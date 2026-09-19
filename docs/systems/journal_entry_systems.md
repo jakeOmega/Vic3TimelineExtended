@@ -360,6 +360,8 @@ All four programmes are **persistent toggles**, not timed one-shots — includin
 | `ch_model` | country | **`ch_set_political_model` only** | the country's political-model code, 1…15 (table in that effect's header) |
 | `ch_ideology_<model>_{count,raw,share}` | global | `ch_yearly_global_update` via `ch_add_country_to_model_totals` / `ch_finish_model_bucket` | per-model world totals; `share` is the percentage of world raw pull, the fifteen add up to 100 |
 | `ch_rank_1_ideology`, `ch_rank_1_ideology_aligned_count`, `ch_rank_1_ideology_share` | global | `ch_cache_rank_1_ideology_alignment_summary` | the hegemon's model code, how many countries run it, and its share of world culture |
+| `ch_model_census`, `ch_model_census_prev` | country | `ch_add_country_to_model_totals` only | this rebuild's and the previous rebuild's model code — the change-detection pair behind events 19/20 (never `var:ch_model`, which the pressure effect also rewrites) |
+| `ch_rank_1_ideology_prev`, `ch_rank_2_ideology` | global | `ch_yearly_global_update` | the previous leader's model (event 19) and the runner-up's model (event 18) |
 
 `ch_set_display_state` is called from the shared tail of `ch_monthly_country_update` **and** of every `ch_effect_<button>`, which is why a click moves the widget's labels without waiting for the next pulse.
 

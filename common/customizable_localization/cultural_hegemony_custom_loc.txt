@@ -183,3 +183,81 @@ ch_exported_model_owner = {
 		localization_key = ch_model_owner_unknown
 	}
 }
+
+# The scoped country's OWN political model, from the last census
+# (var:ch_model_census, written by ch_add_country_to_model_totals). Used by the
+# model events to name a country's model in prose:
+#   [ROOT.GetCountry.GetCustom('ch_country_model_text')]
+#   [SCOPE.sCountry('ch_domino_country').GetCustom('ch_country_model_text')]
+ch_country_model_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = ch_model_census } }
+		localization_key = ch_model_unknown
+	}
+	text = {
+		trigger = { var:ch_model_census = 1 }
+		localization_key = ch_model_communist
+	}
+	text = {
+		trigger = { var:ch_model_census = 2 }
+		localization_key = ch_model_anarchist
+	}
+	text = {
+		trigger = { var:ch_model_census = 3 }
+		localization_key = ch_model_fascist
+	}
+	text = {
+		trigger = { var:ch_model_census = 4 }
+		localization_key = ch_model_corporatist
+	}
+	text = {
+		trigger = { var:ch_model_census = 5 }
+		localization_key = ch_model_socialist
+	}
+	text = {
+		trigger = { var:ch_model_census = 6 }
+		localization_key = ch_model_royalist_absolutist
+	}
+	text = {
+		trigger = { var:ch_model_census = 7 }
+		localization_key = ch_model_royalist_constitutional
+	}
+	text = {
+		trigger = { var:ch_model_census = 8 }
+		localization_key = ch_model_religious
+	}
+	text = {
+		trigger = { var:ch_model_census = 9 }
+		localization_key = ch_model_reactionary
+	}
+	text = {
+		trigger = { var:ch_model_census = 10 }
+		localization_key = ch_model_military_junta
+	}
+	text = {
+		trigger = { var:ch_model_census = 11 }
+		localization_key = ch_model_liberal
+	}
+	text = {
+		trigger = { var:ch_model_census = 12 }
+		localization_key = ch_model_other
+	}
+	text = {
+		trigger = { var:ch_model_census = 13 }
+		localization_key = ch_model_technocratic
+	}
+	text = {
+		trigger = { var:ch_model_census = 14 }
+		localization_key = ch_model_republican
+	}
+	text = {
+		trigger = { var:ch_model_census = 15 }
+		localization_key = ch_model_developmentalist_junta
+	}
+	text = {
+		localization_key = ch_model_unknown
+	}
+}

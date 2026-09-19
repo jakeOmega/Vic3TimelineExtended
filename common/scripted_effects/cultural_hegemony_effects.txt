@@ -468,8 +468,19 @@ ch_finish_all_model_buckets = {
 }
 
 # Scope: country. Classifies it and adds it to its model's totals.
+# Also keeps the rebuild's own snapshot of the model: var:ch_model_census (this
+# rebuild) and var:ch_model_census_prev (the one before). var:ch_model itself is
+# also rewritten between rebuilds whenever the pressure effect re-classifies a
+# country it is using as scope:cultural_hegemon, so change detection
+# (ch_switched_to_hegemon_model, cultural_hegemony.19/.20) reads the census
+# pair instead.
 ch_add_country_to_model_totals = {
+	if = {
+		limit = { has_variable = ch_model_census }
+		set_variable = { name = ch_model_census_prev value = var:ch_model_census }
+	}
 	ch_set_political_model = yes
+	set_variable = { name = ch_model_census value = var:ch_model }
 	if = {
 		limit = { var:ch_model = 1 }
 		ch_add_to_model_bucket = { MODEL = communist }
@@ -859,9 +870,17 @@ ch_yearly_global_update = {
 		# Rebuild the per-model world totals: classify every country, then turn
 		# each model's summed raw pull into a share of the world total refreshed
 		# at the top of this rebuild.
+		# The outgoing leader's model, kept so a change of champion can be
+		# noticed below (cultural_hegemony.19). Left in place when there was no
+		# leader last time, so a one-rebuild gap does not look like a change.
+		if = {
+			limit = { has_global_variable = ch_rank_1_ideology }
+			set_global_variable = { name = ch_rank_1_ideology_prev value = global_var:ch_rank_1_ideology }
+		}
 		remove_global_variable = ch_rank_1_ideology
 		remove_global_variable = ch_rank_1_ideology_aligned_count
 		remove_global_variable = ch_rank_1_ideology_share
+		remove_global_variable = ch_rank_2_ideology
 		ch_reset_all_model_buckets = yes
 		every_country = {
 			ch_add_country_to_model_totals = yes
@@ -872,6 +891,13 @@ ch_yearly_global_update = {
 			global_var:ch_rank_1 = {
 				ch_cache_rank_1_ideology_alignment_summary = yes
 				save_scope_as = cultural_hegemon
+			}
+		}
+		# The runner-up's model, for the rival-models event (cultural_hegemony.18).
+		if = {
+			limit = { has_global_variable = ch_rank_2 }
+			global_var:ch_rank_2 = {
+				set_global_variable = { name = ch_rank_2_ideology value = var:ch_model }
 			}
 		}
 
@@ -893,6 +919,8 @@ ch_yearly_global_update = {
 			}
 			ch_refresh_baseline_model_pressure = yes
 		}
+
+		ch_fire_model_change_events = yes
 
 		# Decay tech firsts counter for all countries (inside lock guard so it
 		# runs exactly once per cycle, even when triggered by war-end recalc)
@@ -1384,5 +1412,58 @@ ch_refresh_baseline_model_pressure = {
 			global_var:ch_rank_1_ideology_share >= ch_model_pressure_min_share
 		}
 		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_model_pressure FALLBACK_MODIFIER = ch_hegemon_model_pressure_weak MONTHS = 13 DECAYING = no MULT = ch_model_pressure_mult }
+	}
+}
+
+# ---- MODEL-CHANGE EVENTS ----
+# Scope: any. Called once per rebuild from ch_yearly_global_update, after the
+# census and the rank-1 summary. Both events react to a CHANGE between two
+# rebuilds, which a yearly random_events pick would miss half the time (the
+# census pair is overwritten every rebuild), so they are fired from here.
+ch_fire_model_change_events = {
+	# The Model Falters: the world's leading cultural power no longer runs the
+	# model it ran at the last rebuild (it changed government, or lost the top
+	# spot to a country running something else). Every country still running
+	# the old model hears of it. Mixed / Other (12) is not a model to lose.
+	if = {
+		limit = {
+			has_global_variable = ch_rank_1_ideology_prev
+			has_global_variable = ch_rank_1_ideology
+			NOT = { global_var:ch_rank_1_ideology = global_var:ch_rank_1_ideology_prev }
+			NOT = { global_var:ch_rank_1_ideology_prev = 12 }
+		}
+		every_country = {
+			limit = {
+				has_journal_entry = je_cultural_hegemony
+				has_variable = ch_model_census
+				var:ch_model_census = global_var:ch_rank_1_ideology_prev
+			}
+			trigger_event = { id = cultural_hegemony.19 days = 14 }
+		}
+	}
+
+	# Domino: a country has just switched to the hegemon's model. Its
+	# neighbours that run something else hear of it. The neighbour test is
+	# state adjacency (vanilla has no country-level neighbour iterator). A
+	# dated variable carries the switcher to the event and stops a country
+	# with two switching neighbours from getting it twice.
+	every_country = {
+		limit = { ch_switched_to_hegemon_model = yes }
+		save_scope_as = ch_domino_switcher
+		every_country = {
+			limit = {
+				has_journal_entry = je_cultural_hegemony
+				NOT = { this = scope:ch_domino_switcher }
+				NOT = { this = global_var:ch_rank_1 }
+				has_variable = ch_model_census
+				NOT = { var:ch_model_census = global_var:ch_rank_1_ideology }
+				NOT = { has_variable = ch_domino_source }
+				any_scope_state = {
+					any_neighbouring_state = { owner = scope:ch_domino_switcher }
+				}
+			}
+			set_variable = { name = ch_domino_source value = scope:ch_domino_switcher days = 90 }
+			trigger_event = { id = cultural_hegemony.20 days = 14 }
+		}
 	}
 }

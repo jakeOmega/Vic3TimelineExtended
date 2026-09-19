@@ -6141,6 +6141,41 @@ ch_hegemon_model_pressure = {
 	political_movement_pop_attraction_mult = 0.20
 }
 
+# Event 17 (Our Model Abroad) option A: the hegemon champions its model abroad.
+# Besides these fields, while it lasts ch_model_pressure_mult adds
+# ch_model_champion_mult_bonus to the baseline pressure every trailing country
+# feels from this model.
+ch_model_champion = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.10
+	country_influence_add = -25
+}
+
+# Event 17 option B: the hegemon leads by example at home instead.
+ch_model_exemplar = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_legitimacy_base_add = 10
+}
+
+# Event 18 (Rival Models) option C: declining to side with either power.
+ch_non_aligned_stance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_legitimacy_base_add = 5
+}
+
+# Event 19 (The Model Falters) option A: holding to a model the world's leading
+# power has abandoned.
+ch_model_orphaned = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -10
+}
+
+# Event 20 (Domino) option A: the cost of policing a neighbour's example.
+ch_ideological_cordon = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -50
+}
+
 # Baseline pressure on an aligned fallback movement, when the model's own
 # movement does not exist in this country.
 ch_hegemon_model_pressure_weak = {

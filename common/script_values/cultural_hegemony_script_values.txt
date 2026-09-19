@@ -752,8 +752,24 @@ ch_model_pressure_mult = {
 		divide = 50
 		min = 0.3
 		max = 1.5
+		# A hegemon that chose to champion its model (cultural_hegemony.17)
+		# pushes it harder for as long as ch_model_champion lasts.
+		if = {
+			limit = {
+				exists = global_var:ch_rank_1
+				global_var:ch_rank_1 = { has_modifier = ch_model_champion }
+			}
+			add = ch_model_champion_mult_bonus
+		}
 	}
 }
+
+# How much ch_model_champion adds to the baseline multiplier above.
+ch_model_champion_mult_bonus = 0.25
+
+# The share of world culture the leader's model must hold before the leader is
+# offered the chance to champion it (cultural_hegemony.17).
+ch_model_abroad_min_share = 40
 
 # ---- Political-model breakdown (the widget's "Political models" section) ----
 # One guarded read per model of global_var:ch_ideology_<model>_share, written by

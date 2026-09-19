@@ -1291,6 +1291,7 @@
  ch_model_royalist_constitutional:0 "Constitutional Monarchist"
  ch_nationalist_rally_ig:0 "Nationalist Rally"
  ch_natural_lingua_franca:0 "Natural Lingua Franca"
+ ch_non_aligned_stance:0 "Non-Aligned"
  ch_policy_funding_step_tt:0 "Each funding step is worth, per step:\n[GetStaticModifier('ch_cultural_program_funding').GetDesc]\nand costs, per step:\n[GetStaticModifier('ch_cultural_program_funding_cost').GetDesc]\n#lore The cost scales with our GDP.#!"
  ch_policy_institutes_off:0 "Defund"
  ch_policy_institutes_on:0 "Fund"

@@ -70,4 +70,17 @@ te_debug_ch.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 		remove_global_variable = ch_ldr_lock
 		ch_yearly_global_update = yes
 	}
+
+	# Stage Our Model Abroad (cultural_hegemony.17) for us as rank 1.
+	option = {
+		name = te_debug_ch.1.h
+		te_debug_ch_stage_hegemon_event = yes
+	}
+
+	# Stage Rival Models / The Model Falters / Domino (.18-.20) for us as a
+	# follower. Each appears only if the save can meet its trigger.
+	option = {
+		name = te_debug_ch.1.i
+		te_debug_ch_stage_follower_events = yes
+	}
 }
