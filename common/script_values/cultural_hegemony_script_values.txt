@@ -629,6 +629,103 @@ cultural_pull_from_stability_display = {
 	divide = 10
 }
 
+# ---- Journal-entry widget display values ----
+# Thin wrappers so the widget never asks .gui to do arithmetic, and so the two
+# modifier readings do not depend on `GetModifier.GetValueWithBreakdownFor`,
+# which this mod has no precedent for in a journal-entry widget context (every
+# existing use is in a status_desc, or on GetPlayer).
+
+cultural_pull_from_modifiers_display = {
+	value = cultural_pull_from_modifiers
+	multiply = 10
+	round = yes
+	divide = 10
+}
+
+ch_pull_mult_pct_display = {
+	value = modifier:country_cultural_pull_mult
+	multiply = 100
+	round = yes
+}
+
+ch_art_mult_pct_display = {
+	value = modifier:country_cultural_hegemony_art_mult
+	multiply = 100
+	round = yes
+}
+
+ch_global_raw_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_cached_global_raw }
+		add = global_var:ch_cached_global_raw
+	}
+	round = yes
+}
+
+# The country's own position in the yearly leaderboard pass, and the size of that
+# pass. Both are written once, inside ch_yearly_global_update's ordered pass;
+# these only round them for display. 0 means "not ranked".
+ch_rank_self_display = {
+	value = 0
+	if = {
+		limit = { has_variable = ch_rank_self }
+		add = var:ch_rank_self
+	}
+	round = yes
+}
+
+ch_ranked_total_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ranked_total }
+		add = global_var:ch_ranked_total
+	}
+	round = yes
+}
+
+# Fill fraction for the widget's share bar, as a percentage of the bar's length.
+# The bar reads full at a 50% share of global cultural influence: no country has
+# ever come near that, and a raw 0-100 bar would leave a real hegemon's reading
+# looking like a quarter-full sliver. The scale lives here so the .gui stays 0-100.
+ch_share_fill_pct = {
+	value = cultural_pull_total
+	multiply = 2
+	min = 0
+	max = 100
+}
+
+ch_prog_count_display = {
+	value = 0
+	if = {
+		limit = { has_variable = ch_prog_count }
+		add = var:ch_prog_count
+	}
+	round = yes
+}
+
+# How much of the world runs the hegemon's political model, from the yearly
+# ideology census in ch_cache_rank_1_ideology_alignment_summary. Read through
+# script values rather than GetGlobalVariable so the widget does not depend on a
+# global read in a data context this mod has not exercised.
+ch_model_aligned_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_rank_1_ideology_aligned_count }
+		add = global_var:ch_rank_1_ideology_aligned_count
+	}
+	round = yes
+}
+
+ch_model_total_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = ch_ideology_country_total }
+		add = global_var:ch_ideology_country_total
+	}
+	round = yes
+}
+
 
 # Used as weight in random_country blocks (var: not valid in weight context)
 ch_total_weight = {

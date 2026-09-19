@@ -3756,6 +3756,27 @@
  TEMPERATURE_ANOMALY_1.5:0 "Global warming has reached 1.5°C above pre-industrial levels."
 
 #
+# TE_DEBUG_COVERT
+#
+ te_debug_covert.1.a:0 "Funding 0 - Dormant"
+ te_debug_covert.1.b:0 "Funding 1 - Operational"
+ te_debug_covert.1.c:0 "Funding 2 - Tradecraft"
+ te_debug_covert.1.d:0 "Console-only shortcuts for testing the covert-warfare command centre. None of these can happen in normal play.\n\nEach option puts funding at an exact level and reapplies everything that depends on it, so the ladder row, the weekly cost, the counterintelligence bonus and the detection factors should all move in the same instant.\n\n#R Level 0 stands every running operation down#! - each pact's requirement to maintain fails at its next evaluation."
+ te_debug_covert.1.e:0 "Funding 3 - Covert Network"
+ te_debug_covert.1.f:0 "The budget line is the whole service."
+ te_debug_covert.1.g:0 "Funding 4 - Black Budget"
+ te_debug_covert.1.h:0 "Funding 5 - Deep State"
+ te_debug_covert.1.t:0 "Covert Warfare Test Console: Funding"
+ te_debug_covert.2.a:0 "Seed three operations, one in each phase"
+ te_debug_covert.2.b:0 "Force a detection now"
+ te_debug_covert.2.c:0 "Cut funding to 0 and stand everything down"
+ te_debug_covert.2.d:0 "Console-only shortcuts for testing the operation rows. None of these can happen in normal play.\n\nSeeding plants three operations against one eligible country - industrial espionage at month 5, an influence campaign at month 11 and military espionage at month 14 - so all three phase layouts show at once and two of them tip over their boundary at the next monthly pulse. It raises funding to Tradecraft first if the service is dormant.\n\nForcing detection burns one operation, sends the target the detection event, and writes the record the command centre reads back as #italic Counterintelligence exposed ...#!\n\nRe-deriving the display state is what the first monthly pulse after loading an older save does: use it if the phase lines are missing from rows restored from a save made before this widget shipped."
+ te_debug_covert.2.e:0 "Age every operation by a year"
+ te_debug_covert.2.f:0 "Three dead drops, one bad week."
+ te_debug_covert.2.g:0 "Re-derive the rows' display state"
+ te_debug_covert.2.t:0 "Covert Warfare Test Console: Operations"
+
+#
 # TE_DEBUG_GW
 #
  te_debug_gw.1.a:0 "Set warming to 0.5°C (Moderate)"
@@ -3776,6 +3797,36 @@
 #
 # TE_DEBUG_UN
 #
+ te_debug_space_race.1.a:0 "Push every running milestone to 90% of its goal"
+ te_debug_space_race.1.b:0 "Finish every running milestone on the next tick"
+ te_debug_space_race.1.c:0 "Force a setback now (progress loss, safety review, cooldown)"
+ te_debug_space_race.1.d:0 "Console-only shortcuts for testing the milestone panel. None of these can happen in normal play.\n\nThey act on every space race milestone that is currently running, so activate one or two entries first. The rival option writes flags that are not backed by a journal entry, so the monthly cleanup wipes them again — pause the game, run it, then open the panel."
+ te_debug_space_race.1.e:0 "Clear the setback cooldown"
+ te_debug_space_race.1.f:0 "'What does the panel do if the programme is nine tenths done and on fire?'\n\n'Let us find out.'"
+ te_debug_space_race.1.g:0 "Put a rival programme in the other top powers"
+ te_debug_space_race.1.h:0 "Let another power claim 'the first' on every milestone I have not won"
+ te_debug_space_race.1.i:0 "Give 'the first' back on every milestone I have not won"
+ te_debug_space_race.1.t:0 "Space Race Test Console"
+ te_debug_space_race.1.z:0 "Close"
+ te_debug_colonial_empire.1.a:0 "Solidified (95)"
+ te_debug_colonial_empire.1.b:0 "Stable (75)"
+ te_debug_colonial_empire.1.c:0 "Strained (50)"
+ te_debug_colonial_empire.1.d:0 "Console-only. Drops the [concept_colonial_stability] bar into any of the five bands so the widget's tier label, next-band boundary, phase-modifier row and subject-pressure effects can all be seen in one session."
+ te_debug_colonial_empire.1.e:0 "Collapsing (10)"
+ te_debug_colonial_empire.1.f:0 "The cartographers await instruction."
+ te_debug_colonial_empire.1.opt_d:0 "Crumbling (30)"
+ te_debug_colonial_empire.1.opt_f:0 "Just refresh the panel (and log it)"
+ te_debug_colonial_empire.1.t:0 "TEST: Colonial Stability Bands"
+ te_debug_colonial_empire.2.a:0 "Every other great power condemns us"
+ te_debug_colonial_empire.2.b:0 "Two great powers back us instead"
+ te_debug_colonial_empire.2.c:0 "Clear every colonial stance"
+ te_debug_colonial_empire.2.d:0 "Console-only. Sets up great-power pressure at each escalation step, and opens each of the three decolonization confirmations through the same shared effect the widget and the AI button use. Nothing is released until you pick an option in the confirmation, and each one offers Reconsider."
+ te_debug_colonial_empire.2.e:0 "Open: Round Table Conference"
+ te_debug_colonial_empire.2.f:0 "The despatches are ready to send."
+ te_debug_colonial_empire.2.g:0 "Log the decolonization diagnostics"
+ te_debug_colonial_empire.2.opt_d:0 "Open: Release a Colonial Territory"
+ te_debug_colonial_empire.2.opt_f:0 "Open: Planned Full Decolonization"
+ te_debug_colonial_empire.2.t:0 "TEST: Pressure and Decolonization"
  te_debug_un.1.a:0 "Found the United Nations and seat the powers"
  te_debug_un.1.b:0 "Grant me a mandate against a neighbour"
  te_debug_un.1.c:0 "Set my standing to Exemplary (85)"
@@ -4543,3 +4594,13 @@
  heir_education_event_cooldown_desc:0 "The [concept_heir]'s education continues without interruption for the time being."
  nuclear_event_prestige:0 "Nuclear Achievement"
  nuclear_event_prestige_desc:0 "This country's nuclear capabilities have affected its standing in the eyes of the world."
+
+### Cultural Hegemony test console
+ te_debug_ch.1.a:0 "A — Set up: Ministry of Culture, funding cap 4, funding at 2, Outreach + Institutes + Protectionism running"
+ te_debug_ch.1.b:0 "B — Put us at rank 1 on the board"
+ te_debug_ch.1.c:0 "C — Fill the board with others and put us at rank 14 of 168"
+ te_debug_ch.1.d:0 "#lore Console-only. Nothing in the mod fires this event; it exists so the Cultural Hegemony journal entry's widget can be driven into its awkward states by hand.#!\n\nPick one effect per firing, then re-run #v event te_debug_ch.1#! for the next. The next yearly cultural-hegemony pulse recomputes the real leaderboard over anything set here."
+ te_debug_ch.1.d_option:0 "D — Empty board slot 5 (the annexed case)"
+ te_debug_ch.1.e:0 "E — Repeal the Ministry of Culture and watch all four programmes stop"
+ te_debug_ch.1.f:0 ""Every ministry keeps a drawer of numbers it would rather no one saw.""
+ te_debug_ch.1.t:0 "Cultural Hegemony Test Console"

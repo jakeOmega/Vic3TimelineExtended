@@ -2,16 +2,20 @@
 
 # Per-JE on_monthly_pulse body for the milestone progress tick. Country scope.
 # Drives 7 of the 8 milestone JEs (solar_colonization has a structurally
-# different progress loop and stays inline). The base risk literal is read
-# by the `sr_failure_weight` script value via `var:sr_base_risk`.
+# different progress loop and stays inline). The failure roll reads
+# sr_risk_pct_$MILESTONE$, the same script value the journal-entry widget shows
+# as "Setback risk" — there is no longer a sr_base_risk proxy variable and no
+# RISK parameter.
+#
+# NOTE ON THE COOLDOWN (existing behaviour, displayed as-is by the widget): the
+# cooldown suppresses only the roll. Progress is added above it, so a programme
+# inside its cooldown runs at full speed with zero chance of a setback.
 #
 # Parameters:
 #   $MILESTONE$ — milestone token (suborbital, orbital, moon_landing, probe,
 #                 moon_base, mars_landing, interstellar_probe). Resolves the
 #                 sr_safe_/sr_ambitious_/sr_progress_/sr_failed_ variable
-#                 namespace.
-#   $RISK$      — base failure-roll risk for this milestone (5..10). Set on
-#                 sr_base_risk before the failure_weight roll fires.
+#                 namespace and the sr_risk_pct_/sr_base_risk_ script values.
 sr_monthly_progress_update_effect = {
 	if = {
 		limit = { sr_ai_should_participate = yes }
@@ -25,10 +29,10 @@ sr_monthly_progress_update_effect = {
 			change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress }
 			if = {
 				limit = { NOT = { sr_has_failure_cooldown = yes } }
-				set_variable = { name = sr_base_risk value = $RISK$ }
 				random = {
-					chance = sr_failure_weight
+					chance = sr_risk_pct_$MILESTONE$
 					set_variable = { name = sr_failed_$MILESTONE$ value = yes }
+					sr_count_setback_base = { MILESTONE = $MILESTONE$ }
 					if = {
 						limit = { has_variable = sr_ambitious_$MILESTONE$ }
 						sr_fire_ambitious_failure_event = yes
@@ -41,9 +45,10 @@ sr_monthly_progress_update_effect = {
 		}
 		else = {
 			# Default (no approach selected) — minimal progress drift.
-			change_variable = { name = sr_progress_$MILESTONE$ add = 0.5 }
+			change_variable = { name = sr_progress_$MILESTONE$ add = sr_progress_drift }
 		}
 	}
+	sr_set_milestone_status_base = { MILESTONE = $MILESTONE$ }
 }
 
 # Recalculate space program cost modifiers on each active JE
@@ -68,6 +73,19 @@ sr_recalculate_cost = {
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = mars_landing       }
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = interstellar_probe }
 	sr_apply_milestone_cost_modifiers_base = { MILESTONE = solar_colonization }
+	# Refresh the widget's display state. This effect is the shared tail of every
+	# approach / funding button, every journal entry's `immediate`, milestone
+	# completion and the monthly cleanup, so the panel's status label reacts to a
+	# click instead of lagging a month. Status is derived from variables only
+	# (never from a modifier), so the add_modifier churn above cannot affect it.
+	sr_set_milestone_status_base = { MILESTONE = suborbital         }
+	sr_set_milestone_status_base = { MILESTONE = orbital            }
+	sr_set_milestone_status_base = { MILESTONE = moon_landing       }
+	sr_set_milestone_status_base = { MILESTONE = probe              }
+	sr_set_milestone_status_base = { MILESTONE = moon_base          }
+	sr_set_milestone_status_base = { MILESTONE = mars_landing       }
+	sr_set_milestone_status_base = { MILESTONE = interstellar_probe }
+	sr_set_milestone_status_base = { MILESTONE = solar_colonization }
 }
 
 # Keeps live milestone state aligned with the JEs that own it.
@@ -367,6 +385,8 @@ sr_cleanup_milestone_if_inactive_base = {
 					has_variable = sr_funding_$MILESTONE$
 					has_variable = sr_safe_$MILESTONE$
 					has_variable = sr_ambitious_$MILESTONE$
+					has_variable = sr_$MILESTONE$_last_status
+					has_variable = sr_$MILESTONE$_setbacks
 				}
 			}
 			set_variable = { name = sr_space_race_cleanup_changed value = yes }
@@ -375,8 +395,150 @@ sr_cleanup_milestone_if_inactive_base = {
 			if = { limit = { has_variable = sr_funding_$MILESTONE$   } remove_variable = sr_funding_$MILESTONE$   }
 			if = { limit = { has_variable = sr_safe_$MILESTONE$      } remove_variable = sr_safe_$MILESTONE$      }
 			if = { limit = { has_variable = sr_ambitious_$MILESTONE$ } remove_variable = sr_ambitious_$MILESTONE$ }
+			if = { limit = { has_variable = sr_$MILESTONE$_last_status } remove_variable = sr_$MILESTONE$_last_status }
+			if = { limit = { has_variable = sr_$MILESTONE$_setbacks    } remove_variable = sr_$MILESTONE$_setbacks    }
 		}
 	}
+}
+
+# --- Shared bodies for the milestone controls --------------------------------
+# The four things a player (or the AI) can do to a running milestone. Each of
+# the 32 journal-entry buttons and each op on that milestone's scripted GUI runs
+# the body from here, so the two surfaces cannot drift apart. $MILESTONE$ is one
+# of the eight milestone tokens.
+#
+# The custom_tooltip wrappers are what the button grid and the widget's
+# ExecuteTooltip both render, so they belong here rather than at the call sites.
+
+sr_effect_safe = {
+	custom_tooltip = {
+		text = "SR_SAFE_APPROACH_EFFECT"
+		set_variable = { name = sr_safe_$MILESTONE$ value = yes }
+		if = {
+			limit = { has_variable = sr_ambitious_$MILESTONE$ }
+			remove_variable = sr_ambitious_$MILESTONE$
+		}
+		je:je_space_race_$MILESTONE$ = {
+			remove_modifier = sr_ambitious_approach
+			add_modifier = sr_safe_approach
+		}
+		sr_recalculate_cost = yes
+	}
+}
+
+sr_effect_ambitious = {
+	custom_tooltip = {
+		text = "SR_AMBITIOUS_APPROACH_EFFECT"
+		set_variable = { name = sr_ambitious_$MILESTONE$ value = yes }
+		if = {
+			limit = { has_variable = sr_safe_$MILESTONE$ }
+			remove_variable = sr_safe_$MILESTONE$
+		}
+		je:je_space_race_$MILESTONE$ = {
+			remove_modifier = sr_safe_approach
+			add_modifier = sr_ambitious_approach
+		}
+		sr_recalculate_cost = yes
+	}
+}
+
+sr_effect_fund_up = {
+	custom_tooltip = {
+		text = "SR_INCREASE_FUNDING_EFFECT"
+		change_variable = { name = sr_funding_$MILESTONE$ add = 1 }
+		sr_recalculate_cost = yes
+	}
+}
+
+sr_effect_fund_down = {
+	custom_tooltip = {
+		text = "SR_DECREASE_FUNDING_EFFECT"
+		change_variable = { name = sr_funding_$MILESTONE$ subtract = 1 }
+		sr_recalculate_cost = yes
+	}
+}
+
+# --- Display state for the journal-entry widget ------------------------------
+# gui/journal_entry_widgets/space_race_widget.gui and
+# common/customizable_localization/space_race_custom_loc.txt only READ these two
+# variables. Neither the GUI nor localization re-derives them.
+
+# The one derivation site for sr_<MILESTONE>_last_status, the integer the widget
+# and the profile custom loc branch on. Country scope. Called from exactly two
+# places: sr_recalculate_cost (the shared tail of every button, every journal
+# entry's `immediate`, completion and cleanup) and the tail of the monthly
+# progress pulse.
+#
+#   (no variable)  the milestone is not running — the panel shows its passive text
+#   0              running, no approach selected yet (drifts at sr_progress_drift)
+#   1              safe approach, exposed to setbacks
+#   2              ambitious approach, exposed to setbacks
+#   3              safe approach, inside the post-setback cooldown
+#   4              ambitious approach, inside the post-setback cooldown
+#
+# States 3 and 4 are "shielded, not paused": the cooldown suppresses only the
+# failure roll, so progress continues at full rate. The widget says exactly that.
+# Deliberately no "programme incompatible" state — that is the journal entry's
+# own `fail` block, which already explains itself through
+# sr_space_program_incompatible_tt, and it would need a second parameter because
+# the eight milestones gate on five different country_sr_*_program_bool modifiers.
+sr_set_milestone_status_base = {
+	if = {
+		limit = { NOT = { has_variable = sr_active_$MILESTONE$ } }
+		if = { limit = { has_variable = sr_$MILESTONE$_last_status } remove_variable = sr_$MILESTONE$_last_status }
+		if = { limit = { has_variable = sr_$MILESTONE$_setbacks    } remove_variable = sr_$MILESTONE$_setbacks    }
+	}
+	else_if = {
+		limit = { has_variable = sr_safe_$MILESTONE$ }
+		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
+		if = {
+			limit = { sr_has_failure_cooldown = yes }
+			set_variable = { name = sr_$MILESTONE$_last_status value = 3 }
+		}
+		else = {
+			set_variable = { name = sr_$MILESTONE$_last_status value = 1 }
+		}
+	}
+	else_if = {
+		limit = { has_variable = sr_ambitious_$MILESTONE$ }
+		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
+		if = {
+			limit = { sr_has_failure_cooldown = yes }
+			set_variable = { name = sr_$MILESTONE$_last_status value = 4 }
+		}
+		else = {
+			set_variable = { name = sr_$MILESTONE$_last_status value = 2 }
+		}
+	}
+	else = {
+		sr_ensure_setback_counter_base = { MILESTONE = $MILESTONE$ }
+		set_variable = { name = sr_$MILESTONE$_last_status value = 0 }
+	}
+}
+
+# The panel's pace line prints the setback count beside the risk, so the counter
+# has to exist for as long as the milestone does — including in a save where the
+# milestone was already running before this widget was written. Called from the
+# status derivation above, which runs from every button, every `immediate`, the
+# monthly pulse and the cleanup.
+sr_ensure_setback_counter_base = {
+	if = {
+		limit = { NOT = { has_variable = sr_$MILESTONE$_setbacks } }
+		set_variable = { name = sr_$MILESTONE$_setbacks value = 0 }
+	}
+}
+
+# Lifetime setback counter for one milestone, shown by the widget as "Setbacks so
+# far". Called from the single site that raises sr_failed_$MILESTONE$ — the
+# monthly progress pulse for seven milestones, and the inline solar colonization
+# pulse. Self-initialising so an old save that already has the milestone running
+# starts counting from its next setback instead of logging a never-set variable.
+sr_count_setback_base = {
+	if = {
+		limit = { NOT = { has_variable = sr_$MILESTONE$_setbacks } }
+		set_variable = { name = sr_$MILESTONE$_setbacks value = 0 }
+	}
+	change_variable = { name = sr_$MILESTONE$_setbacks add = 1 }
 }
 
 # --- Concrete per-milestone wrappers (kept as named entry points) ------------
@@ -865,5 +1027,64 @@ sr_fire_safe_setback_event = {
 		10 = {
 			trigger_event = { id = space_race_events.73 }
 		}
+	}
+}
+
+# --- Display-only: who else is racing for one milestone ----------------------
+# Rendered by sr_rivals_sgui through ExecuteTooltip, so nothing here ever runs.
+# Country scope (ROOT = the panel's owner). $MILESTONE$ is one of the eight
+# milestone tokens.
+#
+# The participation test is deliberately the same one the monthly pulse uses:
+# sr_ai_should_participate. A great power outside the top three can hold
+# sr_active_$MILESTONE$ and never tick a single month of progress, and listing it
+# as a competitor would be a lie.
+#
+# What this does NOT show is how far along a rival is. Programmes are announced;
+# their internal schedules are not, and reading another country's
+# sr_progress_$MILESTONE$ would hand the player omniscience the system has never
+# given. The claim on "the first" is public — it is a global variable — so that
+# is shown.
+sr_rivals_line_base = {
+	sr_rivals_first_line_base = { MILESTONE = $MILESTONE$ }
+	sr_rivals_participants_base = { MILESTONE = $MILESTONE$ }
+}
+
+# Whether "the first" is still on the table. NOT used for solar colonization:
+# that entry has no sr_first_solar_colonization reward and never sets a
+# sr_global_first_ flag (it does not go through sr_complete_milestone_effect_base
+# at all), so telling the player a first is unclaimed there would be a lie — and
+# would contradict this system's own reward preview.
+sr_rivals_first_line_base = {
+	if = {
+		limit = { has_global_variable = sr_global_first_$MILESTONE$ }
+		custom_tooltip_no_bullet = sr_rivals_first_claimed
+	}
+	else = {
+		custom_tooltip_no_bullet = sr_rivals_first_open
+	}
+}
+
+sr_rivals_participants_base = {
+	if = {
+		limit = {
+			any_country = {
+				NOT = { THIS = ROOT }
+				has_variable = sr_active_$MILESTONE$
+				sr_ai_should_participate = yes
+			}
+		}
+		custom_tooltip_no_bullet = sr_rivals_intro
+		every_country = {
+			limit = {
+				NOT = { THIS = ROOT }
+				has_variable = sr_active_$MILESTONE$
+				sr_ai_should_participate = yes
+			}
+			custom_tooltip = sr_rivals_entry
+		}
+	}
+	else = {
+		custom_tooltip_no_bullet = sr_rivals_none
 	}
 }

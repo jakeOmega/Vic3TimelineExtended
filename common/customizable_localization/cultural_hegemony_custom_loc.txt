@@ -1,0 +1,172 @@
+﻿# ============================================================================
+# Cultural Hegemony — branchy one-liners for the journal-entry widget
+# ============================================================================
+# Two readings that used to be a chain of `triggered_desc` entries on the journal
+# entry: the country's influence tier (six branches) and the world hegemon's
+# exported political model (twelve). Both are read from the widget as
+# [JournalEntry.GetCountry.GetCustom('<key>')].
+#
+# Neither block owns a threshold or a classification. The tier reads `ch_tier`,
+# whose only derivation site is `ch_set_display_state`
+# (common/scripted_effects/cultural_hegemony_effects.txt), where 2/5/10/15/25
+# live. The exported model reads `global_var:ch_rank_1_ideology`, whose only
+# derivation site is `ch_cache_rank_1_ideology_alignment_summary` in the same
+# file — the 1..12 mapping below is that effect's, in its order.
+# ============================================================================
+
+ch_tier_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = ch_tier } }
+		localization_key = ch_tier_negligible
+	}
+	text = {
+		trigger = { var:ch_tier >= 5 }
+		localization_key = ch_tier_hegemon
+	}
+	text = {
+		trigger = { var:ch_tier >= 4 }
+		localization_key = ch_tier_major
+	}
+	text = {
+		trigger = { var:ch_tier >= 3 }
+		localization_key = ch_tier_significant
+	}
+	text = {
+		trigger = { var:ch_tier >= 2 }
+		localization_key = ch_tier_moderate
+	}
+	text = {
+		trigger = { var:ch_tier >= 1 }
+		localization_key = ch_tier_minor
+	}
+	text = {
+		localization_key = ch_tier_negligible
+	}
+}
+
+# The plain-language summary that replaces the six status_desc tier blocks.
+ch_tier_blurb = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = ch_tier } }
+		localization_key = ch_tier_blurb_negligible
+	}
+	text = {
+		trigger = { var:ch_tier >= 5 }
+		localization_key = ch_tier_blurb_hegemon
+	}
+	text = {
+		trigger = { var:ch_tier >= 4 }
+		localization_key = ch_tier_blurb_major
+	}
+	text = {
+		trigger = { var:ch_tier >= 3 }
+		localization_key = ch_tier_blurb_significant
+	}
+	text = {
+		trigger = { var:ch_tier >= 2 }
+		localization_key = ch_tier_blurb_moderate
+	}
+	text = {
+		trigger = { var:ch_tier >= 1 }
+		localization_key = ch_tier_blurb_minor
+	}
+	text = {
+		localization_key = ch_tier_blurb_negligible
+	}
+}
+
+# The world hegemon's political model, in the twelve families
+# ch_cache_rank_1_ideology_alignment_summary classifies it into. The guard comes
+# first: the global does not exist until the first yearly pulse, and on an old
+# save it can be absent for up to a year.
+ch_exported_model_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_global_variable = ch_rank_1_ideology } }
+		localization_key = ch_model_unknown
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 1 }
+		localization_key = ch_model_communist
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 2 }
+		localization_key = ch_model_anarchist
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 3 }
+		localization_key = ch_model_fascist
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 4 }
+		localization_key = ch_model_corporatist
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 5 }
+		localization_key = ch_model_socialist
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 6 }
+		localization_key = ch_model_royalist_absolutist
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 7 }
+		localization_key = ch_model_royalist_constitutional
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 8 }
+		localization_key = ch_model_religious
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 9 }
+		localization_key = ch_model_reactionary
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 10 }
+		localization_key = ch_model_military_junta
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 11 }
+		localization_key = ch_model_liberal
+	}
+	text = {
+		trigger = { global_var:ch_rank_1_ideology = 12 }
+		localization_key = ch_model_other
+	}
+	text = {
+		localization_key = ch_model_unknown
+	}
+}
+
+# Whether the exported model is ours, so the alignment block can say "our model"
+# or name the hegemon instead of implying the player leads the world.
+ch_exported_model_owner = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_global_variable = ch_rank_1
+			global_var:ch_rank_1 ?= ROOT
+		}
+		localization_key = ch_model_owner_us
+	}
+	text = {
+		trigger = {
+			has_global_variable = ch_rank_1
+			exists = global_var:ch_rank_1
+		}
+		localization_key = ch_model_owner_them
+	}
+	text = {
+		localization_key = ch_model_owner_unknown
+	}
+}

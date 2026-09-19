@@ -153,21 +153,115 @@ Mod JEs of this family bundle two kinds of modifiers in the same `extra_modifier
 Models the challenge of maintaining overseas colonies after decolonization tech. Countries balance stability through investment, military presence, or cultural assimilation — or accept planned decolonization.
 
 ### Key Mechanics
-- **Progress bar:** `colonial_stability_bar` (0-100)
-- **5 stability tiers:** collapsing (0-20), crumbling (20-40), strained (40-65), stable (65-90), solidified (90+)
-- **GP pressure:** Tracked via `colonial_gp_condemners_count`
-- **Phase modifiers:** `colonial_empire_under_pressure_modifier` (<40), `colonial_empire_crumbling_modifier` (<20)
+- **Progress bar:** `colonial_stability_bar` (0-100, `start_value = 50`, `default_green`). Purely `monthly_progress`-driven — nothing calls `set_bar_progress` on it outside the debug harness. Its 21 terms are named leaf script values; see `mod_systems.md` § Stability Bar Formula.
+- **5 stability bands:** collapsing (0-20), crumbling (20-40), strained (40-65), stable (65-90), solidified (90+). Derived **once**, in `colonial_empire_refresh_display`, into `var:colonial_empire_tier` (1-5). No other file knows a boundary.
+- **GP pressure:** `colonial_gp_condemners_count` / `colonial_gp_supporters_count` (great powers carrying `gp_anti_colonial_stance` / `gp_pro_colonial_stance`).
+- **Phase modifiers, applied to the ENTRY not the country** (`je:je_colonial_empire = { add_modifier = … }`, so a country-scope `has_modifier` never sees them): `colonial_empire_crumbling_modifier` (<20), `colonial_empire_under_pressure_modifier` (<40), `colonial_empire_strained_modifier` (<65), `colonial_empire_stable_modifier` (<90), `colonial_empire_solidified_modifier` (90+).
+- **`is_shown_when_inactive`** on game rule + `decolonization` tech, so any widget here must be guarded (see below).
 
-### Buttons (8)
-4 toggle pairs:
-- `ce_invest_in_development` / `ce_remove_invest_in_development`
-- `ce_military_garrison` / `ce_remove_military_garrison`
-- `ce_cultural_assimilation` / `ce_remove_cultural_assimilation`
-- `ce_release_colonial_territory` / `ce_planned_decolonization`
+### Buttons (9) — AI-only
+All nine carry `is_ai = yes` in `visible`; a human sees the widget instead. They remain the AI's only path into the system (their `ai_chance`). `possible` / `effect` delegate to shared helpers, so the grid and the widget cannot drift.
+
+| Button | Gate trigger | Action effect |
+|---|---|---|
+| `ce_invest_in_development` | `colonial_empire_possible_invest` | `colonial_empire_effect_invest` |
+| `ce_remove_invest_in_development` | `colonial_empire_possible_remove_invest` | `colonial_empire_effect_remove_invest` |
+| `ce_military_garrison` | `colonial_empire_possible_garrison` | `colonial_empire_effect_garrison` |
+| `ce_remove_military_garrison` | `colonial_empire_possible_remove_garrison` | `colonial_empire_effect_remove_garrison` |
+| `ce_cultural_assimilation` | `colonial_empire_possible_assimilation` | `colonial_empire_effect_assimilation` |
+| `ce_remove_cultural_assimilation` | `colonial_empire_possible_remove_assimilation` | `colonial_empire_effect_remove_assimilation` |
+| `ce_release_colonial_territory` | `colonial_empire_possible_release_territory` | `colonial_empire_effect_release_territory` |
+| `ce_planned_decolonization` | `colonial_empire_possible_planned_decolonization` | `colonial_empire_effect_planned_decolonization` |
+| `ce_round_table_conference` | `colonial_empire_possible_round_table` | `colonial_empire_effect_round_table` |
+
+Gates live in `common/scripted_triggers/colonial_empire_triggers.txt`, actions in `common/scripted_effects/decolonization.txt`. The three decision actions wrap their body in `hidden_effect` — see Editing rules.
+
+### Variables
+Written by `colonial_empire_refresh_display` (`common/scripted_effects/colonial_empire_display_effects.txt`) and by nothing else; all ten cleared in `colonial_empire_je_cleanup_effect`.
+
+| Variable | Meaning |
+|---|---|
+| `colonial_empire_tier` | 1-5 band index |
+| `colonial_empire_next_boundary` | 20 / 40 / 65 / 90 / 100 — the next band's edge |
+| `colonial_empire_bar_bucket` | bar value to the nearest 5, for the history chart |
+| `colonial_empire_d_overreach`, `_d_gp`, `_d_acceptance` | the three drift groups that iterate |
+| `colonial_empire_d_total` | projected monthly change, for the signed chart |
+| `colonial_empire_eligible_count`, `_round_table_count` | decolonization candidate counts |
+| `colonial_empire_largest_eligible_state` | largest eligible state (removed when none) |
+
+Still owned by the JE's own pulse: `colonial_invest_months`, `colonial_garrison_months`, `colonial_assimilate_months`, `colonial_solidified_months`, `colonial_at_100_months`, `colonial_je_total_months` (path-dependence and completion counters).
+
+**Retired:** the seven `colonial_condemner_rank_N` slots and `colonial_condemner_idx`. The roster is walked live in script now; their `remove_variable` lines were dropped rather than kept, because a `remove_variable` for a name nothing sets logs "used but never set".
+
+### Colonial Stability Widget (journal-entry widget)
+
+**File:** `gui/journal_entry_widgets/colonial_empire_widget.gui` (UTF-8 BOM). Two roots, both mounted from `je_colonial_empire`: `widget_je_colonial_empire` → `custom_widget_container_2`, `widget_je_colonial_empire_history` → `custom_widget_container_3` (directly above the native bar).
+
+**Handlers** (`common/scripted_guis/colonial_empire_sguis.txt`), all `ai_is_valid = { always = no }`:
+
+| Handler | Kind | Role |
+|---|---|---|
+| `colonial_empire_display_ready` | read-only | has `colonial_empire_refresh_display` run yet? One gate for all ten var reads |
+| `colonial_empire_has_candidates` | read-only | is `colonial_empire_largest_eligible_state` set? |
+| `colonial_empire_active_invest_sgui` | read-only | is Development Investment running? **Decides which half of its row is drawn** |
+| `colonial_empire_active_garrison_sgui` | read-only | is Military Garrison running? Ditto |
+| `colonial_empire_active_assimilation_sgui` | read-only | is Cultural Assimilation running? Ditto |
+| `colonial_empire_pressure_sgui` | read-only text | walks the great powers live and names condemners / supporters |
+| `colonial_empire_policy_sgui` | action, `saved_scopes = { op }` | the three programmes, enable and disable |
+| `colonial_empire_decision_sgui` | action, `saved_scopes = { op }` | the three decolonization decisions |
+
+Eight handlers. All carry `ai_is_valid = { always = no }`; the five read-only ones also carry `is_valid = { always = no }` and an empty `effect`, so nothing can execute them.
+
+**Op tables** (repeated in the `.gui` header and the sgui header — keep all three in step):
+
+`colonial_empire_policy_sgui`: 0 enable Invest · 1 disable Invest · 2 enable Garrison · 3 disable Garrison · 4 enable Assimilation · 5 disable Assimilation.
+`colonial_empire_decision_sgui`: 0 Release a Colonial Territory · 1 Planned Full Decolonization · 2 Round Table Conference.
+
+**An op code decides what a control does, never whether it is drawn.** `AddScope` is passed to `IsValid`, `Execute` and the tooltips only — the three paths `st_res_scripted_gui.txt` has shipped. Whether a saved scope reaches an `is_shown` block is *unproven* in this mod: Strategic Reserve passes one to `IsShown` but its `is_shown` never reads it, vanilla ships no handler whose `is_shown` reads a saved scope, and the one in-mod case (`un_chamber_vote_sgui`'s veto branch) is fail-open and so would look correct either way. With the button grid hidden from humans, a programme row whose visibility quietly evaluated false would leave no control at all, so each Enable/Disable pair keys off a scope-free `colonial_empire_active_*_sgui` instead — Disable on `IsShown(…)`, Enable on `Not(IsShown(…))`, which is the shape banking's dashboard is play-tested with. `colonial_empire_policy_sgui.is_shown` is therefore unconditional, and `colonial_empire_decision_sgui.is_shown` is `always = yes` (a decision with nothing to release stays visible and disabled), so no control's visibility depends on that path.
+
+**Display-only reads** — the widget derives nothing:
+- Bar value: `[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]`, reached through `datamodel = "[JournalEntry.GetScriptedProgressBars]"`.
+- Bar breakdown: `[ScriptedProgressBar.GetPeriodicProgressBreakdown]` — the **engine's own** per-term rendering, built from the 21 `desc` keys on the bar's `add` lines. It cannot drift from the mechanic because it *is* the mechanic.
+- Six drift groups live: `[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_{base,laws,igs,rank,policies,domestic}')]` — all O(1), and live so a click moves them the next frame.
+- Three drift groups + the total from `var:` (they iterate; the widget runs every frame).
+- Band names and the phase-modifier line: `[JournalEntry.GetCountry.GetCustom('colonial_empire_{status_custom,tier_name,next_band_name,phase_modifier}')]` (`common/customizable_localization/colonial_empire_custom_loc.txt`), keyed on the tier integer.
+- Programme costs / effects: `[GetStaticModifier('x').GetDesc]` plus `colonial_{invest,garrison,assim}_effectiveness_display` and `colonial_{invest,assimilate}_startup_cost_display`.
+
+**Areas:** Colonial Stability (open by default) · International Pressure (**collapsed** by default — its sgui walks `every_country` twice per frame while open) · Colonial Programmes (open) · Decolonization (open) · History (collapsed). Section state is `GetVariableSystem` only; `colonial_empire_stability_closed` / `_programmes_closed` / `_decisions_closed` are *closed* flags, `colonial_empire_pressure_open` / `_history_open` are *open* flags.
+
+**No arm/confirm flag anywhere.** The three decisions confirm through `decolonization_events.400` / `.401`, which preview up to three candidates and offer a "Reconsider" option. That is real game state: it survives a save, cannot be left half-armed by closing the panel, and lets the player choose *which* territory. A `GetVariableSystem` arm flag would be client-side with no lifetime.
+
+#### Editing rules
+1. **Never put a number in the `.gui` or in a loc string.** Retune the leaf script value; the bar, the widget and the charts all move together.
+2. **Never re-derive state in `.gui` or loc.** Add it to `colonial_empire_refresh_display` and read the variable.
+3. **A gate or action changes in the shared helper only** — never in the button, never in the sgui.
+4. **The three decision effects must keep their `hidden_effect` wrapper.** `ExecuteTooltip` renders an effect every frame the panel is open and does not execute; unwrapped, their three `ordered_scope_state` picks and the region flood-fill would be walked per frame and their `debug_log` would interpolate `scope:decolonization_target_state_*` on scopes a render never saves. The player-facing `custom_tooltip` stays *outside* the wrapper. `colonial_empire_refresh_display` is wrapped the same way, for the same reason.
+5. **Read the phase modifiers off the entry, not the country** (`je:je_colonial_empire ?= { has_modifier = … }`).
+6. **Every `var:` read in the widget stays behind `colonial_empire_display_ready`** — `is_shown_when_inactive` means the widget is built for countries whose entry never activated.
+7. **`GetValueWithBreakdownFor` is not used in the widget** — its object chain is confirmed for `ROOT.GetCountry.GetModifier…` in a JE desc but not for `JournalEntry.GetCountry.GetModifier…` in a widget. Thin display script values (`colonial_{invest,garrison,assim}_effectiveness_display`) read the aggregates; the bar's own hover keeps the full breakdown.
+8. **A loc key reachable from BOTH a description and a widget must carry no country accessor at all.** `ROOT.` is the proven root in a description and in an `ExecuteTooltip`-rendered effect; `JournalEntry.` is the proven root in a widget. The trap is *nesting*: `je_colonial_empire_tt_invest` is a `.gui` `tooltip = "key"` (widget context), so while it included `$CE_INVEST_IN_DEVELOPMENT_DESC$` it dragged that key's `ROOT.GetCountry.GetModifier…` line into widget context — even though the `_DESC` key itself was untouched and is correct for the button and for `ExecuteTooltip`. Fix shape: keep the prose in an accessor-free `CE_*_BODY` key that both sides include, and let each side append its own root-appropriate reading of the number. Check the whole reachability graph (`$KEY$`, `SelectLocalization`, `AddLocalizationIf`, `GetCustom` targets), not just the keys the `.gui` names directly.
+9. **Never move a control's visibility onto an op-parameterised `IsShown`.** See the paragraph above the op tables: visibility comes from a scope-free read-only handler, because a saved scope reaching an `is_shown` block is unproven here and the hidden button grid leaves no fallback. Adding a fourth programme means adding a fourth `colonial_empire_active_*_sgui` alongside its two op codes.
+
+#### Traced scenarios
+Fresh activation (`immediate` populates the display state on frame one) · inactive entry (root `visible = "[JournalEntry.IsActive]"`, nothing runs) · each programme on and off (row and the six live groups move the next frame; only the three iterating snapshots lag a month) · Garrison below the authority gate (greyed, condition in `IsValidTooltip`) · Assimilation without the era-6 tech · no eligible territory (decisions greyed, "largest" row hidden by its own guard) · decision opened then cancelled (event option D clears every marker) · AI country (acts only through `ai_chance`) · law passed mid-entry · old save mid-entry (guarded, shows the pending line) · bar reaches 0 or 100 (cleanup removes all ten variables).
+
+#### Debug harness
+`event te_debug_colonial_empire.1` — put the bar in any of the five bands, or refresh and log the display state. `event te_debug_colonial_empire.2` — great-power pressure at each escalation step, clear all stances, or open each of the three decolonization confirmations through the shared effect. Both require the entry to be active.
+
+### History charts (journal-entry widget)
+`te_history_record_colonial_samples` (`common/scripted_effects/te_history_colonial_effects.txt`), called once from the monthly pulse after the refresh, gated on the game rule + `has_journal_entry`; eligibility is the shared `te_history_country_is_tracked`.
+
+| Metric | Chart | Axis | Source |
+|---|---|---|---|
+| `colonial_stability` | `te_history_bar_unsigned` | 0-100 | `var:colonial_empire_bar_bucket` (nearest 5 — the legend says so) |
+| `colonial_drift` | `te_history_bar_signed` | ±6 | `var:colonial_empire_d_total` (exact) |
+
+No markers: their tooltip branches live in the shared `te_history_scripted_gui.txt`. `te_hist_range` is a single global GUI variable shared with the banking charts.
 
 ### Outcomes
-- **Complete (100):** Permanent `colonial_empire_solidified_modifier`, grants homeland to primary cultures in colonial states with 4+ acceptance
-- **Fail (0):** 3× `form_decolonized_country` from overseas states, `colonial_empire_collapsed_modifier` (decaying)
+- **Complete:** 60 sustained months at bar 100, or the Imperial Federation Act capstone. Permanent `colonial_empire_solidified_modifier`, grants homeland to primary cultures in colonial states with 4+ acceptance, sets `colonial_empire_completed` (permanent re-entry block).
+- **Fail (bar 0):** path-dependent resolution event, strong liberty-desire spike and relations hit on every qualifying colonial subject, `colonial_empire_collapsed_recently` 10-year cooldown.
+- **Voluntary end (bar > 0, no colonies left):** resolution event, no cooldown.
 
 ---
 
@@ -180,10 +274,56 @@ Models the challenge of maintaining overseas colonies after decolonization tech.
 Command centre for the covert-operations layer: intelligence capacity, operation slots, funding level and detection risk. Operations themselves are launched as diplomatic actions (`common/diplomatic_actions/covert_operations.txt`), not from this entry. Mechanics, files and AI behaviour are documented in `mod_systems.md` § Covert Warfare System.
 
 ### Buttons (2)
-- `iw_increase_funding_button`, `iw_decrease_funding_button`
+- `iw_increase_funding_button`, `iw_decrease_funding_button` — both carry `visible = { is_ai = yes }`, so the vanilla grid shows a human nothing; the widget's funding stepper is the human surface and calls the same helpers.
 
-### Operations Widget (journal-entry widget)
-**File:** `gui/journal_entry_widgets/covert_operations_widget.gui` — `widget_je_covert_operations` in `custom_widget_container_2`. Read-only: one row per running operation (type, target, phase, detection) from the operator's `iw_ops` script-container list. It stores each target's **capital state** (`iw_target_capital`) because `Var().GetCountry.GetName` renders blank in a widget (`gui_modding_guide.md` gotcha #11).
+Unlike banking, these buttons are **not** the AI's path into the system: neither declares an `ai_chance`, and the entry's own `on_monthly_pulse` sets `iw_funding_level` directly for every `is_player = no` country. The declarations stay anyway (deleting a `scripted_button = …` line is how an entry silently loses an option), and the gate is safe whichever way the undocumented no-`ai_chance` default falls — if the AI never clicks, nothing changes; if it does, both effects are idempotent and the next pulse re-asserts the AI's level.
+
+### Status Desc (2 entries)
+Down from 22 `triggered_desc` lines and three `iw_separator` delimiters to the five-way intelligence-standing verdict (`je_iw_status_fortress` … `_vulnerable`, the one genuinely prose reading) plus `je_iw_no_operations`, which points at the diplomatic actions. Everything else moved into the command centre. Keys rendered from `status_desc` keep the `ROOT.` accessor; keys rendered by a widget use `JournalEntry.GetCountry…`. No key is reachable from both.
+
+### Variables
+Country: `iw_funding_level` (0 – `iw_funding_level_max`, which is **5**), `iw_defender_event_cooldown` / `_age`, `iw_last_exposed_country` / `_type` / `_age`, and the staging pair `target_max_ic` / `target_type_defense`. Operation container: `iw_target`, `iw_duration`, `iw_target_capital`, `iw_detect`, `iw_tgt_ic`, `iw_tgt_td`, `iw_phase`, `iw_phase_months_left`.
+
+### Command Centre (journal-entry widget)
+Two custom widgets, both from one file, wired from `je_covert_warfare.txt` into `custom_widget_container_1` (above the status text) and `_2` (below it).
+
+- **File:** `gui/journal_entry_widgets/covert_operations_widget.gui` — `widget_je_covert_command_centre`, `widget_je_covert_operations`
+- **Handlers:** `common/scripted_guis/covert_warfare_sguis.txt`
+- **Shared helpers:** `common/scripted_triggers/covert_warfare_triggers.txt` (`covert_possible_increase_funding`, `covert_possible_decrease_funding`, `covert_possible_stand_down`), `common/scripted_effects/covert_warfare_effects.txt` (`covert_effect_increase_funding`, `covert_effect_decrease_funding`, `covert_effect_stand_down`, and the shared tail `covert_refresh_funding_state`)
+- **Display-only reads:** `intelligence_capacity_from_modifiers_display`, `covert_defense_economic_display`, `covert_defense_military_display`, `covert_defense_ideological_display`, `covert_detection_base_display`, `covert_ops_max_per_type_display`, `covert_last_exposed_age_display`, and `covert_funding_detect_reduction_at_1…5` / `covert_funding_ci_ic_at_1…5` (each a sum of the tuning constants in `covert_warfare_script_values.txt` § 1, so the funding ladder cannot drift from the detection formula)
+- **Customizable localization:** `common/customizable_localization/covert_warfare_custom_loc.txt` — `covert_funding_level_name`, `covert_funding_state_line`, `covert_decrease_funding_warning`, `covert_last_exposed_type_name`
+
+Areas:
+1. **Intelligence capacity** — total, standing relative to the global best, and the components (modifiers, literacy, GDP share). The modifier row's value comes from a script value; its `GetValueWithBreakdownFor` breakdown is in the tooltip only.
+2. **Operation slots** — in use / maximum / free, plus the per-type cap from `covert_ops_max_per_type`. Slot breakdown in the tooltip.
+3. **Funding** — the level and its name, what that level means, a `[-] n [+]` stepper, and a six-row ladder naming every level's detection reduction and counterintelligence bonus with the row in force marked. Current weekly cost and the cost one level up. A dormancy banner when funding is 0.
+4. **Detection risk** — base rate, funding stealth reduction, covert efficiency. Deliberately no country-level risk number: see the Known-behaviours note in `mod_systems.md`. Each operation's own risk is on its row.
+5. **Covert defence** — unused slots redirected to counterintelligence, the funding bonus, and the three `country_covert_defense_*_add` axes with their breakdowns in the tooltip.
+6. **Last exposed** — what our own counterintelligence caught, written by `covert_op_burn` at the moment of exposure. Dropped after ten years.
+7. **Operation rows** — one per `iw_ops` container: type and target, phase by name with months until the next phase, a dormancy line, and that operation's own detection risk with the IC-versus-defence arithmetic. Optionally a per-row **Stand down** control.
+
+Op table:
+
+| op | control | delegates to |
+|---|---|---|
+| 0 | funding stepper `[-]` | `covert_possible_decrease_funding` / `covert_effect_decrease_funding` |
+| 1 | funding stepper `[+]` | `covert_possible_increase_funding` / `covert_effect_increase_funding` |
+| — | per-row **Stand down** | `covert_possible_stand_down` / `covert_effect_stand_down`, parameterized by type; the target arrives as the saved scope `iw_tgt` |
+
+**Stand down** ends one operation without waiting for detection and without cutting funding to zero (which would end all of them). It removes the pact and calls `covert_op_destroy`, reaching the same end state as breaking the pact from the diplomacy outliner — that path runs `manual_break_effect = { covert_op_end }`, i.e. the same `covert_op_destroy`, and the effect's `any_in_list` guard makes it idempotent, so it does not matter whether `remove_diplomatic_pact` also fires the break hook. It is `covert_op_burn` without the infamy and relations hit, which belong to being caught. There are nine handlers, one per type, rather than one with a type op code, because the row's existing per-tag markup already settles the type — which lets the target travel alone in a **single** `AddScope`, the only shape vanilla demonstrates. Eligibility is fail-closed: it requires both that `scope:iw_tgt` resolved and that we run an operation of that exact type against that exact country, so the worst case is a permanently greyed button rather than the wrong operation ending.
+
+Editing rules:
+- Change a funding action's eligibility or effect in the **helper**, never in the button or the scripted GUI.
+- Never compare a game number against a literal in the `.gui`. The phase lines read `iw_phase` (1/2/3) and `iw_phase_months_left`, written by `covert_op_refresh_phase`; the 6- and 12-month thresholds live only in `covert_op_is_established` / `covert_op_is_fully_operational`.
+- Anything the widget needs to know but cannot ask goes through an `is_shown`-only scripted GUI: `covert_ops_dormant_sgui`, `covert_last_exposed_known_sgui`, `covert_ops_phase_ready_sgui`.
+- Panel numbers come from `MakeScope.ScriptValue`; `GetModifier.GetValueWithBreakdownFor` is for tooltips only, so if that chain fails in-game the panel still reads correctly and only the hover is lost.
+- Target country names go through the stored capital state (`iw_target_capital`, refreshed monthly inside `covert_op_refresh_detection`) because `Var().GetCountry.GetName` renders blank in this mod (`gui_modding_guide.md` gotcha #11). The last-exposed attacker is stored as the **country** instead and named by navigating into it in script, so an annexed attacker degrades to an anonymous line.
+- Both widget roots are gated on `[JournalEntry.IsActive]`: the entry has `is_shown_when_inactive`, so without the gate every display read would run for countries that have none of these variables (gotcha #14).
+
+Traced scenarios: fresh activation (no operations, dormant banner, empty-state line); inactive entry (neither widget renders, no variable reads); `[+]` 0→1 (cost and counter-intelligence modifiers both applied in the same click); `[-]` 1→0 with operations running (tooltip warns, then every pact lapses); either end of the ladder (stepper greys itself with the condition as its tooltip); target annexed mid-month (row renders from the stored capital until the sync collects the container, Stand down greys out); AI country (grid still declared and visible to the AI, every handler `ai_is_valid = { always = no }`); entry deactivated by losing a slot (widgets hidden, pacts keep running); save made before this widget (phase lines hidden for at most one month).
+
+### Debug Harness
+`event te_debug_covert.1` sets funding to any of the six levels; `event te_debug_covert.2` seeds three operations at months 5 / 11 / 14, forces a detection, cuts funding to 0, ages everything by a year, and re-derives the rows' display state. Files: `events/te_debug_covert_events.txt`, `common/scripted_effects/te_debug_covert_effects.txt`.
 
 ### Never Completes
 Persistent journal entry.
@@ -198,9 +338,70 @@ Persistent journal entry.
 ### Purpose
 The player's window into the cultural-hegemony system: the country's share of global cultural pull, its component breakdown, the yearly top-10 leaderboard and the cultural policy controls. All computation runs from on-actions and scripted effects; the entry displays it and owns the JE-scoped policy modifiers. Mechanics, files and hooks are documented in `mod_systems.md` § Cultural Hegemony System.
 
-### Buttons (10)
+### Buttons (10, AI-only)
 - `ch_increase_program_funding_button`, `ch_decrease_program_funding_button`
 - 4 enable/disable pairs: `ch_world_exposition_button`, `ch_cultural_institutes_button`, `ch_global_media_campaign_button`, `ch_cultural_protectionism_button` (each with a `ch_disable_*` counterpart)
+
+All ten carry `is_ai = yes` in `visible`, so the vanilla button grid shows nothing to a human — the widget below is the human surface. **Never delete a `scripted_button = …` line from the entry:** those `ai_chance` blocks are the AI's only path into the system. Each button's `possible` lives in `ch_possible_<button>` (`common/scripted_triggers/cultural_hegemony_triggers.txt`) and its `effect` in `ch_effect_<button>` (`common/scripted_effects/cultural_hegemony_effects.txt`); the widget's controls call the same two helpers, so the AI's path and the player's cannot drift. `ch_shown_<programme>` mirrors the enable/disable swap for both surfaces.
+
+All four programmes are **persistent toggles**, not timed one-shots — including International Cultural Outreach (`ch_world_exposition`), whose static modifier is untimed.
+
+### Variables
+| Variable | Scope | Written by | Meaning |
+|---|---|---|---|
+| `ch_total`, `ch_art`, `ch_sol`, `ch_monuments`, `ch_megaprojects` | country | `ch_monthly_country_update` | monthly cache of the pull components |
+| `ch_tech_firsts_recent` | country | `cultural_hegemony_tech_first_on_action`, decayed yearly | world-first tech bonus |
+| `ch_program_funding_level` | country | the two funding steppers; zeroed by the monthly pulse when the Ministry goes | 0…cap |
+| `ch_tier` | country | **`ch_set_display_state` only** | 0 negligible … 5 hegemon. The 2/5/10/15/25 share thresholds exist nowhere else |
+| `ch_prog_count` | country | **`ch_set_display_state` only** | active programmes, 0…4 |
+| `ch_rank_self` | country | the `ordered_country` pass in `ch_yearly_global_update`; cleared by `ch_monthly_country_update` when `cultural_pull_raw < 0.01` | 1-based board position |
+| `ch_ranked_total` | global | end of the same pass | how many countries have any pull |
+| `ch_rank_N`, `ch_rank_N_{score,delta,prev,art,prs,sol,tech,raw}` | global | `ch_yearly_global_update` | the yearly top-ten snapshot. All ten deltas are zeroed before being computed, so the board never reads an unset global |
+| `ch_rank_1_ideology`, `ch_rank_1_ideology_aligned_count`, `ch_ideology_country_total` | global | `ch_cache_rank_1_ideology_alignment_summary` | the hegemon's exported model and its reach |
+
+`ch_set_display_state` is called from the shared tail of `ch_monthly_country_update` **and** of every `ch_effect_<button>`, which is why a click moves the widget's labels without waiting for the next pulse.
+
+### Cultural Hegemony Widget (journal-entry widget)
+Three custom widgets replace a 55-entry `status_desc` — a ten-line hand-rolled leaderboard, a twelve-branch ideology ladder, ten breakdown lines and four policy lines, all of which were a table pretending to be prose. `status_desc` now carries three lines (tier, share, funding level), which is what a pinned or unopened entry shows.
+
+- **File:** `gui/journal_entry_widgets/cultural_hegemony_widget.gui` (chart types: `gui/journal_entry_widgets/te_history_chart.gui`)
+- **Handlers:** `common/scripted_guis/cultural_hegemony_sguis.txt`
+- **Shared helpers:** `common/scripted_triggers/cultural_hegemony_triggers.txt` (`ch_possible_<button>`, `ch_active_<programme>`, `ch_shown_<programme>`), `common/scripted_effects/cultural_hegemony_effects.txt` (`ch_effect_<button>`, `ch_refresh_funding_modifiers`, `ch_set_display_state`)
+- **Handlers, 10:** `ch_policy_sgui` (the only interactive one), four scope-free `ch_active_<programme>_sgui`, and five display-only — `ch_show_sgui`, `ch_board_row_sgui`, `ch_board_detail_sgui`, `ch_board_is_us_sgui`, `ch_history_marker_sgui`
+- **Branchy text:** `common/customizable_localization/cultural_hegemony_custom_loc.txt` — `ch_tier_text`, `ch_tier_blurb`, `ch_exported_model_text`, `ch_exported_model_owner`
+- **Display-only reads:** `cultural_pull_from_modifiers_display`, `ch_pull_mult_pct_display`, `ch_art_mult_pct_display`, `ch_global_raw_display`, `ch_rank_self_display`, `ch_ranked_total_display`, `ch_share_fill_pct`, `ch_prog_count_display`, `ch_model_aligned_display`, `ch_model_total_display` in `cultural_hegemony_script_values.txt`, alongside the pre-existing `*_display` family
+
+Areas:
+1. **Cultural Influence** (`custom_widget_container_1`) — tier name and blurb from custom loc, the share of global influence as a bar plus a number, world rank, and the hegemon's exported political model with how many countries share it. The tier line is deliberately duplicated with `status_desc`: one is the unopened entry, the other the open panel.
+2. **Cultural Programmes** (`custom_widget_container_2`) — the funding stepper and one row per programme, each showing whether it is running and carrying the enable and disable controls. Exactly one of the pair renders: the Disable control is drawn on `ch_active_<programme>_sgui`'s `IsShown` and the Enable control on `Not(...)` of the same, which is the same `ch_active_<programme>` trigger the journal-entry buttons' `visible` reads. Mutual exclusion between Global Media Campaign and Cultural Protectionism leaves the Enable control visible and disabled, with the reason in its tooltip. The two funding steppers are always drawn and grey out through `is_valid`.
+3. **Standing** (`custom_widget_container_3`) — three collapsible sections, all collapsed by default: the pull breakdown, the top-ten board, and the history chart.
+
+**Whether the player can act never depends on a saved scope.** It is unproven in this mod that a `saved_scopes` value reaches a handler's `is_shown`: Strategic Reserve passes `AddScope('dir', …)` to `IsShown` but its `is_shown` never reads the scope, vanilla ships no handler whose `is_shown` does, and vanilla's `scripted_guis.md` promises saved scopes only "in triggers / effects". So the Enable/Disable swap — the one question the player's ability to act rests on — is answered by four **scope-free** `ch_active_<programme>_sgui` handlers in the banking dashboard's play-tested shape (`is_shown` asks the shared trigger, `is_valid = { always = no }`, empty effect), and `ch_policy_sgui`'s own `is_shown` is just `has_journal_entry = je_cultural_hegemony`. `op` still drives `is_valid`, `Execute` and the tooltips, where Strategic Reserve proves it works. The two display handlers that branch on `op` for row visibility **fail open** (a scope that never arrives shows the row), so the worst case is a cosmetic line rather than a missing reading; `ch_board_is_us_sgui` is the single fail-closed handler, because no marker beats ten.
+
+Op table — `ch_policy_sgui` (interactive; `is_valid` → the trigger, `effect` → the effect):
+
+| op | control | helper suffix |
+|---|---|---|
+| 0 / 1 | programme funding − / + | `decrease_program_funding` / `increase_program_funding` |
+| 2 / 3 | International Cultural Outreach begin / end | `world_exposition` / `disable_world_exposition` |
+| 4 / 5 | Cultural Institutes fund / defund | `cultural_institutes` / `disable_cultural_institutes` |
+| 6 / 7 | Global Media Campaign launch / end | `global_media_campaign` / `disable_global_media_campaign` |
+| 8 / 9 | Cultural Protectionism enact / end | `cultural_protectionism` / `disable_cultural_protectionism` |
+
+Op table — `ch_show_sgui` (display only, empty effect, **fail open**). Ops 0–12 each reproduce one condition that used to gate a `triggered_desc`, so no threshold moved into `.gui`: 0 art (no diminishing returns), 1 art (diminished), 2 prestige, 3 standard of living, 4 tech leadership, 5 monuments, 6 megaprojects, 7 flat pull modifiers, 8 infamy, 9 instability, 10 pull multiplier, 11 the "Rank N of M" line, 12 the exported-model block.
+
+`ch_board_row_sgui` (fail open), `ch_board_detail_sgui` (`is_shown = { always = yes }`) and `ch_board_is_us_sgui` (**fail closed**) all take **op = board rank 1…10**: the row's line, its hover breakdown, and its "us" marker. `ch_history_marker_sgui` takes `saved_scopes = { te_hist_sample }`. The four `ch_active_<programme>_sgui` handlers take no scope at all.
+
+**Why the board is script-built text and not GUI rows.** The leaderboard is a list of *countries*, and `.gui` cannot name one: `Var().GetCountry.GetName` is recorded as rendering blank in this mod (`gui_modding_guide.md` gotcha #11) and `Scope.GetCountry` appears in no vanilla `.gui` (gotcha #15); `GetGlobalVariable` appears in no vanilla or mod `.gui` at all, and there is no `HasGlobalVariable` to hide an empty slot. `ch_board_row_sgui` therefore enters `global_var:ch_rank_N`'s scope **in script** and prints `[THIS.GetCountry.GetName]`, which is vanilla's own shape for a country list inside a scripted GUI. Each rank is its own widget with its own `ExecuteTooltip`, so gotcha #18 (a scope's own lines print before its nested blocks') cannot apply. `is_shown` doubles as the row's visibility, so an empty or annexed slot collapses instead of printing a placeholder.
+
+**History.** One series, `ch_share` (`var:ch_total`, axis 0–50), sampled monthly from the entry's own pulse by `te_history_record_cultural_hegemony_samples`, plus eight programme on/off markers recorded inside the `ch_effect_*` helpers. The series **re-bases each January**: the numerator moves monthly but `global_var:ch_cached_global_raw` is only refreshed by the yearly pulse, so a step at the turn of the year is the world total being recomputed, not this country gaining influence. The chart legend says so. No funding marker — `te_history_record_marker` sets one flag per (month, marker) but bumps the month's marker count on every call, and a funding nudge is not a turning point. Marker tooltips come from the CH-owned `ch_history_marker_sgui` via a per-instance `bar_tooltip` blockoverride, so no shared history file needs a cultural-hegemony branch.
+
+**Editing rules.** Change a gate, a cost or an applied modifier in the **helper**, never in the button or the scripted GUI. Move a share threshold in `ch_set_display_state` and nowhere else; move the art diminishing-returns threshold in `cultural_pull_art_dr_threshold` and nowhere else. Add a breakdown row by adding a `ch_show_sgui` op, not a `.gui` comparison. Never delete a `scripted_button = …` line from the entry. **Never make a control's `visible` depend on a saved scope** — a new action control either reuses a scope-free `ch_active_*_sgui`, or is drawn unconditionally and greys out through `is_valid`; and a new display handler that does branch on `op` gets the fail-open first branch (`trigger_if = { limit = { NOT = { exists = scope:op } } always = yes }`).
+
+Traced scenarios: fresh activation without the Ministry (all controls disabled, "Requires Ministry of Culture"); an inactive entry under `is_shown_when_inactive` (all three roots gated on `JournalEntry.IsActive`, nothing renders, no sgui runs); all four programmes running; Media on and Protectionism's Enable greyed; funding at cap; the Ministry repealed (pulse zeroes funding and stops all four programmes); an annexed board slot (row collapses); an AI country (grid hidden from humans only, every `ai_chance` intact, every handler `ai_is_valid = { always = no }`); an old save (no new persistent state is needed to render — `ch_tier`/`ch_prog_count` arrive on the first monthly pulse, `ch_rank_self` on the first yearly pass, and every read is guarded); the game rule disabled mid-game.
+
+### Debug harness
+`event te_debug_ch.1` (`events/te_debug_ch_events.txt`, helpers in `common/scripted_effects/te_debug_ch_effects.txt`): **A** set up the Ministry, a funding cap of 4 and three running programmes; **B** put us at rank 1; **C** fill the board with others and put us at rank 14 of 168; **D** empty board slot 5 (the annexed case); **E** repeal the Ministry. The console-only `ch_debug_funding_cap` static modifier grants the funding cap.
 
 ### Never Completes
 Persistent journal entry.
@@ -1106,14 +1307,14 @@ Completes when `ww_fully_resolved` is set (36 months post-war). Fails if dropped
 **Group:** `je_group_foreign_affairs`
 
 ### Purpose
-Multi-stage competitive space race system with 8 milestones. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
+Multi-stage competitive space race system across nine journal entries — seven milestones with a bar, the repeatable Solar System Colonization entry, and a passive entry that waits out the interstellar probe's transit. Great/Major Powers with rocketry tech compete to achieve milestones first. Semi-parallel progression allows pursuing multiple objectives once prerequisites are met.
 
 ### Key Mechanics
-- **8 Milestones:** Suborbital Flight → Orbital Flight → Moon Landing / Probe (parallel) → Moon Base / Mars Landing (parallel) → Mars Terraforming → Solar System Colonization
+- **9 Entries:** Suborbital Flight → Orbital Flight → Moon Landing / Deep-Space Probe (parallel) → Moon Base / Mars Landing (parallel) → Interstellar Probe (→ Awaiting Data, passive) / Solar System Colonization (repeatable)
 - **"The First" Bonus:** Global flags track first achiever per milestone. First nation gets ~2× permanent rewards.
-- **Approach Choice:** Safe (slow, ~2-7% failure) vs Ambitious (fast, ~10-22% failure) via scripted buttons.
-- **Funding Levels:** 0-3 levels affecting progress speed and innovation drain.
-- **Failure:** Halves progress + cooldown period. Does NOT permanently block.
+- **Approach Choice:** Safe vs Ambitious, per entry. Base setback risk is 5–10% a month depending on the milestone (`sr_base_risk_<m>`); Safe halves it and Ambitious leaves it alone, through `country_space_race_risk_mult`. The roll and the panel's "Setback risk" figure read the same `sr_risk_pct_<m>`.
+- **Funding Levels:** 0 to `sr_max_funding_level` (base 3) affecting progress speed and innovation drain.
+- **Failure:** Multiplies progress down (×0.75 ambitious, ×0.85 safe) and starts a cooldown. The cooldown suppresses only the **roll** — progress keeps accruing at full rate while it runs. Does NOT permanently block.
 - **Moon Landing Site:** Shackleton Crater (high risk, science) vs Equatorial Plain (low risk, modest).
 - **Progress Sources:** Base rate + Aerospace Industry levels + Space Elevator + Space Mine + UN partnership + SpaceX company + funding + tech bonuses.
 - **Cross-System:** UN space partnership, SpaceX company, space elevator, space mine, and tourism all provide progress bonuses and/or reduce failure risk.
@@ -1127,13 +1328,56 @@ Multi-stage competitive space race system with 8 milestones. Great/Major Powers 
 | Moon Landing | space_exploration | Orbital complete |
 | Outer Solar System Probe | space_exploration | Orbital complete |
 | Moon Base | reusable_rocketry | Moon Landing complete |
-| Mars Landing | reusable_rocketry | Orbital complete |
-| Mars Terraforming | space_colonization | Mars Landing complete |
-| Solar System Colonization | space_colonization | Moon Base + Mars Landing complete |
+| Mars Landing | knowledge_economy | Orbital + Moon Landing complete |
+| Interstellar Probe | compact_fusion_reactors | Deep-Space Probe + Mars Landing complete |
+| Interstellar Probe: Awaiting Data | — | Interstellar Probe launched (passive, 132 months) |
+| Solar System Colonization | directed_energy_weapons | Moon Base + Mars Landing complete |
 
-### Buttons (4 per JE)
-- `sr_select_safe_approach` / `sr_select_ambitious_approach` — approach toggle
-- `sr_increase_funding` / `sr_decrease_funding` — funding level (0-3)
+Each entry additionally requires the matching `country_sr_*_program_bool` from the space programme's production method; losing it fires the entry's `fail`.
+
+### Buttons (4 per JE × 8 JEs = 32)
+Per milestone `<m>`: `sr_btn_safe_<m>` / `sr_btn_ambitious_<m>` (approach) and `sr_btn_fund_up_<m>` / `sr_btn_fund_down_<m>` (funding level, 0 to `sr_max_funding_level`). `je_space_race_interstellar_results` has none.
+
+All 32 carry `is_ai = yes` in their `visible`, so the vanilla grid shows a human nothing: the buttons exist for the AI, which picks approach and funding through their `ai_chance`. None of them holds a rule — `visible`, `possible` and `effect` all delegate to the shared helpers the widget's scripted GUIs also call, so the two surfaces cannot drift. Never delete a `scripted_button = …` line: those `ai_chance` blocks are the AI's only path into the space race.
+
+### Milestone Panel (journal-entry widget)
+One shared panel mounted on **all nine** entries in `custom_widget_container_2`, replacing the hidden button grid and the 44-branch `triggered_desc` chains (each `status_desc` is now one line).
+
+- **File:** `gui/journal_entry_widgets/space_race_widget.gui` — one `widget_je_sr_milestone_panel` type instanced by nine named widgets (`widget_je_space_race_<m>`). Vanilla precedent for several named widgets in one journal-entry widget file: `gui/journal_entry_widgets/ep2_japan_widgets.gui:501,550`, mounted by `00_meiji_restoration.txt:10,16`.
+- **Handlers:** `common/scripted_guis/space_race_sguis.txt` — eight `sr_milestone_<m>_sgui` (one per milestone with buttons) plus the display-only `sr_rivals_sgui`.
+- **Shared helpers:** `common/scripted_triggers/space_race_triggers.txt` (`sr_controls_shown`, `sr_solar_controls_shown`, `sr_possible_{safe,ambitious,fund_up,fund_down}`), `common/scripted_effects/space_race_effects.txt` (`sr_effect_{safe,ambitious,fund_up,fund_down}`). All parameterized on `$MILESTONE$`.
+- **Branching text:** `common/customizable_localization/space_race_custom_loc.txt` — `sr_<m>_profile` (the moved `triggered_desc` branches), `sr_<m>_pace` (one sentence explaining the pace figures), `sr_prog_<m>` (one word per programme-overview row). Every target key is plain text; the numbers all live in the outer widget loc keys.
+- **Display-only reads:** `sr_pace_rate_<m>` (the rate the pulse actually applies), `sr_risk_shown_<m>` (the roll's own value, forced to zero while the cooldown suppresses the roll), `sr_eta_months_<m>`, `sr_setbacks_<m>_value`, `sr_colony_count_value`, `sr_interstellar_months_left` — all in `space_race_values.txt`.
+
+Areas:
+1. **Readout** — progress against goal; pace, setback risk and lifetime setbacks; a rough estimate of months left; one sentence naming the state; the mission-profile flavour. The pace-and-estimate line is gated on the same `is_shown` as the controls, because solar colonization's entry stays alive with every colony claimed: there the rate falls back to the drift floor with no progress variable left to divide, and the estimate would read in the hundreds of months. The sentence below it still says the programme is not running. Its tooltip is the reward preview, built from `GetStaticModifier('sr_first_<m>').GetDesc` and `GetStaticModifier('sr_<m>').GetDesc` — never a typed number. Two exceptions: solar colonization has no `sr_first_*` / `sr_*` pair and uses `sr_solar_system_trade`; `interstellar_results` has no single modifier and describes the uncertainty in prose.
+2. **Controls** — Safe / Ambitious as a two-option selector where the option in force greys itself out through `is_valid`, and a funding stepper. The whole inset is gated on the scripted GUI's `is_shown`, which is also what keeps its `Var` read of `sr_funding_<m>` safe and what hides the controls when solar colonization drops into passive mode.
+3. **Who else is racing** (collapsed) — who is running a programme for this milestone and whether "the first" is still unclaimed. Built in script because `.gui` cannot list countries (gotchas #11, #15). It deliberately does **not** show rivals' progress. Its `limit` requires `sr_ai_should_participate = yes`, because a great power outside the top three can hold `sr_active_<m>` and never tick a month. **Solar colonization gets the participation list only** (`sr_rivals_participants_base`, not `sr_rivals_line_base`): it has no `sr_first_solar_colonization` reward and never writes a `sr_global_first_` flag, so there is no first to race for — the debug console's claim/release options leave it out for the same reason.
+4. **The programme so far** (collapsed) — all nine milestones as done / ours-and-first / under way / claimed by another / not begun. Restates no prerequisites; those are already legible in the journal list through `is_shown_when_inactive`.
+
+Op table (repeated in the `.gui` header and the sgui header — keep all three in step):
+
+| op | control |
+|---|---|
+| 0 | select the Safe approach |
+| 1 | select the Ambitious approach |
+| 2 | decrease this milestone's funding level |
+| 3 | increase this milestone's funding level |
+
+The milestone is **not** in the op code: it arrives through the panel's datacontext, which names one of the eight handlers.
+
+**Editing rules:** change an approach or funding rule in the **helper**, not in the button and not in the scripted GUI. Never re-derive a milestone's state in `.gui` or in localization — read `sr_<m>_last_status`, whose single derivation site is `sr_set_milestone_status_base`. Never put a scope expression in a customizable-localization target key (this repo has no precedent for one); put the numbers in the outer widget loc key, which is read in real GUI context. Expander state is per milestone and lives in `GetVariableSystem` (`sr_panel_rivals_<m>`, `sr_panel_programme_<m>`) — several milestone entries can be active at once, and collapsing a section must not touch the game.
+
+**Cost:** the two collapsible sections are the only expensive part, and both sit inside the container whose `visible` is their expander flag, so neither is evaluated while collapsed. `sr_rivals_sgui` walks every country once per frame while its section is open, which is why it is closed by default.
+
+Traced scenarios: fresh activation (no approach → drift rate, no risk); inactive entry with `is_shown_when_inactive` (root gated on `[JournalEntry.IsActive]`); either approach toggle; funding at each bound; a setback month (progress loss, counter, cooldown → shielded reading); a rival annexed or a rival that never ticks; an AI country; the programme's production method lost mid-way; an old save with neither display variable yet; solar colonization completing into passive mode; three milestones active at once; the read-only waiting entry.
+
+**Known behaviours the panel now makes visible** (existing mechanics, unchanged):
+- The failure cooldown suppresses only the **roll**. Progress is added before the check (`space_race_effects.txt:25`), so a programme inside its cooldown runs at full speed with zero chance of a setback. The panel says "shielded", not "paused".
+- With no approach selected the pulse adds a flat `sr_progress_drift` (0.5), not `sr_progress`. The panel quotes the drift rate in that state so the two agree.
+
+### Debug harness
+`event te_debug_space_race.1` (`events/te_debug_space_race_events.txt`, helpers in `common/scripted_effects/te_debug_space_race_effects.txt`) reaches every panel state: 90% / 100% progress, a forced setback with its cooldown, clearing the cooldown, seeding rival programmes, and claiming or releasing "the first". The rival flags are not backed by a journal entry, so the monthly cleanup wipes them — pause first.
 
 ### Events (34 total)
 - `.1`-`.9` — Milestone completion events (1 per milestone + notification)
@@ -1152,4 +1396,8 @@ Multi-stage competitive space race system with 8 milestones. Great/Major Powers 
 - Values: `common/script_values/space_race_values.txt`
 - Modifiers: `common/static_modifiers/space_race_modifiers.txt`
 - On Actions: `common/on_actions/space_race_on_actions.txt`
+- Widget: `gui/journal_entry_widgets/space_race_widget.gui`
+- Scripted GUIs: `common/scripted_guis/space_race_sguis.txt`
+- Customizable localization: `common/customizable_localization/space_race_custom_loc.txt`
+- Debug console: `events/te_debug_space_race_events.txt`, `common/scripted_effects/te_debug_space_race_effects.txt`
 - Localization: Organized into main loc files by `organize_loc.py` (events, JE labels, modifiers, etc.)

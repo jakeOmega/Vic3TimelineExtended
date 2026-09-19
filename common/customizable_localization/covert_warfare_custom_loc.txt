@@ -1,0 +1,152 @@
+﻿# ============================================================================
+# COVERT WARFARE — customizable localization for the command-centre widget
+# ============================================================================
+# Read from gui/journal_entry_widgets/covert_operations_widget.gui and from the
+# funding controls' tooltips as
+# [JournalEntry.GetCountry.GetCustom('<key>')] / [GetPlayer.GetCustom('<key>')].
+#
+# These exist so the widget and the button tooltips never branch on a number
+# themselves. Every threshold they test is one script already acts on:
+#   - iw_funding_level 0 is the level at which every covert diplomatic action's
+#     requirement_to_maintain fails (common/diplomatic_actions/covert_operations.txt),
+#     which is why the decrease warning speaks up at level 1.
+#   - covert_operations_active is the live pact count.
+# ============================================================================
+
+# The funding level's name. Six levels; iw_funding_level_max is 5.
+covert_funding_level_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = iw_funding_level } }
+		localization_key = iw_funding_name_0
+	}
+	text = {
+		trigger = { var:iw_funding_level >= 5 }
+		localization_key = iw_funding_name_5
+	}
+	text = {
+		trigger = { var:iw_funding_level >= 4 }
+		localization_key = iw_funding_name_4
+	}
+	text = {
+		trigger = { var:iw_funding_level >= 3 }
+		localization_key = iw_funding_name_3
+	}
+	text = {
+		trigger = { var:iw_funding_level >= 2 }
+		localization_key = iw_funding_name_2
+	}
+	text = {
+		trigger = { var:iw_funding_level >= 1 }
+		localization_key = iw_funding_name_1
+	}
+	text = {
+		localization_key = iw_funding_name_0
+	}
+}
+
+# What a level's operations are actually doing, for the panel's headline line.
+covert_funding_state_line = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			covert_operations_active >= 1
+		}
+		localization_key = iw_funding_state_running
+	}
+	text = {
+		trigger = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		localization_key = iw_funding_state_ready
+	}
+	text = {
+		trigger = { covert_operations_active >= 1 }
+		localization_key = iw_funding_state_dormant_with_ops
+	}
+	text = {
+		localization_key = iw_funding_state_dormant
+	}
+}
+
+# The decrease control's consequence. Only at level 1 does a step down stand
+# operations down, and only then is there anything to warn about.
+covert_decrease_funding_warning = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = iw_funding_level
+			var:iw_funding_level = 1
+			covert_operations_active >= 1
+		}
+		localization_key = iw_decrease_warning_stands_down
+	}
+	text = {
+		trigger = {
+			has_variable = iw_funding_level
+			var:iw_funding_level = 1
+		}
+		localization_key = iw_decrease_warning_blocks_launch
+	}
+	text = {
+		localization_key = iw_decrease_warning_none
+	}
+}
+
+# What our counter-intelligence last exposed. Named only when the stored
+# attacker still exists AND still owns the state we recorded, so a conquered
+# capital can never turn into a false accusation against its conqueror; see
+# covert_last_exposed_named_sgui.
+covert_last_exposed_type_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { var:iw_last_exposed_type = 0 }
+		localization_key = iw_op_name_election_interference
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 1 }
+		localization_key = iw_op_name_financial_subversion
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 2 }
+		localization_key = iw_op_name_infrastructure_sabotage
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 3 }
+		localization_key = iw_op_name_comms_disruption
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 4 }
+		localization_key = iw_op_name_industrial_espionage
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 5 }
+		localization_key = iw_op_name_military_espionage
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 6 }
+		localization_key = iw_op_name_influence_campaign
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 7 }
+		localization_key = iw_op_name_ideological_subversion
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 8 }
+		localization_key = iw_op_name_destabilization
+	}
+	text = {
+		localization_key = iw_op_name_unknown
+	}
+}

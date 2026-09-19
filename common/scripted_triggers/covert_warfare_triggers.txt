@@ -52,3 +52,61 @@ covert_op_is_established = {
 covert_op_is_fully_operational = {
 	var:iw_duration >= 12
 }
+
+# ============================================================================
+# FUNDING CONTROLS — shared eligibility
+# ============================================================================
+# One definition per funding action, called by BOTH the journal entry's
+# scripted button (`possible`) and the widget's scripted GUI (`is_valid`), so
+# the two surfaces cannot drift. The custom_tooltip text is phrased as a
+# condition, not a complaint, because ScriptedGui.IsValidTooltip renders it
+# with a tick when it holds and a cross when it does not — and it doubles as
+# the "you are here" indicator at either end of the ladder.
+# Scope: country
+
+covert_possible_increase_funding = {
+	custom_tooltip = {
+		text = iw_funding_not_max_tt
+		OR = {
+			NOT = { has_variable = iw_funding_level }
+			var:iw_funding_level < iw_funding_level_max
+		}
+	}
+}
+
+covert_possible_decrease_funding = {
+	custom_tooltip = {
+		text = iw_funding_not_min_tt
+		has_variable = iw_funding_level
+		var:iw_funding_level > 0
+	}
+}
+
+# ============================================================================
+# STAND DOWN — shared eligibility
+# ============================================================================
+# Whether the operation a widget row is showing can be ended from that row.
+#
+# FAIL-CLOSED BY DESIGN. The row hands the target country to script through a
+# saved scope, and this trigger requires BOTH that the scope resolved AND that we
+# really run an operation of this exact type against that exact country. If the
+# scope ever arrives unset — the one part of the mechanism with no vanilla
+# precedent for a scripted GUI, see the .gui header — the control greys out and
+# does nothing. It can never end an operation other than the one the row names.
+# Parameters: $TYPE$ = short name (e.g. election_interference)
+# Scope: operator country; scope:iw_tgt = the row's target country
+covert_possible_stand_down = {
+	custom_tooltip = {
+		text = iw_stand_down_target_known_tt
+		exists = scope:iw_tgt
+	}
+	custom_tooltip = {
+		text = iw_stand_down_op_matches_tt
+		has_variable_list = iw_ops
+		any_in_list = {
+			variable = iw_ops
+			has_tag = iw_op_$TYPE$
+			var:iw_target ?= scope:iw_tgt
+		}
+	}
+}
