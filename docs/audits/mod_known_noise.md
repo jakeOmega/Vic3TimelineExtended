@@ -145,3 +145,13 @@ building_strategic_reserve_silo has missing texture
 ```
 
 One line per launch; the queried-but-missing texture slot hasn't been identified yet (the building's `icon` dds exists). Cosmetic fallback art. Signature pinned to the silo so other buildings' missing textures still surface. Tracked at `docs/audits/open_issues.md#l17-strategic-reserve-silo-missing-texture-warning-unresolved`.
+
+### `jomini_eventmanager.cpp:376` — console-only debug test events reported orphaned
+- source: `jomini_eventmanager.cpp:376`
+- tracked: `docs/audits/open_issues.md#l23-console-only-debug-test-events-logged-as-orphaned-by-design`
+
+```
+Event te_debug_
+```
+
+The `te_debug_<system>.1` test consoles in `events/te_debug_*_events.txt` are fired by hand with `event te_debug_<x>.1`. Nothing in script fires them, so each is logged as orphaned at load (ch, colonial_empire, covert, gw, nuclear, space_race, un as of 2026-09-19). By design. The signature is the `te_debug_` prefix only, not `is orphaned`, because signatures match if ANY line matches: an `is orphaned` line would also hide a real mod event that lost its trigger. A new console needs no change here. Tracked at `docs/audits/open_issues.md#l23-console-only-debug-test-events-logged-as-orphaned-by-design`.

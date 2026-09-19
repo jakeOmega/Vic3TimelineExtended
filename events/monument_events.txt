@@ -38,7 +38,7 @@ monument_events.2 = {
 
 	event_image = { video = "unspecific_world_fair" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = monument_events.2.t
 	desc = monument_events.2.d
@@ -197,7 +197,7 @@ monument_events.3 = {
 	placement = root
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = monument_events.3.t
 	desc = monument_events.3.d
@@ -400,7 +400,7 @@ monument_events.10 = {
 	placement = root
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_urbanization.dds"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
 	title = monument_events.10.t
 	desc = monument_events.10.d
