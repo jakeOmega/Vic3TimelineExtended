@@ -59,11 +59,52 @@ nuclear_program_effect_decrease_funding = {
 # entry always has a status code), the tail of its on_weekly_pulse, and the two
 # button effects above — and therefore both stepper ops in the widget, which
 # delegate to those effects. In `immediate` the journal entry is still being
-# activated. Nothing else may write nuclear_program_last_status, and neither the
-# .gui nor the localization may re-derive it — see
+# activated, which is why the modifier guard below reaches it through `?=`:
+# whether `je:je_nuclear_program` resolves that early is untested, and either
+# answer is safe (unresolved is skipped; resolved has no modifier yet on a fresh
+# entry, and on a re-activation the old entry's modifier died with it). Nothing
+# else may write nuclear_program_last_status, and neither the .gui nor the
+# localization may re-derive it — see
 # docs/guides/scripting_best_practices.md, "Journal-Entry Widgets: Derive Display
 # State Once, in Script".
+#
+# WHY THE FUNDING MODIFIER IS DECIDED FROM THE VARIABLE, NOT FROM has_modifier.
+# add_modifier / remove_modifier results are not visible inside the same effect
+# block, and a scripted effect call is inlined into its caller's block, so a
+# has_modifier read here may see the state as it was *before* the button body
+# ran. change_variable results, by contrast, are visible immediately. The
+# decision is therefore taken from var:nuclear_weapons_program_funding, which
+# this block's caller has just written. Walking every caller, with the invariant
+# "funding >= 1 implies the modifier is on the journal entry":
+#   increase, F -> F+1       funding >= 1, guard skipped; the button body already
+#                            re-added the modifier at the new multiplier.
+#   decrease, F -> F-1 >= 1  same: nothing to do.
+#   decrease, 1 -> 0         funding = 0. Pre-block the modifier was present
+#                            (funding was 1), so the has_modifier read is true,
+#                            and the body removed and re-added it at multiplier
+#                            0 — so it really is present and the remove lands.
+#                            Without this the entry would keep a "-0 weekly
+#                            innovation" row for ever.
+#   pulse, pause in force    the pulse zeroes funding earlier in the same block;
+#                            the modifier is genuinely still present, so the read
+#                            is true and the innovation drain finally stops.
+#   pulse, already at 0      modifier absent, read false, so no remove_modifier
+#                            on a missing modifier (which logs an error).
+#   pulse, steady funding>=1 funding /= 0, guard skipped, modifier left exactly
+#                            as it is rather than re-added every week.
+# The guard is correct whether the has_modifier read sees the pre-block or the
+# live state, because the only caller where the two differ is "decrease 1 -> 0",
+# and there both readings say "present".
 nuclear_program_refresh_state_effect = {
+	if = {
+		limit = {
+			has_variable = nuclear_weapons_program_funding
+			var:nuclear_weapons_program_funding = 0
+			je:je_nuclear_program ?= { has_modifier = nuclear_weapon_program_funding }
+		}
+		je:je_nuclear_program ?= { remove_modifier = nuclear_weapon_program_funding }
+	}
+
 	# The status code the panel and the status line read. Order matters: a pause
 	# treaty forces funding to 0, so without testing the pause first a frozen
 	# programme would report itself as merely unfunded.
