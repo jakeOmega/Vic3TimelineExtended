@@ -291,6 +291,18 @@ flowcontainer = {
 		blockoverride "line_text" { text = "je_iw_defense_axes" }
 		blockoverride "line_extra" { tooltip = "je_iw_defense_axes_tooltip" }
 	}
+	### The one honest word on hostile operations: what our own counterintelligence
+	### actually caught, named in script so an annexed attacker degrades to an
+	### anonymous line. Nothing here aggregates the undetected covert_* effect
+	### modifiers a target may be carrying.
+	covert_cc_line = {
+		blockoverride "line_text" {
+			text = "[GetScriptedGui('covert_last_exposed_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		}
+		blockoverride "line_extra" {
+			visible = "[GetScriptedGui('covert_last_exposed_known_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		}
+	}
 }
 
 ### One row per running operation.

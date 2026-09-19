@@ -140,13 +140,36 @@ covert_op_end = {
 	}
 }
 
-# Burn a detected operation: remove its pact and destroy its container.
+# Burn a detected operation: remove its pact, destroy its container, and leave
+# the target a record of what it just caught us doing.
+#
+# That record is the ONLY thing a defender's journal entry says about hostile
+# operations, and it is deliberately narrow: this effect runs exactly when the
+# target's counterintelligence exposed this operation, so naming it is not
+# omniscience. The operation-effect modifiers a target carries (covert_*) are
+# NOT aggregated anywhere — those are the effects of operations it has not
+# detected, and surfacing them would hand the defender knowledge the detection
+# system exists to withhold.
+#
+# iw_last_exposed_country holds the country itself, not its capital state: the
+# widget renders the name by navigating into the country in script
+# (covert_last_exposed_sgui), so an annexed attacker falls back to an anonymous
+# line instead of a months-old capital naming whoever conquered it.
+# iw_last_exposed_age is aged by the journal entry's monthly pulse.
+#
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
-#             $TARGET$ = target country
+#             $TARGET$ = target country,
+#             $CODE$ = operation type code 0-8, matching the branches of
+#                      covert_last_exposed_type_name
 # Scope: operator country
 covert_op_burn = {
 	remove_diplomatic_pact = { country = $TARGET$ type = $ACTION$ }
 	covert_op_destroy = { TYPE = $TYPE$ TARGET = $TARGET$ }
+	$TARGET$ = {
+		set_variable = { name = iw_last_exposed_country value = ROOT }
+		set_variable = { name = iw_last_exposed_type value = $CODE$ }
+		set_variable = { name = iw_last_exposed_age value = 0 }
+	}
 }
 
 # ============================================================================

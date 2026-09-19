@@ -182,6 +182,65 @@ covert_ops_dormant_sgui = {
 	}
 }
 
+# ---- TOOLTIP BUILDER: what our counterintelligence last exposed -------------
+# The only thing this journal entry says about hostile operations, and it says it
+# only about one that was actually caught: covert_op_burn writes the record at
+# the moment the target's counterintelligence exposed the operation.
+#
+# The attacker's name is produced by navigating into the stored country in script
+# and printing [THIS.GetCountry.GetName] on a line inside that scope —
+# gui_modding_guide.md gotcha #11 workaround (b), because Var().GetCountry.GetName
+# renders blank in this mod. Storing the country rather than its capital is what
+# makes annexation safe: `exists` fails and the anonymous line renders, instead of
+# a months-old capital state naming whoever conquered it.
+covert_last_exposed_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = {
+				has_variable = iw_last_exposed_type
+				exists = var:iw_last_exposed_country
+			}
+			var:iw_last_exposed_country = {
+				custom_tooltip = je_iw_last_exposed_named
+			}
+		}
+		else_if = {
+			limit = { has_variable = iw_last_exposed_type }
+			custom_tooltip_no_bullet = je_iw_last_exposed_unknown
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- YES/NO: is there a recent exposure worth showing? ----------------------
+# Ten years is a display cut-off, not a mechanic: past that the record is history
+# rather than intelligence, and the panel drops the line instead of reporting
+# "412 months ago".
+covert_last_exposed_known_sgui = {
+	scope = country
+
+	is_shown = {
+		has_variable = iw_last_exposed_type
+		has_variable = iw_last_exposed_age
+		var:iw_last_exposed_age < 120
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = { }
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
 # ---- YES/NO: do all operations carry their display phase yet? ---------------
 # iw_phase / iw_phase_months_left are written by covert_op_refresh_phase, which
 # is new. A save made before this widget shipped has containers without them

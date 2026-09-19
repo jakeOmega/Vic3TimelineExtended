@@ -621,3 +621,14 @@ covert_defense_ideological_display = {
 	value = modifier:country_covert_defense_ideological_add
 	round = yes
 }
+
+# How long ago our counterintelligence last exposed a foreign operation. Aged by
+# the journal entry's monthly pulse; covert_op_burn resets it to 0 on the target.
+covert_last_exposed_age_display = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_last_exposed_age }
+		add = var:iw_last_exposed_age
+	}
+	round = yes
+}
