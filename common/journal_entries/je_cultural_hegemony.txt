@@ -3,7 +3,7 @@
 # ============================================================================
 # This JE is the player's window into the Cultural Hegemony system.
 # It shows cultural pull breakdown, global leaderboard, and tier status.
-# All computation runs in on_actions (hegemony_cyber_on_actions.txt) via
+# All computation runs in on_actions (cultural_hegemony_on_actions.txt) via
 # scripted effects (cultural_hegemony_effects.txt) from game start.
 # The JE only activates after 1845 so scores are stable when first shown.
 # ============================================================================
@@ -346,15 +346,6 @@ je_cultural_hegemony = {
 			set_variable = { name = ch_sol value = 0 }
 			set_variable = { name = ch_monuments value = 0 }
 			set_variable = { name = ch_megaprojects value = 0 }
-			set_variable = { name = ch_disp_total value = 0 }
-			set_variable = { name = ch_disp_raw value = 0 }
-			set_variable = { name = ch_disp_art value = 0 }
-			set_variable = { name = ch_disp_prestige value = 0 }
-			set_variable = { name = ch_disp_sol value = 0 }
-			set_variable = { name = ch_disp_tech value = 0 }
-			set_variable = { name = ch_disp_monuments value = 0 }
-			set_variable = { name = ch_disp_megaprojects value = 0 }
-			set_variable = { name = ch_disp_rank value = 0 }
 		}
 	}
 
