@@ -228,6 +228,7 @@ update sets the target from the mandate formula instead of the player's stepper.
 | **Growth** | `r̂* + π − 1.0 + 0.5 × max(0, π − 4) + cycle_lean/2` | runs 1pp warm — equilibrium inflation ≈ 2 + 0.4/c ≈ 3% — and reacts only above 4% (zero-gap point π = 6), or frenzy. Never more hawkish than price stability |
 | **Peg defence** (gold only) | `world_rate + 0.5 × reserve_shortfall_pp` | keeps gold flows at zero; ignores the domestic cycle |
 
+`π` in these formulas is **core** inflation (§9.1) — mandates look through cost-push.
 `r̂*` is the bank's **estimate** of the neutral rate: true value plus a slow random-walk
 error of ±1.5pp (±0.5pp under CBI; shrinking with finance techs). `cycle_lean` is the
 replacement for the deleted rate-hike button's AI logic: +2 frenzy, +1 boom, +1 if bubble
@@ -522,11 +523,16 @@ expected   += α × ( (1 − c_eff) × π_headline + c_eff × anchor − expecte
 | Central bank independence | 1/12 | 0.7 |
 | Gold / commodity money | — | 1 (expected pinned to 0) |
 
-The **real rate, the rate paid, the bands and the mandates all use headline**;
-persistence acts on core. The credibility anchor **(proposed)** is what "CBI anchors
-expectations" means mechanically: with a standing pressure P, inflation settles at
-2 + P / c instead of accelerating — +0.5pp of wage pressure costs 2pp of inflation on a
-manual target but 0.7pp under CBI.
+The **real rate, the rate paid and the bands use headline**; persistence acts on core; the
+**mandates react to core** — a delegated bank *looks through* a supply shock and responds
+only to its second-round effects (simulated, +25% grain under price stability: policy peaks
+at 7% reacting to core against 9% reacting to headline, for a 4.5% headline peak either
+way). A manual player gets no such help: that is the stagflation dilemma.
+
+The credibility anchor **(proposed)** is what "CBI anchors expectations" means
+mechanically: with a standing pressure P *and the real stance held* (the rate moving with
+inflation, as any mandate does), inflation settles at 2 + P / c instead of accelerating —
++0.5pp of wage pressure costs 2pp of inflation at c = 0.25 but 0.7pp under CBI.
 
 **A fixed manual target is unstable above the floor, by design.** Holding the nominal rate
 fixed while π rises lowers the real rate, which adds pressure: stable only if c > 0.4, so
@@ -668,30 +674,42 @@ because rate-paid is an exact dashboard number and would otherwise leak r\*.
 - **Disinflation is the hangover.** While π falls faster than `expected`, the country pays
   `era_base + (expected − π) + premium`, plus the unanchored-expectations premium (§7.6).
 
-Worked example (rough) — fiat, manual target, `era_base` 3, structural 0.5 + cyclical 1.5,
-π = expected = 2, policy 5 → pays max(5, 5) + 2 − 2 = **5%**. War: monetise at level 3 for
-two years, policy held at 5. Pressure +7.5 plus the loosening real rate takes headline to
-~13 while `expected` lags near 4.5 → pays max(5, 7.5) + 2 + 1.5 (monetisation premium) − 13
-→ **floor, 0.5%**. Peace: monetisation off, target raised to 10 over 15 months; `expected`
-peaks near 8 as π falls back to 4 → pays max(10, 11) + 2 + 0.75 (unanchored) − 4 =
-**~9.75%** against 5% before the war, for several years, in a policy-induced downturn.
-Under CBI `expected` re-anchors about three times faster — but CBI forbade the
-monetisation. That is the tradeoff: a cheap war now, an expensive peace later.
+Worked example (simulated monthly; `era_base` = r\* = 3, premium 2, manual target,
+c = 0.25) — π = expected = 2, policy 5 → pays max(5, 5) + 2 − 2 = **5%**.
+
+- **War:** monetise at level 3 for two years with the dial left at 5. Headline reaches
+  ~12.7 while `expected` lags at ~6.5 → pays max(5, 9.5) + 2 + 1.5 + 0.4 − 12.7 ≈ **0.7%**.
+  Three points of GDP a year in extra minting, and the debt nearly free.
+- **Peace, disinflating** (handed to the price-stability mandate): the policy rate has to
+  climb past π + r\* — it peaks near **17%** three years after the war — and rate paid
+  peaks near **12%**. Inflation is back under 4% only ~7 years after the war; rate paid
+  averages **~6.9%** over the 15 post-war years against 5% before it, through a
+  policy-induced downturn. A target of 10 would *not* have done it: with π ≈ 10 the real
+  rate is ~0, still loose. With CBI-grade credibility the same disinflation is ~2 years
+  shorter and ~0.6pp cheaper — but CBI forbade the monetisation.
+- **Peace, never disinflating** (dial left at 5): rate paid averages **~5.4%** — never
+  below the pre-war 5% once expectations catch up — while inflation sits at 12% and climbs
+  to 18% over twenty years, deep in the §9.2 *High* band.
+
+That is the tradeoff: a cheap war now, then either an expensive peace or a permanently
+inflationary one.
 
 **The path that must not pay: never disinflating.** Under *accelerating* inflation adaptive
-expectations trail π indefinitely (~3–4pp in simulation), so the erosion term never turns
-positive and the cheapest line is to ride inflation to 50% and take the currency reform. A
-reviewer's simulation of the earlier formula showed exactly that: rate paid at or below its
-pre-war level for eight years with the dial untouched. Three things close it, and the
-**tuning invariant** is that together they exceed the expectation lag at every inflation
-level above ~10%:
+expectations trail π indefinitely, so the erosion term never turns positive. A reviewer's
+simulation of the earlier formula showed the cheapest line was to ride inflation to 50%
+and take the currency reform: rate paid at or below its pre-war level for eight years with
+the dial untouched. On the revised equations the lag is ~1pp and the **tuning invariant**
+holds — rate paid on the never-disinflate path stays *above* the pre-war baseline — because:
 
 1. the unanchored-expectations premium (§7.6): 0.25pp per pp beyond the 3pp tolerance is
    already +3.75pp at `expected` = 20;
 2. the §9.2 bands, including the collapse of minting income;
 3. the lenders' floor, which removes the *level* gain and leaves only the lag.
 
-Test it on the accelerating path, not just at steady states (§19).
+In *rate-paid* terms never disinflating is still cheaper than a Volcker disinflation
+(~5.4% against ~6.9%). That is acceptable — even realistic — **only because the §9.2 bands
+make a standing 12–18% inflation worse overall**; they are the deterrent and must be sized
+for it. Test all of this on the accelerating path, not just at steady states (§19).
 
 ---
 
@@ -1123,7 +1141,7 @@ Each phase is playable alone. Later phases can be cut.
 | Phase | Ships | Interim rule until the next phase | Exit criteria |
 |---|---|---|---|
 | **1** | country-scope plumbing (incl. `on_game_started`); both premium types + full §7.5 conversion + access/rank tables; target + drift; delegation + mandates (π terms dropped, §6); CBI binding; regime dial ranges; stance → cycle via the variable update; rate-hike deletion; dashboard block; history series | world/reference rate = `era_base`; gold standard target clamped to `era_base` ±2; inflation = 0; OMO usable at the floor but without its inflation cost | §17 checks 1–4 pass; anchor table (§7.4) reproduced in-game within 0.5pp; observer-mode run shows no country at the 60 cap, and none at the 0.5 *total* clamp, by accident; AI countries' stance tracks the cycle; **mean AI stance gap ≈ 0 outside cycle extremes** (no regime is permanently tight or loose); r\* cannot be read from any tooltip |
-| **2** | inflation (core / headline / anchored expectations), basket, wage-pressure type + real-wage dividend, §10 formula, monetisation, QE costs, hyperinflation chain, §13 stance politics | gold standard still on the ±2 band | 50-year observer run: median fiat inflation 1–4% **including AI on the growth mandate** (at war or `scaled_debt ≥ 0.5`), no oscillation with period < 3 years, at least one organic hyperinflation and one deflation. **Debug harness**: a fiat tag pinned to a fixed manual target — observer runs never exercise the human path, because AI is always delegated; confirm the drift is slow (e-folding of years), that the §10 worked example reproduces, and that **never disinflating costs more over 15 years than disinflating** (the §10 tuning invariant — test the accelerating path, not just steady states) |
+| **2** | inflation (core / headline / anchored expectations), basket, wage-pressure type + real-wage dividend, §10 formula, monetisation, QE costs, hyperinflation chain, §13 stance politics | gold standard still on the ±2 band | 50-year observer run: median fiat inflation 1–4% **including AI on the growth mandate** (at war or `scaled_debt ≥ 0.5`), no oscillation with period < 3 years, at least one organic hyperinflation and one deflation. **Debug harness**: a fiat tag pinned to a fixed manual target — observer runs never exercise the human path, because AI is always delegated; confirm the drift is slow (e-folding of years), that the §10 worked example reproduces, that **rate paid on the never-disinflate path never falls below the pre-war baseline** once expectations catch up (the §10 tuning invariant), and that its §9.2 band penalties make it worse *overall* over 15 years than disinflating — judged on treasury, SoL and radicals, not rate paid alone |
 | **3** | real world rate (discretionary GPs only), gold flows + hot money, peg confidence, convertibility crisis; regime law stances | FX buttons unchanged | world rate sits at `era_base` in 1836 and does not drift on its own; a discretionary GP's hike visibly drains a small gold country; AI on peg defence survives a 2pp world-rate rise; holding world + 5 on gold yields no lasting treasury gain |
 | **4** | FX index, trilemma, capital-controls politics; devalue/support deleted | — | — |
 
