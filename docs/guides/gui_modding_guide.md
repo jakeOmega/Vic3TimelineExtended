@@ -731,7 +731,7 @@ progresspie = {
 }
 ```
 
-Reference implementation: the Cultural Hegemony "Political Models of the World" section (`gui/journal_entry_widgets/cultural_hegemony_widget.gui`), with textures from `scripts/image_pipeline/gen_ch_model_pie_textures.py` (numpy only). **Status: proof of concept.** The first test drew a solid disc because of the 0–100 value range above. The fix (0–1 fractions) still needs an in-game retest; record the result here.
+Reference implementation: the Cultural Hegemony "Political Models of the World" section (`gui/journal_entry_widgets/cultural_hegemony_widget.gui`), with textures from `scripts/image_pipeline/gen_ch_model_pie_textures.py` (numpy only). **Status: works in game (confirmed 2026-09-19).** Fifteen stacked layers render as correctly ordered, correctly coloured slices that match the legend. The first test drew a solid disc; the only fix needed was the 0–1 value range above. Reuse this pattern for any script-driven pie.
 
 ---
 
