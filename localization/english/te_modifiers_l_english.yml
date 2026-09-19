@@ -425,7 +425,6 @@
  goods_trade_advantage_digital_assets_mult_desc:0 "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('digital_assets').GetName]."
  goods_trade_advantage_fine_art_mult:0 "[concept_trade_advantage] for [GetGoods('fine_art').GetName]"
  goods_trade_advantage_fine_art_mult_desc:0 "An increase or decrease in overall [concept_trade_advantage] for [GetGoods('fine_art').GetName]."
- je_ch_breakdown_mult:0 "\n  [concept_ch_modifier_bonus]: #v [GetPlayer.GetModifier.GetValueWithBreakdownFor('country_cultural_pull_mult')]#!"
  power_bloc_principle_groups_max_add:0 "Maximum [concept_power_bloc] [Concept('concept_power_bloc_principle_group', 'Principle Groups')]"
  power_bloc_principle_groups_max_add_desc:0 "Increases the maximum number of [concept_power_bloc_principle] groups that can be adopted by this [concept_power_bloc]"
  ship_battle_against_ship_type_amphibious_assault_ship_accuracy_mult:0 "$ship_type_amphibious_assault_ship$ $ship_accuracy_add$"

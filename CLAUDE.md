@@ -140,6 +140,14 @@ Squash-merging the parent leaves the child's branch unable to see that it alread
 
 Build one integration branch from the stack tips, check it out in the **full** main checkout (`scripts/deploy.sh` rsyncs with `--delete` and includes `gfx/`, so deploying from a sparse worktree would delete the textures), `POST /reload`, then `./scripts/deploy.sh --apply`. Make sure the launcher playset does not also enable a Steam Workshop copy of this mod: a later-loaded copy overrides same-path files and produces a half-old, half-new game. Vic3's console has **no `effect` command** (that is CK3) — run test script with `event <id>` (see `events/te_debug_un_events.txt`).
 
+### Orchestrated multi-branch waves
+
+Lessons from the second journal-entry-widget wave (#316–#322):
+- **Brief each sub-agent to write its PR body to a file before returning, and to sign commits with a truthful `Co-Authored-By` (its own model).** Two API outages killed agents mid-run; anything not yet on disk was lost.
+- **Treat premises pre-seeded in a brief as hypotheses.** A design step before implementation overturned the brief's premise in 3 of 6 systems.
+- **Check the UTF-8 BOM on every changed `.txt`, not just the `.gui`.** `bom_normalizer` repairs it on the next `/reload`, but the fix then lands as unexplained regeneration churn.
+- **Merging sibling PRs that append to the same files** (`te_events_l_english.yml` `TE_DEBUG_*` sections, the tail of `scripting_best_practices.md`): dry-run the whole sequence in a scratch clone with `git config rerere.enabled true`, then squash-merge one PR at a time, refreshing each next branch with `git merge origin/main` (rerere replays the recorded resolutions), and confirm the final `main` tree equals the dry run. Re-read numbered lists git merged without conflict — the `gui_modding_guide.md` gotchas came out #23-before-#22.
+
 ### `gh pr edit --body-file` can fail silently here — verify or use the REST API
 
 On this repo `gh pr edit <n> --body-file <file>` currently exits non-zero with only a GraphQL *Projects (classic) is being deprecated* notice and **leaves the body unchanged**; nothing else is printed, so a chained `&& echo ok` is the only tell. Verify with `gh pr view <n> --json body -q .body | grep -c <marker>`, or patch directly: `gh api -X PATCH repos/<owner>/<repo>/pulls/<n> -F body=@<file>`. `gh pr create --body-file` and `gh issue comment --body-file` are unaffected.
