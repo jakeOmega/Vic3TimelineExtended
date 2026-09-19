@@ -355,12 +355,19 @@ je_cultural_hegemony = {
 
 	on_monthly_pulse = {
 		effect = {
+			# Losing the Ministry of Culture shuts every cultural programme down.
+			# International Cultural Outreach (internally ch_world_exposition) was
+			# missing from this list, so it survived the repeal indefinitely — its
+			# `possible` requires the law, but nothing re-checked an already-running
+			# programme. Its GDP-scaled cost modifier goes with it.
 			if = {
 				limit = { NOT = { has_law = law_type:law_ministry_of_culture } }
 				set_variable = { name = ch_program_funding_level value = 0 }
 				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_institutes_program }
 				je:je_cultural_hegemony ?= { remove_modifier = ch_global_media_campaign }
 				je:je_cultural_hegemony ?= { remove_modifier = ch_cultural_protectionism_program }
+				je:je_cultural_hegemony ?= { remove_modifier = ch_world_exposition }
+				je:je_cultural_hegemony ?= { remove_modifier = ch_world_exposition_cost }
 			}
 
 			# ch_refresh_funding_modifiers removes both funding modifiers and
