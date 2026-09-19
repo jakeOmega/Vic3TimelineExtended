@@ -1227,6 +1227,7 @@
  ch_cultural_institutes_program:0 "Cultural Institutes Program"
  ch_cultural_program_funding:0 "Cultural Program Funding"
  ch_cultural_program_funding_cost:0 "Cultural Program Cost"
+ ch_debug_funding_cap:0 "Cultural Programme Funding Cap (test console)"
  ch_cultural_protectionism_program:0 "Cultural Protectionism"
  ch_cultural_renaissance_ig:0 "Cultural Renaissance"
  ch_cultural_resistance_ig:0 "Cultural Resistance"
