@@ -1,0 +1,183 @@
+﻿# ============================================================================
+# Monetary Policy — on-action wiring
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §16.1-16.2.
+#
+# Everything here feeds one effect, te_monetary_monthly_update
+# (common/scripted_effects/te_monetary_effects.txt), which is the system's
+# single owner: no other file writes te_policy_rate, te_rate_paid_pts or the
+# two interest modifiers.
+#
+# NOT GATED ON `banking_system_enabled` (§16.1). The interest plumbing cancels
+# vanilla's flat 20% base rate and replaces it with the mod's own number, so it
+# has to run even with the banking system switched off — otherwise a rule-off
+# game would either keep vanilla's rate while the mod's cancel-injects fire, or
+# pay nothing at all.
+# ============================================================================
+
+
+# ----------------------------------------------------------------------------
+# THE WORLD REFERENCE RATE — once a month, for everybody
+# ----------------------------------------------------------------------------
+# te_mon_era_base costs two any_country scans, so it is evaluated once a month
+# into a global variable instead of once per country per month. Expected scope
+# of on_monthly_pulse is `none`; the effect enters country scope itself.
+on_monthly_pulse = {
+	on_actions = {
+		te_monetary_world_monthly_on_action
+	}
+}
+
+te_monetary_world_monthly_on_action = {
+	effect = {
+		te_monetary_refresh_world_era_base = yes
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# THE MONTHLY COUNTRY UPDATE
+# ----------------------------------------------------------------------------
+# Root = Country
+on_monthly_pulse_country = {
+	on_actions = {
+		te_monetary_monthly_on_action
+	}
+}
+
+te_monetary_monthly_on_action = {
+	effect = {
+		te_monetary_monthly_update = yes
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# THE YEARLY GDP SNAPSHOT
+# ----------------------------------------------------------------------------
+# The neutral rate's growth term compares this year's GDP with last year's, so
+# the snapshot runs on its own yearly cadence and the monthly update just reads
+# the cached term (§8).
+#
+# Root = Country
+on_yearly_pulse_country = {
+	on_actions = {
+		te_monetary_yearly_on_action
+	}
+}
+
+te_monetary_yearly_on_action = {
+	effect = {
+		te_monetary_yearly_growth_snapshot = yes
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# GAME START
+# ----------------------------------------------------------------------------
+# The cancel-INJECTs apply on day one, but te_monetary_rate_paid would not exist
+# until a country's first monthly pulse. Several tags start in debt, and a
+# Britain-like tag would pay vanilla's ~20% instead of its own rate for that
+# first month (§16.1). The world reference rate is refreshed first so every
+# country's step 0 reads a populated global.
+on_game_started = {
+	on_actions = {
+		te_monetary_on_game_started
+	}
+}
+
+te_monetary_on_game_started = {
+	effect = {
+		te_monetary_refresh_world_era_base = yes
+		every_country = {
+			te_monetary_monthly_update = yes
+		}
+	}
+}
+
+
+# ============================================================================
+# COUNTRY CREATION
+# ============================================================================
+# A newly created tag has no interest modifiers at all, so until its first
+# monthly pulse it shows vanilla's 20% — exactly when the player is looking at
+# it (§16.1). Every hook below therefore runs the full update on the new
+# country immediately.
+#
+# Scope note: the four `released_as` hooks and the two uprising hooks put the
+# NEW country in scope:target and the parent in Root; on_country_formed puts
+# the new country in Root. Idiom copied from
+# common/on_actions/te_construction_market_on_actions.txt:80-164.
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_independent = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_own_subject = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_overlord_subject = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_company_subject = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Root = Country
+# scope:target = Uprising country
+on_revolution_start = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Root = Country
+# scope:target = Uprising country
+on_secession_start = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Shared by all six: the new country is scope:target, and the parent's own rate
+# is refreshed too because losing states moves its GDP, debt load and rank.
+te_monetary_on_country_released = {
+	effect = {
+		te_monetary_monthly_update = yes
+		scope:target ?= {
+			te_monetary_monthly_update = yes
+		}
+	}
+}
+
+# Root = Country (the newly formed country)
+on_country_formed = {
+	on_actions = {
+		te_monetary_on_country_formed
+	}
+}
+
+te_monetary_on_country_formed = {
+	effect = {
+		te_monetary_monthly_update = yes
+	}
+}

@@ -3854,6 +3854,17 @@
  te_debug_gw.1.t:0 "Climate Test Console"
 
 #
+# TE_DEBUG_MONETARY
+#
+ te_debug_monetary.1.a:0 "Run one monthly update now (target, drift, premium, rate paid, stance)"
+ te_debug_monetary.1.b:0 "Recompute the yearly growth term against this instant's GDP, then pulse"
+ te_debug_monetary.1.c:0 "Re-read the world reference rate, then pulse"
+ te_debug_monetary.1.d:0 "#lore Console-only. Nothing in the mod fires this event; it prints the monetary state of this country exactly as the last monthly update left it, including the numbers no player is ever shown.#!\n\n#title The dial#!\nRegime: #v [ROOT.GetVariable('te_mon_regime').GetValue|0]#! — 0 bankless, 1 commodity, 2 gold, 3 fiat, 4 digital, 5 crypto, 6 command\nDelegated: #v [ROOT.GetVariable('te_mon_delegated').GetValue|0]#!   Mandate: #v [ROOT.GetVariable('te_mon_mandate').GetValue|0]#! — 1 price stability, 2 growth, 3 peg defence\nTarget: #v [ROOT.GetVariable('te_policy_rate_target').GetValue|1]#!   Policy rate: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\n\n#title The rate paid#!\nCredit standing: #v [ROOT.GetVariable('te_premium_structural').GetValue|2]#!   Risk premium: #v [ROOT.GetVariable('te_premium_cyclical').GetValue|2]#!\nRate paid: #v [ROOT.GetVariable('te_rate_paid_pts').GetValue|2]#!   Written into the modifier: #v [ROOT.GetVariable('te_rate_paid_applied').GetValue|2]#!\n\n#title Hidden state — debug only#!\nReference rate: #v [ROOT.GetVariable('te_mon_era_base_now').GetValue|2]#!   Growth term: #v [ROOT.GetVariable('te_mon_growth_term').GetValue|2]#!   Walk: #v [ROOT.GetVariable('te_neutral_walk').GetValue|2]#!\nNeutral rate: #v [ROOT.GetVariable('te_neutral_rate').GetValue|2]#!   Estimation error: #v [ROOT.GetVariable('te_neutral_error').GetValue|2]#!\nStance gap: #v [ROOT.GetVariable('te_mon_stance_gap').GetValue|2]#!   Band: #v [ROOT.GetVariable('te_mon_stance_band').GetValue|0]#! — 1 very loose to 5 very tight\nLast year's GDP: #v [ROOT.GetVariable('te_mon_gdp_last_year').GetValue|0]#!"
+ te_debug_monetary.1.f:0 "'And what, precisely, is the natural rate of interest?'\n\n'Nobody knows, Chancellor. That is rather the point.'"
+ te_debug_monetary.1.t:0 "Monetary Policy Test Console"
+ te_debug_monetary.1.z:0 "Close"
+
+#
 # TE_DEBUG_NUCLEAR
 #
  te_debug_nuclear.1.a:0 "Fund the programme to step 3, and arm three rivals"

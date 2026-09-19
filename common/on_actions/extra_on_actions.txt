@@ -57,6 +57,23 @@ te_banking_law_change_cleanup = {
 				remove_banking_market_modifiers_effect = yes
 			}
 		}
+
+		# Monetary policy (§14). A command economy has no dial and no delegation
+		# — the rate is administered — so entering one clears the delegation
+		# toggle. This sits OUTSIDE the journal-entry check above on purpose:
+		# the monetary plumbing runs for every country, with or without
+		# je_banking_cycle and with or without banking_system_enabled.
+		#
+		# Only the toggle is cleared. No monetary variable is ever removed here:
+		# te_rate_paid_applied backs a live add_modifier multiplier, and the
+		# rest are re-derived by the next monthly update anyway.
+		if = {
+			limit = {
+				te_mon_is_command = yes
+				has_variable = te_mon_delegated
+			}
+			set_variable = { name = te_mon_delegated value = 0 }
+		}
 	}
 }
 

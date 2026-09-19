@@ -60,6 +60,24 @@
 #   te_mon_regime           0 to 6                  0 none/bankless, 1 commodity, 2 gold,
 #                                                   3 fiat, 4 digital, 5 crypto, 6 command
 #
+# WORKING VARIABLES (task 2, common/scripted_effects/te_monetary_effects.txt).
+# Not part of the displayed contract, but they follow the same two rules —
+# initialised behind `has_variable`, never removed:
+#
+#   te_mon_work             scratch     a scratch slot reused by every step of
+#   te_mon_work2            scratch     te_monetary_monthly_update; nothing may
+#                                       assume a value survives across steps
+#   te_mon_era_base_now     2 to 3      this pulse's copy of the world reference
+#                                       rate, read from global_var:te_mon_era_base_world
+#   te_mon_growth_term      +/-1.5      0.25 x (trailing yearly GDP growth % - 2),
+#                                       refreshed once a year by
+#                                       te_monetary_yearly_growth_snapshot and read
+#                                       by the neutral rate every month
+#
+#   global_var:te_mon_era_base_world    te_mon_era_base, evaluated ONCE A MONTH
+#                                       for the whole world (see below) instead of
+#                                       once per country
+#
 # HIDDEN STATE RULE (§8). te_neutral_rate, te_neutral_error, te_neutral_walk and
 # te_mon_stance_gap are never printed in any tooltip, loc string or visible
 # modifier. What the player *chooses* is shown exactly; the economy's hidden
@@ -88,10 +106,12 @@
 # powers also removes the fragility of a single-tech test — some great power
 # will always have researched the marker even if a given country skipped it.
 #
-# If profiling ever shows the two any_country scans costing too much at monthly
-# pulse, cache the result in a global variable from a yearly pulse and read it
-# here behind has_global_variable; the value is world-wide and changes at most
-# twice per campaign.
+# COST. The two any_country scans make this expensive to call per country per
+# pulse, so task 2 does not: te_monetary_refresh_world_era_base evaluates it
+# ONCE A MONTH into global_var:te_mon_era_base_world (on_monthly_pulse, plus
+# on_game_started and a self-heal inside the country update), and every country
+# reads the global. Nothing else should call this value directly in a per-country
+# loop.
 te_mon_era_base = {
 	value = 3.0
 	if = {
@@ -230,6 +250,68 @@ te_mon_scaled_debt_premium = {
 	divide = 3
 	min = 0
 	max = 4
+}
+
+
+# --- Mandate inputs ---------------------------------------------------------
+
+# How hard a delegated central bank leans against the financial cycle, in pp
+# (§6). This is the replacement for the deleted rate-hike button's AI logic:
+#
+#   frenzy                  +2
+#   boom                    +1
+#   bubble pressure >= 65   +1   (on top of the phase term)
+#   downturn                -2
+#   panic                   -3
+#
+# Price stability takes the whole lean; growth takes half of it; peg defence
+# ignores the domestic cycle entirely.
+#
+# finance_cycle_value and bubble_pressure are COUNTRY variables owned by
+# je_banking_cycle's `immediate` (je_banking.txt:119-133) — the same variables
+# harvest conditions read through `owner = { ... }`. A country without the
+# journal entry has neither, so every branch carries its own has_variable guard
+# and such a country simply leans by 0. The banking_cycle_is_* triggers are the
+# canonical phase thresholds (market_triggers.txt:2-8); they read
+# var:finance_cycle_value unguarded, which is why the guard is in the limit
+# beside them rather than around them.
+te_mon_cycle_lean = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_frenzy = yes
+		}
+		add = 2
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_boom = yes
+		}
+		add = 1
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_panic = yes
+		}
+		subtract = 3
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_downturn = yes
+		}
+		subtract = 2
+	}
+	if = {
+		limit = {
+			has_variable = bubble_pressure
+			var:bubble_pressure >= 65
+		}
+		add = 1
+	}
 }
 
 
