@@ -25,10 +25,30 @@
 # One ExecuteTooltip per GUI row rather than one block listing all ten, because
 # a scope's own tooltip lines print before the lines produced inside nested
 # scope changes (gui_modding_guide.md gotcha #18) — separate rows make that
-# impossible. `is_shown` requires the rank's global to exist, so an empty slot
-# collapses instead of printing a placeholder. No flag icon in the row text: the
-# engine already prefixes a country-scope tooltip line with that country's flag
-# (gotcha #19).
+# impossible. No flag icon in the row text: the engine already prefixes a
+# country-scope tooltip line with that country's flag (gotcha #19).
+#
+# ---- WHY NEITHER `is_shown` DEPENDS ON `scope:op` --------------------------
+# Whether a saved scope passed as `IsShown( … AddScope('op', …) … )` actually
+# reaches a handler's `is_shown` is UNPROVEN in this mod. Vanilla's
+# scripted_guis.md says saved scopes are available "in triggers / effects", and
+# `is_valid` demonstrably receives them (the st_res_* policy handlers depend on
+# it), but no vanilla handler reads a saved scope inside `is_shown`, and the one
+# in-mod case is written fail-open and may never have been exercised. With this
+# journal entry's button grid hidden from humans, a control whose `is_shown`
+# quietly evaluated false would leave a player no way to act at all. So:
+#
+#   * nuclear_program_funding_sgui — the ACTION handler — has a scope-free
+#     `is_shown`, and the .gui does not drive the stepper buttons' `visible`
+#     from it at all. Eligibility is entirely `is_valid`'s job, which is the
+#     proven path, and which greys the button and says why.
+#   * nuclear_program_powers_sgui — DISPLAY only — is written FAIL-OPEN: with no
+#     `scope:op` it returns yes, and emptiness is guarded inside the effect
+#     instead. ExecuteTooltip ignores `is_shown` anyway (gotcha #16), so the
+#     worst case is a blank line inside a section that is collapsed by default,
+#     never a list that refuses to appear.
+#
+# `effect` reading `scope:op` to pick which rank to render IS the proven path.
 # ============================================================================
 
 # ---------------------------------------------------------------------------
@@ -38,20 +58,15 @@ nuclear_program_funding_sgui = {
 	scope = country
 	saved_scopes = { op }
 
-	# Mirrors the two scripted buttons' `visible`, which is `always = yes` plus
-	# the `is_ai = yes` that hides the grid from humans. `has_journal_entry`
-	# stands in for that: it is also the cheap guard that keeps
-	# nuclear_program_possible_decrease_funding — which reads a variable that
-	# only an activated entry has created — from ever running too early.
+	# Deliberately scope-free — see "WHY NEITHER `is_shown` DEPENDS ON `scope:op`"
+	# in the header. This mirrors what the two scripted buttons' `visible` says
+	# for a human (`always = yes`, minus the `is_ai = yes` that hides the grid),
+	# and it is also the cheap guard that keeps
+	# nuclear_program_possible_decrease_funding — which reads a variable only an
+	# activated entry has created — from ever running too early. Which of the two
+	# ops is allowed right now is `is_valid`'s business, not this block's.
 	is_shown = {
 		has_journal_entry = je_nuclear_program
-		OR = {
-			AND = {
-				exists = scope:op
-				scope:op = 0
-			}
-			scope:op = 1
-		}
 	}
 
 	is_valid = {
@@ -110,56 +125,60 @@ nuclear_program_powers_sgui = {
 	saved_scopes = { op }
 
 	is_shown = {
+		# FAIL-OPEN first branch: if the saved scope never arrives, every row
+		# returns yes and the effect below simply renders nothing for the ranks
+		# that are empty. See the header for why this path is not trusted.
 		trigger_if = {
-			limit = {
-				exists = scope:op
-				scope:op = 1
-			}
+			limit = { NOT = { exists = scope:op } }
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 1 }
 			has_global_variable = nuke_rank_1
 			exists = global_var:nuke_rank_1
 		}
 		trigger_else_if = {
-			limit = { scope:op = 2 }
+			limit = { exists = scope:op  scope:op = 2 }
 			has_global_variable = nuke_rank_2
 			exists = global_var:nuke_rank_2
 		}
 		trigger_else_if = {
-			limit = { scope:op = 3 }
+			limit = { exists = scope:op  scope:op = 3 }
 			has_global_variable = nuke_rank_3
 			exists = global_var:nuke_rank_3
 		}
 		trigger_else_if = {
-			limit = { scope:op = 4 }
+			limit = { exists = scope:op  scope:op = 4 }
 			has_global_variable = nuke_rank_4
 			exists = global_var:nuke_rank_4
 		}
 		trigger_else_if = {
-			limit = { scope:op = 5 }
+			limit = { exists = scope:op  scope:op = 5 }
 			has_global_variable = nuke_rank_5
 			exists = global_var:nuke_rank_5
 		}
 		trigger_else_if = {
-			limit = { scope:op = 6 }
+			limit = { exists = scope:op  scope:op = 6 }
 			has_global_variable = nuke_rank_6
 			exists = global_var:nuke_rank_6
 		}
 		trigger_else_if = {
-			limit = { scope:op = 7 }
+			limit = { exists = scope:op  scope:op = 7 }
 			has_global_variable = nuke_rank_7
 			exists = global_var:nuke_rank_7
 		}
 		trigger_else_if = {
-			limit = { scope:op = 8 }
+			limit = { exists = scope:op  scope:op = 8 }
 			has_global_variable = nuke_rank_8
 			exists = global_var:nuke_rank_8
 		}
 		trigger_else_if = {
-			limit = { scope:op = 9 }
+			limit = { exists = scope:op  scope:op = 9 }
 			has_global_variable = nuke_rank_9
 			exists = global_var:nuke_rank_9
 		}
 		trigger_else_if = {
-			limit = { scope:op = 10 }
+			limit = { exists = scope:op  scope:op = 10 }
 			has_global_variable = nuke_rank_10
 			exists = global_var:nuke_rank_10
 		}
@@ -181,43 +200,44 @@ nuclear_program_powers_sgui = {
 			limit = {
 				exists = scope:op
 				scope:op = 1
+				has_global_variable = nuke_rank_1
 			}
 			global_var:nuke_rank_1 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_1 }
 		}
 		else_if = {
-			limit = { scope:op = 2 }
+			limit = { exists = scope:op  scope:op = 2  has_global_variable = nuke_rank_2 }
 			global_var:nuke_rank_2 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_2 }
 		}
 		else_if = {
-			limit = { scope:op = 3 }
+			limit = { exists = scope:op  scope:op = 3  has_global_variable = nuke_rank_3 }
 			global_var:nuke_rank_3 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_3 }
 		}
 		else_if = {
-			limit = { scope:op = 4 }
+			limit = { exists = scope:op  scope:op = 4  has_global_variable = nuke_rank_4 }
 			global_var:nuke_rank_4 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_4 }
 		}
 		else_if = {
-			limit = { scope:op = 5 }
+			limit = { exists = scope:op  scope:op = 5  has_global_variable = nuke_rank_5 }
 			global_var:nuke_rank_5 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_5 }
 		}
 		else_if = {
-			limit = { scope:op = 6 }
+			limit = { exists = scope:op  scope:op = 6  has_global_variable = nuke_rank_6 }
 			global_var:nuke_rank_6 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_6 }
 		}
 		else_if = {
-			limit = { scope:op = 7 }
+			limit = { exists = scope:op  scope:op = 7  has_global_variable = nuke_rank_7 }
 			global_var:nuke_rank_7 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_7 }
 		}
 		else_if = {
-			limit = { scope:op = 8 }
+			limit = { exists = scope:op  scope:op = 8  has_global_variable = nuke_rank_8 }
 			global_var:nuke_rank_8 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_8 }
 		}
 		else_if = {
-			limit = { scope:op = 9 }
+			limit = { exists = scope:op  scope:op = 9  has_global_variable = nuke_rank_9 }
 			global_var:nuke_rank_9 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_9 }
 		}
 		else_if = {
-			limit = { scope:op = 10 }
+			limit = { exists = scope:op  scope:op = 10  has_global_variable = nuke_rank_10 }
 			global_var:nuke_rank_10 ?= { custom_tooltip_no_bullet = nuclear_program_power_row_10 }
 		}
 	}

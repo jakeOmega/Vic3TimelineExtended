@@ -42,6 +42,18 @@
 ### no flag icon because the engine prefixes a country-scope tooltip line with
 ### that country's flag already (gotcha #19).
 ###
+### NO CONTROL'S `visible` COMES FROM AN op-BRANCHING `IsShown`. Whether a saved
+### scope passed through `IsShown( … AddScope('op', …) … )` reaches a handler's
+### `is_shown` is unproven in this mod: `is_valid` provably receives it, but no
+### vanilla handler reads a saved scope inside `is_shown`. With this entry's
+### button grid hidden from humans, a stepper whose `visible` silently evaluated
+### false would leave the player unable to act at all, so the two stepper buttons
+### carry no `visible` — they are simply there while the entry is active, and
+### `is_valid` greys them and says why. The ten leaderboard rows do use `IsShown`,
+### but that handler is written fail-open (no `scope:op` means yes) and guards
+### emptiness inside its effect, so the worst case there is a blank line in a
+### section that is collapsed by default.
+###
 ### BOTH ROOTS ARE GATED ON JournalEntry.IsActive. je_nuclear_program carries
 ### is_shown_when_inactive, so the panel is built for every country that has the
 ### tech and the game rule, including ones whose entry never activated and which
@@ -143,7 +155,6 @@ types nuclear_program_widget_types
 		button_icon_minus_action = {
 			size = { 24 24 }
 			parentanchor = vcenter
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
@@ -162,7 +173,6 @@ types nuclear_program_widget_types
 		button_icon_plus_action = {
 			size = { 24 24 }
 			parentanchor = vcenter
-			visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 			tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) )]"
