@@ -1,0 +1,246 @@
+﻿# ============================================================================
+# Monetary Policy — script values
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md (§4 rate stack, §7 risk premium,
+# §8 stance + neutral rate, §16 implementation mapping, §21 tuning constants).
+#
+# Everything here is evaluated in COUNTRY scope unless a comment says otherwise.
+#
+# UNIT CONVENTION. Every monetary variable and every script value below is in
+# percentage POINTS (3.5 means 3.5%). Modifier fields use vanilla's interest
+# scale (0.01 = 1pp), so a modifier contribution is read back as
+# `100 x modifier:X` and written out as `multiplier = var:<pp value>` on a
+# modifier whose field is 0.01.
+#
+# ----------------------------------------------------------------------------
+# VARIABLE CONTRACT (§16.2) — country-scope variables owned by
+# te_monetary_monthly_update. Every one of them initialises behind
+# `has_variable`, and NONE of them is ever removed (a `remove_variable` on a
+# variable read by an `add_modifier { multiplier = ... }` is what
+# modifier_multiplier_var_audit exists to catch). No new monetary variable may
+# be introduced in je_banking.txt's `immediate` — that block resets unguarded
+# and the JE is can_revolution_inherit.
+#
+#   te_policy_rate_target   regime range, integer   the dial's setting (§5)
+#   te_policy_rate          regime range, fractional  drifts toward the target
+#                                                   at 1/3 pp per month (2/3 digital)
+#   te_mon_delegated        0 or 1                  1 = the target follows the mandate formula
+#   te_mon_mandate          1-3                     1 price stability, 2 growth, 3 peg defence
+#   te_premium_structural   floor to 30             what the country *is*; floored
+#                                                   at 0.5 (0.25 under CBI)
+#   te_premium_cyclical     -10 to 40               what is *happening*; added after the floor
+#   te_rate_paid_pts        0.5 to 60               the displayed rate paid, clamped (§4)
+#   te_rate_paid_applied    0.5 to 70               the value last written into
+#                                                   te_monetary_rate_paid's multiplier —
+#                                                   te_rate_paid_pts plus
+#                                                   te_mon_vanilla_tech_offset (R3).
+#                                                   The ceiling is 60 + 10, not the
+#                                                   60 of te_rate_paid_pts, because
+#                                                   the offset adds up to 2.0 x 5
+#                                                   techs on top of the clamp.
+#                                                   Never displayed; it is a
+#                                                   bookkeeping value, not the rate.
+#   te_neutral_rate         1 to 6      HIDDEN      r*, the natural rate (§8)
+#   te_neutral_error        +/-1.5      HIDDEN      the country's estimate error
+#                                                   (+/-0.5 under CBI); mandates
+#                                                   and the displayed band use
+#                                                   te_neutral_rate + te_neutral_error,
+#                                                   never the true value
+#   te_neutral_walk         see note    HIDDEN      the mean-reverting random-walk
+#                                                   component of te_neutral_rate:
+#                                                   +/-0.1 per month, mean-reverting,
+#                                                   and bounded in effect by the
+#                                                   1-6 clamp on te_neutral_rate.
+#                                                   §16.2 gives no separate range
+#   te_mon_gdp_last_year    >= 0                    cached gdp, refreshed yearly, for
+#                                                   the neutral rate's growth term
+#   te_mon_stance_gap       -10 to 10   HIDDEN      real rate minus neutral rate; 0 for
+#                                                   every country without a dial (§8)
+#   te_mon_stance_band      1 to 5      displayed   1 very loose ... 5 very tight
+#   te_mon_regime           0 to 6                  0 none/bankless, 1 commodity, 2 gold,
+#                                                   3 fiat, 4 digital, 5 crypto, 6 command
+#
+# HIDDEN STATE RULE (§8). te_neutral_rate, te_neutral_error, te_neutral_walk and
+# te_mon_stance_gap are never printed in any tooltip, loc string or visible
+# modifier. What the player *chooses* is shown exactly; the economy's hidden
+# state is not. The displayed stance band is the only window onto the gap.
+# ============================================================================
+
+
+# --- Reference rate ---------------------------------------------------------
+
+# The long-run real rate the whole world borrows against: 3.0 in eras 1-4,
+# 2.5 in eras 5-8, 2.0 in eras 9-12 (§8). In phase 1 this doubles as the world
+# / reference rate (§12.1) and as the base of the hidden neutral rate.
+#
+# ERA DETECTION. The engine exposes no "current era" trigger and the mod has no
+# canonical era detector, so this reuses the mod's two existing idioms: an era
+# is marked by a signature technology (events/modern_election_events.txt:1000),
+# and "the world has reached era N" is asked as "some great power has researched
+# it" (common/script_values/extra_script_values.txt:870-949). The markers are
+# `macroeconomics` (era_5) and `globalization` (era_9), both society techs and
+# neither of them a capital-market-access tech, so nothing is double-counted
+# against te_mon_access_premium.
+#
+# This is deliberately a WORLD quantity, not a per-country one: the spec calls
+# it the world / reference rate (§7.4, §12.1, §21), and the neutral rate is then
+# world base + per-country deviation (growth term + walk). Anchoring on great
+# powers also removes the fragility of a single-tech test — some great power
+# will always have researched the marker even if a given country skipped it.
+#
+# If profiling ever shows the two any_country scans costing too much at monthly
+# pulse, cache the result in a global variable from a yearly pulse and read it
+# here behind has_global_variable; the value is world-wide and changes at most
+# twice per campaign.
+te_mon_era_base = {
+	value = 3.0
+	if = {
+		limit = {
+			any_country = {
+				country_rank >= rank_value:great_power
+				has_technology_researched = macroeconomics
+			}
+		}
+		subtract = 0.5
+	}
+	if = {
+		limit = {
+			any_country = {
+				country_rank >= rank_value:great_power
+				has_technology_researched = globalization
+			}
+		}
+		subtract = 0.5
+	}
+}
+
+
+# --- Structural premium terms -----------------------------------------------
+
+# Capital-market access premium, in pp (§7.2). This is what keeps Siam or
+# Afghanistan out of the London market: a permanent premium that shrinks as a
+# country builds financial institutions. It replaces vanilla's five flat -2pp
+# tech reductions (which are cancelled in script by te_mon_vanilla_tech_offset,
+# ruling R3) and is deliberately front-loaded, because Britain in 1836 holds
+# only two of the five techs and must still land near Consols.
+#
+#   base, no finance techs           +8.0
+#   banking                          -4.0
+#   central_banking                  -2.5
+#   mutual_funds                     -0.5
+#   international_exchange_standards -0.5
+#   modern_financial_instruments     -0.5
+#   no stock_exchange                +2.0
+#
+# The surcharge keys on the `stock_exchange` technology, not on having the
+# stock-exchange journal entry: that JE's other gate (a level-10 urban centre)
+# is not a capital-market signal.
+#
+# Anchors (§7.4): Britain / USA 1836 hold banking + central_banking + the
+# exchange, so 8 - 4 - 2.5 = 1.5. Siam 1850 holds none of them and no exchange,
+# so 8 + 2 = 10.
+#
+# Consumed by te_monetary_monthly_update step 5 as part of the STRUCTURAL tier,
+# i.e. before the 0.5pp (0.25pp under CBI) floor is applied.
+te_mon_access_premium = {
+	value = 8
+	if = {
+		limit = { has_technology_researched = banking }
+		subtract = 4
+	}
+	if = {
+		limit = { has_technology_researched = central_banking }
+		subtract = 2.5
+	}
+	if = {
+		limit = { has_technology_researched = mutual_funds }
+		subtract = 0.5
+	}
+	if = {
+		limit = { has_technology_researched = international_exchange_standards }
+		subtract = 0.5
+	}
+	if = {
+		limit = { has_technology_researched = modern_financial_instruments }
+		subtract = 0.5
+	}
+	if = {
+		limit = { NOT = { has_technology_researched = stock_exchange } }
+		add = 2
+	}
+}
+
+# Compensation for vanilla's five finance techs (ruling R3), in pp.
+#
+# Each of banking, central_banking, mutual_funds,
+# international_exchange_standards and modern_financial_instruments grants
+# country_loan_interest_rate_add = -0.02 in vanilla, i.e. -2pp, and they are
+# NOT cancelled with INJECTs — the mod compensates in script instead, so no
+# vanilla technology entity is touched.
+#
+# The compensation is applied OUTSIDE the premium tiers, so the structural
+# floor is unaffected: step 9 writes te_monetary_rate_paid with
+# `te_rate_paid_applied = te_rate_paid_pts + te_mon_vanilla_tech_offset`, while
+# every displayed number uses te_rate_paid_pts. te_mon_access_premium therefore
+# uses the §7.2 table values as-is.
+#
+# If a vanilla patch changes any of the five -0.02 grants, this value and the
+# runbook entry must follow (docs/guides/vanilla_patch_runbook.md).
+te_mon_vanilla_tech_offset = {
+	value = 0
+	if = {
+		limit = { has_technology_researched = banking }
+		add = 2
+	}
+	if = {
+		limit = { has_technology_researched = central_banking }
+		add = 2
+	}
+	if = {
+		limit = { has_technology_researched = mutual_funds }
+		add = 2
+	}
+	if = {
+		limit = { has_technology_researched = international_exchange_standards }
+		add = 2
+	}
+	if = {
+		limit = { has_technology_researched = modern_financial_instruments }
+		add = 2
+	}
+}
+
+
+# --- Cyclical premium terms -------------------------------------------------
+
+# Debt-load premium, in pp (§7.6). Zero below scaled_debt 0.25, then linear to
+# +4pp at scaled_debt 1.0 and flat above it. Lenders price a heavily indebted
+# borrower higher; this is what keeps a cheap-debt world self-limiting.
+#
+# CYCLICAL, so it is added after the structural floor and always bites.
+#
+# Arithmetic: (scaled_debt - 0.25) x 16 / 3 is (scaled_debt - 0.25) x 5.3333
+# without the rounding. `scaled_debt` is a country trigger read, which is legal
+# inside a script value but NOT in a change_variable op slot — that is exactly
+# why this is a named script value.
+te_mon_scaled_debt_premium = {
+	value = scaled_debt
+	subtract = 0.25
+	multiply = 16
+	divide = 3
+	min = 0
+	max = 4
+}
+
+
+# --- Cached reads for te_monetary_monthly_update ----------------------------
+
+# change_variable / set_variable op slots accept a literal, a var:X or a NAMED
+# SCRIPT VALUE, but not a bare trigger-dispatched read such as `gdp`
+# (docs/guides/scripting_best_practices.md:1622-1624). This wrapper is what
+# lets the monthly update cache GDP into te_mon_gdp_last_year and difference
+# against it for the neutral rate's growth term (§8). The growth arithmetic
+# itself belongs to te_monetary_monthly_update, not here.
+te_mon_gdp_current = {
+	value = gdp
+}

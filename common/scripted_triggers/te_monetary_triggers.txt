@@ -1,0 +1,80 @@
+﻿# ============================================================================
+# Monetary Policy — scripted triggers
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §4 (the rate stack and who has a
+# dial), §5 (regimes), §8 (stance channel).
+#
+# All country scope. The variable contract these read from is documented in
+# common/script_values/te_monetary_script_values.txt.
+# ============================================================================
+
+
+# Does this country set its own policy rate?
+#
+# A dial requires a national bank AND a discretionary monetary regime. Without
+# one, te_policy_rate is derived rather than chosen (§4): bankless, commodity-
+# money and crypto countries get world rate + the bankless spread, and a command
+# economy gets the administered rate.
+#
+# lawgroup_national_bank holds exactly two laws (law_no_national_bank,
+# law_national_bank), so the positive test is the whole of it. Central bank
+# independence and state-owned banking live in lawgroup_financial_regulation, a
+# separate group — a CBI country still has law_national_bank and still has a
+# dial; it just does not steer it by hand (§6).
+#
+# has_law_or_variant rather than has_law throughout: variant laws
+# (`parent = law_X`) are tag-restricted skins of the same law and must count.
+te_mon_has_dial = {
+	has_law_or_variant = law_type:law_national_bank
+	OR = {
+		has_law_or_variant = law_type:law_gold_standard
+		has_law_or_variant = law_type:law_fiat_currency
+		has_law_or_variant = law_type:law_digital_currency
+	}
+	NOT = { has_law_or_variant = law_type:law_command_economy }
+}
+
+# Central bank independence (lawgroup_financial_regulation). Binds the target to
+# the mandate formula, halves the structural premium floor to 0.25pp and narrows
+# the neutral-rate estimation error to +/-0.5 (§6, §7, §21).
+te_mon_is_cbi = {
+	has_law_or_variant = law_type:law_central_bank_independence
+}
+
+# Command economy (vanilla lawgroup_economic_system). The rate is administered,
+# there is no dial, and the stance channel is switched off (§4, §8).
+te_mon_is_command = {
+	has_law_or_variant = law_type:law_command_economy
+}
+
+# State-owned banking (lawgroup_financial_regulation). Carries a +0.5pp
+# structural premium and the weakest credibility anchor (§5.2, §9.1). Ruling R2
+# ships the premium part only in phase 1.
+te_mon_is_state_banking = {
+	has_law_or_variant = law_type:law_state_owned_banking
+}
+
+
+# --- Policy stance ----------------------------------------------------------
+#
+# te_mon_stance_gap is HIDDEN STATE (§8): these two triggers exist so AI weights
+# and gating can react to the stance without any script ever printing the gap.
+# They must never be used to build a player-visible number.
+#
+# Both are guarded on has_variable, because the gap does not exist until a
+# country's first monthly monetary update — and because the JE pulse and the
+# country update may run in either order, the value read may be one month old.
+# A country with no dial has a gap of exactly 0, so it is neither tight nor
+# loose, which is the intended answer.
+
+# Real rate at least 1pp above the (hidden) neutral rate.
+banking_stance_is_tight = {
+	has_variable = te_mon_stance_gap
+	var:te_mon_stance_gap >= 1
+}
+
+# Real rate at least 1pp below the (hidden) neutral rate.
+banking_stance_is_loose = {
+	has_variable = te_mon_stance_gap
+	var:te_mon_stance_gap <= -1
+}

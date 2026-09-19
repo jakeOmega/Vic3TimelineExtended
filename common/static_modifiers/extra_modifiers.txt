@@ -6790,3 +6790,77 @@ agdiff_first_mover_prestige = {
 	country_prestige_mult = 0.05
 	country_authority_mult = 0.05
 }
+
+# ============================================================================
+# Monetary Policy — interest plumbing (monetary_policy_design.md §16.1)
+# ============================================================================
+# The rate a country pays on government debt is rebased onto the mod's own
+# stack: te_monetary_base_offset cancels vanilla's base_values rate, and
+# te_monetary_rate_paid carries the mod's answer, re-applied each month with
+# `multiplier = var:te_rate_paid_applied` (pp; 0.01 = 1pp, so a multiplier of
+# 3.5 pays 3.5%).
+#
+# INVARIANT: the two are always added in the *same* effect block, so the sum of
+# country_loan_interest_rate_add never sits at <= 0 — the engine's behaviour at
+# a non-positive total is unknown and is never exercised. A freshly spawned
+# country with neither modifier pays vanilla's rate until its first pulse,
+# which is a safe fallback. Idiom: sol_expectations_apply_strata_shifts
+# (common/scripted_effects/sol_expectations_effects.txt:143-160).
+#
+# The -0.2 hardcodes vanilla's base_values rate
+# (vanilla common/static_modifiers/00_code_static_modifiers.txt:12). If a
+# vanilla patch changes it, this value must follow — see
+# docs/guides/vanilla_patch_runbook.md.
+
+te_monetary_base_offset = {
+	country_loan_interest_rate_add = -0.2
+}
+
+te_monetary_rate_paid = {
+	country_loan_interest_rate_add = 0.01
+}
+
+# ============================================================================
+# Monetary Policy — policy stance bands (monetary_policy_design.md §8)
+# ============================================================================
+# Journal-entry-scope modifiers on je_banking_cycle, swapped when
+# te_mon_stance_band changes. Cheap money feeds the investment pool; tight
+# money starves it.
+#
+# These exist *instead of* one modifier scaled by the true stance gap: a scaled
+# modifier would print -0.125 x (policy - inflation - r*) in its tooltip, from
+# which the hidden neutral rate could be read to two decimals. The band is
+# already shown to the player, so a banded modifier leaks nothing new. The
+# momentum and bubble halves of the stance channel are applied directly in the
+# variable update, not through a modifier, for the same reason.
+#
+# Band 3 (neutral) carries no field on purpose: a 0 value would render as "+0%"
+# and trip modifier_visibility_audit, and there is nothing to say. It stays
+# defined so the swap logic always has exactly one band modifier to apply and
+# the JE reads "Monetary Stance: Neutral" rather than falling silent. Vanilla
+# does the same for the neutral tier of its own banded sets — tax_modifier_medium,
+# government_wages_medium and infamy_reputable in
+# vanilla common/static_modifiers/00_code_static_modifiers.txt are all empty.
+
+banking_stance_band_1 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_capitalists_investment_pool_contribution_add = 0.04
+}
+
+banking_stance_band_2 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_capitalists_investment_pool_contribution_add = 0.02
+}
+
+banking_stance_band_3 = {
+}
+
+banking_stance_band_4 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	state_capitalists_investment_pool_contribution_add = -0.02
+}
+
+banking_stance_band_5 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	state_capitalists_investment_pool_contribution_add = -0.04
+}

@@ -73,3 +73,60 @@ country_banking_lock_export_credit_bool    = { color = bad  boolean = yes }
 country_banking_lock_capital_controls_bool = { color = bad  boolean = yes }
 country_banking_lock_fx_swap_lines_bool    = { color = bad  boolean = yes }
 country_banking_lock_asset_relief_bool     = { color = bad  boolean = yes }
+
+# ============================================================================
+# Monetary policy — the two risk-premium tiers (monetary_policy_design.md §7.1)
+# ============================================================================
+# `rate paid = policy rate + risk premium`, and the premium is computed in two
+# tiers rather than one floored sum: a mature great power's standing sits well
+# below the floor, so a single floor would silently swallow a panic, every tool
+# and the whole debt-load term while their tooltips still promised "+2.0%".
+#
+#   te_premium_structural = max( floor , 100 x modifier:country_credit_standing_add )
+#   te_premium_cyclical   = 100 x modifier:country_risk_premium_add + computed terms
+#
+# Both carry vanilla's interest scale (0.01 = 1pp), so there is one unit
+# convention across the mod and te_monetary_monthly_update reads them back as
+# 100 x modifier:X. JE-scope grants still feed the country-scope `modifier:`
+# read — the same path banking_cycle_advance_variables already uses for
+# country_finance_momentum_monthly_add.
+
+# Structural — what the country *is*: capital-market access, rank, finance
+# techs, national-bank institution level, laissez-faire, gold / central-bank
+# credibility, company prosperity. Floored at 0.5pp (0.25pp under central bank
+# independence); standing beyond the floor is wasted by design.
+country_credit_standing_add = {
+	color = bad
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Cyclical — what is *happening*: cycle phases, banking tools, crash
+# interventions, event outcomes, bankruptcy, debt load, monetisation. Added
+# *after* the structural floor, so a crisis always bites.
+country_risk_premium_add = {
+	color = bad
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Vanilla declares country_loan_interest_rate_add at decimals = 0, which rounds
+# the whole realistic-rate stack to whole percent in tooltips — a 3.5% Consols
+# rate would read "4%". Re-declare the modifier *type* at decimals = 1; every
+# other field is copied verbatim from vanilla
+# common/modifier_type_definitions/00_modifier_types.txt:662-669.
+# This REPLACEs a modifier type definition, not a vanilla database entity —
+# same precedent as mod_entity_modifier_types.txt:3486. Re-diff this block when
+# vanilla changes the type (docs/guides/vanilla_patch_runbook.md).
+REPLACE:country_loan_interest_rate_add = {
+	decimals = 1
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
