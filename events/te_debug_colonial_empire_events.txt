@@ -1,0 +1,191 @@
+﻿# ============================================================================
+# COLONIAL EMPIRE TEST CONSOLE — fired only from the console:
+#   event te_debug_colonial_empire.1    put the stability bar in any band
+#   event te_debug_colonial_empire.2    great-power pressure and the decisions
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires these events.
+#
+# Between them they reach every state the colonial-stability widget can show:
+# all five bands (so the tier label, the next-band boundary, the phase-modifier
+# row and the chart's colour all change), great-power pressure at each tier
+# escalation, and each of the three decolonization confirmations opened directly.
+#
+# The bar is written through the `je:` scope link rather than
+# scope:journal_entry, which a console-fired event does not have saved.
+# ============================================================================
+namespace = te_debug_colonial_empire
+
+te_debug_colonial_empire.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debug_colonial_empire.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = te_debug_colonial_empire.1.t
+	desc = te_debug_colonial_empire.1.d
+	flavor = te_debug_colonial_empire.1.f
+
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
+
+	# Solidified band (>= 90). Also the band the Imperial Federation Act needs.
+	option = {
+		name = te_debug_colonial_empire.1.a
+		default_option = yes
+		je:je_colonial_empire ?= {
+			set_bar_progress = { name = colonial_stability_bar value = 95 }   # REVIEWED 2026-09-18: console-only test event, not gameplay balance
+		}
+		colonial_empire_refresh_display = yes
+	}
+
+	# Stable band (65-90).
+	option = {
+		name = te_debug_colonial_empire.1.b
+		je:je_colonial_empire ?= {
+			set_bar_progress = { name = colonial_stability_bar value = 75 }   # REVIEWED 2026-09-18: console-only test event, not gameplay balance
+		}
+		colonial_empire_refresh_display = yes
+	}
+
+	# Strained band (40-65) — the starting neighbourhood.
+	option = {
+		name = te_debug_colonial_empire.1.c
+		je:je_colonial_empire ?= {
+			set_bar_progress = { name = colonial_stability_bar value = 50 }   # REVIEWED 2026-09-18: console-only test event, not gameplay balance
+		}
+		colonial_empire_refresh_display = yes
+	}
+
+	# Crumbling band (20-40) — colonial_empire_under_pressure_modifier, subject
+	# liberty-desire pressure, civil-rights movement radicalism.
+	option = {
+		name = te_debug_colonial_empire.1.opt_d
+		je:je_colonial_empire ?= {
+			set_bar_progress = { name = colonial_stability_bar value = 30 }   # REVIEWED 2026-09-18: console-only test event, not gameplay balance
+		}
+		colonial_empire_refresh_display = yes
+	}
+
+	# Collapsing band (0-20) — colonial_empire_crumbling_modifier and the
+	# severe subject liberty-desire spike. One more step and the entry fails.
+	option = {
+		name = te_debug_colonial_empire.1.e
+		je:je_colonial_empire ?= {
+			set_bar_progress = { name = colonial_stability_bar value = 10 }   # REVIEWED 2026-09-18: console-only test event, not gameplay balance
+		}
+		colonial_empire_refresh_display = yes
+	}
+
+	# Refresh the widget's display state without touching the bar. Use this to
+	# confirm the panel is reading variables rather than caching.
+	option = {
+		name = te_debug_colonial_empire.1.opt_f
+		colonial_empire_refresh_display = yes
+		debug_log = "COLONIAL_DEBUG: tier=[ROOT.GetVariable('colonial_empire_tier').GetValue] next_boundary=[ROOT.GetVariable('colonial_empire_next_boundary').GetValue] bucket=[ROOT.GetVariable('colonial_empire_bar_bucket').GetValue] total=[ROOT.GetVariable('colonial_empire_d_total').GetValue]"
+	}
+}
+
+
+te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`event te_debug_colonial_empire.2`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/independence_celebration.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_colonial_empire.2.t
+	desc = te_debug_colonial_empire.2.d
+	flavor = te_debug_colonial_empire.2.f
+
+	trigger = {
+		has_journal_entry = je_colonial_empire
+	}
+
+	# Four condemners: crosses the -1.0 tier-4 escalation without reaching the
+	# -2.0 tier-6 one, so the Great-power pressure row should read about -3.4.
+	option = {
+		name = te_debug_colonial_empire.2.a
+		default_option = yes
+		every_country = {
+			limit = {
+				NOT = { this = ROOT }
+				country_rank >= rank_value:great_power
+				NOT = { has_variable = gp_anti_colonial_stance }
+			}
+			set_variable = gp_anti_colonial_stance
+		}
+		colonial_empire_refresh_display = yes
+	}
+
+	# Two supporters instead, for the positive side of the pressure row.
+	option = {
+		name = te_debug_colonial_empire.2.b
+		every_country = {
+			limit = {
+				NOT = { this = ROOT }
+				country_rank >= rank_value:great_power
+			}
+			remove_variable = gp_anti_colonial_stance
+		}
+		ordered_country = {
+			limit = {
+				NOT = { this = ROOT }
+				country_rank >= rank_value:great_power
+			}
+			order_by = country_rank
+			max = 2
+			set_variable = gp_pro_colonial_stance
+		}
+		colonial_empire_refresh_display = yes
+	}
+
+	# Clear every colonial great-power stance, so the International Pressure
+	# section falls back to its "no one is pressing us" line.
+	option = {
+		name = te_debug_colonial_empire.2.c
+		every_country = {
+			limit = { NOT = { this = ROOT } }
+			remove_variable = gp_anti_colonial_stance
+			remove_variable = gp_pro_colonial_stance
+		}
+		colonial_empire_refresh_display = yes
+	}
+
+	# Open each of the three decolonization confirmations directly, through the
+	# same shared effect the widget row and the AI button both call. Nothing is
+	# released until an option of decolonization_events.400 / .401 is chosen, and
+	# each of those has a Reconsider option.
+	option = {
+		name = te_debug_colonial_empire.2.opt_d
+		trigger = { colonial_empire_possible_release_territory = yes }
+		colonial_empire_effect_release_territory = yes
+	}
+
+	option = {
+		name = te_debug_colonial_empire.2.e
+		trigger = { colonial_empire_possible_round_table = yes }
+		colonial_empire_effect_round_table = yes
+	}
+
+	option = {
+		name = te_debug_colonial_empire.2.opt_f
+		trigger = { colonial_empire_possible_planned_decolonization = yes }
+		colonial_empire_effect_planned_decolonization = yes
+	}
+
+	# Diagnostics for the decolonization rows when they look wrong.
+	option = {
+		name = te_debug_colonial_empire.2.g
+		colonial_empire_refresh_display = yes
+		debug_log = "COLONIAL_DEBUG: eligible=[ROOT.GetVariable('colonial_empire_eligible_count').GetValue] round_table_ok=[ROOT.GetVariable('colonial_empire_round_table_count').GetValue] overreach=[ROOT.GetVariable('colonial_empire_d_overreach').GetValue] gp=[ROOT.GetVariable('colonial_empire_d_gp').GetValue] acceptance=[ROOT.GetVariable('colonial_empire_d_acceptance').GetValue]"
+	}
+}

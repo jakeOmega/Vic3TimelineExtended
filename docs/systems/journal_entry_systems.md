@@ -153,21 +153,115 @@ Mod JEs of this family bundle two kinds of modifiers in the same `extra_modifier
 Models the challenge of maintaining overseas colonies after decolonization tech. Countries balance stability through investment, military presence, or cultural assimilation — or accept planned decolonization.
 
 ### Key Mechanics
-- **Progress bar:** `colonial_stability_bar` (0-100)
-- **5 stability tiers:** collapsing (0-20), crumbling (20-40), strained (40-65), stable (65-90), solidified (90+)
-- **GP pressure:** Tracked via `colonial_gp_condemners_count`
-- **Phase modifiers:** `colonial_empire_under_pressure_modifier` (<40), `colonial_empire_crumbling_modifier` (<20)
+- **Progress bar:** `colonial_stability_bar` (0-100, `start_value = 50`, `default_green`). Purely `monthly_progress`-driven — nothing calls `set_bar_progress` on it outside the debug harness. Its 21 terms are named leaf script values; see `mod_systems.md` § Stability Bar Formula.
+- **5 stability bands:** collapsing (0-20), crumbling (20-40), strained (40-65), stable (65-90), solidified (90+). Derived **once**, in `colonial_empire_refresh_display`, into `var:colonial_empire_tier` (1-5). No other file knows a boundary.
+- **GP pressure:** `colonial_gp_condemners_count` / `colonial_gp_supporters_count` (great powers carrying `gp_anti_colonial_stance` / `gp_pro_colonial_stance`).
+- **Phase modifiers, applied to the ENTRY not the country** (`je:je_colonial_empire = { add_modifier = … }`, so a country-scope `has_modifier` never sees them): `colonial_empire_crumbling_modifier` (<20), `colonial_empire_under_pressure_modifier` (<40), `colonial_empire_strained_modifier` (<65), `colonial_empire_stable_modifier` (<90), `colonial_empire_solidified_modifier` (90+).
+- **`is_shown_when_inactive`** on game rule + `decolonization` tech, so any widget here must be guarded (see below).
 
-### Buttons (8)
-4 toggle pairs:
-- `ce_invest_in_development` / `ce_remove_invest_in_development`
-- `ce_military_garrison` / `ce_remove_military_garrison`
-- `ce_cultural_assimilation` / `ce_remove_cultural_assimilation`
-- `ce_release_colonial_territory` / `ce_planned_decolonization`
+### Buttons (9) — AI-only
+All nine carry `is_ai = yes` in `visible`; a human sees the widget instead. They remain the AI's only path into the system (their `ai_chance`). `possible` / `effect` delegate to shared helpers, so the grid and the widget cannot drift.
+
+| Button | Gate trigger | Action effect |
+|---|---|---|
+| `ce_invest_in_development` | `colonial_empire_possible_invest` | `colonial_empire_effect_invest` |
+| `ce_remove_invest_in_development` | `colonial_empire_possible_remove_invest` | `colonial_empire_effect_remove_invest` |
+| `ce_military_garrison` | `colonial_empire_possible_garrison` | `colonial_empire_effect_garrison` |
+| `ce_remove_military_garrison` | `colonial_empire_possible_remove_garrison` | `colonial_empire_effect_remove_garrison` |
+| `ce_cultural_assimilation` | `colonial_empire_possible_assimilation` | `colonial_empire_effect_assimilation` |
+| `ce_remove_cultural_assimilation` | `colonial_empire_possible_remove_assimilation` | `colonial_empire_effect_remove_assimilation` |
+| `ce_release_colonial_territory` | `colonial_empire_possible_release_territory` | `colonial_empire_effect_release_territory` |
+| `ce_planned_decolonization` | `colonial_empire_possible_planned_decolonization` | `colonial_empire_effect_planned_decolonization` |
+| `ce_round_table_conference` | `colonial_empire_possible_round_table` | `colonial_empire_effect_round_table` |
+
+Gates live in `common/scripted_triggers/colonial_empire_triggers.txt`, actions in `common/scripted_effects/decolonization.txt`. The three decision actions wrap their body in `hidden_effect` — see Editing rules.
+
+### Variables
+Written by `colonial_empire_refresh_display` (`common/scripted_effects/colonial_empire_display_effects.txt`) and by nothing else; all ten cleared in `colonial_empire_je_cleanup_effect`.
+
+| Variable | Meaning |
+|---|---|
+| `colonial_empire_tier` | 1-5 band index |
+| `colonial_empire_next_boundary` | 20 / 40 / 65 / 90 / 100 — the next band's edge |
+| `colonial_empire_bar_bucket` | bar value to the nearest 5, for the history chart |
+| `colonial_empire_d_overreach`, `_d_gp`, `_d_acceptance` | the three drift groups that iterate |
+| `colonial_empire_d_total` | projected monthly change, for the signed chart |
+| `colonial_empire_eligible_count`, `_round_table_count` | decolonization candidate counts |
+| `colonial_empire_largest_eligible_state` | largest eligible state (removed when none) |
+
+Still owned by the JE's own pulse: `colonial_invest_months`, `colonial_garrison_months`, `colonial_assimilate_months`, `colonial_solidified_months`, `colonial_at_100_months`, `colonial_je_total_months` (path-dependence and completion counters).
+
+**Retired:** the seven `colonial_condemner_rank_N` slots and `colonial_condemner_idx`. The roster is walked live in script now; their `remove_variable` lines were dropped rather than kept, because a `remove_variable` for a name nothing sets logs "used but never set".
+
+### Colonial Stability Widget (journal-entry widget)
+
+**File:** `gui/journal_entry_widgets/colonial_empire_widget.gui` (UTF-8 BOM). Two roots, both mounted from `je_colonial_empire`: `widget_je_colonial_empire` → `custom_widget_container_2`, `widget_je_colonial_empire_history` → `custom_widget_container_3` (directly above the native bar).
+
+**Handlers** (`common/scripted_guis/colonial_empire_sguis.txt`), all `ai_is_valid = { always = no }`:
+
+| Handler | Kind | Role |
+|---|---|---|
+| `colonial_empire_display_ready` | read-only | has `colonial_empire_refresh_display` run yet? One gate for all ten var reads |
+| `colonial_empire_has_candidates` | read-only | is `colonial_empire_largest_eligible_state` set? |
+| `colonial_empire_active_invest_sgui` | read-only | is Development Investment running? **Decides which half of its row is drawn** |
+| `colonial_empire_active_garrison_sgui` | read-only | is Military Garrison running? Ditto |
+| `colonial_empire_active_assimilation_sgui` | read-only | is Cultural Assimilation running? Ditto |
+| `colonial_empire_pressure_sgui` | read-only text | walks the great powers live and names condemners / supporters |
+| `colonial_empire_policy_sgui` | action, `saved_scopes = { op }` | the three programmes, enable and disable |
+| `colonial_empire_decision_sgui` | action, `saved_scopes = { op }` | the three decolonization decisions |
+
+Eight handlers. All carry `ai_is_valid = { always = no }`; the five read-only ones also carry `is_valid = { always = no }` and an empty `effect`, so nothing can execute them.
+
+**Op tables** (repeated in the `.gui` header and the sgui header — keep all three in step):
+
+`colonial_empire_policy_sgui`: 0 enable Invest · 1 disable Invest · 2 enable Garrison · 3 disable Garrison · 4 enable Assimilation · 5 disable Assimilation.
+`colonial_empire_decision_sgui`: 0 Release a Colonial Territory · 1 Planned Full Decolonization · 2 Round Table Conference.
+
+**An op code decides what a control does, never whether it is drawn.** `AddScope` is passed to `IsValid`, `Execute` and the tooltips only — the three paths `st_res_scripted_gui.txt` has shipped. Whether a saved scope reaches an `is_shown` block is *unproven* in this mod: Strategic Reserve passes one to `IsShown` but its `is_shown` never reads it, vanilla ships no handler whose `is_shown` reads a saved scope, and the one in-mod case (`un_chamber_vote_sgui`'s veto branch) is fail-open and so would look correct either way. With the button grid hidden from humans, a programme row whose visibility quietly evaluated false would leave no control at all, so each Enable/Disable pair keys off a scope-free `colonial_empire_active_*_sgui` instead — Disable on `IsShown(…)`, Enable on `Not(IsShown(…))`, which is the shape banking's dashboard is play-tested with. `colonial_empire_policy_sgui.is_shown` is therefore unconditional, and `colonial_empire_decision_sgui.is_shown` is `always = yes` (a decision with nothing to release stays visible and disabled), so no control's visibility depends on that path.
+
+**Display-only reads** — the widget derives nothing:
+- Bar value: `[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]`, reached through `datamodel = "[JournalEntry.GetScriptedProgressBars]"`.
+- Bar breakdown: `[ScriptedProgressBar.GetPeriodicProgressBreakdown]` — the **engine's own** per-term rendering, built from the 21 `desc` keys on the bar's `add` lines. It cannot drift from the mechanic because it *is* the mechanic.
+- Six drift groups live: `[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_{base,laws,igs,rank,policies,domestic}')]` — all O(1), and live so a click moves them the next frame.
+- Three drift groups + the total from `var:` (they iterate; the widget runs every frame).
+- Band names and the phase-modifier line: `[JournalEntry.GetCountry.GetCustom('colonial_empire_{status_custom,tier_name,next_band_name,phase_modifier}')]` (`common/customizable_localization/colonial_empire_custom_loc.txt`), keyed on the tier integer.
+- Programme costs / effects: `[GetStaticModifier('x').GetDesc]` plus `colonial_{invest,garrison,assim}_effectiveness_display` and `colonial_{invest,assimilate}_startup_cost_display`.
+
+**Areas:** Colonial Stability (open by default) · International Pressure (**collapsed** by default — its sgui walks `every_country` twice per frame while open) · Colonial Programmes (open) · Decolonization (open) · History (collapsed). Section state is `GetVariableSystem` only; `colonial_empire_stability_closed` / `_programmes_closed` / `_decisions_closed` are *closed* flags, `colonial_empire_pressure_open` / `_history_open` are *open* flags.
+
+**No arm/confirm flag anywhere.** The three decisions confirm through `decolonization_events.400` / `.401`, which preview up to three candidates and offer a "Reconsider" option. That is real game state: it survives a save, cannot be left half-armed by closing the panel, and lets the player choose *which* territory. A `GetVariableSystem` arm flag would be client-side with no lifetime.
+
+#### Editing rules
+1. **Never put a number in the `.gui` or in a loc string.** Retune the leaf script value; the bar, the widget and the charts all move together.
+2. **Never re-derive state in `.gui` or loc.** Add it to `colonial_empire_refresh_display` and read the variable.
+3. **A gate or action changes in the shared helper only** — never in the button, never in the sgui.
+4. **The three decision effects must keep their `hidden_effect` wrapper.** `ExecuteTooltip` renders an effect every frame the panel is open and does not execute; unwrapped, their three `ordered_scope_state` picks and the region flood-fill would be walked per frame and their `debug_log` would interpolate `scope:decolonization_target_state_*` on scopes a render never saves. The player-facing `custom_tooltip` stays *outside* the wrapper. `colonial_empire_refresh_display` is wrapped the same way, for the same reason.
+5. **Read the phase modifiers off the entry, not the country** (`je:je_colonial_empire ?= { has_modifier = … }`).
+6. **Every `var:` read in the widget stays behind `colonial_empire_display_ready`** — `is_shown_when_inactive` means the widget is built for countries whose entry never activated.
+7. **`GetValueWithBreakdownFor` is not used in the widget** — its object chain is confirmed for `ROOT.GetCountry.GetModifier…` in a JE desc but not for `JournalEntry.GetCountry.GetModifier…` in a widget. Thin display script values (`colonial_{invest,garrison,assim}_effectiveness_display`) read the aggregates; the bar's own hover keeps the full breakdown.
+8. **A loc key reachable from BOTH a description and a widget must carry no country accessor at all.** `ROOT.` is the proven root in a description and in an `ExecuteTooltip`-rendered effect; `JournalEntry.` is the proven root in a widget. The trap is *nesting*: `je_colonial_empire_tt_invest` is a `.gui` `tooltip = "key"` (widget context), so while it included `$CE_INVEST_IN_DEVELOPMENT_DESC$` it dragged that key's `ROOT.GetCountry.GetModifier…` line into widget context — even though the `_DESC` key itself was untouched and is correct for the button and for `ExecuteTooltip`. Fix shape: keep the prose in an accessor-free `CE_*_BODY` key that both sides include, and let each side append its own root-appropriate reading of the number. Check the whole reachability graph (`$KEY$`, `SelectLocalization`, `AddLocalizationIf`, `GetCustom` targets), not just the keys the `.gui` names directly.
+9. **Never move a control's visibility onto an op-parameterised `IsShown`.** See the paragraph above the op tables: visibility comes from a scope-free read-only handler, because a saved scope reaching an `is_shown` block is unproven here and the hidden button grid leaves no fallback. Adding a fourth programme means adding a fourth `colonial_empire_active_*_sgui` alongside its two op codes.
+
+#### Traced scenarios
+Fresh activation (`immediate` populates the display state on frame one) · inactive entry (root `visible = "[JournalEntry.IsActive]"`, nothing runs) · each programme on and off (row and the six live groups move the next frame; only the three iterating snapshots lag a month) · Garrison below the authority gate (greyed, condition in `IsValidTooltip`) · Assimilation without the era-6 tech · no eligible territory (decisions greyed, "largest" row hidden by its own guard) · decision opened then cancelled (event option D clears every marker) · AI country (acts only through `ai_chance`) · law passed mid-entry · old save mid-entry (guarded, shows the pending line) · bar reaches 0 or 100 (cleanup removes all ten variables).
+
+#### Debug harness
+`event te_debug_colonial_empire.1` — put the bar in any of the five bands, or refresh and log the display state. `event te_debug_colonial_empire.2` — great-power pressure at each escalation step, clear all stances, or open each of the three decolonization confirmations through the shared effect. Both require the entry to be active.
+
+### History charts (journal-entry widget)
+`te_history_record_colonial_samples` (`common/scripted_effects/te_history_colonial_effects.txt`), called once from the monthly pulse after the refresh, gated on the game rule + `has_journal_entry`; eligibility is the shared `te_history_country_is_tracked`.
+
+| Metric | Chart | Axis | Source |
+|---|---|---|---|
+| `colonial_stability` | `te_history_bar_unsigned` | 0-100 | `var:colonial_empire_bar_bucket` (nearest 5 — the legend says so) |
+| `colonial_drift` | `te_history_bar_signed` | ±6 | `var:colonial_empire_d_total` (exact) |
+
+No markers: their tooltip branches live in the shared `te_history_scripted_gui.txt`. `te_hist_range` is a single global GUI variable shared with the banking charts.
 
 ### Outcomes
-- **Complete (100):** Permanent `colonial_empire_solidified_modifier`, grants homeland to primary cultures in colonial states with 4+ acceptance
-- **Fail (0):** 3× `form_decolonized_country` from overseas states, `colonial_empire_collapsed_modifier` (decaying)
+- **Complete:** 60 sustained months at bar 100, or the Imperial Federation Act capstone. Permanent `colonial_empire_solidified_modifier`, grants homeland to primary cultures in colonial states with 4+ acceptance, sets `colonial_empire_completed` (permanent re-entry block).
+- **Fail (bar 0):** path-dependent resolution event, strong liberty-desire spike and relations hit on every qualifying colonial subject, `colonial_empire_collapsed_recently` 10-year cooldown.
+- **Voluntary end (bar > 0, no colonies left):** resolution event, no cooldown.
 
 ---
 
