@@ -1,0 +1,345 @@
+﻿# ============================================================================
+# COLONIAL EMPIRE — SCRIPTED GUIS
+#
+# Backs gui/journal_entry_widgets/colonial_empire_widget.gui, the player-facing
+# surface for je_colonial_empire now that the vanilla button grid is AI-only.
+#
+# Every action handler delegates: `is_valid` calls the same
+# colonial_empire_possible_* trigger the scripted button's `possible` calls, and
+# `effect` calls the same colonial_empire_effect_* effect the button's `effect`
+# calls. Nothing here restates a condition or an action, so the AI's grid and the
+# player's widget cannot drift apart. Change the shared helper in
+# common/scripted_triggers/colonial_empire_triggers.txt or
+# common/scripted_effects/decolonization.txt -- never here.
+#
+# The AI never uses any of these (`ai_is_valid = { always = no }` on all four):
+# AI policy and decolonization choices still run through the `ai_chance` blocks
+# on the je_colonial_empire scripted buttons, which are untouched.
+#
+# Read-only handlers carry `is_valid = { always = no }` so nothing can execute
+# them; they exist purely so the widget can ask script a question it cannot ask
+# itself.
+#
+# ---------------------------------------------------------------------------
+# OP TABLE — colonial_empire_policy_sgui (saved_scopes = { op })
+#   0  enable  Development Investment      1  disable Development Investment
+#   2  enable  Military Garrison           3  disable Military Garrison
+#   4  enable  Cultural Assimilation       5  disable Cultural Assimilation
+#
+# OP TABLE — colonial_empire_decision_sgui (saved_scopes = { op })
+#   0  Release a Colonial Territory   (-> decolonization_events.400)
+#   1  Planned Full Decolonization    (-> decolonization_events.401)
+#   2  Round Table Conference         (-> decolonization_events.400)
+#
+# Both tables are repeated in the .gui header and in
+# docs/systems/journal_entry_systems.md § Colonial Stability Widget. Keep all
+# three in step.
+#
+# ---------------------------------------------------------------------------
+# WHY THE OP CODE DECIDES WHAT A CONTROL *DOES* BUT NEVER WHETHER IT IS *DRAWN*
+#
+# Passing a saved scope to `IsValid` / `Execute` / the tooltips is proven in this
+# mod (st_res_scripted_gui.txt has shipped it). Passing one to `IsShown` is NOT:
+# Strategic Reserve hands `AddScope('dir', …)` to IsShown but its `is_shown`
+# never reads the scope, vanilla ships no handler whose `is_shown` reads a saved
+# scope at all, and the one in-mod case (un_chamber_vote_sgui's veto branch) is
+# written fail-open, so it would look fine either way. Vanilla's
+# scripted_guis.md only promises saved scopes "in triggers / effects".
+#
+# With the button grid hidden from humans, a programme row whose visibility
+# quietly evaluated false would leave the player no control at all — the one
+# failure this surface cannot afford. So each programme's Enable/Disable pair
+# takes its visibility from a SCOPE-FREE read-only handler below
+# (colonial_empire_active_*_sgui), which is the shape banking's dashboard has
+# been play-tested with. The op code still selects the gate, the effect and the
+# tooltip text.
+# ============================================================================
+
+
+# ---------------------------------------------------------------------------
+# Read-only: has colonial_empire_refresh_display run yet?
+#
+# All ten display variables are written by that one effect, so a single
+# has_variable check gates every var read in the widget. This is the guard for
+# gui_modding_guide gotcha #14: je_colonial_empire has is_shown_when_inactive, so
+# the widget is built for countries whose entry never activated, and an
+# unguarded var read there is a "Failed to fetch variable" per frame. The
+# widget's root is additionally gated on [JournalEntry.IsActive].
+# ---------------------------------------------------------------------------
+colonial_empire_display_ready = {
+	scope = country
+	is_shown = {
+		has_variable = colonial_empire_tier
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+
+# ---------------------------------------------------------------------------
+# Read-only: is there a territory the decolonization decisions could act on?
+#
+# colonial_empire_refresh_display removes colonial_empire_largest_eligible_state
+# when nothing qualifies, so the row that names it needs its own guard rather
+# than sharing colonial_empire_display_ready's.
+# ---------------------------------------------------------------------------
+colonial_empire_has_candidates = {
+	scope = country
+	is_shown = {
+		has_variable = colonial_empire_largest_eligible_state
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+
+# ---------------------------------------------------------------------------
+# Read-only: is programme X running? One per programme, and the ONLY thing that
+# decides which half of each Enable/Disable pair the widget draws.
+#
+# Deliberately scope-free (no `saved_scopes`), because whether a saved scope
+# reaches `is_shown` is unproven here — see the note in the file header. This is
+# the shape banking's dashboard has been play-tested with.
+#
+# Each `is_shown` is the same check as the matching scripted_button's `visible`
+# (minus its `is_ai = yes`), read in the SAME scope the button reads it in. The
+# three programme modifiers are country-scoped: the button effects apply them at
+# the top level of a country-scope effect, the bar reads them as
+# `owner = { has_modifier = … }`, and colonial_empire_je_cleanup_effect removes
+# them in country scope. (Contrast the five colonial_empire_*_modifier PHASE
+# modifiers, which the JE pulse applies to the ENTRY with
+# `je:je_colonial_empire = { add_modifier = … }` and which a country-scope
+# has_modifier would therefore never see. None of those are read here.)
+# ---------------------------------------------------------------------------
+colonial_empire_active_invest_sgui = {
+	scope = country
+	is_shown = {
+		has_modifier = colonial_development_investment_modifier
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+colonial_empire_active_garrison_sgui = {
+	scope = country
+	is_shown = {
+		has_modifier = colonial_military_garrison_modifier
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+colonial_empire_active_assimilation_sgui = {
+	scope = country
+	is_shown = {
+		has_modifier = colonial_cultural_assimilation_modifier
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+
+# ---------------------------------------------------------------------------
+# Read-only text: which great powers are pressing on the empire.
+#
+# Rendered with ScriptedGui.ExecuteTooltip. The great powers are walked LIVE
+# here rather than read out of stored slot variables, because
+# `Var('x').GetCountry.GetName` is recorded as rendering blank in this mod
+# (gui_modding_guide gotcha #11) and because a live walk cannot go stale or name
+# an annexed country.
+#
+# Cost: two every_country walks per frame while the section is open. That is why
+# the widget keeps International Pressure COLLAPSED by default and puts this
+# textbox inside the collapsed container -- nothing runs until the player asks.
+#
+# Each entry names its own side (gotcha #18: a header above a script-built
+# country list renders above the whole undivided list, not above its own group),
+# and no entry adds a flag icon (gotcha #19: a custom_tooltip inside a country
+# scope change already gets a bullet and a flag for free).
+# ---------------------------------------------------------------------------
+colonial_empire_pressure_sgui = {
+	scope = country
+	is_shown = { always = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+
+	effect = {
+		# Cheap short-circuit: `any_country` stops at the first match, where the
+		# condemner/supporter script values would walk every country twice.
+		if = {
+			limit = {
+				NOT = {
+					any_country = {
+						NOT = { THIS = ROOT }
+						country_rank >= rank_value:great_power
+						OR = {
+							has_variable = gp_anti_colonial_stance
+							has_variable = gp_pro_colonial_stance
+						}
+					}
+				}
+			}
+			custom_tooltip = je_colonial_empire_pressure_quiet_tt
+		}
+
+		every_country = {
+			limit = {
+				NOT = { THIS = ROOT }
+				country_rank >= rank_value:great_power
+				has_variable = gp_anti_colonial_stance
+			}
+			custom_tooltip = je_colonial_empire_condemner_entry_tt
+		}
+
+		every_country = {
+			limit = {
+				NOT = { THIS = ROOT }
+				country_rank >= rank_value:great_power
+				has_variable = gp_pro_colonial_stance
+			}
+			custom_tooltip = je_colonial_empire_supporter_entry_tt
+		}
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+# The three colonial programmes, enable and disable.
+#
+# `is_valid` delegates to the same trigger the matching scripted_button's
+# `possible` calls, and `effect` to the same effect its `effect` calls, selected
+# by op code. Those three paths (IsValid / Execute / the tooltips) are the ones
+# `AddScope` is proven on in this mod.
+#
+# `is_shown` is deliberately unconditional: WHICH half of each pair is drawn is
+# decided by the scope-free colonial_empire_active_*_sgui handlers above, so no
+# control's visibility depends on a saved scope reaching an `is_shown` block.
+# See the file header for why. A stray op code cannot produce a live control
+# either way -- `is_valid`'s `trigger_else = { always = no }` greys out anything
+# outside 0-5, and `effect` has no branch for it.
+# ---------------------------------------------------------------------------
+colonial_empire_policy_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			colonial_empire_possible_invest = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			colonial_empire_possible_remove_invest = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			colonial_empire_possible_garrison = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			colonial_empire_possible_remove_garrison = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			colonial_empire_possible_assimilation = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			colonial_empire_possible_remove_assimilation = yes
+		}
+		trigger_else = { always = no }
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			colonial_empire_effect_invest = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			colonial_empire_effect_remove_invest = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			colonial_empire_effect_garrison = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			colonial_empire_effect_remove_garrison = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			colonial_empire_effect_assimilation = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			colonial_empire_effect_remove_assimilation = yes
+		}
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+# The three decolonization decisions.
+#
+# `is_shown = { always = yes }` deliberately: a decision with nothing to release
+# stays visible and disabled, with the reason in the button's IsValidTooltip. A
+# control that vanishes teaches nothing.
+#
+# These are NOT armed-then-confirmed in the GUI. Each one fires
+# decolonization_events.400 / .401, which previews up to three candidate
+# territories (with the state count and culture of each release region) and
+# offers a "Reconsider" option that clears every marker. That confirmation is
+# real game state: it survives a save, it cannot be left half-armed by closing
+# the panel, and it lets the player pick WHICH territory. A GetVariableSystem
+# arm flag would be client-side, have no lifetime, and greet a returning player
+# still armed -- strictly worse. Nothing is released by pressing these.
+# ---------------------------------------------------------------------------
+colonial_empire_decision_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = { always = yes }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			colonial_empire_possible_release_territory = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			colonial_empire_possible_planned_decolonization = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			colonial_empire_possible_round_table = yes
+		}
+		trigger_else = { always = no }
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			colonial_empire_effect_release_territory = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			colonial_empire_effect_planned_decolonization = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			colonial_empire_effect_round_table = yes
+		}
+	}
+}

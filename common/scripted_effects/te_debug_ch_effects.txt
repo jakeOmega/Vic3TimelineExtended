@@ -1,0 +1,146 @@
+﻿# ============================================================================
+# CULTURAL HEGEMONY TEST CONSOLE — console-only helpers
+# ============================================================================
+# Reached only from events/te_debug_ch_events.txt, which is fired by hand with
+# `event te_debug_ch.1`. Nothing in the mod calls any of this.
+#
+# Vic3's console has no `effect` command (that is CK3), so a debug event is the
+# only way to run script by hand. These helpers force the journal-entry widget's
+# awkward states — a board slot that is us, a board slot that is empty, being
+# outside the top ten, and the Ministry of Culture going away underneath four
+# running programmes — in seconds instead of decades of play.
+#
+# They write the very globals and variables ch_yearly_global_update writes, so
+# the widget cannot tell a forced state from a real one. The next yearly pulse
+# overwrites everything, which is the intended way out.
+# ============================================================================
+
+# Give ourselves the Ministry of Culture, a funding cap to spend against, and all
+# four programmes running, so every control in the widget has something to do.
+# Scope: country
+te_debug_ch_setup = {
+	activate_law = law_type:law_ministry_of_culture
+	if = {
+		limit = { NOT = { has_modifier = ch_debug_funding_cap } }
+		add_modifier = { name = ch_debug_funding_cap }
+	}
+	set_variable = { name = ch_program_funding_level value = 2 }
+	ch_refresh_funding_modifiers = yes
+
+	ch_effect_world_exposition = yes
+	ch_effect_cultural_institutes = yes
+	# Protectionism only — it is mutually exclusive with the media campaign, and
+	# leaving media off is what makes the greyed-out Enable control testable.
+	ch_effect_cultural_protectionism = yes
+
+	ch_set_display_state = yes
+}
+
+# Repeal the Ministry of Culture. The journal entry's monthly pulse should then
+# zero funding and strip all four programme modifiers, International Cultural
+# Outreach included — the bug this branch fixes.
+# Scope: country
+te_debug_ch_repeal_ministry = {
+	activate_law = law_type:law_no_ministry_of_culture
+	if = {
+		limit = { has_modifier = ch_debug_funding_cap }
+		remove_modifier = ch_debug_funding_cap
+	}
+}
+
+# Fill one board slot with a country and a plausible set of component scores.
+# Parameters: $SLOT$ = 1-10, $WHO$ = a country scope, $SCORE$ = share percentage
+# Scope: any
+te_debug_ch_fill_slot = {
+	set_global_variable = { name = ch_rank_$SLOT$ value = $WHO$ }
+	set_global_variable = { name = ch_rank_$SLOT$_score value = $SCORE$ }
+	set_global_variable = { name = ch_rank_$SLOT$_delta value = 0 }
+	set_global_variable = { name = ch_rank_$SLOT$_art value = $SCORE$ }
+	set_global_variable = { name = ch_rank_$SLOT$_prs value = $SCORE$ }
+	set_global_variable = { name = ch_rank_$SLOT$_sol value = 0 }
+	set_global_variable = { name = ch_rank_$SLOT$_tech value = 0 }
+	set_global_variable = { name = ch_rank_$SLOT$_raw value = $SCORE$ }
+}
+
+# Put us at the top of the board. Row 1 should carry the "us" marker and our
+# own name, and the summary should read Rank 1.
+# Scope: country
+te_debug_ch_make_us_rank_1 = {
+	te_debug_ch_fill_slot = { SLOT = 1 WHO = ROOT SCORE = 31 }
+	set_global_variable = { name = ch_top_cultural_pull value = 31 }
+	set_variable = { name = ch_rank_self value = 1 }
+	set_global_variable = { name = ch_ranked_total value = 168 }
+	set_variable = { name = ch_total value = 31 }
+	ch_set_display_state = yes
+}
+
+# Fill all ten slots with other countries and put us well outside them. The board
+# should show no "us" marker and the line underneath should say where we are.
+# Scope: country
+te_debug_ch_push_us_outside = {
+	set_variable = { name = te_debug_ch_slot value = 0 }
+	ordered_country = {
+		limit = {
+			NOT = { this = ROOT }
+			is_country_type = recognized
+		}
+		order_by = prestige
+		check_range_bounds = no
+
+		root = { change_variable = { name = te_debug_ch_slot add = 1 } }
+		save_scope_as = te_debug_ch_who
+
+		if = {
+			limit = { root.var:te_debug_ch_slot = 1 }
+			te_debug_ch_fill_slot = { SLOT = 1 WHO = scope:te_debug_ch_who SCORE = 28 }
+		}
+		else_if = {
+			limit = { root.var:te_debug_ch_slot = 2 }
+			te_debug_ch_fill_slot = { SLOT = 2 WHO = scope:te_debug_ch_who SCORE = 21 }
+		}
+		else_if = {
+			limit = { root.var:te_debug_ch_slot = 3 }
+			te_debug_ch_fill_slot = { SLOT = 3 WHO = scope:te_debug_ch_who SCORE = 17 }
+		}
+		else_if = {
+			limit = { root.var:te_debug_ch_slot = 4 }
+			te_debug_ch_fill_slot = { SLOT = 4 WHO = scope:te_debug_ch_who SCORE = 13 }
+		}
+		else_if = {
+			limit = { root.var:te_debug_ch_slot = 5 }
+			te_debug_ch_fill_slot = { SLOT = 5 WHO = scope:te_debug_ch_who SCORE = 9 }
+		}
+		else_if = {
+			limit = { root.var:te_debug_ch_slot = 6 }
+			te_debug_ch_fill_slot = { SLOT = 6 WHO = scope:te_debug_ch_who SCORE = 7 }
+		}
+		else_if = {
+			limit = { root.var:te_debug_ch_slot = 7 }
+			te_debug_ch_fill_slot = { SLOT = 7 WHO = scope:te_debug_ch_who SCORE = 5 }
+		}
+		else_if = {
+			limit = { root.var:te_debug_ch_slot = 8 }
+			te_debug_ch_fill_slot = { SLOT = 8 WHO = scope:te_debug_ch_who SCORE = 4 }
+		}
+		else_if = {
+			limit = { root.var:te_debug_ch_slot = 9 }
+			te_debug_ch_fill_slot = { SLOT = 9 WHO = scope:te_debug_ch_who SCORE = 3 }
+		}
+		else_if = {
+			limit = { root.var:te_debug_ch_slot = 10 }
+			te_debug_ch_fill_slot = { SLOT = 10 WHO = scope:te_debug_ch_who SCORE = 2 }
+		}
+	}
+	remove_variable = te_debug_ch_slot # REVIEWED 2026-09-18: console-only loop counter, not a modifier multiplier
+	set_global_variable = { name = ch_top_cultural_pull value = 28 }
+	set_variable = { name = ch_rank_self value = 14 }
+	set_global_variable = { name = ch_ranked_total value = 168 }
+	ch_set_display_state = yes
+}
+
+# Empty board slot 5, the way an annexation between yearly recounts does. Row 5
+# should disappear and rows 1-4 and 6-10 should keep their places.
+# Scope: any
+te_debug_ch_empty_slot_5 = {
+	remove_global_variable = ch_rank_5
+}

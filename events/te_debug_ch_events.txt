@@ -1,0 +1,64 @@
+﻿# ============================================================================
+# CULTURAL HEGEMONY TEST CONSOLE — fired only from the console:
+#   event te_debug_ch.1
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires this event. It calls the
+# console-only helpers in common/scripted_effects/te_debug_ch_effects.txt so the
+# journal-entry widget's awkward states can be reached in seconds.
+#
+# Suggested order: A to set everything running, then B / C / D to exercise the
+# leaderboard, then E to watch the Ministry repeal strip all four programmes.
+# Re-fire the event for each option. The next yearly pulse recomputes the real
+# board over whatever these leave behind.
+# ============================================================================
+namespace = te_debug_ch
+
+te_debug_ch.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debug_ch.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/cultural_exhibition_grand.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_ch.1.t
+	desc = te_debug_ch.1.d
+	flavor = te_debug_ch.1.f
+
+	# Ministry of Culture, a funding cap of four steps, funding at 2, and three of
+	# the four programmes running (media left off so its greyed-out Enable control
+	# can be inspected against Cultural Protectionism).
+	option = {
+		name = te_debug_ch.1.a
+		default_option = yes
+		te_debug_ch_setup = yes
+	}
+
+	# Put us at the top of the board.
+	option = {
+		name = te_debug_ch.1.b
+		te_debug_ch_make_us_rank_1 = yes
+	}
+
+	# Fill all ten slots with other countries and put us at rank 14 of 168.
+	option = {
+		name = te_debug_ch.1.c
+		te_debug_ch_push_us_outside = yes
+	}
+
+	# Empty slot 5, as an annexation between yearly recounts does.
+	option = {
+		name = te_debug_ch.1.d_option
+		te_debug_ch_empty_slot_5 = yes
+	}
+
+	# Repeal the Ministry of Culture. Within a month the journal entry's pulse
+	# should zero funding and strip all four programme modifiers.
+	option = {
+		name = te_debug_ch.1.e
+		te_debug_ch_repeal_ministry = yes
+	}
+}

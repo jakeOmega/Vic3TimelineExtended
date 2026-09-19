@@ -1,0 +1,123 @@
+﻿# ============================================================================
+# COVERT WARFARE TEST CONSOLE — helpers
+# ============================================================================
+# Called only from events/te_debug_covert_events.txt, which is itself only ever
+# fired by hand from the console. Nothing in the mod calls anything here.
+#
+# These deliberately go through the shipping effects wherever they can
+# (covert_refresh_funding_state, covert_op_start, covert_op_refresh_phase), so
+# testing a state also tests the code that maintains it.
+# ============================================================================
+
+# Put funding at an exact level and bring every dependent modifier and display
+# value with it, exactly as a stepper click would.
+# Parameters: $LEVEL$ = 0 .. iw_funding_level_max
+# Scope: country
+te_debug_covert_set_funding = {
+	set_variable = { name = iw_funding_level value = $LEVEL$ }
+	clamp_variable = { name = iw_funding_level min = 0 max = iw_funding_level_max }
+	covert_refresh_funding_state = yes
+}
+
+# Start one operation of $TYPE$ against scope:te_debug_covert_target and set its
+# duration, so a phase can be reached without waiting for it.
+# covert_op_start creates the container; the pact is added separately because
+# the container is what the widget draws, and covert_ops_sync_all would collect
+# a container with no pact at the next monthly pulse.
+# Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
+#             $DEFENSE_MOD$ = type-specific defense modifier,
+#             $MONTHS$ = duration to plant
+# Scope: country; scope:te_debug_covert_target must be set
+te_debug_covert_plant_op = {
+	scope:te_debug_covert_target = { save_scope_as = target_country }
+	create_diplomatic_pact = {
+		country = scope:te_debug_covert_target
+		type = $ACTION$
+	}
+	covert_op_start = { TYPE = $TYPE$ DEFENSE_MOD = $DEFENSE_MOD$ }
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_$TYPE$
+				var:iw_target ?= scope:te_debug_covert_target
+			}
+			set_variable = { name = iw_duration value = $MONTHS$ }
+			covert_op_refresh_phase = yes
+		}
+	}
+}
+
+# Three operations against the same target, one per phase, each one month short
+# of its next boundary so the countdown can be watched tipping over.
+#   industrial espionage   month 5   preparatory, 1 month to establishing
+#   influence campaign     month 11  establishing, 1 month to fully operational
+#   military espionage     month 14  fully operational
+# Scope: country
+te_debug_covert_seed_phases = {
+	if = {
+		limit = { NOT = { has_variable = iw_funding_level } }
+		te_debug_covert_set_funding = { LEVEL = 2 }
+	}
+	else_if = {
+		limit = { var:iw_funding_level < 1 }
+		te_debug_covert_set_funding = { LEVEL = 2 }
+	}
+	random_country = {
+		limit = {
+			NOT = { this = ROOT }
+			covert_action_valid_target = yes
+		}
+		save_scope_as = te_debug_covert_target
+	}
+	if = {
+		limit = { exists = scope:te_debug_covert_target }
+		te_debug_covert_plant_op = {
+			TYPE = industrial_espionage
+			ACTION = covert_industrial_espionage_action
+			DEFENSE_MOD = country_covert_defense_economic_add
+			MONTHS = 5
+		}
+		te_debug_covert_plant_op = {
+			TYPE = influence_campaign
+			ACTION = covert_influence_campaign_action
+			DEFENSE_MOD = country_covert_defense_ideological_add
+			MONTHS = 11
+		}
+		te_debug_covert_plant_op = {
+			TYPE = military_espionage
+			ACTION = covert_military_espionage_action
+			DEFENSE_MOD = country_covert_defense_military_add
+			MONTHS = 14
+		}
+	}
+}
+
+# Age every running operation by a year and restate its phase.
+# Scope: country
+te_debug_covert_age_year = {
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			change_variable = { name = iw_duration add = 12 }
+			covert_op_refresh_phase = yes
+		}
+	}
+}
+
+# Re-derive every container's display state, which is what the first monthly
+# pulse after loading an older save does. Use it to close the window in which
+# covert_ops_phase_ready_sgui hides the phase lines.
+# Scope: country
+te_debug_covert_refresh_display = {
+	covert_ops_sync_all = yes
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			covert_op_refresh_phase = yes
+		}
+	}
+}

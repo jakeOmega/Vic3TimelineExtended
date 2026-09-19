@@ -1,0 +1,152 @@
+﻿# ============================================================================
+# Colonial Empire — banded readings
+# ============================================================================
+# The five stability bands used to be five triggered_desc chains on
+# je_colonial_empire's status_desc. They are here instead, keyed on
+# var:colonial_empire_tier, which colonial_empire_refresh_display derives from
+# the ONE threshold ladder in
+# common/scripted_effects/colonial_empire_display_effects.txt.
+#
+# Nothing in this file knows a threshold: it reads the tier integer, never the
+# bar. That is deliberate — the boundaries (20 / 40 / 65 / 90) exist in exactly
+# one place, and the widget prints the next one from
+# var:colonial_empire_next_boundary.
+#
+# Tier mapping (1..5), matching the phase modifier the JE pulse applies:
+#   1 collapsing  (bar  0-20)  -> colonial_empire_crumbling_modifier
+#   2 crumbling   (bar 20-40)  -> colonial_empire_under_pressure_modifier
+#   3 strained    (bar 40-65)  -> colonial_empire_strained_modifier
+#   4 stable      (bar 65-90)  -> colonial_empire_stable_modifier
+#   5 solidified  (bar 90+)    -> colonial_empire_solidified_modifier
+# (The band names and the modifier names are offset by one for historical
+# reasons; the mapping above is the authority.)
+#
+# Read from loc as [JournalEntry.GetCountry.GetCustom('<key>')], or
+# [ROOT.GetCountry.GetCustom('<key>')] inside a journal-entry desc.
+# ============================================================================
+
+# One-line status summary for the journal entry's status_desc.
+colonial_empire_status_custom = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = colonial_empire_tier } }
+		localization_key = je_colonial_empire_status_pending
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 5 }
+		localization_key = je_colonial_empire_status_solidified
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 4 }
+		localization_key = je_colonial_empire_status_stable
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 3 }
+		localization_key = je_colonial_empire_status_strained
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 2 }
+		localization_key = je_colonial_empire_status_crumbling
+	}
+	text = {
+		localization_key = je_colonial_empire_status_collapsing
+	}
+}
+
+# Short band name for the widget's headline row ("Stable", "Strained", ...).
+colonial_empire_tier_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = colonial_empire_tier } }
+		localization_key = je_colonial_empire_band_unknown
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 5 }
+		localization_key = je_colonial_empire_band_solidified
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 4 }
+		localization_key = je_colonial_empire_band_stable
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 3 }
+		localization_key = je_colonial_empire_band_strained
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 2 }
+		localization_key = je_colonial_empire_band_crumbling
+	}
+	text = {
+		localization_key = je_colonial_empire_band_collapsing
+	}
+}
+
+# Name of the band ABOVE the current one, for "Strained -> Stable at 65".
+# Tier 5 is the top: it names the completion goal instead of a next band.
+colonial_empire_next_band_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = colonial_empire_tier } }
+		localization_key = je_colonial_empire_band_unknown
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 5 }
+		localization_key = je_colonial_empire_band_at_cap
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 4 }
+		localization_key = je_colonial_empire_band_solidified
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 3 }
+		localization_key = je_colonial_empire_band_stable
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 2 }
+		localization_key = je_colonial_empire_band_strained
+	}
+	text = {
+		localization_key = je_colonial_empire_band_crumbling
+	}
+}
+
+# The phase modifier the journal entry currently carries, rendered from the
+# modifier itself so its numbers are never retyped. The JE pulse applies these
+# to the ENTRY (`je:je_colonial_empire = { add_modifier = ... }`), not to the
+# country, so a bare has_modifier here would never fire — hence the tier read
+# rather than a modifier read. Each key wraps
+# [GetStaticModifier('<name>').GetDesc].
+colonial_empire_phase_modifier = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = colonial_empire_tier } }
+		localization_key = je_colonial_empire_phase_unknown
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 5 }
+		localization_key = je_colonial_empire_phase_solidified
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 4 }
+		localization_key = je_colonial_empire_phase_stable
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 3 }
+		localization_key = je_colonial_empire_phase_strained
+	}
+	text = {
+		trigger = { var:colonial_empire_tier = 2 }
+		localization_key = je_colonial_empire_phase_under_pressure
+	}
+	text = {
+		localization_key = je_colonial_empire_phase_crumbling
+	}
+}
