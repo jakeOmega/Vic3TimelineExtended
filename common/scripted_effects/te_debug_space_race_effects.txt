@@ -1,0 +1,173 @@
+﻿# ============================================================================
+# SPACE RACE TEST HELPERS — console only
+# ============================================================================
+# Nothing in the mod calls these. They exist so the milestone panel
+# (gui/journal_entry_widgets/space_race_widget.gui) can be seen in every state
+# it has, in minutes rather than decades. Vic3's console has no `effect` command,
+# so they are reached through a console-fired event
+# (events/te_debug_space_race_events.txt):
+#
+#   event te_debug_space_race.1
+#
+# They skip costs, risk and eligibility on purpose. Never call them from
+# gameplay script.
+# ============================================================================
+
+# Drive every running milestone to $FRACTION$ of its goal, so the panel's
+# estimate, the native bar and (at 1) the completion path can all be seen at
+# once. Scope: country.
+te_debug_sr_set_progress_base = {
+	if = {
+		limit = { has_variable = sr_active_$MILESTONE$ }
+		set_variable = { name = sr_progress_$MILESTONE$ value = sr_$MILESTONE$_goal }
+		change_variable = { name = sr_progress_$MILESTONE$ multiply = $FRACTION$ }
+	}
+}
+
+te_debug_sr_set_progress = {
+	te_debug_sr_set_progress_base = { MILESTONE = suborbital         FRACTION = 0.9 }
+	te_debug_sr_set_progress_base = { MILESTONE = orbital            FRACTION = 0.9 }
+	te_debug_sr_set_progress_base = { MILESTONE = moon_landing       FRACTION = 0.9 }
+	te_debug_sr_set_progress_base = { MILESTONE = probe              FRACTION = 0.9 }
+	te_debug_sr_set_progress_base = { MILESTONE = moon_base          FRACTION = 0.9 }
+	te_debug_sr_set_progress_base = { MILESTONE = mars_landing       FRACTION = 0.9 }
+	te_debug_sr_set_progress_base = { MILESTONE = interstellar_probe FRACTION = 0.9 }
+	te_debug_sr_set_progress_base = { MILESTONE = solar_colonization FRACTION = 0.9 }
+	sr_recalculate_cost = yes
+}
+
+te_debug_sr_finish_now = {
+	te_debug_sr_set_progress_base = { MILESTONE = suborbital         FRACTION = 1 }
+	te_debug_sr_set_progress_base = { MILESTONE = orbital            FRACTION = 1 }
+	te_debug_sr_set_progress_base = { MILESTONE = moon_landing       FRACTION = 1 }
+	te_debug_sr_set_progress_base = { MILESTONE = probe              FRACTION = 1 }
+	te_debug_sr_set_progress_base = { MILESTONE = moon_base          FRACTION = 1 }
+	te_debug_sr_set_progress_base = { MILESTONE = mars_landing       FRACTION = 1 }
+	te_debug_sr_set_progress_base = { MILESTONE = interstellar_probe FRACTION = 1 }
+	te_debug_sr_set_progress_base = { MILESTONE = solar_colonization FRACTION = 1 }
+	sr_recalculate_cost = yes
+}
+
+# Raise the failure flag on every running milestone. Scope: country.
+te_debug_sr_flag_setback_base = {
+	if = {
+		limit = { has_variable = sr_active_$MILESTONE$ }
+		set_variable = { name = sr_failed_$MILESTONE$ value = yes }
+		sr_count_setback_base = { MILESTONE = $MILESTONE$ }
+	}
+}
+
+# One real setback on every running milestone, down the same path the monthly
+# pulse takes: flag, progress loss, safety review on the journal entry, cooldown.
+# The order matters — the progress loss reads the flags and the safety review
+# clears them. Ends on sr_recalculate_cost so the panel's status flips to
+# "shielded" immediately instead of next month. Scope: country.
+te_debug_sr_force_setback = {
+	te_debug_sr_flag_setback_base = { MILESTONE = suborbital         }
+	te_debug_sr_flag_setback_base = { MILESTONE = orbital            }
+	te_debug_sr_flag_setback_base = { MILESTONE = moon_landing       }
+	te_debug_sr_flag_setback_base = { MILESTONE = probe              }
+	te_debug_sr_flag_setback_base = { MILESTONE = moon_base          }
+	te_debug_sr_flag_setback_base = { MILESTONE = mars_landing       }
+	te_debug_sr_flag_setback_base = { MILESTONE = interstellar_probe }
+	te_debug_sr_flag_setback_base = { MILESTONE = solar_colonization }
+	sr_apply_safe_setback_progress_loss = yes
+	sr_temporary_safety_review_effect = yes
+	set_variable = { name = sr_failure_cooldown value = 6 }
+	sr_recalculate_cost = yes
+}
+
+# Drop the cooldown, so the panel goes back to showing a real setback risk.
+# Scope: country.
+te_debug_sr_clear_cooldown = {
+	set_variable = { name = sr_failure_cooldown value = 0 }
+	sr_recalculate_cost = yes
+}
+
+# Copy one of our running milestones onto another country so it shows up in
+# "Who else is racing". Scope: the rival. ROOT is the player.
+te_debug_sr_mirror_base = {
+	if = {
+		limit = {
+			ROOT = { has_variable = sr_active_$MILESTONE$ }
+			NOT = { has_variable = sr_active_$MILESTONE$ }
+		}
+		set_variable = { name = sr_active_$MILESTONE$ value = yes }
+		set_variable = { name = sr_progress_$MILESTONE$ value = 0 }
+		set_variable = { name = sr_funding_$MILESTONE$ value = 1 }
+		set_variable = { name = sr_safe_$MILESTONE$ value = yes }
+	}
+}
+
+# Put a programme in the top two other prestige powers — the rivals list only
+# counts countries that would actually tick, which is the same
+# sr_ai_should_participate test the monthly pulse uses.
+#
+# These flags are NOT backed by a journal entry, so
+# sr_cleanup_inactive_space_race_milestones wipes them on the next monthly tick.
+# Pause the game, run this, and open the panel. Scope: country (the player).
+te_debug_sr_seed_rivals = {
+	every_country = {
+		limit = {
+			NOT = { THIS = ROOT }
+			is_country_type = recognized
+			global_country_ranking <= 3
+		}
+		te_debug_sr_mirror_base = { MILESTONE = suborbital         }
+		te_debug_sr_mirror_base = { MILESTONE = orbital            }
+		te_debug_sr_mirror_base = { MILESTONE = moon_landing       }
+		te_debug_sr_mirror_base = { MILESTONE = probe              }
+		te_debug_sr_mirror_base = { MILESTONE = moon_base          }
+		te_debug_sr_mirror_base = { MILESTONE = mars_landing       }
+		te_debug_sr_mirror_base = { MILESTONE = interstellar_probe }
+		te_debug_sr_mirror_base = { MILESTONE = solar_colonization }
+	}
+}
+
+# Hand "the first" for one milestone to nobody in particular: the global flag is
+# what the panel and the reward split read, and setting it is exactly what
+# another power finishing first would do. Only touches milestones we have not
+# already completed, so our own sr_was_first_<m> is never contradicted.
+# Scope: country.
+te_debug_sr_claim_first_base = {
+	if = {
+		limit = {
+			NOT = { has_variable = sr_completed_$MILESTONE$ }
+			NOT = { has_global_variable = sr_global_first_$MILESTONE$ }
+		}
+		set_global_variable = { name = sr_global_first_$MILESTONE$ value = yes }
+	}
+}
+
+te_debug_sr_claim_firsts = {
+	te_debug_sr_claim_first_base = { MILESTONE = suborbital         }
+	te_debug_sr_claim_first_base = { MILESTONE = orbital            }
+	te_debug_sr_claim_first_base = { MILESTONE = moon_landing       }
+	te_debug_sr_claim_first_base = { MILESTONE = probe              }
+	te_debug_sr_claim_first_base = { MILESTONE = moon_base          }
+	te_debug_sr_claim_first_base = { MILESTONE = mars_landing       }
+	te_debug_sr_claim_first_base = { MILESTONE = interstellar_probe }
+	te_debug_sr_claim_first_base = { MILESTONE = solar_colonization }
+}
+
+# Undo the two global-state options so a test can be repeated. Scope: country.
+te_debug_sr_release_first_base = {
+	if = {
+		limit = {
+			has_global_variable = sr_global_first_$MILESTONE$
+			NOT = { has_variable = sr_was_first_$MILESTONE$ }
+		}
+		remove_global_variable = sr_global_first_$MILESTONE$
+	}
+}
+
+te_debug_sr_reset_globals = {
+	te_debug_sr_release_first_base = { MILESTONE = suborbital         }
+	te_debug_sr_release_first_base = { MILESTONE = orbital            }
+	te_debug_sr_release_first_base = { MILESTONE = moon_landing       }
+	te_debug_sr_release_first_base = { MILESTONE = probe              }
+	te_debug_sr_release_first_base = { MILESTONE = moon_base          }
+	te_debug_sr_release_first_base = { MILESTONE = mars_landing       }
+	te_debug_sr_release_first_base = { MILESTONE = interstellar_probe }
+	te_debug_sr_release_first_base = { MILESTONE = solar_colonization }
+}
