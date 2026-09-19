@@ -3,12 +3,29 @@
 # Used by je_colonial_empire journal entry
 # ============================================================================
 
+# ----------------------------------------------------------------------------
+# PLAYER-FACING SURFACE: the colonial stability widget
+# (gui/journal_entry_widgets/colonial_empire_widget.gui). Every button below
+# carries `is_ai = yes` in its `visible`, so the vanilla button grid shows
+# nothing to a human: the buttons exist for the AI, which picks policies and
+# decolonization decisions through their `ai_chance`. Do not remove them, and do
+# not drop the is_ai line without restoring a player surface.
+#
+# `possible` and `effect` delegate to colonial_empire_possible_* /
+# colonial_empire_effect_* (common/scripted_triggers/colonial_empire_triggers.txt,
+# common/scripted_effects/decolonization.txt), which the widget's scripted GUIs
+# in common/scripted_guis/colonial_empire_sguis.txt call as well -- so the AI's
+# grid and the player's widget can never drift apart. Change a gate or an action
+# in the helper, never here.
+# ----------------------------------------------------------------------------
+
 # ------ Invest in Colonial Development ------
 ce_invest_in_development = {
 	name = "CE_INVEST_IN_DEVELOPMENT"
 	desc = "CE_INVEST_IN_DEVELOPMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { has_modifier = colonial_development_investment_modifier }
 	}
 
@@ -42,6 +59,7 @@ ce_remove_invest_in_development = {
 	desc = "CE_REMOVE_INVEST_IN_DEVELOPMENT_DESC"
 
 	visible = {
+		is_ai = yes
 		has_modifier = colonial_development_investment_modifier
 	}
 
@@ -68,6 +86,7 @@ ce_military_garrison = {
 	desc = "CE_MILITARY_GARRISON_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { has_modifier = colonial_military_garrison_modifier }
 	}
 
@@ -97,6 +116,7 @@ ce_remove_military_garrison = {
 	desc = "CE_REMOVE_MILITARY_GARRISON_DESC"
 
 	visible = {
+		is_ai = yes
 		has_modifier = colonial_military_garrison_modifier
 	}
 
@@ -123,6 +143,7 @@ ce_cultural_assimilation = {
 	desc = "CE_CULTURAL_ASSIMILATION_DESC"
 
 	visible = {
+		is_ai = yes
 		NOT = { has_modifier = colonial_cultural_assimilation_modifier }
 	}
 
@@ -152,6 +173,7 @@ ce_remove_cultural_assimilation = {
 	desc = "CE_REMOVE_CULTURAL_ASSIMILATION_DESC"
 
 	visible = {
+		is_ai = yes
 		has_modifier = colonial_cultural_assimilation_modifier
 	}
 
@@ -176,6 +198,12 @@ ce_remove_cultural_assimilation = {
 ce_release_colonial_territory = {
 	name = "CE_RELEASE_COLONIAL_TERRITORY"
 	desc = "CE_RELEASE_COLONIAL_TERRITORY_DESC"
+
+	# No player-facing conditions: this button is AI-only, and the widget's
+	# decision row carries the human's version of it.
+	visible = {
+		is_ai = yes
+	}
 
 	ai_chance = {
 		value = 0
@@ -207,6 +235,12 @@ ce_release_colonial_territory = {
 ce_planned_decolonization = {
 	name = "CE_PLANNED_DECOLONIZATION"
 	desc = "CE_PLANNED_DECOLONIZATION_DESC"
+
+	# No player-facing conditions: this button is AI-only, and the widget's
+	# decision row carries the human's version of it.
+	visible = {
+		is_ai = yes
+	}
 
 	ai_chance = {
 		value = 0
@@ -250,6 +284,12 @@ ce_planned_decolonization = {
 ce_round_table_conference = {
 	name = "CE_ROUND_TABLE_CONFERENCE"
 	desc = "CE_ROUND_TABLE_CONFERENCE_DESC"
+
+	# No player-facing conditions: this button is AI-only, and the widget's
+	# decision row carries the human's version of it.
+	visible = {
+		is_ai = yes
+	}
 
 	ai_chance = {
 		value = 0

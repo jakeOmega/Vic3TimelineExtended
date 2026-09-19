@@ -47,6 +47,36 @@ colonial_high_acceptance_count = {
 	}
 }
 
+# Count of states the three decolonization decisions would consider. Snapshotted
+# into colonial_empire_eligible_count by colonial_empire_refresh_display so the
+# widget's decision rows can say how many territories are on the table without
+# walking every state per frame. Same `is_decolonization_eligible_state` trigger
+# the buttons use, so the count cannot disagree with what the buttons offer.
+colonial_eligible_state_count = {
+	value = 0
+	every_scope_state = {
+		limit = { is_decolonization_eligible_state = yes }
+		add = 1
+	}
+}
+
+# Subset of the above that the Round Table Conference accepts: no pop below
+# acceptance_status_2. Mirrors colonial_empire_possible_round_table's gate.
+colonial_round_table_state_count = {
+	value = 0
+	every_scope_state = {
+		limit = {
+			is_decolonization_eligible_state = yes
+			NOT = {
+				any_scope_pop = {
+					pop_acceptance < acceptance_status_2
+				}
+			}
+		}
+		add = 1
+	}
+}
+
 # Count of great powers with anti-colonial stance (set via event 14)
 colonial_gp_condemners_count = {
 	value = 0
