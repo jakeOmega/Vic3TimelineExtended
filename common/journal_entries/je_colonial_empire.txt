@@ -85,7 +85,19 @@
 	# numbers that drive them. The tier phrase comes from customizable
 	# localization keyed on var:colonial_empire_tier, so the thresholds stay in
 	# the one ladder in colonial_empire_refresh_display.
-	status_desc = je_colonial_empire_status_summary
+	#
+	# Kept as an untriggered `triggered_desc` rather than the bare
+	# `status_desc = <key>` form: the journal-entry script docs note "value can be
+	# a localization key or first_valid + triggered_desc script" for
+	# `progress_desc` but NOT for `status_desc`, and no vanilla journal entry uses
+	# the bare form for `status_desc` (0 hits across common/journal_entries/). A
+	# wrong form here would fail silently as an empty status line.
+	status_desc = {
+		triggered_desc = {
+			desc = je_colonial_empire_status_summary
+			trigger = { always = yes }
+		}
+	}
 
 	complete = {
 		custom_tooltip = {

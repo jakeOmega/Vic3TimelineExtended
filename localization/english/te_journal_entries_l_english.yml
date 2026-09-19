@@ -120,7 +120,7 @@
  je_colonial_empire_status_solidified:0 "#G Colonial empire nearly fully integrated.#! The overseas territories are becoming a permanent part of the nation."
  je_colonial_empire_status_stable:0 "#Y Colonial holdings are stable.#! Integration is proceeding, though challenges remain."
  je_colonial_empire_status_strained:0 "#O Colonial empire is under strain.#! Rising tensions and international pressure threaten our hold."
- je_colonial_empire_status_summary:0 "[ROOT.GetCountry.GetCustom('colonial_empire_status_custom')] #lore Open the entry for the full breakdown, the colonial programmes and the decolonization options.#!"
+ je_colonial_empire_status_summary:0 "[ROOT.GetCountry.GetCustom('colonial_empire_status_custom')] #lore Details, programmes and decolonization options below.#!"
  je_colonial_empire_supporter_entry_tt:0 "#G Supporting#! — [THIS.GetCountry.GetName]"
  je_colonial_empire_tt_assimilation:0 "#header $je_colonial_empire_row_assimilation$#!\n$CE_CULTURAL_ASSIMILATION_DESC$\n$TOOLTIP_DELIMITER$\n#title While active:#!\n[GetStaticModifier('colonial_cultural_assimilation_modifier').GetDesc]"
  je_colonial_empire_tt_garrison:0 "#header $je_colonial_empire_row_garrison$#!\n$CE_MILITARY_GARRISON_DESC$\n$TOOLTIP_DELIMITER$\n#title While active:#!\n[GetStaticModifier('colonial_military_garrison_modifier').GetDesc]"
