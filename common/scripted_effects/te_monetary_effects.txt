@@ -65,6 +65,18 @@ te_monetary_refresh_world_era_base = {
 # and from the country-creation on-actions (common/on_actions/te_monetary_on_actions.txt).
 # A country that has never run it pays vanilla's flat 20% — a safe fallback, and
 # the reason the creation hooks exist at all (§16.1).
+#
+# NOT IDEMPOTENT WITHIN A MONTH. Step 3 advances the policy rate toward the
+# target by a third of a point per call, and step 8 draws both random walks per
+# call, so calling this twice in one month drifts twice as fast and ages the
+# hidden state twice as quickly. Call it ONLY from the pulse and country-creation
+# on-actions listed above — never from an event, a scripted button, a scripted
+# GUI or a journal entry's on_monthly_pulse. Anything that needs the rate to
+# reflect a change it just made should write the input and let the next pulse
+# pick it up; the 0.05 skip threshold in step 9 means an unchanged month costs
+# nothing. (The sole deliberate exception is the console-only debug event
+# events/te_debug_monetary_events.txt, whose entire purpose is stepping the
+# system by hand.)
 te_monetary_monthly_update = {
 	# --- 0. initialise ------------------------------------------------------
 	te_monetary_init_variables = yes
@@ -118,6 +130,9 @@ te_monetary_init_variables = {
 		limit = { NOT = { has_global_variable = te_mon_era_base_world } }
 		te_monetary_refresh_world_era_base = yes
 	}
+	# No has_variable guard on this one, deliberately: it is a per-pulse cache of
+	# the world reference rate, not persistent state, and it must be overwritten
+	# every pulse or a country would keep reading the era it was created in.
 	set_variable = { name = te_mon_era_base_now value = global_var:te_mon_era_base_world }
 
 	if = {
@@ -636,16 +651,45 @@ te_monetary_update_rate_paid = {
 # them would leave every law_no_national_bank country permanently tight, a hidden
 # penalty nobody chose.
 te_monetary_update_stance = {
-	# --- the walk: mean-reverting, +/-0.1 a month -----------------------------
-	# The 0.95 decay is the mean reversion; with +/-0.1 steps two months in three
-	# the walk settles around a standard deviation of roughly a quarter point,
-	# well inside the 1-6 clamp below.
-	change_variable = { name = te_neutral_walk multiply = 0.95 }
-	random_list = {
-		1 = { change_variable = { name = te_neutral_walk add = 0.1 } }
-		1 = { }
-		1 = { change_variable = { name = te_neutral_walk subtract = 0.1 } }
+	# --- the two random walks, for countries with a dial only ----------------
+	# WHY THE GATE. Neither walk is read by a country without a dial: its stance
+	# gap is forced to 0, its band to 3, and it never runs a mandate formula. So
+	# the two draws below would be pure cost for the ~95% of tags that have no
+	# national bank, and this effect runs for every country every month.
+	#
+	# The accepted consequence (controller ruling, fix round 1) is that a
+	# no-dial country's hidden state FREEZES rather than drifting: the walk keeps
+	# whatever value it last held and resumes from there — not from zero — if the
+	# country later enacts a national bank. The decay is inside the gate with its
+	# own draw for exactly that reason; leaving the decay outside would quietly
+	# bleed the walk to zero instead of freezing it, which is a different
+	# behaviour, not an optimisation. The clamps stay outside so the bounds stay
+	# true even for a frozen value — and so enacting central bank independence
+	# narrows an already-wide error on the very next pulse, dial or no dial.
+	if = {
+		limit = { te_mon_has_dial = yes }
+
+		# The walk: mean-reverting, +/-0.1 a month. The 0.95 decay is the mean
+		# reversion; with +/-0.1 steps two months in three the walk settles
+		# around a standard deviation of roughly a quarter point, well inside
+		# the 1-6 clamp on the neutral rate below.
+		change_variable = { name = te_neutral_walk multiply = 0.95 }
+		random_list = {
+			1 = { change_variable = { name = te_neutral_walk add = 0.1 } }
+			1 = { }
+			1 = { change_variable = { name = te_neutral_walk subtract = 0.1 } }
+		}
+
+		# The bank's estimation error: a slow random walk, bounded below at
+		# +/-1.5pp or +/-0.5pp under central bank independence — one of the
+		# things markets and the mandate get in exchange for the commitment (§6).
+		random_list = {
+			1 = { change_variable = { name = te_neutral_error add = 0.1 } }
+			4 = { }
+			1 = { change_variable = { name = te_neutral_error subtract = 0.1 } }
+		}
 	}
+
 	if = {
 		limit = { var:te_neutral_walk > 1 }
 		set_variable = { name = te_neutral_walk value = 1 }
@@ -662,6 +706,13 @@ te_monetary_update_stance = {
 	change_variable = { name = te_neutral_rate add = var:te_mon_growth_term }
 	change_variable = { name = te_neutral_rate add = var:te_neutral_walk }
 	if = {
+		# Cooperative ownership runs the full system, but mutual credit puts its
+		# natural rate half a point lower (§5.3). This is the spec's term, and it
+		# binds over the brief's step-8 enumeration, which omitted it.
+		limit = { has_law_or_variant = law_type:law_cooperative_ownership }
+		change_variable = { name = te_neutral_rate subtract = 0.5 }
+	}
+	if = {
 		limit = { var:te_neutral_rate < 1 }
 		set_variable = { name = te_neutral_rate value = 1 }
 	}
@@ -670,16 +721,9 @@ te_monetary_update_stance = {
 		set_variable = { name = te_neutral_rate value = 6 }
 	}
 
-	# --- the bank's estimation error ----------------------------------------
-	# A slow random walk bounded at +/-1.5pp, or +/-0.5pp under central bank
-	# independence — one of the things markets and the mandate get in exchange
-	# for the commitment (§6). The bound is re-applied every month, so enacting
-	# independence narrows an already-wide error on the next pulse.
-	random_list = {
-		1 = { change_variable = { name = te_neutral_error add = 0.1 } }
-		4 = { }
-		1 = { change_variable = { name = te_neutral_error subtract = 0.1 } }
-	}
+	# --- the estimation error's bound ---------------------------------------
+	# Re-applied every month whether or not the walk advanced, so a country that
+	# enacts independence narrows an already-wide error on the next pulse.
 	if = {
 		limit = { te_mon_is_cbi = yes }
 		if = {
