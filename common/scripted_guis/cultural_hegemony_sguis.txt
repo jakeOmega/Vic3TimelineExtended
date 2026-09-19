@@ -1,0 +1,599 @@
+﻿# ============================================================================
+# CULTURAL HEGEMONY — SCRIPTED GUIS FOR THE JOURNAL-ENTRY WIDGET
+# ============================================================================
+# Read by gui/journal_entry_widgets/cultural_hegemony_widget.gui. Five handlers,
+# in two kinds.
+#
+# 1. THE ONE INTERACTIVE HANDLER — ch_policy_sgui. It holds no logic of its own:
+#    `is_shown` mirrors each journal-entry button's `visible`, `is_valid`
+#    delegates to `ch_possible_<button>` and `effect` to `ch_effect_<button>`, so
+#    the widget and the AI's buttons run the same script.
+#
+# 2. DISPLAY-ONLY HANDLERS — ch_show_sgui, ch_board_row_sgui,
+#    ch_board_detail_sgui, ch_history_marker_sgui. All four carry
+#    `is_valid = { always = no }` and `ai_is_valid = { always = no }`, so neither
+#    a player nor the AI can execute them. Two are pure questions with an empty
+#    effect (the banking dashboard's `banking_dash_phase_*` shape); two emit
+#    nothing but `custom_tooltip` lines for `ExecuteTooltip` to render — vanilla's
+#    documented "using SGUIs to build lists in loc" pattern, see
+#    game/common/scripted_guis/scripted_guis.md.
+#
+# ---- ch_policy_sgui op table (keep in step with the .gui header and the doc) --
+#   0 / 1   programme funding   decrease / increase
+#   2 / 3   International Cultural Outreach   begin / end
+#   4 / 5   Cultural Institutes               fund  / defund
+#   6 / 7   Global Media Campaign             launch / end
+#   8 / 9   Cultural Protectionism            enact / end
+#
+# ---- ch_show_sgui op table -------------------------------------------------
+# Each op reproduces one condition that used to gate a `triggered_desc` on the
+# journal entry, so no threshold moves into .gui:
+#   0   art row, share at or below the diminishing-returns threshold
+#   1   art row, share above it
+#   2   prestige row            3   standard-of-living row
+#   4   tech-leadership row     5   monuments row
+#   6   megaprojects row        7   cultural-pull modifier row
+#   8   infamy row              9   instability row
+#   10  cultural-pull multiplier row
+#   11  "Rank N of M" line      12  exported-model block
+#   20-29  board slot (op - 19) is the viewing country — row highlight only
+#
+# ---- ch_board_row_sgui / ch_board_detail_sgui ------------------------------
+#   op = board rank, 1 to 10.
+# ============================================================================
+
+# ---------------------------------------------------------------------------
+# THE POLICY CONTROLS
+# ---------------------------------------------------------------------------
+ch_policy_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	# Mirrors the ten scripted buttons' `visible`. Ops 0/1 were always visible
+	# while the entry was up and greyed out through `possible`; the four
+	# enable/disable pairs swap on whether the programme is running, so a pair
+	# can never both offer "Enable".
+	is_shown = {
+		has_journal_entry = je_cultural_hegemony
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			ch_shown_world_exposition = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			je:je_cultural_hegemony ?= { has_modifier = ch_world_exposition }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 4 }
+			ch_shown_cultural_institutes = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 5 }
+			je:je_cultural_hegemony ?= { has_modifier = ch_cultural_institutes_program }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 6 }
+			ch_shown_global_media_campaign = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 7 }
+			je:je_cultural_hegemony ?= { has_modifier = ch_global_media_campaign }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 8 }
+			ch_shown_cultural_protectionism = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 9 }
+			je:je_cultural_hegemony ?= { has_modifier = ch_cultural_protectionism_program }
+		}
+		trigger_else_if = {
+			limit = { scope:op = 0 }
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			always = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	# Every branch delegates. The custom_tooltip wording lives in the triggers,
+	# phrased as conditions, because IsValidTooltip renders each with a tick or a
+	# cross.
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			ch_possible_decrease_program_funding = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			ch_possible_increase_program_funding = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			ch_possible_world_exposition = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			ch_possible_disable_world_exposition = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 4 }
+			ch_possible_cultural_institutes = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 5 }
+			ch_possible_disable_cultural_institutes = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 6 }
+			ch_possible_global_media_campaign = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 7 }
+			ch_possible_disable_global_media_campaign = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 8 }
+			ch_possible_cultural_protectionism = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 9 }
+			ch_possible_disable_cultural_protectionism = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			ch_effect_decrease_program_funding = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			ch_effect_increase_program_funding = yes
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			ch_effect_world_exposition = yes
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			ch_effect_disable_world_exposition = yes
+		}
+		else_if = {
+			limit = { scope:op = 4 }
+			ch_effect_cultural_institutes = yes
+		}
+		else_if = {
+			limit = { scope:op = 5 }
+			ch_effect_disable_cultural_institutes = yes
+		}
+		else_if = {
+			limit = { scope:op = 6 }
+			ch_effect_global_media_campaign = yes
+		}
+		else_if = {
+			limit = { scope:op = 7 }
+			ch_effect_disable_global_media_campaign = yes
+		}
+		else_if = {
+			limit = { scope:op = 8 }
+			ch_effect_cultural_protectionism = yes
+		}
+		else_if = {
+			limit = { scope:op = 9 }
+			ch_effect_disable_cultural_protectionism = yes
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# ROW VISIBILITY — one question per conditional row
+# ---------------------------------------------------------------------------
+# Every branch is the trigger the matching `triggered_desc` used to carry, moved
+# here verbatim so the .gui never compares a number and no threshold is copied.
+ch_show_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			has_variable = ch_art
+			var:ch_art > 0
+			country_art_share_pct <= cultural_pull_art_dr_threshold
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			has_variable = ch_art
+			var:ch_art > 0
+			country_art_share_pct > cultural_pull_art_dr_threshold
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			prestige > 0
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			has_variable = ch_sol
+			var:ch_sol > 0
+		}
+		trigger_else_if = {
+			limit = { scope:op = 4 }
+			has_variable = ch_tech_firsts_recent
+			var:ch_tech_firsts_recent > 0
+		}
+		trigger_else_if = {
+			limit = { scope:op = 5 }
+			has_variable = ch_monuments
+			var:ch_monuments >= 1
+		}
+		trigger_else_if = {
+			limit = { scope:op = 6 }
+			has_variable = ch_megaprojects
+			var:ch_megaprojects >= 1
+		}
+		trigger_else_if = {
+			limit = { scope:op = 7 }
+			modifier:country_cultural_pull_add > 0
+		}
+		trigger_else_if = {
+			limit = { scope:op = 8 }
+			infamy > 0
+		}
+		trigger_else_if = {
+			limit = { scope:op = 9 }
+			OR = {
+				country_turmoil > 0.01
+				any_civil_war = { }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 10 }
+			modifier:country_cultural_pull_mult > 0
+		}
+		trigger_else_if = {
+			limit = { scope:op = 11 }
+			has_variable = ch_rank_self
+			var:ch_rank_self > 0
+			has_global_variable = ch_ranked_total
+		}
+		trigger_else_if = {
+			limit = { scope:op = 12 }
+			has_global_variable = ch_rank_1_ideology
+		}
+		# 20-29: is board slot (op - 19) this country? Drives the row highlight
+		# only. Written out rather than computed because .gui passes a literal and
+		# the global's name cannot be built at runtime.
+		trigger_else_if = {
+			limit = { scope:op = 20 }
+			has_global_variable = ch_rank_1
+			global_var:ch_rank_1 ?= ROOT
+		}
+		trigger_else_if = {
+			limit = { scope:op = 21 }
+			has_global_variable = ch_rank_2
+			global_var:ch_rank_2 ?= ROOT
+		}
+		trigger_else_if = {
+			limit = { scope:op = 22 }
+			has_global_variable = ch_rank_3
+			global_var:ch_rank_3 ?= ROOT
+		}
+		trigger_else_if = {
+			limit = { scope:op = 23 }
+			has_global_variable = ch_rank_4
+			global_var:ch_rank_4 ?= ROOT
+		}
+		trigger_else_if = {
+			limit = { scope:op = 24 }
+			has_global_variable = ch_rank_5
+			global_var:ch_rank_5 ?= ROOT
+		}
+		trigger_else_if = {
+			limit = { scope:op = 25 }
+			has_global_variable = ch_rank_6
+			global_var:ch_rank_6 ?= ROOT
+		}
+		trigger_else_if = {
+			limit = { scope:op = 26 }
+			has_global_variable = ch_rank_7
+			global_var:ch_rank_7 ?= ROOT
+		}
+		trigger_else_if = {
+			limit = { scope:op = 27 }
+			has_global_variable = ch_rank_8
+			global_var:ch_rank_8 ?= ROOT
+		}
+		trigger_else_if = {
+			limit = { scope:op = 28 }
+			has_global_variable = ch_rank_9
+			global_var:ch_rank_9 ?= ROOT
+		}
+		trigger_else_if = {
+			limit = { scope:op = 29 }
+			has_global_variable = ch_rank_10
+			global_var:ch_rank_10 ?= ROOT
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = { }
+}
+
+# ---------------------------------------------------------------------------
+# LEADERBOARD — one row's line
+# ---------------------------------------------------------------------------
+# `is_shown` doubles as the row's visibility: a slot that the yearly pass left
+# empty, or whose country has since ceased to exist, hides its whole row rather
+# than printing a placeholder.
+#
+# The effect enters the ranked country's scope and prints one line, so the loc
+# key can use [THIS.GetCountry.GetName] — the chain vanilla itself uses for a
+# country list inside a scripted GUI. The engine prefixes a line printed inside
+# a country scope change with that country's flag for free, so the keys add none.
+ch_board_row_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			has_global_variable = ch_rank_1
+			exists = global_var:ch_rank_1
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			has_global_variable = ch_rank_2
+			exists = global_var:ch_rank_2
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			has_global_variable = ch_rank_3
+			exists = global_var:ch_rank_3
+		}
+		trigger_else_if = {
+			limit = { scope:op = 4 }
+			has_global_variable = ch_rank_4
+			exists = global_var:ch_rank_4
+		}
+		trigger_else_if = {
+			limit = { scope:op = 5 }
+			has_global_variable = ch_rank_5
+			exists = global_var:ch_rank_5
+		}
+		trigger_else_if = {
+			limit = { scope:op = 6 }
+			has_global_variable = ch_rank_6
+			exists = global_var:ch_rank_6
+		}
+		trigger_else_if = {
+			limit = { scope:op = 7 }
+			has_global_variable = ch_rank_7
+			exists = global_var:ch_rank_7
+		}
+		trigger_else_if = {
+			limit = { scope:op = 8 }
+			has_global_variable = ch_rank_8
+			exists = global_var:ch_rank_8
+		}
+		trigger_else_if = {
+			limit = { scope:op = 9 }
+			has_global_variable = ch_rank_9
+			exists = global_var:ch_rank_9
+		}
+		trigger_else_if = {
+			limit = { scope:op = 10 }
+			has_global_variable = ch_rank_10
+			exists = global_var:ch_rank_10
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 1 }
+			global_var:ch_rank_1 ?= { custom_tooltip_no_bullet = ch_board_row_1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			global_var:ch_rank_2 ?= { custom_tooltip_no_bullet = ch_board_row_2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			global_var:ch_rank_3 ?= { custom_tooltip_no_bullet = ch_board_row_3 }
+		}
+		else_if = {
+			limit = { scope:op = 4 }
+			global_var:ch_rank_4 ?= { custom_tooltip_no_bullet = ch_board_row_4 }
+		}
+		else_if = {
+			limit = { scope:op = 5 }
+			global_var:ch_rank_5 ?= { custom_tooltip_no_bullet = ch_board_row_5 }
+		}
+		else_if = {
+			limit = { scope:op = 6 }
+			global_var:ch_rank_6 ?= { custom_tooltip_no_bullet = ch_board_row_6 }
+		}
+		else_if = {
+			limit = { scope:op = 7 }
+			global_var:ch_rank_7 ?= { custom_tooltip_no_bullet = ch_board_row_7 }
+		}
+		else_if = {
+			limit = { scope:op = 8 }
+			global_var:ch_rank_8 ?= { custom_tooltip_no_bullet = ch_board_row_8 }
+		}
+		else_if = {
+			limit = { scope:op = 9 }
+			global_var:ch_rank_9 ?= { custom_tooltip_no_bullet = ch_board_row_9 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			global_var:ch_rank_10 ?= { custom_tooltip_no_bullet = ch_board_row_10 }
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# LEADERBOARD — one row's hover breakdown
+# ---------------------------------------------------------------------------
+# The yearly snapshot of that rank's four largest components and its raw score,
+# which is what the retired concept_ch_rank_N_breakdown tooltips used to show.
+# Snapshot, not live: these are the numbers the displayed score was computed
+# from, so they still add up.
+ch_board_detail_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 1 }
+			global_var:ch_rank_1 ?= { custom_tooltip_no_bullet = ch_board_detail_1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			global_var:ch_rank_2 ?= { custom_tooltip_no_bullet = ch_board_detail_2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			global_var:ch_rank_3 ?= { custom_tooltip_no_bullet = ch_board_detail_3 }
+		}
+		else_if = {
+			limit = { scope:op = 4 }
+			global_var:ch_rank_4 ?= { custom_tooltip_no_bullet = ch_board_detail_4 }
+		}
+		else_if = {
+			limit = { scope:op = 5 }
+			global_var:ch_rank_5 ?= { custom_tooltip_no_bullet = ch_board_detail_5 }
+		}
+		else_if = {
+			limit = { scope:op = 6 }
+			global_var:ch_rank_6 ?= { custom_tooltip_no_bullet = ch_board_detail_6 }
+		}
+		else_if = {
+			limit = { scope:op = 7 }
+			global_var:ch_rank_7 ?= { custom_tooltip_no_bullet = ch_board_detail_7 }
+		}
+		else_if = {
+			limit = { scope:op = 8 }
+			global_var:ch_rank_8 ?= { custom_tooltip_no_bullet = ch_board_detail_8 }
+		}
+		else_if = {
+			limit = { scope:op = 9 }
+			global_var:ch_rank_9 ?= { custom_tooltip_no_bullet = ch_board_detail_9 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			global_var:ch_rank_10 ?= { custom_tooltip_no_bullet = ch_board_detail_10 }
+		}
+	}
+}
+
+# ---------------------------------------------------------------------------
+# HISTORY CHART — marker tooltips for the cultural-hegemony series
+# ---------------------------------------------------------------------------
+# Same shape as the shared te_history_marker_tooltip, but carrying only this
+# system's markers. te_history_chart takes the bar tooltip as a per-instance
+# blockoverride, so te_hist_tt_ch_share chains here instead of into the shared
+# handler and no shared file has to grow a cultural-hegemony branch.
+#
+# Each branch quotes the programme's own button name and static modifier
+# description, so a rebalance updates the marker text with no edit here.
+ch_history_marker_sgui = {
+	scope = country
+	saved_scopes = { te_hist_sample }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:te_hist_sample }
+			scope:te_hist_sample = {
+				if = {
+					limit = { has_variable = te_hist_mk_ch_on_outreach }
+					custom_tooltip = ch_hist_mk_ch_on_outreach_tt
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_ch_off_outreach }
+					custom_tooltip = ch_hist_mk_ch_off_outreach_tt
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_ch_on_institutes }
+					custom_tooltip = ch_hist_mk_ch_on_institutes_tt
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_ch_off_institutes }
+					custom_tooltip = ch_hist_mk_ch_off_institutes_tt
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_ch_on_media }
+					custom_tooltip = ch_hist_mk_ch_on_media_tt
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_ch_off_media }
+					custom_tooltip = ch_hist_mk_ch_off_media_tt
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_ch_on_protectionism }
+					custom_tooltip = ch_hist_mk_ch_on_protectionism_tt
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_ch_off_protectionism }
+					custom_tooltip = ch_hist_mk_ch_off_protectionism_tt
+				}
+			}
+		}
+	}
+}

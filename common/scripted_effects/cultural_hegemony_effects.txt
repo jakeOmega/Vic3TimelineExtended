@@ -638,7 +638,21 @@ ch_yearly_global_update = {
 		}
 		set_global_variable = { name = ch_ranked_total value = global_var:ch_ldr_idx }
 
-		# Compute year-over-year deltas
+		# Compute year-over-year deltas. Every slot's delta is zeroed first: the
+		# journal-entry widget's board rows print it unconditionally, and a loc
+		# read of a global that was never set logs "failed to fetch variable"
+		# every frame the board is open. In the first year, and for a slot whose
+		# occupant is new, zero is also the honest answer.
+		set_global_variable = { name = ch_rank_1_delta value = 0 }
+		set_global_variable = { name = ch_rank_2_delta value = 0 }
+		set_global_variable = { name = ch_rank_3_delta value = 0 }
+		set_global_variable = { name = ch_rank_4_delta value = 0 }
+		set_global_variable = { name = ch_rank_5_delta value = 0 }
+		set_global_variable = { name = ch_rank_6_delta value = 0 }
+		set_global_variable = { name = ch_rank_7_delta value = 0 }
+		set_global_variable = { name = ch_rank_8_delta value = 0 }
+		set_global_variable = { name = ch_rank_9_delta value = 0 }
+		set_global_variable = { name = ch_rank_10_delta value = 0 }
 		if = {
 			limit = { has_global_variable = ch_rank_1_prev }
 			set_global_variable = { name = ch_rank_1_delta value = global_var:ch_rank_1_score }
