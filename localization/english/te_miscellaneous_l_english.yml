@@ -1871,7 +1871,7 @@
  nuclear_program_rate_note_series:0 "\n#G Series production#! — the design is proven, so progress runs [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_weapon_program_additional_nuke_progress_multiplier')|0] times faster than it did before the first device."
  nuclear_program_rate_note_unfunded:0 "\n#lore No funding is allocated, so nothing is being built.#!"
  nuclear_program_status_developing:0 "Our first nuclear device is under development."
- nuclear_program_status_disarmed:0 "#R Our nuclear programme has been dismantled#! under the terms of a disarmament settlement."
+ nuclear_program_status_disarmed:0 "#R Our nuclear programme has been dismantled#! — under the terms of a disarmament settlement, or of the Non-Proliferation Treaty."
  nuclear_program_status_generic:0 "Our nuclear weapons programme is under way."
  nuclear_program_status_ineligible:0 "#R We cannot sustain a weapons programme#! — that needs the standing of a great power, or a major power with intercontinental missiles, or a patron willing to share its nuclear science."
  nuclear_program_status_paused:0 "#R Development is frozen#! for as long as the programme-pause treaty stands."

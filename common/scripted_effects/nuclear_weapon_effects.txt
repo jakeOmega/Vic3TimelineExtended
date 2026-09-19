@@ -54,11 +54,13 @@ nuclear_program_effect_decrease_funding = {
 # ----------------------------------------------------------------------------
 # The single derivation site for everything the panel displays.
 # ----------------------------------------------------------------------------
-# Called from exactly four places, which between them cover every way the
+# Called from exactly four places in play, which between them cover every way the
 # programme's state can move: je_nuclear_program's `immediate` (so an active
 # entry always has a status code), the tail of its on_weekly_pulse, and the two
 # button effects above — and therefore both stepper ops in the widget, which
-# delegate to those effects. In `immediate` the journal entry is still being
+# delegate to those effects. (events/te_debug_nuclear_events.txt also calls it,
+# from the console only, after forcing state by hand.)
+# In `immediate` the journal entry is still being
 # activated, which is why the modifier guard below reaches it through `?=`:
 # whether `je:je_nuclear_program` resolves that early is untested, and either
 # answer is safe (unresolved is skipped; resolved has no modifier yet on a fresh

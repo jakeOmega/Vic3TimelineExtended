@@ -101,10 +101,13 @@ nuclear_program_rate_note = {
 	random_valid = no
 
 	text = {
-		trigger = {
-			has_variable = nuclear_program_last_status
-			var:nuclear_program_last_status = 3
-		}
+		# Live modifier, not status code 3, for the same reason the status line
+		# reads its blockers live: between a pause article entering force and the
+		# next weekly pulse the status code is still stale, while
+		# nuclear_program_display_months_to_next already tests the modifier — so
+		# reading the code here would have this row quote a rate in the same frame
+		# the row below it said "not progressing".
+		trigger = { modifier:country_nuclear_program_pause_bool = yes }
 		localization_key = nuclear_program_rate_note_paused
 	}
 	text = {

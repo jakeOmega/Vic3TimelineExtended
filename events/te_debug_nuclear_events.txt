@@ -148,9 +148,16 @@ te_debug_nuclear.2 = { # REVIEWED 2026-09-18: console-only test event (`event te
 
 	# Lift it. The entry re-activates and runs its `immediate` again, which is
 	# the re-activation path: the stockpile and the first-device flag must come
-	# back unchanged, while progress and funding restart at zero. Note the weekly
-	# pulse zeroes the stockpile while the disarmament modifier is on, so to test
-	# the arsenal surviving, lift this within the same week you applied it.
+	# back unchanged, while progress and funding restart at zero.
+	#
+	# The stockpile should survive however long disarmament stands. The weekly
+	# pulse has a branch that zeroes it, but that branch can never run while the
+	# modifier is on: `possible` fails the same tick, so the entry is already
+	# inactive and its pulse has stopped. Only the nuclear_disarmament treaty
+	# article empties a stockpile, in its own on_entry_into_force — which is
+	# exactly why that article does the work itself. If the stockpile does come
+	# back as 0 here, that contradicts the deactivation ordering and is worth
+	# recording.
 	option = {
 		name = te_debug_nuclear.2.d
 		if = {

@@ -59,12 +59,14 @@ nuclear_program_funding_sgui = {
 	saved_scopes = { op }
 
 	# Deliberately scope-free — see "WHY NEITHER `is_shown` DEPENDS ON `scope:op`"
-	# in the header. This mirrors what the two scripted buttons' `visible` says
-	# for a human (`always = yes`, minus the `is_ai = yes` that hides the grid),
-	# and it is also the cheap guard that keeps
-	# nuclear_program_possible_decrease_funding — which reads a variable only an
-	# activated entry has created — from ever running too early. Which of the two
-	# ops is allowed right now is `is_valid`'s business, not this block's.
+	# in the header. In practice this block is now vestigial: the .gui never calls
+	# IsShown on the stepper buttons, and IsValid does not consult is_shown. What
+	# actually keeps nuclear_program_possible_decrease_funding — which reads a
+	# variable only an activated entry has created — from running too early is the
+	# widget root's `visible = "[JournalEntry.IsActive]"`. It is kept as the honest
+	# declaration of when this handler means anything, and as the guard should some
+	# future caller ask IsShown. Which of the two ops is allowed right now is
+	# `is_valid`'s business, not this block's.
 	is_shown = {
 		has_journal_entry = je_nuclear_program
 	}
