@@ -1,0 +1,161 @@
+﻿# ============================================================================
+# NUCLEAR PROGRAMME TEST CONSOLE — `event te_debug_nuclear.1` / `.2`
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires either of these. They exist so
+# the programme panel, the deterrence readout and the leaderboard can be driven
+# through every state they can render in, in a couple of minutes, without
+# playing a century.
+#
+#   te_debug_nuclear.1   the programme: funding, the first device, warheads,
+#                        and the leaderboard
+#   te_debug_nuclear.2   the things that block it: a pause treaty and a
+#                        disarmament settlement, each applied and lifted
+#
+# Run these as a great power that has researched nuclear_weapons, or the entry
+# will not be active and the panels will correctly draw nothing.
+# ============================================================================
+namespace = te_debug_nuclear
+
+te_debug_nuclear.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debug_nuclear.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/mushroom_cloud.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = te_debug_nuclear.1.t
+	desc = te_debug_nuclear.1.desc
+	flavor = te_debug_nuclear.1.f
+
+	# Fund the programme to step 3 and give three rival great powers arsenals, so
+	# the panel shows a real rate and the leaderboard has rows to draw.
+	option = {
+		name = te_debug_nuclear.1.a
+		default_option = yes
+		set_variable = { name = nuclear_weapons_program_funding value = 3 }
+		je:je_nuclear_program ?= {
+			if = {
+				limit = { has_modifier = nuclear_weapon_program_funding }
+				remove_modifier = nuclear_weapon_program_funding
+			}
+			add_modifier = {
+				name = nuclear_weapon_program_funding
+				multiplier = nuclear_weapons_program_current_cost
+			}
+		}
+		nuclear_program_refresh_state_effect = yes
+		te_debug_nuclear_seed_rivals = yes
+	}
+
+	# Cut funding to nothing. The panel should read "not progressing", and the
+	# entry should be left with no funding modifier at all — not one at zero.
+	option = {
+		name = te_debug_nuclear.1.b
+		set_variable = { name = nuclear_weapons_program_funding value = 0 }
+		nuclear_program_refresh_state_effect = yes
+	}
+
+	# Push progress to the goal, so the next weekly pulse builds a warhead
+	# through the real code path: the world-first check, the ×10 rate change, the
+	# first-device year, and events 9 and 10.
+	option = {
+		name = te_debug_nuclear.1.c
+		set_variable = {
+			name = nuclear_weapon_program_progress
+			value = nuclear_weapon_program_goal_value
+		}
+	}
+
+	# Five warheads straight into the stockpile, with the leaderboard recounted
+	# at once instead of waiting for the weekly pulse.
+	option = {
+		name = te_debug_nuclear.1.d
+		change_variable = { name = nuclear_weapon_stockpile add = 5 }
+		set_variable = { name = nuclear_weapons_program_first_nuke_done value = 1 }
+		if = {
+			limit = { NOT = { has_variable = nuclear_program_first_device_year } }
+			set_variable = { name = nuclear_program_first_device_year value = year }
+		}
+		if = {
+			limit = { NOT = { has_modifier = nuclear_power } }
+			add_modifier = { name = nuclear_power }
+		}
+		nuclear_program_refresh_state_effect = yes
+		update_nuclear_powers_ranking = yes
+	}
+
+	# Empty every arsenal in the world. All ten leaderboard rows should collapse
+	# and the section should show only its legend.
+	option = {
+		name = te_debug_nuclear.1.e
+		te_debug_nuclear_wipe_board = yes
+		nuclear_program_refresh_state_effect = yes
+	}
+}
+
+te_debug_nuclear.2 = { # REVIEWED 2026-09-18: console-only test event (`event te_debug_nuclear.2`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/mushroom_cloud.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = te_debug_nuclear.2.t
+	desc = te_debug_nuclear.2.desc
+	flavor = te_debug_nuclear.2.f
+
+	# Freeze the programme, as the nuclear_program_pause treaty article does. The
+	# status line should say so, both stepper buttons should grey out with the
+	# pause named as the failing condition, and within a week the funding
+	# modifier should be gone from the entry — that last part is the fix this
+	# branch makes, so check the entry's modifier list, not just the panel.
+	option = {
+		name = te_debug_nuclear.2.a
+		default_option = yes
+		if = {
+			limit = { NOT = { has_modifier = nuclear_program_debug_pause } }
+			add_modifier = { name = nuclear_program_debug_pause }
+		}
+	}
+
+	option = {
+		name = te_debug_nuclear.2.b
+		if = {
+			limit = { has_modifier = nuclear_program_debug_pause }
+			remove_modifier = nuclear_program_debug_pause
+		}
+		nuclear_program_refresh_state_effect = yes
+	}
+
+	# Disarmament, through the same boolean the UN's Non-Proliferation Treaty
+	# uses. This makes the entry's `possible` fail, so the entry deactivates:
+	# both panels should vanish and the status line — which the engine renders
+	# for an inactive entry too — should say the programme has been dismantled.
+	option = {
+		name = te_debug_nuclear.2.c
+		if = {
+			limit = { NOT = { has_modifier = un_npt_disarmament_modifier } }
+			add_modifier = { name = un_npt_disarmament_modifier }
+		}
+	}
+
+	# Lift it. The entry re-activates and runs its `immediate` again, which is
+	# the re-activation path: the stockpile and the first-device flag must come
+	# back unchanged, while progress and funding restart at zero. Note the weekly
+	# pulse zeroes the stockpile while the disarmament modifier is on, so to test
+	# the arsenal surviving, lift this within the same week you applied it.
+	option = {
+		name = te_debug_nuclear.2.d
+		if = {
+			limit = { has_modifier = un_npt_disarmament_modifier }
+			remove_modifier = un_npt_disarmament_modifier
+		}
+	}
+}
