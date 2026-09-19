@@ -1631,17 +1631,22 @@ Currently 21 GUI files at the top of `gui/`: 19 full-file replacements of vanill
 | `treaty_panel.gui` | Treaty view | Enhanced treaty display |
 | `zzz_extra_goods_texticons.gui` | (additive) | Custom goods text icons |
 
-Scripted GUIs (`common/scripted_guis/`): `te_construction_market_scripted_gui.txt` — public/private construction ratio slider with +/- buttons and shift/ctrl/alt click modifiers. `st_res_scripted_gui.txt` — one `op`-parameterized handler per Strategic Reserve good. `banking_dashboard_scripted_gui.txt` — the banking policy dashboard's handlers. `un_chamber_sguis.txt` — the UN chamber's tooltip builders (called only through `ExecuteTooltip`) plus its vote/propose handlers. `te_history_scripted_gui.txt` — the history charts' marker tooltip.
+Scripted GUIs (`common/scripted_guis/`): `te_construction_market_scripted_gui.txt` — public/private construction ratio slider with +/- buttons and shift/ctrl/alt click modifiers. `st_res_scripted_gui.txt` — one `op`-parameterized handler per Strategic Reserve good. `banking_dashboard_scripted_gui.txt` — the banking policy dashboard's handlers. `un_chamber_sguis.txt` — the UN chamber's tooltip builders (called only through `ExecuteTooltip`) plus its vote/propose handlers. `te_history_scripted_gui.txt` — the history charts' marker tooltip. One handler file per journal-entry widget added in the second widget wave, each holding that widget's `op`-parameterized action handlers plus its read-only yes/no and tooltip-builder handlers: `cultural_hegemony_sguis.txt`, `space_race_sguis.txt`, `colonial_empire_sguis.txt`, `global_warming_sguis.txt`, `covert_warfare_sguis.txt`, `nuclear_program_sguis.txt`. In all of them a control's `visible` never depends on a saved scope reaching `is_shown` (gotcha #22): action visibility comes from scope-free handlers, and display-only handlers that branch on `op` fail open.
 
 Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journal_entry_widgets/` is attached to a JE with a `widget = { gui = "..." name = "..." container = "custom_widget_container_N" }` block and renders inside vanilla's `journal_entry.gui` slots, so it costs no panel replacement. `custom_widget_container_1` sits above the status description, `_2` between the status description and the scripted-button grid, `_3` below the button grid; `_4`–`_7` are further down the panel. Keep content within `@panel_width_minus_20` (520 px) — the existing widgets use a 480 px text column plus a `margin = { 20 8 }`. The current widgets (add a row here when a journal entry gains one):
 
 | File | Journal entry | Purpose |
 |---|---|---|
-| `covert_operations_widget.gui` | `je_covert_warfare` | one row per running operation (script-container datamodel) |
+| `covert_operations_widget.gui` | `je_covert_warfare` | command centre (capacity, slots, funding ladder + stepper, detection factors, covert defence) and one row per running operation with phase, countdown and an optional stand-down |
 | `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
 | `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard |
 | `banking_history_widget.gui` | `je_banking_cycle` | the three banking history charts |
 | `un_chamber_widget.gui` | `je_united_nations` | General Assembly chamber: standing, open resolutions, vote and propose controls |
+| `cultural_hegemony_widget.gui` | `je_cultural_hegemony` | summary, programme funding + four programme rows, and the standing section (pull breakdown, top-10 leaderboard built in script, share history chart) |
+| `space_race_widget.gui` | the nine `je_space_race_*` | one shared milestone panel instanced by nine named widgets: pace, setback risk, approach selector, funding stepper, rivals list, programme overview |
+| `colonial_empire_widget.gui` | `je_colonial_empire` | colonial stability: the bar's own per-term breakdown, nine drift groups, great-power pressure roster, three programme rows, three decolonization decisions, two history charts |
+| `global_warming_widget.gui` | `je_global_warming` | climate conditions readout, all eight mitigation policies as rows, world adoption counts, two history charts |
+| `nuclear_program_widget.gui` | `je_nuclear_program` | programme panel (funding stepper, production rate, time to next warhead, stockpile) and a collapsed deterrence + nuclear-powers readout, bracketing the native bar |
 | `te_history_chart.gui` | (type library) | reusable `te_history_chart` column-chart types, usable from any JE widget |
 
 ## GUI 3-way merge across vanilla patches
