@@ -17,5 +17,9 @@
 		8 = cultural_hegemony.14 # Foreign Entertainment Invasion (low pull, influenced)
 		8 = cultural_hegemony.15 # Foreign Education Model (low pull, influenced)
 		15 = cultural_hegemony.16 # Hegemonic Law Pressure (low pull, ≥10x ratio)
+		8 = cultural_hegemony.17 # Our Model Abroad (the hegemon, model share ≥ ch_model_abroad_min_share)
+		10 = cultural_hegemony.18 # Rival Models (low pull, #1 and #2 export different models)
+		# cultural_hegemony.19 / .20 (The Model Falters / Domino) react to a change
+		# between rebuilds and are fired by ch_fire_model_change_events instead.
 	}
 }

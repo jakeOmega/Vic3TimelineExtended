@@ -1964,3 +1964,361 @@ cultural_hegemony.16 = {
 		}
 	}
 }
+
+# ============================================================================
+# EVENT 17: Our Model Abroad
+# ============================================================================
+# The world's leading cultural power sees its own political model carried by a
+# large share of world culture (>= ch_model_abroad_min_share, with at least two
+# other countries running it). It can champion the model abroad — prestige and a
+# stronger baseline push on every trailing country, at a cost in influence and
+# in relations with the other cultural powers that run something else — or lead
+# by example at home.
+# ============================================================================
+
+cultural_hegemony.17 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.17.t
+	desc = cultural_hegemony.17.d
+	flavor = cultural_hegemony.17.f
+
+	event_image = { texture = "gfx/event_pictures/propaganda_broadcast.dds" }
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		has_journal_entry = je_cultural_hegemony
+		has_technology_researched = mass_media
+		exists = global_var:ch_rank_1
+		this = global_var:ch_rank_1
+		has_global_variable = ch_rank_1_ideology
+		NOT = { global_var:ch_rank_1_ideology = 12 }
+		has_global_variable = ch_rank_1_ideology_share
+		global_var:ch_rank_1_ideology_share >= ch_model_abroad_min_share
+		has_global_variable = ch_rank_1_ideology_aligned_count
+		global_var:ch_rank_1_ideology_aligned_count >= 3
+		NOT = { has_modifier = ch_model_champion }
+	}
+
+	# A: Champion the model abroad
+	option = {
+		name = cultural_hegemony.17.a
+		default_option = yes
+
+		add_modifier = {
+			name = ch_model_champion
+			days = normal_modifier_time
+		}
+		# The other cultural powers that run something else take it as a challenge.
+		every_country = {
+			limit = {
+				NOT = { this = ROOT }
+				has_variable = ch_total
+				var:ch_total >= 5
+				has_variable = ch_model_census
+				NOT = { var:ch_model_census = global_var:ch_rank_1_ideology }
+			}
+			change_relations = {
+				country = ROOT
+				value = -15
+			}
+		}
+
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { influence > 100 }
+				add = 2
+			}
+		}
+	}
+
+	# B: Lead by example at home
+	option = {
+		name = cultural_hegemony.17.b
+
+		add_modifier = {
+			name = ch_model_exemplar
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+
+		ai_chance = {
+			base = 4
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 18: Rival Models
+# ============================================================================
+# The two leading cultural powers export different political models. A country
+# that trails them both is courted by each and must lean one way or stand
+# apart. Leaning toward a power brings its research exchange and its friendship
+# at the price of the other's, and opens the country to that power's model; the
+# chosen power is saved as scope:cultural_hegemon so the shared pressure effect
+# pushes ITS model. Standing apart costs a little goodwill with both.
+# ============================================================================
+
+cultural_hegemony.18 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.18.t
+	desc = cultural_hegemony.18.d
+	flavor = cultural_hegemony.18.f
+
+	event_image = { texture = "gfx/event_pictures/ideological_confrontation_speech.dds" }
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	duration = 3
+	cooldown = { days = very_long_modifier_time }
+
+	trigger = {
+		has_journal_entry = je_cultural_hegemony
+		has_technology_researched = mass_media
+		has_modifier = cultural_hegemony_foreign_benchmark
+		has_variable = ch_total
+		var:ch_total < 10
+		exists = global_var:ch_rank_1
+		exists = global_var:ch_rank_2
+		NOT = { this = global_var:ch_rank_1 }
+		NOT = { this = global_var:ch_rank_2 }
+		has_global_variable = ch_rank_1_ideology
+		has_global_variable = ch_rank_2_ideology
+		NOT = { global_var:ch_rank_1_ideology = global_var:ch_rank_2_ideology }
+		NOT = { global_var:ch_rank_1_ideology = 12 }
+		NOT = { global_var:ch_rank_2_ideology = 12 }
+		global_var:ch_rank_2 = {
+			has_variable = ch_total
+			var:ch_total >= 10
+		}
+	}
+
+	immediate = {
+		global_var:ch_rank_1 = { save_scope_as = ch_bloc_a }
+		global_var:ch_rank_2 = { save_scope_as = ch_bloc_b }
+	}
+
+	# A: Lean toward the leading power
+	option = {
+		name = cultural_hegemony.18.a
+		default_option = yes
+
+		change_relations = { country = scope:ch_bloc_a value = 15 }
+		change_relations = { country = scope:ch_bloc_b value = -15 }
+		je:je_cultural_hegemony ?= { add_modifier = {
+				name = ch_cultural_exchange
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
+		scope:ch_bloc_a = { save_scope_as = cultural_hegemon }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 DECAYING = no MULT = 1 }
+
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { scope:ch_bloc_a = { relations:root >= relations_threshold:cordial } }
+				add = 3
+			}
+		}
+	}
+
+	# B: Lean toward the challenger
+	option = {
+		name = cultural_hegemony.18.b
+
+		change_relations = { country = scope:ch_bloc_b value = 15 }
+		change_relations = { country = scope:ch_bloc_a value = -15 }
+		je:je_cultural_hegemony ?= { add_modifier = {
+				name = ch_cultural_exchange
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
+		scope:ch_bloc_b = { save_scope_as = cultural_hegemon }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 DECAYING = no MULT = 1 }
+
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { scope:ch_bloc_b = { relations:root >= relations_threshold:cordial } }
+				add = 3
+			}
+		}
+	}
+
+	# C: Stand apart from both
+	option = {
+		name = cultural_hegemony.18.c
+
+		add_modifier = {
+			name = ch_non_aligned_stance
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		change_relations = { country = scope:ch_bloc_a value = -5 }
+		change_relations = { country = scope:ch_bloc_b value = -5 }
+
+		ai_chance = {
+			base = 3
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 19: The Model Falters
+# ============================================================================
+# Fired by ch_fire_model_change_events when the world's leading cultural power
+# no longer runs the model it ran at the previous rebuild — it changed its own
+# government, or lost the top spot to a country running something else. Sent to
+# every country still running the old model. Holding course costs legitimacy
+# but rallies the groups in government; adapting opens the country to the new
+# leader's model and earns its goodwill.
+# ============================================================================
+
+cultural_hegemony.19 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.19.t
+	desc = cultural_hegemony.19.d
+	flavor = cultural_hegemony.19.f
+
+	event_image = { texture = "gfx/event_pictures/parliamentary_debate_heated.dds" }
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_journal_entry = je_cultural_hegemony
+		has_variable = ch_model_census
+		has_global_variable = ch_rank_1_ideology_prev
+		var:ch_model_census = global_var:ch_rank_1_ideology_prev
+		has_global_variable = ch_rank_1_ideology
+		NOT = { var:ch_model_census = global_var:ch_rank_1_ideology }
+		exists = global_var:ch_rank_1
+		NOT = { this = global_var:ch_rank_1 }
+	}
+
+	immediate = {
+		global_var:ch_rank_1 = { save_scope_as = ch_new_hegemon }
+	}
+
+	# A: Hold to our course
+	option = {
+		name = cultural_hegemony.19.a
+		default_option = yes
+
+		add_modifier = {
+			name = ch_model_orphaned
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		every_interest_group = {
+			limit = { is_in_government = yes }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+			}
+		}
+
+		ai_chance = {
+			base = 5
+		}
+	}
+
+	# B: Look to the new leader
+	option = {
+		name = cultural_hegemony.19.b
+
+		change_relations = { country = scope:ch_new_hegemon value = 15 }
+		scope:ch_new_hegemon = { save_scope_as = cultural_hegemon }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 DECAYING = no MULT = 1 }
+
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { ig:ig_intelligentsia ?= { is_in_government = yes } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ============================================================================
+# EVENT 20: Domino
+# ============================================================================
+# Fired by ch_fire_model_change_events when a neighbour has just switched to the
+# model the world's leading cultural power runs. The neighbour arrives in
+# var:ch_domino_source (a dated variable, which also stops a second firing).
+# Containing the example costs authority and the neighbour's goodwill; letting
+# it travel opens the country to the hegemon's model.
+# ============================================================================
+
+cultural_hegemony.20 = {
+	type = country_event
+	placement = root
+
+	title = cultural_hegemony.20.t
+	desc = cultural_hegemony.20.d
+	flavor = cultural_hegemony.20.f
+
+	event_image = { texture = "gfx/event_pictures/nationalist_backlash_flags.dds" }
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	duration = 3
+	cooldown = { days = normal_modifier_time }
+
+	trigger = {
+		has_journal_entry = je_cultural_hegemony
+		has_variable = ch_domino_source
+		exists = var:ch_domino_source
+		exists = global_var:ch_rank_1
+		NOT = { this = global_var:ch_rank_1 }
+		has_global_variable = ch_rank_1_ideology
+		has_variable = ch_model_census
+		NOT = { var:ch_model_census = global_var:ch_rank_1_ideology }
+	}
+
+	immediate = {
+		var:ch_domino_source = { save_scope_as = ch_domino_country }
+		global_var:ch_rank_1 = { save_scope_as = cultural_hegemon }
+	}
+
+	# A: Contain the example
+	option = {
+		name = cultural_hegemony.20.a
+		default_option = yes
+
+		change_relations = { country = scope:ch_domino_country value = -15 }
+		add_modifier = {
+			name = ch_ideological_cordon
+			days = short_modifier_time
+		}
+
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { authority > 200 }
+				add = 2
+			}
+		}
+	}
+
+	# B: Let the idea travel
+	option = {
+		name = cultural_hegemony.20.b
+
+		change_relations = { country = scope:ch_domino_country value = 10 }
+		ch_apply_hegemon_movement_pressure = { MODIFIER = ch_hegemon_ideological_pressure_weak FALLBACK_MODIFIER = ch_hegemon_ideological_pressure_weak MONTHS = 30 DECAYING = no MULT = 1 }
+
+		ai_chance = {
+			base = 4
+		}
+	}
+}

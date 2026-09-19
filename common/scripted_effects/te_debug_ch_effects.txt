@@ -144,3 +144,73 @@ te_debug_ch_push_us_outside = {
 te_debug_ch_empty_slot_5 = {
 	remove_global_variable = ch_rank_5
 }
+
+# ---- Political-model events (cultural_hegemony.17-20) ----
+# These events fire on real conditions that take years to arise (a model's
+# share passing 40%, the leader changing model, a neighbour switching). The two
+# helpers below fake just enough of the rebuild's globals for each event's own
+# trigger to pass, then queue the event with trigger_event (which re-checks that
+# trigger). An event whose condition the save cannot meet — e.g. we already run
+# the leader's model — simply does not appear.
+
+# Stage Our Model Abroad (cultural_hegemony.17): make us rank 1 and say that
+# half the world's culture, across three countries, runs our model. Needs Mass
+# Media researched and a model other than Mixed / Other.
+# Scope: country
+te_debug_ch_stage_hegemon_event = {
+	te_debug_ch_make_us_rank_1 = yes
+	ch_set_political_model = yes
+	set_variable = { name = ch_model_census value = var:ch_model }
+	set_global_variable = { name = ch_rank_1_ideology value = var:ch_model }
+	set_global_variable = { name = ch_rank_1_ideology_share value = 50 }
+	set_global_variable = { name = ch_rank_1_ideology_aligned_count value = 3 }
+	trigger_event = { id = cultural_hegemony.17 days = 1 }
+}
+
+# Stage the three follower events: push us outside the top ten (option C), then
+# for Rival Models (.18) give rank 2 a real share and us a trailing one; for The
+# Model Falters (.19) say the leader used to run OUR model; for Domino (.20) name
+# a neighbour as having just switched. .18 needs the top two to run different
+# models, and .19 / .20 need us to run something other than the leader's model.
+# Scope: country
+te_debug_ch_stage_follower_events = {
+	te_debug_ch_push_us_outside = yes
+	ch_set_political_model = yes
+	set_variable = { name = ch_model_census value = var:ch_model }
+	global_var:ch_rank_1 = {
+		ch_set_political_model = yes
+		set_variable = { name = ch_model_census value = var:ch_model }
+		set_global_variable = { name = ch_rank_1_ideology value = var:ch_model }
+	}
+	global_var:ch_rank_2 = {
+		ch_set_political_model = yes
+		set_variable = { name = ch_model_census value = var:ch_model }
+		set_global_variable = { name = ch_rank_2_ideology value = var:ch_model }
+		set_variable = { name = ch_total value = 15 }
+	}
+
+	# .18 — a trailing share and the benchmark the journal entry would give us
+	set_variable = { name = ch_total value = 3 }
+	add_modifier = { name = cultural_hegemony_foreign_benchmark months = 1 }
+	trigger_event = { id = cultural_hegemony.18 days = 1 }
+
+	# .19 — the leader used to run our model
+	set_global_variable = { name = ch_rank_1_ideology_prev value = var:ch_model_census }
+	trigger_event = { id = cultural_hegemony.19 days = 2 }
+
+	# .20 — a neighbour has just switched to the leader's model
+	random_country = {
+		limit = {
+			NOT = { this = ROOT }
+			any_scope_state = {
+				any_neighbouring_state = { owner = ROOT }
+			}
+		}
+		save_scope_as = te_debug_ch_neighbour
+	}
+	if = {
+		limit = { exists = scope:te_debug_ch_neighbour }
+		set_variable = { name = ch_domino_source value = scope:te_debug_ch_neighbour days = 90 }
+		trigger_event = { id = cultural_hegemony.20 days = 3 }
+	}
+}

@@ -171,3 +171,21 @@ ch_has_regressive_laws = {
 		has_law_or_variant = law_type:law_debt_slavery
 	}
 }
+
+# ---- Switched to the hegemon's model ----
+# Scope: country
+# True when this rebuild's census moved the country onto the model the world's
+# leading cultural power runs, from something else. Reads the census pair
+# (var:ch_model_census / _prev, written only by ch_add_country_to_model_totals),
+# never var:ch_model, which the pressure effect also rewrites between rebuilds.
+# Drives the Domino event (cultural_hegemony.20).
+ch_switched_to_hegemon_model = {
+	has_variable = ch_model_census_prev
+	has_variable = ch_model_census
+	NOT = { var:ch_model_census = var:ch_model_census_prev }
+	has_global_variable = ch_rank_1_ideology
+	var:ch_model_census = global_var:ch_rank_1_ideology
+	NOT = { global_var:ch_rank_1_ideology = 12 }
+	exists = global_var:ch_rank_1
+	NOT = { this = global_var:ch_rank_1 }
+}
