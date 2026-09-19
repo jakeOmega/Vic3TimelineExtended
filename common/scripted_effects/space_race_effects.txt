@@ -401,6 +401,63 @@ sr_cleanup_milestone_if_inactive_base = {
 	}
 }
 
+# --- Shared bodies for the milestone controls --------------------------------
+# The four things a player (or the AI) can do to a running milestone. Each of
+# the 32 journal-entry buttons and each op on that milestone's scripted GUI runs
+# the body from here, so the two surfaces cannot drift apart. $MILESTONE$ is one
+# of the eight milestone tokens.
+#
+# The custom_tooltip wrappers are what the button grid and the widget's
+# ExecuteTooltip both render, so they belong here rather than at the call sites.
+
+sr_effect_safe = {
+	custom_tooltip = {
+		text = "SR_SAFE_APPROACH_EFFECT"
+		set_variable = { name = sr_safe_$MILESTONE$ value = yes }
+		if = {
+			limit = { has_variable = sr_ambitious_$MILESTONE$ }
+			remove_variable = sr_ambitious_$MILESTONE$
+		}
+		je:je_space_race_$MILESTONE$ = {
+			remove_modifier = sr_ambitious_approach
+			add_modifier = sr_safe_approach
+		}
+		sr_recalculate_cost = yes
+	}
+}
+
+sr_effect_ambitious = {
+	custom_tooltip = {
+		text = "SR_AMBITIOUS_APPROACH_EFFECT"
+		set_variable = { name = sr_ambitious_$MILESTONE$ value = yes }
+		if = {
+			limit = { has_variable = sr_safe_$MILESTONE$ }
+			remove_variable = sr_safe_$MILESTONE$
+		}
+		je:je_space_race_$MILESTONE$ = {
+			remove_modifier = sr_safe_approach
+			add_modifier = sr_ambitious_approach
+		}
+		sr_recalculate_cost = yes
+	}
+}
+
+sr_effect_fund_up = {
+	custom_tooltip = {
+		text = "SR_INCREASE_FUNDING_EFFECT"
+		change_variable = { name = sr_funding_$MILESTONE$ add = 1 }
+		sr_recalculate_cost = yes
+	}
+}
+
+sr_effect_fund_down = {
+	custom_tooltip = {
+		text = "SR_DECREASE_FUNDING_EFFECT"
+		change_variable = { name = sr_funding_$MILESTONE$ subtract = 1 }
+		sr_recalculate_cost = yes
+	}
+}
+
 # --- Display state for the journal-entry widget ------------------------------
 # gui/journal_entry_widgets/space_race_widget.gui and
 # common/customizable_localization/space_race_custom_loc.txt only READ these two
