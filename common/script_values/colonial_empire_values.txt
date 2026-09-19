@@ -457,8 +457,8 @@ colonial_stability_drift_domestic = {
 }
 
 # Projected monthly change, identical by construction to the sum the bar
-# applies. Snapshotted into colonial_empire_d_total for the headline and the
-# signed history series.
+# applies. Snapshotted into colonial_empire_d_total for the signed history
+# series, which is sampled from the monthly pulse and can afford the iteration.
 colonial_stability_drift_total = {
 	value = colonial_stability_drift_base
 	add = colonial_stability_drift_laws
@@ -469,4 +469,72 @@ colonial_stability_drift_total = {
 	add = colonial_stability_drift_policies
 	add = colonial_stability_drift_acceptance
 	add = colonial_stability_drift_domestic
+}
+
+# The same total, but safe to read from the widget every frame: the six O(1)
+# groups are evaluated live and the three iterating ones come from the snapshot
+# variables. That mix is deliberate rather than a compromise -- the six live
+# groups are exactly the ones a button press changes, so the headline moves the
+# frame after a click, which a pure snapshot could never do (add_modifier and
+# remove_modifier results are invisible inside the effect that wrote them).
+# The three snapshotted groups cannot be changed by any button here.
+colonial_stability_drift_total_display = {
+	value = colonial_stability_drift_base
+	add = colonial_stability_drift_laws
+	add = colonial_stability_drift_igs
+	add = colonial_stability_drift_rank
+	add = colonial_stability_drift_policies
+	add = colonial_stability_drift_domestic
+	if = {
+		limit = { has_variable = colonial_empire_d_overreach }
+		add = var:colonial_empire_d_overreach
+	}
+	if = {
+		limit = { has_variable = colonial_empire_d_gp }
+		add = var:colonial_empire_d_gp
+	}
+	if = {
+		limit = { has_variable = colonial_empire_d_acceptance }
+		add = var:colonial_empire_d_acceptance
+	}
+}
+
+# ============================================================================
+# DISPLAY-ONLY READS
+#
+# Thin wrappers so the widget's loc can show a modifier aggregate as a number
+# without GetValueWithBreakdownFor, whose object chain is confirmed for
+# `ROOT.GetCountry.GetModifier...` in a journal-entry desc but not for
+# `JournalEntry.GetCountry.GetModifier...` in a widget. The bar's own hover still
+# carries the full source-by-source breakdown through colonial_law_aggregate_tt
+# and the three programme aggregate keys, where the confirmed chain applies.
+#
+# These read the aggregate UNCONDITIONALLY -- unlike colonial_stability_term_*,
+# which zeroes when its programme is off -- so the widget can preview what a
+# programme WOULD contribute before it is switched on.
+# ============================================================================
+
+colonial_invest_effectiveness_display = {
+	value = modifier:country_colonial_invest_effectiveness_add
+}
+
+colonial_garrison_effectiveness_display = {
+	value = modifier:country_colonial_garrison_effectiveness_add
+}
+
+colonial_assim_effectiveness_display = {
+	value = modifier:country_colonial_assim_effectiveness_add
+}
+
+# colonial_invest_startup_cost is negative (it feeds add_treasury). Flipped here
+# so the cost row can show a positive amount next to the word "one-off".
+colonial_invest_startup_cost_display = {
+	value = colonial_invest_startup_cost
+	multiply = -1
+}
+
+# Likewise for the Cultural Assimilation programme's startup cost.
+colonial_assimilate_startup_cost_display = {
+	value = colonial_assimilate_startup_cost
+	multiply = -1
 }
