@@ -266,7 +266,7 @@ REPLACE:low_pop_state = {
 REPLACE:declared_bankruptcy = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_prestige_mult = -0.75
-	country_loan_interest_rate_mult = 0.5
+	country_risk_premium_add = 0.1
 	unit_offense_mult = -0.75
 	unit_defense_mult = -0.75
 	state_radicals_from_political_movements_mult = 1.0
@@ -387,7 +387,7 @@ tourism_throughput = {
 # ----- Cycle phases (auto-applied by JE) -----
 financial_cycle_phase_panic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_loan_interest_rate_mult = 0.1
+	country_risk_premium_add = 0.02
 	state_capitalists_investment_pool_contribution_add = -0.25
 	goods_output_services_mult = -0.5
 	building_group_bg_manufacturing_throughput_add = -0.2
@@ -397,7 +397,7 @@ financial_cycle_phase_panic = {
 
 financial_cycle_phase_downturn = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_loan_interest_rate_mult = 0.05
+	country_risk_premium_add = 0.01
 	state_capitalists_investment_pool_contribution_add = -0.1
 	goods_output_services_mult = -0.25
 	building_group_bg_manufacturing_throughput_add = -0.1
@@ -407,7 +407,7 @@ financial_cycle_phase_downturn = {
 
 financial_cycle_phase_stagnation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_loan_interest_rate_mult = 0.02
+	country_risk_premium_add = 0.004
 	goods_output_services_mult = -0.10
 	building_group_bg_manufacturing_throughput_add = -0.05
 	country_bubble_pressure_monthly_add = -1
@@ -563,7 +563,7 @@ financial_cycle_phase_frenzy_coop = {
 great_depression_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_finance_momentum_monthly_add = -0.4
-	country_loan_interest_rate_mult = 0.15
+	country_risk_premium_add = 0.03
 	country_prestige_mult = -0.05
 }
 
@@ -571,7 +571,7 @@ great_depression_modifier = {
 great_depression_bystander_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_finance_momentum_monthly_add = -0.2
-	country_loan_interest_rate_mult = 0.05
+	country_risk_premium_add = 0.01
 }
 
 # Applied to isolated/command economy countries (largely shielded)
@@ -646,14 +646,14 @@ banking_event_import_and_subsidy_cost = {
 # --- Event 10: Sovereign Debt Scare ---
 banking_event_austerity = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_loan_interest_rate_mult = -0.10
+	country_risk_premium_add = -0.02
 	country_bureaucracy_mult = -0.05
 }
 
 banking_event_partial_default = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_prestige_mult = -0.15
-	country_loan_interest_rate_mult = 0.20
+	country_risk_premium_add = 0.04
 }
 
 # --- Event 11: Insurance Sector Wobble ---
@@ -666,7 +666,7 @@ banking_event_insurance_reserves = {
 # --- Event 12: Gold Standard Pressure ---
 banking_event_gold_defense = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_loan_interest_rate_mult = 0.10
+	country_risk_premium_add = 0.02
 }
 
 banking_event_managed_devaluation = {
@@ -710,14 +710,14 @@ banking_event_currency_collapse = {
 # --- Event 16: Central Bank Independence Debate ---
 banking_event_cb_independence = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_loan_interest_rate_mult = -0.05
+	country_risk_premium_add = -0.01
 	country_banking_random_momentum_mult = -0.15
 	country_banking_crash_chance_mult = -0.1
 }
 
 banking_event_dual_mandate = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_loan_interest_rate_mult = -0.03
+	country_risk_premium_add = -0.006
 	building_group_bg_manufacturing_throughput_add = 0.02
 	country_banking_random_momentum_mult = 0.1
 }
@@ -726,7 +726,7 @@ banking_event_dual_mandate = {
 banking_event_derivatives_crackdown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.08
-	country_loan_interest_rate_mult = 0.10
+	country_risk_premium_add = 0.02
 	country_banking_crash_chance_mult = -0.15
 }
 
@@ -745,7 +745,7 @@ banking_event_sovereign_wealth_fund = {
 banking_event_shadow_regulation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	goods_output_services_mult = -0.05
-	country_loan_interest_rate_mult = -0.05
+	country_risk_premium_add = -0.01
 	country_banking_crash_chance_mult = -0.2
 }
 
@@ -774,7 +774,6 @@ banking_event_sovereign_wealth_fund_cost = {
 # ----- Interventions (buttons spend points here via negative adds) -----
 banking_policy_rate_hike = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
-	country_loan_interest_rate_mult = 0.05
 	country_banking_intervention_max_add = -2
 	interest_group_ig_industrialists_approval_add = -2
 	# monthly:
@@ -784,7 +783,6 @@ banking_policy_rate_hike = {
 
 banking_open_market_ops = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	country_loan_interest_rate_mult = -0.04
 	goods_output_services_mult = 0.05
 	country_banking_intervention_max_add = -4
 	# monthly:
@@ -804,7 +802,7 @@ banking_countercyclical_capital_buffer = {
 
 banking_expand_deposit_guarantee = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
-	country_loan_interest_rate_mult = -0.01
+	country_risk_premium_add = -0.002
 	country_banking_intervention_max_add = -4
 	# monthly:
 	country_finance_momentum_monthly_add = 0.1
@@ -826,7 +824,7 @@ banking_directed_credit_infrastructure = {
 
 banking_emergency_liquidity_program = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_loan_interest_rate_mult = -0.04
+	country_risk_premium_add = -0.008
 	country_banking_intervention_max_add = -6
 	# monthly:
 	country_bubble_pressure_monthly_add  = 0.8
@@ -855,7 +853,7 @@ banking_fx_devaluation = {
 	country_banking_intervention_max_add = -3
 	state_import_advantage_mult = -0.25
 	state_export_advantage_mult = 0.25		     # exporters advantaged
-	country_loan_interest_rate_mult = 0.02       # inflation pass-through
+	country_risk_premium_add = 0.004            # inflation pass-through
 	country_finance_momentum_monthly_add = 0.1
 	country_bubble_pressure_monthly_add  = 0.3
 }
@@ -865,7 +863,7 @@ banking_fx_support = {
 	country_banking_intervention_max_add = -3
 	state_import_advantage_mult = 0.25
 	state_export_advantage_mult = -0.25		     # importers advantaged
-	country_loan_interest_rate_mult = -0.01
+	country_risk_premium_add = -0.002
 	country_finance_momentum_monthly_add = 0.05
 	country_bubble_pressure_monthly_add  = -0.4
 	state_tax_collection_mult = -0.03             # ongoing cost of deploying foreign reserves
@@ -930,20 +928,20 @@ banking_crash_intervention_suspend_convertibility = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_banking_intervention_max_add = -1
 	state_export_advantage_mult = -0.10                  # convertibility freeze hampers exporters
-	country_loan_interest_rate_mult = 0.02
+	country_risk_premium_add = 0.004
 }
 
 banking_crash_intervention_mutual_clearing = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_banking_intervention_max_add = -2
-	country_loan_interest_rate_mult = 0.01
+	country_risk_premium_add = 0.002
 	interest_group_ig_industrialists_approval_add = -2
 }
 
 banking_crash_intervention_correspondent_liquidity = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_banking_intervention_max_add = -2
-	country_loan_interest_rate_mult = -0.02
+	country_risk_premium_add = -0.004
 	country_bubble_pressure_monthly_add = 0.2
 }
 
@@ -964,7 +962,7 @@ banking_crash_intervention_dev_bank_lending = {
 banking_crash_intervention_open_market = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_banking_intervention_max_add = -3
-	country_loan_interest_rate_mult = -0.05
+	country_risk_premium_add = -0.01
 	country_bubble_pressure_monthly_add = 0.4
 	country_prestige_mult = 0.02
 }
@@ -972,7 +970,7 @@ banking_crash_intervention_open_market = {
 banking_crash_intervention_nationalize = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_banking_intervention_max_add = -4
-	country_loan_interest_rate_mult = -0.06
+	country_risk_premium_add = -0.012
 	interest_group_ig_industrialists_approval_add = -8
 	interest_group_ig_trade_unions_approval_add = 3
 	state_tax_collection_mult = -0.05
@@ -983,7 +981,7 @@ banking_crash_intervention_nationalize = {
 banking_crash_intervention_discount_window = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_banking_intervention_max_add = -2
-	country_loan_interest_rate_mult = -0.04
+	country_risk_premium_add = -0.008
 	country_bubble_pressure_monthly_add = 0.3
 }
 
@@ -1799,7 +1797,7 @@ colonial_military_garrison_modifier = {
 	country_prestige_from_army_power_projection_mult = -0.10
 	country_bureaucracy_mult = -0.03
 	# Modest money cost: credit dries up when you're shooting people
-	country_loan_interest_rate_mult = 0.05
+	country_risk_premium_add = 0.01
 	# IG anger: the universities and unions don't like brutality
 	interest_group_ig_intelligentsia_pol_str_mult = -0.05
 	interest_group_ig_trade_unions_pol_str_mult = -0.03
@@ -1894,7 +1892,7 @@ colonial_empire_crumbling_modifier = {
 # Metropole-side pressure: persistent debt strain after the Treasury Says No event
 treasury_strain_persistence_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_loan_interest_rate_add = 0.005
+	country_risk_premium_add = 0.005
 	country_bureaucracy_mult = -0.02
 }
 
@@ -2041,7 +2039,7 @@ neocolonial_dependency_imposed_modifier = {
 	country_prestige_mult = -0.05
 	state_standard_of_living_add = -1
 	country_influence_add = -25
-	country_loan_interest_rate_add = 0.01
+	country_risk_premium_add = 0.01
 	country_weekly_investment_pool_mult = -0.005
 }
 
@@ -4255,7 +4253,7 @@ banking_event_trade_bills = {
 
 banking_event_pension_stability = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_loan_interest_rate_mult = -0.03
+	country_risk_premium_add = -0.006
 	country_banking_crash_chance_mult = -0.1
 }
 
@@ -4283,7 +4281,7 @@ banking_event_bank_holiday = {
 banking_event_trust_collapse = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.05
-	country_loan_interest_rate_mult = 0.05
+	country_risk_premium_add = 0.01
 }
 
 banking_event_commercial_paper = {
@@ -4293,7 +4291,7 @@ banking_event_commercial_paper = {
 
 banking_event_deposit_insurance = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_loan_interest_rate_mult = -0.03
+	country_risk_premium_add = -0.006
 	country_banking_crash_chance_mult = -0.15
 }
 
@@ -4306,7 +4304,7 @@ banking_event_joint_stock_boom = {
 banking_event_fintech_growth = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	goods_output_services_mult = 0.03
-	country_loan_interest_rate_mult = -0.03
+	country_risk_premium_add = -0.006
 	country_banking_random_momentum_mult = 0.1
 }
 
@@ -4330,14 +4328,14 @@ banking_event_microfinance_cost = {
 
 banking_event_qe_stimulus = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_loan_interest_rate_mult = -0.05
+	country_risk_premium_add = -0.01
 	country_banking_random_momentum_mult = 0.15
 }
 
 banking_event_rating_crackdown = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.05
-	country_loan_interest_rate_mult = 0.05
+	country_risk_premium_add = 0.01
 	country_banking_random_momentum_mult = -0.15
 }
 
@@ -4584,7 +4582,7 @@ cooperative_solidarity_campaign = {
 # 5. Cooperative Credit Union Expansion: expand internal member lending
 cooperative_credit_expansion = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_loan_interest_rate_mult = -0.03
+	country_risk_premium_add = -0.006
 	country_banking_intervention_max_add = -3
 	# monthly: improves liquidity and momentum; also loosens restraint
 	country_finance_momentum_monthly_add = 0.25
@@ -6430,14 +6428,14 @@ banking_crisis_protectionism_light_modifier = {
 banking_crisis_capital_controls_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	building_trade_center_throughput_add = -0.10
-	country_loan_interest_rate_mult = 0.05
+	country_risk_premium_add = 0.01
 	# monthly:
 	country_finance_momentum_monthly_add = 0.08
 }
 
 banking_crisis_monetary_stabilization_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
-	country_loan_interest_rate_mult = 0.08
+	country_risk_premium_add = 0.016
 	# monthly:
 	country_finance_momentum_monthly_add = 0.15
 }

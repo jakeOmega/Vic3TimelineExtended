@@ -1,0 +1,127 @@
+﻿# ============================================================================
+# Monetary Policy — vanilla country-rank interest INJECTs (§7.3)
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §7.3, §7.5, §16.1, §17.
+# Plan ruling R1 (docs/superpowers/plans/2026-09-19-monetary-policy-phase1.md).
+#
+# WHAT THIS FILE DOES
+# Vanilla prices sovereign debt by rank with country_loan_interest_rate_mult,
+# which multiplies the WHOLE interest stack. The monetary system computes the
+# rate itself and writes it through te_monetary_rate_paid, so every one of
+# those mults is cancelled here with its exact inverse, and the rank's real
+# contribution is re-expressed on country_credit_standing_add — the STRUCTURAL
+# premium tier, which is floored at 0.5pp (0.25pp under central bank
+# independence) before the cyclical tier is added.
+#
+#   Rank                          vanilla _mult   cancel    §7.3 premium
+#   great_power                       -0.50        +0.50      +0.5pp
+#   major_power                       -0.25        +0.25      +1.0pp
+#   minor_power                         --           --       +2.0pp
+#   insignificant_power               +0.25        -0.25      +3.0pp
+#   unrecognized_major_power          +0.50        -0.50      +4.0pp
+#   unrecognized_regional_power       +0.75        -0.75      +6.0pp
+#   unrecognized_power                +1.00        -1.00      +8.0pp
+#   decentralized_power                 --           --      +10.0pp
+#
+# A straight x0.2 conversion of the vanilla mults would give a great power
+# -10pp, which is meaningless against a dial with a 0.5pp floor, so §7.3 uses a
+# designed table instead. minor_power and decentralized_power carry no vanilla
+# mult and therefore only get the premium; decentralized sits at +10pp so a
+# decentralized country can never borrow more cheaply than a minor power.
+#
+# The premium is carried on the rank rather than computed in script so that it
+# shows up in the rank tooltip where the player already looks for it.
+#
+# UNVERIFIED ENGINE ASSUMPTION — read before changing anything here (§17)
+# Every block below assumes that a `modifier = { }` inside an `INJECT:` SUMS
+# with the vanilla entity's own `modifier = { }`, key by key. That is the same
+# assumption common/laws/sol_expectations_vanilla_injections.txt has shipped on
+# since April, and §17 checks 1 and 4 (read a great power's budget-panel
+# interest tooltip; read a vanilla tech tooltip the mod INJECTs) are the way to
+# settle it. They need no new code.
+#
+# If INJECT turns out to be LAST-WINS instead, this file is wrong twice over:
+# the cancel would ADD to vanilla's mult instead of zeroing it (a great power
+# would pay +50% rather than +0%), and the injected block would wipe the rest
+# of each rank's vanilla modifier (influence, maneuvers, agitator slots,
+# leverage resistance, unassigned commanders...). The §17 fallback for ranks is
+# to REPLACE them in common/country_ranks/extra_country_ranks.txt, restating
+# vanilla's full modifier block minus the interest mult plus the premium — a
+# one-file fix, which is why these blocks are isolated here and not folded into
+# extra_country_ranks.txt's cultural-hegemony INJECTs.
+#
+# Note that extra_country_ranks.txt ALREADY injects great_power and
+# major_power, so a last-wins engine would already be wiping those two ranks
+# today, independently of this file. Multiple INJECTs into one entity from
+# different files are well precedented in this mod (several vanilla laws carry
+# four).
+#
+# VANILLA DRIFT. The cancel values mirror vanilla
+# common/country_ranks/00_country_ranks.txt as of the version in
+# paths.local.json's base_game_path. docs/guides/vanilla_patch_runbook.md
+# carries the re-check entry.
+# ============================================================================
+
+# --- Recognized ---
+
+INJECT:great_power = {
+	modifier = {
+		country_loan_interest_rate_mult = 0.5
+		country_credit_standing_add = 0.005
+	}
+}
+
+INJECT:major_power = {
+	modifier = {
+		country_loan_interest_rate_mult = 0.25
+		country_credit_standing_add = 0.01
+	}
+}
+
+# No vanilla interest mult on this rank — premium only.
+INJECT:minor_power = {
+	modifier = {
+		country_credit_standing_add = 0.02
+	}
+}
+
+INJECT:insignificant_power = {
+	modifier = {
+		country_loan_interest_rate_mult = -0.25
+		country_credit_standing_add = 0.03
+	}
+}
+
+# --- Unrecognized ---
+
+INJECT:unrecognized_major_power = {
+	modifier = {
+		country_loan_interest_rate_mult = -0.5
+		country_credit_standing_add = 0.04
+	}
+}
+
+INJECT:unrecognized_regional_power = {
+	modifier = {
+		country_loan_interest_rate_mult = -0.75
+		country_credit_standing_add = 0.06
+	}
+}
+
+INJECT:unrecognized_power = {
+	modifier = {
+		country_loan_interest_rate_mult = -1.0
+		country_credit_standing_add = 0.08
+	}
+}
+
+# --- Decentralized ---
+
+# No vanilla interest mult on this rank — premium only. This is where the
+# §7.3 decentralized +10pp lives: the rank's own modifier block is the one
+# place a decentralized-only country modifier can sit without a script test.
+INJECT:decentralized_power = {
+	modifier = {
+		country_credit_standing_add = 0.1
+	}
+}

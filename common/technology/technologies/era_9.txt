@@ -558,7 +558,7 @@ social_justice_movements = {
 	}
 
 	modifier = {
-		country_loan_interest_rate_add = -0.02
+		country_credit_standing_add = -0.004
 		country_institution_ministry_of_international_aid_max_investment_add = 1
 		country_institution_ministry_of_refugee_affairs_max_investment_add = 2
 		country_institution_social_security_max_investment_add = 1

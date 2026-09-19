@@ -90,7 +90,7 @@ containerization = {
 	modifier = {
 		building_group_bg_trade_employee_mult = -0.5
 		state_market_access_price_impact = 0.01
-		country_loan_interest_rate_add = -0.02
+		country_credit_standing_add = -0.004
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_containerization_pb_principles_bool = yes
 	}

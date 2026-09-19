@@ -297,7 +297,7 @@ decline_of_organized_religion = {
 	}
 
 	modifier = {
-		country_loan_interest_rate_add = -0.02
+		country_credit_standing_add = -0.004
 		country_institution_ministry_of_religion_max_investment_add = 2
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		# Homeland system: weakens tradition-based territorial claims
