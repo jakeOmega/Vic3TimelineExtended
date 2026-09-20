@@ -2439,10 +2439,24 @@ te_mon_gold_gap_value = {
 
 # --- the bank's own vault (the hybrid model, §0.5) ---------------------------
 
-# The vault is measured against the ENGINE'S reserve limit, so it grows with
-# the economy and a vault nobody tops up thins out over the decades by itself.
+# The vault is measured against 0.2 x annual GDP — vanilla's BASE reserve
+# limit (GOLD_RESERVE_LIMIT_FACTOR), so it grows with the economy and a vault
+# nobody tops up thins out over the decades by itself.
+#
+# NOT THE ENGINE'S gold_reserves_limit, which it was for one revision. That
+# figure carries every country_gold_reserve_limit_mult, and the biggest source
+# of those is institution_national_bank itself (+20% a level, x2.8 at level 9):
+# a country that INVESTED in its central bank saw the limit run away from the
+# gold in the vault, read as having a thinner reserve, and was pushed toward
+# the shortfall and the pressure threshold by its own spending. The treasury's
+# limit is the treasury's business; the vault's is the size of the economy.
+te_mon_bank_gold_limit_share = {
+	value = 0.2
+}
+
 te_mon_bank_gold_limit = {
-	value = gold_reserves_limit
+	value = gdp
+	multiply = te_mon_bank_gold_limit_share
 	min = 1
 }
 

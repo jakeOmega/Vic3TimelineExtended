@@ -853,6 +853,8 @@ player **spending** borrowed gold. The owner's call was to split the stock:
   is correct.
 - **Devalue** revalues the vault (+15% of its limit) instead of paying the treasury.
 
+**The vault's limit is `0.2 × GDP`, not the engine's `gold_reserves_limit`** (one revision used the latter). The engine's figure carries every `country_gold_reserve_limit_mult`, and the largest source of those is `institution_national_bank` itself (+20% a level) — so a country that invested in its central bank watched the limit outrun the gold in the vault and was pushed toward the shortfall by its own spending.
+
 **What it retired:** Q6's "no inflow in debt", Q8's hot-money cap, Q9's payout *from the
 treasury* (borrowed gold now goes home out of the vault), the capitalised carry, the
 "outflow never exceeds the treasury" cap — and **owner decision J**: the shortfall no longer
@@ -1333,7 +1335,7 @@ laissez-faire and credibility terms of §7.2–7.3.
 | Crisis capital controls / monetary stabilisation | +0.05 / +0.08 | +1.0 / +1.6 |
 | `colonial_military_garrison_modifier` | +0.05 | +1.0 |
 | **Hand-judged:** `declared_bankruptcy` | +0.50 | **+10.0** |
-| **Hand-judged:** `institution_national_bank` | −0.05 / level | **−0.3 / level** (×20 would be −5pp at level 5) |
+| **Hand-judged:** `institution_national_bank` | −0.05 / level | ~~−0.3 / level~~ **−0.15 / level** — *revised 2026-09-20:* −0.3 was judged against vanilla's cap of 5 levels; this mod's `MAX_INSTITUTION_INVESTMENT` is **9**, so −0.3 made a fully-funded bank worth −2.7pp, more than gold, CBI, laissez-faire and all five mod techs together. −0.15 × 9 = −1.35, the ceiling that was meant. §7.4's Britain row loses 0.3 of its "−0.6 bank" and still reaches the 0.5 floor once invested |
 
 The mod's existing `_add` users re-type too. Cyclical:
 `treasury_strain_persistence_modifier` (+0.5), `neocolonial_dependency_imposed_modifier`
