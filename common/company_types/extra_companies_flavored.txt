@@ -3512,7 +3512,7 @@ company_shell = {
 	prosperity_modifier = {
 		building_oil_rig_throughput_add = 0.15
 		building_chemical_plant_throughput_add = 0.10
-		country_loan_interest_rate_add = -0.01
+		country_credit_standing_add = -0.003
 		country_minting_mult = 0.05
 		state_building_shell_pernis_refinery_max_level_add = 1
 	}

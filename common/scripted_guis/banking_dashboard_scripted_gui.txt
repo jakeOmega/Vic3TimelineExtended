@@ -127,7 +127,6 @@ banking_dash_any_policy_active = {
 	scope = country
 	is_shown = {
 		OR = {
-			banking_tool_rate_hike_active = yes
 			banking_tool_omo_active = yes
 			banking_tool_moral_suasion_active = yes
 			banking_tool_buffer_active = yes
@@ -168,21 +167,9 @@ banking_dash_any_policy_active = {
 # Policy actions. `is_shown` mirrors the matching scripted_button's `visible`,
 # `is_valid` its `possible`, and `effect` calls the same shared effect.
 # ---------------------------------------------------------------------------
-banking_dash_enable_cb_policy_rate_hike = {
-	scope = country
-	is_shown = { banking_is_market_economy = yes banking_tool_rate_hike_active = no }
-	ai_is_valid = { always = no }
-	is_valid = { banking_possible_cb_policy_rate_hike = yes }
-	effect = { banking_effect_cb_policy_rate_hike = yes }
-}
-
-banking_dash_disable_cb_policy_rate_hike = {
-	scope = country
-	is_shown = { banking_tool_rate_hike_active = yes }
-	ai_is_valid = { always = no }
-	is_valid = { banking_tool_rate_hike_active = yes }
-	effect = { banking_effect_cb_disable_policy_rate_hike = yes }
-}
+# The "Raise Policy Rate" enable/disable pair used to head this list. Deleted
+# with the tool (monetary_policy_design.md §18) — the rate is a dial now, not an
+# intervention, and its dashboard surface is rebuilt as the monetary block.
 
 banking_dash_enable_cb_open_market_ops = {
 	scope = country

@@ -1,0 +1,600 @@
+﻿# ============================================================================
+# Monetary Policy — script values
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md (§4 rate stack, §7 risk premium,
+# §8 stance + neutral rate, §16 implementation mapping, §21 tuning constants).
+#
+# Everything here is evaluated in COUNTRY scope unless a comment says otherwise.
+#
+# UNIT CONVENTION. Every monetary variable and every script value below is in
+# percentage POINTS (3.5 means 3.5%). Modifier fields use vanilla's interest
+# scale (0.01 = 1pp), so a modifier contribution is read back as
+# `100 x modifier:X` and written out as `multiplier = var:<pp value>` on a
+# modifier whose field is 0.01.
+#
+# ----------------------------------------------------------------------------
+# VARIABLE CONTRACT (§16.2) — country-scope variables owned by
+# te_monetary_monthly_update. Every one of them initialises behind
+# `has_variable` — with the single documented exception of te_rate_paid_rooted,
+# whose absence is load-bearing — and NONE of them is ever removed (a `remove_variable` on a
+# variable read by an `add_modifier { multiplier = ... }` is what
+# modifier_multiplier_var_audit exists to catch). No new monetary variable may
+# be introduced in je_banking.txt's `immediate` — that block resets unguarded
+# and the JE is can_revolution_inherit.
+#
+#   te_policy_rate_target   regime range, integer   the dial's setting (§5)
+#   te_policy_rate          regime range, fractional  drifts toward the target
+#                                                   at 1/3 pp per month (2/3 digital)
+#   te_mon_delegated        0 or 1                  1 = the target follows the mandate formula
+#   te_mon_mandate          1-3                     1 price stability, 2 growth, 3 peg defence
+#   te_premium_structural   floor to 30             what the country *is*; floored
+#                                                   at 0.5 (0.25 under CBI)
+#   te_premium_cyclical     -10 to 40               what is *happening*; added after the floor
+#   te_rate_paid_pts        0.5 to 60               the displayed rate paid, clamped (§4)
+#   te_rate_paid_applied    0.5 to 60               the value last written into
+#                                                   te_monetary_rate_paid's multiplier.
+#                                                   Equal to te_rate_paid_pts; it
+#                                                   exists so step 9 can tell whether
+#                                                   the rate has moved enough to be
+#                                                   worth re-applying. A save from
+#                                                   before the vanilla finance techs
+#                                                   were cancelled engine-side may
+#                                                   carry up to 10 more; the first
+#                                                   pulse after loading corrects it.
+#                                                   Never displayed; it is a
+#                                                   bookkeeping value, not the rate.
+#   te_rate_paid_rooted     1, or absent            THE ONE VARIABLE THAT IS
+#                                                   DELIBERATELY NOT INITIALISED.
+#                                                   Step 9 sets it only after a
+#                                                   write whose ROOT was this
+#                                                   country (`root ?= this`), so
+#                                                   its ABSENCE is the signal
+#                                                   that the interest modifier
+#                                                   was applied from a root-less
+#                                                   or foreign-rooted context and
+#                                                   is therefore at the wrong
+#                                                   multiplier. Initialising it
+#                                                   would destroy that signal.
+#                                                   Safe: it is read only through
+#                                                   `has_variable`, never as
+#                                                   `var:`, so it can never
+#                                                   return 'none'. Never removed,
+#                                                   like the rest.
+#   te_neutral_rate         1 to 6      HIDDEN      r*, the natural rate (§8)
+#   te_neutral_error        +/-1.5      HIDDEN      the country's estimate error
+#                                                   (+/-0.5 under CBI); mandates
+#                                                   and the displayed band use
+#                                                   te_neutral_rate + te_neutral_error,
+#                                                   never the true value
+#   te_neutral_walk         see note    HIDDEN      the mean-reverting random-walk
+#                                                   component of te_neutral_rate:
+#                                                   +/-0.1 per month, mean-reverting,
+#                                                   and bounded in effect by the
+#                                                   1-6 clamp on te_neutral_rate.
+#                                                   §16.2 gives no separate range
+#   te_mon_gdp_last_year    >= 0                    cached gdp, refreshed yearly, for
+#                                                   the neutral rate's growth term
+#   te_mon_stance_gap       -10 to 10   HIDDEN      real rate minus neutral rate; 0 for
+#                                                   every country without a dial (§8)
+#   te_mon_stance_band      1 to 5      displayed   1 very loose ... 5 very tight
+#   te_mon_regime           0 to 6                  0 none/bankless, 1 commodity, 2 gold,
+#                                                   3 fiat, 4 digital, 5 crypto, 6 command
+#
+# ONE COUNTRY VARIABLE IS OWNED ELSEWHERE. te_mon_stance_band_applied belongs to
+# banking_cycle_apply_stance_band (common/scripted_effects/banking_cycle_effects.txt),
+# not to the monthly update: it is bookkeeping for the banking journal entry's
+# stance modifier, so it only exists for countries that have that journal entry.
+# It follows the same two rules — initialised behind `has_variable`, never
+# removed.
+#
+#   te_mon_stance_band_applied  0 to 5              which banking_stance_band_* is
+#                                                   currently on je_banking_cycle;
+#                                                   0 = none applied yet
+#
+# WORKING VARIABLES (task 2, common/scripted_effects/te_monetary_effects.txt).
+# Not part of the displayed contract, but they follow the same two rules —
+# initialised behind `has_variable`, never removed:
+#
+#   te_mon_work             scratch     a scratch slot reused by every step of
+#   te_mon_work2            scratch     te_monetary_monthly_update; nothing may
+#                                       assume a value survives across steps
+#   te_mon_era_base_now     2 to 3      this pulse's copy of the world reference
+#                                       rate, read from global_var:te_mon_era_base_world
+#   te_mon_growth_term      +/-1.5      0.25 x (trailing yearly GDP growth % - 2),
+#                                       refreshed once a year by
+#                                       te_monetary_yearly_growth_snapshot and read
+#                                       by the neutral rate every month
+#
+#   global_var:te_mon_era_base_world    te_mon_era_base, evaluated ONCE A MONTH
+#                                       for the whole world (see below) instead of
+#                                       once per country
+#
+# HIDDEN STATE RULE (§8). te_neutral_rate, te_neutral_error, te_neutral_walk and
+# te_mon_stance_gap are never printed in any tooltip, loc string or visible
+# modifier. What the player *chooses* is shown exactly; the economy's hidden
+# state is not. The displayed stance band is the only window onto the gap.
+# ============================================================================
+
+
+# --- Reference rate ---------------------------------------------------------
+
+# The long-run real rate the whole world borrows against: 3.0 in eras 1-4,
+# 2.5 in eras 5-8, 2.0 in eras 9-12 (§8). In phase 1 this doubles as the world
+# / reference rate (§12.1) and as the base of the hidden neutral rate.
+#
+# ERA DETECTION. The engine exposes no "current era" trigger and the mod has no
+# canonical era detector, so this reuses the mod's two existing idioms: an era
+# is marked by a signature technology (events/modern_election_events.txt:1000),
+# and "the world has reached era N" is asked as "some great power has researched
+# it" (common/script_values/extra_script_values.txt:870-949). The markers are
+# `macroeconomics` (era_5) and `globalization` (era_9), both society techs and
+# neither of them a capital-market-access tech, so nothing is double-counted
+# against te_mon_access_premium.
+#
+# This is deliberately a WORLD quantity, not a per-country one: the spec calls
+# it the world / reference rate (§7.4, §12.1, §21), and the neutral rate is then
+# world base + per-country deviation (growth term + walk). Anchoring on great
+# powers also removes the fragility of a single-tech test — some great power
+# will always have researched the marker even if a given country skipped it.
+#
+# COST. The two any_country scans make this expensive to call per country per
+# pulse, so task 2 does not: te_monetary_refresh_world_era_base evaluates it
+# ONCE A MONTH into global_var:te_mon_era_base_world (on_monthly_pulse, plus
+# on_game_started and a self-heal inside the country update), and every country
+# reads the global. Nothing else should call this value directly in a per-country
+# loop.
+te_mon_era_base = {
+	value = 3.0
+	if = {
+		limit = {
+			any_country = {
+				country_rank >= rank_value:great_power
+				has_technology_researched = macroeconomics
+			}
+		}
+		subtract = 0.5
+	}
+	if = {
+		limit = {
+			any_country = {
+				country_rank >= rank_value:great_power
+				has_technology_researched = globalization
+			}
+		}
+		subtract = 0.5
+	}
+}
+
+
+# --- The dial's range (§5.1) ------------------------------------------------
+
+# The lowest and highest target the current monetary regime allows, in pp.
+#
+#   gold standard        the reference rate +/- 2, taken inwards to whole
+#                        numbers and held inside 0-15 (the phase-1 interim rule
+#                        of §19 row 1, standing in for §12's gold flows)
+#   digital currency     -3 to 25 (no cash to hoard, so negative rates bite)
+#   fiat currency        0 to 25
+#
+# ONE AUTHORITY, TWO CONSUMERS. te_monetary_clamp_target re-clamps the target
+# every month, and the dashboard's stepper has to grey out at exactly the same
+# edges (te_mon_target_can_step_down / _up in
+# common/scripted_triggers/te_monetary_triggers.txt). Writing the table twice is
+# how the stepper ends up offering a step the monthly update silently undoes, so
+# both read these two values and nothing else states the bounds.
+#
+# The gold branch is guarded on te_mon_era_base_now because a country that has
+# never run a monetary pulse has no cached reference rate. Inside
+# te_monetary_clamp_target that cannot happen (step 0 writes it every pulse); in
+# the GUI it can, on a save from before the system existed, and the fiat range it
+# falls back to is the harmless answer — the dashboard's readiness gate hides the
+# stepper until the first pulse anyway.
+#
+# THE FLOOR IS DECLARATIVE. Everything except the gold band comes from
+# country_policy_rate_floor_add, which law_digital_currency carries at -0.03 and
+# every other regime leaves at zero. The law tooltip therefore states the rule
+# ("Lowest Policy Rate -3%") instead of a sentence of localization restating a
+# law check that lived here. The gold band stays scripted because it is a
+# phase-1 INTERIM rule standing in for §12's gold flows (§19 row 1), not a
+# property of the law — when gold flows arrive, the band is computed from
+# reserves and this branch goes with it.
+te_mon_target_min = {
+	value = 0
+	if = {
+		limit = {
+			has_law_or_variant = law_type:law_gold_standard
+			has_variable = te_mon_era_base_now
+		}
+		add = {
+			value = var:te_mon_era_base_now
+			subtract = 2
+			min = 0
+			ceiling = yes
+		}
+	}
+	else = {
+		add = {
+			value = modifier:country_policy_rate_floor_add
+			multiply = 100
+		}
+	}
+}
+
+# The rate at or below which the policy rate counts as "at the floor" — the gate
+# on open market operations (te_mon_policy_rate_at_floor). One point of slack,
+# because te_policy_rate drifts fractionally and need not land exactly on the
+# bound.
+#
+# ONLY FIAT AND DIGITAL EVER READ THIS. Open-market operations are fiat/digital
+# only (§0.1 ruling of 2026-09-20: creating unbacked money to buy bonds is what
+# a convertibility promise forbids), and the regime is checked before the floor
+# is, so te_mon_target_min here is always its country_policy_rate_floor_add
+# branch — 0 under fiat, -3 under digital. A `max = 0` used to sit here for the
+# sole purpose of stopping a gold standard's band floor (reference rate - 2,
+# around 1pp) from counting as "the rate can go no lower"; the regime gate does
+# that job now, and gold never reaches this value.
+te_mon_floor_threshold = {
+	value = te_mon_target_min
+	add = 0.01
+}
+
+te_mon_target_max = {
+	value = 0
+	if = {
+		limit = {
+			has_law_or_variant = law_type:law_gold_standard
+			has_variable = te_mon_era_base_now
+		}
+		add = {
+			value = var:te_mon_era_base_now
+			add = 2
+			max = 15
+			floor = yes
+		}
+	}
+	else = {
+		add = 25
+	}
+}
+
+
+# --- How fast the rate closes on the target (§5.1) --------------------------
+
+# The multiplier on the baseline drift speed, from
+# country_policy_rate_drift_speed_mult. law_digital_currency carries +1.0, so a
+# digital regime moves at 2x — which is the whole of the old
+# `if = { limit = { has_law_or_variant = law_type:law_digital_currency } }`
+# branch inside te_monetary_drift_policy_rate, now stated on the law's own
+# tooltip instead of in a sentence of localization.
+#
+# `min = 0.1` stops a hypothetical -100% grant freezing the rate forever; the
+# dial would otherwise become a control that silently does nothing.
+te_mon_drift_speed_factor = {
+	value = 1
+	add = modifier:country_policy_rate_drift_speed_mult
+	min = 0.1
+}
+
+# How far the policy rate moves toward its target in one month, in pp. A third
+# of a point at the baseline — a point a quarter, so a 5pp swing takes fifteen
+# months and reversals are slow by construction (§4). Rendered in the dashboard's
+# Policy Rate and Rate Target tooltips, so the player reads the real number
+# rather than prose about thirds.
+te_mon_drift_step = {
+	value = 0.3333
+	multiply = te_mon_drift_speed_factor
+}
+
+# The distance that has to remain before another step is worth taking, rather
+# than snapping to the target.
+#
+# THE EPSILON IS LOAD-BEARING. Comparing against the bare step lets a hairline
+# remainder buy a whole extra month: closing a 1.0pp gap in thirds leaves
+# 1.0 - 2 x 0.3333 = 0.3334, which is *greater* than 0.3333, so the rate takes a
+# fourth step of 0.3333 to land 0.0001 short and snaps on the fifth month. The
+# old hard-coded thresholds (0.34 against a 0.3333 step, 0.67 against 0.6667)
+# existed precisely to stop that, and 0.0067 reproduces the first of them
+# exactly. A 1pp move is three months at the baseline, as it always was.
+te_mon_drift_step_threshold = {
+	value = te_mon_drift_step
+	add = 0.0067
+}
+
+# The same threshold, negated, so te_monetary_drift_policy_rate can test the
+# downward side without a third scratch variable.
+te_mon_drift_step_threshold_neg = {
+	value = te_mon_drift_step_threshold
+	multiply = -1
+}
+
+
+# --- Structural premium terms -----------------------------------------------
+
+# Capital-market access premium, in pp (§7.2). This is what keeps Siam or
+# Afghanistan out of the London market: a permanent premium that shrinks as a
+# country builds financial institutions. It replaces vanilla's five flat -2pp
+# tech reductions (which are cancelled engine-side by
+# common/technology/technologies/te_monetary_tech_injections.txt) and is
+# deliberately front-loaded, because Britain in 1836 holds only two of the five
+# techs and must still land near Consols.
+#
+#   base, no finance techs           +8.0
+#   banking                          -4.0
+#   central_banking                  -2.5
+#   mutual_funds                     -0.5
+#   international_exchange_standards -0.5
+#   modern_financial_instruments     -0.5
+#   no stock_exchange                +2.0
+#
+# The surcharge keys on the `stock_exchange` technology, not on having the
+# stock-exchange journal entry: that JE's other gate (a level-10 urban centre)
+# is not a capital-market signal.
+#
+# Anchors (§7.4): Britain / USA 1836 hold banking + central_banking + the
+# exchange, so 8 - 4 - 2.5 = 1.5. Siam 1850 holds none of them and no exchange,
+# so 8 + 2 = 10.
+#
+# Consumed by te_monetary_monthly_update step 5 as part of the STRUCTURAL tier,
+# i.e. before the 0.5pp (0.25pp under CBI) floor is applied.
+te_mon_access_premium = {
+	value = 8
+	if = {
+		limit = { has_technology_researched = banking }
+		subtract = 4
+	}
+	if = {
+		limit = { has_technology_researched = central_banking }
+		subtract = 2.5
+	}
+	if = {
+		limit = { has_technology_researched = mutual_funds }
+		subtract = 0.5
+	}
+	if = {
+		limit = { has_technology_researched = international_exchange_standards }
+		subtract = 0.5
+	}
+	if = {
+		limit = { has_technology_researched = modern_financial_instruments }
+		subtract = 0.5
+	}
+	if = {
+		limit = { NOT = { has_technology_researched = stock_exchange } }
+		add = 2
+	}
+}
+
+# The lowest structural premium lenders will offer, in pp (§7.1). Standing
+# earned past it buys nothing: credibility has a lower bound.
+#
+# 0.5 baseline, moved by country_credit_standing_floor_add, which
+# law_central_bank_independence carries at -0.0025 (-0.25pp). That grant is the
+# whole of the old `te_mon_is_cbi` branch inside te_monetary_update_premium, and
+# it now shows on the law's own tooltip beside the -0.5pp credibility term it is
+# separate from and stacks with.
+#
+# Also rendered in the dashboard's Credit Standing tooltip, so the figure the
+# player reads is the one the premium is actually floored at.
+te_mon_standing_floor = {
+	value = 0.5
+	add = {
+		value = modifier:country_credit_standing_floor_add
+		multiply = 100
+	}
+	min = 0
+}
+
+# Vanilla's five finance techs each grant country_loan_interest_rate_add = -0.02
+# engine-side. They are cancelled on the techs themselves, in
+# common/technology/technologies/te_monetary_tech_injections.txt — there is no
+# script compensation here, and no separate offset for the modifier write to add
+# (owner decision 2026-09-19, superseding plan ruling R3). If a vanilla patch
+# changes any of those five grants, that file and the runbook entry must follow
+# (docs/guides/vanilla_patch_runbook.md §6b).
+
+
+# --- Cyclical premium terms -------------------------------------------------
+
+# Debt-load premium, in pp (§7.6). Zero below scaled_debt 0.25, then linear to
+# +4pp at scaled_debt 1.0 and flat above it. Lenders price a heavily indebted
+# borrower higher; this is what keeps a cheap-debt world self-limiting.
+#
+# CYCLICAL, so it is added after the structural floor and always bites.
+#
+# Arithmetic: (scaled_debt - 0.25) x 16 / 3 is (scaled_debt - 0.25) x 5.3333
+# without the rounding. `scaled_debt` is a country trigger read, which is legal
+# inside a script value but NOT in a change_variable op slot — that is exactly
+# why this is a named script value.
+te_mon_scaled_debt_premium = {
+	value = scaled_debt
+	subtract = 0.25
+	multiply = 16
+	divide = 3
+	min = 0
+	max = 4
+}
+
+
+# --- Mandate inputs ---------------------------------------------------------
+
+# How hard a delegated central bank leans against the financial cycle, in pp
+# (§6). This is the replacement for the deleted rate-hike button's AI logic:
+#
+#   frenzy                  +2
+#   boom                    +1
+#   bubble pressure >= 65   +1   (on top of the phase term)
+#   downturn                -2
+#   panic                   -3
+#
+# Price stability takes the whole lean; growth takes half of it; peg defence
+# ignores the domestic cycle entirely.
+#
+# finance_cycle_value and bubble_pressure are COUNTRY variables owned by
+# je_banking_cycle's `immediate` (je_banking.txt:119-133) — the same variables
+# harvest conditions read through `owner = { ... }`. A country without the
+# journal entry has neither, so every branch carries its own has_variable guard
+# and such a country simply leans by 0. The banking_cycle_is_* triggers are the
+# canonical phase thresholds (market_triggers.txt:2-8); they read
+# var:finance_cycle_value unguarded, which is why the guard is in the limit
+# beside them rather than around them.
+te_mon_cycle_lean = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_frenzy = yes
+		}
+		add = 2
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_boom = yes
+		}
+		add = 1
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_panic = yes
+		}
+		subtract = 3
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_downturn = yes
+		}
+		subtract = 2
+	}
+	if = {
+		limit = {
+			has_variable = bubble_pressure
+			var:bubble_pressure >= 65
+		}
+		add = 1
+	}
+}
+
+
+# --- The central bank's forecasting error (§6, §8) --------------------------
+
+# How far the bank's reading of the neutral rate may stray from the truth, in
+# pp. 1.5 baseline, moved by country_bank_forecast_error_add, which
+# law_central_bank_independence carries at -0.01 (-1.0pp) — the old
+# `te_mon_is_cbi` branch of te_monetary_update_stance, now on the law tooltip.
+#
+# This bounds hidden state; it is not hidden state. §8's rule bars printing
+# te_neutral_error itself, not the width of the band it moves inside, so the law
+# may advertise it. `min = 0.1` keeps the walk from being pinned to exactly zero
+# by some future grant, which would hand the player a perfect estimate of r*.
+te_mon_forecast_error_bound = {
+	value = 1.5
+	add = {
+		value = modifier:country_bank_forecast_error_add
+		multiply = 100
+	}
+	min = 0.1
+}
+
+te_mon_forecast_error_bound_neg = {
+	value = te_mon_forecast_error_bound
+	multiply = -1
+}
+
+
+# --- The stance channel into the banking cycle (§8, §16.3) ------------------
+
+# The stance gap, clamped to +/-4 for the purpose of pushing the cycle.
+#
+# The gap itself is clamped to +/-10 (§8); this tighter bound is the one the
+# cycle sees, so that a country parked at an extreme stance settles at the edge
+# of the +/-5 momentum bar rather than driving through it: +/-4 x -0.125 is
+# -/+0.5 a month against a 10%-a-month decay, i.e. a steady state of -/+5.
+#
+# GUARDED. te_mon_stance_gap does not exist until a country's first monthly
+# monetary update, and the journal-entry pulse and that update may run in either
+# order in a given month (§17 check 7) — so a missing variable reads as 0 (no
+# push) and a present one may be a month old, which is exactly what §16.3 says
+# the consumer must tolerate. A country without a dial has a gap of exactly 0.
+#
+# HIDDEN STATE. Neither this value nor the two below may ever be rendered: they
+# are the gap, and the gap is r* (§8, "Why not a scaled modifier"). They are
+# consumed only by `change_variable` inside banking_cycle_advance_variables.
+#
+# DO NOT FOLD THE TWO MULTIPLIERS BELOW INTO THIS CLAMP BLOCK. A script value's
+# keys apply in the order they are written, so a `multiply` placed ahead of
+# `min`/`max` inside the same block silently DISARMS the bound: it is then tested
+# against the already-scaled figure. Folding `multiply = -0.125` in above the
+# bounds here would leave a +/-4 clamp guarding a quantity whose entire range is
+# +/-1.25, so the clamp would never bite and a country parked at an extreme
+# stance would push momentum by up to 1.25 a month instead of the calibrated 0.5
+# — straight through the +/-5 momentum bar the steady state below assumes.
+# Keep the clamp and the scaling in separate script values, as they are here.
+te_mon_stance_gap_clamped = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_stance_gap }
+		add = {
+			value = var:te_mon_stance_gap
+			min = -4
+			max = 4
+		}
+	}
+}
+
+# Monthly push on finance_cycle_momentum: -0.125 per pp of tight gap (§8).
+# Calibration: a 2pp tight stance equals the deleted rate-hike tool's -0.25.
+te_mon_stance_momentum_add = {
+	value = te_mon_stance_gap_clamped
+	multiply = -0.125
+}
+
+# Monthly push on bubble_pressure: -0.75 per pp of tight gap (§8).
+# Calibration: 2pp is about -1.5, against the old hike's -2.0 and the old open
+# market operations' +0.8.
+te_mon_stance_bubble_add = {
+	value = te_mon_stance_gap_clamped
+	multiply = -0.75
+}
+
+
+# --- Cached reads for te_monetary_monthly_update ----------------------------
+
+# change_variable / set_variable op slots accept a literal, a var:X or a NAMED
+# SCRIPT VALUE, but not a bare trigger-dispatched read such as `gdp`
+# (docs/guides/scripting_best_practices.md:1622-1624). This wrapper is what
+# lets the monthly update cache GDP into te_mon_gdp_last_year and difference
+# against it for the neutral rate's growth term (§8). The growth arithmetic
+# itself belongs to te_monetary_monthly_update, not here.
+te_mon_gdp_current = {
+	value = gdp
+}
+
+
+# --- Diagnostic only — the multiplier experiment ----------------------------
+
+# NOT PART OF THE MONTHLY UPDATE. Step 9 writes te_monetary_rate_paid with
+# `multiplier = var:te_rate_paid_applied`, and on a fresh 1836 game that
+# modifier lands at 1x (budget tooltip: +20.0% Base Value, -19.0% Timed
+# Modifiers) even though te_rate_paid_applied holds the right number. The first
+# application runs from on_game_started, so either the variable is unreadable
+# at that call site or the var form does not scale this modifier at all.
+#
+# This wrapper is the second arm of the experiment: te_debug_monetary.3 applies
+# the same pair mid-game with `multiplier = te_mon_rate_paid_multiplier`, so a
+# named-script-value multiplier can be told apart from the var form. The
+# fallback of 3 is a number no country pays by coincidence — a tooltip reading
+# -17.0% means the script value ran but could not see the variable, while
+# -7.5%-ish (for a country paying ~12.5pp) means it resolved.
+#
+# Nothing outside events/te_debug_monetary_events.txt may reference this.
+te_mon_rate_paid_multiplier = {
+	if = {
+		limit = { has_variable = te_rate_paid_applied }
+		value = var:te_rate_paid_applied
+	}
+	else = {
+		value = 3
+	}
+}

@@ -10604,7 +10604,7 @@ pm_shell_pernis_refinery = {
 	}
 	country_modifiers = {
 		workforce_scaled = {
-			country_loan_interest_rate_add = -0.01
+			country_credit_standing_add = -0.003
 			country_minting_mult = 0.05
 		}
 	}

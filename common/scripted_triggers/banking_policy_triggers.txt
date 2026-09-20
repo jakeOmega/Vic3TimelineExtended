@@ -8,24 +8,68 @@
 # Disable-side eligibility reuses the `banking_tool_*_active` family in
 # common/scripted_triggers/market_triggers.txt.
 
-banking_possible_cb_policy_rate_hike = {
-	custom_tooltip = {
-		text = BANKING_POINTS_2
-		modifier:country_banking_intervention_max_add >= 2
-	}
-	NOT = { je:je_banking_cycle = { has_modifier = banking_open_market_ops } }
-}
+# The "Raise Policy Rate" eligibility trigger used to sit above this one, and
+# OMO used to exclude itself while that tool was active. Both are gone with the
+# tool (monetary_policy_design.md §18).
 
+# Open market operations are FIAT AND DIGITAL ONLY, and within those two, THE
+# FLOOR TOOL (monetary_policy_design.md §5.1 and §11, and the §0.1 ruling of
+# 2026-09-20). Two separate rules, and the tooltip names them one at a time:
+#
+#   1. REGIME. Creating money to buy bonds is precisely what a promise to redeem
+#      the currency in metal forbids — the reserves walk out of the door. So
+#      commodity money, the gold standard and crypto can never run OMO, at any
+#      rate. The gold standard's own crisis tool is suspending convertibility,
+#      and that arrives in phase 3 (§12.3). The gate is
+#      country_can_create_unbacked_money_bool, granted by law_fiat_currency and
+#      law_digital_currency in common/laws/extra_laws.txt — a declarative
+#      modifier, so both laws advertise "Enables Open-Market Operations" on
+#      their own tooltip instead of the rule living only in this file.
+#
+#   2. THE FLOOR, for the two regimes that pass rule 1. A central bank that can
+#      still cut does not buy assets: cutting is cheaper, it is reversible, and
+#      it does the same job. The floor is the regime's own minimum, not a flat
+#      zero — 0 under fiat, -3 under digital, which has no cash to hoard and so
+#      three more points of cutting room. te_mon_floor_threshold derives both
+#      from country_policy_rate_floor_add rather than restating them.
+#
+# The floor line is wrapped in a trigger_if so a gold-standard player is told
+# about convertibility and is NOT also shown a red line about a fiat floor that
+# could never have applied. te_mon_has_dial stays in that branch because fiat
+# plus a command economy, or fiat after the national bank is repealed, is a
+# country with the regime and no dial to be at the bottom of (§4, §8).
+#
+# SCOPE. This runs in country scope from both surfaces — the scripted_button's
+# `possible` and the dashboard scripted GUI's `is_valid` (scope = country) — which
+# is why the points and lock checks read country modifiers directly.
+# var:te_policy_rate resolves against the same country.
+#
+# GUARDED on has_variable: te_policy_rate does not exist until a country's first
+# monthly monetary update, and an ungated `var:` read would resolve to 'none'.
+# Before that first pulse the tool is simply unavailable, which is the safe
+# answer. The guard lives inside te_mon_policy_rate_at_floor
+# (common/scripted_triggers/te_monetary_triggers.txt).
 banking_possible_cb_open_market_ops = {
 	modifier:country_can_use_open_market_ops_bool = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_4
 		modifier:country_banking_intervention_max_add >= 4
 	}
-	NOT = { je:je_banking_cycle = { has_modifier = banking_policy_rate_hike } }
 	custom_tooltip = {
 		text = banking_button_locked_by_law_tt
 		modifier:country_banking_lock_open_market_ops_bool = no
+	}
+	custom_tooltip = {
+		text = banking_omo_unbacked_money_tt
+		modifier:country_can_create_unbacked_money_bool = yes
+	}
+	trigger_if = {
+		limit = { modifier:country_can_create_unbacked_money_bool = yes }
+		custom_tooltip = {
+			text = banking_omo_rate_floor_tt
+			te_mon_has_dial = yes
+			te_mon_policy_rate_at_floor = yes
+		}
 	}
 }
 

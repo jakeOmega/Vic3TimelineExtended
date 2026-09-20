@@ -73,3 +73,132 @@ country_banking_lock_export_credit_bool    = { color = bad  boolean = yes }
 country_banking_lock_capital_controls_bool = { color = bad  boolean = yes }
 country_banking_lock_fx_swap_lines_bool    = { color = bad  boolean = yes }
 country_banking_lock_asset_relief_bool     = { color = bad  boolean = yes }
+
+# The REGIME gate on open-market operations (monetary_policy_design.md §5.1 and
+# the §0.1 ruling of 2026-09-20). Granted by law_fiat_currency and
+# law_digital_currency only: buying bonds with money the state simply makes is
+# exactly what a promise to redeem in metal forbids, so commodity money, the
+# gold standard and crypto can never run OMO. Read by
+# banking_possible_cb_open_market_ops (common/scripted_triggers/banking_policy_triggers.txt);
+# the two laws show it in their modifier tooltip as "Enables Open-Market Operations".
+country_can_create_unbacked_money_bool     = { color = good boolean = yes }
+
+# ============================================================================
+# Monetary policy — the two risk-premium tiers (monetary_policy_design.md §7.1)
+# ============================================================================
+# `rate paid = policy rate + risk premium`, and the premium is computed in two
+# tiers rather than one floored sum: a mature great power's standing sits well
+# below the floor, so a single floor would silently swallow a panic, every tool
+# and the whole debt-load term while their tooltips still promised "+2.0%".
+#
+#   te_premium_structural = max( floor , 100 x modifier:country_credit_standing_add )
+#   te_premium_cyclical   = 100 x modifier:country_risk_premium_add + computed terms
+#
+# Both carry vanilla's interest scale (0.01 = 1pp), so there is one unit
+# convention across the mod and te_monetary_monthly_update reads them back as
+# 100 x modifier:X. JE-scope grants still feed the country-scope `modifier:`
+# read — the same path banking_cycle_advance_variables already uses for
+# country_finance_momentum_monthly_add.
+
+# Structural — what the country *is*: capital-market access, rank, finance
+# techs, national-bank institution level, laissez-faire, gold / central-bank
+# credibility, company prosperity. Floored at 0.5pp (0.25pp under central bank
+# independence); standing beyond the floor is wasted by design.
+country_credit_standing_add = {
+	color = bad
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Cyclical — what is *happening*: cycle phases, banking tools, crash
+# interventions, event outcomes, bankruptcy, debt load, monetisation. Added
+# *after* the structural floor, so a crisis always bites.
+country_risk_premium_add = {
+	color = bad
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# ============================================================================
+# Monetary policy — the regime rules, carried on the laws that grant them
+# ============================================================================
+# Each of these replaces a rule that used to be a law check buried in script and
+# a sentence of localization restating it. Putting the number on the law means
+# the law's own tooltip states it, the engine renders the breakdown, and a later
+# law, technology or principle can move the same dial without anyone editing
+# te_monetary_effects.txt.
+#
+# Consumed ONLY by the named script values in
+# common/script_values/te_monetary_script_values.txt — te_mon_drift_step,
+# te_mon_target_min, te_mon_standing_floor and te_mon_forecast_error_bound.
+# Nothing reads `modifier:` on these anywhere else.
+
+# How much faster than the baseline third of a point a month the policy rate
+# closes on its target. +100% under a digital currency: an economy with no cash
+# to hold transmits a rate change in weeks rather than seasons.
+country_policy_rate_drift_speed_mult = {
+	color = good
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# The lowest policy rate the monetary regime allows, as a delta from zero.
+# -3% under a digital currency, which abolishes the cash that would otherwise
+# make a negative rate unenforceable. Vanilla's interest scale (0.01 = 1pp).
+country_policy_rate_floor_add = {
+	color = bad
+	percent = yes
+	decimals = 0
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# The lowest credit-standing premium lenders will offer, as a delta from the
+# 0.5pp baseline. -0.25% under central bank independence. This is the floor
+# itself, not a contribution to the premium — country_credit_standing_add is
+# what moves the premium.
+country_credit_standing_floor_add = {
+	color = bad
+	percent = yes
+	decimals = 2
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# How far the central bank's reading of what the economy can bear may stray from
+# the truth, as a delta from the +/-1.5pp baseline. -1.0% under central bank
+# independence: a bank nobody leans on reads its own economy better.
+#
+# This is a BOUND on hidden state, not the hidden state itself (§8's rule bars
+# printing te_neutral_error, not the width of the band it lives in), so it is
+# safe on a law tooltip.
+country_bank_forecast_error_add = {
+	color = bad
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Vanilla declares country_loan_interest_rate_add at decimals = 0, which rounds
+# the whole realistic-rate stack to whole percent in tooltips — a 3.5% Consols
+# rate would read "4%". Re-declare the modifier *type* at decimals = 1; every
+# other field is copied verbatim from vanilla
+# common/modifier_type_definitions/00_modifier_types.txt:662-669.
+# This REPLACEs a modifier type definition, not a vanilla database entity —
+# same precedent as mod_entity_modifier_types.txt:3486. Re-diff this block when
+# vanilla changes the type (docs/guides/vanilla_patch_runbook.md).
+REPLACE:country_loan_interest_rate_add = {
+	decimals = 1
+	color = bad
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}

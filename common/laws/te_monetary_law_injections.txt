@@ -1,0 +1,58 @@
+﻿# ============================================================================
+# Monetary Policy — vanilla law interest INJECTs (§7.5)
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §7.5, §16.1, §17.
+# Plan ruling R1 (docs/superpowers/plans/2026-09-19-monetary-policy-phase1.md).
+#
+# WHAT THIS FILE DOES
+# One law only. Vanilla's law_laissez_faire carries
+# country_loan_interest_rate_mult = -0.25, which multiplies the WHOLE interest
+# stack. The monetary system computes the rate itself and writes it through
+# te_monetary_rate_paid, so that mult is cancelled here with its exact inverse
+# and re-expressed as -0.5pp on country_credit_standing_add — the STRUCTURAL
+# premium tier, floored at 0.5pp (0.25pp under central bank independence).
+#
+#   law_laissez_faire   vanilla -0.25   cancel +0.25   premium -0.5pp
+#
+# A x20 conversion would make laissez-faire worth -5pp, which at realistic
+# rates is larger than the entire rate paid; §7.5 hand-sets it to -0.5pp, the
+# same order as the other structural terms.
+#
+# The other vanilla interest sources are DELIBERATELY LEFT ALONE in phase 1
+# (§7.5): IG traits, the amendment mults and adds, companies, the character
+# trait and vanilla event modifiers. They keep multiplying the finished stack,
+# which is a documented consequence, not an oversight.
+#
+# CONFIRMED ENGINE BEHAVIOUR — read before changing anything here (§17)
+# This block relies on a `modifier = { }` inside an `INJECT:` SUMMING with the
+# vanilla entity's own `modifier = { }`, key by key — the same behaviour
+# common/laws/sol_expectations_vanilla_injections.txt has shipped on since
+# April. Read in game by the owner on 2026-09-20: laissez-faire's -25% and the
+# cancelling +25% below are both gone from the interest tooltip, which closes
+# §17 checks 1 and 3. docs/guides/scripting_best_practices.md § INJECT.
+#
+# Recovery recipe, kept in case a future patch ever changes that. Under
+# LAST-WINS this block would be wrong twice over: the
+# cancel would ADD to vanilla's mult instead of zeroing it, and the injected
+# block would wipe the rest of law_laissez_faire's vanilla modifier (investment
+# pool efficiency, private construction allocation, government dividend
+# reinvestment, free charters, and the three privatisation/monopoly booleans).
+# The §17 fallback for laws is the same as for ranks: restate the law's full
+# modifier in the mod, minus the interest mult, plus the premium. Keeping this
+# one block in its own file makes that a one-file fix. Note that two other mod
+# files already INJECT law_laissez_faire (construction_system_law_injections.txt,
+# legislative_override_capacity.txt), so a last-wins engine would already be
+# wiping this law today, independently of this file.
+#
+# VANILLA DRIFT. The cancel value mirrors vanilla
+# common/laws/01_economic_system.txt as of the version in paths.local.json's
+# base_game_path. docs/guides/vanilla_patch_runbook.md carries the re-check
+# entry.
+# ============================================================================
+
+INJECT:law_laissez_faire = {
+	modifier = {
+		country_loan_interest_rate_mult = 0.25
+		country_credit_standing_add = -0.005
+	}
+}

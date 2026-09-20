@@ -38,7 +38,7 @@ docs/
 | [`systems/mod_systems.md`](systems/mod_systems.md) | All key mod systems: banking cycle, global warming, construction scaling, migration crowding, nuclear, colonial collapse, wonders, etc. | Understanding or modifying a mod system |
 | [`systems/journal_entry_systems.md`](systems/journal_entry_systems.md) | All 10+ custom journal-entry systems in detail | Working on or debugging a journal entry system |
 | [`systems/strategic_reserve_system.md`](systems/strategic_reserve_system.md) | Architecture and file layout of the Strategic Reserve journal-entry system | Adding goods to the SR; touching the SR JE / Hub building |
-| [`systems/monetary_policy_design.md`](systems/monetary_policy_design.md) | **DESIGN — not implemented.** Policy-rate dial, risk premium, inflation, currency-regime ladder, gold flows and an FX sketch for the banking JE; engine mapping, in-game verification checklist, four phases | Implementing or reviewing any phase of the monetary-policy rework; touching interest-rate modifiers |
+| [`systems/monetary_policy_design.md`](systems/monetary_policy_design.md) | **Phase 1 implemented, pending in-game verification; phases 2–4 design only.** Policy-rate dial, risk premium, inflation, currency-regime ladder, gold flows and an FX sketch for the banking JE; §0 holds what shipped, the deviations and the one in-game checklist | Implementing or reviewing any phase of the monetary-policy rework; touching interest-rate modifiers |
 
 ## Vanilla & Patch References — `vanilla/`
 

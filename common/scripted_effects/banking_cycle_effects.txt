@@ -1685,6 +1685,31 @@ banking_cycle_advance_variables = {
 		add = "modifier:country_finance_value_monthly_add"
 	}
 
+	# Monetary stance (monetary_policy_design.md §8, §16.3).
+	#
+	# A tight policy rate leans against the cycle and lets air out of the
+	# bubble; a loose one does the opposite. This is deliberately NOT a
+	# modifier: a stance modifier scaled by the gap would print
+	# -0.125 x (policy rate - r*) in its tooltip, and the hidden neutral rate
+	# could then be read off it to two decimals. The push therefore lands
+	# straight in the variables, and the player is told the stance BAND
+	# (banking_dash_momentum_tt, and the banded journal-entry modifier applied
+	# by banking_cycle_apply_stance_band) but never the number.
+	#
+	# Both script values are guarded and clamp the gap to +/-4, so a country
+	# whose monetary update has not run yet — or which has no policy dial at
+	# all — is pushed by exactly 0, and a gap one month old is tolerated by
+	# design (§16.3). Placed with the other monthly pushes and ahead of the
+	# clamps below, so the bubble term cannot leave the 0-100 range behind.
+	change_variable = {
+		name = finance_cycle_momentum
+		add = te_mon_stance_momentum_add
+	}
+	change_variable = {
+		name = bubble_pressure
+		add = te_mon_stance_bubble_add
+	}
+
 	# Random mean-reversion nudge: biased towards equilibrium
 	# Magnitude scales with country_banking_random_momentum_mult modifier
 	random_list = {
@@ -1997,6 +2022,81 @@ banking_cycle_apply_phase_modifiers = {
 		else_if = { limit = { var:finance_cycle_value < 75 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_expansion } } }
 		else_if = { limit = { var:finance_cycle_value < 88 } je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_boom } } }
 		else = { je:je_banking_cycle = { add_modifier = { name = financial_cycle_phase_frenzy } } }
+	}
+}
+
+# 4b. Apply the displayed monetary-stance band as a journal-entry modifier.
+#     (monetary_policy_design.md §8, §16.3.)
+#
+#     Five static modifiers, banking_stance_band_1..5, carry the investment-pool
+#     side of the stance: +0.04 / +0.02 / nothing / -0.02 / -0.04 on
+#     state_capitalists_investment_pool_contribution_add. Cheap money feeds the
+#     pool, dear money starves it. Exactly one of them is on the journal entry at
+#     any time, so the modifier list always NAMES the stance — which is the whole
+#     point: the band is the only window onto the hidden gap (§8), and it leaks
+#     nothing the band does not already show.
+#
+#     BAND 3 IS APPLIED EVEN THOUGH IT IS EMPTY. Vanilla does the same for the
+#     neutral member of its own banded families — tax_modifier_medium,
+#     government_wages_medium and infamy_reputable are all zero-field static
+#     modifiers the engine applies so the neutral step still has a name in the
+#     tooltip. Applying it also keeps the invariant above exactly true, and means
+#     every country with the journal entry but no policy dial (bankless, command
+#     economy, commodity money, crypto) reads "Monetary Stance: Neutral" rather
+#     than showing nothing at all — which is what §8 says they are.
+#
+#     DECIDED FROM VARIABLES, NEVER FROM has_modifier. add_modifier and
+#     remove_modifier results are not visible inside the effect block that issues
+#     them (scripting_best_practices.md, "Modifier Values Are NOT Recalculated
+#     Within a Single Effect Block"), so asking `has_modifier` here would read the
+#     state this effect is in the middle of changing. te_mon_stance_band_applied
+#     remembers which band was last put on instead. It initialises behind
+#     has_variable, is never removed, and 0 means "none applied yet".
+#
+#     THE FIRST RUN REMOVES ALL FIVE. je_banking_cycle is can_revolution_inherit,
+#     so the journal entry and its modifiers move to the successor tag while the
+#     country variables do not. A successor would otherwise start at the 0
+#     sentinel and add a second band on top of the inherited one. Removing all
+#     five once, on the pulse that creates the bookkeeping variable, closes that
+#     hole for the cost of five no-op removals per country per campaign.
+#
+#     A country without the journal entry never gets here: this is called from
+#     je_banking_cycle's own monthly pulse.
+banking_cycle_apply_stance_band = {
+	if = {
+		limit = { NOT = { has_variable = te_mon_stance_band_applied } }
+		set_variable = { name = te_mon_stance_band_applied value = 0 }
+		je:je_banking_cycle = { remove_modifier = banking_stance_band_1 }
+		je:je_banking_cycle = { remove_modifier = banking_stance_band_2 }
+		je:je_banking_cycle = { remove_modifier = banking_stance_band_3 }
+		je:je_banking_cycle = { remove_modifier = banking_stance_band_4 }
+		je:je_banking_cycle = { remove_modifier = banking_stance_band_5 }
+	}
+
+	if = {
+		limit = {
+			# te_mon_stance_band is written by te_monetary_update_stance
+			# (common/scripted_effects/te_monetary_effects.txt); a country whose
+			# monetary update has not run yet simply keeps whatever it has.
+			has_variable = te_mon_stance_band
+			NOT = { var:te_mon_stance_band_applied = var:te_mon_stance_band }
+		}
+
+		# Take off the band we put on last month.
+		if = { limit = { var:te_mon_stance_band_applied = 1 } je:je_banking_cycle = { remove_modifier = banking_stance_band_1 } }
+		else_if = { limit = { var:te_mon_stance_band_applied = 2 } je:je_banking_cycle = { remove_modifier = banking_stance_band_2 } }
+		else_if = { limit = { var:te_mon_stance_band_applied = 3 } je:je_banking_cycle = { remove_modifier = banking_stance_band_3 } }
+		else_if = { limit = { var:te_mon_stance_band_applied = 4 } je:je_banking_cycle = { remove_modifier = banking_stance_band_4 } }
+		else_if = { limit = { var:te_mon_stance_band_applied = 5 } je:je_banking_cycle = { remove_modifier = banking_stance_band_5 } }
+
+		# Put on this month's.
+		if = { limit = { var:te_mon_stance_band = 1 } je:je_banking_cycle = { add_modifier = { name = banking_stance_band_1 } } }
+		else_if = { limit = { var:te_mon_stance_band = 2 } je:je_banking_cycle = { add_modifier = { name = banking_stance_band_2 } } }
+		else_if = { limit = { var:te_mon_stance_band = 3 } je:je_banking_cycle = { add_modifier = { name = banking_stance_band_3 } } }
+		else_if = { limit = { var:te_mon_stance_band = 4 } je:je_banking_cycle = { add_modifier = { name = banking_stance_band_4 } } }
+		else_if = { limit = { var:te_mon_stance_band = 5 } je:je_banking_cycle = { add_modifier = { name = banking_stance_band_5 } } }
+
+		set_variable = { name = te_mon_stance_band_applied value = var:te_mon_stance_band }
 	}
 }
 

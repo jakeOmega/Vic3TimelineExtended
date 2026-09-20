@@ -1,0 +1,247 @@
+﻿# ============================================================================
+# Monetary Policy — on-action wiring
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §16.1-16.2.
+#
+# Almost everything here feeds one effect, te_monetary_monthly_update
+# (common/scripted_effects/te_monetary_effects.txt), which is the system's
+# single owner: no other file writes te_policy_rate, te_rate_paid_pts or the
+# interest modifier, and no step of it is ever called in isolation — see
+# the contract comment on te_monetary_monthly_update.
+#
+# ROOT MATTERS AT EVERY ENTRY POINT. The update's last step applies its modifier
+# with `multiplier = var:te_rate_paid_applied`, and the engine resolves a
+# `multiplier =` expression against ROOT rather than against the scope the effect
+# is running in. So a hook whose ROOT is the country being updated calls the
+# effect directly; a hook whose ROOT is `none` (game start) or somebody else
+# (the six country-creation hooks, where ROOT is the parent) dispatches
+# `te_monetary_internal.1` instead — a hidden country event whose ROOT is the
+# country it fires on (events/te_monetary_events.txt). Each entry point still
+# causes exactly ONE update, so the effect's non-idempotent steps never run
+# twice. Every claim about a hook's ROOT below cites the engine's own
+# docs/on_actions.log.
+#
+# NOT GATED ON `banking_system_enabled` (§16.1). Vanilla's flat 20% base rate is
+# cancelled unconditionally, in INJECT:base_values, and this is what replaces it
+# with the mod's own number — so it has to run even with the banking system
+# switched off, or a rule-off game would have every country borrowing free.
+# ============================================================================
+
+
+# ----------------------------------------------------------------------------
+# THE WORLD REFERENCE RATE — once a month, for everybody
+# ----------------------------------------------------------------------------
+# te_mon_era_base costs two any_country scans, so it is evaluated once a month
+# into a global variable instead of once per country per month. Expected scope
+# of on_monthly_pulse is `none`; the effect enters country scope itself.
+on_monthly_pulse = {
+	on_actions = {
+		te_monetary_world_monthly_on_action
+	}
+}
+
+te_monetary_world_monthly_on_action = {
+	effect = {
+		te_monetary_refresh_world_era_base = yes
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# THE MONTHLY COUNTRY UPDATE
+# ----------------------------------------------------------------------------
+# Root = Country ("Expected Scope: country", docs/on_actions.log:1901), so step
+# 9's `multiplier = var:...` resolves against the country being updated and the
+# call is made directly, with no dispatch event. This is also the hook that
+# heals anything applied from a root-less context — see the te_rate_paid_rooted
+# marker in step 9.
+on_monthly_pulse_country = {
+	on_actions = {
+		te_monetary_monthly_on_action
+	}
+}
+
+te_monetary_monthly_on_action = {
+	effect = {
+		te_monetary_monthly_update = yes
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# THE YEARLY GDP SNAPSHOT
+# ----------------------------------------------------------------------------
+# The neutral rate's growth term compares this year's GDP with last year's, so
+# the snapshot runs on its own yearly cadence and the monthly update just reads
+# the cached term (§8).
+#
+# Root = Country
+on_yearly_pulse_country = {
+	on_actions = {
+		te_monetary_yearly_on_action
+	}
+}
+
+te_monetary_yearly_on_action = {
+	effect = {
+		te_monetary_yearly_growth_snapshot = yes
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# GAME START
+# ----------------------------------------------------------------------------
+# The cancel-INJECTs apply on day one, but te_monetary_rate_paid would not exist
+# until a country's first monthly pulse. Several tags start in debt, and with
+# vanilla's flat base already cancelled they would borrow free for that first
+# month instead of paying their own rate (§16.1).
+#
+# ROOT IS `none` HERE. The engine declares this on-action's expected scope as
+# `none` (docs/on_actions.log:341; vanilla 00_code_on_actions.txt:3-5 spells it
+# out: "No root scope set"), and `every_country` changes THIS, not ROOT. Step 9
+# of the update writes its modifier with `multiplier = var:te_rate_paid_applied`,
+# which the engine resolves against ROOT — so calling the update directly from
+# here applied every country's rate at a multiplier of 1.0. Proven in-game
+# 2026-09-19; see the header of events/te_monetary_events.txt and
+# scripting_best_practices.md § "Scope Chain Issues with add_modifier + Script
+# Values". The update therefore runs inside a country event, whose ROOT is the
+# country it fires on.
+#
+# The world reference rate is refreshed first so every country's step 0 reads a
+# populated global.
+#
+# Event timing at game start: the mod's proven precedent for fanning an event
+# out to every country at game start is `GLOBAL = { every_country = {
+# trigger_event = ... } }` in common/history/te_construction_market_global.txt,
+# which runs with no delay and has its effect visible on day one. Vanilla ships
+# no trigger_event from on_game_started to compare against (its own block is
+# empty, and on_game_started_after_lobby uses only direct effects), so the
+# no-delay form here is the reasonable reading rather than a proven one. If the
+# day-one budget tooltip ever shows no rate at all, move this fan-out to a
+# GLOBAL history file on that precedent — the self-healing marker in step 9
+# bounds the damage to the first monthly pulse either way.
+on_game_started = {
+	on_actions = {
+		te_monetary_on_game_started
+	}
+}
+
+te_monetary_on_game_started = {
+	effect = {
+		te_monetary_refresh_world_era_base = yes
+		every_country = {
+			trigger_event = {
+				id = te_monetary_internal.1
+			}
+		}
+	}
+}
+
+
+# ============================================================================
+# COUNTRY CREATION
+# ============================================================================
+# A newly created tag has no rate modifier at all, so until its first monthly
+# pulse it borrows at 0% — exactly when the player is looking at it (§16.1),
+# since the flat base is already cancelled in INJECT:base_values. Every hook
+# below therefore runs the full update on the new country immediately.
+#
+# Scope note: the four `released_as` hooks and the two uprising hooks put the
+# NEW country in scope:target and the parent in Root; on_country_formed puts
+# the new country in Root. Idiom copied from
+# common/on_actions/te_construction_market_on_actions.txt:80-164.
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_independent = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_own_subject = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_overlord_subject = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Root = Releasing Country
+# scope:target = Released Country
+on_country_released_as_company_subject = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Root = Country
+# scope:target = Uprising country
+on_revolution_start = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Root = Country
+# scope:target = Uprising country
+on_secession_start = {
+	on_actions = {
+		te_monetary_on_country_released
+	}
+}
+
+# Shared by all six. ONLY the new country is updated. Root is the parent — the
+# releasing country, or the one the uprising is breaking away from (vanilla
+# documents this at common/on_actions/00_code_on_actions.txt:3634, :5143, :5510)
+# — and the parent already pulses monthly like everyone else. Running the update
+# on it here would be a second non-idempotent call in the same month: it would
+# drift the parent's policy rate an extra third of a point toward its target and
+# draw both hidden random walks twice. The parent's GDP, debt load and rank do
+# move when it loses states, but the very next monthly pulse prices that in; a
+# one-month lag is the correct cost, a double pulse is not.
+#
+# THE UPDATE IS DISPATCHED, NOT CALLED. All six of these on-actions declare
+# "Expected Scope: none" (docs/on_actions.log:503, :893, :1043, :1607, :1685,
+# :2081) and leave the PARENT in ROOT. Step 9's
+# `multiplier = var:te_rate_paid_applied` is resolved against ROOT, so a bare
+# `scope:target = { te_monetary_monthly_update = yes }` would have stamped the
+# parent's rate onto the newly created tag — the same class of bug as the
+# game-start one above, with a wrong number instead of a 1.0. The country event
+# re-roots on the country it fires on. See events/te_monetary_events.txt.
+te_monetary_on_country_released = {
+	effect = {
+		scope:target ?= {
+			trigger_event = {
+				id = te_monetary_internal.1
+			}
+		}
+	}
+}
+
+# Root = Country (the newly formed country — the engine declares "Expected
+# Scope: country" for this one, docs/on_actions.log:1037, and vanilla's own
+# block tests `c:LAO ?= ROOT`, 00_code_on_actions.txt:3898-3905). ROOT is the new
+# tag here, not a parent, so the bare call is correct: step 9's multiplier
+# resolves against the country being updated, there is nothing to double-pulse,
+# and no dispatch event is needed.
+on_country_formed = {
+	on_actions = {
+		te_monetary_on_country_formed
+	}
+}
+
+te_monetary_on_country_formed = {
+	effect = {
+		te_monetary_monthly_update = yes
+	}
+}

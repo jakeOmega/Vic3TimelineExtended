@@ -658,7 +658,7 @@ te_trade_center_chill = {
 # ----- Extra-law system-specific -----
 finreg_interest_rate_hike = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
-	country_loan_interest_rate_add = 0.01
+	country_risk_premium_add = 0.01
 }
 finreg_banking_stability = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds

@@ -5,22 +5,9 @@
 # dashboard scripted GUI call these, so the cost and the applied modifier cannot
 # drift apart between the two surfaces.
 
-banking_effect_cb_policy_rate_hike = {
-	te_history_record_banking_marker = { MARK = on_cb_policy_rate_hike }
-	# Spend 2 points (via the modifier) and cool the cycle
-	je:je_banking_cycle = { add_modifier = { name = banking_policy_rate_hike } }
-	add_radicals = {
-		value = banking_medium_radicals_value
-	}
-}
-
-banking_effect_cb_disable_policy_rate_hike = {
-	te_history_record_banking_marker = { MARK = off_cb_policy_rate_hike }
-	je:je_banking_cycle = { remove_modifier = banking_policy_rate_hike }
-	add_loyalists = {
-		value = banking_small_radicals_value
-	}
-}
+# The "Raise Policy Rate" pair used to open this file. It is deleted
+# (monetary_policy_design.md §18): the policy rate is a country variable the
+# player or the delegated central bank sets directly, not an on/off intervention.
 
 banking_effect_cb_open_market_ops = {
 	te_history_record_banking_marker = { MARK = on_cb_open_market_ops }

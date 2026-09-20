@@ -67,3 +67,235 @@ banking_dash_bubble_band = {
 		localization_key = banking_dash_bubble_band_severe
 	}
 }
+
+# ----------------------------------------------------------------------------
+# Monetary stance band (monetary_policy_design.md §8)
+# ----------------------------------------------------------------------------
+# Returns the NAME of the stance band and nothing else — no gap, no rate, no
+# arithmetic. The gap behind the band is hidden state (§8, "The rule"): what the
+# player chooses is shown exactly, what the economy is doing is banded. This is
+# the only thing allowed to render any part of te_mon_stance_gap.
+#
+# Deliberately named generically rather than banking_dash_*: the banking
+# journal entry's momentum tooltip is its first consumer, and the monetary
+# dashboard's own stance row is meant to call the same block rather than
+# duplicate the ladder.
+#
+# te_mon_stance_band is written by te_monetary_update_stance
+# (common/scripted_effects/te_monetary_effects.txt) and is 3 for every country
+# without a policy dial, which is why bankless and command economies read
+# Neutral here. The has_variable branch covers a country whose first monthly
+# monetary update has not run yet.
+te_mon_stance_band_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_stance_band } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 1 }
+		localization_key = banking_dash_stance_band_very_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 2 }
+		localization_key = banking_dash_stance_band_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 3 }
+		localization_key = banking_dash_stance_band_neutral
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 4 }
+		localization_key = banking_dash_stance_band_tight
+	}
+	text = {
+		localization_key = banking_dash_stance_band_very_tight
+	}
+}
+
+# ----------------------------------------------------------------------------
+# What the band is WORTH, in the cycle's own units (monetary_policy_design.md §8)
+# ----------------------------------------------------------------------------
+# "Loose" on its own does not tell a player whether it means a tenth of a point
+# of momentum or ten. These two blocks give each band its order of magnitude
+# without giving up the gap.
+#
+# WHERE THE NUMBERS COME FROM. The band is set from the estimated gap
+# (te_monetary_update_stance): band 1 at or below -2, band 2 above that to
+# -0.75, band 3 inside +/-0.75, band 4 up to 2, band 5 at or above 2. The push
+# is te_mon_stance_momentum_add (-0.125 per pp) and te_mon_stance_bubble_add
+# (-0.75 per pp), both on the gap CLAMPED to +/-4
+# (te_mon_stance_gap_clamped). So each band's range is its threshold pair times
+# those two rates, and band 1 / band 5 run out at the clamp:
+#
+#   band   gap            momentum/month      bubble/month
+#   1      <= -2 (to -4)  +0.25 .. +0.5       +1.5 .. +3
+#   2      -2 .. -0.75    +0.1  .. +0.25      +0.5 .. +1.5
+#   3      +/-0.75        under 0.1 either way   under 0.5 either way
+#   4      0.75 .. 2      -0.1  .. -0.25      -0.5 .. -1.5
+#   5      >= 2 (to 4)    -0.25 .. -0.5       -1.5 .. -3
+#
+# THESE ARE NOT EXACT AND MUST NOT READ AS IF THEY WERE. The band is drawn from
+# the bank's ESTIMATE of the gap and the push from the TRUE gap, and the two
+# differ by the forecasting error (te_mon_forecast_error_bound, +/-1.5pp, or
+# +/-0.5pp under central bank independence). Every consumer says so once, which
+# is why each phrase here is hedged with "roughly" and never carries a decimal
+# the player could difference against.
+#
+# If §21's -0.125 / -0.75 rates or the band thresholds are ever retuned, the
+# table above and the five pairs of phrases below move with them — that is the
+# cost of stating a magnitude at all, and it is cheaper than a player who
+# cannot tell a lever from a label.
+te_mon_stance_momentum_effect = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_stance_band } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 1 }
+		localization_key = banking_dash_stance_mom_very_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 2 }
+		localization_key = banking_dash_stance_mom_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 3 }
+		localization_key = banking_dash_stance_mom_neutral
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 4 }
+		localization_key = banking_dash_stance_mom_tight
+	}
+	text = {
+		localization_key = banking_dash_stance_mom_very_tight
+	}
+}
+
+te_mon_stance_bubble_effect = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_stance_band } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 1 }
+		localization_key = banking_dash_stance_bub_very_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 2 }
+		localization_key = banking_dash_stance_bub_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 3 }
+		localization_key = banking_dash_stance_bub_neutral
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 4 }
+		localization_key = banking_dash_stance_bub_tight
+	}
+	text = {
+		localization_key = banking_dash_stance_bub_very_tight
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Monetary dashboard — the three state readouts (monetary_policy_design.md §3)
+# ----------------------------------------------------------------------------
+# Each returns a NAME, so the .gui never compares a number and no threshold or
+# code value is copied out of script (gui_modding_guide.md gotcha 23). All three
+# read variables owned by te_monetary_monthly_update
+# (common/scripted_effects/te_monetary_effects.txt); the has_variable branch
+# covers a country whose first monthly monetary update has not run yet.
+#
+# None of them touches hidden state: delegation, the mandate and the monetary
+# regime are all things the player chose or can read off their own law list.
+
+# Who is holding the dial (§5.2, §6). Central bank independence is tested first
+# because it outranks the toggle: a CBI country's te_mon_delegated is whatever
+# it was before the law passed, and the law binds the target regardless.
+te_mon_delegation_state = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_delegated } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { te_mon_is_cbi = yes }
+		localization_key = banking_dash_mon_delegation_bound
+	}
+	text = {
+		trigger = { var:te_mon_delegated = 1 }
+		localization_key = banking_dash_mon_delegation_delegated
+	}
+	text = {
+		localization_key = banking_dash_mon_delegation_direct
+	}
+}
+
+# Which rule a delegated bank follows (§6). Peg defence can only be in force on
+# a gold standard — te_monetary_update_target falls a country that leaves gold
+# back to price stability on its next pulse — so no branch here has to check the
+# currency law.
+te_mon_mandate_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_mandate } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:te_mon_mandate >= 3 }
+		localization_key = banking_dash_mon_mandate_peg
+	}
+	text = {
+		trigger = { var:te_mon_mandate = 2 }
+		localization_key = banking_dash_mon_mandate_growth
+	}
+	text = {
+		localization_key = banking_dash_mon_mandate_price
+	}
+}
+
+# Why this country has no policy dial (§4, §5.2, §5.3). One sentence per cause,
+# because "you cannot set a rate" without a reason is the kind of dead end the
+# dashboard exists to avoid. The order matches te_monetary_set_regime's: a
+# command economy administers the rate whatever its currency law says, and a
+# country with no national bank has no dial whatever its currency law says.
+#
+# The last branch is the fall-through for a country that DOES hold the dial; the
+# widget hides this line for those, so it should never be seen.
+te_mon_no_dial_reason = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_is_command = yes }
+		localization_key = banking_dash_mon_why_command
+	}
+	text = {
+		trigger = { NOT = { has_law_or_variant = law_type:law_national_bank } }
+		localization_key = banking_dash_mon_why_no_bank
+	}
+	text = {
+		trigger = { has_law_or_variant = law_type:law_commodity_money }
+		localization_key = banking_dash_mon_why_commodity
+	}
+	text = {
+		trigger = { has_law_or_variant = law_type:law_decentralized_cryptocurrency }
+		localization_key = banking_dash_mon_why_crypto
+	}
+	text = {
+		localization_key = banking_dash_mon_why_has_dial
+	}
+}

@@ -190,6 +190,30 @@ Walk the validator's reported unknowns. For each:
 
 After each batch of edits: `curl -X POST http://localhost:8950/reload?engine_only=true` then `curl http://localhost:8950/validate/engine-coverage` to verify removed-modifier count drops.
 
+## 6b. Vanilla constants the mod mirrors (silent-drift check)
+
+A separate class from step 6's breakages: values the mod **copies or cancels** rather than references. Vanilla changing one produces **no error, no log line and no validator finding** — the mod keeps loading and quietly computes the wrong number. Re-read each row against the new vanilla on every bump.
+
+All of these come from the monetary-policy system (`docs/systems/mod_systems.md` § Banking Cycle → **Monetary Policy (phase 1)**; spec `docs/systems/monetary_policy_design.md` §7, §16.1). It computes the government's borrowing rate itself, so it cancels vanilla's own interest sources — each on the entity that grants it — and re-expresses them on its two premium types.
+
+| Vanilla (under `$BG/game/`) | Value the mod assumes | Mod side | If vanilla changes it |
+|---|---|---|---|
+| `common/static_modifiers/00_code_static_modifiers.txt:12` — `base_values` | `country_loan_interest_rate_add = 0.2` | `country_loan_interest_rate_add = -0.2` inside the mod's own `INJECT:base_values` block in `common/static_modifiers/extra_modifiers.txt` | the cancel stops zeroing the flat base rate; **every** country's rate paid is off by the difference |
+| `common/country_ranks/00_country_ranks.txt` — six `country_loan_interest_rate_mult` (`great_power` −0.5 :44, `major_power` −0.25 :82, `insignificant_power` +0.25 :140, `unrecognized_major_power` +0.5 :175, `unrecognized_regional_power` +0.75 :210, `unrecognized_power` +1.0 :242; `minor_power` and `decentralized_power` carry none) | each cancelled with its exact inverse | `common/country_ranks/te_monetary_rank_injections.txt` | a changed value leaves a residual multiplier on the *whole* stack for that rank; a **new** rank mult is not cancelled at all |
+| `common/laws/01_economic_system.txt:477` — `law_laissez_faire` | `country_loan_interest_rate_mult = -0.25` | `common/laws/te_monetary_law_injections.txt` (+0.25 cancel, −0.5pp premium) | same residual-multiplier failure, on one law |
+| `common/technology/technologies/30_society.txt` — five finance techs at `country_loan_interest_rate_add = -0.02` (`banking` :209, `central_banking` :599, `mutual_funds` :1226, `international_exchange_standards` :1473, `modern_financial_instruments` :1647) | each cancelled with its exact inverse, `+0.02` | `common/technology/technologies/te_monetary_tech_injections.txt` | a changed value leaves a residual flat `_add` on every country holding that tech; a **sixth** finance tech is not cancelled at all, and a dropped one leaves the mod adding 2pp. Watch `country_minting_mult = 0.1`, which shares the vanilla `modifier = { }` block: it is the in-game tell that the INJECT is summing rather than overwriting |
+| `common/modifier_type_definitions/00_modifier_types.txt:662-669` — the `country_loan_interest_rate_add` **type definition** (`decimals=0 color=bad percent=yes game_data={ai_value=0}`) | every field but `decimals` copied verbatim | `REPLACE:country_loan_interest_rate_add` in `common/modifier_type_definitions/banking_cycle_modifier_types.txt`, at `decimals = 1` | a `REPLACE` restates the whole definition, so any field vanilla adds or retunes is silently dropped by the mod's copy |
+
+```bash
+BG="$(python3 -c 'import path_constants; print(path_constants.base_game_path)')/game"
+grep -n country_loan_interest_rate_add "$BG/common/static_modifiers/00_code_static_modifiers.txt"
+grep -n country_loan_interest_rate_mult "$BG/common/country_ranks/00_country_ranks.txt" "$BG/common/laws/01_economic_system.txt"
+grep -rn country_loan_interest_rate_add "$BG/common/technology/technologies/"
+grep -n -A8 '^country_loan_interest_rate_add=' "$BG/common/modifier_type_definitions/00_modifier_types.txt"
+```
+
+The three INJECT files carry the same warning in their own headers, so a fix made here should be echoed there (and vice versa). All three cancels rest on INJECT blocks summing with vanilla's, which is confirmed in game for every shape the mod uses (ranks and techs 2026-09-19, laws and flat keys 2026-09-20); see `scripting_best_practices.md` § INJECT.
+
 ## 7. Special-case: combat units / ship types
 
 Patches sometimes add new entity TYPES (1.13 added `ship_types/`, replacing the old `combat_unit_types` naval section). The migration is not a rename — it's a system replacement. Strip the old entries first to make the mod load, then port the entries to the new framework as a follow-up.

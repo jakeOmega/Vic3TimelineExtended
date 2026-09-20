@@ -1,16 +1,247 @@
 # Monetary Policy — Design
 
-> **STATUS: DESIGN — not implemented (phase 1 next).** Written 2026-09-19 from a design
+> **STATUS: PHASE 1 IMPLEMENTED ON BRANCH, PENDING IN-GAME VERIFICATION.** Phases 2–4 are
+> still design only. Written 2026-09-19 from a design
 > interview with the mod owner plus an engine-feasibility pass, then revised the same day
 > after two independent reviews on PR #329 (one with a monthly simulation of §9–§10). Every number is a starting
 > point for tuning, collected in [§21](#21-tuning-constants). Items marked **(proposed)**
 > were not explicitly decided by the owner. Items marked **VERIFY IN-GAME** cannot be
-> proven from files. When phase 1 ships, fold the implemented parts into
-> `mod_systems.md` / `journal_entry_systems.md` and keep this file as the spec for the
-> remaining phases.
+> proven from files.
+>
+> **Read [§0](#0-phase-1-as-shipped--deviations-and-open-checks) before anything else if you
+> are touching the implementation**: what phase 1 actually shipped, where it deviates from the
+> design sections below, what was deferred, and the single in-game verification checklist.
+> Sections 1–22 remain the *design*, not a description of the code — where they disagree with
+> §0, §0 is what shipped. The implemented parts are folded into `mod_systems.md` § Banking
+> Cycle → **Monetary Policy (phase 1)** and `journal_entry_systems.md` § Banking Cycle; this
+> file stays the spec for the remaining phases.
 
 This extends the Banking Cycle (`je_banking_cycle` — see `mod_systems.md` § Banking Cycle
 and `journal_entry_systems.md`). Read those first.
+
+---
+
+## 0. Phase 1 as shipped — deviations and open checks
+
+Phase 1 (§19 row 1) was implemented on `feat/monetary-policy-phase1` over seven tasks on
+2026-09-19. **Nothing below has been seen in a running game.** Every claim in this section is
+verified against the files; every claim about *behaviour* is not.
+
+File inventory and the architectural rules (variable contract, single owner, hidden state,
+the cancel-INJECT assumption, the migration window): `mod_systems.md` § Banking Cycle →
+**Monetary Policy (phase 1)**. This section carries only what the design sections below get
+wrong or leave open.
+
+### 0.1 Rulings — deviations from, or bindings on, the sections below
+
+| # | Ruling | Why | Cost if wrong |
+|---|---|---|---|
+| **R1** | Vanilla **techs**, **ranks** and `law_laissez_faire` all use cancel-INJECTs, isolated one file each (`te_monetary_tech_injections.txt`, `te_monetary_rank_injections.txt`, `te_monetary_law_injections.txt`) | the owner confirms tech INJECTs sum in this mod (see R3); ranks and laissez-faire rode the same assumption and were read in game too — all three sum (§17 checks 1–4, answered 2026-09-19/20) | if INJECT is last-wins, the rates are wrong until each file becomes a `REPLACE:` — one file each |
+| **R2** | Implemented: the §8 neutral-rate formula, the §7.6 debt-load premium, and §5.2's state-owned-banking **premium only** (+0.5 structural, no CBI bonuses). Deferred: §0.2 | the owner had not decided the `(proposed)` items | rework of small terms |
+| **R3** | **Vanilla finance techs: cancel-INJECT.** Owner decision 2026-09-19 (PR #335), overriding the plan's script-compensation fallback. Each of the five takes `INJECT:<tech> = { modifier = { country_loan_interest_rate_add = 0.02 } }` in `common/technology/technologies/te_monetary_tech_injections.txt`; `te_mon_vanilla_tech_offset` and the `on_acquired_technology` hook that served it are **deleted**, and `te_rate_paid_applied` now equals `te_rate_paid_pts` | a tech tooltip promising "−2% interest" the mod silently takes back elsewhere is misleading; the owner reports tech INJECTs sum in this mod, so the `country_minting_mult = 0.1` in the same vanilla block survives | if INJECT is last-wins, the five techs make borrowing 2pp **dearer** and lose their minting bonus — visible on the tech tooltip, and a one-file `REPLACE:` fix |
+| | **`te_mon_era_base` is a WORLD quantity**, not per-country: 3.0, −0.5 once any great power holds `macroeconomics`, −0.5 again for `globalization` | the spec calls this the world / reference rate in §7.4, §12.1 and §21, and **no era trigger or era detector exists** (see `scripting_best_practices.md` § "There Is No 'Current Era' Trigger") | five-line swap inside `te_mon_era_base` to per-country techs |
+| | The stance band is computed from `gap − error`, not `gap + error` | §8 binds: the band and the mandates both use `neutral + error` as r̂\*, so the estimated gap is `policy − (neutral + error)`. Statistically identical, coherent with the mandates | one character |
+| | §5.3's cooperative-ownership **−0.5pp on the neutral rate is implemented** | the spec's term binds over a task brief that omitted it | — |
+| | `law_gold_standard` carries `country_credit_standing_add = -0.01` and `law_central_bank_independence` `-0.005` (§5.1/§5.2 credibility, §21) | phase-1 structural terms the implementation plan had omitted | without them Britain 1836 pays 5.0% |
+| | **Britain 1836 lands at 4.0%, not §7.4's 3.5%** | §7.4 assumes `institution_national_bank` at level 2; GBR actually starts at level 0, so the −0.6 institution term arrives only once it invests. Inside the 0.5pp exit tolerance, and it converges on 3.5% over the first years | — |
+| | The two hidden random walks are drawn **only** for countries with a dial | ~1,330 of ~1,400 `random_list` draws a month were pure waste — a no-dial country's gap is forced to 0 anyway | a no-dial country's hidden state *freezes* rather than decaying, and resumes from a stale walk if it later enacts a national bank |
+| | OMO's floor under **digital currency is −3**, not 0 (`te_mon_policy_rate_at_floor`: `<= -2.99` under `law_digital_currency`, `<= 0.01` otherwise) | §11's prose ("QE arrives later") is the intent; its literal `0.01` formula was written for fiat | digital gets QE at 0 like fiat — one-line revert |
+| | **OMO is fiat/digital only — owner decision 2026-09-20.** Binds over §11's `possible` bullet, which states the floor test and no regime test: `banking_possible_cb_open_market_ops` also requires `country_can_create_unbacked_money_bool`, a declarative bool granted by `law_fiat_currency` and `law_digital_currency` only. The floor test is wrapped in a `trigger_if` on that bool, so exactly one cause is reported per case (`banking_omo_unbacked_money_tt` off-regime, `banking_omo_rate_floor_tt` on it). The digital −3 ruling above **stands**, and `te_mon_floor_threshold` lost its `max = 0`: that clamp existed only to keep a gold band floor from counting as the floor, and gold can no longer reach the value | §5.1's ladder already says commodity money and crypto have "no QE" and gold's crisis tool is suspending convertibility (§12.3). Creating money to buy bonds is what a convertibility promise forbids. Gold was excluded only *accidentally*, by a `max = 0` and a 1pp band floor, and would have gained OMO for free the moment the reference rate reached 2.0 | a gold standard runs QE without giving up convertibility — the regime ladder's central tradeoff stops biting. One `custom_tooltip` and one law modifier to revert |
+| | The dashboard's rate-paid row uses **`GetPlayer.GetYearlyInterestRate`**, not §17 check 6's `JournalEntry.GetCountry.…` form | `GetPlayer.` is the only form vanilla ships; the panel only ever renders for its owner, so both roots name the same country | **§17 check 6 stays untested** — a later phase needing the figure where `GetPlayer` is wrong must test the chain then |
+| | `banking_policy_rate_hike`'s loc keys are **kept** while the modifier stays defined | §18's deletion list and its save-migration paragraph conflict; every defined modifier needs loc | they come out with the modifier next release (checklist in `legacy_modifier_cleanup.txt`) |
+| | §7.5 says "Banking event outcomes (14)"; there are **13** | enumerated from the files; the stated −0.10…+0.20 range matches exactly, so it is a spec miscount, not a missed site | corrected in §7.5 |
+| | **No step of the update has a second entry point**, as §16.2's ordering implies. An earlier phase-1 revision ran step 9 alone from `on_acquired_technology`; R3's cancel-INJECTs removed the reason for it and the hook is gone | the hook existed only to stop a vanilla finance tech's −2pp landing a month before the script compensation for it. The engine now cancels in the same instant | a second entry point reintroduced without a reason of the same kind risks the non-idempotent steps being called the same way |
+| | **`bubble_pressure` must never be printed to a decimal on any surface** | §8 argues the cycle's random monthly nudges mask the stance term — true for momentum and cycle value, which `banking_cycle_advance_variables`' `random_list` nudges, but **bubble has no random term**. `banking_display_bubble_monthly_add` is exactly `modifier:country_bubble_pressure_monthly_add`, so Δbubble minus it is the stance push alone: `−0.75 × te_mon_stance_gap_clamped`, which inverts to the gap (and so to r\*) anywhere inside the ±4 clamp and off bubble's own 0/100 bounds — the whole stance-band range | the hidden-state rule (§8) fails through the banking panel, not through anything monetary |
+
+### 0.2 Deferred (named in the design, deliberately not shipped)
+
+- **CBI's 12-month mandate-change delay** (§6, `(proposed)`).
+- **§5.1's minting axis.**
+- **France's commodity-money dial** (§5.1).
+- **Estimation error shrinking with finance techs** (§6) — the spec gives no magnitude. The
+  error is a bounded walk at ±1.5pp (±0.5pp under CBI), re-bounded every month, so enacting
+  independence narrows an already-wide error on the next pulse.
+- Everything in §19 rows 2–4 (inflation, QE costs, world rate, gold flows, FX), plus the
+  §13 stance politics the deleted rate hike's `interest_group_ig_industrialists_approval_add`
+  was supposed to become.
+
+Smaller known roughnesses, all judged acceptable for a first pass: the era proxy is
+non-monotonic if a great power holds `globalization` without `macroeconomics`;
+`te_mon_gdp_last_year` is seeded at game start, so the first year's growth term reads ≈ −0.3
+once; `banking_stance_band_3` is an empty modifier with no icon (the offset that used to read
+"−20.0%" beside the rate it cancels is gone — the cancel moved into `INJECT:base_values`);
+`pm_shell_pernis_refinery`'s structural term is `workforce_scaled`, so §7.5's "−0.3" is only
+true at one building level; `cb_fx_support`'s `banking_stance_is_tight` easing weight may be
+sign-wrong and belongs to the phase-3 FX pass; OMO's `ai_chance` has no recession-only term
+at the floor; the band swap does not self-heal if a JE's modifiers are lost while
+`te_mon_stance_band_applied` persists.
+
+One asymmetry worth naming, because it looks like a bug and is not: the AI's **tools** are
+better informed than the AI's **central bank**. `banking_stance_is_tight` reads
+`te_mon_stance_gap`, the true gap against r\*, while a delegated bank's mandate steers on the
+estimate r̂\* = `neutral + error`. Nothing leaks — `ai_chance` is never rendered — and the
+alternative (a second, estimate-based stance trigger) buys a realism point nobody can observe.
+Phase 3's stance politics should revisit it when IGs start reacting to the stance.
+
+### 0.3 IN-GAME VERIFICATION CHECKLIST
+
+One list, ordered by **how much breaks if the check fails**. Items 1–2 can invalidate the
+whole premium design; 3–6 are the numbers and the UI; the rest are lifecycle and polish.
+Record every INJECT result in `scripting_best_practices.md` § INJECT in the same session.
+Lettered items came out of the final whole-branch review and sit beside the numbered item
+they belong with; the numbering is stable so earlier notes that cite "checklist 7" or
+"checklist 10" still point at the right thing.
+
+**Structural — a failure here means the premium stack is not doing what the files say**
+
+1. **Do `INJECT:`ed `modifier = { }` blocks SUM with vanilla's?** — **CONFIRMED: YES, every
+   case.** Read in game by the owner on **2026-09-19** (country RANKS: the rank's −50% and
+   its +50% cancel both gone from the interest tooltip; TECHNOLOGIES: the finance techs' −2%
+   cancelled) and on **2026-09-20** (LAWS: laissez-faire's −25% and the mod's cancelling
+   +25% both gone from the same tooltip). §17 checks 1, 3 and 4 are closed, and with them
+   `te_monetary_rank_injections.txt`, `te_monetary_tech_injections.txt` and
+   `te_monetary_law_injections.txt`. Recorded in `scripting_best_practices.md` § INJECT.
+
+1b. **Check 2 — a FLAT KEY inside a static modifier** — **CONFIRMED 2026-09-20: it sums too.**
+   `te_monetary_base_offset` is gone; vanilla's flat base is cancelled by
+   `country_loan_interest_rate_add = -0.2` inside the mod's `INJECT:base_values` block
+   (`common/static_modifiers/extra_modifiers.txt`). Day one on a fresh 1836 game the owner
+   read **no "Base Value" line at all** on the budget-panel interest tooltip and
+   country-specific rates, which is the "keys sum" branch of the tell; the failure branch
+   (every country at 0.0%, i.e. a −20% base) did not happen, so nothing is reverted. This
+   also retro-validates `state_expected_sol_from_literacy = -5` against vanilla's `+5`, the
+   same shape shipped since April.
+
+   **Day-1 dispatch and released subjects: CONFIRMED 2026-09-20 in the same read.** Rates
+   were already country-specific on 1836-01-01 — so the hidden-country-event fan-out from
+   `on_game_started` delivers with no delay (that is checklist item 7 as well) — and a
+   **released subject shows its own rate**, not its former overlord's, so the
+   country-creation hooks' `scope:target` dispatch resolves against the new tag. Both
+   recorded in `scripting_best_practices.md` § ROOT-resolved multipliers.
+
+   Still worth a glance, but no longer load-bearing: the five vanilla finance techs
+   (`banking`, `central_banking`, `mutual_funds`, `international_exchange_standards`,
+   `modern_financial_instruments`) should each still show `+10%` minting on their tooltip —
+   `country_minting_mult = 0.1` sits in the same vanilla `modifier = { }` block R3 cancels
+   the interest line in, and it needs no arithmetic to read.
+2. **Does the country-scope `modifier:` read aggregate every source type?**
+   `country_credit_standing_add` is granted from country **ranks**, an **institution**
+   (`institution_national_bank`), a company **`prosperity_modifier`** (`company_shell`) and a
+   PM **`country_modifiers`** block (`pm_shell_pernis_refinery`) — none of which is covered by
+   the existing laws-and-techs precedent. Hover the dashboard's **Credit Standing** row as a
+   great power, and again as a Shell owner: every one of those contributions must appear. If
+   one is missing it vanishes silently.
+
+2a. *(Removed.)* R3's cancel-INJECTs mean no vanilla finance tech moves the
+   `country_loan_interest_rate_add` sum at all, so there is no window between the tech
+   landing and the next pulse to check. Checklist item 1's minting read covers what is left.
+
+**Numbers and UI**
+
+3. **The §7.4 anchor table, within 0.5pp** (the phase-1 exit criterion). Expected from the
+   shipped values: **Britain 1836 = 4.0%** (converging on 3.5% as the national bank fills),
+   **USA 1836 = 6.5%**, **Siam 1850 = 20.0%**, late-game great power on the floor = **3.5%**
+   (3.25% under CBI), same GP in a panic after default = **15.5%** plus up to 4pp of debt-load
+   premium.
+   **Non-anchor 1836 starts**, computed the same way and worth reading off the same save:
+   **Russia = 12.5%** (great power, `stock_exchange` but no `banking`, no national bank),
+   **France = 6.0%**, **Austria and Prussia = 8.5%**. Russia's 12.5 against vanilla's 10 is the
+   one to look at: the front-loaded −4.0 on `banking` makes an unbanked tier-3 great power
+   *dearer* than vanilla, which §7.2 did not intend (it accepts weak countries getting
+   *cheaper* debt, not strong ones getting dearer). **Balance exit criterion: no 1836 country
+   pays far above what it pays in vanilla.** Scan the great powers and the majors; if several
+   sit well above, the remedy is the owner's call — this checklist only surfaces the numbers.
+4. **Does a rate render with one decimal?** The `REPLACE:` of the `country_loan_interest_rate_add`
+   *type definition* at `decimals = 1` is precedented but unseen.
+5. **Does `GetValueWithBreakdownFor` render for the two new mod-declared modifier types?**
+   Credit Standing and Risk Premium must each show an engine breakdown block under the
+   script-computed lines. An *empty* breakdown is fine; a *missing* block means the accessor
+   did not resolve.
+6. **Walk the dashboard — CONFIRMED 2026-09-20 (owner, in game), except (e) digital currency and the digital −3 chart in (g), not yet walked. Also still open: confirm `te_rate_paid_rooted` is set on a country after its first pulse (`root ?= this`); if it never sets, the rate modifier is harmlessly re-applied every month.** (a) Fiat great power: policy rate one decimal, target an integer,
+   `+` moves only the target and the rate follows ~0.33/month; the engine's rate figure and
+   `te_rate_paid_pts` should differ only by the surviving vanilla `_mult` modifiers — an
+   *additive* gap, or a ratio no percentage modifier explains, is the leak this pairing
+   exists to expose. (b) Delegate, then take control; pick Growth and watch the target move
+   on its own. (c) Enact CBI: no delegation button, dead stepper, mandate buttons still live,
+   floor reachable at 0.25. (d) Gold standard: Peg Defence appears, target band is a 4–5
+   point window around the reference rate, and **OMO is locked at every rate** with the
+   convertibility line (`banking_omo_unbacked_money_tt`) as the only red cause — no floor
+   line beside it. (e) Digital currency: the stepper reaches −3, and
+   **OMO stays locked until the rate reaches −3, not 0**. (f) Four no-dial countries
+   (bankless, commodity money, crypto, command economy): readouts plus exactly one
+   cause-specific line, and no stepper / delegation / mandate rows. (g) History: two new
+   charts, policy rate tracking target changes with about a quarter's lag and rate paid
+   sitting above it by the premium; both tooltips print exact figures. (h) `debug.log` sweep
+   for "Failed to fetch variable" bursts — the readiness gate should make them impossible.
+
+6a. **No surface prints an exact `bubble_pressure`.** Sweep the banking panel, the dashboard,
+   both history widgets and every banking tooltip for a bubble figure rendered to a decimal.
+   Today all of them band it, and that is what keeps the hidden-state rule true: bubble is the
+   one cycle variable `banking_cycle_advance_variables` gives no random nudge, and
+   `banking_display_bubble_monthly_add` is exactly the modifier-driven part, so Δbubble minus
+   the displayed monthly add is the stance push alone — `−0.75 × te_mon_stance_gap_clamped`,
+   which two readings a month apart invert into the gap, and so into r\*, anywhere the gap is
+   inside its ±4 clamp and bubble is off its own 0/100 bounds. If the vanilla panel's bubble
+   bar (or anything else) turns out to show a number rather than a bar, **this stops being a
+   checklist item and becomes an Important bug** — band it, or give `bubble_pressure` a random
+   term.
+
+6b. **OMO at a zero policy rate — CONFIRMED 2026-09-20 (owner, in game).** The fiat case item 6
+   never states outright: with the policy rate down at its 0 floor the Open-Market Operations
+   row goes green and the tool activates, so `te_mon_floor_threshold` /
+   `te_mon_policy_rate_at_floor` do let the one regime that should reach the floor reach it —
+   dropping `max = 0` did not shut the door on fiat along with gold. What is **not** confirmed
+   is item 14's balance half: the retuned +1.5 bubble a month has still never been watched
+   running, which needs a zero-rate recession to last a few months.
+
+**Lifecycle**
+
+7. **Day one is not vanilla's flat 20% — CONFIRMED 2026-09-20 (owner, in game).** 1836 rates
+   are the mod's own country-specific numbers on day one, so the game-start pass runs: the two
+   mod `on_game_started` declarations merge, and the no-delay hidden-country-event fan-out
+   delivers before the player's first day (recorded in `scripting_best_practices.md` § ROOT-
+   resolved multipliers). Nothing to move into `extra_on_actions.txt`.
+8. **A pre-deletion save gets its 2 intervention points back** the month after loading, and
+   the *Raise Policy Rate* row is gone from both dashboard lists.
+8a. **Tag-switch into an AI great power.** Every AI country is held at `te_mon_delegated = 1`,
+   so a human taking over an AI tag opens on **Delegated** with whatever mandate the AI's bank
+   was running. That is truthful — the bank *was* driving — and one click of Take Control
+   undoes it; the check is that the dashboard says so plainly, that Take Control works on the
+   first click, and that a fresh Britain start opens **un**delegated by contrast.
+9. **`random_country = { }` from `on_monthly_pulse`** (expected scope `none`) resolves — this
+   is how the world reference rate is refreshed. Nearest precedent is `city_rank_on_action`
+   running `ordered_state` from the same hook. **Observable, because a silent failure here is
+   invisible**: the country-side self-heal seeds the global exactly once, so a broken
+   `random_country` freezes the reference rate at 3.0 for the whole campaign rather than
+   erroring. Run `te_debug_monetary.1` from the console the month after any great power
+   finishes `macroeconomics` — "Reference rate" must read **2.5**, not 3.0.
+10. **`round` / `ceiling` / `floor` / `min` / `max` behave as documented inside a
+    `set_variable value = { }` block** (four sites). Related: `round(2.5)` — half-up (3) or
+    half-to-even (2)? Either is inside every regime range and self-corrects on the first
+    delegated pulse.
+11. **An empty static modifier applied to a JE** — does `banking_stance_band_3` render as
+    "Monetary Stance: Neutral" with no effects, or as nothing at all? Both are safe; the
+    answer decides whether the neutral band should keep being applied.
+12. **Revolution inheritance.** `je_banking_cycle` is `can_revolution_inherit`, so the entry's
+    modifiers move but country variables do not. Worst traced case is **one month with no
+    stance band** on the successor, not two stacked. Watch one revolution.
+12a. **Releasing a subject does not move the parent's own rate.** The six release and uprising
+    hooks update `scope:target`, the new tag, and deliberately *not* ROOT, which is the parent
+    and already pulses monthly. Note a great power's policy rate, release a subject, and check
+    it has not jumped by about a third of a point that same month (the drift step's per-call
+    size) — that jump is the signature of a second, non-idempotent update in one month. The new
+    tag should meanwhile open with a real rate rather than vanilla's ~20%.
+13. **Relative order of global `on_monthly_pulse`, `on_monthly_pulse_country` and the JE's own
+    pulse** (§17 check 7) — the stance reaches the cycle through a variable written by the
+    country update and read by the JE pulse, so a one-month staleness is tolerated by design
+    but has never been observed.
+
+**Observer run (the rest of §19 row 1's exit criteria)**
+
+14. No country sits at the 60 cap or at the 0.5 *total* clamp by accident; AI stance tracks
+    the cycle; **mean AI stance gap ≈ 0 outside cycle extremes** (no regime permanently tight
+    or loose); r\* is not recoverable from any tooltip. Also: the OMO retune (+1.5 bubble a
+    month) is untested — it needs a zero-rate recession to fire at all.
 
 ---
 
@@ -155,7 +386,7 @@ Monetary policy is the intersection of four existing law groups. No new laws in 
 | Law | Dial | Constraint | Extras |
 |---|---|---|---|
 | `law_commodity_money` | **none**, even with a national bank | pays world rate + spread | no monetisation, no QE; expected inflation pinned to 0 |
-| `law_gold_standard` | target 0–15 | **gold flows** (§12). Interim before P3: target clamped to `era_base` ±2pp | credibility: premium −1pp; expected inflation anchored at 0; deflation bias |
+| `law_gold_standard` | target 0–15 | **gold flows** (§12). Interim before P3: target clamped to `era_base` ±2pp | credibility: premium −1pp; expected inflation anchored at 0; deflation bias; **no QE** — its crisis tool is suspending convertibility (§12.3, phase 3) |
 | `law_fiat_currency` | target 0–25 | **inflation** (§9) | monetisation lever; QE at the floor; no credibility bonus — it must be earned |
 | `law_digital_currency` | target **−3**–25 | inflation | negative rates (no cash to hoard); drift twice as fast (better transmission) |
 | `law_decentralized_cryptocurrency` | **none** | pays world rate + spread | fixed supply: inflation pulled toward −1%; no monetisation, no QE, no lender of last resort |
@@ -256,7 +487,7 @@ toggle buttons, which all stay; here the mandate is a shared player/AI mechanic 
 `ai_chance` is bypassed. Avoid the orphan-gate trap recorded at
 `scripting_best_practices.md:2953` — the AI branch must carry no gate the player branch lacks.
 
-A national-bank country **without the JE** (no `stock_exchange` or no level-10 urban
+A national-bank country **without the JE** (no `stock_exchange` or no level-5 urban
 center) has no dashboard and is auto-delegated to price stability.
 
 ---
@@ -320,7 +551,7 @@ financial institutions. It replaces vanilla's five −2pp tech reductions and is
 | No `stock_exchange` | +2.0 |
 
 The surcharge keys on **`stock_exchange`, not on having the JE**: the JE's other gate (a
-level-10 urban center) is not a capital-market signal.
+level-5 urban center) is not a capital-market signal.
 
 *(The interview floated a flat −2pp per tech from a +10 base. That puts 1836 Britain near
 9%, so the weights are front-loaded instead. Same idea, different curve.)*
@@ -368,7 +599,7 @@ laissez-faire and credibility terms of §7.2–7.3.
 | Tools: deposit guarantee / emergency liquidity / FX support / FX devaluation / coop credit expansion | −0.01 / −0.04 / −0.01 / +0.02 / −0.03 | −0.2 / −0.8 / −0.2 / +0.4 / −0.6 |
 | Tools: **rate hike / OMO** | +0.05 / −0.04 | **interest field deleted** (the dial replaces it; OMO → QE, §11) |
 | Crash interventions (6) | +0.02 … −0.06 | +0.4 … −1.2 |
-| Banking event outcomes (14) | −0.10 … +0.20 | −2.0 … +4.0 |
+| Banking event outcomes (13) | −0.10 … +0.20 | −2.0 … +4.0 |
 | Great Depression / bystander | +0.15 / +0.05 | +3.0 / +1.0 |
 | Crisis capital controls / monetary stabilisation | +0.05 / +0.08 | +1.0 / +1.6 |
 | `colonial_military_garrison_modifier` | +0.05 | +1.0 |
@@ -915,6 +1146,30 @@ Open questions: a declared non-gold peg (to a hegemon's currency) as a law or a 
 pact; whether `te_fx_index` is displayed exactly; currency-union interaction with customs
 unions; whether swap lines should lend peg confidence.
 
+### 15.1 International monetary arrangements — to scope (phase 5)
+
+Not designed; recorded so it is not forgotten. Phases 1–4 treat every country as a monetary
+island apart from the world rate. The mod's diplomatic layer should eventually carry
+monetary content of its own — look into, and hopefully implement:
+
+- **Treaty articles** — e.g. a currency peg to a partner, swap lines or a standing credit
+  facility, a lender-of-last-resort guarantee, reserve pooling; each with a real cost to the
+  stronger party (shared risk premium, imported stance).
+- **Subjects** — a subject using the overlord's currency or pegged to it: it inherits the
+  overlord's policy rate and credibility and gives up its own dial (a currency board);
+  colonial-era monetary dependence as a lever for both sides.
+- **Power blocs** — a principle (or tier) for a **shared currency**, à la the euro, available
+  to fiat / digital members: one policy rate set for the bloc (by the leader, or weighted by
+  GDP), a common credibility bonus and lower intra-bloc transaction costs, against the loss
+  of the dial — a member in a slump while the bloc runs hot gets the wrong stance, cannot
+  devalue, and its risk premium becomes the adjustment valve (the euro-crisis shape). Exit
+  should be possible and expensive.
+
+Design principle as elsewhere (§1): each arrangement must be a genuine tradeoff, and any
+asymmetry between members should come from shared mechanics (size, credibility, cycle
+position), not from special-casing. Depends on phase 3 (world rate) and largely on phase 4
+(exchange rates); the currency-union open question above belongs here.
+
 ---
 
 ## 16. Implementation mapping
@@ -925,27 +1180,45 @@ Countries without the JE or a national bank must still pay world rate + premium,
 JE-scope `multiplier =` cannot read country properties (`scripting_best_practices.md:400`).
 So the rate lives in **country scope**, refreshed for every country.
 
-Two static modifiers, always added in the **same effect block**:
+**AS SHIPPED (revised 2026-09-19): ONE static modifier, not two.** The design below
+described a pair — an offset cancelling vanilla's flat base, plus the rate itself. That
+pair shipped and was then collapsed: vanilla's flat base is cancelled on the entity that
+grants it, by `country_loan_interest_rate_add = -0.2` in the mod's `INJECT:base_values`
+block, the same treatment the ranks and the finance techs get. `te_monetary_base_offset` is
+deleted. The player sees one interest line instead of a +20% base with a −20% modifier
+beside it.
 
 ```
-te_monetary_base_offset = { country_loan_interest_rate_add = -0.2 }
-te_monetary_rate_paid   = { country_loan_interest_rate_add = 0.01 }   # multiplier = var:te_rate_paid_pts
+INJECT:base_values = { … country_loan_interest_rate_add = -0.2 }    # cancels vanilla's flat 20%
+te_monetary_rate_paid = { country_loan_interest_rate_add = 0.01 }   # multiplier = var:te_rate_paid_applied
 ```
 
-Idiom: `sol_expectations_apply_strata_shifts`
-(`common/scripted_effects/sol_expectations_effects.txt:143-160`). Invariant: the offset is
-never present without the rate modifier, so Σ`_add` never sits at ≤ 0; a freshly spawned
-country with neither pays vanilla's 20% until its first pulse — a safe fallback. Skip the
-re-apply when the change since last month is under 0.05. `REPLACE` the
-`country_loan_interest_rate_add` **modifier type definition** to `decimals = 1` (precedent:
-`common/modifier_type_definitions/mod_entity_modifier_types.txt:3486`).
+**Consequence:** a country with no rate modifier now sums to **0%**, not vanilla's 20%. The
+owner has confirmed in game that a non-positive total simply displays 0.0% with no ill
+effect, so the old "Σ`_add` never sits at ≤ 0" invariant is retired. Skip the re-apply when
+the change since last month is under 0.05. `REPLACE` the `country_loan_interest_rate_add`
+**modifier type definition** to `decimals = 1` (precedent:
+`common/modifier_type_definitions/mod_entity_modifier_types.txt:3486`). The flat-key INJECT
+is §17 check 2, and the owner read it in game on 2026-09-20: it **sums** — see §0.3 item 1b.
 
 - **Run the update from `on_game_started` as well as the monthly pulse.** The
   cancel-`INJECT`s apply on day one but the rate modifier would not exist until the first
-  pulse; several tags start in debt, and a Britain-like tag would pay ~20% instead of ~3.5%
-  for that month. **Also call it from the country-creation on-actions** — civil-war and
-  released tags would otherwise show vanilla's 20% until their first pulse, exactly when
-  the player is looking at them.
+  pulse; several tags start in debt, and they would borrow free for that month. **Also call
+  it from the country-creation on-actions** — civil-war and released tags would otherwise
+  borrow free until their first pulse, exactly when the player is looking at them.
+- **BUT NOT DIRECTLY FROM EITHER (fixed 2026-09-19).** `add_modifier`'s `multiplier =` is
+  resolved against **ROOT**. `on_game_started` has no root scope at all and the six
+  country-creation hooks leave the **parent** in ROOT, so the first write applied every
+  country's rate at a multiplier of 1.0 (and would have stamped a parent's rate onto a
+  released tag). Both families dispatch a hidden country event, `te_monetary_internal.1`
+  (`events/te_monetary_events.txt`), whose ROOT is the country it fires on; it runs the whole
+  update, so each entry point still causes exactly one, non-doubled call.
+  `on_monthly_pulse_country` and `on_country_formed` declare "Expected Scope: country" and
+  call the effect directly. Step 9 carries a `te_rate_paid_rooted` marker — set only when
+  `root ?= this` — so anything applied root-less is repaired on the next monthly pulse; it is
+  the one monetary variable deliberately not initialised. Full write-up:
+  `scripting_best_practices.md` § "`add_modifier { multiplier = var:X }` Resolves Against
+  ROOT".
 - **`-0.2` hardcodes vanilla's `base_values` rate.** When phase 1 ships, add a line to
   `docs/guides/vanilla_patch_runbook.md` so a vanilla change to
   `country_loan_interest_rate_add` in `00_code_static_modifiers.txt` gets caught — along
@@ -1033,6 +1306,18 @@ the construction market, ruler traits and the history charts read them directly.
 
 ## 17. Engine unknowns — VERIFY IN-GAME
 
+> Phase 1 has shipped, so checks 1–4 and 6 are now part of the single consolidated list in
+> [§0.3](#03-in-game-verification-checklist) — run that, not this. Check 6 was **bypassed**
+> rather than answered (§0.1: the widget uses the vanilla-proven `GetPlayer.` form). The
+> remaining checks below still belong to phases 2–4.
+>
+> **CHECKS 1–4 ARE ANSWERED (owner, in game, 2026-09-19 and 2026-09-20): `INJECT:` SUMS with
+> vanilla's values** — nested `modifier = { }` blocks on ranks, technologies and laws, and a
+> flat key inside a static modifier (`INJECT:base_values`) alike. Nothing below about
+> last-wins came to pass; the fallbacks are kept only as the recipe for some future entity
+> type that turns out to differ. Details in §0.3 items 1 / 1b and in
+> `scripting_best_practices.md` § INJECT.
+
 **Phase-1 coding gate.** Checks 1–4 need **no new code** — read tooltips on the current
 build. They decide whether cancel-`INJECT`s sum with vanilla's values or overwrite them. If
 INJECT is last-wins, `+0.5` on `great_power` would **double** a GP's rate instead of
@@ -1064,11 +1349,14 @@ are wrong in play today.
 **Whatever the results, record them in `scripting_best_practices.md` § INJECT in the same
 session** — it is the most reusable fact this work will produce.
 
-Fallbacks if summing fails — techs: compensate in script (+pp per researched finance tech
-inside `te_premium_structural`, no vanilla touch). That is the right fallback for techs
-regardless: the five vanilla techs carry `country_minting_mult = 0.1` in the same
-`modifier = {}` block as the interest line, so a last-wins cancel-`INJECT` would wipe
-their minting bonus too; ranks / laissez-faire: `REPLACE` in
+Fallbacks if summing fails — techs: `REPLACE` the five in
+`common/technology/technologies/te_monetary_tech_injections.txt`, restating each vanilla
+`modifier = {}` block minus the interest line (§0.1 R3 chose the cancel-`INJECT` over
+script compensation; compensating in `te_premium_structural` instead, touching no vanilla
+entity, remains available). Note that the five vanilla techs carry
+`country_minting_mult = 0.1` in the same `modifier = {}` block as the interest line, so a
+last-wins cancel-`INJECT` would wipe their minting bonus too — which is the tell §0.3's
+checklist item 1 reads; ranks / laissez-faire: `REPLACE` in
 `common/country_ranks/extra_country_ranks.txt` — owed regardless in that case, because the
 mod's existing GP/major INJECTs would already be wiping vanilla's blocks.
 
@@ -1101,6 +1389,13 @@ Later checks:
 ---
 
 ## 18. Deletions and save migration
+
+> **Done** (phase 1). Both buttons and every live reference are gone; the
+> `banking_policy_rate_hike` static modifier and its two loc keys stay defined for one
+> release so the migration can run, and `common/scripted_effects/legacy_modifier_cleanup.txt`
+> carries the dated checklist of the four artefacts that must be deleted together. The
+> section below is kept as the record of what the deletion covered — line numbers predate the
+> implementation.
 
 Deleting `cb_policy_rate_hike` / `cb_disable_policy_rate_hike` touches:
 
@@ -1144,6 +1439,7 @@ Each phase is playable alone. Later phases can be cut.
 | **2** | inflation (core / headline / anchored expectations), basket, wage-pressure type + real-wage dividend, §10 formula, monetisation, QE costs, hyperinflation chain, §13 stance politics | gold standard still on the ±2 band | 50-year observer run: median fiat inflation 1–4% **including AI on the growth mandate** (at war or `scaled_debt ≥ 0.5`), no oscillation with period < 3 years, at least one organic hyperinflation and one deflation. **Debug harness**: a fiat tag pinned to a fixed manual target — observer runs never exercise the human path, because AI is always delegated; confirm the drift is slow (e-folding of years), that the §10 worked example reproduces, that **rate paid on the never-disinflate path never falls below the pre-war baseline** once expectations catch up (the §10 tuning invariant), and that its §9.2 band penalties make it worse *overall* over 15 years than disinflating — judged on treasury, SoL and radicals, not rate paid alone |
 | **3** | real world rate (discretionary GPs only), gold flows + hot money, peg confidence, convertibility crisis; regime law stances | FX buttons unchanged | world rate sits at `era_base` in 1836 and does not drift on its own; a discretionary GP's hike visibly drains a small gold country; AI on peg defence survives a 2pp world-rate rise; holding world + 5 on gold yields no lasting treasury gain |
 | **4** | FX index, trilemma, capital-controls politics; devalue/support deleted | — | — |
+| **5** | *(to scope — §15.1)* international monetary arrangements: treaty articles, subject currency dependence, power-bloc shared currency | — | — |
 
 ---
 
@@ -1157,8 +1453,8 @@ Each phase is playable alone. Later phases can be cut.
    *Mitigation:* access + rank tables; the debt-load premium (§7.6); and as a fallback the
    **global** credit-limit defines (`COUNTRY_MIN_CREDIT_SCALED`) — blunt, all countries at
    once, but real.
-3. **INJECT semantics unproven.** *Mitigation:* the phase-1 coding gate (§17), with a
-   fallback per axis.
+3. **INJECT semantics.** *Retired 2026-09-20:* the §17 gate was run and INJECT sums in
+   every shape the mod uses, so the per-axis fallbacks are recipes, not pending work.
 4. **Variable lifecycle** — unguarded `immediate` resets; a multiplier-backing var removed
    by a cleanup effect; a national-bank country with no JE and therefore no dial.
    *Mitigation:* single owner on the country pulse, guards everywhere, never remove,

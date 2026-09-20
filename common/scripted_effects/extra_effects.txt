@@ -377,7 +377,9 @@ remove_banking_cooperative_modifiers_effect = {
 
 remove_banking_market_modifiers_effect = {
 	je:je_banking_cycle = {
-		remove_modifier = banking_policy_rate_hike
+		# banking_policy_rate_hike is no longer a market tool (monetary_policy_design.md
+		# §18). A save that still holds it is cleaned up by the one-shot in
+		# je_banking.txt's monthly pulse, which does not depend on a law change.
 		remove_modifier = banking_open_market_ops
 		remove_modifier = banking_countercyclical_capital_buffer
 		remove_modifier = banking_expand_deposit_guarantee

@@ -4,8 +4,13 @@
 ### `widget = { name = "widget_je_banking_history" container = "custom_widget_container_2" }`,
 ### directly under Current Conditions.
 ###
-### Three charts, one per unit: the cycle value and bubble pressure are 0..100
-### indices, momentum is a signed monthly delta, so they never share an axis.
+### Five charts, one per unit: the cycle value and bubble pressure are 0..100
+### indices, momentum is a signed monthly delta, and the two monetary series are
+### in percentage points, so they never share an axis. Each monetary chart's
+### axis is deliberately narrower than its variable's full range — see the
+### comment above each one. The policy rate is drawn by one of two instances,
+### picked on whether the country's currency law allows a negative rate; only
+### one of the pair is ever visible.
 ### Every bar reads a `te_hist_v_*` variable recorded by
 ### common/scripted_effects/te_history_banking_effects.txt; the reusable
 ### chart type lives in te_history_chart.gui.
@@ -211,6 +216,153 @@ flowcontainer = {
 					}
 					blockoverride "color" {
 						color = { 0.85 0.55 0.28 1.0 }
+					}
+				}
+			}
+		}
+
+		### ---- Policy rate (percentage points) --------------------------
+		### TWO CHARTS, ONE VISIBLE. The policy rate is never negative unless
+		### the country is on a digital currency, whose floor is -3
+		### (country_policy_rate_floor_add on law_digital_currency,
+		### monetary_policy_design.md §5.1). A signed +/-12 axis therefore
+		### spent half its height on a range almost no campaign ever enters,
+		### and squeezed the 2-6% band an ordinary campaign lives in into a
+		### quarter of the plot.
+		###
+		### So: an unsigned 0..12 chart for everyone, and a -3..12 chart with
+		### a 0% line for a digital currency, picked by banking_mon_is_digital
+		### (common/scripted_guis/te_monetary_sguis.txt). Only one is ever
+		### drawn, the same way the whole section is gated on the collapse
+		### flag so a player who never opens it pays for no bars at all.
+		###
+		### Both are unsigned, so the series keeps ONE colour above and below
+		### the line: a negative rate is an unusual policy, not a bad reading,
+		### and the red/green split te_history_bar_signed brings with it would
+		### say otherwise. A rate above 12% draws a full bar with the exact
+		### figure in the tooltip, as before.
+
+		### Everyone except a digital currency: the axis starts at 0.
+		te_history_chart = {
+			visible = "[Not( GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+			blockoverride "chart_title" {
+				text = "te_hist_chart_mon_policy_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_mon_policy_legend"
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_mon_policy"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_policy' )]"
+					blockoverride "values" {
+						min = 0
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ), '(CFixedPoint)0.5' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.50 0.58 0.80 1.0 }
+					}
+				}
+			}
+		}
+
+		### Digital currency: the axis reaches down to the -3 floor, and the
+		### 0% line is drawn where it actually falls — a fifth of the way up
+		### a 15-point span, i.e. 23px above the bottom of the 96px plot area
+		### (the 84px bar band is centred in it, so its own floor sits 6px up,
+		### plus 0.2 x 84 = 16.8px). EYEBALL THIS IN GAME: it is the one
+		### number here that cannot be checked from the files.
+		te_history_chart = {
+			visible = "[GetScriptedGui('banking_mon_is_digital').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "chart_title" {
+				text = "te_hist_chart_mon_policy_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_mon_policy_legend_neg"
+			}
+			blockoverride "zero_axis" {
+				widget = {
+					size = { 100% 2 }
+					parentanchor = bottom
+					position = { 0 -23 }
+					alwaystransparent = yes
+
+					background = {
+						using = dark_area
+						alpha = 0.7
+					}
+				}
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_mon_policy"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_policy' )]"
+					blockoverride "values" {
+						min = -3
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3', ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = -3
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_policy' ), '(CFixedPoint)0.5' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.50 0.58 0.80 1.0 }
+					}
+				}
+			}
+		}
+
+		### ---- Rate the government pays (percentage points) --------------
+		### Never negative (the §4 clamp floors it at 0.5), so an unsigned
+		### bar with its floor at 0, the same as the policy-rate chart above.
+		### The axis stops at 20 rather than the variable's 60 ceiling for
+		### the same reason as above: a default campaign sits between 2 and
+		### 12, and a country in a debt spiral draws a full bar with the real
+		### figure in the tooltip.
+		###
+		### NOT TO THE SAME SCALE as the policy-rate chart (0..20 against
+		### 0..12), so the premium is the difference between the two
+		### *tooltips*, not the gap between the two bars. Giving them one
+		### axis would cost the rate chart nearly half its resolution in the
+		### band a normal campaign lives in, which is the problem that
+		### started this.
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "te_hist_chart_mon_rate_paid_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_mon_rate_paid_legend"
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_mon_rate_paid"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_rate_paid' )]"
+					blockoverride "values" {
+						min = 0
+						max = 20
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_mon_rate_paid' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 20
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_rate_paid' ), '(CFixedPoint)0.8' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.80 0.66 0.34 1.0 }
 					}
 				}
 			}

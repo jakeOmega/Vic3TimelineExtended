@@ -1,0 +1,246 @@
+﻿# ============================================================================
+# MONETARY POLICY TEST CONSOLE — fired only from the console:
+# `event te_debug_monetary.1`
+# ============================================================================
+# Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
+# to run script by hand. Nothing in the mod fires this event.
+#
+# It is a read-out, not a cheat menu: the description prints every variable
+# te_monetary_monthly_update owns, for the country that fires it, so a pulse can
+# be inspected without a debugger. The two options re-run the monthly update and
+# the yearly GDP snapshot, so the drift, the hysteresis and the random walks can
+# be stepped one month at a time instead of waiting for the calendar.
+#
+# HIDDEN STATE. te_neutral_rate, te_neutral_error, te_neutral_walk and
+# te_mon_stance_gap are hidden from the player everywhere else (§8 "The rule").
+# Printing them HERE is deliberate and allowed — this event is console-only, it
+# is never surfaced by any journal entry, button or on-action, and reading r*
+# is the whole point of a debug read-out. Nothing in this file may be reused in
+# player-facing loc.
+# ============================================================================
+namespace = te_debug_monetary
+
+te_debug_monetary.1 = { # REVIEWED 2026-09-19: console-only test event (`event te_debug_monetary.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.1.t
+	desc = te_debug_monetary.1.d
+	flavor = te_debug_monetary.1.f
+
+	# Step one month: target, drift, premium, rate paid, stance, modifiers.
+	option = {
+		name = te_debug_monetary.1.a
+		default_option = yes
+		te_monetary_monthly_update = yes
+	}
+
+	# Recompute the neutral rate's growth term against this instant's GDP,
+	# instead of waiting for the next yearly pulse.
+	option = {
+		name = te_debug_monetary.1.b
+		te_monetary_yearly_growth_snapshot = yes
+		te_monetary_monthly_update = yes
+	}
+
+	# Re-read the world reference rate, then pulse.
+	option = {
+		name = te_debug_monetary.1.c
+		te_monetary_refresh_world_era_base = yes
+		te_monetary_monthly_update = yes
+	}
+
+	option = {
+		name = te_debug_monetary.1.z
+	}
+}
+
+
+# ============================================================================
+# THE INTEREST-MODIFIER MULTIPLIER EXPERIMENT — .2, .3, .4
+# ============================================================================
+# SOLVED 2026-09-19 — these three events did their job; they are kept as the
+# standing bench for the next time a modifier multiplier misbehaves.
+#
+# THE BUG THEY DIAGNOSED. On a fresh 1836 game, day one, the budget interest
+# tooltip read "+20.0% Base Value, -19.0% Timed Modifiers" for every country:
+# te_monetary_rate_paid was present but at a multiplier of exactly 1
+# (0.01 = +1%), even though te_rate_paid_applied held the right number
+# (12.5 for Russia, 3.7 for Britain — te_debug_monetary.1 prints it). No script
+# error was logged from any monetary file. The first application ran from
+# on_game_started -> every_country (common/on_actions/te_monetary_on_actions.txt),
+# and afterwards step 9 skipped the re-apply while |pts - applied| < 0.05, so the
+# bad first write stuck for the whole game.
+#
+# THE ANSWER. .2 (the production `var:` form) and .3 (a named script value) both
+# produced the correct rate when run mid-game from a country event, and .4's
+# literal worked as well. So the form was never the problem: the CALL SITE was.
+# `add_modifier`'s `multiplier =` is resolved against ROOT, and on_game_started
+# has no root scope at all (engine docs/on_actions.log:341, "Expected Scope:
+# none") — `every_country` changes THIS, not ROOT — so the read found nothing and
+# the engine silently substituted 1.0. The same fault sat in the six
+# country-creation hooks, which also declare scope `none` and leave the PARENT in
+# ROOT. Both families now dispatch through te_monetary_internal.1, a hidden
+# country event whose ROOT is the country it fires on
+# (events/te_monetary_events.txt), and step 9 carries a te_rate_paid_rooted
+# marker so any root-less write is repaired on the next monthly pulse.
+# Written up in scripting_best_practices.md § "Scope Chain Issues with
+# add_modifier + Script Values".
+#
+# The three events below run the SAME remove-then-add block that step 9 runs
+# (te_monetary_apply_interest_modifiers), mid-game, from country scope, and
+# differ only in what goes in the `multiplier =` slot:
+#
+#   .2  multiplier = var:te_rate_paid_applied      the production form
+#   .3  multiplier = te_mon_rate_paid_multiplier   a named script value wrapping
+#                                                  that same variable
+#   .4  multiplier = 7                             a literal — the control
+#
+# Reading the result: vanilla's flat base is cancelled in INJECT:base_values, so
+# te_monetary_rate_paid is the only interest modifier a country carries and the
+# tooltip's modifier line IS the rate the multiplier produced. A country whose
+# te_rate_paid_applied is 12.5 should read about +12.5%; a multiplier that
+# silently fell back to 1 reads +1.0%, and the .4 control reads +7.0%.
+#
+# WHAT EACH OUTCOME MEANS, for the next investigation. All three worked from a
+# country event, which is what proved the call site rather than the form to be
+# at fault. If a future .2 fails where .3 works, the `var:` form is wrong for
+# that modifier; if .4 also fails, the modifier does not scale at all and the
+# approach has to change; if all three work but production does not, look at the
+# ROOT of the call site — that is what happened here.
+#
+# ORDER OF USE. Fire .2, then .3, then .4 — .4 leaves the country paying 7%,
+# which step 9's 0.05 threshold will never correct on its own.
+# te_debug_monetary.2's second option is the undo: it zeroes te_rate_paid_applied
+# and runs the real monthly update, which sees the whole gap at once and rewrites
+# the modifier through the production path.
+#
+# HOVER BEFORE CLICKING. The option tooltip previews the resolved modifier, so
+# it is worth reading the tooltip as well as the budget panel afterwards.
+#
+# None of these events is fired by anything in the mod; they exist for
+# `event te_debug_monetary.2` and friends typed into the console.
+# ============================================================================
+
+te_debug_monetary.2 = { # REVIEWED 2026-09-19: console-only diagnostic (`event te_debug_monetary.2`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.2.t
+	desc = te_debug_monetary.2.d
+	flavor = te_debug_monetary.2.f
+
+	# The production form: the same remove-and-add as step 9, with the same
+	# multiplier expression. It deliberately does NOT write te_rate_paid_applied
+	# or the te_rate_paid_rooted marker, so the next pulse can still correct it.
+	option = {
+		name = te_debug_monetary.2.a
+		default_option = yes
+		if = {
+			limit = { has_modifier = te_monetary_rate_paid }
+			remove_modifier = te_monetary_rate_paid
+		}
+		add_modifier = {
+			name = te_monetary_rate_paid
+			multiplier = var:te_rate_paid_applied
+		}
+	}
+
+	# The undo, and the cleanest test of the production path itself: zeroing the
+	# applied value forces step 9 past its 0.05 threshold, so the monthly update
+	# rewrites the modifier exactly as it would on any other month. Note that the
+	# update is not idempotent — it also drifts the policy rate a third of a
+	# point and draws both hidden random walks, same as any pulse.
+	option = {
+		name = te_debug_monetary.2.b
+		set_variable = { name = te_rate_paid_applied value = 0 }
+		te_monetary_monthly_update = yes
+	}
+
+	option = {
+		name = te_debug_monetary.2.z
+	}
+}
+
+
+te_debug_monetary.3 = { # REVIEWED 2026-09-19: console-only diagnostic (`event te_debug_monetary.3`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.3.t
+	desc = te_debug_monetary.3.d
+	flavor = te_debug_monetary.3.f
+
+	# Same pair, same block, but the multiplier is a named script value that
+	# wraps the same variable behind has_variable and falls back to 3.
+	option = {
+		name = te_debug_monetary.3.a
+		default_option = yes
+		if = {
+			limit = { has_modifier = te_monetary_rate_paid }
+			remove_modifier = te_monetary_rate_paid
+		}
+		add_modifier = {
+			name = te_monetary_rate_paid
+			multiplier = te_mon_rate_paid_multiplier
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.3.z
+	}
+}
+
+
+te_debug_monetary.4 = { # REVIEWED 2026-09-19: console-only diagnostic (`event te_debug_monetary.4`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.4.t
+	desc = te_debug_monetary.4.d
+	flavor = te_debug_monetary.4.f
+
+	# The control: a literal multiplier, no variable and no script value in the
+	# slot. If this one does not move the tooltip, nothing about the multiplier
+	# form is the problem. 7 is chosen because no country pays it by accident.
+	option = {
+		name = te_debug_monetary.4.a
+		default_option = yes
+		if = {
+			limit = { has_modifier = te_monetary_rate_paid }
+			remove_modifier = te_monetary_rate_paid
+		}
+		add_modifier = {
+			name = te_monetary_rate_paid
+			multiplier = 7 # REVIEWED 2026-09-19: console-only control value, never reachable in play
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.4.z
+	}
+}

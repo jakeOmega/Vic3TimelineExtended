@@ -1,0 +1,172 @@
+﻿# ============================================================================
+# Monetary Policy — scripted triggers
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §4 (the rate stack and who has a
+# dial), §5 (regimes), §8 (stance channel).
+#
+# All country scope. The variable contract these read from is documented in
+# common/script_values/te_monetary_script_values.txt.
+# ============================================================================
+
+
+# Does this country set its own policy rate?
+#
+# A dial requires a national bank AND a discretionary monetary regime. Without
+# one, te_policy_rate is derived rather than chosen (§4): bankless, commodity-
+# money and crypto countries get world rate + the bankless spread, and a command
+# economy gets the administered rate.
+#
+# lawgroup_national_bank holds exactly two laws (law_no_national_bank,
+# law_national_bank), so the positive test is the whole of it. Central bank
+# independence and state-owned banking live in lawgroup_financial_regulation, a
+# separate group — a CBI country still has law_national_bank and still has a
+# dial; it just does not steer it by hand (§6).
+#
+# has_law_or_variant rather than has_law throughout: variant laws
+# (`parent = law_X`) are tag-restricted skins of the same law and must count.
+te_mon_has_dial = {
+	has_law_or_variant = law_type:law_national_bank
+	OR = {
+		has_law_or_variant = law_type:law_gold_standard
+		has_law_or_variant = law_type:law_fiat_currency
+		has_law_or_variant = law_type:law_digital_currency
+	}
+	NOT = { has_law_or_variant = law_type:law_command_economy }
+}
+
+# Central bank independence (lawgroup_financial_regulation). Binds the target to
+# the mandate formula, halves the structural premium floor to 0.25pp and narrows
+# the neutral-rate estimation error to +/-0.5 (§6, §7, §21).
+te_mon_is_cbi = {
+	has_law_or_variant = law_type:law_central_bank_independence
+}
+
+# Command economy (vanilla lawgroup_economic_system). The rate is administered,
+# there is no dial, and the stance channel is switched off (§4, §8).
+te_mon_is_command = {
+	has_law_or_variant = law_type:law_command_economy
+}
+
+# State-owned banking (lawgroup_financial_regulation). The weakest credibility
+# anchor (§5.2, §9.1). Ruling R2 ships the premium part only in phase 1.
+#
+# KEEP: no caller since the +0.5pp structural premium moved onto the law itself
+# as country_credit_standing_add = 0.005, where the law tooltip states it. This
+# trigger is contract surface for the §9.1 expectations-anchoring work in phase
+# 2, which is a behaviour and not a number; a cleanup pass should leave it.
+te_mon_is_state_banking = {
+	has_law_or_variant = law_type:law_state_owned_banking
+}
+
+
+# --- Policy stance ----------------------------------------------------------
+#
+# te_mon_stance_gap is HIDDEN STATE (§8): these two triggers exist so AI weights
+# and gating can react to the stance without any script ever printing the gap.
+# They must never be used to build a player-visible number.
+#
+# Both are guarded on has_variable, because the gap does not exist until a
+# country's first monthly monetary update — and because the JE pulse and the
+# country update may run in either order, the value read may be one month old.
+# A country with no dial has a gap of exactly 0, so it is neither tight nor
+# loose, which is the intended answer.
+
+# Real rate at least 1pp above the (hidden) neutral rate.
+banking_stance_is_tight = {
+	has_variable = te_mon_stance_gap
+	var:te_mon_stance_gap >= 1
+}
+
+# Real rate at least 1pp below the (hidden) neutral rate.
+# KEEP: no caller in phase 1 (only _is_tight is weighted today). It is the other
+# half of this pair's contract surface for phases 2-3, where loose money feeds
+# inflation and the easing-side AI weights; a cleanup pass should leave it.
+banking_stance_is_loose = {
+	has_variable = te_mon_stance_gap
+	var:te_mon_stance_gap <= -1
+}
+
+
+# --- The dial's controls (§3, §5.1, §6) -------------------------------------
+#
+# Everything the dashboard's monetary block greys a control on. Each of these is
+# asked from the scripted GUI's `is_valid`, wrapped in a `custom_tooltip` there
+# so IsValidTooltip renders it with a tick or a cross; the triggers themselves
+# stay plain conditions so they can also be read by script.
+#
+# All of them are guarded: a country that has never run a monetary pulse has
+# none of these variables, and an unguarded `var:` read resolves to 'none'.
+
+# Has the player handed the dial to the central bank? (§6) The toggle is free
+# and reversible for any dial country that is not independent; central bank
+# independence is permanently mandate-bound and does not use this variable,
+# which is why te_mon_mandate_binds below asks for either.
+te_mon_is_delegated = {
+	has_variable = te_mon_delegated
+	var:te_mon_delegated = 1
+}
+
+# Does the mandate actually drive the target? Only then is picking one a
+# decision rather than a preference stored for later.
+te_mon_mandate_binds = {
+	OR = {
+		te_mon_is_delegated = yes
+		te_mon_is_cbi = yes
+	}
+}
+
+# Is there room left to step the target down / up inside the regime's range?
+# The bounds are te_mon_target_min / te_mon_target_max
+# (common/script_values/te_monetary_script_values.txt), the same two values
+# te_monetary_clamp_target re-clamps with every month — so the stepper can never
+# offer a step the next pulse would undo.
+te_mon_target_can_step_down = {
+	has_variable = te_policy_rate_target
+	var:te_policy_rate_target > te_mon_target_min
+}
+
+te_mon_target_can_step_up = {
+	has_variable = te_policy_rate_target
+	var:te_policy_rate_target < te_mon_target_max
+}
+
+# Has this country's first monthly monetary update run? Everything the dashboard
+# reads is written by that pulse, and a `.gui` read of a missing variable logs
+# "Failed to fetch variable" every frame (gui_modding_guide.md gotcha 14/23), so
+# the whole monetary block hides behind this one question. The list is the
+# displayed contract of §16.2, not every variable the update owns —
+# te_mon_era_base_now is on it because the World Reference Rate row reads it,
+# and because it is the first thing step 0 writes, so a country that has it has
+# run a pulse.
+te_mon_display_ready = {
+	has_variable = te_mon_era_base_now
+	has_variable = te_policy_rate
+	has_variable = te_policy_rate_target
+	has_variable = te_premium_structural
+	has_variable = te_premium_cyclical
+	has_variable = te_rate_paid_pts
+	has_variable = te_mon_stance_band
+}
+
+# Is the policy rate at the floor of its regime's range? This is the gate on
+# open market operations (§11, and monetary_policy_design.md's "the floor tool"):
+# a bank that can still cut does not buy assets, because cutting is cheaper and
+# reversible and does the same job.
+#
+# ONLY FIAT AND DIGITAL EVER ASK. OMO is fiat/digital only (§0.1 ruling of
+# 2026-09-20 — a convertible currency cannot create money to buy bonds), and
+# banking_possible_cb_open_market_ops checks the regime before it reaches this
+# trigger. So the floor here is 0 under fiat and -3 under digital, which has no
+# cash to hoard and so three more points of cutting room; no gold-standard band
+# floor is in the picture at all.
+#
+# The bound comes from te_mon_floor_threshold, which reads te_mon_target_min —
+# so the law check that used to sit here is gone, and
+# country_policy_rate_floor_add on law_digital_currency is the single statement
+# of the rule. The threshold carries one point of slack (0.01) because
+# te_policy_rate is a drifting fractional value that need not land exactly on
+# the bound.
+te_mon_policy_rate_at_floor = {
+	has_variable = te_policy_rate
+	var:te_policy_rate <= te_mon_floor_threshold
+}

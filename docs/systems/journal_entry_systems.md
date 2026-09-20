@@ -10,7 +10,7 @@ Reference for all custom journal entry systems added by the Vic3TimelineExtended
 **Group:** `je_group_internal_affairs`
 
 ### Purpose
-Simulates a realistic financial cycle with boom/bust mechanics, including speculative bubbles, crashes, and economic contagion between trading partners. Requires `stock_exchange` tech + urban centers level 10+.
+Simulates a realistic financial cycle with boom/bust mechanics, including speculative bubbles, crashes, and economic contagion between trading partners. Requires `stock_exchange` tech + urban centers level 5+.
 
 ### Key Mechanics
 - **3 progress bars:** `banking_cycle_value_bar` (phase 0-100), `banking_cycle_momentum_bar` (velocity -5 to +5), `banking_bubble_pressure_bar` (speculation 0-100)
@@ -30,9 +30,10 @@ Simulates a realistic financial cycle with boom/bust mechanics, including specul
 | `crash_severity` | int | Crash intensity |
 | `banking_points_max_from_law` | int | Law-dependent cap |
 
-### Buttons (28 market + 16 CE + 16 CW)
+### Buttons (26 market + 16 CE + 16 CW)
 Central bank policy tools, organized as toggle pairs (market economy only):
-- Policy rate (hike/disable), open market ops, countercyclical buffer, deposit guarantee
+- Open market ops (locked until the policy rate reaches its regime floor), countercyclical buffer, deposit guarantee
+  (the *Raise Policy Rate* pair was deleted — the rate is now a dial, see **Monetary Policy block** below)
 - Directed credit, emergency liquidity, moral suasion
 - Margin requirements, FX devaluation, FX support
 - Capital controls (outflow), FX swap lines, export credit facility, asset relief program
@@ -48,7 +49,7 @@ Central bank policy tools, organized as toggle pairs (market economy only):
 - Each has an enable/disable toggle pair. Modifiers use prefix `cooperative_*`.
 
 ### Policy Dashboard (journal-entry widget)
-Two custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1` and `_2`, are the player-facing surface. The 62 scripted buttons stay declared on the journal entry because the AI picks policies through their `ai_chance` (confirmed in play testing), but each carries `is_ai = yes` in its `visible`, so the vanilla button grid shows nothing to a human.
+Two custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1` and `_2`, are the player-facing surface. The 60 scripted buttons stay declared on the journal entry because the AI picks policies through their `ai_chance` (confirmed in play testing), but each carries `is_ai = yes` in its `visible`, so the vanilla button grid shows nothing to a human.
 
 - **File:** `gui/journal_entry_widgets/banking_dashboard_widget.gui`
 - **Handlers:** `common/scripted_guis/banking_dashboard_scripted_gui.txt`
@@ -60,6 +61,8 @@ Areas:
 2. **Active Policies** — one row per intervention currently in force, gated on `banking_tool_*_active` only (no economic-system gate), each with a working Disable action.
 3. **Available Interventions** — only the current economic system's policies, in collapsible categories. Ineligible policies stay visible but disabled, with the reason in the action tooltip.
 
+**Monetary Policy block (phase 1).** The *Monetary Policy* category inside area 3 now opens with the policy-rate dial block, above the two market interventions: policy rate, rate target with a −/+ stepper, rate you pay (the engine's own `GetPlayer.GetYearlyInterestRate` beside the script-computed `te_rate_paid_pts`), credit standing, risk premium, policy stance (**band name only** — the stance gap is hidden state), delegation and mandate. Handlers live in `common/scripted_guis/te_monetary_sguis.txt`: one interactive `banking_mon_control_sgui` carrying ops 0–6 (target − / +, delegate, take control, the three mandates) plus five scope-free display handlers that decide which rows are drawn. The category header is now unconditional and the old `banking_dash_system_market` gate moved down onto a sub-container wrapping the two intervention rows — a command-economy, bankless, commodity-money or crypto country still has a policy rate, it just does not choose one, and one customizable-loc line (`te_mon_no_dial_reason`) says which of the four causes applies. Row texts come from `banking_dash_custom_loc.txt` (`te_mon_stance_band_name`, `te_mon_delegation_state`, `te_mon_mandate_name`). Full system: `docs/systems/mod_systems.md` § Banking Cycle → **Monetary Policy (phase 1)**.
+
 Editing rules: change a policy's cost, eligibility or effect in the **helper**, not in the button or the scripted GUI. Never delete a `scripted_button = …` line from `je_banking.txt` — those `ai_chance` blocks are the AI's only path to banking policy.
 
 ### History Charts (journal-entry widget)
@@ -67,6 +70,7 @@ A third custom widget in `custom_widget_container_3`, collapsed by default.
 
 - **File:** `gui/journal_entry_widgets/banking_history_widget.gui` (chart types: `gui/journal_entry_widgets/te_history_chart.gui`)
 - **Series:** cycle value and bubble pressure (0–100 indices) and momentum (signed monthly delta) — three separate charts, because the units differ.
+- **Monetary series (phase 1):** two further charts below those three — policy rate (`te_history_bar_signed`, ±12pp, signed because a digital-currency regime runs to −3) and rate paid on debt (`te_history_bar_unsigned`, 0–20pp). Both tooltips print the **exact** figure, unlike the banded cycle series, because these are chosen/shown state rather than hidden state. Both axes clip: read oscillation off them, not absolute levels.
 - **Sampling:** `te_history_record_banking_samples` from the JE's own `on_monthly_pulse`, after `banking_cycle_check_and_execute_crash`. Gated on `has_game_rule = banking_system_enabled` + `has_journal_entry = je_banking_cycle` and on `te_history_country_is_tracked` (player, or major power and above).
 - **Markers:** policy adopted / withdrawn, recorded inside each `banking_effect_<button>` helper so the AI's buttons and the dashboard both hit it; plus `crash` and `crash_contagion` from the crash subsystem. Hovering a bar shows the date, the reading and — via `te_history_marker_tooltip` — each marker's own policy name, description and static-modifier effect list.
 - **Ranges:** 1 / 5 / 10 years, held in the GUI variable system only. Retention is 120 monthly samples.
@@ -83,7 +87,7 @@ A third custom widget in `custom_widget_container_3`, collapsed by default.
 - `banking_capital_controls_out` — removed when conditions normalize
 - **Command Economy modifiers** (`planning_*`): 8 mods applied by CE planning-tool buttons
 - **Cooperative modifiers** (`cooperative_*`): 8 mods applied by CW council-tool buttons
-- **Law-change cleanup:** `on_law_enactment_pass` → `te_banking_law_change_cleanup` (in `extra_on_actions.txt`) removes all economy-type-specific modifiers automatically when the economic law changes. CE → market removes `planning_*`; CW → market removes `cooperative_*`; market → CE/CW removes all 14 `banking_*` CB-tool modifiers. The dashboard's Active Policies area deliberately does **not** apply an economic-system gate, so if that cleanup ever misses a case (a law swapped by something other than `on_law_enactment_pass`) the stale policy still shows up with a working Disable action.
+- **Law-change cleanup:** `on_law_enactment_pass` → `te_banking_law_change_cleanup` (in `extra_on_actions.txt`) removes all economy-type-specific modifiers automatically when the economic law changes. CE → market removes `planning_*`; CW → market removes `cooperative_*`; market → CE/CW removes all 13 `banking_*` CB-tool modifiers. The dashboard's Active Policies area deliberately does **not** apply an economic-system gate, so if that cleanup ever misses a case (a law swapped by something other than `on_law_enactment_pass`) the stale policy still shows up with a working Disable action.
 
 ### Events
 - `minor_events_timelineextended.6` — crash announcement (origin country)
