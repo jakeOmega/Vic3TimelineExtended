@@ -12,7 +12,10 @@
 # be stepped one month at a time instead of waiting for the calendar.
 #
 # HIDDEN STATE. te_neutral_rate, te_neutral_error, te_neutral_walk and
-# te_mon_stance_gap are hidden from the player everywhere else (§8 "The rule").
+# te_mon_stance_gap are hidden from the player everywhere else (§8 "The rule"),
+# and since phase 2 so are te_inflation_core, te_inflation_noise and the whole
+# §9.1 pressure sum with its individual terms (ruling P7 — the sum carries
+# -0.4 x the stance gap, so anything that prints it prints r*).
 # Printing them HERE is deliberate and allowed — this event is console-only, it
 # is never surfaced by any journal entry, button or on-action, and reading r*
 # is the whole point of a debug read-out. Nothing in this file may be reused in
@@ -34,7 +37,9 @@ te_debug_monetary.1 = { # REVIEWED 2026-09-19: console-only test event (`event t
 	desc = te_debug_monetary.1.d
 	flavor = te_debug_monetary.1.f
 
-	# Step one month: target, drift, premium, rate paid, stance, modifiers.
+	# Step one month: target, drift, premium, inflation, rate paid, stance,
+	# modifiers. Not idempotent — one click is one month, including one draw
+	# of each random walk and one month of core-inflation adjustment.
 	option = {
 		name = te_debug_monetary.1.a
 		default_option = yes

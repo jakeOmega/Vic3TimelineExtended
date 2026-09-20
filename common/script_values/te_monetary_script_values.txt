@@ -2,7 +2,8 @@
 # Monetary Policy — script values
 # ============================================================================
 # Spec: docs/systems/monetary_policy_design.md (§4 rate stack, §7 risk premium,
-# §8 stance + neutral rate, §16 implementation mapping, §21 tuning constants).
+# §8 stance + neutral rate, §9 inflation, §16 implementation mapping,
+# §21 tuning constants).
 #
 # Everything here is evaluated in COUNTRY scope unless a comment says otherwise.
 #
@@ -1001,4 +1002,591 @@ te_mon_band_edge_hyper = {
 # edge rather than restated, so the two can never drift apart.
 te_mon_hyperinflation_threshold = {
 	value = te_mon_band_edge_hyper
+}
+
+
+# ============================================================================
+# PHASE 2 — INFLATION: step 6's working values (§9.1, §9.3)
+# ============================================================================
+# The constants above are what §21 tunes; everything below is the ARITHMETIC
+# step 6 (te_monetary_update_inflation) assembles out of them. It lives here
+# rather than in the effect for two reasons:
+#
+#   * change_variable's op slots take a literal, a var:X or a NAMED SCRIPT
+#     VALUE, and its `divide` slot does not reliably take even that
+#     (scripting_best_practices.md:432) — so anything built from a country
+#     trigger (`gdp`, `income`) or from a market read has to be a script value
+#     before the effect can touch it; and
+#   * every §9.1 pressure term is then individually readable, which is what
+#     lets events/te_debug_monetary_events.txt print the terms one by one
+#     instead of a single sum nobody can take apart.
+#
+# HIDDEN STATE (ruling P7). te_mon_pressure_total and every te_mon_pressure_*
+# term below are HIDDEN: the sum carries -0.4 x te_mon_stance_gap, so printing
+# it anywhere the player can see inverts to the stance gap and from there to
+# r* — the same inversion §0.1 found for bubble_pressure. A script value's name
+# is one ScriptValue() accessor away from a tooltip, so the rule is: these are
+# printable from te_debug_monetary.1 and from nowhere else. te_inflation,
+# te_inflation_expected and the player's own country_inflation_pressure_add /
+# country_wage_pressure_add are the displayable parts.
+
+
+# --- The cost-push basket (§9.3) --------------------------------------------
+
+# THE IDIOM IS st_res_<good>_price_rel's (common/script_values/st_res_script_values.txt,
+# rationale in docs/systems/strategic_reserve_system.md § "The price signal").
+# Each value is the signed premium against the good's base price on the
+# country's own market, as a fraction: -0.12 is 12% below base.
+#
+#   max(market_goods_pricier, 0) - max(market_goods_cheaper, 0)
+#
+# written as `value = 0`, the market read, `min = 0` (that is the max-with-zero
+# clamp), then a `subtract` block of the same shape. The engine docs do not
+# settle whether the two reads are clamped at zero or are signed mirrors of
+# each other, and this expression is correct either way. Do NOT simplify it to
+# a bare market_goods_pricier read, and do NOT rewrite the reads as a
+# `this.market.mg:<good>` dot chain: no vanilla file reads through `mg:` that
+# way and a chain that silently returned zero would look exactly like a market
+# sitting at base price.
+#
+# WHY THESE ARE NOT st_res_grain_price_rel / st_res_oil_price_rel. The reserve
+# defines two of the basket's eight goods and would have to define the other
+# six for goods it does not stockpile. Eight values under one prefix, retuned
+# and read as one set, beats a basket that breaks the day the Strategic Reserve
+# drops a good.
+#
+# UNGUARDED ON PURPOSE. te_mon_basket_index_value below gates each term on the
+# market actually trading the good; these raw reads are also printed one by one
+# by te_debug_monetary.1, where an engine complaint about `mg:oil` in a market
+# that has never traded oil is the ANSWER to §9.3's open question, not a bug.
+
+te_mon_price_rel_grain = {
+	value = 0
+	market = {
+		mg:grain = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+	subtract = {
+		value = 0
+		market = {
+			mg:grain = {
+				add = market_goods_cheaper
+			}
+		}
+		min = 0
+	}
+}
+
+te_mon_price_rel_clothes = {
+	value = 0
+	market = {
+		mg:clothes = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+	subtract = {
+		value = 0
+		market = {
+			mg:clothes = {
+				add = market_goods_cheaper
+			}
+		}
+		min = 0
+	}
+}
+
+te_mon_price_rel_coal = {
+	value = 0
+	market = {
+		mg:coal = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+	subtract = {
+		value = 0
+		market = {
+			mg:coal = {
+				add = market_goods_cheaper
+			}
+		}
+		min = 0
+	}
+}
+
+te_mon_price_rel_oil = {
+	value = 0
+	market = {
+		mg:oil = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+	subtract = {
+		value = 0
+		market = {
+			mg:oil = {
+				add = market_goods_cheaper
+			}
+		}
+		min = 0
+	}
+}
+
+te_mon_price_rel_fish = {
+	value = 0
+	market = {
+		mg:fish = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+	subtract = {
+		value = 0
+		market = {
+			mg:fish = {
+				add = market_goods_cheaper
+			}
+		}
+		min = 0
+	}
+}
+
+te_mon_price_rel_meat = {
+	value = 0
+	market = {
+		mg:meat = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+	subtract = {
+		value = 0
+		market = {
+			mg:meat = {
+				add = market_goods_cheaper
+			}
+		}
+		min = 0
+	}
+}
+
+te_mon_price_rel_wood = {
+	value = 0
+	market = {
+		mg:wood = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+	subtract = {
+		value = 0
+		market = {
+			mg:wood = {
+				add = market_goods_cheaper
+			}
+		}
+		min = 0
+	}
+}
+
+te_mon_price_rel_fabric = {
+	value = 0
+	market = {
+		mg:fabric = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+	subtract = {
+		value = 0
+		market = {
+			mg:fabric = {
+				add = market_goods_cheaper
+			}
+		}
+		min = 0
+	}
+}
+
+# index = SUM( weight x (price / base - 1) ) over the eight goods (§9.3):
+#
+#   grain .30 | clothes .15 | coal .15 | oil .15
+#   fish .075 | meat .075   | wood .05 | fabric .05        (they sum to 1.00)
+#
+# THE WEIGHTS LIVE HERE AND NOWHERE ELSE. They are literals rather than eight
+# named constants because they are one table, meaningless apart, and §21 does
+# not tune them individually.
+#
+# EACH TERM IS GATED on the market actually supplying the good, using the
+# guard the mod already uses for exactly this question
+# (common/mobilization_options/extra_mobilization_options.txt:5-12:
+# `market ?= { mg:<good> = { market_goods_sell_orders > 0 } }`). A good the
+# market has never traded contributes 0 rather than erroring — and that is the
+# right economics as well as the safe read: the price of a good nobody in your
+# market supplies is not a cost your economy is paying. The weights are NOT
+# renormalised over the surviving goods; an economy with no oil trade has a
+# genuinely smaller basket.
+#
+# ORDER INSIDE EACH TERM: the `min = 0` clamps inside te_mon_price_rel_<good>
+# run before the weight is applied here, which is the right way round — see the
+# "DO NOT FOLD THE TWO MULTIPLIERS INTO THIS CLAMP BLOCK" note above
+# te_mon_stance_gap_clamped for what folding a multiply ahead of a bound costs.
+te_mon_basket_index_value = {
+	value = 0
+	if = {
+		limit = { market ?= { mg:grain = { market_goods_sell_orders > 0 } } }
+		add = {
+			value = te_mon_price_rel_grain
+			multiply = 0.30
+		}
+	}
+	if = {
+		limit = { market ?= { mg:clothes = { market_goods_sell_orders > 0 } } }
+		add = {
+			value = te_mon_price_rel_clothes
+			multiply = 0.15
+		}
+	}
+	if = {
+		limit = { market ?= { mg:coal = { market_goods_sell_orders > 0 } } }
+		add = {
+			value = te_mon_price_rel_coal
+			multiply = 0.15
+		}
+	}
+	if = {
+		limit = { market ?= { mg:oil = { market_goods_sell_orders > 0 } } }
+		add = {
+			value = te_mon_price_rel_oil
+			multiply = 0.15
+		}
+	}
+	if = {
+		limit = { market ?= { mg:fish = { market_goods_sell_orders > 0 } } }
+		add = {
+			value = te_mon_price_rel_fish
+			multiply = 0.075
+		}
+	}
+	if = {
+		limit = { market ?= { mg:meat = { market_goods_sell_orders > 0 } } }
+		add = {
+			value = te_mon_price_rel_meat
+			multiply = 0.075
+		}
+	}
+	if = {
+		limit = { market ?= { mg:wood = { market_goods_sell_orders > 0 } } }
+		add = {
+			value = te_mon_price_rel_wood
+			multiply = 0.05
+		}
+	}
+	if = {
+		limit = { market ?= { mg:fabric = { market_goods_sell_orders > 0 } } }
+		add = {
+			value = te_mon_price_rel_fabric
+			multiply = 0.05
+		}
+	}
+}
+
+# The same index, read off the country that OWNS this country's market (§9.3's
+# performance note). Every member of a customs union shares one market, so the
+# eight price reads are done once by the market owner and copied by everybody
+# else. Block form (`market = { owner = { ... } }`) rather than a
+# `market.owner.var:` chain, for the same reason the price reads are.
+#
+# Step 6 only calls this when the owner is a DIFFERENT country that already has
+# the variable, so the value never falls through to 0 in practice.
+te_mon_basket_index_from_owner = {
+	value = 0
+	market = {
+		owner = {
+			if = {
+				limit = { has_variable = te_basket_index }
+				add = var:te_basket_index
+			}
+		}
+	}
+}
+
+
+# --- Guarded reads of the two inflation levels ------------------------------
+
+# Step 0 initialises both, so the guards are belt-and-braces for exactly one
+# caller: the console read-out, which evaluates these on whatever country the
+# player typed the event at — including one whose first pulse has not run.
+
+te_mon_inflation_read = {
+	value = 0
+	if = {
+		limit = { has_variable = te_inflation }
+		add = var:te_inflation
+	}
+}
+
+te_mon_inflation_core_read = {
+	value = 0
+	if = {
+		limit = { has_variable = te_inflation_core }
+		add = var:te_inflation_core
+	}
+}
+
+
+# --- The §9.1 pressure terms, one script value each -------------------------
+# HIDDEN — printable only from te_debug_monetary.1 (see the section header).
+
+# Loose money: -0.4 x the clamped stance gap. te_mon_stance_gap_clamped is the
+# same +/-4-clamped read the cycle channel uses, and it is 0 for every country
+# without a dial — so bankless, commodity-money, crypto and dollarised
+# countries simply drop this term, which is §9.1's intent.
+#
+# IT IS LAST MONTH'S GAP (ruling P5). Step 8 rewrites te_mon_stance_gap later
+# in the same pulse; §16.3 already tolerates a one-month-old gap for the cycle
+# channel, and the alternative — moving the stance ahead of inflation — would
+# make the gap depend on an inflation figure computed from it.
+te_mon_pressure_stance = {
+	value = te_mon_stance_gap_clamped
+	multiply = te_mon_stance_pressure_coeff
+	multiply = -1
+}
+
+# Speculative excess feeding prices once bubble_pressure reaches 65 — the same
+# threshold te_mon_cycle_lean leans at, and guarded the same way, because
+# bubble_pressure belongs to je_banking_cycle and a country without the journal
+# entry has no such variable.
+te_mon_pressure_bubble = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = bubble_pressure
+			var:bubble_pressure >= 65
+		}
+		add = te_mon_bubble_pressure_term
+	}
+}
+
+# How far above 1% of GDP a year the deficit has to be before it prices
+# anything (§9.1). Same shape as te_mon_unanchored_tolerance: inside the
+# tolerance, an ordinary working deficit costs nothing.
+te_mon_deficit_tolerance = {
+	value = 1
+}
+
+# The deficit as a % of GDP a year (ruling P4). Shape borrowed from
+# financial_cycle_government_fiscal_policy_effect_size
+# (common/script_values/extra_script_values.txt), with two differences:
+#
+#   * the flows are annualised by te_mon_deficit_annualise_factor (52) before
+#     the division, because `income` and `total_expenses` are WEEKLY while
+#     `gdp` is annual. The engine's own event-target catalogue says so for two
+#     of the three — docs/engine/event_targets_summary.txt: "income … Get the
+#     current weekly income of the scoped country" and "gdp … Get the scoped
+#     country's yearly predicted GDP" — which is as far as §17 check 12 can be
+#     settled from the files; total_expenses is documented only as a trigger
+#     and is assumed to share income's cadence; and
+#   * the monetisation the country is running is ADDED BACK, because no trigger
+#     reads minting and money-financed spending would otherwise suppress its
+#     own deficit term. One monetisation level is 1% of GDP a year
+#     (te_mon_monetisation_gdp_share), i.e. exactly one point of this figure.
+#
+# Cached into te_mon_deficit_pct by step 6 and printed by the console read-out,
+# so the units question can be settled from a running game.
+te_mon_deficit_pct_value = {
+	value = total_expenses
+	subtract = income
+	multiply = te_mon_deficit_annualise_factor
+	divide = {
+		value = gdp
+		min = 1
+	}
+	multiply = 100
+	if = {
+		limit = { has_variable = te_monetisation_level }
+		add = {
+			value = var:te_monetisation_level
+			multiply = te_mon_monetisation_gdp_share
+			multiply = 100
+		}
+	}
+}
+
+# 0.3 x max(0, deficit % of GDP - 1), doubled at war (§9.1). It reads the
+# CACHED te_mon_deficit_pct rather than recomputing te_mon_deficit_pct_value,
+# so the number the console prints is the number the pressure used.
+te_mon_pressure_deficit = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_deficit_pct }
+		add = var:te_mon_deficit_pct
+	}
+	subtract = te_mon_deficit_tolerance
+	min = 0
+	multiply = te_mon_deficit_coeff
+	if = {
+		limit = { is_at_war = yes }
+		multiply = 2
+	}
+}
+
+# Money finance: +2.5pp per monetisation level (§9.1, §11).
+te_mon_pressure_monetisation = {
+	value = 0
+	if = {
+		limit = { has_variable = te_monetisation_level }
+		add = var:te_monetisation_level
+	}
+	multiply = te_mon_monetisation_pressure
+}
+
+# Quantitative easing: a flat +1.0pp while open-market operations are running
+# (§9.1, §11). banking_tool_omo_active is the shipped read of the JE modifier
+# (common/scripted_triggers/market_triggers.txt) and is guarded with `?=`, so a
+# country without the journal entry answers no.
+te_mon_pressure_qe = {
+	value = 0
+	if = {
+		limit = { banking_tool_omo_active = yes }
+		add = te_mon_qe_pressure
+	}
+}
+
+# Everything script grants as standing pressure, in pp. TWO TYPES, not one
+# (ruling P11): country_wage_pressure_add is what labour and welfare laws carry
+# and what the §9.4 real-wage dividend pays back on, country_inflation_pressure_add
+# is everything else (events, devaluations). §9.1 sums them; only the dividend
+# tells them apart. Both are modifier fields on vanilla's scale, so 0.01 = 1pp
+# and the sum is read back x 100.
+te_mon_pressure_modifiers = {
+	value = 0
+	add = modifier:country_inflation_pressure_add
+	add = modifier:country_wage_pressure_add
+	multiply = 100
+}
+
+# The hidden mean-reverting random walk (ruling P7). It exists so the pressure
+# sum cannot be inverted to read the stance gap: every other term is either
+# public or derivable, so without a random component two months of a displayed
+# headline would recover r*. Step 6 advances it; this only reads it.
+te_mon_pressure_noise = {
+	value = 0
+	if = {
+		limit = { has_variable = te_inflation_noise }
+		add = var:te_inflation_noise
+	}
+}
+
+# The regime pull (§9.1). A convertible currency drags core inflation back to
+# zero — that is the deflation bias of hard money, expressed as a pressure term
+# rather than a constant — and a currency nobody issues drags harder still.
+#
+#   gold / commodity money, and a DOLLARISED country (ruling P9: it now uses
+#   somebody else's metal-or-otherwise disciplined money)   -pi_core
+#   decentralized cryptocurrency                            -(pi_core + 1)
+#
+# Dollarisation is tested first so a dollarised crypto country gets the
+# metallic pull rather than the crypto one: the currency actually circulating
+# is the foreign one. The §9.1 gold-SUPPLY term is deliberately absent — it is
+# a phase-3 companion to gold flows (ruling P2), and this plain pull carries
+# the deflation bias until then.
+te_mon_pressure_regime_pull = {
+	value = 0
+	if = {
+		limit = {
+			OR = {
+				te_mon_is_metallic = yes
+				AND = {
+					has_variable = te_mon_dollarised
+					var:te_mon_dollarised = 1
+				}
+			}
+		}
+		subtract = te_mon_inflation_core_read
+	}
+	else_if = {
+		limit = { has_law_or_variant = law_type:law_decentralized_cryptocurrency }
+		subtract = te_mon_inflation_core_read
+		subtract = 1
+	}
+}
+
+# The whole §9.1 pressure, in pp: how far above expectations inflation settles
+# while all of this lasts. A LEVEL, never a per-month increment.
+#
+# THE GOLD-FLOW TERM IS ABSENT ON PURPOSE (phase 3, ruling P2), as is the
+# gold-supply term folded into the regime pull above.
+te_mon_pressure_total = {
+	value = te_mon_pressure_stance
+	add = te_mon_phase_pressure
+	add = te_mon_pressure_bubble
+	add = te_mon_pressure_deficit
+	add = te_mon_pressure_monetisation
+	add = te_mon_pressure_qe
+	add = te_mon_pressure_modifiers
+	add = te_mon_pressure_noise
+	add = te_mon_pressure_regime_pull
+}
+
+
+# --- Expectations: the credibility blend (§9.1) -----------------------------
+
+# |headline - anchor|, in pp. change_variable has no absolute value and a
+# script value's `limit` tests triggers on the scope rather than the running
+# total, so the sign is decided from the inputs and each branch subtracts the
+# other way round.
+te_mon_inflation_gap_abs = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_inflation
+			var:te_inflation > te_mon_inflation_anchor
+		}
+		add = var:te_inflation
+		subtract = te_mon_inflation_anchor
+	}
+	else_if = {
+		limit = { has_variable = te_inflation }
+		add = te_mon_inflation_anchor
+		subtract = var:te_inflation
+	}
+}
+
+# c_eff = c x max( 0 , 1 - |headline - anchor| / 10 ) — credibility is lost as
+# inflation leaves target, and is gone entirely 10pp away from it (§9.1).
+# Without it an anchored `expected` would trail a STEADY high inflation for
+# ever and §10's lenders' floor would under-price it permanently.
+#
+# METALLIC MONEY IS EXEMPT — convertibility IS the anchor — and step 6 carries
+# that exemption rather than this value: a metallic regime never reaches the
+# expectations blend at all, because §9.1 pins its expectations to 0 outright
+# (the table's "—" for alpha). If that pin is ever softened into an ordinary
+# c = 1 update, the exemption has to reappear here as a branch.
+te_mon_credibility_eff = {
+	value = 1
+	subtract = {
+		value = te_mon_inflation_gap_abs
+		divide = te_mon_deanchor_span
+	}
+	min = 0
+	multiply = te_mon_credibility_c
+}
+
+# (1 - c_eff) x headline + c_eff x anchor — what expectations are moving
+# toward this month, before alpha decides how far they get (§9.1).
+te_mon_expectation_target = {
+	value = te_mon_inflation_read
+	multiply = {
+		value = 1
+		subtract = te_mon_credibility_eff
+	}
+	add = {
+		value = te_mon_inflation_anchor
+		multiply = te_mon_credibility_eff
+	}
 }
