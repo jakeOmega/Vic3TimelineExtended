@@ -67,8 +67,8 @@ wrong or leave open.
 Smaller known roughnesses, all judged acceptable for a first pass: the era proxy is
 non-monotonic if a great power holds `globalization` without `macroeconomics`;
 `te_mon_gdp_last_year` is seeded at game start, so the first year's growth term reads ≈ −0.3
-once; `banking_stance_band_3` is an empty modifier with no icon and `te_monetary_base_offset`
-reads "−20.0%" in the country modifier list beside the rate it is cancelling;
+once; `banking_stance_band_3` is an empty modifier with no icon (the offset that used to read
+"−20.0%" beside the rate it cancels is gone — the cancel moved into `INJECT:base_values`);
 `pm_shell_pernis_refinery`'s structural term is `workforce_scaled`, so §7.5's "−0.3" is only
 true at one building level; `cb_fx_support`'s `banking_stance_is_tight` easing weight may be
 sign-wrong and belongs to the phase-3 FX pass; OMO's `ai_chance` has no recession-only term
@@ -93,11 +93,30 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
 
 **Structural — a failure here means the premium stack is not doing what the files say**
 
-1. **Do `INJECT:`ed `modifier = { }` blocks SUM with vanilla's?** (§17 checks 1, 3, 4, then
-   2.) Read a great power's budget-panel interest tooltip — does it still list rank −50%
-   *and* laissez-faire −25%? Does expected SoL under `law_industry_banned` net to zero? Then,
-   separately and **not** as a substitute, the `state_expected_sol_from_literacy`
-   static-modifier probe (0 ⇒ sum, −5 ⇒ last wins, +5 ⇒ inject ignored).
+1. **Do `INJECT:`ed `modifier = { }` blocks SUM with vanilla's?** — **MOSTLY ANSWERED,
+   2026-09-19: YES for a nested `modifier = { }` on country RANKS and on TECHNOLOGIES**,
+   read in game by the owner (rank −50% and its +50% cancel both gone from the interest
+   tooltip; the finance techs' −2% cancelled). §17 check 4 and the rank half of check 1 are
+   closed, and with them `te_monetary_rank_injections.txt` and
+   `te_monetary_tech_injections.txt`. Recorded in `scripting_best_practices.md` § INJECT.
+
+   **Still open, and it is now the one that matters:** laissez-faire's −25% (the law half of
+   check 1) and check 3's `law_industry_banned` were not separately read — same nested-block
+   case on a third entity type, very likely the same, but inference. And **check 2, a FLAT
+   KEY inside a static modifier, is untouched**: the `state_expected_sol_from_literacy`
+   probe (0 ⇒ sum, −5 ⇒ last wins, +5 ⇒ inject ignored), which is **not** a substitute for
+   the nested-block reads and is **not** substituted for by them.
+
+1b. **NEW (2026-09-19), and it is check 2 with teeth.** `te_monetary_base_offset` is gone;
+   vanilla's flat base is now cancelled by `country_loan_interest_rate_add = -0.2` inside the
+   mod's `INJECT:base_values` block (`common/static_modifiers/extra_modifiers.txt`) — the
+   same flat-key-in-a-static-modifier case as check 2. Day one on a fresh 1836 game, read any
+   budget-panel interest tooltip:
+   * **no "Base Value" line at all, UK ≈ 3.4%, Russia ≈ 12%** ⇒ the keys sum. Correct.
+   * **every country reading 0.0%** ⇒ last wins: the base is −20% instead of cancelled.
+     Revert that one commit; it restores the offset modifier and step 9's two-modifier write.
+   Also check a **released subject shows its own rate**, not its former overlord's — the
+   country-creation hooks used to apply the parent's number (see the note under §16.1).
 
    **The techs are now part of this check.** R3 cancels
    `country_loan_interest_rate_add = -0.02` on each of `banking`, `central_banking`,
@@ -1137,27 +1156,46 @@ Countries without the JE or a national bank must still pay world rate + premium,
 JE-scope `multiplier =` cannot read country properties (`scripting_best_practices.md:400`).
 So the rate lives in **country scope**, refreshed for every country.
 
-Two static modifiers, always added in the **same effect block**:
+**AS SHIPPED (revised 2026-09-19): ONE static modifier, not two.** The design below
+described a pair — an offset cancelling vanilla's flat base, plus the rate itself. That
+pair shipped and was then collapsed: vanilla's flat base is cancelled on the entity that
+grants it, by `country_loan_interest_rate_add = -0.2` in the mod's `INJECT:base_values`
+block, the same treatment the ranks and the finance techs get. `te_monetary_base_offset` is
+deleted. The player sees one interest line instead of a +20% base with a −20% modifier
+beside it.
 
 ```
-te_monetary_base_offset = { country_loan_interest_rate_add = -0.2 }
-te_monetary_rate_paid   = { country_loan_interest_rate_add = 0.01 }   # multiplier = var:te_rate_paid_pts
+INJECT:base_values = { … country_loan_interest_rate_add = -0.2 }    # cancels vanilla's flat 20%
+te_monetary_rate_paid = { country_loan_interest_rate_add = 0.01 }   # multiplier = var:te_rate_paid_applied
 ```
 
-Idiom: `sol_expectations_apply_strata_shifts`
-(`common/scripted_effects/sol_expectations_effects.txt:143-160`). Invariant: the offset is
-never present without the rate modifier, so Σ`_add` never sits at ≤ 0; a freshly spawned
-country with neither pays vanilla's 20% until its first pulse — a safe fallback. Skip the
-re-apply when the change since last month is under 0.05. `REPLACE` the
-`country_loan_interest_rate_add` **modifier type definition** to `decimals = 1` (precedent:
-`common/modifier_type_definitions/mod_entity_modifier_types.txt:3486`).
+**Consequence:** a country with no rate modifier now sums to **0%**, not vanilla's 20%. The
+owner has confirmed in game that a non-positive total simply displays 0.0% with no ill
+effect, so the old "Σ`_add` never sits at ≤ 0" invariant is retired. Skip the re-apply when
+the change since last month is under 0.05. `REPLACE` the `country_loan_interest_rate_add`
+**modifier type definition** to `decimals = 1` (precedent:
+`common/modifier_type_definitions/mod_entity_modifier_types.txt:3486`). The flat-key INJECT
+is §17 check 2 and is still unverified — see §0.3 item 1b for the day-one read and the
+one-commit revert.
 
 - **Run the update from `on_game_started` as well as the monthly pulse.** The
   cancel-`INJECT`s apply on day one but the rate modifier would not exist until the first
-  pulse; several tags start in debt, and a Britain-like tag would pay ~20% instead of ~3.5%
-  for that month. **Also call it from the country-creation on-actions** — civil-war and
-  released tags would otherwise show vanilla's 20% until their first pulse, exactly when
-  the player is looking at them.
+  pulse; several tags start in debt, and they would borrow free for that month. **Also call
+  it from the country-creation on-actions** — civil-war and released tags would otherwise
+  borrow free until their first pulse, exactly when the player is looking at them.
+- **BUT NOT DIRECTLY FROM EITHER (fixed 2026-09-19).** `add_modifier`'s `multiplier =` is
+  resolved against **ROOT**. `on_game_started` has no root scope at all and the six
+  country-creation hooks leave the **parent** in ROOT, so the first write applied every
+  country's rate at a multiplier of 1.0 (and would have stamped a parent's rate onto a
+  released tag). Both families dispatch a hidden country event, `te_monetary_internal.1`
+  (`events/te_monetary_events.txt`), whose ROOT is the country it fires on; it runs the whole
+  update, so each entry point still causes exactly one, non-doubled call.
+  `on_monthly_pulse_country` and `on_country_formed` declare "Expected Scope: country" and
+  call the effect directly. Step 9 carries a `te_rate_paid_rooted` marker — set only when
+  `root ?= this` — so anything applied root-less is repaired on the next monthly pulse; it is
+  the one monetary variable deliberately not initialised. Full write-up:
+  `scripting_best_practices.md` § "`add_modifier { multiplier = var:X }` Resolves Against
+  ROOT".
 - **`-0.2` hardcodes vanilla's `base_values` rate.** When phase 1 ships, add a line to
   `docs/guides/vanilla_patch_runbook.md` so a vanilla change to
   `country_loan_interest_rate_add` in `00_code_static_modifiers.txt` gets caught — along
