@@ -793,7 +793,7 @@ does not issue. Core now settles near `1 + P/2`. One `else_if` in step 6's expec
 | **Q3** | The phase-1 gold band (reference ±2) is **deleted**; gold's range is §5.1's 0–15. The dashboard keeps **both** rows — *World Reference Rate* and the new *World Rate* — because the first is still the lenders' floor | §19 row 1 called the band an interim standing in for flows | restore two branches in `te_mon_target_min` / `_max` |
 | **Q4** | "On gold" is **one trigger, `te_mon_is_on_gold`** = the law ∧ not suspended, and every peg test goes through it (the metallic anchor, peg defence, gold flows, the 0–15 ceiling, the mandate button). Suspension is a **month counter** (`te_peg_suspended_months`), on the dollarisation precedent (P9); the timed modifiers carry only the prices, and script never reads `has_modifier` on them | "acts as fiat without the law change" (§12.3) needs the law-derived regime overridden, and a missed raw `law_gold_standard` test is silent | grep the monetary files for the raw law test — the survivors are deliberate (regime code, `te_mon_has_dial`, the dashboard's gold-rows gate, the law-gone reset in step 10) |
 | **Q4** | A suspended country gets fiat's **range, anchor, credibility and mandates** — and **not** OMO or monetisation | §12.3 says "free dial, inflation-constrained", and both tools are gated on the fiat/digital *laws* (the OMO bool, `te_mon_can_monetise`); a five-year emergency is not a licence to print | add `country_can_create_unbacked_money_bool` to `te_mon_peg_suspension` |
-| **Q5** | **`reserve_shortfall_pp`** (§6 names it and defines it nowhere) = `4 × max(0, 0.5 − scaled_gold_reserves)`, capped at 2, and **2 outright while in debt**. Peg defence rounds its target **up** with its own hysteresis (move when below the formula; come down only when > 1.25 above it) instead of the shared round-to-nearest ± 0.75 | an integer target under a fractional world rate sits *below* it half the time under round-to-nearest, and a peg defender parked below the world rate bleeds gold by construction — §19's "AI on peg defence survives a 2pp rise" fails on rounding alone | the 2 and the 0.5 in `te_mon_peg_shortfall_pp`; owner decision **J** |
+| **Q5** | **`reserve_shortfall_pp`** (§6 names it and defines it nowhere) = `4 × max(0, 0.5 − scaled_gold_reserves)`, capped at 2, and **2 outright while in debt**. Peg defence rounds its target **up to a tenth** with its own hysteresis (move when below the formula; come down only when > 0.35 above it) instead of the shared round-to-nearest-integer ± 0.75 — *revised after the first playtest from a whole point, see below* | an integer target under a fractional world rate sits *below* it half the time under round-to-nearest, and a peg defender parked below the world rate bleeds gold by construction — §19's "AI on peg defence survives a 2pp rise" fails on rounding alone | the 2 and the 0.5 in `te_mon_peg_shortfall_pp`; owner decision **J** |
 | **Q6** | "In debt" (§12.3) is **`scaled_debt > 0`**. Inflows also stop while in debt, not only outflows | gold arriving into a debt pays it down, and could then never be asked back because outflows stop in debt — free money through the back door | one trigger line |
 | **Q7** | Hot money leaves at 2× the ordinary speed **with a floor of a 0.5pp gap**, and a pending exit that *cannot* be paid hits peg confidence at that doubled, floored rate | §12.2 has the balance leave "when the gap falls to ≤ 0", but 2 × a zero outflow is zero — and peg defence parks everybody at a gap of zero. The confidence half is what makes spending borrowed gold dangerous rather than free | `te_mon_gold_hot_exit_gap_floor` |
 | **Q8** | The hot-money **balance is capped at one reserve limit** (inflows stop when it is reached, whatever the vault holds) | §12.2's own argument is that the reserve cap "would only stop a hoarder"; an unbounded balance leaves 12% of GDP a year for a player who spends it. Owner decision **I** | `te_mon_gold_inflow_room` |
@@ -819,8 +819,8 @@ does not issue. Core now settles near `1 + P/2`. One `else_if` in step 6's expec
 2. **The flow reads one month late in inflation** (step 10 runs after step 6) — the same lag
    ruling P5 accepts for the stance gap.
 3. **Defend's floor is `ceiling(world + 4)`**, so it can be up to a point more than +4.
-4. **A peg defender's target can sit up to 1.25 above its formula** before it steps down
-   (Q5's hysteresis) — small standing inflows, which become hot money.
+4. **A peg defender's target can sit up to 0.35 above its formula** before it steps down
+   (Q5's hysteresis) — small standing inflows, which become hot money and pay the carry.
 5. **`te_mon_peg_state` reads "Trusted" for a country that has never been under pressure even
    with an empty vault the month it empties** — confidence is a stock, and says so a month
    or two later.
@@ -828,6 +828,30 @@ does not issue. Core now settles near `1 + P/2`. One `else_if` in step 6's expec
    clamp raises the target the mandate set.
 7. **Command economies on the gold law** take step 10's off-gold branch (no dial): hot money
    is paid out the month they go planned.
+
+#### First playtest — owner, 2026-09-20 (Britain and France, 1836, game 1.14.3)
+
+Read from the dashboard and `te_debug_monetary.8`; `debug.log` / `error.log` carried nothing
+monetary. **Confirmed:** items **40** (`add_treasury` moves the treasury by exactly the printed
+flow — 1.333 × 54,139 = 72,178), **41**'s ceiling half (gold reads 0 / 15, a suspended-free
+France 0 / 25; the Defend floor is still unwalked), **42** (accumulators 117.298 / 27.069 =
+4.333 with Britain manual, 0 / 0 on peg defence), **39a** (carry 647 = 179,213 × 4.333 ÷ 1200),
+**39b** (Britain's own copy 3.000 against a global 4.333) and the day-one half of **36**.
+Gold rows show for Britain and not for France.
+
+**§17 check 7, provisionally answered: `on_monthly_pulse_country` runs BEFORE the global
+`on_monthly_pulse`.** One month after Britain went manual, the global read 4.333 and France's
+per-pulse copy still read 3.000 — France had taken its copy before that month's refresh. So
+every consumer of the world rate sees it one month late, which is the lag ruling Q1 already
+tolerates; nothing needs to change, and a second month should show France at the global.
+
+**What the playtest changed:** ruling **Q5** (peg defence now rounds up to a *tenth* — Britain's
+quarter-full vault asked for 3.46 and the whole-point rule gave it 4, a standing point of gap
+and carry on gold it had no use for); the rate-target stepper gained **ctrl-click = 0.1** and
+**shift-click = to the limit** (ops 9–12), so a target is no longer always an integer; *Borrowed
+Gold* and *Interest on It* became dashboard rows rather than tooltip lines; the block gained
+five sub-headings; the label column went 160 → 200 with Delegate / Take Control moved to a row
+of their own.
 
 #### IN-GAME VERIFICATION CHECKLIST (phase 3)
 
@@ -2241,7 +2265,8 @@ carries no status column and is left as written.)
 | Peg crisis threshold | confidence ≤ 20 | 12.3 |
 | World / reference rate fallback | `era_base` | 12.1 |
 | World rate clamp (ruling Q1) | −2 – 10 | 12.1 |
-| Peg-defence reserve shortfall (ruling Q5) | 2pp at zero reserves or in debt → 0 at half the limit; the mandate adds half, rounded **up** | 6 |
+| Peg-defence reserve shortfall (ruling Q5) | 2pp at zero reserves or in debt → 0 at half the limit; the mandate adds half, rounded **up to a tenth** | 6 |
+| Target step: click / ctrl / shift | 1pp / 0.1pp / to the regime limit | 4 |
 | Hot-money exit floor / hot-money cap (rulings Q7, Q8) | a 0.5pp gap / one reserve limit | 12.2 |
 | Peg confidence: start / healthy recovery / crisis cooldown (ruling Q10) | 100 / +1 a month / 24 months | 12.3 |
 | Defend / Suspend / Devalue | world + 4 for 12 months, +40 · 60 months, +2pp premium 5y, credibility lost 10y · confidence 50, revaluation 15% of the reserve limit, +3pp pressure decaying over 2y | 12.3 |

@@ -940,15 +940,20 @@ te_monetary_update_target = {
 			# rate is the phase-3 REAL one (§12.1), which a gold country can
 			# target directly because its own expected inflation is pinned at 0.
 			#
-			# ROUNDED UP, WITH ITS OWN HYSTERESIS (ruling Q5). The shared rule
-			# below rounds to nearest and tolerates a 0.75pp miss, which for
-			# every other mandate is noise — but a peg defender parked 0.75pp
-			# UNDER the world rate bleeds gold every month by construction. So
-			# this mandate moves its target whenever the target is below the
-			# formula, takes the next integer UP (the 0.05 keeps a formula of
-			# 3.00001 from costing a whole point), and comes down only once it
-			# is more than a point and a quarter too high. Then it skips the
-			# shared rule by handing it the target it has just settled.
+			# ROUNDED UP TO A TENTH, WITH ITS OWN HYSTERESIS (ruling Q5, revised
+			# after the first playtest). The shared rule below rounds to the
+			# nearest whole point and tolerates a 0.75pp miss, which for every
+			# other mandate is noise — but a peg defender parked 0.75pp UNDER
+			# the world rate bleeds gold every month by construction. So this
+			# mandate moves its target whenever the target is below the
+			# formula, takes the next TENTH up (the 0.005 keeps a formula of
+			# 3.00001 from costing a step), and comes down only once it is
+			# more than 0.35 too high. It was a whole point at first: Britain
+			# in 1836, with a vault a quarter full, asked for 3.46 and got 4 —
+			# a standing point of gap, borrowing gold it then paid the carry
+			# on. The dial has tenths now (the fine step), so the bank uses
+			# them. Then it skips the shared rule by handing it the target it
+			# has just settled.
 			limit = { var:te_mon_mandate = 3 }
 			set_variable = { name = te_mon_work value = te_mon_peg_defence_target }
 			set_variable = { name = te_mon_work2 value = var:te_policy_rate_target }
@@ -956,16 +961,18 @@ te_monetary_update_target = {
 			if = {
 				limit = {
 					OR = {
-						var:te_mon_work2 < -0.05
-						var:te_mon_work2 > 1.25
+						var:te_mon_work2 < -0.005
+						var:te_mon_work2 > 0.35
 					}
 				}
 				set_variable = {
 					name = te_policy_rate_target
 					value = {
 						value = var:te_mon_work
-						subtract = 0.05
+						subtract = 0.005
+						multiply = 10
 						ceiling = yes
+						divide = 10
 					}
 				}
 			}
@@ -2606,6 +2613,53 @@ te_mon_effect_target_step_down = {
 			min = te_mon_target_min
 			max = te_mon_target_max
 		}
+	}
+	custom_tooltip = banking_mon_step_tt
+}
+
+# THE FINE AND THE FAR STEP (ctrl-click and shift-click on the same two
+# buttons — ops 9-12 of banking_mon_control_sgui). A tenth of a point, because
+# under a gold standard the dial is now set against a fractional world rate and
+# a whole point of gap is 0.2% of GDP a month (§12.2); and straight to the
+# regime's limit, because fifteen clicks is not a decision. Both clamp against
+# te_mon_target_min / _max like the whole-point step, so neither can leave a
+# target the next pulse would undo. The target is therefore no longer always an
+# integer: the three ordinary mandates still round theirs to one, peg defence
+# rounds to a tenth (step 2), and a manual target is whatever the player set.
+te_mon_effect_target_fine_down = {
+	hidden_effect = {
+		change_variable = { name = te_policy_rate_target subtract = 0.1 }
+		clamp_variable = {
+			name = te_policy_rate_target
+			min = te_mon_target_min
+			max = te_mon_target_max
+		}
+	}
+	custom_tooltip = banking_mon_step_tt
+}
+
+te_mon_effect_target_fine_up = {
+	hidden_effect = {
+		change_variable = { name = te_policy_rate_target add = 0.1 }
+		clamp_variable = {
+			name = te_policy_rate_target
+			min = te_mon_target_min
+			max = te_mon_target_max
+		}
+	}
+	custom_tooltip = banking_mon_step_tt
+}
+
+te_mon_effect_target_to_min = {
+	hidden_effect = {
+		set_variable = { name = te_policy_rate_target value = te_mon_target_min }
+	}
+	custom_tooltip = banking_mon_step_tt
+}
+
+te_mon_effect_target_to_max = {
+	hidden_effect = {
+		set_variable = { name = te_policy_rate_target value = te_mon_target_max }
 	}
 	custom_tooltip = banking_mon_step_tt
 }

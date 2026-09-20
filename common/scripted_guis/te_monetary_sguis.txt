@@ -77,7 +77,15 @@ banking_mon_control_sgui = {
 		# A dial needs a national bank and a discretionary regime; independence
 		# binds the target to the mandate; delegation does the same by choice.
 		trigger_if = {
-			limit = { exists = scope:op scope:op = 0 }
+			# 0 a whole point, 9 a tenth (ctrl-click), 11 to the floor (shift-click).
+			limit = {
+				exists = scope:op
+				OR = {
+					scope:op = 0
+					scope:op = 9
+					scope:op = 11
+				}
+			}
 			custom_tooltip = {
 				text = banking_mon_tt_needs_dial
 				te_mon_has_dial = yes
@@ -114,7 +122,14 @@ banking_mon_control_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 1 }
+			# 1 a whole point, 10 a tenth, 12 to the ceiling.
+			limit = {
+				OR = {
+					scope:op = 1
+					scope:op = 10
+					scope:op = 12
+				}
+			}
 			custom_tooltip = {
 				text = banking_mon_tt_needs_dial
 				te_mon_has_dial = yes
@@ -307,6 +322,22 @@ banking_mon_control_sgui = {
 		else_if = {
 			limit = { scope:op = 8 }
 			te_mon_effect_monetisation_step_up = yes
+		}
+		else_if = {
+			limit = { scope:op = 9 }
+			te_mon_effect_target_fine_down = yes
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			te_mon_effect_target_fine_up = yes
+		}
+		else_if = {
+			limit = { scope:op = 11 }
+			te_mon_effect_target_to_min = yes
+		}
+		else_if = {
+			limit = { scope:op = 12 }
+			te_mon_effect_target_to_max = yes
 		}
 	}
 }
