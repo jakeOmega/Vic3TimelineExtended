@@ -7079,8 +7079,7 @@ te_mon_currency_reform_premium = {
 # te_monetary_monthly_update only while inflation is in the comfort band, and
 # scaled by `multiplier = var:te_mon_wage_dividend_applied` — one unit per
 # +0.1pp of country_wage_pressure_add, so law_factory_councils (+0.5pp) is
-# worth +0.1 standard of living for the lower strata and +0.15 financial
-# momentum a month.
+# worth -0.1 on lower-strata expectations and +0.15 financial momentum a month.
 #
 # WHY IT EXISTS. Wage pressure would otherwise be a hidden tax on every
 # progressive labour law: the law raises inflation, the player tightens to
@@ -7090,24 +7089,51 @@ te_mon_currency_reform_premium = {
 # credible monetary management the precondition for strong labour laws rather
 # than their enemy.
 #
-# TWO HALVES, AND ONE OF THEM IS DEAD FOR MOST COUNTRIES. Financial momentum is
-# only consumed by a country holding je_banking_cycle; the standard-of-living
-# half is live everywhere the monthly update runs, which is every country that
-# is not a command economy. That asymmetry is known and accepted — the loc
-# leads with the half everyone gets.
+# WHY EXPECTATIONS AND NOT STANDARD OF LIVING. §9.4 asks for a lower-strata
+# loyalist trickle. The engine has no lower-strata loyalist key (the one
+# country-scope loyalist modifier is all-strata and would hand aristocrats a
+# bonus for factory councils), and the obvious aimed substitute,
+# state_lower_strata_standard_of_living_add, is INERT at this magnitude: pop
+# SoL is an integer level (DEFINE NUM_WEALTH_LEVELS, and every vanilla grant of
+# the key but two is a whole number), so a fractional add does nothing unless
+# it sums with other sources across a whole point — and the dividend's whole
+# realistic range is a quarter of a point.
 #
-# NOT A LOYALIST TRICKLE. §9.4 asks for one, and the engine has no lower-strata
-# loyalist key: the one country-scope loyalist modifier applies to every
-# stratum and would hand aristocrats a bonus for factory councils.
-# state_lower_strata_standard_of_living_add is the aimed version of the same
-# idea — the workers whose pay held its value are better off, and the loyalty
-# follows from vanilla's own SoL-vs-expectations machinery instead of being
-# granted around it. A state-masked key inside a modifier a COUNTRY holds
-# applies across that country's states; vanilla's modifier_donghak_heaven_on_earth
-# carries this exact key and is added in a country_event
-# (events/soi_events/00_ep1_korea_events.txt).
+# country_sol_expectations_lower_offset_add is consumed CONTINUOUSLY, which is
+# why it works where the SoL key does not. It is summed into
+# sol_expectations_lower_shift_value (common/script_values/extra_script_values.txt),
+# which is then the `multiplier` on sol_expectations_lower_strata_shift — a
+# unit modifier carrying state_lower_strata_expected_sol_add = 1
+# (common/scripted_effects/sol_expectations_effects.txt). Vanilla ships
+# fractional values on that same expected-SoL key from its tax modifiers
+# (tax_modifier_low -0.5, tax_modifier_high +1.5), and vanilla's
+# RADICALS_MONTHLY_FROM_LOW_SOL scales by the raw delta between SoL and
+# expected SoL, so a tenth of a point of expectation is a tenth of a point of
+# delta.
+#
+# It is also the exact thing in fiction. These same laws already RAISE
+# lower-strata expectations — sol_expectations_vanilla_injections.txt puts +1
+# on law_worker_protections and +0.5 on law_regulatory_bodies, and
+# law_universal_basic_income carries +1 of its own. Organised workers expect
+# more. The dividend is the part of that expectation a stable currency actually
+# meets: the pay rise was real, so the disappointment is smaller.
+#
+# SIZED FOR PERMANENCE. An expectations offset is in one sense STRONGER than an
+# SoL change: an SoL change gets priced into expectations over time, while this
+# is a STANDING offset against whatever expectations would otherwise be, for as
+# long as the country stays in the comfort band — potentially decades. So the
+# realistic ceiling is deliberately well under half of a single law's +1
+# headwind: the heaviest plausible stack (factory councils + workers'
+# protections + UBI, +1.4pp, 14 units) reaches -0.28, and factory councils on
+# its own reaches -0.10.
+#
+# TWO HALVES, AND ONE OF THEM IS DEAD FOR MOST COUNTRIES. Financial momentum is
+# only consumed by a country holding je_banking_cycle; the expectations half is
+# live everywhere the monthly update runs, which is every country that is not a
+# command economy. That asymmetry is known and accepted — the loc leads with
+# the half everyone gets.
 te_mon_real_wage_dividend = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_finance_momentum_monthly_add = 0.03
-	state_lower_strata_standard_of_living_add = 0.02 # REVIEWED 2026-09-20: unit value, multiplied by te_mon_wage_dividend_applied (one unit per +0.1pp of wage pressure) — law_factory_councils alone applies it x5 and renders +0.1
+	country_sol_expectations_lower_offset_add = -0.02 # REVIEWED 2026-09-20: unit value, multiplied by te_mon_wage_dividend_applied (one unit per +0.1pp of wage pressure) — law_factory_councils alone applies it x5 and renders -0.1
 }

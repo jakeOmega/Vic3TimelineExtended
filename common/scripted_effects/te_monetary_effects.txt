@@ -1394,9 +1394,10 @@ te_monetary_apply_inflation_band = {
 # law: the law raises inflation, the player tightens to answer it, and growth
 # pays for both. §9.4's compensation is the other half of wage-led demand —
 # workers whose pay holds its value spend it — and it is deliberately
-# CONDITIONAL on price stability. Inside the comfort band the same laws pay a
-# lower-strata standard-of-living gain and financial momentum; outside it they
-# pay nothing, because wages rising into rising prices buy nothing. That is
+# CONDITIONAL on price stability. Inside the comfort band the same laws take
+# part of the lower-strata expectations headwind they themselves carry back off
+# again, and pay financial momentum; outside it they pay nothing, because wages
+# rising into rising prices buy nothing. That is
 # what makes credible monetary management the precondition for strong labour
 # laws rather than their enemy (§9.4's arithmetic: under a CBI's c = 0.7
 # factory councils cost +0.7pp and stay inside the band, so the dividend is

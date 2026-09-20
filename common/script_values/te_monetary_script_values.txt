@@ -1717,9 +1717,9 @@ te_mon_pressure_total = {
 
 # What te_mon_real_wage_dividend's multiplier is set to: ONE UNIT PER +0.1pp of
 # positive wage pressure. law_factory_councils alone (+0.5pp) is 5 units, worth
-# +0.15 financial momentum a month and +0.1 standard of living for the lower
-# strata; a country stacking factory councils, workers' protections and a
-# universal basic income (+1.4pp) is 14 units.
+# +0.15 financial momentum a month and -0.1 on lower-strata expectations; a
+# country stacking factory councils, workers' protections and a universal basic
+# income (+1.4pp) is 14 units, the realistic ceiling.
 #
 # WHY THE DIVIDEND IS PAID ON WAGE PRESSURE AND NOT ON THE WHOLE SUM. Step 6d
 # is paying for wage-led demand — higher real wages spent — which is a fact
