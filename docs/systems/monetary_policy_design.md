@@ -425,7 +425,7 @@ and are tagged with the task that raised them.
 | **T5** | Dollarisation is the **seventh state of the band modifier**, not a modifier stacked on one — and **dollarising resets headline, core *and* expected inflation to `te_mon_inflation_anchor`** | chosen from inside the hyper band, the two `country_minting_mult` fields would have summed to −1.55; one swap with one owner leaves no window at all, where an event-applied modifier or a "reset π so the band falls" rule both leave up to 30 days. A *partial* reset was tried on paper and rejected: with `expected` left at 50, the dollarised `−core` pull's fixed point `core = expected/2` climbs straight back to ~25 and the country spends years in *Very High* under a modifier saying inflation is somebody else's problem. Resetting both lands it at band 2 and holds it there | — |
 | **T5** | Leaving dollarisation calls the shared `te_mon_effect_new_currency` (reset to 5 + `te_mon_currency_reform_premium` for 3650 days); no pool wipe and no radicals at the exit | otherwise the P9 exit was a free currency reform; **owner decision E** | four lines at the exit site |
 | **T5** | `te_mon_hyper_cooldown` is cleared by the two **resolving** options, not by the exit | it is an anti-nag device for riding the crisis out, not a lock-out | two lines |
-| **T5** | A dollarised country takes the metallic **pull** (`−π_core`) without the metallic **pin**, so the model's fixed point is `core = expected/2` rather than 0 | accepted for phase 2: with dollarise's full reset it lands near 1% and stays there | **phase-3 item** — decide between giving it the metallic pin and a `−(core + expected)/2` pull |
+| **T5** | A dollarised country takes the metallic **pull** (`−π_core`) without the metallic **pin**, so the model's fixed point is `core = expected/2` rather than 0 | accepted for phase 2: with dollarise's full reset it lands near 1% and stays there | **Decided 2026-09-20 (§0.5 owner decision K):** it takes a pin, at the anchor (2) rather than metal's 0 |
 | **T7** | `te_mon_stance_months` is capped at ±11 | §13 names no cap, and without one a decade-long stance takes a decade of the middle band to unwind. 11 makes the fade exactly as long as the climb — six pulses each way | one constant |
 | **T7** | Rural Folk: `cross_of_gold_currency` added to `ideology_isolationist` | `ideology_particularist` already carried `simple_currency`, which cancelled the Cross of Gold on `ideology_agrarian` **exactly**, so §13's marquee row netted zero on gold and zero on fiat. Isolationist is a Rural Folk baseline held by no other IG, and the gold standard is unlocked by `international_exchange_standards` — an international order is what an isolationist objects to | one line of generator input |
 | **T7** | Petite Bourgeoisie: `simple_currency` added to `ideology_patriotic` | `ideology_meritocratic`'s pre-existing `advanced_curency` left PB coming out pro-digital. **Side effect accepted:** patriotic is also an Armed Forces baseline, so the Armed Forces gain a modest hard-money lean — correct on its own terms (fixed salaries and pensions), and §13 already puts them on the losing side of its own inflation row | one line |
@@ -437,7 +437,7 @@ and are tagged with the task that raised them.
 
 #### Deferred (phase 2's additions to §0.2)
 
-- **The dollarised regime pull has no expectations pin** (T5 above) — a phase-3 decision.
+- ~~**The dollarised regime pull has no expectations pin** (T5 above) — a phase-3 decision.~~ **Decided and shipped with phase 3** — §0.5 owner decision K.
 - **The §9.1 gold-supply term and §12.2's gold-flow pressure term** are absent from the
   pressure sum, as P2 and §19 row 3 intend.
 - **The §9.2 flavour notifications** (a one-shot on first *High*, one on first *Deflation*)
@@ -743,33 +743,46 @@ phase 2 (§13 "Delivered"; rulings T7). "FX buttons unchanged" is row 3's own in
 revisiting the AI's better-informed tools "when IGs start reacting to the stance" is moot: the
 stance politics shipped in phase 2, keyed on the displayed band.
 
-#### Owner decisions to review (phase 3)
+#### Owner decisions (phase 3) — H, I and K decided, J open
 
-**H. The hegemon has no gold constraint.** With one discretionary great power — a *player*
-Britain in 1836 on a manual target — the world rate **is** that country's real rate, so its
-own gap is 0 by construction: no flows, no confidence loss, and (with the ±2 band gone) a dial
-free from 0 to 15. Spec-faithful — §12.1 says such a country "starts moving it for everyone
-else" — and historically arguable (London *was* the world rate), but it means §19's "holding
-world + 5 yields no lasting gain" only ever tests a **non-hegemon** gold country, and a player
-Britain pays for a wild rate only through the stance channel. Levers if that reads wrong:
-exclude a country's own weight from the world rate *it* faces (one more accumulator pass), or
-blend the world rate with `era_base`.
+**H. DECIDED 2026-09-20 — nobody faces a world rate that contains itself.** As first shipped,
+a lone discretionary great power (a *player* Britain in 1836) **was** the world rate: its gap
+was 0 by construction, so it had no flows and no peg. The owner's call: each member of the
+average records its exact share of the two accumulators at refresh time
+(`te_mon_world_own_num` / `_den`), and step 0 subtracts it, so a great power faces the **rest**
+of the world's rate — the reference rate when there is no rest — while everybody else still
+sees the full average, hegemon included. A player Britain in 1836 therefore faces 3.0.
+*Considered and parked for after playtesting:* widening the average to non-great-powers (adds
+price-takers, and nobody at all in 1836 — Britain is the only tag on gold with a bank), and
+the owner's observation that **commodity money also moves gold** — specie circulates and is a
+trade good under bimetallism too — so flows arguably belong to commodity-money countries as
+well. That is §5.4's open France question from another side, and would want a dial (or at
+least a flow) for commodity money + national bank.
 
-**I. A gold player can borrow one reserve limit (20% of GDP) interest-free for as long as they
-can stand the stance.** Ruling Q8 caps the hot-money balance at one reserve limit, which is
-what stops "hold world + 5 and spend the proceeds" being 12% of GDP a year for ever — but the
-capped amount is still a zero-coupon loan that is only called when the gap closes. Its prices
-are the tight stance, the price–specie inflation, and a run on the peg (Q7) if it has been
-spent when it is called. Levers: a lower cap, or charging the policy rate on the balance.
+**I. DECIDED 2026-09-20 — borrowed gold pays the policy rate.** The owner's question was what
+stopped real countries doing this, and the answer is the carry: gold drawn in by Bank Rate
+came as short-term balances *earning* that rate, against a vault that earns nothing. So
+`te_gold_hot_money` now costs `te_policy_rate / 12` percent a month (`te_gold_carry`) — paid by
+`add_treasury` while there is a treasury, **capitalised into the balance** when there is not,
+so not paying is never free either. That makes hot money strictly dearer than ordinary
+borrowing for any country with sound credit: at world + 5 on an 8% rate, one reserve limit
+costs 1.6% of GDP a year for as long as it is held. It stays what it historically was — a way
+to refill a vault or defend a peg. Ruling Q8's cap is kept as a backstop. The carry is not part
+of `te_gold_flow`, so the price–specie term prices the principal only; a suspension freezes
+the balance **and** the carry.
 
 **J. An indebted AI on gold sits a point above the world rate, permanently.** Ruling Q5's
 shortfall term treats any debt as an empty vault, so the peg-defence target is world + 1 for
 every AI gold country in debt — a standing −0.125 of momentum a month. That is "the cost of
 the peg" §8 promises, and it is what keeps its confidence from eroding, but AI debt is the
-normal state of many tags. The lever is the 2pp in `te_mon_peg_shortfall_pp`. **It also moves a phase-1 expected number:** a peg-defending AI that is *in debt* now targets `ceiling(world + 1)` = 4 rather than 3, so §0.3 item 3's anchor figures (Britain 1836 at 4.0%) read a point higher for any AI gold country that starts, or falls, into debt. That is this ruling, not a regression — check `scaled_debt` before chasing it.
+normal state of many tags. The lever is the 2pp in `te_mon_peg_shortfall_pp`. **It also moves a phase-1 expected number:** a peg-defending AI that is *in debt* now targets `ceiling(world + 1)` = 4 rather than 3, so §0.3 item 3's anchor figures (Britain 1836 at 4.0%) read a point higher for any AI gold country that starts, or falls, into debt. That is this ruling, not a regression — check `scaled_debt` before chasing it. **Still open.**
 
-**K. T5's dollarised expectations pin is still open.** §0.4 called it "a phase-3 item —
-decide". Nothing in §12 bears on it, the choice is the owner's, and phase 3 did not make it.
+**K. DECIDED 2026-09-20 — a dollarised country's expectations are pinned at the anchor.** This
+closes the item ruling T5 (§0.4) left open. It keeps the metallic pull and gains a pin at
+`te_mon_inflation_anchor` (2, not metal's 0 — the adopted money is somebody's managed
+currency): imported credibility is the whole of what dollarising buys, and unpinned, a
+dollarised country with a large deficit drifted its own expectations up for a currency it
+does not issue. Core now settles near `1 + P/2`. One `else_if` in step 6's expectations block.
 
 #### 0.5 rulings — deviations from, or bindings on, the sections below
 
@@ -830,6 +843,13 @@ header says how to stage each; 40–42 can invalidate a mechanism; 43–47 are n
     Confidence* falls ~6 a month until `te_peg.1` fires at 20.
 38. **AI on peg defence survives +2pp.** Same option, observer mode, two years: targets step
     up within a month, and no `te_peg.1` for a tag that was out of debt at the start.
+39a. **The carry is charged, and it capitalises.** With a borrowed balance, the *Gold Flow*
+    tooltip's interest line reads balance × policy rate ÷ 1200 and the treasury falls by it each
+    month beyond the flow; in debt, the balance grows by it instead.
+39b. **The hegemon is constrained.** As a player Britain on a manual target in 1836, *World
+    Rate* reads 3.0 whatever Britain's own rate is, the gap is non-zero, and gold moves; as
+    France, *World Rate* reads Britain's rate.
+39c. **Dollarised pin:** a dollarised country's *Expected Inflation* reads 2.0 every month.
 39. **World + 5 yields no lasting gain.** Inflows stop when *borrowed gold* reaches one
     reserve limit even if everything was spent; on dropping the target the balance leaves at
     twice the speed; if it cannot be paid, confidence collapses. Judge the whole run on

@@ -277,6 +277,21 @@
 #                                                   go if the country stops being
 #                                                   on gold, frozen while it is
 #                                                   suspended (ruling Q9)
+#   te_gold_carry           >= 0        displayed   this month's interest on that
+#                                                   balance at the policy rate
+#                                                   (owner decision I): paid from
+#                                                   the treasury, or capitalised
+#                                                   into the balance when it
+#                                                   cannot be
+#   te_mon_world_own_num    weighted    \           this country's exact share of
+#   te_mon_world_own_den    >= 0        /           the two world-rate accumulators,
+#                                                   written by the GLOBAL refresh
+#                                                   (the one writer outside step
+#                                                   10) and zeroed by it when the
+#                                                   country leaves the average;
+#                                                   step 0 subtracts it so nobody
+#                                                   faces a world rate containing
+#                                                   itself (owner decision H)
 #   te_peg_confidence       0 to 100    displayed   §12.3. Seeds at 100; te_peg.1
 #                                                   fires at <= 20
 #   te_peg_crisis_cooldown  0 to te_mon_peg_crisis_cooldown_months
@@ -2430,6 +2445,17 @@ te_mon_gold_flow_signed = {
 	if = {
 		limit = { has_variable = te_gold_flow }
 		add = var:te_gold_flow
+	}
+}
+
+# The month's interest on the borrowed balance, negated for add_treasury
+# (owner decision I): te_gold_hot_money x te_policy_rate / 1200, computed by
+# step 10 into te_gold_carry.
+te_mon_gold_carry_payment = {
+	value = 0
+	if = {
+		limit = { has_variable = te_gold_carry }
+		subtract = var:te_gold_carry
 	}
 }
 

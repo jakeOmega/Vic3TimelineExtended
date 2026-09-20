@@ -112,13 +112,31 @@ te_monetary_refresh_world_era_base = {
 te_monetary_refresh_world_rate = {
 	set_global_variable = { name = te_world_rate_acc_num value = 0 }
 	set_global_variable = { name = te_world_rate_acc_den value = 0 }
+	# Last month's members forget their share first, so a country that has
+	# dropped out of the average (lost rank, gone on to peg defence) does not
+	# go on subtracting a contribution it no longer makes — see step 0.
+	every_country = {
+		limit = {
+			has_variable = te_mon_world_own_den
+			var:te_mon_world_own_den > 0
+		}
+		set_variable = { name = te_mon_world_own_num value = 0 }
+		set_variable = { name = te_mon_world_own_den value = 0 }
+	}
 	every_country = {
 		limit = {
 			country_rank >= rank_value:great_power
 			te_mon_rate_is_discretionary = yes
 		}
-		change_global_variable = { name = te_world_rate_acc_num add = te_mon_world_rate_weighted_real }
-		change_global_variable = { name = te_world_rate_acc_den add = te_mon_world_rate_weight }
+		# Each member keeps the EXACT share it contributed (owner decision H):
+		# step 0 subtracts it, so the world rate a great power faces is the
+		# REST of the world's. Recorded here rather than recomputed there
+		# because the pulse order is unknown (§17 check 7) and a share
+		# recomputed a month later would not be the one in the sum.
+		set_variable = { name = te_mon_world_own_num value = te_mon_world_rate_weighted_real }
+		set_variable = { name = te_mon_world_own_den value = te_mon_world_rate_weight }
+		change_global_variable = { name = te_world_rate_acc_num add = var:te_mon_world_own_num }
+		change_global_variable = { name = te_world_rate_acc_den add = var:te_mon_world_own_den }
 	}
 	if = {
 		limit = { global_var:te_world_rate_acc_den > 0 }
@@ -295,6 +313,44 @@ te_monetary_init_variables = {
 	}
 	else = {
 		set_variable = { name = te_mon_world_rate_now value = var:te_mon_era_base_now }
+	}
+
+	# NOBODY FACES A WORLD RATE THAT CONTAINS ITSELF (owner decision H,
+	# 2026-09-20). A great power inside the average takes its own recorded
+	# share back out, so what it faces is the rest of the world's rate — and the
+	# reference rate when there is no rest. Without this a lone discretionary
+	# power (a player Britain in 1836) WAS the world rate: its gap was 0 by
+	# construction, so it had no gold flows and no peg to defend. Everybody
+	# else still sees the full average, hegemon included.
+	#
+	# The global's debug offset and clamp are re-applied, because this branch
+	# rebuilds the figure from the accumulators rather than from the global.
+	if = {
+		limit = {
+			has_variable = te_mon_world_own_den
+			var:te_mon_world_own_den > 0
+			has_global_variable = te_world_rate_acc_den
+		}
+		set_variable = { name = te_mon_work2 value = global_var:te_world_rate_acc_den }
+		change_variable = { name = te_mon_work2 subtract = var:te_mon_world_own_den }
+		if = {
+			limit = { var:te_mon_work2 > 0.0005 }
+			set_variable = { name = te_mon_world_rate_now value = global_var:te_world_rate_acc_num }
+			change_variable = { name = te_mon_world_rate_now subtract = var:te_mon_world_own_num }
+			change_variable = { name = te_mon_world_rate_now divide = var:te_mon_work2 }
+		}
+		else = {
+			set_variable = { name = te_mon_world_rate_now value = var:te_mon_era_base_now }
+		}
+		if = {
+			limit = { has_global_variable = te_world_rate_debug_offset }
+			change_variable = { name = te_mon_world_rate_now add = global_var:te_world_rate_debug_offset }
+		}
+		clamp_variable = {
+			name = te_mon_world_rate_now
+			min = te_mon_world_rate_min
+			max = te_mon_world_rate_max
+		}
 	}
 
 	if = {
@@ -533,6 +589,17 @@ te_monetary_init_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_gold_hot_money } }
 		set_variable = { name = te_gold_hot_money value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_gold_carry } }
+		set_variable = { name = te_gold_carry value = 0 }
+	}
+	# Owned by the GLOBAL world-rate refresh, which writes them for the members
+	# of the average only; seeded here so every country has a readable zero.
+	if = {
+		limit = { NOT = { has_variable = te_mon_world_own_den } }
+		set_variable = { name = te_mon_world_own_num value = 0 }
+		set_variable = { name = te_mon_world_own_den value = 0 }
 	}
 	if = {
 		limit = { NOT = { has_variable = te_peg_confidence } }
@@ -1415,13 +1482,24 @@ te_monetary_update_inflation = {
 		# deflation bias that comes with it is the regime pull inside
 		# te_mon_pressure_total.
 		#
-		# A DOLLARISED country is NOT pinned (ruling P9): it takes the metallic
-		# regime PULL, because its money is somebody else's, but its own
-		# expectations still have to converge from wherever the hyperinflation
-		# left them.
+		# A DOLLARISED country IS PINNED TOO, AT THE ANCHOR (owner decision K,
+		# 2026-09-20, closing the item ruling T5 left open). It takes the
+		# metallic regime PULL because its money is somebody else's, and for
+		# the same reason nothing its own government does can move what people
+		# expect of that money: imported credibility is the whole of what
+		# dollarising buys. Unpinned, a dollarised country running a large
+		# deficit drifted its own expectations upward for a currency it does
+		# not issue. The pin is te_mon_inflation_anchor (2), not metal's 0 —
+		# the money it adopted is somebody's managed currency, not specie. The
+		# dollarise option already resets expectations to the anchor, so the
+		# pin holds a value rather than jumping to one.
 		if = {
 			limit = { te_mon_is_metallic = yes }
 			set_variable = { name = te_inflation_expected value = 0 }
+		}
+		else_if = {
+			limit = { te_mon_is_dollarised = yes }
+			set_variable = { name = te_inflation_expected value = te_mon_inflation_anchor }
 		}
 		else = {
 			set_variable = {
@@ -2328,6 +2406,45 @@ te_monetary_update_gold = {
 		}
 		set_variable = { name = te_gold_flow_pct value = te_mon_gold_flow_pct_value }
 
+		# --- the carry: borrowed gold is paid for (owner decision I) ---------
+		# What stopped real central banks pulling gold in for the money: it
+		# came as short-term balances EARNING the rate that attracted them,
+		# while the gold it bought sat in a vault earning nothing. So the
+		# balance costs the policy rate, a twelfth of it a month — which makes
+		# hot money strictly dearer than ordinary borrowing for any country
+		# whose credit is good, and leaves it what it historically was: a way
+		# to refill a vault or defend a peg, never a way to raise funds.
+		#
+		# Paid from the treasury while there is one; CAPITALISED into the
+		# balance when there is not (in debt, or an empty vault), on the same
+		# argument that stops the outflow there — a negative add_treasury would
+		# only deepen the debt — and so that not paying is never free either:
+		# the unpaid interest is more gold queueing to leave.
+		#
+		# Not part of te_gold_flow, so the price-specie term prices the
+		# principal that moved and not the coupon on it.
+		set_variable = { name = te_gold_carry value = 0 }
+		if = {
+			limit = {
+				var:te_gold_hot_money > 0
+				var:te_policy_rate > 0
+			}
+			set_variable = { name = te_gold_carry value = var:te_gold_hot_money }
+			change_variable = { name = te_gold_carry multiply = var:te_policy_rate }
+			change_variable = { name = te_gold_carry divide = 1200 }
+			set_variable = { name = te_mon_work2 value = te_mon_gold_reserves_now }
+			if = {
+				limit = {
+					scaled_debt <= 0
+					var:te_mon_work2 >= var:te_gold_carry
+				}
+				add_treasury = te_mon_gold_carry_payment
+			}
+			else = {
+				change_variable = { name = te_gold_hot_money add = var:te_gold_carry }
+			}
+		}
+
 		# --- peg confidence -------------------------------------------------
 		if = {
 			limit = { te_mon_peg_under_pressure = yes }
@@ -2359,6 +2476,7 @@ te_monetary_update_gold = {
 		set_variable = { name = te_gold_flow_gap value = 0 }
 		set_variable = { name = te_gold_flow value = 0 }
 		set_variable = { name = te_gold_flow_pct value = 0 }
+		set_variable = { name = te_gold_carry value = 0 }
 
 		# Off gold altogether: borrowed gold goes home, and the next peg this
 		# country enters starts trusted. Suspended: frozen, both of them.

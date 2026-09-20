@@ -409,6 +409,7 @@ banking_mon_shows_gold = {
 		has_variable = te_gold_flow_gap
 		has_variable = te_gold_flow
 		has_variable = te_gold_hot_money
+		has_variable = te_gold_carry
 		has_variable = te_peg_confidence
 		has_variable = te_mon_world_rate_now
 	}
