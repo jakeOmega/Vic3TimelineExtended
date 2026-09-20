@@ -260,8 +260,14 @@ te_monetary_init_variables = {
 	# --- phase 2: inflation (§9) --------------------------------------------
 	# Every one of these seeds to a neutral zero, which is exactly what phase 1
 	# behaviour is: no inflation, expectations at nothing, no monetisation, no
-	# dollarisation. Nothing reads them until step 6 exists, so a save loaded
-	# before then simply gains a set of zeroes.
+	# dollarisation. A phase-1 save therefore gains a set of zeroes and keeps
+	# paying exactly what it paid, until step 6 starts moving them.
+	#
+	# THE ZEROES ARE LOAD-BEARING FOR DAY ONE. Every 1836 country starts on
+	# commodity money — Britain on gold — and both are metallic: expectations
+	# are pinned at 0 and the regime pull holds core there, so the §7.4 anchor
+	# table comes out of the new stack unchanged. The first country to enact
+	# fiat is the first to leave zero.
 	#
 	# TWO EXCEPTIONS TO THE ZERO. te_inflation_band seeds to 2 (comfort),
 	# because 0 is not a band and the band swap has to have something to
@@ -1088,11 +1094,13 @@ te_monetary_update_inflation = {
 # THE 0.5 FLOOR STILL HOLDS, and it is why a negative policy rate never reaches
 # the rate paid: under digital currency a target of -3 acts only through the
 # stimulus channel (§8), which is intended. It is now also what stops a
-# monetised war from paying the government to borrow: at the §10 worked
-# example's ~0.7% the clamp is not binding, but a deeper monetisation would
-# stop at 0.5 rather than going negative. Cyclical negatives (relief tools) can
-# pull the total under the structural floor the same way; this clamp is the
-# final backstop for all of it.
+# monetised war from paying the government to borrow, and it DOES bite on §10's
+# war path: simulated, it binds for three months in the middle of a level-3
+# monetisation (while headline is climbing faster than expectations are lifting
+# the yield floor) and again for the single month the monetisation ends, when
+# the +1.5pp monetisation premium comes off before headline starts falling.
+# Cyclical negatives (relief tools) can pull the total under the structural
+# floor the same way; this clamp is the final backstop for all of it.
 te_monetary_update_rate_paid = {
 	# --- the lenders' floor -------------------------------------------------
 	# te_market_yield is a displayed figure with no hidden state in it: the

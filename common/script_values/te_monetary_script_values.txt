@@ -82,8 +82,10 @@
 #                                                   3 fiat, 4 digital, 5 crypto, 6 command
 #
 # PHASE 2 — INFLATION (§9). Same two rules: initialised behind `has_variable`,
-# never removed. Step 6 of te_monetary_monthly_update is the only writer of all
-# of them, exactly as step 8 is the only writer of the stance.
+# never removed. Step 6 of te_monetary_monthly_update is the only writer of
+# every inflation variable below, exactly as step 8 is the only writer of the
+# stance. ONE EXCEPTION, and it is not an inflation variable: te_market_yield
+# is owned by step 7, which is where §10's lenders' floor is computed.
 #
 #   te_inflation            -10 to 100  displayed   headline annual inflation in pp:
 #                                                   core plus cost-push (§9.3).
@@ -1318,9 +1320,15 @@ te_mon_basket_index_from_owner = {
 
 # --- Guarded reads of the two inflation levels ------------------------------
 
-# Step 0 initialises both, so the guards are belt-and-braces for exactly one
-# caller: the console read-out, which evaluates these on whatever country the
-# player typed the event at — including one whose first pulse has not run.
+# Step 0 initialises both, so the guards matter only where these are evaluated
+# on a country whose first pulse has not run: the console read-out, which fires
+# on whatever country the player typed the event at, and the dashboard, which
+# renders te_mon_inflation_offset. Inside the monthly update they always have a
+# value.
+#
+# BOTH HAVE REAL CALLERS NOW. te_mon_inflation_core_read feeds the two §6
+# mandate reaction terms and the regime pull; te_mon_inflation_read feeds the
+# expectations blend and te_mon_inflation_offset. Neither is debug-only.
 
 te_mon_inflation_read = {
 	value = 0
