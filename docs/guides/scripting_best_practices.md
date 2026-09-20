@@ -202,6 +202,10 @@ Known invalid names:
 - Use the mod state server `/modifier-search?q=<name>` endpoint.
 - Search base game: `Get-ChildItem "C:\Program Files (x86)\Steam\steamapps\common\Victoria 3\game\common" -Recurse -Filter "*.txt" | Select-String "modifier_name"`.
 
+## A `state_`-Masked Key Works Inside a Modifier a COUNTRY Holds
+
+The `state_` / `building_` / `interest_group_` prefix is the modifier's **mask** (what `/engine-docs/origin/<name>` reports as `"mask": "state"`), not a restriction on who may carry it. A static modifier applied to a country with `add_modifier` may contain `state_*` keys, and they apply across every state that country owns — you do **not** need to iterate `every_scope_state`. This is how vanilla laws already work (`law_women_in_the_fields` carries `state_lower_strata_standard_of_living_add = -4`), and it holds for event modifiers too: `modifier_donghak_heaven_on_earth` (`common/static_modifiers/07_sphere_of_influence_4_modifiers.txt`) mixes `country_legitimacy_base_add` with `state_lower_strata_standard_of_living_add` and is added in a `country_event` (`events/soi_events/00_ep1_korea_events.txt`). Same for the mod's own `te_mon_real_wage_dividend`. So when reaching for a per-stratum or per-building effect from country scope, check the mask and use the masked key rather than building an `every_scope_state` iterator around it. Only this direction is verified — the reverse (a *country-masked* key inside a state-scoped modifier) is untested here.
+
 ## Modifier Value Scale: The Suffix Doesn't Tell You
 
 A modifier's `_add` / `_mult` suffix tells you the *operation* (additive vs multiplicative), not the *unit* the engine reads. Whether a value should be a 0–1 fraction, a raw percentage point integer, or a small integer on a custom scale is set per-modifier by the engine — and it's not always intuitive.

@@ -23,11 +23,12 @@
 #
 # ORDER (§16.2): 0 init -> 1 regime code -> 1b monetisation -> 2 target ->
 # 3 drift -> 4 no-dial derived rate -> 5 premium -> 6 inflation -> 6c band
-# modifier -> 7 rate paid -> 8 neutral rate + stance -> 9 re-apply the interest
-# modifier. Step 10 is phase 3. Steps 1b and 6c are numbered rather than
-# renumbering §16.2's list: 1b settles an INPUT the later steps read (§11's
-# monetisation level), the way step 1 settles the regime code, and 6c is the
-# engine-write half of step 6 (6a is the basket and 6b the inflation loop).
+# modifier -> 6d real-wage dividend -> 7 rate paid -> 8 neutral rate + stance ->
+# 9 re-apply the interest modifier. Step 10 is phase 3. Steps 1b, 6c and 6d are
+# numbered rather than renumbering §16.2's list: 1b settles an INPUT the later
+# steps read (§11's monetisation level), the way step 1 settles the regime code,
+# and 6c and 6d are the engine-write half of step 6 (6a is the basket and 6b the
+# inflation loop).
 #
 # THE RATE STACK READS INFLATION (§4, §6, §7.6, §8, §10). Step 6 computes the
 # basket, core, headline and expected inflation, and the rest of the stack is
@@ -43,9 +44,6 @@
 # price. Nothing outside step 6 writes any of them, with the one documented
 # exception of the §9.2 hyperinflation crisis (events/te_inflation_events.txt),
 # whose two escapes ARE a reset of those figures — see the variable contract.
-#
-# WHAT PHASE 2 HAS STILL NOT WIRED. The §9.4 real-wage dividend is defined but
-# unapplied; that is a later task of the same phase.
 #
 # WORKING VARIABLES. te_mon_work and te_mon_work2 are scratch slots reused by
 # every step; te_mon_era_base_now caches the world reference rate for this
@@ -154,6 +152,12 @@ te_monetary_monthly_update = {
 	# Immediately after the band number is written, so the modifier on the
 	# country is never a month behind the figure the dashboard shows.
 	te_monetary_apply_inflation_band = yes
+
+	# --- 6d. the real-wage dividend the comfort band pays -------------------
+	# After 6c, and for the same reason: it keys off the band this month's
+	# step 6 just wrote, so the dividend arrives with the band rather than a
+	# month behind it.
+	te_monetary_apply_wage_dividend = yes
 
 	# --- 7. the rate the government actually pays ---------------------------
 	te_monetary_update_rate_paid = yes
@@ -1377,6 +1381,106 @@ te_monetary_apply_inflation_band = {
 		}
 		set_variable = { name = te_mon_hyper_cooldown value = te_mon_hyper_cooldown_months }
 		trigger_event = { id = te_inflation.1 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# STEP 6d — the real-wage dividend (§9.4)
+# ----------------------------------------------------------------------------
+# Scope: country. Runs immediately after 6c, off the band number step 6 wrote.
+#
+# WHAT IT IS. Wage pressure would otherwise be a pure tax on progressive labour
+# law: the law raises inflation, the player tightens to answer it, and growth
+# pays for both. §9.4's compensation is the other half of wage-led demand —
+# workers whose pay holds its value spend it — and it is deliberately
+# CONDITIONAL on price stability. Inside the comfort band the same laws pay a
+# lower-strata standard-of-living gain and financial momentum; outside it they
+# pay nothing, because wages rising into rising prices buy nothing. That is
+# what makes credible monetary management the precondition for strong labour
+# laws rather than their enemy (§9.4's arithmetic: under a CBI's c = 0.7
+# factory councils cost +0.7pp and stay inside the band, so the dividend is
+# pure gain; on a manual c = 0.25 target they cost +2pp and the player has to
+# hold a tighter stance to keep it).
+#
+# WHO IS EXCLUDED, and why the band alone is not the test:
+#
+#   * A COMMAND ECONOMY has no inflation of its own (§14, ruling P6) — step 6
+#     holds pi at 0 and pins te_inflation_band at 2, so the band would read
+#     comfort for a country whose prices are administered rather than stable.
+#     Paying a dividend for "price stability" the plan simply decrees is
+#     paying for nothing, so te_mon_has_inflation gates it out.
+#   * A DOLLARISED country has no band of its own that means anything. Its
+#     modelled headline keeps running because §10's lenders price its
+#     expectations, and it can read comfort — but it is holding somebody
+#     else's money, that country's central bank earned the stability, and step
+#     6c has already replaced its band modifier with te_mon_dollarised_modifier
+#     (te_inflation_band_applied = 7). It pays three quarters of its
+#     seigniorage instead; it does not also collect a dividend.
+#
+# ONLY POSITIVE PRESSURE EARNS IT (te_mon_wage_pressure_positive). A country
+# on anti-strike laws is not paid for holding wages down — it simply has no
+# dividend, the same as a country with no labour law at all.
+#
+# THE ROOT-SAFE SCALED PATTERN, verbatim from step 1b: `multiplier = var:X`
+# resolves against ROOT, not against the scope this effect runs in, so the
+# re-apply is gated on `root ?= this` and the value is carried in a persistent
+# variable. te_mon_wage_dividend_applied is never REMOVED — it backs a live
+# multiplier and a missing variable would make every later re-evaluation read
+# 'none' (modifier_multiplier_var_audit). The 0.05-unit skip threshold means an
+# unchanged month costs nothing: wage pressure only moves when a law changes,
+# so for almost every country this step does nothing after the first pulse.
+#
+# The `NOT = { has_modifier }` clause in the skip test is the self-heal: if the
+# modifier is ever lost while the variable persists (a save-game migration, a
+# tag change), the next pulse puts it back rather than waiting for the units to
+# move.
+te_monetary_apply_wage_dividend = {
+	# --- what is earned this month, in units of +0.1pp ----------------------
+	if = {
+		limit = {
+			var:te_inflation_band = 2
+			te_mon_has_inflation = yes
+			var:te_mon_dollarised = 0
+		}
+		set_variable = { name = te_mon_work value = te_mon_wage_dividend_units }
+	}
+	else = {
+		set_variable = { name = te_mon_work value = 0 }
+	}
+
+	# --- apply, or take it off ----------------------------------------------
+	if = {
+		limit = { var:te_mon_work < 0.05 }
+		if = {
+			limit = { has_modifier = te_mon_real_wage_dividend }
+			remove_modifier = te_mon_real_wage_dividend
+		}
+		# The applied value follows the modifier off, but the variable stays.
+		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
+	}
+	else_if = {
+		limit = { root ?= this }
+		set_variable = { name = te_mon_work2 value = var:te_mon_work }
+		change_variable = { name = te_mon_work2 subtract = var:te_mon_wage_dividend_applied }
+		if = {
+			limit = {
+				OR = {
+					var:te_mon_work2 >= 0.05
+					var:te_mon_work2 <= -0.05
+					NOT = { has_modifier = te_mon_real_wage_dividend }
+				}
+			}
+			if = {
+				limit = { has_modifier = te_mon_real_wage_dividend }
+				remove_modifier = te_mon_real_wage_dividend
+			}
+			set_variable = { name = te_mon_wage_dividend_applied value = var:te_mon_work }
+			add_modifier = {
+				name = te_mon_real_wage_dividend
+				multiplier = var:te_mon_wage_dividend_applied
+			}
+		}
 	}
 }
 

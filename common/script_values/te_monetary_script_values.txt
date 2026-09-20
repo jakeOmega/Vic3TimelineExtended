@@ -1068,6 +1068,11 @@ te_mon_band_edge_elevated = {
 	value = 3
 }
 
+# RETUNING THIS MOVES A LOC KEY WITH IT. §9.4's wage-price spiral opens at this
+# same edge (te_mon_pressure_wage_spiral), and country_wage_pressure_add_desc
+# in localization/english/te_modifiers_l_english.yml tells the player the laws
+# count twice above "8%" — a tooltip reading "above te_mon_band_edge_high"
+# would be no use to anybody. Same arrangement as te_mon_hyper_cooldown_months.
 te_mon_band_edge_high = {
 	value = 8
 }
@@ -1601,6 +1606,48 @@ te_mon_pressure_modifiers = {
 	multiply = 100
 }
 
+# The POSITIVE half of wage pressure, in pp (§9.4). Both things that treat
+# wages asymmetrically read this one value rather than writing the clamp
+# twice: the wage-price spiral below, and te_mon_wage_dividend_units further
+# down. A country whose labour laws SUPPRESS wages (no workers' rights,
+# combination acts, anti-strike laws) reads 0 from both — it neither earns a
+# dividend for holding wages down nor spirals on the way up. Its negative
+# contribution to inflation is already in te_mon_pressure_modifiers above, and
+# counting it a second time would make wage suppression a disinflation tool
+# that gets stronger the worse inflation is.
+te_mon_wage_pressure_positive = {
+	value = 0
+	add = modifier:country_wage_pressure_add
+	multiply = 100
+	min = 0
+}
+
+# The wage-price spiral (§9.4): above 8% headline, the same labour and welfare
+# laws add their pressure A SECOND TIME. Wage pressure is a level — how far
+# above expectations inflation settles — and the point of the spiral is that
+# once prices are moving fast enough for everyone to be watching them, the
+# bargaining that produced that level starts producing it again on top of
+# itself. It is also what makes §10's "never disinflate" path expensive: a
+# country that lets inflation run past the high band with strong labour laws
+# has doubled the term it would have to unwind.
+#
+# THE GATE IS LAST MONTH'S HEADLINE. te_mon_pressure_total is evaluated in step
+# 6b to advance core, BEFORE the same step writes this month's headline and
+# band — so var:te_inflation here is the figure the player was shown last
+# month. That is the same one-month lag ruling P5 already accepts for the
+# stance gap, and the threshold is te_mon_band_edge_high rather than a literal
+# 8 so the spiral opens exactly where the "high" band does.
+te_mon_pressure_wage_spiral = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_inflation
+			var:te_inflation >= te_mon_band_edge_high
+		}
+		add = te_mon_wage_pressure_positive
+	}
+}
+
 # The hidden mean-reverting random walk (ruling P7). It exists so the pressure
 # sum cannot be inverted to read the stance gap: every other term is either
 # public or derivable, so without a random component two months of a displayed
@@ -1660,8 +1707,39 @@ te_mon_pressure_total = {
 	add = te_mon_pressure_monetisation
 	add = te_mon_pressure_qe
 	add = te_mon_pressure_modifiers
+	add = te_mon_pressure_wage_spiral
 	add = te_mon_pressure_noise
 	add = te_mon_pressure_regime_pull
+}
+
+
+# --- The real-wage dividend: the multiplier (§9.4) ---------------------------
+
+# What te_mon_real_wage_dividend's multiplier is set to: ONE UNIT PER +0.1pp of
+# positive wage pressure. law_factory_councils alone (+0.5pp) is 5 units, worth
+# +0.15 financial momentum a month and +0.1 standard of living for the lower
+# strata; a country stacking factory councils, workers' protections and a
+# universal basic income (+1.4pp) is 14 units.
+#
+# WHY THE DIVIDEND IS PAID ON WAGE PRESSURE AND NOT ON THE WHOLE SUM. Step 6d
+# is paying for wage-led demand — higher real wages spent — which is a fact
+# about the labour laws and about nothing else in te_mon_pressure_total. A
+# devaluation or a monetised war raises prices without raising anybody's pay,
+# and paying a dividend on those would reward debasing the currency. That is
+# the whole reason ruling P11 split the two modifier types.
+#
+# Step 6d of the monthly update writes this into te_mon_wage_dividend_applied
+# and nothing else reads it.
+te_mon_wage_dividend_units = {
+	value = te_mon_wage_pressure_positive
+	multiply = te_mon_wage_dividend_units_per_pp
+}
+
+# Units of dividend per pp of wage pressure. 10 is §9.4's "each +0.1pp", named
+# rather than inlined so retuning the dividend's granularity is a one-line edit
+# (§21) — though the modifier's own field values are the sharper dial.
+te_mon_wage_dividend_units_per_pp = {
+	value = 10
 }
 
 

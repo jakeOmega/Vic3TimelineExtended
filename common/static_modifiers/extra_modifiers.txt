@@ -7075,10 +7075,12 @@ te_mon_currency_reform_premium = {
 	country_risk_premium_add = 0.05
 }
 
-# The real-wage dividend (§9.4). A UNIT modifier, applied only while inflation
-# is in the comfort band and scaled by `multiplier = var:te_mon_wage_dividend_applied`
-# — one unit per +0.1pp of country_wage_pressure_add, so law_factory_councils
-# (+0.5pp) is worth +0.15 momentum a month.
+# The real-wage dividend (§9.4). A UNIT modifier, applied by step 6d of
+# te_monetary_monthly_update only while inflation is in the comfort band, and
+# scaled by `multiplier = var:te_mon_wage_dividend_applied` — one unit per
+# +0.1pp of country_wage_pressure_add, so law_factory_councils (+0.5pp) is
+# worth +0.1 standard of living for the lower strata and +0.15 financial
+# momentum a month.
 #
 # WHY IT EXISTS. Wage pressure would otherwise be a hidden tax on every
 # progressive labour law: the law raises inflation, the player tightens to
@@ -7088,11 +7090,24 @@ te_mon_currency_reform_premium = {
 # credible monetary management the precondition for strong labour laws rather
 # than their enemy.
 #
-# MOMENTUM ONLY. §9.4 also asks for a lower-strata loyalist trickle; the engine
-# has no lower-strata loyalist modifier (see the task report), and the one
-# country-scope loyalist key applies to every stratum, which would hand
-# aristocrats a bonus for factory councils. Left out rather than mis-aimed.
+# TWO HALVES, AND ONE OF THEM IS DEAD FOR MOST COUNTRIES. Financial momentum is
+# only consumed by a country holding je_banking_cycle; the standard-of-living
+# half is live everywhere the monthly update runs, which is every country that
+# is not a command economy. That asymmetry is known and accepted — the loc
+# leads with the half everyone gets.
+#
+# NOT A LOYALIST TRICKLE. §9.4 asks for one, and the engine has no lower-strata
+# loyalist key: the one country-scope loyalist modifier applies to every
+# stratum and would hand aristocrats a bonus for factory councils.
+# state_lower_strata_standard_of_living_add is the aimed version of the same
+# idea — the workers whose pay held its value are better off, and the loyalty
+# follows from vanilla's own SoL-vs-expectations machinery instead of being
+# granted around it. A state-masked key inside a modifier a COUNTRY holds
+# applies across that country's states; vanilla's modifier_donghak_heaven_on_earth
+# carries this exact key and is added in a country_event
+# (events/soi_events/00_ep1_korea_events.txt).
 te_mon_real_wage_dividend = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_finance_momentum_monthly_add = 0.03
+	state_lower_strata_standard_of_living_add = 0.02 # REVIEWED 2026-09-20: unit value, multiplied by te_mon_wage_dividend_applied (one unit per +0.1pp of wage pressure) — law_factory_councils alone applies it x5 and renders +0.1
 }

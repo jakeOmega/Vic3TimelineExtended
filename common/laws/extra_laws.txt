@@ -286,6 +286,12 @@ law_universal_basic_income = {
 		country_sol_expectations_target_add = 1
 		country_sol_expectations_shift_min_add = 10
 		country_sol_expectations_lower_offset_add = 1
+		# §9.4 wage pressure. An income nobody has to work for is the hardest
+		# wage floor there is, so this is the welfare row's +0.5 — the same as
+		# law_factory_councils. Written here rather than in
+		# common/laws/te_monetary_wage_pressure_injections.txt with the other
+		# ten, because this law is the mod's own.
+		country_wage_pressure_add = 0.005
 	}
 
 	institution = institution_social_security
