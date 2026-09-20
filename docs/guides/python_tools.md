@@ -433,6 +433,8 @@ Timings are order-of-magnitude on a WSL+NTFS checkout and move with the machine;
 | `?mod_only=true&audits_only=true` | ~25 s | audit reports under `docs/engine/*_report.md` only | both regenerators *and* the vanilla re-read | **The fast-verify path used by the nightly audit.** Safe to call after every batch of fixes. |
 
 > **Caveat — editing modifier-type schemas:** if your edit changed a `decimals` / `percent` / `script_only` field in `common/modifier_type_definitions/`, the fast paths above do **not** rebuild the modifier-decimals registry that `modifier_visibility_audit` reads (`_union_mod_modifier_types`). It keeps the pre-edit value and emits false "displays as +0" flags. Restart the server (`mod_state_server.py --replace`) or run an unflagged full `/reload` to refresh it. (A plain re-launch without `--replace` is refused while the old PID is alive.)
+>
+> The same staleness hits a **newly added** modifier type: after a fast reload, `/engine-docs/modifiers?q=<name>` still returns 0 entries for it, which looks exactly like a registration that failed to parse. It is not. Confirm the registration with `/search?q=<name>` (it comes back under the `Modifier Types` entity type, with its loc name) and the grants with `/modifier-grants/<name>`; both read the freshly parsed ModState. Only reach for a restart if you actually need the engine-docs view.
 
 #### `/raw/<EntityType>[/<id>]` Response Shape
 
