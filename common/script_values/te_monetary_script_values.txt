@@ -265,10 +265,25 @@ te_mon_drift_step = {
 	multiply = te_mon_drift_speed_factor
 }
 
-# The same step, negated, so te_monetary_drift_policy_rate can test the downward
-# side without a third scratch variable.
-te_mon_drift_step_neg = {
+# The distance that has to remain before another step is worth taking, rather
+# than snapping to the target.
+#
+# THE EPSILON IS LOAD-BEARING. Comparing against the bare step lets a hairline
+# remainder buy a whole extra month: closing a 1.0pp gap in thirds leaves
+# 1.0 - 2 x 0.3333 = 0.3334, which is *greater* than 0.3333, so the rate takes a
+# fourth step of 0.3333 to land 0.0001 short and snaps on the fifth month. The
+# old hard-coded thresholds (0.34 against a 0.3333 step, 0.67 against 0.6667)
+# existed precisely to stop that, and 0.0067 reproduces the first of them
+# exactly. A 1pp move is three months at the baseline, as it always was.
+te_mon_drift_step_threshold = {
 	value = te_mon_drift_step
+	add = 0.0067
+}
+
+# The same threshold, negated, so te_monetary_drift_policy_rate can test the
+# downward side without a third scratch variable.
+te_mon_drift_step_threshold_neg = {
+	value = te_mon_drift_step_threshold
 	multiply = -1
 }
 

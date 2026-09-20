@@ -460,22 +460,23 @@ te_monetary_clamp_target = {
 # sentence of localization, and a future law or principle can move it without
 # editing this effect.
 #
-# The old code compared against a threshold a hair above the step (0.34 against
-# 0.3333) to stop a hairline remainder costing a whole extra month of stepping.
-# Comparing against the step itself does the same job: a remainder smaller than
-# one step snaps, a remainder of exactly one step snaps, and anything larger
-# steps and shrinks. te_mon_work2 carries the step so the downward test can use
-# the negated form without a third scratch slot.
+# THE TEST IS AGAINST te_mon_drift_step_THRESHOLD, NOT THE STEP. The old code's
+# 0.34 against a 0.3333 step was not sloppiness: closing a 1.0pp gap in thirds
+# leaves 0.3334, which is larger than the step, so testing against the step
+# itself buys a fourth month that moves the rate 0.3333 to land 0.0001 short. The
+# threshold's 0.0067 epsilon reproduces the old 0.34 exactly, and a 1pp move is
+# three months at the baseline as it always was. te_mon_work2 carries the step
+# (not the threshold) because it is what actually gets added.
 te_monetary_drift_policy_rate = {
 	set_variable = { name = te_mon_work value = var:te_policy_rate_target }
 	change_variable = { name = te_mon_work subtract = var:te_policy_rate }
 	set_variable = { name = te_mon_work2 value = te_mon_drift_step }
 	if = {
-		limit = { var:te_mon_work > var:te_mon_work2 }
+		limit = { var:te_mon_work > te_mon_drift_step_threshold }
 		change_variable = { name = te_policy_rate add = var:te_mon_work2 }
 	}
 	else_if = {
-		limit = { var:te_mon_work < te_mon_drift_step_neg }
+		limit = { var:te_mon_work < te_mon_drift_step_threshold_neg }
 		change_variable = { name = te_policy_rate subtract = var:te_mon_work2 }
 	}
 	else = {

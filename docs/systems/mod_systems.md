@@ -254,7 +254,7 @@ The policy-rate dial and the risk-premium stack that replaced the old *Raise Pol
 
 | File | Holds |
 |---|---|
-| `common/script_values/te_monetary_script_values.txt` | the **variable contract** (file header), `te_mon_era_base`, the regime range (`te_mon_target_min` / `_max`) and the OMO gate's `te_mon_floor_threshold`, the drift step (`te_mon_drift_speed_factor` / `te_mon_drift_step` / `_neg`), `te_mon_access_premium`, `te_mon_standing_floor`, `te_mon_scaled_debt_premium`, `te_mon_cycle_lean`, `te_mon_forecast_error_bound` / `_neg`, and the three stance-channel values |
+| `common/script_values/te_monetary_script_values.txt` | the **variable contract** (file header), `te_mon_era_base`, the regime range (`te_mon_target_min` / `_max`) and the OMO gate's `te_mon_floor_threshold`, the drift step (`te_mon_drift_speed_factor` / `te_mon_drift_step` / `_threshold` / `_threshold_neg`), `te_mon_access_premium`, `te_mon_standing_floor`, `te_mon_scaled_debt_premium`, `te_mon_cycle_lean`, `te_mon_forecast_error_bound` / `_neg`, and the three stance-channel values |
 | `common/scripted_effects/te_monetary_effects.txt` | `te_monetary_monthly_update` and its steps, the yearly GDP-growth snapshot, and the five `te_mon_effect_*` player controls |
 | `common/scripted_triggers/te_monetary_triggers.txt` | `te_mon_has_dial`, `te_mon_is_cbi` / `_is_command` / `_is_state_banking`, `banking_stance_is_tight` / `_loose`, `te_mon_policy_rate_at_floor`, plus the stepper and display gates |
 | `common/on_actions/te_monetary_on_actions.txt` | every hook the update is reached from (see below) |
