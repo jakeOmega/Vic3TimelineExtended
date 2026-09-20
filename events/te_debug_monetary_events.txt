@@ -5,6 +5,13 @@
 # Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
 # to run script by hand. Nothing in the mod fires this event.
 #
+# THE FILE HOLDS THREE FAMILIES. .1 is the read-out and the single-month
+# stepper; .2-.4 are the solved interest-multiplier bench; .5-.7 are the §19
+# row 2 harness — pin a manual fiat target, fast-forward years of pulses, and
+# set up §10's war case. The console sequences that reproduce §10's worked
+# example, the never-disinflate invariant and the §9.1 drift check, with the
+# numbers to expect, are in the .5-.7 header further down.
+#
 # It is a read-out, not a cheat menu: the description prints every variable
 # te_monetary_monthly_update owns, for the country that fires it, so a pulse can
 # be inspected without a debugger. The two options re-run the monthly update and
@@ -12,7 +19,10 @@
 # be stepped one month at a time instead of waiting for the calendar.
 #
 # HIDDEN STATE. te_neutral_rate, te_neutral_error, te_neutral_walk and
-# te_mon_stance_gap are hidden from the player everywhere else (§8 "The rule").
+# te_mon_stance_gap are hidden from the player everywhere else (§8 "The rule"),
+# and since phase 2 so are te_inflation_core, te_inflation_noise and the whole
+# §9.1 pressure sum with its individual terms (ruling P7 — the sum carries
+# -0.4 x the stance gap, so anything that prints it prints r*).
 # Printing them HERE is deliberate and allowed — this event is console-only, it
 # is never surfaced by any journal entry, button or on-action, and reading r*
 # is the whole point of a debug read-out. Nothing in this file may be reused in
@@ -34,7 +44,9 @@ te_debug_monetary.1 = { # REVIEWED 2026-09-19: console-only test event (`event t
 	desc = te_debug_monetary.1.d
 	flavor = te_debug_monetary.1.f
 
-	# Step one month: target, drift, premium, rate paid, stance, modifiers.
+	# Step one month: target, drift, premium, inflation, rate paid, stance,
+	# modifiers. Not idempotent — one click is one month, including one draw
+	# of each random walk and one month of core-inflation adjustment.
 	option = {
 		name = te_debug_monetary.1.a
 		default_option = yes
@@ -242,5 +254,568 @@ te_debug_monetary.4 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 
 	option = {
 		name = te_debug_monetary.4.z
+	}
+}
+
+
+# ============================================================================
+# THE §19 ROW 2 HARNESS — .5 pin, .6 fast-forward, .7 the §10 war case
+# ============================================================================
+# WHY IT EXISTS. Every AI country is delegated (§6), so an observer run never
+# exercises the human path at all: the fixed manual target, its §9.1 Taylor
+# instability, and §10's monetise-a-war-then-never-disinflate line are things
+# only a player can do. §19 row 2 makes confirming them an exit criterion, and
+# these three events are how that is done without playing fifty years by hand.
+#
+# THEY ARE CHEATS, and only the console can reach them. .5 rewrites four law
+# slots, .7 writes inflation and the hidden neutral rate directly, and .6 runs
+# the monthly update dozens of times inside one click. Nothing in the mod fires
+# any of them, and nothing outside this file may call what they do.
+#
+# ROOT IS THE COUNTRY, which is the whole reason .6 is allowed to call
+# te_monetary_monthly_update at all. That effect is the single owner of the
+# rate stack and is documented as callable only from the pulse and
+# country-creation on-actions, with this file as the one sanctioned exception
+# (common/scripted_effects/te_monetary_effects.txt, the monthly update's
+# header): its step 9 and step 1b both apply a modifier whose `multiplier =`
+# the engine resolves against ROOT, and a console-fired country event's ROOT is
+# the country that fired it. A future debug event that steps the system from
+# inside an iterator or a `scope:X = { }` block would break that and silently
+# write a multiplier of 1.
+#
+# ----------------------------------------------------------------------------
+# WHAT A FAST-FORWARD IS NOT
+# ----------------------------------------------------------------------------
+# .6 runs N monthly updates back to back. It does NOT advance the game, and the
+# difference matters when reading the result:
+#
+#   * THE CALENDAR DOES NOT MOVE. No timed modifier ages — the inflation band,
+#     the §13 stance politics and the ten-year currency-reform premium all sit
+#     where they were — and nothing that keys off a date fires.
+#   * THE BANKING JOURNAL ENTRY'S CYCLE DOES NOT ADVANCE. Phase, momentum and
+#     bubble pressure are driven by je_banking_cycle's own monthly pulse, which
+#     this does not call, so the §9.1 phase and bubble terms are frozen at
+#     whatever the cycle held when you clicked. A run started in a frenzy adds
+#     +1.5pp of pressure for every one of its months.
+#   * THE YEARLY GDP SNAPSHOT DOES NOT RUN, deliberately: with the date frozen
+#     it would read one instant's GDP against itself, book 0% growth and shift
+#     the hidden neutral rate by -0.5. te_mon_growth_term keeps its last real
+#     value instead. Use .1's second option if you want it refreshed.
+#   * THE BUDGET DOES NOT MOVE, so te_mon_deficit_pct — and with it the §9.1
+#     deficit term — is frozen at today's figure for the whole run.
+#   * PRICES DO NOT MOVE. The basket still runs every month, so te_basket_avg
+#     converges on a standing index at 1/36 a month and cost-push decays toward
+#     0 over the run: a fast-forward is a world with no supply shocks in it.
+#   * THE HYPERINFLATION CRISIS STOPS THE RUN. If headline crosses the band-6
+#     edge (50pp) mid-loop, step 6c fires te_inflation.1 and sets the 24-month
+#     cooldown; the loop sees the cooldown at its maximum and skips every
+#     remaining month, so the state you read afterwards is the state in the
+#     month the crisis fired rather than sixty months of unanswered popups.
+#     Answer the crisis, then fire .6 again. (The one cost: firing .6 in the
+#     single month after a crisis that arrived from a real pulse does nothing.)
+#     None of the sequences below reaches it — §10's never-disinflate path tops
+#     out around 20pp, deep in band 5.
+#
+# What DOES advance: everything te_monetary_monthly_update owns — the policy
+# rate's drift, core and expected inflation, the basket average, the premium
+# terms, both of the neutral rate's random walks, the inflation-noise walk, the
+# band swap, the §13 month counter and the interest modifier.
+#
+# ----------------------------------------------------------------------------
+# SEQUENCE 1 — §10's worked example (the fixed point)
+# ----------------------------------------------------------------------------
+#   event te_debug_monetary.5     option a    pin: fiat + national bank, not
+#                                             independent, not state-owned, not
+#                                             command, delegation off, target 5
+#   event te_debug_monetary.7     option a    seed π = core = expected = 2,
+#                                             policy = target = 5, r* = the
+#                                             reference rate, no monetisation —
+#                                             and one pulse, so the premium,
+#                                             the yield and the rate paid are
+#                                             derived from the seed rather than
+#                                             left over from before the pin
+#   event te_debug_monetary.1                 read it
+#
+# §10: era_base = r* = 3, premium 2, π = expected = 2, policy 5 →
+# max(5, 3+2) + 2 − 2 = **5.0%**, and it is a genuine fixed point, not a
+# one-month coincidence: the tuple (policy, π, expected, yield, paid, gap) =
+# (5, 2.00, 2.00, 5.00, 5.00, 0.00) reproduces indefinitely.
+#
+# IN A LIVE GAME THE PREMIUM IS NOT 2. Rate paid comes out at
+# 3 + (credit standing + risk premium), so read those two off .1 and treat
+# whatever rate paid says here as YOUR baseline — sequence 2 is judged against
+# it, not against the literal 5.00. Read it AFTER the pin, never before: taking
+# a country off central bank independence gives up that law's -0.5pp of credit
+# standing and its halved floor, so the pin itself moves the premium.
+#
+# THE SEED WRITES 5 BECAUSE §10 IS BUILT ON A REFERENCE RATE OF 3, which is
+# eras 1-4. Later eras run at 2.5 and 2.0 (§8), where the fixed point is
+# reference + 2; .1's "Reference rate" line says which one you are in, and the
+# dial has to be stepped to match or the pin is a tight stance, not a neutral
+# one.
+#
+#   event te_debug_monetary.6     option a    twelve more months
+#
+# Expect the tuple back within a tenth or two, not to the last decimal: the
+# noise walk and the neutral rate's own walk are redrawn every month, and any
+# live pressure term the seed cannot reach (cycle phase, bubble, deficit) is
+# added on top. .1's pressure section is where to look if it moves more than
+# that — a non-zero total pressure is a real reading, not a bug.
+#
+# ----------------------------------------------------------------------------
+# SEQUENCE 2 — the §10 tuning invariant (never disinflating must not pay)
+# ----------------------------------------------------------------------------
+#   .5 a, .7 a                                pin and seed, as above
+#   event te_debug_monetary.1                 note RATE PAID — the baseline
+#   event te_debug_monetary.7     option b    war: monetisation level 3, dial 5
+#   event te_debug_monetary.6     option a    x2 — two years of war
+#   event te_debug_monetary.1                 headline ≈ 12.7, expected ≈ 6.5,
+#                                             rate paid ≈ 0.6
+#   event te_debug_monetary.7     option c    peace — monetisation 0, and the
+#                                             dial deliberately left at 5
+#   event te_debug_monetary.6     option b    x3 for §19's fifteen years; task
+#                                             3 averaged over twenty-one, which
+#                                             is x4 (twenty years) plus one of
+#                                             option a. Read .1 between runs
+#
+# WHAT THE NUMBERS SHOULD DO (simulated against the shipped equations in task
+# 3's report, which has the month-by-month tables):
+#
+#   * at the trough of the war, rate paid ≈ **0.61%** — §10 quotes ≈0.7%, which
+#     is the same-month figure; step 5 prices the unanchored premium off LAST
+#     month's expectations (ruling P5), which is the 0.1pp;
+#   * the 0.5 clamp binds for about three months mid-war, while headline is
+#     climbing faster than expectations lift the lenders' floor, and for the
+#     single month the war ends, when the +1.5pp monetisation premium comes off
+#     before headline starts falling. That is the clamp doing its job;
+#   * over the twenty-one post-war years rate paid averages **≈5.85%** against
+#     the pre-war **5.00%** — it must never settle below the baseline once
+#     expectations catch up. That is the invariant. If a run shows it cheap, the
+#     §7.6 unanchored premium, the §9.2 band costs or the lenders' floor has
+#     broken;
+#   * headline climbs from ≈12% to ≈20% over twenty years and sits in band 5
+#     (very high), never band 6 — the hyperinflation edge is 50pp.
+#
+# RATE PAID IS NOT THE WHOLE TEST (§19 row 2). The invariant is judged on
+# treasury, standard of living and radicals as well, and those live on the
+# country panel, not in .1: the §9.2 band modifiers are what make a standing
+# 12-20% worse *overall* than disinflating. Run the same sequence a second time
+# stepping the dial up past π + r* instead of leaving it at 5, and compare the
+# two end states.
+#
+# ----------------------------------------------------------------------------
+# SEQUENCE 3 — §9.1's "a fixed manual target is unstable, by design"
+# ----------------------------------------------------------------------------
+#   .5 a, .7 a                                pin and seed
+#   ... give the country a standing pressure: a boom or frenzy on the banking
+#       journal entry, a labour law carrying country_wage_pressure_add, or an
+#       event modifier with country_inflation_pressure_add ...
+#   event te_debug_monetary.6     option b    x4 — twenty years
+#
+# §9.1's "settles at 2 + P / c" is a simplification. With the de-anchoring
+# c_eff that shipped there is NO fixed point under a held real stance once
+# P > 2.5 × c, which on a manual target (c = 0.25) is P > 0.625 — a boom phase
+# alone (+0.8) clears it. A pinned manual target under standing pressure is
+# therefore EXPECTED to drift away, and the thing to confirm is that it does so
+# with an e-folding time of years: twenty years should be a slow climb the
+# player has many chances to answer, not a runaway. If it runs away inside one
+# 60-month click, the credibility table or the stance coefficient is wrong.
+#
+# THE HONEST COMPARISON is the same twenty years with delegation on (.5 option
+# b): c goes to 0.4, which is above the stability threshold, and the drift
+# should stop. That is what "delegation is the set-and-forget option" means.
+# ============================================================================
+
+te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event te_debug_monetary.5`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	# The title says whether the country is standing on the harness's footing
+	# right now, so the pin re-opening this event IS the failure report.
+	# `first_valid` + `triggered_desc` on a TITLE is vanilla's own form — see
+	# vanilla events/belle_epoque_events.txt:356 and the ten more like it in the
+	# same file — not a mod invention.
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						te_mon_has_dial = no
+						te_mon_can_monetise = no
+					}
+				}
+				desc = te_debug_monetary.5.t_blocked
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_debug_monetary.5.t
+			}
+		}
+	}
+	desc = te_debug_monetary.5.d
+	flavor = te_debug_monetary.5.f
+
+	# PIN. What §9.1's manual case needs is a country with a dial it controls
+	# itself: a national bank, fiat money, no central bank independence, no
+	# state-owned banking, no command economy, delegation off and a target the
+	# mandate formula will not move.
+	#
+	# LAWS ARE SET WITH activate_law, WHICH IS NOT AN ENACTMENT — and this mod
+	# hooks BOTH sides of that, so the difference cuts twice.
+	#
+	#   * on_law_enactment_pass does NOT fire, so te_banking_law_change_cleanup
+	#     (common/on_actions/extra_on_actions.txt) never runs: its dollarisation
+	#     exit, its monetisation eligibility sweep and
+	#     remove_banking_planning_modifiers_effect are all skipped. The
+	#     dollarisation flag is therefore cleared below by hand, and cleared
+	#     WITHOUT te_mon_effect_new_currency — a pin is a cheat, not a currency
+	#     reform, and the ten-year premium would poison the very rate this
+	#     harness exists to read. Nothing else in the mod may take that
+	#     shortcut. An ex-command country also keeps its planning_* journal-entry
+	#     modifiers until it next really enacts an economic-system law; nothing
+	#     in the rate stack reads them, but the banking cycle this harness takes
+	#     its phase and bubble terms from does.
+	#   * on_law_activated DOES fire, and the mod hooks it with five effects
+	#     (extra_on_actions.txt): fix_incompatible_laws_from_law_scope,
+	#     te_fix_inconsistent_laws_from_law_scope, language_reform_law_on_action,
+	#     radical_law_backlash_on_action and banking_law_cascade_on_law_activated.
+	#     The second of those is the one that matters here.
+	#
+	# THE CONSISTENCY SWEEP RUNS AFTER EVERY activate_law AND WILL UNDO A
+	# CARELESS PIN. te_fix_inconsistent_laws walks every law group
+	# (common/scripted_effects/extra_law_consistency_generated.txt, generated
+	# from the laws' own disallowing_laws / unlocking_laws) and replaces
+	# whatever it finds inconsistent. Three of its rules bear on this pin:
+	#
+	#   national bank        law_national_bank + law_traditionalism
+	#                        -> law_no_national_bank
+	#   monetary policy      law_fiat_currency without a national bank
+	#                        -> in 1836, law_commodity_money
+	#   economic system      law_interventionism + any of law_serfdom /
+	#                        law_anarchy / law_factory_councils /
+	#                        law_women_in_the_fields -> bounced, and on a tag
+	#                        with none of the three modern taxation laws the
+	#                        bounce lands back on law_traditionalism
+	#
+	# Chained, that is why the economic system is settled FIRST below: on a
+	# traditionalist tag a pin that started with the bank would lose the bank to
+	# rule one and then the currency to rule two, and end up on commodity money
+	# with no dial at all — most non-Western 1836 tags.
+	#
+	# WHY AGRARIANISM AND NOT ALWAYS INTERVENTIONISM. Interventionism is the
+	# better landing law — it is the mid economic system and disturbs least —
+	# but it disallows law_serfdom, which is exactly what a traditionalist 1836
+	# tag tends to hold, so the sweep would bounce it straight back.
+	# law_agrarianism's disallowing_laws are the same list MINUS serfdom, so it
+	# survives that case; both have an empty on_activate and neither carries
+	# country_credit_standing_add, so neither moves the premium. A country
+	# holding law_anarchy, law_factory_councils or law_women_in_the_fields has
+	# no stable economic system for this pin at all — that is what the verify
+	# at the foot of the option is for.
+	#
+	# STATE-OWNED BANKING IS TAKEN OFF TOO, not only independence: it is the
+	# weakest credibility anchor in the §9.1 table (c = 0.15) and it outranks
+	# delegation, so a country left on it runs the 0.15 case rather than the
+	# manual 0.25 every number in the sequences above is computed for.
+	# law_universal_banking_light_prudence is the replacement because it is the
+	# only law in the group with no credit-standing modifier and no consistency
+	# rule of its own — it cannot be bounced.
+	#
+	# BUT A COMMAND ECONOMY ON STATE-OWNED BANKING NEVER REACHES STEP 3, and
+	# lands on law_directed_credit_development_banks instead. Step 1's move to
+	# interventionism fires the sweep, and state-owned banking's own rule
+	# (extra_law_consistency_generated.txt) bounces it the moment the country is
+	# no longer a command economy: to directed credit if it has `central_planning`
+	# — which a command economy has by definition, it is law_command_economy's
+	# own unlocking technology — and to central bank independence otherwise, for
+	# a tag that got the law some other way. Step 3 then reads
+	# te_mon_is_state_banking = no and
+	# te_mon_is_cbi = no and does nothing. The pin still HOLDS: directed credit
+	# is not CBI and not state-owned, so te_mon_has_dial and te_mon_can_monetise
+	# both pass and te_mon_credibility_c falls through to the manual 0.25 the
+	# sequences assume. What the country does not get is universal banking's
+	# volatility profile — directed credit runs
+	# country_banking_random_momentum_mult at -0.2 rather than +0.10 (read off
+	# law_directed_credit_development_banks in common/laws/extra_laws.txt, not
+	# off mod_systems.md's law table, which says -25% for this row), so the
+	# financial cycle is quieter than the paragraph below describes. Take the
+	# baseline off .1 either way. (A country that lands on CBI instead — no
+	# central planning — would fail the verify at the foot of the option and
+	# re-open this event, which is what the verify is for.)
+	#
+	# The swap that DOES happen is not free, and is visible in two places the
+	# harness reads:
+	#
+	#   * country_banking_random_momentum_mult goes from -0.10 under
+	#     independence (-0.12 with its institution modifier) or -0.35 under
+	#     state ownership to +0.10, so the banking cycle becomes markedly more
+	#     volatile and the §9.1 phase term with it — a fast-forward started in
+	#     a frenzy or a panic is a different experiment from one started in
+	#     stable, and this makes those states more likely;
+	#   * leaving independence gives up its country_credit_standing_add of
+	#     -0.005 and its country_credit_standing_floor_add of -0.0025, so the
+	#     structural premium rises by up to 0.5pp and its floor doubles back to
+	#     0.5. That is correct — §9.1's manual case is not supposed to keep a
+	#     credibility bonus it no longer earns — but it means the baseline rate
+	#     paid after a pin is NOT the one the country was showing before it.
+	option = {
+		name = te_debug_monetary.5.a
+		default_option = yes
+
+		te_monetary_init_variables = yes
+
+		# 1. THE ECONOMIC SYSTEM, FIRST. Only traditionalism (which forbids the
+		#    bank) and a command economy (which has no dial) are in the way, so
+		#    nothing else is touched. The command swap is the one big cheat
+		#    here — it moves production methods across the whole country.
+		if = {
+			limit = {
+				OR = {
+					has_law_or_variant = law_type:law_traditionalism
+					te_mon_is_command = yes
+				}
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_law_or_variant = law_type:law_serfdom
+						has_law_or_variant = law_type:law_anarchy
+						has_law_or_variant = law_type:law_factory_councils
+						has_law_or_variant = law_type:law_women_in_the_fields
+					}
+				}
+				activate_law = law_type:law_interventionism
+			}
+			else = {
+				activate_law = law_type:law_agrarianism
+			}
+		}
+
+		# 2. THE BANK, now that nothing forbids it.
+		activate_law = law_type:law_national_bank
+
+		# 3. THE CREDIBILITY ANCHOR.
+		if = {
+			limit = {
+				OR = {
+					te_mon_is_cbi = yes
+					te_mon_is_state_banking = yes
+				}
+			}
+			activate_law = law_type:law_universal_banking_light_prudence
+		}
+
+		# 4. THE CURRENCY, last, because its consistency rule is the one that
+		#    reads the bank.
+		activate_law = law_type:law_fiat_currency
+
+		set_variable = { name = te_mon_dollarised value = 0 }
+		set_variable = { name = te_mon_delegated value = 0 }
+		# DELIBERATELY NOT CLAMPED. te_mon_target_min / _max read the laws, and
+		# the laws above were written moments ago in this same effect block, so
+		# a clamp here could still be answering for the old regime — on a gold
+		# country in a late era it would take 5 down to the reference rate + 2.
+		# te_monetary_clamp_target owns the range and re-applies it at the top
+		# of every pulse, with law reads that have certainly settled.
+		set_variable = { name = te_policy_rate_target value = 5 } # REVIEWED 2026-09-20: console-only; §10's worked example is built on a target of 5
+
+		# 5. VERIFY, AFTER THE LAST activate_law AND THEREFORE AFTER THE LAST
+		#    SWEEP. Effects in an option run in order and the on-action fires at
+		#    activation, so by here the laws have settled into whatever the
+		#    consistency rules will allow. If that is not a dial the player owns,
+		#    re-open this event: its title switches to the blocked variant and
+		#    its description names the sweep and what to change by hand. A pin
+		#    that quietly did nothing is the failure mode worth spending three
+		#    lines on — te_debug_monetary.7's war option would simply be missing,
+		#    with nothing to say why.
+		if = {
+			limit = {
+				OR = {
+					te_mon_has_dial = no
+					te_mon_can_monetise = no
+				}
+			}
+			trigger_event = { id = te_debug_monetary.5 }
+		}
+	}
+
+	# UNPIN — delegation only. The laws are NOT restored: this event never
+	# recorded what they were, and reconstructing "what the country used to
+	# have" across four law groups is a bigger cheat than the pin was. Put them
+	# back by hand, or reload the save.
+	option = {
+		name = te_debug_monetary.5.b
+		te_monetary_init_variables = yes
+		set_variable = { name = te_mon_delegated value = 1 }
+	}
+
+	option = {
+		name = te_debug_monetary.5.z
+	}
+}
+
+
+te_debug_monetary.6 = { # REVIEWED 2026-09-20: console-only test event (`event te_debug_monetary.6`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.6.t
+	desc = te_debug_monetary.6.d
+	flavor = te_debug_monetary.6.f
+
+	# FAST-FORWARD. The counts are literals on purpose: `count =` is an
+	# <int>-typed slot and a script value in one is liable to be read as 0 and
+	# the loop silently skipped.
+	#
+	# THE STOP. te_mon_hyper_cooldown is set to its maximum by step 6c in the
+	# month the §9.2 crisis goes out and aged down by one every month after and
+	# never set above it, so "below the maximum" is false for exactly the month
+	# the crisis fired. Testing it inside the loop rather than in a `while`
+	# limit keeps the iteration count bounded no matter what the guard does.
+	# The variable is guaranteed present because te_monetary_init_variables
+	# runs first.
+	option = {
+		name = te_debug_monetary.6.a
+		default_option = yes
+
+		te_monetary_init_variables = yes
+		while = {
+			count = 12
+			if = {
+				limit = { var:te_mon_hyper_cooldown < te_mon_hyper_cooldown_months }
+				te_monetary_monthly_update = yes
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.6.b
+
+		te_monetary_init_variables = yes
+		while = {
+			count = 60
+			if = {
+				limit = { var:te_mon_hyper_cooldown < te_mon_hyper_cooldown_months }
+				te_monetary_monthly_update = yes
+			}
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.6.z
+	}
+}
+
+
+te_debug_monetary.7 = { # REVIEWED 2026-09-20: console-only test event (`event te_debug_monetary.7`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.7.t
+	desc = te_debug_monetary.7.d
+	flavor = te_debug_monetary.7.f
+
+	# SEED THE §10 FIXED POINT. Everything §10's first line specifies, written
+	# at once: π = core = expected = 2, no cost-push, policy and target at 5,
+	# nothing being monetised, and the hidden half parked where it makes the
+	# stance gap exactly 0 — r* on the reference rate with no estimation error,
+	# no walk and no growth term, and last month's gap zeroed because step 6
+	# reads it before step 8 rewrites it (ruling P5).
+	#
+	# IT WRITES INFLATION STATE AND HIDDEN STATE DIRECTLY, which only the
+	# monthly update, the §9.2 crisis and the dollarisation exit otherwise do.
+	# That is the point of a seed and it is why it lives in a console-only
+	# event; the variable contract (header of
+	# common/script_values/te_monetary_script_values.txt) names this event as
+	# the console-only writer. The walks and the noise are redrawn by the very
+	# next pulse, so zeroing them buys one clean month, not a quiet decade.
+	#
+	# AND IT ENDS WITH ONE PULSE, because the seed writes the INPUTS and every
+	# figure worth reading is derived: the premium, the market yield, the rate
+	# paid, the band and the stance are all written by later steps of the
+	# monthly update, and without a pulse te_debug_monetary.1 would show them
+	# as they were before the pin. The pulse costs one draw of each random walk
+	# and one month of core adjustment from a zero-pressure state — which moves
+	# nothing, because the seed IS the fixed point. What it can also do is put
+	# cost-push back: step 6a re-reads the country's basket, so a market with a
+	# live price shock in it will show headline away from 2 straight away.
+	# That is a real reading, not a failed seed.
+	option = {
+		name = te_debug_monetary.7.a
+		default_option = yes
+
+		te_monetary_init_variables = yes
+
+		set_variable = { name = te_inflation value = 2 } # REVIEWED 2026-09-20: console-only; §10's worked example is π = expected = 2
+		set_variable = { name = te_inflation_core value = 2 } # REVIEWED 2026-09-20: console-only seed, see above
+		set_variable = { name = te_inflation_expected value = 2 } # REVIEWED 2026-09-20: console-only seed, see above
+		set_variable = { name = te_cost_push value = 0 }
+		set_variable = { name = te_inflation_noise value = 0 }
+
+		set_variable = { name = te_policy_rate value = 5 } # REVIEWED 2026-09-20: console-only; §10's worked example is policy 5 on a reference rate of 3
+		set_variable = { name = te_policy_rate_target value = 5 } # REVIEWED 2026-09-20: console-only seed, see above
+		set_variable = { name = te_monetisation_level value = 0 }
+
+		set_variable = { name = te_neutral_rate value = var:te_mon_era_base_now }
+		set_variable = { name = te_neutral_error value = 0 }
+		set_variable = { name = te_neutral_walk value = 0 }
+		set_variable = { name = te_mon_growth_term value = 0 }
+		set_variable = { name = te_mon_stance_gap value = 0 }
+
+		te_monetary_monthly_update = yes
+	}
+
+	# THE WAR. §10: monetise at level 3 for two years with the dial left at 5.
+	# The level is an input; step 1b of the next pulse turns it into minting,
+	# into +1.5pp of risk premium and into +7.5pp of inflation pressure, and it
+	# is not walked back on its own — the one-step-a-month retrenchment in step
+	# 1b is gated on `is_player = no`.
+	#
+	# The option is hidden unless the country may actually monetise, which is
+	# the pin's job: without it step 1b would zero the level again on the next
+	# pulse and the run would quietly be a peacetime one. If it is missing,
+	# fire te_debug_monetary.5 first.
+	option = {
+		name = te_debug_monetary.7.b
+		trigger = { te_mon_can_monetise = yes }
+
+		te_monetary_init_variables = yes
+
+		set_variable = { name = te_monetisation_level value = 3 } # REVIEWED 2026-09-20: console-only; §10's war case is level 3
+		set_variable = { name = te_policy_rate_target value = 5 } # REVIEWED 2026-09-20: console-only; §10's war case leaves the dial at 5
+	}
+
+	# PEACE, AND THE DIAL LEFT WHERE IT WAS. This is §10's never-disinflate
+	# path, so it deliberately does NOT touch the target: the whole question is
+	# what a government pays for refusing to raise it. Stepping the dial up is
+	# the comparison run, and it is done from the dashboard like a player would.
+	option = {
+		name = te_debug_monetary.7.c
+
+		te_monetary_init_variables = yes
+
+		set_variable = { name = te_monetisation_level value = 0 }
+	}
+
+	option = {
+		name = te_debug_monetary.7.z
 	}
 }

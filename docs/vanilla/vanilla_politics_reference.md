@@ -79,6 +79,8 @@ The non-obvious rule: **only the largest disagreement counts** across all laws, 
 
 Each law group then multiplies that base penalty by a group-specific factor — the **Governance Principles** and **Distribution of Power** groups carry the highest multipliers (because they're the foundational political laws), Slavery is similarly high, Bureaucracy/Education-System/Policing are low. The exact multipliers live in `common/law_groups/00_laws.txt` (`ideological_opinion_impact`); read them when balancing.
 
+`ideological_opinion_impact` is **only** this legitimacy multiplier. It does *not* gate the other thing an ideology stance does — the standing approval an IG gains or loses for the laws currently on the books, and the larger one-off approval swing when a law is changed. Those run off their own defines (`IG_APPROVAL_FROM_LAW` / `..._STRONG_STANCE`, `IG_APPROVAL_FROM_LAW_CHANGE` and its radical/extreme tiers, under a separate cap on the total from laws) and are live for every law group, including one whose multiplier is 0. So a group at 0 still has real politics; what it lacks is a legitimacy cost when the governing coalition disagrees about it. Don't read a 0 as "stances here do nothing".
+
 Two more wrinkles:
 
 - **Parties halve the secondary IGs' contribution.** The party's *whip* (highest-clout member IG) has its stances counted at full weight; every other IG in the party has its stances counted at half. This is the structural argument for forming parties even when the ideological alignment isn't perfect — the mathematical penalty halves.

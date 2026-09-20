@@ -124,6 +124,51 @@ country_risk_premium_add = {
 }
 
 # ============================================================================
+# Monetary policy — the two inflation-pressure channels (§9.1, §9.4, §11)
+# ============================================================================
+# "Pressure" is a LEVEL, not an increment: how far above expectations inflation
+# settles while the source lasts. Step 6 of te_monetary_monthly_update sums both
+# types into the §9.1 pressure term, read back the same way as the premium tiers
+# — `100 x modifier:X`, because both carry vanilla's interest scale
+# (0.01 = 1pp), so one unit convention covers the whole monetary system.
+#
+# TWO TYPES, NOT ONE. §9.4 put wage pressure on country_inflation_pressure_add,
+# which §11 also uses for devaluation and event modifiers — and then the §9.4
+# real-wage dividend could not tell a labour law from a currency crisis, and
+# would have paid a country for debasing its money. So labour and welfare laws
+# grant country_wage_pressure_add, everything else grants
+# country_inflation_pressure_add, and only the wage half backs the dividend.
+#
+# BOTH ARE DELIBERATELY VISIBLE. Unlike the hidden stance gap, these are what
+# the player *chose* — a labour law, a devaluation, a monetisation step — so
+# each law and event modifier states its own contribution on its own tooltip.
+# The pressure SUM is still hidden state (ruling P7): it carries the stance term
+# and the random walk, and nothing may print it.
+
+# Everything that is not a wage: currency devaluation and stabilisation event
+# modifiers (§11), crisis outcomes, and any later source of standing price
+# pressure that is not a labour cost.
+country_inflation_pressure_add = {
+	color = bad
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# Labour and welfare laws only (§9.4). Kept apart from the type above so the
+# real-wage dividend can pay for wage-led demand without paying for inflation
+# created any other way. Negative under laws that suppress wages
+# (no workers' rights, combination acts, anti-strike laws).
+country_wage_pressure_add = {
+	color = bad
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
+# ============================================================================
 # Monetary policy — the regime rules, carried on the laws that grant them
 # ============================================================================
 # Each of these replaces a rule that used to be a law check buried in script and

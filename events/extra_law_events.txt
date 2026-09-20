@@ -232,6 +232,7 @@ extra_law_events.3 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = monpol_currency_stability days = normal_modifier_time multiplier = sv_money_flow_event_small }
+		add_modifier = { name = monpol_currency_stability_pressure days = normal_modifier_time }
 	}
 }
 
@@ -284,6 +285,7 @@ extra_law_events.4 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = monpol_currency_devaluation days = normal_modifier_time multiplier = sv_money_flow_event_small }
+		add_modifier = { name = monpol_currency_devaluation_pressure days = normal_modifier_time }
 	}
 
 	option = { # Build an academic consensus first
@@ -4231,12 +4233,22 @@ extra_law_events.39 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = monpol_currency_stability days = normal_modifier_time multiplier = sv_money_flow_event_small }
+		add_modifier = { name = monpol_currency_stability_pressure days = normal_modifier_time }
 	}
 }
 
 # ======================================================================
-#  40 – Hyperinflation Panic  (Monetary Policy – stall flavor)
+#  40 – The Spectre of Runaway Prices  (Monetary Policy – stall flavor)
 # ======================================================================
+# RETITLED in phase 2 (monetary_policy_design.md §11). It was "Hyperinflation
+# Panic", which once te_inflation existed read as a claim about the country's
+# actual inflation. It is not one: the event fires while the country is
+# ENACTING fiat currency, and its own description has an interest group
+# "warning of imminent runaway prices" — an anticipation, not an observation.
+# Gating it on te_inflation >= 20 would have been near-unreachable (a country
+# with 20% inflation is not usually mid-enactment of its first fiat law) and
+# would have thrown away a working enactment event; the title now says what the
+# event has always been about.
 extra_law_events.40 = {
 	type = country_event
 	placement = root
@@ -4314,6 +4326,7 @@ extra_law_events.40 = {
 		}
 		# Domain side-effect
 		add_modifier = { name = monpol_currency_devaluation days = normal_modifier_time multiplier = sv_money_flow_event_small }
+		add_modifier = { name = monpol_currency_devaluation_pressure days = normal_modifier_time }
 	}
 }
 
@@ -6231,6 +6244,7 @@ extra_law_events.63 = {
 		add_enactment_modifier = { name = monpol_aristocrat_settlement }
 		# Domain side-effect
 		add_modifier = { name = monpol_currency_stability days = normal_modifier_time multiplier = sv_money_flow_event_small }
+		add_modifier = { name = monpol_currency_stability_pressure days = normal_modifier_time }
 	}
 
 	option = {
@@ -6290,6 +6304,7 @@ extra_law_events.64 = {
 		add_enactment_modifier = { name = monpol_capital_protection }
 		# Domain side-effect
 		add_modifier = { name = monpol_currency_devaluation days = normal_modifier_time multiplier = sv_money_flow_event_small }
+		add_modifier = { name = monpol_currency_devaluation_pressure days = normal_modifier_time }
 	}
 }
 

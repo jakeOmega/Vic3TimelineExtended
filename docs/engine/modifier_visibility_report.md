@@ -22,18 +22,19 @@ _None._
 
 ## Reviewed Exemptions
 
-- `common/static_modifiers/extra_modifiers.txt:345` — `state_construction_mult = -0.0001` (displays as +0%) — **2026-05-06**: Multiplied by a potentially big number, intentionally tiny
-- `common/static_modifiers/extra_modifiers.txt:5779` — `country_mass_migration_attraction_mult = 0.0025` (displays as +0%) — **2026-05-06**: Multiplied by cultural hegemony score - need 4% of global cultural influence to get +1% migration attraction
-- `common/static_modifiers/extra_modifiers.txt:5784` — `country_diplomatic_reputation_add = 0.1` (displays as +0) — **2026-05-06**: Multiplied by cultural hegemony score - need 10% of global cultural influence to get to +1
+- `common/static_modifiers/extra_modifiers.txt:371` — `state_construction_mult = -0.0001` (displays as +0%) — **2026-05-06**: Multiplied by a potentially big number, intentionally tiny
+- `common/static_modifiers/extra_modifiers.txt:5811` — `country_mass_migration_attraction_mult = 0.0025` (displays as +0%) — **2026-05-06**: Multiplied by cultural hegemony score - need 4% of global cultural influence to get +1% migration attraction
+- `common/static_modifiers/extra_modifiers.txt:5816` — `country_diplomatic_reputation_add = 0.1` (displays as +0) — **2026-05-06**: Multiplied by cultural hegemony score - need 10% of global cultural influence to get to +1
+- `common/static_modifiers/extra_modifiers.txt:7138` — `country_sol_expectations_lower_offset_add = -0.02` (displays as +0) — **2026-09-20**: unit value, multiplied by te_mon_wage_dividend_applied (one unit per +0.1pp of wage pressure) — law_factory_councils alone applies it x5 and renders -0.1
 
 ## Coverage
 
-- files_audited: 302
-- modifiers_in_registry_with_decimals: 2732
-- registry_hits: 7423
-- total flags: 3
+- files_audited: 310
+- modifiers_in_registry_with_decimals: 2740
+- registry_hits: 7500
+- total flags: 4
 - unreviewed: 0
-- exempted: 3
+- exempted: 4
 
 ## Scope notes
 

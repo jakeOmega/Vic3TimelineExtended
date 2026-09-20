@@ -1,0 +1,132 @@
+﻿# ============================================================================
+# Monetary Policy — wage pressure on the labour and welfare laws (§9.4)
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §9.4, and ruling P1 of
+# docs/superpowers/plans/2026-09-20-monetary-policy-phase2.md.
+#
+# WHAT THIS FILE DOES
+# country_wage_pressure_add is a standing LEVEL of inflation pressure, in pp:
+# how far above expectations inflation settles while the law stands. Step 6 of
+# te_monetary_monthly_update sums it (x 100 — the field is on vanilla's
+# interest scale, 0.01 = 1pp) into §9.1's pressure term, and step 6d pays the
+# §9.4 real-wage dividend back on the positive half of it while headline
+# inflation is inside the comfort band.
+#
+#   law_no_workers_rights      -0.2     law_regulatory_bodies       +0.2
+#   law_combination_acts       -0.2     law_right_to_associate      +0.2
+#   law_anti_strike_laws       -0.2     law_worker_protections      +0.4
+#                                       law_corporatized_unions     +0.4
+#   law_wage_subsidies         +0.2     law_factory_councils        +0.5
+#   law_old_age_pension        +0.2
+#   law_universal_basic_income +0.5  <- NOT HERE: see below
+#
+# WHY IT IS A VISIBLE MODIFIER ON THE LAW and not a law check inside the
+# monthly update. §9.4 asks for it explicitly: the effect is never hidden, so
+# the law's own tooltip states its contribution, the engine renders the
+# breakdown, and a later law, technology or principle can move the same dial
+# without anyone editing te_monetary_effects.txt. It is also what the hidden-
+# state rule allows to be shown — this is what the player CHOSE, unlike the
+# pressure sum it feeds (ruling P7).
+#
+# WHY THE NEGATIVE ROW IS NOT A DISINFLATION TOOL. Suppressing wages does lower
+# the pressure level, and that is the whole point of the row — but the dividend
+# and the §9.4 wage-price spiral both read te_mon_wage_pressure_positive, so a
+# country on anti-strike laws neither collects a dividend for it nor gets a
+# negative spiral. Its -0.2pp is worth exactly -0.2pp, at every inflation rate.
+#
+# ONE LAW IS MISSING FROM THIS FILE ON PURPOSE. law_universal_basic_income is
+# MOD-OWNED (common/laws/extra_laws.txt), so its +0.5 is written straight into
+# its own `modifier = { }` block rather than injected into it. INJECTing a law
+# the mod itself declares would put the value a brace away from the block that
+# already exists, for no gain.
+#
+# THE INJECT ASSUMPTION (ruling R1, §17 checks 1/3/4 — CLOSED). A `modifier = { }`
+# inside an `INJECT:` SUMS with the vanilla entity's own, key by key. Read in
+# game by the owner on 2026-09-19 and 2026-09-20; recorded in
+# docs/guides/scripting_best_practices.md § INJECT. Four of these ten laws are
+# already INJECTed for a different concern by
+# common/laws/sol_expectations_vanilla_injections.txt (wage subsidies, old age
+# pension, regulatory bodies, workers' protections), which is the same
+# arrangement three separate files already have on law_laissez_faire.
+#
+# If a future patch ever made INJECT last-wins, this file would wipe those
+# laws' vanilla modifier blocks. The §17 recovery recipe is the one every other
+# monetary INJECT file carries: restate each law's full vanilla modifier in the
+# mod plus the wage pressure. Keeping the concern in its own file makes that a
+# one-file fix.
+# ============================================================================
+
+
+# --- Labour laws that suppress wages ----------------------------------------
+# No bargaining, no wage-price channel — and no dividend either.
+
+INJECT:law_no_workers_rights = {
+	modifier = {
+		country_wage_pressure_add = -0.002
+	}
+}
+
+INJECT:law_combination_acts = {
+	modifier = {
+		country_wage_pressure_add = -0.002
+	}
+}
+
+INJECT:law_anti_strike_laws = {
+	modifier = {
+		country_wage_pressure_add = -0.002
+	}
+}
+
+
+# --- Labour laws that let wages be bargained --------------------------------
+
+INJECT:law_regulatory_bodies = {
+	modifier = {
+		country_wage_pressure_add = 0.002
+	}
+}
+
+INJECT:law_right_to_associate = {
+	modifier = {
+		country_wage_pressure_add = 0.002
+	}
+}
+
+INJECT:law_worker_protections = {
+	modifier = {
+		country_wage_pressure_add = 0.004
+	}
+}
+
+INJECT:law_corporatized_unions = {
+	modifier = {
+		country_wage_pressure_add = 0.004
+	}
+}
+
+# The strongest of them, and §9.4's worked example: +0.5pp settles inflation
+# 0.5/c higher — +2pp on a manual target, +0.7pp under central bank
+# independence, which is still inside the comfort band and so still paying the
+# dividend at no cost at all.
+INJECT:law_factory_councils = {
+	modifier = {
+		country_wage_pressure_add = 0.005
+	}
+}
+
+
+# --- Welfare: an income floor is a wage floor -------------------------------
+# A worker who can refuse the job bargains like one.
+
+INJECT:law_wage_subsidies = {
+	modifier = {
+		country_wage_pressure_add = 0.002
+	}
+}
+
+INJECT:law_old_age_pension = {
+	modifier = {
+		country_wage_pressure_add = 0.002
+	}
+}

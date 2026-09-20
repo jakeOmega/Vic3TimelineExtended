@@ -156,7 +156,7 @@ on_law_checkpoint_stall = {
 		# --- Extra Law Events — issue #81 stall flavor ---
 		10 = extra_law_events.38	# Bank Run Triggers Doubt (Financial Regulation)
 		10 = extra_law_events.39	# Gold Outflow Crisis (Monetary Policy)
-		10 = extra_law_events.40	# Hyperinflation Panic (Monetary Policy)
+		10 = extra_law_events.40	# The Spectre of Runaway Prices (Monetary Policy)
 		10 = extra_law_events.41	# Civil Liberties Outcry (Privacy Rights)
 		10 = extra_law_events.42	# The Counter-Campaign (Internet Governance)
 		10 = extra_law_events.43	# Pulpit Against Progress (Genetic Rights)

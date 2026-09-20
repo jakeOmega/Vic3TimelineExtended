@@ -21,14 +21,31 @@
 # flat 20% base is cancelled in INJECT:base_values either way — so with this
 # switched off too, every country would borrow free.
 #
-# ORDER (§16.2): 0 init -> 1 regime code -> 2 target -> 3 drift -> 4 no-dial
-# derived rate -> 5 premium -> 7 rate paid -> 8 neutral rate + stance ->
-# 9 re-apply the interest modifier. Steps 6 and 10 are phases 2 and 3.
+# ORDER (§16.2): 0 init -> 1 regime code -> 1b monetisation -> 2 target ->
+# 3 drift -> 4 no-dial derived rate -> 5 premium -> 6 inflation -> 6c band
+# modifier -> 6d real-wage dividend -> 7 rate paid -> 8 neutral rate + stance ->
+# 8b creditor-versus-debtor politics -> 9 re-apply the interest modifier. Step
+# 10 is phase 3. Steps 1b, 6c, 6d and 8b are numbered rather than renumbering
+# §16.2's list: 1b settles an INPUT the later steps read (§11's monetisation
+# level), the way step 1 settles the regime code, 6c and 6d are the engine-write
+# half of step 6 (6a is the basket and 6b the inflation loop), and 8b is the
+# engine-write half of step 8 — it consumes the band step 8 has just written
+# and must not run before it.
 #
-# PHASE 1 HAS NO INFLATION. Every pi / expected-inflation term of §6 and §9 is
-# dropped, including price stability's `-2`, and the mandate formulas below are
-# the phase-1 forms the plan specifies — not the full §6 ones. Market yield
-# (§4, §10) is the policy rate.
+# THE RATE STACK READS INFLATION (§4, §6, §7.6, §8, §10). Step 6 computes the
+# basket, core, headline and expected inflation, and the rest of the stack is
+# pointed at them: the mandates react to CORE (step 2), a no-dial country's
+# derived rate carries its own expected inflation (step 4), the cyclical
+# premium prices unanchored expectations and monetisation (step 5), the rate
+# paid is built on the lenders' floor and net of realised inflation (step 7),
+# and the stance gap is a REAL rate (step 8).
+#
+# WHICH FIGURE GOES WHERE. Core is what the mandates steer on — a delegated
+# bank looks through a supply shock (§9.1) — while headline is what the real
+# rate, the rate paid and the §9.2 bands use, and expected is what lenders
+# price. Nothing outside step 6 writes any of them, with the one documented
+# exception of the §9.2 hyperinflation crisis (events/te_inflation_events.txt),
+# whose two escapes ARE a reset of those figures — see the variable contract.
 #
 # WORKING VARIABLES. te_mon_work and te_mon_work2 are scratch slots reused by
 # every step; te_mon_era_base_now caches the world reference rate for this
@@ -80,14 +97,25 @@ te_monetary_refresh_world_era_base = {
 # marker is the net if one does not.
 #
 # NOT IDEMPOTENT WITHIN A MONTH. Step 3 advances the policy rate toward the
-# target by a third of a point per call, and step 8 draws both random walks per
-# call, so calling this twice in one month drifts twice as fast and ages the
-# hidden state twice as quickly. Call it ONLY from the pulse and country-creation
+# target by a third of a point per call, step 6 draws the inflation noise walk
+# and advances core inflation, its trailing basket average and expectations by
+# one month's worth per call, step 8 draws both of the neutral rate's random
+# walks per call, and step 1b's AI rule walks the monetisation level one step
+# back per call — so calling this twice in one month drifts twice as fast and
+# ages the hidden state twice as quickly. Call it ONLY from the pulse and country-creation
 # on-actions listed above — never from an event, a scripted button, a scripted
 # GUI or a journal entry's on_monthly_pulse. Anything that needs the rate to
 # reflect a change it just made should write the input and let the next pulse
-# pick it up; the 0.05 skip threshold in step 9 means an unchanged month costs
-# nothing. (The sole deliberate exception is the console-only debug event
+# pick it up.
+#
+# WAITING A MONTH IS CHEAP; THE PULSE ITSELF IS NOT FREE ANY MORE. Step 9 skips
+# the remove/re-add when the rate has moved less than 0.05pp, which under phase
+# 1 meant an unchanged month cost nothing. Phase 2's cost-push is a fresh
+# basket reading every pulse rather than a level that sits still, so the rate
+# paid moves every month for most countries with a market and the skip catches
+# the becalmed and the market-less rather than the majority. §0.4 checklist 34
+# is the in-game read of what that costs in tick time.
+# (The sole deliberate exception is the console-only debug event
 # events/te_debug_monetary_events.txt, whose entire purpose is stepping the
 # system by hand.)
 #
@@ -109,6 +137,10 @@ te_monetary_monthly_update = {
 	# --- 1. regime code -----------------------------------------------------
 	te_monetary_set_regime = yes
 
+	# --- 1b. monetising the deficit, and the minting it buys ----------------
+	# Before the premium and the pressure sum, both of which read the level.
+	te_monetary_update_monetisation = yes
+
 	# --- 2/3. the dial: target, then drift toward it ------------------------
 	# --- 4. no dial: the rate is derived, never chosen ----------------------
 	if = {
@@ -123,11 +155,31 @@ te_monetary_monthly_update = {
 	# --- 5. risk premium, structural then cyclical --------------------------
 	te_monetary_update_premium = yes
 
+	# --- 6. the basket, core inflation, headline and expectations -----------
+	te_monetary_update_inflation = yes
+
+	# --- 6c. the band modifier, and the hyperinflation crisis ---------------
+	# Immediately after the band number is written, so the modifier on the
+	# country is never a month behind the figure the dashboard shows.
+	te_monetary_apply_inflation_band = yes
+
+	# --- 6d. the real-wage dividend the comfort band pays -------------------
+	# After 6c, and for the same reason: it keys off the band this month's
+	# step 6 just wrote, so the dividend arrives with the band rather than a
+	# month behind it.
+	te_monetary_apply_wage_dividend = yes
+
 	# --- 7. the rate the government actually pays ---------------------------
 	te_monetary_update_rate_paid = yes
 
 	# --- 8. hidden neutral rate, stance gap, displayed band -----------------
 	te_monetary_update_stance = yes
+
+	# --- 8b. the politics a sustained stance earns (§13) --------------------
+	# After step 8, and for the same reason 6c follows 6: it counts months of
+	# the DISPLAYED band, so it has to see the one step 8 has just written
+	# rather than last month's.
+	te_monetary_apply_stance_politics = yes
 
 	# --- 9. write it into the engine ----------------------------------------
 	te_monetary_apply_interest_modifiers = yes
@@ -238,6 +290,143 @@ te_monetary_init_variables = {
 		limit = { NOT = { has_variable = te_mon_stance_band } }
 		set_variable = { name = te_mon_stance_band value = 3 }
 	}
+
+	# --- phase 2: inflation (§9) --------------------------------------------
+	# Every one of these seeds to a neutral zero, which is exactly what phase 1
+	# behaviour is: no inflation, expectations at nothing, no monetisation, no
+	# dollarisation. A phase-1 save therefore gains a set of zeroes and keeps
+	# paying exactly what it paid, until step 6 starts moving them.
+	#
+	# THE ZEROES ARE WHAT A PHASE-1 SAVE AND AN UNPULSED 1836 COUNTRY LOOK
+	# LIKE — AND ONLY THE FIRST PULSE IS INERT (final-review finding I1; spec
+	# §0.4 owner decision G). Every 1836 country starts on commodity money —
+	# Britain on gold — and both are metallic, so expectations stay pinned at 0
+	# and the regime pull holds core down. That is NOT the same as "phase 2
+	# evaluates to zero on a metallic start", which is what this comment used
+	# to claim:
+	#
+	#   * the FIRST pulse is genuinely inert in cost-push, because step 6a
+	#     seeds te_basket_avg to that month's index, so index - avg = 0;
+	#   * from the SECOND pulse te_cost_push = 0.3 x (index - 36-month avg) x
+	#     100, clamped +/-6, for every country with a market, metallic or not.
+	#     A basket a few per cent under its own trailing average is an ordinary
+	#     reading, and it goes straight onto headline, off the rate paid in
+	#     step 7, into the band, and — for a country with a dial — into the
+	#     stance gap in step 8;
+	#   * core is not pinned either. Metallic money pins EXPECTATIONS and pulls
+	#     core toward 0; it does not zero the rest of the pressure sum (deficit,
+	#     cycle phase, bubble, the noise walk, any law or event pressure), so
+	#     core settles where the pull and that sum balance rather than at 0.
+	#
+	# So §7.4's anchor figures hold on an 1836 start only +/- the cost-push
+	# term, and the band can read Deflation or Elevated for a gold country. The
+	# owner's decision was to keep the economics spec-faithful and add the band
+	# hysteresis in step 6b; §0.4 decision G names the three one-line levers if
+	# play shows it too noisy. The first country to enact fiat is still the
+	# first to leave zero in the sense that matters — it is the first with an
+	# expectations term of its own.
+	#
+	# TWO EXCEPTIONS TO THE ZERO. te_inflation_band seeds to 2 (comfort),
+	# because 0 is not a band and the band swap has to have something to
+	# compare against; te_inflation_band_applied seeds to 0, which means "no
+	# band modifier has been applied yet" and is a legal value.
+	#
+	# te_basket_market_owner is a SCOPE variable, so it cannot hold 0. It seeds
+	# to the country's current market owner, and to nothing at all for a
+	# country with no market — the one phase-2 variable that can legitimately
+	# be absent after init. Read it with `var:te_basket_market_owner = { ... }`
+	# behind a has_variable guard, never as a number and never through a
+	# GetValue loc accessor.
+	if = {
+		limit = { NOT = { has_variable = te_inflation } }
+		set_variable = { name = te_inflation value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_inflation_core } }
+		set_variable = { name = te_inflation_core value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_inflation_expected } }
+		set_variable = { name = te_inflation_expected value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_inflation_noise } }
+		set_variable = { name = te_inflation_noise value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_cost_push } }
+		set_variable = { name = te_cost_push value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_basket_index } }
+		set_variable = { name = te_basket_index value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_basket_avg } }
+		set_variable = { name = te_basket_avg value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_basket_seeded } }
+		set_variable = { name = te_basket_seeded value = 0 }
+	}
+	if = {
+		limit = {
+			NOT = { has_variable = te_basket_market_owner }
+			exists = market.owner
+		}
+		market = { owner = { save_scope_as = te_mon_init_market_owner } }
+		set_variable = { name = te_basket_market_owner value = scope:te_mon_init_market_owner }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_inflation_band } }
+		set_variable = { name = te_inflation_band value = 2 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_inflation_band_applied } }
+		set_variable = { name = te_inflation_band_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_monetisation_level } }
+		set_variable = { name = te_monetisation_level value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_monetisation_minting_applied } }
+		set_variable = { name = te_monetisation_minting_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_dollarised } }
+		set_variable = { name = te_mon_dollarised value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_market_yield } }
+		set_variable = { name = te_market_yield value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_deficit_pct } }
+		set_variable = { name = te_mon_deficit_pct value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_stance_months } }
+		set_variable = { name = te_mon_stance_months value = 0 }
+	}
+	# 0 means "neither §13 politics modifier is on the country", which is what a
+	# fresh country and a save from before this step both are.
+	if = {
+		limit = { NOT = { has_variable = te_mon_stance_politics_applied } }
+		set_variable = { name = te_mon_stance_politics_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_wage_dividend_applied } }
+		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
+	}
+	# 0 means "the hyperinflation crisis may be offered". Step 6c sets it to
+	# te_mon_hyper_cooldown_months when the event goes out and ticks it down a
+	# month at a time; seeding it to 0 means a country that hyperinflates on its
+	# very first pulse is offered the choice at once.
+	if = {
+		limit = { NOT = { has_variable = te_mon_hyper_cooldown } }
+		set_variable = { name = te_mon_hyper_cooldown value = 0 }
+	}
 }
 
 
@@ -291,6 +480,158 @@ te_monetary_set_regime = {
 
 
 # ----------------------------------------------------------------------------
+# STEP 1b — monetising the deficit (§11)
+# ----------------------------------------------------------------------------
+# Scope: country.
+#
+# Three things in one place, in this order:
+#
+#   1. eligibility — a country that may no longer monetise is forced to 0;
+#   2. the AI's rule, for AI countries only;
+#   3. the GDP-scaled minting modifier, re-applied to match the level.
+#
+# WHY IT RUNS THIS EARLY. te_monetisation_level is an INPUT to three later
+# steps of the same pulse: the cyclical premium charges +0.5pp a level (step 5,
+# §7.6), the pressure sum adds +2.5pp a level (step 6, §9.1), and the deficit
+# term adds the printed money back into the deficit, because no trigger reads
+# minting and money-financed spending would otherwise suppress its own deficit
+# term (step 6, ruling P4). Settling the level here means all three see this
+# month's number instead of last month's, and the deficit read-out the console
+# prints is the one the pressure used.
+#
+# THE PLAYER'S LEVEL IS NOT TOUCHED except by rule 1. The steppers at the foot
+# of this file write it and the next pulse picks it up, exactly like the rate
+# target — which is also why this step is the only writer that runs inside the
+# update, and why no other step may write the level.
+#
+# ELIGIBILITY IS RE-ASKED EVERY MONTH, not only on a law change. §14 has
+# te_banking_law_change_cleanup zero the level the moment a disqualifying law
+# lands, so the player never keeps a level they cannot hold; this is the net
+# under it, and it covers every route the on-action cannot see — a save from
+# before phase 2, a law set directly by script, dollarisation (ruling P9),
+# which is a variable rather than a law.
+#
+# THE AI RULE (§11 leaves it to the implementer; §6 only says the AI is always
+# delegated). At war and already deep in debt, a treasury reaches for the
+# printing press; in default or weeks from it, it reaches harder:
+#
+#   level 1   at war AND scaled_debt >= 0.5
+#   level 2   the same, AND in default or inside 20 weeks of insolvency
+#   otherwise one step back toward 0 a month
+#
+# The war-and-debt test is deliberately the SAME pair step 2 switches the AI's
+# mandate to growth on, so an AI that has decided this is an emergency treats
+# it as one on both dials. Escalation is immediate and retrenchment is one step
+# a month, because a war finances itself the week it starts and a government
+# that has been printing does not stop in one: it is also what keeps a country
+# that dips in and out of `is_at_war` for a month from slamming 2 -> 0 -> 2.
+#
+# weeks_until_bankruptcy IS READ BEHIND taking_loans, the way vanilla's own
+# war_support_from_looming_bankruptcy reads it (war_support_values.txt): the
+# figure counts weeks of the CURRENT deficit before the credit limit, which
+# means nothing for a country running a surplus.
+#
+# NO GATE THE PLAYER BRANCH LACKS (scripting_best_practices.md, the orphan-gate
+# trap): both branches pass through the same te_mon_can_monetise test above,
+# and the AI's own weights are a choice, not a permission.
+#
+# THE MODIFIER, and why it is not shaped exactly like step 9. Step 9 keeps a
+# te_rate_paid_rooted marker so a wrongly-rooted write can be repaired, because
+# a multiplier that silently fell back to 1 still looks like a plausible 1%
+# interest rate. Here a fallback to 1 is one pound of minting a week, invisible
+# on every surface, and step 9's own skip-if-unchanged logic would then never
+# correct it. So instead of repairing a bad write this step makes one
+# impossible: the re-add happens only when `root ?= this`, and a call with the
+# wrong ROOT leaves both the modifier and te_monetisation_minting_applied
+# exactly as they were for the next pulse to handle.
+#
+# THE SKIP THRESHOLD IS NOT THE POINT AT LEVEL > 0. gdp moves every month, so a
+# monetising country re-applies almost every pulse — that IS the GDP-scaled
+# refresh §11 asks for, and the £1-a-week threshold only stops a rewrite that
+# would change nothing. What the skip is really for is the other 1,300 tags:
+# the level-0 branch is a variable read and a has_modifier test, and never
+# touches a modifier at all.
+te_monetary_update_monetisation = {
+	# --- 1/2. who monetises, and how much -----------------------------------
+	if = {
+		limit = { te_mon_can_monetise = no }
+		set_variable = { name = te_monetisation_level value = 0 }
+	}
+	else_if = {
+		limit = { is_player = no }
+		if = {
+			limit = {
+				is_at_war = yes
+				# The same test step 2 switches the AI mandate to growth on.
+				scaled_debt >= 0.5
+			}
+			if = {
+				limit = {
+					OR = {
+						in_default = yes
+						AND = {
+							taking_loans = yes
+							weeks_until_bankruptcy < te_mon_monetisation_bankruptcy_weeks
+						}
+					}
+				}
+				set_variable = { name = te_monetisation_level value = 2 }
+			}
+			else = {
+				set_variable = { name = te_monetisation_level value = 1 }
+			}
+		}
+		else_if = {
+			limit = { var:te_monetisation_level > 0 }
+			change_variable = { name = te_monetisation_level subtract = 1 }
+		}
+		clamp_variable = {
+			name = te_monetisation_level
+			min = 0
+			max = te_mon_monetisation_max
+		}
+	}
+
+	# --- 3. the GDP-scaled minting modifier ---------------------------------
+	if = {
+		limit = { var:te_monetisation_level = 0 }
+		if = {
+			limit = { has_modifier = te_monetisation_minting }
+			remove_modifier = te_monetisation_minting
+		}
+		# The applied value follows the modifier off. It is never REMOVED —
+		# it backs a live multiplier and a missing variable would make every
+		# later re-evaluation read 'none' (modifier_multiplier_var_audit).
+		set_variable = { name = te_monetisation_minting_applied value = 0 }
+	}
+	else_if = {
+		limit = { root ?= this }
+		set_variable = { name = te_mon_work value = te_mon_monetisation_minting_value }
+		set_variable = { name = te_mon_work2 value = var:te_mon_work }
+		change_variable = { name = te_mon_work2 subtract = var:te_monetisation_minting_applied }
+		if = {
+			limit = {
+				OR = {
+					var:te_mon_work2 >= 1
+					var:te_mon_work2 <= -1
+					NOT = { has_modifier = te_monetisation_minting }
+				}
+			}
+			if = {
+				limit = { has_modifier = te_monetisation_minting }
+				remove_modifier = te_monetisation_minting
+			}
+			set_variable = { name = te_monetisation_minting_applied value = var:te_mon_work }
+			add_modifier = {
+				name = te_monetisation_minting
+				multiplier = var:te_monetisation_minting_applied
+			}
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
 # STEP 2 — the target
 # ----------------------------------------------------------------------------
 # Scope: country, dial countries only.
@@ -314,9 +655,39 @@ te_monetary_set_regime = {
 # it on entering a command economy — and flipping it here would leave a player
 # silently delegated after repealing independence.
 #
+# THE MANDATE FORMULAS (§6), with pi = te_inflation_core — a delegated bank
+# looks THROUGH a supply shock and steers on the persistent half (§9.1):
+#
+#   price stability   r^* + pi + 1.0 x (pi - anchor) + cycle_lean
+#   growth            r^* + pi - 1.0 + 0.5 x max(0, pi - 4) + cycle_lean / 2
+#   peg defence       the world reference rate (gold only; ignores pi and the cycle)
+#
+# The second pi term is what makes price stability move MORE than one for one
+# with inflation — the Taylor principle, and the reason a delegated bank can
+# disinflate where a fixed manual target cannot (§9.1). Growth's zero-gap point
+# is pi = 6, so below 4% it simply does not see inflation.
+#
+# GROWTH IS NEVER MORE HAWKISH THAN PRICE STABILITY. The two formulas cross at
+# low inflation under a negative cycle lean: at pi = 0 in a panic (lean -3),
+# growth asks for r^* - 2.5 and price stability for r^* - 5, so the "looser"
+# mandate would be the tighter one. Both are computed and the LOWER is taken.
+#
+# Each constant is a named script value (§21): te_mon_mandate_inflation_weight,
+# te_mon_mandate_growth_bias, te_mon_mandate_growth_reaction and
+# te_mon_mandate_growth_threshold, with the two reaction terms assembled in
+# te_mon_mandate_price_reaction / te_mon_mandate_growth_reaction_term because
+# both need a max() or a subtraction against the anchor that change_variable
+# cannot express. The anchor is te_mon_inflation_anchor rather than a literal
+# 2: §9.1 calls it "the mandate target" and gives it as 0 under a metallic
+# regime, and a gold bank on price stability would otherwise target r^* - 2
+# against its own pinned zero inflation — permanently loose at the bottom of
+# its band.
+#
 # The neutral rate this reads is last month's (step 8 recomputes it later in the
-# same pulse). That one-month lag is the §16.2 order and is harmless: r* moves
-# by at most 0.1pp a month.
+# same pulse), and so is the core inflation (step 6 runs after this one, ruling
+# P5). Both lags are the §16.2 order and both are harmless: r* moves by at most
+# 0.1pp a month and core by a tenth of its own gap, while the hysteresis below
+# only lets the target move in whole points at a 0.75pp margin anyway.
 te_monetary_update_target = {
 	# --- which mandate? ---
 	if = {
@@ -369,26 +740,44 @@ te_monetary_update_target = {
 		}
 		if = {
 			# 3 peg defence: hold the reference rate so gold flows net to zero.
-			# Ignores the domestic cycle by design.
+			# Ignores the domestic cycle — and inflation — by design.
 			limit = { var:te_mon_mandate = 3 }
 			set_variable = { name = te_mon_work value = var:te_mon_era_base_now }
 		}
-		else_if = {
-			# 2 growth: r^* - 1.0 + cycle_lean / 2. Runs a standing 1pp loose,
-			# which is the point — more momentum, faster bubbles, more crashes.
-			limit = { var:te_mon_mandate = 2 }
-			set_variable = { name = te_mon_work value = var:te_neutral_rate }
-			change_variable = { name = te_mon_work add = var:te_neutral_error }
-			change_variable = { name = te_mon_work subtract = 1.0 }
-			set_variable = { name = te_mon_work2 value = te_mon_cycle_lean }
-			change_variable = { name = te_mon_work2 divide = 2 }
-			change_variable = { name = te_mon_work add = var:te_mon_work2 }
-		}
 		else = {
-			# 1 price stability: r^* + cycle_lean.
+			# 1 price stability: r^* + pi + 1.0 x (pi - anchor) + cycle_lean.
+			# Computed for the growth mandate as well, as the cap below.
 			set_variable = { name = te_mon_work value = var:te_neutral_rate }
 			change_variable = { name = te_mon_work add = var:te_neutral_error }
+			change_variable = { name = te_mon_work add = var:te_inflation_core }
+			change_variable = { name = te_mon_work add = te_mon_mandate_price_reaction }
 			change_variable = { name = te_mon_work add = te_mon_cycle_lean }
+
+			if = {
+				# 2 growth: r^* + pi - 1.0 + 0.5 x max(0, pi - 4) + lean / 2.
+				# Runs a standing point loose, which is the point — more
+				# momentum, faster bubbles, more crashes.
+				#
+				# The lean is halved FIRST because change_variable's divide
+				# applies to the whole running total; everything after it is an
+				# add, so the written order is the arithmetic.
+				limit = { var:te_mon_mandate = 2 }
+				set_variable = { name = te_mon_work2 value = te_mon_cycle_lean }
+				change_variable = { name = te_mon_work2 divide = 2 }
+				change_variable = { name = te_mon_work2 add = var:te_neutral_rate }
+				change_variable = { name = te_mon_work2 add = var:te_neutral_error }
+				change_variable = { name = te_mon_work2 add = var:te_inflation_core }
+				change_variable = { name = te_mon_work2 add = te_mon_mandate_growth_bias }
+				change_variable = { name = te_mon_work2 add = te_mon_mandate_growth_reaction_term }
+
+				# Never more hawkish than price stability (§6): the two formulas
+				# cross at low inflation under a negative lean, so growth takes
+				# whichever of the two is lower.
+				if = {
+					limit = { var:te_mon_work2 < var:te_mon_work }
+					set_variable = { name = te_mon_work value = var:te_mon_work2 }
+				}
+			}
 		}
 
 		# Hysteresis (§4): the delegated target only moves when the formula is
@@ -504,8 +893,25 @@ te_monetary_drift_policy_rate = {
 # Scope: country, no-dial countries only.
 #
 # No national bank, commodity money or crypto: the country pays the reference
-# rate plus the 1pp bankless spread (§4). Command economy: the administered
-# rate, a flat 3% (§5.3). Premium still applies to both.
+# rate, PLUS ITS OWN EXPECTED INFLATION, plus the 1pp bankless spread (§4).
+# Command economy: the administered rate, a flat 3% (§5.3). Premium still
+# applies to both.
+#
+# WHY EXPECTED INFLATION IS IN A DERIVED RATE. The reference rate is real (§4);
+# a market rate is nominal. Lenders in a bankless country price the inflation
+# they expect of it exactly as lenders anywhere else do — which is why ruling
+# P6 has these countries run the inflation loop at all despite having no dial
+# and no stance. Without the term they would be the one group in the game whose
+# nominal rate ignores its own inflation, and step 7 would then subtract a
+# realised inflation the rate never contained.
+#
+# A COMMAND ECONOMY DOES NOT GET THE TERM. §14 holds its inflation, core and
+# expectations at 0, so adding it would be adding zero; the administered rate
+# is a plan figure, not a price, and it stays the flat 3%.
+#
+# It is LAST MONTH'S expected inflation: step 6 runs after this one (ruling
+# P5). Expectations move by at most alpha x the gap in a month, so the lag is
+# well under a tenth of a point.
 #
 # te_policy_rate_target is deliberately NOT written here. It is the dial's
 # setting, and these countries have no dial; leaving it alone means a country
@@ -518,6 +924,7 @@ te_monetary_set_derived_rate = {
 	}
 	else = {
 		set_variable = { name = te_policy_rate value = var:te_mon_era_base_now }
+		change_variable = { name = te_policy_rate add = var:te_inflation_expected }
 		change_variable = { name = te_policy_rate add = 1.0 }
 	}
 }
@@ -576,6 +983,22 @@ te_monetary_update_premium = {
 	# Debt load (§7.6): nothing below scaled_debt 0.25, +4pp at 1.0. Cyclical,
 	# so it is added after the floor and always bites.
 	change_variable = { name = te_premium_cyclical add = te_mon_scaled_debt_premium }
+	# Unanchored expectations (§7.6): +0.25pp per pp that |expected - anchor|
+	# exceeds the 3pp tolerance. It is one of the three reasons §10's
+	# never-disinflate path stays dearer than the pre-war baseline — already
+	# +3.75pp at expected = 20 — and it is what makes a disinflation's hangover
+	# cost something while expectations are still coming down.
+	#
+	# Monetisation (§7.6, §11): +0.5pp per level. Lenders price a government
+	# that is printing money to pay them.
+	#
+	# BOTH READ LAST MONTH'S EXPECTATIONS, because step 6 runs after this one
+	# (ruling P5). Step 7's market yield, which runs after step 6, uses this
+	# month's — the two are at most alpha x the gap apart, i.e. a few hundredths
+	# of a point, and pricing the premium off the figure lenders were quoted
+	# last month is if anything the more honest of the two.
+	change_variable = { name = te_premium_cyclical add = te_mon_premium_unanchored }
+	change_variable = { name = te_premium_cyclical add = te_mon_premium_monetisation }
 	if = {
 		limit = { var:te_premium_cyclical < -10 }
 		set_variable = { name = te_premium_cyclical value = -10 }
@@ -588,21 +1011,602 @@ te_monetary_update_premium = {
 
 
 # ----------------------------------------------------------------------------
-# STEP 7 — the rate the government pays (§4)
+# STEP 6 — inflation: the basket, core, headline, expectations (§9)
 # ----------------------------------------------------------------------------
 # Scope: country.
 #
-#   rate_paid_pts = clamp( market_yield + structural + cyclical , 0.5 , 60 )
+#   index       = SUM( weight x (price / base - 1) ) over eight goods    §9.3
+#   cost_push   = clamp( 0.3 x (index - basket_avg) x 100 , +/-6 )       §9.3
+#   basket_avg += (1/36) x (index - basket_avg)
+#   pi_core    += 0.10 x ( expected + pressure - pi_core )               §9.1
+#   pi_headline = clamp( pi_core + cost_push , -10 , 100 )
+#   c_eff       = c x max( 0 , 1 - |headline - anchor| / 10 )
+#   expected   += alpha x ( (1 - c_eff) x headline + c_eff x anchor - expected )
 #
-# Market yield is the policy rate until phase 2 adds §10. The 0.5 floor is why a
-# negative policy rate never reaches the rate paid: under digital currency a
-# target of -3 acts only through the stimulus channel (§8), which is intended.
+# EVERY DRIVER IS A LEVEL IN pp, never a per-month increment (§9.1). The whole
+# of the pressure sum lives in te_mon_pressure_total and its nine named terms
+# (common/script_values/te_monetary_script_values.txt); the arithmetic here is
+# only the three integrations — core, the basket average and expectations —
+# plus the noise walk, because a random draw cannot live in a script value.
+#
+# WHERE IT SITS IN THE ORDER (ruling P5). Between the premium and the rate
+# paid, so §10's market yield reads THIS month's expectations. Everything
+# upstream of it reads last month's — step 2's core, step 4's expected in the
+# derived rate, step 5's §7.6 unanchored premium — which is a lag of at most
+# alpha x the gap, a few hundredths of a point, and each site says so.
+# The stance term therefore reads LAST month's
+# te_mon_stance_gap, which step 8 rewrites later in the same pulse: §16.3
+# already tolerates a one-month-old gap, and the alternative would define the
+# gap in terms of an inflation figure computed from the gap.
+#
+# WHO RUNS IT (ruling P6). Everyone except a command economy — including
+# bankless, commodity-money, crypto and dollarised countries, whose stance gap
+# is 0 and who therefore just drop the loose-money term. §14 holds a planned
+# economy's pi, core, expected and cost-push at 0 until repressed inflation is
+# designed. It is NOT gated on banking_system_enabled: inflation feeds the rate
+# every country pays.
+#
+# THE BASKET RUNS FOR EVERYONE WITH A MARKET, including a command economy. It
+# is a price observation, not a policy: a planned economy that leads a customs
+# union still has to feed its members an index, and its own trailing average
+# has to keep moving or the month it liberalises books three decades of price
+# drift as one shock.
+#
+# HIDDEN STATE (ruling P7). te_inflation_core, te_inflation_noise and the
+# pressure sum are never printed outside events/te_debug_monetary_events.txt.
+# Headline, expected, cost-push and the player's own wage / inflation pressure
+# modifiers are the public half.
+te_monetary_update_inflation = {
+	# --- 6a. the cost-push basket (§9.3) ------------------------------------
+	# Computed once per MARKET and copied by the members. A member may pulse
+	# before its market owner does, so the copy can be a month old — the same
+	# staleness §16.3 accepts for the stance, and a price index moves by less
+	# in a month than the 1/36 average absorbs.
+	if = {
+		limit = { exists = market.owner }
+		market = { owner = { save_scope_as = te_mon_basket_owner } }
+
+		if = {
+			limit = {
+				# `scope:X ?= this` is vanilla's own arrangement for "am I
+				# the one that scope points at" (00_flag_definitions.txt:10050,
+				# `NOT = { scope:actor ?= this }`) and the same one step 9's
+				# te_rate_paid_rooted marker uses. If it ever evaluated the
+				# wrong way round for a market OWNER, that owner would copy
+				# its own zero for ever and its cost-push would be silently
+				# dead: the tell in te_debug_monetary.1 is "Basket index"
+				# disagreeing with "Weighted index as computed".
+				NOT = { scope:te_mon_basket_owner ?= this }
+				scope:te_mon_basket_owner = { has_variable = te_basket_index }
+			}
+			set_variable = { name = te_basket_index value = te_mon_basket_index_from_owner }
+		}
+		else = {
+			# The market owner itself, and any member whose owner has not
+			# pulsed yet (the first month of a game, or of a new union).
+			set_variable = { name = te_basket_index value = te_mon_basket_index_value }
+		}
+
+		# SEED, AND RE-SEED ON A CHANGE OF MARKET (§9.3). Without the seed the
+		# first month reads the whole price level as a shock; without the
+		# re-seed, joining a customs union books the new market's price level
+		# as inflation, which is not what happened.
+		if = {
+			limit = {
+				OR = {
+					var:te_basket_seeded = 0
+					NOT = { has_variable = te_basket_market_owner }
+					# The has_variable is restated rather than relied on from
+					# the clause above it: an OR is not guaranteed to
+					# short-circuit, and an unguarded var: read of a missing
+					# variable logs every month it is evaluated.
+					AND = {
+						has_variable = te_basket_market_owner
+						NOT = { var:te_basket_market_owner = scope:te_mon_basket_owner }
+					}
+				}
+			}
+			set_variable = { name = te_basket_avg value = var:te_basket_index }
+			set_variable = { name = te_basket_seeded value = 1 }
+			set_variable = { name = te_basket_market_owner value = scope:te_mon_basket_owner }
+			set_variable = { name = te_cost_push value = 0 }
+		}
+		else = {
+			# cost_push first, THEN the average catches up: the month's shock
+			# is measured against where the average was, not where it lands.
+			set_variable = {
+				name = te_cost_push
+				value = {
+					value = var:te_basket_index
+					subtract = var:te_basket_avg
+					multiply = te_mon_basket_k
+					multiply = 100
+					min = te_mon_cost_push_clamp_neg
+					max = te_mon_cost_push_clamp
+				}
+			}
+			set_variable = {
+				name = te_mon_work
+				value = {
+					value = var:te_basket_index
+					subtract = var:te_basket_avg
+					multiply = te_mon_basket_avg_alpha
+				}
+			}
+			change_variable = { name = te_basket_avg add = var:te_mon_work }
+		}
+	}
+	else = {
+		# No market at all: no prices to read, so no cost-push. The index and
+		# the average are left where they were rather than zeroed, so a country
+		# that regains a market re-seeds against the new one instead of
+		# differencing against a fabricated zero.
+		set_variable = { name = te_cost_push value = 0 }
+	}
+
+	# --- 6b. the inflation loop ---------------------------------------------
+	if = {
+		limit = { te_mon_has_inflation = no }
+		# §14: a command economy's prices are administered. Everything is held
+		# at zero — including cost-push, which the basket above may just have
+		# written — and the band at comfort, so nothing downstream sees a
+		# stale number from before the plan.
+		set_variable = { name = te_inflation value = 0 }
+		set_variable = { name = te_inflation_core value = 0 }
+		set_variable = { name = te_inflation_expected value = 0 }
+		set_variable = { name = te_cost_push value = 0 }
+		set_variable = { name = te_inflation_band value = 2 }
+	}
+	else = {
+		# --- the hidden noise walk (ruling P7) ------------------------------
+		# Mean-reverting, +/-0.1 a month, bounded +/-0.75: the same machinery
+		# as te_neutral_walk in step 8, and here for the same kind of reason —
+		# without a random term the pressure sum is fully determined by public
+		# quantities plus -0.4 x the stance gap, so two months of a displayed
+		# headline would recover the gap and with it r*.
+		#
+		# THE DRAW IS ONLY FOR A COUNTRY WITH A DIAL, on the §0.1 precedent
+		# that gated step 8's two walks: this effect runs for every country
+		# every month, and ~1,330 of ~1,400 tags have no national bank. There
+		# is nothing for the noise to hide in those — their stance gap is
+		# forced to 0, so te_mon_pressure_stance is 0 and the sum carries no r*
+		# to invert.
+		#
+		# THE DECAY IS OUTSIDE THE GATE, and that is where this parts company
+		# with step 8. Step 8's walks are *read* only by countries with a dial,
+		# so freezing them costs nothing. This one is different:
+		# te_mon_pressure_noise is an UNCONDITIONAL term of
+		# te_mon_pressure_total, so a country that loses its dial would carry
+		# its last draw — up to +/-0.75pp — as a permanent, deterministic bias
+		# on its inflation for the rest of the campaign. Decaying outside the
+		# gate bleeds an undrawn walk away instead — 0.95 a month halves it
+		# every thirteen months or so, and a worst-case 0.75 is under a tenth
+		# of a point inside four years. That is the intended reading of "the
+		# noise stops moving": it stops being random, and then it stops being
+		# anything. A country that has never had a dial keeps step 0's zero
+		# either way, and multiplying zero by 0.95 costs nothing.
+		#
+		# The clamp stays outside too, so the bound stays true whatever path
+		# the value took.
+		change_variable = { name = te_inflation_noise multiply = 0.95 }
+		if = {
+			limit = { te_mon_has_dial = yes }
+			random_list = {
+				1 = { change_variable = { name = te_inflation_noise add = 0.1 } }
+				1 = { }
+				1 = { change_variable = { name = te_inflation_noise subtract = 0.1 } }
+			}
+		}
+		clamp_variable = {
+			name = te_inflation_noise
+			min = -0.75
+			max = 0.75
+		}
+
+		# --- the deficit read-out (ruling P4) -------------------------------
+		# Cached before the pressure terms are summed, because
+		# te_mon_pressure_deficit reads the cache rather than recomputing it:
+		# the number the console prints is then the number the pressure used.
+		set_variable = { name = te_mon_deficit_pct value = te_mon_deficit_pct_value }
+
+		# --- core: a ten-month adjustment toward expected + pressure --------
+		set_variable = {
+			name = te_mon_work
+			value = {
+				value = te_mon_pressure_total
+				add = var:te_inflation_expected
+				subtract = var:te_inflation_core
+				multiply = te_mon_core_speed
+			}
+		}
+		change_variable = { name = te_inflation_core add = var:te_mon_work }
+		clamp_variable = {
+			name = te_inflation_core
+			min = -10
+			max = 100
+		}
+
+		# --- headline = core + cost-push ------------------------------------
+		set_variable = { name = te_inflation value = var:te_inflation_core }
+		change_variable = { name = te_inflation add = var:te_cost_push }
+		clamp_variable = {
+			name = te_inflation
+			min = -10
+			max = 100
+		}
+
+		# --- expectations ---------------------------------------------------
+		# METALLIC MONEY IS PINNED AT ZERO, not blended (§9.1's table gives it
+		# no alpha at all): a promise to redeem in metal is a promise about the
+		# price LEVEL, and the two explicit consequences are this pin and the
+		# exemption from de-anchoring — c_eff never enters the picture, so
+		# convertibility cannot lose credibility the way a target can. The
+		# deflation bias that comes with it is the regime pull inside
+		# te_mon_pressure_total.
+		#
+		# A DOLLARISED country is NOT pinned (ruling P9): it takes the metallic
+		# regime PULL, because its money is somebody else's, but its own
+		# expectations still have to converge from wherever the hyperinflation
+		# left them.
+		if = {
+			limit = { te_mon_is_metallic = yes }
+			set_variable = { name = te_inflation_expected value = 0 }
+		}
+		else = {
+			set_variable = {
+				name = te_mon_work
+				value = {
+					value = te_mon_expectation_target
+					subtract = var:te_inflation_expected
+					multiply = te_mon_expectation_alpha
+				}
+			}
+			change_variable = { name = te_inflation_expected add = var:te_mon_work }
+			clamp_variable = {
+				name = te_inflation_expected
+				min = -10
+				max = 100
+			}
+		}
+
+		# --- the displayed band (§9.2) --------------------------------------
+		# From HEADLINE, not core: the bands are what the country is living
+		# through. This writes the NUMBER; step 6c, immediately after, swaps the
+		# te_inflation_band_* modifier off it.
+		#
+		# THE EDGES ARE HYSTERESISED (final-review finding I2). The ladder tests
+		# te_mon_band_test_*, not te_mon_band_edge_*: each test sits
+		# te_mon_band_hysteresis (0.25pp) on the far side of the edge FROM
+		# WHEREVER THE COUNTRY ALREADY IS, so the live boundary is a quarter
+		# point higher than the nominal edge for a country climbing towards it
+		# and a quarter point lower for one falling towards it. Without it a
+		# headline
+		# resting on 3% — well inside te_inflation_noise's own +/-0.75pp walk —
+		# would swap the country's band modifier, hand it and take back the
+		# step 6d real-wage dividend, and redraw the dashboard row every second
+		# or third month for no change in its economy.
+		#
+		# IT READS LAST MONTH'S BAND, and this chain is why that works: the
+		# band is written in the BODY of whichever branch matches, and an
+		# else_if evaluates its limit only after the ones above it have failed
+		# without running, so every test below sees the value step 6b of the
+		# previous pulse left. No new variable, and nothing to keep in step.
+		#
+		# THE HYPER EDGE IS NOT HYSTERESISED ON THE WAY UP: §9.2 puts the
+		# crisis at 50 and te_mon_band_test_hyper keeps the entry there, moving
+		# only the exit. See the block above te_mon_band_hysteresis in
+		# common/script_values/te_monetary_script_values.txt.
+		if = {
+			limit = { var:te_inflation < te_mon_band_test_deflation }
+			set_variable = { name = te_inflation_band value = 1 }
+		}
+		else_if = {
+			limit = { var:te_inflation < te_mon_band_test_elevated }
+			set_variable = { name = te_inflation_band value = 2 }
+		}
+		else_if = {
+			limit = { var:te_inflation < te_mon_band_test_high }
+			set_variable = { name = te_inflation_band value = 3 }
+		}
+		else_if = {
+			limit = { var:te_inflation < te_mon_band_test_very_high }
+			set_variable = { name = te_inflation_band value = 4 }
+		}
+		else_if = {
+			limit = { var:te_inflation < te_mon_band_test_hyper }
+			set_variable = { name = te_inflation_band value = 5 }
+		}
+		else = {
+			set_variable = { name = te_inflation_band value = 6 }
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# STEP 6c — the band modifier and the hyperinflation crisis (§9.2)
+# ----------------------------------------------------------------------------
+# Scope: country. Runs immediately after step 6, so the modifier on the country
+# always matches the band number the dashboard shows.
+#
+# ONE MODIFIER, SEVEN STATES. te_inflation_band_applied says which member of
+# the family is on the country right now:
+#
+#   1-6  te_inflation_band_deflation / _comfort / _elevated / _high /
+#        _very_high / _hyper — the §9.2 ladder, keyed off te_inflation_band
+#   7    te_mon_dollarised_modifier — the country gave up its own money
+#   0    nothing applied yet (a fresh country, or a save from before this task)
+#
+# DOLLARISATION REPLACES THE BAND, IT DOES NOT STACK WITH IT (ruling P9, and
+# the finding parked in task 1's review). te_inflation_band_hyper carries
+# country_minting_mult -0.8 and te_mon_dollarised_modifier carries -0.75, and
+# dollarisation is chosen from INSIDE the hyperinflation band — so any design
+# that can hold both at once puts that field at -1.55 and turns the mint into a
+# drain on the budget. Making 7 a value of the SAME bookkeeping variable makes
+# that state unreachable rather than merely brief: this effect issues exactly
+# one add_modifier a month, and the swap that adds the dollarised modifier is
+# the same one that takes the band off.
+#
+# It is also the right answer in fiction, and the one te_mon_dollarised_modifier's
+# own loc already gives: with prices, wages and contracts written in foreign
+# money, "inflation is somebody else's problem". The §9.2 ladder prices what it
+# costs to hold a currency that is losing its value, and a dollarised country
+# does not hold one. What it pays instead is three quarters of its seigniorage,
+# for ever — §9.2's "defining cost of dollarisation".
+#
+# THE PLAYER'S CHOICE IS AN INPUT, NOT A MODIFIER. te_inflation.1's dollarise
+# option writes te_mon_dollarised and the inflation reset, and nothing else;
+# this step is what puts the modifier on, at most a month later. That is the
+# same "write the input and let the pulse pick it up" rule every other control
+# in this system follows, and it is what lets one owner keep the family
+# exclusive. The option says so in its tooltip, because nothing mechanical
+# renders in an option that only sets variables.
+#
+# DECIDED FROM VARIABLES, NEVER FROM has_modifier — add_modifier and
+# remove_modifier results are not visible inside the effect block that issues
+# them (scripting_best_practices.md), so a has_modifier read here would be
+# asking about state this effect is in the middle of changing. Same rule, and
+# the same reason, as banking_cycle_apply_stance_band.
+#
+# COMFORT IS APPLIED THOUGH IT IS EMPTY, on the banking_stance_band_3 precedent
+# and vanilla's own tax_modifier_medium / infamy_reputable: the swap then always
+# has exactly one thing to apply, and the modifier list always NAMES the band
+# the country is in. Its loc is written for that job — it says the band costs
+# nothing and that it is the one band in which the real-wage dividend pays.
+#
+# NO FIRST-RUN SWEEP. banking_cycle_apply_stance_band removes all five of its
+# bands once, because its modifiers live on a can_revolution_inherit journal
+# entry and move to a successor tag while the variables do not. These are
+# COUNTRY modifiers on the country itself, and a country that has never run this
+# step carries the 0 from step 0 and no band modifier — the two agree.
+te_monetary_apply_inflation_band = {
+	# The crisis cooldown ages first, so the month it reaches 0 is a month the
+	# crisis can be offered again rather than the month after.
+	if = {
+		limit = { var:te_mon_hyper_cooldown > 0 }
+		change_variable = { name = te_mon_hyper_cooldown subtract = 1 }
+	}
+
+	# What belongs on the country this month: the band, unless it is dollarised,
+	# in which case the dollarised modifier and no band.
+	if = {
+		limit = { var:te_mon_dollarised = 1 }
+		set_variable = { name = te_mon_work value = 7 }
+	}
+	else = {
+		set_variable = { name = te_mon_work value = var:te_inflation_band }
+	}
+
+	if = {
+		limit = { NOT = { var:te_inflation_band_applied = var:te_mon_work } }
+
+		# Take off what we put on last month.
+		if = { limit = { var:te_inflation_band_applied = 1 } remove_modifier = te_inflation_band_deflation }
+		else_if = { limit = { var:te_inflation_band_applied = 2 } remove_modifier = te_inflation_band_comfort }
+		else_if = { limit = { var:te_inflation_band_applied = 3 } remove_modifier = te_inflation_band_elevated }
+		else_if = { limit = { var:te_inflation_band_applied = 4 } remove_modifier = te_inflation_band_high }
+		else_if = { limit = { var:te_inflation_band_applied = 5 } remove_modifier = te_inflation_band_very_high }
+		else_if = { limit = { var:te_inflation_band_applied = 6 } remove_modifier = te_inflation_band_hyper }
+		else_if = { limit = { var:te_inflation_band_applied = 7 } remove_modifier = te_mon_dollarised_modifier }
+
+		# Put on this month's.
+		if = { limit = { var:te_mon_work = 1 } add_modifier = { name = te_inflation_band_deflation } }
+		else_if = { limit = { var:te_mon_work = 2 } add_modifier = { name = te_inflation_band_comfort } }
+		else_if = { limit = { var:te_mon_work = 3 } add_modifier = { name = te_inflation_band_elevated } }
+		else_if = { limit = { var:te_mon_work = 4 } add_modifier = { name = te_inflation_band_high } }
+		else_if = { limit = { var:te_mon_work = 5 } add_modifier = { name = te_inflation_band_very_high } }
+		else_if = { limit = { var:te_mon_work = 6 } add_modifier = { name = te_inflation_band_hyper } }
+		else_if = { limit = { var:te_mon_work = 7 } add_modifier = { name = te_mon_dollarised_modifier } }
+
+		set_variable = { name = te_inflation_band_applied value = var:te_mon_work }
+	}
+
+	# --- the hyperinflation crisis (§9.2) -----------------------------------
+	# The band, not a fresh headline read, is the gate. Band 6 is ENTERED at
+	# exactly pi >= te_mon_band_edge_hyper — finding I2's hysteresis deliberately
+	# leaves that edge plain on the way up — and left again only at 49.75, which
+	# is the difference between the two tests and is the intended one: a country
+	# riding the crisis out on the boundary should not be re-offered the choice
+	# by a tenth of a point of noise. The band is also where §14 already holds a
+	# command economy at comfort, so a planned economy is excluded here without
+	# anything restating why.
+	#
+	# A DOLLARISED COUNTRY IS NOT OFFERED IT. Its modelled inflation can still
+	# read above the threshold for a month or two after the switch — the loop
+	# keeps running because §10's lenders price its expectations — but it has no
+	# currency of its own left to reform or abandon, and the choice it is being
+	# offered is the one it already made.
+	#
+	# THE COOLDOWN IS SET HERE, not in the event, so that a player who leaves
+	# the event unanswered is not handed a second copy of it at the next pulse.
+	# The two options that RESOLVE the crisis clear it again themselves: it is
+	# an anti-nag device for riding it out, not a lock-out, and a country that
+	# reformed its currency and then hyperinflated the new one all over again
+	# has to be offered the choice a second time. So this effect owns the
+	# countdown — setting it and ageing it — and te_inflation.1's reform and
+	# dollarise options own the one write that zeroes it.
+	if = {
+		limit = {
+			var:te_inflation_band = 6
+			var:te_mon_dollarised = 0
+			var:te_mon_hyper_cooldown = 0
+		}
+		set_variable = { name = te_mon_hyper_cooldown value = te_mon_hyper_cooldown_months }
+		trigger_event = { id = te_inflation.1 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# STEP 6d — the real-wage dividend (§9.4)
+# ----------------------------------------------------------------------------
+# Scope: country. Runs immediately after 6c, off the band number step 6 wrote.
+#
+# WHAT IT IS. Wage pressure would otherwise be a pure tax on progressive labour
+# law: the law raises inflation, the player tightens to answer it, and growth
+# pays for both. §9.4's compensation is the other half of wage-led demand —
+# workers whose pay holds its value spend it — and it is deliberately
+# CONDITIONAL on price stability. Inside the comfort band the same laws take
+# part of the lower-strata expectations headwind they themselves carry back off
+# again, and pay financial momentum; outside it they pay nothing, because wages
+# rising into rising prices buy nothing. That is
+# what makes credible monetary management the precondition for strong labour
+# laws rather than their enemy (§9.4's arithmetic: under a CBI's c = 0.7
+# factory councils cost +0.7pp and stay inside the band, so the dividend is
+# pure gain; on a manual c = 0.25 target they cost +2pp and the player has to
+# hold a tighter stance to keep it).
+#
+# WHO IS EXCLUDED, and why the band alone is not the test:
+#
+#   * A COMMAND ECONOMY has no inflation of its own (§14, ruling P6) — step 6
+#     holds pi at 0 and pins te_inflation_band at 2, so the band would read
+#     comfort for a country whose prices are administered rather than stable.
+#     Paying a dividend for "price stability" the plan simply decrees is
+#     paying for nothing, so te_mon_has_inflation gates it out.
+#   * A DOLLARISED country has no band of its own that means anything. Its
+#     modelled headline keeps running because §10's lenders price its
+#     expectations, and it can read comfort — but it is holding somebody
+#     else's money, that country's central bank earned the stability, and step
+#     6c has already replaced its band modifier with te_mon_dollarised_modifier
+#     (te_inflation_band_applied = 7). It pays three quarters of its
+#     seigniorage instead; it does not also collect a dividend.
+#
+# ONLY POSITIVE PRESSURE EARNS IT (te_mon_wage_pressure_positive). A country
+# on anti-strike laws is not paid for holding wages down — it simply has no
+# dividend, the same as a country with no labour law at all.
+#
+# THE ROOT-SAFE SCALED PATTERN, verbatim from step 1b: `multiplier = var:X`
+# resolves against ROOT, not against the scope this effect runs in, so the
+# re-apply is gated on `root ?= this` and the value is carried in a persistent
+# variable. te_mon_wage_dividend_applied is never REMOVED — it backs a live
+# multiplier and a missing variable would make every later re-evaluation read
+# 'none' (modifier_multiplier_var_audit). The 0.05-unit skip threshold means an
+# unchanged month costs nothing: wage pressure only moves when a law changes,
+# so for almost every country this step does nothing after the first pulse.
+#
+# The `NOT = { has_modifier }` clause in the skip test is the self-heal: if the
+# modifier is ever lost while the variable persists (a save-game migration, a
+# tag change), the next pulse puts it back rather than waiting for the units to
+# move.
+te_monetary_apply_wage_dividend = {
+	# --- what is earned this month, in units of +0.1pp ----------------------
+	if = {
+		limit = {
+			var:te_inflation_band = 2
+			te_mon_has_inflation = yes
+			var:te_mon_dollarised = 0
+		}
+		set_variable = { name = te_mon_work value = te_mon_wage_dividend_units }
+	}
+	else = {
+		set_variable = { name = te_mon_work value = 0 }
+	}
+
+	# --- apply, or take it off ----------------------------------------------
+	if = {
+		limit = { var:te_mon_work < 0.05 }
+		if = {
+			limit = { has_modifier = te_mon_real_wage_dividend }
+			remove_modifier = te_mon_real_wage_dividend
+		}
+		# The applied value follows the modifier off, but the variable stays.
+		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
+	}
+	else_if = {
+		limit = { root ?= this }
+		set_variable = { name = te_mon_work2 value = var:te_mon_work }
+		change_variable = { name = te_mon_work2 subtract = var:te_mon_wage_dividend_applied }
+		if = {
+			limit = {
+				OR = {
+					var:te_mon_work2 >= 0.05
+					var:te_mon_work2 <= -0.05
+					NOT = { has_modifier = te_mon_real_wage_dividend }
+				}
+			}
+			if = {
+				limit = { has_modifier = te_mon_real_wage_dividend }
+				remove_modifier = te_mon_real_wage_dividend
+			}
+			set_variable = { name = te_mon_wage_dividend_applied value = var:te_mon_work }
+			add_modifier = {
+				name = te_mon_real_wage_dividend
+				multiplier = var:te_mon_wage_dividend_applied
+			}
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# STEP 7 — the rate the government pays (§4, §10)
+# ----------------------------------------------------------------------------
+# Scope: country.
+#
+#   market_yield  = max( policy_rate , era_base + expected_inflation )
+#   rate_paid_pts = clamp( market_yield + structural + cyclical
+#                          - headline_inflation , 0.5 , 60 )
+#
+# THE LENDERS' FLOOR (§10). The policy rate is NOMINAL — it already contains
+# the central bank's allowance for inflation — so expected inflation is not
+# added on top of it. What lenders add is a FLOOR: they will not hold
+# government paper yielding less than a normal real return over the inflation
+# they expect, whatever the bank's rate is. The floor is built on era_base, the
+# public long-run real rate, and NOT on the hidden neutral rate: rate paid is an
+# exact dashboard number, and building it on r* would print r* (§8, §10).
+#
+# ALL DEBT IS REAL, so the treasury's cost is the nominal yield minus the
+# inflation that actually OCCURS — headline, not expected (§9.1). Three
+# consequences the design wants: tight policy costs the treasury pp for pp,
+# loose policy saves it only down to the floor, and only SURPRISES erode debt —
+# once expectations catch up the floor binds and the country pays
+# era_base + premium in real terms again. Financial repression has a shelf life.
+#
+# THE 0.5 FLOOR STILL HOLDS, and it is why a negative policy rate never reaches
+# the rate paid: under digital currency a target of -3 acts only through the
+# stimulus channel (§8), which is intended. It is now also what stops a
+# monetised war from paying the government to borrow, and it DOES bite on §10's
+# war path: simulated, it binds for three months in the middle of a level-3
+# monetisation (while headline is climbing faster than expectations are lifting
+# the yield floor) and again for the single month the monetisation ends, when
+# the +1.5pp monetisation premium comes off before headline starts falling.
 # Cyclical negatives (relief tools) can pull the total under the structural
-# floor; this clamp is the final backstop.
+# floor the same way; this clamp is the final backstop for all of it.
 te_monetary_update_rate_paid = {
-	set_variable = { name = te_rate_paid_pts value = var:te_policy_rate }
+	# --- the lenders' floor -------------------------------------------------
+	# te_market_yield is a displayed figure with no hidden state in it: the
+	# reference rate and expected inflation are both shown exactly.
+	set_variable = { name = te_market_yield value = var:te_mon_era_base_now }
+	change_variable = { name = te_market_yield add = var:te_inflation_expected }
+	if = {
+		limit = { var:te_market_yield < var:te_policy_rate }
+		set_variable = { name = te_market_yield value = var:te_policy_rate }
+	}
+
+	set_variable = { name = te_rate_paid_pts value = var:te_market_yield }
 	change_variable = { name = te_rate_paid_pts add = var:te_premium_structural }
 	change_variable = { name = te_rate_paid_pts add = var:te_premium_cyclical }
+	change_variable = { name = te_rate_paid_pts subtract = var:te_inflation }
 	if = {
 		limit = { var:te_rate_paid_pts < 0.5 }
 		set_variable = { name = te_rate_paid_pts value = 0.5 }
@@ -619,8 +1623,18 @@ te_monetary_update_rate_paid = {
 # ----------------------------------------------------------------------------
 # Scope: country.
 #
+#   real_rate    = policy_rate - headline_inflation
 #   neutral_rate = clamp( era_base + growth_term + walk , 1 , 6 )
-#   stance_gap   = clamp( policy_rate - neutral_rate , -10 , +10 )   [0 if no dial]
+#   stance_gap   = clamp( real_rate - neutral_rate , -10 , +10 )   [0 if no dial]
+#
+# THE GAP IS REAL, NOT NOMINAL (§8). The neutral rate is a real rate, so the
+# policy rate has to be deflated before the two can be compared; phase 1
+# compared them directly only because inflation was identically zero. HEADLINE
+# is the deflator, not core: §9.1 gives the real rate, the rate paid and the
+# bands to headline and only the mandates to core. The consequence is the
+# Taylor principle in one line — holding a nominal target while inflation rises
+# eases policy, which adds pressure, which raises inflation again (§9.1). That
+# loop is closed through step 6, which reads this variable a month later.
 #
 # HIDDEN STATE. te_neutral_rate, te_neutral_error, te_neutral_walk and
 # te_mon_stance_gap are never printed in any tooltip, loc string or visible
@@ -735,6 +1749,7 @@ te_monetary_update_stance = {
 	if = {
 		limit = { te_mon_has_dial = yes }
 		set_variable = { name = te_mon_stance_gap value = var:te_policy_rate }
+		change_variable = { name = te_mon_stance_gap subtract = var:te_inflation }
 		change_variable = { name = te_mon_stance_gap subtract = var:te_neutral_rate }
 		if = {
 			limit = { var:te_mon_stance_gap > 10 }
@@ -770,6 +1785,133 @@ te_monetary_update_stance = {
 	else = {
 		set_variable = { name = te_mon_stance_gap value = 0 }
 		set_variable = { name = te_mon_stance_band value = 3 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# STEP 8b — creditor-versus-debtor politics (§13)
+# ----------------------------------------------------------------------------
+# Scope: country. Runs immediately after step 8, off the band step 8 wrote.
+#
+# WHAT IT IS. A rate decision has winners and losers, and §13 says they should
+# eventually notice. te_mon_stance_months counts months of the same stance;
+# once six of them have accumulated on one side, the country carries
+# te_mon_stance_politics_tight or te_mon_stance_politics_loose (defined, with
+# the §13 table and the sizing, in common/static_modifiers/extra_modifiers.txt).
+# One month's tightening buys nothing: this is the politics of a POLICY, not of
+# a meeting.
+#
+# IT COUNTS THE DISPLAYED BAND, NEVER THE GAP (ruling P8). te_mon_stance_gap is
+# hidden state (§8), and §13's literal test — |gap| >= 1 — would put a modifier
+# on the country exactly when the gap crossed 1, which inverts to the neutral
+# rate to within the estimation error. te_mon_stance_band is what the bank
+# itself reads (gap - error) and what the dashboard already shows: bands 4 and
+# 5 are its tight half, 1 and 2 its loose half, 3 the middle. So the politics
+# are keyed to a number the player can already see, and the two modifiers' loc
+# says "as the bank reads it" for the same reason.
+#
+# THE COUNTER, in three cases:
+#
+#   band >= 4   count up, after zeroing a counter that was counting DOWN
+#   band <= 2   count down, after zeroing a counter that was counting UP
+#   band 3      walk one step back toward 0, whichever side it is on
+#
+# A REVERSAL IS INSTANT, A LULL IS SLOW. Crossing from tight to loose zeroes the
+# counter in one month, because the stance the politics were about is not merely
+# paused — it has been replaced by its opposite, and nobody is still angry about
+# dear money in the month the bank starts giving it away. Drifting back to the
+# middle band is the other case: the stance has stopped, the consequences have
+# not, and te_mon_stance_months_cap (11 — five months past the threshold, so the
+# longest fade is exactly as long as the climb) bounds it at six months however
+# long the stance ran. Six is the MAXIMUM, not the figure: a country that only
+# just earned the politics is sitting at exactly 6 and loses them again after
+# one month in the middle band. Without the cap a decade of tight money would
+# take a decade to unwind; the loc says "within six months" for the same reason.
+#
+# ONLY A COUNTRY WITH A DIAL. Step 8 forces a no-dial country's band to 3, so a
+# bankless, dollarised or command-economy country would already decay to 0 on
+# its own — but slowly, and while still carrying a modifier it can no longer
+# do anything about. Losing the dial is not a stance, so the counter is zeroed
+# outright and the modifier comes off on the same pulse.
+#
+# DECIDED FROM VARIABLES, NEVER FROM has_modifier, and for the reason written
+# out at length on step 6c: add_modifier and remove_modifier results are not
+# visible inside the effect block that issues them, so a has_modifier read here
+# would be asking about state this effect is in the middle of changing.
+# te_mon_stance_politics_applied is the bookkeeping — 0 neither, 1 tight,
+# 2 loose — and the swap issues at most one remove and one add a month.
+#
+# NO FIRST-RUN SWEEP, on step 6c's reasoning: these are COUNTRY modifiers on the
+# country itself, and a country that has never run this step carries the 0 from
+# step 0 and no politics modifier — the two agree.
+te_monetary_apply_stance_politics = {
+	# --- the counter --------------------------------------------------------
+	if = {
+		limit = { te_mon_has_dial = no }
+		set_variable = { name = te_mon_stance_months value = 0 }
+	}
+	else_if = {
+		limit = { var:te_mon_stance_band >= 4 }
+		if = {
+			limit = { var:te_mon_stance_months < 0 }
+			set_variable = { name = te_mon_stance_months value = 0 }
+		}
+		change_variable = { name = te_mon_stance_months add = 1 }
+		if = {
+			limit = { var:te_mon_stance_months > te_mon_stance_months_cap }
+			set_variable = { name = te_mon_stance_months value = te_mon_stance_months_cap }
+		}
+	}
+	else_if = {
+		limit = { var:te_mon_stance_band <= 2 }
+		if = {
+			limit = { var:te_mon_stance_months > 0 }
+			set_variable = { name = te_mon_stance_months value = 0 }
+		}
+		change_variable = { name = te_mon_stance_months subtract = 1 }
+		if = {
+			limit = { var:te_mon_stance_months < te_mon_stance_months_cap_neg }
+			set_variable = { name = te_mon_stance_months value = te_mon_stance_months_cap_neg }
+		}
+	}
+	else = {
+		# Band 3 — the stance has stopped. Fade, one month per month.
+		if = {
+			limit = { var:te_mon_stance_months > 0 }
+			change_variable = { name = te_mon_stance_months subtract = 1 }
+		}
+		else_if = {
+			limit = { var:te_mon_stance_months < 0 }
+			change_variable = { name = te_mon_stance_months add = 1 }
+		}
+	}
+
+	# --- what belongs on the country this month -----------------------------
+	if = {
+		limit = { var:te_mon_stance_months >= te_mon_stance_politics_months }
+		set_variable = { name = te_mon_work value = 1 }
+	}
+	else_if = {
+		limit = { var:te_mon_stance_months <= te_mon_stance_politics_months_neg }
+		set_variable = { name = te_mon_work value = 2 }
+	}
+	else = {
+		set_variable = { name = te_mon_work value = 0 }
+	}
+
+	if = {
+		limit = { NOT = { var:te_mon_stance_politics_applied = var:te_mon_work } }
+
+		# Take off what we put on last month.
+		if = { limit = { var:te_mon_stance_politics_applied = 1 } remove_modifier = te_mon_stance_politics_tight }
+		else_if = { limit = { var:te_mon_stance_politics_applied = 2 } remove_modifier = te_mon_stance_politics_loose }
+
+		# Put on this month's, if there is one.
+		if = { limit = { var:te_mon_work = 1 } add_modifier = { name = te_mon_stance_politics_tight } }
+		else_if = { limit = { var:te_mon_work = 2 } add_modifier = { name = te_mon_stance_politics_loose } }
+
+		set_variable = { name = te_mon_stance_politics_applied value = var:te_mon_work }
 	}
 }
 
@@ -934,10 +2076,14 @@ te_monetary_yearly_growth_snapshot = {
 # ----------------------------------------------------------------------------
 # Scope: country (the journal entry's owner).
 #
-# These are the ONLY writers of te_policy_rate_target, te_mon_delegated and
-# te_mon_mandate outside the monthly update, and they live here rather than in
-# the scripted-GUI file for the same reason everything else in this file does:
-# one owner per variable, one place to look.
+# These are the ONLY writers of te_policy_rate_target, te_mon_delegated,
+# te_mon_mandate and te_monetisation_level outside the monthly update, and they
+# live here rather than in the scripted-GUI file for the same reason everything
+# else in this file does: one owner per variable, one place to look. The one
+# exception is the console-only §19 harness (te_debug_monetary.5 and .7 in
+# events/te_debug_monetary_events.txt), which pins those same four by hand
+# because an AI country is always delegated and no player-facing control can
+# put a country where §10's worked example starts.
 #
 # They deliberately do NOT call te_monetary_monthly_update. That effect is not
 # idempotent within a month (step 3 drifts the rate, step 8 draws two random
@@ -1013,4 +2159,97 @@ te_mon_effect_set_mandate = {
 		set_variable = { name = te_mon_mandate value = $MANDATE$ }
 	}
 	custom_tooltip = $TT$
+}
+
+# MONETISING THE DEFICIT (§11). The same stepper shape as the rate target, and
+# for the same reason: the pair writes te_monetisation_level and nothing else,
+# and step 1b of the next monthly pulse turns the number into minting, into a
+# risk premium and into inflation pressure. Calling the update from here would
+# age a month of hidden state per click.
+#
+# ELIGIBILITY is te_mon_can_monetise (fiat or digital, a national bank, not
+# independent, not a command economy, not dollarised), which the dashboard asks
+# in its `is_valid` so the greyed-out tooltip and the effect can never
+# disagree — and which step 1b re-asks every month, so a level held through a
+# law change is taken away on the next pulse rather than lingering.
+#
+# The clamp is here as well as in step 1b because a click and the monthly pass
+# can race across a law change, and clamping twice is free.
+te_mon_effect_monetisation_step_down = {
+	hidden_effect = {
+		change_variable = { name = te_monetisation_level subtract = 1 }
+		clamp_variable = {
+			name = te_monetisation_level
+			min = 0
+			max = te_mon_monetisation_max
+		}
+	}
+	custom_tooltip = banking_mon_monetise_step_tt
+}
+
+te_mon_effect_monetisation_step_up = {
+	hidden_effect = {
+		change_variable = { name = te_monetisation_level add = 1 }
+		clamp_variable = {
+			name = te_monetisation_level
+			min = 0
+			max = te_mon_monetisation_max
+		}
+	}
+	custom_tooltip = banking_mon_monetise_step_tt
+}
+
+
+# ----------------------------------------------------------------------------
+# THE NEW-CURRENCY RESET (§9.2) — what a country pays for money it has just
+# issued
+# ----------------------------------------------------------------------------
+# Scope: country. Two call sites, and they are the only ones:
+#
+#   * te_inflation.1's CURRENCY REFORM option (events/te_inflation_events.txt) —
+#     the old notes called in and reissued at a new value; and
+#   * the P9 DOLLARISATION EXIT in te_banking_law_change_cleanup
+#     (common/on_actions/extra_on_actions.txt) — a dollarised country enacting a
+#     monetary-policy law, which IS the act of putting a currency of its own
+#     back into people's hands.
+#
+# The same economic event from two directions, so it carries the same
+# credibility price: inflation and expectations start at
+# te_mon_currency_reform_reset rather than at the target, and lenders charge the
+# ten-year premium. What the two do NOT share is the one-off wreckage — the
+# reform wipes out the investment pool and radicalises the savers who held the
+# old notes; the exit does neither, because the months of lost seigniorage under
+# dollarisation were that half of the price.
+#
+# WHY THE EXIT PAYS ANYTHING AT ALL. Dollarising resets expectations to the
+# anchor, so without this the sequence dollarise -> wait out one law enactment
+# -> re-enact fiat would be a currency reform with no pool wipe, no radicals and
+# no premium: strictly the cheapest way out of a hyperinflation, and free.
+#
+# IT WRITES INFLATION STATE, which nothing but the monthly update otherwise
+# does. Both call sites are listed as documented exceptions in the variable
+# contract (header of common/script_values/te_monetary_script_values.txt). It
+# must never call te_monetary_monthly_update: that effect is not idempotent
+# within a month.
+#
+# te_cost_push GOES TO 0 WITH THE REST, so the headline written here is
+# consistent with core until the next pulse recomputes the basket term. It is a
+# level, not a stock, so the pulse simply re-derives it from the same prices.
+#
+# THE WRITES ARE HIDDEN AND THE MODIFIER IS NOT, on the player-controls
+# convention above: raw set_variable lines would otherwise be spelled out in
+# the option's tooltip, while the ten-year premium is exactly what the player
+# should see there.
+te_mon_effect_new_currency = {
+	hidden_effect = {
+		set_variable = { name = te_inflation value = te_mon_currency_reform_reset }
+		set_variable = { name = te_inflation_core value = te_mon_currency_reform_reset }
+		set_variable = { name = te_inflation_expected value = te_mon_currency_reform_reset }
+		set_variable = { name = te_cost_push value = 0 }
+	}
+
+	add_modifier = {
+		name = te_mon_currency_reform_premium
+		days = 3650
+	}
 }

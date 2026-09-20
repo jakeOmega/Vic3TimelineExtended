@@ -142,6 +142,19 @@ traditional_rules_of_war = [
     ("law_limited_war", "disapprove"),
     ("law_total_war", "neutral"),
 ]
+# --- lawgroup_monetary_policy stances (monetary_policy_design.md section 13) ---
+# The four lists below — advanced_curency, simple_currency, libertarian_currency
+# and cross_of_gold_currency — are the whole of section 13's Part B, and they
+# reach an interest group through whichever ideologies it holds, which
+# common/interest_groups/00_*.txt reassigns per country.
+#
+# SECTION 13 CARRIES A HAND-TRANSCRIBED NET-STANCE TABLE (per IG, per law)
+# derived from these four lists plus the per-ideology `modifications` entries
+# further down this file. Nothing regenerates it. UPDATE IT WHENEVER ANY OF THIS
+# CHANGES: a stance added, removed or re-pointed here, or an ideology gaining or
+# losing one of these lists. Two IGs can also cancel each other's stance inside
+# one interest group, so read the NET per law across the IG's whole `ideologies`
+# block rather than the line you touched.
 advanced_curency = [
     ("law_commodity_money", "disapprove"),
     ("law_gold_standard", "neutral"),
@@ -162,6 +175,29 @@ libertarian_currency = [
     ("law_fiat_currency", "disapprove"),
     ("law_digital_currency", "strongly_disapprove"),
     ("law_decentralized_cryptocurrency", "strongly_approve"),
+]
+# The debtors' side of monetary_policy_design.md section 13 — the Cross of
+# Gold. Metallic money is deflationary by construction in this mod (both
+# law_commodity_money and law_gold_standard carry the metallic regime pull that
+# drags inflation toward zero), so every debtor constituency is against both of
+# them and for the unbacked regimes that can be expanded: the mortgaged farmer,
+# the worker whose job depends on somebody borrowing, the small manufacturer
+# rolling over working capital. Cryptocurrency is hard money wearing new
+# clothes — a fixed issue nobody can expand — so it sits with gold, not with
+# fiat.
+#
+# SINGLE STEPS ONLY, on both this list and where simple_currency /
+# advanced_curency are reused for section 13. IG_APPROVAL_FROM_LAW_CHANGE is 5
+# (10 or 20 for a bigger jump) and lingers 60 months, so a strongly_* stance on
+# a law group the player re-enacts several times a campaign is a much louder
+# event than the standing +/-1 from IG_APPROVAL_FROM_LAW. Section 13 asks for
+# this gently.
+cross_of_gold_currency = [
+    ("law_commodity_money", "disapprove"),
+    ("law_gold_standard", "disapprove"),
+    ("law_fiat_currency", "approve"),
+    ("law_digital_currency", "approve"),
+    ("law_decentralized_cryptocurrency", "disapprove"),
 ]
 pro_secrecy = [
     ("law_informal_government_secrecy", "neutral"),
@@ -615,6 +651,7 @@ navy_jingoist = [
 
 modifications = {
     "ideology_paternalistic": {
+        "lawgroup_monetary_policy": simple_currency,
         "lawgroup_army_model": pmc_disapprove,
         "lawgroup_navy_model": navy_imperialist,
         "lawgroup_privacy_rights": anti_privacy_entry,
@@ -688,6 +725,16 @@ modifications = {
         "lawgroup_antitrust": antitrust_traditional,
     },
     "ideology_patriotic": {
+        # Section 13 puts the Petite Bourgeoisie on the hard-money side, and
+        # ideology_reactionary alone does not get them there:
+        # ideology_meritocratic already carries advanced_curency, so the two
+        # cancel to roughly nothing. This is the third PB baseline and the only
+        # one still free. Its other holder is the Armed Forces, for whom it is
+        # the right answer rather than a side effect — an officer corps on fixed
+        # salaries and fixed pensions is the classic sound-money constituency,
+        # which is also why section 13's own "Inflation >= 8%" row already puts
+        # ig_armed_forces on the losing side of it.
+        "lawgroup_monetary_policy": simple_currency,
         "lawgroup_army_model": pmc_disapprove,
         "lawgroup_navy_model": navy_imperialist,
         "lawgroup_privacy_rights": anti_privacy_entry,
@@ -724,6 +771,7 @@ modifications = {
         "lawgroup_antitrust": antitrust_corporatist_nat,
     },
     "ideology_liberal": {
+        "lawgroup_monetary_policy": advanced_curency,
         "lawgroup_privacy_rights": pro_privacy_entry,
         "lawgroup_right_to_information": anti_secrecy,
         "lawgroup_human_augmentation": lightly_regulated_augmentation,
@@ -774,6 +822,7 @@ modifications = {
         "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_liberal_modern": {
+        "lawgroup_monetary_policy": advanced_curency,
         "lawgroup_privacy_rights": pro_privacy_entry,
         "lawgroup_human_augmentation": lightly_regulated_augmentation,
         "lawgroup_LGBTQ_rights": lgbtq_like,
@@ -923,6 +972,7 @@ modifications = {
         "lawgroup_antitrust": antitrust_ordoliberal,
     },
     "ideology_populist": {
+        "lawgroup_monetary_policy": cross_of_gold_currency,
         "lawgroup_army_model": pmc_disapprove,
         "lawgroup_privacy_rights": reform_privacy_entry,
         "lawgroup_right_to_information": anti_secrecy,
@@ -1390,6 +1440,7 @@ modifications = {
         "lawgroup_inheritance": moderate_inheritance,
     },
     "ideology_proletarian": {
+        "lawgroup_monetary_policy": cross_of_gold_currency,
         "lawgroup_army_model": pmc_strongly_disapprove,
         "lawgroup_navy_model": navy_defensive,
         "lawgroup_intellectual_property": communal_ip_laws,
@@ -1591,6 +1642,7 @@ modifications = {
         "lawgroup_minority_rights": minority_love,
     },
     "ideology_reactionary": {
+        "lawgroup_monetary_policy": simple_currency,
         "lawgroup_LGBTQ_rights": lgbtq_hate,
         "lawgroup_right_to_information": pro_secrecy,
         "lawgroup_criminal_justice": regressive_criminal_justice,
@@ -1670,6 +1722,7 @@ modifications = {
         ],
     },
     "ideology_republican_paternalistic": {
+        "lawgroup_monetary_policy": simple_currency,
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "approve"),
@@ -1735,6 +1788,7 @@ modifications = {
         "lawgroup_antitrust": antitrust_command_coop,
     },
     "ideology_scholar_paternalistic": {
+        "lawgroup_monetary_policy": simple_currency,
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
@@ -1771,6 +1825,7 @@ modifications = {
         ],
     },
     "ideology_junker_paternalistic": {
+        "lawgroup_monetary_policy": simple_currency,
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
@@ -1807,6 +1862,7 @@ modifications = {
         ],
     },
     "ideology_papal_paternalistic": {
+        "lawgroup_monetary_policy": simple_currency,
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
             ("law_direct_democracy", "neutral"),
@@ -2072,6 +2128,19 @@ modifications = {
         ],
     },
     "ideology_isolationist": {
+        # Rural Folk's third baseline, so that section 13's Cross-of-Gold row is
+        # actually felt: ideology_particularist already carries simple_currency
+        # from earlier mod work, which on its own cancels ideology_agrarian's
+        # stance on gold and on fiat and leaves the one interest group the row
+        # is named for with no opinion at all. This is not a stance borrowed to
+        # win an argument — law_gold_standard is unlocked by
+        # international_exchange_standards and ties the money supply to an
+        # international order and to other countries' gold flows, which is what
+        # an isolationist objects to on its own terms. ideology_isolationist is
+        # held by NO other interest group, as a baseline or a character
+        # ideology, and is never swapped out, so this reaches Rural Folk and
+        # nothing else.
+        "lawgroup_monetary_policy": cross_of_gold_currency,
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
             "ministry_of_foreign_affairs", "--"
         ),
@@ -2087,6 +2156,7 @@ modifications = {
         "lawgroup_colonization": [("law_neocolonialism", "neutral")],
     },
     "ideology_agrarian": {
+        "lawgroup_monetary_policy": cross_of_gold_currency,
         "lawgroup_ministry_of_the_environment": ministry_constructor(
             "ministry_of_the_environment", "+"
         ),
@@ -2131,6 +2201,7 @@ modifications = {
         ],
     },
     "ideology_agrarian_jeffersonian": {
+        "lawgroup_monetary_policy": cross_of_gold_currency,
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
         ],
@@ -2561,5 +2632,42 @@ modifications = {
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
         ],
+    },
+    # --- monetary_policy_design.md section 13: the country-flavoured
+    # landowner ideologies ---------------------------------------------------
+    # These carry no modification of their own; they are here only so that
+    # section 13's hard-money stance survives the ideology swaps the interest
+    # groups perform on themselves. common/interest_groups/00_landowners.txt
+    # removes ideology_paternalistic and adds one of junker / papal / scholar /
+    # republican / magnatial / japan / carlist / moderantist depending on the
+    # country, and removes ideology_hierarchic for ideology_japan_hierarchic in
+    # Japan. A stance placed only on the two baselines would therefore be
+    # missing in Prussia, the Papal States, China, Poland-Hungary, Spain and
+    # Japan — exactly the countries whose landowners are most at home in a
+    # Cross-of-Gold argument. The four paternalistic variants already in this
+    # file get the same stance through their own entries above.
+    #
+    # ideology_modernizer, the Bhadralok's replacement for
+    # ideology_reactionary, is DELIBERATELY not in this list: hard money is a
+    # reactionary's position, not a modernizer's, and copying the stance onto
+    # the variant only because the baseline had it would be the wrong answer in
+    # the one place it changes anything.
+    "ideology_hierarchic": {
+        "lawgroup_monetary_policy": simple_currency,
+    },
+    "ideology_japan_hierarchic": {
+        "lawgroup_monetary_policy": simple_currency,
+    },
+    "ideology_japan_paternalistic": {
+        "lawgroup_monetary_policy": simple_currency,
+    },
+    "ideology_magnatial": {
+        "lawgroup_monetary_policy": simple_currency,
+    },
+    "ideology_carlist_ig": {
+        "lawgroup_monetary_policy": simple_currency,
+    },
+    "ideology_moderantist": {
+        "lawgroup_monetary_policy": simple_currency,
     },
 }

@@ -6898,3 +6898,317 @@ banking_stance_band_5 = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	state_capitalists_investment_pool_contribution_add = -0.04
 }
+
+# ============================================================================
+# Monetary Policy — inflation bands (monetary_policy_design.md §9.2, §13)
+# ============================================================================
+# COUNTRY-scope modifiers, swapped when te_inflation_band changes (1 deflation,
+# 2 comfort, 3 elevated, 4 high, 5 very high, 6 hyperinflation; edges
+# -1 / 3 / 8 / 20 / 50 in te_monetary_script_values.txt) by step 6c of the
+# monthly update, te_monetary_apply_inflation_band. The comfort band is an empty
+# modifier for the same reason banking_stance_band_3 is: the swap logic always
+# has exactly one band to apply, and a 0-valued field would render "+0%" and
+# trip modifier_visibility_audit.
+#
+# EXACTLY ONE OF THE SIX IS ON A COUNTRY AT A TIME — unless the country is
+# dollarised, in which case none of them is and te_mon_dollarised_modifier
+# below is on instead. The seven are one mutually exclusive family with one
+# bookkeeping variable, which is what keeps country_minting_mult from taking
+# -0.8 from the hyperinflation band and -0.75 from dollarisation at once; the
+# reasoning is written out on te_monetary_apply_inflation_band.
+#
+# THESE ARE THE DETERRENT, NOT FLAVOUR (§9.2 and §10's tuning invariant).
+# §10 computes that never disinflating after a monetised war costs ~5.4% on the
+# debt against ~6.9% for a Volcker disinflation — a ~1.5pp saving for sitting in
+# the 8-20% *High* band forever. The High band has to cost clearly more than
+# that, and it does: ~5% of all tax revenue wasted swamps 1.5pp of interest on
+# any plausible debt (a great power taking ~£500k a week in tax loses ~£25k a
+# week to waste, against ~£9k a week of interest saved on a £30M debt), and the
+# radicals, the starved investment pool and three angry interest groups are on
+# top of it.
+#
+# THE LADDER IS MONOTONE. Every field is strictly worse at each step from
+# comfort to hyperinflation, so no band is ever a better place to sit than the
+# one below it. Retuning one band means checking the column, not the row.
+#
+#   field                                         defl  comf  elev  high  vhigh hyper
+#   country_sol_expectations_lower_offset_add       -     -    0.5   1.0   2.0   3.0
+#   state_tax_waste_add                             -     -     -    0.05  0.12  0.25
+#   state_*_investment_pool_efficiency_mult         -     -     -   -0.15 -0.30 -0.50
+#   country_minting_mult                            -     -     -     -   -0.3  -0.8
+#   country_bubble_pressure_monthly_add             -     -     -     -    1.0   2.0
+#   ig_petty_bourgeoisie approval                   -     -     -1    -3    -5    -8
+#   ig_landowners approval                         +1     -     -     -2    -4    -6
+#   ig_armed_forces approval                        -     -     -     -2    -3    -5
+#   ig_rural_folk / ig_trade_unions approval       -2     -     -     -     -     -
+#   country_finance_momentum_monthly_add          -0.2    -     -     -     -     -
+#
+# WHY THESE KEYS. country_sol_expectations_lower_offset_add is the
+# cost-of-living squeeze §9.2 names: it is read every month by
+# sol_expectations_monthly_update (on_monthly_pulse_country, ungated) into the
+# lower-strata expected-SoL modifier, so a positive offset raises what the poor
+# expect without raising what they get — radicals. state_tax_waste_add is the
+# Olivera-Tanzi collection lag: tax assessed at last quarter's prices is
+# collected at this quarter's. The two investment-pool efficiency keys are
+# vanilla and always live (the mod's own country_weekly_investment_pool_mult is
+# applied only from je_banking.txt's weekly block, so it would vanish for a
+# country without the journal entry); capitalists and shopkeepers are the two
+# saving professions, and inflation is a tax on savings. The IG rows are §13's
+# "Inflation >= 8%" and "Deflation" rows, which live HERE rather than being
+# duplicated in the stance politics.
+#
+# TWO FIELDS ARE JE-GATED, deliberately. country_finance_momentum_monthly_add
+# and country_bubble_pressure_monthly_add are consumed by
+# banking_cycle_advance_variables, which only runs for a country that has
+# je_banking_cycle. A bankless country in deflation therefore gets the §10 rate
+# rise and the political anger but no momentum drag — the same "JE-dependent
+# inputs read as absent" rule the rest of the system follows.
+
+te_inflation_band_deflation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_finance_momentum_monthly_add = -0.2
+	interest_group_ig_landowners_approval_add = 1
+	interest_group_ig_rural_folk_approval_add = -2
+	interest_group_ig_trade_unions_approval_add = -2
+}
+
+te_inflation_band_comfort = {
+}
+
+te_inflation_band_elevated = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_sol_expectations_lower_offset_add = 0.5
+	interest_group_ig_petty_bourgeoisie_approval_add = -1
+}
+
+te_inflation_band_high = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_sol_expectations_lower_offset_add = 1
+	state_tax_waste_add = 0.05
+	state_capitalists_investment_pool_efficiency_mult = -0.15
+	state_shopkeepers_investment_pool_efficiency_mult = -0.15
+	interest_group_ig_petty_bourgeoisie_approval_add = -3
+	interest_group_ig_landowners_approval_add = -2
+	interest_group_ig_armed_forces_approval_add = -2
+}
+
+te_inflation_band_very_high = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	country_sol_expectations_lower_offset_add = 2
+	state_tax_waste_add = 0.12
+	state_capitalists_investment_pool_efficiency_mult = -0.3
+	state_shopkeepers_investment_pool_efficiency_mult = -0.3
+	country_minting_mult = -0.3
+	country_bubble_pressure_monthly_add = 1
+	interest_group_ig_petty_bourgeoisie_approval_add = -5
+	interest_group_ig_landowners_approval_add = -4
+	interest_group_ig_armed_forces_approval_add = -3
+}
+
+te_inflation_band_hyper = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	country_sol_expectations_lower_offset_add = 3
+	state_tax_waste_add = 0.25
+	state_capitalists_investment_pool_efficiency_mult = -0.5
+	state_shopkeepers_investment_pool_efficiency_mult = -0.5
+	country_minting_mult = -0.8
+	country_bubble_pressure_monthly_add = 2
+	interest_group_ig_petty_bourgeoisie_approval_add = -8
+	interest_group_ig_landowners_approval_add = -6
+	interest_group_ig_armed_forces_approval_add = -5
+}
+
+# ============================================================================
+# Monetary Policy — monetisation, dollarisation, the real-wage dividend
+# ============================================================================
+
+# Monetising the deficit (§11, ruling P3). A UNIT modifier: the field is one
+# pound of extra weekly minting, and the monthly update re-applies it with
+# `multiplier = var:te_monetisation_minting_applied`, which carries the whole
+# GDP-scaled amount — te_mon_monetisation_gdp_share (1% of annual GDP a year)
+# per level, divided by te_mon_weeks_per_year to reach a week. The whole
+# expression is te_mon_monetisation_minting_value, and step 1b of the monthly
+# update (te_monetary_update_monetisation) is its only writer.
+#
+# WHY GDP-SCALED AND NOT country_minting_mult (owner decision, §11). A `_mult`
+# reads better in the budget tooltip and needs no refresh, but vanilla's own
+# GDP term is capped at GDP 200M, so past that cap a multiplier of baseline
+# minting shrinks toward nothing relative to the economy — exactly in the late
+# eras this system is meant to matter in. `multiplier =` IS RESOLVED AGAINST
+# ROOT: this may only ever be applied from inside the monthly update.
+te_monetisation_minting = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_minting_add = 1
+}
+
+# Dollarisation — the hyperinflation exit that gives up the currency (§9.2,
+# ruling P9). Adopting someone else's money ends the inflation and ends the
+# seigniorage with it: three quarters of minting income is simply gone, which
+# is the defining cost of the choice. The rest of the flag's effect is not a
+# modifier — te_mon_dollarised makes te_mon_has_dial false, so the rate is
+# derived and the stance gap is 0.
+#
+# APPLIED BY THE BAND SWAP, not by the event that chooses it: it is the seventh
+# member of the te_inflation_band_* family above, and it REPLACES whichever band
+# the country was in. te_inflation.1's dollarise option writes the flag and the
+# inflation reset; step 6c of the monthly update puts this on and takes the band
+# off in the same swap, which is what makes -0.8 + -0.75 unreachable.
+te_mon_dollarised_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_minting_mult = -0.75
+}
+
+# The cyclical premium a currency reform leaves behind (§9.2): +5pp for ten
+# years, applied by te_inflation.1's reform option with days = 3650.
+#
+# WHY IT IS A TIMED STATIC MODIFIER and not another term in step 5. Lenders
+# price a government that has repudiated its own paper once, and they go on
+# pricing it long after the inflation figure is respectable — but that is a
+# FACT ABOUT THIS COUNTRY'S HISTORY, not a state the monthly update could
+# recompute from anything it holds. country_risk_premium_add is exactly the
+# channel step 5 already reads for "what is happening" (it sums the field as
+# 100 x modifier:country_risk_premium_add before adding the computed terms), so
+# the premium arrives in te_premium_cyclical, shows in the country's modifier
+# list with its own expiry, and needs no variable to carry it.
+te_mon_currency_reform_premium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_risk_premium_add = 0.05
+}
+
+# The real-wage dividend (§9.4). A UNIT modifier, applied by step 6d of
+# te_monetary_monthly_update only while inflation is in the comfort band, and
+# scaled by `multiplier = var:te_mon_wage_dividend_applied` — one unit per
+# +0.1pp of country_wage_pressure_add, so law_factory_councils (+0.5pp) is
+# worth -0.1 on lower-strata expectations and +0.15 financial momentum a month.
+#
+# WHY IT EXISTS. Wage pressure would otherwise be a hidden tax on every
+# progressive labour law: the law raises inflation, the player tightens to
+# answer it, and growth pays for both. The dividend is the other half of
+# wage-led demand — higher real wages are higher consumption — and it switches
+# off the moment inflation leaves the comfort band, which is what makes
+# credible monetary management the precondition for strong labour laws rather
+# than their enemy.
+#
+# WHY EXPECTATIONS AND NOT STANDARD OF LIVING. §9.4 asks for a lower-strata
+# loyalist trickle. The engine has no lower-strata loyalist key (the one
+# country-scope loyalist modifier is all-strata and would hand aristocrats a
+# bonus for factory councils), and the obvious aimed substitute,
+# state_lower_strata_standard_of_living_add, is INERT at this magnitude: pop
+# SoL is an integer level (DEFINE NUM_WEALTH_LEVELS, and every vanilla grant of
+# the key but two is a whole number), so a fractional add does nothing unless
+# it sums with other sources across a whole point — and the dividend's whole
+# realistic range is a quarter of a point.
+#
+# country_sol_expectations_lower_offset_add is consumed CONTINUOUSLY, which is
+# why it works where the SoL key does not. It is summed into
+# sol_expectations_lower_shift_value (common/script_values/extra_script_values.txt),
+# which is then the `multiplier` on sol_expectations_lower_strata_shift — a
+# unit modifier carrying state_lower_strata_expected_sol_add = 1
+# (common/scripted_effects/sol_expectations_effects.txt). Vanilla ships
+# fractional values on that same expected-SoL key from its tax modifiers
+# (tax_modifier_low -0.5, tax_modifier_high +1.5), and vanilla's
+# RADICALS_MONTHLY_FROM_LOW_SOL scales by the raw delta between SoL and
+# expected SoL, so a tenth of a point of expectation is a tenth of a point of
+# delta.
+#
+# It is also the exact thing in fiction. These same laws already RAISE
+# lower-strata expectations — sol_expectations_vanilla_injections.txt puts +1
+# on law_worker_protections and +0.5 on law_regulatory_bodies, and
+# law_universal_basic_income carries +1 of its own. Organised workers expect
+# more. The dividend is the part of that expectation a stable currency actually
+# meets: the pay rise was real, so the disappointment is smaller.
+#
+# SIZED FOR PERMANENCE. An expectations offset is in one sense STRONGER than an
+# SoL change: an SoL change gets priced into expectations over time, while this
+# is a STANDING offset against whatever expectations would otherwise be, for as
+# long as the country stays in the comfort band — potentially decades. So the
+# realistic ceiling is deliberately well under half of a single law's +1
+# headwind: the heaviest plausible stack (factory councils + workers'
+# protections + UBI, +1.4pp, 14 units) reaches -0.28, and factory councils on
+# its own reaches -0.10.
+#
+# TWO HALVES, AND ONE OF THEM IS DEAD FOR MOST COUNTRIES. Financial momentum is
+# only consumed by a country holding je_banking_cycle; the expectations half is
+# live everywhere the monthly update runs, which is every country that is not a
+# command economy. That asymmetry is known and accepted — the loc leads with
+# the half everyone gets.
+te_mon_real_wage_dividend = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_finance_momentum_monthly_add = 0.03
+	country_sol_expectations_lower_offset_add = -0.02 # REVIEWED 2026-09-20: unit value, multiplied by te_mon_wage_dividend_applied (one unit per +0.1pp of wage pressure) — law_factory_councils alone applies it x5 and renders -0.1
+}
+
+# ============================================================================
+# Monetary Policy — creditor-versus-debtor politics (§13)
+# ============================================================================
+# COUNTRY-scope modifiers, PLAIN (no multiplier, so they may be applied from
+# anywhere — but only step 8b of the monthly update,
+# te_monetary_apply_stance_politics, ever does). Exactly one of the two is on a
+# country at a time, or neither; te_mon_stance_politics_applied says which
+# (0 neither, 1 tight, 2 loose), the same swap-by-variable bookkeeping as the
+# te_inflation_band_* family above and for the same reason — add_modifier and
+# remove_modifier results are not visible inside the effect block that issues
+# them, so has_modifier would be asking about state the swap is in the middle
+# of changing.
+#
+# WHAT SETS THEM. te_mon_stance_months counts months in the DISPLAYED stance
+# band (te_mon_stance_band: 4-5 tight, 1-2 loose), and the modifier arrives at
+# six months on one side (ruling P8, and the rationale on
+# te_mon_stance_politics_months). NOT on te_mon_stance_gap: a modifier keyed
+# to the true gap would appear exactly when |gap| crossed 1 and hand the
+# player the neutral rate. Both loc strings therefore talk about the stance
+# "as the bank reads it", never about the gap.
+#
+# WHO WINS AND WHO LOSES is §13's table, and it is the asset-versus-wage
+# incidence the banking event chain already runs on
+# (docs/audits/strata_social_axis_exceptions.md). A dear money rewards whoever
+# holds the paper claims — landowners living off rents and mortgages, and the
+# shopkeepers whose savings are the family's capital — and punishes everyone
+# who owes: the industrialist rolling over working capital, the farmer with a
+# mortgage, the worker whose job depends on the first two borrowing. Cheap
+# money is the same list upside down.
+#
+#   IG                  tight   loose
+#   ig_landowners         +1     -1
+#   ig_petty_bourgeoisie  +1     -1
+#   ig_industrialists     -1     +1
+#   ig_rural_folk         -1     +1
+#   ig_trade_unions       -1     +1
+#
+# GENTLY: §13 asks for a nudge, not a verdict, and +/-1 is a fifth of what
+# vanilla calls an unhappy interest group (APPROVAL_THRESHOLD_UNHAPPY = -5).
+# The deleted banking_policy_rate_hike modifier carried -2 on industrialists
+# for a single rate decision; this is half that, and it takes half a year of
+# the same stance to earn.
+#
+# THEY STACK WITH THE BAND MODIFIERS, AND THAT IS NOT DOUBLE-COUNTING. §13's
+# "Inflation >= 8%" and "Deflation" rows live on te_inflation_band_* above,
+# keyed to the PRICE LEVEL; these two are keyed to the RATE the bank is
+# holding against it. The worst stacks are coherent rather than accidental: a
+# tight stance held through a deflation reads landowners +2 / rural folk -3 /
+# trade unions -3 (dear money on top of falling prices is the debtor's
+# nightmare twice over), and a loose stance held through 8%+ inflation reads
+# petty bourgeoisie -4 / landowners -3 (the savers watch the bank decline to
+# defend them). Retuning either family means re-reading both.
+#
+# ONE ICON FOR BOTH, deliberately: the fist is the money question turning
+# political, which is what both of these are. Neither stance is the good one —
+# each has two winners and three losers, or three and two — so a positive icon
+# on one of them would be the modifier list taking sides.
+te_mon_stance_politics_tight = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	interest_group_ig_landowners_approval_add = 1
+	interest_group_ig_petty_bourgeoisie_approval_add = 1
+	interest_group_ig_industrialists_approval_add = -1
+	interest_group_ig_rural_folk_approval_add = -1
+	interest_group_ig_trade_unions_approval_add = -1
+}
+
+te_mon_stance_politics_loose = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	interest_group_ig_landowners_approval_add = -1
+	interest_group_ig_petty_bourgeoisie_approval_add = -1
+	interest_group_ig_industrialists_approval_add = 1
+	interest_group_ig_rural_folk_approval_add = 1
+	interest_group_ig_trade_unions_approval_add = 1
+}

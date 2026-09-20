@@ -36,6 +36,17 @@ cb_open_market_ops = {
 	# (monetary_policy_design.md §0.1 ruling of 2026-09-20), and `possible`
 	# refuses the button outright off-regime — an `ai_chance` term for it would
 	# be scoring a click the AI can never make.
+	#
+	# §11's rule is "use it at the floor in recession OR DEFLATION". The floor
+	# is `possible`; recession is the panic and downturn pair below
+	# (banking_cycle_is_recession is exactly those two); deflation is the phase-2
+	# half, and it is a separate reason to buy assets rather than a symptom of
+	# the cycle — prices can fall while the cycle reads stable, and that is the
+	# case a rate at its floor cannot answer on its own. te_inflation is read
+	# behind has_variable because it does not exist until a country's first
+	# monthly monetary update, and against te_mon_band_edge_deflation rather
+	# than a literal 0, so the tool and the §9.2 deflation band agree on what
+	# deflation is.
 	ai_chance = {
 		value = 0
 		# Core: the deeper the hole, the more worth buying assets out of it.
@@ -43,6 +54,15 @@ cb_open_market_ops = {
 		if = { limit = { banking_cycle_is_downturn = yes } add = 45 }
 		if = { limit = { banking_cycle_is_stagnation = yes } add = 25 }
 		if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
+
+		# Deflation: falling prices at a rate that can go no lower.
+		if = {
+			limit = {
+				has_variable = te_inflation
+				var:te_inflation < te_mon_band_edge_deflation
+			}
+			add = 40
+		}
 
 		# Law flavor: an independent central bank is the one most willing to reach
 		# past the rate for the balance sheet.
@@ -57,6 +77,17 @@ cb_open_market_ops = {
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -30 }
 
+		# And not while prices are already running: QE is worth +1.0pp of
+		# standing inflation pressure (§9.1, §11), which is the last thing a
+		# country outside the comfort band needs.
+		if = {
+			limit = {
+				has_variable = te_inflation
+				var:te_inflation >= te_mon_band_edge_elevated
+			}
+			add = -35
+		}
+
 		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
 		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
 	}
@@ -70,6 +101,12 @@ cb_disable_open_market_ops = {
 	name = "CB_DISABLE_OPEN_MARKET_OPS"
 	desc = "CB_DISABLE_OPEN_MARKET_OPS_DESC"
 	visible = { is_ai = yes banking_tool_omo_active = yes }
+	# The enable side is gated to the rate floor and now also scores deflation;
+	# nothing on this side could see inflation at all, so a country that eased
+	# into a price surge had no reason to stop until its cycle turned. The
+	# inflation weight below is that reason: while the tool is on it is adding
+	# +1.0pp of standing pressure (§9.1, §11), which is a cost the phase-1
+	# weights were written before there was any such thing.
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
@@ -77,6 +114,13 @@ cb_disable_open_market_ops = {
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = 30 }
 		if = { limit = { banking_stance_is_tight = yes } add = 35 } # stop easing while the rate is tight
+		if = {
+			limit = {
+				has_variable = te_inflation
+				var:te_inflation >= te_mon_band_edge_elevated
+			}
+			add = 40
+		}
 	}
 	possible = { banking_tool_omo_active = yes }
 	effect = { banking_effect_cb_disable_open_market_ops = yes }
