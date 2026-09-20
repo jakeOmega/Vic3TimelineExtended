@@ -940,6 +940,19 @@ header says how to stage each; 40–42 can invalidate a mechanism; 43–47 are n
     drops by it on the next pulse, into debt if need be.
 46. **The price–specie term**: a sustained +2 gap shows ~+2.4pp of pressure in
     `te_debug_monetary.1` and a gold country's inflation climbing toward ~+1.2.
+46a. **The vault (hybrid model).** On load, *Bank's Gold Reserve* reads at least 50% of its limit
+    and the treasury does not move with *Gold Flow* any more; the vault does. *Recapitalise the
+    Bank* debits the treasury and credits the vault by the same figure, greys out with one cause
+    line when the cash is not there, and is never offered on credit. With borrowed gold in the
+    vault, the budget shows an **Interest on Borrowed Gold** expense of about
+    balance × policy rate ÷ 5200 a week. **A save made under the first version carries its old
+    hot-money balance into the new vault** and goes on paying the carry on it until the gap is
+    ≤ 0 — expected, not a bug.
+46b. **Script values on the left of a comparison** (`te_mon_bank_gold_scaled < 0.25`,
+    `te_mon_bank_recap_amount > 0`). Vanilla ships the form (`raiding_income > 0`,
+    `state_infrastructure_balance < 0`), but this system had not used it before: if
+    `debug.log` shows a parse error in `te_monetary_triggers.txt`, that is where to look, and the
+    tell in play is a recapitalise button that is permanently grey.
 47. **Formatting**: `|+=1` on the gap (*Gold Flow* uses `@money!` with `|D+`, which the mod
     already ships);
     `GetGlobalVariable('te_world_rate_debug_offset')` rendering blank, not an error, when

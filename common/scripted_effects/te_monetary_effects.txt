@@ -608,6 +608,10 @@ te_monetary_init_variables = {
 		limit = { NOT = { has_variable = te_gold_carry_applied } }
 		set_variable = { name = te_gold_carry_applied value = 0 }
 	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_recap_work } }
+		set_variable = { name = te_mon_recap_work value = 0 }
+	}
 	# Owned by the GLOBAL world-rate refresh, which writes them for the members
 	# of the average only; seeded here so every country has a readable zero.
 	if = {
