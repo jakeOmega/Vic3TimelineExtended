@@ -1658,12 +1658,28 @@ te_mon_pressure_qe = {
 # and what the §9.4 real-wage dividend pays back on, country_inflation_pressure_add
 # is everything else (events, devaluations). §9.1 sums them; only the dividend
 # tells them apart. Both are modifier fields on vanilla's scale, so 0.01 = 1pp
-# and the sum is read back x 100.
-te_mon_pressure_modifiers = {
+# and each half is read back x 100.
+#
+# THE SUM IS DEFINED FROM THE TWO HALVES rather than re-reading both fields,
+# because the halves are what the dashboard prints: both are things the player
+# CHOSE (a labour law, a devaluation, a monetisation step), so §0's hidden-state
+# rule shows them exactly while the §9.1 pressure TOTAL stays hidden. One
+# definition per modifier field means the rows and the engine can never drift.
+te_mon_wage_pressure_display = {
 	value = 0
-	add = modifier:country_inflation_pressure_add
 	add = modifier:country_wage_pressure_add
 	multiply = 100
+}
+
+te_mon_other_pressure_display = {
+	value = 0
+	add = modifier:country_inflation_pressure_add
+	multiply = 100
+}
+
+te_mon_pressure_modifiers = {
+	value = te_mon_wage_pressure_display
+	add = te_mon_other_pressure_display
 }
 
 # The POSITIVE half of wage pressure, in pp (§9.4). Both things that treat

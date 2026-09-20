@@ -12,13 +12,19 @@
 #   bank_bubble     bubble_pressure          0..100
 #   mon_policy      te_policy_rate           pp, -3..25 (regime range, §5.1)
 #   mon_rate_paid   te_rate_paid_pts         pp, 0.5..60 (§4)
+#   mon_inflation   te_inflation             pp, -10..100 (headline, §9.3)
 #
-# The two monetary series are the oscillation detector the spec asks for
-# (monetary_policy_design.md §16.4, §20 risk 5): a target that flaps or a rate
-# paid that runs away shows up as a sawtooth here long before it shows up as a
-# crisis. Unlike the three cycle metrics they are NOT banded — the policy rate
-# is something the player chose and the rate paid is something they can read off
-# the budget, so both charts print the exact figure in their bar tooltips.
+# The three monetary series are the oscillation detector the spec asks for
+# (monetary_policy_design.md §16.4, §20 risk 5): a target that flaps, a rate
+# paid that runs away or an inflation rate that will not settle shows up as a
+# sawtooth here long before it shows up as a crisis. Unlike the three cycle
+# metrics they are NOT banded — the policy rate is something the player chose,
+# the rate paid is something they can read off the budget, and headline
+# inflation is displayed exactly by §0's hidden-state rule — so all three charts
+# print the exact figure in their bar tooltips.
+#
+# HEADLINE ONLY. te_inflation_core and te_inflation_noise are hidden state
+# (ruling P7) and are never sampled: a stored series is a rendered series.
 #
 # Markers:
 #   on_<button> / off_<button>   a banking policy was enabled/disabled
@@ -60,6 +66,10 @@ te_history_record_banking_samples = {
 		if = {
 			limit = { has_variable = te_rate_paid_pts }
 			te_history_record_sample = { METRIC = mon_rate_paid VALUE = var:te_rate_paid_pts }
+		}
+		if = {
+			limit = { has_variable = te_inflation }
+			te_history_record_sample = { METRIC = mon_inflation VALUE = var:te_inflation }
 		}
 	}
 }

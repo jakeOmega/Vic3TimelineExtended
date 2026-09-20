@@ -60,6 +60,24 @@ te_mon_is_command = {
 	has_law_or_variant = law_type:law_command_economy
 }
 
+# Has this country given up its own currency? (ruling P9) Set by the dollarise
+# option of te_inflation.1 and cleared by te_banking_law_change_cleanup when the
+# country next enacts a monetary-policy law.
+#
+# Guarded, so a country that has never pulsed — and every save from before phase
+# 2 — reads no. It exists for the dashboard's four cause-specific custom-loc
+# blocks (te_mon_no_dial_reason, te_mon_inflation_band_name, _cost and
+# te_mon_monetise_condition in
+# common/customizable_localization/banking_dash_custom_loc.txt), every one of
+# which has to tell a dollarised country from a bankless one. te_mon_has_dial
+# above and te_mon_can_monetise below ask the same question inline; they were
+# written before this trigger existed and are left as they are rather than
+# re-tested for a cosmetic saving.
+te_mon_is_dollarised = {
+	has_variable = te_mon_dollarised
+	var:te_mon_dollarised = 1
+}
+
 # State-owned banking (lawgroup_financial_regulation). The weakest credibility
 # anchor (§5.2, §9.1). Ruling R2 ships the premium part only in phase 1.
 #
@@ -206,6 +224,24 @@ te_mon_target_can_step_up = {
 	var:te_policy_rate_target < te_mon_target_max
 }
 
+# The same pair for the monetisation stepper (§11). The ceiling is
+# te_mon_monetisation_max, which both step effects and step 1b of the monthly
+# update clamp against, so the stepper can never offer a step the next pulse
+# would undo — exactly the arrangement the rate target has above.
+#
+# WHETHER THE COUNTRY MAY MONETISE AT ALL is te_mon_can_monetise, a separate
+# question with its own one-line answer (te_mon_monetise_condition). These two
+# only say whether there is room left in the range.
+te_mon_monetise_can_step_down = {
+	has_variable = te_monetisation_level
+	var:te_monetisation_level > 0
+}
+
+te_mon_monetise_can_step_up = {
+	has_variable = te_monetisation_level
+	var:te_monetisation_level < te_mon_monetisation_max
+}
+
 # Has this country's first monthly monetary update run? Everything the dashboard
 # reads is written by that pulse, and a `.gui` read of a missing variable logs
 # "Failed to fetch variable" every frame (gui_modding_guide.md gotcha 14/23), so
@@ -215,11 +251,16 @@ te_mon_target_can_step_up = {
 # and because it is the first thing step 0 writes, so a country that has it has
 # run a pulse.
 #
-# THE LAST THREE ARE PHASE 2. The Rate You Pay tooltip now breaks the figure
-# down as market yield + premium - inflation (§10), so it reads all three. A
-# save made under phase 1 has every variable above this line and none of these
-# until its first pulse on the new version, which is exactly the case this gate
-# exists for.
+# THE LAST FOUR ARE PHASE 2. The Rate You Pay tooltip breaks the figure down as
+# market yield + premium - inflation (§10), the block's own Inflation and
+# Expected Inflation rows print two of those, and the monetisation stepper
+# prints its level. A save made under phase 1 has every variable above this line
+# and none of these until its first pulse on the new version, which is exactly
+# the case this gate exists for.
+#
+# te_inflation_band and te_mon_dollarised are deliberately NOT here: every
+# dashboard read of either goes through a customizable_localization block that
+# carries its own has_variable branch, so they need no second gate.
 te_mon_display_ready = {
 	has_variable = te_mon_era_base_now
 	has_variable = te_policy_rate
@@ -231,6 +272,7 @@ te_mon_display_ready = {
 	has_variable = te_market_yield
 	has_variable = te_inflation
 	has_variable = te_inflation_expected
+	has_variable = te_monetisation_level
 }
 
 # Is the policy rate at the floor of its regime's range? This is the gate on

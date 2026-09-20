@@ -25,11 +25,11 @@
 #    trigger in te_monetary_triggers.txt and a shared effect in
 #    te_monetary_effects.txt, so the tooltip and the click can never disagree.
 #
-# 2. FIVE SCOPE-FREE DISPLAY HANDLERS — they answer "which control applies here"
+# 2. SIX SCOPE-FREE DISPLAY HANDLERS — they answer "which control applies here"
 #    with `is_shown` alone. Whether a saved scope reaches `is_shown` is thinly
 #    evidenced, and the failure direction here is the bad one: if the scope went
 #    missing, an op-branching `is_shown` would hide the whole monetary block and
-#    leave the player unable to set a rate at all. All five carry
+#    leave the player unable to set a rate at all. All six carry
 #    `is_valid = { always = no }` and an empty effect, so neither a player nor
 #    the AI can execute them.
 #
@@ -47,6 +47,8 @@
 #   4   mandate              price stability
 #   5   mandate              growth
 #   6   mandate              peg defence (gold standard only)
+#   7   monetisation level   step down one level
+#   8   monetisation level   step up one level
 # ============================================================================
 
 banking_mon_control_sgui = {
@@ -233,6 +235,39 @@ banking_mon_control_sgui = {
 				}
 			}
 		}
+
+		# --- 7 / 8: monetising the deficit (§11) ---
+		# TWO LINES, not the dial's three. Eligibility here has five separate
+		# causes (no national bank, a currency the state cannot create,
+		# central bank independence, a command economy, dollarisation) and
+		# listing all five as conditions would grey a button behind a wall of
+		# ticks. banking_mon_tt_can_monetise is ONE line that names the binding
+		# cause and nothing else — the answer te_mon_no_dial_reason gives for
+		# the dial, through the same customizable_localization machinery
+		# (te_mon_monetise_condition,
+		# common/customizable_localization/banking_dash_custom_loc.txt).
+		trigger_else_if = {
+			limit = { scope:op = 7 }
+			custom_tooltip = {
+				text = banking_mon_tt_can_monetise
+				te_mon_can_monetise = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_monetise_above_floor
+				te_mon_monetise_can_step_down = yes
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 8 }
+			custom_tooltip = {
+				text = banking_mon_tt_can_monetise
+				te_mon_can_monetise = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_monetise_below_ceiling
+				te_mon_monetise_can_step_up = yes
+			}
+		}
 		trigger_else = {
 			always = no
 		}
@@ -268,6 +303,14 @@ banking_mon_control_sgui = {
 			# Peg defence gets its own line: its rule points outside the country,
 			# at the world reference rate the dashboard now shows as a row.
 			te_mon_effect_set_mandate = { MANDATE = 3 TT = banking_mon_mandate_peg_set_tt }
+		}
+		else_if = {
+			limit = { scope:op = 7 }
+			te_mon_effect_monetisation_step_down = yes
+		}
+		else_if = {
+			limit = { scope:op = 8 }
+			te_mon_effect_monetisation_step_up = yes
 		}
 	}
 }

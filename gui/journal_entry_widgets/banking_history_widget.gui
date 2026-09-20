@@ -4,9 +4,9 @@
 ### `widget = { name = "widget_je_banking_history" container = "custom_widget_container_2" }`,
 ### directly under Current Conditions.
 ###
-### Five charts, one per unit: the cycle value and bubble pressure are 0..100
-### indices, momentum is a signed monthly delta, and the two monetary series are
-### in percentage points, so they never share an axis. Each monetary chart's
+### Six charts, one per unit: the cycle value and bubble pressure are 0..100
+### indices, momentum is a signed monthly delta, and the three monetary series
+### are in percentage points, so they never share an axis. Each monetary chart's
 ### axis is deliberately narrower than its variable's full range — see the
 ### comment above each one. The policy rate is drawn by one of two instances,
 ### picked on whether the country's currency law allows a negative rate; only
@@ -363,6 +363,80 @@ flowcontainer = {
 					}
 					blockoverride "color" {
 						color = { 0.80 0.66 0.34 1.0 }
+					}
+				}
+			}
+		}
+
+		### ---- Headline inflation (percentage points) -------------------
+		### ONE CHART, NOT A PAIR. The policy rate needed two instances
+		### because only a digital currency can go under zero; every country
+		### can deflate, so the axis reaches below the line for all of them
+		### and the 0% line is drawn where it actually falls — a quarter of
+		### the way up a 16-point span, i.e. 27px above the bottom of the
+		### 96px plot area (the 84px bar band is centred in it, so its own
+		### floor sits 6px up, plus 0.25 x 84 = 21). EYEBALL THIS IN GAME,
+		### exactly like the digital policy-rate chart's 23px.
+		###
+		### WHY -4..12 AND NOT THE VARIABLE'S -10..100. A campaign lives
+		### between about -2 and +10: the comfort band tops out at 3 and the
+		### high band opens at 8, so both edges the player is steering
+		### against sit inside the plot with room above them. Giving the
+		### axis the hyperinflation range would squash every ordinary year
+		### into two pixels to keep space for a state that ends the currency
+		### within a few years of arriving.
+		###
+		### SO THE ENDS CLAMP, and both ends say so. Anything at or above
+		### 12% draws a full bar; anything at or below -4% draws a 1.5px
+		### sliver rather than nothing, on the cycle charts' floor trick, so
+		### a deep deflation is never mistaken for a month with no reading.
+		### Either way the bar's tooltip prints the exact figure, which is
+		### the same bargain the rate-paid chart's 0..20 axis strikes.
+		###
+		### ONE COLOUR ABOVE AND BELOW THE LINE, like the policy-rate pair
+		### and unlike momentum: te_history_bar_signed's green/red split
+		### would read as good-above / bad-below, and deflation is not the
+		### opposite of a problem. It is also the honest axis — a signed bar
+		### splits the plot 50/50 whatever its two ranges are, so a -2%
+		### month would draw taller than a +2% one.
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "te_hist_chart_mon_inflation_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_mon_inflation_legend"
+			}
+			blockoverride "zero_axis" {
+				widget = {
+					size = { 100% 2 }
+					parentanchor = bottom
+					position = { 0 -27 }
+					alwaystransparent = yes
+
+					background = {
+						using = dark_area
+						alpha = 0.7
+					}
+				}
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_mon_inflation"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_inflation' )]"
+					blockoverride "values" {
+						min = -4
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-3.7', ScriptContainer.GetVariableValue( 'te_hist_v_mon_inflation' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = -4
+						max = 12
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)-4', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_inflation' ), '(CFixedPoint)0.65' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.80 0.45 0.32 1.0 }
 					}
 				}
 			}

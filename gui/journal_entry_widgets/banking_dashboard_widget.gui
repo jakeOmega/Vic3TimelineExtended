@@ -13,9 +13,10 @@
 ###
 ### The Monetary Policy category's dial block is answered by a second file,
 ### common/scripted_guis/te_monetary_sguis.txt — one op-parameterised handler
-### (banking_mon_control_sgui, ops 0-6: 0/1 target stepper, 2/3 delegation,
-### 4/5/6 mandate) plus five scope-free display handlers. That op table is an
-### implicit contract between this file and that one; keep both headers in step.
+### (banking_mon_control_sgui, ops 0-8: 0/1 target stepper, 2/3 delegation,
+### 4/5/6 mandate, 7/8 monetisation stepper) plus six scope-free display
+### handlers. That op table is an implicit contract between this file and that
+### one; keep both headers in step.
 
 types banking_dashboard_widget_types
 {
@@ -1113,6 +1114,143 @@ flowcontainer = {
 							banking_dash_condition_value = {
 								text = "banking_dash_mon_premium_value"
 							}
+						}
+					}
+
+					### ---- Prices (monetary_policy_design.md §3, §9) --------
+					### Headline and expected inflation are shown EXACTLY, to one
+					### decimal: both are things the player can act on, and both
+					### are already priced by their lenders. Core inflation, the
+					### noise walk and the §9.1 pressure sum are hidden state and
+					### appear nowhere here (ruling P7) — the two pressure rows
+					### print only the part the player CHOSE, which is a modifier
+					### the engine breaks down on its own.
+
+					### Inflation — what prices actually did.
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_inflation_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_inflation_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_inflation_value"
+							}
+						}
+					}
+
+					### Expected inflation — what lenders and workers have
+					### priced in, which is the half that costs money.
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_expected_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_expected_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_expected_value"
+							}
+						}
+					}
+
+					### Price band — the band NAME, and in the tooltip the band
+					### modifier's own account of what it costs. No band edge
+					### and no modifier value is copied into this file: both
+					### come from customizable_localization blocks reading the
+					### band variable step 6b wrote.
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_band_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_band_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_band_value"
+							}
+						}
+					}
+
+					### Wage pressure — the labour and welfare half (§9.4),
+					### kept apart from every other source because it is the
+					### half that earns the real-wage dividend.
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_wage_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_wage_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_wage_value"
+							}
+						}
+					}
+
+					### Price pressure — everything else the player chose:
+					### devaluations, crisis outcomes, event modifiers.
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_pressure_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_pressure_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_pressure_value"
+							}
+						}
+					}
+
+					### Monetising the deficit — ops 7 (down) and 8 (up) of
+					### banking_mon_control_sgui, the same shape as the target
+					### stepper above.
+					###
+					### NOT hidden for a country that may not monetise, unlike
+					### the delegation and mandate rows further down. Printing
+					### money is the one lever here whose absence is itself a
+					### fact about the country's laws, so the row stays, the
+					### level reads 0, and the two buttons grey out carrying
+					### one line that names the cause
+					### (te_mon_monetise_condition).
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 6
+						parentanchor = left
+						tooltip = "banking_dash_mon_monetise_tt"
+						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
+
+						banking_dash_mon_label = {
+							blockoverride "mon_label_text" {
+								text = "banking_dash_mon_monetise_label"
+							}
+						}
+
+						button_icon_minus_action = {
+							size = { 26 26 }
+							parentanchor = vcenter
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)7' ) ).End ) )]"
+						}
+
+						widget = {
+							size = { 68 28 }
+							textbox = {
+								parentanchor = center
+								align = center|nobaseline
+								autoresize = yes
+								max_width = 68
+								elide = right
+								using = fontsize_large
+								text = "banking_dash_mon_monetise_value"
+							}
+						}
+
+						button_icon_plus_action = {
+							size = { 26 26 }
+							parentanchor = vcenter
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)8' ) ).End ) )]"
 						}
 					}
 

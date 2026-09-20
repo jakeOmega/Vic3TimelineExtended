@@ -273,12 +273,22 @@ te_mon_mandate_name = {
 # command economy administers the rate whatever its currency law says, and a
 # country with no national bank has no dial whatever its currency law says.
 #
+# DOLLARISATION COMES FIRST (ruling P9), ahead of every law-based cause. A
+# country that abandoned its currency in a hyperinflation usually still has
+# law_national_bank and law_fiat_currency on the books, so every branch below
+# would miss it and the fall-through would tell it that its central bank sets
+# the rate — which is the one thing that is no longer true.
+#
 # The last branch is the fall-through for a country that DOES hold the dial; the
 # widget hides this line for those, so it should never be seen.
 te_mon_no_dial_reason = {
 	type = country
 	random_valid = no
 
+	text = {
+		trigger = { te_mon_is_dollarised = yes }
+		localization_key = banking_dash_mon_why_dollarised
+	}
 	text = {
 		trigger = { te_mon_is_command = yes }
 		localization_key = banking_dash_mon_why_command
@@ -297,5 +307,178 @@ te_mon_no_dial_reason = {
 	}
 	text = {
 		localization_key = banking_dash_mon_why_has_dial
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Phase 2 — the inflation band, and what it costs (§9.2)
+# ----------------------------------------------------------------------------
+# Two blocks, one question each, on the te_mon_stance_band_name pattern above:
+# the .gui never compares a number and no band edge is copied out of script.
+# te_inflation_band is written by step 6b of te_monetary_monthly_update and the
+# matching te_inflation_band_* modifier is put on the country by step 6c, so the
+# name here and the modifier in the country's own list always agree.
+#
+# TWO STATES SIT OUTSIDE THE LADDER and both are tested first.
+#   * A DOLLARISED country (ruling P9) carries te_mon_dollarised_modifier
+#     INSTEAD of a band — step 6c makes the seven states one exclusive family —
+#     so reporting the band it would otherwise be in would name a modifier that
+#     is not on the country.
+#   * A COMMAND ECONOMY (§14) has its inflation held at 0 and its band forced to
+#     comfort, which is not the same statement as "prices here are stable": the
+#     plan administers them, and the real-wage dividend the comfort band's own
+#     text promises is never paid to one.
+te_mon_inflation_band_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_inflation_band } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { te_mon_is_dollarised = yes }
+		localization_key = banking_dash_price_band_dollarised
+	}
+	text = {
+		trigger = { te_mon_has_inflation = no }
+		localization_key = banking_dash_price_band_command
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 1 }
+		localization_key = banking_dash_price_band_deflation
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 2 }
+		localization_key = banking_dash_price_band_comfort
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 3 }
+		localization_key = banking_dash_price_band_elevated
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 4 }
+		localization_key = banking_dash_price_band_high
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 5 }
+		localization_key = banking_dash_price_band_very_high
+	}
+	text = {
+		localization_key = banking_dash_price_band_hyper
+	}
+}
+
+# What the band costs, for the Price Band row's tooltip.
+#
+# THE SIX LADDER BRANCHES RETURN THE BAND MODIFIER'S OWN `_desc` KEY. Unlike the
+# stance block above — which has to state a magnitude in words because the gap
+# behind it may never be printed — every one of these bands IS a modifier on the
+# country, whose description already says what it costs and whose numbers the
+# engine renders in the country's modifier list. Pointing at that text instead
+# of paraphrasing it is the only arrangement in which retuning
+# te_inflation_band_high cannot leave this tooltip quietly lying: there is
+# nothing here to retune.
+#
+# The two branches above the ladder are the two states with no band modifier,
+# and they follow the same rule — dollarisation points at its own modifier's
+# description, and only the command economy needs a line of its own, because
+# "no band at all" is not a modifier anywhere.
+te_mon_inflation_band_cost = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_inflation_band } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { te_mon_is_dollarised = yes }
+		localization_key = te_mon_dollarised_modifier_desc
+	}
+	text = {
+		trigger = { te_mon_has_inflation = no }
+		localization_key = banking_dash_price_band_cost_command
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 1 }
+		localization_key = te_inflation_band_deflation_desc
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 2 }
+		localization_key = te_inflation_band_comfort_desc
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 3 }
+		localization_key = te_inflation_band_elevated_desc
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 4 }
+		localization_key = te_inflation_band_high_desc
+	}
+	text = {
+		trigger = { var:te_inflation_band <= 5 }
+		localization_key = te_inflation_band_very_high_desc
+	}
+	text = {
+		localization_key = te_inflation_band_hyper_desc
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Phase 2 — may this country print money to pay its bills? (§11)
+# ----------------------------------------------------------------------------
+# ONE LINE, PHRASED AS A CONDITION, naming the single binding cause. The
+# monetisation stepper's is_valid renders it through banking_mon_tt_can_monetise
+# beside a tick or a cross (common/scripted_guis/te_monetary_sguis.txt, ops
+# 7/8), so every branch has to read correctly in both states — "You have a
+# national bank to print the money through" works with either mark, while "You
+# have no national bank" would not.
+#
+# THE BRANCH ORDER IS A PRIORITY ORDER, not te_mon_can_monetise's clause order:
+# a country can fail several of these at once, and this picks which one the
+# player is told about. Dollarisation comes first because it is the one cause
+# that does not appear in the law list at all. Then the command economy, which
+# settles the question before any monetary law is consulted; then the missing
+# bank, because there is no institution to give the order to; then the
+# currency; and independence last, because it is the only one of the five that
+# can be undone without changing what the country's money is.
+#
+# The fall-through is reached exactly when te_mon_can_monetise holds — every
+# clause of that trigger has a branch above — so it is the line that renders
+# with a tick.
+te_mon_monetise_condition = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_is_dollarised = yes }
+		localization_key = banking_dash_mon_monetise_why_dollarised
+	}
+	text = {
+		trigger = { te_mon_is_command = yes }
+		localization_key = banking_dash_mon_monetise_why_command
+	}
+	text = {
+		trigger = { NOT = { has_law_or_variant = law_type:law_national_bank } }
+		localization_key = banking_dash_mon_monetise_why_no_bank
+	}
+	text = {
+		trigger = {
+			NOR = {
+				has_law_or_variant = law_type:law_fiat_currency
+				has_law_or_variant = law_type:law_digital_currency
+			}
+		}
+		localization_key = banking_dash_mon_monetise_why_backed
+	}
+	text = {
+		trigger = { te_mon_is_cbi = yes }
+		localization_key = banking_dash_mon_monetise_why_cbi
+	}
+	text = {
+		localization_key = banking_dash_mon_monetise_why_allowed
 	}
 }
