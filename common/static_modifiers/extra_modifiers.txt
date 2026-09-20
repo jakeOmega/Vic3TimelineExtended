@@ -63,25 +63,13 @@
 	# one interest line instead of a +20% base and a -20% modifier sitting beside
 	# each other, which is the whole point.
 	#
-	# UNPROVEN MERGE CASE — READ BEFORE TRUSTING THIS LINE.
-	# What was confirmed in-game is a NESTED `modifier = { }` block on a rank and
-	# on a technology. This is a FLAT KEY inside a static modifier, which is
-	# monetary_policy_design.md §17's check 2 and is still unverified: whole-block
-	# last-wins is already ruled out (the mod has shipped bureaucracy, authority
-	# and innovation through this same INJECT since April), but SAME-KEY semantics
-	# are not. The identical case is near the TOP of this same INJECT block —
-	# state_expected_sol_from_literacy = -5 against vanilla's +5.
-	#
-	# The day-one tell, on a fresh 1836 game, reading any country's budget-panel
-	# interest tooltip:
-	#   * no "Base Value" line at all, and Britain near 3.4% / Russia near 12%
-	#     => the keys SUM. This line is correct.
-	#   * every country reading 0.0% => LAST WINS: vanilla's 0.2 was replaced by
-	#     this -0.2 instead of cancelled, so the base is -20% and the mod's own
-	#     rate is swallowed by the clamp at zero.
-	# If it is last-wins: `git revert` the commit that added this line. That
-	# restores the separate cancelling modifier and step 9's two-modifier write,
-	# the arrangement that was live before and does not depend on this case.
+	# CONFIRMED IN-GAME 2026-09-20: a flat key INJECTed into a static modifier
+	# SUMS with vanilla's, exactly as the nested `modifier = { }` blocks on ranks,
+	# technologies and laws do. The read was the day-one budget-panel interest
+	# tooltip: no "Base Value" line at all, and each country on the rate the mod
+	# computes for it. That also settles the identical case near the TOP of this
+	# block, state_expected_sol_from_literacy = -5 against vanilla's +5
+	# (monetary_policy_design.md §17 check 2, §0.3 item 1b).
 	country_loan_interest_rate_add = -0.2
 }
 

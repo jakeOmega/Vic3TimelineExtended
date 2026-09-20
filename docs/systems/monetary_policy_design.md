@@ -36,7 +36,7 @@ wrong or leave open.
 
 | # | Ruling | Why | Cost if wrong |
 |---|---|---|---|
-| **R1** | Vanilla **techs**, **ranks** and `law_laissez_faire` all use cancel-INJECTs, isolated one file each (`te_monetary_tech_injections.txt`, `te_monetary_rank_injections.txt`, `te_monetary_law_injections.txt`) | the owner confirms tech INJECTs sum in this mod (see R3); ranks/LF ride the same assumption, still unverified (§17 checks 1–4) | if INJECT is last-wins, the rates are wrong until each file becomes a `REPLACE:` — one file each |
+| **R1** | Vanilla **techs**, **ranks** and `law_laissez_faire` all use cancel-INJECTs, isolated one file each (`te_monetary_tech_injections.txt`, `te_monetary_rank_injections.txt`, `te_monetary_law_injections.txt`) | the owner confirms tech INJECTs sum in this mod (see R3); ranks and laissez-faire rode the same assumption and were read in game too — all three sum (§17 checks 1–4, answered 2026-09-19/20) | if INJECT is last-wins, the rates are wrong until each file becomes a `REPLACE:` — one file each |
 | **R2** | Implemented: the §8 neutral-rate formula, the §7.6 debt-load premium, and §5.2's state-owned-banking **premium only** (+0.5 structural, no CBI bonuses). Deferred: §0.2 | the owner had not decided the `(proposed)` items | rework of small terms |
 | **R3** | **Vanilla finance techs: cancel-INJECT.** Owner decision 2026-09-19 (PR #335), overriding the plan's script-compensation fallback. Each of the five takes `INJECT:<tech> = { modifier = { country_loan_interest_rate_add = 0.02 } }` in `common/technology/technologies/te_monetary_tech_injections.txt`; `te_mon_vanilla_tech_offset` and the `on_acquired_technology` hook that served it are **deleted**, and `te_rate_paid_applied` now equals `te_rate_paid_pts` | a tech tooltip promising "−2% interest" the mod silently takes back elsewhere is misleading; the owner reports tech INJECTs sum in this mod, so the `country_minting_mult = 0.1` in the same vanilla block survives | if INJECT is last-wins, the five techs make borrowing 2pp **dearer** and lose their minting bonus — visible on the tech tooltip, and a one-file `REPLACE:` fix |
 | | **`te_mon_era_base` is a WORLD quantity**, not per-country: 3.0, −0.5 once any great power holds `macroeconomics`, −0.5 again for `globalization` | the spec calls this the world / reference rate in §7.4, §12.1 and §21, and **no era trigger or era detector exists** (see `scripting_best_practices.md` § "There Is No 'Current Era' Trigger") | five-line swap inside `te_mon_era_base` to per-country techs |
@@ -94,45 +94,36 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
 
 **Structural — a failure here means the premium stack is not doing what the files say**
 
-1. **Do `INJECT:`ed `modifier = { }` blocks SUM with vanilla's?** — **MOSTLY ANSWERED,
-   2026-09-19: YES for a nested `modifier = { }` on country RANKS and on TECHNOLOGIES**,
-   read in game by the owner (rank −50% and its +50% cancel both gone from the interest
-   tooltip; the finance techs' −2% cancelled). §17 check 4 and the rank half of check 1 are
-   closed, and with them `te_monetary_rank_injections.txt` and
-   `te_monetary_tech_injections.txt`. Recorded in `scripting_best_practices.md` § INJECT.
+1. **Do `INJECT:`ed `modifier = { }` blocks SUM with vanilla's?** — **CONFIRMED: YES, every
+   case.** Read in game by the owner on **2026-09-19** (country RANKS: the rank's −50% and
+   its +50% cancel both gone from the interest tooltip; TECHNOLOGIES: the finance techs' −2%
+   cancelled) and on **2026-09-20** (LAWS: laissez-faire's −25% and the mod's cancelling
+   +25% both gone from the same tooltip). §17 checks 1, 3 and 4 are closed, and with them
+   `te_monetary_rank_injections.txt`, `te_monetary_tech_injections.txt` and
+   `te_monetary_law_injections.txt`. Recorded in `scripting_best_practices.md` § INJECT.
 
-   **Still open, and it is now the one that matters:** laissez-faire's −25% (the law half of
-   check 1) and check 3's `law_industry_banned` were not separately read — same nested-block
-   case on a third entity type, very likely the same, but inference. And **check 2, a FLAT
-   KEY inside a static modifier, is untouched**: the `state_expected_sol_from_literacy`
-   probe (0 ⇒ sum, −5 ⇒ last wins, +5 ⇒ inject ignored), which is **not** a substitute for
-   the nested-block reads and is **not** substituted for by them.
+1b. **Check 2 — a FLAT KEY inside a static modifier** — **CONFIRMED 2026-09-20: it sums too.**
+   `te_monetary_base_offset` is gone; vanilla's flat base is cancelled by
+   `country_loan_interest_rate_add = -0.2` inside the mod's `INJECT:base_values` block
+   (`common/static_modifiers/extra_modifiers.txt`). Day one on a fresh 1836 game the owner
+   read **no "Base Value" line at all** on the budget-panel interest tooltip and
+   country-specific rates, which is the "keys sum" branch of the tell; the failure branch
+   (every country at 0.0%, i.e. a −20% base) did not happen, so nothing is reverted. This
+   also retro-validates `state_expected_sol_from_literacy = -5` against vanilla's `+5`, the
+   same shape shipped since April.
 
-1b. **NEW (2026-09-19), and it is check 2 with teeth.** `te_monetary_base_offset` is gone;
-   vanilla's flat base is now cancelled by `country_loan_interest_rate_add = -0.2` inside the
-   mod's `INJECT:base_values` block (`common/static_modifiers/extra_modifiers.txt`) — the
-   same flat-key-in-a-static-modifier case as check 2. Day one on a fresh 1836 game, read any
-   budget-panel interest tooltip:
-   * **no "Base Value" line at all, UK ≈ 3.4%, Russia ≈ 12%** ⇒ the keys sum. Correct.
-   * **every country reading 0.0%** ⇒ last wins: the base is −20% instead of cancelled.
-     Revert that one commit; it restores the offset modifier and step 9's two-modifier write.
-   Also check a **released subject shows its own rate**, not its former overlord's — the
-   country-creation hooks used to apply the parent's number (see the note under §16.1).
+   **Day-1 dispatch and released subjects: CONFIRMED 2026-09-20 in the same read.** Rates
+   were already country-specific on 1836-01-01 — so the hidden-country-event fan-out from
+   `on_game_started` delivers with no delay (that is checklist item 7 as well) — and a
+   **released subject shows its own rate**, not its former overlord's, so the
+   country-creation hooks' `scope:target` dispatch resolves against the new tag. Both
+   recorded in `scripting_best_practices.md` § ROOT-resolved multipliers.
 
-   **The techs are now part of this check.** R3 cancels
-   `country_loan_interest_rate_add = -0.02` on each of `banking`, `central_banking`,
-   `mutual_funds`, `international_exchange_standards` and `modern_financial_instruments`
-   (`common/technology/technologies/te_monetary_tech_injections.txt`). Open all five tech
-   tooltips: **each must still show `+10%` minting** (`country_minting_mult = 0.1` sits in
-   the same vanilla `modifier = { }` block), and the interest line must net to zero or
-   vanish. Minting is the tell, because it needs no arithmetic. Four of the five should also
-   still show `+5%` state max trade advantage from capacity; `modern_financial_instruments`
-   shows `+5%` government dividends efficiency instead. If minting is gone, INJECT is
-   last-wins and the file is wrong twice over — the techs would be making borrowing 2pp
-   *dearer*.
-
-   If last-wins: `REPLACE:` the ranks, `law_laissez_faire` and the five techs, restating
-   their full vanilla modifier blocks.
+   Still worth a glance, but no longer load-bearing: the five vanilla finance techs
+   (`banking`, `central_banking`, `mutual_funds`, `international_exchange_standards`,
+   `modern_financial_instruments`) should each still show `+10%` minting on their tooltip —
+   `country_minting_mult = 0.1` sits in the same vanilla `modifier = { }` block R3 cancels
+   the interest line in, and it needs no arithmetic to read.
 2. **Does the country-scope `modifier:` read aggregate every source type?**
    `country_credit_standing_add` is granted from country **ranks**, an **institution**
    (`institution_national_bank`), a company **`prosperity_modifier`** (`company_shell`) and a
@@ -166,7 +157,7 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
    Credit Standing and Risk Premium must each show an engine breakdown block under the
    script-computed lines. An *empty* breakdown is fine; a *missing* block means the accessor
    did not resolve.
-6. **Walk the dashboard.** (a) Fiat great power: policy rate one decimal, target an integer,
+6. **Walk the dashboard — CONFIRMED 2026-09-20 (owner, in game).** (a) Fiat great power: policy rate one decimal, target an integer,
    `+` moves only the target and the rate follows ~0.33/month; the engine's rate figure and
    `te_rate_paid_pts` should differ only by the surviving vanilla `_mult` modifiers — an
    *additive* gap, or a ratio no percentage modifier explains, is the leak this pairing
@@ -195,15 +186,21 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
    checklist item and becomes an Important bug** — band it, or give `bubble_pressure` a random
    term.
 
+6b. **OMO at a zero policy rate — CONFIRMED 2026-09-20 (owner, in game).** The fiat case item 6
+   never states outright: with the policy rate down at its 0 floor the Open-Market Operations
+   row goes green and the tool activates, so `te_mon_floor_threshold` /
+   `te_mon_policy_rate_at_floor` do let the one regime that should reach the floor reach it —
+   dropping `max = 0` did not shut the door on fiat along with gold. What is **not** confirmed
+   is item 14's balance half: the retuned +1.5 bubble a month has still never been watched
+   running, which needs a zero-rate recession to last a few months.
+
 **Lifecycle**
 
-7. **Day one is not vanilla's flat 20%.** `on_game_started` is declared in two mod files;
-   on-actions are expected to merge, but `GET /on-actions/<name>` is last-wins and cannot
-   confirm it. If the game-start pass did not run, 1836 rates read ~20% — the fix is moving
-   one line into `extra_on_actions.txt`'s existing block. Low risk in practice: the mod already
-   splits `on_monthly_pulse_country` across eight files and `on_monthly_pulse` across two, and
-   `extra_on_actions.txt` itself merges with vanilla's `on_game_started`, so cross-file merging
-   is proven — this check confirms it rather than discovering it.
+7. **Day one is not vanilla's flat 20% — CONFIRMED 2026-09-20 (owner, in game).** 1836 rates
+   are the mod's own country-specific numbers on day one, so the game-start pass runs: the two
+   mod `on_game_started` declarations merge, and the no-delay hidden-country-event fan-out
+   delivers before the player's first day (recorded in `scripting_best_practices.md` § ROOT-
+   resolved multipliers). Nothing to move into `extra_on_actions.txt`.
 8. **A pre-deletion save gets its 2 intervention points back** the month after loading, and
    the *Raise Policy Rate* row is gone from both dashboard lists.
 8a. **Tag-switch into an AI great power.** Every AI country is held at `te_mon_delegated = 1`,
@@ -1178,8 +1175,7 @@ effect, so the old "Σ`_add` never sits at ≤ 0" invariant is retired. Skip the
 the change since last month is under 0.05. `REPLACE` the `country_loan_interest_rate_add`
 **modifier type definition** to `decimals = 1` (precedent:
 `common/modifier_type_definitions/mod_entity_modifier_types.txt:3486`). The flat-key INJECT
-is §17 check 2 and is still unverified — see §0.3 item 1b for the day-one read and the
-one-commit revert.
+is §17 check 2, and the owner read it in game on 2026-09-20: it **sums** — see §0.3 item 1b.
 
 - **Run the update from `on_game_started` as well as the monthly pulse.** The
   cancel-`INJECT`s apply on day one but the rate modifier would not exist until the first
@@ -1290,6 +1286,13 @@ the construction market, ruler traits and the history charts read them directly.
 > [§0.3](#03-in-game-verification-checklist) — run that, not this. Check 6 was **bypassed**
 > rather than answered (§0.1: the widget uses the vanilla-proven `GetPlayer.` form). The
 > remaining checks below still belong to phases 2–4.
+>
+> **CHECKS 1–4 ARE ANSWERED (owner, in game, 2026-09-19 and 2026-09-20): `INJECT:` SUMS with
+> vanilla's values** — nested `modifier = { }` blocks on ranks, technologies and laws, and a
+> flat key inside a static modifier (`INJECT:base_values`) alike. Nothing below about
+> last-wins came to pass; the fallbacks are kept only as the recipe for some future entity
+> type that turns out to differ. Details in §0.3 items 1 / 1b and in
+> `scripting_best_practices.md` § INJECT.
 
 **Phase-1 coding gate.** Checks 1–4 need **no new code** — read tooltips on the current
 build. They decide whether cancel-`INJECT`s sum with vanilla's values or overwrite them. If
