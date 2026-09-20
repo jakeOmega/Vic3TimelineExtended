@@ -1966,6 +1966,16 @@ that backs a multiplier**.
 
 ## 15. Exchange rates and the trilemma (phase 4)
 
+> **Read with §0.5 "The bank's own reserve" in hand.** This section and §15A were rebased on
+> phase 3 as it stood *before* the owner moved gold out of the treasury (they came in through
+> PR #340, cut from the phase-3 branch mid-playtest). Since then gold flows move
+> **`te_bank_gold`**, the central bank's own vault, never the treasury: wherever the text below
+> says "reserves" in a gold or peg context — the FX-support AI weight's "reserves < 0.3", the
+> swap line's effect on the hot-money exit — read `te_mon_bank_gold_scaled`, not
+> `scaled_gold_reserves`; and a swap line or lender-of-last-resort article that *lends gold*
+> should credit the vault (the recapitalisation path), not `add_treasury`. Nothing else in the
+> phase 4/5 design depends on which stock the gold sits in.
+
 > **Scoped 2026-09-20** from a second owner interview plus a file survey of the FX buttons,
 > the trade modifier types and the §9.3 cost-push code, then **revised the same day after a
 > review on PR #340** that cross-checked it against phase 3 *as shipped*. The baseline is
@@ -2921,13 +2931,14 @@ carries no status column and is left as written.)
 | Hyperinflation threshold | 50% | 9.2 |
 | Lenders' floor | `era_base` + expected | 10 |
 | Monetisation per level: minting / pressure / premium | 1% GDP/yr (baseline minting ≈ 5.2%) / +2.5pp / +0.5 | 11 |
-| Gold flow per pp / gap clamp / hot-money exit speed / inflow cap | 0.002 × GDP per month / ±5 / ×2 / `scaled_gold_reserves` 1 | 12.2 |
+| Gold flow per pp / gap clamp / hot-money exit speed / inflow cap | 0.002 × GDP per month / ±5 / ×2 / the **bank's vault** at its limit (`te_bank_gold` = 0.2 × GDP — §0.5 "The bank's own reserve"; was the treasury's `scaled_gold_reserves` 1) | 12.2 |
 | Peg crisis threshold | confidence ≤ 20 | 12.3 |
 | World / reference rate fallback | `era_base` | 12.1 |
 | World rate clamp (ruling Q1) | −2 – 10 | 12.1 |
-| Peg-defence reserve shortfall (ruling Q5) | 2pp at zero reserves or in debt → 0 at half the limit; the mandate adds half, rounded **up to a tenth** | 6 |
+| Peg-defence reserve shortfall (ruling Q5) | 2pp with the bank's vault empty → 0 at half its limit (treasury debt no longer counts); the mandate adds half, rounded **up to a tenth** | 6 |
 | Target step: click / ctrl / shift | 1pp / 0.1pp / to the regime limit | 4 |
-| Hot-money exit floor / hot-money cap (rulings Q7, Q8) | a 0.5pp gap / one reserve limit | 12.2 |
+| Hot-money exit floor (ruling Q7) | a 0.5pp gap (Q8's hot-money cap was retired by the hybrid model) | 12.2 |
+| Vault: limit / seed floor / recapitalisation step / AI top-up rule | 0.2 × GDP / 0.5 of the limit / 0.1 of the limit / vault < 0.25 and treasury > 0.5 | 0.5, 12.2 |
 | Peg confidence: start / healthy recovery / crisis cooldown (ruling Q10) | 100 / +1 a month / 24 months | 12.3 |
 | Defend / Suspend / Devalue | world + 4 for 12 months, +40 · 60 months, +2pp premium 5y, credibility lost 10y · confidence 50, revaluation 15% of the reserve limit, +3pp pressure decaying over 2y | 12.3 |
 | FX target: per pp real-rate gap (clamp) / per pp inflation gap (clamp) / per pp cyclical premium | 4.0 (±5) / 2.0 (±10) / 1.5 | 15.1 |
