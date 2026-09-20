@@ -7137,3 +7137,78 @@ te_mon_real_wage_dividend = {
 	country_finance_momentum_monthly_add = 0.03
 	country_sol_expectations_lower_offset_add = -0.02 # REVIEWED 2026-09-20: unit value, multiplied by te_mon_wage_dividend_applied (one unit per +0.1pp of wage pressure) — law_factory_councils alone applies it x5 and renders -0.1
 }
+
+# ============================================================================
+# Monetary Policy — creditor-versus-debtor politics (§13)
+# ============================================================================
+# COUNTRY-scope modifiers, PLAIN (no multiplier, so they may be applied from
+# anywhere — but only step 8b of the monthly update,
+# te_monetary_apply_stance_politics, ever does). Exactly one of the two is on a
+# country at a time, or neither; te_mon_stance_politics_applied says which
+# (0 neither, 1 tight, 2 loose), the same swap-by-variable bookkeeping as the
+# te_inflation_band_* family above and for the same reason — add_modifier and
+# remove_modifier results are not visible inside the effect block that issues
+# them, so has_modifier would be asking about state the swap is in the middle
+# of changing.
+#
+# WHAT SETS THEM. te_mon_stance_months counts months in the DISPLAYED stance
+# band (te_mon_stance_band: 4-5 tight, 1-2 loose), and the modifier arrives at
+# six months on one side (ruling P8, and the rationale on
+# te_mon_stance_politics_months). NOT on te_mon_stance_gap: a modifier keyed
+# to the true gap would appear exactly when |gap| crossed 1 and hand the
+# player the neutral rate. Both loc strings therefore talk about the stance
+# "as the bank reads it", never about the gap.
+#
+# WHO WINS AND WHO LOSES is §13's table, and it is the asset-versus-wage
+# incidence the banking event chain already runs on
+# (docs/audits/strata_social_axis_exceptions.md). A dear money rewards whoever
+# holds the paper claims — landowners living off rents and mortgages, and the
+# shopkeepers whose savings are the family's capital — and punishes everyone
+# who owes: the industrialist rolling over working capital, the farmer with a
+# mortgage, the worker whose job depends on the first two borrowing. Cheap
+# money is the same list upside down.
+#
+#   IG                  tight   loose
+#   ig_landowners         +1     -1
+#   ig_petty_bourgeoisie  +1     -1
+#   ig_industrialists     -1     +1
+#   ig_rural_folk         -1     +1
+#   ig_trade_unions       -1     +1
+#
+# GENTLY: §13 asks for a nudge, not a verdict, and +/-1 is a fifth of what
+# vanilla calls an unhappy interest group (APPROVAL_THRESHOLD_UNHAPPY = -5).
+# The deleted banking_policy_rate_hike modifier carried -2 on industrialists
+# for a single rate decision; this is half that, and it takes half a year of
+# the same stance to earn.
+#
+# THEY STACK WITH THE BAND MODIFIERS, AND THAT IS NOT DOUBLE-COUNTING. §13's
+# "Inflation >= 8%" and "Deflation" rows live on te_inflation_band_* above,
+# keyed to the PRICE LEVEL; these two are keyed to the RATE the bank is
+# holding against it. The worst stacks are coherent rather than accidental: a
+# tight stance held through a deflation reads landowners +2 / rural folk -3 /
+# trade unions -3 (dear money on top of falling prices is the debtor's
+# nightmare twice over), and a loose stance held through 8%+ inflation reads
+# petty bourgeoisie -4 / landowners -3 (the savers watch the bank decline to
+# defend them). Retuning either family means re-reading both.
+#
+# ONE ICON FOR BOTH, deliberately: the fist is the money question turning
+# political, which is what both of these are. Neither stance is the good one —
+# each has two winners and three losers, or three and two — so a positive icon
+# on one of them would be the modifier list taking sides.
+te_mon_stance_politics_tight = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	interest_group_ig_landowners_approval_add = 1
+	interest_group_ig_petty_bourgeoisie_approval_add = 1
+	interest_group_ig_industrialists_approval_add = -1
+	interest_group_ig_rural_folk_approval_add = -1
+	interest_group_ig_trade_unions_approval_add = -1
+}
+
+te_mon_stance_politics_loose = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	interest_group_ig_landowners_approval_add = -1
+	interest_group_ig_petty_bourgeoisie_approval_add = -1
+	interest_group_ig_industrialists_approval_add = 1
+	interest_group_ig_rural_folk_approval_add = 1
+	interest_group_ig_trade_unions_approval_add = 1
+}

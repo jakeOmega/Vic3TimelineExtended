@@ -24,11 +24,13 @@
 # ORDER (§16.2): 0 init -> 1 regime code -> 1b monetisation -> 2 target ->
 # 3 drift -> 4 no-dial derived rate -> 5 premium -> 6 inflation -> 6c band
 # modifier -> 6d real-wage dividend -> 7 rate paid -> 8 neutral rate + stance ->
-# 9 re-apply the interest modifier. Step 10 is phase 3. Steps 1b, 6c and 6d are
-# numbered rather than renumbering §16.2's list: 1b settles an INPUT the later
-# steps read (§11's monetisation level), the way step 1 settles the regime code,
-# and 6c and 6d are the engine-write half of step 6 (6a is the basket and 6b the
-# inflation loop).
+# 8b creditor-versus-debtor politics -> 9 re-apply the interest modifier. Step
+# 10 is phase 3. Steps 1b, 6c, 6d and 8b are numbered rather than renumbering
+# §16.2's list: 1b settles an INPUT the later steps read (§11's monetisation
+# level), the way step 1 settles the regime code, 6c and 6d are the engine-write
+# half of step 6 (6a is the basket and 6b the inflation loop), and 8b is the
+# engine-write half of step 8 — it consumes the band step 8 has just written
+# and must not run before it.
 #
 # THE RATE STACK READS INFLATION (§4, §6, §7.6, §8, §10). Step 6 computes the
 # basket, core, headline and expected inflation, and the rest of the stack is
@@ -164,6 +166,12 @@ te_monetary_monthly_update = {
 
 	# --- 8. hidden neutral rate, stance gap, displayed band -----------------
 	te_monetary_update_stance = yes
+
+	# --- 8b. the politics a sustained stance earns (§13) --------------------
+	# After step 8, and for the same reason 6c follows 6: it counts months of
+	# the DISPLAYED band, so it has to see the one step 8 has just written
+	# rather than last month's.
+	te_monetary_apply_stance_politics = yes
 
 	# --- 9. write it into the engine ----------------------------------------
 	te_monetary_apply_interest_modifiers = yes
@@ -369,6 +377,12 @@ te_monetary_init_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_mon_stance_months } }
 		set_variable = { name = te_mon_stance_months value = 0 }
+	}
+	# 0 means "neither §13 politics modifier is on the country", which is what a
+	# fresh country and a save from before this step both are.
+	if = {
+		limit = { NOT = { has_variable = te_mon_stance_politics_applied } }
+		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 	}
 	if = {
 		limit = { NOT = { has_variable = te_mon_wage_dividend_applied } }
@@ -1713,6 +1727,131 @@ te_monetary_update_stance = {
 	else = {
 		set_variable = { name = te_mon_stance_gap value = 0 }
 		set_variable = { name = te_mon_stance_band value = 3 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# STEP 8b — creditor-versus-debtor politics (§13)
+# ----------------------------------------------------------------------------
+# Scope: country. Runs immediately after step 8, off the band step 8 wrote.
+#
+# WHAT IT IS. A rate decision has winners and losers, and §13 says they should
+# eventually notice. te_mon_stance_months counts months of the same stance;
+# once six of them have accumulated on one side, the country carries
+# te_mon_stance_politics_tight or te_mon_stance_politics_loose (defined, with
+# the §13 table and the sizing, in common/static_modifiers/extra_modifiers.txt).
+# One month's tightening buys nothing: this is the politics of a POLICY, not of
+# a meeting.
+#
+# IT COUNTS THE DISPLAYED BAND, NEVER THE GAP (ruling P8). te_mon_stance_gap is
+# hidden state (§8), and §13's literal test — |gap| >= 1 — would put a modifier
+# on the country exactly when the gap crossed 1, which inverts to the neutral
+# rate to within the estimation error. te_mon_stance_band is what the bank
+# itself reads (gap - error) and what the dashboard already shows: bands 4 and
+# 5 are its tight half, 1 and 2 its loose half, 3 the middle. So the politics
+# are keyed to a number the player can already see, and the two modifiers' loc
+# says "as the bank reads it" for the same reason.
+#
+# THE COUNTER, in three cases:
+#
+#   band >= 4   count up, after zeroing a counter that was counting DOWN
+#   band <= 2   count down, after zeroing a counter that was counting UP
+#   band 3      walk one step back toward 0, whichever side it is on
+#
+# A REVERSAL IS INSTANT, A LULL IS SLOW. Crossing from tight to loose zeroes the
+# counter in one month, because the stance the politics were about is not merely
+# paused — it has been replaced by its opposite, and nobody is still angry about
+# dear money in the month the bank starts giving it away. Drifting back to the
+# middle band is the other case: the stance has stopped, the consequences have
+# not, and te_mon_stance_months_cap (11 — five months past the threshold, so the
+# fade is exactly as long as the climb) makes both earning the politics and
+# losing them cost six months however long the stance ran. Without the cap a
+# decade of tight money would take a decade to unwind.
+#
+# ONLY A COUNTRY WITH A DIAL. Step 8 forces a no-dial country's band to 3, so a
+# bankless, dollarised or command-economy country would already decay to 0 on
+# its own — but slowly, and while still carrying a modifier it can no longer
+# do anything about. Losing the dial is not a stance, so the counter is zeroed
+# outright and the modifier comes off on the same pulse.
+#
+# DECIDED FROM VARIABLES, NEVER FROM has_modifier, and for the reason written
+# out at length on step 6c: add_modifier and remove_modifier results are not
+# visible inside the effect block that issues them, so a has_modifier read here
+# would be asking about state this effect is in the middle of changing.
+# te_mon_stance_politics_applied is the bookkeeping — 0 neither, 1 tight,
+# 2 loose — and the swap issues at most one remove and one add a month.
+#
+# NO FIRST-RUN SWEEP, on step 6c's reasoning: these are COUNTRY modifiers on the
+# country itself, and a country that has never run this step carries the 0 from
+# step 0 and no politics modifier — the two agree.
+te_monetary_apply_stance_politics = {
+	# --- the counter --------------------------------------------------------
+	if = {
+		limit = { te_mon_has_dial = no }
+		set_variable = { name = te_mon_stance_months value = 0 }
+	}
+	else_if = {
+		limit = { var:te_mon_stance_band >= 4 }
+		if = {
+			limit = { var:te_mon_stance_months < 0 }
+			set_variable = { name = te_mon_stance_months value = 0 }
+		}
+		change_variable = { name = te_mon_stance_months add = 1 }
+		if = {
+			limit = { var:te_mon_stance_months > te_mon_stance_months_cap }
+			set_variable = { name = te_mon_stance_months value = te_mon_stance_months_cap }
+		}
+	}
+	else_if = {
+		limit = { var:te_mon_stance_band <= 2 }
+		if = {
+			limit = { var:te_mon_stance_months > 0 }
+			set_variable = { name = te_mon_stance_months value = 0 }
+		}
+		change_variable = { name = te_mon_stance_months subtract = 1 }
+		if = {
+			limit = { var:te_mon_stance_months < te_mon_stance_months_cap_neg }
+			set_variable = { name = te_mon_stance_months value = te_mon_stance_months_cap_neg }
+		}
+	}
+	else = {
+		# Band 3 — the stance has stopped. Fade, one month per month.
+		if = {
+			limit = { var:te_mon_stance_months > 0 }
+			change_variable = { name = te_mon_stance_months subtract = 1 }
+		}
+		else_if = {
+			limit = { var:te_mon_stance_months < 0 }
+			change_variable = { name = te_mon_stance_months add = 1 }
+		}
+	}
+
+	# --- what belongs on the country this month -----------------------------
+	if = {
+		limit = { var:te_mon_stance_months >= te_mon_stance_politics_months }
+		set_variable = { name = te_mon_work value = 1 }
+	}
+	else_if = {
+		limit = { var:te_mon_stance_months <= te_mon_stance_politics_months_neg }
+		set_variable = { name = te_mon_work value = 2 }
+	}
+	else = {
+		set_variable = { name = te_mon_work value = 0 }
+	}
+
+	if = {
+		limit = { NOT = { var:te_mon_stance_politics_applied = var:te_mon_work } }
+
+		# Take off what we put on last month.
+		if = { limit = { var:te_mon_stance_politics_applied = 1 } remove_modifier = te_mon_stance_politics_tight }
+		else_if = { limit = { var:te_mon_stance_politics_applied = 2 } remove_modifier = te_mon_stance_politics_loose }
+
+		# Put on this month's, if there is one.
+		if = { limit = { var:te_mon_work = 1 } add_modifier = { name = te_mon_stance_politics_tight } }
+		else_if = { limit = { var:te_mon_work = 2 } add_modifier = { name = te_mon_stance_politics_loose } }
+
+		set_variable = { name = te_mon_stance_politics_applied value = var:te_mon_work }
 	}
 }
 

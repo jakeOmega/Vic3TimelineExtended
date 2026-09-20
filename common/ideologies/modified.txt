@@ -89,6 +89,13 @@ REPLACE:ideology_paternalistic = {
 	lawgroup_army_model = {
 		law_private_military_contractors = disapprove
 	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = disapprove
 		law_neocameralism = disapprove
@@ -433,6 +440,13 @@ REPLACE:ideology_liberal = {
 		law_strong_privacy_rights = strongly_approve
 		law_intrusive_surveillance = strongly_disapprove
 	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = disapprove
+		law_gold_standard = neutral
+		law_fiat_currency = approve
+		law_digital_currency = strongly_approve
+		law_decentralized_cryptocurrency = disapprove
+	}
 	lawgroup_citizenship = {
 		law_multicultural = strongly_disapprove
 		law_ethnostate = strongly_disapprove
@@ -602,6 +616,13 @@ REPLACE:ideology_liberal_modern = {
 		law_moderate_data_privacy = approve
 		law_strong_privacy_rights = strongly_approve
 		law_intrusive_surveillance = strongly_disapprove
+	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = disapprove
+		law_gold_standard = neutral
+		law_fiat_currency = approve
+		law_digital_currency = strongly_approve
+		law_decentralized_cryptocurrency = disapprove
 	}
 	lawgroup_citizenship = {
 		law_multicultural = strongly_disapprove
@@ -1835,6 +1856,13 @@ REPLACE:ideology_populist = {
 		law_moderate_data_privacy = approve
 		law_strong_privacy_rights = neutral
 		law_intrusive_surveillance = disapprove
+	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = disapprove
+		law_gold_standard = disapprove
+		law_fiat_currency = approve
+		law_digital_currency = approve
+		law_decentralized_cryptocurrency = disapprove
 	}
 	lawgroup_distribution_of_power = {
 		law_algorithmic_governance = disapprove
@@ -5480,6 +5508,13 @@ REPLACE:ideology_proletarian = {
 	lawgroup_army_model = {
 		law_private_military_contractors = strongly_disapprove
 	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = disapprove
+		law_gold_standard = disapprove
+		law_fiat_currency = approve
+		law_digital_currency = approve
+		law_decentralized_cryptocurrency = disapprove
+	}
 	lawgroup_taxation = {
 		law_per_capita_based_taxation = disapprove
 		law_land_based_taxation = neutral
@@ -7431,6 +7466,13 @@ REPLACE:ideology_reactionary = {
 		law_comprehensive_rights = disapprove
 		law_full_equality_and_protection = strongly_disapprove
 	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = disapprove
 		law_neocameralism = neutral
@@ -7745,6 +7787,13 @@ REPLACE:ideology_republican_paternalistic = {
 		law_federal_system = approve
 		law_devolution = disapprove
 	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = approve
 		law_neocameralism = disapprove
@@ -7882,6 +7931,13 @@ REPLACE:ideology_scholar_paternalistic = {
 		law_federal_system = neutral
 		law_devolution = disapprove
 	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = neutral
 		law_neocameralism = disapprove
@@ -7961,6 +8017,13 @@ REPLACE:ideology_junker_paternalistic = {
 		law_federal_system = neutral
 		law_devolution = disapprove
 	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = neutral
 		law_neocameralism = disapprove
@@ -8034,6 +8097,13 @@ REPLACE:ideology_papal_paternalistic = {
 		law_unitary_state = approve
 		law_federal_system = neutral
 		law_devolution = disapprove
+	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
 	}
 	lawgroup_governance_principles = {
 		law_direct_democracy = neutral
@@ -10736,6 +10806,13 @@ REPLACE:ideology_isolationist = {
 }
 
 INJECT:ideology_agrarian = {
+	lawgroup_monetary_policy = {
+		law_commodity_money = disapprove
+		law_gold_standard = disapprove
+		law_fiat_currency = approve
+		law_digital_currency = approve
+		law_decentralized_cryptocurrency = disapprove
+	}
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = neutral
 		law_ministry_of_the_environment = approve
@@ -11112,6 +11189,13 @@ REPLACE:ideology_agrarian_jeffersonian = {
 	lawgroup_ministry_of_the_environment = {
 		law_no_ministry_of_the_environment = neutral
 		law_ministry_of_the_environment = approve
+	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = disapprove
+		law_gold_standard = disapprove
+		law_fiat_currency = approve
+		law_digital_currency = approve
+		law_decentralized_cryptocurrency = disapprove
 	}
 	lawgroup_economic_system = {
 		law_agrarianism = approve
@@ -13550,6 +13634,66 @@ REPLACE:ideology_legitimist_movement = {
 		law_anti_strike_laws = neutral
 		law_corporatized_unions = neutral
 		law_right_to_associate = disapprove
+	}
+}
+
+INJECT:ideology_hierarchic = {
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
+}
+
+INJECT:ideology_japan_hierarchic = {
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
+}
+
+INJECT:ideology_japan_paternalistic = {
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
+}
+
+INJECT:ideology_magnatial = {
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
+}
+
+INJECT:ideology_carlist_ig = {
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
+}
+
+INJECT:ideology_moderantist = {
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
 	}
 }
 

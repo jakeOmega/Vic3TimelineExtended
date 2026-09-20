@@ -192,14 +192,26 @@
 #                                                   printed in the debug read-out so the
 #                                                   §17 check-12 units question can be
 #                                                   settled from a running game
-#   te_mon_stance_months    signed counter          how many consecutive months the
+#   te_mon_stance_months    +/- te_mon_stance_months_cap
+#                                                   how many consecutive months the
 #                                                   DISPLAYED band has been loose (<= 2,
 #                                                   counts negative) or tight (>= 4,
-#                                                   counts positive); reset to 0 in the
-#                                                   middle. §13's sustained-stance
+#                                                   counts positive); reset to 0 when the
+#                                                   stance REVERSES, and walked one step
+#                                                   a month back toward 0 in band 3.
+#                                                   Written by step 8b
+#                                                   (te_monetary_apply_stance_politics),
+#                                                   nothing else. §13's sustained-stance
 #                                                   politics key on this rather than on
 #                                                   the true gap, which would print r*
 #                                                   (ruling P8)
+#   te_mon_stance_politics_applied 0 to 2           which member of the §13 stance-politics
+#                                                   pair is on the country right now:
+#                                                   0 neither, 1 te_mon_stance_politics_tight,
+#                                                   2 te_mon_stance_politics_loose. Same
+#                                                   swap-by-variable bookkeeping as
+#                                                   te_inflation_band_applied; owned by
+#                                                   step 8b
 #   te_mon_wage_dividend_applied >= 0               the value last written into
 #                                                   te_mon_real_wage_dividend's
 #                                                   multiplier (units of +0.1pp of wage
@@ -1131,6 +1143,53 @@ te_mon_currency_reform_reset = {
 # which is the historical fact a currency reform records rather than causes.
 te_mon_currency_reform_pool_wipe = {
 	value = investment_pool
+	multiply = -1
+}
+
+
+# --- §13's sustained stance -------------------------------------------------
+
+# How many months the DISPLAYED band has to hold one side before the creditor
+# -versus-debtor politics arrive. §13's own figure, and the only one it gives.
+#
+# WHY THE DISPLAYED BAND AND NOT THE GAP (ruling P8). §13 words the test as
+# "|gap| >= 1 for six months", but the gap is hidden state: a modifier that
+# appeared exactly when |gap| crossed 1 would tell the player where r* is to
+# within the width of the estimation error. te_mon_stance_band is what the
+# bank itself reads (gap - error, §0.1), it is already on the dashboard, and
+# bands 4-5 / 1-2 are its tight and loose halves — so the politics key on it
+# and print nothing new.
+te_mon_stance_politics_months = {
+	value = 6
+}
+
+# The bound on te_mon_stance_months in both directions, and so the hysteresis
+# on the other side of the threshold: a stance that has held for a year or for a
+# decade both take the same six months in the middle band to unwind, rather than
+# a decade-long stance taking a decade.
+#
+# WHY 11 AND NOT 12. The counter may run FIVE months past the threshold, so the
+# fade is exactly as long as the climb: from 0 it takes six pulses to reach 6 and
+# earn the politics, and from 11 it takes six pulses to fall below 6 and lose
+# them (11 - 6 = 5, and the sixth step is the one that drops under the line). A
+# cap of twice the threshold would read symmetrical and fade in seven. §13 names
+# no figure; this is the one that makes the loc's "six months" true in both
+# directions.
+#
+# A REVERSAL IS NOT SUBJECT TO IT. Crossing from tight to loose zeroes the
+# counter outright (step 8b), so the modifier comes off the month the stance
+# flips; the cap only governs the slow fade through band 3.
+te_mon_stance_months_cap = {
+	value = 11
+}
+
+te_mon_stance_months_cap_neg = {
+	value = te_mon_stance_months_cap
+	multiply = -1
+}
+
+te_mon_stance_politics_months_neg = {
+	value = te_mon_stance_politics_months
 	multiply = -1
 }
 
