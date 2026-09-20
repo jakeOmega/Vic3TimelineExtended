@@ -866,6 +866,28 @@ quarter of revenue" sizing argument is moot — so the peg bites through confide
 crisis, the carry and whatever the player chooses to recapitalise. §12.2's `add_treasury`
 paragraph and §17 check 11 are superseded by this section.
 
+#### Balance pass on the structural tier (owner, 2026-09-20)
+
+Three sources of `country_credit_standing_add` were resized together, because between them they
+put every recognised country on the floor by the late game and did nothing at all for a great
+power after era 3:
+
+- **`institution_national_bank` −0.3 → −0.15 a level** — §7.5 judged it against vanilla's cap of
+  five levels; this mod's is nine.
+- **The five mod techs −1.8 → −1.35 in total, and moved** off `containerization`,
+  `social_justice_movements`, `decline_of_organized_religion` and `mind_backups` (inherited, in
+  place, from the old `country_loan_interest_rate_mult` sites) onto techs that are about finance
+  or the machinery of it. `artificial_intelligence` was considered for the last and rejected as
+  already the strongest tech in the mod; `machine_learning` carries it instead.
+- **The last two lower the FLOOR by 0.1pp each**, so late finance tech is worth something to a
+  country already on it — which is every great power from about era 3.
+- **The access ladder's last 1.5 points are back-loaded** (0.25 / 0.5 / 0.75). The first two steps
+  are pinned by §7.4: what remains after them is what a tier-1 country carries in 1836.
+
+Net: late discounts total −2.7 (−1.35 techs, −1.35 bank) rather than −4.5, so an insignificant
+power (+3 rank) no longer reaches the floor on tech and the bank alone, and §7.4's late-game GP row
+reads `0.5 − 0.5 − 1.35 − 1.35 = −2.7 → floor 0.3` rather than `−3.3 → floor 0.5`.
+
 #### First playtest — owner, 2026-09-20 (Britain and France, 1836, game 1.14.3)
 
 Read from the dashboard and `te_debug_monetary.8`; `debug.log` / `error.log` carried nothing
@@ -2305,11 +2327,11 @@ carries no status column and is left as written.)
 | Rate-paid clamp | 0.5 – 60 | 4 |
 | Structural premium floor (CBI); cyclical added after it | 0.5 (0.25) | 7 |
 | Rank: decentralized | +10 | 7.3 |
-| Mod techs (structural) | −0.4 ×4, −0.2 (era 12) | 7.5 |
+| Mod techs (structural) | **−0.3 ×4, −0.15** = −1.35 (was −0.4 ×4, −0.2 = −1.8), re-homed 2026-09-20 to `keynesian_economics` (6), `computer_networks` (8), `knowledge_economy` (9), `machine_learning` (10, the −0.15) and `universal_digital_identity` (11); the last two also carry `country_credit_standing_floor_add` −0.1pp each, so the floor goes 0.5 → 0.3 (CBI 0.25 → 0.05) | 7.5 |
 | Delegated target rounding / hysteresis | integer / 0.75 | 4 |
 | Gold / CBI credibility | −1.0 / −0.5 | 5 |
 | `_mult` → pp conversion | × 20 | 7.5 |
-| Access base / techs / no exchange | +8 / −4, −2.5, −0.5 ×3 / +2 | 7.2 |
+| Access base / techs / no exchange | +8 / −4, −2.5, then **−0.25, −0.5, −0.75** (eras 3–5; was −0.5 ×3 — back-loaded 2026-09-20; the first two cannot move without moving §7.4's 1836 rows) / +2 | 7.2 |
 | Rank table | 0.5 · 1 · 2 · 3 · 4 · 6 · 8 | 7.3 |
 | Debt-load premium | 0 → +4 over `scaled_debt` 0.25 → 1.0 | 7.6 |
 | Stance per pp: momentum / bubble / pool | 0.125 / 0.75 / 0.01; gap clamp ±4 | 8 |

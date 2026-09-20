@@ -609,6 +609,11 @@ te_mon_drift_step_threshold_neg = {
 #
 # Consumed by te_monetary_monthly_update step 5 as part of the STRUCTURAL tier,
 # i.e. before the 0.5pp (0.25pp under CBI) floor is applied.
+# THE LAST 1.5 POINTS ARE BACK-LOADED (0.25 / 0.5 / 0.75 over eras 3-5, not
+# 0.5 each — owner, 2026-09-20), so a developed country still has something
+# left to earn from finance techs for longer. The first two steps cannot move:
+# what is left after banking + central_banking is exactly what a tier-1 country
+# carries in 1836, and §7.4's Britain and USA rows are built on that 1.5.
 te_mon_access_premium = {
 	value = 8
 	if = {
@@ -621,7 +626,7 @@ te_mon_access_premium = {
 	}
 	if = {
 		limit = { has_technology_researched = mutual_funds }
-		subtract = 0.5
+		subtract = 0.25
 	}
 	if = {
 		limit = { has_technology_researched = international_exchange_standards }
@@ -629,7 +634,7 @@ te_mon_access_premium = {
 	}
 	if = {
 		limit = { has_technology_researched = modern_financial_instruments }
-		subtract = 0.5
+		subtract = 0.75
 	}
 	if = {
 		limit = { NOT = { has_technology_researched = stock_exchange } }
