@@ -5,6 +5,22 @@
 # migration exist (i.e., after all players have loaded and saved at
 # least once on the new version).
 # Also delete: common/on_actions/legacy_modifier_cleanup.txt
+#
+# ── PENDING REMOVAL: banking_policy_rate_hike (added 2026-09-19) ──
+# The "Raise Policy Rate" banking tool was deleted in
+# docs/systems/monetary_policy_design.md §18; only its static modifier survives,
+# so that a save made while the tool was active can still be cleaned up. Remove
+# ALL of the following together, one release after 2026-09-19 — no earlier, or a
+# pre-§18 save keeps 2 intervention points reserved with no way to release them:
+#   1. the `banking_policy_rate_hike` block in
+#      common/static_modifiers/extra_modifiers.txt
+#   2. its two loc keys — `banking_policy_rate_hike` in
+#      localization/english/te_miscellaneous_l_english.yml and
+#      `banking_policy_rate_hike_desc` in te_concepts_l_english.yml
+#   3. the one-shot migration `if` at the top of je_banking_cycle's
+#      on_monthly_pulse in common/journal_entries/je_banking.txt
+#   4. the `banking_policy_rate_hike` line in legacy_je_modifier_cleanup_effect
+#      below
 ########################################
 
 legacy_je_modifier_cleanup_effect = {

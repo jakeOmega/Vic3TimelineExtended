@@ -39,16 +39,9 @@ te_history_marker_tooltip = {
 					limit = { has_variable = te_hist_mk_crash_contagion }
 					custom_tooltip = te_hist_mk_crash_contagion_tt
 				}
-				if = {
-					limit = { has_variable = te_hist_mk_on_cb_policy_rate_hike }
-					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_policy_rate_hike
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_off_cb_policy_rate_hike }
-					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_policy_rate_hike
-				}
+				# The "Raise Policy Rate" marker rows are gone with the tool
+				# (monetary_policy_design.md §18). te_hist_mk_on/off_cb_policy_rate_hike
+				# left on samples in old saves are harmless orphans: nothing reads them.
 				if = {
 					limit = { has_variable = te_hist_mk_on_cb_open_market_ops }
 					custom_tooltip = te_hist_mk_enabled

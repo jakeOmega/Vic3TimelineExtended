@@ -42,8 +42,6 @@
 	# These stay declared here: their `ai_chance` blocks are the AI's only path to
 	# banking policy, and they remain the player's fallback controls next to the
 	# dashboard above.
-	scripted_button = cb_policy_rate_hike
-	scripted_button = cb_disable_policy_rate_hike
 	scripted_button = cb_open_market_ops
 	scripted_button = cb_disable_open_market_ops
 	scripted_button = cb_countercyclical_buffer
@@ -219,6 +217,20 @@
 
 	on_monthly_pulse = {
 		effect = {
+			# SAVE MIGRATION — added 2026-09-19, remove after one release.
+			# The "Raise Policy Rate" tool was deleted (monetary_policy_design.md
+			# §18) and with it the button that switched it off. A save carrying
+			# the modifier would otherwise reserve 2 intervention points forever,
+			# so strip it here; the points come back on the next tick, because
+			# add_modifier/remove_modifier results are not visible inside the
+			# same effect block. Runs first so the rest of the pulse sees the
+			# migrated state. The eventual removal of the static modifier itself
+			# is tracked in common/scripted_effects/legacy_modifier_cleanup.txt.
+			if = {
+				limit = { je:je_banking_cycle ?= { has_modifier = banking_policy_rate_hike } }
+				je:je_banking_cycle = { remove_modifier = banking_policy_rate_hike }
+			}
+
 			banking_cycle_update_fiscal_policy = yes
 			banking_cycle_advance_variables = yes
 			banking_cycle_check_and_execute_crash = yes

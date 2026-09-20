@@ -772,6 +772,10 @@ banking_event_sovereign_wealth_fund_cost = {
 }
 
 # ----- Interventions (buttons spend points here via negative adds) -----
+# KEPT FOR SAVE MIGRATION ONLY (2026-09-19). The "Raise Policy Rate" tool that
+# applied this is deleted (monetary_policy_design.md §18); nothing adds it any
+# more, and je_banking_cycle's monthly pulse strips it from saves that still
+# carry it. Removal checklist: common/scripted_effects/legacy_modifier_cleanup.txt.
 banking_policy_rate_hike = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	country_banking_intervention_max_add = -2

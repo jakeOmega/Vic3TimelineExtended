@@ -32,7 +32,11 @@ banking_points_med  = { "modifier:country_banking_intervention_max_add" >= 3 "mo
 banking_points_high = { "modifier:country_banking_intervention_max_add" >= 6 }
 
 # ----- Active/conflicting tools (quick checks) -----
-banking_tool_rate_hike_active = { je:je_banking_cycle ?= { has_modifier = banking_policy_rate_hike } }
+# banking_tool_rate_hike_active is gone with the "Raise Policy Rate" tool
+# (monetary_policy_design.md §18). Its callers now ask banking_stance_is_tight
+# (common/scripted_triggers/te_monetary_triggers.txt) instead — and only from
+# `ai_chance`, because the stance gap is hidden state that must never render
+# into a tooltip (§8).
 banking_tool_omo_active       = { je:je_banking_cycle ?= { has_modifier = banking_open_market_ops } }
 banking_tool_buffer_active    = { je:je_banking_cycle ?= { has_modifier = banking_countercyclical_capital_buffer } }
 banking_tool_deposit_active   = { je:je_banking_cycle ?= { has_modifier = banking_expand_deposit_guarantee } }

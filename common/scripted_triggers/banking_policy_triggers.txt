@@ -8,21 +8,16 @@
 # Disable-side eligibility reuses the `banking_tool_*_active` family in
 # common/scripted_triggers/market_triggers.txt.
 
-banking_possible_cb_policy_rate_hike = {
-	custom_tooltip = {
-		text = BANKING_POINTS_2
-		modifier:country_banking_intervention_max_add >= 2
-	}
-	NOT = { je:je_banking_cycle = { has_modifier = banking_open_market_ops } }
-}
-
+# The "Raise Policy Rate" eligibility trigger used to sit above this one, and
+# OMO used to exclude itself while that tool was active. Both are gone with the
+# tool (monetary_policy_design.md §18); the block below keeps its own points and
+# law gates.
 banking_possible_cb_open_market_ops = {
 	modifier:country_can_use_open_market_ops_bool = yes
 	custom_tooltip = {
 		text = BANKING_POINTS_4
 		modifier:country_banking_intervention_max_add >= 4
 	}
-	NOT = { je:je_banking_cycle = { has_modifier = banking_policy_rate_hike } }
 	custom_tooltip = {
 		text = banking_button_locked_by_law_tt
 		modifier:country_banking_lock_open_market_ops_bool = no

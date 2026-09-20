@@ -285,25 +285,6 @@ flowcontainer = {
 	}
 
 	banking_dash_policy_row = {
-		visible = "[GetScriptedGui('banking_dash_disable_cb_policy_rate_hike').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-		tooltip = "banking_dash_tt_cb_policy_rate_hike"
-		blockoverride "row_label" {
-			text = "CB_POLICY_RATE_HIKE"
-		}
-		blockoverride "row_cost" {
-			text = "banking_dash_cost_cb_policy_rate_hike"
-		}
-		blockoverride "enable_action" {
-			datacontext = "[GetScriptedGui('banking_dash_enable_cb_policy_rate_hike')]"
-			text = "banking_dash_btn_enable"
-		}
-		blockoverride "disable_action" {
-			datacontext = "[GetScriptedGui('banking_dash_disable_cb_policy_rate_hike')]"
-			text = "banking_dash_btn_disable"
-		}
-	}
-
-	banking_dash_policy_row = {
 		visible = "[GetScriptedGui('banking_dash_disable_cb_open_market_ops').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		tooltip = "banking_dash_tt_cb_open_market_ops"
 		blockoverride "row_label" {
@@ -894,25 +875,6 @@ flowcontainer = {
 			parentanchor = hcenter
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_monetary'))]"
-
-			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_enable_cb_policy_rate_hike').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				tooltip = "banking_dash_tt_cb_policy_rate_hike"
-				blockoverride "row_label" {
-					text = "CB_POLICY_RATE_HIKE"
-				}
-				blockoverride "row_cost" {
-					text = "banking_dash_cost_cb_policy_rate_hike"
-				}
-				blockoverride "enable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_enable_cb_policy_rate_hike')]"
-					text = "banking_dash_btn_enable"
-				}
-				blockoverride "disable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_disable_cb_policy_rate_hike')]"
-					text = "banking_dash_btn_disable"
-				}
-			}
 
 			banking_dash_policy_row = {
 				visible = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"

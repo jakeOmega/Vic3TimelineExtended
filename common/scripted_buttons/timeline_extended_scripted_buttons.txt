@@ -6,53 +6,14 @@
 # their `ai_chance` (confirmed in play testing, 2026-09-18). Do not remove them,
 # and do not drop the is_ai line without restoring a player surface.
 # ----------------------------------------------------------------------------
-cb_policy_rate_hike = {
-	name = "CB_POLICY_RATE_HIKE"
-	desc = "CB_POLICY_RATE_HIKE_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_rate_hike_active = no }
-	ai_chance = {
-		value = 0
-		# Core: use when hot / bubble risk high
-		if = { limit = { banking_cycle_is_frenzy = yes } add = 45 }
-		if = { limit = { banking_cycle_bubble_risk_high = yes } add = 25 }
-		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 15 }
-
-		# Law flavor: prefer if proper CB
-		if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
-
-		# Resources
-		if = { limit = { banking_points_high = yes } add = 10 }
-		if = { limit = { banking_points_low = yes } add = -15 }
-
-		# Avoid when weak
-		if = { limit = { banking_cycle_is_recession = yes } add = -80 }
-		if = { limit = { banking_tool_omo_active = yes } add = -10 }  # don't fight OMO
-		if = { limit = { banking_tool_eliq_active = yes } add = -40 } # don't hike during emergency
-	}
-
-
-	possible = { banking_possible_cb_policy_rate_hike = yes }
-
-	effect = { banking_effect_cb_policy_rate_hike = yes }
-}
-
-cb_disable_policy_rate_hike = {
-	name = "CB_DISABLE_POLICY_RATE_HIKE"
-	desc = "CB_DISABLE_POLICY_RATE_HIKE_DESC"
-	visible = { is_ai = yes banking_tool_rate_hike_active = yes }
-	ai_chance = {
-		value = 0
-		if = { limit = { banking_cycle_is_recession = yes } add = 85 }
-		if = { limit = { banking_cycle_is_downturn = yes } add = 55 }
-		if = { limit = { banking_cycle_is_panic = yes } add = 40 }
-		if = { limit = { banking_cycle_risk_falling = yes } add = 20 }
-		if = { limit = { banking_tool_omo_active = yes } add = 20 }
-		if = { limit = { banking_tool_eliq_active = yes } add = 35 }
-	}
-	possible = { banking_tool_rate_hike_active = yes }
-	effect = { banking_effect_cb_disable_policy_rate_hike = yes }
-}
-
+# The on/off "Raise Policy Rate" pair that used to open this file is GONE
+# (monetary_policy_design.md §18). The policy rate is now a continuously set
+# country variable (te_policy_rate), and the AI steers it through its mandate
+# formula in common/scripted_effects/te_monetary_effects.txt — the old button's
+# frenzy/boom/recession weights live on as that formula's cycle_lean term (§6).
+# Where a weight below used to read `banking_tool_rate_hike_active`, it now reads
+# `banking_stance_is_tight`: the same question ("is the central bank leaning
+# against the cycle right now?"), asked of the rate instead of a toggle.
 cb_open_market_ops = {
 	name = "CB_OPEN_MARKET_OPS"
 	desc = "CB_OPEN_MARKET_OPS_DESC"
@@ -76,7 +37,7 @@ cb_open_market_ops = {
 		# Avoid when hot or contradictory
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
 
 		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
 		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
@@ -97,7 +58,7 @@ cb_disable_open_market_ops = {
 		if = { limit = { banking_cycle_is_boom = yes } add = 25 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = 30 }
-		if = { limit = { banking_tool_rate_hike_active = yes } add = 35 }
+		if = { limit = { banking_stance_is_tight = yes } add = 35 } # stop easing while the rate is tight
 	}
 	possible = { banking_tool_omo_active = yes }
 	effect = { banking_effect_cb_disable_open_market_ops = yes }
@@ -391,7 +352,7 @@ cb_fx_devaluation = {
 		# Avoid when hot or contradictory
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
 
 		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
 		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
@@ -411,7 +372,7 @@ cb_disable_fx_devaluation = {
 		if = { limit = { banking_cycle_is_expansion = yes } add = 15 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
-		if = { limit = { banking_tool_rate_hike_active = yes } add = 25 }
+		if = { limit = { banking_stance_is_tight = yes } add = 25 } # stop easing while the rate is tight
 		if = { limit = { je:je_banking_cycle = { has_modifier = banking_fx_support } } add = 30 }
 	}
 	possible = { banking_tool_fx_devaluation_active = yes }
@@ -441,7 +402,7 @@ cb_fx_support = {
 		# Avoid when hot or contradictory
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
 
 		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
 		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
@@ -461,7 +422,7 @@ cb_disable_fx_support = {
 		if = { limit = { banking_cycle_is_expansion = yes } add = 15 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
-		if = { limit = { banking_tool_rate_hike_active = yes } add = 20 }
+		if = { limit = { banking_stance_is_tight = yes } add = 20 } # stop easing while the rate is tight
 		if = { limit = { je:je_banking_cycle = { has_modifier = banking_fx_devaluation } } add = 30 }
 	}
 	possible = { banking_tool_fx_support_active = yes }
@@ -491,7 +452,7 @@ cb_capital_controls_outflow = {
 		# Avoid when hot or contradictory
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
 
 		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
 		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
@@ -540,7 +501,7 @@ cb_fx_swap_lines = {
 		# Avoid when hot or contradictory
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
 
 		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
 		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
@@ -590,7 +551,7 @@ cb_export_credit_facility = {
 		# Avoid when hot or contradictory
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_tool_rate_hike_active = yes } add = -30 }
+		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
 
 		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
 		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
