@@ -1761,7 +1761,7 @@ currency crisis reaches the floor.
 | Regime | `te_fx_index` |
 |---|---|
 | `law_gold_standard`, `law_commodity_money` | **par, 100**, by definition — convertibility *is* the exchange rate. Target = 100, so any displacement drifts home |
-| §12.3 *Devalue the peg* | sets the index to **85** (and re-seeds nothing): target stays 100, but on this path the return speed is **1/36**, not 1/12 — a devaluation's real edge erodes as domestic prices catch up, over about three years. This *is* that option's "export boost", which stops being a separate modifier |
+| §12.3 *Devalue the peg* | sets the index to **85** (and re-seeds nothing): target stays 100, but on this path the return speed is **1/36**, not 1/12 — a devaluation's real edge erodes as domestic prices catch up, over about three years. The path is marked by `te_fx_devalued_months`, set to 36 by the option and counted down monthly; while it is > 0 on a metallic regime the slow speed applies. This *is* that option's "export boost", which stops being a separate modifier |
 | §12.3 *Suspend convertibility* | floats under the §15.1 formula for the suspension's five years |
 | `law_fiat_currency`, `law_digital_currency` | §15.1 formula |
 | `law_decentralized_cryptocurrency`, dollarised (§9.2) | §15.1 formula. No dial, so the rate term is pinned at about +1 (the bankless spread) and the index is driven by the inflation gap and the premium alone **(proposed)** |
@@ -1832,7 +1832,8 @@ the currency being distrusted.
 **The price (owner decision, now with numbers — the numbers are (proposed)).**
 `te_capital_controls_months` counts months the modifier is held **outside a crisis**.
 "Crisis" is one shared trigger, `te_mon_in_external_crisis` — banking panic or downturn, at
-war, a §12.3 peg crisis (confidence ≤ 40 or the crisis event pending), or the §9.2
+war, a §12.3 peg crisis (confidence ≤ 40 or the crisis event pending — deliberately above
+the event's own ≤ 20, so emergency controls are forgiven *before* the crisis breaks), or the §9.2
 hyperinflation band — reused by the AI weights below so the two cannot drift apart.
 
 | Counter effect | Rule |
@@ -1877,7 +1878,7 @@ player chose). Gold / commodity countries see "Par (convertible)".
 
 **AI.** No FX tool remains to weigh, only capital controls. `cb_capital_controls_outflow`
 `ai_chance`: strongly positive when `te_mon_in_external_crisis = yes` **and** (index < 85,
-or gold flow negative with reserves < 0.3, or peg confidence < 50); its disable side
+or gold flow negative with reserves < 0.3, or peg confidence ≤ 40 — the same threshold); its disable side
 strongly positive when not in crisis, rising with `te_capital_controls_months`. The
 `banking_stance_is_tight` easing weight on the deleted `cb_fx_support` (§0.2's possibly
 sign-wrong note) is deleted with it, which closes that item.
@@ -2027,10 +2028,12 @@ so the slot is free.
   devaluation, a rising premium and a worsening debt spiral — the euro-crisis shape, from
   nothing but the shared mechanics.
 - **Convergence pressure — the leader's lever (owner requirement; mechanics proposed).** A
-  leader toggle on its dashboard, *Press for monetary convergence*, with a standing
-  influence upkeep. While on, each **holdout** (a member that could adopt but has not):
+  leader toggle on its dashboard, *Press for monetary convergence*, carrying a static modifier
+  with `country_influence_cost_add` while on (the capital-controls modifier is the
+  precedent), scaled by the number of holdouts. While on, each **holdout** (a member that could adopt but has not):
   - loses the tier-1 cooperation benefit;
-  - accrues a *holdout premium*, +0.2pp structural per year pressed, cap +1pp — markets price
+  - accrues a *holdout premium*, +0.2pp structural per year pressed
+    (`te_mon_union_pressed_months`, decaying when pressure stops), cap +1pp — markets price
     the uncertainty of being half-in;
   - has the **debt criterion waived** — pressed adoption only needs the inflation criterion.
     This is how a union acquires the member that should not have joined, and why tier 3 is
@@ -2197,7 +2200,7 @@ arrangement modifiers.
 | `global_var:te_world_rate` | real rate | 3 |
 | `global_var:te_world_inflation` | expected inflation, GP mean | 4 |
 | `te_fx_index` / `te_fx_avg` / `te_fx_shock` | 50–150 / 50–150 / ±30 | 4 |
-| `te_capital_controls_months` | 0–60 | 4 |
+| `te_capital_controls_months` / `te_fx_devalued_months` | 0–60 / 0–36 | 4 |
 | `te_mon_anchor` / `te_mon_anchor_kind` | scope / 0–3 | 5a |
 | `te_fx_shadow` / `te_mon_overvaluation` | 50–150 / 0–100 | 5a |
 | `te_mon_union_member` / `te_mon_union_pressed_months` | 0–1 / ≥ 0 | 5b |
@@ -2358,6 +2361,8 @@ Phases 4–5 (§15, §15A):
 > carries the dated checklist of the four artefacts that must be deleted together. The
 > section below is kept as the record of what the deletion covered — line numbers predate the
 > implementation.
+
+### 18.1 Phase 1 — `cb_policy_rate_hike`
 
 Deleting `cb_policy_rate_hike` / `cb_disable_policy_rate_hike` touches:
 
