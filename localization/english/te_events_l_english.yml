@@ -1233,7 +1233,7 @@
  extra_law_events.40.b:0 "Push through despite the panic"
  extra_law_events.40.d:0 "Industry has caught wind of the proposed currency reform under [SCOPE.sLaw('current_law_scope').GetName] and reacted with the worst possible interpretation. The [SCOPE.gsInterestGroup('opposing_ig').GetName] warn of imminent runaway prices."
  extra_law_events.40.f:0 "\"A barrel of flour cost ten coins this morning. Twelve this afternoon. What will it cost tomorrow if the printing press is unchained?\"\n\n\"It is not the press that drives the price. It is the speculator hoarding the flour.\"\n\n\"Find me a speculator and I will sell him my last sack. The price is the price. The reason is whatever you say it is.\""
- extra_law_events.40.t:0 "Hyperinflation Panic"
+ extra_law_events.40.t:0 "The Spectre of Runaway Prices"
  extra_law_events.41.a:0 "Withdraw - the privacy concerns are real"
  extra_law_events.41.b:0 "Push through - and accept the intellectuals' opposition"
  extra_law_events.41.d:0 "The [SCOPE.gsInterestGroup('opposing_ig').GetName] have organized public hearings condemning [SCOPE.sLaw('current_law_scope').GetName] as an assault on the dignity of the private citizen. Pamphlets and broadsheets carry their arguments into every parlor."

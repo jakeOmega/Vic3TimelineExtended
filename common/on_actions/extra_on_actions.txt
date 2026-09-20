@@ -122,6 +122,51 @@ te_banking_law_change_cleanup = {
 			}
 			set_variable = { name = te_mon_delegated value = 0 }
 		}
+
+		# Monetisation (§11, §14). Printing money to pay the government needs a
+		# currency the state can create, a bank to create it through and a
+		# government still able to give that bank the order, so a law that takes
+		# any of the three away takes the stepper with it — and it should do so
+		# the moment the law lands, not at the next monthly pulse, because the
+		# level is charged in inflation pressure and in the risk premium every
+		# month it stands.
+		#
+		# THE TWO-PART TEST is the OMO branch's, for the same timing reason: this
+		# on-action fires while the new law is still "considered being enacted",
+		# so te_mon_can_monetise still reads the OLD laws on the very enactment
+		# that disqualifies the country. is_enacting_law names the law about to
+		# land, and the list is the exact inverse of te_mon_can_monetise's four
+		# conditions — the currency (three ways out of fiat/digital), the bank,
+		# independence, and the planned economy. ADD A LAW HERE if a new one that
+		# blocks monetisation is ever introduced; te_mon_can_monetise in
+		# common/scripted_triggers/te_monetary_triggers.txt is the other half.
+		#
+		# The bare trigger read covers every other route — a save from before
+		# phase 2, a law set directly by script, dollarisation (ruling P9, which
+		# is a variable and no law at all).
+		#
+		# ONLY THE LEVEL IS WRITTEN. No variable is removed (§16.2), and the
+		# te_monetisation_minting modifier is left to step 1b of the next pulse,
+		# which owns it: that is the same "write the input and let the pulse pick
+		# it up" rule every other control in this system follows, and the cost is
+		# at most one month of minting the country has already been charged the
+		# premium for.
+		if = {
+			limit = {
+				has_variable = te_monetisation_level
+				NOT = { var:te_monetisation_level = 0 }
+				OR = {
+					te_mon_can_monetise = no
+					is_enacting_law = law_type:law_commodity_money
+					is_enacting_law = law_type:law_gold_standard
+					is_enacting_law = law_type:law_decentralized_cryptocurrency
+					is_enacting_law = law_type:law_no_national_bank
+					is_enacting_law = law_type:law_central_bank_independence
+					is_enacting_law = law_type:law_command_economy
+				}
+			}
+			set_variable = { name = te_monetisation_level value = 0 }
+		}
 	}
 }
 

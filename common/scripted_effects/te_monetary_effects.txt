@@ -21,9 +21,12 @@
 # flat 20% base is cancelled in INJECT:base_values either way — so with this
 # switched off too, every country would borrow free.
 #
-# ORDER (§16.2): 0 init -> 1 regime code -> 2 target -> 3 drift -> 4 no-dial
-# derived rate -> 5 premium -> 6 inflation -> 7 rate paid -> 8 neutral rate +
-# stance -> 9 re-apply the interest modifier. Step 10 is phase 3.
+# ORDER (§16.2): 0 init -> 1 regime code -> 1b monetisation -> 2 target ->
+# 3 drift -> 4 no-dial derived rate -> 5 premium -> 6 inflation -> 7 rate paid
+# -> 8 neutral rate + stance -> 9 re-apply the interest modifier. Step 10 is
+# phase 3. Step 1b is numbered rather than renumbering §16.2's list: it settles
+# an INPUT the later steps read (§11's monetisation level), the way step 1
+# settles the regime code.
 #
 # THE RATE STACK READS INFLATION (§4, §6, §7.6, §8, §10). Step 6 computes the
 # basket, core, headline and expected inflation, and the rest of the stack is
@@ -39,9 +42,8 @@
 # price. Nothing outside step 6 writes any of them.
 #
 # WHAT PHASE 2 HAS STILL NOT WIRED. Nothing swaps the te_inflation_band_*
-# modifiers, nothing sets te_monetisation_level or te_mon_dollarised, and the
-# §9.4 real-wage dividend is defined but unapplied. Those are later tasks of
-# the same phase.
+# modifiers, nothing sets te_mon_dollarised, and the §9.4 real-wage dividend is
+# defined but unapplied. Those are later tasks of the same phase.
 #
 # WORKING VARIABLES. te_mon_work and te_mon_work2 are scratch slots reused by
 # every step; te_mon_era_base_now caches the world reference rate for this
@@ -95,8 +97,9 @@ te_monetary_refresh_world_era_base = {
 # NOT IDEMPOTENT WITHIN A MONTH. Step 3 advances the policy rate toward the
 # target by a third of a point per call, step 6 draws the inflation noise walk
 # and advances core inflation, its trailing basket average and expectations by
-# one month's worth per call, and step 8 draws both of the neutral rate's random
-# walks per call — so calling this twice in one month drifts twice as fast and
+# one month's worth per call, step 8 draws both of the neutral rate's random
+# walks per call, and step 1b's AI rule walks the monetisation level one step
+# back per call — so calling this twice in one month drifts twice as fast and
 # ages the hidden state twice as quickly. Call it ONLY from the pulse and country-creation
 # on-actions listed above — never from an event, a scripted button, a scripted
 # GUI or a journal entry's on_monthly_pulse. Anything that needs the rate to
@@ -123,6 +126,10 @@ te_monetary_monthly_update = {
 
 	# --- 1. regime code -----------------------------------------------------
 	te_monetary_set_regime = yes
+
+	# --- 1b. monetising the deficit, and the minting it buys ----------------
+	# Before the premium and the pressure sum, both of which read the level.
+	te_monetary_update_monetisation = yes
 
 	# --- 2/3. the dial: target, then drift toward it ------------------------
 	# --- 4. no dial: the rate is derived, never chosen ----------------------
@@ -404,6 +411,158 @@ te_monetary_set_regime = {
 	}
 	else = {
 		set_variable = { name = te_mon_regime value = 0 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# STEP 1b — monetising the deficit (§11)
+# ----------------------------------------------------------------------------
+# Scope: country.
+#
+# Three things in one place, in this order:
+#
+#   1. eligibility — a country that may no longer monetise is forced to 0;
+#   2. the AI's rule, for AI countries only;
+#   3. the GDP-scaled minting modifier, re-applied to match the level.
+#
+# WHY IT RUNS THIS EARLY. te_monetisation_level is an INPUT to three later
+# steps of the same pulse: the cyclical premium charges +0.5pp a level (step 5,
+# §7.6), the pressure sum adds +2.5pp a level (step 6, §9.1), and the deficit
+# term adds the printed money back into the deficit, because no trigger reads
+# minting and money-financed spending would otherwise suppress its own deficit
+# term (step 6, ruling P4). Settling the level here means all three see this
+# month's number instead of last month's, and the deficit read-out the console
+# prints is the one the pressure used.
+#
+# THE PLAYER'S LEVEL IS NOT TOUCHED except by rule 1. The steppers at the foot
+# of this file write it and the next pulse picks it up, exactly like the rate
+# target — which is also why this step is the only writer that runs inside the
+# update, and why no other step may write the level.
+#
+# ELIGIBILITY IS RE-ASKED EVERY MONTH, not only on a law change. §14 has
+# te_banking_law_change_cleanup zero the level the moment a disqualifying law
+# lands, so the player never keeps a level they cannot hold; this is the net
+# under it, and it covers every route the on-action cannot see — a save from
+# before phase 2, a law set directly by script, dollarisation (ruling P9),
+# which is a variable rather than a law.
+#
+# THE AI RULE (§11 leaves it to the implementer; §6 only says the AI is always
+# delegated). At war and already deep in debt, a treasury reaches for the
+# printing press; in default or weeks from it, it reaches harder:
+#
+#   level 1   at war AND scaled_debt >= 0.5
+#   level 2   the same, AND in default or inside 20 weeks of insolvency
+#   otherwise one step back toward 0 a month
+#
+# The war-and-debt test is deliberately the SAME pair step 2 switches the AI's
+# mandate to growth on, so an AI that has decided this is an emergency treats
+# it as one on both dials. Escalation is immediate and retrenchment is one step
+# a month, because a war finances itself the week it starts and a government
+# that has been printing does not stop in one: it is also what keeps a country
+# that dips in and out of `is_at_war` for a month from slamming 2 -> 0 -> 2.
+#
+# weeks_until_bankruptcy IS READ BEHIND taking_loans, the way vanilla's own
+# war_support_from_looming_bankruptcy reads it (war_support_values.txt): the
+# figure counts weeks of the CURRENT deficit before the credit limit, which
+# means nothing for a country running a surplus.
+#
+# NO GATE THE PLAYER BRANCH LACKS (scripting_best_practices.md, the orphan-gate
+# trap): both branches pass through the same te_mon_can_monetise test above,
+# and the AI's own weights are a choice, not a permission.
+#
+# THE MODIFIER, and why it is not shaped exactly like step 9. Step 9 keeps a
+# te_rate_paid_rooted marker so a wrongly-rooted write can be repaired, because
+# a multiplier that silently fell back to 1 still looks like a plausible 1%
+# interest rate. Here a fallback to 1 is one pound of minting a week, invisible
+# on every surface, and step 9's own skip-if-unchanged logic would then never
+# correct it. So instead of repairing a bad write this step makes one
+# impossible: the re-add happens only when `root ?= this`, and a call with the
+# wrong ROOT leaves both the modifier and te_monetisation_minting_applied
+# exactly as they were for the next pulse to handle.
+#
+# THE SKIP THRESHOLD IS NOT THE POINT AT LEVEL > 0. gdp moves every month, so a
+# monetising country re-applies almost every pulse — that IS the GDP-scaled
+# refresh §11 asks for, and the £1-a-week threshold only stops a rewrite that
+# would change nothing. What the skip is really for is the other 1,300 tags:
+# the level-0 branch is a variable read and a has_modifier test, and never
+# touches a modifier at all.
+te_monetary_update_monetisation = {
+	# --- 1/2. who monetises, and how much -----------------------------------
+	if = {
+		limit = { te_mon_can_monetise = no }
+		set_variable = { name = te_monetisation_level value = 0 }
+	}
+	else_if = {
+		limit = { is_player = no }
+		if = {
+			limit = {
+				is_at_war = yes
+				# The same test step 2 switches the AI mandate to growth on.
+				scaled_debt >= 0.5
+			}
+			if = {
+				limit = {
+					OR = {
+						in_default = yes
+						AND = {
+							taking_loans = yes
+							weeks_until_bankruptcy < te_mon_monetisation_bankruptcy_weeks
+						}
+					}
+				}
+				set_variable = { name = te_monetisation_level value = 2 }
+			}
+			else = {
+				set_variable = { name = te_monetisation_level value = 1 }
+			}
+		}
+		else_if = {
+			limit = { var:te_monetisation_level > 0 }
+			change_variable = { name = te_monetisation_level subtract = 1 }
+		}
+		clamp_variable = {
+			name = te_monetisation_level
+			min = 0
+			max = te_mon_monetisation_max
+		}
+	}
+
+	# --- 3. the GDP-scaled minting modifier ---------------------------------
+	if = {
+		limit = { var:te_monetisation_level = 0 }
+		if = {
+			limit = { has_modifier = te_monetisation_minting }
+			remove_modifier = te_monetisation_minting
+		}
+		# The applied value follows the modifier off. It is never REMOVED —
+		# it backs a live multiplier and a missing variable would make every
+		# later re-evaluation read 'none' (modifier_multiplier_var_audit).
+		set_variable = { name = te_monetisation_minting_applied value = 0 }
+	}
+	else_if = {
+		limit = { root ?= this }
+		set_variable = { name = te_mon_work value = te_mon_monetisation_minting_value }
+		set_variable = { name = te_mon_work2 value = var:te_mon_work }
+		change_variable = { name = te_mon_work2 subtract = var:te_monetisation_minting_applied }
+		if = {
+			limit = {
+				OR = {
+					var:te_mon_work2 >= 1
+					var:te_mon_work2 <= -1
+					NOT = { has_modifier = te_monetisation_minting }
+				}
+			}
+			if = {
+				limit = { has_modifier = te_monetisation_minting }
+				remove_modifier = te_monetisation_minting
+			}
+			set_variable = { name = te_monetisation_minting_applied value = var:te_mon_work }
+			add_modifier = {
+				name = te_monetisation_minting
+				multiplier = var:te_monetisation_minting_applied
+			}
+		}
 	}
 }
 
@@ -1468,10 +1627,10 @@ te_monetary_yearly_growth_snapshot = {
 # ----------------------------------------------------------------------------
 # Scope: country (the journal entry's owner).
 #
-# These are the ONLY writers of te_policy_rate_target, te_mon_delegated and
-# te_mon_mandate outside the monthly update, and they live here rather than in
-# the scripted-GUI file for the same reason everything else in this file does:
-# one owner per variable, one place to look.
+# These are the ONLY writers of te_policy_rate_target, te_mon_delegated,
+# te_mon_mandate and te_monetisation_level outside the monthly update, and they
+# live here rather than in the scripted-GUI file for the same reason everything
+# else in this file does: one owner per variable, one place to look.
 #
 # They deliberately do NOT call te_monetary_monthly_update. That effect is not
 # idempotent within a month (step 3 drifts the rate, step 8 draws two random
@@ -1547,4 +1706,42 @@ te_mon_effect_set_mandate = {
 		set_variable = { name = te_mon_mandate value = $MANDATE$ }
 	}
 	custom_tooltip = $TT$
+}
+
+# MONETISING THE DEFICIT (§11). The same stepper shape as the rate target, and
+# for the same reason: the pair writes te_monetisation_level and nothing else,
+# and step 1b of the next monthly pulse turns the number into minting, into a
+# risk premium and into inflation pressure. Calling the update from here would
+# age a month of hidden state per click.
+#
+# ELIGIBILITY is te_mon_can_monetise (fiat or digital, a national bank, not
+# independent, not a command economy, not dollarised), which the dashboard asks
+# in its `is_valid` so the greyed-out tooltip and the effect can never
+# disagree — and which step 1b re-asks every month, so a level held through a
+# law change is taken away on the next pulse rather than lingering.
+#
+# The clamp is here as well as in step 1b because a click and the monthly pass
+# can race across a law change, and clamping twice is free.
+te_mon_effect_monetisation_step_down = {
+	hidden_effect = {
+		change_variable = { name = te_monetisation_level subtract = 1 }
+		clamp_variable = {
+			name = te_monetisation_level
+			min = 0
+			max = te_mon_monetisation_max
+		}
+	}
+	custom_tooltip = banking_mon_monetise_step_tt
+}
+
+te_mon_effect_monetisation_step_up = {
+	hidden_effect = {
+		change_variable = { name = te_monetisation_level add = 1 }
+		clamp_variable = {
+			name = te_monetisation_level
+			min = 0
+			max = te_mon_monetisation_max
+		}
+	}
+	custom_tooltip = banking_mon_monetise_step_tt
 }

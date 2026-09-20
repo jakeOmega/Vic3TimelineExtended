@@ -674,6 +674,32 @@ monpol_currency_devaluation = {
 	# Base -1 — apply with multiplier = sv_money_flow_event_small for GDP-scaled effect.
 	country_minting_add = -1
 }
+# The price half of the pair above (monetary_policy_design.md §11). Once
+# inflation exists, a "devaluation" that only trims the mint reads as a bug, so
+# each of the six law-event options that grants one of those two also grants the
+# matching modifier here.
+#
+# UNSCALED — NEVER APPLY EITHER OF THESE WITH `multiplier =`. That is the whole
+# reason they are separate entities rather than a field on the pair above: the
+# engine multiplies EVERY field of a modifier by the multiplier, and those two
+# are applied with `multiplier = sv_money_flow_event_small` (gdp x 0.0001), so a
+# pressure field living beside the minting field would have been scaled by tens
+# of thousands. Minting is a sum of money and scales with the economy; a rate of
+# inflation is not and does not.
+#
+# SIZE (§11 asks for 0.5-1.0pp). sv_money_flow_event_small is 0.52% of GDP a
+# year, and §11 prices money finance at 2.5pp of pressure per 1% of GDP a year,
+# so the minting these events move is worth about 1.3pp on the monetisation
+# scale. Rounded down to the top of the permitted range, and symmetric because
+# the two events move exactly the same amount of money in opposite directions.
+monpol_currency_stability_pressure = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_inflation_pressure_add = -0.01
+}
+monpol_currency_devaluation_pressure = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_inflation_pressure_add = 0.01
+}
 antitrust_market_competition_boost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_company_throughput_bonus_add = 0.05

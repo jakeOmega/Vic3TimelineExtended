@@ -7019,7 +7019,9 @@ te_inflation_band_hyper = {
 # pound of extra weekly minting, and the monthly update re-applies it with
 # `multiplier = var:te_monetisation_minting_applied`, which carries the whole
 # GDP-scaled amount — te_mon_monetisation_gdp_share (1% of annual GDP a year)
-# per level, divided by te_mon_deficit_annualise_factor to reach a week.
+# per level, divided by te_mon_weeks_per_year to reach a week. The whole
+# expression is te_mon_monetisation_minting_value, and step 1b of the monthly
+# update (te_monetary_update_monetisation) is its only writer.
 #
 # WHY GDP-SCALED AND NOT country_minting_mult (owner decision, §11). A `_mult`
 # reads better in the budget tooltip and needs no refresh, but vanilla's own

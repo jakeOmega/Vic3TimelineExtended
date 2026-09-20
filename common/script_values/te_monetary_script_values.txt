@@ -896,23 +896,67 @@ te_mon_deficit_annualise_factor = {
 	value = 52
 }
 
+# Weeks in a year, as the conversion from a YEARLY sum to a weekly one.
+# country_minting_add is a weekly amount — vanilla's base_values grants 500 a
+# week — so §11's "1% of annual GDP a year" per monetisation level has to be
+# divided by this before it can go in te_monetisation_minting's multiplier.
+#
+# IT IS DELIBERATELY NOT te_mon_deficit_annualise_factor, which is also 52.
+# That one is a HYPOTHESIS about `income` and `total_expenses` that ruling P4
+# expects to be settled from a running game and set to 1 if the budget flows
+# turn out to be annual after all. This one is a fact about country_minting_add
+# that no reading of the budget can change — sharing the constant would have
+# multiplied every monetised pound by 52 the moment the other was corrected.
+te_mon_weeks_per_year = {
+	value = 52
+}
+
 # Money finance, in pp of pressure per monetisation level (§11). Three levels
 # is +7.5pp — the WWI-scale answer to "print the war".
+#
+# STATED IN WORDS by banking_mon_monetise_step_tt, which the stepper renders;
+# see te_mon_qe_pressure for why those tooltips spell the numbers out instead
+# of reading them back. Retune this and edit that string.
 te_mon_monetisation_pressure = {
 	value = 2.5
 }
 
 # What one monetisation level is worth in minting, as a share of annual GDP per
 # year (§11, §21). About +20% of baseline seigniorage per level, so level 3 is
-# three points of GDP a year. The monthly update turns this into
+# three points of GDP a year. te_mon_monetisation_minting_value turns this into
 # te_monetisation_minting's multiplier: gdp x share x level, divided by
-# te_mon_deficit_annualise_factor, because country_minting_add is a WEEKLY sum.
+# te_mon_weeks_per_year, because country_minting_add is a WEEKLY sum.
+#
+# STATED IN WORDS by banking_mon_monetise_step_tt (see te_mon_qe_pressure).
 te_mon_monetisation_gdp_share = {
 	value = 0.01
 }
 
+# The top of the stepper (§11): 0 to 3, so the deepest setting prints three
+# points of GDP a year rather than borrowing them. Both step effects and the
+# AI rule clamp against this, so the ceiling is stated in exactly one place.
+te_mon_monetisation_max = {
+	value = 3
+}
+
+# How near insolvency has to be before the AI escalates from level 1 to level 2
+# (§11's AI rule). 20 weeks is vanilla's own "bankruptcy is looming" threshold,
+# NWar|WAR_SUPPORT_CHANGE_BANKRUPTCY_LOOMING_WEEKS, and the AI rule reads
+# weeks_until_bankruptcy exactly the way vanilla's war_support_from_looming_
+# bankruptcy does — behind taking_loans, because the figure is meaningless for
+# a country running a surplus.
+te_mon_monetisation_bankruptcy_weeks = {
+	value = 20
+}
+
 # Quantitative easing, in pp of pressure while open-market operations are
 # active (§11). Flat, not scaled: the tool is already gated to the rate floor.
+#
+# RETUNING THIS ALSO MEANS EDITING ONE LOC STRING. banking_omo_inflation_cost_tt
+# states the figure in words rather than reading it back, because that tooltip
+# is also rendered as a script `custom_tooltip` from the history chart
+# (common/scripted_guis/te_history_scripted_gui.txt), where a GUI ScriptValue
+# accessor would not resolve and would log a data-system error every render.
 te_mon_qe_pressure = {
 	value = 1.0
 }
@@ -966,6 +1010,8 @@ te_mon_unanchored_premium_per_pp = {
 
 # The cyclical premium charged per monetisation level (§7.6, §11). Lenders
 # price a government that is printing to pay them.
+#
+# STATED IN WORDS by banking_mon_monetise_step_tt (see te_mon_qe_pressure).
 te_mon_monetisation_premium = {
 	value = 0.5
 }
@@ -1539,6 +1585,42 @@ te_mon_pressure_total = {
 	add = te_mon_pressure_modifiers
 	add = te_mon_pressure_noise
 	add = te_mon_pressure_regime_pull
+}
+
+
+# --- Monetisation: the minting amount (§11) ---------------------------------
+
+# What te_monetisation_minting's multiplier is set to, in pounds of extra
+# minting a WEEK:
+#
+#   level x te_mon_monetisation_gdp_share x gdp / te_mon_weeks_per_year
+#
+# i.e. one level is 1% of annual GDP a year, spread over the 52 weekly minting
+# ticks the engine actually pays it out on. Step 1b of the monthly update
+# writes this into te_monetisation_minting_applied and nothing else reads it.
+#
+# THE SHAPE IS te_mon_pressure_monetisation'S, not a fresh one: the level is
+# folded in behind has_variable so a country that has never pulsed contributes
+# a clean zero instead of 'none', and `multiply = gdp` is the bare trigger read
+# the mod already relies on in common/treaty_articles/05_transfer_money.txt.
+#
+# SANITY CHECK against the mod's own GDP-scaled money flows:
+# sv_money_flow_event_small is gdp x 0.0001 a week, i.e. 0.52% of GDP a year,
+# so one monetisation level is a little under twice the largest one-off flow a
+# law event grants. Against vanilla seigniorage (~5.2% of GDP a year up to the
+# GDP-200M cap, §11) it is the "+20% of baseline minting per level" §11 asks
+# for — and past that cap, where baseline minting is a flat ~£10.4M a year, it
+# keeps growing with the economy. That is the whole reason §11 chose a
+# GDP-scaled `_add` over country_minting_mult.
+te_mon_monetisation_minting_value = {
+	value = 0
+	if = {
+		limit = { has_variable = te_monetisation_level }
+		add = var:te_monetisation_level
+	}
+	multiply = te_mon_monetisation_gdp_share
+	multiply = gdp
+	divide = te_mon_weeks_per_year
 }
 
 
