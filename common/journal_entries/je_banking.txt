@@ -6,7 +6,7 @@
 		has_game_rule = banking_system_enabled
 		has_technology_researched = stock_exchange
 		any_scope_state = {
-			any_scope_building = { is_building_type = building_urban_center level >= 10 }
+			any_scope_building = { is_building_type = building_urban_center level >= 5 }
 		}
 	}
 

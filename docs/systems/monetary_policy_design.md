@@ -490,7 +490,7 @@ toggle buttons, which all stay; here the mandate is a shared player/AI mechanic 
 `ai_chance` is bypassed. Avoid the orphan-gate trap recorded at
 `scripting_best_practices.md:2953` — the AI branch must carry no gate the player branch lacks.
 
-A national-bank country **without the JE** (no `stock_exchange` or no level-10 urban
+A national-bank country **without the JE** (no `stock_exchange` or no level-5 urban
 center) has no dashboard and is auto-delegated to price stability.
 
 ---
@@ -554,7 +554,7 @@ financial institutions. It replaces vanilla's five −2pp tech reductions and is
 | No `stock_exchange` | +2.0 |
 
 The surcharge keys on **`stock_exchange`, not on having the JE**: the JE's other gate (a
-level-10 urban center) is not a capital-market signal.
+level-5 urban center) is not a capital-market signal.
 
 *(The interview floated a flat −2pp per tech from a +10 base. That puts 1836 Britain near
 9%, so the weights are front-loaded instead. Same idea, different curve.)*

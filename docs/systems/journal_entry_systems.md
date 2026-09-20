@@ -10,7 +10,7 @@ Reference for all custom journal entry systems added by the Vic3TimelineExtended
 **Group:** `je_group_internal_affairs`
 
 ### Purpose
-Simulates a realistic financial cycle with boom/bust mechanics, including speculative bubbles, crashes, and economic contagion between trading partners. Requires `stock_exchange` tech + urban centers level 10+.
+Simulates a realistic financial cycle with boom/bust mechanics, including speculative bubbles, crashes, and economic contagion between trading partners. Requires `stock_exchange` tech + urban centers level 5+.
 
 ### Key Mechanics
 - **3 progress bars:** `banking_cycle_value_bar` (phase 0-100), `banking_cycle_momentum_bar` (velocity -5 to +5), `banking_bubble_pressure_bar` (speculation 0-100)
