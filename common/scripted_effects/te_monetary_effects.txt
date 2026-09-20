@@ -1765,9 +1765,11 @@ te_monetary_update_stance = {
 # dear money in the month the bank starts giving it away. Drifting back to the
 # middle band is the other case: the stance has stopped, the consequences have
 # not, and te_mon_stance_months_cap (11 — five months past the threshold, so the
-# fade is exactly as long as the climb) makes both earning the politics and
-# losing them cost six months however long the stance ran. Without the cap a
-# decade of tight money would take a decade to unwind.
+# longest fade is exactly as long as the climb) bounds it at six months however
+# long the stance ran. Six is the MAXIMUM, not the figure: a country that only
+# just earned the politics is sitting at exactly 6 and loses them again after
+# one month in the middle band. Without the cap a decade of tight money would
+# take a decade to unwind; the loc says "within six months" for the same reason.
 #
 # ONLY A COUNTRY WITH A DIAL. Step 8 forces a no-dial country's band to 3, so a
 # bankless, dollarised or command-economy country would already decay to 0 on

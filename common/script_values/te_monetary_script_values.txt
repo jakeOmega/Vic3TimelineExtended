@@ -1169,12 +1169,13 @@ te_mon_stance_politics_months = {
 # a decade-long stance taking a decade.
 #
 # WHY 11 AND NOT 12. The counter may run FIVE months past the threshold, so the
-# fade is exactly as long as the climb: from 0 it takes six pulses to reach 6 and
-# earn the politics, and from 11 it takes six pulses to fall below 6 and lose
-# them (11 - 6 = 5, and the sixth step is the one that drops under the line). A
-# cap of twice the threshold would read symmetrical and fade in seven. §13 names
-# no figure; this is the one that makes the loc's "six months" true in both
-# directions.
+# LONGEST fade is exactly as long as the climb: from 0 it takes six pulses to
+# reach 6 and earn the politics, and from 11 it takes six pulses to fall below 6
+# and lose them (11 - 6 = 5, and the sixth step is the one that drops under the
+# line). A cap of twice the threshold would read symmetrical and fade in seven.
+# §13 names no figure; this is the one that makes the loc's "within six months"
+# an accurate bound — a country sitting at exactly 6, having only just earned
+# the politics, loses them after a single month in the middle band.
 #
 # A REVERSAL IS NOT SUBJECT TO IT. Crossing from tight to loose zeroes the
 # counter outright (step 8b), so the modifier comes off the month the stance

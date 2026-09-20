@@ -288,6 +288,13 @@ REPLACE:ideology_patriotic = {
 	lawgroup_army_model = {
 		law_private_military_contractors = disapprove
 	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = neutral
+		law_gold_standard = approve
+		law_fiat_currency = disapprove
+		law_digital_currency = disapprove
+		law_decentralized_cryptocurrency = disapprove
+	}
 	lawgroup_policing = {
 		law_militarized_police = strongly_approve
 		law_dedicated_police = approve
@@ -10770,6 +10777,13 @@ REPLACE:ideology_isolationist = {
 	lawgroup_ministry_of_foreign_affairs = {
 		law_no_ministry_of_foreign_affairs = approve
 		law_ministry_of_foreign_affairs = strongly_disapprove
+	}
+	lawgroup_monetary_policy = {
+		law_commodity_money = disapprove
+		law_gold_standard = disapprove
+		law_fiat_currency = approve
+		law_digital_currency = approve
+		law_decentralized_cryptocurrency = disapprove
 	}
 	lawgroup_colonization = {
 		law_neocolonialism = neutral

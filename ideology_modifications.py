@@ -712,6 +712,16 @@ modifications = {
         "lawgroup_antitrust": antitrust_traditional,
     },
     "ideology_patriotic": {
+        # Section 13 puts the Petite Bourgeoisie on the hard-money side, and
+        # ideology_reactionary alone does not get them there:
+        # ideology_meritocratic already carries advanced_curency, so the two
+        # cancel to roughly nothing. This is the third PB baseline and the only
+        # one still free. Its other holder is the Armed Forces, for whom it is
+        # the right answer rather than a side effect — an officer corps on fixed
+        # salaries and fixed pensions is the classic sound-money constituency,
+        # which is also why section 13's own "Inflation >= 8%" row already puts
+        # ig_armed_forces on the losing side of it.
+        "lawgroup_monetary_policy": simple_currency,
         "lawgroup_army_model": pmc_disapprove,
         "lawgroup_navy_model": navy_imperialist,
         "lawgroup_privacy_rights": anti_privacy_entry,
@@ -2105,6 +2115,19 @@ modifications = {
         ],
     },
     "ideology_isolationist": {
+        # Rural Folk's third baseline, so that section 13's Cross-of-Gold row is
+        # actually felt: ideology_particularist already carries simple_currency
+        # from earlier mod work, which on its own cancels ideology_agrarian's
+        # stance on gold and on fiat and leaves the one interest group the row
+        # is named for with no opinion at all. This is not a stance borrowed to
+        # win an argument — law_gold_standard is unlocked by
+        # international_exchange_standards and ties the money supply to an
+        # international order and to other countries' gold flows, which is what
+        # an isolationist objects to on its own terms. ideology_isolationist is
+        # held by NO other interest group, as a baseline or a character
+        # ideology, and is never swapped out, so this reaches Rural Folk and
+        # nothing else.
+        "lawgroup_monetary_policy": cross_of_gold_currency,
         "lawgroup_ministry_of_foreign_affairs": ministry_constructor(
             "ministry_of_foreign_affairs", "--"
         ),
