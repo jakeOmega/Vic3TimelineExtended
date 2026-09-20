@@ -20,7 +20,7 @@
 #  9. Asset Price Uncertainty  - expansion/boom, bubble >= 30, central_banking
 # 10. Sovereign Debt Scare    - stagnation/downturn/panic, central_banking
 # 11. Insurance Sector Wobble - expansion+, mutual_funds
-# 12. Gold Standard Pressure  - any phase, international_exchange_standards
+# 12. (removed — absorbed by te_peg.1, the convertibility crisis)
 # 13. Industrial Overinvestment - boom/frenzy, corporate_management
 #
 # --- LATE ERA (keynesian_economics / modern_financial_instruments / consumer_credit) ---
@@ -1485,105 +1485,12 @@ banking_cycle_events.11 = {
 }
 
 # --------------------------------------------------------------------------
-# 12. Gold Standard Pressure
-# Fires in any phase. Requires international_exchange_standards.
-# Foreign gold flows are pressuring the currency peg.
+# 12. Gold Standard Pressure — REMOVED (monetary phase 3). A random draw that
+# said "gold is leaving" is replaced by gold actually leaving: the
+# convertibility crisis te_peg.1 (events/te_peg_events.txt) fires when
+# te_peg_confidence runs out (monetary_policy_design.md §12.3). The number is
+# left unused so the other events keep theirs.
 # --------------------------------------------------------------------------
-banking_cycle_events.12 = {
-	type = country_event
-	placement = root
-
-	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
-
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-	icon = "gfx/interface/icons/event_icons/event_trade.dds"
-
-	title = banking_cycle_events.12.t
-	desc = banking_cycle_events.12.d
-	flavor = banking_cycle_events.12.f
-
-	duration = 3
-
-	immediate = {
-	}
-
-	# Option A: Defend the peg at all costs - deflationary but credible
-	option = {
-		name = banking_cycle_events.12.a
-		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
-		add_modifier = {
-			name = banking_event_gold_defense
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		add_loyalists = {
-			value = small_radicals
-			strata = upper
-		}
-		add_radicals = {
-			value = small_radicals
-			strata = lower
-		}
-		ai_chance = {
-			base = 45
-		}
-	}
-
-	# Option B: Allow a managed devaluation
-	option = {
-		name = banking_cycle_events.12.b
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
-		add_modifier = {
-			name = banking_event_managed_devaluation
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		ai_chance = {
-			base = 35
-			modifier = { add = 15 banking_cycle_is_recession = yes }
-		}
-	}
-
-	# Option C: Abandon the gold standard entirely
-	option = {
-		name = banking_cycle_events.12.c
-		custom_tooltip = {
-			text = "MOMENTUM_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = 3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
-		add_radicals = {
-			value = small_radicals
-			strata = upper
-		}
-		add_loyalists = {
-			value = small_radicals
-			strata = lower
-		}
-		ai_chance = {
-			base = 20
-			modifier = { add = 25 banking_cycle_is_panic = yes }
-		}
-	}
-
-	after = {
-		banking_cycle_post_event_refresh = yes
-	}
-}
 
 # --------------------------------------------------------------------------
 # 13. Industrial Overinvestment

@@ -1,13 +1,16 @@
 # Monetary Policy — Design
 
-> **STATUS: PHASES 1 AND 2 IMPLEMENTED ON BRANCH, PENDING IN-GAME VERIFICATION.** Phase 2
+> **STATUS: PHASES 1–3 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 3 (§19 row 3 — the
+> real world rate, gold flows and hot money, peg confidence, the convertibility crisis)
+> shipped on `feat/monetary-policy-phase3` on 2026-09-20; see
+> [§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks). Phase 2
 > (§19 row 2 — inflation, monetisation and QE costs, the §9.2 bands and hyperinflation
 > chain, wage pressure, §13 stance politics) shipped on `feat/monetary-policy-phase2` on
 > 2026-09-20 and has not been seen in a running game either; see
-> [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks). Phases 3–5 are
-> still design only — **phases 4 and 5 were scoped on 2026-09-20** ([§15](#15-exchange-rates-and-the-trilemma-phase-4),
-> [§15A](#15a-international-monetary-arrangements-phase-5)) from a sketch and a to-do list
-> respectively. Written 2026-09-19 from a design
+> [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks). Phases 4–5 are
+> still design only — **both were scoped on 2026-09-20** ([§15](#15-exchange-rates-and-the-trilemma-phase-4),
+> [§15A](#15a-international-monetary-arrangements-phase-5)), written against phase 3 **as
+> shipped** (§0.5), not against §12 as first drafted. Written 2026-09-19 from a design
 > interview with the mod owner plus an engine-feasibility pass, then revised the same day
 > after two independent reviews on PR #329 (one with a monthly simulation of §9–§10). Every number is a starting
 > point for tuning, collected in [§21](#21-tuning-constants). Items marked **(proposed)**
@@ -15,14 +18,16 @@
 > proven from files.
 >
 > **Read [§0](#0-phase-1-as-shipped--deviations-and-open-checks) before anything else if you
-> are touching the implementation**: what phases 1 and 2 actually shipped (§0.1–§0.3 and
-> [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks) respectively), where
+> are touching the implementation**: what phases 1, 2 and 3 actually shipped (§0.1–§0.3,
+> [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks) and
+> [§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks) respectively), where
 > they deviate from the design sections below, what was deferred, and the in-game
-> verification checklist — one list, numbered 1–14 for phase 1 and 15–35 for phase 2.
+> verification checklist — one list, numbered 1–14 for phase 1, 15–35 for phase 2 and 36–47
+> for phase 3.
 > Sections 1–22 remain the *design*, not a description of the code — where they disagree with
 > §0, §0 is what shipped. The implemented parts are folded into `mod_systems.md` § Banking
 > Cycle → **Monetary Policy (phase 1)** and **(phase 2)**, and `journal_entry_systems.md`
-> § Banking Cycle; this file stays the spec for the remaining phases.
+> § Banking Cycle (plus **(phase 3)**); this file stays the spec for the remaining phases.
 
 This extends the Banking Cycle (`je_banking_cycle` — see `mod_systems.md` § Banking Cycle
 and `journal_entry_systems.md`). Read those first.
@@ -422,7 +427,7 @@ and are tagged with the task that raised them.
 | **T5** | Dollarisation is the **seventh state of the band modifier**, not a modifier stacked on one — and **dollarising resets headline, core *and* expected inflation to `te_mon_inflation_anchor`** | chosen from inside the hyper band, the two `country_minting_mult` fields would have summed to −1.55; one swap with one owner leaves no window at all, where an event-applied modifier or a "reset π so the band falls" rule both leave up to 30 days. A *partial* reset was tried on paper and rejected: with `expected` left at 50, the dollarised `−core` pull's fixed point `core = expected/2` climbs straight back to ~25 and the country spends years in *Very High* under a modifier saying inflation is somebody else's problem. Resetting both lands it at band 2 and holds it there | — |
 | **T5** | Leaving dollarisation calls the shared `te_mon_effect_new_currency` (reset to 5 + `te_mon_currency_reform_premium` for 3650 days); no pool wipe and no radicals at the exit | otherwise the P9 exit was a free currency reform; **owner decision E** | four lines at the exit site |
 | **T5** | `te_mon_hyper_cooldown` is cleared by the two **resolving** options, not by the exit | it is an anti-nag device for riding the crisis out, not a lock-out | two lines |
-| **T5** | A dollarised country takes the metallic **pull** (`−π_core`) without the metallic **pin**, so the model's fixed point is `core = expected/2` rather than 0 | accepted for phase 2: with dollarise's full reset it lands near 1% and stays there | **phase-3 item** — decide between giving it the metallic pin and a `−(core + expected)/2` pull |
+| **T5** | A dollarised country takes the metallic **pull** (`−π_core`) without the metallic **pin**, so the model's fixed point is `core = expected/2` rather than 0 | accepted for phase 2: with dollarise's full reset it lands near 1% and stays there | **Decided 2026-09-20 (§0.5 owner decision K):** it takes a pin, at the anchor (2) rather than metal's 0 |
 | **T7** | `te_mon_stance_months` is capped at ±11 | §13 names no cap, and without one a decade-long stance takes a decade of the middle band to unwind. 11 makes the fade exactly as long as the climb — six pulses each way | one constant |
 | **T7** | Rural Folk: `cross_of_gold_currency` added to `ideology_isolationist` | `ideology_particularist` already carried `simple_currency`, which cancelled the Cross of Gold on `ideology_agrarian` **exactly**, so §13's marquee row netted zero on gold and zero on fiat. Isolationist is a Rural Folk baseline held by no other IG, and the gold standard is unlocked by `international_exchange_standards` — an international order is what an isolationist objects to | one line of generator input |
 | **T7** | Petite Bourgeoisie: `simple_currency` added to `ideology_patriotic` | `ideology_meritocratic`'s pre-existing `advanced_curency` left PB coming out pro-digital. **Side effect accepted:** patriotic is also an Armed Forces baseline, so the Armed Forces gain a modest hard-money lean — correct on its own terms (fixed salaries and pensions), and §13 already puts them on the losing side of its own inflation row | one line |
@@ -434,7 +439,7 @@ and are tagged with the task that raised them.
 
 #### Deferred (phase 2's additions to §0.2)
 
-- **The dollarised regime pull has no expectations pin** (T5 above) — a phase-3 decision.
+- ~~**The dollarised regime pull has no expectations pin** (T5 above) — a phase-3 decision.~~ **Decided and shipped with phase 3** — §0.5 owner decision K.
 - **The §9.1 gold-supply term and §12.2's gold-flow pressure term** are absent from the
   pressure sum, as P2 and §19 row 3 intend.
 - **The §9.2 flavour notifications** (a one-shot on first *High*, one on first *Deflation*)
@@ -723,6 +728,185 @@ still open and are inherited, not repeated.
     judges the never-disinflate path: on treasury, SoL and radicals over the whole run, not
     on rate paid.
 
+### 0.5 Phase 3 as shipped — rulings, deviations and open checks
+
+Phase 3 (§19 row 3) was implemented on `feat/monetary-policy-phase3` on 2026-09-20: the real
+world rate (§12.1), gold flows with hot money and the price–specie term (§12.2), peg
+confidence and the convertibility crisis (§12.3), the peg-defence mandate's real formula (§6),
+the dashboard rows and a console harness for §19 row 3. **Nothing below has been seen in a
+running game either** — phases 1 and 2's open checks are inherited unchanged (ruling P10's
+logic), and the checklist continues from item 36. File inventory and the architectural rules:
+`mod_systems.md` § Banking Cycle → **Monetary Policy (phase 3)**.
+
+**What §19 row 3 lists that phase 3 did *not* have to do.** "Regime law stances" shipped with
+phase 2 (§13 "Delivered"; rulings T7). "FX buttons unchanged" is row 3's own interim rule, so
+`cb_fx_support`'s possibly sign-wrong `banking_stance_is_tight` weight (§0.2) stays a
+**phase-4** item despite that note calling it the "phase-3 FX pass". §0.2's line about phase 3
+revisiting the AI's better-informed tools "when IGs start reacting to the stance" is moot: the
+stance politics shipped in phase 2, keyed on the displayed band.
+
+#### Owner decisions (phase 3) — H, I and K decided, J open
+
+**H. DECIDED 2026-09-20 — nobody faces a world rate that contains itself.** As first shipped,
+a lone discretionary great power (a *player* Britain in 1836) **was** the world rate: its gap
+was 0 by construction, so it had no flows and no peg. The owner's call: each member of the
+average records its exact share of the two accumulators at refresh time
+(`te_mon_world_own_num` / `_den`), and step 0 subtracts it, so a great power faces the **rest**
+of the world's rate — the reference rate when there is no rest — while everybody else still
+sees the full average, hegemon included. A player Britain in 1836 therefore faces 3.0.
+*Considered and parked for after playtesting:* widening the average to non-great-powers (adds
+price-takers, and nobody at all in 1836 — Britain is the only tag on gold with a bank), and
+the owner's observation that **commodity money also moves gold** — specie circulates and is a
+trade good under bimetallism too — so flows arguably belong to commodity-money countries as
+well. That is §5.4's open France question from another side, and would want a dial (or at
+least a flow) for commodity money + national bank.
+
+**I. DECIDED 2026-09-20 — borrowed gold pays the policy rate.** The owner's question was what
+stopped real countries doing this, and the answer is the carry: gold drawn in by Bank Rate
+came as short-term balances *earning* that rate, against a vault that earns nothing. So
+`te_gold_hot_money` now costs `te_policy_rate / 12` percent a month (`te_gold_carry`) — paid by
+`add_treasury` while there is a treasury, **capitalised into the balance** when there is not,
+so not paying is never free either. That makes hot money strictly dearer than ordinary
+borrowing for any country with sound credit: at world + 5 on an 8% rate, one reserve limit
+costs 1.6% of GDP a year for as long as it is held. It stays what it historically was — a way
+to refill a vault or defend a peg. Ruling Q8's cap is kept as a backstop. The carry is not part
+of `te_gold_flow`, so the price–specie term prices the principal only; a suspension freezes
+the balance **and** the carry.
+
+**J. An indebted AI on gold sits a point above the world rate, permanently.** Ruling Q5's
+shortfall term treats any debt as an empty vault, so the peg-defence target is world + 1 for
+every AI gold country in debt — a standing −0.125 of momentum a month. That is "the cost of
+the peg" §8 promises, and it is what keeps its confidence from eroding, but AI debt is the
+normal state of many tags. The lever is the 2pp in `te_mon_peg_shortfall_pp`. **It also moves a phase-1 expected number:** a peg-defending AI that is *in debt* now targets `ceiling(world + 1)` = 4 rather than 3, so §0.3 item 3's anchor figures (Britain 1836 at 4.0%) read a point higher for any AI gold country that starts, or falls, into debt. That is this ruling, not a regression — check `scaled_debt` before chasing it. **Still open.**
+
+**K. DECIDED 2026-09-20 — a dollarised country's expectations are pinned at the anchor.** This
+closes the item ruling T5 (§0.4) left open. It keeps the metallic pull and gains a pin at
+`te_mon_inflation_anchor` (2, not metal's 0 — the adopted money is somebody's managed
+currency): imported credibility is the whole of what dollarising buys, and unpinned, a
+dollarised country with a large deficit drifted its own expectations up for a currency it
+does not issue. Core now settles near `1 + P/2`. One `else_if` in step 6's expectations block.
+
+#### 0.5 rulings — deviations from, or bindings on, the sections below
+
+| # | Ruling | Why | Cost if wrong |
+|---|---|---|---|
+| **Q1** | The world rate is clamped to **−2…10**, is **not smoothed**, and reads whatever each great power's last pulse left | §12.1 gives no bounds; a no-dial rate is `world + expected + 1` and a gold gap `policy − world`, and neither means anything at −8. No smoothing because its inputs already move at ⅓pp a month; the pulse order is §17 check 7, unknown, so a one-month-old input is tolerated by construction | two constants; a partial-adjustment line in `te_monetary_refresh_world_rate` |
+| **Q2** | **`era_base` survives** as the reference rate: it is still the base of the neutral rate (§8), the lenders' floor (§10, §21) and every seed. The world rate replaced it in exactly three places — the no-dial derived rate (§4), peg defence (§6) and the gold gap (§12.2) | §10 and §21 name `era_base` for the floor explicitly; putting a GDP-weighted *policy* figure under the neutral rate would make r\* partly public | one variable name per site |
+| **Q3** | The phase-1 gold band (reference ±2) is **deleted**; gold's range is §5.1's 0–15. The dashboard keeps **both** rows — *World Reference Rate* and the new *World Rate* — because the first is still the lenders' floor | §19 row 1 called the band an interim standing in for flows | restore two branches in `te_mon_target_min` / `_max` |
+| **Q4** | "On gold" is **one trigger, `te_mon_is_on_gold`** = the law ∧ not suspended, and every peg test goes through it (the metallic anchor, peg defence, gold flows, the 0–15 ceiling, the mandate button). Suspension is a **month counter** (`te_peg_suspended_months`), on the dollarisation precedent (P9); the timed modifiers carry only the prices, and script never reads `has_modifier` on them | "acts as fiat without the law change" (§12.3) needs the law-derived regime overridden, and a missed raw `law_gold_standard` test is silent | grep the monetary files for the raw law test — the survivors are deliberate (regime code, `te_mon_has_dial`, the dashboard's gold-rows gate, the law-gone reset in step 10) |
+| **Q4** | A suspended country gets fiat's **range, anchor, credibility and mandates** — and **not** OMO or monetisation | §12.3 says "free dial, inflation-constrained", and both tools are gated on the fiat/digital *laws* (the OMO bool, `te_mon_can_monetise`); a five-year emergency is not a licence to print | add `country_can_create_unbacked_money_bool` to `te_mon_peg_suspension` |
+| **Q5** | **`reserve_shortfall_pp`** (§6 names it and defines it nowhere) = `4 × max(0, 0.5 − scaled_gold_reserves)`, capped at 2, and **2 outright while in debt**. Peg defence rounds its target **up to a tenth** with its own hysteresis (move when below the formula; come down only when > 0.35 above it) instead of the shared round-to-nearest-integer ± 0.75 — *revised after the first playtest from a whole point, see below* | an integer target under a fractional world rate sits *below* it half the time under round-to-nearest, and a peg defender parked below the world rate bleeds gold by construction — §19's "AI on peg defence survives a 2pp rise" fails on rounding alone | the 2 and the 0.5 in `te_mon_peg_shortfall_pp`; owner decision **J** |
+| **Q6** | "In debt" (§12.3) is **`scaled_debt > 0`**. Inflows also stop while in debt, not only outflows | gold arriving into a debt pays it down, and could then never be asked back because outflows stop in debt — free money through the back door | one trigger line |
+| **Q7** | Hot money leaves at 2× the ordinary speed **with a floor of a 0.5pp gap**, and a pending exit that *cannot* be paid hits peg confidence at that doubled, floored rate | §12.2 has the balance leave "when the gap falls to ≤ 0", but 2 × a zero outflow is zero — and peg defence parks everybody at a gap of zero. The confidence half is what makes spending borrowed gold dangerous rather than free | `te_mon_gold_hot_exit_gap_floor` |
+| **Q8** | The hot-money **balance is capped at one reserve limit** (inflows stop when it is reached, whatever the vault holds) | §12.2's own argument is that the reserve cap "would only stop a hoarder"; an unbounded balance leaves 12% of GDP a year for a player who spends it. Owner decision **I** | `te_mon_gold_inflow_room` |
+| **Q9** | A country that stops being on gold **altogether** (law changed, bank gone, command economy, dollarised) pays its whole hot-money balance out **at once, debt or no debt**, and its confidence resets to 100. A **suspension freezes** both instead | "pull gold in, then enact fiat" is otherwise §20 risk 7 by another door; suspending convertibility *is* refusing to pay gold out | the `else` branch of `te_monetary_update_gold` |
+| **Q10** | Confidence **seeds at 100**, heals **+1 a month** while not under pressure *and the gap is ≥ 0 with no borrowed gold pending* (otherwise it holds — revised after the first playtest, where a −3 gap with a healthy vault gained confidence while it drained), the four §12.3 terms apply independently while under pressure (`+2` needs only gap ≥ 0 and no pending hot-money exit — "reserves are rebuilding" cannot be tested and is never true in debt), and resumption after a suspension restarts it at 50. The crisis has a 24-month cooldown set by step 10, the same shape as the hyperinflation crisis | §12.3 gives no start value, no recovery and no cooldown; without recovery one episode scars a country for the campaign | four constants |
+| **Q11** | §9.1's **gold-supply term stays deferred** (`(proposed)`, owner undecided — P2), and with it "mine output as a positive input to `te_peg_confidence`" | not in §19 row 3 | — |
+| **Q12** | Devalue's "expected inflation +3" is delivered as **+3pp of inflation *pressure*, decaying over two years** (`te_mon_peg_devaluation_pressure`) | under gold, expectations are pinned at 0 and step 6 re-pins them every pulse, so a write to `te_inflation_expected` is gone in a month | one modifier |
+| **Q12** | Devalue's revaluation is **15% of the reserve limit** (3% of GDP), its export boost `±0.15` for five decaying years, and its infamy / GP relations are the old button's exact **+1 / −3**, restated rather than shared | §12.3 sizes none of them; the button's effect also switches on a JE tool, which this is not | the modifier and one script value |
+| **Q13** | `te_peg.1` **writes `te_peg_confidence` and two clocks** — the phase-3 entry on the variable contract's list of documented outside writers | §12.3 defines Defend and Devalue *as* a jump in confidence, exactly as §9.2 defines its escapes as resets | — |
+
+#### Deferred (phase 3's additions)
+
+- The **gold-supply term** and mine output into confidence (Q11).
+- **History**: no chart or marker for the world rate, the flow or confidence.
+- A **confidence bar** widget — §3 asks for a bar; the row prints the figure and a word.
+- Nothing removes an active suspension's modifiers if the gold *law* goes mid-suspension; the
+  counter is cleared (step 10), the +2pp / lost-credibility modifiers run out their clocks.
+
+#### Known roughnesses (phase 3)
+
+1. **A suspended gold standard's law tooltip still advertises the credibility bonus**, with
+   `te_mon_peg_credibility_lost` cancelling it line for line in the modifier list.
+2. **The flow reads one month late in inflation** (step 10 runs after step 6) — the same lag
+   ruling P5 accepts for the stance gap.
+3. **Defend's floor is `ceiling(world + 4)`**, so it can be up to a point more than +4.
+4. **A peg defender's target can sit up to 0.35 above its formula** before it steps down
+   (Q5's hysteresis) — small standing inflows, which become hot money and pay the carry.
+5. **`te_mon_peg_state` reads "Trusted" for a country that has never been under pressure even
+   with an empty vault the month it empties** — confidence is a stock, and says so a month
+   or two later.
+6. **The Defend clock and a delegated peg-defence bank are redundant but harmless** — the
+   clamp raises the target the mandate set.
+7. **Command economies on the gold law** take step 10's off-gold branch (no dial): hot money
+   is paid out the month they go planned.
+
+#### First playtest — owner, 2026-09-20 (Britain and France, 1836, game 1.14.3)
+
+Read from the dashboard and `te_debug_monetary.8`; `debug.log` / `error.log` carried nothing
+monetary. **Confirmed:** items **40** (`add_treasury` moves the treasury by exactly the printed
+flow — 1.333 × 54,139 = 72,178), **41**'s ceiling half (gold reads 0 / 15, a suspended-free
+France 0 / 25; the Defend floor is still unwalked), **42** (accumulators 117.298 / 27.069 =
+4.333 with Britain manual, 0 / 0 on peg defence), **39a** (carry 647 = 179,213 × 4.333 ÷ 1200),
+**39b** (Britain's own copy 3.000 against a global 4.333) and the day-one half of **36**.
+Gold rows show for Britain and not for France.
+
+**§17 check 7, provisionally answered: `on_monthly_pulse_country` runs BEFORE the global
+`on_monthly_pulse`.** One month after Britain went manual, the global read 4.333 and France's
+per-pulse copy still read 3.000 — France had taken its copy before that month's refresh. So
+every consumer of the world rate sees it one month late, which is the lag ruling Q1 already
+tolerates; nothing needs to change, and a second month should show France at the global.
+
+**What the playtest changed:** ruling **Q5** (peg defence now rounds up to a *tenth* — Britain's
+quarter-full vault asked for 3.46 and the whole-point rule gave it 4, a standing point of gap
+and carry on gold it had no use for); the rate-target stepper gained **ctrl-click = 0.1** and
+**shift-click = to the limit** (ops 9–12), so a target is no longer always an integer; *Borrowed
+Gold* and *Interest on It* became dashboard rows rather than tooltip lines; the block gained
+five sub-headings; the label column went 160 → 200 with Delegate / Take Control moved to a row
+of their own.
+
+#### IN-GAME VERIFICATION CHECKLIST (phase 3)
+
+Continues the numbering. 36–39 are §19 row 3's four exit criteria — `te_debug_monetary.8`'s
+header says how to stage each; 40–42 can invalidate a mechanism; 43–47 are numbers and UI.
+
+36. **World rate = World Reference Rate in 1836, and stays there** under observation until a
+    great power takes a discretionary dial. If it moves on its own, some great power is
+    passing `te_mon_rate_is_discretionary` that should not — `.8` prints both accumulators.
+37. **A world-rate rise drains a small gold country.** `.8` option a, as a small gold country
+    on a manual target: gap −2, *Gold Flow* ≈ −0.4% of GDP a month, the treasury falling by
+    the same figure, then (under a tenth of the reserve limit) the flow stops and *Peg
+    Confidence* falls ~6 a month until `te_peg.1` fires at 20.
+38. **AI on peg defence survives +2pp.** Same option, observer mode, two years: targets step
+    up within a month, and no `te_peg.1` for a tag that was out of debt at the start.
+39a. **The carry is charged, and it capitalises.** With a borrowed balance, the *Gold Flow*
+    tooltip's interest line reads balance × policy rate ÷ 1200 and the treasury falls by it each
+    month beyond the flow; in debt, the balance grows by it instead.
+39b. **The hegemon is constrained.** As a player Britain on a manual target in 1836, *World
+    Rate* reads 3.0 whatever Britain's own rate is, the gap is non-zero, and gold moves; as
+    France, *World Rate* reads Britain's rate.
+39c. **Dollarised pin:** a dollarised country's *Expected Inflation* reads 2.0 every month.
+39. **World + 5 yields no lasting gain.** Inflows stop when *borrowed gold* reaches one
+    reserve limit even if everything was spent; on dropping the target the balance leaves at
+    twice the speed; if it cannot be paid, confidence collapses. Judge the whole run on
+    treasury **and** the downturn it cost (owner decision I).
+40. **`add_treasury` with a script value that reads a variable** (`te_mon_gold_flow_signed`)
+    — every existing use in the mod passes a constant-shaped value. If the treasury does not
+    move while *Gold Flow* reads non-zero, that is the cause. Also §17 check 11: an inflow
+    near the reserve limit — does the engine diminish it? (`te_mon_gold_inflow_room` caps at
+    the limit, so it should never be asked to.)
+41. **`value = X` inside an `if` in a script value resets the running total**
+    (`te_mon_target_min`'s Defend branch, `te_mon_target_max`'s gold branch). Vanilla does it
+    (`ep2_japan_values.txt`); if it *adds* instead, gold's ceiling reads 40 and the stepper
+    tooltip shows it at once.
+42. **Global-variable arithmetic**: `change_global_variable … divide = global_var:…` and
+    `add = <script value>` evaluated in the iterated country's scope inside `every_country`.
+    `.8` prints the accumulators; with one discretionary GP the denominator is its GDP in
+    millions.
+43. **Suspension really is fiat**: *Expected Inflation* unpins from 0 within a few months, the
+    target stepper reaches 25, the Peg Defence button disappears, the gold rows stay with
+    *Gold Flow* at 0 and the word "Convertibility suspended"; after 60 months confidence is 50.
+44. **Defend**: the stepper's minus greys out at `ceiling(world + 4)` with
+    `banking_mon_tt_peg_defend_floor`, for 12 months, for a delegated bank too.
+45. **Leaving gold pays the hot money out at once** — enact fiat with a balance; the treasury
+    drops by it on the next pulse, into debt if need be.
+46. **The price–specie term**: a sustained +2 gap shows ~+2.4pp of pressure in
+    `te_debug_monetary.1` and a gold country's inflation climbing toward ~+1.2.
+47. **Formatting**: `|+=1` on the gap (*Gold Flow* uses `@money!` with `|D+`, which the mod
+    already ships);
+    `GetGlobalVariable('te_world_rate_debug_offset')` rendering blank, not an error, when
+    unset.
+
 ---
 
 ## 1. Goals, non-goals, principles
@@ -799,7 +983,7 @@ dashboard's existing *Monetary Policy* category
 | World rate (P3) | exact (a **real** rate) | `global_var:te_world_rate` |
 | Gold flow per month, peg confidence (P3) | exact flow; confidence as a bar | — |
 | Exchange rate (P4) | exact index, 100 = par, with a per-term breakdown; "Par (convertible)" on metal | `te_fx_index` (§15.1) |
-| Monetary anchor + overvaluation (P5) | anchor named; overvaluation exact | `te_mon_anchor`, `te_mon_overvaluation` (§15A.1) |
+| Overvaluation (P4, pegs) · monetary anchor (P5) | overvaluation exact; anchor named | `te_mon_overvaluation` (§15.2), `te_mon_anchor` (§15A.1) |
 | Delegation | toggle + mandate selector | `te_mon_delegated`, `te_mon_mandate` |
 
 **The neutral rate is never displayed** — nobody knows r\*, and hiding it keeps judgement
@@ -1534,7 +1718,7 @@ Effect: a small country is pulled around by the hegemon's central bank.
 
 **Phase 4 adds a sibling**, `global_var:te_world_inflation` — GDP-weighted
 `te_inflation_expected` over *all* great powers, fallback 0 — computed in the same pulse
-with its own accumulator pair (§15.1). If phase 3 is built with phase 4 in view, add it then.
+with its own accumulator pair and the same own-share exclusion (§15.1).
 
 ### 12.2 Gold flows
 
@@ -1594,10 +1778,12 @@ At ≤ 20 the **convertibility crisis** event fires:
 |---|---|
 | **Defend** | target forced to world + 4 for a year; peg confidence +40; downturn likely |
 | **Suspend convertibility** | acts as fiat for 5 years (free dial, inflation-constrained) without the law change; gold credibility bonus lost for 10 years; premium +2pp |
-| **Devalue the peg** | one-off gold reserve revaluation + export boost (a flat timed modifier in phase 3; from phase 4 it *is* `te_fx_index` set to 85 and eroding at 1/36 — §15.2); confidence reset to 50; infamy and GP relations (the costs the old *Devalue* button carried); expected inflation +3 |
+| **Devalue the peg** | one-off gold reserve revaluation + export boost (`te_mon_peg_devalued`, ±0.15 over five decaying years — ruling Q12; from phase 4 it *is* `te_fx_index` set to 88 and returning at 1/30, tuned to the same peak and impulse — §15.2); confidence reset to 50; infamy and GP relations (the costs the old *Devalue* button carried); expected inflation +3 |
 
 This absorbs banking event 12 ("Gold Standard Pressure") and the gold-peg-defence event at
-`events/banking_cycle_events.txt:1510-1548`.
+`events/banking_cycle_events.txt:1510-1548`. **As shipped:** those line numbers were event
+12's own first two options, so "both" were one event; it is deleted, with its draw in
+`banking_cycle_effects.txt` and its loc, and its flavour text lives on as `te_peg.1.f`.
 
 ---
 
@@ -1690,10 +1876,13 @@ that backs a multiplier**.
 ## 15. Exchange rates and the trilemma (phase 4)
 
 > **Scoped 2026-09-20** from a second owner interview plus a file survey of the FX buttons,
-> the trade modifier types and the §9.3 cost-push code. Phase 3 is **not implemented**, so
-> this section is designed against §12 *as written*; a phase-3 §0-style ruling that moves
-> `te_world_rate`, `te_peg_confidence` or the §12.3 crisis options moves this section with
-> it. **Owner decisions:** the capital-controls politics (already recorded here before the
+> the trade modifier types and the §9.3 cost-push code, then **revised the same day after a
+> review on PR #340** that cross-checked it against phase 3 *as shipped*. The baseline is
+> therefore [§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks), not §12 as
+> first drafted — in particular decision **H** (nobody faces a world rate that contains
+> itself), rulings **Q4** (`te_mon_is_on_gold` / `te_mon_is_metallic` are the only regime
+> tests), **Q10** (confidence heal and crisis cooldown) and **Q12** (Devalue's shipped export
+> boost). **Owner decisions:** the capital-controls politics (already recorded here before the
 > scoping pass); **`te_fx_index` is displayed exactly**; a **declared non-gold peg is a
 > treaty article, not a law** — so it belongs to phase 5a (§15A.2), and phase 4 ships only the
 > float, the metallic par and capital controls. The design below was approved by the owner as
@@ -1725,19 +1914,31 @@ fx_target = 100
 te_fx_index += (1/12) × ( fx_target − te_fx_index )          ~1-year adjustment; then clamp 50–150
 ```
 
-- `own_real_rate = te_policy_rate − te_inflation_expected`; `world_rate` is §12.1's
-  `global_var:te_world_rate`, already real.
+- `own_real_rate = te_policy_rate − te_inflation_expected`; `world_rate` is the country's
+  own per-pulse copy **`te_mon_world_rate_now`**, already real and — by decision H (§0.5) —
+  **with the country's own share subtracted**. That matters here more than anywhere: read
+  against the raw global, the carry term would be structurally zero for the hegemon, the one
+  country whose currency should dominate the system. A player Britain's hike moves sterling.
 - **`global_var:te_world_inflation` is new**: the GDP-weighted mean of
   `te_inflation_expected` over **all** great powers (inflation is not circular the way the
-  world *rate* is, so no discretionary-only filter), fallback **0**. One more accumulator
-  pair in §12.1's global `on_monthly_pulse`, seeded in `te_init_global_state`.
+  world *rate* is, so no discretionary-only filter), fallback **0**, built exactly like the
+  world rate — accumulator pair in the global pulse, a per-country copy with the **own share
+  excluded** (`te_mon_world_inflation_now`), seeded in `te_init_global_state`.
+- **The formula runs for every country as `te_fx_shadow`**, whatever its regime; §15.2 says
+  which countries' *index* follows it. `te_mon_overvaluation = max(0, te_fx_index −
+  te_fx_shadow)` is therefore a phase-4 quantity, not a phase-5 one.
 - The inflation term looks double-counted against the real-rate term (which already
   subtracts `expected`) and is not: the first is the return on holding the currency, the
   second is whether anyone trusts it. A country at 12% policy and 10% expected inflation has
   a healthy real rate and a weak currency.
 - `controls_damp` = **0.25** while `banking_capital_controls_out` is active, else 1 (§15.4).
-- `te_fx_shock` is the only event-writable input: events never `set_variable` the index.
-  Clamped ±30, multiplied by 11/12 each month.
+- `te_fx_shock` is the only event-writable input: events never `set_variable` the index
+  (two documented exceptions: §12.3's *Devalue*, which is *defined* as a jump, and the §18.2
+  save migration). Clamped ±40, multiplied by 11/12 each month. **A shock delivers 38% of its
+  nominal size**: it decays at the speed the index adjusts, so the index never catches it —
+  `x_n = (n·S/11)·(11/12)ⁿ`, peaking at month ~11 at 0.384 × S. Every shock in §15.5 is sized
+  knowing that (a nominal −26 is a 10-point move); the ±40 clamp caps any event at ~15 points,
+  so nothing but *Devalue* and policy can reproduce a devaluation.
 - **Seed at 100** behind `has_variable`; never removed (it backs a multiplier — §16.2).
 
 **Projection (the evidence for the two speeds).** Target displacement is
@@ -1758,16 +1959,38 @@ currency crisis reaches the floor.
 
 ### 15.2 Regime rules
 
-| Regime | `te_fx_index` |
+Keyed on phase 3's triggers, **never on raw law names** (ruling Q4: a missed raw
+`law_gold_standard` test is silent). `te_mon_is_metallic` is already `te_mon_is_on_gold OR
+law_commodity_money` and already suspension-aware, so *Suspend convertibility → floats* needs
+no branch of its own.
+
+| Case | `te_fx_index` |
 |---|---|
-| `law_gold_standard`, `law_commodity_money` | **par, 100**, by definition — convertibility *is* the exchange rate. Target = 100, so any displacement drifts home |
-| §12.3 *Devalue the peg* | sets the index to **85** (and re-seeds nothing): target stays 100, but on this path the return speed is **1/36**, not 1/12 — a devaluation's real edge erodes as domestic prices catch up, over about three years. The path is marked by `te_fx_devalued_months`, set to 36 by the option and counted down monthly; while it is > 0 on a metallic regime the slow speed applies. This *is* that option's "export boost", which stops being a separate modifier |
-| §12.3 *Suspend convertibility* | floats under the §15.1 formula for the suspension's five years |
-| `law_fiat_currency`, `law_digital_currency` | §15.1 formula |
-| `law_decentralized_cryptocurrency`, dollarised (§9.2) | §15.1 formula. No dial, so the rate term is pinned at about +1 (the bankless spread) and the index is driven by the inflation gap and the premium alone **(proposed)** |
-| Anchored (phase 5, §15A) | the anchor's index; the formula keeps running as `te_fx_shadow` |
-| `law_command_economy` | par; excluded, like §14's other exclusions (inconvertible currency) |
-| No national bank | whatever its money law says above — the update is country-scope (§16.1), not JE-scope |
+| `te_mon_is_metallic = yes` | **par, 100** — the *nominal* parity is fixed, so there is no trade edge to give. The shadow still runs (below) |
+| …after §12.3 *Devalue the peg* | set to **88**, returning to par at **1/30** a month while `te_fx_devalued_months` (set to 60 by the option) is > 0. This **replaces** ruling Q12's `te_mon_peg_devalued` (±0.15, five decaying years) and is tuned to match it: same ±0.15 peak (12 points × 1.25%), same total impulse (0.15 × 30 months ≈ 0.375 advantage-years), half gone at 21 months against 30. The modifier is retired through `legacy_modifier_cleanup.txt` |
+| Anchored (phase 5, §15A) | the anchor's index |
+| `law_command_economy` | par; excluded, like §14's other exclusions (inconvertible currency). No shadow |
+| Everything else — fiat, digital, crypto, dollarised, a suspended gold standard; with or without a national bank | `te_fx_index = te_fx_shadow`. For the no-dial cases the rate term is pinned near +1 (the bankless spread), so the index is driven by the inflation gap and the premium **(proposed)** |
+
+**The metallic shadow — real appreciation under a fixed parity.** "Convertibility *is* the
+exchange rate" is true of the nominal rate only, and the real rate under a fixed nominal peg
+is where the history lives: inflate at home, price yourself out, lose the peg. So a metallic
+country's shadow runs too, with one substitution — ruling Q12 pins `te_inflation_expected`
+to 0 under metal, which would leave both inflation-bearing terms structurally dead exactly
+where they are needed, so the metallic shadow reads **realised core inflation**
+(`te_inflation_core`) in both places. That input already contains §12.2's price–specie term,
+which closes the classical loop with no new state: gold inflow → price–specie pressure →
+inflation → shadow falls → overvaluation → confidence drains → the inflow's purpose is
+defeated. The sign flip between regimes falls out by construction: under a float high
+inflation lowers the index; under a peg the index cannot move, so the same inflation shows up
+as overvaluation.
+
+**Overvaluation drains the gold peg**, as a fifth §12.3 term beside the rate-gap drain
+(adding to it, not replacing it): **−1 confidence per 2 points of `te_mon_overvaluation`
+beyond 5, per month, × `controls_damp`**. Set against ruling Q10 rather than against zero:
+overvaluation > 5 counts as *under pressure*, so the +1 heal holds instead of netting the
+drain away, and a crisis it triggers inherits Q10's 24-month cooldown. Phase 5a's
+`currency_peg` reuses this term unchanged — phases 4 and 5 run on one mechanism.
 
 ### 15.3 Consequences
 
@@ -1808,7 +2031,13 @@ currency crisis reaches the floor.
   the mandates exactly as a grain shock is. A 20-point depreciation lifts headline ~3pp,
   fading over three years. `te_cost_push` is force-zeroed at three sites (no market, the
   command / repressed path, the reset effect) — **the imported term must be zeroed at the
-  same three**. Seed `te_fx_avg` to the first observation; **re-seed it whenever the anchor
+  same three**. **`k` is banded by trade openness**, because the currency's *upside* already
+  is — `state_export_advantage_mult` pays in proportion to how much a country trades, so a
+  flat pass-through would give an autarkic continental power an entrepôt's downside.
+  `market_trade_reliance` (market scope, no target = share of orders due to world-market
+  trade) is a comparison trigger, not a value, so it buys three bands on the market §9.3
+  already resolves: **×0.6 / ×1.0 / ×1.5** at reliance < 0.1 / 0.1–0.3 / > 0.3 **(proposed;
+  §17 check 20 — the trigger has no vanilla script use)**. Seed `te_fx_avg` to the first observation; **re-seed it whenever the anchor
   changes** (§15A.1), for the same reason §9.3 re-seeds on a market change.
 - No momentum / bubble terms. The deleted modifiers carried them, but the stance already
   delivers stimulus (§8) and the trade edge is the FX channel's own; adding both would
@@ -1841,7 +2070,7 @@ hyperinflation band — reused by the AI weights below so the two cannot drift a
 | Industrialists, Petite Bourgeoisie | −1 approval per 12 months, to **−5** at five years — "major if prolonged" |
 | Trade Unions | flat **+1** while controls are on (Bretton-Woods-era labour backed them) |
 | Investment-pool drag | `state_capitalists_investment_pool_efficiency_mult` −0.02 per 12 months, to −0.10. **Replaces** the modifier's current `state_capitalists_investment_pool_contribution_add = 0.05`, which made trapping capital a *bonus* |
-| In a crisis | counter frozen, neither growing nor decaying — emergency controls are forgiven |
+| In a crisis | counter **frozen**, neither growing nor decaying — emergency controls are forgiven. **Freeze wins over decay:** controls lifted *during* a crisis do not start decaying until it ends, or lifting in a panic banks free decay |
 | Lifted | counter **decays 3 per month** (a five-year stint clears in 20 months). Deviation from the original wording ("resets when lifted"), which a one-month toggle would exploit |
 
 One scaled modifier (`te_capital_controls_fatigue`, multiplier = counter ÷ 12 clamped 0–5)
@@ -1862,11 +2091,12 @@ Re-pointing the FX-flavoured event content (all via `te_fx_shock`, never the ind
 
 | Site | Today | Phase 4 |
 |---|---|---|
-| `banking_cycle_events.58` "End the Gold Standard" | `banking_event_managed_devaluation` | shock **−10**; modifier kept (its throughput / prestige fields are not FX) |
+| `banking_cycle_events.58` "End the Gold Standard" | `banking_event_managed_devaluation` | shock **−26** (a ~10-point move — §15.1's 38% rule); modifier kept (its throughput / prestige fields are not FX) |
 | `banking_cycle_events.12` "Gold Standard Pressure" | same modifier | already absorbed by §12.3 in phase 3 — nothing here |
-| five `banking_event_fx_defense` sites | expense-scaled modifier | + shock **+5** (a defence that works props the currency) |
-| `monpol_currency_devaluation` law-event pair | minting / pressure | + shock **−5** |
+| five `banking_event_fx_defense` sites | expense-scaled modifier | + shock **+13** (~5 points; a defence that works props the currency) |
+| `monpol_currency_devaluation` law-event pair | minting / pressure | + shock **−13** (~5 points) |
 | `banking_crash_intervention_suspend_convertibility` | `state_export_advantage_mult = -0.10` | field removed — the float now produces the export effect, with the right sign |
+| `te_mon_peg_devalued` (ruling Q12, `te_peg.1`) | ±0.15, five decaying years | retired — the option sets the index to 88 instead (§15.2) |
 
 **UI.** One dashboard row under the phase-1 Monetary Policy block: the index, exact, one
 decimal, with a breakdown tooltip listing the four `fx_target` terms, the target, and
@@ -1885,9 +2115,13 @@ sign-wrong note) is deleted with it, which closes that item.
 
 ### 15.6 Open after scoping
 
-- Whether imported inflation should scale with trade openness (imports ÷ GDP). Left out:
-  no cheap, verified read of import value exists in country scope, and the ±6 clamp bounds
-  the error.
+- Whether overvaluation under a peg should also cost trade directly (a share of it counted
+  into `te_fx_strong`): real appreciation *is* lost competitiveness. Left out — the
+  confidence drain already prices it, and a second consequence of one gauge is how loops get
+  double-counted.
+- Commodity-money countries have a shadow but no `te_peg_confidence` to drain; their
+  overvaluation is display-only until §0.5 decision H's parked "commodity money also moves
+  gold" question is settled.
 - `te_fx_index` as an input to migration or tourism attraction — natural, but neither
   system is touched this phase.
 - Tech replacements: `keynesian_economics` and `international_exchange_standards` each lose
@@ -1915,8 +2149,7 @@ mechanics (size, credibility, cycle position), never from special-casing.
 |---|---|
 | `te_mon_anchor` | **scope** variable → the anchor country. Copy the `te_basket_market_owner` contract (`te_monetary_script_values.txt:144-165`): it cannot hold 0, is read as `var:te_mon_anchor = { … }`, and is only meaningful while `te_mon_anchor_kind > 0` |
 | `te_mon_anchor_kind` | 0 none · 1 treaty peg (5a) · 2 bloc currency (5b) · 3 currency board (5c). When several apply the **highest wins**: an overlord's board overrides a bloc, a bloc overrides a bilateral peg |
-| `te_fx_shadow` | the §15.1 float formula, still run every month for an anchored country, written here instead of to `te_fx_index` |
-| `te_mon_overvaluation` | `te_fx_index − te_fx_shadow`, floored at 0 — **the one pressure gauge all three arrangements read** |
+| `te_fx_shadow` / `te_mon_overvaluation` | **phase-4 variables** (§15.1–15.2): the float formula, run for everyone, and `max(0, index − shadow)`. An anchored country's index is its anchor's, so its overvaluation is how far it has diverged from the currency it borrowed — **the one pressure gauge all three arrangements read**, and the same one a gold peg already reads |
 
 An anchored country (`te_mon_is_anchored`: kind > 0 and the anchor is valid):
 
@@ -1942,15 +2175,29 @@ anchor loses its dial (law change, command economy, itself anchored by a higher 
 arrangement **lapses**: kind → 0 next month, and a treaty's `requirement_to_maintain` breaks
 the article.
 
-**Detection is a monthly compare.** There are no bloc join / leave on-actions and no
-ceased-to-be-a-subject on-action, so a new step **1c** of the monthly update recomputes the
-(kind, anchor) pair from current facts and compares it with the stored pair. On any change:
-re-seed `te_fx_avg` (§15.3), re-seed `te_basket_avg` if the market also changed, and snap
-`te_fx_index` to the new anchor's — or, on *leaving*, to `te_fx_shadow` (that jump **is** the
-devaluation). `on_become_subject` may call the same effect for immediacy, re-rooted through
-`te_monetary_internal.1` as the release hooks already are
-(`te_monetary_on_actions.txt:204-220`): cross-country **reads** are fine, a modifier
-**write** must run with the owner in ROOT.
+**Detection: cheap monthly validity, event-driven discovery, yearly full scan.** There are
+no bloc join / leave on-actions and no ceased-to-be-a-subject on-action, and a per-country
+`any_scope_treaty × any_scope_article` walk every month for ~200 countries would be the
+heaviest thing in the update, spent detecting something that happens a handful of times a
+campaign. Going yearly is worse — an ex-member would import its ex-leader's rate for up to a
+year. So step **1c** is split three ways:
+
+1. **Monthly — validity of the stored pair only.** Is my anchor still dialled; am I still in
+   that bloc with the bool set / still that kind of subject of it / still bound by that
+   treaty (`var:te_mon_anchor = { … }` tests, no article walk). Failure → kind 0 now.
+2. **Event-driven — discovery.** The articles' `on_entry_into_force` / `on_break` /
+   `on_withdrawal`, `on_become_subject` and the four `released_as` hooks, the 5b adoption
+   and exit actions: each calls the full recompute for the countries involved, re-rooted
+   through `te_monetary_internal.1` as the release hooks already are
+   (`te_monetary_on_actions.txt:204-220`) — cross-country **reads** are fine, a modifier
+   **write** must run with the owner in ROOT.
+3. **Yearly — the full scan** (treaty walk, bloc read, subject test, precedence), as the
+   safety net for anything with no hook: a subject type changing, a bloc tier changing, a
+   higher kind appearing over a lower one.
+
+On any change of (kind, anchor): re-seed `te_fx_avg` (§15.3), re-seed `te_basket_avg` if the
+market also changed, and snap `te_fx_index` to the new anchor's — or, on *leaving*, to
+`te_fx_shadow` (that jump **is** the devaluation).
 
 **Asymmetric magnitudes, shared mechanic.** Wherever a stronger party carries a weaker one,
 `provider cost = recipient benefit × clamp( recipient gdp ÷ provider gdp , 0 , 1 )`. Britain
@@ -1968,7 +2215,7 @@ folded into the swap line, which under gold *is* reserve lending.
 
 | Article | Source → target | Weaker party | Stronger party |
 |---|---|---|---|
-| **`currency_peg`** | pegger → anchor (`required_inputs`: none beyond the target country) | anchored, kind 1: no dial, rate = anchor + 0.5, credibility import, structural premium **−0.5pp**; `te_mon_overvaluation` drains `te_peg_confidence` (−1 per 2 points over 5, per month, × `controls_damp`) | "reserve currency": structural premium −0.1pp per 5% of world GDP pegged to it, cap −0.5; small influence upkeep. No obligation — a bare peg is unilateral in substance, which is why it is cheap to grant |
+| **`currency_peg`** | pegger → anchor (`required_inputs`: none beyond the target country) | anchored, kind 1: no dial, rate = anchor + 0.5, credibility import, structural premium **−0.5pp**; `te_mon_overvaluation` drains `te_peg_confidence` by §15.2's term, unchanged (so Q10's heal-holds-under-pressure and 24-month cooldown apply) | "reserve currency": structural premium −0.1pp per 5% of world GDP pegged to it, cap −0.5; small influence upkeep. No obligation — a bare peg is unilateral in substance, which is why it is cheap to grant |
 | **`swap_line`** | provider → recipient | peg confidence **+2 / month**; cyclical premium **−1pp**; in a panic, its §12.2 hot-money exit runs at ×1 instead of ×2 | GDP-scaled share of that premium cut as a premium **rise**; while the recipient is in `te_mon_in_external_crisis`, a treasury draw of 0.1% of *recipient* GDP a month |
 | **`lender_of_last_resort`** | guarantor → ward | §7.6 debt-load premium **halved**; `banking_cycle` panic severity inputs reduced | GDP-scaled share of the halved premium; **on the ward's default**, an event: *honour* (pay 5% of ward GDP, keep the article) or *renege* (article breaks, prestige and infamy cost, every other ward's benefit suspended for five years — guarantees are only worth the last one honoured) |
 
@@ -2030,23 +2277,35 @@ so the slot is free.
 - **Convergence pressure — the leader's lever (owner requirement; mechanics proposed).** A
   leader toggle on its dashboard, *Press for monetary convergence*, carrying a static modifier
   with `country_influence_cost_add` while on (the capital-controls modifier is the
-  precedent), scaled by the number of holdouts. While on, each **holdout** (a member that could adopt but has not):
-  - loses the tier-1 cooperation benefit;
-  - accrues a *holdout premium*, +0.2pp structural per year pressed
-    (`te_mon_union_pressed_months`, decaying when pressure stops), cap +1pp — markets price
-    the uncertainty of being half-in;
+  precedent), scaled by the number of holdouts. While on, each **holdout** (a member that
+  could adopt but has not):
+  - loses the tier-1 cooperation benefit, and goes on missing the adopters' `+0.05` trade
+    advantage — the costs of staying out are **political and access, never a premium**. (An
+    earlier draft charged a "holdout premium". Struck on review: Denmark and Sweden borrowed
+    more cheaply outside the euro than most members inside it, and the design's own
+    euro-crisis valve argues that *losing* the dial is what raises a premium — refusing to
+    lose it cannot raise one too.)
   - has the **debt criterion waived** — pressed adoption only needs the inflation criterion.
     This is how a union acquires the member that should not have joined, and why tier 3 is
     expensive;
-  - every three years gets the event *The Question of the Common Currency*: **adopt**, or
-    **refuse** — relations with the leader fall, the leader loses bloc cohesion, and the
-    holdout gains `country_leverage_resistance_add` for five years (a refusal hardens it
-    against the leader generally).
+  - faces the event *The Question of the Common Currency* **when the answer could have
+    changed, not on a timer**: pressure newly applied; the convergence criteria newly met; a
+    bloc tier change; a change of government in the holdout — with a floor of once per five
+    years (`te_mon_union_last_asked`). A three-yearly popup with a stable answer is exactly
+    the "clear right answer" §1 says to automate. **Adopt**, or **refuse**: relations with
+    the leader fall, the leader loses bloc cohesion, and the holdout gains
+    `country_leverage_resistance_add = 250` for ten years, refreshed not stacked (one rank
+    step on vanilla's 250 / 500 / 750 / 1000 ladder). That makes holding out a *strategy*
+    that builds something — a reputation for monetary independence that blunts the leader's
+    leverage generally — rather than an endurance test.
+  - **AI-versus-AI never fires the event**: it resolves on the adoption score directly, and
+    the leader's dashboard lists holdouts with their current answer, so a human leader sees
+    the cohesion cost coming instead of discovering it.
 
   So pressure costs the leader influence continuously and cohesion on every refusal; a bloc
   of stubborn members is cheaper left alone. AI holdouts weigh adoption on the same score as
-  a 5a peg plus the holdout premium; AI leaders press only with surplus influence and
-  cohesion above a floor.
+  a 5a peg plus the forgone cooperation and trade terms; AI leaders press only with surplus
+  influence and cohesion above a floor.
 - **Exit is possible and expensive.** *Leave the common currency* (or leaving the bloc /
   the bloc losing tier 2): index snaps to `te_fx_shadow` (the devaluation it could not have
   inside), structural premium **+3pp decaying over ten years**, a one-off investment-pool
@@ -2077,8 +2336,14 @@ monthly compare.
   arrangement and may sign a 5a `currency_peg` with the overlord like anyone else. Asymmetry
   comes from the autonomy ladder that already exists, not from a new rule.
 - **Subject:** the overlord's credibility, no dial, **`country_minting_mult = -0.5`**.
-  **Overlord:** that seigniorage, as `country_minting_mult` scaled by subject GDP ÷ overlord
-  GDP — the colonial-era lever, and the reason an overlord resists raising autonomy.
+  **Overlord:** a flat **`country_minting_add`** equal to half the subject's minting, summed
+  over its boards and re-applied yearly — *not* a `country_minting_mult`, which would scale
+  the overlord's own base and transfer nothing. Be honest about the size: vanilla's base
+  minting is a flat 500 and the real money is gold-mine PMs (125–1000 a level; the mod's late
+  PMs reach 8250), so for a colony without gold both sides are rounding errors. This is a
+  **gold-colony lever** — the Rand, Victoria — which is where the history is anyway. Needs a
+  read of the subject's minting (`modifier:country_minting_add` in its scope — §17 check 21);
+  fallback, count gold-mine levels.
 - **The subject's lever:** a wrong stance sustained — the §13 counter **as shipped**, which
   keys on the *displayed band* (§0.4 P8), here at its extremes: band 1 or 5 for six
   consecutive months — adds `country_liberty_desire_add` while it lasts. Never the true gap:
@@ -2174,9 +2439,10 @@ expected + spread → 5 premium (structural, floored; then cyclical) → 6 *[P2]
 core → headline → expected → 7 market yield → rate paid → 8 stance gap + displayed band →
 9 re-apply interest modifiers → 10 *[P3]* gold flow / hot money / peg confidence.
 
-Phases 4–5 insert, without reordering the above: **1c** *[P5]* anchor compare (recompute
-kind + anchor, handle change — §15A.1), before step 2 so the dial test sees it; **5b** *[P4]*
-FX (shock decay → `fx_target` → index or shadow → overvaluation → `te_fx_avg`), after the
+Phases 4–5 insert, without reordering the above: **1c** *[P5]* anchor validity (monthly
+check of the stored pair; discovery is event-driven with a yearly full scan — §15A.1), before
+step 2 so the dial test sees it; **5b** *[P4]* FX (shock decay → `fx_target` → shadow →
+index by regime → overvaluation → `te_fx_avg`), after the
 premium it reads and before step 6 whose cost-push reads it; `te_mon_premium_fx` and the
 phase-5 overvaluation premium are read in step 5 **from last month's index** (a one-month
 lag, deliberately — it breaks the premium ↔ FX loop inside a single tick); **9b** *[P4/P5]*
@@ -2201,9 +2467,9 @@ arrangement modifiers.
 | `global_var:te_world_inflation` | expected inflation, GP mean | 4 |
 | `te_fx_index` / `te_fx_avg` / `te_fx_shock` | 50–150 / 50–150 / ±30 | 4 |
 | `te_capital_controls_months` / `te_fx_devalued_months` | 0–60 / 0–36 | 4 |
+| `te_fx_shadow` / `te_mon_overvaluation` / `te_mon_world_inflation_now` | 50–150 / 0–100 / pp | 4 |
 | `te_mon_anchor` / `te_mon_anchor_kind` | scope / 0–3 | 5a |
-| `te_fx_shadow` / `te_mon_overvaluation` | 50–150 / 0–100 | 5a |
-| `te_mon_union_member` / `te_mon_union_pressed_months` | 0–1 / ≥ 0 | 5b |
+| `te_mon_union_member` / `te_mon_union_last_asked` | 0–1 / date | 5b |
 
 **Arithmetic with `change_variable`.** Drift: temp = target − actual; if temp > 0.34 add
 0.3333, if < −0.34 subtract 0.3333, else set actual = target. Moving average: temp =
@@ -2336,7 +2602,10 @@ Phases 4–5 (§15, §15A):
 13. Do `state_export_advantage_mult` / `state_import_advantage_mult` on a **country-scope**
     modifier applied with `multiplier =` reach the states, and scale? (The deleted buttons
     applied them flat from JE scope; scaled country-scope is new.) Fallback: five banded
-    fixed modifiers, as the stance uses.
+    fixed modifiers, as the stance uses — in which case the dashboard **still shows the
+    exact index** and the tooltip names the band the trade effect is currently in; effects
+    step, the reading does not. **Run 13 and 16 in a throwaway save before the phase-4 build,
+    not during it**: 13 gates the whole trade channel and 16 gates all of 5b.
 14. Does a **`script_only`** modifier type (`country_credit_standing_add`) work inside a
     treaty article's `source_modifier` / `target_modifier`? Laws and ranks are proven;
     treaties are not. The design routes the GDP-scaled terms through script anyway, so this
@@ -2349,7 +2618,13 @@ Phases 4–5 (§15, §15A):
 18. Cross-country reads in the monthly update (`var:te_mon_anchor = { var:te_policy_rate }`)
     see this month's or last month's value depending on country iteration order. The design
     tolerates either; confirm it is not something worse (a read of 0 mid-update).
-19. `participant_modifier` has **zero** vanilla uses — avoid it; if 5b wants it, test first.
+19. ~~`participant_modifier`~~ **Answered on review (PR #340): zero vanilla uses** — it
+    appears only in the two `.md` schema files. Avoid it.
+20. `market_trade_reliance` (market scope, no target) — no vanilla script uses it; only its
+    trigger-loc entry exists. Does it evaluate, and what range does a closed economy / an
+    entrepôt actually read? Sets §15.3's three band edges. Fallback: drop the banding (×1.0).
+21. Is `modifier:country_minting_add` readable in a subject's scope from script (§15A.4)?
+    Same family as check 5.
 
 ---
 
@@ -2428,7 +2703,10 @@ Surveyed 2026-09-20; line numbers are of that date. **Delete the two as a pair**
 **Save migration**, same recipe as phase 1: keep both static modifiers defined for one
 release; `extra_effects.txt:390-391` and `legacy_modifier_cleanup.txt:39-40` already strip
 them, so extend that dated checklist rather than adding a new mechanism. A country holding
-either modifier at load gets a one-off `te_fx_shock` of −10 / +10 so the save does not lurch.
+either modifier at load has its **index set directly** to 80 / 120 — what the ±0.25 modifier
+*was*, in index points — and drifts to its own target from there. (Not a `te_fx_shock`: a
+shock delivers 38% of its size, §15.1, so ±10 would swap a ±25% edge for ±5% overnight —
+the lurch the migration exists to prevent.)
 Phase 5a repeats the recipe for `cb_fx_swap_lines` / `banking_fx_swap_lines` (buttons
 `:543-590`, triggers `:151-164`, modifier `:917-924`, its tech bool and law lock).
 
@@ -2438,9 +2716,12 @@ Phase 5a repeats the recipe for `cb_fx_swap_lines` / `banking_fx_swap_lines` (bu
 
 Each phase is playable alone. Later phases can be cut.
 
-**Status.** Rows **1 and 2 are implemented** on branch and pending in-game verification — see
-§0.1–§0.3 and [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks); row 2's
-exit criteria are §0.4 checklist items 24–25. Rows 3–5 are design only (rows 4–5 scoped 2026-09-20; row 5 is staged 5a / 5b / 5c, each cuttable, 5c independent of 5b). (The table itself
+**Status.** Rows **1, 2 and 3 are implemented** and pending in-game verification — see
+§0.1–§0.3, [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks) and
+[§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks); row 2's exit criteria are
+§0.4 checklist items 24–25 and row 3's are §0.5 items 36–39. Row 3's "regime law stances" had
+already shipped with phase 2 (§13 "Delivered"). Rows 4–5 are design only (scoped 2026-09-20;
+row 5 is staged 5a / 5b / 5c, each cuttable, 5c independent of 5b). (The table itself
 carries no status column and is left as written.)
 
 | Phase | Ships | Interim rule until the next phase | Exit criteria |
@@ -2448,9 +2729,9 @@ carries no status column and is left as written.)
 | **1** | country-scope plumbing (incl. `on_game_started`); both premium types + full §7.5 conversion + access/rank tables; target + drift; delegation + mandates (π terms dropped, §6); CBI binding; regime dial ranges; stance → cycle via the variable update; rate-hike deletion; dashboard block; history series | world/reference rate = `era_base`; gold standard target clamped to `era_base` ±2; inflation = 0; OMO usable at the floor but without its inflation cost | §17 checks 1–4 pass; anchor table (§7.4) reproduced in-game within 0.5pp; observer-mode run shows no country at the 60 cap, and none at the 0.5 *total* clamp, by accident; AI countries' stance tracks the cycle; **mean AI stance gap ≈ 0 outside cycle extremes** (no regime is permanently tight or loose); r\* cannot be read from any tooltip |
 | **2** | inflation (core / headline / anchored expectations), basket, wage-pressure type + real-wage dividend, §10 formula, monetisation, QE costs, hyperinflation chain, §13 stance politics | gold standard still on the ±2 band | 50-year observer run: median fiat inflation 1–4% **including AI on the growth mandate** (at war or `scaled_debt ≥ 0.5`), no oscillation with period < 3 years, at least one organic hyperinflation and one deflation. **Debug harness**: a fiat tag pinned to a fixed manual target — observer runs never exercise the human path, because AI is always delegated; confirm the drift is slow (e-folding of years), that the §10 worked example reproduces, that **rate paid on the never-disinflate path never falls below the pre-war baseline** once expectations catch up (the §10 tuning invariant), and that its §9.2 band penalties make it worse *overall* over 15 years than disinflating — judged on treasury, SoL and radicals, not rate paid alone |
 | **3** | real world rate (discretionary GPs only), gold flows + hot money, peg confidence, convertibility crisis; regime law stances | FX buttons unchanged | world rate sits at `era_base` in 1836 and does not drift on its own; a discretionary GP's hike visibly drains a small gold country; AI on peg defence survives a 2pp world-rate rise; holding world + 5 on gold yields no lasting treasury gain |
-| **4** | §15: `te_fx_index` (float formula, metallic par, `te_fx_shock`), world inflation, `te_fx_weak` / `te_fx_strong`, imported inflation inside cost-push, FX premium, `controls_damp` + capital-controls fatigue, dashboard row + history series; devalue/support deleted (§18.2), FX events re-pointed | no anchoring: a country that wants a peg has gold or nothing; `cb_fx_swap_lines` unchanged | §17 check 13 passes; the 1836 world sits at par and stays there; a fiat harness tag held 2pp loose settles at 92–94 within two years (§15.1 table); in a 50-year observer run no floating AI country is pinned at 50 or 150 outside the hyperinflation band, and phase 2's median-inflation criterion **still holds with imported inflation on**; harness shock of −20 under price stability: headline back within 1pp of its pre-shock path in four years (§20 risk 9 converges); ten peacetime years of capital controls lands Industrialists and Petite Bourgeoisie at −5; a gold country under controls holding world − 4 drains like world − 1; all audits clean after the deletion and AI countries still use their remaining tools |
-| **5a** | §15A.1–2: the anchored state (`te_mon_anchor`, kind, shadow, overvaluation, monthly compare); `currency_peg`, `swap_line`, `lender_of_last_resort` articles; peg-crisis re-read; GDP-scaled arrangement modifiers; `cb_fx_swap_lines` deleted | blocs and subjects are monetary islands | §17 checks 14–15, 18 answered; an AI minor pegged to a GP tracks a 2pp anchor hike within two months and survives it; the same peg **breaks** under 15 points of sustained overvaluation; a GP's provider cost for a minor is < 10% of the minor's benefit; no chain or cycle of anchors can be constructed; AI signs pegs and swap lines in an observer run, and not universally |
-| **5b** | §15A.3: `principle_group_monetary_union` (3 tiers), adoption action + convergence criteria, overvaluation premium, convergence pressure, exit | subjects still islands | §17 checks 16, 19 answered; an adopter in a slump while the leader runs hot shows a visibly rising premium and a tight band; the **exit invariant** holds in the harness (worse than staying for ≥ 5 years at 15 points of overvaluation, better after); a pressed, debt-heavy adopter costs a tier-3 leader a backstop call within a cycle or two; pressing a bloc of refusers loses the leader cohesion on net |
+| **4** | §15: `te_fx_shadow` for everyone and `te_fx_index` by regime (float, metallic par, `te_fx_shock`), the overvaluation drain on a gold peg, world inflation (own share excluded), `te_fx_weak` / `te_fx_strong`, imported inflation inside cost-push, FX premium, `controls_damp` + capital-controls fatigue, dashboard row + history series; devalue/support deleted (§18.2), FX events re-pointed | no anchoring: a country that wants a peg has gold or nothing; `cb_fx_swap_lines` unchanged | §17 check 13 passes; the 1836 world sits at par and stays there; a fiat harness tag held 2pp loose settles at 92–94 within two years (§15.1 table); the 1836 gold world shows **no overvaluation drain at start** (a peg defender at a zero gap has shadow ≈ 100); a gold country that inflates 5pp above the world for three years loses its peg through the overvaluation term; in a 50-year observer run no floating AI country is pinned at 50 or 150 outside the hyperinflation band — **a statement about AI mandates (§20 risk 9), so a failure here is fixed in §6, not in the FX constants**; **the §10 invariant extended to phase 4: a fiat harness tag held at the loose clamp for 20 years ends worse on treasury, SoL and radicals than a neutral one *with the trade edge on*** (a 5pp loose stance is ~90% of `law_mercantilism`'s ±0.25 for no law — if this fails, halve the per-point value, §20 risk 10); and phase 2's median-inflation criterion **still holds with imported inflation on**; harness shock of −20 under price stability: headline back within 1pp of its pre-shock path in four years (§20 risk 9 converges); ten peacetime years of capital controls lands Industrialists and Petite Bourgeoisie at −5; a gold country under controls holding world − 4 drains like world − 1; all audits clean after the deletion and AI countries still use their remaining tools |
+| **5a** | §15A.1–2: the anchored state (`te_mon_anchor`, kind; validity / discovery / yearly scan) on phase 4's shadow and overvaluation; `currency_peg`, `swap_line`, `lender_of_last_resort` articles; peg-crisis re-read; GDP-scaled arrangement modifiers; `cb_fx_swap_lines` deleted | blocs and subjects are monetary islands | §17 checks 14–15, 18 answered; an AI minor pegged to a GP tracks a 2pp anchor hike within two months and survives it; the same peg **breaks** under 15 points of sustained overvaluation; a GP's provider cost for a minor is < 10% of the minor's benefit; no chain or cycle of anchors can be constructed; AI signs pegs and swap lines in an observer run, and not universally |
+| **5b** | §15A.3: `principle_group_monetary_union` (3 tiers), adoption action + convergence criteria, overvaluation premium, convergence pressure, exit | subjects still islands | §17 checks 16, 19 answered; an adopter in a slump while the leader runs hot shows a visibly rising premium and a tight band; the **exit invariant** holds in the harness (worse than staying for ≥ 5 years at 15 points of overvaluation, better after); a pressed, debt-heavy adopter costs a tier-3 leader a backstop call within a cycle or two; pressing a bloc of refusers loses the leader cohesion on net; a human holdout sees *The Question* fewer than ~6 times a campaign |
 | **5c** | §15A.4: automatic currency boards for `autonomy_level = 1` subjects, seigniorage transfer, wrong-stance liberty desire | — | §17 check 17 answered; a puppet's rate tracks its overlord's within a month of subjugation and returns to its own rule within a month of release, with no exit penalty; the overlord's minting gain is GDP-scaled (a tiny puppet is a rounding error); a sustained 2pp wrong stance moves liberty desire measurably but does not alone cause a revolt |
 
 ---
@@ -2489,8 +2770,16 @@ carries no status column and is left as written.)
    expected inflation → weaker currency, plus weak currency → premium → weaker currency.
    Both are positive feedback. *Mitigation:* imported inflation is a change term under the
    shared ±6 clamp and fades at 1/36; the premium loop's gain is 0.075; step 5 reads last
-   month's index; the index is clamped 50–150. The phase-4 harness shock is the test, and
-   the FX history chart the detector.
+   month's index; the index is clamped 50–150. **The loop gain is computable** (derived on
+   review, PR #340; confirm with the harness): per pp of expected inflation `fx_target`
+   moves `4·(1 − ρ) + 2 + ~0.4` points — the carry term, cancelled to the extent ρ (the
+   mandate's rate response) tracks expectations 1:1; the confidence term; the unanchored
+   premium through the ×1.5 term — and the return leg (index → imported inflation →
+   expected) is ≈ `0.1 × (1 − c)`. Round trip ≈ **0.14 at ρ = 1, c = 0.4; 0.5 at ρ = 0,
+   c = 0.2; < 0.65 at worst** — under 1 everywhere, without leaning on the clamps. But it is
+   dominated by ρ: the spiral is a *policy-failure* signature (a fixed manual dial, a growth
+   mandate, a no-dial regime), which is realistic and intended. The phase-4 harness shock is
+   the test, and the FX history chart the detector.
 10. **The trade edge is large and universal** (phase 4). ±1.25% per point on every state of
    every floating country is a bigger aggregate lever than two AI-only buttons ever were,
    and world-market effects of many countries drifting at once are untested. *Mitigation:*
@@ -2544,9 +2833,17 @@ carries no status column and is left as written.)
 | Gold flow per pp / gap clamp / hot-money exit speed / inflow cap | 0.002 × GDP per month / ±5 / ×2 / `scaled_gold_reserves` 1 | 12.2 |
 | Peg crisis threshold | confidence ≤ 20 | 12.3 |
 | World / reference rate fallback | `era_base` | 12.1 |
+| World rate clamp (ruling Q1) | −2 – 10 | 12.1 |
+| Peg-defence reserve shortfall (ruling Q5) | 2pp at zero reserves or in debt → 0 at half the limit; the mandate adds half, rounded **up to a tenth** | 6 |
+| Target step: click / ctrl / shift | 1pp / 0.1pp / to the regime limit | 4 |
+| Hot-money exit floor / hot-money cap (rulings Q7, Q8) | a 0.5pp gap / one reserve limit | 12.2 |
+| Peg confidence: start / healthy recovery / crisis cooldown (ruling Q10) | 100 / +1 a month / 24 months | 12.3 |
+| Defend / Suspend / Devalue | world + 4 for 12 months, +40 · 60 months, +2pp premium 5y, credibility lost 10y · confidence 50, revaluation 15% of the reserve limit, +3pp pressure decaying over 2y | 12.3 |
 | FX target: per pp real-rate gap (clamp) / per pp inflation gap (clamp) / per pp cyclical premium | 4.0 (±5) / 2.0 (±10) / 1.5 | 15.1 |
-| FX adjustment speed / index clamp / shock clamp + decay | 1/12 per month / 50–150 / ±30, ×11/12 | 15.1 |
-| Post-devaluation erosion speed / devalued index | 1/36 / 85 | 15.2 |
+| FX adjustment speed / index clamp / shock clamp + decay / shock capture | 1/12 per month / 50–150 / ±40, ×11/12 / 38% of nominal | 15.1 |
+| Post-devaluation: index / return speed / window (replaces Q12's ±0.15 over 5y, same peak and impulse) | 88 / 1/30 / 60 months | 15.2 |
+| Overvaluation drain on a peg (gold, and 5a) | −1 confidence per 2 points over 5, × `controls_damp`; counts as pressure for Q10 | 15.2 |
+| Imported-inflation openness bands (`market_trade_reliance`) | ×0.6 / ×1.0 / ×1.5 at < 0.1 / 0.1–0.3 / > 0.3 | 15.3 |
 | Trade edge per index point (export / import) | ±0.0125 | 15.3 |
 | FX premium | +0.05pp per point below par | 15.3 |
 | Imported inflation: k / avg α | 0.15 / 1/36 (inside the ±6pp cost-push clamp) | 15.3 |
@@ -2554,14 +2851,14 @@ carries no status column and is left as written.)
 | Controls fatigue: approval / pool drag / cap / decay when lifted | −1 and −0.02 per 12 months / 5 steps / 3 months per month | 15.4 |
 | Anchor spread: peg / board / bloc | 0.5 / 0.25 / 0 | 15A.1 |
 | Imported credibility | `max(own c, 0.8 × anchor c)` | 15A.1 |
-| Peg: premium cut / overvaluation drain / reserve-currency cut | −0.5pp / −1 confidence per 2 points over 5 / −0.1pp per 5% world GDP, cap −0.5 | 15A.2 |
+| Peg: premium cut / reserve-currency cut | −0.5pp / −0.1pp per 5% world GDP, cap −0.5 | 15A.2 |
 | Swap line: confidence / premium / crisis draw | +2 per month / −1pp / 0.1% recipient GDP per month | 15A.2 |
 | LOLR: debt-load premium / honour cost / renege suspension | ×0.5 / 5% ward GDP / 5 years | 15A.2 |
 | Provider cost scaling | recipient benefit × clamp(recipient GDP ÷ provider GDP, 0, 1) | 15A.1 |
 | Union: convergence (inflation / debt) / overvaluation premium / trade | 3pp / `scaled_debt` < 0.5 / +0.1pp per point over 5 (×0.5 at tier 3) / +0.05 | 15A.3 |
-| Union pressure: holdout premium / event interval | +0.2pp per year, cap +1 / 3 years | 15A.3 |
+| Union pressure: refusal's leverage resistance / event floor | +250 for 10 years, refreshed / once per 5 years, state-change triggered | 15A.3 |
 | Union exit: premium / re-adoption lock | +3pp decaying over 10 years / 10 years | 15A.3 |
-| Currency board: subject minting / wrong-stance threshold | −0.5 / stance band 1 or 5 for 6 months | 15A.4 |
+| Currency board: subject minting / overlord's share / wrong-stance threshold | −0.5 / half the subject's minting, as a flat add / stance band 1 or 5 for 6 months | 15A.4 |
 
 ---
 

@@ -115,9 +115,14 @@ te_mon_has_inflation = {
 # CRYPTO IS NOT METALLIC. law_decentralized_cryptocurrency gets a stronger pull
 # (-(pi_core + 1)) and none of the anchoring, because nothing redeems it; that
 # branch belongs to step 6, not here.
+#
+# A SUSPENDED GOLD STANDARD IS NOT METALLIC (phase 3, §12.3). Convertibility is
+# the whole of the anchor, so a country that has suspended it keeps the law and
+# loses the pin: it "acts as fiat" — anchor 2, ordinary credibility c, no regime
+# pull — until the suspension runs out. te_mon_is_on_gold owns that test.
 te_mon_is_metallic = {
 	OR = {
-		has_law_or_variant = law_type:law_gold_standard
+		te_mon_is_on_gold = yes
 		has_law_or_variant = law_type:law_commodity_money
 	}
 }
@@ -292,4 +297,81 @@ te_mon_display_ready = {
 te_mon_policy_rate_at_floor = {
 	has_variable = te_policy_rate
 	var:te_policy_rate <= te_mon_floor_threshold
+}
+
+
+# --- Phase 3: the world rate, gold flows and the peg (§12) ------------------
+#
+# ONE TEST FOR "ON GOLD". The gold standard is a law; being on gold is the law
+# AND a convertible currency. §12.3's suspension keeps the law and drops the
+# convertibility for five years, on the dollarisation precedent (ruling P9: a
+# variable overriding what the law-derived regime says). Every monetary test
+# that means "the peg binds" — the metallic anchor, peg defence, gold flows, the
+# 0-15 range — goes through te_mon_is_on_gold; a raw has_law_or_variant on
+# law_gold_standard is right only where the LAW is meant (the regime code, the
+# crisis's own gate, the dashboard's suspended read-out).
+
+# Has this country suspended convertibility? Guarded, so a country that has
+# never pulsed and every save from before phase 3 read "no".
+te_mon_peg_is_suspended = {
+	has_variable = te_peg_suspended_months
+	var:te_peg_suspended_months > 0
+}
+
+te_mon_is_on_gold = {
+	has_law_or_variant = law_type:law_gold_standard
+	te_mon_peg_is_suspended = no
+}
+
+# Do gold flows run for this country? (§12.2: "gold-standard countries with a
+# national bank only".) A gold country without a bank pays the world rate, so
+# its gap and its drain are zero by construction; te_mon_has_dial carries the
+# bank, the command-economy and the dollarisation tests.
+te_mon_has_gold_flows = {
+	te_mon_is_on_gold = yes
+	te_mon_has_dial = yes
+}
+
+# §12.3's switch from moving gold to moving confidence: reserves under a tenth
+# of the limit, or any debt at all. A negative add_treasury there would only
+# deepen the debt, so step 10 stops the flow and moves te_peg_confidence.
+te_mon_peg_under_pressure = {
+	OR = {
+		scaled_gold_reserves < te_mon_peg_reserve_floor
+		scaled_debt > 0
+	}
+}
+
+# Is this country's Defend option (§12.3) still running? While it is, the
+# target's floor is the world rate + 4 (te_mon_target_min).
+te_mon_peg_is_defending = {
+	has_variable = te_peg_defend_months
+	var:te_peg_defend_months > 0
+}
+
+# Is the peg-defence mandate what actually sets this country's target? The
+# mandate variable alone is not enough — a player on a manual target may have
+# peg defence stored as a preference for later. Mirrors the mandate branch of
+# te_monetary_update_target: AI is always delegated, and a bank without the
+# journal entry is auto-delegated (to price stability, so never to this).
+te_mon_is_on_peg_defence = {
+	te_mon_is_on_gold = yes
+	has_variable = te_mon_mandate
+	var:te_mon_mandate = 3
+	OR = {
+		is_player = no
+		te_mon_mandate_binds = yes
+	}
+}
+
+# Is this country's policy rate DISCRETIONARY — chosen, rather than derived
+# from the world rate? (§12.1) Only these great powers enter the world-rate
+# average: a no-dial rate is world + spread and a peg defender's target IS the
+# world rate, so averaging either would define the world rate in terms of
+# itself and ratchet it up by the spread every month.
+te_mon_rate_is_discretionary = {
+	te_mon_has_dial = yes
+	te_mon_is_on_peg_defence = no
+	has_variable = te_policy_rate
+	has_variable = te_inflation_expected
 }

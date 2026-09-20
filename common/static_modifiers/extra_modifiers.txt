@@ -7075,6 +7075,50 @@ te_mon_currency_reform_premium = {
 	country_risk_premium_add = 0.05
 }
 
+# --- Phase 3: what the convertibility crisis leaves behind (§12.3) -----------
+# All four are TIMED, applied by the options of te_peg.1 (events/te_peg_events.txt)
+# with `days =`, on te_mon_currency_reform_premium's reasoning: lenders remember
+# for a fixed term, and a timed modifier shows the player the clock.
+#
+# THE SCRIPT NEVER READS has_modifier ON THESE. The suspension's regime effects
+# run off the month counter te_peg_suspended_months (te_mon_is_on_gold); these
+# only carry the prices, which the monthly update picks up through the two
+# premium modifier types like any other source.
+
+# Suspend convertibility: +2pp of cyclical premium for the five years the
+# suspension runs (days = 1825).
+te_mon_peg_suspension = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_risk_premium_add = 0.02
+}
+
+# ...and gold's credibility bonus lost for ten (days = 3650): the exact inverse
+# of the country_credit_standing_add = -0.01 law_gold_standard carries, so the
+# law's tooltip stays true and this line says why it is not being paid.
+te_mon_peg_credibility_lost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_credit_standing_add = 0.01
+}
+
+# Devalue the peg: the export boost (days = 1825, decaying). Half the size of
+# the standing banking_fx_devaluation tool, because this one costs no
+# intervention points and cannot be switched off.
+te_mon_peg_devalued = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_export_advantage_mult = 0.15
+	state_import_advantage_mult = -0.15
+}
+
+# ...and §12.3's "expected inflation +3" (days = 730, decaying), delivered as
+# inflation PRESSURE (ruling Q12): under a gold standard expectations are pinned
+# at 0 and step 6 re-pins them every pulse, so a write to te_inflation_expected
+# would be gone in a month. Pressure reaches core, headline and the bands, which
+# is where a devaluation's price rise actually shows up under a peg.
+te_mon_peg_devaluation_pressure = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_inflation_pressure_add = 0.03
+}
+
 # The real-wage dividend (§9.4). A UNIT modifier, applied by step 6d of
 # te_monetary_monthly_update only while inflation is in the comfort band, and
 # scaled by `multiplier = var:te_mon_wage_dividend_applied` — one unit per
