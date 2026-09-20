@@ -60,3 +60,183 @@ te_debug_monetary.1 = { # REVIEWED 2026-09-19: console-only test event (`event t
 		name = te_debug_monetary.1.z
 	}
 }
+
+
+# ============================================================================
+# THE INTEREST-MODIFIER MULTIPLIER EXPERIMENT — .2, .3, .4
+# ============================================================================
+# THE BUG. On a fresh 1836 game, day one, the budget interest tooltip reads
+# "+20.0% Base Value, -19.0% Timed Modifiers" for every country: the
+# te_monetary_base_offset half of the pair is there (-0.2 = -20%), and
+# te_monetary_rate_paid is there too but at a multiplier of exactly 1
+# (0.01 = +1%), even though te_rate_paid_applied holds the right number
+# (12.5 for Russia, 3.7 for Britain — te_debug_monetary.1 prints it). No script
+# error is logged from any monetary file. The first application runs from
+# on_game_started -> every_country (common/on_actions/te_monetary_on_actions.txt),
+# and afterwards step 9 skips the re-apply while |pts - applied| < 0.05, so a
+# bad first write sticks for the whole game.
+#
+# The three events below run the SAME remove-then-add-the-pair block that step 9
+# runs (te_monetary_apply_interest_modifiers), mid-game, from country scope, and
+# differ only in what goes in the `multiplier =` slot:
+#
+#   .2  multiplier = var:te_rate_paid_applied      the production form
+#   .3  multiplier = te_mon_rate_paid_multiplier   a named script value wrapping
+#                                                  that same variable
+#   .4  multiplier = 7                             a literal — the control
+#
+# Reading the result: Timed Modifiers = -20% (the offset) + the rate the
+# multiplier actually produced. So for a country paying 12.5pp, a working
+# multiplier reads about -7.5%, a multiplier of 1 reads -19.0%, the .3 fallback
+# reads -17.0%, and the .4 control reads -13.0%.
+#
+# WHAT EACH OUTCOME MEANS. If .2 works mid-game the var form is fine and the
+# fault is the on_game_started call site (ROOT there is `none`, and
+# scripting_best_practices.md:403-404 documents multiplier expressions being
+# resolved in the OUTER scope of an iterator, which would leave `var:` reading
+# against nothing and defaulting to 1.0). If .2 fails but .3 works, the var form
+# is the wrong form for this modifier. If .4 also fails, the modifier does not
+# scale at all and the whole approach has to change.
+#
+# ORDER OF USE. Fire .2, then .3, then .4 — .4 leaves the country paying 7%
+# with both modifiers present, which step 9's 0.05 threshold will never correct
+# on its own. te_debug_monetary.2's second option is the undo: it zeroes
+# te_rate_paid_applied and runs the real monthly update, which sees the whole
+# gap at once and rewrites the pair through the production path.
+#
+# HOVER BEFORE CLICKING. The option tooltip previews the resolved modifier, so
+# it is worth reading the tooltip as well as the budget panel afterwards.
+#
+# None of these events is fired by anything in the mod; they exist for
+# `event te_debug_monetary.2` and friends typed into the console.
+# ============================================================================
+
+te_debug_monetary.2 = { # REVIEWED 2026-09-19: console-only diagnostic (`event te_debug_monetary.2`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.2.t
+	desc = te_debug_monetary.2.d
+	flavor = te_debug_monetary.2.f
+
+	# The production form, character for character with step 9's write.
+	option = {
+		name = te_debug_monetary.2.a
+		default_option = yes
+		if = {
+			limit = { has_modifier = te_monetary_base_offset }
+			remove_modifier = te_monetary_base_offset
+		}
+		if = {
+			limit = { has_modifier = te_monetary_rate_paid }
+			remove_modifier = te_monetary_rate_paid
+		}
+		add_modifier = { name = te_monetary_base_offset }
+		add_modifier = {
+			name = te_monetary_rate_paid
+			multiplier = var:te_rate_paid_applied
+		}
+	}
+
+	# The undo, and the cleanest test of the production path itself: zeroing the
+	# applied value forces step 9 past its 0.05 threshold, so the monthly update
+	# rewrites the pair exactly as it would on any other month. Note that the
+	# update is not idempotent — it also drifts the policy rate a third of a
+	# point and draws both hidden random walks, same as any pulse.
+	option = {
+		name = te_debug_monetary.2.b
+		set_variable = { name = te_rate_paid_applied value = 0 }
+		te_monetary_monthly_update = yes
+	}
+
+	option = {
+		name = te_debug_monetary.2.z
+	}
+}
+
+
+te_debug_monetary.3 = { # REVIEWED 2026-09-19: console-only diagnostic (`event te_debug_monetary.3`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.3.t
+	desc = te_debug_monetary.3.d
+	flavor = te_debug_monetary.3.f
+
+	# Same pair, same block, but the multiplier is a named script value that
+	# wraps the same variable behind has_variable and falls back to 3.
+	option = {
+		name = te_debug_monetary.3.a
+		default_option = yes
+		if = {
+			limit = { has_modifier = te_monetary_base_offset }
+			remove_modifier = te_monetary_base_offset
+		}
+		if = {
+			limit = { has_modifier = te_monetary_rate_paid }
+			remove_modifier = te_monetary_rate_paid
+		}
+		add_modifier = { name = te_monetary_base_offset }
+		add_modifier = {
+			name = te_monetary_rate_paid
+			multiplier = te_mon_rate_paid_multiplier
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.3.z
+	}
+}
+
+
+te_debug_monetary.4 = { # REVIEWED 2026-09-19: console-only diagnostic (`event te_debug_monetary.4`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/stock_exchange_frenzy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.4.t
+	desc = te_debug_monetary.4.d
+	flavor = te_debug_monetary.4.f
+
+	# The control: a literal multiplier, no variable and no script value in the
+	# slot. If this one does not move the tooltip, nothing about the multiplier
+	# form is the problem. 7 is chosen because no country pays it by accident.
+	option = {
+		name = te_debug_monetary.4.a
+		default_option = yes
+		if = {
+			limit = { has_modifier = te_monetary_base_offset }
+			remove_modifier = te_monetary_base_offset
+		}
+		if = {
+			limit = { has_modifier = te_monetary_rate_paid }
+			remove_modifier = te_monetary_rate_paid
+		}
+		add_modifier = { name = te_monetary_base_offset }
+		add_modifier = {
+			name = te_monetary_rate_paid
+			multiplier = 7 # REVIEWED 2026-09-19: console-only control value, never reachable in play
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.4.z
+	}
+}

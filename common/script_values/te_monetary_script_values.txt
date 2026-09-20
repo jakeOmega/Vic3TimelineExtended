@@ -427,3 +427,31 @@ te_mon_stance_bubble_add = {
 te_mon_gdp_current = {
 	value = gdp
 }
+
+
+# --- Diagnostic only — the multiplier experiment ----------------------------
+
+# NOT PART OF THE MONTHLY UPDATE. Step 9 writes te_monetary_rate_paid with
+# `multiplier = var:te_rate_paid_applied`, and on a fresh 1836 game that
+# modifier lands at 1x (budget tooltip: +20.0% Base Value, -19.0% Timed
+# Modifiers) even though te_rate_paid_applied holds the right number. The first
+# application runs from on_game_started, so either the variable is unreadable
+# at that call site or the var form does not scale this modifier at all.
+#
+# This wrapper is the second arm of the experiment: te_debug_monetary.3 applies
+# the same pair mid-game with `multiplier = te_mon_rate_paid_multiplier`, so a
+# named-script-value multiplier can be told apart from the var form. The
+# fallback of 3 is a number no country pays by coincidence — a tooltip reading
+# -17.0% means the script value ran but could not see the variable, while
+# -7.5%-ish (for a country paying ~12.5pp) means it resolved.
+#
+# Nothing outside events/te_debug_monetary_events.txt may reference this.
+te_mon_rate_paid_multiplier = {
+	if = {
+		limit = { has_variable = te_rate_paid_applied }
+		value = var:te_rate_paid_applied
+	}
+	else = {
+		value = 3
+	}
+}
