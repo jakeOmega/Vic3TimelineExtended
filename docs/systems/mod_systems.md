@@ -248,7 +248,7 @@ The `on_monthly_pulse` calls these scripted effects in order (all in `common/scr
 7. **`banking_cycle_update_ce_pool_balance`** — under `law_command_economy`, recalibrates the `planning_treasury_pool_balance` modifier on the JE so investment-pool net monthly income targets zero (state treasury funds all investment directly). Also called from `ce_invest_pool_inject` / `ce_invest_pool_withdraw` button effects.
 
 ### Monetary Policy (phase 1)
-The policy-rate dial and the risk-premium stack that replaced the old *Raise Policy Rate* toggle. `docs/systems/monetary_policy_design.md` stays the authority for phases 3–5 (world rate, gold flows, peg confidence, FX, international arrangements) and carries **"Phase 1 as shipped"** (§0.1–§0.3) and **"Phase 2 as shipped"** (§0.4), each with its deviations list and its half of the one in-game verification checklist — both phases are implemented but **not yet verified in a running game**. Read this subsection first, then **Monetary Policy (phase 2)** below, which adds to it rather than replacing it.
+The policy-rate dial and the risk-premium stack that replaced the old *Raise Policy Rate* toggle. `docs/systems/monetary_policy_design.md` stays the authority for phases 4–5 (FX, international arrangements) and carries **"Phase 1 as shipped"** (§0.1–§0.3), **"Phase 2 as shipped"** (§0.4) and **"Phase 3 as shipped"** (§0.5), each with its deviations list and its half of the one in-game verification checklist — both phases are implemented but **not yet verified in a running game**. Read this subsection first, then **Monetary Policy (phase 2)** below, which adds to it rather than replacing it.
 
 **Files.**
 

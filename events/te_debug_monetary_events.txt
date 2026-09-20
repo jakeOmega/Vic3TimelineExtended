@@ -853,6 +853,12 @@ te_debug_monetary.7 = { # REVIEWED 2026-09-20: console-only test event (`event t
 #      confidence at 25 so the crisis can be reached in two or three months
 #      rather than a decade.
 #
+# FIRE IT ON A COUNTRY THAT HAS PULSED. te_mon_peg_confidence_move and
+# te_mon_gold_gap_value read their variables unguarded — inside the monthly
+# update step 0 has always just written them — so on a tag that has never run a
+# monetary pulse (the first day of a campaign) those two read-out lines may log
+# an error instead of a number. Step a month first, or use te_debug_monetary.1.
+#
 # THE OFFSET IS A GLOBAL AND IT PERSISTS IN THE SAVE. Option b removes it. It
 # is read by te_monetary_refresh_world_rate, so it reaches the world rate on
 # the next global monthly pulse and each country on the pulse after that.

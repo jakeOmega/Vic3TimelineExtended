@@ -766,7 +766,7 @@ spent when it is called. Levers: a lower cap, or charging the policy rate on the
 shortfall term treats any debt as an empty vault, so the peg-defence target is world + 1 for
 every AI gold country in debt — a standing −0.125 of momentum a month. That is "the cost of
 the peg" §8 promises, and it is what keeps its confidence from eroding, but AI debt is the
-normal state of many tags. The lever is the 2pp in `te_mon_peg_shortfall_pp`.
+normal state of many tags. The lever is the 2pp in `te_mon_peg_shortfall_pp`. **It also moves a phase-1 expected number:** a peg-defending AI that is *in debt* now targets `ceiling(world + 1)` = 4 rather than 3, so §0.3 item 3's anchor figures (Britain 1836 at 4.0%) read a point higher for any AI gold country that starts, or falls, into debt. That is this ruling, not a regression — check `scaled_debt` before chasing it.
 
 **K. T5's dollarised expectations pin is still open.** §0.4 called it "a phase-3 item —
 decide". Nothing in §12 bears on it, the choice is the owner's, and phase 3 did not make it.
@@ -856,7 +856,8 @@ header says how to stage each; 40–42 can invalidate a mechanism; 43–47 are n
     drops by it on the next pulse, into debt if need be.
 46. **The price–specie term**: a sustained +2 gap shows ~+2.4pp of pressure in
     `te_debug_monetary.1` and a gold country's inflation climbing toward ~+1.2.
-47. **Formatting**: `@money!` with `|D+=` on *Gold Flow*; `|+=1` on the gap;
+47. **Formatting**: `|+=1` on the gap (*Gold Flow* uses `@money!` with `|D+`, which the mod
+    already ships);
     `GetGlobalVariable('te_world_rate_debug_offset')` rendering blank, not an error, when
     unset.
 

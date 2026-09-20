@@ -2342,23 +2342,6 @@ te_mon_world_rate_weighted_real = {
 	multiply = te_mon_world_rate_weight
 }
 
-# The guarded per-country read, for anything outside the monthly update. Inside
-# it step 0 has always just written te_mon_world_rate_now.
-te_mon_world_rate_read = {
-	value = 0
-	if = {
-		limit = { has_variable = te_mon_world_rate_now }
-		add = var:te_mon_world_rate_now
-	}
-	else_if = {
-		limit = { has_variable = te_mon_era_base_now }
-		add = var:te_mon_era_base_now
-	}
-	else = {
-		add = 3
-	}
-}
-
 # --- §12.2 gold flows --------------------------------------------------------
 
 # The gap is clamped to +/- this many pp before it moves any gold.
