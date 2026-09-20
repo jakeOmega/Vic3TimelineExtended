@@ -344,7 +344,9 @@ te_debug_monetary.4 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 # IN A LIVE GAME THE PREMIUM IS NOT 2. Rate paid comes out at
 # 3 + (credit standing + risk premium), so read those two off .1 and treat
 # whatever rate paid says here as YOUR baseline — sequence 2 is judged against
-# it, not against the literal 5.00.
+# it, not against the literal 5.00. Read it AFTER the pin, never before: taking
+# a country off central bank independence gives up that law's -0.5pp of credit
+# standing and its halved floor, so the pin itself moves the premium.
 #
 # THE SEED WRITES 5 BECAUSE §10 IS BUILT ON A REFERENCE RATE OF 3, which is
 # eras 1-4. Later eras run at 2.5 and 2.0 (§8), where the fixed point is
@@ -371,10 +373,10 @@ te_debug_monetary.4 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 #                                             rate paid ≈ 0.6
 #   event te_debug_monetary.7     option c    peace — monetisation 0, and the
 #                                             dial deliberately left at 5
-#   event te_debug_monetary.6     option b    x3 for §19's fifteen years, x4 to
-#                                             reach the twenty-one task 3
-#                                             averaged over; read .1 between
-#                                             runs
+#   event te_debug_monetary.6     option b    x3 for §19's fifteen years; task
+#                                             3 averaged over twenty-one, which
+#                                             is x4 (twenty years) plus one of
+#                                             option a. Read .1 between runs
 #
 # WHAT THE NUMBERS SHOULD DO (simulated against the shipped equations in task
 # 3's report, which has the month-by-month tables):
@@ -434,7 +436,25 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
-	title = te_debug_monetary.5.t
+	# The title says whether the country is standing on the harness's footing
+	# right now, so the pin re-opening this event IS the failure report.
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						te_mon_has_dial = no
+						te_mon_can_monetise = no
+					}
+				}
+				desc = te_debug_monetary.5.t_blocked
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = te_debug_monetary.5.t
+			}
+		}
+	}
 	desc = te_debug_monetary.5.d
 	flavor = te_debug_monetary.5.f
 
@@ -443,46 +463,117 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 	# state-owned banking, no command economy, delegation off and a target the
 	# mandate formula will not move.
 	#
-	# LAWS ARE SET WITH activate_law, WHICH IS NOT AN ENACTMENT. It fires
-	# on_law_activated, not on_law_enactment_pass, so te_banking_law_change_cleanup
-	# (common/on_actions/extra_on_actions.txt) does NOT run — its dollarisation
-	# exit and its monetisation eligibility sweep are both skipped. The
-	# dollarisation flag is therefore cleared here by hand, and it is cleared
-	# WITHOUT te_mon_effect_new_currency: a pin is a cheat, not a currency
-	# reform, and paying the ten-year premium would poison the very rate this
-	# harness exists to read. Nothing else in the mod may take that shortcut.
+	# LAWS ARE SET WITH activate_law, WHICH IS NOT AN ENACTMENT — and this mod
+	# hooks BOTH sides of that, so the difference cuts twice.
+	#
+	#   * on_law_enactment_pass does NOT fire, so te_banking_law_change_cleanup
+	#     (common/on_actions/extra_on_actions.txt) never runs: its dollarisation
+	#     exit, its monetisation eligibility sweep and
+	#     remove_banking_planning_modifiers_effect are all skipped. The
+	#     dollarisation flag is therefore cleared below by hand, and cleared
+	#     WITHOUT te_mon_effect_new_currency — a pin is a cheat, not a currency
+	#     reform, and the ten-year premium would poison the very rate this
+	#     harness exists to read. Nothing else in the mod may take that
+	#     shortcut. An ex-command country also keeps its planning_* journal-entry
+	#     modifiers until it next really enacts an economic-system law; nothing
+	#     in the rate stack reads them, but the banking cycle this harness takes
+	#     its phase and bubble terms from does.
+	#   * on_law_activated DOES fire, and the mod hooks it with five effects
+	#     (extra_on_actions.txt): fix_incompatible_laws_from_law_scope,
+	#     te_fix_inconsistent_laws_from_law_scope, language_reform_law_on_action,
+	#     radical_law_backlash_on_action and banking_law_cascade_on_law_activated.
+	#     The second of those is the one that matters here.
+	#
+	# THE CONSISTENCY SWEEP RUNS AFTER EVERY activate_law AND WILL UNDO A
+	# CARELESS PIN. te_fix_inconsistent_laws walks every law group
+	# (common/scripted_effects/extra_law_consistency_generated.txt, generated
+	# from the laws' own disallowing_laws / unlocking_laws) and replaces
+	# whatever it finds inconsistent. Three of its rules bear on this pin:
+	#
+	#   national bank        law_national_bank + law_traditionalism
+	#                        -> law_no_national_bank
+	#   monetary policy      law_fiat_currency without a national bank
+	#                        -> in 1836, law_commodity_money
+	#   economic system      law_interventionism + any of law_serfdom /
+	#                        law_anarchy / law_factory_councils /
+	#                        law_women_in_the_fields -> bounced, and on a tag
+	#                        with none of the three modern taxation laws the
+	#                        bounce lands back on law_traditionalism
+	#
+	# Chained, that is why the economic system is settled FIRST below: on a
+	# traditionalist tag a pin that started with the bank would lose the bank to
+	# rule one and then the currency to rule two, and end up on commodity money
+	# with no dial at all — most non-Western 1836 tags.
+	#
+	# WHY AGRARIANISM AND NOT ALWAYS INTERVENTIONISM. Interventionism is the
+	# better landing law — it is the mid economic system and disturbs least —
+	# but it disallows law_serfdom, which is exactly what a traditionalist 1836
+	# tag tends to hold, so the sweep would bounce it straight back.
+	# law_agrarianism's disallowing_laws are the same list MINUS serfdom, so it
+	# survives that case; both have an empty on_activate and neither carries
+	# country_credit_standing_add, so neither moves the premium. A country
+	# holding law_anarchy, law_factory_councils or law_women_in_the_fields has
+	# no stable economic system for this pin at all — that is what the verify
+	# at the foot of the option is for.
 	#
 	# STATE-OWNED BANKING IS TAKEN OFF TOO, not only independence: it is the
 	# weakest credibility anchor in the §9.1 table (c = 0.15) and it outranks
 	# delegation, so a country left on it runs the 0.15 case rather than the
 	# manual 0.25 every number in the sequences above is computed for.
 	# law_universal_banking_light_prudence is the replacement because it is the
-	# one law in the group with no credit-standing modifier and no
-	# disallowing_laws — the least the pin can disturb.
+	# only law in the group with no credit-standing modifier and no consistency
+	# rule of its own — it cannot be bounced. It is not free, and the swap is
+	# visible in two places the harness reads:
 	#
-	# THE COMMAND-ECONOMY SWAP IS THE ONE BIG CHEAT here (it moves production
-	# methods across the whole country), so it happens only if the country is
-	# actually in one. Being an activation rather than an enactment, it also
-	# skips remove_banking_planning_modifiers_effect, the other half of
-	# te_banking_law_change_cleanup: an ex-command country keeps its planning_*
-	# journal-entry modifiers until it next really enacts an economic-system
-	# law. Nothing in the rate stack reads them, but the banking cycle this
-	# harness takes its phase and bubble terms from does.
-	#
-	# law_national_bank CARRIES disallowing_laws = { law_traditionalism }, which
-	# most non-Western 1836 tags hold, so the pin can produce a pair the
-	# enactment screen would refuse. Nothing in the monetary system tests
-	# traditionalism — the only law test outside the regime ladder is
-	# te_mon_is_command — so the dial works regardless; it is a cheat's
-	# fingerprint, not a bug to file.
+	#   * country_banking_random_momentum_mult goes from -0.10 under
+	#     independence (-0.12 with its institution modifier) or -0.35 under
+	#     state ownership to +0.10, so the banking cycle becomes markedly more
+	#     volatile and the §9.1 phase term with it — a fast-forward started in
+	#     a frenzy or a panic is a different experiment from one started in
+	#     stable, and this makes those states more likely;
+	#   * leaving independence gives up its country_credit_standing_add of
+	#     -0.005 and its country_credit_standing_floor_add of -0.0025, so the
+	#     structural premium rises by up to 0.5pp and its floor doubles back to
+	#     0.5. That is correct — §9.1's manual case is not supposed to keep a
+	#     credibility bonus it no longer earns — but it means the baseline rate
+	#     paid after a pin is NOT the one the country was showing before it.
 	option = {
 		name = te_debug_monetary.5.a
 		default_option = yes
 
 		te_monetary_init_variables = yes
 
+		# 1. THE ECONOMIC SYSTEM, FIRST. Only traditionalism (which forbids the
+		#    bank) and a command economy (which has no dial) are in the way, so
+		#    nothing else is touched. The command swap is the one big cheat
+		#    here — it moves production methods across the whole country.
+		if = {
+			limit = {
+				OR = {
+					has_law_or_variant = law_type:law_traditionalism
+					te_mon_is_command = yes
+				}
+			}
+			if = {
+				limit = {
+					NOR = {
+						has_law_or_variant = law_type:law_serfdom
+						has_law_or_variant = law_type:law_anarchy
+						has_law_or_variant = law_type:law_factory_councils
+						has_law_or_variant = law_type:law_women_in_the_fields
+					}
+				}
+				activate_law = law_type:law_interventionism
+			}
+			else = {
+				activate_law = law_type:law_agrarianism
+			}
+		}
+
+		# 2. THE BANK, now that nothing forbids it.
 		activate_law = law_type:law_national_bank
-		activate_law = law_type:law_fiat_currency
+
+		# 3. THE CREDIBILITY ANCHOR.
 		if = {
 			limit = {
 				OR = {
@@ -492,10 +583,10 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 			}
 			activate_law = law_type:law_universal_banking_light_prudence
 		}
-		if = {
-			limit = { te_mon_is_command = yes }
-			activate_law = law_type:law_interventionism
-		}
+
+		# 4. THE CURRENCY, last, because its consistency rule is the one that
+		#    reads the bank.
+		activate_law = law_type:law_fiat_currency
 
 		set_variable = { name = te_mon_dollarised value = 0 }
 		set_variable = { name = te_mon_delegated value = 0 }
@@ -506,6 +597,25 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 		# te_monetary_clamp_target owns the range and re-applies it at the top
 		# of every pulse, with law reads that have certainly settled.
 		set_variable = { name = te_policy_rate_target value = 5 } # REVIEWED 2026-09-20: console-only; §10's worked example is built on a target of 5
+
+		# 5. VERIFY, AFTER THE LAST activate_law AND THEREFORE AFTER THE LAST
+		#    SWEEP. Effects in an option run in order and the on-action fires at
+		#    activation, so by here the laws have settled into whatever the
+		#    consistency rules will allow. If that is not a dial the player owns,
+		#    re-open this event: its title switches to the blocked variant and
+		#    its description names the sweep and what to change by hand. A pin
+		#    that quietly did nothing is the failure mode worth spending three
+		#    lines on — te_debug_monetary.7's war option would simply be missing,
+		#    with nothing to say why.
+		if = {
+			limit = {
+				OR = {
+					te_mon_has_dial = no
+					te_mon_can_monetise = no
+				}
+			}
+			trigger_event = { id = te_debug_monetary.5 }
+		}
 	}
 
 	# UNPIN — delegation only. The laws are NOT restored: this event never
