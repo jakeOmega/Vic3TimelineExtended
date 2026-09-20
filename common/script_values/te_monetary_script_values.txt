@@ -219,6 +219,15 @@
 #                                                   printed in the debug read-out so the
 #                                                   §17 check-12 units question can be
 #                                                   settled from a running game
+#   te_mon_mod_home         0 or 1                  where this country's MANAGED
+#                                                   monetary modifiers live: 1 on
+#                                                   je_banking_cycle, 0 on the
+#                                                   country (it has no entry).
+#                                                   Written by step 0b; a change
+#                                                   strips them all and zeroes the
+#                                                   five `_applied` variables (see
+#                                                   "WHERE THE MODIFIERS LIVE" in
+#                                                   te_monetary_effects.txt)
 #   te_mon_stance_bar_pos   -2 to 2     displayed   3 - te_mon_stance_band: the
 #                                                   band as a position for the
 #                                                   journal entry's

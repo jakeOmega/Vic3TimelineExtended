@@ -948,6 +948,20 @@ header says how to stage each; 40–42 can invalidate a mechanism; 43–47 are n
     balance × policy rate ÷ 5200 a week. **A save made under the first version carries its old
     hot-money balance into the new vault** and goes on paying the carry on it until the gap is
     ≤ 0 — expected, not a bug.
+46c. **Modifiers on the journal entry.** As Britain, the country's modifier list no longer shows the
+    inflation band (or stance politics, wage dividend, monetisation, gold carry); the banking
+    entry's own modifier list does, and their effects still reach the country — the budget still
+    shows *Interest on Borrowed Gold*, the band's IG rows still apply. **The scaled ones are the
+    risk:** `multiplier = root.var:X` on a JE modifier is the documented form but new to this
+    system — a carry line of £1 a week, or minting worth a pound, means the multiplier fell back
+    to 1. A country with no banking entry (any bankless tag) still carries its band on the
+    country. Build a first stock exchange as a small country and the modifiers should move to
+    the new entry on the next pulse with nothing doubled.
+46d. **Bars at the top.** Four bars above *Current Conditions* and none at the bottom of the
+    banking entry; every OTHER journal entry with scripted bars still shows them where it always
+    did (the `journal_entry.gui` override changes one `visible` line). The stance bar's marker
+    sits left when tight. A save from before this adds the fourth bar to a live entry — if
+    `debug.log` complains about `banking_policy_stance_bar`, that is why.
 46b. **Script values on the left of a comparison** (`te_mon_bank_gold_scaled < 0.25`,
     `te_mon_bank_recap_amount > 0`). Vanilla ships the form (`raiding_income > 0`,
     `state_infrastructure_balance < 0`), but this system had not used it before: if

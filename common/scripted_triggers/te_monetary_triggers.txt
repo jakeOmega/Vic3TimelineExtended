@@ -385,3 +385,25 @@ te_mon_rate_is_discretionary = {
 	has_variable = te_policy_rate
 	has_variable = te_inflation_expected
 }
+
+
+# --- Where the managed modifiers live ---------------------------------------
+# Is $NAME$ on this country's monetary modifier HOME — the banking journal entry
+# if te_mon_mod_home says so, the country otherwise? The read-side twin of
+# te_mon_mod_add / _remove (common/scripted_effects/te_monetary_effects.txt,
+# "WHERE THE MODIFIERS LIVE"). te_mon_mod_home is written by step 0b of every
+# pulse before anything asks; the has_journal_entry guard is for a caller
+# outside the update, where the entry may have gone since.
+te_mon_mod_has = {
+	trigger_if = {
+		limit = {
+			has_variable = te_mon_mod_home
+			var:te_mon_mod_home = 1
+			has_journal_entry = je_banking_cycle
+		}
+		je:je_banking_cycle = { has_modifier = $NAME$ }
+	}
+	trigger_else = {
+		has_modifier = $NAME$
+	}
+}

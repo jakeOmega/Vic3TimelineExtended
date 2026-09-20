@@ -219,6 +219,11 @@ te_monetary_monthly_update = {
 	# --- 0. initialise ------------------------------------------------------
 	te_monetary_init_variables = yes
 
+	# --- 0b. where this country's monetary modifiers live -------------------
+	# Before any step that adds or removes one: a changed home strips them all
+	# and zeroes the bookkeeping, and the steps below re-apply on this pulse.
+	te_monetary_settle_modifier_home = yes
+
 	# --- 1. regime code -----------------------------------------------------
 	te_monetary_set_regime = yes
 
@@ -274,6 +279,163 @@ te_monetary_monthly_update = {
 	# writes the flow step 6 will price NEXT month (the same one-month lag
 	# ruling P5 accepts for the stance gap).
 	te_monetary_update_gold = yes
+}
+
+
+# ----------------------------------------------------------------------------
+# WHERE THE MODIFIERS LIVE — on the banking journal entry, when there is one
+# ----------------------------------------------------------------------------
+# The repo's convention (scripting_best_practices.md § "Journal Entry Scoped
+# Modifiers") is that a system's modifiers sit on its journal entry, so they
+# read in the entry's own panel rather than lengthening the country's modifier
+# list. Monetary policy could not simply follow it, because the update runs for
+# EVERY country and most have no banking entry — so each managed modifier has a
+# HOME: je_banking_cycle if the country holds it, the country otherwise. JE
+# modifiers carrying country_* keys reach the country exactly as the banking
+# tools' always have, so every `modifier:` read in this file is unchanged.
+#
+# MANAGED: the inflation-band family (six bands + te_mon_dollarised_modifier),
+# the two §13 stance-politics modifiers, te_mon_real_wage_dividend,
+# te_monetisation_minting and te_mon_gold_carry_expense. Every add, remove and
+# has_modifier on them in this file goes through the four wrappers below;
+# nothing may touch them directly.
+#
+# NOT MANAGED, deliberately: te_monetary_rate_paid stays on the COUNTRY. It is
+# the one modifier every tag in the world carries, it must survive the banking
+# rule being off, it has its own root-repair marker, and it is the line the
+# budget's interest tooltip names. The timed crisis modifiers
+# (te_mon_currency_reform_premium, te_mon_peg_*) are applied by event options
+# with a clock on them and stay where the event put them.
+#
+# THE HOME CAN CHANGE — the entry activates when a country gets a stock
+# exchange, and is lost with it. te_monetary_settle_modifier_home runs first in
+# every pulse: when the home it recorded (te_mon_mod_home) is not the home the
+# country has now, it strips every managed modifier from BOTH places and zeroes
+# the five `_applied` bookkeeping variables, so each step re-applies into the
+# new home on this same pulse. A journal entry that vanished took its modifiers
+# with it, which is exactly the case the zeroing covers.
+#
+# SCALED MODIFIERS ON THE ENTRY use `multiplier = root.var:X`. The engine
+# re-evaluates a journal-entry multiplier in JE scope, where a bare country
+# property reads 'none' but a country VARIABLE reached through root resolves
+# (scripting_best_practices.md, "JE scope can't read country properties";
+# precedent: un_buttons.txt). The country-home branch keeps the bare `var:X`
+# form that has been read in game since phase 1. ROOT is the country in both —
+# every scaled site already sits behind `root ?= this`.
+te_monetary_settle_modifier_home = {
+	if = {
+		limit = { NOT = { has_variable = te_mon_mod_home } }
+		set_variable = { name = te_mon_mod_home value = 0 }
+	}
+	if = {
+		limit = { has_journal_entry = je_banking_cycle }
+		set_variable = { name = te_mon_work value = 1 }
+	}
+	else = {
+		set_variable = { name = te_mon_work value = 0 }
+	}
+	# THE CANARY. Every country that runs inflation always carries exactly one
+	# member of the band family (comfort is an empty modifier that is still
+	# applied), so an entry that holds none while te_inflation_band_applied
+	# says one is on it is an entry that was lost and re-created between two
+	# pulses with the home unchanged — its modifiers went with the old one.
+	# Treated as a change of home: strip, zero, re-apply.
+	if = {
+		limit = {
+			var:te_mon_mod_home = 1
+			var:te_mon_work = 1
+			var:te_inflation_band_applied >= 1
+			je:je_banking_cycle = {
+				NOR = {
+					has_modifier = te_inflation_band_deflation
+					has_modifier = te_inflation_band_comfort
+					has_modifier = te_inflation_band_elevated
+					has_modifier = te_inflation_band_high
+					has_modifier = te_inflation_band_very_high
+					has_modifier = te_inflation_band_hyper
+					has_modifier = te_mon_dollarised_modifier
+				}
+			}
+		}
+		set_variable = { name = te_mon_mod_home value = -1 }
+	}
+	if = {
+		limit = { NOT = { var:te_mon_mod_home = var:te_mon_work } }
+		te_mon_mod_strip = { NAME = te_inflation_band_deflation }
+		te_mon_mod_strip = { NAME = te_inflation_band_comfort }
+		te_mon_mod_strip = { NAME = te_inflation_band_elevated }
+		te_mon_mod_strip = { NAME = te_inflation_band_high }
+		te_mon_mod_strip = { NAME = te_inflation_band_very_high }
+		te_mon_mod_strip = { NAME = te_inflation_band_hyper }
+		te_mon_mod_strip = { NAME = te_mon_dollarised_modifier }
+		te_mon_mod_strip = { NAME = te_mon_stance_politics_tight }
+		te_mon_mod_strip = { NAME = te_mon_stance_politics_loose }
+		te_mon_mod_strip = { NAME = te_mon_real_wage_dividend }
+		te_mon_mod_strip = { NAME = te_monetisation_minting }
+		te_mon_mod_strip = { NAME = te_mon_gold_carry_expense }
+		set_variable = { name = te_inflation_band_applied value = 0 }
+		set_variable = { name = te_mon_stance_politics_applied value = 0 }
+		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
+		set_variable = { name = te_monetisation_minting_applied value = 0 }
+		set_variable = { name = te_gold_carry_applied value = 0 }
+		set_variable = { name = te_mon_mod_home value = var:te_mon_work }
+	}
+}
+
+# Take $NAME$ off the country AND off the entry, wherever it is. Guarded both
+# ways: remove_modifier on a modifier that is not there logs an error.
+te_mon_mod_strip = {
+	if = {
+		limit = { has_modifier = $NAME$ }
+		remove_modifier = $NAME$
+	}
+	if = {
+		limit = { has_journal_entry = je_banking_cycle }
+		je:je_banking_cycle = {
+			if = {
+				limit = { has_modifier = $NAME$ }
+				remove_modifier = $NAME$
+			}
+		}
+	}
+}
+
+te_mon_mod_add = {
+	if = {
+		limit = { var:te_mon_mod_home = 1 }
+		je:je_banking_cycle = { add_modifier = { name = $NAME$ } }
+	}
+	else = {
+		add_modifier = { name = $NAME$ }
+	}
+}
+
+te_mon_mod_add_scaled = {
+	if = {
+		limit = { var:te_mon_mod_home = 1 }
+		je:je_banking_cycle = {
+			add_modifier = {
+				name = $NAME$
+				multiplier = root.var:$VAR$
+			}
+		}
+	}
+	else = {
+		add_modifier = {
+			name = $NAME$
+			multiplier = var:$VAR$
+		}
+	}
+}
+
+te_mon_mod_remove = {
+	if = {
+		limit = { var:te_mon_mod_home = 1 }
+		je:je_banking_cycle = { remove_modifier = $NAME$ }
+	}
+	else = {
+		remove_modifier = $NAME$
+	}
 }
 
 
@@ -804,8 +966,8 @@ te_monetary_update_monetisation = {
 	if = {
 		limit = { var:te_monetisation_level = 0 }
 		if = {
-			limit = { has_modifier = te_monetisation_minting }
-			remove_modifier = te_monetisation_minting
+			limit = { te_mon_mod_has = { NAME = te_monetisation_minting } }
+			te_mon_mod_remove = { NAME = te_monetisation_minting }
 		}
 		# The applied value follows the modifier off. It is never REMOVED —
 		# it backs a live multiplier and a missing variable would make every
@@ -822,18 +984,15 @@ te_monetary_update_monetisation = {
 				OR = {
 					var:te_mon_work2 >= 1
 					var:te_mon_work2 <= -1
-					NOT = { has_modifier = te_monetisation_minting }
+					NOT = { te_mon_mod_has = { NAME = te_monetisation_minting } }
 				}
 			}
 			if = {
-				limit = { has_modifier = te_monetisation_minting }
-				remove_modifier = te_monetisation_minting
+				limit = { te_mon_mod_has = { NAME = te_monetisation_minting } }
+				te_mon_mod_remove = { NAME = te_monetisation_minting }
 			}
 			set_variable = { name = te_monetisation_minting_applied value = var:te_mon_work }
-			add_modifier = {
-				name = te_monetisation_minting
-				multiplier = var:te_monetisation_minting_applied
-			}
+			te_mon_mod_add_scaled = { NAME = te_monetisation_minting VAR = te_monetisation_minting_applied }
 		}
 	}
 }
@@ -1675,22 +1834,22 @@ te_monetary_apply_inflation_band = {
 		limit = { NOT = { var:te_inflation_band_applied = var:te_mon_work } }
 
 		# Take off what we put on last month.
-		if = { limit = { var:te_inflation_band_applied = 1 } remove_modifier = te_inflation_band_deflation }
-		else_if = { limit = { var:te_inflation_band_applied = 2 } remove_modifier = te_inflation_band_comfort }
-		else_if = { limit = { var:te_inflation_band_applied = 3 } remove_modifier = te_inflation_band_elevated }
-		else_if = { limit = { var:te_inflation_band_applied = 4 } remove_modifier = te_inflation_band_high }
-		else_if = { limit = { var:te_inflation_band_applied = 5 } remove_modifier = te_inflation_band_very_high }
-		else_if = { limit = { var:te_inflation_band_applied = 6 } remove_modifier = te_inflation_band_hyper }
-		else_if = { limit = { var:te_inflation_band_applied = 7 } remove_modifier = te_mon_dollarised_modifier }
+		if = { limit = { var:te_inflation_band_applied = 1 } te_mon_mod_remove = { NAME = te_inflation_band_deflation } }
+		else_if = { limit = { var:te_inflation_band_applied = 2 } te_mon_mod_remove = { NAME = te_inflation_band_comfort } }
+		else_if = { limit = { var:te_inflation_band_applied = 3 } te_mon_mod_remove = { NAME = te_inflation_band_elevated } }
+		else_if = { limit = { var:te_inflation_band_applied = 4 } te_mon_mod_remove = { NAME = te_inflation_band_high } }
+		else_if = { limit = { var:te_inflation_band_applied = 5 } te_mon_mod_remove = { NAME = te_inflation_band_very_high } }
+		else_if = { limit = { var:te_inflation_band_applied = 6 } te_mon_mod_remove = { NAME = te_inflation_band_hyper } }
+		else_if = { limit = { var:te_inflation_band_applied = 7 } te_mon_mod_remove = { NAME = te_mon_dollarised_modifier } }
 
 		# Put on this month's.
-		if = { limit = { var:te_mon_work = 1 } add_modifier = { name = te_inflation_band_deflation } }
-		else_if = { limit = { var:te_mon_work = 2 } add_modifier = { name = te_inflation_band_comfort } }
-		else_if = { limit = { var:te_mon_work = 3 } add_modifier = { name = te_inflation_band_elevated } }
-		else_if = { limit = { var:te_mon_work = 4 } add_modifier = { name = te_inflation_band_high } }
-		else_if = { limit = { var:te_mon_work = 5 } add_modifier = { name = te_inflation_band_very_high } }
-		else_if = { limit = { var:te_mon_work = 6 } add_modifier = { name = te_inflation_band_hyper } }
-		else_if = { limit = { var:te_mon_work = 7 } add_modifier = { name = te_mon_dollarised_modifier } }
+		if = { limit = { var:te_mon_work = 1 } te_mon_mod_add = { NAME = te_inflation_band_deflation } }
+		else_if = { limit = { var:te_mon_work = 2 } te_mon_mod_add = { NAME = te_inflation_band_comfort } }
+		else_if = { limit = { var:te_mon_work = 3 } te_mon_mod_add = { NAME = te_inflation_band_elevated } }
+		else_if = { limit = { var:te_mon_work = 4 } te_mon_mod_add = { NAME = te_inflation_band_high } }
+		else_if = { limit = { var:te_mon_work = 5 } te_mon_mod_add = { NAME = te_inflation_band_very_high } }
+		else_if = { limit = { var:te_mon_work = 6 } te_mon_mod_add = { NAME = te_inflation_band_hyper } }
+		else_if = { limit = { var:te_mon_work = 7 } te_mon_mod_add = { NAME = te_mon_dollarised_modifier } }
 
 		set_variable = { name = te_inflation_band_applied value = var:te_mon_work }
 	}
@@ -1800,8 +1959,8 @@ te_monetary_apply_wage_dividend = {
 	if = {
 		limit = { var:te_mon_work < 0.05 }
 		if = {
-			limit = { has_modifier = te_mon_real_wage_dividend }
-			remove_modifier = te_mon_real_wage_dividend
+			limit = { te_mon_mod_has = { NAME = te_mon_real_wage_dividend } }
+			te_mon_mod_remove = { NAME = te_mon_real_wage_dividend }
 		}
 		# The applied value follows the modifier off, but the variable stays.
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
@@ -1815,18 +1974,15 @@ te_monetary_apply_wage_dividend = {
 				OR = {
 					var:te_mon_work2 >= 0.05
 					var:te_mon_work2 <= -0.05
-					NOT = { has_modifier = te_mon_real_wage_dividend }
+					NOT = { te_mon_mod_has = { NAME = te_mon_real_wage_dividend } }
 				}
 			}
 			if = {
-				limit = { has_modifier = te_mon_real_wage_dividend }
-				remove_modifier = te_mon_real_wage_dividend
+				limit = { te_mon_mod_has = { NAME = te_mon_real_wage_dividend } }
+				te_mon_mod_remove = { NAME = te_mon_real_wage_dividend }
 			}
 			set_variable = { name = te_mon_wage_dividend_applied value = var:te_mon_work }
-			add_modifier = {
-				name = te_mon_real_wage_dividend
-				multiplier = var:te_mon_wage_dividend_applied
-			}
+			te_mon_mod_add_scaled = { NAME = te_mon_real_wage_dividend VAR = te_mon_wage_dividend_applied }
 		}
 	}
 }
@@ -2185,12 +2341,12 @@ te_monetary_apply_stance_politics = {
 		limit = { NOT = { var:te_mon_stance_politics_applied = var:te_mon_work } }
 
 		# Take off what we put on last month.
-		if = { limit = { var:te_mon_stance_politics_applied = 1 } remove_modifier = te_mon_stance_politics_tight }
-		else_if = { limit = { var:te_mon_stance_politics_applied = 2 } remove_modifier = te_mon_stance_politics_loose }
+		if = { limit = { var:te_mon_stance_politics_applied = 1 } te_mon_mod_remove = { NAME = te_mon_stance_politics_tight } }
+		else_if = { limit = { var:te_mon_stance_politics_applied = 2 } te_mon_mod_remove = { NAME = te_mon_stance_politics_loose } }
 
 		# Put on this month's, if there is one.
-		if = { limit = { var:te_mon_work = 1 } add_modifier = { name = te_mon_stance_politics_tight } }
-		else_if = { limit = { var:te_mon_work = 2 } add_modifier = { name = te_mon_stance_politics_loose } }
+		if = { limit = { var:te_mon_work = 1 } te_mon_mod_add = { NAME = te_mon_stance_politics_tight } }
+		else_if = { limit = { var:te_mon_work = 2 } te_mon_mod_add = { NAME = te_mon_stance_politics_loose } }
 
 		set_variable = { name = te_mon_stance_politics_applied value = var:te_mon_work }
 	}
@@ -2551,8 +2707,8 @@ te_monetary_update_gold = {
 	if = {
 		limit = { var:te_mon_work < 1 }
 		if = {
-			limit = { has_modifier = te_mon_gold_carry_expense }
-			remove_modifier = te_mon_gold_carry_expense
+			limit = { te_mon_mod_has = { NAME = te_mon_gold_carry_expense } }
+			te_mon_mod_remove = { NAME = te_mon_gold_carry_expense }
 		}
 		set_variable = { name = te_gold_carry_applied value = 0 }
 	}
@@ -2565,18 +2721,15 @@ te_monetary_update_gold = {
 				OR = {
 					var:te_mon_work2 >= 1
 					var:te_mon_work2 <= -1
-					NOT = { has_modifier = te_mon_gold_carry_expense }
+					NOT = { te_mon_mod_has = { NAME = te_mon_gold_carry_expense } }
 				}
 			}
 			if = {
-				limit = { has_modifier = te_mon_gold_carry_expense }
-				remove_modifier = te_mon_gold_carry_expense
+				limit = { te_mon_mod_has = { NAME = te_mon_gold_carry_expense } }
+				te_mon_mod_remove = { NAME = te_mon_gold_carry_expense }
 			}
 			set_variable = { name = te_gold_carry_applied value = var:te_mon_work }
-			add_modifier = {
-				name = te_mon_gold_carry_expense
-				multiplier = var:te_gold_carry_applied
-			}
+			te_mon_mod_add_scaled = { NAME = te_mon_gold_carry_expense VAR = te_gold_carry_applied }
 		}
 	}
 
