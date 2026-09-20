@@ -219,6 +219,13 @@
 #                                                   printed in the debug read-out so the
 #                                                   §17 check-12 units question can be
 #                                                   settled from a running game
+#   te_mon_stance_bar_pos   -2 to 2     displayed   3 - te_mon_stance_band: the
+#                                                   band as a position for the
+#                                                   journal entry's
+#                                                   banking_policy_stance_bar (tight
+#                                                   left, loose right). Written by
+#                                                   step 8 from the BAND, never
+#                                                   from the gap
 #   te_mon_stance_months    +/- te_mon_stance_months_cap
 #                                                   how many consecutive months the
 #                                                   DISPLAYED band has been loose (<= 2,
@@ -2703,4 +2710,17 @@ te_mon_peg_confidence_move = {
 # beside the vault's, which is te_mon_bank_gold_scaled.
 te_mon_debug_scaled_reserves = {
 	value = scaled_gold_reserves
+}
+
+# Peg confidence as 0-1, for the dashboard's meter. Guarded: a .gui evaluates
+# it for a save that may not have pulsed on phase 3 yet.
+te_mon_peg_confidence_scaled = {
+	value = 0
+	if = {
+		limit = { has_variable = te_peg_confidence }
+		add = var:te_peg_confidence
+	}
+	divide = 100
+	min = 0
+	max = 1
 }

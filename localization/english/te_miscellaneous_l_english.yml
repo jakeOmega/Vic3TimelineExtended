@@ -1379,6 +1379,8 @@
  banking_omo_unbacked_money_tt:0 "A currency convertible into metal cannot create money to buy bonds without losing its reserves; only a fiat or digital currency can run open-market operations."
  banking_open_market_ops:0 "Open Market Operations"
  banking_policy_rate_hike:0 "Policy Rate Hike"
+ banking_policy_stance_bar_name:0 "Policy Stance — tight"
+ banking_policy_stance_bar_second:0 "loose"
  banking_raise_margin_requirements:0 "Raise Margin Requirements"
  banking_stance_band_1:0 "Monetary Stance: Very Loose"
  banking_stance_band_2:0 "Monetary Stance: Loose"

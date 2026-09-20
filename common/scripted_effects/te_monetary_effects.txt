@@ -2060,6 +2060,13 @@ te_monetary_update_stance = {
 		set_variable = { name = te_mon_stance_gap value = 0 }
 		set_variable = { name = te_mon_stance_band value = 3 }
 	}
+
+	# The band again, as a position for banking_policy_stance_bar: 3 - band, so
+	# very tight is -2 (left) and very loose +2 (right). Derived from the BAND
+	# and nothing else — the bar is a picture of a number the dashboard already
+	# prints, not a second window onto the gap.
+	set_variable = { name = te_mon_stance_bar_pos value = 3 }
+	change_variable = { name = te_mon_stance_bar_pos subtract = var:te_mon_stance_band }
 }
 
 
