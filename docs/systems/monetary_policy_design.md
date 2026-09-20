@@ -1428,8 +1428,8 @@ Each phase is playable alone. Later phases can be cut.
    *Mitigation:* access + rank tables; the debt-load premium (§7.6); and as a fallback the
    **global** credit-limit defines (`COUNTRY_MIN_CREDIT_SCALED`) — blunt, all countries at
    once, but real.
-3. **INJECT semantics unproven.** *Mitigation:* the phase-1 coding gate (§17), with a
-   fallback per axis.
+3. **INJECT semantics.** *Retired 2026-09-20:* the §17 gate was run and INJECT sums in
+   every shape the mod uses, so the per-axis fallbacks are recipes, not pending work.
 4. **Variable lifecycle** — unguarded `immediate` resets; a multiplier-backing var removed
    by a cleanup effect; a national-bank country with no JE and therefore no dial.
    *Mitigation:* single owner on the country pulse, guards everywhere, never remove,

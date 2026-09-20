@@ -23,13 +23,16 @@
 # trait and vanilla event modifiers. They keep multiplying the finished stack,
 # which is a documented consequence, not an oversight.
 #
-# UNVERIFIED ENGINE ASSUMPTION — read before changing anything here (§17)
-# This block assumes that a `modifier = { }` inside an `INJECT:` SUMS with the
-# vanilla entity's own `modifier = { }`, key by key — the same assumption
+# CONFIRMED ENGINE BEHAVIOUR — read before changing anything here (§17)
+# This block relies on a `modifier = { }` inside an `INJECT:` SUMMING with the
+# vanilla entity's own `modifier = { }`, key by key — the same behaviour
 # common/laws/sol_expectations_vanilla_injections.txt has shipped on since
-# April. §17 checks 1 and 3 settle it from tooltips alone, with no new code.
+# April. Read in game by the owner on 2026-09-20: laissez-faire's -25% and the
+# cancelling +25% below are both gone from the interest tooltip, which closes
+# §17 checks 1 and 3. docs/guides/scripting_best_practices.md § INJECT.
 #
-# If INJECT turns out to be LAST-WINS, this block is wrong twice over: the
+# Recovery recipe, kept in case a future patch ever changes that. Under
+# LAST-WINS this block would be wrong twice over: the
 # cancel would ADD to vanilla's mult instead of zeroing it, and the injected
 # block would wipe the rest of law_laissez_faire's vanilla modifier (investment
 # pool efficiency, private construction allocation, government dividend

@@ -32,15 +32,17 @@
 # The premium is carried on the rank rather than computed in script so that it
 # shows up in the rank tooltip where the player already looks for it.
 #
-# UNVERIFIED ENGINE ASSUMPTION — read before changing anything here (§17)
-# Every block below assumes that a `modifier = { }` inside an `INJECT:` SUMS
-# with the vanilla entity's own `modifier = { }`, key by key. That is the same
-# assumption common/laws/sol_expectations_vanilla_injections.txt has shipped on
-# since April, and §17 checks 1 and 4 (read a great power's budget-panel
-# interest tooltip; read a vanilla tech tooltip the mod INJECTs) are the way to
-# settle it. They need no new code.
+# CONFIRMED ENGINE BEHAVIOUR — read before changing anything here (§17)
+# Every block below relies on a `modifier = { }` inside an `INJECT:` SUMMING
+# with the vanilla entity's own `modifier = { }`, key by key. The owner read
+# that off a great power's budget-panel interest tooltip in game on 2026-09-19
+# (ranks and technologies) and 2026-09-20 (laws, and a flat key in a static
+# modifier), closing §17 checks 1-4 — the same behaviour
+# common/laws/sol_expectations_vanilla_injections.txt has shipped on since
+# April. docs/guides/scripting_best_practices.md § INJECT carries the reads.
 #
-# If INJECT turns out to be LAST-WINS instead, this file is wrong twice over:
+# Recovery recipe, kept in case a future patch ever changes that. Under
+# LAST-WINS this file would be wrong twice over:
 # the cancel would ADD to vanilla's mult instead of zeroing it (a great power
 # would pay +50% rather than +0%), and the injected block would wipe the rest
 # of each rank's vanilla modifier (influence, maneuvers, agitator slots,

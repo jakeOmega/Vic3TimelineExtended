@@ -32,15 +32,15 @@
 # engine applies the instant a tech lands and what the next monthly pulse
 # writes.
 #
-# ENGINE ASSUMPTION — read before changing anything here
-# Every block below assumes that a `modifier = { }` inside an `INJECT:` SUMS
-# with the vanilla entity's own `modifier = { }`, key by key. The mod owner
-# confirmed (PR #335, 2026-09-19) that tech INJECTs sum in this mod; that is an
-# owner report, not a recorded probe, so it is still worth reading off in game
-# — and the same assumption carries
+# CONFIRMED ENGINE BEHAVIOUR — read before changing anything here
+# Every block below relies on a `modifier = { }` inside an `INJECT:` SUMMING
+# with the vanilla entity's own `modifier = { }`, key by key. The owner read it
+# in game on 2026-09-19 for technologies (and country ranks) and on 2026-09-20
+# for laws and for a flat key in a static modifier, which closes §17 checks 1-4
+# for this file and for its two siblings,
 # common/country_ranks/te_monetary_rank_injections.txt and
-# common/laws/te_monetary_law_injections.txt, where it is NOT yet confirmed
-# (docs/guides/scripting_best_practices.md § INJECT keeps the open question).
+# common/laws/te_monetary_law_injections.txt
+# (docs/guides/scripting_best_practices.md § INJECT carries all four reads).
 #
 # THE IN-GAME CHECK IS `country_minting_mult`. Each of the five vanilla blocks
 # carries country_minting_mult = 0.1 alongside the interest line (and

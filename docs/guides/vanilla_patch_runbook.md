@@ -212,7 +212,7 @@ grep -rn country_loan_interest_rate_add "$BG/common/technology/technologies/"
 grep -n -A8 '^country_loan_interest_rate_add=' "$BG/common/modifier_type_definitions/00_modifier_types.txt"
 ```
 
-The three INJECT files carry the same warning in their own headers, so a fix made here should be echoed there (and vice versa). Note that all three cancels additionally rest on the INJECT sum-vs-last-wins question — owner-confirmed for techs, still unresolved for ranks and laws; see `scripting_best_practices.md` § INJECT.
+The three INJECT files carry the same warning in their own headers, so a fix made here should be echoed there (and vice versa). All three cancels rest on INJECT blocks summing with vanilla's, which is confirmed in game for every shape the mod uses (ranks and techs 2026-09-19, laws and flat keys 2026-09-20); see `scripting_best_practices.md` § INJECT.
 
 ## 7. Special-case: combat units / ship types
 

@@ -83,11 +83,15 @@ te_banking_law_change_cleanup = {
 			# also records the off_cb_open_market_ops history marker, so an automatic
 			# switch-off draws on the chart exactly like a manual one.
 			#
-			# else_if on purpose: a country entering a command or cooperative economy
-			# has already had banking_open_market_ops stripped by the branch above, and
+			# else_if on purpose: a country ALREADY IN a command or cooperative economy
+			# (the branch above reads the old law, per the timing note, so that is the
+			# case it catches) has just had banking_open_market_ops stripped there, and
 			# that removal is not visible inside this same effect block — the
 			# has_modifier read behind banking_tool_omo_active would still say yes and
-			# post a second, spurious marker.
+			# post a second, spurious marker. A country *entering* one of those
+			# economies falls through to here instead, which is also right: if it has a
+			# legacy OMO and no unbacked-money regime, switching it off is the whole
+			# point of this branch.
 			else_if = {
 				limit = {
 					banking_tool_omo_active = yes
