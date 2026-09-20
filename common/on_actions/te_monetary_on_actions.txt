@@ -3,10 +3,13 @@
 # ============================================================================
 # Spec: docs/systems/monetary_policy_design.md §16.1-16.2.
 #
-# Everything here feeds one effect, te_monetary_monthly_update
+# Almost everything here feeds one effect, te_monetary_monthly_update
 # (common/scripted_effects/te_monetary_effects.txt), which is the system's
 # single owner: no other file writes te_policy_rate, te_rate_paid_pts or the
-# two interest modifiers.
+# two interest modifiers. The one exception is the tech-acquisition hook at the
+# bottom, which calls step 9 (te_monetary_apply_interest_modifiers) on its own —
+# see the contract comment on te_monetary_monthly_update for why that is safe
+# and why nothing else may do it.
 #
 # NOT GATED ON `banking_system_enabled` (§16.1). The interest plumbing cancels
 # vanilla's flat 20% base rate and replaces it with the mod's own number, so it
@@ -158,18 +161,27 @@ on_secession_start = {
 	}
 }
 
-# Shared by all six: the new country is scope:target, and the parent's own rate
-# is refreshed too because losing states moves its GDP, debt load and rank.
+# Shared by all six. ONLY the new country is updated. Root is the parent — the
+# releasing country, or the one the uprising is breaking away from (vanilla
+# documents this at common/on_actions/00_code_on_actions.txt:3634, :5143, :5510)
+# — and the parent already pulses monthly like everyone else. Running the update
+# on it here would be a second non-idempotent call in the same month: it would
+# drift the parent's policy rate an extra third of a point toward its target and
+# draw both hidden random walks twice. The parent's GDP, debt load and rank do
+# move when it loses states, but the very next monthly pulse prices that in; a
+# one-month lag is the correct cost, a double pulse is not.
 te_monetary_on_country_released = {
 	effect = {
-		te_monetary_monthly_update = yes
 		scope:target ?= {
 			te_monetary_monthly_update = yes
 		}
 	}
 }
 
-# Root = Country (the newly formed country)
+# Root = Country (the newly formed country — vanilla's own block tests
+# `was_formed_from` on ROOT, 00_code_on_actions.txt:3875-3891). Root is the new
+# tag here, not a parent, so the bare call is correct and there is nothing to
+# double-pulse.
 on_country_formed = {
 	on_actions = {
 		te_monetary_on_country_formed
@@ -179,5 +191,57 @@ on_country_formed = {
 te_monetary_on_country_formed = {
 	effect = {
 		te_monetary_monthly_update = yes
+	}
+}
+
+
+# ============================================================================
+# TECH ACQUISITION — step 9 alone, never the whole update
+# ============================================================================
+# Root = Country (docs/engine/on_actions_summary.txt: `on_acquired_technology|country`).
+# Registered in common/on_actions/extra_on_actions.txt's existing
+# on_acquired_technology block, so the monetary system adds no second
+# declaration of that on-action for the engine to merge.
+#
+# WHY IT EXISTS (R3). The five vanilla finance techs — banking, central_banking,
+# mutual_funds, international_exchange_standards, modern_financial_instruments —
+# each still grant country_loan_interest_rate_add = -0.02 engine-side, and the
+# engine applies that the instant the tech lands. The mod's compensation for it,
+# te_mon_vanilla_tech_offset, reaches the engine only through
+# te_monetary_rate_paid, which used to be rewritten on the monthly pulse and
+# nowhere else. Between the tech landing and the next pulse the country therefore
+# paid 2pp less than te_rate_paid_pts claims, and a country already paying under
+# 2% — a fiat or digital economy sitting near its floor with relief tools, which
+# is exactly when the last three of those techs arrive for laggards and through
+# tech spread — drove the sum of the country_loan_interest_rate_add modifiers
+# non-positive. extra_modifiers.txt calls that state unknown and never exercised;
+# this hook is what keeps it that way.
+#
+# STEP 9 AND NOTHING ELSE. Step 9 is the only idempotent step of the update: it
+# recomputes te_rate_paid_pts + te_mon_vanilla_tech_offset, compares it against
+# what is already applied, and re-adds both modifiers in one block. It does not
+# drift the policy rate and does not draw the hidden random walks, so running it
+# off the pulse neither ages the hidden state nor moves the rate. Calling
+# te_monetary_monthly_update from here instead would do both, twice in the month
+# a tech lands.
+#
+# NOT FILTERED ON scope:technology, deliberately. Any tech that changes nothing
+# moves the applied value by 0 and step 9's 0.05 threshold skips it before it
+# touches a modifier; one of the five moves it by a full 2.0, forty times the
+# threshold. Five has_technology_researched tests would buy one subtraction and
+# would give up the threshold's other job — re-adding a pair that has gone
+# missing on a country that happens to research something.
+#
+# THE GUARD IS STEP 9'S OWN INPUTS. It reads var:te_rate_paid_pts and
+# var:te_rate_paid_applied; both are written by step 0 on a country's first
+# monthly update. A country that has never pulsed has neither, pays vanilla's
+# flat 20% as the documented fallback, and gets its pair from the pulse.
+te_monetary_on_acquired_technology = {
+	trigger = {
+		has_variable = te_rate_paid_pts
+		has_variable = te_rate_paid_applied
+	}
+	effect = {
+		te_monetary_apply_interest_modifiers = yes
 	}
 }

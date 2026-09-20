@@ -74,6 +74,9 @@ banking_stance_is_tight = {
 }
 
 # Real rate at least 1pp below the (hidden) neutral rate.
+# KEEP: no caller in phase 1 (only _is_tight is weighted today). It is the other
+# half of this pair's contract surface for phases 2-3, where loose money feeds
+# inflation and the easing-side AI weights; a cleanup pass should leave it.
 banking_stance_is_loose = {
 	has_variable = te_mon_stance_gap
 	var:te_mon_stance_gap <= -1

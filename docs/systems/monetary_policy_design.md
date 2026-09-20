@@ -49,6 +49,8 @@ wrong or leave open.
 | | The dashboard's rate-paid row uses **`GetPlayer.GetYearlyInterestRate`**, not §17 check 6's `JournalEntry.GetCountry.…` form | `GetPlayer.` is the only form vanilla ships; the panel only ever renders for its owner, so both roots name the same country | **§17 check 6 stays untested** — a later phase needing the figure where `GetPlayer` is wrong must test the chain then |
 | | `banking_policy_rate_hike`'s loc keys are **kept** while the modifier stays defined | §18's deletion list and its save-migration paragraph conflict; every defined modifier needs loc | they come out with the modifier next release (checklist in `legacy_modifier_cleanup.txt`) |
 | | §7.5 says "Banking event outcomes (14)"; there are **13** | enumerated from the files; the stated −0.10…+0.20 range matches exactly, so it is a spec miscount, not a missed site | corrected in §7.5 |
+| | **Step 9 also runs from `on_acquired_technology`**, on its own, guarded on `te_rate_paid_pts` + `te_rate_paid_applied` — §16.2's ordering implies the modifier write only ever happens inside the monthly update | the engine grants a vanilla finance tech's −2pp the instant it lands, while R3's compensation waits for the next pulse; a country already paying under 2% would spend up to a month at a non-positive `country_loan_interest_rate_add` sum, the state §16.1's invariant exists to prevent. Step 9 is the one idempotent step (no drift, no walk draw), so an extra call is free | delete the on-action; the hole reopens |
+| | **`bubble_pressure` must never be printed to a decimal on any surface** | §8 argues the cycle's random monthly nudges mask the stance term — true for momentum and cycle value, which `banking_cycle_advance_variables`' `random_list` nudges, but **bubble has no random term**. `banking_display_bubble_monthly_add` is exactly `modifier:country_bubble_pressure_monthly_add`, so Δbubble minus it is the stance push alone: `−0.75 × te_mon_stance_gap_clamped`, which inverts to the gap (and so to r\*) anywhere inside the ±4 clamp and off bubble's own 0/100 bounds — the whole stance-band range | the hidden-state rule (§8) fails through the banking panel, not through anything monetary |
 
 ### 0.2 Deferred (named in the design, deliberately not shipped)
 
@@ -73,11 +75,21 @@ sign-wrong and belongs to the phase-3 FX pass; OMO's `ai_chance` has no recessio
 at the floor; the band swap does not self-heal if a JE's modifiers are lost while
 `te_mon_stance_band_applied` persists.
 
+One asymmetry worth naming, because it looks like a bug and is not: the AI's **tools** are
+better informed than the AI's **central bank**. `banking_stance_is_tight` reads
+`te_mon_stance_gap`, the true gap against r\*, while a delegated bank's mandate steers on the
+estimate r̂\* = `neutral + error`. Nothing leaks — `ai_chance` is never rendered — and the
+alternative (a second, estimate-based stance trigger) buys a realism point nobody can observe.
+Phase 3's stance politics should revisit it when IGs start reacting to the stance.
+
 ### 0.3 IN-GAME VERIFICATION CHECKLIST
 
 One list, ordered by **how much breaks if the check fails**. Items 1–2 can invalidate the
 whole premium design; 3–6 are the numbers and the UI; the rest are lifecycle and polish.
 Record every INJECT result in `scripting_best_practices.md` § INJECT in the same session.
+Lettered items came out of the final whole-branch review and sit beside the numbered item
+they belong with; the numbering is stable so earlier notes that cite "checklist 7" or
+"checklist 10" still point at the right thing.
 
 **Structural — a failure here means the premium stack is not doing what the files say**
 
@@ -96,6 +108,23 @@ Record every INJECT result in `scripting_best_practices.md` § INJECT in the sam
    great power, and again as a Shell owner: every one of those contributions must appear. If
    one is missing it vanishes silently.
 
+2a. **The `_add` sum does not go non-positive the month a vanilla finance tech lands.** The
+   engine grants each of `banking`, `central_banking`, `mutual_funds`,
+   `international_exchange_standards` and `modern_financial_instruments` a
+   `country_loan_interest_rate_add = -0.02` the instant it is researched;
+   `te_monetary_on_acquired_technology` is what re-applies R3's +2.0 compensation in the same
+   instant rather than a month later. Research one of the five and compare the dashboard's
+   "Rate You Pay" against the budget panel's engine figure **before** the next monthly pulse —
+   they must still agree to the surviving `_mult` modifiers. Then do it once more at a
+   **sub-2% rate** (fiat or digital, target 0–1, relief tools active): that is the case that
+   used to drive the sum of `country_loan_interest_rate_add` to zero or below, a state whose
+   engine behaviour is unknown and which §16.1's invariant exists to prevent. A failure here
+   means either that `on_acquired_technology` did not merge the new handler in with the four
+   already registered in `extra_on_actions.txt`, or that the hook fires before the tech is
+   flagged researched — in which case `te_mon_vanilla_tech_offset` does not yet count it and
+   step 9 no-ops. (The latter is unlikely: `agdiff_dispatch_if_first` already tests
+   `has_technology_researched` on ROOT from this same hook and works.)
+
 **Numbers and UI**
 
 3. **The §7.4 anchor table, within 0.5pp** (the phase-1 exit criterion). Expected from the
@@ -103,6 +132,14 @@ Record every INJECT result in `scripting_best_practices.md` § INJECT in the sam
    **USA 1836 = 6.5%**, **Siam 1850 = 20.0%**, late-game great power on the floor = **3.5%**
    (3.25% under CBI), same GP in a panic after default = **15.5%** plus up to 4pp of debt-load
    premium.
+   **Non-anchor 1836 starts**, computed the same way and worth reading off the same save:
+   **Russia = 12.5%** (great power, `stock_exchange` but no `banking`, no national bank),
+   **France = 6.0%**, **Austria and Prussia = 8.5%**. Russia's 12.5 against vanilla's 10 is the
+   one to look at: the front-loaded −4.0 on `banking` makes an unbanked tier-3 great power
+   *dearer* than vanilla, which §7.2 did not intend (it accepts weak countries getting
+   *cheaper* debt, not strong ones getting dearer). **Balance exit criterion: no 1836 country
+   pays far above what it pays in vanilla.** Scan the great powers and the majors; if several
+   sit well above, the remedy is the owner's call — this checklist only surfaces the numbers.
 4. **Does a rate render with one decimal?** The `REPLACE:` of the `country_loan_interest_rate_add`
    *type definition* at `decimals = 1` is precedented but unseen.
 5. **Does `GetValueWithBreakdownFor` render for the two new mod-declared modifier types?**
@@ -124,17 +161,41 @@ Record every INJECT result in `scripting_best_practices.md` § INJECT in the sam
    sitting above it by the premium; both tooltips print exact figures. (h) `debug.log` sweep
    for "Failed to fetch variable" bursts — the readiness gate should make them impossible.
 
+6a. **No surface prints an exact `bubble_pressure`.** Sweep the banking panel, the dashboard,
+   both history widgets and every banking tooltip for a bubble figure rendered to a decimal.
+   Today all of them band it, and that is what keeps the hidden-state rule true: bubble is the
+   one cycle variable `banking_cycle_advance_variables` gives no random nudge, and
+   `banking_display_bubble_monthly_add` is exactly the modifier-driven part, so Δbubble minus
+   the displayed monthly add is the stance push alone — `−0.75 × te_mon_stance_gap_clamped`,
+   which two readings a month apart invert into the gap, and so into r\*, anywhere the gap is
+   inside its ±4 clamp and bubble is off its own 0/100 bounds. If the vanilla panel's bubble
+   bar (or anything else) turns out to show a number rather than a bar, **this stops being a
+   checklist item and becomes an Important bug** — band it, or give `bubble_pressure` a random
+   term.
+
 **Lifecycle**
 
 7. **Day one is not vanilla's flat 20%.** `on_game_started` is declared in two mod files;
    on-actions are expected to merge, but `GET /on-actions/<name>` is last-wins and cannot
    confirm it. If the game-start pass did not run, 1836 rates read ~20% — the fix is moving
-   one line into `extra_on_actions.txt`'s existing block.
+   one line into `extra_on_actions.txt`'s existing block. Low risk in practice: the mod already
+   splits `on_monthly_pulse_country` across eight files and `on_monthly_pulse` across two, and
+   `extra_on_actions.txt` itself merges with vanilla's `on_game_started`, so cross-file merging
+   is proven — this check confirms it rather than discovering it.
 8. **A pre-deletion save gets its 2 intervention points back** the month after loading, and
    the *Raise Policy Rate* row is gone from both dashboard lists.
+8a. **Tag-switch into an AI great power.** Every AI country is held at `te_mon_delegated = 1`,
+   so a human taking over an AI tag opens on **Delegated** with whatever mandate the AI's bank
+   was running. That is truthful — the bank *was* driving — and one click of Take Control
+   undoes it; the check is that the dashboard says so plainly, that Take Control works on the
+   first click, and that a fresh Britain start opens **un**delegated by contrast.
 9. **`random_country = { }` from `on_monthly_pulse`** (expected scope `none`) resolves — this
    is how the world reference rate is refreshed. Nearest precedent is `city_rank_on_action`
-   running `ordered_state` from the same hook.
+   running `ordered_state` from the same hook. **Observable, because a silent failure here is
+   invisible**: the country-side self-heal seeds the global exactly once, so a broken
+   `random_country` freezes the reference rate at 3.0 for the whole campaign rather than
+   erroring. Run `te_debug_monetary.1` from the console the month after any great power
+   finishes `macroeconomics` — "Reference rate" must read **2.5**, not 3.0.
 10. **`round` / `ceiling` / `floor` / `min` / `max` behave as documented inside a
     `set_variable value = { }` block** (four sites). Related: `round(2.5)` — half-up (3) or
     half-to-even (2)? Either is inside every regime range and self-corrects on the first
@@ -145,6 +206,12 @@ Record every INJECT result in `scripting_best_practices.md` § INJECT in the sam
 12. **Revolution inheritance.** `je_banking_cycle` is `can_revolution_inherit`, so the entry's
     modifiers move but country variables do not. Worst traced case is **one month with no
     stance band** on the successor, not two stacked. Watch one revolution.
+12a. **Releasing a subject does not move the parent's own rate.** The six release and uprising
+    hooks update `scope:target`, the new tag, and deliberately *not* ROOT, which is the parent
+    and already pulses monthly. Note a great power's policy rate, release a subject, and check
+    it has not jumped by about a third of a point that same month (the drift step's per-call
+    size) — that jump is the signature of a second, non-idempotent update in one month. The new
+    tag should meanwhile open with a real rate rather than vanilla's ~20%.
 13. **Relative order of global `on_monthly_pulse`, `on_monthly_pulse_country` and the JE's own
     pulse** (§17 check 7) — the stance reaches the cycle through a variable written by the
     country update and read by the JE pulse, so a one-month staleness is tolerated by design
