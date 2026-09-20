@@ -106,8 +106,16 @@ te_monetary_refresh_world_era_base = {
 # on-actions listed above — never from an event, a scripted button, a scripted
 # GUI or a journal entry's on_monthly_pulse. Anything that needs the rate to
 # reflect a change it just made should write the input and let the next pulse
-# pick it up; the 0.05 skip threshold in step 9 means an unchanged month costs
-# nothing. (The sole deliberate exception is the console-only debug event
+# pick it up.
+#
+# WAITING A MONTH IS CHEAP; THE PULSE ITSELF IS NOT FREE ANY MORE. Step 9 skips
+# the remove/re-add when the rate has moved less than 0.05pp, which under phase
+# 1 meant an unchanged month cost nothing. Phase 2's cost-push is a fresh
+# basket reading every pulse rather than a level that sits still, so the rate
+# paid moves every month for most countries with a market and the skip catches
+# the becalmed and the market-less rather than the majority. §0.4 checklist 34
+# is the in-game read of what that costs in tick time.
+# (The sole deliberate exception is the console-only debug event
 # events/te_debug_monetary_events.txt, whose entire purpose is stepping the
 # system by hand.)
 #
@@ -289,11 +297,34 @@ te_monetary_init_variables = {
 	# dollarisation. A phase-1 save therefore gains a set of zeroes and keeps
 	# paying exactly what it paid, until step 6 starts moving them.
 	#
-	# THE ZEROES ARE LOAD-BEARING FOR DAY ONE. Every 1836 country starts on
-	# commodity money — Britain on gold — and both are metallic: expectations
-	# are pinned at 0 and the regime pull holds core there, so the §7.4 anchor
-	# table comes out of the new stack unchanged. The first country to enact
-	# fiat is the first to leave zero.
+	# THE ZEROES ARE WHAT A PHASE-1 SAVE AND AN UNPULSED 1836 COUNTRY LOOK
+	# LIKE — AND ONLY THE FIRST PULSE IS INERT (final-review finding I1; spec
+	# §0.4 owner decision G). Every 1836 country starts on commodity money —
+	# Britain on gold — and both are metallic, so expectations stay pinned at 0
+	# and the regime pull holds core down. That is NOT the same as "phase 2
+	# evaluates to zero on a metallic start", which is what this comment used
+	# to claim:
+	#
+	#   * the FIRST pulse is genuinely inert in cost-push, because step 6a
+	#     seeds te_basket_avg to that month's index, so index - avg = 0;
+	#   * from the SECOND pulse te_cost_push = 0.3 x (index - 36-month avg) x
+	#     100, clamped +/-6, for every country with a market, metallic or not.
+	#     A basket a few per cent under its own trailing average is an ordinary
+	#     reading, and it goes straight onto headline, off the rate paid in
+	#     step 7, into the band, and — for a country with a dial — into the
+	#     stance gap in step 8;
+	#   * core is not pinned either. Metallic money pins EXPECTATIONS and pulls
+	#     core toward 0; it does not zero the rest of the pressure sum (deficit,
+	#     cycle phase, bubble, the noise walk, any law or event pressure), so
+	#     core settles where the pull and that sum balance rather than at 0.
+	#
+	# So §7.4's anchor figures hold on an 1836 start only +/- the cost-push
+	# term, and the band can read Deflation or Elevated for a gold country. The
+	# owner's decision was to keep the economics spec-faithful and add the band
+	# hysteresis in step 6b; §0.4 decision G names the three one-line levers if
+	# play shows it too noisy. The first country to enact fiat is still the
+	# first to leave zero in the sense that matters — it is the first with an
+	# expectations term of its own.
 	#
 	# TWO EXCEPTIONS TO THE ZERO. te_inflation_band seeds to 2 (comfort),
 	# because 0 is not a band and the band swap has to have something to
@@ -1242,24 +1273,47 @@ te_monetary_update_inflation = {
 		# From HEADLINE, not core: the bands are what the country is living
 		# through. This writes the NUMBER; step 6c, immediately after, swaps the
 		# te_inflation_band_* modifier off it.
+		#
+		# THE EDGES ARE HYSTERESISED (final-review finding I2). The ladder tests
+		# te_mon_band_test_*, not te_mon_band_edge_*: each test sits
+		# te_mon_band_hysteresis (0.25pp) on the far side of the edge FROM
+		# WHEREVER THE COUNTRY ALREADY IS, so the live boundary is a quarter
+		# point higher than the nominal edge for a country climbing towards it
+		# and a quarter point lower for one falling towards it. Without it a
+		# headline
+		# resting on 3% — well inside te_inflation_noise's own +/-0.75pp walk —
+		# would swap the country's band modifier, hand it and take back the
+		# step 6d real-wage dividend, and redraw the dashboard row every second
+		# or third month for no change in its economy.
+		#
+		# IT READS LAST MONTH'S BAND, and this chain is why that works: the
+		# band is written in the BODY of whichever branch matches, and an
+		# else_if evaluates its limit only after the ones above it have failed
+		# without running, so every test below sees the value step 6b of the
+		# previous pulse left. No new variable, and nothing to keep in step.
+		#
+		# THE HYPER EDGE IS NOT HYSTERESISED ON THE WAY UP: §9.2 puts the
+		# crisis at 50 and te_mon_band_test_hyper keeps the entry there, moving
+		# only the exit. See the block above te_mon_band_hysteresis in
+		# common/script_values/te_monetary_script_values.txt.
 		if = {
-			limit = { var:te_inflation < te_mon_band_edge_deflation }
+			limit = { var:te_inflation < te_mon_band_test_deflation }
 			set_variable = { name = te_inflation_band value = 1 }
 		}
 		else_if = {
-			limit = { var:te_inflation < te_mon_band_edge_elevated }
+			limit = { var:te_inflation < te_mon_band_test_elevated }
 			set_variable = { name = te_inflation_band value = 2 }
 		}
 		else_if = {
-			limit = { var:te_inflation < te_mon_band_edge_high }
+			limit = { var:te_inflation < te_mon_band_test_high }
 			set_variable = { name = te_inflation_band value = 3 }
 		}
 		else_if = {
-			limit = { var:te_inflation < te_mon_band_edge_very_high }
+			limit = { var:te_inflation < te_mon_band_test_very_high }
 			set_variable = { name = te_inflation_band value = 4 }
 		}
 		else_if = {
-			limit = { var:te_inflation < te_mon_band_edge_hyper }
+			limit = { var:te_inflation < te_mon_band_test_hyper }
 			set_variable = { name = te_inflation_band value = 5 }
 		}
 		else = {
@@ -1368,10 +1422,14 @@ te_monetary_apply_inflation_band = {
 	}
 
 	# --- the hyperinflation crisis (§9.2) -----------------------------------
-	# The band, not a fresh headline read, is the gate: they are the same test
-	# (band 6 is exactly pi >= te_mon_band_edge_hyper), and the band is also
-	# where §14 already holds a command economy at comfort — so a planned
-	# economy is excluded here without anything restating why.
+	# The band, not a fresh headline read, is the gate. Band 6 is ENTERED at
+	# exactly pi >= te_mon_band_edge_hyper — finding I2's hysteresis deliberately
+	# leaves that edge plain on the way up — and left again only at 49.75, which
+	# is the difference between the two tests and is the intended one: a country
+	# riding the crisis out on the boundary should not be re-offered the choice
+	# by a tenth of a point of noise. The band is also where §14 already holds a
+	# command economy at comfort, so a planned economy is excluded here without
+	# anything restating why.
 	#
 	# A DOLLARISED COUNTRY IS NOT OFFERED IT. Its modelled inflation can still
 	# read above the threshold for a month or two after the switch — the loop

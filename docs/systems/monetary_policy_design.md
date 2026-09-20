@@ -16,7 +16,7 @@
 > are touching the implementation**: what phases 1 and 2 actually shipped (§0.1–§0.3 and
 > [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks) respectively), where
 > they deviate from the design sections below, what was deferred, and the in-game
-> verification checklist — one list, numbered 1–14 for phase 1 and 15–26 for phase 2.
+> verification checklist — one list, numbered 1–14 for phase 1 and 15–35 for phase 2.
 > Sections 1–22 remain the *design*, not a description of the code — where they disagree with
 > §0, §0 is what shipped. The implemented parts are folded into `mod_systems.md` § Banking
 > Cycle → **Monetary Policy (phase 1)** and **(phase 2)**, and `journal_entry_systems.md`
@@ -38,7 +38,7 @@ the cancel-INJECT assumption, the migration window): `mod_systems.md` § Banking
 **Monetary Policy (phase 1)**. This section carries only what the design sections below get
 wrong or leave open. **Phase 2 has its own equivalent in [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks)**
 — its rulings, its deferred list, its roughnesses and its half of the checklist (items
-15–26) all live there; §0.1–§0.3 are phase 1's and are not rewritten.
+15–35) all live there; §0.1–§0.3 are phase 1's and are not rewritten.
 
 ### 0.1 Rulings — deviations from, or bindings on, the sections below
 
@@ -264,9 +264,11 @@ Phase 2 (§19 row 2) was implemented on `feat/monetary-policy-phase2` over ten t
 2026-09-20: inflation (core / headline / anchored expectations, the §9.3 basket), the rate
 stack that reads it, monetisation and QE costs, the §9.2 bands and the hyperinflation chain,
 §9.4 wage pressure and the real-wage dividend, §13 stance politics, the dashboard and history
-rows, and a console harness for §19 row 2. **Nothing below has been seen in a running game
-either.** Every claim here is verified against the files; every claim about *behaviour* is a
-simulation of the shipped equations or an argument from them.
+rows, and a console harness for §19 row 2 — plus a final whole-branch review wave that
+produced owner decision **G**, ruling **F-I2** and checklist items **27–35**. **Nothing below
+has been seen in a running game either.** Every claim here is verified against the files;
+every claim about *behaviour* is a simulation of the shipped equations or an argument from
+them.
 
 Phase 1's §0.3 checklist is **inherited unchanged** (ruling P10) — items 2–5, the unwalked
 parts of 6 and 8–14 are still open and are not repeated here. The phase-2 list continues the same numbering from
@@ -276,7 +278,8 @@ inventory and the new architectural rules: `mod_systems.md` § Banking Cycle →
 
 #### Owner decisions to review
 
-Six calls the run made and flagged rather than settled. Each is one or two lines to reverse.
+Seven calls: A–F the run made and flagged rather than settled, and **G taken by the owner in
+the final whole-branch review**. Each is one or two lines to reverse.
 
 **A. "Inflation settles at 2 + P/c" is a simplification, and the shipped code is sharper
 than §9.1 says.** With the real stance held, core converges on `expected + P`, so the
@@ -304,10 +307,11 @@ it exists for (at π = 0 with a panic lean, raw growth is 2.5pp *tighter* than p
 **C. A fiat regime enacted out of metallic money opens ~2pp loose for a few years.** At the
 switch `π_core ≈ 0` while the anchor jumps 0 → 2, so a price-stability bank asks for
 `r̂* − 2` and eases until inflation climbs to target — years, at α = 1/24. Accepted as a
-realistic regime-change transient. It affects **no 1836 start**: every tag starts metallic, so
-every phase-2 term evaluates to zero on day one and §0.3 item 3's anchor figures are
-unchanged. One-line remedy if unwanted: seed `te_inflation_core` / `te_inflation_expected` at
-`te_mon_inflation_anchor` on a regime change.
+realistic regime-change transient. **It is a transient of the *switch*, not of the 1836
+start**: every tag starts metallic, so no tag is in this state on day one. (What day one
+*does* look like is decision G below — not "every phase-2 term evaluates to zero", which is
+what this paragraph used to claim.) One-line remedy if unwanted: seed `te_inflation_core` /
+`te_inflation_expected` at `te_mon_inflation_anchor` on a regime change.
 
 **D. With `banking_system_enabled` off, the AI monetises and the player cannot.** The
 plumbing is deliberately never gated on the game rule, but the stepper lives on the
@@ -324,6 +328,20 @@ headline / core / expected reset to 5, cost-push to 0, and `te_mon_currency_refo
 months of −75% minting were that half of the price. The asymmetry is intended; whether it is
 the right size is the owner's call.
 
+> **How unequal it is, and what the levers are.** Dollarising and leaving costs the months of
+> −75% minting — seigniorage is of order a few per cent of GDP a year in this model, so the
+> whole dwell is single-digit per cent of one year's GDP — against currency reform's **100%
+> investment-pool wipe plus radicals**, both immediate. The player who can wait is therefore
+> buying the cheaper exit, and the shorter the dwell the wider the gap. Two levers if that
+> reads wrong in play: a **minimum dwell** before the flag may clear, and a **fractional pool
+> hit at the exit** (the reform's wipe scaled down) so the re-founding costs something the
+> treasury feels. One thing that is *not* a leak: a monetary law imposed by script or by a
+> revolution does not pass `on_law_enactment_pass`, so `te_banking_law_change_cleanup` never
+> runs for it and the flag survives — the exit cannot be taken by accident. (There is a
+> second exit since the final review: entering a **command economy** clears the flag for
+> free. It is not a cheap way out of the price — a planned economy is not a dial — but it is
+> the one path that leaves dollarisation without paying, and it is deliberate.)
+
 **F. The inflation bands' expectations offsets are standing pressures that are never priced
 in.** The owner's mid-run fact — an SoL *change* is absorbed into expectations over time, but
 an SoL-*expectations* offset never is — applies to the band ladder as well as to the dividend
@@ -333,6 +351,41 @@ as the band is, against `law_worker_protections`' +1 as the scale. +3 for a hype
 country is deliberate; **+0.5 for an Elevated band a country can sit in for decades** is the
 magnitude worth a second look. The real-wage dividend's −0.02 per unit (maximum ≈ −0.28) was
 sized after the fact and sits comfortably inside the same scale.
+
+**G. Phase 2 is NOT inert on an 1836 start — cost-push reaches every metallic country from
+the second pulse. Taken, not flagged: keep the economics, add band hysteresis.** Three places
+in this document and in the code said the opposite, and they were wrong (final-review finding
+I1). What the code does:
+
+- **Only the first pulse is inert in cost-push.** Step 6a seeds `te_basket_avg` to that
+  month's index, so `index − avg = 0` and `te_cost_push = 0` exactly once.
+- **From the second pulse** every country with a market carries
+  `te_cost_push = 0.3 × (index − 36-month avg) × 100`, clamped ±6 — metallic ones included.
+  §9.3's basket is gated on `te_mon_has_inflation` only for π, not for the index (ruling T2).
+  A basket a few per cent under its own trailing average is an ordinary reading, and under a
+  metallic regime expectations are pinned at 0, so *nothing offsets it*: a basket 3.4% under
+  average puts a gold country in **Deflation**; a 10% grain spike cuts the rate it pays by
+  roughly 0.9pp (headline is subtracted in step 7); and for a country with a dial it moves
+  the displayed stance band and through it momentum, bubble pressure and step 8b's politics.
+- **Core is not zero either.** Metallic money pins *expectations* and pulls core toward 0; it
+  does not zero the rest of the pressure sum (deficit, cycle phase, bubble, the noise walk,
+  any law or event pressure), so core settles where the pull and that sum balance.
+- So **§7.4's anchor figures hold only ± the cost-push term**, not unchanged, and §0.3 item 3
+  is a check against a moving number rather than a fixed one.
+
+**The owner's call (2026-09-20) was to keep the economics spec-faithful** — the basket is what
+§9.3 asks for and a metallic country genuinely did live with commodity-price swings — **and to
+buy back only the UI churn it caused, with band hysteresis** (ruling F-I2 below). The three
+one-line levers if play shows it too noisy, in increasing order of how much they change:
+
+1. **Damp cost-push under `te_mon_is_metallic`** — multiply the term by a fraction inside
+   `te_monetary_update_inflation`'s basket block. Keeps the direction, shrinks the amplitude.
+2. **Take only core off rate paid** in step 7 (`subtract = var:te_inflation_core` rather than
+   `var:te_inflation`). Removes the cost-push channel from the *rate* while leaving it in the
+   band and the stance — which is arguably more correct anyway: lenders price the trend.
+3. **Widen the hysteresis** past 0.25pp, which only buys quieter bands, not a quieter rate.
+
+Checklist **27** is the in-game read of whether any of them is needed.
 
 #### 0.4 rulings — deviations from, or bindings on, the sections below
 
@@ -347,10 +400,10 @@ and are tagged with the task that raised them.
 | **P4** | The deficit term annualises through a named `te_mon_deficit_annualise_factor` = **52**, and the computed deficit-%-of-GDP is printed in the console read-out | §17 check 12 is unverified; the engine docs make `income` weekly and `gdp` yearly, so 52 is the documented reading | one-line flip to 1 — **checklist 15** |
 | **P5** | Step 6 (inflation) runs between steps 5 and 7 and reads **last month's** stance gap; step 8's real rate becomes `te_policy_rate − te_inflation` | forced by the step layout, and §16.3 already tolerates a one-month-old gap | one month of lag in two places — it is also why §10's war line comes out at 0.61% rather than 0.7% |
 | **P6** | Every country except a command economy runs inflation | §4 makes bankless / commodity / crypto countries pay `era_base + own expected + 1`, so they need expectations even with no dial | performance; could be restricted |
-| **P7** | A hidden mean-reverting walk `te_inflation_noise` (±0.1pp a month, bounded ±0.75pp) is added to the pressure sum, and core, noise and the pressure **total** are never displayed | headline and expected are exact while `pressure` carries `−0.4 × stance_gap` with no random term — the same inversion §0.1 found for `bubble_pressure` | one term to delete |
+| **P7** | A hidden mean-reverting walk `te_inflation_noise` (±0.1pp a month, bounded ±0.75pp) is added to the pressure sum, and core, noise, **`te_cost_push`** and the pressure **total** are never displayed | headline and expected are exact while `pressure` carries `−0.4 × stance_gap` with no random term — the same inversion §0.1 found for `bubble_pressure`. **Cost-push is hidden in practice and by rule** (final review, M1): nothing but `te_debug_monetary.1` prints it, and it must stay that way — headline is displayed and is core + cost-push, so with cost-push shown core becomes recoverable and the inversion opens | one term to delete |
 | **P8** | §13's "sustained stance" keys on the **displayed band** (≤ 2 or ≥ 4 for six consecutive months), not on the true gap | a modifier appearing exactly at `\|gap\| ≥ 1` would print a bit of r\* | one trigger |
 | **P9** | Dollarisation is a persistent flag variable, not a law; it clears when the country next enacts any `lawgroup_monetary_policy` law | the spec names no exit and this is the smallest one | small rework — and see T5's exit ruling below |
-| **P10** | Phase 2 does not block on phase 1's open in-game checks, and inherits them | phase 1 is unverified but internally consistent, and every phase-2 term is zero on a metallic 1836 start | — |
+| **P10** | Phase 2 does not block on phase 1's open in-game checks, and inherits them | phase 1 is unverified but internally consistent. (The other half of this rationale as written — "every phase-2 term is zero on a metallic 1836 start" — is **false**, and is corrected in owner decision G: only the first pulse is inert, and from the second one cost-push moves the rate paid and the band of every country with a market. The ruling stands; its reason is now just the first clause) | — |
 | **P11** | Wage pressure gets its **own** modifier type, `country_wage_pressure_add`; step 6 sums it with `country_inflation_pressure_add` | §9.4 and §11 would otherwise share one type, and the real-wage dividend could not tell a labour law from a devaluation | merge the two types back |
 | **T1** | A bankless country falls through `te_mon_credibility_c` to the manual 0.25 | §9.1 has no bankless row, and a bankless country has no anchoring institution | one branch |
 | **T1** | §9.4's "lower-strata loyalist trickle" to be delivered as `state_lower_strata_standard_of_living_add` | §9.4 promises a lower-strata gain, and an all-strata loyalists key would pay landowners for factory councils | — |
@@ -374,6 +427,7 @@ and are tagged with the task that raised them.
 | **T7** | `ideological_opinion_impact` stays **0** on `lawgroup_monetary_policy` | it scales the *legitimacy* friction between disagreeing governing IGs, not the IG approval §13 wants, which runs off `IG_APPROVAL_FROM_LAW` / `IG_APPROVAL_FROM_LAW_CHANGE` and is ungated by it. **Inferred from the defines, not observed** — **checklist 17** | one value (0.25, like the mod's other economy law groups) |
 | **T8** | The `GetCustom`-in-`is_valid` single-cause line is kept, with no static fallback | precedent: `iw_funding_not_max_tt` uses a data function in an `is_valid` tooltip | ~40 lines of `trigger_if` branches — **checklist 21** |
 | **T8** | A no-dial or command country sees two **greyed** monetise buttons rather than a pure readout | consistent with the target stepper, which already behaves that way | a visible gate |
+| **F-I2** | The §9.2 band edges are **hysteresised by `te_mon_band_hysteresis` = 0.25pp**: a country leaves the band it is in only once headline is a quarter point past the edge, so the live boundary sits at `edge + 0.25` for a country climbing and `edge − 0.25` for one falling, decided from last month's `te_inflation_band` through `te_mon_band_test_*`. A country's very first pulse uses the plain edges (`te_inflation_band_applied = 0`), because its band is step 0's seed rather than an observation. The **hyper** edge is un-hysteresised on the way up, so the crisis still fires at exactly 50 | the band is a state machine with five consumers (the modifier swap, the real-wage dividend, the crisis, the dashboard row and its tooltip) and headline is noisy — `te_inflation_noise` alone is a ±0.75pp walk — so plain edges make a country parked near an edge swap all five every second or third month for no change in its economy. Bought instead of damping the economics (owner decision G) | one constant |
 | **T9** | The harness's three extras are accepted: a seed option (a third console-only writer of inflation state), a peace option, and a pin that also takes state-owned banking off | required to reproduce §10 at all — an 1836 country pinned at target 5 with π ≈ 0 measures a *disinflation*, not the fixed point — and state-owned banking's `c = 0.15` is not the manual 0.25 every number in the harness header assumes | delete the options |
 
 #### Deferred (phase 2's additions to §0.2)
@@ -392,6 +446,9 @@ and are tagged with the task that raised them.
 #### Known roughnesses (phase 2)
 
 All judged acceptable for a first pass; listed because each is user-visible or behavioural.
+Four of them (5, 7, 8 and half of 9) were **fixed in the final whole-branch review** and are
+struck through rather than deleted, so a note citing "roughness 8" still points at the right
+thing.
 
 1. **Two band fields are journal-entry-gated by construction.** The Deflation band's
    `country_finance_momentum_monthly_add = −0.2` and the Very High / Hyper bands'
@@ -408,22 +465,32 @@ All judged acceptable for a first pass; listed because each is user-visible or b
    about the regime every country starts on.
 4. **The two premium rows render `|1`, not `|=+1`** — `0.3%` rather than `+0.3%` in a column
    of signed lines.
-5. **The Expected Inflation tooltip omits the mandates half-line** ("a delegated bank steers
-   on the underlying trend").
+5. ~~**The Expected Inflation tooltip omits the mandates half-line.**~~ **Fixed in the final
+   review wave** — `banking_dash_mon_expected_tt` now says a delegated bank steers on the
+   underlying trend, not on this figure.
 6. **An ineligible monetisation step shows a cause line *and* a range line**, not literally
    the one line the design asks for.
-7. **Two loc imprecisions.** `banking_mon_monetise_step_tt` says expectations make prices
-   rise "twice as quickly"; the shipped ratio is ~1.75×. The Price Band row tells a command
-   economy it "sits in no band"; it is pinned at the comfort band.
-8. **Two naming mismatches.** The dashboard row "Price Pressure" against the modifier type's
-   own name "Inflationary Pressure"; and `te_history_banking_effects.txt`'s header still says
-   "three metrics" where the store now carries four.
+7. ~~**The Price Band row tells a command economy it "sits in no band".**~~ **Fixed in the
+   final review wave** — `banking_dash_price_band_cost_command` now says its band is
+   nominal. (`banking_mon_monetise_step_tt`'s "twice as quickly" was also listed here and is
+   **correct**: α is 1/12 under a CBI against 1/24 delegated, exactly 2×. The ~1.75× that
+   prompted the note is the *credibility* ratio, 0.7/0.4, which is a different sentence.)
+8. ~~**Two naming mismatches.**~~ **Both fixed in the final review wave** — the dashboard row
+   is now labelled "Inflationary Pressure" to match the modifier type, and
+   `te_history_banking_effects.txt`'s header says **six** metrics, which is what its own list
+   and its six `te_history_record_sample` calls carry (three cycle, three monetary).
 9. **Harness pin.** On a command economy that also holds state-owned banking the pin lands on
    `law_directed_credit_development_banks` rather than universal banking — the
-   `on_law_activated` consistency sweep runs first — which the code comment and `.5.d` do not
-   say. And `law_anarchy` / `law_factory_councils` / `law_women_in_the_fields` countries have
-   **no** stable economic-system landing for the pin at all; the pin's own verify catches
-   that and tells the player to fix it by hand.
+   `on_law_activated` consistency sweep bounces state-owned banking the moment the country
+   stops being a command economy, before the pin's own step 3 is reached. The behaviour
+   stands (directed credit is neither credibility anchor, so the pin still holds and `c`
+   still falls through to the manual 0.25); the final review corrected the code comment and
+   `.5.d`, which claimed universal banking. What the country does not get is universal
+   banking's `country_banking_random_momentum_mult` of +0.10 — directed credit runs −0.25, so
+   the financial cycle is quieter than the harness header describes. And `law_anarchy` /
+   `law_factory_councils` / `law_women_in_the_fields` countries have **no** stable
+   economic-system landing for the pin at all; the pin's own verify catches that and tells
+   the player to fix it by hand.
 10. **A dollarised country's Price Band and Inflation rows disagree by design.** The band row
     reads "Foreign money" while the Inflation row keeps printing a live figure, because the
     loop runs for every non-command country and only the band *modifier* is replaced (P9).
@@ -440,9 +507,10 @@ All judged acceptable for a first pass; listed because each is user-visible or b
 
 Continues §0.3's numbering, and ordered the same way: by **how much breaks if the check
 fails**. 15–17 can invalidate a whole mechanism; 18–23a are the numbers and the UI; 24–26 are
-the harness and the exit criteria. Phase 1's items 2–5, the unwalked parts of 6 (digital
-currency, and the digital policy-rate chart — see item 22) and 8–14 are still open and are
-inherited, not repeated.
+the harness and the exit criteria; **27–35 were added by the final whole-branch review**, and
+27 belongs with 15–17 — it is the check on owner decision G. Phase 1's items 2–5, the unwalked
+parts of 6 (digital currency, and the digital policy-rate chart — see item 22) and 8–14 are
+still open and are inherited, not repeated.
 
 **Structural — a failure here changes what the phase does**
 
@@ -467,7 +535,8 @@ inherited, not repeated.
     (nobody trades oil) and sweep `debug.log`. If the ungated read errors, the model is still
     right — it is the probe that has to move.
 17. **Does an IG law stance on `lawgroup_monetary_policy` reach IG approval at all?** All of
-    §13's Part B — eighteen ideology assignments — rests on `ideological_opinion_impact = 0`
+    §13's Part B — **20** ideology assignments added on this branch, **24** entries in
+    `ideology_modifications.py` carrying a `lawgroup_monetary_policy` stance in all — rests on `ideological_opinion_impact = 0`
     gating only the legitimacy friction and not `IG_APPROVAL_FROM_LAW`, which was inferred
     from define names and `vanilla_politics_reference.md`, never observed. Enact a monetary
     law with a stanced IG in government and look for a line for that law in the IG's approval
@@ -574,8 +643,9 @@ inherited, not repeated.
     half — the never-disinflate path must be worse **overall** than disinflating over 15
     years, judged on treasury, SoL and radicals, *not* on rate paid alone, where it is
     deliberately the cheaper line (§10).
-26. **Hidden-state sweep, including P7's noise.** No surface may print `te_inflation_core`,
-    `te_inflation_noise` or the pressure **total** — on top of §0.3's list (`te_neutral_rate`,
+26. **Hidden-state sweep, including P7's noise and cost-push.** No surface may print
+    `te_inflation_core`, `te_inflation_noise`, **`te_cost_push`** or the pressure **total** —
+    on top of §0.3's list (`te_neutral_rate`,
     `_error`, `_walk`, `te_mon_stance_gap`, momentum, and `bubble_pressure` to a decimal,
     item 6a). Exact by contract: headline, expected, the five band edges, the monetisation
     level, and the two player-chosen pressure modifier types. Sweep the six new dashboard
@@ -583,6 +653,73 @@ inherited, not repeated.
     inflation chart tooltip and the crisis event. `te_debug_monetary.1` is the one place the
     hidden values may be printed, and `.5`'s pin and `.7`'s seed are the only console writers
     of them.
+
+**Added by the final whole-branch review**
+
+27. **What cost-push actually does to a metallic 1836 country (owner decision G).** The
+    structural one. Play **GBR** and one commodity-money minor from 1836 to 1846 and record:
+    the **min and max of rate paid** against §7.4's anchor figure for that tag (3.5% for
+    Britain), how many **months are spent in Deflation or Elevated**, and — for Britain,
+    which has a dial — how often the **displayed stance band flips with the target
+    untouched**. `te_debug_monetary.1` prints `te_cost_push`, `te_basket_index` and
+    `te_basket_avg` beside the rate, so a swing can be attributed. If the rate paid wanders
+    by more than about a point either side of the anchor, or a gold country spends most of a
+    decade in Deflation, decision G's three levers are the answer, in the order it lists
+    them.
+28. **How often the band actually swaps, with the hysteresis in (ruling F-I2).** Count band
+    changes per decade for a country parked near an edge — Elevated/Stable is the common
+    case. A handful a decade is the intended behaviour; one every two or three months means
+    0.25pp is too small against `te_inflation_noise` and the constant goes up. Watch the
+    real-wage dividend arrive and depart with it (checklist 18 is the other half), and
+    confirm the crisis still fires at exactly 50 on the way up.
+29. **Does `country_minting_mult` scale `country_minting_add`?** The §9.2 ladder's minting
+    penalty (−0.3 at *Very High*, −0.8 at *Hyper*) and `te_mon_dollarised_modifier`'s −0.75
+    are all `_mult`, while §11's monetisation is `country_minting_add`. If the engine applies
+    the mult only to the *base* minting and not to script-added minting, **monetisation is
+    immune to the band's penalty** — which is exactly the feedback the ladder exists to
+    provide, and the never-disinflate invariant is measured with it missing. Read the budget
+    panel's minting line at monetisation 3 with and without the *Hyper* band and compare.
+30. **Bankless fiat AI countries drifting to the crisis.** A country with fiat money and no
+    national bank has no dial, so its stance term is 0, its `c` falls through to the manual
+    0.25, and owner decision A's threshold `P > 2.5 × c = 0.625pp` is cleared by a boom phase
+    alone — with nothing able to lean against it. Sweep a 50-year observer run for tags in
+    band 4+ that never held a national bank. If there are many, the answer is a floor on `c`
+    for no-dial countries or a regime pull for them, not a retune of the pressure terms.
+31. **AI monetary-law churn, and dollarised AIs getting out.** 24 `ideology_modifications.py`
+    entries now carry a `lawgroup_monetary_policy` stance (checklist 17), which changes what
+    the AI's law-selection weights see. Watch for a tag re-enacting monetary laws every few
+    years, and — separately — whether an AI that dollarises ever takes either exit (a
+    monetary law, or a command economy). A dollarised AI that never leaves is a tag
+    permanently at −75% minting; that may be right, but it should be observed rather than
+    assumed.
+32. **What a revolution, a civil war or a tag formation inherits.** Country variables and
+    country modifiers do not travel together. The band modifier, the §13 stance-politics
+    modifier, `te_monetisation_minting` and `te_mon_real_wage_dividend` are all held on the
+    country and all driven by an `_applied` bookkeeping variable, so a successor tag that
+    inherits one without the other lands in a state the swap cannot repair. **Look
+    specifically for two band modifiers on one country**, and for a minting or dividend
+    modifier with no variable behind it. Trigger a revolution and a formable unification and
+    read the successor's modifier list against `te_debug_monetary.1`.
+33. **The empty `te_inflation_band_comfort`, on roughly every tag in the world.** It is
+    applied deliberately (step 6c always has exactly one thing to apply, and the modifier
+    list always names the band), but an empty `modifier = { }` on ~1,400 countries is a form
+    nothing in this mod has tried at that scale. Check `debug.log` for a complaint about it
+    at game start, and look at how it renders in the country's modifier list — a nameless or
+    zero-line entry there is worse than no entry.
+34. **What step 9 now costs every month.** Cost-push moves the rate paid for most countries
+    with a market every pulse, so step 9's 0.05pp skip threshold no longer spares them and
+    the interest modifier is removed and re-added roughly `N_countries` times a month. Time a
+    late-game month against a pre-branch save of the same campaign, and watch the first of
+    the month specifically — that is when the country pulse runs. If it bites, the lever is a
+    larger skip threshold in step 9, not fewer pulses.
+35. **The repeat-reform loop has to be worse than not doing it.** Monetise to 3, hyperinflate,
+    take the currency reform, monetise again. Each pass costs a 100% investment-pool wipe,
+    radicals and ten years of `te_mon_currency_reform_premium` — and the premium **refreshes
+    rather than stacks**, which is the thing to confirm: if a second reform inside ten years
+    only resets the clock on +5pp rather than adding to it, check that the pool wipe and the
+    radicals are still enough to make the loop a losing line. Judge it the way §19 row 2
+    judges the never-disinflate path: on treasury, SoL and radicals over the whole run, not
+    on rate paid.
 
 ---
 

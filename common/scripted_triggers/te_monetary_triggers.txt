@@ -29,10 +29,10 @@
 # in a hyperinflation has no dial left whatever its laws still say: the rate is
 # whoever's money it now uses. The flag is set by the dollarise option of
 # te_inflation.1 (events/te_inflation_events.txt) and cleared by
-# te_banking_law_change_cleanup when the country next enacts a different
-# lawgroup_monetary_policy law, which is the only exit the spec leaves room for.
-# The test is guarded on has_variable, so a country that has never pulsed — and
-# every save from before phase 2 — reads exactly as it did before.
+# te_banking_law_change_cleanup, on either of its two exits (a different
+# lawgroup_monetary_policy law, or entering a command economy).
+# te_mon_is_dollarised below owns the guarded read, so a country that has never
+# pulsed — and every save from before phase 2 — reads exactly as it did before.
 te_mon_has_dial = {
 	has_law_or_variant = law_type:law_national_bank
 	OR = {
@@ -41,10 +41,7 @@ te_mon_has_dial = {
 		has_law_or_variant = law_type:law_digital_currency
 	}
 	NOT = { has_law_or_variant = law_type:law_command_economy }
-	trigger_if = {
-		limit = { has_variable = te_mon_dollarised }
-		NOT = { var:te_mon_dollarised = 1 }
-	}
+	NOT = { te_mon_is_dollarised = yes }
 }
 
 # Central bank independence (lawgroup_financial_regulation). Binds the target to
@@ -61,18 +58,20 @@ te_mon_is_command = {
 }
 
 # Has this country given up its own currency? (ruling P9) Set by the dollarise
-# option of te_inflation.1 and cleared by te_banking_law_change_cleanup when the
-# country next enacts a monetary-policy law.
+# option of te_inflation.1 and cleared by te_banking_law_change_cleanup, either
+# when the country next enacts a monetary-policy law (which pays the
+# new-currency price) or when it enters a command economy (which does not).
 #
 # Guarded, so a country that has never pulsed — and every save from before phase
-# 2 — reads no. It exists for the dashboard's four cause-specific custom-loc
-# blocks (te_mon_no_dial_reason, te_mon_inflation_band_name, _cost and
-# te_mon_monetise_condition in
+# 2 — reads no. THE ONE PLACE THE QUESTION IS ASKED: the dashboard's four
+# cause-specific custom-loc blocks (te_mon_no_dial_reason,
+# te_mon_inflation_band_name, _cost and te_mon_monetise_condition in
 # common/customizable_localization/banking_dash_custom_loc.txt), every one of
-# which has to tell a dollarised country from a bankless one. te_mon_has_dial
-# above and te_mon_can_monetise below ask the same question inline; they were
-# written before this trigger existed and are left as they are rather than
-# re-tested for a cosmetic saving.
+# which has to tell a dollarised country from a bankless one, and — since the
+# final review — te_mon_has_dial above and te_mon_can_monetise below, which used
+# to carry their own copy of the guarded read. `NOT = { te_mon_is_dollarised =
+# yes }` is exactly equivalent to that copy: NOT(has_variable AND var = 1) is the
+# same statement as "if the variable is there, it is not 1".
 te_mon_is_dollarised = {
 	has_variable = te_mon_dollarised
 	var:te_mon_dollarised = 1
@@ -128,10 +127,10 @@ te_mon_is_metallic = {
 # create it through, and a government still able to give that bank the order —
 # so central bank independence rules it out, and so does a command economy,
 # which has its own `ce_*` plan finance. A dollarised country has no currency of
-# its own left to print (ruling P9); that clause is guarded, so a country that
-# has never pulsed reads as it did before phase 2. It also means step 1b of the
-# monthly update zeroes te_monetisation_level by itself the month after a
-# country dollarises — the dollarise option does not have to.
+# its own left to print (ruling P9); te_mon_is_dollarised owns that guarded read,
+# so a country that has never pulsed reads as it did before phase 2. It also
+# means step 1b of the monthly update zeroes te_monetisation_level by itself the
+# month after a country dollarises — the dollarise option does not have to.
 #
 # The regime test is the same pair law_fiat_currency / law_digital_currency that
 # country_can_create_unbacked_money_bool gates open-market operations with. It
@@ -146,10 +145,7 @@ te_mon_can_monetise = {
 	}
 	te_mon_is_cbi = no
 	te_mon_is_command = no
-	trigger_if = {
-		limit = { has_variable = te_mon_dollarised }
-		NOT = { var:te_mon_dollarised = 1 }
-	}
+	NOT = { te_mon_is_dollarised = yes }
 }
 
 

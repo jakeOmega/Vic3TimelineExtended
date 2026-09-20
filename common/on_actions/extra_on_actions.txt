@@ -115,9 +115,21 @@ te_banking_law_change_cleanup = {
 		# Only the toggle is cleared. No monetary variable is ever removed here:
 		# te_rate_paid_applied backs a live add_modifier multiplier, and the
 		# rest are re-derived by the next monthly update anyway.
+		#
+		# THE TWO-PART TEST is the OMO branch's above and the monetisation
+		# branch's below, for the same timing reason: this on-action fires while
+		# the new law is still "considered being enacted", so te_mon_is_command
+		# reads the OLD law and on the very enactment that brings the plan in it
+		# answers "no". is_enacting_law names the law about to land, which is the
+		# case the comment above describes — "entering one clears the delegation
+		# toggle" — and without it the toggle only cleared for a country that was
+		# already a command economy and happened to enact some other law later.
 		if = {
 			limit = {
-				te_mon_is_command = yes
+				OR = {
+					te_mon_is_command = yes
+					is_enacting_law = law_type:law_command_economy
+				}
 				has_variable = te_mon_delegated
 			}
 			set_variable = { name = te_mon_delegated value = 0 }
@@ -170,39 +182,75 @@ te_banking_law_change_cleanup = {
 
 		# Dollarisation (§9.2, ruling P9). A country that abandoned its own money
 		# in a hyperinflation would carry te_mon_dollarised for ever otherwise:
-		# the spec names no exit, and enacting a monetary-policy law is the
-		# smallest one there is — it is the act of declaring what the country's
-		# currency now is, which is precisely the thing dollarisation gave up.
-		# All five laws of lawgroup_monetary_policy count, because a law cannot
-		# be enacted by a country that already holds it: any of them IS a
-		# different one. ADD A LAW HERE if lawgroup_monetary_policy ever gains a
-		# sixth.
+		# the spec names no exit. THERE ARE TWO, and they are one if/else_if pair
+		# because the flag can only be cleared once and the price for clearing it
+		# is not the same:
 		#
-		# AND IT PAYS THE NEW-CURRENCY PRICE. Leaving dollarisation is not
-		# putting a currency back in a drawer, it is issuing one: the state has
-		# to persuade people to hold paper it prints again, having already
-		# failed to once. Without this the sequence dollarise -> wait out one
-		# law enactment -> re-enact fiat would be a currency reform with no pool
-		# wipe, no radicals and no premium — strictly the cheapest way out of a
-		# hyperinflation, and free, because the dollarise option already reset
-		# expectations to the anchor for nothing. te_mon_effect_new_currency is
-		# the same effect te_inflation.1's reform option calls: inflation and
-		# expectations start at te_mon_currency_reform_reset and lenders charge
-		# the ten-year premium. NOT the pool wipe and NOT the radicals — the
-		# months of -75% minting under dollarisation were that half of the
-		# price, and te_inflation.1.b.tt tells the player so before they choose.
+		#   * ENTERING A COMMAND ECONOMY — free (final-review finding M8);
+		#   * ENACTING A MONETARY-POLICY LAW — pays te_mon_effect_new_currency.
+		#
+		# NO MODIFIER IS REMOVED IN EITHER. te_mon_dollarised_modifier is the
+		# seventh member of the te_inflation_band_* family and belongs to step 6c
+		# of the monthly update (te_monetary_apply_inflation_band), which takes it
+		# off and puts the country's current band on in the same swap. A
+		# remove_modifier here would be a second owner of that modifier, and would
+		# leave te_inflation_band_applied still claiming it was applied. Clearing
+		# the flag IS what releases it, on the next pulse — which is the whole of
+		# finding M8: law_command_economy lives in lawgroup_economic_system, not
+		# the monetary group, so the five-law list below never saw it and a
+		# dollarised country that went over to a planned economy carried
+		# te_inflation_band_applied = 7 and its -75% minting for the rest of the
+		# campaign.
+		#
+		# THE COMMAND EXIT IS FREE, AND TESTED FIRST. An administered currency is
+		# not a market re-founding: the plan decrees what money is and what it
+		# buys, so there is nobody to persuade to hold it, no ten-year premium to
+		# charge, and no reset to 5 to write (step 6's command branch holds the
+		# inflation figures at 0 anyway, §14). Testing it first is also what makes
+		# the overlap deterministic — a command economy enacting a monetary law is
+		# still administering its currency, so it takes this exit rather than the
+		# priced one. The te_mon_is_command half of the OR is the same two-part
+		# test the delegation and monetisation blocks above use, and here it
+		# catches only the leftovers (a save made before this rule, or a
+		# dollarised planned economy enacting some other law); is_enacting_law is
+		# the live case.
+		if = {
+			limit = {
+				has_variable = te_mon_dollarised
+				var:te_mon_dollarised = 1
+				OR = {
+					te_mon_is_command = yes
+					is_enacting_law = law_type:law_command_economy
+				}
+			}
+			set_variable = { name = te_mon_dollarised value = 0 }
+		}
+		# THE MONETARY-LAW EXIT PAYS THE NEW-CURRENCY PRICE. Enacting a
+		# monetary-policy law is the smallest exit the spec leaves room for — it
+		# is the act of declaring what the country's currency now is, which is
+		# precisely the thing dollarisation gave up. All five laws of
+		# lawgroup_monetary_policy count, because a law cannot be enacted by a
+		# country that already holds it: any of them IS a different one. ADD A LAW
+		# HERE if lawgroup_monetary_policy ever gains a sixth.
+		#
+		# Leaving dollarisation this way is not putting a currency back in a
+		# drawer, it is issuing one: the state has to persuade people to hold
+		# paper it prints again, having already failed to once. Without the price
+		# the sequence dollarise -> wait out one law enactment -> re-enact fiat
+		# would be a currency reform with no pool wipe, no radicals and no premium
+		# — strictly the cheapest way out of a hyperinflation, and free, because
+		# the dollarise option already reset expectations to the anchor for
+		# nothing. te_mon_effect_new_currency is the same effect te_inflation.1's
+		# reform option calls: inflation and expectations start at
+		# te_mon_currency_reform_reset and lenders charge the ten-year premium.
+		# NOT the pool wipe and NOT the radicals — the months of -75% minting
+		# under dollarisation were that half of the price, and te_inflation.1.b.tt
+		# tells the player so before they choose.
 		#
 		# It is the only write of inflation state outside the monthly update and
 		# the crisis event; the variable contract in the header of
 		# common/script_values/te_monetary_script_values.txt lists it.
-		#
-		# NO MODIFIER IS REMOVED HERE. te_mon_dollarised_modifier is the seventh
-		# member of the te_inflation_band_* family and belongs to step 6c of the
-		# monthly update (te_monetary_apply_inflation_band), which takes it off
-		# and puts the country's current band on in the same swap. A
-		# remove_modifier here would be a second owner of that modifier, and
-		# would leave te_inflation_band_applied still claiming it was applied.
-		if = {
+		else_if = {
 			limit = {
 				has_variable = te_mon_dollarised
 				var:te_mon_dollarised = 1
