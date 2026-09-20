@@ -6,7 +6,7 @@
 # Almost everything here feeds one effect, te_monetary_monthly_update
 # (common/scripted_effects/te_monetary_effects.txt), which is the system's
 # single owner: no other file writes te_policy_rate, te_rate_paid_pts or the
-# two interest modifiers, and no step of it is ever called in isolation — see
+# interest modifier, and no step of it is ever called in isolation — see
 # the contract comment on te_monetary_monthly_update.
 #
 # ROOT MATTERS AT EVERY ENTRY POINT. The update's last step applies its modifier
@@ -21,11 +21,10 @@
 # twice. Every claim about a hook's ROOT below cites the engine's own
 # docs/on_actions.log.
 #
-# NOT GATED ON `banking_system_enabled` (§16.1). The interest plumbing cancels
-# vanilla's flat 20% base rate and replaces it with the mod's own number, so it
-# has to run even with the banking system switched off — otherwise a rule-off
-# game would either keep vanilla's rate while the mod's cancel-injects fire, or
-# pay nothing at all.
+# NOT GATED ON `banking_system_enabled` (§16.1). Vanilla's flat 20% base rate is
+# cancelled unconditionally, in INJECT:base_values, and this is what replaces it
+# with the mod's own number — so it has to run even with the banking system
+# switched off, or a rule-off game would have every country borrowing free.
 # ============================================================================
 
 
@@ -94,9 +93,9 @@ te_monetary_yearly_on_action = {
 # GAME START
 # ----------------------------------------------------------------------------
 # The cancel-INJECTs apply on day one, but te_monetary_rate_paid would not exist
-# until a country's first monthly pulse. Several tags start in debt, and a
-# Britain-like tag would pay vanilla's ~20% instead of its own rate for that
-# first month (§16.1).
+# until a country's first monthly pulse. Several tags start in debt, and with
+# vanilla's flat base already cancelled they would borrow free for that first
+# month instead of paying their own rate (§16.1).
 #
 # ROOT IS `none` HERE. The engine declares this on-action's expected scope as
 # `none` (docs/on_actions.log:341; vanilla 00_code_on_actions.txt:3-5 spells it
@@ -143,10 +142,10 @@ te_monetary_on_game_started = {
 # ============================================================================
 # COUNTRY CREATION
 # ============================================================================
-# A newly created tag has no interest modifiers at all, so until its first
-# monthly pulse it shows vanilla's 20% — exactly when the player is looking at
-# it (§16.1). Every hook below therefore runs the full update on the new
-# country immediately.
+# A newly created tag has no rate modifier at all, so until its first monthly
+# pulse it borrows at 0% — exactly when the player is looking at it (§16.1),
+# since the flat base is already cancelled in INJECT:base_values. Every hook
+# below therefore runs the full update on the new country immediately.
 #
 # Scope note: the four `released_as` hooks and the two uprising hooks put the
 # NEW country in scope:target and the parent in Root; on_country_formed puts

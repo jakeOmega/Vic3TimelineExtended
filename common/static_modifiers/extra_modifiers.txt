@@ -45,6 +45,44 @@
 	country_st_res_artillery_decay_add = 0.010
 	country_st_res_aeroplanes_decay_add = 0.040
 	country_st_res_tanks_decay_add = 0.025
+
+	# ------------------------------------------------------------------------
+	# Monetary Policy — cancel vanilla's flat base interest rate (§16.1)
+	# ------------------------------------------------------------------------
+	# Vanilla's own base_values carries country_loan_interest_rate_add = 0.2
+	# (vanilla common/static_modifiers/00_code_static_modifiers.txt:12), a flat
+	# 20% every country in the world pays regardless of anything about it. The
+	# mod replaces that with a rate its own central bank and its own lenders
+	# arrive at (te_monetary_rate_paid), so the flat base is cancelled here.
+	#
+	# WHY HERE AND NOT IN A MODIFIER OF OUR OWN. The country ranks and the
+	# vanilla finance techs are cancelled the same way, by INJECTing an equal and
+	# opposite value into the entity that grants it, and the owner confirmed
+	# in-game on 2026-09-19 that those nested `modifier = { }` INJECTs SUM with
+	# vanilla's. Doing the flat base the same way means the budget tooltip shows
+	# one interest line instead of a +20% base and a -20% modifier sitting beside
+	# each other, which is the whole point.
+	#
+	# UNPROVEN MERGE CASE — READ BEFORE TRUSTING THIS LINE.
+	# What was confirmed in-game is a NESTED `modifier = { }` block on a rank and
+	# on a technology. This is a FLAT KEY inside a static modifier, which is
+	# monetary_policy_design.md §17's check 2 and is still unverified: whole-block
+	# last-wins is already ruled out (the mod has shipped bureaucracy, authority
+	# and innovation through this same INJECT since April), but SAME-KEY semantics
+	# are not. The identical case sits four lines up in the same block —
+	# state_expected_sol_from_literacy = -5 against vanilla's +5.
+	#
+	# The day-one tell, on a fresh 1836 game, reading any country's budget-panel
+	# interest tooltip:
+	#   * no "Base Value" line at all, and Britain near 3.4% / Russia near 12%
+	#     => the keys SUM. This line is correct.
+	#   * every country reading 0.0% => LAST WINS: vanilla's 0.2 was replaced by
+	#     this -0.2 instead of cancelled, so the base is -20% and the mod's own
+	#     rate is swallowed by the clamp at zero.
+	# If it is last-wins: `git revert` the commit that added this line. That
+	# restores the separate cancelling modifier and step 9's two-modifier write,
+	# the arrangement that was live before and does not depend on this case.
+	country_loan_interest_rate_add = -0.2
 }
 
 INJECT:country_literacy_rate = {
@@ -6801,26 +6839,28 @@ agdiff_first_mover_prestige = {
 # Monetary Policy — interest plumbing (monetary_policy_design.md §16.1)
 # ============================================================================
 # The rate a country pays on government debt is rebased onto the mod's own
-# stack: te_monetary_base_offset cancels vanilla's base_values rate, and
-# te_monetary_rate_paid carries the mod's answer, re-applied each month with
-# `multiplier = var:te_rate_paid_applied` (pp; 0.01 = 1pp, so a multiplier of
-# 3.5 pays 3.5%).
+# stack. That takes two halves, and only ONE of them lives here:
 #
-# INVARIANT: the two are always added in the *same* effect block, so the sum of
-# country_loan_interest_rate_add never sits at <= 0 — the engine's behaviour at
-# a non-positive total is unknown and is never exercised. A freshly spawned
-# country with neither modifier pays vanilla's rate until its first pulse,
-# which is a safe fallback. Idiom: sol_expectations_apply_strata_shifts
-# (common/scripted_effects/sol_expectations_effects.txt:143-160).
+#   * vanilla's flat 20% base is cancelled in the INJECT:base_values block at the
+#     top of this file, on the entity that grants it — the same treatment the
+#     country ranks and the vanilla finance techs get. Read the comment there
+#     before touching the value; it carries the unproven-merge-case caveat.
+#   * te_monetary_rate_paid, below, carries the mod's own answer. Step 9 of
+#     te_monetary_monthly_update re-applies it each month with
+#     `multiplier = var:te_rate_paid_applied` (pp; 0.01 = 1pp, so a multiplier of
+#     3.5 pays 3.5%).
 #
-# The -0.2 hardcodes vanilla's base_values rate
-# (vanilla common/static_modifiers/00_code_static_modifiers.txt:12). If a
-# vanilla patch changes it, this value must follow — see
-# docs/guides/vanilla_patch_runbook.md.
-
-te_monetary_base_offset = {
-	country_loan_interest_rate_add = -0.2
-}
+# So a country that has not pulsed yet has no rate modifier and its
+# country_loan_interest_rate_add sums to zero: it borrows free until its first
+# update. That is deliberate and the owner has seen it in game — a non-positive
+# total simply displays 0.0% with no ill effect. Game start and every
+# country-creation hook fire the update immediately, so the window is the gap
+# before the first monthly pulse at worst (common/on_actions/te_monetary_on_actions.txt).
+#
+# `multiplier` IS RESOLVED AGAINST ROOT. Whatever re-applies this modifier must
+# run with the country it is updating in ROOT, or the engine silently writes a
+# multiplier of 1.0. See step 9's comment in
+# common/scripted_effects/te_monetary_effects.txt.
 
 te_monetary_rate_paid = {
 	country_loan_interest_rate_add = 0.01

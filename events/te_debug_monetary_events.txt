@@ -93,8 +93,8 @@ te_debug_monetary.1 = { # REVIEWED 2026-09-19: console-only test event (`event t
 # Written up in scripting_best_practices.md § "Scope Chain Issues with
 # add_modifier + Script Values".
 #
-# The three events below run the SAME remove-then-add-the-pair block that step 9
-# runs (te_monetary_apply_interest_modifiers), mid-game, from country scope, and
+# The three events below run the SAME remove-then-add block that step 9 runs
+# (te_monetary_apply_interest_modifiers), mid-game, from country scope, and
 # differ only in what goes in the `multiplier =` slot:
 #
 #   .2  multiplier = var:te_rate_paid_applied      the production form
@@ -102,10 +102,11 @@ te_debug_monetary.1 = { # REVIEWED 2026-09-19: console-only test event (`event t
 #                                                  that same variable
 #   .4  multiplier = 7                             a literal — the control
 #
-# Reading the result: Timed Modifiers = -20% (the offset) + the rate the
-# multiplier actually produced. So for a country paying 12.5pp, a working
-# multiplier reads about -7.5%, a multiplier of 1 reads -19.0%, the .3 fallback
-# reads -17.0%, and the .4 control reads -13.0%.
+# Reading the result: vanilla's flat base is cancelled in INJECT:base_values, so
+# te_monetary_rate_paid is the only interest modifier a country carries and the
+# tooltip's modifier line IS the rate the multiplier produced. A country whose
+# te_rate_paid_applied is 12.5 should read about +12.5%; a multiplier that
+# silently fell back to 1 reads +1.0%, and the .4 control reads +7.0%.
 #
 # WHAT EACH OUTCOME MEANS, for the next investigation. All three worked from a
 # country event, which is what proved the call site rather than the form to be
@@ -114,11 +115,11 @@ te_debug_monetary.1 = { # REVIEWED 2026-09-19: console-only test event (`event t
 # approach has to change; if all three work but production does not, look at the
 # ROOT of the call site — that is what happened here.
 #
-# ORDER OF USE. Fire .2, then .3, then .4 — .4 leaves the country paying 7%
-# with both modifiers present, which step 9's 0.05 threshold will never correct
-# on its own. te_debug_monetary.2's second option is the undo: it zeroes
-# te_rate_paid_applied and runs the real monthly update, which sees the whole
-# gap at once and rewrites the pair through the production path.
+# ORDER OF USE. Fire .2, then .3, then .4 — .4 leaves the country paying 7%,
+# which step 9's 0.05 threshold will never correct on its own.
+# te_debug_monetary.2's second option is the undo: it zeroes te_rate_paid_applied
+# and runs the real monthly update, which sees the whole gap at once and rewrites
+# the modifier through the production path.
 #
 # HOVER BEFORE CLICKING. The option tooltip previews the resolved modifier, so
 # it is worth reading the tooltip as well as the budget panel afterwards.
@@ -146,14 +147,9 @@ te_debug_monetary.2 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 		name = te_debug_monetary.2.a
 		default_option = yes
 		if = {
-			limit = { has_modifier = te_monetary_base_offset }
-			remove_modifier = te_monetary_base_offset
-		}
-		if = {
 			limit = { has_modifier = te_monetary_rate_paid }
 			remove_modifier = te_monetary_rate_paid
 		}
-		add_modifier = { name = te_monetary_base_offset }
 		add_modifier = {
 			name = te_monetary_rate_paid
 			multiplier = var:te_rate_paid_applied
@@ -162,7 +158,7 @@ te_debug_monetary.2 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 
 	# The undo, and the cleanest test of the production path itself: zeroing the
 	# applied value forces step 9 past its 0.05 threshold, so the monthly update
-	# rewrites the pair exactly as it would on any other month. Note that the
+	# rewrites the modifier exactly as it would on any other month. Note that the
 	# update is not idempotent — it also drifts the policy rate a third of a
 	# point and draws both hidden random walks, same as any pulse.
 	option = {
@@ -197,14 +193,9 @@ te_debug_monetary.3 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 		name = te_debug_monetary.3.a
 		default_option = yes
 		if = {
-			limit = { has_modifier = te_monetary_base_offset }
-			remove_modifier = te_monetary_base_offset
-		}
-		if = {
 			limit = { has_modifier = te_monetary_rate_paid }
 			remove_modifier = te_monetary_rate_paid
 		}
-		add_modifier = { name = te_monetary_base_offset }
 		add_modifier = {
 			name = te_monetary_rate_paid
 			multiplier = te_mon_rate_paid_multiplier
@@ -238,14 +229,9 @@ te_debug_monetary.4 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 		name = te_debug_monetary.4.a
 		default_option = yes
 		if = {
-			limit = { has_modifier = te_monetary_base_offset }
-			remove_modifier = te_monetary_base_offset
-		}
-		if = {
 			limit = { has_modifier = te_monetary_rate_paid }
 			remove_modifier = te_monetary_rate_paid
 		}
-		add_modifier = { name = te_monetary_base_offset }
 		add_modifier = {
 			name = te_monetary_rate_paid
 			multiplier = 7 # REVIEWED 2026-09-19: console-only control value, never reachable in play

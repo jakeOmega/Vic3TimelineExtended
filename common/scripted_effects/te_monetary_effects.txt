@@ -17,12 +17,13 @@
 #     modifier_multiplier_var_audit exists to catch.
 #
 # Nothing here is gated on `banking_system_enabled` (§16.1): with the banking
-# rule switched off a country still pays reference rate + premium, and the
-# interest plumbing still has to cancel vanilla's flat 20% base.
+# rule switched off a country still pays reference rate + premium, and vanilla's
+# flat 20% base is cancelled in INJECT:base_values either way — so with this
+# switched off too, every country would borrow free.
 #
 # ORDER (§16.2): 0 init -> 1 regime code -> 2 target -> 3 drift -> 4 no-dial
 # derived rate -> 5 premium -> 7 rate paid -> 8 neutral rate + stance ->
-# 9 re-apply the interest modifiers. Steps 6 and 10 are phases 2 and 3.
+# 9 re-apply the interest modifier. Steps 6 and 10 are phases 2 and 3.
 #
 # PHASE 1 HAS NO INFLATION. Every pi / expected-inflation term of §6 and §9 is
 # dropped, including price stability's `-2`, and the mandate formulas below are
@@ -65,8 +66,9 @@ te_monetary_refresh_world_era_base = {
 # on_game_started and the six country-creation on-actions through the hidden
 # dispatch event te_monetary_internal.1 — all of them wired in
 # common/on_actions/te_monetary_on_actions.txt. A country that has never run it
-# pays vanilla's flat 20% — a safe fallback, and the reason the creation hooks
-# exist at all (§16.1).
+# carries no rate modifier and borrows at 0%, because the flat base is cancelled
+# in INJECT:base_values — which is the reason the creation hooks exist at all
+# (§16.1).
 #
 # THE CALLER'S ROOT MUST BE THE COUNTRY BEING UPDATED. Step 9 applies its
 # modifier with `multiplier = var:...`, which the engine resolves against ROOT
@@ -92,8 +94,8 @@ te_monetary_refresh_world_era_base = {
 # NO STEP OF THIS EFFECT MAY BE CALLED IN ISOLATION. The pulse family calling
 # the full update is the whole list. Step 9 (te_monetary_apply_interest_modifiers)
 # is the only step that even could be called on its own — it is idempotent,
-# recomputing the applied value, comparing, and re-adding both modifiers in one
-# block without drifting the rate or drawing a walk — and it used to be, from
+# recomputing the applied value, comparing, and re-adding the modifier without
+# drifting the rate or drawing a walk — and it used to be, from
 # `on_acquired_technology`, to close the gap between a vanilla finance tech
 # granting its -2pp instantly and the next monthly pulse compensating for it in
 # script. The five vanilla finance techs are now cancelled engine-side in
@@ -777,16 +779,20 @@ te_monetary_update_stance = {
 # ----------------------------------------------------------------------------
 # Scope: country.
 #
-# Two static modifiers, ALWAYS added in the same effect block:
+# ONE static modifier:
 #
-#   te_monetary_base_offset  country_loan_interest_rate_add = -0.2
-#                            cancels vanilla's flat 20% from base_values
 #   te_monetary_rate_paid    country_loan_interest_rate_add = 0.01
 #                            multiplier = var:te_rate_paid_applied
 #
-# The offset is never present without the rate modifier, so the sum of `_add`
-# never sits at or below zero. A country that has never pulsed has neither and
-# pays vanilla's 20% — a safe fallback.
+# Vanilla's flat 20% base is not cancelled here. It is cancelled on the entity
+# that grants it, by `country_loan_interest_rate_add = -0.2` in the mod's
+# INJECT:base_values block (common/static_modifiers/extra_modifiers.txt), the
+# same treatment the country ranks and the vanilla finance techs get. The player
+# therefore sees one interest line rather than a +20% base with a -20% modifier
+# beside it. A country that has never pulsed carries no rate modifier at all and
+# borrows at 0% until its first update — the owner has confirmed in game that a
+# non-positive total simply reads 0.0% with no ill effect — which is why game
+# start and all seven country-creation hooks run the update immediately.
 #
 # te_rate_paid_applied IS te_rate_paid_pts. It stays a separate variable because
 # it records what was last written into the multiplier, which is what the 0.05
@@ -796,8 +802,8 @@ te_monetary_update_stance = {
 # so no vanilla interest source survives for this write to net against.
 #
 # The re-apply is skipped when the applied value has moved by less than 0.05
-# (§16.1), unless a modifier is missing — which is how a country that has just
-# been released, formed or loaded from an older save gets its pair on the first
+# (§16.1), unless the modifier is missing — which is how a country that has just
+# been released, formed or loaded from an older save gets it on the first
 # pulse even though nothing moved. A save written before the tech cancel landed
 # carries an applied value up to 2.0pp per researched finance tech above pts; the
 # first pulse after loading sees that whole gap at once, far over the threshold,
@@ -805,7 +811,7 @@ te_monetary_update_stance = {
 #
 # CALLED FROM ONE PLACE — te_monetary_monthly_update. This step, alone in this
 # file, is idempotent: it reads its inputs, compares against what is applied, and
-# either does nothing or replaces the pair in one block, never drifting the rate
+# either does nothing or replaces the modifier, never drifting the rate
 # and never drawing a walk. That makes it the only step an extra entry point
 # would be safe on, and it had one until the tech cancels removed the reason for
 # it. Anything that wants the modifier refreshed writes its input and waits for
@@ -853,20 +859,14 @@ te_monetary_apply_interest_modifiers = {
 				var:te_mon_work2 >= 0.05
 				var:te_mon_work2 <= -0.05
 				NOT = { has_modifier = te_monetary_rate_paid }
-				NOT = { has_modifier = te_monetary_base_offset }
 				NOT = { has_variable = te_rate_paid_rooted }
 			}
-		}
-		if = {
-			limit = { has_modifier = te_monetary_base_offset }
-			remove_modifier = te_monetary_base_offset
 		}
 		if = {
 			limit = { has_modifier = te_monetary_rate_paid }
 			remove_modifier = te_monetary_rate_paid
 		}
 		set_variable = { name = te_rate_paid_applied value = var:te_mon_work }
-		add_modifier = { name = te_monetary_base_offset }
 		add_modifier = {
 			name = te_monetary_rate_paid
 			multiplier = var:te_rate_paid_applied
