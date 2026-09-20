@@ -942,22 +942,32 @@ te_monetary_update_inflation = {
 		# quantities plus -0.4 x the stance gap, so two months of a displayed
 		# headline would recover the gap and with it r*.
 		#
-		# DRAWN ONLY FOR A COUNTRY WITH A DIAL, on the §0.1 precedent that
-		# gated step 8's two walks: this effect runs for every country every
-		# month, and ~1,330 of ~1,400 tags have no national bank. There is
-		# nothing for the noise to hide in those: their stance gap is forced to
-		# 0, so te_mon_pressure_stance is 0 and the sum carries no r* to
-		# invert. The accepted consequence is the same one step 8 accepts — a
-		# no-dial country's noise FREEZES rather than decaying, and resumes
-		# from where it stopped if the country later enacts a national bank. A
-		# country that has never had a dial simply keeps step 0's zero. The
-		# decay sits inside the gate with the draw, deliberately: leaving it
-		# outside would bleed a frozen walk to zero instead of freezing it,
-		# which is a different behaviour rather than an optimisation. The clamp
-		# stays outside, so the bound stays true even for a frozen value.
+		# THE DRAW IS ONLY FOR A COUNTRY WITH A DIAL, on the §0.1 precedent
+		# that gated step 8's two walks: this effect runs for every country
+		# every month, and ~1,330 of ~1,400 tags have no national bank. There
+		# is nothing for the noise to hide in those — their stance gap is
+		# forced to 0, so te_mon_pressure_stance is 0 and the sum carries no r*
+		# to invert.
+		#
+		# THE DECAY IS OUTSIDE THE GATE, and that is where this parts company
+		# with step 8. Step 8's walks are *read* only by countries with a dial,
+		# so freezing them costs nothing. This one is different:
+		# te_mon_pressure_noise is an UNCONDITIONAL term of
+		# te_mon_pressure_total, so a country that loses its dial would carry
+		# its last draw — up to +/-0.75pp — as a permanent, deterministic bias
+		# on its inflation for the rest of the campaign. Decaying outside the
+		# gate bleeds an undrawn walk away instead — 0.95 a month halves it
+		# every thirteen months or so, and a worst-case 0.75 is under a tenth
+		# of a point inside four years. That is the intended reading of "the
+		# noise stops moving": it stops being random, and then it stops being
+		# anything. A country that has never had a dial keeps step 0's zero
+		# either way, and multiplying zero by 0.95 costs nothing.
+		#
+		# The clamp stays outside too, so the bound stays true whatever path
+		# the value took.
+		change_variable = { name = te_inflation_noise multiply = 0.95 }
 		if = {
 			limit = { te_mon_has_dial = yes }
-			change_variable = { name = te_inflation_noise multiply = 0.95 }
 			random_list = {
 				1 = { change_variable = { name = te_inflation_noise add = 0.1 } }
 				1 = { }
