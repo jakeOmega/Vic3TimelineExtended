@@ -90,7 +90,6 @@ containerization = {
 	modifier = {
 		building_group_bg_trade_employee_mult = -0.5
 		state_market_access_price_impact = 0.01
-		country_credit_standing_add = -0.004
 		country_institution_ministry_of_commerce_max_investment_add = 1
 		country_containerization_pb_principles_bool = yes
 	}
@@ -133,6 +132,8 @@ computer_networks = {
 	category = production
 
 	modifier = {
+		# monetary policy: structural premium (monetary_policy_design.md §7.5, re-homed and resized 2026-09-20)
+		country_credit_standing_add = -0.003
 		country_weekly_innovation_max_add = 50
 		state_bureaucracy_population_base_cost_factor_mult = 0.5
 		country_institution_police_max_investment_add = 1

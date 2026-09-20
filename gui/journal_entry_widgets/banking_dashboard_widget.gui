@@ -115,11 +115,25 @@ types banking_dashboard_widget_types
 	type banking_dash_mon_subheader = textbox {
 		autoresize = yes
 		max_width = 460
-		align = left|nobaseline
+		parentanchor = hcenter
+		align = center|nobaseline
 		margin_top = 6
 		margin_bottom = 1
 		default_format = "#lore"
 		block "mon_subheader_text" {}
+	}
+
+	### A plain 0-1 meter under a row of the gold sub-section (the bank's vault
+	### against its limit, peg confidence against 100). Vanilla's own bar type,
+	### so it matches the journal entry's scripted bars above.
+	type banking_dash_mon_meter = default_progressbar_horizontal {
+		parentanchor = hcenter
+		size = { 440 16 }
+		blockoverride "values" {
+			block "meter_value" {}
+			min = 0
+			max = 1
+		}
 	}
 
 	### The value column of a monetary row. Wider than the label column looks
@@ -217,6 +231,132 @@ flowcontainer = {
 		alpha = 0.5
 	}
 
+	### THE JOURNAL ENTRY'S OWN SCRIPTED BARS, AT THE TOP. Phase, momentum,
+	### policy stance, bubble pressure — the same four bars, from the same
+	### datamodel, that vanilla's panel draws at the very bottom; the markup of
+	### each variant is vanilla's (gui/journal_entry.gui), narrowed to this
+	### widget. They are NOT drawn twice: je_banking.txt puts a marker widget in
+	### custom_widget_container_7, and the mod's journal_entry.gui override
+	### hides its own bar block for any entry that does. Only the three variants
+	### these bars use are reproduced (default_green, default_bad,
+	### double_sided_gold); a bar of another kind added to this entry would need
+	### its variant added here.
+	flowcontainer = {
+		parentanchor = hcenter
+		direction = vertical
+		visible = "[Not( IsDataModelEmpty( JournalEntry.GetScriptedProgressBars ) )]"
+		datamodel = "[JournalEntry.GetScriptedProgressBars]"
+		spacing = 8
+		margin_bottom = 8
+
+		item = {
+			container = {
+				bad_progressbar_horizontal = {
+					visible = "[ScriptedProgressBar.IsDefaultBad]"
+					size = { 480 30 }
+					tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+					blockoverride "values" {
+						value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
+						min = 0
+						max = 1
+					}
+					textbox = {
+						text = "[ScriptedProgressBar.GetDesc]"
+						autoresize = yes
+						align = nobaseline
+						margin_left = 10
+						parentanchor = vcenter
+					}
+				}
+
+				green_progressbar_horizontal = {
+					visible = "[ScriptedProgressBar.IsDefaultGreen]"
+					size = { 480 30 }
+					tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+					blockoverride "values" {
+						value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
+						min = 0
+						max = 1
+					}
+					textbox = {
+						text = "[ScriptedProgressBar.GetDesc]"
+						autoresize = yes
+						align = nobaseline
+						margin_left = 10
+						parentanchor = vcenter
+					}
+				}
+
+				widget = {
+					size = { 480 34 }
+					visible = "[ScriptedProgressBar.IsDoubleSidedGold]"
+
+					default_progressbar_horizontal = {
+						parentanchor = center
+						size = { 480 30 }
+
+						blockoverride "noprogresstexture" {
+							noprogresstexture = "gfx/interface/progressbar/progressbar_gold.dds"
+						}
+
+						tooltip = "[ScriptedProgressBar.GetPeriodicProgressBreakdown]"
+						blockoverride "values" {
+							value = "[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)]"
+							min = 0
+							max = 1
+						}
+						textbox = {
+							text = "[ScriptedProgressBar.GetDesc]"
+							autoresize = yes
+							align = nobaseline
+							margin_left = 10
+							parentanchor = vcenter
+						}
+						textbox = {
+							text = "[ScriptedProgressBar.GetSecondDesc]"
+							autoresize = yes
+							align = right|nobaseline
+							margin_right = 10
+							parentanchor = right|vcenter
+						}
+
+						blockoverride "on_top_of_the_progressbar" {
+							progressbar = {
+								noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+								progresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+								size = { 100% 100% }
+								spriteType = Corneredtiled
+								spriteborder = { 4 4 }
+								texture_density = 2
+								skip_initial_animation = yes
+
+								block "values" {}
+								block "direction" {
+									direction = horizontal
+								}
+								block "progress_changed_animation" {
+									using = progressbar_changed_animation
+								}
+								block "animate_negative_change" {
+									animate_negative_changes = yes
+								}
+								marker = {
+									icon = {
+										size = { 65 33 }
+										parentanchor = vcenter
+										widgetanchor = center
+										texture = "gfx/interface/progressbar/progressbar_marker.dds"
+										using = shimmer
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
 	textbox = {
 		text = "banking_dash_conditions_header"
 		default_format = "#header"
@@ -286,6 +426,23 @@ flowcontainer = {
 	}
 
 	### Bubble pressure
+	### Policy stance, between momentum and bubble pressure — the order of the
+	### bars above, and the order of cause: the stance feeds both. The BAND NAME
+	### only, from the same customizable localization the Monetary Policy block
+	### uses; a country with no dial has no stance, so it has no row.
+	banking_dash_condition_row = {
+		visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		tooltip = "banking_dash_mon_stance_tt"
+		blockoverride "condition_label" {
+			text = "banking_dash_mon_stance_label"
+		}
+		blockoverride "condition_value" {
+			banking_dash_condition_value = {
+				text = "banking_dash_mon_stance_value"
+			}
+		}
+	}
+
 	banking_dash_condition_row = {
 		tooltip = "banking_dash_bubble_tt"
 		blockoverride "condition_label" {
@@ -1134,6 +1291,29 @@ flowcontainer = {
 						}
 					}
 
+					### The bank's own vault (the hybrid model) — what the flows below
+					### move, as pounds and as a share of its limit. NOT the treasury.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_bankgold_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_bankgold_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_bankgold_value"
+							}
+						}
+					}
+
+					banking_dash_mon_meter = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_bankgold_tt"
+						blockoverride "meter_value" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_bank_gold_scaled') )]"
+						}
+					}
+
 					### ---- Gold and the peg (phase 3, §12.2-12.3) ---------------
 					### Three rows, for a gold-standard country with a national
 					### bank only (banking_mon_shows_gold) — suspended or not; the
@@ -1214,6 +1394,32 @@ flowcontainer = {
 							banking_dash_condition_value = {
 								text = "banking_dash_mon_pegconf_value"
 							}
+						}
+					}
+
+					banking_dash_mon_meter = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_pegconf_tt"
+						blockoverride "meter_value" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+						}
+					}
+
+					### Recapitalise — op 13, treasury -> vault, one way. The handler
+					### answers why it is greyed out, so no threshold lives here.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						parentanchor = hcenter
+						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_button = {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ) )]"
+							size = { 200 28 }
+							text = "banking_dash_mon_btn_recapitalise"
 						}
 					}
 
@@ -1428,6 +1634,20 @@ flowcontainer = {
 								text = "banking_dash_mon_stance_value"
 							}
 						}
+					}
+
+					### What the stance is worth, in the open rather than only in the
+					### tooltip. BANDED on purpose: both phrases come from the displayed
+					### band (te_mon_stance_momentum_effect / _bubble_effect), never from
+					### the gap, so nothing here narrows the neutral rate.
+					textbox = {
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						text = "banking_dash_mon_stance_impact_line"
+						autoresize = yes
+						multiline = yes
+						max_width = 460
+						align = left|nobaseline
+						margin_bottom = 2
 					}
 
 					### Delegation — ops 2 (delegate) and 3 (take it back).

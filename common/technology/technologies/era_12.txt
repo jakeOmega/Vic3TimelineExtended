@@ -373,7 +373,6 @@ post-scarcity_economy = {
 	modifier = {
 		country_sol_expectations_target_add = 0.5
 		country_max_weekly_construction_progress_add = 50
-		country_credit_standing_add = -0.002
 		state_migration_crowding_density_mult = 0.15
 		state_building_airport_max_level_add = 1
 		state_building_highway_max_level_add = 1

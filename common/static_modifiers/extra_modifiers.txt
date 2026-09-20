@@ -6887,6 +6887,10 @@ banking_stance_band_2 = {
 }
 
 banking_stance_band_3 = {
+	# An EMPTY modifier that is still applied, so the entry always names the
+	# stance. It needs an icon all the same: the journal entry lists it, and a
+	# modifier with none logs "Could not find texture ... '' not found".
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 }
 
 banking_stance_band_4 = {
@@ -6973,6 +6977,10 @@ te_inflation_band_deflation = {
 }
 
 te_inflation_band_comfort = {
+	# Empty, still applied, and since the managed modifiers moved onto the
+	# banking journal entry it is LISTED there — so it needs an icon, or the
+	# panel logs "Could not find texture ... '' not found" on every open.
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 }
 
 te_inflation_band_elevated = {
@@ -7084,6 +7092,16 @@ te_mon_currency_reform_premium = {
 # run off the month counter te_peg_suspended_months (te_mon_is_on_gold); these
 # only carry the prices, which the monthly update picks up through the two
 # premium modifier types like any other source.
+
+# The carry on borrowed gold (owner decision I), as a line in the budget. A
+# UNIT modifier: step 10 of te_monetary_monthly_update applies it with
+# `multiplier = var:te_gold_carry_applied`, the weekly pounds the hot-money
+# balance costs at the policy rate. It is the one thing the gold mechanism ever
+# shows the treasury — the flows themselves move the central bank's vault.
+te_mon_gold_carry_expense = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1 # REVIEWED 2026-09-20: unit value, multiplied by te_gold_carry_applied (weekly pounds of interest on te_gold_hot_money)
+}
 
 # Suspend convertibility: +2pp of cyclical premium for the five years the
 # suspension runs (days = 1825).

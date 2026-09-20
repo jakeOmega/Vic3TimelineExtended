@@ -10,6 +10,9 @@
 	}
 
 	modifier = {
+		# monetary policy: structural premium (monetary_policy_design.md §7.5, re-homed and resized 2026-09-20) — the small one, and the first of the two that lower the FLOOR
+		country_credit_standing_add = -0.0015
+		country_credit_standing_floor_add = -0.001
 		country_weekly_innovation_max_add = 100
 		country_intelligence_capacity_add = 3
 		country_covert_operation_efficiency_mult = 0.10
@@ -297,7 +300,6 @@ decline_of_organized_religion = {
 	}
 
 	modifier = {
-		country_credit_standing_add = -0.004
 		country_institution_ministry_of_religion_max_investment_add = 2
 		country_institution_ministry_of_foreign_affairs_max_investment_add = 1
 		# Homeland system: weakens tradition-based territorial claims

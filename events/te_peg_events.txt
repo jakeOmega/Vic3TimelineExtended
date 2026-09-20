@@ -156,7 +156,17 @@ te_peg.1 = {
 			set_variable = { name = te_peg_defend_months value = 0 }
 		}
 
-		add_treasury = te_mon_peg_devalue_revaluation
+		# The revaluation lands in the BANK'S vault, not the treasury (the
+		# hybrid model): a devaluation makes the bank's gold worth more notes
+		# and hands the government nothing. The third documented outside
+		# writer of te_bank_gold, beside step 10 and the recapitalise button.
+		hidden_effect = {
+			change_variable = { name = te_bank_gold add = te_mon_peg_devalue_revaluation }
+			if = {
+				limit = { var:te_bank_gold > te_mon_bank_gold_limit }
+				set_variable = { name = te_bank_gold value = te_mon_bank_gold_limit }
+			}
+		}
 
 		add_modifier = {
 			name = te_mon_peg_devalued

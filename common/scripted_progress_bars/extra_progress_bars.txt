@@ -20,6 +20,24 @@ banking_cycle_momentum_bar = {
 	max_value = 5
 }
 
+# The displayed policy-stance BAND as a bar (monetary phase 3). Five positions,
+# -2 very tight ... +2 very loose — tight on the LEFT because tight money is
+# what drags momentum, the bar above it, to the left. It is fed from
+# te_mon_stance_bar_pos, which step 8 of the monetary update derives from
+# te_mon_stance_band — the bank's ESTIMATE, already public on the dashboard —
+# and never from te_mon_stance_gap: a continuous stance bar would print r*.
+banking_policy_stance_bar = {
+	name = "banking_policy_stance_bar_name"
+	desc = "banking_policy_stance_bar_name"
+	second_desc = "banking_policy_stance_bar_second" # REVIEWED 2026-09-20: scripted-progress-bar field, not an effect/trigger — vanilla 00_great_game_progress_bars.txt:4 uses it; the audit has no schema for this entity type
+
+	double_sided_gold = yes
+
+	start_value = 0
+	min_value = -2
+	max_value = 2
+}
+
 banking_bubble_pressure_bar = {
 	name = "banking_bubble_pressure_bar_name"
 	desc = "banking_bubble_pressure_bar_name"

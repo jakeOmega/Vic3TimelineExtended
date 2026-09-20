@@ -12,6 +12,7 @@
 
 	scripted_progress_bar = banking_cycle_value_bar
 	scripted_progress_bar = banking_cycle_momentum_bar
+	scripted_progress_bar = banking_policy_stance_bar
 	scripted_progress_bar = banking_bubble_pressure_bar
 
 	# Policy dashboard. Both widgets are presentation only: every action they
@@ -36,6 +37,18 @@
 		gui = "gui/journal_entry_widgets/banking_history_widget.gui"
 		name = "widget_je_banking_history"
 		container = "custom_widget_container_2"
+	}
+
+	# MARKER, not content. gui/journal_entry.gui (the mod's override of the
+	# vanilla panel) hides its own scripted-progress-bar block for any journal
+	# entry that puts a widget in custom_widget_container_7, because the
+	# dashboard widget above draws the same bars at the TOP of the panel. The
+	# widget itself is zero-sized. Remove this and the bars come back at the
+	# bottom as well.
+	widget = {
+		gui = "gui/journal_entry_widgets/te_je_bars_on_top_marker.gui"
+		name = "widget_te_je_bars_on_top_marker"
+		container = "custom_widget_container_7"
 	}
 
 	# Buttons
@@ -126,6 +139,7 @@
 		scope:journal_entry = {
 			set_bar_progress = { name = banking_cycle_value_bar value = 50 }
 			set_bar_progress = { name = banking_cycle_momentum_bar value = 0 }
+			set_bar_progress = { name = banking_policy_stance_bar value = 0 }
 			set_bar_progress = { name = banking_bubble_pressure_bar value = 0 }
 		}
 	}

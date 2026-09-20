@@ -41,7 +41,15 @@ institution_national_bank = {
 	icon = "gfx/interface/icons/institution_icons/schools.dds"
 	background_texture = "gfx/interface/illustrations/institutions/schools.dds"
 	modifier = {
-		country_credit_standing_add = -0.003
+		# -0.15pp of structural premium a level. It was -0.3, hand-judged in
+		# monetary_policy_design.md §7.5 against VANILLA's cap of 5 levels
+		# (-1.5pp at most); this mod's cap is 9 (MAX_INSTITUTION_INVESTMENT in
+		# extra_defines.txt), which made a fully-funded bank worth -2.7pp — more
+		# than the gold standard (-1), independence (-0.5), laissez-faire (-0.5)
+		# and all five mod finance techs (-1.8) put together, and most of a minor
+		# power's whole rank premium. Halved, the full nine levels are worth
+		# -1.35pp, which is the ceiling the design meant.
+		country_credit_standing_add = -0.0015
 		country_gold_reserve_limit_mult = 0.2
 		building_cash_reserves_mult = 0.2
 		state_capitalists_investment_pool_efficiency_mult = 0.05

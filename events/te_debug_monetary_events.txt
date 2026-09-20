@@ -836,22 +836,26 @@ te_debug_monetary.7 = { # REVIEWED 2026-09-20: console-only test event (`event t
 #      Rate row, month after month, until a great power takes a discretionary
 #      dial. No option needed.
 #   2. "A discretionary GP's hike visibly drains a small gold country."
-#      Option a (+2pp on the world rate) stands in for the hike. As a small
-#      gold country on a manual target left where it was: the gap reads -2,
-#      Gold Flow about -0.4% of GDP a month, and once reserves pass under a
-#      tenth of the limit the flow stops and Peg Confidence starts falling
-#      about 6 a month.
+#      Option a (+2pp on the world rate) stands in for the hike. As a gold
+#      country on a manual target left where it was: the gap reads -2, Gold
+#      Flow about -0.4% of GDP a month, and it is the BANK'S GOLD RESERVE that
+#      falls — the treasury does not move. Once the vault passes under a tenth
+#      of its limit the flow stops and Peg Confidence starts falling about 6 a
+#      month.
 #   3. "AI on peg defence survives a 2pp world-rate rise." Option a, then
 #      observe AI gold countries for two years: their targets step up within a
-#      month (rounded UP, ruling Q5), the rate closes the gap in ~6 months, and
-#      no te_peg.1 fires for a country that was out of debt when it started.
-#   4. "Holding world + 5 on gold yields no lasting treasury gain." As a gold
-#      player: target = world + 5, fast-forward with te_debug_monetary.6. Gold
-#      comes in until the BORROWED balance reaches one reserve limit (ruling
-#      Q8) and then stops whatever was spent; drop the target to the world rate
-#      and it leaves at twice the speed. Option c prints nothing new but parks
-#      confidence at 25 so the crisis can be reached in two or three months
-#      rather than a decade.
+#      month or two (to the tenth, ruling Q5), and no te_peg.1 fires for a tag
+#      whose vault was at least half full when it started.
+#   4. "Holding world + 5 on gold yields no lasting treasury gain." Under the
+#      hybrid model it yields no treasury gain AT ALL: the inflow fills the
+#      bank's vault to its limit and stops, the treasury only ever sees the
+#      carry as a budget expense, and on dropping the target the borrowed part
+#      leaves at twice the speed. Option c parks confidence at 25 so the crisis
+#      can be reached without waiting out a whole vault.
+#
+# COUNTRY MONTHLY PULSES ARE STAGGERED — Britain's fires around the 13th, not
+# on the 1st (first playtest). Watch a figure across a whole month, not across
+# the 31st to the 1st.
 #
 # FIRE IT ON A COUNTRY THAT HAS PULSED. te_mon_peg_confidence_move and
 # te_mon_gold_gap_value read their variables unguarded — inside the monthly

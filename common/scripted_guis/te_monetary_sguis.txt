@@ -279,6 +279,25 @@ banking_mon_control_sgui = {
 				te_mon_monetise_can_step_up = yes
 			}
 		}
+		# --- 13: recapitalise the bank (§0.5, the hybrid model) ---
+		# Treasury -> vault, one way. One custom_tooltip per cause, phrased as
+		# conditions like the rest.
+		trigger_else_if = {
+			limit = { scope:op = 13 }
+			custom_tooltip = {
+				text = banking_mon_tt_recap_has_flows
+				te_mon_has_gold_flows = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_recap_room
+				te_mon_bank_recap_amount > 0
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_recap_cash
+				gold_reserves >= te_mon_bank_recap_amount
+			}
+			te_mon_bank_can_recapitalise = yes
+		}
 		trigger_else = {
 			always = no
 		}
@@ -338,6 +357,10 @@ banking_mon_control_sgui = {
 		else_if = {
 			limit = { scope:op = 12 }
 			te_mon_effect_target_to_max = yes
+		}
+		else_if = {
+			limit = { scope:op = 13 }
+			te_mon_effect_recapitalise_bank = yes
 		}
 	}
 }
@@ -440,6 +463,7 @@ banking_mon_shows_gold = {
 		has_variable = te_gold_flow_gap
 		has_variable = te_gold_flow
 		has_variable = te_gold_hot_money
+		has_variable = te_bank_gold
 		has_variable = te_gold_carry
 		has_variable = te_peg_confidence
 		has_variable = te_mon_world_rate_now

@@ -423,6 +423,9 @@ universal_digital_identity = {
 	}
 
 	modifier = {
+		# monetary policy: structural premium (monetary_policy_design.md §7.5, re-homed and resized 2026-09-20) — and the second of the two that lower the FLOOR
+		country_credit_standing_add = -0.003
+		country_credit_standing_floor_add = -0.001
 		country_intelligence_capacity_add = 5
 		country_loyalists_from_legitimacy_mult = 0.05
 		state_radicals_and_loyalists_from_sol_change_mult = -0.05

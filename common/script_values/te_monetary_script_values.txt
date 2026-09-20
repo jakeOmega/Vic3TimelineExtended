@@ -219,6 +219,22 @@
 #                                                   printed in the debug read-out so the
 #                                                   §17 check-12 units question can be
 #                                                   settled from a running game
+#   te_mon_mod_home         0 or 1                  where this country's MANAGED
+#                                                   monetary modifiers live: 1 on
+#                                                   je_banking_cycle, 0 on the
+#                                                   country (it has no entry).
+#                                                   Written by step 0b; a change
+#                                                   strips them all and zeroes the
+#                                                   five `_applied` variables (see
+#                                                   "WHERE THE MODIFIERS LIVE" in
+#                                                   te_monetary_effects.txt)
+#   te_mon_stance_bar_pos   -2 to 2     displayed   3 - te_mon_stance_band: the
+#                                                   band as a position for the
+#                                                   journal entry's
+#                                                   banking_policy_stance_bar (tight
+#                                                   left, loose right). Written by
+#                                                   step 8 from the BAND, never
+#                                                   from the gap
 #   te_mon_stance_months    +/- te_mon_stance_months_cap
 #                                                   how many consecutive months the
 #                                                   DISPLAYED band has been loose (<= 2,
@@ -265,24 +281,42 @@
 #   te_gold_flow_gap        +/-5        displayed   policy rate - world rate,
 #                                                   clamped; 0 for every country
 #                                                   without gold flows
-#   te_gold_flow            pounds      displayed   this month's add_treasury,
-#                                                   signed (+ in), after every cap
+#   te_gold_flow            pounds      displayed   this month's change in the
+#                                                   VAULT, signed (+ in), after
+#                                                   every cap
 #   te_gold_flow_pct        +/- ~12                 the same as % of GDP a year;
 #                                                   read NEXT month by
 #                                                   te_mon_pressure_gold_flow
-#   te_gold_hot_money       >= 0        displayed   gold drawn in by a high rate
-#                                                   and still owed back (§12.2).
-#                                                   Capped at one reserve limit
-#                                                   (ruling Q8); paid out in one
-#                                                   go if the country stops being
-#                                                   on gold, frozen while it is
-#                                                   suspended (ruling Q9)
+#   te_bank_gold            0 to limit  displayed   THE CENTRAL BANK'S OWN VAULT
+#                                                   (the hybrid model, §0.5) —
+#                                                   what gold flows move, and the
+#                                                   only thing they move. Step 10
+#                                                   owns it; the two documented
+#                                                   outside writers are
+#                                                   te_mon_effect_recapitalise_bank
+#                                                   (treasury -> vault, one way)
+#                                                   and te_peg.1's devalue option
+#   te_bank_gold_seeded     0 or 1                  1 once the vault has been
+#                                                   counted; back to 0 when the
+#                                                   gold LAW goes
+#   te_gold_hot_money       >= 0        displayed   the part of the vault drawn in
+#                                                   by a high rate and still owed
+#                                                   back (§12.2). Goes home out of
+#                                                   the vault if the country stops
+#                                                   being on gold, frozen while it
+#                                                   is suspended (ruling Q9)
+#   te_gold_carry_applied   >= 0                    the WEEKLY value last written
+#                                                   into te_mon_gold_carry_expense's
+#                                                   multiplier. BACKS A MULTIPLIER
+#                                                   — never remove it
+#   te_mon_recap_work       scratch                 the amount one recapitalisation
+#                                                   moves, so debit = credit
 #   te_gold_carry           >= 0        displayed   this month's interest on that
 #                                                   balance at the policy rate
-#                                                   (owner decision I): paid from
-#                                                   the treasury, or capitalised
-#                                                   into the balance when it
-#                                                   cannot be
+#                                                   (owner decision I), as a
+#                                                   MONTHLY figure; charged to the
+#                                                   budget weekly through
+#                                                   te_mon_gold_carry_expense
 #   te_mon_world_own_num    weighted    \           this country's exact share of
 #   te_mon_world_own_den    >= 0        /           the two world-rate accumulators,
 #                                                   written by the GLOBAL refresh
@@ -575,6 +609,11 @@ te_mon_drift_step_threshold_neg = {
 #
 # Consumed by te_monetary_monthly_update step 5 as part of the STRUCTURAL tier,
 # i.e. before the 0.5pp (0.25pp under CBI) floor is applied.
+# THE LAST 1.5 POINTS ARE BACK-LOADED (0.25 / 0.5 / 0.75 over eras 3-5, not
+# 0.5 each — owner, 2026-09-20), so a developed country still has something
+# left to earn from finance techs for longer. The first two steps cannot move:
+# what is left after banking + central_banking is exactly what a tier-1 country
+# carries in 1836, and §7.4's Britain and USA rows are built on that 1.5.
 te_mon_access_premium = {
 	value = 8
 	if = {
@@ -587,7 +626,7 @@ te_mon_access_premium = {
 	}
 	if = {
 		limit = { has_technology_researched = mutual_funds }
-		subtract = 0.5
+		subtract = 0.25
 	}
 	if = {
 		limit = { has_technology_researched = international_exchange_standards }
@@ -595,7 +634,7 @@ te_mon_access_premium = {
 	}
 	if = {
 		limit = { has_technology_researched = modern_financial_instruments }
-		subtract = 0.5
+		subtract = 0.75
 	}
 	if = {
 		limit = { NOT = { has_technology_researched = stock_exchange } }
@@ -2403,28 +2442,72 @@ te_mon_gold_gap_value = {
 	max = te_mon_gold_gap_clamp
 }
 
-# How much gold may still come in this month. Two caps, and the tighter binds:
+# --- the bank's own vault (the hybrid model, §0.5) ---------------------------
+
+# The vault is measured against 0.2 x annual GDP — vanilla's BASE reserve
+# limit (GOLD_RESERVE_LIMIT_FACTOR), so it grows with the economy and a vault
+# nobody tops up thins out over the decades by itself.
 #
-#   * the engine's reserve limit — a high rate can REFILL reserves, never stack
-#     a war chest (§12.2);
-#   * the hot-money balance may not exceed one reserve limit either (ruling
-#     Q8). §12.2's own argument is that the reserve cap "would only stop a
-#     hoarder — a player who SPENDS the inflow stays under the limit"; the
-#     hot-money balance is what closes that, but only if it is bounded. Without
-#     this a player holding world + 5 and spending the proceeds collects 12% of
-#     GDP a year for as long as they can stand the stance.
-te_mon_gold_inflow_room = {
-	value = gold_reserves_limit
-	subtract = gold_reserves
-	max = {
-		value = gold_reserves_limit
-		subtract = te_mon_gold_hot_money_read
-	}
-	min = 0
+# NOT THE ENGINE'S gold_reserves_limit, which it was for one revision. That
+# figure carries every country_gold_reserve_limit_mult, and the biggest source
+# of those is institution_national_bank itself (+20% a level, x2.8 at level 9):
+# a country that INVESTED in its central bank saw the limit run away from the
+# gold in the vault, read as having a thinner reserve, and was pushed toward
+# the shortfall and the pressure threshold by its own spending. The treasury's
+# limit is the treasury's business; the vault's is the size of the economy.
+te_mon_bank_gold_limit_share = {
+	value = 0.2
 }
 
-te_mon_gold_reserves_now = {
-	value = gold_reserves
+te_mon_bank_gold_limit = {
+	value = gdp
+	multiply = te_mon_bank_gold_limit_share
+	min = 1
+}
+
+te_mon_bank_gold_read = {
+	value = 0
+	if = {
+		limit = { has_variable = te_bank_gold }
+		add = var:te_bank_gold
+	}
+}
+
+# The vault as a share of its limit, 0-1: what scaled_gold_reserves is for the
+# treasury. Read by the peg-defence shortfall, the pressure test, the AI's
+# recapitalisation rule and the dashboard.
+te_mon_bank_gold_scaled = {
+	value = te_mon_bank_gold_read
+	divide = te_mon_bank_gold_limit
+	min = 0
+	max = 1
+}
+
+# ...and as a percentage, for the dashboard row.
+te_mon_bank_gold_pct = {
+	value = te_mon_bank_gold_scaled
+	multiply = 100
+}
+
+# What the vault opens at, the first pulse a country has gold flows: the share
+# of the limit its treasury holds, and never less than half — where the
+# peg-defence shortfall reaches zero, so a fresh gold standard's bank asks for
+# exactly the world rate. Nothing is taken from the treasury for it.
+te_mon_bank_gold_seed = {
+	value = scaled_gold_reserves
+	min = 0.5
+	max = 1
+	multiply = te_mon_bank_gold_limit
+}
+
+# How much gold may still come in this month: the room left under the limit.
+# A high rate can REFILL the vault, never stack a war chest (§12.2). The
+# first version needed a second cap on the hot-money balance itself, because
+# a player could SPEND the inflow and stay under the limit for ever; gold that
+# never reaches the treasury cannot be spent, so the one cap is enough.
+te_mon_gold_inflow_room = {
+	value = te_mon_bank_gold_limit
+	subtract = te_mon_bank_gold_read
 	min = 0
 }
 
@@ -2436,34 +2519,48 @@ te_mon_gold_hot_money_read = {
 	}
 }
 
-# What add_treasury is handed. te_gold_flow is signed (positive = inflow) and
-# already capped by step 10; the wrapper exists because add_treasury's
-# documented argument is a fixed point and every use of it in this mod passes a
-# named script value.
+# One step of recapitalisation: a tenth of the limit, or the room left if that
+# is less. te_mon_bank_recap_payment is the same figure negated, for
+# add_treasury; it reads the scratch variable the effect has just written so
+# the amount debited is exactly the amount credited.
+te_mon_bank_recap_step = {
+	value = 0.1
+}
+
+te_mon_bank_recap_amount = {
+	value = te_mon_bank_gold_limit
+	multiply = te_mon_bank_recap_step
+	max = te_mon_gold_inflow_room
+	min = 0
+}
+
+te_mon_bank_recap_payment = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_recap_work }
+		subtract = var:te_mon_recap_work
+	}
+}
+
+# The carry as the WEEKLY expense the budget modifier is scaled by:
+# te_gold_carry is the monthly figure, country_expenses_add is weekly.
+te_mon_gold_carry_weekly = {
+	value = 0
+	if = {
+		limit = { has_variable = te_gold_carry }
+		add = var:te_gold_carry
+	}
+	multiply = 12
+	divide = te_mon_weeks_per_year
+}
+
+# The signed monthly flow, guarded, for anything outside step 10.
 te_mon_gold_flow_signed = {
 	value = 0
 	if = {
 		limit = { has_variable = te_gold_flow }
 		add = var:te_gold_flow
 	}
-}
-
-# The month's interest on the borrowed balance, negated for add_treasury
-# (owner decision I): te_gold_hot_money x te_policy_rate / 1200, computed by
-# step 10 into te_gold_carry.
-te_mon_gold_carry_payment = {
-	value = 0
-	if = {
-		limit = { has_variable = te_gold_carry }
-		subtract = var:te_gold_carry
-	}
-}
-
-# The same flow, negated: what leaves when a country stops being on gold with
-# hot money still on its books (ruling Q9).
-te_mon_gold_hot_money_payout = {
-	value = te_mon_gold_hot_money_read
-	multiply = -1
 }
 
 # This month's flow as a % of GDP A YEAR — the unit §9.1's price-specie term is
@@ -2500,23 +2597,22 @@ te_mon_pressure_gold_flow = {
 # --- §6 peg defence ----------------------------------------------------------
 
 # `reserve_shortfall_pp` — §6 names it and defines it nowhere (ruling Q5). Two
-# points when the country has no reserves at all or is in debt, falling to zero
-# once reserves reach half the limit. The mandate adds HALF of it, so a peg
-# defender with an empty vault runs one point above the world rate: enough to
-# pull gold back in, not enough to be a standing depression.
+# points when the BANK'S vault is empty, falling to zero once it reaches half
+# its limit. The mandate adds HALF of it, so a peg defender with an empty vault
+# runs one point above the world rate: enough to pull gold back in, not enough
+# to be a standing depression.
+#
+# THE TREASURY'S DEBT IS NO LONGER IN IT. The first version treated any debt as
+# an empty vault, because the vault WAS the treasury; that parked every
+# indebted AI on gold a point over the world rate for good (owner decision J).
+# The vault is the bank's own now, so a government in debt with a sound bank
+# is simply a government in debt.
 te_mon_peg_shortfall_pp = {
-	value = 0
-	if = {
-		limit = { scaled_debt > 0 }
-		add = 2
-	}
-	else = {
-		add = 0.5
-		subtract = scaled_gold_reserves
-		multiply = 4
-		min = 0
-		max = 2
-	}
+	value = 0.5
+	subtract = te_mon_bank_gold_scaled
+	multiply = 4
+	min = 0
+	max = 2
 }
 
 # The peg-defence formula: world rate + 0.5 x shortfall. Step 2 rounds it UP
@@ -2575,14 +2671,16 @@ te_mon_peg_suspension_months = {
 	value = 60
 }
 
-# Devalue: confidence reset to this, and the reserves revalued by this share of
-# the reserve limit (0.15 x 0.2 x GDP = 3% of GDP, once).
+# Devalue: confidence reset to this, and the BANK'S vault revalued by this
+# share of its limit (0.15 x 0.2 x GDP = 3% of GDP, once) — the vault, not the
+# treasury: a devaluation makes the bank's gold worth more notes, and hands
+# the government nothing.
 te_mon_peg_devalue_confidence = {
 	value = 50
 }
 
 te_mon_peg_devalue_revaluation = {
-	value = gold_reserves_limit
+	value = te_mon_bank_gold_limit
 	multiply = 0.15
 }
 
@@ -2636,7 +2734,21 @@ te_mon_peg_confidence_move = {
 }
 
 
-# Debug read-out only (te_debug_monetary.8): the engine's scaled reserves.
+# Debug read-out only (te_debug_monetary.8): the TREASURY's scaled reserves,
+# beside the vault's, which is te_mon_bank_gold_scaled.
 te_mon_debug_scaled_reserves = {
 	value = scaled_gold_reserves
+}
+
+# Peg confidence as 0-1, for the dashboard's meter. Guarded: a .gui evaluates
+# it for a save that may not have pulsed on phase 3 yet.
+te_mon_peg_confidence_scaled = {
+	value = 0
+	if = {
+		limit = { has_variable = te_peg_confidence }
+		add = var:te_peg_confidence
+	}
+	divide = 100
+	min = 0
+	max = 1
 }
