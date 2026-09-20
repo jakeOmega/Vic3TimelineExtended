@@ -279,10 +279,6 @@ on_acquired_technology = {
 		fix_incompatible_laws
 		cultural_hegemony_tech_first_on_action
 		agricultural_diffusion_on_action
-		# Defined in common/on_actions/te_monetary_on_actions.txt. Registered
-		# here rather than in that file so the monetary system adds no second
-		# declaration of on_acquired_technology to merge.
-		te_monetary_on_acquired_technology
 	}
 }
 

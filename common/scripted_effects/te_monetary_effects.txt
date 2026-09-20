@@ -78,15 +78,17 @@ te_monetary_refresh_world_era_base = {
 # events/te_debug_monetary_events.txt, whose entire purpose is stepping the
 # system by hand.)
 #
-# STEP 9 HAS A SECOND ENTRY POINT, and it is the only step that may have one.
-# te_monetary_apply_interest_modifiers is idempotent — it recomputes the applied
-# value, compares, and re-adds both modifiers in one block, without drifting the
-# rate or drawing a walk — so `on_acquired_technology` calls it on its own
-# (te_monetary_on_acquired_technology in common/on_actions/te_monetary_on_actions.txt)
-# to close the gap between a vanilla finance tech granting its -2pp instantly and
-# the next monthly pulse re-applying the compensation for it. Those two sites are
-# the whole list: the pulse family calling the full update, and the tech hook
-# calling step 9. No other step of this effect may be called in isolation.
+# NO STEP OF THIS EFFECT MAY BE CALLED IN ISOLATION. The pulse family calling
+# the full update is the whole list. Step 9 (te_monetary_apply_interest_modifiers)
+# is the only step that even could be called on its own — it is idempotent,
+# recomputing the applied value, comparing, and re-adding both modifiers in one
+# block without drifting the rate or drawing a walk — and it used to be, from
+# `on_acquired_technology`, to close the gap between a vanilla finance tech
+# granting its -2pp instantly and the next monthly pulse compensating for it in
+# script. The five vanilla finance techs are now cancelled engine-side in
+# common/technology/technologies/te_monetary_tech_injections.txt, so there is no
+# gap left to close and that hook is gone. Do not reintroduce a second entry
+# point without a reason of the same kind.
 te_monetary_monthly_update = {
 	# --- 0. initialise ------------------------------------------------------
 	te_monetary_init_variables = yes
@@ -786,37 +788,34 @@ te_monetary_update_stance = {
 # never sits at or below zero. A country that has never pulsed has neither and
 # pays vanilla's 20% — a safe fallback.
 #
-# RULING R3. The five vanilla finance techs still grant -2pp each engine-side
-# and are not cancelled with INJECTs, so the modifier is written with
-# te_rate_paid_applied = te_rate_paid_pts + te_mon_vanilla_tech_offset. That
-# compensation sits OUTSIDE the premium tiers, so the structural floor is
-# unaffected. Every displayed number uses te_rate_paid_pts, never this one.
+# te_rate_paid_applied IS te_rate_paid_pts. It stays a separate variable because
+# it records what was last written into the multiplier, which is what the 0.05
+# comparison below needs; nothing is added to it. Vanilla's five finance techs
+# used to be compensated here (plan ruling R3), but they are now cancelled
+# engine-side in common/technology/technologies/te_monetary_tech_injections.txt,
+# so no vanilla interest source survives for this write to net against.
 #
 # The re-apply is skipped when the applied value has moved by less than 0.05
 # (§16.1), unless a modifier is missing — which is how a country that has just
 # been released, formed or loaded from an older save gets its pair on the first
-# pulse even though nothing moved.
+# pulse even though nothing moved. A save written before the tech cancel landed
+# carries an applied value up to 2.0pp per researched finance tech above pts; the
+# first pulse after loading sees that whole gap at once, far over the threshold,
+# and corrects it in one step.
 #
-# CALLED FROM TWO PLACES. This step, alone in this file, is idempotent: it reads
-# its inputs, compares against what is applied, and either does nothing or
-# replaces the pair in one block. It never drifts the rate and never draws a
-# walk. So besides te_monetary_monthly_update it is called directly from
-# `on_acquired_technology` (te_monetary_on_acquired_technology, in
-# common/on_actions/te_monetary_on_actions.txt), because the engine grants a
-# vanilla finance tech's -2pp the instant it lands while te_mon_vanilla_tech_offset
-# only reaches the engine through this write — leaving a country that pays under
-# 2% with a non-positive `_add` sum until the next pulse. One of those techs moves
-# te_mon_work by a full 2.0, forty times the 0.05 threshold, so the skip cannot
-# swallow the case it exists for; a tech that changes nothing moves it by 0 and is
-# correctly skipped. Anything else that wants the modifier refreshed writes its
-# input and waits for the pulse.
+# CALLED FROM ONE PLACE — te_monetary_monthly_update. This step, alone in this
+# file, is idempotent: it reads its inputs, compares against what is applied, and
+# either does nothing or replaces the pair in one block, never drifting the rate
+# and never drawing a walk. That makes it the only step an extra entry point
+# would be safe on, and it had one until the tech cancels removed the reason for
+# it. Anything that wants the modifier refreshed writes its input and waits for
+# the pulse.
 #
 # te_rate_paid_applied is never removed: the engine re-evaluates the multiplier
 # expression on later ticks, and a missing variable would make every one of them
 # read 'none' (modifier_multiplier_var_audit).
 te_monetary_apply_interest_modifiers = {
 	set_variable = { name = te_mon_work value = var:te_rate_paid_pts }
-	change_variable = { name = te_mon_work add = te_mon_vanilla_tech_offset }
 	set_variable = { name = te_mon_work2 value = var:te_mon_work }
 	change_variable = { name = te_mon_work2 subtract = var:te_rate_paid_applied }
 	if = {

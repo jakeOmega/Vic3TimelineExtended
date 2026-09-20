@@ -65,6 +65,7 @@ without an inflation cost.
   finance techs), and step 9 writes the modifier with multiplier
   `te_rate_paid_applied = te_rate_paid_pts + te_mon_vanilla_tech_offset`. The access premium
   uses the §7.2 table values as-is. Displayed numbers use `te_rate_paid_pts`.
+- **R3 superseded by owner decision (2026-09-19, PR #335) — tech cancel-INJECTs.** The five techs are cancelled engine-side in `common/technology/technologies/te_monetary_tech_injections.txt`; `te_mon_vanilla_tech_offset` and the `on_acquired_technology` hook are deleted. See `docs/systems/monetary_policy_design.md` §0.1 R3.
 
 ## Task 1: Registrations and the interface contract
 

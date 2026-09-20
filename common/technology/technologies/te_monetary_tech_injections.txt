@@ -1,0 +1,106 @@
+﻿# ============================================================================
+# Monetary Policy — vanilla finance-technology interest INJECTs
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §0.1 (rulings R1/R3), §7.2, §16.1.
+# Owner decision 2026-09-19 (PR #335): cancel these engine-side, do NOT
+# compensate in script. This SUPERSEDES plan ruling R3
+# (docs/superpowers/plans/2026-09-19-monetary-policy-phase1.md), whose
+# te_mon_vanilla_tech_offset script value has been deleted along with the
+# on_acquired_technology hook that existed only to keep it in step.
+#
+# WHAT THIS FILE DOES
+# Vanilla gives each of its five finance techs a flat
+# country_loan_interest_rate_add = -0.02 (-2pp). The monetary system computes
+# the government's borrowing rate itself and writes the whole thing through
+# te_monetary_rate_paid, so every one of those five grants is cancelled here
+# with its exact inverse, +0.02. The techs' real contribution to the rate is
+# re-expressed in te_mon_access_premium (§7.2), which front-loads it: banking
+# is worth -4.0pp there, central_banking -2.5pp, the last three -0.5pp each.
+#
+#   Tech                              vanilla _add   cancel   §7.2 premium
+#   banking                              -0.02       +0.02      -4.0pp
+#   central_banking                      -0.02       +0.02      -2.5pp
+#   mutual_funds                         -0.02       +0.02      -0.5pp
+#   international_exchange_standards     -0.02       +0.02      -0.5pp
+#   modern_financial_instruments         -0.02       +0.02      -0.5pp
+#
+# WHY NOT COMPENSATE IN SCRIPT
+# The script compensation worked, but it left every one of the five tech
+# tooltips promising the player a "-2% interest" the mod immediately takes
+# back somewhere they cannot see. Cancelling on the tech makes the tooltip
+# tell the truth, and removes the whole class of desync between what the
+# engine applies the instant a tech lands and what the next monthly pulse
+# writes.
+#
+# ENGINE ASSUMPTION — read before changing anything here
+# Every block below assumes that a `modifier = { }` inside an `INJECT:` SUMS
+# with the vanilla entity's own `modifier = { }`, key by key. The mod owner
+# confirmed (PR #335, 2026-09-19) that tech INJECTs sum in this mod; that is an
+# owner report, not a recorded probe, so it is still worth reading off in game
+# — and the same assumption carries
+# common/country_ranks/te_monetary_rank_injections.txt and
+# common/laws/te_monetary_law_injections.txt, where it is NOT yet confirmed
+# (docs/guides/scripting_best_practices.md § INJECT keeps the open question).
+#
+# THE IN-GAME CHECK IS `country_minting_mult`. Each of the five vanilla blocks
+# carries country_minting_mult = 0.1 alongside the interest line (and
+# state_max_trade_advantage_from_capacity_add = 0.05, except
+# modern_financial_instruments, which carries
+# country_government_dividends_efficiency_add = 0.05 instead). If INJECT sums,
+# the tech tooltip still shows +10% minting and the interest line nets to zero
+# or vanishes. If INJECT is LAST-WINS, this file is wrong twice over: the
+# minting bonus disappears from the tooltip, and the cancel ADDS to vanilla's
+# grant so the tech makes borrowing 2pp DEARER. Minting is the tell — it is
+# visible on the tech tooltip without any arithmetic.
+#
+# Fallback if last-wins: REPLACE: each tech in this same file, restating its
+# full vanilla modifier block minus the interest line. That is why these
+# blocks are isolated here rather than folded into modified.txt.
+#
+# MULTIPLE INJECTS PER TECH ARE FINE and already shipped:
+# international_exchange_standards also takes one from modified.txt (the
+# crisis-tool bools) and modern_financial_instruments one from
+# sol_expectations_vanilla_injections.txt (an SoL strata offset). Several
+# vanilla laws carry four. This file must stay the only place the mod touches
+# these techs' interest line.
+#
+# VANILLA DRIFT. The cancel values mirror vanilla
+# common/technology/technologies/30_society.txt (banking :209,
+# central_banking :599, mutual_funds :1226, international_exchange_standards
+# :1473, modern_financial_instruments :1647) as of the version in
+# paths.local.json's base_game_path. docs/guides/vanilla_patch_runbook.md §6b
+# carries the re-check entry; a SIXTH finance tech needs a sixth block here.
+#
+# This file sorts after vanilla's 30_society.txt, so the entities exist by the
+# time these INJECTs are merged.
+# ============================================================================
+
+INJECT:banking = {
+	modifier = {
+		country_loan_interest_rate_add = 0.02
+	}
+}
+
+INJECT:central_banking = {
+	modifier = {
+		country_loan_interest_rate_add = 0.02
+	}
+}
+
+INJECT:mutual_funds = {
+	modifier = {
+		country_loan_interest_rate_add = 0.02
+	}
+}
+
+INJECT:international_exchange_standards = {
+	modifier = {
+		country_loan_interest_rate_add = 0.02
+	}
+}
+
+INJECT:modern_financial_instruments = {
+	modifier = {
+		country_loan_interest_rate_add = 0.02
+	}
+}

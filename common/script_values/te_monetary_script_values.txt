@@ -30,14 +30,16 @@
 #                                                   at 0.5 (0.25 under CBI)
 #   te_premium_cyclical     -10 to 40               what is *happening*; added after the floor
 #   te_rate_paid_pts        0.5 to 60               the displayed rate paid, clamped (§4)
-#   te_rate_paid_applied    0.5 to 70               the value last written into
-#                                                   te_monetary_rate_paid's multiplier —
-#                                                   te_rate_paid_pts plus
-#                                                   te_mon_vanilla_tech_offset (R3).
-#                                                   The ceiling is 60 + 10, not the
-#                                                   60 of te_rate_paid_pts, because
-#                                                   the offset adds up to 2.0 x 5
-#                                                   techs on top of the clamp.
+#   te_rate_paid_applied    0.5 to 60               the value last written into
+#                                                   te_monetary_rate_paid's multiplier.
+#                                                   Equal to te_rate_paid_pts; it
+#                                                   exists so step 9 can tell whether
+#                                                   the rate has moved enough to be
+#                                                   worth re-applying. A save from
+#                                                   before the vanilla finance techs
+#                                                   were cancelled engine-side may
+#                                                   carry up to 10 more; the first
+#                                                   pulse after loading corrects it.
 #                                                   Never displayed; it is a
 #                                                   bookkeeping value, not the rate.
 #   te_neutral_rate         1 to 6      HIDDEN      r*, the natural rate (§8)
@@ -214,9 +216,10 @@ te_mon_target_max = {
 # Capital-market access premium, in pp (§7.2). This is what keeps Siam or
 # Afghanistan out of the London market: a permanent premium that shrinks as a
 # country builds financial institutions. It replaces vanilla's five flat -2pp
-# tech reductions (which are cancelled in script by te_mon_vanilla_tech_offset,
-# ruling R3) and is deliberately front-loaded, because Britain in 1836 holds
-# only two of the five techs and must still land near Consols.
+# tech reductions (which are cancelled engine-side by
+# common/technology/technologies/te_monetary_tech_injections.txt) and is
+# deliberately front-loaded, because Britain in 1836 holds only two of the five
+# techs and must still land near Consols.
 #
 #   base, no finance techs           +8.0
 #   banking                          -4.0
@@ -264,45 +267,13 @@ te_mon_access_premium = {
 	}
 }
 
-# Compensation for vanilla's five finance techs (ruling R3), in pp.
-#
-# Each of banking, central_banking, mutual_funds,
-# international_exchange_standards and modern_financial_instruments grants
-# country_loan_interest_rate_add = -0.02 in vanilla, i.e. -2pp, and they are
-# NOT cancelled with INJECTs — the mod compensates in script instead, so no
-# vanilla technology entity is touched.
-#
-# The compensation is applied OUTSIDE the premium tiers, so the structural
-# floor is unaffected: step 9 writes te_monetary_rate_paid with
-# `te_rate_paid_applied = te_rate_paid_pts + te_mon_vanilla_tech_offset`, while
-# every displayed number uses te_rate_paid_pts. te_mon_access_premium therefore
-# uses the §7.2 table values as-is.
-#
-# If a vanilla patch changes any of the five -0.02 grants, this value and the
-# runbook entry must follow (docs/guides/vanilla_patch_runbook.md).
-te_mon_vanilla_tech_offset = {
-	value = 0
-	if = {
-		limit = { has_technology_researched = banking }
-		add = 2
-	}
-	if = {
-		limit = { has_technology_researched = central_banking }
-		add = 2
-	}
-	if = {
-		limit = { has_technology_researched = mutual_funds }
-		add = 2
-	}
-	if = {
-		limit = { has_technology_researched = international_exchange_standards }
-		add = 2
-	}
-	if = {
-		limit = { has_technology_researched = modern_financial_instruments }
-		add = 2
-	}
-}
+# Vanilla's five finance techs each grant country_loan_interest_rate_add = -0.02
+# engine-side. They are cancelled on the techs themselves, in
+# common/technology/technologies/te_monetary_tech_injections.txt — there is no
+# script compensation here, and no separate offset for the modifier write to add
+# (owner decision 2026-09-19, superseding plan ruling R3). If a vanilla patch
+# changes any of those five grants, that file and the runbook entry must follow
+# (docs/guides/vanilla_patch_runbook.md §6b).
 
 
 # --- Cyclical premium terms -------------------------------------------------

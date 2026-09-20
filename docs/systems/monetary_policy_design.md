@@ -36,9 +36,9 @@ wrong or leave open.
 
 | # | Ruling | Why | Cost if wrong |
 |---|---|---|---|
-| **R1** | Vanilla **techs** are compensated in script (no INJECT); **ranks** and `law_laissez_faire` use cancel-INJECTs, isolated one per file | §17 checks 1–4 are unresolved; the tech fallback is correct regardless (the same vanilla block carries `country_minting_mult`, which a last-wins cancel would wipe) | if INJECT is last-wins, rank/LF rates are wrong until each file becomes a `REPLACE:` — one file each |
+| **R1** | Vanilla **techs**, **ranks** and `law_laissez_faire` all use cancel-INJECTs, isolated one file each (`te_monetary_tech_injections.txt`, `te_monetary_rank_injections.txt`, `te_monetary_law_injections.txt`) | the owner confirms tech INJECTs sum in this mod (see R3); ranks/LF ride the same assumption, still unverified (§17 checks 1–4) | if INJECT is last-wins, the rates are wrong until each file becomes a `REPLACE:` — one file each |
 | **R2** | Implemented: the §8 neutral-rate formula, the §7.6 debt-load premium, and §5.2's state-owned-banking **premium only** (+0.5 structural, no CBI bonuses). Deferred: §0.2 | the owner had not decided the `(proposed)` items | rework of small terms |
-| **R3** | The five vanilla finance techs still grant −2pp each engine-side. Compensated **outside** the premium tiers: `te_mon_vanilla_tech_offset` = 2.0 × researched, added at the modifier write (`te_rate_paid_applied`), never to a displayed number | keeps the structural floor's semantics — a compensation inside the tiers would push the floor around | rate off by 2pp per researched tech |
+| **R3** | **Vanilla finance techs: cancel-INJECT.** Owner decision 2026-09-19 (PR #335), overriding the plan's script-compensation fallback. Each of the five takes `INJECT:<tech> = { modifier = { country_loan_interest_rate_add = 0.02 } }` in `common/technology/technologies/te_monetary_tech_injections.txt`; `te_mon_vanilla_tech_offset` and the `on_acquired_technology` hook that served it are **deleted**, and `te_rate_paid_applied` now equals `te_rate_paid_pts` | a tech tooltip promising "−2% interest" the mod silently takes back elsewhere is misleading; the owner reports tech INJECTs sum in this mod, so the `country_minting_mult = 0.1` in the same vanilla block survives | if INJECT is last-wins, the five techs make borrowing 2pp **dearer** and lose their minting bonus — visible on the tech tooltip, and a one-file `REPLACE:` fix |
 | | **`te_mon_era_base` is a WORLD quantity**, not per-country: 3.0, −0.5 once any great power holds `macroeconomics`, −0.5 again for `globalization` | the spec calls this the world / reference rate in §7.4, §12.1 and §21, and **no era trigger or era detector exists** (see `scripting_best_practices.md` § "There Is No 'Current Era' Trigger") | five-line swap inside `te_mon_era_base` to per-country techs |
 | | The stance band is computed from `gap − error`, not `gap + error` | §8 binds: the band and the mandates both use `neutral + error` as r̂\*, so the estimated gap is `policy − (neutral + error)`. Statistically identical, coherent with the mandates | one character |
 | | §5.3's cooperative-ownership **−0.5pp on the neutral rate is implemented** | the spec's term binds over a task brief that omitted it | — |
@@ -49,7 +49,7 @@ wrong or leave open.
 | | The dashboard's rate-paid row uses **`GetPlayer.GetYearlyInterestRate`**, not §17 check 6's `JournalEntry.GetCountry.…` form | `GetPlayer.` is the only form vanilla ships; the panel only ever renders for its owner, so both roots name the same country | **§17 check 6 stays untested** — a later phase needing the figure where `GetPlayer` is wrong must test the chain then |
 | | `banking_policy_rate_hike`'s loc keys are **kept** while the modifier stays defined | §18's deletion list and its save-migration paragraph conflict; every defined modifier needs loc | they come out with the modifier next release (checklist in `legacy_modifier_cleanup.txt`) |
 | | §7.5 says "Banking event outcomes (14)"; there are **13** | enumerated from the files; the stated −0.10…+0.20 range matches exactly, so it is a spec miscount, not a missed site | corrected in §7.5 |
-| | **Step 9 also runs from `on_acquired_technology`**, on its own, guarded on `te_rate_paid_pts` + `te_rate_paid_applied` — §16.2's ordering implies the modifier write only ever happens inside the monthly update | the engine grants a vanilla finance tech's −2pp the instant it lands, while R3's compensation waits for the next pulse; a country already paying under 2% would spend up to a month at a non-positive `country_loan_interest_rate_add` sum, the state §16.1's invariant exists to prevent. Step 9 is the one idempotent step (no drift, no walk draw), so an extra call is free | delete the on-action; the hole reopens |
+| | **No step of the update has a second entry point**, as §16.2's ordering implies. An earlier phase-1 revision ran step 9 alone from `on_acquired_technology`; R3's cancel-INJECTs removed the reason for it and the hook is gone | the hook existed only to stop a vanilla finance tech's −2pp landing a month before the script compensation for it. The engine now cancels in the same instant | a second entry point reintroduced without a reason of the same kind risks the non-idempotent steps being called the same way |
 | | **`bubble_pressure` must never be printed to a decimal on any surface** | §8 argues the cycle's random monthly nudges mask the stance term — true for momentum and cycle value, which `banking_cycle_advance_variables`' `random_list` nudges, but **bubble has no random term**. `banking_display_bubble_monthly_add` is exactly `modifier:country_bubble_pressure_monthly_add`, so Δbubble minus it is the stance push alone: `−0.75 × te_mon_stance_gap_clamped`, which inverts to the gap (and so to r\*) anywhere inside the ±4 clamp and off bubble's own 0/100 bounds — the whole stance-band range | the hidden-state rule (§8) fails through the banking panel, not through anything monetary |
 
 ### 0.2 Deferred (named in the design, deliberately not shipped)
@@ -95,11 +95,24 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
 
 1. **Do `INJECT:`ed `modifier = { }` blocks SUM with vanilla's?** (§17 checks 1, 3, 4, then
    2.) Read a great power's budget-panel interest tooltip — does it still list rank −50%
-   *and* laissez-faire −25%? Does expected SoL under `law_industry_banned` net to zero? Does
-   vanilla's own modifier still show on a tech the mod INJECTs? Then, separately and **not**
-   as a substitute, the `state_expected_sol_from_literacy` static-modifier probe (0 ⇒ sum,
-   −5 ⇒ last wins, +5 ⇒ inject ignored). If last-wins: `REPLACE:` the ranks and
-   `law_laissez_faire`, restating their full vanilla modifier blocks.
+   *and* laissez-faire −25%? Does expected SoL under `law_industry_banned` net to zero? Then,
+   separately and **not** as a substitute, the `state_expected_sol_from_literacy`
+   static-modifier probe (0 ⇒ sum, −5 ⇒ last wins, +5 ⇒ inject ignored).
+
+   **The techs are now part of this check.** R3 cancels
+   `country_loan_interest_rate_add = -0.02` on each of `banking`, `central_banking`,
+   `mutual_funds`, `international_exchange_standards` and `modern_financial_instruments`
+   (`common/technology/technologies/te_monetary_tech_injections.txt`). Open all five tech
+   tooltips: **each must still show `+10%` minting** (`country_minting_mult = 0.1` sits in
+   the same vanilla `modifier = { }` block), and the interest line must net to zero or
+   vanish. Minting is the tell, because it needs no arithmetic. Four of the five should also
+   still show `+5%` state max trade advantage from capacity; `modern_financial_instruments`
+   shows `+5%` government dividends efficiency instead. If minting is gone, INJECT is
+   last-wins and the file is wrong twice over — the techs would be making borrowing 2pp
+   *dearer*.
+
+   If last-wins: `REPLACE:` the ranks, `law_laissez_faire` and the five techs, restating
+   their full vanilla modifier blocks.
 2. **Does the country-scope `modifier:` read aggregate every source type?**
    `country_credit_standing_add` is granted from country **ranks**, an **institution**
    (`institution_national_bank`), a company **`prosperity_modifier`** (`company_shell`) and a
@@ -108,22 +121,9 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
    great power, and again as a Shell owner: every one of those contributions must appear. If
    one is missing it vanishes silently.
 
-2a. **The `_add` sum does not go non-positive the month a vanilla finance tech lands.** The
-   engine grants each of `banking`, `central_banking`, `mutual_funds`,
-   `international_exchange_standards` and `modern_financial_instruments` a
-   `country_loan_interest_rate_add = -0.02` the instant it is researched;
-   `te_monetary_on_acquired_technology` is what re-applies R3's +2.0 compensation in the same
-   instant rather than a month later. Research one of the five and compare the dashboard's
-   "Rate You Pay" against the budget panel's engine figure **before** the next monthly pulse —
-   they must still agree to the surviving `_mult` modifiers. Then do it once more at a
-   **sub-2% rate** (fiat or digital, target 0–1, relief tools active): that is the case that
-   used to drive the sum of `country_loan_interest_rate_add` to zero or below, a state whose
-   engine behaviour is unknown and which §16.1's invariant exists to prevent. A failure here
-   means either that `on_acquired_technology` did not merge the new handler in with the four
-   already registered in `extra_on_actions.txt`, or that the hook fires before the tech is
-   flagged researched — in which case `te_mon_vanilla_tech_offset` does not yet count it and
-   step 9 no-ops. (The latter is unlikely: `agdiff_dispatch_if_first` already tests
-   `has_technology_researched` on ROOT from this same hook and works.)
+2a. *(Removed.)* R3's cancel-INJECTs mean no vanilla finance tech moves the
+   `country_loan_interest_rate_add` sum at all, so there is no window between the tech
+   landing and the next pulse to check. Checklist item 1's minting read covers what is left.
 
 **Numbers and UI**
 
@@ -1281,11 +1281,14 @@ are wrong in play today.
 **Whatever the results, record them in `scripting_best_practices.md` § INJECT in the same
 session** — it is the most reusable fact this work will produce.
 
-Fallbacks if summing fails — techs: compensate in script (+pp per researched finance tech
-inside `te_premium_structural`, no vanilla touch). That is the right fallback for techs
-regardless: the five vanilla techs carry `country_minting_mult = 0.1` in the same
-`modifier = {}` block as the interest line, so a last-wins cancel-`INJECT` would wipe
-their minting bonus too; ranks / laissez-faire: `REPLACE` in
+Fallbacks if summing fails — techs: `REPLACE` the five in
+`common/technology/technologies/te_monetary_tech_injections.txt`, restating each vanilla
+`modifier = {}` block minus the interest line (§0.1 R3 chose the cancel-`INJECT` over
+script compensation; compensating in `te_premium_structural` instead, touching no vanilla
+entity, remains available). Note that the five vanilla techs carry
+`country_minting_mult = 0.1` in the same `modifier = {}` block as the interest line, so a
+last-wins cancel-`INJECT` would wipe their minting bonus too — which is the tell §0.3's
+checklist item 1 reads; ranks / laissez-faire: `REPLACE` in
 `common/country_ranks/extra_country_ranks.txt` — owed regardless in that case, because the
 mod's existing GP/major INJECTs would already be wiping vanilla's blocks.
 
