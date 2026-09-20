@@ -47,9 +47,13 @@ te_mon_is_command = {
 	has_law_or_variant = law_type:law_command_economy
 }
 
-# State-owned banking (lawgroup_financial_regulation). Carries a +0.5pp
-# structural premium and the weakest credibility anchor (§5.2, §9.1). Ruling R2
-# ships the premium part only in phase 1.
+# State-owned banking (lawgroup_financial_regulation). The weakest credibility
+# anchor (§5.2, §9.1). Ruling R2 ships the premium part only in phase 1.
+#
+# KEEP: no caller since the +0.5pp structural premium moved onto the law itself
+# as country_credit_standing_add = 0.005, where the law tooltip states it. This
+# trigger is contract surface for the §9.1 expectations-anchoring work in phase
+# 2, which is a behaviour and not a number; a cleanup pass should leave it.
 te_mon_is_state_banking = {
 	has_law_or_variant = law_type:law_state_owned_banking
 }
@@ -130,8 +134,12 @@ te_mon_target_can_step_up = {
 # reads is written by that pulse, and a `.gui` read of a missing variable logs
 # "Failed to fetch variable" every frame (gui_modding_guide.md gotcha 14/23), so
 # the whole monetary block hides behind this one question. The list is the
-# displayed contract of §16.2, not every variable the update owns.
+# displayed contract of §16.2, not every variable the update owns —
+# te_mon_era_base_now is on it because the World Reference Rate row reads it,
+# and because it is the first thing step 0 writes, so a country that has it has
+# run a pulse.
 te_mon_display_ready = {
+	has_variable = te_mon_era_base_now
 	has_variable = te_policy_rate
 	has_variable = te_policy_rate_target
 	has_variable = te_premium_structural
@@ -145,22 +153,19 @@ te_mon_display_ready = {
 # a bank that can still cut does not buy assets, because cutting is cheaper and
 # reversible and does the same job.
 #
-# THE FLOOR IS THE REGIME MINIMUM, not zero. Digital currency has no cash to
-# hoard, so its range runs to -3 and a digital central bank at 0% still has three
-# points of cutting left. The test is on the law rather than on var:te_mon_regime
-# so it needs no has_variable guard; inside te_mon_has_dial the two are the same
-# question.
+# THE FLOOR IS ZERO, OR THE REGIME'S OWN MINIMUM IF THAT IS LOWER. Digital
+# currency has no cash to hoard, so its range runs to -3 and a digital central
+# bank at 0% still has three points of cutting left before it has to buy assets.
 #
-# The thresholds are 0.01 and -2.99 rather than 0 and -3 because te_policy_rate
-# is a drifting fractional value that closes on its target by a third of a point
-# a month and need not land exactly on the bound.
+# The bound comes from te_mon_floor_threshold, which reads te_mon_target_min —
+# so the law check that used to sit here is gone, and
+# country_policy_rate_floor_add on law_digital_currency is the single statement
+# of the rule. The threshold carries one point of slack (0.01) because
+# te_policy_rate is a drifting fractional value that need not land exactly on
+# the bound, and it caps at zero so a gold standard's band floor (the reference
+# rate minus two, around 1pp) does NOT count as the floor — the shipped §0
+# ruling, unchanged.
 te_mon_policy_rate_at_floor = {
 	has_variable = te_policy_rate
-	trigger_if = {
-		limit = { has_law_or_variant = law_type:law_digital_currency }
-		var:te_policy_rate <= -2.99
-	}
-	trigger_else = {
-		var:te_policy_rate <= 0.01
-	}
+	var:te_policy_rate <= te_mon_floor_threshold
 }

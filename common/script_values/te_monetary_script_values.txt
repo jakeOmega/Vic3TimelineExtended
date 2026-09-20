@@ -171,6 +171,15 @@ te_mon_era_base = {
 # the GUI it can, on a save from before the system existed, and the fiat range it
 # falls back to is the harmless answer — the dashboard's readiness gate hides the
 # stepper until the first pulse anyway.
+#
+# THE FLOOR IS DECLARATIVE. Everything except the gold band comes from
+# country_policy_rate_floor_add, which law_digital_currency carries at -0.03 and
+# every other regime leaves at zero. The law tooltip therefore states the rule
+# ("Lowest Policy Rate -3%") instead of a sentence of localization restating a
+# law check that lived here. The gold band stays scripted because it is a
+# phase-1 INTERIM rule standing in for §12's gold flows (§19 row 1), not a
+# property of the law — when gold flows arrive, the band is computed from
+# reserves and this branch goes with it.
 te_mon_target_min = {
 	value = 0
 	if = {
@@ -185,10 +194,28 @@ te_mon_target_min = {
 			ceiling = yes
 		}
 	}
-	else_if = {
-		limit = { has_law_or_variant = law_type:law_digital_currency }
-		add = -3
+	else = {
+		add = {
+			value = modifier:country_policy_rate_floor_add
+			multiply = 100
+		}
 	}
+}
+
+# The rate at or below which the policy rate counts as "at the floor" — the gate
+# on open market operations (te_mon_policy_rate_at_floor). One point of slack,
+# because te_policy_rate drifts fractionally and need not land exactly on the
+# bound.
+#
+# `max = 0` is not a typo and not the regime ceiling: it preserves the shipped
+# §0 ruling that the OMO floor is 0 for every regime except digital currency,
+# whose -3 it lets through. A gold standard's band floor (reference rate - 2,
+# around 1pp) therefore does NOT unlock open market operations, exactly as
+# today — a gold bank that cannot cut further is still not a bank at zero.
+te_mon_floor_threshold = {
+	value = te_mon_target_min
+	max = 0
+	add = 0.01
 }
 
 te_mon_target_max = {
@@ -208,6 +235,41 @@ te_mon_target_max = {
 	else = {
 		add = 25
 	}
+}
+
+
+# --- How fast the rate closes on the target (§5.1) --------------------------
+
+# The multiplier on the baseline drift speed, from
+# country_policy_rate_drift_speed_mult. law_digital_currency carries +1.0, so a
+# digital regime moves at 2x — which is the whole of the old
+# `if = { limit = { has_law_or_variant = law_type:law_digital_currency } }`
+# branch inside te_monetary_drift_policy_rate, now stated on the law's own
+# tooltip instead of in a sentence of localization.
+#
+# `min = 0.1` stops a hypothetical -100% grant freezing the rate forever; the
+# dial would otherwise become a control that silently does nothing.
+te_mon_drift_speed_factor = {
+	value = 1
+	add = modifier:country_policy_rate_drift_speed_mult
+	min = 0.1
+}
+
+# How far the policy rate moves toward its target in one month, in pp. A third
+# of a point at the baseline — a point a quarter, so a 5pp swing takes fifteen
+# months and reversals are slow by construction (§4). Rendered in the dashboard's
+# Policy Rate and Rate Target tooltips, so the player reads the real number
+# rather than prose about thirds.
+te_mon_drift_step = {
+	value = 0.3333
+	multiply = te_mon_drift_speed_factor
+}
+
+# The same step, negated, so te_monetary_drift_policy_rate can test the downward
+# side without a third scratch variable.
+te_mon_drift_step_neg = {
+	value = te_mon_drift_step
+	multiply = -1
 }
 
 
@@ -265,6 +327,26 @@ te_mon_access_premium = {
 		limit = { NOT = { has_technology_researched = stock_exchange } }
 		add = 2
 	}
+}
+
+# The lowest structural premium lenders will offer, in pp (§7.1). Standing
+# earned past it buys nothing: credibility has a lower bound.
+#
+# 0.5 baseline, moved by country_credit_standing_floor_add, which
+# law_central_bank_independence carries at -0.0025 (-0.25pp). That grant is the
+# whole of the old `te_mon_is_cbi` branch inside te_monetary_update_premium, and
+# it now shows on the law's own tooltip beside the -0.5pp credibility term it is
+# separate from and stacks with.
+#
+# Also rendered in the dashboard's Credit Standing tooltip, so the figure the
+# player reads is the one the premium is actually floored at.
+te_mon_standing_floor = {
+	value = 0.5
+	add = {
+		value = modifier:country_credit_standing_floor_add
+		multiply = 100
+	}
+	min = 0
 }
 
 # Vanilla's five finance techs each grant country_loan_interest_rate_add = -0.02
@@ -357,6 +439,32 @@ te_mon_cycle_lean = {
 		}
 		add = 1
 	}
+}
+
+
+# --- The central bank's forecasting error (§6, §8) --------------------------
+
+# How far the bank's reading of the neutral rate may stray from the truth, in
+# pp. 1.5 baseline, moved by country_bank_forecast_error_add, which
+# law_central_bank_independence carries at -0.01 (-1.0pp) — the old
+# `te_mon_is_cbi` branch of te_monetary_update_stance, now on the law tooltip.
+#
+# This bounds hidden state; it is not hidden state. §8's rule bars printing
+# te_neutral_error itself, not the width of the band it moves inside, so the law
+# may advertise it. `min = 0.1` keeps the walk from being pinned to exactly zero
+# by some future grant, which would hand the player a perfect estimate of r*.
+te_mon_forecast_error_bound = {
+	value = 1.5
+	add = {
+		value = modifier:country_bank_forecast_error_add
+		multiply = 100
+	}
+	min = 0.1
+}
+
+te_mon_forecast_error_bound_neg = {
+	value = te_mon_forecast_error_bound
+	multiply = -1
 }
 
 

@@ -446,40 +446,40 @@ te_monetary_clamp_target = {
 # ----------------------------------------------------------------------------
 # Scope: country, dial countries only.
 #
-# 1/3 pp a month, i.e. 1pp a quarter; digital currency transmits twice as fast
-# (§5.1). A 5pp swing therefore takes 15 months — reversals are slow by
-# construction (§4). The arithmetic is §16.2's: difference into a scratch
-# variable, step if it is bigger than one step, otherwise snap to the target so
-# the rate never oscillates around it by a third of a point forever.
+# 1/3 pp a month, i.e. 1pp a quarter. A 5pp swing therefore takes 15 months —
+# reversals are slow by construction (§4). The arithmetic is §16.2's: difference
+# into a scratch variable, step if it is bigger than one step, otherwise snap to
+# the target so the rate never oscillates around it by a third of a point
+# forever.
+#
+# THE SPEED IS DECLARATIVE. There is no law check here any more: the step comes
+# from te_mon_drift_step, which is the baseline third of a point scaled by
+# country_policy_rate_drift_speed_mult. law_digital_currency carries +1.0, so a
+# digital regime still moves at 2/3 a month — but the rule now reads off that
+# law's own tooltip ("Policy Rate Adjustment Speed +100%") instead of out of a
+# sentence of localization, and a future law or principle can move it without
+# editing this effect.
+#
+# The old code compared against a threshold a hair above the step (0.34 against
+# 0.3333) to stop a hairline remainder costing a whole extra month of stepping.
+# Comparing against the step itself does the same job: a remainder smaller than
+# one step snaps, a remainder of exactly one step snaps, and anything larger
+# steps and shrinks. te_mon_work2 carries the step so the downward test can use
+# the negated form without a third scratch slot.
 te_monetary_drift_policy_rate = {
 	set_variable = { name = te_mon_work value = var:te_policy_rate_target }
 	change_variable = { name = te_mon_work subtract = var:te_policy_rate }
+	set_variable = { name = te_mon_work2 value = te_mon_drift_step }
 	if = {
-		limit = { has_law_or_variant = law_type:law_digital_currency }
-		if = {
-			limit = { var:te_mon_work > 0.67 }
-			change_variable = { name = te_policy_rate add = 0.6667 }
-		}
-		else_if = {
-			limit = { var:te_mon_work < -0.67 }
-			change_variable = { name = te_policy_rate subtract = 0.6667 }
-		}
-		else = {
-			set_variable = { name = te_policy_rate value = var:te_policy_rate_target }
-		}
+		limit = { var:te_mon_work > var:te_mon_work2 }
+		change_variable = { name = te_policy_rate add = var:te_mon_work2 }
+	}
+	else_if = {
+		limit = { var:te_mon_work < te_mon_drift_step_neg }
+		change_variable = { name = te_policy_rate subtract = var:te_mon_work2 }
 	}
 	else = {
-		if = {
-			limit = { var:te_mon_work > 0.34 }
-			change_variable = { name = te_policy_rate add = 0.3333 }
-		}
-		else_if = {
-			limit = { var:te_mon_work < -0.34 }
-			change_variable = { name = te_policy_rate subtract = 0.3333 }
-		}
-		else = {
-			set_variable = { name = te_policy_rate value = var:te_policy_rate_target }
-		}
+		set_variable = { name = te_policy_rate value = var:te_policy_rate_target }
 	}
 }
 
@@ -536,26 +536,19 @@ te_monetary_update_premium = {
 	change_variable = { name = te_premium_structural add = "modifier:country_credit_standing_add" }
 	change_variable = { name = te_premium_structural multiply = 100 }
 	change_variable = { name = te_premium_structural add = te_mon_access_premium }
+	# State-owned banking's +0.5pp (§5.2, ruling R2 ships the premium part only)
+	# is no longer added here. It rides on law_state_owned_banking as
+	# country_credit_standing_add = 0.005, so it arrives through the
+	# `modifier:` read above, shows on that law's own tooltip, and appears in the
+	# dashboard's Credit Standing breakdown without anything restating it.
+	#
+	# The floor, likewise, is te_mon_standing_floor: 0.5pp moved by
+	# country_credit_standing_floor_add, which law_central_bank_independence
+	# carries at -0.0025. That replaces the te_mon_is_cbi branch that used to
+	# hard-code 0.25 here.
 	if = {
-		# State-owned banking is the opposite pole from independence: full
-		# political control, the lowest credibility (§5.2, ruling R2 ships the
-		# premium part only).
-		limit = { te_mon_is_state_banking = yes }
-		change_variable = { name = te_premium_structural add = 0.5 }
-	}
-	if = {
-		limit = {
-			te_mon_is_cbi = yes
-			var:te_premium_structural < 0.25
-		}
-		set_variable = { name = te_premium_structural value = 0.25 }
-	}
-	else_if = {
-		limit = {
-			te_mon_is_cbi = no
-			var:te_premium_structural < 0.5
-		}
-		set_variable = { name = te_premium_structural value = 0.5 }
+		limit = { var:te_premium_structural < te_mon_standing_floor }
+		set_variable = { name = te_premium_structural value = te_mon_standing_floor }
 	}
 	if = {
 		limit = { var:te_premium_structural > 30 }
@@ -707,26 +700,21 @@ te_monetary_update_stance = {
 	# --- the estimation error's bound ---------------------------------------
 	# Re-applied every month whether or not the walk advanced, so a country that
 	# enacts independence narrows an already-wide error on the next pulse.
+	#
+	# The bound is te_mon_forecast_error_bound: 1.5pp moved by
+	# country_bank_forecast_error_add, which law_central_bank_independence
+	# carries at -0.01 (-1.0pp, leaving +/-0.5). That grant replaces the
+	# te_mon_is_cbi branch that used to hard-code the two pairs of literals here,
+	# and it is the only one of these four rules that is readable on a law
+	# tooltip *and* touches hidden state — the bound may be shown, the error
+	# inside it may not (§8).
 	if = {
-		limit = { te_mon_is_cbi = yes }
-		if = {
-			limit = { var:te_neutral_error > 0.5 }
-			set_variable = { name = te_neutral_error value = 0.5 }
-		}
-		if = {
-			limit = { var:te_neutral_error < -0.5 }
-			set_variable = { name = te_neutral_error value = -0.5 }
-		}
+		limit = { var:te_neutral_error > te_mon_forecast_error_bound }
+		set_variable = { name = te_neutral_error value = te_mon_forecast_error_bound }
 	}
-	else = {
-		if = {
-			limit = { var:te_neutral_error > 1.5 }
-			set_variable = { name = te_neutral_error value = 1.5 }
-		}
-		if = {
-			limit = { var:te_neutral_error < -1.5 }
-			set_variable = { name = te_neutral_error value = -1.5 }
-		}
+	if = {
+		limit = { var:te_neutral_error < te_mon_forecast_error_bound_neg }
+		set_variable = { name = te_neutral_error value = te_mon_forecast_error_bound_neg }
 	}
 
 	# --- the gap and the band -----------------------------------------------
@@ -961,6 +949,13 @@ te_mon_effect_delegate_off = {
 }
 
 # Parameters: $MANDATE$ = 1 price stability, 2 growth, 3 peg defence (§6).
+#             $TT$      the loc key the button's ExecuteTooltip renders.
+#
+# $TT$ exists because peg defence is the one mandate whose rule is about
+# something outside your own country — it parks the target on the world
+# reference rate — and a button that says only "changes the rule your central
+# bank follows" leaves the player to go looking for which rule. A `$MANDATE$ = 3`
+# test is not available here: a parameter is substituted as text, not compared.
 #
 # The change takes effect on the next monthly pulse, including under central
 # bank independence: the spec's 12-month CBI mandate delay is deferred to a
@@ -969,5 +964,5 @@ te_mon_effect_set_mandate = {
 	hidden_effect = {
 		set_variable = { name = te_mon_mandate value = $MANDATE$ }
 	}
-	custom_tooltip = banking_mon_mandate_set_tt
+	custom_tooltip = $TT$
 }

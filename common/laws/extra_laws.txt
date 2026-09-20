@@ -905,6 +905,14 @@ law_digital_currency = {
 		state_tax_capacity_mult = 0.2
 		country_minting_mult = 0.25
 		country_banking_random_momentum_mult = 0.5
+		# Transmission (monetary_policy_design.md §5.1). With no cash in the
+		# economy a rate change reaches every account at once, so the policy rate
+		# closes on its target twice as fast — and the floor comes off, because
+		# there is no mattress to move the money into. Both were law checks
+		# inside te_monetary_effects.txt and a sentence of localization until
+		# they moved here; te_mon_drift_step and te_mon_target_min read them.
+		country_policy_rate_drift_speed_mult = 1.0
+		country_policy_rate_floor_add = -0.03
 	}
 
 	ai_enact_weight_modifier = {
@@ -2369,6 +2377,13 @@ law_state_owned_banking = {
 		country_banking_lock_capital_controls_bool = yes
 		country_banking_lock_fx_swap_lines_bool = yes
 		country_banking_lock_asset_relief_bool = yes
+		# The opposite pole from central bank independence (§5.2): total
+		# political control over credit is the least credible arrangement a
+		# lender can be offered, so it costs 0.5pp of credit standing. Until
+		# this grant existed it was a te_mon_is_state_banking branch inside
+		# te_monetary_update_premium and a sentence in the dashboard's Credit
+		# Standing tooltip.
+		country_credit_standing_add = 0.005
 	}
 	ai_enact_weight_modifier = {
 		value = 0
@@ -2406,9 +2421,18 @@ law_central_bank_independence = {
 		country_banking_lock_capital_controls_bool = yes
 		# Mandate credibility (§5.2, §21): a central bank the government cannot
 		# lean on is believed, so lenders shave 0.5pp off the structural tier.
-		# This is separate from - and stacks with - independence lowering the
-		# structural floor from 0.5pp to 0.25pp in te_monetary_update_premium.
+		# This is separate from - and stacks with - the floor below.
 		country_credit_standing_add = -0.005
+		# The floor that credit standing cannot fall below: 0.5pp normally,
+		# 0.25pp here. Believed sovereigns are priced closer to the bone.
+		# Read by te_mon_standing_floor; until this grant existed the 0.25 was a
+		# te_mon_is_cbi branch inside te_monetary_update_premium.
+		country_credit_standing_floor_add = -0.0025
+		# A bank nobody leans on reads its own economy better: the error on its
+		# estimate of what the economy can bear narrows from +/-1.5pp to
+		# +/-0.5pp. Read by te_mon_forecast_error_bound. This advertises the
+		# WIDTH of the error band, never the error itself (§8).
+		country_bank_forecast_error_add = -0.01
 	}
 }
 
