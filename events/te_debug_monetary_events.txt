@@ -438,6 +438,9 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 
 	# The title says whether the country is standing on the harness's footing
 	# right now, so the pin re-opening this event IS the failure report.
+	# `first_valid` + `triggered_desc` on a TITLE is vanilla's own form — see
+	# vanilla events/belle_epoque_events.txt:356 and the ten more like it in the
+	# same file — not a mod invention.
 	title = {
 		first_valid = {
 			triggered_desc = {
@@ -522,8 +525,32 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 	# manual 0.25 every number in the sequences above is computed for.
 	# law_universal_banking_light_prudence is the replacement because it is the
 	# only law in the group with no credit-standing modifier and no consistency
-	# rule of its own — it cannot be bounced. It is not free, and the swap is
-	# visible in two places the harness reads:
+	# rule of its own — it cannot be bounced.
+	#
+	# BUT A COMMAND ECONOMY ON STATE-OWNED BANKING NEVER REACHES STEP 3, and
+	# lands on law_directed_credit_development_banks instead. Step 1's move to
+	# interventionism fires the sweep, and state-owned banking's own rule
+	# (extra_law_consistency_generated.txt) bounces it the moment the country is
+	# no longer a command economy: to directed credit if it has `central_planning`
+	# — which a command economy has by definition, it is law_command_economy's
+	# own unlocking technology — and to central bank independence otherwise, for
+	# a tag that got the law some other way. Step 3 then reads
+	# te_mon_is_state_banking = no and
+	# te_mon_is_cbi = no and does nothing. The pin still HOLDS: directed credit
+	# is not CBI and not state-owned, so te_mon_has_dial and te_mon_can_monetise
+	# both pass and te_mon_credibility_c falls through to the manual 0.25 the
+	# sequences assume. What the country does not get is universal banking's
+	# volatility profile — directed credit runs
+	# country_banking_random_momentum_mult at -0.2 rather than +0.10 (read off
+	# law_directed_credit_development_banks in common/laws/extra_laws.txt, not
+	# off mod_systems.md's law table, which says -25% for this row), so the
+	# financial cycle is quieter than the paragraph below describes. Take the
+	# baseline off .1 either way. (A country that lands on CBI instead — no
+	# central planning — would fail the verify at the foot of the option and
+	# re-open this event, which is what the verify is for.)
+	#
+	# The swap that DOES happen is not free, and is visible in two places the
+	# harness reads:
 	#
 	#   * country_banking_random_momentum_mult goes from -0.10 under
 	#     independence (-0.12 with its institution modifier) or -0.35 under

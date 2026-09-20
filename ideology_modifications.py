@@ -142,6 +142,19 @@ traditional_rules_of_war = [
     ("law_limited_war", "disapprove"),
     ("law_total_war", "neutral"),
 ]
+# --- lawgroup_monetary_policy stances (monetary_policy_design.md section 13) ---
+# The four lists below — advanced_curency, simple_currency, libertarian_currency
+# and cross_of_gold_currency — are the whole of section 13's Part B, and they
+# reach an interest group through whichever ideologies it holds, which
+# common/interest_groups/00_*.txt reassigns per country.
+#
+# SECTION 13 CARRIES A HAND-TRANSCRIBED NET-STANCE TABLE (per IG, per law)
+# derived from these four lists plus the per-ideology `modifications` entries
+# further down this file. Nothing regenerates it. UPDATE IT WHENEVER ANY OF THIS
+# CHANGES: a stance added, removed or re-pointed here, or an ideology gaining or
+# losing one of these lists. Two IGs can also cancel each other's stance inside
+# one interest group, so read the NET per law across the IG's whole `ideologies`
+# block rather than the line you touched.
 advanced_curency = [
     ("law_commodity_money", "disapprove"),
     ("law_gold_standard", "neutral"),

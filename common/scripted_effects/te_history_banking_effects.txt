@@ -2,7 +2,7 @@
 # HISTORY STORE — banking series
 # ============================================================================
 # The banking system's side of the generic store in te_history_effects.txt:
-# three metrics and the markers that explain their turning points. This is the
+# six metrics and the markers that explain their turning points. This is the
 # whole per-system surface — a future reserve or UN series adds a file exactly
 # like this one and nothing else in common/.
 #
