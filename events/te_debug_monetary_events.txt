@@ -5,10 +5,11 @@
 # Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
 # to run script by hand. Nothing in the mod fires this event.
 #
-# THE FILE HOLDS THREE FAMILIES. .1 is the read-out and the single-month
+# THE FILE HOLDS FOUR FAMILIES. .1 is the read-out and the single-month
 # stepper; .2-.4 are the solved interest-multiplier bench; .5-.7 are the §19
 # row 2 harness — pin a manual fiat target, fast-forward years of pulses, and
-# set up §10's war case. The console sequences that reproduce §10's worked
+# set up §10's war case; .8 is the §19 row 3 harness — the world rate, gold
+# flows and the peg, with its own header at the foot of the file. The console sequences that reproduce §10's worked
 # example, the never-disinflate invariant and the §9.1 drift check, with the
 # numbers to expect, are in the .5-.7 header further down.
 #
@@ -817,5 +818,89 @@ te_debug_monetary.7 = { # REVIEWED 2026-09-20: console-only test event (`event t
 
 	option = {
 		name = te_debug_monetary.7.z
+	}
+}
+
+
+# ============================================================================
+# .8 — THE §19 ROW 3 HARNESS: the world rate, gold flows and the peg
+# ============================================================================
+# Console: `event te_debug_monetary.8`, as a GOLD-STANDARD country with a
+# national bank (Britain 1836 is one). The description prints the phase-3
+# state; nothing in it is hidden, but the two globals are printed nowhere else.
+#
+# §19 ROW 3'S FOUR EXIT CRITERIA, and how to stage each:
+#
+#   1. "World rate sits at era_base in 1836 and does not drift on its own."
+#      Observe as any country: the World Rate row equals the World Reference
+#      Rate row, month after month, until a great power takes a discretionary
+#      dial. No option needed.
+#   2. "A discretionary GP's hike visibly drains a small gold country."
+#      Option a (+2pp on the world rate) stands in for the hike. As a small
+#      gold country on a manual target left where it was: the gap reads -2,
+#      Gold Flow about -0.4% of GDP a month, and once reserves pass under a
+#      tenth of the limit the flow stops and Peg Confidence starts falling
+#      about 6 a month.
+#   3. "AI on peg defence survives a 2pp world-rate rise." Option a, then
+#      observe AI gold countries for two years: their targets step up within a
+#      month (rounded UP, ruling Q5), the rate closes the gap in ~6 months, and
+#      no te_peg.1 fires for a country that was out of debt when it started.
+#   4. "Holding world + 5 on gold yields no lasting treasury gain." As a gold
+#      player: target = world + 5, fast-forward with te_debug_monetary.6. Gold
+#      comes in until the BORROWED balance reaches one reserve limit (ruling
+#      Q8) and then stops whatever was spent; drop the target to the world rate
+#      and it leaves at twice the speed. Option c prints nothing new but parks
+#      confidence at 25 so the crisis can be reached in two or three months
+#      rather than a decade.
+#
+# THE OFFSET IS A GLOBAL AND IT PERSISTS IN THE SAVE. Option b removes it. It
+# is read by te_monetary_refresh_world_rate, so it reaches the world rate on
+# the next global monthly pulse and each country on the pulse after that.
+# ============================================================================
+te_debug_monetary.8 = { # REVIEWED 2026-09-20: console-only test event (`event te_debug_monetary.8`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.8.t
+	desc = te_debug_monetary.8.d
+	flavor = te_debug_monetary.8.f
+
+	# +2pp on the world rate, cumulative: fire it twice for +4.
+	option = {
+		name = te_debug_monetary.8.a
+		if = {
+			limit = { NOT = { has_global_variable = te_world_rate_debug_offset } }
+			set_global_variable = { name = te_world_rate_debug_offset value = 0 }
+		}
+		change_global_variable = { name = te_world_rate_debug_offset add = 2 }
+	}
+
+	# Take the offset off again.
+	option = {
+		name = te_debug_monetary.8.b
+		if = {
+			limit = { has_global_variable = te_world_rate_debug_offset }
+			remove_global_variable = te_world_rate_debug_offset
+		}
+	}
+
+	# Park confidence just over the crisis threshold. The second console-only
+	# writer of te_peg_confidence, beside te_peg.1's options.
+	option = {
+		name = te_debug_monetary.8.c
+		te_monetary_init_variables = yes
+		set_variable = { name = te_peg_confidence value = 25 } # REVIEWED 2026-09-20: console-only; five over te_mon_peg_crisis_threshold
+		set_variable = { name = te_peg_crisis_cooldown value = 0 }
+	}
+
+	option = {
+		name = te_debug_monetary.8.z
+		default_option = yes
 	}
 }

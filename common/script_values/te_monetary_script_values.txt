@@ -246,6 +246,56 @@
 #                                                   band). BACKS A MULTIPLIER — never
 #                                                   remove it
 #
+# PHASE 3 — THE WORLD RATE, GOLD AND THE PEG (§12). Same two rules. Step 10 of
+# te_monetary_monthly_update (te_monetary_update_gold) is the only writer of
+# every variable below, with ONE documented exception: the convertibility
+# crisis te_peg.1 (events/te_peg_events.txt) writes te_peg_confidence,
+# te_peg_defend_months and te_peg_suspended_months in its options, because
+# §12.3 defines those options AS a jump in confidence and the start of a clock.
+# (te_debug_monetary.8 is the console-only writer, as .5 and .7 are for phase 2.)
+# NONE OF THIS IS HIDDEN STATE: every figure is built from displayed ones — the
+# policy rate, expected inflation, GDP, the treasury — and none carries r*.
+#
+#   te_mon_world_rate_now   -2 to 10    displayed   this pulse's copy of
+#                                                   global_var:te_world_rate, the
+#                                                   REAL world rate of §12.1.
+#                                                   Written unguarded by step 0
+#                                                   every pulse, like
+#                                                   te_mon_era_base_now
+#   te_gold_flow_gap        +/-5        displayed   policy rate - world rate,
+#                                                   clamped; 0 for every country
+#                                                   without gold flows
+#   te_gold_flow            pounds      displayed   this month's add_treasury,
+#                                                   signed (+ in), after every cap
+#   te_gold_flow_pct        +/- ~12                 the same as % of GDP a year;
+#                                                   read NEXT month by
+#                                                   te_mon_pressure_gold_flow
+#   te_gold_hot_money       >= 0        displayed   gold drawn in by a high rate
+#                                                   and still owed back (§12.2).
+#                                                   Capped at one reserve limit
+#                                                   (ruling Q8); paid out in one
+#                                                   go if the country stops being
+#                                                   on gold, frozen while it is
+#                                                   suspended (ruling Q9)
+#   te_peg_confidence       0 to 100    displayed   §12.3. Seeds at 100; te_peg.1
+#                                                   fires at <= 20
+#   te_peg_crisis_cooldown  0 to te_mon_peg_crisis_cooldown_months
+#                                                   months before te_peg.1 may be
+#                                                   offered again; set by step 10
+#                                                   when the event goes out
+#   te_peg_defend_months    0 to 12                 months left of the Defend
+#                                                   option's world + 4 floor;
+#                                                   read by te_mon_target_min
+#   te_peg_suspended_months 0 to 60                 months left of a suspension of
+#                                                   convertibility; > 0 makes
+#                                                   te_mon_is_on_gold false, which
+#                                                   is the whole regime switch
+#
+#   global_var:te_world_rate            the world rate (§12.1), once a month
+#   global_var:te_world_rate_acc_num    its two accumulators, reset every call
+#   global_var:te_world_rate_acc_den
+#   global_var:te_world_rate_debug_offset   console-only; absent in play
+#
 # ONE COUNTRY VARIABLE IS OWNED ELSEWHERE. te_mon_stance_band_applied belongs to
 # banking_cycle_apply_stance_band (common/scripted_effects/banking_cycle_effects.txt),
 # not to the monthly update: it is bookkeeping for the banking journal entry's
@@ -362,9 +412,12 @@ te_mon_era_base = {
 
 # The lowest and highest target the current monetary regime allows, in pp.
 #
-#   gold standard        the reference rate +/- 2, taken inwards to whole
-#                        numbers and held inside 0-15 (the phase-1 interim rule
-#                        of §19 row 1, standing in for §12's gold flows)
+#   gold standard        0 to 15 (§5.1). What constrains the dial is no longer
+#                        a band but GOLD: a rate under the world rate bleeds
+#                        reserves and then peg confidence (§12.2-12.3, step 10)
+#   gold, suspended      0 to 25 — "acts as fiat" for the suspension (§12.3)
+#   gold, defending      world rate + 4 to 15, for the twelve months §12.3's
+#                        Defend option forces
 #   digital currency     -3 to 25 (no cash to hoard, so negative rates bite)
 #   fiat currency        0 to 25
 #
@@ -375,40 +428,30 @@ te_mon_era_base = {
 # how the stepper ends up offering a step the monthly update silently undoes, so
 # both read these two values and nothing else states the bounds.
 #
-# The gold branch is guarded on te_mon_era_base_now because a country that has
-# never run a monetary pulse has no cached reference rate. Inside
-# te_monetary_clamp_target that cannot happen (step 0 writes it every pulse); in
-# the GUI it can, on a save from before the system existed, and the fiat range it
-# falls back to is the harmless answer — the dashboard's readiness gate hides the
-# stepper until the first pulse anyway.
+# THE PHASE-1 GOLD BAND IS GONE. Reference rate +/-2 was §19 row 1's interim
+# rule standing in for gold flows; phase 3 ships the flows, so the band went
+# with it, exactly as the old comment here promised.
 #
-# THE FLOOR IS DECLARATIVE. Everything except the gold band comes from
-# country_policy_rate_floor_add, which law_digital_currency carries at -0.03 and
-# every other regime leaves at zero. The law tooltip therefore states the rule
-# ("Lowest Policy Rate -3%") instead of a sentence of localization restating a
-# law check that lived here. The gold band stays scripted because it is a
-# phase-1 INTERIM rule standing in for §12's gold flows (§19 row 1), not a
-# property of the law — when gold flows arrive, the band is computed from
-# reserves and this branch goes with it.
+# THE FLOOR IS DECLARATIVE. It comes from country_policy_rate_floor_add, which
+# law_digital_currency carries at -0.03 and every other regime leaves at zero,
+# so the law tooltip states the rule ("Lowest Policy Rate -3%"). The one
+# scripted floor is the Defend clamp, which is an event outcome with a clock on
+# it rather than a property of any law. It is guarded on te_mon_world_rate_now
+# because the GUI can evaluate this for a save that has not pulsed on phase 3.
 te_mon_target_min = {
-	value = 0
+	value = modifier:country_policy_rate_floor_add
+	multiply = 100
 	if = {
 		limit = {
-			has_law_or_variant = law_type:law_gold_standard
-			has_variable = te_mon_era_base_now
+			te_mon_peg_is_defending = yes
+			te_mon_is_on_gold = yes
+			has_variable = te_mon_world_rate_now
 		}
-		add = {
-			value = var:te_mon_era_base_now
-			subtract = 2
-			min = 0
-			ceiling = yes
-		}
-	}
-	else = {
-		add = {
-			value = modifier:country_policy_rate_floor_add
-			multiply = 100
-		}
+		value = var:te_mon_world_rate_now
+		add = te_mon_peg_defend_margin
+		subtract = 0.05
+		ceiling = yes
+		max = te_mon_target_max
 	}
 }
 
@@ -431,21 +474,10 @@ te_mon_floor_threshold = {
 }
 
 te_mon_target_max = {
-	value = 0
+	value = 25
 	if = {
-		limit = {
-			has_law_or_variant = law_type:law_gold_standard
-			has_variable = te_mon_era_base_now
-		}
-		add = {
-			value = var:te_mon_era_base_now
-			add = 2
-			max = 15
-			floor = yes
-		}
-	}
-	else = {
-		add = 25
+		limit = { te_mon_is_on_gold = yes }
+		value = 15
 	}
 }
 
@@ -1960,8 +1992,9 @@ te_mon_pressure_regime_pull = {
 # The whole §9.1 pressure, in pp: how far above expectations inflation settles
 # while all of this lasts. A LEVEL, never a per-month increment.
 #
-# THE GOLD-FLOW TERM IS ABSENT ON PURPOSE (phase 3, ruling P2), as is the
-# gold-supply term folded into the regime pull above.
+# THE GOLD-FLOW TERM ARRIVED IN PHASE 3 (te_mon_pressure_gold_flow, §12.2's
+# price-specie flow). The §9.1 gold-SUPPLY term is still absent on purpose: it
+# is `(proposed)` and the owner has not decided it (rulings P2 and Q11).
 te_mon_pressure_total = {
 	value = te_mon_pressure_stance
 	add = te_mon_phase_pressure
@@ -1973,6 +2006,7 @@ te_mon_pressure_total = {
 	add = te_mon_pressure_wage_spiral
 	add = te_mon_pressure_noise
 	add = te_mon_pressure_regime_pull
+	add = te_mon_pressure_gold_flow
 }
 
 
@@ -2256,4 +2290,338 @@ te_mon_premium_monetisation = {
 te_mon_inflation_offset = {
 	value = te_mon_inflation_read
 	multiply = -1
+}
+
+
+# ============================================================================
+# PHASE 3 — the world rate, gold flows and the peg (§12)
+# ============================================================================
+# Rulings Q1-Q12 are in docs/systems/monetary_policy_design.md §0.5. Every
+# constant below is a §21 tuning constant with a name, so a retune edits one
+# number and the dashboard tooltips that quote it follow.
+#
+# NOTHING HERE IS HIDDEN STATE. The world rate, the gap against it, the monthly
+# flow, the hot-money balance and peg confidence are all built from displayed
+# figures — the policy rate, expected inflation, GDP, the treasury — and none of
+# them carries the neutral rate, so all five may be printed exactly.
+
+# --- §12.1 the world rate ----------------------------------------------------
+
+# The world rate is REAL and is clamped to this range (ruling Q1). The floor is
+# below zero on purpose — a world of great powers at the zero bound with
+# inflation running does have a negative real rate — but bounded, because a
+# no-dial country pays world + expected + 1 and a gold country's gap is
+# policy - world, and neither formula means anything at -8.
+te_mon_world_rate_min = {
+	value = -2
+}
+
+te_mon_world_rate_max = {
+	value = 10
+}
+
+# One discretionary great power's weight in the average: GDP in millions. The
+# scaling is fixed-point headroom for the two accumulators (§12.1), nothing
+# more — it cancels in the division.
+#
+# A NAMED VALUE BECAUSE change_global_variable's op slot cannot take a bare
+# `gdp` (§16.2's arithmetic note). Scope: country.
+te_mon_world_rate_weight = {
+	value = gdp
+	divide = 1000000
+	min = 0.001
+}
+
+# That weight times the country's REAL policy rate: policy - expected
+# inflation (§12.1 — capital responds to real returns, so a fiat power at 13%
+# with 10% inflation must not drag a gold country to 13%). Read only behind
+# te_mon_rate_is_discretionary, which guards both variables.
+te_mon_world_rate_weighted_real = {
+	value = var:te_policy_rate
+	subtract = var:te_inflation_expected
+	multiply = te_mon_world_rate_weight
+}
+
+# The guarded per-country read, for anything outside the monthly update. Inside
+# it step 0 has always just written te_mon_world_rate_now.
+te_mon_world_rate_read = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_world_rate_now }
+		add = var:te_mon_world_rate_now
+	}
+	else_if = {
+		limit = { has_variable = te_mon_era_base_now }
+		add = var:te_mon_era_base_now
+	}
+	else = {
+		add = 3
+	}
+}
+
+# --- §12.2 gold flows --------------------------------------------------------
+
+# The gap is clamped to +/- this many pp before it moves any gold.
+te_mon_gold_gap_clamp = {
+	value = 5
+}
+
+# One pp of gap moves this share of annual GDP a month: 0.002, i.e. 2.4% of GDP
+# a year, or ~1% of vanilla's reserve limit (0.2 x GDP) a month.
+te_mon_gold_flow_per_pp = {
+	value = 0.002
+}
+
+# ...and in pounds, for this country, this month.
+te_mon_gold_flow_unit = {
+	value = gdp
+	multiply = te_mon_gold_flow_per_pp
+}
+
+# Hot money leaves at this multiple of the ordinary outflow speed (§12.2).
+te_mon_gold_hot_exit_speed = {
+	value = 2
+}
+
+# ...and never slower than the speed a gap of this size would give (ruling Q7).
+# §12.2 has the balance leave "when the gap falls to <= 0", but twice a zero
+# outflow is zero: without a floor, hot money would sit for ever in a country
+# parked exactly on the world rate, which is where peg defence parks everybody.
+te_mon_gold_hot_exit_gap_floor = {
+	value = 0.5
+}
+
+# The gap itself: policy rate minus the world rate, clamped. A gold country's
+# expected inflation is pinned at 0, so its nominal policy rate IS its real
+# rate and the two can be differenced directly (§12.1). Scope: country, inside
+# the monthly update.
+te_mon_gold_gap_value = {
+	value = var:te_policy_rate
+	subtract = var:te_mon_world_rate_now
+	min = {
+		value = te_mon_gold_gap_clamp
+		multiply = -1
+	}
+	max = te_mon_gold_gap_clamp
+}
+
+# How much gold may still come in this month. Two caps, and the tighter binds:
+#
+#   * the engine's reserve limit — a high rate can REFILL reserves, never stack
+#     a war chest (§12.2);
+#   * the hot-money balance may not exceed one reserve limit either (ruling
+#     Q8). §12.2's own argument is that the reserve cap "would only stop a
+#     hoarder — a player who SPENDS the inflow stays under the limit"; the
+#     hot-money balance is what closes that, but only if it is bounded. Without
+#     this a player holding world + 5 and spending the proceeds collects 12% of
+#     GDP a year for as long as they can stand the stance.
+te_mon_gold_inflow_room = {
+	value = gold_reserves_limit
+	subtract = gold_reserves
+	max = {
+		value = gold_reserves_limit
+		subtract = te_mon_gold_hot_money_read
+	}
+	min = 0
+}
+
+te_mon_gold_reserves_now = {
+	value = gold_reserves
+	min = 0
+}
+
+te_mon_gold_hot_money_read = {
+	value = 0
+	if = {
+		limit = { has_variable = te_gold_hot_money }
+		add = var:te_gold_hot_money
+	}
+}
+
+# What add_treasury is handed. te_gold_flow is signed (positive = inflow) and
+# already capped by step 10; the wrapper exists because add_treasury's
+# documented argument is a fixed point and every use of it in this mod passes a
+# named script value.
+te_mon_gold_flow_signed = {
+	value = 0
+	if = {
+		limit = { has_variable = te_gold_flow }
+		add = var:te_gold_flow
+	}
+}
+
+# The same flow, negated: what leaves when a country stops being on gold with
+# hot money still on its books (ruling Q9).
+te_mon_gold_hot_money_payout = {
+	value = te_mon_gold_hot_money_read
+	multiply = -1
+}
+
+# This month's flow as a % of GDP A YEAR — the unit §9.1's price-specie term is
+# written in. 1pp of gap that actually flows is 0.002 x 12 x 100 = 2.4.
+te_mon_gold_flow_pct_value = {
+	value = te_mon_gold_flow_signed
+	divide = {
+		value = gdp
+		min = 1
+	}
+	multiply = 1200
+}
+
+# §9.1 / §12.2: 0.5pp of inflation pressure per 1% of GDP a year of gold flow.
+# Inflows inflate, outflows deflate — the price-specie mechanism, and the reason
+# pulling gold in with a high rate corrects itself. Reads LAST month's flow:
+# step 10 runs after step 6 (the same one-month lag ruling P5 accepts for the
+# stance gap). Clamped like cost-push, so one capped month cannot swing core.
+te_mon_gold_flow_pressure_per_pct = {
+	value = 0.5
+}
+
+te_mon_pressure_gold_flow = {
+	value = 0
+	if = {
+		limit = { has_variable = te_gold_flow_pct }
+		add = var:te_gold_flow_pct
+	}
+	multiply = te_mon_gold_flow_pressure_per_pct
+	min = -6
+	max = 6
+}
+
+# --- §6 peg defence ----------------------------------------------------------
+
+# `reserve_shortfall_pp` — §6 names it and defines it nowhere (ruling Q5). Two
+# points when the country has no reserves at all or is in debt, falling to zero
+# once reserves reach half the limit. The mandate adds HALF of it, so a peg
+# defender with an empty vault runs one point above the world rate: enough to
+# pull gold back in, not enough to be a standing depression.
+te_mon_peg_shortfall_pp = {
+	value = 0
+	if = {
+		limit = { scaled_debt > 0 }
+		add = 2
+	}
+	else = {
+		add = 0.5
+		subtract = scaled_gold_reserves
+		multiply = 4
+		min = 0
+		max = 2
+	}
+}
+
+# The peg-defence formula: world rate + 0.5 x shortfall. Step 2 rounds it UP
+# (ruling Q5): a bank defending a peg never parks below the world rate, and an
+# integer target under a fractional world rate otherwise would, half the time.
+te_mon_peg_defence_target = {
+	value = te_mon_peg_shortfall_pp
+	multiply = 0.5
+	add = var:te_mon_world_rate_now
+}
+
+# --- §12.3 peg confidence and the convertibility crisis ----------------------
+
+te_mon_peg_reserve_floor = {
+	value = 0.1
+}
+
+te_mon_peg_confidence_start = {
+	value = 100
+}
+
+# Confidence lost per pp of negative gap per month, while under pressure.
+te_mon_peg_confidence_per_pp = {
+	value = 3
+}
+
+te_mon_peg_crisis_threshold = {
+	value = 20
+}
+
+# Months before the convertibility crisis may be offered again; the same
+# anti-nag shape as te_mon_hyper_cooldown_months, and cleared by nothing —
+# every option of te_peg.1 moves confidence well clear of the threshold itself.
+te_mon_peg_crisis_cooldown_months = {
+	value = 24
+}
+
+# Defend: target forced to world + 4 for a year, confidence +40.
+te_mon_peg_defend_margin = {
+	value = 4
+}
+
+te_mon_peg_defend_months = {
+	value = 12
+}
+
+te_mon_peg_defend_confidence = {
+	value = 40
+}
+
+# Suspend: five years as fiat. The timed modifiers te_mon_peg_suspension
+# (1825 days) and te_mon_peg_credibility_lost (3650 days) carry the premium and
+# the lost credibility; this counter is what the SCRIPT reads, so the regime
+# tests never depend on has_modifier.
+te_mon_peg_suspension_months = {
+	value = 60
+}
+
+# Devalue: confidence reset to this, and the reserves revalued by this share of
+# the reserve limit (0.15 x 0.2 x GDP = 3% of GDP, once).
+te_mon_peg_devalue_confidence = {
+	value = 50
+}
+
+te_mon_peg_devalue_revaluation = {
+	value = gold_reserves_limit
+	multiply = 0.15
+}
+
+# The signed monthly confidence move step 10 applies while the country is under
+# pressure (te_mon_peg_under_pressure). te_gold_flow_gap and te_gold_hot_money
+# have both just been written by the same step.
+#
+#   -3 per pp of negative gap — and a pending hot-money exit counts as a gap of
+#      at least the exit floor, at the exit's double speed (ruling Q7): gold
+#      that wants to leave and cannot is exactly what a run on the peg is
+#   -2 in a panic or downturn
+#   -2 if scaled_debt >= 0.5
+#   +2 when the gap is >= 0 and nothing is queueing to leave
+te_mon_peg_confidence_move = {
+	value = 0
+	if = {
+		limit = {
+			var:te_gold_hot_money > 0
+			var:te_gold_flow_gap <= 0
+		}
+		add = {
+			value = var:te_gold_flow_gap
+			multiply = -1
+			min = te_mon_gold_hot_exit_gap_floor
+			multiply = te_mon_gold_hot_exit_speed
+			multiply = te_mon_peg_confidence_per_pp
+			multiply = -1
+		}
+	}
+	else_if = {
+		limit = { var:te_gold_flow_gap < 0 }
+		add = {
+			value = var:te_gold_flow_gap
+			multiply = te_mon_peg_confidence_per_pp
+		}
+	}
+	else = {
+		add = 2
+	}
+	if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_recession = yes
+		}
+		subtract = 2
+	}
+	if = {
+		limit = { scaled_debt >= 0.5 }
+		subtract = 2
+	}
 }

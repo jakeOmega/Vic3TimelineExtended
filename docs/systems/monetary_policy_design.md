@@ -1,10 +1,13 @@
 # Monetary Policy — Design
 
-> **STATUS: PHASES 1 AND 2 IMPLEMENTED ON BRANCH, PENDING IN-GAME VERIFICATION.** Phase 2
+> **STATUS: PHASES 1–3 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 3 (§19 row 3 — the
+> real world rate, gold flows and hot money, peg confidence, the convertibility crisis)
+> shipped on `feat/monetary-policy-phase3` on 2026-09-20; see
+> [§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks). Phase 2
 > (§19 row 2 — inflation, monetisation and QE costs, the §9.2 bands and hyperinflation
 > chain, wage pressure, §13 stance politics) shipped on `feat/monetary-policy-phase2` on
 > 2026-09-20 and has not been seen in a running game either; see
-> [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks). Phases 3–5 are
+> [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks). Phases 4–5 are
 > still design only. Written 2026-09-19 from a design
 > interview with the mod owner plus an engine-feasibility pass, then revised the same day
 > after two independent reviews on PR #329 (one with a monthly simulation of §9–§10). Every number is a starting
@@ -13,14 +16,16 @@
 > proven from files.
 >
 > **Read [§0](#0-phase-1-as-shipped--deviations-and-open-checks) before anything else if you
-> are touching the implementation**: what phases 1 and 2 actually shipped (§0.1–§0.3 and
-> [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks) respectively), where
+> are touching the implementation**: what phases 1, 2 and 3 actually shipped (§0.1–§0.3,
+> [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks) and
+> [§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks) respectively), where
 > they deviate from the design sections below, what was deferred, and the in-game
-> verification checklist — one list, numbered 1–14 for phase 1 and 15–35 for phase 2.
+> verification checklist — one list, numbered 1–14 for phase 1, 15–35 for phase 2 and 36–47
+> for phase 3.
 > Sections 1–22 remain the *design*, not a description of the code — where they disagree with
 > §0, §0 is what shipped. The implemented parts are folded into `mod_systems.md` § Banking
 > Cycle → **Monetary Policy (phase 1)** and **(phase 2)**, and `journal_entry_systems.md`
-> § Banking Cycle; this file stays the spec for the remaining phases.
+> § Banking Cycle (plus **(phase 3)**); this file stays the spec for the remaining phases.
 
 This extends the Banking Cycle (`je_banking_cycle` — see `mod_systems.md` § Banking Cycle
 and `journal_entry_systems.md`). Read those first.
@@ -720,6 +725,140 @@ still open and are inherited, not repeated.
     radicals are still enough to make the loop a losing line. Judge it the way §19 row 2
     judges the never-disinflate path: on treasury, SoL and radicals over the whole run, not
     on rate paid.
+
+### 0.5 Phase 3 as shipped — rulings, deviations and open checks
+
+Phase 3 (§19 row 3) was implemented on `feat/monetary-policy-phase3` on 2026-09-20: the real
+world rate (§12.1), gold flows with hot money and the price–specie term (§12.2), peg
+confidence and the convertibility crisis (§12.3), the peg-defence mandate's real formula (§6),
+the dashboard rows and a console harness for §19 row 3. **Nothing below has been seen in a
+running game either** — phases 1 and 2's open checks are inherited unchanged (ruling P10's
+logic), and the checklist continues from item 36. File inventory and the architectural rules:
+`mod_systems.md` § Banking Cycle → **Monetary Policy (phase 3)**.
+
+**What §19 row 3 lists that phase 3 did *not* have to do.** "Regime law stances" shipped with
+phase 2 (§13 "Delivered"; rulings T7). "FX buttons unchanged" is row 3's own interim rule, so
+`cb_fx_support`'s possibly sign-wrong `banking_stance_is_tight` weight (§0.2) stays a
+**phase-4** item despite that note calling it the "phase-3 FX pass". §0.2's line about phase 3
+revisiting the AI's better-informed tools "when IGs start reacting to the stance" is moot: the
+stance politics shipped in phase 2, keyed on the displayed band.
+
+#### Owner decisions to review (phase 3)
+
+**H. The hegemon has no gold constraint.** With one discretionary great power — a *player*
+Britain in 1836 on a manual target — the world rate **is** that country's real rate, so its
+own gap is 0 by construction: no flows, no confidence loss, and (with the ±2 band gone) a dial
+free from 0 to 15. Spec-faithful — §12.1 says such a country "starts moving it for everyone
+else" — and historically arguable (London *was* the world rate), but it means §19's "holding
+world + 5 yields no lasting gain" only ever tests a **non-hegemon** gold country, and a player
+Britain pays for a wild rate only through the stance channel. Levers if that reads wrong:
+exclude a country's own weight from the world rate *it* faces (one more accumulator pass), or
+blend the world rate with `era_base`.
+
+**I. A gold player can borrow one reserve limit (20% of GDP) interest-free for as long as they
+can stand the stance.** Ruling Q8 caps the hot-money balance at one reserve limit, which is
+what stops "hold world + 5 and spend the proceeds" being 12% of GDP a year for ever — but the
+capped amount is still a zero-coupon loan that is only called when the gap closes. Its prices
+are the tight stance, the price–specie inflation, and a run on the peg (Q7) if it has been
+spent when it is called. Levers: a lower cap, or charging the policy rate on the balance.
+
+**J. An indebted AI on gold sits a point above the world rate, permanently.** Ruling Q5's
+shortfall term treats any debt as an empty vault, so the peg-defence target is world + 1 for
+every AI gold country in debt — a standing −0.125 of momentum a month. That is "the cost of
+the peg" §8 promises, and it is what keeps its confidence from eroding, but AI debt is the
+normal state of many tags. The lever is the 2pp in `te_mon_peg_shortfall_pp`.
+
+**K. T5's dollarised expectations pin is still open.** §0.4 called it "a phase-3 item —
+decide". Nothing in §12 bears on it, the choice is the owner's, and phase 3 did not make it.
+
+#### 0.5 rulings — deviations from, or bindings on, the sections below
+
+| # | Ruling | Why | Cost if wrong |
+|---|---|---|---|
+| **Q1** | The world rate is clamped to **−2…10**, is **not smoothed**, and reads whatever each great power's last pulse left | §12.1 gives no bounds; a no-dial rate is `world + expected + 1` and a gold gap `policy − world`, and neither means anything at −8. No smoothing because its inputs already move at ⅓pp a month; the pulse order is §17 check 7, unknown, so a one-month-old input is tolerated by construction | two constants; a partial-adjustment line in `te_monetary_refresh_world_rate` |
+| **Q2** | **`era_base` survives** as the reference rate: it is still the base of the neutral rate (§8), the lenders' floor (§10, §21) and every seed. The world rate replaced it in exactly three places — the no-dial derived rate (§4), peg defence (§6) and the gold gap (§12.2) | §10 and §21 name `era_base` for the floor explicitly; putting a GDP-weighted *policy* figure under the neutral rate would make r\* partly public | one variable name per site |
+| **Q3** | The phase-1 gold band (reference ±2) is **deleted**; gold's range is §5.1's 0–15. The dashboard keeps **both** rows — *World Reference Rate* and the new *World Rate* — because the first is still the lenders' floor | §19 row 1 called the band an interim standing in for flows | restore two branches in `te_mon_target_min` / `_max` |
+| **Q4** | "On gold" is **one trigger, `te_mon_is_on_gold`** = the law ∧ not suspended, and every peg test goes through it (the metallic anchor, peg defence, gold flows, the 0–15 ceiling, the mandate button). Suspension is a **month counter** (`te_peg_suspended_months`), on the dollarisation precedent (P9); the timed modifiers carry only the prices, and script never reads `has_modifier` on them | "acts as fiat without the law change" (§12.3) needs the law-derived regime overridden, and a missed raw `law_gold_standard` test is silent | grep the monetary files for the raw law test — the survivors are deliberate (regime code, `te_mon_has_dial`, the dashboard's gold-rows gate, the law-gone reset in step 10) |
+| **Q4** | A suspended country gets fiat's **range, anchor, credibility and mandates** — and **not** OMO or monetisation | §12.3 says "free dial, inflation-constrained", and both tools are gated on the fiat/digital *laws* (the OMO bool, `te_mon_can_monetise`); a five-year emergency is not a licence to print | add `country_can_create_unbacked_money_bool` to `te_mon_peg_suspension` |
+| **Q5** | **`reserve_shortfall_pp`** (§6 names it and defines it nowhere) = `4 × max(0, 0.5 − scaled_gold_reserves)`, capped at 2, and **2 outright while in debt**. Peg defence rounds its target **up** with its own hysteresis (move when below the formula; come down only when > 1.25 above it) instead of the shared round-to-nearest ± 0.75 | an integer target under a fractional world rate sits *below* it half the time under round-to-nearest, and a peg defender parked below the world rate bleeds gold by construction — §19's "AI on peg defence survives a 2pp rise" fails on rounding alone | the 2 and the 0.5 in `te_mon_peg_shortfall_pp`; owner decision **J** |
+| **Q6** | "In debt" (§12.3) is **`scaled_debt > 0`**. Inflows also stop while in debt, not only outflows | gold arriving into a debt pays it down, and could then never be asked back because outflows stop in debt — free money through the back door | one trigger line |
+| **Q7** | Hot money leaves at 2× the ordinary speed **with a floor of a 0.5pp gap**, and a pending exit that *cannot* be paid hits peg confidence at that doubled, floored rate | §12.2 has the balance leave "when the gap falls to ≤ 0", but 2 × a zero outflow is zero — and peg defence parks everybody at a gap of zero. The confidence half is what makes spending borrowed gold dangerous rather than free | `te_mon_gold_hot_exit_gap_floor` |
+| **Q8** | The hot-money **balance is capped at one reserve limit** (inflows stop when it is reached, whatever the vault holds) | §12.2's own argument is that the reserve cap "would only stop a hoarder"; an unbounded balance leaves 12% of GDP a year for a player who spends it. Owner decision **I** | `te_mon_gold_inflow_room` |
+| **Q9** | A country that stops being on gold **altogether** (law changed, bank gone, command economy, dollarised) pays its whole hot-money balance out **at once, debt or no debt**, and its confidence resets to 100. A **suspension freezes** both instead | "pull gold in, then enact fiat" is otherwise §20 risk 7 by another door; suspending convertibility *is* refusing to pay gold out | the `else` branch of `te_monetary_update_gold` |
+| **Q10** | Confidence **seeds at 100**, heals **+1 a month** while not under pressure, the four §12.3 terms apply independently while under pressure (`+2` needs only gap ≥ 0 and no pending hot-money exit — "reserves are rebuilding" cannot be tested and is never true in debt), and resumption after a suspension restarts it at 50. The crisis has a 24-month cooldown set by step 10, the same shape as the hyperinflation crisis | §12.3 gives no start value, no recovery and no cooldown; without recovery one episode scars a country for the campaign | four constants |
+| **Q11** | §9.1's **gold-supply term stays deferred** (`(proposed)`, owner undecided — P2), and with it "mine output as a positive input to `te_peg_confidence`" | not in §19 row 3 | — |
+| **Q12** | Devalue's "expected inflation +3" is delivered as **+3pp of inflation *pressure*, decaying over two years** (`te_mon_peg_devaluation_pressure`) | under gold, expectations are pinned at 0 and step 6 re-pins them every pulse, so a write to `te_inflation_expected` is gone in a month | one modifier |
+| **Q12** | Devalue's revaluation is **15% of the reserve limit** (3% of GDP), its export boost `±0.15` for five decaying years, and its infamy / GP relations are the old button's exact **+1 / −3**, restated rather than shared | §12.3 sizes none of them; the button's effect also switches on a JE tool, which this is not | the modifier and one script value |
+| **Q13** | `te_peg.1` **writes `te_peg_confidence` and two clocks** — the phase-3 entry on the variable contract's list of documented outside writers | §12.3 defines Defend and Devalue *as* a jump in confidence, exactly as §9.2 defines its escapes as resets | — |
+
+#### Deferred (phase 3's additions)
+
+- The **gold-supply term** and mine output into confidence (Q11).
+- **History**: no chart or marker for the world rate, the flow or confidence.
+- A **confidence bar** widget — §3 asks for a bar; the row prints the figure and a word.
+- Nothing removes an active suspension's modifiers if the gold *law* goes mid-suspension; the
+  counter is cleared (step 10), the +2pp / lost-credibility modifiers run out their clocks.
+
+#### Known roughnesses (phase 3)
+
+1. **A suspended gold standard's law tooltip still advertises the credibility bonus**, with
+   `te_mon_peg_credibility_lost` cancelling it line for line in the modifier list.
+2. **The flow reads one month late in inflation** (step 10 runs after step 6) — the same lag
+   ruling P5 accepts for the stance gap.
+3. **Defend's floor is `ceiling(world + 4)`**, so it can be up to a point more than +4.
+4. **A peg defender's target can sit up to 1.25 above its formula** before it steps down
+   (Q5's hysteresis) — small standing inflows, which become hot money.
+5. **`te_mon_peg_state` reads "Trusted" for a country that has never been under pressure even
+   with an empty vault the month it empties** — confidence is a stock, and says so a month
+   or two later.
+6. **The Defend clock and a delegated peg-defence bank are redundant but harmless** — the
+   clamp raises the target the mandate set.
+7. **Command economies on the gold law** take step 10's off-gold branch (no dial): hot money
+   is paid out the month they go planned.
+
+#### IN-GAME VERIFICATION CHECKLIST (phase 3)
+
+Continues the numbering. 36–39 are §19 row 3's four exit criteria — `te_debug_monetary.8`'s
+header says how to stage each; 40–42 can invalidate a mechanism; 43–47 are numbers and UI.
+
+36. **World rate = World Reference Rate in 1836, and stays there** under observation until a
+    great power takes a discretionary dial. If it moves on its own, some great power is
+    passing `te_mon_rate_is_discretionary` that should not — `.8` prints both accumulators.
+37. **A world-rate rise drains a small gold country.** `.8` option a, as a small gold country
+    on a manual target: gap −2, *Gold Flow* ≈ −0.4% of GDP a month, the treasury falling by
+    the same figure, then (under a tenth of the reserve limit) the flow stops and *Peg
+    Confidence* falls ~6 a month until `te_peg.1` fires at 20.
+38. **AI on peg defence survives +2pp.** Same option, observer mode, two years: targets step
+    up within a month, and no `te_peg.1` for a tag that was out of debt at the start.
+39. **World + 5 yields no lasting gain.** Inflows stop when *borrowed gold* reaches one
+    reserve limit even if everything was spent; on dropping the target the balance leaves at
+    twice the speed; if it cannot be paid, confidence collapses. Judge the whole run on
+    treasury **and** the downturn it cost (owner decision I).
+40. **`add_treasury` with a script value that reads a variable** (`te_mon_gold_flow_signed`)
+    — every existing use in the mod passes a constant-shaped value. If the treasury does not
+    move while *Gold Flow* reads non-zero, that is the cause. Also §17 check 11: an inflow
+    near the reserve limit — does the engine diminish it? (`te_mon_gold_inflow_room` caps at
+    the limit, so it should never be asked to.)
+41. **`value = X` inside an `if` in a script value resets the running total**
+    (`te_mon_target_min`'s Defend branch, `te_mon_target_max`'s gold branch). Vanilla does it
+    (`ep2_japan_values.txt`); if it *adds* instead, gold's ceiling reads 40 and the stepper
+    tooltip shows it at once.
+42. **Global-variable arithmetic**: `change_global_variable … divide = global_var:…` and
+    `add = <script value>` evaluated in the iterated country's scope inside `every_country`.
+    `.8` prints the accumulators; with one discretionary GP the denominator is its GDP in
+    millions.
+43. **Suspension really is fiat**: *Expected Inflation* unpins from 0 within a few months, the
+    target stepper reaches 25, the Peg Defence button disappears, the gold rows stay with
+    *Gold Flow* at 0 and the word "Convertibility suspended"; after 60 months confidence is 50.
+44. **Defend**: the stepper's minus greys out at `ceiling(world + 4)` with
+    `banking_mon_tt_peg_defend_floor`, for 12 months, for a delegated bank too.
+45. **Leaving gold pays the hot money out at once** — enact fiat with a balance; the treasury
+    drops by it on the next pulse, into debt if need be.
+46. **The price–specie term**: a sustained +2 gap shows ~+2.4pp of pressure in
+    `te_debug_monetary.1` and a gold country's inflation climbing toward ~+1.2.
+47. **Formatting**: `@money!` with `|D+=` on *Gold Flow*; `|+=1` on the gap;
+    `GetGlobalVariable('te_world_rate_debug_offset')` rendering blank, not an error, when
+    unset.
 
 ---
 
@@ -1582,7 +1721,9 @@ At ≤ 20 the **convertibility crisis** event fires:
 | **Devalue the peg** | one-off gold reserve revaluation + export boost; confidence reset to 50; infamy and GP relations (the costs the old *Devalue* button carried); expected inflation +3 |
 
 This absorbs banking event 12 ("Gold Standard Pressure") and the gold-peg-defence event at
-`events/banking_cycle_events.txt:1510-1548`.
+`events/banking_cycle_events.txt:1510-1548`. **As shipped:** those line numbers were event
+12's own first two options, so "both" were one event; it is deleted, with its draw in
+`banking_cycle_effects.txt` and its loc, and its flavour text lives on as `te_peg.1.f`.
 
 ---
 
@@ -1989,9 +2130,11 @@ for the eventual removal.
 
 Each phase is playable alone. Later phases can be cut.
 
-**Status.** Rows **1 and 2 are implemented** on branch and pending in-game verification — see
-§0.1–§0.3 and [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks); row 2's
-exit criteria are §0.4 checklist items 24–25. Rows 3–5 are design only. (The table itself
+**Status.** Rows **1, 2 and 3 are implemented** and pending in-game verification — see
+§0.1–§0.3, [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks) and
+[§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks); row 2's exit criteria are
+§0.4 checklist items 24–25 and row 3's are §0.5 items 36–39. Row 3's "regime law stances" had
+already shipped with phase 2 (§13 "Delivered"). Rows 4–5 are design only. (The table itself
 carries no status column and is left as written.)
 
 | Phase | Ships | Interim rule until the next phase | Exit criteria |
@@ -2076,6 +2219,11 @@ carries no status column and is left as written.)
 | Gold flow per pp / gap clamp / hot-money exit speed / inflow cap | 0.002 × GDP per month / ±5 / ×2 / `scaled_gold_reserves` 1 | 12.2 |
 | Peg crisis threshold | confidence ≤ 20 | 12.3 |
 | World / reference rate fallback | `era_base` | 12.1 |
+| World rate clamp (ruling Q1) | −2 – 10 | 12.1 |
+| Peg-defence reserve shortfall (ruling Q5) | 2pp at zero reserves or in debt → 0 at half the limit; the mandate adds half, rounded **up** | 6 |
+| Hot-money exit floor / hot-money cap (rulings Q7, Q8) | a 0.5pp gap / one reserve limit | 12.2 |
+| Peg confidence: start / healthy recovery / crisis cooldown (ruling Q10) | 100 / +1 a month / 24 months | 12.3 |
+| Defend / Suspend / Devalue | world + 4 for 12 months, +40 · 60 months, +2pp premium 5y, credibility lost 10y · confidence 50, revaluation 15% of the reserve limit, +3pp pressure decaying over 2y | 12.3 |
 
 ---
 

@@ -24,8 +24,9 @@
 # ORDER (§16.2): 0 init -> 1 regime code -> 1b monetisation -> 2 target ->
 # 3 drift -> 4 no-dial derived rate -> 5 premium -> 6 inflation -> 6c band
 # modifier -> 6d real-wage dividend -> 7 rate paid -> 8 neutral rate + stance ->
-# 8b creditor-versus-debtor politics -> 9 re-apply the interest modifier. Step
-# 10 is phase 3. Steps 1b, 6c, 6d and 8b are numbered rather than renumbering
+# 8b creditor-versus-debtor politics -> 9 re-apply the interest modifier ->
+# 10 gold flow, hot money and peg confidence (phase 3, §12). Steps 1b, 6c, 6d
+# and 8b are numbered rather than renumbering
 # §16.2's list: 1b settles an INPUT the later steps read (§11's monetisation
 # level), the way step 1 settles the regime code, 6c and 6d are the engine-write
 # half of step 6 (6a is the basket and 6b the inflation loop), and 8b is the
@@ -72,6 +73,72 @@ te_monetary_refresh_world_era_base = {
 			name = te_mon_era_base_world
 			value = te_mon_era_base
 		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# THE WORLD RATE (§12.1) — evaluated once a month for the whole world
+# ----------------------------------------------------------------------------
+# global_var:te_world_rate is a REAL rate: the GDP-weighted mean of
+# te_policy_rate - te_inflation_expected over the great powers whose rate is
+# DISCRETIONARY (te_mon_rate_is_discretionary: a dial, and not on peg defence).
+# Whenever no great power qualifies it is the reference rate, te_mon_era_base —
+# which is what it is in 1836, where Britain's AI bank is on peg defence and
+# France and Austria are on commodity money with no dial at all.
+#
+# DISCRETIONARY-ONLY IS WHAT KEEPS IT FROM BEING CIRCULAR. A peg defender's
+# target IS the world rate and a no-dial rate is world + spread, so averaging
+# either would define the world rate in terms of itself and ratchet it up by the
+# spread every month. §19 row 3's first exit criterion — "sits at era_base in
+# 1836 and does not drift on its own" — is this gate and nothing else.
+#
+# IT READS WHAT THE COUNTRIES' LAST PULSE LEFT. The relative order of the global
+# on_monthly_pulse and on_monthly_pulse_country is unknown (§17 check 7), so the
+# inputs may be this month's or last month's, and every consumer reads the
+# per-country copy step 0 takes (te_mon_world_rate_now). The policy rate moves a
+# third of a point a month and expectations slower, so the lag is immaterial.
+#
+# TWO ACCUMULATORS, reset here every call: sum of weight x real rate, and sum
+# of weight, with weight = GDP in millions (fixed-point headroom, §12.1).
+#
+# THE DEBUG OFFSET. global_var:te_world_rate_debug_offset is added when it
+# exists. Nothing in play sets it; te_debug_monetary.8 does, because §19 row 3's
+# third exit criterion ("AI on peg defence survives a 2pp world-rate rise")
+# cannot otherwise be staged without waiting for a great power to hike.
+#
+# Must run AFTER te_monetary_refresh_world_era_base, whose global it falls back
+# on. Scope: any.
+te_monetary_refresh_world_rate = {
+	set_global_variable = { name = te_world_rate_acc_num value = 0 }
+	set_global_variable = { name = te_world_rate_acc_den value = 0 }
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			te_mon_rate_is_discretionary = yes
+		}
+		change_global_variable = { name = te_world_rate_acc_num add = te_mon_world_rate_weighted_real }
+		change_global_variable = { name = te_world_rate_acc_den add = te_mon_world_rate_weight }
+	}
+	if = {
+		limit = { global_var:te_world_rate_acc_den > 0 }
+		set_global_variable = { name = te_world_rate value = global_var:te_world_rate_acc_num }
+		change_global_variable = { name = te_world_rate divide = global_var:te_world_rate_acc_den }
+	}
+	else = {
+		set_global_variable = { name = te_world_rate value = global_var:te_mon_era_base_world }
+	}
+	if = {
+		limit = { has_global_variable = te_world_rate_debug_offset }
+		change_global_variable = { name = te_world_rate add = global_var:te_world_rate_debug_offset }
+	}
+	if = {
+		limit = { global_var:te_world_rate < te_mon_world_rate_min }
+		set_global_variable = { name = te_world_rate value = te_mon_world_rate_min }
+	}
+	if = {
+		limit = { global_var:te_world_rate > te_mon_world_rate_max }
+		set_global_variable = { name = te_world_rate value = te_mon_world_rate_max }
 	}
 }
 
@@ -183,6 +250,12 @@ te_monetary_monthly_update = {
 
 	# --- 9. write it into the engine ----------------------------------------
 	te_monetary_apply_interest_modifiers = yes
+
+	# --- 10. gold flow, hot money, peg confidence (§12.2-12.3) --------------
+	# Last, as §16.2 orders it: it reads the policy rate step 3 settled and
+	# writes the flow step 6 will price NEXT month (the same one-month lag
+	# ruling P5 accepts for the stance gap).
+	te_monetary_update_gold = yes
 }
 
 
@@ -211,6 +284,18 @@ te_monetary_init_variables = {
 	# the world reference rate, not persistent state, and it must be overwritten
 	# every pulse or a country would keep reading the era it was created in.
 	set_variable = { name = te_mon_era_base_now value = global_var:te_mon_era_base_world }
+
+	# The same per-pulse cache for the phase-3 WORLD rate (§12.1), and the same
+	# self-heal: a save from before phase 3, or a pulse that beats the month's
+	# first global refresh, reads the reference rate — which is exactly §12.1's
+	# stated fallback when has_global_variable is false.
+	if = {
+		limit = { has_global_variable = te_world_rate }
+		set_variable = { name = te_mon_world_rate_now value = global_var:te_world_rate }
+	}
+	else = {
+		set_variable = { name = te_mon_world_rate_now value = var:te_mon_era_base_now }
+	}
 
 	if = {
 		limit = { NOT = { has_variable = te_mon_work } }
@@ -426,6 +511,44 @@ te_monetary_init_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_mon_hyper_cooldown } }
 		set_variable = { name = te_mon_hyper_cooldown value = 0 }
+	}
+
+	# --- phase 3: gold and the peg (§12) ------------------------------------
+	# Zeroes again, and again they are what an earlier save looks like: no flow,
+	# no borrowed gold, nothing suspended, nobody defending. Confidence is the
+	# exception — a peg nobody has tested is a peg nobody doubts, so it seeds
+	# full rather than empty, or every gold country would open in a crisis.
+	if = {
+		limit = { NOT = { has_variable = te_gold_flow_gap } }
+		set_variable = { name = te_gold_flow_gap value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_gold_flow } }
+		set_variable = { name = te_gold_flow value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_gold_flow_pct } }
+		set_variable = { name = te_gold_flow_pct value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_gold_hot_money } }
+		set_variable = { name = te_gold_hot_money value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_peg_confidence } }
+		set_variable = { name = te_peg_confidence value = te_mon_peg_confidence_start }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_peg_crisis_cooldown } }
+		set_variable = { name = te_peg_crisis_cooldown value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_peg_defend_months } }
+		set_variable = { name = te_peg_defend_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_peg_suspended_months } }
+		set_variable = { name = te_peg_suspended_months value = 0 }
 	}
 }
 
@@ -694,7 +817,11 @@ te_monetary_update_target = {
 		limit = { is_player = no }
 		set_variable = { name = te_mon_delegated value = 1 }
 		if = {
-			limit = { has_law_or_variant = law_type:law_gold_standard }
+			# te_mon_is_on_gold, not the law: an AI that suspended convertibility
+			# (§12.3) has a free dial for five years and runs it on an ordinary
+			# mandate, then goes back to defending the peg when the suspension
+			# ends.
+			limit = { te_mon_is_on_gold = yes }
 			set_variable = { name = te_mon_mandate value = 3 }
 		}
 		else_if = {
@@ -718,12 +845,13 @@ te_monetary_update_target = {
 	}
 
 	# Peg defence is a gold-standard mandate only (§6). A country that leaves
-	# gold falls back to price stability rather than keeping a mandate whose
-	# formula no longer means anything.
+	# gold — or suspends convertibility, which leaves no peg to defend (§12.3) —
+	# falls back to price stability rather than keeping a mandate whose formula
+	# no longer means anything.
 	if = {
 		limit = {
 			var:te_mon_mandate = 3
-			NOT = { has_law_or_variant = law_type:law_gold_standard }
+			te_mon_is_on_gold = no
 		}
 		set_variable = { name = te_mon_mandate value = 1 }
 	}
@@ -739,10 +867,42 @@ te_monetary_update_target = {
 			}
 		}
 		if = {
-			# 3 peg defence: hold the reference rate so gold flows net to zero.
-			# Ignores the domestic cycle — and inflation — by design.
+			# 3 peg defence (§6): world rate + 0.5 x reserve shortfall, so gold
+			# flows net to zero — or run inwards while the vault is empty.
+			# Ignores the domestic cycle — and inflation — by design. The world
+			# rate is the phase-3 REAL one (§12.1), which a gold country can
+			# target directly because its own expected inflation is pinned at 0.
+			#
+			# ROUNDED UP, WITH ITS OWN HYSTERESIS (ruling Q5). The shared rule
+			# below rounds to nearest and tolerates a 0.75pp miss, which for
+			# every other mandate is noise — but a peg defender parked 0.75pp
+			# UNDER the world rate bleeds gold every month by construction. So
+			# this mandate moves its target whenever the target is below the
+			# formula, takes the next integer UP (the 0.05 keeps a formula of
+			# 3.00001 from costing a whole point), and comes down only once it
+			# is more than a point and a quarter too high. Then it skips the
+			# shared rule by handing it the target it has just settled.
 			limit = { var:te_mon_mandate = 3 }
-			set_variable = { name = te_mon_work value = var:te_mon_era_base_now }
+			set_variable = { name = te_mon_work value = te_mon_peg_defence_target }
+			set_variable = { name = te_mon_work2 value = var:te_policy_rate_target }
+			change_variable = { name = te_mon_work2 subtract = var:te_mon_work }
+			if = {
+				limit = {
+					OR = {
+						var:te_mon_work2 < -0.05
+						var:te_mon_work2 > 1.25
+					}
+				}
+				set_variable = {
+					name = te_policy_rate_target
+					value = {
+						value = var:te_mon_work
+						subtract = 0.05
+						ceiling = yes
+					}
+				}
+			}
+			set_variable = { name = te_mon_work value = var:te_policy_rate_target }
 		}
 		else = {
 			# 1 price stability: r^* + pi + 1.0 x (pi - anchor) + cycle_lean.
@@ -923,9 +1083,20 @@ te_monetary_set_derived_rate = {
 		set_variable = { name = te_policy_rate value = 3.0 }
 	}
 	else = {
-		set_variable = { name = te_policy_rate value = var:te_mon_era_base_now }
+		# The WORLD rate since phase 3 (§4, §12.1), no longer the reference
+		# rate: a small country is pulled around by the hegemon's central bank.
+		# Step 7's lenders' floor still stands on the reference rate, so a
+		# world rate under it cannot make a bankless country's debt cheap.
+		set_variable = { name = te_policy_rate value = var:te_mon_world_rate_now }
 		change_variable = { name = te_policy_rate add = var:te_inflation_expected }
 		change_variable = { name = te_policy_rate add = 1.0 }
+		# The world rate can be negative (te_mon_world_rate_min); a derived
+		# rate cannot. Nothing downstream would break — step 7 floors the rate
+		# paid — but the dashboard prints this figure.
+		if = {
+			limit = { var:te_policy_rate < 0 }
+			set_variable = { name = te_policy_rate value = 0 }
+		}
 	}
 }
 
@@ -2018,6 +2189,214 @@ te_monetary_apply_interest_modifiers = {
 		if = {
 			limit = { root ?= this }
 			set_variable = { name = te_rate_paid_rooted value = 1 }
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# STEP 10 — gold flow, hot money and peg confidence (§12.2, §12.3)
+# ----------------------------------------------------------------------------
+# Scope: country. Rulings Q6-Q10 (monetary_policy_design.md §0.5).
+#
+#   gap  = clamp( policy_rate - world_rate , -5 , +5 )
+#   flow = gap x 0.002 x gdp     a month; positive = inflow
+#
+# WHO. te_mon_has_gold_flows — on gold (the law AND convertibility) with a
+# national bank. A gold country without a bank pays the world rate, so its gap
+# and its drain are zero by construction (§12.2). Everyone else takes the `else`
+# at the foot of this effect, which is a handful of variable writes.
+#
+# add_treasury, NOT A SCALED EXPENSE MODIFIER (§12.2's sign argument): an
+# expense modifier feeds total_expenses, which the fiscal-stimulus reader and
+# the §9.1 deficit term both read, so an OUTFLOW would register as deficit
+# spending — stimulus and inflation, the wrong sign twice. It never appears in
+# the budget ledger, which is why the dashboard prints the flow.
+#
+# INFLOWS ARE HOT MONEY, NOT INCOME. Every pound that comes in is recorded in
+# te_gold_hot_money, and:
+#
+#   * it comes in only while the country is out of debt (ruling Q6 — gold that
+#     arrives into a debt pays the debt down, and could then never be asked
+#     back, because outflows stop for a country in debt), while reserves are
+#     under the engine's limit, and while the hot-money balance is itself under
+#     one reserve limit (ruling Q8) — te_mon_gold_inflow_room is both caps;
+#   * when the gap falls to <= 0 it leaves FIRST, at twice the ordinary speed
+#     and never slower than a half-point gap would give (ruling Q7), before any
+#     ordinary drain starts;
+#   * it adds nothing to peg confidence — and while it is queueing to leave a
+#     country that cannot pay it, it is what empties confidence fastest.
+#
+# UNDER PRESSURE (te_mon_peg_under_pressure: reserves under a tenth of the
+# limit, or any debt) the OUTFLOW stops — a negative add_treasury would only
+# deepen the debt — and te_peg_confidence moves instead, by
+# te_mon_peg_confidence_move. Out from under it, confidence heals a point a
+# month (ruling Q10; §12.3 is silent, and without it an episode would scar a
+# country for the rest of the campaign).
+#
+# NO OUTFLOW EVER EXCEEDS THE RESERVES. The drain is capped at gold_reserves, so
+# this step can empty a treasury and can never put a country into debt.
+#
+# THE CRISIS. At confidence <= te_mon_peg_crisis_threshold the convertibility
+# crisis te_peg.1 goes out (events/te_peg_events.txt), with the same
+# cooldown-set-here shape as step 6c's hyperinflation crisis and for the same
+# reason: an unanswered event must not be handed out again next month.
+#
+# THE THREE CLOCKS tick here, once a pulse, AFTER everything that reads them:
+# te_peg_crisis_cooldown, te_peg_defend_months (the Defend option's year at
+# world + 4 — te_mon_target_min reads it) and te_peg_suspended_months (the
+# Suspend option's five years as fiat — te_mon_is_on_gold reads it). When the
+# suspension runs out convertibility resumes at te_mon_peg_devalue_confidence
+# (50): a peg that has been broken once is not trusted like one that never was.
+#
+# LEAVING GOLD WITH BORROWED GOLD ON THE BOOKS PAYS IT BACK AT ONCE (ruling Q9).
+# A country that is no longer on gold at all — the law changed, or the national
+# bank went — has its whole hot-money balance leave in one payment, debt or no
+# debt; otherwise "pull gold in, then enact fiat" is the free money §20 risk 7
+# exists to prevent. A SUSPENSION is different and deliberately so: suspending
+# convertibility IS refusing to pay gold out, so the balance is frozen, not
+# paid, and is waiting when the peg resumes.
+te_monetary_update_gold = {
+	if = {
+		limit = { te_mon_has_gold_flows = yes }
+
+		set_variable = { name = te_gold_flow_gap value = te_mon_gold_gap_value }
+		set_variable = { name = te_gold_flow value = 0 }
+
+		# --- inflow ---------------------------------------------------------
+		if = {
+			limit = {
+				var:te_gold_flow_gap > 0
+				scaled_debt <= 0
+			}
+			set_variable = { name = te_gold_flow value = te_mon_gold_flow_unit }
+			change_variable = { name = te_gold_flow multiply = var:te_gold_flow_gap }
+			set_variable = { name = te_mon_work value = te_mon_gold_inflow_room }
+			if = {
+				limit = { var:te_gold_flow > var:te_mon_work }
+				set_variable = { name = te_gold_flow value = var:te_mon_work }
+			}
+			change_variable = { name = te_gold_hot_money add = var:te_gold_flow }
+		}
+		# --- outflow: hot money first, then the ordinary drain --------------
+		else_if = {
+			limit = {
+				var:te_gold_flow_gap <= 0
+				te_mon_peg_under_pressure = no
+			}
+			# te_mon_work = the pp of gap this month's outflow is worth.
+			set_variable = { name = te_mon_work value = var:te_gold_flow_gap }
+			change_variable = { name = te_mon_work multiply = -1 }
+			if = {
+				limit = { var:te_gold_hot_money > 0 }
+				if = {
+					limit = { var:te_mon_work < te_mon_gold_hot_exit_gap_floor }
+					set_variable = { name = te_mon_work value = te_mon_gold_hot_exit_gap_floor }
+				}
+				change_variable = { name = te_mon_work multiply = te_mon_gold_hot_exit_speed }
+			}
+			change_variable = { name = te_mon_work multiply = te_mon_gold_flow_unit }
+			# Hot money leaves no faster than there is hot money...
+			if = {
+				limit = {
+					var:te_gold_hot_money > 0
+					var:te_mon_work > var:te_gold_hot_money
+				}
+				set_variable = { name = te_mon_work value = var:te_gold_hot_money }
+			}
+			# ...and nothing leaves faster than there is gold.
+			set_variable = { name = te_mon_work2 value = te_mon_gold_reserves_now }
+			if = {
+				limit = { var:te_mon_work > var:te_mon_work2 }
+				set_variable = { name = te_mon_work value = var:te_mon_work2 }
+			}
+			if = {
+				limit = { var:te_gold_hot_money > 0 }
+				change_variable = { name = te_gold_hot_money subtract = var:te_mon_work }
+				if = {
+					limit = { var:te_gold_hot_money < 0 }
+					set_variable = { name = te_gold_hot_money value = 0 }
+				}
+			}
+			set_variable = { name = te_gold_flow value = var:te_mon_work }
+			change_variable = { name = te_gold_flow multiply = -1 }
+		}
+
+		if = {
+			limit = { NOT = { var:te_gold_flow = 0 } }
+			add_treasury = te_mon_gold_flow_signed
+		}
+		set_variable = { name = te_gold_flow_pct value = te_mon_gold_flow_pct_value }
+
+		# --- peg confidence -------------------------------------------------
+		if = {
+			limit = { te_mon_peg_under_pressure = yes }
+			change_variable = { name = te_peg_confidence add = te_mon_peg_confidence_move }
+		}
+		else = {
+			change_variable = { name = te_peg_confidence add = 1 }
+		}
+		if = {
+			limit = { var:te_peg_confidence > 100 }
+			set_variable = { name = te_peg_confidence value = 100 }
+		}
+		if = {
+			limit = { var:te_peg_confidence < 0 }
+			set_variable = { name = te_peg_confidence value = 0 }
+		}
+
+		# --- the convertibility crisis --------------------------------------
+		if = {
+			limit = {
+				var:te_peg_confidence <= te_mon_peg_crisis_threshold
+				var:te_peg_crisis_cooldown = 0
+			}
+			set_variable = { name = te_peg_crisis_cooldown value = te_mon_peg_crisis_cooldown_months }
+			trigger_event = { id = te_peg.1 }
+		}
+	}
+	else = {
+		set_variable = { name = te_gold_flow_gap value = 0 }
+		set_variable = { name = te_gold_flow value = 0 }
+		set_variable = { name = te_gold_flow_pct value = 0 }
+
+		# Off gold altogether: borrowed gold goes home, and the next peg this
+		# country enters starts trusted. Suspended: frozen, both of them.
+		if = {
+			limit = { te_mon_peg_is_suspended = no }
+			if = {
+				limit = { var:te_gold_hot_money > 0 }
+				add_treasury = te_mon_gold_hot_money_payout
+				set_variable = { name = te_gold_hot_money value = 0 }
+			}
+			set_variable = { name = te_peg_confidence value = te_mon_peg_confidence_start }
+		}
+		# The LAW itself gone: a suspension or a defence of a peg that no
+		# longer exists is nothing, and must not be waiting for a country that
+		# enacts the gold standard again twenty years later.
+		if = {
+			limit = { NOT = { has_law_or_variant = law_type:law_gold_standard } }
+			set_variable = { name = te_peg_suspended_months value = 0 }
+			set_variable = { name = te_peg_defend_months value = 0 }
+		}
+	}
+
+	# --- the three clocks ---------------------------------------------------
+	if = {
+		limit = { var:te_peg_crisis_cooldown > 0 }
+		change_variable = { name = te_peg_crisis_cooldown subtract = 1 }
+	}
+	if = {
+		limit = { var:te_peg_defend_months > 0 }
+		change_variable = { name = te_peg_defend_months subtract = 1 }
+	}
+	if = {
+		limit = { var:te_peg_suspended_months > 0 }
+		change_variable = { name = te_peg_suspended_months subtract = 1 }
+		if = {
+			limit = { var:te_peg_suspended_months <= 0 }
+			set_variable = { name = te_peg_suspended_months value = 0 }
+			set_variable = { name = te_peg_confidence value = te_mon_peg_devalue_confidence }
 		}
 	}
 }

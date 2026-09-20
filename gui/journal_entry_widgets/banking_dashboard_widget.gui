@@ -986,9 +986,9 @@ flowcontainer = {
 
 					### World reference rate — read-only, the same figure for
 					### every country, and the anchor the rest of the block is
-					### measured against: a no-dial country pays it plus a
-					### point, a gold standard must stay within two of it, and
-					### Peg Defence parks the target on it exactly. Public
+					### measured against: it is the base of the lenders' floor
+					### (§10) and what the World Rate below falls back to when
+					### no great power sets a rate of its own. Public
 					### information by spec §10, unlike anything downstream of
 					### the neutral rate.
 					###
@@ -1007,6 +1007,30 @@ flowcontainer = {
 						blockoverride "condition_value" {
 							banking_dash_condition_value = {
 								text = "banking_dash_mon_world_value"
+							}
+						}
+					}
+
+					### World rate (phase 3, §12.1) — the REAL rate the discretionary
+					### great powers are actually running, GDP-weighted. A no-dial
+					### country pays it plus expectations plus a point, Peg Defence
+					### targets it, and a gold country's reserves move on the gap
+					### against it. Built from displayed figures only (policy rates
+					### and expected inflation), so it is printed exactly.
+					###
+					### te_mon_world_rate_now is the per-pulse copy of
+					### global_var:te_world_rate, read for the same reason as
+					### te_mon_era_base_now above; its own readiness handler
+					### because a phase-2 save has none until its first pulse.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_worldrate_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_worldrate_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_worldrate_value"
 							}
 						}
 					}
@@ -1069,6 +1093,59 @@ flowcontainer = {
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) )]"
+						}
+					}
+
+					### ---- Gold and the peg (phase 3, §12.2-12.3) ---------------
+					### Three rows, for a gold-standard country with a national
+					### bank only (banking_mon_shows_gold) — suspended or not; the
+					### values' customizable localization says "suspended" where
+					### that is the answer. None of it is hidden state: the gap is
+					### policy rate minus world rate, both displayed.
+					###
+					### Gap against the world rate — what moves the gold.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_goldgap_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_goldgap_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_goldgap_value"
+							}
+						}
+					}
+
+					### Gold flow this month. add_treasury never appears in the
+					### budget ledger (§12.2), so this row is the only place the
+					### player can see it; the tooltip carries the hot-money
+					### balance that says how much of the vault is borrowed.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_goldflow_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_goldflow_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_goldflow_value"
+							}
+						}
+					}
+
+					### Peg confidence, 0-100. §3 asks for a bar; a figure with a
+					### word beside it reads the same and costs no new widget.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_pegconf_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_pegconf_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_pegconf_value"
+							}
 						}
 					}
 

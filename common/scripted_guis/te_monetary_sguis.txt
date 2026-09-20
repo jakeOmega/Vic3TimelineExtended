@@ -91,13 +91,18 @@ banking_mon_control_sgui = {
 				te_mon_is_delegated = no
 			}
 			# The bound is te_mon_target_min either way; only the reason for it
-			# differs. A gold standard's floor is the world reference rate minus
-			# two, which is worth naming — unlike the digital floor, the player
-			# cannot read it off the law that imposes it.
+			# differs. While §12.3's Defend option runs, the floor is the world
+			# rate plus four, which is worth naming — unlike the digital floor,
+			# the player cannot read it off the law that imposes it. (The
+			# phase-1 gold band that used to be named here went when gold flows
+			# arrived: on gold the dial is now free, and the reserves pay.)
 			trigger_if = {
-				limit = { has_law_or_variant = law_type:law_gold_standard }
+				limit = {
+					te_mon_peg_is_defending = yes
+					te_mon_is_on_gold = yes
+				}
 				custom_tooltip = {
-					text = banking_mon_tt_gold_above_floor
+					text = banking_mon_tt_peg_defend_floor
 					te_mon_target_can_step_down = yes
 				}
 			}
@@ -122,18 +127,9 @@ banking_mon_control_sgui = {
 				text = banking_mon_tt_not_delegated
 				te_mon_is_delegated = no
 			}
-			trigger_if = {
-				limit = { has_law_or_variant = law_type:law_gold_standard }
-				custom_tooltip = {
-					text = banking_mon_tt_gold_below_ceiling
-					te_mon_target_can_step_up = yes
-				}
-			}
-			trigger_else = {
-				custom_tooltip = {
-					text = banking_mon_tt_below_ceiling
-					te_mon_target_can_step_up = yes
-				}
+			custom_tooltip = {
+				text = banking_mon_tt_below_ceiling
+				te_mon_target_can_step_up = yes
 			}
 		}
 
@@ -221,7 +217,7 @@ banking_mon_control_sgui = {
 			}
 			custom_tooltip = {
 				text = banking_mon_tt_gold_only
-				has_law_or_variant = law_type:law_gold_standard
+				te_mon_is_on_gold = yes
 			}
 			custom_tooltip = {
 				text = banking_mon_tt_mandate_binds
@@ -370,9 +366,13 @@ banking_mon_is_delegated = {
 
 # Peg defence is a gold-standard mandate only (§6), so the third mandate button
 # only exists on gold.
+#
+# te_mon_is_on_gold, not the law: a country that has suspended convertibility
+# (§12.3) has no peg to defend, and step 2 would bounce the mandate straight
+# back to price stability.
 banking_mon_is_gold = {
 	scope = country
-	is_shown = { has_law_or_variant = law_type:law_gold_standard }
+	is_shown = { te_mon_is_on_gold = yes }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
@@ -390,6 +390,38 @@ banking_mon_is_gold = {
 banking_mon_is_digital = {
 	scope = country
 	is_shown = { has_law_or_variant = law_type:law_digital_currency }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Phase 3 (§12): does the dashboard show the gold rows — World Rate Gap, Gold
+# Flow, Peg Confidence? A gold-standard LAW with a dial, suspended or not: a
+# suspended country still wants to see its frozen hot money and the clock, and
+# the rows' own customizable localization says "suspended" where that is the
+# answer. A gold country with no national bank has no gap and no flow (§12.2),
+# so it has no rows.
+banking_mon_shows_gold = {
+	scope = country
+	is_shown = {
+		has_law_or_variant = law_type:law_gold_standard
+		te_mon_has_dial = yes
+		has_variable = te_gold_flow_gap
+		has_variable = te_gold_flow
+		has_variable = te_gold_hot_money
+		has_variable = te_peg_confidence
+		has_variable = te_mon_world_rate_now
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Is the World Rate row ready to print? te_mon_world_rate_now is a phase-3
+# variable, so a save from before it has none until its first pulse.
+banking_mon_world_rate_ready = {
+	scope = country
+	is_shown = { has_variable = te_mon_world_rate_now }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }

@@ -4,7 +4,7 @@ This file lists events whose mirrored upper/lower-strata radicals + loyalists sh
 
 **Format:** one bullet per event, with the event id in backticks at the **start of the line**, followed by two sentences of mechanical context explaining why the strata reaction is the real economic content. Don't write one-word category labels — the goal is for this doc to double as the reference for "when *is* strata-targeted reaction actually correct?".
 
-**Format example:**
+**Format example** (the event it quotes, `banking_cycle_events.12`, was removed in monetary phase 3 — absorbed by the convertibility crisis `te_peg.1`, which carries no strata reactions — and is kept here only as the worked example of the format):
 
 > - `` `banking_cycle_events.12` `` — Defending the gold peg deflates wages and rewards creditors who get repaid in stronger currency, so upper-strata loyalist and lower-strata radical reactions reflect direct asset-vs-wage incidence. Abandoning gold inflates debt away, flipping the same incidence — upper-strata radicals (asset holders) and lower-strata loyalists (debtors and wage earners). This is creditor-vs-debtor economics, not a social-progressivism proxy.
 
@@ -20,7 +20,6 @@ The banking-cycle event chain models monetary policy choices (gold standard defe
 - `banking_cycle_events.6` — Currency-stability defense; option .b carries the standard creditor-protection / wage-deflation incidence.
 - `banking_cycle_events.10` — Liquidity crisis response. Option .a's lower-radical / upper-loyalist split reflects emergency liquidity injections that protect bank balance sheets but inflate prices for wage-earners.
 - `banking_cycle_events.11` — Boom-cycle interest-rate decision; tightening punishes borrowers (lower), accommodation punishes creditors (upper). Standard cycle incidence.
-- `banking_cycle_events.12` — Gold standard defence vs devaluation, with the classic creditor-vs-debtor incidence flip across options. (See worked example above.)
 - `banking_cycle_events.13` — Industrial overinvestment response: defending profits vs letting bubble correct. The strata reaction tracks asset-holder vs wage-earner exposure to the correction.
 - `banking_cycle_events.17` — Cycle-stage panic response; options trade creditor protection vs broad relief, with strata reactions tracking who bears the cost.
 - `banking_cycle_events.18` — Asset-deflation politics with within-option mirrored incidence — the policy choice itself sets winners and losers.

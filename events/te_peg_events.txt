@@ -1,0 +1,203 @@
+﻿# ============================================================================
+# Monetary Policy — the convertibility crisis (§12.3)
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §12.3, and §0.5 for what phase 3
+# shipped (rulings Q9-Q12). System overview: docs/systems/mod_systems.md
+# § Banking Cycle -> Monetary Policy (phase 3); the variable contract is in the
+# header of common/script_values/te_monetary_script_values.txt.
+#
+# HOW IT IS REACHED. Step 10 of the monthly update (te_monetary_update_gold,
+# common/scripted_effects/te_monetary_effects.txt) fires this the month a gold
+# standard country's te_peg_confidence falls to te_mon_peg_crisis_threshold (20)
+# or under, if te_peg_crisis_cooldown has run out — and sets the cooldown
+# itself, so an unanswered event is not handed out again at the next pulse.
+# There is deliberately no `trigger` block: the gate lives in exactly one place
+# (the same rule, for the same reason, as te_inflation.1).
+#
+# IT ABSORBED banking_cycle_events.12, "Gold Standard Pressure" — a random draw
+# that told a gold country its reserves were leaving whether or not they were.
+# Now they are, the dashboard shows it for months beforehand, and this event is
+# the end of that road rather than a bolt from the blue. The old event's flavour
+# text lives on as te_peg.1.f.
+#
+# EVERY OPTION WRITES AN INPUT, NEVER THE RATE. Defend writes a month counter
+# that te_mon_target_min reads; Suspend writes the counter te_mon_is_on_gold
+# reads; Devalue writes confidence. None of them touches te_policy_rate or
+# te_policy_rate_target, and none may ever call te_monetary_monthly_update — it
+# is not idempotent (see its contract comment). te_peg_confidence is the one
+# variable here that the update also integrates; §12.3 defines Defend and
+# Devalue AS a jump in it, which makes this the phase-3 entry on the variable
+# contract's short list of documented outside writers.
+#
+# THE THREE ANSWERS, and why each is somebody's best one:
+#
+#   * DEFEND keeps the peg and everything it buys — the credibility bonus, the
+#     pinned expectations — and pays in the real economy: a year with the rate
+#     four points over the world's is a downturn, deliberately. Right for a
+#     country whose debt is cheap BECAUSE of the peg.
+#   * SUSPEND is 1931. Five years with a free dial and no gold leaving, bought
+#     with +2pp on every loan for as long as it lasts and the gold bonus gone
+#     for ten. Right for a country at war, or already in a panic, that cannot
+#     survive Defend's year.
+#   * DEVALUE keeps convertibility at a worse price: the vault is revalued,
+#     exporters get five good years, and the neighbours — who have just been
+#     undercut — remember. Confidence comes back to 50, not to 100; a peg that
+#     moved once can move again.
+# ============================================================================
+namespace = te_peg
+
+te_peg.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_peg.1.t
+	desc = te_peg.1.d
+	flavor = te_peg.1.f
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	# --- defend -------------------------------------------------------------
+	# The default: a government that does nothing is a government whose central
+	# bank does what central banks on gold did. te_peg_defend_months raises
+	# te_mon_target_min to the world rate + te_mon_peg_defend_margin, which the
+	# monthly clamp applies to a manual target and a delegated one alike and
+	# the dashboard's stepper greys out against.
+	option = {
+		name = te_peg.1.a
+		default_option = yes
+		custom_tooltip = te_peg.1.a.tt
+
+		hidden_effect = {
+			set_variable = { name = te_peg_defend_months value = te_mon_peg_defend_months }
+			change_variable = { name = te_peg_confidence add = te_mon_peg_defend_confidence }
+			if = {
+				limit = { var:te_peg_confidence > 100 }
+				set_variable = { name = te_peg_confidence value = 100 }
+			}
+		}
+
+		ai_chance = {
+			base = 5
+			# A great power's peg is what its cheap debt stands on.
+			modifier = {
+				trigger = { country_rank >= rank_value:major_power }
+				add = 2
+			}
+			# A year at world + 4 on top of a slump already under way.
+			modifier = {
+				trigger = {
+					has_variable = finance_cycle_value
+					banking_cycle_is_recession = yes
+				}
+				add = -3
+			}
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = -2
+			}
+		}
+	}
+
+	# --- suspend convertibility ---------------------------------------------
+	# The counter is the regime switch (te_mon_is_on_gold); the two timed
+	# modifiers are the price. Hot money is FROZEN for the duration, not paid
+	# out (step 10, ruling Q9): refusing to pay gold out is what a suspension
+	# is. When the counter reaches 0 step 10 resumes convertibility at
+	# te_mon_peg_devalue_confidence.
+	option = {
+		name = te_peg.1.b
+		custom_tooltip = te_peg.1.b.tt
+
+		hidden_effect = {
+			set_variable = { name = te_peg_suspended_months value = te_mon_peg_suspension_months }
+			set_variable = { name = te_peg_defend_months value = 0 }
+		}
+
+		add_modifier = {
+			name = te_mon_peg_suspension
+			days = 1825
+		}
+		add_modifier = {
+			name = te_mon_peg_credibility_lost
+			days = 3650
+		}
+
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 4
+			}
+			modifier = {
+				trigger = {
+					has_variable = finance_cycle_value
+					banking_cycle_is_panic = yes
+				}
+				add = 3
+			}
+		}
+	}
+
+	# --- devalue the peg ----------------------------------------------------
+	# Infamy and great-power relations are the costs the old Devalue button
+	# carried (§12.3), restated at the same size as
+	# banking_effect_cb_fx_devaluation rather than shared with it: that effect
+	# also switches on a journal-entry tool, which this is not.
+	option = {
+		name = te_peg.1.c
+		custom_tooltip = te_peg.1.c.tt
+
+		hidden_effect = {
+			set_variable = { name = te_peg_confidence value = te_mon_peg_devalue_confidence }
+			set_variable = { name = te_peg_defend_months value = 0 }
+		}
+
+		add_treasury = te_mon_peg_devalue_revaluation
+
+		add_modifier = {
+			name = te_mon_peg_devalued
+			days = 1825
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = te_mon_peg_devaluation_pressure
+			days = 730
+			is_decaying = yes
+		}
+
+		change_infamy = { value = 1 }
+		custom_tooltip = {
+			text = FX_DEVALUATION_GP_RELATIONS_TT
+			every_country = {
+				limit = {
+					country_rank >= rank_value:great_power
+					NOT = { this = root }
+				}
+				change_relations = {
+					country = root
+					value = -3
+				}
+			}
+		}
+
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					has_variable = finance_cycle_value
+					banking_cycle_is_recession = yes
+				}
+				add = 2
+			}
+			# Small countries devalue; great powers' pegs are their word.
+			modifier = {
+				trigger = { country_rank >= rank_value:major_power }
+				add = -1
+			}
+		}
+	}
+}
