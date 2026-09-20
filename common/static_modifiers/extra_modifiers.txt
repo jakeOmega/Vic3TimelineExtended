@@ -6887,6 +6887,10 @@ banking_stance_band_2 = {
 }
 
 banking_stance_band_3 = {
+	# An EMPTY modifier that is still applied, so the entry always names the
+	# stance. It needs an icon all the same: the journal entry lists it, and a
+	# modifier with none logs "Could not find texture ... '' not found".
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 }
 
 banking_stance_band_4 = {
@@ -6973,6 +6977,10 @@ te_inflation_band_deflation = {
 }
 
 te_inflation_band_comfort = {
+	# Empty, still applied, and since the managed modifiers moved onto the
+	# banking journal entry it is LISTED there — so it needs an icon, or the
+	# panel logs "Could not find texture ... '' not found" on every open.
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 }
 
 te_inflation_band_elevated = {

@@ -81,7 +81,7 @@ wrong or leave open. **Phase 2 has its own equivalent in [§0.4](#04-phase-2-as-
 Smaller known roughnesses, all judged acceptable for a first pass: the era proxy is
 non-monotonic if a great power holds `globalization` without `macroeconomics`;
 `te_mon_gdp_last_year` is seeded at game start, so the first year's growth term reads ≈ −0.3
-once; `banking_stance_band_3` is an empty modifier with no icon (the offset that used to read
+once; `banking_stance_band_3` is an empty modifier (it had no icon until the phase-3 playtest, when it and `te_inflation_band_comfort` — by then also listed on the journal entry — were found logging an empty-texture error on every panel open; both carry one now) (the offset that used to read
 "−20.0%" beside the rate it cancels is gone — the cancel moved into `INJECT:base_values`);
 `pm_shell_pernis_refinery`'s structural term is `workforce_scaled`, so §7.5's "−0.3" is only
 true at one building level; `cb_fx_support`'s `banking_stance_is_tight` easing weight may be

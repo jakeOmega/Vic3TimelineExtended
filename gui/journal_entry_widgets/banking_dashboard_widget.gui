@@ -426,6 +426,23 @@ flowcontainer = {
 	}
 
 	### Bubble pressure
+	### Policy stance, between momentum and bubble pressure — the order of the
+	### bars above, and the order of cause: the stance feeds both. The BAND NAME
+	### only, from the same customizable localization the Monetary Policy block
+	### uses; a country with no dial has no stance, so it has no row.
+	banking_dash_condition_row = {
+		visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		tooltip = "banking_dash_mon_stance_tt"
+		blockoverride "condition_label" {
+			text = "banking_dash_mon_stance_label"
+		}
+		blockoverride "condition_value" {
+			banking_dash_condition_value = {
+				text = "banking_dash_mon_stance_value"
+			}
+		}
+	}
+
 	banking_dash_condition_row = {
 		tooltip = "banking_dash_bubble_tt"
 		blockoverride "condition_label" {
@@ -1617,6 +1634,20 @@ flowcontainer = {
 								text = "banking_dash_mon_stance_value"
 							}
 						}
+					}
+
+					### What the stance is worth, in the open rather than only in the
+					### tooltip. BANDED on purpose: both phrases come from the displayed
+					### band (te_mon_stance_momentum_effect / _bubble_effect), never from
+					### the gap, so nothing here narrows the neutral rate.
+					textbox = {
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						text = "banking_dash_mon_stance_impact_line"
+						autoresize = yes
+						multiline = yes
+						max_width = 460
+						align = left|nobaseline
+						margin_bottom = 2
 					}
 
 					### Delegation — ops 2 (delegate) and 3 (take it back).
