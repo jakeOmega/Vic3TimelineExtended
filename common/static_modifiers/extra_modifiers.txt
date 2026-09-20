@@ -7085,6 +7085,16 @@ te_mon_currency_reform_premium = {
 # only carry the prices, which the monthly update picks up through the two
 # premium modifier types like any other source.
 
+# The carry on borrowed gold (owner decision I), as a line in the budget. A
+# UNIT modifier: step 10 of te_monetary_monthly_update applies it with
+# `multiplier = var:te_gold_carry_applied`, the weekly pounds the hot-money
+# balance costs at the policy rate. It is the one thing the gold mechanism ever
+# shows the treasury — the flows themselves move the central bank's vault.
+te_mon_gold_carry_expense = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1 # REVIEWED 2026-09-20: unit value, multiplied by te_gold_carry_applied (weekly pounds of interest on te_gold_hot_money)
+}
+
 # Suspend convertibility: +2pp of cyclical premium for the five years the
 # suspension runs (days = 1825).
 te_mon_peg_suspension = {

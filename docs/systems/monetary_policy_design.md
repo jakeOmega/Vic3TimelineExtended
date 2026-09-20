@@ -743,7 +743,7 @@ phase 2 (§13 "Delivered"; rulings T7). "FX buttons unchanged" is row 3's own in
 revisiting the AI's better-informed tools "when IGs start reacting to the stance" is moot: the
 stance politics shipped in phase 2, keyed on the displayed band.
 
-#### Owner decisions (phase 3) — H, I and K decided, J open
+#### Owner decisions (phase 3) — H, I and K decided, J resolved by the hybrid model
 
 **H. DECIDED 2026-09-20 — nobody faces a world rate that contains itself.** As first shipped,
 a lone discretionary great power (a *player* Britain in 1836) **was** the world rate: its gap
@@ -771,11 +771,11 @@ to refill a vault or defend a peg. Ruling Q8's cap is kept as a backstop. The ca
 of `te_gold_flow`, so the price–specie term prices the principal only; a suspension freezes
 the balance **and** the carry.
 
-**J. An indebted AI on gold sits a point above the world rate, permanently.** Ruling Q5's
+**J. RESOLVED by the hybrid model (below) — was:** An indebted AI on gold sits a point above the world rate, permanently. Ruling Q5's
 shortfall term treats any debt as an empty vault, so the peg-defence target is world + 1 for
 every AI gold country in debt — a standing −0.125 of momentum a month. That is "the cost of
 the peg" §8 promises, and it is what keeps its confidence from eroding, but AI debt is the
-normal state of many tags. The lever is the 2pp in `te_mon_peg_shortfall_pp`. **It also moves a phase-1 expected number:** a peg-defending AI that is *in debt* now targets `ceiling(world + 1)` = 4 rather than 3, so §0.3 item 3's anchor figures (Britain 1836 at 4.0%) read a point higher for any AI gold country that starts, or falls, into debt. That is this ruling, not a regression — check `scaled_debt` before chasing it. **Still open.**
+normal state of many tags. The lever is the 2pp in `te_mon_peg_shortfall_pp`. **It also moves a phase-1 expected number:** a peg-defending AI that is *in debt* now targets `ceiling(world + 1)` = 4 rather than 3, so §0.3 item 3's anchor figures (Britain 1836 at 4.0%) read a point higher for any AI gold country that starts, or falls, into debt. *(No longer true: the shortfall reads the bank's vault, and debt is not in it.)*
 
 **K. DECIDED 2026-09-20 — a dollarised country's expectations are pinned at the anchor.** This
 closes the item ruling T5 (§0.4) left open. It keeps the metallic pull and gains a pin at
@@ -794,10 +794,10 @@ does not issue. Core now settles near `1 + P/2`. One `else_if` in step 6's expec
 | **Q4** | "On gold" is **one trigger, `te_mon_is_on_gold`** = the law ∧ not suspended, and every peg test goes through it (the metallic anchor, peg defence, gold flows, the 0–15 ceiling, the mandate button). Suspension is a **month counter** (`te_peg_suspended_months`), on the dollarisation precedent (P9); the timed modifiers carry only the prices, and script never reads `has_modifier` on them | "acts as fiat without the law change" (§12.3) needs the law-derived regime overridden, and a missed raw `law_gold_standard` test is silent | grep the monetary files for the raw law test — the survivors are deliberate (regime code, `te_mon_has_dial`, the dashboard's gold-rows gate, the law-gone reset in step 10) |
 | **Q4** | A suspended country gets fiat's **range, anchor, credibility and mandates** — and **not** OMO or monetisation | §12.3 says "free dial, inflation-constrained", and both tools are gated on the fiat/digital *laws* (the OMO bool, `te_mon_can_monetise`); a five-year emergency is not a licence to print | add `country_can_create_unbacked_money_bool` to `te_mon_peg_suspension` |
 | **Q5** | **`reserve_shortfall_pp`** (§6 names it and defines it nowhere) = `4 × max(0, 0.5 − scaled_gold_reserves)`, capped at 2, and **2 outright while in debt**. Peg defence rounds its target **up to a tenth** with its own hysteresis (move when below the formula; come down only when > 0.35 above it) instead of the shared round-to-nearest-integer ± 0.75 — *revised after the first playtest from a whole point, see below* | an integer target under a fractional world rate sits *below* it half the time under round-to-nearest, and a peg defender parked below the world rate bleeds gold by construction — §19's "AI on peg defence survives a 2pp rise" fails on rounding alone | the 2 and the 0.5 in `te_mon_peg_shortfall_pp`; owner decision **J** |
-| **Q6** | "In debt" (§12.3) is **`scaled_debt > 0`**. Inflows also stop while in debt, not only outflows | gold arriving into a debt pays it down, and could then never be asked back because outflows stop in debt — free money through the back door | one trigger line |
+| **Q6 — superseded by the hybrid model** | "In debt" (§12.3) is **`scaled_debt > 0`**. Inflows also stop while in debt, not only outflows | gold arriving into a debt pays it down, and could then never be asked back because outflows stop in debt — free money through the back door | one trigger line |
 | **Q7** | Hot money leaves at 2× the ordinary speed **with a floor of a 0.5pp gap**, and a pending exit that *cannot* be paid hits peg confidence at that doubled, floored rate | §12.2 has the balance leave "when the gap falls to ≤ 0", but 2 × a zero outflow is zero — and peg defence parks everybody at a gap of zero. The confidence half is what makes spending borrowed gold dangerous rather than free | `te_mon_gold_hot_exit_gap_floor` |
-| **Q8** | The hot-money **balance is capped at one reserve limit** (inflows stop when it is reached, whatever the vault holds) | §12.2's own argument is that the reserve cap "would only stop a hoarder"; an unbounded balance leaves 12% of GDP a year for a player who spends it. Owner decision **I** | `te_mon_gold_inflow_room` |
-| **Q9** | A country that stops being on gold **altogether** (law changed, bank gone, command economy, dollarised) pays its whole hot-money balance out **at once, debt or no debt**, and its confidence resets to 100. A **suspension freezes** both instead | "pull gold in, then enact fiat" is otherwise §20 risk 7 by another door; suspending convertibility *is* refusing to pay gold out | the `else` branch of `te_monetary_update_gold` |
+| **Q8 — superseded by the hybrid model** | The hot-money **balance is capped at one reserve limit** (inflows stop when it is reached, whatever the vault holds) | §12.2's own argument is that the reserve cap "would only stop a hoarder"; an unbounded balance leaves 12% of GDP a year for a player who spends it. Owner decision **I** | `te_mon_gold_inflow_room` |
+| **Q9 — revised: the payout is out of the vault, never the treasury** | A country that stops being on gold **altogether** (law changed, bank gone, command economy, dollarised) pays its whole hot-money balance out **at once, debt or no debt**, and its confidence resets to 100. A **suspension freezes** both instead | "pull gold in, then enact fiat" is otherwise §20 risk 7 by another door; suspending convertibility *is* refusing to pay gold out | the `else` branch of `te_monetary_update_gold` |
 | **Q10** | Confidence **seeds at 100**, heals **+1 a month** while not under pressure *and the gap is ≥ 0 with no borrowed gold pending* (otherwise it holds — revised after the first playtest, where a −3 gap with a healthy vault gained confidence while it drained), the four §12.3 terms apply independently while under pressure (`+2` needs only gap ≥ 0 and no pending hot-money exit — "reserves are rebuilding" cannot be tested and is never true in debt), and resumption after a suspension restarts it at 50. The crisis has a 24-month cooldown set by step 10, the same shape as the hyperinflation crisis | §12.3 gives no start value, no recovery and no cooldown; without recovery one episode scars a country for the campaign | four constants |
 | **Q11** | §9.1's **gold-supply term stays deferred** (`(proposed)`, owner undecided — P2), and with it "mine output as a positive input to `te_peg_confidence`" | not in §19 row 3 | — |
 | **Q12** | Devalue's "expected inflation +3" is delivered as **+3pp of inflation *pressure*, decaying over two years** (`te_mon_peg_devaluation_pressure`) | under gold, expectations are pinned at 0 and step 6 re-pins them every pulse, so a write to `te_inflation_expected` is gone in a month | one modifier |
@@ -829,6 +829,41 @@ does not issue. Core now settles near `1 + P/2`. One `else_if` in step 6's expec
 7. **Command economies on the gold law** take step 10's off-gold branch (no dial): hot money
    is paid out the month they go planned.
 
+#### The bank's own reserve — the hybrid model (owner decision, 2026-09-20)
+
+§12.2 moves gold with `add_treasury`, and the first version did. Playing it raised three
+things at once: reserves changed with nothing in the budget to say why; a healthy *treasury*
+made the peg unbreakable however reckless the rate; and four rulings existed only to stop a
+player **spending** borrowed gold. The owner's call was to split the stock:
+
+- **`te_bank_gold` is the central bank's own vault**, measured against the engine's
+  `gold_reserves_limit` (so it grows with the economy and thins out if never topped up).
+  Gold flows move it and **nothing else**; the peg-defence shortfall, the pressure test and
+  peg confidence all read it. It is seeded, without touching the treasury, the first pulse a
+  country has gold flows: the share of the limit its treasury holds, floor **0.5** — where the
+  shortfall is zero, so a fresh gold standard asks for exactly the world rate and §7.4's
+  Britain figure is back to the phase-1 number. Losing the gold *law* un-seeds it.
+- **The fiscal link is `Recapitalise the Bank`** (op 13; `te_mon_effect_recapitalise_bank`):
+  a tenth of the limit from treasury to vault, cash in hand only, **one way** — a reserve the
+  government could draw on is a second wallet. The AI does the same inside step 10, a step a
+  month, when its vault is under a quarter and its treasury over half full.
+- **The carry is the only thing the treasury sees**, as the scaled budget expense
+  `te_mon_gold_carry_expense` (`country_expenses_add`, weekly) — a fourth scaled-modifier
+  site on step 6d's exact shape. It is ordinary interest, so the deficit readers counting it
+  is correct.
+- **Devalue** revalues the vault (+15% of its limit) instead of paying the treasury.
+
+**What it retired:** Q6's "no inflow in debt", Q8's hot-money cap, Q9's payout *from the
+treasury* (borrowed gold now goes home out of the vault), the capitalised carry, the
+"outflow never exceeds the treasury" cap — and **owner decision J**: the shortfall no longer
+treats treasury debt as an empty vault, so an indebted AI with a sound bank sits on the world
+rate. `te_mon_peg_under_pressure` is now the vault under a tenth of its limit and nothing
+else; confidence's `−2 at scaled_debt ≥ 0.5` term stays, as a statement about the sovereign.
+**What it costs:** the peg no longer bleeds the budget directly — §12.2's "a 2pp gap costs a
+quarter of revenue" sizing argument is moot — so the peg bites through confidence, the
+crisis, the carry and whatever the player chooses to recapitalise. §12.2's `add_treasury`
+paragraph and §17 check 11 are superseded by this section.
+
 #### First playtest — owner, 2026-09-20 (Britain and France, 1836, game 1.14.3)
 
 Read from the dashboard and `te_debug_monetary.8`; `debug.log` / `error.log` carried nothing
@@ -839,11 +874,16 @@ France 0 / 25; the Defend floor is still unwalked), **42** (accumulators 117.298
 **39b** (Britain's own copy 3.000 against a global 4.333) and the day-one half of **36**.
 Gold rows show for Britain and not for France.
 
-**§17 check 7, provisionally answered: `on_monthly_pulse_country` runs BEFORE the global
-`on_monthly_pulse`.** One month after Britain went manual, the global read 4.333 and France's
-per-pulse copy still read 3.000 — France had taken its copy before that month's refresh. So
-every consumer of the world rate sees it one month late, which is the lag ruling Q1 already
-tolerates; nothing needs to change, and a second month should show France at the global.
+**§17 check 7, answered: country monthly pulses are STAGGERED, not all on the 1st.** Britain's
+step-10 payment read reserves of 3,456,393 → 3,290,579 (exactly the −165,813 flow), and by
+31 January the treasury stood three weekly budget ticks below that — so Britain's pulse fired
+around the **13th**. France's copy of the world rate lagging the global by a month is the same
+fact seen from the other side: each country's pulse falls on its own day, before or after the
+global `on_monthly_pulse`, so a consumer sees the world rate up to a month late. That is the
+lag ruling Q1 already tolerates. (An earlier revision of this note concluded "country pulse
+runs before the global one"; that was an over-reading of one data point.) **Practical
+consequence for every check in this document: compare across a whole month, never across the
+31st → 1st.** `add_treasury` was confirmed landing, and visible to a read in the same block.
 
 **What the playtest changed:** ruling **Q5** (peg defence now rounds up to a *tenth* — Britain's
 quarter-full vault asked for 3.46 and the whole-point rule gave it 4, a standing point of gap

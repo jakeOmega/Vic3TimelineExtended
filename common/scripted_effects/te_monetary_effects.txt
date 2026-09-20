@@ -594,6 +594,20 @@ te_monetary_init_variables = {
 		limit = { NOT = { has_variable = te_gold_carry } }
 		set_variable = { name = te_gold_carry value = 0 }
 	}
+	# The bank's own vault (the hybrid model): 0 and unseeded until the first
+	# pulse the country has gold flows, when step 10 counts it.
+	if = {
+		limit = { NOT = { has_variable = te_bank_gold } }
+		set_variable = { name = te_bank_gold value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_bank_gold_seeded } }
+		set_variable = { name = te_bank_gold_seeded value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_gold_carry_applied } }
+		set_variable = { name = te_gold_carry_applied value = 0 }
+	}
 	# Owned by the GLOBAL world-rate refresh, which writes them for the members
 	# of the average only; seeded here so every country has a readable zero.
 	if = {
@@ -2280,81 +2294,107 @@ te_monetary_apply_interest_modifiers = {
 
 
 # ----------------------------------------------------------------------------
-# STEP 10 — gold flow, hot money and peg confidence (§12.2, §12.3)
+# STEP 10 — the bank's gold, hot money and peg confidence (§12.2, §12.3)
 # ----------------------------------------------------------------------------
-# Scope: country. Rulings Q6-Q10 (monetary_policy_design.md §0.5).
+# Scope: country. monetary_policy_design.md §0.5, "The bank's own reserve" —
+# the hybrid model the owner chose after the first playtest — and rulings
+# Q5-Q10 as revised there.
 #
 #   gap  = clamp( policy_rate - world_rate , -5 , +5 )
 #   flow = gap x 0.002 x gdp     a month; positive = inflow
 #
+# THE GOLD THAT MOVES IS THE CENTRAL BANK'S, NOT THE TREASURY'S. te_bank_gold
+# is a stock of its own, measured against the engine's reserve limit
+# (te_mon_bank_gold_limit = gold_reserves_limit, so it grows with the economy
+# and a vault that is not topped up thins out by itself). Flows move it and
+# NOTHING ELSE: the treasury is touched only by the carry, which is an ordinary
+# budget expense, and by the player's own recapitalisations. That is what the
+# Bank of England's reserve was — never Exchequer money — and it is what
+# retired the four patch-rulings the first version needed to stop a player
+# SPENDING borrowed gold (no inflow in debt, the hot-money cap, the payout on
+# leaving gold, the capitalised carry): gold that never reaches the treasury
+# cannot be spent.
+#
 # WHO. te_mon_has_gold_flows — on gold (the law AND convertibility) with a
-# national bank. A gold country without a bank pays the world rate, so its gap
-# and its drain are zero by construction (§12.2). Everyone else takes the `else`
-# at the foot of this effect, which is a handful of variable writes.
+# national bank. Everyone else takes the `else` at the foot of this effect.
 #
-# add_treasury, NOT A SCALED EXPENSE MODIFIER (§12.2's sign argument): an
-# expense modifier feeds total_expenses, which the fiscal-stimulus reader and
-# the §9.1 deficit term both read, so an OUTFLOW would register as deficit
-# spending — stimulus and inflation, the wrong sign twice. It never appears in
-# the budget ledger, which is why the dashboard prints the flow.
+# SEEDING. The first pulse a country has gold flows, its vault opens at
+# te_mon_bank_gold_seed: the share of the limit its TREASURY holds, and never
+# less than half. Nothing is taken from the treasury — this is the bank's gold
+# being counted for the first time, not moved — and half is where the
+# peg-defence shortfall reaches zero, so a fresh gold standard starts with a
+# bank that asks for exactly the world rate. A country that loses the gold LAW
+# is un-seeded, and re-seeds against the economy it has when it comes back.
 #
-# INFLOWS ARE HOT MONEY, NOT INCOME. Every pound that comes in is recorded in
-# te_gold_hot_money, and:
+# INFLOWS ARE HOT MONEY. Every pound that comes in is recorded in
+# te_gold_hot_money. It comes in only while the vault is under its limit; when
+# the gap falls to <= 0 it leaves FIRST, at twice the ordinary speed and never
+# slower than a half-point gap would give (ruling Q7), before any ordinary
+# drain starts; and it PAYS THE POLICY RATE while it is here (owner decision I)
+# — te_gold_carry, applied as the scaled expense te_mon_gold_carry_expense so
+# the budget shows a line for it, which is the one thing about all this the
+# treasury ever sees.
 #
-#   * it comes in only while the country is out of debt (ruling Q6 — gold that
-#     arrives into a debt pays the debt down, and could then never be asked
-#     back, because outflows stop for a country in debt), while reserves are
-#     under the engine's limit, and while the hot-money balance is itself under
-#     one reserve limit (ruling Q8) — te_mon_gold_inflow_room is both caps;
-#   * when the gap falls to <= 0 it leaves FIRST, at twice the ordinary speed
-#     and never slower than a half-point gap would give (ruling Q7), before any
-#     ordinary drain starts;
-#   * it adds nothing to peg confidence — and while it is queueing to leave a
-#     country that cannot pay it, it is what empties confidence fastest.
-#
-# UNDER PRESSURE (te_mon_peg_under_pressure: reserves under a tenth of the
-# limit, or any debt) the OUTFLOW stops — a negative add_treasury would only
-# deepen the debt — and te_peg_confidence moves instead, by
+# UNDER PRESSURE (te_mon_peg_under_pressure: the VAULT under a tenth of its
+# limit — the treasury's health no longer has anything to do with it) the
+# outflow stops and te_peg_confidence moves instead, by
 # te_mon_peg_confidence_move. Out from under it, confidence heals a point a
 # month while the gap is >= 0 and no borrowed gold is waiting to leave, and
-# otherwise holds (ruling Q10, revised after the first playtest; §12.3 is silent, and without it an episode would scar a
-# country for the rest of the campaign).
+# otherwise holds (ruling Q10).
 #
-# NO OUTFLOW EVER EXCEEDS THE RESERVES. The drain is capped at gold_reserves, so
-# this step can empty a treasury and can never put a country into debt.
+# THE FISCAL LINK IS RECAPITALISATION, and it runs one way. The dashboard's
+# button (op 13, te_mon_effect_recapitalise_bank) moves te_mon_bank_recap_amount
+# from the treasury into the vault; the AI does the same here, a step a month,
+# when its vault is under a quarter and its treasury over half full. There is
+# no way back out: a reserve the government could draw on is a second wallet,
+# and the whole point of the split is that it is not one.
 #
 # THE CRISIS. At confidence <= te_mon_peg_crisis_threshold the convertibility
 # crisis te_peg.1 goes out (events/te_peg_events.txt), with the same
-# cooldown-set-here shape as step 6c's hyperinflation crisis and for the same
-# reason: an unanswered event must not be handed out again next month.
+# cooldown-set-here shape as step 6c's hyperinflation crisis.
 #
 # THE THREE CLOCKS tick here, once a pulse, AFTER everything that reads them:
-# te_peg_crisis_cooldown, te_peg_defend_months (the Defend option's year at
-# world + 4 — te_mon_target_min reads it) and te_peg_suspended_months (the
-# Suspend option's five years as fiat — te_mon_is_on_gold reads it). When the
-# suspension runs out convertibility resumes at te_mon_peg_devalue_confidence
-# (50): a peg that has been broken once is not trusted like one that never was.
+# te_peg_crisis_cooldown, te_peg_defend_months (te_mon_target_min reads it) and
+# te_peg_suspended_months (te_mon_is_on_gold reads it). When the suspension
+# runs out convertibility resumes at te_mon_peg_devalue_confidence (50).
 #
-# LEAVING GOLD WITH BORROWED GOLD ON THE BOOKS PAYS IT BACK AT ONCE (ruling Q9).
-# A country that is no longer on gold at all — the law changed, or the national
-# bank went — has its whole hot-money balance leave in one payment, debt or no
-# debt; otherwise "pull gold in, then enact fiat" is the free money §20 risk 7
-# exists to prevent. A SUSPENSION is different and deliberately so: suspending
-# convertibility IS refusing to pay gold out, so the balance is frozen, not
-# paid, and is waiting when the peg resumes.
+# OFF GOLD. Borrowed gold goes home out of the VAULT (never the treasury) and
+# confidence resets; a SUSPENSION freezes vault, balance and confidence alike,
+# because suspending convertibility is refusing to pay gold out. Either way
+# the carry stops: no peg, no foreign balances held against it.
+#
+# THE CARRY MODIFIER follows step 6d's shape exactly — remove, compare,
+# re-add, behind `root ?= this`, with te_gold_carry_applied as the persistent
+# multiplier variable (never removed). A silent fallback to x1 would be a pound
+# a week, so like 6d it simply skips the re-add when ROOT is wrong.
 te_monetary_update_gold = {
 	if = {
 		limit = { te_mon_has_gold_flows = yes }
+
+		# --- seed the vault -------------------------------------------------
+		if = {
+			limit = { var:te_bank_gold_seeded = 0 }
+			set_variable = { name = te_bank_gold value = te_mon_bank_gold_seed }
+			set_variable = { name = te_bank_gold_seeded value = 1 }
+		}
+
+		# --- the AI tops its vault up (the player has a button) -------------
+		if = {
+			limit = {
+				is_player = no
+				te_mon_bank_can_recapitalise = yes
+				te_mon_bank_gold_scaled < 0.25
+				scaled_gold_reserves > 0.5
+			}
+			te_mon_effect_recapitalise_bank_silent = yes
+		}
 
 		set_variable = { name = te_gold_flow_gap value = te_mon_gold_gap_value }
 		set_variable = { name = te_gold_flow value = 0 }
 
 		# --- inflow ---------------------------------------------------------
 		if = {
-			limit = {
-				var:te_gold_flow_gap > 0
-				scaled_debt <= 0
-			}
+			limit = { var:te_gold_flow_gap > 0 }
 			set_variable = { name = te_gold_flow value = te_mon_gold_flow_unit }
 			change_variable = { name = te_gold_flow multiply = var:te_gold_flow_gap }
 			set_variable = { name = te_mon_work value = te_mon_gold_inflow_room }
@@ -2390,11 +2430,10 @@ te_monetary_update_gold = {
 				}
 				set_variable = { name = te_mon_work value = var:te_gold_hot_money }
 			}
-			# ...and nothing leaves faster than there is gold.
-			set_variable = { name = te_mon_work2 value = te_mon_gold_reserves_now }
+			# ...and nothing leaves faster than there is gold in the vault.
 			if = {
-				limit = { var:te_mon_work > var:te_mon_work2 }
-				set_variable = { name = te_mon_work value = var:te_mon_work2 }
+				limit = { var:te_mon_work > var:te_bank_gold }
+				set_variable = { name = te_mon_work value = var:te_bank_gold }
 			}
 			if = {
 				limit = { var:te_gold_hot_money > 0 }
@@ -2408,37 +2447,16 @@ te_monetary_update_gold = {
 			change_variable = { name = te_gold_flow multiply = -1 }
 		}
 
-		# INSTRUMENTATION (first playtest: "the flow says -167k and my reserves
-		# are not falling"). The engine's gold_reserves read immediately before
-		# and immediately after the payment, printed by te_debug_monetary.8 and
-		# nowhere else. after - before = the flow means add_treasury landed and
-		# anything else moving the treasury is the weekly budget; after = before
-		# means it did not. Two set_variables a month for gold countries only.
-		set_variable = { name = te_gold_debug_before value = te_mon_gold_reserves_now }
+		change_variable = { name = te_bank_gold add = var:te_gold_flow }
 		if = {
-			limit = { NOT = { var:te_gold_flow = 0 } }
-			add_treasury = te_mon_gold_flow_signed
+			limit = { var:te_bank_gold < 0 }
+			set_variable = { name = te_bank_gold value = 0 }
 		}
-		set_variable = { name = te_gold_debug_after value = te_mon_gold_reserves_now }
 		set_variable = { name = te_gold_flow_pct value = te_mon_gold_flow_pct_value }
 
 		# --- the carry: borrowed gold is paid for (owner decision I) ---------
-		# What stopped real central banks pulling gold in for the money: it
-		# came as short-term balances EARNING the rate that attracted them,
-		# while the gold it bought sat in a vault earning nothing. So the
-		# balance costs the policy rate, a twelfth of it a month — which makes
-		# hot money strictly dearer than ordinary borrowing for any country
-		# whose credit is good, and leaves it what it historically was: a way
-		# to refill a vault or defend a peg, never a way to raise funds.
-		#
-		# Paid from the treasury while there is one; CAPITALISED into the
-		# balance when there is not (in debt, or an empty vault), on the same
-		# argument that stops the outflow there — a negative add_treasury would
-		# only deepen the debt — and so that not paying is never free either:
-		# the unpaid interest is more gold queueing to leave.
-		#
-		# Not part of te_gold_flow, so the price-specie term prices the
-		# principal that moved and not the coupon on it.
+		# te_gold_carry is the MONTHLY figure the dashboard prints; the modifier
+		# below is handed the weekly one, because country_expenses_add is weekly.
 		set_variable = { name = te_gold_carry value = 0 }
 		if = {
 			limit = {
@@ -2448,17 +2466,6 @@ te_monetary_update_gold = {
 			set_variable = { name = te_gold_carry value = var:te_gold_hot_money }
 			change_variable = { name = te_gold_carry multiply = var:te_policy_rate }
 			change_variable = { name = te_gold_carry divide = 1200 }
-			set_variable = { name = te_mon_work2 value = te_mon_gold_reserves_now }
-			if = {
-				limit = {
-					scaled_debt <= 0
-					var:te_mon_work2 >= var:te_gold_carry
-				}
-				add_treasury = te_mon_gold_carry_payment
-			}
-			else = {
-				change_variable = { name = te_gold_hot_money add = var:te_gold_carry }
-			}
 		}
 
 		# --- peg confidence -------------------------------------------------
@@ -2468,13 +2475,9 @@ te_monetary_update_gold = {
 		}
 		else_if = {
 			# Out from under pressure confidence HEALS — but only while the bank
-			# is not visibly losing gold. First playtest: a country at a gap of
-			# -3 with a healthy vault was GAINING a point a month while its
-			# reserves drained, which read as the peg applauding its own
-			# undoing. With a negative gap (or borrowed gold still queueing to
-			# leave) confidence now simply holds: the vault is paying, which is
-			# the cost §12.2 intends at that stage, and the fall starts when the
-			# vault cannot.
+			# is not visibly losing gold (first playtest: a gap of -3 with a
+			# healthy vault was GAINING a point a month while it drained). With
+			# a negative gap, or borrowed gold still queueing to leave, it holds.
 			limit = {
 				var:te_gold_flow_gap >= 0
 				var:te_gold_hot_money <= 0
@@ -2506,24 +2509,63 @@ te_monetary_update_gold = {
 		set_variable = { name = te_gold_flow_pct value = 0 }
 		set_variable = { name = te_gold_carry value = 0 }
 
-		# Off gold altogether: borrowed gold goes home, and the next peg this
-		# country enters starts trusted. Suspended: frozen, both of them.
+		# Off gold altogether: borrowed gold goes home, out of the vault, and
+		# the next peg this country enters starts trusted. Suspended: frozen.
 		if = {
 			limit = { te_mon_peg_is_suspended = no }
 			if = {
 				limit = { var:te_gold_hot_money > 0 }
-				add_treasury = te_mon_gold_hot_money_payout
+				change_variable = { name = te_bank_gold subtract = var:te_gold_hot_money }
+				if = {
+					limit = { var:te_bank_gold < 0 }
+					set_variable = { name = te_bank_gold value = 0 }
+				}
 				set_variable = { name = te_gold_hot_money value = 0 }
 			}
 			set_variable = { name = te_peg_confidence value = te_mon_peg_confidence_start }
 		}
 		# The LAW itself gone: a suspension or a defence of a peg that no
-		# longer exists is nothing, and must not be waiting for a country that
-		# enacts the gold standard again twenty years later.
+		# longer exists is nothing, and the vault is counted afresh if the
+		# country ever enacts the gold standard again.
 		if = {
 			limit = { NOT = { has_law_or_variant = law_type:law_gold_standard } }
 			set_variable = { name = te_peg_suspended_months value = 0 }
 			set_variable = { name = te_peg_defend_months value = 0 }
+			set_variable = { name = te_bank_gold_seeded value = 0 }
+		}
+	}
+
+	# --- the carry, into the budget -----------------------------------------
+	set_variable = { name = te_mon_work value = te_mon_gold_carry_weekly }
+	if = {
+		limit = { var:te_mon_work < 1 }
+		if = {
+			limit = { has_modifier = te_mon_gold_carry_expense }
+			remove_modifier = te_mon_gold_carry_expense
+		}
+		set_variable = { name = te_gold_carry_applied value = 0 }
+	}
+	else_if = {
+		limit = { root ?= this }
+		set_variable = { name = te_mon_work2 value = var:te_mon_work }
+		change_variable = { name = te_mon_work2 subtract = var:te_gold_carry_applied }
+		if = {
+			limit = {
+				OR = {
+					var:te_mon_work2 >= 1
+					var:te_mon_work2 <= -1
+					NOT = { has_modifier = te_mon_gold_carry_expense }
+				}
+			}
+			if = {
+				limit = { has_modifier = te_mon_gold_carry_expense }
+				remove_modifier = te_mon_gold_carry_expense
+			}
+			set_variable = { name = te_gold_carry_applied value = var:te_mon_work }
+			add_modifier = {
+				name = te_mon_gold_carry_expense
+				multiplier = var:te_gold_carry_applied
+			}
 		}
 	}
 
@@ -2636,6 +2678,30 @@ te_mon_effect_target_step_down = {
 		}
 	}
 	custom_tooltip = banking_mon_step_tt
+}
+
+# RECAPITALISE THE BANK (op 13 of banking_mon_control_sgui) — the one fiscal
+# link between the treasury and the vault, and it runs one way: a tenth of the
+# reserve limit (or whatever room the vault has left, if less) leaves the
+# treasury and is counted into te_bank_gold. It is how a rich government
+# defends a peg with money instead of with a recession. Gated by
+# te_mon_bank_can_recapitalise (gold flows, a seeded vault, room in it, and
+# the cash in hand — never on credit).
+#
+# A DOCUMENTED OUTSIDE WRITER of te_bank_gold, beside step 10: the transfer is
+# an act, not an input the next pulse could derive. The silent twin is what
+# step 10's AI rule calls, so an AI's monthly top-up writes no tooltip lines.
+te_mon_effect_recapitalise_bank = {
+	te_mon_effect_recapitalise_bank_silent = yes
+	custom_tooltip = banking_mon_recapitalise_tt
+}
+
+te_mon_effect_recapitalise_bank_silent = {
+	hidden_effect = {
+		set_variable = { name = te_mon_recap_work value = te_mon_bank_recap_amount }
+		add_treasury = te_mon_bank_recap_payment
+		change_variable = { name = te_bank_gold add = var:te_mon_recap_work }
+	}
 }
 
 # THE FINE AND THE FAR STEP (ctrl-click and shift-click on the same two

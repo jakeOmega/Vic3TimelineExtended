@@ -332,14 +332,24 @@ te_mon_has_gold_flows = {
 	te_mon_has_dial = yes
 }
 
-# §12.3's switch from moving gold to moving confidence: reserves under a tenth
-# of the limit, or any debt at all. A negative add_treasury there would only
-# deepen the debt, so step 10 stops the flow and moves te_peg_confidence.
+# §12.3's switch from moving gold to moving confidence: the BANK'S vault under
+# a tenth of its limit. (The first version also counted any treasury debt,
+# because the vault was the treasury; under the hybrid model the government's
+# books have nothing to do with whether the bank can pay out gold.)
 te_mon_peg_under_pressure = {
-	OR = {
-		scaled_gold_reserves < te_mon_peg_reserve_floor
-		scaled_debt > 0
-	}
+	te_mon_bank_gold_scaled < te_mon_peg_reserve_floor
+}
+
+# May the treasury put gold into the bank right now? Gold flows, a counted
+# vault with room in it, and the step's worth of cash actually in hand — a
+# recapitalisation on credit would be the government borrowing to lend to
+# itself. One gate for the dashboard button and the AI's rule in step 10.
+te_mon_bank_can_recapitalise = {
+	te_mon_has_gold_flows = yes
+	has_variable = te_bank_gold_seeded
+	var:te_bank_gold_seeded = 1
+	te_mon_bank_recap_amount > 0
+	gold_reserves >= te_mon_bank_recap_amount
 }
 
 # Is this country's Defend option (§12.3) still running? While it is, the

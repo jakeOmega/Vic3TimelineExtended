@@ -1134,6 +1134,21 @@ flowcontainer = {
 						}
 					}
 
+					### The bank's own vault (the hybrid model) — what the flows below
+					### move, as pounds and as a share of its limit. NOT the treasury.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_bankgold_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_bankgold_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_bankgold_value"
+							}
+						}
+					}
+
 					### ---- Gold and the peg (phase 3, §12.2-12.3) ---------------
 					### Three rows, for a gold-standard country with a national
 					### bank only (banking_mon_shows_gold) — suspended or not; the
@@ -1214,6 +1229,24 @@ flowcontainer = {
 							banking_dash_condition_value = {
 								text = "banking_dash_mon_pegconf_value"
 							}
+						}
+					}
+
+					### Recapitalise — op 13, treasury -> vault, one way. The handler
+					### answers why it is greyed out, so no threshold lives here.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						parentanchor = hcenter
+						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_button = {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)13' ) ).End ) )]"
+							size = { 200 28 }
+							text = "banking_dash_mon_btn_recapitalise"
 						}
 					}
 
