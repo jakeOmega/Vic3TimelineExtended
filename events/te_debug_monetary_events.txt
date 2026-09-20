@@ -142,7 +142,9 @@ te_debug_monetary.2 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 	desc = te_debug_monetary.2.d
 	flavor = te_debug_monetary.2.f
 
-	# The production form, character for character with step 9's write.
+	# The production form: the same remove-and-add as step 9, with the same
+	# multiplier expression. It deliberately does NOT write te_rate_paid_applied
+	# or the te_rate_paid_rooted marker, so the next pulse can still correct it.
 	option = {
 		name = te_debug_monetary.2.a
 		default_option = yes

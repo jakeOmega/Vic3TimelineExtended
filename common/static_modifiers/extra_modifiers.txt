@@ -69,7 +69,7 @@
 	# monetary_policy_design.md §17's check 2 and is still unverified: whole-block
 	# last-wins is already ruled out (the mod has shipped bureaucracy, authority
 	# and innovation through this same INJECT since April), but SAME-KEY semantics
-	# are not. The identical case sits four lines up in the same block —
+	# are not. The identical case is near the TOP of this same INJECT block —
 	# state_expected_sol_from_literacy = -5 against vanilla's +5.
 	#
 	# The day-one tell, on a fresh 1836 game, reading any country's budget-panel
