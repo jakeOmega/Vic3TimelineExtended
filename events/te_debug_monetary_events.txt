@@ -462,7 +462,19 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 	#
 	# THE COMMAND-ECONOMY SWAP IS THE ONE BIG CHEAT here (it moves production
 	# methods across the whole country), so it happens only if the country is
-	# actually in one.
+	# actually in one. Being an activation rather than an enactment, it also
+	# skips remove_banking_planning_modifiers_effect, the other half of
+	# te_banking_law_change_cleanup: an ex-command country keeps its planning_*
+	# journal-entry modifiers until it next really enacts an economic-system
+	# law. Nothing in the rate stack reads them, but the banking cycle this
+	# harness takes its phase and bubble terms from does.
+	#
+	# law_national_bank CARRIES disallowing_laws = { law_traditionalism }, which
+	# most non-Western 1836 tags hold, so the pin can produce a pair the
+	# enactment screen would refuse. Nothing in the monetary system tests
+	# traditionalism — the only law test outside the regime ladder is
+	# te_mon_is_command — so the dial works regardless; it is a cheat's
+	# fingerprint, not a bug to file.
 	option = {
 		name = te_debug_monetary.5.a
 		default_option = yes
@@ -531,11 +543,12 @@ te_debug_monetary.6 = { # REVIEWED 2026-09-20: console-only test event (`event t
 	# the loop silently skipped.
 	#
 	# THE STOP. te_mon_hyper_cooldown is set to its maximum by step 6c in the
-	# month the §9.2 crisis goes out and aged down by one every month after, so
-	# "cooldown is at its maximum" is true for exactly the month the crisis
-	# fired. Testing it inside the loop rather than in a `while` limit keeps the
-	# iteration count bounded no matter what the guard does. The variable is
-	# guaranteed present because te_monetary_init_variables runs first.
+	# month the §9.2 crisis goes out and aged down by one every month after and
+	# never set above it, so "below the maximum" is false for exactly the month
+	# the crisis fired. Testing it inside the loop rather than in a `while`
+	# limit keeps the iteration count bounded no matter what the guard does.
+	# The variable is guaranteed present because te_monetary_init_variables
+	# runs first.
 	option = {
 		name = te_debug_monetary.6.a
 		default_option = yes
@@ -544,7 +557,7 @@ te_debug_monetary.6 = { # REVIEWED 2026-09-20: console-only test event (`event t
 		while = {
 			count = 12
 			if = {
-				limit = { NOT = { var:te_mon_hyper_cooldown = te_mon_hyper_cooldown_months } }
+				limit = { var:te_mon_hyper_cooldown < te_mon_hyper_cooldown_months }
 				te_monetary_monthly_update = yes
 			}
 		}
@@ -557,7 +570,7 @@ te_debug_monetary.6 = { # REVIEWED 2026-09-20: console-only test event (`event t
 		while = {
 			count = 60
 			if = {
-				limit = { NOT = { var:te_mon_hyper_cooldown = te_mon_hyper_cooldown_months } }
+				limit = { var:te_mon_hyper_cooldown < te_mon_hyper_cooldown_months }
 				te_monetary_monthly_update = yes
 			}
 		}
