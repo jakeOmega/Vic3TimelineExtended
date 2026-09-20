@@ -1,4 +1,4 @@
-# Auto-generated from custom_localization.log @ 2026-09-19T21:06:43+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from custom_localization.log @ 2026-09-13T19:29:55+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 character|BR_Dede|random_valid=no
 character|BR_DoDa|random_valid=no
@@ -272,7 +272,6 @@ country|automobile_accident_type|random_valid=yes
 |banking_dash_momentum_band|random_valid=no
 country|brz_republic_or_state|random_valid=no
 country|byzantium_reason_text|random_valid=no
-|ch_country_model_text|random_valid=no
 |ch_exported_model_owner|random_valid=no
 |ch_exported_model_text|random_valid=no
 |ch_tier_blurb|random_valid=no
