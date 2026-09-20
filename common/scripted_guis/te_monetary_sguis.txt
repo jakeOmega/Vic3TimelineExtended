@@ -1,0 +1,312 @@
+﻿# ============================================================================
+# MONETARY POLICY — SCRIPTED GUIS FOR THE BANKING DASHBOARD'S MONETARY BLOCK
+# ============================================================================
+# Read by gui/journal_entry_widgets/banking_dashboard_widget.gui. Spec:
+# docs/systems/monetary_policy_design.md §3 (what the block shows), §5.2 and §6
+# (who may touch what), §16.4 (the widget shape).
+#
+# These sit beside common/scripted_guis/banking_dashboard_scripted_gui.txt
+# rather than inside it because the monetary system keeps its own file per layer
+# — te_monetary_effects.txt, te_monetary_triggers.txt,
+# te_monetary_script_values.txt — and this is that system's GUI layer.
+#
+# THE AI NEVER USES ANY OF THESE (`ai_is_valid = { always = no }`). The AI's
+# monetary behaviour is not a button at all: te_monetary_update_target simply
+# runs the mandate formula for `is_player = no` every month (§6, a documented
+# exception recorded in that effect's header).
+#
+# TWO KINDS OF HANDLER, and the split is gotcha 22 of
+# docs/guides/gui_modding_guide.md.
+#
+# 1. ONE INTERACTIVE HANDLER — banking_mon_control_sgui, parameterised by an
+#    `op` saved scope. `is_valid`, `Execute` and the two tooltips are the places
+#    a saved scope is PROVEN to arrive (Strategic Reserve, cultural hegemony),
+#    so all the op branching lives there. Every branch delegates to a shared
+#    trigger in te_monetary_triggers.txt and a shared effect in
+#    te_monetary_effects.txt, so the tooltip and the click can never disagree.
+#
+# 2. FIVE SCOPE-FREE DISPLAY HANDLERS — they answer "which control applies here"
+#    with `is_shown` alone. Whether a saved scope reaches `is_shown` is thinly
+#    evidenced, and the failure direction here is the bad one: if the scope went
+#    missing, an op-branching `is_shown` would hide the whole monetary block and
+#    leave the player unable to set a rate at all. All five carry
+#    `is_valid = { always = no }` and an empty effect, so neither a player nor
+#    the AI can execute them.
+#
+# `is_shown` on the interactive handler is scope-free for the same reason, and
+# carries `is_player = yes`: the block only ever renders in the owner's own
+# journal-entry panel, and putting the test here rather than in `is_valid` keeps
+# a line that is always ticked out of the player's tooltip.
+#
+# ---- banking_mon_control_sgui op table -------------------------------------
+# (keep in step with the .gui header and docs/systems/monetary_policy_design.md)
+#   0   policy rate target   step down one point
+#   1   policy rate target   step up one point
+#   2   delegation           hand the dial to the central bank
+#   3   delegation           take the dial back
+#   4   mandate              price stability
+#   5   mandate              growth
+#   6   mandate              peg defence (gold standard only)
+# ============================================================================
+
+banking_mon_control_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_banking_cycle
+		is_player = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	# Every clause is a `custom_tooltip` phrased as a CONDITION, not a complaint:
+	# IsValidTooltip renders each one with a tick when it holds and a cross when
+	# it does not, so "Your country sets its own policy rate" reads correctly in
+	# both states while "You cannot set a rate" would not.
+	#
+	# `exists = scope:op` guards the first branch so a missing scope falls
+	# through to `trigger_else = { always = no }` — every control greys out
+	# rather than acting on the wrong op.
+	is_valid = {
+		# --- 0 / 1: the target stepper (§5.2) ---
+		# A dial needs a national bank and a discretionary regime; independence
+		# binds the target to the mandate; delegation does the same by choice.
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			custom_tooltip = {
+				text = banking_mon_tt_needs_dial
+				te_mon_has_dial = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_not_cbi
+				te_mon_is_cbi = no
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_not_delegated
+				te_mon_is_delegated = no
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_above_floor
+				te_mon_target_can_step_down = yes
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = {
+				text = banking_mon_tt_needs_dial
+				te_mon_has_dial = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_not_cbi
+				te_mon_is_cbi = no
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_not_delegated
+				te_mon_is_delegated = no
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_below_ceiling
+				te_mon_target_can_step_up = yes
+			}
+		}
+
+		# --- 2 / 3: delegation (§6) ---
+		# Free and reversible for any dial country that is not independent. A
+		# country under central bank independence is permanently mandate-bound,
+		# which is the whole point of the law, so the toggle is not offered.
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = {
+				text = banking_mon_tt_needs_dial
+				te_mon_has_dial = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_not_cbi
+				te_mon_is_cbi = no
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_not_yet_delegated
+				te_mon_is_delegated = no
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = {
+				text = banking_mon_tt_needs_dial
+				te_mon_has_dial = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_not_cbi
+				te_mon_is_cbi = no
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_currently_delegated
+				te_mon_is_delegated = yes
+			}
+		}
+
+		# --- 4 / 5 / 6: the mandate (§6) ---
+		# Pickable while the mandate actually drives the dial — delegated, or
+		# bound by independence. The mandate already in force is deliberately
+		# INVALID: greying it out is the "you are here" marker, and it saves a
+		# parallel highlight path.
+		trigger_else_if = {
+			limit = { scope:op = 4 }
+			custom_tooltip = {
+				text = banking_mon_tt_needs_dial
+				te_mon_has_dial = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_mandate_binds
+				te_mon_mandate_binds = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_mandate_other
+				OR = {
+					NOT = { has_variable = te_mon_mandate }
+					NOT = { var:te_mon_mandate = 1 }
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 5 }
+			custom_tooltip = {
+				text = banking_mon_tt_needs_dial
+				te_mon_has_dial = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_mandate_binds
+				te_mon_mandate_binds = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_mandate_other
+				OR = {
+					NOT = { has_variable = te_mon_mandate }
+					NOT = { var:te_mon_mandate = 2 }
+				}
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 6 }
+			custom_tooltip = {
+				text = banking_mon_tt_needs_dial
+				te_mon_has_dial = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_gold_only
+				has_law_or_variant = law_type:law_gold_standard
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_mandate_binds
+				te_mon_mandate_binds = yes
+			}
+			custom_tooltip = {
+				text = banking_mon_tt_mandate_other
+				OR = {
+					NOT = { has_variable = te_mon_mandate }
+					NOT = { var:te_mon_mandate = 3 }
+				}
+			}
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			te_mon_effect_target_step_down = yes
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			te_mon_effect_target_step_up = yes
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			te_mon_effect_delegate_on = yes
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			te_mon_effect_delegate_off = yes
+		}
+		else_if = {
+			limit = { scope:op = 4 }
+			te_mon_effect_set_mandate = { MANDATE = 1 }
+		}
+		else_if = {
+			limit = { scope:op = 5 }
+			te_mon_effect_set_mandate = { MANDATE = 2 }
+		}
+		else_if = {
+			limit = { scope:op = 6 }
+			te_mon_effect_set_mandate = { MANDATE = 3 }
+		}
+	}
+}
+
+
+# ---------------------------------------------------------------------------
+# DISPLAY-ONLY HANDLERS — one scope-free question each
+# ---------------------------------------------------------------------------
+
+# Has this country's first monthly monetary update run? Every `var:` read in the
+# monetary block hides behind this one question, because a .gui read of a
+# missing variable logs "Failed to fetch variable" once per frame
+# (gui_modding_guide.md gotcha 14) and je_banking_cycle is
+# is_shown_when_inactive.
+banking_mon_display_ready = {
+	scope = country
+	is_shown = { te_mon_display_ready = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Does this country set its own policy rate at all? Drives the whole
+# interactive half of the block: a bankless, commodity-money, crypto or
+# command-economy country reads the block but cannot touch it, and gets a
+# cause-specific line saying why (te_mon_no_dial_reason).
+banking_mon_has_dial = {
+	scope = country
+	is_shown = { te_mon_has_dial = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Is the delegation toggle offered at all? Central bank independence is
+# permanently mandate-bound (§5.2), so it gets the explanation instead of the
+# button.
+banking_mon_can_delegate = {
+	scope = country
+	is_shown = {
+		te_mon_has_dial = yes
+		te_mon_is_cbi = no
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Which half of the delegate / take-back pair to draw.
+banking_mon_is_delegated = {
+	scope = country
+	is_shown = { te_mon_is_delegated = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Peg defence is a gold-standard mandate only (§6), so the third mandate button
+# only exists on gold.
+banking_mon_is_gold = {
+	scope = country
+	is_shown = { has_law_or_variant = law_type:law_gold_standard }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

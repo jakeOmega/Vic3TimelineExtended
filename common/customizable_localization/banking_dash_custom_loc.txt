@@ -114,3 +114,97 @@ te_mon_stance_band_name = {
 		localization_key = banking_dash_stance_band_very_tight
 	}
 }
+
+# ----------------------------------------------------------------------------
+# Monetary dashboard — the three state readouts (monetary_policy_design.md §3)
+# ----------------------------------------------------------------------------
+# Each returns a NAME, so the .gui never compares a number and no threshold or
+# code value is copied out of script (gui_modding_guide.md gotcha 23). All three
+# read variables owned by te_monetary_monthly_update
+# (common/scripted_effects/te_monetary_effects.txt); the has_variable branch
+# covers a country whose first monthly monetary update has not run yet.
+#
+# None of them touches hidden state: delegation, the mandate and the monetary
+# regime are all things the player chose or can read off their own law list.
+
+# Who is holding the dial (§5.2, §6). Central bank independence is tested first
+# because it outranks the toggle: a CBI country's te_mon_delegated is whatever
+# it was before the law passed, and the law binds the target regardless.
+te_mon_delegation_state = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_delegated } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { te_mon_is_cbi = yes }
+		localization_key = banking_dash_mon_delegation_bound
+	}
+	text = {
+		trigger = { var:te_mon_delegated = 1 }
+		localization_key = banking_dash_mon_delegation_delegated
+	}
+	text = {
+		localization_key = banking_dash_mon_delegation_direct
+	}
+}
+
+# Which rule a delegated bank follows (§6). Peg defence can only be in force on
+# a gold standard — te_monetary_update_target falls a country that leaves gold
+# back to price stability on its next pulse — so no branch here has to check the
+# currency law.
+te_mon_mandate_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_mandate } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:te_mon_mandate >= 3 }
+		localization_key = banking_dash_mon_mandate_peg
+	}
+	text = {
+		trigger = { var:te_mon_mandate = 2 }
+		localization_key = banking_dash_mon_mandate_growth
+	}
+	text = {
+		localization_key = banking_dash_mon_mandate_price
+	}
+}
+
+# Why this country has no policy dial (§4, §5.2, §5.3). One sentence per cause,
+# because "you cannot set a rate" without a reason is the kind of dead end the
+# dashboard exists to avoid. The order matches te_monetary_set_regime's: a
+# command economy administers the rate whatever its currency law says, and a
+# country with no national bank has no dial whatever its currency law says.
+#
+# The last branch is the fall-through for a country that DOES hold the dial; the
+# widget hides this line for those, so it should never be seen.
+te_mon_no_dial_reason = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_is_command = yes }
+		localization_key = banking_dash_mon_why_command
+	}
+	text = {
+		trigger = { NOT = { has_law_or_variant = law_type:law_national_bank } }
+		localization_key = banking_dash_mon_why_no_bank
+	}
+	text = {
+		trigger = { has_law_or_variant = law_type:law_commodity_money }
+		localization_key = banking_dash_mon_why_commodity
+	}
+	text = {
+		trigger = { has_law_or_variant = law_type:law_decentralized_cryptocurrency }
+		localization_key = banking_dash_mon_why_crypto
+	}
+	text = {
+		localization_key = banking_dash_mon_why_has_dial
+	}
+}

@@ -403,57 +403,23 @@ te_monetary_update_target = {
 # The gold band is taken inwards to whole numbers — ceiling on the low side,
 # floor on the high side — so the target stays an integer the stepper can move
 # without ever sitting outside the band.
+#
+# The band itself lives in te_mon_target_min / te_mon_target_max
+# (common/script_values/te_monetary_script_values.txt), not here, because the
+# dashboard's stepper has to grey out at exactly these edges: a second copy of
+# the table is how a stepper ends up offering a step this effect silently undoes
+# on the next pulse. Fiat is the values' fall-through case and the only dial
+# regime left once gold and digital are handled (te_mon_has_dial gates this).
 te_monetary_clamp_target = {
+	set_variable = { name = te_mon_work value = te_mon_target_min }
+	set_variable = { name = te_mon_work2 value = te_mon_target_max }
 	if = {
-		limit = { has_law_or_variant = law_type:law_gold_standard }
-		set_variable = {
-			name = te_mon_work
-			value = {
-				value = var:te_mon_era_base_now
-				subtract = 2
-				min = 0
-				ceiling = yes
-			}
-		}
-		set_variable = {
-			name = te_mon_work2
-			value = {
-				value = var:te_mon_era_base_now
-				add = 2
-				max = 15
-				floor = yes
-			}
-		}
-		if = {
-			limit = { var:te_policy_rate_target < var:te_mon_work }
-			set_variable = { name = te_policy_rate_target value = var:te_mon_work }
-		}
-		if = {
-			limit = { var:te_policy_rate_target > var:te_mon_work2 }
-			set_variable = { name = te_policy_rate_target value = var:te_mon_work2 }
-		}
+		limit = { var:te_policy_rate_target < var:te_mon_work }
+		set_variable = { name = te_policy_rate_target value = var:te_mon_work }
 	}
-	else_if = {
-		limit = { has_law_or_variant = law_type:law_digital_currency }
-		if = {
-			limit = { var:te_policy_rate_target < -3 }
-			set_variable = { name = te_policy_rate_target value = -3 }
-		}
-		if = {
-			limit = { var:te_policy_rate_target > 25 }
-			set_variable = { name = te_policy_rate_target value = 25 }
-		}
-	}
-	else = {
-		# Fiat is the only remaining dial regime (te_mon_has_dial gates this).
-		if = {
-			limit = { var:te_policy_rate_target < 0 }
-			set_variable = { name = te_policy_rate_target value = 0 }
-		}
-		if = {
-			limit = { var:te_policy_rate_target > 25 }
-			set_variable = { name = te_policy_rate_target value = 25 }
-		}
+	if = {
+		limit = { var:te_policy_rate_target > var:te_mon_work2 }
+		set_variable = { name = te_policy_rate_target value = var:te_mon_work2 }
 	}
 }
 
@@ -896,4 +862,84 @@ te_monetary_yearly_growth_snapshot = {
 		set_variable = { name = te_mon_growth_term value = var:te_mon_work }
 	}
 	set_variable = { name = te_mon_gdp_last_year value = te_mon_gdp_current }
+}
+
+
+# ----------------------------------------------------------------------------
+# PLAYER CONTROLS — what the dashboard's monetary block writes (§3, §16.4)
+# ----------------------------------------------------------------------------
+# Scope: country (the journal entry's owner).
+#
+# These are the ONLY writers of te_policy_rate_target, te_mon_delegated and
+# te_mon_mandate outside the monthly update, and they live here rather than in
+# the scripted-GUI file for the same reason everything else in this file does:
+# one owner per variable, one place to look.
+#
+# They deliberately do NOT call te_monetary_monthly_update. That effect is not
+# idempotent within a month (step 3 drifts the rate, step 8 draws two random
+# walks), so a button that ran it would age the hidden state every click. Each
+# control writes its input and the next monthly pulse picks it up — which is
+# also why the target stepper's tooltip says the rate closes on the target over
+# a quarter rather than moving now.
+#
+# Eligibility lives in common/scripted_triggers/te_monetary_triggers.txt and is
+# asked by the scripted GUI's `is_valid`, so the tooltip and the effect can
+# never disagree. Each effect still clamps: a click and the monthly re-clamp can
+# race across a law change, and clamping twice is free.
+#
+# The `hidden_effect` + one `custom_tooltip` shape is the funding stepper's
+# (common/scripted_effects/cultural_hegemony_effects.txt:139): the raw variable
+# writes would otherwise be spelled out in the button's ExecuteTooltip.
+
+te_mon_effect_target_step_down = {
+	hidden_effect = {
+		change_variable = { name = te_policy_rate_target subtract = 1 }
+		clamp_variable = {
+			name = te_policy_rate_target
+			min = te_mon_target_min
+			max = te_mon_target_max
+		}
+	}
+	custom_tooltip = banking_mon_step_tt
+}
+
+te_mon_effect_target_step_up = {
+	hidden_effect = {
+		change_variable = { name = te_policy_rate_target add = 1 }
+		clamp_variable = {
+			name = te_policy_rate_target
+			min = te_mon_target_min
+			max = te_mon_target_max
+		}
+	}
+	custom_tooltip = banking_mon_step_tt
+}
+
+# Delegation is free and reversible (§6). Turning it off leaves the target where
+# the mandate last put it, so the player resumes from the bank's setting rather
+# than from whatever they had chosen before delegating.
+te_mon_effect_delegate_on = {
+	hidden_effect = {
+		set_variable = { name = te_mon_delegated value = 1 }
+	}
+	custom_tooltip = banking_mon_delegate_on_tt
+}
+
+te_mon_effect_delegate_off = {
+	hidden_effect = {
+		set_variable = { name = te_mon_delegated value = 0 }
+	}
+	custom_tooltip = banking_mon_delegate_off_tt
+}
+
+# Parameters: $MANDATE$ = 1 price stability, 2 growth, 3 peg defence (§6).
+#
+# The change takes effect on the next monthly pulse, including under central
+# bank independence: the spec's 12-month CBI mandate delay is deferred to a
+# later phase (plan ruling R2).
+te_mon_effect_set_mandate = {
+	hidden_effect = {
+		set_variable = { name = te_mon_mandate value = $MANDATE$ }
+	}
+	custom_tooltip = banking_mon_mandate_set_tt
 }

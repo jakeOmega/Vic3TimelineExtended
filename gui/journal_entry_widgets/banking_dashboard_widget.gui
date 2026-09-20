@@ -10,6 +10,12 @@
 ### same shared triggers/effects as the journal-entry buttons. Nothing here holds
 ### gameplay state; the only widget-local state is the GUI variable system flag that
 ### collapses a category section.
+###
+### The Monetary Policy category's dial block is answered by a second file,
+### common/scripted_guis/te_monetary_sguis.txt — one op-parameterised handler
+### (banking_mon_control_sgui, ops 0-6: 0/1 target stepper, 2/3 delegation,
+### 4/5/6 mandate) plus five scope-free display handlers. That op table is an
+### implicit contract between this file and that one; keep both headers in step.
 
 types banking_dashboard_widget_types
 {
@@ -67,6 +73,53 @@ types banking_dashboard_widget_types
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+	}
+
+	### A monetary-policy control button. Deliberately carries NO `visible` of
+	### its own, unlike banking_dash_action_button above: the delegation and
+	### mandate buttons take their visibility from a different scripted GUI than
+	### the one that answers their enabled state, and two `visible` properties on
+	### one widget is a bug rather than a conjunction (gui_modding_guide.md
+	### gotcha 17). Each instance therefore writes its own visible / enabled /
+	### onclick / tooltip against the shared banking_mon_control_sgui datacontext
+	### its row supplies.
+	type banking_dash_mon_button = button {
+		using = default_button_action
+		size = { 128 28 }
+		parentanchor = vcenter
+	}
+
+	### The label column of a monetary row, sized to line up with
+	### banking_dash_condition_row's.
+	type banking_dash_mon_label = widget {
+		size = { 160 28 }
+
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 160
+			elide = right
+			align = nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "mon_label_text" {}
+		}
+	}
+
+	### The value column of a monetary row. Wider than the label column looks
+	### like it needs, because "Bound by mandate" has to fit without eliding.
+	type banking_dash_mon_value = widget {
+		size = { 140 28 }
+
+		textbox = {
+			parentanchor = left|vcenter
+			autoresize = yes
+			max_width = 140
+			elide = right
+			align = nobaseline
+			using = fontsize_large
+			block "mon_value_text" {}
+		}
 	}
 
 	### One policy: status/label, point cost, and the enable + disable actions.
@@ -846,12 +899,18 @@ flowcontainer = {
 	}
 
 	### Monetary Policy
+	###
+	### Unlike every other category below, this one is NOT gated on the market
+	### economy. The policy dial exists for every country — a command economy
+	### administers its rate, a bankless one pays the world rate plus a spread —
+	### and the block's whole job for those countries is to say so in one line
+	### (monetary_policy_design.md §3, §4, §5.3). The market-economy gate moved
+	### down onto the two intervention rows, which really are market-only.
 	flowcontainer = {
 		direction = vertical
 		ignoreinvisible = yes
 		parentanchor = hcenter
 		spacing = 2
-		visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 		banking_dash_category_header = {
 			blockoverride "left_text" {
@@ -876,44 +935,320 @@ flowcontainer = {
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_monetary'))]"
 
-			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				tooltip = "banking_dash_tt_cb_open_market_ops"
-				blockoverride "row_label" {
-					text = "CB_OPEN_MARKET_OPS"
+			### ---- The policy dial (monetary_policy_design.md §3) ----------
+			### Readouts for every country; the three interactive rows only for
+			### one that holds the dial. Nothing here renders the neutral rate,
+			### the stance gap or the estimation error — the stance band name is
+			### the only window onto any of them (§8, "The rule").
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				spacing = 2
+				margin = { 8 6 }
+
+				background = {
+					using = entry_bg_fancy_dark
+					alpha = 0.35
 				}
-				blockoverride "row_cost" {
-					text = "banking_dash_cost_cb_open_market_ops"
+
+				### Everything below is written by te_monetary_monthly_update, so
+				### until a country's first pulse there is nothing to read and
+				### every `var:` would log "Failed to fetch variable" per frame.
+				textbox = {
+					visible = "[Not( GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+					text = "banking_dash_mon_not_ready"
+					autoresize = yes
+					multiline = yes
+					max_width = 460
+					align = left|nobaseline
 				}
-				blockoverride "enable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops')]"
-					text = "banking_dash_btn_enable"
-				}
-				blockoverride "disable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_disable_cb_open_market_ops')]"
-					text = "banking_dash_btn_disable"
+
+				flowcontainer = {
+					direction = vertical
+					ignoreinvisible = yes
+					parentanchor = hcenter
+					spacing = 2
+					visible = "[GetScriptedGui('banking_mon_display_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+					### Why there is no dial here — one line, cause-specific.
+					### Hidden for a country that holds one.
+					textbox = {
+						visible = "[Not( GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+						text = "banking_dash_mon_no_dial_line"
+						autoresize = yes
+						multiline = yes
+						max_width = 460
+						align = left|nobaseline
+						margin_bottom = 2
+					}
+
+					### Policy rate — the actual rate, one decimal.
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_rate_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_rate_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_rate_value"
+							}
+						}
+					}
+
+					### Target — the dial itself. Ops 0 (down) and 1 (up) of
+					### banking_mon_control_sgui; the handler answers why a step
+					### is greyed out, so no threshold lives in this file.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 6
+						parentanchor = left
+						tooltip = "banking_dash_mon_target_tt"
+						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_label = {
+							blockoverride "mon_label_text" {
+								text = "banking_dash_mon_target_label"
+							}
+						}
+
+						button_icon_minus_action = {
+							size = { 26 26 }
+							parentanchor = vcenter
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
+						}
+
+						widget = {
+							size = { 68 28 }
+							textbox = {
+								parentanchor = center
+								align = center|nobaseline
+								autoresize = yes
+								max_width = 68
+								elide = right
+								using = fontsize_large
+								text = "banking_dash_mon_target_value"
+							}
+						}
+
+						button_icon_plus_action = {
+							size = { 26 26 }
+							parentanchor = vcenter
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) )]"
+						}
+					}
+
+					### What the treasury actually pays. The engine's own figure
+					### first, this system's arithmetic beside it — if the two
+					### drift apart, something outside the system is moving the
+					### rate and the player can see it (§17 check 6).
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_paid_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_paid_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_paid_value"
+							}
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_paid_script_tag"
+							}
+						}
+					}
+
+					### Credit standing — the structural tier (§7).
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_standing_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_standing_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_standing_value"
+							}
+						}
+					}
+
+					### Risk premium — the cyclical tier (§7).
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_premium_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_premium_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_premium_value"
+							}
+						}
+					}
+
+					### Policy stance — the band NAME and nothing else.
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_stance_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_stance_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_stance_value"
+							}
+						}
+					}
+
+					### Delegation — ops 2 (delegate) and 3 (take it back).
+					### Exactly one button is ever drawn, and neither is drawn
+					### under central bank independence, which is permanently
+					### mandate-bound; the value cell says so there (§5.2).
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 6
+						parentanchor = left
+						tooltip = "banking_dash_mon_delegation_tt"
+						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_label = {
+							blockoverride "mon_label_text" {
+								text = "banking_dash_mon_delegation_label"
+							}
+						}
+
+						banking_dash_mon_value = {
+							blockoverride "mon_value_text" {
+								text = "banking_dash_mon_delegation_value"
+							}
+						}
+
+						banking_dash_mon_button = {
+							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)2' ) ).End ) )]"
+							text = "banking_dash_mon_btn_delegate"
+						}
+
+						banking_dash_mon_button = {
+							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)3' ) ).End ) )]"
+							text = "banking_dash_mon_btn_take_control"
+						}
+					}
+
+					### Mandate — which rule a delegated bank follows.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 6
+						parentanchor = left
+						tooltip = "banking_dash_mon_mandate_tt"
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_label = {
+							blockoverride "mon_label_text" {
+								text = "banking_dash_mon_mandate_label"
+							}
+						}
+
+						banking_dash_mon_value = {
+							blockoverride "mon_value_text" {
+								text = "banking_dash_mon_mandate_value"
+							}
+						}
+					}
+
+					### Ops 4 / 5 / 6. The mandate already in force is greyed out
+					### by the handler's is_valid — that is the "you are here"
+					### marker — and peg defence only exists on a gold standard.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+						parentanchor = hcenter
+						margin_bottom = 2
+						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_button = {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End ) )]"
+							text = "banking_dash_mon_mandate_price"
+						}
+
+						banking_dash_mon_button = {
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)5' ) ).End ) )]"
+							text = "banking_dash_mon_mandate_growth"
+						}
+
+						banking_dash_mon_button = {
+							visible = "[GetScriptedGui('banking_mon_is_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) )]"
+							text = "banking_dash_mon_mandate_peg"
+						}
+					}
 				}
 			}
 
-			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				tooltip = "banking_dash_tt_cb_moral_suasion"
-				blockoverride "row_label" {
-					text = "CB_MORAL_SUASION"
+			### ---- Market-economy interventions ---------------------------
+			flowcontainer = {
+				direction = vertical
+				ignoreinvisible = yes
+				parentanchor = hcenter
+				spacing = 2
+				visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+				banking_dash_policy_row = {
+					visible = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					tooltip = "banking_dash_tt_cb_open_market_ops"
+					blockoverride "row_label" {
+						text = "CB_OPEN_MARKET_OPS"
+					}
+					blockoverride "row_cost" {
+						text = "banking_dash_cost_cb_open_market_ops"
+					}
+					blockoverride "enable_action" {
+						datacontext = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops')]"
+						text = "banking_dash_btn_enable"
+					}
+					blockoverride "disable_action" {
+						datacontext = "[GetScriptedGui('banking_dash_disable_cb_open_market_ops')]"
+						text = "banking_dash_btn_disable"
+					}
 				}
-				blockoverride "row_cost" {
-					text = "banking_dash_cost_cb_moral_suasion"
-				}
-				blockoverride "enable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion')]"
-					text = "banking_dash_btn_enable"
-				}
-				blockoverride "disable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_disable_cb_moral_suasion')]"
-					text = "banking_dash_btn_disable"
+
+				banking_dash_policy_row = {
+					visible = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+					tooltip = "banking_dash_tt_cb_moral_suasion"
+					blockoverride "row_label" {
+						text = "CB_MORAL_SUASION"
+					}
+					blockoverride "row_cost" {
+						text = "banking_dash_cost_cb_moral_suasion"
+					}
+					blockoverride "enable_action" {
+						datacontext = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion')]"
+						text = "banking_dash_btn_enable"
+					}
+					blockoverride "disable_action" {
+						datacontext = "[GetScriptedGui('banking_dash_disable_cb_moral_suasion')]"
+						text = "banking_dash_btn_disable"
+					}
 				}
 			}
-
 		}
 	}
 

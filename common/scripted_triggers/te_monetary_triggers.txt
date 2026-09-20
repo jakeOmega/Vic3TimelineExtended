@@ -78,3 +78,86 @@ banking_stance_is_loose = {
 	has_variable = te_mon_stance_gap
 	var:te_mon_stance_gap <= -1
 }
+
+
+# --- The dial's controls (§3, §5.1, §6) -------------------------------------
+#
+# Everything the dashboard's monetary block greys a control on. Each of these is
+# asked from the scripted GUI's `is_valid`, wrapped in a `custom_tooltip` there
+# so IsValidTooltip renders it with a tick or a cross; the triggers themselves
+# stay plain conditions so they can also be read by script.
+#
+# All of them are guarded: a country that has never run a monetary pulse has
+# none of these variables, and an unguarded `var:` read resolves to 'none'.
+
+# Has the player handed the dial to the central bank? (§6) The toggle is free
+# and reversible for any dial country that is not independent; central bank
+# independence is permanently mandate-bound and does not use this variable,
+# which is why te_mon_mandate_binds below asks for either.
+te_mon_is_delegated = {
+	has_variable = te_mon_delegated
+	var:te_mon_delegated = 1
+}
+
+# Does the mandate actually drive the target? Only then is picking one a
+# decision rather than a preference stored for later.
+te_mon_mandate_binds = {
+	OR = {
+		te_mon_is_delegated = yes
+		te_mon_is_cbi = yes
+	}
+}
+
+# Is there room left to step the target down / up inside the regime's range?
+# The bounds are te_mon_target_min / te_mon_target_max
+# (common/script_values/te_monetary_script_values.txt), the same two values
+# te_monetary_clamp_target re-clamps with every month — so the stepper can never
+# offer a step the next pulse would undo.
+te_mon_target_can_step_down = {
+	has_variable = te_policy_rate_target
+	var:te_policy_rate_target > te_mon_target_min
+}
+
+te_mon_target_can_step_up = {
+	has_variable = te_policy_rate_target
+	var:te_policy_rate_target < te_mon_target_max
+}
+
+# Has this country's first monthly monetary update run? Everything the dashboard
+# reads is written by that pulse, and a `.gui` read of a missing variable logs
+# "Failed to fetch variable" every frame (gui_modding_guide.md gotcha 14/23), so
+# the whole monetary block hides behind this one question. The list is the
+# displayed contract of §16.2, not every variable the update owns.
+te_mon_display_ready = {
+	has_variable = te_policy_rate
+	has_variable = te_policy_rate_target
+	has_variable = te_premium_structural
+	has_variable = te_premium_cyclical
+	has_variable = te_rate_paid_pts
+	has_variable = te_mon_stance_band
+}
+
+# Is the policy rate at the floor of its regime's range? This is the gate on
+# open market operations (§11, and monetary_policy_design.md's "the floor tool"):
+# a bank that can still cut does not buy assets, because cutting is cheaper and
+# reversible and does the same job.
+#
+# THE FLOOR IS THE REGIME MINIMUM, not zero. Digital currency has no cash to
+# hoard, so its range runs to -3 and a digital central bank at 0% still has three
+# points of cutting left. The test is on the law rather than on var:te_mon_regime
+# so it needs no has_variable guard; inside te_mon_has_dial the two are the same
+# question.
+#
+# The thresholds are 0.01 and -2.99 rather than 0 and -3 because te_policy_rate
+# is a drifting fractional value that closes on its target by a third of a point
+# a month and need not land exactly on the bound.
+te_mon_policy_rate_at_floor = {
+	has_variable = te_policy_rate
+	trigger_if = {
+		limit = { has_law_or_variant = law_type:law_digital_currency }
+		var:te_policy_rate <= -2.99
+	}
+	trigger_else = {
+		var:te_policy_rate <= 0.01
+	}
+}

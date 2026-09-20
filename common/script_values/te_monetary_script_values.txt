@@ -146,6 +146,69 @@ te_mon_era_base = {
 }
 
 
+# --- The dial's range (§5.1) ------------------------------------------------
+
+# The lowest and highest target the current monetary regime allows, in pp.
+#
+#   gold standard        the reference rate +/- 2, taken inwards to whole
+#                        numbers and held inside 0-15 (the phase-1 interim rule
+#                        of §19 row 1, standing in for §12's gold flows)
+#   digital currency     -3 to 25 (no cash to hoard, so negative rates bite)
+#   fiat currency        0 to 25
+#
+# ONE AUTHORITY, TWO CONSUMERS. te_monetary_clamp_target re-clamps the target
+# every month, and the dashboard's stepper has to grey out at exactly the same
+# edges (te_mon_target_can_step_down / _up in
+# common/scripted_triggers/te_monetary_triggers.txt). Writing the table twice is
+# how the stepper ends up offering a step the monthly update silently undoes, so
+# both read these two values and nothing else states the bounds.
+#
+# The gold branch is guarded on te_mon_era_base_now because a country that has
+# never run a monetary pulse has no cached reference rate. Inside
+# te_monetary_clamp_target that cannot happen (step 0 writes it every pulse); in
+# the GUI it can, on a save from before the system existed, and the fiat range it
+# falls back to is the harmless answer — the dashboard's readiness gate hides the
+# stepper until the first pulse anyway.
+te_mon_target_min = {
+	value = 0
+	if = {
+		limit = {
+			has_law_or_variant = law_type:law_gold_standard
+			has_variable = te_mon_era_base_now
+		}
+		add = {
+			value = var:te_mon_era_base_now
+			subtract = 2
+			min = 0
+			ceiling = yes
+		}
+	}
+	else_if = {
+		limit = { has_law_or_variant = law_type:law_digital_currency }
+		add = -3
+	}
+}
+
+te_mon_target_max = {
+	value = 0
+	if = {
+		limit = {
+			has_law_or_variant = law_type:law_gold_standard
+			has_variable = te_mon_era_base_now
+		}
+		add = {
+			value = var:te_mon_era_base_now
+			add = 2
+			max = 15
+			floor = yes
+		}
+	}
+	else = {
+		add = 25
+	}
+}
+
+
 # --- Structural premium terms -----------------------------------------------
 
 # Capital-market access premium, in pp (§7.2). This is what keeps Siam or
@@ -344,6 +407,14 @@ te_mon_cycle_lean = {
 # HIDDEN STATE. Neither this value nor the two below may ever be rendered: they
 # are the gap, and the gap is r* (§8, "Why not a scaled modifier"). They are
 # consumed only by `change_variable` inside banking_cycle_advance_variables.
+#
+# DO NOT FOLD THE TWO MULTIPLIERS BELOW INTO THIS CLAMP BLOCK. `min`/`max` inside
+# an `add = { ... }` bound the value BEFORE the outer `multiply`, so moving
+# `multiply = -0.125` in here would clamp the gap to +/-4 and then... nothing:
+# the clamp would be applied to the already-multiplied figure instead, turning
+# the intended +/-4 into +/-0.5 and quietly cutting the whole stance channel to
+# an eighth of its calibrated strength. Keep the clamp and the scaling in
+# separate script values, as they are here.
 te_mon_stance_gap_clamped = {
 	value = 0
 	if = {

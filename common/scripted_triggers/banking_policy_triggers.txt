@@ -27,13 +27,15 @@
 # GUARDED on has_variable: te_policy_rate does not exist until a country's first
 # monthly monetary update, and an ungated `var:` read would resolve to 'none'.
 # Before that first pulse the tool is simply unavailable, which is the safe
-# answer.
+# answer. The guard lives inside te_mon_policy_rate_at_floor
+# (common/scripted_triggers/te_monetary_triggers.txt).
 #
-# The threshold is 0.01, not 0, because te_policy_rate is a drifting fractional
-# value. Under digital currency the rate can go to -3, and the spec keeps the
-# same 0.01 test there (§11): a digital central bank at zero may still buy
-# assets, it just has the better option of cutting further, so quantitative
-# easing arrives late rather than never.
+# THE FLOOR IS THE REGIME MINIMUM, not a flat zero. An earlier note here said
+# the spec keeps the same 0.01 test under digital currency; that is wrong, and
+# it would have unlocked asset purchases for a digital central bank still
+# holding three points of cutting room (its range runs to -3, because there is
+# no cash to hoard). The test is 0.01 for gold and fiat and -2.99 for digital —
+# "the rate can go no lower" in each regime's own terms.
 banking_possible_cb_open_market_ops = {
 	modifier:country_can_use_open_market_ops_bool = yes
 	custom_tooltip = {
@@ -47,8 +49,7 @@ banking_possible_cb_open_market_ops = {
 	custom_tooltip = {
 		text = banking_omo_rate_floor_tt
 		te_mon_has_dial = yes
-		has_variable = te_policy_rate
-		var:te_policy_rate <= 0.01
+		te_mon_policy_rate_at_floor = yes
 	}
 }
 

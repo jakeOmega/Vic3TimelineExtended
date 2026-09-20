@@ -10,6 +10,15 @@
 #   bank_value      finance_cycle_value      0..100
 #   bank_momentum   finance_cycle_momentum   signed, roughly -6..+6
 #   bank_bubble     bubble_pressure          0..100
+#   mon_policy      te_policy_rate           pp, -3..25 (regime range, §5.1)
+#   mon_rate_paid   te_rate_paid_pts         pp, 0.5..60 (§4)
+#
+# The two monetary series are the oscillation detector the spec asks for
+# (monetary_policy_design.md §16.4, §20 risk 5): a target that flaps or a rate
+# paid that runs away shows up as a sawtooth here long before it shows up as a
+# crisis. Unlike the three cycle metrics they are NOT banded — the policy rate
+# is something the player chose and the rate paid is something they can read off
+# the budget, so both charts print the exact figure in their bar tooltips.
 #
 # Markers:
 #   on_<button> / off_<button>   a banking policy was enabled/disabled
@@ -36,6 +45,22 @@ te_history_record_banking_samples = {
 		te_history_record_sample = { METRIC = bank_value    VALUE = var:finance_cycle_value }
 		te_history_record_sample = { METRIC = bank_momentum VALUE = var:finance_cycle_momentum }
 		te_history_record_sample = { METRIC = bank_bubble   VALUE = var:bubble_pressure }
+
+		# The monetary variables are owned by te_monetary_monthly_update, which
+		# runs off a different pulse: this journal entry's monthly pulse and the
+		# country's may fall in either order in a given month (§17 check 7), and
+		# a country restored from a save made before the system existed has run
+		# neither yet. Guarded, so a missing variable skips the sample and the
+		# chart simply shows no bar for that month — which is exactly what the
+		# store's "no te_hist_v_<metric> means no data" rule is for.
+		if = {
+			limit = { has_variable = te_policy_rate }
+			te_history_record_sample = { METRIC = mon_policy VALUE = var:te_policy_rate }
+		}
+		if = {
+			limit = { has_variable = te_rate_paid_pts }
+			te_history_record_sample = { METRIC = mon_rate_paid VALUE = var:te_rate_paid_pts }
+		}
 	}
 }
 
