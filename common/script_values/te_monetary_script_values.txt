@@ -80,6 +80,94 @@
 #   te_mon_regime           0 to 6                  0 none/bankless, 1 commodity, 2 gold,
 #                                                   3 fiat, 4 digital, 5 crypto, 6 command
 #
+# PHASE 2 — INFLATION (§9). Same two rules: initialised behind `has_variable`,
+# never removed. Step 6 of te_monetary_monthly_update is the only writer of all
+# of them, exactly as step 8 is the only writer of the stance.
+#
+#   te_inflation            -10 to 100  displayed   headline annual inflation in pp:
+#                                                   core plus cost-push (§9.3).
+#                                                   Shown exactly on the dashboard
+#   te_inflation_core       -10 to 100  HIDDEN      the slow-moving part, which
+#                                                   persistence acts on and the
+#                                                   mandates react to. Never printed:
+#                                                   headline minus core is cost-push,
+#                                                   and cost-push is public, so
+#                                                   printing core would be harmless —
+#                                                   but printing it NEXT to the
+#                                                   pressure sum would not (P7), and
+#                                                   one rule is easier to keep
+#   te_inflation_expected   -10 to 100  displayed   what lenders price and the §10
+#                                                   floor uses. Pinned at 0 under a
+#                                                   metallic regime
+#   te_inflation_noise      +/-0.75     HIDDEN      the mean-reverting random walk
+#                                                   added to pressure (ruling P7),
+#                                                   +/-0.1 a month. It exists so the
+#                                                   pressure sum cannot be inverted
+#                                                   to read the stance gap, the way
+#                                                   bubble_pressure can be (§0.1)
+#   te_cost_push            +/-6        displayed   the basket term added to HEADLINE
+#                                                   (§9.3); a level, never cumulative
+#   te_basket_index         -1 to 1                 this month's weighted price index
+#                                                   for the country's market
+#   te_basket_avg           -1 to 1                 the 1/36-a-month trailing average
+#                                                   the index is differenced against
+#   te_basket_seeded        0 or 1                  1 once te_basket_avg has been
+#                                                   seeded to a real observation.
+#                                                   Without it month 1 reads the whole
+#                                                   index as a shock
+#   te_basket_market_owner  scope                   the market owner te_basket_avg was
+#                                                   last seeded against, so joining a
+#                                                   customs union re-seeds instead of
+#                                                   booking the new market's price
+#                                                   level as inflation. A SCOPE
+#                                                   variable: read it with
+#                                                   `var:te_basket_market_owner = {`,
+#                                                   never as a number, and never in a
+#                                                   `GetValue` loc accessor. It is the
+#                                                   one phase-2 variable that can be
+#                                                   absent after init — a country with
+#                                                   no market never gets one — so
+#                                                   guard on has_variable
+#   te_inflation_band       1 to 6      displayed   1 deflation, 2 comfort, 3 elevated,
+#                                                   4 high, 5 very high, 6 hyperinflation
+#                                                   (edges in te_mon_band_edge_* below)
+#   te_inflation_band_applied 0 to 6                which te_inflation_band_* modifier
+#                                                   is currently on the country;
+#                                                   0 = none applied yet. Bookkeeping
+#                                                   for the swap, never displayed
+#   te_monetisation_level   0 to 3      displayed   the deficit-monetisation stepper (§11)
+#   te_monetisation_minting_applied >= 0            the value last written into
+#                                                   te_monetisation_minting's multiplier
+#                                                   (pounds of extra minting a week).
+#                                                   BACKS A MULTIPLIER — never remove it
+#   te_mon_dollarised       0 or 1                  1 once the country abandoned its
+#                                                   currency out of hyperinflation
+#                                                   (ruling P9). Makes te_mon_has_dial
+#                                                   false; cleared when the country next
+#                                                   enacts a different monetary law
+#   te_market_yield         >= 0        displayed   max( policy rate , reference rate +
+#                                                   expected inflation ) — the lenders'
+#                                                   floor of §10, before the premium
+#   te_mon_deficit_pct      +/- large               the deficit as a % of GDP a year,
+#                                                   cached for the §9.1 deficit term and
+#                                                   printed in the debug read-out so the
+#                                                   §17 check-12 units question can be
+#                                                   settled from a running game
+#   te_mon_stance_months    signed counter          how many consecutive months the
+#                                                   DISPLAYED band has been loose (<= 2,
+#                                                   counts negative) or tight (>= 4,
+#                                                   counts positive); reset to 0 in the
+#                                                   middle. §13's sustained-stance
+#                                                   politics key on this rather than on
+#                                                   the true gap, which would print r*
+#                                                   (ruling P8)
+#   te_mon_wage_dividend_applied >= 0               the value last written into
+#                                                   te_mon_real_wage_dividend's
+#                                                   multiplier (units of +0.1pp of wage
+#                                                   pressure; 0 outside the comfort
+#                                                   band). BACKS A MULTIPLIER — never
+#                                                   remove it
+#
 # ONE COUNTRY VARIABLE IS OWNED ELSEWHERE. te_mon_stance_band_applied belongs to
 # banking_cycle_apply_stance_band (common/scripted_effects/banking_cycle_effects.txt),
 # not to the monthly update: it is bookkeeping for the banking journal entry's
@@ -113,6 +201,14 @@
 # te_mon_stance_gap are never printed in any tooltip, loc string or visible
 # modifier. What the player *chooses* is shown exactly; the economy's hidden
 # state is not. The displayed stance band is the only window onto the gap.
+# Phase 2 adds three more to the list (ruling P7): te_inflation_core,
+# te_inflation_noise, and the §9.1 pressure SUM, which is never stored but must
+# not be rendered from its parts either — it carries -0.4 x the stance gap, so a
+# printed sum inverts to r* exactly the way bubble_pressure does (§0.1). What
+# phase 2 shows exactly: headline inflation, expected inflation, the target, the
+# rate paid, the monetisation level, and the two pressure modifier types, which
+# are what the player chose. The console debug event is the one place the hidden
+# half may be printed.
 # ============================================================================
 
 
@@ -597,4 +693,312 @@ te_mon_rate_paid_multiplier = {
 	else = {
 		value = 3
 	}
+}
+
+
+# ============================================================================
+# PHASE 2 — INFLATION: the §21 tuning constants
+# ============================================================================
+# Every number §21 gives for phase 2 is a named value here, so retuning any of
+# them is a one-line edit and no consumer restates one. Nothing below reads a
+# phase-2 variable: these are the constants, and te_monetary_monthly_update's
+# step 6 is what assembles them.
+#
+# UNITS. Everything is in percentage POINTS, like the rest of the file: a
+# pressure of 2.5 means "inflation settles 2.5pp above expectations while this
+# lasts". Pressure terms are LEVELS, never per-month increments (§9.1) — an
+# earlier draft added them to the change in inflation and made a routine grain
+# move worth ~28pp of cumulative inflation.
+
+
+# --- The core / expectations loop (§9.1) ------------------------------------
+
+# How much of the gap between (expected + pressure) and core inflation closes
+# each month: pi_core += 0.10 x (expected + pressure - pi_core). A ten-month
+# adjustment, which is what makes inflation something a player steers rather
+# than something that jumps.
+te_mon_core_speed = {
+	value = 0.10
+}
+
+# The mandate's inflation target, and the anchor expectations are pulled
+# toward. 0 under a metallic regime: convertibility promises a stable price
+# LEVEL, not a stable inflation rate, so gold and commodity money anchor on
+# zero and carry the deflation bias §5.1 describes.
+te_mon_inflation_anchor = {
+	if = {
+		limit = { te_mon_is_metallic = yes }
+		value = 0
+	}
+	else = {
+		value = 2
+	}
+}
+
+# How fast expectations move toward the anchored blend each month (§9.1).
+# 1/12 under central bank independence, 1/24 otherwise — an independent bank's
+# announcements are believed twice as quickly.
+te_mon_expectation_alpha = {
+	value = 1
+	if = {
+		limit = { te_mon_is_cbi = yes }
+		divide = 12
+	}
+	else = {
+		divide = 24
+	}
+}
+
+# The credibility anchor c (§9.1, §21): how much of expected inflation comes
+# from the target rather than from what inflation is actually doing. With a
+# standing pressure P and the real stance held, inflation settles at
+# anchor + P / c, so c is the whole difference between a labour law costing
+# 0.7pp and costing 3.3pp.
+#
+#   metallic (gold / commodity)  1      convertibility IS the anchor; §9.1 pins
+#                                       expectations to 0 outright
+#   state-owned banking          0.15   the weakest anchor there is (§5.2): a
+#                                       bank the treasury owns cannot promise
+#                                       anything the treasury might want undone
+#   central bank independence    0.7
+#   delegated, not independent   0.4
+#   manual                       0.25   unstable above the floor BY DESIGN — the
+#                                       Taylor principle; holding a nominal rate
+#                                       fixed while inflation rises eases policy
+#
+# ORDER OF THE BRANCHES IS A RULING, not an accident. State-owned banking sits
+# above both independence and delegation: it is in the same law group as
+# independence (so those two can never both hold), but a state-owned bank CAN be
+# delegated, and delegating the dial to a bank the government owns does not buy
+# credibility it never had. Delegation is read through te_mon_is_delegated,
+# which is guarded — a country that has never pulsed reads as manual.
+te_mon_credibility_c = {
+	if = {
+		limit = { te_mon_is_metallic = yes }
+		value = 1
+	}
+	else_if = {
+		limit = { te_mon_is_state_banking = yes }
+		value = 0.15
+	}
+	else_if = {
+		limit = { te_mon_is_cbi = yes }
+		value = 0.7
+	}
+	else_if = {
+		limit = { te_mon_is_delegated = yes }
+		value = 0.4
+	}
+	else = {
+		value = 0.25
+	}
+}
+
+# How far headline inflation has to sit from the anchor before credibility is
+# gone entirely, in pp: c_eff = c x max(0, 1 - |headline - anchor| / 10).
+# Without it an anchored `expected` would trail a STEADY high inflation
+# for ever and the §10 lenders' floor would under-price it permanently.
+te_mon_deanchor_span = {
+	value = 10
+}
+
+
+# --- The §9.1 pressure terms ------------------------------------------------
+
+# Loose money, in pp of pressure per pp of stance gap: pressure takes
+# -0.4 x te_mon_stance_gap_clamped (the same +/-4 clamp the cycle channel uses).
+# Positive here, negated by the consumer, so the sign lives in one place.
+te_mon_stance_pressure_coeff = {
+	value = 0.4
+}
+
+# The financial cycle's contribution to pressure, in pp (§9.1): frenzy +1.5,
+# boom +0.8, expansion +0.3, stable 0, stagnation -0.3, downturn -0.8,
+# panic -1.5. THE SEVEN PHASE TERMS OF §21 LIVE HERE AND NOWHERE ELSE — one
+# branching value rather than seven named constants, because every consumer
+# wants "the phase term", never one particular phase's number.
+#
+# GUARDED the same way te_mon_cycle_lean is: finance_cycle_value is owned by
+# je_banking_cycle's `immediate`, so a country without the journal entry has no
+# such variable and the banking_cycle_is_* triggers read it unguarded. Such a
+# country contributes 0, which is the "JE-dependent inputs read as absent" rule.
+te_mon_phase_pressure = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_frenzy = yes
+		}
+		add = 1.5
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_boom = yes
+		}
+		add = 0.8
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_expansion = yes
+		}
+		add = 0.3
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_stagnation = yes
+		}
+		subtract = 0.3
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_downturn = yes
+		}
+		subtract = 0.8
+	}
+	else_if = {
+		limit = {
+			has_variable = finance_cycle_value
+			banking_cycle_is_panic = yes
+		}
+		subtract = 1.5
+	}
+}
+
+# Speculative excess feeding through into prices, in pp, added once
+# bubble_pressure reaches 65 — the same threshold te_mon_cycle_lean leans at.
+te_mon_bubble_pressure_term = {
+	value = 0.2
+}
+
+# Bond-financed deficits, in pp of pressure per pp of deficit above 1% of GDP
+# a year (doubled at war). Small on purpose: §11's whole point is that money
+# finance is about eight times as inflationary per pound financed.
+te_mon_deficit_coeff = {
+	value = 0.3
+}
+
+# Weeks in a year, as the conversion from a budget flow to a yearly one
+# (ruling P4). `income` and `total_expenses` appear to be WEEKLY while `gdp` is
+# ANNUAL — the mod's own sv_money_flow_event_small is commented "0.01% GDP /
+# week" — so the §9.1 deficit term needs the flows annualised before dividing
+# by GDP. §17 check 12 has not been read in a running game yet: the monthly
+# update caches the computed deficit-%-of-GDP in te_mon_deficit_pct and the
+# console read-out prints it, so if the flows turn out to be annual already
+# this value goes to 1 and nothing else changes.
+te_mon_deficit_annualise_factor = {
+	value = 52
+}
+
+# Money finance, in pp of pressure per monetisation level (§11). Three levels
+# is +7.5pp — the WWI-scale answer to "print the war".
+te_mon_monetisation_pressure = {
+	value = 2.5
+}
+
+# What one monetisation level is worth in minting, as a share of annual GDP per
+# year (§11, §21). About +20% of baseline seigniorage per level, so level 3 is
+# three points of GDP a year. The monthly update turns this into
+# te_monetisation_minting's multiplier: gdp x share x level, divided by
+# te_mon_deficit_annualise_factor, because country_minting_add is a WEEKLY sum.
+te_mon_monetisation_gdp_share = {
+	value = 0.01
+}
+
+# Quantitative easing, in pp of pressure while open-market operations are
+# active (§11). Flat, not scaled: the tool is already gated to the rate floor.
+te_mon_qe_pressure = {
+	value = 1.0
+}
+
+
+# --- Cost-push: the goods basket (§9.3) -------------------------------------
+
+# How much of the basket's deviation from its own trailing average reaches
+# headline inflation: cost_push = 0.3 x (index - average) x 100. A 10% grain
+# rise is ~0.9pp of headline; oil doubling is ~4.5pp.
+te_mon_basket_k = {
+	value = 0.3
+}
+
+# How fast that trailing average catches up: 1/36 a month, so a price shock
+# fades over about three years rather than accumulating. This is why cost-push
+# is a LEVEL — a world where oil is permanently dear is a fact about that
+# world, not inflation.
+te_mon_basket_avg_alpha = {
+	value = 1
+	divide = 36
+}
+
+# The clamp on cost-push, in pp either way (§9.3). Stops a single market
+# dislocation from writing a hyperinflation.
+te_mon_cost_push_clamp = {
+	value = 6
+}
+
+te_mon_cost_push_clamp_neg = {
+	value = te_mon_cost_push_clamp
+	multiply = -1
+}
+
+
+# --- Premium terms that inflation adds (§7.6) -------------------------------
+
+# How far expected inflation may stray from the target before lenders start
+# charging for it, in pp. Inside the tolerance, expectations cost nothing.
+te_mon_unanchored_tolerance = {
+	value = 3
+}
+
+# The cyclical premium charged per pp of |expected - anchor| beyond that
+# tolerance (§7.6, ruling P1). It is already +3.75pp at expected = 20, and it
+# is one of the three reasons §10's never-disinflate path stays dearer than the
+# pre-war baseline instead of becoming the cheapest line in the game.
+te_mon_unanchored_premium_per_pp = {
+	value = 0.25
+}
+
+# The cyclical premium charged per monetisation level (§7.6, §11). Lenders
+# price a government that is printing to pay them.
+te_mon_monetisation_premium = {
+	value = 0.5
+}
+
+
+# --- The §9.2 band edges ----------------------------------------------------
+
+# Headline inflation, in pp, at each boundary. te_inflation_band is 1 below the
+# first edge and 6 at or above the last, and te_inflation_band_* in
+# common/static_modifiers/extra_modifiers.txt carries what each band costs.
+# THE BANDS ARE THE DETERRENT (§9.2, §10): if these edges move, the modifier
+# values have to be re-read against them.
+te_mon_band_edge_deflation = {
+	value = -1
+}
+
+te_mon_band_edge_elevated = {
+	value = 3
+}
+
+te_mon_band_edge_high = {
+	value = 8
+}
+
+te_mon_band_edge_very_high = {
+	value = 20
+}
+
+te_mon_band_edge_hyper = {
+	value = 50
+}
+
+# §21 names the hyperinflation threshold separately from the band edges, and it
+# is the same number: the crisis chain (§9.2 — currency reform, dollarise, ride
+# it out) fires exactly when the hyperinflation band opens. Defined from the
+# edge rather than restated, so the two can never drift apart.
+te_mon_hyperinflation_threshold = {
+	value = te_mon_band_edge_hyper
 }

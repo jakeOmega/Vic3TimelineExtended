@@ -339,7 +339,12 @@ def categorize_key(key, technology_keys):
     # Monetary-policy static modifier names. The base keys are four tokens long,
     # so without this rule the `_desc` half of each pair falls to CONCEPTS while
     # the name stays in MISCELLANEOUS and the family is split across two files.
-    if key.startswith("te_monetary_"):
+    # Phase 2 adds three more prefixes: `te_mon_` and `te_monetisation_` (whose
+    # three-token `te_monetisation_minting` would otherwise fall to CONCEPTS
+    # outright, not just its `_desc`) and `te_inflation_` for the band set.
+    # This rule must stay BELOW the `_add` / `_mult` line above, so the two
+    # pressure modifier types still land in te_modifiers_l_english.yml.
+    if key.startswith(("te_monetary_", "te_mon_", "te_monetisation_", "te_inflation_")):
         return "MISCELLANEOUS"
     if "_desc" in key or (re.match(r"^[a-zA-Z_]+$", key) and len(key.split("_")) < 4):
         return "CONCEPTS"

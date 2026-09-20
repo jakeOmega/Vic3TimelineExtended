@@ -238,6 +238,100 @@ te_monetary_init_variables = {
 		limit = { NOT = { has_variable = te_mon_stance_band } }
 		set_variable = { name = te_mon_stance_band value = 3 }
 	}
+
+	# --- phase 2: inflation (§9) --------------------------------------------
+	# Every one of these seeds to a neutral zero, which is exactly what phase 1
+	# behaviour is: no inflation, expectations at nothing, no monetisation, no
+	# dollarisation. Nothing reads them until step 6 exists, so a save loaded
+	# before then simply gains a set of zeroes.
+	#
+	# TWO EXCEPTIONS TO THE ZERO. te_inflation_band seeds to 2 (comfort),
+	# because 0 is not a band and the band swap has to have something to
+	# compare against; te_inflation_band_applied seeds to 0, which means "no
+	# band modifier has been applied yet" and is a legal value.
+	#
+	# te_basket_market_owner is a SCOPE variable, so it cannot hold 0. It seeds
+	# to the country's current market owner, and to nothing at all for a
+	# country with no market — the one phase-2 variable that can legitimately
+	# be absent after init. Read it with `var:te_basket_market_owner = { ... }`
+	# behind a has_variable guard, never as a number and never through a
+	# GetValue loc accessor.
+	if = {
+		limit = { NOT = { has_variable = te_inflation } }
+		set_variable = { name = te_inflation value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_inflation_core } }
+		set_variable = { name = te_inflation_core value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_inflation_expected } }
+		set_variable = { name = te_inflation_expected value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_inflation_noise } }
+		set_variable = { name = te_inflation_noise value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_cost_push } }
+		set_variable = { name = te_cost_push value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_basket_index } }
+		set_variable = { name = te_basket_index value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_basket_avg } }
+		set_variable = { name = te_basket_avg value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_basket_seeded } }
+		set_variable = { name = te_basket_seeded value = 0 }
+	}
+	if = {
+		limit = {
+			NOT = { has_variable = te_basket_market_owner }
+			exists = market.owner
+		}
+		market = { owner = { save_scope_as = te_mon_init_market_owner } }
+		set_variable = { name = te_basket_market_owner value = scope:te_mon_init_market_owner }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_inflation_band } }
+		set_variable = { name = te_inflation_band value = 2 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_inflation_band_applied } }
+		set_variable = { name = te_inflation_band_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_monetisation_level } }
+		set_variable = { name = te_monetisation_level value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_monetisation_minting_applied } }
+		set_variable = { name = te_monetisation_minting_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_dollarised } }
+		set_variable = { name = te_mon_dollarised value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_market_yield } }
+		set_variable = { name = te_market_yield value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_deficit_pct } }
+		set_variable = { name = te_mon_deficit_pct value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_stance_months } }
+		set_variable = { name = te_mon_stance_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_wage_dividend_applied } }
+		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
+	}
 }
 
 

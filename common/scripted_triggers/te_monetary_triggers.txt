@@ -24,6 +24,15 @@
 #
 # has_law_or_variant rather than has_law throughout: variant laws
 # (`parent = law_X`) are tag-restricted skins of the same law and must count.
+#
+# DOLLARISATION (phase 2, ruling P9). A country that abandoned its own currency
+# in a hyperinflation has no dial left whatever its laws still say: the rate is
+# whoever's money it now uses. The test is guarded on has_variable and is
+# therefore inert until step 6 of the monthly update starts setting the flag —
+# a country that has never pulsed, and every save from before phase 2, reads
+# exactly as it did before. The flag clears when the country next enacts a
+# different lawgroup_monetary_policy law, which is the only exit the spec
+# leaves room for.
 te_mon_has_dial = {
 	has_law_or_variant = law_type:law_national_bank
 	OR = {
@@ -32,6 +41,10 @@ te_mon_has_dial = {
 		has_law_or_variant = law_type:law_digital_currency
 	}
 	NOT = { has_law_or_variant = law_type:law_command_economy }
+	trigger_if = {
+		limit = { has_variable = te_mon_dollarised }
+		NOT = { var:te_mon_dollarised = 1 }
+	}
 }
 
 # Central bank independence (lawgroup_financial_regulation). Binds the target to
@@ -50,12 +63,73 @@ te_mon_is_command = {
 # State-owned banking (lawgroup_financial_regulation). The weakest credibility
 # anchor (§5.2, §9.1). Ruling R2 ships the premium part only in phase 1.
 #
-# KEEP: no caller since the +0.5pp structural premium moved onto the law itself
-# as country_credit_standing_add = 0.005, where the law tooltip states it. This
-# trigger is contract surface for the §9.1 expectations-anchoring work in phase
-# 2, which is a behaviour and not a number; a cleanup pass should leave it.
+# It lost its phase-1 caller when the +0.5pp structural premium moved onto the
+# law itself as country_credit_standing_add = 0.005, where the law tooltip
+# states it. Phase 2 gave it one again: te_mon_credibility_c reads it for the
+# §9.1 expectations anchor, where state-owned banking is the weakest c there is
+# (0.15) and outranks delegation — a bank the treasury owns cannot promise
+# anything the treasury might want undone.
 te_mon_is_state_banking = {
 	has_law_or_variant = law_type:law_state_owned_banking
+}
+
+
+# --- Who has inflation, and on what terms (§9, §11, §14) --------------------
+
+# Does this country run the inflation loop at all? Everyone except a command
+# economy (ruling P6, §14: repressed inflation is a system nobody has designed
+# yet, so a planned economy holds pi and expected at 0 and is excluded from the
+# bands, the premium terms and the cost-push basket).
+#
+# NOTE WHO IS *IN*. Bankless, commodity-money and crypto countries all run
+# inflation, even though none of them has a dial: §4 makes them pay the world
+# rate plus THEIR OWN expected inflation plus the bankless spread, so their
+# expectations have to be computed. Their stance gap stays 0, which simply
+# drops the loose-money term out of §9.1's pressure for them.
+te_mon_has_inflation = {
+	te_mon_is_command = no
+}
+
+# Metallic money — gold standard or commodity money (§5.1). Convertibility is
+# the anchor: expectations are pinned (credibility c = 1), the inflation target
+# is 0 rather than 2, and §9.1's regime pull drags core inflation back toward
+# zero, which is the deflation bias of a hard-money regime.
+#
+# CRYPTO IS NOT METALLIC. law_decentralized_cryptocurrency gets a stronger pull
+# (-(pi_core + 1)) and none of the anchoring, because nothing redeems it; that
+# branch belongs to step 6, not here.
+te_mon_is_metallic = {
+	OR = {
+		has_law_or_variant = law_type:law_gold_standard
+		has_law_or_variant = law_type:law_commodity_money
+	}
+}
+
+# May this country monetise its deficit? (§11) Printing money to pay the
+# government needs a currency the state can create (fiat or digital), a bank to
+# create it through, and a government still able to give that bank the order —
+# so central bank independence rules it out, and so does a command economy,
+# which has its own `ce_*` plan finance. A dollarised country has no currency of
+# its own left to print (ruling P9); that clause is guarded, so it is inert
+# until step 6 starts setting the flag.
+#
+# The regime test is the same pair law_fiat_currency / law_digital_currency that
+# country_can_create_unbacked_money_bool gates open-market operations with. It
+# is written out rather than read from the bool because monetisation is a
+# TREASURY act and OMO is a CENTRAL BANK act: a later law could plausibly permit
+# one and forbid the other, and sharing the gate would hide that.
+te_mon_can_monetise = {
+	has_law_or_variant = law_type:law_national_bank
+	OR = {
+		has_law_or_variant = law_type:law_fiat_currency
+		has_law_or_variant = law_type:law_digital_currency
+	}
+	te_mon_is_cbi = no
+	te_mon_is_command = no
+	trigger_if = {
+		limit = { has_variable = te_mon_dollarised }
+		NOT = { var:te_mon_dollarised = 1 }
+	}
 }
 
 
