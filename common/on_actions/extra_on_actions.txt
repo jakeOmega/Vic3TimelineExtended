@@ -56,6 +56,50 @@ te_banking_law_change_cleanup = {
 				}
 				remove_banking_market_modifiers_effect = yes
 			}
+			# Left fiat or digital currency with open-market operations still running.
+			# OMO is fiat/digital only (monetary_policy_design.md §5.1 and the §0.1
+			# ruling of 2026-09-20), enforced in banking_possible_cb_open_market_ops,
+			# but `possible` only gates the click — a country that enacts commodity
+			# money, the gold standard or crypto afterwards kept the tool, and its four
+			# intervention points, until it switched it off by hand.
+			#
+			# WHY THE TWO-PART TEST. This on-action fires while the new law is still
+			# "considered being enacted" (vanilla 00_code_on_actions.txt:4835-4841), so
+			# the country still holds the OLD law here and
+			# modifier:country_can_create_unbacked_money_bool still reads the OLD
+			# regime's value on the very enactment that takes it away. is_enacting_law
+			# names the law that is about to land, which is exactly how vanilla's own
+			# block at this hook clears Brazil's slave-trade modifiers (old law via
+			# has_law_or_variant + new law via is_enacting_law). The bool read then
+			# covers every other route out of fiat/digital — a save from before this
+			# rule, a law set directly by script, any later enactment. ADD A LAW HERE
+			# if a new lawgroup_monetary_policy law that does NOT grant
+			# country_can_create_unbacked_money_bool is ever introduced.
+			#
+			# It runs through banking_effect_cb_disable_open_market_ops, the same effect
+			# cb_disable_open_market_ops and the dashboard call, not a bare
+			# remove_modifier: the points come back either way (they are the modifier's
+			# own country_banking_intervention_max_add = -4), but only the shared effect
+			# also records the off_cb_open_market_ops history marker, so an automatic
+			# switch-off draws on the chart exactly like a manual one.
+			#
+			# else_if on purpose: a country entering a command or cooperative economy
+			# has already had banking_open_market_ops stripped by the branch above, and
+			# that removal is not visible inside this same effect block — the
+			# has_modifier read behind banking_tool_omo_active would still say yes and
+			# post a second, spurious marker.
+			else_if = {
+				limit = {
+					banking_tool_omo_active = yes
+					OR = {
+						modifier:country_can_create_unbacked_money_bool = no
+						is_enacting_law = law_type:law_commodity_money
+						is_enacting_law = law_type:law_gold_standard
+						is_enacting_law = law_type:law_decentralized_cryptocurrency
+					}
+				}
+				banking_effect_cb_disable_open_market_ops = yes
+			}
 		}
 
 		# Monetary policy (§14). A command economy has no dial and no delegation
