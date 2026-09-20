@@ -442,6 +442,14 @@ fails**. 15–17 can invalidate a whole mechanism; 18–23 are the numbers and t
 the harness and the exit criteria. Phase 1's items 2–5 and 8–14 are still open and are
 inherited, not repeated.
 
+**Read this one first, because three of the checks below use it as their instrument.**
+`te_debug_monetary.1`'s new sections read their figures with
+`SCOPE.GetRootScope.ScriptValue(…)`, an accessor this mod uses in journal-entry rows and
+button descriptions but **never before in an event description**. If the pressure and basket
+blocks come out blank in game, the fix is one find-and-replace to
+`GetPlayer.MakeScope.ScriptValue` — correct for every use of the event except firing it at a
+foreign tag from the console — and checks 15, 16 and 24 all need it working.
+
 **Structural — a failure here changes what the phase does**
 
 15. **Deficit units (ruling P4 / §17 check 12).** `te_debug_monetary.1` prints
@@ -471,7 +479,10 @@ inherited, not repeated.
     law with a stanced IG in government and look for a line for that law in the IG's approval
     tooltip. If there is none, the one-line fix is to set the group to 0.25 like the mod's
     other economy law groups. (Worth a second read while there: an IG already pinned at
-    vanilla's global `MAX_IG_APPROVAL_FROM_LAWS` ±5 absorbs these ±1 rows entirely.)
+    vanilla's global `MAX_IG_APPROVAL_FROM_LAWS` ±5 absorbs these ±1 rows entirely.) While
+    on the politics: step 8b's own swap should issue cleanly month to month, its ±1 rows
+    should read sensibly in the IG approval tooltip, and six months should feel like a
+    policy rather than a meeting.
 
 **Numbers, modifiers and the UI**
 
@@ -483,7 +494,11 @@ inherited, not repeated.
     `sol_expectations_lower_strata_shift`, a country-held modifier carrying the state-masked
     `state_lower_strata_expected_sol_add`**. On a comfort-band country with labour laws:
     confirm the lower-strata expected-SoL line in a state panel actually moves. The modifier's
-    own tooltip renders "+0" at `decimals = 1`, so read the state panel, not the tooltip.
+    own tooltip renders "+0" at `decimals = 1`, so read the state panel, not the tooltip. Two
+    band-edge behaviours ride along and have only been reasoned through: the dividend
+    arriving and departing as the band crosses into and out of comfort, and the wage-price
+    spiral's doubling switching on at the *High* edge (it reads last month's headline, ruling
+    P5). `te_debug_monetary.1` prints every input for both.
 19. **The band modifiers' state- and interest-group-masked keys, applied at country scope.**
     `te_inflation_band_high` and above carry `state_tax_waste_add`, both
     `state_*_investment_pool_efficiency_mult` keys and three `interest_group_ig_*_approval_add`
@@ -492,6 +507,13 @@ inherited, not repeated.
     `banking_crash_intervention_nationalize` mixes all three masks) but unread for these. On
     the first save that reaches Elevated or High, hover the modifier and check every field
     lands.
+
+19a. **Monetisation's three reads.** That the budget panel's minting line moves by roughly
+    1% of annual GDP a year per level (the debug event prints the level and the applied
+    weekly amount beside it); that an AI at war with `scaled_debt ≥ 0.5` actually reaches
+    level 1; and that the six law-enactment events in `extra_law_events.txt` now show a
+    **second, unscaled** inflation-pressure modifier beside the minting one.
+
 20. **The hyperinflation flow.** The band swap across a boundary; the crisis firing **once**
     (24-month cooldown, cleared by the two resolving options); the reform option's pool wipe,
     radicals and ten-year premium; the dollarise option landing at
