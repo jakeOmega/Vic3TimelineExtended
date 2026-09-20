@@ -40,9 +40,16 @@ on_monthly_pulse = {
 	}
 }
 
+#
+# PHASE 3 ADDS THE WORLD RATE (§12.1) to the same once-a-month slot: the real,
+# GDP-weighted rate of the great powers whose rate is discretionary, falling
+# back on the reference rate just refreshed — hence the order. It reads whatever
+# the countries' last pulse left (§17 check 7: the order of this pulse and
+# on_monthly_pulse_country is unknown), and every consumer tolerates that.
 te_monetary_world_monthly_on_action = {
 	effect = {
 		te_monetary_refresh_world_era_base = yes
+		te_monetary_refresh_world_rate = yes
 	}
 }
 
@@ -130,6 +137,9 @@ on_game_started = {
 te_monetary_on_game_started = {
 	effect = {
 		te_monetary_refresh_world_era_base = yes
+		# No country has pulsed yet, so no great power is discretionary and this
+		# writes the reference rate — which is the 1836 answer anyway (§12.1).
+		te_monetary_refresh_world_rate = yes
 		every_country = {
 			trigger_event = {
 				id = te_monetary_internal.1

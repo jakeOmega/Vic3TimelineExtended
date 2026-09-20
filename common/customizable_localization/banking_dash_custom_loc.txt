@@ -482,3 +482,47 @@ te_mon_monetise_condition = {
 		localization_key = banking_dash_mon_monetise_why_allowed
 	}
 }
+
+
+# Phase 3 (§12.3): the word beside the peg-confidence figure. The figure is
+# displayed exactly — it is built from the displayed gap, the treasury and the
+# debt, none of which carries the neutral rate — so this is a reading aid, not a
+# band standing in for a hidden number. Thresholds: the crisis fires at
+# te_mon_peg_crisis_threshold (20), and a resumed or devalued peg restarts at
+# te_mon_peg_devalue_confidence (50), which is why 50 is still only "Watched".
+#
+# Suspension is tested first: confidence is frozen while convertibility is
+# suspended, so its figure says nothing and the word says why. Defending comes
+# next because the +40 it bought would otherwise read as calm.
+te_mon_peg_state = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_peg_confidence } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { te_mon_peg_is_suspended = yes }
+		localization_key = banking_dash_mon_peg_state_suspended
+	}
+	text = {
+		trigger = { te_mon_peg_is_defending = yes }
+		localization_key = banking_dash_mon_peg_state_defending
+	}
+	text = {
+		trigger = { var:te_peg_confidence <= te_mon_peg_crisis_threshold }
+		localization_key = banking_dash_mon_peg_state_breaking
+	}
+	text = {
+		trigger = { var:te_peg_confidence < 40 }
+		localization_key = banking_dash_mon_peg_state_doubted
+	}
+	text = {
+		trigger = { var:te_peg_confidence < 70 }
+		localization_key = banking_dash_mon_peg_state_watched
+	}
+	text = {
+		localization_key = banking_dash_mon_peg_state_trusted
+	}
+}

@@ -29,11 +29,11 @@ types banking_dashboard_widget_types
 		spacing = 6
 
 		widget = {
-			size = { 160 24 }
+			size = { 200 24 }
 			textbox = {
 				parentanchor = left|vcenter
 				autoresize = yes
-				max_width = 160
+				max_width = 200
 				elide = right
 				align = nobaseline
 				using = fontsize_large
@@ -93,18 +93,33 @@ types banking_dashboard_widget_types
 	### The label column of a monetary row, sized to line up with
 	### banking_dash_condition_row's.
 	type banking_dash_mon_label = widget {
-		size = { 160 28 }
+		size = { 200 28 }
 
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 160
+			max_width = 200
 			elide = right
 			align = nobaseline
 			using = fontsize_large
 			default_format = "#title"
 			block "mon_label_text" {}
 		}
+	}
+
+	### A sub-heading inside the Monetary Policy block. The block grew to some
+	### twenty rows over three phases; these split it into what the world is
+	### doing, what gold is doing, what the debt costs, what prices are doing,
+	### and who holds the dial. A heading whose rows are all hidden carries the
+	### same `visible` as they do.
+	type banking_dash_mon_subheader = textbox {
+		autoresize = yes
+		max_width = 460
+		align = left|nobaseline
+		margin_top = 6
+		margin_bottom = 1
+		default_format = "#lore"
+		block "mon_subheader_text" {}
 	}
 
 	### The value column of a monetary row. Wider than the label column looks
@@ -984,11 +999,17 @@ flowcontainer = {
 						margin_bottom = 2
 					}
 
+					banking_dash_mon_subheader = {
+						blockoverride "mon_subheader_text" {
+							text = "banking_dash_mon_sub_rates"
+						}
+					}
+
 					### World reference rate — read-only, the same figure for
 					### every country, and the anchor the rest of the block is
-					### measured against: a no-dial country pays it plus a
-					### point, a gold standard must stay within two of it, and
-					### Peg Defence parks the target on it exactly. Public
+					### measured against: it is the base of the lenders' floor
+					### (§10) and what the World Rate below falls back to when
+					### no great power sets a rate of its own. Public
 					### information by spec §10, unlike anything downstream of
 					### the neutral rate.
 					###
@@ -1007,6 +1028,30 @@ flowcontainer = {
 						blockoverride "condition_value" {
 							banking_dash_condition_value = {
 								text = "banking_dash_mon_world_value"
+							}
+						}
+					}
+
+					### World rate (phase 3, §12.1) — the REAL rate the discretionary
+					### great powers are actually running, GDP-weighted. A no-dial
+					### country pays it plus expectations plus a point, Peg Defence
+					### targets it, and a gold country's reserves move on the gap
+					### against it. Built from displayed figures only (policy rates
+					### and expected inflation), so it is printed exactly.
+					###
+					### te_mon_world_rate_now is the per-pulse copy of
+					### global_var:te_world_rate, read for the same reason as
+					### te_mon_era_base_now above; its own readiness handler
+					### because a phase-2 save has none until its first pulse.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_world_rate_ready').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_worldrate_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_worldrate_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_worldrate_value"
 							}
 						}
 					}
@@ -1046,7 +1091,12 @@ flowcontainer = {
 							size = { 26 26 }
 							parentanchor = vcenter
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+							### Click a point, ctrl-click a tenth, shift-click to the limit.
+							click_modifiers = {
+								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
+								onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)9' ) ).End )]"
+								onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)11' ) ).End )]"
+							}
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
 						}
 
@@ -1067,8 +1117,109 @@ flowcontainer = {
 							size = { 26 26 }
 							parentanchor = vcenter
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+							### Click a point, ctrl-click a tenth, shift-click to the limit.
+							click_modifiers = {
+								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+								onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)10' ) ).End )]"
+								onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)12' ) ).End )]"
+							}
 							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) )]"
+						}
+					}
+
+					banking_dash_mon_subheader = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						blockoverride "mon_subheader_text" {
+							text = "banking_dash_mon_sub_gold"
+						}
+					}
+
+					### ---- Gold and the peg (phase 3, §12.2-12.3) ---------------
+					### Three rows, for a gold-standard country with a national
+					### bank only (banking_mon_shows_gold) — suspended or not; the
+					### values' customizable localization says "suspended" where
+					### that is the answer. None of it is hidden state: the gap is
+					### policy rate minus world rate, both displayed.
+					###
+					### Gap against the world rate — what moves the gold.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_goldgap_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_goldgap_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_goldgap_value"
+							}
+						}
+					}
+
+					### Gold flow this month. add_treasury never appears in the
+					### budget ledger (§12.2), so this row is the only place the
+					### player can see it; the tooltip carries the hot-money
+					### balance that says how much of the vault is borrowed.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_goldflow_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_goldflow_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_goldflow_value"
+							}
+						}
+					}
+
+					### Borrowed gold and what it costs — rows of their own since the
+					### first playtest: a balance the player owes, growing every month
+					### the rate is held high, is not tooltip material. Both share the
+					### Gold Flow tooltip, which is where the mechanism is explained.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_goldflow_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_hotmoney_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_hotmoney_value"
+							}
+						}
+					}
+
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_goldflow_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_goldcarry_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_goldcarry_value"
+							}
+						}
+					}
+
+					### Peg confidence, 0-100. §3 asks for a bar; a figure with a
+					### word beside it reads the same and costs no new widget.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_pegconf_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_pegconf_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_pegconf_value"
+							}
+						}
+					}
+
+					banking_dash_mon_subheader = {
+						blockoverride "mon_subheader_text" {
+							text = "banking_dash_mon_sub_borrowing"
 						}
 					}
 
@@ -1114,6 +1265,12 @@ flowcontainer = {
 							banking_dash_condition_value = {
 								text = "banking_dash_mon_premium_value"
 							}
+						}
+					}
+
+					banking_dash_mon_subheader = {
+						blockoverride "mon_subheader_text" {
+							text = "banking_dash_mon_sub_prices"
 						}
 					}
 
@@ -1254,6 +1411,12 @@ flowcontainer = {
 						}
 					}
 
+					banking_dash_mon_subheader = {
+						blockoverride "mon_subheader_text" {
+							text = "banking_dash_mon_sub_bank"
+						}
+					}
+
 					### Policy stance — the band NAME and nothing else.
 					banking_dash_condition_row = {
 						tooltip = "banking_dash_mon_stance_tt"
@@ -1291,6 +1454,19 @@ flowcontainer = {
 								text = "banking_dash_mon_delegation_value"
 							}
 						}
+					}
+
+					### Delegate / Take control — a row of their own, under the
+					### Delegation row they act on. They used to share that row, which
+					### is what kept the label column at 160 and "World Reference Rate"
+					### elided; with the button gone the labels get 200.
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						spacing = 4
+						parentanchor = hcenter
+						datacontext = "[GetScriptedGui('banking_mon_control_sgui')]"
+						visible = "[GetScriptedGui('banking_mon_has_dial').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 						banking_dash_mon_button = {
 							visible = "[And( GetScriptedGui('banking_mon_can_delegate').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('banking_mon_is_delegated').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
