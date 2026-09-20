@@ -2316,7 +2316,8 @@ te_monetary_apply_interest_modifiers = {
 # limit, or any debt) the OUTFLOW stops — a negative add_treasury would only
 # deepen the debt — and te_peg_confidence moves instead, by
 # te_mon_peg_confidence_move. Out from under it, confidence heals a point a
-# month (ruling Q10; §12.3 is silent, and without it an episode would scar a
+# month while the gap is >= 0 and no borrowed gold is waiting to leave, and
+# otherwise holds (ruling Q10, revised after the first playtest; §12.3 is silent, and without it an episode would scar a
 # country for the rest of the campaign).
 #
 # NO OUTFLOW EVER EXCEEDS THE RESERVES. The drain is capped at gold_reserves, so
@@ -2457,7 +2458,19 @@ te_monetary_update_gold = {
 			limit = { te_mon_peg_under_pressure = yes }
 			change_variable = { name = te_peg_confidence add = te_mon_peg_confidence_move }
 		}
-		else = {
+		else_if = {
+			# Out from under pressure confidence HEALS — but only while the bank
+			# is not visibly losing gold. First playtest: a country at a gap of
+			# -3 with a healthy vault was GAINING a point a month while its
+			# reserves drained, which read as the peg applauding its own
+			# undoing. With a negative gap (or borrowed gold still queueing to
+			# leave) confidence now simply holds: the vault is paying, which is
+			# the cost §12.2 intends at that stage, and the fall starts when the
+			# vault cannot.
+			limit = {
+				var:te_gold_flow_gap >= 0
+				var:te_gold_hot_money <= 0
+			}
 			change_variable = { name = te_peg_confidence add = 1 }
 		}
 		if = {
