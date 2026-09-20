@@ -170,6 +170,7 @@ banking_dash_any_policy_active = {
 # The "Raise Policy Rate" enable/disable pair used to head this list. Deleted
 # with the tool (monetary_policy_design.md §18) — the rate is a dial now, not an
 # intervention, and its dashboard surface is rebuilt as the monetary block.
+
 banking_dash_enable_cb_open_market_ops = {
 	scope = country
 	is_shown = { banking_is_market_economy = yes banking_tool_omo_active = no }

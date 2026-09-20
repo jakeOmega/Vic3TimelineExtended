@@ -221,11 +221,20 @@
 			# The "Raise Policy Rate" tool was deleted (monetary_policy_design.md
 			# §18) and with it the button that switched it off. A save carrying
 			# the modifier would otherwise reserve 2 intervention points forever,
-			# so strip it here; the points come back on the next tick, because
-			# add_modifier/remove_modifier results are not visible inside the
-			# same effect block. Runs first so the rest of the pulse sees the
-			# migrated state. The eventual removal of the static modifier itself
-			# is tracked in common/scripted_effects/legacy_modifier_cleanup.txt.
+			# so strip it here.
+			#
+			# The points do not come back until next month: add_modifier and
+			# remove_modifier results are not visible inside the effect block that
+			# issues them, so every `modifier:country_banking_intervention_max_add`
+			# read later in THIS pulse still sees the stale -2. The one such read is
+			# banking_crash_check_overdrawn_interventions at the end of the block,
+			# and the stale -2 makes it MORE likely to shed a tool this month, not
+			# less — a one-off cost on the single migrating month, on a save that
+			# was already two points down. Nothing else in the pulse reads the
+			# modifier, so the position of this block within it is cosmetic.
+			#
+			# The eventual removal of the static modifier itself is tracked in
+			# common/scripted_effects/legacy_modifier_cleanup.txt.
 			if = {
 				limit = { je:je_banking_cycle ?= { has_modifier = banking_policy_rate_hike } }
 				je:je_banking_cycle = { remove_modifier = banking_policy_rate_hike }
@@ -244,6 +253,7 @@
 
 			banking_cycle_random_event_effect = yes
 			banking_cycle_apply_phase_modifiers = yes
+			banking_cycle_apply_stance_band = yes
 			banking_cycle_update_progress_bars = yes
 			banking_cycle_cleanup_capital_controls = yes
 			banking_cycle_update_ce_pool_balance = yes

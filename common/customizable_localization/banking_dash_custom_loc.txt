@@ -67,3 +67,50 @@ banking_dash_bubble_band = {
 		localization_key = banking_dash_bubble_band_severe
 	}
 }
+
+# ----------------------------------------------------------------------------
+# Monetary stance band (monetary_policy_design.md §8)
+# ----------------------------------------------------------------------------
+# Returns the NAME of the stance band and nothing else — no gap, no rate, no
+# arithmetic. The gap behind the band is hidden state (§8, "The rule"): what the
+# player chooses is shown exactly, what the economy is doing is banded. This is
+# the only thing allowed to render any part of te_mon_stance_gap.
+#
+# Deliberately named generically rather than banking_dash_*: the banking
+# journal entry's momentum tooltip is its first consumer, and the monetary
+# dashboard's own stance row is meant to call the same block rather than
+# duplicate the ladder.
+#
+# te_mon_stance_band is written by te_monetary_update_stance
+# (common/scripted_effects/te_monetary_effects.txt) and is 3 for every country
+# without a policy dial, which is why bankless and command economies read
+# Neutral here. The has_variable branch covers a country whose first monthly
+# monetary update has not run yet.
+te_mon_stance_band_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_stance_band } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 1 }
+		localization_key = banking_dash_stance_band_very_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 2 }
+		localization_key = banking_dash_stance_band_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 3 }
+		localization_key = banking_dash_stance_band_neutral
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 4 }
+		localization_key = banking_dash_stance_band_tight
+	}
+	text = {
+		localization_key = banking_dash_stance_band_very_tight
+	}
+}

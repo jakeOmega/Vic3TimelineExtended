@@ -14,30 +14,43 @@
 # Where a weight below used to read `banking_tool_rate_hike_active`, it now reads
 # `banking_stance_is_tight`: the same question ("is the central bank leaning
 # against the cycle right now?"), asked of the rate instead of a toggle.
+
 cb_open_market_ops = {
 	name = "CB_OPEN_MARKET_OPS"
 	desc = "CB_OPEN_MARKET_OPS_DESC"
 	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_omo_active = no }
 
+	# `possible` now gates this on the policy rate sitting at its floor
+	# (banking_possible_cb_open_market_ops, monetary_policy_design.md §11), so
+	# these weights no longer have to ask whether easing is the right direction —
+	# at the floor it always is. They answer the remaining question: how badly
+	# does the economy need more than a zero rate can give?
+	#
+	# The old `banking_stance_is_tight -> -30` line is dropped because it is now
+	# unreachable: tight means the rate is at least 1pp above the neutral rate,
+	# the neutral rate is clamped at 1 or above, and the floor test caps the rate
+	# at 0.01. Even a stance gap one month stale cannot bridge that — the rate
+	# drifts by at most 2/3 of a point a month.
 	ai_chance = {
 		value = 0
-		# Core: use in panic/downturn/stagnation, or when momentum is sharply negative
-		if = { limit = { banking_cycle_is_panic = yes } add = 60 }
-		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+		# Core: the deeper the hole, the more worth buying assets out of it.
+		if = { limit = { banking_cycle_is_panic = yes } add = 70 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 45 }
 		if = { limit = { banking_cycle_is_stagnation = yes } add = 25 }
 		if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 
-		# Law flavor
+		# Law flavor: an independent central bank is the one most willing to reach
+		# past the rate for the balance sheet.
 		if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
 
 		# Resources
 		if = { limit = { banking_points_med = yes } add = 10 }
 		if = { limit = { banking_points_low = yes } add = 5 }
 
-		# Avoid when hot or contradictory
+		# Avoid when hot: a zero rate during a frenzy is already a bubble waiting
+		# to happen, and the tool now adds +1.5 bubble pressure a month.
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
-		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
+		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -30 }
 
 		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
 		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }

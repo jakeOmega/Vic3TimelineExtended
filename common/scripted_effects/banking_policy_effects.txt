@@ -8,6 +8,7 @@
 # The "Raise Policy Rate" pair used to open this file. It is deleted
 # (monetary_policy_design.md §18): the policy rate is a country variable the
 # player or the delegated central bank sets directly, not an on/off intervention.
+
 banking_effect_cb_open_market_ops = {
 	te_history_record_banking_marker = { MARK = on_cb_open_market_ops }
 	je:je_banking_cycle = { add_modifier = { name = banking_open_market_ops } }

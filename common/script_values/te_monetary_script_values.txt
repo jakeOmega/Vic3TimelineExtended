@@ -60,6 +60,17 @@
 #   te_mon_regime           0 to 6                  0 none/bankless, 1 commodity, 2 gold,
 #                                                   3 fiat, 4 digital, 5 crypto, 6 command
 #
+# ONE COUNTRY VARIABLE IS OWNED ELSEWHERE. te_mon_stance_band_applied belongs to
+# banking_cycle_apply_stance_band (common/scripted_effects/banking_cycle_effects.txt),
+# not to the monthly update: it is bookkeeping for the banking journal entry's
+# stance modifier, so it only exists for countries that have that journal entry.
+# It follows the same two rules — initialised behind `has_variable`, never
+# removed.
+#
+#   te_mon_stance_band_applied  0 to 5              which banking_stance_band_* is
+#                                                   currently on je_banking_cycle;
+#                                                   0 = none applied yet
+#
 # WORKING VARIABLES (task 2, common/scripted_effects/te_monetary_effects.txt).
 # Not part of the displayed contract, but they follow the same two rules —
 # initialised behind `has_variable`, never removed:
@@ -312,6 +323,52 @@ te_mon_cycle_lean = {
 		}
 		add = 1
 	}
+}
+
+
+# --- The stance channel into the banking cycle (§8, §16.3) ------------------
+
+# The stance gap, clamped to +/-4 for the purpose of pushing the cycle.
+#
+# The gap itself is clamped to +/-10 (§8); this tighter bound is the one the
+# cycle sees, so that a country parked at an extreme stance settles at the edge
+# of the +/-5 momentum bar rather than driving through it: +/-4 x -0.125 is
+# -/+0.5 a month against a 10%-a-month decay, i.e. a steady state of -/+5.
+#
+# GUARDED. te_mon_stance_gap does not exist until a country's first monthly
+# monetary update, and the journal-entry pulse and that update may run in either
+# order in a given month (§17 check 7) — so a missing variable reads as 0 (no
+# push) and a present one may be a month old, which is exactly what §16.3 says
+# the consumer must tolerate. A country without a dial has a gap of exactly 0.
+#
+# HIDDEN STATE. Neither this value nor the two below may ever be rendered: they
+# are the gap, and the gap is r* (§8, "Why not a scaled modifier"). They are
+# consumed only by `change_variable` inside banking_cycle_advance_variables.
+te_mon_stance_gap_clamped = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_stance_gap }
+		add = {
+			value = var:te_mon_stance_gap
+			min = -4
+			max = 4
+		}
+	}
+}
+
+# Monthly push on finance_cycle_momentum: -0.125 per pp of tight gap (§8).
+# Calibration: a 2pp tight stance equals the deleted rate-hike tool's -0.25.
+te_mon_stance_momentum_add = {
+	value = te_mon_stance_gap_clamped
+	multiply = -0.125
+}
+
+# Monthly push on bubble_pressure: -0.75 per pp of tight gap (§8).
+# Calibration: 2pp is about -1.5, against the old hike's -2.0 and the old open
+# market operations' +0.8.
+te_mon_stance_bubble_add = {
+	value = te_mon_stance_gap_clamped
+	multiply = -0.75
 }
 
 
