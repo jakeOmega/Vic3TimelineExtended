@@ -1146,6 +1146,30 @@ Open questions: a declared non-gold peg (to a hegemon's currency) as a law or a 
 pact; whether `te_fx_index` is displayed exactly; currency-union interaction with customs
 unions; whether swap lines should lend peg confidence.
 
+### 15.1 International monetary arrangements — to scope (phase 5)
+
+Not designed; recorded so it is not forgotten. Phases 1–4 treat every country as a monetary
+island apart from the world rate. The mod's diplomatic layer should eventually carry
+monetary content of its own — look into, and hopefully implement:
+
+- **Treaty articles** — e.g. a currency peg to a partner, swap lines or a standing credit
+  facility, a lender-of-last-resort guarantee, reserve pooling; each with a real cost to the
+  stronger party (shared risk premium, imported stance).
+- **Subjects** — a subject using the overlord's currency or pegged to it: it inherits the
+  overlord's policy rate and credibility and gives up its own dial (a currency board);
+  colonial-era monetary dependence as a lever for both sides.
+- **Power blocs** — a principle (or tier) for a **shared currency**, à la the euro, available
+  to fiat / digital members: one policy rate set for the bloc (by the leader, or weighted by
+  GDP), a common credibility bonus and lower intra-bloc transaction costs, against the loss
+  of the dial — a member in a slump while the bloc runs hot gets the wrong stance, cannot
+  devalue, and its risk premium becomes the adjustment valve (the euro-crisis shape). Exit
+  should be possible and expensive.
+
+Design principle as elsewhere (§1): each arrangement must be a genuine tradeoff, and any
+asymmetry between members should come from shared mechanics (size, credibility, cycle
+position), not from special-casing. Depends on phase 3 (world rate) and largely on phase 4
+(exchange rates); the currency-union open question above belongs here.
+
 ---
 
 ## 16. Implementation mapping
@@ -1415,6 +1439,7 @@ Each phase is playable alone. Later phases can be cut.
 | **2** | inflation (core / headline / anchored expectations), basket, wage-pressure type + real-wage dividend, §10 formula, monetisation, QE costs, hyperinflation chain, §13 stance politics | gold standard still on the ±2 band | 50-year observer run: median fiat inflation 1–4% **including AI on the growth mandate** (at war or `scaled_debt ≥ 0.5`), no oscillation with period < 3 years, at least one organic hyperinflation and one deflation. **Debug harness**: a fiat tag pinned to a fixed manual target — observer runs never exercise the human path, because AI is always delegated; confirm the drift is slow (e-folding of years), that the §10 worked example reproduces, that **rate paid on the never-disinflate path never falls below the pre-war baseline** once expectations catch up (the §10 tuning invariant), and that its §9.2 band penalties make it worse *overall* over 15 years than disinflating — judged on treasury, SoL and radicals, not rate paid alone |
 | **3** | real world rate (discretionary GPs only), gold flows + hot money, peg confidence, convertibility crisis; regime law stances | FX buttons unchanged | world rate sits at `era_base` in 1836 and does not drift on its own; a discretionary GP's hike visibly drains a small gold country; AI on peg defence survives a 2pp world-rate rise; holding world + 5 on gold yields no lasting treasury gain |
 | **4** | FX index, trilemma, capital-controls politics; devalue/support deleted | — | — |
+| **5** | *(to scope — §15.1)* international monetary arrangements: treaty articles, subject currency dependence, power-bloc shared currency | — | — |
 
 ---
 
