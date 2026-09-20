@@ -336,6 +336,11 @@ def categorize_key(key, technology_keys):
     # Broad "event" substring catch (modifier/tooltip keys mentioning events)
     if "event" in key:
         return "EVENTS"
+    # Monetary-policy static modifier names. The base keys are four tokens long,
+    # so without this rule the `_desc` half of each pair falls to CONCEPTS while
+    # the name stays in MISCELLANEOUS and the family is split across two files.
+    if key.startswith("te_monetary_"):
+        return "MISCELLANEOUS"
     if "_desc" in key or (re.match(r"^[a-zA-Z_]+$", key) and len(key.split("_")) < 4):
         return "CONCEPTS"
     return "MISCELLANEOUS"

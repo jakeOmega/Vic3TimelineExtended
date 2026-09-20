@@ -983,6 +983,33 @@ flowcontainer = {
 						margin_bottom = 2
 					}
 
+					### World reference rate — read-only, the same figure for
+					### every country, and the anchor the rest of the block is
+					### measured against: a no-dial country pays it plus a
+					### point, a gold standard must stay within two of it, and
+					### Peg Defence parks the target on it exactly. Public
+					### information by spec §10, unlike anything downstream of
+					### the neutral rate.
+					###
+					### te_mon_era_base_now is the country's per-pulse copy of
+					### global_var:te_mon_era_base_world. It is read rather than
+					### the global because a .gui has no HasGlobalVariable to
+					### guard with (gui_modding_guide.md gotcha 15), and step 0
+					### of the monthly update writes it before anything else —
+					### so banking_mon_display_ready, which now asks for it,
+					### is the guard.
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_world_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_world_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_world_value"
+							}
+						}
+					}
+
 					### Policy rate — the actual rate, one decimal.
 					banking_dash_condition_row = {
 						tooltip = "banking_dash_mon_rate_tt"

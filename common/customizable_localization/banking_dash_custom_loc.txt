@@ -116,6 +116,97 @@ te_mon_stance_band_name = {
 }
 
 # ----------------------------------------------------------------------------
+# What the band is WORTH, in the cycle's own units (monetary_policy_design.md §8)
+# ----------------------------------------------------------------------------
+# "Loose" on its own does not tell a player whether it means a tenth of a point
+# of momentum or ten. These two blocks give each band its order of magnitude
+# without giving up the gap.
+#
+# WHERE THE NUMBERS COME FROM. The band is set from the estimated gap
+# (te_monetary_update_stance): band 1 at or below -2, band 2 above that to
+# -0.75, band 3 inside +/-0.75, band 4 up to 2, band 5 at or above 2. The push
+# is te_mon_stance_momentum_add (-0.125 per pp) and te_mon_stance_bubble_add
+# (-0.75 per pp), both on the gap CLAMPED to +/-4
+# (te_mon_stance_gap_clamped). So each band's range is its threshold pair times
+# those two rates, and band 1 / band 5 run out at the clamp:
+#
+#   band   gap            momentum/month      bubble/month
+#   1      <= -2 (to -4)  +0.25 .. +0.5       +1.5 .. +3
+#   2      -2 .. -0.75    +0.1  .. +0.25      +0.5 .. +1.5
+#   3      +/-0.75        under 0.1 either way   under 0.5 either way
+#   4      0.75 .. 2      -0.1  .. -0.25      -0.5 .. -1.5
+#   5      >= 2 (to 4)    -0.25 .. -0.5       -1.5 .. -3
+#
+# THESE ARE NOT EXACT AND MUST NOT READ AS IF THEY WERE. The band is drawn from
+# the bank's ESTIMATE of the gap and the push from the TRUE gap, and the two
+# differ by the forecasting error (te_mon_forecast_error_bound, +/-1.5pp, or
+# +/-0.5pp under central bank independence). Every consumer says so once, which
+# is why each phrase here is hedged with "roughly" and never carries a decimal
+# the player could difference against.
+#
+# If §21's -0.125 / -0.75 rates or the band thresholds are ever retuned, the
+# table above and the five pairs of phrases below move with them — that is the
+# cost of stating a magnitude at all, and it is cheaper than a player who
+# cannot tell a lever from a label.
+te_mon_stance_momentum_effect = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_stance_band } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 1 }
+		localization_key = banking_dash_stance_mom_very_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 2 }
+		localization_key = banking_dash_stance_mom_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 3 }
+		localization_key = banking_dash_stance_mom_neutral
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 4 }
+		localization_key = banking_dash_stance_mom_tight
+	}
+	text = {
+		localization_key = banking_dash_stance_mom_very_tight
+	}
+}
+
+te_mon_stance_bubble_effect = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_variable = te_mon_stance_band } }
+		localization_key = banking_dash_band_unknown
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 1 }
+		localization_key = banking_dash_stance_bub_very_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 2 }
+		localization_key = banking_dash_stance_bub_loose
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 3 }
+		localization_key = banking_dash_stance_bub_neutral
+	}
+	text = {
+		trigger = { var:te_mon_stance_band <= 4 }
+		localization_key = banking_dash_stance_bub_tight
+	}
+	text = {
+		localization_key = banking_dash_stance_bub_very_tight
+	}
+}
+
+# ----------------------------------------------------------------------------
 # Monetary dashboard — the three state readouts (monetary_policy_design.md §3)
 # ----------------------------------------------------------------------------
 # Each returns a NAME, so the .gui never compares a number and no threshold or

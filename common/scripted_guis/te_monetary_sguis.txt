@@ -88,9 +88,22 @@ banking_mon_control_sgui = {
 				text = banking_mon_tt_not_delegated
 				te_mon_is_delegated = no
 			}
-			custom_tooltip = {
-				text = banking_mon_tt_above_floor
-				te_mon_target_can_step_down = yes
+			# The bound is te_mon_target_min either way; only the reason for it
+			# differs. A gold standard's floor is the world reference rate minus
+			# two, which is worth naming — unlike the digital floor, the player
+			# cannot read it off the law that imposes it.
+			trigger_if = {
+				limit = { has_law_or_variant = law_type:law_gold_standard }
+				custom_tooltip = {
+					text = banking_mon_tt_gold_above_floor
+					te_mon_target_can_step_down = yes
+				}
+			}
+			trigger_else = {
+				custom_tooltip = {
+					text = banking_mon_tt_above_floor
+					te_mon_target_can_step_down = yes
+				}
 			}
 		}
 		trigger_else_if = {
@@ -107,9 +120,18 @@ banking_mon_control_sgui = {
 				text = banking_mon_tt_not_delegated
 				te_mon_is_delegated = no
 			}
-			custom_tooltip = {
-				text = banking_mon_tt_below_ceiling
-				te_mon_target_can_step_up = yes
+			trigger_if = {
+				limit = { has_law_or_variant = law_type:law_gold_standard }
+				custom_tooltip = {
+					text = banking_mon_tt_gold_below_ceiling
+					te_mon_target_can_step_up = yes
+				}
+			}
+			trigger_else = {
+				custom_tooltip = {
+					text = banking_mon_tt_below_ceiling
+					te_mon_target_can_step_up = yes
+				}
 			}
 		}
 
@@ -235,15 +257,17 @@ banking_mon_control_sgui = {
 		}
 		else_if = {
 			limit = { scope:op = 4 }
-			te_mon_effect_set_mandate = { MANDATE = 1 }
+			te_mon_effect_set_mandate = { MANDATE = 1 TT = banking_mon_mandate_set_tt }
 		}
 		else_if = {
 			limit = { scope:op = 5 }
-			te_mon_effect_set_mandate = { MANDATE = 2 }
+			te_mon_effect_set_mandate = { MANDATE = 2 TT = banking_mon_mandate_set_tt }
 		}
 		else_if = {
 			limit = { scope:op = 6 }
-			te_mon_effect_set_mandate = { MANDATE = 3 }
+			# Peg defence gets its own line: its rule points outside the country,
+			# at the world reference rate the dashboard now shows as a row.
+			te_mon_effect_set_mandate = { MANDATE = 3 TT = banking_mon_mandate_peg_set_tt }
 		}
 	}
 }
@@ -306,6 +330,23 @@ banking_mon_is_delegated = {
 banking_mon_is_gold = {
 	scope = country
 	is_shown = { has_law_or_variant = law_type:law_gold_standard }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Is the policy rate allowed to go below zero? Only a digital currency abolishes
+# the cash that makes a negative rate unenforceable
+# (country_policy_rate_floor_add = -0.03 on law_digital_currency), so only a
+# digital country needs a history chart whose axis reaches under the zero line.
+# Read by gui/journal_entry_widgets/banking_history_widget.gui, which draws one
+# of two policy-rate charts on the answer.
+#
+# The test is on the law rather than on the modifier because a .gui cannot read
+# `modifier:` — and inside this system the two are the same question.
+banking_mon_is_digital = {
+	scope = country
+	is_shown = { has_law_or_variant = law_type:law_digital_currency }
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
