@@ -31,6 +31,11 @@ cb_open_market_ops = {
 	# the neutral rate is clamped at 1 or above, and the floor test caps the rate
 	# at 0.01. Even a stance gap one month stale cannot bridge that — the rate
 	# drifts by at most 2/3 of a point a month.
+	#
+	# No weight asks about the currency regime either. OMO is fiat/digital only
+	# (monetary_policy_design.md §0.1 ruling of 2026-09-20), and `possible`
+	# refuses the button outright off-regime — an `ai_chance` term for it would
+	# be scoring a click the AI can never make.
 	ai_chance = {
 		value = 0
 		# Core: the deeper the hole, the more worth buying assets out of it.

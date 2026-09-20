@@ -153,18 +153,19 @@ te_mon_display_ready = {
 # a bank that can still cut does not buy assets, because cutting is cheaper and
 # reversible and does the same job.
 #
-# THE FLOOR IS ZERO, OR THE REGIME'S OWN MINIMUM IF THAT IS LOWER. Digital
-# currency has no cash to hoard, so its range runs to -3 and a digital central
-# bank at 0% still has three points of cutting left before it has to buy assets.
+# ONLY FIAT AND DIGITAL EVER ASK. OMO is fiat/digital only (§0.1 ruling of
+# 2026-09-20 — a convertible currency cannot create money to buy bonds), and
+# banking_possible_cb_open_market_ops checks the regime before it reaches this
+# trigger. So the floor here is 0 under fiat and -3 under digital, which has no
+# cash to hoard and so three more points of cutting room; no gold-standard band
+# floor is in the picture at all.
 #
 # The bound comes from te_mon_floor_threshold, which reads te_mon_target_min —
 # so the law check that used to sit here is gone, and
 # country_policy_rate_floor_add on law_digital_currency is the single statement
 # of the rule. The threshold carries one point of slack (0.01) because
 # te_policy_rate is a drifting fractional value that need not land exactly on
-# the bound, and it caps at zero so a gold standard's band floor (the reference
-# rate minus two, around 1pp) does NOT count as the floor — the shipped §0
-# ruling, unchanged.
+# the bound.
 te_mon_policy_rate_at_floor = {
 	has_variable = te_policy_rate
 	var:te_policy_rate <= te_mon_floor_threshold

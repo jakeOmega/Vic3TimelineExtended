@@ -74,6 +74,15 @@ country_banking_lock_capital_controls_bool = { color = bad  boolean = yes }
 country_banking_lock_fx_swap_lines_bool    = { color = bad  boolean = yes }
 country_banking_lock_asset_relief_bool     = { color = bad  boolean = yes }
 
+# The REGIME gate on open-market operations (monetary_policy_design.md §5.1 and
+# the §0.1 ruling of 2026-09-20). Granted by law_fiat_currency and
+# law_digital_currency only: buying bonds with money the state simply makes is
+# exactly what a promise to redeem in metal forbids, so commodity money, the
+# gold standard and crypto can never run OMO. Read by
+# banking_possible_cb_open_market_ops (common/scripted_triggers/banking_policy_triggers.txt);
+# the two laws show it in their modifier tooltip as "Enables Open-Market Operations".
+country_can_create_unbacked_money_bool     = { color = good boolean = yes }
+
 # ============================================================================
 # Monetary policy — the two risk-premium tiers (monetary_policy_design.md §7.1)
 # ============================================================================

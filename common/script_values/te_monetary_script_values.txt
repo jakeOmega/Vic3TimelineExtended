@@ -225,14 +225,16 @@ te_mon_target_min = {
 # because te_policy_rate drifts fractionally and need not land exactly on the
 # bound.
 #
-# `max = 0` is not a typo and not the regime ceiling: it preserves the shipped
-# §0 ruling that the OMO floor is 0 for every regime except digital currency,
-# whose -3 it lets through. A gold standard's band floor (reference rate - 2,
-# around 1pp) therefore does NOT unlock open market operations, exactly as
-# today — a gold bank that cannot cut further is still not a bank at zero.
+# ONLY FIAT AND DIGITAL EVER READ THIS. Open-market operations are fiat/digital
+# only (§0.1 ruling of 2026-09-20: creating unbacked money to buy bonds is what
+# a convertibility promise forbids), and the regime is checked before the floor
+# is, so te_mon_target_min here is always its country_policy_rate_floor_add
+# branch — 0 under fiat, -3 under digital. A `max = 0` used to sit here for the
+# sole purpose of stopping a gold standard's band floor (reference rate - 2,
+# around 1pp) from counting as "the rate can go no lower"; the regime gate does
+# that job now, and gold never reaches this value.
 te_mon_floor_threshold = {
 	value = te_mon_target_min
-	max = 0
 	add = 0.01
 }
 

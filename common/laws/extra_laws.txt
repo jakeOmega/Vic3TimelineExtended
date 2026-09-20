@@ -878,6 +878,12 @@ law_fiat_currency = {
 		state_tax_capacity_mult = 0.1
 		country_minting_mult = 0.1
 		country_institution_cost_institution_national_bank_mult = 0.1
+		# Open-market operations (monetary_policy_design.md §5.1, §0.1 ruling of
+		# 2026-09-20). A currency nobody can present for metal can be created to
+		# buy bonds, so the QE-style tool belongs to this rung and to digital
+		# currency; banking_possible_cb_open_market_ops reads this bool, and the
+		# floor test behind it still has to pass.
+		country_can_create_unbacked_money_bool = yes
 	}
 
 	ai_enact_weight_modifier = {
@@ -913,6 +919,11 @@ law_digital_currency = {
 		# they moved here; te_mon_drift_step and te_mon_target_min read them.
 		country_policy_rate_drift_speed_mult = 1.0
 		country_policy_rate_floor_add = -0.03
+		# Open-market operations, same rule as fiat (§5.1, §0.1 ruling of
+		# 2026-09-20): nothing is convertible, so money can be created to buy
+		# bonds. The floor this regime has to reach first is -3, not 0 — the
+		# line above is what sets it.
+		country_can_create_unbacked_money_bool = yes
 	}
 
 	ai_enact_weight_modifier = {
