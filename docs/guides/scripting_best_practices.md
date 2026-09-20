@@ -1009,7 +1009,24 @@ Fix pattern: drive the AI path from a pulse on-action (e.g. `on_yearly_pulse_cou
 
 Note: `effect_starting_technology_tier_1_tech` (vanilla, applied to recognized GP/major-power countries via their vanilla history files) already researches `central_banking`, so for tier_1-bundle countries the tech is satisfied legitimately and you don't need to re-add it.
 
-**`add_era_researched = era_N` grants every technology of that era, not just an era marker.** Only starting-tech tiers 1 and 2 (`common/scripted_effects/00_starting_inventions.txt`) call it; tiers 3–7 list techs one by one. The tell is that *every* tech tier 1 and 2 list individually is era_2 (`mechanical_tools`, `atmospheric_engine`, `dialectics`, `central_archives`, `central_banking`, `corporate_charters`, `screw_frigate`, `general_staff`, `percussion_cap`, `power_of_the_purse`) while tier 3 has to spell out era_1 prerequisites like `currency_standards`, `tech_bureaucracy` and `international_trade` that tiers 1–2 never mention. Practical consequence when a mod system keys on specific vanilla techs: a tier-1 country (GBR, USA, FRA, BEL) holds **all** era_1 techs at 1836 start — including `banking`, `stock_exchange` and `international_trade` — plus the era_2 list. A tier-4 country (Siam) holds none of them. Don't infer a 1836 tech loadout from the explicit `add_technology_researched` lines alone.
+**`add_era_researched = era_N` grants every technology of that era, not just an era marker.** Only starting-tech tiers 1 and 2 (`common/scripted_effects/00_starting_inventions.txt`) call it; tiers 3–7 list techs one by one. The tell is that *every* tech tier 1 and 2 list individually is era_2 — all 13 of tier 1's, among them `mechanical_tools`, `central_banking`, `corporate_charters`, `railways` and `power_of_the_purse`; read the effect for the full list, don't treat any quotation of it (including this one) as complete — while tier 3 has to spell out era_1 prerequisites like `currency_standards`, `tech_bureaucracy` and `international_trade` that tiers 1–2 never mention. Practical consequence when a mod system keys on specific vanilla techs: a tier-1 country (GBR, USA, FRA, BEL) holds **all** era_1 techs at 1836 start — including `banking`, `stock_exchange` and `international_trade` — plus the era_2 list. A tier-4 country (Siam) holds none of them. Don't infer a 1836 tech loadout from the explicit `add_technology_researched` lines alone.
+
+## There Is No "Current Era" Trigger — Proxy It With a Great-Power Signature Tech
+
+The engine exposes **no era-level trigger**. `docs/engine/triggers_summary.txt` (generated from `triggers.log`) contains **zero** triggers with `era` in the name; the whole tech-facing surface is `has_technology_researched`, `has_technology_progress`, `has_researchable_technology`, `is_researching_technology` and `is_researching_technology_category`. `add_era_researched` is an *effect*, and the mod stores no era variable, global variable or scripted trigger anywhere in `common/`, `events/` or `gui/`. Any brief that says "reuse the mod's era detector" is describing something that does not exist — check before building on it.
+
+Two shipped idioms compose into the substitute:
+
+1. **An era is identified by a signature technology** — `events/modern_election_events.txt` gates its radio-era events on `has_technology_researched = mass_propaganda` + `NOT = { television_broadcasting }`.
+2. **"The world has reached era N" is asked as "has some great power researched it"** — `common/script_values/extra_script_values.txt` runs `any_country = { country_rank >= rank_value:great_power  has_technology_researched = X }` repeatedly for exactly this.
+
+`te_mon_era_base` (`common/script_values/te_monetary_script_values.txt`) is the worked example: 3.0, minus 0.5 once any great power holds `macroeconomics` (era_5), minus another 0.5 once any holds `globalization` (era_9). Three things to copy:
+
+- **Pick markers outside the system's own inputs.** Neither marker is one of the five capital-market-access techs the same system already tests, so nothing double-counts.
+- **Great-power anchoring beats a single-country test** for a world quantity — some great power will hold the marker even if the country you are evaluating skipped that branch of the tree.
+- **It is expensive.** Each marker is a full `any_country` scan. Evaluate a world quantity **once** into a global variable from `on_monthly_pulse` and have every country read the global; calling it per country per pulse is O(N²) trigger evaluations a month. Add a self-heal (`if NOT has_global_variable → refresh`) at the top of the per-country update so a save made before the global existed, or a country pulse that beats the month's refresh, still works.
+
+Known wrinkle with the two-marker shape: it is non-monotonic if a great power somehow holds the later marker without the earlier one. Acceptable for a smoothly-varying quantity; not acceptable if you are branching on discrete eras.
 
 ## Mod-Only Ministry Laws: Calibrate to Bureaucratic Apparatus, Not Office-Holder Existence
 
@@ -2204,10 +2221,10 @@ The modifier's effects (e.g., `country_loan_interest_rate_mult`) still apply to 
 When moving modifiers to JE scope, update associated scripted triggers:
 ```
 # Before
-banking_tool_rate_hike_active = { has_modifier = banking_policy_rate_hike }
+banking_tool_omo_active = { has_modifier = banking_open_market_ops }
 
 # After
-banking_tool_rate_hike_active = { je:je_banking_cycle = { has_modifier = banking_policy_rate_hike } }
+banking_tool_omo_active = { je:je_banking_cycle ?= { has_modifier = banking_open_market_ops } }
 ```
 
 ### Systems Using JE-Scoped Modifiers
@@ -2215,7 +2232,7 @@ banking_tool_rate_hike_active = { je:je_banking_cycle = { has_modifier = banking
 | System | JE Name | Modifiers |
 |---|---|---|
 | Nuclear Weapons | `je_nuclear_program` | `nuclear_weapon_program_funding` |
-| Banking Cycle | `je_banking_cycle` | All intervention tools (14 market, 8 command, 8 cooperative), phase modifiers (18), bubble inertia (3), fiscal policy, `planning_treasury_pool_balance` (command-economy auto-balance) |
+| Banking Cycle | `je_banking_cycle` | All intervention tools (13 market, 8 command, 8 cooperative), phase modifiers (18), bubble inertia (3), fiscal policy, `planning_treasury_pool_balance` (command-economy auto-balance), `banking_stance_band_1..5` (the monetary stance band, swapped by `banking_cycle_apply_stance_band`) |
 | Global Warming | `je_global_warming` | `global_warming`, 8 climate policy modifiers |
 | Covert Warfare | `je_covert_warfare` | `intelligence_capacity_defense`, `iw_domestic_defense`, `iw_funding_defense`, `covert_operation_funding_cost` |
 | World War | `je_world_war` | 9 modifiers: `ww_rising_tensions`, `ww_rearmament`, `ww_appeasement`, `ww_lend_lease`, `ww_total_war_economy`, `ww_war_propaganda`, `ww_wartime_rationing`, `ww_home_front_strain`, `ww_prolonged_war_exhaustion`. NOT: `ww_fresh_forces`, `ww_arsenal_of_democracy` (event-applied one-time bonuses) |
@@ -2360,7 +2377,7 @@ When migrating modifiers from country scope to JE scope, existing save games sti
 For modifiers that a JE monthly pulse or scripted button will re-apply to JE scope automatically on the next tick:
 ```
 # Just remove from country — the JE pulse/button will re-add to JE scope
-if = { limit = { has_modifier = banking_policy_rate_hike } remove_modifier = banking_policy_rate_hike }
+if = { limit = { has_modifier = banking_open_market_ops } remove_modifier = banking_open_market_ops }
 ```
 
 ### Re-Apply Cleanup (one-shot event modifiers)
@@ -2378,6 +2395,14 @@ if = {
 }
 ```
 The inner `has_journal_entry` guard is critical — if the country doesn't have the JE (e.g., it completed or was never started), the `je:` accessor would error.
+
+### Deleted-tool migration (a modifier that must outlive its own button)
+
+Deleting a player-facing toggle whose modifier reserved a resource is the third shape. The modifier itself is the only thing a pre-deletion save can be holding, and nothing re-applies it — but nothing releases it either, so the save keeps paying for a control that no longer exists (the *Raise Policy Rate* banking tool reserved 2 intervention points this way). The pattern:
+
+1. **Keep the static modifier defined for one release.** `remove_modifier` on an undefined modifier is not a safe no-op, and the modifier still needs its loc key while it is defined.
+2. **Strip it from a guarded one-shot at the head of the owning JE's `on_monthly_pulse`**, not from `on_game_started` — a JE pulse reaches every save including ones already in progress, and `limit = { … has_modifier = X }` makes it free on every other month. Remember the refund is not visible inside that same effect block, so any `modifier:` read later in the same pulse still sees the pre-refund value; check that the stale reading errs on the conservative side before choosing where in the pulse to put it.
+3. **Write a dated `PENDING REMOVAL` block at the top of `legacy_modifier_cleanup.txt`** listing *every* artefact that must be deleted together — the static modifier, its loc keys, the one-shot, and the line in `legacy_je_modifier_cleanup_effect`. Removing any subset early re-breaks it in one direction or the other, and nothing enforces the grouping. Live example: `banking_policy_rate_hike`, added 2026-09-19.
 
 ### Lifecycle
 - Safe to delete cleanup files once no save games from before the migration exist.
@@ -2483,6 +2508,21 @@ The same rule applies any time the wrapper key collides with vanilla: e.g. you c
 The cleanest case for `INJECT:` is **adding a field vanilla doesn't already declare** on that entity. No collision semantics to reason about — engine just sees the new field. Example: vanilla's `BHT` and `IDN` country_formation entries don't declare `potential = { ... }`, so `INJECT:BHT = { potential = { NOT = { has_technology_researched = decolonization } } }` cleanly adds visibility gating without any of the duplicate-key risk that re-declaring a field vanilla owns would carry.
 
 When the field you want to extend already exists in vanilla (e.g. you want to *tighten* vanilla's `possible` block by ANDing extra conditions), `INJECT:` is risky — engine semantics on duplicate sibling keys vary by entity type, and you may get last-wins (silently drops vanilla's conditions) rather than concatenation. Reach for `REPLACE:` and re-state vanilla's body in those cases. Look for a *different* field on the same entity that's empty in vanilla and serves the same gate role (`potential` vs `possible`, `is_shown` vs `selectable`, etc.) — that often turns a brittle REPLACE: into a clean INJECT.
+
+### OPEN: does a `modifier = { }` inside an `INJECT:` **sum** with vanilla's, or overwrite it?
+
+**Unresolved as of 2026-09-19. Nothing below is a result — do not cite it as one.** The mod has shipped on the *summing* assumption since April (`common/laws/sol_expectations_vanilla_injections.txt`, e.g. `law_industry_banned`: `state_expected_sol_mult = 0.1` against vanilla's −0.1), and monetary policy phase 1 added nine more blocks that depend on it (`common/country_ranks/te_monetary_rank_injections.txt`, `common/laws/te_monetary_law_injections.txt`). If INJECT is last-wins instead, both families are wrong *twice*: the cancel adds to vanilla's value instead of zeroing it, **and** the injected block wipes every other key in the entity's vanilla `modifier = { }`.
+
+What is known: the 1.12 digest's INJECT-capable type list (`~/src/Modding-Digests/1.12.0/inject_types.md`) includes `common/country_ranks`, `common/laws`, `common/technology`, `common/institutions`, `common/company_types` and `common/production_methods`, so the open question is **sum vs last-wins**, not "is the INJECT a no-op". Note also that merge semantics are documented to vary by entity type, which is why the tech probe is separate from the rank and law ones.
+
+Four tooltip reads settle it. They need **no new code** — run them on any current build (`monetary_policy_design.md` §17 checks 1–4):
+
+1. **A great power's budget-panel interest tooltip.** Does it still list the rank's −50% *and* laissez-faire's −25%? If yes, separate `modifier = { }` blocks merge.
+2. **The breakdown of `state_expected_sol_from_literacy`.** The mod injects −5 against vanilla's +5 (`extra_modifiers.txt:17`). Three outcomes: **0 ⇒ values sum; −5 ⇒ last wins; +5 ⇒ the inject is ignored.** *Caveat:* this one is a flat key inside a **static modifier**, and `common/static_modifiers` is not on the digest's INJECT-capable list even though `INJECT:base_values` demonstrably works. Ranks, laws and techs merge a *nested* `modifier = { }` block — do not let this result stand in for them.
+3. **Expected SoL under `law_industry_banned`** — does the same key net to zero across the two blocks?
+4. **A technology probe.** `common/technology/technologies/modified.txt` INJECTs `modifier = { }` into vanilla techs (`intensive_agriculture`, `nationalism`, …): does vanilla's own modifier still show in the tech tooltip?
+
+**Record the result here, in this section, in the same session it is obtained** — it is the most reusable engine fact this area can produce, and three separate systems are currently guessing. Fallback if summing fails: for **techs**, compensate in script and touch no vanilla entity (the right answer regardless — the five vanilla finance techs carry `country_minting_mult = 0.1` in the same block as the interest line, which a last-wins cancel would wipe; `te_mon_vanilla_tech_offset` already does this). For **ranks / laws**, `REPLACE:` the entity and restate its full vanilla modifier block; the monetary cancels are isolated in one file each precisely so that is a one-file fix.
 
 ### `INJECT:` silently fails on mod-only or REPLACEd entities
 
@@ -3321,6 +3361,10 @@ When researching mod content (auditing for bugs, inventorying which PMs produce/
 
 - **PMs in different groups within a building SUM additively.** When auditing a building's net effect, sum across all active PMs from all groups — they don't cancel or override each other. See `docs/vanilla/vanilla_economy_reference.md` § 2.
 
+- **`GET /on-actions/<name>` is last-wins; the engine merges.** Ten mod files declare `on_monthly_pulse_country` and every one of those systems runs, but the server's store keeps only the last parsed declaration, so the endpoint can return a single unrelated entry and look authoritative. Never use it to answer "is my effect wired to this hook?" or "what else runs here?" — `git grep -n '<hook_name>' -- common/on_actions/` is the real answer. Filed as issue #333 (merge-aware `/on-actions/<name>` plus an `/on-action-callers/<effect>` inverse).
+
+- **`GET /modifier-grants/<name>` covers five entity types, not all of them.** It scans Modifiers, Laws, Amendments, Technologies and Principles — so it silently misses grants from **country ranks, institutions, company `prosperity_modifier` blocks and PM `country_modifiers` blocks**, and it drops hyphenated tech ids (`post-scarcity_economy`). A monetary-policy conversion that trusted it would have left four live sources behind. Enumerate with `git grep` plus the enclosing-entity awk pattern above, and use the endpoint as a cross-check for the five types it does cover. Filed as issue #334.
+
 ## `any_state` from State Scope Iterates Owner's States, Not Globally
 
 Building `potential = { ... }` blocks evaluate at **state scope**. From state scope, `any_state = { ... }` iterates the **owning country's** states — not every state in the world. The same applies to other state-scope contexts.
@@ -3723,3 +3767,30 @@ Two consequences worth knowing before designing such a panel:
 `on_weekly_pulse` / `on_monthly_pulse` have the **owning country** as root (vanilla `common/journal_entries/journal_entries.md:354`), while the JE-scoped modifier pattern applies policy modifiers with `je:<key> = { add_modifier = … }`. A pulse that tries `if = { limit = { has_modifier = X } remove_modifier = X }` for such a modifier is therefore testing the country, which never had it: the `if` never fires, nothing is logged, and the modifier stays on the entry for ever. This shipped undetected in `je_nuclear_program`, where a programme-pause treaty zeroed the funding variable but left the full weekly innovation cost applied.
 
 When the removal has to happen in a helper that a button also calls, note that you cannot test `has_modifier` for the answer either: `add_modifier`/`remove_modifier` results are invisible inside the same effect block, and a scripted-effect call is inlined into its caller's block, so the read may see the pre-call state. Decide from a variable you just wrote instead (`change_variable` results *are* immediately visible), and write the per-caller walk-through into the helper's header — including why the choice is safe whichever state the modifier read happens to see.
+
+**Worked case — swapping one member of a banded modifier family.** `banking_cycle_apply_stance_band` has to keep exactly one of `banking_stance_band_1..5` on `je_banking_cycle`. It decides entirely from two variables: the band the monthly update computed (`te_mon_stance_band`) and a stored `te_mon_stance_band_applied` recording which one is physically on the entry. The remove branch keys on the *stored* value, the add branch on the *new* one, and nothing reads `has_modifier` anywhere. Two details generalise: (a) run the whole swap only when the two differ, so an unchanged month costs nothing; (b) on a JE with `can_revolution_inherit = yes` the entry and its modifiers move to the successor tag but **country variables do not**, so the sentinel-initialisation branch must also issue an unconditional `remove_modifier` for every member of the family — otherwise the successor stacks a second band on top of the inherited one for good.
+
+## Script-Value Keys Apply in Written Order — a `multiply` Above `min`/`max` Disarms the Clamp
+
+A Jomini value block evaluates its keys top to bottom, so `min` / `max` bound whatever the accumulator holds **at that line**, not the block's final result. Folding a scaling step into the same block as its clamp therefore changes what the clamp means:
+
+```
+# Clamped, then scaled — the bound is on the INPUT, which is what you want
+te_mon_stance_gap_clamped = { value = 0  if = { limit = { has_variable = te_mon_stance_gap }  add = { value = var:te_mon_stance_gap  min = -4  max = 4 } } }
+te_mon_stance_momentum_add = { value = te_mon_stance_gap_clamped  multiply = -0.125 }
+```
+
+Written as one block with `multiply = -0.125` **above** `min = -4 max = 4`, the bound is tested against the already-scaled figure — whose whole range is ±1.25 — so it never bites and the channel becomes unbounded. That is a *disarmed* clamp, not a shrunken one, and it is silent: no error, no audit flag, just a quantity that occasionally runs several times its calibrated size.
+
+Rules of thumb: keep a clamp in its own named script value when two consumers scale it differently (one clamp site, and both possible evaluation-order readings then agree); and when you do write clamp and scale in one block, put a comment on the clamp saying why the order is load-bearing, because the "simplification" of merging them is exactly the edit that breaks it.
+
+## A Non-Idempotent Pulse Effect Needs an Explicit Call-Site Contract
+
+Most scripted effects are safe to call twice; one that **advances** state is not. `te_monetary_monthly_update` moves the policy rate a third of a point toward its target and draws two random walks *per call*, so a second call in the same month drifts twice as fast and ages the hidden state twice as quickly — no error, no log line, just a system running at double speed for that country.
+
+When an effect is the single owner of a time-advancing quantity, put the contract in its header and be specific:
+
+- State **NOT IDEMPOTENT WITHIN A \<period\>** and say which steps advance.
+- **Enumerate the permitted call sites** (here: `on_monthly_pulse_country`, `on_game_started`, and the country-creation hooks) and name the forbidden ones explicitly — events, scripted buttons, scripted GUIs, and a journal entry's own `on_monthly_pulse`, which are exactly where someone reaches for it to "refresh the number now".
+- Give that someone the alternative: write the input and let the next pulse pick it up. If the effect skips cheaply when nothing changed, say so — it removes the perceived cost of waiting.
+- Record any deliberate exception (a console-only debug event that steps the system by hand) in the same header, so it does not read as a violation.
