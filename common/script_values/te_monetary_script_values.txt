@@ -260,6 +260,20 @@
 # rate paid, the monetisation level, and the two pressure modifier types, which
 # are what the player chose. The console debug event is the one place the hidden
 # half may be printed.
+#
+# AND THE ONE PLACE IT MAY BE WRITTEN BY HAND (§19 row 2). te_debug_monetary.7's
+# seed option (events/te_debug_monetary_events.txt) sets te_inflation,
+# te_inflation_core, te_inflation_expected, te_cost_push, te_inflation_noise,
+# te_policy_rate, te_policy_rate_target, te_monetisation_level, te_neutral_rate,
+# te_neutral_error, te_neutral_walk, te_mon_growth_term and te_mon_stance_gap
+# directly, to put a country at the starting point of §10's worked example;
+# te_debug_monetary.5 writes te_mon_dollarised, te_mon_delegated and
+# te_policy_rate_target to pin it to a manual fiat target. That is a third
+# documented exception to the single-owner rule, alongside the §9.2 crisis and
+# the P9 dollarisation exit — and unlike those two it is unreachable from play:
+# nothing in the mod fires either event. The harness exists because every AI
+# country is delegated, so no observer run ever exercises the manual path §9.1
+# calls unstable by design.
 # ============================================================================
 
 

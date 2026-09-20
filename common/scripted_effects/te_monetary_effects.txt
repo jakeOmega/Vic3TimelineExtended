@@ -2021,7 +2021,11 @@ te_monetary_yearly_growth_snapshot = {
 # These are the ONLY writers of te_policy_rate_target, te_mon_delegated,
 # te_mon_mandate and te_monetisation_level outside the monthly update, and they
 # live here rather than in the scripted-GUI file for the same reason everything
-# else in this file does: one owner per variable, one place to look.
+# else in this file does: one owner per variable, one place to look. The one
+# exception is the console-only §19 harness (te_debug_monetary.5 and .7 in
+# events/te_debug_monetary_events.txt), which pins those same four by hand
+# because an AI country is always delegated and no player-facing control can
+# put a country where §10's worked example starts.
 #
 # They deliberately do NOT call te_monetary_monthly_update. That effect is not
 # idempotent within a month (step 3 drifts the rate, step 8 draws two random
