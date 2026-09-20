@@ -65,16 +65,33 @@ te_debug_monetary.1 = { # REVIEWED 2026-09-19: console-only test event (`event t
 # ============================================================================
 # THE INTEREST-MODIFIER MULTIPLIER EXPERIMENT — .2, .3, .4
 # ============================================================================
-# THE BUG. On a fresh 1836 game, day one, the budget interest tooltip reads
-# "+20.0% Base Value, -19.0% Timed Modifiers" for every country: the
-# te_monetary_base_offset half of the pair is there (-0.2 = -20%), and
-# te_monetary_rate_paid is there too but at a multiplier of exactly 1
-# (0.01 = +1%), even though te_rate_paid_applied holds the right number
+# SOLVED 2026-09-19 — these three events did their job; they are kept as the
+# standing bench for the next time a modifier multiplier misbehaves.
+#
+# THE BUG THEY DIAGNOSED. On a fresh 1836 game, day one, the budget interest
+# tooltip read "+20.0% Base Value, -19.0% Timed Modifiers" for every country:
+# te_monetary_rate_paid was present but at a multiplier of exactly 1
+# (0.01 = +1%), even though te_rate_paid_applied held the right number
 # (12.5 for Russia, 3.7 for Britain — te_debug_monetary.1 prints it). No script
-# error is logged from any monetary file. The first application runs from
+# error was logged from any monetary file. The first application ran from
 # on_game_started -> every_country (common/on_actions/te_monetary_on_actions.txt),
-# and afterwards step 9 skips the re-apply while |pts - applied| < 0.05, so a
-# bad first write sticks for the whole game.
+# and afterwards step 9 skipped the re-apply while |pts - applied| < 0.05, so the
+# bad first write stuck for the whole game.
+#
+# THE ANSWER. .2 (the production `var:` form) and .3 (a named script value) both
+# produced the correct rate when run mid-game from a country event, and .4's
+# literal worked as well. So the form was never the problem: the CALL SITE was.
+# `add_modifier`'s `multiplier =` is resolved against ROOT, and on_game_started
+# has no root scope at all (engine docs/on_actions.log:341, "Expected Scope:
+# none") — `every_country` changes THIS, not ROOT — so the read found nothing and
+# the engine silently substituted 1.0. The same fault sat in the six
+# country-creation hooks, which also declare scope `none` and leave the PARENT in
+# ROOT. Both families now dispatch through te_monetary_internal.1, a hidden
+# country event whose ROOT is the country it fires on
+# (events/te_monetary_events.txt), and step 9 carries a te_rate_paid_rooted
+# marker so any root-less write is repaired on the next monthly pulse.
+# Written up in scripting_best_practices.md § "Scope Chain Issues with
+# add_modifier + Script Values".
 #
 # The three events below run the SAME remove-then-add-the-pair block that step 9
 # runs (te_monetary_apply_interest_modifiers), mid-game, from country scope, and
@@ -90,13 +107,12 @@ te_debug_monetary.1 = { # REVIEWED 2026-09-19: console-only test event (`event t
 # multiplier reads about -7.5%, a multiplier of 1 reads -19.0%, the .3 fallback
 # reads -17.0%, and the .4 control reads -13.0%.
 #
-# WHAT EACH OUTCOME MEANS. If .2 works mid-game the var form is fine and the
-# fault is the on_game_started call site (ROOT there is `none`, and
-# scripting_best_practices.md:403-404 documents multiplier expressions being
-# resolved in the OUTER scope of an iterator, which would leave `var:` reading
-# against nothing and defaulting to 1.0). If .2 fails but .3 works, the var form
-# is the wrong form for this modifier. If .4 also fails, the modifier does not
-# scale at all and the whole approach has to change.
+# WHAT EACH OUTCOME MEANS, for the next investigation. All three worked from a
+# country event, which is what proved the call site rather than the form to be
+# at fault. If a future .2 fails where .3 works, the `var:` form is wrong for
+# that modifier; if .4 also fails, the modifier does not scale at all and the
+# approach has to change; if all three work but production does not, look at the
+# ROOT of the call site — that is what happened here.
 #
 # ORDER OF USE. Fire .2, then .3, then .4 — .4 leaves the country paying 7%
 # with both modifiers present, which step 9's 0.05 threshold will never correct

@@ -1,0 +1,59 @@
+﻿# ============================================================================
+# Monetary Policy — the country-rooted dispatch event
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §16.1-16.2. System overview:
+# docs/systems/mod_systems.md § Banking Cycle -> Monetary Policy (phase 1).
+#
+# WHY THIS EVENT EXISTS. Step 9 of te_monetary_monthly_update writes the rate
+# into the engine with
+#
+#     add_modifier = { name = te_monetary_rate_paid multiplier = var:te_rate_paid_applied }
+#
+# and the engine resolves a `multiplier =` expression against ROOT, not against
+# the scope the effect is running in. Two of the update's entry points have the
+# wrong ROOT for that:
+#
+#   * on_game_started has NO root scope at all (engine docs/on_actions.log:341
+#     "Expected Scope: none"; vanilla 00_code_on_actions.txt:3-5 says the same
+#     in words). `every_country = { ... }` changes THIS, not ROOT, so the
+#     multiplier read found nothing and silently defaulted to 1.0 — every
+#     country in the world spent the whole campaign paying 1%, because step 9's
+#     0.05 threshold then saw an applied value that matched and never re-wrote
+#     it. Proven in-game 2026-09-19: the budget tooltip read "+20.0% Base Value,
+#     -19.0% Timed Modifiers" for every tag on day one while te_rate_paid_applied
+#     held the correct 12.5 for Russia.
+#   * the six country-creation hooks also declare "Expected Scope: none" and put
+#     the PARENT in ROOT (the releasing country, or the one an uprising is
+#     breaking away from), with the new tag in scope:target. A bare
+#     `scope:target = { te_monetary_monthly_update = yes }` would therefore have
+#     written the PARENT's rate onto the new country.
+#
+# Routing both through a hidden country event fixes both at once: a
+# country_event's ROOT is the country it fires on, so `var:` in the multiplier
+# resolves against exactly the country being updated. te_debug_monetary.2 is the
+# in-game proof — the identical block, run from a country event, produces the
+# right number.
+#
+# IT RUNS THE WHOLE UPDATE, not step 9 alone. That keeps the "one call per entry
+# point" rule in te_monetary_monthly_update's contract comment intact: each hook
+# still causes exactly one update, so the non-idempotent steps (3's drift, 8's
+# two random walks) are never advanced twice.
+#
+# DO NOT fire this from anywhere else. It is the monthly update, with all of
+# that effect's non-idempotence; the list of legitimate callers is the one in
+# common/on_actions/te_monetary_on_actions.txt.
+#
+# No loc and no `is_triggered_only`: a hidden event has no player-facing text,
+# and orphaned_event_audit only considers `is_triggered_only = yes` events.
+# Boilerplate copied from events/te_construction_market_recalc_events.txt.
+# ============================================================================
+namespace = te_monetary_internal
+
+te_monetary_internal.1 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		te_monetary_monthly_update = yes
+	}
+}

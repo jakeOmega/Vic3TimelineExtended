@@ -61,10 +61,21 @@ te_monetary_refresh_world_era_base = {
 # ----------------------------------------------------------------------------
 # THE MONTHLY UPDATE — country scope
 # ----------------------------------------------------------------------------
-# Called from on_monthly_pulse_country, from on_game_started for every country,
-# and from the country-creation on-actions (common/on_actions/te_monetary_on_actions.txt).
-# A country that has never run it pays vanilla's flat 20% — a safe fallback, and
-# the reason the creation hooks exist at all (§16.1).
+# Called from on_monthly_pulse_country and on_country_formed directly, and from
+# on_game_started and the six country-creation on-actions through the hidden
+# dispatch event te_monetary_internal.1 — all of them wired in
+# common/on_actions/te_monetary_on_actions.txt. A country that has never run it
+# pays vanilla's flat 20% — a safe fallback, and the reason the creation hooks
+# exist at all (§16.1).
+#
+# THE CALLER'S ROOT MUST BE THE COUNTRY BEING UPDATED. Step 9 applies its
+# modifier with `multiplier = var:...`, which the engine resolves against ROOT
+# rather than against the scope this effect is running in. That is why the two
+# families of entry point with the wrong ROOT — game start (ROOT `none`) and
+# country creation (ROOT the parent) — go through a country event instead of
+# calling this effect inside an iterator or a `scope:target = { }` block. Any
+# new entry point must satisfy the same rule; step 9's te_rate_paid_rooted
+# marker is the net if one does not.
 #
 # NOT IDEMPOTENT WITHIN A MONTH. Step 3 advances the policy rate toward the
 # target by a third of a point per call, and step 8 draws both random walks per
@@ -800,9 +811,38 @@ te_monetary_update_stance = {
 # it. Anything that wants the modifier refreshed writes its input and waits for
 # the pulse.
 #
-# te_rate_paid_applied is never removed: the engine re-evaluates the multiplier
-# expression on later ticks, and a missing variable would make every one of them
-# read 'none' (modifier_multiplier_var_audit).
+# ROOT MUST BE THIS COUNTRY. `multiplier = var:te_rate_paid_applied` is resolved
+# by the engine against ROOT, not against the scope this effect runs in. Run from
+# a context whose ROOT is `none` (on_game_started) the read finds nothing and the
+# engine silently substitutes 1.0; run from a context whose ROOT is another
+# country (the country-creation hooks, where ROOT is the parent) it writes that
+# country's rate. Both were live bugs, fixed by dispatching those entry points
+# through te_monetary_internal.1 — see common/on_actions/te_monetary_on_actions.txt
+# and scripting_best_practices.md § "Scope Chain Issues with add_modifier +
+# Script Values".
+#
+# te_rate_paid_rooted IS THE BELT. It is set only here, and only when `root ?= this`
+# says the write really did have this country in ROOT for the multiplier to
+# resolve against. It is the one monetary variable deliberately NOT initialised
+# in step 0: its ABSENCE is the signal. A country whose modifier was written
+# root-less — from a save made before this fix, or from any future call site that
+# gets ROOT wrong — lacks the marker, so the condition below fires on its first
+# monthly pulse (ROOT = country there) and rewrites the modifier correctly.
+# Without it, such a country is stuck forever: the applied value already equals
+# the target, so the 0.05 threshold never trips and the wrong multiplier survives
+# the whole campaign. That is exactly how the game-start bug went unnoticed for a
+# whole play-test. It is only ever read through `has_variable`, so it can never
+# return 'none', and it is never removed.
+#
+# The degradation is graceful in both directions. If `root ?= this` somehow never
+# holds, the marker never sets and this step simply re-writes the modifier every
+# month from the monthly pulse — where ROOT *is* the country — so the rate stays
+# correct and the only cost is a redundant remove-and-add. If a future call site
+# gets ROOT wrong, the marker stays unset and the next pulse repairs it.
+#
+# te_rate_paid_applied is never removed either: the engine re-evaluates the
+# multiplier expression on later ticks, and a missing variable would make every
+# one of them read 'none' (modifier_multiplier_var_audit).
 te_monetary_apply_interest_modifiers = {
 	set_variable = { name = te_mon_work value = var:te_rate_paid_pts }
 	set_variable = { name = te_mon_work2 value = var:te_mon_work }
@@ -814,6 +854,7 @@ te_monetary_apply_interest_modifiers = {
 				var:te_mon_work2 <= -0.05
 				NOT = { has_modifier = te_monetary_rate_paid }
 				NOT = { has_modifier = te_monetary_base_offset }
+				NOT = { has_variable = te_rate_paid_rooted }
 			}
 		}
 		if = {
@@ -829,6 +870,12 @@ te_monetary_apply_interest_modifiers = {
 		add_modifier = {
 			name = te_monetary_rate_paid
 			multiplier = var:te_rate_paid_applied
+		}
+		# Only a write whose ROOT was this country counts as a good one — that is
+		# the whole meaning of the marker.
+		if = {
+			limit = { root ?= this }
+			set_variable = { name = te_rate_paid_rooted value = 1 }
 		}
 	}
 }

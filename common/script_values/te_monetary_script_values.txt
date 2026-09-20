@@ -15,7 +15,8 @@
 # ----------------------------------------------------------------------------
 # VARIABLE CONTRACT (§16.2) — country-scope variables owned by
 # te_monetary_monthly_update. Every one of them initialises behind
-# `has_variable`, and NONE of them is ever removed (a `remove_variable` on a
+# `has_variable` — with the single documented exception of te_rate_paid_rooted,
+# whose absence is load-bearing — and NONE of them is ever removed (a `remove_variable` on a
 # variable read by an `add_modifier { multiplier = ... }` is what
 # modifier_multiplier_var_audit exists to catch). No new monetary variable may
 # be introduced in je_banking.txt's `immediate` — that block resets unguarded
@@ -42,6 +43,23 @@
 #                                                   pulse after loading corrects it.
 #                                                   Never displayed; it is a
 #                                                   bookkeeping value, not the rate.
+#   te_rate_paid_rooted     1, or absent            THE ONE VARIABLE THAT IS
+#                                                   DELIBERATELY NOT INITIALISED.
+#                                                   Step 9 sets it only after a
+#                                                   write whose ROOT was this
+#                                                   country (`root ?= this`), so
+#                                                   its ABSENCE is the signal
+#                                                   that the interest modifier
+#                                                   was applied from a root-less
+#                                                   or foreign-rooted context and
+#                                                   is therefore at the wrong
+#                                                   multiplier. Initialising it
+#                                                   would destroy that signal.
+#                                                   Safe: it is read only through
+#                                                   `has_variable`, never as
+#                                                   `var:`, so it can never
+#                                                   return 'none'. Never removed,
+#                                                   like the rest.
 #   te_neutral_rate         1 to 6      HIDDEN      r*, the natural rate (§8)
 #   te_neutral_error        +/-1.5      HIDDEN      the country's estimate error
 #                                                   (+/-0.5 under CBI); mandates
