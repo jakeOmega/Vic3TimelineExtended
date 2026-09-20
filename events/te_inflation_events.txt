@@ -21,15 +21,17 @@
 # neither mean_time_to_happen nor a random_events registration is reached only
 # by trigger_event anyway.
 #
-# THIS EVENT WRITES INFLATION VARIABLES, and it is the only thing outside the
-# monthly update that does. Everywhere else in this system a control writes an
-# INPUT and lets the next pulse derive the state; here §9.2 defines both escapes
-# AS a reset of the state itself — a currency reform to 5, a dollarisation to
-# the ordinary anchor — so there is no input for the pulse to derive it from.
-# The exception is written into the variable contract. What this event must
-# NEVER do is call te_monetary_monthly_update: the update is not idempotent, and
-# a second call in a month would drift the policy rate twice and age both hidden
-# random walks twice.
+# THIS EVENT WRITES INFLATION VARIABLES. Everywhere else in this system a
+# control writes an INPUT and lets the next pulse derive the state; here §9.2
+# defines both escapes AS a reset of the state itself — a currency reform to 5,
+# a dollarisation to the ordinary anchor — so there is no input for the pulse to
+# derive it from. This and the P9 dollarisation exit in
+# te_banking_law_change_cleanup are the two documented exceptions in the
+# variable contract, and they share the write through
+# te_mon_effect_new_currency. What this event must NEVER do is call
+# te_monetary_monthly_update: the update is not idempotent, and a second call in
+# a month would drift the policy rate twice and age both hidden random walks
+# twice.
 #
 # THE THREE ESCAPES, and why each is somebody's best answer:
 #
@@ -69,10 +71,14 @@ te_inflation.1 = {
 	duration = 3
 
 	# --- currency reform ----------------------------------------------------
+	# The reset and the ten-year premium are te_mon_effect_new_currency, shared
+	# with the P9 dollarisation exit: both are a country putting money it has
+	# just issued into people's hands, and both pay the same credibility price.
 	# The reset is to te_mon_currency_reform_reset (5), not to the target: §9.2
 	# is explicit, and it is the difference between a reform and a miracle.
-	# te_cost_push goes to 0 with the rest so the headline written here is
-	# consistent with core until the next pulse recomputes the basket term.
+	#
+	# WHAT IS NOT SHARED is the one-off wreckage below — the pool and the
+	# savers. The exit pays for those in months of lost seigniorage instead.
 	#
 	# The monetisation level is zeroed on the same reasoning
 	# te_banking_law_change_cleanup zeroes it on a disqualifying law change: it
@@ -80,15 +86,22 @@ te_inflation.1 = {
 	# stands, and a currency reform that leaves the press running is not one.
 	# For an AI country step 1b will decide the level again next month on its
 	# own war-and-debt rule; for a player it stays where this puts it.
+	#
+	# THE CRISIS COOLDOWN IS CLEARED, because this option resolved the crisis.
+	# The countdown step 6c starts exists to stop the same unanswered question
+	# being asked twelve times while a country rides it out; a country that
+	# reformed its currency and then hyperinflated the new one has to be offered
+	# the choice again, and π at 5 means that cannot happen for a while anyway.
 	option = {
 		name = te_inflation.1.a
 		custom_tooltip = te_inflation.1.a.tt
 
-		set_variable = { name = te_inflation value = te_mon_currency_reform_reset }
-		set_variable = { name = te_inflation_core value = te_mon_currency_reform_reset }
-		set_variable = { name = te_inflation_expected value = te_mon_currency_reform_reset }
-		set_variable = { name = te_cost_push value = 0 }
-		set_variable = { name = te_monetisation_level value = 0 }
+		te_mon_effect_new_currency = yes
+
+		hidden_effect = {
+			set_variable = { name = te_monetisation_level value = 0 }
+			set_variable = { name = te_mon_hyper_cooldown value = 0 }
+		}
 
 		add_investment_pool = te_mon_currency_reform_pool_wipe
 
@@ -99,11 +112,6 @@ te_inflation.1 = {
 		add_radicals = {
 			value = medium_radicals
 			strata = upper
-		}
-
-		add_modifier = {
-			name = te_mon_currency_reform_premium
-			days = 3650
 		}
 
 		ai_chance = {
@@ -143,15 +151,35 @@ te_inflation.1 = {
 	# month and the dollarised regime pull holds core at half of them, so the
 	# country would have sat in the *Very High* band for years with a modifier
 	# on it that says inflation is somebody else's problem.
+	#
+	# THE RESET IS WHY THE EXIT COSTS SOMETHING. Because expectations are
+	# anchored here for free, leaving dollarisation later has to pay the
+	# credibility price a currency reform pays —
+	# te_banking_law_change_cleanup calls te_mon_effect_new_currency when a
+	# dollarised country enacts a monetary-policy law. The tooltip says so, so
+	# the player is choosing with that in front of them rather than finding out
+	# a decade later.
+	#
+	# The crisis cooldown is cleared for the same reason the reform option
+	# clears it: this resolved the crisis, and a country that later re-founds a
+	# currency and hyperinflates it has to be offered the choice again.
 	option = {
 		name = te_inflation.1.b
 		custom_tooltip = te_inflation.1.b.tt
 
-		set_variable = { name = te_mon_dollarised value = 1 }
-		set_variable = { name = te_inflation value = te_mon_inflation_anchor }
-		set_variable = { name = te_inflation_core value = te_mon_inflation_anchor }
-		set_variable = { name = te_inflation_expected value = te_mon_inflation_anchor }
-		set_variable = { name = te_cost_push value = 0 }
+		# Hidden for the same reason te_mon_effect_new_currency hides its own
+		# writes: the whole of this option's meaning is in its tooltip, and raw
+		# set_variable lines under it would say nothing a player can use.
+		# te_cost_push goes to 0 with the rest so the headline written here is
+		# consistent with core until the next pulse recomputes the basket term.
+		hidden_effect = {
+			set_variable = { name = te_mon_dollarised value = 1 }
+			set_variable = { name = te_inflation value = te_mon_inflation_anchor }
+			set_variable = { name = te_inflation_core value = te_mon_inflation_anchor }
+			set_variable = { name = te_inflation_expected value = te_mon_inflation_anchor }
+			set_variable = { name = te_cost_push value = 0 }
+			set_variable = { name = te_mon_hyper_cooldown value = 0 }
+		}
 
 		ai_chance = {
 			# Base 2, not 1, so that the two subtractions below can meet at 0

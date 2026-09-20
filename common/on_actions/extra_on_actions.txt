@@ -178,7 +178,25 @@ te_banking_law_change_cleanup = {
 		# different one. ADD A LAW HERE if lawgroup_monetary_policy ever gains a
 		# sixth.
 		#
-		# ONLY THE FLAG IS WRITTEN. te_mon_dollarised_modifier is the seventh
+		# AND IT PAYS THE NEW-CURRENCY PRICE. Leaving dollarisation is not
+		# putting a currency back in a drawer, it is issuing one: the state has
+		# to persuade people to hold paper it prints again, having already
+		# failed to once. Without this the sequence dollarise -> wait out one
+		# law enactment -> re-enact fiat would be a currency reform with no pool
+		# wipe, no radicals and no premium — strictly the cheapest way out of a
+		# hyperinflation, and free, because the dollarise option already reset
+		# expectations to the anchor for nothing. te_mon_effect_new_currency is
+		# the same effect te_inflation.1's reform option calls: inflation and
+		# expectations start at te_mon_currency_reform_reset and lenders charge
+		# the ten-year premium. NOT the pool wipe and NOT the radicals — the
+		# months of -75% minting under dollarisation were that half of the
+		# price, and te_inflation.1.b.tt tells the player so before they choose.
+		#
+		# It is the only write of inflation state outside the monthly update and
+		# the crisis event; the variable contract in the header of
+		# common/script_values/te_monetary_script_values.txt lists it.
+		#
+		# NO MODIFIER IS REMOVED HERE. te_mon_dollarised_modifier is the seventh
 		# member of the te_inflation_band_* family and belongs to step 6c of the
 		# monthly update (te_monetary_apply_inflation_band), which takes it off
 		# and puts the country's current band on in the same swap. A
@@ -197,6 +215,7 @@ te_banking_law_change_cleanup = {
 				}
 			}
 			set_variable = { name = te_mon_dollarised value = 0 }
+			te_mon_effect_new_currency = yes
 		}
 	}
 }

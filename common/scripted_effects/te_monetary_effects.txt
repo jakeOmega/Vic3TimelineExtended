@@ -1361,9 +1361,14 @@ te_monetary_apply_inflation_band = {
 	# currency of its own left to reform or abandon, and the choice it is being
 	# offered is the one it already made.
 	#
-	# THE COOLDOWN IS SET HERE, not in the event: this effect then stays the
-	# only writer of the variable, and a player who leaves the event unanswered
-	# is not handed a second copy of it at the next pulse.
+	# THE COOLDOWN IS SET HERE, not in the event, so that a player who leaves
+	# the event unanswered is not handed a second copy of it at the next pulse.
+	# The two options that RESOLVE the crisis clear it again themselves: it is
+	# an anti-nag device for riding it out, not a lock-out, and a country that
+	# reformed its currency and then hyperinflated the new one all over again
+	# has to be offered the choice a second time. So this effect owns the
+	# countdown — setting it and ageing it — and te_inflation.1's reform and
+	# dollarise options own the one write that zeroes it.
 	if = {
 		limit = {
 			var:te_inflation_band = 6
@@ -1884,4 +1889,59 @@ te_mon_effect_monetisation_step_up = {
 		}
 	}
 	custom_tooltip = banking_mon_monetise_step_tt
+}
+
+
+# ----------------------------------------------------------------------------
+# THE NEW-CURRENCY RESET (§9.2) — what a country pays for money it has just
+# issued
+# ----------------------------------------------------------------------------
+# Scope: country. Two call sites, and they are the only ones:
+#
+#   * te_inflation.1's CURRENCY REFORM option (events/te_inflation_events.txt) —
+#     the old notes called in and reissued at a new value; and
+#   * the P9 DOLLARISATION EXIT in te_banking_law_change_cleanup
+#     (common/on_actions/extra_on_actions.txt) — a dollarised country enacting a
+#     monetary-policy law, which IS the act of putting a currency of its own
+#     back into people's hands.
+#
+# The same economic event from two directions, so it carries the same
+# credibility price: inflation and expectations start at
+# te_mon_currency_reform_reset rather than at the target, and lenders charge the
+# ten-year premium. What the two do NOT share is the one-off wreckage — the
+# reform wipes out the investment pool and radicalises the savers who held the
+# old notes; the exit does neither, because the months of lost seigniorage under
+# dollarisation were that half of the price.
+#
+# WHY THE EXIT PAYS ANYTHING AT ALL. Dollarising resets expectations to the
+# anchor, so without this the sequence dollarise -> wait out one law enactment
+# -> re-enact fiat would be a currency reform with no pool wipe, no radicals and
+# no premium: strictly the cheapest way out of a hyperinflation, and free.
+#
+# IT WRITES INFLATION STATE, which nothing but the monthly update otherwise
+# does. Both call sites are listed as documented exceptions in the variable
+# contract (header of common/script_values/te_monetary_script_values.txt). It
+# must never call te_monetary_monthly_update: that effect is not idempotent
+# within a month.
+#
+# te_cost_push GOES TO 0 WITH THE REST, so the headline written here is
+# consistent with core until the next pulse recomputes the basket term. It is a
+# level, not a stock, so the pulse simply re-derives it from the same prices.
+#
+# THE WRITES ARE HIDDEN AND THE MODIFIER IS NOT, on the player-controls
+# convention above: raw set_variable lines would otherwise be spelled out in
+# the option's tooltip, while the ten-year premium is exactly what the player
+# should see there.
+te_mon_effect_new_currency = {
+	hidden_effect = {
+		set_variable = { name = te_inflation value = te_mon_currency_reform_reset }
+		set_variable = { name = te_inflation_core value = te_mon_currency_reform_reset }
+		set_variable = { name = te_inflation_expected value = te_mon_currency_reform_reset }
+		set_variable = { name = te_cost_push value = 0 }
+	}
+
+	add_modifier = {
+		name = te_mon_currency_reform_premium
+		days = 3650
+	}
 }

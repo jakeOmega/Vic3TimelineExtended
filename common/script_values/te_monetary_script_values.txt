@@ -92,12 +92,17 @@
 #     the band swap, which is the half of step 6 that touches the engine; and
 #   * the §9.2 HYPERINFLATION CRISIS (events/te_inflation_events.txt) writes
 #     te_inflation, te_inflation_core, te_inflation_expected, te_cost_push,
-#     te_monetisation_level and te_mon_dollarised in its option effects. §9.2
-#     defines both escapes AS a reset of those figures — a currency reform to 5,
-#     a dollarisation to the anchor — so there is nothing for the crisis to
-#     write as an "input" that the next pulse could derive the reset from. It is
-#     a one-shot write of state the update otherwise integrates, and it is the
-#     only place in the system that does it.
+#     te_monetisation_level, te_mon_dollarised and te_mon_hyper_cooldown in its
+#     option effects, and the P9 DOLLARISATION EXIT in
+#     te_banking_law_change_cleanup (common/on_actions/extra_on_actions.txt)
+#     writes the first four of those. §9.2 defines every one of these escapes AS
+#     a reset of those figures — a currency reform to 5, a dollarisation to the
+#     anchor, and leaving dollarisation back to 5 again — so there is nothing
+#     for either site to write as an "input" that the next pulse could derive
+#     the reset from. The two share one effect, te_mon_effect_new_currency
+#     (common/scripted_effects/te_monetary_effects.txt), so the price of issuing
+#     a new currency is stated once. These are the only two places in the system
+#     that write state the update otherwise integrates.
 #
 #   te_inflation            -10 to 100  displayed   headline annual inflation in pp:
 #                                                   core plus cost-push (§9.3).
@@ -174,8 +179,11 @@
 #                                                   hyperinflation crisis may be offered
 #                                                   again. Set by step 6c when the event
 #                                                   goes out, ticked down a month at a
-#                                                   time by the same step; 0 means "may
-#                                                   be offered"
+#                                                   time by the same step, and zeroed by
+#                                                   te_inflation.1's two RESOLVING
+#                                                   options — it is an anti-nag device
+#                                                   for riding it out, not a lock-out;
+#                                                   0 means "may be offered"
 #   te_market_yield         >= 0        displayed   max( policy rate , reference rate +
 #                                                   expected inflation ) — the lenders'
 #                                                   floor of §10, before the premium
@@ -1104,8 +1112,10 @@ te_mon_hyper_cooldown_months = {
 # the deficit and the press — the reform zeroes te_monetisation_level, and
 # nothing stops the pressure sum putting core back where it was.
 #
-# RETUNING THIS MOVES A LOC KEY WITH IT, the same way the cooldown above does:
-# te_inflation.1.a.tt tells the player inflation falls back to "5%".
+# RETUNING THIS MOVES TWO LOC KEYS WITH IT, the same way the cooldown above
+# moves one: te_inflation.1.a.tt tells the player a reform brings inflation back
+# to "5%", and te_inflation.1.b.tt warns that leaving dollarisation later starts
+# from the same figure.
 te_mon_currency_reform_reset = {
 	value = 5
 }
