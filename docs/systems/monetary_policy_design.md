@@ -268,8 +268,8 @@ rows, and a console harness for §19 row 2. **Nothing below has been seen in a r
 either.** Every claim here is verified against the files; every claim about *behaviour* is a
 simulation of the shipped equations or an argument from them.
 
-Phase 1's §0.3 checklist is **inherited unchanged** (ruling P10) — items 2–5 and 8–14 are
-still open and are not repeated here. The phase-2 list continues the same numbering from
+Phase 1's §0.3 checklist is **inherited unchanged** (ruling P10) — items 2–5, the unwalked
+parts of 6 and 8–14 are still open and are not repeated here. The phase-2 list continues the same numbering from
 item 15, so an older note citing "checklist 7" still points at the right thing. File
 inventory and the new architectural rules: `mod_systems.md` § Banking Cycle →
 **Monetary Policy (phase 2)**.
@@ -354,7 +354,7 @@ and are tagged with the task that raised them.
 | **P11** | Wage pressure gets its **own** modifier type, `country_wage_pressure_add`; step 6 sums it with `country_inflation_pressure_add` | §9.4 and §11 would otherwise share one type, and the real-wage dividend could not tell a labour law from a devaluation | merge the two types back |
 | **T1** | A bankless country falls through `te_mon_credibility_c` to the manual 0.25 | §9.1 has no bankless row, and a bankless country has no anchoring institution | one branch |
 | **T1** | §9.4's "lower-strata loyalist trickle" to be delivered as `state_lower_strata_standard_of_living_add` | §9.4 promises a lower-strata gain, and an all-strata loyalists key would pay landowners for factory councils | — |
-| **T1 (withdrawn)** | **WITHDRAWN** — the ruling above is inert: the owner's fact is that **standard of living is an integer**, so a fractional `*_standard_of_living_add` does nothing unless it sums past a whole point. **Replacement:** `country_sol_expectations_lower_offset_add = −0.02` per unit on `te_mon_real_wage_dividend`, whose consumption chain is continuous end to end (`sol_expectations_lower_shift_value` → the multiplier on `sol_expectations_lower_strata_shift`) | verified against the files and against vanilla's own `tax_modifier_low/high`, which ship ±0.5/1.5 on the expectations key | ~31 other fractional-SoL sites in the mod are inert for the same reason — filed as **issue #338** (audit + content pass), deliberately not fixed here |
+| **T6 (withdraws T1)** | **WITHDRAWN** — the ruling above is inert: the owner's fact is that **standard of living is an integer**, so a fractional `*_standard_of_living_add` does nothing unless it sums past a whole point. **Replacement:** `country_sol_expectations_lower_offset_add = −0.02` per unit on `te_mon_real_wage_dividend`, whose consumption chain is continuous end to end (`sol_expectations_lower_shift_value` → the multiplier on `sol_expectations_lower_strata_shift`) | verified against the files and against vanilla's own `tax_modifier_low/high`, which ship ±0.5/1.5 on the expectations key | ~31 other fractional-SoL sites in the mod are inert for the same reason — filed as **issue #338** (audit + content pass), deliberately not fixed here |
 | **T2** | The §9.3 basket runs **before** the `te_mon_has_inflation` gate, for every country with a market | a command economy leading a customs union would otherwise starve its members of an index, and would book decades of price drift as one cost-push shock the month it liberalised; §14's exclusion is about π, not about the market's price index | move one block |
 | **T2** | The noise walk's `random_list` **draw** is narrowed to `te_mon_has_dial` countries; its **decay** is not | §0.1's precedent (~1,330 wasted draws a month), and a no-dial country's pressure sum carries no r\* to hide. The decay stays ungated because every country *reads* this term, so a frozen draw would be a permanent ±0.75pp bias rather than harmless dead state | one limit |
 | **T2** | **§9.1's "settles at 2 + P/c" is a simplification** — with `c_eff` de-anchoring there is no fixed point when `P > 2.5 × c`. Code left spec-faithful | consistent with §9.1's own instability paragraph, but sharper; **owner decision A** and the §9.1 pointer note | analysis only, nothing to revert |
@@ -385,8 +385,9 @@ and are tagged with the task that raised them.
   were skipped: each needs its own "first, not every crossing" variable plus loc and wiring,
   and nothing depends on them.
 - **§13's "CBI endorsed by Industrialists and Petite Bourgeoisie" needed nothing.**
-  `law_central_bank_independence` lives in `lawgroup_financial_regulation`, which already
-  carries CBI stances across all eleven `finreg_*` entries.
+  `law_central_bank_independence` lives in `lawgroup_financial_regulation`, and all eleven
+  `finreg_*` stance lists in `ideology_modifications.py` already carry a stance on it
+  (`finreg_laissez_faire` approve, `finreg_market_liberal` strongly_approve, and so on).
 
 #### Known roughnesses (phase 2)
 
@@ -438,17 +439,10 @@ All judged acceptable for a first pass; listed because each is user-visible or b
 #### IN-GAME VERIFICATION CHECKLIST (phase 2)
 
 Continues §0.3's numbering, and ordered the same way: by **how much breaks if the check
-fails**. 15–17 can invalidate a whole mechanism; 18–23 are the numbers and the UI; 24–26 are
-the harness and the exit criteria. Phase 1's items 2–5 and 8–14 are still open and are
+fails**. 15–17 can invalidate a whole mechanism; 18–23a are the numbers and the UI; 24–26 are
+the harness and the exit criteria. Phase 1's items 2–5, the unwalked parts of 6 (digital
+currency, and the digital policy-rate chart — see item 22) and 8–14 are still open and are
 inherited, not repeated.
-
-**Read this one first, because three of the checks below use it as their instrument.**
-`te_debug_monetary.1`'s new sections read their figures with
-`SCOPE.GetRootScope.ScriptValue(…)`, an accessor this mod uses in journal-entry rows and
-button descriptions but **never before in an event description**. If the pressure and basket
-blocks come out blank in game, the fix is one find-and-replace to
-`GetPlayer.MakeScope.ScriptValue` — correct for every use of the event except firing it at a
-foreign tag from the console — and checks 15, 16 and 24 all need it working.
 
 **Structural — a failure here changes what the phase does**
 
@@ -518,10 +512,14 @@ foreign tag from the console — and checks 15, 16 and 24 all need it working.
     (24-month cooldown, cleared by the two resolving options); the reform option's pool wipe,
     radicals and ten-year premium; the dollarise option landing at
     `te_inflation_band_applied = 7` with the band back at 2 on the next pulse; and the P9
-    exit paying `te_mon_effect_new_currency` on the next monetary-law enactment. Two engine
-    forms ride along: a bare `custom_tooltip = te_inflation.1.a.tt` with a **dotted** loc key
-    (every mod precedent for the bare form uses a flat key), and `add_investment_pool` with a
-    negative script value landing the pool at 0 rather than below it.
+    exit paying `te_mon_effect_new_currency` on the next monetary-law enactment. One engine
+    form rides along and is genuinely untried: `add_investment_pool` with a **negative**
+    script value, which should land the pool at 0 rather than below it (the value is exactly
+    `−investment_pool`, on the mod's own `ce_pool_withdraw_pool_cost` precedent). *(The
+    task-5 report also flagged the bare `custom_tooltip = te_inflation.1.a.tt` form with a
+    **dotted** loc key as unprecedented. It is not: `events/irredentism_events.txt` uses the
+    same bare-dotted form three times — `irredentism.1.b.tt`, `.1.c.tt`, `.2.a.tt`, all with
+    loc present. Nothing to check.)*
 21. **`[GetPlayer.GetCustom('…')]` inside an `is_valid` `custom_tooltip`** — the greyed
     monetisation buttons' single cause line. The in-repo precedent
     (`iw_decrease_funding_effect_tt`) is an **ExecuteTooltip** path; this is
@@ -535,6 +533,16 @@ foreign tag from the console — and checks 15, 16 and 24 all need it working.
 23. **`ScriptValue(…)|=+1`.** Three rate-paid rows use the signed script-value formatter; the
     repo has precedent for `Var().GetValue|=+1` and for `ScriptValue()|1` separately, never
     for the two together. A missing or unsigned figure on those rows is the tell.
+
+23a. **A glance at the console read-out, because checks 15, 16 and 24 all read their figures
+    through it.** `te_debug_monetary.1`'s new sections use
+    `SCOPE.GetRootScope.ScriptValue(…)`. This is a **confirmation, not a risk**: the same
+    accessor already renders in four `country_event` descriptions in this mod —
+    `environmentalism_events.1`–`.4`, which print
+    `[SCOPE.GetRootScope.ScriptValue('temperature_anomaly_display')]`. If the pressure or
+    basket block nevertheless comes out blank, the fix is one find-and-replace to
+    `GetPlayer.MakeScope.ScriptValue`, correct for every use of the event except firing it at
+    a foreign tag from the console.
 
 **The harness, and §19 row 2's exit criteria**
 
