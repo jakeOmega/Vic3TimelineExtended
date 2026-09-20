@@ -2634,3 +2634,9 @@ te_mon_peg_confidence_move = {
 		subtract = 2
 	}
 }
+
+
+# Debug read-out only (te_debug_monetary.8): the engine's scaled reserves.
+te_mon_debug_scaled_reserves = {
+	value = scaled_gold_reserves
+}

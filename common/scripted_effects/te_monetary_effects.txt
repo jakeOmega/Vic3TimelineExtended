@@ -2408,10 +2408,18 @@ te_monetary_update_gold = {
 			change_variable = { name = te_gold_flow multiply = -1 }
 		}
 
+		# INSTRUMENTATION (first playtest: "the flow says -167k and my reserves
+		# are not falling"). The engine's gold_reserves read immediately before
+		# and immediately after the payment, printed by te_debug_monetary.8 and
+		# nowhere else. after - before = the flow means add_treasury landed and
+		# anything else moving the treasury is the weekly budget; after = before
+		# means it did not. Two set_variables a month for gold countries only.
+		set_variable = { name = te_gold_debug_before value = te_mon_gold_reserves_now }
 		if = {
 			limit = { NOT = { var:te_gold_flow = 0 } }
 			add_treasury = te_mon_gold_flow_signed
 		}
+		set_variable = { name = te_gold_debug_after value = te_mon_gold_reserves_now }
 		set_variable = { name = te_gold_flow_pct value = te_mon_gold_flow_pct_value }
 
 		# --- the carry: borrowed gold is paid for (owner decision I) ---------
