@@ -212,6 +212,12 @@ te_mon_target_can_step_up = {
 # te_mon_era_base_now is on it because the World Reference Rate row reads it,
 # and because it is the first thing step 0 writes, so a country that has it has
 # run a pulse.
+#
+# THE LAST THREE ARE PHASE 2. The Rate You Pay tooltip now breaks the figure
+# down as market yield + premium - inflation (§10), so it reads all three. A
+# save made under phase 1 has every variable above this line and none of these
+# until its first pulse on the new version, which is exactly the case this gate
+# exists for.
 te_mon_display_ready = {
 	has_variable = te_mon_era_base_now
 	has_variable = te_policy_rate
@@ -220,6 +226,9 @@ te_mon_display_ready = {
 	has_variable = te_premium_cyclical
 	has_variable = te_rate_paid_pts
 	has_variable = te_mon_stance_band
+	has_variable = te_market_yield
+	has_variable = te_inflation
+	has_variable = te_inflation_expected
 }
 
 # Is the policy rate at the floor of its regime's range? This is the gate on

@@ -25,13 +25,23 @@
 # derived rate -> 5 premium -> 6 inflation -> 7 rate paid -> 8 neutral rate +
 # stance -> 9 re-apply the interest modifier. Step 10 is phase 3.
 #
-# WHAT PHASE 2 HAS NOT WIRED YET. Step 6 (§9) computes the basket, core,
-# headline and expected inflation, but the rest of the stack has not been
-# pointed at them: the mandate formulas below are still the phase-1 forms
-# (no price-stability `-2`, no reaction to core), market yield (§4, §10) is
-# still the policy rate, step 8's stance gap is still nominal, and nothing
-# swaps the te_inflation_band_* modifiers. Those are later tasks of the same
-# phase; step 6 writes the variables they will read.
+# THE RATE STACK READS INFLATION (§4, §6, §7.6, §8, §10). Step 6 computes the
+# basket, core, headline and expected inflation, and the rest of the stack is
+# pointed at them: the mandates react to CORE (step 2), a no-dial country's
+# derived rate carries its own expected inflation (step 4), the cyclical
+# premium prices unanchored expectations and monetisation (step 5), the rate
+# paid is built on the lenders' floor and net of realised inflation (step 7),
+# and the stance gap is a REAL rate (step 8).
+#
+# WHICH FIGURE GOES WHERE. Core is what the mandates steer on — a delegated
+# bank looks through a supply shock (§9.1) — while headline is what the real
+# rate, the rate paid and the §9.2 bands use, and expected is what lenders
+# price. Nothing outside step 6 writes any of them.
+#
+# WHAT PHASE 2 HAS STILL NOT WIRED. Nothing swaps the te_inflation_band_*
+# modifiers, nothing sets te_monetisation_level or te_mon_dollarised, and the
+# §9.4 real-wage dividend is defined but unapplied. Those are later tasks of
+# the same phase.
 #
 # WORKING VARIABLES. te_mon_work and te_mon_work2 are scratch slots reused by
 # every step; te_mon_era_base_now caches the world reference rate for this
@@ -416,9 +426,39 @@ te_monetary_set_regime = {
 # it on entering a command economy — and flipping it here would leave a player
 # silently delegated after repealing independence.
 #
+# THE MANDATE FORMULAS (§6), with pi = te_inflation_core — a delegated bank
+# looks THROUGH a supply shock and steers on the persistent half (§9.1):
+#
+#   price stability   r^* + pi + 1.0 x (pi - anchor) + cycle_lean
+#   growth            r^* + pi - 1.0 + 0.5 x max(0, pi - 4) + cycle_lean / 2
+#   peg defence       the world reference rate (gold only; ignores pi and the cycle)
+#
+# The second pi term is what makes price stability move MORE than one for one
+# with inflation — the Taylor principle, and the reason a delegated bank can
+# disinflate where a fixed manual target cannot (§9.1). Growth's zero-gap point
+# is pi = 6, so below 4% it simply does not see inflation.
+#
+# GROWTH IS NEVER MORE HAWKISH THAN PRICE STABILITY. The two formulas cross at
+# low inflation under a negative cycle lean: at pi = 0 in a panic (lean -3),
+# growth asks for r^* - 2.5 and price stability for r^* - 5, so the "looser"
+# mandate would be the tighter one. Both are computed and the LOWER is taken.
+#
+# Each constant is a named script value (§21): te_mon_mandate_inflation_weight,
+# te_mon_mandate_growth_bias, te_mon_mandate_growth_reaction and
+# te_mon_mandate_growth_threshold, with the two reaction terms assembled in
+# te_mon_mandate_price_reaction / te_mon_mandate_growth_reaction_term because
+# both need a max() or a subtraction against the anchor that change_variable
+# cannot express. The anchor is te_mon_inflation_anchor rather than a literal
+# 2: §9.1 calls it "the mandate target" and gives it as 0 under a metallic
+# regime, and a gold bank on price stability would otherwise target r^* - 2
+# against its own pinned zero inflation — permanently loose at the bottom of
+# its band.
+#
 # The neutral rate this reads is last month's (step 8 recomputes it later in the
-# same pulse). That one-month lag is the §16.2 order and is harmless: r* moves
-# by at most 0.1pp a month.
+# same pulse), and so is the core inflation (step 6 runs after this one, ruling
+# P5). Both lags are the §16.2 order and both are harmless: r* moves by at most
+# 0.1pp a month and core by a tenth of its own gap, while the hysteresis below
+# only lets the target move in whole points at a 0.75pp margin anyway.
 te_monetary_update_target = {
 	# --- which mandate? ---
 	if = {
@@ -471,26 +511,44 @@ te_monetary_update_target = {
 		}
 		if = {
 			# 3 peg defence: hold the reference rate so gold flows net to zero.
-			# Ignores the domestic cycle by design.
+			# Ignores the domestic cycle — and inflation — by design.
 			limit = { var:te_mon_mandate = 3 }
 			set_variable = { name = te_mon_work value = var:te_mon_era_base_now }
 		}
-		else_if = {
-			# 2 growth: r^* - 1.0 + cycle_lean / 2. Runs a standing 1pp loose,
-			# which is the point — more momentum, faster bubbles, more crashes.
-			limit = { var:te_mon_mandate = 2 }
-			set_variable = { name = te_mon_work value = var:te_neutral_rate }
-			change_variable = { name = te_mon_work add = var:te_neutral_error }
-			change_variable = { name = te_mon_work subtract = 1.0 }
-			set_variable = { name = te_mon_work2 value = te_mon_cycle_lean }
-			change_variable = { name = te_mon_work2 divide = 2 }
-			change_variable = { name = te_mon_work add = var:te_mon_work2 }
-		}
 		else = {
-			# 1 price stability: r^* + cycle_lean.
+			# 1 price stability: r^* + pi + 1.0 x (pi - anchor) + cycle_lean.
+			# Computed for the growth mandate as well, as the cap below.
 			set_variable = { name = te_mon_work value = var:te_neutral_rate }
 			change_variable = { name = te_mon_work add = var:te_neutral_error }
+			change_variable = { name = te_mon_work add = var:te_inflation_core }
+			change_variable = { name = te_mon_work add = te_mon_mandate_price_reaction }
 			change_variable = { name = te_mon_work add = te_mon_cycle_lean }
+
+			if = {
+				# 2 growth: r^* + pi - 1.0 + 0.5 x max(0, pi - 4) + lean / 2.
+				# Runs a standing point loose, which is the point — more
+				# momentum, faster bubbles, more crashes.
+				#
+				# The lean is halved FIRST because change_variable's divide
+				# applies to the whole running total; everything after it is an
+				# add, so the written order is the arithmetic.
+				limit = { var:te_mon_mandate = 2 }
+				set_variable = { name = te_mon_work2 value = te_mon_cycle_lean }
+				change_variable = { name = te_mon_work2 divide = 2 }
+				change_variable = { name = te_mon_work2 add = var:te_neutral_rate }
+				change_variable = { name = te_mon_work2 add = var:te_neutral_error }
+				change_variable = { name = te_mon_work2 add = var:te_inflation_core }
+				change_variable = { name = te_mon_work2 add = te_mon_mandate_growth_bias }
+				change_variable = { name = te_mon_work2 add = te_mon_mandate_growth_reaction_term }
+
+				# Never more hawkish than price stability (§6): the two formulas
+				# cross at low inflation under a negative lean, so growth takes
+				# whichever of the two is lower.
+				if = {
+					limit = { var:te_mon_work2 < var:te_mon_work }
+					set_variable = { name = te_mon_work value = var:te_mon_work2 }
+				}
+			}
 		}
 
 		# Hysteresis (§4): the delegated target only moves when the formula is
@@ -606,8 +664,25 @@ te_monetary_drift_policy_rate = {
 # Scope: country, no-dial countries only.
 #
 # No national bank, commodity money or crypto: the country pays the reference
-# rate plus the 1pp bankless spread (§4). Command economy: the administered
-# rate, a flat 3% (§5.3). Premium still applies to both.
+# rate, PLUS ITS OWN EXPECTED INFLATION, plus the 1pp bankless spread (§4).
+# Command economy: the administered rate, a flat 3% (§5.3). Premium still
+# applies to both.
+#
+# WHY EXPECTED INFLATION IS IN A DERIVED RATE. The reference rate is real (§4);
+# a market rate is nominal. Lenders in a bankless country price the inflation
+# they expect of it exactly as lenders anywhere else do — which is why ruling
+# P6 has these countries run the inflation loop at all despite having no dial
+# and no stance. Without the term they would be the one group in the game whose
+# nominal rate ignores its own inflation, and step 7 would then subtract a
+# realised inflation the rate never contained.
+#
+# A COMMAND ECONOMY DOES NOT GET THE TERM. §14 holds its inflation, core and
+# expectations at 0, so adding it would be adding zero; the administered rate
+# is a plan figure, not a price, and it stays the flat 3%.
+#
+# It is LAST MONTH'S expected inflation: step 6 runs after this one (ruling
+# P5). Expectations move by at most alpha x the gap in a month, so the lag is
+# well under a tenth of a point.
 #
 # te_policy_rate_target is deliberately NOT written here. It is the dial's
 # setting, and these countries have no dial; leaving it alone means a country
@@ -620,6 +695,7 @@ te_monetary_set_derived_rate = {
 	}
 	else = {
 		set_variable = { name = te_policy_rate value = var:te_mon_era_base_now }
+		change_variable = { name = te_policy_rate add = var:te_inflation_expected }
 		change_variable = { name = te_policy_rate add = 1.0 }
 	}
 }
@@ -678,6 +754,22 @@ te_monetary_update_premium = {
 	# Debt load (§7.6): nothing below scaled_debt 0.25, +4pp at 1.0. Cyclical,
 	# so it is added after the floor and always bites.
 	change_variable = { name = te_premium_cyclical add = te_mon_scaled_debt_premium }
+	# Unanchored expectations (§7.6): +0.25pp per pp that |expected - anchor|
+	# exceeds the 3pp tolerance. It is one of the three reasons §10's
+	# never-disinflate path stays dearer than the pre-war baseline — already
+	# +3.75pp at expected = 20 — and it is what makes a disinflation's hangover
+	# cost something while expectations are still coming down.
+	#
+	# Monetisation (§7.6, §11): +0.5pp per level. Lenders price a government
+	# that is printing money to pay them.
+	#
+	# BOTH READ LAST MONTH'S EXPECTATIONS, because step 6 runs after this one
+	# (ruling P5). Step 7's market yield, which runs after step 6, uses this
+	# month's — the two are at most alpha x the gap apart, i.e. a few hundredths
+	# of a point, and pricing the premium off the figure lenders were quoted
+	# last month is if anything the more honest of the two.
+	change_variable = { name = te_premium_cyclical add = te_mon_premium_unanchored }
+	change_variable = { name = te_premium_cyclical add = te_mon_premium_monetisation }
 	if = {
 		limit = { var:te_premium_cyclical < -10 }
 		set_variable = { name = te_premium_cyclical value = -10 }
@@ -709,8 +801,11 @@ te_monetary_update_premium = {
 # plus the noise walk, because a random draw cannot live in a script value.
 #
 # WHERE IT SITS IN THE ORDER (ruling P5). Between the premium and the rate
-# paid, so §10's market yield and §7.6's unanchored premium can read this
-# month's expectations. The stance term therefore reads LAST month's
+# paid, so §10's market yield reads THIS month's expectations. Everything
+# upstream of it reads last month's — step 2's core, step 4's expected in the
+# derived rate, step 5's §7.6 unanchored premium — which is a lag of at most
+# alpha x the gap, a few hundredths of a point, and each site says so.
+# The stance term therefore reads LAST month's
 # te_mon_stance_gap, which step 8 rewrites later in the same pulse: §16.3
 # already tolerates a one-month-old gap, and the alternative would define the
 # gap in terms of an inflation figure computed from the gap.
@@ -840,11 +935,28 @@ te_monetary_update_inflation = {
 		# without a random term the pressure sum is fully determined by public
 		# quantities plus -0.4 x the stance gap, so two months of a displayed
 		# headline would recover the gap and with it r*.
-		change_variable = { name = te_inflation_noise multiply = 0.95 }
-		random_list = {
-			1 = { change_variable = { name = te_inflation_noise add = 0.1 } }
-			1 = { }
-			1 = { change_variable = { name = te_inflation_noise subtract = 0.1 } }
+		#
+		# DRAWN ONLY FOR A COUNTRY WITH A DIAL, on the §0.1 precedent that
+		# gated step 8's two walks: this effect runs for every country every
+		# month, and ~1,330 of ~1,400 tags have no national bank. There is
+		# nothing for the noise to hide in those: their stance gap is forced to
+		# 0, so te_mon_pressure_stance is 0 and the sum carries no r* to
+		# invert. The accepted consequence is the same one step 8 accepts — a
+		# no-dial country's noise FREEZES rather than decaying, and resumes
+		# from where it stopped if the country later enacts a national bank. A
+		# country that has never had a dial simply keeps step 0's zero. The
+		# decay sits inside the gate with the draw, deliberately: leaving it
+		# outside would bleed a frozen walk to zero instead of freezing it,
+		# which is a different behaviour rather than an optimisation. The clamp
+		# stays outside, so the bound stays true even for a frozen value.
+		if = {
+			limit = { te_mon_has_dial = yes }
+			change_variable = { name = te_inflation_noise multiply = 0.95 }
+			random_list = {
+				1 = { change_variable = { name = te_inflation_noise add = 0.1 } }
+				1 = { }
+				1 = { change_variable = { name = te_inflation_noise subtract = 0.1 } }
+			}
 		}
 		clamp_variable = {
 			name = te_inflation_noise
@@ -950,21 +1062,52 @@ te_monetary_update_inflation = {
 
 
 # ----------------------------------------------------------------------------
-# STEP 7 — the rate the government pays (§4)
+# STEP 7 — the rate the government pays (§4, §10)
 # ----------------------------------------------------------------------------
 # Scope: country.
 #
-#   rate_paid_pts = clamp( market_yield + structural + cyclical , 0.5 , 60 )
+#   market_yield  = max( policy_rate , era_base + expected_inflation )
+#   rate_paid_pts = clamp( market_yield + structural + cyclical
+#                          - headline_inflation , 0.5 , 60 )
 #
-# Market yield is the policy rate until phase 2 adds §10. The 0.5 floor is why a
-# negative policy rate never reaches the rate paid: under digital currency a
-# target of -3 acts only through the stimulus channel (§8), which is intended.
-# Cyclical negatives (relief tools) can pull the total under the structural
-# floor; this clamp is the final backstop.
+# THE LENDERS' FLOOR (§10). The policy rate is NOMINAL — it already contains
+# the central bank's allowance for inflation — so expected inflation is not
+# added on top of it. What lenders add is a FLOOR: they will not hold
+# government paper yielding less than a normal real return over the inflation
+# they expect, whatever the bank's rate is. The floor is built on era_base, the
+# public long-run real rate, and NOT on the hidden neutral rate: rate paid is an
+# exact dashboard number, and building it on r* would print r* (§8, §10).
+#
+# ALL DEBT IS REAL, so the treasury's cost is the nominal yield minus the
+# inflation that actually OCCURS — headline, not expected (§9.1). Three
+# consequences the design wants: tight policy costs the treasury pp for pp,
+# loose policy saves it only down to the floor, and only SURPRISES erode debt —
+# once expectations catch up the floor binds and the country pays
+# era_base + premium in real terms again. Financial repression has a shelf life.
+#
+# THE 0.5 FLOOR STILL HOLDS, and it is why a negative policy rate never reaches
+# the rate paid: under digital currency a target of -3 acts only through the
+# stimulus channel (§8), which is intended. It is now also what stops a
+# monetised war from paying the government to borrow: at the §10 worked
+# example's ~0.7% the clamp is not binding, but a deeper monetisation would
+# stop at 0.5 rather than going negative. Cyclical negatives (relief tools) can
+# pull the total under the structural floor the same way; this clamp is the
+# final backstop for all of it.
 te_monetary_update_rate_paid = {
-	set_variable = { name = te_rate_paid_pts value = var:te_policy_rate }
+	# --- the lenders' floor -------------------------------------------------
+	# te_market_yield is a displayed figure with no hidden state in it: the
+	# reference rate and expected inflation are both shown exactly.
+	set_variable = { name = te_market_yield value = var:te_mon_era_base_now }
+	change_variable = { name = te_market_yield add = var:te_inflation_expected }
+	if = {
+		limit = { var:te_market_yield < var:te_policy_rate }
+		set_variable = { name = te_market_yield value = var:te_policy_rate }
+	}
+
+	set_variable = { name = te_rate_paid_pts value = var:te_market_yield }
 	change_variable = { name = te_rate_paid_pts add = var:te_premium_structural }
 	change_variable = { name = te_rate_paid_pts add = var:te_premium_cyclical }
+	change_variable = { name = te_rate_paid_pts subtract = var:te_inflation }
 	if = {
 		limit = { var:te_rate_paid_pts < 0.5 }
 		set_variable = { name = te_rate_paid_pts value = 0.5 }
@@ -981,8 +1124,18 @@ te_monetary_update_rate_paid = {
 # ----------------------------------------------------------------------------
 # Scope: country.
 #
+#   real_rate    = policy_rate - headline_inflation
 #   neutral_rate = clamp( era_base + growth_term + walk , 1 , 6 )
-#   stance_gap   = clamp( policy_rate - neutral_rate , -10 , +10 )   [0 if no dial]
+#   stance_gap   = clamp( real_rate - neutral_rate , -10 , +10 )   [0 if no dial]
+#
+# THE GAP IS REAL, NOT NOMINAL (§8). The neutral rate is a real rate, so the
+# policy rate has to be deflated before the two can be compared; phase 1
+# compared them directly only because inflation was identically zero. HEADLINE
+# is the deflator, not core: §9.1 gives the real rate, the rate paid and the
+# bands to headline and only the mandates to core. The consequence is the
+# Taylor principle in one line — holding a nominal target while inflation rises
+# eases policy, which adds pressure, which raises inflation again (§9.1). That
+# loop is closed through step 6, which reads this variable a month later.
 #
 # HIDDEN STATE. te_neutral_rate, te_neutral_error, te_neutral_walk and
 # te_mon_stance_gap are never printed in any tooltip, loc string or visible
@@ -1097,6 +1250,7 @@ te_monetary_update_stance = {
 	if = {
 		limit = { te_mon_has_dial = yes }
 		set_variable = { name = te_mon_stance_gap value = var:te_policy_rate }
+		change_variable = { name = te_mon_stance_gap subtract = var:te_inflation }
 		change_variable = { name = te_mon_stance_gap subtract = var:te_neutral_rate }
 		if = {
 			limit = { var:te_mon_stance_gap > 10 }

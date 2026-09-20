@@ -1590,3 +1590,162 @@ te_mon_expectation_target = {
 		multiply = te_mon_credibility_eff
 	}
 }
+
+
+# ============================================================================
+# PHASE 2 — THE RATE STACK: what steps 2, 5 and 7 read (§6, §7.6, §10)
+# ============================================================================
+# Inflation reaching the rest of the stack. §6 gives the mandates their pi
+# terms, §7.6 gives the cyclical premium two more terms, and §10 gives the rate
+# paid its lenders' floor. Only the pieces change_variable cannot express live
+# here: a max() against zero, an absolute value, and the §21 constants
+# themselves.
+#
+# ORDER OF KEYS. Every computed value below puts the BOUND before the SCALING,
+# for the reason spelled out on te_mon_stance_gap_clamped: a script value's
+# keys apply in the order they are written, so a `multiply` placed above a
+# `min` is tested against the already-scaled figure and silently disarms it.
+#
+# WHAT IS HIDDEN HERE. The two mandate reaction terms read te_inflation_core,
+# which is hidden state (ruling P7), and their consumer adds them to r^*. The
+# two premium terms are the opposite: expected inflation, the anchor and the
+# monetisation level are all displayed exactly, so those two are printed on the
+# dashboard's Risk Premium tooltip.
+
+
+# --- The mandate's inflation terms (§6, §21) --------------------------------
+
+# How hard price stability leans on the inflation gap:
+#   target = r^* + pi + 1.0 x (pi - anchor) + cycle_lean
+# The second pi term is what makes the mandate move MORE than one for one with
+# inflation. That is the Taylor principle, and it is the whole reason a
+# delegated bank can disinflate where a fixed manual target cannot (§9.1).
+te_mon_mandate_inflation_weight = {
+	value = 1.0
+}
+
+# Growth's standing looseness in pp (§6, §21): it sits a point below price
+# stability's neutral setting by design — more momentum, faster bubbles, more
+# crashes. NEGATIVE, because the consumer adds it rather than subtracting it,
+# so the sign lives in one place.
+te_mon_mandate_growth_bias = {
+	value = -1.0
+}
+
+# How hard the growth mandate reacts to inflation once it is past the threshold
+# below — half price stability's weight (§6, §21).
+te_mon_mandate_growth_reaction = {
+	value = 0.5
+}
+
+# Where growth starts reacting to inflation at all, in pp (§6, §21). Below it
+# the mandate does not see inflation; with the reaction above, its zero-gap
+# point is pi = 6.
+#
+# NOT DEFINED FROM te_mon_inflation_anchor. §21 lists it as its own constant,
+# and the two mean different things: the anchor is the target inflation is
+# steered TO, this is the tolerance before a growth-minded bank stops
+# tolerating. A metallic regime never runs this mandate in any case — a gold
+# bank on peg defence ignores pi outright.
+te_mon_mandate_growth_threshold = {
+	value = 4
+}
+
+# 1.0 x (pi_core - anchor) — price stability's reaction term (§6).
+#
+# THE ANCHOR, NOT A LITERAL 2. §9.1 calls the anchor "the mandate target" and
+# gives it as 2, or 0 under a metallic regime, which is exactly what
+# te_mon_inflation_anchor already holds. Spelling a 2 out here would make a
+# gold-standard bank running price stability target r^* - 2 against its own
+# pinned zero inflation: permanently 2pp loose, parked at the bottom of the
+# gold band, for the one regime whose whole promise is the price LEVEL.
+#
+# HIDDEN (ruling P7): it reads core inflation, and its consumer adds it to r^*.
+te_mon_mandate_price_reaction = {
+	value = te_mon_inflation_core_read
+	subtract = te_mon_inflation_anchor
+	multiply = te_mon_mandate_inflation_weight
+}
+
+# 0.5 x max( 0 , pi_core - 4 ) — growth's reaction term (§6). Below the
+# threshold it is exactly zero, which is what "runs warm" means and why §6 puts
+# the mandate's equilibrium around 3% rather than at target.
+#
+# HIDDEN, for the same reason as the value above.
+te_mon_mandate_growth_reaction_term = {
+	value = te_mon_inflation_core_read
+	subtract = te_mon_mandate_growth_threshold
+	min = 0
+	multiply = te_mon_mandate_growth_reaction
+}
+
+
+# --- The premium terms inflation adds (§7.6) --------------------------------
+
+# | expected - anchor |, in pp. change_variable has no absolute value and a
+# script value's `limit` tests triggers on the scope rather than on the running
+# total, so the sign is decided from the inputs and each branch subtracts the
+# other way round — the same shape as te_mon_inflation_gap_abs above.
+te_mon_expectation_gap_abs = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_inflation_expected
+			var:te_inflation_expected > te_mon_inflation_anchor
+		}
+		add = var:te_inflation_expected
+		subtract = te_mon_inflation_anchor
+	}
+	else_if = {
+		limit = { has_variable = te_inflation_expected }
+		add = te_mon_inflation_anchor
+		subtract = var:te_inflation_expected
+	}
+}
+
+# Unanchored expectations (§7.6, ruling P1): +0.25pp of CYCLICAL premium per pp
+# that |expected - anchor| exceeds the 3pp tolerance. Inside the tolerance,
+# expectations cost nothing; it is already +3.75pp at expected = 20.
+#
+# It is one of the three reasons §10's never-disinflate path stays dearer than
+# the pre-war baseline instead of becoming the cheapest line in the game — the
+# other two are the §9.2 bands and the lenders' floor in step 7.
+#
+# PUBLIC: expected inflation and the anchor are both displayed exactly.
+te_mon_premium_unanchored = {
+	value = te_mon_expectation_gap_abs
+	subtract = te_mon_unanchored_tolerance
+	min = 0
+	multiply = te_mon_unanchored_premium_per_pp
+}
+
+# Monetisation (§7.6, §11): +0.5pp of cyclical premium per level. Lenders price
+# a government that is printing money to pay them, which is half of why
+# monetising is not free — the other half is the +2.5pp of inflation pressure
+# per level in te_mon_pressure_monetisation.
+#
+# PUBLIC: the monetisation level is displayed.
+te_mon_premium_monetisation = {
+	value = 0
+	if = {
+		limit = { has_variable = te_monetisation_level }
+		add = var:te_monetisation_level
+	}
+	multiply = te_mon_monetisation_premium
+}
+
+
+# --- Display only: the inflation line of the rate-paid sum (§10) ------------
+
+# Headline inflation with its sign flipped, so the Rate You Pay tooltip can
+# print the §10 build-up as a column that adds up: market yield, plus credit
+# standing, plus risk premium, PLUS this. Rendering `-[...te_inflation...]`
+# instead would print "--1.0%" in the deflation band, which is the one band
+# where the line is a charge rather than a discount.
+#
+# Not read by any effect — step 7 subtracts te_inflation directly. PUBLIC:
+# headline inflation is displayed exactly.
+te_mon_inflation_offset = {
+	value = te_mon_inflation_read
+	multiply = -1
+}
