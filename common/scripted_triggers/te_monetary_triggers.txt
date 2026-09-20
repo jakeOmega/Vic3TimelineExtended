@@ -27,12 +27,12 @@
 #
 # DOLLARISATION (phase 2, ruling P9). A country that abandoned its own currency
 # in a hyperinflation has no dial left whatever its laws still say: the rate is
-# whoever's money it now uses. The test is guarded on has_variable and is
-# therefore inert until step 6 of the monthly update starts setting the flag —
-# a country that has never pulsed, and every save from before phase 2, reads
-# exactly as it did before. The flag clears when the country next enacts a
-# different lawgroup_monetary_policy law, which is the only exit the spec
-# leaves room for.
+# whoever's money it now uses. The flag is set by the dollarise option of
+# te_inflation.1 (events/te_inflation_events.txt) and cleared by
+# te_banking_law_change_cleanup when the country next enacts a different
+# lawgroup_monetary_policy law, which is the only exit the spec leaves room for.
+# The test is guarded on has_variable, so a country that has never pulsed — and
+# every save from before phase 2 — reads exactly as it did before.
 te_mon_has_dial = {
 	has_law_or_variant = law_type:law_national_bank
 	OR = {
@@ -110,8 +110,10 @@ te_mon_is_metallic = {
 # create it through, and a government still able to give that bank the order —
 # so central bank independence rules it out, and so does a command economy,
 # which has its own `ce_*` plan finance. A dollarised country has no currency of
-# its own left to print (ruling P9); that clause is guarded, so it is inert
-# until step 6 starts setting the flag.
+# its own left to print (ruling P9); that clause is guarded, so a country that
+# has never pulsed reads as it did before phase 2. It also means step 1b of the
+# monthly update zeroes te_monetisation_level by itself the month after a
+# country dollarises — the dollarise option does not have to.
 #
 # The regime test is the same pair law_fiat_currency / law_digital_currency that
 # country_can_create_unbacked_money_bool gates open-market operations with. It

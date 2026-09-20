@@ -167,6 +167,37 @@ te_banking_law_change_cleanup = {
 			}
 			set_variable = { name = te_monetisation_level value = 0 }
 		}
+
+		# Dollarisation (§9.2, ruling P9). A country that abandoned its own money
+		# in a hyperinflation would carry te_mon_dollarised for ever otherwise:
+		# the spec names no exit, and enacting a monetary-policy law is the
+		# smallest one there is — it is the act of declaring what the country's
+		# currency now is, which is precisely the thing dollarisation gave up.
+		# All five laws of lawgroup_monetary_policy count, because a law cannot
+		# be enacted by a country that already holds it: any of them IS a
+		# different one. ADD A LAW HERE if lawgroup_monetary_policy ever gains a
+		# sixth.
+		#
+		# ONLY THE FLAG IS WRITTEN. te_mon_dollarised_modifier is the seventh
+		# member of the te_inflation_band_* family and belongs to step 6c of the
+		# monthly update (te_monetary_apply_inflation_band), which takes it off
+		# and puts the country's current band on in the same swap. A
+		# remove_modifier here would be a second owner of that modifier, and
+		# would leave te_inflation_band_applied still claiming it was applied.
+		if = {
+			limit = {
+				has_variable = te_mon_dollarised
+				var:te_mon_dollarised = 1
+				OR = {
+					is_enacting_law = law_type:law_commodity_money
+					is_enacting_law = law_type:law_gold_standard
+					is_enacting_law = law_type:law_fiat_currency
+					is_enacting_law = law_type:law_digital_currency
+					is_enacting_law = law_type:law_decentralized_cryptocurrency
+				}
+			}
+			set_variable = { name = te_mon_dollarised value = 0 }
+		}
 	}
 }
 

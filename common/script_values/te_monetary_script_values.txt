@@ -84,8 +84,20 @@
 # PHASE 2 — INFLATION (§9). Same two rules: initialised behind `has_variable`,
 # never removed. Step 6 of te_monetary_monthly_update is the only writer of
 # every inflation variable below, exactly as step 8 is the only writer of the
-# stance. ONE EXCEPTION, and it is not an inflation variable: te_market_yield
-# is owned by step 7, which is where §10's lenders' floor is computed.
+# stance, with three documented exceptions:
+#
+#   * te_market_yield is owned by step 7, where §10's lenders' floor is
+#     computed, and is not an inflation variable at all;
+#   * te_inflation_band_applied and te_mon_hyper_cooldown are owned by step 6c,
+#     the band swap, which is the half of step 6 that touches the engine; and
+#   * the §9.2 HYPERINFLATION CRISIS (events/te_inflation_events.txt) writes
+#     te_inflation, te_inflation_core, te_inflation_expected, te_cost_push,
+#     te_monetisation_level and te_mon_dollarised in its option effects. §9.2
+#     defines both escapes AS a reset of those figures — a currency reform to 5,
+#     a dollarisation to the anchor — so there is nothing for the crisis to
+#     write as an "input" that the next pulse could derive the reset from. It is
+#     a one-shot write of state the update otherwise integrates, and it is the
+#     only place in the system that does it.
 #
 #   te_inflation            -10 to 100  displayed   headline annual inflation in pp:
 #                                                   core plus cost-push (§9.3).
@@ -134,10 +146,15 @@
 #   te_inflation_band       1 to 6      displayed   1 deflation, 2 comfort, 3 elevated,
 #                                                   4 high, 5 very high, 6 hyperinflation
 #                                                   (edges in te_mon_band_edge_* below)
-#   te_inflation_band_applied 0 to 6                which te_inflation_band_* modifier
-#                                                   is currently on the country;
+#   te_inflation_band_applied 0 to 7                which member of the band family is
+#                                                   currently on the country: 1-6 the
+#                                                   matching te_inflation_band_* modifier,
+#                                                   7 te_mon_dollarised_modifier (which
+#                                                   REPLACES the band, so minting can
+#                                                   never take -0.8 and -0.75 at once),
 #                                                   0 = none applied yet. Bookkeeping
-#                                                   for the swap, never displayed
+#                                                   for the swap in step 6c, never
+#                                                   displayed
 #   te_monetisation_level   0 to 3      displayed   the deficit-monetisation stepper (§11)
 #   te_monetisation_minting_applied >= 0            the value last written into
 #                                                   te_monetisation_minting's multiplier
@@ -148,6 +165,17 @@
 #                                                   (ruling P9). Makes te_mon_has_dial
 #                                                   false; cleared when the country next
 #                                                   enacts a different monetary law
+#                                                   (te_banking_law_change_cleanup).
+#                                                   te_inflation.1's dollarise option sets
+#                                                   it; step 6c turns it into the modifier
+#                                                   at the next pulse
+#   te_mon_hyper_cooldown   0 to te_mon_hyper_cooldown_months
+#                                                   months left before the §9.2
+#                                                   hyperinflation crisis may be offered
+#                                                   again. Set by step 6c when the event
+#                                                   goes out, ticked down a month at a
+#                                                   time by the same step; 0 means "may
+#                                                   be offered"
 #   te_market_yield         >= 0        displayed   max( policy rate , reference rate +
 #                                                   expected inflation ) — the lenders'
 #                                                   floor of §10, before the premium
@@ -1050,6 +1078,45 @@ te_mon_band_edge_hyper = {
 # edge rather than restated, so the two can never drift apart.
 te_mon_hyperinflation_threshold = {
 	value = te_mon_band_edge_hyper
+}
+
+
+# --- The §9.2 hyperinflation crisis -----------------------------------------
+
+# How long te_inflation.1 stays away once it has been offered, in months. §9.2
+# names no figure; two years is long enough that riding it out is a decision
+# the player lives with rather than a prompt they dismiss twelve times, and
+# short enough that the choice comes back while the crisis is still the same
+# crisis. Step 6c (te_monetary_apply_inflation_band) is the only writer of the
+# countdown it feeds.
+#
+# RETUNING THIS MOVES A LOC KEY WITH IT: te_inflation.1.c.tt tells the player
+# the question comes back "in two years", because a tooltip that said "in
+# te_mon_hyper_cooldown_months months" would be no use to anybody.
+te_mon_hyper_cooldown_months = {
+	value = 24
+}
+
+# What a currency reform resets headline, core and expected inflation to (§9.2).
+# NOT to the target: a new currency issued out of a hyperinflation starts with
+# the credibility its predecessor earned, and 5 leaves the country in the
+# *Elevated* band with real work still to do. Whether it stays there is up to
+# the deficit and the press — the reform zeroes te_monetisation_level, and
+# nothing stops the pressure sum putting core back where it was.
+#
+# RETUNING THIS MOVES A LOC KEY WITH IT, the same way the cooldown above does:
+# te_inflation.1.a.tt tells the player inflation falls back to "5%".
+te_mon_currency_reform_reset = {
+	value = 5
+}
+
+# The investment-pool wipe-out (§9.2): the whole pool, expressed as the negative
+# add that empties it. Savings denominated in a currency that has just been
+# repudiated are not worth a fraction of themselves — they are worth nothing,
+# which is the historical fact a currency reform records rather than causes.
+te_mon_currency_reform_pool_wipe = {
+	value = investment_pool
+	multiply = -1
 }
 
 

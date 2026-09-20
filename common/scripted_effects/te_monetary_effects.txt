@@ -22,11 +22,12 @@
 # switched off too, every country would borrow free.
 #
 # ORDER (§16.2): 0 init -> 1 regime code -> 1b monetisation -> 2 target ->
-# 3 drift -> 4 no-dial derived rate -> 5 premium -> 6 inflation -> 7 rate paid
-# -> 8 neutral rate + stance -> 9 re-apply the interest modifier. Step 10 is
-# phase 3. Step 1b is numbered rather than renumbering §16.2's list: it settles
-# an INPUT the later steps read (§11's monetisation level), the way step 1
-# settles the regime code.
+# 3 drift -> 4 no-dial derived rate -> 5 premium -> 6 inflation -> 6c band
+# modifier -> 7 rate paid -> 8 neutral rate + stance -> 9 re-apply the interest
+# modifier. Step 10 is phase 3. Steps 1b and 6c are numbered rather than
+# renumbering §16.2's list: 1b settles an INPUT the later steps read (§11's
+# monetisation level), the way step 1 settles the regime code, and 6c is the
+# engine-write half of step 6 (6a is the basket and 6b the inflation loop).
 #
 # THE RATE STACK READS INFLATION (§4, §6, §7.6, §8, §10). Step 6 computes the
 # basket, core, headline and expected inflation, and the rest of the stack is
@@ -39,11 +40,12 @@
 # WHICH FIGURE GOES WHERE. Core is what the mandates steer on — a delegated
 # bank looks through a supply shock (§9.1) — while headline is what the real
 # rate, the rate paid and the §9.2 bands use, and expected is what lenders
-# price. Nothing outside step 6 writes any of them.
+# price. Nothing outside step 6 writes any of them, with the one documented
+# exception of the §9.2 hyperinflation crisis (events/te_inflation_events.txt),
+# whose two escapes ARE a reset of those figures — see the variable contract.
 #
-# WHAT PHASE 2 HAS STILL NOT WIRED. Nothing swaps the te_inflation_band_*
-# modifiers, nothing sets te_mon_dollarised, and the §9.4 real-wage dividend is
-# defined but unapplied. Those are later tasks of the same phase.
+# WHAT PHASE 2 HAS STILL NOT WIRED. The §9.4 real-wage dividend is defined but
+# unapplied; that is a later task of the same phase.
 #
 # WORKING VARIABLES. te_mon_work and te_mon_work2 are scratch slots reused by
 # every step; te_mon_era_base_now caches the world reference rate for this
@@ -147,6 +149,11 @@ te_monetary_monthly_update = {
 
 	# --- 6. the basket, core inflation, headline and expectations -----------
 	te_monetary_update_inflation = yes
+
+	# --- 6c. the band modifier, and the hyperinflation crisis ---------------
+	# Immediately after the band number is written, so the modifier on the
+	# country is never a month behind the figure the dashboard shows.
+	te_monetary_apply_inflation_band = yes
 
 	# --- 7. the rate the government actually pays ---------------------------
 	te_monetary_update_rate_paid = yes
@@ -362,6 +369,14 @@ te_monetary_init_variables = {
 	if = {
 		limit = { NOT = { has_variable = te_mon_wage_dividend_applied } }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
+	}
+	# 0 means "the hyperinflation crisis may be offered". Step 6c sets it to
+	# te_mon_hyper_cooldown_months when the event goes out and ticks it down a
+	# month at a time; seeding it to 0 means a country that hyperinflates on its
+	# very first pulse is offered the choice at once.
+	if = {
+		limit = { NOT = { has_variable = te_mon_hyper_cooldown } }
+		set_variable = { name = te_mon_hyper_cooldown value = 0 }
 	}
 }
 
@@ -1207,8 +1222,8 @@ te_monetary_update_inflation = {
 
 		# --- the displayed band (§9.2) --------------------------------------
 		# From HEADLINE, not core: the bands are what the country is living
-		# through. Swapping the te_inflation_band_* modifier off this variable
-		# is a later task; this writes the number only.
+		# through. This writes the NUMBER; step 6c, immediately after, swaps the
+		# te_inflation_band_* modifier off it.
 		if = {
 			limit = { var:te_inflation < te_mon_band_edge_deflation }
 			set_variable = { name = te_inflation_band value = 1 }
@@ -1232,6 +1247,131 @@ te_monetary_update_inflation = {
 		else = {
 			set_variable = { name = te_inflation_band value = 6 }
 		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# STEP 6c — the band modifier and the hyperinflation crisis (§9.2)
+# ----------------------------------------------------------------------------
+# Scope: country. Runs immediately after step 6, so the modifier on the country
+# always matches the band number the dashboard shows.
+#
+# ONE MODIFIER, SEVEN STATES. te_inflation_band_applied says which member of
+# the family is on the country right now:
+#
+#   1-6  te_inflation_band_deflation / _comfort / _elevated / _high /
+#        _very_high / _hyper — the §9.2 ladder, keyed off te_inflation_band
+#   7    te_mon_dollarised_modifier — the country gave up its own money
+#   0    nothing applied yet (a fresh country, or a save from before this task)
+#
+# DOLLARISATION REPLACES THE BAND, IT DOES NOT STACK WITH IT (ruling P9, and
+# the finding parked in task 1's review). te_inflation_band_hyper carries
+# country_minting_mult -0.8 and te_mon_dollarised_modifier carries -0.75, and
+# dollarisation is chosen from INSIDE the hyperinflation band — so any design
+# that can hold both at once puts that field at -1.55 and turns the mint into a
+# drain on the budget. Making 7 a value of the SAME bookkeeping variable makes
+# that state unreachable rather than merely brief: this effect issues exactly
+# one add_modifier a month, and the swap that adds the dollarised modifier is
+# the same one that takes the band off.
+#
+# It is also the right answer in fiction, and the one te_mon_dollarised_modifier's
+# own loc already gives: with prices, wages and contracts written in foreign
+# money, "inflation is somebody else's problem". The §9.2 ladder prices what it
+# costs to hold a currency that is losing its value, and a dollarised country
+# does not hold one. What it pays instead is three quarters of its seigniorage,
+# for ever — §9.2's "defining cost of dollarisation".
+#
+# THE PLAYER'S CHOICE IS AN INPUT, NOT A MODIFIER. te_inflation.1's dollarise
+# option writes te_mon_dollarised and the inflation reset, and nothing else;
+# this step is what puts the modifier on, at most a month later. That is the
+# same "write the input and let the pulse pick it up" rule every other control
+# in this system follows, and it is what lets one owner keep the family
+# exclusive. The option says so in its tooltip, because nothing mechanical
+# renders in an option that only sets variables.
+#
+# DECIDED FROM VARIABLES, NEVER FROM has_modifier — add_modifier and
+# remove_modifier results are not visible inside the effect block that issues
+# them (scripting_best_practices.md), so a has_modifier read here would be
+# asking about state this effect is in the middle of changing. Same rule, and
+# the same reason, as banking_cycle_apply_stance_band.
+#
+# COMFORT IS APPLIED THOUGH IT IS EMPTY, on the banking_stance_band_3 precedent
+# and vanilla's own tax_modifier_medium / infamy_reputable: the swap then always
+# has exactly one thing to apply, and the modifier list always NAMES the band
+# the country is in. Its loc is written for that job — it says the band costs
+# nothing and that it is the one band in which the real-wage dividend pays.
+#
+# NO FIRST-RUN SWEEP. banking_cycle_apply_stance_band removes all five of its
+# bands once, because its modifiers live on a can_revolution_inherit journal
+# entry and move to a successor tag while the variables do not. These are
+# COUNTRY modifiers on the country itself, and a country that has never run this
+# step carries the 0 from step 0 and no band modifier — the two agree.
+te_monetary_apply_inflation_band = {
+	# The crisis cooldown ages first, so the month it reaches 0 is a month the
+	# crisis can be offered again rather than the month after.
+	if = {
+		limit = { var:te_mon_hyper_cooldown > 0 }
+		change_variable = { name = te_mon_hyper_cooldown subtract = 1 }
+	}
+
+	# What belongs on the country this month: the band, unless it is dollarised,
+	# in which case the dollarised modifier and no band.
+	if = {
+		limit = { var:te_mon_dollarised = 1 }
+		set_variable = { name = te_mon_work value = 7 }
+	}
+	else = {
+		set_variable = { name = te_mon_work value = var:te_inflation_band }
+	}
+
+	if = {
+		limit = { NOT = { var:te_inflation_band_applied = var:te_mon_work } }
+
+		# Take off what we put on last month.
+		if = { limit = { var:te_inflation_band_applied = 1 } remove_modifier = te_inflation_band_deflation }
+		else_if = { limit = { var:te_inflation_band_applied = 2 } remove_modifier = te_inflation_band_comfort }
+		else_if = { limit = { var:te_inflation_band_applied = 3 } remove_modifier = te_inflation_band_elevated }
+		else_if = { limit = { var:te_inflation_band_applied = 4 } remove_modifier = te_inflation_band_high }
+		else_if = { limit = { var:te_inflation_band_applied = 5 } remove_modifier = te_inflation_band_very_high }
+		else_if = { limit = { var:te_inflation_band_applied = 6 } remove_modifier = te_inflation_band_hyper }
+		else_if = { limit = { var:te_inflation_band_applied = 7 } remove_modifier = te_mon_dollarised_modifier }
+
+		# Put on this month's.
+		if = { limit = { var:te_mon_work = 1 } add_modifier = { name = te_inflation_band_deflation } }
+		else_if = { limit = { var:te_mon_work = 2 } add_modifier = { name = te_inflation_band_comfort } }
+		else_if = { limit = { var:te_mon_work = 3 } add_modifier = { name = te_inflation_band_elevated } }
+		else_if = { limit = { var:te_mon_work = 4 } add_modifier = { name = te_inflation_band_high } }
+		else_if = { limit = { var:te_mon_work = 5 } add_modifier = { name = te_inflation_band_very_high } }
+		else_if = { limit = { var:te_mon_work = 6 } add_modifier = { name = te_inflation_band_hyper } }
+		else_if = { limit = { var:te_mon_work = 7 } add_modifier = { name = te_mon_dollarised_modifier } }
+
+		set_variable = { name = te_inflation_band_applied value = var:te_mon_work }
+	}
+
+	# --- the hyperinflation crisis (§9.2) -----------------------------------
+	# The band, not a fresh headline read, is the gate: they are the same test
+	# (band 6 is exactly pi >= te_mon_band_edge_hyper), and the band is also
+	# where §14 already holds a command economy at comfort — so a planned
+	# economy is excluded here without anything restating why.
+	#
+	# A DOLLARISED COUNTRY IS NOT OFFERED IT. Its modelled inflation can still
+	# read above the threshold for a month or two after the switch — the loop
+	# keeps running because §10's lenders price its expectations — but it has no
+	# currency of its own left to reform or abandon, and the choice it is being
+	# offered is the one it already made.
+	#
+	# THE COOLDOWN IS SET HERE, not in the event: this effect then stays the
+	# only writer of the variable, and a player who leaves the event unanswered
+	# is not handed a second copy of it at the next pulse.
+	if = {
+		limit = {
+			var:te_inflation_band = 6
+			var:te_mon_dollarised = 0
+			var:te_mon_hyper_cooldown = 0
+		}
+		set_variable = { name = te_mon_hyper_cooldown value = te_mon_hyper_cooldown_months }
+		trigger_event = { id = te_inflation.1 }
 	}
 }
 

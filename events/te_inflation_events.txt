@@ -1,0 +1,206 @@
+﻿# ============================================================================
+# Monetary Policy — the hyperinflation crisis (§9.2)
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §9.2 (the band ladder and the
+# three escapes), §10 ("the path that must not pay"), ruling P9 (dollarisation).
+# System overview: docs/systems/mod_systems.md § Banking Cycle -> Monetary
+# Policy (phase 1), and the variable contract in the header of
+# common/script_values/te_monetary_script_values.txt.
+#
+# HOW IT IS REACHED. Step 6c of the monthly update
+# (te_monetary_apply_inflation_band, common/scripted_effects/te_monetary_effects.txt)
+# fires this the month a country's headline inflation enters the hyperinflation
+# band, if the country is not already dollarised and te_mon_hyper_cooldown has
+# run out. That step also sets the cooldown, so the crisis is offered once and
+# then stays away for te_mon_hyper_cooldown_months — which is what makes "ride
+# it out" a decision the player lives with rather than a prompt they dismiss
+# every month. There is deliberately no `trigger` block here: the gate lives in
+# exactly one place, and a second copy of it could swallow an event whose
+# cooldown had already been spent. There is no `is_triggered_only` either —
+# that is a CK3 keyword; vanilla Victoria 3 uses it nowhere, and an event with
+# neither mean_time_to_happen nor a random_events registration is reached only
+# by trigger_event anyway.
+#
+# THIS EVENT WRITES INFLATION VARIABLES, and it is the only thing outside the
+# monthly update that does. Everywhere else in this system a control writes an
+# INPUT and lets the next pulse derive the state; here §9.2 defines both escapes
+# AS a reset of the state itself — a currency reform to 5, a dollarisation to
+# the ordinary anchor — so there is no input for the pulse to derive it from.
+# The exception is written into the variable contract. What this event must
+# NEVER do is call te_monetary_monthly_update: the update is not idempotent, and
+# a second call in a month would drift the policy rate twice and age both hidden
+# random walks twice.
+#
+# THE THREE ESCAPES, and why each is somebody's best answer:
+#
+#   * CURRENCY REFORM keeps the currency, the dial and the seigniorage, and pays
+#     for it at once — every saver wiped out, the middle and upper strata
+#     radicalised, and ten years of a +5pp risk premium on every loan. It leaves
+#     inflation at 5%, not at the target: the new notes inherit the credibility
+#     the old ones spent. Whether it holds is up to the government — the reform
+#     stops the press, but nothing stops the deficit putting core inflation back
+#     where it was.
+#   * DOLLARISATION ends the inflation outright, because the price level is
+#     somebody else's from the day the switch is made, and costs nothing today.
+#     What it costs is permanent: three quarters of minting income, the policy
+#     rate, and the ability to monetise anything ever again. Best for a country
+#     whose seigniorage is small and whose central bank was never much of one.
+#   * RIDING IT OUT costs nothing and changes nothing. It is the right answer
+#     for a government that has already fixed the cause — stopped printing,
+#     tightened hard — and only has to wait for the figure to follow; and it is
+#     the only answer for one that cannot afford to wipe out its investment pool
+#     in the middle of a war. The §9.2 band keeps biting in the meantime, which
+#     is the whole point of sizing those bands as a deterrent (§10).
+# ============================================================================
+namespace = te_inflation
+
+te_inflation.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_inflation.1.t
+	desc = te_inflation.1.d
+	flavor = te_inflation.1.f
+
+	event_image = { video = "unspecific_vandalized_storefront" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	# --- currency reform ----------------------------------------------------
+	# The reset is to te_mon_currency_reform_reset (5), not to the target: §9.2
+	# is explicit, and it is the difference between a reform and a miracle.
+	# te_cost_push goes to 0 with the rest so the headline written here is
+	# consistent with core until the next pulse recomputes the basket term.
+	#
+	# The monetisation level is zeroed on the same reasoning
+	# te_banking_law_change_cleanup zeroes it on a disqualifying law change: it
+	# is charged in inflation pressure and in the risk premium every month it
+	# stands, and a currency reform that leaves the press running is not one.
+	# For an AI country step 1b will decide the level again next month on its
+	# own war-and-debt rule; for a player it stays where this puts it.
+	option = {
+		name = te_inflation.1.a
+		custom_tooltip = te_inflation.1.a.tt
+
+		set_variable = { name = te_inflation value = te_mon_currency_reform_reset }
+		set_variable = { name = te_inflation_core value = te_mon_currency_reform_reset }
+		set_variable = { name = te_inflation_expected value = te_mon_currency_reform_reset }
+		set_variable = { name = te_cost_push value = 0 }
+		set_variable = { name = te_monetisation_level value = 0 }
+
+		add_investment_pool = te_mon_currency_reform_pool_wipe
+
+		add_radicals = {
+			value = large_radicals
+			strata = middle
+		}
+		add_radicals = {
+			value = medium_radicals
+			strata = upper
+		}
+
+		add_modifier = {
+			name = te_mon_currency_reform_premium
+			days = 3650
+		}
+
+		ai_chance = {
+			base = 4
+			# A reform only holds if the press has already stopped.
+			modifier = {
+				trigger = { var:te_monetisation_level = 0 }
+				add = 4
+			}
+			# Not in the middle of a war it still has to pay for.
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = -3
+			}
+			# A great power has a currency worth re-founding.
+			modifier = {
+				trigger = { country_rank >= rank_value:major_power }
+				add = 2
+			}
+		}
+	}
+
+	# --- dollarisation ------------------------------------------------------
+	# Only the flag and the reset are written here. te_mon_dollarised_modifier
+	# is applied by step 6c of the monthly update, which takes the band modifier
+	# off in the same swap — that is what stops country_minting_mult holding
+	# -0.8 from the hyperinflation band and -0.75 from dollarisation at once.
+	# te_monetisation_level looks after itself: te_mon_can_monetise reads false
+	# for a dollarised country, so step 1b zeroes it on the next pulse.
+	#
+	# THE RESET IS TO THE ANCHOR, and expected inflation goes with it. Prices,
+	# wages and contracts are in foreign money from the day the switch is made,
+	# so there is no domestic price level left to be rising — that is what
+	# dollarisation does, and what every country that has actually done it got
+	# out of it. Leaving expectations where the hyperinflation left them was
+	# considered and rejected: §9.1's expectations move at 1/24 of the gap a
+	# month and the dollarised regime pull holds core at half of them, so the
+	# country would have sat in the *Very High* band for years with a modifier
+	# on it that says inflation is somebody else's problem.
+	option = {
+		name = te_inflation.1.b
+		custom_tooltip = te_inflation.1.b.tt
+
+		set_variable = { name = te_mon_dollarised value = 1 }
+		set_variable = { name = te_inflation value = te_mon_inflation_anchor }
+		set_variable = { name = te_inflation_core value = te_mon_inflation_anchor }
+		set_variable = { name = te_inflation_expected value = te_mon_inflation_anchor }
+		set_variable = { name = te_cost_push value = 0 }
+
+		ai_chance = {
+			# Base 2, not 1, so that the two subtractions below can meet at 0
+			# (a great power at war never dollarises) without the weight ever
+			# going negative.
+			base = 2
+			# A small country has the least to give up: its seigniorage is
+			# small and its central bank was never much of one.
+			modifier = {
+				trigger = { country_rank <= rank_value:minor_power }
+				add = 3
+			}
+			modifier = {
+				trigger = { country_rank >= rank_value:major_power }
+				add = -1
+			}
+			# No government gives up the press in the middle of a war.
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = -1
+			}
+		}
+	}
+
+	# --- ride it out --------------------------------------------------------
+	# The passive lane, and the default: a government that does nothing is a
+	# government that has done nothing, and the §9.2 band goes on charging it.
+	# No effects at all, deliberately — the cost is the band that is already
+	# applied, and adding a token penalty here would charge the same thing
+	# twice.
+	option = {
+		name = te_inflation.1.c
+		default_option = yes
+		custom_tooltip = te_inflation.1.c.tt
+
+		ai_chance = {
+			base = 3
+			# A war government has other things to lose than its currency.
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 4
+			}
+			# Still printing? Then it has not finished inflating, and neither a
+			# reform nor a foreign currency would survive contact with next
+			# year's budget.
+			modifier = {
+				trigger = { NOT = { var:te_monetisation_level = 0 } }
+				add = 3
+			}
+		}
+	}
+}

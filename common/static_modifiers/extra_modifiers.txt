@@ -6902,13 +6902,20 @@ banking_stance_band_5 = {
 # ============================================================================
 # Monetary Policy — inflation bands (monetary_policy_design.md §9.2, §13)
 # ============================================================================
-# COUNTRY-scope modifiers, exactly one of the six applied at a time, swapped
-# when te_inflation_band changes (1 deflation, 2 comfort, 3 elevated, 4 high,
-# 5 very high, 6 hyperinflation; edges -1 / 3 / 8 / 20 / 50 in
-# te_monetary_script_values.txt). The comfort band is an empty modifier for the
-# same reason banking_stance_band_3 is: the swap logic always has exactly one
-# band to apply, and a 0-valued field would render "+0%" and trip
-# modifier_visibility_audit.
+# COUNTRY-scope modifiers, swapped when te_inflation_band changes (1 deflation,
+# 2 comfort, 3 elevated, 4 high, 5 very high, 6 hyperinflation; edges
+# -1 / 3 / 8 / 20 / 50 in te_monetary_script_values.txt) by step 6c of the
+# monthly update, te_monetary_apply_inflation_band. The comfort band is an empty
+# modifier for the same reason banking_stance_band_3 is: the swap logic always
+# has exactly one band to apply, and a 0-valued field would render "+0%" and
+# trip modifier_visibility_audit.
+#
+# EXACTLY ONE OF THE SIX IS ON A COUNTRY AT A TIME — unless the country is
+# dollarised, in which case none of them is and te_mon_dollarised_modifier
+# below is on instead. The seven are one mutually exclusive family with one
+# bookkeeping variable, which is what keeps country_minting_mult from taking
+# -0.8 from the hyperinflation band and -0.75 from dollarisation at once; the
+# reasoning is written out on te_monetary_apply_inflation_band.
 #
 # THESE ARE THE DETERRENT, NOT FLAVOUR (§9.2 and §10's tuning invariant).
 # §10 computes that never disinflating after a monetised war costs ~5.4% on the
@@ -7040,9 +7047,32 @@ te_monetisation_minting = {
 # is the defining cost of the choice. The rest of the flag's effect is not a
 # modifier — te_mon_dollarised makes te_mon_has_dial false, so the rate is
 # derived and the stance gap is 0.
+#
+# APPLIED BY THE BAND SWAP, not by the event that chooses it: it is the seventh
+# member of the te_inflation_band_* family above, and it REPLACES whichever band
+# the country was in. te_inflation.1's dollarise option writes the flag and the
+# inflation reset; step 6c of the monthly update puts this on and takes the band
+# off in the same swap, which is what makes -0.8 + -0.75 unreachable.
 te_mon_dollarised_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_minting_mult = -0.75
+}
+
+# The cyclical premium a currency reform leaves behind (§9.2): +5pp for ten
+# years, applied by te_inflation.1's reform option with days = 3650.
+#
+# WHY IT IS A TIMED STATIC MODIFIER and not another term in step 5. Lenders
+# price a government that has repudiated its own paper once, and they go on
+# pricing it long after the inflation figure is respectable — but that is a
+# FACT ABOUT THIS COUNTRY'S HISTORY, not a state the monthly update could
+# recompute from anything it holds. country_risk_premium_add is exactly the
+# channel step 5 already reads for "what is happening" (it sums the field as
+# 100 x modifier:country_risk_premium_add before adding the computed terms), so
+# the premium arrives in te_premium_cyclical, shows in the country's modifier
+# list with its own expiry, and needs no variable to carry it.
+te_mon_currency_reform_premium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_risk_premium_add = 0.05
 }
 
 # The real-wage dividend (§9.4). A UNIT modifier, applied only while inflation
