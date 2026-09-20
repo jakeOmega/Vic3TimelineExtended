@@ -157,7 +157,7 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
    Credit Standing and Risk Premium must each show an engine breakdown block under the
    script-computed lines. An *empty* breakdown is fine; a *missing* block means the accessor
    did not resolve.
-6. **Walk the dashboard — CONFIRMED 2026-09-20 (owner, in game).** (a) Fiat great power: policy rate one decimal, target an integer,
+6. **Walk the dashboard — CONFIRMED 2026-09-20 (owner, in game), except (e) digital currency and the digital −3 chart in (g), not yet walked. Also still open: confirm `te_rate_paid_rooted` is set on a country after its first pulse (`root ?= this`); if it never sets, the rate modifier is harmlessly re-applied every month.** (a) Fiat great power: policy rate one decimal, target an integer,
    `+` moves only the target and the rate follows ~0.33/month; the engine's rate figure and
    `te_rate_paid_pts` should differ only by the surviving vanilla `_mult` modifiers — an
    *additive* gap, or a ratio no percentage modifier explains, is the leak this pairing
