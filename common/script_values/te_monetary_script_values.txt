@@ -408,13 +408,15 @@ te_mon_cycle_lean = {
 # are the gap, and the gap is r* (§8, "Why not a scaled modifier"). They are
 # consumed only by `change_variable` inside banking_cycle_advance_variables.
 #
-# DO NOT FOLD THE TWO MULTIPLIERS BELOW INTO THIS CLAMP BLOCK. `min`/`max` inside
-# an `add = { ... }` bound the value BEFORE the outer `multiply`, so moving
-# `multiply = -0.125` in here would clamp the gap to +/-4 and then... nothing:
-# the clamp would be applied to the already-multiplied figure instead, turning
-# the intended +/-4 into +/-0.5 and quietly cutting the whole stance channel to
-# an eighth of its calibrated strength. Keep the clamp and the scaling in
-# separate script values, as they are here.
+# DO NOT FOLD THE TWO MULTIPLIERS BELOW INTO THIS CLAMP BLOCK. A script value's
+# keys apply in the order they are written, so a `multiply` placed ahead of
+# `min`/`max` inside the same block silently DISARMS the bound: it is then tested
+# against the already-scaled figure. Folding `multiply = -0.125` in above the
+# bounds here would leave a +/-4 clamp guarding a quantity whose entire range is
+# +/-1.25, so the clamp would never bite and a country parked at an extreme
+# stance would push momentum by up to 1.25 a month instead of the calibrated 0.5
+# — straight through the +/-5 momentum bar the steady state below assumes.
+# Keep the clamp and the scaling in separate script values, as they are here.
 te_mon_stance_gap_clamped = {
 	value = 0
 	if = {
