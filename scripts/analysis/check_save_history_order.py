@@ -11,15 +11,26 @@ saved, not the order the script intended.
 A healthy store reports `ascending=True` for every country. The bug it was
 written for reports one break with the newest months at the front:
 
-    n=240 first=1856.02 last=1856.01 ascending=False breaks=[(117, 1865.11 -> 1845.12)]
+    n=240  1845.12..1865.11  ascending=False  break@117: 1865.11 -> 1845.12
+
+FROZEN STORES ARE REPORTED BUT DO NOT FAIL. `te_history_sort_samples` only runs
+on an eviction, and a country that has stopped recording — dropped below
+major-power rank, or lost the journal entry the series belongs to — never
+evicts again, so a store already scrambled when it froze stays that way. It is
+unreachable rather than broken: nobody can open another country's journal
+entry, and the first month that country records again puts it over the cap,
+which evicts, which sorts. Counting it as a failure forever would make this
+check useless as a gate, so a store whose newest month is more than a month
+behind the save's newest month is labelled `frozen` and only a *live* store out
+of order sets the exit code.
 
 Usage:
     python3 scripts/analysis/check_save_history_order.py             # newest save
     python3 scripts/analysis/check_save_history_order.py <save.v3>
     python3 scripts/analysis/check_save_history_order.py --all       # every save
 
-Exits 1 if any store is out of order, 0 otherwise (including "no stores found",
-which just means no tracked country has recorded a sample yet).
+Exits 1 if a live store is out of order, 0 otherwise (including "no stores
+found", which just means no tracked country has recorded a sample yet).
 
 SAVE FORMAT. A non-ironman .v3 is a 24-byte ASCII header followed by a zip whose
 single `gamestate` entry is Clausewitz *binary*: 2-byte little-endian tokens,
@@ -119,27 +130,45 @@ def fmt_month(index):
 
 
 def check_save(save_path):
-    """Print one line per history store. Returns the number of unordered stores."""
+    """Print one line per history store. Returns the number of live unordered ones."""
     blob = read_gamestate(save_path)
     months = month_index_by_container(blob)
     stores = sample_lists(blob)
     print(f"{save_path}  ({len(stores)} history store(s), {len(months)} sample containers)")
 
-    broken = 0
+    spans = {off: [months[i] for i in ids if i in months] for off, ids in stores}
+    # The save's own clock: no store can hold a month the game has not reached.
+    now = max((max(seq) for seq in spans.values() if seq), default=None)
+
+    broken = frozen = 0
     for off, ids in stores:
-        seq = [months[i] for i in ids if i in months]
+        seq = spans[off]
         if not seq:
             print(f"  0x{off:x}  n={len(ids):3d}  no month indices resolved")
             continue
         breaks = [k for k in range(len(seq) - 1) if seq[k + 1] <= seq[k]]
         ascending = not breaks
-        broken += 0 if ascending else 1
+        # One month of slack: a store can miss the current month depending on
+        # where its pulse sits relative to the save, and still be live.
+        is_frozen = now is not None and now - max(seq) > 1
+        if not ascending:
+            if is_frozen:
+                frozen += 1
+            else:
+                broken += 1
         detail = "".join(
             f"  break@{k}: {fmt_month(seq[k])} -> {fmt_month(seq[k + 1])}" for k in breaks[:3]
         )
+        if not ascending and is_frozen:
+            detail += f"  [frozen since {fmt_month(max(seq))} — cannot re-sort until it records again]"
         print(
             f"  0x{off:x}  n={len(ids):3d}  {fmt_month(min(seq))}..{fmt_month(max(seq))}"
             f"  ascending={ascending}{detail}"
+        )
+    if frozen:
+        print(
+            f"  ({frozen} frozen store(s) out of order — pre-existing, unreachable, "
+            f"not counted as a failure; see the module docstring)"
         )
     return broken
 
@@ -161,7 +190,7 @@ def main(argv):
         broken += check_save(save)
         print()
     if broken:
-        print(f"{broken} history store(s) out of chronological order")
+        print(f"{broken} live history store(s) out of chronological order")
     return 1 if broken else 0
 
 
