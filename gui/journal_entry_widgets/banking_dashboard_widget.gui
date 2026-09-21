@@ -644,25 +644,6 @@ flowcontainer = {
 	}
 
 	banking_dash_policy_row = {
-		visible = "[GetScriptedGui('banking_dash_disable_cb_fx_swap_lines').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-		tooltip = "banking_dash_tt_cb_fx_swap_lines"
-		blockoverride "row_label" {
-			text = "CB_FX_SWAP_LINES"
-		}
-		blockoverride "row_cost" {
-			text = "banking_dash_cost_cb_fx_swap_lines"
-		}
-		blockoverride "enable_action" {
-			datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_swap_lines')]"
-			text = "banking_dash_btn_enable"
-		}
-		blockoverride "disable_action" {
-			datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_swap_lines')]"
-			text = "banking_dash_btn_disable"
-		}
-	}
-
-	banking_dash_policy_row = {
 		visible = "[GetScriptedGui('banking_dash_disable_cb_capital_controls_outflow').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		tooltip = "banking_dash_tt_cb_capital_controls_outflow"
 		blockoverride "row_label" {
@@ -1423,6 +1404,128 @@ flowcontainer = {
 						}
 					}
 
+					### [P5] International monetary arrangements (§15A). Hidden unless the
+					### country holds some role in one. Every branch that reads the
+					### anchor sits behind te_mon_is_anchored in customizable
+					### localization, so no absent scope variable is ever fetched.
+					banking_dash_mon_subheader = {
+						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						blockoverride "mon_subheader_text" {
+							text = "banking_dash_mon_sub_arrangements"
+						}
+					}
+
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_anchor_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_anchor_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_anchor_value"
+							}
+						}
+					}
+
+					### A treaty pegger's confidence — §12.3's gauge, read against
+					### overvaluation rather than a vault.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_anchorpeg_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_pegconf_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_anchorpeg_value"
+							}
+						}
+					}
+
+					banking_dash_mon_meter = {
+						visible = "[GetScriptedGui('banking_mon_shows_anchor_peg').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_anchorpeg_tt"
+						blockoverride "meter_value" {
+							value = "[FixedPointToFloat( JournalEntry.GetCountry.MakeScope.ScriptValue('te_mon_peg_confidence_scaled') )]"
+						}
+					}
+
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_arrangements').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_backstops_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_backstops_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_backstops_value"
+							}
+						}
+					}
+
+					### [P5b] The bloc's common currency (§15A.3): one state row and the
+					### four actions, each its own scripted GUI.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_union_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_union_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_union_value"
+							}
+						}
+					}
+
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						parentanchor = hcenter
+						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_button = {
+							datacontext = "[GetScriptedGui('banking_mon_union_adopt')]"
+							visible = "[GetScriptedGui('banking_mon_union_adopt').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							size = { 200 28 }
+							text = "banking_dash_mon_btn_union_adopt"
+						}
+
+						banking_dash_mon_button = {
+							datacontext = "[GetScriptedGui('banking_mon_union_leave')]"
+							visible = "[GetScriptedGui('banking_mon_union_leave').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							size = { 200 28 }
+							text = "banking_dash_mon_btn_union_leave"
+						}
+
+						banking_dash_mon_button = {
+							datacontext = "[GetScriptedGui('banking_mon_union_press_on')]"
+							visible = "[GetScriptedGui('banking_mon_union_press_on').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							size = { 200 28 }
+							text = "banking_dash_mon_btn_union_press"
+						}
+
+						banking_dash_mon_button = {
+							datacontext = "[GetScriptedGui('banking_mon_union_press_off')]"
+							visible = "[GetScriptedGui('banking_mon_union_press_off').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							size = { 200 28 }
+							text = "banking_dash_mon_btn_union_press_off"
+						}
+					}
+
 					banking_dash_mon_subheader = {
 						blockoverride "mon_subheader_text" {
 							text = "banking_dash_mon_sub_borrowing"
@@ -2006,25 +2109,6 @@ flowcontainer = {
 			parentanchor = hcenter
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_external'))]"
-
-			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_enable_cb_fx_swap_lines').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				tooltip = "banking_dash_tt_cb_fx_swap_lines"
-				blockoverride "row_label" {
-					text = "CB_FX_SWAP_LINES"
-				}
-				blockoverride "row_cost" {
-					text = "banking_dash_cost_cb_fx_swap_lines"
-				}
-				blockoverride "enable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_swap_lines')]"
-					text = "banking_dash_btn_enable"
-				}
-				blockoverride "disable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_swap_lines')]"
-					text = "banking_dash_btn_disable"
-				}
-			}
 
 			banking_dash_policy_row = {
 				visible = "[GetScriptedGui('banking_dash_enable_cb_capital_controls_outflow').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"

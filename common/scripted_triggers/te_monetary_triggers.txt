@@ -51,6 +51,28 @@ te_mon_has_dial = {
 	}
 	NOT = { has_law_or_variant = law_type:law_command_economy }
 	NOT = { te_mon_is_dollarised = yes }
+	# [P5] ANCHORED (§15A.1): a country that has tied its money to another's —
+	# treaty peg, bloc currency, currency board — imports that country's rate.
+	# te_mon_is_anchored reads STORED state only (it must: the anchor's validity
+	# is "the anchor has a dial", which is this trigger again), and step 1c of
+	# the monthly update keeps the stored pair checked.
+	NOT = { te_mon_is_anchored = yes }
+}
+
+# Does this country have a STANCE — a real rate that can be the wrong one? (§8,
+# §15A.1) Every dial country, and every anchored one: an anchored country "keeps
+# its own inflation, neutral rate, stance gap and cycle. This is the whole
+# point" — the imported rate is wrong whenever the two cycles diverge, and the
+# gap is the measure of it. So the three sites in the monthly update that used
+# to gate hidden state on te_mon_has_dial — the inflation noise walk, the two
+# neutral-rate walks, the gap itself — gate on this instead (§0.8 ruling G1).
+# The OTHER no-dial countries are unchanged: their derived rate is world +
+# expected + spread, a constant real gap that means nothing, and it stays 0.
+te_mon_has_stance = {
+	OR = {
+		te_mon_has_dial = yes
+		te_mon_is_anchored = yes
+	}
 }
 
 # Is this country's dial the NARROW one? (§5.1, §0.6) Commodity money buys a
@@ -202,6 +224,10 @@ te_mon_can_monetise = {
 	te_mon_is_cbi = no
 	te_mon_is_command = no
 	NOT = { te_mon_is_dollarised = yes }
+	# [P5] Nor may an anchored country (§15A.1): it is not their currency to
+	# print. Step 1b zeroes the level by itself the month after, as it does for
+	# a dollarised one.
+	NOT = { te_mon_is_anchored = yes }
 }
 
 

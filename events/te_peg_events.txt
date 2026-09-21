@@ -214,3 +214,129 @@ te_peg.1 = {
 		}
 	}
 }
+
+
+# ============================================================================
+# [P5] te_peg.2 — the peg crisis of a TREATY pegger (§15A.2, kind 1)
+# ============================================================================
+# §12.3's event with the options re-read, because the country in trouble here
+# has borrowed somebody else's money rather than promised gold:
+#
+#   * DEFEND — it has no rate to raise, so it shuts the door: capital controls
+#     forced on for a year (te_mon_emergency_controls_months, which
+#     te_mon_capital_controls_in_force reads — so they damp the drain AND run
+#     the fatigue counter, like chosen ones), confidence +40.
+#   * BREAK THE PEG — withdraw from the treaty. The article's on_withdrawal hook
+#     runs the discovery, which un-anchors the country and snaps its index to
+#     the shadow: the devaluation it could not have inside. Premium +2pp for
+#     five years.
+#   * RE-PEG LOWER — stay, at a worse parity: the country's index now sits half
+#     the overvaluation BELOW its anchor's (§0.8 ruling G4). A negotiated
+#     devaluation — infamy, and the anchor remembers.
+#
+# REACHED from te_monetary_update_anchor_peg (step 10), which sets the shared
+# te_peg_crisis_cooldown itself; no `trigger` block, the te_peg.1 rule.
+# EVERY OPTION WRITES AN INPUT, never the rate or the index.
+te_peg.2 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_peg.2.t
+	desc = te_peg.2.d
+	flavor = te_peg.2.f
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	immediate = {
+		if = {
+			limit = {
+				has_variable = te_mon_anchor
+				exists = var:te_mon_anchor
+			}
+			var:te_mon_anchor = { save_scope_as = te_peg_anchor_country }
+		}
+	}
+
+	option = {
+		name = te_peg.2.a
+		default_option = yes
+		custom_tooltip = te_peg.2.a.tt
+
+		hidden_effect = {
+			te_mon_effect_anchor_peg_defend = yes
+		}
+
+		ai_chance = {
+			base = 5
+			# Controls are forgiven in a crisis, and resented out of one.
+			modifier = {
+				trigger = { te_mon_in_external_crisis = no }
+				add = -2
+			}
+		}
+	}
+
+	option = {
+		name = te_peg.2.b
+		custom_tooltip = te_peg.2.b.tt
+
+		hidden_effect = {
+			te_mon_effect_anchor_peg_break = yes
+		}
+		add_modifier = {
+			name = te_mon_peg_broken_premium
+			days = 1825
+		}
+
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 3
+			}
+			# The further apart the two economies have drifted, the less the peg
+			# is worth another year of the wrong rate.
+			modifier = {
+				trigger = {
+					has_variable = te_mon_overvaluation
+					var:te_mon_overvaluation >= 20
+				}
+				add = 3
+			}
+		}
+	}
+
+	option = {
+		name = te_peg.2.c
+		custom_tooltip = te_peg.2.c.tt
+
+		hidden_effect = {
+			te_mon_effect_anchor_peg_repeg = yes
+		}
+		change_infamy = { value = 1 }
+		if = {
+			limit = { exists = scope:te_peg_anchor_country }
+			scope:te_peg_anchor_country = {
+				change_relations = {
+					country = root
+					value = -15
+				}
+			}
+		}
+
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = {
+					has_variable = finance_cycle_value
+					banking_cycle_is_recession = yes
+				}
+				add = 2
+			}
+		}
+	}
+}

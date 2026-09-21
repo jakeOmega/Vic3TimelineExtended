@@ -40,6 +40,19 @@
 #      the foot of te_monetary_init_fx_variables in
 #      common/scripted_effects/te_monetary_fx_effects.txt
 #   4. the two `banking_fx_*` lines in legacy_je_modifier_cleanup_effect below
+#
+# ── PENDING REMOVAL: banking_fx_swap_lines (added 2026-09-21) ──
+# Monetary policy phase 5a (docs/systems/monetary_policy_design.md §18.2, §0.8)
+# deleted the FX Swap Lines tool; the swap_line treaty article replaces it. The
+# static modifier survives so a save made before 5a loads clean. Remove ALL of
+# the following together, one release after 2026-09-21:
+#   1. the `banking_fx_swap_lines` block in
+#      common/static_modifiers/extra_modifiers.txt
+#   2. its loc keys — `banking_fx_swap_lines` in te_miscellaneous_l_english.yml
+#      and `banking_fx_swap_lines_desc` in te_concepts_l_english.yml
+#   3. the monthly strip at the foot of te_monetary_init_arrangement_variables in
+#      common/scripted_effects/te_monetary_arrangement_effects.txt
+#   4. the `banking_fx_swap_lines` line in legacy_je_modifier_cleanup_effect below
 ########################################
 
 legacy_je_modifier_cleanup_effect = {

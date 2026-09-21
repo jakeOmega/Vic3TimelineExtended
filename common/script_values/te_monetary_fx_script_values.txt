@@ -88,7 +88,8 @@ te_mon_controls_decay = { value = 3 }
 te_mon_controls_damp = {
 	value = 1
 	if = {
-		limit = { banking_tool_capital_controls_active = yes }
+		# [P5] ...or while te_peg.2's Defend has forced them on.
+		limit = { te_mon_capital_controls_in_force = yes }
 		value = te_mon_controls_damp_value
 	}
 }

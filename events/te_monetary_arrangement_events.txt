@@ -1,0 +1,182 @@
+﻿# ============================================================================
+# Monetary Policy, phase 5 — international monetary arrangements: events
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §15A, as shipped in §0.8.
+# System overview: docs/systems/mod_systems.md § Banking Cycle -> Monetary
+# Policy (phase 5). The kind-1 peg crisis is te_peg.2, beside §12.3's own event
+# in events/te_peg_events.txt.
+# ============================================================================
+namespace = te_lolr
+
+# ----------------------------------------------------------------------------
+# te_lolr.1 — the guarantee is called (§15A.2)
+# ----------------------------------------------------------------------------
+# Fires on the GUARANTOR (ROOT) when a country it stands behind defaults:
+# te_monetary_on_country_default (common/on_actions/te_monetary_on_actions.txt)
+# saves the ward as scope:te_lolr_ward and sets the ward's five-year cooldown
+# itself, so there is no `trigger` block — the te_peg.1 rule.
+#
+# HONOUR pays 5% of the WARD'S GDP across and keeps the article. RENEGE leaves
+# the treaty, costs prestige and infamy, and starts te_mon_lolr_suspended_months
+# on the guarantor — which te_mon_lolr_is_effective reads from every OTHER
+# ward's side: guarantees are only worth the last one honoured.
+te_lolr.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_lolr.1.t
+	desc = te_lolr.1.d
+	flavor = te_lolr.1.f
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	option = {
+		name = te_lolr.1.a
+		default_option = yes
+
+		add_treasury = {
+			value = scope:te_lolr_ward.te_mon_lolr_honour_cost
+			multiply = -1
+		}
+		scope:te_lolr_ward = {
+			add_treasury = te_mon_lolr_honour_cost
+			change_relations = {
+				country = root
+				value = 25
+			}
+		}
+
+		ai_chance = {
+			base = 10
+			# A guarantor that cannot pay its own way does not pay another's.
+			modifier = {
+				trigger = { scaled_debt >= 0.5 }
+				add = -4
+			}
+			modifier = {
+				trigger = { scaled_debt >= 0.9 }
+				add = -4
+			}
+			modifier = {
+				trigger = { is_in_same_power_bloc = scope:te_lolr_ward }
+				add = 3
+			}
+		}
+	}
+
+	option = {
+		name = te_lolr.1.b
+		custom_tooltip = te_lolr.1.b.tt
+
+		hidden_effect = {
+			set_variable = { name = te_mon_lolr_suspended_months value = te_mon_lolr_suspension_months }
+			every_scope_treaty = {
+				limit = {
+					binds = scope:te_lolr_ward
+					any_scope_article = {
+						has_type = lender_of_last_resort
+						source_country = root
+					}
+				}
+				withdraw = { country = root }
+			}
+		}
+		change_infamy = { value = 5 }
+		add_modifier = {
+			name = te_mon_lolr_reneged
+			days = 1825
+		}
+		scope:te_lolr_ward = {
+			change_relations = {
+				country = root
+				value = -40
+			}
+		}
+
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { is_at_war = yes }
+				add = 3
+			}
+		}
+	}
+}
+
+
+# ============================================================================
+# te_union.1 — The Question of the Common Currency (§15A.3)
+# ============================================================================
+namespace = te_union
+
+# Put to a PRESSED holdout by te_monetary_update_union (step 9b), and only to a
+# PLAYER: an AI holdout resolves on te_mon_union_adopt_score directly, with the
+# same two outcomes. It fires when the answer could have changed — pressure
+# newly applied, the criteria newly met, the bloc's tier changed — never on a
+# timer, and no more than once in five years (the caller sets
+# te_mon_union_ask_cooldown itself, so there is no `trigger` block).
+#
+# ADOPT is te_mon_effect_union_adopt behind its own gate, re-asked here because
+# three days can pass between the pulse and the click. REFUSE builds something:
+# +250 leverage resistance for ten years, refreshed not stacked — and costs the
+# leader cohesion, which is why pressing a bloc of refusers is a losing trade.
+te_union.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_union.1.t
+	desc = te_union.1.d
+	flavor = te_union.1.f
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	immediate = {
+		if = {
+			limit = { exists = power_bloc }
+			power_bloc = { power_bloc_leader = { save_scope_as = te_union_leader } }
+		}
+	}
+
+	option = {
+		name = te_union.1.a
+		trigger = { te_mon_union_can_adopt = yes }
+		custom_tooltip = te_mon_union_adopt_effect_tt
+
+		hidden_effect = {
+			te_mon_effect_union_adopt = yes
+		}
+		if = {
+			limit = { exists = scope:te_union_leader }
+			scope:te_union_leader = {
+				change_relations = {
+					country = root
+					value = 15
+				}
+			}
+		}
+
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = {
+		name = te_union.1.b
+		default_option = yes
+		custom_tooltip = te_union.1.b.tt
+
+		te_mon_effect_union_refuse = yes
+
+		ai_chance = {
+			base = 1
+		}
+	}
+}

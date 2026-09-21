@@ -927,6 +927,10 @@ banking_capital_controls_out = {
 	country_bubble_pressure_monthly_add  = -0.6
 }
 
+# LEGACY since monetary policy phase 5a (2026-09-21): the FX Swap Lines tool is
+# deleted and the swap_line treaty article replaces it, so nothing applies this
+# any more. The definition stays for one release so a save holding it loads
+# clean; legacy_modifier_cleanup.txt carries the dated removal checklist.
 banking_fx_swap_lines = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_banking_intervention_max_add = -4
@@ -7344,5 +7348,115 @@ te_capital_controls_fatigue = {
 	interest_group_ig_industrialists_approval_add = -1
 	interest_group_ig_petty_bourgeoisie_approval_add = -1
 	state_capitalists_investment_pool_efficiency_mult = -0.02
+}
+
+
+# ============================================================================
+# Monetary policy phase 5 — international monetary arrangements (§15A)
+# ============================================================================
+# The first three are SCALED and MANAGED, like the phase-4 trio above: applied
+# only by te_monetary_apply_arrangement_modifiers (step 9b, their one refresh
+# site) through te_mon_mod_add_scaled. Values are PER POINT (1pp) of the
+# multiplier, which is te_mon_arr_*_applied. Three fixed-sign modifiers, for the
+# reason te_fx_weak and te_fx_strong are two (§17 check 8).
+#
+# The premium terms live here and NOT in the treaty articles' source_modifier /
+# target_modifier blocks because every one of them is GDP- or share-scaled
+# (§15A.1 "asymmetric magnitudes, shared mechanic").
+
+# multiplier = pp of CYCLICAL premium this country's backstops take off: a swap
+# line's 1pp, half the debt-load premium under a lender of last resort, a
+# monetary union's cooperation terms.
+te_mon_arrangement_recipient = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_risk_premium_add = -0.01
+}
+
+# multiplier = pp of cyclical premium the lines and guarantees this country
+# EXTENDS cost it: each recipient's benefit x clamp( its GDP / ours , 0 , 1 ).
+te_mon_arrangement_provider = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_risk_premium_add = 0.01
+}
+
+# multiplier = pp of STRUCTURAL premium: a treaty pegger's 0.5, and a reserve
+# currency's 0.1 per 5% of world GDP pegged to it (cap 0.5).
+te_mon_arrangement_standing = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_credit_standing_add = -0.01
+}
+
+# te_peg.2 "Break the peg": +2pp for five years (days = 1825). Timed, applied by
+# the event option and NOT managed — the te_mon_peg_suspension precedent.
+te_mon_peg_broken_premium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_risk_premium_add = 0.02
+}
+
+# --- 5c: subject currency boards (§15A.4). All three MANAGED, applied only by
+# te_monetary_apply_board_modifiers (step 9b).
+
+# On a subject while its currency board is in force (kind 3). Half its minting
+# goes to the overlord; -0.5 is te_mon_board_seigniorage_share restated.
+te_mon_board_subject = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_minting_mult = -0.5
+}
+
+# multiplier = pounds a week (te_mon_board_seigniorage_applied): half the flat
+# minting of every direct subject on a board, re-summed yearly. An _add, not a
+# _mult — a _mult would scale the overlord's own base and transfer nothing.
+te_mon_board_seigniorage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_minting_add = 1
+}
+
+# On a board subject whose DISPLAYED stance band has sat at an extreme for six
+# months: the overlord's rate is visibly the wrong one. One step on vanilla's
+# 0.05-0.5 liberty-desire scale — measurable, not a revolt by itself (§19 5c).
+te_mon_board_wrong_stance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	country_liberty_desire_add = 0.15
+}
+
+# --- 5b: the power-bloc common currency (§15A.3) ----------------------------
+
+# MANAGED, flat; on an ADOPTER while kind = 2 (te_monetary_update_union). One
+# money, no conversion: the design's "state_trade_advantage_mult +0.05" names a
+# modifier type that does not exist, so it is the export / import pair phase 4
+# already uses (§0.8 ruling G9).
+te_mon_union_adopter = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_export_advantage_mult = 0.05
+	state_import_advantage_mult = 0.05
+}
+
+# MANAGED, scaled; on a LEADER while "Press for monetary convergence" is on.
+# multiplier = the number of holdouts (te_mon_union_pressure_applied). The
+# capital-controls modifier's country_influence_cost_add = 100 is the precedent.
+te_mon_union_pressure = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_influence_cost_add = 50
+}
+
+# Exit: +3pp of structural premium decaying over ten years (days = 3650,
+# is_decaying). Timed, applied by te_mon_effect_union_exit_costs, NOT managed.
+te_mon_union_exit_premium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_credit_standing_add = 0.03
+}
+
+# Refusing The Question: one rank step on vanilla's 250 / 500 / 750 / 1000
+# leverage-resistance ladder, ten years (days = 3650), refreshed not stacked.
+te_mon_union_independence = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_leverage_resistance_add = 250
+}
+
+# te_lolr.1 "Renege": the guarantor's name, for five years (days = 1825).
+te_mon_lolr_reneged = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_prestige_mult = -0.1
+	country_credit_standing_add = 0.005
 }
 

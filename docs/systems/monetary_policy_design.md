@@ -1,6 +1,10 @@
 # Monetary Policy — Design
 
-> **STATUS: PHASES 1–4 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 4 (§19 row 4 —
+> **STATUS: PHASES 1–5 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 5 (§19 rows 5a /
+> 5b / 5c — the anchored state, the `currency_peg` / `swap_line` / `lender_of_last_resort`
+> treaty articles, the power-bloc common currency, subject currency boards, the
+> `cb_fx_swap_lines` deletion) was implemented on 2026-09-21; see
+> [§0.8](#08-phase-5-as-shipped--rulings-deviations-and-open-checks). Phase 4 (§19 row 4 —
 > the exchange-rate index, world inflation, the trade edge, imported inflation, capital
 > controls as the trilemma's third corner, the FX-tool deletion) and the narrow commodity
 > dial were implemented on 2026-09-21; see
@@ -11,8 +15,8 @@
 > (§19 row 2 — inflation, monetisation and QE costs, the §9.2 bands and hyperinflation
 > chain, wage pressure, §13 stance politics) shipped on `feat/monetary-policy-phase2` on
 > 2026-09-20 and has not been seen in a running game either; see
-> [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks). Phase 5 is
-> still design only — **phases 4 and 5 were scoped on 2026-09-20** ([§15](#15-exchange-rates-and-the-trilemma-phase-4),
+> [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks). **Phases 4 and 5 were
+> scoped on 2026-09-20** ([§15](#15-exchange-rates-and-the-trilemma-phase-4),
 > [§15A](#15a-international-monetary-arrangements-phase-5)), written against phase 3 **as
 > shipped** (§0.5), not against §12 as first drafted. Written 2026-09-19 from a design
 > interview with the mod owner plus an engine-feasibility pass, then revised the same day
@@ -1175,6 +1179,129 @@ every figure; options a / b / c stage the shocks), beside `.5` (fixed manual tar
   commodity tag inside its comfort band and a world rate near 3 reaches stance band 5
   (*Very Tight*) at the `+3` setting. The band is nominal and the stance real, so this is a
   check that R7 keeps the precondition, **not** that the dial gained a setting.
+
+### 0.8 Phase 5 as shipped — rulings, deviations and open checks
+
+Phase 5 (§19 rows 5a, 5b, 5c) was implemented on 2026-09-21, on top of §0.7, as three commits
+in the order **5a → 5c → 5b** (5c needs only the spine; 5b needs 5a's lender-of-last-resort
+event) — each still cuttable. **Nothing below has been seen in a running game, and it is
+built on a phase 4 that has not been either** (§0.7): phases 1–4's open checks are inherited
+unchanged, and phase 5 leans on phase 4's `te_fx_shadow` / `te_mon_overvaluation` for every
+pressure gauge it has. Every reload (`mod_only`, generators on) came back with no parse
+failures and no audit findings. File inventory and the architectural rules: `mod_systems.md`
+§ Banking Cycle → **Monetary Policy (phase 5)**.
+
+#### Owner decisions to review (phase 5)
+
+| # | Ruling | Why | Cost to reverse |
+|---|---|---|---|
+| **G1** | **An anchored country keeps its hidden state running**: a new `te_mon_has_stance` (= dial **or** anchored) replaces `te_mon_has_dial` at the three hidden-state gates in the monthly update — the inflation noise walk, the two neutral-rate walks, the stance gap itself | §15A.1 promises "a single edit that propagates to every consumer", and also that an anchored country "keeps its own inflation, neutral rate, stance gap and cycle. This is the whole point". The two conflict: those three gates zero the gap and freeze the walks for anyone without a dial, which would make the imported rate never *wrong* — no stance politics, no 5c liberty-desire lever, nothing for `te_mon_overvaluation` to mean. Other no-dial countries are unchanged (their real gap is a constant and stays 0) | point the three sites back at `te_mon_has_dial` |
+| **G2** | **The monthly leg of detection runs the *full* discovery, but only for flagged countries.** §15A.1's three-way split stands (monthly / hooks / yearly scan); `te_mon_arr_scan = 1` marks a country that holds any role — anchored, an anchor, either side of a backstop, a board subject, a member of a bloc with the union group — and step 1c re-runs `te_monetary_discover_arrangements` for those every month. Everyone else runs nothing monthly | the split existed to avoid a treaty walk for ~200 countries a month. The walk is over a country's *own* in-force treaties, and only a few dozen are ever flagged, so the cost is not paid — and "is the stored pair still valid" is answered by the code that found it rather than by a second copy of each kind's rule. The flag seeds to 1, so a save from before phase 5 discovers itself on its first pulse | replace the call in `te_monetary_update_anchor` with per-kind validity tests |
+| **G3** | **`te_mon_is_anchored` reads stored state only; validity is step 1c's job.** Discovery hooks dispatch a new **`te_monetary_internal.2`**, not `.1` | validity is "the anchor has a dial", and `te_mon_has_dial` asks `te_mon_is_anchored` of the anchor — testing it inside the trigger makes the two call each other down the chain. Step 1c runs before 1b and 2, so within a pulse the stored pair is always a checked one. `.1` **is the monthly update** and is not idempotent; the discovery is, so hooks may overlap freely. It still needs ROOT = the country (its treaty walk tests `source_country = root`), hence an event at all | — |
+| **G4** | **"Re-peg lower" moves the parity, not the shadow**: `te_mon_peg_parity_offset` += half the overvaluation, and an anchored index is *anchor's index − offset* | §15A.2 re-bases the country's shadow upward. Same cut in overvaluation either way, but a moved parity is also an actual devaluation — the trade edge and the imported inflation a negotiated devaluation should carry — and a re-based shadow decays back at 1/12 a month, quietly undoing the option within a year | swap the body of `te_mon_effect_anchor_peg_repeg` |
+| **G5** | **Joining re-seeds `te_fx_avg` after the snap; leaving does not re-seed at all** | §15A.1 says re-seed "on any change". Adopting somebody's money is a redenomination, not a price event; but leaving "**is** the devaluation", and imported inflation exists to price exactly that (the reasoning `te_mon_effect_fx_devalue_peg` already gives for §12.3's Devalue) | one call in `te_monetary_anchor_changed` |
+| **G6** | **A drawn swap line pays the recipient.** The provider's 0.1%-of-recipient-GDP monthly draw lands in the recipient's treasury | §15A.2 states only the draw. "Under gold a swap line *is* reserve lending" — money that leaves one treasury and arrives nowhere is a tax, not a loan. 1.2% of GDP a year, only while `te_mon_in_external_crisis` | delete the recipient's `add_treasury` |
+| **G7** | **Currency boards do not count toward the reserve-currency cut** | "per 5% of world GDP *pegged* to it": a board is imposed, not a vote of confidence, and counted, the East India Company alone would hand Britain the full −0.5 on day one | the `kind < 3` line in `te_monetary_refresh_anchored_gdp` |
+| **G8** | **No monetary term lives in an article's `source_modifier` / `target_modifier`, and there are three arrangement modifiers, not two.** `te_mon_arrangement_recipient` and `_provider` carry cyclical points as designed; a third, `te_mon_arrangement_standing`, carries the *structural* ones (the pegger's −0.5, the reserve currency's cut), because one multiplier cannot scale two fields differently. Articles carry prestige only | this **bypasses §17 check 14** rather than answering it (the §0.1 precedent for check 6) | — |
+| **G9** | **`state_trade_advantage_mult` does not exist.** An adopter gets `state_export_advantage_mult` and `state_import_advantage_mult` +0.05 each (`te_mon_union_adopter`) | the engine has only per-good `goods_trade_advantage_*`; the export / import pair is what phase 4 already uses | — |
+| **G10** | **The union's tier is read through `has_principle`, and "cohesion per adopter" is per member.** The three `power_bloc_*_bool` markers exist for the principle tooltip only; `power_bloc_cohesion_per_member_add = 1` sits on tiers 2–3 | **bypasses §17 check 16** (`has_principle` has vanilla script precedent). And no script can put a modifier on a bloc, so a per-adopter cohesion term cannot be applied; per-member is the nearest static form | — |
+| **G11** | **The Question fires on three of §15A.3's four triggers.** Pressure newly applied, criteria newly met and a tier change are one integer signature (`te_mon_union_q_state`); **a change of government in the holdout is not shipped**. `te_mon_union_last_asked` is a countdown (`te_mon_union_ask_cooldown`), not a date | there is no cheap government-change signature, and a date variable buys nothing a countdown does not | — |
+| **G12** | **"Panic severity inputs reduced" is one site**: an imported crash's `crash_severity` × 0.8 for a country with an effective backstop (treaty guarantee or tier-3 union) | origin crashes are rolled in generated events (`gen_banking_events.py`); the contagion path is script and is where a foreign guarantor plausibly matters | — |
+| **G13** | **The imported rate carries no expected-inflation term** (`anchor's rate + spread`, where a bankless rate is `world + expected + 1`) | the anchor's nominal rate already carries the *anchor's* expectations; that it ignores the borrower's is the cost of the arrangement, and the borrower's stance gap (G1) is the measure of it | one `change_variable` in `te_monetary_set_derived_rate` |
+| **G14** | **"Break the peg" withdraws from the whole treaty** | `withdraw` is a treaty effect; an article cannot be dropped alone. The option tooltip says so | — |
+| **G15** | **Defend forces controls with a clock, not the banking tool.** `te_mon_emergency_controls_months` = 12, read by a new `te_mon_capital_controls_in_force` that replaced `banking_tool_capital_controls_active` inside `te_mon_controls_damp` and the fatigue counter | a treaty pegger need not hold the banking journal entry the tool lives on. Forced controls therefore damp and fatigue exactly like chosen ones, but carry none of `banking_capital_controls_out`'s other fields | — |
+| **G16** | **Numbers that were not in the design**: AI leader presses at influence ≥ 300, cohesion ≥ 60% and fewer refusers than holdouts; AI adopter exits at 30 points of overvaluation; pressure costs 50 influence a holdout; the exit pool hit is 2% of GDP and 5% radicals; refusing costs the leader 5% cohesion and 15 relations; `te_mon_board_wrong_stance` is +0.15 liberty desire; LOLR renege is 5 infamy, −10% prestige and +0.5pp standing for five years; articles cost 25 / 50 / 75 influence | all (proposed) until the harness has been run | the named values in `te_monetary_union_script_values.txt` / `_arrangement_script_values.txt` and `extra_modifiers.txt` |
+
+#### Deferred (phase 5's additions)
+
+- **Grant monetary autonomy** (§15A.4) — named, not designed; unchanged.
+- **A named list of holdouts on the leader's dashboard.** Shipped as two counts (holdouts,
+  and how many would refuse today), which is what the design wanted the list *for*.
+- **The government-change trigger for The Question** (G11).
+- **Re-expressing `te_mon_dollarised` as "anchored to the hegemon"** (§15A.5) — recorded, not
+  proposed; unchanged.
+
+#### Known roughnesses (phase 5)
+
+- **The exit invariant is untested.** §19 row 5b's "exit must be worse than staying for ≥ 5
+  years at 15 points of overvaluation, and better thereafter" is a harness run nobody has
+  made. At 15 points an adopter pays +1.0pp (0.5 at tier 3) against the exit's +3pp decaying
+  linearly over ten years — so exit is dearer on the premium alone for about 6.7 years (8.3
+  at tier 3) before counting the trade edge regained. Plausible; unverified.
+- **A provider's cost is as fresh as its last discovery.** Flagged countries discover monthly,
+  so in practice a month; a ward's relief, which moves with its debt, is refreshed every pulse
+  on the ward's side.
+- **A member is charged the exit when the *leader* loses its dial** (law change, command
+  economy). §15A.3 says losing the ground is an exit "not silently"; it does not distinguish
+  whose fault it was. The likeliest complaint from a playtest.
+- **A gold-standard country can sign a `currency_peg`.** It then has no dial, so gold flows
+  stop and its vault and hot money freeze as under a suspension; its index is the anchor's.
+  Coherent, odd, and cheap to forbid in `te_mon_can_peg_to` if it reads wrongly.
+- **The four article keys `*_effects_desc` / `*_article_short_desc` land in
+  `te_unused_l_english.yml`**, like every existing article's: `organize_loc.py` cannot see
+  engine-constructed keys. The file is loaded, so they render; the detection gap is old.
+- **Hooks fire a day late on purpose** (`days = 1`), so the treaty's own state has settled
+  before the discovery walks it. Whether `on_entry_into_force` would see the treaty in
+  `any_scope_treaty` with no delay is unknown and no longer matters.
+- **`scripting_best_practices.md` cites the deleted `banking_effect_cb_fx_swap_lines`** as its
+  self-relations example. Stale, harmless.
+- **`concept_fx_swap_lines` is kept**, re-written to describe the article.
+
+#### IN-GAME VERIFICATION CHECKLIST (phase 5)
+
+Harness: `event te_debug_monetary.10` — the description prints the whole anchored state;
+option a pins a **treaty-less debug kind-1 anchor** on the largest dial economy (the
+discovery honours `te_mon_debug_anchor_on`; nothing in play sets it), b releases it, c sets
+peg confidence to 25, then "run the discovery" / "run one monthly update". Beside `.8`
+(world rate), `.9` (shadow shock) and `.5` (fixed target).
+
+- **P5-1. §17 check 18** — with a debug anchor pinned, does *Anchor's rate (copy)* ever read
+  0 or lurch? It may lag the anchor's dashboard by a month; it must never be anything worse.
+- **P5-2. §17 check 15** — does a treaty under `non_fulfillment = freeze` still iterate under
+  `any_scope_treaty`? No phase-5 article uses `freeze`, so this only matters if a peg is
+  bundled with one that does: read kind on `.10` after the freeze.
+- **P5-3. §19 5a** — an AI minor pegged to a GP tracks a 2pp anchor hike within two months
+  (`.8`, or hike as the anchor) and survives it.
+- **P5-4. §19 5a** — the same peg **breaks** under 15 points of *sustained* overvaluation:
+  drain 5 a month, 100 → 20 in 16 months. One `.9` shadow shock is not sustained (≈ 50 points
+  in total); repeat it, or hold a real inflation differential.
+- **P5-5. §19 5a** — a GP's *Backstops Extended* for a minor is < 10% of the minor's
+  *Monetary Backstops*; between equals it is all of it.
+- **P5-6.** No chain or cycle can be built: pegging to an anchored country is refused in
+  `can_ratify`, and a country whose anchor becomes anchored lapses next month.
+- **P5-7.** Articles: the three appear in the treaty UI with their effects text; tooltips in
+  `can_ratify` read correctly from both sides; an observer run shows AI signing pegs and swap
+  lines, and **not universally**.
+- **P5-8.** te_peg.2's three options: forced controls for 12 months (damp + fatigue, no JE
+  needed); *Break* leaves the treaty and the index jumps to the shadow with imported
+  inflation following; *Re-peg* drops the index by half the overvaluation and holds it there.
+- **P5-9.** te_lolr.1 fires on the guarantor at a ward's default, once per five years; *Renege*
+  zeroes every other ward's *Monetary Backstops* line for five years.
+- **P5-10.** A pre-5a save holding `banking_fx_swap_lines` loads with no modifier and no
+  error-log line; the FX Swap Lines row is gone from the dashboard and the AI's button list.
+- **P5-11. §17 check 17** — a newly subjugated puppet shows kind 3 the next day and its rate
+  tracks the overlord's within a month; released, it returns to its own rule within a month,
+  with **no** exit penalty.
+- **P5-12. §17 check 21** — does `.10`'s *Own flat minting* print a real figure for a subject
+  with gold mines? If 0, `modifier:country_minting_add` is unreadable from script and the
+  fallback is counting gold-mine levels. The overlord's gain is GDP-blind by construction
+  and tiny for a colony without gold.
+- **P5-13. §19 5c** — a board subject held at band 1 or 5 for six months gains
+  *The Overlord's Rate* (+0.15 liberty desire); it clears the month the band leaves the
+  extreme; alone it does not cause a revolt.
+- **P5-14. §17 check 16** (bypassed, G10) — confirm `has_principle` /
+  `has_principle_group` resolve for a mod-defined group: the *Monetary Union* row appears for
+  every member of a bloc that takes the principle.
+- **P5-15. §19 5b** — an adopter in a slump while the leader runs hot shows a tight band and a
+  visibly rising *overvaluation premium*; adoption is refused outside the criteria and the
+  debt line flips when the leader presses.
+- **P5-16. §19 5b** — the exit invariant, with `.10` and `.9`: at 15 points of overvaluation,
+  worse than staying for ≥ 5 years on treasury, SoL and radicals, better thereafter.
+- **P5-17. §19 5b** — a pressed, debt-heavy adopter costs a tier-3 leader a backstop call
+  within a cycle or two; pressing a bloc of refusers loses the leader cohesion on net (and an
+  AI leader stops); a human holdout sees *The Question* fewer than ~6 times a campaign.
+- **P5-18.** Phase 4's exit criteria still hold with phase 5 on — in particular "the 1836
+  world sits at par": every board subject should read its overlord's par.
 
 ---
 
@@ -2441,6 +2568,9 @@ sign-wrong note) is deleted with it, which closes that item.
 
 ## 15A. International monetary arrangements (phase 5)
 
+> **Implemented 2026-09-21** — what shipped, where it departs from this section and what is
+> still unverified: [§0.8](#08-phase-5-as-shipped--rulings-deviations-and-open-checks).
+>
 > **Scoped 2026-09-20** in the same pass as §15. Owner decisions: **one "anchored" state
 > underlies every arrangement**; the declared peg is a **treaty article**; all three families
 > ship, **staged 5a / 5b / 5c** so each can be cut; a bloc currency's rate is **the leader's
@@ -2842,6 +2972,11 @@ the construction market, ruler traits and the history charts read them directly.
 > respectively, with the debug read-out that settles each. The remaining checks below still
 > belong to phases 3–5.
 >
+> **Phase 5 has shipped** (§0.8): checks **15, 17, 18 and 21** are live code — §0.8 checklist
+> items P5-2, P5-11, P5-1 and P5-12 — and checks **14 and 16 were bypassed** rather than
+> answered (rulings G8 and G10: no monetary term lives in a treaty modifier block, and the
+> union's tier is read through `has_principle`).
+>
 > **CHECKS 1–4 ARE ANSWERED (owner, in game, 2026-09-19 and 2026-09-20): `INJECT:` SUMS with
 > vanilla's values** — nested `modifier = { }` blocks on ranks, technologies and laws, and a
 > flat key inside a static modifier (`INJECT:base_values`) alike. Nothing below about
@@ -2996,6 +3131,12 @@ for the eventual removal.
 > `legacy_modifier_cleanup.txt` carries the dated checklist. `cb_fx_swap_lines` is untouched
 > and still belongs to 5a. The survey below is kept as the record; line numbers predate the
 > implementation.
+>
+> **Done** (phase 5a, 2026-09-21) for `cb_fx_swap_lines` as well — §0.8. The
+> `banking_fx_swap_lines` static modifier stays defined for one release;
+> `te_monetary_init_arrangement_variables` strips it every pulse and
+> `legacy_modifier_cleanup.txt` carries its dated checklist. No state to migrate: the tool was
+> a flat modifier, and its replacement is a treaty the country has to go and sign.
 
 Surveyed 2026-09-20; line numbers are of that date. **Delete the two as a pair** (§15.5).
 
@@ -3042,13 +3183,15 @@ Phase 5a repeats the recipe for `cb_fx_swap_lines` / `banking_fx_swap_lines` (bu
 
 Each phase is playable alone. Later phases can be cut.
 
-**Status.** Rows **1, 2, 3 and 4 are implemented** and pending in-game verification (row 4:
+**Status.** Rows **1, 2, 3, 4, 5a, 5b and 5c are implemented** and pending in-game
+verification (rows 5a–5c: [§0.8](#08-phase-5-as-shipped--rulings-deviations-and-open-checks),
+checklist P5-1…18; row 4:
 [§0.7](#07-phase-4-as-shipped--rulings-deviations-and-open-checks), checklist P4-1…12) — see
 §0.1–§0.3, [§0.4](#04-phase-2-as-shipped--rulings-deviations-and-open-checks) and
 [§0.5](#05-phase-3-as-shipped--rulings-deviations-and-open-checks); row 2's exit criteria are
 §0.4 checklist items 24–25 and row 3's are §0.5 items 36–39. Row 3's "regime law stances" had
-already shipped with phase 2 (§13 "Delivered"). Row 5 is design only (scoped 2026-09-20;
-it is staged 5a / 5b / 5c, each cuttable, 5c independent of 5b). (The table itself
+already shipped with phase 2 (§13 "Delivered"). Row 5 was scoped 2026-09-20 and built
+2026-09-21 in the order 5a → 5c → 5b, one commit each, so each is still cuttable. (The table itself
 carries no status column and is left as written.)
 
 | Phase | Ships | Interim rule until the next phase | Exit criteria |

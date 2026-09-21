@@ -52,6 +52,9 @@ te_monetary_world_monthly_on_action = {
 		te_monetary_refresh_world_rate = yes
 		# [P4] Its sibling (§15.1): GDP-weighted inflation over all great powers.
 		te_monetary_refresh_world_inflation = yes
+		# [P5] World GDP, and the GDP pegged to each anchor (§15A.2's
+		# reserve-currency cut).
+		te_monetary_refresh_anchored_gdp = yes
 	}
 }
 
@@ -88,6 +91,8 @@ te_monetary_monthly_on_action = {
 on_yearly_pulse_country = {
 	on_actions = {
 		te_monetary_yearly_on_action
+		# [P5] the yearly full scan of §15A.1 — defined at the foot of the file.
+		te_monetary_arrangement_yearly_on_action
 	}
 }
 
@@ -257,5 +262,86 @@ on_country_formed = {
 te_monetary_on_country_formed = {
 	effect = {
 		te_monetary_monthly_update = yes
+	}
+}
+
+
+# ============================================================================
+# [P5] INTERNATIONAL MONETARY ARRANGEMENTS (§15A.1)
+# ============================================================================
+# Detection is three-way: a flagged country re-runs the discovery in step 1c of
+# its own monthly update; the hooks below and the treaty articles' own hooks
+# (common/treaty_articles/11*.txt) dispatch it when something changes; and the
+# yearly pulse runs it for EVERYBODY, as the net under anything with no hook.
+# The discovery is idempotent (te_monetary_internal.2's header), so the three
+# may overlap freely.
+
+# Root = Country: called directly. Guarded like te_monetary_internal.2.
+te_monetary_arrangement_yearly_on_action = {
+	effect = {
+		if = {
+			limit = { has_variable = te_mon_anchor_kind }
+			te_monetary_discover_arrangements = yes
+			# [5c] An overlord's seigniorage, re-summed (§15A.4); step 9b applies it.
+			te_monetary_update_board_seigniorage = yes
+		}
+	}
+}
+
+# [5c] A new subject gets its currency board at once rather than at its next
+# flagged pulse. Root = Country (the NEW SUBJECT — vanilla's own block says so
+# and scopes `top_overlord` from it, 00_code_on_actions.txt; the engine log
+# declares "Expected Scope: none", §17 check 17). Dispatched a day later so the
+# subject relationship has settled; the overlord is dispatched too, so it is
+# flagged as somebody's anchor. There is NO ceased-to-be-a-subject on-action:
+# that way round is the flagged monthly discovery, within a month.
+on_become_subject = {
+	on_actions = {
+		te_monetary_on_become_subject
+	}
+}
+
+te_monetary_on_become_subject = {
+	effect = {
+		trigger_event = { id = te_monetary_internal.2 days = 1 }
+		if = {
+			limit = { exists = overlord }
+			overlord = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+		}
+	}
+}
+
+# A guaranteed country defaults: the guarantee is called (§15A.2). Root =
+# Country. The cooldown is set HERE, the te_peg.1 / te_inflation.1 shape, so an
+# unanswered event is not handed out again.
+on_country_default = {
+	on_actions = {
+		te_monetary_on_country_default
+	}
+}
+
+te_monetary_on_country_default = {
+	effect = {
+		if = {
+			limit = {
+				te_mon_has_effective_backstop = yes
+				var:te_mon_lolr_default_cooldown = 0
+			}
+			set_variable = { name = te_mon_lolr_default_cooldown value = te_mon_lolr_default_cooldown_months }
+			save_scope_as = te_lolr_ward
+			# A treaty guarantor first; else [5b] the leader of a tier-3 monetary
+			# union, which is lender of last resort to every adopter (§15A.3).
+			if = {
+				limit = { te_mon_lolr_is_effective = yes }
+				var:te_mon_lolr_guarantor = {
+					trigger_event = { id = te_lolr.1 popup = yes }
+				}
+			}
+			else = {
+				var:te_mon_anchor = {
+					trigger_event = { id = te_lolr.1 popup = yes }
+				}
+			}
+		}
 	}
 }

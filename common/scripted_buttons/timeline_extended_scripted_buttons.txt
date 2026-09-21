@@ -476,55 +476,6 @@ cb_disable_capital_controls_outflow = {
 	effect = { banking_effect_cb_disable_capital_controls_outflow = yes }
 }
 
-cb_fx_swap_lines = {
-	name = "CB_FX_SWAP_LINES"
-	desc = "CB_FX_SWAP_LINES_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_fx_swap_lines_active = no }
-
-	ai_chance = {
-		value = 0
-		# Core: use in panic/downturn, or when momentum is sharply negative
-		if = { limit = { banking_cycle_is_panic = yes } add = 60 }
-		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
-		if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
-
-		# Law flavor
-		if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
-		if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 10 }
-
-		# Resources
-		if = { limit = { banking_points_med = yes } add = 10 }
-		if = { limit = { banking_points_low = yes } add = 5 }
-
-		# Avoid when hot or contradictory
-		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
-		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
-
-		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
-		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
-	}
-
-	possible = { banking_possible_cb_fx_swap_lines = yes }
-	effect = { banking_effect_cb_fx_swap_lines = yes }
-}
-
-cb_disable_fx_swap_lines = {
-	name = "CB_DISABLE_FX_SWAP_LINES"
-	desc = "CB_DISABLE_FX_SWAP_LINES_DESC"
-	visible = { is_ai = yes banking_tool_fx_swap_lines_active = yes }
-	ai_chance = {
-		value = 0
-		if = { limit = { banking_cycle_is_stable = yes } add = 20 }
-		if = { limit = { banking_cycle_is_expansion = yes } add = 35 }
-		if = { limit = { banking_cycle_is_boom = yes } add = 45 }
-		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
-		if = { limit = { banking_cycle_risk_falling = no banking_cycle_is_panic = no banking_cycle_is_downturn = no } add = 15 }
-	}
-	possible = { banking_tool_fx_swap_lines_active = yes }
-	effect = { banking_effect_cb_disable_fx_swap_lines = yes }
-}
-
 
 cb_export_credit_facility = {
 	name = "CB_EXPORT_CREDIT"

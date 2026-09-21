@@ -214,6 +214,12 @@ grep -rn country_loan_interest_rate_add "$BG/common/technology/technologies/"
 grep -n -A8 '^country_loan_interest_rate_add=' "$BG/common/modifier_type_definitions/00_modifier_types.txt"
 ```
 
+**Monetary policy phase 5c also mirrors vanilla's subject `autonomy_level`**, which script cannot read: `te_mon_is_board_subject` (`common/scripted_triggers/te_monetary_arrangement_triggers.txt`) is the hand-written OR-list of the types with `autonomy_level = 1` — puppet, vassal, colony, crown land as of 1.14.3 — and those subjects run a currency board on their overlord's money. A new or re-levelled subject type changes nothing visibly; it just gets the wrong monetary regime. Re-derive on every bump:
+
+```bash
+grep -n 'autonomy_level\|^subject_type' "$BG/common/subject_types/"*.txt
+```
+
 The three INJECT files carry the same warning in their own headers, so a fix made here should be echoed there (and vice versa). All three cancels rest on INJECT blocks summing with vanilla's, which is confirmed in game for every shape the mod uses (ranks and techs 2026-09-19, laws and flat keys 2026-09-20); see `scripting_best_practices.md` § INJECT.
 
 ## 7. Special-case: combat units / ship types

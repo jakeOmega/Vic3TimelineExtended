@@ -126,21 +126,6 @@ banking_possible_cb_export_credit_facility = {
 	}
 }
 
-banking_possible_cb_fx_swap_lines = {
-	custom_tooltip = {
-		text = BANKING_POINTS_4
-		modifier:country_banking_intervention_max_add >= 4
-	}
-	modifier:country_can_use_fx_swap_lines_bool = yes
-	custom_tooltip = {
-		text = banking_button_locked_by_law_tt
-		modifier:country_banking_lock_fx_swap_lines_bool = no
-	}
-	NOT = {
-		country_rank >= rank_value:great_power
-	}
-}
-
 banking_possible_cb_capital_controls_outflow = {
 	custom_tooltip = {
 		text = BANKING_POINTS_2

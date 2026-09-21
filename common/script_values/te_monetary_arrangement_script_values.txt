@@ -1,0 +1,333 @@
+﻿# ============================================================================
+# Monetary policy, phase 5 — international monetary arrangements: values
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §15A, as shipped in §0.8.
+# Effects: common/scripted_effects/te_monetary_arrangement_effects.txt.
+#
+# All country scope unless a comment says otherwise. Units are percentage
+# POINTS, like the rest of the monetary files.
+#
+# VARIABLE CONTRACT (phase 5). Same two rules as every other phase: initialised
+# behind has_variable (te_monetary_init_arrangement_variables), never removed.
+#
+#   te_mon_anchor           scope       the anchor country. A SCOPE variable:
+#                                       cannot hold 0, read as
+#                                       `var:te_mon_anchor = { ... }` behind
+#                                       has_variable, never as a number, never
+#                                       through GetValue. Only meaningful while
+#                                       te_mon_anchor_kind > 0. CAN BE ABSENT
+#                                       after init (a country that was never
+#                                       anchored has none) — the
+#                                       te_basket_market_owner contract
+#   te_mon_anchor_kind      0 to 3      0 none, 1 treaty peg (5a), 2 bloc
+#                                       currency (5b), 3 currency board (5c).
+#                                       Highest wins
+#   te_mon_anchor_rate      pp          \  this pulse's COPIES of the anchor's
+#   te_mon_anchor_fx_index  50 to 150    | te_policy_rate, te_fx_index, own
+#   te_mon_anchor_c         0 to 1       | credibility c and inflation anchor,
+#   te_mon_anchor_target    0 or 2      /  taken by step 1c so that every later
+#                                       read — script values, the dashboard — is
+#                                       a plain local var: and never a
+#                                       cross-country chain. They hold last
+#                                       pulse's figures when nobody is anchored
+#   te_mon_peg_parity_offset 0 to 50    index points a kind-1 pegger's parity
+#                                       sits BELOW its anchor's index (§0.8
+#                                       ruling G4: "re-peg lower"). 0 on every
+#                                       change of anchor
+#   te_mon_arr_scan         0 or 1      1 = this country holds some role in an
+#                                       arrangement, so step 1c runs the FULL
+#                                       discovery every month for it; 0 = it is
+#                                       discovered by the hooks and the yearly
+#                                       scan only (§0.8 ruling G2)
+#   te_mon_swap_recipient   0 or 1      receives a swap line from somebody
+#   te_mon_swap_provider    scope       ...the (first) provider. Same scope-
+#                                       variable contract as te_mon_anchor
+#   te_mon_lolr_ward        0 or 1      has a lender of last resort
+#   te_mon_lolr_guarantor   scope       ...the (first) guarantor. Same contract
+#   te_mon_lolr_suspended_months 0-60   a GUARANTOR'S clock: it reneged, so its
+#                                       other wards' benefit is off this long
+#   te_mon_lolr_default_cooldown 0-60   a WARD'S clock: months before its next
+#                                       default may call the guarantee again
+#   te_mon_arr_recipient_pts  >= 0      \  what the three arrangement modifiers
+#   te_mon_arr_provider_pts   >= 0       | SHOULD be at, in pp, recomputed by
+#   te_mon_arr_standing_pts   >= 0      /  the discovery
+#   te_mon_arr_recipient_applied >= 0   \  ...and what they were last applied
+#   te_mon_arr_provider_applied  >= 0    | at. BACK MULTIPLIERS — never remove
+#   te_mon_arr_standing_applied  >= 0   /
+#   te_mon_anchored_gdp_m   >= 0        GDP (millions) of everyone anchored to
+#                                       this country. Written by the GLOBAL
+#                                       monthly pass, like te_mon_world_own_den
+#   te_mon_board_wrong_months 0 to 24   [5c] consecutive months a currency-board
+#                                       subject's DISPLAYED band has sat at an
+#                                       extreme (1 or 5). Never the true gap
+#   te_mon_board_lever_applied 0 or 1   [5c] is te_mon_board_wrong_stance on?
+#   te_mon_board_seigniorage_pts >= 0   [5c] an OVERLORD'S weekly minting gain:
+#                                       half its board subjects' minting,
+#                                       re-summed yearly
+#   te_mon_board_seigniorage_applied    ...and what was last applied. BACKS A
+#                                       MULTIPLIER — never remove it
+#   te_mon_emergency_controls_months 0-12  the kind-1 crisis's Defend option:
+#                                       capital controls forced on. Read by
+#                                       te_mon_capital_controls_in_force
+# ============================================================================
+
+
+# --- §15A.1 the imported rate's spread over the anchor's --------------------
+te_mon_anchor_spread_peg = { value = 0.5 }
+te_mon_anchor_spread_bloc = { value = 0 }
+te_mon_anchor_spread_board = { value = 0.25 }
+
+te_mon_anchor_spread = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_anchor_kind }
+		if = {
+			limit = { var:te_mon_anchor_kind = 1 }
+			value = te_mon_anchor_spread_peg
+		}
+		else_if = {
+			limit = { var:te_mon_anchor_kind = 3 }
+			value = te_mon_anchor_spread_board
+		}
+		else = {
+			value = te_mon_anchor_spread_bloc
+		}
+	}
+}
+
+# The share of the anchor's credibility an anchored country imports:
+# c = max( own c , 0.8 x anchor's c ).
+te_mon_anchor_credibility_share = { value = 0.8 }
+
+
+# --- §15A.2 the three articles ----------------------------------------------
+
+# currency_peg, pegger: structural premium cut, pp.
+te_mon_peg_standing_cut = { value = 0.5 }
+
+# currency_peg, anchor ("reserve currency"): -0.1pp of structural premium per
+# 5% of world GDP pegged to it, capped at -0.5.
+te_mon_reserve_currency_per_step = { value = 0.1 }
+te_mon_reserve_currency_step_share = { value = 0.05 }
+te_mon_reserve_currency_cap = { value = 0.5 }
+
+te_mon_reserve_currency_cut = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_mon_anchored_gdp_m
+			var:te_mon_anchored_gdp_m > 0
+			has_global_variable = te_mon_world_gdp_m
+			global_var:te_mon_world_gdp_m > 0
+		}
+		value = var:te_mon_anchored_gdp_m
+		divide = global_var:te_mon_world_gdp_m
+		divide = te_mon_reserve_currency_step_share
+		multiply = te_mon_reserve_currency_per_step
+		min = 0
+		max = te_mon_reserve_currency_cap
+	}
+}
+
+# swap_line, recipient: peg confidence a month and the cyclical premium cut.
+te_mon_swap_confidence = { value = 2 }
+te_mon_swap_premium_cut = { value = 1 }
+# ...and the provider's treasury draw while the recipient is in an external
+# crisis: 0.1% of the RECIPIENT'S GDP a month. Recipient scope.
+te_mon_swap_crisis_draw = {
+	value = gdp
+	multiply = 0.001
+}
+
+# lender_of_last_resort, ward: this share of its §7.6 debt-load premium is
+# taken off. Ward scope.
+te_mon_lolr_relief_share = { value = 0.5 }
+
+te_mon_lolr_relief = {
+	value = te_mon_scaled_debt_premium
+	multiply = te_mon_lolr_relief_share
+}
+
+# ...and what honouring the guarantee costs: 5% of the WARD'S GDP. Ward scope.
+te_mon_lolr_honour_cost = {
+	value = gdp
+	multiply = 0.05
+}
+
+te_mon_lolr_suspension_months = { value = 60 }
+te_mon_lolr_default_cooldown_months = { value = 60 }
+
+
+# --- "Asymmetric magnitudes, shared mechanic" (§15A.1) ----------------------
+#   provider cost = recipient benefit x clamp( recipient gdp / provider gdp , 0 , 1 )
+#
+# Evaluated in the RECIPIENT'S scope from inside the provider's discovery, where
+# ROOT is the provider and root.var:te_mon_work_gdp holds ITS GDP (cached first:
+# a bare `root.gdp` is a trigger read, which a divide slot does not take).
+te_mon_arr_gdp_ratio_to_root = {
+	value = gdp
+	divide = {
+		value = root.var:te_mon_work_gdp
+		min = 1
+	}
+	min = 0
+	max = 1
+}
+
+# What one swap line costs ROOT. Recipient scope.
+te_mon_arr_swap_cost_to_root = {
+	value = te_mon_swap_premium_cut
+	multiply = te_mon_arr_gdp_ratio_to_root
+}
+
+# What one guarantee costs ROOT. Ward scope.
+te_mon_arr_lolr_cost_to_root = {
+	value = te_mon_lolr_relief
+	multiply = te_mon_arr_gdp_ratio_to_root
+}
+
+
+# [5b] What a bloc's monetary-union principle hands this member (§15A.3): tier
+# 1+'s cooperation — half a swap line from the leader — and, for an adopter at
+# tier 3, the leader as lender of last resort. The second only where no TREATY
+# guarantee already pays the same relief: two guarantors of one debt are not
+# two rescues.
+te_mon_union_recipient_value = {
+	value = 0
+	if = {
+		limit = { te_mon_union_gets_cooperation = yes }
+		add = te_mon_union_cooperation_cut
+	}
+	if = {
+		limit = {
+			te_mon_union_backstop_is_effective = yes
+			te_mon_lolr_is_effective = no
+		}
+		add = te_mon_lolr_relief
+	}
+}
+
+
+# --- What this country RECEIVES, in pp of cyclical premium ------------------
+# A reneging guarantor's wards get nothing from it while its clock runs.
+te_mon_arr_recipient_value = {
+	value = 0
+	if = {
+		limit = { te_mon_is_swap_recipient = yes }
+		add = te_mon_swap_premium_cut
+	}
+	if = {
+		limit = { te_mon_lolr_is_effective = yes }
+		add = te_mon_lolr_relief
+	}
+	# [5b] tier 1+ cooperation and tier 3's backstop add here.
+	add = te_mon_union_recipient_value
+}
+
+# ...and in pp of STRUCTURAL premium: the pegger's cut, the reserve currency's.
+te_mon_arr_standing_value = {
+	value = te_mon_reserve_currency_cut
+	if = {
+		limit = {
+			te_mon_is_anchored = yes
+			var:te_mon_anchor_kind = 1
+		}
+		add = te_mon_peg_standing_cut
+	}
+}
+
+
+# --- The peg crisis, kind 1 (§15A.2) ----------------------------------------
+te_mon_peg_anchor_defend_confidence = { value = 40 }
+te_mon_emergency_controls_duration = { value = 12 }
+
+# "Re-peg lower": the parity moves down by half the overvaluation.
+te_mon_peg_repeg_step = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_overvaluation }
+		value = var:te_mon_overvaluation
+		divide = 2
+	}
+}
+
+# The index an anchored country takes: its anchor's, less a negotiated parity
+# offset (kind 1 only; 0 otherwise).
+te_mon_anchored_fx_index = {
+	value = var:te_mon_anchor_fx_index
+	subtract = var:te_mon_peg_parity_offset
+	min = te_mon_fx_index_min
+	max = te_mon_fx_index_max
+}
+
+
+# --- Display ----------------------------------------------------------------
+te_mon_anchor_rate_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_anchor_rate }
+		value = var:te_mon_anchor_rate
+	}
+}
+
+te_mon_anchor_spread_display = {
+	value = te_mon_anchor_spread
+}
+
+te_mon_arr_recipient_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_arr_recipient_pts }
+		value = var:te_mon_arr_recipient_pts
+	}
+}
+
+te_mon_arr_provider_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_arr_provider_pts }
+		value = var:te_mon_arr_provider_pts
+	}
+}
+
+te_mon_arr_standing_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_arr_standing_pts }
+		value = var:te_mon_arr_standing_pts
+	}
+}
+
+te_mon_peg_parity_offset_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_peg_parity_offset }
+		value = var:te_mon_peg_parity_offset
+	}
+}
+
+
+# --- §15A.4 subject currency boards (5c) ------------------------------------
+
+# The share of a board subject's minting that goes to its overlord. The
+# subject's half is te_mon_board_subject's country_minting_mult = -0.5, which
+# must be restated there (a static modifier cannot read a script value).
+te_mon_board_seigniorage_share = { value = 0.5 }
+
+# What ONE board subject is worth to its overlord, a week: that share of the
+# subject's flat minting adds. Subject scope. §17 check 21 is whether this
+# `modifier:` read works at all from script; if it reads 0 the overlord simply
+# gains nothing, and the fallback is to count gold-mine levels.
+#
+# BE HONEST ABOUT THE SIZE (§15A.4): vanilla's base minting is a flat 500 and
+# the real money is gold-mine production methods, so for a colony without gold
+# both sides of this are rounding errors. It is a GOLD-COLONY lever.
+te_mon_board_seigniorage_from_subject = {
+	value = modifier:country_minting_add
+	multiply = te_mon_board_seigniorage_share
+	min = 0
+}
+
+# The wrong-stance lever: months at an extreme band before liberty desire moves.
+te_mon_board_wrong_months_threshold = { value = 6 }
+te_mon_board_wrong_months_cap = { value = 24 }

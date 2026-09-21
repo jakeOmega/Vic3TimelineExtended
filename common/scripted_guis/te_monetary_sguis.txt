@@ -504,3 +504,139 @@ banking_mon_world_rate_ready = {
 	is_valid = { always = no }
 	effect = { }
 }
+
+
+# ----------------------------------------------------------------------------
+# Phase 5 (§15A): international monetary arrangements
+# ----------------------------------------------------------------------------
+# Does the dashboard show the arrangements block? Any role at all — anchored, an
+# anchor, either side of a swap line or a guarantee. te_mon_arr_scan is exactly
+# that flag (the discovery sets it), and the has_variable list is the block's
+# displayed contract, the banking_mon_shows_gold pattern.
+banking_mon_shows_arrangements = {
+	scope = country
+	is_shown = {
+		has_variable = te_mon_arr_scan
+		var:te_mon_arr_scan = 1
+		has_variable = te_mon_anchor_kind
+		has_variable = te_mon_anchor_rate
+		has_variable = te_mon_arr_recipient_pts
+		has_variable = te_mon_arr_provider_pts
+		has_variable = te_mon_arr_standing_pts
+		has_variable = te_mon_peg_parity_offset
+		OR = {
+			var:te_mon_anchor_kind > 0
+			var:te_mon_arr_recipient_pts > 0
+			var:te_mon_arr_provider_pts > 0
+			var:te_mon_arr_standing_pts > 0
+			# [5b] ...or it sits in a bloc with the monetary-union group.
+			te_mon_bloc_union_tier_1_plus = yes
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ...and the treaty pegger's Peg Confidence row and meter?
+banking_mon_shows_anchor_peg = {
+	scope = country
+	is_shown = {
+		te_mon_has_anchor_peg = yes
+		has_variable = te_peg_confidence
+		has_variable = te_mon_overvaluation
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+
+# ----------------------------------------------------------------------------
+# Phase 5b (§15A.3): the power-bloc common currency
+# ----------------------------------------------------------------------------
+# One scripted GUI per action, each its own datacontext on its button — four
+# plain actions with nothing to parameterise, so the `op` dispatcher above would
+# buy nothing. ROOT is the country (GuiScope.SetRoot), which the discovery the
+# effects run requires. ai_is_valid = no throughout: the AI's choices live in
+# te_monetary_update_union.
+
+# Does the dashboard show the Monetary Union row? Any member of a bloc that
+# holds the principle group, once the 5b variables exist.
+banking_mon_shows_union = {
+	scope = country
+	is_shown = {
+		te_mon_bloc_union_tier_1_plus = yes
+		has_variable = te_mon_union_member
+		has_variable = te_mon_union_holdouts
+		has_variable = te_mon_union_refusers
+		has_variable = te_mon_union_lock_months
+		has_variable = te_mon_overvaluation
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+banking_mon_union_adopt = {
+	scope = country
+	is_shown = {
+		te_mon_bloc_has_common_currency = yes
+		te_mon_is_union_member = no
+		has_variable = te_mon_union_member
+	}
+	ai_is_valid = { always = no }
+	is_valid = { te_mon_union_can_adopt = yes }
+	effect = {
+		custom_tooltip = te_mon_union_adopt_effect_tt
+		hidden_effect = { te_mon_effect_union_adopt = yes }
+	}
+}
+
+banking_mon_union_leave = {
+	scope = country
+	is_shown = { te_mon_is_union_member = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_mon_is_union_member = yes }
+	effect = {
+		custom_tooltip = te_mon_union_leave_effect_tt
+		hidden_effect = { te_mon_effect_union_exit = yes }
+	}
+}
+
+banking_mon_union_press_on = {
+	scope = country
+	is_shown = {
+		is_power_bloc_leader = yes
+		te_mon_bloc_union_tier_2_plus = yes
+		te_mon_union_is_pressing = no
+		has_variable = te_mon_union_pressing
+	}
+	ai_is_valid = { always = no }
+	is_valid = {
+		custom_tooltip = {
+			text = te_mon_union_req_can_lead_tt
+			te_mon_can_lead_union = yes
+		}
+	}
+	effect = {
+		custom_tooltip = te_mon_union_press_effect_tt
+		hidden_effect = {
+			set_variable = { name = te_mon_union_pressing value = 1 }
+			set_variable = { name = te_mon_arr_scan value = 1 }
+		}
+	}
+}
+
+banking_mon_union_press_off = {
+	scope = country
+	is_shown = { te_mon_union_is_pressing = yes }
+	ai_is_valid = { always = no }
+	is_valid = { te_mon_union_is_pressing = yes }
+	effect = {
+		custom_tooltip = te_mon_union_press_off_effect_tt
+		hidden_effect = {
+			set_variable = { name = te_mon_union_pressing value = 0 }
+		}
+	}
+}

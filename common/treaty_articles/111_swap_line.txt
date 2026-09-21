@@ -1,0 +1,233 @@
+﻿# =================================================================
+# TREATY ARTICLE: swap_line                     (monetary policy 5a)
+# Spec: docs/systems/monetary_policy_design.md §15A.2, §0.8.
+#
+# DIRECTED: source = the PROVIDER, target = the RECIPIENT.
+#
+# Recipient: peg confidence +2 a month (a gold standard's, or a treaty peg's),
+# cyclical premium -1pp, and in a panic its §12.2 hot-money exit runs at x1
+# instead of x2. Provider: a GDP-scaled share of that premium cut as a premium
+# RISE, and, while the recipient is in te_mon_in_external_crisis, a treasury
+# draw of 0.1% of the RECIPIENT'S GDP a month, which the recipient receives.
+#
+# REPLACES the deleted cb_fx_swap_lines banking tool (§18.2): its anonymous
+# "-5 relations with every great power" is now a named counterparty with a real
+# cost. The old sketch's fourth article, reserve pooling, is folded in here —
+# under gold a swap line IS reserve lending.
+#
+# Modifier blocks and hooks: see 110_currency_peg.txt's header.
+# =================================================================
+swap_line = {
+	icon = "gfx/interface/icons/law_icons/national_bank.dds"
+	kind = directed
+	cost = 50
+
+	relations_progress_per_day = 0.75
+	relations_improvement_max = 50
+
+	flags = {
+		can_be_renegotiated
+		giftable
+		friendly
+	}
+
+	maintenance_paid_by = source_country
+	usage_limit = once_per_side
+
+	unlocked_by_technologies = {
+		central_banking
+	}
+
+	source_modifier = {
+		country_prestige_mult = 0.01
+	}
+
+	visible = {
+		always = yes
+	}
+
+	possible = {
+		has_diplomatic_relevance = scope:other_country
+		NOT = { has_war_with = scope:other_country }
+		NOT = { is_country_type = decentralized }
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	# The provider keeps a national bank for as long as the line stands.
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_backstop_provider_needs_bank_tt
+				scope:source_country = {
+					has_law_or_variant = law_type:law_national_bank
+					te_mon_is_command = no
+				}
+			}
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = te_backstop_provider_outranks_tt
+			scope:source_country = {
+				te_mon_can_backstop = { OTHER = scope:target_country }
+			}
+		}
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			scope:source_country = {
+				NOT = {
+					any_scope_treaty = {
+						binds = scope:target_country
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = swap_line
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_entry_into_force = {
+		scope:article_options = {
+			source_country = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+			target_country = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+		}
+	}
+
+	on_withdrawal = {
+		scope:withdrawing_country ?= { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+		scope:non_withdrawing_country ?= { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 0.04
+			}
+			# A country whose peg is wobbling goes looking for a line.
+			if = {
+				limit = {
+					has_variable = te_peg_confidence
+					var:te_peg_confidence <= 60
+				}
+				add = 0.15
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# --- the PROVIDER'S side -------------------------------------------
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_ai_swap_base"
+					value = -10
+				}
+				if = {
+					limit = { is_in_same_power_bloc = scope:target_country }
+					add = {
+						desc = "AI_SAME_POWER_BLOC"
+						value = 15
+					}
+				}
+				# Influence goals: a great power buys clients.
+				if = {
+					limit = { country_rank >= rank_value:great_power }
+					add = {
+						desc = "te_ai_backstop_influence"
+						value = 10
+					}
+				}
+				# The recipient lives in the provider's market: its trouble is ours.
+				if = {
+					limit = {
+						exists = scope:target_country.market
+						scope:target_country.market.owner = this
+					}
+					add = {
+						desc = "te_ai_peg_shared_market"
+						value = 15
+					}
+				}
+				# The GDP-scaled cost: backing an equal costs all of the benefit.
+				add = {
+					desc = "te_ai_backstop_cost"
+					value = {
+						value = scope:target_country.gdp
+						divide = {
+							value = gdp
+							min = 1
+						}
+						max = 1
+						multiply = -25
+					}
+				}
+				# ...and a recipient already deep in debt is a call waiting to happen.
+				if = {
+					limit = { scope:target_country = { scaled_debt >= 0.5 } }
+					add = {
+						desc = "te_ai_backstop_recipient_debt"
+						value = {
+							value = scope:target_country.scaled_debt
+							multiply = -40
+							min = -60
+						}
+					}
+				}
+				if = {
+					limit = { scaled_debt >= 0.5 }
+					add = {
+						desc = "te_ai_backstop_own_debt"
+						value = -30
+					}
+				}
+			}
+			# --- the RECIPIENT'S side: a backstop is worth having ---------------
+			else = {
+				add = {
+					desc = "te_ai_backstop_wanted"
+					value = 20
+				}
+			}
+
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:other_country type = rivalry } }
+				add = {
+					desc = "te_ai_arrangement_rivalry"
+					value = -1000
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_attitude = { who = scope:other_country attitude = antagonistic }
+						has_attitude = { who = scope:other_country attitude = domineering }
+						has_attitude = { who = scope:other_country attitude = belligerent }
+					}
+				}
+				add = {
+					desc = "AI_HOSTILE_ATTITUDE"
+					value = -50
+				}
+			}
+		}
+	}
+}

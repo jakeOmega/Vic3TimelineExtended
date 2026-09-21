@@ -4138,3 +4138,118 @@ principle_multilateral_institutions_5 = {
 		value = 1000
 	}
 }
+
+
+# ============================================================================
+# principle_group_monetary_union — monetary policy phase 5b (§15A.3, §0.8)
+# ============================================================================
+# TIERS DO NOT STACK: each restates the full list.
+#
+# THE BLOCKS CARRY MARKERS, NOT MECHANICS. Everything a monetary union does is
+# GDP-scaled, per-member, or conditional on a member having ADOPTED, and none of
+# that can live in a static modifier block. So each tier grants script-only
+# bools, and the monthly monetary update does the work
+# (common/scripted_effects/te_monetary_union_effects.txt):
+#
+#   1  Monetary cooperation  every member gets half a swap line from the leader
+#                            (-0.5pp premium, +1 peg confidence a month); the
+#                            leader pays the GDP-scaled cost. No anchoring.
+#   2  Common currency       + members MAY ADOPT the leader's currency (kind 2:
+#                            the leader's rate, no spread, its credibility; +5%
+#                            trade advantage). The leader sets the rate with its
+#                            own dial. No peg to break, so an adopter's
+#                            overvaluation raises its premium instead.
+#   3  Fiscal backstop       + the leader is lender of last resort to every
+#                            adopter, and the overvaluation premium is halved.
+#                            What makes the union safe is what makes it
+#                            expensive to lead.
+#
+# Script reads the TIER through has_principle (te_mon_bloc_union_tier_*), not
+# through the bools: whether a script-only power_bloc bool can be read from
+# country scope is an open engine check (§17 check 16). The bools are what the
+# principle's tooltip prints.
+
+principle_monetary_union_1 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
+
+	visible = {
+		has_dlc_feature = power_bloc_features
+	}
+
+	possible = {
+		has_technology_researched = central_banking
+	}
+
+	power_bloc_modifier = {
+		power_bloc_monetary_cooperation_bool = yes
+	}
+
+	ai_weight = {
+		value = 50
+		# A leader with no dial of its own has nothing to cooperate WITH.
+		if = {
+			limit = { NOT = { te_mon_has_dial = yes } }
+			multiply = 0
+		}
+	}
+}
+
+principle_monetary_union_2 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	possible = {
+		has_technology_researched = central_banking
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)
+		power_bloc_monetary_cooperation_bool = yes
+
+		power_bloc_shared_currency_bool = yes
+		# Common money binds: §15A.3's "cohesion per adopter", which no script
+		# can apply to a bloc, approximated per member (§0.8 ruling G10).
+		power_bloc_cohesion_per_member_add = 1
+	}
+
+	ai_weight = {
+		value = 100
+		# The principle is inert unless the leader is fiat / digital with a dial.
+		if = {
+			limit = { NOT = { te_mon_can_lead_union = yes } }
+			multiply = 0
+		}
+	}
+}
+
+principle_monetary_union_3 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	possible = {
+		has_technology_researched = central_banking
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)
+		power_bloc_monetary_cooperation_bool = yes
+		power_bloc_shared_currency_bool = yes
+		power_bloc_cohesion_per_member_add = 1
+
+		power_bloc_fiscal_backstop_bool = yes
+	}
+
+	ai_weight = {
+		value = 100
+		if = {
+			limit = { NOT = { te_mon_can_lead_union = yes } }
+			multiply = 0
+		}
+		# Standing behind everybody's debts is for a leader whose own are in order.
+		if = {
+			limit = { scaled_debt >= 0.5 }
+			multiply = 0.25
+		}
+	}
+}

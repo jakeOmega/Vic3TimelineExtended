@@ -1,0 +1,793 @@
+﻿# ============================================================================
+# Monetary policy, phase 5 — international monetary arrangements: effects
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §15A, as shipped in §0.8.
+# Values: common/script_values/te_monetary_arrangement_script_values.txt, whose
+# header carries the variable contract. Triggers:
+# common/scripted_triggers/te_monetary_arrangement_triggers.txt.
+#
+# WHAT IS CALLED FROM WHERE
+#
+#   te_monetary_refresh_anchored_gdp        global monthly pulse, beside the
+#                                           world rate and world inflation
+#   te_monetary_init_arrangement_variables  step 0   seeds, behind has_variable
+#   te_monetary_update_anchor               step 1c  discovery for the flagged,
+#                                                    the anchor's figures copied,
+#                                                    the clocks
+#   te_monetary_apply_arrangement_modifiers step 9b  the three scaled modifiers
+#                                                    and the swap line's draw
+#   te_monetary_update_anchor_peg           step 10  a kind-1 pegger's confidence
+#   te_monetary_discover_arrangements       te_monetary_internal.2 (the hooks),
+#                                           the yearly pulse, and step 1c
+#
+# THE DISCOVERY IS IDEMPOTENT, which is the whole difference between it and the
+# monthly update: it draws no walk and integrates nothing, so the article hooks,
+# the subject hooks and the yearly scan may all call it in the same month. What
+# it must have is ROOT = THE COUNTRY — its treaty walk tests
+# `source_country = root` — so a hook whose ROOT is an article or an overlord
+# dispatches te_monetary_internal.2 (events/te_monetary_events.txt) rather than
+# calling it inside a scope block.
+#
+# NOTHING HERE IS EVER REMOVED (modifier_multiplier_var_audit): the three
+# `_applied` variables back `multiplier =` reads.
+# ============================================================================
+
+
+# ----------------------------------------------------------------------------
+# World GDP, and the GDP pegged to each anchor — global pulse
+# ----------------------------------------------------------------------------
+# Scope: none. The reserve-currency cut (§15A.2) is "per 5% of WORLD GDP pegged
+# to it", which needs two sums no country can take alone. Built the way the
+# world rate is: last month's holders zeroed first, then one pass.
+te_monetary_refresh_anchored_gdp = {
+	set_global_variable = { name = te_mon_world_gdp_m value = 0 }
+	every_country = {
+		limit = {
+			has_variable = te_mon_anchored_gdp_m
+			var:te_mon_anchored_gdp_m > 0
+		}
+		set_variable = { name = te_mon_anchored_gdp_m value = 0 }
+	}
+	every_country = {
+		change_global_variable = { name = te_mon_world_gdp_m add = te_mon_world_rate_weight }
+		if = {
+			# CHOSEN anchors only — a treaty peg, a bloc currency. A currency
+			# board is imposed, not a vote of confidence: counted, the East India
+			# Company alone would hand Britain the whole reserve-currency cut on
+			# day one (§0.8 ruling G7).
+			limit = {
+				te_mon_is_anchored = yes
+				var:te_mon_anchor_kind < 3
+				exists = var:te_mon_anchor
+			}
+			set_variable = { name = te_mon_work_gdp_m value = te_mon_world_rate_weight }
+			var:te_mon_anchor = {
+				if = {
+					limit = { NOT = { has_variable = te_mon_anchored_gdp_m } }
+					set_variable = { name = te_mon_anchored_gdp_m value = 0 }
+				}
+				change_variable = { name = te_mon_anchored_gdp_m add = prev.var:te_mon_work_gdp_m }
+			}
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Step 0 (phase 5 half) — seeds
+# ----------------------------------------------------------------------------
+# Scope: country. Called at the end of te_monetary_init_variables, after the
+# phase-4 seeds (te_mon_anchor_fx_index copies te_fx_index).
+#
+# te_mon_anchor, te_mon_swap_provider and te_mon_lolr_guarantor are SCOPE
+# variables and are deliberately not seeded: they cannot hold 0.
+te_monetary_init_arrangement_variables = {
+	if = {
+		limit = { NOT = { has_variable = te_mon_anchor_kind } }
+		set_variable = { name = te_mon_anchor_kind value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_anchor_kind_new } }
+		set_variable = { name = te_mon_anchor_kind_new value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_anchor_rate } }
+		set_variable = { name = te_mon_anchor_rate value = var:te_policy_rate }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_anchor_fx_index } }
+		set_variable = { name = te_mon_anchor_fx_index value = var:te_fx_index }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_anchor_c } }
+		set_variable = { name = te_mon_anchor_c value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_anchor_target } }
+		set_variable = { name = te_mon_anchor_target value = 2 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_peg_parity_offset } }
+		set_variable = { name = te_mon_peg_parity_offset value = 0 }
+	}
+	if = {
+		# Seeds to 1, not 0: a save made before phase 5 has no hook history, so
+		# every country runs the discovery once on its first pulse and the flag
+		# settles to the truth from there.
+		limit = { NOT = { has_variable = te_mon_arr_scan } }
+		set_variable = { name = te_mon_arr_scan value = 1 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_swap_recipient } }
+		set_variable = { name = te_mon_swap_recipient value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_lolr_ward } }
+		set_variable = { name = te_mon_lolr_ward value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_lolr_suspended_months } }
+		set_variable = { name = te_mon_lolr_suspended_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_lolr_default_cooldown } }
+		set_variable = { name = te_mon_lolr_default_cooldown value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_arr_recipient_pts } }
+		set_variable = { name = te_mon_arr_recipient_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_arr_provider_pts } }
+		set_variable = { name = te_mon_arr_provider_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_arr_standing_pts } }
+		set_variable = { name = te_mon_arr_standing_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_arr_recipient_applied } }
+		set_variable = { name = te_mon_arr_recipient_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_arr_provider_applied } }
+		set_variable = { name = te_mon_arr_provider_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_arr_standing_applied } }
+		set_variable = { name = te_mon_arr_standing_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_anchored_gdp_m } }
+		set_variable = { name = te_mon_anchored_gdp_m value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_emergency_controls_months } }
+		set_variable = { name = te_mon_emergency_controls_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_work_gdp } }
+		set_variable = { name = te_mon_work_gdp value = 0 }
+	}
+	# [5b]
+	te_monetary_init_union_variables = yes
+	# [5c]
+	if = {
+		limit = { NOT = { has_variable = te_mon_board_wrong_months } }
+		set_variable = { name = te_mon_board_wrong_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_board_lever_applied } }
+		set_variable = { name = te_mon_board_lever_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_board_seigniorage_pts } }
+		set_variable = { name = te_mon_board_seigniorage_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_board_seigniorage_applied } }
+		set_variable = { name = te_mon_board_seigniorage_applied value = 0 }
+	}
+
+	# SAVE MIGRATION (§18.2). The deleted FX Swap Lines tool's modifier, stripped
+	# wherever a save still carries it, every pulse, until
+	# legacy_modifier_cleanup.txt's dated checklist retires the definition. No
+	# state to migrate: the tool was a flat +momentum / -contagion modifier, and
+	# its replacement is a treaty the country has to go and sign.
+	if = {
+		limit = { has_journal_entry = je_banking_cycle }
+		je:je_banking_cycle = {
+			if = {
+				limit = { has_modifier = banking_fx_swap_lines }
+				remove_modifier = banking_fx_swap_lines
+			}
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Step 1c — the anchor, before anything asks for the dial
+# ----------------------------------------------------------------------------
+# Scope: country, ROOT = this (the monthly update's own contract).
+#
+# §15A.1 splits detection three ways — monthly validity of the stored pair,
+# event-driven discovery, a yearly full scan — because a treaty walk for every
+# country every month was the heaviest thing in the update. §0.8 ruling G2 keeps
+# the three entry points and changes what the monthly one does: a country that
+# holds ANY role in an arrangement (te_mon_arr_scan = 1) runs the full discovery
+# every month, and everybody else runs nothing. The walk is over the country's
+# OWN in-force treaties, and only a few dozen countries are ever flagged, so the
+# cost the split was designed around is not paid; and "is the stored pair still
+# valid" is answered by the same code that found it, not by a second copy of
+# each kind's rule.
+te_monetary_update_anchor = {
+	if = {
+		limit = {
+			var:te_mon_arr_scan = 1
+			root ?= this
+		}
+		te_monetary_discover_arrangements = yes
+	}
+
+	# The anchor's figures, copied once so that every later read this pulse —
+	# and every dashboard read until the next — is a local variable. Each is
+	# guarded: an anchor that has never pulsed leaves last month's copy alone.
+	# Whether this sees the anchor's figure for this month or last depends on
+	# country iteration order (§17 check 18); both are tolerated, the policy
+	# rate moves a third of a point a month.
+	if = {
+		limit = {
+			te_mon_is_anchored = yes
+			exists = var:te_mon_anchor
+		}
+		var:te_mon_anchor = { save_scope_as = te_mon_anchor_now }
+		if = {
+			limit = { scope:te_mon_anchor_now = { has_variable = te_policy_rate } }
+			set_variable = { name = te_mon_anchor_rate value = scope:te_mon_anchor_now.var:te_policy_rate }
+		}
+		if = {
+			limit = { scope:te_mon_anchor_now = { has_variable = te_fx_index } }
+			set_variable = { name = te_mon_anchor_fx_index value = scope:te_mon_anchor_now.var:te_fx_index }
+		}
+		set_variable = { name = te_mon_anchor_c value = scope:te_mon_anchor_now.te_mon_credibility_c_own }
+		set_variable = { name = te_mon_anchor_target value = scope:te_mon_anchor_now.te_mon_inflation_anchor_own }
+	}
+
+	# --- the clocks ---------------------------------------------------------
+	if = {
+		limit = { var:te_mon_emergency_controls_months > 0 }
+		change_variable = { name = te_mon_emergency_controls_months subtract = 1 }
+	}
+	if = {
+		limit = { var:te_mon_lolr_suspended_months > 0 }
+		change_variable = { name = te_mon_lolr_suspended_months subtract = 1 }
+	}
+	if = {
+		limit = { var:te_mon_lolr_default_cooldown > 0 }
+		change_variable = { name = te_mon_lolr_default_cooldown subtract = 1 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# THE DISCOVERY — who is my anchor, and what roles do I hold?
+# ----------------------------------------------------------------------------
+# Scope: country. ROOT MUST BE THIS COUNTRY (see the file header).
+#
+# PRECEDENCE, highest kind wins (§15A.1): 3 currency board (5c) > 2 bloc
+# currency (5b) > 1 treaty peg (5a). Each candidate requires an anchor that can
+# be one (te_mon_can_be_anchor: it holds a dial, so it is not itself anchored),
+# which is what makes chains and cycles unconstructible. A command economy is
+# never anchored: its rate is a plan figure (§14).
+#
+# It decides into te_mon_anchor_kind_new / scope:te_mon_new_anchor, compares
+# with the stored pair, and only a CHANGE writes anything that matters —
+# te_monetary_anchor_changed below.
+te_monetary_discover_arrangements = {
+	set_variable = { name = te_mon_work_gdp value = te_mon_gdp_current }
+	set_variable = { name = te_mon_anchor_kind_new value = 0 }
+
+	if = {
+		limit = { te_mon_is_command = no }
+		# [5c] KIND 3, the currency board (§15A.4). RULE-BASED, not a button: a
+		# subject whose type has vanilla autonomy_level = 1 is anchored to its
+		# DIRECT overlord, automatically. If the overlord has no dial the subject
+		# falls through to the lower kinds and then to the ordinary no-dial rule.
+		if = {
+			limit = {
+				te_mon_is_board_subject = yes
+				exists = overlord
+				overlord = { te_mon_can_be_anchor = yes }
+			}
+			overlord = { save_scope_as = te_mon_new_anchor }
+			set_variable = { name = te_mon_anchor_kind_new value = 3 }
+		}
+		# [5b] KIND 2, the bloc's common currency (§15A.3): the member has
+		# ADOPTED (te_mon_union_member), and there is still a common currency to
+		# be in — it is in the bloc, the bloc holds tier 2+, the leader can lead.
+		else_if = {
+			limit = {
+				te_mon_is_union_member = yes
+				te_mon_bloc_has_common_currency = yes
+			}
+			power_bloc = { power_bloc_leader = { save_scope_as = te_mon_new_anchor } }
+			set_variable = { name = te_mon_anchor_kind_new value = 2 }
+		}
+	}
+	# [5b] A member with NO common currency left to be in — it left the bloc, the
+	# bloc lost tier 2, the leader lost its dial — has EXITED, with everything
+	# that costs (§15A.3: "as an exit, not silently"). A board imposed on top of
+	# membership is not that: kind 3 simply outranks it, and the choice is kept.
+	# _exit_costs is a LEAF (it must be: _exit calls this effect); it sets member
+	# = 0, and the change logic just below does the un-anchoring.
+	if = {
+		limit = {
+			te_mon_is_union_member = yes
+			var:te_mon_anchor_kind_new = 0
+			te_mon_bloc_has_common_currency = no
+		}
+		te_mon_effect_union_exit_costs = yes
+	}
+	if = {
+		limit = {
+			te_mon_is_command = no
+			var:te_mon_anchor_kind_new = 0
+		}
+		# THE DEBUG ANCHOR. te_debug_monetary.10 pins a kind-1 anchor with no
+		# treaty behind it — §19 row 5a's "tracks a 2pp anchor hike" and "breaks
+		# under 15 points of overvaluation" cannot otherwise be staged without
+		# talking an AI great power into a treaty. Nothing in play sets the flag
+		# (the te_world_rate_debug_offset precedent).
+		if = {
+			limit = {
+				has_variable = te_mon_debug_anchor_on
+				var:te_mon_debug_anchor_on = 1
+				has_variable = te_mon_debug_anchor
+				exists = var:te_mon_debug_anchor
+				var:te_mon_debug_anchor = { te_mon_can_be_anchor = yes }
+			}
+			var:te_mon_debug_anchor = { save_scope_as = te_mon_new_anchor }
+			set_variable = { name = te_mon_anchor_kind_new value = 1 }
+		}
+		else_if = {
+			limit = { te_mon_has_valid_peg_article = yes }
+			random_scope_treaty = {
+				limit = {
+					any_scope_article = {
+						has_type = currency_peg
+						source_country = root
+						target_country = { te_mon_can_be_anchor = yes }
+					}
+				}
+				random_scope_article = {
+					limit = {
+						has_type = currency_peg
+						source_country = root
+						target_country = { te_mon_can_be_anchor = yes }
+					}
+					target_country = { save_scope_as = te_mon_new_anchor }
+				}
+			}
+			set_variable = { name = te_mon_anchor_kind_new value = 1 }
+		}
+	}
+
+	# --- has the pair changed? ----------------------------------------------
+	# scope:te_mon_new_anchor is read only behind kind_new > 0, where it was
+	# saved a few lines up — an older save of the same scope name may linger.
+	if = {
+		limit = {
+			OR = {
+				NOT = { var:te_mon_anchor_kind = var:te_mon_anchor_kind_new }
+				AND = {
+					var:te_mon_anchor_kind_new > 0
+					OR = {
+						NOT = { has_variable = te_mon_anchor }
+						AND = {
+							has_variable = te_mon_anchor
+							NOT = { var:te_mon_anchor = scope:te_mon_new_anchor }
+						}
+					}
+				}
+			}
+		}
+		te_monetary_anchor_changed = yes
+	}
+
+	# --- roles in the two backstop articles ---------------------------------
+	set_variable = { name = te_mon_swap_recipient value = 0 }
+	if = {
+		limit = { te_mon_is_article_target = { TYPE = swap_line } }
+		set_variable = { name = te_mon_swap_recipient value = 1 }
+		random_scope_treaty = {
+			limit = {
+				any_scope_article = {
+					has_type = swap_line
+					target_country = root
+				}
+			}
+			random_scope_article = {
+				limit = {
+					has_type = swap_line
+					target_country = root
+				}
+				source_country = { save_scope_as = te_mon_new_provider }
+			}
+		}
+		set_variable = { name = te_mon_swap_provider value = scope:te_mon_new_provider }
+	}
+	set_variable = { name = te_mon_lolr_ward value = 0 }
+	if = {
+		limit = { te_mon_is_article_target = { TYPE = lender_of_last_resort } }
+		set_variable = { name = te_mon_lolr_ward value = 1 }
+		random_scope_treaty = {
+			limit = {
+				any_scope_article = {
+					has_type = lender_of_last_resort
+					target_country = root
+				}
+			}
+			random_scope_article = {
+				limit = {
+					has_type = lender_of_last_resort
+					target_country = root
+				}
+				source_country = { save_scope_as = te_mon_new_guarantor }
+			}
+		}
+		set_variable = { name = te_mon_lolr_guarantor value = scope:te_mon_new_guarantor }
+	}
+
+	# --- what ROOT pays for the lines and guarantees it extends -------------
+	# provider cost = recipient benefit x clamp( recipient gdp / provider gdp ).
+	set_variable = { name = te_mon_arr_provider_pts value = 0 }
+	every_scope_treaty = {
+		every_scope_article = {
+			limit = {
+				has_type = swap_line
+				source_country = root
+			}
+			target_country = { save_scope_as = te_mon_arr_party }
+			root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_arr_swap_cost_to_root } }
+		}
+		every_scope_article = {
+			limit = {
+				has_type = lender_of_last_resort
+				source_country = root
+			}
+			target_country = { save_scope_as = te_mon_arr_party }
+			root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_arr_lolr_cost_to_root } }
+		}
+	}
+	# [5b] A bloc leader's cooperation and backstop costs, and its holdout count.
+	te_monetary_discover_union = yes
+
+	set_variable = { name = te_mon_arr_recipient_pts value = te_mon_arr_recipient_value }
+	set_variable = { name = te_mon_arr_standing_pts value = te_mon_arr_standing_value }
+
+	# --- is there anything here worth looking at again next month? ----------
+	if = {
+		limit = {
+			OR = {
+				var:te_mon_anchor_kind > 0
+				var:te_mon_swap_recipient = 1
+				var:te_mon_lolr_ward = 1
+				var:te_mon_arr_provider_pts > 0
+				var:te_mon_anchored_gdp_m > 0
+				te_mon_has_peg_article = yes
+				# [5c] A board subject whose overlord has no dial today is one
+				# law change away from a board; keep looking monthly.
+				te_mon_is_board_subject = yes
+				var:te_mon_board_seigniorage_pts > 0
+				# [5b] Anybody in a bloc with the monetary-union group has a role.
+				te_mon_bloc_union_tier_1_plus = yes
+				te_mon_is_union_member = yes
+				AND = {
+					has_variable = te_mon_debug_anchor_on
+					var:te_mon_debug_anchor_on = 1
+				}
+			}
+		}
+		set_variable = { name = te_mon_arr_scan value = 1 }
+	}
+	else = {
+		set_variable = { name = te_mon_arr_scan value = 0 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# A change of (kind, anchor)
+# ----------------------------------------------------------------------------
+# Scope: country. Reads te_mon_anchor_kind_new and, when it is > 0,
+# scope:te_mon_new_anchor.
+#
+# JOINING, or changing anchor: the index SNAPS to the new anchor's and the
+# three-year average re-seeds AFTER the snap — adopting somebody's money is a
+# redenomination, not a price event, so nothing is imported off the jump. The
+# basket average is left to step 6's own market-owner test, which re-seeds it if
+# the market changed too.
+#
+# LEAVING: the index snaps to te_fx_shadow and the average is NOT re-seeded.
+# That jump IS the devaluation the country could not have inside, and imported
+# inflation exists to price exactly such a move (the reasoning
+# te_mon_effect_fx_devalue_peg gives for §12.3's Devalue).
+#
+# Both are documented writers of te_fx_index outside step 5b, beside the two
+# te_monetary_fx_effects.txt lists.
+te_monetary_anchor_changed = {
+	set_variable = { name = te_mon_peg_parity_offset value = 0 }
+	set_variable = { name = te_peg_crisis_cooldown value = 0 }
+	if = {
+		limit = { var:te_mon_anchor_kind_new > 0 }
+		set_variable = { name = te_mon_anchor value = scope:te_mon_new_anchor }
+		set_variable = { name = te_mon_anchor_kind value = var:te_mon_anchor_kind_new }
+		if = {
+			limit = { scope:te_mon_new_anchor = { has_variable = te_fx_index } }
+			set_variable = { name = te_mon_anchor_fx_index value = scope:te_mon_new_anchor.var:te_fx_index }
+		}
+		if = {
+			limit = { scope:te_mon_new_anchor = { has_variable = te_policy_rate } }
+			set_variable = { name = te_mon_anchor_rate value = scope:te_mon_new_anchor.var:te_policy_rate }
+		}
+		set_variable = { name = te_fx_index value = var:te_mon_anchor_fx_index }
+		set_variable = { name = te_fx_devalued_months value = 0 }
+		te_mon_effect_fx_reseed_average = yes
+		set_variable = { name = te_peg_confidence value = te_mon_peg_confidence_start }
+	}
+	else = {
+		set_variable = { name = te_mon_anchor_kind value = 0 }
+		if = {
+			limit = { has_variable = te_fx_shadow }
+			set_variable = { name = te_fx_index value = var:te_fx_shadow }
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Step 9b (phase 5 half) — the three arrangement modifiers, and the swap draw
+# ----------------------------------------------------------------------------
+# Scope: country. THE one refresh site for all three. Same recipe, same wrapper
+# and the same MANAGED status as te_fx_weak (te_monetary_apply_fx_one): re-apply
+# when the multiplier has moved 0.05pp or the modifier has gone missing, remove
+# at zero.
+#
+# THE POINTS ARE REFRESHED HERE for a flagged country even though the discovery
+# also writes them: a ward's relief is half its debt-load premium, which moves
+# every month. The PROVIDER'S sum is not — it is only as fresh as its last
+# discovery, which for a provider (flagged) is this month's step 1c.
+#
+# Step 5 reads them through modifier:country_risk_premium_add /
+# country_credit_standing_add, so they reach the premium a month late, like
+# every other modifier-borne term.
+te_monetary_apply_arrangement_modifiers = {
+	if = {
+		limit = { var:te_mon_arr_scan = 1 }
+		set_variable = { name = te_mon_arr_recipient_pts value = te_mon_arr_recipient_value }
+		set_variable = { name = te_mon_arr_standing_pts value = te_mon_arr_standing_value }
+	}
+	if = {
+		limit = { root ?= this }
+		te_monetary_apply_fx_one = { NAME = te_mon_arrangement_recipient VALUE = var:te_mon_arr_recipient_pts APPLIED = te_mon_arr_recipient_applied STEP = 0.05 STEP_NEG = -0.05 }
+		te_monetary_apply_fx_one = { NAME = te_mon_arrangement_provider VALUE = var:te_mon_arr_provider_pts APPLIED = te_mon_arr_provider_applied STEP = 0.05 STEP_NEG = -0.05 }
+		te_monetary_apply_fx_one = { NAME = te_mon_arrangement_standing VALUE = var:te_mon_arr_standing_pts APPLIED = te_mon_arr_standing_applied STEP = 0.05 STEP_NEG = -0.05 }
+	}
+
+	# --- [5c] the currency board (§15A.4) ------------------------------------
+	te_monetary_apply_board_modifiers = yes
+
+	# --- [5b] the common currency (§15A.3) -----------------------------------
+	te_monetary_update_union = yes
+
+	# --- the swap line is DRAWN in a crisis (§15A.2) -------------------------
+	# 0.1% of the recipient's GDP a month, provider's treasury to recipient's:
+	# under gold a swap line IS reserve lending, so the money arrives somewhere
+	# (§0.8 ruling G6). A cross-country EFFECT, which is fine from here — it is
+	# a cross-country MODIFIER write that needs the owner in ROOT.
+	if = {
+		limit = {
+			te_mon_is_swap_recipient = yes
+			te_mon_in_external_crisis = yes
+			has_variable = te_mon_swap_provider
+			exists = var:te_mon_swap_provider
+		}
+		set_variable = { name = te_mon_work value = te_mon_swap_crisis_draw }
+		var:te_mon_swap_provider = {
+			add_treasury = {
+				value = prev.var:te_mon_work
+				multiply = -1
+			}
+		}
+		add_treasury = var:te_mon_work
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Step 10 (phase 5 half) — a kind-1 pegger's confidence
+# ----------------------------------------------------------------------------
+# Scope: country. Called from te_monetary_update_gold's off-gold branch, in
+# place of the monthly reset to 100, while te_mon_has_anchor_peg.
+#
+# §15A.2: te_mon_overvaluation drains te_peg_confidence "by §15.2's term,
+# unchanged" — so the tolerance, the divisor, controls_damp and ruling Q10's
+# heal-holds-under-pressure are all te_mon_fx_is_overvalued /
+# te_mon_fx_overvaluation_drain, not copies. There is no vault and no gap here:
+# a pegger has no rate of its own to be under the world's.
+#
+# The crisis is te_peg.2 — §12.3's event with the options re-read — on the SAME
+# cooldown variable, so ruling Q10's 24 months applies.
+te_monetary_update_anchor_peg = {
+	if = {
+		limit = { te_mon_fx_is_overvalued = yes }
+		change_variable = { name = te_peg_confidence subtract = te_mon_fx_overvaluation_drain }
+	}
+	else = {
+		change_variable = { name = te_peg_confidence add = 1 }
+	}
+	# A treaty swap line's +2 and the bloc's cooperation +1 (5b), in one value.
+	change_variable = { name = te_peg_confidence add = te_mon_backstop_confidence }
+	clamp_variable = {
+		name = te_peg_confidence
+		min = 0
+		max = 100
+	}
+	if = {
+		limit = {
+			var:te_peg_confidence <= te_mon_peg_crisis_threshold
+			var:te_peg_crisis_cooldown = 0
+		}
+		set_variable = { name = te_peg_crisis_cooldown value = te_mon_peg_crisis_cooldown_months }
+		trigger_event = { id = te_peg.2 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Event-facing effects
+# ----------------------------------------------------------------------------
+
+# te_peg.2 Defend: a pegger has no rate to raise, so it shuts the door instead —
+# capital controls forced on for a year. te_mon_capital_controls_in_force reads
+# the clock, so they damp the overvaluation drain and run the fatigue counter
+# exactly as chosen ones do.
+te_mon_effect_anchor_peg_defend = {
+	set_variable = { name = te_mon_emergency_controls_months value = te_mon_emergency_controls_duration }
+	change_variable = { name = te_peg_confidence add = te_mon_peg_anchor_defend_confidence }
+	clamp_variable = {
+		name = te_peg_confidence
+		min = 0
+		max = 100
+	}
+}
+
+# te_peg.2 Break the peg: leave every treaty that carries ROOT's currency_peg.
+# `withdraw` leaves the whole TREATY — an article cannot be dropped alone — so a
+# peg bundled with other articles takes them with it, and the option says so.
+# The article's on_withdrawal hook runs the discovery, which is what un-anchors
+# and snaps the index; nothing is written here.
+te_mon_effect_anchor_peg_break = {
+	every_scope_treaty = {
+		limit = {
+			any_scope_article = {
+				has_type = currency_peg
+				source_country = root
+			}
+		}
+		withdraw = { country = root }
+	}
+}
+
+# te_peg.2 Re-peg lower: a negotiated devaluation. The parity moves DOWN by half
+# the overvaluation (§0.8 ruling G4 — the design re-based the shadow up; moving
+# the parity is the same cut in overvaluation and is also an actual
+# devaluation, with the trade edge and the import bill that go with one).
+te_mon_effect_anchor_peg_repeg = {
+	change_variable = { name = te_mon_peg_parity_offset add = te_mon_peg_repeg_step }
+	clamp_variable = {
+		name = te_mon_peg_parity_offset
+		min = 0
+		max = 50
+	}
+	set_variable = { name = te_peg_confidence value = te_mon_peg_devalue_confidence }
+}
+
+
+# ----------------------------------------------------------------------------
+# Phase 5c — the currency board's three modifiers (§15A.4)
+# ----------------------------------------------------------------------------
+# Scope: country. Called from step 9b. Subject types carry no modifiers and
+# there is no subject_modifier / overlord_modifier key, so everything a board
+# does is applied here. All three are MANAGED.
+#
+#   te_mon_board_subject       flat; on while kind = 3. country_minting_mult -0.5.
+#   te_mon_board_seigniorage   scaled; the OVERLORD'S half, in pounds a week,
+#                              from te_mon_board_seigniorage_pts — which the
+#                              YEARLY pulse re-sums (te_monetary_update_board_
+#                              seigniorage). A flat country_minting_add and NOT a
+#                              _mult, which would scale the overlord's own base
+#                              and transfer nothing.
+#   te_mon_board_wrong_stance  flat; the SUBJECT'S lever. Six consecutive months
+#                              with the DISPLAYED band at an extreme (1 or 5) add
+#                              liberty desire for as long as it lasts. The band,
+#                              never the true gap: a modifier appearing at an
+#                              exact gap would print a bit of r* (§0.4 P8). This
+#                              runs after step 8, so the band is this month's.
+#
+# An overlord running its rate for home conditions pays in unrest at the
+# periphery; raising the subject's autonomy ends the board through the ordinary
+# discovery, with no exit penalty — it never chose to join.
+te_monetary_apply_board_modifiers = {
+	# --- the subject's half of the seigniorage ------------------------------
+	if = {
+		limit = { te_mon_is_on_currency_board = yes }
+		if = {
+			limit = { NOT = { te_mon_mod_has = { NAME = te_mon_board_subject } } }
+			te_mon_mod_add = { NAME = te_mon_board_subject }
+		}
+	}
+	else_if = {
+		limit = { te_mon_mod_has = { NAME = te_mon_board_subject } }
+		te_mon_mod_remove = { NAME = te_mon_board_subject }
+	}
+
+	# --- the wrong-stance counter and its lever -----------------------------
+	if = {
+		limit = {
+			te_mon_is_on_currency_board = yes
+			OR = {
+				var:te_mon_stance_band = 1
+				var:te_mon_stance_band = 5
+			}
+		}
+		change_variable = { name = te_mon_board_wrong_months add = 1 }
+		clamp_variable = {
+			name = te_mon_board_wrong_months
+			min = 0
+			max = te_mon_board_wrong_months_cap
+		}
+	}
+	else = {
+		set_variable = { name = te_mon_board_wrong_months value = 0 }
+	}
+	if = {
+		limit = { var:te_mon_board_wrong_months >= te_mon_board_wrong_months_threshold }
+		if = {
+			limit = { NOT = { te_mon_mod_has = { NAME = te_mon_board_wrong_stance } } }
+			te_mon_mod_add = { NAME = te_mon_board_wrong_stance }
+		}
+		set_variable = { name = te_mon_board_lever_applied value = 1 }
+	}
+	else = {
+		if = {
+			limit = { te_mon_mod_has = { NAME = te_mon_board_wrong_stance } }
+			te_mon_mod_remove = { NAME = te_mon_board_wrong_stance }
+		}
+		set_variable = { name = te_mon_board_lever_applied value = 0 }
+	}
+
+	# --- the overlord's half ------------------------------------------------
+	if = {
+		limit = { root ?= this }
+		te_monetary_apply_fx_one = { NAME = te_mon_board_seigniorage VALUE = var:te_mon_board_seigniorage_pts APPLIED = te_mon_board_seigniorage_applied STEP = 25 STEP_NEG = -25 }
+	}
+}
+
+# The overlord's yearly re-sum. Scope: country (the yearly pulse; ROOT = this).
+# Only DIRECT subjects whose board is in force AND anchored on this country —
+# a subject whose stored anchor is somebody else (a moment after a transfer) is
+# not ours to tax yet.
+te_monetary_update_board_seigniorage = {
+	set_variable = { name = te_mon_board_seigniorage_pts value = 0 }
+	every_direct_subject = {
+		limit = {
+			te_mon_is_on_currency_board = yes
+			exists = var:te_mon_anchor
+			var:te_mon_anchor = root
+		}
+		save_scope_as = te_mon_arr_party
+		root = { change_variable = { name = te_mon_board_seigniorage_pts add = scope:te_mon_arr_party.te_mon_board_seigniorage_from_subject } }
+	}
+}

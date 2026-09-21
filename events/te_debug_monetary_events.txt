@@ -1022,3 +1022,102 @@ te_debug_monetary.9 = { # REVIEWED 2026-09-21: console-only test event (`event t
 		default_option = yes
 	}
 }
+
+
+# ============================================================================
+# te_debug_monetary.10 — international monetary arrangements (phase 5, §15A)
+# ============================================================================
+# Console-only: `event te_debug_monetary.10`. The description prints the whole
+# anchored state; §19 rows 5a-5c's exit criteria and §17 checks 14-18 and 21 are
+# staged from here:
+#
+#   a  pin a DEBUG kind-1 anchor on the top great power, with no treaty (the
+#      discovery honours te_mon_debug_anchor_on). Then: .8 raises the world
+#      rate / the anchor hikes -> "tracks a 2pp anchor hike within two months".
+#      "The same peg BREAKS under 15 points of SUSTAINED overvaluation": a drain
+#      of (15 - 5) / 2 = 5 a month takes confidence from 100 to the threshold in
+#      16 months. A single .9 option a (shadow -20) is NOT sustained — the
+#      shadow closes a twelfth of the gap a month and the whole episode costs
+#      about 50 points — so repeat it every six months or so, or hold a real
+#      inflation differential with .5 / .7.
+#   b  release the debug anchor (the index snaps to the shadow)
+#   c  set peg confidence to 25 — one bad month from te_peg.2
+#   d  run the discovery now       e  run one monthly update now
+#
+# §17 CHECK 18 is answered by reading "Anchor's rate (copy)" against the
+# anchor's own dashboard over a few months: it must never read 0.
+te_debug_monetary.10 = { # REVIEWED 2026-09-21: console-only test event (`event te_debug_monetary.10`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.10.t
+	desc = te_debug_monetary.10.d
+	flavor = te_debug_monetary.10.f
+
+	immediate = {
+		te_monetary_init_variables = yes
+		# The read-out names the anchor; a country with none names itself, so the
+		# saved scope always exists.
+		save_scope_as = te_debug_anchor
+		if = {
+			limit = {
+				te_mon_is_anchored = yes
+				exists = var:te_mon_anchor
+			}
+			var:te_mon_anchor = { save_scope_as = te_debug_anchor }
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.10.a
+		ordered_country = {
+			limit = {
+				NOT = { this = root }
+				te_mon_can_be_anchor = yes
+			}
+			order_by = gdp
+			# Explicit, the form 282 of vanilla's 304 ordered_* iterators use:
+			# what a bare order_by yields is undocumented (scripting_best_practices.md).
+			position = 0
+			save_scope_as = te_debug_new_anchor
+		}
+		if = {
+			limit = { exists = scope:te_debug_new_anchor }
+			set_variable = { name = te_mon_debug_anchor value = scope:te_debug_new_anchor }
+			set_variable = { name = te_mon_debug_anchor_on value = 1 }
+			te_monetary_discover_arrangements = yes
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.10.b
+		set_variable = { name = te_mon_debug_anchor_on value = 0 }
+		te_monetary_discover_arrangements = yes
+	}
+
+	option = {
+		name = te_debug_monetary.10.c
+		set_variable = { name = te_peg_confidence value = 25 } # REVIEWED 2026-09-21: console-only; one bad month from the te_peg.2 threshold
+	}
+
+	option = {
+		name = te_debug_monetary.10.dd
+		te_monetary_discover_arrangements = yes
+	}
+
+	option = {
+		name = te_debug_monetary.10.e
+		te_monetary_monthly_update = yes
+	}
+
+	option = {
+		name = te_debug_monetary.10.z
+		default_option = yes
+	}
+}

@@ -21,7 +21,7 @@
 # flat 20% base is cancelled in INJECT:base_values either way — so with this
 # switched off too, every country would borrow free.
 #
-# ORDER (§16.2): 0 init -> 1 regime code -> 1b monetisation -> 2 target ->
+# ORDER (§16.2): 0 init -> 1 regime code -> 1c [P5] anchor -> 1b monetisation -> 2 target ->
 # 3 drift -> 4 no-dial derived rate -> 5 premium -> 6 inflation -> 6c band
 # modifier -> 6d real-wage dividend -> 7 rate paid -> 8 neutral rate + stance ->
 # 8b creditor-versus-debtor politics -> 9 re-apply the interest modifier ->
@@ -227,6 +227,14 @@ te_monetary_monthly_update = {
 	# --- 1. regime code -----------------------------------------------------
 	te_monetary_set_regime = yes
 
+	# --- 1c. [P5] the anchor (§15A.1) ---------------------------------------
+	# Discovery for a country that holds a role in an arrangement, and this
+	# pulse's copy of the anchor's rate, index and credibility. BEFORE 1b and 2:
+	# te_mon_can_monetise and te_mon_has_dial both ask te_mon_is_anchored, so the
+	# pair they see has to be this month's checked one.
+	# common/scripted_effects/te_monetary_arrangement_effects.txt.
+	te_monetary_update_anchor = yes
+
 	# --- 1b. monetising the deficit, and the minting it buys ----------------
 	# Before the premium and the pressure sum, both of which read the level.
 	te_monetary_update_monetisation = yes
@@ -287,6 +295,10 @@ te_monetary_monthly_update = {
 	# one refresh site.
 	te_monetary_apply_fx_modifiers = yes
 
+	# 9b. [P5] the three arrangement modifiers, and a swap line drawn on in a
+	# crisis — their one refresh site too.
+	te_monetary_apply_arrangement_modifiers = yes
+
 	# --- 10. gold flow, hot money, peg confidence (§12.2-12.3) --------------
 	# Last, as §16.2 orders it: it reads the policy rate step 3 settled and
 	# writes the flow step 6 will price NEXT month (the same one-month lag
@@ -310,9 +322,10 @@ te_monetary_monthly_update = {
 # MANAGED: the inflation-band family (six bands + te_mon_dollarised_modifier),
 # the two §13 stance-politics modifiers, te_mon_real_wage_dividend,
 # te_monetisation_minting, te_mon_gold_carry_expense, — since 2026-09-20 —
-# te_monetary_rate_paid, and — phase 4 — te_fx_weak, te_fx_strong and
+# te_monetary_rate_paid, — phase 4 — te_fx_weak, te_fx_strong and
 # te_capital_controls_fatigue (applied from te_monetary_fx_effects.txt, through
-# the same wrappers). Every add, remove and has_modifier on them in this file
+# the same wrappers), and — phase 5 — te_mon_arrangement_recipient, _provider
+# and _standing (te_monetary_arrangement_effects.txt). Every add, remove and has_modifier on them in this file
 # goes through the four wrappers below; nothing may touch them directly.
 #
 # te_monetary_rate_paid WAS the one deliberate exception, on four grounds. The
@@ -406,6 +419,15 @@ te_monetary_settle_modifier_home = {
 		te_mon_mod_strip = { NAME = te_fx_weak }
 		te_mon_mod_strip = { NAME = te_fx_strong }
 		te_mon_mod_strip = { NAME = te_capital_controls_fatigue }
+		# [P5] Likewise the three arrangement modifiers (step 9b's other half).
+		te_mon_mod_strip = { NAME = te_mon_arrangement_recipient }
+		te_mon_mod_strip = { NAME = te_mon_arrangement_provider }
+		te_mon_mod_strip = { NAME = te_mon_arrangement_standing }
+		te_mon_mod_strip = { NAME = te_mon_board_subject }
+		te_mon_mod_strip = { NAME = te_mon_board_seigniorage }
+		te_mon_mod_strip = { NAME = te_mon_board_wrong_stance }
+		te_mon_mod_strip = { NAME = te_mon_union_adopter }
+		te_mon_mod_strip = { NAME = te_mon_union_pressure }
 		set_variable = { name = te_inflation_band_applied value = 0 }
 		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
@@ -857,6 +879,10 @@ te_monetary_init_variables = {
 	# [P4] The exchange-rate seeds, the per-pulse world-inflation copy and the
 	# one-shot migration off the two deleted FX tools (§15, §18.2).
 	te_monetary_init_fx_variables = yes
+
+	# [P5] The anchored state's seeds (§15A.1). After the phase-4 seeds: the
+	# anchor copies start from this country's own rate and index.
+	te_monetary_init_arrangement_variables = yes
 }
 
 
@@ -1408,6 +1434,25 @@ te_monetary_set_derived_rate = {
 		limit = { te_mon_is_command = yes }
 		set_variable = { name = te_policy_rate value = 3.0 }
 	}
+	# [P5] ANCHORED (§15A.1): the rate is IMPORTED — the anchor's own policy
+	# rate plus the arrangement's spread (peg 0.5, board 0.25, bloc 0). Distinct
+	# from both peg-ish concepts that came before it: mandate 3 is a DIAL country
+	# defending gold, and dollarisation derives from the era base, not from
+	# anyone's rate. No expected-inflation term, deliberately: the anchor's
+	# nominal rate already carries the ANCHOR'S expectations, and that the
+	# imported rate ignores this country's own inflation is the whole cost of
+	# the arrangement — its stance gap, which step 8 still computes from its
+	# own inflation and neutral rate, is how wrong the borrowed rate is.
+	# te_mon_anchor_rate is step 1c's copy, so this is a local read.
+	else_if = {
+		limit = { te_mon_is_anchored = yes }
+		set_variable = { name = te_policy_rate value = var:te_mon_anchor_rate }
+		change_variable = { name = te_policy_rate add = te_mon_anchor_spread }
+		if = {
+			limit = { var:te_policy_rate < 0 }
+			set_variable = { name = te_policy_rate value = 0 }
+		}
+	}
 	else = {
 		# The WORLD rate since phase 3 (§4, §12.1), no longer the reference
 		# rate: a small country is pulled around by the hegemon's central bank.
@@ -1499,6 +1544,13 @@ te_monetary_update_premium = {
 	# [P4] Foreign-currency debt: +0.05pp per index point below par, off LAST
 	# month's index (step 5b has not run yet — see te_mon_premium_fx).
 	change_variable = { name = te_premium_cyclical add = te_mon_premium_fx }
+	# [P5b] A common-currency adopter has no peg to break, so its overvaluation
+	# against the currency it borrowed is priced here instead: +0.1pp per point
+	# beyond 5, halved under the bloc's fiscal backstop. Off last month's index,
+	# like the line above. A slump while the bloc runs hot means a tight stance,
+	# no devaluation, a rising premium and a worsening debt spiral — the
+	# euro-crisis shape, from nothing but the shared mechanics (§15A.3).
+	change_variable = { name = te_premium_cyclical add = te_mon_premium_union_overvaluation }
 	if = {
 		limit = { var:te_premium_cyclical < -10 }
 		set_variable = { name = te_premium_cyclical value = -10 }
@@ -1699,7 +1751,7 @@ te_monetary_update_inflation = {
 		# the value took.
 		change_variable = { name = te_inflation_noise multiply = 0.95 }
 		if = {
-			limit = { te_mon_has_dial = yes }
+			limit = { te_mon_has_stance = yes }
 			random_list = {
 				1 = { change_variable = { name = te_inflation_noise add = 0.1 } }
 				1 = { }
@@ -2193,7 +2245,7 @@ te_monetary_update_stance = {
 	# true even for a frozen value — and so enacting central bank independence
 	# narrows an already-wide error on the very next pulse, dial or no dial.
 	if = {
-		limit = { te_mon_has_dial = yes }
+		limit = { te_mon_has_stance = yes }
 
 		# The walk: mean-reverting, +/-0.1 a month. The 0.95 decay is the mean
 		# reversion; with +/-0.1 steps two months in three the walk settles
@@ -2269,7 +2321,7 @@ te_monetary_update_stance = {
 
 	# --- the gap and the band -----------------------------------------------
 	if = {
-		limit = { te_mon_has_dial = yes }
+		limit = { te_mon_has_stance = yes }
 		set_variable = { name = te_mon_stance_gap value = var:te_policy_rate }
 		change_variable = { name = te_mon_stance_gap subtract = var:te_inflation }
 		change_variable = { name = te_mon_stance_gap subtract = var:te_neutral_rate }
@@ -2754,6 +2806,10 @@ te_monetary_update_gold = {
 			limit = { te_mon_fx_is_overvalued = yes }
 			change_variable = { name = te_peg_confidence subtract = te_mon_fx_overvaluation_drain }
 		}
+		# [P5] A swap line lends peg confidence (§15A.2 — §15's old open question,
+		# answered yes): under gold it IS reserve lending.
+		# te_mon_backstop_confidence: a treaty line's +2, a bloc's cooperation +1.
+		change_variable = { name = te_peg_confidence add = te_mon_backstop_confidence }
 		if = {
 			limit = { var:te_peg_confidence > 100 }
 			set_variable = { name = te_peg_confidence value = 100 }
@@ -2792,7 +2848,16 @@ te_monetary_update_gold = {
 				}
 				set_variable = { name = te_gold_hot_money value = 0 }
 			}
-			set_variable = { name = te_peg_confidence value = te_mon_peg_confidence_start }
+			# [P5] A treaty pegger (kind 1) runs confidence on overvaluation
+			# against its anchor; everybody else off gold starts the next peg
+			# trusted.
+			if = {
+				limit = { te_mon_has_anchor_peg = yes }
+				te_monetary_update_anchor_peg = yes
+			}
+			else = {
+				set_variable = { name = te_peg_confidence value = te_mon_peg_confidence_start }
+			}
 		}
 		# The LAW itself gone: a suspension or a defence of a peg that no
 		# longer exists is nothing, and the vault is counted afresh if the

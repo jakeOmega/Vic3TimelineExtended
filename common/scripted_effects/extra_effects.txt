@@ -388,7 +388,6 @@ remove_banking_market_modifiers_effect = {
 		remove_modifier = banking_moral_suasion
 		remove_modifier = banking_raise_margin_requirements
 		remove_modifier = banking_capital_controls_out
-		remove_modifier = banking_fx_swap_lines
 		remove_modifier = banking_export_credit_facility
 		remove_modifier = banking_asset_relief_program
 	}

@@ -70,7 +70,6 @@ country_banking_lock_open_market_ops_bool  = { color = bad  boolean = yes }
 country_banking_lock_directed_credit_bool  = { color = bad  boolean = yes }
 country_banking_lock_export_credit_bool    = { color = bad  boolean = yes }
 country_banking_lock_capital_controls_bool = { color = bad  boolean = yes }
-country_banking_lock_fx_swap_lines_bool    = { color = bad  boolean = yes }
 country_banking_lock_asset_relief_bool     = { color = bad  boolean = yes }
 
 # The REGIME gate on open-market operations (monetary_policy_design.md §5.1 and

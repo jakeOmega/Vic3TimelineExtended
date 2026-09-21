@@ -300,6 +300,28 @@ te_mon_no_dial_reason = {
 		trigger = { te_mon_is_command = yes }
 		localization_key = banking_dash_mon_why_command
 	}
+	# [P5] Anchored (§15A.1), above the bank test: a country with a national
+	# bank and a treaty peg has no dial BECAUSE of the peg, and the way out it
+	# should be told about is the treaty's, not a law's. Each key names the
+	# anchor through Var('te_mon_anchor'), which te_mon_is_anchored guarantees.
+	text = {
+		trigger = {
+			te_mon_is_anchored = yes
+			var:te_mon_anchor_kind = 3
+		}
+		localization_key = banking_dash_mon_why_board
+	}
+	text = {
+		trigger = {
+			te_mon_is_anchored = yes
+			var:te_mon_anchor_kind = 2
+		}
+		localization_key = banking_dash_mon_why_union
+	}
+	text = {
+		trigger = { te_mon_is_anchored = yes }
+		localization_key = banking_dash_mon_why_peg
+	}
 	text = {
 		trigger = { NOT = { has_law_or_variant = law_type:law_national_bank } }
 		localization_key = banking_dash_mon_why_no_bank
@@ -590,6 +612,11 @@ te_mon_fx_state = {
 		trigger = { te_mon_is_command = yes }
 		localization_key = banking_dash_mon_fx_state_command
 	}
+	# [P5] An anchored country's index is its anchor's (§15A.1).
+	text = {
+		trigger = { te_mon_is_anchored = yes }
+		localization_key = banking_dash_mon_fx_state_anchored
+	}
 	text = {
 		trigger = {
 			te_mon_is_metallic = yes
@@ -613,6 +640,11 @@ te_mon_fx_effect = {
 	text = {
 		trigger = { te_mon_is_command = yes }
 		localization_key = banking_dash_mon_fx_effect_none
+	}
+	# [P5] ...and what it shows is how far it has diverged from that currency.
+	text = {
+		trigger = { te_mon_is_anchored = yes }
+		localization_key = banking_dash_mon_fx_effect_peg
 	}
 	text = {
 		trigger = {
@@ -640,3 +672,105 @@ te_mon_fx_controls_note = {
 	}
 }
 
+
+# ----------------------------------------------------------------------------
+# Phase 5 — the Monetary Anchor row (§15A.1)
+# ----------------------------------------------------------------------------
+# One question: what, if anything, is this country's money tied to? The three
+# anchored branches name the anchor; the fall-through is a country that only
+# extends or receives backstops, or is somebody else's anchor.
+te_mon_anchor_state = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			te_mon_is_anchored = yes
+			var:te_mon_anchor_kind = 3
+		}
+		localization_key = banking_dash_mon_anchor_state_board
+	}
+	text = {
+		trigger = {
+			te_mon_is_anchored = yes
+			var:te_mon_anchor_kind = 2
+		}
+		localization_key = banking_dash_mon_anchor_state_union
+	}
+	text = {
+		trigger = { te_mon_is_anchored = yes }
+		localization_key = banking_dash_mon_anchor_state_peg
+	}
+	text = {
+		trigger = {
+			has_variable = te_mon_anchored_gdp_m
+			var:te_mon_anchored_gdp_m > 0
+		}
+		localization_key = banking_dash_mon_anchor_state_reserve
+	}
+	text = {
+		localization_key = banking_dash_mon_anchor_state_none
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Phase 5b — the Monetary Union row (§15A.3)
+# ----------------------------------------------------------------------------
+# One question: where does this country stand in its bloc's monetary union? The
+# leader first (it cannot adopt its own currency), then the member's states in
+# the order a player meets them.
+te_mon_union_state = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			is_power_bloc_leader = yes
+			te_mon_bloc_union_tier_2_plus = yes
+			te_mon_union_is_pressing = yes
+		}
+		localization_key = banking_dash_mon_union_state_leader_pressing
+	}
+	text = {
+		trigger = {
+			is_power_bloc_leader = yes
+			te_mon_bloc_union_tier_2_plus = yes
+		}
+		localization_key = banking_dash_mon_union_state_leader
+	}
+	text = {
+		trigger = { is_power_bloc_leader = yes }
+		localization_key = banking_dash_mon_union_state_leader_coop
+	}
+	text = {
+		trigger = { te_mon_is_union_adopter = yes }
+		localization_key = banking_dash_mon_union_state_adopter
+	}
+	text = {
+		trigger = { te_mon_is_union_member = yes }
+		localization_key = banking_dash_mon_union_state_member_dormant
+	}
+	text = {
+		trigger = {
+			has_variable = te_mon_union_lock_months
+			var:te_mon_union_lock_months > 0
+		}
+		localization_key = banking_dash_mon_union_state_locked
+	}
+	text = {
+		trigger = { te_mon_union_is_pressed = yes }
+		localization_key = banking_dash_mon_union_state_pressed
+	}
+	text = {
+		trigger = { te_mon_union_is_holdout = yes }
+		localization_key = banking_dash_mon_union_state_holdout
+	}
+	text = {
+		trigger = { te_mon_bloc_has_common_currency = yes }
+		localization_key = banking_dash_mon_union_state_outside
+	}
+	text = {
+		localization_key = banking_dash_mon_union_state_coop
+	}
+}

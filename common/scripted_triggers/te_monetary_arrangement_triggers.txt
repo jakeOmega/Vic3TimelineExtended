@@ -1,0 +1,209 @@
+﻿# ============================================================================
+# Monetary policy, phase 5 — international monetary arrangements: triggers
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §15A, as shipped in §0.8.
+# All country scope unless a comment says otherwise.
+# ============================================================================
+
+
+# Has this country tied its money to another's? (§15A.1)
+#
+# STORED STATE ONLY, DELIBERATELY. §15A.1 defines an anchored country as "kind >
+# 0 and the anchor is valid", and the anchor is valid when it has a dial — but
+# te_mon_has_dial asks THIS question of the anchor, so testing validity here
+# would make the two triggers call each other across the chain of anchors.
+# Validity is step 1c's job instead (te_monetary_update_anchor): it demotes the
+# kind to 0 the month the anchor stops qualifying, BEFORE step 2 asks for the
+# dial, so within a pulse the stored pair is always a checked one.
+#
+# That is also what forbids chains and cycles: an anchored country has no dial,
+# and every gate that creates an anchor asks the anchor for one.
+te_mon_is_anchored = {
+	has_variable = te_mon_anchor_kind
+	var:te_mon_anchor_kind > 0
+	has_variable = te_mon_anchor
+}
+
+# Is the stored anchor still one? The monthly half of §15A.1's "validity":
+# alive, and holding a dial of its own.
+te_mon_anchor_is_valid = {
+	has_variable = te_mon_anchor
+	exists = var:te_mon_anchor
+	var:te_mon_anchor = {
+		NOT = { this = root }
+		te_mon_has_dial = yes
+	}
+}
+
+# Can THIS country serve as somebody's anchor? One name for the rule, so the
+# article gates, the discovery and the validity check cannot drift apart.
+te_mon_can_be_anchor = {
+	te_mon_has_dial = yes
+}
+
+# --- 5a: reading the treaties from the pulse --------------------------------
+# `any_scope_treaty` iterates IN-FORCE treaties only. The direction test reads
+# the article's own source / target links; ROOT must be the country asking,
+# which it is at every caller (the monthly pulse and te_monetary_internal.2).
+# no_duplicate_treaty_article is NOT the model: its scope:treaty guard only
+# resolves in can_ratify.
+
+# Is ROOT the pegger in some in-force currency_peg?
+te_mon_has_peg_article = {
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = currency_peg
+			source_country = root
+		}
+	}
+}
+
+# ...and is it one whose target is $ANCHOR$-valid right now?
+te_mon_has_valid_peg_article = {
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = currency_peg
+			source_country = root
+			target_country = { te_mon_can_be_anchor = yes }
+		}
+	}
+}
+
+# Does ROOT stand in an in-force article of $TYPE$ as its TARGET (the party that
+# receives: the swap line's recipient, the guarantee's ward)?
+te_mon_is_article_target = {
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = $TYPE$
+			target_country = root
+		}
+	}
+}
+
+# ...or as its SOURCE (the provider, the guarantor)?
+te_mon_is_article_source = {
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = $TYPE$
+			source_country = root
+		}
+	}
+}
+
+# Guarded reads of what the discovery stored.
+te_mon_is_swap_recipient = {
+	has_variable = te_mon_swap_recipient
+	var:te_mon_swap_recipient = 1
+}
+
+te_mon_is_lolr_ward = {
+	has_variable = te_mon_lolr_ward
+	var:te_mon_lolr_ward = 1
+}
+
+# Is the guarantee worth anything this month? Not while the guarantor's
+# renege clock runs: "guarantees are only worth the last one honoured".
+te_mon_lolr_is_effective = {
+	te_mon_is_lolr_ward = yes
+	has_variable = te_mon_lolr_guarantor
+	exists = var:te_mon_lolr_guarantor
+	var:te_mon_lolr_guarantor = {
+		NOT = {
+			AND = {
+				has_variable = te_mon_lolr_suspended_months
+				var:te_mon_lolr_suspended_months > 0
+			}
+		}
+	}
+}
+
+# Does a kind-1 pegger run te_peg_confidence? (§15A.2) Kinds 2 and 3 have no peg
+# to break: a union's valve is the premium, a board's is liberty desire.
+te_mon_has_anchor_peg = {
+	te_mon_is_anchored = yes
+	var:te_mon_anchor_kind = 1
+}
+
+# Capital controls, however they came to be on: the dashboard tool, or the
+# kind-1 crisis's Defend option forcing them for a year. Read by controls_damp
+# and the fatigue counter, so forced controls buy and cost what chosen ones do.
+te_mon_capital_controls_in_force = {
+	OR = {
+		banking_tool_capital_controls_active = yes
+		AND = {
+			has_variable = te_mon_emergency_controls_months
+			var:te_mon_emergency_controls_months > 0
+		}
+	}
+}
+
+
+# --- Article gates (§15A.2 "Gating") ----------------------------------------
+# Written once here so `possible`, the AI filters and the debug harness agree.
+# Scope: the would-be SOURCE; $OTHER$ is the other party.
+
+# currency_peg: the pegger has no higher-kind anchor, the target holds a dial
+# and is a great or major power or the pegger's market owner.
+te_mon_can_peg_to = {
+	NOT = { this = $OTHER$ }
+	NOT = { te_mon_is_command = yes }
+	NOT = {
+		AND = {
+			te_mon_is_anchored = yes
+			var:te_mon_anchor_kind > 1
+		}
+	}
+	$OTHER$ = {
+		te_mon_can_be_anchor = yes
+		OR = {
+			country_rank >= rank_value:major_power
+			AND = {
+				exists = prev.market
+				prev.market.owner = this
+			}
+		}
+	}
+}
+
+# swap_line / lender_of_last_resort: the provider has a national bank and
+# outranks or out-GDPs the recipient.
+te_mon_can_backstop = {
+	NOT = { this = $OTHER$ }
+	has_law_or_variant = law_type:law_national_bank
+	NOT = { te_mon_is_command = yes }
+	OR = {
+		country_rank > $OTHER$.country_rank
+		gdp > $OTHER$.gdp
+	}
+}
+
+
+# ============================================================================
+# Phase 5c — subject currency boards (§15A.4)
+# ============================================================================
+
+# Is this country a subject WITHOUT monetary autonomy? Vanilla's subject types
+# carry `autonomy_level`, which script cannot read, so this is the OR-list of the
+# types that have `autonomy_level = 1`.
+#
+# RE-DERIVE IT ON EVERY VANILLA BUMP (vanilla_patch_runbook.md):
+#   grep -n 'autonomy_level\|^subject_type' <game>/common/subject_types/*.txt
+# Verified against 1.14.3, 2026-09-21: puppet, vassal, colony, crown_land are 1;
+# protectorate, tributary, dominion, personal_union, chartered_company are 2 and
+# keep their own monetary arrangement (they may sign a currency_peg with the
+# overlord like anyone else). The mod defines no subject types of its own.
+te_mon_is_board_subject = {
+	is_subject = yes
+	OR = {
+		is_subject_type = subject_type_puppet
+		is_subject_type = subject_type_vassal
+		is_subject_type = subject_type_colony
+		is_subject_type = subject_type_crown_land
+	}
+}
+
+# ...and is the board actually in force? Kind 3, stored and checked.
+te_mon_is_on_currency_board = {
+	te_mon_is_anchored = yes
+	var:te_mon_anchor_kind = 3
+}
