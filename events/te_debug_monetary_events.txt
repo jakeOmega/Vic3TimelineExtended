@@ -161,14 +161,8 @@ te_debug_monetary.2 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 	option = {
 		name = te_debug_monetary.2.a
 		default_option = yes
-		if = {
-			limit = { has_modifier = te_monetary_rate_paid }
-			remove_modifier = te_monetary_rate_paid
-		}
-		add_modifier = {
-			name = te_monetary_rate_paid
-			multiplier = var:te_rate_paid_applied
-		}
+		te_mon_mod_strip = { NAME = te_monetary_rate_paid }
+		te_mon_mod_add_scaled = { NAME = te_monetary_rate_paid VAR = te_rate_paid_applied }
 	}
 
 	# The undo, and the cleanest test of the production path itself: zeroing the
@@ -204,16 +198,38 @@ te_debug_monetary.3 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 
 	# Same pair, same block, but the multiplier is a named script value that
 	# wraps the same variable behind has_variable and falls back to 3.
+	#
+	# READ THIS BEFORE TRUSTING .3 (2026-09-20). Now that te_monetary_rate_paid
+	# lives on je_banking_cycle for a country that holds the entry, the script
+	# value evaluates in JE scope on that branch, its `has_variable =
+	# te_rate_paid_applied` asks the ENTRY for a country variable, finds nothing,
+	# and returns the 3 fallback every time. For a country with the entry, .3
+	# therefore always reads "script value ran but could not see the variable" —
+	# which is the fallback's meaning, so the console cannot tell that apart from
+	# a real miss any more. It is still meaningful for a country with NO banking
+	# entry, where the country branch runs. Use .2 (the production var form) and
+	# .4 (a literal) for anything else; the var-form question .3 was built for was
+	# settled in phase 1 and step 9 has carried the var form in game since.
 	option = {
 		name = te_debug_monetary.3.a
 		default_option = yes
+		te_mon_mod_strip = { NAME = te_monetary_rate_paid }
+		# te_mon_mod_add_scaled takes a VARIABLE name; this console deliberately uses the
+		# named script value, so the same home branch is written out.
 		if = {
-			limit = { has_modifier = te_monetary_rate_paid }
-			remove_modifier = te_monetary_rate_paid
+			limit = { var:te_mon_mod_home = 1 }
+			je:je_banking_cycle = {
+				add_modifier = {
+					name = te_monetary_rate_paid
+					multiplier = te_mon_rate_paid_multiplier
+				}
+			}
 		}
-		add_modifier = {
-			name = te_monetary_rate_paid
-			multiplier = te_mon_rate_paid_multiplier
+		else = {
+			add_modifier = {
+				name = te_monetary_rate_paid
+				multiplier = te_mon_rate_paid_multiplier
+			}
 		}
 	}
 
@@ -243,13 +259,22 @@ te_debug_monetary.4 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 	option = {
 		name = te_debug_monetary.4.a
 		default_option = yes
+		te_mon_mod_strip = { NAME = te_monetary_rate_paid }
+		# Literal multiplier, so the _scaled wrapper does not fit; same home branch by hand.
 		if = {
-			limit = { has_modifier = te_monetary_rate_paid }
-			remove_modifier = te_monetary_rate_paid
+			limit = { var:te_mon_mod_home = 1 }
+			je:je_banking_cycle = {
+				add_modifier = {
+					name = te_monetary_rate_paid
+					multiplier = 7 # REVIEWED 2026-09-19: console-only control value, never reachable in play
+				}
+			}
 		}
-		add_modifier = {
-			name = te_monetary_rate_paid
-			multiplier = 7 # REVIEWED 2026-09-19: console-only control value, never reachable in play
+		else = {
+			add_modifier = {
+				name = te_monetary_rate_paid
+				multiplier = 7 # REVIEWED 2026-09-19: console-only control value, never reachable in play
+			}
 		}
 	}
 

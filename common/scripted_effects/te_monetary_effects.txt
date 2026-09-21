@@ -296,16 +296,28 @@ te_monetary_monthly_update = {
 #
 # MANAGED: the inflation-band family (six bands + te_mon_dollarised_modifier),
 # the two §13 stance-politics modifiers, te_mon_real_wage_dividend,
-# te_monetisation_minting and te_mon_gold_carry_expense. Every add, remove and
-# has_modifier on them in this file goes through the four wrappers below;
-# nothing may touch them directly.
+# te_monetisation_minting, te_mon_gold_carry_expense and — since 2026-09-20 —
+# te_monetary_rate_paid. Every add, remove and has_modifier on them in this file
+# goes through the four wrappers below; nothing may touch them directly.
 #
-# NOT MANAGED, deliberately: te_monetary_rate_paid stays on the COUNTRY. It is
-# the one modifier every tag in the world carries, it must survive the banking
-# rule being off, it has its own root-repair marker, and it is the line the
-# budget's interest tooltip names. The timed crisis modifiers
-# (te_mon_currency_reform_premium, te_mon_peg_*) are applied by event options
-# with a clock on them and stay where the event put them.
+# te_monetary_rate_paid WAS the one deliberate exception, on four grounds. The
+# HOME mechanism answers the first two outright: a country with no banking entry
+# keeps the modifier on the country, exactly as it keeps the inflation bands, so
+# "every tag in the world carries it" and "it must survive the banking rule being
+# off" are the te_mon_mod_home = 0 branch, not reasons to opt out. The third, its
+# te_rate_paid_rooted repair marker, is orthogonal — the marker gates WHETHER
+# step 9 rewrites, never WHERE. The fourth was the real one: it is the line the
+# budget's interest tooltip names, and whether a journal-entry modifier still
+# gets attributed in the budget's interest breakdown is a display question no
+# amount of script reading settles. It is now on the entry because the owner
+# asked for it there; if the budget breakdown turns out to drop the line, this is
+# the paragraph to read before reverting — revert is the three call sites in
+# step 9 plus the strip in te_monetary_settle_modifier_home.
+#
+# STILL NOT MANAGED: the timed crisis modifiers (te_mon_currency_reform_premium,
+# te_mon_peg_*) are applied by event options with a clock on them and stay where
+# the event put them — a journal entry that vanishes mid-clock would take the
+# remaining years with it.
 #
 # THE HOME CAN CHANGE — the entry activates when a country gets a stock
 # exchange, and is lost with it. te_monetary_settle_modifier_home runs first in
@@ -373,6 +385,7 @@ te_monetary_settle_modifier_home = {
 		te_mon_mod_strip = { NAME = te_mon_real_wage_dividend }
 		te_mon_mod_strip = { NAME = te_monetisation_minting }
 		te_mon_mod_strip = { NAME = te_mon_gold_carry_expense }
+		te_mon_mod_strip = { NAME = te_monetary_rate_paid }
 		set_variable = { name = te_inflation_band_applied value = 0 }
 		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
@@ -2437,19 +2450,16 @@ te_monetary_apply_interest_modifiers = {
 			OR = {
 				var:te_mon_work2 >= 0.05
 				var:te_mon_work2 <= -0.05
-				NOT = { has_modifier = te_monetary_rate_paid }
+				NOT = { te_mon_mod_has = { NAME = te_monetary_rate_paid } }
 				NOT = { has_variable = te_rate_paid_rooted }
 			}
 		}
-		if = {
-			limit = { has_modifier = te_monetary_rate_paid }
-			remove_modifier = te_monetary_rate_paid
-		}
+		# Strip, not te_mon_mod_remove: strip is guarded both ways and also clears
+		# a stale copy in the OTHER home, which is what a save written before this
+		# modifier became managed carries on the country.
+		te_mon_mod_strip = { NAME = te_monetary_rate_paid }
 		set_variable = { name = te_rate_paid_applied value = var:te_mon_work }
-		add_modifier = {
-			name = te_monetary_rate_paid
-			multiplier = var:te_rate_paid_applied
-		}
+		te_mon_mod_add_scaled = { NAME = te_monetary_rate_paid VAR = te_rate_paid_applied }
 		# Only a write whose ROOT was this country counts as a good one — that is
 		# the whole meaning of the marker.
 		if = {
