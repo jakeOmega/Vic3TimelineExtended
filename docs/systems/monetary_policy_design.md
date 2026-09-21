@@ -2640,6 +2640,9 @@ sign-wrong note) is deleted with it, which closes that item.
 > **Implemented 2026-09-21** — what shipped, where it departs from this section and what is
 > still unverified: [§0.8](#08-phase-5-as-shipped--rulings-deviations-and-open-checks).
 >
+> **Reviewed 2026-09-21 for leverage, coercive variants and exploit surface — nothing
+> owner-decided, findings and directions only:** [§15B](#15b-leverage-coercion-and-exploit-hardening-phase-6-proposed).
+>
 > **Scoped 2026-09-20** in the same pass as §15. Owner decisions: **one "anchored" state
 > underlies every arrangement**; the declared peg is a **treaty article**; all three families
 > ship, **staged 5a / 5b / 5c** so each can be cut; a bloc currency's rate is **the leader's
@@ -2877,6 +2880,175 @@ monthly compare.
 LOLR event. 5c needs only the spine — it could ship before 5b. `te_mon_dollarised` (§9.2)
 could later be re-expressed as "anchored to the hegemon"; recorded, **not** proposed — it
 works, and its era-base derivation is what makes it a no-counterparty option.
+
+---
+
+## 15B. Leverage, coercion and exploit hardening (phase 6, proposed)
+
+> **Not scoped — no owner decisions yet.** This section records what a design review of the
+> shipped 5a articles (§15A.2) found missing or gameable, and sketches directions, not
+> answers. Unlike §15A's "everything else is (proposed)", nothing here should be read as a
+> committed shape — an implementer picking this up should treat the three subsections below
+> as a punch list of open questions, weigh the tradeoffs noted inline, and is expected to
+> bring their own ideas rather than just pick from these.
+
+The review that motivated this section walked the shipped 110–112 treaty articles and their
+effects/script-value chain end to end (not just the treaty-file comments) and found three
+gaps, each below. All three read as gaps in the *same* place: 5a models voluntary,
+symmetric-mechanic dependency (§15A "asymmetry... never from special-casing") and stops
+there — no leverage accrues from it, no one can impose it, and the AI's caution about it is
+evaluated once, at signing, and never revisited.
+
+### 15B.1 Leverage and orbit-building
+
+None of the three articles write `country_treaty_leverage_generation_add`. Several other
+directed articles in the mod do — `common/treaty_articles/extra_treaty_articles.txt` grants
+150–5000 leverage across a legal-jurisdiction article, a maritime-dominance article, and one
+whose own comment names "the client's growing dependence" as the point. The three banking
+articles model exactly that shape of dependency (a pegger living in the anchor's monetary
+orbit; a ward whose finances answer to its guarantor) and generate none of vanilla's normal
+currency for turning dependency into influence.
+
+Directions to consider — not a shortlist to choose from, a starting point:
+
+- A flat per-article `country_treaty_leverage_generation_add`, sized against the comparable
+  articles above rather than against the 5000 outlier (tied to a much heavier commitment).
+- Or leverage scaled the way the premium terms already are (§15A.1's GDP-ratio rule, or the
+  reserve-currency share term, §15A.2) rather than flat per instance — flat-per-instance
+  leverage would let the fan-out problem in §15B.3 (an anchor with unlimited peggers)
+  snowball leverage the same way it already snowballs prestige.
+- Whether leverage should reward *duration held* rather than mere existence — a peg or
+  backstop that has survived several crises is a different kind of dependency than one
+  signed last month, and nothing currently distinguishes them.
+- Whether the weak side should earn anything symmetric. 5b already has a precedent
+  (§15A.3: a holdout that refuses convergence pressure earns `country_leverage_resistance_add
+  = 250` for ten years) for turning *enduring* a dependency, or *refusing* one, into
+  something that isn't purely a cost. A ward that never calls its guarantee, or a pegger that
+  rides out a crisis without breaking, might deserve the same kind of standing.
+- Whether all three should generate the same amount. The three commit their stronger party to
+  very different depths (a bare peg carries no obligation at all; a guarantee is the deepest),
+  and vanilla's own leverage-granting pacts vary by what they actually commit — worth checking
+  those before picking numbers.
+
+### 15B.2 Hostile and coercive variants
+
+All three articles are `friendly`-only. Every comparable *directed* article elsewhere in the
+mod ships a `hostile` + `can_be_enforced` counterpart (Free Port Concession, Minority
+Protection in `extra_treaty_articles.txt`) precisely because a directed article is normally
+something a stronger power can impose on an unwilling counterparty, not just offer to a
+willing one. The banking trio currently models only the Bretton-Woods, voluntary-cooperation
+half of monetary history and none of the gunboat-diplomacy half — despite the AI-scoring
+already treating the underlying dependency as something one side finds extractive.
+
+The three don't carry the coercive framing equally well — **this is itself something the
+implementer should weigh, not assume**:
+
+- **`currency_peg`, imposed**: the best-attested historically (an occupying or dominant power
+  forcing a currency board or peg on a weaker one — Panama's dollarization, interwar
+  currency boards imposed as loan or reparations conditions). Note phase 5c already models
+  the *subject* version of this (currency boards on `autonomy_level = 1` subjects,
+  §15A.4) — an imposed peg would be the equivalent for a country that is *not* a subject.
+- **`swap_line`, imposed**: the weakest fit. A swap line commits the *strong* side's own
+  treasury (§15A.2, §0.8 ruling G6 — it's a real transfer, not flavour); forcing a country to
+  lend against its will doesn't hold together the way forcing a peg does. A coercive version
+  would have to coerce something else entirely (favorable currency-purchase or reserve terms
+  extracted *from* the weaker side), which starts to look like a different article, not a
+  hostile flag on this one. Worth asking whether this one should get a coercive variant at
+  all, versus leaving the coercive angle to the other two.
+- **`lender_of_last_resort`, imposed**: apt as *debt receivership* (the Dominican Republic
+  1905, Egypt's Anglo-French debt commission, Venezuela 1902–03) — historically, the coercion
+  isn't "force someone to guarantee you," it's forcing the weaker country to accept
+  externally-supervised finances on one-sided terms. A hostile variant here probably isn't the
+  friendly one's ward-benefit block with the sign flipped; it's a different relief/extraction
+  shape.
+
+Other things worth folding in if a hostile variant is built:
+
+- The engine-constraints note at the top of `docs/vanilla/treaty_articles_reference.md`
+  already documents `non_fulfillment` + `consequences = freeze` as the pattern for enforcing a
+  directed article. None of the three current *friendly* articles use it either — a gap
+  independent of the coercion question, and one the friendly versions might also want.
+- A hostile variant's AI math can't just be the friendly version's mirrored: the friendly
+  side's weak-party score is flatly eager (`+10`/`+20`/`+20`, no caution term at all, §15A.2)
+  because the whole point there is that it's wanted. A coerced target should default to
+  reluctant, the way any other `hostile` article's target does — that's a new score shape,
+  not a re-signed one.
+- Whether imposing one of these should route through a diplomatic play / war goal rather than
+  ordinary treaty ratification, matching how vanilla usually gates imposing something on an
+  unwilling target.
+
+### 15B.3 AI logic and exploit hardening
+
+These three are concrete, verified against the shipped effect and script-value files
+(`te_monetary_arrangement_effects.txt`, `te_monetary_arrangement_script_values.txt`,
+`events/te_monetary_arrangement_events.txt`) rather than inferred from the treaty-file
+comments alone. Each is presented with what's actually in the code today and some directions;
+none of the directions is a specification.
+
+**Multi-provider swap-line stacking against a self-inflicted crisis.** `111_swap_line.txt`'s
+`can_ratify` dedup only blocks the *same* provider granting a recipient a second line —
+nothing caps how many *different* providers one recipient can hold at once, unlike
+`lender_of_last_resort`'s explicit one-guarantor-per-ward check (112's can_ratify,
+`te_lolr_already_guaranteed_tt`). `te_monetary_discover_arrangements` picks one provider a
+month via `random_scope_article` (`te_monetary_arrangement_effects.txt:410`), so several
+lines don't multiply a single month's draw — but they do mean the *real* treasury transfer
+(`te_mon_swap_crisis_draw` = 0.1% of the recipient's own GDP a month, drawn provider →
+recipient, `te_monetary_arrangement_effects.txt:596-603`) rotates across whichever provider
+gets picked that month. `te_mon_in_external_crisis` (`te_monetary_triggers.txt:549`) is true
+on `is_at_war = yes` **or** a banking panic/downturn — both are within a player's own control
+to start and sustain — and nothing repays the draw. Directions: cap active swap-line providers
+per recipient at one, mirroring LOLR; or keep multiple lines legal but make the draw
+provider-*chosen* (with a cost/cooldown to switching) rather than randomly rotating; or
+exclude a self-declared or below some scale/duration war from counting toward
+`te_mon_in_external_crisis`; or put a lifetime or running cap on total drawn per relationship,
+the way LOLR already caps calls per ward.
+
+**Serial LOLR default farming.** Honouring costs the guarantor `5% of the WARD'S GDP`
+(`te_mon_lolr_honour_cost`, ward scope) straight into the ward's treasury
+(`te_lolr.1` option a, `events/te_monetary_arrangement_events.txt:41-51`), plus +25 relations
+for the ward. The relief itself — `te_mon_lolr_relief_share = 0.5`, halving the ward's debt-load
+premium — is what makes it *cheaper* for the ward to carry the debt that eventually defaults;
+that's the moral-hazard loop the design intends to model (the AI's own GDP-scaled,
+recipient-debt-penalized caution on the provider side says so), but nothing defends against a
+player working it on purpose. `te_mon_lolr_default_cooldown_months = 60` is the only limiter,
+and it resets rather than accumulating — nothing remembers how many times a given ward has
+already been bailed out. The AI's `ai_chance` favors Honour over Renege roughly 5:1 before
+modifiers (base 10 vs. 2, `te_lolr.1`), and same-power-bloc pushes further toward Honour;
+only the guarantor's *own* debt level pushes back. Directions: a per-relationship repeat-call
+counter that escalates the honour cost, decays AI willingness to Honour, or lengthens the
+cooldown on each successive call; taper the relief itself against the ward's *own*
+`scaled_debt` instead of a flat 50% regardless of how much it's already borrowing beyond what
+the relief enabled; or give the AI a periodic post-signing re-evaluation (5b's convergence
+pressure / holdout-question pattern is a precedent for exactly this) so a guarantor isn't
+locked into whatever it agreed to at signing once the ward's debt has since spiraled.
+
+**Uncapped pegger fan-out on the anchor side.** `te_mon_can_peg_to` gates who is *allowed* to
+be an anchor (must hold a dial, be a major power+ or the pegger's own market owner) but caps
+nothing about how many *different* countries can peg to the same anchor at once. The anchor
+pays no maintenance (`maintenance_paid_by = target_country` — the pegger pays), takes on no
+obligation, and gets `target_modifier = { country_prestige_mult = 0.02 }` per article in
+force (§15A.2). Only the structural-premium half of the reserve-currency benefit is capped and
+GDP-share-scaled (`te_mon_reserve_currency_cut`, capped at 0.5pp, §15A.1 script values); the
+prestige half is a separate flat modifier that isn't routed through that same capped term, so
+it plausibly scales with pegger *headcount* rather than with the GDP share the cap already
+tracks (worth confirming in-game how the engine stacks repeated same-name modifiers from
+several in-force treaty articles, before assuming this one). Directions: fold the anchor's
+prestige benefit into the same capped, GDP-scaled reserve-currency calculation the structural
+premium already uses, so there's one "being a reserve currency is prestigious" term instead
+of an uncapped one that multiplies by count; or cap the pegger *count* directly, the way LOLR
+caps guarantors per ward — though a headcount cap cuts against how reserve currencies actually
+work (many real countries do peg to one anchor simultaneously), so it's the blunter of the two
+options.
+
+**The general pattern underneath all three.** Every article's AI score gives the dependent
+side a flat, generous, uncaveated bonus (`+10`/`+20`/`+20`) with no matching caution term,
+while the caution the design *does* have (GDP-scaled cost, recipient-debt penalties) lives
+only on the strong side, and — per the LOLR case above — only ever runs once, at signing.
+Before patching the three exploits individually, it's worth deciding whether that's the
+intended shape (the strong side's caution is meant to be the *only* check, and the weak side's
+eagerness is fine to leave unconditional) or whether some of it should also gate the weak side,
+and whether a post-ratification re-evaluation belongs as a pattern shared by all three articles
+rather than three separate ad-hoc fixes.
 
 ---
 
@@ -3347,6 +3519,12 @@ carries no status column and is left as written.)
 12. **No counterparty ever signs** (phase 5) if provider costs are mirrored. *Mitigation:*
    the GDP-ratio rule (§15A.1), and the reserve-currency premium cut as a standing reason to
    be an anchor.
+13. **The arrangements can be gamed deliberately, not just stumbled into by the AI** (phase 5,
+   found on review — §15B): a recipient can hold several swap-line providers at once and farm
+   a self-inflicted external crisis against them; a ward can serial-default every five years
+   against a guarantor whose Honour/Renege odds don't move with history; an anchor can take
+   unlimited peggers for a flat per-article prestige gain no cap touches. *Mitigation:*
+   directions only, not fixes — §15B.3.
 
 ---
 

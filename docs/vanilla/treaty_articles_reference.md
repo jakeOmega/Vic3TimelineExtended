@@ -904,7 +904,9 @@ For each article implemented, these files need changes:
 
 ## Monetary articles: Currency Peg, Swap Line, Lender of Last Resort
 
-Monetary policy phase 5a (`docs/systems/monetary_policy_design.md` §15A.2, §0.8; `mod_systems.md` § **Monetary Policy (phase 5)**). Files `common/treaty_articles/110_currency_peg.txt`, `111_swap_line.txt`, `112_lender_of_last_resort.txt`. All three are **directed**, `friendly`, `giftable`, `can_be_renegotiated`, unlocked by `central_banking`.
+Monetary policy phase 5a (`docs/systems/monetary_policy_design.md` §15A.2, §0.8; `mod_systems.md` § **Monetary Policy (phase 5)**). Files `common/treaty_articles/110_currency_peg.txt`, `111_swap_line.txt`, `112_lender_of_last_resort.txt`. All three are **directed**, `friendly`, `giftable`, `can_be_renegotiated`. Tech gates are staggered over three eras, not a shared `central_banking` (owner decision 2026-09-21): `currency_peg` at `international_exchange_standards`, `swap_line` at `macroeconomics`, `lender_of_last_resort` at `intergovernmental_organizations`.
+
+**Missing leverage, no coercive variant, and a gameable AI/exploit surface — reviewed but not yet designed:** `docs/systems/monetary_policy_design.md` §15B (phase 6, proposed).
 
 | Article | Source → target | What it does |
 |---|---|---|
