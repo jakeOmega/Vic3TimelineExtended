@@ -348,6 +348,21 @@ te_monetary_on_country_default = {
 				te_mon_has_effective_backstop = yes
 				var:te_mon_lolr_default_cooldown = 0
 			}
+			# [6a] THE WARD'S RECORD, first (§15C.1, ruling H3). The counter is a
+			# fact about the WARD, not about whoever is standing behind it this
+			# decade, so it survives a change of guarantor: a ward cannot launder
+			# its record by switching backers. Incrementing BEFORE everything else
+			# is the file's convention: what prices THIS call reads
+			# te_mon_lolr_calls_prior (the cooldown just below, te_lolr.1's honour
+			# cost and its odds), what prices the ONGOING relationship reads the
+			# counter itself (the relief taper, the signing score).
+			change_variable = { name = te_mon_lolr_calls add = 1 }
+			clamp_variable = {
+				name = te_mon_lolr_calls
+				min = 0
+				max = te_mon_lolr_calls_cap
+			}
+			set_variable = { name = te_mon_lolr_call_forget value = te_mon_lolr_call_forget_months }
 			set_variable = { name = te_mon_lolr_default_cooldown value = te_mon_lolr_default_cooldown_months }
 			save_scope_as = te_lolr_ward
 			# A treaty guarantor first; else [5b] the leader of a tier-3 monetary

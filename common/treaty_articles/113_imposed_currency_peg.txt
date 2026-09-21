@@ -1,0 +1,325 @@
+﻿# =================================================================
+# TREATY ARTICLE: imposed_currency_peg          (monetary policy 6c)
+# Spec: docs/systems/monetary_policy_design.md §15C.3, ruling C1.
+#
+# DIRECTED: source = the PEGGER (concedes), target = the ANCHOR (imposes).
+# The mod's convention for a hostile directed article — 103_free_port_
+# concession.txt: "Source (losing tariff sovereignty) is reluctant" — which is
+# the friendly peg's direction already, so the whole anchored-state machinery
+# reads this article without a special case.
+#
+# WHAT 5a MODELLED AND THIS DOES NOT: 110 is the Bretton-Woods, voluntary half
+# of monetary history. This is the other half — an occupying or dominant power
+# forcing a currency board or a peg on a weaker one: Panama's dollarization,
+# the interwar currency boards imposed as loan and reparations conditions.
+# Phase 5c already models the SUBJECT version (a board on an autonomy_level = 1
+# subject); this is the same instrument for a country that is not a subject,
+# and the precedence rule means subjugating an imposed pegger simply promotes
+# it to a board.
+#
+# THE PEGGER IS KIND 1, exactly as under 110 — one anchored state, per §15A's
+# owner decision. Three things differ, all of them terms:
+#   * spread 1.0, not 0.5 (te_mon_anchor_spread_peg_imposed): a penalty rate.
+#   * NO te_mon_peg_standing_cut. The -0.5pp is the market's reward for a
+#     CHOSEN discipline; lenders are not reassured by a promise extracted.
+#   * -10 legitimacy on the pegger (102_minority_protection.txt's line: the
+#     government looks weak for ceding sovereignty).
+# And te_peg.2's "Break the peg" is closed to it (events/te_peg_events.txt):
+# its way out is the treaty UI, which is what the wargoal below exists to
+# answer.
+#
+# NO PRESTIGE LINE (§15C.1, ruling H5). A coerced peg is not a vote of
+# confidence, and the reserve-currency benefit is already GDP-share-scaled and
+# capped elsewhere.
+#
+# Modifier blocks and hooks: see 110_currency_peg.txt's header.
+# =================================================================
+imposed_currency_peg = {
+	icon = "gfx/interface/icons/law_icons/gold_standard.dds"
+	kind = directed
+	cost = 100
+
+	flags = {
+		can_be_enforced
+		can_be_renegotiated
+		hostile
+	}
+
+	# The imposer wants it, so the imposer pays: 103_free_port_concession.txt's
+	# rule for a hostile directed article, and the opposite of 110's, where the
+	# anchor pays because being the anchor is the favour.
+	maintenance_paid_by = target_country
+	usage_limit = once_per_treaty
+
+	mutual_exclusions = {
+		currency_peg
+		imposed_currency_peg
+	}
+
+	# The peg's own tech gate, unchanged: a country that cannot run a
+	# convertible currency has nothing to be held to.
+	unlocked_by_technologies = {
+		international_exchange_standards
+	}
+
+	# The pegger's government looks weak for ceding its money.
+	source_modifier = {
+		country_legitimacy_base_add = -10
+	}
+
+	target_modifier = {
+		# [6b] The heaviest peg-side leverage: this is a client state in
+		# everything but name (§15C.3, ruling C1 — 400, against 110's 200).
+		country_treaty_leverage_generation_add = 400
+	}
+
+	visible = {
+		te_mon_full_system = yes
+	}
+
+	# THE PRETEXT (§15C.3, ruling C4: IN DEFAULT ONLY). The wider draft —
+	# inflation >= 10, or the target living in the imposer's market — was
+	# rejected as too loose: a currency in trouble, or in somebody's economic
+	# space, is not by itself grounds. An insolvent government is. It is also
+	# what keeps the AI world from filling with imposed pegs.
+	#
+	# IT IS TESTED TWICE, in the two places the mod's convention puts each half
+	# (treaty_articles_reference.md: "Symmetric conditions in `possible`;
+	# everything directional in `requirement_to_maintain` or `can_ratify`").
+	# `possible` runs before the direction is fixed, so here it only asks
+	# whether a pretext exists in EITHER direction; can_ratify below holds the
+	# imposer to the side that actually has one.
+	possible = {
+		has_diplomatic_relevance = scope:other_country
+		NOT = { is_country_type = decentralized }
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+		}
+		OR = {
+			te_mon_can_impose_peg_on = { OTHER = scope:other_country }
+			scope:other_country = {
+				te_mon_can_impose_peg_on = { OTHER = root }
+			}
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_currency_peg_anchor_needs_dial_tt
+				scope:target_country = { te_mon_can_be_anchor = yes }
+			}
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_currency_peg_pegger_not_command_tt
+				scope:source_country = { te_mon_is_command = no }
+			}
+		}
+	}
+
+	can_ratify = {
+		# The pretext, this time with the sides fixed: the ANCHOR imposes, so
+		# it is the target, and the pegger that concedes is the source.
+		custom_tooltip = {
+			text = te_imposed_peg_pretext_tt
+			scope:target_country = {
+				te_mon_can_impose_peg_on = { OTHER = scope:source_country }
+			}
+		}
+		# One peg at a time, of either kind — 110's check with the sides read
+		# the same way round (the pegger is the source in both).
+		custom_tooltip = {
+			text = te_currency_peg_already_pegged_tt
+			scope:source_country = {
+				NOT = {
+					any_scope_treaty = {
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							OR = {
+								has_type = currency_peg
+								has_type = imposed_currency_peg
+							}
+							source_country = scope:source_country
+						}
+					}
+				}
+			}
+		}
+	}
+
+	# NO non_fulfillment on war. 110 ends itself between belligerents because a
+	# peg is a mutual arrangement; this one is the settlement a war produced,
+	# and a renewed war is exactly when the imposer wants it standing. The
+	# enforce play is the way out, for either side.
+
+	on_entry_into_force = {
+		scope:article_options = {
+			source_country = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+			target_country = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+		}
+	}
+
+	on_withdrawal = {
+		scope:withdrawing_country ?= { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+		scope:non_withdrawing_country ?= { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		# REQUEST ONLY: nobody offers to be pegged at gunpoint.
+		article_ai_usage = { request }
+
+		# The pretext is already the gate, so the chance is small and moves
+		# only with the imposer's disposition (103's shape).
+		evaluation_chance = {
+			value = 0.01
+			if = {
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = domineering }
+				}
+				add = 0.05
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# --- the PEGGER'S side: reluctant, as any hostile target is ------
+			if = {
+				limit = { scope:source_country ?= this }
+				# -20, not the draft's -40 + 30-if-in-default: the pretext makes
+				# "in default" a constant here, so it is folded in. A government
+				# already insolvent finds a rescue in a rescue, however it came.
+				add = {
+					desc = "te_ai_imposed_peg_base"
+					value = -20
+				}
+				# A currency that has stopped working is worth less than its
+				# sovereignty.
+				if = {
+					limit = {
+						has_variable = te_inflation_band
+						var:te_inflation_band >= 6
+					}
+					add = {
+						desc = "te_ai_peg_high_inflation"
+						value = 10
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:target_country attitude = domineering }
+							has_attitude = { who = scope:target_country attitude = belligerent }
+							has_attitude = { who = scope:target_country attitude = antagonistic }
+						}
+					}
+					add = {
+						desc = "AI_HOSTILE_ATTITUDE"
+						value = -20
+					}
+				}
+			}
+			# --- the IMPOSER'S side -----------------------------------------
+			else = {
+				if = {
+					limit = {
+						has_attitude = { who = scope:source_country attitude = domineering }
+					}
+					add = {
+						desc = "AI_DOMINEERING_ATTITUDE"
+						value = 15
+					}
+				}
+				if = {
+					limit = {
+						exists = scope:source_country.market
+						scope:source_country.market.owner = this
+					}
+					add = {
+						desc = "te_ai_peg_shared_market"
+						value = 10
+					}
+				}
+				if = {
+					limit = { country_rank >= rank_value:great_power }
+					add = {
+						desc = "te_ai_backstop_influence"
+						value = 10
+					}
+				}
+				# population_transfer's rule: don't impose on friends.
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:source_country attitude = genial }
+							has_attitude = { who = scope:source_country attitude = cooperative }
+							has_attitude = { who = scope:source_country attitude = conciliatory }
+						}
+					}
+					add = {
+						desc = "AI_FRIENDLY_ATTITUDE"
+						value = -20
+					}
+				}
+			}
+		}
+	}
+
+	# 105_enforce_privatization.txt's shape: there is no state to take, so the
+	# demand is answered at the capital. Infamy 8 — more than a port, less than
+	# a disarmament.
+	wargoal = {
+		execution_priority = 60
+		contestion_type = control_target_country_capital
+
+		maneuvers = {
+			value = 0
+
+			add = {
+				desc = "MANEUVERS_BASE_VALUE"
+				value = 2.5
+			}
+
+			scope:target_country = {
+				multiply = {
+					desc = "MANEUVERS_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_FACTOR
+					multiply = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER
+					max = define:NDiplomacy|SWAY_OFFER_WARGOAL_MANEUVERS_COST_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+				}
+			}
+		}
+
+		infamy = {
+			value = 0
+
+			add = {
+				desc = "INFAMY_BASE_VALUE"
+				value = 8
+			}
+			scope:target_country = {
+				multiply = {
+					desc = "INFAMY_TARGET_COUNTRY_POPULATION_FACTOR"
+					value = total_population
+					divide = 20000000
+					add = 1
+					max = 2.0
+				}
+			}
+		}
+	}
+}

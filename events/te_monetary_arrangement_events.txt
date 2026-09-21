@@ -20,6 +20,13 @@ namespace = te_lolr
 # the treaty, costs prestige and infamy, and starts te_mon_lolr_suspended_months
 # on the guarantor — which te_mon_lolr_is_effective reads from every OTHER
 # ward's side: guarantees are only worth the last one honoured.
+#
+# [6a] THE WARD'S RECORD (§15C.1, ruling H3). The on-action increments
+# te_mon_lolr_calls before dispatching, so the honour cost here is 5% x
+# (1 + 0.5 x PRIOR calls) to 15%, and the odds walk from 10:2 to 1:8 as a ward
+# defaults again and again. The other two schedules the counter drives — the
+# relief taper and the ward's own cooldown — are elsewhere; this event pays for
+# the call in front of it.
 te_lolr.1 = {
 	type = country_event
 	placement = ROOT
@@ -37,6 +44,7 @@ te_lolr.1 = {
 	option = {
 		name = te_lolr.1.a
 		default_option = yes
+		custom_tooltip = te_lolr_calls_tt
 
 		add_treasury = {
 			value = scope:te_lolr_ward.te_mon_lolr_honour_cost
@@ -64,6 +72,21 @@ te_lolr.1 = {
 			modifier = {
 				trigger = { is_in_same_power_bloc = scope:te_lolr_ward }
 				add = 3
+			}
+			# [6a] ...and a ward that has been here before. Three tiers, so the
+			# base walks 10 / 7 / 4 / 1 and then SATURATES: a fifth call is as bad
+			# as a fourth, never worse than certain refusal.
+			modifier = {
+				trigger = { scope:te_lolr_ward = { te_mon_lolr_calls_prior >= 1 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_lolr_ward = { te_mon_lolr_calls_prior >= 2 } }
+				add = -3
+			}
+			modifier = {
+				trigger = { scope:te_lolr_ward = { te_mon_lolr_calls_prior >= 3 } }
+				add = -3
 			}
 		}
 	}
@@ -102,6 +125,19 @@ te_lolr.1 = {
 			modifier = {
 				trigger = { is_at_war = yes }
 				add = 3
+			}
+			# [6a] The mirror of Honour's three tiers: 2 / 4 / 6 / 8.
+			modifier = {
+				trigger = { scope:te_lolr_ward = { te_mon_lolr_calls_prior >= 1 } }
+				add = 2
+			}
+			modifier = {
+				trigger = { scope:te_lolr_ward = { te_mon_lolr_calls_prior >= 2 } }
+				add = 2
+			}
+			modifier = {
+				trigger = { scope:te_lolr_ward = { te_mon_lolr_calls_prior >= 3 } }
+				add = 2
 			}
 		}
 	}

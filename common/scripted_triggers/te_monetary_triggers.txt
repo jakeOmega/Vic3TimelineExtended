@@ -549,6 +549,19 @@ te_mon_mod_has = {
 te_mon_in_external_crisis = {
 	OR = {
 		is_at_war = yes
+		te_mon_in_financial_crisis = yes
+	}
+}
+
+# [6a] The same trouble MINUS the war (§15C.1, ruling H2). One consumer reads
+# this narrower name: the swap line's draw. Capital-controls forgiveness and the
+# AI's controls rule keep the wider definition — a war excuses shutting the
+# door, but a swap line is a central bank's liquidity instrument, not war
+# finance, and `is_at_war` is the one leg a player can switch on and sustain at
+# will (§15B.3's multi-provider farm). Precedent for one consumer re-reading a
+# narrower trigger: §0.8 ruling G15's te_mon_capital_controls_in_force.
+te_mon_in_financial_crisis = {
+	OR = {
 		AND = {
 			has_variable = finance_cycle_value
 			OR = {

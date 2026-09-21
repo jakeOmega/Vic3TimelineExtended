@@ -122,8 +122,28 @@ te_monetary_init_arrangement_variables = {
 		set_variable = { name = te_mon_swap_recipient value = 0 }
 	}
 	if = {
+		limit = { NOT = { has_variable = te_mon_swap_drawn } }
+		set_variable = { name = te_mon_swap_drawn value = 0 }
+	}
+	if = {
 		limit = { NOT = { has_variable = te_mon_lolr_ward } }
 		set_variable = { name = te_mon_lolr_ward value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_lolr_calls } }
+		set_variable = { name = te_mon_lolr_calls value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_lolr_call_forget } }
+		set_variable = { name = te_mon_lolr_call_forget value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_receivership } }
+		set_variable = { name = te_mon_receivership value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_receivership_clear_months } }
+		set_variable = { name = te_mon_receivership_clear_months value = 0 }
 	}
 	if = {
 		limit = { NOT = { has_variable = te_mon_lolr_suspended_months } }
@@ -267,6 +287,49 @@ te_monetary_update_anchor = {
 		limit = { var:te_mon_lolr_default_cooldown > 0 }
 		change_variable = { name = te_mon_lolr_default_cooldown subtract = 1 }
 	}
+	# [6c] THE RECEIVERSHIP'S EXIT RAMP (§15C.3, ruling C2). Twelve consecutive
+	# months under the debt threshold and out of default, and 114's
+	# non_fulfillment withdraws the article: the commission wound up when the debt
+	# was worked down (the Dominican 1941 shape), so it is a sentence rather than
+	# a permanent tribute. The counter runs here rather than in the article
+	# because a treaty condition cannot keep a count of its own.
+	if = {
+		limit = { var:te_mon_receivership = 1 }
+		if = {
+			limit = {
+				in_default = no
+				scaled_debt < te_mon_receivership_exit_debt
+			}
+			change_variable = { name = te_mon_receivership_clear_months add = 1 }
+			clamp_variable = {
+				name = te_mon_receivership_clear_months
+				min = 0
+				max = te_mon_receivership_exit_months
+			}
+		}
+		else = {
+			set_variable = { name = te_mon_receivership_clear_months value = 0 }
+		}
+	}
+	else_if = {
+		limit = { var:te_mon_receivership_clear_months > 0 }
+		set_variable = { name = te_mon_receivership_clear_months value = 0 }
+	}
+
+	# [6a] A WARD forgets one call after ten quiet years (§15C.1, ruling H3). The
+	# clock is re-armed by every new call and by every call forgotten, so a ward
+	# that keeps defaulting never works its record down.
+	if = {
+		limit = { var:te_mon_lolr_calls > 0 }
+		if = {
+			limit = { var:te_mon_lolr_call_forget > 0 }
+			change_variable = { name = te_mon_lolr_call_forget subtract = 1 }
+		}
+		else = {
+			change_variable = { name = te_mon_lolr_calls subtract = 1 }
+			set_variable = { name = te_mon_lolr_call_forget value = te_mon_lolr_call_forget_months }
+		}
+	}
 }
 
 
@@ -351,18 +414,28 @@ te_monetary_discover_arrangements = {
 			set_variable = { name = te_mon_anchor_kind_new value = 1 }
 		}
 		else_if = {
+			# [6c] A CHOSEN peg or an IMPOSED one (113): both make their source
+			# kind 1, and only the terms differ (§15C.3, ruling C1). A country
+			# cannot hold both — they exclude each other by type — so the walk needs
+			# no precedence between them.
 			limit = { te_mon_has_valid_peg_article = yes }
 			random_scope_treaty = {
 				limit = {
 					any_scope_article = {
-						has_type = currency_peg
+						OR = {
+							has_type = currency_peg
+							has_type = imposed_currency_peg
+						}
 						source_country = root
 						target_country = { te_mon_can_be_anchor = yes }
 					}
 				}
 				random_scope_article = {
 					limit = {
-						has_type = currency_peg
+						OR = {
+							has_type = currency_peg
+							has_type = imposed_currency_peg
+						}
 						source_country = root
 						target_country = { te_mon_can_be_anchor = yes }
 					}
@@ -396,8 +469,38 @@ te_monetary_discover_arrangements = {
 	}
 
 	# --- roles in the two backstop articles ---------------------------------
+	# [6a] THE LINE IS CALLED WHEN IT ENDS (§15C.1). Withdrawal by either side, a
+	# break, the provider losing its bank: whatever is still drawn is settled in
+	# one lump, recipient -> provider. Going into debt to settle is the honest
+	# outcome; there is no stain modifier, because the settlement IS the cost.
+	# This runs BEFORE the role is re-derived, while var:te_mon_swap_provider still
+	# names the provider that lent the money (the scope variable is never removed).
+	if = {
+		limit = {
+			var:te_mon_swap_recipient = 1
+			var:te_mon_swap_drawn > 0
+			has_variable = te_mon_swap_provider
+			exists = var:te_mon_swap_provider
+			NOT = { te_mon_has_swap_line_role = yes }
+		}
+		te_mon_effect_swap_settle = yes
+	}
 	set_variable = { name = te_mon_swap_recipient value = 0 }
 	if = {
+		# THE DEBUG SWAP LINE, the te_mon_debug_anchor precedent: te_debug_
+		# monetary.11 pins a provider with no treaty behind it, because P6-1..P6-4
+		# cannot otherwise be staged without talking an AI great power into one.
+		# Nothing in play sets the flag.
+		limit = {
+			has_variable = te_mon_debug_swap_on
+			var:te_mon_debug_swap_on = 1
+			has_variable = te_mon_debug_swap_provider
+			exists = var:te_mon_debug_swap_provider
+		}
+		set_variable = { name = te_mon_swap_recipient value = 1 }
+		set_variable = { name = te_mon_swap_provider value = var:te_mon_debug_swap_provider }
+	}
+	else_if = {
 		limit = { te_mon_is_article_target = { TYPE = swap_line } }
 		set_variable = { name = te_mon_swap_recipient value = 1 }
 		random_scope_treaty = {
@@ -439,6 +542,31 @@ te_monetary_discover_arrangements = {
 		set_variable = { name = te_mon_lolr_guarantor value = scope:te_mon_new_guarantor }
 	}
 
+	# [6c] ...and the receivership, whose direction is the other way round: the
+	# DEBTOR concedes, so it is the article's SOURCE, and the receiver imposes, so
+	# it is the TARGET (§15C.3's hostile-article convention, 103's rule).
+	set_variable = { name = te_mon_receivership value = 0 }
+	if = {
+		limit = { te_mon_is_article_source = { TYPE = debt_receivership } }
+		set_variable = { name = te_mon_receivership value = 1 }
+		random_scope_treaty = {
+			limit = {
+				any_scope_article = {
+					has_type = debt_receivership
+					source_country = root
+				}
+			}
+			random_scope_article = {
+				limit = {
+					has_type = debt_receivership
+					source_country = root
+				}
+				target_country = { save_scope_as = te_mon_new_receiver }
+			}
+		}
+		set_variable = { name = te_mon_receiver value = scope:te_mon_new_receiver }
+	}
+
 	# --- what ROOT pays for the lines and guarantees it extends -------------
 	# provider cost = recipient benefit x clamp( recipient gdp / provider gdp ).
 	set_variable = { name = te_mon_arr_provider_pts value = 0 }
@@ -459,6 +587,16 @@ te_monetary_discover_arrangements = {
 			target_country = { save_scope_as = te_mon_arr_party }
 			root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_arr_lolr_cost_to_root } }
 		}
+		# [6c] A receiver carries a share of the relief its name buys the debtor,
+		# as a guarantor would — and it is the article's TARGET, not its source.
+		every_scope_article = {
+			limit = {
+				has_type = debt_receivership
+				target_country = root
+			}
+			source_country = { save_scope_as = te_mon_arr_party }
+			root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_arr_receivership_cost_to_root } }
+		}
 	}
 	# [5b] A bloc leader's cooperation and backstop costs, and its holdout count.
 	te_monetary_discover_union = yes
@@ -473,6 +611,9 @@ te_monetary_discover_arrangements = {
 				var:te_mon_anchor_kind > 0
 				var:te_mon_swap_recipient = 1
 				var:te_mon_lolr_ward = 1
+				# [6c] a debtor under a receivership, and the receiver itself (whose
+				# cost is already in te_mon_arr_provider_pts just above).
+				var:te_mon_receivership = 1
 				var:te_mon_arr_provider_pts > 0
 				var:te_mon_anchored_gdp_m > 0
 				te_mon_has_peg_article = yes
@@ -581,27 +722,92 @@ te_monetary_apply_arrangement_modifiers = {
 	# --- [5b] the common currency (§15A.3) -----------------------------------
 	te_monetary_update_union = yes
 
-	# --- the swap line is DRAWN in a crisis (§15A.2) -------------------------
+	# --- the swap line is DRAWN in a crisis, and REPAID out of one (§15A.2) --
 	# 0.1% of the recipient's GDP a month, provider's treasury to recipient's:
 	# under gold a swap line IS reserve lending, so the money arrives somewhere
 	# (§0.8 ruling G6). A cross-country EFFECT, which is fine from here — it is
 	# a cross-country MODIFIER write that needs the owner in ROOT.
+	#
+	# [6a] IT IS A LOAN (§15C.1). Three things changed: the crisis that opens the
+	# tap is te_mon_in_financial_crisis, which a war does not (ruling H2); the
+	# balance stops at te_mon_swap_line_limit, 2% of the recipient's GDP; and out
+	# of a crisis the same 0.1% a month flows BACK until the balance is clear. No
+	# interest — the recipient's own rate paid is already the price of its crisis.
+	# A self-inflicted crisis now buys an interest-free loan of at most 2% of GDP
+	# that comes straight back out, which is nothing to farm.
 	if = {
 		limit = {
 			te_mon_is_swap_recipient = yes
-			te_mon_in_external_crisis = yes
 			has_variable = te_mon_swap_provider
 			exists = var:te_mon_swap_provider
 		}
-		set_variable = { name = te_mon_work value = te_mon_swap_crisis_draw }
-		var:te_mon_swap_provider = {
+		if = {
+			limit = {
+				te_mon_in_financial_crisis = yes
+				te_mon_swap_draw_room > 0
+			}
+			set_variable = { name = te_mon_work value = te_mon_swap_draw_this_month }
+			var:te_mon_swap_provider = {
+				add_treasury = {
+					value = prev.var:te_mon_work
+					multiply = -1
+				}
+			}
+			add_treasury = var:te_mon_work
+			change_variable = { name = te_mon_swap_drawn add = var:te_mon_work }
+		}
+		else_if = {
+			limit = { var:te_mon_swap_drawn > 0 }
+			set_variable = { name = te_mon_work value = te_mon_swap_repay }
 			add_treasury = {
-				value = prev.var:te_mon_work
+				value = var:te_mon_work
 				multiply = -1
 			}
+			var:te_mon_swap_provider = { add_treasury = prev.var:te_mon_work }
+			change_variable = { name = te_mon_swap_drawn subtract = var:te_mon_work }
+			# Under a pound outstanding is nothing outstanding: a rounding residue
+			# would otherwise keep the row on the dashboard for ever.
+			if = {
+				limit = { var:te_mon_swap_drawn < 1 }
+				set_variable = { name = te_mon_swap_drawn value = 0 }
+			}
 		}
-		add_treasury = var:te_mon_work
 	}
+
+	# --- [6c] the receivership remits the customs receipts (§15C.3) -----------
+	# 0.1% of the DEBTOR'S GDP a month, debtor's treasury to the receiver's — the
+	# swap draw's plumbing in the other direction, and the reason the instrument
+	# existed. Unconditional while the commission sits: it is a tribute, not a
+	# crisis facility, and the exit ramp (step 1c's counter) is how it ends.
+	if = {
+		limit = {
+			te_mon_is_under_receivership = yes
+			exists = var:te_mon_receiver
+		}
+		set_variable = { name = te_mon_work value = te_mon_receivership_take }
+		add_treasury = {
+			value = var:te_mon_work
+			multiply = -1
+		}
+		var:te_mon_receiver = { add_treasury = prev.var:te_mon_work }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# [6a] The swap line is settled (§15C.1)
+# ----------------------------------------------------------------------------
+# Scope: the RECIPIENT. Called from the discovery the moment the recipient role
+# ends with a balance outstanding, and from nowhere else. te_mon_swap_provider
+# still names the lender at that point; the discovery re-derives it afterwards.
+te_mon_effect_swap_settle = {
+	set_variable = { name = te_mon_work value = var:te_mon_swap_drawn }
+	add_treasury = {
+		value = var:te_mon_work
+		multiply = -1
+	}
+	var:te_mon_swap_provider = { add_treasury = prev.var:te_mon_work }
+	set_variable = { name = te_mon_swap_drawn value = 0 }
 }
 
 
@@ -672,7 +878,14 @@ te_mon_effect_anchor_peg_break = {
 	every_scope_treaty = {
 		limit = {
 			any_scope_article = {
-				has_type = currency_peg
+				# [6c] Both types, so the walk cannot leave a peg standing — even
+				# though te_peg.2's Break option is closed to an imposed pegger
+				# (its way out is the treaty UI, which is what the imposer's war
+				# goal exists to answer).
+				OR = {
+					has_type = currency_peg
+					has_type = imposed_currency_peg
+				}
 				source_country = root
 			}
 		}

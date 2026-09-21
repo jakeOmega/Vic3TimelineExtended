@@ -282,6 +282,11 @@ te_peg.2 = {
 
 	option = {
 		name = te_peg.2.b
+		# [6c] An IMPOSED pegger cannot simply walk away (§15C.3, ruling C1):
+		# Defend and Re-peg lower remain, and its way out is the treaty UI, where
+		# withdrawing from an enforced article is what the imposer's war goal
+		# exists to answer.
+		trigger = { te_mon_is_imposed_pegger = no }
 		custom_tooltip = te_peg.2.b.tt
 
 		hidden_effect = {
