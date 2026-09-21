@@ -390,6 +390,22 @@ te_mon_effect_fx_shock = {
 	}
 }
 
+# THE SAME SHOCK, WITH ITS TOOLTIP LINE, FOR AN EVENT OPTION. Every event that
+# moves the exchange rate calls this rather than wrapping te_mon_effect_fx_shock
+# in a custom_tooltip of its own, because the line has to disappear along with
+# the effect under the simplified setting of banking_system_rule: there is no
+# exchange rate then, and an option promising a weaker currency would be
+# promising nothing. $TEXT$ is the loc key, $POINTS$ the nominal move.
+te_mon_effect_fx_shock_tt = {
+	if = {
+		limit = { te_mon_full_system = yes }
+		custom_tooltip = {
+			text = $TEXT$
+			te_mon_effect_fx_shock = { POINTS = $POINTS$ }
+		}
+	}
+}
+
 # §12.3 Devalue: the index is SET (documented exception #1 to "events never
 # write the index"). Replaces the te_mon_peg_devalued timed modifier — same
 # peak, same impulse (§15.2). te_fx_avg is NOT re-seeded: a devaluation is

@@ -10,11 +10,30 @@
 	}
 }
 
+# Three settings, not two. `banking_system_simplified` keeps the Banking Cycle
+# journal entry — the cycle, its crashes, the prudential tools, the financial
+# regulation laws — and switches off the whole monetary-policy layer built on
+# top of it (docs/systems/monetary_policy_design.md phases 1-5): no policy-rate
+# dial, no inflation, no exchange rate, no pegs / swap lines / guarantees /
+# common currency. A country still pays a country-specific interest rate, it
+# just cannot steer it: the world reference rate plus its risk premium.
+#
+# THE RATE PLUMBING RUNS UNDER ALL THREE SETTINGS. Vanilla's flat 20% base rate,
+# the six rank multipliers, laissez-faire and the five finance techs are all
+# cancelled by unconditional INJECTs (monetary_policy_design.md §16.1), which no
+# game rule can switch off, so something in script has to supply the number or
+# every country would borrow free. `te_mon_full_system`
+# (common/scripted_triggers/te_monetary_triggers.txt) is the one trigger that
+# tells the two halves apart.
 banking_system_rule = {
 	default = banking_system_enabled
 
 	banking_system_enabled = {
 		flag = banking_system_enabled
+	}
+
+	banking_system_simplified = {
+		flag = banking_system_simplified
 	}
 
 	banking_system_disabled = {

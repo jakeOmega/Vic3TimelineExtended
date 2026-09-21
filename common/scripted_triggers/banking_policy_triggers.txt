@@ -8,6 +8,25 @@
 # Disable-side eligibility reuses the `banking_tool_*_active` family in
 # common/scripted_triggers/market_triggers.txt.
 
+# Is the Banking Cycle system switched on at all? TRUE for both of the settings
+# that keep the journal entry — `banking_system_enabled` and the simplified one
+# — and false only for `banking_system_disabled`
+# (common/game_rules/extra_game_rules.txt).
+#
+# THIS IS THE CYCLE'S GATE; te_mon_full_system
+# (common/scripted_triggers/te_monetary_triggers.txt) is the MONETARY LAYER'S.
+# The two are deliberately different questions: the simplified setting answers
+# yes here and no there. Anything that belongs to the cycle — the journal entry,
+# its tools, its history series — asks this one.
+#
+# Reads only a game rule, so it works from any scope.
+te_banking_system_on = {
+	OR = {
+		has_game_rule = banking_system_enabled
+		has_game_rule = banking_system_simplified
+	}
+}
+
 # The "Raise Policy Rate" eligibility trigger used to sit above this one, and
 # OMO used to exclude itself while that tool was active. Both are gone with the
 # tool (monetary_policy_design.md §18).
@@ -59,16 +78,26 @@ banking_possible_cb_open_market_ops = {
 		text = banking_button_locked_by_law_tt
 		modifier:country_banking_lock_open_market_ops_bool = no
 	}
-	custom_tooltip = {
-		text = banking_omo_unbacked_money_tt
-		modifier:country_can_create_unbacked_money_bool = yes
-	}
+	# BOTH OF THE MONETARY CONDITIONS BELONG TO THE MONETARY LAYER, so the
+	# simplified setting of banking_system_rule drops them and open-market
+	# operations revert to what they were before phase 1: the unlock bool, four
+	# intervention points and the law lock, and nothing about the regime or the
+	# rate. There is no policy rate to be at the
+	# floor of when nobody holds a dial, so leaving the floor test in would lock
+	# the tool out of a simplified game entirely.
 	trigger_if = {
-		limit = { modifier:country_can_create_unbacked_money_bool = yes }
+		limit = { te_mon_full_system = yes }
 		custom_tooltip = {
-			text = banking_omo_rate_floor_tt
-			te_mon_has_dial = yes
-			te_mon_policy_rate_at_floor = yes
+			text = banking_omo_unbacked_money_tt
+			modifier:country_can_create_unbacked_money_bool = yes
+		}
+		trigger_if = {
+			limit = { modifier:country_can_create_unbacked_money_bool = yes }
+			custom_tooltip = {
+				text = banking_omo_rate_floor_tt
+				te_mon_has_dial = yes
+				te_mon_policy_rate_at_floor = yes
+			}
 		}
 	}
 }

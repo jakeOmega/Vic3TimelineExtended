@@ -4173,8 +4173,13 @@ principle_monetary_union_1 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
+	# The monetary union is part of the monetary layer, so the simplified setting
+	# of banking_system_rule hides all three tiers: with no dial anywhere there is
+	# no currency for a bloc to share (te_mon_full_system,
+	# common/scripted_triggers/te_monetary_triggers.txt).
 	visible = {
 		has_dlc_feature = power_bloc_features
+		te_mon_full_system = yes
 	}
 
 	possible = {
@@ -4198,6 +4203,14 @@ principle_monetary_union_1 = {
 principle_monetary_union_2 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
+
+	# The monetary union is part of the monetary layer, so the simplified setting
+	# of banking_system_rule hides all three tiers: with no dial anywhere there is
+	# no currency for a bloc to share (te_mon_full_system,
+	# common/scripted_triggers/te_monetary_triggers.txt).
+	visible = {
+		te_mon_full_system = yes
+	}
 
 	possible = {
 		has_technology_researched = central_banking
@@ -4226,6 +4239,14 @@ principle_monetary_union_2 = {
 principle_monetary_union_3 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	# The monetary union is part of the monetary layer, so the simplified setting
+	# of banking_system_rule hides all three tiers: with no dial anywhere there is
+	# no currency for a bloc to share (te_mon_full_system,
+	# common/scripted_triggers/te_monetary_triggers.txt).
+	visible = {
+		te_mon_full_system = yes
+	}
 
 	possible = {
 		has_technology_researched = central_banking

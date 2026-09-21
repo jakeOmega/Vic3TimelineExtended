@@ -83,7 +83,13 @@ te_monetary_internal.2 = {
 
 	immediate = {
 		if = {
-			limit = { has_variable = te_mon_anchor_kind }
+			limit = {
+				# Belt and braces: every dispatch site is gated on the game rule
+				# already, and under the simplified setting there is nothing to
+				# discover — no article is visible, no bloc can share a currency.
+				te_mon_full_system = yes
+				has_variable = te_mon_anchor_kind
+			}
 			te_monetary_discover_arrangements = yes
 		}
 	}

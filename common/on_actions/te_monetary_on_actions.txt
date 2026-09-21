@@ -25,6 +25,14 @@
 # cancelled unconditionally, in INJECT:base_values, and this is what replaces it
 # with the mod's own number — so it has to run even with the banking system
 # switched off, or a rule-off game would have every country borrowing free.
+#
+# THE GAME RULE IS APPLIED INSIDE THE UPDATE, NOT HERE. banking_system_simplified
+# switches off the advanced half of the monthly update (te_mon_full_system,
+# common/scripted_triggers/te_monetary_triggers.txt) while the passive rate stack
+# runs on. The hooks below that serve ONLY the advanced half — the phase-4 world
+# inflation, the phase-5 anchored-GDP scan, the yearly arrangement scan, the
+# subject and default hooks — are gated on that trigger here, because skipping
+# them under the simplified rule saves the scan rather than just its result.
 # ============================================================================
 
 
@@ -50,11 +58,14 @@ te_monetary_world_monthly_on_action = {
 	effect = {
 		te_monetary_refresh_world_era_base = yes
 		te_monetary_refresh_world_rate = yes
-		# [P4] Its sibling (§15.1): GDP-weighted inflation over all great powers.
-		te_monetary_refresh_world_inflation = yes
-		# [P5] World GDP, and the GDP pegged to each anchor (§15A.2's
-		# reserve-currency cut).
-		te_monetary_refresh_anchored_gdp = yes
+		if = {
+			limit = { te_mon_full_system = yes }
+			# [P4] Its sibling (§15.1): GDP-weighted inflation over all great powers.
+			te_monetary_refresh_world_inflation = yes
+			# [P5] World GDP, and the GDP pegged to each anchor (§15A.2's
+			# reserve-currency cut).
+			te_monetary_refresh_anchored_gdp = yes
+		}
 	}
 }
 
@@ -147,8 +158,11 @@ te_monetary_on_game_started = {
 		# No country has pulsed yet, so no great power is discretionary and this
 		# writes the reference rate — which is the 1836 answer anyway (§12.1).
 		te_monetary_refresh_world_rate = yes
-		# [P4] Its sibling (§15.1): GDP-weighted inflation over all great powers.
-		te_monetary_refresh_world_inflation = yes
+		if = {
+			limit = { te_mon_full_system = yes }
+			# [P4] Its sibling (§15.1): GDP-weighted inflation over all great powers.
+			te_monetary_refresh_world_inflation = yes
+		}
 		every_country = {
 			trigger_event = {
 				id = te_monetary_internal.1
@@ -280,7 +294,10 @@ te_monetary_on_country_formed = {
 te_monetary_arrangement_yearly_on_action = {
 	effect = {
 		if = {
-			limit = { has_variable = te_mon_anchor_kind }
+			limit = {
+				te_mon_full_system = yes
+				has_variable = te_mon_anchor_kind
+			}
 			te_monetary_discover_arrangements = yes
 			# [5c] An overlord's seigniorage, re-summed (§15A.4); step 9b applies it.
 			te_monetary_update_board_seigniorage = yes
@@ -303,10 +320,13 @@ on_become_subject = {
 
 te_monetary_on_become_subject = {
 	effect = {
-		trigger_event = { id = te_monetary_internal.2 days = 1 }
 		if = {
-			limit = { exists = overlord }
-			overlord = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+			limit = { te_mon_full_system = yes }
+			trigger_event = { id = te_monetary_internal.2 days = 1 }
+			if = {
+				limit = { exists = overlord }
+				overlord = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+			}
 		}
 	}
 }
@@ -324,6 +344,7 @@ te_monetary_on_country_default = {
 	effect = {
 		if = {
 			limit = {
+				te_mon_full_system = yes
 				te_mon_has_effective_backstop = yes
 				var:te_mon_lolr_default_cooldown = 0
 			}

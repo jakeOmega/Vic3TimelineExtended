@@ -409,7 +409,7 @@ International monetary arrangements. Spec: `monetary_policy_design.md` §15A; wh
 
 **Every premium term goes through managed scaled modifiers, never a treaty's modifier block** (G8): `te_mon_arrangement_recipient` (−cyclical), `_provider` (+cyclical) and `_standing` (−structural), refreshed in **step 9b** (`te_monetary_apply_arrangement_modifiers`) with phase 4's `te_monetary_apply_fx_one` recipe, so step 5 sees them a month late like any modifier-borne term. **Provider cost = recipient benefit × clamp(recipient GDP ÷ provider GDP, 0, 1)** — evaluated in the recipient's scope against `root.var:te_mon_work_gdp`.
 
-**5a — three directed articles.** `currency_peg` (pegger → anchor): kind 1, structural −0.5pp; the anchor is a *reserve currency* (−0.1pp per 5% of world GDP pegged to it, cap −0.5 — `te_monetary_refresh_anchored_gdp` on the global pulse; **boards excluded**, G7). `swap_line`: recipient −1pp cyclical, **+2 peg confidence a month** (gold pegs and treaty pegs alike — `te_mon_backstop_confidence`), hot-money exit ×1 in a panic, and in `te_mon_in_external_crisis` the provider pays the recipient 0.1% of recipient GDP a month (G6). `lender_of_last_resort`: the ward's §7.6 debt-load premium halved, imported crashes × 0.8 (`te_mon_has_effective_backstop`), and **on the ward's default** (`on_country_default`) `te_lolr.1` on the guarantor — *honour* (5% of ward GDP) or *renege* (`te_mon_lolr_suspended_months` = 60: every other ward's benefit is off). Same-draft / existing-treaty checks are in **`can_ratify`**; every AI score line carries `desc =`. A kind-1 pegger runs `te_peg_confidence` on overvaluation against its anchor (`te_monetary_update_anchor_peg`, step 10 — §15.2's drain and Q10's heal-holds, unchanged) and gets **`te_peg.2`**: *Defend* (capital controls forced for 12 months via `te_mon_capital_controls_in_force`, which replaced the tool test inside `te_mon_controls_damp` and the fatigue counter — G15), *Break the peg* (withdraws from the whole **treaty** — G14), *Re-peg lower* (parity offset += half the overvaluation — G4).
+**5a — three directed articles.** `currency_peg` (pegger → anchor): kind 1, structural −0.5pp; the anchor is a *reserve currency* (−0.1pp per 5% of world GDP pegged to it, cap −0.5 — `te_monetary_refresh_anchored_gdp` on the global pulse; **boards excluded**, G7). `swap_line`: recipient −1pp cyclical, **+2 peg confidence a month** (gold pegs and treaty pegs alike — `te_mon_backstop_confidence`), hot-money exit ×1 in a panic, and in `te_mon_in_external_crisis` the provider pays the recipient 0.1% of recipient GDP a month (G6). `lender_of_last_resort`: the ward's §7.6 debt-load premium halved, imported crashes × 0.8 (`te_mon_has_effective_backstop`), and **on the ward's default** (`on_country_default`) `te_lolr.1` on the guarantor — *honour* (5% of ward GDP) or *renege* (`te_mon_lolr_suspended_months` = 60: every other ward's benefit is off). Same-draft / existing-treaty checks are in **`can_ratify`**; every AI score line carries `desc =`. **Tech gates are staggered over three eras** (owner decision 2026-09-21, replacing `central_banking` on all three): `currency_peg` at `international_exchange_standards`, `swap_line` at `macroeconomics`, `lender_of_last_resort` at `intergovernmental_organizations`. A kind-1 pegger runs `te_peg_confidence` on overvaluation against its anchor (`te_monetary_update_anchor_peg`, step 10 — §15.2's drain and Q10's heal-holds, unchanged) and gets **`te_peg.2`**: *Defend* (capital controls forced for 12 months via `te_mon_capital_controls_in_force`, which replaced the tool test inside `te_mon_controls_damp` and the fatigue counter — G15), *Break the peg* (withdraws from the whole **treaty** — G14), *Re-peg lower* (parity offset += half the overvaluation — G4).
 
 **5c — currency boards are rule-based.** `te_mon_is_board_subject` is the OR-list of vanilla's `autonomy_level = 1` types (puppet, vassal, colony, crown land — **re-derive on every vanilla bump**, `vanilla_patch_runbook.md` § 6b); such a subject is kind 3 on its *direct* overlord whenever the overlord holds a dial. Three managed modifiers from `te_monetary_apply_board_modifiers`: `te_mon_board_subject` (`country_minting_mult = −0.5`), `te_mon_board_seigniorage` (the overlord's half as a scaled flat `country_minting_add`, re-summed **yearly** — a gold-colony lever, a rounding error otherwise), and `te_mon_board_wrong_stance` (+0.15 liberty desire after six consecutive months with the **displayed** band at 1 or 5 — never the true gap). No exit penalty.
 
@@ -418,6 +418,51 @@ International monetary arrangements. Spec: `monetary_policy_design.md` §15A; wh
 **Deleted:** `cb_fx_swap_lines` and its disable pair, effects, `possible` trigger, `banking_tool_fx_swap_lines_active`, dashboard sguis and GUI rows, history marker rows, the tech-gate bool (also out of `add_tech_modifiers.py`), the law lock, 11 loc keys. `banking_fx_swap_lines` stays defined for one release; `te_monetary_init_arrangement_variables` strips it every pulse; checklist in `legacy_modifier_cleanup.txt`.
 
 **Dashboard, debug.** An INTERNATIONAL ARRANGEMENTS sub-block, hidden unless the country holds a role: *Monetary Anchor* (names the anchor through `Var('te_mon_anchor').GetCountry.GetName`, only ever inside a custom-loc branch guarded by `te_mon_is_anchored`), a treaty pegger's *Peg Confidence* + meter, *Backstops* (received / extended), *Monetary Union* with four single-purpose scripted GUIs (adopt, leave, press, stop pressing). `te_mon_no_dial_reason` has three anchored branches above the bank test. `te_debug_monetary.10` prints everything and pins a **treaty-less debug anchor** (`te_mon_debug_anchor_on` — nothing in play sets it).
+
+### The `banking_system_simplified` game rule
+
+`banking_system_rule` has **three** settings, not two (`common/game_rules/extra_game_rules.txt`).
+`banking_system_simplified` keeps this whole section down to **Monetary Policy (phase 1)** and
+switches phases 1–5 off. The player still gets the cycle, its crashes, the prudential /
+command / cooperative tools, the financial-regulation laws and the history charts; they get no
+policy-rate dial, no inflation, no exchange rate, and no pegs, swap lines, guarantees or shared
+currency. Interest is still country-specific — the world reference rate plus the risk premium —
+they simply do not steer it.
+
+**One trigger does all of it: `te_mon_full_system`** (`common/scripted_triggers/te_monetary_triggers.txt`,
+`has_game_rule = banking_system_enabled`, scope-free). `te_banking_system_on`
+(`banking_policy_triggers.txt`) is its counterpart for the *cycle*: true for enabled **and**
+simplified, and what the journal entry and the history store ask.
+
+**What the rule reaches:**
+
+| Site | Behaviour when `te_mon_full_system = no` |
+|---|---|
+| `te_mon_has_dial` | false for every country — one line, and every consumer (steps 2/4, the dashboard block, the OMO gate, the conditions' stance row, the union principles' `ai_weight`) falls to its no-dial side |
+| `te_monetary_monthly_update` | steps 0, 0b, 1, 4, 5, 7 and 9 only. 1b, 1c, 5b, 6, 6c, 6d, 8, 8b, 9b and 10 are skipped, so their variables keep step 0's neutral seeds (`te_inflation` 0, `te_fx_index` par, `te_mon_anchor_kind` 0, `te_mon_stance_gap` 0) and every downstream read gets a sane answer rather than a missing variable |
+| `te_monetary_set_derived_rate` | the **bankless spread is conditional**: normally every country here is bankless, but with the dial off a country that built a national bank would otherwise be charged 1pp for not having one |
+| `te_monetary_refresh_world_rate` | short-circuits to the era base — with no dial anywhere the accumulator would reach its own `else` after two ~200-country scans |
+| on-action hooks | the phase-4 world-inflation refresh, the phase-5 anchored-GDP scan, the yearly arrangement scan, `on_become_subject` and the `on_country_default` guarantee call are all skipped |
+| `banking_possible_cb_open_market_ops` | drops the regime and rate-floor conditions — OMO reverts to its pre-phase-1 gate (unlock bool, 4 points, law lock). The `on_law_enacted` auto-switch-off is gated to match |
+| `cb_capital_controls_outflow` (+ disable) | `ai_chance` falls back to the pre-phase-1 cycle rule; the external-crisis rule reads its neutral inputs and would never fire |
+| `te_mon_effect_fx_shock_tt` | the wrapper the ten event options call: no shock **and no tooltip line**, so no option promises a currency move that cannot happen |
+| treaty articles 110–112, `principle_monetary_union_1..3` | `visible = no` |
+| dashboard / history GUI | the Monetary Policy readout block is hidden (the two intervention rows under the same header are not); the inflation and exchange-rate charts are hidden and not sampled |
+
+**`banking_system_disabled` takes the same path through the monetary layer** — `te_mon_full_system`
+is false for it too, and it always should have been: with the journal entry gone there was no UI
+for the dial, the bands or the hyperinflation chain, but the whole simulation still ran behind it.
+
+**Known roughness.** Five script-only modifier types are granted from `modifier = { }` blocks
+that take no trigger, so they still render on law tooltips under the simplified rule with
+nothing consuming them: `country_wage_pressure_add`, `country_policy_rate_drift_speed_mult`,
+`country_policy_rate_floor_add`, `country_bank_forecast_error_add`,
+`country_inflation_pressure_add`. See `monetary_policy_design.md` §0.9.
+
+**What the rule deliberately does *not* reach.** The cancel-`INJECT`s (`base_values`' flat 20%,
+the six rank multipliers, laissez-faire, the five finance techs — §16.1) are file-level merges no
+game rule can switch off, so the passive rate stack runs under all three settings. Switching it
+off as well would leave every country borrowing at 0%.
 
 ### Banking Law Modifiers
 Two `script_only` modifier types allow laws (and potentially techs, PMs, etc.) to tune the banking cycle:
@@ -506,7 +551,7 @@ Sharing one container between all of a month's metrics is what makes the store a
 - **Re-sorting after eviction:** `remove_list_variable` fills the removed slot with the list's *last* element instead of shifting, so one eviction moves the newest sample to the front of the list — and the chart draws raw `GetList` order. Confirmed from a 1865 save: every store at the cap held `[the newest k months][the oldest 240 - k]`, one break, while every store still under the cap was chronological. `te_history_prune_samples` therefore calls **`te_history_sort_samples`** after each eviction, which rebuilds the list oldest-first. It builds the sorted copy into `te_hist_tmp` and clears `te_hist` only once that copy is provably complete (`count >= 240`, exact because the pruner runs at precisely the cap) — clearing first would strand 240 containers no list points at. `te_history_sort_global_samples` does the same for the global series. Check any save with `python3 scripts/analysis/check_save_history_order.py`. **A store that stops recording keeps whatever order it froze in** — the re-sort only runs on an eviction, and a country that has dropped out of eligibility never evicts again. That is unreachable rather than broken: the charts live on that country's own journal entry, and the first month it records again puts the list over the cap, which evicts, which sorts. The checker labels those `frozen` and does not fail on them.
 - **Eligibility:** `te_history_country_is_tracked` = `is_player = yes` OR `country_rank >= rank_value:major_power`. Identical for AI and human countries. `unrecognized_major_power` (rank_value 5) is deliberately out — those countries are numerous and rarely run the charted systems.
 - **Dropping out:** a country that falls below the bar stops sampling and **keeps** its stored history; nothing prunes it early. It is bounded at 240 containers and dies with the country, so stale history costs at most one country's worth of samples. Re-entry resumes recording and the gap renders empty.
-- **System gating:** a series also gates on its own system. `te_history_record_banking_samples` requires `has_game_rule = banking_system_enabled` and `has_journal_entry = je_banking_cycle`, so a country with banking switched off records no banking metrics at all.
+- **System gating:** a series also gates on its own system. `te_history_record_banking_samples` requires `te_banking_system_on = yes` and `has_journal_entry = je_banking_cycle`, so a country with banking switched off records no banking metrics at all. Under `banking_system_simplified` the three cycle series and the two rate series are still sampled; `mon_inflation` and `mon_fx` are not (they would flatline), and their two charts are hidden on the same trigger.
 
 ### Markers
 
@@ -1424,7 +1469,7 @@ Thirteen mod systems can be toggled on/off at game setup via `common/game_rules/
 | Rule | Flag (enabled) | Default | Systems Gated |
 |---|---|---|---|
 | `custom_religions_allowed_rule` | `custom_religions_allowed` | **disabled** | Custom religion events, JE visibility |
-| `banking_system_rule` | `banking_system_enabled` | enabled | Banking cycle, crash contagion |
+| `banking_system_rule` | `banking_system_enabled` | enabled | Banking cycle, crash contagion. **Three settings, not two** — see below |
 | `global_warming_rule` | `global_warming_enabled` | enabled | CO₂ tracking, GW modifiers |
 | `world_war_rule` | `world_war_enabled` | **disabled** | World war escalation, related JEs |
 | `cultural_hegemony_rule` | `cultural_hegemony_enabled` | enabled | Cultural pull calculation, hegemony JE, hegemony on-action |
@@ -1437,13 +1482,29 @@ Thirteen mod systems can be toggled on/off at game setup via `common/game_rules/
 | `social_movements_rule` | `social_movements_enabled` | enabled | 8 social movement JEs and associated events |
 | `universal_aptitude_traits_rule` | `universal_aptitude_traits_enabled` | **disabled** | Assigns admin/diplo/military aptitude traits to ALL adult characters instead of only rulers and heirs — works with Heir Education off too. With both rules off, no aptitude traits at all |
 
+**`banking_system_rule` has three settings.** `banking_system_enabled`, `banking_system_simplified`
+and `banking_system_disabled`. The middle one keeps the Banking Cycle journal entry — the cycle,
+its crashes, the prudential and command/cooperative tools, the financial-regulation laws — and
+switches off the monetary-policy layer built on top of it (`monetary_policy_design.md`
+phases 1–5): no policy-rate dial, no inflation, no exchange rate, no pegs / swap lines /
+guarantees / shared currency. Two scripted triggers tell the halves apart, and **nothing reads
+the rule directly any more**:
+
+| Trigger | File | True for | Asked by |
+|---|---|---|---|
+| `te_banking_system_on` | `common/scripted_triggers/banking_policy_triggers.txt` | enabled **and** simplified | the journal entry's `is_shown_when_inactive`, the banking history series |
+| `te_mon_full_system` | `common/scripted_triggers/te_monetary_triggers.txt` | enabled only | every step of the monetary layer (see § Banking Cycle → Monetary Policy) |
+
+Both read only a game rule, so they work from any scope — country, journal entry, treaty
+article, power-bloc principle, GUI.
+
 **Gating pattern:** Each rule sets a flag checked via `has_game_rule = <flag>`:
 - **Journal entries:** `is_shown_when_inactive = { has_game_rule = X_enabled }`
 - **On-actions:** Early `return = yes` if `NOT = { has_game_rule = X_enabled }`
 - **Diplomatic actions:** `potential = { has_game_rule = X_enabled ... }`
 - **Trait assignment (aptitude):** `limit = { te_aptitude_traits_enabled = yes  OR = { has_game_rule = universal_aptitude_traits_enabled  has_role_of_type = ruler  has_role_of_type = heir } }`
 
-**Localization:** Rule names, option labels, and descriptions in `te_game_rules_l_english.yml`. Each rule has 5 keys: `rule_X_rule`, `setting_X_enabled`, `setting_X_enabled_desc`, `setting_X_disabled`, `setting_X_disabled_desc`.
+**Localization:** Rule names, option labels, and descriptions in `te_game_rules_l_english.yml`. Each rule has 5 keys: `rule_X_rule`, `setting_X_enabled`, `setting_X_enabled_desc`, `setting_X_disabled`, `setting_X_disabled_desc` — 7 for `banking_system_rule`, which adds `setting_banking_system_simplified` and its `_desc`.
 
 **Game Concepts:** Both cultural hegemony and information warfare have detailed concept tooltips (8 concepts total) in `te_concepts_l_english.yml` with cross-linked `[concept_X]` references. Concepts: `concept_cultural_hegemony_system`, `concept_cultural_pull`, `concept_cultural_pull_components`, `concept_foreign_cultural_benchmark`, `concept_information_warfare_system`, `concept_digital_sovereignty`, `concept_cyber_operations`, `concept_cyber_detection`.
 

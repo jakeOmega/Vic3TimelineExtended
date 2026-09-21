@@ -405,6 +405,24 @@ banking_mon_display_ready = {
 	effect = { }
 }
 
+# Is the monetary layer in this game at all? `banking_system_simplified` keeps
+# the Banking Cycle journal entry and switches the whole of phases 1-5 off
+# (common/game_rules/extra_game_rules.txt), so the dashboard's Monetary Policy
+# readouts — rate, premium, inflation, gold, exchange rate — have nothing to
+# show. The two intervention rows under the same category header (open-market
+# operations, moral suasion) are NOT part of this block and stay.
+#
+# Reads only a game rule, so the country scope is a formality; it is declared
+# to match every other handler in this file and to keep the GUI call sites
+# identical.
+banking_mon_system_shown = {
+	scope = country
+	is_shown = { te_mon_full_system = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Does this country set its own policy rate at all? Drives the whole
 # interactive half of the block: a bankless, commodity-money, crypto or
 # command-economy country reads the block but cannot touch it, and gets a

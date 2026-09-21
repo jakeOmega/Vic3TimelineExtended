@@ -321,7 +321,7 @@ minor_events_timelineextended.6 = {
 		# freeze weakens the currency, and the index now produces the trade
 		# effect itself, with the right sign. A metallic country sits at par and
 		# sees this only in its shadow — as overvaluation.
-		custom_tooltip = { text = TE_FX_SHOCK_MINUS_5_DESC te_mon_effect_fx_shock = { POINTS = -13 } }
+		te_mon_effect_fx_shock_tt = { TEXT = TE_FX_SHOCK_MINUS_5_DESC POINTS = -13 }
 		ai_chance = {
 			base = 50
 			modifier = { factor = 0.5  trigger = { gold_reserves <= 0.5 } }

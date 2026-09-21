@@ -92,8 +92,14 @@ te_banking_law_change_cleanup = {
 			# economies falls through to here instead, which is also right: if it has a
 			# legacy OMO and no unbacked-money regime, switching it off is the whole
 			# point of this branch.
+			#
+			# te_mon_full_system: the regime rule this branch enforces is the monetary
+			# layer's, and banking_possible_cb_open_market_ops drops it under the
+			# simplified game rule. Switching the tool off here anyway would take it
+			# away from a country the `possible` gate still lets click it.
 			else_if = {
 				limit = {
+					te_mon_full_system = yes
 					banking_tool_omo_active = yes
 					OR = {
 						modifier:country_can_create_unbacked_money_bool = no

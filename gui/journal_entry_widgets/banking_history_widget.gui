@@ -527,7 +527,11 @@ flowcontainer = {
 		### opposite of a problem. It is also the honest axis — a signed bar
 		### splits the plot 50/50 whatever its two ranges are, so a -2%
 		### month would draw taller than a +2% one.
+		### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
+		### the two charts that read them are hidden rather than drawn empty; the
+		### samples are not taken either (te_history_banking_effects.txt).
 		te_history_chart = {
+			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			blockoverride "chart_title" {
 				text = "te_hist_chart_mon_inflation_title"
 			}
@@ -580,7 +584,11 @@ flowcontainer = {
 		### country draws a flat line at par, which is the right picture of a
 		### fixed parity. One colour either side of par, for the inflation
 		### chart's reason: weak is not the opposite of a problem.
+		### NO INFLATION AND NO EXCHANGE RATE UNDER `banking_system_simplified`, so
+		### the two charts that read them are hidden rather than drawn empty; the
+		### samples are not taken either (te_history_banking_effects.txt).
 		te_history_chart = {
+			visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			blockoverride "chart_title" {
 				text = "te_hist_chart_mon_fx_title"
 			}

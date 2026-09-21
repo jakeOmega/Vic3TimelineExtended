@@ -2,8 +2,12 @@
 	icon    = "gfx/interface/icons/event_icons/event_trade.dds"
 	group = je_group_internal_affairs
 
+	# te_banking_system_on, not `has_game_rule = banking_system_enabled`: the
+	# entry is shown under the simplified setting too, which keeps the cycle and
+	# drops only the monetary layer on top of it
+	# (common/scripted_triggers/banking_policy_triggers.txt).
 	is_shown_when_inactive = {
-		has_game_rule = banking_system_enabled
+		te_banking_system_on = yes
 		has_technology_researched = stock_exchange
 		any_scope_state = {
 			any_scope_building = { is_building_type = building_urban_center level >= 5 }

@@ -3937,3 +3937,35 @@ Vanilla treats this as non-negotiable rather than stylistic. Of its 2,185 visibl
 - **Directed treaty articles: put every directional test behind an explicit `scope:source_country` / `scope:target_country`, in `can_ratify` or `requirement_to_maintain`** — both are checked on proposal, and neither depends on which party ROOT happens to be in `possible`. `requirement_to_maintain` is also what breaks the article later ("the anchor must keep a dial"). Hooks: `on_entry_into_force` reaches the parties through `scope:article_options = { source_country = { … } }`, `on_withdrawal` through `scope:withdrawing_country` / `scope:non_withdrawing_country`; ROOT is the article in both, so dispatch a country event rather than running ROOT-sensitive script in place, and give it `days = 1` if it walks `any_scope_treaty`. `withdraw` is a **treaty** effect — there is no way to drop one article.
 - **`abs = yes` is a valid script-value operator (vanilla uses it) that `effect_trigger_validity_audit` does not know.** A sign flip behind an `if` costs one line; teaching the catalog is the better fix if it comes up again.
 - **Treaty-article loc: `[SOURCE_COUNTRY…]` / `[TARGET_COUNTRY…]` resolve only in `<article>_article_short_desc`.** In `<article>_desc` (rendered through `ArticleType.GetDesc`, which has no article instance behind it) they promote to `nullptr` — the text renders with **blank country names** and `debug.log` carries `Promote 'SOURCE_COUNTRY' returned nullptr, in 'SOURCE_COUNTRY.GetNameNoFormatting'` (`pdx_data_callstack.cpp:52`, no script path, so only the `mod_only=unknown` view shows it). Vanilla leaves most `_desc` keys empty for this reason. Keep `_desc` a static one-sentence gist, put the parties' names in `_article_short_desc`, and put the mechanics in `_effects_desc` **grouped by party with the numbers in them** — an AI-proposed article is read cold, from the tooltip, by somebody who has never seen the design doc. Caught on first play of monetary phase 5a.
+
+## Retrofitting a Third Setting onto an On/Off Game Rule
+
+A Paradox game rule takes any number of settings, so a two-setting rule grows a third by adding
+one block and one pair of loc keys (`setting_<name>` / `setting_<name>_desc`). The work is
+everywhere else. Three things that made `banking_system_simplified` a ~460-line change rather
+than a sprawl (`monetary_policy_design.md` §0.9):
+
+- **Never let a third setting be read as `has_game_rule` at call sites.** Every existing site
+  asks `has_game_rule = X_enabled`, and each one now means one of two different questions — "is
+  the system on?" or "is the *advanced half* on?". Answer them with two scripted triggers
+  (`te_banking_system_on`, `te_mon_full_system`), convert every call site to those, and leave
+  `has_game_rule` in the trigger bodies only. Both read a game rule and nothing else, so they
+  carry no scope and work from a country, a journal entry, a treaty article, a power-bloc
+  principle or a `.gui` alike (`has_game_rule` is declared scope `none`).
+- **Gate the orchestrator, not the steps.** Wrapping whole groups of an update's numbered steps
+  in one `if = { limit = { <trigger> = yes } … }` beats putting a guard inside each step: the
+  skipped steps stay readable, and the contract becomes a single sentence — *a skipped step
+  never writes, so its variables keep the values the init step seeded* (0 for inflation, par for
+  an index, 0 for a kind enum). Every downstream consumer then reads a sane number with no
+  second "is it on?" test, and script values that combine them (premium terms, `min = 0` floors)
+  collapse to 0 on their own. Worth auditing that last claim term by term rather than assuming
+  it.
+- **A game rule cannot change mid-campaign, so nothing needs a migration or a strip path.** A
+  modifier the gate turns off is simply never applied in the first place. That is also why the
+  gate can sit in `visible = { }` on treaty articles and principles rather than in `possible`.
+
+Two traps found on the way: an unconditional term that was only ever correct *because* of what
+the gate now changes (a "bankless spread" added in the no-dial branch, which every country would
+have paid once the dial was off for everyone), and event-option `custom_tooltip`s wrapping a
+gated effect — the effect no-ops but the promise stays on screen, so wrap **tooltip and effect
+together** in one parameterised helper (`te_mon_effect_fx_shock_tt`) and gate that.

@@ -1056,7 +1056,13 @@ flowcontainer = {
 			### one that holds the dial. Nothing here renders the neutral rate,
 			### the stance gap or the estimation error — the stance band name is
 			### the only window onto any of them (§8, "The rule").
+			###
+			### THE WHOLE BLOCK IS OFF UNDER `banking_system_simplified` — the rate,
+			### the premium, prices, gold and the exchange rate all belong to the
+			### monetary layer that setting removes. The two intervention rows below
+			### it share the category header and are NOT gated on it.
 			flowcontainer = {
+				visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				direction = vertical
 				ignoreinvisible = yes
 				parentanchor = hcenter

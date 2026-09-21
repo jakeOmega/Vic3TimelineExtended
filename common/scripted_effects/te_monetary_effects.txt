@@ -110,42 +110,55 @@ te_monetary_refresh_world_era_base = {
 # Must run AFTER te_monetary_refresh_world_era_base, whose global it falls back
 # on. Scope: any.
 te_monetary_refresh_world_rate = {
-	set_global_variable = { name = te_world_rate_acc_num value = 0 }
-	set_global_variable = { name = te_world_rate_acc_den value = 0 }
-	# Last month's members forget their share first, so a country that has
-	# dropped out of the average (lost rank, gone on to peg defence) does not
-	# go on subtracting a contribution it no longer makes — see step 0.
-	every_country = {
-		limit = {
-			has_variable = te_mon_world_own_den
-			var:te_mon_world_own_den > 0
-		}
-		set_variable = { name = te_mon_world_own_num value = 0 }
-		set_variable = { name = te_mon_world_own_den value = 0 }
-	}
-	every_country = {
-		limit = {
-			country_rank >= rank_value:great_power
-			te_mon_rate_is_discretionary = yes
-		}
-		# Each member keeps the EXACT share it contributed (owner decision H):
-		# step 0 subtracts it, so the world rate a great power faces is the
-		# REST of the world's. Recorded here rather than recomputed there
-		# because the pulse order is unknown (§17 check 7) and a share
-		# recomputed a month later would not be the one in the sum.
-		set_variable = { name = te_mon_world_own_num value = te_mon_world_rate_weighted_real }
-		set_variable = { name = te_mon_world_own_den value = te_mon_world_rate_weight }
-		change_global_variable = { name = te_world_rate_acc_num add = var:te_mon_world_own_num }
-		change_global_variable = { name = te_world_rate_acc_den add = var:te_mon_world_own_den }
-	}
+	# SIMPLIFIED GAME RULE: nobody holds a dial, so te_mon_rate_is_discretionary
+	# is false for every great power and the accumulator below would fall through
+	# to its own `else` anyway. Answering directly saves two ~200-country
+	# iterations a month for a result that cannot differ.
 	if = {
-		limit = { global_var:te_world_rate_acc_den > 0 }
-		set_global_variable = { name = te_world_rate value = global_var:te_world_rate_acc_num }
-		change_global_variable = { name = te_world_rate divide = global_var:te_world_rate_acc_den }
-	}
-	else = {
+		limit = { te_mon_full_system = no }
 		set_global_variable = { name = te_world_rate value = global_var:te_mon_era_base_world }
 	}
+	else = {
+		set_global_variable = { name = te_world_rate_acc_num value = 0 }
+		set_global_variable = { name = te_world_rate_acc_den value = 0 }
+		# Last month's members forget their share first, so a country that has
+		# dropped out of the average (lost rank, gone on to peg defence) does not
+		# go on subtracting a contribution it no longer makes — see step 0.
+		every_country = {
+			limit = {
+				has_variable = te_mon_world_own_den
+				var:te_mon_world_own_den > 0
+			}
+			set_variable = { name = te_mon_world_own_num value = 0 }
+			set_variable = { name = te_mon_world_own_den value = 0 }
+		}
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				te_mon_rate_is_discretionary = yes
+			}
+			# Each member keeps the EXACT share it contributed (owner decision H):
+			# step 0 subtracts it, so the world rate a great power faces is the
+			# REST of the world's. Recorded here rather than recomputed there
+			# because the pulse order is unknown (§17 check 7) and a share
+			# recomputed a month later would not be the one in the sum.
+			set_variable = { name = te_mon_world_own_num value = te_mon_world_rate_weighted_real }
+			set_variable = { name = te_mon_world_own_den value = te_mon_world_rate_weight }
+			change_global_variable = { name = te_world_rate_acc_num add = var:te_mon_world_own_num }
+			change_global_variable = { name = te_world_rate_acc_den add = var:te_mon_world_own_den }
+		}
+		if = {
+			limit = { global_var:te_world_rate_acc_den > 0 }
+			set_global_variable = { name = te_world_rate value = global_var:te_world_rate_acc_num }
+			change_global_variable = { name = te_world_rate divide = global_var:te_world_rate_acc_den }
+		}
+		else = {
+			set_global_variable = { name = te_world_rate value = global_var:te_mon_era_base_world }
+		}
+	}
+
+	# The debug offset and the two clamps apply to BOTH branches: the simplified
+	# answer is still the world rate every country reads.
 	if = {
 		limit = { has_global_variable = te_world_rate_debug_offset }
 		change_global_variable = { name = te_world_rate add = global_var:te_world_rate_debug_offset }
@@ -204,6 +217,16 @@ te_monetary_refresh_world_rate = {
 # events/te_debug_monetary_events.txt, whose entire purpose is stepping the
 # system by hand.)
 #
+# HALF OF IT IS SWITCHED OFF BY A GAME RULE. Under banking_system_simplified
+# (and banking_system_disabled) te_mon_full_system is false and every step but
+# 0, 0b, 1, 4, 5, 7 and 9 is skipped — no dial, no monetisation, no inflation,
+# no exchange rate, no stance, no gold, no international arrangements. What is
+# left is the passive rate stack, which has to run under every setting because
+# vanilla's own interest sources are cancelled by INJECTs no game rule reaches
+# (§16.1). The skipped steps never write, so their variables keep the neutral
+# values step 0 gives them; see the te_mon_full_system header in
+# common/scripted_triggers/te_monetary_triggers.txt for that contract.
+#
 # NO STEP OF THIS EFFECT MAY BE CALLED IN ISOLATION. The pulse family calling
 # the full update is the whole list. Step 9 (te_monetary_apply_interest_modifiers)
 # is the only step that even could be called on its own — it is idempotent,
@@ -233,14 +256,19 @@ te_monetary_monthly_update = {
 	# te_mon_can_monetise and te_mon_has_dial both ask te_mon_is_anchored, so the
 	# pair they see has to be this month's checked one.
 	# common/scripted_effects/te_monetary_arrangement_effects.txt.
-	te_monetary_update_anchor = yes
+	if = {
+		limit = { te_mon_full_system = yes }
+		te_monetary_update_anchor = yes
 
-	# --- 1b. monetising the deficit, and the minting it buys ----------------
-	# Before the premium and the pressure sum, both of which read the level.
-	te_monetary_update_monetisation = yes
+		# --- 1b. monetising the deficit, and the minting it buys ------------
+		# Before the premium and the pressure sum, both of which read the level.
+		te_monetary_update_monetisation = yes
+	}
 
 	# --- 2/3. the dial: target, then drift toward it ------------------------
 	# --- 4. no dial: the rate is derived, never chosen ----------------------
+	# Under the simplified game rule te_mon_has_dial is false for everybody, so
+	# every country takes the derived branch and nobody steers a rate.
 	if = {
 		limit = { te_mon_has_dial = yes }
 		te_monetary_update_target = yes
@@ -260,50 +288,71 @@ te_monetary_monthly_update = {
 	# own te_mon_premium_fx therefore reads LAST month's index — the deliberate
 	# one-month lag that breaks the premium <-> FX loop inside a single tick.
 	# common/scripted_effects/te_monetary_fx_effects.txt.
-	te_monetary_update_fx = yes
+	#
+	# THE SIMPLIFIED GAME RULE SKIPS 5b, 6, 6c AND 6d WHOLESALE (te_mon_full_system,
+	# common/scripted_triggers/te_monetary_triggers.txt): no exchange rate and no
+	# inflation. te_fx_index stays at the par step 0 seeds it to and te_inflation
+	# at 0, which is exactly what every downstream read wants to see — step 7's
+	# lenders' floor becomes era_base, its realised-inflation subtraction becomes
+	# zero, and the rate paid is the reference rate plus the premium.
+	if = {
+		limit = { te_mon_full_system = yes }
+		te_monetary_update_fx = yes
 
-	# --- 6. the basket, core inflation, headline and expectations -----------
-	te_monetary_update_inflation = yes
+		# --- 6. the basket, core inflation, headline and expectations -------
+		te_monetary_update_inflation = yes
 
-	# --- 6c. the band modifier, and the hyperinflation crisis ---------------
-	# Immediately after the band number is written, so the modifier on the
-	# country is never a month behind the figure the dashboard shows.
-	te_monetary_apply_inflation_band = yes
+		# --- 6c. the band modifier, and the hyperinflation crisis -----------
+		# Immediately after the band number is written, so the modifier on the
+		# country is never a month behind the figure the dashboard shows.
+		te_monetary_apply_inflation_band = yes
 
-	# --- 6d. the real-wage dividend the comfort band pays -------------------
-	# After 6c, and for the same reason: it keys off the band this month's
-	# step 6 just wrote, so the dividend arrives with the band rather than a
-	# month behind it.
-	te_monetary_apply_wage_dividend = yes
+		# --- 6d. the real-wage dividend the comfort band pays ---------------
+		# After 6c, and for the same reason: it keys off the band this month's
+		# step 6 just wrote, so the dividend arrives with the band rather than a
+		# month behind it.
+		te_monetary_apply_wage_dividend = yes
+	}
 
 	# --- 7. the rate the government actually pays ---------------------------
 	te_monetary_update_rate_paid = yes
 
 	# --- 8. hidden neutral rate, stance gap, displayed band -----------------
-	te_monetary_update_stance = yes
+	# Simplified: skipped, so te_mon_stance_gap stays 0 and the stance channel
+	# into the cycle (§16.3) contributes nothing. The band modifiers and the
+	# stance bar are gated on the same trigger in banking_cycle_effects.txt.
+	if = {
+		limit = { te_mon_full_system = yes }
+		te_monetary_update_stance = yes
 
-	# --- 8b. the politics a sustained stance earns (§13) --------------------
-	# After step 8, and for the same reason 6c follows 6: it counts months of
-	# the DISPLAYED band, so it has to see the one step 8 has just written
-	# rather than last month's.
-	te_monetary_apply_stance_politics = yes
+		# --- 8b. the politics a sustained stance earns (§13) ----------------
+		# After step 8, and for the same reason 6c follows 6: it counts months of
+		# the DISPLAYED band, so it has to see the one step 8 has just written
+		# rather than last month's.
+		te_monetary_apply_stance_politics = yes
+	}
 
 	# --- 9. write it into the engine ----------------------------------------
+	# NOT gated: this is the step that replaces vanilla's cancelled base rate,
+	# and it runs under all three settings of banking_system_rule (§16.1).
 	te_monetary_apply_interest_modifiers = yes
 
 	# 9b. [P4] te_fx_weak / te_fx_strong / te_capital_controls_fatigue — their
 	# one refresh site.
-	te_monetary_apply_fx_modifiers = yes
-
+	#
 	# 9b. [P5] the three arrangement modifiers, and a swap line drawn on in a
 	# crisis — their one refresh site too.
-	te_monetary_apply_arrangement_modifiers = yes
-
+	#
 	# --- 10. gold flow, hot money, peg confidence (§12.2-12.3) --------------
 	# Last, as §16.2 orders it: it reads the policy rate step 3 settled and
 	# writes the flow step 6 will price NEXT month (the same one-month lag
 	# ruling P5 accepts for the stance gap).
-	te_monetary_update_gold = yes
+	if = {
+		limit = { te_mon_full_system = yes }
+		te_monetary_apply_fx_modifiers = yes
+		te_monetary_apply_arrangement_modifiers = yes
+		te_monetary_update_gold = yes
+	}
 }
 
 
@@ -1460,7 +1509,20 @@ te_monetary_set_derived_rate = {
 		# world rate under it cannot make a bankless country's debt cheap.
 		set_variable = { name = te_policy_rate value = var:te_mon_world_rate_now }
 		change_variable = { name = te_policy_rate add = var:te_inflation_expected }
-		change_variable = { name = te_policy_rate add = 1.0 }
+		# THE BANKLESS SPREAD IS FOR THE BANKLESS. Normally every country that
+		# reaches this branch is one (a bank plus any monetary regime is a dial),
+		# so the term was unconditional. Under the simplified game rule the dial
+		# is switched off for everybody, and a country that HAS built a national
+		# bank would otherwise be charged a spread for not having one.
+		if = {
+			limit = {
+				OR = {
+					te_mon_full_system = yes
+					NOT = { has_law_or_variant = law_type:law_national_bank }
+				}
+			}
+			change_variable = { name = te_policy_rate add = 1.0 }
+		}
 		# The world rate can be negative (te_mon_world_rate_min); a derived
 		# rate cannot. Nothing downstream would break — step 7 floors the rate
 		# paid — but the dashboard prints this figure.
