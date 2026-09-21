@@ -1,6 +1,12 @@
-﻿# Auto-generated boolean modifiers for technology-gated features
+﻿# Boolean modifiers for technology-gated features.
 # These make technology requirements for scripted buttons and
 # power bloc principles visible in the tech tree.
+#
+# HAND-MAINTAINED — NOT a generated file, despite what this header used to claim.
+# scripts/generators/add_tech_modifiers.py only appends definitions missing from its
+# tables; it never rewrites or prunes this file, so blocks it knows nothing about (the
+# space-program one below) are safe. Deleting a gate means removing it here AND from
+# that script's tables. This file is also an input to gen_pb_principle_unlock_descs.py.
 
 # Space Program building PM unlock modifiers
 # These appear in PM tooltips so players know which journal entries each PM unlocks.
