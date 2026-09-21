@@ -4,8 +4,31 @@ with custom boolean modifier checks, and adds those modifiers to the relevant te
 
 This makes the technology's effects on scripted buttons and power bloc principles visible
 when browsing the tech tree.
+
+ADDITIVE AND IDEMPOTENT. Every step below only ever *adds* what is missing, and no file is
+opened for writing unless its content actually changed. Running this on a clean tree must
+leave `git status` clean — `test_add_tech_modifiers.py` pins that.
+
+Consequences worth knowing before you edit the tables:
+
+* `common/modifier_type_definitions/tech_gate_modifier_types.txt` is **hand-maintained**,
+  not owned by this script. It carries definitions this script knows nothing about (the
+  `country_sr_*_program_bool` space-program block, without which the space race silently
+  never activates — see docs/guides/scripting_best_practices.md). The script used to
+  rewrite the file from scratch with `open(..., 'w')`, which deleted that block on every
+  run; it now merges in missing definitions and leaves everything else alone.
+* Because the merge is additive, **deleting** a tech gate is a two-place edit: drop it from
+  the tables here *and* from the modifier-type file / tech files / loc. Removing it from
+  the tables alone just makes this script stop re-adding it; removing it from the file
+  alone means the next run resurrects it.
+* Localization is only emitted for keys that exist in **no** `localization/english/*.yml`
+  file. The hardcoded `loc_name` / `loc_desc` strings below are stale placeholders for
+  brand-new gates, not the source of truth for the ones already shipped.
+
+Usage: python3 scripts/generators/add_tech_modifiers.py [--root PATH]
 """
 
+import argparse
 import os
 import re
 import sys
@@ -297,36 +320,112 @@ VANILLA_TECHS = {
 # We'll detect this automatically
 
 # ============================================================================
-# STEP 1: Generate modifier type definitions
+# STEP 1: Merge modifier type definitions
 # ============================================================================
 
-def generate_modifier_type_definitions():
-    """Generate the modifier_type_definitions file content."""
-    lines = ['# Auto-generated boolean modifiers for technology-gated features\n']
-    lines.append('# These make technology requirements for scripted buttons and\n')
-    lines.append('# power bloc principles visible in the tech tree.\n\n')
+PRINCIPLE_SECTION_HEADER = '# Power bloc principle technology requirements'
+BUTTON_SECTION_HEADER = '# Scripted button technology requirements'
 
-    # Principle modifiers
-    lines.append('# Power bloc principle technology requirements\n')
-    for tech, (mod_name, loc_name, loc_desc) in sorted(PRINCIPLE_TECH_MODIFIERS.items()):
-        lines.append(f'{mod_name} = {{\n')
-        lines.append('\tcolor = good\n')
-        lines.append('\tboolean = yes\n')
-        lines.append('}\n\n')
+# Only used when the modifier-type file does not exist at all. The live file's header
+# carries the same warning; keep the two in sync if you reword either.
+MODIFIER_TYPE_FILE_HEADER = (
+    '# Boolean modifiers for technology-gated features.\n'
+    '# These make technology requirements for scripted buttons and\n'
+    '# power bloc principles visible in the tech tree.\n'
+    '#\n'
+    '# HAND-MAINTAINED. scripts/generators/add_tech_modifiers.py only appends\n'
+    '# definitions missing from its tables; it never rewrites or prunes this file,\n'
+    '# so unrelated blocks below are safe. Deleting a gate means removing it here\n'
+    '# AND from that script\'s tables.\n'
+)
 
-    # Button modifiers
-    lines.append('# Scripted button technology requirements\n')
-    all_button_mods = set()
-    for tech, mods in sorted(BUTTON_TECH_MODIFIERS.items()):
-        for mod_name, loc_name, loc_desc in mods:
-            if mod_name not in all_button_mods:
-                all_button_mods.add(mod_name)
-                lines.append(f'{mod_name} = {{\n')
-                lines.append('\tcolor = good\n')
-                lines.append('\tboolean = yes\n')
-                lines.append('}\n\n')
 
-    return ''.join(lines)
+def _definition_block(modifier_name):
+    """One `boolean = yes` modifier-type definition, trailing blank line included."""
+    return f'{modifier_name} = {{\n\tcolor = good\n\tboolean = yes\n}}\n\n'
+
+
+def expected_modifier_definitions():
+    """[(section_header, [modifier_name, ...]), ...] in this script's canonical order."""
+    principles = [mod_name for _, (mod_name, _, _) in sorted(PRINCIPLE_TECH_MODIFIERS.items())]
+
+    buttons, seen = [], set()
+    for _, mods in sorted(BUTTON_TECH_MODIFIERS.items()):
+        for mod_name, _, _ in mods:
+            if mod_name not in seen:
+                seen.add(mod_name)
+                buttons.append(mod_name)
+
+    return [(PRINCIPLE_SECTION_HEADER, principles), (BUTTON_SECTION_HEADER, buttons)]
+
+
+def _top_level_keys(content):
+    """Every `<key> = {` defined at column 0 — i.e. already-registered modifier types."""
+    return set(re.findall(r'(?m)^(\S+)\s*=\s*\{', content))
+
+
+def _section_end_index(content, header, later_headers):
+    """Index just past the last entry of `header`'s section, or None if absent.
+
+    A section runs from its own header to the next known section header, or to EOF.
+    """
+    start = content.find(header)
+    if start == -1:
+        return None
+    end = len(content)
+    for other in later_headers:
+        other_start = content.find(other, start + len(header))
+        if other_start != -1:
+            end = min(end, other_start)
+    return end
+
+
+def merge_modifier_type_definitions(filepath):
+    """Append any missing tech-gate boolean definitions to `filepath`. Returns True if written.
+
+    Deliberately additive: the file is hand-maintained and holds definitions this script
+    has no table entry for (notably the `country_sr_*_program_bool` space-program block,
+    which the space race silently depends on). The previous implementation regenerated the
+    whole file with `open(..., 'w')` and dropped every such block on each run.
+
+    When nothing is missing the file is not opened for writing at all, so a run on a clean
+    tree leaves no diff — not even a whitespace or BOM round-trip.
+    """
+    if os.path.exists(filepath):
+        with open(filepath, 'r', encoding='utf-8-sig') as f:
+            content = f.read()
+    else:
+        content = MODIFIER_TYPE_FILE_HEADER
+
+    original = content
+    existing = _top_level_keys(content)
+    sections = expected_modifier_definitions()
+
+    for index, (header, modifier_names) in enumerate(sections):
+        missing = [m for m in modifier_names if m not in existing]
+        if not missing:
+            continue
+        addition = ''.join(_definition_block(m) for m in missing)
+        later_headers = [h for h, _ in sections[index + 1:]]
+        insert_at = _section_end_index(content, header, later_headers)
+
+        if insert_at is None:
+            # Section absent entirely — start one at EOF.
+            content = content.rstrip('\n') + '\n\n' + header + '\n' + addition
+        else:
+            prefix, suffix = content[:insert_at], content[insert_at:]
+            if not prefix.endswith('\n\n'):
+                prefix = prefix.rstrip('\n') + '\n\n'
+            content = prefix + addition + suffix
+
+        existing.update(missing)
+
+    if content == original:
+        return False
+
+    with open(filepath, 'w', encoding='utf-8-sig') as f:
+        f.write(content.lstrip('﻿'))
+    return True
 
 
 # ============================================================================
@@ -436,10 +535,11 @@ def add_modifiers_to_tech_file(filepath, tech_modifiers_map):
 
 
 def add_inject_entries_to_modified(filepath, tech_modifiers_map):
-    """Add INJECT: entries for vanilla techs to modified.txt."""
+    """Add INJECT: entries for vanilla techs to modified.txt. Returns True if written."""
     with open(filepath, 'r', encoding='utf-8-sig') as f:
         content = f.read()
 
+    original = content
     new_entries = []
     for tech_name, modifier_names in sorted(tech_modifiers_map.items()):
         modifier_lines = '\n'.join(f'\t\t{m} = yes' for m in modifier_names)
@@ -472,8 +572,12 @@ def add_inject_entries_to_modified(filepath, tech_modifiers_map):
     if new_entries:
         content = content.rstrip() + '\n' + '\n'.join(new_entries) + '\n'
 
+    if content == original:
+        return False
+
     with open(filepath, 'w', encoding='utf-8-sig') as f:
         f.write(content.lstrip('\ufeff'))
+    return True
 
 
 # ============================================================================
@@ -485,6 +589,7 @@ def replace_tech_in_principles(filepath):
     with open(filepath, 'r', encoding='utf-8-sig') as f:
         content = f.read()
 
+    original = content
     replacements = 0
     for tech_name, (mod_name, _, _) in PRINCIPLE_TECH_MODIFIERS.items():
         old = f'has_technology_researched = {tech_name}'
@@ -495,8 +600,10 @@ def replace_tech_in_principles(filepath):
             replacements += count
             print(f"  Replaced {count}x: {tech_name} -> {mod_name}")
 
-    with open(filepath, 'w', encoding='utf-8-sig') as f:
-        f.write(content.lstrip('\ufeff'))
+    # Already-converted file: skip the write entirely so no diff is produced.
+    if content != original:
+        with open(filepath, 'w', encoding='utf-8-sig') as f:
+            f.write(content.lstrip('\ufeff'))
 
     return replacements
 
@@ -505,14 +612,16 @@ def replace_tech_in_principles(filepath):
 # STEP 4: Replace has_technology_researched in scripted buttons
 # ============================================================================
 
-def replace_tech_in_buttons():
+def replace_tech_in_buttons(root=None):
     """Replace has_technology_researched with modifier checks in button files."""
+    root = root or mod_path
     replacements = 0
+    already_converted = 0
 
     # Group buttons by file
     file_buttons = {}
     for rel_path, button_name, tech_name, mod_name in BUTTON_SPECIFIC_MAP:
-        full_path = os.path.join(mod_path, rel_path)
+        full_path = os.path.join(root, rel_path)
         if full_path not in file_buttons:
             file_buttons[full_path] = []
         file_buttons[full_path].append((button_name, tech_name, mod_name))
@@ -521,6 +630,7 @@ def replace_tech_in_buttons():
         with open(filepath, 'r', encoding='utf-8-sig') as f:
             content = f.read()
 
+        original = content
         for button_name, tech_name, mod_name in buttons:
             # Find the button definition and replace has_technology_researched within it
             # We need to be careful to only replace within the specific button
@@ -546,7 +656,10 @@ def replace_tech_in_buttons():
             tech_pos = content.find(old, search_start)
 
             if tech_pos == -1:
-                print(f"  WARNING: Could not find '{old}' after button '{button_name}' in {filepath}")
+                # Either already converted on an earlier run, or the button no longer
+                # gates on that tech. Both are no-ops, not errors — warning on them made
+                # every run of an up-to-date tree print eight scary lines.
+                already_converted += 1
                 continue
 
             # Make sure this occurrence is within the button (before the next top-level def)
@@ -555,8 +668,12 @@ def replace_tech_in_buttons():
             replacements += 1
             print(f"  Replaced in {button_name}: {tech_name} -> {mod_name}")
 
-        with open(filepath, 'w', encoding='utf-8-sig') as f:
-            f.write(content.lstrip('\ufeff'))
+        if content != original:
+            with open(filepath, 'w', encoding='utf-8-sig') as f:
+                f.write(content.lstrip('\ufeff'))
+
+    if already_converted:
+        print(f"  {already_converted} button gate(s) already converted \u2014 nothing to do")
 
     return replacements
 
@@ -565,14 +682,44 @@ def replace_tech_in_buttons():
 # STEP 5: Generate localization
 # ============================================================================
 
+def existing_localization_keys(root=None):
+    """Every `key:0` defined in any localization/english/*.yml under `root`.
+
+    Cross-file, deliberately: these modifiers' loc long ago migrated out of
+    te_modifiers_l_english.yml (the pb ones to te_power_bloc_unlocks_l_english.yml, the
+    button ones to te_miscellaneous/te_concepts). A same-file-only check — what this
+    script had before — saw them as absent and re-appended ~104 stale duplicates per run.
+    """
+    root = root or mod_path
+    loc_dir = os.path.join(root, 'localization', 'english')
+    keys = set()
+    if not os.path.isdir(loc_dir):
+        return keys
+    for filename in sorted(os.listdir(loc_dir)):
+        if not filename.endswith('.yml'):
+            continue
+        with open(os.path.join(loc_dir, filename), 'r', encoding='utf-8-sig') as f:
+            keys.update(re.findall(r'(?m)^\s*([\w.]+):\d+\s', f.read()))
+    return keys
+
+
 def generate_localization():
-    """Generate localization entries for all new modifiers."""
+    """Generate candidate localization entries for the configured modifiers.
+
+    These are placeholders for gates that have no loc anywhere yet; main() filters out
+    everything `existing_localization_keys` already knows.
+    """
     lines = []
 
-    # Principle modifiers
+    # Principle modifiers.
+    #
+    # `<name>_desc` is deliberately NOT emitted: gen_pb_principle_unlock_descs.py owns
+    # every country_*_pb_principles_bool_desc key and renders it with [GetTechnology(...)]
+    # / [Concept(...)] accessors into te_power_bloc_unlocks_l_english.yml. Emitting a
+    # plain-text copy here would put the same key in two files with different values,
+    # which duplicate_key_audit --strict treats as an error.
     for tech, (mod_name, loc_name, loc_desc) in sorted(PRINCIPLE_TECH_MODIFIERS.items()):
         lines.append(f' {mod_name}:0 "{loc_name}"')
-        lines.append(f' {mod_name}_desc:0 "{loc_desc}"')
 
     # Button modifiers
     all_button_mods = set()
@@ -590,12 +737,15 @@ def generate_localization():
 # MAIN
 # ============================================================================
 
-def find_tech_in_era_files():
+def find_tech_in_era_files(root=None):
     """Determine which era file each mod tech is defined in."""
-    tech_dir = os.path.join(mod_path, 'common', 'technology', 'technologies')
+    root = root or mod_path
+    tech_dir = os.path.join(root, 'common', 'technology', 'technologies')
     tech_file_map = {}  # tech_name -> filepath
+    if not os.path.isdir(tech_dir):
+        return tech_file_map
 
-    for filename in os.listdir(tech_dir):
+    for filename in sorted(os.listdir(tech_dir)):
         if not filename.endswith('.txt') or filename == 'modified.txt':
             continue
         filepath = os.path.join(tech_dir, filename)
@@ -612,9 +762,11 @@ def find_tech_in_era_files():
     return tech_file_map
 
 
-def main():
+def main(root=None):
+    root = root or mod_path
     print("=" * 60)
     print("Adding technology modifiers for scripted buttons and power bloc principles")
+    print(f"Root: {root}")
     print("=" * 60)
 
     # Collect all techs that need modifiers
@@ -624,7 +776,7 @@ def main():
         all_techs_needing_modifiers.add(tech)
 
     # Find which file each tech is in
-    tech_file_map = find_tech_in_era_files()
+    tech_file_map = find_tech_in_era_files(root)
 
     # Organize techs by file
     era_file_techs = {}  # filepath -> { tech_name: [modifiers] }
@@ -645,15 +797,15 @@ def main():
         else:
             print(f"  WARNING: Tech '{tech}' not found in any era file and not marked as vanilla!")
 
-    # STEP 1: Generate modifier type definitions
-    print("\n--- Step 1: Generating modifier type definitions ---")
+    # STEP 1: Merge in any missing modifier type definitions
+    print("\n--- Step 1: Merging modifier type definitions ---")
     mod_type_path = os.path.join(
-        mod_path, 'common', 'modifier_type_definitions', 'tech_gate_modifier_types.txt'
+        root, 'common', 'modifier_type_definitions', 'tech_gate_modifier_types.txt'
     )
-    mod_type_content = generate_modifier_type_definitions()
-    with open(mod_type_path, 'w', encoding='utf-8-sig') as f:
-        f.write(mod_type_content)
-    print(f"  Created {mod_type_path}")
+    if merge_modifier_type_definitions(mod_type_path):
+        print(f"  Added missing definition(s) to {os.path.basename(mod_type_path)}")
+    else:
+        print(f"  {os.path.basename(mod_type_path)} already has every definition — unchanged")
 
     # STEP 2: Add modifiers to mod tech files
     print("\n--- Step 2: Adding modifiers to mod technology files ---")
@@ -665,7 +817,7 @@ def main():
 
     # STEP 3: Add INJECT entries for vanilla techs
     print("\n--- Step 3: Adding INJECT entries for vanilla techs ---")
-    modified_path = os.path.join(mod_path, 'common', 'technology', 'technologies', 'modified.txt')
+    modified_path = os.path.join(root, 'common', 'technology', 'technologies', 'modified.txt')
     if vanilla_techs:
         for tech, mods in sorted(vanilla_techs.items()):
             print(f"  {tech}: {', '.join(mods)}")
@@ -676,33 +828,34 @@ def main():
     # STEP 4: Replace in power bloc principles
     print("\n--- Step 4: Replacing tech triggers in power bloc principles ---")
     principle_path = os.path.join(
-        mod_path, 'common', 'power_bloc_principles', 'extra_power_bloc_principles.txt'
+        root, 'common', 'power_bloc_principles', 'extra_power_bloc_principles.txt'
     )
     count = replace_tech_in_principles(principle_path)
     print(f"  Total replacements: {count}")
 
     # STEP 5: Replace in scripted buttons
     print("\n--- Step 5: Replacing tech triggers in scripted buttons ---")
-    count = replace_tech_in_buttons()
+    count = replace_tech_in_buttons(root)
     print(f"  Total replacements: {count}")
 
     # STEP 6: Generate localization
     print("\n--- Step 6: Generating localization ---")
     loc_entries = generate_localization()
     loc_path = os.path.join(
-        mod_path, 'localization', 'english', 'te_modifiers_l_english.yml'
+        root, 'localization', 'english', 'te_modifiers_l_english.yml'
     )
     with open(loc_path, 'r', encoding='utf-8-sig') as f:
         loc_content = f.read()
 
-    # Append new entries before the end of the file, skipping any loc key already
-    # present in this file (idempotency guard — issue #191). This dedups the
-    # within-file double-run case; organize_loc.py separately handles cross-file
-    # relocation of these keys (last-wins), so no lingering dupes survive a reload.
-    existing_loc_keys = set(re.findall(r'(?m)^\s*([\w.]+:\d+)\s', loc_content))
+    # Skip any key that already exists in ANY localization/english/*.yml, not just this
+    # one (issue #191 only guarded the within-file case). Every one of these keys has
+    # since migrated to a topical file — te_power_bloc_unlocks / te_miscellaneous /
+    # te_concepts — with richer, accessor-based text, so a same-file check re-appended
+    # ~104 stale duplicates on every run and organize_loc.py then had to un-do it.
+    existing_loc_keys = existing_localization_keys(root)
     new_loc_lines = []
     for line in loc_entries.splitlines():
-        key_match = re.match(r'\s*([\w.]+:\d+)\s', line)
+        key_match = re.match(r'\s*([\w.]+):\d+\s', line)
         if key_match and key_match.group(1) in existing_loc_keys:
             continue
         new_loc_lines.append(line)
@@ -712,12 +865,18 @@ def main():
             f.write(loc_content)
         print(f"  Added {len(new_loc_lines)} localization line(s) to {os.path.basename(loc_path)}")
     else:
-        print(f"  No new localization entries for {os.path.basename(loc_path)} (all present)")
+        print("  No new localization entries (every key already has loc somewhere)")
 
     print("\n" + "=" * 60)
-    print("DONE! Remember to run: python organize_loc.py")
+    print("DONE! If anything was added, run: python3 organize_loc.py")
     print("=" * 60)
 
 
 if __name__ == '__main__':
-    main()
+    parser = argparse.ArgumentParser(description=__doc__.strip().splitlines()[0])
+    parser.add_argument(
+        '--root',
+        default=mod_path,
+        help='Mod tree to operate on (default: this checkout, via path_constants.mod_path).',
+    )
+    main(parser.parse_args().root)

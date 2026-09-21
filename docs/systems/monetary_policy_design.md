@@ -3158,6 +3158,14 @@ Surveyed 2026-09-20; line numbers are of that date. **Delete the two as a pair**
   `common/technology/technologies/era_6.txt:178` and `modified.txt:62-63`, both written by
   **`scripts/generators/add_tech_modifiers.py:258,263,289-291`** — edit the generator, not
   its output
+  > **Correction (2026-09-21).** "Edit the generator, not its output" was wrong for
+  > deletions, and following it is what made phases 4/5 edit both by hand. That script is
+  > **additive only**: it appends missing definitions and never prunes, and
+  > `tech_gate_modifier_types.txt` is hand-maintained (it also holds the space-program
+  > block the script knows nothing about). Deleting a tech gate means removing it from the
+  > script's tables **and** from the modifier-type file / tech files / loc — the table edit
+  > alone only stops it being re-added. Adding a gate is still a one-place edit: put it in
+  > the tables and run the script.
 - **Law lock** `country_banking_lock_fx_devaluation_bool`:
   `common/modifier_type_definitions/banking_cycle_modifier_types.txt:71`, granted at
   `common/laws/extra_laws.txt:2348`
