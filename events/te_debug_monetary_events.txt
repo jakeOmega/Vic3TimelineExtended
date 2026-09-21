@@ -1082,6 +1082,9 @@ te_debug_monetary.10 = { # REVIEWED 2026-09-21: console-only test event (`event 
 				te_mon_can_be_anchor = yes
 			}
 			order_by = gdp
+			# Explicit, the form 282 of vanilla's 304 ordered_* iterators use:
+			# what a bare order_by yields is undocumented (scripting_best_practices.md).
+			position = 0
 			save_scope_as = te_debug_new_anchor
 		}
 		if = {

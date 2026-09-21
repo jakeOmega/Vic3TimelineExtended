@@ -320,8 +320,14 @@ def categorize_key(key, technology_keys):
     # drags keys like `banking_dash_mon_stance_impact_line` and
     # `banking_event_default_rural_impact` into te_diplomacy_l_english.yml,
     # away from the 237 other `banking_dash_*` keys.
-    if any(s in key for s in ["diplo", "_subject_", "_proposal_"]) or re.search(
-        r"(^|_)pacts?(_|$)", key
+    #
+    # `te_mon_` is excluded for the same family-splitting reason: the currency-
+    # board modifier `te_mon_board_subject` has no `_subject_` in it but its
+    # `_desc` does, so the pair would land in two files. The monetary rule
+    # further down files both halves under MISCELLANEOUS.
+    if not key.startswith("te_mon_") and (
+        any(s in key for s in ["diplo", "_subject_", "_proposal_"])
+        or re.search(r"(^|_)pacts?(_|$)", key)
     ):
         return "DIPLOMACY"
     # Tech-gated principle unlock boolean modifiers. The short-label keys

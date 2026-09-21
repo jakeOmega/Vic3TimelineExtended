@@ -104,6 +104,12 @@ te_mon_union_regime_fits = {
 	te_mon_is_command = no
 	NOT = { te_mon_is_dollarised = yes }
 	NOT = { te_mon_is_on_currency_board = yes }
+	# Nor a treaty pegger. Kind 2 would simply outrank its kind 1 — and then a
+	# bloc that lost tier 2 would drop it back to the PEG rather than to nothing,
+	# which the discovery's exit test (kind_new = 0) would never see: a member
+	# flag left set for ever, and an exit nobody paid for. One arrangement at a
+	# time; leave the treaty first.
+	NOT = { te_mon_has_anchor_peg = yes }
 }
 
 # Headline inflation within 3pp of the leader's. Both guarded: either side may
