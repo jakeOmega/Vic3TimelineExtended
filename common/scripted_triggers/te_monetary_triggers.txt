@@ -11,10 +11,18 @@
 
 # Does this country set its own policy rate?
 #
-# A dial requires a national bank AND a discretionary monetary regime. Without
-# one, te_policy_rate is derived rather than chosen (§4): bankless, commodity-
-# money and crypto countries get world rate + the bankless spread, and a command
+# A dial requires a national bank AND a monetary regime that leaves a rate to
+# set. Without one, te_policy_rate is derived rather than chosen (§4): bankless
+# and crypto countries get world rate + the bankless spread, and a command
 # economy gets the administered rate.
+#
+# COMMODITY MONEY IS IN, BUT ONLY WITH A BANK, AND ONLY NARROWLY (owner
+# decision, 2026-09-21, closing §5.4's open question). The Banque de France did
+# set a discount rate on bimetallic money in 1836, so a commodity-money country
+# that has built a national bank holds a dial — one restricted to a band around
+# the world rate (one under, three over), which is te_mon_has_narrow_dial below. Commodity money
+# WITHOUT a bank still has no dial at all, and this trigger's national-bank line
+# is the whole of that rule.
 #
 # lawgroup_national_bank holds exactly two laws (law_no_national_bank,
 # law_national_bank), so the positive test is the whole of it. Central bank
@@ -36,12 +44,46 @@
 te_mon_has_dial = {
 	has_law_or_variant = law_type:law_national_bank
 	OR = {
+		has_law_or_variant = law_type:law_commodity_money
 		has_law_or_variant = law_type:law_gold_standard
 		has_law_or_variant = law_type:law_fiat_currency
 		has_law_or_variant = law_type:law_digital_currency
 	}
 	NOT = { has_law_or_variant = law_type:law_command_economy }
 	NOT = { te_mon_is_dollarised = yes }
+}
+
+# Is this country's dial the NARROW one? (§5.1, §0.6) Commodity money buys a
+# discount rate, not a monetary policy: convertibility into metal at a fixed
+# weight lets the bank make credit one point cheaper than the world and up to
+# three points dearer, and nothing more. The band itself lives in
+# te_mon_target_min / te_mon_target_max, which is the single place it is stated;
+# this trigger only answers whose band it is.
+#
+# FIVE SETTINGS, NOT TWENTY-SIX, AND LOPSIDED. Both bounds hang off one
+# whole-number centre (var:te_mon_commodity_centre), so the dial always offers
+# exactly centre-1 to centre+3. Cheap money is what metal forbids; dear money
+# was always available, and was the period's answer to a panic.
+#
+# READ BY: the two range branches, the stepper's floor/ceiling tooltips
+# (common/scripted_guis/te_monetary_sguis.txt), te_mon_dial_range_note, and
+# te_mon_rate_is_discretionary, which excludes these countries from the
+# world-rate average for the same reason it excludes a peg defender.
+te_mon_has_narrow_dial = {
+	te_mon_has_dial = yes
+	has_law_or_variant = law_type:law_commodity_money
+}
+
+# Has the world rate moved far enough from the commodity band's centre that
+# step 0 should re-round it? Hysteresis, so a world rate hovering at x.5 does
+# not walk the band (and with it a target sitting on the floor) up and down.
+te_mon_commodity_centre_is_stale = {
+	has_variable = te_mon_commodity_centre
+	has_variable = te_mon_world_rate_now
+	OR = {
+		te_mon_commodity_centre_offset >= te_mon_commodity_centre_hysteresis
+		te_mon_commodity_centre_offset <= te_mon_commodity_centre_hysteresis_neg
+	}
 }
 
 # Central bank independence (lawgroup_financial_regulation). Binds the target to
@@ -98,11 +140,13 @@ te_mon_is_state_banking = {
 # yet, so a planned economy holds pi and expected at 0 and is excluded from the
 # bands, the premium terms and the cost-push basket).
 #
-# NOTE WHO IS *IN*. Bankless, commodity-money and crypto countries all run
-# inflation, even though none of them has a dial: §4 makes them pay the world
-# rate plus THEIR OWN expected inflation plus the bankless spread, so their
-# expectations have to be computed. Their stance gap stays 0, which simply
-# drops the loose-money term out of §9.1's pressure for them.
+# NOTE WHO IS *IN*. Bankless and crypto countries all run inflation, even
+# though neither has a dial: §4 makes them pay the world rate plus THEIR OWN
+# expected inflation plus the bankless spread, so their expectations have to be
+# computed. Their stance gap stays 0, which simply drops the loose-money term
+# out of §9.1's pressure for them. (Commodity money with a bank now holds the
+# narrow dial and so does have a stance — a band one point under the world
+# rate and three over is a small channel, but it is not a closed one.)
 te_mon_has_inflation = {
 	te_mon_is_command = no
 }
@@ -379,8 +423,14 @@ te_mon_is_on_peg_defence = {
 # average: a no-dial rate is world + spread and a peg defender's target IS the
 # world rate, so averaging either would define the world rate in terms of
 # itself and ratchet it up by the spread every month.
+#
+# A NARROW DIAL IS NOT DISCRETIONARY EITHER, for exactly that reason: its band
+# is world-1 to world+3, so a commodity-money great power in the average would
+# be helping to set the number its own band is measured from. It gets a rate it
+# chooses inside the band and no vote on where the band sits.
 te_mon_rate_is_discretionary = {
 	te_mon_has_dial = yes
+	te_mon_has_narrow_dial = no
 	te_mon_is_on_peg_defence = no
 	has_variable = te_policy_rate
 	has_variable = te_inflation_expected
@@ -407,3 +457,67 @@ te_mon_mod_has = {
 		has_modifier = $NAME$
 	}
 }
+
+
+# ============================================================================
+# Phase 4 — exchange rates and capital controls (§15)
+# ============================================================================
+
+# Is this country in the kind of trouble that excuses capital controls? (§15.4)
+# ONE shared definition, read by the fatigue counter (frozen in a crisis) and by
+# the two capital-controls buttons' ai_chance, so "when the AI reaches for
+# controls" and "when controls are forgiven" cannot drift apart.
+#
+# Peg confidence is tested at <= 40, deliberately ABOVE the crisis event's own
+# <= 20: emergency controls are forgiven before the crisis breaks, which is
+# when they are any use.
+te_mon_in_external_crisis = {
+	OR = {
+		is_at_war = yes
+		AND = {
+			has_variable = finance_cycle_value
+			OR = {
+				banking_cycle_is_panic = yes
+				banking_cycle_is_downturn = yes
+			}
+		}
+		AND = {
+			te_mon_has_gold_flows = yes
+			has_variable = te_peg_confidence
+			var:te_peg_confidence <= 40
+		}
+		AND = {
+			has_variable = te_inflation_band
+			var:te_inflation_band >= 6
+		}
+	}
+}
+
+# Does this country's index follow its shadow? (§15.2) Everything that is
+# neither metal (par: the NOMINAL parity is fixed, so there is no trade edge to
+# give) nor a command economy (inconvertible; excluded like §14's others).
+# te_mon_is_metallic is already suspension-aware through te_mon_is_on_gold
+# (ruling Q4), so "suspend convertibility -> floats" needs no branch here.
+te_mon_fx_floats = {
+	te_mon_is_command = no
+	te_mon_is_metallic = no
+}
+
+# Is a metallic index still walking back to par after §12.3's Devalue?
+te_mon_fx_is_devalued = {
+	has_variable = te_fx_devalued_months
+	var:te_fx_devalued_months > 0
+}
+
+# Is overvaluation past the tolerance at which it drains a gold peg? Also read
+# by step 10's heal, so that the +1 a healthy peg earns holds instead of netting
+# the drain away (ruling Q10's "under pressure", extended).
+#
+# Judged on te_mon_fx_overvaluation_for_peg, NOT the raw variable: the share of
+# overvaluation a low rate caused is excluded, because gold flows already price
+# it (§0.7 ruling F4).
+te_mon_fx_is_overvalued = {
+	has_variable = te_mon_overvaluation
+	te_mon_fx_overvaluation_for_peg > te_mon_fx_overvaluation_tolerance
+}
+

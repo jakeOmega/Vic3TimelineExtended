@@ -2,7 +2,7 @@
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7804 modifier entries.*
+*Auto-generated from 7801 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1852,7 +1852,7 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (539)
+### country (536)
 
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
@@ -1916,7 +1916,6 @@ _Cannon Artillery Offense_
 - `country_banking_lock_capital_controls_bool` — **Locks [Concept('concept_capital_controls', 'Capital Controls')]**
 - `country_banking_lock_directed_credit_bool` — **Locks [Concept('concept_directed_credit', 'Directed Credit')]**
 - `country_banking_lock_export_credit_bool` — **Locks [Concept('concept_export_credit_facility', 'Export Credit Facility')]**
-- `country_banking_lock_fx_devaluation_bool` — **Locks [Concept('concept_currency_devaluation', 'Currency Devaluation')]**
 - `country_banking_lock_fx_swap_lines_bool` — **Locks [Concept('concept_fx_swap_lines', 'FX Swap Lines')]**
 - `country_banking_lock_open_market_ops_bool` — **Locks [Concept('concept_open_market_operations', 'Open Market Operations')]**
 - `country_banking_random_momentum_mult` — **[concept_banking_cycle] Volatility**
@@ -1942,8 +1941,6 @@ _Cannon Artillery Offense_
 - `country_can_use_deposit_guarantee_bool` — **Enables #bold Deposit Guarantee Expansion#!**
 - `country_can_use_emergency_liquidity_bool` — **Enables #bold Emergency Liquidity Program#!**
 - `country_can_use_export_credit_bool` — **Enables #bold Export Credit Facility#!**
-- `country_can_use_fx_devaluation_bool` — **Enables #bold FX Devaluation#!**
-- `country_can_use_fx_support_bool` — **Enables #bold FX Support#!**
 - `country_can_use_fx_swap_lines_bool` — **Enables #bold FX Swap Lines#!**
 - `country_can_use_open_market_ops_bool` — **Enables #bold Open Market Operations#!**
 - `country_cannot_be_subjugated_bool` — **Cannot be Subjugated** — This country recently declared its Neutrality and cannot be subjugated

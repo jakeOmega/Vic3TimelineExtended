@@ -4245,7 +4245,6 @@ country|country_banking_lock_asset_relief_bool|
 country|country_banking_lock_capital_controls_bool|
 country|country_banking_lock_directed_credit_bool|
 country|country_banking_lock_export_credit_bool|
-country|country_banking_lock_fx_devaluation_bool|
 country|country_banking_lock_fx_swap_lines_bool|
 country|country_banking_lock_open_market_ops_bool|
 country|country_banking_random_momentum_mult|
@@ -4494,8 +4493,6 @@ country|country_can_use_cultural_assimilation_bool|
 country|country_can_use_deposit_guarantee_bool|
 country|country_can_use_emergency_liquidity_bool|
 country|country_can_use_export_credit_bool|
-country|country_can_use_fx_devaluation_bool|
-country|country_can_use_fx_support_bool|
 country|country_can_use_fx_swap_lines_bool|
 country|country_can_use_open_market_ops_bool|
 country|country_cannot_be_subjugated_bool|This country recently declared its Neutrality and cannot be subjugated

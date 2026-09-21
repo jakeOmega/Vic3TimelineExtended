@@ -68,7 +68,6 @@ country_weekly_investment_pool_mult = {
 # active lock as a red "Locks: <Tool>" line in the law's modifier block tooltip.
 country_banking_lock_open_market_ops_bool  = { color = bad  boolean = yes }
 country_banking_lock_directed_credit_bool  = { color = bad  boolean = yes }
-country_banking_lock_fx_devaluation_bool   = { color = bad  boolean = yes }
 country_banking_lock_export_credit_bool    = { color = bad  boolean = yes }
 country_banking_lock_capital_controls_bool = { color = bad  boolean = yes }
 country_banking_lock_fx_swap_lines_bool    = { color = bad  boolean = yes }

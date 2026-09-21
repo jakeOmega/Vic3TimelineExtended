@@ -113,26 +113,6 @@ te_history_marker_tooltip = {
 					custom_tooltip = banking_dash_tt_cb_export_credit_facility
 				}
 				if = {
-					limit = { has_variable = te_hist_mk_on_cb_fx_devaluation }
-					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_fx_devaluation
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_off_cb_fx_devaluation }
-					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_fx_devaluation
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_on_cb_fx_support }
-					custom_tooltip = te_hist_mk_enabled
-					custom_tooltip = banking_dash_tt_cb_fx_support
-				}
-				if = {
-					limit = { has_variable = te_hist_mk_off_cb_fx_support }
-					custom_tooltip = te_hist_mk_disabled
-					custom_tooltip = banking_dash_tt_cb_fx_support
-				}
-				if = {
 					limit = { has_variable = te_hist_mk_on_cb_fx_swap_lines }
 					custom_tooltip = te_hist_mk_enabled
 					custom_tooltip = banking_dash_tt_cb_fx_swap_lines

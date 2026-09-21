@@ -461,6 +461,11 @@ te_mon_era_base = {
 
 # The lowest and highest target the current monetary regime allows, in pp.
 #
+#   commodity money      band centre -1 to band centre +3, and only with a
+#                        national bank (§5.1, §0.6). The centre is the world
+#                        rate as a whole point, held with hysteresis
+#                        (te_mon_commodity_centre), so the band is always
+#                        exactly five settings wide and does not flap
 #   gold standard        0 to 15 (§5.1). What constrains the dial is no longer
 #                        a band but GOLD: a rate under the world rate bleeds
 #                        reserves and then peg confidence (§12.2-12.3, step 10)
@@ -469,6 +474,14 @@ te_mon_era_base = {
 #                        Defend option forces
 #   digital currency     -3 to 25 (no cash to hoard, so negative rates bite)
 #   fiat currency        0 to 25
+#
+# WHY COMMODITY MONEY GETS A BAND AND GOLD DOES NOT. Both promise metal, but
+# only a gold standard has the §12.2 machinery to make the promise bite: a
+# reserve that drains, hot money, and a confidence crisis when the vault runs
+# low. Commodity money has no vault in this model, so the discipline has to be
+# stated as a bound rather than paid for in reserves. That is also the honest
+# reading of the regime — a country whose coin IS the commodity cannot move the
+# price of credit far from what the metal costs everywhere else.
 #
 # ONE AUTHORITY, TWO CONSUMERS. te_monetary_clamp_target re-clamps the target
 # every month, and the dashboard's stepper has to grey out at exactly the same
@@ -487,6 +500,29 @@ te_mon_era_base = {
 # scripted floor is the Defend clamp, which is an event outcome with a clock on
 # it rather than a property of any law. It is guarded on te_mon_world_rate_now
 # because the GUI can evaluate this for a save that has not pulsed on phase 3.
+#
+# THE COMMODITY BAND IS THE SECOND SCRIPTED BOUND, and for the same kind of
+# reason: a band measured from the world rate moves, so no static law modifier
+# can state it. Both bounds hang off ONE whole-number centre,
+# var:te_mon_commodity_centre, which step 0 keeps (te_monetary_init_variables):
+# the world rate rounded to a point, re-rounded only once the world rate has
+# moved 0.75 away from it — the same hysteresis the delegated target uses. A
+# bare `round = yes` on the live world rate would do for the arithmetic but not
+# for the player: a world rate hovering at x.5 would walk the band up and down a
+# point month by month, and every upward flip silently clamps a target sitting
+# on the floor, which the flip back down does not restore. `min = 0` keeps the
+# floor off the negative side: commodity money is coin, and coin can be
+# hoarded, so the zero lower bound that law_digital_currency buys its way past
+# applies with full force. No `max = te_mon_target_max` is needed — both bounds
+# come off the SAME centre and cannot invert.
+#
+# THE BAND IS LOPSIDED ON PURPOSE (-1 / +3). What metal forbids is CHEAP money:
+# a discount rate under the world's sends coin abroad. Nothing ever stopped a
+# bank on metal from making money DEAR — that was the standard answer to a
+# panic (the Banque de France sat at 4% for a generation and went to 5-6% in
+# 1847 and as high as 10% in 1857). So the downside is the narrow one, and the
+# upside is wide enough to be a real brake on a bubble, paid for the ordinary
+# way: a tight stance and a dearer treasury.
 te_mon_target_min = {
 	value = modifier:country_policy_rate_floor_add
 	multiply = 100
@@ -502,6 +538,15 @@ te_mon_target_min = {
 		ceiling = yes
 		max = te_mon_target_max
 	}
+	else_if = {
+		limit = {
+			te_mon_has_narrow_dial = yes
+			has_variable = te_mon_commodity_centre
+		}
+		value = var:te_mon_commodity_centre
+		subtract = te_mon_commodity_band_margin_down
+		min = 0
+	}
 }
 
 # The rate at or below which the policy rate counts as "at the floor" — the gate
@@ -513,7 +558,11 @@ te_mon_target_min = {
 # only (§0.1 ruling of 2026-09-20: creating unbacked money to buy bonds is what
 # a convertibility promise forbids), and the regime is checked before the floor
 # is, so te_mon_target_min here is always its country_policy_rate_floor_add
-# branch — 0 under fiat, -3 under digital. A `max = 0` used to sit here for the
+# branch — 0 under fiat, -3 under digital. STILL TRUE OF THE COMMODITY BAND
+# (2026-09-21): a commodity-money country now has a floor of its own, band
+# centre - 1, but it fails the unbacked-money bool before this value is reached,
+# so sitting at the bottom of its band never reads as "the rate can go no
+# lower" for a tool it cannot use anyway. A `max = 0` used to sit here for the
 # sole purpose of stopping a gold standard's band floor (reference rate - 2,
 # around 1pp) from counting as "the rate can go no lower"; the regime gate does
 # that job now, and gold never reaches this value.
@@ -527,6 +576,15 @@ te_mon_target_max = {
 	if = {
 		limit = { te_mon_is_on_gold = yes }
 		value = 15
+	}
+	else_if = {
+		limit = {
+			te_mon_has_narrow_dial = yes
+			has_variable = te_mon_commodity_centre
+		}
+		value = var:te_mon_commodity_centre
+		add = te_mon_commodity_band_margin_up
+		min = 0
 	}
 }
 
@@ -2440,6 +2498,13 @@ te_mon_gold_gap_value = {
 		multiply = -1
 	}
 	max = te_mon_gold_gap_clamp
+	# [P4] §15.4: capital controls are the trilemma's third corner — a gold
+	# country under controls holding world - 4 bleeds as if it were world - 1.
+	# AFTER the clamp, and on both signs: controls that stop capital leaving
+	# also stop it arriving, so they are no way to bank a high rate's inflow.
+	# te_gold_flow_gap is this value, so the confidence drain per pp of
+	# negative gap is damped with it and needs no second site.
+	multiply = te_mon_controls_damp
 }
 
 # --- the bank's own vault (the hybrid model, §0.5) ---------------------------
@@ -2653,6 +2718,48 @@ te_mon_peg_crisis_cooldown_months = {
 # Defend: target forced to world + 4 for a year, confidence +40.
 te_mon_peg_defend_margin = {
 	value = 4
+}
+
+# How far under, and how far over, the band centre a commodity-money bank may
+# set its discount rate (§5.1, §0.6, §21). The centre is the world rate as a
+# whole point (var:te_mon_commodity_centre); with 1 and 3 the dial is five
+# settings wide.
+#
+# THE TWO NUMBERS THAT SIZE THE WHOLE CONCESSION, and they do different jobs.
+# DOWN is the constraint: it is how much cheaper than the world a bank on metal
+# may make credit, and at 0 the regime can lean against a boom but never into a
+# slump. Raising it past about 2 starts to make a commodity-money bank as free
+# as a fiat one on the side that matters, without any of fiat's inflation
+# exposure, since metallic expectations stay pinned at 0. UP is the panic
+# brake: at +3 over a neutral near the world rate the stance gap reaches the
+# "very tight" band (about -0.4 momentum and -2.3 bubble pressure a month, a
+# little more than the old rate-hike button), and the treasury pays the full
+# three points on its debt while it is held. It is not dangerous to widen —
+# dear money is its own price — so if one of the two is to be tuned, tune DOWN.
+te_mon_commodity_band_margin_down = {
+	value = 1
+}
+
+te_mon_commodity_band_margin_up = {
+	value = 3
+}
+
+# World rate minus band centre, signed, for te_mon_commodity_centre_is_stale
+# (which tests both sides — the mod's script values do not lean on `abs`).
+te_mon_commodity_centre_offset = {
+	value = var:te_mon_world_rate_now
+	subtract = var:te_mon_commodity_centre
+}
+
+te_mon_commodity_centre_hysteresis_neg = {
+	value = te_mon_commodity_centre_hysteresis
+	multiply = -1
+}
+
+# How far the world rate must sit from the band centre before the centre is
+# re-rounded (step 0). Deliberately the delegated target's hysteresis.
+te_mon_commodity_centre_hysteresis = {
+	value = 0.75
 }
 
 te_mon_peg_defend_months = {

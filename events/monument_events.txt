@@ -3,16 +3,17 @@
 # ============================================================================
 # GRAND MONUMENTS
 # ============================================================================
-# Event 1  - hidden building_event, fires from on_building_built. Hops to country
-#            scope because building scope supports neither variables nor modifiers.
-# Event 2  - the dedication ceremony. Sets the monument's dedication PM via
-#            activate_production_method on the saved state scope.
+# Event 1  - hidden building_event, fires from on_building_built. Hands off to the
+#            monument's own STATE, because that is where the ceremony belongs and
+#            because building scope supports neither variables nor modifiers.
+# Event 2  - the dedication ceremony, a state_event placed on the monument's state.
+#            ROOT is that state, so activate_production_method targets it directly
+#            and every country-level gate goes through `owner`.
 # Events 3+ - recurring flavour, dispatched from monument_events_on_actions.txt.
 # ============================================================================
 
 # Event 1: construction finished (hidden plumbing).
-# ROOT is the newly-built BUILDING. Save the state so the ceremony event can target
-# activate_production_method at it, then hand off to the owner country.
+# ROOT is the newly-built BUILDING. Hop to its state and let the ceremony fire there.
 monument_events.1 = {
 	type = building_event
 	hidden = yes
@@ -23,18 +24,37 @@ monument_events.1 = {
 				is_building_group = bg_grand_monuments
 				exists = owner
 			}
-			state = { save_scope_as = monument_state }
-			owner = { trigger_event = { id = monument_events.2 } }
+			state = { trigger_event = { id = monument_events.2 } }
 		}
 	}
 }
 
-# Event 2: The Dedication. One option per unlocked dedication; each locks the choice
-# in permanently via the unlocking_production_methods ratchet (see
-# common/production_methods/grand_monument_pms.txt).
+# Event 2: The Dedication. A STATE event -- the ceremony happens where the monument
+# stands, not in the capital, and the event window is placed on that state.
+#
+# Every option locks its choice in permanently via the unlocking_production_methods
+# ratchet (see common/production_methods/grand_monument_pms.txt).
+#
+# OPTION GATING. Two kinds, and they are not interchangeable:
+#   * `trigger` on an option HIDES it. Reserved for dedications the country has no
+#     business offering at all -- a state-atheist republic consecrating a shrine, an
+#     industry-banned agrarian state glorifying the factory, or a technology it has
+#     not researched.
+#   * `ai_chance` TILTS it. Everything a country could plausibly want stays visible
+#     and is steered by weight instead, so the player always sees the full menu of
+#     what is actually possible.
+# The civic dedication is never hidden: it is offered under one of three wordings
+# depending on who the monument would be raised to. See
+# common/scripted_triggers/monument_triggers.txt.
+#
+# TOOLTIPS. Each option wraps its activate_production_method in a custom_tooltip so
+# the player reads what the dedication actually does before committing to it, rather
+# than relying on whatever the engine emits for that effect. The .tt strings live in
+# localization/english/te_events_l_english.yml and are hand-kept in sync with
+# grand_monument_pms.txt; change a value there, change it here.
 monument_events.2 = {
-	type = country_event
-	placement = root
+	type = state_event
+	placement = ROOT
 
 	event_image = { video = "unspecific_world_fair" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
@@ -46,11 +66,19 @@ monument_events.2 = {
 
 	duration = 3
 
+	# Only for a monument that has not been dedicated yet. `has_building` alone would
+	# re-open the question every time an existing monument gains a level.
 	trigger = {
-		exists = scope:monument_state
+		any_scope_building = {
+			is_building_type = building_grand_monument
+			has_active_production_method = pm_monument_undedicated
+		}
 	}
 
-	immediate = { }
+	# Named in the description and in every option tooltip.
+	immediate = {
+		save_scope_as = monument_state
+	}
 
 	# Leave it undedicated -- the monument keeps pm_monument_undedicated and the
 	# player can still dedicate it by hand in the building panel later.
@@ -58,14 +86,21 @@ monument_events.2 = {
 		name = monument_events.2.a
 		default_option = yes
 		ai_chance = { base = 1 }
+
+		custom_tooltip = monument_events.2.a.tt
 	}
 
-	# Civic
+	# Civic, republican wording.
 	option = {
 		name = monument_events.2.b
+		trigger = {
+			owner = { monument_government_is_republican = yes }
+		}
+
 		ai_chance = { base = 3 }
 
-		scope:monument_state = {
+		custom_tooltip = {
+			text = monument_events.2.b.tt
 			activate_production_method = {
 				building_type = building_grand_monument
 				production_method = pm_monument_civic
@@ -73,12 +108,75 @@ monument_events.2 = {
 		}
 	}
 
-	# Religious
+	# Civic, dynastic wording. Same production method as the republican option.
 	option = {
-		name = monument_events.2.c
+		name = monument_events.2.l
+		trigger = {
+			owner = { monument_government_is_crowned = yes }
+		}
+
 		ai_chance = { base = 3 }
 
-		scope:monument_state = {
+		custom_tooltip = {
+			text = monument_events.2.l.tt
+			activate_production_method = {
+				building_type = building_grand_monument
+				production_method = pm_monument_civic
+			}
+		}
+	}
+
+	# Civic, neutral wording -- theocracies, corporate states, colonial
+	# administrations, neocameralist states, and any governance principle added later.
+	option = {
+		name = monument_events.2.m
+		trigger = {
+			owner = {
+				monument_government_is_republican = no
+				monument_government_is_crowned = no
+			}
+		}
+
+		ai_chance = { base = 3 }
+
+		custom_tooltip = {
+			text = monument_events.2.m.tt
+			activate_production_method = {
+				building_type = building_grand_monument
+				production_method = pm_monument_civic
+			}
+		}
+	}
+
+	# Religious. Hidden only under state atheism, where there is no faith to
+	# consecrate it to; a secular state may still build a cathedral, it is just
+	# an unlikely use of the money.
+	option = {
+		name = monument_events.2.c
+		trigger = {
+			owner = {
+				NOT = { has_law_or_variant = law_type:law_state_atheism }
+			}
+		}
+
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					owner = { has_law_or_variant = law_type:law_total_separation }
+				}
+				add = -2
+			}
+			modifier = {
+				trigger = {
+					owner = { has_law_or_variant = law_type:law_state_religion }
+				}
+				add = 2
+			}
+		}
+
+		custom_tooltip = {
+			text = monument_events.2.c.tt
 			activate_production_method = {
 				building_type = building_grand_monument
 				production_method = pm_monument_religious
@@ -86,12 +184,23 @@ monument_events.2 = {
 		}
 	}
 
-	# War memorial
+	# War memorial. Every country has fallen soldiers to name, so this is never
+	# hidden -- but a country that has just been through a war reaches for it.
 	option = {
 		name = monument_events.2.e
-		ai_chance = { base = 3 }
 
-		scope:monument_state = {
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					owner = { is_at_war = yes }
+				}
+				add = 3
+			}
+		}
+
+		custom_tooltip = {
+			text = monument_events.2.e.tt
 			activate_production_method = {
 				building_type = building_grand_monument
 				production_method = pm_monument_war_memorial
@@ -99,16 +208,17 @@ monument_events.2 = {
 		}
 	}
 
-	# Artistic
+	# Artistic.
 	option = {
 		name = monument_events.2.g
 		trigger = {
-			has_technology_researched = romanticism
+			owner = { has_technology_researched = romanticism }
 		}
 
 		ai_chance = { base = 3 }
 
-		scope:monument_state = {
+		custom_tooltip = {
+			text = monument_events.2.g.tt
 			activate_production_method = {
 				building_type = building_grand_monument
 				production_method = pm_monument_artistic
@@ -116,16 +226,26 @@ monument_events.2 = {
 		}
 	}
 
-	# Naturalist
+	# Naturalist.
 	option = {
 		name = monument_events.2.h
 		trigger = {
-			has_technology_researched = romanticism
+			owner = { has_technology_researched = romanticism }
 		}
 
-		ai_chance = { base = 3 }
+		ai_chance = {
+			base = 3
+			# The state itself has industry worth planting over.
+			modifier = {
+				trigger = {
+					pollution_generation >= 200
+				}
+				add = 3
+			}
+		}
 
-		scope:monument_state = {
+		custom_tooltip = {
+			text = monument_events.2.h.tt
 			activate_production_method = {
 				building_type = building_grand_monument
 				production_method = pm_monument_naturalist
@@ -133,16 +253,17 @@ monument_events.2 = {
 		}
 	}
 
-	# Scientific
+	# Scientific.
 	option = {
 		name = monument_events.2.i
 		trigger = {
-			has_technology_researched = empiricism
+			owner = { has_technology_researched = empiricism }
 		}
 
 		ai_chance = { base = 3 }
 
-		scope:monument_state = {
+		custom_tooltip = {
+			text = monument_events.2.i.tt
 			activate_production_method = {
 				building_type = building_grand_monument
 				production_method = pm_monument_scientific
@@ -150,16 +271,21 @@ monument_events.2 = {
 		}
 	}
 
-	# Industrial
+	# Industrial. Hidden where industry itself is outlawed -- a great exhibition
+	# hall is not something an industry-banned state puts up.
 	option = {
 		name = monument_events.2.j
 		trigger = {
-			has_technology_researched = marketing_research
+			owner = {
+				has_technology_researched = marketing_research
+				NOT = { has_law_or_variant = law_type:law_industry_banned }
+			}
 		}
 
 		ai_chance = { base = 3 }
 
-		scope:monument_state = {
+		custom_tooltip = {
+			text = monument_events.2.j.tt
 			activate_production_method = {
 				building_type = building_grand_monument
 				production_method = pm_monument_industrial
@@ -167,16 +293,17 @@ monument_events.2 = {
 		}
 	}
 
-	# Athletic
+	# Athletic.
 	option = {
 		name = monument_events.2.k
 		trigger = {
-			has_technology_researched = television_broadcasting
+			owner = { has_technology_researched = television_broadcasting }
 		}
 
 		ai_chance = { base = 3 }
 
-		scope:monument_state = {
+		custom_tooltip = {
+			text = monument_events.2.k.tt
 			activate_production_method = {
 				building_type = building_grand_monument
 				production_method = pm_monument_athletic

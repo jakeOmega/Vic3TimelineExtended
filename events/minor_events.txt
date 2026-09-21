@@ -317,6 +317,11 @@ minor_events_timelineextended.6 = {
 			INTERVENTION = banking_crash_intervention_suspend_convertibility
 			RADICALS     = medium
 		}
+		# [P4] The modifier's old -10% export line is gone (§15.5): a payments
+		# freeze weakens the currency, and the index now produces the trade
+		# effect itself, with the right sign. A metallic country sits at par and
+		# sees this only in its shadow — as overvaluation.
+		custom_tooltip = { text = TE_FX_SHOCK_MINUS_5_DESC te_mon_effect_fx_shock = { POINTS = -13 } }
 		ai_chance = {
 			base = 50
 			modifier = { factor = 0.5  trigger = { gold_reserves <= 0.5 } }

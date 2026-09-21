@@ -391,106 +391,15 @@ cb_disable_raise_margin_requirements = {
 	effect = { banking_effect_cb_disable_raise_margin_requirements = yes }
 }
 
-cb_fx_devaluation = {
-	name = "CB_FX_DEVALUATION"
-	desc = "CB_FX_DEVALUATION_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_fx_devaluation_active = no }
-
-	ai_chance = {
-		value = 0
-		# Core: use in panic/downturn/stagnation, or when momentum is sharply negative
-		if = { limit = { banking_cycle_is_panic = yes } add = 60 }
-		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
-		if = { limit = { banking_cycle_is_stagnation = yes } add = 25 }
-		if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
-
-		# Law flavor
-		if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
-
-		# Resources
-		if = { limit = { banking_points_med = yes } add = 10 }
-		if = { limit = { banking_points_low = yes } add = 5 }
-
-		# Avoid when hot or contradictory
-		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
-		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
-
-		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
-		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
-	}
-
-	possible = { banking_possible_cb_fx_devaluation = yes }
-	effect = { banking_effect_cb_fx_devaluation = yes }
-}
-
-cb_disable_fx_devaluation = {
-	name = "CB_DISABLE_FX_DEVALUATION"
-	desc = "CB_DISABLE_FX_DEVALUATION_DESC"
-	visible = { is_ai = yes banking_tool_fx_devaluation_active = yes }
-	ai_chance = {
-		value = 0
-		if = { limit = { banking_cycle_is_stable = yes } add = 15 }
-		if = { limit = { banking_cycle_is_expansion = yes } add = 15 }
-		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
-		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
-		if = { limit = { banking_stance_is_tight = yes } add = 25 } # stop easing while the rate is tight
-		if = { limit = { je:je_banking_cycle = { has_modifier = banking_fx_support } } add = 30 }
-	}
-	possible = { banking_tool_fx_devaluation_active = yes }
-	effect = { banking_effect_cb_disable_fx_devaluation = yes }
-}
-
-cb_fx_support = {
-	name = "CB_FX_SUPPORT"
-	desc = "CB_FX_SUPPORT_DESC"
-	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_fx_support_active = no }
-
-	ai_chance = {
-		value = 0
-		# Core: use in panic/downturn/stagnation, or when momentum is sharply negative
-		if = { limit = { banking_cycle_is_panic = yes } add = 60 }
-		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
-		if = { limit = { banking_cycle_is_stagnation = yes } add = 25 }
-		if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
-
-		# Law flavor
-		if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
-
-		# Resources
-		if = { limit = { banking_points_med = yes } add = 10 }
-		if = { limit = { banking_points_low = yes } add = 5 }
-
-		# Avoid when hot or contradictory
-		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
-		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
-
-		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
-		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
-	}
-
-	possible = { banking_possible_cb_fx_support = yes }
-	effect = { banking_effect_cb_fx_support = yes }
-}
-
-cb_disable_fx_support = {
-	name = "CB_DISABLE_FX_SUPPORT"
-	desc = "CB_DISABLE_FX_SUPPORT_DESC"
-	visible = { is_ai = yes banking_tool_fx_support_active = yes }
-	ai_chance = {
-		value = 0
-		if = { limit = { banking_cycle_is_stable = yes } add = 15 }
-		if = { limit = { banking_cycle_is_expansion = yes } add = 15 }
-		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
-		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
-		if = { limit = { banking_stance_is_tight = yes } add = 20 } # stop easing while the rate is tight
-		if = { limit = { je:je_banking_cycle = { has_modifier = banking_fx_devaluation } } add = 30 }
-	}
-	possible = { banking_tool_fx_support_active = yes }
-	effect = { banking_effect_cb_disable_fx_support = yes }
-}
-
+# Capital controls are the trilemma's third corner (monetary_policy_design.md
+# §15.4): they damp the carry term of the exchange rate, the gold-flow gap and
+# the overvaluation drain to a quarter, at the price of te_capital_controls_fatigue
+# for every PEACETIME month held. So the AI reaches for them in an external
+# crisis with something to defend, and drops them once the crisis is over —
+# te_mon_in_external_crisis is the one definition shared with the fatigue
+# counter's freeze, so "when the AI uses controls" and "when controls are
+# forgiven" cannot drift apart. (The two FX tools that used to sit above this
+# one were deleted in phase 4: a weak or strong currency is an outcome now.)
 cb_capital_controls_outflow = {
 	name = "CB_CAPITAL_CONTROLS_OUT"
 	desc = "CB_CAPITAL_CONTROLS_OUT_DESC"
@@ -498,10 +407,34 @@ cb_capital_controls_outflow = {
 
 	ai_chance = {
 		value = 0
-		# Core: use in panic/downturn, or when momentum is sharply negative
-		if = { limit = { banking_cycle_is_panic = yes } add = 60 }
-		if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
-		if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
+		# Core: an external crisis AND something for controls to protect — a
+		# currency in flight, a draining vault, or a peg losing confidence (the
+		# same <= 40 the crisis trigger uses).
+		if = {
+			limit = {
+				te_mon_in_external_crisis = yes
+				OR = {
+					te_mon_fx_index_display < 85
+					AND = {
+						te_mon_has_gold_flows = yes
+						has_variable = te_gold_flow
+						var:te_gold_flow < 0
+						te_mon_bank_gold_scaled < 0.3
+					}
+					AND = {
+						te_mon_has_gold_flows = yes
+						has_variable = te_peg_confidence
+						var:te_peg_confidence <= 40
+					}
+				}
+			}
+			add = 70
+		}
+		# A crisis with nothing external at stake: a weak case.
+		else_if = {
+			limit = { te_mon_in_external_crisis = yes }
+			add = 15
+		}
 
 		# Law flavor
 		if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
@@ -511,13 +444,9 @@ cb_capital_controls_outflow = {
 		if = { limit = { banking_points_med = yes } add = 10 }
 		if = { limit = { banking_points_low = yes } add = 5 }
 
-		# Avoid when hot or contradictory
+		# Avoid when hot: nothing is leaving.
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
 		if = { limit = { banking_cycle_bubble_risk_high = yes } add = -20 }
-		if = { limit = { banking_stance_is_tight = yes } add = -30 } # don't ease against a tight policy rate
-
-		# (Optional) Fiscal stress: conservative on big asset buys if highly stressed
-		if = { limit = { banking_fiscal_stress_high = yes } add = -15 }
 	}
 
 	possible = { banking_possible_cb_capital_controls_outflow = yes }
@@ -530,11 +459,18 @@ cb_disable_capital_controls_outflow = {
 	visible = { is_ai = yes banking_tool_capital_controls_active = yes }
 	ai_chance = {
 		value = 0
-		if = { limit = { banking_cycle_is_stable = yes } add = 20 }
-		if = { limit = { banking_cycle_is_expansion = yes } add = 35 }
-		if = { limit = { banking_cycle_is_boom = yes } add = 45 }
-		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
-		if = { limit = { banking_fiscal_stress_high = no banking_cycle_is_panic = no } add = 15 }
+		# Out of the crisis: lift them, and more urgently the longer the
+		# fatigue counter has run (+10 a peacetime year held, to +50).
+		if = {
+			limit = { te_mon_in_external_crisis = no }
+			add = 40
+			add = {
+				value = te_mon_controls_fatigue_steps
+				multiply = 10
+			}
+		}
+		if = { limit = { banking_cycle_is_boom = yes } add = 10 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 20 }
 	}
 	possible = { banking_tool_capital_controls_active = yes }
 	effect = { banking_effect_cb_disable_capital_controls_outflow = yes }

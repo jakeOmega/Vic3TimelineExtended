@@ -87,14 +87,21 @@ INJECT:bg_power = {
 #   * cultural_hegemony_script_values.txt / cultural_pull_from_monuments (+3 each, uncapped)
 # An infinitely repeatable member would break both, so Grand Monuments stay outside
 # bg_monuments and contribute to those systems on their own capped terms instead.
-# NOT is_government_funded: the treasury paying the whole goods input would wreck the
-# deliberately-long tourism payback.
+#
+# is_government_funded, like bg_government (Government Administration) and the mod's own
+# bg_parks: a monument is raised by the state, not by investors. The treasury pays the
+# pmg_maintenance goods input and no private or foreign investor can put money into one.
+# That deepens the intended construction *sink* -- the upkeep is now a permanent line on
+# the budget rather than something the building earns back on its own books -- which is
+# the point: this is civic spending, not an investment.
 bg_grand_monuments = {
 	category = urban
 
 	lens = development
 
 	always_possible = yes
+
+	is_government_funded = yes
 
 	economy_of_scale = no
 

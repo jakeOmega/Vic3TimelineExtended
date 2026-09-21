@@ -1,0 +1,398 @@
+﻿# ============================================================================
+# Monetary policy, phase 4 — exchange rates and the trilemma: effects
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §15, as shipped in §0.7.
+# Values: common/script_values/te_monetary_fx_script_values.txt.
+#
+# All three country effects are called from te_monetary_monthly_update
+# (te_monetary_effects.txt) and from nowhere else:
+#
+#   te_monetary_init_fx_variables   step 0   seeds, behind has_variable
+#   te_monetary_update_fx           step 5b  shock -> target -> shadow -> index
+#                                            -> overvaluation -> average ->
+#                                            imported inflation -> controls counter
+#   te_monetary_apply_fx_modifiers  step 9b  te_fx_weak / te_fx_strong /
+#                                            te_capital_controls_fatigue
+#
+# NOTHING HERE IS EVER REMOVED. te_fx_weak_applied, te_fx_strong_applied and
+# te_capital_controls_fatigue_applied back `multiplier =` reads
+# (modifier_multiplier_var_audit), and the rest are read unguarded by values
+# that run every month.
+#
+# EVENTS WRITE te_fx_shock, NEVER te_fx_index. Two documented exceptions: §12.3's
+# Devalue (te_mon_effect_fx_devalue_peg — a devaluation is DEFINED as a jump)
+# and the one-shot save migration below.
+
+
+# ----------------------------------------------------------------------------
+# World inflation — global pulse, beside te_monetary_refresh_world_rate
+# ----------------------------------------------------------------------------
+# Scope: none (global on_monthly_pulse / on_game_started).
+#
+# The world rate's sibling, built the same way: two accumulator globals, each
+# member's exact share recorded on the member so step 0 can subtract it (owner
+# decision H — nobody is measured against an average that contains itself), and
+# last month's members zeroed first so a country that stops being a great power
+# does not carry a stale share. Fallback 0 when nobody qualifies.
+#
+# The has_variable guard is what keeps on_game_started safe: no country has
+# pulsed yet, so nobody qualifies and the world sits at 0, which is true.
+te_monetary_refresh_world_inflation = {
+	set_global_variable = { name = te_world_inflation_acc_num value = 0 }
+	set_global_variable = { name = te_world_inflation_acc_den value = 0 }
+	every_country = {
+		limit = {
+			has_variable = te_mon_world_infl_own_den
+			var:te_mon_world_infl_own_den > 0
+		}
+		set_variable = { name = te_mon_world_infl_own_num value = 0 }
+		set_variable = { name = te_mon_world_infl_own_den value = 0 }
+	}
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			te_mon_is_command = no
+			has_variable = te_inflation_expected
+			has_variable = te_inflation_core
+		}
+		set_variable = { name = te_mon_world_infl_own_num value = te_mon_world_inflation_weighted }
+		set_variable = { name = te_mon_world_infl_own_den value = te_mon_world_rate_weight }
+		change_global_variable = { name = te_world_inflation_acc_num add = var:te_mon_world_infl_own_num }
+		change_global_variable = { name = te_world_inflation_acc_den add = var:te_mon_world_infl_own_den }
+	}
+	if = {
+		limit = { global_var:te_world_inflation_acc_den > 0 }
+		set_global_variable = { name = te_world_inflation value = global_var:te_world_inflation_acc_num }
+		change_global_variable = { name = te_world_inflation divide = global_var:te_world_inflation_acc_den }
+	}
+	else = {
+		set_global_variable = { name = te_world_inflation value = 0 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Step 0 (phase 4 half) — seeds
+# ----------------------------------------------------------------------------
+# Scope: country. Called at the end of te_monetary_init_variables.
+te_monetary_init_fx_variables = {
+	# The per-pulse copy of world inflation, own share excluded — the same
+	# arithmetic step 0 does for te_mon_world_rate_now.
+	set_variable = { name = te_mon_world_inflation_now value = 0 }
+	if = {
+		limit = { has_global_variable = te_world_inflation }
+		set_variable = { name = te_mon_world_inflation_now value = global_var:te_world_inflation }
+	}
+	if = {
+		limit = {
+			has_variable = te_mon_world_infl_own_den
+			var:te_mon_world_infl_own_den > 0
+			has_global_variable = te_world_inflation_acc_den
+		}
+		set_variable = { name = te_mon_work2 value = global_var:te_world_inflation_acc_den }
+		change_variable = { name = te_mon_work2 subtract = var:te_mon_world_infl_own_den }
+		if = {
+			limit = { var:te_mon_work2 > 0.0005 }
+			set_variable = { name = te_mon_world_inflation_now value = global_var:te_world_inflation_acc_num }
+			change_variable = { name = te_mon_world_inflation_now subtract = var:te_mon_world_infl_own_num }
+			change_variable = { name = te_mon_world_inflation_now divide = var:te_mon_work2 }
+		}
+		else = {
+			set_variable = { name = te_mon_world_inflation_now value = 0 }
+		}
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_world_infl_own_den } }
+		set_variable = { name = te_mon_world_infl_own_num value = 0 }
+		set_variable = { name = te_mon_world_infl_own_den value = 0 }
+	}
+
+	if = {
+		limit = { NOT = { has_variable = te_fx_index } }
+		set_variable = { name = te_fx_index value = te_mon_fx_par }
+
+		# SAVE MIGRATION (§18.2), one shot, riding on the seed so it can never
+		# run twice. A country holding one of the two deleted tools has its
+		# index SET to what the +/-0.25 modifier was in index points — 80 / 120 —
+		# and drifts to its own target from there. Not a te_fx_shock: a shock
+		# delivers 38% of its size, which would swap a 25% edge for 5% overnight,
+		# the lurch the migration exists to prevent. The modifiers themselves are
+		# stripped below, every pulse, until legacy_modifier_cleanup.txt's dated
+		# checklist retires the definitions.
+		if = {
+			limit = {
+				has_journal_entry = je_banking_cycle
+				je:je_banking_cycle = { has_modifier = banking_fx_devaluation }
+			}
+			set_variable = { name = te_fx_index value = 80 }
+		}
+		else_if = {
+			limit = {
+				has_journal_entry = je_banking_cycle
+				je:je_banking_cycle = { has_modifier = banking_fx_support }
+			}
+			set_variable = { name = te_fx_index value = 120 }
+		}
+	}
+	if = {
+		limit = { NOT = { has_variable = te_fx_shadow } }
+		set_variable = { name = te_fx_shadow value = var:te_fx_index }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_fx_shock } }
+		set_variable = { name = te_fx_shock value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_fx_avg } }
+		set_variable = { name = te_fx_avg value = var:te_fx_index }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_fx_imported } }
+		set_variable = { name = te_fx_imported value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_fx_devalued_months } }
+		set_variable = { name = te_fx_devalued_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_overvaluation } }
+		set_variable = { name = te_mon_overvaluation value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_capital_controls_months } }
+		set_variable = { name = te_capital_controls_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_fx_weak_applied } }
+		set_variable = { name = te_fx_weak_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_fx_strong_applied } }
+		set_variable = { name = te_fx_strong_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_capital_controls_fatigue_applied } }
+		set_variable = { name = te_capital_controls_fatigue_applied value = 0 }
+	}
+
+	# The two deleted tools' modifiers, stripped wherever a save still carries
+	# them (the migration above has already read them on the seeding pulse).
+	if = {
+		limit = { has_journal_entry = je_banking_cycle }
+		je:je_banking_cycle = {
+			if = {
+				limit = { has_modifier = banking_fx_devaluation }
+				remove_modifier = banking_fx_devaluation
+			}
+			if = {
+				limit = { has_modifier = banking_fx_support }
+				remove_modifier = banking_fx_support
+			}
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Step 5b — the exchange rate
+# ----------------------------------------------------------------------------
+# Scope: country. After step 5 (it reads the premium step 5 just wrote) and
+# before step 6 (whose cost-push reads te_fx_imported).
+te_monetary_update_fx = {
+	# --- the shock decays, whatever the regime ------------------------------
+	# Clamped first, so an event that stacks shocks cannot bank more than the
+	# clamp; then decayed. Snapped to zero under 0.05 so a spent shock stops
+	# being arithmetic.
+	clamp_variable = {
+		name = te_fx_shock
+		min = te_mon_fx_shock_clamp_neg
+		max = te_mon_fx_shock_clamp
+	}
+	change_variable = { name = te_fx_shock multiply = te_mon_fx_shock_decay }
+	if = {
+		limit = {
+			var:te_fx_shock < 0.05
+			var:te_fx_shock > -0.05
+		}
+		set_variable = { name = te_fx_shock value = 0 }
+	}
+
+	if = {
+		limit = { te_mon_is_command = yes }
+		# Inconvertible: par, and no shadow either (§15.2).
+		set_variable = { name = te_fx_shadow value = te_mon_fx_par }
+		set_variable = { name = te_fx_index value = te_mon_fx_par }
+		set_variable = { name = te_fx_devalued_months value = 0 }
+	}
+	else = {
+		# --- the shadow runs for everyone else --------------------------------
+		set_variable = { name = te_mon_work value = te_mon_fx_shadow_step }
+		change_variable = { name = te_fx_shadow add = var:te_mon_work }
+		clamp_variable = {
+			name = te_fx_shadow
+			min = te_mon_fx_index_min
+			max = te_mon_fx_index_max
+		}
+
+		# --- the index, by regime (§15.2) --------------------------------------
+		if = {
+			limit = { te_mon_fx_floats = yes }
+			set_variable = { name = te_fx_index value = var:te_fx_shadow }
+			set_variable = { name = te_fx_devalued_months value = 0 }
+		}
+		else_if = {
+			limit = { te_mon_fx_is_devalued = yes }
+			set_variable = { name = te_mon_work value = te_mon_fx_devalue_step }
+			change_variable = { name = te_fx_index add = var:te_mon_work }
+			change_variable = { name = te_fx_devalued_months subtract = 1 }
+			if = {
+				limit = { var:te_fx_devalued_months <= 0 }
+				set_variable = { name = te_fx_devalued_months value = 0 }
+				set_variable = { name = te_fx_index value = te_mon_fx_par }
+			}
+		}
+		else = {
+			# Metal, undevalued: the nominal parity IS the exchange rate. A
+			# country that has just enacted metal from a float lands here on its
+			# first pulse and is at par from then on — choosing a parity is what
+			# enacting a standard means.
+			set_variable = { name = te_fx_index value = te_mon_fx_par }
+		}
+	}
+	clamp_variable = {
+		name = te_fx_index
+		min = te_mon_fx_index_min
+		max = te_mon_fx_index_max
+	}
+
+	# --- overvaluation: the peg's index against where a float would sit ------
+	# Zero by construction for a floater (index = shadow) and for a command
+	# economy. Display-only under commodity money, which has no te_peg_confidence
+	# to drain (§15.6).
+	set_variable = { name = te_mon_overvaluation value = te_mon_fx_overvaluation_value }
+
+	# --- the three-year average, and imported inflation off it ---------------
+	# Imported FIRST, against the average as it stood, then the average moves —
+	# the order §9.3's basket uses.
+	set_variable = { name = te_fx_imported value = te_mon_fx_imported_value }
+	set_variable = { name = te_mon_work value = te_mon_fx_avg_step }
+	change_variable = { name = te_fx_avg add = var:te_mon_work }
+
+	# --- capital-controls fatigue counter (§15.4) ---------------------------
+	# FREEZE WINS OVER DECAY: in a crisis the counter neither grows nor decays,
+	# so controls lifted DURING a crisis do not start decaying until it ends —
+	# otherwise lifting in a panic would bank free decay.
+	if = {
+		limit = { te_mon_in_external_crisis = no }
+		if = {
+			limit = { banking_tool_capital_controls_active = yes }
+			change_variable = { name = te_capital_controls_months add = 1 }
+		}
+		else = {
+			change_variable = { name = te_capital_controls_months subtract = te_mon_controls_decay }
+		}
+		clamp_variable = {
+			name = te_capital_controls_months
+			min = 0
+			max = te_mon_controls_months_max
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Step 9b — the trade edge and controls fatigue
+# ----------------------------------------------------------------------------
+# Scope: country. THE one refresh site for all three modifiers.
+#
+# Each follows step 9's recipe: re-apply only when the multiplier has moved by a
+# visible amount or the modifier has gone missing; strip, record, add. A zero
+# multiplier is REMOVED rather than applied at zero — an empty line in the
+# modifier list is noise, and te_mon_mod_has is what notices it coming back.
+# All three are MANAGED modifiers (te_monetary_settle_modifier_home strips them
+# on a change of home), and every scaled add sits behind `root ?= this` because
+# the journal-entry branch reads root.var.
+te_monetary_apply_fx_modifiers = {
+	if = {
+		limit = { root ?= this }
+		te_monetary_apply_fx_one = { NAME = te_fx_weak VALUE = te_mon_fx_weak_points APPLIED = te_fx_weak_applied STEP = 0.5 STEP_NEG = -0.5 }
+		te_monetary_apply_fx_one = { NAME = te_fx_strong VALUE = te_mon_fx_strong_points APPLIED = te_fx_strong_applied STEP = 0.5 STEP_NEG = -0.5 }
+		te_monetary_apply_fx_one = { NAME = te_capital_controls_fatigue VALUE = te_mon_controls_fatigue_steps APPLIED = te_capital_controls_fatigue_applied STEP = 0.08 STEP_NEG = -0.08 }
+	}
+}
+
+# $STEP$ is how far the multiplier must move before the modifier is rewritten:
+# half an index point (0.6% of trade edge) for the currency pair, a month's
+# worth (1/12 of a step) for fatigue. $STEP_NEG$ is the same number negated —
+# passed in rather than written as -$STEP$, a form with no precedent in the mod.
+te_monetary_apply_fx_one = {
+	set_variable = { name = te_mon_work value = $VALUE$ }
+	if = {
+		limit = { var:te_mon_work < 0.01 }
+		if = {
+			limit = { te_mon_mod_has = { NAME = $NAME$ } }
+			te_mon_mod_remove = { NAME = $NAME$ }
+		}
+		set_variable = { name = $APPLIED$ value = 0 }
+	}
+	else = {
+		set_variable = { name = te_mon_work2 value = var:te_mon_work }
+		change_variable = { name = te_mon_work2 subtract = var:$APPLIED$ }
+		if = {
+			limit = {
+				OR = {
+					var:te_mon_work2 >= $STEP$
+					var:te_mon_work2 <= $STEP_NEG$
+					NOT = { te_mon_mod_has = { NAME = $NAME$ } }
+				}
+			}
+			if = {
+				limit = { te_mon_mod_has = { NAME = $NAME$ } }
+				te_mon_mod_remove = { NAME = $NAME$ }
+			}
+			set_variable = { name = $APPLIED$ value = var:te_mon_work }
+			te_mon_mod_add_scaled = { NAME = $NAME$ VAR = $APPLIED$ }
+		}
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Event-facing effects
+# ----------------------------------------------------------------------------
+
+# A currency shock, in NOMINAL points: the index moves about 38% of $POINTS$,
+# peaking eleven months out (§15.1). Negative weakens. Seeds the variable
+# itself because an event can fire on a country before its first pulse.
+te_mon_effect_fx_shock = {
+	if = {
+		limit = { NOT = { has_variable = te_fx_shock } }
+		set_variable = { name = te_fx_shock value = 0 }
+	}
+	change_variable = { name = te_fx_shock add = $POINTS$ }
+	clamp_variable = {
+		name = te_fx_shock
+		min = te_mon_fx_shock_clamp_neg
+		max = te_mon_fx_shock_clamp
+	}
+}
+
+# §12.3 Devalue: the index is SET (documented exception #1 to "events never
+# write the index"). Replaces the te_mon_peg_devalued timed modifier — same
+# peak, same impulse (§15.2). te_fx_avg is NOT re-seeded: a devaluation is
+# exactly the move against its own average that imported inflation exists to
+# price, on top of te_mon_peg_devaluation_pressure.
+te_mon_effect_fx_devalue_peg = {
+	set_variable = { name = te_fx_index value = te_mon_fx_devalue_index }
+	set_variable = { name = te_fx_devalued_months value = te_mon_fx_devalue_months }
+}
+
+# A new currency (currency reform, §9.2): the old one's history is void, so the
+# average re-seeds and nothing is imported off a comparison with dead money.
+te_mon_effect_fx_reseed_average = {
+	if = {
+		limit = { has_variable = te_fx_index }
+		set_variable = { name = te_fx_avg value = var:te_fx_index }
+		set_variable = { name = te_fx_imported value = 0 }
+	}
+}

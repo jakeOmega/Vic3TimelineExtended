@@ -1717,6 +1717,7 @@ banking_cycle_events.15 = {
 			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
 			change_variable = { name = bubble_pressure add = -5 }
 		}
+		custom_tooltip = { text = TE_FX_SHOCK_PLUS_5_DESC te_mon_effect_fx_shock = { POINTS = 13 } } # [P4] a defence that works props the currency (~5 points; a shock lands 38% of nominal)
 		add_modifier = {
 			name = banking_event_fx_defense
 			multiplier = banking_event_expense_large
@@ -1809,6 +1810,7 @@ banking_cycle_events.115 = {
 		name = banking_cycle_events.115.a
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		custom_tooltip = { text = TE_FX_SHOCK_PLUS_5_DESC te_mon_effect_fx_shock = { POINTS = 13 } } # [P4] a defence that works props the currency (~5 points; a shock lands 38% of nominal)
 		add_modifier = { name = banking_event_fx_defense multiplier = banking_event_expense_large days = normal_modifier_time is_decaying = yes }
 		ai_chance = { base = 40 }
 	}
@@ -1860,6 +1862,7 @@ banking_cycle_events.165 = {
 		name = banking_cycle_events.165.a
 		default_option = yes
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		custom_tooltip = { text = TE_FX_SHOCK_PLUS_5_DESC te_mon_effect_fx_shock = { POINTS = 13 } } # [P4] a defence that works props the currency (~5 points; a shock lands 38% of nominal)
 		add_modifier = { name = banking_event_fx_defense multiplier = banking_event_expense_large days = normal_modifier_time is_decaying = yes }
 		ai_chance = { base = 40 }
 	}
@@ -5935,6 +5938,7 @@ banking_cycle_events.58 = {
 			value = medium_radicals
 			pop_type = capitalists
 		}
+		custom_tooltip = { text = TE_FX_SHOCK_MINUS_10_DESC te_mon_effect_fx_shock = { POINTS = -26 } } # [P4] ~10 points weaker (a shock lands 38% of nominal)
 		add_modifier = {
 			name = banking_event_managed_devaluation
 			days = normal_modifier_time
@@ -5956,6 +5960,7 @@ banking_cycle_events.58 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		custom_tooltip = { text = TE_FX_SHOCK_PLUS_5_DESC te_mon_effect_fx_shock = { POINTS = 13 } } # [P4] a defence that works props the currency (~5 points; a shock lands 38% of nominal)
 		add_modifier = {
 			name = banking_event_fx_defense
 			multiplier = banking_event_expense_huge
@@ -5972,6 +5977,7 @@ banking_cycle_events.58 = {
 	option = {
 		name = banking_cycle_events.58.c
 		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
+		custom_tooltip = { text = TE_FX_SHOCK_PLUS_5_DESC te_mon_effect_fx_shock = { POINTS = 13 } } # [P4] a defence that works props the currency (~5 points; a shock lands 38% of nominal)
 		add_modifier = {
 			name = banking_event_fx_defense
 			multiplier = banking_event_expense_small

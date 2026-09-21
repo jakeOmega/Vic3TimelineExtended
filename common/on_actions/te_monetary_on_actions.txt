@@ -50,6 +50,8 @@ te_monetary_world_monthly_on_action = {
 	effect = {
 		te_monetary_refresh_world_era_base = yes
 		te_monetary_refresh_world_rate = yes
+		# [P4] Its sibling (§15.1): GDP-weighted inflation over all great powers.
+		te_monetary_refresh_world_inflation = yes
 	}
 }
 
@@ -140,6 +142,8 @@ te_monetary_on_game_started = {
 		# No country has pulsed yet, so no great power is discretionary and this
 		# writes the reference rate — which is the 1836 answer anyway (§12.1).
 		te_monetary_refresh_world_rate = yes
+		# [P4] Its sibling (§15.1): GDP-weighted inflation over all great powers.
+		te_monetary_refresh_world_inflation = yes
 		every_country = {
 			trigger_event = {
 				id = te_monetary_internal.1

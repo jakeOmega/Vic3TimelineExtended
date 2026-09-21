@@ -569,5 +569,57 @@ flowcontainer = {
 				}
 			}
 		}
+
+		### ---- The exchange rate (monetary policy phase 4, §15.5) ----------
+		### te_fx_index, 50..150 with a drawn line at par. The spec's LOOP
+		### DETECTOR for the depreciation spiral (§20 risk 9): weak currency ->
+		### imported inflation -> expectations -> weaker currency shows up here
+		### as a slide that will not level off, years before it reaches the
+		### floor. Exact in the tooltip — the index is displayed exactly on the
+		### dashboard too, since every input to it already is. A metallic
+		### country draws a flat line at par, which is the right picture of a
+		### fixed parity. One colour either side of par, for the inflation
+		### chart's reason: weak is not the opposite of a problem.
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "te_hist_chart_mon_fx_title"
+			}
+			blockoverride "chart_legend" {
+				text = "te_hist_chart_mon_fx_legend"
+			}
+			blockoverride "zero_axis" {
+				widget = {
+					size = { 100% 2 }
+					parentanchor = vcenter
+					alwaystransparent = yes
+
+					background = {
+						using = dark_area
+						alpha = 0.7
+					}
+				}
+			}
+			blockoverride "bar_tooltip" {
+				tooltip = "te_hist_tt_mon_fx"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_mon_fx' )]"
+					blockoverride "values" {
+						min = 50
+						max = 150
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)51.5', ScriptContainer.GetVariableValue( 'te_hist_v_mon_fx' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 50
+						max = 150
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)50', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_mon_fx' ), '(CFixedPoint)4' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.36 0.56 0.78 1.0 }
+					}
+				}
+			}
+		}
 	}
 }

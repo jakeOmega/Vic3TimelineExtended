@@ -13,6 +13,7 @@
 #   mon_policy      te_policy_rate           pp, -3..25 (regime range, §5.1)
 #   mon_rate_paid   te_rate_paid_pts         pp, 0.5..60 (§4)
 #   mon_inflation   te_inflation             pp, -10..100 (headline, §9.3)
+#   mon_fx          te_fx_index              50..150, 100 = par (§15.1; phase 4)
 #
 # The three monetary series are the oscillation detector the spec asks for
 # (monetary_policy_design.md §16.4, §20 risk 5): a target that flaps, a rate
@@ -70,6 +71,10 @@ te_history_record_banking_samples = {
 		if = {
 			limit = { has_variable = te_inflation }
 			te_history_record_sample = { METRIC = mon_inflation VALUE = var:te_inflation }
+		}
+		if = {
+			limit = { has_variable = te_fx_index }
+			te_history_record_sample = { METRIC = mon_fx VALUE = var:te_fx_index }
 		}
 	}
 }

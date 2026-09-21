@@ -1,0 +1,416 @@
+﻿# ============================================================================
+# Monetary policy, phase 4 — exchange rates and the trilemma: script values
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §15, as shipped in §0.7.
+# Effects: common/scripted_effects/te_monetary_fx_effects.txt (step 5b / 9b).
+#
+# te_fx_index is a REAL exchange rate, 100 = par, 50-150 (§15.1). There is no
+# price level in the engine (§2 fact 2), so it says how cheap the country's
+# goods and assets are to foreigners, never how many francs buy a pound.
+#
+# EVERY NUMBER HERE IS A §21 TUNING CONSTANT, kept as a named value so the
+# formulas below read as the spec does and so a balance pass edits one line.
+# Every var: read is guarded or seeded by step 0 — the dashboard evaluates the
+# display values for saves that have not pulsed on phase 4 yet.
+
+
+# --- Constants (§21) --------------------------------------------------------
+
+te_mon_fx_par = { value = 100 }
+te_mon_fx_index_min = { value = 50 }
+te_mon_fx_index_max = { value = 150 }
+
+# Points of fx_target per pp of real-rate gap, and the gap's clamp.
+te_mon_fx_rate_weight = { value = 4 }
+te_mon_fx_rate_gap_clamp = { value = 5 }
+
+# Points per pp of inflation gap against the world, and its clamp.
+te_mon_fx_inflation_weight = { value = 2 }
+te_mon_fx_inflation_gap_clamp = { value = 10 }
+
+# Points per pp of POSITIVE cyclical premium — flight from a distressed
+# sovereign. A negative cyclical premium buys nothing here.
+te_mon_fx_premium_weight = { value = 1.5 }
+
+# The index closes 1/12 of the gap to its target each month (~1-year
+# adjustment), and a shock decays at the same speed — which is WHY A SHOCK
+# DELIVERS ONLY 38% OF ITS NOMINAL SIZE (§15.1): the index never catches it.
+# Size every event shock knowing that: -26 is a ten-point move, +13 is five.
+te_mon_fx_adjust_speed = { value = 0.0833 }
+te_mon_fx_shock_decay = { value = 0.9167 }
+te_mon_fx_shock_clamp = { value = 40 }
+te_mon_fx_shock_clamp_neg = { value = -40 }
+
+# §12.3 Devalue under a metallic par (§15.2): the index is SET to 88 and walks
+# back to par at 1/30 of the remaining gap a month for 60 months. Tuned to the
+# te_mon_peg_devalued modifier it replaces — same +/-0.15 peak (12 points x
+# 1.25%), same total impulse, half gone at 21 months.
+te_mon_fx_devalue_index = { value = 88 }
+te_mon_fx_devalue_return_speed = { value = 0.0333 }
+te_mon_fx_devalue_months = { value = 60 }
+
+# Overvaluation drain on a gold peg (§15.2): -1 confidence per 2 points of
+# overvaluation beyond 5, per month, x controls_damp.
+te_mon_fx_overvaluation_tolerance = { value = 5 }
+te_mon_fx_overvaluation_per_confidence = { value = 2 }
+
+# +0.05pp of cyclical premium per index point below par (§15.3): foreign-
+# currency debt. Index 80 = +1pp.
+te_mon_fx_premium_per_point = { value = 0.05 }
+
+# Imported inflation (§15.3): pp of cost-push per point the index sits below
+# its own three-year average; the average's speed; and the three openness
+# bands, keyed on market_trade_reliance.
+te_mon_fx_imported_k = { value = 0.15 }
+te_mon_fx_avg_alpha = { value = 0.0278 }
+te_mon_fx_openness_closed = { value = 0.6 }
+te_mon_fx_openness_normal = { value = 1.0 }
+te_mon_fx_openness_open = { value = 1.5 }
+
+# Capital controls (§15.4): what they multiply the rate term, the gold gap and
+# (through the gap) the confidence drain by.
+te_mon_controls_damp_value = { value = 0.25 }
+
+# Fatigue: one step per 12 peacetime months held, to 5 steps at five years;
+# decays 3 months per month once lifted.
+te_mon_controls_months_max = { value = 60 }
+te_mon_controls_months_per_step = { value = 12 }
+te_mon_controls_decay = { value = 3 }
+
+
+# --- controls_damp ----------------------------------------------------------
+# 0.25 while banking_capital_controls_out sits on the journal entry, else 1.
+# READ AT THREE SITES and nowhere else: the rate term of fx_target below,
+# te_mon_gold_gap_value (and so, through te_gold_flow_gap, the confidence drain
+# per pp of negative gap), and the overvaluation drain. It does NOT touch the
+# inflation or premium terms: controls stop capital leaving, not the currency
+# being distrusted.
+te_mon_controls_damp = {
+	value = 1
+	if = {
+		limit = { banking_tool_capital_controls_active = yes }
+		value = te_mon_controls_damp_value
+	}
+}
+
+
+# --- The inflation this country's currency is judged on ----------------------
+# Expected inflation for everyone but metal. Ruling Q12 pins a metallic
+# country's te_inflation_expected to 0, which would leave both inflation-
+# bearing terms dead exactly where the history lives (inflate under a fixed
+# parity, price yourself out, lose the peg) — so a metallic country is read on
+# REALISED CORE instead (§15.2). The world average below uses this same read
+# per member (§0.7 ruling F2), so an all-metal world that inflates together on
+# a gold rush is compared like with like and nobody is "overvalued" by it.
+te_mon_fx_inflation_read = {
+	value = 0
+	if = {
+		limit = {
+			te_mon_is_metallic = yes
+			has_variable = te_inflation_core
+		}
+		add = var:te_inflation_core
+	}
+	else_if = {
+		limit = { has_variable = te_inflation_expected }
+		add = var:te_inflation_expected
+	}
+}
+
+
+# --- World inflation (§12.1's sibling, §15.1) --------------------------------
+# GDP-weighted te_mon_fx_inflation_read over ALL great powers outside a command
+# economy — inflation is not circular the way the world RATE is, so there is no
+# discretionary-only filter. Same accumulator pattern, same weight, same
+# own-share exclusion as the world rate; fallback 0.
+te_mon_world_inflation_weighted = {
+	value = te_mon_fx_inflation_read
+	multiply = te_mon_world_rate_weight
+}
+
+
+# --- fx_target, term by term (§15.1) -----------------------------------------
+# Each term is its own value because the dashboard tooltip lists them, and so a
+# debug read-out can show which one is moving the currency.
+
+# Carry. own real rate - world real rate, clamped, x controls_damp, x 4.
+#
+# ZERO FOR A COUNTRY WITHOUT A DIAL (§0.7 ruling F1). The spec left this
+# "(proposed)": a no-dial rate is world + own expected + the 1pp bankless
+# spread, so its real gap is a constant +1 and every bankless floater would sit
+# four points strong for ever — a -5% export edge nobody chose, the same hidden
+# standing penalty §8 refuses to apply through the stance. The spread is a risk
+# charge, not a return anyone crosses a border for. So no dial, no carry: those
+# currencies move on the inflation gap, the premium and shocks alone.
+te_mon_fx_term_rate = {
+	value = 0
+	if = {
+		limit = {
+			te_mon_has_dial = yes
+			has_variable = te_policy_rate
+			has_variable = te_mon_world_rate_now
+		}
+		add = var:te_policy_rate
+		subtract = te_mon_fx_inflation_read
+		subtract = var:te_mon_world_rate_now
+		min = {
+			value = te_mon_fx_rate_gap_clamp
+			multiply = -1
+		}
+		max = te_mon_fx_rate_gap_clamp
+		multiply = te_mon_controls_damp
+		multiply = te_mon_fx_rate_weight
+	}
+}
+
+# Confidence in the currency. NOT double-counted against the carry term, which
+# also subtracts inflation: that one is the return on holding the currency,
+# this one is whether anyone trusts it. 12% policy and 10% expected inflation
+# is a healthy real rate and a weak currency.
+te_mon_fx_term_inflation = {
+	value = te_mon_fx_inflation_read
+	if = {
+		limit = { has_variable = te_mon_world_inflation_now }
+		subtract = var:te_mon_world_inflation_now
+	}
+	min = {
+		value = te_mon_fx_inflation_gap_clamp
+		multiply = -1
+	}
+	max = te_mon_fx_inflation_gap_clamp
+	multiply = te_mon_fx_inflation_weight
+	multiply = -1
+}
+
+# Flight from a distressed sovereign. Reads te_premium_cyclical as step 5 has
+# JUST written it (5b runs after 5); the loop the other way — index into the
+# premium — is the one that carries the deliberate one-month lag.
+te_mon_fx_term_premium = {
+	value = 0
+	if = {
+		limit = { has_variable = te_premium_cyclical }
+		add = var:te_premium_cyclical
+	}
+	min = 0
+	multiply = te_mon_fx_premium_weight
+	multiply = -1
+}
+
+te_mon_fx_target_value = {
+	value = te_mon_fx_par
+	add = te_mon_fx_term_rate
+	add = te_mon_fx_term_inflation
+	add = te_mon_fx_term_premium
+	if = {
+		limit = { has_variable = te_fx_shock }
+		add = var:te_fx_shock
+	}
+}
+
+# One month's move of the shadow toward its target.
+te_mon_fx_shadow_step = {
+	value = te_mon_fx_target_value
+	subtract = var:te_fx_shadow
+	multiply = te_mon_fx_adjust_speed
+}
+
+# One month's walk of a devalued metallic index back toward par.
+te_mon_fx_devalue_step = {
+	value = te_mon_fx_par
+	subtract = var:te_fx_index
+	multiply = te_mon_fx_devalue_return_speed
+}
+
+te_mon_fx_overvaluation_value = {
+	value = var:te_fx_index
+	subtract = var:te_fx_shadow
+	min = 0
+}
+
+# The overvaluation a GOLD PEG is judged on (§0.7 ruling F4): overvaluation with
+# the part a LOW RATE put there taken back out. A rate under the world's already
+# has its own price under gold — the vault bleeds, and then the rate-gap drain
+# bites (§12.2-12.3). Left in, the carry term would charge it a second time and
+# independent of the vault: a gold player at world - 2 with a full vault would
+# lose 1.5 confidence a month where phase 3 lost none, and an AI peg defender
+# trailing a world-rate rise by its drift lag would sit a point from the
+# tolerance. So what drains a peg here is what §15.2 says it is — inflating at
+# home under a fixed parity, and a distressed treasury. A rate ABOVE the world's
+# is left in: it props the shadow, and a dear-money defence of an overvalued
+# parity is exactly how that defence is supposed to work. An approximation — the
+# shadow is smoothed and this term is not — but it errs toward forgiving.
+te_mon_fx_overvaluation_for_peg = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_overvaluation }
+		add = var:te_mon_overvaluation
+		add = {
+			value = te_mon_fx_term_rate
+			max = 0
+		}
+		min = 0
+	}
+}
+
+# Confidence lost this month to overvaluation (step 10). Positive; the caller
+# subtracts it. Only read behind te_mon_fx_is_overvalued.
+te_mon_fx_overvaluation_drain = {
+	value = te_mon_fx_overvaluation_for_peg
+	subtract = te_mon_fx_overvaluation_tolerance
+	min = 0
+	divide = te_mon_fx_overvaluation_per_confidence
+	multiply = te_mon_controls_damp
+}
+
+te_mon_fx_avg_step = {
+	value = var:te_fx_index
+	subtract = var:te_fx_avg
+	multiply = te_mon_fx_avg_alpha
+}
+
+
+# --- Consequences (§15.3) ----------------------------------------------------
+
+# The two fixed-sign multipliers. Two modifiers rather than one signed one
+# because §17 check 8 (a negative `multiplier =`) is still open.
+te_mon_fx_weak_points = {
+	value = te_mon_fx_par
+	subtract = var:te_fx_index
+	min = 0
+}
+
+te_mon_fx_strong_points = {
+	value = var:te_fx_index
+	subtract = te_mon_fx_par
+	min = 0
+}
+
+# Foreign-currency debt: a sibling of te_mon_premium_unanchored in step 5. READS
+# LAST MONTH'S INDEX, deliberately — step 5 runs before 5b, and that lag is what
+# breaks the premium <-> FX loop inside a single tick (§16.2). Do not "fix" it.
+te_mon_premium_fx = {
+	value = 0
+	if = {
+		limit = { has_variable = te_fx_index }
+		add = te_mon_fx_par
+		subtract = var:te_fx_index
+		min = 0
+		multiply = te_mon_fx_premium_per_point
+	}
+}
+
+# How much of a currency move reaches prices, by how much the MARKET trades.
+# The currency's upside is already banded by openness — the trade edge pays in
+# proportion to how much a country trades — so a flat pass-through would give an
+# autarkic continental power an entrepot's downside. market_trade_reliance is a
+# comparison trigger in market scope, not a value, hence three bands.
+te_mon_fx_openness = {
+	value = te_mon_fx_openness_normal
+	if = {
+		limit = {
+			exists = market
+			market = { market_trade_reliance = { value > 0.3 } }
+		}
+		value = te_mon_fx_openness_open
+	}
+	else_if = {
+		limit = {
+			exists = market
+			market = { market_trade_reliance = { value < 0.1 } }
+		}
+		value = te_mon_fx_openness_closed
+	}
+}
+
+# Imported inflation, pp. A CHANGE term, not a level (§9.3's rule): the index
+# against its own three-year average, so a currency that has been 20% weak for
+# a decade imports nothing. Weak against its average = positive. UNCLAMPED here:
+# it is added INSIDE te_cost_push and shares that one +/-6 clamp.
+te_mon_fx_imported_value = {
+	value = var:te_fx_avg
+	subtract = var:te_fx_index
+	multiply = te_mon_fx_imported_k
+	multiply = te_mon_fx_openness
+}
+
+# Capital-controls fatigue steps, 0-5, fractional (§15.4).
+te_mon_controls_fatigue_steps = {
+	value = var:te_capital_controls_months
+	divide = te_mon_controls_months_per_step
+	min = 0
+	max = 5
+}
+
+
+# --- Display (guarded: the .gui evaluates these before the first pulse) ------
+
+te_mon_fx_index_display = {
+	value = te_mon_fx_par
+	if = {
+		limit = { has_variable = te_fx_index }
+		value = var:te_fx_index
+	}
+}
+
+te_mon_fx_shadow_display = {
+	value = te_mon_fx_par
+	if = {
+		limit = { has_variable = te_fx_shadow }
+		value = var:te_fx_shadow
+	}
+}
+
+te_mon_fx_avg_display = {
+	value = te_mon_fx_par
+	if = {
+		limit = { has_variable = te_fx_avg }
+		value = var:te_fx_avg
+	}
+}
+
+te_mon_fx_shock_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_fx_shock }
+		value = var:te_fx_shock
+	}
+}
+
+te_mon_fx_overvaluation_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_overvaluation }
+		value = var:te_mon_overvaluation
+	}
+}
+
+te_mon_fx_imported_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_fx_imported }
+		value = var:te_fx_imported
+	}
+}
+
+# The trade edge the index is paying, in %: positive = exports advantaged.
+te_mon_fx_export_edge_pct = {
+	value = te_mon_fx_par
+	subtract = te_mon_fx_index_display
+	multiply = 1.25
+}
+
+te_mon_world_inflation_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_world_inflation_now }
+		value = var:te_mon_world_inflation_now
+	}
+}
+
+te_mon_controls_months_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_capital_controls_months }
+		value = var:te_capital_controls_months
+	}
+}

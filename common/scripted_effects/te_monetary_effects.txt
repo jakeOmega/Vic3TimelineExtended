@@ -245,6 +245,15 @@ te_monetary_monthly_update = {
 	# --- 5. risk premium, structural then cyclical --------------------------
 	te_monetary_update_premium = yes
 
+	# 5b. [P4] The exchange rate (§15): shock decay -> fx_target -> shadow ->
+	# index by regime -> overvaluation -> three-year average -> imported
+	# inflation -> capital-controls counter. AFTER step 5, whose cyclical premium
+	# it reads, and BEFORE step 6, whose cost-push reads te_fx_imported. Step 5's
+	# own te_mon_premium_fx therefore reads LAST month's index — the deliberate
+	# one-month lag that breaks the premium <-> FX loop inside a single tick.
+	# common/scripted_effects/te_monetary_fx_effects.txt.
+	te_monetary_update_fx = yes
+
 	# --- 6. the basket, core inflation, headline and expectations -----------
 	te_monetary_update_inflation = yes
 
@@ -274,6 +283,10 @@ te_monetary_monthly_update = {
 	# --- 9. write it into the engine ----------------------------------------
 	te_monetary_apply_interest_modifiers = yes
 
+	# 9b. [P4] te_fx_weak / te_fx_strong / te_capital_controls_fatigue — their
+	# one refresh site.
+	te_monetary_apply_fx_modifiers = yes
+
 	# --- 10. gold flow, hot money, peg confidence (§12.2-12.3) --------------
 	# Last, as §16.2 orders it: it reads the policy rate step 3 settled and
 	# writes the flow step 6 will price NEXT month (the same one-month lag
@@ -296,8 +309,10 @@ te_monetary_monthly_update = {
 #
 # MANAGED: the inflation-band family (six bands + te_mon_dollarised_modifier),
 # the two §13 stance-politics modifiers, te_mon_real_wage_dividend,
-# te_monetisation_minting, te_mon_gold_carry_expense and — since 2026-09-20 —
-# te_monetary_rate_paid. Every add, remove and has_modifier on them in this file
+# te_monetisation_minting, te_mon_gold_carry_expense, — since 2026-09-20 —
+# te_monetary_rate_paid, and — phase 4 — te_fx_weak, te_fx_strong and
+# te_capital_controls_fatigue (applied from te_monetary_fx_effects.txt, through
+# the same wrappers). Every add, remove and has_modifier on them in this file
 # goes through the four wrappers below; nothing may touch them directly.
 #
 # te_monetary_rate_paid WAS the one deliberate exception, on four grounds. The
@@ -386,6 +401,11 @@ te_monetary_settle_modifier_home = {
 		te_mon_mod_strip = { NAME = te_monetisation_minting }
 		te_mon_mod_strip = { NAME = te_mon_gold_carry_expense }
 		te_mon_mod_strip = { NAME = te_monetary_rate_paid }
+		# [P4] No _applied zeroing for these three: step 9b re-adds on a
+		# missing modifier, exactly as step 9 does for te_monetary_rate_paid.
+		te_mon_mod_strip = { NAME = te_fx_weak }
+		te_mon_mod_strip = { NAME = te_fx_strong }
+		te_mon_mod_strip = { NAME = te_capital_controls_fatigue }
 		set_variable = { name = te_inflation_band_applied value = 0 }
 		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
@@ -525,6 +545,29 @@ te_monetary_init_variables = {
 			name = te_mon_world_rate_now
 			min = te_mon_world_rate_min
 			max = te_mon_world_rate_max
+		}
+	}
+
+	# The commodity band's centre (§0.6): the world rate as a whole point, moved
+	# only when the world rate has gone te_mon_commodity_centre_hysteresis (0.75)
+	# away from it. Kept for EVERY country, not just narrow-dial ones, so that
+	# te_mon_target_min / _max have a true centre to read on the very pulse a
+	# country enacts commodity money or founds its bank — and because one
+	# comparison a month is cheaper than the law test that would gate it.
+	# Seeded behind has_variable and never removed, like everything in this step.
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = te_mon_commodity_centre }
+				te_mon_commodity_centre_is_stale = yes
+			}
+		}
+		set_variable = {
+			name = te_mon_commodity_centre
+			value = {
+				value = var:te_mon_world_rate_now
+				round = yes
+			}
 		}
 	}
 
@@ -810,6 +853,10 @@ te_monetary_init_variables = {
 		limit = { NOT = { has_variable = te_peg_suspended_months } }
 		set_variable = { name = te_peg_suspended_months value = 0 }
 	}
+
+	# [P4] The exchange-rate seeds, the per-pulse world-inflation copy and the
+	# one-shot migration off the two deleted FX tools (§15, §18.2).
+	te_monetary_init_fx_variables = yes
 }
 
 
@@ -821,7 +868,10 @@ te_monetary_init_variables = {
 #
 # Command economy is tested first because the administered rate overrides the
 # monetary law entirely (§5.3), and "no national bank" next because a bankless
-# country has no dial whatever its currency law says (§5.2).
+# country has no dial whatever its currency law says (§5.2). That order is also
+# why regime 1 (commodity money) means "commodity money WITH a bank" and so,
+# since 2026-09-21, a country holding the narrow dial: commodity money without
+# one has already been caught by the bankless branch above and reads 0.
 #
 # KEEP: te_mon_regime is written here every pulse and, in phase 1, read only by
 # the console debug event — every gate below re-tests the laws directly. It is
@@ -1237,22 +1287,29 @@ te_monetary_update_target = {
 # ----------------------------------------------------------------------------
 # Scope: country, dial countries only.
 #
-#   gold standard        0-15, and in phase 1 also the reference rate +/-2
-#                        (the §19 row-1 interim rule standing in for §12 gold
-#                        flows). The interim band is the binding one.
+#   commodity money      band centre -1 to band centre +3 (§0.6, 2026-09-21)
+#   gold standard        0-15; what binds the dial is gold, not a band (§12.2)
 #   fiat currency        0-25
 #   digital currency     -3 to 25 (no cash to hoard, so negative rates bite)
 #
-# The gold band is taken inwards to whole numbers — ceiling on the low side,
-# floor on the high side — so the target stays an integer the stepper can move
-# without ever sitting outside the band.
+# A world-relative band is taken to whole numbers so the target stays an integer
+# the stepper can move without ever sitting outside it: the commodity band
+# hangs off a whole-number centre (var:te_mon_commodity_centre, step 0), and §12.3's Defend floor takes its bound inwards
+# with a ceiling.
+#
+# THIS IS WHERE A LAW CHANGE LANDS. A country that leaves fiat for commodity
+# money keeps whatever target it last held, and this step pulls it into the new
+# band on the first pulse after enactment — so an 8% fiat target becomes the top
+# of the band rather than anything the player has to go and fix by hand. The rate
+# itself then drifts there at a third of a point a month like any other move.
 #
 # The band itself lives in te_mon_target_min / te_mon_target_max
 # (common/script_values/te_monetary_script_values.txt), not here, because the
 # dashboard's stepper has to grey out at exactly these edges: a second copy of
 # the table is how a stepper ends up offering a step this effect silently undoes
 # on the next pulse. Fiat is the values' fall-through case and the only dial
-# regime left once gold and digital are handled (te_mon_has_dial gates this).
+# regime left once commodity money, gold and digital are handled
+# (te_mon_has_dial gates this).
 te_monetary_clamp_target = {
 	set_variable = { name = te_mon_work value = te_mon_target_min }
 	set_variable = { name = te_mon_work2 value = te_mon_target_max }
@@ -1316,10 +1373,15 @@ te_monetary_drift_policy_rate = {
 # ----------------------------------------------------------------------------
 # Scope: country, no-dial countries only.
 #
-# No national bank, commodity money or crypto: the country pays the reference
-# rate, PLUS ITS OWN EXPECTED INFLATION, plus the 1pp bankless spread (§4).
-# Command economy: the administered rate, a flat 3% (§5.3). Premium still
-# applies to both.
+# No national bank or crypto: the country pays the reference rate, PLUS ITS OWN
+# EXPECTED INFLATION, plus the 1pp bankless spread (§4). Command economy: the
+# administered rate, a flat 3% (§5.3). Premium still applies to both.
+#
+# COMMODITY MONEY IS NO LONGER ON THAT LIST, unless it is also bankless — a
+# commodity-money country with a national bank takes the dial path instead and
+# sets a rate inside its band, world -1 to +3 (§5.4's open question, §0.6).
+# Bankless commodity money is caught by the first line of te_mon_has_dial and
+# still lands here.
 #
 # WHY EXPECTED INFLATION IS IN A DERIVED RATE. The reference rate is real (§4);
 # a market rate is nominal. Lenders in a bankless country price the inflation
@@ -1434,6 +1496,9 @@ te_monetary_update_premium = {
 	# last month is if anything the more honest of the two.
 	change_variable = { name = te_premium_cyclical add = te_mon_premium_unanchored }
 	change_variable = { name = te_premium_cyclical add = te_mon_premium_monetisation }
+	# [P4] Foreign-currency debt: +0.05pp per index point below par, off LAST
+	# month's index (step 5b has not run yet — see te_mon_premium_fx).
+	change_variable = { name = te_premium_cyclical add = te_mon_premium_fx }
 	if = {
 		limit = { var:te_premium_cyclical < -10 }
 		set_variable = { name = te_premium_cyclical value = -10 }
@@ -1556,6 +1621,13 @@ te_monetary_update_inflation = {
 					subtract = var:te_basket_avg
 					multiply = te_mon_basket_k
 					multiply = 100
+					# [P4] Imported inflation (§15.3), INSIDE the one clamp: a
+					# weak currency and a grain shock share the same +/-6pp, and
+					# the mandates look through both alike. Step 5b wrote it this
+					# pulse. Every site that forces te_cost_push to zero drops it
+					# with the rest; the ones outside this branch zero
+					# te_fx_imported too, so the dashboard agrees.
+					add = var:te_fx_imported
 					min = te_mon_cost_push_clamp_neg
 					max = te_mon_cost_push_clamp
 				}
@@ -1577,6 +1649,7 @@ te_monetary_update_inflation = {
 		# that regains a market re-seeds against the new one instead of
 		# differencing against a fabricated zero.
 		set_variable = { name = te_cost_push value = 0 }
+		set_variable = { name = te_fx_imported value = 0 }
 	}
 
 	# --- 6b. the inflation loop ---------------------------------------------
@@ -1590,6 +1663,7 @@ te_monetary_update_inflation = {
 		set_variable = { name = te_inflation_core value = 0 }
 		set_variable = { name = te_inflation_expected value = 0 }
 		set_variable = { name = te_cost_push value = 0 }
+		set_variable = { name = te_fx_imported value = 0 }
 		set_variable = { name = te_inflation_band value = 2 }
 	}
 	else = {
@@ -2093,10 +2167,15 @@ te_monetary_update_rate_paid = {
 # sign convention the mandate formulas above use for r^*.
 #
 # WHO FEELS THE STANCE: only countries with a dial (§8). A market rate clears at
-# neutral by definition, so bankless, commodity-money, crypto and command-economy
-# countries get a gap of exactly 0 and read Neutral — applying the channel to
-# them would leave every law_no_national_bank country permanently tight, a hidden
-# penalty nobody chose.
+# neutral by definition, so bankless, crypto and command-economy countries get a
+# gap of exactly 0 and read Neutral — applying the channel to them would leave
+# every law_no_national_bank country permanently tight, a hidden penalty nobody
+# chose. A COMMODITY-MONEY BANK IS NOW INSIDE THE GATE (2026-09-21): its band
+# lets it go one point cheaper than the world and three dearer. On the cheap
+# side the gap it can open is small, and that small gap is all the easing the
+# regime allows — the lenders' floor in step 7 means cutting barely touches the
+# rate the treasury pays, so the stimulus channel is where a cut lands. On the
+# dear side it is a real brake, and the treasury pays for it in full.
 te_monetary_update_stance = {
 	# --- the two random walks, for countries with a dial only ----------------
 	# WHY THE GATE. Neither walk is read by a country without a dial: its stance
@@ -2658,8 +2737,22 @@ te_monetary_update_gold = {
 			limit = {
 				var:te_gold_flow_gap >= 0
 				var:te_gold_hot_money <= 0
+				# [P4] An overvalued peg counts as under pressure for ruling
+				# Q10: the +1 holds, instead of netting the drain below away.
+				te_mon_fx_is_overvalued = no
 			}
 			change_variable = { name = te_peg_confidence add = 1 }
+		}
+		# [P4] §15.2, the FIFTH confidence term, beside the rate-gap drain and
+		# adding to it: -1 per 2 points of overvaluation beyond 5, x
+		# controls_damp. Independent of the vault — an overvalued parity is
+		# distrusted however much gold sits behind it. This is the classical
+		# loop closing with no new state: gold inflow -> price-specie pressure ->
+		# core inflation -> the shadow falls -> overvaluation -> this. A crisis it
+		# triggers inherits Q10's cooldown, because the threshold test is below.
+		if = {
+			limit = { te_mon_fx_is_overvalued = yes }
+			change_variable = { name = te_peg_confidence subtract = te_mon_fx_overvaluation_drain }
 		}
 		if = {
 			limit = { var:te_peg_confidence > 100 }
@@ -3058,6 +3151,8 @@ te_mon_effect_new_currency = {
 		set_variable = { name = te_inflation_core value = te_mon_currency_reform_reset }
 		set_variable = { name = te_inflation_expected value = te_mon_currency_reform_reset }
 		set_variable = { name = te_cost_push value = 0 }
+		# [P4] New money has no exchange-rate history to import inflation off.
+		te_mon_effect_fx_reseed_average = yes
 	}
 
 	add_modifier = {

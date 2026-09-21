@@ -126,28 +126,6 @@ banking_possible_cb_export_credit_facility = {
 	}
 }
 
-banking_possible_cb_fx_devaluation = {
-	custom_tooltip = {
-		text = BANKING_POINTS_3
-		modifier:country_banking_intervention_max_add >= 3
-	}
-	modifier:country_can_use_fx_devaluation_bool = yes
-	NOT = { je:je_banking_cycle = { has_modifier = banking_fx_support } }
-	custom_tooltip = {
-		text = banking_button_locked_by_law_tt
-		modifier:country_banking_lock_fx_devaluation_bool = no
-	}
-}
-
-banking_possible_cb_fx_support = {
-	custom_tooltip = {
-		text = BANKING_POINTS_3
-		modifier:country_banking_intervention_max_add >= 3
-	}
-	modifier:country_can_use_fx_support_bool = yes
-	NOT = { je:je_banking_cycle = { has_modifier = banking_fx_devaluation } }
-}
-
 banking_possible_cb_fx_swap_lines = {
 	custom_tooltip = {
 		text = BANKING_POINTS_4

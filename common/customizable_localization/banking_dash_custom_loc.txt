@@ -279,6 +279,13 @@ te_mon_mandate_name = {
 # would miss it and the fall-through would tell it that its central bank sets
 # the rate — which is the one thing that is no longer true.
 #
+# COMMODITY MONEY LEFT THIS LIST on 2026-09-21 (§5.4's open question). With a
+# national bank it now holds the narrow dial and the widget hides this line
+# outright; without one it is caught by the no-bank branch above, which is the
+# binding cause and the one that names the way out. So a commodity-money branch
+# here would be unreachable from either side, and its loc key went with it —
+# te_mon_dial_range_note below is where the regime gets its sentence now.
+#
 # The last branch is the fall-through for a country that DOES hold the dial; the
 # widget hides this line for those, so it should never be seen.
 te_mon_no_dial_reason = {
@@ -296,10 +303,6 @@ te_mon_no_dial_reason = {
 	text = {
 		trigger = { NOT = { has_law_or_variant = law_type:law_national_bank } }
 		localization_key = banking_dash_mon_why_no_bank
-	}
-	text = {
-		trigger = { has_law_or_variant = law_type:law_commodity_money }
-		localization_key = banking_dash_mon_why_commodity
 	}
 	text = {
 		trigger = { has_law_or_variant = law_type:law_decentralized_cryptocurrency }
@@ -526,3 +529,114 @@ te_mon_peg_state = {
 		localization_key = banking_dash_mon_peg_state_trusted
 	}
 }
+
+
+# ----------------------------------------------------------------------------
+# What kind of range the dial has, and what pays for it (§5.1, §5.4)
+# ----------------------------------------------------------------------------
+# The Rate Target tooltip prints the regime's floor and ceiling from
+# te_mon_target_min / te_mon_target_max, then this block says in a sentence why
+# they sit where they do. It used to be one hard-coded #lore line about the gold
+# standard, which was true of the only regime that had an interesting range —
+# and became wrong the moment commodity money got a band of its own.
+#
+# ORDER. Suspended gold is tested before gold, because a suspension is exactly
+# the case where the printed range (0-25) contradicts the law's name. Commodity
+# money is next, then gold, then the two flat-range regimes share the
+# fall-through: a fiat or digital player is told the range is theirs to use,
+# which is the whole difference the ladder is selling.
+#
+# NOT GATED ON te_mon_display_ready. The tooltip that calls this is, and no
+# branch here reads a variable — every trigger is a law or a law-plus-clock
+# test, so a country that has never pulsed still gets a true sentence.
+te_mon_dial_range_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_law_or_variant = law_type:law_gold_standard
+			te_mon_peg_is_suspended = yes
+		}
+		localization_key = banking_dash_mon_range_gold_suspended
+	}
+	text = {
+		trigger = { te_mon_has_narrow_dial = yes }
+		localization_key = banking_dash_mon_range_commodity
+	}
+	text = {
+		trigger = { te_mon_is_on_gold = yes }
+		localization_key = banking_dash_mon_range_gold
+	}
+	text = {
+		localization_key = banking_dash_mon_range_free
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# The exchange-rate row (phase 4, §15.5)
+# ----------------------------------------------------------------------------
+# te_mon_fx_state is the row's VALUE; te_mon_fx_effect the second row's. Order:
+# command economy (inconvertible — par, no shadow) before metal, a devalued
+# metallic par before a plain one, and the float as the fall-through. No branch
+# reads an unguarded variable: the numbers come from the *_display script
+# values, which carry their own has_variable guards.
+te_mon_fx_state = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_is_command = yes }
+		localization_key = banking_dash_mon_fx_state_command
+	}
+	text = {
+		trigger = {
+			te_mon_is_metallic = yes
+			te_mon_fx_is_devalued = yes
+		}
+		localization_key = banking_dash_mon_fx_state_devalued
+	}
+	text = {
+		trigger = { te_mon_is_metallic = yes }
+		localization_key = banking_dash_mon_fx_state_par
+	}
+	text = {
+		localization_key = banking_dash_mon_fx_state_float
+	}
+}
+
+te_mon_fx_effect = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { te_mon_is_command = yes }
+		localization_key = banking_dash_mon_fx_effect_none
+	}
+	text = {
+		trigger = {
+			te_mon_is_metallic = yes
+			te_mon_fx_is_devalued = no
+		}
+		localization_key = banking_dash_mon_fx_effect_peg
+	}
+	text = {
+		localization_key = banking_dash_mon_fx_effect_float
+	}
+}
+
+# One sentence in the index tooltip on what capital controls are doing to it.
+te_mon_fx_controls_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { banking_tool_capital_controls_active = yes }
+		localization_key = banking_dash_mon_fx_controls_on
+	}
+	text = {
+		localization_key = banking_dash_mon_fx_controls_off
+	}
+}
+

@@ -284,6 +284,7 @@ extra_law_events.4 = {
 			name = monpol_printing_press_advance
 		}
 		# Domain side-effect
+		custom_tooltip = { text = TE_FX_SHOCK_MINUS_5_DESC te_mon_effect_fx_shock = { POINTS = -13 } } # [P4] ~5 points weaker (a shock lands 38% of nominal)
 		add_modifier = { name = monpol_currency_devaluation days = normal_modifier_time multiplier = sv_money_flow_event_small }
 		add_modifier = { name = monpol_currency_devaluation_pressure days = normal_modifier_time }
 	}
@@ -4325,6 +4326,7 @@ extra_law_events.40 = {
 			name = monpol_printing_press_stall
 		}
 		# Domain side-effect
+		custom_tooltip = { text = TE_FX_SHOCK_MINUS_5_DESC te_mon_effect_fx_shock = { POINTS = -13 } } # [P4] ~5 points weaker (a shock lands 38% of nominal)
 		add_modifier = { name = monpol_currency_devaluation days = normal_modifier_time multiplier = sv_money_flow_event_small }
 		add_modifier = { name = monpol_currency_devaluation_pressure days = normal_modifier_time }
 	}
@@ -6303,6 +6305,7 @@ extra_law_events.64 = {
 		name = extra_law_events.64.b
 		add_enactment_modifier = { name = monpol_capital_protection }
 		# Domain side-effect
+		custom_tooltip = { text = TE_FX_SHOCK_MINUS_5_DESC te_mon_effect_fx_shock = { POINTS = -13 } } # [P4] ~5 points weaker (a shock lands 38% of nominal)
 		add_modifier = { name = monpol_currency_devaluation days = normal_modifier_time multiplier = sv_money_flow_event_small }
 		add_modifier = { name = monpol_currency_devaluation_pressure days = normal_modifier_time }
 	}

@@ -350,7 +350,10 @@ def categorize_key(key, technology_keys):
     # outright, not just its `_desc`) and `te_inflation_` for the band set.
     # This rule must stay BELOW the `_add` / `_mult` line above, so the two
     # pressure modifier types still land in te_modifiers_l_english.yml.
-    if key.startswith(("te_monetary_", "te_mon_", "te_monetisation_", "te_inflation_")):
+    # Phase 4 adds `te_fx_` (three tokens: both halves would fall to CONCEPTS) and
+    # `te_capital_controls_` (four: the pair would split).
+    if key.startswith(("te_monetary_", "te_mon_", "te_monetisation_", "te_inflation_",
+                       "te_fx_", "te_capital_controls_")):
         return "MISCELLANEOUS"
     if "_desc" in key or (re.match(r"^[a-zA-Z_]+$", key) and len(key.split("_")) < 4):
         return "CONCEPTS"
