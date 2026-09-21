@@ -2,7 +2,7 @@
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7801 modifier entries.*
+*Auto-generated from 7802 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1852,7 +1852,7 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (536)
+### country (534)
 
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
@@ -1916,7 +1916,6 @@ _Cannon Artillery Offense_
 - `country_banking_lock_capital_controls_bool` — **Locks [Concept('concept_capital_controls', 'Capital Controls')]**
 - `country_banking_lock_directed_credit_bool` — **Locks [Concept('concept_directed_credit', 'Directed Credit')]**
 - `country_banking_lock_export_credit_bool` — **Locks [Concept('concept_export_credit_facility', 'Export Credit Facility')]**
-- `country_banking_lock_fx_swap_lines_bool` — **Locks [Concept('concept_fx_swap_lines', 'FX Swap Lines')]**
 - `country_banking_lock_open_market_ops_bool` — **Locks [Concept('concept_open_market_operations', 'Open Market Operations')]**
 - `country_banking_random_momentum_mult` — **[concept_banking_cycle] Volatility**
 - `country_block_government_reform_bool` — **Blocks Government Reform** — Blocks the Country from reforming it's current Government.
@@ -1941,7 +1940,6 @@ _Cannon Artillery Offense_
 - `country_can_use_deposit_guarantee_bool` — **Enables #bold Deposit Guarantee Expansion#!**
 - `country_can_use_emergency_liquidity_bool` — **Enables #bold Emergency Liquidity Program#!**
 - `country_can_use_export_credit_bool` — **Enables #bold Export Credit Facility#!**
-- `country_can_use_fx_swap_lines_bool` — **Enables #bold FX Swap Lines#!**
 - `country_can_use_open_market_ops_bool` — **Enables #bold Open Market Operations#!**
 - `country_cannot_be_subjugated_bool` — **Cannot be Subjugated** — This country recently declared its Neutrality and cannot be subjugated
 - `country_cannot_be_target_for_law_imposition_bool` — **Cannot be targeted for Law Imposition** — Country cannot be targeted for new Law Imposition attempts while this is in effect
@@ -2444,7 +2442,7 @@ _Cannon Artillery Offense_
 - `political_movement_radicalism_from_enactment_approval_mult` — **Political Movement Activism Reduction from Approved Enactment** — An increase or decrease in the Movement Activism impact of enacting Laws that Political Movements approve of
 - `political_movement_radicalism_from_enactment_disapproval_mult` — **Political Movement Activism Increase from Disapproved Enactment** — An increase or decrease in the Movement Activism impact of enacting Laws that Political Movements disapprove of
 
-### power-bloc (17)
+### power-bloc (20)
 
 - `power_bloc_can_enact_decree_cultural_emigration_initiative_bool` — **Can Enact Cultural Emigration Initiative and Forced Migration [Concept('concept_decree', 'Decrees')]**
 - `power_bloc_can_enact_greenest_grass_campaign_bool` — **Can Enact Greenest Grass Campaign**
@@ -2459,10 +2457,13 @@ _Cannon Artillery Offense_
 - `power_bloc_can_use_diplomatic_alignment_bool` — **Leader Can Use Diplomatic Alignment [concept_diplomatic_action]**
 - `power_bloc_can_use_extend_influence_bool` — **Can Use Extend Influence [concept_diplomatic_action]**
 - `power_bloc_can_use_join_united_nations_bool` — **Leader Can Require UN Membership**
+- `power_bloc_fiscal_backstop_bool` — **The leader is lender of last resort to every adopter, and their overvaluation premium is halved**
 - `power_bloc_leader_can_force_cultural_acceptance_bool` — **Leader Can Force Cultural Acceptance**
 - `power_bloc_leader_can_force_cultural_adoption_bool` — **Leader Can Force Cultural Adoption**
 - `power_bloc_leader_can_peacefully_annex_bool` — **Leader Can Peacefully Annex Subjects**
+- `power_bloc_monetary_cooperation_bool` — **The leader's central bank backs every member: #G −0.5#! points of risk premium and #G +1#! peg confidence a month**
 - `power_bloc_principle_groups_max_add` — **Maximum [concept_power_bloc] [Concept('concept_power_bloc_principle_group', 'Principle Groups')]**
+- `power_bloc_shared_currency_bool` — **Members may adopt the leader's currency**
 
 ### power_bloc (20)
 
