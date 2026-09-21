@@ -13320,6 +13320,38 @@ REPLACE:ideology_reactionary_movement = {
 	}
 }
 
+INJECT:ideology_modernizer = {
+	lawgroup_national_bank = {
+		law_no_national_bank = disapprove
+		law_national_bank = strongly_approve
+	}
+}
+
+INJECT:ideology_regenerator = {
+	lawgroup_national_bank = {
+		law_no_national_bank = disapprove
+		law_national_bank = strongly_approve
+	}
+}
+
+INJECT:ideology_modernizer_leader = {
+	lawgroup_national_bank = {
+		law_no_national_bank = disapprove
+		law_national_bank = strongly_approve
+	}
+}
+
+INJECT:ideology_modernizer_movement_2 = {
+	lawgroup_ministry_of_science = {
+		law_no_ministry_of_science = neutral
+		law_ministry_of_science = approve
+	}
+	lawgroup_national_bank = {
+		law_no_national_bank = disapprove
+		law_national_bank = strongly_approve
+	}
+}
+
 INJECT:ideology_traditionalist_movement = {
 	lawgroup_ministry_of_religion = {
 		law_no_ministry_of_religion = disapprove
