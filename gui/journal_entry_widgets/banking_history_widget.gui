@@ -17,9 +17,139 @@
 ###
 ### The section is collapsed by default — the flag is the *open* flag, the
 ### inverse of the dashboard's collapsed flags — so a player who does not open
-### it never pays for 360 bar widgets. Nothing here has an effect: the only
-### click targets are the collapse header and the three range buttons, and
-### both write GUI variables only.
+### it never pays for 1,440 bar slots (six charts x the 240-month store cap).
+### An out-of-range month costs one `visible` test and nothing below it, so the
+### 1-year view is as cheap as it ever was; only the 20-year view draws them
+### all. Nothing here has an effect: the only click targets are the collapse
+### header and the three range buttons, and both write GUI variables only.
+
+types te_banking_history_types
+{
+	### The cycle-value column, coloured by the phase its reading falls in.
+	###
+	### WHY SIX PROGRESSBARS AND NOT ONE WITH A COMPUTED COLOUR. A progressbar's
+	### `color` can be an expression, but the only way to *produce* a CVector4f
+	### is Select_CVector4f over two colours that already exist as engine
+	### getters (GetMapColor, GetMoraleColorVec); nothing in the data-binding
+	### surface builds a colour out of numbers, and there is no CVector4f
+	### literal promotion to nest into it. So the five colours are five
+	### progressbars in the same slot, each shown only while the reading sits in
+	### its band, plus the one shared dark cover that gives every chart here its
+	### stepped-line look. Exactly one of the five is ever visible, and a hidden
+	### widget's subtree is not drawn.
+	###
+	### THE BANDS AND THE COLOURS ARE NOT CHOSEN HERE. Both are copied: the
+	### edges 10 / 25 / 40 / 60 / 75 / 88 are the phase ladder in
+	### banking_cycle_effects.txt (and the banking_cycle_is_* triggers), and the
+	### RGB values are vanilla's named text colours out of gui/textformatting.gui
+	### — red { 0.88 0.34 0.34 }, gold { 1 0.674 0.454 }, white
+	### { 0.94 0.95 0.88 }, green { 0.39 0.67 0.33 }, blue { 0.41 0.67 0.74 } —
+	### so a bar is literally the colour the phase's own name is printed in,
+	### both in banking_cycle_status_* and in the dashboard's Cycle Phase row.
+	### Downturn and Stagnation share gold and Panic and Frenzy share red, which
+	### is why five bars cover seven phases. If either the ladder or a phase
+	### colour moves, move it here too.
+	type te_history_bar_cycle_phase = widget {
+		size = { 100% 100% }
+
+		### Panic (< 10) and Frenzy (>= 88) — red at both ends of the ladder.
+		progressbar = {
+			visible = "[Or( LessThan_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)10' ), GreaterThanOrEqualTo_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)88' ) )]"
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/backgrounds/white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+			color = { 0.88 0.34 0.34 1.0 }
+			min = 0
+			max = 100
+			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+		}
+
+		### Downturn (10-24) and Stagnation (25-39) — gold.
+		progressbar = {
+			visible = "[And( GreaterThanOrEqualTo_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)10' ), LessThan_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)40' ) )]"
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/backgrounds/white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+			color = { 1.0 0.674 0.454 1.0 }
+			min = 0
+			max = 100
+			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+		}
+
+		### Stable (40-59) — white, the phase with nothing to say about it.
+		progressbar = {
+			visible = "[And( GreaterThanOrEqualTo_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)40' ), LessThan_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)60' ) )]"
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/backgrounds/white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+			color = { 0.94 0.95 0.88 1.0 }
+			min = 0
+			max = 100
+			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+		}
+
+		### Expansion (60-74) — green.
+		progressbar = {
+			visible = "[And( GreaterThanOrEqualTo_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)60' ), LessThan_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)75' ) )]"
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/backgrounds/white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+			color = { 0.39 0.67 0.33 1.0 }
+			min = 0
+			max = 100
+			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+		}
+
+		### Boom (75-87) — blue.
+		progressbar = {
+			visible = "[And( GreaterThanOrEqualTo_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)75' ), LessThan_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)88' ) )]"
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/backgrounds/white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+			color = { 0.41 0.67 0.74 1.0 }
+			min = 0
+			max = 100
+			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+		}
+
+		### The shared cover, declared last so it draws over whichever colour
+		### won. Same 4-point thickness as te_history_bar_unsigned's, so this
+		### chart's cap reads exactly like the others'.
+		progressbar = {
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/backgrounds/white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+			color = { 0.05 0.06 0.08 0.78 }
+			min = 0
+			max = 100
+			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)4' ) ) )]"
+		}
+	}
+}
 
 flowcontainer = {
 	name = "widget_je_banking_history"
@@ -88,13 +218,13 @@ flowcontainer = {
 			}
 			te_history_range_button = {
 				blockoverride "range_text" {
-					text = "te_hist_range_10y"
+					text = "te_hist_range_20y"
 				}
 				blockoverride "range_enabled" {
 					enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
 				}
 				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '10' )]"
+					onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
 				}
 			}
 		}
@@ -109,6 +239,12 @@ flowcontainer = {
 			text = "te_hist_since"
 		}
 
+		### What the two pips on a bar mean. Both halves apply here: the banking
+		### series is the only one that records crash markers.
+		te_history_marker_legend = {
+			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+		}
+
 		### ---- Cycle value (0-100 index) --------------------------------
 		te_history_chart = {
 			blockoverride "chart_title" {
@@ -120,22 +256,14 @@ flowcontainer = {
 			blockoverride "bar_tooltip" {
 				tooltip = "te_hist_tt_bank_value"
 			}
+			### The one chart here that does NOT use te_history_bar_unsigned:
+			### its colour is the phase the month's reading falls in, so the
+			### series reads as a run of Stable years broken by a red Panic
+			### without anyone having to check the axis. Type and bands:
+			### te_history_bar_cycle_phase at the top of this file.
 			blockoverride "bar_body" {
-				te_history_bar_unsigned = {
+				te_history_bar_cycle_phase = {
 					visible = "[ScriptContainer.HasVariable( 'te_hist_v_bank_value' )]"
-					blockoverride "values" {
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
-					}
-					blockoverride "cover_values" {
-						min = 0
-						max = 100
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)4' ) ) )]"
-					}
-					blockoverride "color" {
-						color = { 0.42 0.62 0.85 1.0 }
-					}
 				}
 			}
 		}

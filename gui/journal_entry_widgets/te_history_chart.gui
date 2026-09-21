@@ -175,6 +175,68 @@ types te_history_chart_types
 		block "range_onclick" {}
 	}
 
+	### Key for the two marker pips a chart can draw on a bar. Same textures at
+	### the same sizes as the pips themselves, so the row reads as a key and not
+	### as a second set of markers.
+	###
+	### The crash half is a block with a default body rather than a fixed row:
+	### only the banking series records crash markers, so a series that never
+	### draws the warning pip overrides "crash_marker" to nothing and keeps the
+	### information pip's line.
+	type te_history_marker_legend = flowcontainer {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 1
+		margin = { 4 2 }
+
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			spacing = 4
+
+			icon = {
+				parentanchor = vcenter
+				alwaystransparent = yes
+				size = { 9 9 }
+				texture = "gfx/interface/icons/generic_icons/information.dds"
+			}
+
+			textbox = {
+				parentanchor = vcenter
+				autoresize = yes
+				max_width = 460
+				align = nobaseline
+				using = fontsize_small
+				text = "te_hist_legend_marker"
+			}
+		}
+
+		block "crash_marker" {
+			flowcontainer = {
+				direction = horizontal
+				ignoreinvisible = yes
+				spacing = 4
+
+				icon = {
+					parentanchor = vcenter
+					alwaystransparent = yes
+					size = { 11 11 }
+					texture = "gfx/interface/icons/generic_icons/warning.dds"
+				}
+
+				textbox = {
+					parentanchor = vcenter
+					autoresize = yes
+					max_width = 460
+					align = nobaseline
+					using = fontsize_small
+					text = "te_hist_legend_crash"
+				}
+			}
+		}
+	}
+
 	### The chart itself.
 	###
 	### Required blockoverrides: "chart_title", "chart_legend", "bar_body",
@@ -185,8 +247,10 @@ types te_history_chart_types
 	### chart's metric renders as an empty slot instead of a zero-height bar.
 	### `layoutpolicy_horizontal = expanding` on the item makes the visible
 	### bars divide the plot width between them (vanilla levels_progressbar),
-	### so switching from 10 years to 1 year widens the bars instead of
-	### leaving 108 empty slots.
+	### so switching from 20 years to 1 year widens the bars instead of
+	### leaving 228 empty slots. At the 20-year end the 484px plot is split
+	### 240 ways — about 2px a bar, so the series reads as a shape rather than
+	### as countable months.
 	type te_history_chart = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -194,16 +258,21 @@ types te_history_chart_types
 		spacing = 2
 		margin = { 0 4 }
 
+		### TITLE OVER LEGEND, not title beside legend. Beside the title a
+		### legend had about 230px, and the two monetary legends that have to
+		### say where their axis clamps did not fit: `elide = right` cut them
+		### to "the plot cla ...", which is the one thing a legend cannot
+		### afford. Stacked, the legend gets the full plot width and wraps
+		### rather than eliding, so it can be as long as it needs to be.
 		flowcontainer = {
-			direction = horizontal
+			direction = vertical
 			ignoreinvisible = yes
-			spacing = 8
+			spacing = 0
 			margin_left = 4
 
 			textbox = {
-				parentanchor = vcenter
 				autoresize = yes
-				max_width = 260
+				max_width = 484
 				elide = right
 				align = nobaseline
 				using = fontsize_large
@@ -212,10 +281,9 @@ types te_history_chart_types
 			}
 
 			textbox = {
-				parentanchor = vcenter
 				autoresize = yes
-				max_width = 300
-				elide = right
+				multiline = yes
+				max_width = 484
 				align = nobaseline
 				using = fontsize_small
 				block "chart_legend" {}
@@ -257,7 +325,7 @@ types te_history_chart_types
 						# the columns touch and the caps join up however short the history is.
 						datacontext = "[Scope.GetScriptContainer]"
 
-						### Range filter. Unset range = 10 years = every stored
+						### Range filter. Unset range = 20 years = every stored
 						### sample, so the default view needs no test at all.
 						### The sample's age in months is "now" minus the month
 						### index stored on the container.

@@ -109,7 +109,7 @@ types global_warming_widget_types
 		text = "gw_btn_adopt"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
 		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End )]"
-		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) )]"
+		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End ) ) )]"
 	}
 
 	### The Repeal control, op 1. Stays visible and greyed when a treaty or
@@ -121,7 +121,7 @@ types global_warming_widget_types
 		text = "gw_btn_repeal"
 		enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 		onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
-		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) )]"
+		tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)1' ) ).End ) ) )]"
 	}
 
 	### One policy: name, in-force state, an optional note, and exactly one of
@@ -727,13 +727,13 @@ flowcontainer = {
 			}
 			te_history_range_button = {
 				blockoverride "range_text" {
-					text = "te_hist_range_10y"
+					text = "te_hist_range_20y"
 				}
 				blockoverride "range_enabled" {
 					enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
 				}
 				blockoverride "range_onclick" {
-					onclick = "[GetVariableSystem.Set( 'te_hist_range', '10' )]"
+					onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
 				}
 			}
 		}
