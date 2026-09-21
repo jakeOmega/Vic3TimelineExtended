@@ -6858,6 +6858,10 @@ agdiff_first_mover_prestige = {
 # takes the `root.var:` form the JE-scope rule requires.
 
 te_monetary_rate_paid = {
+	# Needs an icon like every other entry here: a modifier without one logs
+	# "Could not find texture ... '' not found" every time the journal entry
+	# renders it (see banking_stance_band_3).
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_loan_interest_rate_add = 0.01
 }
 
