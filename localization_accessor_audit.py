@@ -550,6 +550,20 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetFarmHubName": "value",
         "GetCountry": "country",
         "GetOwner": "country",
+        # State value / state infamy "perspective" accessors both return the
+        # COUNTRY the reckoning is from, not a display string. Vanilla:
+        #   STATE_STATE_INFAMY_OWNED "[State.GetStateInfamyPerspective
+        #       .GetNameNoFormatting] already owns [State.GetName]"
+        #   STATE_STATE_VALUE        "How much [State.GetStateValuePerspective
+        #       .GetNameNoFormatting] values holding this [concept_state]"
+        # Hand-placed here with their real return type rather than folded into
+        # the extras as "value": validate_chain treats a `value` step as
+        # terminal and accepts every later step unchecked, so mis-folding one
+        # of these does not just lose a check, it blinds the rest of the chain.
+        # GetStateValuePerspective was mis-folded by the 1.14 bootstrap; see
+        # the follow-up issue for the rest of that class.
+        "GetStateInfamyPerspective": "country",
+        "GetStateValuePerspective": "country",
         "GetRegion": "strategic_region",
         "GetStateRegion": "state_region",
         "GetPopulation": "value",
@@ -615,6 +629,10 @@ _BUILTIN_ACCESSORS_BY_TYPE: dict[str, dict[str, str]] = {
         "GetModifier": "value",
         "GetCustom": "value",
         "GetTooltipTag": "value",
+        # Every other type's MakeScope is scope_object; power_bloc's was folded
+        # in from vanilla as "value", which stopped the audit dead at
+        # `PowerBloc.MakeScope.ScriptValue(...)` and accepted whatever followed.
+        "MakeScope": "scope_object",
     },
     "law": {
         "Self": "law",
