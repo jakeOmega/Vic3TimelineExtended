@@ -235,7 +235,17 @@ te_monetary_update_fx = {
 		}
 
 		# --- the index, by regime (§15.2) --------------------------------------
+		# [P5] ANCHORED first, whatever the regime (§15A.1): the index is the
+		# ANCHOR'S (step 1c's copy), less a kind-1 pegger's negotiated parity
+		# offset. Its own formula has just run on as te_fx_shadow, so the
+		# overvaluation written below is how far it has diverged from the
+		# currency it borrowed — the one gauge all three arrangements read.
 		if = {
+			limit = { te_mon_is_anchored = yes }
+			set_variable = { name = te_fx_index value = te_mon_anchored_fx_index }
+			set_variable = { name = te_fx_devalued_months value = 0 }
+		}
+		else_if = {
 			limit = { te_mon_fx_floats = yes }
 			set_variable = { name = te_fx_index value = var:te_fx_shadow }
 			set_variable = { name = te_fx_devalued_months value = 0 }
@@ -285,7 +295,7 @@ te_monetary_update_fx = {
 	if = {
 		limit = { te_mon_in_external_crisis = no }
 		if = {
-			limit = { banking_tool_capital_controls_active = yes }
+			limit = { te_mon_capital_controls_in_force = yes }
 			change_variable = { name = te_capital_controls_months add = 1 }
 		}
 		else = {

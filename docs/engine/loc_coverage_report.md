@@ -41,7 +41,7 @@ _None._
 
 ## Coverage
 
-- files audited: 149
+- files audited: 150
 - flags by category:
   - Modifiers: 14
 - total flags: 14

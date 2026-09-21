@@ -57,3 +57,34 @@ te_monetary_internal.1 = {
 		te_monetary_monthly_update = yes
 	}
 }
+
+
+# ============================================================================
+# [P5] te_monetary_internal.2 — the arrangement discovery, re-rooted (§15A.1)
+# ============================================================================
+# NOT the monthly update, and that is the point of giving it its own id. The
+# discovery hooks — the three articles' on_entry_into_force / on_withdrawal /
+# on_break, on_become_subject, the release hooks, the 5b adopt and exit actions
+# — can fire any number of times in a month, and te_monetary_internal.1 above is
+# not idempotent. te_monetary_discover_arrangements is: it integrates nothing and
+# draws no walk.
+#
+# WHY AN EVENT AT ALL. The discovery's treaty walk tests `source_country = root`,
+# and its cost terms read `root.var:`. Every hook that calls it has something
+# else in ROOT — the ARTICLE, for the three treaty hooks — so it is dispatched
+# onto the country instead of being run inside a `source_country = { }` block.
+#
+# Guarded on te_mon_anchor_kind: a country that has never pulsed has none of the
+# discovery's variables, and its first pulse seeds te_mon_arr_scan = 1, which
+# runs the discovery anyway.
+te_monetary_internal.2 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		if = {
+			limit = { has_variable = te_mon_anchor_kind }
+			te_monetary_discover_arrangements = yes
+		}
+	}
+}

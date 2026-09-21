@@ -29,7 +29,7 @@ _None._
 ## Coverage
 
 - loc files scanned: 30
-- concept references checked: 2896
+- concept references checked: 2895
 - registered concepts (vanilla + mod): 717
 - total flags: 0
 - unreviewed: 0

@@ -94,44 +94,6 @@ banking_effect_cb_disable_export_credit_facility = {
 	je:je_banking_cycle = { remove_modifier = banking_export_credit_facility }
 }
 
-banking_effect_cb_fx_swap_lines = {
-	te_history_record_banking_marker = { MARK = on_cb_fx_swap_lines }
-	je:je_banking_cycle = { add_modifier = { name = banking_fx_swap_lines } }
-	custom_tooltip = {
-		text = FX_SWAP_LINES_GP_RELATIONS_TT
-		every_country = {
-			limit = {
-				country_rank >= rank_value:great_power
-			}
-			# The actor is usually a great power itself, so it turns up in this
-			# loop. Guarding only change_relations — rather than the iterator's
-			# limit, as the sibling GP-relations effects above and below do — keeps
-			# the actor's own bubble_pressure increment while dropping the
-			# self-relations call the engine asserts on ("Attempted to create
-			# relations between a country and itself").
-			if = {
-				limit = { NOT = { THIS = ROOT } }
-				change_relations = {
-					country = ROOT
-					value = -5
-				}
-			}
-			if = {
-				limit = { has_variable = bubble_pressure }
-				change_variable = {
-					name = bubble_pressure
-					add = 1
-				}
-			}
-		}
-	}
-}
-
-banking_effect_cb_disable_fx_swap_lines = {
-	te_history_record_banking_marker = { MARK = off_cb_fx_swap_lines }
-	je:je_banking_cycle = { remove_modifier = banking_fx_swap_lines }
-}
-
 banking_effect_cb_capital_controls_outflow = {
 	te_history_record_banking_marker = { MARK = on_cb_capital_controls_outflow }
 	je:je_banking_cycle = { add_modifier = { name = banking_capital_controls_out } }

@@ -71,8 +71,6 @@
 	scripted_button = cb_disable_raise_margin_requirements
 	scripted_button = cb_capital_controls_outflow
 	scripted_button = cb_disable_capital_controls_outflow
-	scripted_button = cb_fx_swap_lines
-	scripted_button = cb_disable_fx_swap_lines
 	scripted_button = cb_export_credit_facility
 	scripted_button = cb_disable_export_credit_facility
 	scripted_button = cb_asset_relief_program

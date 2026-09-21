@@ -3,8 +3,8 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 776
-**Event files:** 51
+**Total events:** 780
+**Event files:** 52
 
 ## agricultural_diffusion_events.txt
 
@@ -4158,6 +4158,12 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** #lore Console-only. §19 row 4's exit criteria and how to stage each are in the header above this event in events/te_debug_monetary_events.txt.#!
 - **Current image:** gfx/event_pictures/central_bank_policy.dds
 
+### te_debug_monetary.10
+- **Title:** Monetary Debug — International Arrangements
+- **Description:** #lore Console-only. Nothing in the mod fires this event.#!\n\n#title The anchored state#!\nKind: #v [ROOT.GetVariable('te_mon_anchor_kind').GetValue|0]#! (0 none, 1 treaty peg, 2 bloc currency, 3 currency board)   Anchor: #v [SCOPE.sCountry('te_debug_anchor').GetName]#! (itself = none)   Scans monthly: #v [ROOT.GetVariable('te_mon_arr_scan').GetValue|0]#!\nAnchor's rate (copy): #v [ROOT.GetVariable('te_mon_anchor_rate').GetValue|2]#! + spread #v [SCOPE.GetRootScope.ScriptValue('te_mon_anchor_spread')|2]#!   Own policy rate: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\nAnchor's index (copy): #v [ROOT.GetVariable('te_mon_anchor_fx_index').GetValue|2]#!   Parity offset: #v [ROOT.GetVariable('te_mon_peg_parity_offset').GetValue|2]#!   Own index: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Shadow: #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Overvaluation: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!\nCredibility c: own #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c_own')|2]#!, anchor's #v [ROOT.GetVariable('te_mon_anchor_c').GetValue|2]#!, in use #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c')|2]#!   Inflation anchor in use: #v [SCOPE.GetRootScope.ScriptValue('te_mon_inflation_anchor')|2]#!\n\n#title The peg#!\nPeg confidence: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Crisis cooldown: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!   Forced controls, months left: #v [ROOT.GetVariable('te_mon_emergency_controls_months').GetValue|0]#!   Drain this month: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!\n\n#title Backstops#!\nSwap recipient: #v [ROOT.GetVariable('te_mon_swap_recipient').GetValue|0]#!   Ward: #v [ROOT.GetVariable('te_mon_lolr_ward').GetValue|0]#!   Renege clock: #v [ROOT.GetVariable('te_mon_lolr_suspended_months').GetValue|0]#!   Default cooldown: #v [ROOT.GetVariable('te_mon_lolr_default_cooldown').GetValue|0]#!\nReceived #v [ROOT.GetVariable('te_mon_arr_recipient_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_recipient_applied').GetValue|2]#!)   Extended #v [ROOT.GetVariable('te_mon_arr_provider_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_provider_applied').GetValue|2]#!)   Standing #v [ROOT.GetVariable('te_mon_arr_standing_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_standing_applied').GetValue|2]#!)\nGDP pegged to us (m): #v [ROOT.GetVariable('te_mon_anchored_gdp_m').GetValue|2]#!   World GDP (m): #v [GetGlobalVariable('te_mon_world_gdp_m').GetValue|0]#!
+- **Flavor:** #lore Console-only. §19 rows 5a–5c's exit criteria and how to stage each are in the header above this event in events/te_debug_monetary_events.txt.#!
+- **Current image:** gfx/event_pictures/central_bank_policy.dds
+
 ## te_debug_nuclear_events.txt
 
 ### te_debug_nuclear.1
@@ -4232,9 +4238,23 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** Maps are arguments, not records — and tonight we choose the argument.
 - **Current image:** gfx/event_pictures/orbital_earth_view.dds
 
+## te_monetary_arrangement_events.txt
+
+### te_lolr.1
+- **Title:** The Guarantee Is Called
+- **Description:** [SCOPE.sCountry('te_lolr_ward').GetName] has defaulted. We are its lender of last resort — we said so, in a treaty, and its creditors lent on the strength of our name as much as theirs. They are at our door this morning. The sum is large. So is what every other government that holds our guarantee will conclude if we decline to pay it.
+- **Flavor:** \"Lend freely, at a high rate, on good collateral — and if you have promised to, lend anyway.\"
+- **Current image:** gfx/event_pictures/banking_boardroom.dds
+
 ## te_monetary_events.txt
 
 ### te_monetary_internal.1
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
+
+### te_monetary_internal.2
 - **Title:** (no localization)
 - **Description:** (no localization)
 - **Flavor:** (none)
@@ -4246,6 +4266,12 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** The Run on the Vault
 - **Description:** The gold is nearly gone, and everyone who holds a note of [ROOT.GetCountry.GetAdjective] issue knows it. The central bank has gone on paying out coin for paper because the law says it must, to a queue that grows longer each morning it is seen to pay. Nobody any longer asks whether the promise can be kept at the present rate. They ask what the government will do on the day it cannot.
 - **Flavor:** \"The gold is leaving the vaults faster than it arrives. Every shipment abroad is a vote of no confidence in our currency.\"\n\n\"Then raise rates.\"\n\n\"And bankrupt every manufacturer who borrowed at the old rate? There must be another way.\"\n\n\"There are two. You will like them less.\"
+- **Current image:** gfx/event_pictures/central_bank_policy.dds
+
+### te_peg.2
+- **Title:** The Peg Under Siege
+- **Description:** Our currency is fixed to [SCOPE.sCountry('te_peg_anchor_country').GetName]'s, and the markets no longer believe it. Prices and wages here have run ahead of theirs for too long: at the promised parity our goods are dear, our reserves are leaving, and every trader in the capital is asking what our money would fetch if we let it go. We have no rate of our own to raise. What we do have is a border, a treaty, and a number that could be changed.
+- **Flavor:** \"A parity is a promise about the future, made by people who will not be in office when it falls due.\"
 - **Current image:** gfx/event_pictures/central_bank_policy.dds
 
 ## treaty_article_events.txt

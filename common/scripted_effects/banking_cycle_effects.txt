@@ -1493,6 +1493,13 @@ banking_contagion_crash_check = {
 			limit = { has_law = law_type:law_cooperative_ownership }
 			change_variable = { name = crash_severity multiply = 0.75 }
 		}
+		# [Monetary policy 5a, §15A.2] A lender of last resort whose word is still
+		# good: an imported panic starts a fifth less deep, because depositors know
+		# who stands behind the banks. Off while the guarantor's renege clock runs.
+		if = {
+			limit = { te_mon_lolr_is_effective = yes }
+			change_variable = { name = crash_severity multiply = 0.8 }
+		}
 		# Clamp severity to 100
 		if = {
 			limit = { var:crash_severity > 100 }

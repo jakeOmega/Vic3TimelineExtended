@@ -3870,6 +3870,15 @@
  te_debug_monetary.1.f:0 "'And what, precisely, is the natural rate of interest?'\n\n'Nobody knows, Chancellor. That is rather the point.'"
  te_debug_monetary.1.t:0 "Monetary Policy Test Console"
  te_debug_monetary.1.z:0 "Close"
+ te_debug_monetary.10.a:0 "Pin a debug kind-1 anchor on the largest dial economy"
+ te_debug_monetary.10.b:0 "Release the debug anchor"
+ te_debug_monetary.10.c:0 "Set peg confidence to 25"
+ te_debug_monetary.10.d:0 "#lore Console-only. Nothing in the mod fires this event.#!\n\n#title The anchored state#!\nKind: #v [ROOT.GetVariable('te_mon_anchor_kind').GetValue|0]#! (0 none, 1 treaty peg, 2 bloc currency, 3 currency board)   Anchor: #v [SCOPE.sCountry('te_debug_anchor').GetName]#! (itself = none)   Scans monthly: #v [ROOT.GetVariable('te_mon_arr_scan').GetValue|0]#!\nAnchor's rate (copy): #v [ROOT.GetVariable('te_mon_anchor_rate').GetValue|2]#! + spread #v [SCOPE.GetRootScope.ScriptValue('te_mon_anchor_spread')|2]#!   Own policy rate: #v [ROOT.GetVariable('te_policy_rate').GetValue|2]#!\nAnchor's index (copy): #v [ROOT.GetVariable('te_mon_anchor_fx_index').GetValue|2]#!   Parity offset: #v [ROOT.GetVariable('te_mon_peg_parity_offset').GetValue|2]#!   Own index: #v [ROOT.GetVariable('te_fx_index').GetValue|2]#!   Shadow: #v [ROOT.GetVariable('te_fx_shadow').GetValue|2]#!   Overvaluation: #v [ROOT.GetVariable('te_mon_overvaluation').GetValue|2]#!\nCredibility c: own #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c_own')|2]#!, anchor's #v [ROOT.GetVariable('te_mon_anchor_c').GetValue|2]#!, in use #v [SCOPE.GetRootScope.ScriptValue('te_mon_credibility_c')|2]#!   Inflation anchor in use: #v [SCOPE.GetRootScope.ScriptValue('te_mon_inflation_anchor')|2]#!\n\n#title The peg#!\nPeg confidence: #v [ROOT.GetVariable('te_peg_confidence').GetValue|1]#!   Crisis cooldown: #v [ROOT.GetVariable('te_peg_crisis_cooldown').GetValue|0]#!   Forced controls, months left: #v [ROOT.GetVariable('te_mon_emergency_controls_months').GetValue|0]#!   Drain this month: #v [SCOPE.GetRootScope.ScriptValue('te_mon_fx_overvaluation_drain')|2]#!\n\n#title Backstops#!\nSwap recipient: #v [ROOT.GetVariable('te_mon_swap_recipient').GetValue|0]#!   Ward: #v [ROOT.GetVariable('te_mon_lolr_ward').GetValue|0]#!   Renege clock: #v [ROOT.GetVariable('te_mon_lolr_suspended_months').GetValue|0]#!   Default cooldown: #v [ROOT.GetVariable('te_mon_lolr_default_cooldown').GetValue|0]#!\nReceived #v [ROOT.GetVariable('te_mon_arr_recipient_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_recipient_applied').GetValue|2]#!)   Extended #v [ROOT.GetVariable('te_mon_arr_provider_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_provider_applied').GetValue|2]#!)   Standing #v [ROOT.GetVariable('te_mon_arr_standing_pts').GetValue|2]#! (applied #v [ROOT.GetVariable('te_mon_arr_standing_applied').GetValue|2]#!)\nGDP pegged to us (m): #v [ROOT.GetVariable('te_mon_anchored_gdp_m').GetValue|2]#!   World GDP (m): #v [GetGlobalVariable('te_mon_world_gdp_m').GetValue|0]#!"
+ te_debug_monetary.10.dd:0 "Run the arrangement discovery now"
+ te_debug_monetary.10.e:0 "Run one monthly update now"
+ te_debug_monetary.10.f:0 "#lore Console-only. §19 rows 5a–5c's exit criteria and how to stage each are in the header above this event in events/te_debug_monetary_events.txt.#!"
+ te_debug_monetary.10.t:0 "Monetary Debug — International Arrangements"
+ te_debug_monetary.10.z:0 "Close"
  te_debug_monetary.2.a:0 "Re-apply the pair with the production multiplier (var:te_rate_paid_applied)"
  te_debug_monetary.2.b:0 "Undo: zero the applied value, then run a real monthly update"
  te_debug_monetary.2.d:0 "#lore Console-only. Nothing in the mod fires this event. It re-applies the two interest modifiers with exactly the multiplier the monthly update uses, but from here instead of from game start — which tells a first-application timing fault apart from a multiplier form that never worked at all.#!\n\n#title What to look for#!\nOpen the budget panel and hover the interest line. #v Timed Modifiers#! is the sum of the base offset (#v -20%#!) and whatever the multiplier produced.\n\nRate paid now: #v [ROOT.GetVariable('te_rate_paid_pts').GetValue|1]#!   Written into the modifier: #v [ROOT.GetVariable('te_rate_paid_applied').GetValue|1]#!\n\nIf the multiplier resolves, Timed Modifiers reads #v -20%#! plus that second number. If it still reads #v -19.0%#!, the multiplier came out as 1 again, exactly as it does on day one.\n\nThe second option is the undo — it forces the real monthly update to rewrite the pair, and it is the only way back after the literal-7 control in #v te_debug_monetary.4#!. It also drifts the policy rate one month's worth, like any pulse.\n\n#title Hover first#!\nThe option tooltip previews the modifier with its multiplier already resolved, so reading it before clicking is a free second data point."
@@ -3984,6 +3993,16 @@
  te_inflation.1.t:0 "Not Worth the Paper"
 
 #
+# TE_LOLR
+#
+ te_lolr.1.a:0 "We gave our word. Pay."
+ te_lolr.1.b:0 "Their debts are not ours."
+ te_lolr.1.b.tt:0 "You #b withdraw from the treaty#!. For #b five years#! every other guarantee you have given is #b worth nothing#! to the country that holds it: guarantees are only worth the last one honoured."
+ te_lolr.1.d:0 "[SCOPE.sCountry('te_lolr_ward').GetName] has defaulted. We are its lender of last resort — we said so, in a treaty, and its creditors lent on the strength of our name as much as theirs. They are at our door this morning. The sum is large. So is what every other government that holds our guarantee will conclude if we decline to pay it."
+ te_lolr.1.f:0 "\"Lend freely, at a high rate, on good collateral — and if you have promised to, lend anyway.\""
+ te_lolr.1.t:0 "The Guarantee Is Called"
+
+#
 # TE_MAP_MODES
 #
  te_map_modes.1.a:0 "Tourism appeal"
@@ -4007,6 +4026,15 @@
  te_peg.1.d:0 "The gold is nearly gone, and everyone who holds a note of [ROOT.GetCountry.GetAdjective] issue knows it. The central bank has gone on paying out coin for paper because the law says it must, to a queue that grows longer each morning it is seen to pay. Nobody any longer asks whether the promise can be kept at the present rate. They ask what the government will do on the day it cannot."
  te_peg.1.f:0 "\"The gold is leaving the vaults faster than it arrives. Every shipment abroad is a vote of no confidence in our currency.\"\n\n\"Then raise rates.\"\n\n\"And bankrupt every manufacturer who borrowed at the old rate? There must be another way.\"\n\n\"There are two. You will like them less.\""
  te_peg.1.t:0 "The Run on the Vault"
+ te_peg.2.a:0 "Shut the door. Nobody takes money out."
+ te_peg.2.a.tt:0 "#b Capital controls#! are forced on for #b one year#!, whatever your banking tools say: they cut the overvaluation drain to a quarter, and they wear on Industrialists, the Petite Bourgeoisie and the investment pool like any other controls held outside a crisis. #v Peg Confidence#! rises by #G 40#!. Nothing about the overvaluation itself changes."
+ te_peg.2.b:0 "Break the peg."
+ te_peg.2.b.tt:0 "You #b withdraw from the treaty#! that carries the peg — and from every other article in it. Your dial returns, your exchange rate falls at once to where it would have floated, and that fall feeds into your prices over the following years."
+ te_peg.2.c:0 "Re-peg, lower."
+ te_peg.2.c.tt:0 "You keep the peg at a #b worse parity#!: your exchange rate drops by #b half your overvaluation#! and stays that far under theirs. #v Peg Confidence#! returns to #v 50#!, not 100 — a parity that moved once can move again."
+ te_peg.2.d:0 "Our currency is fixed to [SCOPE.sCountry('te_peg_anchor_country').GetName]'s, and the markets no longer believe it. Prices and wages here have run ahead of theirs for too long: at the promised parity our goods are dear, our reserves are leaving, and every trader in the capital is asking what our money would fetch if we let it go. We have no rate of our own to raise. What we do have is a border, a treaty, and a number that could be changed."
+ te_peg.2.f:0 "\"A parity is a promise about the future, made by people who will not be in office when it falls due.\""
+ te_peg.2.t:0 "The Peg Under Siege"
 
 #
 # TREATY_ARTICLE_EVENTS

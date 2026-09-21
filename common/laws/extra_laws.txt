@@ -2298,7 +2298,6 @@ law_unregulated_banking = {
 		country_banking_crash_chance_mult = 0.25
 		country_covert_defense_economic_add = -1
 		country_banking_lock_capital_controls_bool = yes
-		country_banking_lock_fx_swap_lines_bool = yes
 		country_banking_lock_asset_relief_bool = yes
 	}
 }
@@ -2317,7 +2316,6 @@ law_free_mutual_banking = {
 		state_farmers_investment_pool_contribution_add = 0.05
 		country_banking_crash_chance_mult = -0.1
 		country_banking_lock_capital_controls_bool = yes
-		country_banking_lock_fx_swap_lines_bool = yes
 		country_banking_lock_asset_relief_bool = yes
 	}
 }
@@ -2335,7 +2333,6 @@ law_universal_banking_light_prudence = {
 		building_urban_center_throughput_add = 0.2
 		country_banking_random_momentum_mult = 0.1
 		country_banking_lock_capital_controls_bool = yes
-		country_banking_lock_fx_swap_lines_bool = yes
 		country_banking_lock_asset_relief_bool = yes
 	}
 }
@@ -2356,7 +2353,6 @@ law_prudential_narrow_banking = {
 		country_banking_lock_open_market_ops_bool = yes
 		country_banking_lock_directed_credit_bool = yes
 		country_banking_lock_export_credit_bool = yes
-		country_banking_lock_fx_swap_lines_bool = yes
 	}
 }
 
@@ -2401,7 +2397,6 @@ law_state_owned_banking = {
 		country_weekly_innovation_mult = -0.05
 		building_urban_center_throughput_add = 0.05
 		country_banking_lock_capital_controls_bool = yes
-		country_banking_lock_fx_swap_lines_bool = yes
 		country_banking_lock_asset_relief_bool = yes
 		# The opposite pole from central bank independence (§5.2): total
 		# political control over credit is the least credible arrangement a

@@ -59,7 +59,6 @@ INJECT:corporate_management = {
 INJECT:international_exchange_standards = {
 	modifier = {
 		country_can_use_countercyclical_buffer_bool = yes
-		country_can_use_fx_swap_lines_bool = yes
 	}
 }
 

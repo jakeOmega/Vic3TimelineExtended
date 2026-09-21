@@ -259,7 +259,6 @@ BUTTON_TECH_MODIFIERS = {
     ],
     'international_exchange_standards': [
         ('country_can_use_countercyclical_buffer_bool', 'Enables Countercyclical Buffer', 'Enables the Countercyclical Buffer banking intervention.'),
-        ('country_can_use_fx_swap_lines_bool', 'Enables FX Swap Lines', 'Enables the FX Swap Lines banking intervention.'),
     ],
     'consumer_credit': [
         ('country_can_use_deposit_guarantee_bool', 'Enables Deposit Guarantee Expansion', 'Enables the Expand Deposit Guarantee banking intervention.'),
@@ -284,7 +283,6 @@ BUTTON_SPECIFIC_MAP = [
     ('common/scripted_buttons/timeline_extended_scripted_buttons.txt', 'cb_countercyclical_buffer', 'international_exchange_standards', 'country_can_use_countercyclical_buffer_bool'),
     ('common/scripted_buttons/timeline_extended_scripted_buttons.txt', 'cb_expand_deposit_guarantee', 'consumer_credit', 'country_can_use_deposit_guarantee_bool'),
     ('common/scripted_buttons/timeline_extended_scripted_buttons.txt', 'cb_emergency_liquidity_program', 'investment_banks', 'country_can_use_emergency_liquidity_bool'),
-    ('common/scripted_buttons/timeline_extended_scripted_buttons.txt', 'cb_fx_swap_lines', 'international_exchange_standards', 'country_can_use_fx_swap_lines_bool'),
     ('common/scripted_buttons/timeline_extended_scripted_buttons.txt', 'cb_export_credit_facility', 'corporate_management', 'country_can_use_export_credit_bool'),
     ('common/scripted_buttons/timeline_extended_scripted_buttons.txt', 'cb_asset_relief_program', 'keynesian_economics', 'country_can_use_asset_relief_bool'),
 ]

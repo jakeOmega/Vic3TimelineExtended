@@ -1,0 +1,240 @@
+﻿# =================================================================
+# TREATY ARTICLE: lender_of_last_resort         (monetary policy 5a)
+# Spec: docs/systems/monetary_policy_design.md §15A.2, §0.8.
+#
+# DIRECTED: source = the GUARANTOR, target = the WARD.
+#
+# Ward: its §7.6 debt-load premium HALVED, and a panic that starts less deep
+# (banking_cycle_effects.txt reads te_mon_lolr_is_effective). Guarantor: a
+# GDP-scaled share of the halved premium as a premium rise — and, ON THE WARD'S
+# DEFAULT, the event te_lolr.1: HONOUR (pay 5% of the ward's GDP, keep the
+# article) or RENEGE (the article breaks, prestige and infamy, and every OTHER
+# ward's benefit is suspended for five years: guarantees are only worth the
+# last one honoured).
+#
+# Modifier blocks and hooks: see 110_currency_peg.txt's header.
+# =================================================================
+lender_of_last_resort = {
+	icon = "gfx/interface/icons/law_icons/central_bank_independence.dds"
+	kind = directed
+	cost = 75
+
+	relations_progress_per_day = 1
+	relations_improvement_max = 60
+
+	flags = {
+		can_be_renegotiated
+		giftable
+		friendly
+	}
+
+	maintenance_paid_by = source_country
+	usage_limit = once_per_treaty
+
+	mutual_exclusions = {
+		lender_of_last_resort
+	}
+
+	unlocked_by_technologies = {
+		central_banking
+	}
+
+	source_modifier = {
+		country_prestige_mult = 0.02
+	}
+
+	visible = {
+		always = yes
+	}
+
+	possible = {
+		has_diplomatic_relevance = scope:other_country
+		NOT = { has_war_with = scope:other_country }
+		NOT = { is_country_type = decentralized }
+		scope:other_country = {
+			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_backstop_provider_needs_bank_tt
+				scope:source_country = {
+					has_law_or_variant = law_type:law_national_bank
+					te_mon_is_command = no
+				}
+			}
+		}
+	}
+
+	# A guarantor in default guarantees nothing.
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_lolr_guarantor_solvent_tt
+				scope:source_country = { in_default = no }
+			}
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = te_backstop_provider_outranks_tt
+			scope:source_country = {
+				te_mon_can_backstop = { OTHER = scope:target_country }
+			}
+		}
+		# One lender of last resort: a second guarantee of the same debt is not
+		# a second rescue.
+		custom_tooltip = {
+			text = te_lolr_already_guaranteed_tt
+			scope:target_country = {
+				NOT = {
+					any_scope_treaty = {
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = lender_of_last_resort
+							target_country = scope:target_country
+						}
+					}
+				}
+			}
+		}
+	}
+
+	on_entry_into_force = {
+		scope:article_options = {
+			source_country = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+			target_country = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+		}
+	}
+
+	on_withdrawal = {
+		scope:withdrawing_country ?= { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+		scope:non_withdrawing_country ?= { trigger_event = { id = te_monetary_internal.2 days = 1 } }
+	}
+
+	ai = {
+		treaty_categories = { economy }
+		article_ai_usage = { offer request }
+
+		evaluation_chance = {
+			value = 0.01
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 0.03
+			}
+			if = {
+				limit = { scaled_debt >= 0.5 }
+				add = 0.1
+			}
+		}
+
+		inherent_accept_score = {
+			value = 0
+
+			# --- the PROVIDER'S side -------------------------------------------
+			if = {
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "te_ai_lolr_base"
+					value = -20
+				}
+				if = {
+					limit = { is_in_same_power_bloc = scope:target_country }
+					add = {
+						desc = "AI_SAME_POWER_BLOC"
+						value = 15
+					}
+				}
+				# Influence goals: a great power buys clients.
+				if = {
+					limit = { country_rank >= rank_value:great_power }
+					add = {
+						desc = "te_ai_backstop_influence"
+						value = 10
+					}
+				}
+				# The recipient lives in the provider's market: its trouble is ours.
+				if = {
+					limit = {
+						exists = scope:target_country.market
+						scope:target_country.market.owner = this
+					}
+					add = {
+						desc = "te_ai_peg_shared_market"
+						value = 15
+					}
+				}
+				# The GDP-scaled cost: backing an equal costs all of the benefit.
+				add = {
+					desc = "te_ai_backstop_cost"
+					value = {
+						value = scope:target_country.gdp
+						divide = {
+							value = gdp
+							min = 1
+						}
+						max = 1
+						multiply = -40
+					}
+				}
+				# ...and a recipient already deep in debt is a call waiting to happen.
+				if = {
+					limit = { scope:target_country = { scaled_debt >= 0.5 } }
+					add = {
+						desc = "te_ai_backstop_recipient_debt"
+						value = {
+							value = scope:target_country.scaled_debt
+							multiply = -40
+							min = -60
+						}
+					}
+				}
+				if = {
+					limit = { scaled_debt >= 0.5 }
+					add = {
+						desc = "te_ai_backstop_own_debt"
+						value = -30
+					}
+				}
+			}
+			# --- the RECIPIENT'S side: a backstop is worth having ---------------
+			else = {
+				add = {
+					desc = "te_ai_backstop_wanted"
+					value = 20
+				}
+			}
+
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:other_country type = rivalry } }
+				add = {
+					desc = "te_ai_arrangement_rivalry"
+					value = -1000
+				}
+			}
+			if = {
+				limit = {
+					OR = {
+						has_attitude = { who = scope:other_country attitude = antagonistic }
+						has_attitude = { who = scope:other_country attitude = domineering }
+						has_attitude = { who = scope:other_country attitude = belligerent }
+					}
+				}
+				add = {
+					desc = "AI_HOSTILE_ATTITUDE"
+					value = -50
+				}
+			}
+		}
+	}
+}

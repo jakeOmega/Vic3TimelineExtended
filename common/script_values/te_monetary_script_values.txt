@@ -965,13 +965,32 @@ te_mon_core_speed = {
 # toward. 0 under a metallic regime: convertibility promises a stable price
 # LEVEL, not a stable inflation rate, so gold and commodity money anchor on
 # zero and carry the deflation bias §5.1 describes.
-te_mon_inflation_anchor = {
+#
+# [P5] SPLIT IN TWO (§15A.1). te_mon_inflation_anchor_own is the rule above and
+# is what an ANCHOR is asked for. te_mon_inflation_anchor — the name every
+# consumer reads — adds one branch: an anchored country's expectations anchor on
+# its ANCHOR'S target (te_mon_anchor_target, step 1c's copy of the anchor's
+# _own). Its own metal still wins: ruling Q12's pin is about convertibility at
+# home, which a peg abroad does not remove.
+te_mon_inflation_anchor_own = {
 	if = {
 		limit = { te_mon_is_metallic = yes }
 		value = 0
 	}
 	else = {
 		value = 2
+	}
+}
+
+te_mon_inflation_anchor = {
+	value = te_mon_inflation_anchor_own
+	if = {
+		limit = {
+			te_mon_is_metallic = no
+			te_mon_is_anchored = yes
+			has_variable = te_mon_anchor_target
+		}
+		value = var:te_mon_anchor_target
 	}
 }
 
@@ -1012,7 +1031,29 @@ te_mon_expectation_alpha = {
 # delegated, and delegating the dial to a bank the government owns does not buy
 # credibility it never had. Delegation is read through te_mon_is_delegated,
 # which is guarded — a country that has never pulsed reads as manual.
+#
+# [P5] SPLIT IN TWO, like the anchor above. _own is this table and is what an
+# ANCHOR is asked for; te_mon_credibility_c below it is what every consumer
+# reads, and IMPORTS credibility for an anchored country (§15A.1):
+#   c = max( own c , 0.8 x anchor's c )
+# te_mon_anchor_c is step 1c's copy of the anchor's _own — never the anchor's
+# imported figure, which it cannot have: an anchor holds a dial.
 te_mon_credibility_c = {
+	value = te_mon_credibility_c_own
+	if = {
+		limit = {
+			te_mon_is_anchored = yes
+			has_variable = te_mon_anchor_c
+		}
+		# `min =` is a FLOOR in a script value, so this is the max() above.
+		min = {
+			value = var:te_mon_anchor_c
+			multiply = te_mon_anchor_credibility_share
+		}
+	}
+}
+
+te_mon_credibility_c_own = {
 	if = {
 		limit = { te_mon_is_metallic = yes }
 		value = 1
@@ -2474,8 +2515,19 @@ te_mon_gold_flow_unit = {
 }
 
 # Hot money leaves at this multiple of the ordinary outflow speed (§12.2).
+#
+# [P5] x1 in a panic for a country with a swap line (§15A.2): the line is what
+# lets the bank pay departing balances out in an orderly way.
 te_mon_gold_hot_exit_speed = {
 	value = 2
+	if = {
+		limit = {
+			te_mon_is_swap_recipient = yes
+			has_variable = finance_cycle_value
+			banking_cycle_is_panic = yes
+		}
+		value = 1
+	}
 }
 
 # ...and never slower than the speed a gap of this size would give (ruling Q7).

@@ -504,3 +504,47 @@ banking_mon_world_rate_ready = {
 	is_valid = { always = no }
 	effect = { }
 }
+
+
+# ----------------------------------------------------------------------------
+# Phase 5 (§15A): international monetary arrangements
+# ----------------------------------------------------------------------------
+# Does the dashboard show the arrangements block? Any role at all — anchored, an
+# anchor, either side of a swap line or a guarantee. te_mon_arr_scan is exactly
+# that flag (the discovery sets it), and the has_variable list is the block's
+# displayed contract, the banking_mon_shows_gold pattern.
+banking_mon_shows_arrangements = {
+	scope = country
+	is_shown = {
+		has_variable = te_mon_arr_scan
+		var:te_mon_arr_scan = 1
+		has_variable = te_mon_anchor_kind
+		has_variable = te_mon_anchor_rate
+		has_variable = te_mon_arr_recipient_pts
+		has_variable = te_mon_arr_provider_pts
+		has_variable = te_mon_arr_standing_pts
+		has_variable = te_mon_peg_parity_offset
+		OR = {
+			var:te_mon_anchor_kind > 0
+			var:te_mon_arr_recipient_pts > 0
+			var:te_mon_arr_provider_pts > 0
+			var:te_mon_arr_standing_pts > 0
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# ...and the treaty pegger's Peg Confidence row and meter?
+banking_mon_shows_anchor_peg = {
+	scope = country
+	is_shown = {
+		te_mon_has_anchor_peg = yes
+		has_variable = te_peg_confidence
+		has_variable = te_mon_overvaluation
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}

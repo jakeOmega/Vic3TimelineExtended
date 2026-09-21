@@ -134,7 +134,6 @@ banking_dash_any_policy_active = {
 			banking_tool_deposit_active = yes
 			banking_tool_directed_active = yes
 			banking_tool_export_credit_active = yes
-			banking_tool_fx_swap_lines_active = yes
 			banking_tool_capital_controls_active = yes
 			banking_tool_eliq_active = yes
 			banking_tool_asset_relief_active = yes
@@ -279,22 +278,6 @@ banking_dash_disable_cb_export_credit_facility = {
 	ai_is_valid = { always = no }
 	is_valid = { banking_tool_export_credit_active = yes }
 	effect = { banking_effect_cb_disable_export_credit_facility = yes }
-}
-
-banking_dash_enable_cb_fx_swap_lines = {
-	scope = country
-	is_shown = { banking_is_market_economy = yes banking_tool_fx_swap_lines_active = no }
-	ai_is_valid = { always = no }
-	is_valid = { banking_possible_cb_fx_swap_lines = yes }
-	effect = { banking_effect_cb_fx_swap_lines = yes }
-}
-
-banking_dash_disable_cb_fx_swap_lines = {
-	scope = country
-	is_shown = { banking_tool_fx_swap_lines_active = yes }
-	ai_is_valid = { always = no }
-	is_valid = { banking_tool_fx_swap_lines_active = yes }
-	effect = { banking_effect_cb_disable_fx_swap_lines = yes }
 }
 
 banking_dash_enable_cb_capital_controls_outflow = {

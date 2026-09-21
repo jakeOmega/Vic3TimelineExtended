@@ -52,6 +52,9 @@ te_monetary_world_monthly_on_action = {
 		te_monetary_refresh_world_rate = yes
 		# [P4] Its sibling (§15.1): GDP-weighted inflation over all great powers.
 		te_monetary_refresh_world_inflation = yes
+		# [P5] World GDP, and the GDP pegged to each anchor (§15A.2's
+		# reserve-currency cut).
+		te_monetary_refresh_anchored_gdp = yes
 	}
 }
 
@@ -88,6 +91,8 @@ te_monetary_monthly_on_action = {
 on_yearly_pulse_country = {
 	on_actions = {
 		te_monetary_yearly_on_action
+		# [P5] the yearly full scan of §15A.1 — defined at the foot of the file.
+		te_monetary_arrangement_yearly_on_action
 	}
 }
 
@@ -257,5 +262,51 @@ on_country_formed = {
 te_monetary_on_country_formed = {
 	effect = {
 		te_monetary_monthly_update = yes
+	}
+}
+
+
+# ============================================================================
+# [P5] INTERNATIONAL MONETARY ARRANGEMENTS (§15A.1)
+# ============================================================================
+# Detection is three-way: a flagged country re-runs the discovery in step 1c of
+# its own monthly update; the hooks below and the treaty articles' own hooks
+# (common/treaty_articles/11*.txt) dispatch it when something changes; and the
+# yearly pulse runs it for EVERYBODY, as the net under anything with no hook.
+# The discovery is idempotent (te_monetary_internal.2's header), so the three
+# may overlap freely.
+
+# Root = Country: called directly. Guarded like te_monetary_internal.2.
+te_monetary_arrangement_yearly_on_action = {
+	effect = {
+		if = {
+			limit = { has_variable = te_mon_anchor_kind }
+			te_monetary_discover_arrangements = yes
+		}
+	}
+}
+
+# A guaranteed country defaults: the guarantee is called (§15A.2). Root =
+# Country. The cooldown is set HERE, the te_peg.1 / te_inflation.1 shape, so an
+# unanswered event is not handed out again.
+on_country_default = {
+	on_actions = {
+		te_monetary_on_country_default
+	}
+}
+
+te_monetary_on_country_default = {
+	effect = {
+		if = {
+			limit = {
+				te_mon_lolr_is_effective = yes
+				var:te_mon_lolr_default_cooldown = 0
+			}
+			set_variable = { name = te_mon_lolr_default_cooldown value = te_mon_lolr_default_cooldown_months }
+			save_scope_as = te_lolr_ward
+			var:te_mon_lolr_guarantor = {
+				trigger_event = { id = te_lolr.1 popup = yes }
+			}
+		}
 	}
 }
