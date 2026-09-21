@@ -3061,7 +3061,15 @@ law_national_bank = {
 	}
 
 	ai_enact_weight_modifier = {
-		value = 200
+		# Nearly every state of the period founded one, and in this mod the bank
+		# gates the whole monetary system: without it there is no policy rate,
+		# no monetisation, no route to central bank independence and a
+		# permanently worse structural premium (monetary_policy_design.md §5.2,
+		# §7.5). At 200 the AI got round to it late or not at all. 600 is a
+		# standing preference sitting just under vanilla's +750 "a movement is
+		# petitioning for this" push — which is the right weight for something
+		# an AI should want without being asked.
+		value = 600
 
 		if = {
 			limit = {
@@ -3073,6 +3081,39 @@ law_national_bank = {
 				}
 			}
 			add = 750
+		}
+
+		# NOT "already runs a fiat or digital currency": both of those laws list
+		# law_national_bank in their own unlocking_laws, so a country that could
+		# still enact this one can never be on either, and the branch would be
+		# dead weight. The tell that a state is ready for a central bank is the
+		# economy it already runs — the three modern economic systems all
+		# presuppose someone managing credit (law_traditionalism is excluded
+		# outright by disallowing_laws above, so it needs no branch here).
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_interventionism
+					has_law = law_type:law_laissez_faire
+					has_law = law_type:law_command_economy
+				}
+			}
+			add = 400
+		}
+
+		# And the bigger the state, the more debt there is to price: a major or
+		# great power gets more out of the institution than a minor does.
+		if = {
+			limit = { country_rank >= rank_value:major_power }
+			add = 300
+		}
+
+		# And a state actually paying for its borrowing has the most to gain:
+		# the institution is worth up to -1.35pp of structural premium across
+		# its nine levels, which is more than any single finance law.
+		if = {
+			limit = { scaled_debt > 0.25 }
+			add = 400
 		}
 	}
 }

@@ -2019,15 +2019,22 @@ modifications = {
             ("law_algorithmic_governance", "disapprove"),
         ],
     },
-    "ideology_atheist": {
-        "lawgroup_ministry_of_religion": ministry_constructor(
-            "ministry_of_religion", "-"
-        ),
-        "lawgroup_governance_principles": [
-            ("law_neocameralism", "neutral"),
-            ("law_direct_democracy", "neutral"),
-        ],
-    },
+    # DEAD KEY, kept commented rather than deleted. `ideology_atheist` matches
+    # no ideology in vanilla 1.14 — nothing under common/ideologies/ is named
+    # for atheism, secularism or irreligion at all — so apply_ideologies skipped
+    # it and this stance has never been written. Found by the unmatched-key
+    # report that regenerate() now returns; left here as a record of the intent
+    # in case the right target turns up. Uncommenting it without renaming the
+    # key puts the reload back to one standing warning.
+    # "ideology_atheist": {
+    #     "lawgroup_ministry_of_religion": ministry_constructor(
+    #         "ministry_of_religion", "-"
+    #     ),
+    #     "lawgroup_governance_principles": [
+    #         ("law_neocameralism", "neutral"),
+    #         ("law_direct_democracy", "neutral"),
+    #     ],
+    # },
     "ideology_republican_leader": {
         "lawgroup_inheritance": reform_inheritance,
         "lawgroup_governance_principles": [
@@ -2549,10 +2556,46 @@ modifications = {
             ("law_communal_child_rearing", "strongly_disapprove"),
         ],
     },
-    "ideology_modernizer_movement": {
+    # --- the Modernizer family and the national bank -----------------------
+    # A central bank is the signature institution of state-led modernisation:
+    # it is what lets a government borrow cheaply, fund industry and manage a
+    # currency it issues itself. ideology_modernizer already reads as that
+    # programme (interventionism approved, traditionalism and the extraction
+    # economy strongly disapproved, compulsory schooling approved), and
+    # law_national_bank is in any case disallowed by law_traditionalism, which
+    # this ideology already refuses. Making it a signature position rather than
+    # a mild preference is the point: strongly_approve, so a Modernizer interest
+    # group pushes for the bank the way it pushes for schools.
+    #
+    # ideology_regenerator is vanilla's Portuguese flavour of the same ideology
+    # and ideology_modernizer_leader its character form, so both take the same
+    # stance; the movement variant already had an entry and gains it here too.
+    # This is the opposite case to the hard-money note at the bottom of this
+    # file: there, copying a reactionary stance onto the Bhadralok's Modernizer
+    # would have been wrong, because the stance was not a modernizer's. This one
+    # is.
+    "ideology_modernizer": {
+        "lawgroup_national_bank": ministry_constructor("national_bank", "++"),
+    },
+    "ideology_regenerator": {
+        "lawgroup_national_bank": ministry_constructor("national_bank", "++"),
+    },
+    "ideology_modernizer_leader": {
+        "lawgroup_national_bank": ministry_constructor("national_bank", "++"),
+    },
+    # ideology_modernizer_movement_2, NOT ideology_modernizer_movement: vanilla
+    # splits the moderniser movement into a _1 ("only the most crucial laws")
+    # and a _2 ("less crucial but still important"), and the unsuffixed key this
+    # entry used to carry matches no vanilla ideology at all, so its
+    # ministry_of_science stance had silently never been applied —
+    # apply_ideologies skips a key it cannot find. The bank and the science
+    # ministry are both second-tier asks for a movement, so they go on _2 beside
+    # the schools and child-labour stances vanilla already put there.
+    "ideology_modernizer_movement_2": {
         "lawgroup_ministry_of_science": ministry_constructor(
             "ministry_of_science", "+"
         ),
+        "lawgroup_national_bank": ministry_constructor("national_bank", "++"),
     },
     "ideology_traditionalist_movement": {
         "lawgroup_ministry_of_religion": ministry_constructor(

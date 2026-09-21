@@ -13,10 +13,12 @@
 # `month` is only a trigger (Jan = 0 ... Dec = 11), hence the if-chain.
 # ============================================================================
 
-# Retained samples per series. 120 monthly samples = the 10-year chart range.
-# Also written as the literal 121 (cap + 1) in te_history_prune_samples and
-# te_history_prune_global_samples — change all three together.
-te_history_sample_cap = 120
+# Retained samples per series. 240 monthly samples = the 20-year chart range,
+# which is the widest of the three range buttons and therefore what the store
+# has to keep. Also written as the literal 241 (cap + 1) in
+# te_history_prune_samples and te_history_prune_global_samples — change all
+# three together.
+te_history_sample_cap = 240
 
 # Monotonic month counter: year * 12 + (0 = January ... 11 = December).
 te_history_month_index = {

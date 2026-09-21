@@ -30,8 +30,8 @@
 #                   the "History available since" line
 #
 # Sharing one container between all of a month's metrics is what keeps the
-# store affordable: 120 containers per tracked country covers every series
-# instead of 120 per series, and markers land on the same container as the
+# store affordable: 240 containers per tracked country covers every series
+# instead of 240 per series, and markers land on the same container as the
 # month they describe, so the chart never has to search for them. A metric
 # that was not recorded in a month simply has no `te_hist_v_<METRIC>`
 # variable there, which is how the charts tell "no data" from a real zero.
@@ -102,7 +102,7 @@ te_history_prune_samples = {
 		# `any_in_*list = { count >= N }` rather than `*variable_list_size`: in 1.14
 		# the engine rejects that trigger's documented `target` key at load
 		# ("Failed to read 'target'"), so the limit never passed. N is cap + 1.
-		limit = { any_in_list = { variable = te_hist count >= 121 has_tag = te_hist_sample } } # te_history_sample_cap + 1
+		limit = { any_in_list = { variable = te_hist count >= 241 has_tag = te_hist_sample } } # te_history_sample_cap + 1
 		ordered_in_list = {
 			variable = te_hist
 			position = 0
@@ -237,7 +237,7 @@ te_history_global_touch_month = {
 # Scope: any
 te_history_prune_global_samples = {
 	if = {
-		limit = { any_in_global_list = { variable = te_hist_g count >= 121 has_tag = te_hist_sample } } # te_history_sample_cap + 1; see te_history_prune_samples
+		limit = { any_in_global_list = { variable = te_hist_g count >= 241 has_tag = te_hist_sample } } # te_history_sample_cap + 1; see te_history_prune_samples
 		ordered_in_global_list = {
 			variable = te_hist_g
 			position = 0

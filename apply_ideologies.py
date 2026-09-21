@@ -86,9 +86,18 @@ def modify_entries(entries, modifications):
     """
 
     result = {}
+    unmatched = []
 
     for key, sub_entries in modifications.items():
         if key not in entries:
+            # A key that matches no vanilla ideology is silently a no-op: the
+            # stance is never written and nothing says so. That is how
+            # `ideology_modernizer_movement`'s ministry_of_science stance sat
+            # dead for however long vanilla has shipped
+            # `ideology_modernizer_movement_1` / `_2` instead. Collected and
+            # reported by regenerate(), which surfaces it in POST /reload's
+            # `warnings`.
+            unmatched.append(key)
             continue
 
         original_entry = entries[key]
@@ -118,7 +127,7 @@ def modify_entries(entries, modifications):
         keyword = "INJECT" if len(replace_reasons) == 0 else "REPLACE"
         result[key] = (keyword, entry, replace_reasons)
 
-    return result
+    return result, unmatched
 
 
 def update_law_reqs(entries):
@@ -226,16 +235,26 @@ def _build_modified_entries(verbose: bool = False):
             print("Found ", len(new_entries.keys()), " new entries")
         entries.update(new_entries)
 
-    modified_entries = modify_entries(entries, modifications)
+    modified_entries, unmatched = modify_entries(entries, modifications)
     modified_entries = update_law_reqs(modified_entries)
-    return modified_entries
+    return modified_entries, unmatched
 
 
 def regenerate(mod_state=None):
-    """Auto-run entrypoint invoked by mod_state_server post-load."""
-    modified_entries = _build_modified_entries(verbose=False)
+    """Auto-run entrypoint invoked by mod_state_server post-load.
+
+    Returns a POST_LOAD_GENERATORS summary dict. `hard_fails` counts keys in
+    `ideology_modifications.modifications` that match no vanilla ideology — a
+    stance written for a key vanilla renamed or dropped applies to nothing and
+    the generator would otherwise say nothing about it.
+    """
+    modified_entries, unmatched = _build_modified_entries(verbose=False)
     output_path = os.path.join(mod_path, "common", "ideologies", "modified.txt")
     write_to_file(output_path, modified_entries)
+    return {
+        "hard_fails": len(unmatched),
+        "unmatched_ideologies": sorted(unmatched),
+    }
 
 
 def main():
@@ -243,8 +262,13 @@ def main():
     parser.add_argument("--dry-run", action="store_true", help="Show what would change without writing")
     args = parser.parse_args()
 
-    modified_entries = _build_modified_entries(verbose=True)
+    modified_entries, unmatched = _build_modified_entries(verbose=True)
     output_path = os.path.join(mod_path, "common", "ideologies", "modified.txt")
+    if unmatched:
+        print(
+            f"\nWARNING: {len(unmatched)} modification key(s) match no vanilla "
+            f"ideology and were skipped entirely: {', '.join(sorted(unmatched))}"
+        )
     if args.dry_run:
         inject_count = sum(1 for v in modified_entries.values() if isinstance(v, tuple) and v[0] == "INJECT")
         replace_count = sum(1 for v in modified_entries.values() if isinstance(v, tuple) and v[0] == "REPLACE")

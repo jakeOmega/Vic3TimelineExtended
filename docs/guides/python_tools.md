@@ -644,7 +644,7 @@ python mod_state_client.py modifier-search goods_output
 3. **Search first:** When unsure of exact IDs, use `/search?q=...`.
 4. **Prefer structured endpoints** (`/laws`, `/technologies`, `/buildings`) over `/raw`.
 5. **Use `/raw` for full data** when you need every field (triggers, effects, modifiers, AI weights).
-6. **After editing mod files:** `POST /reload` to pick up changes without restarting. Note: `/reload` re-parses data files, NOT Python code. To pick up Python code changes, restart the server process.
+6. **After editing mod files:** `POST /reload` to pick up changes without restarting. Note: `/reload` re-parses data files, NOT Python code. To pick up Python code changes, restart the server process. **This is worse than "the change doesn't take" when the Python you edited is a *regenerator's input*.** `/reload` runs the regenerators from the modules it imported at startup, so after editing e.g. `ideology_modifications.py` and running `apply_ideologies.py` by hand, the next `/reload` rewrites `common/ideologies/modified.txt` from the **stale** dict and silently reverts your edit — `generators_wrote_files` lists the file, `warnings` is empty, and `git status` quietly loses it. Restart the server first, then reload; or re-run the standalone generator after the reload and don't reload again until you have restarted.
 7. **Entity types use display names with spaces** (e.g. "PM Groups"). URL-encode as `%20`.
 8. **Validate modifier names** with `/modifier-search?q=<substring>` or `/engine-docs/modifiers?q=<substring>` before using them.
 9. **Cross-reference** with `/references/<key>` to find all entities using a given key.

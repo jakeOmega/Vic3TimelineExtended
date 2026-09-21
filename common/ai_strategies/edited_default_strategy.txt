@@ -58,7 +58,13 @@
 			value = 50
 		}
 		institution_national_bank = {
-			value = 50
+			# Enacting law_national_bank is only half the job: the credit-standing
+			# and investment-pool benefits (extra_institutions.txt) scale with the
+			# level the country funds, so an AI that passes the law and never
+			# invests still runs an expensive, fragile balance sheet. Level with
+			# institution_ministry_of_the_environment's 100 rather than the
+			# 10-50 band the ministries sit in.
+			value = 100
 		}
 		institution_ministry_of_culture = {
 			value = 5
