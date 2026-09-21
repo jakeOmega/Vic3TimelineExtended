@@ -6,8 +6,13 @@ of the mod state server. Do not hand-edit.
 Flagged: a localization value contains a bracket-style formatting tag
 (`[b]`, `[/i]`, …). Vic3 has no such tags — the engine treats `[b]` as
 a failing data-system-function and floods the log, causing in-game lag.
-
 Fix: replace `[b]X[/b]` with `#b X#!`.
+
+Also flagged: a `[` opened inside an unclosed `[...]`. The loc parser
+does not nest, so the whole value fails to parse and any widget whose
+`text =` points at the key logs `Failed parsing localized text`.
+Fix: pass data-function arguments as bare expressions, not as their own
+bracketed expressions.
 
 Suppress an intentional flag with a trailing comment on the loc line:
 `my_loc_key:0 "…" # REVIEWED YYYY-MM-DD: rationale`
@@ -23,7 +28,7 @@ _None._
 ## Coverage
 
 - loc files scanned: 30
-- loc values checked: 16901
+- loc values checked: 17267
 - total flags: 0
 - unreviewed: 0
 - exempted: 0
