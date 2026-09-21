@@ -150,6 +150,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 modifier_multiplier_var_audit.py --strict
 
+      - name: Audit — event images
+        if: ${{ !cancelled() }}
+        run: python3 event_image_audit.py --strict
+
       # Fails when a POST_LOAD_REGENERATORS / POST_LOAD_AUDITS module in
       # mod_state_server.py is missing from CLAUDE.md, docs/guides/python_tools.md
       # or docs/auto_generated_files.md. Reads the rosters with `ast`, so it needs
