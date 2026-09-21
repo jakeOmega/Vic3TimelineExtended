@@ -323,6 +323,7 @@ monument_events.3 = {
 	type = country_event
 	placement = root
 
+	event_image = { video = "unspecific_ruler_speaking_to_people" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -351,6 +352,62 @@ monument_events.3 = {
 monument_events.4 = {
 	type = country_event
 	placement = root
+
+	event_image = {
+		trigger = { religion = rel:jewish }
+		video = "europenorthamerica_judaism"
+	}
+	event_image = {
+		trigger = {
+			OR = {
+				religion = rel:protestant
+				religion = rel:catholic
+				religion = rel:orthodox
+				religion = rel:oriental_orthodox
+			}
+		}
+		video = "southamerica_christianity"
+	}
+	event_image = {
+		trigger = {
+			OR = {
+				religion = rel:hindu
+				religion = rel:sikh
+			}
+		}
+		video = "asia_hinduism_sikhism"
+	}
+	event_image = {
+		trigger = {
+			OR = {
+				religion = rel:shinto
+				religion = rel:confucian
+			}
+		}
+		video = "asia_confucianism_shinto"
+	}
+	event_image = {
+		trigger = {
+			OR = {
+				religion = rel:mahayana
+				religion = rel:gelugpa
+				religion = rel:theravada
+			}
+		}
+		video = "asia_buddhism"
+	}
+	event_image = {
+		trigger = {
+			OR = {
+				religion = rel:sunni
+				religion = rel:shiite
+			}
+		}
+		video = "middleeast_islam"
+	}
+	event_image = {
+		video = "africa_animism"
+	}
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_portrait.dds"
@@ -381,6 +438,7 @@ monument_events.5 = {
 	type = country_event
 	placement = root
 
+	event_image = { video = "unspecific_military_parade" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_military.dds"
 
@@ -410,6 +468,7 @@ monument_events.6 = {
 	type = country_event
 	placement = root
 
+	event_image = { video = "europenorthamerica_art_gallery" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -439,6 +498,7 @@ monument_events.7 = {
 	type = country_event
 	placement = root
 
+	event_image = { texture = "gfx/event_pictures/nature_conservation_effort.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -468,6 +528,7 @@ monument_events.8 = {
 	type = country_event
 	placement = root
 
+	event_image = { video = "middleeast_engineer_blueprint" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
@@ -497,6 +558,7 @@ monument_events.9 = {
 	type = country_event
 	placement = root
 
+	event_image = { texture = "gfx/event_pictures/world_exhibition_fair.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
@@ -526,6 +588,7 @@ monument_events.10 = {
 	type = country_event
 	placement = root
 
+	event_image = { texture = "gfx/event_pictures/movement_triumph_celebration.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 

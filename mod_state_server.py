@@ -8127,6 +8127,7 @@ POST_LOAD_AUDITS = [
     ("effect_trigger_validity_audit", "effect_trigger_validity_audit"),
     ("duplicate_key_audit",           "duplicate_key_audit"),
     ("attitude_key_audit",            "attitude_key_audit"),
+    ("event_image_audit",             "event_image_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS

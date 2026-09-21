@@ -82,6 +82,13 @@ te_mon_has_stance = {
 # te_mon_target_min / te_mon_target_max, which is the single place it is stated;
 # this trigger only answers whose band it is.
 #
+# THE BAND IS NOT THE REGIME'S WHOLE DISCIPLINE ANY MORE (ruling R7, issue
+# #351). §0.6 R5 said it was, and a band on the RATE turned out to say nothing
+# about the QUANTITY of money: te_mon_pressure_commodity_specie is the
+# price-specie channel that answers for the price level, and it is gated on the
+# LAW, not on this trigger — a commodity country without a bank has no dial to
+# narrow and is disciplined all the same.
+#
 # FIVE SETTINGS, NOT TWENTY-SIX, AND LOPSIDED. Both bounds hang off one
 # whole-number centre (var:te_mon_commodity_centre), so the dial always offers
 # exactly centre-1 to centre+3. Cheap money is what metal forbids; dear money
