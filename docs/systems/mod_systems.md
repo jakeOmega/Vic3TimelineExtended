@@ -678,8 +678,11 @@ investment — roughly a 65-year payback at base tourism price.
   `pmg_monument_dedication` group. The choice is **one-way** — see the header comment in
   `grand_monument_pms.txt` and the scripting-best-practices note on locking a PM choice.
 - **Dedication ceremony.** `on_building_built` → `monument_events.1` (hidden `building_event`,
-  saves the state, hops to `owner`) → `monument_events.2`, whose options call
-  `activate_production_method` on the saved state scope. Recurring flavour events 3–10 are
+  hops to the monument's `state`) → `monument_events.2`, a **`state_event` with
+  `placement = ROOT`** so the ceremony is placed on the state that built the monument rather
+  than the capital. ROOT is that state, so `activate_production_method` targets it directly and
+  every country-level gate goes through `owner`. Its `immediate` saves `scope:monument_state`
+  purely so the loc can name the state. Recurring flavour events 3–10 are still country events,
   dispatched from `monument_events_on_action` on `on_monthly_pulse_country`.
 - **Scaling split.** `state_*` and `building_*_throughput_add` are `level_scaled` (genuinely
   local); `interest_group_*` and `country_*` are `unscaled` (flat per monument) because the
@@ -703,6 +706,23 @@ The `has_amendment` guards on events 29/31/58 make the permanent and temporary v
 
 ## On-Actions Reference
 
+- **Re-ask guard.** The ceremony's `trigger` requires a monument in the state still on
+  `pm_monument_undedicated`. `has_building` alone would re-open the question every time an
+  existing monument gained a level.
+- **Option gating: hide vs tilt.** An option `trigger` *hides* the row and is reserved for
+  dedications a country has no business offering — state atheism (religious), `law_industry_banned`
+  (industrial), and the four technology gates. Everything else stays visible and is steered by
+  `ai_chance` instead. The civic dedication is never hidden: one `pm_monument_civic` is offered
+  under three mutually exclusive wordings — "to the republic", "to the Crown", "to the nation" —
+  partitioned by `monument_government_is_republican` / `monument_government_is_crowned` in
+  `common/scripted_triggers/monument_triggers.txt`. The third skin is written as `NOT` of both,
+  so a governance principle added later still gets a civic dedication rather than losing the option.
+- **Option tooltips are hand-written.** Each option wraps its `activate_production_method` in a
+  `custom_tooltip` whose `monument_events.2.*.tt` string spells out that dedication's modifiers,
+  because there is no `GetProductionMethod('key')` global promote to render a PM's effects in loc
+  (see `docs/guides/event_creation_guide.md`). Modifier *names* come from `$modifier_key$`
+  substitution so they follow renames; the *numbers* are hand-kept in sync with
+  `grand_monument_pms.txt`, which carries a TOOLTIP MIRROR header comment saying so.
 The mod uses 23 on-action files under `common/on_actions/`. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).
 
 ### File Index

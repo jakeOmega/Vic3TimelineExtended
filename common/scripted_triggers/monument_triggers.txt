@@ -1,0 +1,42 @@
+﻿# ======================================================================
+#  Grand Monument Scripted Triggers
+#  Country scope. Used by the dedication ceremony (monument_events.2) to
+#  pick which wording the civic dedication is offered under.
+# ======================================================================
+# The civic dedication (pm_monument_civic) is available to every government --
+# a triumphal arch means something under any flag. What changes is who the arch
+# is raised TO, so the one PM is offered under three mutually exclusive option
+# skins and these two triggers carve lawgroup_governance_principles in three:
+#
+#   monument_government_is_crowned      -> "Dedicate it to the Crown"
+#   monument_government_is_republican   -> "Dedicate it to the republic"
+#   neither                             -> "Dedicate it to the nation"
+#
+# The third skin is written as NOT of both, so a governance principle added
+# later (by this mod or by vanilla) still gets a civic dedication it can use
+# rather than silently losing the option.
+#
+# has_law_or_variant throughout: variant laws (parent = law_X) are tag- and
+# condition-restricted skins of their parent and must count as the parent here.
+
+# True if the head of state wears a crown (or the equivalent).
+monument_government_is_crowned = {
+	OR = {
+		has_law_or_variant = law_type:law_monarchy
+		has_law_or_variant = law_type:law_social_monarchy
+		has_law_or_variant = law_type:law_chiefdom
+	}
+}
+
+# True if the head of state is chosen rather than born to it.
+# Deliberately excludes law_corporate_state, law_theocracy, law_neocameralism and
+# law_colonial_administration -- all of them are "the republic" only by courtesy,
+# and they fall through to the neutral "to the nation" skin.
+monument_government_is_republican = {
+	OR = {
+		has_law_or_variant = law_type:law_presidential_republic
+		has_law_or_variant = law_type:law_parliamentary_republic
+		has_law_or_variant = law_type:law_council_republic
+		has_law_or_variant = law_type:law_direct_democracy
+	}
+}

@@ -53,6 +53,14 @@
 # zero output if the unscaled employment block failed to register. level_scaled goods
 # I/O is already proven by pm_maintenance.
 
+#--------------------------------------------------
+# TOOLTIP MIRROR -- every number below is also written out in prose, by hand, in the
+# dedication ceremony's option tooltips: the `monument_events.2.*.tt` keys in
+# localization/english/te_events_l_english.yml. Loc has no way to render a PM's effect
+# list (there is no GetProductionMethod('key') global promote), and the dedication is
+# permanent, so the prose is what stops the player choosing blind. There is no generator
+# keeping the two in sync -- change a value here and change the matching .tt string.
+
 # Entry point and fallback: a monument nobody has yet decided the meaning of.
 # Still a tourist draw, just a generic one. Also what a player is left with if
 # they dismiss the dedication ceremony event.
@@ -256,7 +264,7 @@ pm_monument_naturalist = {
 
 	state_modifiers = {
 		level_scaled = {
-			state_pollution_generation_add = -1
+			state_pollution_generation_add = -1000 # two parks worth
 			building_tourism_industry_throughput_add = 0.01
 		}
 	}

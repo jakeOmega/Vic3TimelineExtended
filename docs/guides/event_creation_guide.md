@@ -272,6 +272,33 @@ After editing modifier or event files, `POST /reload` to refresh the server's vi
 - **Correct:** `ai_chance = { base = 5 modifier = { trigger = { <condition> } add = 3 } }`
 - **WRONG:** `ai_chance = { base = 5 if = { limit = { <condition> } add = 3 } }` — causes silent failures.
 - **Nested conditions:** Use AND inside `trigger = { }`, or `OR = { }` inside `trigger`.
+- **Don't drop the `trigger = { }` wrapper.** Script values accept bare conditions inside a
+  `modifier` block; event `ai_chance` blocks are written the other way in vanilla by 501 uses to 9.
+  Use the wrapper.
+
+### Showing a Production Method's Effects in an Option Tooltip
+There is **no `GetProductionMethod('key')` global promote** — nothing in loc can reach a PM you
+name by key, so `[ProductionMethod.GetTooltip(...)]` (the accessor the building panel uses) is out
+of reach from an event. An option that calls `activate_production_method` therefore has to state
+the PM's effects in prose, wrapped around the effect:
+
+```
+option = {
+	name = my_event.1.a
+	custom_tooltip = {
+		text = my_event.1.a.tt
+		activate_production_method = { building_type = building_x production_method = pm_y }
+	}
+}
+```
+
+In the `.tt` string, write the modifier **names** as `$<modifier_key>$` (e.g.
+`$state_conversion_mult$`) rather than typing them out — every modifier type has a loc key of
+exactly its own name, so the label follows any rename. Two-level `$...$` nesting is safe and
+vanilla relies on it (`$state_fortification_bombardment_resistance_add$` expands to a string that
+itself contains `$building_naval_fortification$`). The **numbers** have to be hardcoded, so leave a
+comment in the PM file pointing at the `.tt` keys — see the TOOLTIP MIRROR note in
+`common/production_methods/grand_monument_pms.txt` and the ceremony in `events/monument_events.txt`.
 
 #### Authority-Spending Options (and Other "Spend a Resource" Choices)
 When an option costs authority (or any resource), AI weights need three pieces of care that aren't obvious:
