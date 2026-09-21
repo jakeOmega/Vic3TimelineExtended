@@ -1464,6 +1464,68 @@ flowcontainer = {
 						}
 					}
 
+					### [P5b] The bloc's common currency (§15A.3): one state row and the
+					### four actions, each its own scripted GUI.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_union_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_union_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_union_value"
+							}
+						}
+					}
+
+					flowcontainer = {
+						direction = horizontal
+						ignoreinvisible = yes
+						parentanchor = hcenter
+						visible = "[GetScriptedGui('banking_mon_shows_union').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+						banking_dash_mon_button = {
+							datacontext = "[GetScriptedGui('banking_mon_union_adopt')]"
+							visible = "[GetScriptedGui('banking_mon_union_adopt').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							size = { 200 28 }
+							text = "banking_dash_mon_btn_union_adopt"
+						}
+
+						banking_dash_mon_button = {
+							datacontext = "[GetScriptedGui('banking_mon_union_leave')]"
+							visible = "[GetScriptedGui('banking_mon_union_leave').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							size = { 200 28 }
+							text = "banking_dash_mon_btn_union_leave"
+						}
+
+						banking_dash_mon_button = {
+							datacontext = "[GetScriptedGui('banking_mon_union_press_on')]"
+							visible = "[GetScriptedGui('banking_mon_union_press_on').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							size = { 200 28 }
+							text = "banking_dash_mon_btn_union_press"
+						}
+
+						banking_dash_mon_button = {
+							datacontext = "[GetScriptedGui('banking_mon_union_press_off')]"
+							visible = "[GetScriptedGui('banking_mon_union_press_off').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+							tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+							size = { 200 28 }
+							text = "banking_dash_mon_btn_union_press_off"
+						}
+					}
+
 					banking_dash_mon_subheader = {
 						blockoverride "mon_subheader_text" {
 							text = "banking_dash_mon_sub_borrowing"

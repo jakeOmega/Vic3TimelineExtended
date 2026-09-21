@@ -7419,6 +7419,40 @@ te_mon_board_wrong_stance = {
 	country_liberty_desire_add = 0.15
 }
 
+# --- 5b: the power-bloc common currency (§15A.3) ----------------------------
+
+# MANAGED, flat; on an ADOPTER while kind = 2 (te_monetary_update_union). One
+# money, no conversion: the design's "state_trade_advantage_mult +0.05" names a
+# modifier type that does not exist, so it is the export / import pair phase 4
+# already uses (§0.8 ruling G9).
+te_mon_union_adopter = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_export_advantage_mult = 0.05
+	state_import_advantage_mult = 0.05
+}
+
+# MANAGED, scaled; on a LEADER while "Press for monetary convergence" is on.
+# multiplier = the number of holdouts (te_mon_union_pressure_applied). The
+# capital-controls modifier's country_influence_cost_add = 100 is the precedent.
+te_mon_union_pressure = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_influence_cost_add = 50
+}
+
+# Exit: +3pp of structural premium decaying over ten years (days = 3650,
+# is_decaying). Timed, applied by te_mon_effect_union_exit_costs, NOT managed.
+te_mon_union_exit_premium = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_credit_standing_add = 0.03
+}
+
+# Refusing The Question: one rank step on vanilla's 250 / 500 / 750 / 1000
+# leverage-resistance ladder, ten years (days = 3650), refreshed not stacked.
+te_mon_union_independence = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_leverage_resistance_add = 250
+}
+
 # te_lolr.1 "Renege": the guarantor's name, for five years (days = 1825).
 te_mon_lolr_reneged = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds

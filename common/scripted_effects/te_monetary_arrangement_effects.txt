@@ -169,6 +169,8 @@ te_monetary_init_arrangement_variables = {
 		limit = { NOT = { has_variable = te_mon_work_gdp } }
 		set_variable = { name = te_mon_work_gdp value = 0 }
 	}
+	# [5b]
+	te_monetary_init_union_variables = yes
 	# [5c]
 	if = {
 		limit = { NOT = { has_variable = te_mon_board_wrong_months } }
@@ -301,7 +303,31 @@ te_monetary_discover_arrangements = {
 			overlord = { save_scope_as = te_mon_new_anchor }
 			set_variable = { name = te_mon_anchor_kind_new value = 3 }
 		}
-		# [5b] kind 2 is tried here, above the peg.
+		# [5b] KIND 2, the bloc's common currency (§15A.3): the member has
+		# ADOPTED (te_mon_union_member), and there is still a common currency to
+		# be in — it is in the bloc, the bloc holds tier 2+, the leader can lead.
+		else_if = {
+			limit = {
+				te_mon_is_union_member = yes
+				te_mon_bloc_has_common_currency = yes
+			}
+			power_bloc = { power_bloc_leader = { save_scope_as = te_mon_new_anchor } }
+			set_variable = { name = te_mon_anchor_kind_new value = 2 }
+		}
+	}
+	# [5b] A member with NO common currency left to be in — it left the bloc, the
+	# bloc lost tier 2, the leader lost its dial — has EXITED, with everything
+	# that costs (§15A.3: "as an exit, not silently"). A board imposed on top of
+	# membership is not that: kind 3 simply outranks it, and the choice is kept.
+	# _exit_costs is a LEAF (it must be: _exit calls this effect); it sets member
+	# = 0, and the change logic just below does the un-anchoring.
+	if = {
+		limit = {
+			te_mon_is_union_member = yes
+			var:te_mon_anchor_kind_new = 0
+			te_mon_bloc_has_common_currency = no
+		}
+		te_mon_effect_union_exit_costs = yes
 	}
 	if = {
 		limit = {
@@ -434,7 +460,8 @@ te_monetary_discover_arrangements = {
 			root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_arr_lolr_cost_to_root } }
 		}
 	}
-	# [5b] A bloc leader's cooperation and backstop costs add here.
+	# [5b] A bloc leader's cooperation and backstop costs, and its holdout count.
+	te_monetary_discover_union = yes
 
 	set_variable = { name = te_mon_arr_recipient_pts value = te_mon_arr_recipient_value }
 	set_variable = { name = te_mon_arr_standing_pts value = te_mon_arr_standing_value }
@@ -453,6 +480,9 @@ te_monetary_discover_arrangements = {
 				# law change away from a board; keep looking monthly.
 				te_mon_is_board_subject = yes
 				var:te_mon_board_seigniorage_pts > 0
+				# [5b] Anybody in a bloc with the monetary-union group has a role.
+				te_mon_bloc_union_tier_1_plus = yes
+				te_mon_is_union_member = yes
 				AND = {
 					has_variable = te_mon_debug_anchor_on
 					var:te_mon_debug_anchor_on = 1
@@ -548,6 +578,9 @@ te_monetary_apply_arrangement_modifiers = {
 	# --- [5c] the currency board (§15A.4) ------------------------------------
 	te_monetary_apply_board_modifiers = yes
 
+	# --- [5b] the common currency (§15A.3) -----------------------------------
+	te_monetary_update_union = yes
+
 	# --- the swap line is DRAWN in a crisis (§15A.2) -------------------------
 	# 0.1% of the recipient's GDP a month, provider's treasury to recipient's:
 	# under gold a swap line IS reserve lending, so the money arrives somewhere
@@ -594,10 +627,8 @@ te_monetary_update_anchor_peg = {
 	else = {
 		change_variable = { name = te_peg_confidence add = 1 }
 	}
-	if = {
-		limit = { te_mon_is_swap_recipient = yes }
-		change_variable = { name = te_peg_confidence add = te_mon_swap_confidence }
-	}
+	# A treaty swap line's +2 and the bloc's cooperation +1 (5b), in one value.
+	change_variable = { name = te_peg_confidence add = te_mon_backstop_confidence }
 	clamp_variable = {
 		name = te_peg_confidence
 		min = 0

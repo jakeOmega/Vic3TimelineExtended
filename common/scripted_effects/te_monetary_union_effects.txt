@@ -1,0 +1,354 @@
+﻿# ============================================================================
+# Monetary policy, phase 5b — the power-bloc common currency: effects
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §15A.3, as shipped in §0.8.
+# Triggers / values: te_monetary_union_triggers.txt / _script_values.txt.
+#
+# WHAT IS CALLED FROM WHERE
+#
+#   te_monetary_init_union_variables    step 0, from the arrangement seeds
+#   te_monetary_discover_union          from te_monetary_discover_arrangements:
+#                                       a leader's holdout count and costs
+#   te_monetary_update_union            step 9b: clocks, the AI's choices, The
+#                                       Question, the two union modifiers
+#   te_mon_effect_union_adopt / _exit   the dashboard buttons, The Question,
+#                                       the AI — and _exit also from the
+#                                       discovery, when the ground goes from
+#                                       under a member (left the bloc, the bloc
+#                                       lost tier 2, the leader lost its dial)
+#
+# ADOPTING AND LEAVING WRITE AN INPUT (te_mon_union_member) and run the
+# idempotent discovery; they never touch the rate. The discovery turns the input
+# into kind 2 and snaps the index (te_monetary_anchor_changed).
+# ============================================================================
+
+
+te_monetary_init_union_variables = {
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_member } }
+		set_variable = { name = te_mon_union_member value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_lock_months } }
+		set_variable = { name = te_mon_union_lock_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_ask_cooldown } }
+		set_variable = { name = te_mon_union_ask_cooldown value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_q_state } }
+		set_variable = { name = te_mon_union_q_state value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_pressing } }
+		set_variable = { name = te_mon_union_pressing value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_holdouts } }
+		set_variable = { name = te_mon_union_holdouts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_refusers } }
+		set_variable = { name = te_mon_union_refusers value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_pressure_applied } }
+		set_variable = { name = te_mon_union_pressure_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_adopter_applied } }
+		set_variable = { name = te_mon_union_adopter_applied value = 0 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# The discovery's 5b half — a LEADER'S books
+# ----------------------------------------------------------------------------
+# Scope: country, ROOT = this. Called from te_monetary_discover_arrangements
+# AFTER the treaty costs are summed, so it ADDS to te_mon_arr_provider_pts.
+#
+# For a bloc leader whose bloc has the monetary-union group: what cooperation
+# and the backstop cost it (each member's benefit x clamp(member gdp / ours)),
+# how many holdouts there are, and how many of those would refuse today — the
+# two figures the leader's dashboard shows, so a human leader sees the cohesion
+# cost of pressing before paying it. Everybody else: zeroes.
+te_monetary_discover_union = {
+	set_variable = { name = te_mon_union_holdouts value = 0 }
+	set_variable = { name = te_mon_union_refusers value = 0 }
+	if = {
+		limit = {
+			is_power_bloc_leader = yes
+			te_mon_bloc_union_tier_1_plus = yes
+		}
+		power_bloc = {
+			every_power_bloc_member = {
+				limit = { NOT = { this = root } }
+				save_scope_as = te_mon_arr_party
+				root = { change_variable = { name = te_mon_arr_provider_pts add = scope:te_mon_arr_party.te_mon_union_cost_to_root } }
+				if = {
+					limit = { te_mon_union_is_holdout = yes }
+					root = { change_variable = { name = te_mon_union_holdouts add = 1 } }
+					if = {
+						limit = { te_mon_union_adopt_score <= 0 }
+						root = { change_variable = { name = te_mon_union_refusers add = 1 } }
+					}
+				}
+			}
+		}
+	}
+	# A leader that is no longer one, or has nobody left to press, stops pressing.
+	if = {
+		limit = {
+			var:te_mon_union_pressing = 1
+			OR = {
+				is_power_bloc_leader = no
+				te_mon_bloc_union_tier_2_plus = no
+			}
+		}
+		set_variable = { name = te_mon_union_pressing value = 0 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Step 9b (5b half) — clocks, the AI, The Question, the two modifiers
+# ----------------------------------------------------------------------------
+# Scope: country, ROOT = this.
+te_monetary_update_union = {
+	# --- clocks -------------------------------------------------------------
+	if = {
+		limit = { var:te_mon_union_lock_months > 0 }
+		change_variable = { name = te_mon_union_lock_months subtract = 1 }
+	}
+	if = {
+		limit = { var:te_mon_union_ask_cooldown > 0 }
+		change_variable = { name = te_mon_union_ask_cooldown subtract = 1 }
+	}
+
+	# --- an AI LEADER presses only from strength (§15A.3) -------------------
+	# Surplus influence and cohesion above a floor; it stops the month either
+	# goes, or when the holdouts who would refuse outnumber the ones who would
+	# not — pressing a bloc of refusers loses cohesion on net.
+	if = {
+		limit = {
+			is_player = no
+			is_power_bloc_leader = yes
+			te_mon_bloc_union_tier_2_plus = yes
+		}
+		if = {
+			limit = {
+				te_mon_can_lead_union = yes
+				var:te_mon_union_holdouts > 0
+				var:te_mon_union_refusers < var:te_mon_union_holdouts
+				influence >= 300
+				power_bloc = { current_cohesion_percentage >= 0.6 }
+			}
+			set_variable = { name = te_mon_union_pressing value = 1 }
+		}
+		else = {
+			set_variable = { name = te_mon_union_pressing value = 0 }
+		}
+	}
+
+	# --- an AI ADOPTER walks only in extremis -------------------------------
+	if = {
+		limit = {
+			is_player = no
+			te_mon_is_union_adopter = yes
+			var:te_mon_overvaluation >= te_mon_union_ai_exit_overvaluation
+		}
+		te_mon_effect_union_exit = yes
+	}
+
+	# --- THE QUESTION (§15A.3) ----------------------------------------------
+	# Put to a PRESSED holdout "when the answer could have changed, not on a
+	# timer": the signature below moves when pressure is newly applied, when the
+	# criteria are newly met, or when the bloc's tier changes — with a floor of
+	# once per five years. A three-yearly popup with a stable answer is exactly
+	# the "clear right answer" §1 says to automate.
+	#
+	# AI NEVER SEES THE EVENT: it resolves on the adoption score directly, with
+	# the same two outcomes. An unpressed AI holdout that wants in simply adopts
+	# (the second branch) — nobody has to ask it.
+	set_variable = { name = te_mon_work value = 0 }
+	if = {
+		limit = { te_mon_union_is_pressed = yes }
+		change_variable = { name = te_mon_work add = 1 }
+	}
+	if = {
+		limit = {
+			te_mon_union_is_holdout = yes
+			te_mon_union_criteria_met = yes
+		}
+		change_variable = { name = te_mon_work add = 2 }
+	}
+	if = {
+		limit = { te_mon_bloc_union_tier_3 = yes }
+		change_variable = { name = te_mon_work add = 12 }
+	}
+	else_if = {
+		limit = { te_mon_bloc_union_tier_2_plus = yes }
+		change_variable = { name = te_mon_work add = 8 }
+	}
+	else_if = {
+		limit = { te_mon_bloc_union_tier_1_plus = yes }
+		change_variable = { name = te_mon_work add = 4 }
+	}
+	if = {
+		limit = {
+			te_mon_union_is_pressed = yes
+			te_mon_union_can_adopt = yes
+			var:te_mon_union_ask_cooldown = 0
+			NOT = { var:te_mon_union_q_state = var:te_mon_work }
+		}
+		set_variable = { name = te_mon_union_ask_cooldown value = te_mon_union_ask_cooldown_duration }
+		if = {
+			limit = { is_player = yes }
+			trigger_event = { id = te_union.1 popup = yes }
+		}
+		else_if = {
+			limit = { te_mon_union_adopt_score > 0 }
+			te_mon_effect_union_adopt = yes
+		}
+		else = {
+			te_mon_effect_union_refuse = yes
+		}
+	}
+	else_if = {
+		limit = {
+			is_player = no
+			te_mon_union_is_holdout = yes
+			te_mon_union_can_adopt = yes
+			te_mon_union_adopt_score > 0
+		}
+		te_mon_effect_union_adopt = yes
+	}
+	set_variable = { name = te_mon_union_q_state value = var:te_mon_work }
+
+	# --- the adopter's trade advantage --------------------------------------
+	if = {
+		limit = { te_mon_is_union_adopter = yes }
+		if = {
+			limit = { NOT = { te_mon_mod_has = { NAME = te_mon_union_adopter } } }
+			te_mon_mod_add = { NAME = te_mon_union_adopter }
+		}
+		set_variable = { name = te_mon_union_adopter_applied value = 1 }
+	}
+	else = {
+		if = {
+			limit = { te_mon_mod_has = { NAME = te_mon_union_adopter } }
+			te_mon_mod_remove = { NAME = te_mon_union_adopter }
+		}
+		set_variable = { name = te_mon_union_adopter_applied value = 0 }
+	}
+
+	# --- the leader's pressure: influence, scaled by the number of holdouts -
+	set_variable = { name = te_mon_work value = 0 }
+	if = {
+		limit = { te_mon_union_is_pressing = yes }
+		set_variable = { name = te_mon_work value = var:te_mon_union_holdouts }
+	}
+	if = {
+		limit = { root ?= this }
+		te_monetary_apply_fx_one = { NAME = te_mon_union_pressure VALUE = var:te_mon_work APPLIED = te_mon_union_pressure_applied STEP = 0.5 STEP_NEG = -0.5 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Adopt, leave, refuse
+# ----------------------------------------------------------------------------
+
+# Adopt the common currency. The gate is te_mon_union_can_adopt, asked by every
+# caller. ROOT must be this country (the discovery's contract) — true from the
+# monthly update, the dashboard sgui and te_union.1.
+te_mon_effect_union_adopt = {
+	set_variable = { name = te_mon_union_member value = 1 }
+	set_variable = { name = te_mon_arr_scan value = 1 }
+	te_monetary_discover_arrangements = yes
+}
+
+# Leave it — by choice, or because the ground went (the discovery calls this
+# when a member has no common currency left to be in). "Exit is possible and
+# expensive": the index snaps to the shadow (the devaluation it could not have
+# inside — te_monetary_anchor_changed, once the discovery sees member = 0),
+# +3pp of structural premium decaying over ten years, a one-off investment-pool
+# hit, radicals, the leader's relations and the bloc's cohesion, and a ten-year
+# re-adoption lock.
+#
+# TUNING INVARIANT (§19 row 5b), to be checked with te_debug_monetary.10: exit
+# must be worse than staying for at least five years for a member at 15 points
+# of overvaluation, and better thereafter.
+#
+# SPLIT IN TWO SO NOTHING RECURSES. The discovery calls _exit_costs (a leaf) and
+# carries on — with member = 0 its own change logic does the un-anchoring. The
+# button, The AI and everything else call _exit, which is the costs plus one run
+# of the discovery. The discovery must never call _exit.
+te_mon_effect_union_exit = {
+	te_mon_effect_union_exit_costs = yes
+	te_monetary_discover_arrangements = yes
+}
+
+te_mon_effect_union_exit_costs = {
+	set_variable = { name = te_mon_union_member value = 0 }
+	set_variable = { name = te_mon_union_lock_months value = te_mon_union_lock_duration }
+	if = {
+		limit = { has_modifier = te_mon_union_exit_premium }
+		remove_modifier = te_mon_union_exit_premium
+	}
+	add_modifier = {
+		name = te_mon_union_exit_premium
+		days = 3650
+		is_decaying = yes
+	}
+	add_investment_pool = te_mon_union_exit_pool_hit
+	add_radicals = {
+		value = 0.05
+	}
+	if = {
+		limit = {
+			has_variable = te_mon_anchor
+			exists = var:te_mon_anchor
+		}
+		var:te_mon_anchor = {
+			change_relations = {
+				country = root
+				value = -30
+			}
+			if = {
+				limit = { is_power_bloc_leader = yes }
+				power_bloc = { add_cohesion_percent = -0.05 }
+			}
+		}
+	}
+}
+
+# Refuse The Question. Relations with the leader fall, the leader loses bloc
+# cohesion, and the holdout gains +250 leverage resistance for ten years —
+# REFRESHED, not stacked (one rank step on vanilla's 250 / 500 / 750 / 1000
+# ladder). Holding out is a strategy that builds something, not an endurance
+# test.
+te_mon_effect_union_refuse = {
+	if = {
+		limit = { has_modifier = te_mon_union_independence }
+		remove_modifier = te_mon_union_independence
+	}
+	add_modifier = {
+		name = te_mon_union_independence
+		days = 3650
+	}
+	if = {
+		limit = { exists = power_bloc }
+		power_bloc = {
+			add_cohesion_percent = -0.05
+			power_bloc_leader = {
+				change_relations = {
+					country = root
+					value = -15
+				}
+			}
+		}
+	}
+}

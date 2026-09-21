@@ -426,6 +426,8 @@ te_monetary_settle_modifier_home = {
 		te_mon_mod_strip = { NAME = te_mon_board_subject }
 		te_mon_mod_strip = { NAME = te_mon_board_seigniorage }
 		te_mon_mod_strip = { NAME = te_mon_board_wrong_stance }
+		te_mon_mod_strip = { NAME = te_mon_union_adopter }
+		te_mon_mod_strip = { NAME = te_mon_union_pressure }
 		set_variable = { name = te_inflation_band_applied value = 0 }
 		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }
@@ -1542,6 +1544,13 @@ te_monetary_update_premium = {
 	# [P4] Foreign-currency debt: +0.05pp per index point below par, off LAST
 	# month's index (step 5b has not run yet — see te_mon_premium_fx).
 	change_variable = { name = te_premium_cyclical add = te_mon_premium_fx }
+	# [P5b] A common-currency adopter has no peg to break, so its overvaluation
+	# against the currency it borrowed is priced here instead: +0.1pp per point
+	# beyond 5, halved under the bloc's fiscal backstop. Off last month's index,
+	# like the line above. A slump while the bloc runs hot means a tight stance,
+	# no devaluation, a rising premium and a worsening debt spiral — the
+	# euro-crisis shape, from nothing but the shared mechanics (§15A.3).
+	change_variable = { name = te_premium_cyclical add = te_mon_premium_union_overvaluation }
 	if = {
 		limit = { var:te_premium_cyclical < -10 }
 		set_variable = { name = te_premium_cyclical value = -10 }
@@ -2799,10 +2808,8 @@ te_monetary_update_gold = {
 		}
 		# [P5] A swap line lends peg confidence (§15A.2 — §15's old open question,
 		# answered yes): under gold it IS reserve lending.
-		if = {
-			limit = { te_mon_is_swap_recipient = yes }
-			change_variable = { name = te_peg_confidence add = te_mon_swap_confidence }
-		}
+		# te_mon_backstop_confidence: a treaty line's +2, a bloc's cooperation +1.
+		change_variable = { name = te_peg_confidence add = te_mon_backstop_confidence }
 		if = {
 			limit = { var:te_peg_confidence > 100 }
 			set_variable = { name = te_peg_confidence value = 100 }

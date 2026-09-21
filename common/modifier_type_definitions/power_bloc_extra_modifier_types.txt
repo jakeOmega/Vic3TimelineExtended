@@ -159,3 +159,35 @@ power_bloc_principle_groups_max_add = {
 	percent = no
 	script_only = yes
 }
+
+
+# Monetary policy phase 5b — principle_group_monetary_union's three markers
+# (docs/systems/monetary_policy_design.md §15A.3). Script-only bools; vanilla's
+# power_bloc_allow_foreign_investment_lower_rank_bool is the precedent. They are
+# what the principle's tooltip prints — script reads the tier via has_principle.
+power_bloc_monetary_cooperation_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_shared_currency_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}
+
+power_bloc_fiscal_backstop_bool = {
+	color = good
+	boolean = yes
+	game_data = {
+		ai_value = 100
+	}
+	script_only = yes
+}

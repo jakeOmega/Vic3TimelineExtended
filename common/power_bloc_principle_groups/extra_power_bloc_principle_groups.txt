@@ -351,3 +351,14 @@ INJECT:principle_group_shared_canon = {
 		principle_shared_canon_5
 	}
 }
+
+### Monetary policy phase 5b (docs/systems/monetary_policy_design.md §15A.3).
+### No identity lock: no finance-flavoured principle exists in vanilla or the
+### mod, so the slot is free, and any bloc may found a monetary union.
+principle_group_monetary_union = {
+	levels = {
+		principle_monetary_union_1
+		principle_monetary_union_2
+		principle_monetary_union_3
+	}
+}

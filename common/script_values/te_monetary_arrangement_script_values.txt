@@ -187,9 +187,25 @@ te_mon_arr_lolr_cost_to_root = {
 }
 
 
-# [5b] What a bloc's monetary-union principle hands this member. Until 5b ships
-# its own file this is the whole of it.
-te_mon_union_recipient_value = { value = 0 }
+# [5b] What a bloc's monetary-union principle hands this member (§15A.3): tier
+# 1+'s cooperation — half a swap line from the leader — and, for an adopter at
+# tier 3, the leader as lender of last resort. The second only where no TREATY
+# guarantee already pays the same relief: two guarantors of one debt are not
+# two rescues.
+te_mon_union_recipient_value = {
+	value = 0
+	if = {
+		limit = { te_mon_union_gets_cooperation = yes }
+		add = te_mon_union_cooperation_cut
+	}
+	if = {
+		limit = {
+			te_mon_union_backstop_is_effective = yes
+			te_mon_lolr_is_effective = no
+		}
+		add = te_mon_lolr_relief
+	}
+}
 
 
 # --- What this country RECEIVES, in pp of cyclical premium ------------------

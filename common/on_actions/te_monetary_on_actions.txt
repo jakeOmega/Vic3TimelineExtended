@@ -324,13 +324,23 @@ te_monetary_on_country_default = {
 	effect = {
 		if = {
 			limit = {
-				te_mon_lolr_is_effective = yes
+				te_mon_has_effective_backstop = yes
 				var:te_mon_lolr_default_cooldown = 0
 			}
 			set_variable = { name = te_mon_lolr_default_cooldown value = te_mon_lolr_default_cooldown_months }
 			save_scope_as = te_lolr_ward
-			var:te_mon_lolr_guarantor = {
-				trigger_event = { id = te_lolr.1 popup = yes }
+			# A treaty guarantor first; else [5b] the leader of a tier-3 monetary
+			# union, which is lender of last resort to every adopter (§15A.3).
+			if = {
+				limit = { te_mon_lolr_is_effective = yes }
+				var:te_mon_lolr_guarantor = {
+					trigger_event = { id = te_lolr.1 popup = yes }
+				}
+			}
+			else = {
+				var:te_mon_anchor = {
+					trigger_event = { id = te_lolr.1 popup = yes }
+				}
 			}
 		}
 	}

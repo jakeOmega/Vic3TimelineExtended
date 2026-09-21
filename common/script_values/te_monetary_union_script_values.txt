@@ -1,0 +1,225 @@
+﻿# ============================================================================
+# Monetary policy, phase 5b — the power-bloc common currency: values
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §15A.3, as shipped in §0.8.
+# Country scope unless a comment says otherwise. Percentage POINTS throughout.
+#
+# VARIABLE CONTRACT (5b). Initialised behind has_variable
+# (te_monetary_init_union_variables), never removed.
+#
+#   te_mon_union_member       0 or 1    this country has ADOPTED the common
+#                                       currency. The stored choice; kind 2 is
+#                                       what the discovery makes of it
+#   te_mon_union_lock_months  0 to 120  months before it may re-adopt after an
+#                                       exit
+#   te_mon_union_ask_cooldown 0 to 60   months before The Question may be put
+#                                       again (the design's
+#                                       te_mon_union_last_asked, kept as a
+#                                       countdown rather than a date)
+#   te_mon_union_q_state      0 to 15   the last "could the answer have
+#                                       changed?" signature The Question was
+#                                       judged on: pressed + 2 x criteria met
+#                                       + 4 x bloc tier
+#   te_mon_union_pressing     0 or 1    a LEADER'S toggle: press for convergence
+#   te_mon_union_holdouts     >= 0      a LEADER'S count of holdouts, and...
+#   te_mon_union_refusers     >= 0      ...of those, how many would refuse if
+#                                       asked today. Both from its discovery
+#   te_mon_union_pressure_applied >= 0  what te_mon_union_pressure was last
+#                                       applied at. BACKS A MULTIPLIER
+#   te_mon_union_adopter_applied 0 or 1 is te_mon_union_adopter on?
+# ============================================================================
+
+
+# --- Convergence criteria ----------------------------------------------------
+te_mon_union_inflation_tolerance = { value = 3 }
+te_mon_union_debt_ceiling = { value = 0.5 }
+
+# | own headline - leader's headline |. Read only behind
+# te_mon_union_inflation_converged's guards.
+#
+# Written as a sign flip rather than `abs = yes`: vanilla uses that operator,
+# but effect_trigger_validity_audit's catalog does not know it, and one
+# multiply is cheaper than teaching it.
+te_mon_union_inflation_distance = {
+	value = var:te_inflation
+	subtract = power_bloc.power_bloc_leader.var:te_inflation
+	if = {
+		limit = { var:te_inflation < power_bloc.power_bloc_leader.var:te_inflation }
+		multiply = -1
+	}
+}
+
+
+# --- Tier 1: cooperation -----------------------------------------------------
+# "The swap_line recipient effect from the leader at half strength."
+te_mon_union_cooperation_share = { value = 0.5 }
+
+te_mon_union_cooperation_cut = {
+	value = te_mon_swap_premium_cut
+	multiply = te_mon_union_cooperation_share
+}
+
+te_mon_union_cooperation_confidence = {
+	value = te_mon_swap_confidence
+	multiply = te_mon_union_cooperation_share
+}
+
+# All the peg confidence this country's backstops lend it a month: a treaty
+# swap line's 2, the bloc's 1. Steps 10 reads this, never the parts.
+te_mon_backstop_confidence = {
+	value = 0
+	if = {
+		limit = { te_mon_is_swap_recipient = yes }
+		add = te_mon_swap_confidence
+	}
+	if = {
+		limit = { te_mon_union_gets_cooperation = yes }
+		add = te_mon_union_cooperation_confidence
+	}
+}
+
+
+# --- Tier 2: no peg to break, so the premium is the valve --------------------
+# An adopter has no te_peg_confidence. Its overvaluation feeds the CYCLICAL
+# premium instead: +0.1pp per point beyond 5, halved at tier 3. Read in step 5,
+# so off LAST month's index — the one-month lag §16.2 asks for, which breaks
+# the premium <-> FX loop inside a tick (te_mon_premium_fx's arrangement).
+te_mon_union_overvaluation_per_point = { value = 0.1 }
+
+te_mon_premium_union_overvaluation = {
+	value = 0
+	if = {
+		limit = {
+			te_mon_is_union_adopter = yes
+			has_variable = te_mon_overvaluation
+			var:te_mon_overvaluation > te_mon_fx_overvaluation_tolerance
+		}
+		value = var:te_mon_overvaluation
+		subtract = te_mon_fx_overvaluation_tolerance
+		multiply = te_mon_union_overvaluation_per_point
+		if = {
+			limit = { te_mon_bloc_union_tier_3 = yes }
+			divide = 2
+		}
+	}
+}
+
+
+# --- What a LEADER pays ------------------------------------------------------
+# Evaluated in a MEMBER'S scope from the leader's discovery (ROOT = leader), the
+# te_mon_arr_swap_cost_to_root pattern.
+te_mon_union_cost_to_root = {
+	value = 0
+	if = {
+		limit = { te_mon_union_gets_cooperation = yes }
+		add = te_mon_union_cooperation_cut
+	}
+	if = {
+		limit = { te_mon_union_backstop_is_effective = yes }
+		add = te_mon_lolr_relief
+	}
+	multiply = te_mon_arr_gdp_ratio_to_root
+}
+
+
+# --- Exit --------------------------------------------------------------------
+te_mon_union_lock_duration = { value = 120 }
+te_mon_union_ask_cooldown_duration = { value = 60 }
+
+# The one-off investment-pool hit: 2% of GDP, never more than the pool holds.
+te_mon_union_exit_pool_hit = {
+	value = gdp
+	multiply = -0.02
+	min = {
+		value = investment_pool
+		multiply = -1
+	}
+}
+
+# An AI adopter walks at this much SUSTAINED overvaluation. Far above the 15
+# points §19's exit invariant is tuned at: below it staying is meant to be the
+# better answer for at least five years.
+te_mon_union_ai_exit_overvaluation = { value = 30 }
+
+
+# --- The adoption score (AI holdouts, and the leader's dashboard) ------------
+# §15A.3: "AI holdouts weigh adoption on the same score as a 5a peg plus the
+# forgone cooperation and trade terms." > 0 adopts. The terms mirror
+# currency_peg's inherent_accept_score, restated because that one lives in a
+# treaty's ai block and cannot be called.
+te_mon_union_adopt_score = {
+	value = -15
+	# The forgone cooperation and the trade advantage.
+	add = 10
+	if = {
+		limit = { te_mon_union_leader_is_pressing = yes }
+		add = 10
+	}
+	if = {
+		limit = {
+			exists = market
+			exists = power_bloc
+			market.owner = power_bloc.power_bloc_leader
+		}
+		add = 30
+	}
+	if = {
+		limit = { te_mon_credibility_c_own < 0.4 }
+		add = 15
+	}
+	if = {
+		limit = {
+			has_variable = te_inflation
+			var:te_inflation >= 6
+		}
+		add = {
+			value = var:te_inflation
+			subtract = 6
+			multiply = 2
+			max = 30
+		}
+	}
+	if = {
+		limit = { te_mon_bloc_union_tier_3 = yes }
+		add = 10
+	}
+	# Heavy debt wants the leader's name behind it.
+	if = {
+		limit = { scaled_debt >= 0.5 }
+		add = 10
+	}
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		add = -40
+	}
+}
+
+
+# --- Display -----------------------------------------------------------------
+te_mon_union_holdouts_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_union_holdouts }
+		value = var:te_mon_union_holdouts
+	}
+}
+
+te_mon_union_refusers_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_union_refusers }
+		value = var:te_mon_union_refusers
+	}
+}
+
+te_mon_union_overvaluation_premium_display = {
+	value = te_mon_premium_union_overvaluation
+}
+
+te_mon_union_lock_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_union_lock_months }
+		value = var:te_mon_union_lock_months
+	}
+}

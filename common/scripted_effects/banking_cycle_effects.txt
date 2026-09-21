@@ -1497,7 +1497,7 @@ banking_contagion_crash_check = {
 		# good: an imported panic starts a fifth less deep, because depositors know
 		# who stands behind the banks. Off while the guarantor's renege clock runs.
 		if = {
-			limit = { te_mon_lolr_is_effective = yes }
+			limit = { te_mon_has_effective_backstop = yes }
 			change_variable = { name = crash_severity multiply = 0.8 }
 		}
 		# Clamp severity to 100
@@ -1849,6 +1849,8 @@ banking_cycle_spread_contagion = {
 				OR = {
 					this.market = scope:banking_crash_origin_country.market
 					is_in_customs_union_with = scope:banking_crash_origin_country
+					# [Monetary policy 5b, §15A.3] A shared currency is a channel too.
+					te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
 					is_adjacent_to_country = scope:banking_crash_origin_country
 					economic_dependence = {
 						target = scope:banking_crash_origin_country
@@ -1917,6 +1919,12 @@ banking_cycle_spread_contagion = {
 				}
 				modifier = {
 					trigger = { is_in_customs_union_with = scope:banking_crash_origin_country }
+					add = 10
+				}
+				# [Monetary policy 5b, §15A.3] One currency, one banking system's worth
+				# of exposure.
+				modifier = {
+					trigger = { te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country } }
 					add = 10
 				}
 				modifier = {

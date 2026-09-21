@@ -106,3 +106,77 @@ te_lolr.1 = {
 		}
 	}
 }
+
+
+# ============================================================================
+# te_union.1 — The Question of the Common Currency (§15A.3)
+# ============================================================================
+namespace = te_union
+
+# Put to a PRESSED holdout by te_monetary_update_union (step 9b), and only to a
+# PLAYER: an AI holdout resolves on te_mon_union_adopt_score directly, with the
+# same two outcomes. It fires when the answer could have changed — pressure
+# newly applied, the criteria newly met, the bloc's tier changed — never on a
+# timer, and no more than once in five years (the caller sets
+# te_mon_union_ask_cooldown itself, so there is no `trigger` block).
+#
+# ADOPT is te_mon_effect_union_adopt behind its own gate, re-asked here because
+# three days can pass between the pulse and the click. REFUSE builds something:
+# +250 leverage resistance for ten years, refreshed not stacked — and costs the
+# leader cohesion, which is why pressing a bloc of refusers is a losing trade.
+te_union.1 = {
+	type = country_event
+	placement = ROOT
+
+	title = te_union.1.t
+	desc = te_union.1.d
+	flavor = te_union.1.f
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	duration = 3
+
+	immediate = {
+		if = {
+			limit = { exists = power_bloc }
+			power_bloc = { power_bloc_leader = { save_scope_as = te_union_leader } }
+		}
+	}
+
+	option = {
+		name = te_union.1.a
+		trigger = { te_mon_union_can_adopt = yes }
+		custom_tooltip = te_mon_union_adopt_effect_tt
+
+		hidden_effect = {
+			te_mon_effect_union_adopt = yes
+		}
+		if = {
+			limit = { exists = scope:te_union_leader }
+			scope:te_union_leader = {
+				change_relations = {
+					country = root
+					value = 15
+				}
+			}
+		}
+
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	option = {
+		name = te_union.1.b
+		default_option = yes
+		custom_tooltip = te_union.1.b.tt
+
+		te_mon_effect_union_refuse = yes
+
+		ai_chance = {
+			base = 1
+		}
+	}
+}

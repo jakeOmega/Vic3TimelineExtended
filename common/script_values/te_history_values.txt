@@ -15,9 +15,11 @@
 
 # Retained samples per series. 240 monthly samples = the 20-year chart range,
 # which is the widest of the three range buttons and therefore what the store
-# has to keep. Also written as the literal 241 (cap + 1) in
-# te_history_prune_samples and te_history_prune_global_samples — change all
-# three together.
+# has to keep. Also written as a literal in te_history_effects.txt, which
+# cannot read a script value inside an iterator's `max`: 241 (cap + 1) in
+# te_history_prune_samples and te_history_prune_global_samples, and 240 in
+# te_history_sort_samples and te_history_sort_global_samples (twice as `max`,
+# once as the completeness gate). Change them all together.
 te_history_sample_cap = 240
 
 # Monotonic month counter: year * 12 + (0 = January ... 11 = December).

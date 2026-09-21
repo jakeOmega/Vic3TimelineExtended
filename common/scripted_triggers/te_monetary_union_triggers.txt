@@ -1,0 +1,240 @@
+﻿# ============================================================================
+# Monetary policy, phase 5b — the power-bloc common currency: triggers
+# ============================================================================
+# Spec: docs/systems/monetary_policy_design.md §15A.3, as shipped in §0.8.
+# All country scope. The variable contract is in the header of
+# common/script_values/te_monetary_union_script_values.txt.
+# ============================================================================
+
+
+# --- The bloc's tier ---------------------------------------------------------
+# Read through has_principle, NOT through the three power_bloc_*_bool markers
+# the principles grant: whether a script-only power_bloc bool is readable from
+# country scope is §17 check 16, and has_principle has vanilla script precedent
+# (`power_bloc ?= { has_principle = principle:principle_colonial_offices_3 }`).
+# Tiers do not stack, so "at least tier N" is an OR.
+te_mon_bloc_union_tier_1_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= { has_principle_group = principle_group:principle_group_monetary_union }
+}
+
+te_mon_bloc_union_tier_2_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= {
+		OR = {
+			has_principle = principle:principle_monetary_union_2
+			has_principle = principle:principle_monetary_union_3
+		}
+	}
+}
+
+te_mon_bloc_union_tier_3 = {
+	is_in_power_bloc = yes
+	power_bloc ?= { has_principle = principle:principle_monetary_union_3 }
+}
+
+# Can THIS country's currency be a bloc's common one? "The leader must be fiat /
+# digital with a dial, or the principle is inert" (§15A.3).
+te_mon_can_lead_union = {
+	te_mon_has_dial = yes
+	OR = {
+		has_law_or_variant = law_type:law_fiat_currency
+		has_law_or_variant = law_type:law_digital_currency
+	}
+}
+
+# Is there a common currency for this MEMBER to be in? Tier 2+, it is not the
+# leader, and the leader can lead.
+te_mon_bloc_has_common_currency = {
+	te_mon_bloc_union_tier_2_plus = yes
+	is_power_bloc_leader = no
+	power_bloc ?= { power_bloc_leader = { te_mon_can_lead_union = yes } }
+}
+
+# Has this country adopted? The stored CHOICE (te_mon_union_member) — kind 2
+# also needs the bloc, the tier and a valid leader, which the discovery checks
+# every month and turns into an EXIT when they fail (§15A.3).
+te_mon_is_union_member = {
+	has_variable = te_mon_union_member
+	var:te_mon_union_member = 1
+}
+
+# ...and is the common currency actually its money right now?
+te_mon_is_union_adopter = {
+	te_mon_is_anchored = yes
+	var:te_mon_anchor_kind = 2
+}
+
+# Do $OTHER$ and this country share a currency? Two adopters of one leader, or
+# an adopter and its leader. The crisis-transmission channel (§15A.3).
+te_mon_shares_currency_with = {
+	OR = {
+		AND = {
+			te_mon_is_union_adopter = yes
+			exists = var:te_mon_anchor
+			OR = {
+				var:te_mon_anchor = $OTHER$
+				$OTHER$ = {
+					te_mon_is_union_adopter = yes
+					exists = var:te_mon_anchor
+					var:te_mon_anchor = prev.var:te_mon_anchor
+				}
+			}
+		}
+		$OTHER$ = {
+			te_mon_is_union_adopter = yes
+			exists = var:te_mon_anchor
+			var:te_mon_anchor = prev
+		}
+	}
+}
+
+
+# --- Convergence criteria (§15A.3) -------------------------------------------
+
+# The regime half: fiat / digital + a national bank, and no higher-kind anchor
+# (a currency board outranks a bloc currency). Also what makes a member a
+# HOLDOUT rather than a bystander: it COULD be in.
+te_mon_union_regime_fits = {
+	has_law_or_variant = law_type:law_national_bank
+	OR = {
+		has_law_or_variant = law_type:law_fiat_currency
+		has_law_or_variant = law_type:law_digital_currency
+	}
+	te_mon_is_command = no
+	NOT = { te_mon_is_dollarised = yes }
+	NOT = { te_mon_is_on_currency_board = yes }
+}
+
+# Headline inflation within 3pp of the leader's. Both guarded: either side may
+# never have pulsed.
+te_mon_union_inflation_converged = {
+	has_variable = te_inflation
+	is_in_power_bloc = yes
+	power_bloc ?= { power_bloc_leader = { has_variable = te_inflation } }
+	te_mon_union_inflation_distance <= te_mon_union_inflation_tolerance
+}
+
+te_mon_union_debt_converged = {
+	scaled_debt < te_mon_union_debt_ceiling
+}
+
+# Is the leader pressing for convergence? (the leader's toggle, read from a
+# member's side)
+te_mon_union_leader_is_pressing = {
+	is_in_power_bloc = yes
+	power_bloc ?= { power_bloc_leader = { te_mon_union_is_pressing = yes } }
+}
+
+# ...the same flag from the leader's own side.
+te_mon_union_is_pressing = {
+	has_variable = te_mon_union_pressing
+	var:te_mon_union_pressing = 1
+}
+
+# A HOLDOUT: a member that could adopt but has not.
+te_mon_union_is_holdout = {
+	te_mon_bloc_has_common_currency = yes
+	te_mon_is_union_member = no
+	te_mon_union_regime_fits = yes
+}
+
+# Pressed: a holdout whose leader has the toggle on. Loses tier 1's cooperation
+# benefit and has the DEBT criterion waived — "this is how a union acquires the
+# member that should not have joined, and why tier 3 is expensive".
+te_mon_union_is_pressed = {
+	te_mon_union_is_holdout = yes
+	te_mon_union_leader_is_pressing = yes
+}
+
+# May this country adopt the common currency now? Each line is wrapped for the
+# dashboard button's tooltip.
+te_mon_union_can_adopt = {
+	custom_tooltip = {
+		text = te_mon_union_req_tier_tt
+		te_mon_bloc_has_common_currency = yes
+	}
+	custom_tooltip = {
+		text = te_mon_union_req_regime_tt
+		te_mon_union_regime_fits = yes
+	}
+	custom_tooltip = {
+		text = te_mon_union_req_inflation_tt
+		te_mon_union_inflation_converged = yes
+	}
+	custom_tooltip = {
+		text = te_mon_union_req_debt_tt
+		OR = {
+			te_mon_union_debt_converged = yes
+			te_mon_union_leader_is_pressing = yes
+		}
+	}
+	custom_tooltip = {
+		text = te_mon_union_req_lock_tt
+		NOT = {
+			AND = {
+				has_variable = te_mon_union_lock_months
+				var:te_mon_union_lock_months > 0
+			}
+		}
+	}
+	custom_tooltip = {
+		text = te_mon_union_req_not_member_tt
+		te_mon_is_union_member = no
+	}
+}
+
+# The criteria with no tooltips, for script (the Question's "newly met" test).
+te_mon_union_criteria_met = {
+	te_mon_union_regime_fits = yes
+	te_mon_union_inflation_converged = yes
+	OR = {
+		te_mon_union_debt_converged = yes
+		te_mon_union_leader_is_pressing = yes
+	}
+}
+
+
+# --- What the tiers hand a member --------------------------------------------
+
+# Tier 1's cooperation: half a swap line from the leader. Not the leader itself,
+# not a pressed holdout (the cost of staying out is political and access, never
+# a premium — §15A.3), and only from a leader with a bank to lend through.
+te_mon_union_gets_cooperation = {
+	te_mon_bloc_union_tier_1_plus = yes
+	is_power_bloc_leader = no
+	te_mon_union_is_pressed = no
+	power_bloc ?= {
+		power_bloc_leader = {
+			has_law_or_variant = law_type:law_national_bank
+			te_mon_is_command = no
+		}
+	}
+}
+
+# Tier 3's backstop: the leader is lender of last resort to every ADOPTER. Off
+# while the leader's renege clock runs, like any guarantee.
+te_mon_union_backstop_is_effective = {
+	te_mon_is_union_adopter = yes
+	te_mon_bloc_union_tier_3 = yes
+	exists = var:te_mon_anchor
+	var:te_mon_anchor = {
+		NOT = {
+			AND = {
+				has_variable = te_mon_lolr_suspended_months
+				var:te_mon_lolr_suspended_months > 0
+			}
+		}
+	}
+}
+
+# Either kind of lender of last resort, whichever is in force. One name for
+# "somebody stands behind this country's debts": the relief in
+# te_mon_arr_recipient_value, the panic dampener in banking_cycle_effects.txt
+# and the default hook all read it.
+te_mon_has_effective_backstop = {
+	OR = {
+		te_mon_lolr_is_effective = yes
+		te_mon_union_backstop_is_effective = yes
+	}
+}

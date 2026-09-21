@@ -712,3 +712,65 @@ te_mon_anchor_state = {
 		localization_key = banking_dash_mon_anchor_state_none
 	}
 }
+
+
+# ----------------------------------------------------------------------------
+# Phase 5b — the Monetary Union row (§15A.3)
+# ----------------------------------------------------------------------------
+# One question: where does this country stand in its bloc's monetary union? The
+# leader first (it cannot adopt its own currency), then the member's states in
+# the order a player meets them.
+te_mon_union_state = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			is_power_bloc_leader = yes
+			te_mon_bloc_union_tier_2_plus = yes
+			te_mon_union_is_pressing = yes
+		}
+		localization_key = banking_dash_mon_union_state_leader_pressing
+	}
+	text = {
+		trigger = {
+			is_power_bloc_leader = yes
+			te_mon_bloc_union_tier_2_plus = yes
+		}
+		localization_key = banking_dash_mon_union_state_leader
+	}
+	text = {
+		trigger = { is_power_bloc_leader = yes }
+		localization_key = banking_dash_mon_union_state_leader_coop
+	}
+	text = {
+		trigger = { te_mon_is_union_adopter = yes }
+		localization_key = banking_dash_mon_union_state_adopter
+	}
+	text = {
+		trigger = { te_mon_is_union_member = yes }
+		localization_key = banking_dash_mon_union_state_member_dormant
+	}
+	text = {
+		trigger = {
+			has_variable = te_mon_union_lock_months
+			var:te_mon_union_lock_months > 0
+		}
+		localization_key = banking_dash_mon_union_state_locked
+	}
+	text = {
+		trigger = { te_mon_union_is_pressed = yes }
+		localization_key = banking_dash_mon_union_state_pressed
+	}
+	text = {
+		trigger = { te_mon_union_is_holdout = yes }
+		localization_key = banking_dash_mon_union_state_holdout
+	}
+	text = {
+		trigger = { te_mon_bloc_has_common_currency = yes }
+		localization_key = banking_dash_mon_union_state_outside
+	}
+	text = {
+		localization_key = banking_dash_mon_union_state_coop
+	}
+}
