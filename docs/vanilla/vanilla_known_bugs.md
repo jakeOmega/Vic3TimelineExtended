@@ -492,6 +492,31 @@ range directive used, but no randomization is available! Might be in a trigger r
 
 A vanilla naval-battle-condition script value uses a `range = { … }` directive from a context the engine can't randomize in (the message's own guess — "might be in a trigger rather than effect" — is the diagnosis). The value falls back to a deterministic result. Vanilla file, not present in this mod. Cosmetic.
 
+### `common/ai_strategies/00_default_strategy.txt:2382` — `s:STATE_HAWAII` names a state region that does not exist
+
+```
+Invalid right side during comparison 's'
+common/ai_strategies/00_default_strategy.txt:2382
+```
+
+Vanilla's default AI state-value script weights Hawaii with
+
+```
+if = {
+	limit = {
+		has_journal_entry = je_hawaiian_interest
+		scope:target_state = { state_region = s:STATE_HAWAII }
+	}
+	add = { value = 50  desc = "STATE_VALUE_JE_HAWAII" }
+}
+```
+
+but the state region is called **`STATE_HAWAIIAN_ISLANDS`** (`map_data/state_regions/05_north_america.txt:920`). `s:STATE_HAWAII` occurs exactly once in the whole vanilla game — this line — and is defined nowhere, so the comparison's right side never resolves. A missed rename.
+
+Fires per AI state-value evaluation, so the volume is large once it starts: 5,708 lines in a nine-minute window (2026-09-20). Consequence in vanilla and modded games alike is that the `+50` Hawaii weighting never applies; the AI simply doesn't prefer Hawaii the way the script intends.
+
+Not mod-caused and not worth fixing mod-side: this mod's `common/ai_strategies/edited_default_strategy.txt` is an `INJECT:ai_strategy_default` that adds law/institution scoring and never touches the state-value block, and correcting the typo would mean carrying a copy of that whole block across every vanilla patch for a cosmetic AI-weight miss. Note the trigger is condition-gated, so an earlier log window with zero occurrences is not evidence it is new.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
