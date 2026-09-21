@@ -198,6 +198,18 @@ te_debug_monetary.3 = { # REVIEWED 2026-09-19: console-only diagnostic (`event t
 
 	# Same pair, same block, but the multiplier is a named script value that
 	# wraps the same variable behind has_variable and falls back to 3.
+	#
+	# READ THIS BEFORE TRUSTING .3 (2026-09-20). Now that te_monetary_rate_paid
+	# lives on je_banking_cycle for a country that holds the entry, the script
+	# value evaluates in JE scope on that branch, its `has_variable =
+	# te_rate_paid_applied` asks the ENTRY for a country variable, finds nothing,
+	# and returns the 3 fallback every time. For a country with the entry, .3
+	# therefore always reads "script value ran but could not see the variable" —
+	# which is the fallback's meaning, so the console cannot tell that apart from
+	# a real miss any more. It is still meaningful for a country with NO banking
+	# entry, where the country branch runs. Use .2 (the production var form) and
+	# .4 (a literal) for anything else; the var-form question .3 was built for was
+	# settled in phase 1 and step 9 has carried the var form in game since.
 	option = {
 		name = te_debug_monetary.3.a
 		default_option = yes
