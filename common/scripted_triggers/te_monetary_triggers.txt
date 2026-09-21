@@ -9,6 +9,43 @@
 # ============================================================================
 
 
+# ============================================================================
+# THE GAME RULE: full monetary policy, or the simplified banking system?
+# ============================================================================
+# `banking_system_rule` has three settings (common/game_rules/extra_game_rules.txt).
+# This trigger answers the only question the monetary layer ever asks of it:
+# is the whole of phases 1-5 live?
+#
+#   banking_system_enabled     yes — the dial, inflation, FX, arrangements
+#   banking_system_simplified  no  — the Banking Cycle journal entry without
+#                                    the monetary layer on top of it
+#   banking_system_disabled    no  — no journal entry either
+#
+# WHAT STILL RUNS WHEN THIS IS `no`. The passive half of the rate stack, and
+# only that: step 0 (init), 0b (modifier home), 1 (regime code), 4 (the derived
+# rate — world reference rate + the bankless spread), 5 (the risk premium), 7
+# (the rate paid) and 9 (writing it into the engine). It has to: vanilla's flat
+# 20% base, the rank multipliers, laissez-faire and the five finance techs are
+# cancelled by unconditional INJECTs that no game rule can reach (§16.1), so
+# with nothing in their place every country would borrow free. Every OTHER step
+# is skipped, and the variables those steps own keep the neutral values step 0
+# initialises them to — te_inflation 0, te_fx_index 100, te_mon_anchor_kind 0,
+# te_mon_stance_gap 0 — so a consumer that reads one gets a sane answer instead
+# of a missing-variable error. That is the contract: skipped steps do not write,
+# and everything downstream reads the initialised value.
+#
+# READS ONLY A GAME RULE, so it works from any scope — country, journal entry,
+# treaty article, power-bloc principle, GUI. Same idiom as
+# te_aptitude_traits_enabled (common/scripted_triggers/misc_triggers.txt).
+#
+# A GAME RULE CANNOT CHANGE MID-CAMPAIGN, so nothing ever has to strip a
+# modifier this gate turned off: under the simplified setting the modifiers of
+# the advanced steps are never applied in the first place.
+te_mon_full_system = {
+	has_game_rule = banking_system_enabled
+}
+
+
 # Does this country set its own policy rate?
 #
 # A dial requires a national bank AND a monetary regime that leaves a rate to
@@ -42,6 +79,11 @@
 # te_mon_is_dollarised below owns the guarded read, so a country that has never
 # pulsed — and every save from before phase 2 — reads exactly as it did before.
 te_mon_has_dial = {
+	# THE GAME RULE FIRST (banking_system_simplified): with the monetary layer
+	# off, nobody holds a dial, and every consumer of this trigger — the update's
+	# step 2/4 branch, the dashboard block, the OMO gate, the stance row, the
+	# union principles' ai_weight — falls to its no-dial side from this one line.
+	te_mon_full_system = yes
 	has_law_or_variant = law_type:law_national_bank
 	OR = {
 		has_law_or_variant = law_type:law_commodity_money

@@ -33,7 +33,10 @@
 #   crash                        this country's own banking crash began
 #   crash_contagion              a crash arrived through financial contagion
 #
-# Both helpers re-check the game rule and the journal entry. The sampling call
+# Both helpers re-check the game rule and the journal entry. THE RULE CHECK IS
+# te_banking_system_on, not `banking_system_enabled`: the simplified setting
+# keeps the cycle and its charts, and drops only the monetary series that have
+# nothing to say under it (see the sampling block below). The sampling call
 # already sits inside je_banking_cycle's monthly pulse, but the marker call is
 # reached from the policy effects, which the AI can also run from the journal
 # entry's scripted buttons — so the gate lives here rather than at each of the
@@ -46,7 +49,7 @@
 te_history_record_banking_samples = {
 	if = {
 		limit = {
-			has_game_rule = banking_system_enabled
+			te_banking_system_on = yes
 			has_journal_entry = je_banking_cycle
 		}
 		te_history_record_sample = { METRIC = bank_value    VALUE = var:finance_cycle_value }
@@ -68,12 +71,25 @@ te_history_record_banking_samples = {
 			limit = { has_variable = te_rate_paid_pts }
 			te_history_record_sample = { METRIC = mon_rate_paid VALUE = var:te_rate_paid_pts }
 		}
+		# Inflation and the exchange rate belong to the monetary layer, and the
+		# simplified setting of banking_system_rule never moves either: te_inflation
+		# would flatline at 0 and te_fx_index at par for the whole campaign. Not
+		# sampling them is what hides their two charts' bars; the chart frames are
+		# hidden on the same trigger in banking_history_widget.gui. The policy rate
+		# and the rate paid ARE still sampled — the first is the world rate this
+		# country borrows at, the second moves with its premium and its cycle.
 		if = {
-			limit = { has_variable = te_inflation }
+			limit = {
+				te_mon_full_system = yes
+				has_variable = te_inflation
+			}
 			te_history_record_sample = { METRIC = mon_inflation VALUE = var:te_inflation }
 		}
 		if = {
-			limit = { has_variable = te_fx_index }
+			limit = {
+				te_mon_full_system = yes
+				has_variable = te_fx_index
+			}
 			te_history_record_sample = { METRIC = mon_fx VALUE = var:te_fx_index }
 		}
 	}
@@ -84,7 +100,7 @@ te_history_record_banking_samples = {
 te_history_record_banking_marker = {
 	if = {
 		limit = {
-			has_game_rule = banking_system_enabled
+			te_banking_system_on = yes
 			has_journal_entry = je_banking_cycle
 		}
 		te_history_record_marker = { MARK = $MARK$ }

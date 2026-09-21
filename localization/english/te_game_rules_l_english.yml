@@ -20,6 +20,8 @@
  setting_banking_system_disabled_desc:0 "The [concept_banking_cycle] [concept_journal_entry] is disabled. [concept_financial_regulation] laws still provide standard economic effects such as construction cost reductions and [concept_infrastructure] bonuses, but banking-specific modifiers are inactive."
  setting_banking_system_enabled:0 "Banking System Enabled"
  setting_banking_system_enabled_desc:0 "The [concept_banking_cycle] [concept_journal_entry] is active. [concept_financial_regulation] laws provide banking intervention tools, momentum effects, and crash chance modifiers that interact with the banking cycle system."
+ setting_banking_system_simplified:0 "Banking System Simplified"
+ setting_banking_system_simplified_desc:0 "The [concept_banking_cycle] [concept_journal_entry] is active, but without the monetary-policy layer built on top of it. There is no policy interest rate to set, no inflation, no exchange rate, and no international monetary arrangements such as currency pegs, swap lines or a shared currency. Your government still borrows at a rate of its own — the world reference rate plus the risk premium your standing earns — you simply do not steer it."
  setting_covert_warfare_disabled:0 "Covert Warfare Disabled"
  setting_covert_warfare_disabled_desc:0 "The covert warfare [concept_journal_entry] is disabled. [concept_intelligence_capacity] modifiers from technologies still appear but [concept_covert_operations] are unavailable."
  setting_covert_warfare_enabled:0 "Covert Warfare Enabled"

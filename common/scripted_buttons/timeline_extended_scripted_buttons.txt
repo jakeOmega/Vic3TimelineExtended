@@ -407,33 +407,47 @@ cb_capital_controls_outflow = {
 
 	ai_chance = {
 		value = 0
-		# Core: an external crisis AND something for controls to protect — a
-		# currency in flight, a draining vault, or a peg losing confidence (the
-		# same <= 40 the crisis trigger uses).
+		# THE CRISIS RULE IS THE MONETARY LAYER'S. Under the simplified game rule
+		# there is no exchange rate, no gold flow and no peg, so every input below
+		# reads its neutral value and te_mon_in_external_crisis is permanently no —
+		# the AI would never reach for controls at all. That branch falls back on
+		# the cycle rule this button carried before phase 1: controls are what a
+		# panic calls for.
 		if = {
-			limit = {
-				te_mon_in_external_crisis = yes
-				OR = {
-					te_mon_fx_index_display < 85
-					AND = {
-						te_mon_has_gold_flows = yes
-						has_variable = te_gold_flow
-						var:te_gold_flow < 0
-						te_mon_bank_gold_scaled < 0.3
-					}
-					AND = {
-						te_mon_has_gold_flows = yes
-						has_variable = te_peg_confidence
-						var:te_peg_confidence <= 40
+			limit = { te_mon_full_system = yes }
+			# Core: an external crisis AND something for controls to protect — a
+			# currency in flight, a draining vault, or a peg losing confidence (the
+			# same <= 40 the crisis trigger uses).
+			if = {
+				limit = {
+					te_mon_in_external_crisis = yes
+					OR = {
+						te_mon_fx_index_display < 85
+						AND = {
+							te_mon_has_gold_flows = yes
+							has_variable = te_gold_flow
+							var:te_gold_flow < 0
+							te_mon_bank_gold_scaled < 0.3
+						}
+						AND = {
+							te_mon_has_gold_flows = yes
+							has_variable = te_peg_confidence
+							var:te_peg_confidence <= 40
+						}
 					}
 				}
+				add = 70
 			}
-			add = 70
+			# A crisis with nothing external at stake: a weak case.
+			else_if = {
+				limit = { te_mon_in_external_crisis = yes }
+				add = 15
+			}
 		}
-		# A crisis with nothing external at stake: a weak case.
-		else_if = {
-			limit = { te_mon_in_external_crisis = yes }
-			add = 15
+		else = {
+			if = { limit = { banking_cycle_is_panic = yes } add = 60 }
+			if = { limit = { banking_cycle_is_downturn = yes } add = 35 }
+			if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 		}
 
 		# Law flavor
@@ -461,16 +475,30 @@ cb_disable_capital_controls_outflow = {
 		value = 0
 		# Out of the crisis: lift them, and more urgently the longer the
 		# fatigue counter has run (+10 a peacetime year held, to +50).
+		#
+		# The simplified game rule has no external crisis to be out of and no
+		# fatigue counter, so it takes the pre-phase-1 rule instead: lift them as
+		# the cycle recovers. Paired with the enable side's fallback above.
 		if = {
-			limit = { te_mon_in_external_crisis = no }
-			add = 40
-			add = {
-				value = te_mon_controls_fatigue_steps
-				multiply = 10
+			limit = { te_mon_full_system = yes }
+			if = {
+				limit = { te_mon_in_external_crisis = no }
+				add = 40
+				add = {
+					value = te_mon_controls_fatigue_steps
+					multiply = 10
+				}
 			}
+			if = { limit = { banking_cycle_is_boom = yes } add = 10 }
+			if = { limit = { banking_cycle_is_frenzy = yes } add = 20 }
 		}
-		if = { limit = { banking_cycle_is_boom = yes } add = 10 }
-		if = { limit = { banking_cycle_is_frenzy = yes } add = 20 }
+		else = {
+			if = { limit = { banking_cycle_is_stable = yes } add = 20 }
+			if = { limit = { banking_cycle_is_expansion = yes } add = 35 }
+			if = { limit = { banking_cycle_is_boom = yes } add = 45 }
+			if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+			if = { limit = { banking_fiscal_stress_high = no banking_cycle_is_panic = no } add = 15 }
+		}
 	}
 	possible = { banking_tool_capital_controls_active = yes }
 	effect = { banking_effect_cb_disable_capital_controls_outflow = yes }

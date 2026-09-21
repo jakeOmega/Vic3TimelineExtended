@@ -34,16 +34,25 @@ swap_line = {
 	maintenance_paid_by = source_country
 	usage_limit = once_per_side
 
+	# TECH GATE: MACROECONOMICS (era 5), not central_banking. A standing line of
+	# credit between two central banks is a 20th-century instrument — the thing
+	# itself dates to 1962 — and it presupposes banks that think in aggregates.
+	# One era later than the peg, one earlier than the guarantee (owner decision
+	# 2026-09-21).
 	unlocked_by_technologies = {
-		central_banking
+		macroeconomics
 	}
 
 	source_modifier = {
 		country_prestige_mult = 0.01
 	}
 
+	# The whole phase-5 toolkit is part of the monetary layer, so the
+	# simplified setting of banking_system_rule hides it: there is no anchored
+	# state to enter when nobody has a dial (te_mon_full_system,
+	# common/scripted_triggers/te_monetary_triggers.txt).
 	visible = {
-		always = yes
+		te_mon_full_system = yes
 	}
 
 	possible = {

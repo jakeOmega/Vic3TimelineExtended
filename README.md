@@ -60,7 +60,7 @@ Thirteen mod systems can be turned on or off at game setup. Defaults below; full
 
 | Rule | Default | What it gates |
 |---|---|---|
-| `banking_system_rule` | enabled | Banking cycle JE, crash contagion, fiscal-policy modifier |
+| `banking_system_rule` | enabled | Banking cycle JE, crash contagion, fiscal-policy modifier. **Three settings**: *enabled* (cycle + the full monetary-policy layer), *simplified* (the cycle only — no policy rate, no inflation, no exchange rate, no currency pegs or shared currencies; your government still borrows at the world rate plus its own risk premium, it just cannot steer it), *disabled* (no JE at all) |
 | `global_warming_rule` | enabled | CO₂ tracking, climate JE, warming modifiers |
 | `cultural_hegemony_rule` | enabled | Soft-power JE and on-action |
 | `covert_warfare_rule` | enabled | Covert operations command-centre JE (`je_covert_warfare`), 9 covert diplomatic actions |
@@ -73,6 +73,9 @@ Thirteen mod systems can be turned on or off at game setup. Defaults below; full
 | `world_war_rule` | **disabled** | World War JE leadup → active → post-war lifecycle |
 | `custom_religions_allowed_rule` | **disabled** | Custom-religion creator JE and events |
 | `universal_aptitude_traits_rule` | **disabled** | Assigns admin/diplo/military aptitude traits to *all* adult characters, not just rulers and heirs — independent of Heir Education. With both rules off, no character has aptitude traits |
+
+Every rule but `banking_system_rule` is a straight on/off pair; that one has a third,
+*simplified* setting (see the table above).
 
 Loc keys for each rule live in `localization/english/te_game_rules_l_english.yml`. The gating pattern (`is_shown_when_inactive`, on-action `return = yes` guards, etc.) is documented in `docs/systems/mod_systems.md` § Game Rules.
 

@@ -1,6 +1,11 @@
 # Monetary Policy — Design
 
-> **STATUS: PHASES 1–5 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 5 (§19 rows 5a /
+> **STATUS: PHASES 1–5 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** The whole of it can now be
+> switched off at game setup while the Banking Cycle stays: `banking_system_rule` gained a third
+> setting, `banking_system_simplified`, on 2026-09-21 — see
+> [§0.9](#09-the-banking_system_simplified-game-rule--2026-09-21), which also carries the owner's
+> ruling on what the rate does under it and the one trigger (`te_mon_full_system`) the whole gate
+> hangs on. Phase 5 (§19 rows 5a /
 > 5b / 5c — the anchored state, the `currency_peg` / `swap_line` / `lender_of_last_resort`
 > treaty articles, the power-bloc common currency, subject currency boards, the
 > `cb_fx_swap_lines` deletion) was implemented on 2026-09-21; see
@@ -1302,6 +1307,70 @@ peg confidence to 25, then "run the discovery" / "run one monthly update". Besid
   AI leader stops); a human holdout sees *The Question* fewer than ~6 times a campaign.
 - **P5-18.** Phase 4's exit criteria still hold with phase 5 on — in particular "the 1836
   world sits at par": every board subject should read its overlord's par.
+
+### 0.9 The `banking_system_simplified` game rule — 2026-09-21
+
+**Owner request, implemented the same day.** `banking_system_rule` gained a third setting
+between *enabled* and *disabled*. `banking_system_simplified` keeps the Banking Cycle journal
+entry and **switches the whole of phases 1–5 off**: the mod's banking system then plays roughly
+as it did before phase 1 — no rate to set, no inflation, no exchange rate, no international
+arrangements. The cycle, its crashes, the prudential / command / cooperative tools, the
+financial-regulation laws and the history charts are all unchanged.
+
+**Owner decision on what the rate does under it (the one real choice here).** The rate stack's
+*passive* half stays: `rate paid = world reference rate + risk premium`, so a country's cost of
+borrowing still reflects its techs, rank, institutions, laws and debt — roughly §7.4's anchor
+table — it simply cannot be steered. The alternative considered and **rejected** was
+re-supplying vanilla's own interest sources in script (the flat 20%, the six rank multipliers,
+laissez-faire, the five finance techs) to reproduce pre-phase-1 borrowing exactly; that would
+have meant a second place mirroring vanilla numbers, to be re-checked on every vanilla bump
+alongside the cancel-`INJECT`s.
+
+**Why the passive half cannot be switched off with the rest.** §16.1's cancel-`INJECT`s are
+file-level merges. No game rule reaches them, so with nothing in their place every country in a
+simplified or disabled game would borrow at 0%.
+
+**One trigger: `te_mon_full_system`** (`common/scripted_triggers/te_monetary_triggers.txt`) —
+`has_game_rule = banking_system_enabled`, scope-free, so it reads from a country, a journal
+entry, a treaty article, a power-bloc principle or the GUI alike. Its counterpart
+`te_banking_system_on` (`banking_policy_triggers.txt`) is true for *enabled* **and**
+*simplified* and is what the journal entry and the history store ask. **Nothing reads the game
+rule directly any more.**
+
+| Site | With `te_mon_full_system = no` |
+|---|---|
+| `te_mon_has_dial` | false everywhere — one line, and every consumer falls to its no-dial side |
+| the monthly update | steps 0, 0b, 1, 4, 5, 7, 9 run; 1b, 1c, 5b, 6, 6c, 6d, 8, 8b, 9b, 10 are skipped |
+| skipped steps' variables | keep step 0's seeds — `te_inflation` 0, `te_fx_index` par, `te_mon_anchor_kind` 0, `te_mon_stance_gap` 0 — so every downstream read is sane rather than missing. **This is the contract**: a step that is skipped never writes, and nothing needs a second "is it on?" test |
+| step 4 | the **bankless spread is conditional** on actually being bankless; with the dial off for everyone, a country with a national bank would otherwise pay 1pp for not having one |
+| `te_monetary_refresh_world_rate` | short-circuits to the era base, saving two ~200-country scans a month for an answer that cannot differ |
+| step 5 | reduces to structural + debt load on its own: `te_mon_premium_fx` is 0 at par, `te_mon_premium_monetisation` 0 at level 0, `te_mon_premium_union_overvaluation` 0 for a non-adopter, and `te_mon_premium_unanchored` 0 because the expectation gap (0 against an anchor of 2 or 0) sits inside the 3pp tolerance |
+| step 7 | the lenders' floor becomes `era_base`, and the realised-inflation subtraction is 0 |
+| §16.3 stance channel | `te_mon_stance_gap` is 0, so momentum and bubble get nothing. `banking_cycle_apply_stance_band` is **not** gated: band 3 is already the designed answer for a country with no dial, and the stance bar already sits at its centre for one |
+| OMO | reverts to its pre-phase-1 gate (unlock bool, 4 points, law lock); the `on_law_enacted` auto-switch-off is gated to match |
+| capital controls | `ai_chance` falls back to the pre-phase-1 cycle rule on both sides — the external-crisis rule reads neutral inputs and would never fire |
+| the ten FX-shock event options | call `te_mon_effect_fx_shock_tt`, which drops **both the shock and its tooltip line**, so no option promises a currency move that cannot happen |
+| articles 110–112, `principle_monetary_union_1..3` | `visible = no` |
+| dashboard / history | the Monetary Policy readout block is hidden (the two intervention rows under the same header are not); the inflation and FX charts are hidden and not sampled |
+
+**`banking_system_disabled` now takes the same path**, which it always should have: with the
+journal entry gone there was no UI for the dial, the bands or the hyperinflation chain, but the
+whole simulation still ran behind it. This is a **behaviour change for that setting**, not just
+for the new one.
+
+**Known roughness: five modifier types still render on tooltips with nothing consuming them.**
+`country_wage_pressure_add` (the ten labour / welfare laws of §9.4 plus UBI),
+`country_policy_rate_drift_speed_mult`, `country_policy_rate_floor_add` and
+`country_bank_forecast_error_add` (the national-bank / CBI laws), and
+`country_inflation_pressure_add` (static modifiers). All five are granted from `modifier = { }`
+blocks, which take no trigger, so a game rule cannot reach them — the same reason §16.1's
+cancel-`INJECT`s cannot be switched off. Under the simplified setting a law tooltip therefore
+still advertises, say, "Wage Pressure +0.4" in a game that has no wage pressure. Nothing is
+wrong with the numbers; the line is simply inert. Fixing it would mean moving each term out of
+the law and onto a script-managed modifier applied from the monthly update, which is a bigger
+change than the rule is worth unless the tooltips bother the owner in play.
+
+**Not verified in a running game**, like everything else in §0.
 
 ---
 
@@ -2666,7 +2735,13 @@ folded into the swap line, which under gold *is* reserve lending.
   snaps to shadow; premium +2pp for 5 years); **Re-peg lower** (stay; `te_fx_shock`-style
   one-off that re-bases the country's *shadow* upward by half the overvaluation — a
   negotiated devaluation — infamy and anchor relations cost).
-- **Gating.** `currency_peg`: source has no higher-kind anchor, target `te_mon_has_dial` and
+- **Gating.** **Tech (owner decision 2026-09-21, replacing `central_banking` on all three):**
+  `currency_peg` at `international_exchange_standards`, `swap_line` at `macroeconomics`,
+  `lender_of_last_resort` at `intergovernmental_organizations` — the declared peg is a
+  gold-standard-era arrangement, the swap line a 20th-century instrument, the guarantee the
+  Bretton Woods idea, so the toolkit arrives over three eras instead of all at once. All three
+  are also hidden entirely under `banking_system_simplified` (§0.9).
+  `currency_peg`: source has no higher-kind anchor, target `te_mon_has_dial` and
   is a great or major power or the source's market owner; mutually exclusive with a second
   peg. `swap_line` / `lender_of_last_resort`: provider has a national bank and outranks or
   out-GDPs the recipient. Same-draft conflict checks go in **`can_ratify`**, never
@@ -2875,6 +2950,9 @@ division blows up as 1 + Σmult → 0, which vanilla stacks can already reach).
 
 **Do not gate the plumbing on `banking_system_enabled`.** The cancel-injects are file-level,
 so with the rule off a passive pulse (constant reference rate + premium) must still run.
+**That passive pulse is now exactly what the `banking_system_simplified` setting ships** — see
+[§0.9](#09-the-banking_system_simplified-game-rule--2026-09-21). Everything above this line runs
+under all three settings of the rule; everything gated on `te_mon_full_system` does not.
 
 ### 16.2 Single owner: the monthly country update
 

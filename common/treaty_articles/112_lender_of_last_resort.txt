@@ -35,16 +35,24 @@ lender_of_last_resort = {
 		lender_of_last_resort
 	}
 
+	# TECH GATE: INTERGOVERNMENTAL ORGANIZATIONS (era 6), not central_banking.
+	# Standing behind another sovereign's debts is the Bretton Woods idea, and
+	# this is the mod's tech for it. The latest of the three (owner decision
+	# 2026-09-21): it is also the one that costs the guarantor most.
 	unlocked_by_technologies = {
-		central_banking
+		intergovernmental_organizations
 	}
 
 	source_modifier = {
 		country_prestige_mult = 0.02
 	}
 
+	# The whole phase-5 toolkit is part of the monetary layer, so the
+	# simplified setting of banking_system_rule hides it: there is no anchored
+	# state to enter when nobody has a dial (te_mon_full_system,
+	# common/scripted_triggers/te_monetary_triggers.txt).
 	visible = {
-		always = yes
+		te_mon_full_system = yes
 	}
 
 	possible = {

@@ -45,8 +45,16 @@ currency_peg = {
 		currency_peg
 	}
 
+	# TECH GATE: INTERNATIONAL EXCHANGE STANDARDS (era 4), not central_banking.
+	# A declared peg between two national currencies is the gold-standard era's
+	# arrangement, and this is the tech that brings the Gold Standard law in with
+	# it — a country that cannot yet run a convertible currency has nothing to
+	# promise a counterparty. Owner decision 2026-09-21; the three articles are
+	# staggered (peg here, swap line at macroeconomics, guarantee at
+	# intergovernmental_organizations) so the phase-5 toolkit arrives over three
+	# eras rather than all at once.
 	unlocked_by_technologies = {
-		central_banking
+		international_exchange_standards
 	}
 
 	# Flat flavour: being the money others hold is prestige.
@@ -54,8 +62,12 @@ currency_peg = {
 		country_prestige_mult = 0.02
 	}
 
+	# The whole phase-5 toolkit is part of the monetary layer, so the
+	# simplified setting of banking_system_rule hides it: there is no anchored
+	# state to enter when nobody has a dial (te_mon_full_system,
+	# common/scripted_triggers/te_monetary_triggers.txt).
 	visible = {
-		always = yes
+		te_mon_full_system = yes
 	}
 
 	possible = {
