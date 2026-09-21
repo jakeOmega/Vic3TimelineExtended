@@ -18,8 +18,8 @@ nothing and logs four lines per frame per bar:
     Data error in loc string 'te_hist_tt_markers'
 
 That is invisible in the UI (the section simply does not appear) and expensive
-in the log: 4,364 of those in four minutes of hovering rotated all six
-`debug.*.log` generations. `te_hist_tt_markers` and `te_hist_tt_ch_markers`
+in the log: 2,239 of those in debug.log in two and a half minutes of hovering,
+mirrored again in error.log, rotated all six generations of both. `te_hist_tt_markers` and `te_hist_tt_ch_markers`
 both had it, which silently broke the marker tooltip on nine of the eleven
 charts. Both now root their scripted-GUI call at `GetPlayer.MakeScope` — the
 handlers never read the country root, they only read `scope:te_hist_sample`.

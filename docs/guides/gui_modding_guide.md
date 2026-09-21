@@ -1540,6 +1540,19 @@ If two mods both override `gui/construction_panel.gui`, only one loads (load ord
 
 23. **`EqualTo_CFixedPoint` exists (35 vanilla uses), and it is what lets you stop encoding thresholds in `.gui`.** The comparison family is `EqualTo_`, `NotEqualTo_`, `GreaterThanOrEqualTo_`, `LessThanOrEqualTo_CFixedPoint`. Testing a *band* in the `.gui` (`GreaterThanOrEqualTo_CFixedPoint(Var('iw_duration'), '(CFixedPoint)12')`) copies a balance number out of script; have script write the classification into its own variable at the site that already recomputes the input, then test identity here. The catch is that a newly introduced variable is absent on containers and countries restored from an older save until the next pulse, and a `.gui` read of a missing variable logs "Failed to fetch variable" *every frame* — so gate the lines that use it on an `is_shown`-only scripted GUI that asks script whether it has landed (`covert_ops_phase_ready_sgui` in `covert_operations_widget.gui`).
 
+24. **A tooltip on a `datamodel` item renders with that item's datacontext and *nothing above it*.** The chart in `te_history_chart.gui` sets `datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('te_hist')]"` and gives each item `datacontext = "[Scope.GetScriptContainer]"`. Widget properties on that item still see the whole chain — the datamodel resolved `JournalEntry` a line earlier — but a loc string rendered as the item's `tooltip` gets a **fresh** context set holding only `ScriptContainer`. `JournalEntry` is gone, and the engine says so:
+
+```
+New data types does not contain a 'JournalEntry' data context
+No context supplied (Use SetDataContext), wanted context of type 'JournalEntry' for 'JournalEntry.GetCountry.MakeScope '
+Promote 'SetRoot' returned nullptr, in 'GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( ... ).End '
+Data error in loc string 'te_hist_tt_markers'
+```
+
+    The tooltip section simply does not appear — nothing in the UI says why — while the log takes four lines per bar per frame (**2,239 lines of it in debug.log in two and a half minutes** of hovering, mirrored again in error.log — enough to rotate all six generations of both). This is the harder half of the bug: **the failure is indirect**, because the key named in the `.gui` is innocent. `te_hist_tt_bank_value` mentions no `JournalEntry`; it splices in `te_hist_tt_markers` through `SelectLocalization`, and *that* key holds the bad root. Nine of the eleven history charts were broken this way at once. When auditing for it, follow `$splices$` and `SelectLocalization` transitively, and look for the root anywhere in the expression, not just after the `[` — here it sat four tokens deep inside `GuiScope.SetRoot( ... )`.
+
+    **The fix is to stop needing the context.** `te_history_marker_tooltip` and `ch_history_marker_sgui` are `scope = country` but never read the country root — their whole body is `scope:te_hist_sample = { ... }` — so the root moved to `GetPlayer.MakeScope`, which is a global and needs no context at all (34 other uses in this mod's loc). `test_history_chart_tooltip_context.py` is the regression guard: no loc key reachable from a `bar_tooltip` blockoverride may name a data context the bar does not have.
+
 ---
 
 ## Patterns from Workshop Mods
