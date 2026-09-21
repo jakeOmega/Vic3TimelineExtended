@@ -194,6 +194,7 @@ Notes:
 | Script | Purpose | Run |
 |--------|---------|-----|
 | `scripts/analysis/pop_growth.py` | Pop growth model (birthrate, mortality vs SoL). | `python scripts/analysis/pop_growth.py` (text table), `--plot` for chart |
+| `scripts/analysis/check_save_history_order.py` | Reads a `.v3` save and reports whether each country's `te_hist` history store is in chronological order — the order the history charts draw. Unpacks the save's binary `gamestate` directly; no game needed beyond the file. Exits 1 on an out-of-order store. | `python3 scripts/analysis/check_save_history_order.py` (newest save), `<save.v3>`, or `--all` |
 | `pop_needs_curves.py` | Pop needs curve definitions and buy_packages generator. **Auto-runs on every server reload.** | `python pop_needs_curves.py` (generate), `--table` for display only |
 
 ## Content Generation

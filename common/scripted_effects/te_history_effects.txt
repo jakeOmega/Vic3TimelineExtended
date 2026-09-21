@@ -22,7 +22,9 @@
 # The country holds the references and the cursor:
 #
 #   te_hist         variable list of sample containers, capped at
-#                   te_history_sample_cap (oldest evicted)
+#                   te_history_sample_cap (oldest evicted), held oldest-first
+#   te_hist_tmp     scratch list used only inside te_history_sort_samples;
+#                   empty at every other moment
 #   te_hist_cur     the current month's container
 #   te_hist_cur_i   its month index — the once-per-month guard
 #   te_hist_now_i   this month's index, recomputed on every call
@@ -37,15 +39,22 @@
 # variable there, which is how the charts tell "no data" from a real zero.
 #
 # LIST ORDER. The chart lays its bars out in `GetList` order, which is the
-# order the engine keeps the variable list in. This store only ever appends to
-# the end and removes the single oldest from the front, so insertion order is
-# chronological as long as `remove_list_variable` erases in place. If the bars
-# ever render out of order in game, that assumption is wrong and the fix is
-# local: rebuild the list after each eviction (`ordered_in_list` with
-# `order_by = te_history_sample_order` and no `position` iterates every
-# element in that order) instead of removing in place. Eviction itself is
-# already order-independent — it uses `order_by`, not position 0 of the raw
-# list. Remember that `ordered_*` sorts descending, which is why
+# order the engine keeps the variable list in — and `remove_list_variable`
+# does NOT preserve that order: it fills the hole with the list's last
+# element. Measured, not assumed. A 1865 save was unpacked and every country
+# whose store had reached the cap held its samples as [the newest k months]
+# [the oldest 240 - k], one clean break, k = the months since that list first
+# filled; every store still under the cap, which has never evicted, was
+# perfectly chronological. Drawn in that order the 20-year chart put the most
+# recent years at its left edge.
+#
+# So every eviction is followed by te_history_sort_samples, which rebuilds the
+# list in month order. Appends alone keep that order, so nothing else has to
+# sort, and the stored order is what every chart draws: no GUI datamodel can
+# reorder a list (`Scope.GetList` is the only accessor and has no sorted or
+# reversed variant in data_types_script.txt). Eviction itself was always
+# order-independent — it uses `order_by`, not position 0 of the raw list.
+# Remember that `ordered_*` sorts descending, which is why
 # te_history_sample_order negates the month index.
 #
 # Every helper is wrapped in `hidden_effect` because the banking policy
@@ -113,7 +122,70 @@ te_history_prune_samples = {
 			limit = { exists = scope:te_hist_evicted }
 			remove_list_variable = { name = te_hist target = scope:te_hist_evicted }
 			scope:te_hist_evicted = { destroy_container = yes }
+			te_history_sort_samples = yes
 		}
+	}
+}
+
+# Rebuild the sample list in month order, oldest first — the order the charts
+# draw left to right. Called only from the pruner, because only an eviction can
+# disturb the order (see LIST ORDER above); an append leaves it alone.
+#
+# THE SORTED COPY IS BUILT FIRST AND `te_hist` IS CLEARED ONLY ONCE IT IS
+# KNOWN TO BE COMPLETE. Clearing first and refilling would, on any iteration
+# that came back short, leave the country with an empty store and 240
+# containers no list points at any more — unreachable, undestroyable and
+# saved forever. The `count >= 240` gate is exact here and nowhere else: the
+# pruner runs with the list at precisely the cap, which is the only reason
+# this helper can check its own work without a list-size trigger (1.14 rejects
+# `target` on `*variable_list_size`, see te_history_prune_samples).
+#
+# `min`/`max` rather than a bare `order_by`: what a bare `order_by` with no
+# `position` iterates is not documented and not measured here. Of 304
+# `ordered_*` iterators in vanilla 282 set `position` and the handful that set
+# neither only `save_scope_as` a single result, so nothing in vanilla relies
+# on a bare `order_by` to walk a whole list — while `min = 0 max = N` with an
+# effect body does have precedent (ep2_iwakura_events.txt). `check_range_bounds
+# = no` keeps a shorter-than-max list from erroring. Both passes sort, so the
+# rebuild is correct whatever order the engine hands elements back in.
+# Scope: country
+te_history_sort_samples = {
+	save_scope_as = te_hist_sorter
+	# The scratch list does not exist before the first sort, and the clear at
+	# the end may remove it again every time, so never clear it unguarded.
+	if = {
+		limit = { has_variable_list = te_hist_tmp }
+		clear_variable_list = te_hist_tmp
+	}
+	ordered_in_list = {
+		variable = te_hist
+		order_by = te_history_sample_order
+		min = 0
+		max = 240 # te_history_sample_cap
+		check_range_bounds = no
+		save_scope_as = te_hist_moved
+		scope:te_hist_sorter = {
+			add_to_variable_list = { name = te_hist_tmp target = scope:te_hist_moved }
+		}
+	}
+	if = {
+		limit = { any_in_list = { variable = te_hist_tmp count >= 240 has_tag = te_hist_sample } } # te_history_sample_cap
+		clear_variable_list = te_hist
+		ordered_in_list = {
+			variable = te_hist_tmp
+			order_by = te_history_sample_order
+			min = 0
+			max = 240 # te_history_sample_cap
+			check_range_bounds = no
+			save_scope_as = te_hist_moved
+			scope:te_hist_sorter = {
+				add_to_variable_list = { name = te_hist target = scope:te_hist_moved }
+			}
+		}
+	}
+	if = {
+		limit = { has_variable_list = te_hist_tmp }
+		clear_variable_list = te_hist_tmp
 	}
 }
 
@@ -196,6 +268,7 @@ te_history_record_marker = {
 # resolution containers). The references live in global variables:
 #
 #   te_hist_g       variable list of global sample containers
+#   te_hist_g_tmp   scratch list, as te_hist_tmp
 #   te_hist_g_cur / te_hist_g_cur_i / te_hist_g_now_i   as above
 #   te_hist_g_since_y / te_hist_g_since_mo
 #
@@ -248,7 +321,43 @@ te_history_prune_global_samples = {
 			limit = { exists = scope:te_hist_g_evicted }
 			remove_list_global_variable = { name = te_hist_g target = scope:te_hist_g_evicted }
 			scope:te_hist_g_evicted = { destroy_container = yes }
+			te_history_sort_global_samples = yes
 		}
+	}
+}
+
+# Scope: any — te_history_sort_samples for the global series, same shape and
+# the same reasons.
+te_history_sort_global_samples = {
+	if = {
+		limit = { has_global_variable_list = te_hist_g_tmp }
+		clear_global_variable_list = te_hist_g_tmp
+	}
+	ordered_in_global_list = {
+		variable = te_hist_g
+		order_by = te_history_sample_order
+		min = 0
+		max = 240 # te_history_sample_cap
+		check_range_bounds = no
+		save_scope_as = te_hist_g_moved
+		add_to_global_variable_list = { name = te_hist_g_tmp target = scope:te_hist_g_moved }
+	}
+	if = {
+		limit = { any_in_global_list = { variable = te_hist_g_tmp count >= 240 has_tag = te_hist_sample } } # te_history_sample_cap
+		clear_global_variable_list = te_hist_g
+		ordered_in_global_list = {
+			variable = te_hist_g_tmp
+			order_by = te_history_sample_order
+			min = 0
+			max = 240 # te_history_sample_cap
+			check_range_bounds = no
+			save_scope_as = te_hist_g_moved
+			add_to_global_variable_list = { name = te_hist_g target = scope:te_hist_g_moved }
+		}
+	}
+	if = {
+		limit = { has_global_variable_list = te_hist_g_tmp }
+		clear_global_variable_list = te_hist_g_tmp
 	}
 }
 
