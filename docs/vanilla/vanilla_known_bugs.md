@@ -517,6 +517,21 @@ Fires per AI state-value evaluation, so the volume is large once it starts: 5,70
 
 Not mod-caused and not worth fixing mod-side: this mod's `common/ai_strategies/edited_default_strategy.txt` is an `INJECT:ai_strategy_default` that adds law/institution scoring and never touches the state-value block, and correcting the typo would mean carrying a copy of that whole block across every vanilla patch for a cosmetic AI-weight miss. Note the trigger is condition-gated, so an earlier log window with zero occurrences is not evidence it is new.
 
+### `common/war_goal_types/21_return_state.txt:69, 83` — war-goal `infamy` preview reads `scope:target_country` before it is bound
+
+```
+scope:target_country trigger [ Scoped object of type 'country' is not valid (Country  (4294967295)) ]
+common/war_goal_types/21_return_state.txt
+common/war_goal_types/03_conquer_state.txt
+common/war_goal_types/00_annex_country.txt
+```
+
+The same shape as the `14_treaty_port.txt:425` entry above, in the war-goal half of the diplomacy UI. Each of these vanilla war goals computes `infamy = { … }` with a `multiply` whose `limit` opens `scope:target_country = { is_subject_of = root … }` unguarded, and the play UI evaluates the block to preview the infamy cost before a target country is bound. `Country (4294967295)` is the engine's invalid handle (`0xFFFFFFFF`). The sibling `scope:target_state = { add = state_infamy_value }` on the line above is the same bug that drives the `00_infamy_values.txt` cascade.
+
+The same block appears in `common/war_goal_types/03_conquer_state.txt` (`:69`, `:83`) and `common/war_goal_types/00_annex_country.txt` (`:66`, `:81`); all three are listed here so the basename index covers them.
+
+20 lines in one session (2026-09-20). Not mod-caused: this mod defines only `te_reunify_country` and `te_un_mandate_restore_state` under `common/war_goal_types/`, and references `wg_return_state` / `wg_conquer_state` / `wg_annex_country` nowhere in `common/` or `events/`. Cosmetic — the `multiply` simply fails its limit, so the subject-related infamy discounts don't apply during the preview.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
@@ -1166,6 +1181,18 @@ This Law group lawgroup_navy_model has no active law
 ```
 
 `lawgroup_navy_model` is the one vanilla law group with an `enable` gate (`any_scope_state = { is_coastal = yes }`, `common/law_groups/00_laws.txt:69`), so a landlocked country has no active law in it. Vanilla's political-movement code walks every law group regardless and warns when one comes back empty. The mod's two extra navy laws (`law_littoral_defense`, `law_auxiliary_fleet`) follow vanilla's own `is_visible = { any_scope_state = { is_coastal = yes } }` shape and don't change the group's membership rules. Six lines per session; cosmetic. The signature names the group so a *different* law group turning up empty still surfaces.
+
+### `virtualfilesystem.cpp:569` — vanilla `gui/texticons.gui` references `alert_icons/repairing.dds`, which ships in no game files
+- source: `virtualfilesystem.cpp:569`
+
+```
+gfx/interface/icons/alert_icons/repairing.dds not found
+VFSOpen Error: gfx/interface/icons/alert_icons/repairing.dds
+```
+
+Vanilla's own `gui/texticons.gui` declares a text icon backed by `gfx/interface/icons/alert_icons/repairing.dds` — the missing `repairing.dds` is what the log names — and that file exists in neither the vanilla install nor this mod — the texture was renamed or dropped without updating the texticon. Two lines per launch. This mod does not override `gui/texticons.gui` (its own icon additions live in `gui/zzz_extra_goods_texticons.gui`) and references the path nowhere, so any `$repairing$` text icon simply renders blank in vanilla too.
+
+Source-anchored rather than path-anchored on purpose: the registry's basename index only accepts `.txt` / `.gui` / `.yml` / `.yaml` paths (`_PATH_REF_RE` in `game_log_reader.py`), so a missing-asset entry whose only file reference is a `.dds` can never be tagged by basename. The signature pins it to this one texture, so any other missing texture still surfaces in triage.
 
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 
