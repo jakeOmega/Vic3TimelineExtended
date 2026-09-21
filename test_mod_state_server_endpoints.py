@@ -19,7 +19,7 @@ import json
 import os
 import tempfile
 import unittest
-from urllib.error import URLError
+from urllib.error import HTTPError, URLError
 from urllib.parse import quote
 from urllib.request import urlopen
 
@@ -40,6 +40,24 @@ def _server_up() -> bool:
 def _get(path: str, timeout: int = 10):
     with urlopen(f"{SERVER}{path}", timeout=timeout) as resp:
         return json.loads(resp.read())
+
+
+def _get_error(path: str, timeout: int = 10):
+    """Fetch a path expected to fail, returning (status, decoded JSON body).
+
+    `_EndpointError` is documented as "a rich error body at a chosen status", so
+    an endpoint's failure mode is a status code AND a payload, and a test that
+    checks one without the other is only half a test. `urlopen` raises on a
+    non-2xx, which is why plain `_get` cannot be used here — same shape as the
+    CORS tests further down, which read `json.loads(ctx.exception.read())`.
+    """
+    try:
+        with urlopen(f"{SERVER}{path}", timeout=timeout) as resp:
+            raise AssertionError(
+                f"expected {path} to fail, got HTTP {resp.status}"
+            )
+    except HTTPError as exc:
+        return exc.code, json.loads(exc.read())
 
 
 def _post(path: str):
@@ -266,7 +284,12 @@ class GuiRenderEndpointsTests(unittest.TestCase):
         self.assertIn("GetNameNoFormatting", data["methods_matched"])
 
     def test_render_paths_unknown_type(self):
-        data = _get("/gui/render-paths/" + quote("Bogus") + "?field=name")
+        # 404 with a payload, not 200 with an "error" key: an entity type that
+        # is not mapped is exactly what NotFound means, and the endpoint says so
+        # with `raise _EndpointError({...}, 404)`. The body still has to carry
+        # the recovery hint, so assert both halves.
+        status, data = _get_error("/gui/render-paths/" + quote("Bogus") + "?field=name")
+        self.assertEqual(status, 404)
         self.assertIn("error", data)
         self.assertIn("Treaty Articles", data["supported_entity_types"])
 
@@ -848,7 +871,6 @@ import threading
 import types
 from http.server import ThreadingHTTPServer
 from unittest import mock
-from urllib.error import HTTPError
 from urllib.request import Request
 
 import mod_state_client
