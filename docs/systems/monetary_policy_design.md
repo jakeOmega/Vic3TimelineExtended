@@ -2486,6 +2486,15 @@ INJECT:base_values = { … country_loan_interest_rate_add = -0.2 }    # cancels 
 te_monetary_rate_paid = { country_loan_interest_rate_add = 0.01 }   # multiplier = var:te_rate_paid_applied
 ```
 
+**Where it lives (changed 2026-09-20):** on `je_banking_cycle` for a country that holds the
+entry, on the country otherwise — the same HOME mechanism as the inflation bands. It was the
+one deliberate exception to the JE-scope convention until the owner asked for it on the entry;
+the reasoning, and what to revert if the budget's interest breakdown stops naming the line, is
+in the `WHERE THE MODIFIERS LIVE` comment in `common/scripted_effects/te_monetary_effects.txt`.
+Step 9 therefore goes through `te_mon_mod_strip` / `te_mon_mod_add_scaled`, and reads presence
+with the `te_mon_mod_has` trigger — a bare country-scope `has_modifier` is silently false for
+any country holding the entry.
+
 **Consequence:** a country with no rate modifier now sums to **0%**, not vanilla's 20%. The
 owner has confirmed in game that a non-positive total simply displays 0.0% with no ill
 effect, so the old "Σ`_add` never sits at ≤ 0" invariant is retired. Skip the re-apply when

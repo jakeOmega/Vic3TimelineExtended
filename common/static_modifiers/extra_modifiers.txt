@@ -6849,6 +6849,13 @@ agdiff_first_mover_prestige = {
 # run with the country it is updating in ROOT, or the engine silently writes a
 # multiplier of 1.0. See step 9's comment in
 # common/scripted_effects/te_monetary_effects.txt.
+#
+# WHERE IT LIVES (changed 2026-09-20): on je_banking_cycle for a country that
+# holds the entry, on the country otherwise. It is a managed modifier now, so
+# step 9 goes through te_mon_mod_strip / te_mon_mod_add_scaled and reads it with
+# the te_mon_mod_has trigger — a bare country-scope `has_modifier` on it is
+# silently false for any country that has the entry. On the entry the multiplier
+# takes the `root.var:` form the JE-scope rule requires.
 
 te_monetary_rate_paid = {
 	country_loan_interest_rate_add = 0.01
