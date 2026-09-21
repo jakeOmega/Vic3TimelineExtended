@@ -60,7 +60,7 @@ wrong or leave open. **Phase 2 has its own equivalent in [§0.4](#04-phase-2-as-
 | # | Ruling | Why | Cost if wrong |
 |---|---|---|---|
 | **R1** | Vanilla **techs**, **ranks** and `law_laissez_faire` all use cancel-INJECTs, isolated one file each (`te_monetary_tech_injections.txt`, `te_monetary_rank_injections.txt`, `te_monetary_law_injections.txt`) | the owner confirms tech INJECTs sum in this mod (see R3); ranks and laissez-faire rode the same assumption and were read in game too — all three sum (§17 checks 1–4, answered 2026-09-19/20) | if INJECT is last-wins, the rates are wrong until each file becomes a `REPLACE:` — one file each |
-| **R2** | The band is **lopsided: `centre − 1` to `centre + 3`** (`te_mon_commodity_band_margin_down` / `_up`), five whole settings. `centre` is `var:te_mon_commodity_centre` — the world rate rounded to a point, kept by step 0 and **re-rounded only once the world rate is 0.75 away from it** (the delegated target's hysteresis) | **Realism:** what metal forbids is *cheap* money — a discount rate under the world's sends coin abroad. Dear money was always available and was the period's panic tool: the Banque de France held 4% for a generation, then 5–6% in 1847 and up to 10% in 1857. **Fun:** at ±1 the dial had no decision in it — the lenders' floor eats a cut and +1 is too weak a brake to be worth its interest, so "sit at −1 forever" dominated. At +3 the stance gap reaches *very tight* (≈ −0.4 momentum, −2.3 bubble a month — the old rate-hike button and a bit), paid for by three points on the whole debt. **Hysteresis:** a bare `round(world)` flips the band a point whenever the world rate hovers at x.5, and each upward flip silently clamps a floor-sitting target that the flip back does not restore | two constants, one stored centre, two `else_if` branches in `te_mon_target_min` / `_max` |
+| **R2** | Implemented: the §8 neutral-rate formula, the §7.6 debt-load premium, and §5.2's state-owned-banking **premium only** (+0.5 structural, no CBI bonuses). Deferred: §0.2 | the owner had not decided the `(proposed)` items | rework of small terms |
 | **R3** | **Vanilla finance techs: cancel-INJECT.** Owner decision 2026-09-19 (PR #335), overriding the plan's script-compensation fallback. Each of the five takes `INJECT:<tech> = { modifier = { country_loan_interest_rate_add = 0.02 } }` in `common/technology/technologies/te_monetary_tech_injections.txt`; `te_mon_vanilla_tech_offset` and the `on_acquired_technology` hook that served it are **deleted**, and `te_rate_paid_applied` now equals `te_rate_paid_pts` | a tech tooltip promising "−2% interest" the mod silently takes back elsewhere is misleading; the owner reports tech INJECTs sum in this mod, so the `country_minting_mult = 0.1` in the same vanilla block survives | if INJECT is last-wins, the five techs make borrowing 2pp **dearer** and lose their minting bonus — visible on the tech tooltip, and a one-file `REPLACE:` fix |
 | | **`te_mon_era_base` is a WORLD quantity**, not per-country: 3.0, −0.5 once any great power holds `macroeconomics`, −0.5 again for `globalization` | the spec calls this the world / reference rate in §7.4, §12.1 and §21, and **no era trigger or era detector exists** (see `scripting_best_practices.md` § "There Is No 'Current Era' Trigger") | five-line swap inside `te_mon_era_base` to per-country techs |
 | | The stance band is computed from `gap − error`, not `gap + error` | §8 binds: the band and the mandates both use `neutral + error` as r̂\*, so the estimated gap is `policy − (neutral + error)`. Statistically identical, coherent with the mandates | one character |
@@ -1018,19 +1018,23 @@ rate — one point under it, three over** — and commodity money *without* one 
 dial at all.
 
 > **Status of this section.** The owner's instruction was only "allow some freedom for
-> commodity money to set rates". Everything below — R1–R6 and the band's shape — is
+> commodity money to set rates". Everything below — R1–R7 and the band's shape — is
 > implementation judgement and **open to revision**, not a recorded owner decision. The first
 > draft took §5.4's "±1pp" literally (a symmetric three-setting dial); a same-day review
-> kept R1 and R3–R6 and **changed R2**, for the two reasons given in its row.
+> kept R1 and R3–R6 and **changed R2**, for the two reasons given in its row. A later pass
+> (2026-09-21, from a live game — issues #351 and #352) **half-reversed R5** and added
+> **R7**: the band disciplines the *rate*, and a metallic regime is supposed to discipline
+> the *price level*, which needed a quantity channel of its own.
 
 | # | Ruling | Why | Cost if wrong |
 |---|---|---|---|
 | **R1** | `law_commodity_money` joins `te_mon_has_dial`'s regime `OR`. The national-bank line already in that trigger is the whole of "only with a bank" | the Banque de France, the Bank of Prussia and the Second Bank all set discount rates on metallic currency; "no dial until you enact gold" was the one rung of the ladder with no player decision on it | one law line |
-| **R2** | The band is `round(world_rate) ± te_mon_commodity_band_margin` (1), so the dial is **always exactly three settings** — `world−1`, `world`, `world+1`. Rounding the world rate *before* the margin is what makes it three rather than two-or-three depending on the month's decimals, and is why this branch needs no `0.05` epsilon of the sort Q5's Defend floor carries | a dial whose ends move by a decimal every month is a stepper that greys out for reasons the player cannot see | `te_mon_commodity_band_margin`, two `else_if` branches in `te_mon_target_min` / `_max` |
+| **R2** | The band is **lopsided: `centre − 1` to `centre + 3`** (`te_mon_commodity_band_margin_down` / `_up`), five whole settings. `centre` is `var:te_mon_commodity_centre` — the world rate rounded to a point, kept by step 0 and **re-rounded only once the world rate is 0.75 away from it** (the delegated target's hysteresis) | **Realism:** what metal forbids is *cheap* money — a discount rate under the world's sends coin abroad. Dear money was always available and was the period's panic tool: the Banque de France held 4% for a generation, then 5–6% in 1847 and up to 10% in 1857. **Fun:** at ±1 the dial had no decision in it — the lenders' floor eats a cut and +1 is too weak a brake to be worth its interest, so "sit at −1 forever" dominated. At +3 the stance gap reaches *very tight* (≈ −0.4 momentum, −2.3 bubble a month — the old rate-hike button and a bit), paid for by three points on the whole debt. **Hysteresis:** a bare `round(world)` flips the band a point whenever the world rate hovers at x.5, and each upward flip silently clamps a floor-sitting target that the flip back does not restore | two constants, one stored centre, two `else_if` branches in `te_mon_target_min` / `_max` |
 | **R3** | The floor is clamped at **0**, not at `country_policy_rate_floor_add` | coin can be hoarded, so the zero lower bound `law_digital_currency` buys its way past applies with full force here; and nothing grants a floor modifier on a rung that is mutually exclusive with digital anyway | one `min = 0` |
 | **R4** | A narrow dial is **not discretionary** for §12.1: `te_mon_rate_is_discretionary` gains `te_mon_has_narrow_dial = no`, so these countries stay out of the world-rate average | a band measured *from* the world rate whose midpoint helps *set* the world rate is the same circularity that keeps a peg defender out — see the rewritten §12.1 paragraph | one trigger line |
-| **R5** | **No new discipline mechanism.** No specie flows, no convertibility crisis, no reserve. The band *is* the constraint | §12.2's machinery is built on a gold-standard vault this regime does not have in the model; inventing a second, thinner version of it to police a two-point band is cost with no decision in it | the band would have to be replaced by flows, which is a phase of its own |
+| **R5** | ~~**No new discipline mechanism.** No specie flows, no convertibility crisis, no reserve. The band *is* the constraint~~ — **half-reversed by R7 below (2026-09-21, issue #351).** No reserve and no convertibility crisis, still; but a price-specie *pressure* term, yes | §12.2's machinery is built on a gold-standard vault this regime does not have in the model; inventing a second, thinner version of it to police a two-point band is cost with no decision in it. **What that argument missed:** the band constrains the *rate*, and the thing a metallic regime is supposed to constrain is the *price level*. A rate bound says nothing about quantity, so nothing in the model stopped a commodity country running a standing 4% core | the band would have to be replaced by flows, which is a phase of its own |
 | **R6** | Commodity money keeps **everything else it had**: metallic anchor (expectations pinned at 0, credibility *c* = 1, the regime pull toward 0), **no** OMO, **no** monetisation, the 1pp bankless spread only while bankless | the dial is a discount rate, not a monetary policy — none of the arguments for pinning expectations or forbidding unbacked money turns on whether a rate is chosen | the two on-action law lists and `te_mon_can_monetise`, all unchanged |
+| **R7** | **The quantity channel, added 2026-09-21 (issue #351), superseding half of R5.** `te_mon_pressure_commodity_specie`: a commodity-money country carries `−2pp` of §9.1 inflation pressure for every pp its core inflation runs above the world's *beyond the first*, clamped at `−6`. The input is phase 4's `te_mon_fx_term_inflation` — the price-level half of the overvaluation the FX layer already computes — normalised back out of `te_mon_fx_inflation_weight`; the *rate* half (`te_mon_fx_term_rate`) is left out on `te_mon_fx_overvaluation_for_peg`'s precedent, because that is capital flight, not a price gap. One-sided, on `te_mon_fx_overvaluation_value`'s own `min = 0`. Gated on the **law**, so a commodity country without a bank is disciplined too | R5 left the regime with a *rate* bound and no *quantity* channel. The regime pull is a proportion, not an anchor: with expectations pinned at 0 it makes the fixed point `core = X − core`, so hard money **halved** a standing pressure sum instead of holding the price level, and doubling the other pressures doubled the inflation. A live game found a commodity country stable at 4% core / 6.1% headline with its dial pinned at the band ceiling. Historically, under convertible coin the price level is *internationally* determined and the enforcement is specie **leaving**; localized metallic inflation came from debasement, a world metal-supply shock, a transitory goods shock (cost-push, which already mean-reverts) or suspended convertibility — not from a stable domestic pressure sum. It also gives §15.6's dead row a job: `te_mon_overvaluation` was display-only under commodity money | three §21 constants, one term in `te_mon_pressure_total`. **The tolerance is the floor:** the equilibrium solves `core × (2 + per_pp) = X + per_pp × (π_w + tolerance)`, so no value of `per_pp` holds a commodity country below `world inflation + tolerance` — retune the tolerance, not the slope |
 
 **What the dial actually does, and what it does not.** The lenders' floor (§10) is
 `max(policy, era_base + expected)`, and metallic expectations are pinned at 0 — so a
@@ -1043,6 +1047,22 @@ prices). **Tightening** is the opposite trade: every point over `era_base` is a 
 whole debt, bought for a brake on momentum and bubble pressure that at `+3` is as strong as
 the deleted rate-hike tool. That is the intended reading of "limited control" — enough to
 lean against a season and to break a fever, not enough to run a policy.
+
+**The `+3` brake is a *nominal* margin against a *real* stance (issue #352, decided
+2026-09-21).** The band is whole points off the **world rate**; the stance gap is
+`policy − headline − neutral`. Metal pins *expectations* at 0, not *inflation*, so at any
+material inflation the two part company: at a 3.0 world rate and 6.1% headline the whole
+five-setting dial maps to a real rate of −4.1% to −0.1% and the *top* setting reads **Very
+Loose** — there is no tightening setting on it, and the panic brake described above does not
+exist. Neither escape works either: step 2b re-clamps a Price Stability mandate's formula
+back into the band on the same pulse, and open-market operations are fiat/digital-only.
+**Resolution: leave the band alone and fix it upstream (R7).** Centring the band on
+`world + headline` would hand a coin economy a fiat-sized nominal dial exactly when prices
+move, which is the opposite of what the regime is for; a coin economy inside a 6% inflation
+*should* be nearly powerless. What R7 changes is that it should not be in one — with the
+price-specie term holding standing core near the world's, the brake is there whenever the
+band is what stands between the country and a bubble. The margin's own comment in
+`te_mon_commodity_band_margin_up` now states the condition it assumes.
 
 **Known roughness — a standing tight bias is possible.** The band is measured from the
 *world* rate and the stance from the country's *own* neutral rate. A slow-growing commodity
@@ -1147,6 +1167,18 @@ every figure; options a / b / c stage the shocks), beside `.5` (fixed manual tar
 - **P4-12.** The extended §10 invariant: a fiat tag at the loose clamp for 20 years ends worse
   on treasury, SoL and radicals than a neutral one *with the trade edge on*. If it fails,
   halve `te_fx_weak` / `te_fx_strong`'s per-point value before touching the formula.
+- **P4-13 (§0.6 R7, issue #351).** A commodity-money tag carrying the pressure sum that used
+  to settle at **4% core / 6.1% headline** now settles near **2.5% core** — comfort band once
+  the cost-push mean-reverts — and `te_debug_monetary.1` shows a *Commodity specie* term
+  between −2 and −4pp. Closed form, with `X` the rest of the sum at equilibrium:
+  `core × (2 + per_pp) = X + per_pp × (π_world + tolerance)`, i.e. X = 4 → 1.5, 6 → 2.0,
+  8 → 2.5, 10 → 3.0, 14 → 4.0 (the −6 clamp binds from there), against `X / 2` before.
+  A quiet commodity tag — stance near neutral, no deficit, stable phase — should be
+  **unchanged**: the term is a dead band below `world inflation + 1`.
+- **P4-14 (issue #352).** Confirm the band still reads as intended once P4-13 holds: a
+  commodity tag inside its comfort band and a world rate near 3 reaches stance band 5
+  (*Very Tight*) at the `+3` setting. The band is nominal and the stance real, so this is a
+  check that R7 keeps the precondition, **not** that the dial gained a setting.
 
 ### 0.8 Phase 5 as shipped — rulings, deviations and open checks
 
@@ -1771,6 +1803,8 @@ pressure (pp) =
     + 1.0 if QE active                       §11
     + 100 × modifier:country_inflation_pressure_add          wage pressure, §9.4; also event modifiers (§11)
     + 0.5 × gold flow in % of GDP per year   phase 3, §12.2 — inflows inflate, outflows deflate
+    − 2 × max(0, π_core − π_world − 1)       commodity money only, clamped at −6 — §0.6 R7, the
+                                             price-specie channel a regime with no vault gets instead
     + gold-supply term                       metallic regimes only, see below
     + regime pull                            gold / commodity: −π_core · crypto: −(π_core + 1)
 
@@ -1822,6 +1856,20 @@ tag to a fixed manual target (§19).
 and commodity money are exempt — convertibility *is* the anchor). Without this, an anchored
 `expected` would trail a *steady* high inflation forever and the §10 lenders' floor would
 under-price it permanently.
+
+**The regime pull is a proportion, not an anchor** (issue #351). With expectations pinned at
+0, a pull of `−π_core` makes the fixed point `π_core = X − π_core`: hard money settles at
+*half* of everything else in the sum, closes a constant fraction of the gap forever and
+never reaches zero, and doubling the other pressures doubles the equilibrium inflation. That
+is the deflation *bias* §5.1 describes, and it is not a price *level* anchor. Each
+convertible regime needs a quantity channel of its own beside it — gold flows for a gold
+standard, and since 2026-09-21 the commodity-money price-specie term above (§0.6 R7). Its
+input is phase 4's `te_mon_fx_term_inflation`, normalised out of the FX weight, so the
+"which inflation is this currency judged on" rule of §15.2 — realised core on metal — is
+stated once. **The tolerance is the floor of the regime:** the equilibrium solves
+`π_core × (2 + per_pp) = X + per_pp × (π_world + tolerance)`, so no slope holds a commodity
+country below `π_world + tolerance`, and the clamp is what still lets a debasement or a
+monetised war inflate.
 
 **Gold supply (proposed).** §5.1's "deflation bias" under metallic money should not be a
 constant: historically it *was* gold supply lagging output, and the reversals were
@@ -2500,9 +2548,18 @@ sign-wrong note) is deleted with it, which closes that item.
   into `te_fx_strong`): real appreciation *is* lost competitiveness. Left out — the
   confidence drain already prices it, and a second consequence of one gauge is how loops get
   double-counted.
-- Commodity-money countries have a shadow but no `te_peg_confidence` to drain; their
+- ~~Commodity-money countries have a shadow but no `te_peg_confidence` to drain; their
   overvaluation is display-only until §0.5 decision H's parked "commodity money also moves
-  gold" question is settled.
+  gold" question is settled.~~ **Closed 2026-09-21 (§0.6 R7, issue #351):** not by moving
+  gold, but by charging the *price-level half* of that overvaluation
+  (`te_mon_fx_term_inflation`) as §9.1 inflation pressure. No vault, no flow variable, no
+  confidence — the row is no longer display-only.
+- The commodity price-specie term is **one-sided**, on `te_mon_fx_overvaluation_value`'s own
+  `min = 0`: prices *below* the world's buy nothing. The mirror half — cheap prices pull
+  specie in and inflate — is the other side of the real mechanism and is left out on
+  purpose, because it would tether a metallic country to a **fiat** world's inflation rather
+  than to a shared standard's. Worth revisiting only if a mostly-metallic world ever wants a
+  common price trend (a gold rush is the §9.1 gold-supply term's job, not this one).
 - `te_fx_index` as an input to migration or tourism attraction — natural, but neither
   system is touched this phase.
 - Tech replacements: `keynesian_economics` and `international_exchange_standards` each lose
@@ -3222,6 +3279,7 @@ carries no status column and is left as written.)
 | Drift per month | 1/3 pp (2/3 digital) | 4 |
 | Target range: gold / fiat / digital | 0–15 / 0–25 / −3–25 | 5 |
 | Target range: commodity money with a bank (`te_mon_commodity_band_margin_down` / `_up`; centre hysteresis `te_mon_commodity_centre_hysteresis`) | `centre − 1` to `centre + 3`, floored at 0; centre = `round(world)`, re-rounded at 0.75 | 5.1, 0.6 |
+| Commodity price-specie term (`te_mon_commodity_specie_tolerance` / `_per_pp` / `_clamp`) | tolerance 1pp of core above world inflation, then −2pp of pressure per pp, clamped at −6 | 9.1, 0.6 R7 |
 | Bankless spread | 1.0 | 5 |
 | Administered rate (command) | 3.0 | 5 |
 | Rate-paid clamp | 0.5 – 60 | 4 |

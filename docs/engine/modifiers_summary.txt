@@ -4245,7 +4245,6 @@ country|country_banking_lock_asset_relief_bool|
 country|country_banking_lock_capital_controls_bool|
 country|country_banking_lock_directed_credit_bool|
 country|country_banking_lock_export_credit_bool|
-country|country_banking_lock_fx_swap_lines_bool|
 country|country_banking_lock_open_market_ops_bool|
 country|country_banking_random_momentum_mult|
 country|country_bashkir_cultural_acceptance_add|A bonus or penalty to a specific culture's [concept_acceptance]
@@ -4493,7 +4492,6 @@ country|country_can_use_cultural_assimilation_bool|
 country|country_can_use_deposit_guarantee_bool|
 country|country_can_use_emergency_liquidity_bool|
 country|country_can_use_export_credit_bool|
-country|country_can_use_fx_swap_lines_bool|
 country|country_can_use_open_market_ops_bool|
 country|country_cannot_be_subjugated_bool|This country recently declared its Neutrality and cannot be subjugated
 country|country_cannot_be_target_for_law_imposition_bool|Country cannot be targeted for new Law Imposition attempts while this is in effect
@@ -6458,6 +6456,7 @@ power_bloc|power_bloc_cohesion_per_member_add|An increase or decrease to the Coh
 power_bloc|power_bloc_customs_union_bool|All members of the Power Bloc become part of the same Customs Union permanently
 power_bloc|power_bloc_disallow_embargo_bool|Cannot place Embargo on another Power Bloc member
 power_bloc|power_bloc_disallow_war_bool|Cannot start or join wars amongst Power Bloc members
+power-bloc|power_bloc_fiscal_backstop_bool|
 power_bloc|power_bloc_income_transfer_to_leader_factor|Base percentage of tax income transferred from Power Bloc Members to the Power Bloc Leader
 power_bloc|power_bloc_invite_acceptance_add|A bonus or penalty to the acceptance chance of a Power Bloc invitation
 power_bloc|power_bloc_invite_acceptance_decentralized_power_add|
@@ -6494,7 +6493,9 @@ power_bloc|power_bloc_mandate_progress_per_unrecognized_power_member_add|Determi
 power_bloc|power_bloc_mandate_progress_per_unrecognized_power_member_mult|Determines the amount of Mandate Progress gained by a Power Bloc for each of its members that are of Rank Unrecognized Power
 power_bloc|power_bloc_mandate_progress_per_unrecognized_regional_power_member_add|Determines the amount of Mandate Progress gained by a Power Bloc for each of its members that are of Rank Unrecognized Regional Power
 power_bloc|power_bloc_mandate_progress_per_unrecognized_regional_power_member_mult|Determines the amount of Mandate Progress gained by a Power Bloc for each of its members that are of Rank Unrecognized Regional Power
+power-bloc|power_bloc_monetary_cooperation_bool|
 power-bloc|power_bloc_principle_groups_max_add|
+power-bloc|power_bloc_shared_currency_bool|
 power_bloc|power_bloc_target_sway_cost_mult|An increase or decrease to the Sway Maneuver cost for the Diplomatic Play Target
 power_bloc|power_bloc_trade_advantage_add|An increase or decrease in overall Trade Advantage with Countries in the same Power Bloc
 ship|ship_accuracy_add|An increase or decrease to the probability that the Ship will hit when attacking

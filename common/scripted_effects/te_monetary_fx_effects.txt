@@ -277,8 +277,11 @@ te_monetary_update_fx = {
 
 	# --- overvaluation: the peg's index against where a float would sit ------
 	# Zero by construction for a floater (index = shadow) and for a command
-	# economy. Display-only under commodity money, which has no te_peg_confidence
-	# to drain (§15.6).
+	# economy. Under commodity money it drains no te_peg_confidence — there is
+	# none — but it is no longer display-only either (§15.6, ruling R7): its
+	# price-level half is what te_mon_pressure_commodity_specie disciplines
+	# prices with. That term reads te_mon_fx_term_inflation LIVE rather than
+	# this stored figure, so nothing here has to move first.
 	set_variable = { name = te_mon_overvaluation value = te_mon_fx_overvaluation_value }
 
 	# --- the three-year average, and imported inflation off it ---------------

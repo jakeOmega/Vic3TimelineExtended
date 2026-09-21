@@ -4,8 +4,8 @@ Lowercase LHS keywords in every script-bearing mod directory (`events/` plus the
 
 Flag kinds: **unresolved-helper-call** is an unknown name in call form (`x = yes` / `x = { ... }`) — typically a scripted effect/trigger that was renamed or deleted while a call site survived (#288). **unknown-name** is any other unknown LHS keyword (#295). **call-syntax** is unquoted `f(...)`. Static-modifier block bodies (`modifier = { ... }`, `member_modifier`, …) are skipped here — their names are validated by `modifier_visibility_audit`.
 
-- Roots scanned: **16**, files scanned: **260**, keys checked: **106028**
-- Catalog size: **7145** + mod-defined names: **2376**
+- Roots scanned: **16**, files scanned: **260**, keys checked: **106094**
+- Catalog size: **7145** + mod-defined names: **2381**
 - Flags (unreviewed): **0**
 - Flags (REVIEWED-suppressed): **4**
 
