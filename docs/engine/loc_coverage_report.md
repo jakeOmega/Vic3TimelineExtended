@@ -20,9 +20,7 @@ entity's opening line:
 
 ## Unreviewed Flags
 
-### Modifier Types (1)
-
-- `common/modifier_type_definitions/un_membership_modifier_types.txt:22` — `country_un_institutional_alignment` — missing: `country_un_institutional_alignment`
+_None._
 
 ## Reviewed Exemptions
 
@@ -43,12 +41,11 @@ entity's opening line:
 
 ## Coverage
 
-- files audited: 145
+- files audited: 149
 - flags by category:
-  - Modifier Types: 1
   - Modifiers: 14
-- total flags: 15
-- unreviewed: 1
+- total flags: 14
+- unreviewed: 0
 - exempted: 14
 
 ## Scope notes

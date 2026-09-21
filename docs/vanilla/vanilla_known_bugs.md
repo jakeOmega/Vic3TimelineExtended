@@ -462,6 +462,61 @@ Invalid left side during comparison 'source_country'
 
 Vanilla naval-mission logic at `:97` calls `source_country` on a treaty article unconditionally, but `source_country` is only valid on *directed* articles. The error names the mod's mutual article `cultural_exchange_program` (`common/treaty_articles/108_cultural_exchange.txt`) because that's what's in scope when a country with that article active evaluates the mission — but the unsafe assumption is in **vanilla** code (vanilla mutual articles like defensive pacts trip it identically). The mod article correctly uses `kind = mutual`; making it directed would be wrong. Three log lines, one vanilla root cause. Register-and-skip; cannot be fixed mod-side.
 
+### `common/treaty_articles/14_treaty_port.txt:425` — article `infamy` preview reads an unset `scope:state`
+
+```
+common/treaty_articles/14_treaty_port.txt:425
+```
+
+Vanilla's Treaty Port article computes `infamy = { value = 0  scope:state = { add = state_infamy_value } … }` with no guard. While the treaty designer has the article listed but no state picked yet, the engine re-evaluates that block every render frame with `scope:state` unset, so `state_infamy_value` is read in a `none` scope and the value comes back typed `none`. Roughly 7,300 lines in a six-generation rotation (2026-09-20) — the single largest log producer in that session, and it cascades into the `00_infamy_values.txt` entry below. Nothing mod-side triggers it: the mod's `treaty_draft_panel.gui` / `treaty_panel.gui` overrides only add company-input rows. Cosmetic; cannot be fixed mod-side without overriding the whole vanilla article.
+
+### `common/script_values/00_infamy_values.txt:40, 50, 60, 87, 97, 110, 122, 136, 194` — state-scoped infamy triggers evaluated in `none` scope
+
+```
+Script location: common/script_values/00_infamy_values.txt
+is_incorporated trigger [ Wrong scope for trigger: none, expected state ]
+is_homeland_of_country_cultures trigger [ Wrong scope for trigger: none, expected state ]
+any_scope_culture trigger [ Wrong scope for trigger: none, expected country, state ]
+has_claim_by trigger [ Wrong scope for trigger: none, expected state ]
+is_land_adjacent_to_state trigger [ Invalid target state ]
+has_strategic_region_interest_tier trigger [ Invalid Country or StrategicRegion! ]
+```
+
+Downstream cascade of the `14_treaty_port.txt:425` entry above: `state_infamy_value` is a state-scoped script value, so every state trigger inside it errors once per render frame when the treaty designer evaluates the article without a chosen state. Eight distinct trigger errors per frame, ~7,800 lines in one six-generation rotation (2026-09-20). Same root cause, same verdict — register and skip.
+
+### `common/naval_battle_conditions/00_naval_battle_conditions.txt:210` — `range` directive used inside a trigger
+
+```
+range directive used, but no randomization is available! Might be in a trigger rather than effect. Invocation near 'common/naval_battle_conditions/00_naval_battle_conditions.txt:210'
+```
+
+A vanilla naval-battle-condition script value uses a `range = { … }` directive from a context the engine can't randomize in (the message's own guess — "might be in a trigger rather than effect" — is the diagnosis). The value falls back to a deterministic result. Vanilla file, not present in this mod. Cosmetic.
+
+### `common/ai_strategies/00_default_strategy.txt:2382` — `s:STATE_HAWAII` names a state region that does not exist
+
+```
+Invalid right side during comparison 's'
+common/ai_strategies/00_default_strategy.txt:2382
+```
+
+Vanilla's default AI state-value script weights Hawaii with
+
+```
+if = {
+	limit = {
+		has_journal_entry = je_hawaiian_interest
+		scope:target_state = { state_region = s:STATE_HAWAII }
+	}
+	add = { value = 50  desc = "STATE_VALUE_JE_HAWAII" }
+}
+```
+
+but the state region is called **`STATE_HAWAIIAN_ISLANDS`** (`map_data/state_regions/05_north_america.txt:920`). `s:STATE_HAWAII` occurs exactly once in the whole vanilla game — this line — and is defined nowhere, so the comparison's right side never resolves. A missed rename.
+
+Fires per AI state-value evaluation, so the volume is large once it starts: 5,708 lines in a nine-minute window (2026-09-20). Consequence in vanilla and modded games alike is that the `+50` Hawaii weighting never applies; the AI simply doesn't prefer Hawaii the way the script intends.
+
+Not mod-caused and not worth fixing mod-side: this mod's `common/ai_strategies/edited_default_strategy.txt` is an `INJECT:ai_strategy_default` that adds law/institution scoring and never touches the state-value block, and correcting the typo would mean carrying a copy of that whole block across every vanilla patch for a cosmetic AI-weight miss. Note the trigger is condition-gated, so an earlier log window with zero occurrences is not evidence it is new.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
@@ -589,6 +644,7 @@ Engine emits per-mesh load duration (e.g. `Total time "male_outfit_indian_tatya_
 
 ### `pdx_assert.cpp:637` — `IsWithinBounds( ProvinceIndex )` engine assertion
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 Assertion failed: IsWithinBounds( ProvinceIndex )
@@ -598,6 +654,7 @@ Vanilla engine internal — fires during province-index lookups in some unspecif
 
 ### `pdx_assert.cpp:637` — `_ProvinceSet.GetNumRanges() <= 1` engine assertion
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 Assertion failed: _ProvinceSet.GetNumRanges() <= 1
@@ -607,6 +664,7 @@ Vanilla engine internal — `_ProvinceSet` accumulating more than one range duri
 
 ### `pdx_assert.cpp:637` — int→float precision loss assertion
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 Assertion failed: Possible loss of data when converting from int to float
@@ -616,6 +674,7 @@ Vanilla engine internal — numeric coercion safety check, fires during some uns
 
 ### `pdx_assert.cpp:637` — vanilla `building_company_basic_<good>` duplicate seeding
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 Tried to create building of Type building_company_basic_
@@ -625,6 +684,7 @@ Vanilla company-charter auto-creation tries to create the same `building_company
 
 ### `pdx_assert.cpp:637` — `DownsizeMilitaryBuildingsToUnitCount` engine assertion
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 Assertion failed: DownsizeMilitaryBuildingsToUnitCount
@@ -634,6 +694,7 @@ Vanilla engine internal — fires when the engine downsizes military buildings (
 
 ### `pdx_assert.cpp:637` — leader generation failure
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 Assertion failed: Failed to generate leader for
@@ -643,6 +704,7 @@ Vanilla engine internal — character-generator failure when an IG needs a new l
 
 ### `pdx_assert.cpp:637` — `War.GetWarParticipant().IsValid()` engine assertion
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 Assertion failed: War.GetWarParticipant
@@ -768,6 +830,7 @@ Engine graphics noise emitted during early frame setup. No mod or vanilla script
 
 ### `pdx_assert.cpp:637` — "The null hierarchy will never have social classes"
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 The null hierarchy will never have social classes associated with it
@@ -777,6 +840,7 @@ Engine-internal assertion fired during pop-strata setup when an empty hierarchy 
 
 ### `pdx_assert.cpp:637` — "Mobilize Army Commmand given an invalid army"
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 Mobilize Army Commmand given an invalid army
@@ -832,9 +896,11 @@ Engine trace logging how long the game↔empty-state transition took (shutdown a
 
 ### `pdx_assert.cpp:637` — "Trying to reposition an invalid formation"
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 Trying to reposition an invalid formation
+Trying to reposition a dead formation
 ```
 
 Engine assertion fired when a formation reposition is requested for a formation that has been disbanded. Same source-line as several other engine assertions (silk-and-dye / null-hierarchy / Mobilize-Army entries); the signature substring disambiguates this one. Cosmetic.
@@ -922,6 +988,7 @@ Vanilla GUI panel reshape logic occasionally hands the data-model layer a negati
 
 ### `pdx_gui_localize.cpp:140` — vanilla GUI loc fetch failure
 - source: `pdx_gui_localize.cpp:140`
+- source: `pdx_gui_localize.cpp:302`
 
 ```
 PdxDataFetchLocalizedData failed for
@@ -949,6 +1016,7 @@ Engine naval-AI complains that a country (commonly Great Britain) has zero curre
 
 ### `pdx_assert.cpp:637` — "dead Formation" exile/loiter/reposition asserts
 - source: `pdx_assert.cpp:637`
+- source: `pdx_assert.cpp:641`
 
 ```
 dead Formation
@@ -1089,6 +1157,15 @@ File 'alerttypes_custom.txt' should be in utf8-bom
 ```
 
 These files exist in neither the mod, vanilla, nor the Workshop folder — they are the engine's per-user message/alert settings. The signatures name the two files exactly so BOM warnings for mod `.txt` files still surface.
+
+### `political_movement.cpp:731` — `lawgroup_navy_model has no active law`
+- source: `political_movement.cpp:731`
+
+```
+This Law group lawgroup_navy_model has no active law
+```
+
+`lawgroup_navy_model` is the one vanilla law group with an `enable` gate (`any_scope_state = { is_coastal = yes }`, `common/law_groups/00_laws.txt:69`), so a landlocked country has no active law in it. Vanilla's political-movement code walks every law group regardless and warns when one comes back empty. The mod's two extra navy laws (`law_littoral_defense`, `law_auxiliary_fleet`) follow vanilla's own `is_visible = { any_scope_state = { is_coastal = yes } }` shape and don't change the group's membership rules. Six lines per session; cosmetic. The signature names the group so a *different* law group turning up empty still surfaces.
 
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 

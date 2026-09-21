@@ -3867,3 +3867,39 @@ The failure is silent and enormous when the multiplier is GDP-scaled. `sv_money_
 Adding a new entry to a big config dict (`ideology_modifications.py`'s `modifications`, and anything shaped like it) when the key is **already** in the dict is legal Python: the later literal wins and the earlier one is discarded without a word. The generator then happily writes a *well-formed* output file that is missing everything the first entry carried, and no Paradox-side audit can see it, because the output is valid.
 
 Caught during phase 2: `ideology_isolationist` was already a key, and adding a second entry for one new law group replaced a `REPLACE:` block carrying nine law groups with an `INJECT:` carrying one — nine ideology stances deleted in silence. **`ruff check .` catches it** (`F601 Dictionary key literal "x" repeated`; `ruff.toml` selects `F`, and CI runs it on every PR), so run ruff before regenerating, not after. Two cheap belt-and-braces habits for generator input: search the file for the key before adding an entry, and diff the regenerated output expecting **zero deleted lines** for a purely additive change.
+
+## Loc Data-Function Arguments Are Bare Expressions — `[...]` Never Nests
+
+`[SelectLocalization( [GetScriptedGui('x').IsShown( … )], 'a', 'b' )]` does not work. The loc parser has no nesting: the inner `[` terminates the outer expression and the **whole value** fails to parse. Vic3 signals this twice per render — `pdx_gui_localize.cpp` logs `<file>.gui:<line> - Failed parsing localized text: <key>` and `pdx_gui_factory.cpp` logs `failed reading property, at <file>.gui:<line>` — and the widget draws nothing where the text should be. Arguments to a data function are written bare: `[SelectLocalization( GetScriptedGui('x').IsShown( … ), 'a', 'b' )]`. Zero of vanilla's 102,168 English loc values nest, so treat the rule as absolute. (Vanilla's *translated* files are not clean — `content_104_l_japanese.yml:436` writes `[[Concept(…)]]` where the English line writes `[Concept(…)]` — those are translator typos, not an escaping convention.) `loc_render_audit` now flags this as `nested_brackets`; it skips single-quoted runs, since a quoted argument may legitimately contain a `[`.
+
+Bit the four cultural-hegemony programme status lines (`je_ch_widget_prog_*_status`, 2026-09-20). Their second bug is worth repeating on its own: the status read went through `ch_policy_sgui`, whose `is_shown` is deliberately **scope-free** (`has_journal_entry = je_cultural_hegemony`), so `IsShown(… AddScope('op', N) …)` returns the same answer for every `op`. When a scripted GUI's `is_shown` ignores the saved scope by design, no `AddScope` on the call side can make it discriminate — ask the per-state handler instead (`ch_active_<programme>_sgui`, which is what the same widget's `visible` lines already use).
+
+## A Treaty Article's `on_entry_into_force` Is Re-Walked by the Designer Tooltip With `scope:article_options` Unbound
+
+Same shape as **Script Containers** rule 6, one layer out. While the treaty designer has an article listed, the engine re-evaluates its `on_entry_into_force` every frame to render the preview, and in that pass `scope:article_options` is never bound — so `scope:article_options = { source_country = { save_scope_as = source_country } }` is a no-op and everything downstream reads an unset scope. A `multiplier = scope:source_country.var:X` inside a called effect then logs `Value of wrong type in '<file>:<line>'. Got value of type 'none'` once per frame per read.
+
+Guard the **call**, not the effect's interior, so the render pass skips the body entirely:
+
+```
+on_entry_into_force = {
+	scope:article_options = {
+		source_country = { save_scope_as = source_country }
+		target_country = { save_scope_as = target_country }
+	}
+	if = {
+		limit = {
+			exists = scope:source_country
+			exists = scope:target_country
+		}
+		population_transfer_effect = yes
+	}
+}
+```
+
+Note the line number in the log is approximate inside a scripted effect — the two reads in `population_transfer_effect` reported `extra_effects.txt:1234` / `:1252` for `multiplier =` lines that actually sit at `:1253` / `:1273`. Match on the *pair* and the effect, not the exact line.
+
+## `every_country` Includes the Actor — `change_relations = { country = ROOT }` Inside It Asserts
+
+`every_country` is not "every other country". When the actor satisfies the iterator's `limit` — which it usually does for a `country_rank >= rank_value:great_power` gate, since these effects are great-power tools — the loop reaches `this = ROOT` and `change_relations = { country = ROOT }` asks the engine to create relations between a country and itself. The engine answers with `Assertion failed: Attempted to create relations between a country and itself` (`pdx_assert.cpp`) and drops that iteration's relations change; nothing else warns you.
+
+Add `NOT = { THIS = ROOT }`. Put it in the iterator's `limit` when relations is all the loop does; wrap only the `change_relations` in an `if` when the loop also does something the actor *should* receive — `banking_effect_cb_fx_swap_lines` also increments each great power's `bubble_pressure`, and the actor's own increment is wanted. Grep shape for auditing: an `every_country` / `every_scope_country` block containing `change_relations`/`set_relations` with `country = ROOT` and no case-insensitive `NOT = { THIS = ROOT }` — one genuine hit across this mod as of 2026-09-20 (every other site was already guarded).

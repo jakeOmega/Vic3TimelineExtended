@@ -16,8 +16,6 @@
  annex_subject_peaceful_proposal_notification_desc:0 "[INITIATOR_COUNTRY.GetName] wishes to peacefully integrate with us."
  annex_subject_peaceful_proposal_notification_effects_desc:0 "$annex_subject_peaceful_desc$"
  annex_subject_peaceful_proposal_notification_name:0 "Proposal for Peaceful Integration"
- banking_event_default_rural_impact:0 "Rural Credit Impact"
- banking_event_default_rural_impact_desc:0 "Temporary negative impact on agricultural [concept_throughput] due to cooperative shortfall adjustments."
  colonial_collapse_subject_unrest_modifier:0 "Imperial Collapse Aftershock"
  colonial_overlord_collapsing_subject_ld_modifier:0 "Subject on the Brink"
  colonial_overlord_crumbling_subject_ld_modifier:0 "Defiant Colonial Subject"

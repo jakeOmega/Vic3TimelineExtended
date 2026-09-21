@@ -129,10 +129,32 @@ class VanillaCleanTests(unittest.TestCase):
         # The bracket-tag check is designed to be vanilla-clean; any hit would
         # mean the regex over-matches a legitimate accessor/concept form.
         result = audit(mod_path=VANILLA_GAME)
+        tag_flags = [f for f in result.flags if f.issue == "bracket_tag"]
         self.assertEqual(
-            len(result.flags), 0,
+            len(tag_flags), 0,
             f"unexpected bracket-tag flags in vanilla loc: "
-            f"{[(f.file, f.line, f.detail) for f in result.flags[:5]]}",
+            f"{[(f.file, f.line, f.detail) for f in tag_flags[:5]]}",
+        )
+
+    def test_vanilla_english_loc_has_no_nested_bracket_flags(self):
+        # Zero nested-bracket values across all 102k vanilla *English* loc
+        # values, which is what establishes the rule. The non-English vanilla
+        # files are NOT clean — e.g. `content_104_l_japanese.yml:436` writes
+        # `[[Concept(…)]]` where the English line writes `[Concept(…)]` — so
+        # those are translator typos in vanilla, not an escaping convention.
+        # This mod ships English only, so scope the assertion to match.
+        result = audit(mod_path=VANILLA_GAME)
+        nested = [
+            f for f in result.flags
+            if f.issue == "nested_brackets"
+            and os.path.normpath(f.file).startswith(
+                os.path.join("localization", "english")
+            )
+        ]
+        self.assertEqual(
+            len(nested), 0,
+            f"unexpected nested-bracket flags in vanilla English loc: "
+            f"{[(f.file, f.line, f.detail) for f in nested[:5]]}",
         )
 
 

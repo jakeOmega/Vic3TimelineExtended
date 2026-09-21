@@ -98,7 +98,6 @@ GLOBAL = {
 		activate_law = law_type:law_ministry_of_war # Ministry of War, 1802
 	}
 	c:USA = {
-		activate_law = law_type:law_minority_rights_violent_hostility
 		activate_law = law_type:law_federal_system
 		activate_law = law_type:law_free_mutual_banking
 		activate_law = law_type:law_traditional_ip_protection # Copyright Act 1790, Patent Act 1790
