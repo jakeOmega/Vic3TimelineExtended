@@ -7,11 +7,23 @@ per-render `data-system-function` error, and the synchronous log spam drives
 measurable in-game lag (confirmed in a prior session). The correct form is
 `#b …#!`.
 
+**Nested `[...]` inside `[...]`** — a data-function argument written as its own
+bracketed expression, e.g.
+`[SelectLocalization( [GetScriptedGui('x').IsShown( … )], 'a', 'b' )]`. The
+engine's loc parser has no nesting: the inner `[` terminates the outer
+expression, the whole value fails to parse, and any widget whose `text =`
+points at that key logs `Failed parsing localized text: <key>` plus a
+`failed reading property` at the `.gui` line. Arguments to a data function are
+bare expressions — drop the inner brackets. Zero occurrences across all 102,168
+vanilla loc values, so the rule is absolute. Single-quoted string literals are
+skipped, since a quoted argument may legitimately contain `[`.
+
 `localization_accessor_audit` catches `[Scope.GetX]` accessor chains and
 `concept_reference_audit` catches `[concept_x]` hyperlinks — neither flags
-bracket formatting tags. This audit closes that gap. The check is vanilla- and
-mod-clean today (0 findings); it is a regression guard against re-introducing
-the known lag bug.
+bracket formatting tags or nesting. This audit closes that gap. Both checks are
+vanilla- and mod-clean today (0 findings); they are regression guards against
+re-introducing the known lag bug and the 2026-09-20 cultural-hegemony
+widget-status breakage.
 
 Note on scope: issue #134 also proposed flagging unbalanced `#…#!` formatting
 runs, but an empirical sweep found 2341 "violations" across vanilla loc
@@ -33,7 +45,7 @@ from dataclasses import dataclass, field
 @dataclass
 class RenderFlag:
     loc_key: str
-    issue: str  # "bracket_tag"
+    issue: str  # "bracket_tag" | "nested_brackets"
     detail: str
     file: str
     line: int
@@ -54,6 +66,29 @@ _REVIEWED_RE = re.compile(
 # Valid Vic3 loc never opens a bare single-letter bracket nor uses a `[/` slash;
 # accessor chains are `[Scope.Method]` and concept links are `[concept_x]`.
 _BRACKET_FMT_RE = re.compile(r"\[/?[biu]\]|\[/[A-Za-z]\w*\]?")
+
+
+def _nested_bracket_offsets(value: str) -> list[int]:
+    """Offsets of every `[` opened while another `[` is still unclosed.
+
+    Single-quoted runs are skipped: a quoted data-function argument is opaque to
+    the loc parser, so a `[` inside one is not a nesting error.
+    """
+    offsets: list[int] = []
+    depth = 0
+    in_quote = False
+    for i, ch in enumerate(value):
+        if ch == "'":
+            in_quote = not in_quote
+        elif in_quote:
+            continue
+        elif ch == "[":
+            if depth > 0:
+                offsets.append(i)
+            depth += 1
+        elif ch == "]":
+            depth = max(0, depth - 1)
+    return offsets
 
 
 def _parse_reviewed(comment: str | None) -> dict | None:
@@ -98,6 +133,15 @@ def check_value(value: str) -> list[tuple[str, str]]:
             "invalid bracket formatting tag(s): "
             + ", ".join(f"`{b}`" for b in uniq)
             + " — use `#b …#!` style, not Markdown/BBCode",
+        ))
+    nested = _nested_bracket_offsets(value)
+    if nested:
+        snippet = value[nested[0]: nested[0] + 40]
+        out.append((
+            "nested_brackets",
+            f"`[` opened inside an unclosed `[...]` at offset {nested[0]} "
+            f"(`{snippet}`) — the loc parser does not nest; pass data-function "
+            "arguments as bare expressions",
         ))
     return out
 
@@ -157,6 +201,7 @@ def audit(ms=None, mod_path: str | None = None) -> AuditResult:
 
 _ISSUE_LABEL = {
     "bracket_tag": "Bracket formatting tags ([b], [/x], …)",
+    "nested_brackets": "Nested [...] inside [...]",
 }
 
 
@@ -173,8 +218,13 @@ def render_report(result: AuditResult) -> str:
         "Flagged: a localization value contains a bracket-style formatting tag",
         "(`[b]`, `[/i]`, …). Vic3 has no such tags — the engine treats `[b]` as",
         "a failing data-system-function and floods the log, causing in-game lag.",
-        "",
         "Fix: replace `[b]X[/b]` with `#b X#!`.",
+        "",
+        "Also flagged: a `[` opened inside an unclosed `[...]`. The loc parser",
+        "does not nest, so the whole value fails to parse and any widget whose",
+        "`text =` points at the key logs `Failed parsing localized text`.",
+        "Fix: pass data-function arguments as bare expressions, not as their own",
+        "bracketed expressions.",
         "",
         "Suppress an intentional flag with a trailing comment on the loc line:",
         "`my_loc_key:0 \"…\" # REVIEWED YYYY-MM-DD: rationale`",

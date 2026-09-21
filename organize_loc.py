@@ -316,7 +316,13 @@ def categorize_key(key, technology_keys):
     # Message / headline keys
     if key.startswith("headlines_"):
         return "MESSAGES"
-    if any(s in key for s in ["diplo", "pact", "_subject_", "_proposal_"]):
+    # "pact" has to match as a word, not a bare substring: `impact` otherwise
+    # drags keys like `banking_dash_mon_stance_impact_line` and
+    # `banking_event_default_rural_impact` into te_diplomacy_l_english.yml,
+    # away from the 237 other `banking_dash_*` keys.
+    if any(s in key for s in ["diplo", "_subject_", "_proposal_"]) or re.search(
+        r"(^|_)pacts?(_|$)", key
+    ):
         return "DIPLOMACY"
     # Tech-gated principle unlock boolean modifiers. The short-label keys
     # (`country_X_pb_principles_bool`) and their auto-generated descriptions
