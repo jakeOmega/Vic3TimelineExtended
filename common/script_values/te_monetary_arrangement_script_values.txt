@@ -57,6 +57,15 @@
 #   te_mon_anchored_gdp_m   >= 0        GDP (millions) of everyone anchored to
 #                                       this country. Written by the GLOBAL
 #                                       monthly pass, like te_mon_world_own_den
+#   te_mon_board_wrong_months 0 to 24   [5c] consecutive months a currency-board
+#                                       subject's DISPLAYED band has sat at an
+#                                       extreme (1 or 5). Never the true gap
+#   te_mon_board_lever_applied 0 or 1   [5c] is te_mon_board_wrong_stance on?
+#   te_mon_board_seigniorage_pts >= 0   [5c] an OVERLORD'S weekly minting gain:
+#                                       half its board subjects' minting,
+#                                       re-summed yearly
+#   te_mon_board_seigniorage_applied    ...and what was last applied. BACKS A
+#                                       MULTIPLIER — never remove it
 #   te_mon_emergency_controls_months 0-12  the kind-1 crisis's Defend option:
 #                                       capital controls forced on. Read by
 #                                       te_mon_capital_controls_in_force
@@ -280,3 +289,29 @@ te_mon_peg_parity_offset_display = {
 		value = var:te_mon_peg_parity_offset
 	}
 }
+
+
+# --- §15A.4 subject currency boards (5c) ------------------------------------
+
+# The share of a board subject's minting that goes to its overlord. The
+# subject's half is te_mon_board_subject's country_minting_mult = -0.5, which
+# must be restated there (a static modifier cannot read a script value).
+te_mon_board_seigniorage_share = { value = 0.5 }
+
+# What ONE board subject is worth to its overlord, a week: that share of the
+# subject's flat minting adds. Subject scope. §17 check 21 is whether this
+# `modifier:` read works at all from script; if it reads 0 the overlord simply
+# gains nothing, and the fallback is to count gold-mine levels.
+#
+# BE HONEST ABOUT THE SIZE (§15A.4): vanilla's base minting is a flat 500 and
+# the real money is gold-mine production methods, so for a colony without gold
+# both sides of this are rounding errors. It is a GOLD-COLONY lever.
+te_mon_board_seigniorage_from_subject = {
+	value = modifier:country_minting_add
+	multiply = te_mon_board_seigniorage_share
+	min = 0
+}
+
+# The wrong-stance lever: months at an extreme band before liberty desire moves.
+te_mon_board_wrong_months_threshold = { value = 6 }
+te_mon_board_wrong_months_cap = { value = 24 }

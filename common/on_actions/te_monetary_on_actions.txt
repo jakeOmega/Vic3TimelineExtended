@@ -282,6 +282,31 @@ te_monetary_arrangement_yearly_on_action = {
 		if = {
 			limit = { has_variable = te_mon_anchor_kind }
 			te_monetary_discover_arrangements = yes
+			# [5c] An overlord's seigniorage, re-summed (§15A.4); step 9b applies it.
+			te_monetary_update_board_seigniorage = yes
+		}
+	}
+}
+
+# [5c] A new subject gets its currency board at once rather than at its next
+# flagged pulse. Root = Country (the NEW SUBJECT — vanilla's own block says so
+# and scopes `top_overlord` from it, 00_code_on_actions.txt; the engine log
+# declares "Expected Scope: none", §17 check 17). Dispatched a day later so the
+# subject relationship has settled; the overlord is dispatched too, so it is
+# flagged as somebody's anchor. There is NO ceased-to-be-a-subject on-action:
+# that way round is the flagged monthly discovery, within a month.
+on_become_subject = {
+	on_actions = {
+		te_monetary_on_become_subject
+	}
+}
+
+te_monetary_on_become_subject = {
+	effect = {
+		trigger_event = { id = te_monetary_internal.2 days = 1 }
+		if = {
+			limit = { exists = overlord }
+			overlord = { trigger_event = { id = te_monetary_internal.2 days = 1 } }
 		}
 	}
 }

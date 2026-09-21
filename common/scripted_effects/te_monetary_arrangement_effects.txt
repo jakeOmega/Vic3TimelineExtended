@@ -51,8 +51,13 @@ te_monetary_refresh_anchored_gdp = {
 	every_country = {
 		change_global_variable = { name = te_mon_world_gdp_m add = te_mon_world_rate_weight }
 		if = {
+			# CHOSEN anchors only — a treaty peg, a bloc currency. A currency
+			# board is imposed, not a vote of confidence: counted, the East India
+			# Company alone would hand Britain the whole reserve-currency cut on
+			# day one (§0.8 ruling G7).
 			limit = {
 				te_mon_is_anchored = yes
+				var:te_mon_anchor_kind < 3
 				exists = var:te_mon_anchor
 			}
 			set_variable = { name = te_mon_work_gdp_m value = te_mon_world_rate_weight }
@@ -164,6 +169,23 @@ te_monetary_init_arrangement_variables = {
 		limit = { NOT = { has_variable = te_mon_work_gdp } }
 		set_variable = { name = te_mon_work_gdp value = 0 }
 	}
+	# [5c]
+	if = {
+		limit = { NOT = { has_variable = te_mon_board_wrong_months } }
+		set_variable = { name = te_mon_board_wrong_months value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_board_lever_applied } }
+		set_variable = { name = te_mon_board_lever_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_board_seigniorage_pts } }
+		set_variable = { name = te_mon_board_seigniorage_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_board_seigniorage_applied } }
+		set_variable = { name = te_mon_board_seigniorage_applied value = 0 }
+	}
 
 	# SAVE MIGRATION (§18.2). The deleted FX Swap Lines tool's modifier, stripped
 	# wherever a save still carries it, every pulse, until
@@ -266,8 +288,26 @@ te_monetary_discover_arrangements = {
 
 	if = {
 		limit = { te_mon_is_command = no }
-		# [5c] kind 3 and [5b] kind 2 are tried here, above the peg.
-		#
+		# [5c] KIND 3, the currency board (§15A.4). RULE-BASED, not a button: a
+		# subject whose type has vanilla autonomy_level = 1 is anchored to its
+		# DIRECT overlord, automatically. If the overlord has no dial the subject
+		# falls through to the lower kinds and then to the ordinary no-dial rule.
+		if = {
+			limit = {
+				te_mon_is_board_subject = yes
+				exists = overlord
+				overlord = { te_mon_can_be_anchor = yes }
+			}
+			overlord = { save_scope_as = te_mon_new_anchor }
+			set_variable = { name = te_mon_anchor_kind_new value = 3 }
+		}
+		# [5b] kind 2 is tried here, above the peg.
+	}
+	if = {
+		limit = {
+			te_mon_is_command = no
+			var:te_mon_anchor_kind_new = 0
+		}
 		# THE DEBUG ANCHOR. te_debug_monetary.10 pins a kind-1 anchor with no
 		# treaty behind it — §19 row 5a's "tracks a 2pp anchor hike" and "breaks
 		# under 15 points of overvaluation" cannot otherwise be staged without
@@ -409,6 +449,10 @@ te_monetary_discover_arrangements = {
 				var:te_mon_arr_provider_pts > 0
 				var:te_mon_anchored_gdp_m > 0
 				te_mon_has_peg_article = yes
+				# [5c] A board subject whose overlord has no dial today is one
+				# law change away from a board; keep looking monthly.
+				te_mon_is_board_subject = yes
+				var:te_mon_board_seigniorage_pts > 0
 				AND = {
 					has_variable = te_mon_debug_anchor_on
 					var:te_mon_debug_anchor_on = 1
@@ -500,6 +544,9 @@ te_monetary_apply_arrangement_modifiers = {
 		te_monetary_apply_fx_one = { NAME = te_mon_arrangement_provider VALUE = var:te_mon_arr_provider_pts APPLIED = te_mon_arr_provider_applied STEP = 0.05 STEP_NEG = -0.05 }
 		te_monetary_apply_fx_one = { NAME = te_mon_arrangement_standing VALUE = var:te_mon_arr_standing_pts APPLIED = te_mon_arr_standing_applied STEP = 0.05 STEP_NEG = -0.05 }
 	}
+
+	# --- [5c] the currency board (§15A.4) ------------------------------------
+	te_monetary_apply_board_modifiers = yes
 
 	# --- the swap line is DRAWN in a crisis (§15A.2) -------------------------
 	# 0.1% of the recipient's GDP a month, provider's treasury to recipient's:
@@ -614,4 +661,102 @@ te_mon_effect_anchor_peg_repeg = {
 		max = 50
 	}
 	set_variable = { name = te_peg_confidence value = te_mon_peg_devalue_confidence }
+}
+
+
+# ----------------------------------------------------------------------------
+# Phase 5c — the currency board's three modifiers (§15A.4)
+# ----------------------------------------------------------------------------
+# Scope: country. Called from step 9b. Subject types carry no modifiers and
+# there is no subject_modifier / overlord_modifier key, so everything a board
+# does is applied here. All three are MANAGED.
+#
+#   te_mon_board_subject       flat; on while kind = 3. country_minting_mult -0.5.
+#   te_mon_board_seigniorage   scaled; the OVERLORD'S half, in pounds a week,
+#                              from te_mon_board_seigniorage_pts — which the
+#                              YEARLY pulse re-sums (te_monetary_update_board_
+#                              seigniorage). A flat country_minting_add and NOT a
+#                              _mult, which would scale the overlord's own base
+#                              and transfer nothing.
+#   te_mon_board_wrong_stance  flat; the SUBJECT'S lever. Six consecutive months
+#                              with the DISPLAYED band at an extreme (1 or 5) add
+#                              liberty desire for as long as it lasts. The band,
+#                              never the true gap: a modifier appearing at an
+#                              exact gap would print a bit of r* (§0.4 P8). This
+#                              runs after step 8, so the band is this month's.
+#
+# An overlord running its rate for home conditions pays in unrest at the
+# periphery; raising the subject's autonomy ends the board through the ordinary
+# discovery, with no exit penalty — it never chose to join.
+te_monetary_apply_board_modifiers = {
+	# --- the subject's half of the seigniorage ------------------------------
+	if = {
+		limit = { te_mon_is_on_currency_board = yes }
+		if = {
+			limit = { NOT = { te_mon_mod_has = { NAME = te_mon_board_subject } } }
+			te_mon_mod_add = { NAME = te_mon_board_subject }
+		}
+	}
+	else_if = {
+		limit = { te_mon_mod_has = { NAME = te_mon_board_subject } }
+		te_mon_mod_remove = { NAME = te_mon_board_subject }
+	}
+
+	# --- the wrong-stance counter and its lever -----------------------------
+	if = {
+		limit = {
+			te_mon_is_on_currency_board = yes
+			OR = {
+				var:te_mon_stance_band = 1
+				var:te_mon_stance_band = 5
+			}
+		}
+		change_variable = { name = te_mon_board_wrong_months add = 1 }
+		clamp_variable = {
+			name = te_mon_board_wrong_months
+			min = 0
+			max = te_mon_board_wrong_months_cap
+		}
+	}
+	else = {
+		set_variable = { name = te_mon_board_wrong_months value = 0 }
+	}
+	if = {
+		limit = { var:te_mon_board_wrong_months >= te_mon_board_wrong_months_threshold }
+		if = {
+			limit = { NOT = { te_mon_mod_has = { NAME = te_mon_board_wrong_stance } } }
+			te_mon_mod_add = { NAME = te_mon_board_wrong_stance }
+		}
+		set_variable = { name = te_mon_board_lever_applied value = 1 }
+	}
+	else = {
+		if = {
+			limit = { te_mon_mod_has = { NAME = te_mon_board_wrong_stance } }
+			te_mon_mod_remove = { NAME = te_mon_board_wrong_stance }
+		}
+		set_variable = { name = te_mon_board_lever_applied value = 0 }
+	}
+
+	# --- the overlord's half ------------------------------------------------
+	if = {
+		limit = { root ?= this }
+		te_monetary_apply_fx_one = { NAME = te_mon_board_seigniorage VALUE = var:te_mon_board_seigniorage_pts APPLIED = te_mon_board_seigniorage_applied STEP = 25 STEP_NEG = -25 }
+	}
+}
+
+# The overlord's yearly re-sum. Scope: country (the yearly pulse; ROOT = this).
+# Only DIRECT subjects whose board is in force AND anchored on this country —
+# a subject whose stored anchor is somebody else (a moment after a transfer) is
+# not ours to tax yet.
+te_monetary_update_board_seigniorage = {
+	set_variable = { name = te_mon_board_seigniorage_pts value = 0 }
+	every_direct_subject = {
+		limit = {
+			te_mon_is_on_currency_board = yes
+			exists = var:te_mon_anchor
+			var:te_mon_anchor = root
+		}
+		save_scope_as = te_mon_arr_party
+		root = { change_variable = { name = te_mon_board_seigniorage_pts add = scope:te_mon_arr_party.te_mon_board_seigniorage_from_subject } }
+	}
 }

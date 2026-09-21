@@ -7393,6 +7393,32 @@ te_mon_peg_broken_premium = {
 	country_risk_premium_add = 0.02
 }
 
+# --- 5c: subject currency boards (§15A.4). All three MANAGED, applied only by
+# te_monetary_apply_board_modifiers (step 9b).
+
+# On a subject while its currency board is in force (kind 3). Half its minting
+# goes to the overlord; -0.5 is te_mon_board_seigniorage_share restated.
+te_mon_board_subject = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_minting_mult = -0.5
+}
+
+# multiplier = pounds a week (te_mon_board_seigniorage_applied): half the flat
+# minting of every direct subject on a board, re-summed yearly. An _add, not a
+# _mult — a _mult would scale the overlord's own base and transfer nothing.
+te_mon_board_seigniorage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_minting_add = 1
+}
+
+# On a board subject whose DISPLAYED stance band has sat at an extreme for six
+# months: the overlord's rate is visibly the wrong one. One step on vanilla's
+# 0.05-0.5 liberty-desire scale — measurable, not a revolt by itself (§19 5c).
+te_mon_board_wrong_stance = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fist_negative.dds
+	country_liberty_desire_add = 0.15
+}
+
 # te_lolr.1 "Renege": the guarantor's name, for five years (days = 1825).
 te_mon_lolr_reneged = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds

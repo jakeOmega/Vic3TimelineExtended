@@ -423,6 +423,9 @@ te_monetary_settle_modifier_home = {
 		te_mon_mod_strip = { NAME = te_mon_arrangement_recipient }
 		te_mon_mod_strip = { NAME = te_mon_arrangement_provider }
 		te_mon_mod_strip = { NAME = te_mon_arrangement_standing }
+		te_mon_mod_strip = { NAME = te_mon_board_subject }
+		te_mon_mod_strip = { NAME = te_mon_board_seigniorage }
+		te_mon_mod_strip = { NAME = te_mon_board_wrong_stance }
 		set_variable = { name = te_inflation_band_applied value = 0 }
 		set_variable = { name = te_mon_stance_politics_applied value = 0 }
 		set_variable = { name = te_mon_wage_dividend_applied value = 0 }

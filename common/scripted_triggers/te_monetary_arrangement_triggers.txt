@@ -176,3 +176,34 @@ te_mon_can_backstop = {
 		gdp > $OTHER$.gdp
 	}
 }
+
+
+# ============================================================================
+# Phase 5c — subject currency boards (§15A.4)
+# ============================================================================
+
+# Is this country a subject WITHOUT monetary autonomy? Vanilla's subject types
+# carry `autonomy_level`, which script cannot read, so this is the OR-list of the
+# types that have `autonomy_level = 1`.
+#
+# RE-DERIVE IT ON EVERY VANILLA BUMP (vanilla_patch_runbook.md):
+#   grep -n 'autonomy_level\|^subject_type' <game>/common/subject_types/*.txt
+# Verified against 1.14.3, 2026-09-21: puppet, vassal, colony, crown_land are 1;
+# protectorate, tributary, dominion, personal_union, chartered_company are 2 and
+# keep their own monetary arrangement (they may sign a currency_peg with the
+# overlord like anyone else). The mod defines no subject types of its own.
+te_mon_is_board_subject = {
+	is_subject = yes
+	OR = {
+		is_subject_type = subject_type_puppet
+		is_subject_type = subject_type_vassal
+		is_subject_type = subject_type_colony
+		is_subject_type = subject_type_crown_land
+	}
+}
+
+# ...and is the board actually in force? Kind 3, stored and checked.
+te_mon_is_on_currency_board = {
+	te_mon_is_anchored = yes
+	var:te_mon_anchor_kind = 3
+}
