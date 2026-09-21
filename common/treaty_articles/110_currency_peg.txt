@@ -41,8 +41,11 @@ currency_peg = {
 	maintenance_paid_by = target_country
 	usage_limit = once_per_treaty
 
+	# [6c] ...and the imposed peg (113): one anchored state, whichever article
+	# put the country in it. Declared in both files.
 	mutual_exclusions = {
 		currency_peg
+		imposed_currency_peg
 	}
 
 	# TECH GATE: INTERNATIONAL EXCHANGE STANDARDS (era 4), not central_banking.
@@ -58,8 +61,19 @@ currency_peg = {
 	}
 
 	# Flat flavour: being the money others hold is prestige.
+	#
+	# PHASE 6 (§15C.1, ruling H5): this line STAYS AS SHIPPED. The plan proposed
+	# folding it into one managed, GDP-scaled term so an anchor's prestige could
+	# not scale with pegger headcount; the owner's ruling was to leave it and to
+	# read the stacking in-game instead (§17 check 24). The imposed peg (113)
+	# carries no prestige line at all: a coerced peg is not a vote of confidence.
 	target_modifier = {
 		country_prestige_mult = 0.02
+		# [6b] A pegger lives in the anchor's monetary orbit (§15C.2, ruling L1),
+		# sized against development_assistance's "the client's growing
+		# dependence". The ANCHOR is the target here, so the line sits in
+		# target_modifier; on the two backstops the provider is the source.
+		country_treaty_leverage_generation_add = 200
 	}
 
 	# The whole phase-5 toolkit is part of the monetary layer, so the
@@ -110,7 +124,7 @@ currency_peg = {
 				te_mon_can_peg_to = { OTHER = scope:target_country }
 			}
 		}
-		# One peg at a time, with anybody.
+		# One peg at a time, with anybody — [6c] imposed ones included.
 		custom_tooltip = {
 			text = te_currency_peg_already_pegged_tt
 			scope:source_country = {
@@ -125,9 +139,31 @@ currency_peg = {
 							}
 						}
 						any_scope_article = {
-							has_type = currency_peg
+							OR = {
+								has_type = currency_peg
+								has_type = imposed_currency_peg
+							}
 							source_country = scope:source_country
 						}
+					}
+				}
+			}
+		}
+	}
+
+	# [6a] §15C.1 ruling H7: WITHDRAW, not freeze. A peg between belligerents
+	# should end, not pause — and §17 check 15 (does a frozen treaty still
+	# iterate under any_scope_treaty?) is unanswered, so freezing would leave the
+	# discovery anchoring a country to an enemy. Withdrawal runs the ordinary
+	# hooks, so the anchored state lapses within a month.
+	non_fulfillment = {
+		consequences = withdraw
+		conditions = {
+			weekly = {
+				scope:article = {
+					OR = {
+						root = { has_war_with = scope:other_country }
+						root = { has_diplomats_expelled = scope:other_country }
 					}
 				}
 			}

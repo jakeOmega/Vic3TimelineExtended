@@ -48,11 +48,17 @@ te_mon_can_be_anchor = {
 # no_duplicate_treaty_article is NOT the model: its scope:treaty guard only
 # resolves in can_ratify.
 
-# Is ROOT the pegger in some in-force currency_peg?
+# Is ROOT the pegger in some in-force peg article? [6c] BOTH TYPES: an imposed
+# peg (113) makes its source kind 1 exactly as a chosen one does — the terms
+# differ, the anchored state does not (§15C.3, ruling C1). Every site that
+# walks for a peg carries the same OR; they are listed in §15C.3's file table.
 te_mon_has_peg_article = {
 	any_scope_treaty = {
 		any_scope_article = {
-			has_type = currency_peg
+			OR = {
+				has_type = currency_peg
+				has_type = imposed_currency_peg
+			}
 			source_country = root
 		}
 	}
@@ -62,9 +68,26 @@ te_mon_has_peg_article = {
 te_mon_has_valid_peg_article = {
 	any_scope_treaty = {
 		any_scope_article = {
-			has_type = currency_peg
+			OR = {
+				has_type = currency_peg
+				has_type = imposed_currency_peg
+			}
 			source_country = root
 			target_country = { te_mon_can_be_anchor = yes }
+		}
+	}
+}
+
+# [6c] ...and is the peg it is living under an IMPOSED one? Read by the spread,
+# by the standing cut a chosen discipline earns and an imposed one does not, and
+# by te_peg.2's missing Break option. A treaty walk rather than a stored flag:
+# the anchored state has one pair and one kind, and which article put it there
+# is a property of the treaty, not of the state.
+te_mon_is_imposed_pegger = {
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = imposed_currency_peg
+			source_country = root
 		}
 	}
 }
@@ -90,6 +113,22 @@ te_mon_is_article_source = {
 	}
 }
 
+# [6a] Does ROOT hold the swap line's RECIPIENT role at all — by treaty, or
+# because te_debug_monetary.11 pinned one? One name for it, so the discovery's
+# role branch and its settle-on-role-end check cannot disagree and settle a line
+# that is still standing.
+te_mon_has_swap_line_role = {
+	OR = {
+		te_mon_is_article_target = { TYPE = swap_line }
+		AND = {
+			has_variable = te_mon_debug_swap_on
+			var:te_mon_debug_swap_on = 1
+			has_variable = te_mon_debug_swap_provider
+			exists = var:te_mon_debug_swap_provider
+		}
+	}
+}
+
 # Guarded reads of what the discovery stored.
 te_mon_is_swap_recipient = {
 	has_variable = te_mon_swap_recipient
@@ -99,6 +138,13 @@ te_mon_is_swap_recipient = {
 te_mon_is_lolr_ward = {
 	has_variable = te_mon_lolr_ward
 	var:te_mon_lolr_ward = 1
+}
+
+# [6c] Is this country's treasury run by somebody else's commission? (§15C.3)
+te_mon_is_under_receivership = {
+	has_variable = te_mon_receivership
+	var:te_mon_receivership = 1
+	has_variable = te_mon_receiver
 }
 
 # Is the guarantee worth anything this month? Not while the guarantor's
@@ -114,6 +160,18 @@ te_mon_lolr_is_effective = {
 				var:te_mon_lolr_suspended_months > 0
 			}
 		}
+	}
+}
+
+# [6c] Is some TREATY already taking a share off this country's debt-load
+# premium — a guarantee that is worth something, or a receivership? One name for
+# it, because a bloc's tier-3 backstop must not pay the same relief twice
+# (§15A.3's rule, extended to the receiver). 112 and 114 exclude each other by
+# type, so this can only ever be one of them.
+te_mon_has_treaty_debt_relief = {
+	OR = {
+		te_mon_lolr_is_effective = yes
+		te_mon_is_under_receivership = yes
 	}
 }
 
@@ -174,6 +232,44 @@ te_mon_can_backstop = {
 	OR = {
 		country_rank > $OTHER$.country_rank
 		gdp > $OTHER$.gdp
+	}
+}
+
+
+# --- [6c] The coercive gates (§15C.3, ruling C4: IN DEFAULT ONLY) ------------
+# Scope: the would-be IMPOSER; $OTHER$ is the country it would impose on. The
+# pretext is deliberately narrow — the wider draft (inflation >= 10, or living
+# in the imposer's market) was rejected as too loose. A currency in trouble, or
+# in somebody's economic space, is not by itself grounds; an insolvent
+# government is. It is also what keeps the AI world from filling with these.
+
+# imposed_currency_peg: the imposer can be an anchor and is a major power or
+# better; the target is insolvent and could actually take a peg.
+te_mon_can_impose_peg_on = {
+	NOT = { this = $OTHER$ }
+	te_mon_can_be_anchor = yes
+	country_rank >= rank_value:major_power
+	$OTHER$ = {
+		in_default = yes
+		te_mon_is_command = no
+		NOT = {
+			AND = {
+				te_mon_is_anchored = yes
+				var:te_mon_anchor_kind > 1
+			}
+		}
+	}
+}
+
+# debt_receivership: te_mon_can_backstop with the roles swapped — the receiver
+# keeps a bank of its own and outranks or out-GDPs the debtor — and the debtor
+# is insolvent. A receiver is a creditor, not a guarantor, but it has to be a
+# financial power for the commission to mean anything to the other creditors.
+te_mon_can_receive_for = {
+	te_mon_can_backstop = { OTHER = $OTHER$ }
+	$OTHER$ = {
+		in_default = yes
+		te_mon_is_command = no
 	}
 }
 

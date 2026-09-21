@@ -40,10 +40,25 @@
 #                                       discovered by the hooks and the yearly
 #                                       scan only (§0.8 ruling G2)
 #   te_mon_swap_recipient   0 or 1      receives a swap line from somebody
-#   te_mon_swap_provider    scope       ...the (first) provider. Same scope-
-#                                       variable contract as te_mon_anchor
+#   te_mon_swap_provider    scope       ...the ONLY provider (111's can_ratify
+#                                       allows one at a time, §6a/H1). Same
+#                                       scope-variable contract as te_mon_anchor
+#   te_mon_swap_drawn       money >= 0  [6a] what the recipient has DRAWN on
+#                                       that line and not yet repaid. Grows in a
+#                                       financial crisis to te_mon_swap_line_limit,
+#                                       shrinks out of one, settled in a lump
+#                                       when the role ends. A LOAN, not a gift
 #   te_mon_lolr_ward        0 or 1      has a lender of last resort
 #   te_mon_lolr_guarantor   scope       ...the (first) guarantor. Same contract
+#   te_mon_lolr_calls       0 to 5      [6a] how many times THIS WARD has had
+#                                       its guarantee called, this one included.
+#                                       A fact about the ward, so it survives a
+#                                       change of guarantor. Everything pricing
+#                                       THIS call reads te_mon_lolr_calls_prior
+#                                       (= calls - 1); everything pricing the
+#                                       ONGOING relationship reads the counter
+#   te_mon_lolr_call_forget 0 to 120    [6a] ...and the months left before one
+#                                       call is forgotten. Re-armed on each call
 #   te_mon_lolr_suspended_months 0-60   a GUARANTOR'S clock: it reneged, so its
 #                                       other wards' benefit is off this long
 #   te_mon_lolr_default_cooldown 0-60   a WARD'S clock: months before its next
@@ -69,6 +84,15 @@
 #   te_mon_emergency_controls_months 0-12  the kind-1 crisis's Defend option:
 #                                       capital controls forced on. Read by
 #                                       te_mon_capital_controls_in_force
+#   te_mon_receivership     0 or 1      [6c] this country's finances are run by
+#                                       a commission somebody else appointed
+#   te_mon_receiver         scope       ...and whose. Same scope-variable
+#                                       contract as te_mon_anchor
+#   te_mon_receivership_clear_months 0-12  [6c] consecutive months the debtor has
+#                                       been under scaled_debt 0.25 and out of
+#                                       default. At 12 the receivership ends
+#                                       itself (114's non_fulfillment): a
+#                                       sentence, not a permanent tribute
 # ============================================================================
 
 
@@ -76,12 +100,23 @@
 te_mon_anchor_spread_peg = { value = 0.5 }
 te_mon_anchor_spread_bloc = { value = 0 }
 te_mon_anchor_spread_board = { value = 0.25 }
+# [6c] A peg imposed at gunpoint is a penalty rate, not a borrowed one: twice
+# the chosen peg's spread (§15C.3, ruling C1). The currency-board-at-gunpoint
+# shape, without the board's subject relationship to soften it.
+te_mon_anchor_spread_peg_imposed = { value = 1 }
 
 te_mon_anchor_spread = {
 	value = 0
 	if = {
 		limit = { has_variable = te_mon_anchor_kind }
 		if = {
+			limit = {
+				var:te_mon_anchor_kind = 1
+				te_mon_is_imposed_pegger = yes
+			}
+			value = te_mon_anchor_spread_peg_imposed
+		}
+		else_if = {
 			limit = { var:te_mon_anchor_kind = 1 }
 			value = te_mon_anchor_spread_peg
 		}
@@ -132,30 +167,168 @@ te_mon_reserve_currency_cut = {
 # swap_line, recipient: peg confidence a month and the cyclical premium cut.
 te_mon_swap_confidence = { value = 2 }
 te_mon_swap_premium_cut = { value = 1 }
-# ...and the provider's treasury draw while the recipient is in an external
+# ...and the provider's treasury draw while the recipient is in a FINANCIAL
 # crisis: 0.1% of the RECIPIENT'S GDP a month. Recipient scope.
+#
+# [6a] THE LINE IS A LOAN (§15C.1). War left the draw trigger with ruling H2 —
+# te_mon_in_financial_crisis, not te_mon_in_external_crisis — because a war is
+# the one leg a player can switch on at will, and a swap line is a central
+# bank's liquidity instrument, not war finance. The draw stops at the limit, it
+# is repaid at the same rate once the crisis clears, and whatever is still
+# outstanding when the role ends is settled in one lump. No interest: the
+# recipient's own rate paid is already the price of its crisis.
 te_mon_swap_crisis_draw = {
 	value = gdp
 	multiply = 0.001
 }
 
+# The ceiling on the balance: twenty months of draw. Recipient scope.
+te_mon_swap_line_limit = {
+	value = gdp
+	multiply = 0.02
+}
+
+# How much of the limit is still unused. Recipient scope.
+te_mon_swap_draw_room = {
+	value = te_mon_swap_line_limit
+	subtract = var:te_mon_swap_drawn
+	min = 0
+}
+
+# This month's draw: the monthly rate, or whatever room is left. Recipient scope.
+te_mon_swap_draw_this_month = {
+	value = te_mon_swap_crisis_draw
+	max = te_mon_swap_draw_room
+	min = 0
+}
+
+# ...and this month's repayment: the same rate, or whatever is still owed.
+te_mon_swap_repay = {
+	value = te_mon_swap_crisis_draw
+	max = var:te_mon_swap_drawn
+	min = 0
+}
+
 # lender_of_last_resort, ward: this share of its §7.6 debt-load premium is
 # taken off. Ward scope.
-te_mon_lolr_relief_share = { value = 0.5 }
+#
+# [6a] THE GUARANTEE REMEMBERS (§15C.1, ruling H3). Four things now read the
+# ward's own call counter, and this is one of them: the relief tapers
+# 0.5 / 0.35 / 0.2 / 0 as the ward is bailed out again and again, so the
+# moral-hazard loop closes on the third default. A guarantee that shrank with
+# the ward's DEBT would not be a guarantee; one that shrinks with its RECORD is
+# the difference between an unlucky ward and a serial one.
+te_mon_lolr_relief_share_base = { value = 0.5 }
+
+te_mon_lolr_relief_share = {
+	value = te_mon_lolr_relief_share_base
+	if = {
+		limit = {
+			has_variable = te_mon_lolr_calls
+			var:te_mon_lolr_calls = 1
+		}
+		value = 0.35
+	}
+	else_if = {
+		limit = {
+			has_variable = te_mon_lolr_calls
+			var:te_mon_lolr_calls = 2
+		}
+		value = 0.2
+	}
+	else_if = {
+		limit = {
+			has_variable = te_mon_lolr_calls
+			var:te_mon_lolr_calls >= 3
+		}
+		value = 0
+	}
+}
 
 te_mon_lolr_relief = {
 	value = te_mon_scaled_debt_premium
 	multiply = te_mon_lolr_relief_share
 }
 
-# ...and what honouring the guarantee costs: 5% of the WARD'S GDP. Ward scope.
+# The calls made BEFORE the one being priced right now. te_monetary_on_country_
+# default increments the counter and then dispatches te_lolr.1, so everything
+# that prices THIS call — the honour cost, te_lolr.1's odds, the cooldown the
+# on-action itself sets — reads this, and everything that prices the ONGOING
+# relationship (the relief above, the signing score) reads the counter. Ward
+# scope.
+te_mon_lolr_calls_prior = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_lolr_calls }
+		value = var:te_mon_lolr_calls
+		subtract = 1
+		min = 0
+	}
+}
+
+# ...and what honouring the guarantee costs: 5% of the WARD'S GDP, half as much
+# again for every call before this one, to 15%. Ward scope.
+te_mon_lolr_honour_cost_base_share = { value = 0.05 }
+te_mon_lolr_honour_cost_per_call = { value = 0.5 }
+te_mon_lolr_honour_cost_cap_multiple = { value = 3 }
+
+te_mon_lolr_honour_multiplier = {
+	value = 1
+	add = {
+		value = te_mon_lolr_calls_prior
+		multiply = te_mon_lolr_honour_cost_per_call
+	}
+	max = te_mon_lolr_honour_cost_cap_multiple
+}
+
 te_mon_lolr_honour_cost = {
 	value = gdp
-	multiply = 0.05
+	multiply = te_mon_lolr_honour_cost_base_share
+	multiply = te_mon_lolr_honour_multiplier
 }
 
 te_mon_lolr_suspension_months = { value = 60 }
-te_mon_lolr_default_cooldown_months = { value = 60 }
+
+# The WARD'S cooldown before its next default may call the guarantee again:
+# five years, and five more for every call before this one. Ward scope, read by
+# te_monetary_on_country_default in the same effect that incremented the counter.
+te_mon_lolr_default_cooldown_base = { value = 60 }
+
+te_mon_lolr_default_cooldown_months = {
+	value = te_mon_lolr_calls_prior
+	add = 1
+	multiply = te_mon_lolr_default_cooldown_base
+}
+
+# How long a quiet ward keeps a call on its record: ten years without a new one
+# forgets one (step 1c's clocks), and the clock is re-armed on every call.
+te_mon_lolr_call_forget_months = { value = 120 }
+te_mon_lolr_calls_cap = { value = 5 }
+
+
+# --- [6c] debt_receivership (§15C.3, ruling C2) -----------------------------
+# The coercive counterpart to the guarantee is not a guarantee at gunpoint; it
+# is externally supervised finances — Egypt's Caisse de la Dette 1876, the
+# Ottoman Public Debt Administration 1881, the Dominican customs receivership
+# 1905. The debtor gets the guarantee's relief, because creditors ARE reassured
+# by a receiver, and pays for it every month out of the customs receipts.
+#
+# THE RELIEF TAPERS BY THE DEBTOR'S OWN RECORD, like a guarantee's: it is
+# te_mon_lolr_relief, so a country that has already burned two guarantors is
+# worth less to a receiver too. Its default under a receivership pays it
+# nothing — te_monetary_on_country_default tests the guarantee, not this — so
+# the counter never moves while the commission sits.
+te_mon_receivership_take_share = { value = 0.001 }
+
+# Debtor scope: what the commission remits to the receiver, a month.
+te_mon_receivership_take = {
+	value = gdp
+	multiply = te_mon_receivership_take_share
+}
+
+# The exit ramp: twelve consecutive months worked down this far ends it.
+te_mon_receivership_exit_debt = { value = 0.25 }
+te_mon_receivership_exit_months = { value = 12 }
 
 
 # --- "Asymmetric magnitudes, shared mechanic" (§15A.1) ----------------------
@@ -186,6 +359,14 @@ te_mon_arr_lolr_cost_to_root = {
 	multiply = te_mon_arr_gdp_ratio_to_root
 }
 
+# [6c] ...and what one receivership costs ROOT. Debtor scope. A receiver does
+# carry a share of the relief its name buys the debtor, exactly as a guarantor
+# does — the difference is that it is paid for it (te_mon_receivership_take).
+te_mon_arr_receivership_cost_to_root = {
+	value = te_mon_lolr_relief
+	multiply = te_mon_arr_gdp_ratio_to_root
+}
+
 
 # [5b] What a bloc's monetary-union principle hands this member (§15A.3): tier
 # 1+'s cooperation — half a swap line from the leader — and, for an adopter at
@@ -201,7 +382,9 @@ te_mon_union_recipient_value = {
 	if = {
 		limit = {
 			te_mon_union_backstop_is_effective = yes
-			te_mon_lolr_is_effective = no
+			# [6c] ...and no receivership either: two names behind one debt are
+			# not two reliefs, whichever way round they were arrived at.
+			te_mon_has_treaty_debt_relief = no
 		}
 		add = te_mon_lolr_relief
 	}
@@ -216,8 +399,14 @@ te_mon_arr_recipient_value = {
 		limit = { te_mon_is_swap_recipient = yes }
 		add = te_mon_swap_premium_cut
 	}
+	# [6c] A guarantee, or a receivership — never both: 112 and 114 exclude each
+	# other by type, and the else_if says so anyway.
 	if = {
 		limit = { te_mon_lolr_is_effective = yes }
+		add = te_mon_lolr_relief
+	}
+	else_if = {
+		limit = { te_mon_is_under_receivership = yes }
 		add = te_mon_lolr_relief
 	}
 	# [5b] tier 1+ cooperation and tier 3's backstop add here.
@@ -227,10 +416,14 @@ te_mon_arr_recipient_value = {
 # ...and in pp of STRUCTURAL premium: the pegger's cut, the reserve currency's.
 te_mon_arr_standing_value = {
 	value = te_mon_reserve_currency_cut
+	# [6c] The -0.5pp is the market's reward for a CHOSEN discipline, so an
+	# imposed pegger does not get it (§15C.3, ruling C1). Lenders are not
+	# reassured by a promise somebody else extracted.
 	if = {
 		limit = {
 			te_mon_is_anchored = yes
 			var:te_mon_anchor_kind = 1
+			te_mon_is_imposed_pegger = no
 		}
 		add = te_mon_peg_standing_cut
 	}
@@ -303,6 +496,59 @@ te_mon_peg_parity_offset_display = {
 	if = {
 		limit = { has_variable = te_mon_peg_parity_offset }
 		value = var:te_mon_peg_parity_offset
+	}
+}
+
+# [6a] The swap line's balance, for the Backstops row's drawn / limit line.
+te_mon_swap_drawn_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_swap_drawn }
+		value = var:te_mon_swap_drawn
+	}
+}
+
+te_mon_swap_line_limit_display = {
+	value = 0
+	if = {
+		limit = { te_mon_is_swap_recipient = yes }
+		value = te_mon_swap_line_limit
+	}
+}
+
+# [6a/6c] Three triggers as numbers, for te_debug_monetary.11's read-out only:
+# loc cannot evaluate a scripted trigger, and these are the three the harness
+# has to see to tell a real draw from a missed one.
+te_mon_debug_in_financial_crisis = {
+	value = 0
+	if = {
+		limit = { te_mon_in_financial_crisis = yes }
+		value = 1
+	}
+}
+
+te_mon_debug_in_external_crisis = {
+	value = 0
+	if = {
+		limit = { te_mon_in_external_crisis = yes }
+		value = 1
+	}
+}
+
+te_mon_debug_is_imposed_pegger = {
+	value = 0
+	if = {
+		limit = { te_mon_is_imposed_pegger = yes }
+		value = 1
+	}
+}
+
+# [6a] The ward's record, for te_lolr.1's option tooltips and the dashboard.
+te_mon_lolr_calls_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_lolr_calls }
+		value = var:te_mon_lolr_calls
 	}
 }
 

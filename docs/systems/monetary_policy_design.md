@@ -1,6 +1,13 @@
 # Monetary Policy — Design
 
-> **STATUS: PHASES 1–5 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** The whole of it can now be
+> **STATUS: PHASES 1–6 IMPLEMENTED, PENDING IN-GAME VERIFICATION.** Phase 6 (§19 rows 6a / 6b /
+> 6c — the swap line as a repayable capped single-provider loan, the guarantee's call counter,
+> `non_fulfillment` on the friendly three, treaty leverage, and the two hostile articles
+> `imposed_currency_peg` and `debt_receivership`) was reviewed (§15B), planned and ruled
+> (§15C, §15C.5) and built on 2026-09-21, all in one day; see
+> [§0.10](#010-phase-6-as-shipped--rulings-deviations-and-open-checks) for what shipped, the
+> thirteen deviations from the plan, and the three new engine checks (§17 checks 22–24) it
+> leaves open. The whole of it can be
 > switched off at game setup while the Banking Cycle stays: `banking_system_rule` gained a third
 > setting, `banking_system_simplified`, on 2026-09-21 — see
 > [§0.9](#09-the-banking_system_simplified-game-rule--2026-09-21), which also carries the owner's
@@ -1369,6 +1376,68 @@ still advertises, say, "Wage Pressure +0.4" in a game that has no wage pressure.
 wrong with the numbers; the line is simply inert. Fixing it would mean moving each term out of
 the law and onto a script-managed modifier applied from the monthly update, which is a bigger
 change than the rule is worth unless the tooltips bother the owner in play.
+
+**Not verified in a running game**, like everything else in §0.
+
+---
+
+### 0.10 Phase 6 as shipped — rulings, deviations and open checks
+
+Phase 6 (§19 rows 6a, 6b, 6c) was implemented on 2026-09-21, on top of §0.8/§0.9, in **one
+change rather than the four PRs §15C.5's "Sequencing" line proposed** — the owner asked for
+phase 6 as a whole. The sub-phases are still separable in the diff (6a is the hardening, 6b is
+three modifier lines, 6c is two new article files plus the sites that had to learn the new
+types), and 6c remains the first thing to cut. **Nothing below has been seen in a running
+game**, and §0.8's P5-1…18 are still unrun, so 6a changes numbers that nobody has watched
+settle yet: §15C.5 wanted P5-5, P5-7 and P5-9 seen once first, and they have not been. Every
+offline check is clean — the parser on all fourteen touched files, the unit suite, `ruff`, the
+tab check, the loc checks, `check_post_load_rosters.py`, and the nine audits in their CI
+exit-code mode. **No `POST /reload` was run**: this was built in a container with no Victoria 3
+install, so the eight audits that only run there (`loc_coverage`, `concept_reference`,
+`localization_accessor`, `mod_structure`, `event_magnitude`, `modifier_visibility`,
+`pm_employment`, `effect_trigger_validity`) have **not** seen these files. Run one before play.
+
+**All thirteen owner rulings (§15C.5) are implemented as ruled**, including the three that
+departed from the plan's recommendation: H5 (the prestige lines stay as shipped, and the plan's
+managed `te_mon_arrangement_prestige` term was **not** written), H6 (nothing yearly of our own —
+the two new score terms are the whole implementation, and the fallback walk is deliberately
+absent until §17 check 22 says it is needed) and C4 (both pretexts are `in_default` only).
+
+#### Deviations from §15C (phase 6)
+
+| # | Deviation | Why |
+|---|---|---|
+| **P1** | **`te_mon_in_external_crisis` is now defined in terms of `te_mon_in_financial_crisis`**, rather than the two being parallel copies: the wide one is `OR = { is_at_war = yes te_mon_in_financial_crisis = yes }` | ruling H2 asked for "the same trigger without its `is_at_war` leg". Two hand-copied lists would drift the first time a fourth leg is added; one definition and a war leg on top cannot |
+| **P2** | **The call counter is incremented FIRST, and a derived `te_mon_lolr_calls_prior` prices the call in flight** | §15C.1 says "incremented by `te_monetary_on_country_default` when it fires `te_lolr.1`", but its four schedules disagree about which side of the increment they want: the relief taper wants the post-increment count (`n = 1` after the first default), while the honour cost, the AI odds and the cooldown want the prior count (the first call costs 5%, not 7.5%). The file's rule is now one line long — **what prices THIS call reads `_prior`; what prices the ONGOING relationship reads the counter** — and it is stated at the increment, in the values file and in the event header |
+| **P3** | **`te_lolr.1`'s odds saturate at `n = 3`**, at the tabled 10 − 3n : 2 + 2n = 1 : 8, instead of continuing | `ai_chance` bases are weights; a fourth call driving Honour to −2 is not "worse than 1:8", it is undefined. Three `>=`-tiered modifiers give exactly the tabled walk and then stop |
+| **P4** | **The Backstops row's *drawn / limit* line is a customizable-localization clause appended to the row's value**, not a new row | one row, one fact, and the clause is empty for everybody not drawn — which is almost everybody, since a line is only drawn in a financial crisis. No `.gui` change was needed |
+| **P5** | **The harness is a new `te_debug_monetary.11`, not more options on `.10`** | §15C.1 offered the choice; `.10` already carries six options and a read-out that fills the window. `.11` pins a debug swap line the way `.10` pins a debug anchor (`te_mon_debug_swap_on`, honoured by the discovery), forces one month of financial crisis, and cycles the call counter |
+| **P6** | **A new `te_mon_has_swap_line_role` trigger** wraps "holds the recipient role, by treaty or by debug pin" | the settle-on-role-end check and the role branch must agree about what "the role ended" means, or the debug line settles itself every month |
+| **P7** | **6c's pretexts are tested twice — symmetrically in `possible`, directionally in `can_ratify`** | `treaty_articles_reference.md`'s own rule: "Symmetric conditions in `possible`; everything directional in `requirement_to_maintain` or `can_ratify`". `possible` runs before the direction is fixed, so `scope:source_country` / `scope:target_country` are not the right handles there. `possible` asks whether a pretext exists in *either* direction; `can_ratify` holds the imposer to the side that has one, and carries the tooltip |
+| **P8** | **`te_mon_is_imposed_pegger` is a live treaty walk, not a stored flag** | the anchored state has one pair and one kind; *which article* put a country there is a property of the treaty. Three consumers read it (the spread, the standing cut, `te_peg.2`'s missing Break), each at most once a month for an anchored country, so it costs one extra walk per anchored country per pulse — the same cost class as the discovery itself |
+| **P9** | **113 carries no `non_fulfillment` on war or expelled diplomats**, unlike the friendly three (H7) | a chosen peg between belligerents should end, because it is a mutual arrangement. An imposed one is the settlement a war produced, and a renewed war is exactly when the imposer wants it standing. The enforce play is the way out, for either side |
+| **P10** | **114's `can_ratify` drops the separate `te_backstop_provider_outranks_tt` line, and its `requirement_to_maintain` gets its own `te_receivership_receiver_solvent_tt` rather than reusing 112's** | `te_mon_can_receive_for` already contains `te_mon_can_backstop` with the roles swapped, and its own tooltip names both halves — two tooltips for one test is noise. §15C.3 named 112's solvency key as the *check* to reuse; the key's text says "the guarantor", which is the wrong noun for a commission, so the trigger is shared and the wording is not |
+| **P11** | **The two pretext tooltips name no country** | no mod treaty-article tooltip resolves `SCOPE.sCountry('source_country')`, and there is no precedent for that scope being exposed to loc from `can_ratify`. The wording carries the rule without the handle |
+| **P12** | **A receivership's relief is `te_mon_lolr_relief`, so it tapers by the debtor's own `te_mon_lolr_calls`** | the value was reused deliberately rather than duplicated. A debtor that has already burned two guarantors is worth less to a receiver too — and its default *under* the receivership pays it nothing and moves no counter, because `te_monetary_on_country_default` tests the guarantee and a receiver is a creditor, not a guarantor |
+| **P13** | **A new `te_mon_has_treaty_debt_relief`** (guarantee-or-receivership) replaces the bare `te_mon_lolr_is_effective = no` guard on 5b's tier-3 backstop | §15A.3's rule is "two guarantors of one debt are not two rescues". A receiver is the third way to be relieved and had to join the same test |
+
+#### Known roughnesses (phase 6)
+
+- **`te_mon_anchor_spread` now performs a treaty walk** (P8) at the one site that sets an
+  anchored country's rate. If a profile ever shows it, the fix is a stored `te_mon_anchor_imposed`
+  flag written beside `te_mon_anchor_kind` in `te_monetary_anchor_changed`.
+- **The engine-built `*_effects_desc` keys for 113 and 114 are hand-written**, in
+  `te_unused_l_english.yml`, like every other article's — §0.8's known roughness, unchanged.
+  The three shipped articles' keys were also rewritten for 6a's and 6b's changes, so they are a
+  second place that has to move when the constants do.
+- **Nothing was done about §15B.3's "general pattern"** beyond what H6 ruled: the weak side's
+  flat `+10 / +20 / +20` eagerness still carries no caution term. That is the ruling, not an
+  omission — but it is the thing to revisit first if observer runs show AI minors signing
+  everything offered.
+- **The AI's post-signing withdrawal is unimplemented by design** (H6). Until §17 check 22 is
+  read, an AI guarantor whose ward has defaulted three times is relying on the engine to act on
+  a score that has gone deeply negative. If the check fails, §15C.1 carries the fallback walk
+  ready to write.
 
 **Not verified in a running game**, like everything else in §0.
 
@@ -2894,10 +2963,12 @@ works, and its era-base derivation is what makes it a no-counterparty option.
 > as a punch list of open questions, weigh the tradeoffs noted inline, and is expected to
 > bring their own ideas rather than just pick from these.
 >
-> **Planned 2026-09-21** — this punch list is turned into a staged plan, with every choice
-> that is the owner's tagged for a ruling, in
-> [§15C](#15c-phase-6-plan--leverage-coercion-and-exploit-hardening-proposed-not-built), and the owner's rulings on every one were taken the same day (§15C.5).
-> Nothing is built.
+> **Planned and built 2026-09-21** — this punch list was turned into a staged plan, with every
+> choice that is the owner's tagged for a ruling, in
+> [§15C](#15c-phase-6-plan--leverage-coercion-and-exploit-hardening-built-2026-09-21), the owner's rulings on every one were taken the same
+> day (§15C.5), and all thirteen shipped the same day. **What was actually built, and where it
+> departs from the plan, is [§0.10](#010-phase-6-as-shipped--rulings-deviations-and-open-checks)** — read that first; the
+> subsections below are the review that motivated the work, kept as written.
 
 The review that motivated this section walked the shipped 110–112 treaty articles and their
 effects/script-value chain end to end (not just the treaty-file comments) and found three
@@ -3057,15 +3128,20 @@ eagerness is fine to leave unconditional) or whether some of it should also gate
 and whether a post-ratification re-evaluation belongs as a pattern shared by all three articles
 rather than three separate ad-hoc fixes.
 
-## 15C. Phase 6 plan — leverage, coercion and exploit hardening (proposed, not built)
+## 15C. Phase 6 plan — leverage, coercion and exploit hardening (built 2026-09-21)
 
-> **Planned 2026-09-21; nothing implemented.** §15B recorded what a review of the shipped 5a
-> articles found. This section turns that punch list into a staged plan an implementer can
-> pick up — files, variables, constants, AI terms, checks — with every choice that is the
-> owner's tagged **H / L / C** and collected in §15C.5 for a ruling before code is written.
-> Where the plan recommends, it says so and says what it rejected. Every number is
-> **(proposed)** until the harness has been run, like §0.8's G16. When a sub-phase ships,
-> its rulings, deviations and open checks go in a new §0.10, the way each phase before it did.
+> **Planned and built 2026-09-21.** §15B recorded what a review of the shipped 5a articles
+> found. This section turned that punch list into a staged plan — files, variables, constants,
+> AI terms, checks — with every choice that is the owner's tagged **H / L / C** and collected
+> in §15C.5 for a ruling before code was written. Where the plan recommends, it says so and
+> says what it rejected. Every number is still **(proposed)** until the harness has been run,
+> like §0.8's G16.
+>
+> **It is now the plan, not the record.** All three sub-phases shipped on 2026-09-21, in one
+> change rather than the four PRs §15C.5's "Sequencing" line proposed;
+> [§0.10](#010-phase-6-as-shipped--rulings-deviations-and-open-checks) carries what was built,
+> the deviations from this text, and what is still unverified. Where the two disagree, §0.10 is
+> the shipped behaviour.
 >
 > **Owner rulings taken 2026-09-21 on all thirteen** (the table in §15C.5). Three depart from
 > the recommendation — **H5** (prestige stays as shipped), **H6** (the engine's own AI withdrawal
@@ -3744,6 +3820,25 @@ Phases 4–5 (§15, §15A):
     entrepôt actually read? Sets §15.3's three band edges. Fallback: drop the banding (×1.0).
 21. Is `modifier:country_minting_add` readable in a subject's scope from script (§15A.4)?
     Same family as check 5.
+22. **(6a / H6, the one 6a is waiting on.)** Does the vanilla AI **withdraw on its own** from an
+    in-force treaty whose article `inherent_accept_score` has turned negative for it, once the
+    binding period allows? Read it on a debug guarantor whose ward's `te_mon_lolr_calls` is set
+    to 2 (`te_debug_monetary.11` option d), which puts `te_ai_backstop_repeat_defaulter` at −40
+    against a base that was already negative. **If it does, 6a is complete as shipped**; if it
+    does not, §15C.1 carries the fallback yearly walk on `NOT = { is_equal_exchange_for = root }`,
+    monetary-only treaties, AI providers only — and that walk has its own sub-check, that a
+    `withdraw = { country = root }` issued from a scripted effect on the yearly pulse fires
+    `on_withdrawal` with `scope:withdrawing_country` set, as it does from an event option (P5-9).
+23. **(6c.)** Does `contestion_type = control_target_country_capital` on a hostile *monetary*
+    article resolve in the play UI? In-mod precedent (`105_enforce_privatization.txt`), so low
+    risk — but 113 and 114 are the first articles to demand something that lives in script
+    variables rather than in a state or a law.
+24. **(6a / H5.)** How do repeated **same-name `target_modifier`s** from several in-force
+    articles stack on one country? Read an anchor's prestige with two, then three, debug
+    peggers: additive stacking shows +4% then +6%. Check 14's cousin, live again *because* the
+    shipped prestige lines stay (H5). The fan-out is accepted by ruling, so this row **records
+    the answer; it does not fail**. If prestige turns out to run away with headcount, §15C.1
+    keeps the managed, GDP-scaled `te_mon_arrangement_prestige` term on record as the fix.
 
 ---
 
@@ -3855,7 +3950,7 @@ Phase 5a repeats the recipe for `cb_fx_swap_lines` / `banking_fx_swap_lines` (bu
 
 Each phase is playable alone. Later phases can be cut.
 
-**Status.** Rows **1, 2, 3, 4, 5a, 5b and 5c are implemented** and pending in-game
+**Status.** Rows **1, 2, 3, 4, 5a, 5b, 5c, 6a, 6b and 6c are implemented** and pending in-game
 verification (rows 5a–5c: [§0.8](#08-phase-5-as-shipped--rulings-deviations-and-open-checks),
 checklist P5-1…18; row 4:
 [§0.7](#07-phase-4-as-shipped--rulings-deviations-and-open-checks), checklist P4-1…12) — see
@@ -3864,9 +3959,11 @@ checklist P5-1…18; row 4:
 §0.4 checklist items 24–25 and row 3's are §0.5 items 36–39. Row 3's "regime law stances" had
 already shipped with phase 2 (§13 "Delivered"). Row 5 was scoped 2026-09-20 and built
 2026-09-21 in the order 5a → 5c → 5b, one commit each, so each is still cuttable. (The table itself
-carries no status column and is left as written.) Rows **6a–6c** are **planned, not built**
-([§15C](#15c-phase-6-plan--leverage-coercion-and-exploit-hardening-proposed-not-built) — the plan, the
-owner decisions it needs, and its checklist P6-1…13).
+carries no status column and is left as written.) Rows **6a–6c** were scoped, planned, ruled and
+built on 2026-09-21, in one change rather than four
+([§15C](#15c-phase-6-plan--leverage-coercion-and-exploit-hardening-built-2026-09-21) is the plan and
+[§0.10](#010-phase-6-as-shipped--rulings-deviations-and-open-checks) the record; checklist
+P6-1…13).
 
 | Phase | Ships | Interim rule until the next phase | Exit criteria |
 |---|---|---|---|
@@ -3877,9 +3974,9 @@ owner decisions it needs, and its checklist P6-1…13).
 | **5a** | §15A.1–2: the anchored state (`te_mon_anchor`, kind; validity / discovery / yearly scan) on phase 4's shadow and overvaluation; `currency_peg`, `swap_line`, `lender_of_last_resort` articles; peg-crisis re-read; GDP-scaled arrangement modifiers; `cb_fx_swap_lines` deleted | blocs and subjects are monetary islands | §17 checks 14–15, 18 answered; an AI minor pegged to a GP tracks a 2pp anchor hike within two months and survives it; the same peg **breaks** under 15 points of sustained overvaluation; a GP's provider cost for a minor is < 10% of the minor's benefit; no chain or cycle of anchors can be constructed; AI signs pegs and swap lines in an observer run, and not universally |
 | **5b** | §15A.3: `principle_group_monetary_union` (3 tiers), adoption action + convergence criteria, overvaluation premium, convergence pressure, exit | subjects still islands | §17 checks 16, 19 answered; an adopter in a slump while the leader runs hot shows a visibly rising premium and a tight band; the **exit invariant** holds in the harness (worse than staying for ≥ 5 years at 15 points of overvaluation, better after); a pressed, debt-heavy adopter costs a tier-3 leader a backstop call within a cycle or two; pressing a bloc of refusers loses the leader cohesion on net; a human holdout sees *The Question* fewer than ~6 times a campaign |
 | **5c** | §15A.4: automatic currency boards for `autonomy_level = 1` subjects, seigniorage transfer, wrong-stance liberty desire | — | §17 check 17 answered; a puppet's rate tracks its overlord's within a month of subjugation and returns to its own rule within a month of release, with no exit penalty; the overlord's minting gain is GDP-scaled (a tiny puppet is a rounding error); a sustained 2pp wrong stance moves liberty desire measurably but does not alone cause a revolt |
-| **6a** *(planned — §15C.1, rulings taken)* | the swap line as a repayable, capped, single-provider loan drawn only in a *financial* crisis; the guarantee's call counter (honour cost, relief, AI odds, cooldown) read by the signing score too; the AI's own post-signing withdrawal on the re-scored articles (a scripted yearly walk only as fallback); `non_fulfillment = withdraw` on war / expulsion. Prestige stays as shipped (H5) | — | P6-1…9; P5-5, P5-7 and P5-9 still hold |
-| **6b** *(planned — §15C.2)* | `country_treaty_leverage_generation_add` 200 / 150 / 300 on the strong side of the three articles | — | P6-10 |
-| **6c** *(planned — §15C.3)* | `imposed_currency_peg` and `debt_receivership`: hostile, enforceable, demandable only against a country in default; no hostile swap line | — | P6-11…13: both rare in a 50-year observer run, and the friendly three still signed |
+| **6a** *(§15C.1 / §0.10)* | the swap line as a repayable, capped, single-provider loan drawn only in a *financial* crisis; the guarantee's call counter (honour cost, relief, AI odds, cooldown) read by the signing score too; the AI's own post-signing withdrawal on the re-scored articles (a scripted yearly walk only as fallback); `non_fulfillment = withdraw` on war / expulsion. Prestige stays as shipped (H5) | — | P6-1…9; P5-5, P5-7 and P5-9 still hold |
+| **6b** *(§15C.2 / §0.10)* | `country_treaty_leverage_generation_add` 200 / 150 / 300 on the strong side of the three articles | — | P6-10 |
+| **6c** *(§15C.3 / §0.10)* | `imposed_currency_peg` and `debt_receivership`: hostile, enforceable, demandable only against a country in default; no hostile swap line | — | P6-11…13: both rare in a 50-year observer run, and the friendly three still signed |
 
 ---
 
@@ -3943,15 +4040,21 @@ owner decisions it needs, and its checklist P6-1…13).
    a self-inflicted external crisis against them; a ward can serial-default every five years
    against a guarantor whose Honour/Renege odds don't move with history; an anchor can take
    unlimited peggers for a flat per-article prestige gain no cap touches. *Mitigation:*
-   planned, not built — §15C.1 (H1–H7, ruled 2026-09-21): the draw becomes a repayable, capped
-   loan from one provider, drawn only in a financial crisis; the guarantee remembers its calls
-   in the cost, the relief, the AI's odds, the cooldown and the signing score; the AI's own
-   post-signing withdrawal sees the re-scored articles. The third item — the pegger fan-out —
-   is **accepted as shipped by owner ruling H5**; §17 check 24 records how it stacks.
-14. **Coercive articles make the AI world grabby** (phase 6c, planned) — every domineering
-   great power demanding pegs and receiverships in every play. *Mitigation:* the pretext
-   gates in `possible`, a low `evaluation_chance`, the don't-impose-on-friends rule; P6-13's
-   rarity criterion is the exit test, and the two articles are the first thing to cut.
+   **built 2026-09-21** — §15C.1 / §0.10 (H1–H7): the draw is a repayable, capped loan from one
+   provider, drawn only in a financial crisis; the guarantee remembers its calls in the cost,
+   the relief, the AI's odds, the cooldown and the signing score. The third item — the pegger
+   fan-out — is **accepted as shipped by owner ruling H5**; §17 check 24 records how it stacks.
+   Two things are still open in play rather than in script: §17 check 22 (does the engine's own
+   AI actually withdraw on the re-scored articles, or is §15C.1's fallback walk needed?), and
+   the fact that none of the phase-5 numbers these schedules move has been watched settle yet
+   (§0.8's P5-1…18 are unrun).
+14. **Coercive articles make the AI world grabby** (phase 6c, built — untested) — every
+   domineering great power demanding pegs and receiverships in every play. *Mitigation:* the
+   `in_default` pretext (ruling C4), tested symmetrically in `possible` and directionally in
+   `can_ratify` (§0.10 P7); `evaluation_chance` 0.01, and `request`-only usage; the
+   don't-impose-on-friends rule. P6-13's rarity criterion is the exit test, and the two
+   articles are the first thing to cut — they are two self-contained files plus the
+   `OR = { has_type … }` edits §15C.3 lists.
 
 ---
 
@@ -4023,11 +4126,11 @@ owner decisions it needs, and its checklist P6-1…13).
 | Union pressure: refusal's leverage resistance / event floor | +250 for 10 years, refreshed / once per 5 years, state-change triggered | 15A.3 |
 | Union exit: premium / re-adoption lock | +3pp decaying over 10 years / 10 years | 15A.3 |
 | Currency board: subject minting / overlord's share / wrong-stance threshold | −0.5 / half the subject's minting, as a flat add / stance band 1 or 5 for 6 months | 15A.4 |
-| Swap line as a loan **(6a, proposed)**: limit / repayment / crisis definition | 2% of recipient GDP outstanding / 0.1% of GDP a month out of crisis, settled in one lump when the line ends / `te_mon_in_financial_crisis` (no war leg) | 15C.1 |
-| LOLR call counter **(6a, proposed)**: honour cost / relief share / AI odds / cooldown / forget | 5% × (1 + 0.5n), cap 15% / 0.5 · 0.35 · 0.2 · 0 / Honour 10 − 3n : Renege 2 + 2n / 60 × (1 + n) months / one call per 120 quiet months | 15C.1 |
-| AI post-signing withdrawal **(6a, H6)** | the engine's own, on `inherent_accept_score` with −20 per ward call and −20 if drawn; fallback: a yearly walk on `is_equal_exchange_for`, monetary-only treaties | 15C.1 |
-| Treaty leverage **(6b / 6c, proposed)** | peg 200 / swap 150 / LOLR 300 / imposed peg 400 / receivership 500 | 15C.2, 15C.3 |
-| Imposed peg / receivership **(6c, proposed; pretext ruled C4)** | spread 1.0, no standing cut, −10 legitimacy, infamy base 8 / take 0.1% of debtor GDP a month, −10 legitimacy, infamy base 10, self-ends 12 months after `scaled_debt` < 0.25 / both demandable only against a country `in_default` | 15C.3 |
+| Swap line as a loan **(6a, shipped; numbers still proposed)**: limit / repayment / crisis definition | 2% of recipient GDP outstanding / 0.1% of GDP a month out of crisis, settled in one lump when the line ends / `te_mon_in_financial_crisis` (no war leg) | 15C.1 |
+| LOLR call counter **(6a, shipped; numbers still proposed)**: honour cost / relief share / AI odds / cooldown / forget | 5% × (1 + 0.5n), cap 15% / 0.5 · 0.35 · 0.2 · 0 / Honour 10 − 3n : Renege 2 + 2n / 60 × (1 + n) months / one call per 120 quiet months | 15C.1 |
+| AI post-signing withdrawal **(6a, H6, shipped)** | the engine's own, on `inherent_accept_score` with −20 per ward call and −20 if drawn. **The fallback walk is deliberately unwritten** until §17 check 22 says it is needed | 15C.1, 0.10 |
+| Treaty leverage **(6b / 6c, shipped; numbers still proposed)** | peg 200 / swap 150 / LOLR 300 / imposed peg 400 / receivership 500 | 15C.2, 15C.3 |
+| Imposed peg / receivership **(6c, shipped; numbers still proposed; pretext ruled C4)** | spread 1.0, no standing cut, −10 legitimacy, infamy base 8 / take 0.1% of debtor GDP a month, −10 legitimacy, infamy base 10, self-ends 12 months after `scaled_debt` < 0.25 / both demandable only against a country `in_default` | 15C.3 |
 
 ---
 

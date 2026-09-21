@@ -697,6 +697,15 @@ te_mon_anchor_state = {
 		}
 		localization_key = banking_dash_mon_anchor_state_union
 	}
+	# [6c] An IMPOSED peg is still kind 1, so it has to be named before the
+	# chosen one's fall-through claims it.
+	text = {
+		trigger = {
+			te_mon_is_anchored = yes
+			te_mon_is_imposed_pegger = yes
+		}
+		localization_key = banking_dash_mon_anchor_state_peg_imposed
+	}
 	text = {
 		trigger = { te_mon_is_anchored = yes }
 		localization_key = banking_dash_mon_anchor_state_peg
@@ -710,6 +719,29 @@ te_mon_anchor_state = {
 	}
 	text = {
 		localization_key = banking_dash_mon_anchor_state_none
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Phase 6a — the drawn balance on a swap line (§15C.1)
+# ----------------------------------------------------------------------------
+# One clause appended to the Backstops row: what this country has drawn on its
+# line and has still to repay, against the ceiling. Empty for everybody else —
+# the overwhelming majority, since a line is only drawn in a financial crisis.
+te_mon_swap_drawn_note = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = te_mon_swap_drawn
+			var:te_mon_swap_drawn > 0
+		}
+		localization_key = banking_dash_mon_backstops_drawn
+	}
+	text = {
+		localization_key = banking_dash_mon_backstops_undrawn
 	}
 }
 

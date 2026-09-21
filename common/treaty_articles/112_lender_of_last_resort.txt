@@ -13,6 +13,13 @@
 # last one honoured).
 #
 # Modifier blocks and hooks: see 110_currency_peg.txt's header.
+#
+# PHASE 6: THE GUARANTEE REMEMBERS (§15C.1). te_mon_lolr_calls counts what a
+# ward has already cost whoever stood behind it — the honour cost rises with it,
+# the relief tapers to nothing on the third call, the cooldown lengthens, and
+# te_lolr.1's odds walk from 10:2 toward 1:8. The counter belongs to the WARD,
+# so a change of guarantor does not clear it, and the score below reads it
+# before anyone signs. Plus §15C.2's leverage and §15C.1/H7's non_fulfillment.
 # =================================================================
 lender_of_last_resort = {
 	icon = "gfx/interface/icons/law_icons/central_bank_independence.dds"
@@ -31,8 +38,11 @@ lender_of_last_resort = {
 	maintenance_paid_by = source_country
 	usage_limit = once_per_treaty
 
+	# [6c] ...and the receivership (114): two names behind one debt are not two
+	# rescues. Declared in both files.
 	mutual_exclusions = {
 		lender_of_last_resort
+		debt_receivership
 	}
 
 	# TECH GATE: INTERGOVERNMENTAL ORGANIZATIONS (era 6), not central_banking.
@@ -45,6 +55,10 @@ lender_of_last_resort = {
 
 	source_modifier = {
 		country_prestige_mult = 0.02
+		# [6b] The deepest of the three commitments, so the most leverage
+		# (§15C.2, ruling L1) — sized against intelligence_sharing_pact: a ward's
+		# finances answer to its guarantor.
+		country_treaty_leverage_generation_add = 300
 	}
 
 	# The whole phase-5 toolkit is part of the monetary layer, so the
@@ -94,7 +108,8 @@ lender_of_last_resort = {
 			}
 		}
 		# One lender of last resort: a second guarantee of the same debt is not
-		# a second rescue.
+		# a second rescue — [6c] and neither is a receivership beside one, so
+		# the walk tests both types with the ward on the side each puts it.
 		custom_tooltip = {
 			text = te_lolr_already_guaranteed_tt
 			scope:target_country = {
@@ -109,9 +124,32 @@ lender_of_last_resort = {
 							}
 						}
 						any_scope_article = {
-							has_type = lender_of_last_resort
-							target_country = scope:target_country
+							OR = {
+								AND = {
+									has_type = lender_of_last_resort
+									target_country = scope:target_country
+								}
+								AND = {
+									has_type = debt_receivership
+									source_country = scope:target_country
+								}
+							}
 						}
+					}
+				}
+			}
+		}
+	}
+
+	# [6a] §15C.1 ruling H7: WITHDRAW, not freeze — see 111_swap_line.txt for why.
+	non_fulfillment = {
+		consequences = withdraw
+		conditions = {
+			weekly = {
+				scope:article = {
+					OR = {
+						root = { has_war_with = scope:other_country }
+						root = { has_diplomats_expelled = scope:other_country }
 					}
 				}
 			}
@@ -212,6 +250,38 @@ lender_of_last_resort = {
 					add = {
 						desc = "te_ai_backstop_own_debt"
 						value = -30
+					}
+				}
+				# [6a] The ward's RECORD, -20 a call (§15C.1, ruling H4). This is the
+				# term that stops a guarantor from walking into a serial defaulter's
+				# arms at signing; the counter itself is what stops the loop once it
+				# has started.
+				if = {
+					limit = {
+						scope:target_country = {
+							has_variable = te_mon_lolr_calls
+							var:te_mon_lolr_calls > 0
+						}
+					}
+					add = {
+						desc = "te_ai_backstop_repeat_defaulter"
+						value = {
+							value = scope:target_country.var:te_mon_lolr_calls
+							multiply = -20
+						}
+					}
+				}
+				# [6a] ...and a recipient still owing on a swap line (ruling H6).
+				if = {
+					limit = {
+						scope:target_country = {
+							has_variable = te_mon_swap_drawn
+							var:te_mon_swap_drawn > 0
+						}
+					}
+					add = {
+						desc = "te_ai_backstop_drawn"
+						value = -20
 					}
 				}
 			}

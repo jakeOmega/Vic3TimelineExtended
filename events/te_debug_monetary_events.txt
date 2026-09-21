@@ -1121,3 +1121,115 @@ te_debug_monetary.10 = { # REVIEWED 2026-09-21: console-only test event (`event 
 		default_option = yes
 	}
 }
+
+
+# ============================================================================
+# te_debug_monetary.11 — leverage, coercion and hardening (phase 6, §15C)
+# ============================================================================
+# Console-only: `event te_debug_monetary.11`. .10 stages the anchored state;
+# this one stages what phase 6 added to it, because P6-1..P6-6 and P6-12 need
+# levers no treaty gives you on demand:
+#
+#   a  pin a DEBUG swap line from the largest dial economy (the discovery
+#      honours te_mon_debug_swap_on, the te_mon_debug_anchor precedent). Then
+#      option c for a month of crisis and .10 option e to pulse:
+#      P6-1 (draw 0.1% a month, stop at 2%, repay out of the crisis),
+#      P6-2 (release with a balance -> one lump settlement),
+#      P6-4 (a war alone draws nothing: declare one and leave c alone).
+#   b  release the debug swap line — with a balance outstanding this IS P6-2
+#   c  force one month of FINANCIAL crisis: te_inflation_band = 6, which the
+#      next monthly update overwrites. War is deliberately not a lever here:
+#      ruling H2 took it out of the draw trigger.
+#   d  cycle te_mon_lolr_calls 0 -> 1 -> 2 -> 3 -> 0 (P6-5's schedules, P6-6's
+#      AI tooltips). The forget clock is re-armed with it.
+#   e  clear the drawn balance without settling it (a reset between runs)
+# ============================================================================
+te_debug_monetary.11 = { # REVIEWED 2026-09-21: console-only test event (`event te_debug_monetary.11`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.11.t
+	desc = te_debug_monetary.11.d
+	flavor = te_debug_monetary.11.f
+
+	immediate = {
+		te_monetary_init_variables = yes
+		# The read-out names the provider; a country with none names itself, so
+		# the saved scope always exists (the .10 rule).
+		save_scope_as = te_debug_swap_provider
+		if = {
+			limit = {
+				te_mon_is_swap_recipient = yes
+				has_variable = te_mon_swap_provider
+				exists = var:te_mon_swap_provider
+			}
+			var:te_mon_swap_provider = { save_scope_as = te_debug_swap_provider }
+		}
+		save_scope_as = te_debug_receiver
+		if = {
+			limit = {
+				te_mon_is_under_receivership = yes
+				exists = var:te_mon_receiver
+			}
+			var:te_mon_receiver = { save_scope_as = te_debug_receiver }
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.11.a
+		ordered_country = {
+			limit = {
+				NOT = { this = root }
+				te_mon_can_be_anchor = yes
+			}
+			order_by = gdp
+			position = 0
+			save_scope_as = te_debug_new_provider
+		}
+		if = {
+			limit = { exists = scope:te_debug_new_provider }
+			set_variable = { name = te_mon_debug_swap_provider value = scope:te_debug_new_provider }
+			set_variable = { name = te_mon_debug_swap_on value = 1 }
+			te_monetary_discover_arrangements = yes
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.11.b
+		set_variable = { name = te_mon_debug_swap_on value = 0 }
+		te_monetary_discover_arrangements = yes
+	}
+
+	option = {
+		name = te_debug_monetary.11.c
+		set_variable = { name = te_inflation_band value = 6 } # REVIEWED 2026-09-21: console-only; the next monthly update recomputes the band
+	}
+
+	option = {
+		name = te_debug_monetary.11.dd
+		if = {
+			limit = { var:te_mon_lolr_calls >= 3 }
+			set_variable = { name = te_mon_lolr_calls value = 0 }
+		}
+		else = {
+			change_variable = { name = te_mon_lolr_calls add = 1 }
+		}
+		set_variable = { name = te_mon_lolr_call_forget value = te_mon_lolr_call_forget_months }
+	}
+
+	option = {
+		name = te_debug_monetary.11.e
+		set_variable = { name = te_mon_swap_drawn value = 0 }
+	}
+
+	option = {
+		name = te_debug_monetary.11.z
+		default_option = yes
+	}
+}
