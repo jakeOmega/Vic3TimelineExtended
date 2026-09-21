@@ -902,6 +902,22 @@ For each article implemented, these files need changes:
 
 ---
 
+## Monetary articles: Currency Peg, Swap Line, Lender of Last Resort
+
+Monetary policy phase 5a (`docs/systems/monetary_policy_design.md` §15A.2, §0.8; `mod_systems.md` § **Monetary Policy (phase 5)**). Files `common/treaty_articles/110_currency_peg.txt`, `111_swap_line.txt`, `112_lender_of_last_resort.txt`. All three are **directed**, `friendly`, `giftable`, `can_be_renegotiated`, unlocked by `central_banking`.
+
+| Article | Source → target | What it does |
+|---|---|---|
+| `currency_peg` | pegger → anchor | the pegger becomes *anchored* (kind 1): no policy rate of its own, the anchor's rate + 0.5, the anchor's exchange rate, imported credibility, −0.5pp credit standing, and a Peg Confidence that overvaluation drains (crisis `te_peg.2`). The anchor gains a reserve-currency standing cut and prestige, and no obligation |
+| `swap_line` | provider → recipient | recipient −1pp risk premium, +2 peg confidence a month, orderly hot-money exit in a panic; drawn on (0.1% of recipient GDP a month, provider → recipient) in an external crisis |
+| `lender_of_last_resort` | guarantor → ward | the ward's debt-load premium halved, imported crashes start shallower; the ward's default fires `te_lolr.1` on the guarantor (honour / renege) |
+
+**Pattern worth copying — and the reason these three look empty.** Their `source_modifier` / `target_modifier` blocks carry prestige only. Every monetary term is GDP- or share-scaled (*provider cost = recipient benefit × clamp(recipient GDP ÷ provider GDP)*), which a static treaty block cannot express, so the articles are **markers**: their hooks dispatch `te_monetary_internal.2`, an idempotent discovery that walks the country's in-force treaties (`any_scope_treaty = { any_scope_article = { has_type = X source_country = root } }`), and the monthly monetary update applies three managed scaled modifiers from what it found. The treaty is the source of truth; the hooks only make it prompt.
+
+**Gating.** Symmetric conditions in `possible`; everything directional in `requirement_to_maintain` (the anchor keeps a dial; the provider keeps a national bank; the guarantor is not in default) or `can_ratify` (rank / GDP tests, one peg at a time, one guarantor per ward — the existing-treaty checks use the vanilla `is_renegotiation` / `amended_treaty` guard and only resolve there).
+
+---
+
 ## Priority & Dependency Order
 
 | Priority | Article | Complexity | Dependencies |

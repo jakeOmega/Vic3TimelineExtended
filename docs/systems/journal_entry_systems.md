@@ -37,7 +37,8 @@ Central bank policy tools, organized as toggle pairs (market economy only):
 - Directed credit, emergency liquidity, moral suasion
 - Margin requirements
   (the *FX Devaluation* and *FX Support* pairs were deleted in monetary phase 4 — the exchange rate is now an outcome, `te_fx_index`; see **Monetary Policy block (phase 4)** below)
-- Capital controls (outflow), FX swap lines, export credit facility, asset relief program
+- Capital controls (outflow), export credit facility, asset relief program
+  (the *FX Swap Lines* pair was deleted in monetary phase 5a — a swap line is now a treaty article with a named counterparty, `swap_line`; see `mod_systems.md` § **Monetary Policy (phase 5)**)
 
 **Command Economy planning tools** (16 buttons, visible under `law_command_economy` only):
 - Emergency Plan Revision, Resource Allocation, Target Reduction, Strategic Stockpile
