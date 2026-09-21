@@ -135,8 +135,10 @@ python3 pop_needs_curves.py                          # common/buy_packages/00_bu
 python3 resources.py                                 # map_data/state_regions/*.txt
 python3 scripts/generators/gen_formable_regions.py   # common/geographic_regions/te_formable_regions_generated.txt
 python3 effect_trigger_validity_audit.py bootstrap   # docs/engine/effect_trigger_valid_keys.txt (frozen valid effect/trigger catalog)
-python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors)
+python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors; 1.14.3 a further 5 — point releases count)
 ```
+
+**Run `fold_vanilla_loc_accessors.py --dry-run` first, and look each new accessor up in vanilla loc before folding.** The generator folds every flagged accessor as `"value"`, which is right for a terminal atom and wrong for a *type-changing* one — and folding the latter still makes the flag go away, by making the audit stop checking the rest of the chain. That is a silent loss of engine-surface knowledge, not a fix. 1.14.3's `State.GetStateInfamyPerspective` is the worked example: it returns a **country** (`"[State.GetStateInfamyPerspective.GetNameNoFormatting] already owns [State.GetName]"`), so it goes into `_BUILTIN_ACCESSORS_BY_TYPE` by hand *before* the fold. The tell is a flagged chain with another step after the flagged accessor.
 
 Re-bootstrap the effect/trigger catalog **after** the engine-doc summaries (`effects_summary.txt` / `triggers_summary.txt`) are refreshed in step 3, since it unions those names with vanilla's effect-corpus keywords. A stale catalog produces false positives (new vanilla effects flagged as unknown).
 
