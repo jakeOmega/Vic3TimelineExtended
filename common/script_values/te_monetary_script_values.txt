@@ -478,10 +478,19 @@ te_mon_era_base = {
 # WHY COMMODITY MONEY GETS A BAND AND GOLD DOES NOT. Both promise metal, but
 # only a gold standard has the §12.2 machinery to make the promise bite: a
 # reserve that drains, hot money, and a confidence crisis when the vault runs
-# low. Commodity money has no vault in this model, so the discipline has to be
-# stated as a bound rather than paid for in reserves. That is also the honest
-# reading of the regime — a country whose coin IS the commodity cannot move the
-# price of credit far from what the metal costs everywhere else.
+# low. Commodity money has no vault in this model, so the RATE discipline has
+# to be stated as a bound rather than paid for in reserves. That is also the
+# honest reading of the regime — a country whose coin IS the commodity cannot
+# move the price of credit far from what the metal costs everywhere else.
+#
+# THE PRICE-LEVEL DISCIPLINE IS SOMEWHERE ELSE, AND IS NOT A BOUND (ruling R7,
+# issue #351). §0.6 R5 originally made this band the whole of the regime's
+# discipline; a live game showed that a band on the RATE says nothing about the
+# QUANTITY of money, and a commodity country sat at 4% core with the dial
+# pinned at this ceiling. te_mon_pressure_commodity_specie now supplies the
+# missing channel — prices out of line with the world's cost the country
+# inflation pressure, the way specie leaving would — so this band no longer has
+# to carry a job it was never shaped for.
 #
 # ONE AUTHORITY, TWO CONSUMERS. te_monetary_clamp_target re-clamps the target
 # every month, and the dashboard's stepper has to grey out at exactly the same
@@ -2080,6 +2089,16 @@ te_mon_pressure_noise = {
 # is the foreign one. The §9.1 gold-SUPPLY term is deliberately absent — it is
 # a phase-3 companion to gold flows (ruling P2), and this plain pull carries
 # the deflation bias until then.
+#
+# THE PULL IS A PROPORTION, NOT AN ANCHOR — and that distinction is the whole
+# of issue #351. It closes a fixed FRACTION of the gap every month and never
+# the gap itself: with expectations pinned at 0 and step 6's
+# core += speed x (expected + P - core), a pull of -core makes the fixed point
+# core = X - core, so core settles at HALF of everything else in the sum and
+# doubling the other pressures doubles it. That is the deflation BIAS doing its
+# job. What holds the price LEVEL is a quantity channel, and each convertible
+# regime has its own: te_mon_pressure_gold_flow for a gold standard,
+# te_mon_pressure_commodity_specie (immediately below) for commodity money.
 te_mon_pressure_regime_pull = {
 	value = 0
 	if = {
@@ -2101,12 +2120,140 @@ te_mon_pressure_regime_pull = {
 	}
 }
 
+# --- The commodity-money price-specie term (§9.1, §15.6, ruling R7) ----------
+# WHAT STOPS A COUNTRY ON COIN FROM HOLDING A STANDING INFLATION. A gold
+# standard has te_mon_pressure_gold_flow below: specie actually leaves a bank
+# that pays less than the world, and the vault is the thing that runs out.
+# Commodity money has no vault in this model (see te_mon_target_min), so §0.6
+# R5 shipped the narrow rate band as the whole of its discipline. That left the
+# regime with a rate dial and no QUANTITY channel at all — the only thing
+# pulling its prices back down was the regime pull above, which closes a fixed
+# fraction of the gap and never the gap itself, and a live game found a
+# commodity-money country parked at 4% core / 6.1% headline with its dial
+# pinned at the band ceiling (issue #351).
+#
+# That is the wrong shape historically. Under convertible coin the price level
+# is INTERNATIONALLY determined, and the enforcement is specie leaving a
+# country whose prices are out of line. Localized metallic inflation came from
+# debasement, from a world metal-supply shock, from a transitory goods shock
+# (the §9.3 cost-push, which already mean-reverts over three years) or from
+# suspended convertibility — never from a stable domestic pressure sum.
+#
+# THE INPUT IS THE FX LAYER'S PRICE GAP, NOT A NEW MEASUREMENT. Phase 4 already
+# computes how far this country's prices have run from the world's, in
+# te_mon_fx_term_inflation — and for a metallic country that term reads
+# REALISED CORE rather than pinned expectations (§15.2), which is exactly the
+# quantity a specie flow would answer. The RATE half of the overvaluation
+# (te_mon_fx_term_rate) is deliberately left out: that is capital flight, not a
+# price gap, and te_mon_fx_overvaluation_for_peg is the precedent for netting
+# one term back out of the headline figure. This also gives a dead row work to
+# do — te_mon_overvaluation was display-only under commodity money (§15.6).
+#
+# ...NORMALISED BACK OUT OF ITS WEIGHT. te_mon_fx_inflation_weight (2 points of
+# exchange rate per pp of gap) is a phase-4 tuning number about how harshly a
+# CURRENCY is judged; this term is about the COIN. Dividing it out keeps a
+# balance pass on the exchange rate from silently retuning the discipline, and
+# leaves the value in the pp that the whole of §9.1 is written in. The FX
+# term's own +/-10pp clamp on the gap comes along with it, far outside anything
+# this term's own clamp lets through.
+te_mon_commodity_specie_gap = {
+	value = te_mon_fx_term_inflation
+	divide = te_mon_fx_inflation_weight
+	multiply = -1
+}
+
+# THE TWO NUMBERS THAT SIZE THIS TERM (§21), and they do different jobs.
+# TOLERANCE is a dead band in pp of inflation above the world's: inside it,
+# nothing happens. It is 1 because te_inflation_noise is a +/-0.75pp walk and
+# cost-push moves points of its own — a tighter band would have specie chasing
+# the model's own noise — and because the gold points of the period were a real
+# friction besides. PER_PP is what a pp beyond the band buys in disinflation.
+#
+# WHAT THEY SET, TOGETHER. Write X for everything else in te_mon_pressure_total
+# at equilibrium and pi_w for world inflation. The regime pull makes the fixed
+# point 2 x core = X + this term, so
+#
+#     core x (2 + per_pp) = X + per_pp x (pi_w + tolerance)
+#
+# The X = 8 that settles at 4% core today, against a world at 0, settles at
+# 2.5% with these two. And — READ THIS BEFORE RETUNING — no value of per_pp
+# pushes the equilibrium below pi_w + tolerance. The TOLERANCE is the floor of
+# what this regime can be held to; per_pp only says how fast it gets there.
+#
+# THE CLAMP IS THE OTHER END. At 6pp the term stops growing, so a country that
+# is genuinely debasing its coin, or monetising a war it cannot monetise
+# legally, can still inflate clean past the band — which is the one way a
+# metallic country historically did.
+te_mon_commodity_specie_tolerance = {
+	value = 1
+}
+
+te_mon_commodity_specie_per_pp = {
+	value = 2
+}
+
+te_mon_commodity_specie_clamp = {
+	value = -6
+}
+
+# ONE-SIDED, on te_mon_fx_overvaluation_value's own `min = 0` precedent: an
+# UNDERvalued parity buys nothing anywhere in this model, and the mirror term —
+# cheap prices pull specie in and inflate — would tether a metallic country to
+# a FIAT world's inflation rather than to a shared standard's, which is the
+# opposite of what the regime is for. Left out deliberately and recorded in
+# §15.6, not forgotten. `min` is therefore the only clamp it needs: the
+# construction cannot produce a positive number.
+#
+# THE GATE IS THE LAW, not te_mon_is_metallic. A gold standard is already
+# disciplined by its own flows and would be charged twice; both laws live in
+# lawgroup_monetary_policy (common/laws/extra_laws.txt), so this test is
+# exclusive by construction. A commodity country WITHOUT a bank is IN: the
+# discipline belongs to the coin, not to whoever sets a discount rate
+# (te_mon_pressure_gold_flow needs a bank only because the vault it drains is
+# the bank's).
+#
+# ...AND THE LAW IS NOT ENOUGH BY ITSELF. Dollarisation is a VARIABLE that
+# overrides what the laws still say (ruling P9), so the second line is the same
+# exclusion te_mon_has_gold_flows gets for free through te_mon_has_dial: a
+# country that abandoned its own currency keeps the metallic regime pull —
+# whatever it adopted is somebody else's hard money — but somebody else's
+# specie is not its to lose. Written in te_mon_has_dial's exact
+# `NOT = { te_mon_is_dollarised = yes }` form, which is the guarded read.
+#
+# WHICH MONTH IT READS. te_mon_fx_term_inflation is live — off the core the
+# last step 6 wrote, and off var:te_mon_world_inflation_now, which step 0
+# copied from a global refreshed once a month in an order §17 check 7 records
+# as unknown. So this carries the same one-month lag ruling P5 accepts for the
+# stance gap and te_mon_pressure_gold_flow carries for the flow.
+te_mon_pressure_commodity_specie = {
+	value = 0
+	if = {
+		limit = {
+			has_law_or_variant = law_type:law_commodity_money
+			NOT = { te_mon_is_dollarised = yes }
+		}
+		value = te_mon_commodity_specie_gap
+		subtract = te_mon_commodity_specie_tolerance
+		min = 0
+		multiply = te_mon_commodity_specie_per_pp
+		multiply = -1
+	}
+	min = te_mon_commodity_specie_clamp
+}
+
 # The whole §9.1 pressure, in pp: how far above expectations inflation settles
 # while all of this lasts. A LEVEL, never a per-month increment.
 #
 # THE GOLD-FLOW TERM ARRIVED IN PHASE 3 (te_mon_pressure_gold_flow, §12.2's
-# price-specie flow). The §9.1 gold-SUPPLY term is still absent on purpose: it
-# is `(proposed)` and the owner has not decided it (rulings P2 and Q11).
+# price-specie flow) AND ITS COMMODITY-MONEY SIBLING IN THIS PASS
+# (te_mon_pressure_commodity_specie, §15.6 / ruling R7 — issue #351). Between
+# them every convertible regime now has a QUANTITY channel and not only the
+# regime pull, which is a proportional drag and never an anchor.
+#
+# The §9.1 gold-SUPPLY term is still absent on purpose, and the term above is
+# NOT it: that one is a metal-output shock — a gold rush — read off mine
+# minting for the whole market, and it is still `(proposed)` with the owner
+# undecided (rulings P2 and Q11). This one is a price GAP against the world.
 te_mon_pressure_total = {
 	value = te_mon_pressure_stance
 	add = te_mon_phase_pressure
@@ -2119,6 +2266,7 @@ te_mon_pressure_total = {
 	add = te_mon_pressure_noise
 	add = te_mon_pressure_regime_pull
 	add = te_mon_pressure_gold_flow
+	add = te_mon_pressure_commodity_specie
 }
 
 
@@ -2731,11 +2879,30 @@ te_mon_peg_defend_margin = {
 # slump. Raising it past about 2 starts to make a commodity-money bank as free
 # as a fiat one on the side that matters, without any of fiat's inflation
 # exposure, since metallic expectations stay pinned at 0. UP is the panic
-# brake: at +3 over a neutral near the world rate the stance gap reaches the
-# "very tight" band (about -0.4 momentum and -2.3 bubble pressure a month, a
-# little more than the old rate-hike button), and the treasury pays the full
-# three points on its debt while it is held. It is not dangerous to widen —
-# dear money is its own price — so if one of the two is to be tuned, tune DOWN.
+# brake, AND ONLY AT INFLATION NEAR THE WORLD'S (issue #352): at +3 over a
+# neutral near the world rate the stance gap reaches the "very tight" band
+# (about -0.4 momentum and -2.3 bubble pressure a month, a little more than the
+# old rate-hike button), and the treasury pays the full three points on its
+# debt while it is held. It is not dangerous to widen — dear money is its own
+# price — so if one of the two is to be tuned, tune DOWN.
+#
+# THE BAND IS NOMINAL AND THE STANCE IS REAL, so what +3 actually buys depends
+# on what prices are doing. The band is whole points off the WORLD RATE; the
+# stance gap is policy rate - headline inflation - neutral rate (step 8). Metal
+# pins EXPECTATIONS at 0, not inflation, so the two can part company. In the
+# game that produced issue #352 the world rate was 3.0 — a dial of 2 to 6 —
+# against a 6.1% headline, and the TOP setting read Very LOOSE: every setting
+# on the dial mapped to a real rate between -4.1% and -0.1%, and there was no
+# tightening setting on it at all.
+#
+# THAT IS LEFT AS IT IS, ON PURPOSE (issue #352, resolved together with #351).
+# A coin economy inside a 6% inflation genuinely cannot do much, and handing it
+# a fiat-sized nominal dial whenever prices move is the opposite of what the
+# regime is for. The answer is upstream: te_mon_pressure_commodity_specie holds
+# a commodity country's standing core near the world's, so the brake is there
+# whenever the band is what stands between the country and a bubble. What is
+# left — a country working its way out of an inflation it already has, from a
+# war, a debasement or a suspension — is the regime, not a defect of the band.
 te_mon_commodity_band_margin_down = {
 	value = 1
 }
