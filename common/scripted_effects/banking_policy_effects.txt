@@ -139,9 +139,18 @@ banking_effect_cb_fx_swap_lines = {
 			limit = {
 				country_rank >= rank_value:great_power
 			}
-			change_relations = {
-				country = ROOT
-				value = -5
+			# The actor is usually a great power itself, so it turns up in this
+			# loop. Guarding only change_relations — rather than the iterator's
+			# limit, as the sibling GP-relations effects above and below do — keeps
+			# the actor's own bubble_pressure increment while dropping the
+			# self-relations call the engine asserts on ("Attempted to create
+			# relations between a country and itself").
+			if = {
+				limit = { NOT = { THIS = ROOT } }
+				change_relations = {
+					country = ROOT
+					value = -5
+				}
 			}
 			if = {
 				limit = { has_variable = bubble_pressure }

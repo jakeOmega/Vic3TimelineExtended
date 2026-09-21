@@ -4617,6 +4617,8 @@
  banking_event_credit_rebalance_desc:0 "Government policy is redirecting credit from oversaturated industrial sectors toward consumer-facing enterprises."
  banking_event_currency_collapse:0 "Currency Collapse"
  banking_event_currency_collapse_desc:0 "The national currency has lost significant value, disrupting trade and damaging our international [concept_prestige]."
+ banking_event_default_rural_impact:0 "Rural Credit Impact"
+ banking_event_default_rural_impact_desc:0 "Temporary negative impact on agricultural [concept_throughput] due to cooperative shortfall adjustments."
  banking_event_deposit_guarantee_emergency:0 "Emergency Deposit Guarantee"
  banking_event_deposit_guarantee_emergency_desc:0 "The government has guaranteed all bank deposits in an emergency measure to halt the bank run, at significant fiscal cost."
  banking_event_deposit_insurance:0 "Deposit Insurance"

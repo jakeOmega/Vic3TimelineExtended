@@ -2494,7 +2494,19 @@ population_transfer = {
 			source_country = { save_scope_as = source_country }
 			target_country = { save_scope_as = target_country }
 		}
-		population_transfer_effect = yes
+		# The treaty-designer tooltip re-walks on_entry_into_force every frame
+		# without binding scope:article_options, so the two save_scope_as calls
+		# above are no-ops in that pass and population_transfer_effect's
+		# `multiplier = scope:source_country.var:…` reads an unset scope — two
+		# "Value of wrong type … type 'none'" lines per rendered frame. Guard the
+		# call so the render pass skips the body entirely.
+		if = {
+			limit = {
+				exists = scope:source_country
+				exists = scope:target_country
+			}
+			population_transfer_effect = yes
+		}
 	}
 
 	ai = {
