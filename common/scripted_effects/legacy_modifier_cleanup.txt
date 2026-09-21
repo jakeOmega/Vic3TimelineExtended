@@ -21,6 +21,25 @@
 #      on_monthly_pulse in common/journal_entries/je_banking.txt
 #   4. the `banking_policy_rate_hike` line in legacy_je_modifier_cleanup_effect
 #      below
+#
+# ── PENDING REMOVAL: banking_fx_devaluation / banking_fx_support /
+#    te_mon_peg_devalued (added 2026-09-21) ──
+# Monetary policy phase 4 (docs/systems/monetary_policy_design.md §18.2, §0.7)
+# deleted the FX Devaluation and FX Support tools and replaced the Devalue
+# option's timed export modifier with a write to te_fx_index. The three static
+# modifiers survive so a save made before phase 4 loads clean. Remove ALL of the
+# following together, one release after 2026-09-21 — and te_mon_peg_devalued no
+# earlier than five years of game time into any save worth keeping, since it is
+# a 1825-day timed modifier that for such a save still IS the devaluation:
+#   1. the `banking_fx_devaluation`, `banking_fx_support` and
+#      `te_mon_peg_devalued` blocks in common/static_modifiers/extra_modifiers.txt
+#   2. their loc keys — `banking_fx_devaluation`, `banking_fx_support` and both
+#      `_desc` in localization/english/te_concepts_l_english.yml;
+#      `te_mon_peg_devalued` and `_desc` in te_miscellaneous_l_english.yml
+#   3. the one-shot migration (index seeded at 80 / 120) and the monthly strip at
+#      the foot of te_monetary_init_fx_variables in
+#      common/scripted_effects/te_monetary_fx_effects.txt
+#   4. the two `banking_fx_*` lines in legacy_je_modifier_cleanup_effect below
 ########################################
 
 legacy_je_modifier_cleanup_effect = {

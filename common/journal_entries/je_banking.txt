@@ -69,10 +69,6 @@
 	scripted_button = cb_disable_moral_suasion
 	scripted_button = cb_raise_margin_requirements
 	scripted_button = cb_disable_raise_margin_requirements
-	scripted_button = cb_fx_devaluation
-	scripted_button = cb_disable_fx_devaluation
-	scripted_button = cb_fx_support
-	scripted_button = cb_disable_fx_support
 	scripted_button = cb_capital_controls_outflow
 	scripted_button = cb_disable_capital_controls_outflow
 	scripted_button = cb_fx_swap_lines

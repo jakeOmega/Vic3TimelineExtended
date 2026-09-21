@@ -830,6 +830,16 @@ law_commodity_money = {
 
 	progressiveness = 0
 
+	# THE NARROW DIAL IS NOT A MODIFIER HERE, and cannot be (§5.1, §5.4, closed
+	# 2026-09-21). With a national bank this law allows a discount rate inside
+	# the world rate -1 / +3, which moves with the world rate — so unlike law_digital_currency's
+	# country_policy_rate_floor_add there is nothing static to grant. The band
+	# lives in te_mon_target_min / te_mon_target_max
+	# (common/script_values/te_monetary_script_values.txt), the law's own
+	# description states it in words, and the Rate Target tooltip prints the two
+	# live numbers. Without a national bank there is no dial at all, which is
+	# te_mon_has_dial's first line and not a property of this law.
+
 	modifier = {
 		country_bureaucracy_investment_cost_factor_mult = 0.05
 		state_bureaucracy_population_base_cost_factor_mult = -0.05
@@ -2345,7 +2355,6 @@ law_prudential_narrow_banking = {
 		state_capitalists_investment_pool_efficiency_mult = -0.1
 		country_banking_lock_open_market_ops_bool = yes
 		country_banking_lock_directed_credit_bool = yes
-		country_banking_lock_fx_devaluation_bool = yes
 		country_banking_lock_export_credit_bool = yes
 		country_banking_lock_fx_swap_lines_bool = yes
 	}

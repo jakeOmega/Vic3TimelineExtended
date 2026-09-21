@@ -644,44 +644,6 @@ flowcontainer = {
 	}
 
 	banking_dash_policy_row = {
-		visible = "[GetScriptedGui('banking_dash_disable_cb_fx_devaluation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-		tooltip = "banking_dash_tt_cb_fx_devaluation"
-		blockoverride "row_label" {
-			text = "CB_FX_DEVALUATION"
-		}
-		blockoverride "row_cost" {
-			text = "banking_dash_cost_cb_fx_devaluation"
-		}
-		blockoverride "enable_action" {
-			datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_devaluation')]"
-			text = "banking_dash_btn_enable"
-		}
-		blockoverride "disable_action" {
-			datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_devaluation')]"
-			text = "banking_dash_btn_disable"
-		}
-	}
-
-	banking_dash_policy_row = {
-		visible = "[GetScriptedGui('banking_dash_disable_cb_fx_support').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-		tooltip = "banking_dash_tt_cb_fx_support"
-		blockoverride "row_label" {
-			text = "CB_FX_SUPPORT"
-		}
-		blockoverride "row_cost" {
-			text = "banking_dash_cost_cb_fx_support"
-		}
-		blockoverride "enable_action" {
-			datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_support')]"
-			text = "banking_dash_btn_enable"
-		}
-		blockoverride "disable_action" {
-			datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_support')]"
-			text = "banking_dash_btn_disable"
-		}
-	}
-
-	banking_dash_policy_row = {
 		visible = "[GetScriptedGui('banking_dash_disable_cb_fx_swap_lines').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		tooltip = "banking_dash_tt_cb_fx_swap_lines"
 		blockoverride "row_label" {
@@ -1423,6 +1385,44 @@ flowcontainer = {
 						}
 					}
 
+					### ---- The exchange rate (phase 4, §15) ----------------------
+					### Two rows for every country. The index is shown EXACTLY: every
+					### input to it is already exact on this dashboard (r* enters only
+					### through the policy rate the player chose), so it leaks no
+					### hidden state. te_mon_fx_state says "Par" for metal and for a
+					### command economy; the tooltip lists fx_target's four terms.
+					banking_dash_mon_subheader = {
+						blockoverride "mon_subheader_text" {
+							text = "banking_dash_mon_sub_fx"
+						}
+					}
+
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_fx_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_fx_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_fx_value"
+							}
+						}
+					}
+
+					### What the index is doing: the trade edge, and the inflation
+					### it is importing (or, under a peg, the overvaluation).
+					banking_dash_condition_row = {
+						tooltip = "banking_dash_mon_fx_effect_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_fx_effect_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_fx_effect_value"
+							}
+						}
+					}
+
 					banking_dash_mon_subheader = {
 						blockoverride "mon_subheader_text" {
 							text = "banking_dash_mon_sub_borrowing"
@@ -2006,44 +2006,6 @@ flowcontainer = {
 			parentanchor = hcenter
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_external'))]"
-
-			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_enable_cb_fx_devaluation').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				tooltip = "banking_dash_tt_cb_fx_devaluation"
-				blockoverride "row_label" {
-					text = "CB_FX_DEVALUATION"
-				}
-				blockoverride "row_cost" {
-					text = "banking_dash_cost_cb_fx_devaluation"
-				}
-				blockoverride "enable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_devaluation')]"
-					text = "banking_dash_btn_enable"
-				}
-				blockoverride "disable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_devaluation')]"
-					text = "banking_dash_btn_disable"
-				}
-			}
-
-			banking_dash_policy_row = {
-				visible = "[GetScriptedGui('banking_dash_enable_cb_fx_support').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-				tooltip = "banking_dash_tt_cb_fx_support"
-				blockoverride "row_label" {
-					text = "CB_FX_SUPPORT"
-				}
-				blockoverride "row_cost" {
-					text = "banking_dash_cost_cb_fx_support"
-				}
-				blockoverride "enable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_enable_cb_fx_support')]"
-					text = "banking_dash_btn_enable"
-				}
-				blockoverride "disable_action" {
-					datacontext = "[GetScriptedGui('banking_dash_disable_cb_fx_support')]"
-					text = "banking_dash_btn_disable"
-				}
-			}
 
 			banking_dash_policy_row = {
 				visible = "[GetScriptedGui('banking_dash_enable_cb_fx_swap_lines').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"

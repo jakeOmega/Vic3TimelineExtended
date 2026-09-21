@@ -364,7 +364,7 @@ Intellectual Property:
 		Patents, copyrights, and industrial designs are owned by the state and licensed freely to domestic firms; foreign access is gated and expensive. State research bureaus coordinate where private R&D would otherwise duplicate effort, but the apparatus consumes administrative capacity and starves the capitalist [concept_investment_pool] of monopoly rents.
 Monetary Policy:
 	Commodity Money
-		A commodity, such as gold or silver, is used directly as currency.
+		A commodity, such as gold or silver, is used directly as currency. A national bank can set a discount rate on it, but can make credit no more than a point cheaper than the world's, or three points dearer — the coin is the metal, and metal leaves for wherever it earns more.
 	Gold Standard [progressiveness=10] - Unlocking Technology: International Exchange Standards
 		The currency is backed by a fixed amount of gold, and the government guarantees to exchange paper money for gold at a fixed rate.
 	Fiat Money [progressiveness=20] - Unlocking Technology: Keynesian Economics

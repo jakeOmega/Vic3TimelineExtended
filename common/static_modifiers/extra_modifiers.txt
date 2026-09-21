@@ -882,6 +882,11 @@ banking_raise_margin_requirements = {
 	country_bubble_pressure_monthly_add  = -2.0
 }
 
+# LEGACY — monetary policy phase 4 (2026-09-21) deleted cb_fx_devaluation and
+# cb_fx_support: a weak or strong currency is now an OUTCOME (te_fx_index, §15),
+# not a button. Both definitions stay for one release so a save that holds them
+# loads clean; te_monetary_init_fx_variables converts them to an index of 80 /
+# 120 and strips them. Retire with legacy_modifier_cleanup.txt's dated checklist.
 banking_fx_devaluation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_banking_intervention_max_add = -3
@@ -906,7 +911,15 @@ banking_fx_support = {
 banking_capital_controls_out = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_banking_intervention_max_add = -2
-	state_capitalists_investment_pool_contribution_add = 0.05
+	# [P4, §15.4] The pool BONUS that used to sit here
+	# (state_capitalists_investment_pool_contribution_add = 0.05) made trapping
+	# capital a reward. It is gone; the price of controls is
+	# te_capital_controls_fatigue, which grows with peacetime months held. What
+	# controls BUY is te_mon_controls_damp (0.25 on the carry term, the gold gap
+	# and the overvaluation drain), which no modifier line can state — the
+	# button's description does. Organised labour backed controls in the
+	# Bretton Woods decades, hence the flat +1.
+	interest_group_ig_trade_unions_approval_add = 1
 	country_bureaucracy_mult = -0.05
 	country_influence_cost_add = 100
 	country_authority_add = 100
@@ -961,7 +974,9 @@ banking_crash_response_cost = {
 banking_crash_intervention_suspend_convertibility = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
 	country_banking_intervention_max_add = -1
-	state_export_advantage_mult = -0.10                  # convertibility freeze hampers exporters
+	# [P4] The -10% export line that sat here is gone (design §15.5): the option
+	# that grants this now sends a -13 te_fx_shock instead, and the exchange rate
+	# produces the trade effect itself — with the right sign.
 	country_risk_premium_add = 0.004
 }
 
@@ -7129,9 +7144,11 @@ te_mon_peg_credibility_lost = {
 	country_credit_standing_add = 0.01
 }
 
-# Devalue the peg: the export boost (days = 1825, decaying). Half the size of
-# the standing banking_fx_devaluation tool, because this one costs no
-# intervention points and cannot be switched off.
+# LEGACY since phase 4 (2026-09-21): §12.3's Devalue now SETS te_fx_index to 88
+# and lets it walk back to par (te_mon_effect_fx_devalue_peg) — same peak, same
+# impulse — so nothing applies this any more. The definition stays for one
+# release because a save can hold up to five years of it, and for that save it
+# still IS the devaluation's export edge. Listed in legacy_modifier_cleanup.txt.
 te_mon_peg_devalued = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	state_export_advantage_mult = 0.15
@@ -7285,3 +7302,47 @@ te_mon_stance_politics_loose = {
 	interest_group_ig_rural_folk_approval_add = 1
 	interest_group_ig_trade_unions_approval_add = 1
 }
+
+
+# ============================================================================
+# Monetary policy phase 4 — the exchange rate's consequences (§15.3, §15.4)
+# ============================================================================
+# All three are SCALED and MANAGED: applied only by
+# te_monetary_apply_fx_modifiers (step 9b, their one refresh site) through
+# te_mon_mod_add_scaled, on the banking journal entry when the country has one
+# and on the country otherwise. Values here are PER UNIT of the multiplier.
+#
+# TWO FIXED-SIGN MODIFIERS, NOT ONE SIGNED ONE: whether `multiplier =` accepts a
+# negative is still an open engine check (design §17 check 8).
+#
+# CALIBRATION: the deleted banking_fx_devaluation / banking_fx_support gave
+# +/-0.25 on exactly these two types. 0.0125 a point reproduces that at index
+# 80 / 120 — the new system's LARGE move equals the old system's button press.
+# state_* fields on a country-scope (or entry-scope) modifier reach every owned
+# state, the shape vanilla's trade laws use.
+
+# multiplier = index points BELOW par (te_fx_weak_applied).
+te_fx_weak = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	state_export_advantage_mult = 0.0125
+	state_import_advantage_mult = -0.0125
+}
+
+# multiplier = index points ABOVE par (te_fx_strong_applied).
+te_fx_strong = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_export_advantage_mult = -0.0125
+	state_import_advantage_mult = 0.0125
+}
+
+# multiplier = years of PEACETIME capital controls, 0-5, fractional
+# (te_capital_controls_fatigue_applied). "Major if prolonged": ten peacetime
+# years lands the two capital-owning groups at -5 and the pool at -10%. Frozen
+# in a crisis, decays three months a month once lifted.
+te_capital_controls_fatigue = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	interest_group_ig_industrialists_approval_add = -1
+	interest_group_ig_petty_bourgeoisie_approval_add = -1
+	state_capitalists_investment_pool_efficiency_mult = -0.02
+}
+

@@ -1899,12 +1899,6 @@ emergency_liquidity_program_deactivation_refund = {
 	round = yes
 }
 
-fx_support_activation_cost = {
-	value = root.gdp
-	multiply = -0.003 # costs 0.3% of GDP to deploy reserves
-	round = yes
-}
-
 export_credit_activation_cost = {
 	value = root.gdp
 	multiply = -0.002 # costs 0.2% of GDP to establish facility

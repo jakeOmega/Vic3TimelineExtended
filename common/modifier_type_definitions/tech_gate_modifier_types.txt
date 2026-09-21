@@ -281,11 +281,6 @@ country_can_use_countercyclical_buffer_bool = {
 	boolean = yes
 }
 
-country_can_use_fx_support_bool = {
-	color = good
-	boolean = yes
-}
-
 country_can_use_fx_swap_lines_bool = {
 	color = good
 	boolean = yes
@@ -297,11 +292,6 @@ country_can_use_emergency_liquidity_bool = {
 }
 
 country_can_use_open_market_ops_bool = {
-	color = good
-	boolean = yes
-}
-
-country_can_use_fx_devaluation_bool = {
 	color = good
 	boolean = yes
 }

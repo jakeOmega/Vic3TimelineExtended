@@ -532,7 +532,9 @@ te_debug_monetary.5 = { # REVIEWED 2026-09-20: console-only test event (`event t
 	# Chained, that is why the economic system is settled FIRST below: on a
 	# traditionalist tag a pin that started with the bank would lose the bank to
 	# rule one and then the currency to rule two, and end up on commodity money
-	# with no dial at all — most non-Western 1836 tags.
+	# with no bank and so no dial at all — most non-Western 1836 tags. (Since
+	# 2026-09-21 commodity money WITH a bank does hold a narrow dial, world
+	# rate +/-1; it is losing the bank to rule one that closes the dial here.)
 	#
 	# WHY AGRARIANISM AND NOT ALWAYS INTERVENTIONISM. Interventionism is the
 	# better landing law — it is the mid economic system and disturbs least —
@@ -936,6 +938,87 @@ te_debug_monetary.8 = { # REVIEWED 2026-09-20: console-only test event (`event t
 
 	option = {
 		name = te_debug_monetary.8.z
+		default_option = yes
+	}
+}
+
+
+# ============================================================================
+# te_debug_monetary.9 — the exchange rate and capital controls (phase 4, §15)
+# ============================================================================
+# `event te_debug_monetary.9` on the country you are playing. The description
+# prints every FX figure, including the two that reach no dashboard row (the
+# global world-inflation accumulators). The options stage §19 row 4's exit
+# criteria:
+#
+#   a  LEVEL SHOCK, -20 points. Moves te_fx_shadow directly, and a floater's
+#      index with it on the next pulse. This is "the harness shock of -20":
+#      under price stability, headline should be back within 1pp of its
+#      pre-shock path inside four years (§20 risk 9 converges). NOT how events
+#      move the currency — that is option b.
+#   b  EVENT SHOCK, nominal -26, through te_mon_effect_fx_shock exactly as
+#      banking_cycle_events.58 sends it. Expect about -10 at the trough, eleven
+#      months out (§15.1's 38% rule). Fire it twice to see the +/-40 clamp.
+#   c  Five peacetime years of capital controls at once: counter to 60. Needs
+#      the controls to be ON (the dashboard button) or it decays 3 a month from
+#      there, which is itself the "lifted" test. Expect Industrialists and
+#      Petite Bourgeoisie at -5 and the pool at -10% on the next pulse.
+#   e  Run one monthly update now (the same effect te_debug_monetary.1.a runs).
+#
+# FOR THE "2pp LOOSE SETTLES AT 92-94" TEST use te_debug_monetary.5's fixed
+# manual target on a fiat tag and read this event's description once a year.
+# FOR THE GOLD TESTS (no overvaluation drain at the 1836 start; a gold country
+# 5pp over world inflation loses its peg in about three years; a gold country
+# under controls at world - 4 drains like world - 1) read Overvaluation here
+# beside te_debug_monetary.8's Gold block.
+#
+# THE SAME "FIRE IT ON A COUNTRY THAT HAS PULSED" CAVEAT AS .8: the term values
+# are guarded, but te_mon_fx_shadow_step and friends are not printed here for
+# exactly that reason.
+# ============================================================================
+te_debug_monetary.9 = { # REVIEWED 2026-09-21: console-only test event (`event te_debug_monetary.9`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = te_debug_monetary.9.t
+	desc = te_debug_monetary.9.d
+	flavor = te_debug_monetary.9.f
+
+	option = {
+		name = te_debug_monetary.9.a
+		te_monetary_init_variables = yes
+		change_variable = { name = te_fx_shadow add = -20 } # REVIEWED 2026-09-21: console-only harness level shock (§19 row 4)
+		clamp_variable = {
+			name = te_fx_shadow
+			min = te_mon_fx_index_min
+			max = te_mon_fx_index_max
+		}
+	}
+
+	option = {
+		name = te_debug_monetary.9.b
+		te_mon_effect_fx_shock = { POINTS = -26 }
+	}
+
+	option = {
+		name = te_debug_monetary.9.c
+		te_monetary_init_variables = yes
+		set_variable = { name = te_capital_controls_months value = 60 } # REVIEWED 2026-09-21: console-only; the counter's cap, five peacetime years
+	}
+
+	option = {
+		name = te_debug_monetary.9.e
+		te_monetary_monthly_update = yes
+	}
+
+	option = {
+		name = te_debug_monetary.9.z
 		default_option = yes
 	}
 }

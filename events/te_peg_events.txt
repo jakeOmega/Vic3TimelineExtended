@@ -144,9 +144,9 @@ te_peg.1 = {
 
 	# --- devalue the peg ----------------------------------------------------
 	# Infamy and great-power relations are the costs the old Devalue button
-	# carried (§12.3), restated at the same size as
-	# banking_effect_cb_fx_devaluation rather than shared with it: that effect
-	# also switches on a journal-entry tool, which this is not.
+	# carried (§12.3), at the size it carried them. The button itself went in
+	# phase 4 — under a float a weak currency is an outcome, so this option is
+	# now the ONLY deliberate devaluation in the mod.
 	option = {
 		name = te_peg.1.c
 		custom_tooltip = te_peg.1.c.tt
@@ -168,10 +168,13 @@ te_peg.1 = {
 			}
 		}
 
-		add_modifier = {
-			name = te_mon_peg_devalued
-			days = 1825
-			is_decaying = yes
+		# [P4] The export edge is no longer a timed modifier: the index is SET to
+		# 88 and walks back to par over 60 months (§15.2) — same +/-0.15 peak,
+		# same impulse as the te_mon_peg_devalued it replaces. One of the two
+		# documented writers of te_fx_index outside step 5b. te_peg.1.c.tt
+		# states it, since a variable write draws no tooltip of its own.
+		hidden_effect = {
+			te_mon_effect_fx_devalue_peg = yes
 		}
 		add_modifier = {
 			name = te_mon_peg_devaluation_pressure

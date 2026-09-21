@@ -94,42 +94,6 @@ banking_effect_cb_disable_export_credit_facility = {
 	je:je_banking_cycle = { remove_modifier = banking_export_credit_facility }
 }
 
-banking_effect_cb_fx_devaluation = {
-	te_history_record_banking_marker = { MARK = on_cb_fx_devaluation }
-	je:je_banking_cycle = { add_modifier = { name = banking_fx_devaluation } }
-	change_infamy = { value = 1 }
-	custom_tooltip = {
-		text = FX_DEVALUATION_GP_RELATIONS_TT
-		every_country = {
-			limit = {
-				country_rank >= rank_value:great_power
-				NOT = { this = root }
-			}
-			change_relations = {
-				country = root
-				value = -3
-			}
-		}
-	}
-}
-
-banking_effect_cb_disable_fx_devaluation = {
-	te_history_record_banking_marker = { MARK = off_cb_fx_devaluation }
-	je:je_banking_cycle = { remove_modifier = banking_fx_devaluation }
-	add_radicals = { value = banking_small_radicals_value }
-}
-
-banking_effect_cb_fx_support = {
-	te_history_record_banking_marker = { MARK = on_cb_fx_support }
-	je:je_banking_cycle = { add_modifier = { name = banking_fx_support } }
-	add_treasury = fx_support_activation_cost
-}
-
-banking_effect_cb_disable_fx_support = {
-	te_history_record_banking_marker = { MARK = off_cb_fx_support }
-	je:je_banking_cycle = { remove_modifier = banking_fx_support }
-}
-
 banking_effect_cb_fx_swap_lines = {
 	te_history_record_banking_marker = { MARK = on_cb_fx_swap_lines }
 	je:je_banking_cycle = { add_modifier = { name = banking_fx_swap_lines } }

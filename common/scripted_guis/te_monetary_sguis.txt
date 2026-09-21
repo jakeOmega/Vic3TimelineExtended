@@ -101,9 +101,12 @@ banking_mon_control_sgui = {
 			# The bound is te_mon_target_min either way; only the reason for it
 			# differs. While §12.3's Defend option runs, the floor is the world
 			# rate plus four, which is worth naming — unlike the digital floor,
-			# the player cannot read it off the law that imposes it. (The
-			# phase-1 gold band that used to be named here went when gold flows
-			# arrived: on gold the dial is now free, and the reserves pay.)
+			# the player cannot read it off the law that imposes it. Commodity
+			# money's floor (world rate - 1) is the second such case and gets
+			# the same treatment for the same reason: no law tooltip can state a
+			# bound that moves with the world rate. (The phase-1 gold band that
+			# used to be named here went when gold flows arrived: on gold the
+			# dial is now free, and the reserves pay.)
 			trigger_if = {
 				limit = {
 					te_mon_peg_is_defending = yes
@@ -111,6 +114,13 @@ banking_mon_control_sgui = {
 				}
 				custom_tooltip = {
 					text = banking_mon_tt_peg_defend_floor
+					te_mon_target_can_step_down = yes
+				}
+			}
+			trigger_else_if = {
+				limit = { te_mon_has_narrow_dial = yes }
+				custom_tooltip = {
+					text = banking_mon_tt_commodity_floor
 					te_mon_target_can_step_down = yes
 				}
 			}
@@ -142,9 +152,21 @@ banking_mon_control_sgui = {
 				text = banking_mon_tt_not_delegated
 				te_mon_is_delegated = no
 			}
-			custom_tooltip = {
-				text = banking_mon_tt_below_ceiling
-				te_mon_target_can_step_up = yes
+			# Same split as the floor above: "the highest rate your monetary law
+			# allows" is a true but useless sentence when the ceiling is world
+			# rate + 1 and moves every month, so the narrow dial names its own.
+			trigger_if = {
+				limit = { te_mon_has_narrow_dial = yes }
+				custom_tooltip = {
+					text = banking_mon_tt_commodity_ceiling
+					te_mon_target_can_step_up = yes
+				}
+			}
+			trigger_else = {
+				custom_tooltip = {
+					text = banking_mon_tt_below_ceiling
+					te_mon_target_can_step_up = yes
+				}
 			}
 		}
 
