@@ -242,6 +242,16 @@ types te_history_chart_types
 	### Required blockoverrides: "chart_title", "chart_legend", "bar_body",
 	### "bar_tooltip". Optional: "zero_axis" (signed series only).
 	###
+	### ORDER COMES FROM THE STORE, NOT FROM HERE. A datamodel is drawn in raw
+	### `GetList` order and nothing in the GUI can sort or reverse one
+	### (`Scope.GetList` is the only accessor in data_types_script.txt), so the
+	### left-to-right time axis is simply whatever order the script keeps
+	### `te_hist` in. `remove_list_variable` does NOT preserve that order — it
+	### fills the hole with the list's last element — so te_history_sort_samples
+	### rebuilds the list after every eviction. If a chart ever renders out of
+	### order again the fault is in the store, not in this file: check a save
+	### with `python3 scripts/analysis/check_save_history_order.py`.
+	###
 	### The bars come from the country's `te_hist` list — one container per
 	### month, shared by every metric — so a month with no value for this
 	### chart's metric renders as an empty slot instead of a zero-height bar.
