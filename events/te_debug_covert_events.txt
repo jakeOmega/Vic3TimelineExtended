@@ -90,13 +90,14 @@ te_debug_covert.2 = { # REVIEWED 2026-09-18: console-only test event (`event te_
 		te_debug_covert_seed_phases = yes
 	}
 
-	# ---- Force the detection roll to land, burning one operation. The target
-	#      gets covert_warfare.2 and, whether or not that event's cooldown lets
-	#      it through, the "last exposed" record the command centre reads.
+	# ---- Force the detection roll to land on one running operation, through the
+	#      real per-operation roll. The target gets covert_warfare.2 and, whether
+	#      or not that event's cooldown lets it through, the "last exposed" record
+	#      the command centre reads.
 	option = {
 		name = te_debug_covert.2.b
 		trigger = { covert_operations_active >= 1 }
-		trigger_event = { id = covert_warfare.1 }
+		te_debug_covert_force_detection = yes
 	}
 
 	# ---- The cascade: drop funding to 0 with operations running, so every

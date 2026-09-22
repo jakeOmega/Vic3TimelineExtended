@@ -3834,7 +3834,7 @@
  te_debug_covert.1.h:0 "Funding 5 - Deep State"
  te_debug_covert.1.t:0 "Covert Warfare Test Console: Funding"
  te_debug_covert.2.a:0 "Seed three operations, one in each phase"
- te_debug_covert.2.b:0 "Force a detection now"
+ te_debug_covert.2.b:0 "Force a detection now (one operation is pinned to 100% and the real roll is run)"
  te_debug_covert.2.c:0 "Cut funding to 0 and stand everything down"
  te_debug_covert.2.d:0 "Console-only shortcuts for testing the operation rows. None of these can happen in normal play.\n\nSeeding plants three operations against one eligible country - industrial espionage at month 5, an influence campaign at month 11 and military espionage at month 14 - so all three phase layouts show at once and two of them tip over their boundary at the next monthly pulse. It raises funding to Tradecraft first if the service is dormant.\n\nForcing detection burns one operation, sends the target the detection event, and writes the record the command centre reads back as #italic Counterintelligence exposed ...#!\n\nRe-deriving the display state is what the first monthly pulse after loading an older save does: use it if the phase lines are missing from rows restored from a save made before this widget shipped."
  te_debug_covert.2.e:0 "Age every operation by a year"

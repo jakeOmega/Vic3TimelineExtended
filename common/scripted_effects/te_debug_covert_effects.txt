@@ -121,3 +121,19 @@ te_debug_covert_refresh_display = {
 		}
 	}
 }
+
+# Make the detection roll land on one specific operation: pin a random running
+# operation's iw_detect to 100 and run the shipping roll effect, so the roll,
+# the temporary-list pick and the scope hand-off to covert_warfare.1 are all
+# exercised. The next monthly sync restores the honest figure.
+# Scope: country
+te_debug_covert_force_detection = {
+	if = {
+		limit = { has_variable_list = iw_ops }
+		random_in_list = {
+			variable = iw_ops
+			set_variable = { name = iw_detect value = 100 }
+		}
+		covert_ops_roll_detection_all = yes
+	}
+}
