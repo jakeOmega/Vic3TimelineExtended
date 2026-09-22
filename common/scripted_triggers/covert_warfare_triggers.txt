@@ -110,3 +110,58 @@ covert_possible_stand_down = {
 		}
 	}
 }
+
+# ============================================================================
+# EXPOSURE TIERS
+# ============================================================================
+# How hostile the world considers an operation when it is caught. This is THE
+# tier table: the blowback script values, both custom-loc tier names and the
+# pre-launch action descriptions all read these four triggers, so a new
+# operation type is one code added to one OR list here and nowhere else.
+#
+# Parameters: $VAR$ = the NAME of a country variable holding an operation type
+#             code — iw_burned_type_code on the operator while
+#             covert_warfare.1 is open, iw_last_exposed_type on the target
+#             afterwards. Each trigger guards the variable itself, because
+#             reading one that does not exist is an engine error and custom
+#             loc can render before anything has been exposed.
+# Scope: country
+# ============================================================================
+
+# "Everyone spies" — stealing designs is not an attack on the state.
+covert_code_tier_mild = {
+	has_variable = $VAR$
+	OR = {
+		var:$VAR$ = 4
+		var:$VAR$ = 5
+	}
+}
+
+# Meddling in how the target governs itself.
+covert_code_tier_moderate = {
+	has_variable = $VAR$
+	OR = {
+		var:$VAR$ = 0
+		var:$VAR$ = 1
+		var:$VAR$ = 6
+	}
+}
+
+# Attacking the state itself. These are the ones third parties hear about.
+covert_code_tier_severe = {
+	has_variable = $VAR$
+	OR = {
+		var:$VAR$ = 7
+		var:$VAR$ = 8
+	}
+}
+
+# Operations that only make sense against someone you are already fighting:
+# infamy alone, because the relationship is already what it is.
+covert_code_tier_war = {
+	has_variable = $VAR$
+	OR = {
+		var:$VAR$ = 2
+		var:$VAR$ = 3
+	}
+}
