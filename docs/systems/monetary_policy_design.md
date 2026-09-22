@@ -1788,6 +1788,15 @@ lower premium and floor, faster-anchoring expectations (disinflation is cheaper)
 better estimate of r\*. A player planning to inflate away war debt should not want it.
 Mandate changes under CBI take effect after a 12-month delay **(proposed)**.
 
+**Players start delegated too (2026-09-22).** `te_monetary_init_variables` seeds
+`te_mon_delegated = 1`, so a player who never opens the dashboard has a bank running price
+stability and *Take Control* is the deliberate act. The seed was 0 before: a fiat or digital
+country whose dial was never touched sat at its seeded whole point while inflation drifted
+(the drift is intended) and the cycle took the maximum loose-money push every month —
+35–50 crashes a century against 5–10 for any steered dial
+(`docs/audits/banking_cycle_simulation.md` F5, §4). Only the seed changed; the toggle, the
+§14 clear and the AI's monthly write are as before, and an existing save keeps its value.
+
 **AI.** AI countries are always delegated. Mandate by rule: gold standard → peg defence;
 at war, or `scaled_debt ≥ 0.5` → growth; otherwise price stability. This runs inside the
 monthly update for `is_player = no` — a **documented exception** to
