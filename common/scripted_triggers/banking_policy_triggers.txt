@@ -172,8 +172,8 @@ banking_possible_cb_capital_controls_outflow = {
 banking_possible_cb_emergency_liquidity_program = {
 	modifier:country_can_use_emergency_liquidity_bool = yes
 	custom_tooltip = {
-		text = BANKING_POINTS_6
-		modifier:country_banking_intervention_max_add >= 6
+		text = BANKING_POINTS_4
+		modifier:country_banking_intervention_max_add >= 4
 	}
 }
 

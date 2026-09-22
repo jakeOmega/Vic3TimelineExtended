@@ -907,7 +907,14 @@ banking_directed_credit_infrastructure = {
 banking_emergency_liquidity_program = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_risk_premium_add = -0.008
-	country_banking_intervention_max_add = -6
+	# 6 -> 4 (2026-09-22). Every crash fires minor_events_timelineextended.6,
+	# whose softening options hold 1-4 points for a year, so at 6 the lender
+	# of last resort was affordable only to an 8-point country that had bought
+	# nothing else: the AI activated it 0.0-0.3 times a century at every
+	# budget. At 4 a 6- or 8-point country can still reach it after a crash
+	# option; it stays rare (~1 a century) because panics are rare now
+	# (docs/audits/banking_cycle_simulation.md F12).
+	country_banking_intervention_max_add = -4
 	# monthly:
 	country_bubble_pressure_monthly_add  = 0.8
 	country_finance_momentum_monthly_add = 0.08

@@ -675,8 +675,22 @@ activated it 0.0–0.7 times a century at every budget. It is not the weights: e
 holding 1–4 points for a year, so an 8-point country enters its panic with 4–6 free and cannot afford the
 tool built for the panic. The last row of the table above — cheaper panic tools stand aside while e-liquidity
 is affordable and not running — measured as exactly zero, confirming that affordability, not competition, is
-the block. **Left as is.** The fix is a price cut (6 → 4) or exempting the crash options from the budget,
-either of which is a design call rather than a tuning one.
+the block.
+
+**Shipped (owner's call, same day): the cost is 6 → 4**, so a 6- or 8-point country can still reach it after
+a crash option. Measured at 300 runs, real budgets 4 / 6 / 8 (activations a century, gold / price):
+
+| cost | 4 pt | 6 pt | 8 pt | crashes / throughput, 8 pt |
+|---|---|---|---|---|
+| 6 | 0.0 | 0.0 | 0.3 | 9.7 · −0.01 |
+| 5 | 0.0 | 0.1 | 0.3 | 9.6 · −0.05 |
+| **4** | 0.6 | 0.6 | 0.7 | 9.9 · −0.01 |
+| 3 | 0.7 | 0.7 | 0.8 | 9.8 · −0.01 |
+
+Use stays around one activation a century even at 3, because the tool's core reasons — the panic band, or
+a downturn with momentum still at −4 or below — are rare under the retune's milder crashes (widening the
+downturn trigger to −3 or −2 changed nothing). That is the intended shape for a lender of last resort; the
+price cut only makes sure the budget is not what stops it. No cycle metric moved.
 
 ---
 

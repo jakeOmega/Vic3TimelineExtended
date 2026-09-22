@@ -295,6 +295,7 @@ TOOL_MODIFIERS = {k: K.modifier(v) for k, v in TOOL_MODIFIER_NAMES.items()}
 TOOL_COST = {
     k: -v.get("country_banking_intervention_max_add", 0.0) for k, v in TOOL_MODIFIERS.items()
 }
+DEFAULT_TOOL_COST = dict(TOOL_COST)
 
 # ── banking_law_base_points_value, restated as a table (it is an if-chain) ────
 FIN_LAW_POINTS = {
@@ -1390,7 +1391,7 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
     # cb_emergency_liquidity_program
     v = 0.0
     v += 85 if p == PANIC else 0
-    v += 35 if (p == DOWNTURN and m <= -4) else 0
+    v += 35 if (p == DOWNTURN and m <= tuned("eliq_downturn_mom", -4)) else 0
     v += flavour(v, (10 if is_cbi(cfg) else 0)
                  + (10 if cfg.fin_law == "law_directed_credit_development_banks" else 0)
                  + (10 if low else 0))
@@ -1962,6 +1963,8 @@ def _run_cell(job: tuple[Config, int, int, dict]) -> dict:
     cfg, seed, runs, tune = job
     TUNE.clear()
     TUNE.update(tune)
+    # `eliq_cost=N` overrides the lender of last resort's point cost (F12).
+    TOOL_COST["eliq"] = float(TUNE.get("eliq_cost", DEFAULT_TOOL_COST["eliq"]))
     # crc32, not hash(): Python salts hash(str) per interpreter, so --seed would
     # not actually reproduce a run.
     base = seed + zlib.crc32(f"{cfg.currency}/{cfg.mode}/{cfg.points}".encode()) % 10_000
