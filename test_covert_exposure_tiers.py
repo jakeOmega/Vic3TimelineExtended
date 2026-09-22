@@ -89,8 +89,34 @@ def _block_span(body, from_index):
     raise AssertionError("unbalanced braces from index %d" % from_index)
 
 
+class _EnclosingBlock(str):
+    """The text an `_innermost_enclosing` call found, plus the (start, end)
+    span it was found at in the body that was searched.
+
+    Subclassing `str` (rather than a bare `(text, start, end)` tuple) means
+    every existing call site that treats the result as plain text --
+    `assertIn`, `_limit_of`, passing it back in as the `body` of a nested
+    `_innermost_enclosing` call -- keeps working unchanged, since slicing or
+    otherwise deriving a new string from it yields a normal `str`. Only
+    `_is_outside` needs the span, and reads it off `.start`/`.end` instead of
+    re-deriving the block's position by searching `body` for its text again,
+    which would silently match the wrong occurrence if that text recurred
+    elsewhere in the body (two structurally identical guards, say -- see
+    HelperTests.test_is_outside_uses_the_found_span_not_a_text_research for
+    a case that pins this down).
+    """
+
+    def __new__(cls, text, start, end):
+        obj = str.__new__(cls, text)
+        obj.start = start
+        obj.end = end
+        return obj
+
+
 def _innermost_enclosing(body, needle, opener):
-    """The text of the innermost `opener { ... }` block that contains needle.
+    """The innermost `opener { ... }` block that contains needle, as an
+    `_EnclosingBlock` (usable as plain text, and carrying the span it was
+    found at).
 
     This is what lets a test say "the war-tier exclusion is in the limit of
     the `if` that guards THIS effect", rather than "the string appears
@@ -109,7 +135,7 @@ def _innermost_enclosing(body, needle, opener):
         pos = at + 1
     if best is None:
         raise AssertionError("no %r block encloses %r" % (opener, needle))
-    return body[best[0]:best[1]]
+    return _EnclosingBlock(body[best[0]:best[1]], best[0], best[1])
 
 
 def _limit_of(block):
@@ -118,11 +144,16 @@ def _limit_of(block):
     return block[start:end]
 
 
-def _is_outside(container, body, needle):
-    """True when needle's position in body falls outside container's span."""
+def _is_outside(span, body, needle):
+    """True when needle's position in body falls outside `span`'s
+    (start, end) -- `span` is normally the `_EnclosingBlock` an
+    `_innermost_enclosing` call already found, so this uses the position it
+    was actually found at instead of re-deriving it by searching `body` for
+    the block's text again (which would silently match the wrong occurrence
+    if that text recurred elsewhere in `body`).
+    """
     at = body.index(needle)
-    start = body.index(container)
-    return not (start <= at < start + len(container))
+    return not (span.start <= at < span.end)
 
 
 class HelperTests(unittest.TestCase):
@@ -158,6 +189,61 @@ class HelperTests(unittest.TestCase):
     def test_limit_of_returns_only_the_limit(self):
         block = _innermost_enclosing(self.SAMPLE, "effect_one = yes", "if = {")
         self.assertEqual("limit = { a = 1 }", _limit_of(block))
+
+    def test_is_outside_uses_the_found_span_not_a_text_research(self):
+        # Two structurally identical `if` guards -- the sort of thing that
+        # happens when the same boilerplate condition guards two different
+        # effects. `_innermost_enclosing` already pins down which OCCURRENCE
+        # it found (the span); if `_is_outside` instead re-derived the
+        # guard's position by searching `body` for its TEXT, `str.index`
+        # would silently return the FIRST (here, unrelated) occurrence
+        # instead of the one that was actually found.
+        body = (
+            "outer = {\n"
+            "\tif = {\n"
+            "\t\tlimit = { a = 1 }\n"
+            "\t\tremove_variable = stray\n"
+            "\t}\n"
+            "\tunrelated_effect = yes\n"
+            "\tif = {\n"
+            "\t\tlimit = { a = 1 }\n"
+            "\t\tremove_variable = stray\n"
+            "\t}\n"
+            "}\n"
+        )
+        first_start, first_end = _block_span(body, body.index("if = {"))
+        second_start, second_end = _block_span(body, body.index("if = {", first_end))
+        self.assertEqual(
+            body[first_start:first_end],
+            body[second_start:second_end],
+            "the two guards must be byte-identical for this case to test anything",
+        )
+        # Simulates what `_innermost_enclosing` would hand back had it been
+        # asked for the SECOND guard specifically (its content is identical
+        # to the first, so a needle-based search cannot distinguish them --
+        # this stands in for "the span a caller already correctly has").
+        second_block = _EnclosingBlock(body[second_start:second_end], second_start, second_end)
+        needle = "remove_variable = stray"
+        # `needle`'s only free-standing occurrence sits inside the FIRST
+        # guard, not the second -- so relative to the second guard
+        # specifically, it is genuinely outside.
+        at = body.index(needle)
+        self.assertTrue(first_start <= at < first_end)
+        self.assertFalse(second_start <= at < second_end)
+
+        # The current (span-based) `_is_outside` gets this right.
+        self.assertTrue(_is_outside(second_block, body, needle))
+
+        # The naive approach the old `_is_outside` used -- re-deriving the
+        # guard's position with `body.index(container)` -- gets it wrong: it
+        # silently lands on the first (decoy) occurrence, whose span happens
+        # to actually contain `needle`, so it wrongly concludes the needle is
+        # INSIDE the guard being checked.
+        naive_start = body.index(second_block)
+        naive_end = naive_start + len(second_block)
+        self.assertEqual(first_start, naive_start, "the naive re-search must land on the decoy")
+        naive_result = not (naive_start <= at < naive_end)
+        self.assertFalse(naive_result, "the naive approach must get this wrong")
 
 
 class TierTableTests(unittest.TestCase):
@@ -326,6 +412,13 @@ class ExposureEventTests(unittest.TestCase):
         # inspect its `limit` directly. Also confirms the guard is NOT the
         # severe-tier one the third-party call uses -- a swap between the two
         # would still leave both literal clauses present in `options`.
+        #
+        # Placement and duplication are different defect classes, so both
+        # are checked: the exact-count assertion catches a duplicated or
+        # unguarded third call that `_innermost_enclosing` (which only ever
+        # looks at the FIRST occurrence of `needle`) would silently miss;
+        # the nesting assertion below catches a guard attached to the wrong
+        # `if`, which a bare count cannot tell from a correct one.
         ev = _event_1(_text(EVENTS))
         options = ev[ev.index("option = {"): ev.index("after = {")]
         for value_name in (
@@ -333,7 +426,11 @@ class ExposureEventTests(unittest.TestCase):
             "covert_exposure_relations_deny",
         ):
             needle = "value = %s" % value_name
-            self.assertIn(needle, options)
+            self.assertEqual(
+                1,
+                options.count(needle),
+                "%s must be referenced exactly once" % value_name,
+            )
             guard = _innermost_enclosing(options, needle, "if = {")
             limit = _limit_of(guard)
             self.assertIn(
@@ -353,12 +450,21 @@ class ExposureEventTests(unittest.TestCase):
             )
 
     def test_both_options_call_the_third_party_blowback_on_the_severe_tier(self):
-        # Tightened: check each of the two occurrences individually rather
-        # than counting matches across both options combined -- a count of 2
-        # for each string would still pass if, say, both severe-tier guards
-        # ended up on the same option and neither on the other.
+        # Placement and count are different defect classes: a plain count of
+        # 2 across both options combined would still pass if both severe-tier
+        # guards ended up on the same option and neither on the other, so
+        # each occurrence is also checked individually by splitting into the
+        # two option halves. But `_innermost_enclosing` only ever looks at
+        # the FIRST occurrence of `needle` within whatever body it is given,
+        # so a duplicated or unguarded third call inside one option would
+        # slip past the per-half check alone -- the exact-count assertions
+        # below catch that class instead.
         ev = _event_1(_text(EVENTS))
         options = ev[ev.index("option = {"): ev.index("after = {")]
+        self.assertEqual(2, options.count("covert_exposure_third_party_blowback = yes"))
+        self.assertEqual(
+            2, options.count("covert_code_tier_severe = { VAR = iw_burned_type_code }")
+        )
         split_at = options.index("name = covert_warfare.1.b")
         for label, half in (("acknowledge", options[:split_at]), ("deny", options[split_at:])):
             needle = "covert_exposure_third_party_blowback = yes"
