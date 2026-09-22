@@ -1384,7 +1384,7 @@ building_modifiers = {
       severity = neutral
   }
   ```
-- Loc keys: `notification_{message_type}_title` and `notification_{message_type}_desc`.
+- **Loc keys are `notification_{message_type}_name` / `_desc` / `_tooltip` — never a bare key matching the message name.** The engine resolves a posted notification through those three only; a `{message_type}:0 "…"` line is dead text, and the feed renders the raw keys with nothing in `debug.log`. `_name` and `_desc` are both required; `_tooltip` is optional (vanilla omits it on a small minority of its own messages) and conventionally composes the other two as `"#header $…_name$#!\n$…_desc$"`. Copy the `notification_iw_*` family in `localization/english/te_notifications_l_english.yml`. `loc_coverage_audit` covers `common/messages` as of 2026-09-22, so a missing `_name`/`_desc` now shows up in `docs/engine/loc_coverage_report.md` on every `/reload` instead of shipping — it cost the covert graduated-exposure branch a Critical finding on its headline effect first.
 
 ## File Writing Best Practices
 
