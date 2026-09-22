@@ -256,5 +256,54 @@ class TierNameLocTests(unittest.TestCase):
             self.assertIn("iw_exposure_tier_%s:" % tier, body)
 
 
+ACTION_TIER = {
+    "election_interference": "moderate",
+    "financial_subversion": "moderate",
+    "infrastructure_sabotage": "war",
+    "comms_disruption": "war",
+    "industrial_espionage": "mild",
+    "military_espionage": "mild",
+    "influence_campaign": "moderate",
+    "ideological_subversion": "severe",
+    "destabilization": "severe",
+}
+
+
+class PreLaunchTierNoteTests(unittest.TestCase):
+    def test_the_hand_written_mapping_matches_the_tier_table(self):
+        body = _text(TRIGGERS)
+        for op_type, tier in ACTION_TIER.items():
+            codes = {int(m) for m in re.findall(r"var:\$VAR\$ = (\d+)", _tier_block(body, tier))}
+            self.assertIn(
+                CODES[op_type],
+                codes,
+                "%s is documented as %s but the tier table disagrees" % (op_type, tier),
+            )
+
+    def test_every_action_description_shows_its_tier(self):
+        loc = "".join(
+            p.read_text(encoding="utf-8-sig")
+            for p in sorted((ROOT / "localization/english").rglob("*.yml"))
+        )
+        for op_type, tier in ACTION_TIER.items():
+            line = next(
+                l for l in loc.splitlines()
+                if l.strip().startswith("covert_%s_action_desc:" % op_type)
+            )
+            self.assertIn(
+                "$iw_exposure_tier_%s_note$" % tier,
+                line,
+                "covert_%s_action_desc must show the %s tier" % (op_type, tier),
+            )
+
+    def test_every_covert_action_is_hostile(self):
+        body = _text(ACTIONS)
+        self.assertEqual(
+            len(CODES),
+            body.count("is_hostile = yes"),
+            "every covert operation must be marked hostile",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

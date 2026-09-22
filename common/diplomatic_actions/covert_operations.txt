@@ -881,6 +881,7 @@ covert_influence_campaign_action = {
 	requires_approval = no
 	show_confirmation_box = yes
 	show_effect_in_tooltip = yes
+	is_hostile = yes
 	should_notify_third_parties = no
 
 	accept_effect = {
