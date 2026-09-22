@@ -1485,15 +1485,21 @@ Union → 5 Reserve Currency**, over a fiscal-union variant. Gates: the mod's or
 
 #### IN-GAME VERIFICATION CHECKLIST (tiers 4–5)
 
-Offline, in a sparse worktree with the dummy `VIC3_*` variables: the parser on all nine touched
-`common/` files, the unit suite minus `test_reload_post_load` (817 tests), `ruff`, the tab
-check, BOM on all thirteen changed files, `check_localization_files.py`,
-`check_post_load_rosters.py` and the nine CI audits in exit-code mode — all clean.
-`gen_pb_principle_unlock_descs` and `organize_loc` were run and their output is in the diff.
-**No `POST /reload` was run** (#306: a worktree reload regenerates against the main checkout),
-so the eight audits that only run there — `loc_coverage`, `concept_reference`,
-`localization_accessor`, `mod_structure`, `event_magnitude`, `modifier_visibility`,
-`pm_employment`, `effect_trigger_validity` — have **not** seen these files. Run one before play.
+Offline, in a sparse worktree: the parser on all nine touched `common/` files, the unit suite
+minus `test_reload_post_load` (834 tests, #306), `ruff`, the tab check, BOM on all thirteen
+changed files, `check_localization_files.py`, `check_post_load_rosters.py` and the ten CI audits
+in exit-code mode — all clean. `gen_pb_principle_unlock_descs` and `organize_loc` were run and
+their output is in the diff.
+
+**No `POST /reload` was run** — a worktree reload runs the regenerators against the *main*
+checkout (#306). The eight audits that normally only run there were instead run **standalone
+from the worktree**, by copying the gitignored `paths.local.json` in so `base_game_path` resolves
+while `mod_path` stays the worktree: `loc_coverage` (14 flags, all pre-existing, 0 unreviewed —
+the five new loc keys are covered), `concept_reference` (0), `localization_accessor` (3871 chains,
+0 flags), `mod_structure` (0), `modifier_visibility`, `effect_trigger_validity`,
+`event_magnitude` and `pm_employment`. All eight rewrote their reports under `docs/engine/`
+**byte-identically** to what is on `main`, so none of them found anything in this change. That
+leaves only the engine itself unverified.
 
 | # | Check |
 |---|---|
