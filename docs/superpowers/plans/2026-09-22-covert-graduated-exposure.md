@@ -1541,7 +1541,28 @@ with:
 
 A war-tier burn during the war therefore emits neither effect, so neither renders as "+0" or "-0"; a war-tier burn during a play emits both.
 
-- [ ] **Step 13: Format, organize loc, run the tests**
+- [ ] **Step 13: Correct the war tier's pre-launch note and tier name**
+
+Task 5 wrote `iw_exposure_tier_war_note` when the war tier cost a flat 1 infamy either way. This task
+makes that text **false**, so it has to move with the mechanic. In
+`localization/english/te_miscellaneous_l_english.yml`, replace it with a note that states both cases:
+
+```
+ iw_exposure_tier_war_note:0 "\n#lore If this is exposed once the war has started, the world shrugs — sabotage between belligerents costs nothing at all. Exposed during the run-up, it reads as manufacturing the war, and costs as much infamy as an attempt to bring down a government.#!"
+```
+
+That also closes a Minor from Task 5's review: the other three notes follow "the world treats it as
+`<characterization>`: `<consequence>`" while the old war note never named what the world was
+reacting to.
+
+Leave `iw_exposure_tier_war` (the short noun phrase "wartime sabotage", used inside both event
+descriptions) as it is — it names the operation, not its price, and is still accurate.
+
+Re-run the Task 5 drift test after this edit: `python3 -m unittest
+test_covert_exposure_tiers.PreLaunchTierNoteTests -v`. It must stay green, since the key name is
+unchanged and the nine descriptions still reference it.
+
+- [ ] **Step 14: Format, organize loc, run the tests**
 
 ```bash
 python3 scripts/format_paradox_tabs.py common/diplomatic_actions/covert_operations.txt events/covert_warfare_events.txt common/script_values/covert_warfare_script_values.txt common/scripted_triggers/covert_warfare_triggers.txt
@@ -1551,11 +1572,11 @@ python3 -m unittest test_covert_exposure_tiers test_covert_detection_roll -v
 
 Then the full suite once.
 
-- [ ] **Step 14: Document both changes**
+- [ ] **Step 15: Document both changes**
 
 In `docs/systems/mod_systems.md` § Covert Warfare, add: the detection floor is now `covert_ops_detection_floor` (0.1%/month, reachable at high funding against a weak target, which is why the operation row shows one decimal); the two wartime operations may be started and maintained while a diplomatic play against the target is running, and stand down if that play ends without war; and the war tier's blowback now turns on *when* the operation was caught — nothing at all once the war has started, severe-tier infamy plus a moderate relations hit if it was caught during the run-up.
 
-- [ ] **Step 15: Commit**
+- [ ] **Step 16: Commit**
 
 ```bash
 git add common/diplomatic_actions/covert_operations.txt common/scripted_triggers/covert_warfare_triggers.txt events/covert_warfare_events.txt common/script_values/covert_warfare_script_values.txt localization/english docs/systems/mod_systems.md test_covert_exposure_tiers.py
