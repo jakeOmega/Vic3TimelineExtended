@@ -29,6 +29,12 @@ covert_ops_detection_funding_3_reduction = 5
 covert_ops_detection_funding_4_reduction = 5
 covert_ops_detection_funding_5_reduction = 6
 
+# Per-operation roll scale. Every running operation rolls its own iw_detect
+# each month, so with N operations the chance that at least one burns is
+# 1 - prod(1 - c_i). 1 = honest per-operation odds; lower it (0.6 puts three
+# 10% operations near the old single-roll 18%) if N-operation risk lands hot.
+covert_ops_detection_multi_op_scale = 1
+
 # Counterintelligence IC bonus per funding level above 1 (applied via iw_funding_defense modifier)
 covert_ops_funding_defense_ic_per_level = 5
 
@@ -252,6 +258,19 @@ target_counterintelligence_penalty = {
 		min = 0
 		max = covert_ops_target_ic_max
 	}
+}
+
+# The chance one operation rolls against this month. iw_detect is written on
+# the container by covert_op_refresh_detection at the top of the same pulse
+# (covert_ops_sync_all), so it is never a month stale here. A named script
+# value is the proven form for `random = { chance = ... }`
+# (space_race_effects.txt); `chance = var:` is not.
+# Scope: covert operation container
+covert_op_roll_chance = {
+	value = var:iw_detect
+	multiply = covert_ops_detection_multi_op_scale
+	min = 0
+	max = 100
 }
 
 # ============================================================================
