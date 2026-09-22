@@ -3435,7 +3435,7 @@ te_fix_inconsistent_lawgroup_monetary_policy = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = international_exchange_standards
+				has_technology_researched = central_banking
 			}
 			activate_law = law_type:law_gold_standard
 		}
@@ -3481,7 +3481,7 @@ te_fix_inconsistent_lawgroup_monetary_policy = {
 		}
 		else_if = {
 			limit = {
-				has_technology_researched = international_exchange_standards
+				has_technology_researched = central_banking
 			}
 			activate_law = law_type:law_gold_standard
 		}
