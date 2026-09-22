@@ -567,12 +567,12 @@
 #
  covert_warfare.1.a:0 "Recall our operatives and apologize through back-channels"
  covert_warfare.1.b:0 "Deny everything — our people were never there"
- covert_warfare.1.d:0 "Our intelligence services report a catastrophic security breach. One of our [concept_covert_operations] ([ROOT.GetCountry.GetCustom('covert_burned_type_name')]) has been detected by [SCOPE.sCountry('detected_by_country').GetName]. The operation must be terminated immediately, and the diplomatic fallout will be considerable."
+ covert_warfare.1.d:0 "Our intelligence services report a catastrophic security breach. One of our [concept_covert_operations] ([ROOT.GetCountry.GetCustom('covert_burned_type_name')]) has been detected by [SCOPE.sCountry('detected_by_country').GetName]. They will present it to the world as [ROOT.GetCountry.GetCustom('covert_burned_tier_name')]. The operation must be terminated immediately, and the diplomatic fallout will be considerable."
  covert_warfare.1.f:0 "The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk.\n\nThe minister was woken at five.\n\n\"How bad?\" he asked.\n\n\"They have the names. The dates. The recordings. The denials we prepared for last month's operation will not cover the current one.\"\n\n\"Then we prepare new denials.\"\n\n\"The new denials will be plausible to no one. We are choosing the cover story for a different audience now — not the foreign ministries, but our own newspapers.\""
  covert_warfare.1.t:0 "Operation Compromised"
  covert_warfare.2.a:0 "Shore up our counterintelligence"
  covert_warfare.2.b:0 "Retaliate in kind"
- covert_warfare.2.d:0 "Our counterintelligence services have uncovered evidence of a sustained foreign covert campaign targeting our [Concept('concept_institution', 'institutions')]. Enemy agents have been manipulating our information networks, attempting to undermine our political stability. We must decide how to respond."
+ covert_warfare.2.d:0 "Our counterintelligence services have uncovered evidence of a sustained foreign covert campaign against us — [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')], conducted by agents of a power that has so far denied everything. We must decide how to respond."
  covert_warfare.2.f:0 "\"The anomalies in the election data were too precise to be accidental, too subtle to be domestic in origin.\"\n\n\"Foreign?\"\n\n\"Foreign. The signature matches three other operations we have catalogued over the last two years. The same patience. The same restraint. The same preference for influence over disruption.\"\n\n\"And the response?\"\n\n\"That is your decision, Minister. Ours was to detect it. The decision to respond — or not — is above our pay grade, and for once we are grateful for that.\""
  covert_warfare.2.t:0 "Foreign Interference Detected"
 

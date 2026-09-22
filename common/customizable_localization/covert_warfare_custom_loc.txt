@@ -198,3 +198,57 @@ covert_burned_type_name = {
 		localization_key = iw_op_name_unknown
 	}
 }
+
+# How hostile the world considers the operation covert_warfare.1 is reporting.
+# The tier table (covert_code_tier_*) is the only place the codes are listed;
+# this just picks the word for it.
+covert_burned_tier_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
+		localization_key = iw_exposure_tier_mild
+	}
+	text = {
+		trigger = { covert_code_tier_severe = { VAR = iw_burned_type_code } }
+		localization_key = iw_exposure_tier_severe
+	}
+	text = {
+		trigger = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		localization_key = iw_exposure_tier_war
+	}
+	text = {
+		trigger = { covert_code_tier_moderate = { VAR = iw_burned_type_code } }
+		localization_key = iw_exposure_tier_moderate
+	}
+	text = {
+		localization_key = iw_exposure_tier_moderate
+	}
+}
+
+# The same word, for the operation our counter-intelligence last exposed.
+covert_last_exposed_tier_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { covert_code_tier_mild = { VAR = iw_last_exposed_type } }
+		localization_key = iw_exposure_tier_mild
+	}
+	text = {
+		trigger = { covert_code_tier_severe = { VAR = iw_last_exposed_type } }
+		localization_key = iw_exposure_tier_severe
+	}
+	text = {
+		trigger = { covert_code_tier_war = { VAR = iw_last_exposed_type } }
+		localization_key = iw_exposure_tier_war
+	}
+	text = {
+		trigger = { covert_code_tier_moderate = { VAR = iw_last_exposed_type } }
+		localization_key = iw_exposure_tier_moderate
+	}
+	text = {
+		localization_key = iw_exposure_tier_moderate
+	}
+}

@@ -231,5 +231,30 @@ class ExposureEventTests(unittest.TestCase):
         self.assertNotIn("remove_variable = iw_burned_phase", guarded)
 
 
+class TierNameLocTests(unittest.TestCase):
+    def test_both_tier_names_read_the_tier_table(self):
+        body = _text(CUSTOM_LOC)
+        for entry, var in (
+            ("covert_burned_tier_name", "iw_burned_type_code"),
+            ("covert_last_exposed_tier_name", "iw_last_exposed_type"),
+        ):
+            block = _top_level_block(body, "%s = {" % entry)
+            for tier in TIER_CODES:
+                self.assertIn(
+                    "covert_code_tier_%s = { VAR = %s }" % (tier, var),
+                    block,
+                    "%s must name the %s tier through the tier table" % (entry, tier),
+                )
+                self.assertIn("localization_key = iw_exposure_tier_%s" % tier, block)
+            # No custom loc may re-list codes; that is the tier table's job.
+            self.assertNotIn("var:%s = " % var, block)
+
+    def test_tier_name_keys_exist(self):
+        loc = (ROOT / "localization/english").rglob("*.yml")
+        body = "".join(p.read_text(encoding="utf-8-sig") for p in loc)
+        for tier in TIER_CODES:
+            self.assertIn("iw_exposure_tier_%s:" % tier, body)
+
+
 if __name__ == "__main__":
     unittest.main()
