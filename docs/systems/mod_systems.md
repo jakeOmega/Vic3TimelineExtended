@@ -1550,7 +1550,7 @@ article, power-bloc principle, GUI.
 | `common/script_values/covert_warfare_script_values.txt` | All script values: IC, slots, costs, detection, display |
 | `common/static_modifiers/extra_modifiers.txt` | `covert_operation_funding_cost`, `intelligence_capacity_defense`, `iw_domestic_defense`, operation effect modifiers |
 | `common/scripted_effects/covert_warfare_effects.txt` | Operation containers (create/destroy/monthly sync), duration aging, phase-based effects, election confidence |
-| `common/scripted_triggers/covert_warfare_triggers.txt` | Pact-type check, target validity, per-type cap, phase triggers, the four `covert_code_tier_*` exposure-tier triggers |
+| `common/scripted_triggers/covert_warfare_triggers.txt` | Pact-type check, target validity, per-type cap, phase triggers, the four `covert_code_tier_*` exposure-tier triggers, `covert_exposure_is_costless` (war-tier-caught-during-the-war) |
 | `common/scripted_buttons/covert_warfare_scripted_buttons.txt` | `iw_increase_funding_button`, `iw_decrease_funding_button` — hidden from humans (`visible = { is_ai = yes }`); the widget's stepper calls the same helpers |
 | `common/on_actions/covert_warfare_on_actions.txt` | Election confidence on `on_election_campaign_end` |
 | `events/covert_warfare_events.txt` | Detection event, diplomatic incidents |
