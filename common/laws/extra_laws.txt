@@ -911,6 +911,11 @@ law_fiat_currency = {
 		state_tax_capacity_mult = 0.1
 		country_minting_mult = 0.1
 		country_institution_cost_institution_national_bank_mult = 0.1
+		# Elastic money feeds speculation (2026-09-22, banking_cycle_simulation.md
+		# §10): +0.2 bubble a month. Paired with the stronger leaning tools, a
+		# managed fiat country still crashes least, while one with little
+		# regulation budget or a passive bank crashes a little more than gold.
+		country_bubble_pressure_monthly_add = 0.2
 		# Open-market operations (monetary_policy_design.md §5.1, §0.1 ruling of
 		# 2026-09-20). A currency nobody can present for metal can be created to
 		# buy bonds, so the QE-style tool belongs to this rung and to digital
@@ -944,6 +949,8 @@ law_digital_currency = {
 		state_tax_capacity_mult = 0.2
 		country_minting_mult = 0.25
 		country_banking_random_momentum_mult = 0.5
+		# Same speculative drift as fiat (see law_fiat_currency).
+		country_bubble_pressure_monthly_add = 0.2
 		# Transmission (monetary_policy_design.md §5.1). With no cash in the
 		# economy a rate change reaches every account at once, so the policy rate
 		# closes on its target twice as fast — and the floor comes off, because
