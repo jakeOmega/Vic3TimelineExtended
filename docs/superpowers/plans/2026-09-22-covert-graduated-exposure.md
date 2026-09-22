@@ -1132,7 +1132,350 @@ git commit -m "docs(covert): document graduated exposure; plant a severe operati
 
 ---
 
-## Verification (controller, after Task 6)
+---
+
+### Task 7: Lower the detection floor to 0.1% a month
+
+**Files:**
+- Modify: `common/script_values/covert_warfare_script_values.txt` (one Section 1 constant; one line in `covert_operation_detection_chance`)
+- Modify: `localization/english/te_journal_entries_l_english.yml` (one decimal on the per-operation risk)
+- Test: `test_covert_exposure_tiers.py` (add a class)
+
+**Why:** with severe exposures now costing up to 6 infamy and −60 relations, a well-funded agency should be able to work a defenceless target almost with impunity — but never with *no* risk. The floor is easy to reach: base risk is 10 and full funding subtracts 19, so a maxed agency is already negative before the target's counterintelligence is added. 1%/month is 11.4% a year; 0.1%/month is 1.2% a year.
+
+**Engine fact this depends on, already checked:** `random = { chance = <fraction> }` really rolls fractions — vanilla's Montenegro raiding journal entry (`common/journal_entries/05_montenegro_je.txt:184-195` in the vanilla tree) passes computed chances of 0.15 and 0.45. Do not re-verify; do not replace the floor with an integer.
+
+- [ ] **Step 1: Write the failing test**
+
+Append to `test_covert_exposure_tiers.py`:
+
+```python
+class DetectionFloorTests(unittest.TestCase):
+    def test_the_floor_is_a_named_constant_at_a_tenth_of_a_percent(self):
+        body = _text(VALUES)
+        self.assertIn("covert_ops_detection_floor = 0.1", body)
+        block = _top_level_block(body, "covert_operation_detection_chance = {")
+        self.assertIn("min = covert_ops_detection_floor", block)
+        self.assertNotIn("\n\tmin = 1\n", block)
+
+    def test_the_operation_row_shows_a_decimal(self):
+        # At the floor the risk is 0.1%/month. Rendered with |0 that reads as
+        # "0%", which tells the player they are safe when they are not.
+        loc = _text(ROOT / "localization/english/te_journal_entries_l_english.yml")
+        line = next(
+            l for l in loc.splitlines()
+            if l.strip().startswith("je_iw_op_row_detection:")
+        )
+        self.assertIn("GetVariableValue('iw_detect')|1", line)
+```
+
+- [ ] **Step 2: Run it to make sure it fails**
+
+Run: `python3 -m unittest test_covert_exposure_tiers -v`
+Expected: FAIL — the constant does not exist and the row still renders `|0`.
+
+- [ ] **Step 3: Add the constant**
+
+In Section 1 of `common/script_values/covert_warfare_script_values.txt`, immediately after the `covert_ops_detection_multi_op_scale` block, add:
+
+```
+# The lowest monthly detection risk any operation can carry. Full funding
+# subtracts more than the base risk on its own, so a well-funded agency
+# against a target with no counterintelligence sits exactly here: 0.1%/month
+# is 1.2% a year, which is "almost with impunity" without ever being "safe".
+# Fractions are real rolls, not a silent zero — vanilla's Montenegro raiding
+# journal entry passes computed chances of 0.15 and 0.45 to `random`.
+covert_ops_detection_floor = 0.1
+```
+
+- [ ] **Step 4: Use it as the floor**
+
+In `covert_operation_detection_chance`, replace the line `	min = 1` (the one directly above `	max = 50`, at one tab of indentation — there are other `min = 1` lines in the file at deeper indentation, leave those alone) with:
+
+```
+	min = covert_ops_detection_floor
+```
+
+- [ ] **Step 5: Show one decimal on the operation row**
+
+In `localization/english/te_journal_entries_l_english.yml`, in `je_iw_op_row_detection`, change `[ScriptContainer.GetVariableValue('iw_detect')|0]` to `[ScriptContainer.GetVariableValue('iw_detect')|1]`. Change nothing else in that string — `iw_tgt_ic` and `iw_tgt_td` stay at `|0`.
+
+- [ ] **Step 6: Format and run the tests**
+
+```bash
+python3 scripts/format_paradox_tabs.py common/script_values/covert_warfare_script_values.txt
+python3 -m unittest test_covert_exposure_tiers test_covert_detection_roll -v
+```
+
+- [ ] **Step 7: Commit**
+
+```bash
+git add common/script_values/covert_warfare_script_values.txt localization/english/te_journal_entries_l_english.yml test_covert_exposure_tiers.py
+git commit -m "feat(covert): drop the detection floor to 0.1% a month"
+```
+
+---
+
+### Task 8: Let the wartime operations start during a diplomatic play
+
+**Files:**
+- Modify: `common/diplomatic_actions/covert_operations.txt` (`covert_infrastructure_sabotage_action` and `covert_comms_disruption_action`, three gates each)
+- Modify: `localization/english/te_miscellaneous_l_english.yml` (rename and reword one tooltip key)
+- Modify: `events/covert_warfare_events.txt` (`immediate` copies the war state; `after` clears it; the relations guard)
+- Modify: `common/script_values/covert_warfare_script_values.txt` (`covert_exposure_relations_base` war branch)
+- Test: `test_covert_exposure_tiers.py` (add a class)
+
+**Why:** sabotage and comms disruption are gated on already being at war, which means the spies can only start preparing once the shooting has begun. If a diplomatic play against the target is under way, the preparation is exactly what an intelligence service would be doing.
+
+**The consequence that has to be handled with it:** the war tier charges *zero* relations on exposure, justified by already being at war. Let these start during a play and being caught becomes diplomatically free at the moment it matters most. So the shrug becomes conditional on actually being at war: caught during a play charges the moderate relations hit, caught during the war charges nothing. The war state is copied onto the country in `immediate` as `iw_burned_at_war`, the same pattern the type code and phase already use — the war can begin between the event firing and the player clicking, and the script values read only country variables by design.
+
+The infamy is unchanged: the war tier's base 1 applies either way.
+
+- [ ] **Step 1: Write the failing test**
+
+Append to `test_covert_exposure_tiers.py`:
+
+```python
+WAR_ACTIONS = ("covert_infrastructure_sabotage_action", "covert_comms_disruption_action")
+
+
+class DiplomaticPlayGateTests(unittest.TestCase):
+    def test_both_wartime_actions_accept_a_play_in_all_three_gates(self):
+        body = _text(ACTIONS)
+        for action in WAR_ACTIONS:
+            block = _top_level_block(body, "%s = {" % action)
+            self.assertEqual(
+                3,
+                block.count("is_diplomatic_play_enemy_of = scope:target_country"),
+                "%s must accept a diplomatic play in `possible`, in "
+                "`requirement_to_maintain` and in the AI's `will_propose`" % action,
+            )
+            # Each of the three is an OR with the war check, never a replacement.
+            self.assertEqual(
+                3,
+                block.count("has_war_with = scope:target_country"),
+                "%s must still accept an actual war in all three gates" % action,
+            )
+            # The old blanket "are you at war with anyone" clause is gone.
+            self.assertNotIn("is_at_war = yes", block)
+
+    def test_the_gate_tooltip_was_renamed_to_match_what_it_now_says(self):
+        body = _text(ACTIONS)
+        self.assertNotIn("iw_at_war_tt", body)
+        self.assertEqual(4, body.count("iw_at_war_or_play_tt"))
+        loc = _text(ROOT / "localization/english/te_miscellaneous_l_english.yml")
+        self.assertIn("iw_at_war_or_play_tt:", loc)
+        self.assertNotIn("iw_at_war_tt:", loc)
+
+
+class WartimeExposureTests(unittest.TestCase):
+    def test_immediate_copies_the_war_state(self):
+        ev = _event_1(_text(EVENTS))
+        immediate = ev[ev.index("immediate = {"): ev.index("option = {")]
+        self.assertIn("name = iw_burned_at_war", immediate)
+        self.assertIn("has_war_with = scope:detected_by_country", immediate)
+
+    def test_after_clears_the_war_state(self):
+        ev = _event_1(_text(EVENTS))
+        after = ev[ev.index("after = {"):]
+        self.assertIn("remove_variable = iw_burned_at_war", after)
+        guarded = after[: after.index("scope:detected_by_country = {\n\t\t\t\ttrigger_event")]
+        self.assertNotIn("remove_variable = iw_burned_at_war", guarded)
+
+    def test_a_wartime_operation_caught_before_the_war_still_costs_relations(self):
+        block = _top_level_block(_text(VALUES), "covert_exposure_relations_base = {")
+        # War tier AND actually at war -> nothing. War tier and merely in a
+        # play -> the moderate hit.
+        self.assertIn("var:iw_burned_at_war = 1", block)
+        self.assertIn("covert_exposure_relations_moderate", block)
+
+    def test_the_event_only_skips_relations_for_a_war_tier_burn_during_a_war(self):
+        ev = _event_1(_text(EVENTS))
+        options = ev[ev.index("option = {"): ev.index("after = {")]
+        self.assertEqual(2, options.count("var:iw_burned_at_war = 1"))
+```
+
+- [ ] **Step 2: Run it to make sure it fails**
+
+Run: `python3 -m unittest test_covert_exposure_tiers -v`
+Expected: FAIL — the actions still gate on war alone.
+
+- [ ] **Step 3: Relax both actions' `possible` gate**
+
+In `common/diplomatic_actions/covert_operations.txt`, in **both** `covert_infrastructure_sabotage_action` and `covert_comms_disruption_action`, replace this pair of clauses in `possible`:
+
+```
+		custom_tooltip = {
+			text = iw_at_war_tt
+			is_at_war = yes
+		}
+		has_war_with = scope:target_country
+```
+
+with:
+
+```
+		custom_tooltip = {
+			text = iw_at_war_or_play_tt
+			OR = {
+				has_war_with = scope:target_country
+				is_diplomatic_play_enemy_of = scope:target_country
+			}
+		}
+```
+
+The blanket `is_at_war = yes` goes: it was redundant once the gate names the target, and it would have blocked the play case.
+
+- [ ] **Step 4: Relax both actions' `requirement_to_maintain`**
+
+In both actions, replace:
+
+```
+				custom_tooltip = {
+					text = iw_at_war_tt
+					has_war_with = scope:target_country
+				}
+```
+
+with:
+
+```
+				custom_tooltip = {
+					text = iw_at_war_or_play_tt
+					OR = {
+						has_war_with = scope:target_country
+						is_diplomatic_play_enemy_of = scope:target_country
+					}
+				}
+```
+
+A play that resolves without war therefore stands the operation down, which is the intended fiction.
+
+- [ ] **Step 5: Relax both actions' AI gate**
+
+In both actions' `ai` block, the bare `has_war_with = scope:target_country` inside `will_propose` becomes:
+
+```
+			OR = {
+				has_war_with = scope:target_country
+				is_diplomatic_play_enemy_of = scope:target_country
+			}
+```
+
+- [ ] **Step 6: Reword the tooltip key**
+
+In `localization/english/te_miscellaneous_l_english.yml`, replace the `iw_at_war_tt` entry with:
+
+```
+ iw_at_war_or_play_tt:0 "Must be at war with them, or in a [concept_diplomatic_play] against them (wartime operation)"
+```
+
+- [ ] **Step 7: Copy the war state in `immediate`**
+
+In `events/covert_warfare_events.txt`, inside `covert_warfare.1`'s `immediate`, add to the existing `ROOT = { ... }` block, after the two `set_variable` lines:
+
+```
+				if = {
+					limit = { has_war_with = scope:detected_by_country }
+					set_variable = { name = iw_burned_at_war value = 1 }
+				}
+				else = {
+					set_variable = { name = iw_burned_at_war value = 0 }
+				}
+```
+
+`scope:detected_by_country` is saved on the line above, so it resolves here. Extend the block comment: the war state is copied for the same reason as the code and the phase, and additionally because the war may begin between the event firing and the player clicking.
+
+- [ ] **Step 8: Clear it in `after`**
+
+Add a third sibling removal block alongside the two that are already there — again, do not edit the existing ones:
+
+```
+		if = {
+			limit = { has_variable = iw_burned_at_war }
+			remove_variable = iw_burned_at_war
+		}
+```
+
+- [ ] **Step 9: Make the war tier's shrug conditional**
+
+In `common/script_values/covert_warfare_script_values.txt`, replace the first branch of `covert_exposure_relations_base`:
+
+```
+	if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		add = 0
+	}
+```
+
+with two flat branches:
+
+```
+	# A wartime operation caught during the war costs nothing diplomatically:
+	# the relationship is already what it is. Caught while only a diplomatic
+	# play is running, it is ordinary meddling and is charged as such.
+	if = {
+		limit = {
+			covert_code_tier_war = { VAR = iw_burned_type_code }
+			has_variable = iw_burned_at_war
+			var:iw_burned_at_war = 1
+		}
+		add = 0
+	}
+	else_if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		add = covert_exposure_relations_moderate
+	}
+```
+
+Leave the mild / severe / else branches exactly as they are.
+
+- [ ] **Step 10: Narrow the event's relations guard**
+
+In both options of `covert_warfare.1`, the relations `if` currently skips the whole war tier. It must now skip only a war-tier burn that happened during an actual war. Replace, in both options:
+
+```
+					NOT = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+```
+
+with:
+
+```
+					NOT = {
+						AND = {
+							covert_code_tier_war = { VAR = iw_burned_type_code }
+							has_variable = iw_burned_at_war
+							var:iw_burned_at_war = 1
+						}
+					}
+```
+
+A missing `iw_burned_at_war` therefore falls through to charging relations, which matches the script value's own default.
+
+- [ ] **Step 11: Format, run the tests**
+
+```bash
+python3 scripts/format_paradox_tabs.py common/diplomatic_actions/covert_operations.txt events/covert_warfare_events.txt common/script_values/covert_warfare_script_values.txt
+python3 organize_loc.py
+python3 -m unittest test_covert_exposure_tiers test_covert_detection_roll -v
+```
+
+Then the full suite once.
+
+- [ ] **Step 12: Document both changes**
+
+In `docs/systems/mod_systems.md` § Covert Warfare, add: the detection floor is now `covert_ops_detection_floor` (0.1%/month, reachable at high funding against a weak target, and the operation row shows one decimal because of it); the two wartime operations may be started and maintained while a diplomatic play against the target is running, and stand down if that play ends without war; and a war-tier exposure costs relations unless the war has actually begun.
+
+- [ ] **Step 13: Commit**
+
+```bash
+git add common/diplomatic_actions/covert_operations.txt events/covert_warfare_events.txt common/script_values/covert_warfare_script_values.txt localization/english docs/systems/mod_systems.md test_covert_exposure_tiers.py
+git commit -m "feat(covert): let sabotage and comms disruption start during a diplomatic play"
+```
+
+---
+
+## Verification (controller, after Task 8)
 
 - `python3 -m unittest discover -s . -p 'test_*.py'` from the main checkout — whole suite green.
 - `ruff check .`, `python3 scripts/format_paradox_tabs.py --check` on the changed `.txt`, `python3 scripts/analysis/check_localization_files.py`.
