@@ -1027,6 +1027,30 @@ st_res_policy_stock_min = { value = 0 }       # lowest protected floor, % of cap
 st_res_policy_stock_max = { value = 100 }     # highest target ceiling, % of capacity
 st_res_policy_stock_min_gap = { value = 10 }  # minimum ceiling - floor, pp
 
+# Price smoothing. The policies act on a running (exponential) average of the
+# market price rather than this week's reading: every weekly tick the average
+# moves 1/memory of the way to the live price, so `price_memory` is the
+# averaging time constant in weeks. 1 = react to the live price, which is
+# exactly how the policies behaved before smoothing existed. The average is
+# advanced by st_res_policy_track_price_effect (weekly pulse only) and read
+# through st_res_<good>_price_signal below.
+st_res_policy_memory_step = { value = 1 }     # weeks
+st_res_policy_memory_min = { value = 1 }      # live price, no smoothing
+st_res_policy_memory_max = { value = 26 }     # half a year
+
+# Response ramp. With a ramp of 0 a lane switches to its full maximum weekly
+# flow the moment the price crosses a threshold (a step, debounced by the
+# hysteresis bands above). With a ramp above 0 the flow instead rises in
+# proportion to how far the price sits past the threshold, reaching the
+# maximum `ramp` points beyond it: a linear response that leans harder the
+# further the price strays and eases off as it recovers, so the reserve stops
+# flipping between full flow and nothing. Percentage points against base
+# price. The hysteresis bands are not applied while a ramp is in effect — the
+# response is already continuous, so there is no on/off edge to debounce.
+st_res_policy_ramp_step = { value = 5 }
+st_res_policy_ramp_min = { value = 0 }        # step response
+st_res_policy_ramp_max = { value = 50 }
+
 # ============================================================================
 # Reserve policies — per-good price signal and validation helpers
 # ============================================================================
@@ -1075,6 +1099,23 @@ st_res_grain_price_down = {
 st_res_grain_price_rel = {
 	value = st_res_grain_price_up
 	subtract = st_res_grain_price_down
+}
+
+# The price signal the policies act on, in percentage points against base
+# price (+20 = 20% above base): the running average kept by
+# st_res_policy_track_price_effect, or the live price until the first weekly
+# tick has seeded it. `has_variable`-guarded because the inventory widget
+# reads it every frame.
+st_res_grain_price_signal = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_grain_price_avg }
+		add = var:st_res_grain_price_avg
+	}
+	else = {
+		add = st_res_grain_price_rel
+		multiply = 100
+	}
 }
 
 # Current market price of one unit, in GBP. Mirrors the shape of
@@ -1168,6 +1209,23 @@ st_res_ammunition_price_rel = {
 	subtract = st_res_ammunition_price_down
 }
 
+# The price signal the policies act on, in percentage points against base
+# price (+20 = 20% above base): the running average kept by
+# st_res_policy_track_price_effect, or the live price until the first weekly
+# tick has seeded it. `has_variable`-guarded because the inventory widget
+# reads it every frame.
+st_res_ammunition_price_signal = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_ammunition_price_avg }
+		add = var:st_res_ammunition_price_avg
+	}
+	else = {
+		add = st_res_ammunition_price_rel
+		multiply = 100
+	}
+}
+
 # Current market price of one unit, in GBP. Mirrors the shape of
 # st_res_ammunition_sale_profit. `min = 1` keeps the budget division safe.
 st_res_ammunition_unit_price = {
@@ -1257,6 +1315,23 @@ st_res_oil_price_down = {
 st_res_oil_price_rel = {
 	value = st_res_oil_price_up
 	subtract = st_res_oil_price_down
+}
+
+# The price signal the policies act on, in percentage points against base
+# price (+20 = 20% above base): the running average kept by
+# st_res_policy_track_price_effect, or the live price until the first weekly
+# tick has seeded it. `has_variable`-guarded because the inventory widget
+# reads it every frame.
+st_res_oil_price_signal = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_oil_price_avg }
+		add = var:st_res_oil_price_avg
+	}
+	else = {
+		add = st_res_oil_price_rel
+		multiply = 100
+	}
 }
 
 # Current market price of one unit, in GBP. Mirrors the shape of
@@ -1350,6 +1425,23 @@ st_res_small_arms_price_rel = {
 	subtract = st_res_small_arms_price_down
 }
 
+# The price signal the policies act on, in percentage points against base
+# price (+20 = 20% above base): the running average kept by
+# st_res_policy_track_price_effect, or the live price until the first weekly
+# tick has seeded it. `has_variable`-guarded because the inventory widget
+# reads it every frame.
+st_res_small_arms_price_signal = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_small_arms_price_avg }
+		add = var:st_res_small_arms_price_avg
+	}
+	else = {
+		add = st_res_small_arms_price_rel
+		multiply = 100
+	}
+}
+
 # Current market price of one unit, in GBP. Mirrors the shape of
 # st_res_small_arms_sale_profit. `min = 1` keeps the budget division safe.
 st_res_small_arms_unit_price = {
@@ -1439,6 +1531,23 @@ st_res_artillery_price_down = {
 st_res_artillery_price_rel = {
 	value = st_res_artillery_price_up
 	subtract = st_res_artillery_price_down
+}
+
+# The price signal the policies act on, in percentage points against base
+# price (+20 = 20% above base): the running average kept by
+# st_res_policy_track_price_effect, or the live price until the first weekly
+# tick has seeded it. `has_variable`-guarded because the inventory widget
+# reads it every frame.
+st_res_artillery_price_signal = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_artillery_price_avg }
+		add = var:st_res_artillery_price_avg
+	}
+	else = {
+		add = st_res_artillery_price_rel
+		multiply = 100
+	}
 }
 
 # Current market price of one unit, in GBP. Mirrors the shape of
@@ -1532,6 +1641,23 @@ st_res_aeroplanes_price_rel = {
 	subtract = st_res_aeroplanes_price_down
 }
 
+# The price signal the policies act on, in percentage points against base
+# price (+20 = 20% above base): the running average kept by
+# st_res_policy_track_price_effect, or the live price until the first weekly
+# tick has seeded it. `has_variable`-guarded because the inventory widget
+# reads it every frame.
+st_res_aeroplanes_price_signal = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_aeroplanes_price_avg }
+		add = var:st_res_aeroplanes_price_avg
+	}
+	else = {
+		add = st_res_aeroplanes_price_rel
+		multiply = 100
+	}
+}
+
 # Current market price of one unit, in GBP. Mirrors the shape of
 # st_res_aeroplanes_sale_profit. `min = 1` keeps the budget division safe.
 st_res_aeroplanes_unit_price = {
@@ -1621,6 +1747,23 @@ st_res_tanks_price_down = {
 st_res_tanks_price_rel = {
 	value = st_res_tanks_price_up
 	subtract = st_res_tanks_price_down
+}
+
+# The price signal the policies act on, in percentage points against base
+# price (+20 = 20% above base): the running average kept by
+# st_res_policy_track_price_effect, or the live price until the first weekly
+# tick has seeded it. `has_variable`-guarded because the inventory widget
+# reads it every frame.
+st_res_tanks_price_signal = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_tanks_price_avg }
+		add = var:st_res_tanks_price_avg
+	}
+	else = {
+		add = st_res_tanks_price_rel
+		multiply = 100
+	}
 }
 
 # Current market price of one unit, in GBP. Mirrors the shape of
