@@ -3,6 +3,7 @@
 #
 # POWER_BLOCS
 #
+ power_bloc_banking_union_bool:0 "One supervisor and one deposit guarantee across the union: adopters get #G −25%#! banking crash chance, #G −25%#! random momentum and #G +1#! banking intervention in reserve, and a crash elsewhere in the currency spreads far less readily"
  power_bloc_can_enact_decree_cultural_emigration_initiative_bool:0 "Can Enact Cultural Emigration Initiative and Forced Migration [Concept('concept_decree', 'Decrees')]"
  power_bloc_can_enact_decree_cultural_emigration_initiative_bool_desc:0 "Can enact the Cultural Emigration Initiative [concept_decree], which encourages emigration of non-[concept_primary_cultures] to other countries, and the Forced Migration decree, which forces non-primary cultures to emigrate to another state or to other countries."
  power_bloc_can_enact_greenest_grass_campaign_bool:0 "Can Enact Greenest Grass Campaign"
@@ -35,6 +36,7 @@
  power_bloc_leader_can_peacefully_annex_bool:0 "Leader Can Peacefully Annex Subjects"
  power_bloc_leader_can_peacefully_annex_bool_desc:0 "[Concept('concept_power_bloc_leader', '$concept_power_bloc_leader_short$')] can peacefully annex [Concept('concept_subject', '$concept_subjects$')] without a [concept_diplomatic_play], if the subject has low [concept_liberty_desire] and a sufficiently low [Concept('concept_gdp', 'GDP')]."
  power_bloc_monetary_cooperation_bool:0 "The leader's central bank backs every member: #G −0.5#! points of risk premium and #G +1#! peg confidence a month"
+ power_bloc_reserve_currency_bool:0 "The union's money is held the world over: the leader mints against those balances and may cut up to #G −1#! point of risk premium, and adopters get a further #G +5%#! trade advantage and #G −0.25#! points of premium"
  power_bloc_shared_currency_bool:0 "Members may adopt the leader's currency"
  principle_group_artistic_expression:0 "Artistic Expression"
  principle_group_artistic_expression_desc:0 "The [concept_power_bloc] encourages artistic expression and the development of culture."

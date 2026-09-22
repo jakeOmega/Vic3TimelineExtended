@@ -1927,6 +1927,17 @@ banking_cycle_spread_contagion = {
 					trigger = { te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country } }
 					add = 10
 				}
+				# [Monetary policy 5b tier 4] ...unless the currency area has one
+				# supervisor and one deposit guarantee over all of it, which is most
+				# of what the shared currency was carrying. Not all of it: a common
+				# supervisor is not a wall, and 2008 and 2011 both crossed one.
+				modifier = {
+					trigger = {
+						te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
+						te_mon_bloc_union_tier_4_plus = yes
+					}
+					add = te_mon_union_contagion_damp
+				}
 				modifier = {
 					trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
 					add = 5

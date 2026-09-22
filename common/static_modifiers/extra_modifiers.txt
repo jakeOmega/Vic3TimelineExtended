@@ -7444,6 +7444,41 @@ te_mon_union_adopter = {
 	state_import_advantage_mult = 0.05
 }
 
+# MANAGED, flat; on an ADOPTER while its bloc holds tier 4 (the banking union).
+# One supervisor and one deposit guarantee across the whole currency area: the
+# cycle is steadier, crashes are rarer, and there is one more intervention in
+# reserve for when one comes anyway. The other half of the tier — contagion
+# through the shared currency — is a probability term in
+# banking_cycle_spread_contagion, not a modifier.
+te_mon_union_banking_union = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_banking_crash_chance_mult = -0.25
+	country_banking_random_momentum_mult = -0.25
+	country_banking_intervention_max_add = 1
+}
+
+# MANAGED, flat; on an ADOPTER while its bloc holds tier 5. A second helping of
+# te_mon_union_adopter's trade edge — the world quotes prices in this money, so
+# an adopter is not converting at either end of a trade. The tier's other gift
+# to an adopter, a cut of structural premium, goes through
+# te_mon_arr_standing_value, where every other standing term lives.
+te_mon_union_reserve = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	state_export_advantage_mult = 0.05
+	state_import_advantage_mult = 0.05
+}
+
+# MANAGED, scaled; on a tier-5 LEADER. multiplier = pounds a week
+# (te_mon_union_seigniorage_applied), from the share of world GDP anchored on
+# this country's money. The exorbitant privilege: everybody else holds balances
+# in it, and issuing them is free. A flat country_minting_add for the reason
+# te_mon_board_seigniorage gives — a _mult would scale the leader's own base
+# and transfer nothing from anybody.
+te_mon_union_seigniorage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
+	country_minting_add = 1
+}
+
 # MANAGED, scaled; on a LEADER while "Press for monetary convergence" is on.
 # multiplier = the number of holdouts (te_mon_union_pressure_applied). The
 # capital-controls modifier's country_influence_cost_add = 100 is the precedent.

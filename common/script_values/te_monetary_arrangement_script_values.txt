@@ -146,6 +146,24 @@ te_mon_reserve_currency_per_step = { value = 0.1 }
 te_mon_reserve_currency_step_share = { value = 0.05 }
 te_mon_reserve_currency_cap = { value = 0.5 }
 
+# [5b tier 5] ...and a full point for the leader of a bloc that has taken the
+# reserve-currency principle. The ordinary cap says the market has noticed other
+# people hold your money; the tier says they hold it as reserves, which is the
+# difference between a well-regarded currency and the one everything is priced
+# in. Same base either way (te_mon_anchored_gdp_m), so the cap is the only lever.
+te_mon_reserve_currency_cap_tier_5 = { value = 1.0 }
+
+te_mon_reserve_currency_cap_effective = {
+	value = te_mon_reserve_currency_cap
+	if = {
+		limit = {
+			is_power_bloc_leader = yes
+			te_mon_bloc_union_tier_5 = yes
+		}
+		value = te_mon_reserve_currency_cap_tier_5
+	}
+}
+
 te_mon_reserve_currency_cut = {
 	value = 0
 	if = {
@@ -160,7 +178,7 @@ te_mon_reserve_currency_cut = {
 		divide = te_mon_reserve_currency_step_share
 		multiply = te_mon_reserve_currency_per_step
 		min = 0
-		max = te_mon_reserve_currency_cap
+		max = te_mon_reserve_currency_cap_effective
 	}
 }
 
@@ -426,6 +444,15 @@ te_mon_arr_standing_value = {
 			te_mon_is_imposed_pegger = no
 		}
 		add = te_mon_peg_standing_cut
+	}
+	# [5b tier 5] An adopter's debt is written in a currency the world holds, so
+	# it does not have to be sold to anybody who does not already want the money.
+	if = {
+		limit = {
+			te_mon_is_union_adopter = yes
+			te_mon_bloc_union_tier_5 = yes
+		}
+		add = te_mon_union_reserve_standing_cut
 	}
 }
 

@@ -16,7 +16,7 @@
 #                                       again (the design's
 #                                       te_mon_union_last_asked, kept as a
 #                                       countdown rather than a date)
-#   te_mon_union_q_state      0 to 15   the last "could the answer have
+#   te_mon_union_q_state      0 to 23   the last "could the answer have
 #                                       changed?" signature The Question was
 #                                       judged on: pressed + 2 x criteria met
 #                                       + 4 x bloc tier
@@ -27,6 +27,12 @@
 #   te_mon_union_pressure_applied >= 0  what te_mon_union_pressure was last
 #                                       applied at. BACKS A MULTIPLIER
 #   te_mon_union_adopter_applied 0 or 1 is te_mon_union_adopter on?
+#   te_mon_union_banking_applied 0 or 1 is te_mon_union_banking_union on?
+#   te_mon_union_reserve_applied 0 or 1 is te_mon_union_reserve on?
+#   te_mon_union_seigniorage_pts  >= 0  a tier-5 LEADER'S seigniorage, pounds a
+#                                       week, re-derived every pulse, and...
+#   te_mon_union_seigniorage_applied    ...what te_mon_union_seigniorage was
+#                             >= 0      last applied at. BACKS A MULTIPLIER
 # ============================================================================
 
 
@@ -81,7 +87,8 @@ te_mon_backstop_confidence = {
 
 # --- Tier 2: no peg to break, so the premium is the valve --------------------
 # An adopter has no te_peg_confidence. Its overvaluation feeds the CYCLICAL
-# premium instead: +0.1pp per point beyond 5, halved at tier 3. Read in step 5,
+# premium instead: +0.1pp per point beyond 5, halved at tier 3+. NEVER zeroed at
+# any tier — this is the valve the euro-crisis shape hangs on. Read in step 5,
 # so off LAST month's index — the one-month lag §16.2 asks for, which breaks
 # the premium <-> FX loop inside a tick (te_mon_premium_fx's arrangement).
 te_mon_union_overvaluation_per_point = { value = 0.1 }
@@ -98,9 +105,62 @@ te_mon_premium_union_overvaluation = {
 		subtract = te_mon_fx_overvaluation_tolerance
 		multiply = te_mon_union_overvaluation_per_point
 		if = {
-			limit = { te_mon_bloc_union_tier_3 = yes }
+			limit = { te_mon_bloc_union_tier_3_plus = yes }
 			divide = 2
 		}
+	}
+}
+
+
+# --- Tier 4: the banking union -----------------------------------------------
+# What a supervisor costs the leader, in pp of its provider premium, per
+# adopter it supervises. Below the backstop's relief: examining somebody's banks
+# every year is cheaper than standing behind their debts, and it is the tier
+# that makes the backstop less likely to be called.
+te_mon_union_supervision_cost = { value = 0.25 }
+
+# How much of the shared-currency contagion channel one supervisor catches. The
+# channel is worth +10 percentage points of spread chance
+# (banking_cycle_spread_contagion); -6 leaves +4, because a common supervisor
+# is not a wall — the 2008 and 2011 waves crossed one.
+te_mon_union_contagion_damp = { value = -6 }
+
+
+# --- Tier 5: the reserve currency --------------------------------------------
+# The structural premium an ADOPTER gets for borrowing in money the world holds,
+# pp. Added in te_mon_arr_standing_value beside the pegger's cut and the
+# leader's reserve-currency cut.
+te_mon_union_reserve_standing_cut = { value = 0.25 }
+
+# The LEADER'S seigniorage, pounds a week: the share of world GDP anchored on
+# its money x this, capped. Vanilla's base minting is a flat 500 a week, so a
+# leader with a fifth of the world in its currency gains 400 — real money
+# without being the whole of one.
+#
+# THE BASE IS te_mon_anchored_gdp_m, WHICH COUNTS EVERY CHOSEN ANCHOR — treaty
+# peggers (kind 1) as well as union adopters (kind 2). Deliberate: a reserve
+# currency is held by everybody who ties their money to it, not only by the
+# bloc, and it is the same base the reserve-currency standing cut already uses,
+# so the two terms can never disagree about how widely the money is held.
+te_mon_union_seigniorage_per_world_share = { value = 2000 }
+te_mon_union_seigniorage_cap = { value = 1000 }
+
+te_mon_union_seigniorage_value = {
+	value = 0
+	if = {
+		limit = {
+			te_mon_bloc_union_tier_5 = yes
+			is_power_bloc_leader = yes
+			has_variable = te_mon_anchored_gdp_m
+			var:te_mon_anchored_gdp_m > 0
+			has_global_variable = te_mon_world_gdp_m
+			global_var:te_mon_world_gdp_m > 0
+		}
+		value = var:te_mon_anchored_gdp_m
+		divide = global_var:te_mon_world_gdp_m
+		multiply = te_mon_union_seigniorage_per_world_share
+		min = 0
+		max = te_mon_union_seigniorage_cap
 	}
 }
 
@@ -117,6 +177,15 @@ te_mon_union_cost_to_root = {
 	if = {
 		limit = { te_mon_union_backstop_is_effective = yes }
 		add = te_mon_lolr_relief
+	}
+	# [tier 4] Supervising this adopter's banks. Keyed on the adopter, not on
+	# the member: a holdout has no banks in the union to examine.
+	if = {
+		limit = {
+			te_mon_is_union_adopter = yes
+			te_mon_bloc_union_tier_4_plus = yes
+		}
+		add = te_mon_union_supervision_cost
 	}
 	multiply = te_mon_arr_gdp_ratio_to_root
 }
@@ -180,8 +249,18 @@ te_mon_union_adopt_score = {
 		}
 	}
 	if = {
-		limit = { te_mon_bloc_union_tier_3 = yes }
+		limit = { te_mon_bloc_union_tier_3_plus = yes }
 		add = 10
+	}
+	# A supervisor over our banks, and a currency the world already holds. Worth
+	# less each than the backstop: neither is somebody standing behind our debts.
+	if = {
+		limit = { te_mon_bloc_union_tier_4_plus = yes }
+		add = 5
+	}
+	if = {
+		limit = { te_mon_bloc_union_tier_5 = yes }
+		add = 5
 	}
 	# Heavy debt wants the leader's name behind it.
 	if = {
@@ -221,5 +300,13 @@ te_mon_union_lock_display = {
 	if = {
 		limit = { has_variable = te_mon_union_lock_months }
 		value = var:te_mon_union_lock_months
+	}
+}
+
+te_mon_union_seigniorage_display = {
+	value = 0
+	if = {
+		limit = { has_variable = te_mon_union_seigniorage_pts }
+		value = var:te_mon_union_seigniorage_pts
 	}
 }
