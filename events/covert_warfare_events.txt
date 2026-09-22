@@ -3,9 +3,9 @@
 # ============================================================================
 # EVENT 1: Covert Operation Detected (Attacker's Perspective)
 # ============================================================================
-# Fired when a monthly detection check succeeds. A random active operation
-# pact is burned (removed). The attacker gains infamy and the target
-# country is notified.
+# Fired by covert_ops_roll_detection_all with the burned operation in
+# scope:iw_burned_op. The pact and container are removed in after; the
+# attacker gains infamy and the target is notified.
 # ============================================================================
 
 covert_warfare.1 = {
@@ -22,30 +22,20 @@ covert_warfare.1 = {
 	duration = 3
 
 	trigger = {
-		covert_operations_active >= 1
+		exists = scope:iw_burned_op
 	}
 
 	immediate = {
-		# Pick a random active operation pact where ROOT is the initiator and save its target
-		random_scope_diplomatic_pact = {
-			limit = {
-				first_country = ROOT
-				OR = {
-					is_diplomatic_action_type = covert_election_interference_action
-					is_diplomatic_action_type = covert_financial_subversion_action
-					is_diplomatic_action_type = covert_infrastructure_sabotage_action
-					is_diplomatic_action_type = covert_comms_disruption_action
-					is_diplomatic_action_type = covert_industrial_espionage_action
-					is_diplomatic_action_type = covert_military_espionage_action
-					is_diplomatic_action_type = covert_influence_campaign_action
-					is_diplomatic_action_type = covert_ideological_subversion_action
-					is_diplomatic_action_type = covert_destabilization_action
-				}
-			}
-			save_scope_as = burned_pact
-			every_participant = {
-				limit = { NOT = { this = ROOT } }
-				save_scope_as = detected_by_country
+		# The burned operation arrives as scope:iw_burned_op from
+		# covert_ops_roll_detection_all. Read it HERE and only here: the options
+		# and `after` run when the player clicks, up to `duration` days later, by
+		# which time stand-down or the monthly sync may have destroyed it.
+		# Event loc cannot reach a container either, so the type code is copied
+		# onto ROOT (scripting_best_practices.md, container rule 10).
+		scope:iw_burned_op = {
+			var:iw_target = { save_scope_as = detected_by_country }
+			ROOT = {
+				set_variable = { name = iw_burned_type_code value = PREV.var:iw_type_code }
 			}
 		}
 	}
@@ -99,52 +89,56 @@ covert_warfare.1 = {
 	}
 
 	after = {
-		# Always burn the operation (pact + container) and notify target regardless of option chosen
+		# Always burn the operation (pact + container) and notify the target,
+		# whichever option was chosen. Branch on the code copied in `immediate`;
+		# covert_op_destroy is idempotent, so a container that already vanished
+		# is harmless.
 		if = {
 			limit = {
 				exists = scope:detected_by_country
-				exists = scope:burned_pact
+				has_variable = iw_burned_type_code
 			}
 			if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_election_interference_action } }
+				limit = { var:iw_burned_type_code = 0 }
 				covert_op_burn = { TYPE = election_interference ACTION = covert_election_interference_action TARGET = scope:detected_by_country CODE = 0 }
 			}
 			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_financial_subversion_action } }
+				limit = { var:iw_burned_type_code = 1 }
 				covert_op_burn = { TYPE = financial_subversion ACTION = covert_financial_subversion_action TARGET = scope:detected_by_country CODE = 1 }
 			}
 			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_infrastructure_sabotage_action } }
+				limit = { var:iw_burned_type_code = 2 }
 				covert_op_burn = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action TARGET = scope:detected_by_country CODE = 2 }
 			}
 			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_comms_disruption_action } }
+				limit = { var:iw_burned_type_code = 3 }
 				covert_op_burn = { TYPE = comms_disruption ACTION = covert_comms_disruption_action TARGET = scope:detected_by_country CODE = 3 }
 			}
 			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_industrial_espionage_action } }
+				limit = { var:iw_burned_type_code = 4 }
 				covert_op_burn = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action TARGET = scope:detected_by_country CODE = 4 }
 			}
 			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_military_espionage_action } }
+				limit = { var:iw_burned_type_code = 5 }
 				covert_op_burn = { TYPE = military_espionage ACTION = covert_military_espionage_action TARGET = scope:detected_by_country CODE = 5 }
 			}
 			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_influence_campaign_action } }
+				limit = { var:iw_burned_type_code = 6 }
 				covert_op_burn = { TYPE = influence_campaign ACTION = covert_influence_campaign_action TARGET = scope:detected_by_country CODE = 6 }
 			}
 			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_ideological_subversion_action } }
+				limit = { var:iw_burned_type_code = 7 }
 				covert_op_burn = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action TARGET = scope:detected_by_country CODE = 7 }
 			}
 			else_if = {
-				limit = { scope:burned_pact = { is_diplomatic_action_type = covert_destabilization_action } }
+				limit = { var:iw_burned_type_code = 8 }
 				covert_op_burn = { TYPE = destabilization ACTION = covert_destabilization_action TARGET = scope:detected_by_country CODE = 8 }
 			}
 
 			scope:detected_by_country = {
 				trigger_event = { id = covert_warfare.2 }
 			}
+			remove_variable = iw_burned_type_code
 		}
 	}
 }

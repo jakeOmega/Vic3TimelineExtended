@@ -150,3 +150,51 @@ covert_last_exposed_type_name = {
 		localization_key = iw_op_name_unknown
 	}
 }
+
+# The operation covert_warfare.1 is reporting on. Same mapping as
+# covert_last_exposed_type_name, read from the code covert_warfare.1's
+# `immediate` copied onto the country (the event's loc cannot see the container).
+covert_burned_type_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { var:iw_burned_type_code = 0 }
+		localization_key = iw_op_name_election_interference
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 1 }
+		localization_key = iw_op_name_financial_subversion
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 2 }
+		localization_key = iw_op_name_infrastructure_sabotage
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 3 }
+		localization_key = iw_op_name_comms_disruption
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 4 }
+		localization_key = iw_op_name_industrial_espionage
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 5 }
+		localization_key = iw_op_name_military_espionage
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 6 }
+		localization_key = iw_op_name_influence_campaign
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 7 }
+		localization_key = iw_op_name_ideological_subversion
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 8 }
+		localization_key = iw_op_name_destabilization
+	}
+	text = {
+		localization_key = iw_op_name_unknown
+	}
+}
