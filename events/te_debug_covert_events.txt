@@ -73,8 +73,11 @@ te_debug_covert.2 = { # REVIEWED 2026-09-18: console-only test event (`event te_
 	desc = te_debug_covert.2.d
 	flavor = te_debug_covert.2.f
 
-	# ---- Three operations against the first eligible neighbour, one in each
-	#      phase, so all three row layouts and both phase boundaries show at once.
+	# ---- Four operations against the first eligible neighbour, one in each
+	#      phase (two share the final, fully-operational phase: military
+	#      espionage and a severe-tier destabilization, so the third-party
+	#      blowback branch is reachable if the latter is later caught) — so all
+	#      three row layouts and both phase boundaries show at once.
 	#      Durations are set one month BEFORE the boundary, so the next monthly
 	#      pulse tips two of them over and the "months until" line can be watched
 	#      changing.
