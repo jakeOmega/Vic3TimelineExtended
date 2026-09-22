@@ -444,6 +444,10 @@ class PrinciplesAmendmentsRegistryTests(unittest.TestCase):
             ("Principles", "power_bloc_principles"),
             ("Principle Groups", "power_bloc_principle_groups"),
             ("Amendments", "amendments"),
+            # loc_coverage_audit reads ms.mod_parsers["Messages"] to check the
+            # notification_<name>_name/_desc/_tooltip keys; that category only
+            # exists if the directory is registered in both path dicts.
+            ("Messages", "messages"),
         ):
             self.assertIn(et, mss.base_game_paths)
             self.assertIn(et, mss.mod_paths)

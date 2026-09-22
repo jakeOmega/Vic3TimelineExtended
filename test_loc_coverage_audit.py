@@ -359,6 +359,80 @@ class AuditTests(unittest.TestCase):
         self.assertEqual(result.flags, [])
 
 
+class MessageTests(unittest.TestCase):
+    """`common/messages` entries are addressed by `post_notification = X` but
+    localized through `notification_X_name` / `_desc` / `_tooltip`. A bare
+    `X:0 "..."` loc line is never looked up, so the feed renders three raw
+    keys with no engine warning — the covert_severe_exposure_notice defect."""
+
+    def test_derivation_shape(self):
+        from loc_coverage_audit import _message_keys
+        keys = dict((k, req) for k, req, _ in _message_keys("my_notice", {}))
+        self.assertTrue(keys["notification_my_notice_name"])
+        self.assertTrue(keys["notification_my_notice_desc"])
+        # Vanilla omits _tooltip on ~5% of its own messages, so it is checked
+        # but not required.
+        self.assertFalse(keys["notification_my_notice_tooltip"])
+        # The bare message name is NOT a key the engine reads.
+        self.assertNotIn("my_notice", keys)
+
+    def _ms(self, loc_keys):
+        return FakeMS(
+            mod_data={"Messages": {"my_notice": {"type": "country"}}},
+            base_data={"Messages": {}},
+            loc_keys=loc_keys,
+        )
+
+    def _tmp(self):
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/messages/extra_messages.txt",
+               "my_notice = {\n\ttype = country\n}\n")
+        return tmp
+
+    def test_bare_key_does_not_satisfy_the_requirement(self):
+        result = audit(self._ms({"my_notice"}), mod_path=self._tmp())
+        self.assertEqual(len(result.flags), 1)
+        f = result.flags[0]
+        self.assertEqual(f.category, "Messages")
+        self.assertEqual(
+            f.missing_keys,
+            ["notification_my_notice_name", "notification_my_notice_desc"],
+        )
+
+    def test_notification_keys_satisfy_the_requirement(self):
+        result = audit(
+            self._ms({
+                "notification_my_notice_name",
+                "notification_my_notice_desc",
+                "notification_my_notice_tooltip",
+            }),
+            mod_path=self._tmp(),
+        )
+        self.assertEqual(result.flags, [])
+
+    def test_missing_tooltip_alone_is_not_flagged(self):
+        result = audit(
+            self._ms({"notification_my_notice_name", "notification_my_notice_desc"}),
+            mod_path=self._tmp(),
+        )
+        self.assertEqual(result.flags, [])
+
+    def test_vanilla_message_override_not_flagged(self):
+        ms = FakeMS(
+            mod_data={"Messages": {"vanilla_notice": {"type": "country"}}},
+            base_data={"Messages": {"vanilla_notice": {"type": "country"}}},
+            loc_keys=set(),
+        )
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/messages/extra_messages.txt", "vanilla_notice = {\n}\n")
+        self.assertEqual(audit(ms, mod_path=tmp).flags, [])
+
+    def test_registered_in_both_rosters(self):
+        from loc_coverage_audit import _REQUIREMENTS, _DIR_MAP
+        self.assertIn("Messages", _REQUIREMENTS)
+        self.assertEqual(_DIR_MAP["Messages"], "common/messages")
+
+
 class RenderTests(unittest.TestCase):
     def test_empty_report_smoke(self):
         from loc_coverage_audit import AuditResult
