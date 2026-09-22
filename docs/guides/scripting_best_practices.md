@@ -468,6 +468,20 @@ Hooks that already declare "Expected Scope: country" (`on_monthly_pulse_country`
 
 **Event timing at game start: CONFIRMED to deliver on day 1 (owner, in game, 2026-09-20).** A no-delay `every_country = { trigger_event = { id = … } }` fanned out from `on_game_started` *does* run before the player sees day one — the owner read correct, country-specific interest rates on 1836-01-01, which only the dispatched event writes. **Released subjects get their own rate too**, so the `scope:target ?= { trigger_event = … }` dispatch on the country-creation hooks resolves against the new tag rather than the parent. This was the open half of the ROOT bug above; both dispatch sites are now read, not inferred. (Vanilla ships no `trigger_event` from `on_game_started` to copy — its own block is empty and `on_game_started_after_lobby` uses only direct effects — so the alternative, had it not delivered, was a **GLOBAL history file**: `GLOBAL = { every_country = { trigger_event = { id = … } } }` in `common/history/te_construction_market_global.txt`, which the mod also uses. Keep it in mind for a hook with no country-scope entry point, not for this one.) A self-healing marker still bounds the damage to the first monthly pulse if a dispatch ever regresses.
 
+## A Standing `*_monthly_add` Into a Decaying Variable Is Worth 10x Its Face Value
+
+When a variable decays multiplicatively each tick and a modifier adds to it every tick, the modifier's
+*steady-state* contribution is `add / (1 - decay)`, not `add`. `banking_cycle_advance_variables` multiplies
+`finance_cycle_momentum` by 0.9 and then adds `modifier:country_finance_momentum_monthly_add`, so a
+permanent +0.15 converges on +1.5 momentum — 1.5 cycle points a month, for ever, not 0.15.
+
+This bit the banking dashboard tools: they carried +-0.15 to +-0.35 there, against the phase modifiers' own
++-0.05 to +-0.2, so a single 2-point tool outweighed the entire expansion phase's restoring force by 3x and
+one cheap tool halved a country's crash rate (`docs/audits/banking_cycle_simulation.md` F1; re-sized to
++-0.02..0.1 on 2026-09-22). Size any new
+`country_finance_momentum_monthly_add` against `add / 0.1`, and compare it to the phase table rather than
+to the other tools.
+
 ## Modifier Values Are NOT Recalculated Within a Single Effect Block
 
 `remove_modifier` and `add_modifier` changes only take effect **after the entire effect block completes**. Reading `modifier:X` within the same effect still sees the pre-removal/pre-addition values. This is critical when an effect needs to read a country's "base" modifier values (without its own contribution) before computing a new value.
@@ -938,6 +952,9 @@ Since 1.14.3, `primary_cultures_percent_country` and `primary_cultures_percent_s
 - **Script value names as weight keys are INVALID**: `random_list = { my_weight_sv = { ... } }` silently breaks — the branch never fires.
 - All vanilla `random_list` usage confirms literal integers only. Use `modifier = { if = { limit = { ... } add = N } }` inside each branch for conditional weight adjustment.
 - **Alternative for dynamic chance:** Use `random = { chance = <script_value> ... }` instead. The `chance` parameter (0-100 percent) explicitly supports script values and complex math. This is cleaner when you only need a pass/fail roll (no multi-branch weighting).
+- **A `modifier` block's `value =` REPLACES the literal weight; only `add =` accumulates onto it.** `25 = { modifier = { value = var:X  subtract = 50  divide = 5 } }` has weight `(X-50)/5`, not `25 + (X-50)/5` — the 25 is dead unless the block carries a `trigger` that can fail. Vanilla relies on this (`game/common/scripted_effects/04_neg_event_options_scripted_effects.txt`, `5 = { modifier = { value = neg_option_7_modifier } }`), so it is the idiom, not a bug — but it makes a weighted list read as if the literals still mattered. The banking cycle's mean-reversion nudge is written this way and therefore cannot fire at all when `finance_cycle_value` is 50 (`docs/audits/banking_cycle_simulation.md` §1).
+- **A branch's probability is `w / (sum of all branch weights)`, not `w / 100`.** `0 = { modifier = { add = var:bubble_pressure } }` against `100 = { }` is `bubble / (bubble + 100)`, so a weight of 50 is a 33% chance, not 50%. Easy to misread when the "nothing happens" branch is weighted 100 to look like a percentage.
+- **Mind the branch that isn't there.** An `if / else_if` chain inside a `modifier` block with no final `else` leaves the weight at whatever the earlier steps left it. `banking_cycle_check_and_execute_crash` covers cycle value >=88/75/60/40 and nothing below 40, so a country that falls under 40 still carrying bubble pressure keeps the raw bubble as its weight — a 33%/month crash chance at bubble 50, two points of cycle value away from zero.
 
 ## `random` Effect Modifier Blocks Require `trigger`
 
@@ -3012,6 +3029,25 @@ possible = {
 Each `custom_tooltip { text = ... <triggers> }` block fails as a unit — if the inner triggers are false, the tooltip text shows. Stacking multiple `custom_tooltip` blocks in `possible` produces stacked failure-reason lines, which is the right UX for "explain every missing prereq."
 
 **Repo example:** `common/scripted_buttons/cultural_hegemony_buttons.txt` — the 5 enable buttons (increase funding, world expo, cultural institutes, global media, protectionism) keep their `has_law` and `has_technology_researched` gates in `possible` with `CH_REQUIRES_MINISTRY_TT` / `CH_REQUIRES_MASS_MEDIA_TT` tooltips. They stay visible-but-greyed when the player lacks the law or tech, so the JE always shows the player what's available rather than a blank panel.
+
+## `ai_chance` Flavour Terms on a Base of 0 Are Not Flavour — Gate Them on a Core Reason
+
+A scripted button's `ai_chance` is usually written as a sum: *core* terms for the game state the
+button answers, then *flavour* (law, institution, companion tool) and *resource* ("points are cheap")
+terms, then penalties. If the block starts at `value = 0` and the flavour/resource terms are
+unconditional `add`s, a button with **no core reason at all** still scores their sum — and the engine
+weighs a positive score against the other buttons and clicks it. The banking dashboard's prudential
+tools scored 10–25 in a *stable* phase this way (universal banking +10, "points low" +10), so the AI
+parked the capital buffer and margin requirements for ~40 % of the century, which is what made two
+intervention points the safest budget in the game and three the most dangerous
+(`docs/audits/banking_cycle_simulation.md` F10).
+
+Wrap the flavour and resource terms in `if = { limit = { <core reason> } … }` — in the mod, one
+`banking_ai_core_cb_*` scripted trigger per button restates the core conditions so the gate reads beside
+them (`common/scripted_triggers/banking_policy_triggers.txt`). Penalties stay outside the gate. The
+disable side of a toggle needs no gate: lifting a tool wants no reason beyond the phase it is lifted in —
+but do give it a weight for every phase the tool should *not* outlive (directed credit only came off in
+boom, frenzy and panic, so a tool bought in a slump ran the whole recovery hot: F11).
 
 ## Triggered Option Names: `name = { trigger=... text=... }`
 

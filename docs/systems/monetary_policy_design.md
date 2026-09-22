@@ -86,7 +86,7 @@ wrong or leave open. **Phase 2 has its own equivalent in [§0.4](#04-phase-2-as-
 | | `banking_policy_rate_hike`'s loc keys are **kept** while the modifier stays defined | §18's deletion list and its save-migration paragraph conflict; every defined modifier needs loc | they come out with the modifier next release (checklist in `legacy_modifier_cleanup.txt`) |
 | | §7.5 says "Banking event outcomes (14)"; there are **13** | enumerated from the files; the stated −0.10…+0.20 range matches exactly, so it is a spec miscount, not a missed site | corrected in §7.5 |
 | | **No step of the update has a second entry point**, as §16.2's ordering implies. An earlier phase-1 revision ran step 9 alone from `on_acquired_technology`; R3's cancel-INJECTs removed the reason for it and the hook is gone | the hook existed only to stop a vanilla finance tech's −2pp landing a month before the script compensation for it. The engine now cancels in the same instant | a second entry point reintroduced without a reason of the same kind risks the non-idempotent steps being called the same way |
-| | **`bubble_pressure` must never be printed to a decimal on any surface** | §8 argues the cycle's random monthly nudges mask the stance term — true for momentum and cycle value, which `banking_cycle_advance_variables`' `random_list` nudges, but **bubble has no random term**. `banking_display_bubble_monthly_add` is exactly `modifier:country_bubble_pressure_monthly_add`, so Δbubble minus it is the stance push alone: `−0.75 × te_mon_stance_gap_clamped`, which inverts to the gap (and so to r\*) anywhere inside the ±4 clamp and off bubble's own 0/100 bounds — the whole stance-band range | the hidden-state rule (§8) fails through the banking panel, not through anything monetary |
+| | **`bubble_pressure` must never be printed to a decimal on any surface** | §8 argues the cycle's random monthly nudges mask the stance term — true for momentum and cycle value, which `banking_cycle_advance_variables`' `random_list` nudges, but **bubble has no random term**. `banking_display_bubble_monthly_add` is exactly `modifier:country_bubble_pressure_monthly_add`, so Δbubble minus it is the stance push alone: `−0.75 × te_mon_stance_gap_clamped`, which inverts to the gap (and so to r\*) anywhere inside the −2…+4 clamp and off bubble's own 0/100 bounds — the whole stance-band range | the hidden-state rule (§8) fails through the banking panel, not through anything monetary |
 
 ### 0.2 Deferred (named in the design, deliberately not shipped)
 
@@ -223,7 +223,7 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
    `banking_display_bubble_monthly_add` is exactly the modifier-driven part, so Δbubble minus
    the displayed monthly add is the stance push alone — `−0.75 × te_mon_stance_gap_clamped`,
    which two readings a month apart invert into the gap, and so into r\*, anywhere the gap is
-   inside its ±4 clamp and bubble is off its own 0/100 bounds. If the vanilla panel's bubble
+   inside its −2…+4 clamp and bubble is off its own 0/100 bounds. If the vanilla panel's bubble
    bar (or anything else) turns out to show a number rather than a bar, **this stops being a
    checklist item and becomes an Important bug** — band it, or give `bubble_pressure` a random
    term.
@@ -1765,7 +1765,7 @@ update sets the target from the mandate formula instead of the player's stepper.
 | Mandate | Target formula (clamped to the regime's range) | Character |
 |---|---|---|
 | **Price stability** | `r̂* + π + 1.0 × (π − 2) + cycle_lean` | leans against inflation first; accepts slumps. (Sanity check: at π = 13 this asks for ~26%, clamped to 25 — Volcker territory; a plain Taylor weight of 0.5 would give ~20%) |
-| **Growth** | `r̂* + π − 1.0 + 0.5 × max(0, π − 4) + cycle_lean/2` | runs 1pp warm — equilibrium inflation ≈ 2 + 0.4/c ≈ 3% — and reacts only above 4% (zero-gap point π = 6), or frenzy. Never more hawkish than price stability |
+| **Growth** | `r̂* + π − 0.25 + 0.5 × max(0, π − 4) + cycle_lean/2` | runs warm — `te_mon_mandate_growth_bias`, **−0.25 since 2026-09-22** (was −1.0: measured at 4× price stability's crash rate and a 4.1% equilibrium, not the ~3% intended; −0.25 lands at 3.2% and 1.7× the crashes while still buying about +1pp of manufacturing throughput — `docs/audits/banking_cycle_simulation.md` F7, §5) — and reacts only above 4% (zero-gap point π = 6), or frenzy. Never more hawkish than price stability |
 | **Peg defence** (gold only) | `world_rate + 0.5 × reserve_shortfall_pp` | keeps gold flows at zero; ignores the domestic cycle |
 
 `π` in these formulas is **core** inflation (§9.1) — mandates look through cost-push.
@@ -1777,8 +1777,9 @@ pressure ≥ 65, −2 recession, −3 panic.
 **Phase 1 has no inflation, so every π term is dropped — including the −2 target.**
 Price stability is `r̂* + cycle_lean`; growth is `r̂* − 1.0 + cycle_lean/2`. (Plugging
 π = 0 into the full formulas instead would give `r̂* − 2` and leave every delegated fiat
-country 2pp loose for the whole phase.) Growth's standing 1pp looseness is its point: more
-momentum, faster bubble build-up, more crash risk.
+country 2pp loose for the whole phase.) Growth's standing looseness is its point: more
+momentum, faster bubble build-up, more crash risk. (Written when the bias was 1pp; it is
+0.25pp now, see the table above.)
 
 **Why CBI is not just "automation".** Delegation already gives everyone automation. CBI is
 a *commitment device*: the player cannot override the bank, cannot monetise deficits, and
@@ -1786,6 +1787,15 @@ cannot pre-load a loose stance before a war. In exchange markets believe the man
 lower premium and floor, faster-anchoring expectations (disinflation is cheaper), and a
 better estimate of r\*. A player planning to inflate away war debt should not want it.
 Mandate changes under CBI take effect after a 12-month delay **(proposed)**.
+
+**Players start delegated too (2026-09-22).** `te_monetary_init_variables` seeds
+`te_mon_delegated = 1`, so a player who never opens the dashboard has a bank running price
+stability and *Take Control* is the deliberate act. The seed was 0 before: a fiat or digital
+country whose dial was never touched sat at its seeded whole point while inflation drifted
+(the drift is intended) and the cycle took the maximum loose-money push every month —
+35–50 crashes a century against 5–10 for any steered dial
+(`docs/audits/banking_cycle_simulation.md` F5, §4). Only the seed changed; the toggle, the
+§14 clear and the AI's monthly write are as before, and an existing save keeps its value.
 
 **AI.** AI countries are always delegated. Mandate by rule: gold standard → peg defence;
 at war, or `scaled_debt ≥ 0.5` → growth; otherwise price stability. This runs inside the
@@ -1967,8 +1977,12 @@ real_rate   = policy_rate − inflation                  (inflation = 0 before p
 stance_gap  = clamp( real_rate − neutral_rate , −10 , +10 )
 ```
 
-The gap (clamped to ±4 for this purpose, so steady-state momentum stays inside the ±5 bar)
-acts on the cycle **through the variable update, not through a visible modifier**:
+The gap (clamped to **−2…+4** for this purpose — `te_mon_stance_gap_clamp_loose` / `_tight`;
+the tight side keeps steady-state momentum inside the ±5 bar, the loose side was narrowed from
+−4 on 2026-09-22 because a dial left where it was seeded saturated it for ever, and at the
+bound the channel no longer told "somewhat loose" from "catastrophically loose" —
+`docs/audits/banking_cycle_simulation.md` F5) acts on the cycle **through the variable
+update, not through a visible modifier**:
 
 | Effect | Per pp of **tight** gap | Calibration | Delivery |
 |---|---|---|---|
@@ -2037,7 +2051,7 @@ law accelerate inflation forever.)
 
 ```
 pressure (pp) =
-    − 0.4 × stance_gap (clamped ±4)          loose money
+    − 0.4 × stance_gap (clamped −2…+4)       loose money (at most +0.8pp; the loose bound was −4, i.e. +1.6pp, until 2026-09-22 — the clamp is shared with the cycle channel, §8)
     + phase term                             frenzy +1.5 · boom +0.8 · expansion +0.3 · stable 0
                                              stagnation −0.3 · downturn −0.8 · panic −1.5
     + 0.2 if bubble_pressure ≥ 65
@@ -2338,7 +2352,7 @@ and treasury cost. Changes:
 
 - `possible`: the rate-hike exclusion (`banking_policy_triggers.txt:25`) becomes
   `var:te_policy_rate <= 0.01` — **usable only at the floor**.
-- Effect: keeps momentum +0.35 and services +5%; bubble +0.8 → **+1.5**; adds +1.0pp
+- Effect: keeps momentum +0.35 (**+0.1** since the 2026-09-22 tool re-sizing) and services +5%; bubble +0.8 → **+1.5**; adds +1.0pp
   inflation pressure (§9.1); the interest field is deleted.
 - AI weights rewritten: use at the floor in recession or deflation.
 - Under digital currency the floor is −3%, so QE arrives later — negative rates substitute.
@@ -4226,11 +4240,11 @@ P6-1…13).
 | Access base / techs / no exchange | +8 / −4, −2.5, then **−0.25, −0.5, −0.75** (eras 3–5; was −0.5 ×3 — back-loaded 2026-09-20; the first two cannot move without moving §7.4's 1836 rows) / +2 | 7.2 |
 | Rank table | 0.5 · 1 · 2 · 3 · 4 · 6 · 8 | 7.3 |
 | Debt-load premium | 0 → +4 over `scaled_debt` 0.25 → 1.0 | 7.6 |
-| Stance per pp: momentum / bubble / pool | 0.125 / 0.75 / 0.01; gap clamp ±4 | 8 |
+| Stance per pp: momentum / bubble / pool | 0.125 / 0.75 / 0.01; gap clamp **−2**…+4 (loose side was −4 until 2026-09-22) | 8 |
 | Neutral rate: era base / growth coeff / walk | 3 → 2 / 0.25 / ±0.1 | 8 |
 | Estimation error (CBI) | ±1.5 (±0.5) | 6 |
 | Price-stability mandate: inflation weight / target | 1.0 / 2% | 6 |
-| Growth mandate: bias / reaction / threshold | −1.0 / 0.5 / 4% | 6 |
+| Growth mandate: bias / reaction / threshold | **−0.25** (was −1.0 until 2026-09-22) / 0.5 / 4% | 6 |
 | Inflation pressure (pp): stance per pp / phases / bubble / deficit / monetisation / QE | 0.4 / ±0.3–1.5 / 0.2 / 0.3 / 2.5 / 1.0 | 9.1 |
 | Core adjustment speed | 0.10 per month | 9.1 |
 | Expectation α: manual, delegated (CBI) | 1/24 (1/12) | 9.1 |

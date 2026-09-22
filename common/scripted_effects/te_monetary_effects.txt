@@ -664,9 +664,22 @@ te_monetary_init_variables = {
 			}
 		}
 	}
+	# DELEGATED BY DEFAULT (2026-09-22). A country's first monetary pulse
+	# starts it with the target following the mandate formula, so a player
+	# who never opens the dashboard has a central bank running price
+	# stability, and taking the dial is the deliberate act rather than the
+	# other way round. Before this the seed was 0, and a fiat or digital
+	# country whose player never touched the dial sat at its seeded whole
+	# point while inflation drifted (intended — see te_debug_monetary_events
+	# sequence 3) and the cycle took the maximum loose-money push every
+	# month: 35-50 crashes a century against 5-10 for any steered dial
+	# (docs/audits/banking_cycle_simulation.md F5, §4). Only this seed
+	# changes: the dashboard's Delegate / Take Control pair, the §14 command-
+	# economy clear and the AI's own monthly write are untouched, and a save
+	# that already carries the variable keeps whatever it had.
 	if = {
 		limit = { NOT = { has_variable = te_mon_delegated } }
-		set_variable = { name = te_mon_delegated value = 0 }
+		set_variable = { name = te_mon_delegated value = 1 }
 	}
 	if = {
 		limit = { NOT = { has_variable = te_mon_mandate } }
