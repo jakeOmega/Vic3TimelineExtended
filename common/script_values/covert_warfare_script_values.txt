@@ -85,8 +85,20 @@ covert_exposure_phase_mult_operational = 1.5
 covert_exposure_acknowledge_relations_mult = 0.5
 covert_exposure_deny_infamy_mult = 0.5
 
-# What a severe exposure costs with everyone tied to the target.
+# What a severe exposure costs with everyone tied to the target. The
+# tooltip prints it through covert_exposure_third_party_relations_display
+# below rather than retyping the number, so retuning this line retunes the
+# text with it.
 covert_exposure_third_party_relations = -10
+
+# The same number as a positive magnitude, for covert_exposure_third_party_tt
+# ("...loses N relations with us"). Derived, not a second constant: the loc
+# string would otherwise have to render "loses -10".
+covert_exposure_third_party_relations_display = {
+	value = covert_exposure_third_party_relations
+	multiply = -1
+	round = yes
+}
 
 # Guardrail, matching te_force_become_subject's own infamy cap.
 covert_exposure_infamy_max = 25

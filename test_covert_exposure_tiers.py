@@ -20,6 +20,7 @@ EVENTS = ROOT / "events/covert_warfare_events.txt"
 CUSTOM_LOC = ROOT / "common/customizable_localization/covert_warfare_custom_loc.txt"
 MESSAGES = ROOT / "common/messages/extra_messages.txt"
 ACTIONS = ROOT / "common/diplomatic_actions/covert_operations.txt"
+LOC_NOTIFICATIONS = ROOT / "localization/english/te_notifications_l_english.yml"
 DEBUG_EFFECTS = ROOT / "common/scripted_effects/te_debug_covert_effects.txt"
 
 # Slice 1's codes, repeated here so this file stands alone.
@@ -368,6 +369,37 @@ class ThirdPartyBlowbackTests(unittest.TestCase):
 
     def test_notice_type_is_defined(self):
         self.assertIn("covert_severe_exposure_notice = {", _text(MESSAGES))
+
+    def test_notice_is_localized_through_the_notification_keys(self):
+        # The message DEFINITION existing is not enough, and asserting only
+        # that was how this shipped rendering three raw keys. Vic3 resolves a
+        # post_notification through notification_<name>_name / _desc /
+        # _tooltip; the bare `covert_severe_exposure_notice` key is never
+        # looked up, so it must not masquerade as the localization either.
+        loc = _text(LOC_NOTIFICATIONS)
+        for suffix in ("name", "desc", "tooltip"):
+            key = "notification_covert_severe_exposure_notice_%s:0" % suffix
+            self.assertIn(key, loc, "%s must be localized" % key)
+        # The tooltip composes the other two, the way every notification_iw_*
+        # entry in this file does.
+        self.assertIn(
+            'notification_covert_severe_exposure_notice_tooltip:0 "#header '
+            "$notification_covert_severe_exposure_notice_name$#!"
+            '\\n$notification_covert_severe_exposure_notice_desc$"',
+            loc,
+        )
+        # No bare key anywhere: organize_loc keeps it alive (the message name
+        # is referenced by post_notification), so a leftover reads as a live
+        # translation of a key the engine never asks for.
+        for directory in MOD_DIRS:
+            for path in sorted((ROOT / directory).rglob("*.yml")):
+                if not path.is_file():
+                    continue
+                self.assertNotIn(
+                    " covert_severe_exposure_notice:",
+                    path.read_text(encoding="utf-8-sig", errors="ignore"),
+                    "bare covert_severe_exposure_notice loc key still in %s" % path,
+                )
 
 
 def _event_1(body):

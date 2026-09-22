@@ -252,3 +252,35 @@ covert_last_exposed_tier_name = {
 		localization_key = iw_exposure_tier_moderate
 	}
 }
+
+# How far along the operation covert_warfare.1 is reporting had got, as a
+# phrase that sits as an appositive inside covert_warfare.1.d. The branch
+# order mirrors covert_exposure_phase_mult exactly -- 1 is preparatory,
+# 3 or more is fully operational, and anything else (including a missing
+# variable, which this block can in principle render before the event's
+# `immediate` sets it) reads as establishing -- so the phrase always names
+# the multiplier actually charged. has_variable guards every branch the way
+# the covert_code_tier_* triggers do: reading a missing variable is an
+# engine error, not a false.
+covert_burned_phase_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = iw_burned_phase
+			var:iw_burned_phase = 1
+		}
+		localization_key = iw_burned_phase_prep
+	}
+	text = {
+		trigger = {
+			has_variable = iw_burned_phase
+			var:iw_burned_phase >= 3
+		}
+		localization_key = iw_burned_phase_full
+	}
+	text = {
+		localization_key = iw_burned_phase_est
+	}
+}
