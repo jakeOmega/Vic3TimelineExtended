@@ -50,12 +50,21 @@ currency_peg = {
 
 	# TECH GATE: INTERNATIONAL EXCHANGE STANDARDS (era 4), not central_banking.
 	# A declared peg between two national currencies is the gold-standard era's
-	# arrangement, and this is the tech that brings the Gold Standard law in with
-	# it — a country that cannot yet run a convertible currency has nothing to
-	# promise a counterparty. Owner decision 2026-09-21; the three articles are
-	# staggered (peg here, swap line at macroeconomics, guarantee at
-	# intergovernmental_organizations) so the phase-5 toolkit arrives over three
-	# eras rather than all at once.
+	# arrangement: the classical gold standard spread as a set of unilateral
+	# convertibility promises, and the *negotiated* peg between currencies —
+	# the Latin Monetary Union's successors, the gold-exchange standards of the
+	# 1890s — is the later, treaty-borne form of it. Owner decision 2026-09-21;
+	# the three articles are staggered (peg here, swap line at macroeconomics,
+	# guarantee at intergovernmental_organizations) so the phase-5 toolkit
+	# arrives over three eras rather than all at once.
+	#
+	# REVISED 2026-09-21 (same day): the first draft of this comment justified
+	# the gate as "the tech that brings the Gold Standard law in with it".
+	# law_gold_standard has since moved to central_banking (era 2 — see
+	# common/laws/extra_laws.txt), so that reason is gone; the staggering above
+	# is the standing one, and it does not depend on where gold sits. Coherence
+	# needs only peg gate >= gold gate, which era 4 still satisfies: a country
+	# reaches convertibility first and can be held to it by treaty later.
 	unlocked_by_technologies = {
 		international_exchange_standards
 	}

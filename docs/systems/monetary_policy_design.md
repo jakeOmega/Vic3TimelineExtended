@@ -449,7 +449,7 @@ and are tagged with the task that raised them.
 | **T5** | `te_mon_hyper_cooldown` is cleared by the two **resolving** options, not by the exit | it is an anti-nag device for riding the crisis out, not a lock-out | two lines |
 | **T5** | A dollarised country takes the metallic **pull** (`−π_core`) without the metallic **pin**, so the model's fixed point is `core = expected/2` rather than 0 | accepted for phase 2: with dollarise's full reset it lands near 1% and stays there | **Decided 2026-09-20 (§0.5 owner decision K):** it takes a pin, at the anchor (2) rather than metal's 0 |
 | **T7** | `te_mon_stance_months` is capped at ±11 | §13 names no cap, and without one a decade-long stance takes a decade of the middle band to unwind. 11 makes the fade exactly as long as the climb — six pulses each way | one constant |
-| **T7** | Rural Folk: `cross_of_gold_currency` added to `ideology_isolationist` | `ideology_particularist` already carried `simple_currency`, which cancelled the Cross of Gold on `ideology_agrarian` **exactly**, so §13's marquee row netted zero on gold and zero on fiat. Isolationist is a Rural Folk baseline held by no other IG, and the gold standard is unlocked by `international_exchange_standards` — an international order is what an isolationist objects to | one line of generator input |
+| **T7** | Rural Folk: `cross_of_gold_currency` added to `ideology_isolationist` | `ideology_particularist` already carried `simple_currency`, which cancelled the Cross of Gold on `ideology_agrarian` **exactly**, so §13's marquee row netted zero on gold and zero on fiat. Isolationist is a Rural Folk baseline held by no other IG, and a convertibility promise binds the rate dial to an external discipline nobody at home voted for — submitting the currency to the outside world is what an isolationist objects to | one line of generator input |
 | **T7** | Petite Bourgeoisie: `simple_currency` added to `ideology_patriotic` | `ideology_meritocratic`'s pre-existing `advanced_curency` left PB coming out pro-digital. **Side effect accepted:** patriotic is also an Armed Forces baseline, so the Armed Forces gain a modest hard-money lean — correct on its own terms (fixed salaries and pensions), and §13 already puts them on the losing side of its own inflation row | one line |
 | **T7** | `ideological_opinion_impact` stays **0** on `lawgroup_monetary_policy` | it scales the *legitimacy* friction between disagreeing governing IGs, not the IG approval §13 wants, which runs off `IG_APPROVAL_FROM_LAW` / `IG_APPROVAL_FROM_LAW_CHANGE` and is ungated by it. **Inferred from the defines, not observed** — **checklist 17** | one value (0.25, like the mod's other economy law groups) |
 | **T8** | The `GetCustom`-in-`is_valid` single-cause line is kept, with no static fallback | precedent: `iw_funding_not_max_tt` uses a data function in an `is_valid` tooltip | ~40 lines of `trigger_if` branches — **checklist 21** |
@@ -1610,6 +1610,13 @@ with but not steer by; gold buys credibility and cheap borrowing at the price of
 fiat buys autonomy and war finance at the price of discipline; crypto is commodity money
 without even the discount rate.
 
+**When each rung opens.** Commodity money is ungated; `law_gold_standard` at
+`central_banking` (era 2 — moved there 2026-09-21, §5.4); `law_fiat_currency` at
+`keynesian_economics` (era 6) **and** `law_national_bank`; `law_digital_currency` at
+`universal_digital_identity` plus the bank; `law_decentralized_cryptocurrency` at
+`cybersecurity`. The gate is availability, not adoption: what paces the ladder is §13's
+politics and the AI enact weights, not research.
+
 ### 5.2 `lawgroup_national_bank` and `lawgroup_financial_regulation` — who holds the dial
 
 | State | Control |
@@ -1649,6 +1656,29 @@ roles and do not touch the dial.
   (bimetallic) money, and the Banque de France did set a discount rate. It now gets the
   narrow dial this line proposed, reshaped to `world_rate − 1 … + 3` (§0.6 R2) — rather than nothing
   until it enacts gold. Commodity money without a bank is unchanged.
+- **The gold standard's tech gate: `central_banking` (era 2), moved 2026-09-21 from
+  `international_exchange_standards` (era 4).** The law is a *unilateral* convertibility
+  promise — Britain 1816, Portugal 1854, Germany 1871, the US 1873 — not membership of the
+  1870–1914 settlement network the era-4 tech models, and the era-4 gate (mod eras:
+  `common/technology/eras/00_eras.txt`, era 4 = 1887–1911) put the law fifty years behind
+  the first bullet's own GBR start. It now sits with its siblings: `law_national_bank` and
+  `law_universal_banking_light_prudence` are both at `central_banking`,
+  `law_free_mutual_banking` at `postal_savings`. What paced adoption historically was
+  politics, not technology, and §13 already models that — `cross_of_gold_currency` on the
+  agrarian and isolationist baselines, plus the enact weight — so the gate is permissive and
+  the politics do the pacing: with research and enactment lag the wave lands c. 1860–1875
+  (Germany 1871–73, Scandinavia 1873–75, the Netherlands 1875, France 1876–78, the US 1879).
+  **The peg articles do not follow it down.** `currency_peg` / `imposed_currency_peg` /
+  `debt_receivership` stay at `international_exchange_standards`: §15A.2's staggering (peg,
+  then swap line at `macroeconomics`, then guarantee at `intergovernmental_organizations`)
+  is independent of where gold sits, coherence needs only peg gate ≥ gold gate, and a
+  *negotiated* peg between currencies is the later, treaty-borne form of the thing — so
+  110_currency_peg.txt's gate comment, which justified era 4 as "the tech that brings the
+  Gold Standard law in with it", was rewritten rather than acted on. **Open:** §17's observer
+  runs were calibrated on "Britain is the only tag on gold with a bank" in 1836. That still
+  holds on day one — no start tech grants `central_banking` — but a 50-year run now sees
+  several gold countries by mid-century, so re-read the §12.1 world rate and §7.4's anchor
+  figures after the change rather than assuming the phase-1/2 exit numbers carry over.
 
 ---
 

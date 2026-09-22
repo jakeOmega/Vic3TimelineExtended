@@ -300,7 +300,7 @@
 	Central Banking - Harnessing and centralizing the banks brings an immense amount of power into the hands of the government.
 		Unlocking Technologies:
 			Banking
-		Unlocks Laws: National Bank Established, Universal Banking (Light Prudence)
+		Unlocks Laws: Gold Standard, National Bank Established, Universal Banking (Light Prudence)
 	Joint-Stock Companies - A joint-stock company is one whose ownership is divided into a number of shares which are held unequally by many investors, who derive dividends from the company according to the size of the portion they own. This allows trading of partial ownership and investment by both rich and middle-class businessmen.
 		Unlocking Technologies:
 			Banking
@@ -681,7 +681,7 @@
 	International Exchange Standards - Establishing an international system of accounting and exchange makes trade between nations simpler and cheaper to maintain.
 		Unlocking Technologies:
 			Mutual Funds
-		Unlocks Laws: Gold Standard, Ministry of Commerce Established
+		Unlocks Laws: Ministry of Commerce Established
 	Corporate Governance - By synergistically introducing higher degrees of streamlining, professionalization, and scientification within our existing corporate culture, we can expect to leverage substantially maximized revenue and collaboratively evolve the industry through the seamless visualization of efficient initiatives.
 		Unlocking Technologies:
 			Investment Banks

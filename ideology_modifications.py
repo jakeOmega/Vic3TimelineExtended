@@ -2140,10 +2140,10 @@ modifications = {
         # from earlier mod work, which on its own cancels ideology_agrarian's
         # stance on gold and on fiat and leaves the one interest group the row
         # is named for with no opinion at all. This is not a stance borrowed to
-        # win an argument — law_gold_standard is unlocked by
-        # international_exchange_standards and ties the money supply to an
-        # international order and to other countries' gold flows, which is what
-        # an isolationist objects to on its own terms. ideology_isolationist is
+        # win an argument — a convertibility promise binds the rate dial to an
+        # external discipline nobody at home voted for, and ties the money
+        # supply to other countries' gold flows, which is what an isolationist
+        # objects to on its own terms. ideology_isolationist is
         # held by NO other interest group, as a baseline or a character
         # ideology, and is never swapped out, so this reaches Rural Folk and
         # nothing else.

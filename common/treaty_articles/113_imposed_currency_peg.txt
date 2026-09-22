@@ -56,8 +56,9 @@ imposed_currency_peg = {
 		imposed_currency_peg
 	}
 
-	# The peg's own tech gate, unchanged: a country that cannot run a
-	# convertible currency has nothing to be held to.
+	# The peg's own tech gate, unchanged: the coerced peg arrives with the
+	# freely negotiated one (110), whose comment carries the reasoning and the
+	# phase-5 staggering behind it.
 	unlocked_by_technologies = {
 		international_exchange_standards
 	}
