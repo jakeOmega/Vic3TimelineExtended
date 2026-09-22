@@ -149,5 +149,35 @@ class BlowbackValueTests(unittest.TestCase):
                     )
 
 
+class ThirdPartyBlowbackTests(unittest.TestCase):
+    def test_effect_previews_in_a_tooltip(self):
+        block = _top_level_block(_text(EFFECTS), "covert_exposure_third_party_blowback = {")
+        # Only a custom_tooltip renders an every_country loop in an option
+        # tooltip; without it the option previews as doing nothing.
+        self.assertIn("custom_tooltip = {", block)
+        self.assertIn("covert_exposure_third_party_tt", block)
+
+    def test_effect_excludes_the_operator_and_the_target(self):
+        block = _top_level_block(_text(EFFECTS), "covert_exposure_third_party_blowback = {")
+        self.assertIn("NOT = { this = root }", block)
+        self.assertIn("NOT = { this = scope:detected_by_country }", block)
+
+    def test_bloc_audience_requires_the_target_to_have_a_bloc(self):
+        # Without this guard two countries that are both in no power bloc can
+        # read as being in the same one, which would spray the whole world.
+        block = _top_level_block(_text(EFFECTS), "covert_exposure_third_party_blowback = {")
+        self.assertIn("is_in_power_bloc = yes", block)
+        self.assertIn("is_in_same_power_bloc = scope:detected_by_country", block)
+        self.assertIn("has_treaty_alliance_with = { TARGET = scope:detected_by_country }", block)
+
+    def test_effect_moves_relations_and_posts_the_notice(self):
+        block = _top_level_block(_text(EFFECTS), "covert_exposure_third_party_blowback = {")
+        self.assertIn("value = covert_exposure_third_party_relations", block)
+        self.assertIn("post_notification = covert_severe_exposure_notice", block)
+
+    def test_notice_type_is_defined(self):
+        self.assertIn("covert_severe_exposure_notice = {", _text(MESSAGES))
+
+
 if __name__ == "__main__":
     unittest.main()
