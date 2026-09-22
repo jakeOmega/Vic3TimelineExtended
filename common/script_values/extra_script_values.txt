@@ -1846,7 +1846,12 @@ financial_cycle_government_fiscal_policy_effect_size = {
 	max = 1
 }
 
-# linear up to +0.25 at 50 bubble pressure, then quadratic to reach +1.25 at max pressure.
+# linear up to +0.25 at 50 bubble pressure, then a gentle curve to +0.45 at
+# max pressure. Until 2026-09-22 the upper half was quadratic to +1.25: at
+# bubble 80+ that was a standing +7-12 cycle points a month, which no tool
+# set could turn, so a frenzy was never escapable. Flattened with frenzy's
+# bubble 20 -> 8 (banking_cycle_simulation.md §10); crash frequency moved
+# ~1%, and maxed tools now escape a few percent of frenzies.
 bubble_inertia_multiplier_script_value = {
 	value = 0
 	owner = {
@@ -1869,17 +1874,23 @@ bubble_inertia_multiplier_script_value = {
 		}
 		else = {
 			add = {
-				# quadratic with f(50) = 0.25, f(100) = 1.25, f'(50) = 1/200
-				# => f(x) = 0.75 - 0.025 x + 0.0003*x^2
-				value = 0.75
+				# f(x) = 0.25 + 0.005 (x - 50) - 0.00002 (x - 50)^2
+				# f(50) = 0.25, f'(50) = 1/200 (continuous with the branch above),
+				# f(100) = 0.45
+				value = 0.25
 				add = {
 					value = var:bubble_pressure
-					multiply = -0.025
+					subtract = 50
+					multiply = 0.005
 				}
 				add = {
 					value = var:bubble_pressure
-					multiply = var:bubble_pressure
-					multiply = 0.0003
+					subtract = 50
+					multiply = {
+						value = var:bubble_pressure
+						subtract = 50
+					}
+					multiply = -0.00002
 				}
 			}
 		}
