@@ -3969,3 +3969,31 @@ the gate now changes (a "bankless spread" added in the no-dial branch, which eve
 have paid once the dial was off for everyone), and event-option `custom_tooltip`s wrapping a
 gated effect — the effect no-ops but the promise stays on screen, so wrap **tooltip and effect
 together** in one parameterised helper (`te_mon_effect_fx_shock_tt`) and gate that.
+## An "at least tier N" trigger must list every higher tier — extending a ladder breaks the short ones
+
+Script often reads a tiered entity's level with an OR-list, because the engine has no
+`has_principle >= N`: `power_bloc ?= { OR = { has_principle = principle:X_2  has_principle =
+principle:X_3 } }` for "at least tier 2". Tiers do not stack, so each tier only reports
+*itself* — which means the OR-list is the only thing making it an "at least" test, and the day
+somebody adds tier 4 every gate that stopped at 3 starts reading a tier-4 bloc as having
+**nothing**.
+
+This is engine-silent in the worst way: the trigger is valid, the principle is valid, and the
+symptom is the *system* firing its own teardown. `principle_group_monetary_union`'s
+`te_mon_bloc_union_tier_2_plus` is what keeps a common-currency adopter anchored, so extending
+the group from three tiers to five without widening it would have force-exited every adopter —
+index snap, +3pp premium, investment-pool hit, ten-year re-adoption lock — the month its leader
+took the new principle, and the player would have read it as the union collapsing on its own.
+
+Three habits make it survivable:
+
+- **Name the trigger for what it is** — `_tier_3_plus`, not `_tier_3`. A bare `_tier_3` reads
+  like an equality test and gets extended by nobody. (Renaming one is cheap: five call sites,
+  one `sed`, one `grep` to prove nothing bare is left.)
+- **Put the invariant in the trigger file's header, not in a commit message**: *every one of
+  these is an "at least" test and must list every higher tier; adding a tier means editing all
+  of them.*
+- **When you do extend a ladder, grep the gates before writing the new entity.** The same shape
+  shows up wherever script reads a level it cannot compare: `has_law` across a law group's
+  variants, `has_technology_researched` over an era's chain, `has_principle_group` plus a
+  per-tier OR. Anything that says "at least" in a comment and enumerates in the body.

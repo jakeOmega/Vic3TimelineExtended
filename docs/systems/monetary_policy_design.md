@@ -1357,7 +1357,7 @@ rule directly any more.**
 | OMO | reverts to its pre-phase-1 gate (unlock bool, 4 points, law lock); the `on_law_enacted` auto-switch-off is gated to match |
 | capital controls | `ai_chance` falls back to the pre-phase-1 cycle rule on both sides — the external-crisis rule reads neutral inputs and would never fire |
 | the ten FX-shock event options | call `te_mon_effect_fx_shock_tt`, which drops **both the shock and its tooltip line**, so no option promises a currency move that cannot happen |
-| articles 110–112, `principle_monetary_union_1..3` | `visible = no` |
+| articles 110–112, `principle_monetary_union_1..5` | `visible = no` |
 | dashboard / history | the Monetary Policy readout block is hidden (the two intervention rows under the same header are not); the inflation and FX charts are hidden and not sampled |
 
 **`banking_system_disabled` now takes the same path**, which it always should have: with the
@@ -1438,6 +1438,75 @@ absent until §17 check 22 says it is needed) and C4 (both pretexts are `in_defa
   read, an AI guarantor whose ward has defaulted three times is relying on the engine to act on
   a score that has gone deeply negative. If the check fails, §15C.1 carries the fallback walk
   ready to write.
+
+**Not verified in a running game**, like everything else in §0.
+
+---
+
+### 0.11 Monetary-union tiers 4–5 as shipped — rulings and open checks
+
+`principle_group_monetary_union` shipped in phase 5b with **three** tiers, the only principle
+group in the mod shorter than five. The owner asked for the missing two on 2026-09-21, to the
+mod's ordinary tier-4/5 pattern. §15A.3's table now carries all five; this records the choices
+that were not in the spec.
+
+**Four owner decisions were taken before any code was written.** Depth: the **hybrid** — new
+script-only markers plus logic in `te_monetary_union_effects.txt`, staying in tiers 1–3's
+idiom, rather than the static `member_modifier` bundles the other mod tier-4/5s use (those
+would reach holdouts as well as adopters, which no union benefit does). Theme: **4 Banking
+Union → 5 Reserve Currency**, over a fiscal-union variant. Gates: the mod's ordinary
+`_pb_principles_bool` pacing gates. Docs: this record plus the §15A.3 rewrite.
+
+#### Rulings (tiers 4–5)
+
+| # | Ruling | Why |
+|---|---|---|
+| **T1** | **Every tier gate lists every higher tier, and `te_mon_bloc_union_tier_3` was renamed `_tier_3_plus`** at all five call sites | the shipped gates were hardcoded OR-lists over `_2`/`_3`. A bloc taking tier 4 would have read as *not tier 2+*, and `te_monetary_discover_arrangements` would have force-exited every adopter with the full exit penalty — index snap, +3pp premium, investment-pool hit, ten-year lock — the month its leader upgraded. Engine-silent, and indistinguishable in play from the union simply collapsing. The trigger file's header now states the invariant |
+| **T2** | **Tier 4's benefits go to ADOPTERS, not members** | every other union benefit except tier 1's cooperation does. A supervisor examines the banks inside the currency area; a member that kept its own money kept its own supervisor with it. It also keeps tier 4 a reason to adopt rather than a reason to stay in the bloc and hold out |
+| **T3** | **`ai_weight` is 1000 on both tiers, not the group's own 50 / 100 / 100 scale**, with tier 3's two guards (`te_mon_can_lead_union` → ×0, `scaled_debt >= 0.5` → ×0.25) carried forward | 1000 is the mod-wide tier-4/5 value and its comment says what it is for — an AI that holds a group should prefer upgrading it to opening a new one. The low 5b numbers exist because the principle is inert for most leaders, and the two `multiply` guards already do that job exactly. At 150 against every other upgrade's 1000, AI unions would have stalled at tier 3 |
+| **T4** | **Tier 5's seigniorage and its doubled standing cap share one base, `te_mon_anchored_gdp_m`, which counts treaty peggers (kind 1) as well as adopters (kind 2)** | a reserve currency is held by everybody who ties their money to it, not only by the bloc — and it is the base the reserve-currency cut already used, so the two terms can never disagree about how widely the money is held. What tier 5 changes is the **cap** (−0.5 → −1.0pp), not the rate |
+| **T5** | **Tier 5's cohesion is +2 per member and RESTATES tier 2–4's +1** | tiers do not stack; each block is the complete final list. Written as an absolute so nobody reads it as a delta |
+| **T6** | **Tiers 4 and 5 are gated twice** — `has_technology_researched = central_banking` beside the `_pb_principles_bool` | the technology line is the group's own gate from tier 1 and the bool is the mod's pacing gate; a bool reached down another tech branch would otherwise skip central banking. `gen_pb_principle_unlock_descs` reads only the `modifier:` line and ignores the technology beside it, so the generated unlock loc is unaffected — confirmed by running it |
+| **T7** | **The contagion damp is −6 of the channel's +10, not a cancellation** | a common supervisor is not a wall: 2008 and 2011 both crossed one. The eligibility channel is untouched — supervision changes the odds, not whether the exposure exists |
+| **T8** | **The Question's signature gains 16 and 20** (contract range 0–15 → 0–23) | §15A.3 requires a bloc tier change to move it. Four new terms would have collided with the pressed + criteria bits |
+
+#### Known roughnesses (tiers 4–5)
+
+- **No dashboard row of its own.** The Monetary Union row's customizable localization keys on
+  `te_mon_bloc_union_tier_2_plus`, which now covers tiers 4 and 5 without saying so: an adopter
+  in a tier-5 union reads the same line as one in a tier-2 union. The modifier tooltips carry
+  the difference. A per-tier clause is the obvious follow-up if it reads thin in play.
+- **`te_mon_union_seigniorage_value` is evaluated for every country every pulse**, like
+  `te_mon_union_pressure` before it. Its first line is `te_mon_bloc_union_tier_5`, so it
+  short-circuits for ~200 countries; if a profile ever shows it, hoist it behind
+  `is_power_bloc_leader`.
+- **The seigniorage constants (×2000, cap 1000 a week) are anchored on vanilla's flat base
+  minting of 500 and nothing else.** Nobody has watched a tier-5 leader's treasury.
+
+#### IN-GAME VERIFICATION CHECKLIST (tiers 4–5)
+
+Offline, in a sparse worktree with the dummy `VIC3_*` variables: the parser on all nine touched
+`common/` files, the unit suite minus `test_reload_post_load` (817 tests), `ruff`, the tab
+check, BOM on all thirteen changed files, `check_localization_files.py`,
+`check_post_load_rosters.py` and the nine CI audits in exit-code mode — all clean.
+`gen_pb_principle_unlock_descs` and `organize_loc` were run and their output is in the diff.
+**No `POST /reload` was run** (#306: a worktree reload regenerates against the main checkout),
+so the eight audits that only run there — `loc_coverage`, `concept_reference`,
+`localization_accessor`, `mod_structure`, `event_magnitude`, `modifier_visibility`,
+`pm_employment`, `effect_trigger_validity` — have **not** seen these files. Run one before play.
+
+| # | Check |
+|---|---|
+| **T-1** | Tiers 4 and 5 appear in the principle panel, named and described, only with `banking_system_enabled`; both are greyed until their technology lands |
+| **T-2** | **The trap, directly**: with a bloc at tier 3 and at least one adopter, take tier 4. The adopter stays anchored — no exit event, no `te_mon_union_exit_premium`, `te_mon_union_lock_months` still 0 (`te_debug_monetary.10` option d) |
+| **T-3** | At tier 4 an adopter carries `te_mon_union_banking_union`; a **holdout** in the same bloc does not |
+| **T-4** | A tier-4 leader's `te_mon_arr_provider_pts` rises by roughly 0.25 × the GDP ratio per adopter over its tier-3 figure |
+| **T-5** | A crash in one adopter reaches its fellow adopters visibly less often at tier 4 than at tier 3 (compare two runs, or read the spread chance in the contagion tooltip) |
+| **T-6** | At tier 5 the leader carries `te_mon_union_seigniorage` at a sane weekly figure, and its `te_mon_arrangement_standing` can pass −0.5pp |
+| **T-7** | At tier 5 an adopter carries both `te_mon_union_adopter` and `te_mon_union_reserve` (+0.10 trade advantage in total) and shows the −0.25pp standing cut |
+| **T-8** | Dropping a bloc from tier 5 to tier 4 removes `te_mon_union_reserve` and the seigniorage within a month, and does **not** trigger an exit |
+| **T-9** | The overvaluation premium still rises for an adopter in a slump at tiers 4 and 5 — halved, never zero |
+| **T-10** | An AI leader holding tier 3 upgrades to 4 and then 5 once the technologies land, rather than opening a new group (T3) |
 
 **Not verified in a running game**, like everything else in §0.
 
@@ -2838,15 +2907,24 @@ folded into the swap line, which under gold *is* reserve lending.
 
 ### 15A.3 Phase 5b — power-bloc shared currency
 
-A new principle group, `principle_group_monetary_union`, three tiers. **Tiers do not stack:
-each restates the full list.** No finance-flavoured principle exists in vanilla or the mod,
-so the slot is free.
+A new principle group, `principle_group_monetary_union`. It shipped with **three** tiers in
+phase 5b and was extended to **five** on 2026-09-21, the mod's ordinary length for a principle
+group (see [§0.11](#011-monetary-union-tiers-45-as-shipped--rulings-and-open-checks)). **Tiers
+do not stack: each restates the full list.** No finance-flavoured principle exists in vanilla
+or the mod, so the slot is free.
 
 | Tier | Grants |
 |---|---|
 | **1 — Monetary cooperation** | `member_modifier`: every member gets the `swap_line` recipient effect from the leader at half strength, the leader the GDP-scaled cost. No anchoring |
 | **2 — Common currency** | tier 1 + `power_bloc_modifier`: `power_bloc_shared_currency_bool = yes` (script-only bool; vanilla's `power_bloc_allow_foreign_investment_lower_rank_bool` is the precedent). Members **may adopt** (below). Adopters: kind 2, anchor = `power_bloc.power_bloc_leader`, spread 0, credibility import; `state_trade_advantage_mult` **+0.05** (transaction costs); leader: reserve-currency premium cut as in 5a, + `power_bloc_cohesion_add` per adopter |
 | **3 — Fiscal backstop** | tier 2 + the leader is `lender_of_last_resort` to every adopter (GDP-scaled cost, the honour / renege event) and adopters' overvaluation premium (below) is **halved**. The "whatever it takes" tier — what makes the union safe is what makes it expensive to lead |
+| **4 — Banking union** | tier 3 + one supervisor and one deposit guarantee over every **adopter's** banks: `country_banking_crash_chance_mult` and `country_banking_random_momentum_mult` **−0.25**, `country_banking_intervention_max_add` **+1**, and the shared-currency contagion channel in `banking_cycle_spread_contagion` damped by **−6** of its **+10**. The leader pays **0.25pp** of provider premium per adopter, GDP-scaled like every other tier's cost. Supervision is the tier that makes tier 3's backstop less likely to be called, and it costs less than the backstop because examining somebody's banks is cheaper than standing behind their debts |
+| **5 — Reserve currency** | tier 4 + the money is held outside the bloc. The **leader's** reserve-currency standing cut may reach **−1.0pp** instead of −0.5 (the cap, not the rate — same `te_mon_anchored_gdp_m` base), and it mints against the balances the world parks in its currency: `country_minting_add` = world-GDP share × 2000, capped 1000 a week, against vanilla's flat base of 500. **Adopters** get a second `te_mon_union_adopter`'s worth of trade edge (+0.05 export / import advantage, so +0.10 in total) and **−0.25pp** of structural premium. Cohesion per member goes to **+2** |
+
+Tiers 4 and 5 are gated twice: the group's own `has_technology_researched = central_banking`,
+carried down from tier 1, and the mod's ordinary tier-4/5 pacing gate —
+`country_keynesian_pb_principles_bool` (`keynesian_economics`, era 6) and
+`country_globalization_pb_principles_bool` (`globalization`, era 9).
 
 - **The leader sets the rate with its own dial or mandate (owner decision).** No virtual
   bloc bank, no shadow targets. The leader keeps its dial; its costs are the backstop, the
@@ -2903,6 +2981,25 @@ so the slot is free.
   ten-year re-adoption lock. Tuning invariant, checked with the harness: **exit must be worse
   than staying for at least five years** for a member at 15 points of overvaluation, and
   better thereafter — otherwise it is either never or always right.
+- **Tiers 4 and 5 are the union looking inward, then outward.** A banking union is what a
+  currency union builds after its first crisis — one supervisor, one deposit guarantee, and
+  the contagion channel the shared money opened in phase 5b partly closed again by the tier
+  that opened it. A reserve currency is what the outside world does to a union that survives:
+  the leader collects the exorbitant privilege, and its members borrow in money their lenders
+  wanted anyway. **Neither tier touches the overvaluation valve** — the premium is halved at
+  tier 3 and never zeroed at any tier, because an adopter in a slump while the bloc runs hot
+  is the whole euro-crisis shape and the only thing holding it up.
+- **A fiscal union was considered and not built.** Bloc-wide budget transfers would need new
+  investment-pool plumbing and, more to the point, would be the tier that *removes* the
+  euro-crisis shape rather than deepening it. Banking supervision and reserve status both make
+  the union more valuable without making a bad adopter's position survivable.
+- **Every tier gate must list every higher tier.** `te_mon_bloc_union_tier_2_plus` is what
+  keeps an adopter anchored, so a gate that stops short of the top tier reads a bloc that
+  upgraded past it as having *nothing*: the discovery would force-exit every adopter, with the
+  full exit penalty, the month its leader took the next principle. The 5b triggers shipped
+  hardcoded to `_2`/`_3` and were widened when tiers 4 and 5 landed
+  (`te_mon_bloc_union_tier_3` became `_tier_3_plus` at the same time). A tier 6 means editing
+  all of them; the trigger file's header says so.
 - **Customs unions** (§15's old open question): adoption does **not** require sharing the
   leader's market, but an adopter *in* the leader's market already shares its §9.3 basket, so
   its inflation diverges less and the union is safer — optimal-currency-area theory from the
@@ -3972,7 +4069,7 @@ P6-1…13).
 | **3** | real world rate (discretionary GPs only), gold flows + hot money, peg confidence, convertibility crisis; regime law stances | FX buttons unchanged | world rate sits at `era_base` in 1836 and does not drift on its own; a discretionary GP's hike visibly drains a small gold country; AI on peg defence survives a 2pp world-rate rise; holding world + 5 on gold yields no lasting treasury gain |
 | **4** | §15: `te_fx_shadow` for everyone and `te_fx_index` by regime (float, metallic par, `te_fx_shock`), the overvaluation drain on a gold peg, world inflation (own share excluded), `te_fx_weak` / `te_fx_strong`, imported inflation inside cost-push, FX premium, `controls_damp` + capital-controls fatigue, dashboard row + history series; devalue/support deleted (§18.2), FX events re-pointed | no anchoring: a country that wants a peg has gold or nothing; `cb_fx_swap_lines` unchanged | §17 check 13 passes; the 1836 world sits at par and stays there; a fiat harness tag held 2pp loose settles at 92–94 within two years (§15.1 table); the 1836 gold world shows **no overvaluation drain at start** (a peg defender at a zero gap has shadow ≈ 100); a gold country that inflates 5pp above the world for three years loses its peg through the overvaluation term; in a 50-year observer run no floating AI country is pinned at 50 or 150 outside the hyperinflation band — **a statement about AI mandates (§20 risk 9), so a failure here is fixed in §6, not in the FX constants**; **the §10 invariant extended to phase 4: a fiat harness tag held at the loose clamp for 20 years ends worse on treasury, SoL and radicals than a neutral one *with the trade edge on*** (a 5pp loose stance is ~90% of `law_mercantilism`'s ±0.25 for no law — if this fails, halve the per-point value, §20 risk 10); and phase 2's median-inflation criterion **still holds with imported inflation on**; harness shock of −20 under price stability: headline back within 1pp of its pre-shock path in four years (§20 risk 9 converges); ten peacetime years of capital controls lands Industrialists and Petite Bourgeoisie at −5; a gold country under controls holding world − 4 drains like world − 1; all audits clean after the deletion and AI countries still use their remaining tools |
 | **5a** | §15A.1–2: the anchored state (`te_mon_anchor`, kind; validity / discovery / yearly scan) on phase 4's shadow and overvaluation; `currency_peg`, `swap_line`, `lender_of_last_resort` articles; peg-crisis re-read; GDP-scaled arrangement modifiers; `cb_fx_swap_lines` deleted | blocs and subjects are monetary islands | §17 checks 14–15, 18 answered; an AI minor pegged to a GP tracks a 2pp anchor hike within two months and survives it; the same peg **breaks** under 15 points of sustained overvaluation; a GP's provider cost for a minor is < 10% of the minor's benefit; no chain or cycle of anchors can be constructed; AI signs pegs and swap lines in an observer run, and not universally |
-| **5b** | §15A.3: `principle_group_monetary_union` (3 tiers), adoption action + convergence criteria, overvaluation premium, convergence pressure, exit | subjects still islands | §17 checks 16, 19 answered; an adopter in a slump while the leader runs hot shows a visibly rising premium and a tight band; the **exit invariant** holds in the harness (worse than staying for ≥ 5 years at 15 points of overvaluation, better after); a pressed, debt-heavy adopter costs a tier-3 leader a backstop call within a cycle or two; pressing a bloc of refusers loses the leader cohesion on net; a human holdout sees *The Question* fewer than ~6 times a campaign |
+| **5b** | §15A.3: `principle_group_monetary_union` (3 tiers as shipped; **tiers 4–5 added 2026-09-21**, §0.11), adoption action + convergence criteria, overvaluation premium, convergence pressure, exit | subjects still islands | §17 checks 16, 19 answered; an adopter in a slump while the leader runs hot shows a visibly rising premium and a tight band; the **exit invariant** holds in the harness (worse than staying for ≥ 5 years at 15 points of overvaluation, better after); a pressed, debt-heavy adopter costs a tier-3 leader a backstop call within a cycle or two; pressing a bloc of refusers loses the leader cohesion on net; a human holdout sees *The Question* fewer than ~6 times a campaign |
 | **5c** | §15A.4: automatic currency boards for `autonomy_level = 1` subjects, seigniorage transfer, wrong-stance liberty desire | — | §17 check 17 answered; a puppet's rate tracks its overlord's within a month of subjugation and returns to its own rule within a month of release, with no exit penalty; the overlord's minting gain is GDP-scaled (a tiny puppet is a rounding error); a sustained 2pp wrong stance moves liberty desire measurably but does not alone cause a revolt |
 | **6a** *(§15C.1 / §0.10)* | the swap line as a repayable, capped, single-provider loan drawn only in a *financial* crisis; the guarantee's call counter (honour cost, relief, AI odds, cooldown) read by the signing score too; the AI's own post-signing withdrawal on the re-scored articles (a scripted yearly walk only as fallback); `non_fulfillment = withdraw` on war / expulsion. Prestige stays as shipped (H5) | — | P6-1…9; P5-5, P5-7 and P5-9 still hold |
 | **6b** *(§15C.2 / §0.10)* | `country_treaty_leverage_generation_add` 200 / 150 / 300 on the strong side of the three articles | — | P6-10 |
@@ -4122,9 +4219,11 @@ P6-1…13).
 | Swap line: confidence / premium / crisis draw | +2 per month / −1pp / 0.1% recipient GDP per month | 15A.2 |
 | LOLR: debt-load premium / honour cost / renege suspension | ×0.5 / 5% ward GDP / 5 years | 15A.2 |
 | Provider cost scaling | recipient benefit × clamp(recipient GDP ÷ provider GDP, 0, 1) | 15A.1 |
-| Union: convergence (inflation / debt) / overvaluation premium / trade | 3pp / `scaled_debt` < 0.5 / +0.1pp per point over 5 (×0.5 at tier 3) / +0.05 | 15A.3 |
+| Union: convergence (inflation / debt) / overvaluation premium / trade | 3pp / `scaled_debt` < 0.5 / +0.1pp per point over 5 (×0.5 at tier 3+) / +0.05, +0.10 at tier 5 | 15A.3 |
 | Union pressure: refusal's leverage resistance / event floor | +250 for 10 years, refreshed / once per 5 years, state-change triggered | 15A.3 |
 | Union exit: premium / re-adoption lock | +3pp decaying over 10 years / 10 years | 15A.3 |
+| Union tier 4: banking crash chance / random momentum / interventions / contagion damp / leader's cost per adopter | −0.25 / −0.25 / +1 / −6 of the channel's +10 / 0.25pp GDP-scaled | 15A.3, 0.11 |
+| Union tier 5: leader's standing cap / seigniorage / adopter's standing cut / cohesion per member | −1.0pp (from −0.5) / world-GDP share × 2000, capped 1000 a week / −0.25pp / +2 | 15A.3, 0.11 |
 | Currency board: subject minting / overlord's share / wrong-stance threshold | −0.5 / half the subject's minting, as a flat add / stance band 1 or 5 for 6 months | 15A.4 |
 | Swap line as a loan **(6a, shipped; numbers still proposed)**: limit / repayment / crisis definition | 2% of recipient GDP outstanding / 0.1% of GDP a month out of crisis, settled in one lump when the line ends / `te_mon_in_financial_crisis` (no war leg) | 15C.1 |
 | LOLR call counter **(6a, shipped; numbers still proposed)**: honour cost / relief share / AI odds / cooldown / forget | 5% × (1 + 0.5n), cap 15% / 0.5 · 0.35 · 0.2 · 0 / Honour 10 − 3n : Renege 2 + 2n / 60 × (1 + n) months / one call per 120 quiet months | 15C.1 |
