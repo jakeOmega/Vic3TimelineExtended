@@ -87,6 +87,8 @@ USAGE
 from __future__ import annotations
 
 import argparse
+import copy
+import dataclasses
 import json
 import math
 import os
@@ -291,6 +293,8 @@ TOOL_MODIFIER_NAMES = {
     "asset_relief": "banking_asset_relief_program",
 }
 TOOL_MODIFIERS = {k: K.modifier(v) for k, v in TOOL_MODIFIER_NAMES.items()}
+# The tools that lean against a boom rather than soften a crash (§10).
+LEANING_TOOLS = ("buffer", "margin", "moral_suasion")
 # Point cost is the modifier's own negative country_banking_intervention_max_add.
 TOOL_COST = {
     k: -v.get("country_banking_intervention_max_add", 0.0) for k, v in TOOL_MODIFIERS.items()
@@ -382,6 +386,10 @@ PRE_RETUNE = {
     "sev_scale": 1.0,       # crash severity was seeded from 1.0 x bubble
     "phase_bubble": 0.35,   # expansion / boom / frenzy bubble adds were ~1/2.9 of today's
     "tool_bubble": 5.0,     # the cb_* tools' NEGATIVE bubble adds were x5
+    "lean_bubble": 1 / 3,   # ...and buffer / margin / moral suasion were tripled again after (§10)
+    "frenzy_bubble": 7.0,   # frenzy's bubble add was 7 (x0.35 of today's 8 would be 2.8)
+    "inertia_top": 1.25,    # the inertia curve reached +1.25 at bubble 100 until §10
+    "currency_bubble": 0.0, # fiat / digital carried no bubble add until §10
     "tool_momentum": 3.3,   # the cb_* tools' momentum adds were ~x3.3
     "gap_clamp_loose": 4.0, # the stance gap's LOOSE clamp was -4
     "recovery": 1 / 3,      # downturn / stagnation momentum adds were 1/3
@@ -392,6 +400,14 @@ PRE_RETUNE = {
     "ai_gate": "off",       # flavour / resource AI terms were unconditional
     "ai_directed_off": "off",  # directed credit was held through stable / expansion
 }
+# The mod as #371 left it, before §10's boom-rescue package: `--tune pre_boom_rescue`.
+PRE_BOOM_RESCUE = {
+    "lean_bubble": 1 / 3,   # buffer / margin / moral suasion bubble lines were a third of today's
+    "frenzy_bubble": 20.0,  # frenzy added +20 bubble a month
+    "inertia_top": 1.25,    # the inertia curve reached +1.25 at bubble 100
+    "currency_bubble": 0.0, # fiat / digital carried no bubble add
+}
+PRESETS = {"pre_retune": PRE_RETUNE, "pre_boom_rescue": PRE_BOOM_RESCUE}
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
 # `ai_eliq_first` (no measurable effect — the lender of last resort is priced
@@ -431,6 +447,7 @@ class Config:
     no_click_weight: float = 100.0
     excluded_tools: tuple[str, ...] = ()  # dashboard tools the AI never clicks
     simplified: bool = False   # banking_system_simplified: the capital-controls fallback branch
+    ai_tools: bool = True      # False: the tools held are fixed from outside (--rescue)
 
     # exogenous stubs
     gdp0: float = 1.0e7
@@ -553,12 +570,19 @@ def era_base(year_index: int) -> float:
 
 
 def bubble_inertia_multiplier(bubble: float) -> float:
-    """bubble_inertia_multiplier_script_value (extra_script_values.txt)."""
+    """bubble_inertia_multiplier_script_value (extra_script_values.txt).
+
+    Hand-ported (the script value is an if-chain). Above 50 it is
+    0.25 + 0.005 (x-50) + a (x-50)^2 with `a` set so f(100) = top: 0.45 since
+    §10, 1.25 before (`--tune inertia_top=1.25`).
+    """
     if bubble <= 15:
         return 0.0
     if bubble < 50:
         return (bubble - 15) * 0.25 / 35
-    return 0.75 + bubble * -0.025 + bubble * bubble * 0.0003
+    top = tuned("inertia_top", 0.45)
+    a = (top - 0.5) / 2500
+    return 0.25 + 0.005 * (bubble - 50) + a * (bubble - 50) ** 2
 
 
 def modifier_sum(state: State, key: str) -> float:
@@ -572,6 +596,9 @@ def modifier_sum(state: State, key: str) -> float:
         val = PHASE_MODIFIERS[state.active_phase].get(key, 0.0)
         if key == "country_bubble_pressure_monthly_add" and val > 0:
             val *= tuned("phase_bubble", 1.0)
+        if key == "country_bubble_pressure_monthly_add" and state.active_phase == FRENZY:
+            # an absolute override, applied after phase_bubble (§10: 20 -> 8)
+            val = tuned("frenzy_bubble", val)
         if (
             key == "country_finance_momentum_monthly_add"
             and state.active_phase in (DOWNTURN, STAGNATION)
@@ -592,6 +619,10 @@ def modifier_sum(state: State, key: str) -> float:
         val = TOOL_MODIFIERS[tool].get(key, 0.0)
         if key == "country_bubble_pressure_monthly_add" and val < 0:
             val *= tuned("tool_bubble", 1.0)
+            # The three leaning tools' bubble lines were doubled after the
+            # retune (§10); `lean_bubble=0.5` measures them as the retune left them.
+            if tool in LEANING_TOOLS:
+                val *= tuned("lean_bubble", 1.0)
         # A STANDING momentum add is worth 10x its face value in cycle points:
         # momentum decays x0.9 a month, so a permanent +x converges on x/0.1.
         # The dashboard tools carry +-0.15 to +-0.35 here, i.e. +-1.5 to +-3.5
@@ -1127,7 +1158,7 @@ def cycle_pulse(cfg: Config, state: State, rng: random.Random, month: int) -> No
             del state.timed[name]
 
     # the dashboard tools: the AI's ai_chance blocks, once a month
-    if cfg.points > 0:
+    if cfg.points > 0 and cfg.ai_tools:
         consider_tools(cfg, state, rng)
     prune_overdrawn_tools(cfg, state)
 
@@ -1157,6 +1188,14 @@ def advance_variables(cfg: Config, state: State, rng: random.Random) -> None:
     state.finance_cycle_momentum += modifier_sum(state, "country_finance_momentum_monthly_add")
     state.bubble_pressure += modifier_sum(state, "country_bubble_pressure_monthly_add")
     state.finance_cycle_value += modifier_sum(state, "country_finance_value_monthly_add")
+    # The script reads these as country-scope `modifier:` values, so the
+    # currency law's lines count too (fiat / digital +0.2 bubble since §10).
+    # The FINANCIAL-regulation law's lines are still not ported (§10).
+    state.finance_cycle_momentum += law_modifier_sum(cfg, "country_finance_momentum_monthly_add")
+    state.bubble_pressure += (
+        law_modifier_sum(cfg, "country_bubble_pressure_monthly_add") * tuned("currency_bubble", 1.0)
+    )
+    state.finance_cycle_value += law_modifier_sum(cfg, "country_finance_value_monthly_add")
 
     # the monetary stance channel (§16.3)
     gap = clamped_gap(state)
@@ -1201,7 +1240,8 @@ def crash_weight(cfg: Config, state: State) -> float:
         # bubble pressure below cycle 40; `--tune below40=off` restores that.
         w = (w - 90) * 0.01 * cm
     w = max(0.0, w)
-    mult = max(0.0, 1.0 + modifier_sum(state, "country_banking_crash_chance_mult"))
+    mult = max(0.0, 1.0 + modifier_sum(state, "country_banking_crash_chance_mult")
+               + law_modifier_sum(cfg, "country_banking_crash_chance_mult"))
     return w * mult
 
 
@@ -1959,6 +1999,126 @@ def self_test() -> int:
     return 1 if failures else 0
 
 
+# ─────────────────────────────────────────────────────────────────────────────
+# --rescue: can a player who maxes the leaning tools pull a boom back?
+# ─────────────────────────────────────────────────────────────────────────────
+#
+# The century matrix answers "how often does it crash"; it cannot answer "once
+# a boom starts, does the player have a chance", because the AI's click model
+# decides when tools go on. This forks each simulated run at every month the
+# cycle enters boom (crosses 75 from below) and replays the next `horizon`
+# months twice on the same random stream:
+#
+#   passive  no tools; the mandate keeps steering the dial as it was
+#   maxed    after `delay` months (the player noticing), the given tools are
+#            switched on and held, and on a dial regime the player takes
+#            control and sets the rate target to its ceiling (the rate still
+#            drifts there at the law's speed, so the stance tightens gradually)
+#
+# An arm is "pulled back" if the cycle falls below 60 before any crash.
+
+RESCUE_HORIZON = 48
+RESCUE_BUCKETS = ((0, 20), (20, 40), (40, 60), (60, 101))
+
+
+def _rescue_step(cfg: Config, state: State, rng: random.Random, month: int) -> bool:
+    advance_exogenous(cfg, state, rng, month)
+    crashed = cycle_pulse(cfg, state, rng, month)
+    monetary_update(cfg, state, rng, month // 12)
+    return bool(crashed)
+
+
+def _rescue_arm(cfg: Config, state: State, rng: random.Random, month: int,
+                tools: tuple[str, ...], delay: int) -> str:
+    cfg = dataclasses.replace(cfg, ai_tools=False, points=int(sum(TOOL_COST[t] for t in tools)))
+    state.tools = set()
+    state.timed = {}
+    for m in range(month, month + delay):
+        if _rescue_step(cfg, state, rng, m):
+            return "crash"
+    month += delay
+    if tools:
+        state.tools = set(tools)
+        if has_dial(cfg, state):
+            cfg = dataclasses.replace(cfg, mode=MODE_NOTHING)  # Take Control
+            state.policy_rate_target = target_bounds(cfg, state, state.world_rate)[1]
+    for m in range(month, month + RESCUE_HORIZON):
+        if _rescue_step(cfg, state, rng, m):
+            return "crash"
+        if state.finance_cycle_value < 60:
+            return "pulled"
+    return "neither"
+
+
+def rescue_run(cfg: Config, seed: int, tools: tuple[str, ...], delay: int,
+               entry: float = 75.0) -> list[tuple[float, str, str]]:
+    """(bubble at entry, passive outcome, maxed outcome) per crossing of `entry`
+    (75 = boom, 88 = frenzy)."""
+    rng = random.Random(seed)
+    cfg = dataclasses.replace(cfg, points=0)
+    state = State(gdp=cfg.gdp0, growth=cfg.growth_mean, deficit_pct=cfg.deficit_mean)
+    state.policy_rate = era_base(0)
+    state.policy_rate_target = round(era_base(0))
+    state.commodity_centre = round(era_base(0))
+    state.inflation_expected = 0.0 if is_metallic(cfg) else 2.0
+    out = []
+    prev = state.finance_cycle_value
+    for month in range(cfg.years * 12 - RESCUE_HORIZON - delay):
+        _rescue_step(cfg, state, rng, month)
+        v = state.finance_cycle_value
+        if prev < entry <= v:
+            fork_seed = seed * 7919 + month
+            res = []
+            for arm_tools in ((), tools):
+                res.append(_rescue_arm(cfg, copy.deepcopy(state), random.Random(fork_seed),
+                                       month + 1, arm_tools, delay))
+            out.append((state.bubble_pressure, res[0], res[1]))
+        prev = v
+    return out
+
+
+def _run_rescue_cell(job: tuple[Config, int, int, dict, tuple[str, ...], int, float]) -> dict:
+    cfg, seed, runs, tune, tools, delay, entry = job
+    TUNE.clear()
+    TUNE.update(tune)
+    base = seed + zlib.crc32(f"rescue/{cfg.currency}/{cfg.mode}".encode()) % 10_000
+    entries = [e for i in range(runs) for e in rescue_run(cfg, base + i, tools, delay, entry)]
+
+    def share(rows: list, arm: int) -> float | None:
+        return 100.0 * sum(r[arm] == "pulled" for r in rows) / len(rows) if rows else None
+
+    row = {"cell": f"{cfg.currency}/{cfg.mode}", "entries": len(entries),
+           "passive": share(entries, 1), "maxed": share(entries, 2)}
+    for lo, hi in RESCUE_BUCKETS:
+        sub = [e for e in entries if lo <= e[0] < hi]
+        row[f"maxed_b{lo}"] = share(sub, 2)
+        row[f"n_b{lo}"] = len(sub)
+    return row
+
+
+def print_rescue(rows: list[dict], args, tools: tuple[str, ...]) -> None:
+    cost = int(sum(TOOL_COST[t] for t in tools))
+    what = "frenzy" if args.rescue_entry >= 88 else "boom" if args.rescue_entry >= 75 else f"cycle {args.rescue_entry:g}"
+    print(f"Rescue — {args.runs} runs x {args.years} years per cell; at each {what} entry, "
+          f"{'+'.join(tools)} ({cost} pt) plus the rate target at its ceiling, "
+          f"switched on {args.rescue_delay} months in")
+    print("share of boom entries pulled below 60 before any crash, %, by bubble at entry\n")
+    head = f"{'cell':18s} {'entries':>7s} {'passive':>8s} {'maxed':>7s}"
+    for lo, hi in RESCUE_BUCKETS:
+        head += f" {f'b{lo}-{min(hi, 100)}':>9s}"
+    print(head)
+    print("-" * len(head))
+
+    def f(x: float | None) -> str:
+        return "      -" if x is None else f"{x:7.1f}"
+
+    for r in rows:
+        line = f"{r['cell']:18s} {r['entries']:7d} {f(r['passive']):>8s} {f(r['maxed'])}"
+        for lo, _ in RESCUE_BUCKETS:
+            line += f"  {f(r[f'maxed_b{lo}'])}"
+        print(line)
+
+
 def _run_cell(job: tuple[Config, int, int, dict]) -> dict:
     cfg, seed, runs, tune = job
     TUNE.clear()
@@ -2009,19 +2169,33 @@ def main() -> int:
                     help="comma-separated overrides to measure a proposed retune, "
                          "e.g. --tune sev_scale=0.4,phase_bubble=1.5. Pass "
                          "--tune pre_retune for (approximately) the script as it "
-                         "stood before the 2026-09-22 retune.")
+                         "stood before the 2026-09-22 retune, or --tune "
+                         "pre_boom_rescue for the mod as #371 left it (§10).")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")
+    ap.add_argument("--rescue", action="store_true",
+                    help="instead of the century matrix: fork every boom entry and "
+                         "measure how often maxed leaning tools pull it back before "
+                         "a crash (price-stability cells; see RESCUE_HORIZON)")
+    ap.add_argument("--rescue-tools", default="buffer,margin,moral_suasion",
+                    help="the tools --rescue switches on (default: the three leaning "
+                         "tools, 5 points)")
+    ap.add_argument("--rescue-delay", type=int, default=3,
+                    help="months into the boom before --rescue acts (default 3)")
+    ap.add_argument("--rescue-entry", type=float, default=75.0,
+                    help="the cycle value whose upward crossing --rescue forks at "
+                         "(75 = boom, the default; 88 = frenzy)")
     ap.add_argument("--jobs", type=int, default=0, help="worker processes (0 = all cores)")
     ap.add_argument("--json", help="write the full result table here")
     args = ap.parse_args()
 
     if args.self_test:
         return self_test()
-    if args.tune.strip() == "pre_retune":
-        TUNE.update(PRE_RETUNE)
-        args.tune = ",".join(f"{k}={v}" for k, v in PRE_RETUNE.items())
+    if args.tune.strip() in PRESETS:
+        preset = PRESETS[args.tune.strip()]
+        TUNE.update(preset)
+        args.tune = ",".join(f"{k}={v}" for k, v in preset.items())
     for part in args.tune.split(","):
         if part.strip():
             k, _, v = part.partition("=")
@@ -2033,6 +2207,27 @@ def main() -> int:
     for t in excluded:
         if t not in TOOL_MODIFIERS:
             ap.error(f"unknown tool {t!r}; keys are {', '.join(TOOL_MODIFIERS)}")
+    if args.rescue:
+        tools = tuple(x.strip() for x in args.rescue_tools.split(",") if x.strip())
+        for x in tools:
+            if x not in TOOL_MODIFIERS:
+                ap.error(f"unknown tool {x!r}; keys are {', '.join(TOOL_MODIFIERS)}")
+        rjobs = [
+            (Config(currency=c, mode=m, fin_law=args.fin_law,
+                    national_bank=not args.no_national_bank, years=args.years),
+             args.seed, args.runs, dict(TUNE), tools, args.rescue_delay, args.rescue_entry)
+            for c, m in valid_cells(args.only) if m == MODE_PRICE
+        ]
+        workers = args.jobs or min(len(rjobs), os.cpu_count() or 1)
+        if workers > 1:
+            with ProcessPoolExecutor(max_workers=workers) as pool:
+                rrows = list(pool.map(_run_rescue_cell, rjobs))
+        else:
+            rrows = [_run_rescue_cell(j) for j in rjobs]
+        print_rescue(rrows, args, tools)
+        if args.json:
+            Path(args.json).write_text(json.dumps(rrows, indent=2), encoding="utf-8")
+        return 0
     cfgs = []
     for currency, mode in valid_cells(args.only):
         for points in budgets:
