@@ -64,13 +64,16 @@ cb_open_market_ops = {
 			add = 40
 		}
 
-		# Law flavor: an independent central bank is the one most willing to reach
-		# past the rate for the balance sheet.
-		if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
-
-		# Resources
-		if = { limit = { banking_points_med = yes } add = 10 }
-		if = { limit = { banking_points_low = yes } add = 5 }
+		# Law flavor and resources, only while a core term above is live
+		# (banking_ai_core_*, banking_policy_triggers.txt).
+		if = {
+			limit = { banking_ai_core_cb_open_market_ops = yes }
+			# an independent central bank is the one most willing to reach past
+			# the rate for the balance sheet.
+			if = { limit = { has_law = law_type:law_central_bank_independence } add = 15 }
+			if = { limit = { banking_points_med = yes } add = 10 }
+			if = { limit = { banking_points_low = yes } add = 5 }
+		}
 
 		# Avoid when hot: a zero rate during a frenzy is already a bubble waiting
 		# to happen, and the tool now adds +1.5 bubble pressure a month.
@@ -139,13 +142,15 @@ cb_countercyclical_buffer = {
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 35 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 15 }
 
-		# Law flavor: prudential regimes lean this way
-		if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
-		if = { limit = { has_law = law_type:law_universal_banking_light_prudence } add = 10 }
-		if = { limit = { has_law = law_type:law_free_mutual_banking } add = 5 }
-
-		# Resources
-		if = { limit = { banking_points_low = yes } add = 10 }  # cheap, so attractive when points are scarce
+		# Law flavor and resources, only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_countercyclical_buffer = yes }
+			# prudential regimes lean this way
+			if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
+			if = { limit = { has_law = law_type:law_universal_banking_light_prudence } add = 10 }
+			if = { limit = { has_law = law_type:law_free_mutual_banking } add = 5 }
+			if = { limit = { banking_points_low = yes } add = 10 }  # cheap, so attractive when points are scarce
+		}
 
 		# Avoid in recession/panic
 		if = { limit = { banking_cycle_is_recession = yes } add = -60 }
@@ -182,12 +187,14 @@ cb_expand_deposit_guarantee = {
 		if = { limit = { banking_cycle_is_panic = yes } add = 70 }
 		if = { limit = { banking_cycle_is_downturn = yes } add = 25 }
 
-		# Synergy: if emergency liquidity not active, prefer deposit guarantee
-		if = { limit = { NOT = { banking_tool_eliq_active = yes } } add = 10 }
-
-		# Law flavor
-		if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
-		if = { limit = { has_law = law_type:law_central_bank_independence } add = 10 }
+		# Synergy and law flavor, only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_expand_deposit_guarantee = yes }
+			# if emergency liquidity not active, prefer deposit guarantee
+			if = { limit = { NOT = { banking_tool_eliq_active = yes } } add = 10 }
+			if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
+			if = { limit = { has_law = law_type:law_central_bank_independence } add = 10 }
+		}
 
 		# Avoid if already expanded or if in hot market
 		if = { limit = { banking_tool_deposit_active = yes } add = -100 }
@@ -229,16 +236,17 @@ cb_directed_credit_infrastructure = {
 		if = { limit = { banking_cycle_is_stagnation = yes } add = 30 }
 		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = yes } add = 15 }
 
-		# Law flavor
-		if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 25 }
+		# Law flavor, synergy and resources, only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_directed_credit_infrastructure = yes }
+			if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 25 }
+			if = { limit = { banking_tool_eliq_active = yes } add = 10 } # after the firebreak, push demand
+			if = { limit = { banking_points_med = yes } add = 10 }
+		}
 
 		# Avoid in frenzy (overheats) and deep panic (prefer E-LIQ first)
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -35 }
 		if = { limit = { banking_cycle_is_panic = yes } add = -30 }
-		if = { limit = { banking_tool_eliq_active = yes } add = 10 } # after the firebreak, push demand
-
-		# Resources
-		if = { limit = { banking_points_med = yes } add = 10 }
 	}
 
 	possible = { banking_possible_cb_directed_credit_infrastructure = yes }
@@ -249,10 +257,18 @@ cb_disable_directed_credit_infrastructure = {
 	name = "CB_DISABLE_DIRECTED_CREDIT_INFRA"
 	desc = "CB_DISABLE_DIRECTED_CREDIT_INFRA_DESC"
 	visible = { is_ai = yes banking_tool_directed_active = yes }
+	# Lift it once the recovery it was bought for has arrived. Directed credit
+	# is bought in a downturn and carries +0.05 momentum (+0.5 cycle points a
+	# month, standing) and +0.3 bubble; held through stable and expansion it
+	# ran the cycle hot, and the simulation attributed 30-40% of a tooled
+	# AI's crashes to it (docs/audits/banking_cycle_simulation.md F11). The
+	# stable and expansion weights below are what the other expansionary tools
+	# already carry.
 	ai_chance = {
 		value = 0
 		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
-		if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 20 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
 		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
 		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
@@ -272,17 +288,18 @@ cb_emergency_liquidity_program = {
 		if = { limit = { banking_cycle_is_panic = yes } add = 85 }
 		if = { limit = { banking_cycle_is_downturn = yes var:finance_cycle_momentum <= -4 } add = 35 }
 
-		# Law flavor
-		if = { limit = { has_law = law_type:law_central_bank_independence } add = 10 }
-		if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 10 }
+		# Law flavor and resources, only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_emergency_liquidity_program = yes }
+			if = { limit = { has_law = law_type:law_central_bank_independence } add = 10 }
+			if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 10 }
+			if = { limit = { banking_points_low = yes } add = 10 } # if you barely have enough, still try
+		}
 
 		# Avoid otherwise
 		if = { limit = { banking_cycle_is_expansion = yes } add = -60 }
 		if = { limit = { banking_cycle_is_boom = yes } add = -65 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -70 }
-
-		# Resources (if you barely have enough, still try)
-		if = { limit = { banking_points_low = yes } add = 10 }
 
 		# Don’t stack duplicates
 		if = { limit = { banking_tool_eliq_active = yes } add = -100 }
@@ -318,8 +335,11 @@ cb_moral_suasion = {
 		if = { limit = { banking_cycle_is_expansion = yes } add = 5 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 30 }
 
-		# Prefer when points are scarce
-		if = { limit = { banking_points_low = yes } add = 20 }
+		# Prefer when points are scarce, only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_moral_suasion = yes }
+			if = { limit = { banking_points_low = yes } add = 20 }
+		}
 
 		# Deprioritize in extremes (panic/frenzy demand stronger tools)
 		if = { limit = { banking_cycle_is_panic = yes } add = -30 }
@@ -359,13 +379,15 @@ cb_raise_margin_requirements = {
 		if = { limit = { banking_cycle_is_frenzy = yes } add = 15 }
 		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 35 }
 
-		# Law flavor: prudential regimes lean this way
-		if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
-		if = { limit = { has_law = law_type:law_universal_banking_light_prudence } add = 10 }
-		if = { limit = { has_law = law_type:law_free_mutual_banking } add = 5 }
-
-		# Resources
-		if = { limit = { banking_points_low = yes } add = 10 }  # cheap, so attractive when points are scarce
+		# Law flavor and resources, only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_raise_margin_requirements = yes }
+			# prudential regimes lean this way
+			if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
+			if = { limit = { has_law = law_type:law_universal_banking_light_prudence } add = 10 }
+			if = { limit = { has_law = law_type:law_free_mutual_banking } add = 5 }
+			if = { limit = { banking_points_low = yes } add = 10 }  # cheap, so attractive when points are scarce
+		}
 
 		# Avoid in recession/panic
 		if = { limit = { banking_cycle_is_recession = yes } add = -60 }
@@ -450,13 +472,18 @@ cb_capital_controls_outflow = {
 			if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 		}
 
-		# Law flavor
-		if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
-		if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 10 }
-
-		# Resources
-		if = { limit = { banking_points_med = yes } add = 10 }
-		if = { limit = { banking_points_low = yes } add = 5 }
+		# Law flavor and resources, only while a core term above is live. Under
+		# the full system with no external crisis this whole block is 0, so a
+		# country with nothing to defend never puts controls on — before the
+		# gate, a universal-banking AI at 3-5 points scored 10-15 here every
+		# month of the century and toggled controls on and off through it.
+		if = {
+			limit = { banking_ai_core_cb_capital_controls_outflow = yes }
+			if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
+			if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 10 }
+			if = { limit = { banking_points_med = yes } add = 10 }
+			if = { limit = { banking_points_low = yes } add = 5 }
+		}
 
 		# Avoid when hot: nothing is leaving.
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
@@ -518,12 +545,13 @@ cb_export_credit_facility = {
 		if = { limit = { banking_cycle_is_stagnation = yes } add = 25 }
 		if = { limit = { banking_cycle_risk_falling = yes } add = 15 }
 
-		# Law flavor
-		if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 15 }
-
-		# Resources
-		if = { limit = { banking_points_med = yes } add = 10 }
-		if = { limit = { banking_points_low = yes } add = 5 }
+		# Law flavor and resources, only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_export_credit_facility = yes }
+			if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 15 }
+			if = { limit = { banking_points_med = yes } add = 10 }
+			if = { limit = { banking_points_low = yes } add = 5 }
+		}
 
 		# Avoid when hot or contradictory
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -40 }
@@ -565,14 +593,17 @@ cb_asset_relief_program = {
 		if = { limit = { banking_cycle_is_panic = yes } add = 70 }
 		if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
 		if = { limit = { var:finance_cycle_value >= 25 var:finance_cycle_value < 40 } add = 25 } # stagnation shelf
-		# Prefer when fiscal/financial stress is high (replace with your own signals if you have them)
-		if = { limit = { banking_fiscal_stress_low = yes } add = 10 }
-		if = { limit = { banking_fiscal_stress_high = yes } add = 10 }
+		# Fiscal stress and points awareness, only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_asset_relief_program = yes }
+			# prefer when fiscal/financial stress is high (replace with your own signals if you have them)
+			if = { limit = { banking_fiscal_stress_low = yes } add = 10 }
+			if = { limit = { banking_fiscal_stress_high = yes } add = 10 }
+			if = { limit = { banking_points_high = yes } add = 10 }
+		}
 		# Avoid when hot
 		if = { limit = { banking_cycle_is_boom = yes } add = -30 }
 		if = { limit = { banking_cycle_is_frenzy = yes } add = -50 }
-		# Points awareness
-		if = { limit = { banking_points_high = yes } add = 10 }
 	}
 
 	possible = { banking_possible_cb_asset_relief_program = yes }

@@ -1691,6 +1691,17 @@ banking_crash_chance_multiplier_value = {
 	min = 0
 }
 
+# What share of bubble_pressure seeds crash_severity, for origin and contagion
+# crashes alike (banking_cycle_check_and_execute_crash, banking_contagion_crash_check).
+# The random 0.5-2.0 multiplier and the law multipliers apply on top. At 1.0 the
+# crash probability and the severity read the same bubble, so crashes only fired
+# off a big bubble and then reset the cycle to 5 or 10 two times in three; 0.55
+# puts the median crash in the 20-40 "crash" tier and a quarter in the panic
+# tiers (docs/audits/banking_cycle_simulation.md F2 and §3).
+banking_crash_severity_scale_value = {
+	value = 0.55
+}
+
 # ========== SoL Expectations System ==========
 
 # Half-life in years: how long it takes for the gap between expected and actual SoL
@@ -1804,12 +1815,35 @@ sol_expectations_lower_shift_value = {
 
 # ========== End SoL Expectations ==========
 
-# fiscal policy effect based on spending relative to GDP
+# Fiscal policy effect based on spending relative to GDP: the multiplier on
+# financial_cycle_government_fiscal_policy_effect (country_finance_value_monthly_add = 1),
+# so this IS the monthly push on finance_cycle_value.
+#
+# `income` and `total_expenses` are WEEKLY and `gdp` is ANNUAL
+# (docs/engine/event_targets_summary.txt), so the flows are annualised through
+# the same te_mon_deficit_annualise_factor that te_mon_deficit_pct_value uses —
+# the one hypothesis constant, so if a running game ever shows the flows to be
+# annual already (monetary_policy_design.md ruling P4) both channels flip
+# together. Before 2026-09-22 this value divided the weekly flow by annual GDP
+# and multiplied by 100, i.e. it was 1/52 of what its own comment claimed ("1%
+# of GDP a year adds 1 point a month"): a 3% deficit moved the cycle 0.06 a
+# month, which is why the channel read as dormant
+# (docs/audits/banking_cycle_simulation.md F8).
+#
+# 0.25 cycle points a month per 1% of GDP of deficit, clamped to +-1: a 4%
+# wartime deficit pushes the cycle a full point a month, about one phase
+# modifier's worth, and the clamp keeps a 10%-of-GDP borrowing spree from
+# pinning the cycle in frenzy on its own. A surplus cools the cycle the same
+# way. The unclamped "1 point per 1%" the old comment intended was measured:
+# it runs the cycle to a mean of 53-57 and 20-26 crashes a century (§6).
 financial_cycle_government_fiscal_policy_effect_size = {
 	value = total_expenses
 	subtract = income
+	multiply = te_mon_deficit_annualise_factor
 	divide = { value = gdp min = 1 }
-	multiply = 100 # deficit spending 1% of GDP per year adds 1 point to the financial cycle monthly (5x previous; was effectively dormant at typical 1-3% deficit levels)
+	multiply = 25
+	min = -1
+	max = 1
 }
 
 # linear up to +0.25 at 50 bubble pressure, then quadratic to reach +1.25 at max pressure.

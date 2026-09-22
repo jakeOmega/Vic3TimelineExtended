@@ -311,3 +311,123 @@ banking_possible_cw_worker_buyout = {
 		modifier:country_banking_intervention_max_add >= 3
 	}
 }
+
+# ----------------------------------------------------------------------------
+# AI: "is there a cycle reason to reach for this tool at all?"
+#
+# Each cb_* enable button's ai_chance is a sum of CORE terms (the cycle state
+# the tool answers), FLAVOUR terms (the financial-regulation law, an independent
+# bank, a companion tool) and RESOURCE terms (how many intervention points are
+# free). The flavour and resource terms are gated on the matching trigger
+# below, because as unconditional adds on a base of 0 they scored a tool 5-25
+# in a STABLE phase with no cycle reason at all, and the AI clicked it: a
+# universal-banking AI parked the capital buffer and margin requirements for
+# 40% of the century, which is what made two intervention points the safest
+# budget in the game and three the most dangerous
+# (docs/audits/banking_cycle_simulation.md F10). With the gate the budget curve
+# is flat and the AI holds about half as many tools.
+#
+# Each trigger restates the conditions of its button's core terms; keep the
+# two in step when a core term changes. The disable buttons are not gated:
+# lifting a tool needs no reason beyond the phase it is lifted in.
+# ----------------------------------------------------------------------------
+banking_ai_core_cb_open_market_ops = {
+	OR = {
+		banking_cycle_is_panic = yes
+		banking_cycle_is_downturn = yes
+		banking_cycle_is_stagnation = yes
+		banking_cycle_risk_falling = yes
+		AND = {
+			has_variable = te_inflation
+			var:te_inflation < te_mon_band_edge_deflation
+		}
+	}
+}
+
+banking_ai_core_cb_countercyclical_buffer = {
+	OR = {
+		banking_cycle_is_expansion = yes
+		banking_cycle_is_boom = yes
+		banking_cycle_is_frenzy = yes
+		banking_cycle_bubble_risk_rising = yes
+	}
+}
+
+banking_ai_core_cb_expand_deposit_guarantee = {
+	OR = {
+		banking_cycle_is_panic = yes
+		banking_cycle_is_downturn = yes
+	}
+}
+
+banking_ai_core_cb_directed_credit_infrastructure = {
+	OR = {
+		banking_cycle_is_downturn = yes
+		banking_cycle_is_stagnation = yes
+		AND = {
+			banking_cycle_is_stable = yes
+			banking_cycle_risk_falling = yes
+		}
+	}
+}
+
+banking_ai_core_cb_emergency_liquidity_program = {
+	OR = {
+		banking_cycle_is_panic = yes
+		AND = {
+			banking_cycle_is_downturn = yes
+			var:finance_cycle_momentum <= -4
+		}
+	}
+}
+
+banking_ai_core_cb_moral_suasion = {
+	OR = {
+		banking_cycle_is_expansion = yes
+		banking_cycle_bubble_risk_rising = yes
+	}
+}
+
+banking_ai_core_cb_raise_margin_requirements = {
+	OR = {
+		banking_cycle_is_boom = yes
+		banking_cycle_is_frenzy = yes
+		banking_cycle_bubble_risk_rising = yes
+	}
+}
+
+# Full system: the external-crisis rule. Simplified game rule: the cycle
+# fallback the button carried before monetary phase 1.
+banking_ai_core_cb_capital_controls_outflow = {
+	OR = {
+		AND = {
+			te_mon_full_system = yes
+			te_mon_in_external_crisis = yes
+		}
+		AND = {
+			te_mon_full_system = no
+			OR = {
+				banking_cycle_is_panic = yes
+				banking_cycle_is_downturn = yes
+				banking_cycle_risk_falling = yes
+			}
+		}
+	}
+}
+
+banking_ai_core_cb_export_credit_facility = {
+	OR = {
+		banking_cycle_is_panic = yes
+		banking_cycle_is_downturn = yes
+		banking_cycle_is_stagnation = yes
+		banking_cycle_risk_falling = yes
+	}
+}
+
+banking_ai_core_cb_asset_relief_program = {
+	OR = {
+		banking_cycle_is_panic = yes
+		banking_cycle_is_downturn = yes
+		banking_cycle_is_stagnation = yes
+	}
+}

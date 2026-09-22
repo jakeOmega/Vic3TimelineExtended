@@ -411,6 +411,20 @@ tourism_throughput = {
 }
 
 # ----- Cycle phases (auto-applied by JE) -----
+#
+# RETUNED 2026-09-22 from the Monte-Carlo study in
+# docs/audits/banking_cycle_simulation.md (regen: scripts/analysis/banking_cycle_sim.py):
+#   * bubble adds on expansion / boom / frenzy ~x3 (1 / 1.5 / 7 -> 3 / 4 / 20).
+#     Crash frequency is limited by how fast the bubble REBUILDS, not by the
+#     per-month crash roll, so this is the lever that puts commodity money and
+#     the gold standard in the 5-15 crashes-a-century band (F3, §3).
+#   * momentum adds on downturn / stagnation x3 (0.1 / 0.05 -> 0.3 / 0.15) and
+#     +0.5 cycle value a month on both. A standing momentum add converges on
+#     add / 0.1 a month, so the old climb out of a crash was ~1 point a month
+#     and a panic-tier reset took four years to reach stable; now 14-18
+#     months. The panic +1 was the owner's own edit (2026-09-21).
+#   * the _cmd / _coop variants are scaled in proportion; the simulation only
+#     runs a market economy, so treat those as unmeasured.
 financial_cycle_phase_panic = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_risk_premium_add = 0.02
@@ -419,6 +433,7 @@ financial_cycle_phase_panic = {
 	building_group_bg_manufacturing_throughput_add = -0.2
 	country_bubble_pressure_monthly_add = -7
 	country_finance_momentum_monthly_add = 0.2
+	country_finance_value_monthly_add = 1 # Shouldn't last long
 }
 
 financial_cycle_phase_downturn = {
@@ -428,7 +443,8 @@ financial_cycle_phase_downturn = {
 	goods_output_services_mult = -0.25
 	building_group_bg_manufacturing_throughput_add = -0.1
 	country_bubble_pressure_monthly_add = -3
-	country_finance_momentum_monthly_add = 0.1
+	country_finance_momentum_monthly_add = 0.3
+	country_finance_value_monthly_add = 0.5
 }
 
 financial_cycle_phase_stagnation = {
@@ -437,7 +453,8 @@ financial_cycle_phase_stagnation = {
 	goods_output_services_mult = -0.10
 	building_group_bg_manufacturing_throughput_add = -0.05
 	country_bubble_pressure_monthly_add = -1
-	country_finance_momentum_monthly_add = 0.05
+	country_finance_momentum_monthly_add = 0.15
+	country_finance_value_monthly_add = 0.5
 }
 
 financial_cycle_phase_expansion = {
@@ -445,7 +462,7 @@ financial_cycle_phase_expansion = {
 	state_capitalists_investment_pool_contribution_add = 0.05
 	goods_output_services_mult = 0.25
 	building_group_bg_manufacturing_throughput_add = 0.05
-	country_bubble_pressure_monthly_add = 1
+	country_bubble_pressure_monthly_add = 3
 	country_finance_momentum_monthly_add = -0.05
 }
 
@@ -454,7 +471,7 @@ financial_cycle_phase_boom = {
 	state_capitalists_investment_pool_contribution_add = 0.1
 	goods_output_services_mult = 0.35
 	building_group_bg_manufacturing_throughput_add = 0.1
-	country_bubble_pressure_monthly_add = 1.5
+	country_bubble_pressure_monthly_add = 4
 	country_finance_momentum_monthly_add = -0.1
 }
 
@@ -463,7 +480,7 @@ financial_cycle_phase_frenzy = {
 	state_capitalists_investment_pool_contribution_add = 0.15
 	goods_output_services_mult = 0.5
 	building_group_bg_manufacturing_throughput_add = 0.15
-	country_bubble_pressure_monthly_add = 7
+	country_bubble_pressure_monthly_add = 20
 	country_finance_momentum_monthly_add = -0.2
 }
 
@@ -480,6 +497,7 @@ financial_cycle_phase_panic_cmd = {
 	building_group_bg_manufacturing_throughput_add = -0.2
 	country_bubble_pressure_monthly_add = -7
 	country_finance_momentum_monthly_add = 0.2
+	country_finance_value_monthly_add = 1 # Shouldn't last long
 }
 
 financial_cycle_phase_downturn_cmd = {
@@ -488,7 +506,8 @@ financial_cycle_phase_downturn_cmd = {
 	country_bureaucracy_mult = -0.08
 	building_group_bg_manufacturing_throughput_add = -0.1
 	country_bubble_pressure_monthly_add = -3
-	country_finance_momentum_monthly_add = 0.1
+	country_finance_momentum_monthly_add = 0.3
+	country_finance_value_monthly_add = 0.5
 }
 
 financial_cycle_phase_stagnation_cmd = {
@@ -497,7 +516,8 @@ financial_cycle_phase_stagnation_cmd = {
 	country_bureaucracy_mult = -0.04
 	building_group_bg_manufacturing_throughput_add = -0.05
 	country_bubble_pressure_monthly_add = -1
-	country_finance_momentum_monthly_add = 0.05
+	country_finance_momentum_monthly_add = 0.15
+	country_finance_value_monthly_add = 0.5
 }
 
 financial_cycle_phase_expansion_cmd = {
@@ -505,7 +525,7 @@ financial_cycle_phase_expansion_cmd = {
 	goods_input_construction_mult = -0.03
 	country_bureaucracy_mult = 0.04
 	building_group_bg_manufacturing_throughput_add = 0.05
-	country_bubble_pressure_monthly_add = 0.5
+	country_bubble_pressure_monthly_add = 1.5
 	country_finance_momentum_monthly_add = -0.05
 }
 
@@ -514,7 +534,7 @@ financial_cycle_phase_boom_cmd = {
 	goods_input_construction_mult = -0.05
 	country_bureaucracy_mult = 0.08
 	building_group_bg_manufacturing_throughput_add = 0.1
-	country_bubble_pressure_monthly_add = 1.2
+	country_bubble_pressure_monthly_add = 3.5
 	country_finance_momentum_monthly_add = -0.1
 }
 
@@ -523,7 +543,7 @@ financial_cycle_phase_frenzy_cmd = {
 	goods_input_construction_mult = -0.08
 	country_bureaucracy_mult = 0.12
 	building_group_bg_manufacturing_throughput_add = 0.15
-	country_bubble_pressure_monthly_add = 6.8
+	country_bubble_pressure_monthly_add = 19
 	country_finance_momentum_monthly_add = -0.2
 }
 
@@ -535,6 +555,7 @@ financial_cycle_phase_panic_coop = {
 	building_group_bg_manufacturing_throughput_add = -0.2
 	country_bubble_pressure_monthly_add = -7
 	country_finance_momentum_monthly_add = 0.2
+	country_finance_value_monthly_add = 1 # Shouldn't last long
 }
 
 financial_cycle_phase_downturn_coop = {
@@ -543,7 +564,8 @@ financial_cycle_phase_downturn_coop = {
 	goods_output_services_mult = -0.20
 	building_group_bg_manufacturing_throughput_add = -0.1
 	country_bubble_pressure_monthly_add = -3
-	country_finance_momentum_monthly_add = 0.1
+	country_finance_momentum_monthly_add = 0.3
+	country_finance_value_monthly_add = 0.5
 }
 
 financial_cycle_phase_stagnation_coop = {
@@ -552,7 +574,8 @@ financial_cycle_phase_stagnation_coop = {
 	goods_output_services_mult = -0.10
 	building_group_bg_manufacturing_throughput_add = -0.05
 	country_bubble_pressure_monthly_add = -1
-	country_finance_momentum_monthly_add = 0.05
+	country_finance_momentum_monthly_add = 0.15
+	country_finance_value_monthly_add = 0.5
 }
 
 financial_cycle_phase_expansion_coop = {
@@ -560,7 +583,7 @@ financial_cycle_phase_expansion_coop = {
 	country_weekly_investment_pool_mult = 0.003
 	goods_output_services_mult = 0.15
 	building_group_bg_manufacturing_throughput_add = 0.05
-	country_bubble_pressure_monthly_add = 0.8
+	country_bubble_pressure_monthly_add = 2.5
 	country_finance_momentum_monthly_add = -0.05
 }
 
@@ -569,7 +592,7 @@ financial_cycle_phase_boom_coop = {
 	country_weekly_investment_pool_mult = 0.006
 	goods_output_services_mult = 0.25
 	building_group_bg_manufacturing_throughput_add = 0.1
-	country_bubble_pressure_monthly_add = 1.5
+	country_bubble_pressure_monthly_add = 4
 	country_finance_momentum_monthly_add = -0.1
 }
 
@@ -578,7 +601,7 @@ financial_cycle_phase_frenzy_coop = {
 	country_weekly_investment_pool_mult = 0.01
 	goods_output_services_mult = 0.35
 	building_group_bg_manufacturing_throughput_add = 0.15
-	country_bubble_pressure_monthly_add = 5.7
+	country_bubble_pressure_monthly_add = 16
 	country_finance_momentum_monthly_add = -0.2
 }
 
@@ -811,12 +834,24 @@ banking_policy_rate_hike = {
 	country_bubble_pressure_monthly_add  = -2.0
 }
 
+# THE TEN DASHBOARD TOOLS' MONTHLY LINES WERE RE-SIZED 2026-09-22
+# (docs/audits/banking_cycle_simulation.md F1, §3):
+#   * every country_finance_momentum_monthly_add x0.3. A STANDING momentum add
+#     is worth add / 0.1 cycle points a month (momentum decays x0.9), so the old
+#     +-0.15..0.35 were +-1.5..3.5 a month against the phase modifiers' own
+#     +-0.5..2 — one 2-point tool outweighed the whole expansion phase 3x, and
+#     two points of budget halved a country's crash rate while three raised it.
+#   * every NEGATIVE country_bubble_pressure_monthly_add x0.2, so the
+#     prudential tools lean against a boom's now-larger bubble build (+3 / +4 /
+#     +20 a month) rather than cancelling it outright; the expansionary tools'
+#     positive bubble lines are unchanged.
+# Size any new line against add / 0.1 and the phase table, not the other tools.
 banking_open_market_ops = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	goods_output_services_mult = 0.05
 	country_banking_intervention_max_add = -4
 	# monthly:
-	country_finance_momentum_monthly_add = 0.35
+	country_finance_momentum_monthly_add = 0.1
 	# 0.8 -> 1.5 (monetary_policy_design.md §11): open market operations are now
 	# gated on the policy rate sitting at its floor, so they are the balance-sheet
 	# tool of last resort rather than an everyday easing lever — and buying assets
@@ -843,8 +878,8 @@ banking_countercyclical_capital_buffer = {
 	state_shopkeepers_investment_pool_contribution_add = -0.05
 	country_banking_intervention_max_add = -2
 	# monthly:
-	country_finance_momentum_monthly_add = -0.15
-	country_bubble_pressure_monthly_add  = -2.5
+	country_finance_momentum_monthly_add = -0.05
+	country_bubble_pressure_monthly_add  = -0.5
 }
 
 banking_expand_deposit_guarantee = {
@@ -852,8 +887,8 @@ banking_expand_deposit_guarantee = {
 	country_risk_premium_add = -0.002
 	country_banking_intervention_max_add = -4
 	# monthly:
-	country_finance_momentum_monthly_add = 0.1
-	country_bubble_pressure_monthly_add  = -1.0
+	country_finance_momentum_monthly_add = 0.03
+	country_bubble_pressure_monthly_add  = -0.2
 }
 
 banking_directed_credit_infrastructure = {
@@ -865,7 +900,7 @@ banking_directed_credit_infrastructure = {
 	building_group_bg_infrastructure_construction_efficiency_add = 0.1
 	country_banking_intervention_max_add = -3
 	# monthly:
-	country_finance_momentum_monthly_add = 0.15
+	country_finance_momentum_monthly_add = 0.05
 	country_bubble_pressure_monthly_add  = 0.3
 }
 
@@ -875,15 +910,15 @@ banking_emergency_liquidity_program = {
 	country_banking_intervention_max_add = -6
 	# monthly:
 	country_bubble_pressure_monthly_add  = 0.8
-	country_finance_momentum_monthly_add = 0.25
+	country_finance_momentum_monthly_add = 0.08
 }
 
 banking_moral_suasion = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_banking_intervention_max_add = -1
 	# monthly:
-	country_bubble_pressure_monthly_add = -0.3
-	country_finance_momentum_monthly_add = -0.05
+	country_bubble_pressure_monthly_add = -0.05
+	country_finance_momentum_monthly_add = -0.02
 }
 
 banking_raise_margin_requirements = {
@@ -891,8 +926,8 @@ banking_raise_margin_requirements = {
 	country_banking_intervention_max_add = -2
 	state_middle_strata_standard_of_living_add = -0.5
 	# monthly:
-	country_finance_momentum_monthly_add = -0.15
-	country_bubble_pressure_monthly_add  = -2.0
+	country_finance_momentum_monthly_add = -0.05
+	country_bubble_pressure_monthly_add  = -0.4
 }
 
 # LEGACY — monetary policy phase 4 (2026-09-21) deleted cb_fx_devaluation and
@@ -936,8 +971,8 @@ banking_capital_controls_out = {
 	country_bureaucracy_mult = -0.05
 	country_influence_cost_add = 100
 	country_authority_add = 100
-	country_finance_momentum_monthly_add = 0.05
-	country_bubble_pressure_monthly_add  = -0.6
+	country_finance_momentum_monthly_add = 0.02
+	country_bubble_pressure_monthly_add  = -0.1
 }
 
 # LEGACY since monetary policy phase 5a (2026-09-21): the FX Swap Lines tool is
@@ -956,7 +991,7 @@ banking_fx_swap_lines = {
 banking_export_credit_facility = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_banking_intervention_max_add = -2
-	country_finance_momentum_monthly_add = 0.15
+	country_finance_momentum_monthly_add = 0.05
 	country_bubble_pressure_monthly_add  = 0.15
 	state_export_advantage_mult = 0.25
 	state_tax_collection_mult = -0.02     # ongoing fiscal cost of subsidised export loans
@@ -966,7 +1001,7 @@ banking_asset_relief_program = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_banking_intervention_max_add = -5         # cost: 5 pts
 	country_finance_value_monthly_add = 0.3
-	country_bubble_pressure_monthly_add = -0.3
+	country_bubble_pressure_monthly_add = -0.05
 	state_tax_collection_mult = -0.05
 	country_bureaucracy_mult = -0.05
 }

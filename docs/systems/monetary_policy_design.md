@@ -1765,7 +1765,7 @@ update sets the target from the mandate formula instead of the player's stepper.
 | Mandate | Target formula (clamped to the regime's range) | Character |
 |---|---|---|
 | **Price stability** | `r̂* + π + 1.0 × (π − 2) + cycle_lean` | leans against inflation first; accepts slumps. (Sanity check: at π = 13 this asks for ~26%, clamped to 25 — Volcker territory; a plain Taylor weight of 0.5 would give ~20%) |
-| **Growth** | `r̂* + π − 1.0 + 0.5 × max(0, π − 4) + cycle_lean/2` | runs 1pp warm — equilibrium inflation ≈ 2 + 0.4/c ≈ 3% — and reacts only above 4% (zero-gap point π = 6), or frenzy. Never more hawkish than price stability |
+| **Growth** | `r̂* + π − 0.25 + 0.5 × max(0, π − 4) + cycle_lean/2` | runs warm — `te_mon_mandate_growth_bias`, **−0.25 since 2026-09-22** (was −1.0: measured at 4× price stability's crash rate and a 4.1% equilibrium, not the ~3% intended; −0.25 lands at 3.2% and 1.7× the crashes while still buying about +1pp of manufacturing throughput — `docs/audits/banking_cycle_simulation.md` F7, §5) — and reacts only above 4% (zero-gap point π = 6), or frenzy. Never more hawkish than price stability |
 | **Peg defence** (gold only) | `world_rate + 0.5 × reserve_shortfall_pp` | keeps gold flows at zero; ignores the domestic cycle |
 
 `π` in these formulas is **core** inflation (§9.1) — mandates look through cost-push.
@@ -1777,8 +1777,9 @@ pressure ≥ 65, −2 recession, −3 panic.
 **Phase 1 has no inflation, so every π term is dropped — including the −2 target.**
 Price stability is `r̂* + cycle_lean`; growth is `r̂* − 1.0 + cycle_lean/2`. (Plugging
 π = 0 into the full formulas instead would give `r̂* − 2` and leave every delegated fiat
-country 2pp loose for the whole phase.) Growth's standing 1pp looseness is its point: more
-momentum, faster bubble build-up, more crash risk.
+country 2pp loose for the whole phase.) Growth's standing looseness is its point: more
+momentum, faster bubble build-up, more crash risk. (Written when the bias was 1pp; it is
+0.25pp now, see the table above.)
 
 **Why CBI is not just "automation".** Delegation already gives everyone automation. CBI is
 a *commitment device*: the player cannot override the bank, cannot monetise deficits, and
@@ -1967,8 +1968,12 @@ real_rate   = policy_rate − inflation                  (inflation = 0 before p
 stance_gap  = clamp( real_rate − neutral_rate , −10 , +10 )
 ```
 
-The gap (clamped to ±4 for this purpose, so steady-state momentum stays inside the ±5 bar)
-acts on the cycle **through the variable update, not through a visible modifier**:
+The gap (clamped to **−2…+4** for this purpose — `te_mon_stance_gap_clamp_loose` / `_tight`;
+the tight side keeps steady-state momentum inside the ±5 bar, the loose side was narrowed from
+−4 on 2026-09-22 because a dial left where it was seeded saturated it for ever, and at the
+bound the channel no longer told "somewhat loose" from "catastrophically loose" —
+`docs/audits/banking_cycle_simulation.md` F5) acts on the cycle **through the variable
+update, not through a visible modifier**:
 
 | Effect | Per pp of **tight** gap | Calibration | Delivery |
 |---|---|---|---|
@@ -4226,11 +4231,11 @@ P6-1…13).
 | Access base / techs / no exchange | +8 / −4, −2.5, then **−0.25, −0.5, −0.75** (eras 3–5; was −0.5 ×3 — back-loaded 2026-09-20; the first two cannot move without moving §7.4's 1836 rows) / +2 | 7.2 |
 | Rank table | 0.5 · 1 · 2 · 3 · 4 · 6 · 8 | 7.3 |
 | Debt-load premium | 0 → +4 over `scaled_debt` 0.25 → 1.0 | 7.6 |
-| Stance per pp: momentum / bubble / pool | 0.125 / 0.75 / 0.01; gap clamp ±4 | 8 |
+| Stance per pp: momentum / bubble / pool | 0.125 / 0.75 / 0.01; gap clamp **−2**…+4 (loose side was −4 until 2026-09-22) | 8 |
 | Neutral rate: era base / growth coeff / walk | 3 → 2 / 0.25 / ±0.1 | 8 |
 | Estimation error (CBI) | ±1.5 (±0.5) | 6 |
 | Price-stability mandate: inflation weight / target | 1.0 / 2% | 6 |
-| Growth mandate: bias / reaction / threshold | −1.0 / 0.5 / 4% | 6 |
+| Growth mandate: bias / reaction / threshold | **−0.25** (was −1.0 until 2026-09-22) / 0.5 / 4% | 6 |
 | Inflation pressure (pp): stance per pp / phases / bubble / deficit / monetisation / QE | 0.4 / ±0.3–1.5 / 0.2 / 0.3 / 2.5 / 1.0 | 9.1 |
 | Core adjustment speed | 0.10 per month | 9.1 |
 | Expectation α: manual, delegated (CBI) | 1/24 (1/12) | 9.1 |

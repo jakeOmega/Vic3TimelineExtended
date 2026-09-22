@@ -876,14 +876,32 @@ te_mon_forecast_error_bound_neg = {
 # stance would push momentum by up to 1.25 a month instead of the calibrated 0.5
 # — straight through the +/-5 momentum bar the steady state below assumes.
 # Keep the clamp and the scaling in separate script values, as they are here.
+#
+# THE TWO BOUNDS ARE NOT SYMMETRIC. The tight side keeps the +-4 §8 assumed; the
+# loose side is -2. A steered dial almost never reaches either bound, but a dial
+# left where it was seeded under fiat sits past -4 for ever once inflation has
+# drifted (the drift itself is intended — events/te_debug_monetary_events.txt
+# sequence 3), and at the bound the cycle channel stopped telling "somewhat
+# loose" from "catastrophically loose": the maximum push every month, a boom-
+# bust every two years. Halving the loose bound took that arm from 49 to 35
+# crashes a century and left every managed cell unchanged
+# (docs/audits/banking_cycle_simulation.md F5, §3).
+te_mon_stance_gap_clamp_loose = {
+	value = -2
+}
+
+te_mon_stance_gap_clamp_tight = {
+	value = 4
+}
+
 te_mon_stance_gap_clamped = {
 	value = 0
 	if = {
 		limit = { has_variable = te_mon_stance_gap }
 		add = {
 			value = var:te_mon_stance_gap
-			min = -4
-			max = 4
+			min = te_mon_stance_gap_clamp_loose
+			max = te_mon_stance_gap_clamp_tight
 		}
 	}
 }
@@ -2467,12 +2485,21 @@ te_mon_mandate_inflation_weight = {
 	value = 1.0
 }
 
-# Growth's standing looseness in pp (§6, §21): it sits a point below price
-# stability's neutral setting by design — more momentum, faster bubbles, more
-# crashes. NEGATIVE, because the consumer adds it rather than subtracting it,
-# so the sign lives in one place.
+# Growth's standing looseness in pp (§6, §21): it sits below price stability's
+# neutral setting by design — more momentum, faster bubbles, more crashes.
+# NEGATIVE, because the consumer adds it rather than subtracting it, so the
+# sign lives in one place.
+#
+# -0.25, NOT THE -1.0 §6 FIRST WROTE. Through the stance channel a standing
+# -1.0 was +0.125 momentum and +0.75 bubble a month for ever, and the mandate
+# ran four times price stability's crash rate (19.8 vs 5.4 a century on gold)
+# while its inflation equilibrium landed at 4.1%, not the ~3% §6 promised.
+# At -0.25 it is 1.7x the crashes, the equilibrium is 3.2%, and it still buys
+# +1.1pp of manufacturing throughput and +3.5% services over price stability
+# on average — a trade, not a trap (docs/audits/banking_cycle_simulation.md
+# F7, §5).
 te_mon_mandate_growth_bias = {
-	value = -1.0
+	value = -0.25
 }
 
 # How hard the growth mandate reacts to inflation once it is past the threshold

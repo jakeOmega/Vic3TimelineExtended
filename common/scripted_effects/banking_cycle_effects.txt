@@ -1460,8 +1460,15 @@ banking_contagion_crash_check = {
 		limit = { var:contagion_crash > 0 }
 		# History-chart marker on this month's bar (te_history_effects.txt)
 		te_history_record_banking_marker = { MARK = crash_contagion }
-		# Crash severity = target's own bubble pressure + boost from origin severity
-		set_variable = { name = crash_severity value = var:bubble_pressure }
+		# Crash severity = target's own bubble pressure (scaled as for an origin
+		# crash — banking_crash_severity_scale_value) + boost from origin severity
+		set_variable = {
+			name = crash_severity
+			value = {
+				value = var:bubble_pressure
+				multiply = banking_crash_severity_scale_value
+			}
+		}
 		if = {
 			limit = { scope:banking_crash_origin_country = { var:crash_severity >= 80 } }
 			change_variable = { name = crash_severity add = 20 }
@@ -1772,6 +1779,16 @@ banking_cycle_check_and_execute_crash = {
 					subtract = 75
 					multiply = 0.02
 				}
+				else = {
+					# stagnation and below. Without this branch the weight fell
+					# through as RAW bubble pressure, so a country dropping out of
+					# a boom through 40 with its bubble intact crashed at
+					# bubble / (bubble + 100) a month — a third at bubble 50 —
+					# while two points higher it was zero
+					# (docs/audits/banking_cycle_simulation.md F4).
+					subtract = 90
+					multiply = 0.01
+				}
 				if = {
 					limit = { has_law = law_type:law_command_economy }
 					multiply = 0.35
@@ -1796,8 +1813,19 @@ banking_cycle_check_and_execute_crash = {
 		# History-chart marker on this month's bar (te_history_effects.txt)
 		te_history_record_banking_marker = { MARK = crash }
 
-		# Severity scales with bubble pressure (random multiplier 0.5–2.0)
-		set_variable = { name = crash_severity value = var:bubble_pressure }
+		# Severity scales with bubble pressure (random multiplier 0.5–2.0).
+		# Seeded from banking_crash_severity_scale_value x bubble, not bubble
+		# itself: the crash PROBABILITY is already proportional to bubble, so a
+		# crash only ever fires off a big bubble, and seeding severity from the
+		# same number made two thirds of all crashes panic-tier resets
+		# (docs/audits/banking_cycle_simulation.md F2).
+		set_variable = {
+			name = crash_severity
+			value = {
+				value = var:bubble_pressure
+				multiply = banking_crash_severity_scale_value
+			}
+		}
 		random_list = {
 			10 = { change_variable = { name = crash_severity multiply = 0.5 } }
 			20 = { change_variable = { name = crash_severity multiply = 0.75 } }
