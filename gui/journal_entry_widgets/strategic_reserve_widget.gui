@@ -36,9 +36,12 @@
 ###   - explanation    -> GetCustom('st_res_<good>_policy_reason_text'), driven
 ###                       by st_res_<good>_policy_status, whose single
 ###                       derivation site is st_res_policy_evaluate_good_effect
-###   - price signal   -> ScriptValue('st_res_<good>_price_rel'), the signed
-###                       premium against base price on the country's own
-###                       market. Nothing here re-derives it from prices.
+###   - price signal   -> ScriptValue('st_res_<good>_price_rel'), the live
+###                       signed premium against base price on the country's
+###                       own market, and ScriptValue('st_res_<good>_price_signal'),
+###                       the running average the policy actually acts on
+###                       (advanced once a week by script). Nothing here
+###                       re-derives either from prices.
 ###
 ### The panel's controls share a SECOND scripted GUI per good,
 ### st_res_policy_<good>_sgui, parameterized by a single 'op' saved scope.
@@ -53,6 +56,7 @@
 ###   20/21 purchase threshold  - / +      26/27 protected stockpile - / +
 ###   22/23 release threshold   - / +      28/29 target stockpile    - / +
 ###   24/25 maximum weekly flow - / +      30/31 weekly budget       - / +
+###   32/33 price memory (weeks) - / +     34/35 response ramp (pp)  - / +
 ###
 ### The expander itself is presentation-only: `GetVariableSystem.Toggle` on a
 ### per-good key that no script ever reads. Collapsing a panel cannot change
@@ -292,7 +296,7 @@ types strategic_reserve_widget_types
 	### script ever sees, so collapsing the panel cannot change what the reserve
 	### does, and the expanded/collapsed state is intentionally not saved.
 	###
-	### Everything inside is shared across goods except the six value cells:
+	### Everything inside is shared across goods except the eight value cells:
 	### `policy_panel_context` points the whole subtree at that good's
 	### st_res_policy_<good>_sgui, and every button below addresses it by op
 	### code alone. The op-code table lives in
@@ -491,6 +495,34 @@ types strategic_reserve_widget_types
 				tooltip = "st_res_policy_label_budget_up_tooltip"
 			}
 		}
+		widget_je_st_res_policy_stepper = {
+			blockoverride "stepper_label" { text = "st_res_policy_label_price_memory" }
+			blockoverride "stepper_value" { block "policy_value_price_memory" {} }
+			blockoverride "stepper_down" {
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)32' ) ).End )]"
+				tooltip = "st_res_policy_label_price_memory_down_tooltip"
+			}
+			blockoverride "stepper_up" {
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)33' ) ).End )]"
+				tooltip = "st_res_policy_label_price_memory_up_tooltip"
+			}
+		}
+		widget_je_st_res_policy_stepper = {
+			blockoverride "stepper_label" { text = "st_res_policy_label_ramp" }
+			blockoverride "stepper_value" { block "policy_value_ramp" {} }
+			blockoverride "stepper_down" {
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)34' ) ).End )]"
+				tooltip = "st_res_policy_label_ramp_down_tooltip"
+			}
+			blockoverride "stepper_up" {
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)35' ) ).End )]"
+				tooltip = "st_res_policy_label_ramp_up_tooltip"
+			}
+		}
 	}
 }
 
@@ -555,6 +587,12 @@ flowcontainer = {
 				blockoverride "policy_value_budget" {
 					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_budget').GetValue|0]"
 				}
+				blockoverride "policy_value_price_memory" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_price_memory').GetValue|0]"
+				}
+				blockoverride "policy_value_ramp" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_grain_ramp').GetValue|0]"
+				}
 			}
 		}
 	}
@@ -602,6 +640,12 @@ flowcontainer = {
 				}
 				blockoverride "policy_value_budget" {
 					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_budget').GetValue|0]"
+				}
+				blockoverride "policy_value_price_memory" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_price_memory').GetValue|0]"
+				}
+				blockoverride "policy_value_ramp" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_ammunition_ramp').GetValue|0]"
 				}
 			}
 		}
@@ -651,6 +695,12 @@ flowcontainer = {
 				blockoverride "policy_value_budget" {
 					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_budget').GetValue|0]"
 				}
+				blockoverride "policy_value_price_memory" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_price_memory').GetValue|0]"
+				}
+				blockoverride "policy_value_ramp" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_oil_ramp').GetValue|0]"
+				}
 			}
 		}
 	}
@@ -698,6 +748,12 @@ flowcontainer = {
 				}
 				blockoverride "policy_value_budget" {
 					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_budget').GetValue|0]"
+				}
+				blockoverride "policy_value_price_memory" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_price_memory').GetValue|0]"
+				}
+				blockoverride "policy_value_ramp" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_small_arms_ramp').GetValue|0]"
 				}
 			}
 		}
@@ -747,6 +803,12 @@ flowcontainer = {
 				blockoverride "policy_value_budget" {
 					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_budget').GetValue|0]"
 				}
+				blockoverride "policy_value_price_memory" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_price_memory').GetValue|0]"
+				}
+				blockoverride "policy_value_ramp" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_artillery_ramp').GetValue|0]"
+				}
 			}
 		}
 	}
@@ -795,6 +857,12 @@ flowcontainer = {
 				blockoverride "policy_value_budget" {
 					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_budget').GetValue|0]"
 				}
+				blockoverride "policy_value_price_memory" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_price_memory').GetValue|0]"
+				}
+				blockoverride "policy_value_ramp" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_aeroplanes_ramp').GetValue|0]"
+				}
 			}
 		}
 	}
@@ -842,6 +910,12 @@ flowcontainer = {
 				}
 				blockoverride "policy_value_budget" {
 					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_budget').GetValue|0]"
+				}
+				blockoverride "policy_value_price_memory" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_price_memory').GetValue|0]"
+				}
+				blockoverride "policy_value_ramp" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_tanks_ramp').GetValue|0]"
 				}
 			}
 		}

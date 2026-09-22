@@ -18,13 +18,24 @@
 # with 0 (= no movement recorded / status "Idle") until the next weekly tick
 # overwrites them with real data.
 #
-# The ten reserve-policy variables are seeded behind ONE guard on
+# The twelve reserve-policy variables are seeded behind ONE guard on
 # `st_res_$GOOD$_policy`, because they are only ever written together: a save
-# from before policies existed has none of them, gets all ten at once, and can
-# never be left in a half-configured state. The seeded policy is 0 (Manual)
+# from before policies existed has none of them, gets all twelve at once, and
+# can never be left in a half-configured state. The seeded policy is 0 (Manual)
 # with the Standard preset's settings, so loading a pre-feature save changes
 # nothing a player can see — every good keeps the rate it had and keeps being
 # driven by hand until the player picks a policy.
+#
+# A SECOND guard covers a save from after policies but before price smoothing:
+# it seeds only the two smoothing settings, with their identity values (price
+# memory 1 = the live price, response ramp 0 = the step response), so a policy
+# that was already running keeps behaving exactly as it did until the player
+# touches those settings or applies a preset. A new game never takes that
+# branch — the preset in the first guard has already written both.
+#
+# The running price average (`st_res_$GOOD$_price_avg`) is deliberately NOT
+# seeded here: st_res_policy_track_price_effect seeds it from the live price on
+# the first weekly tick, and a value of 0 would read as "at base price".
 # --------------------------------------------------------------------------
 st_res_init_good_effect = {
 	if = {
@@ -50,6 +61,11 @@ st_res_init_good_effect = {
 		set_variable = { name = st_res_$GOOD$_policy_status value = 0 }
 		set_variable = { name = st_res_$GOOD$_policy_price value = 0 }
 		st_res_apply_preset_standard_base = { GOOD = $GOOD$ }
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_price_memory } }
+		set_variable = { name = st_res_$GOOD$_price_memory value = 1 }
+		set_variable = { name = st_res_$GOOD$_ramp value = 0 }
 	}
 }
 
@@ -100,6 +116,10 @@ st_res_reset_good_vars_effect = {
 	set_variable = { name = st_res_$GOOD$_policy_status value = 0 }
 	set_variable = { name = st_res_$GOOD$_policy_price value = 0 }
 	st_res_apply_preset_standard_base = { GOOD = $GOOD$ }
+	# The running price average is removed rather than zeroed, so the next
+	# weekly tick re-seeds it from the live price instead of averaging up
+	# from "at base price".
+	remove_variable = st_res_$GOOD$_price_avg
 }
 
 # --------------------------------------------------------------------------
@@ -486,19 +506,22 @@ st_res_weekly_update_effect = {
 		st_res_apply_weekly_good_effect = { GOOD = aeroplanes }
 		st_res_apply_weekly_good_effect = { GOOD = tanks }
 
-		# Re-decide every automated lane AFTER last week's movement has been
+		# Advance every good's running price average by one week, then
+		# re-decide every automated lane — AFTER last week's movement has been
 		# booked and BEFORE the shared refresh/clamp tail, so the rate the hub
 		# trades on next week is the one the policy just chose. The evaluator
 		# rewrites the configured rate unconditionally, which is what makes it
 		# immune to st_res_clamp_stockpiles_effect having zeroed that rate at a
-		# stockpile bound last week.
-		st_res_policy_evaluate_good_effect = { GOOD = grain }
-		st_res_policy_evaluate_good_effect = { GOOD = ammunition }
-		st_res_policy_evaluate_good_effect = { GOOD = oil }
-		st_res_policy_evaluate_good_effect = { GOOD = small_arms }
-		st_res_policy_evaluate_good_effect = { GOOD = artillery }
-		st_res_policy_evaluate_good_effect = { GOOD = aeroplanes }
-		st_res_policy_evaluate_good_effect = { GOOD = tanks }
+		# stockpile bound last week. The weekly pulse is the ONLY caller of the
+		# tick wrapper: the price average must advance once a week, never once
+		# per panel click.
+		st_res_policy_tick_good_effect = { GOOD = grain }
+		st_res_policy_tick_good_effect = { GOOD = ammunition }
+		st_res_policy_tick_good_effect = { GOOD = oil }
+		st_res_policy_tick_good_effect = { GOOD = small_arms }
+		st_res_policy_tick_good_effect = { GOOD = artillery }
+		st_res_policy_tick_good_effect = { GOOD = aeroplanes }
+		st_res_policy_tick_good_effect = { GOOD = tanks }
 
 		st_res_refresh_hub_flow_effect = yes
 		st_res_clamp_stockpiles_effect = yes
@@ -513,17 +536,18 @@ st_res_weekly_update_effect = {
 		st_res_mark_good_no_hub_effect = { GOOD = aeroplanes }
 		st_res_mark_good_no_hub_effect = { GOOD = tanks }
 
-		# The evaluator also runs with no hub: its `hub_level_cached <= 0`
-		# branch writes policy status 9 and touches no rate. Keeping the call in
-		# BOTH branches is what makes st_res_policy_evaluate_good_effect the one
-		# and only writer of st_res_<good>_policy_status.
-		st_res_policy_evaluate_good_effect = { GOOD = grain }
-		st_res_policy_evaluate_good_effect = { GOOD = ammunition }
-		st_res_policy_evaluate_good_effect = { GOOD = oil }
-		st_res_policy_evaluate_good_effect = { GOOD = small_arms }
-		st_res_policy_evaluate_good_effect = { GOOD = artillery }
-		st_res_policy_evaluate_good_effect = { GOOD = aeroplanes }
-		st_res_policy_evaluate_good_effect = { GOOD = tanks }
+		# The tick also runs with no hub: the price average keeps tracking,
+		# and the evaluator's `hub_level_cached <= 0` branch writes policy
+		# status 9 and touches no rate. Keeping the call in BOTH branches is
+		# what makes st_res_policy_evaluate_good_effect the one and only writer
+		# of st_res_<good>_policy_status.
+		st_res_policy_tick_good_effect = { GOOD = grain }
+		st_res_policy_tick_good_effect = { GOOD = ammunition }
+		st_res_policy_tick_good_effect = { GOOD = oil }
+		st_res_policy_tick_good_effect = { GOOD = small_arms }
+		st_res_policy_tick_good_effect = { GOOD = artillery }
+		st_res_policy_tick_good_effect = { GOOD = aeroplanes }
+		st_res_policy_tick_good_effect = { GOOD = tanks }
 	}
 }
 
@@ -681,11 +705,25 @@ st_res_apply_sell_profit_effect = {
 #
 # Engagement latch (st_res_<good>_engaged), the hysteresis state:
 #   0 = idle | 1 = engaged buying | 2 = engaged releasing
-# An engaged lane keeps going until the price crosses the *stop* threshold,
-# which sits st_res_policy_buy_band above the purchase threshold, or
-# st_res_policy_sell_band below the release threshold. That is what stops a
-# price oscillating around a single trigger from flapping the lane on and off
-# week after week.
+# With a step response an engaged lane keeps going until the price crosses the
+# *stop* threshold, which sits st_res_policy_buy_band above the purchase
+# threshold, or st_res_policy_sell_band below the release threshold. That is
+# what stops a price oscillating around a single trigger from flapping the
+# lane on and off week after week.
+#
+# Two settings shape HOW a lane responds, both per good:
+#   st_res_<good>_price_memory — weeks. The policy acts on a running average
+#       of the market price, advanced once a week by
+#       st_res_policy_track_price_effect: avg += (live - avg) / memory.
+#       1 = the live price. Read through st_res_<good>_price_signal.
+#   st_res_<good>_ramp — percentage points. 0 = step: full maximum flow the
+#       moment a threshold is crossed, with the hysteresis bands. > 0 =
+#       linear: the flow rises from 0 at the threshold to the maximum `ramp`
+#       points beyond it, and the bands are not applied because a continuous
+#       response has no on/off edge to debounce.
+# Both exist to stop the reserve's own trading from chasing the price it
+# moved — the step response at full flow is the most oscillation-prone limit
+# of the family, and it is still available (ramp 0) for anyone who wants it.
 #
 # Policy status codes (st_res_<good>_policy_status) — the plain-language
 # explanation the inventory row shows, rendered through
@@ -709,7 +747,7 @@ st_res_apply_sell_profit_effect = {
 # --------------------------------------------------------------------------
 
 # --------------------------------------------------------------------------
-# Presets. THESE THREE EFFECTS ARE THE TUNING TABLE — the eighteen preset
+# Presets. THESE THREE EFFECTS ARE THE TUNING TABLE — the twenty-four preset
 # numbers below exist nowhere else in the mod. Everything else about the
 # policies (step sizes, hysteresis bands, stepper bounds) lives in the
 # `st_res_policy_*` constants at the bottom of
@@ -720,6 +758,11 @@ st_res_apply_sell_profit_effect = {
 # reserve capacity, so they scale automatically when the player adds Silos.
 # Budget is an ESTIMATED weekly spend cap in GBP (see
 # st_res_policy_evaluate_good_effect for why it can only be an estimate).
+# Price memory is the averaging window in weeks and the ramp is in percentage
+# points past each threshold — see st_res_policy_track_price_effect and the
+# response-shape block of st_res_policy_evaluate_good_effect. The presets
+# smooth harder the more patient they are: a Conservative reserve waits for a
+# real bargain and should not be spooked by one week's price.
 #
 # The three presets keep sell_thr - buy_thr >= st_res_policy_min_gap (15) and
 # ceil_pct - floor_pct >= st_res_policy_stock_min_gap (10), which is the same
@@ -732,6 +775,8 @@ st_res_apply_preset_conservative_base = {
 	set_variable = { name = st_res_$GOOD$_floor_pct value = 40 }
 	set_variable = { name = st_res_$GOOD$_ceil_pct value = 60 }
 	set_variable = { name = st_res_$GOOD$_budget value = 5000 }
+	set_variable = { name = st_res_$GOOD$_price_memory value = 8 }
+	set_variable = { name = st_res_$GOOD$_ramp value = 20 }
 	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
 	# must re-test against the new band instead of the old stop threshold.
 	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
@@ -744,6 +789,8 @@ st_res_apply_preset_standard_base = {
 	set_variable = { name = st_res_$GOOD$_floor_pct value = 20 }
 	set_variable = { name = st_res_$GOOD$_ceil_pct value = 80 }
 	set_variable = { name = st_res_$GOOD$_budget value = 15000 }
+	set_variable = { name = st_res_$GOOD$_price_memory value = 4 }
+	set_variable = { name = st_res_$GOOD$_ramp value = 10 }
 	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
 	# must re-test against the new band instead of the old stop threshold.
 	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
@@ -756,6 +803,8 @@ st_res_apply_preset_aggressive_base = {
 	set_variable = { name = st_res_$GOOD$_floor_pct value = 10 }
 	set_variable = { name = st_res_$GOOD$_ceil_pct value = 95 }
 	set_variable = { name = st_res_$GOOD$_budget value = 40000 }
+	set_variable = { name = st_res_$GOOD$_price_memory value = 2 }
+	set_variable = { name = st_res_$GOOD$_ramp value = 5 }
 	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
 	# must re-test against the new band instead of the old stop threshold.
 	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
@@ -835,6 +884,70 @@ st_res_apply_rate_target_base = {
 }
 
 # --------------------------------------------------------------------------
+# st_res_policy_track_price_effect — advance one good's running price average
+# by one week. Parameter: GOOD. Country scope. WEEKLY PULSE ONLY.
+#
+# The policies act on an exponential moving average of the national market
+# price rather than this week's reading:
+#
+#     avg <- avg + (live - avg) / price_memory
+#
+# i.e. A * live + (1 - A) * avg with A = 1 / memory, so `price_memory` is the
+# averaging time constant in weeks and memory 1 is the live price. The average
+# is kept in percentage points against base price, the unit the thresholds
+# use, and the widget shows it next to the live price.
+#
+# It runs for every good under every policy, Manual included, so the average
+# is already warm when the player switches a policy on. It is seeded from the
+# live price the first time it runs (and again after st_res_reset_vars_effect
+# removes it), never from 0 — a cold start at 0 would read as "at base price"
+# for weeks.
+#
+# It is deliberately NOT part of st_res_policy_evaluate_good_effect: the
+# evaluator also runs on every policy-panel click, and a click must re-decide
+# the lane against the same signal the last weekly tick used, not drag the
+# average toward today's price once per click.
+# --------------------------------------------------------------------------
+st_res_policy_track_price_effect = {
+	set_local_variable = {
+		name = st_res_policy_live_price
+		value = {
+			value = st_res_$GOOD$_price_rel
+			multiply = 100
+		}
+	}
+	if = {
+		limit = { NOT = { has_variable = st_res_$GOOD$_price_avg } }
+		set_variable = { name = st_res_$GOOD$_price_avg value = local_var:st_res_policy_live_price }
+	}
+	else = {
+		change_variable = {
+			name = st_res_$GOOD$_price_avg
+			add = {
+				value = local_var:st_res_policy_live_price
+				subtract = var:st_res_$GOOD$_price_avg
+				divide = {
+					value = var:st_res_$GOOD$_price_memory
+					min = 1
+				}
+			}
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# st_res_policy_tick_good_effect — one good's weekly policy step: advance the
+# price average, then re-decide the lane. Parameter: GOOD. This is what the
+# weekly pulse calls, in BOTH of its branches. The policy panel calls the
+# evaluator directly (through st_res_policy_apply_good_effect), so a click
+# never advances the average.
+# --------------------------------------------------------------------------
+st_res_policy_tick_good_effect = {
+	st_res_policy_track_price_effect = { GOOD = $GOOD$ }
+	st_res_policy_evaluate_good_effect = { GOOD = $GOOD$ }
+}
+
+# --------------------------------------------------------------------------
 # st_res_policy_evaluate_good_effect — one good, one weekly decision.
 # Parameter: GOOD. Country scope. Expects st_res_init_effect and
 # st_res_refresh_hub_cache_effect to have run.
@@ -873,14 +986,12 @@ st_res_policy_evaluate_good_effect = {
 	}
 	else = {
 		# --- Inputs -------------------------------------------------------
-		# Signed market premium against base price, in percentage points.
-		set_local_variable = {
-			name = st_res_policy_price
-			value = {
-				value = st_res_$GOOD$_price_rel
-				multiply = 100
-			}
-		}
+		# The price signal, in percentage points against base price: the
+		# running average kept by st_res_policy_track_price_effect, or the
+		# live price until the first weekly tick has seeded it. Reading the
+		# stored average rather than the market here is what lets a panel
+		# click re-decide the lane without also advancing the average.
+		set_local_variable = { name = st_res_policy_price value = st_res_$GOOD$_price_signal }
 		set_variable = { name = st_res_$GOOD$_policy_price value = local_var:st_res_policy_price }
 
 		# Protected floor and target ceiling, converted from percent of
@@ -921,16 +1032,60 @@ st_res_policy_evaluate_good_effect = {
 		}
 
 		# --- Hysteresis ---------------------------------------------------
-		# An engaged lane uses the stop threshold instead of the start one.
+		# With the step response (ramp 0) an engaged lane uses the stop
+		# threshold instead of the start one. With a ramp the response is
+		# continuous — the flow is already near zero at the threshold — so
+		# there is no on/off edge to debounce and the bands are not applied.
 		set_local_variable = { name = st_res_policy_buy_at value = var:st_res_$GOOD$_buy_thr }
 		if = {
-			limit = { var:st_res_$GOOD$_engaged = 1 }
+			limit = {
+				var:st_res_$GOOD$_engaged = 1
+				var:st_res_$GOOD$_ramp <= 0
+			}
 			change_local_variable = { name = st_res_policy_buy_at add = st_res_policy_buy_band }
 		}
 		set_local_variable = { name = st_res_policy_sell_at value = var:st_res_$GOOD$_sell_thr }
 		if = {
-			limit = { var:st_res_$GOOD$_engaged = 2 }
+			limit = {
+				var:st_res_$GOOD$_engaged = 2
+				var:st_res_$GOOD$_ramp <= 0
+			}
 			change_local_variable = { name = st_res_policy_sell_at subtract = st_res_policy_sell_band }
+		}
+
+		# --- Response shape -----------------------------------------------
+		# The share of the maximum weekly flow the price position calls for.
+		# Step (ramp 0): the full flow whenever the lane fires. Ramp > 0:
+		# rises linearly from 0 at the threshold to 1 at `ramp` points beyond
+		# it, so the reserve leans harder the further the price strays and
+		# eases off as it recovers instead of flipping between full flow and
+		# nothing. Both sides are computed here so the buy and release
+		# branches below keep their shape; a side that does not fire never
+		# reads its fraction.
+		set_local_variable = { name = st_res_policy_buy_frac value = 1 }
+		set_local_variable = { name = st_res_policy_sell_frac value = 1 }
+		if = {
+			limit = { var:st_res_$GOOD$_ramp > 0 }
+			set_local_variable = {
+				name = st_res_policy_buy_frac
+				value = {
+					value = local_var:st_res_policy_buy_at
+					subtract = local_var:st_res_policy_price
+					divide = var:st_res_$GOOD$_ramp
+					min = 0
+					max = 1
+				}
+			}
+			set_local_variable = {
+				name = st_res_policy_sell_frac
+				value = {
+					value = local_var:st_res_policy_price
+					subtract = local_var:st_res_policy_sell_at
+					divide = var:st_res_$GOOD$_ramp
+					min = 0
+					max = 1
+				}
+			}
 		}
 
 		# --- Decision -----------------------------------------------------
@@ -956,11 +1111,14 @@ st_res_policy_evaluate_good_effect = {
 				set_local_variable = { name = st_res_policy_next_status value = 7 }
 			}
 			else = {
-				# What the policy wants before money is considered...
+				# What the policy wants before money is considered: the
+				# maximum flow scaled by the response fraction, then capped
+				# by the room left under the target and the hub's flow cap.
 				set_local_variable = {
 					name = st_res_policy_want
 					value = {
 						value = var:st_res_$GOOD$_max_flow
+						multiply = local_var:st_res_policy_buy_frac
 						max = local_var:st_res_policy_room
 						max = st_res_weekly_base_rate_cap
 						min = 0
@@ -1003,6 +1161,7 @@ st_res_policy_evaluate_good_effect = {
 					name = st_res_policy_target
 					value = {
 						value = var:st_res_$GOOD$_max_flow
+						multiply = local_var:st_res_policy_sell_frac
 						max = local_var:st_res_policy_spare
 						max = st_res_weekly_base_rate_cap
 						min = 0

@@ -413,7 +413,7 @@ st_res_adjust_tanks_sgui = {
 # ============================================================================
 # The second scripted GUI a good owns (the first is st_res_adjust_<good>_sgui
 # above). It backs every control in the row's policy panel: the four policy
-# buttons, the three presets and the six settings steppers. Like its sibling it
+# buttons, the three presets and the eight settings steppers. Like its sibling it
 # owns NO gameplay rules — every branch delegates to a shared `$GOOD$` effect in
 # common/scripted_effects/st_res_effects.txt, and every branch ends in
 # st_res_policy_apply_good_effect so the change is re-evaluated and the hub
@@ -447,6 +447,10 @@ st_res_adjust_tanks_sgui = {
 #   29  | target stockpile    +
 #   30  | weekly budget       -  (st_res_policy_budget_step)
 #   31  | weekly budget       +
+#   32  | price memory        -  (st_res_policy_memory_step, weeks averaged)
+#   33  | price memory        +
+#   34  | response ramp       -  (st_res_policy_ramp_step, pp past a threshold)
+#   35  | response ramp       +
 #
 # `is_valid` carries the whole validation surface, so a disabled stepper always
 # explains itself in the tooltip and no rule lives only in a .gui expression:
@@ -623,6 +627,34 @@ st_res_policy_grain_sgui = {
 				var:st_res_grain_budget < st_res_policy_budget_max
 			}
 		}
+		trigger_else_if = {
+			limit = { scope:op = 32 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_price_memory > st_res_policy_memory_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 33 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_price_memory < st_res_policy_memory_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 34 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_ramp > st_res_policy_ramp_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 35 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_grain_ramp < st_res_policy_ramp_max
+			}
+		}
 		trigger_else = {
 			# No such op code. Fail closed rather than silently doing nothing.
 			always = no
@@ -776,6 +808,46 @@ st_res_policy_grain_sgui = {
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
 				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 32 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 33 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 34 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 35 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
 			}
 		}
 
@@ -942,6 +1014,34 @@ st_res_policy_ammunition_sgui = {
 				var:st_res_ammunition_budget < st_res_policy_budget_max
 			}
 		}
+		trigger_else_if = {
+			limit = { scope:op = 32 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_price_memory > st_res_policy_memory_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 33 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_price_memory < st_res_policy_memory_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 34 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_ramp > st_res_policy_ramp_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 35 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_ammunition_ramp < st_res_policy_ramp_max
+			}
+		}
 		trigger_else = {
 			# No such op code. Fail closed rather than silently doing nothing.
 			always = no
@@ -1095,6 +1195,46 @@ st_res_policy_ammunition_sgui = {
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
 				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 32 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 33 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 34 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 35 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
 			}
 		}
 
@@ -1261,6 +1401,34 @@ st_res_policy_oil_sgui = {
 				var:st_res_oil_budget < st_res_policy_budget_max
 			}
 		}
+		trigger_else_if = {
+			limit = { scope:op = 32 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_price_memory > st_res_policy_memory_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 33 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_price_memory < st_res_policy_memory_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 34 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_ramp > st_res_policy_ramp_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 35 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_oil_ramp < st_res_policy_ramp_max
+			}
+		}
 		trigger_else = {
 			# No such op code. Fail closed rather than silently doing nothing.
 			always = no
@@ -1414,6 +1582,46 @@ st_res_policy_oil_sgui = {
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
 				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 32 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 33 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 34 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 35 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
 			}
 		}
 
@@ -1580,6 +1788,34 @@ st_res_policy_small_arms_sgui = {
 				var:st_res_small_arms_budget < st_res_policy_budget_max
 			}
 		}
+		trigger_else_if = {
+			limit = { scope:op = 32 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_price_memory > st_res_policy_memory_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 33 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_price_memory < st_res_policy_memory_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 34 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_ramp > st_res_policy_ramp_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 35 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_small_arms_ramp < st_res_policy_ramp_max
+			}
+		}
 		trigger_else = {
 			# No such op code. Fail closed rather than silently doing nothing.
 			always = no
@@ -1733,6 +1969,46 @@ st_res_policy_small_arms_sgui = {
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
 				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 32 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 33 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 34 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 35 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
 			}
 		}
 
@@ -1899,6 +2175,34 @@ st_res_policy_artillery_sgui = {
 				var:st_res_artillery_budget < st_res_policy_budget_max
 			}
 		}
+		trigger_else_if = {
+			limit = { scope:op = 32 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_price_memory > st_res_policy_memory_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 33 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_price_memory < st_res_policy_memory_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 34 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_ramp > st_res_policy_ramp_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 35 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_artillery_ramp < st_res_policy_ramp_max
+			}
+		}
 		trigger_else = {
 			# No such op code. Fail closed rather than silently doing nothing.
 			always = no
@@ -2052,6 +2356,46 @@ st_res_policy_artillery_sgui = {
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
 				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 32 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 33 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 34 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 35 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
 			}
 		}
 
@@ -2218,6 +2562,34 @@ st_res_policy_aeroplanes_sgui = {
 				var:st_res_aeroplanes_budget < st_res_policy_budget_max
 			}
 		}
+		trigger_else_if = {
+			limit = { scope:op = 32 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_price_memory > st_res_policy_memory_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 33 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_price_memory < st_res_policy_memory_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 34 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_ramp > st_res_policy_ramp_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 35 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_aeroplanes_ramp < st_res_policy_ramp_max
+			}
+		}
 		trigger_else = {
 			# No such op code. Fail closed rather than silently doing nothing.
 			always = no
@@ -2371,6 +2743,46 @@ st_res_policy_aeroplanes_sgui = {
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
 				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 32 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 33 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 34 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 35 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
 			}
 		}
 
@@ -2537,6 +2949,34 @@ st_res_policy_tanks_sgui = {
 				var:st_res_tanks_budget < st_res_policy_budget_max
 			}
 		}
+		trigger_else_if = {
+			limit = { scope:op = 32 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_price_memory > st_res_policy_memory_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 33 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_price_memory < st_res_policy_memory_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 34 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_ramp > st_res_policy_ramp_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 35 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_tanks_ramp < st_res_policy_ramp_max
+			}
+		}
 		trigger_else = {
 			# No such op code. Fail closed rather than silently doing nothing.
 			always = no
@@ -2690,6 +3130,46 @@ st_res_policy_tanks_sgui = {
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
 				MAX = st_res_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 32 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 33 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 34 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 35 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
 			}
 		}
 
