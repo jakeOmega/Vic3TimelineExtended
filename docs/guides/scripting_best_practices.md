@@ -1375,15 +1375,16 @@ building_modifiers = {
 ## Notification Messages for Cross-Country Alerts
 
 - `post_notification = <message_type>` sends a notification. Define message types in `common/messages/extra_messages.txt`.
-- **Pattern:**
+- **Pattern** — `type`, `texture` and `notification_type` are declared by all 473 vanilla and all 212 mod message types; `color` by all 212 of the mod's:
   ```
-  message_name = {
+  covert_severe_exposure_notice = {
       type = country
-      texture = "gfx/interface/icons/notification_icons/diplomatic_play.dds"
-      group = feed
-      severity = neutral
+      texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+      notification_type = feed    # feed | toast | popup
+      color = bad                 # bad | neutral | good
   }
   ```
+  There is **no `severity` field** — the engine ignores it. `group = "some_group"` (on 166 of the mod's 212) is the optional extra worth knowing: it files the notice under "Current Situation", adds it to the player's Message Settings list, and makes `texture` mandatory. Vanilla's commented `notification_example` at the top of `game/common/messages/00_messages.txt` is the authoritative field list.
 - **Loc keys are `notification_{message_type}_name` / `_desc` / `_tooltip` — never a bare key matching the message name.** The engine resolves a posted notification through those three only; a `{message_type}:0 "…"` line is dead text, and the feed renders the raw keys with nothing in `debug.log`. `_name` and `_desc` are both required; `_tooltip` is optional (vanilla omits it on a small minority of its own messages) and conventionally composes the other two as `"#header $…_name$#!\n$…_desc$"`. Copy the `notification_iw_*` family in `localization/english/te_notifications_l_english.yml`. `loc_coverage_audit` covers `common/messages` as of 2026-09-22, so a missing `_name`/`_desc` now shows up in `docs/engine/loc_coverage_report.md` on every `/reload` instead of shipping — it cost the covert graduated-exposure branch a Critical finding on its headline effect first.
 
 ## File Writing Best Practices
