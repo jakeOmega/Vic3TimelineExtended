@@ -58,6 +58,7 @@ class RollEffectTests(unittest.TestCase):
         self.assertIn("covert_ops_roll_detection_all", data)
         body = _text(EFFECTS)
         block = body[body.index("covert_ops_roll_detection_all = {"):]
+        block = block[: block.index("\n}\n") + 3]
         self.assertIn("random = {", block)
         self.assertIn("chance = covert_op_roll_chance", block)
         self.assertIn("add_to_temporary_list = iw_detected_ops", block)
@@ -91,6 +92,7 @@ class RollEffectTests(unittest.TestCase):
         self.assertEqual(codes["election_interference"], 0)
         self.assertEqual(codes["destabilization"], 8)
         sync = body[body.index("covert_op_sync = {"):]
+        sync = sync[: sync.index("\n}\n") + 3]
         self.assertIn("name = iw_type_code value = $CODE$", sync)
 
 
