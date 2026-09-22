@@ -179,5 +179,57 @@ class ThirdPartyBlowbackTests(unittest.TestCase):
         self.assertIn("covert_severe_exposure_notice = {", _text(MESSAGES))
 
 
+def _event_1(body):
+    return body[body.index("covert_warfare.1 = {"): body.index("covert_warfare.2 = {")]
+
+
+class ExposureEventTests(unittest.TestCase):
+    def test_immediate_copies_the_phase_as_well_as_the_code(self):
+        ev = _event_1(_text(EVENTS))
+        immediate = ev[ev.index("immediate = {"): ev.index("option = {")]
+        self.assertIn("name = iw_burned_type_code", immediate)
+        self.assertIn("name = iw_burned_phase", immediate)
+        self.assertIn("PREV.var:iw_phase", immediate)
+
+    def test_options_use_the_graduated_values_not_literals(self):
+        ev = _event_1(_text(EVENTS))
+        options = ev[ev.index("option = {"): ev.index("after = {")]
+        self.assertIn("value = covert_exposure_infamy_acknowledge", options)
+        self.assertIn("value = covert_exposure_infamy_deny", options)
+        self.assertIn("value = covert_exposure_relations_acknowledge", options)
+        self.assertIn("value = covert_exposure_relations_deny", options)
+        for literal in ("change_infamy = 2", "change_infamy = 1", "value = -15", "value = -30"):
+            self.assertNotIn(literal, options, "%s survived the rewiring" % literal)
+
+    def test_relations_are_skipped_for_the_war_tier(self):
+        ev = _event_1(_text(EVENTS))
+        options = ev[ev.index("option = {"): ev.index("after = {")]
+        self.assertEqual(
+            2,
+            options.count("NOT = { covert_code_tier_war = { VAR = iw_burned_type_code } }"),
+            "both options must skip the relations hit for war-tier operations",
+        )
+
+    def test_both_options_call_the_third_party_blowback_on_the_severe_tier(self):
+        ev = _event_1(_text(EVENTS))
+        options = ev[ev.index("option = {"): ev.index("after = {")]
+        self.assertEqual(2, options.count("covert_exposure_third_party_blowback = yes"))
+        self.assertEqual(
+            2,
+            options.count("covert_code_tier_severe = { VAR = iw_burned_type_code }"),
+        )
+
+    def test_after_clears_both_copied_variables(self):
+        ev = _event_1(_text(EVENTS))
+        after = ev[ev.index("after = {"):]
+        self.assertIn("remove_variable = iw_burned_type_code", after)
+        self.assertIn("remove_variable = iw_burned_phase", after)
+        # Neither removal may sit inside the detected_by_country guard, or a
+        # burn whose target has vanished leaves the variable stuck forever.
+        guarded = after[: after.index("scope:detected_by_country = {\n\t\t\t\ttrigger_event")]
+        self.assertNotIn("remove_variable = iw_burned_type_code", guarded)
+        self.assertNotIn("remove_variable = iw_burned_phase", guarded)
+
+
 if __name__ == "__main__":
     unittest.main()
