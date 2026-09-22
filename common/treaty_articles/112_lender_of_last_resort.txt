@@ -55,9 +55,17 @@ lender_of_last_resort = {
 
 	source_modifier = {
 		country_prestige_mult = 0.02
-		# [6b] The deepest of the three commitments, so the most leverage
-		# (§15C.2, ruling L1) — sized against intelligence_sharing_pact: a ward's
-		# finances answer to its guarantor.
+	}
+
+	# [6b] The deepest of the three commitments, so the most leverage (§15C.2,
+	# ruling L1) — sized against intelligence_sharing_pact: a ward's finances
+	# answer to its guarantor.
+	#
+	# PLACEMENT (fixed 2026-09-21): the modifier is generated AGAINST the country
+	# whose block carries it (see 110_currency_peg.txt's note for the vanilla
+	# evidence). It shipped on the GUARANTOR's source_modifier, which made the
+	# ward gain leverage over its guarantor. The WARD is the target.
+	target_modifier = {
 		country_treaty_leverage_generation_add = 300
 	}
 

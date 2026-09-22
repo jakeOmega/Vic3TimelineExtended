@@ -12,8 +12,12 @@ request_influence = {
 	usage_limit = once_per_side
 
 	source_modifier = {
-		# Formerly first_modifier, providing leverage to the initiator (source).
-		country_treaty_leverage_generation_add = 5000
+		# Placement is correct and deliberate: this modifier is generated
+		# AGAINST the country whose block carries it, not by it. Source here is
+		# the bloc-less country asking to be swayed (`possible` below), target is
+		# the power-bloc leader — so the leader gains the leverage. Don't "fix"
+		# it to source_modifier's counterpart; see 110_currency_peg.txt's note.
+		country_treaty_leverage_generation_add = 5000  # REVIEWED 2026-09-21: the one article where the maintenance payer is also the leveraged party — the petitioner asks for the arrangement, so it pays, and it is what the bloc leader gains leverage over
 	}
 
 	visible = {

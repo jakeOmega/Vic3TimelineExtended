@@ -14,6 +14,7 @@ This document is the reference for all custom treaty articles in the Vic3Timelin
 - **`source_modifier` / `target_modifier` are automatically applied and removed** by the engine when the treaty is active/broken — no manual cleanup needed. But they only accept country-scope modifiers.
 - **For state-scoped effects that persist while the treaty is active**, the cleanest pattern is: `on_entry_into_force` adds a modifier to the state + sets a variable on the state, and `on_break`/`on_withdrawal` removes them. An `on_action` (yearly/monthly) can reapply if needed.
 - **Company throughput**: `country_company_throughput_bonus_add` (country scope) boosts all companies. There is no per-company modifier — company benefits are country-wide or via building-level effects.
+- **`country_treaty_leverage_generation_add` goes on the DOMINATED party's block.** The engine generates that leverage *against* the country whose `source_modifier` / `target_modifier` carries it — it is not "leverage this country generates". Vanilla: `guarantee_independence` puts it on the *guaranteed* party (`target_modifier`, while `possible` requires the source to outrank the target); `foreign_investment_rights`, `trade_privilege` and `host_power_bloc_embassy` put it on the party that *grants* the concession (`source_modifier`). It only pays out while the dominant party leads a power bloc, and it is generated per pair. Getting this backwards is silent — no log line, no validation error, just influence flowing the wrong way; it shipped inverted on all five monetary articles (110–114) and was corrected 2026-09-21.
 
 ---
 
@@ -573,10 +574,10 @@ Extraterritoriality in China and Japan (foreign citizens judged by foreign court
 - `country_prestige_mult = -0.1` — National humiliation
 - `country_legitimacy_base_add = -15` — Government looks weak
 - `country_authority_cost_add  = 200` — Can't enforce own laws on foreigners
+- `country_treaty_leverage_generation_add = 200` — Leverage from controlling legal jurisdiction. **On the source's block on purpose**: the engine generates this leverage *against* the country carrying the modifier, so it belongs to the humiliated party, not the imperial one. See the placement rule at the top of this file.
 
 **Target modifier** (nation whose citizens enjoy extraterritoriality):
 - `country_prestige_mult = 0.05` — Imperial prestige
-- `country_treaty_leverage_generation_add = 200` — Leverage from controlling legal jurisdiction
 
 ### AI Design (7B)
 - `article_ai_usage = { request }` — Only demanded by significantly stronger nations
@@ -790,7 +791,8 @@ Law of the Sea; Exclusive Economic Zones; British blockade of Argentina during t
 
 **Target modifier** (enforcing naval power):
 - `country_prestige_from_navy_power_projection_mult = 0.1` — Naval prestige
-- `country_treaty_leverage_generation_add = 200` — Leverage from maritime dominance
+
+The `country_treaty_leverage_generation_add = 200` for maritime dominance goes in the **source** block (the country whose waters are restricted), not here — the engine generates the leverage *against* the modifier's carrier. See the placement rule at the top of this file.
 
 ### Design Notes
 - The `strategic_region` input makes this geographically meaningful
@@ -906,7 +908,7 @@ For each article implemented, these files need changes:
 
 Monetary policy phases 5a and 6 (`docs/systems/monetary_policy_design.md` §15A.2 and §15C, as shipped in §0.8 and §0.10; `mod_systems.md` § **Monetary Policy (phase 5)** and **(phase 6)**). Files `common/treaty_articles/110_currency_peg.txt`, `111_swap_line.txt`, `112_lender_of_last_resort.txt`, `113_imposed_currency_peg.txt`, `114_debt_receivership.txt`. The first three are **directed**, `friendly`, `giftable`, `can_be_renegotiated`; the last two are **directed**, `hostile`, `can_be_enforced`, `can_be_renegotiated`, `request`-only. Tech gates are staggered over three eras, not a shared `central_banking` (owner decision 2026-09-21): `currency_peg` at `international_exchange_standards`, `swap_line` at `macroeconomics`, `lender_of_last_resort` at `intergovernmental_organizations`.
 
-**Phase 6 shipped on 2026-09-21** (findings §15B, plan and rulings H1–H7 / L1–L2 / C1–C4 in §15C, record and deviations in §0.10): the swap line became a repayable, capped, single-provider loan drawn only in a *financial* crisis; the guarantee remembers its calls in the cost, the relief, the AI's odds, the cooldown and the signing score; all three friendly articles gained `non_fulfillment = { consequences = withdraw }` on war or expelled diplomats and a `country_treaty_leverage_generation_add` line; and the two hostile articles below were added. The per-pegger prestige fan-out **stays as shipped by ruling (H5)**, and **no scripted AI withdrawal was written** (H6) — the two new score terms lean on the engine's own, which §17 check 22 has still to confirm.
+**Phase 6 shipped on 2026-09-21** (findings §15B, plan and rulings H1–H7 / L1–L2 / C1–C4 in §15C, record and deviations in §0.10): the swap line became a repayable, capped, single-provider loan drawn only in a *financial* crisis; the guarantee remembers its calls in the cost, the relief, the AI's odds, the cooldown and the signing score; all three friendly articles gained `non_fulfillment = { consequences = withdraw }` on war or expelled diplomats and a `country_treaty_leverage_generation_add` line; and the two hostile articles below were added. **All five leverage lines shipped on the wrong side and were corrected 2026-09-21** — the modifier generates leverage *against* the country whose block carries it, so it now sits on the pegger / coerced pegger / debtor (`source_modifier`) and the swap-line recipient / guarantee ward (`target_modifier`). Values unchanged. The per-pegger prestige fan-out **stays as shipped by ruling (H5)**, and **no scripted AI withdrawal was written** (H6) — the two new score terms lean on the engine's own, which §17 check 22 has still to confirm.
 
 | Article | Source → target | What it does |
 |---|---|---|

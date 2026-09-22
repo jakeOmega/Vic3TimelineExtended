@@ -65,11 +65,14 @@ imposed_currency_peg = {
 	# The pegger's government looks weak for ceding its money.
 	source_modifier = {
 		country_legitimacy_base_add = -10
-	}
-
-	target_modifier = {
 		# [6b] The heaviest peg-side leverage: this is a client state in
 		# everything but name (§15C.3, ruling C1 — 400, against 110's 200).
+		#
+		# PLACEMENT (fixed 2026-09-21): the modifier is generated AGAINST the
+		# country whose block carries it (see 110_currency_peg.txt's note for the
+		# vanilla evidence). It shipped on the imposing ANCHOR's target_modifier,
+		# which handed the coerced pegger leverage over its coercer. The PEGGER
+		# is the source.
 		country_treaty_leverage_generation_add = 400
 	}
 

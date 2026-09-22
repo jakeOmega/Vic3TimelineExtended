@@ -3969,3 +3969,32 @@ the gate now changes (a "bankless spread" added in the no-dial branch, which eve
 have paid once the dial was off for everyone), and event-option `custom_tooltip`s wrapping a
 gated effect — the effect no-ops but the promise stays on screen, so wrap **tooltip and effect
 together** in one parameterised helper (`te_mon_effect_fx_shock_tt`) and gate that.
+
+## `country_treaty_leverage_generation_add` sits on the DOMINATED party's block
+
+The modifier reads like "leverage this country generates", and the engine's own tooltip —
+"Leverage Generation from Treaty" — does nothing to dispel that. It is the other way round:
+the leverage is generated **against** the country whose `source_modifier` / `target_modifier`
+carries the line, by the dominant counterparty, and only while that counterparty leads a power
+bloc. Vanilla is consistent about it once you know which side is which:
+
+| Vanilla article | Source | Target | Line lives on |
+|---|---|---|---|
+| `guarantee_independence` | guarantor (`possible` requires the higher rank) | the guaranteed | `target_modifier` |
+| `foreign_investment_rights` | the country invested in | the investor | `source_modifier` |
+| `trade_privilege` | grants the privilege | enjoys it | `source_modifier` |
+| `host_power_bloc_embassy` | hosts the embassy | the bloc leader | `source_modifier` |
+
+In every row the line is on the party being leaned on. This mod's `development_assistance`,
+`education_aid`, `healthcare_aid`, `security_aid`, `science_aid`, `crisis_resolution` and
+`extend_influence` all put it on the client's `target_modifier`, and `request_influence` on the
+petitioner's `source_modifier` — all correct.
+
+**Getting it backwards is completely silent.** No log line, no parse error, no validation
+failure — influence simply flows the wrong way, and you only notice it in the leverage panel
+mid-campaign. Phase 6 of the monetary system shipped all five banking articles (`currency_peg`,
+`swap_line`, `lender_of_last_resort`, `imposed_currency_peg`, `debt_receivership`) with the line
+on the strong side, which let a pegger accumulate leverage over its own anchor; corrected
+2026-09-21. When you write one of these, state the *direction* in the comment, not just the
+placement — "the anchor is the target, so it goes in `target_modifier`" is the reasoning that
+produced the bug.

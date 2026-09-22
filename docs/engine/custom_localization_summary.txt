@@ -549,6 +549,7 @@ character|stepping_down_reason|random_valid=yes
 |te_mon_stance_band_name|random_valid=no
 |te_mon_stance_bubble_effect|random_valid=no
 |te_mon_stance_momentum_effect|random_valid=no
+|te_mon_swap_drawn_note|random_valid=no
 |te_mon_union_state|random_valid=no
 |te_nuke_attack_hypersonic|random_valid=no
 |te_nuke_attack_icbms|random_valid=no
