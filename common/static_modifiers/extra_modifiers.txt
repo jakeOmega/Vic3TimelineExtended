@@ -826,7 +826,18 @@ banking_open_market_ops = {
 
 banking_countercyclical_capital_buffer = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	state_capitalists_investment_pool_contribution_add = -0.05
+	# CAPITALISTS -0.05 -> -0.01 (owner, 2026-09-21: "too harsh"). Anchored on
+	# vanilla's base contributions in 00_code_static_modifiers.txt: capitalists
+	# 0.30, shopkeepers 0.20. The old -0.05 took a sixth of the capitalists'
+	# pool contribution for as long as the buffer stayed up — a standing
+	# structural cost, not the lean against the cycle this tool is. -0.01 is
+	# ~3% of base; the cooling still comes from the bubble-pressure line below.
+	#
+	# SHOPKEEPERS STAYS AT -0.05 — owner decision, same day, asked and answered.
+	# It is proportionally the harsher line (a quarter of their 0.20 base), and
+	# that is the point: capital requirements bind small lenders hardest, so the
+	# buffer's cost now falls mainly on the petite bourgeoisie.
+	state_capitalists_investment_pool_contribution_add = -0.01
 	state_shopkeepers_investment_pool_contribution_add = -0.05
 	country_banking_intervention_max_add = -2
 	# monthly:
