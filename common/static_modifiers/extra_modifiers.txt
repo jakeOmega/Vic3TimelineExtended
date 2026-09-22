@@ -833,10 +833,12 @@ banking_countercyclical_capital_buffer = {
 	# structural cost, not the lean against the cycle this tool is. -0.01 is
 	# ~3% of base; the cooling still comes from the bubble-pressure line below.
 	#
-	# SHOPKEEPERS STAYS AT -0.05 — owner decision, same day, asked and answered.
-	# It is proportionally the harsher line (a quarter of their 0.20 base), and
-	# that is the point: capital requirements bind small lenders hardest, so the
-	# buffer's cost now falls mainly on the petite bourgeoisie.
+	# SHOPKEEPERS STAYS AT -0.05 — the owner was asked and chose to change the
+	# capitalists' line only (2026-09-21); no reason was given, so don't treat
+	# the asymmetry as load-bearing. One reading that fits it: capital
+	# requirements bind small lenders hardest, which now leaves most of the
+	# buffer's cost on the petite bourgeoisie. Proportionally it is the harsher
+	# of the two lines — a quarter of their 0.20 base.
 	state_capitalists_investment_pool_contribution_add = -0.01
 	state_shopkeepers_investment_pool_contribution_add = -0.05
 	country_banking_intervention_max_add = -2
