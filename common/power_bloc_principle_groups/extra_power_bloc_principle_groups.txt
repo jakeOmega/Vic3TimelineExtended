@@ -360,5 +360,7 @@ principle_group_monetary_union = {
 		principle_monetary_union_1
 		principle_monetary_union_2
 		principle_monetary_union_3
+		principle_monetary_union_4
+		principle_monetary_union_5
 	}
 }

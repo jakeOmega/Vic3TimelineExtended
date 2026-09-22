@@ -8,11 +8,17 @@
 
 
 # --- The bloc's tier ---------------------------------------------------------
-# Read through has_principle, NOT through the three power_bloc_*_bool markers
+# Read through has_principle, NOT through the five power_bloc_*_bool markers
 # the principles grant: whether a script-only power_bloc bool is readable from
 # country scope is §17 check 16, and has_principle has vanilla script precedent
 # (`power_bloc ?= { has_principle = principle:principle_colonial_offices_3 }`).
 # Tiers do not stack, so "at least tier N" is an OR.
+#
+# EVERY ONE OF THESE IS AN "AT LEAST" TEST AND MUST LIST EVERY HIGHER TIER. A
+# tier gate that stops short of 5 reads a bloc that upgraded past it as having
+# nothing: te_mon_bloc_union_tier_2_plus is what keeps an adopter anchored, so a
+# short list would exit every adopter — with the full exit penalty — the month
+# its leader took the next principle. Adding a tier 6 means editing all of them.
 te_mon_bloc_union_tier_1_plus = {
 	is_in_power_bloc = yes
 	power_bloc ?= { has_principle_group = principle_group:principle_group_monetary_union }
@@ -24,13 +30,36 @@ te_mon_bloc_union_tier_2_plus = {
 		OR = {
 			has_principle = principle:principle_monetary_union_2
 			has_principle = principle:principle_monetary_union_3
+			has_principle = principle:principle_monetary_union_4
+			has_principle = principle:principle_monetary_union_5
 		}
 	}
 }
 
-te_mon_bloc_union_tier_3 = {
+te_mon_bloc_union_tier_3_plus = {
 	is_in_power_bloc = yes
-	power_bloc ?= { has_principle = principle:principle_monetary_union_3 }
+	power_bloc ?= {
+		OR = {
+			has_principle = principle:principle_monetary_union_3
+			has_principle = principle:principle_monetary_union_4
+			has_principle = principle:principle_monetary_union_5
+		}
+	}
+}
+
+te_mon_bloc_union_tier_4_plus = {
+	is_in_power_bloc = yes
+	power_bloc ?= {
+		OR = {
+			has_principle = principle:principle_monetary_union_4
+			has_principle = principle:principle_monetary_union_5
+		}
+	}
+}
+
+te_mon_bloc_union_tier_5 = {
+	is_in_power_bloc = yes
+	power_bloc ?= { has_principle = principle:principle_monetary_union_5 }
 }
 
 # Can THIS country's currency be a bloc's common one? "The leader must be fiat /
@@ -222,7 +251,7 @@ te_mon_union_gets_cooperation = {
 # while the leader's renege clock runs, like any guarantee.
 te_mon_union_backstop_is_effective = {
 	te_mon_is_union_adopter = yes
-	te_mon_bloc_union_tier_3 = yes
+	te_mon_bloc_union_tier_3_plus = yes
 	exists = var:te_mon_anchor
 	var:te_mon_anchor = {
 		NOT = {

@@ -60,6 +60,22 @@ te_monetary_init_union_variables = {
 		limit = { NOT = { has_variable = te_mon_union_adopter_applied } }
 		set_variable = { name = te_mon_union_adopter_applied value = 0 }
 	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_banking_applied } }
+		set_variable = { name = te_mon_union_banking_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_reserve_applied } }
+		set_variable = { name = te_mon_union_reserve_applied value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_seigniorage_pts } }
+		set_variable = { name = te_mon_union_seigniorage_pts value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = te_mon_union_seigniorage_applied } }
+		set_variable = { name = te_mon_union_seigniorage_applied value = 0 }
+	}
 }
 
 
@@ -185,7 +201,15 @@ te_monetary_update_union = {
 		change_variable = { name = te_mon_work add = 2 }
 	}
 	if = {
-		limit = { te_mon_bloc_union_tier_3 = yes }
+		limit = { te_mon_bloc_union_tier_5 = yes }
+		change_variable = { name = te_mon_work add = 20 }
+	}
+	else_if = {
+		limit = { te_mon_bloc_union_tier_4_plus = yes }
+		change_variable = { name = te_mon_work add = 16 }
+	}
+	else_if = {
+		limit = { te_mon_bloc_union_tier_3_plus = yes }
 		change_variable = { name = te_mon_work add = 12 }
 	}
 	else_if = {
@@ -242,6 +266,59 @@ te_monetary_update_union = {
 			te_mon_mod_remove = { NAME = te_mon_union_adopter }
 		}
 		set_variable = { name = te_mon_union_adopter_applied value = 0 }
+	}
+
+	# --- tier 4: the banking union, on ADOPTERS -----------------------------
+	# Not on holdouts. A supervisor examines the banks inside the currency area;
+	# a member that kept its own money kept its own supervisor with it.
+	if = {
+		limit = {
+			te_mon_is_union_adopter = yes
+			te_mon_bloc_union_tier_4_plus = yes
+		}
+		if = {
+			limit = { NOT = { te_mon_mod_has = { NAME = te_mon_union_banking_union } } }
+			te_mon_mod_add = { NAME = te_mon_union_banking_union }
+		}
+		set_variable = { name = te_mon_union_banking_applied value = 1 }
+	}
+	else = {
+		if = {
+			limit = { te_mon_mod_has = { NAME = te_mon_union_banking_union } }
+			te_mon_mod_remove = { NAME = te_mon_union_banking_union }
+		}
+		set_variable = { name = te_mon_union_banking_applied value = 0 }
+	}
+
+	# --- tier 5: the reserve currency, on ADOPTERS --------------------------
+	if = {
+		limit = {
+			te_mon_is_union_adopter = yes
+			te_mon_bloc_union_tier_5 = yes
+		}
+		if = {
+			limit = { NOT = { te_mon_mod_has = { NAME = te_mon_union_reserve } } }
+			te_mon_mod_add = { NAME = te_mon_union_reserve }
+		}
+		set_variable = { name = te_mon_union_reserve_applied value = 1 }
+	}
+	else = {
+		if = {
+			limit = { te_mon_mod_has = { NAME = te_mon_union_reserve } }
+			te_mon_mod_remove = { NAME = te_mon_union_reserve }
+		}
+		set_variable = { name = te_mon_union_reserve_applied value = 0 }
+	}
+
+	# --- tier 5: the LEADER'S seigniorage -----------------------------------
+	# Pounds a week off the share of world GDP anchored on this money, re-derived
+	# every pulse and stepped like every other scaled modifier. The value is
+	# zero for everyone who is not a tier-5 leader, so the else-branch of
+	# te_monetary_apply_fx_one takes the modifier off by itself.
+	set_variable = { name = te_mon_union_seigniorage_pts value = te_mon_union_seigniorage_value }
+	if = {
+		limit = { root ?= this }
+		te_monetary_apply_fx_one = { NAME = te_mon_union_seigniorage VALUE = var:te_mon_union_seigniorage_pts APPLIED = te_mon_union_seigniorage_applied STEP = 25 STEP_NEG = -25 }
 	}
 
 	# --- the leader's pressure: influence, scaled by the number of holdouts -

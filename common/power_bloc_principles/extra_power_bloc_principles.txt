@@ -4163,18 +4163,37 @@ principle_multilateral_institutions_5 = {
 #                            adopter, and the overvaluation premium is halved.
 #                            What makes the union safe is what makes it
 #                            expensive to lead.
+#   4  Banking union         + one supervisor and one deposit guarantee over
+#                            every adopter's banks: a quarter off their crash
+#                            chance and their random momentum, one more
+#                            intervention held in reserve, and a crash next
+#                            door travels down the shared currency far less
+#                            readily. The leader pays a supervision cost per
+#                            adopter, as it pays for every other tier.
+#   5  Reserve currency      + the money is held outside the bloc. The leader's
+#                            reserve-currency standing cut may reach a full
+#                            point instead of half and it mints against the
+#                            balances the world parks in its currency;
+#                            adopters get a second helping of the trade edge
+#                            and a cut of structural premium.
 #
 # Script reads the TIER through has_principle (te_mon_bloc_union_tier_*), not
 # through the bools: whether a script-only power_bloc bool can be read from
 # country scope is an open engine check (§17 check 16). The bools are what the
 # principle's tooltip prints.
+#
+# TIERS 4 AND 5 ARE GATED TWICE. `has_technology_researched = central_banking`
+# is the group's own gate, carried down from tier 1; the `_pb_principles_bool`
+# is the mod's ordinary tier-4/5 pacing gate, and is the line
+# gen_pb_principle_unlock_descs reads to write the unlock's loc (it ignores the
+# technology line beside it). Both must hold.
 
 principle_monetary_union_1 = {
 	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
 	background = "gfx/interface/icons/principles_icons/principle_tier_1.dds"
 
 	# The monetary union is part of the monetary layer, so the simplified setting
-	# of banking_system_rule hides all three tiers: with no dial anywhere there is
+	# of banking_system_rule hides all five tiers: with no dial anywhere there is
 	# no currency for a bloc to share (te_mon_full_system,
 	# common/scripted_triggers/te_monetary_triggers.txt).
 	visible = {
@@ -4205,7 +4224,7 @@ principle_monetary_union_2 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_2.dds"
 
 	# The monetary union is part of the monetary layer, so the simplified setting
-	# of banking_system_rule hides all three tiers: with no dial anywhere there is
+	# of banking_system_rule hides all five tiers: with no dial anywhere there is
 	# no currency for a bloc to share (te_mon_full_system,
 	# common/scripted_triggers/te_monetary_triggers.txt).
 	visible = {
@@ -4241,7 +4260,7 @@ principle_monetary_union_3 = {
 	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
 
 	# The monetary union is part of the monetary layer, so the simplified setting
-	# of banking_system_rule hides all three tiers: with no dial anywhere there is
+	# of banking_system_rule hides all five tiers: with no dial anywhere there is
 	# no currency for a bloc to share (te_mon_full_system,
 	# common/scripted_triggers/te_monetary_triggers.txt).
 	visible = {
@@ -4268,6 +4287,96 @@ principle_monetary_union_3 = {
 			multiply = 0
 		}
 		# Standing behind everybody's debts is for a leader whose own are in order.
+		if = {
+			limit = { scaled_debt >= 0.5 }
+			multiply = 0.25
+		}
+	}
+}
+
+principle_monetary_union_4 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	# The monetary union is part of the monetary layer, so the simplified setting
+	# of banking_system_rule hides all five tiers: with no dial anywhere there is
+	# no currency for a bloc to share (te_mon_full_system,
+	# common/scripted_triggers/te_monetary_triggers.txt).
+	visible = {
+		te_mon_full_system = yes
+	}
+
+	possible = {
+		has_technology_researched = central_banking
+		modifier:country_keynesian_pb_principles_bool = yes
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)
+		power_bloc_monetary_cooperation_bool = yes
+		power_bloc_shared_currency_bool = yes
+		power_bloc_cohesion_per_member_add = 1
+		power_bloc_fiscal_backstop_bool = yes
+
+		power_bloc_banking_union_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+		# The principle is inert unless the leader is fiat / digital with a dial.
+		if = {
+			limit = { NOT = { te_mon_can_lead_union = yes } }
+			multiply = 0
+		}
+		# Tier 3's backstop is still in the list, and standing behind everybody's
+		# debts is for a leader whose own are in order.
+		if = {
+			limit = { scaled_debt >= 0.5 }
+			multiply = 0.25
+		}
+	}
+}
+
+principle_monetary_union_5 = {
+	icon = "gfx/interface/icons/principles_icons/foreign_investment.dds"
+	background = "gfx/interface/icons/principles_icons/principle_tier_3.dds"
+
+	# The monetary union is part of the monetary layer, so the simplified setting
+	# of banking_system_rule hides all five tiers: with no dial anywhere there is
+	# no currency for a bloc to share (te_mon_full_system,
+	# common/scripted_triggers/te_monetary_triggers.txt).
+	visible = {
+		te_mon_full_system = yes
+	}
+
+	possible = {
+		has_technology_researched = central_banking
+		modifier:country_globalization_pb_principles_bool = yes
+	}
+
+	power_bloc_modifier = {
+		# Modifiers from previous level(s)
+		power_bloc_monetary_cooperation_bool = yes
+		power_bloc_shared_currency_bool = yes
+		power_bloc_fiscal_backstop_bool = yes
+		power_bloc_banking_union_bool = yes
+
+		# A currency the world holds is a reason of its own to be in the bloc.
+		# Tiers do not stack, so this REPLACES tier 2-4's +1 rather than adding.
+		power_bloc_cohesion_per_member_add = 2
+
+		power_bloc_reserve_currency_bool = yes
+	}
+
+	ai_weight = {
+		value = 1000 # AI prefers upgrading groups it has already picked to unlocking new ones
+		# The principle is inert unless the leader is fiat / digital with a dial.
+		if = {
+			limit = { NOT = { te_mon_can_lead_union = yes } }
+			multiply = 0
+		}
+		# Tier 3's backstop is still in the list, and standing behind everybody's
+		# debts is for a leader whose own are in order.
 		if = {
 			limit = { scaled_debt >= 0.5 }
 			multiply = 0.25
