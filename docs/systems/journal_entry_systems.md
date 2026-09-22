@@ -311,7 +311,7 @@ Two custom widgets, both from one file, wired from `je_covert_warfare.txt` into 
 - **Handlers:** `common/scripted_guis/covert_warfare_sguis.txt`
 - **Shared helpers:** `common/scripted_triggers/covert_warfare_triggers.txt` (`covert_possible_increase_funding`, `covert_possible_decrease_funding`, `covert_possible_stand_down`), `common/scripted_effects/covert_warfare_effects.txt` (`covert_effect_increase_funding`, `covert_effect_decrease_funding`, `covert_effect_stand_down`, and the shared tail `covert_refresh_funding_state`)
 - **Display-only reads:** `intelligence_capacity_from_modifiers_display`, `covert_defense_economic_display`, `covert_defense_military_display`, `covert_defense_ideological_display`, `covert_detection_base_display`, `covert_ops_max_per_type_display`, `covert_last_exposed_age_display`, and `covert_funding_detect_reduction_at_1…5` / `covert_funding_ci_ic_at_1…5` (each a sum of the tuning constants in `covert_warfare_script_values.txt` § 1, so the funding ladder cannot drift from the detection formula)
-- **Customizable localization:** `common/customizable_localization/covert_warfare_custom_loc.txt` — `covert_funding_level_name`, `covert_funding_state_line`, `covert_decrease_funding_warning`, `covert_last_exposed_type_name`
+- **Customizable localization:** `common/customizable_localization/covert_warfare_custom_loc.txt` — `covert_funding_level_name`, `covert_funding_state_line`, `covert_decrease_funding_warning`, `covert_last_exposed_type_name`, `covert_burned_type_name`
 
 Areas:
 1. **Intelligence capacity** — total, standing relative to the global best, and the components (modifiers, literacy, GDP share). The modifier row's value comes from a script value; its `GetValueWithBreakdownFor` breakdown is in the tooltip only.
