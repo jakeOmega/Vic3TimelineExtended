@@ -51,11 +51,15 @@ te_debug_covert_plant_op = {
 	}
 }
 
-# Three operations against the same target, one per phase, each one month short
+# Four operations against the same target, one per phase, each one month short
 # of its next boundary so the countdown can be watched tipping over.
 #   industrial espionage   month 5   preparatory, 1 month to establishing
 #   influence campaign     month 11  establishing, 1 month to fully operational
 #   military espionage     month 14  fully operational
+#   destabilization        month 14  fully operational, severe tier — the only
+#                           plant that can trigger the third-party blowback
+#                           when caught, so that branch is reachable from
+#                           the console without hand-building a save
 # Scope: country
 te_debug_covert_seed_phases = {
 	if = {
@@ -94,6 +98,13 @@ te_debug_covert_seed_phases = {
 			ACTION = covert_military_espionage_action
 			DEFENSE_MOD = country_covert_defense_military_add
 			CODE = 5
+			MONTHS = 14
+		}
+		te_debug_covert_plant_op = {
+			TYPE = destabilization
+			ACTION = covert_destabilization_action
+			DEFENSE_MOD = country_covert_defense_ideological_add
+			CODE = 8
 			MONTHS = 14
 		}
 	}

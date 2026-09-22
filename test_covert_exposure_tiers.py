@@ -305,5 +305,16 @@ class PreLaunchTierNoteTests(unittest.TestCase):
         )
 
 
+class DebugHarnessTests(unittest.TestCase):
+    def test_the_seed_plants_a_severe_operation(self):
+        block = _top_level_block(_text(DEBUG_EFFECTS), "te_debug_covert_seed_phases = {")
+        planted = {int(m) for m in re.findall(r"CODE = (\d+)", block)}
+        self.assertTrue(
+            planted & TIER_CODES["severe"],
+            "the seed must plant a severe operation so the third-party "
+            "blowback branch is reachable in game",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
