@@ -38,6 +38,8 @@
 # container, so the scope is unset.
 # Parameters: $TYPE$ = short name (e.g. election_interference)
 #             $TARGET$ = target country (a scope: reference — it is read inside on_created)
+#             $CODE$ = operation type code 0-8, matching the branches of
+#                      covert_last_exposed_type_name
 # Scope: operator country
 covert_op_create = {
 	save_scope_as = iw_operator
@@ -51,6 +53,7 @@ covert_op_create = {
 		scope:iw_new_op = {
 			set_variable = { name = iw_target value = $TARGET$ }
 			set_variable = { name = iw_duration value = 0 }
+			set_variable = { name = iw_type_code value = $CODE$ }
 			# Initialise the display phase so the widget never reads a variable
 			# that does not exist yet; covert_op_refresh_phase derives it from
 			# then on.
@@ -113,7 +116,9 @@ covert_op_refresh_detection = {
 # Start an operation. Called from the covert action's accept_effect, where
 # the pact doesn't exist yet — so this creates the container directly
 # instead of reconciling against pacts.
-# Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier
+# Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier,
+#             $CODE$ = operation type code 0-8, matching the branches of
+#                      covert_last_exposed_type_name
 # Scope: operator country; scope:target_country must be set
 covert_op_start = {
 	hidden_effect = {
@@ -121,7 +126,7 @@ covert_op_start = {
 		# container whose pact ended through a path with no break hook may still
 		# be waiting for the monthly sync. Clear it so the new op starts at month 0.
 		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:target_country }
-		covert_op_create = { TYPE = $TYPE$ TARGET = scope:target_country }
+		covert_op_create = { TYPE = $TYPE$ TARGET = scope:target_country CODE = $CODE$ }
 		if = {
 			limit = { exists = scope:iw_new_op }
 			scope:iw_new_op = { covert_op_refresh_detection = { DEFENSE_MOD = $DEFENSE_MOD$ } }
@@ -209,7 +214,7 @@ covert_op_sync = {
 							}
 						}
 					}
-					covert_op_create = { TYPE = $TYPE$ TARGET = scope:iw_pact_target }
+					covert_op_create = { TYPE = $TYPE$ TARGET = scope:iw_pact_target CODE = $CODE$ }
 				}
 				every_in_list = {
 					variable = iw_ops

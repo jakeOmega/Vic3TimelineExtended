@@ -700,7 +700,7 @@ Replace the `- **Detection:** …` bullet with:
 Delete the bullet beginning `- **The monthly detection roll is a single country-level roll, slightly mis-weighted.**` and put in its place:
 
 ```
-- **Detection was a single country-level roll until 2026-09 (covert slice 1).** It rolled once against the worst target's intelligence capacity combined with an arbitrary target's type defence, then burned a *random* operation, and the `random_list { 1 = { add = c } 99 }` form made the odds (1 + c) / (100 + c) rather than c %. It now rolls per operation (see **Detection** above). The four `covert_detection_*_display` script values that the old roll would have needed remain unreferenced; the command centre deliberately shows no country-level detection number.
+- **Detection was a single country-level roll until 2026-09 (covert slice 1).** It rolled once against the worst target's intelligence capacity combined with an arbitrary target's type defence, then burned a *random* operation, and the `random_list { 1 = { add = c } 99 }` form made the odds (1 + c) / (100 + c) rather than c %. It now rolls per operation (see **Detection** above). Three script values from the old roll's display layer remain unreferenced (`covert_detection_chance_display`, `covert_detection_target_ic_display`, `covert_detection_efficiency_reduction`); they read the operator's `target_max_ic` staging variable, which since this change is only ever the last operation refreshed, so they are not a country-level figure and should not be wired up — deletion candidates for a later slice.
 ```
 
 - [ ] **Step 3: Add the rolling-per-container bullet to the best-practices container rules**

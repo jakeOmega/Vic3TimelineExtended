@@ -32,6 +32,9 @@ covert_warfare.1 = {
 		# which time stand-down or the monthly sync may have destroyed it.
 		# Event loc cannot reach a container either, so the type code is copied
 		# onto ROOT (scripting_best_practices.md, container rule 10).
+		# Two instances open at once would share iw_burned_type_code (the second
+		# immediate overwrites it); not reachable at the monthly pulse's one-burn
+		# cadence with duration = 3.
 		scope:iw_burned_op = {
 			var:iw_target = { save_scope_as = detected_by_country }
 			ROOT = {
@@ -138,6 +141,9 @@ covert_warfare.1 = {
 			scope:detected_by_country = {
 				trigger_event = { id = covert_warfare.2 }
 			}
+		}
+		if = {
+			limit = { has_variable = iw_burned_type_code }
 			remove_variable = iw_burned_type_code
 		}
 	}

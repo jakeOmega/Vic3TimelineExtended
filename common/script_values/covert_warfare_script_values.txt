@@ -29,7 +29,8 @@ covert_ops_detection_funding_3_reduction = 5
 covert_ops_detection_funding_4_reduction = 5
 covert_ops_detection_funding_5_reduction = 6
 
-# Per-operation roll scale. Every running operation rolls its own iw_detect
+# Per-operation roll scale, applied inside covert_operation_detection_chance
+# (so it shows in the widget). Every running operation rolls its own iw_detect
 # each month, so with N operations the chance that at least one burns is
 # 1 - prod(1 - c_i). 1 = honest per-operation odds; lower it (0.6 puts three
 # 10% operations near the old single-roll 18%) if N-operation risk lands hot.
@@ -232,6 +233,9 @@ covert_operation_detection_chance = {
 		subtract = modifier:country_covert_operation_efficiency_mult
 		min = 0.2
 	}
+	# Per-operation roll scale (Section 1) applied here so the widget row and
+	# the roll (covert_op_roll_chance) read the exact same number.
+	multiply = covert_ops_detection_multi_op_scale
 	min = 1
 	max = 50
 }
@@ -262,13 +266,15 @@ target_counterintelligence_penalty = {
 
 # The chance one operation rolls against this month. iw_detect is written on
 # the container by covert_op_refresh_detection at the top of the same pulse
-# (covert_ops_sync_all), so it is never a month stale here. A named script
-# value is the proven form for `random = { chance = ... }`
+# (covert_ops_sync_all), so it is never a month stale here, and the
+# covert_ops_detection_multi_op_scale is already folded into it by
+# covert_operation_detection_chance — the widget row and the roll agree by
+# construction, so the harness's pin to iw_detect = 100 is a true 100% roll.
+# A named script value is the proven form for `random = { chance = ... }`
 # (space_race_effects.txt); `chance = var:` is not.
 # Scope: covert operation container
 covert_op_roll_chance = {
 	value = var:iw_detect
-	multiply = covert_ops_detection_multi_op_scale
 	min = 0
 	max = 100
 }

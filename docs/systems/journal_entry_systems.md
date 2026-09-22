@@ -302,7 +302,7 @@ Unlike banking, these buttons are **not** the AI's path into the system: neither
 Down from 22 `triggered_desc` lines and three `iw_separator` delimiters to the five-way intelligence-standing verdict (`je_iw_status_fortress` … `_vulnerable`, the one genuinely prose reading) plus `je_iw_no_operations`, which points at the diplomatic actions. Everything else moved into the command centre. Keys rendered from `status_desc` keep the `ROOT.` accessor; keys rendered by a widget use `JournalEntry.GetCountry…`. No key is reachable from both.
 
 ### Variables
-Country: `iw_funding_level` (0 – `iw_funding_level_max`, which is **5**), `iw_defender_event_cooldown` / `_age`, `iw_last_exposed_country` / `_type` / `_age`, and the staging pair `target_max_ic` / `target_type_defense`. Operation container: `iw_target`, `iw_duration`, `iw_target_capital`, `iw_detect`, `iw_tgt_ic`, `iw_tgt_td`, `iw_phase`, `iw_phase_months_left`.
+Country: `iw_funding_level` (0 – `iw_funding_level_max`, which is **5**), `iw_defender_event_cooldown` / `_age`, `iw_last_exposed_country` / `_type` / `_age`, `iw_burned_type_code` (transient — set by `covert_warfare.1`'s `immediate`, removed in its `after`), and the staging pair `target_max_ic` / `target_type_defense`. Operation container: `iw_target`, `iw_duration`, `iw_target_capital`, `iw_detect`, `iw_tgt_ic`, `iw_tgt_td`, `iw_phase`, `iw_phase_months_left`, `iw_type_code` (operation type code 0–8).
 
 ### Command Centre (journal-entry widget)
 Two custom widgets, both from one file, wired from `je_covert_warfare.txt` into `custom_widget_container_1` (above the status text) and `_2` (below it).

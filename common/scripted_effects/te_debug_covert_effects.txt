@@ -26,6 +26,8 @@ te_debug_covert_set_funding = {
 # a container with no pact at the next monthly pulse.
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
 #             $DEFENSE_MOD$ = type-specific defense modifier,
+#             $CODE$ = operation type code 0-8, matching the branches of
+#                      covert_last_exposed_type_name
 #             $MONTHS$ = duration to plant
 # Scope: country; scope:te_debug_covert_target must be set
 te_debug_covert_plant_op = {
@@ -34,7 +36,7 @@ te_debug_covert_plant_op = {
 		country = scope:te_debug_covert_target
 		type = $ACTION$
 	}
-	covert_op_start = { TYPE = $TYPE$ DEFENSE_MOD = $DEFENSE_MOD$ }
+	covert_op_start = { TYPE = $TYPE$ DEFENSE_MOD = $DEFENSE_MOD$ CODE = $CODE$ }
 	if = {
 		limit = { has_variable_list = iw_ops }
 		every_in_list = {
@@ -77,18 +79,21 @@ te_debug_covert_seed_phases = {
 			TYPE = industrial_espionage
 			ACTION = covert_industrial_espionage_action
 			DEFENSE_MOD = country_covert_defense_economic_add
+			CODE = 4
 			MONTHS = 5
 		}
 		te_debug_covert_plant_op = {
 			TYPE = influence_campaign
 			ACTION = covert_influence_campaign_action
 			DEFENSE_MOD = country_covert_defense_ideological_add
+			CODE = 6
 			MONTHS = 11
 		}
 		te_debug_covert_plant_op = {
 			TYPE = military_espionage
 			ACTION = covert_military_espionage_action
 			DEFENSE_MOD = country_covert_defense_military_add
+			CODE = 5
 			MONTHS = 14
 		}
 	}
