@@ -1475,7 +1475,187 @@ git commit -m "feat(covert): let sabotage and comms disruption start during a di
 
 ---
 
-## Verification (controller, after Task 8)
+---
+
+### Task 9: Make the structural tests assert nesting, not text position
+
+**Files:**
+- Modify: `test_covert_exposure_tiers.py` (helpers + tighten the guard-placement assertions)
+
+**Why:** two independent reviews flagged the same gap. Every guard-placement assertion in this file
+checks that a string appears *somewhere* inside a text slice — so a guard attached to the wrong `if`,
+or a `remove_variable` nested inside the `exists = scope:detected_by_country` block but textually
+after the anchor the test slices on, would still pass. The placements are all correct today
+(verified by direct code inspection during review); this task stops them from silently rotting. It
+is scheduled as its own task, rather than folded into Tasks 1-3, because the weakness spans
+assertions written across all of them and is worth fixing once, coherently.
+
+**No production code changes.** If a tightened assertion fails, that is a real defect — stop and
+report it rather than loosening the assertion to make it pass.
+
+**Interfaces:**
+- Consumes: everything Tasks 1-8 wrote. This task adds no new behaviour.
+
+- [ ] **Step 1: Add brace-matching helpers**
+
+Add these next to the existing `_top_level_block` helper in `test_covert_exposure_tiers.py`:
+
+```python
+def _block_span(body, from_index):
+    """(start, end) of the brace-balanced block whose opening `{` is at or
+    after from_index; end is the index just past the matching `}`.
+
+    Counts braces instead of trusting indentation, so it is correct even for
+    a block that a future edit re-indents or collapses.
+    """
+    open_at = body.index("{", from_index)
+    depth = 0
+    for i in range(open_at, len(body)):
+        if body[i] == "{":
+            depth += 1
+        elif body[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return from_index, i + 1
+    raise AssertionError("unbalanced braces from index %d" % from_index)
+
+
+def _innermost_enclosing(body, needle, opener):
+    """The text of the innermost `opener { ... }` block that contains needle.
+
+    This is what lets a test say "the war-tier exclusion is in the limit of
+    the `if` that guards THIS effect", rather than "the string appears
+    somewhere nearby".
+    """
+    target = body.index(needle)
+    best = None
+    pos = 0
+    while True:
+        at = body.find(opener, pos)
+        if at == -1 or at > target:
+            break
+        start, end = _block_span(body, at)
+        if start <= target < end and (best is None or start > best[0]):
+            best = (start, end)
+        pos = at + 1
+    if best is None:
+        raise AssertionError("no %r block encloses %r" % (opener, needle))
+    return body[best[0]:best[1]]
+
+
+def _limit_of(block):
+    """The `limit = { ... }` sub-block of a block, brace-balanced."""
+    start, end = _block_span(block, block.index("limit = {"))
+    return block[start:end]
+
+
+def _is_outside(container, body, needle):
+    """True when needle's position in body falls outside container's span."""
+    at = body.index(needle)
+    start = body.index(container)
+    return not (start <= at < start + len(container))
+```
+
+- [ ] **Step 2: Prove the helpers work before relying on them**
+
+Add a test class that pins the helpers themselves — they are now load-bearing, so a bug in
+`_block_span` would silently weaken every assertion built on it:
+
+```python
+class HelperTests(unittest.TestCase):
+    SAMPLE = (
+        "outer = {\n"
+        "\tif = {\n"
+        "\t\tlimit = { a = 1 }\n"
+        "\t\teffect_one = yes\n"
+        "\t}\n"
+        "\teffect_two = yes\n"
+        "}\n"
+    )
+
+    def test_block_span_stops_at_the_matching_brace(self):
+        start, end = _block_span(self.SAMPLE, self.SAMPLE.index("if = {"))
+        self.assertEqual("effect_one = yes\n\t}", self.SAMPLE[start:end][-20:])
+        self.assertNotIn("effect_two", self.SAMPLE[start:end])
+
+    def test_innermost_enclosing_picks_the_inner_block(self):
+        block = _innermost_enclosing(self.SAMPLE, "effect_one = yes", "if = {")
+        self.assertIn("limit = { a = 1 }", block)
+        self.assertNotIn("effect_two", block)
+
+    def test_innermost_enclosing_raises_when_nothing_encloses(self):
+        with self.assertRaises(AssertionError):
+            _innermost_enclosing(self.SAMPLE, "effect_two = yes", "if = {")
+
+    def test_limit_of_returns_only_the_limit(self):
+        block = _innermost_enclosing(self.SAMPLE, "effect_one = yes", "if = {")
+        self.assertEqual("limit = { a = 1 }", _limit_of(block))
+```
+
+- [ ] **Step 3: Run the helper tests**
+
+Run: `python3 -m unittest test_covert_exposure_tiers.HelperTests -v`
+Expected: PASS (4 tests). If any fails, fix the helper before going further.
+
+- [ ] **Step 4: Tighten every guard-placement assertion**
+
+Rewrite the assertions below to use the helpers. Keep each test's name and intent; change only
+*how* it checks. Leave alone the assertions that are genuinely membership questions (that a literal
+no longer appears, that a key exists, that the tier codes partition) — those are the right tool
+already.
+
+1. **`after` clears the variables outside the target guard.** Replace the anchor-slicing in
+   `test_after_clears_both_copied_variables` (and the `iw_burned_at_war` equivalent from Task 8) with:
+   take the `after` block, find the innermost `if = {` enclosing
+   `trigger_event = { id = covert_warfare.2 }` — that is the guarded block — and assert each
+   `remove_variable = iw_burned_*` call lies outside its brace-balanced span, using `_is_outside`.
+
+2. **Each option's relations call carries the right guard.** For each of
+   `covert_exposure_relations_acknowledge` and `covert_exposure_relations_deny`: take the innermost
+   `if = {` enclosing that value, take `_limit_of` it, and assert that limit contains both
+   `exists = scope:detected_by_country` and the war-tier exclusion — including, after Task 8, the
+   `var:iw_burned_at_war = 1` clause. Assert the limit does **not** contain
+   `covert_code_tier_severe`, which would mean the guards had been swapped.
+
+3. **Each third-party call carries the severe guard.** For each occurrence of
+   `covert_exposure_third_party_blowback = yes`: take the innermost enclosing `if = {`, take
+   `_limit_of` it, assert it contains `covert_code_tier_severe` and **not** `covert_code_tier_war`.
+   Iterate over both occurrences rather than checking only the first.
+
+4. **The bloc guard applies to the target, not the iterated country.** In
+   `test_bloc_audience_requires_the_target_to_have_a_bloc`, assert that `is_in_power_bloc = yes`
+   sits inside the innermost `scope:detected_by_country = {` block — that is the whole point of the
+   guard, and the current assertion would pass if it were applied to `this`.
+
+5. **`immediate` writes the variables on the country.** Assert each
+   `set_variable = { name = iw_burned_* ... }` in `covert_warfare.1`'s `immediate` lies inside the
+   innermost `ROOT = {` block, not merely somewhere in `immediate`.
+
+- [ ] **Step 5: Run the covert tests**
+
+Run: `python3 -m unittest test_covert_exposure_tiers test_covert_detection_roll -v`
+Expected: PASS. **If a tightened assertion fails, the production code has a real placement bug —
+report it as DONE_WITH_CONCERNS with the specifics rather than weakening the test.**
+
+- [ ] **Step 6: Prove the tightened tests actually bite**
+
+For one of them — the relations guard is the clearest — temporarily move the war-tier exclusion from
+the relations `if` to the third-party `if` in `events/covert_warfare_events.txt`, re-run that single
+test, and confirm it now FAILS. Then `git checkout -- events/covert_warfare_events.txt` to restore.
+Record the failing output in your report: this is the evidence that the fix is real rather than
+cosmetic. Do not commit the temporary change.
+
+- [ ] **Step 7: Run the full suite and commit**
+
+```bash
+python3 -m unittest discover -s . -p 'test_*.py'
+git add test_covert_exposure_tiers.py
+git commit -m "test(covert): assert guard nesting by brace matching, not text position"
+```
+
+---
+
+## Verification (controller, after Task 9)
 
 - `python3 -m unittest discover -s . -p 'test_*.py'` from the main checkout — whole suite green.
 - `ruff check .`, `python3 scripts/format_paradox_tabs.py --check` on the changed `.txt`, `python3 scripts/analysis/check_localization_files.py`.
