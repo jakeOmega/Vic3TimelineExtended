@@ -258,9 +258,19 @@ types te_history_chart_types
 	### `layoutpolicy_horizontal = expanding` on the item makes the visible
 	### bars divide the plot width between them (vanilla levels_progressbar),
 	### so switching from 20 years to 1 year widens the bars instead of
-	### leaving 228 empty slots. At the 20-year end the 484px plot is split
-	### 240 ways — about 2px a bar, so the series reads as a shape rather than
-	### as countable months.
+	### leaving 228 empty slots. At the 20-year end the 480px plot is split
+	### 240 ways — exactly 2px a bar, so the series reads as a shape rather
+	### than as countable months.
+	###
+	### THE PLOT IS 480px WIDE BECAUSE 480 DIVIDES 240, 60 AND 12 EXACTLY —
+	### the three bar counts the range selector can produce from a full
+	### store. Widths are integer pixels, so anything the division leaves
+	### over has to go somewhere, and the layout puts it at the newest end:
+	### at 484 every range was 4px over (484 = 480 + 4 in all three cases)
+	### and the last month drew 6px against everyone else's 2px on the
+	### 20-year view — three times as wide as the bar beside it. Any future
+	### change to this width or to the range set has to keep plot_width %
+	### bar_count == 0 for every range, or the newest bar goes fat again.
 	type te_history_chart = flowcontainer {
 		direction = vertical
 		parentanchor = hcenter
@@ -316,7 +326,8 @@ types te_history_chart_types
 			block "zero_axis" {}
 
 			hbox = {
-				size = { 484 84 }
+				# 480, not 484: see THE PLOT IS 480px WIDE above.
+				size = { 480 84 }
 				parentanchor = center
 				ignoreinvisible = yes
 				spacing = 0
