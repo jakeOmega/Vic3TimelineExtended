@@ -18,7 +18,7 @@ scripted buttons, buildings, production methods, production method groups,
 goods, government types,
 company types, combat unit types, ship types, ideologies, interest groups,
 institutions, subject types, mobilization options, diplomatic actions, pop
-needs, decisions, amendments, events. Skips scripted_effects/triggers, on_actions, modifier
+needs, decisions, amendments, messages, events. Skips scripted_effects/triggers, on_actions, modifier
 type definitions, script values (most are arithmetic helpers — only those
 referenced in `custom_tooltip` need loc, deferred until reports show gaps).
 """
@@ -94,6 +94,24 @@ def _je_keys(name: str, body) -> list[tuple[str, bool, str]]:
     ]
 
 
+def _message_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """Messages (`common/messages`) are addressed by `post_notification = X`,
+    but the engine never looks up the bare name `X`. It resolves the feed entry
+    through `notification_X_name` (the headline), `notification_X_desc` (the
+    body) and `notification_X_tooltip` (the hover). A bare `X:0 "..."` loc line
+    is dead text and the feed renders the raw keys, with no engine warning.
+
+    `_tooltip` is checked but not required: vanilla omits it on ~5% of its own
+    messages, so a fallback evidently exists, whereas a missing `_name`/`_desc`
+    is always a visible raw key.
+    """
+    return [
+        (f"notification_{name}_name", True, "name"),
+        (f"notification_{name}_desc", True, "desc"),
+        (f"notification_{name}_tooltip", False, "tooltip"),
+    ]
+
+
 def _explicit_name_field(name: str, body) -> list[tuple[str, bool, str]]:
     """For entities that declare loc via `name = "KEY"` and `desc = "KEY"`
     fields (scripted_buttons), not via the entity name itself."""
@@ -138,6 +156,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Interest Groups":        _simple_name,
     "Institutions":           _simple_name,
     "Subject Types":          _simple_name,
+    "Messages":               _message_keys,
     "Mobilization Options":   _name_and_desc,
     "Diplomatic Actions":     _simple_name,
     "Pop Needs":              _simple_name,
@@ -169,6 +188,7 @@ _DIR_MAP: dict[str, str] = {
     "Interest Groups":        "common/interest_groups",
     "Institutions":           "common/institutions",
     "Subject Types":          "common/subject_types",
+    "Messages":               "common/messages",
     "Mobilization Options":   "common/mobilization_options",
     "Diplomatic Actions":     "common/diplomatic_actions",
     "Pop Needs":              "common/pop_needs",
@@ -357,7 +377,9 @@ def render_report(result: AuditResult) -> str:
         "file. For static modifiers and most simple entities the key is the",
         "entity name itself; for journal entries also `<name>_desc`; for",
         "events the keys are whatever `title`/`desc`/`flavor`/option `name`",
-        "fields point at.",
+        "fields point at; for messages (`common/messages`) the keys are",
+        "`notification_<name>_name` / `_desc` / `_tooltip`, never the bare",
+        "message name.",
         "",
         "Suppress an intentional missing key with a same-line comment on the",
         "entity's opening line:",

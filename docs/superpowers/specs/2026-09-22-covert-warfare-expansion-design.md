@@ -288,12 +288,21 @@ same pattern as the funding ladder rows.
 ## Slice 6 — Three new operation types
 
 **Per-type enumeration sites** (each new type = one row/branch in each; make the tier table
-one-row-per-type first): the diplomatic action in `covert_operations.txt`; `covert_ops_sync_all`
-(TYPE / ACTION / DEFENSE_MOD / CODE row); `covert_type_tier` branch; `is_covert_operation_pact`
-OR list (`covert_warfare_triggers.txt`); the `covert_warfare.1` `after` code branch; the
-`covert_warfare.2` trigger OR list; `covert_last_exposed_type_name` code (9, 10, 11) in
-`covert_warfare_custom_loc.txt`; a stand-down sgui handler; the block in
-`covert_ops_apply_all_phase_effects`; static modifiers; loc (`iw_*_tt`, action name/desc).
+one-row-per-type first; verified against the code on 2026-09-22 during slice 2): the diplomatic
+action in `covert_operations.txt`; `covert_ops_sync_all` (TYPE / ACTION / DEFENSE_MOD / CODE
+row); one of the four `covert_code_tier_mild` / `_moderate` / `_severe` / `_war` triggers — the
+actual shipped form; no single `covert_type_tier` branch exists in the codebase, despite this
+list once naming one; `is_covert_operation_pact` OR list (`covert_warfare_triggers.txt`); the
+`covert_warfare.1` `after` code branch; the `covert_warfare.2` trigger OR list;
+`covert_last_exposed_type_name` and its sibling `covert_burned_type_name` — two separate
+blocks, not one — code (9, 10, 11) in `covert_warfare_custom_loc.txt`; a stand-down sgui
+handler; the block in `covert_ops_apply_all_phase_effects`; static modifiers; loc (`iw_*_tt`,
+action name/desc); and the operations widget's own per-type row and stand-down-button blocks
+in `gui/journal_entry_widgets/covert_operations_widget.gui`, gated on
+`ScriptContainer.HasTag('iw_op_<type>')`. A structural test that pins every one of these lists
+against the operation-code set is a plausible candidate pre-task for this slice (rough
+estimate: comparable to slice 2's brace-matching test work, roughly half a day to a day) — a
+recommendation for the repository owner to weigh, not a decision made here.
 
 **A. Regime change** (`covert_regime_change_action`, code 9, tier severe, defense
 ideological). Fiction: bankroll the colonels.

@@ -720,3 +720,43 @@ covert_effect_stand_down = {
 		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:iw_tgt }
 	}
 }
+
+# ============================================================================
+# EXPOSURE BLOWBACK
+# ============================================================================
+
+# The severe tier's third-party cost: everyone tied to the target — their power
+# bloc and their treaty allies — hears what we were caught doing and cools
+# towards us. Called from BOTH options of covert_warfare.1 rather than from
+# `after`, because only an option's own effects render in its tooltip, and
+# custom_tooltip is what makes an every_country loop previewable at all
+# (banking_effect_cb_capital_controls_outflow is the same shape).
+#
+# The caller guards the tier and the existence of scope:detected_by_country.
+# The bloc audience is guarded on the TARGET actually having a bloc: two
+# countries that are both in none can otherwise read as being in the same one,
+# which would hit every unaligned country on the map.
+# Scope: country (the operator); scope:detected_by_country = the target
+covert_exposure_third_party_blowback = {
+	custom_tooltip = {
+		text = covert_exposure_third_party_tt
+		every_country = {
+			limit = {
+				NOT = { this = root }
+				NOT = { this = scope:detected_by_country }
+				OR = {
+					AND = {
+						scope:detected_by_country = { is_in_power_bloc = yes }
+						is_in_same_power_bloc = scope:detected_by_country
+					}
+					has_treaty_alliance_with = { TARGET = scope:detected_by_country }
+				}
+			}
+			change_relations = {
+				country = root
+				value = covert_exposure_third_party_relations
+			}
+			post_notification = covert_severe_exposure_notice
+		}
+	}
+}

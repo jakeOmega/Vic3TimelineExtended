@@ -1979,3 +1979,10 @@ iw_election_interference_confidence = {
 	notification_type = feed
 	color = bad
 }
+
+covert_severe_exposure_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}

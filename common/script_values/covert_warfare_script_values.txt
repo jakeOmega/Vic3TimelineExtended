@@ -36,6 +36,14 @@ covert_ops_detection_funding_5_reduction = 6
 # 10% operations near the old single-roll 18%) if N-operation risk lands hot.
 covert_ops_detection_multi_op_scale = 1
 
+# The lowest monthly detection risk any operation can carry. Full funding
+# subtracts more than the base risk on its own, so a well-funded agency
+# against a target with no counterintelligence sits exactly here: 0.1%/month
+# is 1.2% a year, which is "almost with impunity" without ever being "safe".
+# Fractions are real rolls, not a silent zero — vanilla's Montenegro raiding
+# journal entry passes computed chances of 0.15 and 0.45 to `random`.
+covert_ops_detection_floor = 0.1
+
 # Counterintelligence IC bonus per funding level above 1 (applied via iw_funding_defense modifier)
 covert_ops_funding_defense_ic_per_level = 5
 
@@ -43,8 +51,57 @@ covert_ops_funding_defense_ic_per_level = 5
 covert_ops_target_ic_factor = 15
 covert_ops_target_ic_max = 20
 
-# Infamy on detection
-covert_ops_detected_infamy = 5
+# ---- Exposure blowback ----
+# What being caught costs, before the phase factor and the option's split.
+# Which tier a type is in lives in covert_code_tier_* (scripted triggers).
+# Anchored on the old flat costs at the moderate tier's establishing phase:
+# Acknowledge (2 infamy / -10 relations) lands close to the old flat
+# 2 infamy / -15 relations; Deny (1 infamy / -20 relations) is a materially
+# softer relations hit than the old flat 1 infamy / -30, not "about there."
+covert_exposure_infamy_mild = 1
+covert_exposure_infamy_moderate = 2
+covert_exposure_infamy_severe = 4
+covert_exposure_infamy_war = 0
+
+# Caught in the run-up instead of during the war: sabotage before the shooting
+# reads as manufacturing the war, so it is charged at the severe tier's infamy
+# and the moderate tier's relations. Named separately from those tiers so this
+# case can be retuned without moving either of them.
+covert_exposure_infamy_war_prewar = 4
+covert_exposure_relations_war_prewar = -20
+
+covert_exposure_relations_mild = -10
+covert_exposure_relations_moderate = -20
+covert_exposure_relations_severe = -40
+
+# How far along the operation was. A network barely laid costs half; one that
+# has been running a year costs half again as much.
+covert_exposure_phase_mult_preparatory = 0.5
+covert_exposure_phase_mult_establishing = 1
+covert_exposure_phase_mult_operational = 1.5
+
+# The two options' split. Owning it costs the infamy but keeps the bilateral
+# damage down; denying it halves the infamy and takes the full relations hit.
+covert_exposure_acknowledge_relations_mult = 0.5
+covert_exposure_deny_infamy_mult = 0.5
+
+# What a severe exposure costs with everyone tied to the target. The
+# tooltip prints it through covert_exposure_third_party_relations_display
+# below rather than retyping the number, so retuning this line retunes the
+# text with it.
+covert_exposure_third_party_relations = -10
+
+# The same number as a positive magnitude, for covert_exposure_third_party_tt
+# ("...loses N relations with us"). Derived, not a second constant: the loc
+# string would otherwise have to render "loses -10".
+covert_exposure_third_party_relations_display = {
+	value = covert_exposure_third_party_relations
+	multiply = -1
+	round = yes
+}
+
+# Guardrail, matching te_force_become_subject's own infamy cap.
+covert_exposure_infamy_max = 25
 
 # Maximum funding level (0 = dormant, max = deep state)
 iw_funding_level_max = 5
@@ -192,7 +249,7 @@ covert_operation_cost_mult = {
 
 # Detection chance per month for active operations
 # Factors: base risk, funding reduction, target counterintelligence (IC + type defense), attacker efficiency
-# Formula: raw = base - funding_reduction + target_defense_penalty, final = raw × (1 - efficiency), clamped [1, 50]
+# Formula: raw = base - funding_reduction + target_defense_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
 # var:target_max_ic and var:target_type_defense must be set before evaluating.
 covert_operation_detection_chance = {
 	value = covert_ops_detection_base
@@ -236,7 +293,7 @@ covert_operation_detection_chance = {
 	# Per-operation roll scale (Section 1) applied here so the widget row and
 	# the roll (covert_op_roll_chance) read the exact same number.
 	multiply = covert_ops_detection_multi_op_scale
-	min = 1
+	min = covert_ops_detection_floor
 	max = 50
 }
 
@@ -354,18 +411,6 @@ covert_funding_level_display = {
 			add = var:iw_funding_level
 		}
 	}
-	round = yes
-}
-
-covert_detection_chance_display = {
-	value = 0
-	owner = { add = covert_operation_detection_chance }
-	round = yes
-}
-
-covert_detection_target_ic_display = {
-	value = 0
-	owner = { add = target_counterintelligence_penalty }
 	round = yes
 }
 
@@ -656,4 +701,118 @@ covert_last_exposed_age_display = {
 		add = var:iw_last_exposed_age
 	}
 	round = yes
+}
+
+# ============================================================================
+# SECTION: EXPOSURE BLOWBACK
+# ============================================================================
+# What a detected operation costs. covert_warfare.1's immediate copies the
+# burned operation's type code and phase onto the operator country
+# (iw_burned_type_code / iw_burned_phase) because the options fire days later,
+# by which time the container may be gone — and event loc cannot reach a
+# container in any case. Everything here reads those two country variables.
+# Scope: country (the operator, while covert_warfare.1 is open)
+# ============================================================================
+
+# How far along the operation was when it was caught. A missing phase reads as
+# establishing, which is the middle of the range and today's behaviour.
+covert_exposure_phase_mult = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = iw_burned_phase
+			var:iw_burned_phase = 1
+		}
+		add = covert_exposure_phase_mult_preparatory
+	}
+	else_if = {
+		limit = {
+			has_variable = iw_burned_phase
+			var:iw_burned_phase >= 3
+		}
+		add = covert_exposure_phase_mult_operational
+	}
+	else = {
+		add = covert_exposure_phase_mult_establishing
+	}
+}
+
+# The tier's base infamy. An unrecognised code reads as moderate.
+covert_exposure_infamy_base = {
+	value = 0
+	if = {
+		limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
+		add = covert_exposure_infamy_mild
+	}
+	else_if = {
+		limit = { covert_code_tier_severe = { VAR = iw_burned_type_code } }
+		add = covert_exposure_infamy_severe
+	}
+	else_if = {
+		limit = { covert_exposure_is_costless = yes }
+		add = covert_exposure_infamy_war
+	}
+	else_if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		add = covert_exposure_infamy_war_prewar
+	}
+	else = {
+		add = covert_exposure_infamy_moderate
+	}
+}
+
+# The tier's base relations hit. Zero once the war has actually started
+# (covert_exposure_is_costless) — the event also skips the relations effect
+# outright in that case so the option never reads "-0" — but caught during the
+# run-up it is charged at the moderate tier's relations (see
+# covert_exposure_relations_war_prewar).
+covert_exposure_relations_base = {
+	value = 0
+	if = {
+		limit = { covert_exposure_is_costless = yes }
+		add = 0
+	}
+	else_if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		add = covert_exposure_relations_war_prewar
+	}
+	else_if = {
+		limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
+		add = covert_exposure_relations_mild
+	}
+	else_if = {
+		limit = { covert_code_tier_severe = { VAR = iw_burned_type_code } }
+		add = covert_exposure_relations_severe
+	}
+	else = {
+		add = covert_exposure_relations_moderate
+	}
+}
+
+# Acknowledging it: the full infamy.
+covert_exposure_infamy_acknowledge = {
+	value = covert_exposure_infamy_base
+	multiply = covert_exposure_phase_mult
+	min = 0
+	max = covert_exposure_infamy_max
+}
+
+# Denying it: half the infamy.
+covert_exposure_infamy_deny = {
+	value = covert_exposure_infamy_acknowledge
+	multiply = covert_exposure_deny_infamy_mult
+}
+
+# Denying it: the full bilateral relations hit.
+covert_exposure_relations_deny = {
+	value = covert_exposure_relations_base
+	multiply = covert_exposure_phase_mult
+	min = -100
+	max = 0
+}
+
+# Acknowledging it: half of that.
+covert_exposure_relations_acknowledge = {
+	value = covert_exposure_relations_deny
+	multiply = covert_exposure_acknowledge_relations_mult
 }

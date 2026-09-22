@@ -198,3 +198,89 @@ covert_burned_type_name = {
 		localization_key = iw_op_name_unknown
 	}
 }
+
+# How hostile the world considers the operation covert_warfare.1 is reporting.
+# The tier table (covert_code_tier_*) is the only place the codes are listed;
+# this just picks the word for it.
+covert_burned_tier_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
+		localization_key = iw_exposure_tier_mild
+	}
+	text = {
+		trigger = { covert_code_tier_severe = { VAR = iw_burned_type_code } }
+		localization_key = iw_exposure_tier_severe
+	}
+	text = {
+		trigger = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		localization_key = iw_exposure_tier_war
+	}
+	text = {
+		trigger = { covert_code_tier_moderate = { VAR = iw_burned_type_code } }
+		localization_key = iw_exposure_tier_moderate
+	}
+	text = {
+		localization_key = iw_exposure_tier_moderate
+	}
+}
+
+# The same word, for the operation our counter-intelligence last exposed.
+covert_last_exposed_tier_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { covert_code_tier_mild = { VAR = iw_last_exposed_type } }
+		localization_key = iw_exposure_tier_mild
+	}
+	text = {
+		trigger = { covert_code_tier_severe = { VAR = iw_last_exposed_type } }
+		localization_key = iw_exposure_tier_severe
+	}
+	text = {
+		trigger = { covert_code_tier_war = { VAR = iw_last_exposed_type } }
+		localization_key = iw_exposure_tier_war
+	}
+	text = {
+		trigger = { covert_code_tier_moderate = { VAR = iw_last_exposed_type } }
+		localization_key = iw_exposure_tier_moderate
+	}
+	text = {
+		localization_key = iw_exposure_tier_moderate
+	}
+}
+
+# How far along the operation covert_warfare.1 is reporting had got, as a
+# phrase that sits as an appositive inside covert_warfare.1.d. The branch
+# order mirrors covert_exposure_phase_mult exactly -- 1 is preparatory,
+# 3 or more is fully operational, and anything else (including a missing
+# variable, which this block can in principle render before the event's
+# `immediate` sets it) reads as establishing -- so the phrase always names
+# the multiplier actually charged. has_variable guards every branch the way
+# the covert_code_tier_* triggers do: reading a missing variable is an
+# engine error, not a false.
+covert_burned_phase_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = iw_burned_phase
+			var:iw_burned_phase = 1
+		}
+		localization_key = iw_burned_phase_prep
+	}
+	text = {
+		trigger = {
+			has_variable = iw_burned_phase
+			var:iw_burned_phase >= 3
+		}
+		localization_key = iw_burned_phase_full
+	}
+	text = {
+		localization_key = iw_burned_phase_est
+	}
+}
