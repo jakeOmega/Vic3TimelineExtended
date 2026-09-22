@@ -165,3 +165,17 @@ covert_code_tier_war = {
 		var:$VAR$ = 3
 	}
 }
+
+# A wartime operation caught once the war has actually started costs nothing:
+# no infamy, no relations. Sabotage does not make the world angrier at a
+# country that is already fighting. Caught during the diplomatic play that
+# precedes the war it is the opposite — see covert_exposure_infamy_war_prewar.
+#
+# THE one place that question is answered: both blowback script values and
+# both options of covert_warfare.1 read this.
+# Scope: country (the operator, while covert_warfare.1 is open)
+covert_exposure_is_costless = {
+	covert_code_tier_war = { VAR = iw_burned_type_code }
+	has_variable = iw_burned_at_war
+	var:iw_burned_at_war = 1
+}

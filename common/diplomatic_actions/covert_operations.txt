@@ -390,10 +390,12 @@ covert_infrastructure_sabotage_action = {
 			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
-			text = iw_at_war_tt
-			is_at_war = yes
+			text = iw_at_war_or_play_tt
+			OR = {
+				has_war_with = scope:target_country
+				is_diplomatic_play_enemy_of = scope:target_country
+			}
 		}
-		has_war_with = scope:target_country
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
@@ -409,8 +411,11 @@ covert_infrastructure_sabotage_action = {
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
-					text = iw_at_war_tt
-					has_war_with = scope:target_country
+					text = iw_at_war_or_play_tt
+					OR = {
+						has_war_with = scope:target_country
+						is_diplomatic_play_enemy_of = scope:target_country
+					}
 				}
 			}
 		}
@@ -439,7 +444,10 @@ covert_infrastructure_sabotage_action = {
 		}
 
 		will_propose = {
-			has_war_with = scope:target_country
+			OR = {
+				has_war_with = scope:target_country
+				is_diplomatic_play_enemy_of = scope:target_country
+			}
 			covert_operations_available_slots >= 1
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1
@@ -526,10 +534,12 @@ covert_comms_disruption_action = {
 			NOT = { scope:target_country.relations:root >= relations_threshold:amicable }
 		}
 		custom_tooltip = {
-			text = iw_at_war_tt
-			is_at_war = yes
+			text = iw_at_war_or_play_tt
+			OR = {
+				has_war_with = scope:target_country
+				is_diplomatic_play_enemy_of = scope:target_country
+			}
 		}
-		has_war_with = scope:target_country
 		custom_tooltip = {
 			text = iw_funding_not_zero_tt
 			has_variable = iw_funding_level
@@ -545,8 +555,11 @@ covert_comms_disruption_action = {
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
-					text = iw_at_war_tt
-					has_war_with = scope:target_country
+					text = iw_at_war_or_play_tt
+					OR = {
+						has_war_with = scope:target_country
+						is_diplomatic_play_enemy_of = scope:target_country
+					}
 				}
 			}
 		}
@@ -575,7 +588,10 @@ covert_comms_disruption_action = {
 		}
 
 		will_propose = {
-			has_war_with = scope:target_country
+			OR = {
+				has_war_with = scope:target_country
+				is_diplomatic_play_enemy_of = scope:target_country
+			}
 			covert_operations_available_slots >= 1
 			has_variable = iw_funding_level
 			var:iw_funding_level >= 1

@@ -59,7 +59,14 @@ covert_ops_target_ic_max = 20
 covert_exposure_infamy_mild = 1
 covert_exposure_infamy_moderate = 2
 covert_exposure_infamy_severe = 4
-covert_exposure_infamy_war = 1
+covert_exposure_infamy_war = 0
+
+# Caught in the run-up instead of during the war: sabotage before the shooting
+# reads as manufacturing the war, so it is charged at the severe tier's infamy
+# and the moderate tier's relations. Named separately from those tiers so this
+# case can be retuned without moving either of them.
+covert_exposure_infamy_war_prewar = 4
+covert_exposure_relations_war_prewar = -20
 
 covert_exposure_relations_mild = -10
 covert_exposure_relations_moderate = -20
@@ -728,21 +735,32 @@ covert_exposure_infamy_base = {
 		add = covert_exposure_infamy_severe
 	}
 	else_if = {
-		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		limit = { covert_exposure_is_costless = yes }
 		add = covert_exposure_infamy_war
+	}
+	else_if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		add = covert_exposure_infamy_war_prewar
 	}
 	else = {
 		add = covert_exposure_infamy_moderate
 	}
 }
 
-# The tier's base relations hit. The war tier is zero here, but the event also
-# skips the relations effect outright so the option never reads "-0".
+# The tier's base relations hit. Zero once the war has actually started
+# (covert_exposure_is_costless) — the event also skips the relations effect
+# outright in that case so the option never reads "-0" — but caught during the
+# run-up it is charged at the moderate tier's relations (see
+# covert_exposure_relations_war_prewar).
 covert_exposure_relations_base = {
 	value = 0
 	if = {
-		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		limit = { covert_exposure_is_costless = yes }
 		add = 0
+	}
+	else_if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		add = covert_exposure_relations_war_prewar
 	}
 	else_if = {
 		limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }

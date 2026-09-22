@@ -201,13 +201,23 @@ class ExposureEventTests(unittest.TestCase):
         for literal in ("change_infamy = 2", "change_infamy = 1", "value = -15", "value = -30"):
             self.assertNotIn(literal, options, "%s survived the rewiring" % literal)
 
-    def test_relations_are_skipped_for_the_war_tier(self):
+    def test_relations_are_skipped_in_the_costless_case(self):
+        # Superseded by the costless trigger (Task 8): the war tier no longer
+        # skips relations unconditionally -- only once the war has actually
+        # started. Caught during the run-up, the war tier now takes the
+        # relations hit like everyone else. The relations guard's `NOT` is
+        # distinguished from the infamy guard's identical clause by the
+        # `exists = scope:detected_by_country` line that only the relations
+        # limit block carries.
         ev = _event_1(_text(EVENTS))
         options = ev[ev.index("option = {"): ev.index("after = {")]
         self.assertEqual(
             2,
-            options.count("NOT = { covert_code_tier_war = { VAR = iw_burned_type_code } }"),
-            "both options must skip the relations hit for war-tier operations",
+            options.count(
+                "exists = scope:detected_by_country\n"
+                "\t\t\t\tNOT = { covert_exposure_is_costless = yes }"
+            ),
+            "both options must skip the relations hit once the war has started",
         )
 
     def test_both_options_call_the_third_party_blowback_on_the_severe_tier(self):
@@ -333,6 +343,88 @@ class DetectionFloorTests(unittest.TestCase):
             if l.strip().startswith("je_iw_op_row_detection:")
         )
         self.assertIn("GetVariableValue('iw_detect')|1", line)
+
+
+WAR_ACTIONS = ("covert_infrastructure_sabotage_action", "covert_comms_disruption_action")
+
+
+class DiplomaticPlayGateTests(unittest.TestCase):
+    def test_both_wartime_actions_accept_a_play_in_all_three_gates(self):
+        body = _text(ACTIONS)
+        for action in WAR_ACTIONS:
+            block = _top_level_block(body, "%s = {" % action)
+            self.assertEqual(
+                3,
+                block.count("is_diplomatic_play_enemy_of = scope:target_country"),
+                "%s must accept a diplomatic play in `possible`, in "
+                "`requirement_to_maintain` and in the AI's `will_propose`" % action,
+            )
+            self.assertEqual(
+                3,
+                block.count("has_war_with = scope:target_country"),
+                "%s must still accept an actual war in all three gates" % action,
+            )
+            # The old blanket "are you at war with anyone" clause is gone.
+            self.assertNotIn("is_at_war = yes", block)
+
+    def test_the_gate_tooltip_was_renamed_to_match_what_it_now_says(self):
+        body = _text(ACTIONS)
+        self.assertNotIn("iw_at_war_tt", body)
+        self.assertEqual(4, body.count("iw_at_war_or_play_tt"))
+        loc = _text(ROOT / "localization/english/te_miscellaneous_l_english.yml")
+        self.assertIn("iw_at_war_or_play_tt:", loc)
+        self.assertNotIn("iw_at_war_tt:", loc)
+
+
+class WartimeExposureTests(unittest.TestCase):
+    def test_the_costless_case_is_one_trigger(self):
+        block = _top_level_block(_text(TRIGGERS), "covert_exposure_is_costless = {")
+        self.assertIn("covert_code_tier_war = { VAR = iw_burned_type_code }", block)
+        self.assertIn("has_variable = iw_burned_at_war", block)
+        self.assertIn("var:iw_burned_at_war = 1", block)
+
+    def test_immediate_copies_the_war_state(self):
+        ev = _event_1(_text(EVENTS))
+        immediate = ev[ev.index("immediate = {"): ev.index("option = {")]
+        self.assertIn("name = iw_burned_at_war", immediate)
+        self.assertIn("has_war_with = scope:detected_by_country", immediate)
+
+    def test_after_clears_the_war_state(self):
+        ev = _event_1(_text(EVENTS))
+        after = ev[ev.index("after = {"):]
+        self.assertIn("remove_variable = iw_burned_at_war", after)
+        guarded = after[: after.index("scope:detected_by_country = {\n\t\t\t\ttrigger_event")]
+        self.assertNotIn("remove_variable = iw_burned_at_war", guarded)
+
+    def test_wartime_sabotage_during_the_war_costs_nothing(self):
+        body = _text(VALUES)
+        self.assertIn("covert_exposure_infamy_war = 0", body)
+        for name in ("covert_exposure_infamy_base", "covert_exposure_relations_base"):
+            block = _top_level_block(body, "%s = {" % name)
+            self.assertIn("covert_exposure_is_costless = yes", block)
+
+    def test_wartime_sabotage_before_the_war_is_charged_as_severe(self):
+        body = _text(VALUES)
+        # Severe-tier infamy, moderate relations -- stated as their own named
+        # constants so the pre-war case can be retuned without touching either
+        # tier it borrows its magnitude from.
+        self.assertIn("covert_exposure_infamy_war_prewar = 4", body)
+        self.assertIn("covert_exposure_relations_war_prewar = -20", body)
+        self.assertIn(
+            "covert_exposure_infamy_war_prewar",
+            _top_level_block(body, "covert_exposure_infamy_base = {"),
+        )
+        self.assertIn(
+            "covert_exposure_relations_war_prewar",
+            _top_level_block(body, "covert_exposure_relations_base = {"),
+        )
+
+    def test_both_options_skip_infamy_and_relations_in_the_costless_case(self):
+        ev = _event_1(_text(EVENTS))
+        options = ev[ev.index("option = {"): ev.index("after = {")]
+        # Once per option for infamy, once per option for relations: a zero
+        # would otherwise render as "+0" / "-0" in the option tooltip.
+        self.assertEqual(4, options.count("NOT = { covert_exposure_is_costless = yes }"))
 
 
 if __name__ == "__main__":
