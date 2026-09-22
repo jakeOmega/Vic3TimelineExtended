@@ -475,9 +475,10 @@ When a variable decays multiplicatively each tick and a modifier adds to it ever
 `finance_cycle_momentum` by 0.9 and then adds `modifier:country_finance_momentum_monthly_add`, so a
 permanent +0.15 converges on +1.5 momentum — 1.5 cycle points a month, for ever, not 0.15.
 
-This bit the banking dashboard tools: they carry +-0.15 to +-0.35 there, against the phase modifiers' own
-+-0.05 to +-0.2, so a single 2-point tool outweighs the entire expansion phase's restoring force by 3x and
-one cheap tool halves a country's crash rate (`docs/audits/banking_cycle_simulation.md` F1). Size any new
+This bit the banking dashboard tools: they carried +-0.15 to +-0.35 there, against the phase modifiers' own
++-0.05 to +-0.2, so a single 2-point tool outweighed the entire expansion phase's restoring force by 3x and
+one cheap tool halved a country's crash rate (`docs/audits/banking_cycle_simulation.md` F1; re-sized to
++-0.02..0.1 on 2026-09-22). Size any new
 `country_finance_momentum_monthly_add` against `add / 0.1`, and compare it to the phase table rather than
 to the other tools.
 

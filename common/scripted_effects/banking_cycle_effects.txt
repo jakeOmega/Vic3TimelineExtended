@@ -1699,7 +1699,7 @@ banking_cycle_advance_variables = {
 	# (banking_dash_momentum_tt, and the banded journal-entry modifier applied
 	# by banking_cycle_apply_stance_band) but never the number.
 	#
-	# Both script values are guarded and clamp the gap to +/-4, so a country
+	# Both script values are guarded and clamp the gap to -2..+4, so a country
 	# whose monetary update has not run yet — or which has no policy dial at
 	# all — is pushed by exactly 0, and a gap one month old is tolerated by
 	# design (§16.3). Placed with the other monthly pushes and ahead of the

@@ -86,7 +86,7 @@ wrong or leave open. **Phase 2 has its own equivalent in [§0.4](#04-phase-2-as-
 | | `banking_policy_rate_hike`'s loc keys are **kept** while the modifier stays defined | §18's deletion list and its save-migration paragraph conflict; every defined modifier needs loc | they come out with the modifier next release (checklist in `legacy_modifier_cleanup.txt`) |
 | | §7.5 says "Banking event outcomes (14)"; there are **13** | enumerated from the files; the stated −0.10…+0.20 range matches exactly, so it is a spec miscount, not a missed site | corrected in §7.5 |
 | | **No step of the update has a second entry point**, as §16.2's ordering implies. An earlier phase-1 revision ran step 9 alone from `on_acquired_technology`; R3's cancel-INJECTs removed the reason for it and the hook is gone | the hook existed only to stop a vanilla finance tech's −2pp landing a month before the script compensation for it. The engine now cancels in the same instant | a second entry point reintroduced without a reason of the same kind risks the non-idempotent steps being called the same way |
-| | **`bubble_pressure` must never be printed to a decimal on any surface** | §8 argues the cycle's random monthly nudges mask the stance term — true for momentum and cycle value, which `banking_cycle_advance_variables`' `random_list` nudges, but **bubble has no random term**. `banking_display_bubble_monthly_add` is exactly `modifier:country_bubble_pressure_monthly_add`, so Δbubble minus it is the stance push alone: `−0.75 × te_mon_stance_gap_clamped`, which inverts to the gap (and so to r\*) anywhere inside the ±4 clamp and off bubble's own 0/100 bounds — the whole stance-band range | the hidden-state rule (§8) fails through the banking panel, not through anything monetary |
+| | **`bubble_pressure` must never be printed to a decimal on any surface** | §8 argues the cycle's random monthly nudges mask the stance term — true for momentum and cycle value, which `banking_cycle_advance_variables`' `random_list` nudges, but **bubble has no random term**. `banking_display_bubble_monthly_add` is exactly `modifier:country_bubble_pressure_monthly_add`, so Δbubble minus it is the stance push alone: `−0.75 × te_mon_stance_gap_clamped`, which inverts to the gap (and so to r\*) anywhere inside the −2…+4 clamp and off bubble's own 0/100 bounds — the whole stance-band range | the hidden-state rule (§8) fails through the banking panel, not through anything monetary |
 
 ### 0.2 Deferred (named in the design, deliberately not shipped)
 
@@ -223,7 +223,7 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
    `banking_display_bubble_monthly_add` is exactly the modifier-driven part, so Δbubble minus
    the displayed monthly add is the stance push alone — `−0.75 × te_mon_stance_gap_clamped`,
    which two readings a month apart invert into the gap, and so into r\*, anywhere the gap is
-   inside its ±4 clamp and bubble is off its own 0/100 bounds. If the vanilla panel's bubble
+   inside its −2…+4 clamp and bubble is off its own 0/100 bounds. If the vanilla panel's bubble
    bar (or anything else) turns out to show a number rather than a bar, **this stops being a
    checklist item and becomes an Important bug** — band it, or give `bubble_pressure` a random
    term.
@@ -2051,7 +2051,7 @@ law accelerate inflation forever.)
 
 ```
 pressure (pp) =
-    − 0.4 × stance_gap (clamped ±4)          loose money
+    − 0.4 × stance_gap (clamped −2…+4)       loose money (at most +0.8pp; the loose bound was −4, i.e. +1.6pp, until 2026-09-22 — the clamp is shared with the cycle channel, §8)
     + phase term                             frenzy +1.5 · boom +0.8 · expansion +0.3 · stable 0
                                              stagnation −0.3 · downturn −0.8 · panic −1.5
     + 0.2 if bubble_pressure ≥ 65
@@ -2352,7 +2352,7 @@ and treasury cost. Changes:
 
 - `possible`: the rate-hike exclusion (`banking_policy_triggers.txt:25`) becomes
   `var:te_policy_rate <= 0.01` — **usable only at the floor**.
-- Effect: keeps momentum +0.35 and services +5%; bubble +0.8 → **+1.5**; adds +1.0pp
+- Effect: keeps momentum +0.35 (**+0.1** since the 2026-09-22 tool re-sizing) and services +5%; bubble +0.8 → **+1.5**; adds +1.0pp
   inflation pressure (§9.1); the interest field is deleted.
 - AI weights rewritten: use at the floor in recession or deflation.
 - Under digital currency the floor is −3%, so QE arrives later — negative rates substitute.

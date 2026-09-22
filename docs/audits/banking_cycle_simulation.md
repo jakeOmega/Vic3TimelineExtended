@@ -282,9 +282,11 @@ with a known deficit and compare.
 
 ## 3. A retune, measured — and what shipped
 
-Every change below was applied in the simulator and re-measured (the measurements were made with the
-`--tune` keys; the mod files now carry the **shipped** column, so a plain run reproduces the right-hand
-column of every table and `--tune pre_retune` approximately restores the left).
+Every change below was applied in the simulator and re-measured with the `--tune` keys, as the full
+thirteen-key preset and before the AI, fiscal and delegation changes of §6–§8 — so the right-hand column of
+the tables in *this* section is the morning's measurement, not the mod as it stands. The mod files now carry
+the **shipped** column; a plain run reproduces §8's tables, and `--tune pre_retune` approximately restores
+the left-hand column here.
 
 | key | change | file | shipped 2026-09-22? |
 |---|---|---|---|
@@ -295,7 +297,7 @@ column of every table and `--tune pre_retune` approximately restores the left).
 | `tool_bubble` | the ten `cb_*` tools' **negative** bubble adds `×0.2` | `extra_modifiers.txt` | **yes**: buffer −2.5→**−0.5**, margin −2.0→**−0.4**, deposit −1.0→**−0.2**, capital controls −0.6→**−0.1**, moral suasion and asset relief −0.3→**−0.05** |
 | `tool_momentum` | the ten `cb_*` tools' momentum adds `×0.3` | `extra_modifiers.txt` | **yes**, rounded to two places: OMO 0.35→**0.1**, e-liquidity 0.25→**0.08**, buffer/margin −0.15→**−0.05**, directed/export 0.15→**0.05**, deposit 0.1→**0.03**, moral suasion −0.05→**−0.02**, capital controls 0.05→**0.02** |
 | `stance_bubble` | `te_mon_stance_bubble_add` multiply −0.75 → −0.45 | `te_monetary_script_values.txt` | no — near zero in the ablation |
-| `gap_clamp_loose` | `te_mon_stance_gap_clamped`'s **loose** bound −4 → **−2** (tight side unchanged) | `te_monetary_script_values.txt`, now the named `te_mon_stance_gap_clamp_loose` / `_tight` | **yes** |
+| `gap_clamp_loose` | `te_mon_stance_gap_clamped`'s **loose** bound −4 → **−2** (tight side unchanged) | `te_monetary_script_values.txt`, now the named `te_mon_stance_gap_clamp_loose` / `_tight` | **yes** — note the clamp is shared with `te_mon_pressure_stance`, so loose money's inflation pressure is also capped at +0.8pp instead of +1.6pp (modelled: the passive-fiat arm's mean inflation falls 22 % → 19 % in §8) |
 | `recovery` | `country_finance_momentum_monthly_add` on downturn 0.1→**0.3** and stagnation 0.05→**0.15** | `extra_modifiers.txt` (and the `_cmd`/`_coop` variants) | **yes** |
 | `climb` | add `country_finance_value_monthly_add = 0.5` to the downturn and stagnation phase modifiers | `extra_modifiers.txt` (and the variants; the owner's own `+1` on panic is mirrored to `_cmd`/`_coop`) | **yes** |
 | `growth_bias` | `te_mon_mandate_growth_bias` −1.0 → **−0.25** | `te_monetary_script_values.txt` | **yes** — §5 measures the alternatives |

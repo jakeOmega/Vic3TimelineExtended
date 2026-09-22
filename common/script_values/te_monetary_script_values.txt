@@ -850,12 +850,14 @@ te_mon_forecast_error_bound_neg = {
 
 # --- The stance channel into the banking cycle (§8, §16.3) ------------------
 
-# The stance gap, clamped to +/-4 for the purpose of pushing the cycle.
+# The stance gap, clamped to -2..+4 for the purpose of pushing the cycle (and,
+# through te_mon_pressure_stance, of pushing inflation).
 #
 # The gap itself is clamped to +/-10 (§8); this tighter bound is the one the
-# cycle sees, so that a country parked at an extreme stance settles at the edge
-# of the +/-5 momentum bar rather than driving through it: +/-4 x -0.125 is
-# -/+0.5 a month against a 10%-a-month decay, i.e. a steady state of -/+5.
+# cycle sees, so that a country parked at an extreme stance settles inside the
+# +/-5 momentum bar rather than driving through it: +4 x -0.125 is -0.5 a month
+# against a 10%-a-month decay, i.e. a steady state of -5 on the tight side and
+# +2.5 on the loose side.
 #
 # GUARDED. te_mon_stance_gap does not exist until a country's first monthly
 # monetary update, and the journal-entry pulse and that update may run in either
@@ -871,7 +873,7 @@ te_mon_forecast_error_bound_neg = {
 # keys apply in the order they are written, so a `multiply` placed ahead of
 # `min`/`max` inside the same block silently DISARMS the bound: it is then tested
 # against the already-scaled figure. Folding `multiply = -0.125` in above the
-# bounds here would leave a +/-4 clamp guarding a quantity whose entire range is
+# bounds here would leave a -2..+4 clamp guarding a quantity whose entire range is
 # +/-1.25, so the clamp would never bite and a country parked at an extreme
 # stance would push momentum by up to 1.25 a month instead of the calibrated 0.5
 # — straight through the +/-5 momentum bar the steady state below assumes.
@@ -1114,7 +1116,9 @@ te_mon_deanchor_span = {
 # --- The §9.1 pressure terms ------------------------------------------------
 
 # Loose money, in pp of pressure per pp of stance gap: pressure takes
-# -0.4 x te_mon_stance_gap_clamped (the same +/-4 clamp the cycle channel uses).
+# -0.4 x te_mon_stance_gap_clamped (the same -2..+4 clamp the cycle channel
+# uses — so loose money is worth at most +0.8pp of pressure and tight money
+# -1.6pp; the loose side was +1.6pp until the clamp's 2026-09-22 narrowing).
 # Positive here, negated by the consumer, so the sign lives in one place.
 te_mon_stance_pressure_coeff = {
 	value = 0.4
@@ -1938,7 +1942,7 @@ te_mon_inflation_core_read = {
 # HIDDEN — printable only from te_debug_monetary.1 (see the section header).
 
 # Loose money: -0.4 x the clamped stance gap. te_mon_stance_gap_clamped is the
-# same +/-4-clamped read the cycle channel uses, and it is 0 for every country
+# same -2..+4-clamped read the cycle channel uses, and it is 0 for every country
 # without a dial — so bankless, commodity-money, crypto and dollarised
 # countries simply drop this term, which is §9.1's intent.
 #
