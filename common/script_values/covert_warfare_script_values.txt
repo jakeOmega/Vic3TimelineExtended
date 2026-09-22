@@ -54,8 +54,10 @@ covert_ops_target_ic_max = 20
 # ---- Exposure blowback ----
 # What being caught costs, before the phase factor and the option's split.
 # Which tier a type is in lives in covert_code_tier_* (scripted triggers).
-# Anchored on the flat +2 infamy / -15 relations every burn used to cost:
-# a moderate operation caught while establishing still lands about there.
+# Anchored on the old flat costs at the moderate tier's establishing phase:
+# Acknowledge (2 infamy / -10 relations) lands close to the old flat
+# 2 infamy / -15 relations; Deny (1 infamy / -20 relations) is a materially
+# softer relations hit than the old flat 1 infamy / -30, not "about there."
 covert_exposure_infamy_mild = 1
 covert_exposure_infamy_moderate = 2
 covert_exposure_infamy_severe = 4
