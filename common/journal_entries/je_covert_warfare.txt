@@ -301,51 +301,16 @@ je_covert_warfare = {
 				covert_ops_apply_all_phase_effects = yes
 			}
 
-			# ---- Restore target_max_ic to actual maximum for detection roll ----
-			set_variable = { name = target_max_ic value = 0 }
-			every_scope_diplomatic_pact = {
-				limit = {
-					first_country = ROOT
-					OR = {
-						is_diplomatic_action_type = covert_election_interference_action
-						is_diplomatic_action_type = covert_financial_subversion_action
-						is_diplomatic_action_type = covert_infrastructure_sabotage_action
-						is_diplomatic_action_type = covert_comms_disruption_action
-						is_diplomatic_action_type = covert_industrial_espionage_action
-						is_diplomatic_action_type = covert_military_espionage_action
-						is_diplomatic_action_type = covert_influence_campaign_action
-						is_diplomatic_action_type = covert_ideological_subversion_action
-						is_diplomatic_action_type = covert_destabilization_action
-					}
-				}
-				every_participant = {
-					limit = {
-						NOT = { this = ROOT }
-						intelligence_capacity_total > ROOT.var:target_max_ic
-					}
-					ROOT = { set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total } }
-				}
-			}
-
-			# ---- Detection check for active operations (only if funding > 0) ----
+			# ---- Detection: one roll per operation, at most one burn ----
+			# Each container's iw_detect was refreshed by covert_ops_sync_all at
+			# the top of this pulse. Funding 0 has no operations to roll (every
+			# pact's requirement_to_maintain lapses), so the gate is belt and braces.
 			if = {
 				limit = {
-					covert_operations_active >= 1
 					has_variable = iw_funding_level
 					var:iw_funding_level >= 1
 				}
-				random_list = {
-					1 = {
-						modifier = {
-							add = covert_operation_detection_chance
-						}
-						# Detected! Fire the detection event
-						trigger_event = { id = covert_warfare.1 }
-					}
-					99 = {
-						# Not detected this month
-					}
-				}
+				covert_ops_roll_detection_all = yes
 			}
 		}
 	}

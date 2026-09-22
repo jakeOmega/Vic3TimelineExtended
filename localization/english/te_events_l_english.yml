@@ -567,7 +567,7 @@
 #
  covert_warfare.1.a:0 "Recall our operatives and apologize through back-channels"
  covert_warfare.1.b:0 "Deny everything — our people were never there"
- covert_warfare.1.d:0 "Our intelligence services report a catastrophic security breach. One of our [concept_covert_operations] has been detected by [SCOPE.sCountry('detected_by_country').GetName]. The operation must be terminated immediately, and the diplomatic fallout will be considerable."
+ covert_warfare.1.d:0 "Our intelligence services report a catastrophic security breach. One of our [concept_covert_operations] ([ROOT.GetCountry.GetCustom('covert_burned_type_name')]) has been detected by [SCOPE.sCountry('detected_by_country').GetName]. The operation must be terminated immediately, and the diplomatic fallout will be considerable."
  covert_warfare.1.f:0 "The encrypted channel went dark at 03:47. By dawn, every foreign ministry in Europe had the intercepted transmissions on their desk.\n\nThe minister was woken at five.\n\n\"How bad?\" he asked.\n\n\"They have the names. The dates. The recordings. The denials we prepared for last month's operation will not cover the current one.\"\n\n\"Then we prepare new denials.\"\n\n\"The new denials will be plausible to no one. We are choosing the cover story for a different audience now — not the foreign ministries, but our own newspapers.\""
  covert_warfare.1.t:0 "Operation Compromised"
  covert_warfare.2.a:0 "Shore up our counterintelligence"
@@ -3834,7 +3834,7 @@
  te_debug_covert.1.h:0 "Funding 5 - Deep State"
  te_debug_covert.1.t:0 "Covert Warfare Test Console: Funding"
  te_debug_covert.2.a:0 "Seed three operations, one in each phase"
- te_debug_covert.2.b:0 "Force a detection now"
+ te_debug_covert.2.b:0 "Force a detection now (one operation is pinned to 100% and the real roll is run)"
  te_debug_covert.2.c:0 "Cut funding to 0 and stand everything down"
  te_debug_covert.2.d:0 "Console-only shortcuts for testing the operation rows. None of these can happen in normal play.\n\nSeeding plants three operations against one eligible country - industrial espionage at month 5, an influence campaign at month 11 and military espionage at month 14 - so all three phase layouts show at once and two of them tip over their boundary at the next monthly pulse. It raises funding to Tradecraft first if the service is dormant.\n\nForcing detection burns one operation, sends the target the detection event, and writes the record the command centre reads back as #italic Counterintelligence exposed ...#!\n\nRe-deriving the display state is what the first monthly pulse after loading an older save does: use it if the phase lines are missing from rows restored from a save made before this widget shipped."
  te_debug_covert.2.e:0 "Age every operation by a year"

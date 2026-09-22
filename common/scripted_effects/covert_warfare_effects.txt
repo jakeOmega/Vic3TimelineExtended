@@ -38,6 +38,8 @@
 # container, so the scope is unset.
 # Parameters: $TYPE$ = short name (e.g. election_interference)
 #             $TARGET$ = target country (a scope: reference — it is read inside on_created)
+#             $CODE$ = operation type code 0-8, matching the branches of
+#                      covert_last_exposed_type_name
 # Scope: operator country
 covert_op_create = {
 	save_scope_as = iw_operator
@@ -51,6 +53,7 @@ covert_op_create = {
 		scope:iw_new_op = {
 			set_variable = { name = iw_target value = $TARGET$ }
 			set_variable = { name = iw_duration value = 0 }
+			set_variable = { name = iw_type_code value = $CODE$ }
 			# Initialise the display phase so the widget never reads a variable
 			# that does not exist yet; covert_op_refresh_phase derives it from
 			# then on.
@@ -113,7 +116,9 @@ covert_op_refresh_detection = {
 # Start an operation. Called from the covert action's accept_effect, where
 # the pact doesn't exist yet — so this creates the container directly
 # instead of reconciling against pacts.
-# Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier
+# Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier,
+#             $CODE$ = operation type code 0-8, matching the branches of
+#                      covert_last_exposed_type_name
 # Scope: operator country; scope:target_country must be set
 covert_op_start = {
 	hidden_effect = {
@@ -121,7 +126,7 @@ covert_op_start = {
 		# container whose pact ended through a path with no break hook may still
 		# be waiting for the monthly sync. Clear it so the new op starts at month 0.
 		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:target_country }
-		covert_op_create = { TYPE = $TYPE$ TARGET = scope:target_country }
+		covert_op_create = { TYPE = $TYPE$ TARGET = scope:target_country CODE = $CODE$ }
 		if = {
 			limit = { exists = scope:iw_new_op }
 			scope:iw_new_op = { covert_op_refresh_detection = { DEFENSE_MOD = $DEFENSE_MOD$ } }
@@ -185,6 +190,8 @@ covert_op_burn = {
 # Parameters: $TYPE$ = short name
 #             $ACTION$ = diplomatic_action_type key (e.g. covert_election_interference_action)
 #             $DEFENSE_MOD$ = type-specific defense modifier
+#             $CODE$ = operation type code 0-8 (the covert_last_exposed_type_name
+#                      mapping); written on every container so old saves gain it
 # Scope: operator country
 covert_op_sync = {
 	save_scope_as = iw_operator
@@ -207,7 +214,7 @@ covert_op_sync = {
 							}
 						}
 					}
-					covert_op_create = { TYPE = $TYPE$ TARGET = scope:iw_pact_target }
+					covert_op_create = { TYPE = $TYPE$ TARGET = scope:iw_pact_target CODE = $CODE$ }
 				}
 				every_in_list = {
 					variable = iw_ops
@@ -249,6 +256,7 @@ covert_op_sync = {
 			variable = iw_ops
 			limit = { has_tag = iw_op_$TYPE$ }
 			remove_variable = iw_seen
+			set_variable = { name = iw_type_code value = $CODE$ }
 			covert_op_refresh_detection = { DEFENSE_MOD = $DEFENSE_MOD$ }
 		}
 	}
@@ -258,15 +266,15 @@ covert_op_sync = {
 # durations age and phase effects apply.
 # Scope: country
 covert_ops_sync_all = {
-	covert_op_sync = { TYPE = election_interference ACTION = covert_election_interference_action DEFENSE_MOD = country_covert_defense_ideological_add }
-	covert_op_sync = { TYPE = financial_subversion ACTION = covert_financial_subversion_action DEFENSE_MOD = country_covert_defense_economic_add }
-	covert_op_sync = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action DEFENSE_MOD = country_covert_defense_military_add }
-	covert_op_sync = { TYPE = comms_disruption ACTION = covert_comms_disruption_action DEFENSE_MOD = country_covert_defense_military_add }
-	covert_op_sync = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action DEFENSE_MOD = country_covert_defense_economic_add }
-	covert_op_sync = { TYPE = military_espionage ACTION = covert_military_espionage_action DEFENSE_MOD = country_covert_defense_military_add }
-	covert_op_sync = { TYPE = influence_campaign ACTION = covert_influence_campaign_action DEFENSE_MOD = country_covert_defense_ideological_add }
-	covert_op_sync = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action DEFENSE_MOD = country_covert_defense_ideological_add }
-	covert_op_sync = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add }
+	covert_op_sync = { TYPE = election_interference ACTION = covert_election_interference_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 0 }
+	covert_op_sync = { TYPE = financial_subversion ACTION = covert_financial_subversion_action DEFENSE_MOD = country_covert_defense_economic_add CODE = 1 }
+	covert_op_sync = { TYPE = infrastructure_sabotage ACTION = covert_infrastructure_sabotage_action DEFENSE_MOD = country_covert_defense_military_add CODE = 2 }
+	covert_op_sync = { TYPE = comms_disruption ACTION = covert_comms_disruption_action DEFENSE_MOD = country_covert_defense_military_add CODE = 3 }
+	covert_op_sync = { TYPE = industrial_espionage ACTION = covert_industrial_espionage_action DEFENSE_MOD = country_covert_defense_economic_add CODE = 4 }
+	covert_op_sync = { TYPE = military_espionage ACTION = covert_military_espionage_action DEFENSE_MOD = country_covert_defense_military_add CODE = 5 }
+	covert_op_sync = { TYPE = influence_campaign ACTION = covert_influence_campaign_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 6 }
+	covert_op_sync = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 7 }
+	covert_op_sync = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 8 }
 }
 
 # Age every running operation by one month, then restate its display phase.
@@ -514,6 +522,40 @@ covert_ops_apply_all_phase_effects = {
 					add_modifier = { name = covert_destabilization_general months = 3 }
 				}
 			}
+		}
+	}
+}
+
+# ============================================================================
+# DETECTION ROLL
+# ============================================================================
+# One roll per running operation against that operation's own iw_detect, then
+# at most ONE burn a month, chosen at random among the operations whose roll
+# landed. Rolling every operation first and choosing afterwards is order-free:
+# P(any burn) = 1 - prod(1 - c_i) whichever order the list is walked, and no
+# type gets the full odds just for being synced first.
+#
+# The burned operation reaches covert_warfare.1 as scope:iw_burned_op (saved
+# scopes survive trigger_event). The event reads it in `immediate` only.
+#
+# Scope: country (the journal entry pulse runs here). Caller gates on funding.
+covert_ops_roll_detection_all = {
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			random = {
+				chance = covert_op_roll_chance
+				add_to_temporary_list = iw_detected_ops
+			}
+		}
+		random_in_list = {
+			list = iw_detected_ops
+			save_scope_as = iw_burned_op
+		}
+		if = {
+			limit = { exists = scope:iw_burned_op }
+			trigger_event = { id = covert_warfare.1 }
 		}
 	}
 }

@@ -36,7 +36,7 @@ covert_election_interference_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_start = { TYPE = election_interference DEFENSE_MOD = country_covert_defense_ideological_add }
+		covert_op_start = { TYPE = election_interference DEFENSE_MOD = country_covert_defense_ideological_add CODE = 0 }
 	}
 
 	potential = {
@@ -202,7 +202,7 @@ covert_financial_subversion_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_start = { TYPE = financial_subversion DEFENSE_MOD = country_covert_defense_economic_add }
+		covert_op_start = { TYPE = financial_subversion DEFENSE_MOD = country_covert_defense_economic_add CODE = 1 }
 	}
 
 	potential = {
@@ -348,7 +348,7 @@ covert_infrastructure_sabotage_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_start = { TYPE = infrastructure_sabotage DEFENSE_MOD = country_covert_defense_military_add }
+		covert_op_start = { TYPE = infrastructure_sabotage DEFENSE_MOD = country_covert_defense_military_add CODE = 2 }
 	}
 
 	potential = {
@@ -484,7 +484,7 @@ covert_comms_disruption_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_start = { TYPE = comms_disruption DEFENSE_MOD = country_covert_defense_military_add }
+		covert_op_start = { TYPE = comms_disruption DEFENSE_MOD = country_covert_defense_military_add CODE = 3 }
 	}
 
 	potential = {
@@ -625,7 +625,7 @@ covert_industrial_espionage_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_start = { TYPE = industrial_espionage DEFENSE_MOD = country_covert_defense_economic_add }
+		covert_op_start = { TYPE = industrial_espionage DEFENSE_MOD = country_covert_defense_economic_add CODE = 4 }
 	}
 
 	potential = {
@@ -763,7 +763,7 @@ covert_military_espionage_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_start = { TYPE = military_espionage DEFENSE_MOD = country_covert_defense_military_add }
+		covert_op_start = { TYPE = military_espionage DEFENSE_MOD = country_covert_defense_military_add CODE = 5 }
 	}
 
 	potential = {
@@ -890,7 +890,7 @@ covert_influence_campaign_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_start = { TYPE = influence_campaign DEFENSE_MOD = country_covert_defense_ideological_add }
+		covert_op_start = { TYPE = influence_campaign DEFENSE_MOD = country_covert_defense_ideological_add CODE = 6 }
 	}
 
 	potential = {
@@ -1047,7 +1047,7 @@ covert_ideological_subversion_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_start = { TYPE = ideological_subversion DEFENSE_MOD = country_covert_defense_ideological_add }
+		covert_op_start = { TYPE = ideological_subversion DEFENSE_MOD = country_covert_defense_ideological_add CODE = 7 }
 	}
 
 	potential = {
@@ -1209,7 +1209,7 @@ covert_destabilization_action = {
 		custom_tooltip = {
 			text = covert_op_detection_warning_tt
 		}
-		covert_op_start = { TYPE = destabilization DEFENSE_MOD = country_covert_defense_ideological_add }
+		covert_op_start = { TYPE = destabilization DEFENSE_MOD = country_covert_defense_ideological_add CODE = 8 }
 	}
 
 	potential = {
