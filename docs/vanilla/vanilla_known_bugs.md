@@ -1194,6 +1194,28 @@ Vanilla's own `gui/texticons.gui` declares a text icon backed by `gfx/interface/
 
 Source-anchored rather than path-anchored on purpose: the registry's basename index only accepts `.txt` / `.gui` / `.yml` / `.yaml` paths (`_PATH_REF_RE` in `game_log_reader.py`), so a missing-asset entry whose only file reference is a `.dds` can never be tagged by basename. The signature pins it to this one texture, so any other missing texture still surfaces in triage.
 
+### `virtualfilesystem.cpp:569` — vanilla's sway-offer icon set has no `puppet.dds`
+- source: `virtualfilesystem.cpp:569`
+
+```
+gfx/interface/icons/sways/puppet.dds not found
+```
+
+The sway panel resolves an offer icon per subject type from `gfx/interface/icons/sways/<subject_type>.dds`. The shipped folder has `protectorate.dds`, `tributary.dds` and a generic `subject.dds`, but no `puppet.dds`, so offering a puppet in the sway panel logs three lines and renders no icon. `common/defines/00_interfaces.txt` only names the generic `SWAY_OFFER_BECOME_SUBJECT_ICON = "gfx/interface/icons/sways/subject.dds"`, so the per-type path is engine-side, not script-side. This mod adds no subject types (`common/subject_types/` is vanilla-only here) and references the path nowhere. Observed 2026-09-21, three lines when the sway panel opened.
+
+Source-anchored for the same reason as the `repairing.dds` entry above — a `.dds`-only file reference can never be tagged by basename.
+
+### `pdx_assert.cpp:641` — treaty-preview asserts fire with unbound countries while the power-bloc invite panel renders
+- source: `pdx_assert.cpp:641`
+
+```
+Assertion failed: LeftCountry.IsValid()
+Assertion failed: RightCountry.IsValid()
+Assertion failed: Treaty.IsValid()
+```
+
+The three fire together, on the same second, interleaved into the `28_invite_to_power_bloc.txt:87` render burst — the engine evaluating a treaty preview before either party or the draft is bound. Engine-internal; nothing in script sets these. One line each per burst, cosmetic. Observed 2026-09-21. Registered as three signatures under one entry so a genuinely new `:641` assert still surfaces.
+
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 
 ## How to triage a new error-log entry

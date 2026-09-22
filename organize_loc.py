@@ -157,6 +157,39 @@ def find_diplo_action_keys(project_directory):
     return diplo_keys
 
 
+def find_treaty_article_keys(project_directory):
+    """Finds implicit key suites for treaty articles.
+
+    The engine auto-resolves a family of loc keys off each article's top-level
+    name — `<article>`, `<article>_desc`, `<article>_effects_desc` (the bullet
+    list in the article picker), `<article>_article_short_desc` (the one-line
+    summary on the treaty draft), and the directed `_effect_desc_first/_third/
+    _global` variants. None of these are referenced from script, so without this
+    parser they all fall to UNUSED and organize_loc exiles live, rendering keys
+    to te_unused_l_english.yml. Confirmed against vanilla `diplomacy_l_english.yml`
+    (guarantee_independence / trade_privilege / treaty_port / law_commitment).
+    Added 2026-09-21 after `[concept_leverage]` inside five exiled
+    `*_effects_desc` values spammed debug.log 612 times a session.
+    """
+    article_keys = set()
+    articles_path = os.path.join(project_directory, "common", "treaty_articles")
+    if not os.path.isdir(articles_path):
+        return article_keys
+    suffixes = [
+        "", "_desc", "_effects_desc", "_article_short_desc",
+        "_effect_desc_first", "_effect_desc_third", "_effect_desc_global",
+        "_pact_desc",
+    ]
+    for file in os.listdir(articles_path):
+        if file.endswith(".txt"):
+            with open(os.path.join(articles_path, file), "r", encoding="utf-8-sig") as f:
+                matches = re.findall(r"^([\w\.-]+)\s*=\s*{", f.read(), re.MULTILINE)
+                for base_key in matches:
+                    for suffix in suffixes:
+                        article_keys.add(f"{base_key}{suffix}")
+    return article_keys
+
+
 def find_political_movement_keys(project_directory):
     """Finds implicit keys for political movements."""
     movement_keys = set()
@@ -499,6 +532,7 @@ def organize_all(project_directory, dry_run=False):
         find_company_keys,
         find_law_keys,
         find_diplo_action_keys,
+        find_treaty_article_keys,
         find_political_movement_keys,
         find_journal_entry_keys,
         find_progress_bar_keys,

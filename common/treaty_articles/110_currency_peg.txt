@@ -69,10 +69,23 @@ currency_peg = {
 	# carries no prestige line at all: a coerced peg is not a vote of confidence.
 	target_modifier = {
 		country_prestige_mult = 0.02
-		# [6b] A pegger lives in the anchor's monetary orbit (§15C.2, ruling L1),
-		# sized against development_assistance's "the client's growing
-		# dependence". The ANCHOR is the target here, so the line sits in
-		# target_modifier; on the two backstops the provider is the source.
+	}
+
+	# [6b] A pegger lives in the anchor's monetary orbit (§15C.2, ruling L1),
+	# sized against development_assistance's "the client's growing dependence".
+	#
+	# PLACEMENT (fixed 2026-09-21): country_treaty_leverage_generation_add is
+	# generated AGAINST the country whose block carries it, by the dominant
+	# counterparty — it is not "leverage this country generates". Vanilla is
+	# unambiguous: guarantee_independence puts it on the *guaranteed* party
+	# (target), foreign_investment_rights / trade_privilege / host_power_bloc_embassy
+	# on the party that *grants* the concession (source). The mod's own
+	# development_assistance already had it right, on the client's target_modifier.
+	# It shipped here on the ANCHOR's block, which made the PEGGER gain leverage
+	# over the anchor — exactly backwards. The pegger is the source, so it goes
+	# in source_modifier. Same correction on 111/112 (mirrored the other way:
+	# there the weak party is the target) and on 113/114.
+	source_modifier = {
 		country_treaty_leverage_generation_add = 200
 	}
 
