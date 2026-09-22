@@ -13,7 +13,8 @@
 **Reading order.** §1–§2 are the study of the system *as it stood on the morning of 2026-09-22* ("shipped" in
 those sections means that state). §3 is the retune it proposed and the subset that was written into the mod.
 §5–§8 are the second pass: what the growth mandate actually buys, the fiscal channel, the AI's tool weights,
-and the final matrix of the mod as it now stands. Every table states which script it measured.
+and the final matrix of #371. §10 is the follow-up that doubled the leaning tools' bubble lines so a maxed player
+can pull a boom back, with `--rescue` and the refreshed matrix. Every table states which script it measured.
 
 ---
 
@@ -308,7 +309,7 @@ the left-hand column here.
 The sim's hard-coded control flow was updated to match the script, so the "recommended" preset is gone: the
 mod *is* the recommendation now, and `--tune pre_retune` is the A/B.
 
-**A feel tension worth one sentence.** The buffer's bubble line is now −0.5 against a frenzy's +20, and the
+**A feel tension worth one sentence.** The buffer's bubble line is now −0.5 (−1.0 since §10) against a frenzy's +20, and the
 tooltip prints the modifier's real values, so a player reading the tool in a frenzy will see it as nearly
 inert there. That is the intended reading — the prudential tools lean against a boom, they do not cancel it —
 but it is a change of texture from the old −2.5.
@@ -714,6 +715,9 @@ Written into the mod on 2026-09-22, in one PR:
 
 ### The mod as it now stands — 400 runs × 100 years per cell, no `--tune`
 
+*As of #371. §10 doubled the three leaning tools' bubble lines afterwards; that moves only the ≥2-point
+cells, and §10 carries the refreshed numbers. `--tune lean_bubble=0.5` reproduces this table by construction.*
+
 Crashes per century at 0 / 1 / 2 / 3 / 5 / 8 points; then the share of crashes that reset into the panic band, the median longest slump, and the mean manufacturing-throughput effect at 0 and 8 points.
 
 | cell | crashes / century | depression % (0 pt) | worst slump, months (0 pt) | throughput pp, 0 → 8 pt |
@@ -772,8 +776,104 @@ Crashes per century at 0 / 1 / 2 / 3 / 5 / 8 points; then the share of crashes t
 --pulse-order           which of the two monthly pulses runs first
 --no-click-weight       how often the AI clicks a dashboard button (largest single assumption)
 --json out.json         the full metric set, including phase occupancy and per-tool usage
+--rescue                instead of the matrix: fork every boom entry, measure how often maxed leaning tools pull it back (§10)
+--rescue-tools a,b      the tools --rescue switches on (default buffer,margin,moral_suasion — 5 points)
+--rescue-delay 3        months into the boom before --rescue acts
 --self-test             check the monetary port against events/te_debug_monetary_events.txt
 ```
 
 The exogenous game-state stubs — GDP, growth, deficit, debt, war, goods prices, tech era — are tabulated in
 the script's module docstring. They are the first thing to argue with if a number here looks wrong.
+
+---
+
+## 10. Pulling a boom back (2026-09-22, after #371)
+
+**The complaint (owner, after playing #371):** once the cycle moves into boom or frenzy, even a little bubble
+pressure means maxed interventions have no chance of pulling it back. It should still usually end in a crash,
+but a player who maxes the tools should have a chance.
+
+**Why the century matrix could not see it.** The matrix measures crash *frequency* with the AI's click model
+deciding when tools go on. The question here is conditional: *given* a boom has started, what can a player do?
+`--rescue` answers that. It forks every run at each month the cycle crosses 75 from below and replays the next
+48 months twice, on the same random stream:
+
+- **passive** — no tools; the price-stability mandate keeps steering the dial.
+- **maxed** — after a 3-month reaction delay, buffer + margin + moral suasion (5 points) switched on and held,
+  and on a dial regime *Take Control* with the rate target at its ceiling. The rate still drifts there at the
+  law's speed, so the stance tightens over months, not at once.
+
+An arm is "pulled back" if the cycle falls below 60 before any crash.
+
+**What it found.** An untended boom crashes essentially every time (0.0–1.2 % pulled back, every currency).
+That part is right. But the maxed arm on metallic money pulled back only **8 % (gold) and 11 % (commodity)**
+of booms, and under 2 % once bubble was past 60. The mechanism: the boom phase adds +4 bubble a month (frenzy
++20). All three leaning tools together drained −0.95 after #371's ×0.2, so bubble kept climbing under maxed
+tools. Speculative inertia is a function of bubble (+0.25 momentum at 50, +1.25 at 100, so +2.5 to +12.5 cycle
+points a month once it converges). It soon outweighed the tools' combined −0.12 momentum several times over.
+Fiat and digital did better (21 % / 34 %) only because a free dial can tighten much harder.
+
+**Levers measured** (rescue share, price cells, the 5-point toolset, 3-month delay, gold / commodity / fiat / digital):
+
+| lever | gold | commodity | fiat | digital |
+|---|---|---|---|---|
+| as #371 left it | 8.0 | 10.9 | 20.9 | 33.8 |
+| **leaning tools' bubble ×2 (shipped)** | **13.4** | **18.6** | **26.7** | **38.9** |
+| leaning tools' bubble ×3 | 18 | 24 | 35 | 44 |
+| tools' momentum ×2 | 15 | 17 | 30 | 40 |
+| leaning tools damp bubble inertia (−20 / −20 / −10 %) | 19 | 22 | 36 | 46 |
+| crash-chance mult on buffer / margin (−0.2 / −0.15) | — | — | — | — |
+
+(×3, momentum and inertia damping are from the prototype harness, 60 runs, whose own baseline read 9.3 / 11.7 /
+23.3 / 34.0; compare those rows against that, not against the 400-run rows. The crash-chance mult was dropped
+because it softens the roll without pulling the cycle down, which is not what was asked. Boom entries are sampled
+from untended centuries, so no tool drained bubble during the expansion before them. That makes these the hard
+cases, and the table conservative.)
+
+**Why ×2 and only on those three.** "Slightly easier, not by a lot." ×3 roughly halved well-managed fiat and
+digital crash rates at 5–8 points (9.4 → 5.1, 8.1 → 4.5), which is a different game. ×2 moves them by about a
+fifth. Inertia damping is a new mechanic (script-value branch, tooltip, sim port) for a gain the value change
+mostly delivers. The deposit guarantee, capital controls and asset relief are crash-management tools, not boom
+tools, and stay at #371's values. **Shipped:** buffer −0.5 → **−1.0**, margin −0.4 → **−0.8**, moral suasion
+−0.05 → **−0.1** (`extra_modifiers.txt`). That is still 40 % of the pre-#371 lines.
+
+### The rescue study — `--rescue --runs 400`, share of boom entries pulled back (%), by bubble at entry
+
+3-month delay, before → after:
+
+| cell | entries | passive | maxed | b 0–20 | b 20–40 | b 40–60 | b 60+ |
+|---|---|---|---|---|---|---|---|
+| commodity / price | 4435 | 0.0 | 10.9 → **18.6** | 72 → 78 | 27 → 39 | 9 → 19 | 0.6 → 3.2 |
+| gold / price | 4178 | 0.4 | 8.0 → **13.4** | 33 → 50 | 18 → 27 | 6 → 12 | 1.9 → 3.7 |
+| fiat / price | 4420 | 0.5 | 20.9 → **26.7** | 63 → 71 | 42 → 47 | 21 → 30 | 3.0 → 7.2 |
+| digital / price | 4080 | 1.2 | 33.8 → **38.9** | 80 → 81 | 72 → 75 | 45 → 51 | 9.9 → 15.7 |
+
+Acting the month the boom starts (`--rescue-delay 0`): commodity 20 → 33, gold 15 → 25, fiat 30 → 42,
+digital 48 → 56. Reacting early is worth about as much as the retune itself, which is the intended texture.
+Few boom entries have bubble under 20 (the b 0–20 column is small-sample).
+
+**Target, stated so it can be argued with.** Maxed tools on metallic money pull back about one boom in six,
+roughly one in four to three with bubble 20–40, one in eight at 40–60, and almost none past 60. An untended
+boom still always crashes. If that is too generous or too stingy, the three tool lines are the one knob, and
+`--rescue` is the measurement.
+
+### The century matrix after §10 — crashes per century, 400 runs × 100 years, #371 → now
+
+0 points is unchanged in every cell. At 1 point only moral suasion is affordable and every cell moves by ±0.6 or less, which is noise.
+
+| cell | 2 pt | 3 pt | 5 pt | 8 pt |
+|---|---|---|---|---|
+| `commodity` / price | 10.7 → 10.5 | 11.2 → 10.2 | 11.8 → 10.1 | 11.2 → 9.9 |
+| `gold` / price | 10.2 → 9.6 | 10.0 → 9.9 | 9.8 → 8.7 | 9.7 → 8.6 |
+| `gold` / peg | 16.1 → 15.3 | 15.7 → 15.0 | 15.9 → 15.3 | 16.5 → 15.6 |
+| `fiat` / price | 10.9 → 9.5 | 10.0 → 8.7 | 9.8 → 7.7 | 9.4 → 7.4 |
+| `digital` / price | 9.4 → 8.3 | 8.4 → 7.3 | 8.5 → 6.5 | 8.1 → 6.1 |
+| growth mandates (range of the four) | −1.3 to +0.4 | −1.7 to −0.5 | −1.9 to −0.6 | −2.2 to −1.0 |
+| dial never touched (range of the four) | −0.4 to −0.2 | −0.7 to −0.3 | −0.8 to −0.5 | −1.1 to −0.9 |
+
+§8's targets still hold. Metallic under price stability, an untouched dial or peg defence at 0–3 points is
+9.6–16.0 (peg defence at the top, as before), inside 5–15 bar that one cell. Well-managed fiat / digital is
+still the rarest (6.1–11.2), now a little further below metallic at high budgets. Growth runs 1.4–2.3× price
+stability (was 1.5–2.0×); the top of the range is digital at 8 points, where price stability gained most. The budget curve now slopes gently downward instead of sitting flat, which is what spending
+intervention points should buy.
+
