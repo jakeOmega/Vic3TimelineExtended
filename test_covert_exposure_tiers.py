@@ -70,6 +70,96 @@ def _tier_block(body, tier):
     return _top_level_block(body, "covert_code_tier_%s = {" % tier)
 
 
+def _block_span(body, from_index):
+    """(start, end) of the brace-balanced block whose opening `{` is at or
+    after from_index; end is the index just past the matching `}`.
+
+    Counts braces instead of trusting indentation, so it is correct even for
+    a block that a future edit re-indents or collapses.
+    """
+    open_at = body.index("{", from_index)
+    depth = 0
+    for i in range(open_at, len(body)):
+        if body[i] == "{":
+            depth += 1
+        elif body[i] == "}":
+            depth -= 1
+            if depth == 0:
+                return from_index, i + 1
+    raise AssertionError("unbalanced braces from index %d" % from_index)
+
+
+def _innermost_enclosing(body, needle, opener):
+    """The text of the innermost `opener { ... }` block that contains needle.
+
+    This is what lets a test say "the war-tier exclusion is in the limit of
+    the `if` that guards THIS effect", rather than "the string appears
+    somewhere nearby".
+    """
+    target = body.index(needle)
+    best = None
+    pos = 0
+    while True:
+        at = body.find(opener, pos)
+        if at == -1 or at > target:
+            break
+        start, end = _block_span(body, at)
+        if start <= target < end and (best is None or start > best[0]):
+            best = (start, end)
+        pos = at + 1
+    if best is None:
+        raise AssertionError("no %r block encloses %r" % (opener, needle))
+    return body[best[0]:best[1]]
+
+
+def _limit_of(block):
+    """The `limit = { ... }` sub-block of a block, brace-balanced."""
+    start, end = _block_span(block, block.index("limit = {"))
+    return block[start:end]
+
+
+def _is_outside(container, body, needle):
+    """True when needle's position in body falls outside container's span."""
+    at = body.index(needle)
+    start = body.index(container)
+    return not (start <= at < start + len(container))
+
+
+class HelperTests(unittest.TestCase):
+    SAMPLE = (
+        "outer = {\n"
+        "\tif = {\n"
+        "\t\tlimit = { a = 1 }\n"
+        "\t\teffect_one = yes\n"
+        "\t}\n"
+        "\teffect_two = yes\n"
+        "}\n"
+    )
+
+    def test_block_span_stops_at_the_matching_brace(self):
+        start, end = _block_span(self.SAMPLE, self.SAMPLE.index("if = {"))
+        # NOTE: the brief's original assertion here sliced a fixed 20
+        # characters off the end and compared it to a 19-character literal,
+        # which can never be equal -- a bug in the brief's illustrative test,
+        # not in `_block_span` (verified by hand-tracing the brace count).
+        # `endswith` checks the same thing without a magic length.
+        self.assertTrue(self.SAMPLE[start:end].endswith("effect_one = yes\n\t}"))
+        self.assertNotIn("effect_two", self.SAMPLE[start:end])
+
+    def test_innermost_enclosing_picks_the_inner_block(self):
+        block = _innermost_enclosing(self.SAMPLE, "effect_one = yes", "if = {")
+        self.assertIn("limit = { a = 1 }", block)
+        self.assertNotIn("effect_two", block)
+
+    def test_innermost_enclosing_raises_when_nothing_encloses(self):
+        with self.assertRaises(AssertionError):
+            _innermost_enclosing(self.SAMPLE, "effect_two = yes", "if = {")
+
+    def test_limit_of_returns_only_the_limit(self):
+        block = _innermost_enclosing(self.SAMPLE, "effect_one = yes", "if = {")
+        self.assertEqual("limit = { a = 1 }", _limit_of(block))
+
+
 class TierTableTests(unittest.TestCase):
     def test_tier_triggers_partition_every_operation_code(self):
         # Slice 6 adds three operation types. Each new code must land in
@@ -165,15 +255,30 @@ class ThirdPartyBlowbackTests(unittest.TestCase):
     def test_bloc_audience_requires_the_target_to_have_a_bloc(self):
         # Without this guard two countries that are both in no power bloc can
         # read as being in the same one, which would spray the whole world.
+        # Tightened: `is_in_power_bloc = yes` must be checked ON THE TARGET
+        # (nested inside `scope:detected_by_country = { ... }`) -- applying it
+        # to the iterated country (`this`) instead would still satisfy a bare
+        # substring check but silently defeat the guard.
         block = _top_level_block(_text(EFFECTS), "covert_exposure_third_party_blowback = {")
-        self.assertIn("is_in_power_bloc = yes", block)
+        scoped_to_target = _innermost_enclosing(
+            block, "is_in_power_bloc = yes", "scope:detected_by_country = {"
+        )
+        self.assertIn("is_in_power_bloc = yes", scoped_to_target)
         self.assertIn("is_in_same_power_bloc = scope:detected_by_country", block)
         self.assertIn("has_treaty_alliance_with = { TARGET = scope:detected_by_country }", block)
 
     def test_effect_moves_relations_and_posts_the_notice(self):
+        # Tightened: both effects must be nested inside the `every_country`
+        # loop, not merely present somewhere in the outer effect -- moved to
+        # a sibling of the loop, either would fire once globally instead of
+        # once per qualifying third party, and a substring check alone would
+        # not notice.
         block = _top_level_block(_text(EFFECTS), "covert_exposure_third_party_blowback = {")
-        self.assertIn("value = covert_exposure_third_party_relations", block)
-        self.assertIn("post_notification = covert_severe_exposure_notice", block)
+        loop = _innermost_enclosing(
+            block, "post_notification = covert_severe_exposure_notice", "every_country = {"
+        )
+        self.assertIn("value = covert_exposure_third_party_relations", loop)
+        self.assertIn("post_notification = covert_severe_exposure_notice", loop)
 
     def test_notice_type_is_defined(self):
         self.assertIn("covert_severe_exposure_notice = {", _text(MESSAGES))
@@ -185,11 +290,16 @@ def _event_1(body):
 
 class ExposureEventTests(unittest.TestCase):
     def test_immediate_copies_the_phase_as_well_as_the_code(self):
+        # Tightened: both `set_variable` calls (and the phase read) must lie
+        # inside the innermost `ROOT = { ... }` block -- a copy that landed on
+        # some other scope would still satisfy a bare substring check but
+        # write the variable to the wrong entity.
         ev = _event_1(_text(EVENTS))
         immediate = ev[ev.index("immediate = {"): ev.index("option = {")]
-        self.assertIn("name = iw_burned_type_code", immediate)
-        self.assertIn("name = iw_burned_phase", immediate)
-        self.assertIn("PREV.var:iw_phase", immediate)
+        root_block = _innermost_enclosing(immediate, "name = iw_burned_type_code", "ROOT = {")
+        self.assertIn("name = iw_burned_type_code", root_block)
+        self.assertIn("name = iw_burned_phase", root_block)
+        self.assertIn("PREV.var:iw_phase", root_block)
 
     def test_options_use_the_graduated_values_not_literals(self):
         ev = _event_1(_text(EVENTS))
@@ -209,40 +319,87 @@ class ExposureEventTests(unittest.TestCase):
         # distinguished from the infamy guard's identical clause by the
         # `exists = scope:detected_by_country` line that only the relations
         # limit block carries.
+        #
+        # Tightened: rather than matching a literal two-line string at a
+        # fixed tab depth (fragile under any reformatting), find the `if`
+        # that actually guards each option's `change_relations` call and
+        # inspect its `limit` directly. Also confirms the guard is NOT the
+        # severe-tier one the third-party call uses -- a swap between the two
+        # would still leave both literal clauses present in `options`.
         ev = _event_1(_text(EVENTS))
         options = ev[ev.index("option = {"): ev.index("after = {")]
-        self.assertEqual(
-            2,
-            options.count(
-                "exists = scope:detected_by_country\n"
-                "\t\t\t\tNOT = { covert_exposure_is_costless = yes }"
-            ),
-            "both options must skip the relations hit once the war has started",
-        )
+        for value_name in (
+            "covert_exposure_relations_acknowledge",
+            "covert_exposure_relations_deny",
+        ):
+            needle = "value = %s" % value_name
+            self.assertIn(needle, options)
+            guard = _innermost_enclosing(options, needle, "if = {")
+            limit = _limit_of(guard)
+            self.assertIn(
+                "exists = scope:detected_by_country",
+                limit,
+                "%s's guard must check the target still exists" % value_name,
+            )
+            self.assertIn(
+                "NOT = { covert_exposure_is_costless = yes }",
+                limit,
+                "%s must skip once the war has actually started" % value_name,
+            )
+            self.assertNotIn(
+                "covert_code_tier_severe",
+                limit,
+                "%s must not be guarded by the third-party severe-tier check" % value_name,
+            )
 
     def test_both_options_call_the_third_party_blowback_on_the_severe_tier(self):
+        # Tightened: check each of the two occurrences individually rather
+        # than counting matches across both options combined -- a count of 2
+        # for each string would still pass if, say, both severe-tier guards
+        # ended up on the same option and neither on the other.
         ev = _event_1(_text(EVENTS))
         options = ev[ev.index("option = {"): ev.index("after = {")]
-        self.assertEqual(2, options.count("covert_exposure_third_party_blowback = yes"))
-        self.assertEqual(
-            2,
-            options.count("covert_code_tier_severe = { VAR = iw_burned_type_code }"),
-        )
+        split_at = options.index("name = covert_warfare.1.b")
+        for label, half in (("acknowledge", options[:split_at]), ("deny", options[split_at:])):
+            needle = "covert_exposure_third_party_blowback = yes"
+            self.assertIn(needle, half, "option %s must call the third-party blowback" % label)
+            guard = _innermost_enclosing(half, needle, "if = {")
+            limit = _limit_of(guard)
+            self.assertIn(
+                "covert_code_tier_severe = { VAR = iw_burned_type_code }",
+                limit,
+                "option %s's third-party call must be gated on the severe tier" % label,
+            )
+            self.assertNotIn("covert_code_tier_war", limit)
 
     def test_after_clears_both_copied_variables(self):
+        # Tightened: locate the actual guarded block (the innermost `if`
+        # enclosing the `trigger_event` call to the target) by brace matching,
+        # then assert each removal's position falls outside its span. Slicing
+        # on where that anchor string happens to sit textually would still
+        # pass if a removal were moved inside the guard but after the anchor.
         ev = _event_1(_text(EVENTS))
         after = ev[ev.index("after = {"):]
-        self.assertIn("remove_variable = iw_burned_type_code", after)
-        self.assertIn("remove_variable = iw_burned_phase", after)
-        # Neither removal may sit inside the detected_by_country guard, or a
-        # burn whose target has vanished leaves the variable stuck forever.
-        guarded = after[: after.index("scope:detected_by_country = {\n\t\t\t\ttrigger_event")]
-        self.assertNotIn("remove_variable = iw_burned_type_code", guarded)
-        self.assertNotIn("remove_variable = iw_burned_phase", guarded)
+        guarded = _innermost_enclosing(
+            after, "trigger_event = { id = covert_warfare.2 }", "if = {"
+        )
+        for name in ("iw_burned_type_code", "iw_burned_phase"):
+            needle = "remove_variable = %s" % name
+            self.assertIn(needle, after)
+            self.assertTrue(
+                _is_outside(guarded, after, needle),
+                "%s must be removed outside the detected_by_country guard, or a "
+                "burn whose target has vanished leaves the variable stuck forever" % needle,
+            )
 
 
 class TierNameLocTests(unittest.TestCase):
     def test_both_tier_names_read_the_tier_table(self):
+        # Tightened: each tier's `trigger` and `localization_key` must live in
+        # the SAME `text = { ... }` sub-block. Checking both strings appear
+        # somewhere in the entry would still pass if a tier's trigger were
+        # paired with a different tier's localization_key, since every tier
+        # name is present somewhere in the entry regardless of pairing.
         body = _text(CUSTOM_LOC)
         for entry, var in (
             ("covert_burned_tier_name", "iw_burned_type_code"),
@@ -250,12 +407,19 @@ class TierNameLocTests(unittest.TestCase):
         ):
             block = _top_level_block(body, "%s = {" % entry)
             for tier in TIER_CODES:
+                trigger_call = "covert_code_tier_%s = { VAR = %s }" % (tier, var)
                 self.assertIn(
-                    "covert_code_tier_%s = { VAR = %s }" % (tier, var),
+                    trigger_call,
                     block,
                     "%s must name the %s tier through the tier table" % (entry, tier),
                 )
-                self.assertIn("localization_key = iw_exposure_tier_%s" % tier, block)
+                text_block = _innermost_enclosing(block, trigger_call, "text = {")
+                self.assertIn(
+                    "localization_key = iw_exposure_tier_%s" % tier,
+                    text_block,
+                    "%s's %s tier must pair the trigger with its OWN localization_key, "
+                    "not one borrowed from a sibling text block" % (entry, tier),
+                )
             # No custom loc may re-list codes; that is the tier table's job.
             self.assertNotIn("var:%s = " % var, block)
 
@@ -348,22 +512,49 @@ class DetectionFloorTests(unittest.TestCase):
 WAR_ACTIONS = ("covert_infrastructure_sabotage_action", "covert_comms_disruption_action")
 
 
+def _header_block(body, header, start=0):
+    """The brace-balanced text of one `header { ... }` occurrence, searching
+    from `start`. Returns (text, end_index) so a caller can find a second
+    occurrence of the same header after this one.
+    """
+    idx = body.index(header, start)
+    span_start, span_end = _block_span(body, idx)
+    return body[span_start:span_end], span_end
+
+
 class DiplomaticPlayGateTests(unittest.TestCase):
     def test_both_wartime_actions_accept_a_play_in_all_three_gates(self):
+        # Tightened: a bare count of 3 across the whole action block passes
+        # even if the clauses landed in the wrong THREE places (e.g. doubled
+        # in `possible` and missing from the pact's `requirement_to_maintain`,
+        # which is the gate that decides whether an in-progress operation
+        # survives a play resolving into war). Check each named gate by name
+        # instead. `requirement_to_maintain` appears twice (this gate and the
+        # funding gate), so the play-or-war clause only has to land in one of
+        # the two -- checked as their concatenation.
         body = _text(ACTIONS)
         for action in WAR_ACTIONS:
             block = _top_level_block(body, "%s = {" % action)
-            self.assertEqual(
-                3,
-                block.count("is_diplomatic_play_enemy_of = scope:target_country"),
-                "%s must accept a diplomatic play in `possible`, in "
-                "`requirement_to_maintain` and in the AI's `will_propose`" % action,
-            )
-            self.assertEqual(
-                3,
-                block.count("has_war_with = scope:target_country"),
-                "%s must still accept an actual war in all three gates" % action,
-            )
+            possible_block, _ = _header_block(block, "possible = {")
+            rtm_1, rtm_1_end = _header_block(block, "requirement_to_maintain = {")
+            rtm_2, _ = _header_block(block, "requirement_to_maintain = {", rtm_1_end)
+            requirement_blocks = rtm_1 + rtm_2
+            will_propose_block, _ = _header_block(block, "will_propose = {")
+            for gate_name, gate_block in (
+                ("possible", possible_block),
+                ("requirement_to_maintain", requirement_blocks),
+                ("will_propose", will_propose_block),
+            ):
+                self.assertIn(
+                    "is_diplomatic_play_enemy_of = scope:target_country",
+                    gate_block,
+                    "%s's %s must accept a diplomatic play" % (action, gate_name),
+                )
+                self.assertIn(
+                    "has_war_with = scope:target_country",
+                    gate_block,
+                    "%s's %s must still accept an actual war" % (action, gate_name),
+                )
             # The old blanket "are you at war with anyone" clause is gone.
             self.assertNotIn("is_at_war = yes", block)
 
@@ -384,40 +575,90 @@ class WartimeExposureTests(unittest.TestCase):
         self.assertIn("var:iw_burned_at_war = 1", block)
 
     def test_immediate_copies_the_war_state(self):
+        # Tightened: both the `if` writing 1 and the `else` writing 0 must lie
+        # inside the innermost `ROOT = { ... }` block, and each write must
+        # sit under its own branch -- the `if`'s `limit` must be the war
+        # check, and the `else` (not just "somewhere in immediate") must
+        # write 0. Without asserting the `else` branch specifically, a stray
+        # unconditional `set_variable = { name = iw_burned_at_war value = 0 }`
+        # placed right after the `if` (silently overwriting the war case back
+        # to 0 every time) would still pass a bare substring check.
         ev = _event_1(_text(EVENTS))
         immediate = ev[ev.index("immediate = {"): ev.index("option = {")]
-        self.assertIn("name = iw_burned_at_war", immediate)
-        self.assertIn("has_war_with = scope:detected_by_country", immediate)
+        root_block = _innermost_enclosing(
+            immediate, "name = iw_burned_at_war value = 1", "ROOT = {"
+        )
+        war_if = _innermost_enclosing(
+            root_block, "name = iw_burned_at_war value = 1", "if = {"
+        )
+        self.assertIn("has_war_with = scope:detected_by_country", _limit_of(war_if))
+        war_else = _innermost_enclosing(
+            root_block, "name = iw_burned_at_war value = 0", "else = {"
+        )
+        self.assertIn("name = iw_burned_at_war value = 0", war_else)
 
     def test_after_clears_the_war_state(self):
+        # Tightened: same brace-matching approach as
+        # `test_after_clears_both_copied_variables` -- find the actual guard
+        # by locating the `if` that encloses the `trigger_event` call, then
+        # confirm the removal's position falls outside its span.
         ev = _event_1(_text(EVENTS))
         after = ev[ev.index("after = {"):]
-        self.assertIn("remove_variable = iw_burned_at_war", after)
-        guarded = after[: after.index("scope:detected_by_country = {\n\t\t\t\ttrigger_event")]
-        self.assertNotIn("remove_variable = iw_burned_at_war", guarded)
+        guarded = _innermost_enclosing(
+            after, "trigger_event = { id = covert_warfare.2 }", "if = {"
+        )
+        needle = "remove_variable = iw_burned_at_war"
+        self.assertIn(needle, after)
+        self.assertTrue(_is_outside(guarded, after, needle))
 
     def test_wartime_sabotage_during_the_war_costs_nothing(self):
+        # Tightened: `covert_exposure_is_costless = yes` must be the LIMIT of
+        # the branch that actually adds the zero/war magnitude, not merely
+        # present somewhere in the value's if/else_if chain -- the chain has
+        # another branch (the pre-war case, below) that also references a
+        # `covert_exposure_*_war*` constant, so a bare substring check cannot
+        # tell the two branches apart. `_innermost_enclosing`'s `opener`
+        # "if = {" also matches inside "else_if = {" (that keyword contains
+        # "if = {" as a substring, starting 5 characters in), which is
+        # exactly what lets this walk the if/else_if chain uniformly.
         body = _text(VALUES)
         self.assertIn("covert_exposure_infamy_war = 0", body)
-        for name in ("covert_exposure_infamy_base", "covert_exposure_relations_base"):
-            block = _top_level_block(body, "%s = {" % name)
-            self.assertIn("covert_exposure_is_costless = yes", block)
+        infamy_block = _top_level_block(body, "covert_exposure_infamy_base = {")
+        infamy_branch = _innermost_enclosing(
+            infamy_block, "add = covert_exposure_infamy_war\n", "if = {"
+        )
+        self.assertIn("covert_exposure_is_costless = yes", _limit_of(infamy_branch))
+        relations_block = _top_level_block(body, "covert_exposure_relations_base = {")
+        relations_branch = _innermost_enclosing(relations_block, "add = 0\n", "if = {")
+        self.assertIn("covert_exposure_is_costless = yes", _limit_of(relations_branch))
 
     def test_wartime_sabotage_before_the_war_is_charged_as_severe(self):
-        body = _text(VALUES)
         # Severe-tier infamy, moderate relations -- stated as their own named
         # constants so the pre-war case can be retuned without touching either
         # tier it borrows its magnitude from.
+        #
+        # Tightened: assert `covert_code_tier_war` (not `covert_exposure_is_
+        # costless`) is specifically the limit of the branch that adds each
+        # *_war_prewar constant -- a bare substring check cannot distinguish
+        # this branch from the costless branch above, since both blocks
+        # contain both constant names somewhere.
+        body = _text(VALUES)
         self.assertIn("covert_exposure_infamy_war_prewar = 4", body)
         self.assertIn("covert_exposure_relations_war_prewar = -20", body)
-        self.assertIn(
-            "covert_exposure_infamy_war_prewar",
-            _top_level_block(body, "covert_exposure_infamy_base = {"),
+        infamy_block = _top_level_block(body, "covert_exposure_infamy_base = {")
+        infamy_branch = _innermost_enclosing(
+            infamy_block, "add = covert_exposure_infamy_war_prewar", "if = {"
         )
-        self.assertIn(
-            "covert_exposure_relations_war_prewar",
-            _top_level_block(body, "covert_exposure_relations_base = {"),
+        infamy_limit = _limit_of(infamy_branch)
+        self.assertIn("covert_code_tier_war = { VAR = iw_burned_type_code }", infamy_limit)
+        self.assertNotIn("covert_exposure_is_costless", infamy_limit)
+        relations_block = _top_level_block(body, "covert_exposure_relations_base = {")
+        relations_branch = _innermost_enclosing(
+            relations_block, "add = covert_exposure_relations_war_prewar", "if = {"
         )
+        relations_limit = _limit_of(relations_branch)
+        self.assertIn("covert_code_tier_war = { VAR = iw_burned_type_code }", relations_limit)
+        self.assertNotIn("covert_exposure_is_costless", relations_limit)
 
     def test_both_options_skip_infamy_and_relations_in_the_costless_case(self):
         ev = _event_1(_text(EVENTS))
