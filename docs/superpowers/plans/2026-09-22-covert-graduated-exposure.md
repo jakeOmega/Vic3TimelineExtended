@@ -1220,16 +1220,23 @@ git commit -m "feat(covert): drop the detection floor to 0.1% a month"
 
 **Files:**
 - Modify: `common/diplomatic_actions/covert_operations.txt` (`covert_infrastructure_sabotage_action` and `covert_comms_disruption_action`, three gates each)
+- Modify: `common/scripted_triggers/covert_warfare_triggers.txt` (one new trigger)
 - Modify: `localization/english/te_miscellaneous_l_english.yml` (rename and reword one tooltip key)
-- Modify: `events/covert_warfare_events.txt` (`immediate` copies the war state; `after` clears it; the relations guard)
-- Modify: `common/script_values/covert_warfare_script_values.txt` (`covert_exposure_relations_base` war branch)
-- Test: `test_covert_exposure_tiers.py` (add a class)
+- Modify: `events/covert_warfare_events.txt` (`immediate` copies the war state; `after` clears it; both options' guards)
+- Modify: `common/script_values/covert_warfare_script_values.txt` (two constants; the war branch of both base values)
+- Modify: `docs/systems/mod_systems.md`
+- Test: `test_covert_exposure_tiers.py` (add two classes)
 
-**Why:** sabotage and comms disruption are gated on already being at war, which means the spies can only start preparing once the shooting has begun. If a diplomatic play against the target is under way, the preparation is exactly what an intelligence service would be doing.
+**Why:** sabotage and comms disruption are gated on already being at war, so the spies can only start preparing once the shooting has begun. If a diplomatic play against the target is under way, that preparation is exactly what an intelligence service would be doing.
 
-**The consequence that has to be handled with it:** the war tier charges *zero* relations on exposure, justified by already being at war. Let these start during a play and being caught becomes diplomatically free at the moment it matters most. So the shrug becomes conditional on actually being at war: caught during a play charges the moderate relations hit, caught during the war charges nothing. The war state is copied onto the country in `immediate` as `iw_burned_at_war`, the same pattern the type code and phase already use — the war can begin between the event firing and the player clicking, and the script values read only country variables by design.
+**The consequence that ships with it.** The war tier's blowback was written for operations that only exist during a war. Once they can start during a play, *when* you are caught matters more than the operation type does:
 
-The infamy is unchanged: the war tier's base 1 applies either way.
+- **Caught once the war has started: nothing at all.** No infamy, no relations. Blowing up a bridge does not make the international community angrier at a country that is already at war — it is just war. Today's war tier charges 1 infamy for this; that goes to zero.
+- **Caught during the play, before the war: the worst look there is.** Sabotage in the run-up reads as manufacturing the war, so it carries **severe-tier infamy** (base 4, the same as bankrolling a coup) and the moderate relations hit (base −20).
+
+Third parties are not notified either way: that branch stays keyed to the severe *tier*, and the international reaction to pre-war sabotage is carried by the infamy.
+
+Because the war can begin between the event firing and the player clicking, the war state is copied onto the country in `immediate` as `iw_burned_at_war`, the same pattern the type code and phase already use, and one scripted trigger — `covert_exposure_is_costless` — is the single place that answers "is this the free case", read by both script values and both options.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -1250,7 +1257,6 @@ class DiplomaticPlayGateTests(unittest.TestCase):
                 "%s must accept a diplomatic play in `possible`, in "
                 "`requirement_to_maintain` and in the AI's `will_propose`" % action,
             )
-            # Each of the three is an OR with the war check, never a replacement.
             self.assertEqual(
                 3,
                 block.count("has_war_with = scope:target_country"),
@@ -1269,6 +1275,12 @@ class DiplomaticPlayGateTests(unittest.TestCase):
 
 
 class WartimeExposureTests(unittest.TestCase):
+    def test_the_costless_case_is_one_trigger(self):
+        block = _top_level_block(_text(TRIGGERS), "covert_exposure_is_costless = {")
+        self.assertIn("covert_code_tier_war = { VAR = iw_burned_type_code }", block)
+        self.assertIn("has_variable = iw_burned_at_war", block)
+        self.assertIn("var:iw_burned_at_war = 1", block)
+
     def test_immediate_copies_the_war_state(self):
         ev = _event_1(_text(EVENTS))
         immediate = ev[ev.index("immediate = {"): ev.index("option = {")]
@@ -1282,23 +1294,41 @@ class WartimeExposureTests(unittest.TestCase):
         guarded = after[: after.index("scope:detected_by_country = {\n\t\t\t\ttrigger_event")]
         self.assertNotIn("remove_variable = iw_burned_at_war", guarded)
 
-    def test_a_wartime_operation_caught_before_the_war_still_costs_relations(self):
-        block = _top_level_block(_text(VALUES), "covert_exposure_relations_base = {")
-        # War tier AND actually at war -> nothing. War tier and merely in a
-        # play -> the moderate hit.
-        self.assertIn("var:iw_burned_at_war = 1", block)
-        self.assertIn("covert_exposure_relations_moderate", block)
+    def test_wartime_sabotage_during_the_war_costs_nothing(self):
+        body = _text(VALUES)
+        self.assertIn("covert_exposure_infamy_war = 0", body)
+        for name in ("covert_exposure_infamy_base", "covert_exposure_relations_base"):
+            block = _top_level_block(body, "%s = {" % name)
+            self.assertIn("covert_exposure_is_costless = yes", block)
 
-    def test_the_event_only_skips_relations_for_a_war_tier_burn_during_a_war(self):
+    def test_wartime_sabotage_before_the_war_is_charged_as_severe(self):
+        body = _text(VALUES)
+        # Severe-tier infamy, moderate relations -- stated as their own named
+        # constants so the pre-war case can be retuned without touching either
+        # tier it borrows its magnitude from.
+        self.assertIn("covert_exposure_infamy_war_prewar = 4", body)
+        self.assertIn("covert_exposure_relations_war_prewar = -20", body)
+        self.assertIn(
+            "covert_exposure_infamy_war_prewar",
+            _top_level_block(body, "covert_exposure_infamy_base = {"),
+        )
+        self.assertIn(
+            "covert_exposure_relations_war_prewar",
+            _top_level_block(body, "covert_exposure_relations_base = {"),
+        )
+
+    def test_both_options_skip_infamy_and_relations_in_the_costless_case(self):
         ev = _event_1(_text(EVENTS))
         options = ev[ev.index("option = {"): ev.index("after = {")]
-        self.assertEqual(2, options.count("var:iw_burned_at_war = 1"))
+        # Once per option for infamy, once per option for relations: a zero
+        # would otherwise render as "+0" / "-0" in the option tooltip.
+        self.assertEqual(4, options.count("NOT = { covert_exposure_is_costless = yes }"))
 ```
 
 - [ ] **Step 2: Run it to make sure it fails**
 
 Run: `python3 -m unittest test_covert_exposure_tiers -v`
-Expected: FAIL — the actions still gate on war alone.
+Expected: FAIL — the actions still gate on war alone and the trigger does not exist.
 
 - [ ] **Step 3: Relax both actions' `possible` gate**
 
@@ -1370,7 +1400,90 @@ In `localization/english/te_miscellaneous_l_english.yml`, replace the `iw_at_war
  iw_at_war_or_play_tt:0 "Must be at war with them, or in a [concept_diplomatic_play] against them (wartime operation)"
 ```
 
-- [ ] **Step 7: Copy the war state in `immediate`**
+- [ ] **Step 7: Add the costless-case trigger**
+
+Append to `common/scripted_triggers/covert_warfare_triggers.txt`, after the tier table:
+
+```
+# A wartime operation caught once the war has actually started costs nothing:
+# no infamy, no relations. Sabotage does not make the world angrier at a
+# country that is already fighting. Caught during the diplomatic play that
+# precedes the war it is the opposite — see covert_exposure_infamy_war_prewar.
+#
+# THE one place that question is answered: both blowback script values and
+# both options of covert_warfare.1 read this.
+# Scope: country (the operator, while covert_warfare.1 is open)
+covert_exposure_is_costless = {
+	covert_code_tier_war = { VAR = iw_burned_type_code }
+	has_variable = iw_burned_at_war
+	var:iw_burned_at_war = 1
+}
+```
+
+- [ ] **Step 8: Retune the war tier's constants**
+
+In Section 1 of `common/script_values/covert_warfare_script_values.txt`, change `covert_exposure_infamy_war = 1` to `0` and add the two pre-war constants beside it:
+
+```
+covert_exposure_infamy_war = 0
+
+# Caught in the run-up instead of during the war: sabotage before the shooting
+# reads as manufacturing the war, so it is charged at the severe tier's infamy
+# and the moderate tier's relations. Named separately from those tiers so this
+# case can be retuned without moving either of them.
+covert_exposure_infamy_war_prewar = 4
+covert_exposure_relations_war_prewar = -20
+```
+
+- [ ] **Step 9: Branch both base values on the costless trigger**
+
+In `covert_exposure_infamy_base`, replace the war branch:
+
+```
+	else_if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		add = covert_exposure_infamy_war
+	}
+```
+
+with:
+
+```
+	else_if = {
+		limit = { covert_exposure_is_costless = yes }
+		add = covert_exposure_infamy_war
+	}
+	else_if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		add = covert_exposure_infamy_war_prewar
+	}
+```
+
+In `covert_exposure_relations_base`, replace the war branch:
+
+```
+	if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		add = 0
+	}
+```
+
+with:
+
+```
+	if = {
+		limit = { covert_exposure_is_costless = yes }
+		add = 0
+	}
+	else_if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		add = covert_exposure_relations_war_prewar
+	}
+```
+
+Leave the mild / severe / else branches of both values exactly as they are.
+
+- [ ] **Step 10: Copy the war state in `immediate`**
 
 In `events/covert_warfare_events.txt`, inside `covert_warfare.1`'s `immediate`, add to the existing `ROOT = { ... }` block, after the two `set_variable` lines:
 
@@ -1386,9 +1499,9 @@ In `events/covert_warfare_events.txt`, inside `covert_warfare.1`'s `immediate`, 
 
 `scope:detected_by_country` is saved on the line above, so it resolves here. Extend the block comment: the war state is copied for the same reason as the code and the phase, and additionally because the war may begin between the event firing and the player clicking.
 
-- [ ] **Step 8: Clear it in `after`**
+- [ ] **Step 11: Clear it in `after`**
 
-Add a third sibling removal block alongside the two that are already there — again, do not edit the existing ones:
+Add a third sibling removal block alongside the two already there — do not edit the existing ones:
 
 ```
 		if = {
@@ -1397,42 +1510,24 @@ Add a third sibling removal block alongside the two that are already there — a
 		}
 ```
 
-- [ ] **Step 9: Make the war tier's shrug conditional**
+- [ ] **Step 12: Guard both costs in both options**
 
-In `common/script_values/covert_warfare_script_values.txt`, replace the first branch of `covert_exposure_relations_base`:
-
-```
-	if = {
-		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
-		add = 0
-	}
-```
-
-with two flat branches:
+In each option of `covert_warfare.1`, the infamy call is currently unconditional and the relations call is guarded on `NOT = { covert_code_tier_war = ... }`. Both now hang off the same question. In **both** options, replace:
 
 ```
-	# A wartime operation caught during the war costs nothing diplomatically:
-	# the relationship is already what it is. Caught while only a diplomatic
-	# play is running, it is ordinary meddling and is charged as such.
-	if = {
-		limit = {
-			covert_code_tier_war = { VAR = iw_burned_type_code }
-			has_variable = iw_burned_at_war
-			var:iw_burned_at_war = 1
-		}
-		add = 0
-	}
-	else_if = {
-		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
-		add = covert_exposure_relations_moderate
-	}
+			change_infamy = { value = covert_exposure_infamy_acknowledge }
 ```
 
-Leave the mild / severe / else branches exactly as they are.
+(and the `_deny` equivalent in the other option) with:
 
-- [ ] **Step 10: Narrow the event's relations guard**
+```
+			if = {
+				limit = { NOT = { covert_exposure_is_costless = yes } }
+				change_infamy = { value = covert_exposure_infamy_acknowledge }
+			}
+```
 
-In both options of `covert_warfare.1`, the relations `if` currently skips the whole war tier. It must now skip only a war-tier burn that happened during an actual war. Replace, in both options:
+and replace the relations guard's tier clause:
 
 ```
 					NOT = { covert_code_tier_war = { VAR = iw_burned_type_code } }
@@ -1441,39 +1536,31 @@ In both options of `covert_warfare.1`, the relations `if` currently skips the wh
 with:
 
 ```
-					NOT = {
-						AND = {
-							covert_code_tier_war = { VAR = iw_burned_type_code }
-							has_variable = iw_burned_at_war
-							var:iw_burned_at_war = 1
-						}
-					}
+					NOT = { covert_exposure_is_costless = yes }
 ```
 
-A missing `iw_burned_at_war` therefore falls through to charging relations, which matches the script value's own default.
+A war-tier burn during the war therefore emits neither effect, so neither renders as "+0" or "-0"; a war-tier burn during a play emits both.
 
-- [ ] **Step 11: Format, run the tests**
+- [ ] **Step 13: Format, organize loc, run the tests**
 
 ```bash
-python3 scripts/format_paradox_tabs.py common/diplomatic_actions/covert_operations.txt events/covert_warfare_events.txt common/script_values/covert_warfare_script_values.txt
+python3 scripts/format_paradox_tabs.py common/diplomatic_actions/covert_operations.txt events/covert_warfare_events.txt common/script_values/covert_warfare_script_values.txt common/scripted_triggers/covert_warfare_triggers.txt
 python3 organize_loc.py
 python3 -m unittest test_covert_exposure_tiers test_covert_detection_roll -v
 ```
 
 Then the full suite once.
 
-- [ ] **Step 12: Document both changes**
+- [ ] **Step 14: Document both changes**
 
-In `docs/systems/mod_systems.md` § Covert Warfare, add: the detection floor is now `covert_ops_detection_floor` (0.1%/month, reachable at high funding against a weak target, and the operation row shows one decimal because of it); the two wartime operations may be started and maintained while a diplomatic play against the target is running, and stand down if that play ends without war; and a war-tier exposure costs relations unless the war has actually begun.
+In `docs/systems/mod_systems.md` § Covert Warfare, add: the detection floor is now `covert_ops_detection_floor` (0.1%/month, reachable at high funding against a weak target, which is why the operation row shows one decimal); the two wartime operations may be started and maintained while a diplomatic play against the target is running, and stand down if that play ends without war; and the war tier's blowback now turns on *when* the operation was caught — nothing at all once the war has started, severe-tier infamy plus a moderate relations hit if it was caught during the run-up.
 
-- [ ] **Step 13: Commit**
+- [ ] **Step 15: Commit**
 
 ```bash
-git add common/diplomatic_actions/covert_operations.txt events/covert_warfare_events.txt common/script_values/covert_warfare_script_values.txt localization/english docs/systems/mod_systems.md test_covert_exposure_tiers.py
-git commit -m "feat(covert): let sabotage and comms disruption start during a diplomatic play"
+git add common/diplomatic_actions/covert_operations.txt common/scripted_triggers/covert_warfare_triggers.txt events/covert_warfare_events.txt common/script_values/covert_warfare_script_values.txt localization/english docs/systems/mod_systems.md test_covert_exposure_tiers.py
+git commit -m "feat(covert): let sabotage start during a diplomatic play; price it by when it is caught"
 ```
-
----
 
 ---
 
