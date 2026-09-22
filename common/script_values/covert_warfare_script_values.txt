@@ -36,6 +36,14 @@ covert_ops_detection_funding_5_reduction = 6
 # 10% operations near the old single-roll 18%) if N-operation risk lands hot.
 covert_ops_detection_multi_op_scale = 1
 
+# The lowest monthly detection risk any operation can carry. Full funding
+# subtracts more than the base risk on its own, so a well-funded agency
+# against a target with no counterintelligence sits exactly here: 0.1%/month
+# is 1.2% a year, which is "almost with impunity" without ever being "safe".
+# Fractions are real rolls, not a silent zero — vanilla's Montenegro raiding
+# journal entry passes computed chances of 0.15 and 0.45 to `random`.
+covert_ops_detection_floor = 0.1
+
 # Counterintelligence IC bonus per funding level above 1 (applied via iw_funding_defense modifier)
 covert_ops_funding_defense_ic_per_level = 5
 
@@ -220,7 +228,7 @@ covert_operation_cost_mult = {
 
 # Detection chance per month for active operations
 # Factors: base risk, funding reduction, target counterintelligence (IC + type defense), attacker efficiency
-# Formula: raw = base - funding_reduction + target_defense_penalty, final = raw × (1 - efficiency), clamped [1, 50]
+# Formula: raw = base - funding_reduction + target_defense_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
 # var:target_max_ic and var:target_type_defense must be set before evaluating.
 covert_operation_detection_chance = {
 	value = covert_ops_detection_base
@@ -264,7 +272,7 @@ covert_operation_detection_chance = {
 	# Per-operation roll scale (Section 1) applied here so the widget row and
 	# the roll (covert_op_roll_chance) read the exact same number.
 	multiply = covert_ops_detection_multi_op_scale
-	min = 1
+	min = covert_ops_detection_floor
 	max = 50
 }
 

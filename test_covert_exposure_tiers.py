@@ -316,5 +316,24 @@ class DebugHarnessTests(unittest.TestCase):
         )
 
 
+class DetectionFloorTests(unittest.TestCase):
+    def test_the_floor_is_a_named_constant_at_a_tenth_of_a_percent(self):
+        body = _text(VALUES)
+        self.assertIn("covert_ops_detection_floor = 0.1", body)
+        block = _top_level_block(body, "covert_operation_detection_chance = {")
+        self.assertIn("min = covert_ops_detection_floor", block)
+        self.assertNotIn("\n\tmin = 1\n", block)
+
+    def test_the_operation_row_shows_a_decimal(self):
+        # At the floor the risk is 0.1%/month. Rendered with |0 that reads as
+        # "0%", which tells the player they are safe when they are not.
+        loc = _text(ROOT / "localization/english/te_journal_entries_l_english.yml")
+        line = next(
+            l for l in loc.splitlines()
+            if l.strip().startswith("je_iw_op_row_detection:")
+        )
+        self.assertIn("GetVariableValue('iw_detect')|1", line)
+
+
 if __name__ == "__main__":
     unittest.main()
