@@ -50,12 +50,21 @@ currency_peg = {
 
 	# TECH GATE: INTERNATIONAL EXCHANGE STANDARDS (era 4), not central_banking.
 	# A declared peg between two national currencies is the gold-standard era's
-	# arrangement, and this is the tech that brings the Gold Standard law in with
-	# it — a country that cannot yet run a convertible currency has nothing to
-	# promise a counterparty. Owner decision 2026-09-21; the three articles are
-	# staggered (peg here, swap line at macroeconomics, guarantee at
-	# intergovernmental_organizations) so the phase-5 toolkit arrives over three
-	# eras rather than all at once.
+	# arrangement: the classical gold standard spread as a set of unilateral
+	# convertibility promises, and the *negotiated* peg between currencies —
+	# the Latin Monetary Union's successors, the gold-exchange standards of the
+	# 1890s — is the later, treaty-borne form of it. Owner decision 2026-09-21;
+	# the three articles are staggered (peg here, swap line at macroeconomics,
+	# guarantee at intergovernmental_organizations) so the phase-5 toolkit
+	# arrives over three eras rather than all at once.
+	#
+	# REVISED 2026-09-21 (same day): the first draft of this comment justified
+	# the gate as "the tech that brings the Gold Standard law in with it".
+	# law_gold_standard has since moved to central_banking (era 2 — see
+	# common/laws/extra_laws.txt), so that reason is gone; the staggering above
+	# is the standing one, and it does not depend on where gold sits. Coherence
+	# needs only peg gate >= gold gate, which era 4 still satisfies: a country
+	# reaches convertibility first and can be held to it by treaty later.
 	unlocked_by_technologies = {
 		international_exchange_standards
 	}
@@ -69,10 +78,23 @@ currency_peg = {
 	# carries no prestige line at all: a coerced peg is not a vote of confidence.
 	target_modifier = {
 		country_prestige_mult = 0.02
-		# [6b] A pegger lives in the anchor's monetary orbit (§15C.2, ruling L1),
-		# sized against development_assistance's "the client's growing
-		# dependence". The ANCHOR is the target here, so the line sits in
-		# target_modifier; on the two backstops the provider is the source.
+	}
+
+	# [6b] A pegger lives in the anchor's monetary orbit (§15C.2, ruling L1),
+	# sized against development_assistance's "the client's growing dependence".
+	#
+	# PLACEMENT (fixed 2026-09-21): country_treaty_leverage_generation_add is
+	# generated AGAINST the country whose block carries it, by the dominant
+	# counterparty — it is not "leverage this country generates". Vanilla is
+	# unambiguous: guarantee_independence puts it on the *guaranteed* party
+	# (target), foreign_investment_rights / trade_privilege / host_power_bloc_embassy
+	# on the party that *grants* the concession (source). The mod's own
+	# development_assistance already had it right, on the client's target_modifier.
+	# It shipped here on the ANCHOR's block, which made the PEGGER gain leverage
+	# over the anchor — exactly backwards. The pegger is the source, so it goes
+	# in source_modifier. Same correction on 111/112 (mirrored the other way:
+	# there the weak party is the target) and on 113/114.
+	source_modifier = {
 		country_treaty_leverage_generation_add = 200
 	}
 

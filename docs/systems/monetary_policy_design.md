@@ -449,7 +449,7 @@ and are tagged with the task that raised them.
 | **T5** | `te_mon_hyper_cooldown` is cleared by the two **resolving** options, not by the exit | it is an anti-nag device for riding the crisis out, not a lock-out | two lines |
 | **T5** | A dollarised country takes the metallic **pull** (`−π_core`) without the metallic **pin**, so the model's fixed point is `core = expected/2` rather than 0 | accepted for phase 2: with dollarise's full reset it lands near 1% and stays there | **Decided 2026-09-20 (§0.5 owner decision K):** it takes a pin, at the anchor (2) rather than metal's 0 |
 | **T7** | `te_mon_stance_months` is capped at ±11 | §13 names no cap, and without one a decade-long stance takes a decade of the middle band to unwind. 11 makes the fade exactly as long as the climb — six pulses each way | one constant |
-| **T7** | Rural Folk: `cross_of_gold_currency` added to `ideology_isolationist` | `ideology_particularist` already carried `simple_currency`, which cancelled the Cross of Gold on `ideology_agrarian` **exactly**, so §13's marquee row netted zero on gold and zero on fiat. Isolationist is a Rural Folk baseline held by no other IG, and the gold standard is unlocked by `international_exchange_standards` — an international order is what an isolationist objects to | one line of generator input |
+| **T7** | Rural Folk: `cross_of_gold_currency` added to `ideology_isolationist` | `ideology_particularist` already carried `simple_currency`, which cancelled the Cross of Gold on `ideology_agrarian` **exactly**, so §13's marquee row netted zero on gold and zero on fiat. Isolationist is a Rural Folk baseline held by no other IG, and a convertibility promise binds the rate dial to an external discipline nobody at home voted for — submitting the currency to the outside world is what an isolationist objects to | one line of generator input |
 | **T7** | Petite Bourgeoisie: `simple_currency` added to `ideology_patriotic` | `ideology_meritocratic`'s pre-existing `advanced_curency` left PB coming out pro-digital. **Side effect accepted:** patriotic is also an Armed Forces baseline, so the Armed Forces gain a modest hard-money lean — correct on its own terms (fixed salaries and pensions), and §13 already puts them on the losing side of its own inflation row | one line |
 | **T7** | `ideological_opinion_impact` stays **0** on `lawgroup_monetary_policy` | it scales the *legitimacy* friction between disagreeing governing IGs, not the IG approval §13 wants, which runs off `IG_APPROVAL_FROM_LAW` / `IG_APPROVAL_FROM_LAW_CHANGE` and is ungated by it. **Inferred from the defines, not observed** — **checklist 17** | one value (0.25, like the mod's other economy law groups) |
 | **T8** | The `GetCustom`-in-`is_valid` single-cause line is kept, with no static fallback | precedent: `iw_funding_not_max_tt` uses a data function in an `is_valid` tooltip | ~40 lines of `trigger_if` branches — **checklist 21** |
@@ -1679,6 +1679,13 @@ with but not steer by; gold buys credibility and cheap borrowing at the price of
 fiat buys autonomy and war finance at the price of discipline; crypto is commodity money
 without even the discount rate.
 
+**When each rung opens.** Commodity money is ungated; `law_gold_standard` at
+`central_banking` (era 2 — moved there 2026-09-21, §5.4); `law_fiat_currency` at
+`keynesian_economics` (era 6) **and** `law_national_bank`; `law_digital_currency` at
+`universal_digital_identity` plus the bank; `law_decentralized_cryptocurrency` at
+`cybersecurity`. The gate is availability, not adoption: what paces the ladder is §13's
+politics and the AI enact weights, not research.
+
 ### 5.2 `lawgroup_national_bank` and `lawgroup_financial_regulation` — who holds the dial
 
 | State | Control |
@@ -1718,6 +1725,29 @@ roles and do not touch the dial.
   (bimetallic) money, and the Banque de France did set a discount rate. It now gets the
   narrow dial this line proposed, reshaped to `world_rate − 1 … + 3` (§0.6 R2) — rather than nothing
   until it enacts gold. Commodity money without a bank is unchanged.
+- **The gold standard's tech gate: `central_banking` (era 2), moved 2026-09-21 from
+  `international_exchange_standards` (era 4).** The law is a *unilateral* convertibility
+  promise — Britain 1816, Portugal 1854, Germany 1871, the US 1873 — not membership of the
+  1870–1914 settlement network the era-4 tech models, and the era-4 gate (mod eras:
+  `common/technology/eras/00_eras.txt`, era 4 = 1887–1911) put the law fifty years behind
+  the first bullet's own GBR start. It now sits with its siblings: `law_national_bank` and
+  `law_universal_banking_light_prudence` are both at `central_banking`,
+  `law_free_mutual_banking` at `postal_savings`. What paced adoption historically was
+  politics, not technology, and §13 already models that — `cross_of_gold_currency` on the
+  agrarian and isolationist baselines, plus the enact weight — so the gate is permissive and
+  the politics do the pacing: with research and enactment lag the wave lands c. 1860–1875
+  (Germany 1871–73, Scandinavia 1873–75, the Netherlands 1875, France 1876–78, the US 1879).
+  **The peg articles do not follow it down.** `currency_peg` / `imposed_currency_peg` /
+  `debt_receivership` stay at `international_exchange_standards`: §15A.2's staggering (peg,
+  then swap line at `macroeconomics`, then guarantee at `intergovernmental_organizations`)
+  is independent of where gold sits, coherence needs only peg gate ≥ gold gate, and a
+  *negotiated* peg between currencies is the later, treaty-borne form of the thing — so
+  110_currency_peg.txt's gate comment, which justified era 4 as "the tech that brings the
+  Gold Standard law in with it", was rewritten rather than acted on. **Open:** §17's observer
+  runs were calibrated on "Britain is the only tag on gold with a bank" in 1836. That still
+  holds on day one — no start tech grants `central_banking` — but a 50-year run now sees
+  several gold countries by mid-century, so re-read the §12.1 world rate and §7.4's anchor
+  figures after the change rather than assuming the phase-1/2 exit numbers carry over.
 
 ---
 
@@ -3419,9 +3449,24 @@ has loc (`loc_coverage_audit`). Expected reload: no findings.
 
 ### 15C.2 Phase 6b — leverage
 
-**One flat `country_treaty_leverage_generation_add` per article (L1), on the strong side's
-modifier block** — `target_modifier` on the peg (the anchor is the target), `source_modifier`
-on the two backstops (the provider is the source):
+**One flat `country_treaty_leverage_generation_add` per article (L1).**
+
+> **Correction, 2026-09-21.** The ruling below said "on the strong side's modifier block", and
+> phase 6 shipped it that way. That is backwards: the engine generates this leverage **against**
+> the country whose modifier block carries it, not by it. Vanilla is unambiguous —
+> `guarantee_independence` puts the line on the *guaranteed* party (`target_modifier`, source
+> being the higher-ranked guarantor), and `foreign_investment_rights` / `trade_privilege` /
+> `host_power_bloc_embassy` put it on the party that *grants* the concession (`source_modifier`).
+> The mod's own `development_assistance` already had it right, on the client's `target_modifier`.
+> In-game the shipped placement let the pegger accumulate leverage on its anchor. Corrected in all
+> five articles: the line now sits on `source_modifier` for `currency_peg`, `imposed_currency_peg`
+> and `debt_receivership` (pegger / coerced pegger / debtor are the sources) and on
+> `target_modifier` for `swap_line` and `lender_of_last_resort` (recipient / ward are the targets).
+> The values below are unchanged. The three legacy articles — `request_influence`,
+> `extend_influence`, `crisis_resolution` — were audited at the same time and are correct as
+> written.
+
+The magnitudes, sized against the comparable articles:
 
 | Article | Leverage | Sized against (`extra_treaty_articles.txt`) |
 |---|---|---|
@@ -4072,7 +4117,7 @@ P6-1…13).
 | **5b** | §15A.3: `principle_group_monetary_union` (3 tiers as shipped; **tiers 4–5 added 2026-09-21**, §0.11), adoption action + convergence criteria, overvaluation premium, convergence pressure, exit | subjects still islands | §17 checks 16, 19 answered; an adopter in a slump while the leader runs hot shows a visibly rising premium and a tight band; the **exit invariant** holds in the harness (worse than staying for ≥ 5 years at 15 points of overvaluation, better after); a pressed, debt-heavy adopter costs a tier-3 leader a backstop call within a cycle or two; pressing a bloc of refusers loses the leader cohesion on net; a human holdout sees *The Question* fewer than ~6 times a campaign |
 | **5c** | §15A.4: automatic currency boards for `autonomy_level = 1` subjects, seigniorage transfer, wrong-stance liberty desire | — | §17 check 17 answered; a puppet's rate tracks its overlord's within a month of subjugation and returns to its own rule within a month of release, with no exit penalty; the overlord's minting gain is GDP-scaled (a tiny puppet is a rounding error); a sustained 2pp wrong stance moves liberty desire measurably but does not alone cause a revolt |
 | **6a** *(§15C.1 / §0.10)* | the swap line as a repayable, capped, single-provider loan drawn only in a *financial* crisis; the guarantee's call counter (honour cost, relief, AI odds, cooldown) read by the signing score too; the AI's own post-signing withdrawal on the re-scored articles (a scripted yearly walk only as fallback); `non_fulfillment = withdraw` on war / expulsion. Prestige stays as shipped (H5) | — | P6-1…9; P5-5, P5-7 and P5-9 still hold |
-| **6b** *(§15C.2 / §0.10)* | `country_treaty_leverage_generation_add` 200 / 150 / 300 on the strong side of the three articles | — | P6-10 |
+| **6b** *(§15C.2 / §0.10)* | `country_treaty_leverage_generation_add` 200 / 150 / 300 on the three articles — shipped on the strong side, **corrected 2026-09-21** to the dominated party's block (the modifier generates leverage *against* its carrier; see §15C.2) | — | P6-10 |
 | **6c** *(§15C.3 / §0.10)* | `imposed_currency_peg` and `debt_receivership`: hostile, enforceable, demandable only against a country in default; no hostile swap line | — | P6-11…13: both rare in a 50-year observer run, and the friendly three still signed |
 
 ---

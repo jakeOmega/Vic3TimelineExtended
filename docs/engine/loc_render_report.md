@@ -28,7 +28,7 @@ _None._
 ## Coverage
 
 - loc files scanned: 30
-- loc values checked: 17442
+- loc values checked: 17473
 - total flags: 0
 - unreviewed: 0
 - exempted: 0

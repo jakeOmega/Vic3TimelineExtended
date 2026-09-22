@@ -53,10 +53,18 @@ swap_line = {
 
 	source_modifier = {
 		country_prestige_mult = 0.01
-		# [6b] A standing line is the lightest dependence of the three (§15C.2,
-		# ruling L1), sized against joint_military_exercises. The engine generates
-		# this only for a power-bloc LEADER, and per pair out of the target's own
-		# pool — so it is orbit-building, not a stack on one counterparty.
+	}
+
+	# [6b] A standing line is the lightest dependence of the three (§15C.2,
+	# ruling L1), sized against joint_military_exercises. The engine generates
+	# this only for a power-bloc LEADER, and per pair out of the dominated
+	# party's own pool — so it is orbit-building, not a stack on one counterparty.
+	#
+	# PLACEMENT (fixed 2026-09-21): the modifier is generated AGAINST the country
+	# whose block carries it (see 110_currency_peg.txt's note for the vanilla
+	# evidence). It shipped on the PROVIDER's source_modifier, which made the
+	# recipient gain leverage over its own backstop. The RECIPIENT is the target.
+	target_modifier = {
 		country_treaty_leverage_generation_add = 150
 	}
 
