@@ -156,8 +156,10 @@ covert_code_tier_severe = {
 	}
 }
 
-# Operations that only make sense against someone you are already fighting:
-# infamy alone, because the relationship is already what it is.
+# Operations usable once conflict with the target is already underway: an
+# active war, or the diplomatic play that precedes one. Infamy is what's at
+# stake, and how much depends on which of those two you're caught in — see
+# covert_exposure_is_costless below.
 covert_code_tier_war = {
 	has_variable = $VAR$
 	OR = {
