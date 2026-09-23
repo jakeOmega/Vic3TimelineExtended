@@ -31,10 +31,10 @@
 #    docs/guides/scripting_best_practices.md § "Asking Script a Yes/No Question
 #    From `.gui`".
 #
-# 4. THE STAND-DOWN HANDLERS (covert_stand_down_<type>_sgui, nine of them). One
-#    per operation type, each ending the operation a widget row is showing. See
-#    their own section header for why there are nine rather than one with a type
-#    op code, and for the single unproven link in the mechanism.
+# 4. THE STAND-DOWN HANDLERS (covert_stand_down_<type>_sgui). One per
+#    operation type, each ending the operation a widget row is showing. See
+#    their own section header for why there is one per type rather than one
+#    with a type op code, and for the single unproven link in the mechanism.
 #
 # 5. THE PRIORITY STEPPER (covert_priority_up_sgui, covert_priority_down_sgui).
 #    One handler per direction; the row's container arrives as the saved scope

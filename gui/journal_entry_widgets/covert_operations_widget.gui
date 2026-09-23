@@ -21,7 +21,7 @@
 ###
 ### The per-row "Stand down" controls use no op code. They pass the row's target
 ### country as the saved scope `iw_tgt` and pick the operation type by which of
-### the nine covert_stand_down_<type>_sgui entries the instance points at — so
+### the covert_stand_down_<type>_sgui entries (one per type) the instance points at — so
 ### the target can travel alone in a SINGLE AddScope, the only shape vanilla
 ### demonstrates. Fail-closed: see covert_possible_stand_down.
 ###
@@ -132,13 +132,13 @@ types covert_operations_widget_types
 		using = fontsize_large
 	}
 
-	### "Stand down" for one row. Nine instances per row, of which exactly one is
+	### "Stand down" for one row. One instance per operation type, of which exactly one is
 	### visible — `sd_visible` gates it on the row's operation tag.
 	###
 	### `sd_context` is the only other per-instance part: it points the button at
 	### that type's covert_stand_down_<type>_sgui. Everything else is shared,
 	### because the target travels as a saved scope built from the row's own
-	### container, so the markup is identical for all nine.
+	### container, so the markup is identical for every type.
 	###
 	### The target country is reached through the stored capital state, the same
 	### chain the row's title line uses (gotcha #11). If that chain or the saved

@@ -68,7 +68,7 @@
 # container, so the scope is unset.
 # Parameters: $TYPE$ = short name (e.g. election_interference)
 #             $TARGET$ = target country (a scope: reference — it is read inside on_created)
-#             $CODE$ = operation type code 0-8, matching the branches of
+#             $CODE$ = operation type code 0-12, matching the branches of
 #                      covert_last_exposed_type_name
 # Scope: operator country
 covert_op_create = {
@@ -195,7 +195,7 @@ covert_op_refresh_detection = {
 # the pact doesn't exist yet — so this creates the container directly
 # instead of reconciling against pacts.
 # Parameters: $TYPE$ = short name, $DEFENSE_MOD$ = type-specific defense modifier,
-#             $CODE$ = operation type code 0-8, matching the branches of
+#             $CODE$ = operation type code 0-12, matching the branches of
 #                      covert_last_exposed_type_name
 # Scope: operator country; scope:target_country must be set
 covert_op_start = {
@@ -246,7 +246,7 @@ covert_op_end = {
 #
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
 #             $TARGET$ = target country,
-#             $CODE$ = operation type code 0-8, matching the branches of
+#             $CODE$ = operation type code 0-12, matching the branches of
 #                      covert_last_exposed_type_name
 # Scope: operator country
 covert_op_burn = {
@@ -733,7 +733,7 @@ covert_tradecraft_monthly = {
 # Parameters: $TYPE$ = short name
 #             $ACTION$ = diplomatic_action_type key (e.g. covert_election_interference_action)
 #             $DEFENSE_MOD$ = type-specific defense modifier
-#             $CODE$ = operation type code 0-8 (the covert_last_exposed_type_name
+#             $CODE$ = operation type code 0-12 (the covert_last_exposed_type_name
 #                      mapping); written on every container so old saves gain it
 # Scope: operator country
 covert_op_sync = {
@@ -818,7 +818,7 @@ covert_op_sync = {
 	}
 }
 
-# Reconcile all 9 operation types, then recompute the upkeep weights. Called
+# Reconcile every operation type, then recompute the upkeep weights. Called
 # monthly from the JE pulse, before durations age and phase effects apply.
 # Scope: country
 covert_ops_sync_all = {
@@ -969,7 +969,7 @@ covert_op_apply_self_effect = {
 	}
 }
 
-# Master effect: apply ALL 9 operation types' phase-based effects.
+# Master effect: apply every operation type's phase-based effects (cultivate assets has none).
 # Only runs if funding > 0, after covert_ops_sync_all. Called monthly from the
 # JE pulse (a priority step deliberately does not call it — see
 # covert_apply_priority_change). Snapshots each operation's priority as

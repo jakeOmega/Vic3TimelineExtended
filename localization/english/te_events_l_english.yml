@@ -3847,14 +3847,14 @@
  te_debug_covert.3.a:0 "Set Tradecraft to 45 (Established)"
  te_debug_covert.3.b:0 "Set Tradecraft to 85 (Veteran)"
  te_debug_covert.3.c:0 "Run one monthly Tradecraft pass"
- te_debug_covert.4.t:0 "Covert Test Console: New Operations"
- te_debug_covert.4.d:0 "Console-only shortcuts for the four slice-6 operations. None of these can happen in normal play.\n\nPlanting declares a rivalry with one valid country and runs regime change and asset cultivation against it; nuclear sabotage goes against a country whose programme is running and space espionage against one ahead of us in the space race, each only if such a country exists. All four start fully operational, so their effects land at the next monthly pulse. Tradecraft is set to Seasoned (65)."
- te_debug_covert.4.f:0 "Test harness. Check debug.log after the next monthly pulse."
- te_debug_covert.4.a:0 "Plant the four new operations"
- te_debug_covert.4.b:0 "Set Tradecraft to Seasoned (65)"
  te_debug_covert.3.d:0 "Console test harness for the agency experience score (slice 5). Set the score, then check the command centre's Tradecraft line, its tooltip, the priority stepper and the per-type cap."
  te_debug_covert.3.f:0 "Not for play."
  te_debug_covert.3.t:0 "Covert Warfare Test Console: Tradecraft"
+ te_debug_covert.4.a:0 "Plant the four new operations"
+ te_debug_covert.4.b:0 "Set Tradecraft to Seasoned (65)"
+ te_debug_covert.4.d:0 "Console-only shortcuts for the four slice-6 operations. None of these can happen in normal play.\n\nPlanting declares a rivalry with one valid country and runs regime change and asset cultivation against it; nuclear sabotage goes against a country whose programme is running and space espionage against one ahead of us in the space race, each only if such a country exists. All four start fully operational, so their effects land at the next monthly pulse. Tradecraft is set to Seasoned (65)."
+ te_debug_covert.4.f:0 "Test harness. Check debug.log after the next monthly pulse."
+ te_debug_covert.4.t:0 "Covert Test Console: New Operations"
 
 #
 # TE_DEBUG_GW

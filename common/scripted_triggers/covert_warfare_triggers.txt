@@ -2,7 +2,8 @@
 # COVERT WARFARE — Scripted Triggers
 # ============================================================================
 
-# Check if a diplomatic pact is a covert operation pact (any of the 9 types).
+# Check if a diplomatic pact is a covert operation pact (any type; the list is
+# pinned by test_covert_op_registry).
 # Scope: diplomatic_pact
 is_covert_operation_pact = {
 	OR = {

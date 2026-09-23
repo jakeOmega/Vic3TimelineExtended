@@ -414,6 +414,21 @@ shows there too.
   (vs 42).
 - Slice 7 synergy: it is the natural way to reach the strength-50 / 75 intelligence reveals.
 
+**As built (plan `docs/superpowers/plans/2026-09-23-covert-new-operations.md`).**
+Departures from the text above: the per-type list is now executable —
+`test_covert_op_registry.py` holds one `OPS` table and checks every site
+against it, and it caught `covert_warfare.2` keying infrastructure sabotage on
+a state modifier (fixed); regime change's rivalry gate is new (destabilization
+never had one in `possible`); the coup push has no DLC gate (coups are base
+game; `je:je_ip4_coup ?=` covers the no-coup case); `sr_target_ahead_of_root`
+is `covert_target_ahead_in_space = { TARGET }` in `covert_warfare_triggers.txt`;
+`nuclear_program_is_proliferating` also excludes paused and disarming
+programmes; cultivate assets is pinned at priority 1 (user decision
+2026-09-23) and its row replaces the phase and priority lines with one line;
+the four lens icons are copies of existing covert icons (user decision
+2026-09-23). The spec's "×2 fully operational" figures predate priority: the
+real range is ×1 to ×3.2 (plan § Balance).
+
 ## Slice 7 — Network-revealed intelligence (later)
 
 At network strength ≥ 50 the operation/network row shows the target's intelligence capacity
