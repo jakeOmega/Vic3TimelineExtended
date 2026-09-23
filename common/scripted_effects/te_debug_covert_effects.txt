@@ -180,3 +180,34 @@ te_debug_covert_max_priority = {
 		covert_effect_priority_up = yes
 	}
 }
+
+# Put every network at an exact strength (slice 4). Runs the real network pass
+# first so every running operation's target has one, then overwrites the
+# strength and re-runs the operation sync so each row's detection line shows
+# the new cover at once. The head start only reaches operations started
+# after this — it is fixed at creation.
+# Note: the network pass also ticks once, which is why the strength is
+# written after it, not before.
+# Parameters: $VALUE$ = 0 .. covert_net_max
+# Scope: country
+te_debug_covert_set_net_strength = {
+	covert_nets_sync = yes
+	if = {
+		limit = { has_variable_list = iw_nets }
+		every_in_list = {
+			variable = iw_nets
+			set_variable = { name = iw_net_strength value = $VALUE$ }
+			covert_net_clamp = yes
+			set_variable = { name = iw_net_head_start_offer value = covert_net_head_start_value }
+		}
+	}
+	covert_ops_sync_all = yes
+}
+
+# One month of network growth / decay without waiting for the pulse. Stand an
+# operation down first to watch its network decay instead.
+# Scope: country
+te_debug_covert_tick_nets = {
+	covert_nets_sync = yes
+	covert_ops_sync_all = yes
+}

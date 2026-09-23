@@ -170,7 +170,10 @@ class PulseOrderTests(unittest.TestCase):
             p for p in ROOT.glob("common/**/*.txt")
             if "covert_nets_sync = yes" in p.read_text(encoding="utf-8-sig")
         ]
-        self.assertEqual([p.name for p in callers], ["je_covert_warfare.txt"])
+        self.assertEqual(
+            sorted(p.name for p in callers),
+            ["je_covert_warfare.txt", "te_debug_covert_effects.txt"],
+        )
 
     def test_pulse_order(self):
         je = _text(JE)
@@ -280,6 +283,23 @@ class WidgetTests(unittest.TestCase):
         loc = _all_loc()
         for key in NET_LOC_KEYS:
             self.assertRegex(loc, r"(?m)^ %s:0 " % re.escape(key))
+
+
+class HarnessTests(unittest.TestCase):
+    def test_harness_effects(self):
+        body = _text(DEBUG_EFFECTS)
+        setter = _top_level_block(body, "te_debug_covert_set_net_strength = {")
+        self.assertIn("covert_nets_sync = yes", setter)  # ensures nets exist first
+        self.assertIn("covert_ops_sync_all = yes", setter)  # re-stages detection
+        tick = _top_level_block(body, "te_debug_covert_tick_nets = {")
+        self.assertIn("covert_nets_sync = yes", tick)
+
+    def test_harness_options_have_loc(self):
+        events = _text(DEBUG_EVENTS)
+        loc = _all_loc()
+        for opt in ("te_debug_covert.2.i", "te_debug_covert.2.j"):
+            self.assertIn("name = %s" % opt, events)
+            self.assertRegex(loc, r"(?m)^ %s:0 " % re.escape(opt))
 
 
 if __name__ == "__main__":
