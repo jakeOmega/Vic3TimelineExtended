@@ -37,6 +37,41 @@ banking_dash_system_coop = {
 	effect = { }
 }
 
+# Is there anything under the Monetary Policy header? With the monetary layer
+# on, always: the policy dial block is drawn for every economic system, if only
+# to say why there is no dial. Under banking_system_simplified the dial block is
+# gone and the one thing left is open-market operations' fallback row, which is
+# market-economy only — so a simplified command or cooperative economy gets no
+# header over an empty category.
+banking_dash_monetary_shown = {
+	scope = country
+	is_shown = {
+		OR = {
+			te_mon_full_system = yes
+			banking_is_market_economy = yes
+		}
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Open-market operations' row when there is no dial to put it beside. With the
+# monetary layer on, the row lives under the rate target (banking_mon_shows_omo
+# in te_monetary_sguis.txt); banking_system_simplified removes that block, and
+# the tool — which the simplified setting keeps, without the regime and floor
+# tests — would otherwise have no row at all.
+banking_dash_omo_fallback_shown = {
+	scope = country
+	is_shown = {
+		te_mon_full_system = no
+		banking_is_market_economy = yes
+	}
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # ---------------------------------------------------------------------------
 # Cycle-phase and signal readouts for the Current Conditions area.
 # ---------------------------------------------------------------------------
