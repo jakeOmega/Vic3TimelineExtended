@@ -239,17 +239,32 @@ covert_operations_available_slots = {
 	min = 0
 }
 
+# Operations as the upkeep counts them: the sum of every operation's
+# priority-weighted share (iw_priority_cost_sum, covert_refresh_priority_cost).
+# A save made before slice 3 has no sum until the first refresh, and gets the
+# live pact count — exactly the old formula — in the meantime.
+covert_priority_cost_units = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_priority_cost_sum }
+		add = var:iw_priority_cost_sum
+	}
+	else = {
+		add = covert_operations_active
+	}
+}
+
 covert_operations_cost_scale = {
 	value = gdp
 	multiply = 0.00005 # small, but multiplied by funding level and number of ops, so it adds up for big economies
 }
 
 # Funding cost: multiplier for the covert_operation_funding_cost modifier
-# Scales with number of active operations + 1 (base maintenance) and funding level
+# Scales with the priority-weighted operation count + 1 (base maintenance) and funding level
 covert_operation_cost_mult = {
 	value = 0
 	owner = {
-		add = covert_operations_active
+		add = covert_priority_cost_units
 		add = 1 # base maintenance — you pay for defensive benefits even with no ops
 		# Scale by funding level (0-5); 0 means no cost
 		multiply = {
@@ -586,7 +601,7 @@ covert_funding_next_level_down = {
 covert_operation_cost_at_next_up = {
 	value = 0
 	owner = {
-		add = covert_operations_active
+		add = covert_priority_cost_units
 		add = 1
 		multiply = covert_funding_next_level_up
 		multiply = covert_operations_cost_scale
@@ -599,7 +614,7 @@ covert_operation_cost_at_next_up = {
 covert_operation_cost_at_next_down = {
 	value = 0
 	owner = {
-		add = covert_operations_active
+		add = covert_priority_cost_units
 		add = 1
 		multiply = covert_funding_next_level_down
 		multiply = covert_operations_cost_scale

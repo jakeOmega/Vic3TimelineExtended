@@ -153,5 +153,39 @@ class ScaledApplicationTests(unittest.TestCase):
         self.assertNotIn("MULT = 1 ", block)
 
 
+class UpkeepTests(unittest.TestCase):
+    COST_VALUES = (
+        "covert_operation_cost_mult",
+        "covert_operation_cost_at_next_up",
+        "covert_operation_cost_at_next_down",
+    )
+
+    def test_cost_values_read_the_priority_weighted_units(self):
+        body = _text(VALUES)
+        for name in self.COST_VALUES:
+            block = _top_level_block(body, "%s = {" % name)
+            self.assertIn("add = covert_priority_cost_units", block, name)
+            self.assertNotIn("covert_operations_active", block, name)
+
+    def test_units_fall_back_to_the_pact_count_before_the_first_refresh(self):
+        block = _top_level_block(_text(VALUES), "covert_priority_cost_units = {")
+        self.assertIn("has_variable = iw_priority_cost_sum", block)
+        self.assertIn("add = var:iw_priority_cost_sum", block)
+        self.assertIn("add = covert_operations_active", block)
+
+    def test_refresh_accumulates_with_set_variable_not_change_variable(self):
+        # change_variable does not reliably resolve a script-value operand.
+        block = _top_level_block(_text(EFFECTS), "covert_refresh_priority_cost = {")
+        self.assertIn("covert_op_priority_3_cost_mult", block)
+        self.assertIn("covert_op_priority_2_cost_mult", block)
+        self.assertNotIn("change_variable", block)
+
+    def test_every_path_that_adds_or_ends_an_operation_refreshes_the_sum(self):
+        body = _text(EFFECTS)
+        for name in ("covert_op_create", "covert_op_destroy", "covert_ops_sync_all"):
+            block = _top_level_block(body, "%s = {" % name)
+            self.assertIn("covert_refresh_priority_cost = yes", block, name)
+
+
 if __name__ == "__main__":
     unittest.main()
