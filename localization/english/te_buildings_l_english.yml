@@ -249,6 +249,8 @@
  building_group_bg_power_infrastructure_usage_mult_desc:0 "A bonus or penalty to the [concept_infrastructure_usage] of $bg_power$ buildings"
  building_group_bg_power_throughput_add:0 "Power Plant [concept_throughput]"
  building_group_bg_power_throughput_add_desc:0 "A bonus or penalty to both input and output of Power Plant buildings"
+ building_group_bg_ship_construction_construction_efficiency_add:0 "$bg_ship_construction$ Construction Efficiency"
+ building_group_bg_ship_construction_construction_efficiency_add_desc:0 "An increase or decrease to the weekly [concept_construction] progress for $bg_ship_construction$ buildings"
  building_group_bg_trade_employee_mult:0 "Trade Employee Multiplier"
  building_group_bg_trade_employee_mult_desc:0 "A percentage change to the number of employees in $bg_trade$ buildings"
  building_group_bg_urban_facilities_employee_mult:0 "Urban Facilities Employee Multiplier"

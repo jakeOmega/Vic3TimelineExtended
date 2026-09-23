@@ -3752,7 +3752,7 @@ principle_engineering_and_logistics_5 = {
 # that build on top of vanilla's cumulative tier 3.
 #
 # Vanilla's tier-3 cumulative:
-#   ship_interest_gain_mult = 0.1
+#   ship_power_projection_mult = 0.1
 #   country_flagship_interest_gain_mult = 0.1
 #   country_ship_construction_progress_max_add = 5
 #   country_navy_goods_cost_mult = -0.1
@@ -3772,7 +3772,7 @@ principle_navy_4 = {
 
 	member_modifier = {
 		# Vanilla tier-3 cumulative
-		ship_interest_gain_mult = 0.1
+		ship_power_projection_mult = 0.1
 		country_flagship_interest_gain_mult = 0.1
 		country_ship_construction_progress_max_add = 5
 		country_navy_goods_cost_mult = -0.1
@@ -3782,7 +3782,7 @@ principle_navy_4 = {
 		character_convoy_protection_mult = 0.25
 		character_convoy_raiding_mult = 0.25
 		character_naval_mission_area_add = 1
-		country_prestige_from_navy_power_projection_mult = 0.1
+		country_prestige_from_navy_combat_power_mult = 0.1
 		# Bloc-wide crew training programs season ships before deployment
 		country_ship_crew_starting_veterancy_experience_add = 75
 	}
@@ -3817,7 +3817,7 @@ principle_navy_5 = {
 
 	member_modifier = {
 		# Vanilla tier-3 cumulative
-		ship_interest_gain_mult = 0.1
+		ship_power_projection_mult = 0.1
 		country_flagship_interest_gain_mult = 0.1
 		country_ship_construction_progress_max_add = 5
 		country_navy_goods_cost_mult = -0.1
@@ -3828,7 +3828,7 @@ principle_navy_5 = {
 		character_convoy_raiding_mult = 0.5
 		character_naval_mission_area_add = 2
 		character_blockade_mult = 0.15
-		country_prestige_from_navy_power_projection_mult = 0.2
+		country_prestige_from_navy_combat_power_mult = 0.2
 		building_port_throughput_add = 0.25
 		# Peak-doctrine bloc supplies veteran crews to every member ship
 		country_ship_crew_starting_veterancy_experience_add = 150

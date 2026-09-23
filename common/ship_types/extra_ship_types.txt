@@ -33,6 +33,7 @@
 ### Pre-update mod stats: 80 atk / 120 def — destroyer-class progression (~1.5x vanilla destroyer 50 dmg / 25 armor)
 ship_type_asw_destroyer = {
 	ship_group = ship_group_torpedo_craft
+	ai_ship_category = ai_ship_category_screens
 	modification_construction_cost = 110
 	can_be_flagship = yes
 
@@ -125,6 +126,7 @@ ship_type_asw_destroyer = {
 ### Pre-update mod stats: 120 atk / 80 def — silent-killer sub w/ unmatched anti-capital damage
 ship_type_nuclear_submarine = {
 	ship_group = ship_group_torpedo_craft
+	ai_ship_category = ai_ship_category_torpedo_craft
 	modification_construction_cost = 140
 
 	is_obsolete = {
@@ -211,6 +213,7 @@ ship_type_nuclear_submarine = {
 ### Pre-update mod stats: 250 atk / 350 def — destroyer-class missile platform (~3-5x vanilla destroyer)
 ship_type_guided_missile_ship = {
 	ship_group = ship_group_torpedo_craft
+	ai_ship_category = ai_ship_category_screens
 	modification_construction_cost = 130
 	can_be_flagship = yes
 
@@ -304,6 +307,7 @@ ship_type_guided_missile_ship = {
 ### 1.13.1 rebalance: armor 360 → 200 (ratio 0.80) to match vanilla's new ~0.83 armor:damage target for late-game capitals.
 ship_type_nuclear_supercarrier = {
 	ship_group = ship_group_cruisers
+	ai_ship_category = ai_ship_category_carriers
 	modification_construction_cost = 240
 	can_be_flagship = yes
 	combat_power_multiplier = 4.0
@@ -403,6 +407,7 @@ ship_type_nuclear_supercarrier = {
 ### Missile-bus capital. Era-9 peer of stealth_battlecruiser (different doctrine: VLS firepower vs stealth survivability).
 ship_type_arsenal_ship = {
 	ship_group = ship_group_capital_ships
+	ai_ship_category = ai_ship_category_battle_line
 	modification_construction_cost = 510
 	can_be_flagship = yes
 	combat_power_multiplier = 6.0
@@ -500,6 +505,7 @@ ship_type_arsenal_ship = {
 ### Pre-update mod stats: 150 atk / 300 def — utility/transport platform (massive marine + supply capacity)
 ship_type_expeditionary_sea_base = {
 	ship_group = ship_group_cruisers
+	ai_ship_category = ai_ship_category_transports
 	modification_construction_cost = 220
 	combat_power_multiplier = 1.0
 
@@ -588,6 +594,7 @@ ship_type_expeditionary_sea_base = {
 ### Troop. Fast carrier-group transport (EPF / Spearhead-class analog). Doctrine alternative to ESB: low capacity, high speed.
 ship_type_expeditionary_fast_transport = {
 	ship_group = ship_group_cruisers
+	ai_ship_category = ai_ship_category_transports
 	modification_construction_cost = 110
 	combat_power_multiplier = 0.7
 	can_be_flagship = no
@@ -674,6 +681,7 @@ ship_type_expeditionary_fast_transport = {
 ### Pre-update mod stats: 4000 atk / 2500 def — pinnacle capital ship (~36x vanilla super_dreadnought)
 ship_type_hypersonic_missile_platform = {
 	ship_group = ship_group_capital_ships
+	ai_ship_category = ai_ship_category_battle_line
 	modification_construction_cost = 720
 	can_be_flagship = yes
 	combat_power_multiplier = 8.0
@@ -768,6 +776,7 @@ ship_type_hypersonic_missile_platform = {
 ### Pre-update mod stats: 800 atk / 1200 def — DEW cruiser w/ point-defense supremacy (~12x vanilla light cruiser)
 ship_type_pulsed_laser_escort = {
 	ship_group = ship_group_cruisers
+	ai_ship_category = ai_ship_category_screens
 	modification_construction_cost = 280
 	can_be_flagship = yes
 
@@ -850,6 +859,7 @@ ship_type_pulsed_laser_escort = {
 ### Pre-update mod stats: 1200 atk / 2000 def — drone-control cruiser (~17x vanilla light cruiser)
 ship_type_swarm_coordination_vessel = {
 	ship_group = ship_group_cruisers
+	ai_ship_category = ai_ship_category_screens
 	modification_construction_cost = 300
 	can_be_flagship = yes
 	combat_power_multiplier = 5.0
@@ -938,6 +948,7 @@ ship_type_swarm_coordination_vessel = {
 ### Capital. Heavy fleet carrier between vanilla aircraft_carrier and nuclear_supercarrier.
 ship_type_fleet_carrier = {
 	ship_group = ship_group_cruisers
+	ai_ship_category = ai_ship_category_carriers
 	modification_construction_cost = 180
 	can_be_flagship = yes
 	combat_power_multiplier = 2.5
@@ -1030,6 +1041,7 @@ ship_type_fleet_carrier = {
 ### Troop. Modern LHA: replaces vanilla troop ship in the mod-era timeline.
 ship_type_amphibious_assault_ship = {
 	ship_group = ship_group_cruisers
+	ai_ship_category = ai_ship_category_transports
 	modification_construction_cost = 130
 	combat_power_multiplier = 1.0
 
@@ -1120,6 +1132,7 @@ ship_type_amphibious_assault_ship = {
 ### Troop. Cold-War-2 LHA/LPD analog (Tarawa-class). Replaces amphibious_assault_ship after PGM unlocks.
 ship_type_marine_assault_ship = {
 	ship_group = ship_group_cruisers
+	ai_ship_category = ai_ship_category_transports
 	modification_construction_cost = 170
 	combat_power_multiplier = 1.0
 
@@ -1210,6 +1223,7 @@ ship_type_marine_assault_ship = {
 ### Capital. Stealth-coated networked battlecruiser between arsenal_ship and hypersonic_missile_platform.
 ship_type_stealth_battlecruiser = {
 	ship_group = ship_group_capital_ships
+	ai_ship_category = ai_ship_category_battle_line
 	modification_construction_cost = 540
 	can_be_flagship = yes
 	combat_power_multiplier = 6.0
@@ -1307,6 +1321,7 @@ ship_type_stealth_battlecruiser = {
 ### Escort. AEGIS-style anti-missile cruiser. Bridges era 8-10 escort gap.
 ship_type_networked_air_defense_cruiser = {
 	ship_group = ship_group_cruisers
+	ai_ship_category = ai_ship_category_screens
 	modification_construction_cost = 200
 	can_be_flagship = yes
 
@@ -1399,6 +1414,7 @@ ship_type_networked_air_defense_cruiser = {
 ### Raider. AIP/stealth boat. Successor to nuclear_submarine.
 ship_type_stealth_attack_submarine = {
 	ship_group = ship_group_torpedo_craft
+	ai_ship_category = ai_ship_category_torpedo_craft
 	modification_construction_cost = 180
 
 	is_obsolete = {
@@ -1486,6 +1502,7 @@ ship_type_stealth_attack_submarine = {
 ### Raider, terminal. Unmanned drone wolfpack — very low crew, very high crit.
 ship_type_autonomous_swarm_submarine = {
 	ship_group = ship_group_torpedo_craft
+	ai_ship_category = ai_ship_category_torpedo_craft
 	modification_construction_cost = 220
 
 	modifier = {
@@ -1567,6 +1584,7 @@ ship_type_autonomous_swarm_submarine = {
 ### Capital, terminal. Mass-driver / antimatter-armed late-game flagship.
 ship_type_antimatter_battleship = {
 	ship_group = ship_group_capital_ships
+	ai_ship_category = ai_ship_category_battle_line
 	modification_construction_cost = 1100
 	can_be_flagship = yes
 	combat_power_multiplier = 14.0
@@ -1657,6 +1675,7 @@ ship_type_antimatter_battleship = {
 ### Troop, terminal. Sea-based mothership with orbital drop-pod marine deployment flavor.
 ship_type_orbital_support_amphibious_mothership = {
 	ship_group = ship_group_cruisers
+	ai_ship_category = ai_ship_category_transports
 	modification_construction_cost = 360
 	combat_power_multiplier = 1.0
 
