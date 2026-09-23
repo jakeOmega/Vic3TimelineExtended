@@ -1830,18 +1830,20 @@ sol_expectations_lower_shift_value = {
 # month, which is why the channel read as dormant
 # (docs/audits/banking_cycle_simulation.md F8).
 #
-# 0.25 cycle points a month per 1% of GDP of deficit, clamped to +-1: a 4%
-# wartime deficit pushes the cycle a full point a month, about one phase
-# modifier's worth, and the clamp keeps a 10%-of-GDP borrowing spree from
-# pinning the cycle in frenzy on its own. A surplus cools the cycle the same
-# way. The unclamped "1 point per 1%" the old comment intended was measured:
-# it runs the cycle to a mean of 53-57 and 20-26 crashes a century (§6).
+# 0.1 cycle points a month per 1% of GDP of deficit, clamped to +-1: it takes
+# a 10%-of-GDP deficit to push the cycle a full point a month, about one phase
+# modifier's worth, and the clamp keeps anything larger from pinning the cycle
+# in frenzy on its own. A surplus cools the cycle the same way. The unclamped
+# "1 point per 1%" the old comment intended was measured: it runs the cycle to
+# a mean of 53-57 and 20-26 crashes a century (§6). 0.25 (+1 at a 4% deficit)
+# shipped first and was cut to 0.1 on 2026-09-22: an ordinary wartime deficit
+# should not be worth a phase modifier by itself.
 financial_cycle_government_fiscal_policy_effect_size = {
 	value = total_expenses
 	subtract = income
 	multiply = te_mon_deficit_annualise_factor
 	divide = { value = gdp min = 1 }
-	multiply = 25
+	multiply = 10
 	min = -1
 	max = 1
 }

@@ -395,7 +395,7 @@ PRE_RETUNE = {
     "recovery": 1 / 3,      # downturn / stagnation momentum adds were 1/3
     "climb": -0.5,          # no finance_value_monthly_add in downturn/stagnation
     "growth_bias": -1.0,    # te_mon_mandate_growth_bias was -1.0
-    "fiscal_scale": 1 / 13, # the fiscal channel was not annualised (and unclamped)
+    "fiscal_scale": 1 / 5.2,  # the fiscal channel was not annualised (and unclamped)
     "fiscal_clamp": 0,
     "ai_gate": "off",       # flavour / resource AI terms were unconditional
     "ai_directed_off": "off",  # directed credit was held through stable / expansion
@@ -1170,13 +1170,13 @@ def fiscal_effect_size(cfg: Config, state: State) -> float:
 
     Since 2026-09-22 the script annualises the WEEKLY (total_expenses - income)
     by te_mon_deficit_annualise_factor before dividing by the annual `gdp`, then
-    multiplies by 25 and clamps to +-1: 0.25 cycle points a month per 1% of GDP
-    of deficit. Before that it skipped the annualisation, i.e. was 1/52 of its
-    own comment's claim (F8); `--tune fiscal_scale=X` multiplies the size and
+    multiplies by 10 and clamps to +-1: 0.1 cycle points a month per 1% of GDP
+    of deficit (0.25 until the same day's §6 follow-up). Before that it skipped
+    the annualisation, i.e. was 1/52 of its own comment's claim (F8); `--tune fiscal_scale=X` multiplies the size and
     `fiscal_clamp=X` overrides the bound (0 = none).
     """
     annual_deficit_share = state.deficit_pct / 100.0
-    size = annual_deficit_share * 25.0 * tuned("fiscal_scale", 1.0)
+    size = annual_deficit_share * 10.0 * tuned("fiscal_scale", 1.0)
     clamp = tuned("fiscal_clamp", 1.0)
     if clamp:
         size = max(-clamp, min(clamp, size))

@@ -579,8 +579,8 @@ throughput pp.
 | cycle points a month per 1 % of GDP of deficit | gold / price / 0 pt | fiat / price / 3 pt | gold / nothing / 0 pt | fiat / growth / 5 pt |
 |---|---|---|---|---|
 | 0.019 (as it stood: not annualised) | 7.9 · 44.4 · 1.5 · −1.61 | 9.3 · 48.4 · 1.3 · −0.36 | 8.4 · 44.7 · 1.7 · −1.60 | 14.0 · 50.4 · 2.7 · +0.21 |
-| 0.1 | 8.6 · 45.1 · 1.6 · −1.40 | 10.3 · 49.2 · 1.5 · −0.16 | 9.5 · 45.9 · 2.0 · −1.23 | 14.6 · 51.0 · 2.7 · +0.37 |
-| **0.25 (shipped, clamped ±1)** | 10.9 · 47.0 · 2.1 · −0.88 | 11.8 · 50.4 · 1.7 · +0.14 | 11.9 · 47.3 · 2.6 · −0.90 | 17.7 · 52.6 · 3.6 · +0.74 |
+| **0.1 (shipped since the follow-up below, clamped ±1)** | 8.6 · 45.1 · 1.6 · −1.40 | 10.3 · 49.2 · 1.5 · −0.16 | 9.5 · 45.9 · 2.0 · −1.23 | 14.6 · 51.0 · 2.7 · +0.37 |
+| 0.25 (first shipped, clamped ±1) | 10.9 · 47.0 · 2.1 · −0.88 | 11.8 · 50.4 · 1.7 · +0.14 | 11.9 · 47.3 · 2.6 · −0.90 | 17.7 · 52.6 · 3.6 · +0.74 |
 | 0.5 | 13.6 · 49.1 · 2.7 · −0.31 | 14.9 · 52.5 · 2.7 · +0.68 | 16.3 · 50.1 · 3.6 · −0.10 | 20.3 · 54.3 · 4.5 · +1.23 |
 | 1.0 (the old comment's intent) | 20.2 · 53.1 · 5.1 · +0.82 | 20.9 · 55.6 · 4.8 · +1.54 | 24.6 · 54.1 · 7.0 · +1.10 | 26.1 · 57.1 · 7.2 · +2.06 |
 
@@ -593,6 +593,19 @@ points. Its cost is stub-dependent: the deficit process in the sim is invented (
 a player who runs large deficits will feel this channel far more than the AI does. **Still unverified in a
 running game:** the units reading is the engine catalogue's, not an observation — the monetary debug
 read-out (`te_mon_deficit_pct`) settles both channels at once.
+
+**Follow-up (2026-09-22): cut to 0.1.** At 0.25 an ordinary 4 % wartime deficit was worth a full phase
+modifier on its own, which the owner judged too strong; the constant is now 0.1 a month per 1 % of GDP, so
+it takes a 10 %-of-GDP deficit to reach the +1 clamp. A/B against 0.25 (`--tune fiscal_scale=2.5`), 400 runs ×
+100 years, same columns:
+
+| | gold / price / 0 pt | fiat / price / 3 pt | gold / nothing / 0 pt | fiat / growth / 5 pt |
+|---|---|---|---|---|
+| 0.25 | 10.6 · 47.2 · 1.6 · −0.80 | 8.0 · 51.6 · 0.6 · +0.65 | 12.0 · 47.4 · 2.4 · −0.87 | 14.7 · 54.0 · 2.7 · +1.31 |
+| **0.1** | 9.0 · 45.9 · 1.3 · −1.19 | 6.8 · 50.2 · 0.4 · +0.31 | 9.5 · 45.8 · 1.8 · −1.27 | 13.3 · 52.4 · 2.1 · +0.91 |
+
+About 1–2.5 fewer crashes a century and a mean cycle ~1.5 points cooler; throughput gives back ~0.4 pp.
+(These rows differ from the table above because §10's boom-rescue package landed in between.)
 
 ---
 
@@ -702,7 +715,8 @@ Written into the mod on 2026-09-22, in one PR:
 - **§3, the nine-key subset**: the below-40 crash branch, `banking_crash_severity_scale_value` 0.55 (origin
   and contagion), phase bubble ~×3, tools' momentum ×0.3 and negative bubble ×0.2, the stance clamp's loose
   side −2, recovery ×3 plus the +0.5 climb, growth bias −0.25.
-- **§6**: the fiscal channel annualised, 0.25 points a month per 1 % of GDP, clamped ±1.
+- **§6**: the fiscal channel annualised, 0.25 points a month per 1 % of GDP, clamped ±1 (cut to 0.1 the
+  same day — §6's follow-up).
 - **§7**: the `banking_ai_core_cb_*` gates on every enable button's flavour/resource terms; directed
   credit's disable side lifts it in stable and expansion.
 - **§4's first bullet**: `te_monetary_init_variables` seeds `te_mon_delegated = 1`, so a player who never
