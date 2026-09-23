@@ -124,6 +124,35 @@ covert_op_priority_detect_add = 2
 # Replaces the literal `multiplier = 2` the apply sites used to carry.
 covert_op_phase_full_mult = 2
 
+# ---- Per-target networks (slice 4) ----
+# An operator's standing presence inside one target country, 0 to
+# covert_net_max. It grows while operations run against the target and
+# decays when none do. Gains shrink above half strength (the UN-standing
+# idiom); losses do not.
+covert_net_max = 100
+covert_net_dr_divisor = 50
+covert_net_dr_floor = 0.1
+# Monthly gain with one operation running; each extra operation against the
+# same target adds covert_net_extra_op_factor of it (2 ops x1.5, 3 ops x2,
+# counted up to 3).
+covert_net_gain_base = 2
+covert_net_extra_op_factor = 0.5
+# Monthly decay with no operations running. Funding at or above
+# covert_net_maintain_funding_level keeps the handlers paid, halving it.
+covert_net_decay_base = 1.5
+covert_net_maintain_funding_level = 3
+covert_net_maintain_decay_mult = 0.5
+# Being caught rolls up part of the network (about a year of single-op work).
+covert_net_burn_loss = 25
+# Raw detection points removed per point of strength (-5 at full strength),
+# before covert efficiency like the rest of the raw score.
+covert_net_detect_factor = 0.05
+# Months of head start a new operation gets per point of strength, rounded.
+# The cap stays below the 6-month establishing threshold, so phase 1 is never
+# skipped: a full network puts a new operation one month from establishing.
+covert_net_head_start_per_point = 0.05
+covert_net_head_start_max = 5
+
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY
 # ============================================================================
@@ -282,7 +311,7 @@ covert_operation_cost_mult = {
 
 # Detection chance per month for active operations
 # Factors: base risk, funding reduction, target counterintelligence (IC + type defense), operation priority, attacker efficiency
-# Formula: raw = base - funding_reduction + target_defense_penalty + priority_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
+# Formula: raw = base - funding_reduction - network + target_defense_penalty + priority_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
 # var:target_max_ic and var:target_type_defense must be set before evaluating.
 covert_operation_detection_chance = {
 	value = covert_ops_detection_base
@@ -315,6 +344,9 @@ covert_operation_detection_chance = {
 		}
 		subtract = covert_ops_detection_funding_5_reduction
 	}
+	# A network inside the target hides the operation (slice 4). Staged per
+	# operation by covert_op_refresh_detection; 0 without a network.
+	subtract = covert_net_detect_reduction
 	# Target's counterintelligence increases detection risk (IC + type defense vs your IC)
 	add = target_counterintelligence_penalty
 	# Priority: a busier operation is more exposed (before efficiency, so
@@ -939,4 +971,104 @@ covert_op_priority_3_detect_display = {
 	value = covert_op_priority_detect_add
 	multiply = 2
 	round = yes
+}
+
+# ============================================================================
+# SECTION: PER-TARGET NETWORKS (slice 4)
+# ============================================================================
+# A network is an iw_net script container (covert_warfare_effects.txt,
+# § PER-TARGET NETWORKS). The values below are evaluated in the scope noted;
+# none of them reads `parent` — anything the network needs from its operator
+# is decided in the effect that calls them.
+#
+# Projection (months from 0; linear below 50, diminishing above):
+#   strength   1 op   2 ops   3 ops
+#   25         12.5   8.3     6.3
+#   50         25     16.7    12.5
+#   75         42     28      21
+#   90         65     44      33
+# Decay from 50 with no operations: 33 months (67 at funding >= 3).
+
+# Monthly decay at or above covert_net_maintain_funding_level.
+covert_net_decay_maintained = {
+	value = covert_net_decay_base
+	multiply = covert_net_maintain_decay_mult
+}
+
+# Diminishing returns on gains: 1 up to half strength, then falling linearly
+# to covert_net_dr_floor at full. Same shape as un_standing_gain_scale.
+# Scope: network container
+covert_net_gain_scale = {
+	value = 1
+	if = {
+		limit = { has_variable = iw_net_strength }
+		subtract = 1
+		add = {
+			value = covert_net_max
+			subtract = var:iw_net_strength
+			divide = covert_net_dr_divisor
+		}
+	}
+	min = covert_net_dr_floor
+	max = 1
+}
+
+# Nominal gain this month, before diminishing returns: covert_net_gain_base
+# for one operation against the target, plus covert_net_extra_op_factor of it
+# for each further one, counted up to three. var:iw_net_ops is written by the
+# tick just before this is read.
+# Scope: network container
+covert_net_tick_gain = {
+	value = var:iw_net_ops
+	max = 3
+	subtract = 1
+	min = 0
+	multiply = covert_net_extra_op_factor
+	add = 1
+	multiply = covert_net_gain_base
+}
+
+# Head start, in whole months, that a new operation against this network's
+# target starts with. Fixed on the operation at creation.
+# Scope: network container
+covert_net_head_start_value = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_net_strength }
+		add = var:iw_net_strength
+		multiply = covert_net_head_start_per_point
+	}
+	round = yes
+	min = 0
+	max = covert_net_head_start_max
+}
+
+# The duration the phase thresholds are measured against: months actually run
+# plus the network's head start. A container from a save made before slice 4
+# has no head start until the next monthly sync backfills it, and reads as 0.
+# Scope: operation container
+covert_op_effective_duration = {
+	value = var:iw_duration
+	if = {
+		limit = { has_variable = iw_net_head_start }
+		add = var:iw_net_head_start
+	}
+}
+
+# Raw detection points the target network hides. var:iw_net_strength_staging
+# is staged on the operator by covert_op_refresh_detection (0 when the target
+# has no network). Scope: operator country
+covert_net_detect_reduction = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_net_strength_staging }
+		add = var:iw_net_strength_staging
+		multiply = covert_net_detect_factor
+	}
+}
+
+# Display: the most a full network takes off the raw detection score.
+covert_net_detect_reduction_max_display = {
+	value = covert_net_max
+	multiply = covert_net_detect_factor
 }
