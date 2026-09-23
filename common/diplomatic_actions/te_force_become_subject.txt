@@ -121,7 +121,7 @@ REPLACE:force_become_subject = {
 					divide = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_FACTOR
 					multiply = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER
 					add = 1
-					max = define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL
+					max = 50 # was define:NDiplomacy|WAR_GOAL_INFAMY_POPULATION_SCALING_MULTIPLIER_MAX_TOTAL (= 50), removed in 1.14.4
 				}
 
 				# Subjugate is 20% as bad as annex globally.

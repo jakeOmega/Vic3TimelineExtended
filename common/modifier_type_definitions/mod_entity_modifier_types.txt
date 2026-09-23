@@ -1011,6 +1011,15 @@ building_group_bg_high_tech_construction_efficiency_add = {
 	}
 }
 
+building_group_bg_ship_construction_construction_efficiency_add = {
+	decimals = 0
+	color = good
+	percent = yes
+	game_data = {
+		ai_value = 0
+	}
+}
+
 
 # === State buildings (max-level for mod company / megastructure / utility buildings) ===
 

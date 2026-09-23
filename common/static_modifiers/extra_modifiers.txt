@@ -1673,7 +1673,7 @@ ig_approval_very_negative_modifier = {
 arms_race_escalation_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_prestige_from_army_power_projection_mult = 0.15
-	country_prestige_from_navy_power_projection_mult = 0.15
+	country_prestige_from_navy_combat_power_mult = 0.15
 	country_military_goods_cost_mult = 0.10
 	country_prestige_mult = 0.05
 }
@@ -1697,7 +1697,7 @@ arms_race_ignored_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_military_goods_cost_mult = -0.05
 	country_prestige_from_army_power_projection_mult = -0.10
-	country_prestige_from_navy_power_projection_mult = -0.10
+	country_prestige_from_navy_combat_power_mult = -0.10
 }
 
 # Event 2a: Proxy conflict funding (weaken rival, but costly and risky)
@@ -1813,7 +1813,7 @@ nuclear_deescalation_modifier = {
 nuclear_mobilization_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_from_army_power_projection_mult = 0.20
-	country_prestige_from_navy_power_projection_mult = 0.20
+	country_prestige_from_navy_combat_power_mult = 0.20
 	state_standard_of_living_add = -2
 }
 
