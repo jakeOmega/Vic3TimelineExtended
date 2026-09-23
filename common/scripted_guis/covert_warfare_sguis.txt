@@ -491,6 +491,27 @@ covert_stand_down_destabilization_sgui = {
 	}
 }
 
+covert_stand_down_regime_change_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = regime_change }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = regime_change ACTION = covert_regime_change_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
 # ---- PRIORITY: the row stepper ----------------------------------------------
 # Two handlers, up and down, so the row's container can travel alone in a
 # SINGLE AddScope — the shape the stand-down handlers use. Both delegate to

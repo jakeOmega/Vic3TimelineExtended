@@ -801,6 +801,7 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = influence_campaign ACTION = covert_influence_campaign_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 6 }
 	covert_op_sync = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 7 }
 	covert_op_sync = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 8 }
+	covert_op_sync = { TYPE = regime_change ACTION = covert_regime_change_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 9 }
 	# The sync reaps lapsed containers without going through covert_op_destroy.
 	covert_refresh_priority_cost = yes
 }
@@ -1082,6 +1083,24 @@ covert_ops_apply_all_phase_effects = {
 				# General destabilization pressure
 				remove_modifier = covert_destabilization_general
 				covert_op_add_scaled_modifier = { MODIFIER = covert_destabilization_general MONTHS = 3 }
+			}
+		}
+
+		# ---- Regime Change (slice 6): country modifier on TARGET; once fully
+		#      operational, a monthly push on any coup already under way there.
+		#      Coups are base game (only vanilla's orchestrate_coup action is
+		#      DLC-gated), and ?= makes the push a no-op when none is running.
+		covert_op_apply_target_effect = { TYPE = regime_change MODIFIER = covert_regime_change }
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_regime_change
+				covert_op_is_fully_operational = yes
+			}
+			var:iw_target ?= {
+				je:je_ip4_coup ?= {
+					add_progress = { value = covert_regime_change_coup_push name = je_ip4_coup_progress_bar }
+				}
 			}
 		}
 

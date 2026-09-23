@@ -1366,3 +1366,165 @@ covert_destabilization_action = {
 		}
 	}
 }
+
+# ---- PEACETIME: Regime Change (slice 6) ----
+# Bankroll the colonels: erode a rival government's legitimacy and its
+# resistance to a coup, radicalise its movements, and once fully operational
+# push any coup already under way. Severe tier. Needs a Seasoned agency to
+# launch; a running operation is never ended by the score falling.
+covert_regime_change_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_regime_change_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+		covert_op_start = { TYPE = regime_change DEFENSE_MOD = country_covert_defense_ideological_add CODE = 9 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_regime_change_tt
+			covert_ops_type_below_cap = { TYPE = covert_regime_change_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_regime_change_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		# Allowed during war: no has_war guard
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_requires_rivalry_tt
+			has_diplomatic_pact = { who = scope:target_country type = rivalry }
+		}
+		custom_tooltip = {
+			text = iw_target_not_our_subject_tt
+			NOT = { scope:target_country = { is_subject_of = ROOT } }
+		}
+		custom_tooltip = {
+			text = iw_severe_ops_need_tradecraft_tt
+			covert_tradecraft_unlocks_severe_ops = yes
+		}
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	pact = {
+		cost = 0
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		# The Tradecraft gate is launch-only: a running operation survives the
+		# agency's score falling below Seasoned.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_requires_rivalry_tt
+					has_diplomatic_pact = { who = scope:target_country type = rivalry }
+				}
+			}
+		}
+
+		# Allowed during war: do not auto-break when war starts
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_no_truce_tt
+					NOT = { has_truce_with = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = regime_change } }
+		auto_break_effect = { covert_op_end = { TYPE = regime_change } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.03
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.25
+			}
+		}
+
+		will_propose = {
+			has_diplomatic_pact = { who = scope:target_country type = rivalry }
+			OR = {
+				has_attitude = { who = scope:target_country attitude = antagonistic }
+				has_attitude = { who = scope:target_country attitude = domineering }
+			}
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+			country_rank >= rank_value:major_power
+		}
+
+		propose_score = {
+			value = 5
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 5
+			}
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 8
+			}
+		}
+	}
+}

@@ -46,6 +46,7 @@ OPS = (
     ("influence_campaign", 6, "ideological", "moderate", "covert_influence_campaign"),
     ("ideological_subversion", 7, "ideological", "severe", "covert_ideological_subversion_resist"),
     ("destabilization", 8, "ideological", "severe", "covert_destabilization_resist"),
+    ("regime_change", 9, "ideological", "severe", "covert_regime_change"),
 )
 
 TIER_NAMES = ("mild", "moderate", "severe", "war")

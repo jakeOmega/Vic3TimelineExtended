@@ -6068,6 +6068,17 @@ covert_military_espionage_detected = {
 	country_authority_add = -3
 }
 
+# Applied to TARGET while a regime-change operation runs (covert slice 6),
+# scaled by phase x priority. country_coup_resistance_add is script_only, so
+# it does not render in the modifier tooltip; covert_regime_change_desc names
+# it instead.
+covert_regime_change = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_coup_resistance_add = -1
+	country_legitimacy_base_add = -5
+	political_movement_radicalism_add = 0.05
+}
+
 # ============================================================================
 # CULTURAL HEGEMONY EVENTS - Timed modifiers from cultural hegemony events
 # ============================================================================
