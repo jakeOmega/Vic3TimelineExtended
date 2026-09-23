@@ -52,10 +52,13 @@ types banking_dashboard_widget_types
 	}
 
 	### Free-standing value textbox used inside banking_dash_condition_row.
+	### 254 is what the Monetary Policy block has left of its 460 once the
+	### 200 label column and the 6 spacing are taken; wider runs the value
+	### past the block's right edge.
 	type banking_dash_condition_value = textbox {
 		parentanchor = vcenter
 		autoresize = yes
-		max_width = 300
+		max_width = 254
 		elide = right
 		align = nobaseline
 		using = fontsize_large
@@ -136,15 +139,15 @@ types banking_dashboard_widget_types
 		}
 	}
 
-	### The value column of a monetary row. Wider than the label column looks
-	### like it needs, because "Bound by mandate" has to fit without eliding.
+	### The value column of a monetary row: the whole 254 the row has after
+	### the label column, so "Bound by mandate" fits without eliding.
 	type banking_dash_mon_value = widget {
-		size = { 140 28 }
+		size = { 254 28 }
 
 		textbox = {
 			parentanchor = left|vcenter
 			autoresize = yes
-			max_width = 140
+			max_width = 254
 			elide = right
 			align = nobaseline
 			using = fontsize_large
@@ -1398,6 +1401,9 @@ flowcontainer = {
 
 					### What the index is doing: the trade edge, and the inflation
 					### it is importing (or, under a peg, the overvaluation).
+					### Multiline: with two signed figures the float reading can
+					### outrun the 254 value column, and wrapping beats eliding a
+					### number.
 					banking_dash_condition_row = {
 						tooltip = "banking_dash_mon_fx_effect_tt"
 						blockoverride "condition_label" {
@@ -1405,6 +1411,7 @@ flowcontainer = {
 						}
 						blockoverride "condition_value" {
 							banking_dash_condition_value = {
+								multiline = yes
 								text = "banking_dash_mon_fx_effect_value"
 							}
 						}
