@@ -231,12 +231,11 @@ class StepperTests(unittest.TestCase):
             self.assertIn("covert_effect_priority_%s = yes" % direction, block)
             self.assertRegex(block, r"ai_is_valid = \{\s*always = no\s*\}")
 
-    def test_step_refreshes_cost_and_gates_effects_on_funding(self):
+    def test_step_refreshes_cost_but_leaves_effects_to_the_pulse(self):
         block = _top_level_block(_text(EFFECTS), "covert_apply_priority_change = {")
         self.assertIn("covert_refresh_priority_cost = yes", block)
         self.assertIn("covert_refresh_funding_state = yes", block)
-        self.assertIn("var:iw_funding_level >= 1", block)
-        self.assertIn("covert_ops_apply_all_phase_effects = yes", block)
+        self.assertNotIn("covert_ops_apply_all_phase_effects", block)
 
     def test_step_clamps_to_the_bounds(self):
         body = _text(EFFECTS)

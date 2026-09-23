@@ -144,7 +144,7 @@ covert_priority_op_is_ours = {
 		exists = scope:iw_op
 		has_variable_list = iw_ops
 		is_target_in_variable_list = { name = iw_ops target = scope:iw_op }
-		scope:iw_op = { has_tag = iw_op }
+		scope:iw_op ?= { has_tag = iw_op }
 	}
 }
 
