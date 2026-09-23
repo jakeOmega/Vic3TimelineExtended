@@ -261,3 +261,53 @@ covert_exposure_is_costless = {
 	has_variable = iw_burned_at_war
 	var:iw_burned_at_war = 1
 }
+
+# ============================================================================
+# TRADECRAFT (slice 5)
+# ============================================================================
+# The agency-experience tiers. These four are the only place the floors are
+# compared; covert_tradecraft_tier (script value) counts them. A country with
+# no iw_tradecraft (an entry never activated, or a save from before slice 5
+# until its first pulse) is in no tier.
+# Scope: country
+
+covert_tradecraft_tier_1 = {
+	has_variable = iw_tradecraft
+	var:iw_tradecraft >= covert_tradecraft_tier_1_floor
+}
+
+covert_tradecraft_tier_2 = {
+	has_variable = iw_tradecraft
+	var:iw_tradecraft >= covert_tradecraft_tier_2_floor
+}
+
+covert_tradecraft_tier_3 = {
+	has_variable = iw_tradecraft
+	var:iw_tradecraft >= covert_tradecraft_tier_3_floor
+}
+
+covert_tradecraft_tier_4 = {
+	has_variable = iw_tradecraft
+	var:iw_tradecraft >= covert_tradecraft_tier_4_floor
+}
+
+# What each tier unlocks. One trigger per unlock, so every gate is one
+# custom_tooltip line and the tier it needs is stated once, here. None of
+# them ever ends something already running: they gate starting it.
+
+# Established: an operation may be raised to priority 3
+# (covert_possible_priority_up).
+covert_tradecraft_unlocks_priority_3 = {
+	covert_tradecraft_tier_2 = yes
+}
+
+# Seasoned: the severe operations added in slice 6 (regime change, nuclear
+# programme sabotage) may be launched.
+covert_tradecraft_unlocks_severe_ops = {
+	covert_tradecraft_tier_3 = yes
+}
+
+# Veteran: one more operation of each type (covert_ops_max_per_type).
+covert_tradecraft_unlocks_extra_per_type = {
+	covert_tradecraft_tier_4 = yes
+}
