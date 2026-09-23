@@ -198,7 +198,6 @@ te_debug_covert_set_net_strength = {
 			variable = iw_nets
 			set_variable = { name = iw_net_strength value = $VALUE$ }
 			covert_net_clamp = yes
-			set_variable = { name = iw_net_head_start_offer value = covert_net_head_start_value }
 		}
 	}
 	covert_ops_sync_all = yes

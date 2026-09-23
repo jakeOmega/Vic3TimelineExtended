@@ -80,19 +80,10 @@ covert_op_create = {
 			set_variable = { name = iw_net_head_start value = 0 }
 		}
 		if = {
-			limit = {
-				has_variable_list = iw_nets
-				any_in_list = {
-					variable = iw_nets
-					var:iw_target ?= $TARGET$
-				}
-			}
+			limit = { has_variable_list = iw_nets }
 			random_in_list = {
 				variable = iw_nets
 				limit = { var:iw_target ?= $TARGET$ }
-				save_scope_as = iw_create_net
-			}
-			scope:iw_create_net = {
 				scope:iw_new_op = { set_variable = { name = iw_net_head_start value = PREV.var:iw_net_head_start_offer } }
 			}
 		}
@@ -142,9 +133,9 @@ covert_op_destroy = {
 # Recompute the target and detection data the JE shows for one operation.
 # covert_operation_detection_chance reads target_max_ic / target_type_defense /
 # iw_priority_staging / iw_net_strength_staging off the operator, so they are
-# staged there first. The
-# priority is copied with PREV.var: from inside the operator (PREV is this
-# container); a scope:<container>.var: chain is avoided on purpose.
+# staged there first. The priority and the network strength are copied with
+# PREV.var: from inside the operator (PREV is the container being read); a
+# scope:<container>.var: chain is avoided on purpose.
 # Parameters: $DEFENSE_MOD$ = type-specific defense modifier
 # Scope: operation container; scope:iw_operator = operator country
 covert_op_refresh_detection = {
@@ -165,24 +156,15 @@ covert_op_refresh_detection = {
 			set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
 			set_variable = { name = target_type_defense value = PREV.modifier:$DEFENSE_MOD$ }
 			# The target network's strength (slice 4), 0 without one. Zeroed
-			# first and looked up under an any_in_list guard: this runs once per
-			# operation in a loop, and an unmatched lookup must not inherit the
+			# first, then overwritten from inside the lookup itself: this runs
+			# once per operation in a loop, and a miss must leave 0, not the
 			# previous operation's network.
 			set_variable = { name = iw_net_strength_staging value = 0 }
 			if = {
-				limit = {
-					has_variable_list = iw_nets
-					any_in_list = {
-						variable = iw_nets
-						var:iw_target ?= scope:iw_det_tgt
-					}
-				}
+				limit = { has_variable_list = iw_nets }
 				random_in_list = {
 					variable = iw_nets
 					limit = { var:iw_target ?= scope:iw_det_tgt }
-					save_scope_as = iw_det_net
-				}
-				scope:iw_det_net = {
 					scope:iw_operator = { set_variable = { name = iw_net_strength_staging value = PREV.var:iw_net_strength } }
 				}
 			}
@@ -248,8 +230,9 @@ covert_op_end = {
 # line instead of a months-old capital naming whoever conquered it.
 # iw_last_exposed_age is aged by the journal entry's monthly pulse.
 #
-# Also costs the target's network covert_net_burn_loss (slice 4). Runs from
-# covert_warfare.1's `after`, which is never rendered as a tooltip.
+# Also costs the target's network covert_net_burn_loss (slice 4), inside the
+# lookup itself: `after` can be walked by the option tooltips' render pass,
+# where a saved scope may be unset.
 #
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
 #             $TARGET$ = target country,
@@ -261,19 +244,12 @@ covert_op_burn = {
 	covert_op_destroy = { TYPE = $TYPE$ TARGET = $TARGET$ }
 	# The exposure rolls up part of the network in that country (slice 4).
 	if = {
-		limit = {
-			has_variable_list = iw_nets
-			any_in_list = {
-				variable = iw_nets
-				var:iw_target ?= $TARGET$
-			}
-		}
+		limit = { has_variable_list = iw_nets }
 		random_in_list = {
 			variable = iw_nets
 			limit = { var:iw_target ?= $TARGET$ }
-			save_scope_as = iw_burn_net
+			covert_net_loss = { AMOUNT = covert_net_burn_loss }
 		}
-		scope:iw_burn_net = { covert_net_loss = { AMOUNT = covert_net_burn_loss } }
 	}
 	$TARGET$ = {
 		set_variable = { name = iw_last_exposed_country value = ROOT }
@@ -334,10 +310,12 @@ covert_refresh_priority_cost = {
 # one of them is burned. Constants and projections:
 # covert_warfare_script_values.txt, § PER-TARGET NETWORKS.
 #
-# Lookups of "the network for target X" always sit under an any_in_list limit
-# on the same target, and each call site saves its own scope name: inside a
-# loop, an unmatched random_in_list would leave the previous iteration's
-# network in the saved scope.
+# Lookups of "the network for target X" do their work INSIDE the
+# random_in_list, never through a saved scope afterwards: several run inside
+# loops, where an unmatched pick would leave the previous iteration's network
+# in the saved scope, and several sit on paths the engine also walks to render
+# tooltips (the steppers' covert_refresh_funding_state, covert_warfare.1's
+# `after`), where a saved scope may be unset (rule 6).
 
 # Create the network for $TARGET$ if there isn't one. Leaves the operator's
 # iw_nets unchanged when one exists.
@@ -381,11 +359,14 @@ covert_net_create = {
 	}
 }
 
-# Hold iw_net_strength inside [0, covert_net_max]. change_variable has no
-# clamp argument, so this runs straight after every write.
+# Hold iw_net_strength inside [0, covert_net_max], and restate the head start
+# a new operation would get from it. Runs straight after every strength write
+# (change_variable has no clamp argument), so a burn shrinks the offer at once
+# and a same-day relaunch cannot take the pre-burn head start.
 # Scope: network container
 covert_net_clamp = {
 	clamp_variable = { name = iw_net_strength min = 0 max = covert_net_max }
+	set_variable = { name = iw_net_head_start_offer value = covert_net_head_start_value }
 }
 
 # Grow the network, scaled down above half strength (covert_net_gain_scale).
@@ -426,8 +407,8 @@ covert_net_loss = {
 #   1. Ensure a network exists for every operation's target.
 #   2. Count operations per network (zero every count, then walk iw_ops once).
 #   3. Tick: grow with >= 1 operation, otherwise decay (halved at funding
-#      >= covert_net_maintain_funding_level); restate trend, head-start offer
-#      and display capital.
+#      >= covert_net_maintain_funding_level); restate trend and display
+#      capital (the head-start offer follows every write, in covert_net_clamp).
 #   4. Reap networks whose target is gone, or that hit 0 with no operations:
 #      temporary list -> remove_list_variable -> destroy_container.
 # Detection (staged inside covert_ops_sync_all) therefore reads last month's
@@ -460,19 +441,10 @@ covert_nets_sync = {
 				var:iw_target ?= {
 					save_scope_as = iw_net_count_tgt
 					scope:iw_net_operator = {
-						if = {
-							limit = {
-								any_in_list = {
-									variable = iw_nets
-									var:iw_target ?= scope:iw_net_count_tgt
-								}
-							}
-							random_in_list = {
-								variable = iw_nets
-								limit = { var:iw_target ?= scope:iw_net_count_tgt }
-								save_scope_as = iw_tick_net
-							}
-							scope:iw_tick_net = { change_variable = { name = iw_net_ops add = 1 } }
+						random_in_list = {
+							variable = iw_nets
+							limit = { var:iw_target ?= scope:iw_net_count_tgt }
+							change_variable = { name = iw_net_ops add = 1 }
 						}
 					}
 				}
@@ -507,7 +479,6 @@ covert_nets_sync = {
 				}
 				set_variable = { name = iw_net_trend value = 2 }
 			}
-			set_variable = { name = iw_net_head_start_offer value = covert_net_head_start_value }
 			save_scope_as = iw_net_display
 			var:iw_target ?= {
 				capital ?= {

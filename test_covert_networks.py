@@ -145,16 +145,16 @@ class NetworkEffectTests(unittest.TestCase):
         block = _top_level_block(_text(EFFECTS), "covert_nets_sync = {")
         self.assertIn("is_country_alive = yes", block)
 
-    def test_tick_lookups_guarded(self):
-        # Every random_in_list over iw_nets inside the tick sits under an
-        # any_in_list limit on the same target, so an unmatched lookup can
-        # never leave the previous operation's network in the saved scope.
+    def test_tick_counts_inside_the_lookup(self):
+        # The count is added inside random_in_list, so an operation whose
+        # target has no network adds to nothing rather than to the previous one.
         block = _top_level_block(_text(EFFECTS), "covert_nets_sync = {")
-        self.assertEqual(
-            block.count("random_in_list = {"),
-            block.count("save_scope_as = iw_tick_net"),
+        pick = block[block.index("random_in_list = {"):]
+        self.assertLess(
+            pick.index("limit = { var:iw_target ?= scope:iw_net_count_tgt }"),
+            pick.index("change_variable = { name = iw_net_ops add = 1 }"),
         )
-        self.assertGreaterEqual(block.count("any_in_list = {"), block.count("random_in_list = {"))
+        self.assertNotIn("save_scope_as", pick[: pick.index("change_variable")])
 
 
 class PulseOrderTests(unittest.TestCase):
@@ -193,31 +193,30 @@ class ConsumerTests(unittest.TestCase):
         )
         self.assertIn("PREV.var:iw_net_head_start_offer", block)
 
-    def test_head_start_lookup_guarded(self):
+    def test_head_start_defaults_to_zero_before_lookup(self):
         block = _top_level_block(_text(EFFECTS), "covert_op_create = {")
-        self.assertIn("set_variable = { name = iw_net_head_start value = 0 }", block)
-        self.assertIn("save_scope_as = iw_create_net", block)
-        guard = block.index("any_in_list")
-        pick = block.index("save_scope_as = iw_create_net")
-        self.assertLess(guard, pick)
+        zero = block.index("set_variable = { name = iw_net_head_start value = 0 }")
+        pick = block.index("random_in_list = {")
+        self.assertLess(zero, pick)
+        self.assertIn("limit = { var:iw_target ?= $TARGET$ }", block[pick:])
 
     def test_op_create_ensures_network_after_lookup(self):
         block = _top_level_block(_text(EFFECTS), "covert_op_create = {")
         self.assertLess(
-            block.index("save_scope_as = iw_create_net"),
+            block.index("PREV.var:iw_net_head_start_offer"),
             block.index("covert_net_create"),
         )
 
-    def test_detection_lookup_guarded_and_zeroed(self):
+    def test_detection_lookup_zeroed_first(self):
         block = _top_level_block(_text(EFFECTS), "covert_op_refresh_detection = {")
         zero = block.index("set_variable = { name = iw_net_strength_staging value = 0 }")
-        pick = block.index("save_scope_as = iw_det_net")
+        pick = block.index("random_in_list = {")
+        read = block.index("PREV.var:iw_net_strength")
         chance = block.index("covert_operation_detection_chance")
         self.assertLess(zero, pick)
-        self.assertLess(pick, chance)
-        self.assertIn("PREV.var:iw_net_strength", block)
+        self.assertLess(pick, read)
+        self.assertLess(read, chance)
         self.assertIn("remove_variable = iw_net_strength_staging", block)
-        self.assertNotRegex(block, r"scope:iw_det_net\.var:")
 
     def test_sync_backfills_head_start_before_detection(self):
         block = _top_level_block(_text(EFFECTS), "covert_op_sync = {")
@@ -240,8 +239,11 @@ class ConsumerTests(unittest.TestCase):
 
     def test_burn_costs_the_network(self):
         block = _top_level_block(_text(EFFECTS), "covert_op_burn = {")
-        self.assertIn("covert_net_loss = { AMOUNT = covert_net_burn_loss }", block)
-        self.assertLess(block.index("any_in_list"), block.index("save_scope_as = iw_burn_net"))
+        pick = block[block.index("random_in_list = {"):]
+        self.assertLess(
+            pick.index("limit = { var:iw_target ?= $TARGET$ }"),
+            pick.index("covert_net_loss = { AMOUNT = covert_net_burn_loss }"),
+        )
 
 
 NET_LOC_KEYS = (
@@ -300,6 +302,25 @@ class HarnessTests(unittest.TestCase):
         for opt in ("te_debug_covert.2.i", "te_debug_covert.2.j"):
             self.assertIn("name = %s" % opt, events)
             self.assertRegex(loc, r"(?m)^ %s:0 " % re.escape(opt))
+
+
+class ReviewFixTests(unittest.TestCase):
+    def test_network_lookups_work_inside_the_iterator(self):
+        # No saved scope for a looked-up network: the work happens inside
+        # random_in_list itself. A saved scope can be unset in the render pass
+        # the engine runs for scripted-GUI and event-option tooltips (rule 6),
+        # and inside a loop an unmatched pick would leave the previous one.
+        body = _text(EFFECTS)
+        for name in ("iw_create_net", "iw_det_net", "iw_tick_net", "iw_burn_net"):
+            self.assertNotIn("save_scope_as = %s" % name, body)
+
+    def test_offer_restated_on_every_strength_write(self):
+        # A burn must shrink the head start a same-day relaunch gets.
+        block = _top_level_block(_text(EFFECTS), "covert_net_clamp = {")
+        self.assertIn(
+            "set_variable = { name = iw_net_head_start_offer value = covert_net_head_start_value }",
+            block,
+        )
 
 
 if __name__ == "__main__":
