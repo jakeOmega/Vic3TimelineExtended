@@ -122,6 +122,59 @@ covert_possible_stand_down = {
 }
 
 # ============================================================================
+# PRIORITY — shared eligibility
+# ============================================================================
+# Whether the operation a widget row is showing can have its priority changed.
+# Called by the row stepper's scripted GUIs (is_valid) and by the AI's
+# priority management, so the two cannot diverge.
+#
+# FAIL-CLOSED BY DESIGN, like covert_possible_stand_down. The row hands the
+# operation's container to script as the saved scope iw_op; passing an object
+# into a scripted GUI's saved_scopes has no vanilla precedent. If it arrives
+# unset, or is anything but one of OUR running operations, the stepper greys
+# out and does nothing.
+# Scope: operator country; scope:iw_op = the operation container
+covert_priority_op_is_ours = {
+	custom_tooltip = {
+		text = iw_priority_op_known_tt
+		exists = scope:iw_op
+	}
+	custom_tooltip = {
+		text = iw_priority_op_ours_tt
+		exists = scope:iw_op
+		has_variable_list = iw_ops
+		is_target_in_variable_list = { name = iw_ops target = scope:iw_op }
+		scope:iw_op = { has_tag = iw_op }
+	}
+}
+
+covert_possible_priority_up = {
+	covert_priority_op_is_ours = yes
+	custom_tooltip = {
+		text = iw_priority_not_max_tt
+		scope:iw_op ?= {
+			OR = {
+				NOT = { has_variable = iw_priority }
+				var:iw_priority < covert_op_priority_max
+			}
+		}
+	}
+	# Slice 5 adds its Tradecraft gate on the step to priority 3 here, as one
+	# more custom_tooltip, so it binds the stepper and the AI alike.
+}
+
+covert_possible_priority_down = {
+	covert_priority_op_is_ours = yes
+	custom_tooltip = {
+		text = iw_priority_not_min_tt
+		scope:iw_op ?= {
+			has_variable = iw_priority
+			var:iw_priority > 1
+		}
+	}
+}
+
+# ============================================================================
 # EXPOSURE TIERS
 # ============================================================================
 # How hostile the world considers an operation when it is caught. This is THE

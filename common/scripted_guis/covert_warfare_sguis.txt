@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # COVERT WARFARE — SCRIPTED GUIS FOR THE JOURNAL-ENTRY WIDGETS
 # ============================================================================
-# Read from gui/journal_entry_widgets/covert_operations_widget.gui. Four kinds
+# Read from gui/journal_entry_widgets/covert_operations_widget.gui. Five kinds
 # of entry live here.
 #
 # 1. THE FUNDING CONTROL (covert_funding_sgui). Delegates to the same
@@ -24,9 +24,9 @@
 #    game/common/scripted_guis/scripted_guis.md.
 #
 # 3. YES/NO QUESTIONS (covert_ops_dormant_sgui, covert_last_exposed_known_sgui,
-#    covert_ops_phase_ready_sgui). `.gui` has no way to ask script a question, so
-#    each of these is an is_shown-only entry read as
-#    `[GetScriptedGui('…').IsShown(…)]`. They exist so the widget never
+#    covert_ops_phase_ready_sgui, covert_ops_priority_ready_sgui). `.gui` has no
+#    way to ask script a question, so each of these is an is_shown-only entry
+#    read as `[GetScriptedGui('…').IsShown(…)]`. They exist so the widget never
 #    re-encodes a threshold or an existence check itself. See
 #    docs/guides/scripting_best_practices.md § "Asking Script a Yes/No Question
 #    From `.gui`".
@@ -35,6 +35,10 @@
 #    per operation type, each ending the operation a widget row is showing. See
 #    their own section header for why there are nine rather than one with a type
 #    op code, and for the single unproven link in the mechanism.
+#
+# 5. THE PRIORITY STEPPER (covert_priority_up_sgui, covert_priority_down_sgui).
+#    One handler per direction; the row's container arrives as the saved scope
+#    iw_op. See their section header.
 #
 # Every entry declares `ai_is_valid = { always = no }`: the AI's path into
 # covert funding is je_covert_warfare's monthly pulse, and it must never
@@ -481,6 +485,85 @@ covert_stand_down_destabilization_sgui = {
 	effect = {
 		covert_effect_stand_down = { TYPE = destabilization ACTION = covert_destabilization_action }
 	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- PRIORITY: the row stepper ----------------------------------------------
+# Two handlers, up and down, so the row's container can travel alone in a
+# SINGLE AddScope — the shape the stand-down handlers use. Both delegate to
+# covert_possible_priority_* / covert_effect_priority_*; the eligibility is
+# fail-closed, so an unset or foreign scope greys the button instead of
+# changing the wrong operation.
+covert_priority_up_sgui = {
+	scope = country
+	saved_scopes = { iw_op }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_priority_up = yes
+	}
+
+	effect = {
+		covert_effect_priority_up = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_priority_down_sgui = {
+	scope = country
+	saved_scopes = { iw_op }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_priority_down = yes
+	}
+
+	effect = {
+		covert_effect_priority_down = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+# ---- YES/NO: do all operations carry a priority yet? -------------------------
+# iw_priority is new in slice 3. A save made before it has containers without
+# it until the first monthly sync backfills them, and a .gui that reads a
+# missing variable logs every frame. The row hides its priority stepper and
+# line until this answers yes. Same shape as covert_ops_phase_ready_sgui.
+covert_ops_priority_ready_sgui = {
+	scope = country
+
+	is_shown = {
+		OR = {
+			NOT = { has_variable_list = iw_ops }
+			NOT = {
+				any_in_list = {
+					variable = iw_ops
+					NOT = { has_variable = iw_priority }
+				}
+			}
+		}
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = { }
 
 	ai_is_valid = {
 		always = no

@@ -927,3 +927,16 @@ covert_op_effect_mult = {
 		multiply = covert_op_priority_2_effect_mult
 	}
 }
+
+# The detection points each priority level adds, for the row and the stepper
+# tooltips. Derived so they cannot drift from covert_op_priority_detect_add.
+covert_op_priority_2_detect_display = {
+	value = covert_op_priority_detect_add
+	round = yes
+}
+
+covert_op_priority_3_detect_display = {
+	value = covert_op_priority_detect_add
+	multiply = 2
+	round = yes
+}

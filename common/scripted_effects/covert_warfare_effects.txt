@@ -803,6 +803,80 @@ covert_effect_stand_down = {
 }
 
 # ============================================================================
+# PRIORITY
+# ============================================================================
+# Raise or lower one operation's priority (1 .. covert_op_priority_max).
+# Called by the row stepper's scripted GUIs, by the console harness, and — for
+# the variable change only — mirrored by covert_ai_manage_priorities.
+# Eligibility, including the fail-closed scope check, is in
+# covert_possible_priority_up / _down (covert_warfare_triggers.txt).
+#
+# The tooltip branches here in script because tooltip loc cannot reach a
+# container: it names the level the operation is moving TO and prints the
+# constants for that level.
+# Scope: operator country; scope:iw_op = the operation container
+
+# Everything that must be true again once a priority has moved: upkeep, the
+# JE's cost modifier and every operation's detection display
+# (covert_refresh_funding_state runs the sync, which re-stages detection), and
+# the effect modifiers — the last only while funded, exactly as the monthly
+# pulse gates them. At funding 0 the click still moves the variable (and the
+# upkeep share, which funding 0 multiplies to nothing).
+covert_apply_priority_change = {
+	covert_refresh_priority_cost = yes
+	covert_refresh_funding_state = yes
+	if = {
+		limit = {
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+		covert_ops_apply_all_phase_effects = yes
+	}
+}
+
+covert_effect_priority_up = {
+	if = {
+		limit = { scope:iw_op ?= { covert_op_priority_at_least = { N = 2 } } }
+		custom_tooltip = iw_priority_to_3_tt
+	}
+	else = {
+		custom_tooltip = iw_priority_to_2_tt
+	}
+	hidden_effect = {
+		scope:iw_op ?= {
+			if = {
+				limit = { NOT = { has_variable = iw_priority } }
+				set_variable = { name = iw_priority value = 1 }
+			}
+			change_variable = { name = iw_priority add = 1 }
+			clamp_variable = { name = iw_priority min = 1 max = covert_op_priority_max }
+		}
+		covert_apply_priority_change = yes
+	}
+}
+
+covert_effect_priority_down = {
+	if = {
+		limit = { scope:iw_op ?= { covert_op_priority_at_least = { N = 3 } } }
+		custom_tooltip = iw_priority_to_2_tt
+	}
+	else = {
+		custom_tooltip = iw_priority_to_1_tt
+	}
+	hidden_effect = {
+		scope:iw_op ?= {
+			if = {
+				limit = { NOT = { has_variable = iw_priority } }
+				set_variable = { name = iw_priority value = 1 }
+			}
+			change_variable = { name = iw_priority subtract = 1 }
+			clamp_variable = { name = iw_priority min = 1 max = covert_op_priority_max }
+		}
+		covert_apply_priority_change = yes
+	}
+}
+
+# ============================================================================
 # EXPOSURE BLOWBACK
 # ============================================================================
 

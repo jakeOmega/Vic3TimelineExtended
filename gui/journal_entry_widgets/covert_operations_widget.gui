@@ -22,6 +22,11 @@
 ### the target can travel alone in a SINGLE AddScope, the only shape vanilla
 ### demonstrates. Fail-closed: see covert_possible_stand_down.
 ###
+### The per-row priority stepper also uses no op code: up and down are two
+### scripted GUIs (covert_priority_up_sgui / _down_sgui), and the row's
+### container travels as the saved scope `iw_op`. Fail-closed: see
+### covert_priority_op_is_ours.
+###
 ### EDITING RULES
 ### * Never compare a game number against a literal here. The phase lines read
 ###   the stored `iw_phase` (1/2/3), written by covert_op_refresh_phase; the 6
@@ -29,7 +34,7 @@
 ###   covert_op_is_fully_operational.
 ### * Every question that needs script asks it through an is_shown-only
 ###   scripted GUI (covert_ops_dormant_sgui, covert_last_exposed_known_sgui,
-###   covert_ops_phase_ready_sgui).
+###   covert_ops_phase_ready_sgui, covert_ops_priority_ready_sgui).
 ### * Panel NUMBERS come from JournalEntry.GetCountry.MakeScope.ScriptValue, a
 ###   proven read. GetModifier.GetValueWithBreakdownFor is used for hover
 ###   breakdowns ONLY, so if that chain fails in-game the panel still reads
@@ -162,6 +167,53 @@ types covert_operations_widget_types
 		}
 	}
 
+	### The priority stepper for one operation row: label, minus, level, plus.
+	### Up and down are separate scripted GUIs, each named by its button's own
+	### datacontext, so the row's container travels alone in a single AddScope
+	### (the stand-down shape). Hidden until every container carries
+	### iw_priority, so a pre-slice-3 save never reads a missing variable.
+	type covert_op_priority_stepper = flowcontainer {
+		direction = horizontal
+		spacing = 3
+		margin_left = 12
+		visible = "[GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+		textbox = {
+			text = "je_iw_priority_stepper_label"
+			size = { 120 24 }
+			align = left|nobaseline
+			using = fontsize_small
+			parentanchor = vcenter
+			elide = right
+		}
+
+		button_icon_minus_action = {
+			size = { 24 24 }
+			parentanchor = vcenter
+			datacontext = "[GetScriptedGui('covert_priority_down_sgui')]"
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'iw_op', ScriptContainer.MakeScope ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'iw_op', ScriptContainer.MakeScope ).End )]"
+			tooltip = "je_iw_priority_step_down_tooltip"
+		}
+
+		textbox = {
+			text = "[ScriptContainer.GetVariableValue('iw_priority')|0]"
+			size = { 40 24 }
+			align = center|nobaseline
+			using = fontsize_small
+			parentanchor = vcenter
+		}
+
+		button_icon_plus_action = {
+			size = { 24 24 }
+			parentanchor = vcenter
+			datacontext = "[GetScriptedGui('covert_priority_up_sgui')]"
+			enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'iw_op', ScriptContainer.MakeScope ).End )]"
+			onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'iw_op', ScriptContainer.MakeScope ).End )]"
+			tooltip = "je_iw_priority_step_up_tooltip"
+		}
+	}
+
 	### The phase, dormancy and detection lines, indented under the title.
 	type widget_je_covert_operation_detail = textbox {
 		autoresize = yes
@@ -238,6 +290,21 @@ types covert_operations_widget_types
 		widget_je_covert_operation_detail = {
 			visible = "[And( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)3') )]"
 			text = "je_iw_op_row_phase_full"
+		}
+
+		# ---- Priority: a stepper, then what the current level means ----
+		covert_op_priority_stepper = { }
+		widget_je_covert_operation_detail = {
+			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)1') )]"
+			text = "je_iw_op_row_priority_1"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)2') )]"
+			text = "je_iw_op_row_priority_2"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)3') )]"
+			text = "je_iw_op_row_priority_3"
 		}
 
 		# ---- Is it doing anything at all? ----

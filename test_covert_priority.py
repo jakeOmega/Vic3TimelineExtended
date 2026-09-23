@@ -208,5 +208,70 @@ class DetectionTests(unittest.TestCase):
         self.assertLess(add, efficiency)
 
 
+class StepperTests(unittest.TestCase):
+    def test_identification_fails_closed(self):
+        block = _top_level_block(_text(TRIGGERS), "covert_priority_op_is_ours = {")
+        self.assertIn("exists = scope:iw_op", block)
+        self.assertIn("is_target_in_variable_list = { name = iw_ops target = scope:iw_op }", block)
+        self.assertIn("has_tag = iw_op", block)
+        for name in ("covert_possible_priority_up", "covert_possible_priority_down"):
+            gate = _top_level_block(_text(TRIGGERS), "%s = {" % name)
+            self.assertIn("covert_priority_op_is_ours = yes", gate, name)
+        self.assertIn(
+            "covert_op_priority_max",
+            _top_level_block(_text(TRIGGERS), "covert_possible_priority_up = {"),
+        )
+
+    def test_both_handlers_delegate_and_are_closed_to_the_ai(self):
+        body = _text(SGUIS)
+        for direction in ("up", "down"):
+            block = _top_level_block(body, "covert_priority_%s_sgui = {" % direction)
+            self.assertIn("saved_scopes = { iw_op }", block)
+            self.assertIn("covert_possible_priority_%s = yes" % direction, block)
+            self.assertIn("covert_effect_priority_%s = yes" % direction, block)
+            self.assertRegex(block, r"ai_is_valid = \{\s*always = no\s*\}")
+
+    def test_step_refreshes_cost_and_gates_effects_on_funding(self):
+        block = _top_level_block(_text(EFFECTS), "covert_apply_priority_change = {")
+        self.assertIn("covert_refresh_priority_cost = yes", block)
+        self.assertIn("covert_refresh_funding_state = yes", block)
+        self.assertIn("var:iw_funding_level >= 1", block)
+        self.assertIn("covert_ops_apply_all_phase_effects = yes", block)
+
+    def test_step_clamps_to_the_bounds(self):
+        body = _text(EFFECTS)
+        for direction in ("up", "down"):
+            block = _top_level_block(body, "covert_effect_priority_%s = {" % direction)
+            self.assertIn("clamp_variable = { name = iw_priority min = 1 max = covert_op_priority_max }", block)
+            self.assertIn("covert_apply_priority_change = yes", block)
+
+    def test_the_row_passes_its_container_in_a_single_addscope(self):
+        gui = _text(WIDGET)
+        call = "AddScope( 'iw_op', ScriptContainer.MakeScope )"
+        self.assertEqual(gui.count(call), 4, "enabled + onclick on each of two buttons")
+        self.assertIn("GetScriptedGui('covert_priority_up_sgui')", gui)
+        self.assertIn("GetScriptedGui('covert_priority_down_sgui')", gui)
+
+    def test_the_row_hides_priority_until_every_container_has_one(self):
+        gui = _text(WIDGET)
+        self.assertIn("covert_ops_priority_ready_sgui", gui)
+        for pri in (1, 2, 3):
+            self.assertIn("je_iw_op_row_priority_%d" % pri, gui)
+        gate = _top_level_block(_text(SGUIS), "covert_ops_priority_ready_sgui = {")
+        self.assertIn("NOT = { has_variable = iw_priority }", gate)
+
+    def test_loc_keys_exist(self):
+        loc = _all_loc()
+        for key in (
+            "iw_priority_op_known_tt", "iw_priority_op_ours_tt",
+            "iw_priority_not_max_tt", "iw_priority_not_min_tt",
+            "iw_priority_to_1_tt", "iw_priority_to_2_tt", "iw_priority_to_3_tt",
+            "je_iw_priority_stepper_label",
+            "je_iw_priority_step_up_tooltip", "je_iw_priority_step_down_tooltip",
+            "je_iw_op_row_priority_1", "je_iw_op_row_priority_2", "je_iw_op_row_priority_3",
+        ):
+            self.assertIn(" %s:" % key, loc, key)
+
+
 if __name__ == "__main__":
     unittest.main()
