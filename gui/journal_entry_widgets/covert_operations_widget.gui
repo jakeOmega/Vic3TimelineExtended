@@ -1,6 +1,6 @@
 ﻿### Covert Warfare JE widgets
 ###
-### Two widgets, both mounted from je_covert_warfare:
+### Three widgets, all mounted from je_covert_warfare:
 ###   widget_je_covert_command_centre  custom_widget_container_1  (above status desc)
 ###     Intelligence capacity, operation slots, the funding ladder and its
 ###     stepper, the detection factors and the defensive side. Everything the
@@ -9,6 +9,9 @@
 ###     One row per running operation, from the operator's `iw_ops` variable
 ###     list of script containers (see common/scripted_effects/covert_warfare_effects.txt
 ###     for their tags and variables).
+###   widget_je_covert_networks        custom_widget_container_3  (below the buttons)
+###     One row per per-target network, from the operator's `iw_nets` list
+###     (slice 4; see covert_warfare_effects.txt § PER-TARGET NETWORKS).
 ###
 ### SCRIPTED GUI OP CODES (common/scripted_guis/covert_warfare_sguis.txt):
 ###     0  funding stepper minus   covert_possible/effect_decrease_funding
@@ -42,7 +45,7 @@
 ### * Target country names go through the stored capital state
 ###   (`iw_target_capital`), because Var().GetCountry.GetName renders blank in
 ###   this mod — docs/guides/gui_modding_guide.md gotcha #11.
-### * Both roots are gated on [JournalEntry.IsActive]: the entry has
+### * All three roots are gated on [JournalEntry.IsActive]: the entry has
 ###   is_shown_when_inactive, so without the gate every display read would run
 ###   for countries that have none of these variables (gotcha #14).
 
@@ -396,6 +399,46 @@ types covert_operations_widget_types
 			}
 		}
 	}
+
+	### ---- NETWORK ROW (slice 4) ---------------------------------------
+
+	### One row per network in the operator's iw_nets. All numbers are
+	### variables the monthly tick (covert_nets_sync) writes on the container;
+	### the trend line is chosen by the stored code, never by comparing
+	### strength against a literal.
+	type widget_je_covert_network_row = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 6 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+
+		widget_je_covert_operation_text = {
+			text = "je_iw_net_row_title"
+		}
+		widget_je_covert_operation_detail = {
+			text = "je_iw_net_row_strength"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)1')]"
+			text = "je_iw_net_row_trend_growing"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)2')]"
+			text = "je_iw_net_row_trend_decaying"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)0')]"
+			text = "je_iw_net_row_trend_holding"
+		}
+		widget_je_covert_operation_detail = {
+			text = "je_iw_net_row_benefit"
+		}
+	}
 }
 
 
@@ -531,6 +574,39 @@ flowcontainer = {
 	item = {
 		widget_je_covert_operation_row = {
 			datacontext = "[Scope.GetScriptContainer]"
+		}
+	}
+}
+
+### One row per network (slice 4). Mounted on custom_widget_container_3,
+### below the journal entry's buttons. The header only shows when there is
+### at least one network, so a country that has never run an operation sees
+### nothing here.
+flowcontainer = {
+	name = "widget_je_covert_networks"
+	direction = vertical
+	parentanchor = hcenter
+	spacing = 4
+	visible = "[JournalEntry.IsActive]"
+
+	covert_cc_header = {
+		blockoverride "header_text" {
+			text = "je_iw_net_header"
+			tooltip = "je_iw_net_header_tooltip"
+			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_nets') ) )]"
+		}
+	}
+
+	flowcontainer = {
+		direction = vertical
+		parentanchor = hcenter
+		spacing = 4
+		datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('iw_nets')]"
+
+		item = {
+			widget_je_covert_network_row = {
+				datacontext = "[Scope.GetScriptContainer]"
+			}
 		}
 	}
 }

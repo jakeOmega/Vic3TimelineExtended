@@ -241,5 +241,46 @@ class ConsumerTests(unittest.TestCase):
         self.assertLess(block.index("any_in_list"), block.index("save_scope_as = iw_burn_net"))
 
 
+NET_LOC_KEYS = (
+    "je_iw_net_header",
+    "je_iw_net_header_tooltip",
+    "je_iw_net_row_title",
+    "je_iw_net_row_strength",
+    "je_iw_net_row_trend_growing",
+    "je_iw_net_row_trend_decaying",
+    "je_iw_net_row_trend_holding",
+    "je_iw_net_row_benefit",
+)
+
+
+class WidgetTests(unittest.TestCase):
+    def test_je_mounts_network_widget_on_container_3(self):
+        je = _text(JE)
+        self.assertRegex(
+            je,
+            r'name = "widget_je_covert_networks"\s*\n\s*container = "custom_widget_container_3"',
+        )
+
+    def test_network_widget_gated(self):
+        gui = _text(WIDGET)
+        root = gui[gui.index('name = "widget_je_covert_networks"'):]
+        self.assertIn('visible = "[JournalEntry.IsActive]"', root[:400])
+        self.assertIn("GetList('iw_nets')", root)
+        self.assertIn("IsDataModelEmpty", root)
+
+    def test_trend_lines_cover_all_three_codes(self):
+        gui = _text(WIDGET)
+        for code in ("0", "1", "2"):
+            self.assertIn(
+                "EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)%s')" % code,
+                gui,
+            )
+
+    def test_loc_keys_exist(self):
+        loc = _all_loc()
+        for key in NET_LOC_KEYS:
+            self.assertRegex(loc, r"(?m)^ %s:0 " % re.escape(key))
+
+
 if __name__ == "__main__":
     unittest.main()

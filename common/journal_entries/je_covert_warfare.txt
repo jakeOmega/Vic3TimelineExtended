@@ -1,11 +1,12 @@
 ﻿# ============================================================================
 # COVERT WARFARE — Journal Entry (Command Center)
 # ============================================================================
-# Two custom widgets carry the interface: widget_je_covert_command_centre shows
+# Three custom widgets carry the interface: widget_je_covert_command_centre shows
 # intelligence capacity, slots, the funding ladder and its stepper, detection
 # factors and covert defence; widget_je_covert_operations lists each running
-# operation. status_desc is left with the one thing that is genuinely prose —
-# the intelligence-standing verdict — plus the empty-state pointer.
+# operation; widget_je_covert_networks lists each per-target network (slice 4).
+# status_desc is left with the one thing that is genuinely prose — the
+# intelligence-standing verdict — plus the empty-state pointer.
 #
 # Operations are toggled via diplomatic actions (pact-based); each running
 # operation's state lives in a script container (covert_warfare_effects.txt).
@@ -30,6 +31,11 @@ je_covert_warfare = {
 		gui = "gui/journal_entry_widgets/covert_operations_widget.gui"
 		name = "widget_je_covert_operations"
 		container = "custom_widget_container_2"
+	}
+	widget = {
+		gui = "gui/journal_entry_widgets/covert_operations_widget.gui"
+		name = "widget_je_covert_networks"
+		container = "custom_widget_container_3"
 	}
 
 	is_shown_when_inactive = {
@@ -85,7 +91,9 @@ je_covert_warfare = {
 		# slot counts, the funding level and its cost, the detection factors and
 		# the defensive side — is drawn by widget_je_covert_command_centre
 		# (custom_widget_container_1, above this text). Per-operation rows come
-		# from widget_je_covert_operations (custom_widget_container_2, below).
+		# from widget_je_covert_operations (custom_widget_container_2, below);
+		# per-target networks from widget_je_covert_networks
+		# (custom_widget_container_3, below the buttons).
 		# Only the empty state stays, because it tells the player where
 		# operations are actually launched.
 		triggered_desc = {
