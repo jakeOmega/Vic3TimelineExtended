@@ -1027,6 +1027,8 @@ button = {
 }
 ```
 
+**On an op-coded scripted GUI** (one `op` saved scope per control, as in the journal-entry widgets), give each modifier its own op code instead of a new sgui, and put it in the plain op's `is_valid` branch as `OR = { scope:op = <plain> scope:op = <shift> scope:op = <ctrl> }`. These sguis end in a fail-closed `trigger_else = { always = no }`, so a modifier op left out of that `OR` fails closed silently. Bind the button's `enabled` to the plain op only, and let the effect's clamp stop an oversized step at the bound. Two conventions exist in this mod: shift ×10 / ctrl ×100 for large ranges (construction panel, Strategic Reserve flow and budget: ops + 20 / + 40), and ctrl a tenth / shift to the limit for a fine dial (banking rate target, ops 9–12).
+
 ---
 
 ## Creating Standalone Panels
