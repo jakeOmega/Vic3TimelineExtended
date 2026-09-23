@@ -62,7 +62,10 @@ momentum and bubble pressure, 3 points and `banking_directed_credit_activation_c
 | `cb_directed_credit_electrification` | `bg_power`, `bg_high_tech` (both mod-registered) | Intelligentsia +2, Trade Unions +1, Industrialists −3 (private utilities fought the REA and the TVA) | `rural_electrification` (era 6) |
 
 All five sectors share Infrastructure's `country_banking_lock_directed_credit_bool`, so Prudential /
-Narrow Banking locks the whole category.
+Narrow Banking locks the whole category. `bg_high_tech` is a child of `bg_heavy_industry`
+(`common/building_groups/extra_building_groups.txt`), so Heavy Industry already covers high-tech
+buildings; Electrification's own addition is `bg_power`. The overlap matters only when both run at
+once under the Directed Credit law, where high tech gets +20 %.
 
 **The cap.** `country_directed_credit_sectors_add` (new, `banking_cycle_modifier_types.txt`) is granted
 `+1` by `law_directed_credit_development_banks`. `banking_directed_credit_slots_free` = 1 + that

@@ -143,6 +143,76 @@ te_history_marker_tooltip = {
 					custom_tooltip = banking_dash_tt_cb_asset_relief_program
 				}
 				if = {
+					limit = { has_variable = te_hist_mk_on_cb_directed_credit_heavy_industry }
+					custom_tooltip = te_hist_mk_enabled
+					custom_tooltip = banking_dash_tt_cb_directed_credit_heavy_industry
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_off_cb_directed_credit_heavy_industry }
+					custom_tooltip = te_hist_mk_disabled
+					custom_tooltip = banking_dash_tt_cb_directed_credit_heavy_industry
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_on_cb_directed_credit_agriculture }
+					custom_tooltip = te_hist_mk_enabled
+					custom_tooltip = banking_dash_tt_cb_directed_credit_agriculture
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_off_cb_directed_credit_agriculture }
+					custom_tooltip = te_hist_mk_disabled
+					custom_tooltip = banking_dash_tt_cb_directed_credit_agriculture
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_on_cb_directed_credit_armaments }
+					custom_tooltip = te_hist_mk_enabled
+					custom_tooltip = banking_dash_tt_cb_directed_credit_armaments
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_off_cb_directed_credit_armaments }
+					custom_tooltip = te_hist_mk_disabled
+					custom_tooltip = banking_dash_tt_cb_directed_credit_armaments
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_on_cb_directed_credit_electrification }
+					custom_tooltip = te_hist_mk_enabled
+					custom_tooltip = banking_dash_tt_cb_directed_credit_electrification
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_off_cb_directed_credit_electrification }
+					custom_tooltip = te_hist_mk_disabled
+					custom_tooltip = banking_dash_tt_cb_directed_credit_electrification
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_on_cb_reserve_requirements }
+					custom_tooltip = te_hist_mk_enabled
+					custom_tooltip = banking_dash_tt_cb_reserve_requirements
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_off_cb_reserve_requirements }
+					custom_tooltip = te_hist_mk_disabled
+					custom_tooltip = banking_dash_tt_cb_reserve_requirements
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_on_cb_bank_holiday }
+					custom_tooltip = te_hist_mk_enabled
+					custom_tooltip = banking_dash_tt_cb_bank_holiday
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_off_cb_bank_holiday }
+					custom_tooltip = te_hist_mk_disabled
+					custom_tooltip = banking_dash_tt_cb_bank_holiday
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_on_cb_bail_in_regime }
+					custom_tooltip = te_hist_mk_enabled
+					custom_tooltip = banking_dash_tt_cb_bail_in_regime
+				}
+				if = {
+					limit = { has_variable = te_hist_mk_off_cb_bail_in_regime }
+					custom_tooltip = te_hist_mk_disabled
+					custom_tooltip = banking_dash_tt_cb_bail_in_regime
+				}
+				if = {
 					limit = { has_variable = te_hist_mk_on_ce_plan_revision }
 					custom_tooltip = te_hist_mk_enabled
 					custom_tooltip = banking_dash_tt_ce_plan_revision

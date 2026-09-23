@@ -151,6 +151,108 @@ banking_effect_cb_disable_asset_relief_program = {
 	je:je_banking_cycle = { remove_modifier = banking_asset_relief_program }
 }
 
+# ---- 2026-09-23 expansion --------------------------------------------------
+# docs/superpowers/specs/2026-09-23-banking-tools-expansion-design.md.
+# The four directed-credit sectors copy Infrastructure's pair above: the state's
+# co-financing share up front, a little discontent when the credit is pulled.
+
+banking_effect_cb_directed_credit_heavy_industry = {
+	te_history_record_banking_marker = { MARK = on_cb_directed_credit_heavy_industry }
+	je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_heavy_industry } }
+	add_treasury = banking_directed_credit_activation_cost
+}
+
+banking_effect_cb_disable_directed_credit_heavy_industry = {
+	te_history_record_banking_marker = { MARK = off_cb_directed_credit_heavy_industry }
+	je:je_banking_cycle = { remove_modifier = banking_directed_credit_heavy_industry }
+	add_radicals = { value = banking_small_radicals_value }
+}
+
+banking_effect_cb_directed_credit_agriculture = {
+	te_history_record_banking_marker = { MARK = on_cb_directed_credit_agriculture }
+	je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_agriculture } }
+	add_treasury = banking_directed_credit_activation_cost
+}
+
+banking_effect_cb_disable_directed_credit_agriculture = {
+	te_history_record_banking_marker = { MARK = off_cb_directed_credit_agriculture }
+	je:je_banking_cycle = { remove_modifier = banking_directed_credit_agriculture }
+	add_radicals = { value = banking_small_radicals_value }
+}
+
+banking_effect_cb_directed_credit_armaments = {
+	te_history_record_banking_marker = { MARK = on_cb_directed_credit_armaments }
+	je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_armaments } }
+	add_treasury = banking_directed_credit_activation_cost
+}
+
+banking_effect_cb_disable_directed_credit_armaments = {
+	te_history_record_banking_marker = { MARK = off_cb_directed_credit_armaments }
+	je:je_banking_cycle = { remove_modifier = banking_directed_credit_armaments }
+	add_radicals = { value = banking_small_radicals_value }
+}
+
+banking_effect_cb_directed_credit_electrification = {
+	te_history_record_banking_marker = { MARK = on_cb_directed_credit_electrification }
+	je:je_banking_cycle = { add_modifier = { name = banking_directed_credit_electrification } }
+	add_treasury = banking_directed_credit_activation_cost
+}
+
+banking_effect_cb_disable_directed_credit_electrification = {
+	te_history_record_banking_marker = { MARK = off_cb_directed_credit_electrification }
+	je:je_banking_cycle = { remove_modifier = banking_directed_credit_electrification }
+	add_radicals = { value = banking_small_radicals_value }
+}
+
+banking_effect_cb_reserve_requirements = {
+	te_history_record_banking_marker = { MARK = on_cb_reserve_requirements }
+	je:je_banking_cycle = { add_modifier = { name = banking_reserve_requirements } }
+	add_radicals = { value = banking_small_radicals_value }
+}
+
+banking_effect_cb_disable_reserve_requirements = {
+	te_history_record_banking_marker = { MARK = off_cb_reserve_requirements }
+	je:je_banking_cycle = { remove_modifier = banking_reserve_requirements }
+	add_radicals = { value = banking_small_radicals_value }
+}
+
+# Ninety days, then the banks reopen on their own: the modifier is TIMED, so
+# the Disable action only ever ends a holiday early, and the history chart gets
+# no "withdrawn" marker when one simply expires. The one-shot halving of a
+# negative momentum is the run stopping; the cooldown is on the country, not the
+# modifier, so ending the holiday early does not reset it.
+banking_effect_cb_bank_holiday = {
+	te_history_record_banking_marker = { MARK = on_cb_bank_holiday }
+	je:je_banking_cycle = { add_modifier = { name = banking_bank_holiday days = 90 } }
+	set_variable = { name = banking_bank_holiday_cooldown days = 1825 }
+	custom_tooltip = {
+		text = banking_bank_holiday_momentum_tt
+		if = {
+			limit = { var:finance_cycle_momentum < 0 }
+			change_variable = { name = finance_cycle_momentum multiply = 0.5 }
+		}
+	}
+	# Depositors who cannot reach their money.
+	add_radicals = { value = banking_small_radicals_value strata = middle }
+}
+
+banking_effect_cb_disable_bank_holiday = {
+	te_history_record_banking_marker = { MARK = off_cb_bank_holiday }
+	je:je_banking_cycle = { remove_modifier = banking_bank_holiday }
+}
+
+# No treasury cost — that is the point of a bail-in. The creditors pay instead.
+banking_effect_cb_bail_in_regime = {
+	te_history_record_banking_marker = { MARK = on_cb_bail_in_regime }
+	je:je_banking_cycle = { add_modifier = { name = banking_bail_in_regime } }
+	add_radicals = { value = banking_medium_radicals_value strata = upper }
+}
+
+banking_effect_cb_disable_bail_in_regime = {
+	te_history_record_banking_marker = { MARK = off_cb_bail_in_regime }
+	je:je_banking_cycle = { remove_modifier = banking_bail_in_regime }
+}
+
 banking_effect_ce_plan_revision = {
 	te_history_record_banking_marker = { MARK = on_ce_plan_revision }
 	je:je_banking_cycle = { add_modifier = { name = planning_plan_revision } }

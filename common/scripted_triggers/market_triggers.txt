@@ -81,3 +81,12 @@ banking_tool_margin_req_active       = { je:je_banking_cycle ?= { has_modifier =
 banking_tool_capital_controls_active = { je:je_banking_cycle ?= { has_modifier = banking_capital_controls_out } }
 banking_tool_export_credit_active    = { je:je_banking_cycle ?= { has_modifier = banking_export_credit_facility } }
 banking_tool_asset_relief_active     = { je:je_banking_cycle ?= { has_modifier = banking_asset_relief_program } }
+
+# ----- 2026-09-23 expansion (full-suffix names, as above) -----
+banking_tool_directed_credit_heavy_industry_active   = { je:je_banking_cycle ?= { has_modifier = banking_directed_credit_heavy_industry } }
+banking_tool_directed_credit_agriculture_active      = { je:je_banking_cycle ?= { has_modifier = banking_directed_credit_agriculture } }
+banking_tool_directed_credit_armaments_active        = { je:je_banking_cycle ?= { has_modifier = banking_directed_credit_armaments } }
+banking_tool_directed_credit_electrification_active  = { je:je_banking_cycle ?= { has_modifier = banking_directed_credit_electrification } }
+banking_tool_reserve_requirements_active             = { je:je_banking_cycle ?= { has_modifier = banking_reserve_requirements } }
+banking_tool_bank_holiday_active                     = { je:je_banking_cycle ?= { has_modifier = banking_bank_holiday } }
+banking_tool_bail_in_regime_active                   = { je:je_banking_cycle ?= { has_modifier = banking_bail_in_regime } }

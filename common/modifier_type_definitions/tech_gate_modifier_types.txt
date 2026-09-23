@@ -302,3 +302,13 @@ country_can_use_asset_relief_bool = {
 	boolean = yes
 }
 
+country_can_use_bail_in_bool = {
+	color = good
+	boolean = yes
+}
+
+country_can_use_directed_credit_electrification_bool = {
+	color = good
+	boolean = yes
+}
+

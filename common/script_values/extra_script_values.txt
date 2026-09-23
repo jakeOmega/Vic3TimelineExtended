@@ -1964,6 +1964,52 @@ banking_directed_credit_activation_cost = {
 	round = yes
 }
 
+# Directed-credit sectors the country may still start: one at a time, plus
+# country_directed_credit_sectors_add (the Directed Credit & Development Banks
+# law's +1), minus those running. Every sector's `possible` asks for > 0;
+# banking_directed_credit_enforce_cap sheds sectors while it is below 0.
+banking_directed_credit_slots_free = {
+	value = 1
+	add = modifier:country_directed_credit_sectors_add
+	if = { limit = { banking_tool_directed_active = yes }                                subtract = 1 }
+	if = { limit = { banking_tool_directed_credit_heavy_industry_active = yes }  subtract = 1 }
+	if = { limit = { banking_tool_directed_credit_agriculture_active = yes }     subtract = 1 }
+	if = { limit = { banking_tool_directed_credit_armaments_active = yes }       subtract = 1 }
+	if = { limit = { banking_tool_directed_credit_electrification_active = yes } subtract = 1 }
+}
+
+# AI only (ai_chance). The weight every directed-credit enable button shares —
+# Infrastructure's ai_chance as it stood before the 2026-09-23 sectors — and how
+# many sectors split it. See "AI: which directed-credit sector?" in
+# common/scripted_triggers/banking_policy_triggers.txt.
+banking_dc_ai_weight = {
+	value = 0
+	# Core: best in downturn/stagnation; OK in stable if momentum is falling
+	if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
+	if = { limit = { banking_cycle_is_stagnation = yes } add = 30 }
+	if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = yes } add = 15 }
+
+	# Law flavor, synergy and resources, only while a core term above is live
+	if = {
+		limit = { banking_ai_core_cb_directed_credit_infrastructure = yes }
+		if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 25 }
+		if = { limit = { banking_tool_eliq_active = yes } add = 10 } # after the firebreak, push demand
+		if = { limit = { banking_points_med = yes } add = 10 }
+	}
+
+	# Avoid in frenzy (overheats) and deep panic (prefer E-LIQ first)
+	if = { limit = { banking_cycle_is_frenzy = yes } add = -35 }
+	if = { limit = { banking_cycle_is_panic = yes } add = -30 }
+}
+
+banking_dc_ai_candidates = {
+	value = 0
+	if = { limit = { banking_dc_ai_candidate_heavy_industry = yes }  add = 1 }
+	if = { limit = { banking_dc_ai_candidate_agriculture = yes }     add = 1 }
+	if = { limit = { banking_dc_ai_candidate_armaments = yes }       add = 1 }
+	if = { limit = { banking_dc_ai_candidate_electrification = yes } add = 1 }
+}
+
 banking_asset_relief_activation_cost = {
 	value = root.gdp
 	multiply = -0.025 # 2.5% of GDP — TARP-scale bailout

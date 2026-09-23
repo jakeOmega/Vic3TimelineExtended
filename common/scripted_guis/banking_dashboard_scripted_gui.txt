@@ -172,6 +172,13 @@ banking_dash_any_policy_active = {
 			banking_tool_capital_controls_active = yes
 			banking_tool_eliq_active = yes
 			banking_tool_asset_relief_active = yes
+			banking_tool_directed_credit_heavy_industry_active = yes
+			banking_tool_directed_credit_agriculture_active = yes
+			banking_tool_directed_credit_armaments_active = yes
+			banking_tool_directed_credit_electrification_active = yes
+			banking_tool_reserve_requirements_active = yes
+			banking_tool_bank_holiday_active = yes
+			banking_tool_bail_in_regime_active = yes
 			banking_tool_ce_plan_revision_active = yes
 			banking_tool_ce_target_cut_active = yes
 			banking_tool_ce_consolidation_active = yes
@@ -361,6 +368,118 @@ banking_dash_disable_cb_asset_relief_program = {
 	ai_is_valid = { always = no }
 	is_valid = { banking_tool_asset_relief_active = yes }
 	effect = { banking_effect_cb_disable_asset_relief_program = yes }
+}
+
+banking_dash_enable_cb_directed_credit_heavy_industry = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_directed_credit_heavy_industry_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_directed_credit_heavy_industry = yes }
+	effect = { banking_effect_cb_directed_credit_heavy_industry = yes }
+}
+
+banking_dash_disable_cb_directed_credit_heavy_industry = {
+	scope = country
+	is_shown = { banking_tool_directed_credit_heavy_industry_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_directed_credit_heavy_industry_active = yes }
+	effect = { banking_effect_cb_disable_directed_credit_heavy_industry = yes }
+}
+
+banking_dash_enable_cb_directed_credit_agriculture = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_directed_credit_agriculture_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_directed_credit_agriculture = yes }
+	effect = { banking_effect_cb_directed_credit_agriculture = yes }
+}
+
+banking_dash_disable_cb_directed_credit_agriculture = {
+	scope = country
+	is_shown = { banking_tool_directed_credit_agriculture_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_directed_credit_agriculture_active = yes }
+	effect = { banking_effect_cb_disable_directed_credit_agriculture = yes }
+}
+
+banking_dash_enable_cb_directed_credit_armaments = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_directed_credit_armaments_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_directed_credit_armaments = yes }
+	effect = { banking_effect_cb_directed_credit_armaments = yes }
+}
+
+banking_dash_disable_cb_directed_credit_armaments = {
+	scope = country
+	is_shown = { banking_tool_directed_credit_armaments_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_directed_credit_armaments_active = yes }
+	effect = { banking_effect_cb_disable_directed_credit_armaments = yes }
+}
+
+banking_dash_enable_cb_directed_credit_electrification = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_directed_credit_electrification_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_directed_credit_electrification = yes }
+	effect = { banking_effect_cb_directed_credit_electrification = yes }
+}
+
+banking_dash_disable_cb_directed_credit_electrification = {
+	scope = country
+	is_shown = { banking_tool_directed_credit_electrification_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_directed_credit_electrification_active = yes }
+	effect = { banking_effect_cb_disable_directed_credit_electrification = yes }
+}
+
+banking_dash_enable_cb_reserve_requirements = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_reserve_requirements_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_reserve_requirements = yes }
+	effect = { banking_effect_cb_reserve_requirements = yes }
+}
+
+banking_dash_disable_cb_reserve_requirements = {
+	scope = country
+	is_shown = { banking_tool_reserve_requirements_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_reserve_requirements_active = yes }
+	effect = { banking_effect_cb_disable_reserve_requirements = yes }
+}
+
+banking_dash_enable_cb_bank_holiday = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_bank_holiday_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_bank_holiday = yes }
+	effect = { banking_effect_cb_bank_holiday = yes }
+}
+
+banking_dash_disable_cb_bank_holiday = {
+	scope = country
+	is_shown = { banking_tool_bank_holiday_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_bank_holiday_active = yes }
+	effect = { banking_effect_cb_disable_bank_holiday = yes }
+}
+
+banking_dash_enable_cb_bail_in_regime = {
+	scope = country
+	is_shown = { banking_is_market_economy = yes banking_tool_bail_in_regime_active = no }
+	ai_is_valid = { always = no }
+	is_valid = { banking_possible_cb_bail_in_regime = yes }
+	effect = { banking_effect_cb_bail_in_regime = yes }
+}
+
+banking_dash_disable_cb_bail_in_regime = {
+	scope = country
+	is_shown = { banking_tool_bail_in_regime_active = yes }
+	ai_is_valid = { always = no }
+	is_valid = { banking_tool_bail_in_regime_active = yes }
+	effect = { banking_effect_cb_disable_bail_in_regime = yes }
 }
 
 banking_dash_enable_ce_plan_revision = {

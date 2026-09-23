@@ -229,24 +229,15 @@ cb_directed_credit_infrastructure = {
 	desc = "CB_DIRECTED_CREDIT_INFRA_DESC"
 	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_active = no }
 
+	# The weight every directed-credit sector shares (banking_dc_ai_weight in
+	# extra_script_values.txt — this button's own ai_chance until 2026-09-23).
+	# Infrastructure is the default sector: it takes the whole weight unless a
+	# sector the government favours could be started instead, and then it
+	# stands aside so directed credit as a whole is not chosen more often
+	# ("AI: which directed-credit sector?" in banking_policy_triggers.txt).
 	ai_chance = {
-		value = 0
-		# Core: best in downturn/stagnation; OK in stable if momentum is falling
-		if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
-		if = { limit = { banking_cycle_is_stagnation = yes } add = 30 }
-		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = yes } add = 15 }
-
-		# Law flavor, synergy and resources, only while a core term above is live
-		if = {
-			limit = { banking_ai_core_cb_directed_credit_infrastructure = yes }
-			if = { limit = { has_law = law_type:law_directed_credit_development_banks } add = 25 }
-			if = { limit = { banking_tool_eliq_active = yes } add = 10 } # after the firebreak, push demand
-			if = { limit = { banking_points_med = yes } add = 10 }
-		}
-
-		# Avoid in frenzy (overheats) and deep panic (prefer E-LIQ first)
-		if = { limit = { banking_cycle_is_frenzy = yes } add = -35 }
-		if = { limit = { banking_cycle_is_panic = yes } add = -30 }
+		value = banking_dc_ai_weight
+		if = { limit = { banking_dc_ai_candidates > 0 } multiply = 0 }
 	}
 
 	possible = { banking_possible_cb_directed_credit_infrastructure = yes }
@@ -625,6 +616,293 @@ cb_disable_asset_relief_program = {
 	}
 	possible = { banking_tool_asset_relief_active = yes }
 	effect = { banking_effect_cb_disable_asset_relief_program = yes }
+}
+
+# ---- 2026-09-23 expansion ---------------------------------------------------
+# docs/superpowers/specs/2026-09-23-banking-tools-expansion-design.md.
+#
+# Directed-credit sectors. A sector's ai_chance is its share of the weight it
+# shares with Infrastructure, and only when the government favours it — see
+# "AI: which directed-credit sector?" in banking_policy_triggers.txt.
+
+cb_directed_credit_heavy_industry = {
+	name = "CB_DIRECTED_CREDIT_HEAVY"
+	desc = "CB_DIRECTED_CREDIT_HEAVY_DESC"
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_credit_heavy_industry_active = no }
+
+	# Its share of banking_dc_ai_weight, only while the Industrialists are in government.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { banking_dc_ai_candidate_heavy_industry = yes }
+			add = banking_dc_ai_weight
+			divide = banking_dc_ai_candidates
+		}
+	}
+
+	possible = { banking_possible_cb_directed_credit_heavy_industry = yes }
+	effect = { banking_effect_cb_directed_credit_heavy_industry = yes }
+}
+
+cb_disable_directed_credit_heavy_industry = {
+	name = "CB_DISABLE_DIRECTED_CREDIT_HEAVY"
+	desc = "CB_DISABLE_DIRECTED_CREDIT_HEAVY_DESC"
+	visible = { is_ai = yes banking_tool_directed_credit_heavy_industry_active = yes }
+	# Infrastructure's lift-on-recovery weights (banking_cycle_simulation.md F11).
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 20 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
+	}
+	possible = { banking_tool_directed_credit_heavy_industry_active = yes }
+	effect = { banking_effect_cb_disable_directed_credit_heavy_industry = yes }
+}
+
+cb_directed_credit_agriculture = {
+	name = "CB_DIRECTED_CREDIT_AGRI"
+	desc = "CB_DIRECTED_CREDIT_AGRI_DESC"
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_credit_agriculture_active = no }
+
+	# Its share of banking_dc_ai_weight, only while the Landowners or the Rural Folk are in government.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { banking_dc_ai_candidate_agriculture = yes }
+			add = banking_dc_ai_weight
+			divide = banking_dc_ai_candidates
+		}
+	}
+
+	possible = { banking_possible_cb_directed_credit_agriculture = yes }
+	effect = { banking_effect_cb_directed_credit_agriculture = yes }
+}
+
+cb_disable_directed_credit_agriculture = {
+	name = "CB_DISABLE_DIRECTED_CREDIT_AGRI"
+	desc = "CB_DISABLE_DIRECTED_CREDIT_AGRI_DESC"
+	visible = { is_ai = yes banking_tool_directed_credit_agriculture_active = yes }
+	# Infrastructure's lift-on-recovery weights (banking_cycle_simulation.md F11).
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 20 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
+	}
+	possible = { banking_tool_directed_credit_agriculture_active = yes }
+	effect = { banking_effect_cb_disable_directed_credit_agriculture = yes }
+}
+
+cb_directed_credit_armaments = {
+	name = "CB_DIRECTED_CREDIT_ARMS"
+	desc = "CB_DIRECTED_CREDIT_ARMS_DESC"
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_credit_armaments_active = no }
+
+	# Its share of banking_dc_ai_weight, only while at war, or while the Armed Forces are in government.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { banking_dc_ai_candidate_armaments = yes }
+			add = banking_dc_ai_weight
+			divide = banking_dc_ai_candidates
+		}
+	}
+
+	possible = { banking_possible_cb_directed_credit_armaments = yes }
+	effect = { banking_effect_cb_directed_credit_armaments = yes }
+}
+
+cb_disable_directed_credit_armaments = {
+	name = "CB_DISABLE_DIRECTED_CREDIT_ARMS"
+	desc = "CB_DISABLE_DIRECTED_CREDIT_ARMS_DESC"
+	visible = { is_ai = yes banking_tool_directed_credit_armaments_active = yes }
+	# Infrastructure's lift-on-recovery weights (banking_cycle_simulation.md F11).
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 20 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
+	}
+	possible = { banking_tool_directed_credit_armaments_active = yes }
+	effect = { banking_effect_cb_disable_directed_credit_armaments = yes }
+}
+
+cb_directed_credit_electrification = {
+	name = "CB_DIRECTED_CREDIT_ELEC"
+	desc = "CB_DIRECTED_CREDIT_ELEC_DESC"
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_directed_credit_electrification_active = no }
+
+	# Its share of banking_dc_ai_weight, only while the Intelligentsia are in government.
+	ai_chance = {
+		value = 0
+		if = {
+			limit = { banking_dc_ai_candidate_electrification = yes }
+			add = banking_dc_ai_weight
+			divide = banking_dc_ai_candidates
+		}
+	}
+
+	possible = { banking_possible_cb_directed_credit_electrification = yes }
+	effect = { banking_effect_cb_directed_credit_electrification = yes }
+}
+
+cb_disable_directed_credit_electrification = {
+	name = "CB_DISABLE_DIRECTED_CREDIT_ELEC"
+	desc = "CB_DISABLE_DIRECTED_CREDIT_ELEC_DESC"
+	visible = { is_ai = yes banking_tool_directed_credit_electrification_active = yes }
+	# Infrastructure's lift-on-recovery weights (banking_cycle_simulation.md F11).
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_risk_falling = no } add = 20 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 35 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 55 }
+		if = { limit = { banking_tool_eliq_active = yes } add = 20 }
+	}
+	possible = { banking_tool_directed_credit_electrification_active = yes }
+	effect = { banking_effect_cb_disable_directed_credit_electrification = yes }
+}
+
+cb_reserve_requirements = {
+	name = "CB_RESERVE_REQUIREMENTS"
+	desc = "CB_RESERVE_REQUIREMENTS_DESC"
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_reserve_requirements_active = no }
+
+	ai_chance = {
+		value = 0
+		# Core: the countercyclical buffer's — lean on a boom, not on mild expansion
+		if = { limit = { banking_cycle_is_expansion = yes } add = 10 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 30 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 35 }
+		if = { limit = { banking_cycle_bubble_risk_rising = yes } add = 15 }
+
+		# Law flavor and resources, only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_reserve_requirements = yes }
+			# the early-era lean: preferred while the buffer is still locked
+			if = { limit = { modifier:country_can_use_countercyclical_buffer_bool = no } add = 15 }
+			if = { limit = { has_law = law_type:law_prudential_narrow_banking } add = 15 }
+			if = { limit = { has_law = law_type:law_universal_banking_light_prudence } add = 10 }
+			if = { limit = { has_law = law_type:law_free_mutual_banking } add = 5 }
+			if = { limit = { banking_points_low = yes } add = 10 }  # cheap, so attractive when points are scarce
+		}
+
+		# Avoid in recession/panic
+		if = { limit = { banking_cycle_is_recession = yes } add = -60 }
+	}
+
+	possible = { banking_possible_cb_reserve_requirements = yes }
+	effect = { banking_effect_cb_reserve_requirements = yes }
+}
+
+cb_disable_reserve_requirements = {
+	name = "CB_DISABLE_RESERVE_REQUIREMENTS"
+	desc = "CB_DISABLE_RESERVE_REQUIREMENTS_DESC"
+	visible = { is_ai = yes banking_tool_reserve_requirements_active = yes }
+	# The buffer's.
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_recession = yes } add = 75 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 55 }
+		if = { limit = { banking_cycle_is_panic = yes } add = 45 }
+		if = { limit = { banking_cycle_is_stagnation = yes } add = 35 }
+		if = { limit = { banking_cycle_is_stable = yes banking_cycle_bubble_risk_rising = no } add = 15 }
+	}
+	possible = { banking_tool_reserve_requirements_active = yes }
+	effect = { banking_effect_cb_disable_reserve_requirements = yes }
+}
+
+cb_bank_holiday = {
+	name = "CB_BANK_HOLIDAY"
+	desc = "CB_BANK_HOLIDAY_DESC"
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_bank_holiday_active = no }
+
+	ai_chance = {
+		value = 0
+		# Core: emergency liquidity's — a panic, or a downturn in free fall
+		if = { limit = { banking_cycle_is_panic = yes } add = 60 }
+		if = { limit = { banking_cycle_is_downturn = yes var:finance_cycle_momentum <= -4 } add = 30 }
+
+		# Only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_bank_holiday = yes }
+			# the crisis tool of a country with no lender of last resort yet
+			if = { limit = { modifier:country_can_use_emergency_liquidity_bool = no } add = 20 }
+			if = { limit = { banking_tool_eliq_active = yes } add = -20 } # the liquidity is already flowing
+		}
+	}
+
+	possible = { banking_possible_cb_bank_holiday = yes }
+	effect = { banking_effect_cb_bank_holiday = yes }
+}
+
+cb_disable_bank_holiday = {
+	name = "CB_DISABLE_BANK_HOLIDAY"
+	desc = "CB_DISABLE_BANK_HOLIDAY_DESC"
+	visible = { is_ai = yes banking_tool_bank_holiday_active = yes }
+	# Usually left to run out; reopened early only once the cycle has recovered.
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_stable = yes } add = 30 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 50 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 60 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 60 }
+	}
+	possible = { banking_tool_bank_holiday_active = yes }
+	effect = { banking_effect_cb_disable_bank_holiday = yes }
+}
+
+cb_bail_in_regime = {
+	name = "CB_BAIL_IN"
+	desc = "CB_BAIL_IN_DESC"
+	visible = { is_ai = yes banking_is_market_economy = yes banking_tool_bail_in_regime_active = no }
+
+	ai_chance = {
+		value = 0
+		# Core: asset relief's — real stress, and the stagnation shelf
+		if = { limit = { banking_cycle_is_panic = yes } add = 70 }
+		if = { limit = { banking_cycle_is_downturn = yes } add = 40 }
+		if = { limit = { banking_cycle_is_stagnation = yes } add = 25 }
+		# Fiscal position, only while a core term above is live
+		if = {
+			limit = { banking_ai_core_cb_bail_in_regime = yes }
+			# a state that cannot afford a bailout makes the creditors pay
+			if = { limit = { scaled_debt >= 0.5 } add = 20 }
+			if = { limit = { banking_fiscal_stress_low = yes } add = 10 }
+		}
+		# Avoid when hot
+		if = { limit = { banking_cycle_is_boom = yes } add = -30 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = -50 }
+	}
+
+	possible = { banking_possible_cb_bail_in_regime = yes }
+	effect = { banking_effect_cb_bail_in_regime = yes }
+}
+
+cb_disable_bail_in_regime = {
+	name = "CB_DISABLE_BAIL_IN"
+	desc = "CB_DISABLE_BAIL_IN_DESC"
+	visible = { is_ai = yes banking_tool_bail_in_regime_active = yes }
+	# Asset relief's.
+	ai_chance = {
+		value = 0
+		if = { limit = { banking_cycle_is_stable = yes } add = 20 }
+		if = { limit = { banking_cycle_is_expansion = yes } add = 30 }
+		if = { limit = { banking_cycle_is_boom = yes } add = 45 }
+		if = { limit = { banking_cycle_is_frenzy = yes } add = 60 }
+	}
+	possible = { banking_tool_bail_in_regime_active = yes }
+	effect = { banking_effect_cb_disable_bail_in_regime = yes }
 }
 
 

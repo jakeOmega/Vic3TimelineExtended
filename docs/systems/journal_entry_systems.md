@@ -30,7 +30,7 @@ Simulates a realistic financial cycle with boom/bust mechanics, including specul
 | `crash_severity` | int | Crash intensity |
 | `banking_points_max_from_law` | int | Law-dependent cap |
 
-### Buttons (22 market + 16 CE + 16 CW)
+### Buttons (34 market + 18 CE + 16 CW)
 Central bank policy tools, organized as toggle pairs (market economy only):
 - Open market ops (locked until the policy rate reaches its regime floor), countercyclical buffer, deposit guarantee
   (the *Raise Policy Rate* pair was deleted — the rate is now a dial, see **Monetary Policy block** below)
@@ -39,6 +39,7 @@ Central bank policy tools, organized as toggle pairs (market economy only):
   (the *FX Devaluation* and *FX Support* pairs were deleted in monetary phase 4 — the exchange rate is now an outcome, `te_fx_index`; see **Monetary Policy block (phase 4)** below)
 - Capital controls (outflow), export credit facility, asset relief program
   (the *FX Swap Lines* pair was deleted in monetary phase 5a — a swap line is now a treaty article with a named counterparty, `swap_line`; see `mod_systems.md` § **Monetary Policy (phase 5)**)
+- Added 2026-09-23: directed credit to heavy industry, agriculture, armaments and electrification & high tech (one directed-credit sector at a time, two under Directed Credit & Development Banks), reserve requirements, bank holiday (timed, 90 days, five-year cooldown), bail-in regime (excludes asset relief); see `mod_systems.md` § **Policy tools added 2026-09-23**
 
 **Command Economy planning tools** (16 buttons, visible under `law_command_economy` only):
 - Emergency Plan Revision, Resource Allocation, Target Reduction, Strategic Stockpile
@@ -51,7 +52,7 @@ Central bank policy tools, organized as toggle pairs (market economy only):
 - Each has an enable/disable toggle pair. Modifiers use prefix `cooperative_*`.
 
 ### Policy Dashboard (journal-entry widget)
-Two custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1` and `_2`, are the player-facing surface. The 60 scripted buttons stay declared on the journal entry because the AI picks policies through their `ai_chance` (confirmed in play testing), but each carries `is_ai = yes` in its `visible`, so the vanilla button grid shows nothing to a human.
+Two custom widgets, wired from `je_banking.txt` into the vanilla panel's `custom_widget_container_1` and `_2`, are the player-facing surface. The 68 scripted buttons stay declared on the journal entry because the AI picks policies through their `ai_chance` (confirmed in play testing), but each carries `is_ai = yes` in its `visible`, so the vanilla button grid shows nothing to a human.
 
 - **File:** `gui/journal_entry_widgets/banking_dashboard_widget.gui`
 - **Handlers:** `common/scripted_guis/banking_dashboard_scripted_gui.txt`

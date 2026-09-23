@@ -53,6 +53,8 @@
  country_defender_diplomatic_play_escalation_weekly_add_desc:0 "A flat amount of [concept_escalation] added each week to every [concept_diplomatic_play] this country is the target of. Floored at 0; combine with the matching #V _mult#! to scale."
  country_defender_diplomatic_play_escalation_weekly_mult:0 "Weekly Escalation in [Concept('concept_diplomatic_play', 'Diplomatic Plays')] Targeting You"
  country_defender_diplomatic_play_escalation_weekly_mult_desc:0 "A multiplier applied to the matching #V _add#! amount of weekly [concept_escalation] for plays this country is the target of."
+ country_directed_credit_sectors_add:0 "Directed Credit Priority Sectors"
+ country_directed_credit_sectors_add_desc:0 "How many sectors the state can steer [Concept('concept_directed_credit', 'directed credit')] toward at the same time, beyond the first."
  country_economic_dependence_leverage_gain_mult:0 "Leverage from [concept_economic_dependence]"
  country_economic_dependence_leverage_gain_mult_desc:0 "A multiplier for the [concept_power_bloc_leverage] gained from how much another [concept_country] relies on our [concept_market]."
  country_enactment_success_chance_law_compulsory_primary_school_add:0 "[concept_enactment_success] chance for [GetLawType('law_compulsory_primary_school').GetName]"

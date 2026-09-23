@@ -292,6 +292,12 @@ BUTTON_TECH_MODIFIERS = {
     'corporate_management': [
         ('country_can_use_export_credit_bool', 'Enables Export Credit Facility', 'Enables the Export Credit Facility banking intervention.'),
     ],
+    'rural_electrification': [
+        ('country_can_use_directed_credit_electrification_bool', 'Enables Directed Credit: Electrification & High Tech', 'Enables the Directed Credit: Electrification & High Tech banking intervention.'),
+    ],
+    'globalization': [
+        ('country_can_use_bail_in_bool', 'Enables Bail-in Regime', 'Enables the Bail-in Regime banking intervention.'),
+    ],
 }
 
 # Map of (button_file, button_name, tech_name) -> modifier_name
