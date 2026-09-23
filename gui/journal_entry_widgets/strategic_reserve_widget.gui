@@ -57,6 +57,12 @@
 ###   22/23 release threshold   - / +      28/29 target stockpile    - / +
 ###   24/25 maximum weekly flow - / +      30/31 weekly budget       - / +
 ###   32/33 price memory (weeks) - / +     34/35 response ramp (pp)  - / +
+###   44/45 maximum weekly flow ten steps  50/51 weekly budget ten steps
+###   64/65 maximum weekly flow 100 steps  70/71 weekly budget 100 steps
+###
+### The flow and budget steppers carry click_modifiers: shift-click is the
+### plain op + 20, ctrl-click the plain op + 40. `enabled` stays bound to the
+### plain op, whose is_valid branch the modifier ops share.
 ###
 ### The expander itself is presentation-only: `GetVariableSystem.Toggle` on a
 ### per-good key that no script ever reads. Collapsing a panel cannot change
@@ -444,12 +450,22 @@ types strategic_reserve_widget_types
 			blockoverride "stepper_value" { block "policy_value_max_flow" {} }
 			blockoverride "stepper_down" {
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
+				### Click one step, shift-click ten, ctrl-click a hundred.
+				click_modifiers = {
+					ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)24' ) ).End )]"
+					onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)44' ) ).End )]"
+					onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)64' ) ).End )]"
+				}
 				tooltip = "st_res_policy_label_max_flow_down_tooltip"
 			}
 			blockoverride "stepper_up" {
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
+				### Click one step, shift-click ten, ctrl-click a hundred.
+				click_modifiers = {
+					ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)25' ) ).End )]"
+					onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)45' ) ).End )]"
+					onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)65' ) ).End )]"
+				}
 				tooltip = "st_res_policy_label_max_flow_up_tooltip"
 			}
 		}
@@ -486,12 +502,22 @@ types strategic_reserve_widget_types
 			blockoverride "stepper_value" { block "policy_value_budget" {} }
 			blockoverride "stepper_down" {
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
+				### Click one step, shift-click ten, ctrl-click a hundred.
+				click_modifiers = {
+					ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)30' ) ).End )]"
+					onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)50' ) ).End )]"
+					onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)70' ) ).End )]"
+				}
 				tooltip = "st_res_policy_label_budget_down_tooltip"
 			}
 			blockoverride "stepper_up" {
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
-				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+				### Click one step, shift-click ten, ctrl-click a hundred.
+				click_modifiers = {
+					ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)31' ) ).End )]"
+					onshift = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)51' ) ).End )]"
+					onctrl = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)71' ) ).End )]"
+				}
 				tooltip = "st_res_policy_label_budget_up_tooltip"
 			}
 		}

@@ -451,6 +451,21 @@ st_res_adjust_tanks_sgui = {
 #   33  | price memory        +
 #   34  | response ramp       -  (st_res_policy_ramp_step, pp past a threshold)
 #   35  | response ramp       +
+#   44  | maximum weekly flow -  ten steps (shift-click)
+#   45  | maximum weekly flow +  ten steps (shift-click)
+#   50  | weekly budget       -  ten steps (shift-click)
+#   51  | weekly budget       +  ten steps (shift-click)
+#   64  | maximum weekly flow -  a hundred steps (ctrl-click)
+#   65  | maximum weekly flow +  a hundred steps (ctrl-click)
+#   70  | weekly budget       -  a hundred steps (ctrl-click)
+#   71  | weekly budget       +  a hundred steps (ctrl-click)
+#
+# The modifier-click ops are the plain op + 20 (shift) and + 40 (ctrl). They
+# share the plain op's is_valid branch — the check is "any room left", and the
+# step base clamps an oversized step to the bound — so the widget binds
+# `enabled` to the plain op alone. The flow ceiling (st_res_policy_flow_max)
+# and each good's budget ceiling (st_res_<good>_policy_budget_max) follow the
+# hub's weekly flow cap rather than being constants; see st_res_script_values.
 #
 # `is_valid` carries the whole validation surface, so a disabled stepper always
 # explains itself in the tooltip and no rule lives only in a .gui expression:
@@ -564,14 +579,28 @@ st_res_policy_grain_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 24 }
+			# 24 one step, 44 ten (shift-click), 64 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 24
+					scope:op = 44
+					scope:op = 64
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_grain_max_flow > st_res_policy_flow_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 25 }
+			# 25 one step, 45 ten (shift-click), 65 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 25
+					scope:op = 45
+					scope:op = 65
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_grain_max_flow < st_res_policy_flow_max
@@ -614,17 +643,31 @@ st_res_policy_grain_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 30 }
+			# 30 one step, 50 ten (shift-click), 70 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 30
+					scope:op = 50
+					scope:op = 70
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_grain_budget > st_res_policy_budget_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 31 }
+			# 31 one step, 51 ten (shift-click), 71 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 31
+					scope:op = 51
+					scope:op = 71
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_grain_budget < st_res_policy_budget_max
+				var:st_res_grain_budget < st_res_grain_policy_budget_max
 			}
 		}
 		trigger_else_if = {
@@ -751,6 +794,46 @@ st_res_policy_grain_sgui = {
 			}
 		}
 		else_if = {
+			limit = { scope:op = 44 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 45 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 64 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 65 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
 			limit = { scope:op = 26 }
 			st_res_policy_step_down_base = {
 				GOOD = grain
@@ -797,7 +880,7 @@ st_res_policy_grain_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_grain_policy_budget_max
 			}
 		}
 		else_if = {
@@ -807,7 +890,47 @@ st_res_policy_grain_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_grain_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 50 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_grain_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 51 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_grain_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 70 }
+			st_res_policy_step_down_base = {
+				GOOD = grain
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_grain_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 71 }
+			st_res_policy_step_up_base = {
+				GOOD = grain
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_grain_policy_budget_max
 			}
 		}
 		else_if = {
@@ -951,14 +1074,28 @@ st_res_policy_ammunition_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 24 }
+			# 24 one step, 44 ten (shift-click), 64 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 24
+					scope:op = 44
+					scope:op = 64
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_ammunition_max_flow > st_res_policy_flow_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 25 }
+			# 25 one step, 45 ten (shift-click), 65 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 25
+					scope:op = 45
+					scope:op = 65
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_ammunition_max_flow < st_res_policy_flow_max
@@ -1001,17 +1138,31 @@ st_res_policy_ammunition_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 30 }
+			# 30 one step, 50 ten (shift-click), 70 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 30
+					scope:op = 50
+					scope:op = 70
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_ammunition_budget > st_res_policy_budget_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 31 }
+			# 31 one step, 51 ten (shift-click), 71 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 31
+					scope:op = 51
+					scope:op = 71
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_ammunition_budget < st_res_policy_budget_max
+				var:st_res_ammunition_budget < st_res_ammunition_policy_budget_max
 			}
 		}
 		trigger_else_if = {
@@ -1138,6 +1289,46 @@ st_res_policy_ammunition_sgui = {
 			}
 		}
 		else_if = {
+			limit = { scope:op = 44 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 45 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 64 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 65 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
 			limit = { scope:op = 26 }
 			st_res_policy_step_down_base = {
 				GOOD = ammunition
@@ -1184,7 +1375,7 @@ st_res_policy_ammunition_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_ammunition_policy_budget_max
 			}
 		}
 		else_if = {
@@ -1194,7 +1385,47 @@ st_res_policy_ammunition_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_ammunition_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 50 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_ammunition_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 51 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_ammunition_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 70 }
+			st_res_policy_step_down_base = {
+				GOOD = ammunition
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_ammunition_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 71 }
+			st_res_policy_step_up_base = {
+				GOOD = ammunition
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_ammunition_policy_budget_max
 			}
 		}
 		else_if = {
@@ -1338,14 +1569,28 @@ st_res_policy_oil_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 24 }
+			# 24 one step, 44 ten (shift-click), 64 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 24
+					scope:op = 44
+					scope:op = 64
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_oil_max_flow > st_res_policy_flow_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 25 }
+			# 25 one step, 45 ten (shift-click), 65 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 25
+					scope:op = 45
+					scope:op = 65
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_oil_max_flow < st_res_policy_flow_max
@@ -1388,17 +1633,31 @@ st_res_policy_oil_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 30 }
+			# 30 one step, 50 ten (shift-click), 70 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 30
+					scope:op = 50
+					scope:op = 70
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_oil_budget > st_res_policy_budget_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 31 }
+			# 31 one step, 51 ten (shift-click), 71 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 31
+					scope:op = 51
+					scope:op = 71
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_oil_budget < st_res_policy_budget_max
+				var:st_res_oil_budget < st_res_oil_policy_budget_max
 			}
 		}
 		trigger_else_if = {
@@ -1525,6 +1784,46 @@ st_res_policy_oil_sgui = {
 			}
 		}
 		else_if = {
+			limit = { scope:op = 44 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 45 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 64 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 65 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
 			limit = { scope:op = 26 }
 			st_res_policy_step_down_base = {
 				GOOD = oil
@@ -1571,7 +1870,7 @@ st_res_policy_oil_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_oil_policy_budget_max
 			}
 		}
 		else_if = {
@@ -1581,7 +1880,47 @@ st_res_policy_oil_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_oil_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 50 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_oil_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 51 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_oil_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 70 }
+			st_res_policy_step_down_base = {
+				GOOD = oil
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_oil_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 71 }
+			st_res_policy_step_up_base = {
+				GOOD = oil
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_oil_policy_budget_max
 			}
 		}
 		else_if = {
@@ -1725,14 +2064,28 @@ st_res_policy_small_arms_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 24 }
+			# 24 one step, 44 ten (shift-click), 64 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 24
+					scope:op = 44
+					scope:op = 64
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_small_arms_max_flow > st_res_policy_flow_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 25 }
+			# 25 one step, 45 ten (shift-click), 65 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 25
+					scope:op = 45
+					scope:op = 65
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_small_arms_max_flow < st_res_policy_flow_max
@@ -1775,17 +2128,31 @@ st_res_policy_small_arms_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 30 }
+			# 30 one step, 50 ten (shift-click), 70 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 30
+					scope:op = 50
+					scope:op = 70
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_small_arms_budget > st_res_policy_budget_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 31 }
+			# 31 one step, 51 ten (shift-click), 71 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 31
+					scope:op = 51
+					scope:op = 71
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_small_arms_budget < st_res_policy_budget_max
+				var:st_res_small_arms_budget < st_res_small_arms_policy_budget_max
 			}
 		}
 		trigger_else_if = {
@@ -1912,6 +2279,46 @@ st_res_policy_small_arms_sgui = {
 			}
 		}
 		else_if = {
+			limit = { scope:op = 44 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 45 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 64 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 65 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
 			limit = { scope:op = 26 }
 			st_res_policy_step_down_base = {
 				GOOD = small_arms
@@ -1958,7 +2365,7 @@ st_res_policy_small_arms_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_small_arms_policy_budget_max
 			}
 		}
 		else_if = {
@@ -1968,7 +2375,47 @@ st_res_policy_small_arms_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_small_arms_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 50 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_small_arms_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 51 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_small_arms_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 70 }
+			st_res_policy_step_down_base = {
+				GOOD = small_arms
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_small_arms_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 71 }
+			st_res_policy_step_up_base = {
+				GOOD = small_arms
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_small_arms_policy_budget_max
 			}
 		}
 		else_if = {
@@ -2112,14 +2559,28 @@ st_res_policy_artillery_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 24 }
+			# 24 one step, 44 ten (shift-click), 64 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 24
+					scope:op = 44
+					scope:op = 64
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_artillery_max_flow > st_res_policy_flow_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 25 }
+			# 25 one step, 45 ten (shift-click), 65 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 25
+					scope:op = 45
+					scope:op = 65
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_artillery_max_flow < st_res_policy_flow_max
@@ -2162,17 +2623,31 @@ st_res_policy_artillery_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 30 }
+			# 30 one step, 50 ten (shift-click), 70 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 30
+					scope:op = 50
+					scope:op = 70
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_artillery_budget > st_res_policy_budget_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 31 }
+			# 31 one step, 51 ten (shift-click), 71 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 31
+					scope:op = 51
+					scope:op = 71
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_artillery_budget < st_res_policy_budget_max
+				var:st_res_artillery_budget < st_res_artillery_policy_budget_max
 			}
 		}
 		trigger_else_if = {
@@ -2299,6 +2774,46 @@ st_res_policy_artillery_sgui = {
 			}
 		}
 		else_if = {
+			limit = { scope:op = 44 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 45 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 64 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 65 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
 			limit = { scope:op = 26 }
 			st_res_policy_step_down_base = {
 				GOOD = artillery
@@ -2345,7 +2860,7 @@ st_res_policy_artillery_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_artillery_policy_budget_max
 			}
 		}
 		else_if = {
@@ -2355,7 +2870,47 @@ st_res_policy_artillery_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_artillery_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 50 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_artillery_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 51 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_artillery_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 70 }
+			st_res_policy_step_down_base = {
+				GOOD = artillery
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_artillery_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 71 }
+			st_res_policy_step_up_base = {
+				GOOD = artillery
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_artillery_policy_budget_max
 			}
 		}
 		else_if = {
@@ -2499,14 +3054,28 @@ st_res_policy_aeroplanes_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 24 }
+			# 24 one step, 44 ten (shift-click), 64 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 24
+					scope:op = 44
+					scope:op = 64
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_aeroplanes_max_flow > st_res_policy_flow_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 25 }
+			# 25 one step, 45 ten (shift-click), 65 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 25
+					scope:op = 45
+					scope:op = 65
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_aeroplanes_max_flow < st_res_policy_flow_max
@@ -2549,17 +3118,31 @@ st_res_policy_aeroplanes_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 30 }
+			# 30 one step, 50 ten (shift-click), 70 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 30
+					scope:op = 50
+					scope:op = 70
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_aeroplanes_budget > st_res_policy_budget_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 31 }
+			# 31 one step, 51 ten (shift-click), 71 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 31
+					scope:op = 51
+					scope:op = 71
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_aeroplanes_budget < st_res_policy_budget_max
+				var:st_res_aeroplanes_budget < st_res_aeroplanes_policy_budget_max
 			}
 		}
 		trigger_else_if = {
@@ -2686,6 +3269,46 @@ st_res_policy_aeroplanes_sgui = {
 			}
 		}
 		else_if = {
+			limit = { scope:op = 44 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 45 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 64 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 65 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
 			limit = { scope:op = 26 }
 			st_res_policy_step_down_base = {
 				GOOD = aeroplanes
@@ -2732,7 +3355,7 @@ st_res_policy_aeroplanes_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_aeroplanes_policy_budget_max
 			}
 		}
 		else_if = {
@@ -2742,7 +3365,47 @@ st_res_policy_aeroplanes_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_aeroplanes_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 50 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_aeroplanes_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 51 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_aeroplanes_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 70 }
+			st_res_policy_step_down_base = {
+				GOOD = aeroplanes
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_aeroplanes_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 71 }
+			st_res_policy_step_up_base = {
+				GOOD = aeroplanes
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_aeroplanes_policy_budget_max
 			}
 		}
 		else_if = {
@@ -2886,14 +3549,28 @@ st_res_policy_tanks_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 24 }
+			# 24 one step, 44 ten (shift-click), 64 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 24
+					scope:op = 44
+					scope:op = 64
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_tanks_max_flow > st_res_policy_flow_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 25 }
+			# 25 one step, 45 ten (shift-click), 65 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 25
+					scope:op = 45
+					scope:op = 65
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_tanks_max_flow < st_res_policy_flow_max
@@ -2936,17 +3613,31 @@ st_res_policy_tanks_sgui = {
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 30 }
+			# 30 one step, 50 ten (shift-click), 70 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 30
+					scope:op = 50
+					scope:op = 70
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
 				var:st_res_tanks_budget > st_res_policy_budget_min
 			}
 		}
 		trigger_else_if = {
-			limit = { scope:op = 31 }
+			# 31 one step, 51 ten (shift-click), 71 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 31
+					scope:op = 51
+					scope:op = 71
+				}
+			}
 			custom_tooltip = {
 				text = "st_res_policy_range_possible"
-				var:st_res_tanks_budget < st_res_policy_budget_max
+				var:st_res_tanks_budget < st_res_tanks_policy_budget_max
 			}
 		}
 		trigger_else_if = {
@@ -3073,6 +3764,46 @@ st_res_policy_tanks_sgui = {
 			}
 		}
 		else_if = {
+			limit = { scope:op = 44 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 45 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 64 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 65 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
 			limit = { scope:op = 26 }
 			st_res_policy_step_down_base = {
 				GOOD = tanks
@@ -3119,7 +3850,7 @@ st_res_policy_tanks_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_tanks_policy_budget_max
 			}
 		}
 		else_if = {
@@ -3129,7 +3860,47 @@ st_res_policy_tanks_sgui = {
 				SETTING = budget
 				STEP = st_res_policy_budget_step
 				MIN = st_res_policy_budget_min
-				MAX = st_res_policy_budget_max
+				MAX = st_res_tanks_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 50 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_tanks_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 51 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_tanks_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 70 }
+			st_res_policy_step_down_base = {
+				GOOD = tanks
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_tanks_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 71 }
+			st_res_policy_step_up_base = {
+				GOOD = tanks
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_tanks_policy_budget_max
 			}
 		}
 		else_if = {
