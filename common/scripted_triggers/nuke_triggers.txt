@@ -68,6 +68,17 @@ nuclear_program_is_proliferating = {
 	NOT = { modifier:country_nuclear_disarmament_bool = yes }
 }
 
+# Country scope: does this country still have a nuclear weapons programme,
+# funded or not? covert_nuclear_sabotage_action's maintain condition. Funding
+# is deliberately not read: stepping it to 0 for a week costs the target
+# nothing, and would otherwise end a year-old sabotage operation for free. A
+# pause treaty or disarmament does end it — that programme has really stopped.
+nuclear_program_is_standing = {
+	has_variable = nuclear_weapon_program_progress
+	NOT = { modifier:country_nuclear_program_pause_bool = yes }
+	NOT = { modifier:country_nuclear_disarmament_bool = yes }
+}
+
 # Country scope: True if scope:country has existential war goals against ROOT
 # (any subjugation war goal, or outright annexation incl. the mod's te_reunify_country)
 # Requires scope:country to be set (the enemy)

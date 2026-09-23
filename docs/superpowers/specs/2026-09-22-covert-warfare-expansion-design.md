@@ -423,7 +423,9 @@ never had one in `possible`); the coup push has no DLC gate (coups are base
 game; `je:je_ip4_coup ?=` covers the no-coup case); `sr_target_ahead_of_root`
 is `covert_target_ahead_in_space = { TARGET }` in `covert_warfare_triggers.txt`;
 `nuclear_program_is_proliferating` also excludes paused and disarming
-programmes; cultivate assets is pinned at priority 1 (user decision
+programmes and gates launching only — the operation is maintained on
+`nuclear_program_is_standing`, which ignores funding (final review: a target
+could otherwise end it for free by dropping funding to 0 for a week); cultivate assets is pinned at priority 1 (user decision
 2026-09-23) and its row replaces the phase and priority lines with one line;
 the four lens icons are copies of existing covert icons (user decision
 2026-09-23). The spec's "×2 fully operational" figures predate priority: the

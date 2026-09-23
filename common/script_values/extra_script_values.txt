@@ -554,8 +554,9 @@ nuclear_program_display_progress_remaining = {
 
 # Monthly progress exactly as je_nuclear_program's on_weekly_pulse computes it
 # before dividing by four: the base rate (funding, times ten once the first
-# device is done) scaled by whatever country_nuclear_program_progress_mult the
-# nuclear_program_aid treaty article is contributing.
+# device is done) scaled by (1 + country_nuclear_program_progress_mult): +1
+# while the nuclear_program_aid treaty article applies, and negative while
+# covert_nuclear_sabotage runs against the country (covert slice 6).
 nuclear_program_display_monthly_progress = {
 	value = 0
 	if = {

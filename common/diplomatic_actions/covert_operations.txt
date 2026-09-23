@@ -1622,12 +1622,14 @@ covert_nuclear_sabotage_action = {
 		}
 
 		# The Tradecraft gate is launch-only: a running operation survives the
-		# agency's score falling below Seasoned.
+		# agency's score falling below Seasoned. Maintained on the programme
+		# existing, not on it being funded: a target that steps funding to 0
+		# for a week must not end the operation for free.
 		requirement_to_maintain = {
 			trigger = {
 				custom_tooltip = {
-					text = iw_target_nuclear_programme_tt
-					scope:target_country = { nuclear_program_is_proliferating = yes }
+					text = iw_target_nuclear_programme_standing_tt
+					scope:target_country = { nuclear_program_is_standing = yes }
 				}
 			}
 		}

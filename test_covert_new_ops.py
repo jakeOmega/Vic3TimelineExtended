@@ -161,7 +161,23 @@ class NuclearSabotageTests(unittest.TestCase):
     def test_severe_gate_is_launch_only(self):
         reqs = _requirements(self.block)
         self.assertNotIn("covert_tradecraft", reqs)
-        self.assertIn("nuclear_program_is_proliferating = yes", reqs)
+        self.assertIn("nuclear_program_is_standing = yes", reqs)
+
+    def test_pausing_funding_does_not_end_the_operation(self):
+        # Funding 0 for one tick costs the target nothing; a maintain condition
+        # that read funding would let it end a year-old operation for free.
+        reqs = _requirements(self.block)
+        self.assertIn("scope:target_country = { nuclear_program_is_standing = yes }", reqs)
+        self.assertNotIn("nuclear_program_is_proliferating", reqs)
+        standing = _top_level_block(_text(NUKE_TRIGGERS), "nuclear_program_is_standing = {")
+        self.assertIn("has_variable = nuclear_weapon_program_progress", standing)
+        self.assertIn("modifier:country_nuclear_disarmament_bool = yes", standing)
+        self.assertNotIn("funding", standing)
+
+    def test_monthly_progress_comment_names_both_sources(self):
+        body = _text(ROOT / "common/script_values/extra_script_values.txt")
+        i = body.index("\nnuclear_program_display_monthly_progress = {")
+        self.assertIn("covert_nuclear_sabotage", body[body.rindex("\n\n", 0, i): i])
 
     def test_ai_values_a_programme_near_completion(self):
         score = _section(self.block, "propose_score = {")
@@ -274,8 +290,15 @@ class CultivateAssetsTests(unittest.TestCase):
 
     def test_cultivate_assets_is_pinned_at_priority_1(self):
         # The stepper and the AI both step through covert_possible_priority_up.
+        # The pin speaks only on a cultivate-assets row: IsValidTooltip prints
+        # every bare custom_tooltip with a tick or a cross, so an unconditional
+        # line would appear on every other operation's stepper too.
         block = _top_level_block(_text(TRIGGERS), "covert_possible_priority_up = {")
-        self.assertIn("scope:iw_op ?= { NOT = { has_tag = iw_op_cultivate_assets } }", block)
+        self.assertRegex(
+            block,
+            r"trigger_if = \{\s*limit = \{ scope:iw_op \?= \{ has_tag = iw_op_cultivate_assets \} \}\s*"
+            r"custom_tooltip = \{\s*text = iw_priority_cultivate_fixed_tt\s*always = no",
+        )
         gui = _text(WIDGET)
         stepper = gui[gui.index("type covert_op_priority_stepper = flowcontainer {"):]
         stepper = stepper[: stepper.index("textbox = {")]

@@ -53,6 +53,9 @@ OPS = (
 )
 
 TIER_NAMES = ("mild", "moderate", "severe", "war")
+NUMBER_WORDS = ("Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
+                "Nine", "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen",
+                "Sixteen", "Seventeen", "Eighteen", "Nineteen", "Twenty")
 TYPES = tuple(op[0] for op in OPS)
 CODES = {op[0]: op[1] for op in OPS}
 TIERS = {op[0]: op[3] for op in OPS}
@@ -286,6 +289,39 @@ class LocTests(unittest.TestCase):
         for t, _, _, tier, _ in OPS:
             with self.subTest(type=t):
                 self.assertIn("$iw_exposure_tier_%s_note$" % tier, loc["covert_%s_action_desc" % t])
+
+
+class ConceptTests(unittest.TestCase):
+    def test_concept_description_counts_and_lists_every_type(self):
+        # The covert-operations concept tooltip is the player's list of what
+        # exists: one bullet per type, and the right count in words.
+        desc = _loc()["concept_covert_operations_desc"]
+        self.assertIn("%s types are available" % NUMBER_WORDS[len(OPS)], desc)
+        self.assertEqual(desc.count("\\n• #bold"), len(OPS))
+
+
+class DocCountTests(unittest.TestCase):
+    """Docs and comments that count or describe the operation types. Slice 6
+    found five stale "nine"s and a false war-check claim after adding four."""
+
+    STALE = re.compile(r"\bnine\b|\b9 (?:covert|diplomatic)\b", re.IGNORECASE)
+
+    def test_no_covert_line_still_says_nine(self):
+        for rel in ("docs/systems/mod_systems.md", "docs/systems/journal_entry_systems.md",
+                    "common/diplomatic_actions/un_lobbying.txt", "README.md"):
+            lines = (ROOT / rel).read_text(encoding="utf-8-sig").splitlines()
+            for n, line in enumerate(lines, 1):
+                if "covert" in line.lower():
+                    with self.subTest(file=rel, line=n):
+                        self.assertNotRegex(line, self.STALE)
+
+    def test_covert_doc_claims_match_the_actions(self):
+        doc = (ROOT / "docs/systems/mod_systems.md").read_text(encoding="utf-8")
+        # The per-type list now has an executable form.
+        self.assertNotIn("there is no single shared list", doc)
+        self.assertIn("test_covert_op_registry.py", doc)
+        # No covert action has a has_war guard ("Allowed during war").
+        self.assertNotIn("have war and truce checks", doc)
 
 
 class LensIconTests(unittest.TestCase):

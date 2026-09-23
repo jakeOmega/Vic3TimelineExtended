@@ -183,10 +183,16 @@ covert_possible_priority_up = {
 	}
 	# Cultivate assets (slice 6) has no effect for priority to multiply, so it
 	# stays at 1: raising it would only cost upkeep and detection. The AI
-	# steps through this same trigger, so it cannot raise it either.
-	custom_tooltip = {
-		text = iw_priority_cultivate_fixed_tt
-		scope:iw_op ?= { NOT = { has_tag = iw_op_cultivate_assets } }
+	# steps through this same trigger, so it cannot raise it either. Inside a
+	# trigger_if so the line exists only on such a row: IsValidTooltip prints
+	# every custom_tooltip with a tick or a cross, and a bare one would sit on
+	# every other operation's stepper as a meaningless tick.
+	trigger_if = {
+		limit = { scope:iw_op ?= { has_tag = iw_op_cultivate_assets } }
+		custom_tooltip = {
+			text = iw_priority_cultivate_fixed_tt
+			always = no
+		}
 	}
 	# Tradecraft gate (slice 5): the step TO priority 3 needs an Established
 	# agency. Only the step up is gated — an operation already at 3 stays
