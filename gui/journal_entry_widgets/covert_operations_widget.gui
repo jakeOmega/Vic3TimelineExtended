@@ -1,6 +1,6 @@
 ﻿### Covert Warfare JE widgets
 ###
-### Two widgets, both mounted from je_covert_warfare:
+### Three widgets, all mounted from je_covert_warfare:
 ###   widget_je_covert_command_centre  custom_widget_container_1  (above status desc)
 ###     Intelligence capacity, operation slots, the funding ladder and its
 ###     stepper, the detection factors and the defensive side. Everything the
@@ -9,6 +9,9 @@
 ###     One row per running operation, from the operator's `iw_ops` variable
 ###     list of script containers (see common/scripted_effects/covert_warfare_effects.txt
 ###     for their tags and variables).
+###   widget_je_covert_networks        custom_widget_container_3  (below the buttons)
+###     One row per per-target network, from the operator's `iw_nets` list
+###     (slice 4; see covert_warfare_effects.txt § PER-TARGET NETWORKS).
 ###
 ### SCRIPTED GUI OP CODES (common/scripted_guis/covert_warfare_sguis.txt):
 ###     0  funding stepper minus   covert_possible/effect_decrease_funding
@@ -42,7 +45,7 @@
 ### * Target country names go through the stored capital state
 ###   (`iw_target_capital`), because Var().GetCountry.GetName renders blank in
 ###   this mod — docs/guides/gui_modding_guide.md gotcha #11.
-### * Both roots are gated on [JournalEntry.IsActive]: the entry has
+### * All three roots are gated on [JournalEntry.IsActive]: the entry has
 ###   is_shown_when_inactive, so without the gate every display read would run
 ###   for countries that have none of these variables (gotcha #14).
 
@@ -130,9 +133,7 @@ types covert_operations_widget_types
 	}
 
 	### "Stand down" for one row. Nine instances per row, of which exactly one is
-	### visible — `sd_visible` combines the row's operation tag with the
-	### panel-level arming toggle in a single `visible` (two `visible` properties
-	### on one widget is a bug, not a conjunction: gotcha #17).
+	### visible — `sd_visible` gates it on the row's operation tag.
 	###
 	### `sd_context` is the only other per-instance part: it points the button at
 	### that type's covert_stand_down_<type>_sgui. Everything else is shared,
@@ -319,16 +320,14 @@ types covert_operations_widget_types
 		}
 
 
-		# ---- Stand down (hidden until armed from the command centre) ----
-		# One instance per type; only the row's own type is ever visible, and
-		# only while the panel-level toggle is set. The toggle is presentation
-		# state in GetVariableSystem, so arming it changes nothing in script.
+		# ---- Stand down ----
+		# One instance per type; only the row's own type is ever visible.
 		covert_op_stand_down_button = {
 			blockoverride "sd_context" {
 				datacontext = "[GetScriptedGui('covert_stand_down_election_interference_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_election_interference'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_election_interference')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -336,7 +335,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_financial_subversion_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_financial_subversion'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_financial_subversion')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -344,7 +343,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_infrastructure_sabotage_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_infrastructure_sabotage'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_infrastructure_sabotage')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -352,7 +351,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_comms_disruption_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_comms_disruption'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_comms_disruption')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -360,7 +359,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_industrial_espionage_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_industrial_espionage'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_industrial_espionage')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -368,7 +367,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_military_espionage_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_military_espionage'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_military_espionage')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -376,7 +375,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_influence_campaign_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_influence_campaign'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_influence_campaign')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -384,7 +383,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_ideological_subversion_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_ideological_subversion'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_ideological_subversion')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -392,8 +391,48 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_destabilization_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_destabilization'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_destabilization')]"
 			}
+		}
+	}
+
+	### ---- NETWORK ROW (slice 4) ---------------------------------------
+
+	### One row per network in the operator's iw_nets. All numbers are
+	### variables the monthly tick (covert_nets_sync) writes on the container;
+	### the trend line is chosen by the stored code, never by comparing
+	### strength against a literal.
+	type widget_je_covert_network_row = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 6 }
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+
+		widget_je_covert_operation_text = {
+			text = "je_iw_net_row_title"
+		}
+		widget_je_covert_operation_detail = {
+			text = "je_iw_net_row_strength"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)1')]"
+			text = "je_iw_net_row_trend_growing"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)2')]"
+			text = "je_iw_net_row_trend_decaying"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_trend'), '(CFixedPoint)0')]"
+			text = "je_iw_net_row_trend_holding"
+		}
+		widget_je_covert_operation_detail = {
+			text = "je_iw_net_row_benefit"
 		}
 	}
 }
@@ -493,29 +532,6 @@ flowcontainer = {
 			visible = "[GetScriptedGui('covert_last_exposed_known_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		}
 	}
-
-	### Arms the per-row "Stand down" controls. One toggle for the whole panel,
-	### not one per row: a GetVariableSystem key cannot be built from a script
-	### container. Presentation-only and unsaved, so arming it is invisible to
-	### script and to other clients — ending an operation still takes a second,
-	### deliberate click on the row itself.
-	button = {
-		using = default_button_action
-		size = { 220 24 }
-		margin_top = 6
-		onclick = "[GetVariableSystem.Toggle( 'covert_stand_down_armed' )]"
-		tooltip = "je_iw_stand_down_toggle_tooltip"
-
-		textbox = {
-			parentanchor = center
-			align = center|nobaseline
-			autoresize = yes
-			max_width = 210
-			elide = right
-			using = fontsize_small
-			text = "je_iw_stand_down_toggle"
-		}
-	}
 }
 
 ### One row per running operation.
@@ -531,6 +547,39 @@ flowcontainer = {
 	item = {
 		widget_je_covert_operation_row = {
 			datacontext = "[Scope.GetScriptContainer]"
+		}
+	}
+}
+
+### One row per network (slice 4). Mounted on custom_widget_container_3,
+### below the journal entry's buttons. The header only shows when there is
+### at least one network, so a country that has never run an operation sees
+### nothing here.
+flowcontainer = {
+	name = "widget_je_covert_networks"
+	direction = vertical
+	parentanchor = hcenter
+	spacing = 4
+	visible = "[JournalEntry.IsActive]"
+
+	covert_cc_header = {
+		blockoverride "header_text" {
+			text = "je_iw_net_header"
+			tooltip = "je_iw_net_header_tooltip"
+			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('iw_nets') ) )]"
+		}
+	}
+
+	flowcontainer = {
+		direction = vertical
+		parentanchor = hcenter
+		spacing = 4
+		datamodel = "[JournalEntry.GetCountry.MakeScope.GetList('iw_nets')]"
+
+		item = {
+			widget_je_covert_network_row = {
+				datacontext = "[Scope.GetScriptContainer]"
+			}
 		}
 	}
 }

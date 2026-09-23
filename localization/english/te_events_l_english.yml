@@ -3841,6 +3841,8 @@
  te_debug_covert.2.f:0 "Four dead drops, one bad week."
  te_debug_covert.2.g:0 "Re-derive the rows' display state"
  te_debug_covert.2.h:0 "Raise one operation to maximum priority (through the real step effect; upkeep and detection change now, effects at next month's pulse)"
+ te_debug_covert.2.i:0 "Raise every network to full strength (detection drops now; new operations start 5 months along)"
+ te_debug_covert.2.j:0 "Run one month of network growth and decay now"
  te_debug_covert.2.t:0 "Covert Warfare Test Console: Operations"
 
 #

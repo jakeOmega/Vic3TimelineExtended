@@ -1678,7 +1678,7 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 
 | File | Journal entry | Purpose |
 |---|---|---|
-| `covert_operations_widget.gui` | `je_covert_warfare` | command centre (capacity, slots, funding ladder + stepper, detection factors, covert defence) and one row per running operation with phase, countdown and an optional stand-down |
+| `covert_operations_widget.gui` | `je_covert_warfare` | command centre (capacity, slots, funding ladder + stepper, detection factors, covert defence) and one row per running operation with phase, countdown and a stand-down control; a third widget lists per-target networks |
 | `strategic_reserve_widget.gui` | `je_strategic_reserve` | per-good reserve readouts |
 | `banking_dashboard_widget.gui` | `je_banking_cycle` | conditions readout + policy dashboard |
 | `banking_history_widget.gui` | `je_banking_cycle` | the three banking history charts |
