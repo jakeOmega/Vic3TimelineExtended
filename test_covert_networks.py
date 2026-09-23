@@ -101,5 +101,85 @@ class ScriptValueTests(unittest.TestCase):
         self.assertIn("min = covert_ops_detection_floor", block)
 
 
+class NetworkEffectTests(unittest.TestCase):
+    def test_create_is_tagged_parented_listed(self):
+        block = _top_level_block(_text(EFFECTS), "covert_net_create = {")
+        self.assertIn("tags = { iw_net }", block)
+        self.assertIn("parent = scope:iw_net_operator", block)
+        self.assertIn("add_to_variable_list = { name = iw_nets", block)
+        self.assertIn("exists = scope:iw_new_net", block)
+        # No duplicate network per target.
+        self.assertIn("any_in_list", block)
+
+    def test_gain_scaled_loss_not(self):
+        body = _text(EFFECTS)
+        gain = _top_level_block(body, "covert_net_gain = {")
+        loss = _top_level_block(body, "covert_net_loss = {")
+        self.assertIn("covert_net_gain_scale", gain)
+        self.assertNotIn("covert_net_gain_scale", loss)
+        self.assertIn("covert_net_clamp = yes", gain)
+        self.assertIn("covert_net_clamp = yes", loss)
+
+    def test_tick_counts_by_accumulation(self):
+        block = _top_level_block(_text(EFFECTS), "covert_nets_sync = {")
+        self.assertIn("set_variable = { name = iw_net_ops value = 0 }", block)
+        self.assertIn("change_variable = { name = iw_net_ops add = 1 }", block)
+        self.assertNotRegex(block, r"count\s*>=")
+
+    def test_tick_halves_decay_on_funding(self):
+        block = _top_level_block(_text(EFFECTS), "covert_nets_sync = {")
+        self.assertIn("covert_net_maintain_funding_level", block)
+        self.assertIn("covert_net_loss = { AMOUNT = covert_net_decay_maintained }", block)
+        self.assertIn("covert_net_loss = { AMOUNT = covert_net_decay_base }", block)
+        self.assertIn("covert_net_gain = { AMOUNT = covert_net_tick_gain }", block)
+
+    def test_reap_removes_before_destroy(self):
+        block = _top_level_block(_text(EFFECTS), "covert_nets_sync = {")
+        reap = block[block.index("add_to_temporary_list = iw_reaped_nets"):]
+        self.assertLess(
+            reap.index("remove_list_variable = { name = iw_nets"),
+            reap.index("destroy_container = yes"),
+        )
+
+    def test_reap_checks_dead_target(self):
+        block = _top_level_block(_text(EFFECTS), "covert_nets_sync = {")
+        self.assertIn("is_country_alive = yes", block)
+
+    def test_tick_lookups_guarded(self):
+        # Every random_in_list over iw_nets inside the tick sits under an
+        # any_in_list limit on the same target, so an unmatched lookup can
+        # never leave the previous operation's network in the saved scope.
+        block = _top_level_block(_text(EFFECTS), "covert_nets_sync = {")
+        self.assertEqual(
+            block.count("random_in_list = {"),
+            block.count("save_scope_as = iw_tick_net"),
+        )
+        self.assertGreaterEqual(block.count("any_in_list = {"), block.count("random_in_list = {"))
+
+
+class PulseOrderTests(unittest.TestCase):
+    def test_nets_sync_only_called_from_monthly_pulse(self):
+        # covert_ops_sync_all also runs on every funding / priority click;
+        # a tick in there would grow networks per click.
+        effects = _text(EFFECTS)
+        sync_all = _top_level_block(effects, "covert_ops_sync_all = {")
+        refresh = _top_level_block(effects, "covert_refresh_funding_state = {")
+        self.assertNotIn("covert_nets_sync", sync_all)
+        self.assertNotIn("covert_nets_sync", refresh)
+        callers = [
+            p for p in ROOT.glob("common/**/*.txt")
+            if "covert_nets_sync = yes" in p.read_text(encoding="utf-8-sig")
+        ]
+        self.assertEqual([p.name for p in callers], ["je_covert_warfare.txt"])
+
+    def test_pulse_order(self):
+        je = _text(JE)
+        ops = je.index("covert_ops_sync_all = yes")
+        nets = je.index("covert_nets_sync = yes")
+        age = je.index("covert_ops_age_all_durations = yes")
+        self.assertLess(ops, nets)
+        self.assertLess(nets, age)
+
+
 if __name__ == "__main__":
     unittest.main()

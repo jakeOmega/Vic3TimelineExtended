@@ -20,6 +20,22 @@
 # list, never every_container: the global iterator scans every container in
 # the game, parent filter or not.
 #
+# Every country the operator has run operations against also has a NETWORK
+# container (slice 4, § PER-TARGET NETWORKS below):
+#
+#   tags    iw_net
+#   parent  operator country
+#   vars    iw_target               target country
+#           iw_target_capital       display chain, as on operations
+#           iw_net_strength         0 - covert_net_max
+#           iw_net_ops              operations against the target this month (display)
+#           iw_net_trend            1 growing, 2 decaying, 0 holding at max (display)
+#           iw_net_head_start_offer months of head start a new operation would get
+#
+# listed in the operator's `iw_nets`. It outlives the operations: that is the
+# point. Operations read it at creation (head start), at every detection
+# refresh (strength) and on a burn (loss).
+#
 # Pacts stay the source of truth for whether an operation exists. The
 # accept/break hooks create and destroy containers immediately;
 # covert_ops_sync_all reconciles monthly for any path that skips them (target
@@ -234,6 +250,217 @@ covert_refresh_priority_cost = {
 					set_variable = { name = iw_priority_cost_sum value = { value = var:iw_priority_cost_sum add = 1 } }
 				}
 			}
+		}
+	}
+}
+
+# ============================================================================
+# PER-TARGET NETWORKS (slice 4)
+# ============================================================================
+# One iw_net container per (operator, target). Grows monthly while operations
+# run against the target, decays when none do, loses covert_net_burn_loss when
+# one of them is burned. Constants and projections:
+# covert_warfare_script_values.txt, § PER-TARGET NETWORKS.
+#
+# Lookups of "the network for target X" always sit under an any_in_list limit
+# on the same target, and each call site saves its own scope name: inside a
+# loop, an unmatched random_in_list would leave the previous iteration's
+# network in the saved scope.
+
+# Create the network for $TARGET$ if there isn't one. Leaves the operator's
+# iw_nets unchanged when one exists.
+# Parameters: $TARGET$ = target country (a scope: reference)
+# Scope: operator country
+covert_net_create = {
+	save_scope_as = iw_net_operator
+	if = {
+		limit = {
+			NOT = {
+				AND = {
+					has_variable_list = iw_nets
+					any_in_list = {
+						variable = iw_nets
+						var:iw_target ?= $TARGET$
+					}
+				}
+			}
+		}
+		create_container = {
+			tags = { iw_net }
+			parent = scope:iw_net_operator
+			save_scope_as = iw_new_net
+		}
+		if = {
+			limit = { exists = scope:iw_new_net }
+			scope:iw_new_net = {
+				set_variable = { name = iw_target value = $TARGET$ }
+				set_variable = { name = iw_net_strength value = 0 }
+				set_variable = { name = iw_net_ops value = 0 }
+				set_variable = { name = iw_net_trend value = 1 }
+				set_variable = { name = iw_net_head_start_offer value = 0 }
+				var:iw_target = {
+					capital ?= {
+						scope:iw_new_net = { set_variable = { name = iw_target_capital value = PREV } }
+					}
+				}
+			}
+			add_to_variable_list = { name = iw_nets target = scope:iw_new_net }
+		}
+	}
+}
+
+# Hold iw_net_strength inside [0, covert_net_max]. change_variable has no
+# clamp argument, so this runs straight after every write.
+# Scope: network container
+covert_net_clamp = {
+	clamp_variable = { name = iw_net_strength min = 0 max = covert_net_max }
+}
+
+# Grow the network, scaled down above half strength (covert_net_gain_scale).
+# Parameters: $AMOUNT$ = points (number or script value, >= 0)
+# Scope: network container
+covert_net_gain = {
+	set_variable = {
+		name = iw_net_strength
+		value = {
+			value = var:iw_net_strength
+			add = {
+				value = $AMOUNT$
+				multiply = covert_net_gain_scale
+			}
+		}
+	}
+	covert_net_clamp = yes
+}
+
+# Shrink the network. Not scaled: a loss costs the same at any strength.
+# Parameters: $AMOUNT$ = points (number or script value, >= 0)
+# Scope: network container
+covert_net_loss = {
+	set_variable = {
+		name = iw_net_strength
+		value = {
+			value = var:iw_net_strength
+			subtract = $AMOUNT$
+		}
+	}
+	covert_net_clamp = yes
+}
+
+# The monthly network pass. Called ONCE a month from je_covert_warfare's pulse,
+# straight after covert_ops_sync_all — never from covert_ops_sync_all itself,
+# which also runs on every funding and priority click and would grow networks
+# per click.
+#   1. Ensure a network exists for every operation's target.
+#   2. Count operations per network (zero every count, then walk iw_ops once).
+#   3. Tick: grow with >= 1 operation, otherwise decay (halved at funding
+#      >= covert_net_maintain_funding_level); restate trend, head-start offer
+#      and display capital.
+#   4. Reap networks whose target is gone, or that hit 0 with no operations:
+#      temporary list -> remove_list_variable -> destroy_container.
+# Detection (staged inside covert_ops_sync_all) therefore reads last month's
+# strength — a one-month lag, accepted.
+# Scope: operator country
+covert_nets_sync = {
+	save_scope_as = iw_net_operator
+	# ---- 1. Ensure ----
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			var:iw_target ?= {
+				save_scope_as = iw_net_ensure_tgt
+				scope:iw_net_operator = { covert_net_create = { TARGET = scope:iw_net_ensure_tgt } }
+			}
+		}
+	}
+	if = {
+		limit = { has_variable_list = iw_nets }
+		# ---- 2. Count ----
+		every_in_list = {
+			variable = iw_nets
+			set_variable = { name = iw_net_ops value = 0 }
+		}
+		if = {
+			limit = { has_variable_list = iw_ops }
+			every_in_list = {
+				variable = iw_ops
+				var:iw_target ?= {
+					save_scope_as = iw_net_count_tgt
+					scope:iw_net_operator = {
+						if = {
+							limit = {
+								any_in_list = {
+									variable = iw_nets
+									var:iw_target ?= scope:iw_net_count_tgt
+								}
+							}
+							random_in_list = {
+								variable = iw_nets
+								limit = { var:iw_target ?= scope:iw_net_count_tgt }
+								save_scope_as = iw_tick_net
+							}
+							scope:iw_tick_net = { change_variable = { name = iw_net_ops add = 1 } }
+						}
+					}
+				}
+			}
+		}
+		# ---- 3. Tick ----
+		every_in_list = {
+			variable = iw_nets
+			if = {
+				limit = { var:iw_net_ops >= 1 }
+				covert_net_gain = { AMOUNT = covert_net_tick_gain }
+				if = {
+					limit = { var:iw_net_strength >= covert_net_max }
+					set_variable = { name = iw_net_trend value = 0 }
+				}
+				else = {
+					set_variable = { name = iw_net_trend value = 1 }
+				}
+			}
+			else = {
+				if = {
+					limit = {
+						scope:iw_net_operator = {
+							has_variable = iw_funding_level
+							var:iw_funding_level >= covert_net_maintain_funding_level
+						}
+					}
+					covert_net_loss = { AMOUNT = covert_net_decay_maintained }
+				}
+				else = {
+					covert_net_loss = { AMOUNT = covert_net_decay_base }
+				}
+				set_variable = { name = iw_net_trend value = 2 }
+			}
+			set_variable = { name = iw_net_head_start_offer value = covert_net_head_start_value }
+			save_scope_as = iw_net_display
+			var:iw_target ?= {
+				capital ?= {
+					scope:iw_net_display = { set_variable = { name = iw_target_capital value = PREV } }
+				}
+			}
+		}
+		# ---- 4. Reap ----
+		every_in_list = {
+			variable = iw_nets
+			limit = {
+				OR = {
+					NOT = { var:iw_target ?= { is_country_alive = yes } }
+					AND = {
+						var:iw_net_ops < 1
+						var:iw_net_strength <= 0
+					}
+				}
+			}
+			add_to_temporary_list = iw_reaped_nets
+		}
+		every_in_list = {
+			list = iw_reaped_nets
+			scope:iw_net_operator = { remove_list_variable = { name = iw_nets target = PREV } }
+			destroy_container = yes
 		}
 	}
 }
