@@ -104,7 +104,10 @@ reserves shrink the money the banks create, and the line shows in the dashboard'
 breakdown (inert under the simplified rule). Small radicals on enabling and lifting, like the buffer
 and margin requirements. Weaker than the buffer, which needs `international_exchange_standards`; it is
 what an early economy leans on a boom with besides margin requirements and moral suasion. AI: the
-buffer's weights, plus a gated +15 while the buffer is still locked.
+buffer's weights, plus a gated +15 while the buffer is still locked — and ×0 while the buffer could be
+bought instead. *(Amended after simulation: with the buffer's weights alone the AI split its leaning
+between the two, and fiat / digital at 3 points crashed up to 1.3 times a century more —
+`banking_cycle_simulation.md` §11.)*
 
 ## B3 — Bank Holiday (Crisis)
 

@@ -799,6 +799,20 @@ cb_reserve_requirements = {
 
 		# Avoid in recession/panic
 		if = { limit = { banking_cycle_is_recession = yes } add = -60 }
+
+		# Defer to the buffer, the stronger lean, whenever the buffer could be
+		# bought instead. Reserve requirements are the lean BEFORE the buffer's
+		# tech, and a second lean BESIDE a running buffer, never a weaker stand-in
+		# for it: with the buffer's weights and nothing else, the AI split its
+		# leaning between the two, and at 3 points a fiat or digital country
+		# crashed 1.5 times a century more (banking_cycle_simulation.md §11).
+		if = {
+			limit = {
+				banking_tool_buffer_active = no
+				banking_possible_cb_countercyclical_buffer = yes
+			}
+			multiply = 0
+		}
 	}
 
 	possible = { banking_possible_cb_reserve_requirements = yes }

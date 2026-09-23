@@ -1555,7 +1555,7 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
     s["asset_relief"] = v
 
     # cb_reserve_requirements — the buffer's weights. Its "+15 while the buffer
-    # is still locked" never fires here: the sim unlocks every tool.
+    # is still locked" never fires here: the sim unlocks every tool...
     v = 0.0
     v += 10 if p == EXPANSION else 0
     v += 30 if p == BOOM else 0
@@ -1566,6 +1566,11 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
                  + (5 if cfg.fin_law == "law_free_mutual_banking" else 0)
                  + (10 if low else 0))
     v -= 60 if recession else 0
+    # ...and it defers to the buffer, the stronger lean, whenever the buffer
+    # could be bought instead (a second lean beside a running buffer, never a
+    # weaker stand-in for it; §11)
+    if "buffer" not in state.tools and tool_possible(cfg, state, "buffer"):
+        v = 0.0
     s["reserve_requirements"] = v
 
     # cb_bank_holiday — emergency liquidity's core. Its "+20 while ELIQ is
