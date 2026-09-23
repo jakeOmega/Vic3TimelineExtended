@@ -2397,6 +2397,9 @@ law_directed_credit_development_banks = {
 		country_weekly_innovation_mult = 0.05
 		country_banking_random_momentum_mult = -0.2
 		country_banking_crash_chance_mult = -0.2
+		# Development banks co-finance priority sectors: two directed-credit
+		# sectors at once instead of one (banking_directed_credit_slots_free).
+		country_directed_credit_sectors_add = 1
 	}
 }
 

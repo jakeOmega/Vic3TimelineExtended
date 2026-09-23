@@ -13,6 +13,17 @@ country_banking_intervention_max_add = {
 	script_only = yes
 }
 
+# Extra directed-credit sectors the state may run at once, beyond the first.
+# Granted by law_directed_credit_development_banks; read only by
+# banking_directed_credit_slots_free (common/script_values/extra_script_values.txt),
+# which every directed-credit tool's `possible` checks.
+country_directed_credit_sectors_add = {
+	color = good
+	percent = no
+	decimals = 0
+	script_only = yes
+}
+
 country_banking_random_momentum_mult = {
 	color = bad
 	percent = yes

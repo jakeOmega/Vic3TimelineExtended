@@ -132,6 +132,12 @@ banking_possible_cb_expand_deposit_guarantee = {
 	}
 }
 
+# DIRECTED CREDIT — FIVE SECTORS, ONE AT A TIME. Infrastructure and the four
+# sectors of the 2026-09-23 expansion share Prudential / Narrow Banking's lock
+# and a cap: one sector running at once, two under Directed Credit &
+# Development Banks (country_directed_credit_sectors_add). The cap is
+# banking_directed_credit_slots_free (extra_script_values.txt), and
+# banking_directed_credit_enforce_cap sheds any excess a law change leaves.
 banking_possible_cb_directed_credit_infrastructure = {
 	custom_tooltip = {
 		text = BANKING_POINTS_3
@@ -140,6 +146,71 @@ banking_possible_cb_directed_credit_infrastructure = {
 	custom_tooltip = {
 		text = banking_button_locked_by_law_tt
 		modifier:country_banking_lock_directed_credit_bool = no
+	}
+	custom_tooltip = {
+		text = banking_dc_sector_cap_tt
+		banking_directed_credit_slots_free > 0
+	}
+}
+
+banking_possible_cb_directed_credit_heavy_industry = {
+	custom_tooltip = {
+		text = BANKING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+	custom_tooltip = {
+		text = banking_button_locked_by_law_tt
+		modifier:country_banking_lock_directed_credit_bool = no
+	}
+	custom_tooltip = {
+		text = banking_dc_sector_cap_tt
+		banking_directed_credit_slots_free > 0
+	}
+}
+
+banking_possible_cb_directed_credit_agriculture = {
+	custom_tooltip = {
+		text = BANKING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+	custom_tooltip = {
+		text = banking_button_locked_by_law_tt
+		modifier:country_banking_lock_directed_credit_bool = no
+	}
+	custom_tooltip = {
+		text = banking_dc_sector_cap_tt
+		banking_directed_credit_slots_free > 0
+	}
+}
+
+banking_possible_cb_directed_credit_armaments = {
+	custom_tooltip = {
+		text = BANKING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+	custom_tooltip = {
+		text = banking_button_locked_by_law_tt
+		modifier:country_banking_lock_directed_credit_bool = no
+	}
+	custom_tooltip = {
+		text = banking_dc_sector_cap_tt
+		banking_directed_credit_slots_free > 0
+	}
+}
+
+banking_possible_cb_directed_credit_electrification = {
+	modifier:country_can_use_directed_credit_electrification_bool = yes
+	custom_tooltip = {
+		text = BANKING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+	custom_tooltip = {
+		text = banking_button_locked_by_law_tt
+		modifier:country_banking_lock_directed_credit_bool = no
+	}
+	custom_tooltip = {
+		text = banking_dc_sector_cap_tt
+		banking_directed_credit_slots_free > 0
 	}
 }
 
@@ -186,6 +257,50 @@ banking_possible_cb_asset_relief_program = {
 	custom_tooltip = {
 		text = banking_button_locked_by_law_tt
 		modifier:country_banking_lock_asset_relief_bool = no
+	}
+	custom_tooltip = {
+		text = banking_asset_relief_excludes_bail_in_tt
+		banking_tool_bail_in_regime_active = no
+	}
+}
+
+banking_possible_cb_reserve_requirements = {
+	custom_tooltip = {
+		text = BANKING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+}
+
+# A bank holiday stops a run; there is no run to stop in a stable economy. The
+# five-year cooldown (days = 1825, set by banking_effect_cb_bank_holiday) keeps
+# it an emergency measure rather than a standing crash shield.
+banking_possible_cb_bank_holiday = {
+	custom_tooltip = {
+		text = BANKING_POINTS_2
+		modifier:country_banking_intervention_max_add >= 2
+	}
+	custom_tooltip = {
+		text = banking_bank_holiday_phase_tt
+		banking_cycle_is_recession = yes
+	}
+	custom_tooltip = {
+		text = banking_bank_holiday_cooldown_tt
+		NOT = { has_variable = banking_bank_holiday_cooldown }
+	}
+}
+
+# No law lock: Unregulated Banking's whole budget (1 point, 2 with a national
+# bank) is below the cost already, and State-Owned Banking never reaches the
+# market dashboard.
+banking_possible_cb_bail_in_regime = {
+	modifier:country_can_use_bail_in_bool = yes
+	custom_tooltip = {
+		text = BANKING_POINTS_3
+		modifier:country_banking_intervention_max_add >= 3
+	}
+	custom_tooltip = {
+		text = banking_bail_in_excludes_asset_relief_tt
+		banking_tool_asset_relief_active = no
 	}
 }
 
@@ -430,4 +545,76 @@ banking_ai_core_cb_asset_relief_program = {
 		banking_cycle_is_downturn = yes
 		banking_cycle_is_stagnation = yes
 	}
+}
+
+banking_ai_core_cb_reserve_requirements = {
+	banking_ai_core_cb_countercyclical_buffer = yes
+}
+
+banking_ai_core_cb_bank_holiday = {
+	banking_ai_core_cb_emergency_liquidity_program = yes
+}
+
+banking_ai_core_cb_bail_in_regime = {
+	banking_ai_core_cb_asset_relief_program = yes
+}
+
+# ----------------------------------------------------------------------------
+# AI: which directed-credit sector?
+#
+# Every directed-credit enable button scores the same weight,
+# banking_dc_ai_weight — Infrastructure's ai_chance as it stood before the four
+# new sectors, gated by banking_ai_core_cb_directed_credit_infrastructure — and
+# the weight is SPLIT among the sectors the government favours: a new sector is
+# a candidate when it has an affinity below and could be clicked right now; with
+# n candidates each scores weight / n and Infrastructure scores 0, and with none
+# Infrastructure scores the whole weight. So the AI reaches for directed credit
+# exactly as often as it did with one sector (docs/audits/banking_cycle_simulation.md
+# F11: it is the AI's riskiest tool), and picks the sector that suits whoever
+# governs. The one deliberate increase is the Directed Credit law's second slot.
+# ----------------------------------------------------------------------------
+banking_dc_affinity_heavy_industry = {
+	ig:ig_industrialists ?= { is_in_government = yes }
+}
+
+banking_dc_affinity_agriculture = {
+	OR = {
+		ig:ig_landowners ?= { is_in_government = yes }
+		ig:ig_rural_folk ?= { is_in_government = yes }
+	}
+}
+
+banking_dc_affinity_armaments = {
+	OR = {
+		is_at_war = yes
+		ig:ig_armed_forces ?= { is_in_government = yes }
+	}
+}
+
+banking_dc_affinity_electrification = {
+	ig:ig_intelligentsia ?= { is_in_government = yes }
+}
+
+banking_dc_ai_candidate_heavy_industry = {
+	banking_dc_affinity_heavy_industry = yes
+	banking_tool_directed_credit_heavy_industry_active = no
+	banking_possible_cb_directed_credit_heavy_industry = yes
+}
+
+banking_dc_ai_candidate_agriculture = {
+	banking_dc_affinity_agriculture = yes
+	banking_tool_directed_credit_agriculture_active = no
+	banking_possible_cb_directed_credit_agriculture = yes
+}
+
+banking_dc_ai_candidate_armaments = {
+	banking_dc_affinity_armaments = yes
+	banking_tool_directed_credit_armaments_active = no
+	banking_possible_cb_directed_credit_armaments = yes
+}
+
+banking_dc_ai_candidate_electrification = {
+	banking_dc_affinity_electrification = yes
+	banking_tool_directed_credit_electrification_active = no
+	banking_possible_cb_directed_credit_electrification = yes
 }

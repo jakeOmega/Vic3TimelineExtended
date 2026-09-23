@@ -419,6 +419,7 @@ globalization = {
 		# Colonial empire (je_colonial_empire): globalization makes empire
 		# unsustainable -- decolonization becomes irresistible.
 		country_colonial_stability_drift_add = -1.5
+		country_can_use_bail_in_bool = yes
 	}
 
 	ai_weight = {

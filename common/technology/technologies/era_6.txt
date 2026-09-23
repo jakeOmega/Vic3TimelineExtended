@@ -492,6 +492,7 @@ rural_electrification = {
 		country_sol_expectations_target_add = 0.5
 		building_power_plant_throughput_add = 0.25
 		country_voting_power_mult = 0.1
+		country_can_use_directed_credit_electrification_bool = yes
 	}
 
 	unlocking_technologies = {

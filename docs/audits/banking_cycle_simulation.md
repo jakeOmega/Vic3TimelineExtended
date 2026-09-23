@@ -947,3 +947,102 @@ average but still negative at 0 points for every metallic cell: an unmanaged cyc
 script reads them as country-scope `modifier:` values). The *financial-regulation* law's lines are still not
 ported — some are large (`country_banking_crash_chance_mult` up to −0.5, random momentum +0.1 on universal
 banking) — so absolute rates in game will differ by law, though no direction above depends on it.
+
+---
+
+## 11. Seven more tools (2026-09-23)
+
+Four directed-credit sectors (heavy industry, agriculture, armaments, electrification & high tech) under a
+one-sector cap that the Directed Credit law raises to two, reserve requirements, a bank holiday and a bail-in
+regime — design and owner decisions in `docs/superpowers/specs/2026-09-23-banking-tools-expansion-design.md`.
+The sim ports all seven: their modifiers through `TOOL_MODIFIER_NAMES`, their `ai_chance` blocks by hand, the
+cap (`dc_slots_free`), the holiday's 3-month timer, 60-month cooldown and one-shot momentum halving
+(`on_tool_enabled`), the bail-in / asset-relief exclusion, and reserve requirements' −0.5 pp inflation line in
+`pressure_total`. The sim has no interest groups, so `--dc-affinity dc_heavy,…` names the sectors whose group
+governs; armaments also has one at war. **Like every tool here, all seven are available from 1836** — bail-in's
+real gate is era 9, so its share of a century below is much larger than in game.
+
+400 runs × 100 years, every cell, 0 / 2 / 3 / 5 / 8 points; *before* is the sim and script as of #378.
+
+### Directed credit: the split is exact
+
+All five sectors score one weight, `banking_dc_ai_weight` (Infrastructure's pre-expansion `ai_chance`),
+divided among the new sectors that have an affinity and could be started; with none, Infrastructure takes it
+all. Summed over the grid, directed-credit clicks per century:
+
+| affinity | total | Infrastructure | heavy | agriculture | armaments | electrification |
+|---|---|---|---|---|---|---|
+| none | 356.7 | 329.9 | 0 | 0 | 26.8 (at war) | 0 |
+| heavy industry | 357.2 | 0 | 343.9 | 0 | 13.3 | 0 |
+| all four | 356.9 | 0 | 89.2 | 89.1 | 89.6 | 89.0 |
+
+Crash rates with one sector favoured match the no-affinity run to within ±0.5 (noise) in every cell, so F11's finding — directed
+credit is the AI's riskiest tool — is not multiplied by four more of it. Leaving the favoured sector out
+(`--exclude-tool dc_heavy`) moves the mean by −0.2, Infrastructure's own small harm. Under the Directed Credit law
+the second slot is used: at 8 points a heavy-industry government adds Infrastructure about 4 times a century,
+and the mean over cells goes 10.7 → 10.2 against the same law before the expansion.
+
+### Reserve requirements: defer to the buffer
+
+First shipped with the buffer's weights and nothing else. The AI then split its leaning clicks between the two —
+at fiat / price / 3 points the buffer fell from 9.3 to 5.1 clicks a century and reserve requirements took 5.3 —
+and reserve requirements are the weaker lean (−0.9 bubble a month against −1.5). Fiat and digital at 2–3 points
+crashed 0.7–1.3 times a century more, and leaving the tool out *lowered* those cells by up to 1.5. Shipped: its
+`ai_chance` is ×0 while the buffer could be bought instead, so it is the lean before the buffer's tech and a
+second lean beside a running buffer, never a stand-in. After that, it gets 0 clicks at 3 points (the buffer is back
+at 8.7–8.8), no cell is better off without it, and leaving it out raises crashes by 0.7 a century on average.
+
+### Bank holiday and bail-in
+
+(These two leave-one-outs, and the sector one above, ran before the reserve-requirements fix; it touches
+neither tool's weights.)
+
+- **Bank holiday:** 0.1–0.7 declarations a century (panics are rare), and leaving it out moves no cell by more
+  than ±0.4. It is a player's emergency lever more than an AI habit.
+- **Bail-in:** at 3 points it is the AI's most-clicked downturn tool, ~10 a century, because asset relief costs
+  5 and does not fit. Leaving it out raises crashes by 0.2 a century on average: it crowds out some directed
+  credit, which is a net gain. In game the era-9 gate confines this to the last part of a campaign.
+
+### The century matrix — crashes per century, 0 / 2 / 3 / 5 / 8 points, before → shipped
+
+| cell | before | shipped |
+|---|---|---|
+| `commodity` / nothing | 8.4 / 7.9 / 7.4 / 7.6 / 7.4 | 8.4 / 7.7 / 7.2 / 5.3 / 5.2 |
+| `commodity` / price | 9.7 / 8.4 / 7.5 / 6.3 / 6.3 | 9.7 / 8.4 / 6.9 / 5.4 / 4.3 |
+| `commodity` / growth | 15.0 / 12.0 / 12.2 / 11.2 / 11.6 | 15.0 / 12.8 / 12.2 / 10.0 / 9.0 |
+| `gold` / nothing | 9.5 / 8.9 / 8.8 / 8.8 / 8.7 | 9.5 / 8.9 / 8.3 / 6.4 / 6.1 |
+| `gold` / price | 9.0 / 6.9 / 6.5 / 5.8 / 5.8 | 9.0 / 7.1 / 6.4 / 5.6 / 4.6 |
+| `gold` / growth | 15.8 / 15.1 / 13.5 / 13.8 / 13.3 | 15.8 / 14.9 / 13.6 / 12.2 / 10.2 |
+| `gold` / peg | 13.1 / 12.4 / 11.7 / 11.9 / 12.0 | 13.1 / 12.4 / 11.4 / 8.8 / 8.5 |
+| `fiat` / nothing | 38.2 / 38.2 / 38.0 / 37.8 / 38.3 | 38.2 / 38.2 / 37.7 / 37.0 / 36.5 |
+| `fiat` / price | 9.9 / 7.9 / 6.8 / 5.2 / 5.0 | 9.9 / 7.6 / 6.2 / 5.1 / 4.2 |
+| `fiat` / growth | 17.0 / 14.5 / 14.5 / 13.3 / 12.6 | 17.0 / 14.5 / 13.7 / 12.4 / 11.6 |
+| `digital` / nothing | 38.6 / 38.5 / 38.1 / 37.5 / 37.8 | 38.6 / 38.7 / 37.8 / 36.7 / 35.3 |
+| `digital` / price | 9.0 / 6.7 / 5.4 / 4.5 / 4.5 | 9.0 / 6.8 / 5.2 / 4.7 / 3.6 |
+| `digital` / growth | 16.3 / 14.6 / 13.5 / 12.5 / 11.7 | 16.3 / 14.4 / 13.0 / 11.7 / 9.7 |
+
+0–3 points are unchanged within noise. The change is at 5–8 points, 1–3.5 fewer crashes a century: a big
+budget now has a second lean to stack (reserve requirements beside the buffer) and a cheap crisis tool. Averaged
+over every cell except the two never-touched fiat / digital dials, 10.1 → 9.4. At 8 points severity 46 → 42, the
+share landing in panic 20 → 16 %, months in recession 3.2 → 2.3 %, manufacturing throughput +0.70 → +0.86 pp,
+services +5.2 → +5.7 %. At 3 points throughput and services dip slightly (+0.18 → +0.13 pp, +4.0 → +3.7 %): bail-in
+takes clicks that directed and export credit used to get.
+
+**§8's targets still hold.** Metallic at 0–3 points under price stability, an untouched dial or peg defence is
+6.4–13.1. Managed digital is at or below gold from 2 points and fiat from 3. Growth runs 1.5–2.8× price
+stability, the top of that range at 8 points, where price stability gained most. The 2-point cell is 0.92–1.01× the mean of its 0- and 3-point
+neighbours on every price cell, inside the 0.92–1.03 band. The budget curve slopes down more steeply at the top,
+which §10 already accepted as the intended direction.
+
+### Boom rescue
+
+`--rescue`, maxed arm, % of boom entries pulled below 60 before any crash (gold / commodity / fiat / digital):
+
+| leaning tools held | gold | commodity | fiat | digital |
+|---|---|---|---|---|
+| buffer + margin + moral suasion (5 pt), before and after | 24.5 | 32.4 | 40.2 | 52.7 |
+| + reserve requirements (7 pt) | 33.4 | 41.1 | 46.8 | 56.9 |
+
+A seven-point leaning stack pulls back about a third of metallic booms, the top of §10's "a quarter to a
+third", and a little over half of digital ones. That is a real improvement, not booms tamed for free, so the
+tool's −0.9 bubble line was left as designed.

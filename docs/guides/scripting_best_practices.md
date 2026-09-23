@@ -3052,6 +3052,31 @@ disable side of a toggle needs no gate: lifting a tool wants no reason beyond th
 but do give it a weight for every phase the tool should *not* outlive (directed credit only came off in
 boom, frenzy and panic, so a tool bought in a slump ran the whole recovery hot: F11).
 
+## N Buttons for One Decision Multiply the AI's Pull on It — Split One Weight Instead
+
+The AI makes one weighted roll over every `possible` button a journal entry offers, so the chance of a
+*kind* of action is the sum of its buttons' weights over the whole pool. Add four variants of a tool with
+the original's `ai_chance` copied onto each and the AI reaches for that kind of tool ~5× as often, even
+with a cap stopping it holding more than one — the cap limits the *second* click, not how often the first
+is chosen. A weaker variant with the stronger one's weights does damage the other way: the AI splits its
+clicks between them and the average pick gets worse.
+
+Two shapes that avoid it, both in the banking tools of 2026-09-23 (`docs/audits/banking_cycle_simulation.md`
+§11):
+
+- **Variants of one decision → one shared weight, divided among the candidates.** The five directed-credit
+  sectors all score `banking_dc_ai_weight` (the original tool's `ai_chance`, moved to a script value),
+  `divide = banking_dc_ai_candidates` on each sector whose interest group governs, and the default sector
+  takes the whole weight only when there is no candidate. The sim's directed-credit clicks: 356.7 / 357.2 /
+  356.9 a century with no sector, one or all four favoured.
+- **A weaker substitute → ×0 while the stronger tool could be bought.** Reserve requirements carry the
+  buffer's weights but `multiply = 0` while `banking_possible_cb_countercyclical_buffer` holds and the
+  buffer is not running, so they are the lean before its tech and a second lean beside it, never a stand-in.
+  Without that, fiat and digital at 3 points crashed up to 1.3 times a century more.
+
+A button that does something *different* (a new lever, a new trade-off) belongs in the pool on its own
+weight; this is only for buttons that answer the same question.
+
 ## Triggered Option Names: `name = { trigger=... text=... }`
 
 Event option labels can be conditional on context. Repeat the `name` field with each variant gated by a `trigger`; first match wins. No `else` / fallback syntax — use `trigger = { always = yes }` as the catch-all.

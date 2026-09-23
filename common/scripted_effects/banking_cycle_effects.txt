@@ -2219,6 +2219,52 @@ banking_cycle_cleanup_capital_controls = {
 	}
 }
 
+# 7b. Directed credit: shed sectors beyond the cap. A law change can leave two
+#     sectors running under a cap of one (leaving Directed Credit & Development
+#     Banks). Lifted in reverse roster order, newest sector first, so the
+#     long-standing Infrastructure tool is the last to go. Monthly rather than
+#     on_law_enactment_pass: no same-tick modifier read, and it also catches a
+#     law swapped by anything other than enactment.
+#
+#     banking_directed_credit_slots_free is read ONCE into a local: a
+#     remove_modifier is not visible to the modifier reads it is built from
+#     until the block ends, so each shed counts itself up by hand.
+banking_directed_credit_enforce_cap = {
+	if = {
+		limit = { banking_directed_credit_slots_free < 0 }
+		set_local_variable = { name = dc_slots value = banking_directed_credit_slots_free }
+		if = {
+			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_electrification_active = yes }
+			te_history_record_banking_marker = { MARK = off_cb_directed_credit_electrification }
+			je:je_banking_cycle = { remove_modifier = banking_directed_credit_electrification }
+			change_local_variable = { name = dc_slots add = 1 }
+		}
+		if = {
+			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_armaments_active = yes }
+			te_history_record_banking_marker = { MARK = off_cb_directed_credit_armaments }
+			je:je_banking_cycle = { remove_modifier = banking_directed_credit_armaments }
+			change_local_variable = { name = dc_slots add = 1 }
+		}
+		if = {
+			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_agriculture_active = yes }
+			te_history_record_banking_marker = { MARK = off_cb_directed_credit_agriculture }
+			je:je_banking_cycle = { remove_modifier = banking_directed_credit_agriculture }
+			change_local_variable = { name = dc_slots add = 1 }
+		}
+		if = {
+			limit = { local_var:dc_slots < 0 banking_tool_directed_credit_heavy_industry_active = yes }
+			te_history_record_banking_marker = { MARK = off_cb_directed_credit_heavy_industry }
+			je:je_banking_cycle = { remove_modifier = banking_directed_credit_heavy_industry }
+			change_local_variable = { name = dc_slots add = 1 }
+		}
+		if = {
+			limit = { local_var:dc_slots < 0 banking_tool_directed_active = yes }
+			te_history_record_banking_marker = { MARK = off_cb_directed_credit_infrastructure }
+			je:je_banking_cycle = { remove_modifier = banking_directed_credit_infrastructure }
+		}
+	}
+}
+
 # 8. Command economy: keep investment pool net income at zero.
 #    Under law_command_economy the state should be funding all planned investment
 #    directly from the treasury. This effect removes and re-applies the

@@ -1026,6 +1026,106 @@ banking_asset_relief_program = {
 	country_bureaucracy_mult = -0.05
 }
 
+# ---- 2026-09-23 expansion -------------------------------------------------
+# docs/superpowers/specs/2026-09-23-banking-tools-expansion-design.md. The
+# momentum and bubble lines were sized with scripts/analysis/banking_cycle_sim.py
+# (docs/audits/banking_cycle_simulation.md §11); retune them there, not by eye.
+
+# Directed-credit sectors. Each is banking_directed_credit_infrastructure's
+# shape — +10% construction for its building groups, an interest-group line
+# that says who gains and who pays, a little momentum and bubble — and they
+# share its lock and its one-sector cap (banking_directed_credit_slots_free).
+banking_directed_credit_heavy_industry = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	# bg_high_tech sits under bg_heavy_industry, so this covers it too.
+	building_group_bg_heavy_industry_construction_efficiency_add = 0.1
+	interest_group_ig_industrialists_approval_add = 3
+	interest_group_ig_landowners_approval_add = -3   # the credit comes off the land
+	country_banking_intervention_max_add = -3
+	# monthly:
+	country_finance_momentum_monthly_add = 0.05
+	country_bubble_pressure_monthly_add  = 0.3
+}
+
+banking_directed_credit_agriculture = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	# Three separate top-level groups; bg_agriculture does not cover the others.
+	building_group_bg_agriculture_construction_efficiency_add = 0.1
+	building_group_bg_plantations_construction_efficiency_add = 0.1
+	building_group_bg_ranching_construction_efficiency_add = 0.1
+	interest_group_ig_landowners_approval_add = 3
+	interest_group_ig_rural_folk_approval_add = 2
+	interest_group_ig_industrialists_approval_add = -3
+	country_banking_intervention_max_add = -3
+	# monthly — a little more bubble than the others: land booms bust
+	# (the Landschaften, the 1920s farm bust):
+	country_finance_momentum_monthly_add = 0.04
+	country_bubble_pressure_monthly_add  = 0.4
+}
+
+banking_directed_credit_armaments = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_military_industry_construction_efficiency_add = 0.1
+	building_group_bg_ship_construction_construction_efficiency_add = 0.1
+	interest_group_ig_armed_forces_approval_add = 3
+	interest_group_ig_intelligentsia_approval_add = -2
+	country_banking_intervention_max_add = -3
+	# monthly — the state is the buyer, so less speculative froth:
+	country_finance_momentum_monthly_add = 0.05
+	country_bubble_pressure_monthly_add  = 0.2
+}
+
+banking_directed_credit_electrification = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_power_construction_efficiency_add = 0.1
+	building_group_bg_high_tech_construction_efficiency_add = 0.1
+	interest_group_ig_intelligentsia_approval_add = 2
+	interest_group_ig_trade_unions_approval_add = 1
+	# private utilities fought the REA and the TVA:
+	interest_group_ig_industrialists_approval_add = -3
+	country_banking_intervention_max_add = -3
+	# monthly:
+	country_finance_momentum_monthly_add = 0.05
+	country_bubble_pressure_monthly_add  = 0.3
+}
+
+# A leaning tool for every era: no tech, weaker than the countercyclical
+# buffer. Tighter reserves also shrink the money the banks create, hence the
+# inflation-pressure line (read by the §9.1 pressure sum; inert under
+# banking_system_simplified).
+banking_reserve_requirements = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_capitalists_investment_pool_efficiency_mult = -0.05
+	country_inflation_pressure_add = -0.005
+	country_banking_intervention_max_add = -2
+	# monthly:
+	country_finance_momentum_monthly_add = -0.04
+	country_bubble_pressure_monthly_add  = -0.9
+}
+
+# Timed: banking_effect_cb_bank_holiday adds it for 90 days. Both the origin
+# and the contagion crash checks multiply by banking_crash_chance_multiplier_value,
+# so the crash line shields against imported crashes too.
+banking_bank_holiday = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_banking_crash_chance_mult = -0.9
+	goods_output_services_mult = -0.2
+	state_tax_collection_mult = -0.05
+	country_banking_intervention_max_add = -2
+}
+
+# The creditors recapitalise the banks, not the treasury: slower than asset
+# relief, no treasury cost, and the moral hazard goes (bubble down) — but debt
+# that can be written down costs more to issue (risk premium up).
+banking_bail_in_regime = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_risk_premium_add = 0.001
+	country_banking_intervention_max_add = -3
+	# monthly:
+	country_finance_value_monthly_add = 0.15
+	country_bubble_pressure_monthly_add = -0.3
+}
+
 # ============================================================
 # CRASH RESPONSE INTERVENTIONS
 # Applied by minor_events_timelineextended.6 (banking crash event).

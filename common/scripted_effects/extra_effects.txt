@@ -390,6 +390,13 @@ remove_banking_market_modifiers_effect = {
 		remove_modifier = banking_capital_controls_out
 		remove_modifier = banking_export_credit_facility
 		remove_modifier = banking_asset_relief_program
+		remove_modifier = banking_directed_credit_heavy_industry
+		remove_modifier = banking_directed_credit_agriculture
+		remove_modifier = banking_directed_credit_armaments
+		remove_modifier = banking_directed_credit_electrification
+		remove_modifier = banking_reserve_requirements
+		remove_modifier = banking_bank_holiday
+		remove_modifier = banking_bail_in_regime
 	}
 }
 

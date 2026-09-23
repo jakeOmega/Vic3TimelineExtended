@@ -279,7 +279,7 @@ INFLATION_BAND_MODIFIERS = {
     7: K.modifier("te_mon_dollarised_modifier"),
 }
 
-# ── the ten market-economy dashboard tools ────────────────────────────────────
+# ── the seventeen market-economy dashboard tools ──────────────────────────────
 TOOL_MODIFIER_NAMES = {
     "omo": "banking_open_market_ops",
     "moral_suasion": "banking_moral_suasion",
@@ -291,15 +291,32 @@ TOOL_MODIFIER_NAMES = {
     "capital_controls": "banking_capital_controls_out",
     "eliq": "banking_emergency_liquidity_program",
     "asset_relief": "banking_asset_relief_program",
+    # 2026-09-23 expansion (docs/superpowers/specs/2026-09-23-banking-tools-expansion-design.md)
+    "dc_heavy": "banking_directed_credit_heavy_industry",
+    "dc_agri": "banking_directed_credit_agriculture",
+    "dc_arms": "banking_directed_credit_armaments",
+    "dc_elec": "banking_directed_credit_electrification",
+    "reserve_requirements": "banking_reserve_requirements",
+    "bank_holiday": "banking_bank_holiday",
+    "bail_in": "banking_bail_in_regime",
 }
 TOOL_MODIFIERS = {k: K.modifier(v) for k, v in TOOL_MODIFIER_NAMES.items()}
 # The tools that lean against a boom rather than soften a crash (§10).
-LEANING_TOOLS = ("buffer", "margin", "moral_suasion")
+LEANING_TOOLS = ("buffer", "margin", "moral_suasion", "reserve_requirements")
 # Point cost is the modifier's own negative country_banking_intervention_max_add.
 TOOL_COST = {
     k: -v.get("country_banking_intervention_max_add", 0.0) for k, v in TOOL_MODIFIERS.items()
 }
 DEFAULT_TOOL_COST = dict(TOOL_COST)
+# The five directed-credit sectors share one cap (banking_directed_credit_slots_free):
+# one at a time, two under law_directed_credit_development_banks. "directed" is
+# Infrastructure, the default sector; the other four are chosen by affinity.
+DC_SECTORS = ("directed", "dc_heavy", "dc_agri", "dc_arms", "dc_elec")
+DC_NEW_SECTORS = DC_SECTORS[1:]
+# banking_effect_cb_bank_holiday: `days = 90` on the modifier, `days = 1825` on
+# the cooldown variable.
+BANK_HOLIDAY_MONTHS = 3
+BANK_HOLIDAY_COOLDOWN_MONTHS = 60
 
 # ── banking_law_base_points_value, restated as a table (it is an if-chain) ────
 FIN_LAW_POINTS = {
@@ -448,6 +465,11 @@ class Config:
     excluded_tools: tuple[str, ...] = ()  # dashboard tools the AI never clicks
     simplified: bool = False   # banking_system_simplified: the capital-controls fallback branch
     ai_tools: bool = True      # False: the tools held are fixed from outside (--rescue)
+    # The directed-credit sectors whose interest group is in government
+    # (banking_dc_affinity_*; the sim has no interest groups). Armaments also
+    # has an affinity whenever the country is at war. Empty: only
+    # Infrastructure is ever chosen, as before the four new sectors.
+    dc_affinity: tuple[str, ...] = ()
 
     # exogenous stubs
     gdp0: float = 1.0e7
@@ -517,6 +539,8 @@ class State:
     active_fiscal_size: float = 0.0
     tools: set[str] = field(default_factory=set)
     timed: dict[str, int] = field(default_factory=dict)  # name -> months remaining
+    tool_timers: dict[str, int] = field(default_factory=dict)  # timed TOOLS (bank holiday)
+    holiday_cooldown: int = 0  # months until another bank holiday may be declared
 
     # exogenous
     gdp: float = 1.0e7
@@ -973,6 +997,12 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     if "omo" in state.tools:
         total += K.sv("te_mon_qe_pressure")
 
+    # the dashboard tools' own country_inflation_pressure_add lines, which the
+    # script's 100 x modifier:country_inflation_pressure_add term reads
+    # (reserve requirements: -0.005, i.e. -0.5pp)
+    for tool in state.tools:
+        total += 100 * TOOL_MODIFIERS[tool].get("country_inflation_pressure_add", 0.0)
+
     # wage spiral above the high band edge
     if state.inflation >= K.sv("te_mon_band_edge_high"):
         total += 0.0  # country_wage_pressure_add is granted by events; none here
@@ -1156,6 +1186,13 @@ def cycle_pulse(cfg: Config, state: State, rng: random.Random, month: int) -> No
         state.timed[name] -= 1
         if state.timed[name] <= 0:
             del state.timed[name]
+    for tool in list(state.tool_timers):
+        state.tool_timers[tool] -= 1
+        if state.tool_timers[tool] <= 0:
+            del state.tool_timers[tool]
+            state.tools.discard(tool)
+    if state.holiday_cooldown > 0:
+        state.holiday_cooldown -= 1
 
     # the dashboard tools: the AI's ai_chance blocks, once a month
     if cfg.points > 0 and cfg.ai_tools:
@@ -1417,7 +1454,11 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
     v -= 10 if low else 0
     s["deposit"] = v
 
-    # cb_directed_credit_infrastructure
+    # banking_dc_ai_weight — the weight all five directed-credit sectors share
+    # (Infrastructure's ai_chance before 2026-09-23), SPLIT among the sectors
+    # with an affinity that could be started now; with none, Infrastructure
+    # takes all of it (banking_policy_triggers.txt, "AI: which directed-credit
+    # sector?").
     v = 0.0
     v += 40 if p == DOWNTURN else 0
     v += 30 if p == STAGNATION else 0
@@ -1426,7 +1467,13 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
                  + (10 if "eliq" in state.tools else 0) + (10 if med else 0))
     v -= 35 if p == FRENZY else 0
     v -= 30 if p == PANIC else 0
-    s["directed"] = v
+    candidates = [
+        t for t in DC_NEW_SECTORS
+        if dc_affinity(cfg, state, t) and tool_possible(cfg, state, t)
+    ]
+    s["directed"] = 0.0 if candidates else v
+    for t in DC_NEW_SECTORS:
+        s[t] = v / len(candidates) if t in candidates else 0.0
 
     # cb_emergency_liquidity_program
     v = 0.0
@@ -1507,7 +1554,57 @@ def tool_scores(cfg: Config, state: State) -> dict[str, float]:
     v -= 50 if p == FRENZY else 0
     s["asset_relief"] = v
 
+    # cb_reserve_requirements — the buffer's weights. Its "+15 while the buffer
+    # is still locked" never fires here: the sim unlocks every tool...
+    v = 0.0
+    v += 10 if p == EXPANSION else 0
+    v += 30 if p == BOOM else 0
+    v += 35 if p == FRENZY else 0
+    v += 15 if risk_rising else 0
+    v += flavour(v, (15 if cfg.fin_law == "law_prudential_narrow_banking" else 0)
+                 + (10 if cfg.fin_law == "law_universal_banking_light_prudence" else 0)
+                 + (5 if cfg.fin_law == "law_free_mutual_banking" else 0)
+                 + (10 if low else 0))
+    v -= 60 if recession else 0
+    # ...and it defers to the buffer, the stronger lean, whenever the buffer
+    # could be bought instead (a second lean beside a running buffer, never a
+    # weaker stand-in for it; §11)
+    if "buffer" not in state.tools and tool_possible(cfg, state, "buffer"):
+        v = 0.0
+    s["reserve_requirements"] = v
+
+    # cb_bank_holiday — emergency liquidity's core. Its "+20 while ELIQ is
+    # still locked" never fires here either.
+    v = 0.0
+    v += 60 if p == PANIC else 0
+    v += 30 if (p == DOWNTURN and m <= -4) else 0
+    v += flavour(v, -20 if "eliq" in state.tools else 0)
+    s["bank_holiday"] = v
+
+    # cb_bail_in_regime — asset relief's core
+    v = 0.0
+    v += 70 if p == PANIC else 0
+    v += 40 if p == DOWNTURN else 0
+    v += 25 if p == STAGNATION else 0
+    v += flavour(v, (20 if state.scaled_debt >= 0.5 else 0) + (10 if fiscal_low else 0))
+    v -= 30 if p == BOOM else 0
+    v -= 50 if p == FRENZY else 0
+    s["bail_in"] = v
+
     return s
+
+
+def dc_affinity(cfg: Config, state: State, tool: str) -> bool:
+    """banking_dc_affinity_* — the government favours this sector."""
+    if tool == "dc_arms" and state.at_war:
+        return True
+    return tool in cfg.dc_affinity
+
+
+def dc_slots_free(cfg: Config, state: State) -> int:
+    """banking_directed_credit_slots_free."""
+    cap = 1 + (1 if cfg.fin_law == "law_directed_credit_development_banks" else 0)
+    return cap - sum(1 for t in DC_SECTORS if t in state.tools)
 
 
 def tool_possible(cfg: Config, state: State, tool: str) -> bool:
@@ -1523,7 +1620,27 @@ def tool_possible(cfg: Config, state: State, tool: str) -> bool:
         lo, _ = target_bounds(cfg, state, state.world_rate)
         if state.policy_rate > lo + 0.01:
             return False
+    if tool in DC_SECTORS and dc_slots_free(cfg, state) <= 0:
+        return False
+    if tool == "bank_holiday":
+        if phase_of(state.finance_cycle_value) not in (PANIC, DOWNTURN):
+            return False
+        if state.holiday_cooldown > 0:
+            return False
+    if tool == "bail_in" and "asset_relief" in state.tools:
+        return False
+    if tool == "asset_relief" and "bail_in" in state.tools:
+        return False
     return True
+
+
+def on_tool_enabled(state: State, tool: str) -> None:
+    """The one-shot parts of a `banking_effect_cb_*` beyond its modifier."""
+    if tool == "bank_holiday":
+        state.tool_timers[tool] = BANK_HOLIDAY_MONTHS
+        state.holiday_cooldown = BANK_HOLIDAY_COOLDOWN_MONTHS
+        if state.finance_cycle_momentum < 0:
+            state.finance_cycle_momentum *= 0.5
 
 
 def disable_scores(cfg: Config, state: State) -> dict[str, float]:
@@ -1637,6 +1754,29 @@ def disable_scores(cfg: Config, state: State) -> dict[str, float]:
     v += 15 if cfg.gold_reserves < 0.01 else 0
     s["asset_relief"] = v
 
+    # the four new directed-credit sectors lift exactly as Infrastructure does
+    for t in DC_NEW_SECTORS:
+        s[t] = s["directed"]
+
+    # reserve requirements: the buffer's
+    s["reserve_requirements"] = s["buffer"]
+
+    # bank holiday: usually left to run out; reopened early once recovered
+    v = 0.0
+    v += 30 if p == STABLE else 0
+    v += 50 if p == EXPANSION else 0
+    v += 60 if p == BOOM else 0
+    v += 60 if p == FRENZY else 0
+    s["bank_holiday"] = v
+
+    # bail-in: asset relief's, without its fiscal term
+    v = 0.0
+    v += 20 if p == STABLE else 0
+    v += 30 if p == EXPANSION else 0
+    v += 45 if p == BOOM else 0
+    v += 60 if p == FRENZY else 0
+    s["bail_in"] = v
+
     return s
 
 
@@ -1669,6 +1809,7 @@ def consider_tools(cfg: Config, state: State, rng: random.Random) -> None:
             if action == "on":
                 state.tools.add(tool)
                 state.tool_usage[tool] += 1
+                on_tool_enabled(state, tool)
             else:
                 state.tools.discard(tool)
             return
@@ -1679,12 +1820,19 @@ def prune_overdrawn_tools(cfg: Config, state: State) -> None:
     order = [
         "capital_controls",
         "eliq",
+        "bank_holiday",
         "asset_relief",
+        "bail_in",
         "deposit",
         "omo",
         "directed",
+        "dc_heavy",
+        "dc_agri",
+        "dc_arms",
+        "dc_elec",
         "export_credit",
         "buffer",
+        "reserve_requirements",
         "margin",
         "moral_suasion",
     ]
@@ -2033,6 +2181,7 @@ def _rescue_arm(cfg: Config, state: State, rng: random.Random, month: int,
     cfg = dataclasses.replace(cfg, ai_tools=False, points=int(sum(TOOL_COST[t] for t in tools)))
     state.tools = set()
     state.timed = {}
+    state.tool_timers = {}
     for m in range(month, month + delay):
         if _rescue_step(cfg, state, rng, m):
             return "crash"
@@ -2161,6 +2310,10 @@ def main() -> int:
                     help="comma-separated dashboard tools the AI never clicks "
                          "(keys: " + ",".join(TOOL_MODIFIERS) + "; 'all' for none "
                          "at all while keeping the crash-event options)")
+    ap.add_argument("--dc-affinity", default="",
+                    help="comma-separated directed-credit sectors whose interest group is "
+                         "in government (dc_heavy, dc_agri, dc_arms, dc_elec); armaments "
+                         "also has one at war. Default none: Infrastructure only")
     ap.add_argument("--simplified", action="store_true",
                     help="the banking_system_simplified game rule: capital controls "
                          "score on the cycle fallback branch instead of the "
@@ -2202,6 +2355,10 @@ def main() -> int:
             TUNE[k.strip()] = v.strip()
     budgets = [int(x) for x in args.points.split(",") if x.strip() != ""]
     excluded = tuple(t.strip() for t in args.exclude_tool.split(",") if t.strip())
+    affinity = tuple(t.strip() for t in args.dc_affinity.split(",") if t.strip())
+    for t in affinity:
+        if t not in DC_NEW_SECTORS:
+            ap.error(f"unknown sector {t!r}; keys are {', '.join(DC_NEW_SECTORS)}")
     if "all" in excluded:
         excluded = tuple(TOOL_MODIFIERS)
     for t in excluded:
@@ -2245,6 +2402,7 @@ def main() -> int:
                     no_click_weight=args.no_click_weight,
                     excluded_tools=excluded,
                     simplified=args.simplified,
+                    dc_affinity=affinity,
                 )
             )
     jobs = [(cfg, args.seed, args.runs, dict(TUNE)) for cfg in cfgs]
