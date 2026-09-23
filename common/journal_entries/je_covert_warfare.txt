@@ -283,6 +283,15 @@ je_covert_warfare = {
 				}
 			}
 
+			# ---- AI priorities ----
+			# Before the sync, so the sync's detection refresh and the upkeep
+			# weights see the new levels. A human's priorities come from the
+			# operations widget and are never touched here.
+			if = {
+				limit = { is_player = no }
+				covert_ai_manage_priorities = yes
+			}
+
 			# ---- Reconcile operation containers with pacts ----
 			# Creates containers for pacts that lack one, destroys containers whose
 			# pact has ended, and refreshes each operation's detection display.

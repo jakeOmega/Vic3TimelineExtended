@@ -877,6 +877,90 @@ covert_effect_priority_down = {
 	}
 }
 
+# The AI's priorities. Per operation, a wanted level: 1 in default or
+# bankruptcy; 3 for a great power at war with the target; 2 against a rival;
+# otherwise 1. It then steps toward that level one at a time, through the same
+# covert_possible_priority_* gates the stepper uses, so any gate added there
+# (slice 5's Tradecraft requirement) binds the AI as well. Two steps each way
+# covers the whole 1-3 range. The variable is set directly: the monthly pulse
+# runs the sync and the effects straight after this.
+# Scope: country (is_player = no; the caller guards it)
+covert_ai_manage_priorities = {
+	save_scope_as = iw_ai_operator
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			save_scope_as = iw_op
+			set_variable = { name = iw_ai_priority value = 1 }
+			if = {
+				limit = {
+					scope:iw_ai_operator = {
+						NOT = { in_default = yes }
+						NOT = { has_modifier = declared_bankruptcy }
+					}
+				}
+				var:iw_target ?= {
+					save_scope_as = iw_ai_target
+					if = {
+						limit = {
+							scope:iw_ai_operator = {
+								country_rank >= rank_value:great_power
+								has_war_with = scope:iw_ai_target
+							}
+						}
+						scope:iw_op = { set_variable = { name = iw_ai_priority value = 3 } }
+					}
+					else_if = {
+						limit = {
+							scope:iw_ai_operator = {
+								has_diplomatic_pact = { who = scope:iw_ai_target type = rivalry }
+							}
+						}
+						scope:iw_op = { set_variable = { name = iw_ai_priority value = 2 } }
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { has_variable = iw_priority } }
+				set_variable = { name = iw_priority value = 1 }
+			}
+			# Up, at most twice
+			if = {
+				limit = {
+					var:iw_priority < var:iw_ai_priority
+					scope:iw_ai_operator = { covert_possible_priority_up = yes }
+				}
+				change_variable = { name = iw_priority add = 1 }
+			}
+			if = {
+				limit = {
+					var:iw_priority < var:iw_ai_priority
+					scope:iw_ai_operator = { covert_possible_priority_up = yes }
+				}
+				change_variable = { name = iw_priority add = 1 }
+			}
+			# Down, at most twice
+			if = {
+				limit = {
+					var:iw_priority > var:iw_ai_priority
+					scope:iw_ai_operator = { covert_possible_priority_down = yes }
+				}
+				change_variable = { name = iw_priority subtract = 1 }
+			}
+			if = {
+				limit = {
+					var:iw_priority > var:iw_ai_priority
+					scope:iw_ai_operator = { covert_possible_priority_down = yes }
+				}
+				change_variable = { name = iw_priority subtract = 1 }
+			}
+			remove_variable = iw_ai_priority
+		}
+	}
+	covert_refresh_priority_cost = yes
+}
+
 # ============================================================================
 # EXPOSURE BLOWBACK
 # ============================================================================

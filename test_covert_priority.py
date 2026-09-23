@@ -272,5 +272,26 @@ class StepperTests(unittest.TestCase):
             self.assertIn(" %s:" % key, loc, key)
 
 
+class AITests(unittest.TestCase):
+    def test_ai_steps_through_the_shared_gates(self):
+        block = _top_level_block(_text(EFFECTS), "covert_ai_manage_priorities = {")
+        self.assertIn("covert_possible_priority_up = yes", block)
+        self.assertIn("covert_possible_priority_down = yes", block)
+        self.assertIn("covert_refresh_priority_cost = yes", block)
+        self.assertIn("rank_value:great_power", block)
+        self.assertIn("type = rivalry", block)
+        self.assertIn("in_default = yes", block)
+        self.assertIn("declared_bankruptcy", block)
+
+    def test_pulse_runs_it_for_the_ai_before_the_sync(self):
+        body = _text(JE)
+        pulse = body[body.index("on_monthly_pulse = {"):]
+        call = pulse.index("covert_ai_manage_priorities = yes")
+        sync = pulse.index("covert_ops_sync_all = yes")
+        self.assertLess(call, sync, "the sync must see the new priorities")
+        guard = pulse.rfind("is_player = no", 0, call)
+        self.assertNotEqual(guard, -1)
+
+
 if __name__ == "__main__":
     unittest.main()
