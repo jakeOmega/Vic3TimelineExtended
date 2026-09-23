@@ -30,7 +30,7 @@
  country_covert_defense_economic_add:0 "Economic Covert Defense"
  country_covert_defense_economic_add_desc:0 "Additional defense against economic [concept_covert_operations] such as financial subversion, industrial espionage and space programme espionage."
  country_covert_defense_ideological_add:0 "Ideological Covert Defense"
- country_covert_defense_ideological_add_desc:0 "Additional defense against ideological [concept_covert_operations] such as election interference, influence campaigns, ideological subversion, destabilization and regime change."
+ country_covert_defense_ideological_add_desc:0 "Additional defense against ideological [concept_covert_operations] such as election interference, influence campaigns, ideological subversion, destabilization, regime change and the cultivation of assets."
  country_covert_defense_military_add:0 "Military Covert Defense"
  country_covert_defense_military_add_desc:0 "Additional defense against military [concept_covert_operations] such as military espionage, communications disruption, [concept_infrastructure] sabotage and nuclear programme sabotage."
  country_covert_operation_efficiency_mult:0 "Covert Operation Efficiency"

@@ -1088,6 +1088,16 @@ covert_net_tick_gain = {
 		limit = { has_variable = iw_net_tc_mult }
 		multiply = var:iw_net_tc_mult
 	}
+	# Cultivate assets (slice 6): flagged onto the network by covert_nets_sync
+	# step 2 when one runs against its target. A network from before slice 6
+	# has no flag until its first pass; missing reads as x1.
+	if = {
+		limit = {
+			has_variable = iw_net_cultivating
+			var:iw_net_cultivating = 1
+		}
+		multiply = covert_net_cultivate_mult
+	}
 }
 
 

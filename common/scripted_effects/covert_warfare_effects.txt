@@ -34,6 +34,7 @@
 #           iw_net_trend            1 growing, 2 decaying, 0 holding at max (display)
 #           iw_net_head_start_offer months of head start a new operation would get
 #           iw_net_tc_mult          operator's Tradecraft growth multiplier, copied each tick (slice 5)
+#           iw_net_cultivating      1 while a cultivate-assets operation runs against the target (slice 6)
 #
 # listed in the operator's `iw_nets`. It outlives the operations: that is the
 # point. Operations read it at creation (head start), at every detection
@@ -414,7 +415,8 @@ covert_net_loss = {
 # which also runs on every funding and priority click and would grow networks
 # per click.
 #   1. Ensure a network exists for every operation's target.
-#   2. Count operations per network (zero every count, then walk iw_ops once).
+#   2. Count operations per network (zero every count, then walk iw_ops once),
+#      and flag networks a cultivate-assets operation feeds (slice 6).
 #   3. Tick: grow with >= 1 operation, otherwise decay (halved at funding
 #      >= covert_net_maintain_funding_level); restate trend and display
 #      capital (the head-start offer follows every write, in covert_net_clamp).
@@ -447,6 +449,7 @@ covert_nets_sync = {
 		every_in_list = {
 			variable = iw_nets
 			set_variable = { name = iw_net_ops value = 0 }
+			set_variable = { name = iw_net_cultivating value = 0 }
 		}
 		if = {
 			limit = { has_variable_list = iw_ops }
@@ -459,6 +462,26 @@ covert_nets_sync = {
 							variable = iw_nets
 							limit = { var:iw_target ?= scope:iw_net_count_tgt }
 							change_variable = { name = iw_net_ops add = 1 }
+						}
+					}
+				}
+			}
+		}
+		# Cultivate assets (slice 6): flag the network it feeds, for
+		# covert_net_tick_gain's x covert_net_cultivate_mult. It is also counted
+		# above as an operation like any other.
+		if = {
+			limit = { has_variable_list = iw_ops }
+			every_in_list = {
+				variable = iw_ops
+				limit = { has_tag = iw_op_cultivate_assets }
+				var:iw_target ?= {
+					save_scope_as = iw_net_cultivate_tgt
+					scope:iw_net_operator = {
+						random_in_list = {
+							variable = iw_nets
+							limit = { var:iw_target ?= scope:iw_net_cultivate_tgt }
+							set_variable = { name = iw_net_cultivating value = 1 }
 						}
 					}
 				}
@@ -648,7 +671,8 @@ covert_tradecraft_refresh_bonus = {
 #   1. Seed if missing.
 #   2. Weigh the running operations into iw_tradecraft_ops: 1 for each at
 #      establishing or better, covert_tradecraft_prep_gain_fraction for each
-#      still preparatory; the total capped at covert_tradecraft_ops_counted.
+#      still preparatory and for every cultivate-assets operation (slice 6);
+#      the total capped at covert_tradecraft_ops_counted.
 #   3. Gain if anything counted; else decay if no operation runs at all.
 #   4. Refresh the tier bonus.
 # Scope: operator country
@@ -661,7 +685,13 @@ covert_tradecraft_monthly = {
 		every_in_list = {
 			variable = iw_ops
 			if = {
-				limit = { covert_op_is_established = yes }
+				limit = {
+					covert_op_is_established = yes
+					# Cultivate assets (slice 6) always counts at the
+					# preparatory fraction: cheap and near-riskless, it must
+					# not be a way to farm experience.
+					NOT = { has_tag = iw_op_cultivate_assets }
+				}
 				scope:iw_tc_operator = { change_variable = { name = iw_tradecraft_ops add = 1 } }
 			}
 			else = {
@@ -804,6 +834,7 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = regime_change ACTION = covert_regime_change_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 9 }
 	covert_op_sync = { TYPE = nuclear_sabotage ACTION = covert_nuclear_sabotage_action DEFENSE_MOD = country_covert_defense_military_add CODE = 10 }
 	covert_op_sync = { TYPE = space_espionage ACTION = covert_space_espionage_action DEFENSE_MOD = country_covert_defense_economic_add CODE = 11 }
+	covert_op_sync = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 12 }
 	# The sync reaps lapsed containers without going through covert_op_destroy.
 	covert_refresh_priority_cost = yes
 }
@@ -1114,6 +1145,9 @@ covert_ops_apply_all_phase_effects = {
 		#      notify them ----
 		covert_op_apply_self_effect = { TYPE = space_espionage MODIFIER = covert_space_espionage }
 		covert_op_apply_target_effect = { TYPE = space_espionage MODIFIER = covert_space_espionage_detected }
+
+		# Cultivate assets (slice 6) is deliberately absent: it acts on
+		# nothing but the network (covert_nets_sync / covert_net_tick_gain).
 
 		# The applied-priority snapshot just moved: recharge upkeep from it.
 		covert_refresh_priority_cost = yes

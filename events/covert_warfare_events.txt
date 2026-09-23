@@ -199,6 +199,10 @@ covert_warfare.1 = {
 				limit = { var:iw_burned_type_code = 11 }
 				covert_op_burn = { TYPE = space_espionage ACTION = covert_space_espionage_action TARGET = scope:detected_by_country CODE = 11 }
 			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 12 }
+				covert_op_burn = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action TARGET = scope:detected_by_country CODE = 12 }
+			}
 
 			# The agency's experience takes the hit (slice 5), by tier. Here,
 			# while iw_burned_type_code still exists; removed further down.
@@ -261,6 +265,13 @@ covert_warfare.2 = {
 			has_modifier = covert_regime_change
 			has_modifier = covert_nuclear_sabotage
 			has_modifier = covert_space_espionage_detected
+			# Cultivate assets (slice 6) leaves nothing on its target, so its
+			# burn is keyed on the record covert_op_burn has just written
+			# (covert_warfare.2 fires only from there).
+			AND = {
+				has_variable = iw_last_exposed_type
+				var:iw_last_exposed_type = 12
+			}
 		}
 		NOT = { has_variable = iw_defender_event_cooldown }
 	}

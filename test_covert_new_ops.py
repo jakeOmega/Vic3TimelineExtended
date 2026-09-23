@@ -230,5 +230,69 @@ class SpaceEspionageTests(unittest.TestCase):
         self.assertIn("covert_op_apply_self_effect = { TYPE = space_espionage MODIFIER = covert_space_espionage }", block)
 
 
+class CultivateAssetsTests(unittest.TestCase):
+    def setUp(self):
+        self.block = _top_level_block(_text(ACTIONS), "covert_cultivate_assets_action = {")
+
+    def test_no_modifiers_of_its_own(self):
+        self.assertNotIn("\ncovert_cultivate_assets = {", _text(STATIC))
+
+    def test_gates(self):
+        possible = _section(self.block, "possible = {")
+        self.assertIn("NOT = { scope:target_country = { is_subject_of = ROOT } }", possible)
+        self.assertNotIn("type = rivalry", possible)
+        self.assertNotIn("covert_tradecraft", possible)
+        self.assertIn("covert_action_valid_target = yes", _requirements(self.block))
+
+    def test_ai_builds_thin_networks(self):
+        will = _section(self.block, "will_propose = {")
+        self.assertIn(
+            "covert_net_weaker_than = { TARGET = scope:target_country STRENGTH = covert_cultivate_ai_net_ceiling }",
+            will,
+        )
+        pred = _top_level_block(_text(TRIGGERS), "covert_net_weaker_than = {")
+        self.assertIn("has_variable_list = iw_nets", pred)
+        self.assertIn("var:iw_net_strength >= $STRENGTH$", pred)
+
+    def test_cultivate_multiplier_is_guarded_and_zeroed(self):
+        gain = _top_level_block(_text(VALUES), "covert_net_tick_gain = {")
+        self.assertIn("has_variable = iw_net_cultivating", gain)
+        self.assertIn("multiply = covert_net_cultivate_mult", gain)
+        sync = _top_level_block(_text(EFFECTS), "covert_nets_sync = {")
+        count = sync[sync.index("# ---- 2. Count ----"): sync.index("# ---- 3. Tick ----")]
+        self.assertIn("set_variable = { name = iw_net_cultivating value = 0 }", count)
+        self.assertIn("has_tag = iw_op_cultivate_assets", count)
+        self.assertIn("set_variable = { name = iw_net_cultivating value = 1 }", count)
+
+    def test_tradecraft_counts_it_at_the_preparatory_rate(self):
+        # The full-rate branch's limit must exclude it (comments may sit between).
+        block = _top_level_block(_text(EFFECTS), "covert_tradecraft_monthly = {")
+        self.assertRegex(
+            block,
+            r"covert_op_is_established = yes(?:\s*#[^\n]*)*\s*NOT = \{ has_tag = iw_op_cultivate_assets \}",
+        )
+
+    def test_cultivate_assets_is_pinned_at_priority_1(self):
+        # The stepper and the AI both step through covert_possible_priority_up.
+        block = _top_level_block(_text(TRIGGERS), "covert_possible_priority_up = {")
+        self.assertIn("scope:iw_op ?= { NOT = { has_tag = iw_op_cultivate_assets } }", block)
+        gui = _text(WIDGET)
+        stepper = gui[gui.index("type covert_op_priority_stepper = flowcontainer {"):]
+        stepper = stepper[: stepper.index("textbox = {")]
+        self.assertIn("Not( ScriptContainer.HasTag('iw_op_cultivate_assets') )", stepper)
+
+    def test_its_row_says_what_it_does_instead_of_phase_and_priority(self):
+        gui = _text(WIDGET)
+        for key in ("je_iw_op_row_phase_prep", "je_iw_op_row_phase_est", "je_iw_op_row_phase_full",
+                    "je_iw_op_row_priority_1", "je_iw_op_row_priority_2", "je_iw_op_row_priority_3"):
+            line = gui[: gui.index('text = "%s"' % key)].rsplit("visible = ", 1)[1]
+            self.assertIn("Not( ScriptContainer.HasTag('iw_op_cultivate_assets') )", line, key)
+        self.assertIn(
+            "visible = \"[ScriptContainer.HasTag('iw_op_cultivate_assets')]\"\n\t\t\ttext = \"je_iw_op_row_cultivate_detail\"",
+            gui,
+        )
+        self.assertIn("covert_net_cultivate_mult", _loc()["je_iw_op_row_cultivate_detail"])
+
+
 if __name__ == "__main__":
     unittest.main()

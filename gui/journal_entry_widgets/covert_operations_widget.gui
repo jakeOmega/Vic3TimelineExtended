@@ -177,7 +177,9 @@ types covert_operations_widget_types
 		direction = horizontal
 		spacing = 3
 		margin_left = 12
-		visible = "[GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+		### Hidden on a cultivate-assets row: its priority is fixed at 1
+		### (covert_possible_priority_up), and the row says so instead.
+		visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 
 		textbox = {
 			text = "je_iw_priority_stepper_label"
@@ -286,6 +288,10 @@ types covert_operations_widget_types
 			visible = "[ScriptContainer.HasTag('iw_op_space_espionage')]"
 			text = "je_iw_op_row_space_espionage"
 		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_cultivate_assets')]"
+			text = "je_iw_op_row_cultivate_assets"
+		}
 
 		# ---- Phase, and how long until the next one ----
 		# iw_phase is written by covert_op_refresh_phase, so the 6 / 12 month
@@ -293,30 +299,37 @@ types covert_operations_widget_types
 		# iw_ops carries it, which covers containers restored from a save made
 		# before this widget shipped — they get it at the first monthly pulse.
 		widget_je_covert_operation_detail = {
-			visible = "[And( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)1') )]"
+			visible = "[And3( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)1'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 			text = "je_iw_op_row_phase_prep"
 		}
 		widget_je_covert_operation_detail = {
-			visible = "[And( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)2') )]"
+			visible = "[And3( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)2'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 			text = "je_iw_op_row_phase_est"
 		}
 		widget_je_covert_operation_detail = {
-			visible = "[And( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)3') )]"
+			visible = "[And3( GetScriptedGui('covert_ops_phase_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_phase'), '(CFixedPoint)3'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 			text = "je_iw_op_row_phase_full"
+		}
+
+		# ---- Cultivate assets (slice 6): no phase effect and no priority to
+		#      show; one line saying what it does instead ----
+		widget_je_covert_operation_detail = {
+			visible = "[ScriptContainer.HasTag('iw_op_cultivate_assets')]"
+			text = "je_iw_op_row_cultivate_detail"
 		}
 
 		# ---- Priority: a stepper, then what the current level means ----
 		covert_op_priority_stepper = { }
 		widget_je_covert_operation_detail = {
-			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)1') )]"
+			visible = "[And3( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)1'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 			text = "je_iw_op_row_priority_1"
 		}
 		widget_je_covert_operation_detail = {
-			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)2') )]"
+			visible = "[And3( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)2'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 			text = "je_iw_op_row_priority_2"
 		}
 		widget_je_covert_operation_detail = {
-			visible = "[And( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)3') )]"
+			visible = "[And3( GetScriptedGui('covert_ops_priority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_priority'), '(CFixedPoint)3'), Not( ScriptContainer.HasTag('iw_op_cultivate_assets') ) )]"
 			text = "je_iw_op_row_priority_3"
 		}
 
@@ -428,6 +441,14 @@ types covert_operations_widget_types
 			}
 			blockoverride "sd_visible" {
 				visible = "[ScriptContainer.HasTag('iw_op_space_espionage')]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_cultivate_assets_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[ScriptContainer.HasTag('iw_op_cultivate_assets')]"
 			}
 		}
 	}
