@@ -6079,6 +6079,17 @@ covert_regime_change = {
 	political_movement_radicalism_add = 0.05
 }
 
+# Applied to TARGET while a nuclear-programme sabotage operation runs (covert
+# slice 6), scaled by phase x priority. je_nuclear_program multiplies progress
+# by (1 + this): x0.75 at base strength, x0.2 at the strongest operation
+# (fully operational, priority 3), never zero. The modifier type is
+# script_only, so the tooltip lists no effect; covert_nuclear_sabotage_desc
+# states it instead.
+covert_nuclear_sabotage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_nuclear_program_progress_mult = -0.25
+}
+
 # ============================================================================
 # CULTURAL HEGEMONY EVENTS - Timed modifiers from cultural hegemony events
 # ============================================================================

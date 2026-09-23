@@ -16,6 +16,7 @@ is_covert_operation_pact = {
 		is_diplomatic_action_type = covert_ideological_subversion_action
 		is_diplomatic_action_type = covert_destabilization_action
 		is_diplomatic_action_type = covert_regime_change_action
+		is_diplomatic_action_type = covert_nuclear_sabotage_action
 	}
 }
 
@@ -244,6 +245,7 @@ covert_code_tier_severe = {
 		var:$VAR$ = 7
 		var:$VAR$ = 8
 		var:$VAR$ = 9
+		var:$VAR$ = 10
 	}
 }
 

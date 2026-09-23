@@ -246,6 +246,7 @@
  je_iw_op_row_comms_disruption:0 "• #R Comms Disruption#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
  je_iw_op_row_destabilization:0 "• #R Destabilization#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
  je_iw_op_row_regime_change:0 "• #R Regime Change#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
+ je_iw_op_row_nuclear_sabotage:0 "• #R Nuclear Sabotage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
  je_iw_op_row_detection:0 "@warning!#R [ScriptContainer.GetVariableValue('iw_detect')|1]%#!/mo [concept_operation_detection]: #v [JournalEntry.GetCountry.MakeScope.ScriptValue('intelligence_capacity_total')|0]#! vs #R [ScriptContainer.GetVariableValue('iw_tgt_ic')|0]#! IC + #R [ScriptContainer.GetVariableValue('iw_tgt_td')|0]#! type"
  je_iw_op_row_dormant:0 "@warning! #R Dormant#! - funding is at zero, so this operation is doing nothing."
  je_iw_op_row_election_interference:0 "• #Y Election Interference#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"

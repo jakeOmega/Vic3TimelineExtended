@@ -278,6 +278,10 @@ types covert_operations_widget_types
 			visible = "[ScriptContainer.HasTag('iw_op_regime_change')]"
 			text = "je_iw_op_row_regime_change"
 		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_nuclear_sabotage')]"
+			text = "je_iw_op_row_nuclear_sabotage"
+		}
 
 		# ---- Phase, and how long until the next one ----
 		# iw_phase is written by covert_op_refresh_phase, so the 6 / 12 month
@@ -404,6 +408,14 @@ types covert_operations_widget_types
 			}
 			blockoverride "sd_visible" {
 				visible = "[ScriptContainer.HasTag('iw_op_regime_change')]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_nuclear_sabotage_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[ScriptContainer.HasTag('iw_op_nuclear_sabotage')]"
 			}
 		}
 	}

@@ -1528,3 +1528,168 @@ covert_regime_change_action = {
 		}
 	}
 }
+
+# ---- PEACETIME: Nuclear Programme Sabotage (slice 6) ----
+# Infiltrate a foreign nuclear weapons programme and slow it: faulty parts,
+# failed centrifuges, missing scientists. Severe tier. Needs a Seasoned agency
+# to launch; lapses when the target's programme stops.
+covert_nuclear_sabotage_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_nuclear_sabotage_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+		covert_op_start = { TYPE = nuclear_sabotage DEFENSE_MOD = country_covert_defense_military_add CODE = 10 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_nuclear_sabotage_tt
+			covert_ops_type_below_cap = { TYPE = covert_nuclear_sabotage_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_nuclear_sabotage_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		# Allowed during war: no has_war guard
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_target_nuclear_programme_tt
+			scope:target_country = { nuclear_program_is_proliferating = yes }
+		}
+		custom_tooltip = {
+			text = iw_severe_ops_need_tradecraft_tt
+			covert_tradecraft_unlocks_severe_ops = yes
+		}
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	pact = {
+		cost = 0
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		# The Tradecraft gate is launch-only: a running operation survives the
+		# agency's score falling below Seasoned.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_nuclear_programme_tt
+					scope:target_country = { nuclear_program_is_proliferating = yes }
+				}
+			}
+		}
+
+		# Allowed during war: do not auto-break when war starts
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_no_truce_tt
+					NOT = { has_truce_with = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = nuclear_sabotage } }
+		auto_break_effect = { covert_op_end = { TYPE = nuclear_sabotage } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.03
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.25
+			}
+		}
+
+		will_propose = {
+			scope:target_country = { nuclear_program_is_proliferating = yes }
+			OR = {
+				has_modifier = nuclear_power
+				country_rank >= rank_value:great_power
+			}
+			OR = {
+				has_diplomatic_pact = { who = scope:target_country type = rivalry }
+				has_attitude = { who = scope:target_country attitude = antagonistic }
+			}
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+		}
+
+		propose_score = {
+			value = 5
+			if = {
+				limit = {
+					scope:target_country = {
+						has_variable = nuclear_weapon_program_progress
+						var:nuclear_weapon_program_progress >= 75
+					}
+				}
+				add = 10
+			}
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 5
+			}
+		}
+	}
+}

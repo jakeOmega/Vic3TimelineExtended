@@ -191,6 +191,10 @@ covert_warfare.1 = {
 				limit = { var:iw_burned_type_code = 9 }
 				covert_op_burn = { TYPE = regime_change ACTION = covert_regime_change_action TARGET = scope:detected_by_country CODE = 9 }
 			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 10 }
+				covert_op_burn = { TYPE = nuclear_sabotage ACTION = covert_nuclear_sabotage_action TARGET = scope:detected_by_country CODE = 10 }
+			}
 
 			# The agency's experience takes the hit (slice 5), by tier. Here,
 			# while iw_burned_type_code still exists; removed further down.
@@ -251,6 +255,7 @@ covert_warfare.2 = {
 			has_modifier = covert_industrial_espionage_detected
 			has_modifier = covert_military_espionage_detected
 			has_modifier = covert_regime_change
+			has_modifier = covert_nuclear_sabotage
 		}
 		NOT = { has_variable = iw_defender_event_cooldown }
 	}

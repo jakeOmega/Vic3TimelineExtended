@@ -141,5 +141,56 @@ class RegimeChangeTests(unittest.TestCase):
         self.assertIn("coup", _loc()["covert_regime_change_desc"].lower())
 
 
+class NuclearSabotageTests(unittest.TestCase):
+    def setUp(self):
+        self.block = _top_level_block(_text(ACTIONS), "covert_nuclear_sabotage_action = {")
+
+    def test_proliferating_trigger(self):
+        block = _top_level_block(_text(NUKE_TRIGGERS), "nuclear_program_is_proliferating = {")
+        self.assertIn("has_variable = nuclear_weapon_program_progress", block)
+        self.assertIn("has_variable = nuclear_weapons_program_funding", block)
+        self.assertIn("var:nuclear_weapons_program_funding >= 1", block)
+        self.assertIn("modifier:country_nuclear_program_pause_bool = yes", block)
+        self.assertIn("modifier:country_nuclear_disarmament_bool = yes", block)
+
+    def test_launch_gates(self):
+        possible = _section(self.block, "possible = {")
+        self.assertIn("scope:target_country = { nuclear_program_is_proliferating = yes }", possible)
+        self.assertIn("covert_tradecraft_unlocks_severe_ops = yes", possible)
+
+    def test_severe_gate_is_launch_only(self):
+        reqs = _requirements(self.block)
+        self.assertNotIn("covert_tradecraft", reqs)
+        self.assertIn("nuclear_program_is_proliferating = yes", reqs)
+
+    def test_ai_values_a_programme_near_completion(self):
+        score = _section(self.block, "propose_score = {")
+        self.assertIn("var:nuclear_weapon_program_progress >= 75", score)
+        self.assertIn("has_variable = nuclear_weapon_program_progress", score)
+
+    def test_nuclear_sabotage_never_stops_progress(self):
+        # je_nuclear_program multiplies progress by (1 + mult); at the largest
+        # phase x priority multiplier the operation must leave it positive.
+        static = _top_level_block(_text(STATIC), "covert_nuclear_sabotage = {")
+        mult = float(re.search(r"country_nuclear_program_progress_mult = (-?[\d.]+)", static).group(1))
+        self.assertEqual(mult, -0.25)
+        values = _text(VALUES)
+        pri3 = float(re.search(r"(?m)^covert_op_priority_3_effect_mult = ([\d.]+)$", values).group(1))
+        full = float(re.search(r"(?m)^covert_op_phase_full_mult = ([\d.]+)$", values).group(1))
+        self.assertGreater(1 + mult * pri3 * full, 0)
+
+    def test_rate_tooltip_does_not_credit_sabotage_to_aid(self):
+        # nuclear_program_display_aid_bonus is the whole progress mult, which
+        # now carries sabotage too: the aid-only line must not fire then.
+        block = _top_level_block(_text(NUKE_CUSTOM_LOC), "nuclear_program_aid_note = {")
+        self.assertLess(
+            block.index("has_modifier = covert_nuclear_sabotage"),
+            block.index("localization_key = nuclear_program_aid_note_active"),
+        )
+        loc = _loc()
+        for key in ("nuclear_program_aid_note_sabotaged", "nuclear_program_sabotage_note"):
+            self.assertIn("nuclear_program_display_aid_bonus", loc[key])
+
+
 if __name__ == "__main__":
     unittest.main()
