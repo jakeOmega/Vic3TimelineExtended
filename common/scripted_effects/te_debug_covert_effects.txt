@@ -162,15 +162,21 @@ te_debug_covert_force_detection = {
 # monthly pulse (covert_apply_priority_change deliberately doesn't re-apply
 # them on the click — see its own comment). Still works if the stepper's
 # saved scope turns out not to arrive.
+# The pick is held as scope:iw_debug_op and re-saved as scope:iw_op before
+# each step: a step runs covert_refresh_funding_state -> covert_ops_sync_all,
+# whose covert_op_refresh_detection re-saves scope:iw_op per container, so
+# without the re-save the second step would move a different operation.
 # Scope: country
 te_debug_covert_max_priority = {
 	if = {
 		limit = { has_variable_list = iw_ops }
 		random_in_list = {
 			variable = iw_ops
-			save_scope_as = iw_op
+			save_scope_as = iw_debug_op
 		}
+		scope:iw_debug_op = { save_scope_as = iw_op }
 		covert_effect_priority_up = yes
+		scope:iw_debug_op = { save_scope_as = iw_op }
 		covert_effect_priority_up = yes
 	}
 }

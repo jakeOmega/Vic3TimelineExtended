@@ -197,10 +197,16 @@ covert_op_burn = {
 # Recompute iw_priority_cost_sum: each running operation's share of the covert
 # budget (1 at priority 1, covert_op_priority_2/3_cost_mult above). The upkeep
 # values read this instead of the pact count, so a priority-3 operation costs
-# 2.4 shares. Called from covert_op_create and covert_op_destroy (every path
+# 2.4 shares. Each operation is weighted by the HIGHER of its current priority
+# and the priority its running effects were applied at (iw_priority_applied,
+# via covert_op_charged_priority_at_least): raising priority raises upkeep on
+# the click, but lowering it only lowers upkeep once the next pulse re-applies
+# the effects at the lower level, so a raise-before-pulse / lower-after dodge
+# buys nothing. Called from covert_op_create and covert_op_destroy (every path
 # that starts or ends an operation goes through one of them, so upkeep moves
 # the same day), from the tail of covert_ops_sync_all (which also reaps
-# containers directly), and after a priority step.
+# containers directly), after a priority step, and at the end of
+# covert_ops_apply_all_phase_effects (the snapshot has just moved).
 # Accumulates with set_variable's inline value block: change_variable does not
 # reliably resolve a script-value operand.
 # Scope: operator country
@@ -212,13 +218,13 @@ covert_refresh_priority_cost = {
 		every_in_list = {
 			variable = iw_ops
 			if = {
-				limit = { covert_op_priority_at_least = { N = 3 } }
+				limit = { covert_op_charged_priority_at_least = { N = 3 } }
 				scope:iw_cost_operator = {
 					set_variable = { name = iw_priority_cost_sum value = { value = var:iw_priority_cost_sum add = covert_op_priority_3_cost_mult } }
 				}
 			}
 			else_if = {
-				limit = { covert_op_priority_at_least = { N = 2 } }
+				limit = { covert_op_charged_priority_at_least = { N = 2 } }
 				scope:iw_cost_operator = {
 					set_variable = { name = iw_priority_cost_sum value = { value = var:iw_priority_cost_sum add = covert_op_priority_2_cost_mult } }
 				}
@@ -474,12 +480,29 @@ covert_op_apply_self_effect = {
 
 # Master effect: apply ALL 9 operation types' phase-based effects.
 # Only runs if funding > 0, after covert_ops_sync_all. Called monthly from the
-# JE pulse and after a priority step.
+# JE pulse (a priority step deliberately does not call it — see
+# covert_apply_priority_change). Snapshots each operation's priority as
+# iw_priority_applied first and refreshes the priority-weighted upkeep last.
 # The helpers it calls iterate iw_ops unguarded; the has_variable_list check here covers them.
 # Scope: country (ROOT = JE owner)
 covert_ops_apply_all_phase_effects = {
 	if = {
 		limit = { has_variable_list = iw_ops }
+		# Snapshot the priority these effects are applied at. Upkeep charges the
+		# higher of this and the current priority (covert_refresh_priority_cost),
+		# so lowering priority after the pulse cannot keep a stronger effect
+		# running on a cheaper budget.
+		every_in_list = {
+			variable = iw_ops
+			if = {
+				limit = { has_variable = iw_priority }
+				set_variable = { name = iw_priority_applied value = var:iw_priority }
+			}
+			else = {
+				set_variable = { name = iw_priority_applied value = 1 }
+			}
+		}
+
 		# ---- Election Interference: country modifier on TARGET ----
 		covert_op_apply_target_effect = { TYPE = election_interference MODIFIER = covert_election_interference }
 
@@ -604,6 +627,9 @@ covert_ops_apply_all_phase_effects = {
 				covert_op_add_scaled_modifier = { MODIFIER = covert_destabilization_general MONTHS = 3 }
 			}
 		}
+
+		# The applied-priority snapshot just moved: recharge upkeep from it.
+		covert_refresh_priority_cost = yes
 	}
 }
 

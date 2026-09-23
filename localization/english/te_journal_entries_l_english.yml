@@ -247,7 +247,7 @@
  je_iw_op_row_infrastructure_sabotage:0 "• #R [concept_infrastructure] Sabotage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
  je_iw_op_row_military_espionage:0 "• #G Military Espionage#! vs [ScriptContainer.MakeScope.Var('iw_target_capital').GetState.GetCountry.GetName]"
  je_iw_op_row_phase_est:0 "#Y Establishing#! - working at base strength; [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months until fully operational"
- je_iw_op_row_phase_full:0 "#G Fully operational#! - working at double strength"
+ je_iw_op_row_phase_full:0 "#G Fully operational#! - working at full strength"
  je_iw_op_row_phase_prep:0 "#R Preparatory#! - no effect yet; [ScriptContainer.GetVariableValue('iw_phase_months_left')|0] months until it establishes"
  je_iw_op_row_priority_1:0 "Priority #v 1#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_max')|0] - base strength, one share of the budget"
  je_iw_op_row_priority_2:0 "Priority #v 2#! of [JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_max')|0] - effect #G x[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_2_effect_mult')|2]#!, budget share #R x[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_2_cost_mult')|1]#!, detection #R +[JournalEntry.GetCountry.MakeScope.ScriptValue('covert_op_priority_2_detect_display')|0]#! points"

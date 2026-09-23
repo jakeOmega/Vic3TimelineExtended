@@ -281,7 +281,7 @@ covert_operation_cost_mult = {
 }
 
 # Detection chance per month for active operations
-# Factors: base risk, funding reduction, target counterintelligence (IC + type defense), attacker efficiency
+# Factors: base risk, funding reduction, target counterintelligence (IC + type defense), operation priority, attacker efficiency
 # Formula: raw = base - funding_reduction + target_defense_penalty + priority_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
 # var:target_max_ic and var:target_type_defense must be set before evaluating.
 covert_operation_detection_chance = {

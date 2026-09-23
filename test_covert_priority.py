@@ -180,6 +180,29 @@ class UpkeepTests(unittest.TestCase):
         self.assertIn("covert_op_priority_2_cost_mult", block)
         self.assertNotIn("change_variable", block)
 
+    def test_upkeep_charges_the_higher_of_current_and_applied_priority(self):
+        # Lowering priority after the pulse must not keep a stronger effect
+        # running on a cheaper budget.
+        body = _text(EFFECTS)
+        refresh = _top_level_block(body, "covert_refresh_priority_cost = {")
+        self.assertIn("covert_op_charged_priority_at_least", refresh)
+        self.assertNotIn("covert_op_priority_at_least = {", refresh)
+        apply_all = _top_level_block(body, "covert_ops_apply_all_phase_effects = {")
+        self.assertIn("name = iw_priority_applied value = var:iw_priority", apply_all)
+        self.assertIn("covert_refresh_priority_cost = yes", apply_all)
+        self.assertLess(
+            apply_all.index("iw_priority_applied"),
+            apply_all.index("covert_op_apply_target_effect"),
+            "the snapshot must precede the effects",
+        )
+        self.assertGreater(
+            apply_all.rindex("covert_refresh_priority_cost = yes"),
+            apply_all.rindex("covert_op_add_scaled_modifier"),
+            "the upkeep refresh must follow the effects",
+        )
+        trigger = _top_level_block(_text(TRIGGERS), "covert_op_charged_priority_at_least = {")
+        self.assertIn("has_variable = iw_priority_applied", trigger)
+
     def test_every_path_that_adds_or_ends_an_operation_refreshes_the_sum(self):
         body = _text(EFFECTS)
         for name in ("covert_op_create", "covert_op_destroy", "covert_ops_sync_all"):
@@ -295,8 +318,12 @@ class AITests(unittest.TestCase):
 
 class HarnessTests(unittest.TestCase):
     def test_the_harness_changes_priority_through_the_shipping_effect(self):
+        # Each step runs covert_ops_sync_all, whose detection refresh re-saves
+        # scope:iw_op per container, so the pick is held under its own name
+        # and re-saved before every step.
         block = _top_level_block(_text(DEBUG_EFFECTS), "te_debug_covert_max_priority = {")
-        self.assertIn("save_scope_as = iw_op", block)
+        self.assertIn("save_scope_as = iw_debug_op", block)
+        self.assertEqual(block.count("scope:iw_debug_op = { save_scope_as = iw_op }"), 2)
         self.assertEqual(block.count("covert_effect_priority_up = yes"), 2)
 
     def test_the_operations_console_offers_it(self):

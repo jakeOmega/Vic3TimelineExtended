@@ -63,6 +63,21 @@ covert_op_priority_at_least = {
 	var:iw_priority >= $N$
 }
 
+# True when the priority upkeep is charged at is at least $N$: the higher of
+# the current priority and the one the running effects were applied at
+# (iw_priority_applied, snapshot by covert_ops_apply_all_phase_effects).
+# Parameters: $N$ = 2 or 3
+# Scope: covert operation container
+covert_op_charged_priority_at_least = {
+	OR = {
+		covert_op_priority_at_least = { N = $N$ }
+		AND = {
+			has_variable = iw_priority_applied
+			var:iw_priority_applied >= $N$
+		}
+	}
+}
+
 # ============================================================================
 # FUNDING CONTROLS — shared eligibility
 # ============================================================================
