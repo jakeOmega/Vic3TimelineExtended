@@ -6,6 +6,7 @@
 # Fired by covert_ops_roll_detection_all with the burned operation in
 # scope:iw_burned_op. The pact and container are removed in after; the
 # attacker gains infamy and the target is notified.
+# after also charges the agency's Tradecraft by the burned operation's tier.
 # ============================================================================
 
 covert_warfare.1 = {
@@ -186,6 +187,10 @@ covert_warfare.1 = {
 				limit = { var:iw_burned_type_code = 8 }
 				covert_op_burn = { TYPE = destabilization ACTION = covert_destabilization_action TARGET = scope:detected_by_country CODE = 8 }
 			}
+
+			# The agency's experience takes the hit (slice 5), by tier. Here,
+			# while iw_burned_type_code still exists; removed further down.
+			covert_tradecraft_burn_loss = yes
 
 			scope:detected_by_country = {
 				trigger_event = { id = covert_warfare.2 }

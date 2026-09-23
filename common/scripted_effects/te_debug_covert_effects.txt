@@ -210,3 +210,23 @@ te_debug_covert_tick_nets = {
 	covert_nets_sync = yes
 	covert_ops_sync_all = yes
 }
+
+# Put the agency's Tradecraft at an exact score (slice 5) and re-apply the tier
+# bonus at once, so the command centre's line, the capacity breakdown and the
+# unlocks can be checked without months of play. Records no reason: the line
+# keeps showing whatever last moved the score for real.
+# Parameters: $VALUE$ = 0 .. covert_tradecraft_max
+# Scope: country
+te_debug_covert_set_tradecraft = {
+	covert_tradecraft_init = yes
+	set_variable = { name = iw_tradecraft value = $VALUE$ }
+	covert_tradecraft_clamp = yes
+	covert_tradecraft_refresh_bonus = yes
+}
+
+# One monthly Tradecraft pass without waiting for the pulse (gain, or idle
+# decay with no operations running).
+# Scope: country
+te_debug_covert_tick_tradecraft = {
+	covert_tradecraft_monthly = yes
+}

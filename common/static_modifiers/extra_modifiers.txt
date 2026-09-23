@@ -5973,6 +5973,15 @@ iw_domestic_defense = {
 	country_colonial_garrison_effectiveness_add = 0.05
 }
 
+# Agency experience (slice 5). Applied to je_covert_warfare by
+# covert_tradecraft_refresh_bonus with multiplier = the Tradecraft tier (0-4).
+# Network growth per tier is scripted (covert_tradecraft_net_gain_mult), not a
+# modifier field.
+iw_tradecraft_bonus = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_intelligence_capacity_mult = 0.05
+}
+
 # Applied to SELF when espionage target has NO tech advantage (base bonus only)
 covert_espionage_base = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
