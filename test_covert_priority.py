@@ -104,5 +104,54 @@ class EffectMultiplierTests(unittest.TestCase):
             self.assertIn(name, parser.data)
 
 
+class ScaledApplicationTests(unittest.TestCase):
+    def test_no_literal_phase_multiplier_is_left(self):
+        body = _text(EFFECTS)
+        self.assertNotRegex(
+            body,
+            r"multiplier = 2\b",
+            "every phase multiplier must go through covert_op_add_scaled_modifier",
+        )
+
+    def test_helper_uses_all_six_constant_multipliers(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_add_scaled_modifier = {")
+        for name in MULT_VALUES:
+            self.assertIn("multiplier = %s" % name, block)
+        self.assertIn("scope:iw_op = { covert_op_is_fully_operational = yes }", block)
+        self.assertIn("scope:iw_op = { covert_op_is_established = yes }", block)
+
+    def test_target_and_self_helpers_call_the_scaled_helper(self):
+        body = _text(EFFECTS)
+        for name in ("covert_op_apply_target_effect", "covert_op_apply_self_effect"):
+            block = _top_level_block(body, "%s = {" % name)
+            self.assertIn("covert_op_add_scaled_modifier = { MODIFIER = $MODIFIER$", block)
+
+    def test_self_effect_picks_the_strongest_operation_not_the_best_phase(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_apply_self_effect = {")
+        self.assertIn("ordered_in_list = {", block)
+        self.assertIn("order_by = covert_op_effect_mult", block)
+        self.assertIn("position = 0", block)
+        self.assertIn("save_scope_as = iw_op", block)
+
+    def test_every_bespoke_site_calls_the_helper(self):
+        block = _top_level_block(_text(EFFECTS), "covert_ops_apply_all_phase_effects = {")
+        for modifier in (
+            "covert_infrastructure_sabotage",
+            "covert_military_espionage",
+            "covert_destabilization_separatist",
+            "covert_destabilization_general",
+        ):
+            self.assertIn(
+                "covert_op_add_scaled_modifier = { MODIFIER = %s MONTHS = 3 }" % modifier,
+                block,
+            )
+
+    def test_ideological_pressure_scales_with_priority(self):
+        block = _top_level_block(_text(EFFECTS), "covert_ops_apply_all_phase_effects = {")
+        for pri in (1, 2, 3):
+            self.assertIn("MULT = covert_op_mult_p2_pri%d" % pri, block)
+        self.assertNotIn("MULT = 1 ", block)
+
+
 if __name__ == "__main__":
     unittest.main()

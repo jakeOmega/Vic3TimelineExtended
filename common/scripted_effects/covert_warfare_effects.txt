@@ -336,12 +336,53 @@ covert_op_refresh_phase = {
 # PHASE-BASED EFFECT APPLICATION
 # ============================================================================
 # Phase 1 (months 0-5): Preparatory — no effect
-# Phase 2 (months 6-11): Establishing — base multiplier (1x)
-# Phase 3 (months 12+): Fully Operational — doubled multiplier (2x)
-# Phase triggers (container scope): covert_op_is_established, covert_op_is_fully_operational
+# Phase 2 (months 6-11): Establishing — base multiplier
+# Phase 3 (months 12+): Fully Operational — covert_op_phase_full_mult
+# Each is then scaled by the operation's priority (slice 3). The product is
+# one of six constant script values, chosen here, because add_modifier's
+# multiplier is re-evaluated against ROOT on later ticks and so cannot read
+# the container. Phase triggers (container scope): covert_op_is_established,
+# covert_op_is_fully_operational; priority: covert_op_priority_at_least.
+
+# Add $MODIFIER$ to the current scope, scaled by scope:iw_op's phase and
+# priority. Adds nothing while that operation is preparatory. Callers remove
+# the modifier first, so a preparatory operation leaves none behind.
+# Parameters: $MODIFIER$ = static modifier, $MONTHS$ = duration (literal)
+# Scope: the country, state or political movement receiving the modifier;
+#        scope:iw_op = the operation container
+covert_op_add_scaled_modifier = {
+	if = {
+		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
+		if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p3_pri3 months = $MONTHS$ }
+		}
+		else_if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p3_pri2 months = $MONTHS$ }
+		}
+		else = {
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p3_pri1 months = $MONTHS$ }
+		}
+	}
+	else_if = {
+		limit = { scope:iw_op = { covert_op_is_established = yes } }
+		if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p2_pri3 months = $MONTHS$ }
+		}
+		else_if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p2_pri2 months = $MONTHS$ }
+		}
+		else = {
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p2_pri1 months = $MONTHS$ }
+		}
+	}
+}
 
 # Apply a country-scoped modifier to the TARGET of each $TYPE$ operation,
-# at that operation's own phase.
+# at that operation's own phase and priority.
 # Parameters: $TYPE$, $MODIFIER$
 # Scope: country (ROOT = JE owner / operator)
 covert_op_apply_target_effect = {
@@ -351,52 +392,35 @@ covert_op_apply_target_effect = {
 		save_scope_as = iw_op
 		var:iw_target = {
 			remove_modifier = $MODIFIER$
-			if = {
-				limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
-				add_modifier = { name = $MODIFIER$ multiplier = 2 months = 3 }
-			}
-			else_if = {
-				limit = { scope:iw_op = { covert_op_is_established = yes } }
-				add_modifier = { name = $MODIFIER$ months = 3 }
-			}
+			covert_op_add_scaled_modifier = { MODIFIER = $MODIFIER$ MONTHS = 3 }
 		}
 	}
 }
 
-# Apply a country-scoped modifier to SELF for a given operation type, at the
-# BEST phase among that type's operations.
+# Apply a country-scoped modifier to SELF for a given operation type, from the
+# operation of that type with the largest effect multiplier (phase x
+# priority). ordered_* sorts descending, so position 0 is the strongest; a
+# preparatory operation scores 0 and adds nothing.
 # Parameters: $TYPE$, $MODIFIER$
 # Scope: country (ROOT = JE owner / operator)
 covert_op_apply_self_effect = {
 	if = {
 		limit = { any_in_list = { variable = iw_ops has_tag = iw_op_$TYPE$ } }
 		remove_modifier = $MODIFIER$
-		if = {
-			limit = {
-				any_in_list = {
-					variable = iw_ops
-					has_tag = iw_op_$TYPE$
-					covert_op_is_fully_operational = yes
-				}
-			}
-			add_modifier = { name = $MODIFIER$ multiplier = 2 months = 3 }
+		ordered_in_list = {
+			variable = iw_ops
+			limit = { has_tag = iw_op_$TYPE$ }
+			order_by = covert_op_effect_mult
+			position = 0
+			save_scope_as = iw_op
 		}
-		else_if = {
-			limit = {
-				any_in_list = {
-					variable = iw_ops
-					has_tag = iw_op_$TYPE$
-					covert_op_is_established = yes
-				}
-			}
-			add_modifier = { name = $MODIFIER$ months = 3 }
-		}
-		# Phase 1: all at prep — no modifier
+		covert_op_add_scaled_modifier = { MODIFIER = $MODIFIER$ MONTHS = 3 }
 	}
 }
 
 # Master effect: apply ALL 9 operation types' phase-based effects.
-# Only runs if funding > 0, after covert_ops_sync_all. Called monthly from JE pulse.
+# Only runs if funding > 0, after covert_ops_sync_all. Called monthly from the
+# JE pulse and after a priority step.
 # The helpers it calls iterate iw_ops unguarded; the has_variable_list check here covers them.
 # Scope: country (ROOT = JE owner)
 covert_ops_apply_all_phase_effects = {
@@ -421,13 +445,7 @@ covert_ops_apply_all_phase_effects = {
 				random_scope_state = {
 					limit = { any_scope_building = { level >= 1 } }
 					remove_modifier = covert_infrastructure_sabotage
-					if = {
-						limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
-						add_modifier = { name = covert_infrastructure_sabotage multiplier = 2 months = 3 }
-					}
-					else = {
-						add_modifier = { name = covert_infrastructure_sabotage months = 3 }
-					}
+					covert_op_add_scaled_modifier = { MODIFIER = covert_infrastructure_sabotage MONTHS = 3 }
 				}
 			}
 		}
@@ -446,7 +464,8 @@ covert_ops_apply_all_phase_effects = {
 		covert_op_apply_self_effect = { TYPE = military_espionage MODIFIER = covert_military_espionage_unit }
 		# Weak counter-intel marker on the TARGET so covert_warfare.2 can notify them (#158)
 		covert_op_apply_target_effect = { TYPE = military_espionage MODIFIER = covert_military_espionage_detected }
-		# Conditional tech spread: only if target has tech advantage (best phase of any operation)
+		# Conditional tech spread: only if target has tech advantage, from the
+		# strongest military espionage operation (phase x priority)
 		if = {
 			limit = {
 				any_in_list = {
@@ -466,19 +485,14 @@ covert_ops_apply_all_phase_effects = {
 					espionage_target_tech_advantage > 0
 				}
 				remove_modifier = covert_military_espionage
-				if = {
-					limit = {
-						any_in_list = {
-							variable = iw_ops
-							has_tag = iw_op_military_espionage
-							covert_op_is_fully_operational = yes
-						}
-					}
-					add_modifier = { name = covert_military_espionage multiplier = 2 months = 3 }
+				ordered_in_list = {
+					variable = iw_ops
+					limit = { has_tag = iw_op_military_espionage }
+					order_by = covert_op_effect_mult
+					position = 0
+					save_scope_as = iw_op
 				}
-				else = {
-					add_modifier = { name = covert_military_espionage months = 3 }
-				}
+				covert_op_add_scaled_modifier = { MODIFIER = covert_military_espionage MONTHS = 3 }
 			}
 		}
 
@@ -487,7 +501,9 @@ covert_ops_apply_all_phase_effects = {
 
 		# ---- Ideological Subversion: country resist modifier + movement modifiers on TARGET ----
 		covert_op_apply_target_effect = { TYPE = ideological_subversion MODIFIER = covert_ideological_subversion_resist }
-		# Movement pressure from the establishing phase on (same strength once fully operational)
+		# Movement pressure from the establishing phase on, at the same
+		# strength once fully operational — so it scales by priority only
+		# (the establishing-phase column of the multiplier table).
 		every_in_list = {
 			variable = iw_ops
 			limit = {
@@ -495,8 +511,22 @@ covert_ops_apply_all_phase_effects = {
 				covert_op_is_established = yes
 			}
 			ROOT = { save_scope_as = cultural_hegemon }
-			var:iw_target = {
-				ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no MULT = 1 }
+			if = {
+				limit = { covert_op_priority_at_least = { N = 3 } }
+				var:iw_target = {
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no MULT = covert_op_mult_p2_pri3 }
+				}
+			}
+			else_if = {
+				limit = { covert_op_priority_at_least = { N = 2 } }
+				var:iw_target = {
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no MULT = covert_op_mult_p2_pri2 }
+				}
+			}
+			else = {
+				var:iw_target = {
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no MULT = covert_op_mult_p2_pri1 }
+				}
 			}
 		}
 
@@ -513,23 +543,11 @@ covert_ops_apply_all_phase_effects = {
 				# Separatist movement pressure
 				every_political_movement = {
 					remove_modifier = covert_destabilization_separatist
-					if = {
-						limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
-						add_modifier = { name = covert_destabilization_separatist multiplier = 2 months = 3 }
-					}
-					else = {
-						add_modifier = { name = covert_destabilization_separatist months = 3 }
-					}
+					covert_op_add_scaled_modifier = { MODIFIER = covert_destabilization_separatist MONTHS = 3 }
 				}
 				# General destabilization pressure
 				remove_modifier = covert_destabilization_general
-				if = {
-					limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
-					add_modifier = { name = covert_destabilization_general multiplier = 2 months = 3 }
-				}
-				else = {
-					add_modifier = { name = covert_destabilization_general months = 3 }
-				}
+				covert_op_add_scaled_modifier = { MODIFIER = covert_destabilization_general MONTHS = 3 }
 			}
 		}
 	}
