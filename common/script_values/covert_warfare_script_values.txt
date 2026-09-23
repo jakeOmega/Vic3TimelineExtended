@@ -1123,14 +1123,24 @@ covert_net_detect_reduction_max_display = {
 # covert_warfare_effects.txt, § TRADECRAFT. Tiers and unlocks:
 # covert_warfare_triggers.txt, § TRADECRAFT.
 #
-# Equilibrium: gains diminish and losses do not, so the score settles where
-# N x gain x (100 - x) / 50 = p x L. Two moderate operations at 10% detection
-# settle near 85, one near 70.
-# Projection, moderate operations at 10% detection (net +0.4/op-month below 50):
-#   ops running   months to 25   to 50   to 60
-#   1             63             125     ~165
-#   2             31             63      ~85
-#   4             16             31      ~45
+# Equilibrium: gains diminish and losses do not, so the score levels off. The
+# spec's closed form (N x (100 - x)/50 = p x L) assumed every operation-month
+# earns; it does not. Detection rolls from month 0, and a burned operation is
+# relaunched preparatory and earns nothing for up to 6 months (fewer with a
+# network head start). Simulated long-run averages (Monte Carlo, 600 months,
+# a burned operation relaunched at once; head start 0 / 5 months), with the
+# median months to reach Established (40):
+#   per-op detection   ops              average        months to 40
+#   10%                1 moderate       31 / 70        221 / 78
+#   10%                2 moderate       38 / 72        114 / 38
+#   10%                4 moderate       53 / 74         51 / 18
+#   10%                1 severe         14 / 45        375 / 138
+#    5%                1 moderate       79 / 85         74 / 51
+#    5%                1 severe         66 / 77         92 / 58
+#    2%                1 moderate       93 / 95         55 / 45
+# So at 10% (funding 1, no efficiency) an agency needs either several
+# operations or a strong network to hold Established; at 5% or less the curve
+# behaves as the spec intended.
 # Scope: operator country throughout, unless noted.
 
 # Diminishing returns on gains: 1 up to half, falling linearly to
@@ -1230,12 +1240,14 @@ covert_tradecraft_net_gain_pct_display = {
 	round = yes
 }
 
-# Display: the score, rounded, 0 when unseeded.
+# Display: the score, rounded DOWN, 0 when unseeded. Floored, not rounded,
+# because the widget prints it beside the tier name: 39.6 must read 39
+# (Fledgling), not 40 next to a priority-3 gate that is still closed.
 covert_tradecraft_display = {
 	value = 0
 	if = {
 		limit = { has_variable = iw_tradecraft }
 		add = var:iw_tradecraft
 	}
-	round = yes
+	floor = yes
 }

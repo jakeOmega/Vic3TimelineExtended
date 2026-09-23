@@ -308,7 +308,12 @@ reason codes are 1 (operations maturing) and 20–23 (burn by tier) / 24 (idle d
 burn loss runs in `covert_warfare.1`'s `after`, before the type code is cleaned up;
 networks grow at last month's tier (they tick earlier in the pulse); the Seasoned unlock is
 a trigger only until slice 6 consumes it; funding level 2, formerly named "Tradecraft", is
-renamed "Professional" so the word means only this score.
+renamed "Professional" so the word means only this score. **The equilibrium and
+projection above are wrong at 10% detection**: they assume every operation-month earns,
+but detection rolls from month 0 and a burned operation is relaunched preparatory. Simulated
+long-run averages at 10% (head start 0 / 5): one moderate op 31 / 70, two 38 / 72, one
+severe 14 / 45; at 5% one moderate op 79 / 85. Corrected table:
+`covert_warfare_script_values.txt` § TRADECRAFT. Whether to retune is an open call.
 
 ## Slice 6 — Three new operation types
 

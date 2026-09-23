@@ -101,6 +101,12 @@ class ScriptValueTests(unittest.TestCase):
         self.assertIn("covert_tradecraft_net_gain_per_tier", block)
         self.assertIn("add = 1", block)
 
+    def test_display_floors_so_it_never_shows_the_next_tier_early(self):
+        # 39.6 must read 39 (Fledgling), not 40 beside a still-blocked gate.
+        block = _top_level_block(_text(VALUES), "covert_tradecraft_display = {")
+        self.assertIn("floor = yes", block)
+        self.assertNotIn("round = yes", block)
+
     def test_burn_loss_value_branches_every_tier(self):
         block = _top_level_block(_text(VALUES), "covert_tradecraft_burn_loss_value = {")
         for tier in ("mild", "severe", "war"):
