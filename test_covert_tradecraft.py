@@ -189,5 +189,37 @@ class MonthlyTests(unittest.TestCase):
         self.assertRegex(loc, r"(?m)^ iw_tradecraft_bonus_desc:0 ")
 
 
+class BurnLossTests(unittest.TestCase):
+    def test_burn_loss_branches_by_tier(self):
+        block = _top_level_block(_text(EFFECTS), "covert_tradecraft_burn_loss = {")
+        for tier, reason in (("mild", 20), ("severe", 22), ("war", 23)):
+            self.assertIn("covert_code_tier_%s = { VAR = iw_burned_type_code }" % tier, block)
+            self.assertIn(
+                "covert_tradecraft_loss = { AMOUNT = covert_tradecraft_loss_%s REASON = %d }" % (tier, reason),
+                block,
+            )
+        self.assertIn(
+            "covert_tradecraft_loss = { AMOUNT = covert_tradecraft_loss_moderate REASON = 21 }", block
+        )
+
+    def test_burn_loss_before_cleanup(self):
+        body = _text(EVENTS)
+        event = _top_level_block(body, "covert_warfare.1 = {")
+        after = event[event.index("\tafter = {"):]
+        call = after.index("covert_tradecraft_burn_loss = yes")
+        self.assertLess(after.index("covert_op_burn = { TYPE = destabilization"), call)
+        self.assertLess(call, after.index("remove_variable = iw_burned_type_code"))
+        # Inside the same guard as the burn: charged only when a burn happened.
+        guard = after.index("exists = scope:detected_by_country")
+        self.assertLess(guard, call)
+        self.assertLess(call, after.index("trigger_event = { id = covert_warfare.2 }"))
+
+    def test_burned_tooltip_names_loss(self):
+        self.assertRegex(
+            _all_loc(),
+            r"(?m)^ covert_op_burned_tt:0 .*covert_tradecraft_burn_loss_value",
+        )
+
+
 if __name__ == "__main__":
     unittest.main()

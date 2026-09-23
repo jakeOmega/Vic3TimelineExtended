@@ -592,6 +592,31 @@ covert_tradecraft_loss = {
 	}
 }
 
+# Charge the burn now being resolved, by its tier. Called from
+# covert_warfare.1's `after`, inside the same guard as covert_op_burn and BEFORE
+# the event removes iw_burned_type_code (which it reads). Mirrors
+# covert_tradecraft_burn_loss_value, which the options' tooltip prints; an
+# unrecognised code is charged as moderate there and here.
+# Scope: operator country (while covert_warfare.1 is open)
+covert_tradecraft_burn_loss = {
+	if = {
+		limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
+		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_loss_mild REASON = 20 }
+	}
+	else_if = {
+		limit = { covert_code_tier_severe = { VAR = iw_burned_type_code } }
+		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_loss_severe REASON = 22 }
+	}
+	else_if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_loss_war REASON = 23 }
+	}
+	else = {
+		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_loss_moderate REASON = 21 }
+	}
+}
+
+
 # Re-apply the tier bonus on the journal entry. The ONE refresh site for
 # iw_tradecraft_bonus: called only from covert_tradecraft_monthly.
 # Scope: operator country
