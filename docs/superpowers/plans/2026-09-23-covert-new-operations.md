@@ -48,6 +48,8 @@
 - **Lens icons** (user decision, 2026-09-23): each action gets a copy of the nearest existing covert icon — regime change ← destabilization, nuclear sabotage ← infrastructure sabotage, space espionage ← industrial espionage, cultivate assets ← influence campaign. The engine auto-loads `gfx/interface/icons/lens_toolbar_icons/<action>.dds` for any action without `show_in_lens = no`; a missing one is a `VFSOpen` error every session (#324 cleaned exactly that).
 - **Pre-existing bug fixed in Task 1:** `covert_warfare.2`'s trigger lists `has_modifier = covert_infrastructure_sabotage`, which is applied to *states* (`random_scope_state` in `covert_ops_apply_all_phase_effects`), never to the country, so a burned infrastructure-sabotage operation never tells the defender. The country-scope modifier that type leaves is `covert_infra_sabotage_morale`. The registry test pins "each type's defender-event marker is the modifier it applies to the target country", which is what surfaces this. One line.
 - **`country_covert_defense_military_add_desc`** gains nuclear sabotage and the missing military espionage; the economic and ideological descriptions gain their new operations.
+- **Two modifier fields are `script_only`** (`country_coup_resistance_add`, vanilla; `country_nuclear_program_progress_mult`, this mod) and so, as far as we know, do not render in modifier tooltips. The descriptions `covert_regime_change_desc` and `covert_nuclear_sabotage_desc` state them, with the strongest-operation factor read from `covert_op_mult_p3_pri3` rather than written as a literal. (`modifier_visibility_audit` checks values too small to render at their decimals, not `script_only`; it should not flag these.)
+- **The nuclear programme's rate tooltip** attributes the whole `country_nuclear_program_progress_mult` to foreign assistance (`nuclear_program_display_aid_bonus`, `nuclear_program_aid_note`). Task 3 adds sabotage-aware branches so an aided-and-sabotaged programme reads as a net figure. The space-race multipliers need no such fix: principles and production methods already feed them, and their descriptions do not claim a single source.
 - **Console harness** gets its own event `te_debug_covert.4` rather than more options on `.2` (already ten) or `.3`.
 - **Known behaviour, documented not changed:** the AI will rarely launch the two severe operations. `possible` binds the AI, so it needs Seasoned (60) Tradecraft; slice 5's own table puts one moderate operation at 10 % detection at a long-run average of 57.
 
@@ -565,6 +567,7 @@ VALUES = ROOT / "common/script_values/covert_warfare_script_values.txt"
 EFFECTS = ROOT / "common/scripted_effects/covert_warfare_effects.txt"
 TRIGGERS = ROOT / "common/scripted_triggers/covert_warfare_triggers.txt"
 NUKE_TRIGGERS = ROOT / "common/scripted_triggers/nuke_triggers.txt"
+NUKE_CUSTOM_LOC = ROOT / "common/customizable_localization/nuclear_program_custom_loc.txt"
 STATIC = ROOT / "common/static_modifiers/extra_modifiers.txt"
 WIDGET = ROOT / "gui/journal_entry_widgets/covert_operations_widget.gui"
 DEBUG_EFFECTS = ROOT / "common/scripted_effects/te_debug_covert_effects.txt"
@@ -1061,7 +1064,7 @@ and after the destabilization stand-down instance (the `covert_op_stand_down_but
  covert_op_capacity_regime_change_tt:0 "No regime change slots available — reduce active regime change operations or increase covert capacity."
  iw_op_name_regime_change:0 "Regime Change"
  covert_regime_change:0 "Foreign-Backed Regime Change"
- covert_regime_change_desc:0 "Foreign money is reaching our officers and our opposition. Our government's [concept_legitimacy] is eroding, and a coup against it is easier to mount: this also lowers our coup resistance, which is not listed among the effects above — by 1 at the operation's base strength, and by up to 3.2 at its strongest."
+ covert_regime_change_desc:0 "Foreign money is reaching our officers and our opposition. Our government's [concept_legitimacy] is eroding, and a coup against it is easier to mount: this also lowers our coup resistance, which is not listed among the effects above — by 1 at the operation's base strength, and by up to [GetPlayer.MakeScope.ScriptValue('covert_op_mult_p3_pri3')|1] at its strongest."
  iw_requires_rivalry_tt:0 "Must have declared a [concept_rivalry] with them"
  iw_target_not_our_subject_tt:0 "Cannot target our own subjects"
  iw_severe_ops_need_tradecraft_tt:0 "Needs an agency of at least #bold Seasoned#! Tradecraft (#v [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_3_floor')|0]#!)"
@@ -1135,6 +1138,7 @@ Claude-Session: https://claude.ai/code/session_01CViHM7Avi99HyFXdbugbSc"
 **Files:**
 - Modify: `test_covert_op_registry.py` (one `OPS` row), `test_covert_new_ops.py` (one class)
 - Modify: `common/scripted_triggers/nuke_triggers.txt`
+- Modify: `common/customizable_localization/nuclear_program_custom_loc.txt` (`nuclear_program_aid_note`), `common/script_values/extra_script_values.txt` (one comment)
 - Modify: `common/static_modifiers/extra_modifiers.txt`
 - Modify: `common/diplomatic_actions/covert_operations.txt` (append)
 - Modify: `common/scripted_effects/covert_warfare_effects.txt`, `common/scripted_triggers/covert_warfare_triggers.txt`, `events/covert_warfare_events.txt`, `common/customizable_localization/covert_warfare_custom_loc.txt`, `common/scripted_guis/covert_warfare_sguis.txt`, `gui/journal_entry_widgets/covert_operations_widget.gui`
@@ -1197,6 +1201,18 @@ class NuclearSabotageTests(unittest.TestCase):
         pri3 = float(re.search(r"(?m)^covert_op_priority_3_effect_mult = ([\d.]+)$", values).group(1))
         full = float(re.search(r"(?m)^covert_op_phase_full_mult = ([\d.]+)$", values).group(1))
         self.assertGreater(1 + mult * pri3 * full, 0)
+
+    def test_rate_tooltip_does_not_credit_sabotage_to_aid(self):
+        # nuclear_program_display_aid_bonus is the whole progress mult, which
+        # now carries sabotage too: the aid-only line must not fire then.
+        block = _top_level_block(_text(NUKE_CUSTOM_LOC), "nuclear_program_aid_note = {")
+        self.assertLess(
+            block.index("has_modifier = covert_nuclear_sabotage"),
+            block.index("localization_key = nuclear_program_aid_note_active"),
+        )
+        loc = _loc()
+        for key in ("nuclear_program_aid_note_sabotaged", "nuclear_program_sabotage_note"):
+            self.assertIn("nuclear_program_display_aid_bonus", loc[key])
 ```
 
 Run: `python3 -m unittest test_covert_new_ops` — Expected: FAIL in `NuclearSabotageTests`.
@@ -1228,7 +1244,9 @@ In `common/static_modifiers/extra_modifiers.txt`, directly after the `covert_reg
 # Applied to TARGET while a nuclear-programme sabotage operation runs (covert
 # slice 6), scaled by phase x priority. je_nuclear_program multiplies progress
 # by (1 + this): x0.75 at base strength, x0.2 at the strongest operation
-# (fully operational, priority 3), never zero.
+# (fully operational, priority 3), never zero. The modifier type is
+# script_only, so the tooltip lists no effect; covert_nuclear_sabotage_desc
+# states it instead.
 covert_nuclear_sabotage = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	country_nuclear_program_progress_mult = -0.25
@@ -1515,7 +1533,48 @@ Widget, after the regime-change stand-down instance:
 		covert_op_apply_target_effect = { TYPE = nuclear_sabotage MODIFIER = covert_nuclear_sabotage }
 ```
 
-- [ ] **Step 8: Loc**
+- [ ] **Step 8: Keep the target's own rate tooltip honest**
+
+The programme's rate tooltip appends `nuclear_program_aid_note`, whose one live branch prints `nuclear_program_display_aid_bonus` — the **whole** `country_nuclear_program_progress_mult` × 100 — as "from foreign nuclear assistance". Once sabotage also feeds that modifier, an aided and sabotaged programme would show "+50% from foreign nuclear assistance". The target already sees `covert_nuclear_sabotage` in its own modifier list (every covert target modifier is visible to the target), so naming it here reveals nothing new.
+
+In `common/customizable_localization/nuclear_program_custom_loc.txt`, `nuclear_program_aid_note`, insert before the existing aid branch (`trigger = { modifier:country_receiving_nuclear_program_aid_bool = yes }`):
+
+```
+	# Covert slice 6: country_nuclear_program_progress_mult also carries
+	# covert_nuclear_sabotage, so while it runs the number is the NET foreign
+	# effect, not assistance alone. These two come first because customizable
+	# localization takes the first branch that holds.
+	text = {
+		trigger = {
+			has_modifier = covert_nuclear_sabotage
+			modifier:country_receiving_nuclear_program_aid_bool = yes
+		}
+		localization_key = nuclear_program_aid_note_sabotaged
+	}
+	text = {
+		trigger = { has_modifier = covert_nuclear_sabotage }
+		localization_key = nuclear_program_sabotage_note
+	}
+```
+
+and change the block's header comment `# The foreign-assistance line, appended after the rate note.` to `# The foreign line — assistance, sabotage (covert slice 6), or both — appended after the rate note.`
+
+In `common/script_values/extra_script_values.txt`, change the comment above `nuclear_program_display_aid_bonus` from `# The foreign-assistance contribution to the rate, as a percentage, so the rate` / `# tooltip can name it without re-stating the treaty article's value.` to
+
+```
+# The foreign contribution to the rate, as a percentage: assistance (the
+# nuclear_program_aid treaty article) and, since covert slice 6, sabotage
+# (covert_nuclear_sabotage). nuclear_program_aid_note picks the wording.
+```
+
+`te_miscellaneous_l_english.yml`, beside `nuclear_program_aid_note_active`:
+
+```yaml
+ nuclear_program_aid_note_sabotaged:0 "\nForeign assistance and foreign sabotage together change the rate by [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%."
+ nuclear_program_sabotage_note:0 "\n#R [JournalEntry.GetCountry.MakeScope.ScriptValue('nuclear_program_display_aid_bonus')|0]%#! from foreign sabotage."
+```
+
+- [ ] **Step 9: Loc**
 
 `te_miscellaneous_l_english.yml`:
 
@@ -1533,7 +1592,7 @@ Widget, after the regime-change stand-down instance:
  iw_op_name_nuclear_sabotage:0 "Nuclear Programme Sabotage"
  iw_target_nuclear_programme_tt:0 "Target must be running a funded nuclear weapons programme"
  covert_nuclear_sabotage:0 "Nuclear Programme Sabotage"
- covert_nuclear_sabotage_desc:0 "Centrifuges fail, parts arrive faulty and scientists disappear. Our nuclear weapons programme is progressing more slowly than it should."
+ covert_nuclear_sabotage_desc:0 "Centrifuges fail, parts arrive faulty and scientists disappear. Our nuclear weapons programme progresses #R 25%#! more slowly at the operation's base strength, and up to [GetPlayer.MakeScope.ScriptValue('covert_op_mult_p3_pri3')|1] times that at its strongest."
 ```
 
 `te_journal_entries_l_english.yml`:
@@ -1554,20 +1613,20 @@ Widget, after the regime-change stand-down instance:
  country_covert_defense_military_add_desc:0 "Additional defense against military [concept_covert_operations] such as military espionage, communications disruption, [concept_infrastructure] sabotage and nuclear programme sabotage."
 ```
 
-- [ ] **Step 9: Icon**
+- [ ] **Step 10: Icon**
 
 ```bash
 cd /home/jakef/src/Vic3TimelineExtended
 cp gfx/interface/icons/lens_toolbar_icons/covert_infrastructure_sabotage_action.dds gfx/interface/icons/lens_toolbar_icons/covert_nuclear_sabotage_action.dds
 ```
 
-- [ ] **Step 10: Green, format, BOM, commit**
+- [ ] **Step 11: Green, format, BOM, commit**
 
 Run: `cd /home/jakef/src/Vic3TimelineExtended && python3 -m unittest test_covert_op_registry test_covert_new_ops test_covert_detection_roll test_covert_exposure_tiers test_covert_stand_down` — Expected: all pass.
 
 ```bash
 cd /home/jakef/src/Vic3TimelineExtended
-F="common/scripted_triggers/nuke_triggers.txt common/static_modifiers/extra_modifiers.txt common/diplomatic_actions/covert_operations.txt common/scripted_effects/covert_warfare_effects.txt common/scripted_triggers/covert_warfare_triggers.txt events/covert_warfare_events.txt common/customizable_localization/covert_warfare_custom_loc.txt common/scripted_guis/covert_warfare_sguis.txt gui/journal_entry_widgets/covert_operations_widget.gui"
+F="common/scripted_triggers/nuke_triggers.txt common/customizable_localization/nuclear_program_custom_loc.txt common/script_values/extra_script_values.txt common/static_modifiers/extra_modifiers.txt common/diplomatic_actions/covert_operations.txt common/scripted_effects/covert_warfare_effects.txt common/scripted_triggers/covert_warfare_triggers.txt events/covert_warfare_events.txt common/customizable_localization/covert_warfare_custom_loc.txt common/scripted_guis/covert_warfare_sguis.txt gui/journal_entry_widgets/covert_operations_widget.gui"
 python3 scripts/format_paradox_tabs.py $(echo "$F")
 for f in $(echo "$F"); do printf '%s ' $f; head -c3 $f | xxd -p; done
 git add test_covert_op_registry.py test_covert_new_ops.py $(echo "$F") localization/english/te_miscellaneous_l_english.yml localization/english/te_journal_entries_l_english.yml localization/english/te_diplomacy_l_english.yml localization/english/te_modifiers_l_english.yml gfx/interface/icons/lens_toolbar_icons/covert_nuclear_sabotage_action.dds
@@ -2611,7 +2670,7 @@ Widget, after the space-espionage stand-down instance:
  covert_cultivate_assets_extra_tt:0 "No effect on the target: grows our network there faster than any other operation."
  covert_op_capacity_cultivate_assets_tt:0 "No asset cultivation slots available — reduce active asset cultivation operations or increase covert capacity."
  iw_op_name_cultivate_assets:0 "Asset Cultivation"
- iw_priority_cultivate_fixed_tt:0 "Cultivating assets has nothing for priority to multiply: it stays at priority #v 1#!"
+ iw_priority_cultivate_fixed_tt:0 "Not an asset-cultivation operation (those have nothing for priority to multiply, so they stay at #v 1#!)"
 ```
 
 `te_journal_entries_l_english.yml`:
@@ -2642,7 +2701,7 @@ cp gfx/interface/icons/lens_toolbar_icons/covert_influence_campaign_action.dds g
 
 - [ ] **Step 11: Green (all covert suites), format, BOM, commit**
 
-Run: `cd /home/jakef/src/Vic3TimelineExtended && python3 -m unittest test_covert_op_registry test_covert_new_ops test_covert_detection_roll test_covert_exposure_tiers test_covert_networks test_covert_priority test_covert_stand_down test_covert_tradecraft` — Expected: all pass. (`test_covert_networks` and `test_covert_tradecraft` pin the network tick and Tradecraft pass this task edited; if one fails, read its assertion before touching it — adjust the test only where it pinned text this task deliberately changed.)
+Run: `cd /home/jakef/src/Vic3TimelineExtended && python3 -m unittest test_covert_op_registry test_covert_new_ops test_covert_detection_roll test_covert_exposure_tiers test_covert_networks test_covert_priority test_covert_stand_down test_covert_tradecraft` — Expected: all pass. (`test_covert_networks`, `test_covert_tradecraft` and `test_covert_priority` pin the network tick, the Tradecraft pass and the priority rows this task edits. Checked 2026-09-23: their assertions are containment checks that still hold after these edits, so a failure there means an edit went wrong — fix the edit, not the test.)
 
 ```bash
 cd /home/jakef/src/Vic3TimelineExtended
