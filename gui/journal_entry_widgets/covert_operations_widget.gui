@@ -133,9 +133,7 @@ types covert_operations_widget_types
 	}
 
 	### "Stand down" for one row. Nine instances per row, of which exactly one is
-	### visible — `sd_visible` combines the row's operation tag with the
-	### panel-level arming toggle in a single `visible` (two `visible` properties
-	### on one widget is a bug, not a conjunction: gotcha #17).
+	### visible — `sd_visible` gates it on the row's operation tag.
 	###
 	### `sd_context` is the only other per-instance part: it points the button at
 	### that type's covert_stand_down_<type>_sgui. Everything else is shared,
@@ -322,16 +320,14 @@ types covert_operations_widget_types
 		}
 
 
-		# ---- Stand down (hidden until armed from the command centre) ----
-		# One instance per type; only the row's own type is ever visible, and
-		# only while the panel-level toggle is set. The toggle is presentation
-		# state in GetVariableSystem, so arming it changes nothing in script.
+		# ---- Stand down ----
+		# One instance per type; only the row's own type is ever visible.
 		covert_op_stand_down_button = {
 			blockoverride "sd_context" {
 				datacontext = "[GetScriptedGui('covert_stand_down_election_interference_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_election_interference'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_election_interference')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -339,7 +335,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_financial_subversion_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_financial_subversion'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_financial_subversion')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -347,7 +343,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_infrastructure_sabotage_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_infrastructure_sabotage'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_infrastructure_sabotage')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -355,7 +351,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_comms_disruption_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_comms_disruption'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_comms_disruption')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -363,7 +359,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_industrial_espionage_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_industrial_espionage'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_industrial_espionage')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -371,7 +367,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_military_espionage_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_military_espionage'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_military_espionage')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -379,7 +375,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_influence_campaign_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_influence_campaign'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_influence_campaign')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -387,7 +383,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_ideological_subversion_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_ideological_subversion'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_ideological_subversion')]"
 			}
 		}
 		covert_op_stand_down_button = {
@@ -395,7 +391,7 @@ types covert_operations_widget_types
 				datacontext = "[GetScriptedGui('covert_stand_down_destabilization_sgui')]"
 			}
 			blockoverride "sd_visible" {
-				visible = "[And( ScriptContainer.HasTag('iw_op_destabilization'), GetVariableSystem.Exists('covert_stand_down_armed') )]"
+				visible = "[ScriptContainer.HasTag('iw_op_destabilization')]"
 			}
 		}
 	}
@@ -534,29 +530,6 @@ flowcontainer = {
 		}
 		blockoverride "line_extra" {
 			visible = "[GetScriptedGui('covert_last_exposed_known_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-		}
-	}
-
-	### Arms the per-row "Stand down" controls. One toggle for the whole panel,
-	### not one per row: a GetVariableSystem key cannot be built from a script
-	### container. Presentation-only and unsaved, so arming it is invisible to
-	### script and to other clients — ending an operation still takes a second,
-	### deliberate click on the row itself.
-	button = {
-		using = default_button_action
-		size = { 220 24 }
-		margin_top = 6
-		onclick = "[GetVariableSystem.Toggle( 'covert_stand_down_armed' )]"
-		tooltip = "je_iw_stand_down_toggle_tooltip"
-
-		textbox = {
-			parentanchor = center
-			align = center|nobaseline
-			autoresize = yes
-			max_width = 210
-			elide = right
-			using = fontsize_small
-			text = "je_iw_stand_down_toggle"
 		}
 	}
 }
