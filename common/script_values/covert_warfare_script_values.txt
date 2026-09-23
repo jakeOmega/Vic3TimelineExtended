@@ -282,7 +282,7 @@ covert_operation_cost_mult = {
 
 # Detection chance per month for active operations
 # Factors: base risk, funding reduction, target counterintelligence (IC + type defense), attacker efficiency
-# Formula: raw = base - funding_reduction + target_defense_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
+# Formula: raw = base - funding_reduction + target_defense_penalty + priority_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
 # var:target_max_ic and var:target_type_defense must be set before evaluating.
 covert_operation_detection_chance = {
 	value = covert_ops_detection_base
@@ -317,6 +317,9 @@ covert_operation_detection_chance = {
 	}
 	# Target's counterintelligence increases detection risk (IC + type defense vs your IC)
 	add = target_counterintelligence_penalty
+	# Priority: a busier operation is more exposed (before efficiency, so
+	# better tradecraft still hides most of it)
+	add = covert_op_priority_detect_penalty
 	# Attacker's efficiency reduces detection: multiply by (1 - eff_mult), floor 0.2
 	multiply = {
 		value = 1
@@ -351,6 +354,21 @@ target_counterintelligence_penalty = {
 		multiply = covert_ops_target_ic_factor
 		min = 0
 		max = covert_ops_target_ic_max
+	}
+}
+
+# A higher-priority operation is busier and more exposed: covert_op_priority_detect_add
+# raw points per level above 1. var:iw_priority_staging is staged per operation
+# by covert_op_refresh_detection; missing reads as priority 1.
+# Scope: operator country
+covert_op_priority_detect_penalty = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_priority_staging }
+		add = var:iw_priority_staging
+		subtract = 1
+		multiply = covert_op_priority_detect_add
+		min = 0
 	}
 }
 

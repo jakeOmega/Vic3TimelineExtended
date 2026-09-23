@@ -96,12 +96,21 @@ covert_op_destroy = {
 }
 
 # Recompute the target and detection data the JE shows for one operation.
-# covert_operation_detection_chance reads target_max_ic / target_type_defense
-# off the operator, so they are staged there first.
+# covert_operation_detection_chance reads target_max_ic / target_type_defense /
+# iw_priority_staging off the operator, so they are staged there first. The
+# priority is copied with PREV.var: from inside the operator (PREV is this
+# container); a scope:<container>.var: chain is avoided on purpose.
 # Parameters: $DEFENSE_MOD$ = type-specific defense modifier
 # Scope: operation container; scope:iw_operator = operator country
 covert_op_refresh_detection = {
 	save_scope_as = iw_op
+	if = {
+		limit = { has_variable = iw_priority }
+		scope:iw_operator = { set_variable = { name = iw_priority_staging value = PREV.var:iw_priority } }
+	}
+	else = {
+		scope:iw_operator = { set_variable = { name = iw_priority_staging value = 1 } }
+	}
 	var:iw_target = {
 		capital = {
 			scope:iw_op = { set_variable = { name = iw_target_capital value = PREV } }
@@ -115,7 +124,10 @@ covert_op_refresh_detection = {
 	set_variable = { name = iw_detect value = scope:iw_operator.var:iw_detect_staging }
 	set_variable = { name = iw_tgt_ic value = scope:iw_operator.var:target_max_ic }
 	set_variable = { name = iw_tgt_td value = scope:iw_operator.var:target_type_defense }
-	scope:iw_operator = { remove_variable = iw_detect_staging }
+	scope:iw_operator = {
+		remove_variable = iw_detect_staging
+		remove_variable = iw_priority_staging
+	}
 }
 
 # Start an operation. Called from the covert action's accept_effect, where

@@ -187,5 +187,26 @@ class UpkeepTests(unittest.TestCase):
             self.assertIn("covert_refresh_priority_cost = yes", block, name)
 
 
+class DetectionTests(unittest.TestCase):
+    def test_refresh_stages_the_priority_through_prev(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_refresh_detection = {")
+        stage = block.index("name = iw_priority_staging value = PREV.var:iw_priority")
+        chance = block.index("value = covert_operation_detection_chance")
+        self.assertLess(stage, chance, "stage the priority before the chance is computed")
+        self.assertNotIn("scope:iw_op.var:", block)
+        self.assertIn("remove_variable = iw_priority_staging", block)
+
+    def test_penalty_is_guarded_and_uses_the_constant(self):
+        block = _top_level_block(_text(VALUES), "covert_op_priority_detect_penalty = {")
+        self.assertIn("has_variable = iw_priority_staging", block)
+        self.assertIn("multiply = covert_op_priority_detect_add", block)
+
+    def test_penalty_is_added_before_covert_efficiency(self):
+        block = _top_level_block(_text(VALUES), "covert_operation_detection_chance = {")
+        add = block.index("add = covert_op_priority_detect_penalty")
+        efficiency = block.index("modifier:country_covert_operation_efficiency_mult")
+        self.assertLess(add, efficiency)
+
+
 if __name__ == "__main__":
     unittest.main()
