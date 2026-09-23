@@ -185,3 +185,34 @@ te_debug_covert.3 = { # REVIEWED 2026-09-22: console-only test event (`event te_
 		te_debug_covert_tick_tradecraft = yes
 	}
 }
+
+te_debug_covert.4 = { # REVIEWED 2026-09-23: console-only test event (`event te_debug_covert.4`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_default.dds"
+
+	title = te_debug_covert.4.t
+	desc = te_debug_covert.4.d
+	flavor = te_debug_covert.4.f
+
+	# ---- Slice 6: plant the four new operations, fully operational, against
+	#      targets that meet their conditions (nuclear sabotage and space
+	#      espionage only if such a target exists). Tradecraft goes to 65.
+	option = {
+		name = te_debug_covert.4.a
+		default_option = yes
+		te_debug_covert_seed_new_ops = yes
+	}
+
+	# ---- Tradecraft to Seasoned (65) only: the two severe operations become
+	#      launchable from the diplomacy panel.
+	option = {
+		name = te_debug_covert.4.b
+		te_debug_covert_set_tradecraft = { VALUE = 65 }
+	}
+}

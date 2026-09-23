@@ -187,6 +187,22 @@ covert_warfare.1 = {
 				limit = { var:iw_burned_type_code = 8 }
 				covert_op_burn = { TYPE = destabilization ACTION = covert_destabilization_action TARGET = scope:detected_by_country CODE = 8 }
 			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 9 }
+				covert_op_burn = { TYPE = regime_change ACTION = covert_regime_change_action TARGET = scope:detected_by_country CODE = 9 }
+			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 10 }
+				covert_op_burn = { TYPE = nuclear_sabotage ACTION = covert_nuclear_sabotage_action TARGET = scope:detected_by_country CODE = 10 }
+			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 11 }
+				covert_op_burn = { TYPE = space_espionage ACTION = covert_space_espionage_action TARGET = scope:detected_by_country CODE = 11 }
+			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 12 }
+				covert_op_burn = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action TARGET = scope:detected_by_country CODE = 12 }
+			}
 
 			# The agency's experience takes the hit (slice 5), by tier. Here,
 			# while iw_burned_type_code still exists; removed further down.
@@ -232,17 +248,30 @@ covert_warfare.2 = {
 	duration = 3
 
 	trigger = {
-		# Only fire when someone has run an operation on us — covers all 9 op types (#158)
+		# Only fire when someone has run an operation on us (#158). One line per
+		# operation type: the country-scope modifier that type leaves on its
+		# target (infrastructure sabotage's own modifier sits on a state, so its
+		# line is the country-scope morale one). Pinned by test_covert_op_registry.
 		OR = {
 			has_modifier = covert_election_interference
 			has_modifier = covert_financial_subversion
-			has_modifier = covert_infrastructure_sabotage
+			has_modifier = covert_infra_sabotage_morale
 			has_modifier = covert_comms_disruption
 			has_modifier = covert_influence_campaign
 			has_modifier = covert_ideological_subversion_resist
 			has_modifier = covert_destabilization_resist
 			has_modifier = covert_industrial_espionage_detected
 			has_modifier = covert_military_espionage_detected
+			has_modifier = covert_regime_change
+			has_modifier = covert_nuclear_sabotage
+			has_modifier = covert_space_espionage_detected
+			# Cultivate assets (slice 6) leaves nothing on its target, so its
+			# burn is keyed on the record covert_op_burn has just written
+			# (covert_warfare.2 fires only from there).
+			AND = {
+				has_variable = iw_last_exposed_type
+				var:iw_last_exposed_type = 12
+			}
 		}
 		NOT = { has_variable = iw_defender_event_cooldown }
 	}

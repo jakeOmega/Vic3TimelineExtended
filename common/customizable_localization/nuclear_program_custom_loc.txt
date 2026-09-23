@@ -130,13 +130,29 @@ nuclear_program_rate_note = {
 	}
 }
 
-# The foreign-assistance line, appended after the rate note. Separate block
-# because customizable localization picks exactly one branch, and assistance is
-# orthogonal to which phase the programme is in.
+# The foreign line — assistance, sabotage (covert slice 6), or both —
+# appended after the rate note. Separate block because customizable
+# localization picks exactly one branch, and the foreign line is orthogonal to
+# which phase the programme is in.
 nuclear_program_aid_note = {
 	type = country
 	random_valid = no
 
+	# Covert slice 6: country_nuclear_program_progress_mult also carries
+	# covert_nuclear_sabotage, so while it runs the number is the NET foreign
+	# effect, not assistance alone. These two come first because customizable
+	# localization takes the first branch that holds.
+	text = {
+		trigger = {
+			has_modifier = covert_nuclear_sabotage
+			modifier:country_receiving_nuclear_program_aid_bool = yes
+		}
+		localization_key = nuclear_program_aid_note_sabotaged
+	}
+	text = {
+		trigger = { has_modifier = covert_nuclear_sabotage }
+		localization_key = nuclear_program_sabotage_note
+	}
 	text = {
 		trigger = { modifier:country_receiving_nuclear_program_aid_bool = yes }
 		localization_key = nuclear_program_aid_note_active

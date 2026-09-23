@@ -6,8 +6,8 @@ The engine cannot be run in CI, so these tests pin the *shape* of the script
 the slice changed: the pulse rolls per operation through one named effect, the
 old country-level roll and its target_max_ic restore block are gone, the
 detection event is driven by scope:iw_burned_op, and every site that maps an
-operation type to its code (covert_op_create, covert_op_sync, the nine
-covert_op_start calls, covert_warfare.1's `after` branches, and
+operation type to its code (covert_op_create, covert_op_sync, every
+covert_op_start call, covert_warfare.1's `after` branches, and
 covert_burned_type_name) agrees with the pinned CODES mapping. A refactor that
 silently re-introduces the single roll, or drops or renumbers a CODE at any of
 those sites, fails here rather than in a play test.
@@ -20,6 +20,7 @@ import unittest
 from pathlib import Path
 
 from paradox_file_parser import ParadoxFileParser
+from test_covert_op_registry import CODES  # the single copy of the type codes
 
 ROOT = Path(__file__).resolve().parent
 EFFECTS = ROOT / "common/scripted_effects/covert_warfare_effects.txt"
@@ -30,21 +31,6 @@ CUSTOM_LOC = ROOT / "common/customizable_localization/covert_warfare_custom_loc.
 DIPLOMATIC_ACTIONS = ROOT / "common/diplomatic_actions/covert_operations.txt"
 TE_DEBUG_EFFECTS = ROOT / "common/scripted_effects/te_debug_covert_effects.txt"
 TE_DEBUG_EVENTS = ROOT / "events/te_debug_covert_events.txt"
-
-# Operation type code mapping, per covert_last_exposed_type_name /
-# covert_burned_type_name. Pinned here once so every site below is checked
-# against the same numbers rather than hand-copied per test.
-CODES = {
-    "election_interference": 0,
-    "financial_subversion": 1,
-    "infrastructure_sabotage": 2,
-    "comms_disruption": 3,
-    "industrial_espionage": 4,
-    "military_espionage": 5,
-    "influence_campaign": 6,
-    "ideological_subversion": 7,
-    "destabilization": 8,
-}
 
 
 def _parse(path):
@@ -151,7 +137,7 @@ class DetectionEventTests(unittest.TestCase):
         self.assertIn("save_scope_as = detected_by_country", immediate)
         self.assertIn("name = iw_burned_type_code", immediate)
         after = ev[ev.index("after = {"):]
-        for code in range(9):
+        for code in CODES.values():
             self.assertIn(f"var:iw_burned_type_code = {code}", after)
         self.assertNotIn("scope:iw_burned_op", after)
 

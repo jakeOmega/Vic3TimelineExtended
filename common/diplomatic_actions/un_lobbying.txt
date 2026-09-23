@@ -21,7 +21,7 @@
 # game/common/diplomatic_actions/03_violate_sovereignty.txt (no `pact` block =
 # no pact is created, per game/common/diplomatic_actions/diplomatic_action.md).
 # Conventions (groups, custom_tooltip'd `possible` clauses, loc key families)
-# follow the mod's own nine covert-warfare actions in
+# follow the mod's own covert-warfare actions in
 # common/diplomatic_actions/covert_operations.txt.
 #
 # SCOPES, which flip between blocks and are easy to get wrong:

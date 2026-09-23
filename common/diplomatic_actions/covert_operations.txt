@@ -1366,3 +1366,621 @@ covert_destabilization_action = {
 		}
 	}
 }
+
+# ---- PEACETIME: Regime Change (slice 6) ----
+# Bankroll the colonels: erode a rival government's legitimacy and its
+# resistance to a coup, radicalise its movements, and once fully operational
+# push any coup already under way. Severe tier. Needs a Seasoned agency to
+# launch; a running operation is never ended by the score falling.
+covert_regime_change_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_regime_change_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+		covert_op_start = { TYPE = regime_change DEFENSE_MOD = country_covert_defense_ideological_add CODE = 9 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_regime_change_tt
+			covert_ops_type_below_cap = { TYPE = covert_regime_change_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_regime_change_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		# Allowed during war: no has_war guard
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_requires_rivalry_tt
+			has_diplomatic_pact = { who = scope:target_country type = rivalry }
+		}
+		custom_tooltip = {
+			text = iw_target_not_our_subject_tt
+			NOT = { scope:target_country = { is_subject_of = ROOT } }
+		}
+		custom_tooltip = {
+			text = iw_severe_ops_need_tradecraft_tt
+			covert_tradecraft_unlocks_severe_ops = yes
+		}
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	pact = {
+		cost = 0
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		# The Tradecraft gate is launch-only: a running operation survives the
+		# agency's score falling below Seasoned.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_requires_rivalry_tt
+					has_diplomatic_pact = { who = scope:target_country type = rivalry }
+				}
+			}
+		}
+
+		# Allowed during war: do not auto-break when war starts
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_no_truce_tt
+					NOT = { has_truce_with = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = regime_change } }
+		auto_break_effect = { covert_op_end = { TYPE = regime_change } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.03
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.25
+			}
+		}
+
+		will_propose = {
+			has_diplomatic_pact = { who = scope:target_country type = rivalry }
+			OR = {
+				has_attitude = { who = scope:target_country attitude = antagonistic }
+				has_attitude = { who = scope:target_country attitude = domineering }
+			}
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+			country_rank >= rank_value:major_power
+		}
+
+		propose_score = {
+			value = 5
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 5
+			}
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 8
+			}
+		}
+	}
+}
+
+# ---- PEACETIME: Nuclear Programme Sabotage (slice 6) ----
+# Infiltrate a foreign nuclear weapons programme and slow it: faulty parts,
+# failed centrifuges, missing scientists. Severe tier. Needs a Seasoned agency
+# to launch; lapses when the target's programme stops.
+covert_nuclear_sabotage_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_nuclear_sabotage_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+		covert_op_start = { TYPE = nuclear_sabotage DEFENSE_MOD = country_covert_defense_military_add CODE = 10 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_nuclear_sabotage_tt
+			covert_ops_type_below_cap = { TYPE = covert_nuclear_sabotage_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_nuclear_sabotage_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		# Allowed during war: no has_war guard
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_target_nuclear_programme_tt
+			scope:target_country = { nuclear_program_is_proliferating = yes }
+		}
+		custom_tooltip = {
+			text = iw_severe_ops_need_tradecraft_tt
+			covert_tradecraft_unlocks_severe_ops = yes
+		}
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	pact = {
+		cost = 0
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		# The Tradecraft gate is launch-only: a running operation survives the
+		# agency's score falling below Seasoned. Maintained on the programme
+		# existing, not on it being funded: a target that steps funding to 0
+		# for a week must not end the operation for free.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_nuclear_programme_standing_tt
+					scope:target_country = { nuclear_program_is_standing = yes }
+				}
+			}
+		}
+
+		# Allowed during war: do not auto-break when war starts
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_no_truce_tt
+					NOT = { has_truce_with = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = nuclear_sabotage } }
+		auto_break_effect = { covert_op_end = { TYPE = nuclear_sabotage } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.03
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.25
+			}
+		}
+
+		will_propose = {
+			scope:target_country = { nuclear_program_is_proliferating = yes }
+			OR = {
+				has_modifier = nuclear_power
+				country_rank >= rank_value:great_power
+			}
+			OR = {
+				has_diplomatic_pact = { who = scope:target_country type = rivalry }
+				has_attitude = { who = scope:target_country attitude = antagonistic }
+			}
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+		}
+
+		propose_score = {
+			value = 5
+			if = {
+				limit = {
+					scope:target_country = {
+						has_variable = nuclear_weapon_program_progress
+						var:nuclear_weapon_program_progress >= 75
+					}
+				}
+				add = 10
+			}
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 5
+			}
+		}
+	}
+}
+
+# ---- PEACETIME: Space Programme Espionage (slice 6) ----
+# Steal the rocket plans of a space programme that is ahead of ours: our
+# milestones progress faster and fail less often. Mild tier. Requires the
+# target to have completed a milestone we have not.
+# Effect phases through preparatory → establishing → fully operational.
+covert_space_espionage_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_space_espionage_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_phase_warning_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+		covert_op_start = { TYPE = space_espionage DEFENSE_MOD = country_covert_defense_economic_add CODE = 11 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_space_espionage_tt
+			covert_ops_type_below_cap = { TYPE = covert_space_espionage_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_space_espionage_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		# Allowed during war: no has_war guard
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_target_ahead_in_space_tt
+			covert_target_ahead_in_space = { TARGET = scope:target_country }
+		}
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	pact = {
+		cost = 0
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		# Stealing plans from a programme we have caught up with is pointless.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_ahead_in_space_tt
+					covert_target_ahead_in_space = { TARGET = scope:target_country }
+				}
+			}
+		}
+
+		# Allowed during war: do not auto-break when war starts
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_no_truce_tt
+					NOT = { has_truce_with = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = space_espionage } }
+		auto_break_effect = { covert_op_end = { TYPE = space_espionage } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.03
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+			if = {
+				limit = { ruler_is_cautious = yes }
+				multiply = 0.5
+			}
+		}
+
+		will_propose = {
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+			# Only spy on a programme that is ahead, while we run one ourselves
+			covert_target_ahead_in_space = { TARGET = scope:target_country }
+			sr_is_pursuing_milestone = yes
+		}
+
+		propose_score = {
+			value = 10
+			if = {
+				limit = { country_rank >= rank_value:great_power }
+				add = 5
+			}
+		}
+	}
+}
+
+# ---- PEACETIME: Cultivate Assets (slice 6) ----
+# Dinners, favours and a slow list of names. No effect on the target at all:
+# its only product is our network there, which grows x covert_net_cultivate_mult
+# while it runs. Mild tier; priority fixed at 1; counts towards Tradecraft
+# only at the preparatory rate.
+covert_cultivate_assets_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_cultivate_assets_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+		covert_op_start = { TYPE = cultivate_assets DEFENSE_MOD = country_covert_defense_ideological_add CODE = 12 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_cultivate_assets_tt
+			covert_ops_type_below_cap = { TYPE = covert_cultivate_assets_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_cultivate_assets_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		# Allowed during war: no has_war guard
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_target_not_our_subject_tt
+			NOT = { scope:target_country = { is_subject_of = ROOT } }
+		}
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	pact = {
+		cost = 0
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_not_decentralized_tt
+					scope:target_country = { covert_action_valid_target = yes }
+				}
+			}
+		}
+
+		# Allowed during war: do not auto-break when war starts
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_no_truce_tt
+					NOT = { has_truce_with = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = cultivate_assets } }
+		auto_break_effect = { covert_op_end = { TYPE = cultivate_assets } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.05
+		}
+
+		will_propose = {
+			OR = {
+				has_diplomatic_pact = { who = scope:target_country type = rivalry }
+				has_attitude = { who = scope:target_country attitude = antagonistic }
+			}
+			covert_net_weaker_than = { TARGET = scope:target_country STRENGTH = covert_cultivate_ai_net_ceiling }
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+		}
+
+		propose_score = {
+			value = 5
+			# Feed the network another operation there already benefits from.
+			if = {
+				limit = {
+					has_variable_list = iw_ops
+					any_in_list = {
+						variable = iw_ops
+						var:iw_target ?= scope:target_country
+					}
+				}
+				add = 5
+			}
+		}
+	}
+}

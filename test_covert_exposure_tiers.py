@@ -11,6 +11,7 @@ import unittest
 from pathlib import Path
 
 from paradox_file_parser import ParadoxFileParser
+from test_covert_op_registry import CODES, TIER_CODES, TIERS as ACTION_TIER
 
 ROOT = Path(__file__).resolve().parent
 TRIGGERS = ROOT / "common/scripted_triggers/covert_warfare_triggers.txt"
@@ -23,25 +24,6 @@ ACTIONS = ROOT / "common/diplomatic_actions/covert_operations.txt"
 LOC_NOTIFICATIONS = ROOT / "localization/english/te_notifications_l_english.yml"
 DEBUG_EFFECTS = ROOT / "common/scripted_effects/te_debug_covert_effects.txt"
 
-# Slice 1's codes, repeated here so this file stands alone.
-CODES = {
-    "election_interference": 0,
-    "financial_subversion": 1,
-    "infrastructure_sabotage": 2,
-    "comms_disruption": 3,
-    "industrial_espionage": 4,
-    "military_espionage": 5,
-    "influence_campaign": 6,
-    "ideological_subversion": 7,
-    "destabilization": 8,
-}
-
-TIER_CODES = {
-    "mild": {4, 5},
-    "moderate": {0, 1, 6},
-    "severe": {7, 8},
-    "war": {2, 3},
-}
 
 # Values slice 2 retires. None of them may survive anywhere in the mod.
 RETIRED_VALUES = (
@@ -249,7 +231,7 @@ class HelperTests(unittest.TestCase):
 
 class TierTableTests(unittest.TestCase):
     def test_tier_triggers_partition_every_operation_code(self):
-        # Slice 6 adds three operation types. Each new code must land in
+        # Each operation code (test_covert_op_registry.OPS) must land in
         # exactly one tier, and no code may be forgotten.
         body = _text(TRIGGERS)
         seen = {}
@@ -566,19 +548,6 @@ class TierNameLocTests(unittest.TestCase):
         body = "".join(p.read_text(encoding="utf-8-sig") for p in loc)
         for tier in TIER_CODES:
             self.assertIn("iw_exposure_tier_%s:" % tier, body)
-
-
-ACTION_TIER = {
-    "election_interference": "moderate",
-    "financial_subversion": "moderate",
-    "infrastructure_sabotage": "war",
-    "comms_disruption": "war",
-    "industrial_espionage": "mild",
-    "military_espionage": "mild",
-    "influence_campaign": "moderate",
-    "ideological_subversion": "severe",
-    "destabilization": "severe",
-}
 
 
 class PreLaunchTierNoteTests(unittest.TestCase):

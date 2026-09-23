@@ -1,7 +1,7 @@
 """Structural tests for the covert operations widget's per-row stand-down.
 
 Stand-down is always shown on its row: there is no panel-level arming toggle.
-Each row carries nine stand-down instances, one per operation type, and only
+Each row carries one stand-down instance per operation type, and only
 the one whose tag matches the row's container may be visible.
 """
 
@@ -9,21 +9,11 @@ import re
 import unittest
 from pathlib import Path
 
+from test_covert_op_registry import TYPES
+
 ROOT = Path(__file__).resolve().parent
 WIDGET = ROOT / "gui/journal_entry_widgets/covert_operations_widget.gui"
 LOC_DIR = ROOT / "localization/english"
-
-TYPES = (
-    "election_interference",
-    "financial_subversion",
-    "infrastructure_sabotage",
-    "comms_disruption",
-    "industrial_espionage",
-    "military_espionage",
-    "influence_campaign",
-    "ideological_subversion",
-    "destabilization",
-)
 
 
 class StandDownTests(unittest.TestCase):

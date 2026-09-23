@@ -31,10 +31,10 @@
 #    docs/guides/scripting_best_practices.md § "Asking Script a Yes/No Question
 #    From `.gui`".
 #
-# 4. THE STAND-DOWN HANDLERS (covert_stand_down_<type>_sgui, nine of them). One
-#    per operation type, each ending the operation a widget row is showing. See
-#    their own section header for why there are nine rather than one with a type
-#    op code, and for the single unproven link in the mechanism.
+# 4. THE STAND-DOWN HANDLERS (covert_stand_down_<type>_sgui). One per
+#    operation type, each ending the operation a widget row is showing. See
+#    their own section header for why there is one per type rather than one
+#    with a type op code, and for the single unproven link in the mechanism.
 #
 # 5. THE PRIORITY STEPPER (covert_priority_up_sgui, covert_priority_down_sgui).
 #    One handler per direction; the row's container arrives as the saved scope
@@ -484,6 +484,90 @@ covert_stand_down_destabilization_sgui = {
 
 	effect = {
 		covert_effect_stand_down = { TYPE = destabilization ACTION = covert_destabilization_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_regime_change_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = regime_change }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = regime_change ACTION = covert_regime_change_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_nuclear_sabotage_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = nuclear_sabotage }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = nuclear_sabotage ACTION = covert_nuclear_sabotage_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_space_espionage_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = space_espionage }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = space_espionage ACTION = covert_space_espionage_action }
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+}
+
+covert_stand_down_cultivate_assets_sgui = {
+	scope = country
+	saved_scopes = { iw_tgt }
+
+	is_shown = {
+		always = yes
+	}
+
+	is_valid = {
+		covert_possible_stand_down = { TYPE = cultivate_assets }
+	}
+
+	effect = {
+		covert_effect_stand_down = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action }
 	}
 
 	ai_is_valid = {

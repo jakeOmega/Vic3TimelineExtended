@@ -189,6 +189,21 @@ covert_tradecraft_tier_4_floor = 80
 # Networks grow this much faster per tier (x1.6 at Veteran). The intelligence
 # capacity bonus per tier is the iw_tradecraft_bonus static modifier itself.
 covert_tradecraft_net_gain_per_tier = 0.15
+# ---- New operations (slice 6) ----
+# Regime change: once fully operational, a monthly push on any coup already
+# under way in the target (je_ip4_coup's bar runs 10 -> 120 and moves weekly
+# by commander strength minus coup resistance). Vanilla's coup events nudge it
+# by 15; this is a steady third of that. Most of the operation's pull on a
+# coup comes through coup resistance, not this push (plan table:
+# docs/superpowers/plans/2026-09-23-covert-new-operations.md).
+covert_regime_change_coup_push = 5
+# Cultivate assets: a network with one running against its target grows this
+# much faster. Stacks with the extra-operation factor and with Tradecraft.
+# Alone against a target: strength 50 in ~17 months (25 for any other
+# operation), 75 in ~28 (42).
+covert_net_cultivate_mult = 1.5
+# The AI proposes cultivate assets only where its network is weaker than this.
+covert_cultivate_ai_net_ceiling = 50
 
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY
@@ -1072,6 +1087,16 @@ covert_net_tick_gain = {
 	if = {
 		limit = { has_variable = iw_net_tc_mult }
 		multiply = var:iw_net_tc_mult
+	}
+	# Cultivate assets (slice 6): flagged onto the network by covert_nets_sync
+	# step 2 when one runs against its target. A network from before slice 6
+	# has no flag until its first pass; missing reads as x1.
+	if = {
+		limit = {
+			has_variable = iw_net_cultivating
+			var:iw_net_cultivating = 1
+		}
+		multiply = covert_net_cultivate_mult
 	}
 }
 

@@ -6168,6 +6168,44 @@ covert_military_espionage_detected = {
 	country_authority_add = -3
 }
 
+# Applied to TARGET while a regime-change operation runs (covert slice 6),
+# scaled by phase x priority. country_coup_resistance_add is script_only, so
+# it does not render in the modifier tooltip; covert_regime_change_desc names
+# it instead.
+covert_regime_change = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_coup_resistance_add = -1
+	country_legitimacy_base_add = -5
+	political_movement_radicalism_add = 0.05
+}
+
+# Applied to TARGET while a nuclear-programme sabotage operation runs (covert
+# slice 6), scaled by phase x priority. je_nuclear_program multiplies progress
+# by (1 + this): x0.75 at base strength, x0.2 at the strongest operation
+# (fully operational, priority 3), never zero. The modifier type is
+# script_only, so the tooltip lists no effect; covert_nuclear_sabotage_desc
+# states it instead.
+covert_nuclear_sabotage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_nuclear_program_progress_mult = -0.25
+}
+
+# Applied to SELF while a space-programme espionage operation runs (covert
+# slice 6), from the strongest such operation (phase x priority).
+covert_space_espionage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_space_race_progress_mult = 0.10
+	country_space_race_risk_mult = -0.10
+}
+
+# Applied to TARGET while a space-programme espionage operation runs against
+# it, so covert_warfare.2 can tell the defender when one is burned. Same shape
+# as the industrial and military espionage markers.
+covert_space_espionage_detected = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_authority_add = -3
+}
+
 # ============================================================================
 # CULTURAL HEGEMONY EVENTS - Timed modifiers from cultural hegemony events
 # ============================================================================

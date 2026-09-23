@@ -2,7 +2,8 @@
 # COVERT WARFARE — Scripted Triggers
 # ============================================================================
 
-# Check if a diplomatic pact is a covert operation pact (any of the 9 types).
+# Check if a diplomatic pact is a covert operation pact (any type; the list is
+# pinned by test_covert_op_registry).
 # Scope: diplomatic_pact
 is_covert_operation_pact = {
 	OR = {
@@ -15,6 +16,10 @@ is_covert_operation_pact = {
 		is_diplomatic_action_type = covert_influence_campaign_action
 		is_diplomatic_action_type = covert_ideological_subversion_action
 		is_diplomatic_action_type = covert_destabilization_action
+		is_diplomatic_action_type = covert_regime_change_action
+		is_diplomatic_action_type = covert_nuclear_sabotage_action
+		is_diplomatic_action_type = covert_space_espionage_action
+		is_diplomatic_action_type = covert_cultivate_assets_action
 	}
 }
 
@@ -176,6 +181,19 @@ covert_possible_priority_up = {
 			}
 		}
 	}
+	# Cultivate assets (slice 6) has no effect for priority to multiply, so it
+	# stays at 1: raising it would only cost upkeep and detection. The AI
+	# steps through this same trigger, so it cannot raise it either. Inside a
+	# trigger_if so the line exists only on such a row: IsValidTooltip prints
+	# every custom_tooltip with a tick or a cross, and a bare one would sit on
+	# every other operation's stepper as a meaningless tick.
+	trigger_if = {
+		limit = { scope:iw_op ?= { has_tag = iw_op_cultivate_assets } }
+		custom_tooltip = {
+			text = iw_priority_cultivate_fixed_tt
+			always = no
+		}
+	}
 	# Tradecraft gate (slice 5): the step TO priority 3 needs an Established
 	# agency. Only the step up is gated — an operation already at 3 stays
 	# there when the score falls, and stepping down is never blocked. The AI
@@ -223,6 +241,8 @@ covert_code_tier_mild = {
 	OR = {
 		var:$VAR$ = 4
 		var:$VAR$ = 5
+		var:$VAR$ = 11
+		var:$VAR$ = 12
 	}
 }
 
@@ -242,6 +262,8 @@ covert_code_tier_severe = {
 	OR = {
 		var:$VAR$ = 7
 		var:$VAR$ = 8
+		var:$VAR$ = 9
+		var:$VAR$ = 10
 	}
 }
 
@@ -319,4 +341,57 @@ covert_tradecraft_unlocks_severe_ops = {
 # Veteran: one more operation of each type (covert_ops_max_per_type).
 covert_tradecraft_unlocks_extra_per_type = {
 	covert_tradecraft_tier_4 = yes
+}
+
+# ============================================================================
+# NEW OPERATIONS (slice 6)
+# ============================================================================
+
+# True when $TARGET$ has completed at least one space race milestone this
+# country has not. Milestone completion is public (world-first modifiers
+# announce it), so this is not the progress omniscience the space race design
+# forbids. The gate on covert_space_espionage_action — the space-race
+# analogue of industrial espionage's tech-gap gate.
+# Parameters: $TARGET$ = the country that may be ahead (scope:target_country
+#             from an action; PREV from the console harness)
+# Scope: country (the operator)
+covert_target_ahead_in_space = {
+	OR = {
+		covert_target_ahead_in_space_on = { TARGET = $TARGET$ MILESTONE = suborbital }
+		covert_target_ahead_in_space_on = { TARGET = $TARGET$ MILESTONE = orbital }
+		covert_target_ahead_in_space_on = { TARGET = $TARGET$ MILESTONE = moon_landing }
+		covert_target_ahead_in_space_on = { TARGET = $TARGET$ MILESTONE = probe }
+		covert_target_ahead_in_space_on = { TARGET = $TARGET$ MILESTONE = moon_base }
+		covert_target_ahead_in_space_on = { TARGET = $TARGET$ MILESTONE = mars_landing }
+		covert_target_ahead_in_space_on = { TARGET = $TARGET$ MILESTONE = interstellar_probe }
+		covert_target_ahead_in_space_on = { TARGET = $TARGET$ MILESTONE = solar_colonization }
+	}
+}
+
+# One milestone of the above.
+# Parameters: $TARGET$ as above; $MILESTONE$ = suborbital | orbital |
+#             moon_landing | probe | moon_base | mars_landing |
+#             interstellar_probe | solar_colonization
+# Scope: country (the operator)
+covert_target_ahead_in_space_on = {
+	$TARGET$ = { has_variable = sr_completed_$MILESTONE$ }
+	NOT = { has_variable = sr_completed_$MILESTONE$ }
+}
+
+# True unless this country already has a network of at least $STRENGTH$
+# against $TARGET$. For the AI's cultivate-assets proposal: build where the
+# network is thin, not where it is already strong.
+# Parameters: $TARGET$ = country (a scope: reference), $STRENGTH$ = 0-100
+# Scope: country (the operator)
+covert_net_weaker_than = {
+	NOT = {
+		AND = {
+			has_variable_list = iw_nets
+			any_in_list = {
+				variable = iw_nets
+				var:iw_target ?= $TARGET$
+				var:iw_net_strength >= $STRENGTH$
+			}
+		}
+	}
 }

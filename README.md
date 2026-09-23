@@ -63,7 +63,7 @@ Thirteen mod systems can be turned on or off at game setup. Defaults below; full
 | `banking_system_rule` | enabled | Banking cycle JE, crash contagion, fiscal-policy modifier. **Three settings**: *enabled* (cycle + the full monetary-policy layer), *simplified* (the cycle only — no policy rate, no inflation, no exchange rate, no currency pegs or shared currencies; your government still borrows at the world rate plus its own risk premium, it just cannot steer it), *disabled* (no JE at all) |
 | `global_warming_rule` | enabled | CO₂ tracking, climate JE, warming modifiers |
 | `cultural_hegemony_rule` | enabled | Soft-power JE and on-action |
-| `covert_warfare_rule` | enabled | Covert operations command-centre JE (`je_covert_warfare`), 9 covert diplomatic actions |
+| `covert_warfare_rule` | enabled | Covert operations command-centre JE (`je_covert_warfare`), 13 covert diplomatic actions |
 | `heir_education_rule` | **disabled** | Heir education JE and focus modifiers; also turns on aptitude traits for rulers and heirs |
 | `united_nations_rule` | enabled | UN JE, vote events, specialized agencies |
 | `nuclear_weapons_rule` | enabled | Nuclear program JE, strike events, nuclear-disarmament treaty article |
