@@ -106,6 +106,24 @@ covert_exposure_infamy_max = 25
 # Maximum funding level (0 = dormant, max = deep state)
 iw_funding_level_max = 5
 
+# ---- Per-operation priority (slice 3) ----
+# An operation's priority (iw_priority on its container, 1 when missing)
+# multiplies what it does, what it costs and how exposed it is. Cost outruns
+# effect at every step: that is the diminishing return that stops "everything
+# at 3" from being the answer.
+covert_op_priority_max = 3
+covert_op_priority_2_effect_mult = 1.35
+covert_op_priority_3_effect_mult = 1.6
+# Each operation's share of the covert budget (priority 1 = one share).
+covert_op_priority_2_cost_mult = 1.6
+covert_op_priority_3_cost_mult = 2.4
+# Raw detection points per priority level above 1, added before covert
+# efficiency (so late-game tradecraft still hides most of it).
+covert_op_priority_detect_add = 2
+# A fully operational operation works at this multiple of an establishing one.
+# Replaces the literal `multiplier = 2` the apply sites used to carry.
+covert_op_phase_full_mult = 2
+
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY
 # ============================================================================
@@ -815,4 +833,64 @@ covert_exposure_relations_deny = {
 covert_exposure_relations_acknowledge = {
 	value = covert_exposure_relations_deny
 	multiply = covert_exposure_acknowledge_relations_mult
+}
+
+# ============================================================================
+# SECTION: PER-OPERATION PRIORITY (slice 3)
+# ============================================================================
+# add_modifier's multiplier is stored with the modifier and re-evaluated
+# against ROOT on later ticks, so it cannot be a value that reads the
+# operation's container. Every apply site therefore goes through
+# covert_op_add_scaled_modifier (covert_warfare_effects.txt), which branches
+# phase x priority onto one of these six CONSTANT values. Keep them free of
+# var:, scope: and trigger reads.
+
+covert_op_mult_p2_pri1 = {
+	value = 1
+}
+
+covert_op_mult_p2_pri2 = {
+	value = covert_op_priority_2_effect_mult
+}
+
+covert_op_mult_p2_pri3 = {
+	value = covert_op_priority_3_effect_mult
+}
+
+covert_op_mult_p3_pri1 = {
+	value = covert_op_phase_full_mult
+}
+
+covert_op_mult_p3_pri2 = {
+	value = covert_op_phase_full_mult
+	multiply = covert_op_priority_2_effect_mult
+}
+
+covert_op_mult_p3_pri3 = {
+	value = covert_op_phase_full_mult
+	multiply = covert_op_priority_3_effect_mult
+}
+
+# The same product, evaluated ON the container, for choosing between
+# operations (never as a multiplier). 0 while preparatory, which is what
+# makes a preparatory operation lose to any working one.
+# Scope: covert operation container
+covert_op_effect_mult = {
+	value = 0
+	if = {
+		limit = { covert_op_is_fully_operational = yes }
+		add = covert_op_phase_full_mult
+	}
+	else_if = {
+		limit = { covert_op_is_established = yes }
+		add = 1
+	}
+	if = {
+		limit = { covert_op_priority_at_least = { N = 3 } }
+		multiply = covert_op_priority_3_effect_mult
+	}
+	else_if = {
+		limit = { covert_op_priority_at_least = { N = 2 } }
+		multiply = covert_op_priority_2_effect_mult
+	}
 }

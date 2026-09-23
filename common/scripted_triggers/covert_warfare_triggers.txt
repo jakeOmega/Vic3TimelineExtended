@@ -53,6 +53,16 @@ covert_op_is_fully_operational = {
 	var:iw_duration >= 12
 }
 
+# True when the operation's priority is at least $N$. A container without
+# iw_priority (a save made before slice 3, until the first monthly sync) reads
+# as priority 1, so this is false for it.
+# Parameters: $N$ = 2 or 3
+# Scope: covert operation container
+covert_op_priority_at_least = {
+	has_variable = iw_priority
+	var:iw_priority >= $N$
+}
+
 # ============================================================================
 # FUNDING CONTROLS — shared eligibility
 # ============================================================================
