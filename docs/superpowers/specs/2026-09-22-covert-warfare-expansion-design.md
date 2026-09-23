@@ -49,7 +49,7 @@ Findings from exploration that shape the design:
 | 1 | Per-operation detection roll | small | — |
 | 2 | Graduated exposure (tier × phase, third-party notice) | small | 1 |
 | 3 | Per-operation priority (diminishing returns) — built on branch covert-per-op-priority | medium | 1 |
-| 4 | Persistent per-target networks | medium | 1, 3 |
+| 4 | Persistent per-target networks — built on branch covert-per-target-networks | medium | 1, 3 |
 | 5 | Agency experience ("Tradecraft") + unlocks | medium | 2, 3, 4 |
 | 6 | Three new operation types | medium-large | 2, 5 |
 | 7 | Network-revealed intelligence in the widget | small-medium | 4 |
@@ -240,6 +240,17 @@ single-op rebuilding.
 
 **Widget**: third widget `widget_je_covert_networks` on `custom_widget_container_3`,
 `datamodel = GetList('iw_nets')`, rows = target name, strength, trend. Loc `je_iw_net_*`.
+
+**As built (plan `docs/superpowers/plans/2026-09-22-covert-per-target-networks.md`).**
+Departures from the text above: the monthly pass is called from the JE pulse right after
+`covert_ops_sync_all`, not inside it (that effect also runs on every funding / priority click),
+so detection reads last month's strength; operations per network are counted by accumulation
+rather than `any_in_list count >= N` (no vanilla precedent); the funding-halved decay branches
+on the operator in the effect instead of staging funding onto the network; the head start is
+rounded to whole months; the detection floor is `covert_ops_detection_floor` (0.1, from slice 2),
+not `min = 1`; the network is also created at operation creation, after the head-start lookup;
+`iw_net_trend` 0 means "holding at full strength"; the loc lives in
+`te_journal_entries_l_english.yml` beside the other `je_iw_*` keys.
 
 ## Slice 5 — Agency experience ("Tradecraft")
 
