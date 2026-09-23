@@ -33,6 +33,7 @@
 #           iw_net_ops              operations against the target this month (display)
 #           iw_net_trend            1 growing, 2 decaying, 0 holding at max (display)
 #           iw_net_head_start_offer months of head start a new operation would get
+#           iw_net_tc_mult          operator's Tradecraft growth multiplier, copied each tick (slice 5)
 #
 # listed in the operator's `iw_nets`. It outlives the operations: that is the
 # point. Operations read it at creation (head start), at every detection
@@ -416,6 +417,7 @@ covert_net_loss = {
 #   3. Tick: grow with >= 1 operation, otherwise decay (halved at funding
 #      >= covert_net_maintain_funding_level); restate trend and display
 #      capital (the head-start offer follows every write, in covert_net_clamp).
+#      Gains are multiplied by the operator's Tradecraft (iw_net_tc_mult).
 #   4. Reap networks whose target is gone, or that hit 0 with no operations:
 #      temporary list -> remove_list_variable -> destroy_container.
 # Detection (staged inside covert_ops_sync_all) therefore reads last month's
@@ -423,6 +425,10 @@ covert_net_loss = {
 # Scope: operator country
 covert_nets_sync = {
 	save_scope_as = iw_net_operator
+	# Tradecraft's network growth multiplier (slice 5), staged once for the
+	# tick to copy onto each network (rule: containers read the operator via
+	# scope:<country>.var:, never parent). Removed at the end of the pass.
+	set_variable = { name = iw_tc_net_mult_staging value = covert_tradecraft_net_gain_mult }
 	# ---- 1. Ensure ----
 	if = {
 		limit = { has_variable_list = iw_ops }
@@ -460,6 +466,7 @@ covert_nets_sync = {
 		# ---- 3. Tick ----
 		every_in_list = {
 			variable = iw_nets
+			set_variable = { name = iw_net_tc_mult value = scope:iw_net_operator.var:iw_tc_net_mult_staging }
 			if = {
 				limit = { var:iw_net_ops >= 1 }
 				covert_net_gain = { AMOUNT = covert_net_tick_gain }
@@ -513,6 +520,7 @@ covert_nets_sync = {
 			destroy_container = yes
 		}
 	}
+	remove_variable = iw_tc_net_mult_staging
 }
 
 # ============================================================================

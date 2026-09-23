@@ -221,5 +221,46 @@ class BurnLossTests(unittest.TestCase):
         )
 
 
+class ConsumerTests(unittest.TestCase):
+    def test_priority_gate_only_on_step_to_three(self):
+        body = _text(TRIGGERS)
+        up = _top_level_block(body, "covert_possible_priority_up = {")
+        self.assertIn("text = iw_priority_3_needs_tradecraft_tt", up)
+        self.assertIn("covert_tradecraft_unlocks_priority_3 = yes", up)
+        # An operation below priority 2 steps freely.
+        self.assertIn("NOT = { covert_op_priority_at_least = { N = 2 } }", up)
+        down = _top_level_block(body, "covert_possible_priority_down = {")
+        self.assertNotIn("tradecraft", down)
+        # The AI goes through the same trigger.
+        ai = _top_level_block(_text(EFFECTS), "covert_ai_manage_priorities = {")
+        self.assertIn("covert_possible_priority_up = yes", ai)
+
+    def test_per_type_cap_veteran(self):
+        block = _top_level_block(_text(VALUES), "covert_ops_max_per_type = {")
+        self.assertIn("covert_tradecraft_unlocks_extra_per_type = yes", block)
+        self.assertIn("mainframe_computers", block)
+
+    def test_net_multiplier_copied_before_gain(self):
+        block = _top_level_block(_text(EFFECTS), "covert_nets_sync = {")
+        stage = block.index("set_variable = { name = iw_tc_net_mult_staging value = covert_tradecraft_net_gain_mult }")
+        tick = block.index("# ---- 3. Tick ----")
+        copy = block.index("set_variable = { name = iw_net_tc_mult value = scope:iw_net_operator.var:iw_tc_net_mult_staging }")
+        gain = block.index("covert_net_gain = { AMOUNT = covert_net_tick_gain }")
+        self.assertLess(stage, tick)
+        self.assertLess(tick, copy)
+        self.assertLess(copy, gain)
+        self.assertIn("remove_variable = iw_tc_net_mult_staging", block[gain:])
+
+    def test_tick_gain_reads_multiplier(self):
+        block = _top_level_block(_text(VALUES), "covert_net_tick_gain = {")
+        self.assertIn("has_variable = iw_net_tc_mult", block)
+        self.assertIn("multiply = var:iw_net_tc_mult", block)
+
+    def test_gate_loc(self):
+        loc = _all_loc()
+        self.assertRegex(loc, r"(?m)^ iw_priority_3_needs_tradecraft_tt:0 .*covert_tradecraft_tier_2_floor")
+        self.assertRegex(loc, r"(?m)^ je_iw_slots_detail_tooltip:0 .*covert_tradecraft_tier_4_floor")
+
+
 if __name__ == "__main__":
     unittest.main()

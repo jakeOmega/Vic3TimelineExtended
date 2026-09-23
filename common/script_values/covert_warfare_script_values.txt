@@ -267,11 +267,14 @@ covert_operation_max_slots = {
 }
 
 # Maximum operations of the same type that can run simultaneously
-# Scales with technology: 1 base + 1 with mainframe_computers + 1 with cyber_warfare
+# 1 base + 1 with mainframe_computers + 1 with cyber_warfare + 1 for a Veteran
+# agency (slice 5). Only gates launching: an operation over the cap after the
+# score falls keeps running.
 covert_ops_max_per_type = {
 	value = 1
 	if = { limit = { has_technology_researched = mainframe_computers } add = 1 }
 	if = { limit = { has_technology_researched = cyber_warfare } add = 1 }
+	if = { limit = { covert_tradecraft_unlocks_extra_per_type = yes } add = 1 }
 }
 
 # Currently active operations — exact pact count using step pattern
@@ -1049,6 +1052,7 @@ covert_net_gain_scale = {
 # for one operation against the target, plus covert_net_extra_op_factor of it
 # for each further one, counted up to three. var:iw_net_ops is written by the
 # tick just before this is read.
+# Multiplied by the operator's Tradecraft network multiplier (var:iw_net_tc_mult).
 # Scope: network container
 covert_net_tick_gain = {
 	value = var:iw_net_ops
@@ -1058,7 +1062,14 @@ covert_net_tick_gain = {
 	multiply = covert_net_extra_op_factor
 	add = 1
 	multiply = covert_net_gain_base
+	# The operator's Tradecraft (slice 5): staged onto the network by
+	# covert_nets_sync just before this is read; missing reads as x1.
+	if = {
+		limit = { has_variable = iw_net_tc_mult }
+		multiply = var:iw_net_tc_mult
+	}
 }
+
 
 # Head start, in whole months, that a new operation against this network's
 # target starts with. Fixed on the operation at creation.

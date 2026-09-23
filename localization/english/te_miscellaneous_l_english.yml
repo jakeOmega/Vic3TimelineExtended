@@ -2062,6 +2062,7 @@
  iw_op_name_infrastructure_sabotage:0 "Infrastructure Sabotage"
  iw_op_name_military_espionage:0 "Military Espionage"
  iw_op_name_unknown:0 "an unidentified operation"
+ iw_priority_3_needs_tradecraft_tt:0 "Priority #v 3#! needs an agency of at least #bold Established#! Tradecraft (#v [GetPlayer.MakeScope.ScriptValue('covert_tradecraft_tier_2_floor')|0]#!)"
  iw_priority_not_max_tt:0 "Priority is not already at its maximum ([GetPlayer.MakeScope.ScriptValue('covert_op_priority_max')|0])"
  iw_priority_not_min_tt:0 "Priority is above the lowest level (1)"
  iw_priority_op_known_tt:0 "The operation on this row can be identified"

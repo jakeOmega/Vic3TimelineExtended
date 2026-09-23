@@ -176,8 +176,17 @@ covert_possible_priority_up = {
 			}
 		}
 	}
-	# Slice 5 adds its Tradecraft gate on the step to priority 3 here, as one
-	# more custom_tooltip, so it binds the stepper and the AI alike.
+	# Tradecraft gate (slice 5): the step TO priority 3 needs an Established
+	# agency. Only the step up is gated — an operation already at 3 stays
+	# there when the score falls, and stepping down is never blocked. The AI
+	# steps through this same trigger (covert_ai_manage_priorities).
+	custom_tooltip = {
+		text = iw_priority_3_needs_tradecraft_tt
+		OR = {
+			scope:iw_op ?= { NOT = { covert_op_priority_at_least = { N = 2 } } }
+			covert_tradecraft_unlocks_priority_3 = yes
+		}
+	}
 }
 
 covert_possible_priority_down = {
