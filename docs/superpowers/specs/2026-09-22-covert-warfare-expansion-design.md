@@ -298,6 +298,18 @@ scripted triggers `covert_tradecraft_tier_N`, applied through one static modifie
 Widget: one row in `widget_je_covert_command_centre` (score, tier name, last reason tooltip),
 same pattern as the funding ladder rows.
 
+**As built (plan `docs/superpowers/plans/2026-09-22-covert-tradecraft.md`).**
+Departures from the text above: the tier bands are Untested (0–19) / Fledgling (20–39) /
+Established (40–59) / Seasoned (60–79) / Veteran (80+) — "Storied" was dropped, because the
+unlock lines bind Established = 40, Seasoned = 60, Veteran = 80 and the name list did not
+fit them; the tier triggers are `covert_tradecraft_tier_1`..`_4` plus three named unlock
+triggers (`covert_tradecraft_unlocks_priority_3` / `_severe_ops` / `_extra_per_type`);
+reason codes are 1 (operations maturing) and 20–23 (burn by tier) / 24 (idle decay); the
+burn loss runs in `covert_warfare.1`'s `after`, before the type code is cleaned up;
+networks grow at last month's tier (they tick earlier in the pulse); the Seasoned unlock is
+a trigger only until slice 6 consumes it; funding level 2, formerly named "Tradecraft", is
+renamed "Professional" so the word means only this score.
+
 ## Slice 6 — Three new operation types
 
 **Per-type enumeration sites** (each new type = one row/branch in each; make the tier table
