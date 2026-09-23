@@ -155,6 +155,10 @@ covert_last_exposed_type_name = {
 		localization_key = iw_op_name_nuclear_sabotage
 	}
 	text = {
+		trigger = { var:iw_last_exposed_type = 11 }
+		localization_key = iw_op_name_space_espionage
+	}
+	text = {
 		localization_key = iw_op_name_unknown
 	}
 }
@@ -209,6 +213,10 @@ covert_burned_type_name = {
 	text = {
 		trigger = { var:iw_burned_type_code = 10 }
 		localization_key = iw_op_name_nuclear_sabotage
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 11 }
+		localization_key = iw_op_name_space_espionage
 	}
 	text = {
 		localization_key = iw_op_name_unknown

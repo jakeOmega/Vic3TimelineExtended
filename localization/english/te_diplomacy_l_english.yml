@@ -24,6 +24,7 @@
  covert_destabilization_action_pact_desc:0 "We are conducting a destabilization campaign against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], fueling political unrest and separatism."
  covert_regime_change_action_pact_desc:0 "We are bankrolling a change of government in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  covert_nuclear_sabotage_action_pact_desc:0 "We are sabotaging the nuclear weapons programme of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ covert_space_espionage_action_pact_desc:0 "We are stealing space programme designs from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  covert_election_interference_action_pact_desc:0 "We are running a covert election interference campaign against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], undermining their political [concept_legitimacy]."
  covert_financial_subversion_action_pact_desc:0 "We are conducting covert financial subversion against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], destabilizing their financial markets."
  covert_ideological_subversion_action_pact_desc:0 "We are covertly promoting our ideology within [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], supporting sympathetic [Concept('concept_political_movement', 'political movements')]."

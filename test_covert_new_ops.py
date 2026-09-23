@@ -192,5 +192,43 @@ class NuclearSabotageTests(unittest.TestCase):
             self.assertIn("nuclear_program_display_aid_bonus", loc[key])
 
 
+MILESTONES = ("suborbital", "orbital", "moon_landing", "probe", "moon_base",
+              "mars_landing", "interstellar_probe", "solar_colonization")
+
+
+class SpaceEspionageTests(unittest.TestCase):
+    def setUp(self):
+        self.block = _top_level_block(_text(ACTIONS), "covert_space_espionage_action = {")
+
+    def test_ahead_in_space_covers_every_milestone(self):
+        body = _text(TRIGGERS)
+        block = _top_level_block(body, "covert_target_ahead_in_space = {")
+        for m in MILESTONES:
+            self.assertIn("covert_target_ahead_in_space_on = { TARGET = $TARGET$ MILESTONE = %s }" % m, block)
+        helper = _top_level_block(body, "covert_target_ahead_in_space_on = {")
+        self.assertIn("$TARGET$ = { has_variable = sr_completed_$MILESTONE$ }", helper)
+        self.assertIn("NOT = { has_variable = sr_completed_$MILESTONE$ }", helper)
+
+    def test_gates_use_the_space_gap(self):
+        gate = "covert_target_ahead_in_space = { TARGET = scope:target_country }"
+        self.assertIn(gate, _section(self.block, "possible = {"))
+        self.assertIn(gate, _requirements(self.block))
+        will = _section(self.block, "will_propose = {")
+        self.assertIn(gate, will)
+        self.assertIn("sr_is_pursuing_milestone = yes", will)
+
+    def test_modifiers(self):
+        static = _text(STATIC)
+        own = _top_level_block(static, "covert_space_espionage = {")
+        self.assertIn("country_space_race_progress_mult = 0.10", own)
+        self.assertIn("country_space_race_risk_mult = -0.10", own)
+        marker = _top_level_block(static, "covert_space_espionage_detected = {")
+        self.assertIn("country_authority_add = -3", marker)
+
+    def test_self_effect_from_the_strongest_operation(self):
+        block = _top_level_block(_text(EFFECTS), "covert_ops_apply_all_phase_effects = {")
+        self.assertIn("covert_op_apply_self_effect = { TYPE = space_espionage MODIFIER = covert_space_espionage }", block)
+
+
 if __name__ == "__main__":
     unittest.main()

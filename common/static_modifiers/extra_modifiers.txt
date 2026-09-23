@@ -6090,6 +6090,22 @@ covert_nuclear_sabotage = {
 	country_nuclear_program_progress_mult = -0.25
 }
 
+# Applied to SELF while a space-programme espionage operation runs (covert
+# slice 6), from the strongest such operation (phase x priority).
+covert_space_espionage = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_space_race_progress_mult = 0.10
+	country_space_race_risk_mult = -0.10
+}
+
+# Applied to TARGET while a space-programme espionage operation runs against
+# it, so covert_warfare.2 can tell the defender when one is burned. Same shape
+# as the industrial and military espionage markers.
+covert_space_espionage_detected = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	country_authority_add = -3
+}
+
 # ============================================================================
 # CULTURAL HEGEMONY EVENTS - Timed modifiers from cultural hegemony events
 # ============================================================================

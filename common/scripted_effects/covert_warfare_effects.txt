@@ -803,6 +803,7 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 8 }
 	covert_op_sync = { TYPE = regime_change ACTION = covert_regime_change_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 9 }
 	covert_op_sync = { TYPE = nuclear_sabotage ACTION = covert_nuclear_sabotage_action DEFENSE_MOD = country_covert_defense_military_add CODE = 10 }
+	covert_op_sync = { TYPE = space_espionage ACTION = covert_space_espionage_action DEFENSE_MOD = country_covert_defense_economic_add CODE = 11 }
 	# The sync reaps lapsed containers without going through covert_op_destroy.
 	covert_refresh_priority_cost = yes
 }
@@ -1107,6 +1108,12 @@ covert_ops_apply_all_phase_effects = {
 
 		# ---- Nuclear Programme Sabotage (slice 6): country modifier on TARGET ----
 		covert_op_apply_target_effect = { TYPE = nuclear_sabotage MODIFIER = covert_nuclear_sabotage }
+
+		# ---- Space Programme Espionage (slice 6): self modifier from the
+		#      strongest operation; marker on TARGET so covert_warfare.2 can
+		#      notify them ----
+		covert_op_apply_self_effect = { TYPE = space_espionage MODIFIER = covert_space_espionage }
+		covert_op_apply_target_effect = { TYPE = space_espionage MODIFIER = covert_space_espionage_detected }
 
 		# The applied-priority snapshot just moved: recharge upkeep from it.
 		covert_refresh_priority_cost = yes
