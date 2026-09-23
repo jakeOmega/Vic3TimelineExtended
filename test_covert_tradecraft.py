@@ -129,5 +129,65 @@ class TriggerTests(unittest.TestCase):
             self.assertIn("covert_tradecraft_tier_%d = yes" % tier, block)
 
 
+class WriterTests(unittest.TestCase):
+    def test_writers_guard_missing_variable(self):
+        body = _text(EFFECTS)
+        for name in ("covert_tradecraft_gain = {", "covert_tradecraft_loss = {"):
+            block = _top_level_block(body, name)
+            self.assertIn("has_variable = iw_tradecraft", block)
+            self.assertIn("covert_tradecraft_clamp = yes", block)
+            self.assertIn("iw_tradecraft_last_reason", block)
+            # Rule 1: never change_variable with a script-value operand.
+            self.assertNotIn("change_variable", block)
+
+    def test_gain_scaled_loss_unscaled(self):
+        body = _text(EFFECTS)
+        self.assertIn("covert_tradecraft_gain_scale", _top_level_block(body, "covert_tradecraft_gain = {"))
+        self.assertNotIn("covert_tradecraft_gain_scale", _top_level_block(body, "covert_tradecraft_loss = {"))
+
+    def test_clamp_bounds(self):
+        block = _top_level_block(_text(EFFECTS), "covert_tradecraft_clamp = {")
+        self.assertIn("clamp_variable = { name = iw_tradecraft min = 0 max = covert_tradecraft_max }", block)
+
+
+class MonthlyTests(unittest.TestCase):
+    def test_monthly_called_only_from_pulse(self):
+        # covert_ops_sync_all / covert_refresh_funding_state run on every click;
+        # the score must move once a month.
+        effects = _text(EFFECTS)
+        calls = re.findall(r"covert_tradecraft_monthly = yes", effects)
+        self.assertEqual(calls, [], "covert_tradecraft_monthly must not be called from another effect")
+        je = _text(JE)
+        self.assertEqual(je.count("covert_tradecraft_monthly = yes"), 1)
+        pulse = je[je.index("on_monthly_pulse"):]
+        self.assertLess(pulse.index("covert_ops_age_all_durations = yes"), pulse.index("covert_tradecraft_monthly = yes"))
+        self.assertLess(pulse.index("covert_tradecraft_monthly = yes"), pulse.index("covert_ops_roll_detection_all = yes"))
+
+    def test_monthly_counts_established_ops_capped(self):
+        block = _top_level_block(_text(EFFECTS), "covert_tradecraft_monthly = {")
+        self.assertIn("covert_tradecraft_init = yes", block)
+        self.assertIn("covert_op_is_established = yes", block)
+        self.assertIn("max = covert_tradecraft_ops_counted", block)
+        self.assertIn("covert_tradecraft_gain = { AMOUNT = covert_tradecraft_monthly_gain_nominal REASON = 1 }", block)
+        self.assertIn("covert_operations_active < 1", block)
+        self.assertIn("covert_tradecraft_loss = { AMOUNT = covert_tradecraft_decay REASON = 24 }", block)
+        self.assertIn("covert_tradecraft_refresh_bonus = yes", block)
+
+    def test_immediate_seeds(self):
+        je = _text(JE)
+        immediate = je[je.index("immediate = {"):je.index("complete = {")]
+        self.assertIn("covert_tradecraft_init = yes", immediate)
+
+    def test_bonus_modifier(self):
+        block = _top_level_block(_text(STATIC), "iw_tradecraft_bonus = {")
+        self.assertIn("country_intelligence_capacity_mult = 0.05", block)
+        refresh = _top_level_block(_text(EFFECTS), "covert_tradecraft_refresh_bonus = {")
+        self.assertIn("multiplier = covert_tradecraft_bonus_mult", refresh)
+        self.assertIn("je:je_covert_warfare", refresh)
+        loc = _all_loc()
+        self.assertRegex(loc, r"(?m)^ iw_tradecraft_bonus:0 ")
+        self.assertRegex(loc, r"(?m)^ iw_tradecraft_bonus_desc:0 ")
+
+
 if __name__ == "__main__":
     unittest.main()

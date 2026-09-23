@@ -1741,6 +1741,8 @@
  covert_military_espionage_action_action_propose_name:0 "Launch Military Espionage"
  covert_military_espionage_detected:0 "Foreign Military Espionage"
  covert_military_espionage_unit:0 "Military Intelligence Advantage"
+ iw_tradecraft_bonus:0 "Agency Tradecraft"
+ iw_tradecraft_bonus_desc:0 "Our intelligence service's accumulated experience sharpens everything it does. Each tier of Tradecraft adds to our [concept_intelligence_capacity] and speeds the growth of our networks abroad."
  covert_op_burned_tt:0 "The compromised operation will be terminated, and our network in their country loses #R [GetPlayer.MakeScope.ScriptValue('covert_net_burn_loss')|0]#! strength."
  covert_op_capacity_comms_tt:0 "No communications disruption slots available — reduce active comms ops or increase covert capacity."
  covert_op_capacity_destabilization_tt:0 "No destabilization slots available — reduce active destabilization operations or increase covert capacity."
