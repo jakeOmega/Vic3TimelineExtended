@@ -294,5 +294,24 @@ class CultivateAssetsTests(unittest.TestCase):
         self.assertIn("covert_net_cultivate_mult", _loc()["je_iw_op_row_cultivate_detail"])
 
 
+class DebugHarnessTests(unittest.TestCase):
+    def test_seed_plants_all_four_new_codes(self):
+        block = _top_level_block(_text(DEBUG_EFFECTS), "te_debug_covert_seed_new_ops = {")
+        self.assertEqual({int(c) for c in re.findall(r"CODE = (\d+)", block)}, {9, 10, 11, 12})
+        self.assertIn("type = rivalry", block)
+        self.assertIn("nuclear_program_is_proliferating = yes", block)
+        self.assertIn("covert_target_ahead_in_space = { TARGET = PREV }", block)
+
+    def test_event_is_console_only_and_localised(self):
+        body = _text(DEBUG_EVENTS)
+        opener = re.search(r"(?m)^te_debug_covert\.4 = \{.*$", body).group(0)
+        self.assertIn("REVIEWED", opener)
+        ev = body[body.index("te_debug_covert.4 = {"):]
+        self.assertIn("event_image", ev)
+        loc = _loc()
+        for suffix in ("t", "d", "f", "a", "b"):
+            self.assertIn("te_debug_covert.4.%s" % suffix, loc)
+
+
 if __name__ == "__main__":
     unittest.main()

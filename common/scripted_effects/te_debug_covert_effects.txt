@@ -26,7 +26,7 @@ te_debug_covert_set_funding = {
 # a container with no pact at the next monthly pulse.
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
 #             $DEFENSE_MOD$ = type-specific defense modifier,
-#             $CODE$ = operation type code 0-8, matching the branches of
+#             $CODE$ = operation type code 0-12, matching the branches of
 #                      covert_last_exposed_type_name
 #             $MONTHS$ = duration to plant
 # Scope: country; scope:te_debug_covert_target must be set
@@ -229,4 +229,100 @@ te_debug_covert_set_tradecraft = {
 # Scope: country
 te_debug_covert_tick_tradecraft = {
 	covert_tradecraft_monthly = yes
+}
+
+# Slice 6's four operations, each planted fully operational (month 14) so
+# their effects land at the next monthly pulse. Each needs a target that meets
+# its requirement_to_maintain, or the pact lapses at the next check:
+#   regime change + cultivate assets  one valid target; a rivalry is declared
+#                                      on it first (regime change needs one)
+#   nuclear sabotage                   a country whose programme is funded and
+#                                      running, if there is one
+#   space espionage                    a country ahead of us in the space race,
+#                                      if there is one
+# Funding is floored at 2, like te_debug_covert_seed_phases. Also sets
+# Tradecraft to Seasoned (65), so both severe operations can be launched by
+# hand from the diplomacy panel too.
+# Scope: country
+te_debug_covert_seed_new_ops = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_variable = iw_funding_level }
+				var:iw_funding_level < 1
+			}
+		}
+		te_debug_covert_set_funding = { LEVEL = 2 }
+	}
+	te_debug_covert_set_tradecraft = { VALUE = 65 }
+	random_country = {
+		limit = {
+			NOT = { this = ROOT }
+			covert_action_valid_target = yes
+			NOT = { is_subject_of = ROOT }
+		}
+		save_scope_as = te_debug_covert_target
+	}
+	if = {
+		limit = { exists = scope:te_debug_covert_target }
+		if = {
+			limit = { NOT = { has_diplomatic_pact = { who = scope:te_debug_covert_target type = rivalry } } }
+			create_diplomatic_pact = {
+				country = scope:te_debug_covert_target
+				type = rivalry
+			}
+		}
+		te_debug_covert_plant_op = {
+			TYPE = regime_change
+			ACTION = covert_regime_change_action
+			DEFENSE_MOD = country_covert_defense_ideological_add
+			CODE = 9
+			MONTHS = 14
+		}
+		te_debug_covert_plant_op = {
+			TYPE = cultivate_assets
+			ACTION = covert_cultivate_assets_action
+			DEFENSE_MOD = country_covert_defense_ideological_add
+			CODE = 12
+			MONTHS = 14
+		}
+	}
+	random_country = {
+		limit = {
+			NOT = { this = ROOT }
+			covert_action_valid_target = yes
+			nuclear_program_is_proliferating = yes
+		}
+		save_scope_as = te_debug_covert_nuke_target
+	}
+	if = {
+		limit = { exists = scope:te_debug_covert_nuke_target }
+		scope:te_debug_covert_nuke_target = { save_scope_as = te_debug_covert_target }
+		te_debug_covert_plant_op = {
+			TYPE = nuclear_sabotage
+			ACTION = covert_nuclear_sabotage_action
+			DEFENSE_MOD = country_covert_defense_military_add
+			CODE = 10
+			MONTHS = 14
+		}
+	}
+	random_country = {
+		limit = {
+			NOT = { this = ROOT }
+			covert_action_valid_target = yes
+			ROOT = { covert_target_ahead_in_space = { TARGET = PREV } }
+		}
+		save_scope_as = te_debug_covert_space_target
+	}
+	if = {
+		limit = { exists = scope:te_debug_covert_space_target }
+		scope:te_debug_covert_space_target = { save_scope_as = te_debug_covert_target }
+		te_debug_covert_plant_op = {
+			TYPE = space_espionage
+			ACTION = covert_space_espionage_action
+			DEFENSE_MOD = country_covert_defense_economic_add
+			CODE = 11
+			MONTHS = 14
+		}
+	}
 }
