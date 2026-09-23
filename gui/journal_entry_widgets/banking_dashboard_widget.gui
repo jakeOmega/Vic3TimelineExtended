@@ -54,7 +54,11 @@ types banking_dashboard_widget_types
 	### Free-standing value textbox used inside banking_dash_condition_row.
 	### 254 is what the Monetary Policy block has left of its 460 once the
 	### 200 label column and the 6 spacing are taken; wider runs the value
-	### past the block's right edge.
+	### past the block's right edge. That is about 28 characters at this font,
+	### so any row whose text can run longer — a country name, two signed
+	### figures, a state word after a number — sets `multiline = yes` and
+	### wraps instead of eliding: Peg Confidence, Exchange Rate Index, Trade
+	### and Prices, Monetary Anchor, Backstops, Monetary Union.
 	type banking_dash_condition_value = textbox {
 		parentanchor = vcenter
 		autoresize = yes
@@ -1020,16 +1024,23 @@ flowcontainer = {
 	### Monetary Policy
 	###
 	### Unlike every other category below, this one is NOT gated on the market
-	### economy. The policy dial exists for every country — a command economy
-	### administers its rate, a bankless one pays the world rate plus a spread —
-	### and the block's whole job for those countries is to say so in one line
-	### (monetary_policy_design.md §3, §4, §5.3). The market-economy gate moved
-	### down onto the two intervention rows, which really are market-only.
+	### economy while the monetary layer is on. The policy dial exists for
+	### every country — a command economy administers its rate, a bankless one
+	### pays the world rate plus a spread — and the block's whole job for those
+	### countries is to say so in one line (monetary_policy_design.md §3, §4,
+	### §5.3). The category holds the dial block and nothing else: open-market
+	### operations sit inside it under the rate target, and moral suasion moved
+	### to Prudential Regulation.
+	###
+	### Under banking_system_simplified the dial block is gone and the only row
+	### left is open-market operations' market-only fallback, so the category is
+	### drawn for a market economy only (banking_dash_monetary_shown).
 	flowcontainer = {
 		direction = vertical
 		ignoreinvisible = yes
 		parentanchor = hcenter
 		spacing = 2
+		visible = "[GetScriptedGui('banking_dash_monetary_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 		banking_dash_category_header = {
 			blockoverride "left_text" {
@@ -1062,8 +1073,8 @@ flowcontainer = {
 			###
 			### THE WHOLE BLOCK IS OFF UNDER `banking_system_simplified` — the rate,
 			### the premium, prices, gold and the exchange rate all belong to the
-			### monetary layer that setting removes. The two intervention rows below
-			### it share the category header and are NOT gated on it.
+			### monetary layer that setting removes. Open-market operations, which
+			### that setting keeps, get a fallback row below the block instead.
 			flowcontainer = {
 				visible = "[GetScriptedGui('banking_mon_system_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 				direction = vertical
@@ -1236,6 +1247,35 @@ flowcontainer = {
 						}
 					}
 
+					### Open-market operations — the dial's own "beyond the floor"
+					### tool, so it sits under the rate target rather than in a
+					### category of its own. Drawn only where the currency law allows
+					### unbacked money (banking_mon_shows_omo); every other reason it
+					### cannot be used — the tech, the Prudential / Narrow Banking
+					### lock, the rate not at its floor, points — leaves the row
+					### visible and greyed, with the cause in the Enable tooltip.
+					### Unlike an Available Interventions row it does not vanish
+					### once enabled: the row type shows exactly one of its two
+					### buttons, so Enable becomes Disable in place.
+					banking_dash_policy_row = {
+						visible = "[GetScriptedGui('banking_mon_shows_omo').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_tt_cb_open_market_ops"
+						blockoverride "row_label" {
+							text = "CB_OPEN_MARKET_OPS"
+						}
+						blockoverride "row_cost" {
+							text = "banking_dash_cost_cb_open_market_ops"
+						}
+						blockoverride "enable_action" {
+							datacontext = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops')]"
+							text = "banking_dash_btn_enable"
+						}
+						blockoverride "disable_action" {
+							datacontext = "[GetScriptedGui('banking_dash_disable_cb_open_market_ops')]"
+							text = "banking_dash_btn_disable"
+						}
+					}
+
 					banking_dash_mon_subheader = {
 						visible = "[GetScriptedGui('banking_mon_shows_gold').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 						blockoverride "mon_subheader_text" {
@@ -1344,6 +1384,7 @@ flowcontainer = {
 						}
 						blockoverride "condition_value" {
 							banking_dash_condition_value = {
+								multiline = yes
 								text = "banking_dash_mon_pegconf_value"
 							}
 						}
@@ -1394,6 +1435,7 @@ flowcontainer = {
 						}
 						blockoverride "condition_value" {
 							banking_dash_condition_value = {
+								multiline = yes
 								text = "banking_dash_mon_fx_value"
 							}
 						}
@@ -1436,6 +1478,7 @@ flowcontainer = {
 						}
 						blockoverride "condition_value" {
 							banking_dash_condition_value = {
+								multiline = yes
 								text = "banking_dash_mon_anchor_value"
 							}
 						}
@@ -1472,6 +1515,7 @@ flowcontainer = {
 						}
 						blockoverride "condition_value" {
 							banking_dash_condition_value = {
+								multiline = yes
 								text = "banking_dash_mon_backstops_value"
 							}
 						}
@@ -1487,6 +1531,7 @@ flowcontainer = {
 						}
 						blockoverride "condition_value" {
 							banking_dash_condition_value = {
+								multiline = yes
 								text = "banking_dash_mon_union_value"
 							}
 						}
@@ -1880,13 +1925,17 @@ flowcontainer = {
 				}
 			}
 
-			### ---- Market-economy interventions ---------------------------
+			### ---- Open-market operations without a dial block ------------
+			### banking_system_simplified only: the dial block above is off,
+			### the tool is not, so it gets an ordinary Available Interventions
+			### row here. With the monetary layer on it lives under the rate
+			### target instead, and this container is hidden.
 			flowcontainer = {
 				direction = vertical
 				ignoreinvisible = yes
 				parentanchor = hcenter
 				spacing = 2
-				visible = "[GetScriptedGui('banking_dash_system_market').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				visible = "[GetScriptedGui('banking_dash_omo_fallback_shown').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
 				banking_dash_policy_row = {
 					visible = "[GetScriptedGui('banking_dash_enable_cb_open_market_ops').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
@@ -1903,25 +1952,6 @@ flowcontainer = {
 					}
 					blockoverride "disable_action" {
 						datacontext = "[GetScriptedGui('banking_dash_disable_cb_open_market_ops')]"
-						text = "banking_dash_btn_disable"
-					}
-				}
-
-				banking_dash_policy_row = {
-					visible = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
-					tooltip = "banking_dash_tt_cb_moral_suasion"
-					blockoverride "row_label" {
-						text = "CB_MORAL_SUASION"
-					}
-					blockoverride "row_cost" {
-						text = "banking_dash_cost_cb_moral_suasion"
-					}
-					blockoverride "enable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion')]"
-						text = "banking_dash_btn_enable"
-					}
-					blockoverride "disable_action" {
-						datacontext = "[GetScriptedGui('banking_dash_disable_cb_moral_suasion')]"
 						text = "banking_dash_btn_disable"
 					}
 				}
@@ -1959,6 +1989,29 @@ flowcontainer = {
 			parentanchor = hcenter
 			spacing = 2
 			visible = "[Not(GetVariableSystem.Exists('banking_dash_collapsed_prudential'))]"
+
+			### Softest first. Moral suasion is a lean on the banks against a
+			### boom, the same job the buffer and margin requirements do with
+			### rules instead of words (banking_cycle_sim.py's LEANING_TOOLS),
+			### so it sits here rather than under Monetary Policy.
+			banking_dash_policy_row = {
+				visible = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+				tooltip = "banking_dash_tt_cb_moral_suasion"
+				blockoverride "row_label" {
+					text = "CB_MORAL_SUASION"
+				}
+				blockoverride "row_cost" {
+					text = "banking_dash_cost_cb_moral_suasion"
+				}
+				blockoverride "enable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_enable_cb_moral_suasion')]"
+					text = "banking_dash_btn_enable"
+				}
+				blockoverride "disable_action" {
+					datacontext = "[GetScriptedGui('banking_dash_disable_cb_moral_suasion')]"
+					text = "banking_dash_btn_disable"
+				}
+			}
 
 			banking_dash_policy_row = {
 				visible = "[GetScriptedGui('banking_dash_enable_cb_countercyclical_buffer').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"

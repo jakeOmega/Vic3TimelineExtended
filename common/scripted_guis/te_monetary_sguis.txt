@@ -409,8 +409,10 @@ banking_mon_display_ready = {
 # the Banking Cycle journal entry and switches the whole of phases 1-5 off
 # (common/game_rules/extra_game_rules.txt), so the dashboard's Monetary Policy
 # readouts — rate, premium, inflation, gold, exchange rate — have nothing to
-# show. The two intervention rows under the same category header (open-market
-# operations, moral suasion) are NOT part of this block and stay.
+# show. Open-market operations are NOT part of this block's gate: inside it
+# the tool sits under the rate target (banking_mon_shows_omo), and under the
+# simplified setting it falls back to a plain row beneath the category header
+# (banking_dash_omo_fallback_shown). Moral suasion moved to Prudential.
 #
 # Reads only a game rule, so the country scope is a formality; it is declared
 # to match every other handler in this file and to keep the GUI call sites
@@ -430,6 +432,30 @@ banking_mon_system_shown = {
 banking_mon_has_dial = {
 	scope = country
 	is_shown = { te_mon_has_dial = yes }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
+# Is the open-market operations row drawn under the rate target? Only where the
+# currency law lets the state create unbacked money — fiat and digital, the
+# declarative country_can_create_unbacked_money_bool — because that is the one
+# rule no amount of waiting fixes. Everything else that stands in the way (the
+# unlocking tech, the Prudential / Narrow Banking lock, the rate not yet at its
+# floor, points) leaves the row visible and greyed, and
+# banking_possible_cb_open_market_ops names the cause in its tooltip.
+#
+# An ACTIVE tool always keeps its row, so a country that leaves fiat with the
+# tool running still has its Disable button where it clicked Enable.
+banking_mon_shows_omo = {
+	scope = country
+	is_shown = {
+		banking_is_market_economy = yes
+		OR = {
+			modifier:country_can_create_unbacked_money_bool = yes
+			banking_tool_omo_active = yes
+		}
+	}
 	ai_is_valid = { always = no }
 	is_valid = { always = no }
 	effect = { }
