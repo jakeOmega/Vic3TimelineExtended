@@ -181,5 +181,65 @@ class PulseOrderTests(unittest.TestCase):
         self.assertLess(nets, age)
 
 
+class ConsumerTests(unittest.TestCase):
+    def test_head_start_set_before_phase_refresh(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_create = {")
+        self.assertLess(
+            block.index("iw_net_head_start"),
+            block.index("covert_op_refresh_phase = yes"),
+        )
+        self.assertIn("PREV.var:iw_net_head_start_offer", block)
+
+    def test_head_start_lookup_guarded(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_create = {")
+        self.assertIn("set_variable = { name = iw_net_head_start value = 0 }", block)
+        self.assertIn("save_scope_as = iw_create_net", block)
+        guard = block.index("any_in_list")
+        pick = block.index("save_scope_as = iw_create_net")
+        self.assertLess(guard, pick)
+
+    def test_op_create_ensures_network_after_lookup(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_create = {")
+        self.assertLess(
+            block.index("save_scope_as = iw_create_net"),
+            block.index("covert_net_create"),
+        )
+
+    def test_detection_lookup_guarded_and_zeroed(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_refresh_detection = {")
+        zero = block.index("set_variable = { name = iw_net_strength_staging value = 0 }")
+        pick = block.index("save_scope_as = iw_det_net")
+        chance = block.index("covert_operation_detection_chance")
+        self.assertLess(zero, pick)
+        self.assertLess(pick, chance)
+        self.assertIn("PREV.var:iw_net_strength", block)
+        self.assertIn("remove_variable = iw_net_strength_staging", block)
+        self.assertNotRegex(block, r"scope:iw_det_net\.var:")
+
+    def test_sync_backfills_head_start_before_detection(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_sync = {")
+        backfill = block.index("NOT = { has_variable = iw_net_head_start }")
+        refresh = block.rindex("covert_op_refresh_detection")
+        self.assertLess(backfill, refresh)
+
+    def test_phase_triggers_read_effective_duration(self):
+        body = _text(TRIGGERS)
+        est = _top_level_block(body, "covert_op_is_established = {")
+        full = _top_level_block(body, "covert_op_is_fully_operational = {")
+        self.assertIn("covert_op_effective_duration >= 6", est)
+        self.assertIn("covert_op_effective_duration >= 12", full)
+        self.assertNotIn("var:iw_duration", est + full)
+
+    def test_refresh_phase_uses_effective_duration(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_refresh_phase = {")
+        self.assertEqual(block.count("subtract = covert_op_effective_duration"), 2)
+        self.assertNotIn("subtract = var:iw_duration", block)
+
+    def test_burn_costs_the_network(self):
+        block = _top_level_block(_text(EFFECTS), "covert_op_burn = {")
+        self.assertIn("covert_net_loss = { AMOUNT = covert_net_burn_loss }", block)
+        self.assertLess(block.index("any_in_list"), block.index("save_scope_as = iw_burn_net"))
+
+
 if __name__ == "__main__":
     unittest.main()

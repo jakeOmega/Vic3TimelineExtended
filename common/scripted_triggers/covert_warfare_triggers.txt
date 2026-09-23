@@ -43,14 +43,16 @@ covert_ops_type_below_cap = {
 }
 
 # Operation phase checks. Phase 2 (establishing) starts at month 6, phase 3
-# (fully operational) at month 12; see covert_warfare_effects.txt.
+# (fully operational) at month 12, measured on covert_op_effective_duration:
+# months run plus the head start the target's network gave the operation at
+# creation (slice 4). These two are the ONLY place the thresholds live.
 # Scope: covert operation container
 covert_op_is_established = {
-	var:iw_duration >= 6
+	covert_op_effective_duration >= 6
 }
 
 covert_op_is_fully_operational = {
-	var:iw_duration >= 12
+	covert_op_effective_duration >= 12
 }
 
 # True when the operation's priority is at least $N$. A container without

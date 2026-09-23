@@ -15,6 +15,8 @@
 #           iw_tgt_td          target's type-specific covert defense (JE display)
 #           iw_priority        1-3; multiplies effect, upkeep share and detection
 #                              (covert_warfare_script_values.txt, slice 3 section)
+#           iw_net_head_start  whole months of head start from the target's
+#                              network, fixed at creation (slice 4)
 #
 # The operator keeps references in its `iw_ops` variable list. Iterate that
 # list, never every_container: the global iterator scans every container in
@@ -73,12 +75,38 @@ covert_op_create = {
 			set_variable = { name = iw_duration value = 0 }
 			set_variable = { name = iw_type_code value = $CODE$ }
 			set_variable = { name = iw_priority value = 1 }
+			# Head start from the target's network, fixed now (slice 4). Set
+			# before the phase is derived, which reads it.
+			set_variable = { name = iw_net_head_start value = 0 }
+		}
+		if = {
+			limit = {
+				has_variable_list = iw_nets
+				any_in_list = {
+					variable = iw_nets
+					var:iw_target ?= $TARGET$
+				}
+			}
+			random_in_list = {
+				variable = iw_nets
+				limit = { var:iw_target ?= $TARGET$ }
+				save_scope_as = iw_create_net
+			}
+			scope:iw_create_net = {
+				scope:iw_new_op = { set_variable = { name = iw_net_head_start value = PREV.var:iw_net_head_start_offer } }
+			}
+		}
+		scope:iw_new_op = {
 			# Initialise the display phase so the widget never reads a variable
 			# that does not exist yet; covert_op_refresh_phase derives it from
 			# then on.
 			covert_op_refresh_phase = yes
 		}
 		add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
+		# The network row appears on the day the first operation starts,
+		# not at the next monthly pulse. After the lookup, so a first
+		# operation gets no head start from an empty network.
+		covert_net_create = { TARGET = $TARGET$ }
 		covert_refresh_priority_cost = yes
 	}
 }
@@ -113,7 +141,8 @@ covert_op_destroy = {
 
 # Recompute the target and detection data the JE shows for one operation.
 # covert_operation_detection_chance reads target_max_ic / target_type_defense /
-# iw_priority_staging off the operator, so they are staged there first. The
+# iw_priority_staging / iw_net_strength_staging off the operator, so they are
+# staged there first. The
 # priority is copied with PREV.var: from inside the operator (PREV is this
 # container); a scope:<container>.var: chain is avoided on purpose.
 # Parameters: $DEFENSE_MOD$ = type-specific defense modifier
@@ -128,12 +157,35 @@ covert_op_refresh_detection = {
 		scope:iw_operator = { set_variable = { name = iw_priority_staging value = 1 } }
 	}
 	var:iw_target = {
+		save_scope_as = iw_det_tgt
 		capital = {
 			scope:iw_op = { set_variable = { name = iw_target_capital value = PREV } }
 		}
 		scope:iw_operator = {
 			set_variable = { name = target_max_ic value = PREV.intelligence_capacity_total }
 			set_variable = { name = target_type_defense value = PREV.modifier:$DEFENSE_MOD$ }
+			# The target network's strength (slice 4), 0 without one. Zeroed
+			# first and looked up under an any_in_list guard: this runs once per
+			# operation in a loop, and an unmatched lookup must not inherit the
+			# previous operation's network.
+			set_variable = { name = iw_net_strength_staging value = 0 }
+			if = {
+				limit = {
+					has_variable_list = iw_nets
+					any_in_list = {
+						variable = iw_nets
+						var:iw_target ?= scope:iw_det_tgt
+					}
+				}
+				random_in_list = {
+					variable = iw_nets
+					limit = { var:iw_target ?= scope:iw_det_tgt }
+					save_scope_as = iw_det_net
+				}
+				scope:iw_det_net = {
+					scope:iw_operator = { set_variable = { name = iw_net_strength_staging value = PREV.var:iw_net_strength } }
+				}
+			}
 			set_variable = { name = iw_detect_staging value = covert_operation_detection_chance }
 		}
 	}
@@ -143,6 +195,7 @@ covert_op_refresh_detection = {
 	scope:iw_operator = {
 		remove_variable = iw_detect_staging
 		remove_variable = iw_priority_staging
+		remove_variable = iw_net_strength_staging
 	}
 }
 
@@ -195,6 +248,9 @@ covert_op_end = {
 # line instead of a months-old capital naming whoever conquered it.
 # iw_last_exposed_age is aged by the journal entry's monthly pulse.
 #
+# Also costs the target's network covert_net_burn_loss (slice 4). Runs from
+# covert_warfare.1's `after`, which is never rendered as a tooltip.
+#
 # Parameters: $TYPE$ = short name, $ACTION$ = diplomatic_action_type key,
 #             $TARGET$ = target country,
 #             $CODE$ = operation type code 0-8, matching the branches of
@@ -203,6 +259,22 @@ covert_op_end = {
 covert_op_burn = {
 	remove_diplomatic_pact = { country = $TARGET$ type = $ACTION$ }
 	covert_op_destroy = { TYPE = $TYPE$ TARGET = $TARGET$ }
+	# The exposure rolls up part of the network in that country (slice 4).
+	if = {
+		limit = {
+			has_variable_list = iw_nets
+			any_in_list = {
+				variable = iw_nets
+				var:iw_target ?= $TARGET$
+			}
+		}
+		random_in_list = {
+			variable = iw_nets
+			limit = { var:iw_target ?= $TARGET$ }
+			save_scope_as = iw_burn_net
+		}
+		scope:iw_burn_net = { covert_net_loss = { AMOUNT = covert_net_burn_loss } }
+	}
 	$TARGET$ = {
 		set_variable = { name = iw_last_exposed_country value = ROOT }
 		set_variable = { name = iw_last_exposed_type value = $CODE$ }
@@ -551,6 +623,13 @@ covert_op_sync = {
 				limit = { NOT = { has_variable = iw_priority } }
 				set_variable = { name = iw_priority value = 1 }
 			}
+			# Old-save backfill (slice 4): an operation from before networks
+			# gets no head start. covert_op_effective_duration already reads
+			# a missing one as 0; this makes the widget and saves consistent.
+			if = {
+				limit = { NOT = { has_variable = iw_net_head_start } }
+				set_variable = { name = iw_net_head_start value = 0 }
+			}
 			covert_op_refresh_detection = { DEFENSE_MOD = $DEFENSE_MOD$ }
 		}
 	}
@@ -607,14 +686,12 @@ covert_op_refresh_phase = {
 	else_if = {
 		limit = { covert_op_is_established = yes }
 		set_variable = { name = iw_phase value = 2 }
-		set_variable = { name = iw_phase_months_left value = 12 }
-		change_variable = { name = iw_phase_months_left subtract = var:iw_duration }
+		set_variable = { name = iw_phase_months_left value = { value = 12 subtract = covert_op_effective_duration } }
 		clamp_variable = { name = iw_phase_months_left min = 0 max = 12 }
 	}
 	else = {
 		set_variable = { name = iw_phase value = 1 }
-		set_variable = { name = iw_phase_months_left value = 6 }
-		change_variable = { name = iw_phase_months_left subtract = var:iw_duration }
+		set_variable = { name = iw_phase_months_left value = { value = 6 subtract = covert_op_effective_duration } }
 		clamp_variable = { name = iw_phase_months_left min = 0 max = 6 }
 	}
 }
