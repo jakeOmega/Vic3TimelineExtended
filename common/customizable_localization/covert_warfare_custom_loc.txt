@@ -284,3 +284,82 @@ covert_burned_phase_name = {
 		localization_key = iw_burned_phase_est
 	}
 }
+
+# The agency's Tradecraft tier name (slice 5). Branches on the tier triggers,
+# never on a number, so the floors live only in covert_warfare_triggers.txt.
+covert_tradecraft_tier_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { covert_tradecraft_tier_4 = yes }
+		localization_key = iw_tradecraft_tier_name_4
+	}
+	text = {
+		trigger = { covert_tradecraft_tier_3 = yes }
+		localization_key = iw_tradecraft_tier_name_3
+	}
+	text = {
+		trigger = { covert_tradecraft_tier_2 = yes }
+		localization_key = iw_tradecraft_tier_name_2
+	}
+	text = {
+		trigger = { covert_tradecraft_tier_1 = yes }
+		localization_key = iw_tradecraft_tier_name_1
+	}
+	text = {
+		localization_key = iw_tradecraft_tier_name_0
+	}
+}
+
+# Why the score last moved. Codes: covert_warfare_effects.txt § TRADECRAFT.
+covert_tradecraft_last_reason = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = iw_tradecraft_last_reason
+			var:iw_tradecraft_last_reason = 1
+		}
+		localization_key = iw_tradecraft_reason_1
+	}
+	text = {
+		trigger = {
+			has_variable = iw_tradecraft_last_reason
+			var:iw_tradecraft_last_reason = 20
+		}
+		localization_key = iw_tradecraft_reason_20
+	}
+	text = {
+		trigger = {
+			has_variable = iw_tradecraft_last_reason
+			var:iw_tradecraft_last_reason = 21
+		}
+		localization_key = iw_tradecraft_reason_21
+	}
+	text = {
+		trigger = {
+			has_variable = iw_tradecraft_last_reason
+			var:iw_tradecraft_last_reason = 22
+		}
+		localization_key = iw_tradecraft_reason_22
+	}
+	text = {
+		trigger = {
+			has_variable = iw_tradecraft_last_reason
+			var:iw_tradecraft_last_reason = 23
+		}
+		localization_key = iw_tradecraft_reason_23
+	}
+	text = {
+		trigger = {
+			has_variable = iw_tradecraft_last_reason
+			var:iw_tradecraft_last_reason = 24
+		}
+		localization_key = iw_tradecraft_reason_24
+	}
+	text = {
+		localization_key = iw_tradecraft_reason_0
+	}
+}

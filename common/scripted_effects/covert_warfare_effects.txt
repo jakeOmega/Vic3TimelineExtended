@@ -33,6 +33,7 @@
 #           iw_net_ops              operations against the target this month (display)
 #           iw_net_trend            1 growing, 2 decaying, 0 holding at max (display)
 #           iw_net_head_start_offer months of head start a new operation would get
+#           iw_net_tc_mult          operator's Tradecraft growth multiplier, copied each tick (slice 5)
 #
 # listed in the operator's `iw_nets`. It outlives the operations: that is the
 # point. Operations read it at creation (head start), at every detection
@@ -44,6 +45,14 @@
 # annexed, pact removed by script). It also adopts pacts from saves made
 # before containers, starting them at month 0; the old slot-numbered
 # variables in such saves are inert.
+#
+# The operator also carries its agency's experience (slice 5, § TRADECRAFT):
+#
+#   iw_tradecraft              0 - covert_tradecraft_max. Written ONLY by
+#                              covert_tradecraft_gain / covert_tradecraft_loss
+#   iw_tradecraft_last_reason  code of the most recent change (see § TRADECRAFT)
+#   iw_tradecraft_ops          operations' worth counted towards this month's gain
+#                              (preparatory ones at a fraction; display)
 #
 # Always remove_list_variable before destroy_container, so iw_ops never holds
 # a dead reference. Storage has no per-type limit: the cap lives only in
@@ -409,6 +418,7 @@ covert_net_loss = {
 #   3. Tick: grow with >= 1 operation, otherwise decay (halved at funding
 #      >= covert_net_maintain_funding_level); restate trend and display
 #      capital (the head-start offer follows every write, in covert_net_clamp).
+#      Gains are multiplied by the operator's Tradecraft (iw_net_tc_mult).
 #   4. Reap networks whose target is gone, or that hit 0 with no operations:
 #      temporary list -> remove_list_variable -> destroy_container.
 # Detection (staged inside covert_ops_sync_all) therefore reads last month's
@@ -416,6 +426,10 @@ covert_net_loss = {
 # Scope: operator country
 covert_nets_sync = {
 	save_scope_as = iw_net_operator
+	# Tradecraft's network growth multiplier (slice 5), staged once for the
+	# tick to copy onto each network (rule: containers read the operator via
+	# scope:<country>.var:, never parent). Removed at the end of the pass.
+	set_variable = { name = iw_tc_net_mult_staging value = covert_tradecraft_net_gain_mult }
 	# ---- 1. Ensure ----
 	if = {
 		limit = { has_variable_list = iw_ops }
@@ -453,6 +467,7 @@ covert_nets_sync = {
 		# ---- 3. Tick ----
 		every_in_list = {
 			variable = iw_nets
+			set_variable = { name = iw_net_tc_mult value = scope:iw_net_operator.var:iw_tc_net_mult_staging }
 			if = {
 				limit = { var:iw_net_ops >= 1 }
 				covert_net_gain = { AMOUNT = covert_net_tick_gain }
@@ -506,6 +521,173 @@ covert_nets_sync = {
 			destroy_container = yes
 		}
 	}
+	remove_variable = iw_tc_net_mult_staging
+}
+
+# ============================================================================
+# TRADECRAFT (slice 5)
+# ============================================================================
+# The agency's experience score, iw_tradecraft on the operator. Constants and
+# projections: covert_warfare_script_values.txt (Section 1 and § TRADECRAFT);
+# tiers and unlocks: covert_warfare_triggers.txt § TRADECRAFT.
+#
+# REASON CODES (iw_tradecraft_last_reason; kept in step with
+# covert_tradecraft_last_reason in covert_warfare_custom_loc.txt):
+#    1 operations maturing (monthly gain)
+#   20 a mild-tier operation burned        23 a wartime operation burned
+#   21 a moderate-tier operation burned    24 idle: no operation running
+#   22 a severe-tier operation burned
+#
+# OLD SAVES: the gain and loss writers are no-ops until the variable exists.
+# covert_tradecraft_init seeds it, from the journal entry's immediate and at
+# the top of every monthly pass (immediate does not re-run for an entry that
+# was already active when the save was made).
+
+# Seed an agency that has no score.
+# Scope: operator country
+covert_tradecraft_init = {
+	if = {
+		limit = { NOT = { has_variable = iw_tradecraft } }
+		set_variable = { name = iw_tradecraft value = 0 }
+	}
+}
+
+# Hold the score inside [0, covert_tradecraft_max]. Straight after every write.
+# Scope: operator country (expects iw_tradecraft to exist)
+covert_tradecraft_clamp = {
+	clamp_variable = { name = iw_tradecraft min = 0 max = covert_tradecraft_max }
+}
+
+# Add experience. $AMOUNT$ is nominal; diminishing returns scale it down above
+# half (covert_tradecraft_gain_scale). set_variable with an inline value block,
+# not change_variable, which does not reliably resolve a script-value operand.
+# Parameters: $AMOUNT$ = nominal points (number or script value, >= 0)
+#             $REASON$ = reason code (table above)
+# Scope: operator country
+covert_tradecraft_gain = {
+	if = {
+		limit = { has_variable = iw_tradecraft }
+		set_variable = {
+			name = iw_tradecraft
+			value = {
+				value = var:iw_tradecraft
+				add = {
+					value = $AMOUNT$
+					multiply = covert_tradecraft_gain_scale
+				}
+			}
+		}
+		covert_tradecraft_clamp = yes
+		set_variable = { name = iw_tradecraft_last_reason value = $REASON$ }
+	}
+}
+
+# Lose experience. Not scaled: a burn costs the same at any score.
+# Parameters: $AMOUNT$ = points (number or script value, >= 0)
+#             $REASON$ = reason code (table above)
+# Scope: operator country
+covert_tradecraft_loss = {
+	if = {
+		limit = { has_variable = iw_tradecraft }
+		set_variable = {
+			name = iw_tradecraft
+			value = {
+				value = var:iw_tradecraft
+				subtract = $AMOUNT$
+			}
+		}
+		covert_tradecraft_clamp = yes
+		set_variable = { name = iw_tradecraft_last_reason value = $REASON$ }
+	}
+}
+
+# Charge the burn now being resolved, by its tier. Called from
+# covert_warfare.1's `after`, inside the same guard as covert_op_burn and BEFORE
+# the event removes iw_burned_type_code (which it reads). Mirrors
+# covert_tradecraft_burn_loss_value, which the options' tooltip prints; an
+# unrecognised code is charged as moderate there and here.
+# Scope: operator country (while covert_warfare.1 is open)
+covert_tradecraft_burn_loss = {
+	if = {
+		limit = { covert_code_tier_mild = { VAR = iw_burned_type_code } }
+		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_loss_mild REASON = 20 }
+	}
+	else_if = {
+		limit = { covert_code_tier_severe = { VAR = iw_burned_type_code } }
+		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_loss_severe REASON = 22 }
+	}
+	else_if = {
+		limit = { covert_code_tier_war = { VAR = iw_burned_type_code } }
+		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_loss_war REASON = 23 }
+	}
+	else = {
+		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_loss_moderate REASON = 21 }
+	}
+}
+
+
+# Re-apply the tier bonus on the journal entry. The ONE refresh site for
+# iw_tradecraft_bonus: called only from covert_tradecraft_monthly.
+# Scope: operator country
+covert_tradecraft_refresh_bonus = {
+	if = {
+		limit = { covert_tradecraft_tier >= 1 }
+		je:je_covert_warfare = { remove_modifier = iw_tradecraft_bonus }
+		je:je_covert_warfare = { add_modifier = { name = iw_tradecraft_bonus multiplier = covert_tradecraft_bonus_mult } }
+	}
+	else_if = {
+		limit = { je:je_covert_warfare = { has_modifier = iw_tradecraft_bonus } }
+		je:je_covert_warfare = { remove_modifier = iw_tradecraft_bonus }
+	}
+}
+
+# The monthly Tradecraft pass. Called ONCE a month from je_covert_warfare's
+# pulse, after covert_ops_age_all_durations (so the phase is this month's) —
+# never from covert_ops_sync_all or covert_refresh_funding_state, which run on
+# every stepper click.
+#   1. Seed if missing.
+#   2. Weigh the running operations into iw_tradecraft_ops: 1 for each at
+#      establishing or better, covert_tradecraft_prep_gain_fraction for each
+#      still preparatory; the total capped at covert_tradecraft_ops_counted.
+#   3. Gain if anything counted; else decay if no operation runs at all.
+#   4. Refresh the tier bonus.
+# Scope: operator country
+covert_tradecraft_monthly = {
+	save_scope_as = iw_tc_operator
+	covert_tradecraft_init = yes
+	set_variable = { name = iw_tradecraft_ops value = 0 }
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			if = {
+				limit = { covert_op_is_established = yes }
+				scope:iw_tc_operator = { change_variable = { name = iw_tradecraft_ops add = 1 } }
+			}
+			else = {
+				# A script-value operand: set_variable, not change_variable.
+				scope:iw_tc_operator = {
+					set_variable = {
+						name = iw_tradecraft_ops
+						value = {
+							value = var:iw_tradecraft_ops
+							add = covert_tradecraft_prep_gain_fraction
+						}
+					}
+				}
+			}
+		}
+	}
+	clamp_variable = { name = iw_tradecraft_ops min = 0 max = covert_tradecraft_ops_counted }
+	if = {
+		limit = { var:iw_tradecraft_ops > 0 }
+		covert_tradecraft_gain = { AMOUNT = covert_tradecraft_monthly_gain_nominal REASON = 1 }
+	}
+	else_if = {
+		limit = { covert_operations_active < 1 }
+		covert_tradecraft_loss = { AMOUNT = covert_tradecraft_decay REASON = 24 }
+	}
+	covert_tradecraft_refresh_bonus = yes
 }
 
 # ============================================================================

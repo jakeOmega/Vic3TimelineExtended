@@ -261,14 +261,16 @@ Eight per-good settings. **Presets fill all eight in one click**; the steppers f
 |---|---|---|---|---|---|---|
 | Purchase threshold | `st_res_<good>_buy_thr` | pp vs base price | −20 | −10 | −5 | ±5, range −50…0 |
 | Release threshold | `st_res_<good>_sell_thr` | pp vs base price | +30 | +20 | +10 | ±5, range 0…+75 |
-| Maximum weekly flow | `st_res_<good>_max_flow` | units/week | 100 | 250 | 600 | ±50, range 50…2000 |
+| Maximum weekly flow | `st_res_<good>_max_flow` | units/week | 100 | 250 | 600 | ±50 (shift ±500, ctrl ±5 000), range 50…the hub's weekly flow cap, never below 2 000 |
 | Protected stockpile | `st_res_<good>_floor_pct` | % of capacity | 40 | 20 | 10 | ±5, range 0…100 |
 | Target stockpile | `st_res_<good>_ceil_pct` | % of capacity | 60 | 80 | 95 | ±5, range 0…100 |
-| Weekly purchase budget | `st_res_<good>_budget` | GBP/week, estimated | 5 000 | 15 000 | 40 000 | ±1 000, range 1 000…100 000 |
+| Weekly purchase budget | `st_res_<good>_budget` | GBP/week, estimated | 5 000 | 15 000 | 40 000 | ±1 000 (shift ±10 000, ctrl ±100 000), range 1 000…the cost of a week at the flow ceiling, never below 100 000 |
 | Price memory | `st_res_<good>_price_memory` | weeks averaged | 8 | 4 | 2 | ±1, range 1…26 |
 | Response ramp | `st_res_<good>_ramp` | pp past a threshold | 20 | 10 | 5 | ±5, range 0…50 |
 
 **Every one of these numbers is defined exactly once.** The twenty-four preset values live in the three `st_res_apply_preset_{conservative,standard,aggressive}_base` effects in [st_res_effects.txt](../../common/scripted_effects/st_res_effects.txt); the step sizes, hysteresis bands and absolute bounds live in the `st_res_policy_*` constants at the bottom of [st_res_script_values.txt](../../common/script_values/st_res_script_values.txt). To retune, edit those and nothing else — the sgui gates, the evaluator and the tooltips all read them.
+
+**The two magnitude settings scale with the hub.** The hub's weekly flow cap is 1 000 units plus 100 per Silo level, so a late-game network can move many times what an early one can. Two things follow. (1) Their ceilings are not constants: `st_res_policy_flow_max` is the hub's weekly flow cap rounded up to a step (the evaluator clamps a policy's flow to that cap anyway, so nothing above it could act), and the per-good `st_res_<good>_policy_budget_max` is what a full week at that flow — plus the week's decay replacement, which the budget pays first — costs at today's price, rounded up to a budget step. Each is floored at its old constant (`st_res_policy_flow_max_base` 2 000, `st_res_policy_budget_max_base` 100 000), so an early-game panel is unchanged. The budget ceiling moves with the price: a budget set at the top in a dear week can sit above it in a cheap one, which greys out the up stepper until the price recovers or the player clicks down (the step base clamps, so that click lands on the ceiling). (2) Their steppers take **shift-click for ten steps and ctrl-click for a hundred** (`st_res_policy_shift_mult` / `_ctrl_mult`) — the construction panel's convention, not the banking dashboard's tenth-and-limit one. Every size lands on the same clamp, so an oversized click stops at the bound. The other six steppers keep a single step: their ranges are fixed and short, and four of them have band limits (`_policy_*_limit`) that are only checked one step ahead.
 
 Floor and ceiling are percentages of capacity rather than unit counts, so they keep meaning when the player builds Silos.
 
@@ -339,6 +341,10 @@ Two things — and only two — switch a good back to Manual, both of them expli
   | 20 / 21 | purchase threshold − / + | 28 / 29 | target stockpile − / + |
   | 22 / 23 | release threshold − / + | 30 / 31 | weekly budget − / + |
   | 32 / 33 | price memory (weeks) − / + | 34 / 35 | response ramp (pp) − / + |
+  | 44 / 45 | maximum weekly flow − / + ten steps (shift-click) | 50 / 51 | weekly budget − / + ten steps (shift-click) |
+  | 64 / 65 | maximum weekly flow − / + a hundred steps (ctrl-click) | 70 / 71 | weekly budget − / + a hundred steps (ctrl-click) |
+
+  A modifier-click op is the plain op + 20 (shift) or + 40 (ctrl). It shares the plain op's `is_valid` branch (`OR` on all three codes), and the widget binds `enabled` to the plain op alone — so a new modifier op that is left out of that `OR` fails closed on the `trigger_else = { always = no }`.
 
   The table is duplicated in the sgui file header and the widget header; keep all three in sync. `is_valid` carries the whole validation surface, so every disabled control explains itself — including the non-overlap rules, which are never enforced in GUI alone.
 - **The expander is presentation-only:** `GetVariableSystem.Toggle('st_res_policy_open_<good>')`, a key no script ever reads. Collapsing a panel cannot change what the reserve does, the state is intentionally not saved, and **policies keep running with the journal entry closed** because the evaluator lives on the weekly pulse.
@@ -396,7 +402,7 @@ Details worth knowing:
 
 What the inventory widget added to that procedure, in short: a good now also needs an entry in `st_res_triggers.txt` (its unlock trigger), an `st_res_adjust_<good>_sgui` in `st_res_scripted_gui.txt`, `st_res_<good>_mode_text` **and** `st_res_<good>_reason_text` custom loc, an `st_res_<good>_last_net` script value, a `st_res_stop_<good>_rate_effect` wrapper, one call each added to the per-good lists in `st_res_init_effect` / `st_res_reset_vars_effect` / `st_res_weekly_update_effect` / `st_res_refresh_hub_flow_effect`, and one row instance plus its five loc keys in the widget. It no longer needs a scripted progress bar, a pair of scripted buttons or a journal-entry status line.
 
-Reserve policies added a second layer on top of that: a `st_res_policy_<good>_sgui`, `st_res_<good>_policy_text` **and** `st_res_<good>_policy_reason_text` custom loc, the nine policy script values (`_price_up`, `_price_down`, `_price_rel`, `_price_signal`, `_unit_price`, and the four `_policy_*_limit` stepper guards), two more calls in `st_res_weekly_update_effect` (`st_res_policy_tick_good_effect`, **both** branches), one `st_res_ai_seed_good_effect` call, the row's two extra loc keys and its policy-panel blockoverrides (eight value cells). The twelve per-good policy settings need no new init code — they are seeded by the guards already in `st_res_init_good_effect` — and the running price average is seeded by the first weekly tick.
+Reserve policies added a second layer on top of that: a `st_res_policy_<good>_sgui`, `st_res_<good>_policy_text` **and** `st_res_<good>_policy_reason_text` custom loc, the ten policy script values (`_price_up`, `_price_down`, `_price_rel`, `_price_signal`, `_unit_price`, the four `_policy_*_limit` stepper guards and the `_policy_budget_max` stepper ceiling), two more calls in `st_res_weekly_update_effect` (`st_res_policy_tick_good_effect`, **both** branches), one `st_res_ai_seed_good_effect` call, the row's two extra loc keys and its policy-panel blockoverrides (eight value cells). The twelve per-good policy settings need no new init code — they are seeded by the guards already in `st_res_init_good_effect` — and the running price average is seeded by the first weekly tick.
 
 ---
 

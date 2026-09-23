@@ -114,6 +114,9 @@ je_covert_warfare = {
 			limit = { NOT = { has_variable = iw_funding_level } }
 			set_variable = { name = iw_funding_level value = 0 }
 		}
+		# Agency experience starts at 0 (slice 5). Also seeded by the monthly
+		# pass, for saves whose entry was already active.
+		covert_tradecraft_init = yes
 	}
 
 	complete = {
@@ -314,6 +317,12 @@ je_covert_warfare = {
 
 			# ---- Age operation durations ----
 			covert_ops_age_all_durations = yes
+
+			# ---- Tradecraft (slice 5) ----
+			# Once a month, here and only here (the steppers re-run the sync).
+			# After aging, so an operation that just reached establishing
+			# counts this month. Runs at any funding: idle decay needs it.
+			covert_tradecraft_monthly = yes
 
 			# ---- Apply phase-based operation effects (only if funding > 0) ----
 			if = {

@@ -154,9 +154,9 @@ st_res_<GOOD>_last_net = {
 
 ---
 
-### Reserve-policy values (nine more, appended after the main section)
+### Reserve-policy values (ten more, appended after the main section)
 
-These back the price-triggered policies. `_price_rel` is the signed premium against base price on the country's own market; do **not** collapse it into a bare `market_goods_pricier` read — the double `min = 0` construction is what keeps it correct whether the engine clamps `pricier`/`cheaper` at zero or returns them as signed mirrors. `_price_signal` is what the evaluator and the widget actually read: the running average kept by `st_res_policy_track_price_effect`, falling back to the live price until the first weekly tick seeds it. The four `_limit` values exist because a Paradox trigger needs a `var:` on its left side, so the sgui cannot compare a gap script value to a constant directly.
+These back the price-triggered policies. `_price_rel` is the signed premium against base price on the country's own market; do **not** collapse it into a bare `market_goods_pricier` read — the double `min = 0` construction is what keeps it correct whether the engine clamps `pricier`/`cheaper` at zero or returns them as signed mirrors. `_price_signal` is what the evaluator and the widget actually read: the running average kept by `st_res_policy_track_price_effect`, falling back to the live price until the first weekly tick seeds it. The four `_limit` values exist because a Paradox trigger needs a `var:` on its left side, so the sgui cannot compare a gap script value to a constant directly. `_policy_budget_max` is per-good because the budget stepper's ceiling is priced in that good: a full week at the shared flow ceiling, decay replacement included, at today's price.
 
 ```
 # --- <GOOD_DISPLAY upper> ---
@@ -252,6 +252,16 @@ st_res_<GOOD>_policy_ceil_down_limit = {
 	}
 	add = st_res_policy_stock_min_gap
 	add = st_res_policy_pct_step
+}
+
+st_res_<GOOD>_policy_budget_max = {
+	value = st_res_policy_flow_max
+	add = st_res_<GOOD>_weekly_decay
+	multiply = st_res_<GOOD>_unit_price
+	divide = st_res_policy_budget_step
+	ceiling = yes
+	multiply = st_res_policy_budget_step
+	min = st_res_policy_budget_max_base
 }
 ```
 
@@ -426,7 +436,7 @@ st_res_adjust_<GOOD>_sgui = {
 
 A good also needs an `st_res_policy_<GOOD>_sgui`, in the lower half of the same file. It is long but entirely mechanical: **copy the `st_res_policy_grain_sgui` block and replace every `grain` with `<GOOD>`.** Nothing else changes — the op codes are identical for every good, and the file header carries the op-code table.
 
-Do not hand-write it from the table; the `is_valid` chain has twenty-four branches and the relative-bound branches (ops 21, 22, 27, 28) reference that good's `_policy_*_limit` script values, which is exactly where a hand copy goes wrong.
+Do not hand-write it from the table; the `is_valid` chain has twenty-four branches and the relative-bound branches (ops 21, 22, 27, 28) reference that good's `_policy_*_limit` script values and the budget branches (ops 31, 51, 71 in `is_valid`; 30/31, 50/51, 70/71 in `effect`) its `_policy_budget_max`, which is exactly where a hand copy goes wrong.
 
 ---
 

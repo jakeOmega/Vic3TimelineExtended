@@ -3826,7 +3826,7 @@
 #
  te_debug_covert.1.a:0 "Funding 0 - Dormant"
  te_debug_covert.1.b:0 "Funding 1 - Operational"
- te_debug_covert.1.c:0 "Funding 2 - Tradecraft"
+ te_debug_covert.1.c:0 "Funding 2 - Professional"
  te_debug_covert.1.d:0 "Console-only shortcuts for testing the covert-warfare command centre. None of these can happen in normal play.\n\nEach option puts funding at an exact level and reapplies everything that depends on it, so the ladder row, the weekly cost, the counterintelligence bonus and the detection factors should all move in the same instant.\n\n#R Level 0 stands every running operation down#! - each pact's requirement to maintain fails at its next evaluation."
  te_debug_covert.1.e:0 "Funding 3 - Covert Network"
  te_debug_covert.1.f:0 "The budget line is the whole service."
@@ -3836,7 +3836,7 @@
  te_debug_covert.2.a:0 "Seed four operations, one per phase (two fully operational)"
  te_debug_covert.2.b:0 "Force a detection now (one operation is pinned to 100% and the real roll is run)"
  te_debug_covert.2.c:0 "Cut funding to 0 and stand everything down"
- te_debug_covert.2.d:0 "Console-only shortcuts for testing the operation rows. None of these can happen in normal play.\n\nSeeding plants four operations against one eligible country - industrial espionage at month 5, an influence campaign at month 11, military espionage at month 14 and a fully-operational destabilization at month 14 - so all three phase layouts show at once, two operations tip over their boundary at the next monthly pulse, and the severe-tier third-party blowback is reachable if the destabilization is later caught. It raises funding to Tradecraft first if the service is dormant.\n\nForcing detection burns one operation, sends the target the detection event, and writes the record the command centre reads back as #italic Counterintelligence exposed ...#!\n\nRe-deriving the display state is what the first monthly pulse after loading an older save does: use it if the phase lines are missing from rows restored from a save made before this widget shipped.\n\nRaising priority runs the same effect as the row's priority stepper, without the button, so it works even if the stepper stays greyed out: upkeep and detection change immediately, and the scaled effect modifiers follow at the start of next month."
+ te_debug_covert.2.d:0 "Console-only shortcuts for testing the operation rows. None of these can happen in normal play.\n\nSeeding plants four operations against one eligible country - industrial espionage at month 5, an influence campaign at month 11, military espionage at month 14 and a fully-operational destabilization at month 14 - so all three phase layouts show at once, two operations tip over their boundary at the next monthly pulse, and the severe-tier third-party blowback is reachable if the destabilization is later caught. It raises funding to level 2 (Professional) first if the service is dormant.\n\nForcing detection burns one operation, sends the target the detection event, and writes the record the command centre reads back as #italic Counterintelligence exposed ...#!\n\nRe-deriving the display state is what the first monthly pulse after loading an older save does: use it if the phase lines are missing from rows restored from a save made before this widget shipped.\n\nRaising priority runs the same effect as the row's priority stepper, without the button, so it works even if the stepper stays greyed out: upkeep and detection change immediately, and the scaled effect modifiers follow at the start of next month."
  te_debug_covert.2.e:0 "Age every operation by a year"
  te_debug_covert.2.f:0 "Four dead drops, one bad week."
  te_debug_covert.2.g:0 "Re-derive the rows' display state"
@@ -3844,6 +3844,12 @@
  te_debug_covert.2.i:0 "Raise every network to full strength (detection drops now; new operations start 5 months along)"
  te_debug_covert.2.j:0 "Run one month of network growth and decay now"
  te_debug_covert.2.t:0 "Covert Warfare Test Console: Operations"
+ te_debug_covert.3.a:0 "Set Tradecraft to 45 (Established)"
+ te_debug_covert.3.b:0 "Set Tradecraft to 85 (Veteran)"
+ te_debug_covert.3.c:0 "Run one monthly Tradecraft pass"
+ te_debug_covert.3.d:0 "Console test harness for the agency experience score (slice 5). Set the score, then check the command centre's Tradecraft line, its tooltip, the priority stepper and the per-type cap."
+ te_debug_covert.3.f:0 "Not for play."
+ te_debug_covert.3.t:0 "Covert Warfare Test Console: Tradecraft"
 
 #
 # TE_DEBUG_GW

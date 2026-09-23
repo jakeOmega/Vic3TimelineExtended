@@ -1001,6 +1001,32 @@ st_res_policy_pct_step = { value = 5 }      # protected floor / target ceiling, 
 st_res_policy_flow_step = { value = 50 }    # maximum weekly flow, units
 st_res_policy_budget_step = { value = 1000 } # weekly purchase budget, GBP
 
+# Modifier-click steps for the two settings whose useful range grows with the
+# country — maximum weekly flow and weekly budget. Shift-click moves ten steps,
+# ctrl-click a hundred: the construction panel's convention. Every size lands on
+# the same absolute clamp as a plain click, so an oversized step stops at the
+# bound instead of past it. The other six steppers keep a single step: their
+# ranges are fixed, and four of them have band limits that only one click at a
+# time is checked against.
+st_res_policy_shift_mult = { value = 10 }
+st_res_policy_ctrl_mult = { value = 100 }
+st_res_policy_flow_step_shift = {
+	value = st_res_policy_flow_step
+	multiply = st_res_policy_shift_mult
+}
+st_res_policy_flow_step_ctrl = {
+	value = st_res_policy_flow_step
+	multiply = st_res_policy_ctrl_mult
+}
+st_res_policy_budget_step_shift = {
+	value = st_res_policy_budget_step
+	multiply = st_res_policy_shift_mult
+}
+st_res_policy_budget_step_ctrl = {
+	value = st_res_policy_budget_step
+	multiply = st_res_policy_ctrl_mult
+}
+
 # Hysteresis. A lane that is already engaged keeps going until the price
 # crosses the *stop* threshold, which sits `band` points on the far side of the
 # start threshold. Defaults: start buying below -10%, stop above -5%; start
@@ -1020,12 +1046,28 @@ st_res_policy_min_gap = {
 st_res_policy_thr_floor = { value = -50 }     # lowest purchase threshold, pp
 st_res_policy_thr_ceiling = { value = 75 }    # highest release threshold, pp
 st_res_policy_flow_min = { value = 50 }
-st_res_policy_flow_max = { value = 2000 }
 st_res_policy_budget_min = { value = 1000 }
-st_res_policy_budget_max = { value = 100000 }
 st_res_policy_stock_min = { value = 0 }       # lowest protected floor, % of capacity
 st_res_policy_stock_max = { value = 100 }     # highest target ceiling, % of capacity
 st_res_policy_stock_min_gap = { value = 10 }  # minimum ceiling - floor, pp
+
+# The two magnitude ceilings follow the hub, because the weekly flow cap does:
+# the hub gives 1000 units a week and every Silo level another 100, so a
+# late-game network moves many times what a fixed ceiling would allow. They
+# never drop below these bases, so an early-game panel reads as it always has.
+st_res_policy_flow_max_base = { value = 2000 }
+st_res_policy_budget_max_base = { value = 100000 }
+
+# Maximum-weekly-flow ceiling: the hub's weekly flow cap, which the evaluator
+# clamps a policy's flow to anyway, so a setting above it could never act.
+# Rounded up to a whole step so the top of the range stays on the stepper's grid.
+st_res_policy_flow_max = {
+	value = st_res_weekly_base_rate_cap
+	divide = st_res_policy_flow_step
+	ceiling = yes
+	multiply = st_res_policy_flow_step
+	min = st_res_policy_flow_max_base
+}
 
 # Price smoothing. The policies act on a running (exponential) average of the
 # market price rather than this week's reading: every weekly tick the average
@@ -1182,6 +1224,22 @@ st_res_grain_policy_ceil_down_limit = {
 	add = st_res_policy_pct_step
 }
 
+# Weekly-budget ceiling: what a full week at the flow ceiling costs at today's
+# price, this week's decay replacement included because the budget pays for
+# that first (see st_res_policy_afford). Rounded up to a whole budget step,
+# never below st_res_policy_budget_max_base. It moves with the price, so a
+# budget set at the top in a dear week may sit above it in a cheap one; the up
+# stepper then greys out and the next down click lands on the ceiling.
+st_res_grain_policy_budget_max = {
+	value = st_res_policy_flow_max
+	add = st_res_grain_weekly_decay
+	multiply = st_res_grain_unit_price
+	divide = st_res_policy_budget_step
+	ceiling = yes
+	multiply = st_res_policy_budget_step
+	min = st_res_policy_budget_max_base
+}
+
 # --- AMMUNITION ---
 st_res_ammunition_price_up = {
 	value = 0
@@ -1288,6 +1346,22 @@ st_res_ammunition_policy_ceil_down_limit = {
 	}
 	add = st_res_policy_stock_min_gap
 	add = st_res_policy_pct_step
+}
+
+# Weekly-budget ceiling: what a full week at the flow ceiling costs at today's
+# price, this week's decay replacement included because the budget pays for
+# that first (see st_res_policy_afford). Rounded up to a whole budget step,
+# never below st_res_policy_budget_max_base. It moves with the price, so a
+# budget set at the top in a dear week may sit above it in a cheap one; the up
+# stepper then greys out and the next down click lands on the ceiling.
+st_res_ammunition_policy_budget_max = {
+	value = st_res_policy_flow_max
+	add = st_res_ammunition_weekly_decay
+	multiply = st_res_ammunition_unit_price
+	divide = st_res_policy_budget_step
+	ceiling = yes
+	multiply = st_res_policy_budget_step
+	min = st_res_policy_budget_max_base
 }
 
 # --- OIL ---
@@ -1398,6 +1472,22 @@ st_res_oil_policy_ceil_down_limit = {
 	add = st_res_policy_pct_step
 }
 
+# Weekly-budget ceiling: what a full week at the flow ceiling costs at today's
+# price, this week's decay replacement included because the budget pays for
+# that first (see st_res_policy_afford). Rounded up to a whole budget step,
+# never below st_res_policy_budget_max_base. It moves with the price, so a
+# budget set at the top in a dear week may sit above it in a cheap one; the up
+# stepper then greys out and the next down click lands on the ceiling.
+st_res_oil_policy_budget_max = {
+	value = st_res_policy_flow_max
+	add = st_res_oil_weekly_decay
+	multiply = st_res_oil_unit_price
+	divide = st_res_policy_budget_step
+	ceiling = yes
+	multiply = st_res_policy_budget_step
+	min = st_res_policy_budget_max_base
+}
+
 # --- SMALL_ARMS ---
 st_res_small_arms_price_up = {
 	value = 0
@@ -1504,6 +1594,22 @@ st_res_small_arms_policy_ceil_down_limit = {
 	}
 	add = st_res_policy_stock_min_gap
 	add = st_res_policy_pct_step
+}
+
+# Weekly-budget ceiling: what a full week at the flow ceiling costs at today's
+# price, this week's decay replacement included because the budget pays for
+# that first (see st_res_policy_afford). Rounded up to a whole budget step,
+# never below st_res_policy_budget_max_base. It moves with the price, so a
+# budget set at the top in a dear week may sit above it in a cheap one; the up
+# stepper then greys out and the next down click lands on the ceiling.
+st_res_small_arms_policy_budget_max = {
+	value = st_res_policy_flow_max
+	add = st_res_small_arms_weekly_decay
+	multiply = st_res_small_arms_unit_price
+	divide = st_res_policy_budget_step
+	ceiling = yes
+	multiply = st_res_policy_budget_step
+	min = st_res_policy_budget_max_base
 }
 
 # --- ARTILLERY ---
@@ -1614,6 +1720,22 @@ st_res_artillery_policy_ceil_down_limit = {
 	add = st_res_policy_pct_step
 }
 
+# Weekly-budget ceiling: what a full week at the flow ceiling costs at today's
+# price, this week's decay replacement included because the budget pays for
+# that first (see st_res_policy_afford). Rounded up to a whole budget step,
+# never below st_res_policy_budget_max_base. It moves with the price, so a
+# budget set at the top in a dear week may sit above it in a cheap one; the up
+# stepper then greys out and the next down click lands on the ceiling.
+st_res_artillery_policy_budget_max = {
+	value = st_res_policy_flow_max
+	add = st_res_artillery_weekly_decay
+	multiply = st_res_artillery_unit_price
+	divide = st_res_policy_budget_step
+	ceiling = yes
+	multiply = st_res_policy_budget_step
+	min = st_res_policy_budget_max_base
+}
+
 # --- AEROPLANES ---
 st_res_aeroplanes_price_up = {
 	value = 0
@@ -1722,6 +1844,22 @@ st_res_aeroplanes_policy_ceil_down_limit = {
 	add = st_res_policy_pct_step
 }
 
+# Weekly-budget ceiling: what a full week at the flow ceiling costs at today's
+# price, this week's decay replacement included because the budget pays for
+# that first (see st_res_policy_afford). Rounded up to a whole budget step,
+# never below st_res_policy_budget_max_base. It moves with the price, so a
+# budget set at the top in a dear week may sit above it in a cheap one; the up
+# stepper then greys out and the next down click lands on the ceiling.
+st_res_aeroplanes_policy_budget_max = {
+	value = st_res_policy_flow_max
+	add = st_res_aeroplanes_weekly_decay
+	multiply = st_res_aeroplanes_unit_price
+	divide = st_res_policy_budget_step
+	ceiling = yes
+	multiply = st_res_policy_budget_step
+	min = st_res_policy_budget_max_base
+}
+
 # --- TANKS ---
 st_res_tanks_price_up = {
 	value = 0
@@ -1828,4 +1966,20 @@ st_res_tanks_policy_ceil_down_limit = {
 	}
 	add = st_res_policy_stock_min_gap
 	add = st_res_policy_pct_step
+}
+
+# Weekly-budget ceiling: what a full week at the flow ceiling costs at today's
+# price, this week's decay replacement included because the budget pays for
+# that first (see st_res_policy_afford). Rounded up to a whole budget step,
+# never below st_res_policy_budget_max_base. It moves with the price, so a
+# budget set at the top in a dear week may sit above it in a cheap one; the up
+# stepper then greys out and the next down click lands on the ceiling.
+st_res_tanks_policy_budget_max = {
+	value = st_res_policy_flow_max
+	add = st_res_tanks_weekly_decay
+	multiply = st_res_tanks_unit_price
+	divide = st_res_policy_budget_step
+	ceiling = yes
+	multiply = st_res_policy_budget_step
+	min = st_res_policy_budget_max_base
 }
