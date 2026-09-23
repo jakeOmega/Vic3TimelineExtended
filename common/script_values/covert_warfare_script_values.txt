@@ -106,6 +106,24 @@ covert_exposure_infamy_max = 25
 # Maximum funding level (0 = dormant, max = deep state)
 iw_funding_level_max = 5
 
+# ---- Per-operation priority (slice 3) ----
+# An operation's priority (iw_priority on its container, 1 when missing)
+# multiplies what it does, what it costs and how exposed it is. Cost outruns
+# effect at every step: that is the diminishing return that stops "everything
+# at 3" from being the answer.
+covert_op_priority_max = 3
+covert_op_priority_2_effect_mult = 1.35
+covert_op_priority_3_effect_mult = 1.6
+# Each operation's share of the covert budget (priority 1 = one share).
+covert_op_priority_2_cost_mult = 1.6
+covert_op_priority_3_cost_mult = 2.4
+# Raw detection points per priority level above 1, added before covert
+# efficiency (so late-game tradecraft still hides most of it).
+covert_op_priority_detect_add = 2
+# A fully operational operation works at this multiple of an establishing one.
+# Replaces the literal `multiplier = 2` the apply sites used to carry.
+covert_op_phase_full_mult = 2
+
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY
 # ============================================================================
@@ -221,17 +239,32 @@ covert_operations_available_slots = {
 	min = 0
 }
 
+# Operations as the upkeep counts them: the sum of every operation's
+# priority-weighted share (iw_priority_cost_sum, covert_refresh_priority_cost).
+# A save made before slice 3 has no sum until the first refresh, and gets the
+# live pact count — exactly the old formula — in the meantime.
+covert_priority_cost_units = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_priority_cost_sum }
+		add = var:iw_priority_cost_sum
+	}
+	else = {
+		add = covert_operations_active
+	}
+}
+
 covert_operations_cost_scale = {
 	value = gdp
 	multiply = 0.00005 # small, but multiplied by funding level and number of ops, so it adds up for big economies
 }
 
 # Funding cost: multiplier for the covert_operation_funding_cost modifier
-# Scales with number of active operations + 1 (base maintenance) and funding level
+# Scales with the priority-weighted operation count + 1 (base maintenance) and funding level
 covert_operation_cost_mult = {
 	value = 0
 	owner = {
-		add = covert_operations_active
+		add = covert_priority_cost_units
 		add = 1 # base maintenance — you pay for defensive benefits even with no ops
 		# Scale by funding level (0-5); 0 means no cost
 		multiply = {
@@ -248,8 +281,8 @@ covert_operation_cost_mult = {
 }
 
 # Detection chance per month for active operations
-# Factors: base risk, funding reduction, target counterintelligence (IC + type defense), attacker efficiency
-# Formula: raw = base - funding_reduction + target_defense_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
+# Factors: base risk, funding reduction, target counterintelligence (IC + type defense), operation priority, attacker efficiency
+# Formula: raw = base - funding_reduction + target_defense_penalty + priority_penalty, final = raw × (1 - efficiency), clamped [covert_ops_detection_floor, 50]
 # var:target_max_ic and var:target_type_defense must be set before evaluating.
 covert_operation_detection_chance = {
 	value = covert_ops_detection_base
@@ -284,6 +317,9 @@ covert_operation_detection_chance = {
 	}
 	# Target's counterintelligence increases detection risk (IC + type defense vs your IC)
 	add = target_counterintelligence_penalty
+	# Priority: a busier operation is more exposed (before efficiency, so
+	# better tradecraft still hides most of it)
+	add = covert_op_priority_detect_penalty
 	# Attacker's efficiency reduces detection: multiply by (1 - eff_mult), floor 0.2
 	multiply = {
 		value = 1
@@ -318,6 +354,21 @@ target_counterintelligence_penalty = {
 		multiply = covert_ops_target_ic_factor
 		min = 0
 		max = covert_ops_target_ic_max
+	}
+}
+
+# A higher-priority operation is busier and more exposed: covert_op_priority_detect_add
+# raw points per level above 1. var:iw_priority_staging is staged per operation
+# by covert_op_refresh_detection; missing reads as priority 1.
+# Scope: operator country
+covert_op_priority_detect_penalty = {
+	value = 0
+	if = {
+		limit = { has_variable = iw_priority_staging }
+		add = var:iw_priority_staging
+		subtract = 1
+		multiply = covert_op_priority_detect_add
+		min = 0
 	}
 }
 
@@ -568,7 +619,7 @@ covert_funding_next_level_down = {
 covert_operation_cost_at_next_up = {
 	value = 0
 	owner = {
-		add = covert_operations_active
+		add = covert_priority_cost_units
 		add = 1
 		multiply = covert_funding_next_level_up
 		multiply = covert_operations_cost_scale
@@ -581,7 +632,7 @@ covert_operation_cost_at_next_up = {
 covert_operation_cost_at_next_down = {
 	value = 0
 	owner = {
-		add = covert_operations_active
+		add = covert_priority_cost_units
 		add = 1
 		multiply = covert_funding_next_level_down
 		multiply = covert_operations_cost_scale
@@ -815,4 +866,77 @@ covert_exposure_relations_deny = {
 covert_exposure_relations_acknowledge = {
 	value = covert_exposure_relations_deny
 	multiply = covert_exposure_acknowledge_relations_mult
+}
+
+# ============================================================================
+# SECTION: PER-OPERATION PRIORITY (slice 3)
+# ============================================================================
+# add_modifier's multiplier is stored with the modifier and re-evaluated
+# against ROOT on later ticks, so it cannot be a value that reads the
+# operation's container. Every apply site therefore goes through
+# covert_op_add_scaled_modifier (covert_warfare_effects.txt), which branches
+# phase x priority onto one of these six CONSTANT values. Keep them free of
+# var:, scope: and trigger reads.
+
+covert_op_mult_p2_pri1 = {
+	value = 1
+}
+
+covert_op_mult_p2_pri2 = {
+	value = covert_op_priority_2_effect_mult
+}
+
+covert_op_mult_p2_pri3 = {
+	value = covert_op_priority_3_effect_mult
+}
+
+covert_op_mult_p3_pri1 = {
+	value = covert_op_phase_full_mult
+}
+
+covert_op_mult_p3_pri2 = {
+	value = covert_op_phase_full_mult
+	multiply = covert_op_priority_2_effect_mult
+}
+
+covert_op_mult_p3_pri3 = {
+	value = covert_op_phase_full_mult
+	multiply = covert_op_priority_3_effect_mult
+}
+
+# The same product, evaluated ON the container, for choosing between
+# operations (never as a multiplier). 0 while preparatory, which is what
+# makes a preparatory operation lose to any working one.
+# Scope: covert operation container
+covert_op_effect_mult = {
+	value = 0
+	if = {
+		limit = { covert_op_is_fully_operational = yes }
+		add = covert_op_phase_full_mult
+	}
+	else_if = {
+		limit = { covert_op_is_established = yes }
+		add = 1
+	}
+	if = {
+		limit = { covert_op_priority_at_least = { N = 3 } }
+		multiply = covert_op_priority_3_effect_mult
+	}
+	else_if = {
+		limit = { covert_op_priority_at_least = { N = 2 } }
+		multiply = covert_op_priority_2_effect_mult
+	}
+}
+
+# The detection points each priority level adds, for the row and the stepper
+# tooltips. Derived so they cannot drift from covert_op_priority_detect_add.
+covert_op_priority_2_detect_display = {
+	value = covert_op_priority_detect_add
+	round = yes
+}
+
+covert_op_priority_3_detect_display = {
+	value = covert_op_priority_detect_add
+	multiply = 2
+	round = yes
 }

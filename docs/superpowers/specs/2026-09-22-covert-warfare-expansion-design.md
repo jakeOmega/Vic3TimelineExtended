@@ -48,7 +48,7 @@ Findings from exploration that shape the design:
 |---|---|---|---|
 | 1 | Per-operation detection roll | small | — |
 | 2 | Graduated exposure (tier × phase, third-party notice) | small | 1 |
-| 3 | Per-operation priority (diminishing returns) | medium | 1 |
+| 3 | Per-operation priority (diminishing returns) — built on branch covert-per-op-priority | medium | 1 |
 | 4 | Persistent per-target networks | medium | 1, 3 |
 | 5 | Agency experience ("Tradecraft") + unlocks | medium | 2, 3, 4 |
 | 6 | Three new operation types | medium-large | 2, 5 |
@@ -149,6 +149,8 @@ have mod precedent in `un_vote_events.txt`.
 so both blowback numbers can be script values.
 
 ## Slice 3 — Per-operation priority
+
+Implementation plan: docs/superpowers/plans/2026-09-22-covert-per-op-priority.md. Election-interference confidence is not priority-scaled (see the plan).
 
 - `iw_priority` 1–3 on the op (missing ⇒ 1; `covert_op_sync` backfills).
 - Constants: `covert_op_priority_max 3`, effect ×1.35 / ×1.6, cost ×1.6 / ×2.4 (cost outruns

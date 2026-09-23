@@ -1,7 +1,7 @@
 ﻿# ============================================================================
 # COVERT WARFARE TEST CONSOLE — fired only from the console:
 #     event te_debug_covert.1     funding levels and the stand-down cascade
-#     event te_debug_covert.2     operations at each phase boundary, and detection
+#     event te_debug_covert.2     operations at each phase boundary, detection, and priority
 # ============================================================================
 # Vic3's console has no `effect` command (that is CK3); `event <id>` is the way
 # to run script by hand. Nothing in the mod fires these events.
@@ -122,5 +122,15 @@ te_debug_covert.2 = { # REVIEWED 2026-09-18: console-only test event (`event te_
 	option = {
 		name = te_debug_covert.2.g
 		te_debug_covert_refresh_display = yes
+	}
+
+	# ---- Max one operation's priority through the real step effect: upkeep
+	#      and the detection line move immediately; the scaled effects follow
+	#      at the start of next month. Checkable without depending on the
+	#      stepper's saved scope.
+	option = {
+		name = te_debug_covert.2.h
+		trigger = { covert_operations_active >= 1 }
+		te_debug_covert_max_priority = yes
 	}
 }

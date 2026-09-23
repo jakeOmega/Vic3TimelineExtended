@@ -119,7 +119,7 @@ je_covert_warfare = {
 			# strategic need, active operations, and cost awareness.
 			# Player uses scripted buttons instead.
 			#
-			# Cost formula: (active_ops + 1) × funding_level × banking_event_expense_small
+			# Cost formula: (priority-weighted ops + 1) × funding_level × covert_operations_cost_scale
 			# So more ops = higher cost per funding level. AI should scale funding
 			# to match its ambitions and avoid overpaying when it has many ops.
 			if = {
@@ -281,6 +281,15 @@ je_covert_warfare = {
 					remove_variable = iw_defender_event_cooldown
 					remove_variable = iw_defender_event_cooldown_age
 				}
+			}
+
+			# ---- AI priorities ----
+			# Before the sync, so the sync's detection refresh and the upkeep
+			# weights see the new levels. A human's priorities come from the
+			# operations widget and are never touched here.
+			if = {
+				limit = { is_player = no }
+				covert_ai_manage_priorities = yes
 			}
 
 			# ---- Reconcile operation containers with pacts ----

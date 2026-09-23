@@ -53,6 +53,31 @@ covert_op_is_fully_operational = {
 	var:iw_duration >= 12
 }
 
+# True when the operation's priority is at least $N$. A container without
+# iw_priority (a save made before slice 3, until the first monthly sync) reads
+# as priority 1, so this is false for it.
+# Parameters: $N$ = 2 or 3
+# Scope: covert operation container
+covert_op_priority_at_least = {
+	has_variable = iw_priority
+	var:iw_priority >= $N$
+}
+
+# True when the priority upkeep is charged at is at least $N$: the higher of
+# the current priority and the one the running effects were applied at
+# (iw_priority_applied, snapshot by covert_ops_apply_all_phase_effects).
+# Parameters: $N$ = 2 or 3
+# Scope: covert operation container
+covert_op_charged_priority_at_least = {
+	OR = {
+		covert_op_priority_at_least = { N = $N$ }
+		AND = {
+			has_variable = iw_priority_applied
+			var:iw_priority_applied >= $N$
+		}
+	}
+}
+
 # ============================================================================
 # FUNDING CONTROLS — shared eligibility
 # ============================================================================
@@ -107,6 +132,59 @@ covert_possible_stand_down = {
 			variable = iw_ops
 			has_tag = iw_op_$TYPE$
 			var:iw_target ?= scope:iw_tgt
+		}
+	}
+}
+
+# ============================================================================
+# PRIORITY — shared eligibility
+# ============================================================================
+# Whether the operation a widget row is showing can have its priority changed.
+# Called by the row stepper's scripted GUIs (is_valid) and by the AI's
+# priority management, so the two cannot diverge.
+#
+# FAIL-CLOSED BY DESIGN, like covert_possible_stand_down. The row hands the
+# operation's container to script as the saved scope iw_op; passing an object
+# into a scripted GUI's saved_scopes has no vanilla precedent. If it arrives
+# unset, or is anything but one of OUR running operations, the stepper greys
+# out and does nothing.
+# Scope: operator country; scope:iw_op = the operation container
+covert_priority_op_is_ours = {
+	custom_tooltip = {
+		text = iw_priority_op_known_tt
+		exists = scope:iw_op
+	}
+	custom_tooltip = {
+		text = iw_priority_op_ours_tt
+		exists = scope:iw_op
+		has_variable_list = iw_ops
+		is_target_in_variable_list = { name = iw_ops target = scope:iw_op }
+		scope:iw_op ?= { has_tag = iw_op }
+	}
+}
+
+covert_possible_priority_up = {
+	covert_priority_op_is_ours = yes
+	custom_tooltip = {
+		text = iw_priority_not_max_tt
+		scope:iw_op ?= {
+			OR = {
+				NOT = { has_variable = iw_priority }
+				var:iw_priority < covert_op_priority_max
+			}
+		}
+	}
+	# Slice 5 adds its Tradecraft gate on the step to priority 3 here, as one
+	# more custom_tooltip, so it binds the stepper and the AI alike.
+}
+
+covert_possible_priority_down = {
+	covert_priority_op_is_ours = yes
+	custom_tooltip = {
+		text = iw_priority_not_min_tt
+		scope:iw_op ?= {
+			has_variable = iw_priority
+			var:iw_priority > 1
 		}
 	}
 }

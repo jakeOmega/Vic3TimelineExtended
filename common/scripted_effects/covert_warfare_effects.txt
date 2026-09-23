@@ -13,6 +13,8 @@
 #           iw_detect          monthly detection % (JE display)
 #           iw_tgt_ic          target's intelligence capacity (JE display)
 #           iw_tgt_td          target's type-specific covert defense (JE display)
+#           iw_priority        1-3; multiplies effect, upkeep share and detection
+#                              (covert_warfare_script_values.txt, slice 3 section)
 #
 # The operator keeps references in its `iw_ops` variable list. Iterate that
 # list, never every_container: the global iterator scans every container in
@@ -54,12 +56,14 @@ covert_op_create = {
 			set_variable = { name = iw_target value = $TARGET$ }
 			set_variable = { name = iw_duration value = 0 }
 			set_variable = { name = iw_type_code value = $CODE$ }
+			set_variable = { name = iw_priority value = 1 }
 			# Initialise the display phase so the widget never reads a variable
 			# that does not exist yet; covert_op_refresh_phase derives it from
 			# then on.
 			covert_op_refresh_phase = yes
 		}
 		add_to_variable_list = { name = iw_ops target = scope:iw_new_op }
+		covert_refresh_priority_cost = yes
 	}
 }
 
@@ -87,16 +91,26 @@ covert_op_destroy = {
 		}
 		remove_list_variable = { name = iw_ops target = scope:iw_ended_op }
 		scope:iw_ended_op = { destroy_container = yes }
+		covert_refresh_priority_cost = yes
 	}
 }
 
 # Recompute the target and detection data the JE shows for one operation.
-# covert_operation_detection_chance reads target_max_ic / target_type_defense
-# off the operator, so they are staged there first.
+# covert_operation_detection_chance reads target_max_ic / target_type_defense /
+# iw_priority_staging off the operator, so they are staged there first. The
+# priority is copied with PREV.var: from inside the operator (PREV is this
+# container); a scope:<container>.var: chain is avoided on purpose.
 # Parameters: $DEFENSE_MOD$ = type-specific defense modifier
 # Scope: operation container; scope:iw_operator = operator country
 covert_op_refresh_detection = {
 	save_scope_as = iw_op
+	if = {
+		limit = { has_variable = iw_priority }
+		scope:iw_operator = { set_variable = { name = iw_priority_staging value = PREV.var:iw_priority } }
+	}
+	else = {
+		scope:iw_operator = { set_variable = { name = iw_priority_staging value = 1 } }
+	}
 	var:iw_target = {
 		capital = {
 			scope:iw_op = { set_variable = { name = iw_target_capital value = PREV } }
@@ -110,7 +124,10 @@ covert_op_refresh_detection = {
 	set_variable = { name = iw_detect value = scope:iw_operator.var:iw_detect_staging }
 	set_variable = { name = iw_tgt_ic value = scope:iw_operator.var:target_max_ic }
 	set_variable = { name = iw_tgt_td value = scope:iw_operator.var:target_type_defense }
-	scope:iw_operator = { remove_variable = iw_detect_staging }
+	scope:iw_operator = {
+		remove_variable = iw_detect_staging
+		remove_variable = iw_priority_staging
+	}
 }
 
 # Start an operation. Called from the covert action's accept_effect, where
@@ -174,6 +191,50 @@ covert_op_burn = {
 		set_variable = { name = iw_last_exposed_country value = ROOT }
 		set_variable = { name = iw_last_exposed_type value = $CODE$ }
 		set_variable = { name = iw_last_exposed_age value = 0 }
+	}
+}
+
+# Recompute iw_priority_cost_sum: each running operation's share of the covert
+# budget (1 at priority 1, covert_op_priority_2/3_cost_mult above). The upkeep
+# values read this instead of the pact count, so a priority-3 operation costs
+# 2.4 shares. Each operation is weighted by the HIGHER of its current priority
+# and the priority its running effects were applied at (iw_priority_applied,
+# via covert_op_charged_priority_at_least): raising priority raises upkeep on
+# the click, but lowering it only lowers upkeep once the next pulse re-applies
+# the effects at the lower level, so a raise-before-pulse / lower-after dodge
+# buys nothing. Called from covert_op_create and covert_op_destroy (every path
+# that starts or ends an operation goes through one of them, so upkeep moves
+# the same day), from the tail of covert_ops_sync_all (which also reaps
+# containers directly), after a priority step, and at the end of
+# covert_ops_apply_all_phase_effects (the snapshot has just moved).
+# Accumulates with set_variable's inline value block: change_variable does not
+# reliably resolve a script-value operand.
+# Scope: operator country
+covert_refresh_priority_cost = {
+	save_scope_as = iw_cost_operator
+	set_variable = { name = iw_priority_cost_sum value = 0 }
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			if = {
+				limit = { covert_op_charged_priority_at_least = { N = 3 } }
+				scope:iw_cost_operator = {
+					set_variable = { name = iw_priority_cost_sum value = { value = var:iw_priority_cost_sum add = covert_op_priority_3_cost_mult } }
+				}
+			}
+			else_if = {
+				limit = { covert_op_charged_priority_at_least = { N = 2 } }
+				scope:iw_cost_operator = {
+					set_variable = { name = iw_priority_cost_sum value = { value = var:iw_priority_cost_sum add = covert_op_priority_2_cost_mult } }
+				}
+			}
+			else = {
+				scope:iw_cost_operator = {
+					set_variable = { name = iw_priority_cost_sum value = { value = var:iw_priority_cost_sum add = 1 } }
+				}
+			}
+		}
 	}
 }
 
@@ -257,13 +318,19 @@ covert_op_sync = {
 			limit = { has_tag = iw_op_$TYPE$ }
 			remove_variable = iw_seen
 			set_variable = { name = iw_type_code value = $CODE$ }
+			# Old-save backfill: detection reads the priority, so it must
+			# exist before covert_op_refresh_detection runs.
+			if = {
+				limit = { NOT = { has_variable = iw_priority } }
+				set_variable = { name = iw_priority value = 1 }
+			}
 			covert_op_refresh_detection = { DEFENSE_MOD = $DEFENSE_MOD$ }
 		}
 	}
 }
 
-# Reconcile all 9 operation types. Called monthly from the JE pulse, before
-# durations age and phase effects apply.
+# Reconcile all 9 operation types, then recompute the upkeep weights. Called
+# monthly from the JE pulse, before durations age and phase effects apply.
 # Scope: country
 covert_ops_sync_all = {
 	covert_op_sync = { TYPE = election_interference ACTION = covert_election_interference_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 0 }
@@ -275,6 +342,8 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = influence_campaign ACTION = covert_influence_campaign_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 6 }
 	covert_op_sync = { TYPE = ideological_subversion ACTION = covert_ideological_subversion_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 7 }
 	covert_op_sync = { TYPE = destabilization ACTION = covert_destabilization_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 8 }
+	# The sync reaps lapsed containers without going through covert_op_destroy.
+	covert_refresh_priority_cost = yes
 }
 
 # Age every running operation by one month, then restate its display phase.
@@ -327,12 +396,53 @@ covert_op_refresh_phase = {
 # PHASE-BASED EFFECT APPLICATION
 # ============================================================================
 # Phase 1 (months 0-5): Preparatory — no effect
-# Phase 2 (months 6-11): Establishing — base multiplier (1x)
-# Phase 3 (months 12+): Fully Operational — doubled multiplier (2x)
-# Phase triggers (container scope): covert_op_is_established, covert_op_is_fully_operational
+# Phase 2 (months 6-11): Establishing — base multiplier
+# Phase 3 (months 12+): Fully Operational — covert_op_phase_full_mult
+# Each is then scaled by the operation's priority (slice 3). The product is
+# one of six constant script values, chosen here, because add_modifier's
+# multiplier is re-evaluated against ROOT on later ticks and so cannot read
+# the container. Phase triggers (container scope): covert_op_is_established,
+# covert_op_is_fully_operational; priority: covert_op_priority_at_least.
+
+# Add $MODIFIER$ to the current scope, scaled by scope:iw_op's phase and
+# priority. Adds nothing while that operation is preparatory. Callers remove
+# the modifier first, so a preparatory operation leaves none behind.
+# Parameters: $MODIFIER$ = static modifier, $MONTHS$ = duration (literal)
+# Scope: the country, state or political movement receiving the modifier;
+#        scope:iw_op = the operation container
+covert_op_add_scaled_modifier = {
+	if = {
+		limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
+		if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p3_pri3 months = $MONTHS$ }
+		}
+		else_if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p3_pri2 months = $MONTHS$ }
+		}
+		else = {
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p3_pri1 months = $MONTHS$ }
+		}
+	}
+	else_if = {
+		limit = { scope:iw_op = { covert_op_is_established = yes } }
+		if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 3 } } }
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p2_pri3 months = $MONTHS$ }
+		}
+		else_if = {
+			limit = { scope:iw_op = { covert_op_priority_at_least = { N = 2 } } }
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p2_pri2 months = $MONTHS$ }
+		}
+		else = {
+			add_modifier = { name = $MODIFIER$ multiplier = covert_op_mult_p2_pri1 months = $MONTHS$ }
+		}
+	}
+}
 
 # Apply a country-scoped modifier to the TARGET of each $TYPE$ operation,
-# at that operation's own phase.
+# at that operation's own phase and priority.
 # Parameters: $TYPE$, $MODIFIER$
 # Scope: country (ROOT = JE owner / operator)
 covert_op_apply_target_effect = {
@@ -342,57 +452,57 @@ covert_op_apply_target_effect = {
 		save_scope_as = iw_op
 		var:iw_target = {
 			remove_modifier = $MODIFIER$
-			if = {
-				limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
-				add_modifier = { name = $MODIFIER$ multiplier = 2 months = 3 }
-			}
-			else_if = {
-				limit = { scope:iw_op = { covert_op_is_established = yes } }
-				add_modifier = { name = $MODIFIER$ months = 3 }
-			}
+			covert_op_add_scaled_modifier = { MODIFIER = $MODIFIER$ MONTHS = 3 }
 		}
 	}
 }
 
-# Apply a country-scoped modifier to SELF for a given operation type, at the
-# BEST phase among that type's operations.
+# Apply a country-scoped modifier to SELF for a given operation type, from the
+# operation of that type with the largest effect multiplier (phase x
+# priority). ordered_* sorts descending, so position 0 is the strongest; a
+# preparatory operation scores 0 and adds nothing.
 # Parameters: $TYPE$, $MODIFIER$
 # Scope: country (ROOT = JE owner / operator)
 covert_op_apply_self_effect = {
 	if = {
 		limit = { any_in_list = { variable = iw_ops has_tag = iw_op_$TYPE$ } }
 		remove_modifier = $MODIFIER$
-		if = {
-			limit = {
-				any_in_list = {
-					variable = iw_ops
-					has_tag = iw_op_$TYPE$
-					covert_op_is_fully_operational = yes
-				}
-			}
-			add_modifier = { name = $MODIFIER$ multiplier = 2 months = 3 }
+		ordered_in_list = {
+			variable = iw_ops
+			limit = { has_tag = iw_op_$TYPE$ }
+			order_by = covert_op_effect_mult
+			position = 0
+			save_scope_as = iw_op
 		}
-		else_if = {
-			limit = {
-				any_in_list = {
-					variable = iw_ops
-					has_tag = iw_op_$TYPE$
-					covert_op_is_established = yes
-				}
-			}
-			add_modifier = { name = $MODIFIER$ months = 3 }
-		}
-		# Phase 1: all at prep — no modifier
+		covert_op_add_scaled_modifier = { MODIFIER = $MODIFIER$ MONTHS = 3 }
 	}
 }
 
 # Master effect: apply ALL 9 operation types' phase-based effects.
-# Only runs if funding > 0, after covert_ops_sync_all. Called monthly from JE pulse.
+# Only runs if funding > 0, after covert_ops_sync_all. Called monthly from the
+# JE pulse (a priority step deliberately does not call it — see
+# covert_apply_priority_change). Snapshots each operation's priority as
+# iw_priority_applied first and refreshes the priority-weighted upkeep last.
 # The helpers it calls iterate iw_ops unguarded; the has_variable_list check here covers them.
 # Scope: country (ROOT = JE owner)
 covert_ops_apply_all_phase_effects = {
 	if = {
 		limit = { has_variable_list = iw_ops }
+		# Snapshot the priority these effects are applied at. Upkeep charges the
+		# higher of this and the current priority (covert_refresh_priority_cost),
+		# so lowering priority after the pulse cannot keep a stronger effect
+		# running on a cheaper budget.
+		every_in_list = {
+			variable = iw_ops
+			if = {
+				limit = { has_variable = iw_priority }
+				set_variable = { name = iw_priority_applied value = var:iw_priority }
+			}
+			else = {
+				set_variable = { name = iw_priority_applied value = 1 }
+			}
+		}
+
 		# ---- Election Interference: country modifier on TARGET ----
 		covert_op_apply_target_effect = { TYPE = election_interference MODIFIER = covert_election_interference }
 
@@ -412,13 +522,7 @@ covert_ops_apply_all_phase_effects = {
 				random_scope_state = {
 					limit = { any_scope_building = { level >= 1 } }
 					remove_modifier = covert_infrastructure_sabotage
-					if = {
-						limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
-						add_modifier = { name = covert_infrastructure_sabotage multiplier = 2 months = 3 }
-					}
-					else = {
-						add_modifier = { name = covert_infrastructure_sabotage months = 3 }
-					}
+					covert_op_add_scaled_modifier = { MODIFIER = covert_infrastructure_sabotage MONTHS = 3 }
 				}
 			}
 		}
@@ -437,7 +541,8 @@ covert_ops_apply_all_phase_effects = {
 		covert_op_apply_self_effect = { TYPE = military_espionage MODIFIER = covert_military_espionage_unit }
 		# Weak counter-intel marker on the TARGET so covert_warfare.2 can notify them (#158)
 		covert_op_apply_target_effect = { TYPE = military_espionage MODIFIER = covert_military_espionage_detected }
-		# Conditional tech spread: only if target has tech advantage (best phase of any operation)
+		# Conditional tech spread: only if target has tech advantage, from the
+		# strongest military espionage operation (phase x priority)
 		if = {
 			limit = {
 				any_in_list = {
@@ -457,19 +562,14 @@ covert_ops_apply_all_phase_effects = {
 					espionage_target_tech_advantage > 0
 				}
 				remove_modifier = covert_military_espionage
-				if = {
-					limit = {
-						any_in_list = {
-							variable = iw_ops
-							has_tag = iw_op_military_espionage
-							covert_op_is_fully_operational = yes
-						}
-					}
-					add_modifier = { name = covert_military_espionage multiplier = 2 months = 3 }
+				ordered_in_list = {
+					variable = iw_ops
+					limit = { has_tag = iw_op_military_espionage }
+					order_by = covert_op_effect_mult
+					position = 0
+					save_scope_as = iw_op
 				}
-				else = {
-					add_modifier = { name = covert_military_espionage months = 3 }
-				}
+				covert_op_add_scaled_modifier = { MODIFIER = covert_military_espionage MONTHS = 3 }
 			}
 		}
 
@@ -478,7 +578,9 @@ covert_ops_apply_all_phase_effects = {
 
 		# ---- Ideological Subversion: country resist modifier + movement modifiers on TARGET ----
 		covert_op_apply_target_effect = { TYPE = ideological_subversion MODIFIER = covert_ideological_subversion_resist }
-		# Movement pressure from the establishing phase on (same strength once fully operational)
+		# Movement pressure from the establishing phase on, at the same
+		# strength once fully operational — so it scales by priority only
+		# (the establishing-phase column of the multiplier table).
 		every_in_list = {
 			variable = iw_ops
 			limit = {
@@ -486,8 +588,22 @@ covert_ops_apply_all_phase_effects = {
 				covert_op_is_established = yes
 			}
 			ROOT = { save_scope_as = cultural_hegemon }
-			var:iw_target = {
-				ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no MULT = 1 }
+			if = {
+				limit = { covert_op_priority_at_least = { N = 3 } }
+				var:iw_target = {
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no MULT = covert_op_mult_p2_pri3 }
+				}
+			}
+			else_if = {
+				limit = { covert_op_priority_at_least = { N = 2 } }
+				var:iw_target = {
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no MULT = covert_op_mult_p2_pri2 }
+				}
+			}
+			else = {
+				var:iw_target = {
+					ch_apply_hegemon_movement_pressure = { MODIFIER = covert_ideological_subversion FALLBACK_MODIFIER = covert_ideological_subversion MONTHS = 3 DECAYING = no MULT = covert_op_mult_p2_pri1 }
+				}
 			}
 		}
 
@@ -504,25 +620,16 @@ covert_ops_apply_all_phase_effects = {
 				# Separatist movement pressure
 				every_political_movement = {
 					remove_modifier = covert_destabilization_separatist
-					if = {
-						limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
-						add_modifier = { name = covert_destabilization_separatist multiplier = 2 months = 3 }
-					}
-					else = {
-						add_modifier = { name = covert_destabilization_separatist months = 3 }
-					}
+					covert_op_add_scaled_modifier = { MODIFIER = covert_destabilization_separatist MONTHS = 3 }
 				}
 				# General destabilization pressure
 				remove_modifier = covert_destabilization_general
-				if = {
-					limit = { scope:iw_op = { covert_op_is_fully_operational = yes } }
-					add_modifier = { name = covert_destabilization_general multiplier = 2 months = 3 }
-				}
-				else = {
-					add_modifier = { name = covert_destabilization_general months = 3 }
-				}
+				covert_op_add_scaled_modifier = { MODIFIER = covert_destabilization_general MONTHS = 3 }
 			}
 		}
+
+		# The applied-priority snapshot just moved: recharge upkeep from it.
+		covert_refresh_priority_cost = yes
 	}
 }
 
@@ -719,6 +826,165 @@ covert_effect_stand_down = {
 		remove_diplomatic_pact = { country = scope:iw_tgt type = $ACTION$ }
 		covert_op_destroy = { TYPE = $TYPE$ TARGET = scope:iw_tgt }
 	}
+}
+
+# ============================================================================
+# PRIORITY
+# ============================================================================
+# Raise or lower one operation's priority (1 .. covert_op_priority_max).
+# Called by the row stepper's scripted GUIs, by the console harness, and — for
+# the variable change only — mirrored by covert_ai_manage_priorities.
+# Eligibility, including the fail-closed scope check, is in
+# covert_possible_priority_up / _down (covert_warfare_triggers.txt).
+#
+# The tooltip branches here in script because tooltip loc cannot reach a
+# container: it names the level the operation is moving TO and prints the
+# constants for that level.
+# Scope: operator country; scope:iw_op = the operation container
+
+# Upkeep, the JE's cost modifier and every operation's detection display are
+# recomputed on the click (covert_refresh_funding_state runs the sync, which
+# re-stages detection). covert_refresh_priority_cost runs first on purpose, so
+# the priority-weighted sum is current before covert_refresh_funding_state
+# re-adds the cost modifier from it (the sync inside covert_refresh_funding_state
+# also refreshes the sum again; that second refresh is harmless).
+#
+# The effect modifiers are deliberately NOT re-applied here. They pick up the
+# new priority at the next monthly pulse instead: covert_ops_apply_all_phase_effects'
+# infrastructure-sabotage branch does random_scope_state = { remove_modifier …
+# add … }, so calling it on every click would re-roll a fresh 3-month sabotage
+# modifier onto a new random target state each time, on top of the ones already
+# running — spam-clicking the stepper would spread sabotage across the whole
+# target for free.
+covert_apply_priority_change = {
+	covert_refresh_priority_cost = yes
+	covert_refresh_funding_state = yes
+}
+
+covert_effect_priority_up = {
+	if = {
+		limit = { scope:iw_op ?= { covert_op_priority_at_least = { N = 2 } } }
+		custom_tooltip = iw_priority_to_3_tt
+	}
+	else = {
+		custom_tooltip = iw_priority_to_2_tt
+	}
+	hidden_effect = {
+		scope:iw_op ?= {
+			if = {
+				limit = { NOT = { has_variable = iw_priority } }
+				set_variable = { name = iw_priority value = 1 }
+			}
+			change_variable = { name = iw_priority add = 1 }
+			clamp_variable = { name = iw_priority min = 1 max = covert_op_priority_max }
+		}
+		covert_apply_priority_change = yes
+	}
+}
+
+covert_effect_priority_down = {
+	if = {
+		limit = { scope:iw_op ?= { covert_op_priority_at_least = { N = 3 } } }
+		custom_tooltip = iw_priority_to_2_tt
+	}
+	else = {
+		custom_tooltip = iw_priority_to_1_tt
+	}
+	hidden_effect = {
+		scope:iw_op ?= {
+			if = {
+				limit = { NOT = { has_variable = iw_priority } }
+				set_variable = { name = iw_priority value = 1 }
+			}
+			change_variable = { name = iw_priority subtract = 1 }
+			clamp_variable = { name = iw_priority min = 1 max = covert_op_priority_max }
+		}
+		covert_apply_priority_change = yes
+	}
+}
+
+# The AI's priorities. Per operation, a wanted level: 1 in default or
+# bankruptcy; 3 for a great power at war with the target; 2 against a rival;
+# otherwise 1. It then steps toward that level one at a time, through the same
+# covert_possible_priority_* gates the stepper uses, so any gate added there
+# (slice 5's Tradecraft requirement) binds the AI as well. Two steps each way
+# covers the whole 1-3 range. The variable is set directly: the monthly pulse
+# runs the sync and the effects straight after this.
+# Scope: country (is_player = no; the caller guards it)
+covert_ai_manage_priorities = {
+	save_scope_as = iw_ai_operator
+	if = {
+		limit = { has_variable_list = iw_ops }
+		every_in_list = {
+			variable = iw_ops
+			save_scope_as = iw_op
+			set_variable = { name = iw_ai_priority value = 1 }
+			if = {
+				limit = {
+					scope:iw_ai_operator = {
+						NOT = { in_default = yes }
+						NOT = { has_modifier = declared_bankruptcy }
+					}
+				}
+				var:iw_target ?= {
+					save_scope_as = iw_ai_target
+					if = {
+						limit = {
+							scope:iw_ai_operator = {
+								country_rank >= rank_value:great_power
+								has_war_with = scope:iw_ai_target
+							}
+						}
+						scope:iw_op = { set_variable = { name = iw_ai_priority value = 3 } }
+					}
+					else_if = {
+						limit = {
+							scope:iw_ai_operator = {
+								has_diplomatic_pact = { who = scope:iw_ai_target type = rivalry }
+							}
+						}
+						scope:iw_op = { set_variable = { name = iw_ai_priority value = 2 } }
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { has_variable = iw_priority } }
+				set_variable = { name = iw_priority value = 1 }
+			}
+			# Up, at most twice
+			if = {
+				limit = {
+					var:iw_priority < var:iw_ai_priority
+					scope:iw_ai_operator = { covert_possible_priority_up = yes }
+				}
+				change_variable = { name = iw_priority add = 1 }
+			}
+			if = {
+				limit = {
+					var:iw_priority < var:iw_ai_priority
+					scope:iw_ai_operator = { covert_possible_priority_up = yes }
+				}
+				change_variable = { name = iw_priority add = 1 }
+			}
+			# Down, at most twice
+			if = {
+				limit = {
+					var:iw_priority > var:iw_ai_priority
+					scope:iw_ai_operator = { covert_possible_priority_down = yes }
+				}
+				change_variable = { name = iw_priority subtract = 1 }
+			}
+			if = {
+				limit = {
+					var:iw_priority > var:iw_ai_priority
+					scope:iw_ai_operator = { covert_possible_priority_down = yes }
+				}
+				change_variable = { name = iw_priority subtract = 1 }
+			}
+			remove_variable = iw_ai_priority
+		}
+	}
+	covert_refresh_priority_cost = yes
 }
 
 # ============================================================================
