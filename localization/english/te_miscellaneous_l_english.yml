@@ -2077,7 +2077,7 @@
  iw_target_not_in_bloc_tt:0 "Target must not be in your [concept_power_bloc]"
  iw_target_tech_advantage_tt:0 "Target must have technologies you have not yet researched"
  iw_tradecraft_reason_0:0 "#italic No operation has yet taught our service anything.#!"
- iw_tradecraft_reason_1:0 "#italic Last change: #G operations past their preparatory phase#! taught our officers their trade.#!"
+ iw_tradecraft_reason_1:0 "#italic Last change: #G our running operations#! taught our officers their trade.#!"
  iw_tradecraft_reason_20:0 "#italic Last change: #R an espionage operation was exposed.#!#!"
  iw_tradecraft_reason_21:0 "#italic Last change: #R an operation meddling in a foreign government was exposed.#!#!"
  iw_tradecraft_reason_22:0 "#italic Last change: #R an operation against a foreign state itself was exposed.#!#!"

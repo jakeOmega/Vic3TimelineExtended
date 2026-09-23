@@ -49,6 +49,7 @@ class ConstantTests(unittest.TestCase):
             ("covert_tradecraft_max", "100"),
             ("covert_tradecraft_gain_per_op", "1"),
             ("covert_tradecraft_ops_counted", "4"),
+            ("covert_tradecraft_prep_gain_fraction", "0.5"),
             ("covert_tradecraft_dr_divisor", "50"),
             ("covert_tradecraft_dr_floor", "0.1"),
             ("covert_tradecraft_loss_mild", "3"),
@@ -174,6 +175,10 @@ class MonthlyTests(unittest.TestCase):
         self.assertIn("covert_tradecraft_init = yes", block)
         self.assertIn("covert_op_is_established = yes", block)
         self.assertIn("max = covert_tradecraft_ops_counted", block)
+        # A preparatory operation earns a fraction, so a burned-and-relaunched
+        # operation is not dead weight for six months.
+        self.assertIn("add = covert_tradecraft_prep_gain_fraction", block)
+        self.assertIn("var:iw_tradecraft_ops > 0", block)
         self.assertIn("covert_tradecraft_gain = { AMOUNT = covert_tradecraft_monthly_gain_nominal REASON = 1 }", block)
         self.assertIn("covert_operations_active < 1", block)
         self.assertIn("covert_tradecraft_loss = { AMOUNT = covert_tradecraft_decay REASON = 24 }", block)

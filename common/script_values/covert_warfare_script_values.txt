@@ -161,9 +161,14 @@ covert_net_head_start_max = 5
 # covert_tradecraft_loss (covert_warfare_effects.txt, § TRADECRAFT).
 covert_tradecraft_max = 100
 # Monthly gain per operation at establishing phase or better, counting at most
-# covert_tradecraft_ops_counted of them.
+# covert_tradecraft_ops_counted operations' worth.
 covert_tradecraft_gain_per_op = 1
 covert_tradecraft_ops_counted = 4
+# A preparatory operation counts as this fraction of one. Without it a burned
+# operation, relaunched preparatory, taught nothing for six months while still
+# rolling detection, and at 10% detection one moderate operation averaged ~31
+# instead of the ~57 it does with 0.5 (§ TRADECRAFT table).
+covert_tradecraft_prep_gain_fraction = 0.5
 covert_tradecraft_dr_divisor = 50
 covert_tradecraft_dr_floor = 0.1
 # What a burn costs, by the exposed operation's tier. Unscaled. Net of these,
@@ -1123,24 +1128,24 @@ covert_net_detect_reduction_max_display = {
 # covert_warfare_effects.txt, § TRADECRAFT. Tiers and unlocks:
 # covert_warfare_triggers.txt, § TRADECRAFT.
 #
-# Equilibrium: gains diminish and losses do not, so the score levels off. The
-# spec's closed form (N x (100 - x)/50 = p x L) assumed every operation-month
-# earns; it does not. Detection rolls from month 0, and a burned operation is
-# relaunched preparatory and earns nothing for up to 6 months (fewer with a
-# network head start). Simulated long-run averages (Monte Carlo, 600 months,
-# a burned operation relaunched at once; head start 0 / 5 months), with the
-# median months to reach Established (40):
+# Equilibrium: gains diminish and losses do not, so the score levels off.
+# Detection rolls from month 0 and a burned operation is relaunched
+# preparatory (up to 6 months, fewer with a network head start), which is why
+# a preparatory operation earns covert_tradecraft_prep_gain_fraction (0.5):
+# at 0 an operation taught nothing while it was most exposed, and one moderate
+# operation at 10% detection averaged ~31. Simulated long-run averages
+# (Monte Carlo, 600 months, a burned operation relaunched at once; network head
+# start 0 / 5 months), with the median months to reach Established (40):
 #   per-op detection   ops              average        months to 40
-#   10%                1 moderate       31 / 70        221 / 78
-#   10%                2 moderate       38 / 72        114 / 38
-#   10%                4 moderate       53 / 74         51 / 18
-#   10%                1 severe         14 / 45        375 / 138
-#    5%                1 moderate       79 / 85         74 / 51
-#    5%                1 severe         66 / 77         92 / 58
-#    2%                1 moderate       93 / 95         55 / 45
-# So at 10% (funding 1, no efficiency) an agency needs either several
-# operations or a strong network to hold Established; at 5% or less the curve
-# behaves as the spec intended.
+#   10%                1 moderate       57 / 69        131 / 81
+#   10%                2 moderate       62 / 72         62 / 39
+#   10%                4 moderate       67 / 74         31 / 18
+#   10%                1 severe         25 / 44        208 / 138
+#    5%                1 moderate       82 / 85         62 / 51
+#    5%                1 severe         73 / 77         74 / 57
+#    2%                1 moderate       94 / 95         47 / 45
+# 10% is funding 1 with no covert efficiency; well-funded agencies sit lower.
+# Severe operations stay hard to learn from at high detection, on purpose.
 # Scope: operator country throughout, unless noted.
 
 # Diminishing returns on gains: 1 up to half, falling linearly to
@@ -1157,7 +1162,8 @@ covert_tradecraft_gain_scale = {
 }
 
 # This month's nominal gain, before diminishing returns. var:iw_tradecraft_ops
-# (operations at establishing or better, already capped at
+# (operations at establishing or better count 1, preparatory ones
+# covert_tradecraft_prep_gain_fraction; the total capped at
 # covert_tradecraft_ops_counted) is written by covert_tradecraft_monthly just
 # before this is read.
 covert_tradecraft_monthly_gain_nominal = {

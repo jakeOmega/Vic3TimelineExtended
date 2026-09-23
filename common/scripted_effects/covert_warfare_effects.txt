@@ -51,7 +51,8 @@
 #   iw_tradecraft              0 - covert_tradecraft_max. Written ONLY by
 #                              covert_tradecraft_gain / covert_tradecraft_loss
 #   iw_tradecraft_last_reason  code of the most recent change (see § TRADECRAFT)
-#   iw_tradecraft_ops          operations counted towards this month's gain (display)
+#   iw_tradecraft_ops          operations' worth counted towards this month's gain
+#                              (preparatory ones at a fraction; display)
 #
 # Always remove_list_variable before destroy_container, so iw_ops never holds
 # a dead reference. Storage has no per-type limit: the cap lives only in
@@ -645,10 +646,10 @@ covert_tradecraft_refresh_bonus = {
 # never from covert_ops_sync_all or covert_refresh_funding_state, which run on
 # every stepper click.
 #   1. Seed if missing.
-#   2. Count operations at establishing or better, capped at
-#      covert_tradecraft_ops_counted, into iw_tradecraft_ops.
-#   3. Gain if any count; else decay if no operation runs at all. Operations
-#      still preparatory neither gain nor decay.
+#   2. Weigh the running operations into iw_tradecraft_ops: 1 for each at
+#      establishing or better, covert_tradecraft_prep_gain_fraction for each
+#      still preparatory; the total capped at covert_tradecraft_ops_counted.
+#   3. Gain if anything counted; else decay if no operation runs at all.
 #   4. Refresh the tier bonus.
 # Scope: operator country
 covert_tradecraft_monthly = {
@@ -659,13 +660,27 @@ covert_tradecraft_monthly = {
 		limit = { has_variable_list = iw_ops }
 		every_in_list = {
 			variable = iw_ops
-			limit = { covert_op_is_established = yes }
-			scope:iw_tc_operator = { change_variable = { name = iw_tradecraft_ops add = 1 } }
+			if = {
+				limit = { covert_op_is_established = yes }
+				scope:iw_tc_operator = { change_variable = { name = iw_tradecraft_ops add = 1 } }
+			}
+			else = {
+				# A script-value operand: set_variable, not change_variable.
+				scope:iw_tc_operator = {
+					set_variable = {
+						name = iw_tradecraft_ops
+						value = {
+							value = var:iw_tradecraft_ops
+							add = covert_tradecraft_prep_gain_fraction
+						}
+					}
+				}
+			}
 		}
 	}
 	clamp_variable = { name = iw_tradecraft_ops min = 0 max = covert_tradecraft_ops_counted }
 	if = {
-		limit = { var:iw_tradecraft_ops >= 1 }
+		limit = { var:iw_tradecraft_ops > 0 }
 		covert_tradecraft_gain = { AMOUNT = covert_tradecraft_monthly_gain_nominal REASON = 1 }
 	}
 	else_if = {
