@@ -17,7 +17,8 @@ diminishing returns, an agency experience score with unlocks, new operation type
 - **No doctrine/posture choice**; the agency-level progression is the experience score.
 - Experience feeds **efficiency-class bonuses + unlocks** (per-type cap, the new severe ops).
 - New operation types: **regime change**, **nuclear programme sabotage**, **space programme
-  espionage** (media/cultural influence declined).
+  espionage** (media/cultural influence declined), and (added 2026-09-23) **cultivate
+  assets**, a network-only operation.
 
 Findings from exploration that shape the design:
 
@@ -51,7 +52,7 @@ Findings from exploration that shape the design:
 | 3 | Per-operation priority (diminishing returns) — built on branch covert-per-op-priority | medium | 1 |
 | 4 | Persistent per-target networks — built on branch covert-per-target-networks | medium | 1, 3 |
 | 5 | Agency experience ("Tradecraft") + unlocks | medium | 2, 3, 4 |
-| 6 | Three new operation types | medium-large | 2, 5 |
+| 6 | Four new operation types | medium-large | 2, 4, 5 |
 | 7 | Network-revealed intelligence in the widget | small-medium | 4 |
 
 Each slice: its own branch off `main`, `POST /reload?mod_only=true&audits_only=true` clean
@@ -106,7 +107,7 @@ a new type is one branch there:
 
 | Tier | Types | Fiction |
 |---|---|---|
-| 1 mild | industrial_espionage, military_espionage, space_program_espionage (new) | "everyone spies" |
+| 1 mild | industrial_espionage, military_espionage, space_program_espionage (new), cultivate_assets (new) | "everyone spies" |
 | 2 moderate | election_interference, financial_subversion, influence_campaign | meddling |
 | 3 severe | ideological_subversion, destabilization, regime_change (new), nuclear_sabotage (new) | attacking the state |
 | war | infrastructure_sabotage, comms_disruption | already at war: infamy only, no relations/third-party effect |
@@ -213,7 +214,7 @@ exactly those two triggers), and `covert_op_refresh_phase` subtracts the same SV
 `covert_operation_detection_chance` subtracts `iw_net_strength_staging × covert_net_detect_factor`
 after the funding terms (floor `min = 1` stays).
 
-**No "maintain presence" pact.** A tenth pact would show in the outliner naming the target and
+**No "maintain presence" pact** (revisited 2026-09-23: slice 6 adds one, *D. Cultivate assets*). A tenth pact would show in the outliner naming the target and
 drags the net into pact reconciliation. Instead decay halves at funding ≥ 3 — funding is
 already the paid lever and the AI already manages it. Read the operator's funding by staging
 it on the net during the tick (don't rely on `parent` from container scope in a script value).
@@ -317,7 +318,7 @@ averages at 10% (network head start 0 / 5): one moderate op 57 / 69, two 62 / 72
 severe 25 / 44; at 5% one moderate op 82 / 85. Table: `covert_warfare_script_values.txt`
 § TRADECRAFT.
 
-## Slice 6 — Three new operation types
+## Slice 6 — Four new operation types
 
 **Per-type enumeration sites** (each new type = one row/branch in each; make the tier table
 one-row-per-type first; verified against the code on 2026-09-22 during slice 2): the diplomatic
@@ -327,7 +328,7 @@ actual shipped form; no single `covert_type_tier` branch exists in the codebase,
 list once naming one; `is_covert_operation_pact` OR list (`covert_warfare_triggers.txt`); the
 `covert_warfare.1` `after` code branch; the `covert_warfare.2` trigger OR list;
 `covert_last_exposed_type_name` and its sibling `covert_burned_type_name` — two separate
-blocks, not one — code (9, 10, 11) in `covert_warfare_custom_loc.txt`; a stand-down sgui
+blocks, not one — code (9, 10, 11, 12) in `covert_warfare_custom_loc.txt`; a stand-down sgui
 handler; the block in `covert_ops_apply_all_phase_effects`; static modifiers; loc (`iw_*_tt`,
 action name/desc); and the operations widget's own per-type row and stand-down-button blocks
 in `gui/journal_entry_widgets/covert_operations_widget.gui`, gated on
@@ -376,6 +377,42 @@ economic). Fiction: the other side's rocket plans.
   `country_space_race_risk_mult = -0.10`. Target marker `covert_space_espionage_detected`
   (same shape as the two existing `_detected` markers, for `covert_warfare.2`).
 - AI `will_propose`: target ahead, ROOT has `sr_active_milestone`; `propose_score` 10, +5 GP.
+
+**D. Cultivate assets** (`covert_cultivate_assets_action`, code 12, tier mild, defense
+ideological: the work is recruiting sympathisers, which the ideological counterintelligence
+axis already covers). Fiction: dinners, favours and a slow list of names. Added 2026-09-23 at
+the user's request; a network-only operation was rejected during slice 4 (see there), and this
+revisits that call on purpose: the outliner line is accepted, since every other operation
+shows there too.
+- **No effect on the target at all**: no target modifier, no self modifier, no
+  `covert_ops_apply_all_phase_effects` block. Its only product is the network.
+- **No `_detected` marker either.** The two existing markers carry a small debuff
+  (`country_authority_add = -3`), which would break "no effect". Instead the
+  `covert_warfare.2` trigger gains an OR branch on `iw_last_exposed_type = 12`
+  (`covert_op_burn` sets it on the target just before firing the event), so a burn is still
+  announced to the defender.
+- **Network gain ×1.5**: `covert_nets_sync` step 2 also marks each network that has a
+  cultivate-assets operation against its target (`iw_net_cultivating` 0/1, zeroed with
+  `iw_net_ops`); `covert_net_tick_gain` multiplies by `covert_net_cultivate_mult = 1.5` when
+  the flag is set. That multiplier stacks with the normal extra-operation factor (it still
+  counts as an operation in `iw_net_ops`) and with Tradecraft's growth multiplier. Decay,
+  burn loss and head start are unchanged.
+- **Tradecraft at the preparatory rate, always**: in `covert_tradecraft_monthly` it counts
+  `covert_tradecraft_prep_gain_fraction` whatever its phase (a `has_tag =
+  iw_op_cultivate_assets` branch ahead of the established check), so a cheap, near-riskless
+  operation cannot be farmed for experience.
+- **Exposure**: mild tier × phase like the espionage pair (0.5–1.5 infamy, −5 to −15
+  relations, Tradecraft −3, network −25). It rolls detection like any operation.
+- `possible`: the usual covert gates (funding ≥ 1, a free slot, per-type cap, valid target, no
+  duplicate against the same target); no rivalry or war requirement. Not usable on ROOT's own
+  subjects. `requirement_to_maintain`: funding ≥ 1 and the target still valid.
+- **AI** `will_propose`: rivalry with the target, or antagonistic, and no network or one below
+  50 against it; `propose_score` 5, +5 when ROOT already runs another operation there
+  (feed the network the other operation benefits from); `evaluation_chance` 0.05.
+- Constant in Section 1: `covert_net_cultivate_mult = 1.5`. Projection: alone against a
+  target it reaches strength 50 in ~17 months (vs 25 for a normal operation) and 75 in ~28
+  (vs 42).
+- Slice 7 synergy: it is the natural way to reach the strength-50 / 75 intelligence reveals.
 
 ## Slice 7 — Network-revealed intelligence (later)
 
