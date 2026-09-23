@@ -1232,6 +1232,8 @@
  iw_funding_defense:0 "Covert Funding (Counterintelligence)"
  iw_funding_defense_desc:0 "Higher covert funding enhances our counterintelligence capabilities, increasing [concept_intelligence_capacity] to better detect and thwart enemy operations."
  iw_increase_funding_button_desc:0 "Increase the funding level for all active cyber operations. Higher funding increases effectiveness but also increases detection risk and cost."
+ iw_tradecraft_bonus:0 "Agency Tradecraft"
+ iw_tradecraft_bonus_desc:0 "Our intelligence service's accumulated experience sharpens everything it does. Each tier of Tradecraft adds to our [concept_intelligence_capacity] and speeds the growth of our networks abroad."
  japanese_union:0 "Japanese Union"
  join_united_nations:0 "Require UN Membership"
  join_united_nations_desc:0 "Requires the target country to join the United Nations as a condition of this treaty."

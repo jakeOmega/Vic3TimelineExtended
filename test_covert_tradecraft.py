@@ -262,5 +262,53 @@ class ConsumerTests(unittest.TestCase):
         self.assertRegex(loc, r"(?m)^ je_iw_slots_detail_tooltip:0 .*covert_tradecraft_tier_4_floor")
 
 
+class DisplayTests(unittest.TestCase):
+    def test_custom_loc_tier_names_cover_every_band(self):
+        block = _top_level_block(_text(CUSTOM_LOC), "covert_tradecraft_tier_name = {")
+        for n in range(0, 5):
+            self.assertIn("iw_tradecraft_tier_name_%d" % n, block)
+        for n in range(1, 5):
+            self.assertIn("covert_tradecraft_tier_%d = yes" % n, block)
+
+    def test_custom_loc_reasons_cover_every_code(self):
+        block = _top_level_block(_text(CUSTOM_LOC), "covert_tradecraft_last_reason = {")
+        for code in (1, 20, 21, 22, 23, 24):
+            self.assertIn("var:iw_tradecraft_last_reason = %d" % code, block)
+            self.assertIn("iw_tradecraft_reason_%d" % code, block)
+
+    def test_widget_row(self):
+        body = _text(WIDGET)
+        cc = body[body.index('name = "widget_je_covert_command_centre"'):body.index('name = "widget_je_covert_operations"')]
+        self.assertIn('text = "je_iw_tradecraft_header"', cc)
+        self.assertIn('text = "je_iw_tradecraft_line"', cc)
+        self.assertIn('tooltip = "je_iw_tradecraft_tooltip"', cc)
+        self.assertLess(cc.index("je_iw_funding_header"), cc.index("je_iw_tradecraft_header"))
+        self.assertLess(cc.index("je_iw_tradecraft_header"), cc.index("je_iw_detection_header"))
+
+    def test_loc_keys_exist(self):
+        loc = _all_loc()
+        keys = ["je_iw_tradecraft_header", "je_iw_tradecraft_line", "je_iw_tradecraft_tooltip"]
+        keys += ["iw_tradecraft_tier_name_%d" % n for n in range(5)]
+        keys += ["iw_tradecraft_reason_%d" % c for c in (0, 1, 20, 21, 22, 23, 24)]
+        keys += ["te_debug_covert.3.t", "te_debug_covert.3.d", "te_debug_covert.3.f"]
+        keys += ["te_debug_covert.3.%s" % o for o in "abc"]
+        for key in keys:
+            self.assertRegex(loc, r"(?m)^ %s:0 " % re.escape(key), key)
+
+    def test_harness(self):
+        effects = _text(DEBUG_EFFECTS)
+        setter = _top_level_block(effects, "te_debug_covert_set_tradecraft = {")
+        self.assertIn("covert_tradecraft_init = yes", setter)
+        self.assertIn("covert_tradecraft_clamp = yes", setter)
+        self.assertIn("covert_tradecraft_refresh_bonus = yes", setter)
+        tick = _top_level_block(effects, "te_debug_covert_tick_tradecraft = {")
+        self.assertIn("covert_tradecraft_monthly = yes", tick)
+        event = _top_level_block(_text(DEBUG_EVENTS), "te_debug_covert.3 = {")
+        self.assertIn("REVIEWED", event.splitlines()[0])
+        self.assertIn("te_debug_covert_set_tradecraft = { VALUE = 45 }", event)
+        self.assertIn("te_debug_covert_set_tradecraft = { VALUE = 85 }", event)
+        self.assertIn("te_debug_covert_tick_tradecraft = yes", event)
+
+
 if __name__ == "__main__":
     unittest.main()

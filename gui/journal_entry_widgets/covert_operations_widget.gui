@@ -3,7 +3,7 @@
 ### Three widgets, all mounted from je_covert_warfare:
 ###   widget_je_covert_command_centre  custom_widget_container_1  (above status desc)
 ###     Intelligence capacity, operation slots, the funding ladder and its
-###     stepper, the detection factors and the defensive side. Everything the
+###     stepper, Tradecraft (slice 5), the detection factors and the defensive side. Everything the
 ###     journal entry used to say in 16 triggered_desc lines.
 ###   widget_je_covert_operations      custom_widget_container_2  (below status desc)
 ###     One row per running operation, from the operator's `iw_ops` variable
@@ -498,6 +498,18 @@ flowcontainer = {
 		blockoverride "line_extra" {
 			visible = "[GetScriptedGui('covert_ops_dormant_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		}
+	}
+
+	### ---- TRADECRAFT (slice 5) ----
+	### Score, tier name (custom loc, branching on the tier triggers) and why it
+	### last moved; the tooltip carries the rules, the capacity breakdown and
+	### the unlock ladder.
+	covert_cc_header = {
+		blockoverride "header_text" { text = "je_iw_tradecraft_header" }
+	}
+	covert_cc_line = {
+		blockoverride "line_text" { text = "je_iw_tradecraft_line" }
+		blockoverride "line_extra" { tooltip = "je_iw_tradecraft_tooltip" }
 	}
 
 	### ---- DETECTION FACTORS ----
