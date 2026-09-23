@@ -154,3 +154,23 @@ te_debug_covert_force_detection = {
 		covert_ops_roll_detection_all = yes
 	}
 }
+
+# Raise one running operation to the top priority through the shipping step
+# effect, twice — the same code the row stepper's scripted GUI runs, minus
+# the GUI. Exercises the priority variable, upkeep and detection immediately;
+# the scaled effect modifiers only pick up the new priority at the next
+# monthly pulse (covert_apply_priority_change deliberately doesn't re-apply
+# them on the click — see its own comment). Still works if the stepper's
+# saved scope turns out not to arrive.
+# Scope: country
+te_debug_covert_max_priority = {
+	if = {
+		limit = { has_variable_list = iw_ops }
+		random_in_list = {
+			variable = iw_ops
+			save_scope_as = iw_op
+		}
+		covert_effect_priority_up = yes
+		covert_effect_priority_up = yes
+	}
+}

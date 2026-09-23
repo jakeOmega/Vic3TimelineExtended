@@ -293,5 +293,17 @@ class AITests(unittest.TestCase):
         self.assertNotEqual(guard, -1)
 
 
+class HarnessTests(unittest.TestCase):
+    def test_the_harness_changes_priority_through_the_shipping_effect(self):
+        block = _top_level_block(_text(DEBUG_EFFECTS), "te_debug_covert_max_priority = {")
+        self.assertIn("save_scope_as = iw_op", block)
+        self.assertEqual(block.count("covert_effect_priority_up = yes"), 2)
+
+    def test_the_operations_console_offers_it(self):
+        block = _top_level_block(_text(DEBUG_EVENTS), "te_debug_covert.2 = {")
+        self.assertIn("te_debug_covert_max_priority = yes", block)
+        self.assertIn(" te_debug_covert.2.h:", _all_loc())
+
+
 if __name__ == "__main__":
     unittest.main()
