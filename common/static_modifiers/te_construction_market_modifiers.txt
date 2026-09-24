@@ -16,3 +16,13 @@ te_construction_market_private_share_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_private_construction_allocation_mult = 0.01
 }
+
+# Direct construction (free_market_construction_rule disabled): the construction
+# minimum. Re-applied each weekly pulse with
+# `multiplier = var:te_dc_floor_points`, the points that top the country's
+# construction up to te_direct_construction_floor
+# (te_direct_construction_update_floor).
+te_direct_construction_floor_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	country_construction_add = 1
+}

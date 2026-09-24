@@ -5,7 +5,9 @@
 #
 # The rule's production methods do the construction itself (the Construction
 # Site is the buildable Construction Sector, te_construction_market_pms.txt), so
-# script only restores the law-set private share.
+# script only restores the law-set private share, keeps the AI's sites
+# (te_direct_construction_keep_ai_sites) and tops construction up to a minimum
+# (te_direct_construction_update_floor).
 
 # Private share of construction (0-100) under direct construction: the
 # economic-system law's vanilla allocation. These are the values
@@ -49,7 +51,40 @@ te_direct_construction_law_private_share = {
 }
 
 # Display: construction points per week from every source (the Construction
-# Sites' levels, the base allocation, Engineering & Logistics barracks, ...).
+# Sites' levels, the construction minimum, Engineering & Logistics barracks, ...).
 te_direct_construction_display_capacity = {
 	value = modifier:country_construction_add
+}
+
+# Construction minimum, points per week (te_direct_construction_update_floor).
+# Five wooden Construction Site levels' worth (pm_te_direct_construction_wooden,
+# 1 point a level): small beside a working construction sector, enough for a
+# country without one to build its first site levels.
+te_direct_construction_floor = 5
+
+# Country scope. The next multiplier of te_direct_construction_floor_modifier:
+# the minimum less the construction from every other source, which is today's
+# total less this modifier's own contribution (te_dc_floor_points, the
+# multiplier it was applied with). Never negative.
+te_direct_construction_floor_points_next = {
+	value = te_direct_construction_floor
+	subtract = modifier:country_construction_add
+	if = {
+		limit = {
+			has_variable = te_dc_floor_points
+		}
+		add = var:te_dc_floor_points
+	}
+	min = 0
+}
+
+# State scope. Level of this state's Construction Site, 0 without one.
+te_direct_construction_state_site_level = {
+	value = 0
+	if = {
+		limit = {
+			has_building = te_construction_market_site
+		}
+		value = b:te_construction_market_site.level
+	}
 }
