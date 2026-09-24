@@ -27,27 +27,27 @@ types te_banking_history_types
 {
 	### The cycle-value column, coloured by the phase its reading falls in.
 	###
-	### WHY SIX PROGRESSBARS AND NOT ONE WITH A COMPUTED COLOUR. A progressbar's
+	### WHY SEVEN PROGRESSBARS AND NOT ONE WITH A COMPUTED COLOUR. A progressbar's
 	### `color` can be an expression, but the only way to *produce* a CVector4f
 	### is Select_CVector4f over two colours that already exist as engine
 	### getters (GetMapColor, GetMoraleColorVec); nothing in the data-binding
 	### surface builds a colour out of numbers, and there is no CVector4f
-	### literal promotion to nest into it. So the five colours are five
+	### literal promotion to nest into it. So the six colours are six
 	### progressbars in the same slot, each shown only while the reading sits in
 	### its band, plus the one shared dark cover that gives every chart here its
-	### stepped-line look. Exactly one of the five is ever visible, and a hidden
+	### stepped-line look. Exactly one of the six is ever visible, and a hidden
 	### widget's subtree is not drawn.
 	###
 	### THE BANDS AND THE COLOURS ARE NOT CHOSEN HERE. Both are copied: the
 	### edges 10 / 25 / 40 / 60 / 75 / 88 are the phase ladder in
 	### banking_cycle_effects.txt (and the banking_cycle_is_* triggers), and the
 	### RGB values are vanilla's named text colours out of gui/textformatting.gui
-	### — red { 0.88 0.34 0.34 }, gold { 1 0.674 0.454 }, white
+	### — red { 0.88 0.34 0.34 }, gold { 1 0.674 0.454 }, yellow
+	### { 1 0.97 0.66 }, white
 	### { 0.94 0.95 0.88 }, green { 0.39 0.67 0.33 }, blue { 0.41 0.67 0.74 } —
 	### so a bar is literally the colour the phase's own name is printed in,
 	### both in banking_cycle_status_* and in the dashboard's Cycle Phase row.
-	### Downturn and Stagnation share gold and Panic and Frenzy share red, which
-	### is why five bars cover seven phases. If either the ladder or a phase
+	### Panic and Frenzy share red, which is why six bars cover seven phases. If either the ladder or a phase
 	### colour moves, move it here too.
 	type te_history_bar_cycle_phase = widget {
 		size = { 100% 100% }
@@ -68,9 +68,9 @@ types te_banking_history_types
 			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
 		}
 
-		### Downturn (10-24) and Stagnation (25-39) — gold.
+		### Downturn (10-24) — gold.
 		progressbar = {
-			visible = "[And( GreaterThanOrEqualTo_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)10' ), LessThan_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)40' ) )]"
+			visible = "[And( GreaterThanOrEqualTo_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)10' ), LessThan_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)25' ) )]"
 			size = { 100% 100% }
 			direction = vertical
 			progresstexture = "gfx/interface/backgrounds/white.dds"
@@ -79,6 +79,22 @@ types te_banking_history_types
 			skip_initial_animation = yes
 			alwaystransparent = yes
 			color = { 1.0 0.674 0.454 1.0 }
+			min = 0
+			max = 100
+			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
+		}
+
+		### Stagnation (25-39) — yellow.
+		progressbar = {
+			visible = "[And( GreaterThanOrEqualTo_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)25' ), LessThan_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ), '(CFixedPoint)40' ) )]"
+			size = { 100% 100% }
+			direction = vertical
+			progresstexture = "gfx/interface/backgrounds/white.dds"
+			noprogresstexture = "gfx/interface/icons/generic_icons/transparent.dds"
+			texture_density = 2
+			skip_initial_animation = yes
+			alwaystransparent = yes
+			color = { 1.0 0.97 0.66 1.0 }
 			min = 0
 			max = 100
 			value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_bank_value' ) ) )]"
