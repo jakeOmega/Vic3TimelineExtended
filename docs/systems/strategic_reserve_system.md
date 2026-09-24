@@ -162,11 +162,13 @@ Decay rates are **custom country modifier types** (`country_st_res_<good>_decay_
 | Oil | 0.5% | −0.05 pp `fractional_distillation`; −0.1 pp each: `modern_chemical_processes`, `predictive_logistics`, `supply_chain_management`, `advanced_workflow_optimization` | 0.05% |
 | Small arms | 1.5% | −0.1 to −0.2 pp from five techs, `semiautomatic_rifle` to `molecular_assemblers` | 0.7% |
 | Artillery | 1% | −0.1 to −0.2 pp from four techs, `motorized_artillery` to `programmable_matter` | 0.4% |
-| Chemicals (`fertilizer`) | 1.5% | −0.5 pp `modern_chemical_processes` | 1% |
+| Chemicals (`fertilizer`) | 4% | −1 pp each: `improved_fertilizer`, `nitrogen_fixation`; −0.75 pp `modern_chemical_processes`; −0.5 pp `plastic_mass_production`; −0.25 pp `pollution_control`; −0.1 pp `supply_chain_management`; −0.15 pp each: `advanced_nanofabrication`, `molecular_assemblers` | 0.1% |
 | Aeroplanes | 4% | rises in eras 7–9 (jets, stealth, UAVs), then falls in eras 10–12; ten techs | 2% |
 | Tanks | 2.5% | rises in era 9 (composite armor, network-centric warfare), then falls in eras 10–12; eight techs | 1.4% |
 
-Chemicals decay is caking, moisture uptake and container corrosion. `modern_chemical_processes` is the tech that already cuts ammunition and oil decay, so it covers chemicals too. `st_res_<good>_decay_rate` divides the annual rate by 52, and the modifier's `GetValueWithBreakdownFor` gives the player a hoverable breakdown of every source.
+Chemicals decay follows how chemical storage actually changed. In era 2 the stock sits in wooden casks, jute sacks and glass carboys: saltpetre and other hygroscopic salts cake, superphosphate "reverts" (its water-soluble phosphate turns insoluble), bleaching powder loses its chlorine, and carboys break. So 4% sits above ammunition's 2% and far below grain's 25%. The cuts track purer product grades (era 3), Haber-Bosch product in steel tanks and drums (era 4), prilling and anti-caking coatings (era 6), polyethylene sacks and tank liners (era 7), vapour recovery and spill containment (era 7), stock rotation (era 9), and impermeable coatings and on-site re-synthesis (era 12). The 0.1% endpoint sits between oil (0.05%) and ammunition (0.5%). Decay models physical and quality loss only. The real modern cost of holding bulk chemicals is storage rent, which the reserve charges through the hub's construction and staffing.
+
+`st_res_<good>_decay_rate` divides the annual rate by 52, and the modifier's `GetValueWithBreakdownFor` gives the player a hoverable breakdown of every source.
 
 Decay is clamped to `[0, 1]` in the script values, so further tech reductions cannot push it negative.
 
@@ -420,5 +422,4 @@ Reserve policies added a second layer on top of that: a `st_res_policy_<good>_sg
 - The policy price signal is the **national market** price, not the hub state's local price (§4.6). They diverge when the capital is badly connected or in local shortage.
 - AI policy presets are static and do not react to war.
 - The response shape is a single linear ramp (a proportional controller); there is no integral term and no curved response, and the hysteresis bands only apply to the step response.
-- Chemicals decay has a single tech reduction (`modern_chemical_processes`, era 6). Every other good gets several, spread across the eras; a late-era chemicals reduction (e.g. on an era 10–12 materials tech) would bring it into line.
 - Silo has no distinctive icon — reuses the government-admin icon.
