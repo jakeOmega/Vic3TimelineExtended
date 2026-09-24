@@ -114,6 +114,16 @@ debt_receivership = {
 		}
 	}
 
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_receivership_regime_valid_tt
+				scope:target_country = { te_mon_backstop_provider_valid = yes }
+				scope:source_country = { te_mon_is_command = no }
+			}
+		}
+	}
+
 	can_ratify = {
 		# The pretext with the sides fixed. It already carries
 		# te_mon_can_backstop's rank / GDP test with the roles swapped, so
@@ -202,6 +212,8 @@ debt_receivership = {
 				}
 				add = 0.08
 			}
+			# Reduce unsolicited proposals while preserving relative crisis priorities.
+			multiply = 0.25
 		}
 
 		inherent_accept_score = {

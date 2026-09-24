@@ -2,7 +2,7 @@
 # Monetary policy, phase 5 — international monetary arrangements: triggers
 # ============================================================================
 # Spec: docs/systems/monetary_policy_design.md §15A, as shipped in §0.8.
-# All country scope unless a comment says otherwise.
+# Country scope except the explicitly marked article-validity helpers.
 # ============================================================================
 
 
@@ -41,6 +41,64 @@ te_mon_can_be_anchor = {
 	te_mon_has_dial = yes
 }
 
+# Currency compatibility survives ratification: a peg is not currency reform.
+# Country scope, OTHER is the anchor. Do not require the pegger's own dial:
+# entering a peg deliberately removes it, and bankless countries can peg.
+te_mon_peg_regime_fits = {
+	te_mon_is_command = no
+	te_mon_is_dollarised = no
+	NOT = { te_mon_is_on_currency_board = yes }
+	NOT = { te_mon_is_union_adopter = yes }
+	OR = {
+		has_law_or_variant = law_type:law_fiat_currency
+		has_law_or_variant = law_type:law_digital_currency
+		AND = {
+			OR = {
+				has_law_or_variant = law_type:law_commodity_money
+				has_law_or_variant = law_type:law_gold_standard
+			}
+			$OTHER$ = {
+				OR = {
+					has_law_or_variant = law_type:law_commodity_money
+					te_mon_is_on_gold = yes
+				}
+			}
+		}
+	}
+}
+
+# Finite treasury lending and debt supervision do not require money creation.
+# Shared ongoing provider requirement; rank/GDP superiority is signing-only.
+te_mon_backstop_provider_valid = {
+	has_law_or_variant = law_type:law_national_bank
+	te_mon_is_command = no
+	in_default = no
+}
+
+# ARTICLE scope. Discovery must not wait for the engine to withdraw an invalid
+# article before dropping its benefits, costs and (for swaps) settling its loan.
+te_mon_peg_article_valid = {
+	target_country = { te_mon_can_be_anchor = yes }
+	source_country = { te_mon_peg_regime_fits = { OTHER = prev.target_country } }
+}
+
+te_mon_support_article_valid = {
+	OR = {
+		AND = {
+			OR = {
+				has_type = swap_line
+				has_type = lender_of_last_resort
+			}
+			source_country = { te_mon_backstop_provider_valid = yes }
+		}
+		AND = {
+			has_type = debt_receivership
+			target_country = { te_mon_backstop_provider_valid = yes }
+			source_country = { te_mon_is_command = no }
+		}
+	}
+}
+
 # --- 5a: reading the treaties from the pulse --------------------------------
 # `any_scope_treaty` iterates IN-FORCE treaties only. The direction test reads
 # the article's own source / target links; ROOT must be the country asking,
@@ -73,7 +131,7 @@ te_mon_has_valid_peg_article = {
 				has_type = imposed_currency_peg
 			}
 			source_country = root
-			target_country = { te_mon_can_be_anchor = yes }
+			te_mon_peg_article_valid = yes
 		}
 	}
 }
@@ -92,12 +150,13 @@ te_mon_is_imposed_pegger = {
 	}
 }
 
-# Does ROOT stand in an in-force article of $TYPE$ as its TARGET (the party that
+# Does ROOT stand in a valid in-force support article of $TYPE$ as its TARGET (the party that
 # receives: the swap line's recipient, the guarantee's ward)?
 te_mon_is_article_target = {
 	any_scope_treaty = {
 		any_scope_article = {
 			has_type = $TYPE$
+			te_mon_support_article_valid = yes
 			target_country = root
 		}
 	}
@@ -108,6 +167,7 @@ te_mon_is_article_source = {
 	any_scope_treaty = {
 		any_scope_article = {
 			has_type = $TYPE$
+			te_mon_support_article_valid = yes
 			source_country = root
 		}
 	}
@@ -203,6 +263,7 @@ te_mon_capital_controls_in_force = {
 # currency_peg: the pegger has no higher-kind anchor, the target holds a dial
 # and is a great or major power or the pegger's market owner.
 te_mon_can_peg_to = {
+	te_mon_peg_regime_fits = { OTHER = $OTHER$ }
 	NOT = { this = $OTHER$ }
 	NOT = { te_mon_is_command = yes }
 	NOT = {
@@ -226,9 +287,8 @@ te_mon_can_peg_to = {
 # swap_line / lender_of_last_resort: the provider has a national bank and
 # outranks or out-GDPs the recipient.
 te_mon_can_backstop = {
+	te_mon_backstop_provider_valid = yes
 	NOT = { this = $OTHER$ }
-	has_law_or_variant = law_type:law_national_bank
-	NOT = { te_mon_is_command = yes }
 	OR = {
 		country_rank > $OTHER$.country_rank
 		gdp > $OTHER$.gdp
@@ -251,7 +311,7 @@ te_mon_can_impose_peg_on = {
 	country_rank >= rank_value:major_power
 	$OTHER$ = {
 		in_default = yes
-		te_mon_is_command = no
+		te_mon_peg_regime_fits = { OTHER = prev }
 		NOT = {
 			AND = {
 				te_mon_is_anchored = yes

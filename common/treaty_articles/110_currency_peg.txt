@@ -139,6 +139,18 @@ currency_peg = {
 
 	# SAME-DRAFT AND EXISTING-TREATY CHECKS GO HERE, never in `possible`:
 	# scope:treaty is unpopulated there (scripting_best_practices.md).
+	# Currency-law changes must also end incompatible existing pegs.
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_currency_peg_regime_fits_tt
+				scope:source_country = {
+					te_mon_peg_regime_fits = { OTHER = scope:target_country }
+				}
+			}
+		}
+	}
+
 	can_ratify = {
 		custom_tooltip = {
 			text = te_currency_peg_target_rank_tt
@@ -226,6 +238,8 @@ currency_peg = {
 				}
 				add = 0.1
 			}
+			# Reduce unsolicited proposals while preserving relative crisis priorities.
+			multiply = 0.25
 		}
 
 		inherent_accept_score = {
@@ -236,7 +250,7 @@ currency_peg = {
 				limit = { scope:source_country ?= this }
 				add = {
 					desc = "te_ai_peg_base"
-					value = -15
+					value = -25
 				}
 				# Economic dependence: it already lives in the anchor's market.
 				if = {
@@ -309,7 +323,7 @@ currency_peg = {
 			else = {
 				add = {
 					desc = "te_ai_peg_reserve_currency"
-					value = 10
+					value = 5
 				}
 			}
 

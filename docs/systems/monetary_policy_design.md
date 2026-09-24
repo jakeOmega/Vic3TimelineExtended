@@ -54,6 +54,29 @@ and `journal_entry_systems.md`). Read those first.
 
 ---
 
+## Treaty eligibility and AI tuning — 2026-09-23
+
+Both peg articles now exclude decentralized cryptocurrency, dollarisation, command
+economies, currency boards and common-currency adopters on the pegging side. Fiat
+and digital currencies may use any eligible anchor; commodity money and gold
+require a commodity-money or currently convertible gold-standard anchor. Metallic
+pegs represent parity agreements; exact metal content is not simulated. The anchor
+still needs its own dial. These checks apply at signing, maintenance and discovery.
+
+Support remains currency-neutral: swap lines lend finite treasury reserves,
+guarantees back debt, and receiverships supervise revenue. All providers/receivers
+must remain solvent, retain a national bank and stay outside a command economy;
+a receivership debtor must also remain outside a command economy. Discovery drops
+invalid support roles and costs, settling outstanding swap loans through the
+existing role-end path. Default of the debtor remains an entry pretext only.
+
+All five articles evaluate AI proposals at one quarter of their previous rate.
+Voluntary peg acceptance starts at -25 (previously -15), and reserve-currency
+interest is +5 (previously +10). Swap/guarantee recipients score dependence at -10
+and gain +30 only during an external crisis / at debt >= 50%, respectively,
+replacing the unconditional +20. Crisis and strategic proposal priorities remain.
+Actual offer frequency and engine withdrawal timing still require in-game testing.
+
 ## 0. Phase 1 as shipped — deviations and open checks
 
 Phase 1 (§19 row 1) was implemented on `feat/monetary-policy-phase1` over seven tasks on

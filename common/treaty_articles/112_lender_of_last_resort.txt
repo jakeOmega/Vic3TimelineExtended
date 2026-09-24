@@ -190,6 +190,8 @@ lender_of_last_resort = {
 				limit = { scaled_debt >= 0.5 }
 				add = 0.1
 			}
+			# Reduce unsolicited proposals while preserving relative crisis priorities.
+			multiply = 0.25
 		}
 
 		inherent_accept_score = {
@@ -293,11 +295,18 @@ lender_of_last_resort = {
 					}
 				}
 			}
-			# --- the RECIPIENT'S side: a backstop is worth having ---------------
+			# --- the RECIPIENT: dependence needs a reason ----------------------
 			else = {
 				add = {
-					desc = "te_ai_backstop_wanted"
-					value = 20
+					desc = "te_ai_backstop_dependence"
+					value = -10
+				}
+				if = {
+					limit = { scaled_debt >= 0.5 }
+					add = {
+						desc = "te_ai_backstop_wanted"
+						value = 30
+					}
 				}
 			}
 

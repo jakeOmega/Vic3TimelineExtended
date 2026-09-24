@@ -3329,3 +3329,7 @@
  ww_war_propaganda_modifier:0 "War Propaganda Campaign"
  ww_wartime_rationing_modifier:0 "Wartime Rationing"
  youth_mental_health_funding_modifier:0 "Youth Mental Health Funding"
+ te_currency_peg_regime_fits_tt:0 "The pegging country controls a compatible currency, is not dollarised or a command economy, and is outside a currency board or common currency. Commodity money and gold-standard currencies require a commodity-money or convertible gold-standard anchor."
+ te_swap_provider_solvent_tt:0 "The swap-line provider is not in default"
+ te_receivership_regime_valid_tt:0 "The receiver has a national bank and is solvent; neither country is a command economy"
+ te_ai_backstop_dependence:0 "Reluctance to accept financial dependence"
