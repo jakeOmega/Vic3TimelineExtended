@@ -1,0 +1,10793 @@
+{
+ "building_food_industry": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_light_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/food_industry.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "-0.25"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "manufacturies"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_food_industry",
+     "pmg_canning",
+     "pmg_distillery",
+     "pmg_automation_building_food_industry"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_high"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds\""
+   ]
+  }
+ ],
+ "building_textile_mill": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_textile_mills"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_light_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/textile_industry.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "-0.25"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "manufacturies"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_textile_mill",
+     "pmg_luxury_building_textile_mill",
+     "pmg_automation_building_textile_mill"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_high"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds\""
+   ]
+  }
+ ],
+ "building_furniture_manufactory": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_furniture_manufacturies"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_light_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/furniture_manufacturies.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "-0.25"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "manufacturies"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_furniture_manufactory",
+     "pmg_luxury_building_furniture_manufactory",
+     "pmg_automation_building_furniture_manufactory"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_high"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds\""
+   ]
+  }
+ ],
+ "building_glassworks": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_light_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/glassworks.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "manufacturies"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_glassworks",
+     "pmg_luxury_building_glassworks",
+     "pmg_glassblowing"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_high"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds\""
+   ]
+  }
+ ],
+ "building_tooling_workshop": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_tooling_workshops"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_light_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/tooling_workshops.dds\""
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "0.25"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "manufacturies"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_tooling_workshop",
+     "pmg_automation_building_tooling_workshop"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_high"
+   ],
+   "ai_value": [
+    "=",
+    "2000"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds\""
+   ]
+  }
+ ],
+ "building_paper_mill": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_paper_mills"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_light_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/paper_mills.dds\""
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "0.25"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "manufacturies"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_paper_mill",
+     "pmg_automation_building_paper_mill"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_high"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_light_industry.dds\""
+   ]
+  }
+ ],
+ "building_chemical_plant": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_chemical_plants"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_heavy_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/chemicals_industry.dds\""
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "intensive_agriculture"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_fertilizer_production"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_high"
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_law_or_variant": [
+            [
+             "=",
+             "law_type:law_industry_banned"
+            ],
+            [
+             "=",
+             "law_type:law_extraction_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds\""
+   ]
+  }
+ ],
+ "building_explosives_factory": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_heavy_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/explosives_factory.dds\""
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "intensive_agriculture"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_explosives_building_chemical_plant"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_high"
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_law_or_variant": [
+            [
+             "=",
+             "law_type:law_industry_banned"
+            ],
+            [
+             "=",
+             "law_type:law_extraction_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds\""
+   ]
+  }
+ ],
+ "building_synthetics_plant": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_synthetics_plants"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_heavy_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/synthetics_plants.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "aniline"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_synthetic_dyes",
+     "pmg_synthetic_silk"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_high"
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_law_or_variant": [
+            [
+             "=",
+             "law_type:law_industry_banned"
+            ],
+            [
+             "=",
+             "law_type:law_extraction_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds\""
+   ]
+  }
+ ],
+ "building_steel_mill": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_steel_mills"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_heavy_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/steel_mills.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "0.25"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steelworking"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_steelmaking_process",
+     "pmg_automation_building_steel_mill"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_high"
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_law_or_variant": [
+            [
+             "=",
+             "law_type:law_industry_banned"
+            ],
+            [
+             "=",
+             "law_type:law_extraction_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds\""
+   ]
+  }
+ ],
+ "building_motor_industry": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_heavy_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/motor_industry.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "atmospheric_engine"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_motor_industry",
+     "pmg_automation_building_motor_industry"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_high"
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_law_or_variant": [
+            [
+             "=",
+             "law_type:law_industry_banned"
+            ],
+            [
+             "=",
+             "law_type:law_extraction_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds\""
+   ]
+  }
+ ],
+ "building_shipyard": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_shipyards"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_ship_construction"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/shipyards.dds\""
+   ],
+   "city_type": [
+    "=",
+    "port"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "1"
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "0.25"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "navigation"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_shipyard"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_high"
+   ],
+   "potential": [
+    "=",
+    {
+     "is_coastal": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_harbour.dds\""
+   ]
+  }
+ ],
+ "building_automotive_industry": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_heavy_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/vehicles_industry.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "combustion_engine"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_automobile_production",
+     "pmg_aeroplanes",
+     "pmg_tanks",
+     "pmg_automation_building_automotive_industry"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_high"
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_law_or_variant": [
+            [
+             "=",
+             "law_type:law_industry_banned"
+            ],
+            [
+             "=",
+             "law_type:law_extraction_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds\""
+   ]
+  }
+ ],
+ "building_electrics_industry": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_heavy_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/electrics_industry.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "telephone"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_telephones_category",
+     "pmg_radios_category"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_high"
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_law_or_variant": [
+            [
+             "=",
+             "law_type:law_industry_banned"
+            ],
+            [
+             "=",
+             "law_type:law_extraction_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds\""
+   ]
+  }
+ ],
+ "building_arms_industry": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_arms_industries"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_military_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/arms_industry.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "0.5"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "gunsmithing"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_firearms_manufacturing",
+     "pmg_automation_building_arms_industry"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_high"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds\""
+   ]
+  }
+ ],
+ "building_artillery_foundry": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_military_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/artillery_foundry.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "0.5"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "gunsmithing"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_foundries",
+     "pmg_automation_building_arms_industry"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_high"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds\""
+   ]
+  }
+ ],
+ "building_munition_plant": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_munition_plants"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_military_industry"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/munition_plants.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "0.5"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "percussion_cap"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_munition_plant",
+     "pmg_automation_building_munition_plant"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_high"
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_law_or_variant": [
+            [
+             "=",
+             "law_type:law_industry_banned"
+            ],
+            [
+             "=",
+             "law_type:law_extraction_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_heavy_industry.dds\""
+   ]
+  }
+ ],
+ "building_rye_farm": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_staple_crops"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/rye_farm.dds\""
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_rye_farm",
+     "pmg_secondary_building_rye_farm",
+     "pmg_harvesting_process_building_rye_farm"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "farmland_rye"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_wheat_farm": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_staple_crops"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/wheat_farm.dds\""
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_wheat_farm",
+     "pmg_secondary_building_wheat_farm",
+     "pmg_harvesting_process_building_wheat_farm"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "farmland_wheat"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_rice_farm": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_staple_crops"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/rice_farm.dds\""
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_rice_farm",
+     "pmg_secondary_building_rice_farm",
+     "pmg_harvesting_process_building_rice_farm"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "farmland_rice"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_maize_farm": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_staple_crops"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/maize_farm.dds\""
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_maize_farm",
+     "pmg_secondary_building_maize_farm",
+     "pmg_harvesting_process_building_maize_farm"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "farmland_maize"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_millet_farm": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_staple_crops"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/millet_farm.dds\""
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_millet_farm",
+     "pmg_secondary_building_millet_farm",
+     "pmg_harvesting_process_building_millet_farm"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "farmland_millet"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_livestock_ranch": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_ranching"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/cattle_ranch.dds\""
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_livestock_ranch",
+     "pmg_sheep_ranch",
+     "pmg_fencing",
+     "pmg_refrigeration_building_livestock_ranch"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "pasture"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_vineyard": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_vineyard_plantations"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_agriculture"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/vineyards.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_vineyard",
+     "pmg_train_automation_building_vineyard"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ]
+  }
+ ],
+ "building_coal_mine": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_mining"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/coal_mine.dds\""
+   ],
+   "city_type": [
+    "=",
+    "mine"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_medium"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "mining"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "shaft_mining"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_mining_equipment_building_coal_mine",
+     "pmg_explosives_building_coal_mine",
+     "pmg_steam_automation_building_coal_mine",
+     "pmg_train_automation_building_coal_mine"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_mining.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "c:JAP": [
+            "?=",
+            "this"
+           ],
+           "has_journal_entry": [
+            "=",
+            "je_colonize_korea"
+           ]
+          }
+         ],
+         "is_in_geographic_region": [
+          "=",
+          "geographic_region_korea"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2000"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "building_iron_mine": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_mining"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/iron_mine.dds\""
+   ],
+   "city_type": [
+    "=",
+    "mine"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_medium"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "mining"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "shaft_mining"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_mining_equipment_building_iron_mine",
+     "pmg_explosives_building_iron_mine",
+     "pmg_steam_automation_building_iron_mine",
+     "pmg_train_automation_building_iron_mine"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_mining.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "c:JAP": [
+            "?=",
+            "this"
+           ],
+           "has_journal_entry": [
+            "=",
+            "je_colonize_korea"
+           ]
+          }
+         ],
+         "is_in_geographic_region": [
+          "=",
+          "geographic_region_korea"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2000"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "building_lead_mine": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_mining"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/lead_mine.dds\""
+   ],
+   "city_type": [
+    "=",
+    "mine"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_medium"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "mining"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "shaft_mining"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_mining_equipment_building_lead_mine",
+     "pmg_explosives_building_lead_mine",
+     "pmg_steam_automation_building_lead_mine",
+     "pmg_train_automation_building_lead_mine"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_mining.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "c:JAP": [
+            "?=",
+            "this"
+           ],
+           "has_journal_entry": [
+            "=",
+            "je_colonize_korea"
+           ]
+          }
+         ],
+         "is_in_geographic_region": [
+          "=",
+          "geographic_region_korea"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2000"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "building_sulfur_mine": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_mining"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/sulfur_mine.dds\""
+   ],
+   "city_type": [
+    "=",
+    "mine"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_medium"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "mining"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "shaft_mining"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_mining_equipment_building_sulfur_mine",
+     "pmg_explosives_building_sulfur_mine",
+     "pmg_steam_automation_building_sulfur_mine",
+     "pmg_train_automation_building_sulfur_mine"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_mining.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "c:JAP": [
+            "?=",
+            "this"
+           ],
+           "has_journal_entry": [
+            "=",
+            "je_colonize_korea"
+           ]
+          }
+         ],
+         "is_in_geographic_region": [
+          "=",
+          "geographic_region_korea"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2000"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "building_gold_mine": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_mining"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/gold_mine.dds\""
+   ],
+   "city_type": [
+    "=",
+    "mine"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_medium"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "mining"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "prospecting"
+    ]
+   ],
+   "ai_value": [
+    "=",
+    "5000"
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "1.0"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_mining_equipment_building_gold_mine",
+     "pmg_explosives_building_gold_mine",
+     "pmg_steam_automation_building_gold_mine",
+     "pmg_train_automation_building_gold_mine"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_mining.dds\""
+   ]
+  }
+ ],
+ "building_gold_field": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_gold_fields"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/gold_fields.dds\""
+   ],
+   "city_type": [
+    "=",
+    "mine"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "can_switch_owner": [
+    "=",
+    "no"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "mining"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "prospecting"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_gold_field"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_mining.dds\""
+   ]
+  }
+ ],
+ "building_coffee_plantation": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_plantations"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/coffee_plantation.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_coffee_plantation",
+     "pmg_drying_coffee_plantation",
+     "pmg_coffee_exploitation",
+     "pmg_train_automation_building_coffee_plantation"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ]
+  }
+ ],
+ "building_cotton_plantation": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_plantations"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/cotton_plantation.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_cotton_plantation",
+     "pmg_cotton_exploitation",
+     "pmg_train_automation_building_cotton_plantation"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_british_dictate_plantations"
+            ],
+            "var:dictate_plantation_type": [
+             "?=",
+             "4"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "c:JAP": [
+             "?=",
+             "this"
+            ],
+            "has_journal_entry": [
+             "=",
+             "je_colonize_korea"
+            ]
+           }
+          ],
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_korea"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2000"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "building_dye_plantation": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_plantations"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/dye_plantation.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_dye_plantation",
+     "pmg_dye_exploitation",
+     "pmg_train_automation_building_dye_plantation"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "=",
+          {
+           "has_journal_entry": [
+            "=",
+            "je_british_dictate_plantations"
+           ],
+           "var:dictate_plantation_type": [
+            "?=",
+            "3"
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2000"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "building_opium_plantation": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_plantations"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/opium_plantation.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_opium_plantation",
+     "pmg_train_automation_building_opium_plantation"
+    ]
+   ],
+   "can_build_government": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "is_banning_goods": [
+          "=",
+          "g:opium"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "can_build_private": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "is_banning_goods": [
+          "=",
+          "g:opium"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_british_dictate_plantations"
+            ],
+            "var:dictate_plantation_type": [
+             "?=",
+             "1"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "c:JAP": [
+             "?=",
+             "this"
+            ],
+            "has_journal_entry": [
+             "=",
+             "je_colonize_korea"
+            ]
+           }
+          ],
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_korea"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2000"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "building_tea_plantation": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_plantations"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/tea_plantation.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_tea_plantation",
+     "pmg_tea_exploitation",
+     "pmg_train_automation_building_tea_plantation"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_british_dictate_plantations"
+            ],
+            "var:dictate_plantation_type": [
+             "?=",
+             "2"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "c:JAP": [
+             "?=",
+             "this"
+            ],
+            "has_journal_entry": [
+             "=",
+             "je_colonize_korea"
+            ]
+           }
+          ],
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_korea"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2000"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "building_tobacco_plantation": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_plantations"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/tobacco_plantation.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_tobacco_plantation",
+     "pmg_manufacture_tobacco",
+     "pmg_working_conditions_tobacco",
+     "pmg_train_automation_building_tobacco_plantation"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_british_dictate_plantations"
+            ],
+            "var:dictate_plantation_type": [
+             "?=",
+             "5"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "c:JAP": [
+             "?=",
+             "this"
+            ],
+            "has_journal_entry": [
+             "=",
+             "je_colonize_korea"
+            ]
+           }
+          ],
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_korea"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2000"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "building_sugar_plantation": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_plantations"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/sugar_plantation.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_sugar_plantation",
+     "pmg_refinement_building_sugar_plantation",
+     "pmg_exploitation_sugar",
+     "pmg_train_automation_building_sugar_plantation"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ]
+  }
+ ],
+ "building_banana_plantation": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_plantations"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/banana_plantation.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_banana_plantation",
+     "pmg_banana_exploitation",
+     "pmg_train_automation_building_banana_plantation"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ]
+  }
+ ],
+ "building_silk_plantation": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_plantations"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/silk_plantation.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_silk_plantation",
+     "pmg_train_automation_building_silk_plantation"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "c:JAP": [
+            "?=",
+            "this"
+           ],
+           "has_journal_entry": [
+            "=",
+            "je_colonize_korea"
+           ]
+          }
+         ],
+         "is_in_geographic_region": [
+          "=",
+          "geographic_region_korea"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2000"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "building_barrack": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_barracks"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_army"
+   ],
+   "recruits_combat_units": [
+    "=",
+    "yes"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_barracks.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "has_max_level": [
+    "=",
+    "yes"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "standing_army"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_training"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_low"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_military.dds\""
+   ]
+  }
+ ],
+ "building_conscription_center": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_conscription"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "has_max_level": [
+    "=",
+    "yes"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "0"
+   ],
+   "residence_points_per_level": [
+    "=",
+    "0"
+   ],
+   "city_type": [
+    "=",
+    "none"
+   ],
+   "recruits_combat_units": [
+    "=",
+    "yes"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_conscription_center.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_training_conscription"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_military.dds\""
+   ]
+  }
+ ],
+ "building_naval_fortification": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_naval_fortification"
+   ],
+   "has_max_level": [
+    "=",
+    "yes"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "5"
+   ],
+   "naval": [
+    "=",
+    "yes"
+   ],
+   "city_type": [
+    "=",
+    "port"
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "2"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_naval_fortification"
+    ]
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_naval_fortification.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_low"
+   ],
+   "potential": [
+    "=",
+    {
+     "is_coastal": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "=",
+          {
+           "has_journal_entry": [
+            "=",
+            "je_tenpo_crisis"
+           ],
+           "country_has_building_type_levels": [
+            "=",
+            {
+             "target": [
+              "=",
+              "bt:building_naval_fortification"
+             ],
+             "value": [
+              "<",
+              "10"
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "5000"
+       ]
+      }
+     ]
+    }
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_military.dds\""
+   ]
+  }
+ ],
+ "building_naval_administration": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_naval_administration"
+   ],
+   "recruits_sailors": [
+    "=",
+    "yes"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "admiralty"
+    ]
+   ],
+   "naval": [
+    "=",
+    "yes"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_naval_administration"
+    ]
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/naval_base.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_low"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_harbour.dds\""
+   ]
+  }
+ ],
+ "building_naval_logistics_center": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_naval_logistics_center"
+   ],
+   "city_type": [
+    "=",
+    "port"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "lens": [
+    "=",
+    "infrastructure"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_naval_logistics_center.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_naval_logistics_center"
+    ]
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_harbour.dds\""
+   ]
+  }
+ ],
+ "building_army_logistics_center": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_land_logistics_center"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_army_logistics_center"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "lens": [
+    "=",
+    "infrastructure"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_army_logistics_center.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_army_logistics_center"
+    ]
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_military.dds\""
+   ]
+  }
+ ],
+ "building_urban_center": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_service"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/urban_center.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "residence_points_per_level": [
+    "=",
+    "0"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "urbanization"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_amenities",
+     "pmg_street_lighting",
+     "pmg_public_transport",
+     "pmg_urban_clergy"
+    ]
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "can_switch_owner": [
+    "=",
+    "no"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "urban_city"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_art_academy": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_arts_academy"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_arts"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "romanticism"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_art_academy",
+     "pmg_ownership_building_art_academy",
+     "pmg_principle_freedom_of_movement_3"
+    ]
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_arts_academy.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_medium"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "owner": [
+          "?=",
+          {
+           "c:AUS": [
+            "?=",
+            "this"
+           ],
+           "has_journal_entry": [
+            "=",
+            "je_metternich"
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "500"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "building_power_plant": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_power"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/power_plant.dds\""
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "electrical_generation"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_power_plant"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_medium"
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1000"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "NOR": [
+          "=",
+          {
+           "has_building": [
+            "=",
+            "building_power_plant"
+           ],
+           "any_scope_building": [
+            "=",
+            {
+             "is_building_type": [
+              "=",
+              "building_power_plant"
+             ],
+             "is_under_construction": [
+              "=",
+              "yes"
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "4000"
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "has_law_or_variant": [
+          "=",
+          "law_type:law_industry_banned"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_government_administration": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_bureaucracy"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "tech_bureaucracy"
+    ]
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "occupancy": [
+      ">=",
+      "0.8"
+     ],
+     "OR": [
+      "=",
+      {
+       "state.tax_capacity": [
+        "<",
+        "state.tax_capacity_usage"
+       ],
+       "owner": [
+        "=",
+        {
+         "bureaucracy": [
+          "<",
+          "-10"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_government_administration",
+     "pmg_government_administration_bureaucrat_professionalism",
+     "pmg_government_administration_religious_administration"
+    ]
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_government_administration.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_low"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_university": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_technology"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "academia"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_university",
+     "pmg_university_academia",
+     "pmg_principle_freedom_of_movement_3"
+    ]
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_university.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_medium"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2000"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_british_dictate_universities"
+            ]
+           }
+          ],
+          "OR": [
+           "=",
+           {
+            "state_region": [
+             [
+              "=",
+              "s:STATE_WEST_BENGAL"
+             ],
+             [
+              "=",
+              "s:STATE_BOMBAY"
+             ],
+             [
+              "=",
+              "s:STATE_MADRAS"
+             ]
+            ]
+           }
+          ],
+          "NOR": [
+           "=",
+           {
+            "has_building": [
+             "=",
+             "building_university"
+            ],
+            "any_scope_building": [
+             "=",
+             {
+              "is_building_type": [
+               "=",
+               "building_university"
+              ],
+              "level": [
+               ">",
+               "3"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_taming_the_north"
+            ]
+           }
+          ],
+          "state_region": [
+           "=",
+           "s:STATE_HOKKAIDO"
+          ],
+          "NOT": [
+           "=",
+           {
+            "has_building": [
+             "=",
+             "building_university"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "500"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "building_skyscraper": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_skyscraper"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "1"
+   ],
+   "enable_air_connection": [
+    "=",
+    "yes"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_skyscraper",
+     "pmg_airship_mooring_post"
+    ]
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/skyscraper.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "can_build_government": [
+    "=",
+    {
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "skyscraper_can_construct_tt"
+       ],
+       "has_modifier": [
+        "=",
+        "skyscraper_site"
+       ]
+      }
+     ]
+    }
+   ],
+   "can_build_private": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "50000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_eiffel_tower": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_eiffel_tower.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"eiffel_tower_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_skyscraper_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_eiffel_tower_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "3"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_eiffel_tower"
+    ]
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steel_frame_buildings"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_ILE_DE_FRANCE"
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_angkor_wat": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/angkor_wat.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"angkor_wat_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_angkorwat_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "5"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_angkor_wat"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_CAMBODIA"
+     ]
+    }
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_big_ben": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/big_ben.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"big_ben_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_2x2_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_big_ben_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "2"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_big_ben"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_HOME_COUNTIES"
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_forbidden_city": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/forbidden_city.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"forbidden_city_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_forbidden_city_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_forbidden_city"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_BEIJING"
+     ]
+    }
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_hagia_sophia": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/hagia_sophia.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"hagia_sophia_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_hagia_sophia_02_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_hagia_sophia"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_EASTERN_THRACE"
+     ]
+    }
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_mosque_of_djenne": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/mosque_of_djenne.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"mosque_of_djenne_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_great_mosque_of_djenne_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_mosque_of_djenne"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_EASTERN_MALI"
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_saint_basils_cathedral": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/saint_basils_cathedral.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"saint_basils_cathedral_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_saint_basils_cathedral_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_saint_basils_cathedral"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_MOSCOW"
+     ]
+    }
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_statue_of_liberty": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/statue_of_liberty.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    [
+     "=",
+     "no"
+    ],
+    [
+     "=",
+     "no"
+    ]
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"statue_of_liberty_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_statue_of_liberty_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "2"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_statue_of_liberty"
+    ]
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steel_frame_buildings"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_NEW_YORK"
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_taj_mahal": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/taj_mahal.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"taj_mahal_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_taj_mahal_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "3"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_taj_mahal"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_RAJPUTANA"
+     ]
+    }
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_vatican_city": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/vatican_city.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"vatican_city_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_vatican_city_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "6"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_vatican_city"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_LAZIO"
+     ]
+    }
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_white_house": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/white_house.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"white_house_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_white_house_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_white_house"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_DISTRICT_OF_COLUMBIA"
+     ]
+    }
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_machu_picchu": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/machu_picchu.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"machu_picchu_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_machu_picchu_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "6"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_argebam": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"argebam_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_argebam_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "8"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_chichen_itza": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"chichen_itza_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_chichen_itza_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_easter_island_heads": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"easter_island_heads_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_easter_island_heads_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "6"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_eye_of_sahara": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"eye_of_sahara_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_eye_of_sahara_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "3"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_giza_necropolis": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"giza_necropolis_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_giza_necropolis_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "10"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_khaju_bridge": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"khaju_bridge_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_khaju_bridge_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_petra": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"petra_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_petra_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "3"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_capitol_hill": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"capitol_hill_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_capitol_building_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "5"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_central_park": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"central_park_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonders_central_park_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_martandsuntemple": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"monument_martandsuntemple_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    [
+     "monument_martandsuntemple_entity"
+    ]
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"monument_martandsuntemple_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "6"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_observatorygreenwich": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"monument_observatorygreenwich_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    [
+     "\"monument_observatorygreenwich_entity\""
+    ]
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"monument_observatorygreenwich_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"monument_observatorygreenwich_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_temple_of_poseidon": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"templeofposeidon_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    [
+     "\"monument_templeofposeidon_entity\""
+    ]
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"monument_templeofposeidon_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"monument_templeofposeidon_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "3"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_wat_arun": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"wat_arun_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    [
+     "\"monument_watarun_entity\""
+    ]
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"monument_watarun_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"monument_watarun_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "3"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_cristo_redentor": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_cristo_redentor.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"cristo_redentor_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_christ_the_redeemer_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "3"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_cristo_redentor"
+    ]
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "pneumatic_tools"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_RIO_DE_JANEIRO"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "has_law_or_variant": [
+          "=",
+          "law_type:law_state_atheism"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_power_bloc_statue": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "1"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "statue": [
+    "=",
+    "yes"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_power_bloc_statue"
+    ]
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_powerblock_statue.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "can_build_government": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "can_build_private": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "is_in_power_bloc": [
+        "=",
+        "yes"
+       ]
+      }
+     ],
+     "has_dlc_feature": [
+      "=",
+      "power_bloc_features"
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "0"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "is_incorporated": [
+           "=",
+           "yes"
+          ],
+          "state_population": [
+           ">=",
+           "500000"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         {
+          "value": [
+           "=",
+           "state_population"
+          ],
+          "divide": [
+           "=",
+           "2500"
+          ],
+          "max": [
+           "=",
+           "5000"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "is_capital": [
+           "=",
+           "yes"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2500"
+        ]
+       }
+      ]
+     ],
+     "owner": [
+      "=",
+      {
+       "if": [
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "is_power_bloc_leader": [
+             "=",
+             "yes"
+            ]
+           }
+          ],
+          "multiply": [
+           "=",
+           "2.0"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "country_rank": [
+             "<",
+             "rank_value:major_power"
+            ]
+           }
+          ],
+          "multiply": [
+           "=",
+           "0.0"
+          ]
+         }
+        ]
+       ],
+       "else_if": [
+        "=",
+        {
+         "limit": [
+          "=",
+          {
+           "country_rank": [
+            "<",
+            "rank_value:great_power"
+           ]
+          }
+         ],
+         "multiply": [
+          "=",
+          "0.5"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_halloween_castledracula": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"halloween_castledracula_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"halloween_castledracula_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_victoria_terminus": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_victoria_terminus.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"chhatrapati_shivaji_terminus_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    [
+     "\"\""
+    ]
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_chhatrapati_shivaji_terminus_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "3"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_victoria_terminus"
+    ]
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steel_frame_buildings"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_BOMBAY"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "owns_bombay_province_tt"
+       ],
+       "owner": [
+        "?=",
+        "p:xB0D0E0.state.owner"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_kaiserforum_1": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/kaiserforum1.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"kaiserforum_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_the_kaiserforum_stage1_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_kaiserforum_1"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "reinforced_concrete"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip3_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_AUSTRIA"
+     ],
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "has_variable": [
+          "=",
+          "kaiserforum_stage_complete_1_var"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_kaiserforum"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_kaiserforum_2": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/kaiserforum2.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"kaiserforum_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"wonder_the_kaiserforum_stage1_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_the_kaiserforum_stage2_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_kaiserforum_2"
+    ]
+   ],
+   "unlocking_technologies": [
+    "=",
+    {}
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip3_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_AUSTRIA"
+     ],
+     "owner": [
+      "?=",
+      {
+       "has_variable": [
+        "=",
+        "kaiserforum_stage_complete_1_var"
+       ],
+       "NOT": [
+        "=",
+        {
+         "has_variable": [
+          "=",
+          "kaiserforum_stage_complete_2_var"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {}
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_kaiserforum_3": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/kaiserforum3.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"kaiserforum_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"wonder_the_kaiserforum_stage2_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_the_kaiserforum_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_kaiserforum_3"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip3_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_AUSTRIA"
+     ],
+     "owner": [
+      "?=",
+      {
+       "has_variable": [
+        "=",
+        "kaiserforum_stage_complete_2_var"
+       ],
+       "NOT": [
+        "=",
+        {
+         "has_variable": [
+          "=",
+          "accepted_kaisergelb_kaiserforum"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "accepted_kaiserforum_tt"
+         ],
+         "has_variable": [
+          "=",
+          "accepted_kaiserforum"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_kaiserforum_4": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/kaiserforum3.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"kaiserforum_locator\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"wonder_the_kaiserforum_stage2_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_the_kaiserforum_alt_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_kaiserforum_4"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip3_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_AUSTRIA"
+     ],
+     "owner": [
+      "?=",
+      {
+       "has_variable": [
+        [
+         "=",
+         "kaiserforum_stage_complete_2_var"
+        ],
+        [
+         "=",
+         "accepted_kaisergelb_kaiserforum"
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_kaiserforum"
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "accepted_kaisergelb_kaiserforum_tt"
+         ],
+         "has_variable": [
+          "=",
+          "accepted_kaisergelb_kaiserforum"
+         ]
+        }
+       ],
+       "any_scope_state": [
+        "=",
+        {
+         "any_scope_building": [
+          "=",
+          {
+           "is_building_type": [
+            "=",
+            "building_iron_mine"
+           ],
+           "NOT": [
+            "=",
+            {
+             "building_has_goods_shortage": [
+              "=",
+              "yes"
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_sagrada_familia_cathedral_1": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/sagrada_familia_cathedral1.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"sagrada_familia_cathedral\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    [
+     "\"\""
+    ]
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_sagradafamilia_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_sagrada_familia_cathedral_1"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_sagrada_familia"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "reinforced_concrete"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip4_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_CATALONIA"
+     ],
+     "owner": [
+      "=",
+      {
+       "NOT": [
+        "=",
+        {
+         "has_variable": [
+          "=",
+          "sagrada_familia_stage_complete_1_var"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_sagrada_familia"
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "sagrada_familia_1_construct_tt"
+         ],
+         "has_variable": [
+          "=",
+          "accepted_sagrada_familia_project"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_sagrada_familia_cathedral_2": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/sagrada_familia_cathedral2.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"sagrada_familia_cathedral\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    [
+     "\"\""
+    ]
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"wonder_sagradafamilia_01_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_sagradafamilia_02_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_sagrada_familia_cathedral_2"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_sagrada_familia"
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip4_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_CATALONIA"
+     ],
+     "owner": [
+      "?=",
+      {
+       "has_variable": [
+        "=",
+        "sagrada_familia_stage_complete_1_var"
+       ],
+       "NOT": [
+        "=",
+        {
+         "has_variable": [
+          "=",
+          "sagrada_familia_stage_complete_2_var"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_sagrada_familia"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_sagrada_familia_cathedral_3": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/sagrada_familia_cathedral3.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"sagrada_familia_cathedral\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    [
+     "\"\""
+    ]
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"wonder_sagradafamilia_02_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_sagradafamilia_03_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_sagrada_familia_cathedral_3"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_sagrada_familia"
+   ],
+   "unlocking_technologies": [
+    "=",
+    {}
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip4_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_CATALONIA"
+     ],
+     "owner": [
+      "?=",
+      {
+       "has_variable": [
+        "=",
+        "sagrada_familia_stage_complete_2_var"
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_sagrada_familia"
+       ],
+       "has_technology_researched": [
+        "=",
+        "pneumatic_tools"
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_pena_convent": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/pena_palace.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"pena_palace\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_pena_palace_pre_restored_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip4_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_ESTREMADURA"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_pena_convent"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_pena_palace": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/pena_palace.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"pena_palace\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_pena_palace_post_restored_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_pena_palace"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip4_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_ESTREMADURA"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "mechanical_tools"
+    ]
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_pena_palace"
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "pena_palace_construct_tt"
+         ],
+         "has_variable": [
+          "=",
+          "accepted_pena_palace_project"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_gran_teatro_de_la_habana": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/gran_teatro.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"gran_teatro_de_la_habana\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_gran_teatro_de_la_habana_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "3"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_gran_teatro_de_la_habana"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "pneumatic_tools"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip4_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_WESTERN_CUBA"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_gran_teatro"
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "gran_teatro_construct_tt"
+         ],
+         "has_variable": [
+          "=",
+          "accepted_gran_teatro_project"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_estacion_de_madrid_atocha": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/estacion_de_madrid_atocha.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"atocha_railway_station\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    [
+     "\"\""
+    ]
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_atocha_railway_station_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_estacion_de_madrid_atocha"
+    ]
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steel_frame_buildings"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip4_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_NEW_CASTILE"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "has_journal_entry": [
+        "=",
+        "je_atocha_railway"
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "atocha_railway_construct_tt"
+         ],
+         "has_variable": [
+          "=",
+          "accepted_atocha_railway_project"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_manila_cathedral_original": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/manila_cathedral.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"manila_cathedral\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_manilacathedral_03_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip4_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_LUZON"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_dummy"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_manila_cathedral_monument": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/manila_cathedral.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "yes"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"manila_cathedral\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"building_construction_3x3_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_manilacathedral_01_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_manila_cathedral_monument"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_monument"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "reinforced_concrete"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip4_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_LUZON"
+     ],
+     "owner": [
+      "?=",
+      {
+       "any_scope_state": [
+        "=",
+        {
+         "has_building": [
+          "=",
+          "building_manila_cathedral_ruins"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "NOT": [
+        "=",
+        {
+         "has_law_or_variant": [
+          "=",
+          "law_type:law_state_atheism"
+         ]
+        }
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "manila_cathedral_construct_tt"
+         ],
+         "has_variable": [
+          "=",
+          "accepted_manila_cathedral_project"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_value": [
+    "=",
+    "10000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_manila_cathedral_ruins": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_monuments_hidden"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/manila_cathedral.dds\""
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "locator": [
+    "=",
+    "\"manila_cathedral\""
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"wonder_manilacathedral_02_entity\""
+    ]
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_size_area": [
+      "=",
+      "yes"
+     ],
+     "size": [
+      "=",
+      "4"
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "ip4_content"
+     ],
+     "state_region": [
+      "=",
+      "s:STATE_LUZON"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_manila_cathedral_ruins"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_logging_camp": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_logging"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/logging_camp.dds\""
+   ],
+   "city_type": [
+    "=",
+    "wood"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "forestry"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_logging_camp",
+     "pmg_hardwood",
+     "pmg_equipment",
+     "pmg_transportation_building_logging_camp"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_rubber_plantation": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_rubber"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/rubber_lodge.dds\""
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "forestry"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "rubber_mastication"
+    ]
+   ],
+   "city_type": [
+    "=",
+    "wood"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_rubber_plantation",
+     "pmg_rubber_exploitation",
+     "pmg_train_automation_building_rubber_plantation"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_plantations.dds\""
+   ]
+  }
+ ],
+ "building_fishing_wharf": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_fishing"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/fishing_wharf.dds\""
+   ],
+   "city_type": [
+    "=",
+    "port"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "1"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_fishing_wharf",
+     "pmg_refrigeration_building_fishing_wharf"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "is_sea_adjacent": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_fishing.dds\""
+   ]
+  }
+ ],
+ "building_whaling_station": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_whaling"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/whaling_station.dds\""
+   ],
+   "city_type": [
+    "=",
+    "port"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "1"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_low"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "navigation"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_whaling_station",
+     "pmg_refrigeration_building_whaling_station"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "is_sea_adjacent": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_fishing.dds\""
+   ]
+  }
+ ],
+ "building_oil_rig": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_oil_extraction"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/oil_rig.dds\""
+   ],
+   "city_type": [
+    "=",
+    "mine"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_medium"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "pumpjacks"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_oil_rig",
+     "pmg_transportation_building_oil_rig"
+    ]
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_oil.dds\""
+   ]
+  }
+ ],
+ "building_suez_canal": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_canals"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/suez_canal.dds\""
+   ],
+   "strait": [
+    "=",
+    "canal_suez"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_canal"
+   ],
+   "ai_value": [
+    "=",
+    "100000"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "colonization"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_SINAI"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "OR": [
+        "=",
+        {
+         "owns_treaty_port_in": [
+          "=",
+          "STATE_SINAI"
+         ],
+         "owns_entire_state_region": [
+          "=",
+          "STATE_SINAI"
+         ]
+        }
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "suez_survey_complete_tooltip"
+         ],
+         "has_variable": [
+          "=",
+          "suez_survey_complete"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"canal_suezcanal_under_construction_01_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"canal_suezcanal_01_entity\""
+    ]
+   ],
+   "locator": [
+    "=",
+    "\"canal_suez_locator\""
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_collision_mesh_area": [
+      "=",
+      "yes"
+     ],
+     "clear_size_area": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_canal"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_harbour.dds\""
+   ]
+  }
+ ],
+ "building_panama_canal": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_canals"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/panama_canal.dds\""
+   ],
+   "strait": [
+    "=",
+    "canal_panama"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_canal"
+   ],
+   "ai_value": [
+    "=",
+    "100000"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "civilizing_mission"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_PANAMA"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "=",
+      {
+       "OR": [
+        "=",
+        {
+         "owns_treaty_port_in": [
+          "=",
+          "STATE_PANAMA"
+         ],
+         "owns_entire_state_region": [
+          "=",
+          "STATE_PANAMA"
+         ]
+        }
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "panama_survey_complete_tooltip"
+         ],
+         "has_variable": [
+          "=",
+          "panama_survey_complete"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    [
+     "\"canal_panamacanal_under_construction_01_entity\""
+    ]
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"canal_panamacanal_01_entity\""
+    ]
+   ],
+   "locator": [
+    "=",
+    "\"canal_panama_locator\""
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_collision_mesh_area": [
+      "=",
+      "yes"
+     ],
+     "clear_size_area": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_canal"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_harbour.dds\""
+   ]
+  }
+ ],
+ "building_kiel_canal": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_canals"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/kiel_canal.dds\""
+   ],
+   "strait": [
+    "=",
+    "canal_kiel"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "unique": [
+    "=",
+    "yes"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_canal"
+   ],
+   "ai_value": [
+    "=",
+    "100000"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "ironclad_tech"
+    ]
+   ],
+   "potential": [
+    "=",
+    {
+     "state_region": [
+      "=",
+      "s:STATE_SCHLESWIG_HOLSTEIN"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "owner": [
+      "?=",
+      {
+       "owns_entire_state_region": [
+        "=",
+        "STATE_SCHLESWIG_HOLSTEIN"
+       ]
+      }
+     ]
+    }
+   ],
+   "entity_not_constructed": [
+    "=",
+    {}
+   ],
+   "entity_under_construction": [
+    "=",
+    {}
+   ],
+   "entity_constructed": [
+    "=",
+    [
+     "\"canal_kiel_entity\""
+    ]
+   ],
+   "locator": [
+    "=",
+    "\"canal_kiel_locator\""
+   ],
+   "city_gfx_interactions": [
+    "=",
+    {
+     "clear_collision_mesh_area": [
+      "=",
+      "yes"
+     ],
+     "clear_size_area": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_canal"
+    ]
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_harbour.dds\""
+   ]
+  }
+ ],
+ "building_port": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_private_infrastructure"
+   ],
+   "city_type": [
+    "=",
+    "port"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "1"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_port.dds\""
+   ],
+   "port": [
+    "=",
+    "yes"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "navigation"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_port"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_medium"
+   ],
+   "terrain_manipulator": [
+    "=",
+    "urban_port"
+   ],
+   "potential": [
+    "=",
+    {
+     "is_coastal": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_railway": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_private_infrastructure"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_railway.dds\""
+   ],
+   "ai_nationalization_desire": [
+    "=",
+    "0.5"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "railways"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_railway",
+     "pmg_passenger_trains"
+    ]
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_high"
+   ],
+   "ai_value": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2000"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_trans_siberian_railway"
+            ]
+           }
+          ],
+          "OR": [
+           "=",
+           {
+            "state_region": [
+             [
+              "=",
+              "s:STATE_MOSCOW"
+             ],
+             [
+              "=",
+              "s:STATE_YAROSLAVL"
+             ],
+             [
+              "=",
+              "s:STATE_NIZHNY_NOVGOROD"
+             ],
+             [
+              "=",
+              "s:STATE_CHUVASHIA"
+             ],
+             [
+              "=",
+              "s:STATE_KAZAN"
+             ],
+             [
+              "=",
+              "s:STATE_UFA"
+             ],
+             [
+              "=",
+              "s:STATE_CHELYABINSK"
+             ],
+             [
+              "=",
+              "s:STATE_URAL"
+             ],
+             [
+              "=",
+              "s:STATE_TOBOLSK"
+             ],
+             [
+              "=",
+              "s:STATE_TOMSK"
+             ],
+             [
+              "=",
+              "s:STATE_KRASNOYARSK"
+             ],
+             [
+              "=",
+              "s:STATE_IRKUTSK"
+             ],
+             [
+              "=",
+              "s:STATE_BURYATIA"
+             ],
+             [
+              "=",
+              "s:STATE_TRANS_BAIKAL"
+             ],
+             [
+              "=",
+              "s:STATE_YAKUTSK"
+             ],
+             [
+              "=",
+              "s:STATE_OKHOTSK"
+             ],
+             [
+              "=",
+              "s:STATE_AMUR"
+             ],
+             [
+              "=",
+              "s:STATE_OUTER_MANCHURIA"
+             ]
+            ]
+           }
+          ],
+          "NOR": [
+           "=",
+           {
+            "has_building": [
+             "=",
+             "building_railway"
+            ],
+            "any_scope_building": [
+             "=",
+             {
+              "is_building_type": [
+               "=",
+               "building_railway"
+              ],
+              "is_under_construction": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "10000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "exists": [
+           "=",
+           "c:RUS"
+          ],
+          "c:RUS": [
+           "?=",
+           "owner"
+          ],
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_manchuria_old"
+          ],
+          "any_scope_building": [
+           "=",
+           {
+            "is_building_type": [
+             "=",
+             "building_railway"
+            ],
+            "levels_owned_by_country": [
+             "=",
+             {
+              "target": [
+               "=",
+               "c:RUS"
+              ],
+              "value": [
+               "<",
+               "1"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "10000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "c:JAP": [
+             "?=",
+             "this"
+            ],
+            "has_journal_entry": [
+             "=",
+             "je_colonize_korea"
+            ]
+           }
+          ],
+          "is_in_geographic_region": [
+           "=",
+           "geographic_region_korea"
+          ],
+          "any_scope_building": [
+           "=",
+           {
+            "is_building_type": [
+             "=",
+             "building_railway"
+            ],
+            "level": [
+             "<",
+             "10"
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "10000"
+        ]
+       }
+      ]
+     ],
+     "else_if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_meiji_economy"
+            ]
+           }
+          ],
+          "is_incorporated": [
+           "=",
+           "yes"
+          ],
+          "NOR": [
+           "=",
+           {
+            "has_building": [
+             "=",
+             "building_railway"
+            ],
+            "any_scope_building": [
+             "=",
+             {
+              "is_building_type": [
+               "=",
+               "building_railway"
+              ],
+              "is_under_construction": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "10000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_trans_continental_railway"
+            ]
+           }
+          ],
+          "OR": [
+           "=",
+           {
+            "state_region": [
+             [
+              "=",
+              "s:STATE_NEBRASKA"
+             ],
+             [
+              "=",
+              "s:STATE_WYOMING"
+             ],
+             [
+              "=",
+              "s:STATE_UTAH"
+             ],
+             [
+              "=",
+              "s:STATE_NEVADA"
+             ],
+             [
+              "=",
+              "s:STATE_CALIFORNIA"
+             ]
+            ]
+           }
+          ],
+          "NOR": [
+           "=",
+           {
+            "has_building": [
+             "=",
+             "building_railway"
+            ],
+            "any_scope_building": [
+             "=",
+             {
+              "is_building_type": [
+               "=",
+               "building_railway"
+              ],
+              "is_under_construction": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "10000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_canada_pacific_railway"
+            ]
+           }
+          ],
+          "OR": [
+           "=",
+           {
+            "state_region": [
+             [
+              "=",
+              "s:STATE_QUEBEC"
+             ],
+             [
+              "=",
+              "s:STATE_BRITISH_COLUMBIA"
+             ],
+             [
+              "=",
+              "s:STATE_ONTARIO"
+             ],
+             [
+              "=",
+              "s:STATE_ALBERTA"
+             ],
+             [
+              "=",
+              "s:STATE_SASKATCHEWAN"
+             ],
+             [
+              "=",
+              "s:STATE_MANITOBA"
+             ]
+            ]
+           }
+          ],
+          "NOR": [
+           "=",
+           {
+            "has_building": [
+             "=",
+             "building_railway"
+            ],
+            "any_scope_building": [
+             "=",
+             {
+              "is_building_type": [
+               "=",
+               "building_railway"
+              ],
+              "is_under_construction": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "10000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "?=",
+           {
+            "c:AUS": [
+             "?=",
+             "this"
+            ],
+            "has_journal_entry": [
+             "=",
+             "je_metternich"
+            ]
+           }
+          ],
+          "is_incorporated": [
+           "=",
+           "yes"
+          ],
+          "NOR": [
+           "=",
+           {
+            "has_building": [
+             "=",
+             "building_railway"
+            ],
+            "any_scope_building": [
+             "=",
+             {
+              "is_building_type": [
+               "=",
+               "building_railway"
+              ],
+              "is_under_construction": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "10000"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "owner": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_portugal_regeneration_public_works"
+            ]
+           }
+          ],
+          "is_incorporated": [
+           "=",
+           "yes"
+          ],
+          "NOR": [
+           "=",
+           {
+            "has_building": [
+             "=",
+             "building_railway"
+            ],
+            "any_scope_building": [
+             "=",
+             {
+              "is_building_type": [
+               "=",
+               "building_railway"
+              ],
+              "is_under_construction": [
+               "=",
+               "yes"
+              ]
+             }
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "10000"
+        ]
+       }
+      ]
+     ]
+    }
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "occupancy": [
+      ">=",
+      "0.8"
+     ],
+     "OR": [
+      [
+       "=",
+       {
+        "cash_reserves_ratio": [
+         ">",
+         "0.5"
+        ],
+        "is_subsidized": [
+         "=",
+         "yes"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "state": [
+         [
+          "=",
+          {
+           "sg:transportation": [
+            "=",
+            {
+             "state_goods_pricier": [
+              ">",
+              "0.5"
+             ]
+            }
+           ]
+          }
+         ],
+         [
+          "=",
+          {
+           "infrastructure_delta": [
+            "<=",
+            "-20"
+           ]
+          }
+         ]
+        ]
+       }
+      ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "is_under_construction": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_railways.dds\""
+   ]
+  }
+ ],
+ "building_trade_center": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_trade"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "lens": [
+    "=",
+    "infrastructure"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_very_low"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_trade_center.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_trade_center",
+     "pmg_trade_quantity_trade_center"
+    ]
+   ],
+   "can_build_government": [
+    "=",
+    {
+     "trade_center_construction_allowed": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "can_build_private": [
+    "=",
+    {
+     "trade_center_construction_allowed": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_manor_house": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_manor_houses"
+   ],
+   "city_type": [
+    "=",
+    "farm"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "lens": [
+    "=",
+    "infrastructure"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_manor_houses.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_ownership_building_manor_house",
+     "pmg_additional_ownership_building_manor_house"
+    ]
+   ],
+   "investment_scores": [
+    "=",
+    {
+     "bg_manufacturing_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_manufacturing\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.0"
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_trade_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_trade\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.0"
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_agriculture_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_agriculture\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "OR": [
+              "=",
+              {
+               "has_law_or_variant": [
+                [
+                 "=",
+                 "law_type:law_agrarianism"
+                ],
+                [
+                 "=",
+                 "law_type:law_industry_banned"
+                ],
+                [
+                 "=",
+                 "law_type:law_extraction_economy"
+                ]
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "2.0"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_ranching_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_ranching\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "OR": [
+              "=",
+              {
+               "has_law_or_variant": [
+                [
+                 "=",
+                 "law_type:law_agrarianism"
+                ],
+                [
+                 "=",
+                 "law_type:law_industry_banned"
+                ],
+                [
+                 "=",
+                 "law_type:law_extraction_economy"
+                ]
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "2.0"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_plantations_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_plantations\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "OR": [
+              "=",
+              {
+               "has_law_or_variant": [
+                [
+                 "=",
+                 "law_type:law_agrarianism"
+                ],
+                [
+                 "=",
+                 "law_type:law_industry_banned"
+                ],
+                [
+                 "=",
+                 "law_type:law_extraction_economy"
+                ]
+               ]
+              }
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "2.0"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_arts_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_arts\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.5"
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_mining_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_mining\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.0"
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_logging_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_logging\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.1"
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_rubber_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_rubber\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.1"
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_whaling_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_whaling\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.25"
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_fishing_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_fishing\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.25"
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_power_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_power\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.0"
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_infrastructure_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_infrastructure\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.0"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "ownership_type": [
+    "=",
+    "other"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_financial_district": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_financial_districts"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "lens": [
+    "=",
+    "infrastructure"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_financial_district.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_ownership_building_financial_district"
+    ]
+   ],
+   "investment_scores": [
+    "=",
+    {
+     "bg_manufacturing_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_manufacturing\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.1"
+           ]
+          }
+         ],
+         "else_if": [
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "OR": [
+               "=",
+               {
+                "has_law_or_variant": [
+                 [
+                  "=",
+                  "law_type:law_industry_banned"
+                 ],
+                 [
+                  "=",
+                  "law_type:law_extraction_economy"
+                 ]
+                ]
+               }
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             "0.5"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_agrarianism"
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             "0.75"
+            ]
+           }
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_trade_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_trade\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1.0"
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_agriculture_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_agriculture\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.5"
+         ],
+         "multiply": [
+          "=",
+          {
+           "value": [
+            "=",
+            "1"
+           ],
+           "add": [
+            "=",
+            "modifier:country_financial_districts_buy_farms_likelihood"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_ranching_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_ranching\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.5"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ],
+         "multiply": [
+          "=",
+          {
+           "value": [
+            "=",
+            "1"
+           ],
+           "add": [
+            "=",
+            "modifier:country_financial_districts_buy_farms_likelihood"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_plantations_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_plantations\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.75"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ],
+         "multiply": [
+          "=",
+          {
+           "value": [
+            "=",
+            "1"
+           ],
+           "add": [
+            "=",
+            "modifier:country_financial_districts_buy_farms_likelihood"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_arts_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_arts\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "0.5"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_mining_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_mining\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.25"
+           ]
+          }
+         ],
+         "else_if": [
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_industry_banned"
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             "0.5"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_agrarianism"
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             "0.75"
+            ]
+           }
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_logging_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_logging\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_rubber_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_rubber\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_whaling_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_whaling\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_fishing_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_fishing\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.5"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_oil_extraction_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_oil_extraction\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.1"
+           ]
+          }
+         ],
+         "else_if": [
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_industry_banned"
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             "0.5"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_agrarianism"
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             "0.75"
+            ]
+           }
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_power_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_power\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.1"
+           ]
+          }
+         ],
+         "else_if": [
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "OR": [
+               "=",
+               {
+                "has_law_or_variant": [
+                 [
+                  "=",
+                  "law_type:law_industry_banned"
+                 ],
+                 [
+                  "=",
+                  "law_type:law_extraction_economy"
+                 ]
+                ]
+               }
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             "0.5"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_agrarianism"
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             "0.75"
+            ]
+           }
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "bg_infrastructure_score": [
+      "=",
+      {
+       "group": [
+        "=",
+        "\"bg_infrastructure\""
+       ],
+       "score": [
+        "=",
+        {
+         "value": [
+          "=",
+          "1"
+         ],
+         "if": [
+          "=",
+          {
+           "limit": [
+            "=",
+            {
+             "has_law_or_variant": [
+              "=",
+              "law_type:law_traditionalism"
+             ]
+            }
+           ],
+           "multiply": [
+            "=",
+            "0.1"
+           ]
+          }
+         ],
+         "else_if": [
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_industry_banned"
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             "0.5"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_law_or_variant": [
+               "=",
+               "law_type:law_agrarianism"
+              ]
+             }
+            ],
+            "multiply": [
+             "=",
+             "0.75"
+            ]
+           }
+          ]
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "ownership_type": [
+    "=",
+    "other"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_subsistence_farm": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_subsistence_farms"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_subsistence_agriculture"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_subsistence_farm_grain.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_subsistence_farm",
+     "pmg_home_workshops_building_subsistence_farm",
+     "pmg_serfdom_building_subsistence_farm"
+    ]
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "min_raise_to_hire": [
+    "=",
+    "0.30"
+   ],
+   "slaves_role": [
+    "=",
+    "peasants"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "can_switch_owner": [
+    "=",
+    "no"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_subsistence_orchard": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_subsistence_orchards"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_subsistence_agriculture"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_subsistence_farm_fruit.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_subsistence_orchard",
+     "pmg_home_workshops_building_subsistence_orchard",
+     "pmg_serfdom_building_subsistence_orchard"
+    ]
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "can_switch_owner": [
+    "=",
+    "no"
+   ],
+   "min_raise_to_hire": [
+    "=",
+    "0.30"
+   ],
+   "slaves_role": [
+    "=",
+    "peasants"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_subsistence_pasture": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_subsistence_pastures"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_subsistence_ranching"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_subsistence_farm_meat.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_subsistence_pasture",
+     "pmg_home_workshops_building_subsistence_pasture",
+     "pmg_serfdom_building_subsistence_pasture"
+    ]
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "can_switch_owner": [
+    "=",
+    "no"
+   ],
+   "min_raise_to_hire": [
+    "=",
+    "0.30"
+   ],
+   "slaves_role": [
+    "=",
+    "peasants"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_subsistence_fishing_village": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_subsistence_fishing_villages"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_subsistence_agriculture"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_subsistence_farm_fish.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_subsistence_fishing_village",
+     "pmg_home_workshops_building_subsistence_fishing_village",
+     "pmg_serfdom_building_subsistence_fishing_village"
+    ]
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "can_switch_owner": [
+    "=",
+    "no"
+   ],
+   "min_raise_to_hire": [
+    "=",
+    "0.30"
+   ],
+   "slaves_role": [
+    "=",
+    "peasants"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_subsistence_rice_farm": [
+  "=",
+  {
+   "aliases": [
+    "=",
+    [
+     "building_subsistence_rice_paddies"
+    ]
+   ],
+   "building_group": [
+    "=",
+    "bg_subsistence_agriculture"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_subsistence_farm_rice.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_subsistence_rice_farm",
+     "pmg_home_workshops_building_subsistence_rice_farm",
+     "pmg_serfdom_building_subsistence_rice_farm"
+    ]
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "can_switch_owner": [
+    "=",
+    "no"
+   ],
+   "min_raise_to_hire": [
+    "=",
+    "0.30"
+   ],
+   "slaves_role": [
+    "=",
+    "peasants"
+   ],
+   "ownership_type": [
+    "=",
+    "self"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_construction_sector": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_construction"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/construction_camp.dds\""
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "has_max_level": [
+    "=",
+    "yes"
+   ],
+   "required_construction": [
+    "=",
+    "construction_cost_construction_sector"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "urbanization"
+    ]
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_base_building_construction_sector"
+    ]
+   ],
+   "ai_value": [
+    "=",
+    "1000"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds\""
+   ]
+  }
+ ],
+ "building_company_headquarter": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_company_headquarter"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "lens": [
+    "=",
+    "infrastructure"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_company_hq.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_ownership_building_company_headquarter"
+    ]
+   ],
+   "investment_scores": [
+    "=",
+    {}
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "ownership_type": [
+    "=",
+    "other"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ],
+ "building_company_regional_headquarter": [
+  "=",
+  {
+   "building_group": [
+    "=",
+    "bg_company_regional_headquarter"
+   ],
+   "city_type": [
+    "=",
+    "city"
+   ],
+   "levels_per_mesh": [
+    "=",
+    "50"
+   ],
+   "lens": [
+    "=",
+    "infrastructure"
+   ],
+   "icon": [
+    "=",
+    "\"gfx/interface/icons/building_icons/building_company_regional_hq.dds\""
+   ],
+   "production_method_groups": [
+    "=",
+    [
+     "pmg_ownership_building_company_headquarter"
+    ]
+   ],
+   "investment_scores": [
+    "=",
+    {}
+   ],
+   "buildable": [
+    "=",
+    "no"
+   ],
+   "expandable": [
+    "=",
+    "no"
+   ],
+   "downsizeable": [
+    "=",
+    "no"
+   ],
+   "ownership_type": [
+    "=",
+    "other"
+   ],
+   "background": [
+    "=",
+    "\"gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds\""
+   ]
+  }
+ ]
+}
