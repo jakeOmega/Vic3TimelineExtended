@@ -204,6 +204,15 @@ covert_regime_change_coup_push = 5
 covert_net_cultivate_mult = 1.5
 # The AI proposes cultivate assets only where its network is weaker than this.
 covert_cultivate_ai_net_ceiling = 50
+# ---- Network intelligence (slice 7) ----
+# A network this strong reports on the service it has penetrated: from tier 1
+# the target's intelligence capacity and technology count, from tier 2 also how
+# many covert operations the target runs against the operator. Display only;
+# nothing in script reads the report back. One operation reaches tier 1 in ~25
+# months and tier 2 in ~42; cultivate assets alone in ~17 and ~28. A burn (-25)
+# from tier 2 drops the network straight back to tier 1.
+covert_net_intel_tier_1_strength = 50
+covert_net_intel_tier_2_strength = 75
 
 # ============================================================================
 # SECTION 2: INTELLIGENCE CAPACITY
@@ -496,6 +505,14 @@ espionage_target_tech_advantage = {
 intelligence_capacity_display = {
 	value = intelligence_capacity_total
 	round = yes
+}
+
+# Our own technology count, printed beside a network's report on its target's
+# (slice 7; the report itself is stored on the network, iw_net_intel_techs).
+# Scope: country
+covert_techs_researched_display = {
+	value = 0
+	add = techs_researched
 }
 
 intelligence_capacity_relative_display = {
@@ -1144,6 +1161,29 @@ covert_net_detect_reduction = {
 covert_net_detect_reduction_max_display = {
 	value = covert_net_max
 	multiply = covert_net_detect_factor
+}
+
+# The intelligence tier this network's strength reaches (slice 7): 0 nothing,
+# 1 the target's service (capacity, technologies), 2 also its operations
+# against the operator. Written to iw_net_intel_tier by covert_net_clamp, the
+# only place these thresholds are compared, so the widget reads a code.
+# Scope: network container
+covert_net_intel_tier_value = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = iw_net_strength
+			var:iw_net_strength >= covert_net_intel_tier_1_strength
+		}
+		add = 1
+	}
+	if = {
+		limit = {
+			has_variable = iw_net_strength
+			var:iw_net_strength >= covert_net_intel_tier_2_strength
+		}
+		add = 1
+	}
 }
 
 # ============================================================================
