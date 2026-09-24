@@ -572,6 +572,8 @@ Allows monarchies to shape their heir's education through active focus choices. 
 
 ## United Nations (`je_united_nations`)
 
+> **Redesign planned:** see [`un_redesign_design.md`](un_redesign_design.md). It covers the authority model, tiers, grounds and transparent voting, the docket, and missions. This section documents the system as it stands.
+
 **File:** `common/journal_entries/je_united_nations.txt`
 **Group:** `je_group_foreign_affairs`
 
