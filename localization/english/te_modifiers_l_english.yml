@@ -309,6 +309,8 @@
  goods_input_electricity_mult_desc:0 "The amount of @electricity! Electricity consumed by buildings"
  goods_input_electronic_components_add:0 "@electronic_components! Electronic Components Input"
  goods_input_electronic_components_add_desc:0 "The amount of @electronic_components! Electronic Components consumed by buildings"
+ goods_input_fertilizer_mult:0 "@fertilizer! Chemicals Input"
+ goods_input_fertilizer_mult_desc:0 "The amount of @fertilizer! Chemicals consumed by buildings"
  goods_input_fine_art_add:0 "@fine_art! Fine Art Input"
  goods_input_fine_art_add_desc:0 "The amount of @fine_art! Fine Art consumed by buildings"
  goods_input_gold_add:0 "@gold! Gold Input"
