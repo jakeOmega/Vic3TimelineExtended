@@ -143,6 +143,7 @@
  je_colonial_empire_phase_unknown:0 "#lore not yet assessed#!"
  je_colonial_empire_pressure_header:0 "International Pressure"
  je_colonial_empire_pressure_quiet_tt:0 "#G No [concept_great_power] is pressing us over our colonies.#!"
+ je_colonial_empire_pressure_share_tt:0 "#lore Condemning powers hold#! #v [ROOT.GetCountry.MakeScope.Var('colonial_empire_condemner_share').GetValue|%0]#! #lore of the [concept_prestige] of all [Concept('concept_great_power', 'great powers')] and ourselves. At a third we face diplomatic isolation, at two-thirds an international consensus against us.#!"
  je_colonial_empire_pressure_scaling_tt:0 "#lore Each [concept_great_power] weighs in proportion to its [concept_prestige] against ours (@prestige! #v [ROOT.GetCountry.GetPrestige|0]#!), from a quarter of a peer's weight up to double.#!"
  je_colonial_empire_programmes_header:0 "Colonial Programmes"
  je_colonial_empire_reason:0 "Our nation controls overseas territories that are not part of our cultural [concept_homeland]. The era of [concept_decolonization_system] is upon us - will we integrate these lands fully into our nation, or release them to self-governance?"

@@ -661,6 +661,7 @@ colonial_empire_je_cleanup_effect = {
 	remove_variable = colonial_empire_d_overreach
 	remove_variable = colonial_empire_d_gp
 	remove_variable = colonial_empire_d_acceptance
+	remove_variable = colonial_empire_condemner_share
 	remove_variable = colonial_empire_d_total
 	remove_variable = colonial_empire_eligible_count
 	remove_variable = colonial_empire_round_table_count

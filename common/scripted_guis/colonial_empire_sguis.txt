@@ -191,6 +191,15 @@ colonial_empire_pressure_sgui = {
 		# prestige, and this line shows ours and how the two combine.
 		else = {
 			custom_tooltip = je_colonial_empire_pressure_scaling_tt
+			# The monthly snapshot, not a live walk. has_variable guards the first
+			# month of a save upgraded mid-entry, which has no snapshot yet.
+			if = {
+				limit = {
+					has_variable = colonial_empire_condemner_share
+					var:colonial_empire_condemner_share > 0
+				}
+				custom_tooltip = je_colonial_empire_pressure_share_tt
+			}
 		}
 
 		every_country = {
