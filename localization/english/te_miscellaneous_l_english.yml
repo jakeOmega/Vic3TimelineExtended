@@ -1649,6 +1649,7 @@
  colonial_empire_crumbling_modifier:0 "Colonial Empire Crumbling"
  colonial_empire_solidified_modifier:0 "Colonial Empire Solidified"
  colonial_empire_stable_modifier:0 "Colonial Empire Stable"
+ colonial_drift_cap_tt:0 "Monthly limit: stability moves at most ±[ROOT.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_cap')|2] a month either way, however large the sum above"
  colonial_empire_strained_modifier:0 "Colonial Empire Strained"
  colonial_empire_under_pressure_modifier:0 "Colonial Empire Under Pressure"
  colonial_garrison_aggregate_tt:0 "Garrison policy active: [ROOT.GetCountry.GetModifier.GetValueWithBreakdownFor('country_colonial_garrison_effectiveness_add')]"

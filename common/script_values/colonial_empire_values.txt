@@ -283,6 +283,10 @@ colonial_state_sol_qualifying_floor = {
 # with a matching `desc` key. The full old-term -> leaf mapping is tabulated
 # in docs/systems/mod_systems.md § Stability Bar Formula.
 #
+# The bar's 22nd and last line, colonial_stability_term_cap, is not one of
+# these leaves: it caps the sum of all 21 and lives in the MONTHLY CAP
+# section after the group sums.
+#
 # Every leaf returns 0 when its gate is false (the gate moved from the bar's
 # enclosing `if` into the leaf), so the bar's `add` lines are unconditional.
 # ============================================================================
@@ -535,10 +539,9 @@ colonial_stability_drift_domestic = {
 	add = colonial_stability_term_turmoil
 }
 
-# Projected monthly change, identical by construction to the sum the bar
-# applies. Snapshotted into colonial_empire_d_total for the signed history
-# series, which is sampled from the monthly pulse and can afford the iteration.
-colonial_stability_drift_total = {
+# Sum of all 21 leaves before the monthly cap: what the bar would move by if
+# nothing limited it. Iterates (it contains the three snapshotted groups).
+colonial_stability_drift_uncapped = {
 	value = colonial_stability_drift_base
 	add = colonial_stability_drift_laws
 	add = colonial_stability_drift_igs
@@ -550,14 +553,53 @@ colonial_stability_drift_total = {
 	add = colonial_stability_drift_domestic
 }
 
-# The same total, but safe to read from the widget every frame: the six O(1)
+# ============================================================================
+# MONTHLY CAP
+#
+# However large the sum of the leaves, the bar moves at most this far in one
+# month, in either direction: 100 / 60, so crossing the whole 0-100 bar takes
+# at least five years. The cap is applied to the TOTAL, after everything is
+# summed, not to any single term. A sudden spike (a superpower condemning a
+# small empire) therefore cannot empty the bar in a few months, but a large
+# enough sum still outweighs the empire's own efforts, and the empire has to
+# change the inputs (win the great power over, integrate the colony, release
+# it) to turn the trend around.
+#
+# The bar applies it as one last leaf, colonial_stability_term_cap: the
+# difference between the capped and the uncapped sum, 0 while the sum is
+# inside the cap. Its hover line therefore shows how much the cap absorbed.
+# ============================================================================
+
+colonial_stability_drift_cap = 1.667
+
+# Projected monthly change after the cap, identical by construction to what
+# the bar applies (its 21 leaves plus colonial_stability_term_cap). Snapshotted
+# into colonial_empire_d_total for the signed history series, which is sampled
+# from the monthly pulse and can afford the iteration.
+colonial_stability_drift_total = {
+	value = colonial_stability_drift_uncapped
+	max = colonial_stability_drift_cap
+	min = {
+		value = colonial_stability_drift_cap
+		multiply = -1
+	}
+}
+
+# The bar's last line. Capped minus uncapped, so the clamp above finishes
+# inside its own script value before the subtraction runs.
+colonial_stability_term_cap = {
+	value = colonial_stability_drift_total
+	subtract = colonial_stability_drift_uncapped
+}
+
+# The uncapped total, but safe to read from the widget every frame: the six O(1)
 # groups are evaluated live and the three iterating ones come from the snapshot
 # variables. That mix is deliberate rather than a compromise -- the six live
 # groups are exactly the ones a button press changes, so the headline moves the
 # frame after a click, which a pure snapshot could never do (add_modifier and
 # remove_modifier results are invisible inside the effect that wrote them).
 # The three snapshotted groups cannot be changed by any button here.
-colonial_stability_drift_total_display = {
+colonial_stability_drift_uncapped_display = {
 	value = colonial_stability_drift_base
 	add = colonial_stability_drift_laws
 	add = colonial_stability_drift_igs
@@ -576,6 +618,23 @@ colonial_stability_drift_total_display = {
 		limit = { has_variable = colonial_empire_d_acceptance }
 		add = var:colonial_empire_d_acceptance
 	}
+}
+
+# The widget's headline: the same, capped. O(1), like the uncapped version.
+colonial_stability_drift_total_display = {
+	value = colonial_stability_drift_uncapped_display
+	max = colonial_stability_drift_cap
+	min = {
+		value = colonial_stability_drift_cap
+		multiply = -1
+	}
+}
+
+# How much the cap is absorbing this month (0 inside the cap), shown as the
+# last row of the widget's breakdown so the rows add up to the headline.
+colonial_stability_drift_cap_display = {
+	value = colonial_stability_drift_total_display
+	subtract = colonial_stability_drift_uncapped_display
 }
 
 # ============================================================================

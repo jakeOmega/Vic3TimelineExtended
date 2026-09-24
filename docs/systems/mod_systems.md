@@ -1098,7 +1098,7 @@ Three layers:
 | File | Purpose |
 |---|---|
 | `common/journal_entries/je_colonial_empire.txt` | JE definition, bar, widget mounts, monthly pulse, outcomes |
-| `common/scripted_progress_bars/extra_progress_bars.txt` | `colonial_stability_bar`; its `monthly_progress` consumes the 21 leaf script values |
+| `common/scripted_progress_bars/extra_progress_bars.txt` | `colonial_stability_bar`; its `monthly_progress` consumes the 21 leaf script values plus the monthly cap |
 | `common/script_values/colonial_empire_values.txt` | Colony counts, `colonial_stability_term_*` leaves, `colonial_stability_drift_*` groups, cost and display values |
 | `common/scripted_triggers/colonial_empire_triggers.txt` | Macro-regions, `is_overseas_colonial_state`, the 9 `colonial_empire_possible_*` button gates |
 | `common/scripted_buttons/colonial_empire_buttons.txt` | 9 AI-only JE buttons; `possible` / `effect` delegate to the shared helpers |
@@ -1117,7 +1117,7 @@ Three layers:
 
 ### Stability Bar Formula (`colonial_stability_bar.monthly_progress`)
 
-**This table is the formula.** Every term is a named leaf script value in `common/script_values/colonial_empire_values.txt` (country scope), and the bar's `monthly_progress` is nothing but 21 unconditional `add = { desc = "<tooltip key>" value = owner.<leaf> }` lines. Each leaf returns 0 when its gate is false. The widget and the history charts read the **same** leaves through the nine `colonial_stability_drift_*` group sums, so there is exactly one place each number lives.
+**This table is the formula.** Every term is a named leaf script value in `common/script_values/colonial_empire_values.txt` (country scope), and the bar's `monthly_progress` is nothing but 21 unconditional `add = { desc = "<tooltip key>" value = owner.<leaf> }` lines, plus a 22nd, last line for the monthly cap (below). Each leaf returns 0 when its gate is false. The widget and the history charts read the **same** leaves through the nine `colonial_stability_drift_*` group sums, so there is exactly one place each number lives.
 
 To retune a term, change only its leaf. To add one: add a leaf, add it to its group, add one `add` line to the bar with a `desc` key, and add a row here.
 
@@ -1144,14 +1144,17 @@ To retune a term, change only its leaf. To add one: add a leaf, add it to its gr
 | `_war` | domestic | at war | **-0.5** | `colonial_war_penalty_tt` |
 | `_revolution` | domestic | revolution | **-1.0** | `colonial_revolution_penalty_tt` |
 | `_turmoil` | domestic | `country_turmoil > 0.05` | turmoil × **-2.0** | `colonial_turmoil_penalty_tt` |
+| `_cap` (**last line**) | — (not in a group) | sum outside ±`colonial_stability_drift_cap` | clamp(sum, ±1.667) − sum | `colonial_drift_cap_tt` |
 
 **Great-power terms scale with relative prestige.** Each condemning or supporting great power is weighted by its prestige divided by the empire's (floored at 1), clamped to **[0.25, 2.0]** — `colonial_gp_condemnation_weight` / `colonial_gp_support_weight` sum those weights. A peer great power therefore contributes the table's figure (-0.6 / +0.3), one with double the empire's prestige or more contributes twice that, and one with a quarter or less contributes a quarter. Net effect: the most prestigious empires shrug off condemnation from lesser powers, while small colonial holders (Portugal, Belgium, the Netherlands) feel superpower condemnation at up to -1.2/month each.
 
 **The two escalations fire on prestige share, not head count.** `colonial_gp_condemner_prestige_share` is the condemners' combined prestige divided by `colonial_gp_prestige_pool` — the prestige of every great power *plus the empire itself*, counted even when it is not a great power. At **≥ 1/3** `_gp_high_pressure` applies a flat -1.0; at **≥ 2/3** `_gp_extreme_pressure` adds a further -2.0 (both apply, -3.0 total). Because the empire sits in the pool, a dominant empire is hard to isolate, while a minor one reaches the thresholds as soon as a few big powers condemn it. The pool is great powers rather than world prestige on purpose: condemners are a subset of the great powers that excludes the empire, and great powers together hold well under all of world prestige, so a two-thirds world share would practically never fire. `colonial_empire_refresh_display` snapshots the share into `colonial_empire_condemner_share` for the widget's International Pressure section. The event and button AI weights keyed on `colonial_gp_condemners_count >= N` are unchanged — they count powers, not pressure.
 
+**Monthly cap, applied last.** However large the sum of the 21 terms, the bar moves at most **±`colonial_stability_drift_cap` = 1.667** a month (100 ÷ 60), so crossing the whole bar takes at least five years either way. The cap acts on the *total*, after everything is summed — not on any one term — so a sudden spike (a superpower condemning a tiny colony) cannot empty the bar in months, but a big enough sum still outweighs the empire's programmes and it has to change the inputs (win the great power over, integrate or release colonies) to turn the trend. The bar applies it as the `_cap` row: `colonial_stability_drift_total` (capped) minus `colonial_stability_drift_uncapped`, which is 0 inside the cap, so the hover shows how much the cap absorbed. `colonial_stability_drift_total` is now the capped figure everywhere it is read (the `colonial_empire_d_total` snapshot and the signed history chart, rescaled to ±2); the widget's headline is `colonial_stability_drift_total_display` and its breakdown ends with `colonial_stability_drift_cap_display`. The cap leaf evaluates the uncapped sum twice, i.e. every leaf about three times a month — acceptable at monthly cadence.
+
 **Contributions that are not rows above** reach the bar through `country_colonial_stability_drift_add` (the `_laws` leaf) and surface inside that line's own `GetValueWithBreakdownFor` breakdown: every contributing law (Colonial Affairs, Minority Rights, Citizenship, Distribution of Power, Free Speech, Internal Security), the era techs (`globalization` **-1.5**/mo, `knowledge_economy` **-0.75**/mo), and the timed `colonial_stability_positive_event` / `_negative_event` modifiers. Programme effectiveness likewise aggregates a `base_values` baseline plus per-law contributions.
 
-**Reading it in game:** hovering the bar shows all 21 terms with their current values — `GetPeriodicProgressBreakdown`, generated by the engine from the `desc` keys above. The widget shows the nine group sums and the projected total.
+**Reading it in game:** hovering the bar shows all 21 terms and the cap with their current values — `GetPeriodicProgressBreakdown`, generated by the engine from the `desc` keys above. The widget shows the nine group sums, the cap row and the projected (capped) total.
 
 **Design intent:** A typical GP with 5 colonies nets roughly -0.5 to -1.0/month even with programmes active. Only great powers with few, well-integrated colonies and little GP condemnation can stabilize. The era techs make holding colonies nearly impossible late.
 

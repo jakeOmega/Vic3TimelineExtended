@@ -176,7 +176,7 @@ Mod JEs of this family bundle two kinds of modifiers in the same `extra_modifier
 Models the challenge of maintaining overseas colonies after decolonization tech. Countries balance stability through investment, military presence, or cultural assimilation — or accept planned decolonization.
 
 ### Key Mechanics
-- **Progress bar:** `colonial_stability_bar` (0-100, `start_value = 50`, `default_green`). Purely `monthly_progress`-driven — nothing calls `set_bar_progress` on it outside the debug harness. Its 21 terms are named leaf script values; see `mod_systems.md` § Stability Bar Formula.
+- **Progress bar:** `colonial_stability_bar` (0-100, `start_value = 50`, `default_green`). Purely `monthly_progress`-driven — nothing calls `set_bar_progress` on it outside the debug harness. Its 21 terms are named leaf script values, followed by a 22nd line (`colonial_stability_term_cap`) that caps the net monthly change at ±`colonial_stability_drift_cap` (1.667, i.e. 0→100 takes at least five years); see `mod_systems.md` § Stability Bar Formula.
 - **5 stability bands:** collapsing (0-20), crumbling (20-40), strained (40-65), stable (65-90), solidified (90+). Derived **once**, in `colonial_empire_refresh_display`, into `var:colonial_empire_tier` (1-5). No other file knows a boundary.
 - **GP pressure:** `colonial_gp_condemners_count` / `colonial_gp_supporters_count` (great powers carrying `gp_anti_colonial_stance` / `gp_pro_colonial_stance`). The bar's per-power GP terms use the prestige-weighted `colonial_gp_condemnation_weight` / `colonial_gp_support_weight` instead: each power counts for its prestige ÷ ours, clamped to 0.25-2.0. Its two escalations fire when the condemners hold 1/3 and 2/3 of the prestige of all great powers plus ours (`colonial_gp_condemner_prestige_share`). See `mod_systems.md` § Stability Bar Formula.
 - **Phase modifiers, applied to the ENTRY not the country** (`je:je_colonial_empire = { add_modifier = … }`, so a country-scope `has_modifier` never sees them): `colonial_empire_crumbling_modifier` (<20), `colonial_empire_under_pressure_modifier` (<40), `colonial_empire_strained_modifier` (<65), `colonial_empire_stable_modifier` (<90), `colonial_empire_solidified_modifier` (90+).
@@ -245,9 +245,10 @@ Eight handlers. All carry `ai_is_valid = { always = no }`; the five read-only on
 
 **Display-only reads** — the widget derives nothing:
 - Bar value: `[JournalEntry.GetCurrentBarProgress(ScriptedProgressBar.Self)|%0]`, reached through `datamodel = "[JournalEntry.GetScriptedProgressBars]"`.
-- Bar breakdown: `[ScriptedProgressBar.GetPeriodicProgressBreakdown]` — the **engine's own** per-term rendering, built from the 21 `desc` keys on the bar's `add` lines. It cannot drift from the mechanic because it *is* the mechanic.
+- Bar breakdown: `[ScriptedProgressBar.GetPeriodicProgressBreakdown]` — the **engine's own** per-term rendering, built from the 22 `desc` keys on the bar's `add` lines (21 terms plus the monthly cap). It cannot drift from the mechanic because it *is* the mechanic.
 - Six drift groups live: `[JournalEntry.GetCountry.MakeScope.ScriptValue('colonial_stability_drift_{base,laws,igs,rank,policies,domestic}')]` — all O(1), and live so a click moves them the next frame.
 - Three drift groups + the total from `var:` (they iterate; the widget runs every frame).
+- Monthly cap: the headline is `colonial_stability_drift_total_display` (capped), and the breakdown's last row is `colonial_stability_drift_cap_display` — capped minus uncapped, 0 inside the cap — so the rows still add up to the headline. Both are O(1) over the live groups and the snapshots.
 - Band names and the phase-modifier line: `[JournalEntry.GetCountry.GetCustom('colonial_empire_{status_custom,tier_name,next_band_name,phase_modifier}')]` (`common/customizable_localization/colonial_empire_custom_loc.txt`), keyed on the tier integer.
 - Programme costs / effects: `[GetStaticModifier('x').GetDesc]` plus `colonial_{invest,garrison,assim}_effectiveness_display` and `colonial_{invest,assimilate}_startup_cost_display`.
 
@@ -278,7 +279,7 @@ Fresh activation (`immediate` populates the display state on frame one) · inact
 | Metric | Chart | Axis | Source |
 |---|---|---|---|
 | `colonial_stability` | `te_history_bar_unsigned` | 0-100 | `var:colonial_empire_bar_bucket` (nearest 5 — the legend says so) |
-| `colonial_drift` | `te_history_bar_signed` | ±6 | `var:colonial_empire_d_total` (exact) |
+| `colonial_drift` | `te_history_bar_signed` | ±2 | `var:colonial_empire_d_total` (exact, after the ±1.667 monthly cap) |
 
 No markers: their tooltip branches live in the shared `te_history_scripted_gui.txt`. `te_hist_range` is a single global GUI variable shared with the banking charts.
 
