@@ -313,9 +313,12 @@ un_vote_apply_treaty_modifier = {
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
 	}
+	# A vetoed reform is flat-blocked (un_vote.2 applies nothing), so members
+	# ratify nothing either.
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_reform }
+			NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 			NOT = { has_modifier = un_reform_champion_modifier }
 		}
 		add_modifier = {
@@ -498,10 +501,11 @@ un_apply_ratified_conventions = {
 # two pledge branches of un_vote_apply_resolution_compliance below.
 #
 # WHY THIS IS THE DELIVERY SITE, AND WHY IT CANNOT PAY TWICE.
-# un_vote.2 (which levies the costs) iterates every country that *currently
-# carries* the contributor marker, so it sweeps up donors from earlier
-# resolutions and, for peacekeeping, every standing programme member as well —
-# awarding standing there would pay the same country on every future request.
+# un_vote.2 (which puts contributors on cooldown) iterates every country that
+# *currently carries* the contributor marker, so it sweeps up donors from
+# earlier resolutions and, for peacekeeping, every standing programme member
+# as well — awarding standing there would pay the same country on every future
+# request.
 # The pledge is made HERE instead, in un_vote.3, which un_vote.2 fires exactly
 # once per member per resolution; an event runs exactly one option, and the two
 # options that reach this effect (A and B) are mutually exclusive by their own
@@ -566,6 +570,12 @@ un_vote_apply_resolution_compliance = {
 	}
 
 	# ---- Peacekeeping/aid pledges ----
+	# A pledge is charged HERE, when it is made. un_vote.2 used to levy the
+	# costs, but it runs before un_vote.3 pledges anyone, so a pledger paid
+	# nothing until some later request passed; the peacekeeping levy also
+	# evaluated gdp in journal-entry scope (reads 'none') and the aid levy was
+	# stripped every month by the legacy cleanup. ROOT is the pledger here
+	# (un_vote.3), so the root.var: multiplier below resolves correctly.
 	# Peacekeeping contributions are skipped when the resolution was vetoed —
 	# the graduated form is observer-mission-only and doesn't levy contributors.
 	if = {
@@ -575,6 +585,19 @@ un_vote_apply_resolution_compliance = {
 			country_rank >= rank_value:major_power
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
+		# Joining the deployment enrols the pledger in the paid peacekeeping
+		# programme — the same cost un_peacekeeping_mission_button charges.
+		# A member already running it keeps its existing cost.
+		if = {
+			limit = { NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } } }
+			set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
+			je:je_united_nations ?= {
+				add_modifier = {
+					name = un_peacekeeping_contributor_cost
+					multiplier = root.var:un_peacekeeping_expense_cached
+				}
+			}
+		}
 		if = {
 			limit = { NOT = { has_variable = un_peacekeeping_contribution_count } }
 			set_variable = { name = un_peacekeeping_contribution_count value = 0 }
@@ -589,6 +612,13 @@ un_vote_apply_resolution_compliance = {
 		}
 		add_modifier = {
 			name = un_humanitarian_aid_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# The pledge's cost runs as long as the aid modifier it pays for.
+		add_modifier = {
+			name = un_humanitarian_aid_cost
+			multiplier = un_program_expense_value
 			days = long_modifier_time
 			is_decaying = yes
 		}

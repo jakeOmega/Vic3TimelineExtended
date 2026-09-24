@@ -380,10 +380,16 @@ un_events.4 = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 		country_rank >= rank_value:major_power
+		# A host that is not our own enemy and has no peacekeepers yet. The
+		# host carries un_peacekeeping_welcomed/resented_modifier (un_events.102);
+		# un_peacekeeping_deployed_modifier sits on the CONTRIBUTOR, so testing
+		# it here never excluded anyone. Keep in step with the immediate below.
 		any_country = {
 			NOT = { this = ROOT }
 			is_at_war = yes
-			NOT = { has_modifier = un_peacekeeping_deployed_modifier }
+			NOT = { has_war_with = ROOT }
+			NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
+			NOT = { has_modifier = un_peacekeeping_resented_modifier }
 		}
 	}
 
@@ -392,7 +398,9 @@ un_events.4 = {
 			limit = {
 				NOT = { this = ROOT }
 				is_at_war = yes
-				NOT = { has_modifier = un_peacekeeping_deployed_modifier }
+				NOT = { has_war_with = ROOT }
+				NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
+				NOT = { has_modifier = un_peacekeeping_resented_modifier }
 			}
 			save_scope_as = peacekeeping_target
 		}
@@ -499,6 +507,10 @@ un_events.5 = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_modifier = un_sanctions_enforcer_modifier
 		NOT = { has_modifier = un_sanctions_enforcement_modifier }
+		# A regime must actually be in force. The enforcer modifier outlives a
+		# target that accepted its censure (no target modifier is applied) or
+		# that no longer exists, and every option below acts on the target.
+		any_country = { has_modifier = un_sanctions_target_modifier }
 	}
 
 	immediate = {
@@ -770,10 +782,14 @@ un_events.7 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		# GDP-scaled expense
+		# GDP-scaled expense, for as long as the aid modifier above runs. It is
+		# country-scoped (an event, not a journal-entry button), so the named
+		# script value reads this country's gdp on every re-evaluation.
 		add_modifier = {
 			name = un_humanitarian_aid_cost
 			multiplier = un_program_expense_value
+			days = normal_modifier_time
+			is_decaying = yes
 		}
 		custom_tooltip = un_authority_change_plus_3
 		change_global_variable = { name = un_authority add = 3 }

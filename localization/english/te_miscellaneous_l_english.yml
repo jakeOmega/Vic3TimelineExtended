@@ -3192,6 +3192,7 @@
  un_sanctions_enforcer_modifier:0 "Sanctions Enforcer"
  un_sanctions_partial_modifier:0 "Partial Sanctions Compliance"
  un_sanctions_target_modifier:0 "Under [concept_un_sanctions]"
+ un_sanctions_voluntary_target_modifier:0 "Under Voluntary [concept_un_sanctions]"
  un_secure_commitment_action:0 "Seek a Vote Commitment"
  un_secure_commitment_action_action_name:0 "A request for a vote in the [concept_un_general_assembly]"
  un_secure_commitment_action_action_propose_name:0 "Ask them to vote with us"

@@ -3493,6 +3493,18 @@ un_sanctions_partial_modifier = {
 	state_trade_advantage_mult = -0.02
 }
 
+# The TARGET of a sanctions resolution that passed but was vetoed: members apply
+# voluntary measures only. About a third of un_sanctions_target_modifier.
+# (un_sanctions_partial_modifier above is the ENFORCER's token-compliance
+# option in un_events.5 and used to be applied here too, which handed the
+# sanctioned country +2% leverage.)
+un_sanctions_voluntary_target_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_influence_mult = -0.03
+	country_prestige_mult = -0.02
+	state_trade_advantage_mult = -0.05
+}
+
 un_sanctions_busting_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_infamy_decay_mult = -0.15

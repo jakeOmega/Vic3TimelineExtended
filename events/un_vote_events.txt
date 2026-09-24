@@ -2237,18 +2237,17 @@ un_vote.2 = {
 						}
 					}
 				}
-				# Apply costs to all countries that pledged contributions
+				# Contributors already carry their programme cost (charged by
+				# un_peacekeeping_mission_button, or at pledge time in
+				# un_vote_apply_resolution_compliance); the deployment only
+				# puts them on cooldown. This block used to strip that cost and
+				# re-add it with a multiplier that read gdp in journal-entry
+				# scope ('none'), from a loop whose ROOT is another country.
 				hidden_effect = {
 					every_country = {
 						limit = {
 							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 						}
-						# Remove old cost to re-apply with updated count-based scaling
-						je:je_united_nations ?= { if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost } }
-						je:je_united_nations ?= { add_modifier = {
-								name = un_peacekeeping_contributor_cost
-								multiplier = un_peacekeeping_total_expense_value
-							} }
 						add_modifier = {
 							name = un_peacekeeping_cooldown
 							days = long_modifier_time
@@ -2301,28 +2300,20 @@ un_vote.2 = {
 						}
 					}
 				}
-				# Apply costs to all countries that pledged aid
-				hidden_effect = {
-					every_country = {
-						limit = { has_modifier = un_humanitarian_aid_modifier }
-						# Remove old cost to re-apply with updated count-based scaling
-						if = { limit = { has_modifier = un_humanitarian_aid_cost } remove_modifier = un_humanitarian_aid_cost }
-						add_modifier = {
-							name = un_humanitarian_aid_cost
-							multiplier = un_aid_total_expense_value
-							days = long_modifier_time
-							is_decaying = yes
-						}
-					}
-				}
+				# No levy here: each donor is charged when it pledges, in
+				# un_vote_apply_resolution_compliance (un_vote.3). Levying
+				# every current aid-modifier holder at this point charged
+				# donors from earlier resolutions again, with a multiplier
+				# that grew with their lifetime pledge count.
 			}
 
 			# ---- Sanctions: Apply sanctions to the target country ----
 			# If the target voted to accept the resolution, they already bear
 			# un_self_corrected_modifier; skip un_sanctions_target_modifier so
 			# the player isn't double-penalized.
-			# Vetoed: voluntary partial sanctions — apply un_sanctions_partial_modifier
-			# to the target instead of the full sanctions package.
+			# Vetoed: voluntary partial sanctions — apply
+			# un_sanctions_voluntary_target_modifier to the target instead of the
+			# full sanctions package, for five years.
 			if = {
 				limit = {
 					scope:un_resolution ?= { has_tag = un_topic_sanctions }
@@ -2363,7 +2354,11 @@ un_vote.2 = {
 					scope:un_vote_target = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
-							add_modifier = { name = un_sanctions_partial_modifier }
+							add_modifier = {
+								name = un_sanctions_voluntary_target_modifier
+								days = normal_modifier_time
+								is_decaying = yes
+							}
 							custom_tooltip = {
 								text = un_standing_sanctioned_partial_tt
 								un_standing_loss = { AMOUNT = un_standing_sanctioned_partial_loss REASON = 25 }

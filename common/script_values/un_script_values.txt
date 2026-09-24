@@ -430,30 +430,6 @@ un_program_expense_value = {
 	divide = 52 # weekly cost
 }
 
-# Scaled expense for humanitarian aid (accounts for multiple ongoing programs)
-un_aid_total_expense_value = {
-	value = un_program_expense_value
-	if = {
-		limit = {
-			has_variable = un_aid_contribution_count
-			var:un_aid_contribution_count >= 2
-		}
-		multiply = var:un_aid_contribution_count
-	}
-}
-
-# Scaled expense for peacekeeping (accounts for multiple ongoing operations)
-un_peacekeeping_total_expense_value = {
-	value = un_program_expense_value
-	if = {
-		limit = {
-			has_variable = un_peacekeeping_contribution_count
-			var:un_peacekeeping_contribution_count >= 2
-		}
-		multiply = var:un_peacekeeping_contribution_count
-	}
-}
-
 # How many countries are currently contributing to peacekeeping
 un_peacekeeping_donor_count = {
 	value = 0
@@ -593,7 +569,7 @@ un_mandate_case_score = {
 	value = 0
 	if = { limit = { has_modifier = un_condemned_modifier } add = 40 }
 	if = { limit = { has_modifier = un_sanctions_target_modifier } add = 40 }
-	if = { limit = { has_modifier = un_sanctions_partial_modifier } add = 20 }
+	if = { limit = { has_modifier = un_sanctions_voluntary_target_modifier } add = 20 }
 	if = { limit = { has_modifier = un_non_binding_rebuke_modifier } add = 20 }
 	if = {
 		limit = { has_diplomatic_pact = { who = ROOT type = rivalry } }

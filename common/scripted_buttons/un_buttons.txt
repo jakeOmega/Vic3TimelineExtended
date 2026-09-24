@@ -237,12 +237,17 @@ un_leave_button = {
 			je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
 			je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
 			je:je_united_nations ?= { remove_modifier = un_founding_member_modifier }
-			remove_modifier = un_sanctions_target_modifier
+			# Sanctions AGAINST us stay: they are the members' measure, not a
+			# membership obligation, so walking out must not shed them. Only
+			# un_lift_sanctions_button lifts a regime. Our own enforcement ends.
 			remove_modifier = un_sanctions_enforcer_modifier
 			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
 			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
 			je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
 			je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
+			# The aid programme ends with its cost; keeping the prestige marker
+			# while dropping the bill made leaving a way to stop paying for aid.
+			remove_modifier = un_humanitarian_aid_modifier
 			remove_modifier = un_humanitarian_aid_cost
 			je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
 			je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
@@ -257,6 +262,11 @@ un_leave_button = {
 			je:je_united_nations ?= { remove_modifier = un_pandemic_cooperation_modifier }
 			je:je_united_nations ?= { remove_modifier = un_refugee_program_modifier }
 			je:je_united_nations ?= { remove_modifier = un_space_partnership_modifier }
+			# The two conventions that sit on the country rather than the journal
+			# entry. un_apply_ratified_conventions re-adds both on rejoining,
+			# exactly as it does the journal-entry ones above.
+			remove_modifier = un_law_of_sea_modifier
+			remove_modifier = un_icc_member_modifier
 			# If we host the HQ, it moves to another member and our HQ building
 			# is demolished, so the new host can build the only one
 			# (un_hq_effects.txt; the helper excludes us from the pick itself).
