@@ -1,129 +1,11 @@
-﻿# Construction-market subsystem — direct construction, the model games run
-# with free_market_construction_rule disabled (te_free_market_construction_off).
-# See docs/systems/mod_systems.md, "Free Market Construction off".
+﻿# Construction-market subsystem — values for direct construction, the model
+# games run with free_market_construction_rule disabled
+# (te_free_market_construction_off). See docs/systems/mod_systems.md,
+# "Free Market Construction off".
 #
-# Construction Sectors produce no construction good and buy nothing; each week
-# te_direct_construction_refresh_capacity adds up what they WOULD deliver and
-# the country's Construction Sites are sized to deliver exactly that many
-# points, buying the matching goods for each point actually spent. Country
-# scope unless marked otherwise.
-
-# Construction per sector level per tier: the sector PMs'
-# goods_output_construction_add in common/production_methods/extra_pms.txt.
-# Direct construction keeps the market's scale, so the same sectors deliver
-# the same construction under either rule setting. Keep in step with
-# extra_pms.txt (and the direct tiers in te_construction_market_pms.txt).
-TE_DC_POINTS_WOODEN = 1
-TE_DC_POINTS_IRON_FRAME = 2
-TE_DC_POINTS_STEEL_FRAME = 3.5
-TE_DC_POINTS_ARC_WELDED = 5
-TE_DC_POINTS_REINFORCED_CONCRETE = 6
-TE_DC_POINTS_ADVANCED = 10
-TE_DC_POINTS_NANOMATERIAL = 16
-# Barracks under the Engineering & Logistics principle
-# (pm_principle_engineering_and_logistics, extra_pms.txt)
-TE_DC_POINTS_BARRACKS_PRINCIPLE = 0.2
-
-# Building scope: how fully staffed the building is, 0-1. workforce_scaled
-# output follows the real occupancy, so read it as a value where the engine
-# allows it (extra_script_values.txt already does, `multiply = occupancy`),
-# floored at the sites' 10%-step staircase
-# (te_construction_market_employee_slots_filled) in case it reads as 0 — the
-# staircase always rounds down, so max() takes the exact figure whenever it is
-# there.
-te_direct_construction_building_staffing = {
-	value = occupancy
-	min = te_construction_market_employee_slots_filled
-	max = 1
-}
-
-# Building scope: staffed levels (level × staffing). te_direct_construction_refresh_capacity
-# sums these per sector tier and multiplies each tier by its TE_DC_POINTS_* once.
-te_direct_construction_building_staffed_levels = {
-	value = level
-	multiply = te_direct_construction_building_staffing
-}
-
-# The Construction Sector's throughput from country-level sources, as it would
-# be without te_direct_construction_sector_idle_modifier. Two uses:
-#   - the idle modifier's multiplier (var:te_dc_throughput_cancel), which
-#     cancels exactly this much so the sector buys no goods;
-#   - the capacity multiplier, so throughput bonuses and penalties move direct
-#     construction the way they move the sector's output under the market.
-# Parent groups count: bg_construction sits under bg_heavy_industry, which sits
-# under bg_manufacturing. The idle modifier's own contribution is backed out
-# through var:te_dc_throughput_cancel, the multiplier it was last applied with
-# (add_modifier results are not visible inside the effect block that applies
-# them). Economy of scale and state- or company-level throughput are per
-# building and cannot be read here; they are left out of both uses.
-te_direct_construction_throughput_factor = {
-	value = 1
-	add = modifier:building_throughput_add
-	add = modifier:building_group_bg_manufacturing_throughput_add
-	add = modifier:building_group_bg_heavy_industry_throughput_add
-	add = modifier:building_group_bg_construction_throughput_add
-	add = modifier:building_construction_sector_throughput_add
-	if = {
-		limit = { has_variable = te_dc_throughput_cancel }
-		add = var:te_dc_throughput_cancel
-	}
-	min = 0
-}
-
-# Multiplier for te_direct_construction_no_maintenance_modifier
-# (goods_input_construction_mult = -1): 1 + every other country-level
-# goods_input_construction_mult, so the country-level total lands on exactly
-# -100%. The modifier's own contribution (-var:te_dc_input_cancel) is backed
-# out the same way as above. State- and building-level sources (climate
-# damage, retooling) are not in the country total and are not cancelled.
-te_direct_construction_input_cancel_next = {
-	value = 1
-	add = modifier:goods_input_construction_mult
-	if = {
-		limit = { has_variable = te_dc_input_cancel }
-		add = var:te_dc_input_cancel
-	}
-	min = 0
-}
-
-# Multiplier for te_direct_construction_no_output_modifier
-# (goods_output_construction_mult = -1): 1 + every other country-level
-# goods_output_construction_mult, backed out the same way.
-te_direct_construction_output_cancel_next = {
-	value = 1
-	add = modifier:goods_output_construction_mult
-	if = {
-		limit = { has_variable = te_dc_output_cancel }
-		add = var:te_dc_output_cancel
-	}
-	min = 0
-}
-
-# Construction points per week. te_direct_construction_refresh_capacity leaves
-# the sectors' base-throughput points by tier in var:te_dc_cap_1 .. _7 and the
-# barracks' in var:te_dc_cap_barracks. The sectors' part is scaled by
-# var:te_dc_throughput_cancel, the factor te_direct_construction_apply_modifiers
-# stored earlier in the same pulse — not by re-reading
-# te_direct_construction_throughput_factor, which would see this pulse's new
-# variable against last pulse's modifier.
-te_direct_construction_capacity_next = {
-	value = 0
-	if = {
-		limit = {
-			has_variable = te_dc_cap_1
-			has_variable = te_dc_throughput_cancel
-		}
-		add = var:te_dc_cap_1
-		add = var:te_dc_cap_2
-		add = var:te_dc_cap_3
-		add = var:te_dc_cap_4
-		add = var:te_dc_cap_5
-		add = var:te_dc_cap_6
-		add = var:te_dc_cap_7
-		multiply = var:te_dc_throughput_cancel
-		add = var:te_dc_cap_barracks
-	}
-}
+# The rule's production methods do the construction itself (the Construction
+# Site is the buildable Construction Sector, te_construction_market_pms.txt), so
+# script only restores the law-set private share.
 
 # Private share of construction (0-100) under direct construction: the
 # economic-system law's vanilla allocation. These are the values
@@ -166,11 +48,8 @@ te_direct_construction_law_private_share = {
 	}
 }
 
-# Display: construction points the country's sectors deliver this week.
+# Display: construction points per week from every source (the Construction
+# Sites' levels, the base allocation, Engineering & Logistics barracks, ...).
 te_direct_construction_display_capacity = {
-	value = 0
-	if = {
-		limit = { has_variable = te_dc_capacity }
-		value = var:te_dc_capacity
-	}
+	value = modifier:country_construction_add
 }

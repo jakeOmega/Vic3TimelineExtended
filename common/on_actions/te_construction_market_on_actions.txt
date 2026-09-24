@@ -10,6 +10,27 @@
 #   work in a state starts or finishes.
 
 # ============================================================================
+# GAME START
+# ============================================================================
+
+# free_market_construction_rule disabled: turn the history's Construction
+# Sectors into Construction Sites (te_direct_construction_convert_sectors).
+# After the lobby, because the rule is final only then; a no-op in market
+# games. ROOT is none here, and the conversion never reads it: it only creates
+# and removes buildings and switches their methods.
+on_game_started_after_lobby = {
+	on_actions = {
+		te_construction_market_on_game_started_after_lobby
+	}
+}
+
+te_construction_market_on_game_started_after_lobby = {
+	effect = {
+		te_direct_construction_convert_sectors = yes
+	}
+}
+
+# ============================================================================
 # PULSE
 # ============================================================================
 

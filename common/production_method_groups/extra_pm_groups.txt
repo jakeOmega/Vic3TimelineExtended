@@ -637,19 +637,11 @@ INJECT:pmg_passenger_trains = {
 }
 
 # Construction Site (common/buildings/te_construction_market_site.txt). The only
-# definitions of these two groups: 13_construction.txt loads first, so a copy
-# there would lose to this one. The mode group picks which family of the base
-# group is available (see te_construction_market_pms.txt).
-pmg_te_construction_market_site_mode = {
-	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
-	ai_selection = most_productive
-
-	production_methods = {
-		pm_te_construction_mode_market
-		pm_te_construction_mode_direct
-	}
-}
-
+# definition of this group: 13_construction.txt loads first, so a copy there
+# would lose to this one. free_market_construction_rule disables one family
+# per game (te_construction_market_pms.txt): the market method in direct games,
+# the direct tiers in market games. Direct games pick among the tiers the
+# country has researched, as vanilla's Construction Sector does.
 REPLACE_OR_CREATE:pmg_base_te_construction_market_site = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
@@ -1247,9 +1239,14 @@ REPLACE_OR_CREATE:pmg_principle_artistic_expression = {
 }
 REPLACE_OR_CREATE:pmg_principle_engineering_and_logistics = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	# The _direct pair replaces the first pair when free_market_construction_rule
+	# is disabled; each setting disables the other pair
+	# (te_construction_market_pms.txt).
 	production_methods = {
 		pm_principle_engineering_and_logistics
 		pm_engineering_and_logistics_no_effect
+		pm_principle_engineering_and_logistics_direct
+		pm_engineering_and_logistics_no_effect_direct
 	}
 }
 INJECT:pmg_ownership_building_manor_house = {
@@ -1389,8 +1386,11 @@ REPLACE_OR_CREATE:pmg_maintenance = {
 	ai_selection = most_productive
 	is_hidden_when_unavailable = yes
 
+	# pm_no_maintenance: free_market_construction_rule disabled only (forced
+	# there, disabled otherwise). te_construction_market_pms.txt.
 	production_methods = {
 		pm_maintenance
+		pm_no_maintenance
 	}
 }
 

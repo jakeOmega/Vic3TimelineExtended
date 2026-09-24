@@ -3,30 +3,118 @@
 
 ############ GOVERNMENT BUILDINGS
 
-
+# The engine's construction camp (common/defines/te_construction_market_defines.txt):
+# its inputs are bought only for the construction points actually spent.
+# free_market_construction_rule decides what it is (common/game_rules/extra_game_rules.txt):
+#
+#   enabled (market)  Script places, sizes and removes one site per state with
+#                     construction under way (te_construction_market_*_effects);
+#                     each turns the construction good into points. Nobody
+#                     builds one: can_build_government is false.
+#   disabled (direct) This is the Construction Sector. The government builds and
+#                     expands it like vanilla's; each level yields its tier's
+#                     points from that tier's goods (te_construction_market_pms.txt).
+#                     Since it is the camp, the AI treats it as its construction
+#                     building, and the engine charges the goods to the treasury
+#                     or the investment pool by queue. The history's sectors are
+#                     converted to sites at game start
+#                     (te_direct_construction_convert_sectors).
+#
+# One building type serves both because the camp define cannot follow a game
+# rule, so neither can these properties:
+#   - downsizeable = yes, which direct games need: a sector whose wages are paid
+#     whether or not its points are used must be shrinkable. In a market game a
+#     player or the AI can therefore remove a site. Capacity is spread over the
+#     remaining staffed sites at each weekly pulse, and the pulse re-places a
+#     capital site if none is left (te_construction_market_ensure_site).
+#   - te_construction_market_bg: no economy of scale (as vanilla's sector), no
+#     infrastructure or urbanization, hidden from the outliner.
+#   - Throughput bonuses aimed at building_construction_sector or bg_construction
+#     do not reach it.
 te_construction_market_site = {
 	building_group = te_construction_market_bg
 	icon = "gfx/interface/icons/building_icons/construction_camp.dds"
 	levels_per_mesh = -1
-	buildable = no
-	expandable = no
-	downsizeable = no
+	buildable = yes
+	expandable = yes
+	downsizeable = yes
 	min_raise_to_hire = -1.0
-	# hiring_rate = 100.0
 	residence_points_per_level = 0
-	#economic_contribution = 0.0
-	#auto_place_buildings = yes
+	required_construction = construction_cost_very_low
+
 	production_method_groups = {
-		pmg_te_construction_market_site_mode
 		pmg_base_te_construction_market_site
+		pmg_construction_automation
+		pmg_construction_principle
 	}
-	#possible = {
-	#	this = {
-	#		#state = {
-	#			is_capital = yes
-	#		#}
-	#	}
-	#}
+
+	# Direct games only. te_cm_placing_site is raised around the market's own
+	# create_building calls (te_construction_market_place_site): since 1.13.9
+	# create_building checks some of a building's requirements (the unlocking
+	# technology, scripting_best_practices.md), and whether that includes
+	# can_build_government is unverified. The flag keeps market placement
+	# working either way.
+	can_build_government = {
+		OR = {
+			te_free_market_construction_off = yes
+			has_global_variable = te_cm_placing_site
+		}
+	}
+
+	can_build_private = {
+		always = no
+	}
+
+	# Direct games: vanilla's Construction Sector needs Urbanization. Market
+	# sites follow construction wherever it happens.
+	possible = {
+		OR = {
+			te_free_market_construction_on = yes
+			owner = {
+				has_technology_researched = urbanization
+			}
+		}
+	}
+
+	# Direct games: the market-mode Construction Sector's weighting (below). The
+	# engine's own construction planning (00_ai.txt MONEY_SPENDING_CONSTRUCTION_*,
+	# GOVERNMENT_BUILDING_STATE_POP_CONSTRUCTION_SECTOR_*) works on the camp,
+	# which in direct games is this building. Market games never build it.
+	ai_value = {
+		value = 0
+		if = {
+			limit = {
+				te_free_market_construction_off = yes
+			}
+			add = 2500
+			# Queue is long: more construction capacity is the right answer
+			if = {
+				limit = { owner = { construction_queue_num_queued_government_levels > 30 } }
+				add = 2000
+			}
+			# Queue is empty: don't keep stockpiling construction
+			if = {
+				limit = { owner = { construction_queue_num_queued_government_levels < 5 } }
+				add = -1500
+			}
+			# At war: deprioritize construction expansion (focus existing capacity on war effort)
+			if = {
+				limit = { owner = { is_at_war = yes } }
+				add = -500
+			}
+			# Active banking-cycle stress: don't add construction during a financial crunch
+			if = {
+				limit = {
+					owner = {
+						has_variable = bubble_pressure
+						var:bubble_pressure >= 60
+					}
+				}
+				add = -500
+			}
+		}
+	}
+
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_farming.dds"
 }
 
@@ -34,6 +122,11 @@ te_construction_market_site = {
 
 
 
+# Market games only: in direct games te_construction_market_site is the
+# Construction Sector, and the sectors the history places are converted to it
+# at game start (te_direct_construction_convert_sectors). Until that conversion
+# has run (te_direct_construction_converted), the history's own create_building
+# calls may place sectors in either kind of game.
 REPLACE:building_construction_sector = {
 	building_group = bg_construction
 	icon = "gfx/interface/icons/building_icons/construction_camp.dds"
@@ -50,6 +143,20 @@ REPLACE:building_construction_sector = {
 		pmg_construction_automation
 		pmg_construction_principle
 		pmg_maintenance
+	}
+
+	can_build_government = {
+		OR = {
+			te_free_market_construction_on = yes
+			NOT = { has_global_variable = te_direct_construction_converted }
+		}
+	}
+
+	can_build_private = {
+		OR = {
+			te_free_market_construction_on = yes
+			NOT = { has_global_variable = te_direct_construction_converted }
+		}
 	}
 
 	# Construction sector should generally be preferred over other equal-priority spending items.

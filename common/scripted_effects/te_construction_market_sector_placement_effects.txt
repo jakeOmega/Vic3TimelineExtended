@@ -1,4 +1,44 @@
-﻿te_construction_market_state_on_start = {
+﻿# Construction-site placement, market games only: a site follows construction
+# into each state and leaves when it is done, with a fallback in the capital.
+# In direct games the sites are the Construction Sectors, built and expanded by
+# their owner, so on_start / on_end do nothing there.
+
+# State scope. Place a level-1 Construction Site. The flag lets the site's
+# can_build_government accept this create_building in a market game (see
+# common/buildings/te_construction_market_site.txt). A caller that already
+# raised it (te_construction_market_country_update_sites) keeps it raised.
+te_construction_market_place_site = {
+	if = {
+		limit = {
+			has_global_variable = te_cm_placing_site
+		}
+		create_building = {
+			building = te_construction_market_site
+			level = 1
+		}
+	}
+	else = {
+		set_global_variable = {
+			name = te_cm_placing_site
+			value = 1
+		}
+		create_building = {
+			building = te_construction_market_site
+			level = 1
+		}
+		remove_global_variable = te_cm_placing_site
+	}
+}
+
+# Country scope, market games (te_construction_market_on_weekly_pulse). Sites
+# can be downsized, because direct games need that, so the player or the AI can
+# remove a market site. Capacity only needs one staffed site (the pulse spreads
+# the week's purchase over whichever remain), so this only restores the last one,
+# in the capital. It runs after the pulse has sized the sites: a site placed
+# before sizing would be sized unstaffed, at 10x
+# (te_construction_market_employment_adjusted_per_site). The replacement hires
+# at a rate of 1.0 and is sized at the next pulse.
+te_construction_market_ensure_site = {
 	if = {
 		limit = {
 			NOT = {
@@ -7,12 +47,31 @@
 				}
 			}
 		}
-		create_building = {
-			building = te_construction_market_site
-			level = 1
+		capital = {
+			te_construction_market_place_site = yes
 		}
-		# A new site starts in market mode; move it to direct mode at once.
-		te_direct_construction_sync_state_site_if_direct = yes
+	}
+}
+
+te_construction_market_state_on_start = {
+	if = {
+		limit = {
+			te_free_market_construction_on = yes
+		}
+		te_construction_market_state_on_start_market = yes
+	}
+}
+
+te_construction_market_state_on_start_market = {
+	if = {
+		limit = {
+			NOT = {
+				any_scope_building = {
+					is_building_type = te_construction_market_site
+				}
+			}
+		}
+		te_construction_market_place_site = yes
 	}
 
 	owner = {
@@ -46,6 +105,15 @@
 te_construction_market_state_on_end = {
 	if = {
 		limit = {
+			te_free_market_construction_on = yes
+		}
+		te_construction_market_state_on_end_market = yes
+	}
+}
+
+te_construction_market_state_on_end_market = {
+	if = {
+		limit = {
 			NOT = {
 				any_scope_building = {
 					is_under_construction = yes
@@ -70,11 +138,7 @@ te_construction_market_state_on_end = {
 				}
 			}
 			capital = {
-				create_building = {
-					building = te_construction_market_site
-					level = 1
-				}
-				te_direct_construction_sync_state_site_if_direct = yes
+				te_construction_market_place_site = yes
 			}
 
 		}

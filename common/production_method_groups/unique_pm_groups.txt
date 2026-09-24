@@ -281,8 +281,11 @@ pmg_vale_carajas_mine = {
 pmg_disney_world = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
+	# pm_disney_world_direct: free_market_construction_rule's construction-good-free
+	# twin (te_construction_market_pms.txt); each setting disables one of the two.
 	production_methods = {
 		pm_disney_world
+		pm_disney_world_direct
 	}
 }
 pmg_universal_studios_hollywood = {
@@ -449,8 +452,11 @@ pmg_generic_data_fortress = {
 pmg_generic_industrial_city = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
+	# pm_generic_industrial_city_direct: free_market_construction_rule's construction-good-free
+	# twin (te_construction_market_pms.txt); each setting disables one of the two.
 	production_methods = {
 		pm_generic_industrial_city
+		pm_generic_industrial_city_direct
 	}
 }
 pmg_generic_media_hq = {
@@ -505,8 +511,11 @@ pmg_generic_financial_center = {
 pmg_generic_monument_to_industry = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
+	# pm_generic_monument_to_industry_direct: free_market_construction_rule's construction-good-free
+	# twin (te_construction_market_pms.txt); each setting disables one of the two.
 	production_methods = {
 		pm_generic_monument_to_industry
+		pm_generic_monument_to_industry_direct
 	}
 }
 

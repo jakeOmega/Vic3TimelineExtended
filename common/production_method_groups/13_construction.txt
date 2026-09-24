@@ -12,6 +12,6 @@
 }
 
 
-# The Construction Site's groups (pmg_te_construction_market_site_mode,
-# pmg_base_te_construction_market_site) live in extra_pm_groups.txt, which loads
-# after this file: a copy here would be silently replaced.
+# The Construction Site's base group (pmg_base_te_construction_market_site)
+# lives in extra_pm_groups.txt, which loads after this file: a copy here would
+# be silently replaced.

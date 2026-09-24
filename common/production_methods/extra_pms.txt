@@ -15424,6 +15424,26 @@ pm_prefabricated_building_components = {
 		modern_management_techniques
 	}
 
+	# Any Construction Sector tier, or the Construction Site's direct tiers
+	# (free_market_construction_rule disabled): never the site's market method,
+	# whose ten laborers per level this would drive negative.
+	unlocking_production_methods = {
+		pm_wooden_buildings
+		pm_iron_frame_buildings
+		pm_steel_frame_buildings
+		pm_arc_welded_buildings
+		pm_reinforced_concrete_buildings
+		pm_advanced_construction
+		pm_nanomaterial_buildings
+		pm_te_direct_construction_wooden
+		pm_te_direct_construction_iron_frame
+		pm_te_direct_construction_steel_frame
+		pm_te_direct_construction_arc_welded
+		pm_te_direct_construction_reinforced_concrete
+		pm_te_direct_construction_advanced
+		pm_te_direct_construction_nanomaterial
+	}
+
 	building_modifiers = {
 		workforce_scaled = {
 			# Input goods
@@ -15452,6 +15472,26 @@ pm_tower_cranes = {
 
 	unlocking_technologies = {
 		modern_urban_planning
+	}
+
+	# Any Construction Sector tier, or the Construction Site's direct tiers
+	# (free_market_construction_rule disabled): never the site's market method,
+	# whose ten laborers per level this would drive negative.
+	unlocking_production_methods = {
+		pm_wooden_buildings
+		pm_iron_frame_buildings
+		pm_steel_frame_buildings
+		pm_arc_welded_buildings
+		pm_reinforced_concrete_buildings
+		pm_advanced_construction
+		pm_nanomaterial_buildings
+		pm_te_direct_construction_wooden
+		pm_te_direct_construction_iron_frame
+		pm_te_direct_construction_steel_frame
+		pm_te_direct_construction_arc_welded
+		pm_te_direct_construction_reinforced_concrete
+		pm_te_direct_construction_advanced
+		pm_te_direct_construction_nanomaterial
 	}
 
 	building_modifiers = {
@@ -15486,12 +15526,18 @@ pm_computer_aided_design = {
 		computer_aided_design
 	}
 
-	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	# Gated to base PMs that employ enough to keep employment non-negative
+	# (pm_employment_audit): those Construction Sector tiers, and their
+	# Construction Site twins (free_market_construction_rule disabled).
 	unlocking_production_methods = {
 		pm_reinforced_concrete_buildings
 		pm_arc_welded_buildings
 		pm_nanomaterial_buildings
 		pm_advanced_construction
+		pm_te_direct_construction_reinforced_concrete
+		pm_te_direct_construction_arc_welded
+		pm_te_direct_construction_nanomaterial
+		pm_te_direct_construction_advanced
 	}
 
 	building_modifiers = {
@@ -15530,12 +15576,18 @@ pm_3d_printed_buildings = {
 		additive_manufacturing
 	}
 
-	# Gated to base PMs that employ enough to keep employment non-negative (pm_employment_audit)
+	# Gated to base PMs that employ enough to keep employment non-negative
+	# (pm_employment_audit): those Construction Sector tiers, and their
+	# Construction Site twins (free_market_construction_rule disabled).
 	unlocking_production_methods = {
 		pm_reinforced_concrete_buildings
 		pm_arc_welded_buildings
 		pm_nanomaterial_buildings
 		pm_advanced_construction
+		pm_te_direct_construction_reinforced_concrete
+		pm_te_direct_construction_arc_welded
+		pm_te_direct_construction_nanomaterial
+		pm_te_direct_construction_advanced
 	}
 
 	building_modifiers = {
@@ -17068,6 +17120,26 @@ pm_rail_transport_mine_infrastructure_4 = {
 pm_construction_principle_2 = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
 	is_hidden_when_unavailable = yes
+
+	# A Construction Sector, or a Construction Site in direct mode
+	# (free_market_construction_rule disabled). Keeps the bonus off the
+	# market-mode sites, which script places one per state under construction.
+	unlocking_production_methods = {
+		pm_wooden_buildings
+		pm_iron_frame_buildings
+		pm_steel_frame_buildings
+		pm_arc_welded_buildings
+		pm_reinforced_concrete_buildings
+		pm_advanced_construction
+		pm_nanomaterial_buildings
+		pm_te_direct_construction_wooden
+		pm_te_direct_construction_iron_frame
+		pm_te_direct_construction_steel_frame
+		pm_te_direct_construction_arc_welded
+		pm_te_direct_construction_reinforced_concrete
+		pm_te_direct_construction_advanced
+		pm_te_direct_construction_nanomaterial
+	}
 
 	unlocking_principles = {
 		principle_construction_2

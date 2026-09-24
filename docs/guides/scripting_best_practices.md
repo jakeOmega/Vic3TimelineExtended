@@ -1252,16 +1252,49 @@ The building's operational PM then grants `state_building_X_max_level_add = 1` p
 
 **Megastructure buildings** (`building_space_elevator`, `building_solar_collector`, `building_orbital_battlestation`, `building_mind_upload_nexus`, `building_antimatter_facility`, `building_nanofabrication_center`, `building_consciousness_network`) use `has_max_level` because they were deliberately converted to allow company ownership while retaining on_action level gating.
 
-## There Is No Engine PM Lock — Use the Self-Reference Ratchet
+## Locking Production Methods: Game-Rule Flags Per Game, Self-Reference Ratchet Per Building
 
-There is **no** way to gate a production method on game state. PM gating is limited to
-`unlocking_technologies`, `unlocking_production_methods`, `unlocking_laws`,
-`unlocking_principles`, `unlocking_company_categories`, `unlocking_identity`,
-`disallowing_laws` and `is_hidden_when_unavailable`. PMs have **no** `possible` / `potential` /
-`available` trigger block, and there is no `unlocking_global_variables` (zero hits repo-wide) —
-so a scripted effect cannot mark a PM as chosen. Country-level gates (law / principle /
-identity) force every building of that type in the country onto one PM, so they cannot express
-a *per-building* choice.
+**Per game, a game rule can lock PMs.** A rule setting's `flag = disable_<pm_key>` makes that PM
+impossible to activate for the whole game, and `flag = force_<pm_key>` activates it and forbids
+switching away (vanilla `game_rules.md`, flags table). Vanilla's `monument_effects` rule
+(`common/game_rules/00_game_rules.txt`) is the model:
+
+```
+monument_effects = {
+    default = allow_monument_effects
+    allow_monument_effects = {                           # default: the alternatives are off
+        flag = disable_pm_monument_prestige_only
+        flag = disable_pm_monument_no_effects
+    }
+    prestige_only_monument_effects = {
+        flag = disable_pm_default_building_eiffel_tower  # the default PM is off ...
+        flag = force_pm_monument_prestige_only           # ... and its replacement forced
+    }
+}
+```
+
+Put every PM a setting can switch to in the same group as the one it replaces, and mark each
+`is_hidden_when_unavailable = yes`, so a building shows one family only (vanilla's own note at the
+top of `common/production_methods/08_monuments.txt`). A setting that leaves a choice between
+several PMs in a group only disables the others; `force_` is for a group that has exactly one PM
+per setting. The flags act on the PM key, so they reach every building whose groups list it, and
+a shared group (this mod's `pmg_maintenance` sits on 54 building types) needs only one pair. Mod
+example: `free_market_construction_rule` (`common/game_rules/extra_game_rules.txt`, methods in
+`common/production_methods/te_construction_market_pms.txt`) swaps six groups per setting and no
+script switches a PM. Two unverified details are worth watching in game: which PM the engine picks
+for a new building when the group's `is_default` PM is disabled and nothing is forced (that mod
+converts its history buildings with `activate_production_method` rather than rely on it), and
+whether a save made before a rule existed receives the default setting's flags.
+
+**Per game state, there is still no lock.** PMs have **no** `possible` / `potential` /
+`available` trigger block, and there is no `unlocking_global_variables` (zero hits repo-wide) — so
+a scripted effect cannot mark a PM as chosen. Gating is limited to `unlocking_technologies`,
+`unlocking_production_methods`, `unlocking_laws`, `unlocking_principles`,
+`unlocking_company_categories`, `unlocking_identity`, `disallowing_laws` and
+`is_hidden_when_unavailable`. Country-level gates (law / principle / identity) force every
+building of that type in the country onto one PM, so they cannot express a *per-building* choice.
+
+**Per building,** use the self-reference ratchet below.
 
 To make a per-building PM choice **permanent**, exploit the fact that
 `unlocking_production_methods` is an **OR** over its list and can reference the PM itself:
@@ -3722,6 +3755,7 @@ When debugging a calculation chain in a running game (a multi-step script-value 
   }
   ```
   The `NOT = { level = N }` guard is critical — without it, a no-op call (current level already matches target) still does remove + create, which fires all employed pops and triggers a multi-week re-hire cycle. Mod fix: `te_construction_market_set_specified_level` in `te_construction_market_build_effects.txt`, called from border-change recalcs (war end, formables, capitulation, yearly pulse) — without the guard, every recalc fired employees and tanked the country's construction.
+  **Disputed:** the engine's own `effects.log` (1.14, `create_building`) says that on an existing building "the level will be the maximum between the scripted level and the level of the existing building", not the sum. Nothing in this repo records an in-game test of either reading. The remove-then-create pattern above is right under both, so use it and don't rely on `create_building` to stack or to set a level.
 - **A modifier with `icon = ""` or no `icon` field at all floods `debug.log` with `virtualfilesystem.cpp:569 | Could not find texture due to 'VFSOpen Error:  not found'` once per UI render.** With the modifier visible in the construction panel or building UI, this can be hundreds of lines per second — enough to roll all 6 generations of `debug.log` (524KB cap each) in seconds, pushing actual signal entries (e.g. `TE_CM_DEBUG` snapshots) out of recoverability. Always specify a real icon path. Vanilla and mod both use `gfx/interface/icons/timed_modifier_icons/modifier_<noun>_<polarity>.dds` paths (e.g. `modifier_gear_positive.dds`, `modifier_coins_negative.dds`) — copy from an adjacent working modifier rather than guessing.
 
 ## Building Group Funding: `is_government_funded` Pays For All Goods Inputs
@@ -4106,9 +4140,9 @@ Three habits make it survivable:
 
 ## Gating a Mechanic on a Game Rule When It Lives in a Define, PM or Building Group
 
-A game rule is only visible to script (`has_game_rule`). Defines, building groups and production methods are static, and PMs have no rule gate (see "There Is No Engine PM Lock"). A rule that has to change what a building *does* therefore needs one of three patterns — the `free_market_construction_rule` uses all three (`docs/systems/mod_systems.md`, "Free Market Construction off"):
+A game rule reaches script through `has_game_rule`, and reaches production methods through its `disable_<pm>` / `force_<pm>` flags ("Locking Production Methods" above). Defines and building groups have no rule gate at all. `free_market_construction_rule` shows how far that goes (`docs/systems/mod_systems.md`, "Free Market Construction off"):
 
-- **Cancel with a runtime modifier.** Put a static modifier on every country while the rule is off. Anything that is a sum can be zeroed this way: goods I/O mults, throughput, subsidy bools. For a `_mult`, cancel *exactly*: multiply a `-1` modifier by `1 +` the country's other sources, backing out its own previous contribution through the variable it was applied with (`te_direct_construction_input_cancel_next`). Don't overshoot with a large negative. Nothing in this repo shows the engine floors a goods input or a building's throughput at zero, and without that floor, −2000% maintenance is negative consumption. The cancel only reaches the country modifier container; state- and building-level sources (climate, retooling) survive it.
-- **Switch the PM with a mode group.** Add a PM group of two effect-less, ungated mode PMs. Gate each real PM family on its mode through cross-group `unlocking_production_methods` (a proven pattern), and move every building with `activate_production_method` when the rule is off: both mode PMs are always available, so the call never needs to bypass `unlocking_*`, which nothing proves it can. Don't lock the mode with a self-referencing ratchet when the default PM sits on buildings in *every* game: a self-referencing default is unverified in game, and if it fails the default family goes dark for everyone. Enforce the mode from the pulse instead, in both settings. Also grep for every definition of a PM group before adding to it: a `REPLACE_OR_CREATE:` copy in a later-loading file wins silently, and the engine logs nothing when `activate_production_method` names a PM that isn't in the building's groups.
-- **Refresh from one place.** An exact cancel reads its own last contribution back (`modifier:X + var`), so run it from the pulse only, not also from border-change or setup hooks that can fire on the same day.
-- **Test the setting that did not exist before.** Write the trigger as `has_game_rule = X_disabled` and `NOT = { has_game_rule = X_disabled }`, never `has_game_rule = X_enabled`. A save made before the rule was added may set neither flag, and it should keep the behaviour it was started with.
+- **Lock the PMs with the rule's flags; don't cancel them with modifiers or switch them from script.** The rule's first version idled the market recipes with runtime modifiers (−100% throughput, exact `goods_input_*_mult` cancels) and moved buildings between PM families from the weekly pulse. It did not hold up in play: a cancel only reaches the country modifier container, so economy of scale and other building-level sources survived it and the "idle" buildings kept buying inputs; nothing was right before the first pulse; and script-translated capacity is invisible to the AI. Give each setting its own PMs with the recipe written out, in the same group as the ones they replace, and let each setting disable the other's.
+- **When a define names the building, make that building serve both settings.** `NCountry.CONSTRUCTION_CAMP_BUILDING` cannot follow a rule, so the camp (`te_construction_market_site`) is the market's converter in one setting and the buildable construction sector in the other. Its rule-dependent build permission goes in `can_build_government` / `possible` (both take `has_game_rule`), and its building properties (`downsizeable`, infrastructure, economy of scale) have to suit both settings, so check each one against the setting it was not written for. Where one setting needs a property that is risky for the other, give that one a guard: direct games need `downsizeable = yes`, so the market's weekly pulse re-places the last site if a player or the AI removes it (`te_construction_market_ensure_site`). `create_building` checks at least the unlocking technology since 1.13.9 (below); whether it also checks `can_build_government` is unverified, so script that places the building in the setting where the trigger is false raises a global flag the trigger accepts (`te_cm_placing_site`).
+- **Convert what history placed after the lobby.** A rule read during history may still change in the lobby; `on_game_started_after_lobby` (engine scope: none) runs once the rules are final. `te_direct_construction_convert_sectors` replaces the history's Construction Sectors there, and sets a global the sector's `can_build_*` read so the history's own seeding still works before it.
+- **Test the setting that did not exist before.** Write the trigger as `has_game_rule = X_disabled` and `NOT = { has_game_rule = X_disabled }`, never `has_game_rule = X_enabled`. A save made before the rule was added may set neither, and it should keep the behaviour it was started with.

@@ -3,8 +3,8 @@
 
 te_construction_market_on_weekly_pulse = {
 	# free_market_construction_rule disabled: vanilla-style direct construction
-	# (te_construction_market_direct_effects.txt). Runs for decentralized
-	# countries too; it skips their capacity itself.
+	# (te_construction_market_direct_effects.txt). The rule's production-method
+	# flags do the construction; the pulse only keeps the law-set private share.
 	if = {
 		limit = {
 			te_free_market_construction_off = yes
@@ -26,14 +26,8 @@ te_construction_market_on_weekly_pulse = {
 			}
 			te_construction_market_ai_update_buy = yes
 		}
-		# Last, after this pulse has sized the sites. Before update_data, the
-		# replacement would be sized while unstaffed: num_sites skips it and
-		# the staffing compensator gives it 10x, which it keeps once it hires
-		# (te_construction_market_employment_adjusted_per_site). Run here, it
-		# carries no capacity modifier until the next pulse, when it is
-		# staffed (both hiring rates are 1.0) and sized normally: at worst a
-		# week of reduced construction, never an inflated purchase.
-		te_construction_market_reset_direct_sites = yes
+		# Last, after the sites are sized; see the effect for why.
+		te_construction_market_ensure_site = yes
 	}
 }
 
@@ -41,17 +35,17 @@ te_construction_market_on_weekly_pulse = {
 te_construction_market_on_border_changes = {
 	if = {
 		limit = {
+			te_free_market_construction_on = yes
 			NOT = {
 				is_country_type = decentralized
 			}
 			#this = market.owner
 		}
-		# Places sites and, in a direct game, moves new ones to direct mode.
-		# Capacity and the direct modifiers are left to the weekly pulse, their
-		# one refresh site: re-running them here, right after sites are
-		# created, would size a not-yet-staffed site at 10x (see
-		# te_construction_market_employment_adjusted_per_site), and the
-		# exact-cancel modifiers read their own last contribution back.
+		# Places sites only. Capacity is left to the weekly pulse, its one
+		# refresh site: re-running it here, right after sites are created,
+		# would size a not-yet-staffed site at 10x (see
+		# te_construction_market_employment_adjusted_per_site). Direct games
+		# have nothing to place: their sites are built by their owners.
 		te_construction_market_country_update_sites = yes
 	}
 }

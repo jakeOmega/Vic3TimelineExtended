@@ -179,18 +179,64 @@ universal_aptitude_traits_rule = {
 # Market Good"). Enabled: construction is a market good; Construction Sectors
 # sell it, the government and investors buy it, Construction Sites turn it into
 # points, buildings pay construction as maintenance, and the private share
-# follows the two purchases. Disabled: vanilla-style construction; sectors
-# provide points directly, no construction good anywhere, laws set the private
-# share. Nothing reads the rule directly: ask te_free_market_construction_on /
-# _off (common/scripted_triggers/te_construction_market_triggers.txt).
+# follows the two purchases. Disabled: vanilla-style construction; the
+# Construction Site is the buildable Construction Sector and provides points
+# directly, no construction good anywhere, laws set the private share.
+#
+# The production methods of each mode are locked with vanilla's rule flags
+# (as monument_effects does in vanilla 00_game_rules.txt):
+#   disable_<pm>  the method cannot be activated at all;
+#   force_<pm>    the method is activated and cannot be switched away from.
+# Each setting disables the other mode's methods; groups with a single method
+# per mode force it. Method families: te_construction_market_pms.txt.
+#
+# Script reads the rule through te_free_market_construction_on / _off
+# (common/scripted_triggers/te_construction_market_triggers.txt), never
+# directly (has_game_rule tests the setting name; the flag named after each
+# setting follows this file's convention).
 free_market_construction_rule = {
 	default = free_market_construction_enabled
 
 	free_market_construction_enabled = {
 		flag = free_market_construction_enabled
+
+		# Construction Site: market method only
+		flag = disable_pm_te_direct_construction_wooden
+		flag = disable_pm_te_direct_construction_iron_frame
+		flag = disable_pm_te_direct_construction_steel_frame
+		flag = disable_pm_te_direct_construction_arc_welded
+		flag = disable_pm_te_direct_construction_reinforced_concrete
+		flag = disable_pm_te_direct_construction_advanced
+		flag = disable_pm_te_direct_construction_nanomaterial
+
+		# Maintenance, company and Engineering & Logistics methods keep the
+		# construction good
+		flag = disable_pm_no_maintenance
+		flag = disable_pm_disney_world_direct
+		flag = disable_pm_generic_industrial_city_direct
+		flag = disable_pm_generic_monument_to_industry_direct
+		flag = disable_pm_principle_engineering_and_logistics_direct
+		flag = disable_pm_engineering_and_logistics_no_effect_direct
 	}
 
 	free_market_construction_disabled = {
 		flag = free_market_construction_disabled
+
+		# Construction Site: direct tiers only (whichever are researched)
+		flag = disable_pm_te_construction_market_base
+
+		# No construction good anywhere
+		flag = disable_pm_maintenance
+		flag = force_pm_no_maintenance
+
+		flag = disable_pm_disney_world
+		flag = force_pm_disney_world_direct
+		flag = disable_pm_generic_industrial_city
+		flag = force_pm_generic_industrial_city_direct
+		flag = disable_pm_generic_monument_to_industry
+		flag = force_pm_generic_monument_to_industry_direct
+
+		flag = disable_pm_principle_engineering_and_logistics
+		flag = disable_pm_engineering_and_logistics_no_effect
 	}
 }
