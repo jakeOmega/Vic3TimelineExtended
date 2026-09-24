@@ -526,6 +526,32 @@ class ParserSemanticsTests(unittest.TestCase):
         self.assertEqual(split_loc_line(' k:0 " padded "'), ("k", " padded ", ""))
         self.assertIsNone(split_loc_line("l_english:"))
 
+    def test_add_localization_reads_subdirectories_but_not_replace(self):
+        # Vanilla keeps state names in english/map/, IG names in
+        # english/interest_groups/, ... — the engine reads those, so ModState
+        # must too. `replace/` is the override layer callers load last.
+        with tempfile.TemporaryDirectory() as tmp:
+            files = {
+                "a_l_english.yml": ' top:0 "Top"\n shared:0 "from a"\n',
+                "map/states_l_english.yml": ' STATE_X:0 "State X"\n',
+                "map/deeper/more_l_english.yml": ' deep:0 "Deep"\n',
+                "z_l_english.yml": ' shared:0 "from z"\n',
+                "replace/r_l_english.yml": ' top:0 "Replaced"\n',
+                "map/notes.txt": ' not_loc:0 "ignored"\n',
+            }
+            for rel, body in files.items():
+                path = os.path.join(tmp, *rel.split("/"))
+                os.makedirs(os.path.dirname(path), exist_ok=True)
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write("l_english:\n" + body)
+            ms = ModState({}, {})
+            ms.add_localization(tmp)
+            self.assertEqual(ms.localization, {
+                "top": "Top", "shared": "from z", "STATE_X": "State X", "deep": "Deep",
+            })
+            ms.add_localization(os.path.join(tmp, "replace"))
+            self.assertEqual(ms.localization["top"], "Replaced")
+
     def test_add_localization_end_to_end(self):
         text = (
             "﻿l_english:\n"

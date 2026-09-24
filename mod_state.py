@@ -91,11 +91,19 @@ def iter_script_files(dir_path):
 
 def iter_loc_files(loc_path):
     """Yield the path of every `.yml` file ModState.add_localization reads
-    from `loc_path`, in sorted name order. Not recursive: subdirectories
-    (vanilla's english/map/, english/character/, ...) are not read."""
+    from `loc_path`, in sorted name order, recursing into subdirectories the
+    way the engine does — vanilla keeps ~2,400 keys (state names, IG names,
+    character names, ...) in english/map/, english/interest_groups/,
+    english/character/, english/historical/ and english/frontend/. A `replace/`
+    subdirectory is NOT descended into: its keys override every other file's,
+    so callers load it separately, last."""
     for file_name in sorted(os.listdir(loc_path)):
-        if file_name.endswith(".yml"):
-            yield os.path.join(loc_path, file_name)
+        path = os.path.join(loc_path, file_name)
+        if os.path.isdir(path):
+            if file_name != "replace":
+                yield from iter_loc_files(path)
+        elif file_name.endswith(".yml"):
+            yield path
 
 
 # Vanilla entity types ModState loads for the mod state server, as
