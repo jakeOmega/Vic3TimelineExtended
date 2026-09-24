@@ -77,12 +77,15 @@ colonial_round_table_state_count = {
 	}
 }
 
-# Count of great powers with anti-colonial stance (set via event 14)
+# Count of great powers with anti-colonial stance (set via event 14).
+# Self-exclusion is `this = prev`, not `this = ROOT`: the bar reads these
+# through `owner.` from journal-entry scope, where ROOT is not guaranteed to be
+# the empire, while `prev` inside the iterator is the empire for every caller.
 colonial_gp_condemners_count = {
 	value = 0
 	every_country = {
 		limit = {
-			NOT = { this = ROOT }
+			NOT = { this = prev }
 			country_rank >= rank_value:great_power
 			has_variable = gp_anti_colonial_stance
 		}
@@ -95,12 +98,63 @@ colonial_gp_supporters_count = {
 	value = 0
 	every_country = {
 		limit = {
-			NOT = { this = ROOT }
+			NOT = { this = prev }
 			country_rank >= rank_value:great_power
 			has_variable = gp_pro_colonial_stance
 		}
 		add = 1
 	}
+}
+
+# Prestige-weighted versions of the two counts above. Each great power adds
+# its own prestige divided by the empire's, clamped to [0.25, 2.0]: a peer
+# great power weighs 1.0, a great power with double (or more) the empire's
+# prestige weighs 2.0, and one with a quarter (or less) weighs 0.25. `prev`
+# inside the iterator is the empire; its prestige is floored at 1 so a
+# zero-prestige empire cannot divide by zero.
+#
+# These drive the bar's four great-power terms; the plain counts above still
+# gate the tier escalations and feed the events' and buttons' AI weights.
+colonial_gp_condemnation_weight = {
+	value = 0
+	every_country = {
+		limit = {
+			NOT = { this = prev }
+			country_rank >= rank_value:great_power
+			has_variable = gp_anti_colonial_stance
+		}
+		add = {
+			value = prestige
+			divide = { value = prev.prestige min = 1 }
+			min = 0.25
+			max = 2
+		}
+	}
+}
+
+colonial_gp_support_weight = {
+	value = 0
+	every_country = {
+		limit = {
+			NOT = { this = prev }
+			country_rank >= rank_value:great_power
+			has_variable = gp_pro_colonial_stance
+		}
+		add = {
+			value = prestige
+			divide = { value = prev.prestige min = 1 }
+			min = 0.25
+			max = 2
+		}
+	}
+}
+
+# Average weight of the condemning great powers (0 when there are none).
+# Scales the flat tier escalations, so four minor-prestige condemners isolate
+# a prestigious empire less than four superpowers isolate a small one.
+colonial_gp_condemnation_mean_weight = {
+	value = colonial_gp_condemnation_weight
+	divide = { value = colonial_gp_condemners_count min = 1 }
 }
 
 # Bureaucracy cost of colonial maintenance - scaled by number of colonial states
@@ -276,22 +330,23 @@ colonial_stability_term_non_gp = {
 }
 
 # --- Great-power pressure (linear + two tier escalations) and support ---
+# Every term scales with the relative prestige of the great powers involved
+# (colonial_gp_condemnation_weight / _support_weight / _mean_weight above), so
+# the per-power figures below are what a peer great power contributes. Both
+# weights are 0 when nobody holds the stance, so no gate is needed.
 colonial_stability_term_gp_condemnation = {
-	value = 0
-	if = {
-		limit = { colonial_gp_condemners_count > 0 }
-		add = {
-			value = colonial_gp_condemners_count
-			multiply = -0.6
-		}
-	}
+	value = colonial_gp_condemnation_weight
+	multiply = -0.6
 }
 
 colonial_stability_term_gp_high_pressure = {
 	value = 0
 	if = {
 		limit = { colonial_gp_condemners_count >= 4 }
-		add = -1.0
+		add = {
+			value = colonial_gp_condemnation_mean_weight
+			multiply = -1.0
+		}
 	}
 }
 
@@ -299,19 +354,16 @@ colonial_stability_term_gp_extreme_pressure = {
 	value = 0
 	if = {
 		limit = { colonial_gp_condemners_count >= 6 }
-		add = -2.0
+		add = {
+			value = colonial_gp_condemnation_mean_weight
+			multiply = -2.0
+		}
 	}
 }
 
 colonial_stability_term_gp_support = {
-	value = 0
-	if = {
-		limit = { colonial_gp_supporters_count > 0 }
-		add = {
-			value = colonial_gp_supporters_count
-			multiply = 0.3
-		}
-	}
+	value = colonial_gp_support_weight
+	multiply = 0.3
 }
 
 # --- Active programme effectiveness (aggregated modifiers; see
@@ -430,7 +482,7 @@ colonial_stability_drift_rank = {
 	add = colonial_stability_term_non_gp
 }
 
-# Iterates every_country twice -- snapshotted.
+# Iterates every_country (counts and prestige weights) -- snapshotted.
 colonial_stability_drift_gp = {
 	value = colonial_stability_term_gp_condemnation
 	add = colonial_stability_term_gp_high_pressure

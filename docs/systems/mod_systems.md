@@ -1132,10 +1132,10 @@ To retune a term, change only its leaf. To add one: add a leaf, add it to its gr
 | `_overreach` | overreach | `colonial_overreach_ratio > 0` | ratio × **-0.4** | `colonial_overreach_tt` |
 | `_gp_rank` | rank | great power | **+0.3** | `colonial_gp_rank_bonus_tt` |
 | `_non_gp` | rank | not a great power | **-0.5** | `colonial_non_gp_penalty_tt` |
-| `_gp_condemnation` | gp | condemners > 0 | count × **-0.6** | `colonial_gp_condemnation_tt` |
-| `_gp_high_pressure` | gp | condemners ≥ 4 | **-1.0** | `colonial_gp_high_pressure_tt` |
-| `_gp_extreme_pressure` | gp | condemners ≥ 6 | **-2.0** | `colonial_gp_extreme_pressure_tt` |
-| `_gp_support` | gp | supporters > 0 | count × **+0.3** | `colonial_gp_support_tt` |
+| `_gp_condemnation` | gp | — (0 with no condemners) | `colonial_gp_condemnation_weight` × **-0.6** | `colonial_gp_condemnation_tt` |
+| `_gp_high_pressure` | gp | condemners ≥ 4 | `colonial_gp_condemnation_mean_weight` × **-1.0** | `colonial_gp_high_pressure_tt` |
+| `_gp_extreme_pressure` | gp | condemners ≥ 6 | `colonial_gp_condemnation_mean_weight` × **-2.0** | `colonial_gp_extreme_pressure_tt` |
+| `_gp_support` | gp | — (0 with no supporters) | `colonial_gp_support_weight` × **+0.3** | `colonial_gp_support_tt` |
 | `_garrison` | policies | Garrison active | `modifier:country_colonial_garrison_effectiveness_add` | `colonial_garrison_aggregate_tt` |
 | `_assim` | policies | Assimilation active | `modifier:country_colonial_assim_effectiveness_add` | `colonial_assim_aggregate_tt` |
 | `_invest` | policies | Investment active | `modifier:country_colonial_invest_effectiveness_add` | `colonial_invest_aggregate_tt` |
@@ -1144,6 +1144,8 @@ To retune a term, change only its leaf. To add one: add a leaf, add it to its gr
 | `_war` | domestic | at war | **-0.5** | `colonial_war_penalty_tt` |
 | `_revolution` | domestic | revolution | **-1.0** | `colonial_revolution_penalty_tt` |
 | `_turmoil` | domestic | `country_turmoil > 0.05` | turmoil × **-2.0** | `colonial_turmoil_penalty_tt` |
+
+**Great-power terms scale with relative prestige.** Each condemning or supporting great power is weighted by its prestige divided by the empire's (floored at 1), clamped to **[0.25, 2.0]** — `colonial_gp_condemnation_weight` / `colonial_gp_support_weight` sum those weights, and `colonial_gp_condemnation_mean_weight` (weight ÷ condemner count) scales the two tier escalations, whose *gates* stay on the plain `colonial_gp_condemners_count`. A peer great power therefore contributes the table's figure (-0.6 / +0.3), one with double the empire's prestige or more contributes twice that, and one with a quarter or less contributes a quarter. Net effect: the most prestigious empires shrug off condemnation from lesser powers, while small colonial holders (Portugal, Belgium, the Netherlands) feel superpower condemnation at up to -1.2/month each. The event and button AI weights keyed on `colonial_gp_condemners_count >= N` are unchanged — they count powers, not pressure.
 
 **Contributions that are not rows above** reach the bar through `country_colonial_stability_drift_add` (the `_laws` leaf) and surface inside that line's own `GetValueWithBreakdownFor` breakdown: every contributing law (Colonial Affairs, Minority Rights, Citizenship, Distribution of Power, Free Speech, Internal Security), the era techs (`globalization` **-1.5**/mo, `knowledge_economy` **-0.75**/mo), and the timed `colonial_stability_positive_event` / `_negative_event` modifiers. Programme effectiveness likewise aggregates a `base_values` baseline plus per-law contributions.
 

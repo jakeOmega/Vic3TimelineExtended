@@ -179,7 +179,8 @@ colonial_empire_refresh_display = {
 		# --- The three drift groups that iterate ---------------------------
 		# Snapshotted because the widget re-evaluates every frame:
 		#   overreach  -> walks every state twice (colonial + metropole counts)
-		#   gp         -> walks every_country twice (condemners + supporters)
+		#   gp         -> walks every_country (condemner / supporter counts and
+		#                 prestige weights)
 		#   acceptance -> walks every state x every pop
 		# The other six groups are read live; see the header.
 		set_variable = { name = colonial_empire_d_overreach value = colonial_stability_drift_overreach }

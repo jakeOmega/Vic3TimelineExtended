@@ -186,6 +186,12 @@ colonial_empire_pressure_sgui = {
 			}
 			custom_tooltip = je_colonial_empire_pressure_quiet_tt
 		}
+		# One line above the whole list (gotcha #18 is about per-group headers;
+		# this one describes every entry): each entry below shows its power's
+		# prestige, and this line shows ours and how the two combine.
+		else = {
+			custom_tooltip = je_colonial_empire_pressure_scaling_tt
+		}
 
 		every_country = {
 			limit = {
