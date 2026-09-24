@@ -6,16 +6,25 @@
 # investment pool according to which queue spends them. Two families of
 # methods share its base group, and a mode group picks the family.
 #
-# MODE (pmg_te_construction_market_site_mode) — a one-way ratchet, the pattern
-# documented in docs/guides/scripting_best_practices.md ("There Is No Engine
-# PM Lock"):
-#   pm_te_construction_mode_market  unlocks on { itself }
-#   pm_te_construction_mode_direct  unlocks on { market, itself }
-# A new site starts in market mode. Games with free_market_construction_rule
-# disabled move every site to direct mode with activate_production_method
-# (te_direct_construction_sync_site_pms), and market mode is then unreachable.
-# In a market game, a site someone moves to direct mode by hand is removed and
-# re-created by the weekly pulse (te_construction_market_reset_direct_sites).
+# MODE (pmg_te_construction_market_site_mode): two effect-less PMs, both always
+# available. Each family in the base group is gated on its mode through
+# cross-group unlocking_production_methods, the pattern this repo already uses
+# widely (e.g. pm_computer_aided_design). There is deliberately no self-
+# referencing ratchet: pm_te_construction_market_base sits on every site in
+# every game, and a self-referencing default is unverified in game
+# (scripting_best_practices.md, "There Is No Engine PM Lock"). Script enforces
+# the mode instead:
+#   - direct games (free_market_construction_rule disabled) move every site to
+#     direct mode with activate_production_method: country-wide each weekly
+#     pulse, and per state straight after a site is placed
+#     (te_direct_construction_sync_site_pms / _sync_state_site_if_direct);
+#   - market games replace, at the start of each weekly pulse, any site someone
+#     moved to direct mode by hand (te_construction_market_reset_direct_sites).
+#     Replacing avoids the retooling tax a switch back would charge.
+# A site flipped back to market mode in a direct game is switched again at the
+# next pulse; until then its market method asks for construction good that
+# nobody sells (the retooling tax sits outside the country-level cancel), so
+# the flip earns nothing.
 #
 # BASE (pmg_base_te_construction_market_site):
 #   pm_te_construction_market_base    market mode: 1 construction good -> 1 point
@@ -33,21 +42,10 @@
 pm_te_construction_mode_market = {
 	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
 	is_default = yes
-	is_hidden_when_unavailable = yes
-
-	unlocking_production_methods = {
-		pm_te_construction_mode_market
-	}
 }
 
 pm_te_construction_mode_direct = {
 	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
-	is_hidden_when_unavailable = yes
-
-	unlocking_production_methods = {
-		pm_te_construction_mode_market
-		pm_te_construction_mode_direct
-	}
 }
 
 pm_te_construction_market_base = {

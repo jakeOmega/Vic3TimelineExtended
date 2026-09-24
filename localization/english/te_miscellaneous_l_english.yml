@@ -2871,6 +2871,7 @@
  te_currency_peg_target_rank_tt:0 "The anchor is a [concept_great_power] or [concept_major_power], or owns the pegging country's [concept_market] — and the pegging country is not already in a common currency or on a currency board"
  te_direct_construction_modifier:0 "Direct Construction"
  te_direct_construction_no_maintenance_modifier:0 "No Construction Maintenance"
+ te_direct_construction_no_output_modifier:0 "No Construction Good"
  te_direct_construction_sector_idle_modifier:0 "Materials Bought per Point"
  te_fx_strong:0 "Strong Currency"
  te_fx_strong_desc:0 "The exchange rate is over par. Imports are cheap and exports struggle — by one and a quarter per cent for every point of the index."

@@ -70,13 +70,10 @@ te_construction_market_country_setup = {
 	# }
 	#te_construction_market_country_update_private_share = yes
 
-	# Direct construction: modifiers, capacity, site PMs and private share from
-	# day one rather than from the first weekly pulse.
-	if = {
-		limit = {
-			te_free_market_construction_off = yes
-		}
-		te_direct_construction_on_weekly_pulse = yes
-	}
+	# Direct construction: move the site just placed to direct mode. Capacity,
+	# the direct modifiers and the private share wait for the first weekly
+	# pulse, their one refresh site (as the market's private share does); see
+	# te_construction_market_on_border_changes for why not here.
+	te_direct_construction_sync_site_pms_if_direct = yes
 }
 

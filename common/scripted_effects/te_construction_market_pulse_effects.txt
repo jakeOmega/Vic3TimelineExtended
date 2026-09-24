@@ -18,6 +18,8 @@ te_construction_market_on_weekly_pulse = {
 			}
 			#this = market.owner
 		}
+		# First, so a replaced site gets its capacity modifier in this pulse.
+		te_construction_market_reset_direct_sites = yes
 		te_construction_market_update_price_stabilizer = yes
 		te_construction_market_country_update_data = yes
 		if = {
@@ -26,7 +28,6 @@ te_construction_market_on_weekly_pulse = {
 			}
 			te_construction_market_ai_update_buy = yes
 		}
-		te_construction_market_reset_direct_sites = yes
 	}
 }
 
@@ -39,14 +40,12 @@ te_construction_market_on_border_changes = {
 			}
 			#this = market.owner
 		}
+		# Places sites and, in a direct game, moves new ones to direct mode.
+		# Capacity and the direct modifiers are left to the weekly pulse, their
+		# one refresh site: re-running them here, right after sites are
+		# created, would size a not-yet-staffed site at 10x (see
+		# te_construction_market_employment_adjusted_per_site), and the
+		# exact-cancel modifiers read their own last contribution back.
 		te_construction_market_country_update_sites = yes
-		# Direct construction: a country released or reshaped mid-week gets its
-		# modifiers, capacity and site PMs now rather than at the next pulse.
-		if = {
-			limit = {
-				te_free_market_construction_off = yes
-			}
-			te_direct_construction_on_weekly_pulse = yes
-		}
 	}
 }

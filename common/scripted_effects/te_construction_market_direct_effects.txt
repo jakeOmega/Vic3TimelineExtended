@@ -28,6 +28,16 @@ te_direct_construction_apply_modifiers = {
 	# must persist (docs/guides/scripting_best_practices.md, "Variables backing
 	# add_modifier { multiplier = ... } must persist beyond the call site").
 	set_variable = {
+		name = te_dc_output_cancel
+		value = te_direct_construction_output_cancel_next
+	}
+	remove_modifier = te_direct_construction_no_output_modifier
+	add_modifier = {
+		name = te_direct_construction_no_output_modifier
+		multiplier = var:te_dc_output_cancel
+	}
+
+	set_variable = {
 		name = te_dc_input_cancel
 		value = te_direct_construction_input_cancel_next
 	}
@@ -49,7 +59,8 @@ te_direct_construction_apply_modifiers = {
 }
 
 # Country scope. Adds up what the country's Construction Sectors (and
-# Engineering & Logistics barracks) would deliver, by sector tier, into
+# Engineering & Logistics barracks) would deliver - staffed levels per tier,
+# then × that tier's points - by sector tier, into
 # var:te_dc_cap_1 .. _7 / var:te_dc_cap_barracks; stores the total in
 # var:te_dc_capacity; and picks the site tier (var:te_dc_site_tier, 1-7) as
 # the tier delivering the most — ties go to the lower tier. Run after
@@ -72,43 +83,43 @@ te_direct_construction_refresh_capacity = {
 		if = {
 			limit = { has_active_production_method = pm_wooden_buildings }
 			owner = {
-				change_variable = { name = te_dc_cap_1 add = prev.te_direct_construction_building_points }
+				change_variable = { name = te_dc_cap_1 add = prev.te_direct_construction_building_staffed_levels }
 			}
 		}
 		else_if = {
 			limit = { has_active_production_method = pm_iron_frame_buildings }
 			owner = {
-				change_variable = { name = te_dc_cap_2 add = prev.te_direct_construction_building_points }
+				change_variable = { name = te_dc_cap_2 add = prev.te_direct_construction_building_staffed_levels }
 			}
 		}
 		else_if = {
 			limit = { has_active_production_method = pm_steel_frame_buildings }
 			owner = {
-				change_variable = { name = te_dc_cap_3 add = prev.te_direct_construction_building_points }
+				change_variable = { name = te_dc_cap_3 add = prev.te_direct_construction_building_staffed_levels }
 			}
 		}
 		else_if = {
 			limit = { has_active_production_method = pm_arc_welded_buildings }
 			owner = {
-				change_variable = { name = te_dc_cap_4 add = prev.te_direct_construction_building_points }
+				change_variable = { name = te_dc_cap_4 add = prev.te_direct_construction_building_staffed_levels }
 			}
 		}
 		else_if = {
 			limit = { has_active_production_method = pm_reinforced_concrete_buildings }
 			owner = {
-				change_variable = { name = te_dc_cap_5 add = prev.te_direct_construction_building_points }
+				change_variable = { name = te_dc_cap_5 add = prev.te_direct_construction_building_staffed_levels }
 			}
 		}
 		else_if = {
 			limit = { has_active_production_method = pm_advanced_construction }
 			owner = {
-				change_variable = { name = te_dc_cap_6 add = prev.te_direct_construction_building_points }
+				change_variable = { name = te_dc_cap_6 add = prev.te_direct_construction_building_staffed_levels }
 			}
 		}
 		else_if = {
 			limit = { has_active_production_method = pm_nanomaterial_buildings }
 			owner = {
-				change_variable = { name = te_dc_cap_7 add = prev.te_direct_construction_building_points }
+				change_variable = { name = te_dc_cap_7 add = prev.te_direct_construction_building_staffed_levels }
 			}
 		}
 	}
@@ -119,9 +130,20 @@ te_direct_construction_refresh_capacity = {
 			has_active_production_method = pm_principle_engineering_and_logistics
 		}
 		owner = {
-			change_variable = { name = te_dc_cap_barracks add = prev.te_direct_construction_barracks_points }
+			change_variable = { name = te_dc_cap_barracks add = prev.te_direct_construction_building_staffed_levels }
 		}
 	}
+
+	# Staffed levels -> points per week, at base throughput. The one place the
+	# tier-to-points table (TE_DC_POINTS_*) is applied.
+	change_variable = { name = te_dc_cap_1 multiply = TE_DC_POINTS_WOODEN }
+	change_variable = { name = te_dc_cap_2 multiply = TE_DC_POINTS_IRON_FRAME }
+	change_variable = { name = te_dc_cap_3 multiply = TE_DC_POINTS_STEEL_FRAME }
+	change_variable = { name = te_dc_cap_4 multiply = TE_DC_POINTS_ARC_WELDED }
+	change_variable = { name = te_dc_cap_5 multiply = TE_DC_POINTS_REINFORCED_CONCRETE }
+	change_variable = { name = te_dc_cap_6 multiply = TE_DC_POINTS_ADVANCED }
+	change_variable = { name = te_dc_cap_7 multiply = TE_DC_POINTS_NANOMATERIAL }
+	change_variable = { name = te_dc_cap_barracks multiply = TE_DC_POINTS_BARRACKS_PRINCIPLE }
 
 	set_variable = {
 		name = te_dc_capacity
@@ -268,8 +290,9 @@ te_direct_construction_sync_state_site_tier = {
 	}
 }
 
-# Country scope. The weekly pulse body for direct construction, also run once
-# by te_construction_market_country_setup at game start.
+# Country scope. The weekly pulse body for direct construction, and the one
+# place that refreshes the direct modifiers, capacity and site throughput.
+# Setup and border changes only place sites and sync their PMs.
 te_direct_construction_on_weekly_pulse = {
 	te_direct_construction_apply_modifiers = yes
 	if = {

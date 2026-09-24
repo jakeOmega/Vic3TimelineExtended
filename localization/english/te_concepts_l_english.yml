@@ -2211,6 +2211,7 @@
  te_construction_market_private_share_modifier_desc:0 "Adjusts the share of construction handled by the private sector versus public investment."
  te_direct_construction_modifier_desc:0 "The Free Market Construction game rule is off: $building_construction_sector$ buildings provide construction points directly instead of producing construction as a good, and the government pays their wages."
  te_direct_construction_no_maintenance_modifier_desc:0 "The Free Market Construction game rule is off: buildings do not consume construction as maintenance."
+ te_direct_construction_no_output_modifier_desc:0 "The Free Market Construction game rule is off: no building produces construction as a good, because $building_construction_sector$ buildings provide construction points directly."
  te_direct_construction_sector_idle_modifier_desc:0 "The Free Market Construction game rule is off: $building_construction_sector$ buildings buy no goods of their own. Instead, the materials for each construction point are bought when the point is spent, by the treasury or the investment pool."
  te_hist_since:0 "#lore History available since [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!"
  te_legitimacy_boost:0 "Popular Mandate Reinforced"

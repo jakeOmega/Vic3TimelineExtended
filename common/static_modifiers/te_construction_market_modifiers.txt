@@ -22,13 +22,21 @@ te_construction_market_private_share_modifier = {
 # te_direct_construction_apply_modifiers. See docs/systems/mod_systems.md,
 # "Free Market Construction off".
 
-# Unscaled. The construction good is no longer produced (Construction Sectors,
-# Engineering & Logistics barracks), and Construction Sectors - which in this
-# mode only employ - are paid for by the government, as vanilla's are.
+# Unscaled. Construction Sectors - which in this mode only employ - are paid
+# for by the government, as vanilla's are.
 te_direct_construction_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
-	goods_output_construction_mult = -1
 	country_building_construction_sector_require_subsidies_bool = yes
+}
+
+# Multiplied by var:te_dc_output_cancel = 1 + every OTHER country-level
+# goods_output_construction_mult (e.g. nuclear_crash_program_strain's -5%), so
+# the country-level total is exactly -100% and nothing produces the
+# construction good: not the idled sectors, not Engineering & Logistics
+# barracks. Exact for the same reason as the input cancel below.
+te_direct_construction_no_output_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_construction_mult = -1
 }
 
 # Multiplied by var:te_dc_input_cancel = 1 + every OTHER country-level
