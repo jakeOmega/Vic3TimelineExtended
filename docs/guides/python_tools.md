@@ -313,6 +313,40 @@ To start manually (use the venv Python so the post-load generators resolve their
 ```
 Loads in ~30 seconds (measured in a cloud container; ~60–110 s before the parser went linear-time in 2026-09), then listens on `http://127.0.0.1:8950`.
 
+### Vanilla data source: `vanilla_parsed/` or the game files
+
+ModState's vanilla half — every entity type in `mod_state.VANILLA_COMMON_DIRS` (the one list; the server's `base_game_paths` derives from it) plus the English loc dict — can come from two places:
+
+- **`vanilla_parsed/`** — the committed parse, written by `vanilla_parsed.py build`. One JSON file per entity type under `common/`, `localization_english.json`, and `manifest.json` (game version, parser fingerprint, per-type counts, size + sha256 of every source file). Loads in a couple of seconds instead of the ~30–60 s vanilla parse, and needs **no game install**, so a cloud session or CI gets the full vanilla view: every entity endpoint, `/diff`, `/localize`, and every audit that reads parsed vanilla.
+- **The game files** under `<base_game_path>/game` — parsed on every full load, as before.
+
+`VIC3_VANILLA_SOURCE` picks between them. `auto` (the default) uses `vanilla_parsed/` when it is fresh. With the game files on disk and the snapshot stale, it parses the files and warns. With no game files, it loads the snapshot even when stale and warns. It does the same when the game files are a known **older** vanilla than the snapshot, for example an out-of-date vanilla git clone as `base_game_path` in a cloud session (`/status` `vanilla_source.game_files_outdated`). Those files are then also kept away from the raw-vanilla generators below. `game_files` always parses; `vanilla_parsed` always loads the snapshot. "Fresh" means all of the following match:
+
+- the snapshot format version;
+- the parser fingerprint: a hash of `paradox_file_parser.py` and the ModState file-walk and loc-read functions, so **any edit there, comments included, stales the snapshot**;
+- the entity-type table;
+- when the game files are present, the live `rawVersion` and the source-file inventory (path + size).
+
+`/status` reports it all under `vanilla_source` (`kind`, `reason`, `freshness`, `game_files_present`, `warnings`). A stale snapshot adds a `{label: "vanilla_source", detail}` entry to every `POST /reload` `warnings` until the next full load.
+
+**Rebuild on the machine with the game** after every vanilla patch (runbook § 4) and after any change to the parser:
+
+```bash
+python3 vanilla_parsed.py check            # fast; exit 1 + reasons when stale
+python3 vanilla_parsed.py check --full     # hash every source file (catches same-size edits)
+python3 vanilla_parsed.py build            # rewrite vanilla_parsed/ (a no-op when nothing changed)
+python3 vanilla_parsed.py info             # one-line summary of the committed snapshot
+```
+
+`build --game-root <dir>` builds from any tree with the `game/...` layout, e.g. the vanilla git clone. It reads the version from the clone's HEAD subject, or you can pass `--game-version`. The output is byte-identical wherever it is built, because files load in sorted name order (`mod_state.iter_script_files`). A vanilla bump therefore shows up in `git diff vanilla_parsed/` as a line-level diff of the parsed data. `check --no-game` checks against the code only.
+
+**Without game files, some things still need them.** The snapshot holds parsed data only. With no `<base_game_path>/game/common` on disk (e.g. `VIC3_BASE_GAME=/nonexistent`):
+
+- **Skipped (reported).** With no game files, or outdated ones, the post-load chain skips `VANILLA_FILE_REGENERATORS` (`pop_needs_curves`, `apply_ideologies`, `ig_feminism`, `pm_costs`, `resources`, `gen_law_consistency`) and `generate_docs`, because they read raw vanilla text. The reload reports them in one `vanilla_files_missing` warning. Their committed outputs are left alone rather than regenerated blind. Run blind, `apply_ideologies` would empty `common/ideologies/modified.txt`.
+- **Vanilla side empty.** These return mod-only results: `/engine-docs/usage`, the vanilla callers in `/scripted-effects|triggers/<id>`, the vanilla side of `/modifier-grants`, `/engine-docs/loc-functions`, `/gui/render-*`, `/dev-docs`, `/tech-unlocks?source=vanilla`, `/duplicate-images`' vanilla hashes, and the `/validate/*?old_ref=` migration helpers. All of them scan raw files.
+
+Engine docs (`effects.log` & co.) are separate from all this and still come from Modding-Digests (`vic3_modding_digests_path`).
+
 ### Checking If the Server Is Running
 ```powershell
 Invoke-RestMethod http://localhost:8950/status

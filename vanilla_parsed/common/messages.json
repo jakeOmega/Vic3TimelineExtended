@@ -1,0 +1,9791 @@
+{
+ "peace_agreement_signed_war_leader": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"peace_agreement_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/peace.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "popup"
+   ],
+   "popup_name": [
+    "=",
+    "peace_signed_popup"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/peace_agreement\""
+   ]
+  }
+ ],
+ "peace_agreement_signed_war_participant": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"peace_agreement_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/peace.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "popup"
+   ],
+   "popup_name": [
+    "=",
+    "peace_signed_popup"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/peace_agreement\""
+   ]
+  }
+ ],
+ "self_capitulated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"capitulated_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/capitulate.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "popup"
+   ],
+   "popup_name": [
+    "=",
+    "capitulation_popup"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/capitulated\""
+   ]
+  }
+ ],
+ "ally_capitulated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"capitulated_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/capitulate.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "popup"
+   ],
+   "popup_name": [
+    "=",
+    "capitulation_popup"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/capitulated\""
+   ]
+  }
+ ],
+ "enemy_capitulated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"capitulated_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/capitulate.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "popup"
+   ],
+   "popup_name": [
+    "=",
+    "capitulation_popup"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/capitulated\""
+   ]
+  }
+ ],
+ "diplomatic_proposal_declined": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_proposal_declined_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "popup"
+   ],
+   "popup_name": [
+    "=",
+    "diplomatic_action_with_reasons_notification_popup"
+   ]
+  }
+ ],
+ "diplo_play_war_start_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_war_start_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "popup"
+   ],
+   "popup_name": [
+    "=",
+    "war_started"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Military/to_war_popup_notification\""
+   ]
+  }
+ ],
+ "acquired_technology_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"acquired_technology_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/technology.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "popup"
+   ],
+   "popup_name": [
+    "=",
+    "acquired_technology_popup"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/acquired_technology\""
+   ]
+  }
+ ],
+ "law_changed_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "law"
+   ],
+   "group": [
+    "=",
+    "\"law_changed_notification_group\""
+   ],
+   "notification_type": [
+    "=",
+    "popup"
+   ],
+   "popup_name": [
+    "=",
+    "law_changed_popup"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/law_changed\""
+   ]
+  }
+ ],
+ "amendment_timed_out": [
+  "=",
+  {
+   "type": [
+    "=",
+    "law"
+   ],
+   "group": [
+    "=",
+    "\"law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "law_notification_advance": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "law_notification_debate_success": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "law_notification_debate_fail": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "law_notification_stall": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "law_notification_setback": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "law_notification_phase_forward_1": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "law_notification_phase_forward_2": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "claim_added_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"claims_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "institution_investment_increased": [
+  "=",
+  {
+   "type": [
+    "=",
+    "institution"
+   ],
+   "group": [
+    "=",
+    "\"institution_investment_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/rank_up.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "institution_investment_decreased": [
+  "=",
+  {
+   "type": [
+    "=",
+    "institution"
+   ],
+   "group": [
+    "=",
+    "\"institution_investment_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/rank_down.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "resource_discovered": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state_region"
+   ],
+   "group": [
+    "=",
+    "\"resource_discovery_notification_group\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/resource.dds\""
+   ]
+  }
+ ],
+ "resource_depleted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state_region"
+   ],
+   "group": [
+    "=",
+    "\"resource_discovery_notification_group\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/resource.dds\""
+   ]
+  }
+ ],
+ "rank_changed_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"country_rank_changed_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/default.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/rank_changed\""
+   ]
+  }
+ ],
+ "diplomatic_action_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_action_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_proposal_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_proposal_accepted_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_start_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_start_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_back_down_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_back_down_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_back_down_involved_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_back_down_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_join_side_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_join_side_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_overlord_protects_subject_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_overlord_protects_subject_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_abandon_side_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_abandon_side_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "colony_created": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "group": [
+    "=",
+    "\"colony_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "colony_complete": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "group": [
+    "=",
+    "\"colony_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "migration_target_created": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "group": [
+    "=",
+    "\"migration_target_created_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/pops.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/migration_target\""
+   ]
+  }
+ ],
+ "country_revolution": [
+  "=",
+  {
+   "type": [
+    "=",
+    "civil_war"
+   ],
+   "group": [
+    "=",
+    "\"country_revolution_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/revolution.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/country_revolution\""
+   ]
+  }
+ ],
+ "country_secession": [
+  "=",
+  {
+   "type": [
+    "=",
+    "civil_war"
+   ],
+   "group": [
+    "=",
+    "\"country_secession_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/country_revolution\""
+   ]
+  }
+ ],
+ "parties_activated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"parties_activated_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/new_parties\""
+   ]
+  }
+ ],
+ "election_results": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"election_results_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/elections.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/election_results\""
+   ]
+  }
+ ],
+ "enactment_failed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"enactment_failed_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/country_revolution\""
+   ]
+  }
+ ],
+ "new_ruler": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"new_ruler_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "character_became_adult": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"character_became_adult_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "character_spawned_in_pool": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"character_spawned_in_pool_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "native_uprising_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"native_uprising_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/native_uprising\""
+   ]
+  }
+ ],
+ "journal_entry_completed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "journal_entry"
+   ],
+   "group": [
+    "=",
+    "\"journal_entry_completed_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/journal.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/journal_entry_completed\""
+   ]
+  }
+ ],
+ "cobelligerent_in_default_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"war_participant_in_default_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/capitulate.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "country_nationalized_building": [
+  "=",
+  {
+   "type": [
+    "=",
+    "building"
+   ],
+   "group": [
+    "=",
+    "\"country_nationalized_building_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/capitulate.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "building_destroyed_by_bombardment": [
+  "=",
+  {
+   "type": [
+    "=",
+    "building"
+   ],
+   "group": [
+    "=",
+    "\"bombardment_building_destroyed_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/commander_order_icons/bomb_shores.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "country_nationalized_building_no_compensation": [
+  "=",
+  {
+   "type": [
+    "=",
+    "building"
+   ],
+   "group": [
+    "=",
+    "\"country_nationalized_building_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/capitulate.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "fleet_defeated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"fleet_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/capitulate.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "fleet_destroyed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"fleet_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/capitulate.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "fleet_repaired": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"fleet_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/order.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "enemy_in_default_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"war_participant_in_default_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/capitulate.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "formation_could_not_find_other_formation_to_automatically_merge_into": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"formation_could_not_find_other_formation_to_automatically_merge_into_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/order.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_formed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_formation\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_disbanded_leader_left": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_formation\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_disbanded_leader_not_eligible": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_formation\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_leader_left": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_leadership\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_leader_outranked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_leadership\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_member_left": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_membership\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "power_bloc_member_kicked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_membership\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "power_bloc_principle_mandate_available": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_principles_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_principle_added": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_principles_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_principle_removed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_principles_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_principle_exchanged": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_principles_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_principle_upgraded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_principles_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "power_bloc_principle_downgraded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_principles_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "political_lobby_created_from_catalyst": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"political_lobby_created_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "political_lobby_created": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"political_lobby_created_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "political_lobby_disbanded_with_reason": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"political_lobby_disbanded_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "political_lobby_disbanded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"political_lobby_disbanded_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "foreign_political_lobby_created": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"foreign_political_lobby_created_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "foreign_political_lobby_created_from_catalyst": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"foreign_political_lobby_created_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "foreign_political_lobby_disbanded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"foreign_political_lobby_disbanded_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "foreign_political_lobby_disbanded_with_reason": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"foreign_political_lobby_disbanded_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "interest_group_joins_lobby": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"interest_group_joins_lobby_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_attitude_improved": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"country_attitude_changed_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_attitude_changed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"country_attitude_changed_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_attitude_worsened": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"country_attitude_changed_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "interest_group_leaves_lobby": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"interest_group_leaves_lobby_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "power_struggle_started_for_contender": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_struggle\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "power_struggle_started_for_leader": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_struggle\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "power_struggle_failed_for_contender": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_struggle\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "power_struggle_failed_for_leader": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_struggle\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "power_struggle_succeeded_for_contender": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_leadership\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "power_struggle_succeeded_for_looser": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_leadership\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "power_struggle_succeeded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "power_bloc"
+   ],
+   "group": [
+    "=",
+    "\"power_bloc_leadership\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "harvest_condition_started_in_country_important": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"harvest_condition_important_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/harvest_conditions.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "national_awakening_started": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"national_awakening_started_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/revolution.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "harvest_condition_started_in_country": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"harvest_condition_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/harvest_conditions.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "harvest_condition_started_in_market": [
+  "=",
+  {
+   "type": [
+    "=",
+    "market"
+   ],
+   "group": [
+    "=",
+    "\"harvest_condition_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/harvest_conditions.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "spreading_technology_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"spreading_technology_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/technology.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "heir_born_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"heir_born_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "character_died_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"character_died_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "character_retired_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"character_died_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "character_career_end_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"character_career_end_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "ig_new_leader_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"ig_new_leader_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "character_new_formation_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"character_new_formation_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "character_died_war_office_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"character_died_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "exile_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"character_exiled_notification_group\""
+   ],
+   "days": [
+    "=",
+    "28"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/revolution.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "agitator_spawned": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"agitator_spawned_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "peace_agreement_signed_non_participant": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"peace_agreement_signed_non_participant_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/peace.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_action_overlord_decrease_autonomy_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_action_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "diplomatic_action_overlord_increase_autonomy_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_action_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "diplomatic_action_subject_increase_own_autonomy_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_action_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "diplomatic_action_break_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_action_break_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_proposal_break_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_proposal_break_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_proposal_break_declined": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_proposal_break_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_proposal_third_party_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_proposal_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_proposal_third_party_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_proposal_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_proposal_third_party_break_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_proposal_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_proposal_third_party_break_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_proposal_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_proposal_third_party_declined": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_proposal_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_proposal_third_party_break_declined": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_action"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_proposal_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_pact_auto_break_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_pact"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_pact_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplomatic_pact_third_party_auto_break_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_pact"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_pact_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_start_third_party_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_start_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_war_start_third_party_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_war_start_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_subject_released_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_subject_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_subject_released_overlord_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_subject_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_swayed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"country_swayed_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "sway_offer_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"sway_offer_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "reverse_sway_offer_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"sway_offer_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "sway_offer_rejected": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"sway_offer_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "reverse_sway_offer_rejected": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"sway_offer_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "diplomatic_demand_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_demand"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_demand_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "diplomatic_demand_rejected": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_demand"
+   ],
+   "group": [
+    "=",
+    "\"diplomatic_demand_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "interest_tier_increased": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_marker"
+   ],
+   "group": [
+    "=",
+    "\"interest_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "interest_tier_decreased": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_marker"
+   ],
+   "group": [
+    "=",
+    "\"interest_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "company_prestige_goods_production_activated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "company"
+   ],
+   "group": [
+    "=",
+    "\"company_prestige_goods_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "company_prosperity_bonus_activated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "company"
+   ],
+   "group": [
+    "=",
+    "\"company_prosperity_bonus_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "company_prosperity_bonus_deactivated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "company"
+   ],
+   "group": [
+    "=",
+    "\"company_prosperity_bonus_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "ig_trait_activated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_group"
+   ],
+   "group": [
+    "=",
+    "\"ig_trait_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "ig_became_influential": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_group"
+   ],
+   "group": [
+    "=",
+    "\"ig_influence_level_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "ig_became_powerful": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_group"
+   ],
+   "group": [
+    "=",
+    "\"ig_influence_level_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "ig_no_longer_powerful": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_group"
+   ],
+   "group": [
+    "=",
+    "\"ig_influence_level_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "ig_no_longer_influential": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_group"
+   ],
+   "group": [
+    "=",
+    "\"ig_influence_level_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "ig_movement_left_in_government": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_group"
+   ],
+   "group": [
+    "=",
+    "\"ig_movement_left_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "ig_movement_left_happy": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_group"
+   ],
+   "group": [
+    "=",
+    "\"ig_movement_left_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "ig_trait_deactivated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_group"
+   ],
+   "group": [
+    "=",
+    "\"ig_trait_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "ig_resigned_government": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_group"
+   ],
+   "group": [
+    "=",
+    "\"ig_resigned_government_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "colony_complete_third_party": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "group": [
+    "=",
+    "\"colony_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "new_culture_obsession": [
+  "=",
+  {
+   "type": [
+    "=",
+    "culture"
+   ],
+   "group": [
+    "=",
+    "\"new_culture_obsession_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/goods.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "migration_target_created_other": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "group": [
+    "=",
+    "\"migration_target_created_other_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/pops.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/migration_target\""
+   ]
+  }
+ ],
+ "commander_order_invalidated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "character"
+   ],
+   "group": [
+    "=",
+    "\"commander_order_invalidated_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/order.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_conscription": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"country_conscription_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/mobilize.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "wargoal_added": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"wargoal_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "wargoal_removed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"wargoal_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "wargoal_enforced": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"wargoal_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "invasion_started": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"invasion_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "invasion_started_against_us": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"invasion_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "invasion_succeeded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"invasion_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "invasion_failed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"invasion_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "our_supply_ship_raiders_intercepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"supply_ship_raiders_intercepted_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "enemy_supply_ship_raiders_intercepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"supply_ship_raiders_intercepted_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "enemy_supply_ships_raided": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"supply_ships_raided_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "our_supply_ships_raided": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"supply_ships_raided_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "journal_entry_activated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "journal_entry"
+   ],
+   "group": [
+    "=",
+    "\"journal_entry_activation_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/journal.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "journal_entry_deactivated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "journal_entry"
+   ],
+   "group": [
+    "=",
+    "\"journal_entry_activation_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/journal.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "political_movement_formed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "political_movement"
+   ],
+   "group": [
+    "=",
+    "\"political_movement_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "political_movement_spread_from_country": [
+  "=",
+  {
+   "type": [
+    "=",
+    "political_movement"
+   ],
+   "group": [
+    "=",
+    "\"political_movement_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "political_movement_disbanded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "political_movement"
+   ],
+   "group": [
+    "=",
+    "\"political_movement_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/laws.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_owes_obligation": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"country_owes_obligation_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_owed_obligation": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"country_owed_obligation_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_owes_obligation_removed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"country_owes_obligation_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_owed_obligation_removed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"country_owed_obligation_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "obligation_owed_to_us_expired": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"obligation_expired_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "obligation_owed_by_us_expired": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"obligation_expired_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "unification_candidate_added": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"unification_candidate_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "unification_candidate_removed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"unification_candidate_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "start_supporting_unification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"unification_support_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "stop_supporting_unification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"unification_support_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "shipping_lane_formation_destination_invalidated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"shipping_lane_formation_destination_invalidated_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/order.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "formation_exiled": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"formation_travel_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "formation_returned": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"formation_travel_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "formation_travel_to_front_cancelled": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"formation_travel_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "formation_travel_station_in_hq_cancelled": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"formation_travel_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "formation_travel_deploy_to_sea_node_cancelled": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"formation_travel_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "formation_travel_deploy_to_state_cancelled": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"formation_travel_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "formation_travel_track_formation_cancelled": [
+  "=",
+  {
+   "type": [
+    "=",
+    "military_formation"
+   ],
+   "group": [
+    "=",
+    "\"formation_travel_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "interest_tier_increased_third_party": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_marker"
+   ],
+   "group": [
+    "=",
+    "\"interest_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "none"
+   ],
+   "color": [
+    "=",
+    "good"
+   ]
+  }
+ ],
+ "interest_tier_decreased_third_party": [
+  "=",
+  {
+   "type": [
+    "=",
+    "interest_marker"
+   ],
+   "group": [
+    "=",
+    "\"interest_third_party_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "none"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "diplo_play_declare_neutrality_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_declare_neutrality_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "none"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "diplo_play_subject_backstab_overlord_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "diplomatic_play"
+   ],
+   "group": [
+    "=",
+    "\"diplo_play_subject_backstab_overlord_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "price_report": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"price_report_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/goods.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "none"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "country_mobilization": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"country_mobilization_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/mobilize.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "none"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "building_built_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "building"
+   ],
+   "group": [
+    "=",
+    "\"building_built_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/building_expanded.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "none"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "building_expanded_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "building"
+   ],
+   "group": [
+    "=",
+    "\"building_expanded_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/building_expanded.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "none"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ]
+  }
+ ],
+ "treaty_entered_into_force": [
+  "=",
+  {
+   "type": [
+    "=",
+    "treaty"
+   ],
+   "group": [
+    "=",
+    "\"treaty_entered_into_force_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "good"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/diplomatic_treaties_signed_agreement\""
+   ]
+  }
+ ],
+ "country_withdrawn_from_treaty": [
+  "=",
+  {
+   "type": [
+    "=",
+    "treaty"
+   ],
+   "group": [
+    "=",
+    "\"country_withdrawn_from_treaty_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/diplomatic_treaties_revoke_negative\""
+   ]
+  }
+ ],
+ "country_broke_treaty": [
+  "=",
+  {
+   "type": [
+    "=",
+    "treaty"
+   ],
+   "group": [
+    "=",
+    "\"country_withdrawn_from_treaty_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/diplomatic_treaties_revoke_negative\""
+   ]
+  }
+ ],
+ "treaty_proposal_declined": [
+  "=",
+  {
+   "type": [
+    "=",
+    "treaty"
+   ],
+   "group": [
+    "=",
+    "\"treaty_proposal_declined_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/diplomatic_treaties_revoke_negative\""
+   ]
+  }
+ ],
+ "treaty_dissolved": [
+  "=",
+  {
+   "type": [
+    "=",
+    "treaty"
+   ],
+   "group": [
+    "=",
+    "\"treaty_dissolved_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/diplomatic_treaties_revoke_neutral\""
+   ]
+  }
+ ],
+ "treaty_article_removed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "treaty"
+   ],
+   "group": [
+    "=",
+    "\"treaty_dissolved_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "neutral"
+   ],
+   "on_created_soundeffect": [
+    "=",
+    "\"event:/SFX/UI/Alerts/Toasts/diplomatic_treaties_revoke_neutral\""
+   ]
+  }
+ ],
+ "neighbor_events_1": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "je_secret_police_research_identification_complete": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/authority.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "je_secret_police_research_identification_fail": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/authority.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "je_make_schools_secular_complete": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/bureaucracy.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "je_make_schools_secular_fail": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/bureaucracy.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "violate_sovereignty_third_party_joins": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "lowlands_land_reclamation_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "expedition_progress_average": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/mobilize.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "west_america_expedition_progress_average": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/mobilize.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "suez_survey_started": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "panama_survey_started": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "obligation_events_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "obligation_events_rejected": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "first_flight": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "ig_leader_steps_down": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "haiti_stops_paying_france": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "rival_supports_trade_unions": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "ig_leader_assassination": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "rival_comdemns_slavery": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "ig_leader_assassination_failed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "slave_revolt_1": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/revolution.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "slave_revolt_2": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/revolution.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "warlord_china_explosion_point_add": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/capitulate.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "warlord_china_explosion_point_remove": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "country_shared_plastics_tech": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/technology.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "country_shared_radio_tech": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/technology.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "imposition_demand_sent": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"on_impose_law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "imposition_started": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"on_impose_law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "imposition_deferred": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"on_impose_law_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "colonial_conflict_region_demands_refused": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "colonial_conflict_region_demands_met": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "colonial_conflict_claim_demands_refused": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "colonial_conflict_claim_demands_met": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "victoria_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "opium_wars_british_response_angry": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "opium_wars_british_response_passive": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "santa_anna_captured_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "algerian_raid": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "pebrine_spread_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/trade_route.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "revolution_pulse1_events13agitator_killed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "revolution_pulse1_events13agitator_not_killed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "revolution_pulse1_events14agitator_belatedly_killed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "revolution_pulse1_events14safehaven_very_angry": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "napoleon_iii_leaves_country": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "summoned_character_leaves_country": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "government_petition_start": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "caucasus_russian_failed_attack_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "caucasus_russian_village_burned_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "caucasus_russian_supply_convoy_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "caucasus_tribe_defection_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "caucasus_russian_soldiers_defection_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "kazakhstan_ride_of_kenesary_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "kazakhstan_cossack_patrol_attacked_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "kazakhstan_fortress_raid_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "kazakhstan_auls_slaughtered_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "kazakhstan_raid_repelled_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "central_asia_bribes_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "gran_colombia_seeking_warning": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "andean_federation_seeking_warning": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "la_plata_seeking_warning": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "gran_colombia_meddling_haiti": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "acre_dispute_success": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "acre_dispute_failure": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "aberdeen_act_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/trade_route.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "garibaldi_is_here": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "garibaldi_skedaddles": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "indochina_catholic_persecutions_begins": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "indochina_great_power_interested": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "indochina_great_power_interested2": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "fra_natural_borders_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "haiti_pays_off_debt": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "bol_salaverry_death": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "brz_brazil_coup": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "pbc_peru_bolivia_collapse": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "pbc_peru_bolivia_success": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "gco_unification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "fnd_unification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "plt_unification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "brz_isabel_accession": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "sa_culture_genesis": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "brz_cultural_unification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "brz_navy_completed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "brz_amazon_border_treaty_colombia": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/bureaucracy.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "brz_amazon_border_treaty_bolivia": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/bureaucracy.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "ita_italian_unification_intent": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "nationalism_national_agitation_occurred": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/revolution.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "nationalism_decision_agitation_occurred": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/revolution.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "sabotage_decision_agitation_occurred": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/revolution.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "swap_negotiations_success": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "swap_negotiations_fail": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "alaska_negotiations_fail": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "arranged_accident_failed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "new_balkan_league_members": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "help_from_ig": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "neg_failed_quest_toast": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "arranged_accident_failed_incrimination": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "afghanistan_assistance_request_rejected": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "afghanistan_assistance_request_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "persian_assistance_request_rejected": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "persian_assistance_request_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "ottoman_circassian_refugees_arrived": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "circassians_deported_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "ottoman_protest_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "tibet_refuses_demands": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "tibet_overlord_refuses_demands": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "expedition_is_our_new_master": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/power_bloc.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "great_game_loss_to_natives": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "tur_warned_balkan_league_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/revolution.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "sikh_wedding_diplomacy_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "mirza_salim_has_died": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "mughals_pick_own_successor": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "britain_hindustan_intervention": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "pan_encroaching_neighbor_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "eic_encroaching_pan_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "pan_encroaching_eic_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "neighbor_encroaching_pan_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "struggle_for_sovereignty_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "pack_animal_loan_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "doctrine_of_lapse_reaction_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "gandhi_leaves": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "caste_hierarchy_appears": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/bureaucracy.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "caste_hierarchy_disappears": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/bureaucracy.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "edo_system_disappears": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/bureaucracy.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "verge_of_collapse": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_clothes_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_groceries_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_furniture_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_fertilizer_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_tools_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_fish_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_meat_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "generic_coffee_prestige": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_steel_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_opium_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_small_arms_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_artillery_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_merchant_marine_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_grain_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_paper_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "prestige_goods_explosives_unlocked": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/company.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "zanzibar_2_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "zanzibar_2_player_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "je_mon_austria_alliance_fail": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "je_montenegrin_raiding_fail": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "yugoslavia_failed_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "yugoslavia_seeking_warning": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "28"
+   ]
+  }
+ ],
+ "yug_unification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "ion_proposal_rejected_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "trs_unification_rejected_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "trs_unification_accepted_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "japan_austria_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "austria_japan_message": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "hungarian_king_elected_from_our_country": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "danubian_federation_culture_angered": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "danubian_federation_culture_disqualified": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "danubian_federation_culture_angered_primary": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "danubian_federation_culture_pleased": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "danubian_federation_culture_pleased_primary": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "danubian_federation_culture_integrated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "hungary_dual_monarchy": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "filipino_mestizo_now_primary_culture": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ],
+   "days": [
+    "=",
+    "7"
+   ]
+  }
+ ],
+ "filipino_culture_genesis": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "filipino_hispanophone_culture_genesis": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "manila_cathedral_rebuilt": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/authority.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "manila_cathedral_in_ruins": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "appointed_new_governor_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "group": [
+    "=",
+    "\"new_ruler_notification_group\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "requested_new_governor_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "colonial_claim_generated": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "group": [
+    "=",
+    "\"colonial_claim_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "piet_retief_killed": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/death.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "piet_retief_forges": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "natal_ceded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "blood_river_mpande_rules_natalia_founded": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/diplomatic_play.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "morrison_incident_has_incidented": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/trade_route.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_1_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_1_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_1_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_2_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_2_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_2_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_3_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_3_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_3_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_4_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_4_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_4_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_5_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_5_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_5_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_6_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_6_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_6_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_7_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_7_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_8_a1": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_8_a2": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_event_8_a1": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_event_8_a2": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_8_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_8_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_9_a1": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_9_a2": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_9_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_9_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_10_a1": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_10_a2": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_event_10_a1": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_event_10_a2": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_10_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_11_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_11_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_12_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_12_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_12_c1": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_12_c2": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_13_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_13_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_13_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_14_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_14_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_14_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_15_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_15_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_16_a": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_16_b": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "paris_commune_automation_pulse_16_c": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/secession.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "foreign_country_supports_commune": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/revolution.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "koh_i_noor_sent": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/goods.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "koh_i_noor_not_sent": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/colonial.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "koh_i_noor_returned": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "koh_i_noor_not_returned": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "combatting_hindu_german_conspiracy": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "not_combatting_hindu_german_conspiracy": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest_group_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "besant_to_india": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "prisoner_out_of_jail": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "joins_union_of_india": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "refuses_to_join_union_of_india": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "overlord_government_reform_accepted": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "overlord_government_reform_denied": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "pope_confirms_archbishop_of_toledo": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "pope_rejects_archbishop_of_toledo": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "pope_super_rejects_archbishop_of_toledo": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "successful_coup_in_country": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "failed_coup_in_country": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "successful_orchestrated_coup_in_country": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "failed_orchestrated_coup_in_country": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "fizzled_orchestrated_coup_in_country": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "brazil_rejects_portuguese_assistance": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "brazil_accepts_portuguese_assistance": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "leopold_becomes_king_of_spain": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "no_portuguese_monarch_available": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "no_espartero_available": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "no_german_monarch_available": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "no_italian_monarch_available": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "no_french_monarch_available": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "pink_map_britain_portugal_intractable": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "pink_map_britain_accepts_with_gift": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "pink_map_britain_portugal_backs_down": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "pink_map_britain_accepts_with_favor": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "pink_map_britain_portugal_ignores": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence_bad.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "colonial_governor_cycle": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "group": [
+    "=",
+    "\"new_ruler_notification_group\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "spain_would_rather_not_appoint_a_braganca_king": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "carlist_war_carlist_terror": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/military.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "iwakura_mission_visited": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "iwakura_mission_learns_laws": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/authority.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "iwakura_mission_learns_techs": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/technology.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "ezo_tokugawa_heir_arrives": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/character.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "ezo_japan_accepts_terms": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/influence.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ]
+  }
+ ],
+ "enemy_world_market_hub_moved": [
+  "=",
+  {
+   "type": [
+    "=",
+    "state"
+   ],
+   "group": [
+    "=",
+    "\"naval_blockade_change_notification_group\""
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/trade_route.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "toast"
+   ],
+   "color": [
+    "=",
+    "bad"
+   ]
+  }
+ ],
+ "unification_notification_one_culture": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "unification_notification_three_culture": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "unification_notification_byz": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "unification_notification_ibe": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "reunification_notification": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "unification_notification_kuk": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "unification_notification_four_culture": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "unification_notification_trh": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "unification_notification_idn": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "unification_notification_ind": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "unification_notification_hre_culture": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ],
+ "unification_notification_generic": [
+  "=",
+  {
+   "type": [
+    "=",
+    "country"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/notification_icons/interest.dds\""
+   ],
+   "notification_type": [
+    "=",
+    "feed"
+   ]
+  }
+ ]
+}

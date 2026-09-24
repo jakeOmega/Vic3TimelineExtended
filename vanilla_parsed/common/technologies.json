@@ -1,0 +1,9185 @@
+{
+ "sericulture": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/sericulture.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "can_research": [
+    "=",
+    "no"
+   ],
+   "modifier": [
+    "=",
+    {
+     "building_silk_plantation_throughput_add": [
+      "=",
+      "0.25"
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "enclosure": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/enclosure.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "manufacturies": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/manufacturies.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "shaft_mining": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/shaft_mining.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure",
+     "manufacturies"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "cotton_gin": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/cotton_gin.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "modifier": [
+    "=",
+    {
+     "building_cotton_plantation_throughput_add": [
+      "=",
+      "0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "manufacturies"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "lathe": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/lathe.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "cotton_gin"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_industrial_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_resource_expansion"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "distillation": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/distillation.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "manufacturies"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "steelworking": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/steelworking.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "shaft_mining"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_industrial_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_resource_expansion"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "prospecting": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/prospecting_tech.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "shaft_mining"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "crystal_glass": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/crystal_glass.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "lathe"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "intensive_agriculture": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/intensive_agriculture.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enclosure"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_agricultural_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_plantation_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "fractional_distillation": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/fractional_distillation.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "distillation"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "canneries": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/canneries.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "lathe"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "watertube_boiler": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/watertube_boiler.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "atmospheric_engine"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "atmospheric_engine": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/atmospheric_engine.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "shaft_mining"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "country_rank": [
+           ">=",
+           "rank_value:unrecognized_major_power"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_industrial_expansion"
+             ],
+             [
+              "=",
+              "ai_strategy_resource_expansion"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "railways": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/railways.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "mechanical_tools",
+     "atmospheric_engine"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "country_rank": [
+           ">=",
+           "rank_value:unrecognized_major_power"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_industrial_expansion"
+             ],
+             [
+              "=",
+              "ai_strategy_resource_expansion"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "chemical_bleaching": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/chemical_bleaching.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "crystal_glass"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "nitroglycerin": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/nitroglycerin.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_resource_discovery_chance_mult": [
+      "=",
+      "0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "intensive_agriculture",
+     "prospecting"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "bessemer_process": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/bessemer_process.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steelworking"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_strategy": [
+          "=",
+          "ai_strategy_industrial_expansion"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "baking_powder": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/baking_powder.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "fractional_distillation"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "mechanized_workshops": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/mechanized_workshops.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "modifier": [
+    "=",
+    {
+     "building_economy_of_scale_level_cap_add": [
+      "=",
+      "10"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "canneries",
+     "mechanical_tools"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_strategy": [
+          "=",
+          "ai_strategy_industrial_expansion"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "mechanical_tools": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/mechanical_tools.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "lathe",
+     "steelworking"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "improved_fertilizer": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/improved_fertilizer.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "intensive_agriculture"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "steam_donkey": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/steam_donkey.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "intensive_agriculture"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_industrial_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_resource_expansion"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "dynamite": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/dynamite.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_resource_discovery_chance_mult": [
+      "=",
+      "0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "nitroglycerin"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "rubber_mastication": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/rubber.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "fractional_distillation",
+     "chemical_bleaching"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_industrial_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_resource_expansion"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "3"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "rotary_valve_engine": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/rotary_valve_engine.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "watertube_boiler"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "reinforced_concrete": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/reinforced_concrete.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "modifier": [
+    "=",
+    {
+     "building_construction_sector_throughput_add": [
+      "=",
+      "0.15"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "bessemer_process"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "threshing_machine": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/threshing_machine.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steam_donkey"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_agricultural_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_plantation_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pumpjacks": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/pumpjacks.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steam_donkey",
+     "dynamite"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_industrial_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_resource_expansion"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "aniline": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/aniline.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "rubber_mastication"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "open_hearth_process": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/open_hearth_process.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "bessemer_process"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "vulcanization": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/vulcanization.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "rubber_mastication"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "vacuum_canning": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/vacuum_canning.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "mechanized_workshops"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "shift_work": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/shift_work.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "modifier": [
+    "=",
+    {
+     "building_economy_of_scale_level_cap_add": [
+      "=",
+      "20"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "mechanized_workshops"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "steel_railway_cars": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/steel_railway_cars.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "railways"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "electrical_generation": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/electrical_generation.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "rotary_valve_engine"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_industrial_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_resource_expansion"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "mechanized_farming": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/mechanized_farming.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "threshing_machine"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_agricultural_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_plantation_economy"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "art_silk": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/art_silk.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "aniline"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "automatic_bottle_blowers": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/automatic_bottle_blowers.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "vulcanization"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "conveyors": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/conveyers.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "vulcanization",
+     "shift_work",
+     "electrical_generation"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "pasteurization": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/pasteurization.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "vacuum_canning",
+     "electrical_capacitors"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "electric_railway": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/electric_railway.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "electrical_capacitors",
+     "steel_railway_cars"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_industrial_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_resource_expansion"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "combustion_engine": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/combustion_engine.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "rotary_valve_engine"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_industrial_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_resource_expansion"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "pneumatic_tools": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/pneumatic_tools.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "modifier": [
+    "=",
+    {
+     "building_construction_sector_throughput_add": [
+      "=",
+      "0.1"
+     ],
+     "goods_output_hardwood_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_resource_discovery_chance_mult": [
+      "=",
+      "0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "rotary_valve_engine",
+     "reinforced_concrete"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "nitrogen_fixation": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/nitrogen_fixation.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "improved_fertilizer"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "electric_arc_process": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/electric_arc_process.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "open_hearth_process"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "steam_turbine": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/steam_turbines.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "electrical_generation"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "plastics": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/plastics.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "reinforced_concrete"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "electrical_capacitors": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/electrical_capacitors.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "electrical_generation"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "has_strategy": [
+            [
+             "=",
+             "ai_strategy_industrial_expansion"
+            ],
+            [
+             "=",
+             "ai_strategy_resource_expansion"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "radio": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/radio.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "telephone"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "telephone": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/telephone.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "shift_work",
+     "electrical_generation"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "dough_rollers": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/rollers.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "conveyors"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "flash_freezing": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/flash_freezing.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "pasteurization"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "oil_turbine": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/oil_turbines.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steam_turbine"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "arc_welding": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/arc_welding.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "electric_arc_process",
+     "pneumatic_tools"
+    ]
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_ship_group_capital_ships_construction_progress_max_add": [
+      "=",
+      "20"
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "compression_ignition": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/compression_ignition.dds\""
+   ],
+   "category": [
+    "=",
+    "production"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "combustion_engine"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "standing_army": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/standing_army.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "navigation": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/navigation.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "drydocks": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/drydock.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "navigation"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "5"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "mandatory_service": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/mandatory_service.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_conscription_rate_mult": [
+      "=",
+      "0.2"
+     ],
+     "country_general_rank_impact_mult": [
+      "=",
+      "0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "standing_army"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "gunsmithing": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/gunsmithing.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "standing_army"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "artillery": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/artillery.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "gunsmithing"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "military_drill": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/military_drill.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "unit_experience_gain_mult": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "standing_army"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "napoleonic_warfare": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/napoleonic_warfare.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "line_infantry",
+     "artillery"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_journal_entry": [
+          "=",
+          "je_sick_man_army"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "100"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "admiralty": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/admiralty.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {}
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "navigation"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "army_reserves": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/army_reserves.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_conscription_rate_mult": [
+      "=",
+      "0.2"
+     ],
+     "country_general_rank_impact_mult": [
+      "=",
+      "0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "line_infantry"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "line_infantry": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/line_infantry.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "mandatory_service",
+     "military_drill"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "paddle_steamer": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/paddle_steamer.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "ship_hull_damage_mult": [
+      "=",
+      "0.05"
+     ],
+     "ship_crew_damage_mult": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "admiralty"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "20"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "field_works": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/field_works.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "unit_army_defense_mult": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "napoleonic_warfare"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "logistics": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/logistics_tech.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_conscription_rate_mult": [
+      "=",
+      "0.2"
+     ],
+     "country_general_rank_impact_mult": [
+      "=",
+      "0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "napoleonic_warfare",
+     "army_reserves"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_unify_germany"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "8"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_journal_entry": [
+           "=",
+           "je_patagonia"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "5"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "triage": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/triage.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "logistics"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_strategy": [
+          "=",
+          "ai_strategy_unify_germany"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "8"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "shell_gun": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/shell_gun.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "artillery"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "percussion_cap": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/percussion_cap.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "gunsmithing"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "rifling": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/rifling.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "percussion_cap"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_strategy": [
+          "=",
+          "ai_strategy_unify_germany"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "8"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "general_staff": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/general_staff.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "army_reserves"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "screw_frigate": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/screw_frigate.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {}
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "paddle_steamer"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "20"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "power_of_the_purse": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/power_of_the_purse.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_admiral_rank_impact_mult": [
+      "=",
+      "0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "admiralty"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "hydraulic_cranes": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/hydraulic_cranes.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "drydocks"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "5"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "modern_nursing": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/modern_nursing.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "triage"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "enlistment_offices": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/enlistment_offices.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_conscription_rate_mult": [
+      "=",
+      "0.2"
+     ],
+     "country_general_rank_impact_mult": [
+      "=",
+      "0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "logistics"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_strategy": [
+          "=",
+          "ai_strategy_unify_germany"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "8"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "electric_telegraph": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/electrical_telegraph.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_war_support_casualties_mult": [
+      "=",
+      "-0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "logistics"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_strategy": [
+          "=",
+          "ai_strategy_unify_germany"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "8"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "military_statistics": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/military_statistics.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "military_formation_organization_gain_mult": [
+      "=",
+      "0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "electric_telegraph",
+     "general_staff"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "repeaters": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/repeaters.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "rifling"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "breech_loading_artillery": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/breech_loading_artillery.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "rifling",
+     "shell_gun"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_strategy": [
+          "=",
+          "ai_strategy_unify_germany"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "8"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "handcranked_machine_gun": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/handcranked_machine_gun.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "unit_army_defense_add": [
+      "=",
+      "5"
+     ],
+     "unit_kill_rate_add": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "repeaters",
+     "breech_loading_artillery"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "self_propelled_torpedoes": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/self_propelled_torpedoes.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "power_of_the_purse"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "monitor_tech": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/monitor_tech.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {}
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "ironclad_tech",
+     "breech_loading_artillery"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "20"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "ironclad_tech": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/ironclad_tech.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "screw_frigate"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "20"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "jeune_ecole": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/jeune_ecole.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_admiral_rank_impact_mult": [
+      "=",
+      "0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "self_propelled_torpedoes"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "floating_harbor": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/floating_harbor.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "gantry_cranes"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "5"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "gantry_cranes": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/gantry_crane.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "ship_ship_type_supply_ship_supply_capacity_mult": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "hydraulic_cranes",
+     "screw_frigate"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "5"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "trench_works": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/trench_works.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "general_staff",
+     "electric_telegraph"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "war_propaganda": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/war_propaganda.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "unit_morale_loss_mult": [
+      "=",
+      "-0.05"
+     ],
+     "state_conscription_rate_mult": [
+      "=",
+      "0.2"
+     ],
+     "country_war_support_battles_increase_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_war_support_battles_decrease_mult": [
+      "=",
+      "-0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "enlistment_offices"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "wargaming": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/wargaming.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "unit_army_offense_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_general_rank_impact_mult": [
+      "=",
+      "0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "military_statistics"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "defense_in_depth": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/defense_in_depth.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "unit_army_defense_mult": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "trench_works",
+     "handcranked_machine_gun"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "bolt_action_rifles": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/bolt_action_rifles.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "repeaters"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "automatic_machine_guns": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/machine_gun.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "handcranked_machine_gun",
+     "bolt_action_rifles"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "submarine": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/submarine.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {}
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "self_propelled_torpedoes"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "destroyer": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/destroyers.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "monitor_tech"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "pre_dreadnought_tech": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/pre_dreadnought.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "ironclad_tech"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "dreadnought_tech": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/dreadnought.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {}
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "pre_dreadnought_tech",
+     "sea_lane_strategies",
+     "concrete_dockyards",
+     "military_aviation"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "20"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "sea_lane_strategies": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/sea_lane_strategies.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_admiral_rank_impact_mult": [
+      "=",
+      "0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "jeune_ecole"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "landing_craft": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/landing_craft.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "jeune_ecole",
+     "monitor_tech"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "20"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "concrete_dockyards": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/concrete_dockyards.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    [
+     "=",
+     {
+      "ship_ship_type_supply_ship_supply_capacity_mult": [
+       "=",
+       "0.1"
+      ]
+     }
+    ],
+    [
+     "=",
+     {
+      "country_ship_group_capital_ships_construction_progress_max_add": [
+       "=",
+       "10"
+      ]
+     }
+    ]
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "floating_harbor"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "5"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "nco_training": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/nco_training.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_general_rank_impact_mult": [
+      "=",
+      "0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "wargaming",
+     "trench_works"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "chemical_warfare": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/chemical_warfare.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "automatic_machine_guns"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "stormtroopers": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/stormtroopers.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "unit_kill_rate_add": [
+      "=",
+      "0.05"
+     ],
+     "unit_combat_unit_type_trench_infantry_offense_add": [
+      "=",
+      "5"
+     ],
+     "unit_combat_unit_type_squad_infantry_offense_add": [
+      "=",
+      "5"
+     ],
+     "unit_combat_unit_type_mechanized_infantry_offense_add": [
+      "=",
+      "5"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "wargaming",
+     "trench_works"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "concrete_fortifications": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/concrete_fortifications.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "unit_army_defense_mult": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "defense_in_depth"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "mobile_armor": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/mobile_armor.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "concrete_fortifications",
+     "nco_training"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "military_aviation": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/military_aviation.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {}
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "handcranked_machine_gun"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "flamethrowers": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/flamethrowers.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "trench_works",
+     "automatic_machine_guns"
+    ]
+   ],
+   "modifier": [
+    "=",
+    {
+     "unit_kill_rate_add": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "carrier_tech": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/carrier_tech.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "dreadnought_tech"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "20"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "battleship_tech": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/battleship_tech.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "dreadnought_tech"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "navy_size": [
+          ">=",
+          "20"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "0.5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "battlefleet_tactics": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/battlefleet_tactics.dds\""
+   ],
+   "category": [
+    "=",
+    "military"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_admiral_rank_impact_mult": [
+      "=",
+      "0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "battleship_tech",
+     "sea_lane_strategies"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "urbanization": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/urbanization.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_infrastructure_from_population_add": [
+      "=",
+      "2"
+     ],
+     "state_infrastructure_from_population_max_add": [
+      "=",
+      "40"
+     ],
+     "state_building_construction_sector_max_level_add": [
+      "=",
+      "10"
+     ],
+     "country_max_weekly_construction_progress_add": [
+      "=",
+      "10"
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "urban_planning": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/urban_planning.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_infrastructure_from_population_add": [
+      "=",
+      "1"
+     ],
+     "state_infrastructure_from_population_max_add": [
+      "=",
+      "20"
+     ],
+     "state_building_construction_sector_max_level_add": [
+      "=",
+      "5"
+     ],
+     "country_max_weekly_construction_progress_add": [
+      "=",
+      "5"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "urbanization"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "rationalism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/rationalism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_schools_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "state_education_access_wealth_add": [
+      "=",
+      "0.01"
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "tech_bureaucracy": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/bureaucracy.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_police_max_investment_add": [
+      "=",
+      "2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "urbanization"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "currency_standards": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/currency_standards.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "international_trade",
+     "centralization"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_journal_entry": [
+          "=",
+          "je_sick_man_bureaucracy"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "20"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "democracy": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/democracy.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_social_security_max_investment_add": [
+      "=",
+      "2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "rationalism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "romanticism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/romanticism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_prestige_mult": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "academia"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "international_trade": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/international_trade.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "tech_bureaucracy"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "centralization": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/centralization.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_tax_capacity_add": [
+      "=",
+      "25"
+     ],
+     "country_institution_home_affairs_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "state_incorporation_speed_mult": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "tech_bureaucracy"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_journal_entry": [
+          "=",
+          "je_age_of_princes"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "20"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "corporate_charters": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/corporate_charters.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_max_companies_add": [
+      "=",
+      "1"
+     ],
+     "country_free_charters_add": [
+      "=",
+      "2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "stock_exchange"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "banking": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/banking.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_minting_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_loan_interest_rate_add": [
+      "=",
+      "-0.02"
+     ],
+     "state_max_trade_advantage_from_capacity_add": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "currency_standards"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "academia": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/academia.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_education_access_wealth_add": [
+      "=",
+      "0.005"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "rationalism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "colonization": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/colonization.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_colonial_affairs_max_investment_add": [
+      "=",
+      "2"
+     ],
+     "country_infamy_generation_against_unrecognized_mult": [
+      "=",
+      "-0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "international_relations"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "international_relations": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/international_diplomacy.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "tech_bureaucracy"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "law_enforcement": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/law_enforcement.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_police_max_investment_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "tech_bureaucracy",
+     "urban_planning"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "stock_exchange": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/stock_exchanges.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_market_access_price_impact": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "international_trade"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "medical_degrees": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/medical_degrees.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_health_system_max_investment_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "academia"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "mass_communication": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/mass_communication.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_authority_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_voting_power_mult": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "democracy"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "empiricism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_1"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/empiricism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_influence_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_diplomatic_play_maneuvers_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_institution_schools_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "state_education_access_wealth_add": [
+      "=",
+      "0.005"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "academia"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "egalitarianism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/egalitarianism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_expected_sol_from_literacy": [
+      "=",
+      "1"
+     ],
+     "country_institution_social_security_max_investment_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "democracy"
+    ]
+   ],
+   "on_researched": [
+    "=",
+    {
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "has_journal_entry": [
+          "=",
+          "je_springtime_of_the_peoples"
+         ],
+         "NOT": [
+          "=",
+          {
+           "is_involved_in_journal_entry": [
+            "=",
+            "je_springtime_of_the_peoples"
+           ]
+          }
+         ]
+        }
+       ],
+       "je:je_springtime_of_the_peoples": [
+        "?=",
+        {
+         "add_involved_country": [
+          "=",
+          "ROOT"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_progressive_agenda"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_conservative_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_reactionary_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_maintain_mandate_of_heaven"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-0.5"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "pharmaceuticals": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/pharmaceuticals.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_health_system_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "state_harvest_condition_disease_outbreak_impact_mult": [
+      "=",
+      "-0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "medical_degrees"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "modern_sewerage": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/modern_sewerage.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_infrastructure_from_population_add": [
+      "=",
+      "1"
+     ],
+     "state_infrastructure_from_population_max_add": [
+      "=",
+      "20"
+     ],
+     "state_building_construction_sector_max_level_add": [
+      "=",
+      "5"
+     ],
+     "country_max_weekly_construction_progress_add": [
+      "=",
+      "5"
+     ],
+     "state_pollution_reduction_health_mult": [
+      "=",
+      "-0.1"
+     ],
+     "state_harvest_condition_flood_impact_mult": [
+      "=",
+      "-0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "urban_planning"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "quinine": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/quinine.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_colonial_affairs_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "country_institution_health_system_max_investment_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "colonization",
+     "pharmaceuticals"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "navy_size": [
+           ">=",
+           "25"
+          ],
+          "is_country_type": [
+           "=",
+           "recognized"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_colonial_expansion"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ],
+        "if": [
+         "=",
+         {
+          "limit": [
+           "=",
+           {
+            "any_scope_state": [
+             "=",
+             {
+              "is_in_geographic_region": [
+               "=",
+               "geographic_region_africa"
+              ]
+             }
+            ]
+           }
+          ],
+          "add": [
+           "=",
+           "3"
+          ]
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "organized_sports": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/organized_sports.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_prestige_mult": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "nationalism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "central_archives": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/central_archives.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_tax_capacity_add": [
+      "=",
+      "25"
+     ],
+     "country_institution_home_affairs_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "state_incorporation_speed_mult": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "centralization"
+    ]
+   ],
+   "on_researched": [
+    "=",
+    {
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "NOT": [
+          "=",
+          {
+           "any_political_movement": [
+            "=",
+            {
+             "is_political_movement_type": [
+              "=",
+              "movement_modernizer"
+             ]
+            }
+           ]
+          }
+         ],
+         "OR": [
+          "=",
+          {
+           "AND": [
+            "=",
+            {
+             "OR": [
+              "=",
+              {
+               "is_in_geographic_region": [
+                [
+                 "=",
+                 "geographic_region_south_america"
+                ],
+                [
+                 "=",
+                 "geographic_region_central_america_old"
+                ]
+               ]
+              }
+             ],
+             "country_rank": [
+              "<=",
+              "rank_value:major_power"
+             ]
+            }
+           ],
+           "country_is_colonial_or_company": [
+            "=",
+            "yes"
+           ],
+           "is_country_type": [
+            "=",
+            "unrecognized"
+           ]
+          }
+         ],
+         "NAND": [
+          "=",
+          {
+           "has_law_or_variant": [
+            [
+             "=",
+             "law_type:law_protectionism"
+            ],
+            [
+             "=",
+             "law_type:law_compulsory_primary_school"
+            ]
+           ],
+           "OR": [
+            "=",
+            {
+             "has_law_or_variant": [
+              [
+               "=",
+               "law_type:law_interventionism"
+              ],
+              [
+               "=",
+               "law_type:law_command_economy"
+              ],
+              [
+               "=",
+               "law_type:law_laissez_faire"
+              ]
+             ]
+            }
+           ]
+          }
+         ]
+        }
+       ],
+       "create_political_movement": [
+        "=",
+        {
+         "type": [
+          "=",
+          "movement_modernizer"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "central_banking": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/central_banking.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_minting_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_loan_interest_rate_add": [
+      "=",
+      "-0.02"
+     ],
+     "state_max_trade_advantage_from_capacity_add": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "banking"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "joint_stock_companies": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/joint_stock_companies.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_max_companies_add": [
+      "=",
+      "1"
+     ],
+     "state_urbanization_per_level_mult": [
+      "=",
+      "-0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "banking",
+     "corporate_charters"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "dialectics": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/dialectics.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_schools_max_investment_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "empiricism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "psychiatry": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/psychiatry.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_influence_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_diplomatic_play_maneuvers_mult": [
+      "=",
+      "0.25"
+     ],
+     "state_bureaucracy_population_base_cost_factor_mult": [
+      "=",
+      "-0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "empiricism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "realism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/realism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_prestige_mult": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "romanticism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "nationalism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/nationalism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_authority_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_voting_power_mult": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "mass_communication",
+     "international_relations"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "country_has_primary_culture": [
+             [
+              "=",
+              "cu:north_german"
+             ],
+             [
+              "=",
+              "cu:south_german"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "country_has_primary_culture": [
+             [
+              "=",
+              "cu:north_italian"
+             ],
+             [
+              "=",
+              "cu:south_italian"
+             ]
+            ]
+           }
+          ],
+          "any_country": [
+           "=",
+           {
+            "has_journal_entry": [
+             "=",
+             "je_risorgimento"
+            ]
+           }
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "4"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "country_has_primary_culture": [
+             [
+              "=",
+              "cu:croat"
+             ],
+             [
+              "=",
+              "cu:serb"
+             ],
+             [
+              "=",
+              "cu:slovene"
+             ],
+             [
+              "=",
+              "cu:bosniak"
+             ],
+             [
+              "=",
+              "cu:hungarian"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "multiply": [
+         "=",
+         "4"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "labor_movement": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/labor_movement.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_expected_sol_from_literacy": [
+      "=",
+      "1"
+     ],
+     "country_institution_workplace_safety_max_investment_add": [
+      "=",
+      "3"
+     ],
+     "country_agitator_slots_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "mass_communication",
+     "egalitarianism"
+    ]
+   ],
+   "on_researched": [
+    "=",
+    {
+     "set_global_variable": [
+      "=",
+      "labour_movement_researched"
+     ]
+    }
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_egalitarian_agenda"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "2"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_conservative_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_reactionary_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_maintain_mandate_of_heaven"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-0.5"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "postal_savings": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_2"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/postal_savings.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_farmers_investment_pool_efficiency_mult": [
+      "=",
+      "0.15"
+     ],
+     "state_shopkeepers_investment_pool_efficiency_mult": [
+      "=",
+      "0.15"
+     ],
+     "state_bureaucrats_investment_pool_efficiency_mult": [
+      "=",
+      "0.15"
+     ],
+     "state_engineers_investment_pool_efficiency_mult": [
+      "=",
+      "0.15"
+     ],
+     "state_machinists_investment_pool_efficiency_mult": [
+      "=",
+      "0.15"
+     ],
+     "building_cash_reserves_mult": [
+      "=",
+      "0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "stock_exchange"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "human_rights": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/human_rights.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_social_security_max_investment_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "egalitarianism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_progressive_agenda"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "0.5"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_egalitarian_agenda"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_conservative_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_reactionary_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_maintain_mandate_of_heaven"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-0.5"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "feminism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/feminism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "on_researched": [
+    "=",
+    {
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "NOT": [
+          "=",
+          {
+           "has_variable": [
+            "=",
+            "feminism_researched"
+           ]
+          }
+         ]
+        }
+       ],
+       "set_variable": [
+        "=",
+        "feminism_researched"
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "liberal_and_egalitarian_amended_tt"
+         ],
+         "every_interest_group": [
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_ideology": [
+               "=",
+               "ideology:ideology_liberal"
+              ]
+             }
+            ],
+            "remove_ideology": [
+             "=",
+             "ideology_liberal"
+            ],
+            "add_ideology": [
+             "=",
+             "ideology_liberal_modern"
+            ]
+           }
+          ],
+          [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_ideology": [
+               "=",
+               "ideology:ideology_egalitarian"
+              ]
+             }
+            ],
+            "remove_ideology": [
+             "=",
+             "ideology_egalitarian"
+            ],
+            "add_ideology": [
+             "=",
+             "ideology_egalitarian_modern"
+            ]
+           }
+          ]
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_social_security_max_investment_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "human_rights"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_egalitarian_agenda"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_conservative_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_reactionary_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_maintain_mandate_of_heaven"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-0.5"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "steel_frame_buildings": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/steel_frame_buildings.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_infrastructure_from_population_add": [
+      "=",
+      "1"
+     ],
+     "state_infrastructure_from_population_max_add": [
+      "=",
+      "20"
+     ],
+     "state_building_construction_sector_max_level_add": [
+      "=",
+      "5"
+     ],
+     "country_max_weekly_construction_progress_add": [
+      "=",
+      "5"
+     ],
+     "state_harvest_condition_flood_impact_mult": [
+      "=",
+      "-0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "modern_sewerage"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "civilizing_mission": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/civilizing_mission.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_colonial_affairs_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "country_infamy_generation_against_unrecognized_mult": [
+      "=",
+      "-0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "quinine",
+     "nationalism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "navy_size": [
+           ">=",
+           "25"
+          ],
+          "is_country_type": [
+           "=",
+           "recognized"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_colonial_expansion"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "anarchism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/anarchy.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "egalitarianism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_egalitarian_agenda"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_conservative_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_reactionary_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_maintain_mandate_of_heaven"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-0.5"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "socialism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/socialism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_expected_sol_from_literacy": [
+      "=",
+      "1"
+     ],
+     "country_institution_workplace_safety_max_investment_add": [
+      "=",
+      "2"
+     ]
+    }
+   ],
+   "on_researched": [
+    "=",
+    {
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "NOT": [
+          "=",
+          {
+           "has_variable": [
+            "=",
+            "socialism_researched"
+           ]
+          }
+         ]
+        }
+       ],
+       "set_variable": [
+        "=",
+        "socialism_researched"
+       ],
+       "ig:ig_trade_unions": [
+        "?=",
+        {
+         "add_ideology": [
+          "=",
+          "ideology_socialist"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "labor_movement",
+     "dialectics"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_egalitarian_agenda"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-0.5"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_conservative_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_reactionary_agenda"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "corporatism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/corporatism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "on_researched": [
+    "=",
+    {
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "NOT": [
+           "=",
+           {
+            "has_variable": [
+             "=",
+             "corporatism_researched"
+            ]
+           }
+          ]
+         }
+        ],
+        "set_variable": [
+         "=",
+         "corporatism_researched"
+        ],
+        "ig:ig_devout": [
+         "?=",
+         {
+          "remove_ideology": [
+           "=",
+           "ideology_pious"
+          ],
+          "add_ideology": [
+           "=",
+           "ideology_corporatist"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "country_has_primary_culture": [
+             [
+              "=",
+              "cu:spanish"
+             ],
+             [
+              "=",
+              "cu:catalan"
+             ],
+             [
+              "=",
+              "cu:basque"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "custom_tooltip": [
+         "=",
+         {
+          "text": [
+           "=",
+           "carlist_amended_tt"
+          ],
+          "every_character": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_ideology": [
+               "=",
+               "ideology:ideology_carlist"
+              ],
+              "OR": [
+               "=",
+               {
+                "owner": [
+                 "?=",
+                 "ROOT"
+                ],
+                "home_country": [
+                 "?=",
+                 "ROOT"
+                ]
+               }
+              ]
+             }
+            ],
+            "set_ideology": [
+             "=",
+             "ideology:ideology_carlist_2"
+            ]
+           }
+          ],
+          "every_political_movement": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_core_ideology": [
+               "=",
+               "ideology:ideology_carlist_movement"
+              ]
+             }
+            ],
+            "set_core_ideology": [
+             "=",
+             "ideology_carlist_movement_2"
+            ]
+           }
+          ],
+          "every_interest_group": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_ideology": [
+               "=",
+               "ideology:ideology_carlist_ig"
+              ]
+             }
+            ],
+            "remove_ideology": [
+             "=",
+             "ideology_carlist_ig"
+            ],
+            "add_ideology": [
+             "=",
+             "ideology_carlist_ig_2"
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "country_has_primary_culture": [
+           "=",
+           "cu:portuguese"
+          ]
+         }
+        ],
+        "custom_tooltip": [
+         "=",
+         {
+          "text": [
+           "=",
+           "miguelist_amended_tt"
+          ],
+          "every_character": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_ideology": [
+               "=",
+               "ideology:ideology_miguelist"
+              ],
+              "OR": [
+               "=",
+               {
+                "owner": [
+                 "?=",
+                 "ROOT"
+                ],
+                "home_country": [
+                 "?=",
+                 "ROOT"
+                ]
+               }
+              ]
+             }
+            ],
+            "set_ideology": [
+             "=",
+             "ideology:ideology_miguelist_2"
+            ]
+           }
+          ],
+          "every_political_movement": [
+           "=",
+           {
+            "limit": [
+             "=",
+             {
+              "has_core_ideology": [
+               "=",
+               "ideology:ideology_miguelist_movement"
+              ]
+             }
+            ],
+            "set_core_ideology": [
+             "=",
+             "ideology_miguelist_movement_2"
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     ]
+    }
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_radicals_from_political_movements_mult": [
+      "=",
+      "-0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "labor_movement",
+     "nationalism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_egalitarian_agenda"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-0.5"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_conservative_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_reactionary_agenda"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1.5"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "pan-nationalism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/pan_nationalism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_authority_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_support_separatism_strength_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_voting_power_mult": [
+      "=",
+      "0.1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "nationalism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "OR": [
+          "=",
+          {
+           "country_has_primary_culture": [
+            [
+             "=",
+             "cu:north_german"
+            ],
+            [
+             "=",
+             "cu:south_german"
+            ],
+            [
+             "=",
+             "cu:north_italian"
+            ],
+            [
+             "=",
+             "cu:south_italian"
+            ],
+            [
+             "=",
+             "cu:croat"
+            ],
+            [
+             "=",
+             "cu:serb"
+            ],
+            [
+             "=",
+             "cu:slovene"
+            ],
+            [
+             "=",
+             "cu:bosniak"
+            ]
+           ]
+          }
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "5"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "mutual_funds": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/mutual_funds.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_minting_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_loan_interest_rate_add": [
+      "=",
+      "-0.02"
+     ],
+     "state_max_trade_advantage_from_capacity_add": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "central_banking",
+     "postal_savings"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "investment_banks": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/investment_banks.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_max_companies_add": [
+      "=",
+      "1"
+     ],
+     "country_free_charters_add": [
+      "=",
+      "1"
+     ],
+     "state_urbanization_per_level_mult": [
+      "=",
+      "-0.15"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "joint_stock_companies",
+     "mutual_funds"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "camera": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/camera.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_prestige_mult": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "realism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "philosophical_pragmatism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/philosophical_pragmatism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_influence_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_diplomatic_play_maneuvers_mult": [
+      "=",
+      "0.25"
+     ],
+     "state_bureaucracy_population_base_cost_factor_mult": [
+      "=",
+      "-0.05"
+     ],
+     "state_literacy_growth_add": [
+      "=",
+      "0.0001"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "psychiatry"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "identification_documents": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_3"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/identification_documents.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_tax_capacity_add": [
+      "=",
+      "25"
+     ],
+     "country_institution_home_affairs_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "state_incorporation_speed_mult": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "central_archives"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "elevator": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/elevator.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_infrastructure_from_population_add": [
+      "=",
+      "1"
+     ],
+     "state_infrastructure_from_population_max_add": [
+      "=",
+      "20"
+     ],
+     "state_building_construction_sector_max_level_add": [
+      "=",
+      "5"
+     ],
+     "country_max_weekly_construction_progress_add": [
+      "=",
+      "5"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steel_frame_buildings"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "zeppelins": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/zeppelins.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_market_access_price_impact": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "steel_frame_buildings"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "malaria_prevention": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/malaria_prevention.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_colonial_affairs_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "country_institution_health_system_max_investment_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "civilizing_mission"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "navy_size": [
+           ">=",
+           "25"
+          ],
+          "is_country_type": [
+           "=",
+           "recognized"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_colonial_expansion"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "central_planning": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/central_planning.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_tax_capacity_add": [
+      "=",
+      "25"
+     ],
+     "country_government_dividends_efficiency_add": [
+      "=",
+      "0.05"
+     ],
+     "country_institution_home_affairs_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "state_incorporation_speed_mult": [
+      "=",
+      "0.05"
+     ],
+     "state_literacy_growth_add": [
+      "=",
+      "0.0002"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "identification_documents"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1.5"
+     ]
+    }
+   ]
+  }
+ ],
+ "political_agitation": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/political_agitation.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_expected_sol_from_literacy": [
+      "=",
+      "1"
+     ],
+     "country_authority_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_voting_power_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_agitator_slots_add": [
+      "=",
+      "1"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "anarchism",
+     "socialism",
+     "corporatism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "has_strategy": [
+           "=",
+           "ai_strategy_egalitarian_agenda"
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "1"
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "limit": [
+         "=",
+         {
+          "OR": [
+           "=",
+           {
+            "has_strategy": [
+             [
+              "=",
+              "ai_strategy_conservative_agenda"
+             ],
+             [
+              "=",
+              "ai_strategy_reactionary_agenda"
+             ]
+            ]
+           }
+          ]
+         }
+        ],
+        "add": [
+         "=",
+         "-0.5"
+        ]
+       }
+      ]
+     ]
+    }
+   ]
+  }
+ ],
+ "international_exchange_standards": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/international_exchange_standards.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_minting_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_loan_interest_rate_add": [
+      "=",
+      "-0.02"
+     ],
+     "state_max_trade_advantage_from_capacity_add": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "mutual_funds"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "corporate_management": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/corporate_management.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_max_companies_add": [
+      "=",
+      "1"
+     ],
+     "state_urbanization_per_level_mult": [
+      "=",
+      "-0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "investment_banks"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ],
+ "psychoanalysis": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/psychoanalysis.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_influence_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_diplomatic_play_maneuvers_mult": [
+      "=",
+      "0.25"
+     ],
+     "state_bureaucracy_population_base_cost_factor_mult": [
+      "=",
+      "-0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "philosophical_pragmatism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "film": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/film.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_prestige_mult": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "camera"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "multilateral_alliances": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_4"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/multilateral_alliances.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_infamy_generation_mult": [
+      "=",
+      "-0.25"
+     ],
+     "country_diplomatic_play_maneuvers_mult": [
+      "=",
+      "0.5"
+     ],
+     "country_allow_multiple_alliances_bool": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "pan-nationalism"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ],
+     "if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "country_rank": [
+          ">=",
+          "rank_value:great_power"
+         ]
+        }
+       ],
+       "add": [
+        "=",
+        "2"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "mass_surveillance": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/mass_surveillance.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_tax_capacity_add": [
+      "=",
+      "25"
+     ],
+     "country_support_separatism_resistance_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_institution_home_affairs_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "state_incorporation_speed_mult": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "central_planning"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "antibiotics": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/antibiotics.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_institution_health_system_max_investment_add": [
+      "=",
+      "1"
+     ],
+     "state_harvest_condition_disease_outbreak_impact_mult": [
+      "=",
+      "-0.15"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "malaria_prevention"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "mass_propaganda": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/mass_propaganda.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_authority_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_voting_power_mult": [
+      "=",
+      "0.1"
+     ],
+     "state_expected_sol_from_literacy": [
+      "=",
+      "1"
+     ],
+     "country_agitator_slots_add": [
+      "=",
+      "1"
+     ],
+     "country_support_separatism_strength_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_war_support_battles_increase_mult": [
+      "=",
+      "0.25"
+     ],
+     "country_war_support_battles_decrease_mult": [
+      "=",
+      "-0.2"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "political_agitation",
+     "film"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "modern_financial_instruments": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/modern_financial_instruments.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_minting_mult": [
+      "=",
+      "0.1"
+     ],
+     "country_loan_interest_rate_add": [
+      "=",
+      "-0.02"
+     ],
+     "country_government_dividends_efficiency_add": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "international_exchange_standards"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "macroeconomics": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/macroeconomics.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_max_companies_add": [
+      "=",
+      "1"
+     ],
+     "state_market_access_price_impact": [
+      "=",
+      "0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "international_exchange_standards",
+     "corporate_management"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "3"
+     ]
+    }
+   ]
+  }
+ ],
+ "behaviorism": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/behaviorism.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "country_influence_mult": [
+      "=",
+      "0.5"
+     ],
+     "country_diplomatic_play_maneuvers_mult": [
+      "=",
+      "0.5"
+     ],
+     "state_bureaucracy_population_base_cost_factor_mult": [
+      "=",
+      "-0.05"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "psychoanalysis"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "analytical_philosophy": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/analytical_philosophy.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_literacy_growth_add": [
+      "=",
+      "0.0002"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "psychoanalysis"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "1"
+     ]
+    }
+   ]
+  }
+ ],
+ "paved_roads": [
+  "=",
+  {
+   "era": [
+    "=",
+    "era_5"
+   ],
+   "texture": [
+    "=",
+    "\"gfx/interface/icons/invention_icons/paved_roads.dds\""
+   ],
+   "category": [
+    "=",
+    "society"
+   ],
+   "should_update_map": [
+    "=",
+    "yes"
+   ],
+   "modifier": [
+    "=",
+    {
+     "state_infrastructure_from_automobiles_consumption_add": [
+      "=",
+      "0.25"
+     ]
+    }
+   ],
+   "unlocking_technologies": [
+    "=",
+    [
+     "elevator"
+    ]
+   ],
+   "ai_weight": [
+    "=",
+    {
+     "value": [
+      "=",
+      "2"
+     ]
+    }
+   ]
+  }
+ ]
+}

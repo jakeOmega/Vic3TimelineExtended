@@ -129,6 +129,7 @@ When `debug.log` shows `Unexpected token: <name>` or `inject/replace to a non-ex
 The auto-generators read vanilla and emit mod files. Re-running them after a vanilla patch picks up vanilla's content changes for free. Run in this order:
 
 ```bash
+python3 vanilla_parsed.py build                      # vanilla_parsed/ (committed vanilla parse; `git diff vanilla_parsed/` = what vanilla changed, parsed)
 python3 apply_ideologies.py                          # common/ideologies/modified.txt
 python3 ig_feminism.py                               # common/interest_groups/00_*.txt (8 files)
 python3 pop_needs_curves.py                          # common/buy_packages/00_buy_packages.txt
@@ -141,6 +142,8 @@ python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accesso
 **Run `fold_vanilla_loc_accessors.py --dry-run` first, and look each new accessor up in vanilla loc before folding.** The generator folds every flagged accessor as `"value"`, which is right for a terminal atom and wrong for a *type-changing* one — and folding the latter still makes the flag go away, by making the audit stop checking the rest of the chain. That is a silent loss of engine-surface knowledge, not a fix. 1.14.3's `State.GetStateInfamyPerspective` is the worked example: it returns a **country** (`"[State.GetStateInfamyPerspective.GetNameNoFormatting] already owns [State.GetName]"`), so it goes into `_BUILTIN_ACCESSORS_BY_TYPE` by hand *before* the fold. The tell is a flagged chain with another step after the flagged accessor.
 
 Re-bootstrap the effect/trigger catalog **after** the engine-doc summaries (`effects_summary.txt` / `triggers_summary.txt`) are refreshed in step 3, since it unions those names with vanilla's effect-corpus keywords. A stale catalog produces false positives (new vanilla effects flagged as unknown).
+
+Rebuild `vanilla_parsed/` first. Until you do, the server notices that the game version and files no longer match the snapshot, parses the game files instead on every start (slower), and says so in `/status` `vanilla_source` and the reload `warnings`. Cloud sessions without a game install keep serving the old vanilla until the rebuilt snapshot is committed. See `docs/guides/python_tools.md` § "Vanilla data source".
 
 If the vanilla map changed (states removed/renamed/split), edit `deposits_config.json` to point old keys at successors **before** running `resources.py`. See `docs/auto_generated_files.md` for the full ownership table.
 
