@@ -4486,10 +4486,12 @@ country|country_can_impose_same_lawgroup_policing_in_power_bloc_bool|Allowed to 
 country|country_can_join_united_nations_bool|
 country|country_can_only_conscript_peasants_bool|Conscript Battalions can only consist of Infantry Military Unit Types, except Mechanized Infantry
 country|country_can_use_asset_relief_bool|
+country|country_can_use_bail_in_bool|
 country|country_can_use_biotech_companies_bool|
 country|country_can_use_countercyclical_buffer_bool|
 country|country_can_use_cultural_assimilation_bool|
 country|country_can_use_deposit_guarantee_bool|
+country|country_can_use_directed_credit_electrification_bool|
 country|country_can_use_emergency_liquidity_bool|
 country|country_can_use_export_credit_bool|
 country|country_can_use_open_market_ops_bool|
@@ -4598,6 +4600,7 @@ country|country_dinka_cultural_acceptance_add|A bonus or penalty to a specific c
 country|country_diplomatic_play_maneuvers_add|A bonus or penalty to the number of Maneuvers the country can take in a diplomatic play.
 country|country_diplomatic_play_maneuvers_mult|A multiplier to the number of Maneuvers the country can take in a diplomatic play.
 country|country_diplomatic_reputation_add|An increase or decrease to the tendency of other Countries to sign Treaties with or offer Diplomatic Play support to a Country.
+country|country_directed_credit_sectors_add|
 country|country_disable_investment_pool_bool|Disallow all reinvestment into and usage of the Investment Pool (except for Companies)
 country|country_disable_nationalization_bool|Prevent Buildings from being Nationalized
 country|country_disable_nationalization_without_compensation_bool|Prevent Buildings from being Nationalized without compensation being paid to the owning Pops
@@ -6437,6 +6440,7 @@ political_movement|political_movement_radicalism_from_enactment_disapproval_mult
 power_bloc|power_bloc_allow_foreign_investment_lower_rank_bool|Countries within the same Power Bloc have Foreign Investment Rights in Power Bloc Member with lower Rank
 power_bloc|power_bloc_allow_port_access_bool|Gives Power Bloc members access to ports within the Bloc, even if they don't have Military Access
 power_bloc|power_bloc_allow_wider_migration_area_bool|Allows Migration to potentially also happen between members of a Power Bloc that don't share a Market, rather than only within a Country’s Market
+power-bloc|power_bloc_banking_union_bool|
 power-bloc|power_bloc_can_enact_decree_cultural_emigration_initiative_bool|
 power-bloc|power_bloc_can_enact_greenest_grass_campaign_bool|
 power-bloc|power_bloc_can_give_development_aid_bool|
@@ -6495,6 +6499,7 @@ power_bloc|power_bloc_mandate_progress_per_unrecognized_regional_power_member_ad
 power_bloc|power_bloc_mandate_progress_per_unrecognized_regional_power_member_mult|Determines the amount of Mandate Progress gained by a Power Bloc for each of its members that are of Rank Unrecognized Regional Power
 power-bloc|power_bloc_monetary_cooperation_bool|
 power-bloc|power_bloc_principle_groups_max_add|
+power-bloc|power_bloc_reserve_currency_bool|
 power-bloc|power_bloc_shared_currency_bool|
 power_bloc|power_bloc_target_sway_cost_mult|An increase or decrease to the Sway Maneuver cost for the Diplomatic Play Target
 power_bloc|power_bloc_trade_advantage_add|An increase or decrease in overall Trade Advantage with Countries in the same Power Bloc

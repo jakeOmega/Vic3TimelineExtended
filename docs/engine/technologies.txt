@@ -183,7 +183,7 @@
 	Water-tube Boiler - The Water-tube Boiler is an improvement on the original boiler, by splitting up the water into smaller tubes they would heat up faster and thus improve efficiency.
 		Unlocking Technologies:
 			Atmospheric Engine
-		Unlocks Ship Modifications: $ship_mod_full_sail_rig_compound_engine$
+		Unlocks Ship Modifications: $ship_mod_barque_rig_compound_engine$, $ship_mod_full_sail_rig_compound_engine$
 		Unlocks PMs: 12 (listed under their buildings in buildings.txt)
 	Atmospheric Engine - The Atmospheric Engine is the first steam engine that has an actual practical application.
 		Unlocking Technologies:
@@ -634,7 +634,7 @@
 			Sea Lane Strategies
 			Concrete Dockyards
 			Military Aviation
-		Unlocks Ship Types: Dreadnought, Light Cruiser, Seaplane Tender
+		Unlocks Ship Types: Dreadnought, Seaplane Tender
 	Sea Lane Strategies - By focusing naval power on controlling the sea lanes, naval dominance is much easier to achieve.
 		Unlocking Technologies:
 			Jeune École
@@ -758,7 +758,7 @@
 	$ship_type_super_dreadnought$ - By taking the dreadnought design and making all the guns high caliber, as well as some other changes, it is possible to make an even more devastating warship.
 		Unlocking Technologies:
 			Dreadnought
-		Unlocks Ship Types: Super Dreadnought
+		Unlocks Ship Types: Light Cruiser, Super Dreadnought
 	Modern Battlefleet Tactics - Operating a large battlefleet can be a difficult task. By practicing and learning specific tactics as a fleet, greater performance can be achieved.
 		Unlocking Technologies:
 			$ship_type_super_dreadnought$

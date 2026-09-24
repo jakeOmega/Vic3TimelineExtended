@@ -1,12 +1,11 @@
 ﻿
 te_construction_market_bg = {
-	#category = development
-	is_shown_in_outliner = no
+	category = development
+	is_shown_in_outliner = yes
 	always_possible = yes
 	#stateregion_max_level = yes
 	min_hiring_rate = 1.0
 	max_hiring_rate = 1.0
-	#lens = government
 	is_government_funded = yes
 	economy_of_scale = no
 	can_use_slaves = yes

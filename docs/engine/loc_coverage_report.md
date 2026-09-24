@@ -12,7 +12,9 @@ Fix: add the missing key(s) to a `localization/english/*_l_english.yml`
 file. For static modifiers and most simple entities the key is the
 entity name itself; for journal entries also `<name>_desc`; for
 events the keys are whatever `title`/`desc`/`flavor`/option `name`
-fields point at.
+fields point at; for messages (`common/messages`) the keys are
+`notification_<name>_name` / `_desc` / `_tooltip`, never the bare
+message name.
 
 Suppress an intentional missing key with a same-line comment on the
 entity's opening line:
@@ -20,7 +22,25 @@ entity's opening line:
 
 ## Unreviewed Flags
 
-_None._
+### Messages (17)
+
+- `common/messages/extra_messages.txt:174` — `colonial_ceasefire_granted_notice` — missing: `notification_colonial_ceasefire_granted_notice_name`, `notification_colonial_ceasefire_granted_notice_desc`
+- `common/messages/extra_messages.txt:153` — `colonial_crackdown_begun_notice` — missing: `notification_colonial_crackdown_begun_notice_name`, `notification_colonial_crackdown_begun_notice_desc`
+- `common/messages/extra_messages.txt:160` — `colonial_independence_granted_notice` — missing: `notification_colonial_independence_granted_notice_name`, `notification_colonial_independence_granted_notice_desc`
+- `common/messages/extra_messages.txt:146` — `colonial_negotiations_started_notice` — missing: `notification_colonial_negotiations_started_notice_name`, `notification_colonial_negotiations_started_notice_desc`
+- `common/messages/extra_messages.txt:167` — `colonial_neocolonial_terms_notice` — missing: `notification_colonial_neocolonial_terms_notice_name`, `notification_colonial_neocolonial_terms_notice_desc`
+- `common/messages/extra_messages.txt:181` — `colonial_reparations_paid_notice` — missing: `notification_colonial_reparations_paid_notice_name`, `notification_colonial_reparations_paid_notice_desc`
+- `common/messages/extra_messages.txt:188` — `colonial_reparations_refused_notice` — missing: `notification_colonial_reparations_refused_notice_name`, `notification_colonial_reparations_refused_notice_desc`
+- `common/messages/extra_messages.txt:202` — `former_colony_ties_declined_notice` — missing: `notification_former_colony_ties_declined_notice_name`, `notification_former_colony_ties_declined_notice_desc`
+- `common/messages/extra_messages.txt:195` — `former_colony_ties_welcomed_notice` — missing: `notification_former_colony_ties_welcomed_notice_name`, `notification_former_colony_ties_welcomed_notice_desc`
+- `common/messages/extra_messages.txt:209` — `gp_condemnation_reforms_announced_notice` — missing: `notification_gp_condemnation_reforms_announced_notice_name`, `notification_gp_condemnation_reforms_announced_notice_desc`
+- `common/messages/extra_messages.txt:216` — `gp_condemnation_rejected_notice` — missing: `notification_gp_condemnation_rejected_notice_name`, `notification_gp_condemnation_rejected_notice_desc`
+- `common/messages/extra_messages.txt:223` — `gp_support_accepted_notice` — missing: `notification_gp_support_accepted_notice_name`, `notification_gp_support_accepted_notice_desc`
+- `common/messages/extra_messages.txt:230` — `gp_support_declined_notice` — missing: `notification_gp_support_declined_notice_name`, `notification_gp_support_declined_notice_desc`
+- `common/messages/extra_messages.txt:94` — `tactical_nuke_fails_attacker` — missing: `notification_tactical_nuke_fails_attacker_name`, `notification_tactical_nuke_fails_attacker_desc`
+- `common/messages/extra_messages.txt:101` — `tactical_nuke_fails_defender` — missing: `notification_tactical_nuke_fails_defender_name`, `notification_tactical_nuke_fails_defender_desc`
+- `common/messages/extra_messages.txt:80` — `tactical_nuke_succeeds_attacker` — missing: `notification_tactical_nuke_succeeds_attacker_name`, `notification_tactical_nuke_succeeds_attacker_desc`
+- `common/messages/extra_messages.txt:87` — `tactical_nuke_succeeds_defender` — missing: `notification_tactical_nuke_succeeds_defender_name`, `notification_tactical_nuke_succeeds_defender_desc`
 
 ## Reviewed Exemptions
 
@@ -41,11 +61,12 @@ _None._
 
 ## Coverage
 
-- files audited: 150
+- files audited: 151
 - flags by category:
+  - Messages: 17
   - Modifiers: 14
-- total flags: 14
-- unreviewed: 0
+- total flags: 31
+- unreviewed: 17
 - exempted: 14
 
 ## Scope notes
