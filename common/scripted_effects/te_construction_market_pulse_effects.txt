@@ -26,6 +26,8 @@ te_construction_market_on_weekly_pulse = {
 			}
 			te_construction_market_ai_update_buy = yes
 		}
+		# Last, after the sites are sized; see the effect for why.
+		te_construction_market_ensure_site = yes
 	}
 }
 

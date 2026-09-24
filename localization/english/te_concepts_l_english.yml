@@ -2229,7 +2229,7 @@
  te_authority_drain:0 "Cabinet Authority Eroded"
  te_construction_market_capacity_modifier_desc:0 "Applies the effects of this construction-focused modifier."
  te_construction_market_private_share_modifier_desc:0 "Adjusts the share of construction handled by the private sector versus public investment."
- te_construction_market_site_desc:0 "With the Free Market Construction game rule on, Construction Sites appear on their own wherever construction is under way and turn purchased [concept_construction] into construction points; nobody builds them. With the rule off, this is your construction sector: the government builds and expands it, and each level provides construction points according to its production method."
+ te_construction_market_site_desc:0 "With the Free Market Construction game rule on, Construction Sites appear on their own wherever construction is under way and turn purchased [concept_construction] into construction points; nobody builds them. With the rule off, this is your construction sector: the government builds, expands and downsizes it, and each level provides construction points according to its production method."
  te_hist_since:0 "#lore History available since [JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_year')|0].[JournalEntry.GetCountry.MakeScope.ScriptValue('te_history_since_month')|0].#!"
  te_legitimacy_boost:0 "Popular Mandate Reinforced"
  te_legitimacy_drain:0 "Public Confidence Shaken"

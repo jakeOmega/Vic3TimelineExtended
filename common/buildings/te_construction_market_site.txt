@@ -21,10 +21,12 @@
 #                     (te_direct_construction_convert_sectors).
 #
 # One building type serves both because the camp define cannot follow a game
-# rule. Properties that cannot follow it either keep the market's values:
-#   - downsizeable = no. A downsized market site takes the country's construction
-#     with it until script re-places it, so neither the player nor the AI may.
-#     Direct-mode sites cannot be downsized either (vanilla's can).
+# rule, so neither can these properties:
+#   - downsizeable = yes, which direct games need: a sector whose wages are paid
+#     whether or not its points are used must be shrinkable. In a market game a
+#     player or the AI can therefore remove a site. Capacity is spread over the
+#     remaining staffed sites at each weekly pulse, and the pulse re-places a
+#     capital site if none is left (te_construction_market_ensure_site).
 #   - te_construction_market_bg: no economy of scale (as vanilla's sector), no
 #     infrastructure or urbanization, hidden from the outliner.
 #   - Throughput bonuses aimed at building_construction_sector or bg_construction
@@ -35,7 +37,7 @@ te_construction_market_site = {
 	levels_per_mesh = -1
 	buildable = yes
 	expandable = yes
-	downsizeable = no
+	downsizeable = yes
 	min_raise_to_hire = -1.0
 	residence_points_per_level = 0
 	required_construction = construction_cost_very_low
