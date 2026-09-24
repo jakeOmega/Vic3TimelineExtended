@@ -3855,6 +3855,12 @@
  te_debug_covert.4.d:0 "Console-only shortcuts for the four slice-6 operations. None of these can happen in normal play.\n\nPlanting declares a rivalry with one valid country and runs regime change and asset cultivation against it; nuclear sabotage goes against a country whose programme is running and space espionage against one ahead of us in the space race, each only if such a country exists. All four start fully operational, so their effects land at the next monthly pulse. Tradecraft is set to Seasoned (65)."
  te_debug_covert.4.f:0 "Test harness. Check debug.log after the next monthly pulse."
  te_debug_covert.4.t:0 "Covert Test Console: New Operations"
+ te_debug_covert.5.a:0 "Every network to strength 50 (their service: capacity and technologies)"
+ te_debug_covert.5.b:0 "Every network to strength 80 (also their operations against us)"
+ te_debug_covert.5.c:0 "Every network's target starts cultivating assets against us"
+ te_debug_covert.5.d:0 "Console-only shortcuts for the network intelligence reports (slice 7). None of these can happen in normal play. Seed an operation first (te_debug_covert.2) so there is a network.\n\nStrength 50 is the first tier: each network row shows the target's intelligence capacity and technology count beside ours, and says its operations against us need 75. Strength 80 is the second: the row also counts them, usually 0.\n\nThe third option makes every network's target run cultivate assets against us (its funding is raised to 1 if it has none) and refreshes the reports, so a second-tier row's count goes up by one. Force a detection afterwards (te_debug_covert.2) and a row that falls below 75 drops back to the first tier the same day."
+ te_debug_covert.5.f:0 "Test harness. Nothing here is real intelligence."
+ te_debug_covert.5.t:0 "Covert Test Console: Network Intelligence"
 
 #
 # TE_DEBUG_GW
