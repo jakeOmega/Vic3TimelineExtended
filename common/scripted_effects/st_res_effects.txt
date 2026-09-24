@@ -11,7 +11,7 @@
 # --------------------------------------------------------------------------
 # st_res_init_good_effect — Per-good half of st_res_init_effect.
 # Parameter: GOOD = grain | ammunition | oil | small_arms | artillery |
-#            aeroplanes | tanks.
+#            aeroplanes | tanks | fertilizer.
 # `st_res_$GOOD$_last_delta` / `st_res_$GOOD$_last_status` are the display
 # bookkeeping vars read by the JE inventory widget. They are SAVE-SAFE: a save
 # made before the widget existed simply has neither, and this effect seeds them
@@ -83,6 +83,7 @@ st_res_init_effect = {
 	st_res_init_good_effect = { GOOD = artillery }
 	st_res_init_good_effect = { GOOD = aeroplanes }
 	st_res_init_good_effect = { GOOD = tanks }
+	st_res_init_good_effect = { GOOD = fertilizer }
 
 	if = {
 		limit = { NOT = { has_variable = st_res_adjust_step_tier } }
@@ -134,6 +135,7 @@ st_res_reset_vars_effect = {
 	st_res_reset_good_vars_effect = { GOOD = artillery }
 	st_res_reset_good_vars_effect = { GOOD = aeroplanes }
 	st_res_reset_good_vars_effect = { GOOD = tanks }
+	st_res_reset_good_vars_effect = { GOOD = fertilizer }
 	set_variable = { name = st_res_adjust_step_tier value = 1 }
 	set_variable = { name = st_res_hub_level_cached value = 0 }
 	set_variable = { name = st_res_hub_throughput_cached value = 0 }
@@ -172,12 +174,12 @@ st_res_refresh_hub_cache_effect = {
 
 # --------------------------------------------------------------------------
 # st_res_startup_good_setup_effect — Country-scoped per-good startup helper.
-# Parameter: GOOD = grain | ammunition | oil.
+# Parameter: GOOD = any reserve good (list at st_res_init_good_effect).
 # Populates local vars the building-scoped helpers expect before the
 # country -> building scope bridge.
 # --------------------------------------------------------------------------
 st_res_startup_good_setup_effect = {
-	# Parameter: GOOD = grain | ammunition | oil
+	# Parameter: GOOD = any reserve good (list at st_res_init_good_effect)
 	set_local_variable = { name = st_res_$GOOD$_rate_local value = var:st_res_$GOOD$_actual_rate_cached }
 	set_local_variable = { name = st_res_$GOOD$_good_mult_local value = st_res_$GOOD$_good_mult }
 	set_local_variable = { name = st_res_$GOOD$_can_store_local value = 0 }
@@ -207,7 +209,7 @@ st_res_startup_good_setup_effect = {
 
 # --------------------------------------------------------------------------
 # st_res_rebuild_good_flow_modifiers_effect — Building-scoped per-good helper.
-# Parameter: GOOD = grain | ammunition | oil.
+# Parameter: GOOD = any reserve good (list at st_res_init_good_effect).
 # Expects the corresponding st_res_$GOOD$_*_local values to already be populated in
 # the calling effect before the country -> building scope bridge.
 # --------------------------------------------------------------------------
@@ -263,6 +265,10 @@ st_res_rebuild_tanks_flow_modifiers_effect = {
 	st_res_rebuild_good_flow_modifiers_effect = { GOOD = tanks }
 }
 
+st_res_rebuild_fertilizer_flow_modifiers_effect = {
+	st_res_rebuild_good_flow_modifiers_effect = { GOOD = fertilizer }
+}
+
 # --------------------------------------------------------------------------
 # st_res_rebuild_hub_flow_modifiers_effect — Bridge country -> building scope.
 # Expects country vars and the hub cache to already be current. Applies the
@@ -277,6 +283,7 @@ st_res_rebuild_hub_flow_modifiers_effect = {
 	st_res_startup_good_setup_effect = { GOOD = artillery }
 	st_res_startup_good_setup_effect = { GOOD = aeroplanes }
 	st_res_startup_good_setup_effect = { GOOD = tanks }
+	st_res_startup_good_setup_effect = { GOOD = fertilizer }
 
 	if = {
 		limit = {
@@ -294,6 +301,7 @@ st_res_rebuild_hub_flow_modifiers_effect = {
 			st_res_rebuild_artillery_flow_modifiers_effect = yes
 			st_res_rebuild_aeroplanes_flow_modifiers_effect = yes
 			st_res_rebuild_tanks_flow_modifiers_effect = yes
+			st_res_rebuild_fertilizer_flow_modifiers_effect = yes
 		}
 	}
 }
@@ -398,6 +406,7 @@ st_res_refresh_hub_flow_effect = {
 	set_variable = { name = st_res_artillery_actual_rate_cached value = st_res_artillery_actual_rate }
 	set_variable = { name = st_res_aeroplanes_actual_rate_cached value = st_res_aeroplanes_actual_rate }
 	set_variable = { name = st_res_tanks_actual_rate_cached value = st_res_tanks_actual_rate }
+	set_variable = { name = st_res_fertilizer_actual_rate_cached value = st_res_fertilizer_actual_rate }
 	st_res_rebuild_hub_flow_modifiers_effect = yes
 	st_res_apply_sell_profit_effect = yes
 
@@ -409,6 +418,7 @@ st_res_refresh_hub_flow_effect = {
 	st_res_set_good_status_effect = { GOOD = artillery }
 	st_res_set_good_status_effect = { GOOD = aeroplanes }
 	st_res_set_good_status_effect = { GOOD = tanks }
+	st_res_set_good_status_effect = { GOOD = fertilizer }
 }
 
 # --------------------------------------------------------------------------
@@ -425,6 +435,7 @@ st_res_clamp_stockpiles_effect = {
 	clamp_variable = { name = st_res_artillery_stored min = 0 max = st_res_artillery_capacity }
 	clamp_variable = { name = st_res_aeroplanes_stored min = 0 max = st_res_aeroplanes_capacity }
 	clamp_variable = { name = st_res_tanks_stored min = 0 max = st_res_tanks_capacity }
+	clamp_variable = { name = st_res_fertilizer_stored min = 0 max = st_res_fertilizer_capacity }
 
 	clamp_variable = { name = st_res_grain_rate min = st_res_neg_weekly_base_rate_cap max = st_res_weekly_base_rate_cap }
 	clamp_variable = { name = st_res_grain_rate min = st_res_grain_max_withdrawable max = st_res_grain_max_storable }
@@ -440,6 +451,8 @@ st_res_clamp_stockpiles_effect = {
 	clamp_variable = { name = st_res_aeroplanes_rate min = st_res_aeroplanes_max_withdrawable max = st_res_aeroplanes_max_storable }
 	clamp_variable = { name = st_res_tanks_rate min = st_res_neg_weekly_base_rate_cap max = st_res_weekly_base_rate_cap }
 	clamp_variable = { name = st_res_tanks_rate min = st_res_tanks_max_withdrawable max = st_res_tanks_max_storable }
+	clamp_variable = { name = st_res_fertilizer_rate min = st_res_neg_weekly_base_rate_cap max = st_res_weekly_base_rate_cap }
+	clamp_variable = { name = st_res_fertilizer_rate min = st_res_fertilizer_max_withdrawable max = st_res_fertilizer_max_storable }
 }
 
 # --------------------------------------------------------------------------
@@ -505,6 +518,7 @@ st_res_weekly_update_effect = {
 		st_res_apply_weekly_good_effect = { GOOD = artillery }
 		st_res_apply_weekly_good_effect = { GOOD = aeroplanes }
 		st_res_apply_weekly_good_effect = { GOOD = tanks }
+		st_res_apply_weekly_good_effect = { GOOD = fertilizer }
 
 		# Advance every good's running price average by one week, then
 		# re-decide every automated lane — AFTER last week's movement has been
@@ -522,6 +536,7 @@ st_res_weekly_update_effect = {
 		st_res_policy_tick_good_effect = { GOOD = artillery }
 		st_res_policy_tick_good_effect = { GOOD = aeroplanes }
 		st_res_policy_tick_good_effect = { GOOD = tanks }
+		st_res_policy_tick_good_effect = { GOOD = fertilizer }
 
 		st_res_refresh_hub_flow_effect = yes
 		st_res_clamp_stockpiles_effect = yes
@@ -535,6 +550,7 @@ st_res_weekly_update_effect = {
 		st_res_mark_good_no_hub_effect = { GOOD = artillery }
 		st_res_mark_good_no_hub_effect = { GOOD = aeroplanes }
 		st_res_mark_good_no_hub_effect = { GOOD = tanks }
+		st_res_mark_good_no_hub_effect = { GOOD = fertilizer }
 
 		# The tick also runs with no hub: the price average keeps tracking,
 		# and the evaluator's `hub_level_cached <= 0` branch writes policy
@@ -548,6 +564,7 @@ st_res_weekly_update_effect = {
 		st_res_policy_tick_good_effect = { GOOD = artillery }
 		st_res_policy_tick_good_effect = { GOOD = aeroplanes }
 		st_res_policy_tick_good_effect = { GOOD = tanks }
+		st_res_policy_tick_good_effect = { GOOD = fertilizer }
 	}
 }
 
@@ -601,6 +618,7 @@ st_res_reset_rates_effect = {
 	st_res_switch_to_manual_base = { GOOD = artillery }
 	st_res_switch_to_manual_base = { GOOD = aeroplanes }
 	st_res_switch_to_manual_base = { GOOD = tanks }
+	st_res_switch_to_manual_base = { GOOD = fertilizer }
 	set_variable = { name = st_res_grain_rate value = 0 }
 	set_variable = { name = st_res_ammunition_rate value = 0 }
 	set_variable = { name = st_res_oil_rate value = 0 }
@@ -608,6 +626,7 @@ st_res_reset_rates_effect = {
 	set_variable = { name = st_res_artillery_rate value = 0 }
 	set_variable = { name = st_res_aeroplanes_rate value = 0 }
 	set_variable = { name = st_res_tanks_rate value = 0 }
+	set_variable = { name = st_res_fertilizer_rate value = 0 }
 	st_res_refresh_hub_flow_effect = yes
 	st_res_clamp_stockpiles_effect = yes
 }
@@ -668,6 +687,8 @@ st_res_increase_aeroplanes_rate_effect  = { st_res_increase_rate_base = { GOOD =
 st_res_decrease_aeroplanes_rate_effect  = { st_res_decrease_rate_base = { GOOD = aeroplanes  } }
 st_res_increase_tanks_rate_effect       = { st_res_increase_rate_base = { GOOD = tanks       } }
 st_res_decrease_tanks_rate_effect       = { st_res_decrease_rate_base = { GOOD = tanks       } }
+st_res_increase_fertilizer_rate_effect  = { st_res_increase_rate_base = { GOOD = fertilizer  } }
+st_res_decrease_fertilizer_rate_effect  = { st_res_decrease_rate_base = { GOOD = fertilizer  } }
 
 st_res_stop_grain_rate_effect           = { st_res_stop_rate_base     = { GOOD = grain       } }
 st_res_stop_ammunition_rate_effect      = { st_res_stop_rate_base     = { GOOD = ammunition  } }
@@ -676,6 +697,7 @@ st_res_stop_small_arms_rate_effect      = { st_res_stop_rate_base     = { GOOD =
 st_res_stop_artillery_rate_effect       = { st_res_stop_rate_base     = { GOOD = artillery   } }
 st_res_stop_aeroplanes_rate_effect      = { st_res_stop_rate_base     = { GOOD = aeroplanes  } }
 st_res_stop_tanks_rate_effect           = { st_res_stop_rate_base     = { GOOD = tanks       } }
+st_res_stop_fertilizer_rate_effect      = { st_res_stop_rate_base     = { GOOD = fertilizer  } }
 
 st_res_apply_sell_profit_effect = {
 	remove_modifier = st_res_sell_profit_modifier
@@ -687,6 +709,7 @@ st_res_apply_sell_profit_effect = {
 	change_variable = { name = st_res_sell_profit add = st_res_artillery_sale_profit }
 	change_variable = { name = st_res_sell_profit add = st_res_aeroplanes_sale_profit }
 	change_variable = { name = st_res_sell_profit add = st_res_tanks_sale_profit }
+	change_variable = { name = st_res_sell_profit add = st_res_fertilizer_sale_profit }
 	add_modifier = { name = st_res_sell_profit_modifier multiplier = var:st_res_sell_profit }
 }
 
@@ -1244,5 +1267,6 @@ st_res_ai_seed_policies_effect = {
 		st_res_ai_seed_good_effect = { GOOD = artillery   POLICY = 1 }
 		st_res_ai_seed_good_effect = { GOOD = aeroplanes  POLICY = 1 }
 		st_res_ai_seed_good_effect = { GOOD = tanks       POLICY = 1 }
+		st_res_ai_seed_good_effect = { GOOD = fertilizer  POLICY = 3 }
 	}
 }

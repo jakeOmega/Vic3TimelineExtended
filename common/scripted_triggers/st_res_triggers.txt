@@ -39,3 +39,8 @@ st_res_aeroplanes_unlocked_trigger = {
 st_res_tanks_unlocked_trigger = {
 	has_technology_researched = mobile_armor
 }
+
+# Chemicals: the Chemical Plant, the good's producer, unlocks with intensive_agriculture.
+st_res_fertilizer_unlocked_trigger = {
+	has_technology_researched = intensive_agriculture
+}

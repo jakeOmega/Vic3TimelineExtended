@@ -7,7 +7,7 @@ description: Add one or more new goods to the Strategic Reserve journal entry in
 
 ## When to use
 
-The Strategic Reserve is a country-scoped stockpile system anchored on `je_strategic_reserve` and the `building_strategic_reserve_hub` building. Each covered good has its own stored stockpile, configurable weekly storage/withdraw rate, decay rate, an optional **price-triggered policy** that re-decides that rate weekly, and one row in the **reserve inventory widget** (`gui/journal_entry_widgets/strategic_reserve_widget.gui`) carrying its fill bar, net weekly movement, status label, decrease/stop/increase controls, policy summary and a collapsible settings panel. The system already covers `grain`, `ammunition`, `oil`, `small_arms`, `artillery`, `aeroplanes`, `tanks`. Adding any new good touches ~14 files with a strict copy-paste-modify pattern — miss one and the good silently does nothing in-game.
+The Strategic Reserve is a country-scoped stockpile system anchored on `je_strategic_reserve` and the `building_strategic_reserve_hub` building. Each covered good has its own stored stockpile, configurable weekly storage/withdraw rate, decay rate, an optional **price-triggered policy** that re-decides that rate weekly, and one row in the **reserve inventory widget** (`gui/journal_entry_widgets/strategic_reserve_widget.gui`) carrying its fill bar, net weekly movement, status label, decrease/stop/increase controls, policy summary and a collapsible settings panel. The system already covers `grain`, `ammunition`, `oil`, `small_arms`, `artillery`, `aeroplanes`, `tanks`, `fertilizer` (displayed as Chemicals). Adding any new good touches ~14 files with a strict copy-paste-modify pattern — miss one and the good silently does nothing in-game.
 
 **Read this if you last worked on the SR before the inventory widget:** per-good `scripted_progress_bar`s, per-good `scripted_button`s and per-good journal-entry `status_desc` lines are **gone**. A good is now surfaced by an unlock scripted trigger, **two** scripted GUIs, a widget row and **four** customizable-localization blocks. Don't re-add the old shapes.
 
@@ -41,7 +41,7 @@ for good in <NEW_GOOD_1> <NEW_GOOD_2>; do
 done
 ```
 
-`0` = vanilla doesn't register that axis. **Any 0 means you must add a registration entry to `common/modifier_type_definitions/mod_entity_modifier_types.txt`.** The mod already pre-registers `goods_input_grain_mult`, `goods_output_grain_mult`, and `goods_input_aeroplanes_mult` for exactly this reason — follow that pattern (search the file for the existing `goods_input_grain_mult = { color = bad percent = yes ... }` block to see the format).
+`0` = vanilla doesn't register that axis. **Any 0 means you must add a registration entry to `common/modifier_type_definitions/mod_entity_modifier_types.txt`.** The mod already pre-registers `goods_input_grain_mult`, `goods_output_grain_mult`, `goods_input_aeroplanes_mult` and `goods_input_fertilizer_mult` for exactly this reason — follow that pattern (search the file for the existing `goods_input_grain_mult = { color = bad percent = yes ... }` block to see the format).
 
 Reference: `docs/guides/scripting_best_practices.md` § goods modifier registration.
 
@@ -73,7 +73,7 @@ All paths are repo-relative (`mod_path` in `path_constants`). The pattern is ide
 **Conventions enforced by this list:**
 - Identifiers use the bare good ID with underscores (`small_arms`, never `smallarms` or `SmallArms`).
 - Tab-indented `.txt` files; YAML uses spaces. Run `python scripts/format_paradox_tabs.py --check <files>` before claiming done.
-- The existing pattern is established 7× over — when in doubt, grep for an existing good's name in each file (e.g. `grep -n "tanks" common/scripted_effects/st_res_effects.txt`) and clone its block.
+- The existing pattern is established 8× over — when in doubt, grep for an existing good's name in each file (e.g. `grep -n "tanks" common/scripted_effects/st_res_effects.txt`) and clone its block.
 
 ## Snippet templates
 
