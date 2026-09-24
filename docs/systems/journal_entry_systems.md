@@ -606,7 +606,7 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
 |----------|-------|-------------|
 | `un_authority` | global | 0-100 legitimacy/strength |
 | `un_founded` | global | Flag: UN has been established |
-| `un_hq_country` | global | HQ host country |
+| `un_hq_country` | global | HQ host country: the founder, then a member chosen by `un_hq_assign_host` when the host leaves or stops existing. The only country that may build `building_un_headquarters` (one per world; `un_hq_effects.txt` removes any other) |
 | `un_vote_active` | global | Vote lock: a resolution (or a proposer event's reservation) holds the General Assembly |
 | `un_vote_reservation` | global | Flag: a proposer event holds the lock before choosing whether to propose |
 | `un_active_resolution` | global | Scope: the open resolution container |

@@ -257,19 +257,19 @@ un_leave_button = {
 			je:je_united_nations ?= { remove_modifier = un_pandemic_cooperation_modifier }
 			je:je_united_nations ?= { remove_modifier = un_refugee_program_modifier }
 			je:je_united_nations ?= { remove_modifier = un_space_partnership_modifier }
-			# If we host the HQ, reassign it
+			# If we host the HQ, it moves to another member and our HQ building
+			# is demolished, so the new host can build the only one
+			# (un_hq_effects.txt; the helper excludes us from the pick itself).
 			if = {
+				limit = { un_hq_is_host = yes }
+				un_hq_assign_host = yes
+				un_hq_enforce_single_building = yes
+			}
+			# A host modifier on a country that is not the host (saves from
+			# before the HQ hand-off was fixed) just goes.
+			else_if = {
 				limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
 				je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
-				random_country = {
-					limit = {
-						je:je_united_nations ?= { has_modifier = un_member_modifier }
-						country_rank >= rank_value:great_power
-						NOT = { this = ROOT }
-					}
-					je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
-					set_global_variable = { name = un_hq_country value = THIS }
-				}
 			}
 			add_modifier = {
 				name = un_withdrawal_penalty_modifier
