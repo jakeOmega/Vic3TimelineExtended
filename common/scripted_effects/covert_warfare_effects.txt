@@ -35,6 +35,10 @@
 #           iw_net_head_start_offer months of head start a new operation would get
 #           iw_net_tc_mult          operator's Tradecraft growth multiplier, copied each tick (slice 5)
 #           iw_net_cultivating      1 while a cultivate-assets operation runs against the target (slice 6)
+#           iw_net_intel_tier       0 / 1 / 2, what the network reports on its target (slice 7, display)
+#           iw_net_intel_ic         target's intelligence capacity, last report (tier >= 1, display)
+#           iw_net_intel_techs      target's technologies researched, last report (tier >= 1, display)
+#           iw_net_intel_ops        covert operations the target runs against the operator (tier 2, display)
 #
 # listed in the operator's `iw_nets`. It outlives the operations: that is the
 # point. Operations read it at creation (head start), at every detection
@@ -232,7 +236,10 @@ covert_op_end = {
 # omniscience. The operation-effect modifiers a target carries (covert_*) are
 # NOT aggregated anywhere — those are the effects of operations it has not
 # detected, and surfacing them would hand the defender knowledge the detection
-# system exists to withhold.
+# system exists to withhold. The one exception is earned, not given: a network
+# of ours at intelligence tier 2 counts the operations its target runs against
+# us (covert_net_refresh_intel, slice 7) — our agents inside their service,
+# not our counterintelligence at home.
 #
 # iw_last_exposed_country holds the country itself, not its capital state: the
 # widget renders the name by navigating into the country in script
@@ -358,6 +365,7 @@ covert_net_create = {
 				set_variable = { name = iw_net_ops value = 0 }
 				set_variable = { name = iw_net_trend value = 1 }
 				set_variable = { name = iw_net_head_start_offer value = 0 }
+				set_variable = { name = iw_net_intel_tier value = 0 }
 				var:iw_target = {
 					capital ?= {
 						scope:iw_new_net = { set_variable = { name = iw_target_capital value = PREV } }
@@ -373,10 +381,76 @@ covert_net_create = {
 # a new operation would get from it. Runs straight after every strength write
 # (change_variable has no clamp argument), so a burn shrinks the offer at once
 # and a same-day relaunch cannot take the pre-burn head start.
+# Also restates the intelligence tier (slice 7) for the same reason: a burn
+# hides a report the network no longer earns on the day, not a month later.
+# Strength only rises in the monthly pass, which refreshes the report straight
+# after (covert_net_refresh_intel), so a tier is never shown with values that
+# were not written at it.
 # Scope: network container
 covert_net_clamp = {
 	clamp_variable = { name = iw_net_strength min = 0 max = covert_net_max }
 	set_variable = { name = iw_net_head_start_offer value = covert_net_head_start_value }
+	set_variable = { name = iw_net_intel_tier value = covert_net_intel_tier_value }
+}
+
+# Refresh what a strong network reports on its target (slice 7). Display only:
+# nothing in script reads these values back. Each is written only at the tier
+# that reveals it (iw_net_intel_tier, restated by covert_net_clamp); below it
+# the old value stays stored but the widget hides it.
+#   tier >= 1  iw_net_intel_ic     the target's intelligence_capacity_total
+#              iw_net_intel_techs  the target's techs_researched
+#   tier 2     iw_net_intel_ops    covert pacts the target runs against the operator
+# The count reads pacts (the source of truth for whether an operation exists),
+# not the target's own iw_ops, whose sync only runs while the target's journal
+# entry is active; every phase counts. It is the ONE place the mod tells a
+# country about hostile operations it has not caught (see covert_op_burn):
+# earned by holding a strong network inside the other service.
+# Called from covert_nets_sync step 3, straight after the strength write, and
+# from the console harness. Never from a tooltip-walked path: it relies on
+# saved scopes. Both saved scopes are re-saved before use on every call, so a
+# loop never reads the previous network's. The tier is tested on the network
+# itself, never through a scope:<container>.var: chain.
+# Scope: network container; scope:iw_net_operator = operator country
+covert_net_refresh_intel = {
+	save_scope_as = iw_net_intel_net
+	# ---- Tier 1: their service ----
+	if = {
+		limit = {
+			has_variable = iw_net_intel_tier
+			var:iw_net_intel_tier >= 1
+		}
+		var:iw_target ?= {
+			if = {
+				limit = { is_country_alive = yes }
+				scope:iw_net_intel_net = {
+					set_variable = { name = iw_net_intel_ic value = PREV.intelligence_capacity_total }
+					set_variable = { name = iw_net_intel_techs value = PREV.techs_researched }
+				}
+			}
+		}
+	}
+	# ---- Tier 2: their operations against us ----
+	if = {
+		limit = {
+			has_variable = iw_net_intel_tier
+			var:iw_net_intel_tier >= 2
+		}
+		set_variable = { name = iw_net_intel_ops value = 0 }
+		var:iw_target ?= {
+			if = {
+				limit = { is_country_alive = yes }
+				save_scope_as = iw_net_intel_tgt
+				every_scope_diplomatic_pact = {
+					limit = {
+						is_covert_operation_pact = yes
+						first_country = scope:iw_net_intel_tgt
+						second_country = { this = scope:iw_net_operator }
+					}
+					scope:iw_net_intel_net = { change_variable = { name = iw_net_intel_ops add = 1 } }
+				}
+			}
+		}
+	}
 }
 
 # Grow the network, scaled down above half strength (covert_net_gain_scale).
@@ -419,7 +493,9 @@ covert_net_loss = {
 #      and flag networks a cultivate-assets operation feeds (slice 6).
 #   3. Tick: grow with >= 1 operation, otherwise decay (halved at funding
 #      >= covert_net_maintain_funding_level); restate trend and display
-#      capital (the head-start offer follows every write, in covert_net_clamp).
+#      capital (the head-start offer and the intelligence tier follow every
+#      write, in covert_net_clamp), then refresh the report the tier earns
+#      (covert_net_refresh_intel, slice 7).
 #      Gains are multiplied by the operator's Tradecraft (iw_net_tc_mult).
 #   4. Reap networks whose target is gone, or that hit 0 with no operations:
 #      temporary list -> remove_list_variable -> destroy_container.
@@ -523,6 +599,9 @@ covert_nets_sync = {
 					scope:iw_net_display = { set_variable = { name = iw_target_capital value = PREV } }
 				}
 			}
+			# The report this month's strength earns (slice 7). After the
+			# strength write, whose clamp has just restated the tier.
+			covert_net_refresh_intel = yes
 		}
 		# ---- 4. Reap ----
 		every_in_list = {

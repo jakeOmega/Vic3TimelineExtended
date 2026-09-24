@@ -438,6 +438,19 @@ and tech count; at ≥ 75 it shows how many operations the target runs against *
 behind a strong network so the "defender never sees undetected ops" rule is broken only by
 having penetrated their service. Display-only; no new mechanics. Designed after slice 4 lands.
 
+**As built (plan `docs/superpowers/plans/2026-09-24-covert-network-intelligence.md`).**
+The report sits on the **network** row only: the network outlives its operations, and the
+operation row's detection line already printed the target's capacity as a detection input
+(unchanged). The thresholds are two Section 1 constants compared in one script value,
+`covert_net_intel_tier_value`; `covert_net_clamp` writes the result to `iw_net_intel_tier`
+after every strength write, so a burn hides a tier the same day, and the widget reads only
+that code. The values are refreshed monthly in the network pass (`covert_net_refresh_intel`)
+and only at the tier that reveals them; the target's technology count uses the engine's
+`techs_researched`, and both of its figures are printed beside our own, which are live.
+The operations count reads the target's covert **pacts** towards the operator, not its
+containers (those sync only while the target's journal entry is active), and every phase
+counts. Console: `event te_debug_covert.5`.
+
 ## Verification (all slices)
 
 - `POST /reload?mod_only=true&audits_only=true` → `warnings` empty; check

@@ -11,7 +11,8 @@
 ###     for their tags and variables).
 ###   widget_je_covert_networks        custom_widget_container_3  (below the buttons)
 ###     One row per per-target network, from the operator's `iw_nets` list
-###     (slice 4; see covert_warfare_effects.txt § PER-TARGET NETWORKS).
+###     (slice 4; see covert_warfare_effects.txt § PER-TARGET NETWORKS),
+###     with what a strong network reports on its target (slice 7).
 ###
 ### SCRIPTED GUI OP CODES (common/scripted_guis/covert_warfare_sguis.txt):
 ###     0  funding stepper minus   covert_possible/effect_decrease_funding
@@ -491,6 +492,31 @@ types covert_operations_widget_types
 		widget_je_covert_operation_detail = {
 			text = "je_iw_net_row_benefit"
 		}
+
+		# ---- What the network reports on its target (slice 7) ----
+		# Chosen by the stored iw_net_intel_tier code (0 / 1 / 2), which
+		# covert_net_clamp restates from strength after every write; the 50 /
+		# 75 thresholds live only in covert_net_intel_tier_value. Every line
+		# waits for the code to exist, so a network restored from a save made
+		# before this slice shows no report until its first monthly pass.
+		widget_je_covert_operation_detail = {
+			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)0') )]"
+			text = "je_iw_net_row_intel_none"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), Or( EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)1'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') ) )]"
+			text = "je_iw_net_row_intel_service"
+			tooltip = "je_iw_net_row_intel_service_tooltip"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)1') )]"
+			text = "je_iw_net_row_intel_ops_locked"
+		}
+		widget_je_covert_operation_detail = {
+			visible = "[And( ScriptContainer.HasVariable('iw_net_intel_tier'), EqualTo_CFixedPoint(ScriptContainer.GetVariableValue('iw_net_intel_tier'), '(CFixedPoint)2') )]"
+			text = "je_iw_net_row_intel_ops"
+			tooltip = "je_iw_net_row_intel_ops_tooltip"
+		}
 	}
 }
 
@@ -592,7 +618,9 @@ flowcontainer = {
 	### The one honest word on hostile operations: what our own counterintelligence
 	### actually caught, named in script so an annexed attacker degrades to an
 	### anonymous line. Nothing here aggregates the undetected covert_* effect
-	### modifiers a target may be carrying.
+	### modifiers a target may be carrying. The only other word on hostile
+	### operations is a network row's tier-2 count (slice 7): what our agents
+	### inside that country's service report, not what we caught at home.
 	covert_cc_line = {
 		blockoverride "line_text" {
 			text = "[GetScriptedGui('covert_last_exposed_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"

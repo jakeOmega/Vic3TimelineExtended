@@ -187,20 +187,95 @@ te_debug_covert_max_priority = {
 # the new cover at once. The head start only reaches operations started
 # after this — it is fixed at creation.
 # Note: the network pass also ticks once, which is why the strength is
-# written after it, not before.
+# written after it, not before. The intelligence report (slice 7) is refreshed
+# after the write too, as the pass itself does, so the row shows the report
+# the new strength earns at once.
 # Parameters: $VALUE$ = 0 .. covert_net_max
 # Scope: country
 te_debug_covert_set_net_strength = {
 	covert_nets_sync = yes
 	if = {
 		limit = { has_variable_list = iw_nets }
+		save_scope_as = iw_net_operator
 		every_in_list = {
 			variable = iw_nets
 			set_variable = { name = iw_net_strength value = $VALUE$ }
 			covert_net_clamp = yes
+			covert_net_refresh_intel = yes
 		}
 	}
 	covert_ops_sync_all = yes
+}
+
+# Every network's target starts a cultivate-assets operation against us
+# (slice 7), so a tier-2 network's "operations against us" line has something
+# to count. Goes through te_debug_covert_plant_op in the target's own scope,
+# like any operation it launched itself; funding is floored at 1 on the target
+# (without touching its journal entry, which it may not have), or the pact's
+# requirement_to_maintain ends it at the next check. Targets already running
+# one against us are skipped (is_initiator, so our own cultivate-assets
+# operation against them does not count). Then refreshes every network's
+# report.
+# Scope: country
+te_debug_covert_hostile_cultivate = {
+	save_scope_as = te_debug_covert_victim
+	if = {
+		limit = { has_variable_list = iw_nets }
+		every_in_list = {
+			variable = iw_nets
+			var:iw_target ?= {
+				if = {
+					limit = {
+						is_country_alive = yes
+						NOT = {
+							has_diplomatic_pact = {
+								who = scope:te_debug_covert_victim
+								type = covert_cultivate_assets_action
+								is_initiator = yes
+							}
+						}
+					}
+					add_to_temporary_list = te_debug_covert_hostiles
+				}
+			}
+		}
+		every_in_list = {
+			list = te_debug_covert_hostiles
+			if = {
+				limit = {
+					OR = {
+						NOT = { has_variable = iw_funding_level }
+						var:iw_funding_level < 1
+					}
+				}
+				set_variable = { name = iw_funding_level value = 1 }
+			}
+			scope:te_debug_covert_victim = { save_scope_as = te_debug_covert_target }
+			te_debug_covert_plant_op = {
+				TYPE = cultivate_assets
+				ACTION = covert_cultivate_assets_action
+				DEFENSE_MOD = country_covert_defense_ideological_add
+				CODE = 12
+				MONTHS = 0
+			}
+		}
+	}
+	te_debug_covert_refresh_net_intel = yes
+}
+
+# Refresh every network's intelligence report now (slice 7), without a tick.
+# Re-saves scope:iw_net_operator first: planting an operation from another
+# country's scope (above) re-saves it as that country.
+# Scope: country
+te_debug_covert_refresh_net_intel = {
+	save_scope_as = iw_net_operator
+	if = {
+		limit = { has_variable_list = iw_nets }
+		every_in_list = {
+			variable = iw_nets
+			covert_net_refresh_intel = yes
+		}
+	}
 }
 
 # One month of network growth / decay without waiting for the pulse. Stand an
