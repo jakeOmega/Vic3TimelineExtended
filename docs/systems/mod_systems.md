@@ -86,6 +86,8 @@ New buildings get built / expanded
 
 **Buildings consume the construction good as maintenance.** `pm_maintenance` (`pmg_maintenance`, hidden in PM displays) carries `goods_input_construction_add = 0.1` per level; it is on 54 building types — industry, power, and transport infrastructure (railways, ports, airports, highways), not farms, mines or urban centres. A few company buildings in `unique_pms.txt` consume more (0.5–1). Construction is therefore not just an upfront build cost — it's an ongoing maintenance load tied to current economic activity.
 
+**Retooling.** The engine puts the `pm_retooling` static modifier on a building that switches production methods (`NEconomy.RETOOLING_WEEKS = 260` in `extra_defines.txt`); this mod REPLACEs it with `goods_input_construction_mult = 10`, so a retooling building pays +1000% on its construction input. Two `free_market_construction_rule` settings waive the retooling cost, and one of them maintenance as well (§ Market settings without retooling or maintenance).
+
 **Player UI.** The domestic tab of the construction panel (`gui/construction_panel.gui`, the `te_construction_market_section` block) carries the purchase control (+/- buttons bound to `te_construction_market_{increase,decrease}_target_*` in `common/scripted_guis/te_construction_market_scripted_gui.txt`; click / shift / ctrl / alt steps 1 / 10 / 100 / 1,000, right-click +10,000 or reset), a live read-out (government purchase in force and its treasury cost, private purchase and share, price per point, market supply vs demand with a shortage flag) and a collapsible "How does the construction market work?" explanation. The figures come from `common/script_values/te_construction_market_display_values.txt` (display-only, every `var:` read guarded); the text is the `TE_CM_*` keys plus the `concept_te_construction_market` game concept.
 
 **Implications for mod authors:**
@@ -118,6 +120,30 @@ Wiring: `common/on_actions/te_construction_market_on_actions.txt` (yearly heartb
 | `te_construction_market_pulse_values.txt` | Tick bookkeeping for the self-relaying pulse. |
 | `te_construction_market_display_values.txt` | Display-only figures for the construction panel. |
 
+### Market settings without retooling or maintenance
+
+`free_market_construction_rule` has four settings. Three run the market (`te_free_market_construction_on` is true for all three, so nothing else in the system tells them apart):
+
+| Setting | Maintenance (`pmg_maintenance`) | Retooling (`pm_retooling`) |
+|---|---|---|
+| `free_market_construction_enabled` (default) | `pm_maintenance` | applies |
+| `free_market_construction_no_retooling` | `pm_maintenance` | removed by script |
+| `free_market_construction_no_maintenance` | `pm_no_maintenance`, forced (the direct setting's flags for that group) | removed by script (it would multiply nothing) |
+| `free_market_construction_disabled` | `pm_no_maintenance`, forced | applies, multiplies nothing (§ Free Market Construction off) |
+
+Everything else in both new settings is the enabled setting's: the Construction Site's market method, and the company buildings (`pm_disney_world`, `pm_generic_industrial_city`, `pm_generic_monument_to_industry`) and Engineering & Logistics barracks keep their construction-good recipes, which are production, not upkeep.
+
+**No retooling cannot be a PM flag.** `pm_retooling` is a static modifier the engine applies for `RETOOLING_WEEKS`; neither a static modifier nor a define has a rule gate, and a cancelling modifier would have to be put on each retooling building by the same script that can simply remove the penalty (`scripting_best_practices.md`, "Gating a Mechanic on a Game Rule When It Lives in a Define, PM or Building Group"). So `te_pm_retooling_waived` (`te_construction_market_triggers.txt`; names the two settings, so a pre-rule save keeps paying) gates `te_remove_waived_pm_retooling` (`extra_effects.txt`, building scope), which removes the modifier:
+- from `on_production_method_changed` (`te_on_production_method_changed_retooling`, `te_construction_market_on_actions.txt`; root = the building), at once and again a day later through `te_construction_market_building_events.3`, since whether the engine applies the modifier before or after the hook fires is unverified;
+- from the weekly sweep `minor_events_timelineextended.100` (every building of every state), which catches any PM change the hook misses, such as one the engine makes itself.
+
+The same effect keeps its older job in every setting: removing the modifier from level-0 buildings (also from `on_start_expanding_building`).
+
+**Play-test list.**
+1. *No retooling, switch a PM* on a factory with maintenance: the Retooling modifier does not appear on the building (or is gone the next day), and its construction input stays at 0.1 per level (times cost scaling). An AI country's buildings show no Retooling modifier after a few weeks.
+2. *No maintenance, day 1*: `pmg_maintenance` shows No Maintenance only; the construction market read-out's demand is the government and private purchases plus the company buildings. Construction Sites, sectors and the panel work as in the default game.
+3. *Default game*: switching a PM still applies Retooling (+1000% construction input).
+
 ### Free Market Construction off (direct construction)
 
 `free_market_construction_rule` (default enabled) turns the whole market off at game setup for base-game-style construction. Script asks `te_free_market_construction_off` / `_on` (`common/scripted_triggers/te_construction_market_triggers.txt`), which test the **disabled** setting so a save from before the rule keeps the market.
@@ -130,7 +156,7 @@ Wiring: `common/on_actions/te_construction_market_on_actions.txt` (yearly heartb
 |---|---|---|
 | `pmg_base_te_construction_market_site` (site) | `pm_te_construction_market_base`: 1 construction good → 1 point | `pm_te_direct_construction_<tier>`, 7 tiers: the Construction Sector tier of the same name (`extra_pms.txt`) with its construction-good output as `country_construction_add` — the same inputs, employment, `state_construction_mult`, mortality and required inputs. Per level: 1 / 2 / 3.5 / 5 / 6 / 10 / 16 points. `ai_selection = most_productive`; the tech gates are the sector's |
 | `pmg_construction_automation`, `pmg_construction_principle` (sector and site) | on the sector only in practice: each gated PM's `unlocking_production_methods` lists the 7 sector tiers and the 7 direct tiers, never the market base PM | the same PMs, on the site |
-| `pmg_maintenance` (54 building types) | `pm_maintenance` (0.1 construction per level) | `pm_no_maintenance`, forced |
+| `pmg_maintenance` (54 building types) | `pm_maintenance` (0.1 construction per level); `pm_no_maintenance`, forced, in the no-maintenance setting | `pm_no_maintenance`, forced |
 | `pmg_disney_world`, `pmg_generic_industrial_city`, `pmg_generic_monument_to_industry` | the original PM (consumes the construction good) | `pm_<same>_direct`, forced: the recipe without the good |
 | `pmg_principle_engineering_and_logistics` (barracks) | the principle PM (0.2 construction good per level) and its no-effect fallback | `_direct` twins: 0.2 `country_construction_add` per level instead |
 
@@ -1036,10 +1062,11 @@ The construction market hooks many engine events to keep its construction sites 
 - `on_revolution_start`, `on_secession_start` — internal conflicts
 - `on_wargoal_enforced` — war results
 - `on_start_expanding_building`, `on_building_expanded`, `on_building_built` — building events
+- `on_production_method_changed` — removes `pm_retooling` in games whose rule setting waives it (§ Market settings without retooling or maintenance)
 
 ### Scope Chain Limitation (Important)
 
-Building, institution and law scopes **do not support variables or modifiers**. The state modifier refresh effects in `extra_effects.txt` use `add_modifier = { multiplier = script_value }`, which evaluates the script value through the parent scope chain, so calling them from building-scope hooks like `on_building_built` / `on_production_method_changed`, from `on_law_activated`, or from `on_acquired_technology` causes cascading errors. Those hooks have all been removed — the **periodic state pulses are the only refresh sites**: `pollution_on_action` and `tourism_on_action` on `on_monthly_pulse_state`, `migration_crowding_on_action` and `free_port_tariff_update_on_action` on `on_yearly_pulse_state`. Pick the pulse whose cadence matches how fast the multiplier's inputs move, and give each modifier exactly one refresh site.
+Building, institution and law scopes **do not support variables or modifiers**. The state modifier refresh effects in `extra_effects.txt` use `add_modifier = { multiplier = script_value }`, which evaluates the script value through the parent scope chain, so calling them from building-scope hooks like `on_building_built` / `on_production_method_changed`, from `on_law_activated`, or from `on_acquired_technology` causes cascading errors. Those hooks have all been removed (a plain `remove_modifier` on the building itself is fine: `te_remove_waived_pm_retooling` runs from `on_start_expanding_building` and `on_production_method_changed`) — the **periodic state pulses are the only refresh sites**: `pollution_on_action` and `tourism_on_action` on `on_monthly_pulse_state`, `migration_crowding_on_action` and `free_port_tariff_update_on_action` on `on_yearly_pulse_state`. Pick the pulse whose cadence matches how fast the multiplier's inputs move, and give each modifier exactly one refresh site.
 
 ## AI Weights Guidelines
 
@@ -1578,7 +1605,7 @@ Fourteen mod systems can be toggled on/off at game setup via `common/game_rules/
 | `space_race_rule` | `space_race_enabled` | enabled | Space race JE, satellite/moon/interplanetary events |
 | `social_movements_rule` | `social_movements_enabled` | enabled | 8 social movement JEs and associated events |
 | `universal_aptitude_traits_rule` | `universal_aptitude_traits_enabled` | **disabled** | Assigns admin/diplo/military aptitude traits to ALL adult characters instead of only rulers and heirs — works with Heir Education off too. With both rules off, no aptitude traits at all |
-| `free_market_construction_rule` | `free_market_construction_enabled` | enabled | The construction market (§ Construction as a Market Good); disabled = base-game-style direct construction (§ Free Market Construction off). Read through `te_free_market_construction_on` / `_off`, which test the *disabled* flag so a save from before the rule keeps the market |
+| `free_market_construction_rule` | `free_market_construction_enabled` | enabled | The construction market (§ Construction as a Market Good); `_no_retooling` = the market without the retooling surcharge, `_no_maintenance` = the market without construction maintenance (§ Market settings without retooling or maintenance); disabled = base-game-style direct construction (§ Free Market Construction off). Read through `te_free_market_construction_on` / `_off`, which test the *disabled* flag so a save from before the rule keeps the market, and `te_pm_retooling_waived` |
 
 **`banking_system_rule` has three settings.** `banking_system_enabled`, `banking_system_simplified`
 and `banking_system_disabled`. The middle one keeps the Banking Cycle journal entry — the cycle,
@@ -1602,7 +1629,7 @@ article, power-bloc principle, GUI.
 - **Diplomatic actions:** `potential = { has_game_rule = X_enabled ... }`
 - **Trait assignment (aptitude):** `limit = { te_aptitude_traits_enabled = yes  OR = { has_game_rule = universal_aptitude_traits_enabled  has_role_of_type = ruler  has_role_of_type = heir } }`
 
-**Localization:** Rule names, option labels, and descriptions in `te_game_rules_l_english.yml`. Each rule has 5 keys: `rule_X_rule`, `setting_X_enabled`, `setting_X_enabled_desc`, `setting_X_disabled`, `setting_X_disabled_desc` — 7 for `banking_system_rule`, which adds `setting_banking_system_simplified` and its `_desc`.
+**Localization:** Rule names, option labels, and descriptions in `te_game_rules_l_english.yml`. Each rule has 5 keys: `rule_X_rule`, `setting_X_enabled`, `setting_X_enabled_desc`, `setting_X_disabled`, `setting_X_disabled_desc` — 7 for `banking_system_rule`, which adds `setting_banking_system_simplified` and its `_desc`, and 9 for `free_market_construction_rule`, which adds `setting_free_market_construction_no_retooling` and `_no_maintenance` with their `_desc`.
 
 **Game Concepts:** Both cultural hegemony and information warfare have detailed concept tooltips (8 concepts total) in `te_concepts_l_english.yml` with cross-linked `[concept_X]` references. Concepts: `concept_cultural_hegemony_system`, `concept_cultural_pull`, `concept_cultural_pull_components`, `concept_foreign_cultural_benchmark`, `concept_information_warfare_system`, `concept_digital_sovereignty`, `concept_cyber_operations`, `concept_cyber_detection`.
 

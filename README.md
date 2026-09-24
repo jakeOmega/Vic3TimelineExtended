@@ -73,10 +73,11 @@ Fourteen mod systems can be turned on or off at game setup. Defaults below; full
 | `world_war_rule` | **disabled** | World War JE leadup → active → post-war lifecycle |
 | `custom_religions_allowed_rule` | **disabled** | Custom-religion creator JE and events |
 | `universal_aptitude_traits_rule` | **disabled** | Assigns admin/diplo/military aptitude traits to *all* adult characters, not just rulers and heirs — independent of Heir Education. With both rules off, no character has aptitude traits |
-| `free_market_construction_rule` | enabled | The construction market: construction as a tradeable good bought by the government and investors, construction maintenance on industry and infrastructure, a private share that follows the purchases. *Disabled*: base-game construction — the Construction Site becomes the construction sector (built and expanded by the government, points straight from its production method), no construction good or maintenance, and the economic-system law sets the private share |
+| `free_market_construction_rule` | enabled | The construction market: construction as a tradeable good bought by the government and investors, construction maintenance on industry and infrastructure, a private share that follows the purchases. *Without Retooling Costs*: the same, but switching a building's production methods no longer multiplies its construction maintenance. *Without Maintenance*: the market with no construction maintenance at all (and so no retooling cost). *Disabled*: base-game construction — the Construction Site becomes the construction sector (built and expanded by the government, points straight from its production method), no construction good or maintenance, and the economic-system law sets the private share |
 
-Every rule but `banking_system_rule` is a straight on/off pair; that one has a third,
-*simplified* setting (see the table above).
+Every rule but `banking_system_rule` and `free_market_construction_rule` is a straight on/off
+pair; the first has a third, *simplified* setting, and the second two more market settings,
+*without retooling costs* and *without maintenance* (see the table above).
 
 Loc keys for each rule live in `localization/english/te_game_rules_l_english.yml`. The gating pattern (`is_shown_when_inactive`, on-action `return = yes` guards, etc.) is documented in `docs/systems/mod_systems.md` § Game Rules.
 

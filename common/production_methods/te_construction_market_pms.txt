@@ -23,6 +23,10 @@
 #   pm_principle_engineering_and_logistics  pm_principle_engineering_and_logistics
 #     (+ its no-effect fallback)              _direct: points instead of the good
 #
+# The two other market settings take the left column, except that
+# no_maintenance takes pm_no_maintenance (forced) from the right one;
+# no_retooling differs from enabled only in script (te_pm_retooling_waived).
+#
 # Every method that a setting disables is hidden when unavailable, so each game
 # shows only its own family.
 #
@@ -360,9 +364,10 @@ pm_te_direct_construction_nanomaterial = {
 }
 
 # ---- Maintenance (pmg_maintenance) ----
-# Forced in direct games in place of pm_maintenance: no construction good to
-# pay upkeep in. Disabled in market games, so pm_maintenance stays the group's
-# only method there, as before.
+# Forced in place of pm_maintenance in direct games (no construction good to
+# pay upkeep in) and in no_maintenance market games (the good exists, but
+# buildings pay no upkeep in it). Disabled in the other market settings, so
+# pm_maintenance stays the group's only method there, as before.
 pm_no_maintenance = {
 	texture = "gfx/interface/icons/production_method_icons/cat_wrench_blue_p0.dds"
 	is_hidden_when_unavailable = yes

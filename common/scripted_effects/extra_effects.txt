@@ -1280,22 +1280,33 @@ population_transfer_effect = {
 	}
 }
 
-# Remove the vanilla pm_retooling penalty from buildings that still have no
-# completed levels. The modifier is only intended to matter once a real level
-# exists, but the engine can leave it on fresh construction sites.
-te_remove_pm_retooling_from_zero_level_building = {
+# Remove the engine's pm_retooling penalty (extra_modifiers.txt) where it is
+# waived (building scope):
+# - buildings that still have no completed levels: the modifier is only
+#   intended to matter once a real level exists, but the engine can leave it on
+#   fresh construction sites;
+# - every building in games whose free_market_construction_rule setting waives
+#   retooling (te_pm_retooling_waived).
+# Called from on_production_method_changed and on_start_expanding_building
+# (te_construction_market_on_actions.txt), a day after a production-method
+# change (te_construction_market_building_events.3), and by the weekly sweep
+# (minor_events_timelineextended.100).
+te_remove_waived_pm_retooling = {
 	if = {
 		limit = {
 			has_modifier = pm_retooling
-			level = 0
+			OR = {
+				level = 0
+				te_pm_retooling_waived = yes
+			}
 		}
 		remove_modifier = pm_retooling
 	}
 }
 
-te_remove_pm_retooling_from_zero_level_state_buildings = {
+te_remove_waived_pm_retooling_from_state_buildings = {
 	every_scope_building = {
-		te_remove_pm_retooling_from_zero_level_building = yes
+		te_remove_waived_pm_retooling = yes
 	}
 }
 

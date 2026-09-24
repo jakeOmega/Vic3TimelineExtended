@@ -1,13 +1,19 @@
 ﻿# Construction-market subsystem — which construction model this game runs.
 #
 # free_market_construction_rule (common/game_rules/extra_game_rules.txt):
-#   enabled  -> the construction market (the default, and the only model before
-#               the rule existed)
-#   disabled -> "direct construction": Construction Sectors provide construction
-#               points directly, as in the base game
+#   enabled         -> the construction market (the default, and the only model
+#                      before the rule existed)
+#   no_retooling    -> the market, without the retooling surcharge on
+#                      construction maintenance
+#   no_maintenance  -> the market, without construction maintenance (and so
+#                      without retooling costs)
+#   disabled        -> "direct construction": Construction Sectors provide
+#                      construction points directly, as in the base game
 #
-# Both triggers test the DISABLED flag, never the enabled one, so a save made
-# before the rule existed (where neither flag may be set) keeps the market.
+# te_free_market_construction_on / _off test the DISABLED flag, never the
+# enabled one, so a save made before the rule existed (where neither flag may
+# be set) keeps the market; te_pm_retooling_waived names its two settings, so
+# such a save keeps paying for retooling.
 # Read only a game rule, so they work from any scope — country, state,
 # building, scripted GUI.
 
@@ -17,4 +23,14 @@ te_free_market_construction_on = {
 
 te_free_market_construction_off = {
 	has_game_rule = free_market_construction_disabled
+}
+
+# The engine's pm_retooling modifier (a building that switches production
+# methods, common/static_modifiers/extra_modifiers.txt) is removed as soon as
+# it appears: te_remove_waived_pm_retooling.
+te_pm_retooling_waived = {
+	OR = {
+		has_game_rule = free_market_construction_no_retooling
+		has_game_rule = free_market_construction_no_maintenance
+	}
 }

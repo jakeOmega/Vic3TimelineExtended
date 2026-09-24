@@ -598,7 +598,7 @@
  pm_no_facility_emission_standards:0 "No Facility Emission Standards"
  pm_no_glassworks_fume_ventilation:0 "No Fume Ventilation"
  pm_no_maintenance:0 "No Maintenance"
- pm_no_maintenance_desc:0 "The Free Market Construction game rule is off: there is no [concept_construction] good, so buildings pay no construction as upkeep."
+ pm_no_maintenance_desc:0 "Buildings pay no [concept_construction] as upkeep: the Free Market Construction game rule has turned construction maintenance off, or the construction market altogether."
  pm_no_precision_environmental_management:0 "No Environmental Management"
  pm_no_rockets:0 "Aircraft Only"
  pm_no_synthesis_scrubbing:0 "No Synthesis Scrubbing"
