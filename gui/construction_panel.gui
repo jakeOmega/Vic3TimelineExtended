@@ -974,20 +974,46 @@ types construction_panel
 				visible = "[InformationPanel.IsTabSelected('default')]"
 				direction = vertical
 
-				### MOD: construction-market mass-buy buttons (te_construction_market) ###
+				### MOD: construction-market section (te_construction_market) ###
+				# The construction good's purchase control, a live read-out of
+				# where construction is going, and an expandable explanation.
+				# Figures: te_construction_market_display_* in
+				# common/script_values/te_construction_market_display_values.txt.
+				# Text: the TE_CM_* keys. The open flag of the explanation lives in
+				# the GUI variable system only, never in the save.
 				flowcontainer = {
-					margin_bottom = 10
-					margin_left = 20
+					name = "te_construction_market_section"
+					using = default_list_position
 					direction = vertical
-					parentanchor = hcenter
+					minimumsize = { @panel_width -1 }
+					margin_top = 5
+					margin_bottom = 10
+					spacing = 5
+
+					default_header = {
+						blockoverride "text" {
+							text = "TE_CM_SECTION_HEADER"
+						}
+					}
+
+					textbox = {
+						parentanchor = hcenter
+						text = "TE_CM_SECTION_INTRO"
+						autoresize = yes
+						multiline = yes
+						max_width = @panel_width_minus_10
+						margin = { 10 0 }
+						align = left|nobaseline
+					}
 
 					textbox = {
 						text = "GOVERNMENT_CONSTRUCTION_BOUGHT"
+						tooltip = "TE_CM_PURCHASE_TT"
 						parentanchor = hcenter|top
-						margin_top = 10
-						margin_bottom = 10
+						margin_top = 5
 						autoresize = yes
 						multiline = yes
+						max_width = @panel_width_minus_10
 						align = center|nobaseline
 					}
 
@@ -1002,6 +1028,7 @@ types construction_panel
 							datacontext = "[GetScriptedGui('te_construction_market_decrease_target_1')]"
 							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
+							tooltip = "TE_CM_DECREASE_TT"
 							click_modifiers = {
 								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 								onshift = "[GetScriptedGui('te_construction_market_decrease_target_10').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -1014,6 +1041,7 @@ types construction_panel
 						### LEVEL
 						container = {
 							parentanchor = vcenter
+							tooltip = "TE_CM_STAT_GOVERNMENT_TT"
 							background = {
 								using = entry_bg
 								margin = { 10 -2 }
@@ -1036,6 +1064,7 @@ types construction_panel
 							datacontext = "[GetScriptedGui('te_construction_market_increase_target_1')]"
 							visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
 							enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( GetPlayer.MakeScope ).End)]"
+							tooltip = "TE_CM_INCREASE_TT"
 							click_modifiers = {
 								ondefault = "[ScriptedGui.Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 								onshift = "[GetScriptedGui('te_construction_market_increase_target_10').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
@@ -1044,6 +1073,85 @@ types construction_panel
 							}
 							onrightclick = "[GetScriptedGui('te_construction_market_increase_target_10000').Execute( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 						}
+					}
+
+					### LIVE READ-OUT
+					flowcontainer = {
+						parentanchor = hcenter
+						direction = vertical
+						margin_top = 5
+						spacing = 3
+
+						textbox = {
+							text = "TE_CM_STAT_GOVERNMENT"
+							tooltip = "TE_CM_STAT_GOVERNMENT_TT"
+							autoresize = yes
+							multiline = yes
+							max_width = @panel_width_minus_10
+							align = left|nobaseline
+						}
+
+						textbox = {
+							text = "TE_CM_STAT_PRIVATE"
+							tooltip = "TE_CM_STAT_PRIVATE_TT"
+							autoresize = yes
+							multiline = yes
+							max_width = @panel_width_minus_10
+							align = left|nobaseline
+						}
+
+						textbox = {
+							text = "TE_CM_STAT_PRICE"
+							tooltip = "TE_CM_STAT_PRICE_TT"
+							autoresize = yes
+							multiline = yes
+							max_width = @panel_width_minus_10
+							align = left|nobaseline
+						}
+
+						textbox = {
+							text = "TE_CM_STAT_MARKET"
+							tooltip = "TE_CM_STAT_MARKET_TT"
+							autoresize = yes
+							multiline = yes
+							max_width = @panel_width_minus_10
+							align = left|nobaseline
+						}
+					}
+
+					### HOW IT WORKS (collapsible)
+					section_header_button = {
+						blockoverride "layout" {
+							parentanchor = hcenter
+							size = { @panel_width_minus_10 32 }
+						}
+						blockoverride "left_text_alignment" {
+							align = left|nobaseline
+						}
+						blockoverride "left_text" {
+							text = "TE_CM_HOW_IT_WORKS"
+							using = elide_fontsize_min
+						}
+						blockoverride "onclick" {
+							onclick = "[GetVariableSystem.Toggle('te_cm_how_it_works_open')]"
+						}
+						blockoverride "onclick_showmore" {
+							visible = "[Not(GetVariableSystem.Exists('te_cm_how_it_works_open'))]"
+						}
+						blockoverride "onclick_showless" {
+							visible = "[GetVariableSystem.Exists('te_cm_how_it_works_open')]"
+						}
+					}
+
+					textbox = {
+						visible = "[GetVariableSystem.Exists('te_cm_how_it_works_open')]"
+						parentanchor = hcenter
+						text = "TE_CM_HOW_IT_WORKS_BODY"
+						autoresize = yes
+						multiline = yes
+						max_width = @panel_width_minus_10
+						margin = { 10 5 }
+						align = left|nobaseline
 					}
 				}
 

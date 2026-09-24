@@ -53,15 +53,15 @@ Systems using this pattern:
 
 ## Construction as a Market Good (FMC architecture)
 
-> Cross-reference: `docs/vanilla/vanilla_economy_reference.md` § 9 establishes the vanilla two-FCFS-queue model (government queue from treasury, private queue from IP, allocation set by `country_private_construction_allocation_mult`). This mod adds a market layer underneath without replacing the queues.
+> Cross-reference: `docs/vanilla/vanilla_economy_reference.md` § 9 establishes the vanilla two-FCFS-queue model (government queue from treasury, private queue from IP, allocation set by `country_private_construction_allocation_mult`). This mod adds a market layer underneath without replacing the queues. Based on the third-party *Free Market Construction* mod (credited in `README.md`); every file is prefixed `te_construction_market_*`.
 
 **Why:** Decoupling construction *capacity* (the vanilla `country_construction` country-resource that the FCFS queues spend) from construction *output* (what the construction sector actually produces) lets per-state economics influence national construction throughput. A goods-side stockout in one region propagates through the price loop instead of disappearing into a black-box country resource.
 
 **Architecture (3 layers):**
 
-1. **Construction-sector building, REPLACE'd.** `building_construction_sector` (vanilla) is REPLACE'd in `common/buildings/fmc_construction.txt` and its tier PMs are REPLACE'd in `common/production_methods/extra_pms.txt` (`pm_wooden_buildings`, `pm_iron_frame_buildings`, `pm_steel_frame_buildings`, `pm_arc_welded_buildings`, plus newer high-tier variants). Each tier now outputs `goods_output_construction_add = N` (1, 2, 3.5, 5, 6, 10, 16 across tiers) — i.e. the construction sector produces the **`construction`** market good rather than direct country construction points. State-level `state_construction_mult` is preserved so per-state efficiency still matters.
+1. **Construction-sector building, REPLACE'd.** `building_construction_sector` (vanilla) is REPLACE'd in `common/buildings/te_construction_market_site.txt` (its group `bg_construction` is REPLACE'd as ordinary heavy industry in `extra_building_groups.txt`, so it is no longer government-funded), and its tier PMs are REPLACE'd in `common/production_methods/extra_pms.txt` (`pm_wooden_buildings`, `pm_iron_frame_buildings`, `pm_steel_frame_buildings`, `pm_arc_welded_buildings`, plus the mod tiers `pm_reinforced_concrete_buildings`, `pm_advanced_construction`, `pm_nanomaterial_buildings` INJECTed into `pmg_base_building_construction_sector`). Each tier now outputs `goods_output_construction_add = N` (1, 2, 3.5, 5, 6, 10, 16 across tiers) — i.e. the construction sector produces the **`construction`** market good rather than direct country construction points. State-level `state_construction_mult` is preserved so per-state efficiency still matters. Barracks under the Engineering & Logistics principle (`pm_principle_engineering_and_logistics`) also produce 0.2 per level.
 2. **The `construction` good itself.** Defined in `common/goods/timeline_extended_extra_goods.txt`. `cost = 1000`, `category = industrial`, `traded_quantity = 0.1`, `consumption_tax_cost = 400` (Authority cost if the player consumption-taxes it). High base cost makes it a load-bearing market input.
-3. **Auto-placed consumer building: `fmc_building_construction_site`.** Defined in `common/buildings/fmc_construction.txt`. Flags: `buildable = no`, `expandable = no`, `downsizeable = no`, `min_raise_to_hire = -1.0`, `levels_per_mesh = -1`, `ownership_type = self`. Placed automatically by `fmc_sector_placement_effects.txt`. Its single PM (`pm_base` in `fmc_construction.txt`) consumes 1 `goods_input_construction` per workforce and produces 1 `country_construction_add` — i.e. it converts the construction good back into the vanilla queue currency. Employment is tiny (10 laborers per level, level_scaled).
+3. **Auto-placed consumer building: `te_construction_market_site`.** Defined in `common/buildings/te_construction_market_site.txt`, group `te_construction_market_bg` (government-funded, hidden from the outliner). `common/defines/te_construction_market_defines.txt` points `NCountry.CONSTRUCTION_CAMP_BUILDING` at it, which is what makes the engine charge its inputs only for the points actually spent — to the treasury or the investment pool, by queue. Flags: `buildable = no`, `expandable = no`, `downsizeable = no`, `min_raise_to_hire = -1.0`, `levels_per_mesh = -1`. Placed automatically by `te_construction_market_sector_placement_effects.txt` in each state where construction starts (with a capital fallback). Its single PM (`pm_te_construction_market_base` in `common/production_methods/te_construction_market_pms.txt`) consumes 1 `goods_input_construction` per workforce and produces 1 `country_construction_add` — i.e. it converts the construction good back into the vanilla queue currency. Each weekly pulse re-applies `te_construction_market_capacity_modifier` (`building_throughput_add`) to every site so the sites together deliver exactly the week's public + private purchase. Employment is tiny (10 laborers per level, level_scaled).
 
 **The chain end-to-end:**
 
@@ -70,7 +70,7 @@ Construction Sector (vanilla, REPLACE'd) → produces construction good
    ↓
 Market: construction good supply meets construction good demand at a price
    ↓
-fmc_building_construction_site (auto-placed) consumes construction good
+te_construction_market_site (auto-placed, the engine's construction camp) consumes construction good
    ↓ produces
 country_construction_add (vanilla queue currency)
    ↓
@@ -79,36 +79,43 @@ Vanilla two-FCFS queues (government from treasury / private from IP) spend it
 New buildings get built / expanded
 ```
 
-**Construction-cost-scaling layer.** The `construction_cost_scaling` static modifier (above) applies `goods_input_construction_mult = 1` (multiplied by a per-country GDPpc-driven multiplier). This scales how much *construction good* every building's maintenance PM consumes. So a richer country burns more construction good per same building → competes more for the same supply → stockouts and higher prices → fewer net `country_construction_add` produced → vanilla queues stall on availability rather than treasury.
+**Purchases and the queue split.** The government purchase is the country variable `te_construction_market_public_target` (set by the player in the construction panel, by `te_construction_market_ai_update_buy` for the AI), capped each week at what the government queue can absorb (`te_construction_market_public_use_target`: queued government levels × `country_max_weekly_construction_progress_add`). The private purchase (`te_construction_market_private_use_target`) is roughly the investment pool's gross weekly income, scaled by how full the pool is against 24 weeks of income, divided by the smoothed price (`te_construction_market_price_stabilizer`) and capped by the private queue. The private share of construction (`te_construction_market_private_share_modifier`, `country_private_construction_allocation_mult = 0.01` × the private share in percent) is set weekly from those two purchases; `common/laws/construction_system_law_injections.txt` cancels the economic-system laws' vanilla allocations so nothing else moves it.
 
-**Buildings consume the construction good as maintenance.** Most production buildings have `goods_input_construction_add = 0.5 - 1` in their `workforce_scaled` block (see `extra_pms.txt`, lines around 1303, 2033, 2260, etc.). Construction is therefore not just an upfront build cost — it's an ongoing maintenance load tied to current economic activity.
+**Construction-cost-scaling layer.** The `construction_cost_scaling` static modifier (above) applies `goods_input_construction_mult = 1` (multiplied by a per-country GDPpc-driven multiplier). This scales how much *construction good* every consumer burns — each construction site per point delivered, and every building's maintenance PM. So a richer country burns more construction good per same building → competes more for the same supply → stockouts and higher prices → fewer net `country_construction_add` produced → vanilla queues stall on availability rather than treasury.
+
+**Buildings consume the construction good as maintenance.** `pm_maintenance` (`pmg_maintenance`, hidden in PM displays) carries `goods_input_construction_add = 0.1` per level; it is on 54 building types — industry, power, and transport infrastructure (railways, ports, airports, highways), not farms, mines or urban centres. A few company buildings in `unique_pms.txt` consume more (0.5–1). Construction is therefore not just an upfront build cost — it's an ongoing maintenance load tied to current economic activity.
+
+**Player UI.** The domestic tab of the construction panel (`gui/construction_panel.gui`, the `te_construction_market_section` block) carries the purchase control (+/- buttons bound to `te_construction_market_{increase,decrease}_target_*` in `common/scripted_guis/te_construction_market_scripted_gui.txt`; click / shift / ctrl / alt steps 1 / 10 / 100 / 1,000, right-click +10,000 or reset), a live read-out (government purchase in force and its treasury cost, private purchase and share, price per point, market supply vs demand with a shortage flag) and a collapsible "How does the construction market work?" explanation. The figures come from `common/script_values/te_construction_market_display_values.txt` (display-only, every `var:` read guarded); the text is the `TE_CM_*` keys plus the `concept_te_construction_market` game concept.
 
 **Implications for mod authors:**
 
-- **The two FCFS queues still apply unchanged** — government queue from treasury, private queue from IP, with allocation set by `country_private_construction_allocation_mult`. The mod hasn't replaced the queue model; it's added an upstream market that determines whether the queue's currency is actually being produced.
+- **The two FCFS queues still apply unchanged** — government queue from treasury, private queue from IP. The mod hasn't replaced the queue model; it's added an upstream market that determines whether the queue's currency is actually being produced, and drives the allocation between the queues from the two purchases.
 - **A goods-side stockout stalls both queues** regardless of treasury/IP balance. This is the design intent: construction is gated by economic capacity, not just by money.
-- **The `fmc_building_construction_site` building is auto-placed and the PM `pm_base` is `is_default = yes`** — there's no UI surface for the player to see this conversion. Tooltips on the construction-good price and the country `country_construction_add` total are the visible signals.
-- **When mod-adding new buildings**, give them realistic `goods_input_construction_add` in their maintenance PMs. Skipping this makes the building free to maintain in capacity terms, undermining the system.
+- **When mod-adding new buildings**, give them realistic `goods_input_construction_add` in their maintenance PMs (or add `pmg_maintenance`). Skipping this makes the building free to maintain in capacity terms, undermining the system.
 
-**FMC scripts (`common/scripted_effects/fmc_*.txt`):**
+**Scripts (`common/scripted_effects/te_construction_market_*.txt`):**
 
 | File | Purpose |
 |---|---|
-| `fmc_setup_effects.txt` | Initial placement at game start. |
-| `fmc_sector_placement_effects.txt` | Per-state placement of `fmc_building_construction_site`. |
-| `fmc_build_effects.txt` | Adjusts auto-built fmc levels in response to construction-good demand. |
-| `fmc_update_effects.txt` | Periodic update of fmc state. |
-| `fmc_ai_effects.txt` | AI-side decisions around the system. |
-| `fmc_custom_on_actions.txt` | Wires the above to on_actions. |
+| `te_construction_market_setup_effects.txt` | Per-country setup at game start / formation: seeds the purchase and price-stabilizer variables, places the capital site. |
+| `te_construction_market_sector_placement_effects.txt` | Per-state placement and removal of `te_construction_market_site` as construction starts and finishes. |
+| `te_construction_market_build_effects.txt` | `te_construction_market_set_specified_level` and friends — set a building to an exact level without level creep. |
+| `te_construction_market_update_effects.txt` | Weekly data refresh: private-share modifier, per-site capacity modifier, price stabilizer; border-change site re-placement. |
+| `te_construction_market_pulse_effects.txt` | Weekly pulse and border-change entry points. |
+| `te_construction_market_ai_effects.txt` | AI purchase target. |
 
-**FMC script values (`common/script_values/`):**
+Wiring: `common/on_actions/te_construction_market_on_actions.txt` (yearly heartbeat, border and building-lifecycle hooks), `events/te_construction_market_{pulse,recalc,building}_events.txt` (a self-relaying daily tick that fans out the weekly body to every country every 7th tick), `common/history/te_construction_market_global.txt` (game-start setup).
+
+**Script values (`common/script_values/te_construction_market_*.txt`):**
 
 | File | Key values |
 |---|---|
-| `fmc_current_values.txt` | `fmc_construction_price` and derived ratios. |
-| `fmc_target_values.txt` | Target levels and stabiliser thresholds. |
-| `fmc_sector_placement_values.txt` | `fmc_construction_per_site` etc. |
-| `fmc_ai_values.txt` | AI weights tied to queue depth and banking stress. |
+| `te_construction_market_current_values.txt` | `te_construction_market_price` (market price × construction cost scaling) and the realised spending/use split. |
+| `te_construction_market_target_values.txt` | Public/private purchase targets, private share, price-stabilizer step. |
+| `te_construction_market_sector_placement_values.txt` | `te_construction_market_per_site` and the staffing-adjusted per-site throughput. |
+| `te_construction_market_ai_values.txt` | AI purchase target (income, reserves, debt; war and banking-stress brakes). |
+| `te_construction_market_pulse_values.txt` | Tick bookkeeping for the self-relaying pulse. |
+| `te_construction_market_display_values.txt` | Display-only figures for the construction panel. |
 
 ## Bulk Transportation (Merchant Marine relocalization)
 
@@ -858,7 +865,7 @@ The mod uses 23 on-action files under `common/on_actions/`. These wire mod logic
 | File | Purpose | Hook Type |
 |------|---------|-----------|
 | `extra_on_actions.txt` | Central hub: pulse wiring, dynamic modifiers, immediate triggers, company cleanup | Mixed |
-| `fmc_on_actions.txt` | FMC map update triggers on diplomatic/territorial changes | Immediate |
+| `te_construction_market_on_actions.txt` | Construction-market site re-placement on diplomatic/territorial and building-lifecycle changes, plus its yearly heartbeat | Mixed |
 | `headlines.txt` | "World first" tech notifications (`on_acquired_technology`) | Immediate |
 | `law_events_on_actions.txt` | Law enactment checkpoint events (advance/debate/stall) | Immediate |
 | `amendment_on_actions.txt` | Temporary-amendment expiry follow-up events (`on_amendment_timeout`) | Immediate |
@@ -929,7 +936,7 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 
 **`on_building_built`** (Root = Building):
 - When a barracks is built, recalculates `apply_combined_arms_bonuses` for the owning country (new combat unit type enters a formation). Only fires if `country_combined_arms_bonus_enabled_bool` is true.
-- Also used by FMC (`fmc_on_actions.txt`) to trigger map updates.
+- Also used by the construction market (`te_construction_market_on_actions.txt`) to remove a finished state's construction site.
 
 **`on_character_recruitment`** (Root = Character):
 - Calls `update_characters` on the owner to immediately apply tech-based traits (immortality, logistics) to newly recruited characters instead of waiting for monthly pulse.
@@ -964,9 +971,9 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 - `gw_market_join_on_action` — copies market leader's GW policy modifiers to new member
 
 
-### FMC Immediate Triggers (`fmc_on_actions.txt`)
+### Construction-Market Immediate Triggers (`te_construction_market_on_actions.txt`)
 
-The FMC system hooks many engine events to keep the map up to date:
+The construction market hooks many engine events to keep its construction sites placed on the current map:
 - `on_merge_markets`, `on_create_market` — market changes
 - `on_country_released_as_independent/own_subject/overlord_subject` — country releases
 - `on_country_formed`, `on_capitulation`, `on_enemy/ally_capitulated_notification` — country events

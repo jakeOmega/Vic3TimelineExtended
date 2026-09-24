@@ -1,0 +1,90 @@
+﻿# Construction-market subsystem — display-only values.
+#
+# Read by the "Construction Market" section of the domestic construction tab
+# (gui/construction_panel.gui) and by its tooltips (TE_CM_* keys). Nothing in
+# script consumes them, so they may be reshaped for presentation freely. All
+# are country scope.
+#
+# Every var: read is guarded: the panel re-renders every frame, and an
+# unguarded read of a missing variable logs "Failed to fetch variable" each
+# time (a country formed mid-game has none of these until its setup event).
+
+# The purchase the player has set (the number in the +/- box).
+te_construction_market_display_public_target = {
+	value = 0
+	if = {
+		limit = { has_variable = te_construction_market_public_target }
+		value = var:te_construction_market_public_target
+	}
+}
+
+# How much the government queue can absorb in a week: each queued level takes
+# at most country_max_weekly_construction_progress_add. The purchase that
+# actually goes through (te_construction_market_public_use_target) is capped
+# at this, so a purchase above it buys nothing extra.
+te_construction_market_display_public_queue_cap = {
+	value = construction_queue_num_queued_government_levels
+	multiply = modifier:country_max_weekly_construction_progress_add
+}
+
+# The government purchase actually in force this week (after the queue cap,
+# and zero while construction is paused).
+te_construction_market_display_public_use = {
+	value = te_construction_market_public_use_target
+}
+
+# Construction the private sector buys this week, funded from the investment
+# pool. Guarded because te_construction_market_private_use_target divides by
+# the price stabilizer.
+te_construction_market_display_private_use = {
+	value = 0
+	if = {
+		limit = { has_variable = te_construction_market_price_stabilizer }
+		value = te_construction_market_private_use_target
+	}
+}
+
+# Approximate cost of one construction point: the market price of the
+# construction good, scaled by Construction Cost Scaling. This is the figure
+# the AI and the price stabilizer work from.
+te_construction_market_display_price = {
+	value = te_construction_market_price
+}
+
+# Approximate weekly treasury cost of the government purchase in force.
+te_construction_market_display_public_cost = {
+	value = te_construction_market_display_public_use
+	multiply = te_construction_market_price
+}
+
+# Share of the country's construction allocated to private projects (0-100),
+# derived each week from the two purchases above.
+te_construction_market_display_private_share = {
+	value = 0
+	if = {
+		limit = { has_variable = te_construction_market_price_stabilizer }
+		value = te_construction_market_private_share_target
+	}
+}
+
+# Construction goods offered for sale and demanded in the country's market
+# (everyone in the market, maintenance included), as sell and buy orders.
+# Block form rather than a this.market.mg: dot chain — see
+# docs/guides/scripting_best_practices.md, "Is it signed below base price?".
+te_construction_market_display_market_supply = {
+	value = 0
+	market = {
+		mg:construction = {
+			add = market_goods_sell_orders
+		}
+	}
+}
+
+te_construction_market_display_market_demand = {
+	value = 0
+	market = {
+		mg:construction = {
+			add = market_goods_buy_orders
+		}
+	}
+}
