@@ -290,6 +290,8 @@ The mod-state server (`mod_state_server.py`) parses **all vanilla AND mod data**
 
 > **IMPORTANT:** The server indexes BOTH vanilla base game data AND mod data, merged together for most entity types. Events, scripted effects, scripted triggers, and on-actions are **mod-only** (they load only from the mod directory, not vanilla).
 
+> **Localization** is read like the engine reads it, recursing into subdirectories (`mod_state.iter_loc_files`). Vanilla keeps about 2,400 keys in `english/map/` (every `STATE_*` name), `interest_groups/`, `character/`, `historical/` and `frontend/`. Before 2026-09 these were silently missing, and `/localize/STATE_X` returned the raw key. The one exception is `replace/`: it is skipped by the recursive read and loaded last (the mod's `localization/english/replace/`) so its keys override.
+
 > **Logging:** The server logs to both console (INFO level) and `mod_state_server.log` (DEBUG level) in the mod root directory. Check the log file for detailed error diagnostics.
 
 ### Auto-Generated Documentation
