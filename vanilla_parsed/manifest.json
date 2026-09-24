@@ -1,0 +1,3508 @@
+{
+ "format_version": 1,
+ "game_version": "1.14.4",
+ "game_version_source": "launcher-settings.json",
+ "parser_fingerprint": "dbc631b08761fe4a",
+ "built_at": "2026-09-24T17:09:22+00:00",
+ "entity_types": {
+  "Building Groups": {
+   "dir": "game/common/building_groups",
+   "file": "common/building_groups.json",
+   "entities": 69
+  },
+  "Buildings": {
+   "dir": "game/common/buildings",
+   "file": "common/buildings.json",
+   "entities": 115
+  },
+  "Technologies": {
+   "dir": "game/common/technology/technologies",
+   "file": "common/technologies.json",
+   "entities": 179
+  },
+  "PM Groups": {
+   "dir": "game/common/production_method_groups",
+   "file": "common/pm_groups.json",
+   "entities": 197
+  },
+  "PMs": {
+   "dir": "game/common/production_methods",
+   "file": "common/pms.json",
+   "entities": 436
+  },
+  "Ideologies": {
+   "dir": "game/common/ideologies",
+   "file": "common/ideologies.json",
+   "entities": 172
+  },
+  "Battle Conditions": {
+   "dir": "game/common/battle_conditions",
+   "file": "common/battle_conditions.json",
+   "entities": 21
+  },
+  "Buy Packages": {
+   "dir": "game/common/buy_packages",
+   "file": "common/buy_packages.json",
+   "entities": 99
+  },
+  "Character Interactions": {
+   "dir": "game/common/character_interactions",
+   "file": "common/character_interactions.json",
+   "entities": 21
+  },
+  "Character Traits": {
+   "dir": "game/common/character_traits",
+   "file": "common/character_traits.json",
+   "entities": 121
+  },
+  "Combat Unit Groups": {
+   "dir": "game/common/combat_unit_groups",
+   "file": "common/combat_unit_groups.json",
+   "entities": 4
+  },
+  "Combat Unit Types": {
+   "dir": "game/common/combat_unit_types",
+   "file": "common/combat_unit_types.json",
+   "entities": 19
+  },
+  "Company Types": {
+   "dir": "game/common/company_types",
+   "file": "common/company_types.json",
+   "entities": 221
+  },
+  "Diplomatic Actions": {
+   "dir": "game/common/diplomatic_actions",
+   "file": "common/diplomatic_actions.json",
+   "entities": 55
+  },
+  "Diplomatic Plays": {
+   "dir": "game/common/diplomatic_plays",
+   "file": "common/diplomatic_plays.json",
+   "entities": 53
+  },
+  "Goods": {
+   "dir": "game/common/goods",
+   "file": "common/goods.json",
+   "entities": 53
+  },
+  "Government Types": {
+   "dir": "game/common/government_types",
+   "file": "common/government_types.json",
+   "entities": 444
+  },
+  "Institutions": {
+   "dir": "game/common/institutions",
+   "file": "common/institutions.json",
+   "entities": 7
+  },
+  "Interest Groups": {
+   "dir": "game/common/interest_groups",
+   "file": "common/interest_groups.json",
+   "entities": 8
+  },
+  "Law Groups": {
+   "dir": "game/common/law_groups",
+   "file": "common/law_groups.json",
+   "entities": 26
+  },
+  "Laws": {
+   "dir": "game/common/laws",
+   "file": "common/laws.json",
+   "entities": 138
+  },
+  "Messages": {
+   "dir": "game/common/messages",
+   "file": "common/messages.json",
+   "entities": 473
+  },
+  "Mobilization Option Groups": {
+   "dir": "game/common/mobilization_option_groups",
+   "file": "common/mobilization_option_groups.json",
+   "entities": 6
+  },
+  "Mobilization Options": {
+   "dir": "game/common/mobilization_options",
+   "file": "common/mobilization_options.json",
+   "entities": 18
+  },
+  "Modifier Types": {
+   "dir": "game/common/modifier_type_definitions",
+   "file": "common/modifier_types.json",
+   "entities": 2365
+  },
+  "Modifiers": {
+   "dir": "game/common/static_modifiers",
+   "file": "common/modifiers.json",
+   "entities": 6128
+  },
+  "Pop Needs": {
+   "dir": "game/common/pop_needs",
+   "file": "common/pop_needs.json",
+   "entities": 15
+  },
+  "Subject Types": {
+   "dir": "game/common/subject_types",
+   "file": "common/subject_types.json",
+   "entities": 9
+  },
+  "Script Values": {
+   "dir": "game/common/script_values",
+   "file": "common/script_values.json",
+   "entities": 493
+  },
+  "Scripted Buttons": {
+   "dir": "game/common/scripted_buttons",
+   "file": "common/scripted_buttons.json",
+   "entities": 218
+  },
+  "Ship Types": {
+   "dir": "game/common/ship_types",
+   "file": "common/ship_types.json",
+   "entities": 22
+  },
+  "Ship Groups": {
+   "dir": "game/common/ship_groups",
+   "file": "common/ship_groups.json",
+   "entities": 4
+  },
+  "Ship Modifications": {
+   "dir": "game/common/ship_modifications",
+   "file": "common/ship_modifications.json",
+   "entities": 271
+  },
+  "Ship Modification Slots": {
+   "dir": "game/common/ship_modification_slots",
+   "file": "common/ship_modification_slots.json",
+   "entities": 7
+  },
+  "Ship Name Definitions": {
+   "dir": "game/common/ship_name_definitions",
+   "file": "common/ship_name_definitions.json",
+   "entities": 86
+  },
+  "Journal Entries": {
+   "dir": "game/common/journal_entries",
+   "file": "common/journal_entries.json",
+   "entities": 419
+  },
+  "Journal Entry Groups": {
+   "dir": "game/common/journal_entry_groups",
+   "file": "common/journal_entry_groups.json",
+   "entities": 27
+  },
+  "Decisions": {
+   "dir": "game/common/decisions",
+   "file": "common/decisions.json",
+   "entities": 60
+  },
+  "Country Formation": {
+   "dir": "game/common/country_formation",
+   "file": "common/country_formation.json",
+   "entities": 74
+  },
+  "Treaty Articles": {
+   "dir": "game/common/treaty_articles",
+   "file": "common/treaty_articles.json",
+   "entities": 34
+  },
+  "Religions": {
+   "dir": "game/common/religions",
+   "file": "common/religions.json",
+   "entities": 17
+  },
+  "Decrees": {
+   "dir": "game/common/decrees",
+   "file": "common/decrees.json",
+   "entities": 11
+  },
+  "Principles": {
+   "dir": "game/common/power_bloc_principles",
+   "file": "common/principles.json",
+   "entities": 69
+  },
+  "Principle Groups": {
+   "dir": "game/common/power_bloc_principle_groups",
+   "file": "common/principle_groups.json",
+   "entities": 23
+  },
+  "Amendments": {
+   "dir": "game/common/amendments",
+   "file": "common/amendments.json",
+   "entities": 67
+  },
+  "Cultures": {
+   "dir": "game/common/cultures",
+   "file": "common/cultures.json",
+   "entities": 317
+  },
+  "Country Ranks": {
+   "dir": "game/common/country_ranks",
+   "file": "common/country_ranks.json",
+   "entities": 8
+  },
+  "Discrimination Traits": {
+   "dir": "game/common/discrimination_traits",
+   "file": "common/discrimination_traits.json",
+   "entities": 324
+  },
+  "Pop Types": {
+   "dir": "game/common/pop_types",
+   "file": "common/pop_types.json",
+   "entities": 15
+  },
+  "Terrains": {
+   "dir": "game/common/terrain",
+   "file": "common/terrains.json",
+   "entities": 25
+  },
+  "Game Concepts": {
+   "dir": "game/common/game_concepts",
+   "file": "common/game_concepts.json",
+   "entities": 613
+  }
+ },
+ "localization": {
+  "dir": "game/localization/english",
+  "file": "localization_english.json",
+  "keys": 99896
+ },
+ "parse_failures": [],
+ "sources": {
+  "game/common/amendments/00_amendments_content_04.txt": {
+   "size": 6188,
+   "sha256": "1c445abca6c91c2d13019544f975147161879595a40d275084b4ebe2f31c0953"
+  },
+  "game/common/amendments/00_amendments_enactment_04.txt": {
+   "size": 29214,
+   "sha256": "addb6b694a12f124e2968e66a4cfef4f7cb745c8d42f4964ef5c27fd861788d9"
+  },
+  "game/common/amendments/00_amendments_ep2_04.txt": {
+   "size": 3675,
+   "sha256": "e60112af5b58fbf42eaee69f9e5eb6e35668be260568798353897c410941ec2c"
+  },
+  "game/common/amendments/00_amendments_generic.txt": {
+   "size": 2261,
+   "sha256": "d8f1046941af9ec140386c422b96259c633939c6e9df389b2d5a8a91ae65ee9a"
+  },
+  "game/common/amendments/00_amendments_historical_04.txt": {
+   "size": 9485,
+   "sha256": "4350452fbb9db5b7263bdc348f2383f9d1b83be377ab6cd9891c59a7ff842bbe"
+  },
+  "game/common/amendments/00_amendments_test.txt": {
+   "size": 1101,
+   "sha256": "55ffe296b2773ddf7df4510e54b3f9ac299e1741cd58a0f7d235b150d3105de8"
+  },
+  "game/common/battle_conditions/00_battle_conditions.txt": {
+   "size": 16680,
+   "sha256": "6fc5a0b9eb9ae20e170ae9be31fd996a65346c2dca4c0d8c83136d6f65f42eda"
+  },
+  "game/common/building_groups/00_building_groups.txt": {
+   "size": 16116,
+   "sha256": "3d6e088d4fa5429653382738bd37b9a1beadce9a7c3f03bd537620267d02d37d"
+  },
+  "game/common/buildings/01_industry.txt": {
+   "size": 11503,
+   "sha256": "7e41e84ab11ab85715badbea648f1ce938f989b00761f47882c65de986fcf25c"
+  },
+  "game/common/buildings/02_agro.txt": {
+   "size": 3883,
+   "sha256": "50a0a2cd68079c44db154d2a089fab78d728fdcceaa4811b7c051c1a21b776ec"
+  },
+  "game/common/buildings/03_mines.txt": {
+   "size": 4594,
+   "sha256": "54a725975ab9581af9ed28c49f2678bfdf6ff90f00deeb9e7f7afe3910819e6f"
+  },
+  "game/common/buildings/04_plantations.txt": {
+   "size": 7143,
+   "sha256": "fa57b7a2ffc59b4074a7ec425f8626f407062c7c05079b396d7caef9d2034046"
+  },
+  "game/common/buildings/05_military.txt": {
+   "size": 3228,
+   "sha256": "087a66be18b234a8db58bbb3055a404296b47733fdb091f893c100961ecd1c3e"
+  },
+  "game/common/buildings/06_urban_center.txt": {
+   "size": 2276,
+   "sha256": "5bd858a79aca4a25e7f61956692fa9b56a5dc3f847971f63d7365db51623b25f"
+  },
+  "game/common/buildings/07_government.txt": {
+   "size": 2631,
+   "sha256": "3c83d9f86d2d986e02749fc438959227012dccda54411f211c1cd7c8b3118954"
+  },
+  "game/common/buildings/08_monuments.txt": {
+   "size": 34000,
+   "sha256": "1187f0363f42a756d4678e43aa3a1ed30180afa27f2c5998e68a74a96e01e475"
+  },
+  "game/common/buildings/09_misc_resource.txt": {
+   "size": 2542,
+   "sha256": "35cd32a26048973da45b79c00c30fb473dcbf4e57591a436dc769ec6d8f2f6b7"
+  },
+  "game/common/buildings/10_canals.txt": {
+   "size": 2965,
+   "sha256": "f613f6ce1aa6a0fab2ace0ec1bf3e1d7452a4d4c61ed8fcf87559f934df69525"
+  },
+  "game/common/buildings/11_private_infrastructure.txt": {
+   "size": 12990,
+   "sha256": "6e3a9f21fec99e13158a4ee10d6a92ce9cdc78e35e1ee0bc9bce6c6632165ae0"
+  },
+  "game/common/buildings/12_subsistence.txt": {
+   "size": 3145,
+   "sha256": "7d7709edad57801494e0f0bbbe33098cfb7ee9d6d0c599c33246c3a673fcea03"
+  },
+  "game/common/buildings/13_construction.txt": {
+   "size": 624,
+   "sha256": "da14e497991ae69b9d52f8e96fb4a2fbcbdae6f84e92e93d992161b00dfd4c1e"
+  },
+  "game/common/buildings/14_companies.txt": {
+   "size": 1042,
+   "sha256": "6eace470af6533d9e53965cf2bb56b92d134c3f7d53964e14d9c0e1ad2989388"
+  },
+  "game/common/buy_packages/00_buy_packages.txt": {
+   "size": 33513,
+   "sha256": "4d4eef3143c5bc399a9f9b61f7940e43d8fa14a621f11ab768d22fdf2bdb98bb"
+  },
+  "game/common/character_interactions/00_character_interactions.txt": {
+   "size": 27585,
+   "sha256": "aafc6d5c9dbc01ee91974c39c1965a1363aa767509f86043b4b04ced564947e8"
+  },
+  "game/common/character_interactions/00_french_interactions.txt": {
+   "size": 5141,
+   "sha256": "6a37f65bb46baf616d8c11d03e456d3ac1ca8f769675cfa4570b9c2010952719"
+  },
+  "game/common/character_interactions/00_iberian_interactions.txt": {
+   "size": 2114,
+   "sha256": "8477145f5f7c0bbd937eeddf8616ab837a703c487e8a85aa869fe91252c586c7"
+  },
+  "game/common/character_interactions/01_additional_interactions.txt": {
+   "size": 29087,
+   "sha256": "9f7e23778afa1adc23ece0819e3ec0a694e5a7355cfeaf1cf5acefd6cafc3809"
+  },
+  "game/common/character_traits/condition_traits.txt": {
+   "size": 10338,
+   "sha256": "d691744cecc2ba1a98a9dc3955cfee2b5d69b3bc7235dc1e46e35592bddb3c9f"
+  },
+  "game/common/character_traits/personality_traits.txt": {
+   "size": 18390,
+   "sha256": "a020157d2f3a3157e20e5e64cc43b5445613f211d4debb6f790b8b6ecc243150"
+  },
+  "game/common/character_traits/skill_traits.txt": {
+   "size": 43492,
+   "sha256": "029ff0a10b52ddcef3c5a1b488ced6ee58e194abf273cae281a49d5d9acc4d2c"
+  },
+  "game/common/character_traits/special_personality_traits.txt": {
+   "size": 10055,
+   "sha256": "fcae9da6e94d97d63f531e00df152c4d07040d2b45d8380a5a2b845e209bff06"
+  },
+  "game/common/character_traits/special_skill_traits.txt": {
+   "size": 2861,
+   "sha256": "559143e87e0b0414ed340f185612da65c5d51887117c272804f06f744d1903cb"
+  },
+  "game/common/combat_unit_groups/00_combat_unit_groups.txt": {
+   "size": 623,
+   "sha256": "7fc51f7f77615ea00bf9531527ff60676670e04edab179e4761fa5d8325734d1"
+  },
+  "game/common/combat_unit_types/00_land_combat_unit_types.txt": {
+   "size": 24710,
+   "sha256": "ad3ed3d68533cbe6ef05ce014cd88b920b58dc4a42b3e566077cdccee072d86c"
+  },
+  "game/common/company_types/00_companies_africa.txt": {
+   "size": 4665,
+   "sha256": "f59ba1f5cb472b2d5eb92840102111a88c6f2f9ee16ab792fd123cc2056eef19"
+  },
+  "game/common/company_types/00_companies_americas.txt": {
+   "size": 17408,
+   "sha256": "f8c40a3bccc063ee55b9e55cb8829a6c7b2452bb858a5a43100865aa391f2aa4"
+  },
+  "game/common/company_types/00_companies_asia.txt": {
+   "size": 20524,
+   "sha256": "2520c6e1388630f4871bf14f667e406af8b18499693d400197e8b40388c1e67c"
+  },
+  "game/common/company_types/00_companies_austria_hungary.txt": {
+   "size": 8680,
+   "sha256": "7713fa613c85260172412ece7066eeffc8e94cbf3141b383c7ed8b59aa9ead1e"
+  },
+  "game/common/company_types/00_companies_china.txt": {
+   "size": 6393,
+   "sha256": "3a150d9b2f344f07032f512a3b073ca87885663b41bb5025b05bb6a8807d3537"
+  },
+  "game/common/company_types/00_companies_cots.txt": {
+   "size": 16820,
+   "sha256": "1c391432856c9444fb2cde4e3f4bb83c7433d0bbe6859c3aad988ed4e7b43ece"
+  },
+  "game/common/company_types/00_companies_ep2.txt": {
+   "size": 25850,
+   "sha256": "d36e4b2ff7d3094764f33f66e908bfbe029487b6eb4960b198d35d86cb0184c6"
+  },
+  "game/common/company_types/00_companies_europe.txt": {
+   "size": 38537,
+   "sha256": "15c2eff77d6f9830ba0258aede08f8116b19287c737e4147db91560c276f8817"
+  },
+  "game/common/company_types/00_companies_france.txt": {
+   "size": 10097,
+   "sha256": "f4078c4ccd97956e681ece7df5b2a43c07943cbb35cd54baac7812ef8f202b2a"
+  },
+  "game/common/company_types/00_companies_germany.txt": {
+   "size": 10216,
+   "sha256": "b2019ff4f5e719f54c20b3c6b18c731f7a61940d00df0233fc8117a1547275fc"
+  },
+  "game/common/company_types/00_companies_great_britain.txt": {
+   "size": 7941,
+   "sha256": "be234202d67a73b9af52747789e80cda363e043fc5c11c8a75687b83874c2b44"
+  },
+  "game/common/company_types/00_companies_ip2.txt": {
+   "size": 17493,
+   "sha256": "e173f2f50f48549e2430ede30f8a3aab9acad700404153d2597b1d9ec0a94fb6"
+  },
+  "game/common/company_types/00_companies_ip3.txt": {
+   "size": 15731,
+   "sha256": "f8e6f3f40ffa46cf27a6d68ab61f67dce90b02afa8c79fcf57ae0e8f329d3b10"
+  },
+  "game/common/company_types/00_companies_ip4.txt": {
+   "size": 17308,
+   "sha256": "298a2354955beac5550d586ab96d59cf4fdaaa1d3d4dde5bef8ef2cdaa1e341b"
+  },
+  "game/common/company_types/00_companies_italy.txt": {
+   "size": 7794,
+   "sha256": "8e5b9b3ca19a15f086296c35329c0af6d9e699005a6e72a67bfbeebf383561e0"
+  },
+  "game/common/company_types/00_companies_japan.txt": {
+   "size": 5133,
+   "sha256": "f626e624c2ae3ec808d8e550b108b85a7f3af51659f57ed9a316cce96b02904e"
+  },
+  "game/common/company_types/00_companies_mp1.txt": {
+   "size": 33354,
+   "sha256": "1132f75ce38f1571c8290829bcc105eb0ed4bcf0ebe69a213ad6ceb03640d101"
+  },
+  "game/common/company_types/00_companies_russia.txt": {
+   "size": 10401,
+   "sha256": "ff0b4a82fe800545d6635c6d5ac065696708dfb1548c7e1a2cd4cf36a751a42b"
+  },
+  "game/common/company_types/00_companies_soi.txt": {
+   "size": 30328,
+   "sha256": "ac1c635aa555d094724cacde33c823e34d52454900f336668dc45855fa220946"
+  },
+  "game/common/company_types/00_companies_totally_normal.txt": {
+   "size": 1642,
+   "sha256": "82091c4b63f6f99044f9d5342e798c459eeef44cdc1bf174a8e1f8f4076d246b"
+  },
+  "game/common/company_types/00_companies_usa.txt": {
+   "size": 10495,
+   "sha256": "a647fccfa789480f82717f8b749fa7dde94d66e82698d8b5f6b5c5664c4bb59f"
+  },
+  "game/common/company_types/99_basic_companies.txt": {
+   "size": 32152,
+   "sha256": "8da8c02afc1e1ede66937862865fc206c73f9697346082acc10ffe5dc90e6623"
+  },
+  "game/common/country_formation/00_formable_countries.txt": {
+   "size": 15500,
+   "sha256": "f65fef08912db1d2d8cb6833b563110589df5f743b1c26f344cce586ba3facbd"
+  },
+  "game/common/country_formation/00_major_formables.txt": {
+   "size": 6242,
+   "sha256": "df6c873820cd73267ee50becc31b9f8d9fbe754074198b021e5b767c6f914580"
+  },
+  "game/common/country_ranks/00_country_ranks.txt": {
+   "size": 6699,
+   "sha256": "ac9ed2205753a32ddf052f72d47b17f0205dbd8dc275bacdc9bada60cae19dac"
+  },
+  "game/common/cultures/00_cultures.txt": {
+   "size": 441858,
+   "sha256": "30c8a1085257fb130634d3e5cc187d2eef7717a07db5fa7b390846dd319e5baa"
+  },
+  "game/common/decisions/000_decisions_help.txt": {
+   "size": 4368,
+   "sha256": "8eddee996025628c8e96659575ed457b8151d9a27c3337f7fb6d110b66dffad5"
+  },
+  "game/common/decisions/00_decisions.txt": {
+   "size": 3244,
+   "sha256": "553c0e2d849bca1567accf6cbe1424b309c54e8b20b66a3d6ee3503fe611b71b"
+  },
+  "game/common/decisions/01_russia_decisions.txt": {
+   "size": 2355,
+   "sha256": "99af03f029514b6b32ce84f091f9b9061bffc298467d4550662aaa7c3d4dd1f0"
+  },
+  "game/common/decisions/antarctica_expedition_decision.txt": {
+   "size": 1124,
+   "sha256": "7ff0eaab65786e340b29b07cab853cb5091694487165380e59c38fc3a5e9d5b4"
+  },
+  "game/common/decisions/austria_decisions.txt": {
+   "size": 4826,
+   "sha256": "9b6575bcc375e362eab4c4a4476ea42fc35541de5b114d5cbec532f7b207f8be"
+  },
+  "game/common/decisions/austro_hungarian_decisions.txt": {
+   "size": 3718,
+   "sha256": "3fc1834fbb20b33d235dc59b890582dc0dc4ec1cd1742f911e991b915379882e"
+  },
+  "game/common/decisions/british_raj_decisions.txt": {
+   "size": 486,
+   "sha256": "545bff6e490ef3e556765b2952b3ff821d32bcb0b3e099fa2ea3e80c8ab74c60"
+  },
+  "game/common/decisions/bulgaria_decisions.txt": {
+   "size": 1252,
+   "sha256": "c495b54adf9120f9910c38f99ec698adcf061f0c542882c8377b4b148c6263c2"
+  },
+  "game/common/decisions/canal_decisions.txt": {
+   "size": 6159,
+   "sha256": "dff3ef389adaf15a5b45d3f596a0c9e3931b888636c0ec2c2b559771fc4ed7a8"
+  },
+  "game/common/decisions/central_africa_expedition_decision.txt": {
+   "size": 1293,
+   "sha256": "31c23691bdc8f86ed5361ea605d7635981403009da7c6eb47e02b8e5dc2077a0"
+  },
+  "game/common/decisions/congo_expedition_decision.txt": {
+   "size": 1277,
+   "sha256": "6547205254d79dbf57d0842356a7063849983cfa525acbd8deabe44d0689c80f"
+  },
+  "game/common/decisions/france_ashes.txt": {
+   "size": 896,
+   "sha256": "e29cbebcea7dabff459c5f0dfd50707df6c08827ee19f693dde7a3eaecd5b1a6"
+  },
+  "game/common/decisions/france_savoy.txt": {
+   "size": 3904,
+   "sha256": "91a24a2bcb05551e397ea53311c4cebc3da9fc9efb75f18050288be6b035bef6"
+  },
+  "game/common/decisions/goa_macao_decisions.txt": {
+   "size": 1198,
+   "sha256": "bc61aacf3b0817dcb7bb0e218f02adbbf284a9c8ecf9b6c8087236652de76801"
+  },
+  "game/common/decisions/goods_ban_decisions.txt": {
+   "size": 1480,
+   "sha256": "c7b8e2c549666ea7c11415254333a3639917368c09e0cf122ca15dc9c26023c2"
+  },
+  "game/common/decisions/grand_exhibition_decision.txt": {
+   "size": 1119,
+   "sha256": "d9e4f34c49dea593858a1824c358152234340cc7bb7801ce1aebb58bfd1a94c3"
+  },
+  "game/common/decisions/greece_decisions.txt": {
+   "size": 930,
+   "sha256": "011ad7646c41c18259996937e2beade93ac9be0bd96349e0c3909c2bd4ea7bcc"
+  },
+  "game/common/decisions/india_decisions.txt": {
+   "size": 9611,
+   "sha256": "310cfdd220e1f3e8673801cff342bd5fd12334fe2d4dbbfe821ea943316eaf0e"
+  },
+  "game/common/decisions/ip4_portugal_decisions.txt": {
+   "size": 7814,
+   "sha256": "ace9d665053f76b403f6f561966c92b58c9c9ee88f68d31bcc201dc20a1c2257"
+  },
+  "game/common/decisions/japan_decisions.txt": {
+   "size": 3172,
+   "sha256": "74f0552b2c103c2b5e0934e244350ea7dd636718758fb36777122eae35cef838"
+  },
+  "game/common/decisions/japan_shinto.txt": {
+   "size": 2687,
+   "sha256": "75b66aed1659c2638cae71e3323ff192f97bfcb8118b9f6d133415b12ba3f2e9"
+  },
+  "game/common/decisions/korea_decisions.txt": {
+   "size": 454,
+   "sha256": "50a26a6af1bbed7c92b879886209bb35aa2b094b3844c8a40e3538663876ba4f"
+  },
+  "game/common/decisions/manifest_destiny.txt": {
+   "size": 4024,
+   "sha256": "30f775e21db3c42c0a3af3eff6752ed46035eec95ed80210e9072152d980bf02"
+  },
+  "game/common/decisions/montenegro_decision.txt": {
+   "size": 613,
+   "sha256": "0338c78324dc43a92e040bfef277e92b557ab9516ca884d6a27808a150e102d1"
+  },
+  "game/common/decisions/niger_river_expedition_decision.txt": {
+   "size": 1270,
+   "sha256": "382c4aefcf4eaa6b8084add4cae61e7c55cd9e199bbd44d142c6f1dca0e80c77"
+  },
+  "game/common/decisions/pink_map_decision.txt": {
+   "size": 924,
+   "sha256": "242329e97b29324b23e1c08c7c91a9434302df239078599eb6873bef0a15b0d8"
+  },
+  "game/common/decisions/princely_state_decision.txt": {
+   "size": 954,
+   "sha256": "1fc865d6f317881012e3c4c7152053f1101d98665507aa51080728719ea40b92"
+  },
+  "game/common/decisions/revoke_fernando_po_lease_decision.txt": {
+   "size": 642,
+   "sha256": "9369e3c95bfa0caf00e870f73dd327501c217bd0098d3f0560fef87067c748a8"
+  },
+  "game/common/decisions/romania_decision.txt": {
+   "size": 305,
+   "sha256": "30ebce626f2477b7251c9cc4f314f735ea615f0c597c5d58abc21ea7be394fc5"
+  },
+  "game/common/decisions/rome_decision.txt": {
+   "size": 554,
+   "sha256": "0061e2c92878a13213280ee4f8709005f2b8340f12017dd9d96d49fa7bef6dbd"
+  },
+  "game/common/decisions/skyscraper_decision.txt": {
+   "size": 1190,
+   "sha256": "cceec3faff1175ee7719833e6b20180fc38060e105817e574941f76f2cef8f44"
+  },
+  "game/common/decisions/spanish_flu_decisions.txt": {
+   "size": 536,
+   "sha256": "457950b0d618150ee37d06456b82b6324beb6684294357d49097e88e5fd1b80f"
+  },
+  "game/common/decisions/tibet_expedition_decision.txt": {
+   "size": 1761,
+   "sha256": "fa3346af3bdfd47546fd0a1f6cec2bcc18f34861e66f68762d0b2cc910971ec2"
+  },
+  "game/common/decisions/west_america_expidition_decision.txt": {
+   "size": 1539,
+   "sha256": "63e342570e2a1351e3a4d48f1f7d65fe606dc088b3cf5e5ff17ded91e7b5372c"
+  },
+  "game/common/decrees/00_decree.txt": {
+   "size": 22626,
+   "sha256": "be606fd97d2abac578293a6602e61fac421ba09147d8683c104676dc82f8e6ff"
+  },
+  "game/common/diplomatic_actions/00_relations_actions.txt": {
+   "size": 7445,
+   "sha256": "66b6b60fa4c89b2f36820bc313927475cbb8d3d47e80c9c28301c007b97a9830"
+  },
+  "game/common/diplomatic_actions/01_expel_diplomats.txt": {
+   "size": 3229,
+   "sha256": "c8c7d92a001edd3341897aa34f6265fb0d9f15de02c178d40b1df7ce98a08df3"
+  },
+  "game/common/diplomatic_actions/02_obligation_actions.txt": {
+   "size": 683,
+   "sha256": "38ca157578a6ad30828b7b9f389974767277b0071d91b65343118810285c6cef"
+  },
+  "game/common/diplomatic_actions/03_violate_sovereignty.txt": {
+   "size": 5942,
+   "sha256": "a145eb69427094089a15b4a2a34e3370ce0eda843b87b40b8af53676cd1bacaf"
+  },
+  "game/common/diplomatic_actions/04_trade_states.txt": {
+   "size": 6754,
+   "sha256": "3ac947c097e584417ba3a6e2713936de762f9bdf0c5bf54bc64624532806e03c"
+  },
+  "game/common/diplomatic_actions/12_rivalry.txt": {
+   "size": 5603,
+   "sha256": "88e5e781fa0096216e68cfcd8967b523556d58cac26251e67f04cfee0d89d754"
+  },
+  "game/common/diplomatic_actions/13_embargo.txt": {
+   "size": 5706,
+   "sha256": "65944aacbdb88dea7e4a39011602ee055fe2ffdf9921ef6955deb61fad467357"
+  },
+  "game/common/diplomatic_actions/17_war_reparations.txt": {
+   "size": 556,
+   "sha256": "ba104a7a10a804666fccc36a3ee9da13a568fab4191228b0365530da8ec40d17"
+  },
+  "game/common/diplomatic_actions/18_humiliation.txt": {
+   "size": 459,
+   "sha256": "592076f65cfd7ebf96b0a127aa2d4c0d84057f79af6081e86fd15d93b935a31a"
+  },
+  "game/common/diplomatic_actions/19_subject_protectorate.txt": {
+   "size": 876,
+   "sha256": "f3dac10f47458557dacd850ee2f2fe10235c935cc4592d1f0b5cc47b3172cb0e"
+  },
+  "game/common/diplomatic_actions/20_subject_puppet.txt": {
+   "size": 1054,
+   "sha256": "0a653598deac05bf3c7bfb31ac7bb307c366cf33beee0b4fc94f139a201742e7"
+  },
+  "game/common/diplomatic_actions/21_subject_dominion.txt": {
+   "size": 1005,
+   "sha256": "027568d14a9475e8516be5cc36f8aed5800bc6db5b3ae2ad498631364d05fd80"
+  },
+  "game/common/diplomatic_actions/22_subject_personal_union.txt": {
+   "size": 1546,
+   "sha256": "4b897197d5c99d4368213d677519b303b0f97cca12bec2900841f20d23b6c677"
+  },
+  "game/common/diplomatic_actions/23_subject_vassal.txt": {
+   "size": 999,
+   "sha256": "2c768c64501127abb77e950a7372453cb97ed928fe6c30257904bc8abd0b2eaf"
+  },
+  "game/common/diplomatic_actions/24_subject_tributary.txt": {
+   "size": 1006,
+   "sha256": "df8300aac8d2c18289a45b30135cf2bfb636b47a5e2bd18ef536777049e5f625"
+  },
+  "game/common/diplomatic_actions/25_colonization_rights.txt": {
+   "size": 501,
+   "sha256": "556da00ac3166cce79effc6504b4557288c11c70998daba51561307eabd88788"
+  },
+  "game/common/diplomatic_actions/26_join_power_bloc.txt": {
+   "size": 5496,
+   "sha256": "6c4399c7c2c7ae3755b03a640c8b994fa0c99bb7b6333c08d1576d7fa28bdfd8"
+  },
+  "game/common/diplomatic_actions/28_invite_to_power_bloc.txt": {
+   "size": 10339,
+   "sha256": "45b4759f86bf72af73f1be8ff8aeea30ed2b08471d9c6719b4819b192904eed3"
+  },
+  "game/common/diplomatic_actions/30_fund_lobby.txt": {
+   "size": 7315,
+   "sha256": "820cc03de0a5eaf7f1b675f39b04c9e00ca88c54ce529e4a9a0169c113387263"
+  },
+  "game/common/diplomatic_actions/31_power_bloc_force_become_subject.txt": {
+   "size": 2438,
+   "sha256": "3c53136e6bcceac8f2d985ab37795bf972a9a67639b9ec8b075d6e329c089e28"
+  },
+  "game/common/diplomatic_actions/31_power_bloc_force_regime_change.txt": {
+   "size": 4783,
+   "sha256": "dcaadc099f1b1782940adf9171aab4fbca25e185d6cc35ba8fe780bcf08b9f6a"
+  },
+  "game/common/diplomatic_actions/31_power_bloc_force_state_religion.txt": {
+   "size": 2539,
+   "sha256": "5e5c107840551ac8522fb97df189a3e7e3dab25135f4e64d2b55ca2fba5596a5"
+  },
+  "game/common/diplomatic_actions/32_subjects_raise_payments.txt": {
+   "size": 3033,
+   "sha256": "7765184035130e31289bf4a83697f71b9c842e5f7944e2987ede5b4e3725e2f7"
+  },
+  "game/common/diplomatic_actions/33_subjects_decrease_payments.txt": {
+   "size": 2740,
+   "sha256": "489a9bca426668a1f89c0d06a3d61083293538c1d679f5e6111a75b97a231952"
+  },
+  "game/common/diplomatic_actions/34_subjects_exempt_from_service.txt": {
+   "size": 2547,
+   "sha256": "7157742ac7c02d94aec5066bf4872d59a863665ed6a1c94e4e79a286f7a47efd"
+  },
+  "game/common/diplomatic_actions/35_subjects_appoint_governor.txt": {
+   "size": 2855,
+   "sha256": "57811a942cf0ac07c87801806d32cda6291cb263bfe1fa67387fe980ba140865"
+  },
+  "game/common/diplomatic_actions/36_subjects_grant_own_market.txt": {
+   "size": 2599,
+   "sha256": "ad712dcfe896c0255eedf87ab979859c3e0702c56b8fc57370b7d61c71a076b3"
+  },
+  "game/common/diplomatic_actions/37_subjects_decrease_autonomy.txt": {
+   "size": 3210,
+   "sha256": "3e154626c260d1424afda4ccfa8df408440f992f1e9a605e0d49d5a5401e99f7"
+  },
+  "game/common/diplomatic_actions/38_subjects_increase_autonomy.txt": {
+   "size": 7628,
+   "sha256": "c7e43033ad2684f579ea72f80f180bd08553d4064942fe892e11ec2842172d56"
+  },
+  "game/common/diplomatic_actions/39_subjects_support_regime.txt": {
+   "size": 6874,
+   "sha256": "dfef3304777ceb4bfb753c93918655e9d4ced3b51ec7b73e28795154599849a4"
+  },
+  "game/common/diplomatic_actions/40_subjects_knowledge_sharing.txt": {
+   "size": 7478,
+   "sha256": "d29cd9b4788e2c240edba4c11a5a645533ca4974b5c8163d43644188c2b4b035"
+  },
+  "game/common/diplomatic_actions/41_subjects_evangelize.txt": {
+   "size": 3173,
+   "sha256": "7d401f69784d4e700badb8bf1b1fc2f9472ae5cfb2ab9533091b5e87d4f2631f"
+  },
+  "game/common/diplomatic_actions/42_subjects_request_market_control.txt": {
+   "size": 5212,
+   "sha256": "88c081fb87846a98b78345fbda4e62e878184a08f161512a5c09baaab45699d1"
+  },
+  "game/common/diplomatic_actions/43_subjects_handle_states.txt": {
+   "size": 14475,
+   "sha256": "a2fb75cd8b673fdc025e3c1f93a9214c10a8c91f010fd4a5175965bbc65394cf"
+  },
+  "game/common/diplomatic_actions/44_enforce_military_access.txt": {
+   "size": 1533,
+   "sha256": "05b2fd86caba6012e75138ebbb91434cb727b9cdb9eaa30ffe60ca41eb11d172"
+  },
+  "game/common/diplomatic_actions/46_doctrine_of_lapse.txt": {
+   "size": 2246,
+   "sha256": "b4e8d3ee13a78532c8ca04458fc95462a9763dbb1c099210b961b4955e8dcc97"
+  },
+  "game/common/diplomatic_actions/48_subject_colony.txt": {
+   "size": 1054,
+   "sha256": "a73f8efc849a2813442fccb3adbf2960bcef933c1f15695be629daf7d3eb1aef"
+  },
+  "game/common/diplomatic_actions/49_subject_chartered_company.txt": {
+   "size": 1076,
+   "sha256": "68605875707c34f0dc06b202d9a073cd6b0ff9264f4b480cba5532a320556fdd"
+  },
+  "game/common/diplomatic_actions/50_raiding.txt": {
+   "size": 988,
+   "sha256": "7f7487b88d2c660a00c653096cdee7a79e8a358b1bc252ac52a3cce92cfa14b7"
+  },
+  "game/common/diplomatic_actions/50_subject_crown_land.txt": {
+   "size": 1024,
+   "sha256": "c740867931d1a834be9b0dc520309fe4b568e21678806da5fb1e5924fa5ae555"
+  },
+  "game/common/diplomatic_actions/51_disapproval.txt": {
+   "size": 1070,
+   "sha256": "d4efdb6192550918a244cac5ffc329c4d412e738ce2286d94d7f81a0abd42734"
+  },
+  "game/common/diplomatic_actions/52_nationalism_actions.txt": {
+   "size": 5109,
+   "sha256": "da7758e1fb613530301f0485866dd4b5d17c025b5f106c1e1134e8024c664a25"
+  },
+  "game/common/diplomatic_actions/53_subjects_change_culture.txt": {
+   "size": 4095,
+   "sha256": "3e58fd298b51ff2ea3775ada491b76c023249280b034fee8204a858ab2beaa6d"
+  },
+  "game/common/diplomatic_actions/54_subjects_investment_rights.txt": {
+   "size": 7009,
+   "sha256": "2eba426c9fb8fafa88efd2d4fc7ad44141408aa3b0f0e7c7d5d1b4921241c484"
+  },
+  "game/common/diplomatic_actions/55_subjects_request_governor.txt": {
+   "size": 3041,
+   "sha256": "69e3b3b98bdc898d34fee3b50f9895aca2127c70cb10e112c9938192e75a0155"
+  },
+  "game/common/diplomatic_actions/56_power_bloc_add_culture.txt": {
+   "size": 1964,
+   "sha256": "ff46d9a18c548adc2b7538b0a2b5a6e4e78e6fd5f540c1dbef9c0023018c662a"
+  },
+  "game/common/diplomatic_actions/56_stake_colonial_claim.txt": {
+   "size": 6470,
+   "sha256": "cc026105b23eb02e90feb1f342094c186a70554b090b126d6a02c3fda11ccd5d"
+  },
+  "game/common/diplomatic_actions/57_orchestrate_coup.txt": {
+   "size": 10782,
+   "sha256": "a5fd89a5847b98fe245853fec019aa6d7d616d388d842f85f5fe5ec57bcab56d"
+  },
+  "game/common/diplomatic_plays/00_diplomatic_plays.txt": {
+   "size": 31798,
+   "sha256": "2698ec93bf2d30693d39d59db1ecb9618db2294d4b4f3c980886fcd8a5c30130"
+  },
+  "game/common/discrimination_traits/00_cultural_heritages.txt": {
+   "size": 9538,
+   "sha256": "06d6638c64c1185a3e8a01102958bfaa5ef57a9c657bf82528cd89f4ec622443"
+  },
+  "game/common/discrimination_traits/01_languages.txt": {
+   "size": 15698,
+   "sha256": "0d792c28567d502deaf4b799be86629ba5719b5c05b450922019f41751e50e94"
+  },
+  "game/common/discrimination_traits/02_traditions.txt": {
+   "size": 512,
+   "sha256": "a0d0e3ea25ff3e1efb36325294b4d47694bb4526763af24d4374fec6525e4a02"
+  },
+  "game/common/discrimination_traits/03_religious_heritages.txt": {
+   "size": 722,
+   "sha256": "30c0da8f7fc934f27d3f25178ec49a3b90ade00b996e88db34d9393a09074890"
+  },
+  "game/common/game_concepts/00_game_concepts.txt": {
+   "size": 38394,
+   "sha256": "6d98b5b99fadf7e96f26877afaa954f64d787bc5119846355d1a239717550c71"
+  },
+  "game/common/game_concepts/01_additional_game_concepts.txt": {
+   "size": 80,
+   "sha256": "3557261af30f929fec3d001fbdf65f6ca9aa730b4a217501d5a6b39535c504ca"
+  },
+  "game/common/goods/00_goods.txt": {
+   "size": 10431,
+   "sha256": "e5d8ed5e5deaf3d2c7193bc6b749555c63c78631aecaf87784a2e34051ddfa48"
+  },
+  "game/common/government_types/00_chiefdoms.txt": {
+   "size": 700,
+   "sha256": "e76bb1493cf68031862768a629274f614e86b303470e3d2c25970b5f5844d6a2"
+  },
+  "game/common/government_types/01_colonial_administrations.txt": {
+   "size": 8290,
+   "sha256": "72911640f308926268298f0c175d212363a38bad8b249ac37ccedde30feac34d"
+  },
+  "game/common/government_types/01_monarchies.txt": {
+   "size": 70467,
+   "sha256": "23c1bf00d72f32d6233de36e721867743f7bb68ce3bb8db2c8b4a440e3698850"
+  },
+  "game/common/government_types/01_regencies.txt": {
+   "size": 41896,
+   "sha256": "6d739f5c4afa0f973200521afa06af2fa779f9a3ad9fbb4a50a3aac91c8f6aa5"
+  },
+  "game/common/government_types/01_social_monarchies.txt": {
+   "size": 125434,
+   "sha256": "4d8fe09bfaeef8c5c5b02a097c4754e32740cf0a505e888ff5a4692be818642f"
+  },
+  "game/common/government_types/02_presidential_republics.txt": {
+   "size": 19859,
+   "sha256": "a2e2e44e9ea9385d4944177e093ca12bbb3beb53ae860d5fa2c9e631a3520c8b"
+  },
+  "game/common/government_types/03_parliamentary_republics.txt": {
+   "size": 10405,
+   "sha256": "30d98c116101cef3dfd5c0431a360691cfc5ceb7a2d8a396d81394a3f92c9178"
+  },
+  "game/common/government_types/04_theocracies.txt": {
+   "size": 8740,
+   "sha256": "26360d3811d4e73a37a7b73e846e2788d889c3b7bf61eb112c4719464a9e89ca"
+  },
+  "game/common/government_types/05_council_republics.txt": {
+   "size": 4862,
+   "sha256": "15f068bc6588014de1c0e471586f41d8fdcb0642c3ef0be3ef9633456a2dbf58"
+  },
+  "game/common/government_types/06_corporate_states.txt": {
+   "size": 4951,
+   "sha256": "c796c1712e5b177fc046f42fa60a76dfd2feb480ec8ee3612f817ee43a03825f"
+  },
+  "game/common/ideologies/00_ig_ideologies.txt": {
+   "size": 25550,
+   "sha256": "4c8bc020d2d1060795e5a615b850736b731a31193862399363ec2e1829639b05"
+  },
+  "game/common/ideologies/00_ig_ideologies_event.txt": {
+   "size": 3470,
+   "sha256": "9821d1dceb526c700eeb2a6351355bf2745004c747744bb8c855e1b1cd6e9f36"
+  },
+  "game/common/ideologies/00_ig_ideologies_flavored.txt": {
+   "size": 45388,
+   "sha256": "68b24613022a7d879337bd2a0c190c7c140b4c0ae2bd6db67770aaecdca87610"
+  },
+  "game/common/ideologies/01_character_ideologies.txt": {
+   "size": 264322,
+   "sha256": "ee996f042b387707e5bc305c32bd7e83d9b706aec784cb4e4f35ade0dae98bee"
+  },
+  "game/common/ideologies/02_character_french_flavored.txt": {
+   "size": 19060,
+   "sha256": "b7f19178695817e615226c647e0ac80ede978902baa5816f898969d59888bc56"
+  },
+  "game/common/ideologies/03_ig_ideologies_movement.txt": {
+   "size": 52249,
+   "sha256": "063a0a979aac9c4f3d721da16866ce242e7b786c8b0ae7de1f54b9c8a05b4a92"
+  },
+  "game/common/institutions/00_institutions.txt": {
+   "size": 1635,
+   "sha256": "9d3b8474e2e99a34cd23cc38343253b850d0b2991a0f9418c85577c68c8ece2b"
+  },
+  "game/common/interest_groups/00_armed_forces.txt": {
+   "size": 13001,
+   "sha256": "c010ec05625f29a1e2691e49b1b30a2900cfce46553d8a9c2c7f248a1ae3e119"
+  },
+  "game/common/interest_groups/00_devout.txt": {
+   "size": 19435,
+   "sha256": "13aa98f4abb562c175a92a52fb5b9a6a55158c0afde26916cb0cc36ca8b042b9"
+  },
+  "game/common/interest_groups/00_industrialists.txt": {
+   "size": 11174,
+   "sha256": "971a0f6a6f299275f71d3f9cefb780eaaed3be36cd29817b42092c1de3618be8"
+  },
+  "game/common/interest_groups/00_intelligentsia.txt": {
+   "size": 12427,
+   "sha256": "289a6082ffc91c567e674bf62710ce280e847e254ff77bd322f50f2be888e6ba"
+  },
+  "game/common/interest_groups/00_landowners.txt": {
+   "size": 15000,
+   "sha256": "f5cab3cf39ca932bd6d50c93f285dfa1c762162b8fa79cebfabf8eb2d62db39c"
+  },
+  "game/common/interest_groups/00_petty_bourgeoisie.txt": {
+   "size": 13399,
+   "sha256": "75ae7a8b68099c5d5c0ccbdb7430d8cf705ff4a1aee2dc386da1d2f801db7d92"
+  },
+  "game/common/interest_groups/00_rural_folk.txt": {
+   "size": 10647,
+   "sha256": "58a4221f2e55cc191fce175778f49097cd643dfc6fadf2edf21ca8725c449129"
+  },
+  "game/common/interest_groups/00_trade_unions.txt": {
+   "size": 8337,
+   "sha256": "37e3a3a9821cefdea0c54cc6352fbf6cef84a3ebca12d94bbe6167f047ca0da6"
+  },
+  "game/common/journal_entries/00_abolish_monarchy.txt": {
+   "size": 2053,
+   "sha256": "1d8ac88eea45b13e035e5a1c15567f48a06de069fe386305b2e4bbc639ddd138"
+  },
+  "game/common/journal_entries/00_acw_entries.txt": {
+   "size": 7919,
+   "sha256": "f164d68b6422676c1ed410f75532a05b18b091a77dea628bc9b62ab1d859e3fa"
+  },
+  "game/common/journal_entries/00_alaska.txt": {
+   "size": 3823,
+   "sha256": "e61dcdb6fe1b4e766cdfb1a7fa9ba88a29f6c6ea0f0b7be6d9c0fdb42112078f"
+  },
+  "game/common/journal_entries/00_antarctica.txt": {
+   "size": 2607,
+   "sha256": "e713e6bb5c8fec3ee4a0265a3b02fca1fa72390dba5bc4597f3844c7639e675d"
+  },
+  "game/common/journal_entries/00_art_jes.txt": {
+   "size": 3511,
+   "sha256": "cdad9a29326543d97f1a0d46c44e1fc3bd83252481503656b261af911df3f4d7"
+  },
+  "game/common/journal_entries/00_assassination.txt": {
+   "size": 4246,
+   "sha256": "fb6ffc5da625317234241519f3c924ac11c03f9405bee8bfd1a55f656e7a60d3"
+  },
+  "game/common/journal_entries/00_autocracy.txt": {
+   "size": 3624,
+   "sha256": "a67d5c75f83c46c35b9a1951b5b94ce68606c273b1149f01c46b5cd64139fc50"
+  },
+  "game/common/journal_entries/00_belle_epoque.txt": {
+   "size": 5760,
+   "sha256": "6e08454fb209c9855d77554412a8a408dd35d51e20ee80331cc444ab74577203"
+  },
+  "game/common/journal_entries/00_boxer_rebellion.txt": {
+   "size": 1379,
+   "sha256": "45b347fcab28c194ec7afb7f9f68cde9440f39f25cc6393b4f5b9ecab322fd82"
+  },
+  "game/common/journal_entries/00_canada_australia.txt": {
+   "size": 4901,
+   "sha256": "c9004f91694c3065e61e9b0febf5f6eafd0f28c6c4351a9e129089a95f9526d0"
+  },
+  "game/common/journal_entries/00_canals.txt": {
+   "size": 3449,
+   "sha256": "0b1bf860886a6997058f5a39364a6533018a854dd3a6e28b0aca9b0a74f0e8e0"
+  },
+  "game/common/journal_entries/00_central_africa.txt": {
+   "size": 3719,
+   "sha256": "60ea35b2177c18a3eebddd57c3555be0559cb480dedda2277243ab8a34fb9bf4"
+  },
+  "game/common/journal_entries/00_central_and_south_america.txt": {
+   "size": 3474,
+   "sha256": "60bfa6dfc4c0331b549218f8f4fcdc5ca88ad3c8644596d2fc8c895004d20b06"
+  },
+  "game/common/journal_entries/00_communism.txt": {
+   "size": 6255,
+   "sha256": "0089230769d47d3aa2ef89394c408262f09861cee499c8954804fe812824d640"
+  },
+  "game/common/journal_entries/00_congo.txt": {
+   "size": 4038,
+   "sha256": "735ebf0d09d10e604db04f34a71eb79ad521cf8f0933eb44c5ab2e844c4bb16a"
+  },
+  "game/common/journal_entries/00_congo_free_state.txt": {
+   "size": 3485,
+   "sha256": "c45a5e2b711442573303660ae5f760c066df9fedafd88c662c5f150c18f6aa9f"
+  },
+  "game/common/journal_entries/00_corn_laws.txt": {
+   "size": 1500,
+   "sha256": "0cddfe4eaf90710bd7611d27fdd172a7663f2966d6af06b40aebb6db01cb8cd8"
+  },
+  "game/common/journal_entries/00_east_indies.txt": {
+   "size": 3148,
+   "sha256": "2398d417afc4de586401479b7bbd95c4129e9a1ef66e0d290561b5595362ccd2"
+  },
+  "game/common/journal_entries/00_establish_colonial_administration.txt": {
+   "size": 1930,
+   "sha256": "a5a1fc6bd2c502a67b282aad0ac421ebc20d6c38e8888aad7794f6f6358b6509"
+  },
+  "game/common/journal_entries/00_ethiopia.txt": {
+   "size": 622,
+   "sha256": "38909c798d04db0ee711387e6ad51d3d9bf0f2c9856b98657746401c15767f71"
+  },
+  "game/common/journal_entries/00_fascism.txt": {
+   "size": 11162,
+   "sha256": "da01c819e6610e2b1278199c0987b8c050ac927a881482993af27ae20046315e"
+  },
+  "game/common/journal_entries/00_german_unification.txt": {
+   "size": 7717,
+   "sha256": "38a42bbfae01cbc32d42b9076c904a4d0cb65c3c2959f7f7c3aca2271a7c66b8"
+  },
+  "game/common/journal_entries/00_grand_exhibition.txt": {
+   "size": 2909,
+   "sha256": "2a9de48e559b2bee5be16f677bc499aacc450bb4dc6d87e36e87f44ecae18bcc"
+  },
+  "game/common/journal_entries/00_greek_nationalism.txt": {
+   "size": 6024,
+   "sha256": "76925b166c659f1da986a445fe8343638465860628dfc5881db4427ce1877517"
+  },
+  "game/common/journal_entries/00_hawaii.txt": {
+   "size": 2505,
+   "sha256": "43eb4de1c8d507f679d35f6228fa09cbae258e926414f6deb91c71092e82ddbd"
+  },
+  "game/common/journal_entries/00_ig_agendas.txt": {
+   "size": 8708,
+   "sha256": "82f49578e7565a76981f8c9dbda08dd9b10436e92d17f3cbd9edb7b3a95d806f"
+  },
+  "game/common/journal_entries/00_ig_suppression.txt": {
+   "size": 1356,
+   "sha256": "5d4cd9b95a6aedc3c3613d2d1e8dff824833c7a70c57de27be148a9cf670e4ce"
+  },
+  "game/common/journal_entries/00_impose_law.txt": {
+   "size": 2507,
+   "sha256": "62fe40c1b04fd352a4f997bb623a795bb54c4b4ffbbc27584ec039606f9e313b"
+  },
+  "game/common/journal_entries/00_indian_removal.txt": {
+   "size": 1441,
+   "sha256": "9a849a3b3e5a64709a9e5cd09a1e13174c6a88cb2c95eb5b907f7142c1b53cb0"
+  },
+  "game/common/journal_entries/00_italian_unification.txt": {
+   "size": 2548,
+   "sha256": "9515ee785f32b69dd06883136c40d4e39f17376049685d29f992abd536238a52"
+  },
+  "game/common/journal_entries/00_krakatoa.txt": {
+   "size": 1832,
+   "sha256": "57427adc923621dfb59b07bf7753936f55d0544d5ecb00d4120906cf81943d2c"
+  },
+  "game/common/journal_entries/00_land_reclamation.txt": {
+   "size": 1422,
+   "sha256": "9e758e20dcc0b7f3524912bc963266ebb52d60cdcc430abbe7d831f97241a26b"
+  },
+  "game/common/journal_entries/00_liberalism.txt": {
+   "size": 3597,
+   "sha256": "b158653cad59b6d761351a3db56b6be193a3347859f3eafced248e2e9b79c4f5"
+  },
+  "game/common/journal_entries/00_major_railroads.txt": {
+   "size": 4490,
+   "sha256": "14592b73831f8899cd089604fc4f3d1961b858e06cce09cefcb9dc5c3e2c8c9f"
+  },
+  "game/common/journal_entries/00_manifest_destiny.txt": {
+   "size": 1386,
+   "sha256": "d9ca139b1b41abe98b4c19ad42bea8f6772a5cf2a9738e4b929bc13a7939de7a"
+  },
+  "game/common/journal_entries/00_meiji_restoration.txt": {
+   "size": 17136,
+   "sha256": "aaaf94eb3c4acd16e2985381ef68f6cd1cf1ca8fa012002ad2305c24faa135d0"
+  },
+  "game/common/journal_entries/00_negotiation_quests_je.txt": {
+   "size": 21613,
+   "sha256": "049b761dd327ab4f25f445974f13f292b7ce4ca05d3bd0114d8f4e3fbfb22603"
+  },
+  "game/common/journal_entries/00_niger_river.txt": {
+   "size": 3721,
+   "sha256": "382d98038a4aeb629dd1f14a8d7591af2a1c4768bdfb9571d67a04c7ea67354f"
+  },
+  "game/common/journal_entries/00_nursing.txt": {
+   "size": 1953,
+   "sha256": "e239dd1a43c3049563dea0b7715405f8fa7a7c766bfbee3a7054b481a6534fcd"
+  },
+  "game/common/journal_entries/00_opium.txt": {
+   "size": 1014,
+   "sha256": "7aa000f4e516ced02003ac08307406f191e4651b7e1ca608087f4a3a555d5e4e"
+  },
+  "game/common/journal_entries/00_opium_wars.txt": {
+   "size": 3211,
+   "sha256": "affb2f5a9e8b526cd57231ed5d1189a95a413aeaecbee8240df28296fa7f19e2"
+  },
+  "game/common/journal_entries/00_oregon.txt": {
+   "size": 2929,
+   "sha256": "4e31248eb66323f343b1c739453e0087b522625f0fe87228b92027271abda089"
+  },
+  "game/common/journal_entries/00_patagonia.txt": {
+   "size": 1508,
+   "sha256": "bec941c9fc78786919a0b4ffe1bcf0637ff59e20968131b3583c45d27221f588"
+  },
+  "game/common/journal_entries/00_peoples_springtime_je.txt": {
+   "size": 10502,
+   "sha256": "344cc4e4497c56440fe213329892e870ad30e214fdf2b1d6c452d090e6f24c6d"
+  },
+  "game/common/journal_entries/00_plague.txt": {
+   "size": 2253,
+   "sha256": "9dd7fbe834f071972093d9a53c5e209ff6e6b81a33e7b95913dcc8658d9f7c06"
+  },
+  "game/common/journal_entries/00_player_objectives_economic_dominance.txt": {
+   "size": 6264,
+   "sha256": "7fb15aab732c9ce9f93c4f3a86265de98aaef64b1d9fdb4a4dd8174ec8e12599"
+  },
+  "game/common/journal_entries/00_player_objectives_egalitarian_society.txt": {
+   "size": 4927,
+   "sha256": "ded700f2ebb489731d98b818a17a42405417cedae8fc4adb8c1d54294fdedb39"
+  },
+  "game/common/journal_entries/00_player_objectives_great_game.txt": {
+   "size": 34304,
+   "sha256": "f8f3a3e6f2d9c405e62b85138e65e20cbb1200b856a530e94f3ae4ebf9ae7b31"
+  },
+  "game/common/journal_entries/00_player_objectives_hegemon.txt": {
+   "size": 4721,
+   "sha256": "6b6300132fe74cb93190daf1917e8a2d7f8f546638a9f177974afbf63e200c9f"
+  },
+  "game/common/journal_entries/00_poland.txt": {
+   "size": 2978,
+   "sha256": "9b01c5dbfa033492753278f044dc20bf3c1f1ac8701c95e6aea51c82b65b930f"
+  },
+  "game/common/journal_entries/00_prohibition_laws.txt": {
+   "size": 2207,
+   "sha256": "4755a3642961fcf1324e298552e24ffce7f7785f7e0e197f6d0b67e69bd38066"
+  },
+  "game/common/journal_entries/00_red_scare.txt": {
+   "size": 2387,
+   "sha256": "56a1e1153b44196f58b9f8e3e0e6ff59d494b17c27d0fb228f6a94a35e3bd7fe"
+  },
+  "game/common/journal_entries/00_request_recognition.txt": {
+   "size": 1540,
+   "sha256": "7ef4d78d42264da727bdeaf4a9027fb7d829828936288d8a035abb8d04cfd939"
+  },
+  "game/common/journal_entries/00_reunify_china.txt": {
+   "size": 3046,
+   "sha256": "e5c184040e8439e588f431191d61956a894914f34459658d32d8fbec56aefe66"
+  },
+  "game/common/journal_entries/00_romania.txt": {
+   "size": 4062,
+   "sha256": "74149d3a3b778732de318d7fb522ce4255289b410f6184625ba9670e6cccab9a"
+  },
+  "game/common/journal_entries/00_scotland_yard.txt": {
+   "size": 4910,
+   "sha256": "9aec69acfeb42f1b42233a5e25dd48e9a01babe3acaf7a3acd6e3be2fe5350c8"
+  },
+  "game/common/journal_entries/00_scramble_for_africa.txt": {
+   "size": 3829,
+   "sha256": "1e36081fe6e081fef17cf4880de26257233e20236292f605f3441785729a1e4c"
+  },
+  "game/common/journal_entries/00_secret_police.txt": {
+   "size": 397,
+   "sha256": "a798bd250fd58fca3f60521d84adc3508635865542b1a66d983fb94d3bf12ae0"
+  },
+  "game/common/journal_entries/00_seminole_wars.txt": {
+   "size": 1506,
+   "sha256": "183c795ac9cbef95a616392908bea6335c03b4eb03e133895f3211f5d5a931bd"
+  },
+  "game/common/journal_entries/00_sick_man.txt": {
+   "size": 8916,
+   "sha256": "e48405bfabb52f6ce757880e436c8d44c67111e246af3215fd3f96ec4f3477f9"
+  },
+  "game/common/journal_entries/00_skyscraper.txt": {
+   "size": 1679,
+   "sha256": "bd035e3b336e8f42d5dde864f7342e18db03c672526aa9a62a7efaf216e70d8d"
+  },
+  "game/common/journal_entries/00_slave_owner_paranoia.txt": {
+   "size": 2105,
+   "sha256": "4b91a482fa867e9547d904c34ddf42484d1ba659adf2c508b410bbb5b85e29c2"
+  },
+  "game/common/journal_entries/00_standard_of_living.txt": {
+   "size": 1754,
+   "sha256": "76f931b1df74300c9cc9703eae609caaf4f90ac30bcc81ab0d997578536c530b"
+  },
+  "game/common/journal_entries/00_strike_je.txt": {
+   "size": 2763,
+   "sha256": "6523539f5e5de075fcfaea134d0249557f462bb5c49f8a34a26011c5e5820244"
+  },
+  "game/common/journal_entries/00_suffragists.txt": {
+   "size": 1800,
+   "sha256": "2ba19ecbc005fb9debd54b86919809dcca14d4e39c035ee7d41b822de611cdfd"
+  },
+  "game/common/journal_entries/00_taiping.txt": {
+   "size": 5962,
+   "sha256": "b3b67e83a60427fcb2a6c45c7915cd21fa83c7196b789654744b523320e84196"
+  },
+  "game/common/journal_entries/00_texas.txt": {
+   "size": 1072,
+   "sha256": "8f88e7e6dd64784b3593099b4d7bf9d83b39cac79082256203a74ac50bfff0fb"
+  },
+  "game/common/journal_entries/00_trade_route_event_missions.txt": {
+   "size": 3189,
+   "sha256": "73cf21807a31233312d38932aab6ebe36344f883e81f70487f1a13723d0b4ac1"
+  },
+  "game/common/journal_entries/00_treaty_of_london.txt": {
+   "size": 17739,
+   "sha256": "0c6a529c0aad7739089769a8a6acd56aaa712f457f9cffbe9bc3cedfdce0fec2"
+  },
+  "game/common/journal_entries/00_turtle_island.txt": {
+   "size": 1770,
+   "sha256": "716e4283aa690e7c250e4fa6f756d24ddd31e60e36e24c8f018139c21cd53a26"
+  },
+  "game/common/journal_entries/00_tutorial.txt": {
+   "size": 32889,
+   "sha256": "f4e44394601d6bb52b85e4184012f9181391831f64af1c4251f8bbeb3978da13"
+  },
+  "game/common/journal_entries/00_urbanization.txt": {
+   "size": 1908,
+   "sha256": "0be06294448f31679d2b14280b4e6c1991f0d2fa34f97ccc0452068c7cdc5ee6"
+  },
+  "game/common/journal_entries/00_veiled_protectorate.txt": {
+   "size": 1259,
+   "sha256": "b67fc2d52874e59373b36052c0c52af5e79ad4846519556aef67df8893d5fb17"
+  },
+  "game/common/journal_entries/00_victoria.txt": {
+   "size": 1454,
+   "sha256": "b55646bd41d0a8c0dd9dd0486a185f7e701222f15aa917b9ecd77b561625e6ab"
+  },
+  "game/common/journal_entries/00_warlord_china.txt": {
+   "size": 2312,
+   "sha256": "9fc26c40d4d1757c94ff98879dc67b79d537672095249407de451909e5db58d2"
+  },
+  "game/common/journal_entries/00_west_america.txt": {
+   "size": 3705,
+   "sha256": "28b94425edab7f6792ec83b7c88874d259d0d90fb4029c021c50d096f047bc1f"
+  },
+  "game/common/journal_entries/00_zanzibar.txt": {
+   "size": 7400,
+   "sha256": "3f7a36bfccd130040abad23af17316e2c848c7d9a42bffe63f6ab9290e668bcd"
+  },
+  "game/common/journal_entries/01_algeria.txt": {
+   "size": 5676,
+   "sha256": "cff9ea3ebe37c8c9cdcafe19b5efbc8daead3badd5ff181be556062151fffcef"
+  },
+  "game/common/journal_entries/01_coup.txt": {
+   "size": 3074,
+   "sha256": "f39d26651a3200b1044a2e79d070a8bfeebb205183079a9bb993ef6d520c5665"
+  },
+  "game/common/journal_entries/01_dreyfus_affair.txt": {
+   "size": 1536,
+   "sha256": "ce8dc0f3514f90ae4586f60b3937b0240fa4de56b400559c23f58f3758546644"
+  },
+  "game/common/journal_entries/01_french_monarchism.txt": {
+   "size": 14668,
+   "sha256": "ca72b2d719141663f4274fef237b0a4f5828ce4c9b2f4e22752882599b5cc350"
+  },
+  "game/common/journal_entries/01_hispaniola.txt": {
+   "size": 2785,
+   "sha256": "7613c72c9fbdde906395286e2e9851023fbd939529fd21b586f0e6ab4c17417c"
+  },
+  "game/common/journal_entries/01_indochina.txt": {
+   "size": 1733,
+   "sha256": "0fee51a5ad3d17edbebb323964867aefe730c8c944434cef2e9adf99f07520c9"
+  },
+  "game/common/journal_entries/01_krakow.txt": {
+   "size": 1528,
+   "sha256": "eff18342bd7b652a83abd178d5aeb44083054658cd7a099859b6407bba353c65"
+  },
+  "game/common/journal_entries/01_natural_borders_of_france.txt": {
+   "size": 4146,
+   "sha256": "7410283c9f4fb832576be6af56bc441015643add42a0a31714d559bdf9d35959"
+  },
+  "game/common/journal_entries/01_nihilism.txt": {
+   "size": 4148,
+   "sha256": "f19ccb017dd90e5715bb0aed6af90dc99c69a4a9bc11115d5bbe929d437577de"
+  },
+  "game/common/journal_entries/01_paris_commune.txt": {
+   "size": 7051,
+   "sha256": "c203f21e2198141685e13f5d4e15d6ad6ebea6ad29dcad5b8ae3eac5bdff875c"
+  },
+  "game/common/journal_entries/01_ryukyu_rivalry.txt": {
+   "size": 6102,
+   "sha256": "acb43f7f590803e0bfd868b89b9af931be0a44da4ee8d8e35a29b68b8ce0c743"
+  },
+  "game/common/journal_entries/01_silkworm_diseases.txt": {
+   "size": 2976,
+   "sha256": "faed6fc78fbeabf5374f65a413518151e4d38ef887052e4764400e2d4e6e1fbf"
+  },
+  "game/common/journal_entries/02_acre_dispute.txt": {
+   "size": 629,
+   "sha256": "8c269e701948f1dc949168794eb0286e253d43b4aaae1c9507914c66b3af3738"
+  },
+  "game/common/journal_entries/02_amazonas.txt": {
+   "size": 1320,
+   "sha256": "cd2e74dd7aad5330e803deda5efa9904f63618bac2d101a38a2f376eca5a9b57"
+  },
+  "game/common/journal_entries/02_brazil_navy.txt": {
+   "size": 2376,
+   "sha256": "442a9dd84452c9dfc9597e839206f5d7d612a2d876f09652468a3bdbc2cd2d14"
+  },
+  "game/common/journal_entries/02_brazilian_nation_building.txt": {
+   "size": 1905,
+   "sha256": "238207d5b32f484f51c3bcb47dd19fdf23821f1f344e7cdfe36f1c872c9ad56b"
+  },
+  "game/common/journal_entries/02_brazilian_slavery.txt": {
+   "size": 7046,
+   "sha256": "7dfe2894a87024e6947bd89a2f48c46227de61f23c4ef619ffe98fba46ac8a03"
+  },
+  "game/common/journal_entries/02_caudillo.txt": {
+   "size": 1550,
+   "sha256": "ce0e9d4256128489b753c6a1afb96ca4202c9fbefab598124de3e70283e4b480"
+  },
+  "game/common/journal_entries/02_coffee_and_milk.txt": {
+   "size": 5485,
+   "sha256": "1370648361ab0b65020b93ff20f6da62b134378dc1d57ec187642f5c9403fc59"
+  },
+  "game/common/journal_entries/02_cristo_redentor.txt": {
+   "size": 1872,
+   "sha256": "b0613a94f2e9fddf4b2be5f1a0953cf2cdce112db19a05c43aac6578c57e3afe"
+  },
+  "game/common/journal_entries/02_gran_colombia.txt": {
+   "size": 6418,
+   "sha256": "c0ef5cbc3029569f5574223ffa4dc140acd566b64ac4746a061d431d58b1652a"
+  },
+  "game/common/journal_entries/02_paraguay.txt": {
+   "size": 12347,
+   "sha256": "4380a74a60d5e4cee72876733f49fa89c560e2138cf3b944af37081932e797ff"
+  },
+  "game/common/journal_entries/02_pedro_brazil.txt": {
+   "size": 7159,
+   "sha256": "88824a36f7cf731a12101555befd106642e0b03e72d2707ac502db6132b2e47d"
+  },
+  "game/common/journal_entries/02_peru_bolivia.txt": {
+   "size": 6481,
+   "sha256": "96095b62af0c7911aad5a3636c25fc933b58e92516803c9eaa08e948b922989f"
+  },
+  "game/common/journal_entries/02_positivism.txt": {
+   "size": 3265,
+   "sha256": "b7bd357caf82a68db3ecf73d00faec7aab830a68b53b631cc307cb3720175e2f"
+  },
+  "game/common/journal_entries/02_south_america_migration.txt": {
+   "size": 10058,
+   "sha256": "9f0f471d402393926be0fee0cbf4d2ea682917a19543923d26d8e80dcea2141a"
+  },
+  "game/common/journal_entries/02_south_american_national_identity.txt": {
+   "size": 10841,
+   "sha256": "a95a6f54dfd7ce6cbef09e0c04ac84a66c195a833849ee782d3bb88523f65a85"
+  },
+  "game/common/journal_entries/02_vargas.txt": {
+   "size": 6085,
+   "sha256": "b2507f35c6a5e1ed36f9a8c4e93c5fa5edced996a5ff16f82eac1b37a3430928"
+  },
+  "game/common/journal_entries/03_afghanistan.txt": {
+   "size": 23927,
+   "sha256": "2c4427d13c0aecee9e89d872cf8ca9b61b491f843d921166d642dce8f06e9c2f"
+  },
+  "game/common/journal_entries/03_eastern_frontier.txt": {
+   "size": 3034,
+   "sha256": "fe924bbf590bbe4c20fd173b1321444cc2f9f0f5f9b731f0711341f793c16ee6"
+  },
+  "game/common/journal_entries/03_korea.txt": {
+   "size": 6981,
+   "sha256": "a2effe143777fb9fc0b034dfbc92943f318aeecb4e62bdf459e101293b4d4093"
+  },
+  "game/common/journal_entries/03_lobbies.txt": {
+   "size": 9803,
+   "sha256": "1251d7c6d88566bf353f1aa49452904ccb298f1a03005370b84f3e9366602f4a"
+  },
+  "game/common/journal_entries/03_russia.txt": {
+   "size": 36530,
+   "sha256": "b75480663aab7d093be6b85d4c49dee3d8d84d6e264467ee9ed81d2eccfa2e2d"
+  },
+  "game/common/journal_entries/03_tibetan_expedition.txt": {
+   "size": 6010,
+   "sha256": "e47a253ab42b9ab074a257c5066764d39b928152223e86c890ab43006203f819"
+  },
+  "game/common/journal_entries/04_communal_divides.txt": {
+   "size": 6234,
+   "sha256": "98e3ef5dbb0d5c90ade186d1e1b29c96aea2f004c03498c01581c74da4153b39"
+  },
+  "game/common/journal_entries/04_dravidian_movement.txt": {
+   "size": 2500,
+   "sha256": "db203abe300843e57f9e7bfaab980e88bf53af8477fa5ad0a15e0d0aee7a4e93"
+  },
+  "game/common/journal_entries/04_imperialism_of_promise.txt": {
+   "size": 3182,
+   "sha256": "f97a929a3cc9faa98a8ce3824a4a6196866afba18a89e477600dda230153d7fc"
+  },
+  "game/common/journal_entries/04_india_british_dictates.txt": {
+   "size": 8785,
+   "sha256": "c73fc3451cd7dcf5d41061b933fcf1689bec98daf6319370e14175fd074dab3c"
+  },
+  "game/common/journal_entries/04_india_home_rule.txt": {
+   "size": 5071,
+   "sha256": "16832b35e57012bf3207e8e0289d3478e71f484afc726db924d3b81579c3ca25"
+  },
+  "game/common/journal_entries/04_india_nationalism.txt": {
+   "size": 2138,
+   "sha256": "b42de287bcb30ffd123402925a4e7e770679f45718d05b8d99909910fed20684"
+  },
+  "game/common/journal_entries/04_india_non_cooperation.txt": {
+   "size": 7512,
+   "sha256": "8f700a392a548f3ddbd5013ee237226dfeb3db85a836b894a34d3f4960d4c1fd"
+  },
+  "game/common/journal_entries/04_india_railway.txt": {
+   "size": 3746,
+   "sha256": "4caa8eeb3a31c544b16233c55bd86764739c778edea3409697f6b9d3965b1c96"
+  },
+  "game/common/journal_entries/04_indian_famines.txt": {
+   "size": 4655,
+   "sha256": "d074e156bb5bf461d9152bab39ee9e8f0bad9a4da58d9d7db7bf3533d5b6d90c"
+  },
+  "game/common/journal_entries/04_indian_federation.txt": {
+   "size": 2727,
+   "sha256": "1e96a65bea927f0a23e3fa6c5157d1af6de36006aa02af57b8a06e58917c91eb"
+  },
+  "game/common/journal_entries/04_mughals.txt": {
+   "size": 1295,
+   "sha256": "06b25bf63dc840ecfcb8fcf1d2a8cf704d97d8e97215bc23788632c75976f872"
+  },
+  "game/common/journal_entries/04_princely_states.txt": {
+   "size": 2036,
+   "sha256": "84506900d60be335eb714164176dcde6a672675c1a6f8394c9691375e36a6618"
+  },
+  "game/common/journal_entries/04_sepoy_mutiny.txt": {
+   "size": 15847,
+   "sha256": "8a213d7c395c6b2cc5f5e8d72d51cb55ab2c0dde62873c30cac07682141e490b"
+  },
+  "game/common/journal_entries/04_sikh_empire.txt": {
+   "size": 4034,
+   "sha256": "f18359847df1993c48adf36690ab6b2a5b9c83b966978088efad836a459d96a5"
+  },
+  "game/common/journal_entries/04_victoria_terminus.txt": {
+   "size": 2882,
+   "sha256": "8b85fdc140a90c65f9253bfb1e6598461d5fb0f3036ef7519aa19cbc5e792959"
+  },
+  "game/common/journal_entries/05_austria_journal_entries.txt": {
+   "size": 9667,
+   "sha256": "abc3af4f08ee235a250a2dca949cc4bf1b0e835b62c2380813ccf19b8614b369"
+  },
+  "game/common/journal_entries/05_austrian_fascism.txt": {
+   "size": 6746,
+   "sha256": "22a6f89d76d2b292765179e1b16b103bbde6513316b2870373be98ef01bf0494"
+  },
+  "game/common/journal_entries/05_balkan_national_awakening.txt": {
+   "size": 2440,
+   "sha256": "2a95d9fa10559080c057693f3372b07c144722984895f2cb82a097a82b8da5c5"
+  },
+  "game/common/journal_entries/05_balkan_wars.txt": {
+   "size": 10017,
+   "sha256": "3e0aad24bc1fc90814bd0b3ae269e4616bc395f459b0c66b35b2306e5cc0c833"
+  },
+  "game/common/journal_entries/05_bulgaria_je.txt": {
+   "size": 2712,
+   "sha256": "fd3dbd34e7d1b3901fccea6d7aebbc965ecf054a20dff09e42b15a337ed5c28a"
+  },
+  "game/common/journal_entries/05_creation_of_yugoslavia.txt": {
+   "size": 3089,
+   "sha256": "4575c5c9e91e60177d6eb69e9af34e319b680ed22de1de899bb3b033c4d48b60"
+  },
+  "game/common/journal_entries/05_danubian_federation.txt": {
+   "size": 17732,
+   "sha256": "7b1a8b5a5d28349cd21b011e06611c3d6196bbeb888d0ec7d47cc7211c273d3f"
+  },
+  "game/common/journal_entries/05_eastern_question.txt": {
+   "size": 4887,
+   "sha256": "12b385c8e48f2847236d4e2f7b4724fbb24c0342a99dc8f08c6cd4b7552afe4c"
+  },
+  "game/common/journal_entries/05_great_eastern_crisis.txt": {
+   "size": 7995,
+   "sha256": "269cd001d5de0d04cc53f2077b66beba76a9e4a4c6d1253e3de4df816098e808"
+  },
+  "game/common/journal_entries/05_greece.txt": {
+   "size": 2631,
+   "sha256": "f4a65df0bb91b714947adc7b94df7d9a90301fb92eb9db7d03ddf148ff0bb11e"
+  },
+  "game/common/journal_entries/05_grunderzeit.txt": {
+   "size": 9151,
+   "sha256": "5038239e69da8c3c1f32e53875831fbab3b7439666f4b1dd8de6976f7e98ecd3"
+  },
+  "game/common/journal_entries/05_hungary_je.txt": {
+   "size": 2539,
+   "sha256": "c7045fda641147814df6cde5ce32fdce29886c87f3b4290bb01967f43e37e5e4"
+  },
+  "game/common/journal_entries/05_hungry_forties.txt": {
+   "size": 770,
+   "sha256": "9ad21c867765d1a89c484171abd3cdeab784e8ae8b0cdda8b8c11d0684661655"
+  },
+  "game/common/journal_entries/05_metternich.txt": {
+   "size": 2897,
+   "sha256": "b1dbab51a443be351872ab283e8263451ef6b58e917f3eacbbc81741ef8abaed"
+  },
+  "game/common/journal_entries/05_montenegro_je.txt": {
+   "size": 15649,
+   "sha256": "552ebe834895e63d0a3a5475df741e4890a64bbb9180b6dda12c17115dba2b4c"
+  },
+  "game/common/journal_entries/05_national_awakening_monument.txt": {
+   "size": 7679,
+   "sha256": "052bb6ad7425447264dc75e4114f52c5ec62346df39047ed8a80db8451c5a86f"
+  },
+  "game/common/journal_entries/05_prestige_goods.txt": {
+   "size": 57435,
+   "sha256": "28d78a15b585a27b3978570b22b978ede32ecf31d5b9112f7dae194a320649fd"
+  },
+  "game/common/journal_entries/05_serbia.txt": {
+   "size": 5385,
+   "sha256": "5b309340d35ede9fdbc8671840a364d1ef737854b131c7fd64754460e1d424f7"
+  },
+  "game/common/journal_entries/05_struggle_for_the_highveld.txt": {
+   "size": 7142,
+   "sha256": "cd0d30f6efb844f72d3ad377fddb204db62830fecf72056e11f31520a0bcda9b"
+  },
+  "game/common/journal_entries/05_technocracy.txt": {
+   "size": 1779,
+   "sha256": "089b9383952b0d5217f4c59c13027e0f552fb3201d7d18c85f7c883b2ac71195"
+  },
+  "game/common/journal_entries/05_the_grand_collapse.txt": {
+   "size": 2945,
+   "sha256": "27aeabf0c364f45d6048b15253d0c34e7ce45291f8ce519f3b97bac55198e1f6"
+  },
+  "game/common/journal_entries/06_cuba.txt": {
+   "size": 12711,
+   "sha256": "6c8333d481e47a5d21b65aeefa34ab939a6ca8406699e72e7e7acc3e6a593928"
+  },
+  "game/common/journal_entries/06_dominican_content.txt": {
+   "size": 2329,
+   "sha256": "d5c620a407876f9ef14e068cf59779af87546dc3d5f65da800608549172b5a95"
+  },
+  "game/common/journal_entries/06_economic_regeneration.txt": {
+   "size": 48138,
+   "sha256": "7bcacb34f6ad1e6f19a7177476b61306f97babeb6ea67b972c7ad2b8c1fdd087"
+  },
+  "game/common/journal_entries/06_iberia.txt": {
+   "size": 6555,
+   "sha256": "aa09572693dfd72384756f2abdef422b39164675c9070cedbf7a4bd28120ad18"
+  },
+  "game/common/journal_entries/06_iberian_twilight_monuments.txt": {
+   "size": 19152,
+   "sha256": "e4c8ab8b3c13f192e59ec901f14d71958c7a4bc4b5f3f70dcd650d50378c4155"
+  },
+  "game/common/journal_entries/06_language_policy.txt": {
+   "size": 8857,
+   "sha256": "75e8da8adcfa18ae1c4af17d0c7e084d8d51687a03516eb2aff5f134c0ca4a33"
+  },
+  "game/common/journal_entries/06_lusosphere.txt": {
+   "size": 4109,
+   "sha256": "a90bf7b608dc468351ed7dccdb0e9b24011defa7e5f1ae57c49ef0233ccf6725"
+  },
+  "game/common/journal_entries/06_morocco_lands_of_anarchy.txt": {
+   "size": 7797,
+   "sha256": "ea3ee07ee02f998dcbc5b5bf23ce4e69ffc52b4dbde6174b06c43c7521cbd39e"
+  },
+  "game/common/journal_entries/06_philippines_je.txt": {
+   "size": 12399,
+   "sha256": "199e4c1620eef9d82ba8a2f9ca5e859c49e7826c65c833d68098ddfcbf54a92b"
+  },
+  "game/common/journal_entries/06_portugal_politics.txt": {
+   "size": 14647,
+   "sha256": "c72620de8c07b2553ce0ea3421450cc91c03f4c2d992cd70d544ee3cd2206acb"
+  },
+  "game/common/journal_entries/06_portuguese_colonialism.txt": {
+   "size": 5442,
+   "sha256": "04ccccf13e9d7b4ea1dbbb29f86861ca8b1db7f77b635175a39d889b9234ee7a"
+  },
+  "game/common/journal_entries/06_spain_provisional_government.txt": {
+   "size": 2838,
+   "sha256": "b7e39478277692f0f626e6d2477a9e2bd9f56a474222dc003ff40149ca6a2a2b"
+  },
+  "game/common/journal_entries/06_spanish_africa.txt": {
+   "size": 8327,
+   "sha256": "2962a5cc02e7bb656cefe22aabc0c2e39bf89bd5624b80cbdb61ed36573ec4e5"
+  },
+  "game/common/journal_entries/06_spanish_anarchism.txt": {
+   "size": 4252,
+   "sha256": "9eaf6077a03943fd38c6f087e165b95fb7bc8d94ac7d5820915eefcf48e0bc23"
+  },
+  "game/common/journal_entries/06_spanish_new_world.txt": {
+   "size": 6750,
+   "sha256": "240e8fbc93f2965da6882d94240a3a2e553f3f0554b525ab8b2b5fe5bbb23ad2"
+  },
+  "game/common/journal_entries/06_the_carlist_wars.txt": {
+   "size": 4481,
+   "sha256": "621020c8bc72692732327e18a2c288a7698d0445e0c8e5e84a4a7cdbd251c4ac"
+  },
+  "game/common/journal_entries/06_the_two_spains.txt": {
+   "size": 4909,
+   "sha256": "d44de6521aa89d1e1e93d027d1b1c6302563f0535d2e351facc1b8d26a7e6e4b"
+  },
+  "game/common/journal_entries/07_hokkaido.txt": {
+   "size": 8276,
+   "sha256": "867af26f75e9e3b4f90c603ddbf0e7b357eb57fb6b92ac0f7989b7756436724d"
+  },
+  "game/common/journal_entries/07_iwakura_mission.txt": {
+   "size": 3075,
+   "sha256": "15bad277059552d795fcc66843af4fc2d28b1baa33a789cf751ac778a2d93f4f"
+  },
+  "game/common/journal_entries/07_japanese_religion.txt": {
+   "size": 4180,
+   "sha256": "7e4b96f4ea5134a1983de2fde8b16c60f3127fc40caf5acd038ea9a2c1a90234"
+  },
+  "game/common/journal_entries/07_korea_colonization.txt": {
+   "size": 5992,
+   "sha256": "48f246262ac93d7d722608d8e31e3a81bd75d423c4b2c340e575142e287a3eb8"
+  },
+  "game/common/journal_entries/07_sakoku.txt": {
+   "size": 2211,
+   "sha256": "142e4e23eec9d7667900a07a36016434dd53828492ad7ee829a84c7205b1f95e"
+  },
+  "game/common/journal_entries/07_tenpo_crisis.txt": {
+   "size": 2833,
+   "sha256": "37e7bf5859dd585d512cfe0b39e7383765598b7e8b69d4d4bd48afbb76c90ac2"
+  },
+  "game/common/journal_entries/07_zaibatsu.txt": {
+   "size": 8793,
+   "sha256": "cbcade9b9f356123356bc720d4bd2ade815cceae21076fdb01d705f630e1f94d"
+  },
+  "game/common/journal_entries/99_test_global_je.txt": {
+   "size": 2591,
+   "sha256": "8f403089ebe8a50d2a74850c18729022a6fe8461093fbd5547f48c2adfc72268"
+  },
+  "game/common/journal_entry_groups/00_journal_entries.txt": {
+   "size": 2227,
+   "sha256": "ccee248be47bc1606e715f16503cca90aa2baa15a89ef978a5665c1eb8dee439"
+  },
+  "game/common/law_groups/00_laws.txt": {
+   "size": 4054,
+   "sha256": "dc2cc8675a97353c297f0ec5d96e75bc2ab67df90079841088310da8c56140b4"
+  },
+  "game/common/laws/00_army_model.txt": {
+   "size": 7401,
+   "sha256": "86c32fb873dd2c192728088b572466d73ef8e0f9cd78130e1e0121803dea17e3"
+  },
+  "game/common/laws/00_bureaucracy.txt": {
+   "size": 3882,
+   "sha256": "3d4b720fa18a75f361075504dfc1cf9e0ba1a90200a5b2e6bff9c3a1bad8f98f"
+  },
+  "game/common/laws/00_caste_hegemony.txt": {
+   "size": 9447,
+   "sha256": "0c31a075766c3fc3db997e23b9aa61d737fe0c4c1086a5c8f501a2d03eecbae8"
+  },
+  "game/common/laws/00_church_and_state.txt": {
+   "size": 13796,
+   "sha256": "ad4e366533b268a86f29813c13aeae6f7472d94de84c35bfe51ce960fd8bb015"
+  },
+  "game/common/laws/00_citizenship.txt": {
+   "size": 22761,
+   "sha256": "c006054323511c81b40502810c4ed8f6a806ebde02bf0a3023538e756ec9bb10"
+  },
+  "game/common/laws/00_distribution_of_power.txt": {
+   "size": 30917,
+   "sha256": "014b5fcb89d4e4abb86c98c013364117a183daf569c9cb8d4ab0bb5ff833cd04"
+  },
+  "game/common/laws/00_governance_principles.txt": {
+   "size": 26161,
+   "sha256": "e676448ea64c17079677ddbf2cbfdbec0ffdefa465286f16c1e6107a14e7f4cf"
+  },
+  "game/common/laws/00_internal_security.txt": {
+   "size": 4014,
+   "sha256": "3e7b3fb954ee6d71e87f7e9a5878cadcb8acf9f4704b492c21d20552997caab2"
+  },
+  "game/common/laws/00_navy_model.txt": {
+   "size": 3986,
+   "sha256": "4f9151c671022a5b8b21baefe5940f10540fb261b88fdc300d9072940aec58c4"
+  },
+  "game/common/laws/01_colonial_affairs.txt": {
+   "size": 7119,
+   "sha256": "102e57f8941f391b3e80dab5b892051f07a02b8bc8874349f505296eccdd5b1a"
+  },
+  "game/common/laws/01_economic_system.txt": {
+   "size": 16682,
+   "sha256": "5ccac1062b2589dd2fb11b5b3c261fb037aa1a5d06a9af4333d11756af492b76"
+  },
+  "game/common/laws/01_education_system.txt": {
+   "size": 7456,
+   "sha256": "94508a8b3fe6612b2510aa99466304839e8d69114179deb16031e34cfff16275"
+  },
+  "game/common/laws/01_health_system.txt": {
+   "size": 2665,
+   "sha256": "4d015438098f9eea1350bdeb4ffe308e86857c9245e24226ab2e643566e317ed"
+  },
+  "game/common/laws/01_land_reform.txt": {
+   "size": 15556,
+   "sha256": "2a6c33fb5c9c44c5876dfb066fc34379b48f382fafa322f483d6d4df02f57a9b"
+  },
+  "game/common/laws/01_policing.txt": {
+   "size": 6116,
+   "sha256": "8d6938f1eb556f412ba5353056cd43797f4eea3fb7ea8d6ef6e7e9eeb4a80be3"
+  },
+  "game/common/laws/01_taxation.txt": {
+   "size": 5887,
+   "sha256": "dd028ab3863ed9e3754ab91d17e07455661cc2bad2e77f98bfb4b64b59a7c317"
+  },
+  "game/common/laws/01_trade_policy.txt": {
+   "size": 7591,
+   "sha256": "f6e0ca1e180c57f994aae1a04ea3e407bfadd4ede85f75f67c303ed16d734e6d"
+  },
+  "game/common/laws/02_childrens_rights.txt": {
+   "size": 2046,
+   "sha256": "5c3659a8cfd083511b47ec0637c0ceb570a823029d9fc082f16ad854598d8818"
+  },
+  "game/common/laws/02_free_speech.txt": {
+   "size": 3181,
+   "sha256": "826b58af733cfadf8f69cd311c52d9b4a542fe4700994c7370f8462713d04cd0"
+  },
+  "game/common/laws/02_labor_rights.txt": {
+   "size": 1310,
+   "sha256": "78c4f45f9f3e0a5b3ecdaf03a8ea6ede6ade46eb1de64ae31621e4ecdfe8c371"
+  },
+  "game/common/laws/02_labour_associations.txt": {
+   "size": 9923,
+   "sha256": "a74414c223efcd5f75a25d4118f9966636146ae5b82e7306fc4c13f07ee12528"
+  },
+  "game/common/laws/02_migration.txt": {
+   "size": 2601,
+   "sha256": "53229809fe63dd8d4c7748fa2205183c737f8afbfb60ab2e9510bc4d65fff5e3"
+  },
+  "game/common/laws/02_rights_of_women.txt": {
+   "size": 3846,
+   "sha256": "8dcfab1ce6746d59b44070e4a367e3d016affc68eb3dff5353f71f0df730886f"
+  },
+  "game/common/laws/02_slavery.txt": {
+   "size": 10525,
+   "sha256": "5771d1e2fbef2c649aed1678b29bac9a94af756d445f9db94faed9e51c9cbd51"
+  },
+  "game/common/laws/02_welfare.txt": {
+   "size": 3224,
+   "sha256": "42594f77b4566637631453c60749318f21e154e23d554be166ac68c7cac44784"
+  },
+  "game/common/messages/00_messages.txt": {
+   "size": 45889,
+   "sha256": "f89cb3e3931afb37d9f05543ad71e48726aee30427be1009599825e1bbbb8e8a"
+  },
+  "game/common/messages/01_event_messages.txt": {
+   "size": 26083,
+   "sha256": "476792c5681312b5ca612e95913c018104f9333412168da08dbe99c8bea84cc6"
+  },
+  "game/common/messages/02_french_commune_messages.txt": {
+   "size": 7941,
+   "sha256": "83d12ed360bcfd90c911f335282e1facd61118a5437705087069e251ee02d655"
+  },
+  "game/common/messages/03_india_messages.txt": {
+   "size": 1735,
+   "sha256": "36851985cf61fa4a5c5d8aa0bbd011d5684c4f17a4fd5b432624dfc45749d96a"
+  },
+  "game/common/messages/04_iberia_messages.txt": {
+   "size": 3679,
+   "sha256": "0883c07001a7a917d1e5dd6d9cd4e73b7466a8c5b7a244a389e796cd7ab6c235"
+  },
+  "game/common/messages/05_japan_messages.txt": {
+   "size": 715,
+   "sha256": "2cdd7beee3253106e248fb2099181de253a3e09ebdd31061361e5fb73d8b3e55"
+  },
+  "game/common/messages/06_naval_messages.txt": {
+   "size": 214,
+   "sha256": "750b4f5c9be6c3d4edaa31e565333a932b39600520bc7e1d0864ec236fc7e3ad"
+  },
+  "game/common/messages/unification_notifcations.txt": {
+   "size": 1755,
+   "sha256": "3c36a4dd03399302ed2fd3a1434ffc00d9b520acc1a458aba438ca1ee91ed7ee"
+  },
+  "game/common/mobilization_option_groups/00_mobilization_option_groups.txt": {
+   "size": 642,
+   "sha256": "d173c7904e4c37e7075b0b2d377f3692b44b491642cb285653f122a950977b4e"
+  },
+  "game/common/mobilization_options/00_mobilization_option.txt": {
+   "size": 18883,
+   "sha256": "e3e5d52365bc56ec270ab91a6f6f280a07eebd862187e8c604574ae89cc5df40"
+  },
+  "game/common/modifier_type_definitions/00_modifier_types.txt": {
+   "size": 47435,
+   "sha256": "85a3af4fc77e0ac99948f4b9ea31e5c9a0690da0d96b2472f333de9992d86ad8"
+  },
+  "game/common/modifier_type_definitions/01_building_modifier_types.txt": {
+   "size": 36489,
+   "sha256": "d6417513cc0c299f3be7c51cd42974a096251d3b36dad64e5e54e0f4063062b1"
+  },
+  "game/common/modifier_type_definitions/02_modifier_types_rules.txt": {
+   "size": 4623,
+   "sha256": "f5e3a31b81660f824fdf82578910c8d98acff74064a7827fa1244daf20e4cb32"
+  },
+  "game/common/modifier_type_definitions/03_modifier_types_script_only.txt": {
+   "size": 4323,
+   "sha256": "cc6f265f6add28e55219eabaf555fa9f87cf2fe695a9d4f66e41d7f9baf9e130"
+  },
+  "game/common/modifier_type_definitions/04_label_modifier_types.txt": {
+   "size": 2923,
+   "sha256": "3c2f1bc65a71d736d95d6e0a666864499e8e0e03aaf0a0822779bf109252eeba"
+  },
+  "game/common/modifier_type_definitions/05_power_bloc_modifier_types.txt": {
+   "size": 4803,
+   "sha256": "0ddb551490f149721a43a8c425e9b1a553bb8ac93a4e027caf46bceb08349eb7"
+  },
+  "game/common/modifier_type_definitions/06_country_modifier_types.txt": {
+   "size": 13319,
+   "sha256": "2833d246665a3016dbdc54e705dacdefbd6f60cacd07494f23525f2e418847b7"
+  },
+  "game/common/modifier_type_definitions/07_description_modifier_types.txt": {
+   "size": 581,
+   "sha256": "289849d0c839b894d912d97935bf42a4978636f8e4db5aa6421392256d17a138"
+  },
+  "game/common/modifier_type_definitions/08_movement_modifier_types.txt": {
+   "size": 7512,
+   "sha256": "a1b9e3384835d48ff52f612bb186c855eeb4f7744b9eae172ce17c413cf1e11d"
+  },
+  "game/common/modifier_type_definitions/09_social_class_modifier_types.txt": {
+   "size": 11609,
+   "sha256": "1f79d5a49a233263fdc2314033eb3e4ba8b15fcceb023ff9250b4e04e6be4cd3"
+  },
+  "game/common/modifier_type_definitions/10_country_cultural_acceptance_culture_modifier_types.txt": {
+   "size": 31093,
+   "sha256": "e93dc0657d388ee6931770864838cd66afc63c069e6727a9c7e0e64bfdab11ae"
+  },
+  "game/common/modifier_type_definitions/11_country_fervor_taget_culture_modifier_types.txt": {
+   "size": 29190,
+   "sha256": "4a9b7bae719d7aee38e1490746ba2cfb4ed4e928d8eb0c918ab39f2309686e51"
+  },
+  "game/common/modifier_type_definitions/12_ip4_script_modifiers.txt": {
+   "size": 1414,
+   "sha256": "3413510aba1cbfc63c194734906be208e63474d27d73772ca4b49c854c02ca33"
+  },
+  "game/common/modifier_type_definitions/13_ep2_script_modifiers.txt": {
+   "size": 379,
+   "sha256": "1f0ece16b15e1adbae72e52ad802c2930d0219c6e08651161c3617d677638898"
+  },
+  "game/common/modifier_type_definitions/99_todo_sort_into_other_files.txt": {
+   "size": 47477,
+   "sha256": "f3412884c57274f20dec983592c44d9d2550e658fd4e7e7fd8b2cabf3a18ec17"
+  },
+  "game/common/pop_needs/00_pop_needs.txt": {
+   "size": 6696,
+   "sha256": "fa945a6aaf581fc4b14da2176fc76f489b3d9328acdcb95ed48a1edbbac07099"
+  },
+  "game/common/pop_types/academics.txt": {
+   "size": 2131,
+   "sha256": "e5e1eb16bf4c9eabd9fbb09b54c2c6e8db4e509ffa78c56f30014ba9753fed57"
+  },
+  "game/common/pop_types/aristocrats.txt": {
+   "size": 2384,
+   "sha256": "93d85dd9be9f806abb1fbd64868a86edb1cc11f99b3507b0b3f15b6fc1976ce5"
+  },
+  "game/common/pop_types/bureaucrats.txt": {
+   "size": 2446,
+   "sha256": "6f94dfe9361a86e425f31eedf77fbbeeb93d9a0b589a97484fd63c8dff9a994c"
+  },
+  "game/common/pop_types/capitalists.txt": {
+   "size": 2031,
+   "sha256": "231ca355389bcdf37c9c11ae7d21a2b30551aca283eb67b8a4764aaa4a771707"
+  },
+  "game/common/pop_types/clergymen.txt": {
+   "size": 2390,
+   "sha256": "a08b7d9d3c6428f3232ebfa793923294a917e1535068f5fef69e8025bccae449"
+  },
+  "game/common/pop_types/clerks.txt": {
+   "size": 1597,
+   "sha256": "f741478bfef4cb66f8f4974f9fade88449b8419a9a81faa39d9fe98e9c64f962"
+  },
+  "game/common/pop_types/engineers.txt": {
+   "size": 2096,
+   "sha256": "0af337d728d57b9eead1c7da82fcf786b1615135dad79678a74e93bee84d93f0"
+  },
+  "game/common/pop_types/farmers.txt": {
+   "size": 1963,
+   "sha256": "1d56e81f8682372bf7f82503c5e2303a5daadf51c90dbefc1a82e2d092bf562c"
+  },
+  "game/common/pop_types/laborers.txt": {
+   "size": 1261,
+   "sha256": "90e109f061ca04c308d3d60cf6ba6d91cbe3769759ff28f0a9a0bd34e169a2d5"
+  },
+  "game/common/pop_types/machinists.txt": {
+   "size": 1824,
+   "sha256": "e0ddad8032fd6be5d0eb77533cf9f711a5baf5fe275d20819bc5ba8e3f6785ee"
+  },
+  "game/common/pop_types/officers.txt": {
+   "size": 2480,
+   "sha256": "dae57f59cfa485f5f80387bdd7afe4db01f554fcfa2d5f23dbd88a3bec5ed9e5"
+  },
+  "game/common/pop_types/peasants.txt": {
+   "size": 1262,
+   "sha256": "1d544a332f7c628b5f832f2a2033c25fafde6d9ed5e629b829432a57419f0c42"
+  },
+  "game/common/pop_types/shopkeepers.txt": {
+   "size": 1516,
+   "sha256": "86376494d3960d2a5d1b3550a1b42c0d043813ae06b6b7b08832754ee0f577a0"
+  },
+  "game/common/pop_types/slaves.txt": {
+   "size": 918,
+   "sha256": "c1359b3ac917b756af20d14c6415c438840ab98a624dc35540579e040f044126"
+  },
+  "game/common/pop_types/soldiers.txt": {
+   "size": 1061,
+   "sha256": "a40f9a31933336d8eb49f6f685919c01afd7e523b6e8433c5d00735658099b12"
+  },
+  "game/common/power_bloc_principle_groups/00_power_bloc_principle_groups.txt": {
+   "size": 4344,
+   "sha256": "9ddc05ccc90d2ce3f6167dd13112aac8ad9a0dfa7d9d347f803b58c822bce5e4"
+  },
+  "game/common/power_bloc_principles/00_power_bloc_principles.txt": {
+   "size": 46970,
+   "sha256": "f0d7229c45bc4371bb2ff23a7bff86e95e022a18e1491b03fafdc45283f9f9bf"
+  },
+  "game/common/production_method_groups/00_dummy.txt": {
+   "size": 201,
+   "sha256": "683158fd1dcd0bd3e2e269466b57969a0f318365f0d80c0a38fc832fbfe96f19"
+  },
+  "game/common/production_method_groups/01_industry.txt": {
+   "size": 8226,
+   "sha256": "070243064f5a07d84e25ce773686b0e5a9e2e7d0b942798d74caf88ea8f5b681"
+  },
+  "game/common/production_method_groups/02_agro.txt": {
+   "size": 4709,
+   "sha256": "a51f28dab7a5867cf19b66e13b8f34b00c96611950aac61d6bd6af49c316407a"
+  },
+  "game/common/production_method_groups/03_mines.txt": {
+   "size": 4806,
+   "sha256": "4d0fb36d2d03fa862bd6adf70b6c1e3692b717ff4a0270abd9c4760485ad227e"
+  },
+  "game/common/production_method_groups/04_plantations.txt": {
+   "size": 6007,
+   "sha256": "c149de98cc6fe693d41155e25e2d7befdfe7a6856cb54e21cc2da0a414819b99"
+  },
+  "game/common/production_method_groups/05_military.txt": {
+   "size": 1870,
+   "sha256": "9c554fb6b021f646c0d87fcbfc3155db638015f8ca35ff1b86f70e154b85de9e"
+  },
+  "game/common/production_method_groups/06_urban_center.txt": {
+   "size": 1669,
+   "sha256": "444618ae2ed2c71be1ebf8edd909926baa547f297d0c12515759fb6b606031e5"
+  },
+  "game/common/production_method_groups/07_government.txt": {
+   "size": 1907,
+   "sha256": "fa5db0c793e60880b525ee1e30e77724239c108b2497c3180273402d5c41354c"
+  },
+  "game/common/production_method_groups/08_monuments.txt": {
+   "size": 8668,
+   "sha256": "50a46603a7a39ae741bc114002828814c4a24c9967ae854c73c76899cc03216f"
+  },
+  "game/common/production_method_groups/09_misc_resource.txt": {
+   "size": 2619,
+   "sha256": "5b4ed0b128d021cd448cafbc4031ff1ee7df29861831248efeec4e1507f27a07"
+  },
+  "game/common/production_method_groups/10_canals.txt": {
+   "size": 157,
+   "sha256": "14d2b8f6a5a26e0ca4b3e2bdc30597ddd34a06692c4269890f66631b817a4ef1"
+  },
+  "game/common/production_method_groups/11_private_infrastructure.txt": {
+   "size": 1996,
+   "sha256": "cf04fc870d1b1bb48bdbde342612b8c6b5df62723150656b9a35d86e4ad8ca17"
+  },
+  "game/common/production_method_groups/12_subsistence.txt": {
+   "size": 3716,
+   "sha256": "9f9840fc5fa2a6ce5dfa35118037ff2975655672495ad08ac1521de91ddd9b44"
+  },
+  "game/common/production_method_groups/13_construction.txt": {
+   "size": 275,
+   "sha256": "f9bd10b3911cb06d19c30ed72534649d205167ea47d96868926a0cbfd43ebc9b"
+  },
+  "game/common/production_method_groups/14_companies.txt": {
+   "size": 1000,
+   "sha256": "31c99d4ab3406bd6f3b19ee24d8e80f93db9a4578ec5e3a1e1c187cc92e552fa"
+  },
+  "game/common/production_methods/00_dummy.txt": {
+   "size": 174,
+   "sha256": "cf1ee5b7b29ad12df7f8611313df7c0bfd66b6c2b03f66df82b5b77a449528bf"
+  },
+  "game/common/production_methods/01_industry.txt": {
+   "size": 54622,
+   "sha256": "d0abb71f6ba922f46e1e512810053d1206a3cbfd8a2ff419d8a66c87b8a36886"
+  },
+  "game/common/production_methods/02_agro.txt": {
+   "size": 14145,
+   "sha256": "40d5d3d776783624e004321a66dc45848f1d8c3d3cb264c612e3521ae11829e5"
+  },
+  "game/common/production_methods/03_mines.txt": {
+   "size": 19557,
+   "sha256": "5e182a3d1e885e0d99848a03070e952d6cd20e33cb2f2e4b5ffa9a2ba23d8931"
+  },
+  "game/common/production_methods/04_plantations.txt": {
+   "size": 25873,
+   "sha256": "7cd7cbbd269b358421b267405b4e2cc72548d40d3bec749b3d4ae9cc910bbc70"
+  },
+  "game/common/production_methods/05_military.txt": {
+   "size": 10265,
+   "sha256": "7ff5cd54ae6ba592a44b49231547fce54d93f6060663891394a88fe315c5b3b1"
+  },
+  "game/common/production_methods/06_urban_center.txt": {
+   "size": 10265,
+   "sha256": "1dc730c0a8a331c68c9035013d0d103e85208dac2d7536783fa236f63d1926a0"
+  },
+  "game/common/production_methods/07_government.txt": {
+   "size": 6607,
+   "sha256": "f74d57845a75e7568c211646366c1e809aa7242aebc712f42af4a728fb07d80d"
+  },
+  "game/common/production_methods/08_monuments.txt": {
+   "size": 14225,
+   "sha256": "84c6e3224e8f647274a852d238a019a01da6b9a414c22fb7be9fcb2aa678d07a"
+  },
+  "game/common/production_methods/09_misc_resource.txt": {
+   "size": 12361,
+   "sha256": "e2aadd13e1b7042fc0ce85fb66ba016db0b3a06248e7a9d1eb5efa228d2bde0d"
+  },
+  "game/common/production_methods/10_canals.txt": {
+   "size": 539,
+   "sha256": "2cf2dcb43b753f74c81ff7fb190817730ec4d1d4170697b89565ab2b428debb4"
+  },
+  "game/common/production_methods/11_private_infrastructure.txt": {
+   "size": 12904,
+   "sha256": "cd32009af5d592d99cf1a9822a57542b9e0b9ad82c7193f24ec32cf3799a017e"
+  },
+  "game/common/production_methods/12_subsistence.txt": {
+   "size": 8931,
+   "sha256": "0c4dd9b220e377a7571edbe342917a33506f84375e692948fca97df055a3822c"
+  },
+  "game/common/production_methods/13_construction.txt": {
+   "size": 3054,
+   "sha256": "65d032301d83cf3ad200901af721454d786b77e29be3069e6ad862668d99dd85"
+  },
+  "game/common/production_methods/14_companies.txt": {
+   "size": 8931,
+   "sha256": "e289cf7118acbe5851e4adf6476cde8282bb6c7123ee0383d517dc09050dc732"
+  },
+  "game/common/religions/religion.txt": {
+   "size": 2306,
+   "sha256": "96ee8ddca57de6957b1a1501f91896e37a086319468312952a1843e5892d1814"
+  },
+  "game/common/script_values/00_diplomacy_values.txt": {
+   "size": 28354,
+   "sha256": "613bf4c513a695c497ca94129ad8783f9255659cae42790bd6e8b000f6c189d0"
+  },
+  "game/common/script_values/00_gfx_route_graphics_values.txt": {
+   "size": 1111,
+   "sha256": "8deac494cce48c8b1d00f67f76134d3abd34328ee99d8a285428051acb28bc48"
+  },
+  "game/common/script_values/00_infamy_values.txt": {
+   "size": 4468,
+   "sha256": "ea930b0b139257c80a7120c4bc3d7ceda539850a6da27b72356a74b8ae0344d0"
+  },
+  "game/common/script_values/01_power_bloc_values.txt": {
+   "size": 32656,
+   "sha256": "cddf5e3615183e3917b272cb7ef5ef050f5ba0c70e8cc31d756542790c089d7c"
+  },
+  "game/common/script_values/ai_script_values.txt": {
+   "size": 18183,
+   "sha256": "1cabe254f9969ddd46d74cf945367b85978b69d98dcb7af1b230a2c11f4fe4d1"
+  },
+  "game/common/script_values/building_values.txt": {
+   "size": 1116,
+   "sha256": "43d63633c893313e574afb93c399d95d2c1bd0b88cebc765f6ef4b165787296f"
+  },
+  "game/common/script_values/command_values.txt": {
+   "size": 12946,
+   "sha256": "6ed32ab1c6d9d2b8eb7ca86ee30f4363885dae965b65c4eec4d18c364ebf4946"
+  },
+  "game/common/script_values/company_values.txt": {
+   "size": 1625,
+   "sha256": "67406aa7ee1a745a4702faf5dd076bcd2f1278f9d8b1b3711e674110fc73bccd"
+  },
+  "game/common/script_values/cultural_community_values.txt": {
+   "size": 3974,
+   "sha256": "1a76af82df0e6e6f115f3ac8e9c5402135ddc6f62881e0e214b2585443ada2d1"
+  },
+  "game/common/script_values/decision_values.txt": {
+   "size": 1954,
+   "sha256": "244c967505d33861ffa9e87ed86b6a98b926a7433855c62cbbb1ca8700dc2e7b"
+  },
+  "game/common/script_values/ep2_japan_values.txt": {
+   "size": 7439,
+   "sha256": "fbe8069966e67a2b73a9bb7672a219092b19cea0aba3c857813deade510cca9e"
+  },
+  "game/common/script_values/event_values.txt": {
+   "size": 6899,
+   "sha256": "0f9116637964bbab9e2b69b476ea3e646a85ddfabeefb377702c25d204e7a754"
+  },
+  "game/common/script_values/game_values.txt": {
+   "size": 209,
+   "sha256": "9333a62bf64891d501e1886f744ef437c731adbfc68299e166104fdc22b27cc6"
+  },
+  "game/common/script_values/ideology_values.txt": {
+   "size": 25069,
+   "sha256": "a2dcfe1e476501ba9c3ad24459584532e7578b641ebeafdc56c62fc16d5637b1"
+  },
+  "game/common/script_values/india_values.txt": {
+   "size": 3802,
+   "sha256": "c34c4bd850e4546b32f7a062a9672cc34b179bfdb577fb23217b3e27c1aa4e39"
+  },
+  "game/common/script_values/ip4_bloc_values.txt": {
+   "size": 471,
+   "sha256": "3eb2b2a316151120d027fe914753939c339e358aa8928a4a221ff2a66d911670"
+  },
+  "game/common/script_values/ip4_cuba_values.txt": {
+   "size": 8858,
+   "sha256": "b562c8d98cb139c22a026f3e378e711057792fe11e9ffec89588f89067380e86"
+  },
+  "game/common/script_values/ip4_je_values.txt": {
+   "size": 17903,
+   "sha256": "b2ecefcdbb0c9fa8ebee117d04d593223abaa7cd433f83971aab79dbea5486fd"
+  },
+  "game/common/script_values/je_values.txt": {
+   "size": 4727,
+   "sha256": "9de128fb4ed48275dce3eca776ba58832840a4fde7f6f66c874f261630c2a9d3"
+  },
+  "game/common/script_values/krakatoa_values.txt": {
+   "size": 639,
+   "sha256": "c952bb99f7125b0629ef0f28dd5bdd26675639811d90171b2a04dcec2fb7a00c"
+  },
+  "game/common/script_values/lobby_values.txt": {
+   "size": 4772,
+   "sha256": "de4b7374580989809465e7b8490e773f150d34e49be3f3ade9ae3c8610b2877d"
+  },
+  "game/common/script_values/migration_values.txt": {
+   "size": 139,
+   "sha256": "ac8453a37091278f22e9779c9265a8d343a923f0b2cb4b4872776b58c0606ded"
+  },
+  "game/common/script_values/movement_values.txt": {
+   "size": 866,
+   "sha256": "76b0466661b458a12c84bd282f3bd3f797b5b3a60d38ec2adce2523ce97b3f73"
+  },
+  "game/common/script_values/negotiation_values.txt": {
+   "size": 21638,
+   "sha256": "ed32d6fca6ebeb03797981d452d5eaaea90c2320002f07c1b54d89fca5c4ccd8"
+  },
+  "game/common/script_values/objective_values.txt": {
+   "size": 177,
+   "sha256": "6c9c697a2ec381e7ab605c3e31318403bb3df779b5ffc127de39def508d6e31d"
+  },
+  "game/common/script_values/occupation_values.txt": {
+   "size": 4385,
+   "sha256": "8a94de8d8549b4e78293d140476edc426b1bea182592f9ffa197b677bc39afdf"
+  },
+  "game/common/script_values/politics_values.txt": {
+   "size": 174,
+   "sha256": "891f3df80cb4abce6ff4f76168457629a025f33cc6428c56ae7b7d9afe6ed66e"
+  },
+  "game/common/script_values/static_treaty_acceptance.txt": {
+   "size": 11304,
+   "sha256": "aebde4afa661abecc54aa3b72a79f285d96f9205241c8c4afea5e5275caef2c0"
+  },
+  "game/common/script_values/treaty_propose_chance.txt": {
+   "size": 184,
+   "sha256": "362768d43cd15d6a3e32a4c7ea998d0a407d74d7eff50e3c62a41d95e41e49e5"
+  },
+  "game/common/script_values/war_support_values.txt": {
+   "size": 16375,
+   "sha256": "16c6c90541076288135ac58a779506af7a420a363e9d5568bf85b42d68eb9c99"
+  },
+  "game/common/scripted_buttons/00_balkan_wars_buttons.txt": {
+   "size": 11717,
+   "sha256": "f1300dd8feb9c4bbc52c81819d17127b7b8a967421bfcdd8f0a2d3989fc034a7"
+  },
+  "game/common/scripted_buttons/00_christ_of_europe_buttons.txt": {
+   "size": 794,
+   "sha256": "9c499857473e03498295a72e259cb71bdc3a655fdf8327e53c54e93544dc5d39"
+  },
+  "game/common/scripted_buttons/00_colonial_administration_buttons.txt": {
+   "size": 20897,
+   "sha256": "78008eb248bd06e77c38583357fdfcf122a64faa9e0ddfaa45456347ba067042"
+  },
+  "game/common/scripted_buttons/00_cuba_scripted_buttons.txt": {
+   "size": 4989,
+   "sha256": "b5db040f10018dcd3cdfc1f34db932570553359ae4096a462c6599f747d00c10"
+  },
+  "game/common/scripted_buttons/00_hispaniola_buttons.txt": {
+   "size": 7465,
+   "sha256": "e5c25b1783fc7283116b4b63e09b1bfc0f6042522797b3801f0a37b42e64e29f"
+  },
+  "game/common/scripted_buttons/00_scripted_buttons.txt": {
+   "size": 24540,
+   "sha256": "4d85ac44950c38e09180c99e3fbe6c90b447bb7f57952577e771eab1277e2703"
+  },
+  "game/common/scripted_buttons/00_the_grand_collapse_buttons.txt": {
+   "size": 3407,
+   "sha256": "8a24b7c51d0f76a6eee903458329dda48266828a9c8924605ce6a81c3bd9d3d7"
+  },
+  "game/common/scripted_buttons/00_wild_je_buttons.txt": {
+   "size": 7642,
+   "sha256": "5276e35593965c931e0d2c16a3779dc029acf5b91f390cde5856a8c3221ac9ce"
+  },
+  "game/common/scripted_buttons/03_brazilian_amazon_scripted_buttons.txt": {
+   "size": 7813,
+   "sha256": "d82e59366d295f36147ef94538a2dfb583fcddb19324ee3dd99dc22f03654d07"
+  },
+  "game/common/scripted_buttons/03_brazilian_slavery_scripted_buttons.txt": {
+   "size": 5055,
+   "sha256": "14262642ceb1bcd08056e09e7f900dcdd98e42f63c28a6ef32aa693c316f7d1b"
+  },
+  "game/common/scripted_buttons/03_paraguay_scripted_buttons.txt": {
+   "size": 5932,
+   "sha256": "f36459aa392cbe5fcd0a7abfcef392b359f881b1c5e8bc8f4024e5e97d6659e5"
+  },
+  "game/common/scripted_buttons/04_great_game_buttons.txt": {
+   "size": 38784,
+   "sha256": "bbdaa8cac9a5845792e04dc76fde18e76b857152f72e73b3e684c4369bd241ae"
+  },
+  "game/common/scripted_buttons/04_india_buttons.txt": {
+   "size": 15369,
+   "sha256": "5cb807e3ee28e28b0c66b2f7ae6a2e71098623a71415fa5976a9c95bc010b8bc"
+  },
+  "game/common/scripted_buttons/04_indian_famines_buttons.txt": {
+   "size": 3860,
+   "sha256": "f41ed2874eddbede21f182a82443af034bde3e993446d7e07ff71cc668cdec58"
+  },
+  "game/common/scripted_buttons/04_law_imposition_buttons.txt": {
+   "size": 3849,
+   "sha256": "2ebdf22d257fb92de7c2adf19b7ef84c27d327bd02e807320e60268482fb3dc9"
+  },
+  "game/common/scripted_buttons/04_persia_buttons.txt": {
+   "size": 10955,
+   "sha256": "c7ca570c37e6afcd05e86698a696dcc00ad6eac3525694339cae5d469e2fc1db"
+  },
+  "game/common/scripted_buttons/04_russia_buttons.txt": {
+   "size": 14893,
+   "sha256": "a46e4c6ceef31e12fc2f3b0b083eeba784ce315ebf38ada4fca1f35c64d05daa"
+  },
+  "game/common/scripted_buttons/05_austria_buttons.txt": {
+   "size": 24167,
+   "sha256": "fee84214ff1674f4104c757fee2db48c5a508b705efb0120ffa60e88627c8ed4"
+  },
+  "game/common/scripted_buttons/05_greece_buttons.txt": {
+   "size": 1864,
+   "sha256": "58a85f91f7a3afa8740b98b425684790bbcc6de262f8d643300f4ebf64841e23"
+  },
+  "game/common/scripted_buttons/05_hungary_buttons.txt": {
+   "size": 7171,
+   "sha256": "375d19e138420632abf2148320c01bd85b29ebc58a66b5a9a66f241c46319bef"
+  },
+  "game/common/scripted_buttons/05_serbia_buttons.txt": {
+   "size": 2237,
+   "sha256": "0968549a4c7e50ebdb237f63e4e7f03dcd5308e0d8f30d3d13f89cd7fe48a7f2"
+  },
+  "game/common/scripted_buttons/05_struggle_for_the_highveld_buttons.txt": {
+   "size": 10510,
+   "sha256": "5c099daf53091573680429cc39d7fbbc9ead81b0deedf21c6cce23162e265f0d"
+  },
+  "game/common/scripted_buttons/06_canada_australia_buttons.txt": {
+   "size": 3558,
+   "sha256": "bba44d082611471a87122d93e0b91c7955d1b152998ab188d58e8eeb9d5fa1c8"
+  },
+  "game/common/scripted_buttons/06_government_petition_buttons.txt": {
+   "size": 2948,
+   "sha256": "072490ec9aba09d8f32aeb53617c0c54b15fd0f7852e379a78e6c33214f74f83"
+  },
+  "game/common/scripted_buttons/06_iberia_buttons.txt": {
+   "size": 6789,
+   "sha256": "75e16f8ba24b05646cb40ebfcc2362b086f4beff87e688b0b4eb962c73906566"
+  },
+  "game/common/scripted_buttons/06_negotiation_buttons.txt": {
+   "size": 2459,
+   "sha256": "e473e1406c9bc8600b817b84b1f6e9d83e5ced1164ac70bcfb9db2a5fb473fb7"
+  },
+  "game/common/scripted_buttons/06_philippines_buttons.txt": {
+   "size": 2426,
+   "sha256": "fdb5cb087347ce28568269f503d025aa214b3059e5f8771508897939d7bc0294"
+  },
+  "game/common/scripted_buttons/06_portugal_buttons.txt": {
+   "size": 2190,
+   "sha256": "16db5493955d886c92885aa9912ae3d8c2b233acd5b72ca1b84b481a0a5fa90e"
+  },
+  "game/common/scripted_buttons/06_reconquista_buttons.txt": {
+   "size": 7820,
+   "sha256": "ed5465ebfebda1e48fe6da90ae3de4f13d25b811270d2aafccc7c679ba178267"
+  },
+  "game/common/scripted_buttons/06_spa_economic_regeneration_buttons.txt": {
+   "size": 5471,
+   "sha256": "f1a41233cd15f0ad5ae5d0712b8809d2a9de1e9730249b5882b69ea65fd5cbdc"
+  },
+  "game/common/scripted_buttons/06_vernacular_buttons.txt": {
+   "size": 14215,
+   "sha256": "0d7084e0d6e43cbca6363bdcf32fe2781d117e97fdcff4d8fef32aa726e2e2a2"
+  },
+  "game/common/scripted_buttons/06_victoria_spain_buttons.txt": {
+   "size": 14287,
+   "sha256": "5dcfe6d10f089a832d8da3c09cd718addb32c75c508c797565543163b6dd2fc0"
+  },
+  "game/common/scripted_buttons/07_iwakura_buttons.txt": {
+   "size": 835,
+   "sha256": "846f632fb380f181bb61eb6fc6fb8f1cd783b08525b53f1a7712d57a6e4f7ad5"
+  },
+  "game/common/scripted_buttons/07_japan_buttons.txt": {
+   "size": 10792,
+   "sha256": "a123213b0096ff8907b5b779c755a142efa358725c12c47590900716bf13d4aa"
+  },
+  "game/common/scripted_buttons/07_japan_religion_buttons.txt": {
+   "size": 2477,
+   "sha256": "dbcd52aede036f2e0d195ffd5dbfaa7bc82a5e5851d56bbc429e636078002c15"
+  },
+  "game/common/scripted_buttons/07_meiji_buttons.txt": {
+   "size": 6116,
+   "sha256": "e0b644da5a745fd489fab290b8078c1db509f46a778f9b10bd6a67518deb9241"
+  },
+  "game/common/scripted_buttons/99_test_global_je_button.txt": {
+   "size": 1430,
+   "sha256": "41e2ef5a12f27673c153f331ca395c99eb6888a5ff18ef6c84cffd5f8b41763f"
+  },
+  "game/common/scripted_buttons/acre_dispute_button.txt": {
+   "size": 1035,
+   "sha256": "27123bf2917f4998bafb9185f5609a6b73ea2811dfa15adb25ae2fdda6655a3c"
+  },
+  "game/common/scripted_buttons/brazilian_scripted_buttons.txt": {
+   "size": 8692,
+   "sha256": "e7aa9b884af46a812ec10479ef0d0ae99a2e9ccdddac4449382a90b391fcf8f7"
+  },
+  "game/common/scripted_buttons/caudillo_buttons.txt": {
+   "size": 551,
+   "sha256": "2ead32113761f1226c7c8c753649151d90dabb521a5970174dfcdf6fc9dbc717"
+  },
+  "game/common/scripted_buttons/china_buttons.txt": {
+   "size": 2205,
+   "sha256": "c910797962c3a35d6dcb2353b2c8efa02d2708174d6937eb21d32033af9d6448"
+  },
+  "game/common/scripted_buttons/london_conference_buttons.txt": {
+   "size": 7754,
+   "sha256": "29cb03184fd5f80dd508b8608d7ccb6f7777b11bf988606186151fee16af8118"
+  },
+  "game/common/scripted_buttons/meiji_reform_buttons.txt": {
+   "size": 1965,
+   "sha256": "5840edfb841544bde2ec6cf24d8fccd53462ba534bae65dd526d956b339f4918"
+  },
+  "game/common/scripted_buttons/morocco_makhzen_buttons.txt": {
+   "size": 3257,
+   "sha256": "54ac4fc62813a8d156731a93125a40a728bed0e9c845c739c0418ecd067688bd"
+  },
+  "game/common/scripted_buttons/ryukyu_rivalry_buttons.txt": {
+   "size": 11230,
+   "sha256": "910808169623ce17a835aadbbe1326ba70ff29fda02695ed816c261994300aa5"
+  },
+  "game/common/scripted_buttons/sakoku_buttons.txt": {
+   "size": 997,
+   "sha256": "6b16a251855e383196256b52fea335afd884090048b054eed86b66dcb0e29bf1"
+  },
+  "game/common/scripted_buttons/southamerica_migration_button.txt": {
+   "size": 2903,
+   "sha256": "4c92c825f9ea285b78f93d36d5ab38e410876b4af058b5ec35fc22f74e892d94"
+  },
+  "game/common/scripted_buttons/spain_buttons.txt": {
+   "size": 3125,
+   "sha256": "cacc5bfead268768ba51c883cad9f1215f4c2de0eb39dfc6c13edf08e3ddfcae"
+  },
+  "game/common/scripted_buttons/turtle_island_buttons.txt": {
+   "size": 3693,
+   "sha256": "8c5b48719a0e34efb88e6bb7a0c0f428f09fbf2e529a0599902f14a4c66682b8"
+  },
+  "game/common/scripted_buttons/usa_buttons.txt": {
+   "size": 1706,
+   "sha256": "01535c263362e7f8cbf99266799e76ffbbd28c342f4e5880a5b5f3cb39ebbf81"
+  },
+  "game/common/ship_groups/00_ship_groups.txt": {
+   "size": 668,
+   "sha256": "bc4ea0057656ffd17b6fc5763dce52b3edf0f8b03575736875759f93c1fb3cd3"
+  },
+  "game/common/ship_modification_slots/00_ship_modification_slots.txt": {
+   "size": 800,
+   "sha256": "def9515eff3646a43596eda05e66bf89ce7a883c707cfd67155e31b043307bf0"
+  },
+  "game/common/ship_modifications/00_ship_modifications.txt": {
+   "size": 139666,
+   "sha256": "93c111d3e565955b78a19e9b8ea206059fe8b77ccbfa89568480ef02fc53b8f7"
+  },
+  "game/common/ship_modifications/01_utility_modifications.txt": {
+   "size": 4808,
+   "sha256": "e8d538aca1278ec81ce829ead98e1efc8dc6beae48190ea58f97344b788a174e"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_brazil.txt": {
+   "size": 1598,
+   "sha256": "d84ec05913eda236ebb04e3306f9532b3b5b74d66300a845f037ced4d6a09162"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_china.txt": {
+   "size": 5376,
+   "sha256": "2f0b306fe51c695011549beec1c761cd728e7e7d087a23e0a457453eb024fc22"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_france.txt": {
+   "size": 7034,
+   "sha256": "ecb9e1965c190973d219f94dfa9220bbf89ddfd51f0e214e881cb101dd96e9f9"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_germany.txt": {
+   "size": 14189,
+   "sha256": "46c3ea64bb1a79a81168e3157393988a0879e5b871aaaee88d31b82f3c71b07a"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_great_britain.txt": {
+   "size": 28810,
+   "sha256": "1f56c4d6a5ce98174a13fdfa86a082122d66388b8b5dca8db8c336e3ab812ef0"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_iberia.txt": {
+   "size": 9320,
+   "sha256": "d56afe0960aab7d99675f60fb8458fde36604b3b3f95fe15841ea71188c138ec"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_italy.txt": {
+   "size": 11238,
+   "sha256": "23c4692f3530bc310959fa6d7fce9bb7e2694e7a8994214f25f02201b6d70543"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_japan.txt": {
+   "size": 21132,
+   "sha256": "70d585d61218c516ff9ab15236e67936b0dadbe7f7aadce19336b3c7cece0bd8"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_low_countries.txt": {
+   "size": 2189,
+   "sha256": "48b108d86db8ca08e00464178b681af3bc6c5375d2801e102fa3a543ce777015"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_ottoman_empire.txt": {
+   "size": 5839,
+   "sha256": "cb0e5995985a1bc32e8fecbda397d652e8ea2f782fcbe4e57a302bddd9cea42e"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_russia.txt": {
+   "size": 10363,
+   "sha256": "06d8522fca373b32e6c3e4abe249d7e0647144b38377e2c786f111325c630877"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_scandinavia.txt": {
+   "size": 7184,
+   "sha256": "8864eb9e22c360b7e753140be672ce335d41c631265e35e2d3766a638e9ca25e"
+  },
+  "game/common/ship_name_definitions/00_ship_name_definitions_united_states.txt": {
+   "size": 7424,
+   "sha256": "62aac0566921f300cc1b7a6e01ad1ebd756fcbcf7dabfb5cffa09250f0f3bc9d"
+  },
+  "game/common/ship_name_definitions/99_ship_name_definitions_fallbacks.txt": {
+   "size": 16228,
+   "sha256": "12b801ba870f53c77bbc30ae137d4dd8ee85994a07f2934479e556b0ac205049"
+  },
+  "game/common/ship_types/00_ship_types.txt": {
+   "size": 60589,
+   "sha256": "356bcffae24060972b28cc7db994854b380f980761aeb19e9967bdedfa87fefa"
+  },
+  "game/common/static_modifiers/00_code_static_modifiers.txt": {
+   "size": 33922,
+   "sha256": "0cb258ac92666db82a4092e0dfb4fd245e81765a72566112ec6b231b361df50d"
+  },
+  "game/common/static_modifiers/00_companies.txt": {
+   "size": 208,
+   "sha256": "40b0cf2906eee79f9de23ae6dd62fae74d9557cf54d8811b49c20e1be5194c8f"
+  },
+  "game/common/static_modifiers/00_diplomacy_modifiers.txt": {
+   "size": 531,
+   "sha256": "9ee53356199a301973e2a155088851ad05b73ecfec787d574efb6868327291c6"
+  },
+  "game/common/static_modifiers/00_ep2_01_modifiers.txt": {
+   "size": 2361,
+   "sha256": "864fcbfae82485028df00d66607e9998aeb7590e10c732c81a78f1eae602fe18"
+  },
+  "game/common/static_modifiers/00_ep2_02_modifiers.txt": {
+   "size": 9428,
+   "sha256": "151e77e1d57c7bd5b239674f7d5b13dfe4189f8d9b1dc0a7c4fba5067f37be47"
+  },
+  "game/common/static_modifiers/00_ep2_03_modifiers.txt": {
+   "size": 3472,
+   "sha256": "8abcf91e57a10e1f2f376f9f3242af0b136f1dbdefa6d69a1582da3a2a055b42"
+  },
+  "game/common/static_modifiers/00_ep2_04_modifiers.txt": {
+   "size": 12361,
+   "sha256": "eff2f10a343af908083a2ee5a3786a0468a6ef4f91919dc528cd1706023132f6"
+  },
+  "game/common/static_modifiers/00_ep2_05_modifiers.txt": {
+   "size": 1283,
+   "sha256": "fc50983a9285fa89c917db8dc5b5579fd15721db9d87248f62cab4f6eab9c323"
+  },
+  "game/common/static_modifiers/00_ep2_06_modifiers.txt": {
+   "size": 7357,
+   "sha256": "0636d3ee6db386f01c9dac045a706a86c6032ce4920312db57c7e13846b95452"
+  },
+  "game/common/static_modifiers/00_ip2_02_modifiers.txt": {
+   "size": 10146,
+   "sha256": "61c792b1ec254ccf6c03c448f7c7eae6966eab12725a5c15f67ef467119fa985"
+  },
+  "game/common/static_modifiers/00_ip2_03_modifiers.txt": {
+   "size": 10237,
+   "sha256": "7ace51c19d4956f23a840b744e36ac053e4329dc888a9a692a13f63a70b801dc"
+  },
+  "game/common/static_modifiers/00_ip2_05_modifiers.txt": {
+   "size": 4146,
+   "sha256": "7fe93216c54cfae82a839621f784310e18dd31fa9e18e655531e2c75f49218a4"
+  },
+  "game/common/static_modifiers/00_ip3_02_modifiers.txt": {
+   "size": 15865,
+   "sha256": "d65ee3b3981492a7698fa316e6b718ac3626f7a97f240465b8808e6f1c56a633"
+  },
+  "game/common/static_modifiers/00_ip3_03_modifiers.txt": {
+   "size": 7812,
+   "sha256": "eb7e211d728a4920632932d7b60563d3fef38942485c7f52a0007f4f5d8034d7"
+  },
+  "game/common/static_modifiers/00_ip3_04_modifiers.txt": {
+   "size": 19045,
+   "sha256": "2f0247eddcd69c6804bf8a9f1e1b7a5d8f7838968201d5bf6258c71dd44c4e0b"
+  },
+  "game/common/static_modifiers/00_ip4_02_modifiers.txt": {
+   "size": 12391,
+   "sha256": "aea792c5730913f44c59317c911d4c19ef82fec62aa6c12fdc613529e1ce7d79"
+  },
+  "game/common/static_modifiers/00_ip4_03_modifiers.txt": {
+   "size": 7523,
+   "sha256": "1f3b87060863700be41db2944dac7cc91c7e36d10038461eb77aefcf01abd4e9"
+  },
+  "game/common/static_modifiers/00_ip4_04_modifiers.txt": {
+   "size": 19361,
+   "sha256": "a514e1fa61aa2178182506c90eb138f4bea53ad341fc20f9dbc1b6dbc5a7bf5c"
+  },
+  "game/common/static_modifiers/00_negotiation_modifiers.txt": {
+   "size": 2283,
+   "sha256": "fd9bc42d6fa9278c0049fd8fc0a2ff06cb1709a700d29fb63cc3261544fe3c00"
+  },
+  "game/common/static_modifiers/00_test_modifiers.txt": {
+   "size": 1740,
+   "sha256": "b4c973698500ac9d1b33fcd681053a3f1f784e285393c77fa7d5f61d3540b2c5"
+  },
+  "game/common/static_modifiers/01_loans.txt": {
+   "size": 102,
+   "sha256": "72102d043767cb1cfea9806a11a765eac0384f0bf27ebe584d01d0b704079028"
+  },
+  "game/common/static_modifiers/02_event_modifiers.txt": {
+   "size": 61047,
+   "sha256": "43fd43a9c772de4323582da2780c62eee87e8eb1f87a5fb845a643d064a8873d"
+  },
+  "game/common/static_modifiers/03_event_ig_opinion_modifiers.txt": {
+   "size": 11838,
+   "sha256": "aca079015efcf73587782b1096c9178ed868af959bbaa2a87d5a5874d2653995"
+  },
+  "game/common/static_modifiers/04_decision_modifiers.txt": {
+   "size": 1028,
+   "sha256": "a8ae83c83e7e3161c2939c294b18a3169574222b6c61a62328c3fad3ee1b9432"
+  },
+  "game/common/static_modifiers/05_rule_modifiers.txt": {
+   "size": 404,
+   "sha256": "f741f3de442b79229c9a924628bbb63af7b376eae3af8aaf708c4680bbe619a8"
+  },
+  "game/common/static_modifiers/06_conscription_modifiers.txt": {
+   "size": 2843,
+   "sha256": "a076fc667126bd4b12b4f2050fab8ea1ed80b4a639d0cb2e6e2cccf10c8fb9b2"
+  },
+  "game/common/static_modifiers/07_culture_standard_of_living.txt": {
+   "size": 109155,
+   "sha256": "53e3647d4d56ae527fac9e771e89fe9f0d01d9ef7f6e647987aa127534c48b66"
+  },
+  "game/common/static_modifiers/07_lobbies_03_modifiers.txt": {
+   "size": 2082,
+   "sha256": "6e6133d89f9d83a975da4ada3174a9d04f8f2b54a5a459fffa16081c1c3c3e45"
+  },
+  "game/common/static_modifiers/07_sphere_of_influence_2_modifiers.txt": {
+   "size": 4752,
+   "sha256": "6f4bcb6b3a9101e939f2abf89b0ece7552ecea1bf635d9ae8ba74eb366c51547"
+  },
+  "game/common/static_modifiers/07_sphere_of_influence_4_modifiers.txt": {
+   "size": 13672,
+   "sha256": "35e4cb43ec1356ba6285430e2ebec08b1d50ce909f9190e68ab7a70b9ffdafb3"
+  },
+  "game/common/static_modifiers/08_religion_standard_of_living.txt": {
+   "size": 5882,
+   "sha256": "c05ca72ba4517f15cf53f7acb39ce64dc3a9cc0000adacf0b3a84ea9bc0fbf38"
+  },
+  "game/common/static_modifiers/09_movement_modifiers.txt": {
+   "size": 161,
+   "sha256": "7d0a9fe6a5e1ce0983431c3bf21713e9b9713bc8046599bff66a39af0c623059"
+  },
+  "game/common/static_modifiers/101_modifiers.txt": {
+   "size": 8521,
+   "sha256": "7329f145477ea76f9d3ffffd4c013ee93b371347d8b806439e6eaa97360c10a5"
+  },
+  "game/common/static_modifiers/104_modifiers.txt": {
+   "size": 25982,
+   "sha256": "01ec03fb2a35d10b1e74fb3439af027933aea2f960e8adc1121d62241c30af42"
+  },
+  "game/common/static_modifiers/105_modifiers.txt": {
+   "size": 24478,
+   "sha256": "3f29dea09e41db23aade3cd7fea5d45e17e4a5941b14936c8c321006e94953e4"
+  },
+  "game/common/static_modifiers/106_modifiers.txt": {
+   "size": 10413,
+   "sha256": "8bbdff40c3695f8ecd39d24c809ca6ce0d543d604e1aaa2c2ccd29c25665f494"
+  },
+  "game/common/static_modifiers/10_culture_cultural_acceptance_modifiers.txt": {
+   "size": 111681,
+   "sha256": "157e157dd348bee3784ffbb7b0cf971858227d5657e609ed5bf0e63012b8f1e1"
+  },
+  "game/common/static_modifiers/11_culture_fervor_target_modifiers.txt": {
+   "size": 104074,
+   "sha256": "fa12894995abf63b8bd5ba5d1d201d3f8105fed42d120b816ec56bb3aff506c5"
+  },
+  "game/common/static_modifiers/12_diplomatic_modifiers.txt": {
+   "size": 178,
+   "sha256": "5b68c3c8ce5015e7a4617783294f5da1fd2e4ab1d956f5a4781dd28112df9839"
+  },
+  "game/common/static_modifiers/99_global_je_test.txt": {
+   "size": 493,
+   "sha256": "e0d62197ea5f86c9fab3e3acb9240ff8a545e233ef6b5940d0d27e1bfdcec31a"
+  },
+  "game/common/static_modifiers/agitators_1_modifiers.txt": {
+   "size": 12639,
+   "sha256": "ab2b5293c8811ab8eaed3a593bfbc0f8ff29088e430357ebbd055932f00e54e7"
+  },
+  "game/common/static_modifiers/agitators_2_modifiers.txt": {
+   "size": 32421,
+   "sha256": "da3488c05be9a378fbd20fbf3327c9083beb73bb905b78b2b182e89538407c45"
+  },
+  "game/common/static_modifiers/agitators_3_modifiers.txt": {
+   "size": 4455,
+   "sha256": "648f91e3d86d46c4646a79b55e86b79633bc84dc27b782ce5c3d1c4ff0762d84"
+  },
+  "game/common/static_modifiers/agitators_4_modifiers.txt": {
+   "size": 35623,
+   "sha256": "3e7d471ea428712e08095d733ae73b1d821804fbbeea06a9bd82ccb1a65876a2"
+  },
+  "game/common/static_modifiers/agitators_4_revolution_modifiers.txt": {
+   "size": 19592,
+   "sha256": "1a5080997164c18f9ce2d4d9da500a4f3267adc353f022935f4ab246dad313a8"
+  },
+  "game/common/static_modifiers/agitators_5_modifiers.txt": {
+   "size": 40513,
+   "sha256": "118c439c6fd26bea041de27e10014da78c07592c9c0a49cb953a8dd17250af0f"
+  },
+  "game/common/static_modifiers/agitators_6_modifiers.txt": {
+   "size": 12041,
+   "sha256": "741f329f9c469762b1f17131af36ea965384762c4580335ebd6ed97f5d01aecf"
+  },
+  "game/common/static_modifiers/brazil_1_modifiers.txt": {
+   "size": 4353,
+   "sha256": "2ec8bade509ceb5435be94fbb3f82096a19f5274bda453d9d02f3b90eda3052e"
+  },
+  "game/common/static_modifiers/brazil_2_modifiers.txt": {
+   "size": 13537,
+   "sha256": "5757585949f02bcfd37942c7839660cc2775ab1368f810bc895cfabe65c1f906"
+  },
+  "game/common/static_modifiers/brazil_3_modifiers.txt": {
+   "size": 330,
+   "sha256": "f5bf0070ee823829db5aaf00d1b02ae4f1d8ef9d9c0fe1261bef718d99739e2e"
+  },
+  "game/common/static_modifiers/bulgarian_modifiers.txt": {
+   "size": 2386,
+   "sha256": "9365e3223229d95354bbe0e3bc75f3efebffd139b3ab3f93909d957eb38e3fc6"
+  },
+  "game/common/static_modifiers/content_1_modifiers.txt": {
+   "size": 45402,
+   "sha256": "fe7422bbba33d6d2901dc7b3a0e98acd8443ada584a4b458558fc8688a16be02"
+  },
+  "game/common/static_modifiers/content_204_modifiers.txt": {
+   "size": 24345,
+   "sha256": "72aaeab517b637905b672e87e2483500642cb629ef9d6fe2c65947ed3f5d47ff"
+  },
+  "game/common/static_modifiers/content_2_modifiers.txt": {
+   "size": 22599,
+   "sha256": "c29d5735a69ecb66abc62ee4c4d78b00a3894627f8963ee4aa9fb394376425d8"
+  },
+  "game/common/static_modifiers/content_304_modifiers.txt": {
+   "size": 24850,
+   "sha256": "65b39f1a5051189ee09e6f3d5d9acf7ebf71a8b46d61ca401e7794053c3b1ddf"
+  },
+  "game/common/static_modifiers/content_3_modifiers.txt": {
+   "size": 19945,
+   "sha256": "12a48944c3dbd6bab107b1f708b6d2092d81d112b0beffb3d69b6b71df93201e"
+  },
+  "game/common/static_modifiers/content_4_modifiers.txt": {
+   "size": 28843,
+   "sha256": "c648749b16e9d2aafc08098f2de2b2455f7061c16487ee5681c173825f410ca2"
+  },
+  "game/common/static_modifiers/cuban_modifiers.txt": {
+   "size": 4113,
+   "sha256": "d806e4a20c79945bc2ce006a9995ac9be2992f565f17373544b00a7a079140e0"
+  },
+  "game/common/static_modifiers/japan_single_fire_events_modifiers.txt": {
+   "size": 5744,
+   "sha256": "5b36d0f2c790fb3dccc09d9e4d768e11270c1accfe8b121ec5f97fa72f080bc0"
+  },
+  "game/common/static_modifiers/libya_modifiers.txt": {
+   "size": 290,
+   "sha256": "8deec095c8ecf3ae046c07f19740f358cbdc9d04994bf0fcd6c3b1d4d5c6de98"
+  },
+  "game/common/static_modifiers/montenegrin_modifiers.txt": {
+   "size": 14505,
+   "sha256": "c6be2f66f380f3b6644da88ea797dd9e9239b03f064bfa2647298f72fe793910"
+  },
+  "game/common/static_modifiers/morocco_modifiers.txt": {
+   "size": 4685,
+   "sha256": "49ac04ffb37c0b9bfcfcd400ace8ef91725c5952c698dbf84ad1f4bcac03e713"
+  },
+  "game/common/static_modifiers/portugal_single_fire_events_1_modifiers.txt": {
+   "size": 5006,
+   "sha256": "2a021b82ff079912d5aea19ee4ee21f3ce0d7e356597c756bf304d2700231d4e"
+  },
+  "game/common/static_modifiers/portuguese_colonialism_modifiers.txt": {
+   "size": 4837,
+   "sha256": "b4e81f66bd674561ab5ddf71412b8ae7e39eb32e69314216c5466621fa839a0e"
+  },
+  "game/common/static_modifiers/portuguese_monarchy_modifiers.txt": {
+   "size": 1217,
+   "sha256": "c98268d622272e54639cdd57febffd490a4c0e0b5cdfbd5574c709954e7834ea"
+  },
+  "game/common/static_modifiers/spanish_africa_modifiers.txt": {
+   "size": 3296,
+   "sha256": "e286c48da8ab1a03d309bc05b16842bedf816d8fb97cf529e7c0ec4cf2497429"
+  },
+  "game/common/static_modifiers/state_atheism.txt": {
+   "size": 1523,
+   "sha256": "c31b55ad406c198cfa56ca9771d993492cff50ebc757049198f35f9e7c33bcca"
+  },
+  "game/common/static_modifiers/unification.txt": {
+   "size": 413,
+   "sha256": "a775306fdb7e7c7af79901ba1d0fe8f2bf187bd39a7e70f3002a21f2a1138e59"
+  },
+  "game/common/subject_types/00_subject_types.txt": {
+   "size": 12649,
+   "sha256": "926d1715c6f210169d0bee72db4219ebf18895bf9a8394cd376c920537ec0e6a"
+  },
+  "game/common/technology/technologies/10_production.txt": {
+   "size": 21017,
+   "sha256": "8de32b3b3b3a93454ea04833c1f9e169ff0fa5492fa109d9b8484700c44d4e39"
+  },
+  "game/common/technology/technologies/20_military.txt": {
+   "size": 20559,
+   "sha256": "3f28d2e2395e9d337ca58cace117edd922e2cfc6e4f500c7c0e6385901ec6489"
+  },
+  "game/common/technology/technologies/30_society.txt": {
+   "size": 34273,
+   "sha256": "da4cf39cf4a04812a45f826aac378d748bb57947b07eacdd02a92bceda7d0f32"
+  },
+  "game/common/terrain/01_terrain.txt": {
+   "size": 24309,
+   "sha256": "47d2edcb116db697399d5faed5e6f4ae10b79443e099eede54db16a07e59717d"
+  },
+  "game/common/treaty_articles/00_alliance.txt": {
+   "size": 12950,
+   "sha256": "1b43a24840cf27ee0a52a141971ced0272806ae27737f61208783c58f91c0d03"
+  },
+  "game/common/treaty_articles/01_defensive_pact.txt": {
+   "size": 10525,
+   "sha256": "caa5603cf92e93bedfef94dbb94d464666772bcf5acadbc6d81991a6409334c2"
+  },
+  "game/common/treaty_articles/02_guarantee_independence.txt": {
+   "size": 7633,
+   "sha256": "a846af719f23c510c1b3afde81d06aeb2a3a1be13089c68bf21108ca0ba770b3"
+  },
+  "game/common/treaty_articles/03_support_independence.txt": {
+   "size": 9958,
+   "sha256": "37b2b31fe0d6266c2001ec5d966fd57dfd8452d9a85d51b7a89294d1d8377c29"
+  },
+  "game/common/treaty_articles/04_take_on_debt.txt": {
+   "size": 5438,
+   "sha256": "c727b7d45aa7e8b22b591f68bebf7dd15cf17c8d540fe3b5f553d6593a822b89"
+  },
+  "game/common/treaty_articles/05_transfer_money.txt": {
+   "size": 8483,
+   "sha256": "6192aa34b71bc6988282e1b1790a39a325ef0b502403fe3a37ed94fd2d148171"
+  },
+  "game/common/treaty_articles/06_transfer_state.txt": {
+   "size": 6129,
+   "sha256": "3a293418db31976af1d6f2eb6ecb0ce26968914fee11b1db9b0965b239b17e06"
+  },
+  "game/common/treaty_articles/07_foreign_investment_rights.txt": {
+   "size": 11494,
+   "sha256": "74d72c0d5cb004261795bdae76452add04ccaf4489e3ae7331af98e7521340af"
+  },
+  "game/common/treaty_articles/09_join_power_bloc.txt": {
+   "size": 10633,
+   "sha256": "9178a5b409a33634b557420b8730b01bf4f73991b23ad868602dc3aa22d63223"
+  },
+  "game/common/treaty_articles/10_host_power_bloc_embassy.txt": {
+   "size": 12159,
+   "sha256": "1dbaeea9798367a356f7d7dfd352fcf13d21408def45f41c340e78b66582867a"
+  },
+  "game/common/treaty_articles/11_offer_embassy.txt": {
+   "size": 6511,
+   "sha256": "b10f55bbcbd32c8b3877244c43af9570f4ebc1d8ef578d6ff072e05719ddb624"
+  },
+  "game/common/treaty_articles/12_military_assistance.txt": {
+   "size": 13317,
+   "sha256": "7d4fe31295bd5791b1f01873eea8255fd9dc4ec215ba7792ed2afa4c884b0514"
+  },
+  "game/common/treaty_articles/13_goods_transfer.txt": {
+   "size": 23953,
+   "sha256": "6b674b14651aad3330bc72b81bb319db9ae8bd27960baf62a0cadfec67112012"
+  },
+  "game/common/treaty_articles/14_treaty_port.txt": {
+   "size": 8238,
+   "sha256": "0b9ec4de5efbf007dbcd407d988699bf22c92dd88615240b073eca70dcbead0d"
+  },
+  "game/common/treaty_articles/15_military_access.txt": {
+   "size": 6729,
+   "sha256": "b87dbffb662495745a1bb9de1b63b45bca238dd429ae746aaaa9bcb75dcdce4d"
+  },
+  "game/common/treaty_articles/16_non_colonization_agreement.txt": {
+   "size": 7677,
+   "sha256": "bed4a11b0f1f9aa3b75de8a0f89255f481150f880cd9778abc3fa1e6f01b1dc2"
+  },
+  "game/common/treaty_articles/17_prohibit_trade_with_global_market.txt": {
+   "size": 6376,
+   "sha256": "4f5b79cd952cb51e3aec58ae3c5cc25cfb0beb3a73b1d820df01cda4e5db8814"
+  },
+  "game/common/treaty_articles/18_acquire_monopoly_for_company.txt": {
+   "size": 7900,
+   "sha256": "7f3b50e2a27dcaeb498af3011819d22e9879aa89adecc857bea3e29194b8f2dd"
+  },
+  "game/common/treaty_articles/20_law_commitment.txt": {
+   "size": 21136,
+   "sha256": "e0e41d4f14081528b4fc72ee304831dd400c8d5258de75f5eec9ed7f9b75a2de"
+  },
+  "game/common/treaty_articles/21_no_tariffs.txt": {
+   "size": 6775,
+   "sha256": "2bc6082764c7c1773663844e017e619f3ce09b9410c8c4ea29c22f99c3e8b94d"
+  },
+  "game/common/treaty_articles/24_transit_rights.txt": {
+   "size": 4539,
+   "sha256": "7678761c91f1849c2b8691d291dd4d96850defe679f1f2ebfc78078e3f2daec0"
+  },
+  "game/common/treaty_articles/25_trade_privilege.txt": {
+   "size": 9583,
+   "sha256": "5064ca626a6cbdf7118f5540e06aab869578192d4536b8748898e589b708a6d3"
+  },
+  "game/common/treaty_articles/26_no_subventions.txt": {
+   "size": 6346,
+   "sha256": "30976f4acbe3e6802be7e0e4a44f771bc1275fc2feea829bdf26ee583fd03150"
+  },
+  "game/common/treaty_articles/27_amend_succession.txt": {
+   "size": 6239,
+   "sha256": "34d3a7138671ee2bff961ccd607227729ad030c0a1a773d364dfc2de52706daa"
+  },
+  "game/common/treaty_articles/28_free_text.txt": {
+   "size": 573,
+   "sha256": "486b7e395f1e21a67d365ef5addaf06b7a33217fb48c4f02c5137d748df97da7"
+  },
+  "game/common/treaty_articles/29_recognize_independence.txt": {
+   "size": 5586,
+   "sha256": "875bdbbc7d82087e9e1db9a942c09da87171dd1ece6ae0fb074dc536506fe1a4"
+  },
+  "game/common/treaty_articles/30_transfer_subject.txt": {
+   "size": 4665,
+   "sha256": "71553fb905623c01d82ddde3a838aa9903a91afb70cb3831cea81c254bb41ec3"
+  },
+  "game/common/treaty_articles/31_ship_transfer.txt": {
+   "size": 7585,
+   "sha256": "2281e4c5ff5b5dbfee8625e4633ce9e5b6ef4c839116504a80ec88fa6d242b84"
+  },
+  "game/common/treaty_articles/31_toll_exemption.txt": {
+   "size": 4231,
+   "sha256": "e11b6d59363253d77f0999a9a8b87c57eb3aa77fe05cec962b7de7aced009091"
+  },
+  "game/common/treaty_articles/32_no_tolls.txt": {
+   "size": 4199,
+   "sha256": "b0b9860cb583516c72916bc982d71bc65f5f3502b7ae8a10cdc9e004a1b1d714"
+  },
+  "game/common/treaty_articles/33_strait_access.txt": {
+   "size": 6236,
+   "sha256": "56a76078d2519de8d7270c005a69dd5728a660e27fb5545cab0812b054264122"
+  },
+  "game/common/treaty_articles/34_no_strait_closure.txt": {
+   "size": 6358,
+   "sha256": "2185679715cfba111ccb89b12190009927b4bab3f5887949358b533fce83890c"
+  },
+  "game/common/treaty_articles/35_non_piracy_agreement.txt": {
+   "size": 4627,
+   "sha256": "89532a330cb616f0d3bdd5a8725c10c510f6ca8242ff0e19fdd1cdb3359427a9"
+  },
+  "game/common/treaty_articles/36_abandon_piracy.txt": {
+   "size": 4625,
+   "sha256": "dfb12f157576f08f2ddb19bcdd252431560c30c145a406d78450a3e907d906a4"
+  },
+  "game/localization/english/JE_lobby_text_l_english.yml": {
+   "size": 23385,
+   "sha256": "f66a87dcfbaee2b78eb194cb7e44704166b8d5ff7d8863027542ef85ac8b109e"
+  },
+  "game/localization/english/acceptance_statuses_l_english.yml": {
+   "size": 13123,
+   "sha256": "b50e77c82655e912dcd0ed2fa670219c460517e9eab9bc1434d5640488205779"
+  },
+  "game/localization/english/achievements_l_english.yml": {
+   "size": 31440,
+   "sha256": "847584390ab47a0c0fcc1bcebc7be808351489569f3c61b4a9445a1fbf61f0c5"
+  },
+  "game/localization/english/acw_text_l_english.yml": {
+   "size": 25151,
+   "sha256": "f367e2117d2fe88f6abdb132795f6bc664bd8d4c57a1cc720dbafbbdc8a0ccc8"
+  },
+  "game/localization/english/agitators_1_l_english.yml": {
+   "size": 71757,
+   "sha256": "b7c3a9370bb59c889625f9d2cc343d18834cb690464b640a9966ba8c04b5c33e"
+  },
+  "game/localization/english/agitators_2_l_english.yml": {
+   "size": 108851,
+   "sha256": "757431ecf75a717966c19cfecf67093f6a4a55bb03946d52e20ba7d8aaa1753d"
+  },
+  "game/localization/english/agitators_3_l_english.yml": {
+   "size": 27863,
+   "sha256": "a97fe02ef98d51a6e349d5af25d60e4c3f2c1246c88c123c72f34611b1300e38"
+  },
+  "game/localization/english/agitators_4_l_english.yml": {
+   "size": 314989,
+   "sha256": "3cc43e49c11ab71a613666086e0f599c629d38ca22f44ddb290be50e3ad48f61"
+  },
+  "game/localization/english/agitators_6_l_english.yml": {
+   "size": 30844,
+   "sha256": "5137f5b11028da405a55c9a9af7c1b657df582b6d670f39ba0c5e678a8c893fb"
+  },
+  "game/localization/english/ai_regional_objectives_l_english.yml": {
+   "size": 1454,
+   "sha256": "cbaa135519adee2468591fc42cfc960e90157aa7b445d49697828527e92ec9e3"
+  },
+  "game/localization/english/ai_strategies_l_english.yml": {
+   "size": 19786,
+   "sha256": "17e7546316e1d05363397f4885b2a32cc836670cd09ac0b43cdd249052b0ccb9"
+  },
+  "game/localization/english/alerts_l_english.yml": {
+   "size": 76638,
+   "sha256": "24b3d8c135df4caede814ac73d3397387c4694eacba41652bbe56676f31fd8d8"
+  },
+  "game/localization/english/amendments_ep2_l_english.yml": {
+   "size": 1192,
+   "sha256": "ae666ecc008190bbdab6c575901ccec894e2b71c3668fff726b6a827b990cc95"
+  },
+  "game/localization/english/amendments_ip4_l_english.yml": {
+   "size": 16155,
+   "sha256": "d50e4fe875e022d97829beeb59d998dbcc5de488a7d0725ffad0b5eaad6fe680"
+  },
+  "game/localization/english/american_buildings_l_english.yml": {
+   "size": 102,
+   "sha256": "682499fc8471d0df943ceaa35a89eeef4e38b485f7aae7d0f922596c29a7a8be"
+  },
+  "game/localization/english/anniversary_formations_l_english.yml": {
+   "size": 24851,
+   "sha256": "d5a04df5dfa90aa0461229d90e4cbe678ace8c1f4e4348a1b5c0c579e16643a5"
+  },
+  "game/localization/english/battle_conditions_l_english.yml": {
+   "size": 5564,
+   "sha256": "ba0f29cfc29f4c0672d1883311615081e66ceca55b599eeb4ce9218535c873e1"
+  },
+  "game/localization/english/brazil_1_l_english.yml": {
+   "size": 52740,
+   "sha256": "d9a02f8fada4c1718543f1c84ad9ed798fd66bed0ef18972eb87898fbdd223f6"
+  },
+  "game/localization/english/brazil_2_l_english.yml": {
+   "size": 59254,
+   "sha256": "9384d32b827d215e67141d0f15eb37363ee8f72f2df2b44fee5c97cf61eb8398"
+  },
+  "game/localization/english/brazil_nation_building_l_english.yml": {
+   "size": 15040,
+   "sha256": "4a2ebe185db9fd47835936084a90429472529e4a5b8f11b43b8b3d45d6a6be61"
+  },
+  "game/localization/english/buildings_l_english.yml": {
+   "size": 13957,
+   "sha256": "4de414674935037858b877c52db81a4dcdfc298707d165e37d8a797e669cde85"
+  },
+  "game/localization/english/canals_l_english.yml": {
+   "size": 8607,
+   "sha256": "dbaaab6e8ac4f5330bd700bcc568b090063d932926f4b36bbe7288005b709d1d"
+  },
+  "game/localization/english/catalysts_l_english.yml": {
+   "size": 14359,
+   "sha256": "10116c654f95771908413d6725bacbfe57cb571feb6f1bdbd972864a48a713cb"
+  },
+  "game/localization/english/caucasus_l_english.yml": {
+   "size": 49391,
+   "sha256": "c54c719c518974412bbf97da042285a4b1781f6a13b8cd34d0fb1c7eee056cfe"
+  },
+  "game/localization/english/character_focused_l_english.yml": {
+   "size": 1457,
+   "sha256": "42d1ee2f99ef0f04966bc388afbe4e7997bba5323b376a7bd55f5bad09fea58d"
+  },
+  "game/localization/english/character_interactions_l_english.yml": {
+   "size": 7607,
+   "sha256": "1b03e9b3fed867f000b7e56b1c9ca84b60afd3f92a7f1726d096ba21a04d20c0"
+  },
+  "game/localization/english/character_role_titles_l_english.yml": {
+   "size": 267,
+   "sha256": "9c47da8676a4f13a92d9d7fae6c9c54514f9cf7ea64ce03e0cbd43d8b25a3797"
+  },
+  "game/localization/english/characters_l_english.yml": {
+   "size": 8933,
+   "sha256": "898dea155487157678e9215696ddab2424edfc78043c960e6e785c26a7808379"
+  },
+  "game/localization/english/chinese_ship_names_l_english.yml": {
+   "size": 6590,
+   "sha256": "6310422ca3290535111f2eb03fb68d947efcfa0e85550015b54f6b31c183ea25"
+  },
+  "game/localization/english/cohesion_levels_l_english.yml": {
+   "size": 9288,
+   "sha256": "cb3ff25c79bef0d211feb2b45d8cb4fc9ab9f74c6c185fa5b1695c0a4bae3dd1"
+  },
+  "game/localization/english/commander_ranks_l_english.yml": {
+   "size": 1443,
+   "sha256": "c7fab9a4e69c2d8489e97ec3101df7ea9d6bea781d8679df471313ea7290f12b"
+  },
+  "game/localization/english/companies_l_english.yml": {
+   "size": 40060,
+   "sha256": "70de5a795826d178246973b3e852959e552bdc551e319f9e36aa69d85b68c114"
+  },
+  "game/localization/english/concepts_l_english.yml": {
+   "size": 409088,
+   "sha256": "55c7f8bb9f33d89b747c13b4b46098d9c6c8bc18337ae2b442bbd172d6c6b630"
+  },
+  "game/localization/english/content_101_l_english.yml": {
+   "size": 78281,
+   "sha256": "5ce995dc61565b5585cb15d26e6784dca9e77444dcce2451f82f3394b19d3155"
+  },
+  "game/localization/english/content_104_l_english.yml": {
+   "size": 194179,
+   "sha256": "b1773ec14d7efbff8eac19d5f961ebb784d6f1f1fe697f3a8e038968e5d46038"
+  },
+  "game/localization/english/content_105_l_english.yml": {
+   "size": 160617,
+   "sha256": "fa6c509ba06e619f0b8b5fab817f4acbee46b3016dee722489dcc4d127fe9fe3"
+  },
+  "game/localization/english/content_1_l_english.yml": {
+   "size": 218630,
+   "sha256": "02241456487324b318f9c269a725b57027c5baaff2b36597e77412cf21fd9a84"
+  },
+  "game/localization/english/content_204_l_english.yml": {
+   "size": 115620,
+   "sha256": "57e99d0e7dc829d0d25220786a59418e09f81f6938afdaa389dfb38eaf67129f"
+  },
+  "game/localization/english/content_2_l_english.yml": {
+   "size": 97507,
+   "sha256": "69cc01a1644dc0343c5285f00f60670efcf547f92539b5f4d24fdd0cee23cecb"
+  },
+  "game/localization/english/content_304_l_english.yml": {
+   "size": 76022,
+   "sha256": "ae49c482d4a680e72830ac5c3016185361d2fb48339d26913eef314980bbcec7"
+  },
+  "game/localization/english/content_3_l_english.yml": {
+   "size": 68984,
+   "sha256": "7cdbb77247092d6f783534a17840e65a8b8e2ff0789e96a17f460b9dab9daeba"
+  },
+  "game/localization/english/content_4_l_english.yml": {
+   "size": 30592,
+   "sha256": "8fc8b0df199a95c7655a1847b94d89da1e6c37e97bed72935ebfb51bd209b63a"
+  },
+  "game/localization/english/core_l_english.yml": {
+   "size": 25043,
+   "sha256": "8167d9cebcc16f69385f0a1804fdf242524c42cc57a75b7acc36b520282a097b"
+  },
+  "game/localization/english/countries_l_english.yml": {
+   "size": 46915,
+   "sha256": "477ea89d1b5c821a7f287899f6f7ec16b51d6749b603ae721b65d54e7819679e"
+  },
+  "game/localization/english/country_flavor_text_l_english.yml": {
+   "size": 37239,
+   "sha256": "d486a98da4c7d7569460cdb66304d39eed2cb4146111ec8b679ad6d756d813a6"
+  },
+  "game/localization/english/credits_l_english.yml": {
+   "size": 19911,
+   "sha256": "92f190f2454bae649bba06dda06119a86eaca75dc8bb43fdd4082a56e7e44708"
+  },
+  "game/localization/english/cultures_l_english.yml": {
+   "size": 70103,
+   "sha256": "e8c1e4ba424b788f843ba393a3ac9f351e5f8de452f5ce667f29c4bda45a6ad9"
+  },
+  "game/localization/english/custom_loc_l_english.yml": {
+   "size": 529,
+   "sha256": "d26b794e76aeaa662fb6e31678bd5a02095510c497363d4aa7d037d4d9063511"
+  },
+  "game/localization/english/customized_tooltips_l_english.yml": {
+   "size": 113888,
+   "sha256": "441355224b775d7944943c3f8e1cf19722bcdb0dda706e652fe062fcc2c1e616"
+  },
+  "game/localization/english/debug_l_english.yml": {
+   "size": 3463,
+   "sha256": "9d3c3b81a77c1da5772ef0adadc64277525c390e28d16485d625441adf8f2f1c"
+  },
+  "game/localization/english/decisions_l_english.yml": {
+   "size": 4047,
+   "sha256": "4b60105542f85553a41ad7141873514e8b557352b10889222986376399d2b2f1"
+  },
+  "game/localization/english/diplomacy_l_english.yml": {
+   "size": 282974,
+   "sha256": "23a47cbf51fd4a9319354ea6a7fc7da9185f749d6673fb6c4bafdab82b406bc4"
+  },
+  "game/localization/english/diplomatic_plays_l_english.yml": {
+   "size": 88928,
+   "sha256": "32409ca3200d17b94dd9c47b79379972a0350acfcf1a5742acf485746e025d26"
+  },
+  "game/localization/english/diplomatic_treaties_l_english.yml": {
+   "size": 6508,
+   "sha256": "ead4f0071c4918d0fe9bab557133619d54681c0783f2e55cc1dcd74fe2c2b199"
+  },
+  "game/localization/english/dlc_l_english.yml": {
+   "size": 7062,
+   "sha256": "9a5bc12cd9b11e2b063aae52cb53c85393d5798b702c92c870db4a83757c0884"
+  },
+  "game/localization/english/dynamic_state_and_hub_names_l_english.yml": {
+   "size": 106407,
+   "sha256": "e7e477c0a4f273553f9331ad049ffe55a7da63661a17ee757fcecd60da63da11"
+  },
+  "game/localization/english/effects_l_english.yml": {
+   "size": 82284,
+   "sha256": "fd032a37902349fc1c5807628df40afd23f6365d7246bcd72a5e79ce0617666b"
+  },
+  "game/localization/english/encyclopedia_l_english.yml": {
+   "size": 913,
+   "sha256": "c85c0ebcbd62871a99ae172d454acc510653f657cefba9ac2c828aee27971196"
+  },
+  "game/localization/english/ep2_01_l_english.yml": {
+   "size": 15884,
+   "sha256": "74e85ba204f60664367b8f2480175a8f7f690927f0d3f7306d5a46d419795964"
+  },
+  "game/localization/english/ep2_02_l_english.yml": {
+   "size": 40851,
+   "sha256": "c1a2d143d9a3d4c52e0293a89ffae30e8a7e1302d4e924fb3cc033ac8ffc4529"
+  },
+  "game/localization/english/ep2_03_l_english.yml": {
+   "size": 15327,
+   "sha256": "cffe0b00902f33dc151173190780c652bba2ca97e077c5780a5cb41222a7f2f0"
+  },
+  "game/localization/english/ep2_04_l_english.yml": {
+   "size": 116019,
+   "sha256": "a2ba8f5db1b375fdb235046a103cc3a98b50524a5f5ff02f822e216e834a33af"
+  },
+  "game/localization/english/ep2_06_l_english.yml": {
+   "size": 19008,
+   "sha256": "bf5c05524c6f11178a4462f8cb583eee6356a966c44ec92e77765ee9461eea36"
+  },
+  "game/localization/english/ep2_ryukyu_rivalry_l_english.yml": {
+   "size": 15028,
+   "sha256": "fb34b80f41cfdd3df6ea02bc92ce5ae630ae142774904a704ec932de32cc29f6"
+  },
+  "game/localization/english/ep2_sakoku_l_english.yml": {
+   "size": 9520,
+   "sha256": "198f32422659b61d9b3848d12f922ba642f4d1078c72d880c1c9a6dba267fa58"
+  },
+  "game/localization/english/ethnicities_l_english.yml": {
+   "size": 538,
+   "sha256": "d4e3197b33d848ac8a1eda48c869d964fec0a54c3b38b7893e2a53359e8dcefa"
+  },
+  "game/localization/english/event_effects_ip4_l_english.yml": {
+   "size": 17248,
+   "sha256": "e680c90b8f1bffae9c127f1fe5d12adb929b6654846cde7d74142b81cc186254"
+  },
+  "game/localization/english/event_effects_l_english.yml": {
+   "size": 109788,
+   "sha256": "decda7171fc8d625a4265de516f3851d4b2bcb6a4b34d9d960525dfa58bb6ec1"
+  },
+  "game/localization/english/event_target_links_l_english.yml": {
+   "size": 215,
+   "sha256": "0e904eb288b00cbe0352f3e57fd05e843f3ab0e7572c74d4178c60ab8225760f"
+  },
+  "game/localization/english/events_l_english.yml": {
+   "size": 96853,
+   "sha256": "d0e9c5ee3d11f97b33d704304de0eb0559a994a919b681499180f1fd40f41cda"
+  },
+  "game/localization/english/game_rules_l_english.yml": {
+   "size": 12729,
+   "sha256": "fa9a803d2e09b35eaa8af5b3e2b3f85d910f26e6c1bec15dd82238050a2c9728"
+  },
+  "game/localization/english/geographic_regions_l_english.yml": {
+   "size": 15685,
+   "sha256": "3cb216948b9e937db68a6b2bf4c062f86434d9135de37513408c21880f6c005a"
+  },
+  "game/localization/english/goods_l_english.yml": {
+   "size": 5301,
+   "sha256": "3b1bb4311f192c03339a995ded79722fbd93a10ca72ab59ec3e69fc6a9537640"
+  },
+  "game/localization/english/government_l_english.yml": {
+   "size": 147324,
+   "sha256": "dd143fa37d7a1f613e449fddefac16682e6a0264a3f6153d9f65912bd888e5d1"
+  },
+  "game/localization/english/harvest_conditions_l_english.yml": {
+   "size": 3249,
+   "sha256": "bfaa02f2cdedc6d5b4a4e999b8052dc0e81803e26c73d4a27f151df59704338a"
+  },
+  "game/localization/english/hub_names_l_english.yml": {
+   "size": 135891,
+   "sha256": "621ad610fc634b84213d4c194740acaa917f922e0a0856fd608f183f86288626"
+  },
+  "game/localization/english/input_settings_l_english.yml": {
+   "size": 3247,
+   "sha256": "3a3b7d8f68cac37c7d03443fd2dcd151721bb2dd9e05904db634289a174b1fb8"
+  },
+  "game/localization/english/institutions_l_english.yml": {
+   "size": 939,
+   "sha256": "bcfa39dc22d8fedc03881343596ec380a0e28719fa95d3e81c385d5879d3ccb6"
+  },
+  "game/localization/english/interest_tier_types_l_english.yml": {
+   "size": 14469,
+   "sha256": "33141f263fa96fc8406b737988cdf9bacc8cda022af61d22055acc27a11d0a9b"
+  },
+  "game/localization/english/interface_labels_l_english.yml": {
+   "size": 22211,
+   "sha256": "24ce0bb318a79e80c1aa9ecc49f8a0e0fedb7bc2d2dba1de6862ca9359a3e49a"
+  },
+  "game/localization/english/interfaces_l_english.yml": {
+   "size": 1370398,
+   "sha256": "86f24247e1dd449a9de7a710829850bf7f5fd7b76b9d5e048673f307441eba14"
+  },
+  "game/localization/english/inventions_l_english.yml": {
+   "size": 86891,
+   "sha256": "ff1fa8de6af268b7206e87b431599a7493e17e02687e659f96945aff887c75b3"
+  },
+  "game/localization/english/ip2_misc_01_l_english.yml": {
+   "size": 101497,
+   "sha256": "ce5d6dd34b1251a25e16e060a8b098c09013c391eed058a659542d041a28041f"
+  },
+  "game/localization/english/ip2_misc_02_l_english.yml": {
+   "size": 60536,
+   "sha256": "1d92a030d49f09d8d05e97089a5aeec52ce7a2842df5e2e119f41d1823535a6c"
+  },
+  "game/localization/english/ip2_misc_03_l_english.yml": {
+   "size": 52905,
+   "sha256": "111b999a9adce85236d2132acdf934e648bf838676dd45efc59e8b1d8c571f38"
+  },
+  "game/localization/english/ip2_mughal_l_english.yml": {
+   "size": 20736,
+   "sha256": "63711d8fdb01f2addb0ca970e4372ccf76630f0be3afde9a7ff39da20b592bd0"
+  },
+  "game/localization/english/ip3_austria_hungary_l_english.yml": {
+   "size": 64195,
+   "sha256": "b28be7a02318e3451ecbe6be5a6dcf554a4085943a78049e00d1e496424b56b7"
+  },
+  "game/localization/english/ip3_bulgaria_l_english.yml": {
+   "size": 5472,
+   "sha256": "04e35da1da64cb55b24b694d17d499ab177da128ab8be31995bea607980b2f15"
+  },
+  "game/localization/english/ip3_greece_l_english.yml": {
+   "size": 46158,
+   "sha256": "99d4b020975f2712f59cd76c5e2f7a197f83796489215dbaec2d2c9cd55d1d53"
+  },
+  "game/localization/english/ip3_misc_01_l_english.yml": {
+   "size": 170301,
+   "sha256": "bb696848d159b20e7a5b5b2549237271caf911adffe52b6619cbb700ce04ced1"
+  },
+  "game/localization/english/ip3_montenegro_l_english.yml": {
+   "size": 42921,
+   "sha256": "dcb6d3141b5500aa7167bbf90c62d5ef9aface92eace04ddb658e2369547aed5"
+  },
+  "game/localization/english/ip3_serbia_l_english.yml": {
+   "size": 60655,
+   "sha256": "3922a7a9ab80d0281eb97f91fe0d028c18696c255e86cc9092023fc99366b324"
+  },
+  "game/localization/english/ip4_amendments_l_english.yml": {
+   "size": 978,
+   "sha256": "b7f3a154cd758f16b9a9e60f798e698e81a97b2f4e538e772abd222896e43ffe"
+  },
+  "game/localization/english/ip4_carlist_war_l_english.yml": {
+   "size": 16521,
+   "sha256": "75c61fb39b1a5addddef38e643fab6426f57dc00cffb77df2d9a6162ea2d8974"
+  },
+  "game/localization/english/ip4_cuba_l_english.yml": {
+   "size": 22289,
+   "sha256": "224f2ab55a542119a5e72d0404af6c0f17d2ecab53fde4a0bbd08b9ccf6570c1"
+  },
+  "game/localization/english/ip4_misc_01_l_english.yml": {
+   "size": 180003,
+   "sha256": "0d5315f101325de58b721f25e6afd6bc950a69a220ec5d78076c2039ec82f8d2"
+  },
+  "game/localization/english/ip4_monuments_philippines_l_english.yml": {
+   "size": 40261,
+   "sha256": "6b4e37c2a2e939fa1ca8a0fd27293970e9f87538b6ea878d11c1e2817538a7fb"
+  },
+  "game/localization/english/ip4_morocco_makhzen_l_english.yml": {
+   "size": 14736,
+   "sha256": "890665d49cd5e023a731b95a0d200c1b557ae1507fcc9e432737f76c1de3d0e0"
+  },
+  "game/localization/english/ip4_negotiation_l_english.yml": {
+   "size": 1439,
+   "sha256": "a2e0fe72aedb6ceac7bbe36e27e592cda43427ef93b5ba366781880006f7d4cf"
+  },
+  "game/localization/english/ip4_portugal_monarchy_l_english.yml": {
+   "size": 5288,
+   "sha256": "f6cbd36c1587671facbb71d3c5852ab9ab961d9e5d19ef804934347635f904ca"
+  },
+  "game/localization/english/ip4_portugal_single_fire_events_1_l_english.yml": {
+   "size": 8459,
+   "sha256": "008be75947406f364845345c080215f66fc8be7ca51a621caf607d7846540426"
+  },
+  "game/localization/english/ip4_portuguese_colonialism_l_english.yml": {
+   "size": 23369,
+   "sha256": "37ee3b4eb9380d68117cc56a549437b1adccc85696d0914da62627183d7ecdf5"
+  },
+  "game/localization/english/ip4_spain_l_english.yml": {
+   "size": 61867,
+   "sha256": "78bc7a30292d7c25e5c7884f4ae6340380024461c6c28bacd771db0fac8adda4"
+  },
+  "game/localization/english/ip4_spanish_africa_l_english.yml": {
+   "size": 16501,
+   "sha256": "457bad17365e56f2b2939ba22810221749566dbad730fbd1cff1d91b831ff7cf"
+  },
+  "game/localization/english/journal_entries_l_english.yml": {
+   "size": 4843,
+   "sha256": "151489ac230dea4a7eee7f1f59f72c36583986d1e74a93c47587f15ea1b99e48"
+  },
+  "game/localization/english/labels_l_english.yml": {
+   "size": 654,
+   "sha256": "17f61fe75dd0662b48890e034b20b9c60af561579d8a8b6fafc23a9b55771c4c"
+  },
+  "game/localization/english/laws_l_english.yml": {
+   "size": 68457,
+   "sha256": "f13cb19b128cd4a5c80c478ccb19e8c9c30c406ca11cfb15474ee3ec37d33be5"
+  },
+  "game/localization/english/legitimacy_levels_l_english.yml": {
+   "size": 5895,
+   "sha256": "8baf62d3b4fb133f027f0ad291d0778408b4360a962872acdfeb217393eabd83"
+  },
+  "game/localization/english/liberty_desire_levels_l_english.yml": {
+   "size": 15152,
+   "sha256": "07f2354c821c331fd13c5dc2316af76740e72a88971d128c01366c84748050eb"
+  },
+  "game/localization/english/loading_tips_l_english.yml": {
+   "size": 143,
+   "sha256": "e1352bf60d63b4fa1011ddc44d7ddaab9b238f1152e8eb9561677292f2c3a877"
+  },
+  "game/localization/english/lobbies_l_english.yml": {
+   "size": 32545,
+   "sha256": "de753fd28d1a05bf5b57b892304213ceebc04aca669c633f972517ff51c49340"
+  },
+  "game/localization/english/map_editor_l_english.yml": {
+   "size": 229,
+   "sha256": "e2077c2747bd568c6598a39efbbcaadf6e440a76d4b82442855c7b6f35672442"
+  },
+  "game/localization/english/map_modes_l_english.yml": {
+   "size": 3521,
+   "sha256": "56c5934c22f8bb74049191226f32060453942ea050e605c0863702364a8f5431"
+  },
+  "game/localization/english/mobilization_options_l_english.yml": {
+   "size": 10120,
+   "sha256": "cae7a11369afb707b02e90dba47b7cb6636ad5968dfc3fad0ba98ff5db403405"
+  },
+  "game/localization/english/modifier_debugger_l_english.yml": {
+   "size": 679,
+   "sha256": "d377378c14ca7d79249f5602f95e8873366c9dd8b01b37c24d2902c43dd1642b"
+  },
+  "game/localization/english/modifiers_l_english.yml": {
+   "size": 494303,
+   "sha256": "d444f7f7292c91fa84476ff72eea9b07a0b6496c654967b01008c2f9814377dd"
+  },
+  "game/localization/english/mp1_04_l_english.yml": {
+   "size": 29417,
+   "sha256": "b38bcddd795449cfe32a1d419390247bcf779fd24cbb26ad197d40f21f689b6f"
+  },
+  "game/localization/english/music_ep2_l_english.yml": {
+   "size": 511,
+   "sha256": "6ce3eb8d7fee1e5c6ca46c7a5888cdfbc53ed3b46bf709c0c56df3dabfd8f155"
+  },
+  "game/localization/english/music_l_english.yml": {
+   "size": 1642,
+   "sha256": "7d272e0b057d90f1d22cc0bc550604cadca29e79fe6a1e88b0c7210c546810ac"
+  },
+  "game/localization/english/music_mp1_l_english.yml": {
+   "size": 617,
+   "sha256": "3a00c4e5802caeb17f6668c8043c192e01a597188762c42d998cc6a82c76ae24"
+  },
+  "game/localization/english/music_mp2_l_english.yml": {
+   "size": 583,
+   "sha256": "0172aa2ae9d286e5e9ef234bb67e7c2db2c124211b615793fe6541cbdf47cb59"
+  },
+  "game/localization/english/names_l_english.yml": {
+   "size": 564114,
+   "sha256": "ed7d31a39131b09af0d15c6745ce9e7fa7b8134a087c63f8c4b61116d65af3bf"
+  },
+  "game/localization/english/national_focus_l_english.yml": {
+   "size": 2624,
+   "sha256": "049c33cd6fbad64a765ffd5970c0b6e7c68af90f2e6d5be0e374626770e3828b"
+  },
+  "game/localization/english/naval_battles_l_english.yml": {
+   "size": 51405,
+   "sha256": "423913f5ad8c08988a3b474d06c7ad25689e71eb569fdb1d94219e1ea3007070"
+  },
+  "game/localization/english/negotiations_l_english.yml": {
+   "size": 20201,
+   "sha256": "358976b966409b64e70f3ff543f391fe562bbd4bb82fceb184fcb11e8312fa42"
+  },
+  "game/localization/english/notifications_l_english.yml": {
+   "size": 668,
+   "sha256": "52f01b4a1ec1d405b337431104333f5aad0fa40880f8eceadff5550ec24a946a"
+  },
+  "game/localization/english/objectives_l_english.yml": {
+   "size": 16716,
+   "sha256": "46a18297216c090b2fc9099c75b019cee2f0a101a6aaff3a23511fb51b5b9d9a"
+  },
+  "game/localization/english/parties_l_english.yml": {
+   "size": 23932,
+   "sha256": "b11101f6c9f8d592ba0a7a614ed071375f99db34f43a10e948813c334cc9944d"
+  },
+  "game/localization/english/political_movements_l_english.yml": {
+   "size": 7725,
+   "sha256": "3884e5edf56de6066e8587433d2464416d870655208ac1b05421c36643294d6e"
+  },
+  "game/localization/english/politics_l_english.yml": {
+   "size": 40068,
+   "sha256": "b8f7d3c920d355045977a9f2141feaa1ee6595e2bf406852d7edab0f8c8079ee"
+  },
+  "game/localization/english/pop_types_l_english.yml": {
+   "size": 8838,
+   "sha256": "ecdde98a54058b6e16a72a7836ea2025a4cced753567db8db7738b4b772f17e8"
+  },
+  "game/localization/english/power_blocs_l_english.yml": {
+   "size": 42195,
+   "sha256": "e5bb9d9dbdc73a125f2f59bdbadc33425cd1a6425363e7307ae8c2129a942938"
+  },
+  "game/localization/english/production_methods_l_english.yml": {
+   "size": 51010,
+   "sha256": "a07b43771d49efd580e9e94406e70d48a8d47dd375333efc46d0cc487cadd12e"
+  },
+  "game/localization/english/religion_l_english.yml": {
+   "size": 904,
+   "sha256": "656c93fab134c573adcdab71642d58b31230b9c468e717d9d54009bd8543b2c2"
+  },
+  "game/localization/english/scripted_triggers_l_english.yml": {
+   "size": 12965,
+   "sha256": "e7f290ebe9d363a87b97b657c00787ee42bed6d84d0c0520d51dbb4d0d885f56"
+  },
+  "game/localization/english/settings_l_english.yml": {
+   "size": 9407,
+   "sha256": "777b4b4f58b2cf20d11254dd22774e7f16bd8180951aa24baf7f4e98fcebf9a4"
+  },
+  "game/localization/english/shared_event_text_l_english.yml": {
+   "size": 31,
+   "sha256": "2e22dc74a5c2414a099fea7a8e8d8bf5fa3830e587d9349d231f933a76111497"
+  },
+  "game/localization/english/ship_modules_l_english.yml": {
+   "size": 23029,
+   "sha256": "0e29e300f74d737c50030b5dba69152857e59c175d1ccb2ee4626c531a4da761"
+  },
+  "game/localization/english/ship_names_l_english.yml": {
+   "size": 110215,
+   "sha256": "87a9667a7743de64b8c214ffb6974d98ac8132e789dbe0b24e5526f1e500e490"
+  },
+  "game/localization/english/ships_l_english.yml": {
+   "size": 103659,
+   "sha256": "b3742910f56212abfb0a77e4a03081365d40f6fff2ed6380b57120ad7faaa860"
+  },
+  "game/localization/english/social_hierarchy_l_english.yml": {
+   "size": 3333,
+   "sha256": "b852b05a2a6cef72a12d81a0aae48d8dd38df1063dec6921bc4590e7c81dcff8"
+  },
+  "game/localization/english/sphere_of_influence_lobbies_great_game_l_english.yml": {
+   "size": 135002,
+   "sha256": "86c421b525fb41fd7d72b3b32f97b13127a98b4bf8cfa28bf83cdb34706c5fd8"
+  },
+  "game/localization/english/sphere_of_influence_persia_l_english.yml": {
+   "size": 58097,
+   "sha256": "51ed9340e1f5ccb5db5a734e7be52b2593942bfe517a39181ac78b8870f26537"
+  },
+  "game/localization/english/sphere_of_influence_tibet_l_english.yml": {
+   "size": 25439,
+   "sha256": "27fbdb548e74fd962643c8a0db46768197d5ea28f236e476b26c1b482f477ddc"
+  },
+  "game/localization/english/state_atheism_l_english.yml": {
+   "size": 3565,
+   "sha256": "0dc26e1f31f1c9f9b53803a628f1ffe4ef9029b88ef4d0a8828918e56d1f5e24"
+  },
+  "game/localization/english/statues_l_english.yml": {
+   "size": 1922,
+   "sha256": "eef053b7e815d3225c2bc5cd851c5f2472f569c5e2e38a15b1b95b3833bb9622"
+  },
+  "game/localization/english/straits_l_english.yml": {
+   "size": 16519,
+   "sha256": "fd71aa6aa455aae3c10c403393122852e5177f12d3d9ce3f665cb614f94c759c"
+  },
+  "game/localization/english/strategic_region_stances_l_english.yml": {
+   "size": 5111,
+   "sha256": "192dd8685971e85bbf4da707a71308337afa2b7b53892a55785561ce2044df4b"
+  },
+  "game/localization/english/test_modifiers_l_english.yml": {
+   "size": 111,
+   "sha256": "dea1dc98ccf1cf9912c5200e7a03741dbabad6c3e37203faf79f2f986e142423"
+  },
+  "game/localization/english/themes_l_english.yml": {
+   "size": 9578,
+   "sha256": "aa6eb79f8dc836025f515ed6f5d0f76b571ac4beb09c93e2d774a64db93e2945"
+  },
+  "game/localization/english/ticktask_debugger_l_english.yml": {
+   "size": 1552,
+   "sha256": "76a37e8fa14e4b1983a2503de9f60bbd1993816d7b2acffe3e2696811acd02da"
+  },
+  "game/localization/english/triggers_l_english.yml": {
+   "size": 577438,
+   "sha256": "ea8131c053f8bf0dc4065d29985cc98b7308dfe27149e62ee8267f1752e663f3"
+  },
+  "game/localization/english/tutorial_l_english.yml": {
+   "size": 206636,
+   "sha256": "756e20482b5facd9187417ddce753b7d5627798f992b7d1b67d36211e1ac3210"
+  },
+  "game/localization/english/unit_veterancy_levels_l_english.yml": {
+   "size": 305,
+   "sha256": "2b52a9d1be3f934c99729024a830127439d7ab8c1d32d38add7dd5e155f1c0ad"
+  }
+ }
+}

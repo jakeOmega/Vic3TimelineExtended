@@ -1,0 +1,3342 @@
+{
+ "GBR": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "ENG": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_HOME_COUNTIES",
+     "STATE_MIDLANDS",
+     "STATE_EAST_ANGLIA",
+     "STATE_WEST_COUNTRY",
+     "STATE_YORKSHIRE",
+     "STATE_LANCASHIRE"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "UCA": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.5"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "RUS": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "IRE": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "FRA": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_ILE_DE_FRANCE",
+     "STATE_PROVENCE",
+     "STATE_NORMANDY",
+     "STATE_LANGUEDOC",
+     "STATE_RHONE",
+     "STATE_FRENCH_LOW_COUNTRIES",
+     "STATE_PICARDY",
+     "STATE_ALSACE_LORRAINE",
+     "STATE_POITOU",
+     "STATE_GUYENNE",
+     "STATE_AUVERGNE_LIMOUSIN",
+     "STATE_BRITTANY",
+     "STATE_BURGUNDY",
+     "STATE_CHAMPAGNE",
+     "STATE_FRANCHE_COMTE",
+     "STATE_LORRAINE",
+     "STATE_AQUITAINE",
+     "STATE_ORLEANS"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "SWE": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_SVEALAND",
+     "STATE_GOTALAND",
+     "STATE_SCANIA",
+     "STATE_NORRLAND"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ]
+  }
+ ],
+ "LAO": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_LAOS"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1.0"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "UBD": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "BYZ": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_EASTERN_THRACE",
+     "STATE_ATTICA",
+     "STATE_THESSALIA",
+     "STATE_MACEDONIA",
+     "STATE_SKOPIA",
+     "STATE_WESTERN_THRACE",
+     "STATE_NORTHERN_THRACE",
+     "STATE_HUDAVENDIGAR",
+     "STATE_AYDIN",
+     "STATE_WEST_AEGEAN_ISLANDS",
+     "STATE_EAST_AEGEAN_ISLANDS",
+     "STATE_ALBANIA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1.0"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "country_has_monarchy_law": [
+      "=",
+      "yes"
+     ],
+     "custom_tooltip": [
+      "=",
+      {
+       "text": [
+        "=",
+        "byzantium_button_check_tt"
+       ],
+       "has_variable": [
+        "=",
+        "embrace_ambitious_agenda_var"
+       ]
+      }
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_game_rule": [
+        "=",
+        "plausible_formable_nations"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "PLC": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_BREST",
+     "STATE_EAST_GALICIA",
+     "STATE_GREATER_POLAND",
+     "STATE_LESSER_POLAND",
+     "STATE_KAUNAS",
+     "STATE_VILNIUS",
+     "STATE_MAZOVIA",
+     "STATE_POSEN",
+     "STATE_VOLHYNIA",
+     "STATE_WEST_GALICIA",
+     "STATE_WEST_PRUSSIA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "PRU": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_BRANDENBURG",
+     "STATE_POMERANIA",
+     "STATE_WEST_PRUSSIA",
+     "STATE_EAST_PRUSSIA",
+     "STATE_LOWER_SILESIA",
+     "STATE_UPPER_SILESIA",
+     "STATE_POSEN"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.8"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "CHI": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.6"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "ETH": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_AMHARA",
+     "STATE_GONDER",
+     "STATE_OROMIA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.33"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "AOT": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "1.0"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "WIN": [
+  "=",
+  {
+   "STATES": [
+    "=",
+    [
+     "STATE_WEST_INDIES",
+     "STATE_JAMAICA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "IBE": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.9"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ],
+     "trigger_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "capital": [
+          "?=",
+          {
+           "is_in_geographic_region": [
+            "=",
+            "geographic_region_iberia_old"
+           ]
+          }
+         ],
+         "any_country_in_iberia_old": [
+          "=",
+          {
+           "is_subject_of": [
+            "=",
+            "ROOT"
+           ]
+          }
+         ]
+        }
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "all_iberian_subjects_below_75_ld_tt"
+         ],
+         "any_country_in_iberia_old": [
+          "=",
+          {
+           "filter": [
+            "=",
+            {
+             "is_subject_of": [
+              "=",
+              "ROOT"
+             ]
+            }
+           ],
+           "liberty_desire": [
+            "<",
+            "75"
+           ],
+           "count": [
+            "=",
+            "all"
+           ]
+          }
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "CLM": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.8"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "BRZ": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.8"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "SPA": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "MEX": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "KUK": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ],
+     "OR": [
+      "=",
+      {
+       "has_law_or_variant": [
+        [
+         "=",
+         "law_type:law_multicultural"
+        ],
+        [
+         "=",
+         "law_type:law_subjecthood"
+        ]
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "USA": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "FSA": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_law_or_variant": [
+      "=",
+      "law_type:law_slavery_banned"
+     ]
+    }
+   ]
+  }
+ ],
+ "CZH": [
+  "=",
+  {
+   "STATES": [
+    "=",
+    [
+     "STATE_BOHEMIA",
+     "STATE_MORAVIA",
+     "STATE_SLOVAKIA",
+     "STATE_RUTHENIA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "c:AUS": [
+        "?=",
+        "this"
+       ],
+       "c:KUK": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "CAN": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "AST": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "POL": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_GREATER_POLAND",
+     "STATE_MAZOVIA",
+     "STATE_LESSER_POLAND",
+     "STATE_WEST_GALICIA",
+     "STATE_EAST_GALICIA",
+     "STATE_UPPER_SILESIA",
+     "STATE_WEST_PRUSSIA",
+     "STATE_POSEN"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.55"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "c:AUS": [
+        "?=",
+        "this"
+       ],
+       "c:KUK": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "ROM": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.375"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "c:AUS": [
+        "?=",
+        "this"
+       ],
+       "c:KUK": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "ARA": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_YEMEN",
+     "STATE_OMAN",
+     "STATE_ABU_DHABI",
+     "STATE_NEJD",
+     "STATE_HEDJAZ",
+     "STATE_HAIL",
+     "STATE_BAGHDAD",
+     "STATE_TRANSJORDAN",
+     "STATE_PALESTINE",
+     "STATE_LEBANON",
+     "STATE_SYRIA",
+     "STATE_ALEPPO",
+     "STATE_MOSUL",
+     "STATE_DEIR_EZ_ZOR",
+     "STATE_BASRA",
+     "STATE_SINAI",
+     "STATE_LOWER_EGYPT",
+     "STATE_MIDDLE_EGYPT",
+     "STATE_MATRUH",
+     "STATE_EGYPTIAN_DESERT",
+     "STATE_UPPER_EGYPT"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "GCO": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_CUNDINAMARCA",
+     "STATE_ECUADOR",
+     "STATE_MIRANDA",
+     "STATE_ANTIOQUIA",
+     "STATE_GUAVIARE",
+     "STATE_BOLIVAR",
+     "STATE_ZULIA",
+     "STATE_CAUCA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.85"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "ZIM": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_ZAMBEZI"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "BLH": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_BALUCHISTAN",
+     "STATE_NORTHERN_BALUCHISTAN",
+     "STATE_SISTAN"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.33"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ],
+     "NOR": [
+      "=",
+      {
+       "c:BHT": [
+        "?=",
+        "this"
+       ],
+       "c:BIC": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "NGF": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "SGF": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "MAL": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_TIMBUKTU",
+     "STATE_WESTERN_MALI",
+     "STATE_EASTERN_MALI",
+     "STATE_SENEGAL",
+     "STATE_GUINEA",
+     "STATE_VOLTA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.5"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "TRH": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_FERGANA",
+     "STATE_UZBEKIA",
+     "STATE_KIRGHIZIA",
+     "STATE_KHIVA",
+     "STATE_MERZ",
+     "STATE_BALKH",
+     "STATE_TAJIKISTAN",
+     "STATE_TURKMENIA",
+     "STATE_SYRDARYA",
+     "STATE_JETISY",
+     "STATE_TIANSHAN",
+     "STATE_DZUNGARIA",
+     "STATE_SEMIRECHE",
+     "STATE_AKMOLINSK",
+     "STATE_AKTOBE",
+     "STATE_URALSK"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.4"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "IDN": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_ACEH",
+     "STATE_CENTRAL_JAVA",
+     "STATE_EAST_BORNEO",
+     "STATE_EAST_JAVA",
+     "STATE_MALAYA",
+     "STATE_MOLUCCAS",
+     "STATE_CELEBES",
+     "STATE_NORTH_BORNEO",
+     "STATE_NORTH_SUMATRA",
+     "STATE_SOUTH_SUMATRA",
+     "STATE_SUNDA_ISLANDS",
+     "STATE_WEST_BORNEO",
+     "STATE_WESTERN_NEW_GUINEA",
+     "STATE_WEST_JAVA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.65"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "BHT": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_ASSAM",
+     "STATE_AWADH",
+     "STATE_BALUCHISTAN",
+     "STATE_BIHAR",
+     "STATE_BOMBAY",
+     "STATE_MALWA",
+     "STATE_CEYLON",
+     "STATE_CIRCARS",
+     "STATE_DELHI",
+     "STATE_GUJARAT",
+     "STATE_HYDERABAD",
+     "STATE_KASHMIR",
+     "STATE_MADRAS",
+     "STATE_MYSORE",
+     "STATE_CENTRAL_PROVINCES",
+     "STATE_WEST_BENGAL",
+     "STATE_ORISSA",
+     "STATE_PASHTUNISTAN",
+     "STATE_PUNJAB",
+     "STATE_RAJPUTANA",
+     "STATE_SINDH",
+     "STATE_EAST_BENGAL",
+     "STATE_TRAVANCORE",
+     "STATE_KURNOOL",
+     "STATE_BUNDELKHAND",
+     "STATE_AGRA",
+     "STATE_HILL_PUNJAB",
+     "STATE_QUETTA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "YEM": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_YEMEN"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "CAU": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_GREATER_CAUCASUS",
+     "STATE_ARMENIA",
+     "STATE_AZERBAIJAN",
+     "STATE_KARS",
+     "STATE_ELIZAVETPOL"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "PNS": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.7"
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "KAZ": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_SEMIRECHE",
+     "STATE_AKMOLINSK",
+     "STATE_JETISY",
+     "STATE_URALSK",
+     "STATE_AKTOBE",
+     "STATE_SYRDARYA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.5"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "ALD": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_ALGIERS",
+     "STATE_ORAN",
+     "STATE_CONSTANTINE"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "PEU": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_LIMA",
+     "STATE_CAJAMARCA",
+     "STATE_ICA",
+     "STATE_AREQUIPA",
+     "STATE_TARAPACA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.8"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "UNL": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_HOLLAND",
+     "STATE_FLANDERS",
+     "STATE_WALLONIA",
+     "STATE_FRIESLAND",
+     "STATE_GELRE"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "RHN": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_HESSE",
+     "STATE_SAXONY",
+     "STATE_SCHLESWIG_HOLSTEIN",
+     "STATE_ANHALT",
+     "STATE_FRANCONIA",
+     "STATE_BAVARIA",
+     "STATE_BRUNSWICK",
+     "STATE_HANNOVER",
+     "STATE_BADEN",
+     "STATE_WURTTEMBERG",
+     "STATE_RUHR",
+     "STATE_WESTPHALIA",
+     "STATE_ELBE",
+     "STATE_MECKLENBURG"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ],
+     "NOR": [
+      "=",
+      {
+       "c:PRU": [
+        "?=",
+        "this"
+       ],
+       "c:AUS": [
+        "?=",
+        "this"
+       ],
+       "c:NGF": [
+        "?=",
+        "this"
+       ],
+       "c:SGF": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "HRE": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOT": [
+      "=",
+      {
+       "has_game_rule": [
+        "=",
+        "plausible_formable_nations"
+       ]
+      }
+     ],
+     "is_in_geographic_region": [
+      "=",
+      "geographic_region_europe"
+     ]
+    }
+   ]
+  }
+ ],
+ "CLI": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_NORTH_CAROLINA",
+     "STATE_SOUTH_CAROLINA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "OR": [
+      "=",
+      {
+       "c:NCR": [
+        "?=",
+        "this"
+       ],
+       "c:SCR": [
+        "?=",
+        "this"
+       ]
+      }
+     ],
+     "NOT": [
+      "=",
+      {
+       "has_game_rule": [
+        "=",
+        "plausible_formable_nations"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "AFG": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_HERAT",
+     "STATE_KANDAHAR",
+     "STATE_KABUL",
+     "STATE_CENTRAL_HIGHLANDS",
+     "STATE_BALKH",
+     "STATE_PASHTUNISTAN",
+     "STATE_QUETTA",
+     "STATE_NORTHERN_BALUCHISTAN"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.5"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "TWT": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.5"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "PLT": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_BUENOS_AIRES",
+     "STATE_CHACO",
+     "STATE_SANTA_FE",
+     "STATE_URUGUAY",
+     "STATE_BAJO_PARAGUAY",
+     "STATE_ALTO_PARAGUAY",
+     "STATE_RIO_NEGRO",
+     "STATE_LA_PAMPA",
+     "STATE_TUCUMAN",
+     "STATE_JUJUY",
+     "STATE_CORRIENTES"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.85"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "PAK": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_BALUCHISTAN",
+     "STATE_PASHTUNISTAN",
+     "STATE_KASHMIR",
+     "STATE_PUNJAB",
+     "STATE_SINDH",
+     "STATE_QUETTA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.80"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ],
+     "country_has_state_religion": [
+      "=",
+      "rel:sunni"
+     ]
+    }
+   ]
+  }
+ ],
+ "MGB": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_MARRAKECH",
+     "STATE_FEZ",
+     "STATE_AL_RIF",
+     "STATE_INNER_MOROCCO",
+     "STATE_WEST_SAHARA",
+     "STATE_INNER_MAURITANIA",
+     "STATE_MAURITANIA",
+     "STATE_SAHARA",
+     "STATE_ORAN",
+     "STATE_ALGIERS",
+     "STATE_CONSTANTINE",
+     "STATE_EAST_SAHARA",
+     "STATE_TUNISIA",
+     "STATE_TRIPOLI",
+     "STATE_LIBYAN_DESERT",
+     "STATE_LIBYA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.5"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "ORI": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ],
+     "NOR": [
+      "=",
+      {
+       "c:BHT": [
+        "?=",
+        "this"
+       ],
+       "c:BIC": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "RAJ": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ],
+     "NOR": [
+      "=",
+      {
+       "c:BHT": [
+        "?=",
+        "this"
+       ],
+       "c:BIC": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "GUJ": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ],
+     "NOR": [
+      "=",
+      {
+       "c:BHT": [
+        "?=",
+        "this"
+       ],
+       "c:BIC": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "MHR": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "c:BHT": [
+        "?=",
+        "this"
+       ],
+       "c:BIC": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "PAN": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "c:BHT": [
+        "?=",
+        "this"
+       ],
+       "c:BIC": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "MUG": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "DRA": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ],
+     "NOR": [
+      "=",
+      {
+       "c:BHT": [
+        "?=",
+        "this"
+       ],
+       "c:BIC": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "CAR": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "c:BHT": [
+        "?=",
+        "this"
+       ],
+       "c:BIC": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "BGL": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.5"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "c:BHT": [
+        "?=",
+        "this"
+       ],
+       "c:BIC": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "GAL": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_EAST_GALICIA",
+     "STATE_WEST_GALICIA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ]
+  }
+ ],
+ "UZB": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_UZBEKIA",
+     "STATE_FERGANA",
+     "STATE_KHIVA"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.66"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "KYR": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_KIRGHIZIA"
+    ]
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "TJI": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_TAJIKISTAN",
+     "STATE_BALKH"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.5"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "LBY": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_TRIPOLI",
+     "STATE_LIBYA",
+     "STATE_LIBYAN_DESERT"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "1"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "capital.state_region": [
+      "?=",
+      {
+       "OR": [
+        "=",
+        {
+         "this": [
+          [
+           "=",
+           "s:STATE_TRIPOLI"
+          ],
+          [
+           "=",
+           "s:STATE_LIBYA"
+          ],
+          [
+           "=",
+           "s:STATE_LIBYAN_DESERT"
+          ]
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "ATL": [
+  "=",
+  {
+   "states": [
+    "=",
+    [
+     "STATE_CENTRAL_CUBA",
+     "STATE_WESTERN_CUBA",
+     "STATE_EASTERN_CUBA",
+     "STATE_PUERTO_RICO",
+     "STATE_SANTO_DOMINGO"
+    ]
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.8"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ]
+    }
+   ]
+  }
+ ],
+ "GER": [
+  "=",
+  {
+   "geographic_region": [
+    "=",
+    "geographic_region_greater_germany"
+   ],
+   "is_major_formation": [
+    "=",
+    "yes"
+   ],
+   "unification_play": [
+    "=",
+    "dp_unify_germany"
+   ],
+   "leadership_play": [
+    "=",
+    "dp_leadership_germany"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.73"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "OR": [
+      "=",
+      {
+       "has_technology_researched": [
+        "=",
+        "pan-nationalism"
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "je_german_unification_idea_trigger_desc"
+         ],
+         "has_variable": [
+          "=",
+          "je_german_unification_idea"
+         ]
+        }
+       ]
+      }
+     ],
+     "custom_tooltip": [
+      [
+       "=",
+       {
+        "text": [
+         "=",
+         "no_confederation_of_the_rhine_tt"
+        ],
+        "NOT": [
+         "=",
+         {
+          "exists": [
+           "=",
+           "c:RHN"
+          ]
+         }
+        ]
+       }
+      ],
+      [
+       "=",
+       {
+        "text": [
+         "=",
+         "no_dual_or_triple_monarchy_tt"
+        ],
+        "NOR": [
+         "=",
+         {
+          "has_government_type": [
+           [
+            "=",
+            "gov_dual_monarchy"
+           ],
+           [
+            "=",
+            "gov_triple_monarchy"
+           ]
+          ]
+         }
+        ]
+       }
+      ]
+     ],
+     "NOT": [
+      "=",
+      {
+       "c:KUK": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ],
+   "max_num_formation_candidates": [
+    "=",
+    "3"
+   ],
+   "can_be_formation_candidate": [
+    "=",
+    {
+     "country_rank": [
+      ">=",
+      "rank_value:major_power"
+     ]
+    }
+   ],
+   "can_be_unification_target": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "has_government_type": [
+        [
+         "=",
+         "gov_dual_monarchy"
+        ],
+        [
+         "=",
+         "gov_triple_monarchy"
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "should_target_state_in_unification_play": [
+    "=",
+    {}
+   ]
+  }
+ ],
+ "ITA": [
+  "=",
+  {
+   "use_culture_states": [
+    "=",
+    "yes"
+   ],
+   "is_major_formation": [
+    "=",
+    "yes"
+   ],
+   "unification_play": [
+    "=",
+    "dp_unify_italy"
+   ],
+   "leadership_play": [
+    "=",
+    "dp_leadership_italy"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.7"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "has_technology_researched": [
+      "=",
+      "nationalism"
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "c:AUS": [
+        "?=",
+        "this"
+       ],
+       "c:KUK": [
+        "?=",
+        "this"
+       ],
+       "c:HRE": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "is_in_geographic_region": [
+      "=",
+      "geographic_region_italy_old"
+     ],
+     "OR": [
+      "=",
+      {
+       "country_has_primary_culture": [
+        [
+         "=",
+         "cu:north_italian"
+        ],
+        [
+         "=",
+         "cu:south_italian"
+        ]
+       ]
+      }
+     ],
+     "is_country_type": [
+      "=",
+      "recognized"
+     ],
+     "NOR": [
+      "=",
+      {
+       "c:AUS": [
+        "?=",
+        "this"
+       ],
+       "c:KUK": [
+        "?=",
+        "this"
+       ],
+       "c:HRE": [
+        "?=",
+        "this"
+       ]
+      }
+     ]
+    }
+   ],
+   "max_num_formation_candidates": [
+    "=",
+    "3"
+   ],
+   "can_be_formation_candidate": [
+    "=",
+    {
+     "country_rank": [
+      ">=",
+      "rank_value:minor_power"
+     ],
+     "NOR": [
+      "=",
+      {
+       "c:AUS": [
+        "?=",
+        "this"
+       ],
+       "c:KUK": [
+        "?=",
+        "this"
+       ],
+       "c:HRE": [
+        "?=",
+        "this"
+       ]
+      }
+     ],
+     "is_country_type": [
+      "=",
+      "recognized"
+     ],
+     "any_country_in_italy_old": [
+      "=",
+      {
+       "has_technology_researched": [
+        "=",
+        "nationalism"
+       ],
+       "percent": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ],
+   "can_be_unification_target": [
+    "=",
+    {
+     "NAND": [
+      "=",
+      {
+       "country_has_primary_culture": [
+        "=",
+        "cu:north_italian"
+       ],
+       "OR": [
+        "=",
+        {
+         "has_journal_entry": [
+          "=",
+          "je_danubian_federation"
+         ],
+         "c:KUK": [
+          "?=",
+          "this"
+         ],
+         "c:HRE": [
+          "?=",
+          "this"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "should_target_state_in_unification_play": [
+    "=",
+    {}
+   ]
+  }
+ ],
+ "SCA": [
+  "=",
+  {
+   "geographic_region": [
+    "=",
+    "geographic_region_scandinavia"
+   ],
+   "is_major_formation": [
+    "=",
+    "yes"
+   ],
+   "unification_play": [
+    "=",
+    "dp_unify_scandinavia"
+   ],
+   "leadership_play": [
+    "=",
+    "dp_leadership_scandinavia"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.7"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "is_in_geographic_region": [
+      "=",
+      "geographic_region_scandinavia"
+     ],
+     "OR": [
+      "=",
+      {
+       "country_has_primary_culture": [
+        [
+         "=",
+         "cu:swedish"
+        ],
+        [
+         "=",
+         "cu:danish"
+        ],
+        [
+         "=",
+         "cu:norwegian"
+        ],
+        [
+         "=",
+         "cu:icelandic"
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "max_num_formation_candidates": [
+    "=",
+    "3"
+   ],
+   "can_be_formation_candidate": [
+    "=",
+    {
+     "country_rank": [
+      ">=",
+      "rank_value:minor_power"
+     ],
+     "any_country_in_scandinavia": [
+      "=",
+      {
+       "has_technology_researched": [
+        "=",
+        "pan-nationalism"
+       ],
+       "percent": [
+        "=",
+        "1"
+       ]
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "FND": [
+  "=",
+  {
+   "geographic_region": [
+    "=",
+    "geographic_region_andean_federation"
+   ],
+   "is_major_formation": [
+    "=",
+    "yes"
+   ],
+   "unification_play": [
+    "=",
+    "dp_unify_andes"
+   ],
+   "leadership_play": [
+    "=",
+    "dp_leadership_andes"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.8"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "has_dlc_feature": [
+      "=",
+      "rp1_content"
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "has_journal_entry": [
+      "=",
+      "je_andean_federation"
+     ],
+     "is_in_geographic_region": [
+      "=",
+      "geographic_region_south_america"
+     ],
+     "OR": [
+      "=",
+      {
+       "country_has_primary_culture": [
+        [
+         "=",
+         "cu:north_andean"
+        ],
+        [
+         "=",
+         "cu:south_andean"
+        ]
+       ],
+       "AND": [
+        [
+         "=",
+         {
+          "exists": [
+           "=",
+           "cu:venezuelan"
+          ],
+          "country_has_primary_culture": [
+           "=",
+           "cu:venezuelan"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "exists": [
+           "=",
+           "cu:ecuadorian"
+          ],
+          "country_has_primary_culture": [
+           "=",
+           "cu:ecuadorian"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "exists": [
+           "=",
+           "cu:bolivian"
+          ],
+          "country_has_primary_culture": [
+           "=",
+           "cu:bolivian"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "exists": [
+           "=",
+           "cu:peruvian"
+          ],
+          "country_has_primary_culture": [
+           "=",
+           "cu:peruvian"
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "exists": [
+           "=",
+           "cu:chilean"
+          ],
+          "country_has_primary_culture": [
+           "=",
+           "cu:chilean"
+          ]
+         }
+        ]
+       ]
+      }
+     ]
+    }
+   ],
+   "max_num_formation_candidates": [
+    "=",
+    "3"
+   ],
+   "can_be_formation_candidate": [
+    "=",
+    {
+     "country_rank": [
+      ">=",
+      "rank_value:major_power"
+     ]
+    }
+   ],
+   "should_target_state_in_unification_play": [
+    "=",
+    {}
+   ]
+  }
+ ],
+ "YUG": [
+  "=",
+  {
+   "geographic_region": [
+    "=",
+    "geographic_region_yugoslavia"
+   ],
+   "is_major_formation": [
+    "=",
+    "yes"
+   ],
+   "unification_play": [
+    "=",
+    "dp_unify_yugoslavia"
+   ],
+   "leadership_play": [
+    "=",
+    "dp_leadership_yugoslavia"
+   ],
+   "required_states_fraction": [
+    "=",
+    "0.75"
+   ],
+   "ai_will_do": [
+    "=",
+    {
+     "always": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "potential": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "c:AUS": [
+        "?=",
+        "this"
+       ],
+       "c:KUK": [
+        "?=",
+        "this"
+       ]
+      }
+     ],
+     "trigger_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "c:BUL": [
+          "?=",
+          "this"
+         ]
+        }
+       ],
+       "has_variable": [
+        "=",
+        "bul_pursued_greater_yugoslavism"
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "always": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "possible": [
+    "=",
+    {
+     "NOR": [
+      "=",
+      {
+       "c:AUS": [
+        "?=",
+        "this"
+       ],
+       "c:KUK": [
+        "?=",
+        "this"
+       ],
+       "c:HRE": [
+        "?=",
+        "this"
+       ]
+      }
+     ],
+     "has_technology_researched": [
+      "=",
+      "pan-nationalism"
+     ],
+     "trigger_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "c:BUL": [
+          "?=",
+          "this"
+         ]
+        }
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "bulgaria_pursued_greater_yugoslavism_tt"
+         ],
+         "has_variable": [
+          "=",
+          "bul_pursued_greater_yugoslavism"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "max_num_formation_candidates": [
+    "=",
+    "3"
+   ],
+   "can_be_formation_candidate": [
+    "=",
+    {
+     "country_rank": [
+      ">=",
+      "rank_value:major_power"
+     ],
+     "NOR": [
+      "=",
+      {
+       "c:AUS": [
+        "?=",
+        "this"
+       ],
+       "c:KUK": [
+        "?=",
+        "this"
+       ],
+       "c:HRE": [
+        "?=",
+        "this"
+       ]
+      }
+     ],
+     "trigger_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "c:BUL": [
+          "?=",
+          "this"
+         ]
+        }
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "bulgaria_pursued_greater_yugoslavism_tt"
+         ],
+         "has_variable": [
+          "=",
+          "bul_pursued_greater_yugoslavism"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "can_be_unification_target": [
+    "=",
+    {
+     "is_in_geographic_region": [
+      "=",
+      "geographic_region_balkans"
+     ],
+     "NAND": [
+      "=",
+      {
+       "OR": [
+        [
+         "=",
+         {
+          "country_has_primary_culture": [
+           [
+            "=",
+            "cu:slovene"
+           ],
+           [
+            "=",
+            "cu:croat"
+           ],
+           [
+            "=",
+            "cu:serb"
+           ]
+          ]
+         }
+        ],
+        [
+         "=",
+         {
+          "has_journal_entry": [
+           "=",
+           "je_danubian_federation"
+          ],
+          "c:KUK": [
+           "?=",
+           "this"
+          ],
+          "c:HRE": [
+           "?=",
+           "this"
+          ]
+         }
+        ]
+       ]
+      }
+     ],
+     "trigger_if": [
+      "=",
+      {
+       "limit": [
+        "=",
+        {
+         "c:BUL": [
+          "?=",
+          "this"
+         ]
+        }
+       ],
+       "custom_tooltip": [
+        "=",
+        {
+         "text": [
+          "=",
+          "bulgaria_pursued_greater_yugoslavism_tt"
+         ],
+         "has_variable": [
+          "=",
+          "bul_pursued_greater_yugoslavism"
+         ]
+        }
+       ]
+      }
+     ],
+     "trigger_else": [
+      "=",
+      {
+       "always": [
+        "=",
+        "yes"
+       ]
+      }
+     ]
+    }
+   ],
+   "should_target_state_in_unification_play": [
+    "=",
+    {}
+   ]
+  }
+ ]
+}

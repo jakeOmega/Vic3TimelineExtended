@@ -1,0 +1,1766 @@
+{
+ "bg_manufacturing": [
+  "=",
+  {
+   "category": [
+    "=",
+    "urban"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "economy_of_scale": [
+    "=",
+    "yes"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "25000"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "0.25"
+   ],
+   "self_investment_chance_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_light_industry": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_manufacturing"
+   ],
+   "lens": [
+    "=",
+    "light_industry"
+   ],
+   "urbanization": [
+    "=",
+    "20"
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "3.0"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "1.5"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_heavy_industry": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_manufacturing"
+   ],
+   "lens": [
+    "=",
+    "heavy_industry"
+   ],
+   "urbanization": [
+    "=",
+    "20"
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "5.0"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "2.5"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_military_industry": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_manufacturing"
+   ],
+   "lens": [
+    "=",
+    "heavy_industry"
+   ],
+   "urbanization": [
+    "=",
+    "20"
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "5.0"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "2"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_agriculture": [
+  "=",
+  {
+   "category": [
+    "=",
+    "rural"
+   ],
+   "land_usage": [
+    "=",
+    "rural"
+   ],
+   "lens": [
+    "=",
+    "agriculture"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "25000"
+   ],
+   "economy_of_scale": [
+    "=",
+    "yes"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "1"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "2.0"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "0.75"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ],
+   "self_investment_chance_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_staple_crops": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_agriculture"
+   ]
+  }
+ ],
+ "bg_subsistence_agriculture": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_agriculture"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "auto_place_buildings": [
+    "=",
+    "yes"
+   ],
+   "is_subsistence": [
+    "=",
+    "yes"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "0"
+   ],
+   "default_building": [
+    "=",
+    "building_subsistence_farm"
+   ],
+   "fired_pops_become_radical": [
+    "=",
+    "no"
+   ],
+   "hires_unemployed_only": [
+    "=",
+    "yes"
+   ],
+   "ignores_productivity_when_hiring": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_ranching": [
+  "=",
+  {
+   "category": [
+    "=",
+    "rural"
+   ],
+   "land_usage": [
+    "=",
+    "rural"
+   ],
+   "lens": [
+    "=",
+    "agriculture"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "25000"
+   ],
+   "economy_of_scale": [
+    "=",
+    "yes"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "1"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "2.0"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "0.75"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ],
+   "self_investment_chance_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_subsistence_ranching": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_ranching"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "auto_place_buildings": [
+    "=",
+    "yes"
+   ],
+   "is_subsistence": [
+    "=",
+    "yes"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "0"
+   ],
+   "default_building": [
+    "=",
+    "building_subsistence_pasture"
+   ],
+   "fired_pops_become_radical": [
+    "=",
+    "no"
+   ],
+   "hires_unemployed_only": [
+    "=",
+    "yes"
+   ],
+   "ignores_productivity_when_hiring": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_plantations": [
+  "=",
+  {
+   "category": [
+    "=",
+    "rural"
+   ],
+   "land_usage": [
+    "=",
+    "rural"
+   ],
+   "economy_of_scale": [
+    "=",
+    "yes"
+   ],
+   "lens": [
+    "=",
+    "plantation"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "25000"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "1"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "3.0"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "1.25"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ],
+   "self_investment_chance_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_extraction": [
+  "=",
+  {
+   "category": [
+    "=",
+    "rural"
+   ],
+   "capped_by_resources": [
+    "=",
+    "yes"
+   ],
+   "economy_of_scale": [
+    "=",
+    "yes"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "25000"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ],
+   "self_investment_chance_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_mining": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_extraction"
+   ],
+   "lens": [
+    "=",
+    "mine"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "urbanization": [
+    "=",
+    "10"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "2"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "3.0"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "1.0"
+   ]
+  }
+ ],
+ "bg_gold_fields": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_extraction"
+   ],
+   "lens": [
+    "=",
+    "mine"
+   ],
+   "auto_place_buildings": [
+    "=",
+    "yes"
+   ],
+   "discoverable_resource": [
+    "=",
+    "yes"
+   ],
+   "depletable_resource": [
+    "=",
+    "yes"
+   ],
+   "always_self_owning": [
+    "=",
+    "yes"
+   ],
+   "pays_taxes": [
+    "=",
+    "no"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0"
+   ],
+   "default_building": [
+    "=",
+    "building_gold_field"
+   ],
+   "fired_pops_become_radical": [
+    "=",
+    "no"
+   ]
+  }
+ ],
+ "bg_logging": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_extraction"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "default_building": [
+    "=",
+    "building_logging_camp"
+   ],
+   "lens": [
+    "=",
+    "forestry"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "1"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "2.0"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "1.0"
+   ]
+  }
+ ],
+ "bg_rubber": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_extraction"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "discoverable_resource": [
+    "=",
+    "yes"
+   ],
+   "depletable_resource": [
+    "=",
+    "no"
+   ],
+   "default_building": [
+    "=",
+    "building_rubber_plantation"
+   ],
+   "lens": [
+    "=",
+    "forestry"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "1"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "2.0"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "1.0"
+   ]
+  }
+ ],
+ "bg_whaling": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_extraction"
+   ],
+   "default_building": [
+    "=",
+    "building_whaling_station"
+   ],
+   "lens": [
+    "=",
+    "fishing"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "1"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "4.0"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "0.75"
+   ]
+  }
+ ],
+ "bg_fishing": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_extraction"
+   ],
+   "default_building": [
+    "=",
+    "building_fishing_wharf"
+   ],
+   "lens": [
+    "=",
+    "fishing"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "1"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "2.5"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "0.75"
+   ]
+  }
+ ],
+ "bg_oil_extraction": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_extraction"
+   ],
+   "discoverable_resource": [
+    "=",
+    "yes"
+   ],
+   "default_building": [
+    "=",
+    "building_oil_rig"
+   ],
+   "lens": [
+    "=",
+    "mine"
+   ],
+   "urbanization": [
+    "=",
+    "10"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "2"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "4.0"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "1.0"
+   ]
+  }
+ ],
+ "bg_service": [
+  "=",
+  {
+   "category": [
+    "=",
+    "urban"
+   ],
+   "land_usage": [
+    "=",
+    "urban"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "auto_place_buildings": [
+    "=",
+    "yes"
+   ],
+   "always_self_owning": [
+    "=",
+    "yes"
+   ],
+   "economy_of_scale": [
+    "=",
+    "yes"
+   ],
+   "default_building": [
+    "=",
+    "building_urban_center"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "25000"
+   ]
+  }
+ ],
+ "bg_urban_facilities": [
+  "=",
+  {
+   "category": [
+    "=",
+    "urban"
+   ],
+   "lens": [
+    "=",
+    "development"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "economy_of_scale": [
+    "=",
+    "yes"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "25000"
+   ],
+   "urbanization": [
+    "=",
+    "20"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "2"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "4.0"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "0.25"
+   ]
+  }
+ ],
+ "bg_arts": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_urban_facilities"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0.5"
+   ]
+  }
+ ],
+ "bg_power": [
+  "=",
+  {
+   "category": [
+    "=",
+    "development"
+   ],
+   "lens": [
+    "=",
+    "development"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "economy_of_scale": [
+    "=",
+    "yes"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "25000"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "default_auto_expand_rule": [
+      "=",
+      "yes"
+     ]
+    }
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "1.5"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "0.5"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "2"
+   ],
+   "urbanization": [
+    "=",
+    "10"
+   ],
+   "self_investment_chance_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_government": [
+  "=",
+  {
+   "category": [
+    "=",
+    "development"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "is_government_funded": [
+    "=",
+    "yes"
+   ],
+   "economy_of_scale": [
+    "=",
+    "yes"
+   ],
+   "lens": [
+    "=",
+    "development"
+   ],
+   "urbanization": [
+    "=",
+    "20"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "1"
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "3.0"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_technology": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_government"
+   ]
+  }
+ ],
+ "bg_bureaucracy": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_government"
+   ]
+  }
+ ],
+ "bg_naval_administration": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_navy"
+   ],
+   "economy_of_scale": [
+    "=",
+    "no"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0.2"
+   ]
+  }
+ ],
+ "bg_naval_fortification": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_navy"
+   ],
+   "economy_of_scale": [
+    "=",
+    "no"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0.2"
+   ]
+  }
+ ],
+ "bg_trade": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_private_infrastructure"
+   ],
+   "stateregion_max_level": [
+    "=",
+    "no"
+   ],
+   "lens": [
+    "=",
+    "trade"
+   ],
+   "subsidized": [
+    "=",
+    "no"
+   ],
+   "has_trade_revenue": [
+    "=",
+    "yes"
+   ],
+   "economy_of_scale": [
+    "=",
+    "no"
+   ],
+   "default_building": [
+    "=",
+    "building_trade_center"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0.5"
+   ]
+  }
+ ],
+ "bg_ship_construction": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_light_industry"
+   ],
+   "urbanization": [
+    "=",
+    "20"
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "5.0"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "2"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ],
+   "builds_ships": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_financial_districts": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_owner_buildings"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "bg_manor_houses": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_owner_buildings"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0.0"
+   ]
+  }
+ ],
+ "bg_company_headquarter": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_owner_buildings"
+   ],
+   "company_headquarter": [
+    "=",
+    "yes"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "bg_company_regional_headquarter": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_owner_buildings"
+   ],
+   "regional_company_headquarter": [
+    "=",
+    "yes"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "bg_owner_buildings": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_urban_facilities"
+   ],
+   "min_productivity_to_hire": [
+    "=",
+    "10.0"
+   ],
+   "category": [
+    "=",
+    "urban"
+   ],
+   "lens": [
+    "=",
+    "trade"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "auto_place_buildings": [
+    "=",
+    "yes"
+   ],
+   "owns_other_buildings": [
+    "=",
+    "yes"
+   ],
+   "always_self_owning": [
+    "=",
+    "yes"
+   ],
+   "ignores_productivity_when_hiring": [
+    "=",
+    "yes"
+   ],
+   "proportionality_limit": [
+    "=",
+    "1.0"
+   ],
+   "economy_of_scale": [
+    "=",
+    "no"
+   ],
+   "default_building": [
+    "=",
+    "building_financial_district"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "10000"
+   ],
+   "urbanization": [
+    "=",
+    "0"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0.1"
+   ],
+   "fired_pops_become_radical": [
+    "=",
+    "no"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ]
+  }
+ ],
+ "bg_infrastructure": [
+  "=",
+  {
+   "category": [
+    "=",
+    "development"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "lens": [
+    "=",
+    "development"
+   ],
+   "stateregion_max_level": [
+    "=",
+    "yes"
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "2.0"
+   ],
+   "foreign_investment_ai_factor": [
+    "=",
+    "0.75"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ],
+   "self_investment_chance_modifier": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_public_infrastructure": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_infrastructure"
+   ],
+   "is_government_funded": [
+    "=",
+    "yes"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "bg_construction": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_public_infrastructure"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "2"
+   ],
+   "lens": [
+    "=",
+    "development"
+   ],
+   "is_government_funded": [
+    "=",
+    "yes"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ],
+   "economy_of_scale_ai_factor": [
+    "=",
+    "5.0"
+   ]
+  }
+ ],
+ "bg_private_infrastructure": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_infrastructure"
+   ],
+   "is_government_funded": [
+    "=",
+    "no"
+   ],
+   "subsidized": [
+    "=",
+    "yes"
+   ],
+   "cash_reserves_max": [
+    "=",
+    "25000"
+   ],
+   "urbanization": [
+    "=",
+    "5"
+   ]
+  }
+ ],
+ "bg_canals": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_infrastructure"
+   ],
+   "lens": [
+    "=",
+    "special"
+   ],
+   "is_government_funded": [
+    "=",
+    "yes"
+   ],
+   "inheritable_construction": [
+    "=",
+    "yes"
+   ],
+   "urbanization": [
+    "=",
+    "100"
+   ]
+  }
+ ],
+ "bg_monuments": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_government"
+   ],
+   "lens": [
+    "=",
+    "special"
+   ],
+   "inheritable_construction": [
+    "=",
+    "yes"
+   ],
+   "economy_of_scale": [
+    "=",
+    "no"
+   ],
+   "default_building": [
+    "=",
+    "building_eiffel_tower"
+   ]
+  }
+ ],
+ "bg_military": [
+  "=",
+  {
+   "category": [
+    "=",
+    "development"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "is_government_funded": [
+    "=",
+    "yes"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0.2"
+   ],
+   "lens": [
+    "=",
+    "development"
+   ],
+   "urbanization": [
+    "=",
+    "2"
+   ],
+   "construction_efficiency_modifier": [
+    "=",
+    "yes"
+   ],
+   "is_military": [
+    "=",
+    "yes"
+   ]
+  }
+ ],
+ "bg_army": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_military"
+   ]
+  }
+ ],
+ "bg_conscription": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_army"
+   ],
+   "urbanization": [
+    "=",
+    "0"
+   ],
+   "fired_pops_become_radical": [
+    "=",
+    "no"
+   ]
+  }
+ ],
+ "bg_navy": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_military"
+   ]
+  }
+ ],
+ "bg_naval_logistics_center": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_navy"
+   ],
+   "urbanization": [
+    "=",
+    "2"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "auto_place_buildings": [
+    "=",
+    "yes"
+   ],
+   "ignores_productivity_when_hiring": [
+    "=",
+    "yes"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "proportionality_limit": [
+    "=",
+    "1.0"
+   ],
+   "fired_pops_become_radical": [
+    "=",
+    "no"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0.1"
+   ],
+   "default_building": [
+    "=",
+    "building_naval_logistics_center"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ]
+  }
+ ],
+ "bg_army_logistics_center": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_army"
+   ],
+   "urbanization": [
+    "=",
+    "2"
+   ],
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "auto_place_buildings": [
+    "=",
+    "yes"
+   ],
+   "ignores_productivity_when_hiring": [
+    "=",
+    "yes"
+   ],
+   "can_use_slaves": [
+    "=",
+    "yes"
+   ],
+   "proportionality_limit": [
+    "=",
+    "1.0"
+   ],
+   "fired_pops_become_radical": [
+    "=",
+    "no"
+   ],
+   "infrastructure_usage_per_level": [
+    "=",
+    "0.1"
+   ],
+   "default_building": [
+    "=",
+    "building_army_logistics_center"
+   ],
+   "should_auto_expand": [
+    "=",
+    {
+     "always": [
+      "=",
+      "no"
+     ]
+    }
+   ]
+  }
+ ],
+ "bg_skyscraper": [
+  "=",
+  {
+   "parent_group": [
+    "=",
+    "bg_government"
+   ],
+   "economy_of_scale": [
+    "=",
+    "no"
+   ]
+  }
+ ],
+ "bg_monuments_hidden": [
+  "=",
+  {
+   "always_possible": [
+    "=",
+    "yes"
+   ],
+   "is_shown_in_outliner": [
+    "=",
+    "no"
+   ]
+  }
+ ],
+ "bg_iron_mining": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_iron_mine"
+   ]
+  }
+ ],
+ "bg_sulfur_mining": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_sulfur_mine"
+   ]
+  }
+ ],
+ "bg_coal_mining": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_coal_mine"
+   ]
+  }
+ ],
+ "bg_gold_mining": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_gold_mine"
+   ]
+  }
+ ],
+ "bg_lead_mining": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_lead_mine"
+   ]
+  }
+ ],
+ "bg_rye_farms": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_rye_farm"
+   ]
+  }
+ ],
+ "bg_rice_farms": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_rice_farm"
+   ]
+  }
+ ],
+ "bg_maize_farms": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_maize_farm"
+   ]
+  }
+ ],
+ "bg_wheat_farms": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_wheat_farm"
+   ]
+  }
+ ],
+ "bg_millet_farms": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_millet_farm"
+   ]
+  }
+ ],
+ "bg_vineyard_plantations": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_vineyard"
+   ]
+  }
+ ],
+ "bg_cotton_plantations": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_cotton_plantation"
+   ]
+  }
+ ],
+ "bg_livestock_ranches": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_livestock_ranch"
+   ]
+  }
+ ],
+ "bg_tobacco_plantations": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_tobacco_plantation"
+   ]
+  }
+ ],
+ "bg_banana_plantations": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_banana_plantation"
+   ]
+  }
+ ],
+ "bg_coffee_plantations": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_coffee_plantation"
+   ]
+  }
+ ],
+ "bg_silk_plantations": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_silk_plantation"
+   ]
+  }
+ ],
+ "bg_dye_plantations": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_dye_plantation"
+   ]
+  }
+ ],
+ "bg_opium_plantations": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_opium_plantation"
+   ]
+  }
+ ],
+ "bg_tea_plantations": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_tea_plantation"
+   ]
+  }
+ ],
+ "bg_sugar_plantations": [
+  "=",
+  {
+   "default_building": [
+    "=",
+    "building_sugar_plantation"
+   ]
+  }
+ ]
+}
