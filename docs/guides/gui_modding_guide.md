@@ -1653,7 +1653,7 @@ Currently 22 GUI files at the top of `gui/`: 19 full-file replacements of vanill
 |---|---|---|
 | `building_browser_panel.gui` | Building browser | Custom building display |
 | `building_details_panel.gui` | Building details | Enhanced building info |
-| `construction_panel.gui` | Construction queue | Public/private construction slider |
+| `construction_panel.gui` | Construction queue | Construction-market section: government purchase stepper, live read-out, collapsible explainer |
 | `goods_state_panel.gui` | Goods by state | Modified goods display |
 | `market_panel.gui` | Market panel | Widened panel; Top Trade Partners table and import/export partner charts |
 | `military_formation_panel.gui` | Military formation | Custom military info |
