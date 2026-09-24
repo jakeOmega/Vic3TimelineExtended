@@ -176,12 +176,25 @@ universal_aptitude_traits_rule = {
 }
 
 # Free Market Construction (docs/systems/mod_systems.md, "Construction as a
-# Market Good"). Enabled: construction is a market good; Construction Sectors
-# sell it, the government and investors buy it, Construction Sites turn it into
-# points, buildings pay construction as maintenance, and the private share
-# follows the two purchases. Disabled: vanilla-style construction; the
-# Construction Site is the buildable Construction Sector and provides points
-# directly, no construction good anywhere, laws set the private share.
+# Market Good"). Four settings, three of them market games:
+#   enabled         construction is a market good; Construction Sectors sell
+#                   it, the government and investors buy it, Construction
+#                   Sites turn it into points, buildings pay construction as
+#                   maintenance (and a retooling surcharge on it after a
+#                   production-method switch, pm_retooling in
+#                   extra_modifiers.txt), and the private share follows the
+#                   two purchases.
+#   no_retooling    the market with maintenance, without the retooling
+#                   surcharge: script removes pm_retooling as the engine
+#                   applies it (te_pm_retooling_waived).
+#   no_maintenance  the market without construction maintenance: pmg_maintenance
+#                   runs pm_no_maintenance, as in direct games. Retooling has
+#                   no construction to multiply then; script removes the
+#                   modifier anyway, so no building shows a penalty.
+#   disabled        vanilla-style construction; the Construction Site is the
+#                   buildable Construction Sector and provides points
+#                   directly, no construction good anywhere, laws set the
+#                   private share.
 #
 # The production methods of each mode are locked with vanilla's rule flags
 # (as monument_effects does in vanilla 00_game_rules.txt):
@@ -195,10 +208,11 @@ universal_aptitude_traits_rule = {
 # game_rules.md): a flat base of construction, so a country without
 # Construction Sites can still build them.
 #
-# Script reads the rule through te_free_market_construction_on / _off
-# (common/scripted_triggers/te_construction_market_triggers.txt), never
-# directly (has_game_rule tests the setting name; the flag named after each
-# setting follows this file's convention).
+# Script reads the rule through te_free_market_construction_on / _off and
+# te_pm_retooling_waived (common/scripted_triggers/
+# te_construction_market_triggers.txt), never directly (has_game_rule tests
+# the setting name; the flag named after each setting follows this file's
+# convention).
 free_market_construction_rule = {
 	default = free_market_construction_enabled
 
@@ -217,6 +231,57 @@ free_market_construction_rule = {
 		# Maintenance, company and Engineering & Logistics methods keep the
 		# construction good
 		flag = disable_pm_no_maintenance
+		flag = disable_pm_disney_world_direct
+		flag = disable_pm_generic_industrial_city_direct
+		flag = disable_pm_generic_monument_to_industry_direct
+		flag = disable_pm_principle_engineering_and_logistics_direct
+		flag = disable_pm_engineering_and_logistics_no_effect_direct
+	}
+
+	# The enabled setting's methods; the retooling surcharge is removed by
+	# script instead (te_pm_retooling_waived).
+	free_market_construction_no_retooling = {
+		flag = free_market_construction_no_retooling
+
+		# Construction Site: market method only
+		flag = disable_pm_te_direct_construction_wooden
+		flag = disable_pm_te_direct_construction_iron_frame
+		flag = disable_pm_te_direct_construction_steel_frame
+		flag = disable_pm_te_direct_construction_arc_welded
+		flag = disable_pm_te_direct_construction_reinforced_concrete
+		flag = disable_pm_te_direct_construction_advanced
+		flag = disable_pm_te_direct_construction_nanomaterial
+
+		# Maintenance, company and Engineering & Logistics methods keep the
+		# construction good
+		flag = disable_pm_no_maintenance
+		flag = disable_pm_disney_world_direct
+		flag = disable_pm_generic_industrial_city_direct
+		flag = disable_pm_generic_monument_to_industry_direct
+		flag = disable_pm_principle_engineering_and_logistics_direct
+		flag = disable_pm_engineering_and_logistics_no_effect_direct
+	}
+
+	# The enabled setting's methods except maintenance, which is the direct
+	# setting's.
+	free_market_construction_no_maintenance = {
+		flag = free_market_construction_no_maintenance
+
+		# Construction Site: market method only
+		flag = disable_pm_te_direct_construction_wooden
+		flag = disable_pm_te_direct_construction_iron_frame
+		flag = disable_pm_te_direct_construction_steel_frame
+		flag = disable_pm_te_direct_construction_arc_welded
+		flag = disable_pm_te_direct_construction_reinforced_concrete
+		flag = disable_pm_te_direct_construction_advanced
+		flag = disable_pm_te_direct_construction_nanomaterial
+
+		# No construction maintenance
+		flag = disable_pm_maintenance
+		flag = force_pm_no_maintenance
+
+		# Company and Engineering & Logistics methods keep the construction
+		# good: it is their recipe, not upkeep
 		flag = disable_pm_disney_world_direct
 		flag = disable_pm_generic_industrial_city_direct
 		flag = disable_pm_generic_monument_to_industry_direct

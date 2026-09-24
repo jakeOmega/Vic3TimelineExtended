@@ -541,7 +541,7 @@ IMAGES = {
             "te_construction_market_pulse_events.1", "te_construction_market_pulse_events.2",
             "te_construction_market_pulse_events.3", "te_construction_market_recalc_events.1",
             "te_construction_market_recalc_events.2", "te_construction_market_building_events.1",
-            "te_construction_market_building_events.2",
+            "te_construction_market_building_events.2", "te_construction_market_building_events.3",
         ],
     },
 

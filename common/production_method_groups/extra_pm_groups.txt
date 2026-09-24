@@ -1386,8 +1386,9 @@ REPLACE_OR_CREATE:pmg_maintenance = {
 	ai_selection = most_productive
 	is_hidden_when_unavailable = yes
 
-	# pm_no_maintenance: free_market_construction_rule disabled only (forced
-	# there, disabled otherwise). te_construction_market_pms.txt.
+	# pm_no_maintenance: free_market_construction_rule's no_maintenance and
+	# disabled settings only (forced there, disabled otherwise).
+	# te_construction_market_pms.txt.
 	production_methods = {
 		pm_maintenance
 		pm_no_maintenance
