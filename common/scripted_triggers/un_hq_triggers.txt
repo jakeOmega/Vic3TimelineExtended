@@ -1,0 +1,13 @@
+﻿# ============================================================================
+# UN HEADQUARTERS TRIGGERS
+# ============================================================================
+
+# Scope: country. True for the UN headquarters host, global_var:un_hq_country:
+# the only country that may build building_un_headquarters. False while the
+# variable is unset (UN not founded, or no members left) or names a country
+# that no longer exists. The has_global_variable guard comes first so an unset
+# variable is never read. See common/scripted_effects/un_hq_effects.txt.
+un_hq_is_host = {
+	has_global_variable = un_hq_country
+	global_var:un_hq_country ?= THIS
+}

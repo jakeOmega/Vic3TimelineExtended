@@ -3529,6 +3529,11 @@ Intent: "this state already has the HQ, OR no state anywhere has one." Reality: 
 
 **For genuinely global checks**, use a single source of truth (a global variable identifying the unique holder, e.g. `owner = { this = global_var:un_hq_country }`) or wrap the iterator: `any_country = { any_state = { ... } }`. Single-source-of-truth comparisons also self-heal in saves where stale per-country flags exist.
 
+**A holder check is still not "one per world"** — the HQ kept duplicating after the global-variable fix, for two reasons:
+
+- **`base_values` max levels are per state.** `state_building_un_headquarters_max_level_add = 1` in `base_values` reaches every state of every country, so the host could build one HQ in *each* of its states. A holder check needs `building_unique_per_owner_potential` beside it.
+- **`potential` only gates construction.** A building whose `potential` stops holding keeps running, modifiers and all (the reason `remove_invalid_buildings` exists). When the holder can change (the HQ passes on when the host leaves the UN, or its state is conquered), the old holder's building must be removed by script: `common/scripted_effects/un_hq_effects.txt`, run on withdrawal, from `on_state_owner_change` and monthly.
+
 ## Event Option Triggers Must Cover the Event's Trigger Surface
 
 If an event fires but **none** of its options' `trigger = { ... }` blocks match for the receiving country, the engine renders the event with **no clickable button** — the player is stuck. Vic3 doesn't auto-fall-back to `default_option = yes` when its trigger fails.

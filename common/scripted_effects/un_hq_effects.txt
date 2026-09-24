@@ -1,0 +1,182 @@
+﻿# ============================================================================
+# UN HEADQUARTERS — one host, one building
+# ============================================================================
+# The UN has exactly one headquarters host, global_var:un_hq_country (the
+# founder, until it leaves the UN), and at most one building_un_headquarters
+# in the whole world, in the host's territory.
+#
+# The building's potential (common/buildings/wonders.txt) only stops the
+# host from starting a second one. It cannot touch a building that already
+# stands: an HQ left behind in a country that stopped hosting keeps running,
+# country modifiers and all, because the engine never removes a building
+# whose potential stops holding. Before these effects that was how a second
+# country came to own one — the HQ passed to a new host on withdrawal, the
+# new host built its own, and the old host's stayed up. So:
+#
+#   un_hq_assign_host              picks the next host (withdrawal, vacancy)
+#   un_hq_enforce_single_building  removes every HQ but the host's one
+#   un_hq_monthly_update           both, from the global monthly pulse
+#
+# Called from un_leave_button (un_buttons.txt), un_hq_on_state_owner_change
+# and un_global_authority_on_action (un_on_actions.txt).
+# ============================================================================
+
+# Scope: country. Makes this country the headquarters host.
+un_hq_make_host = {
+	je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
+	set_global_variable = { name = un_hq_country value = THIS }
+}
+
+# Scope: any. Hands the headquarters from the current host to a random member
+# great power, or to a random member of any rank when no other great power is
+# in the UN. With no other member at all it clears un_hq_country, so nobody
+# holds building rights for an HQ the UN no longer has; un_hq_monthly_update
+# seats the next member.
+#
+# The outgoing host is excluded by un_hq_is_host, not by its membership.
+# un_leave_button removes un_member_modifier just before calling this, and a
+# remove_modifier is not visible to has_modifier later in the same effect
+# block (a scripted effect is inlined into its caller), so the leaver can
+# still read as a member here. The variable is written only after the pick,
+# so it still names the outgoing host; when it is unset or names a country
+# that no longer exists, un_hq_is_host is false and nobody is excluded.
+un_hq_assign_host = {
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
+		je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
+	}
+	if = {
+		limit = {
+			any_country = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				country_rank >= rank_value:great_power
+				NOT = { un_hq_is_host = yes }
+			}
+		}
+		random_country = {
+			limit = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				country_rank >= rank_value:great_power
+				NOT = { un_hq_is_host = yes }
+			}
+			un_hq_make_host = yes
+		}
+	}
+	else_if = {
+		limit = {
+			any_country = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				NOT = { un_hq_is_host = yes }
+			}
+		}
+		random_country = {
+			limit = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				NOT = { un_hq_is_host = yes }
+			}
+			un_hq_make_host = yes
+		}
+	}
+	else = {
+		remove_global_variable = un_hq_country
+	}
+}
+
+# Scope: any. Leaves at most one building_un_headquarters in the world.
+#   1. Every HQ outside the host's territory goes: a former host's, one in a
+#      state that was conquered or released, or all of them while there is no
+#      live host.
+#   2. If the host has more than one (pre-fix saves, when each of its states
+#      could hold one), it keeps the one in its capital, or an arbitrary one
+#      when the capital has none.
+un_hq_enforce_single_building = {
+	if = {
+		limit = {
+			has_global_variable = un_hq_country
+			exists = global_var:un_hq_country
+		}
+		every_country = {
+			limit = {
+				NOT = { un_hq_is_host = yes }
+				any_scope_state = { has_building = building_un_headquarters }
+			}
+			every_scope_state = {
+				limit = { has_building = building_un_headquarters }
+				remove_building = building_un_headquarters
+			}
+		}
+		global_var:un_hq_country = {
+			if = {
+				limit = {
+					any_scope_state = {
+						count >= 2
+						has_building = building_un_headquarters
+					}
+				}
+				if = {
+					limit = { capital ?= { has_building = building_un_headquarters } }
+					capital = { save_scope_as = un_hq_keep_state }
+				}
+				else = {
+					random_scope_state = {
+						limit = { has_building = building_un_headquarters }
+						save_scope_as = un_hq_keep_state
+					}
+				}
+				every_scope_state = {
+					limit = {
+						has_building = building_un_headquarters
+						NOT = { this = scope:un_hq_keep_state }
+					}
+					remove_building = building_un_headquarters
+				}
+			}
+		}
+	}
+	else = {
+		every_country = {
+			limit = { any_scope_state = { has_building = building_un_headquarters } }
+			every_scope_state = {
+				limit = { has_building = building_un_headquarters }
+				remove_building = building_un_headquarters
+			}
+		}
+	}
+}
+
+# Scope: none (global monthly pulse, UN founded). Re-seats the host when there
+# is none, when it no longer exists, or when it is no longer a member (saves
+# from before withdrawal handed the HQ on reliably), strips the host modifier
+# from anyone else, then enforces the single building.
+un_hq_monthly_update = {
+	if = {
+		limit = { NOT = { has_global_variable = un_hq_country } }
+		un_hq_assign_host = yes
+	}
+	else_if = {
+		limit = { NOT = { exists = global_var:un_hq_country } }
+		un_hq_assign_host = yes
+	}
+	else_if = {
+		limit = {
+			global_var:un_hq_country = {
+				NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			}
+		}
+		un_hq_assign_host = yes
+	}
+	if = {
+		limit = {
+			has_global_variable = un_hq_country
+			exists = global_var:un_hq_country
+		}
+		every_country = {
+			limit = {
+				NOT = { un_hq_is_host = yes }
+				je:je_united_nations ?= { has_modifier = un_headquarters_modifier }
+			}
+			je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
+		}
+	}
+	un_hq_enforce_single_building = yes
+}

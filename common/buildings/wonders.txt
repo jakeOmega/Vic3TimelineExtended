@@ -16,11 +16,15 @@ building_un_headquarters = {
 	}
 	required_construction = construction_cost_mega_high
 	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	# One HQ in the world, and only the host (global_var:un_hq_country) may
+	# build it. The max level of 1 comes from base_values, which every country
+	# carries, so it is 1 per STATE: without the per-owner guard the host could
+	# put an HQ in each of its states, stacking pm_un_headquarters' country
+	# modifiers. HQs the host no longer owns (a former host's, a conquered one)
+	# can't be blocked from here; un_hq_enforce_single_building removes them.
 	potential = {
-		owner = {
-			has_global_variable = un_hq_country
-			this = global_var:un_hq_country
-		}
+		owner = { un_hq_is_host = yes }
+		building_unique_per_owner_potential = { BUILDING_TYPE = building_un_headquarters }
 	}
 }
 

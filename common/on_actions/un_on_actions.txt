@@ -341,6 +341,29 @@ un_global_authority_on_action = {
 			# the register (un_mandate_effects.txt). No-op until the first
 			# mandate is issued.
 			un_mandates_monthly_update = yes
+
+			# Headquarters upkeep: a live member hosts, and exactly one HQ
+			# building stands, in the host's territory (un_hq_effects.txt).
+			un_hq_monthly_update = yes
+		}
+	}
+}
+
+# A state holding the UN Headquarters changed hands (conquest, cession,
+# release, annexation of the host). Root = state. An HQ outside the host's
+# territory goes at once rather than at the next monthly pulse, so the
+# conqueror never runs one and the host can rebuild straight away.
+on_state_owner_change = {
+	on_actions = {
+		un_hq_on_state_owner_change
+	}
+}
+
+un_hq_on_state_owner_change = {
+	effect = {
+		if = {
+			limit = { has_building = building_un_headquarters }
+			un_hq_enforce_single_building = yes
 		}
 	}
 }
