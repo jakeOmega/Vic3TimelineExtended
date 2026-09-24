@@ -946,4 +946,58 @@ flowcontainer = {
 			}
 		}
 	}
+
+	widget_je_st_res_inventory_row = {
+		datacontext = "[GetScriptedGui('st_res_adjust_fertilizer_sgui')]"
+		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
+		tooltip = "st_res_row_fertilizer_tooltip"
+
+		blockoverride "row_name" { text = "st_res_row_fertilizer_name" }
+		blockoverride "row_amount" { text = "st_res_row_fertilizer_amount" }
+		blockoverride "row_status" { text = "st_res_row_fertilizer_status" }
+		blockoverride "row_flow" { text = "st_res_row_fertilizer_flow" }
+		blockoverride "row_bar_value" {
+			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_fertilizer_fill_pct'))]"
+		}
+		blockoverride "row_policy_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_policy_open_fertilizer' )]"
+			tooltip = "st_res_row_policy_toggle_tooltip"
+		}
+		blockoverride "row_policy" { text = "st_res_row_fertilizer_policy" }
+		blockoverride "row_policy_reason" { text = "st_res_row_fertilizer_policy_reason" }
+		blockoverride "row_policy_panel" {
+			widget_je_st_res_policy_panel = {
+				blockoverride "policy_panel_context" {
+					datacontext = "[GetScriptedGui('st_res_policy_fertilizer_sgui')]"
+				}
+				blockoverride "policy_panel_visible" {
+					visible = "[GetVariableSystem.Exists( 'st_res_policy_open_fertilizer' )]"
+				}
+				blockoverride "policy_value_buy_thr" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_buy_thr').GetValue|+0]"
+				}
+				blockoverride "policy_value_sell_thr" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_sell_thr').GetValue|+0]"
+				}
+				blockoverride "policy_value_max_flow" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_max_flow').GetValue|0]"
+				}
+				blockoverride "policy_value_floor_pct" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_floor_pct').GetValue|0]"
+				}
+				blockoverride "policy_value_ceil_pct" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_ceil_pct').GetValue|0]"
+				}
+				blockoverride "policy_value_budget" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_budget').GetValue|0]"
+				}
+				blockoverride "policy_value_price_memory" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_price_memory').GetValue|0]"
+				}
+				blockoverride "policy_value_ramp" {
+					text = "[JournalEntry.GetCountry.MakeScope.Var('st_res_fertilizer_ramp').GetValue|0]"
+				}
+			}
+		}
+	}
 }

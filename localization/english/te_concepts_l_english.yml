@@ -2084,6 +2084,8 @@
  st_res_artillery_store_flow_desc:0 "This hub is purchasing artillery for the strategic reserve."
  st_res_artillery_withdraw_flow_desc:0 "This hub is releasing artillery from the strategic reserve."
  st_res_cycle_step_size_button_desc:0 "Change the reserve rate adjustment step. Current step: [ROOT.GetCountry.MakeScope.ScriptValue('st_res_adjust_step_value')|0]. Cycles 1 -> 10 -> 100 -> 1000 -> 10000 -> 1."
+ st_res_fertilizer_store_flow_desc:0 "This hub is purchasing chemicals for the strategic reserve."
+ st_res_fertilizer_withdraw_flow_desc:0 "This hub is releasing chemicals from the strategic reserve."
  st_res_grain_store_flow_desc:0 "This hub is purchasing grain for the strategic reserve."
  st_res_grain_withdraw_flow_desc:0 "This hub is releasing grain from the strategic reserve."
  st_res_oil_store_flow_desc:0 "This hub is purchasing oil for the strategic reserve."

@@ -312,7 +312,7 @@ Most of the per-good work is now one line added to an existing `$GOOD$`-paramete
 
 Its position in the hub branch matters too — after `st_res_apply_weekly_good_effect` (so last week's movement is booked first) and before the shared `st_res_refresh_hub_flow_effect` / `st_res_clamp_stockpiles_effect` tail (so the rate it picks is the one the hub trades on next week). The tail still runs **once**, not once per good.
 
-For `st_res_ai_seed_good_effect`, pick the AI's policy: `3` (Stabilize Prices) for a civilian good whose price the AI should smooth, `1` (Buy When Cheap) for war materiel. Grain is the only `3` today.
+For `st_res_ai_seed_good_effect`, pick the AI's policy: `3` (Stabilize Prices) for a civilian good whose price the AI should smooth, `1` (Buy When Cheap) for war materiel. Grain and `fertilizer` (Chemicals) are the only `3`s today.
 
 The twelve per-good policy settings need **no** new init code — `st_res_init_good_effect` seeds them behind its two `has_variable` guards, and `st_res_reset_good_vars_effect` resets them (and removes the running price average so it re-seeds from the live price), all already `$GOOD$`-parameterized.
 

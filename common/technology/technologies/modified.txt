@@ -20,12 +20,14 @@ INJECT:intensive_agriculture = {
 INJECT:improved_fertilizer = {
 	modifier = {
 		state_arable_land_mult = 0.15
+		country_st_res_fertilizer_decay_add = -0.01 # purer, drier grades
 	}
 }
 
 INJECT:nitrogen_fixation = {
 	modifier = {
 		state_arable_land_mult = 0.30
+		country_st_res_fertilizer_decay_add = -0.01 # Haber-Bosch product in steel tanks and drums
 	}
 }
 

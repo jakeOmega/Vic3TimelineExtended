@@ -192,6 +192,10 @@ pollution_control = {
 	texture = "gfx/interface/icons/invention_icons/mass_communication.dds"
 	category = society
 
+	modifier = {
+		country_st_res_fertilizer_decay_add = -0.0025
+	}
+
 	unlocking_technologies = {
 		advanced_agricultural_statistics
 		public_works_programs
@@ -248,6 +252,7 @@ plastic_mass_production = {
 
 	modifier = {
 		country_institution_ministry_of_consumer_protection_max_investment_add = 1
+		country_st_res_fertilizer_decay_add = -0.005
 	}
 
 	unlocking_technologies = {

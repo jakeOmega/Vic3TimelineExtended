@@ -328,6 +328,18 @@ goods_input_aeroplanes_mult = {
 	}
 }
 
+# Vanilla registers neither fertilizer mult axis; goods_output_fertilizer_mult is
+# registered above. The Strategic Reserve's st_res_fertilizer_store_flow needs
+# the input axis too, or the hub's chemicals intake silently no-ops.
+goods_input_fertilizer_mult = {
+	color = bad
+	percent = yes
+
+	game_data = {
+		ai_value = 250
+	}
+}
+
 goods_output_fish_mult = {
 	color = good
 	percent = yes

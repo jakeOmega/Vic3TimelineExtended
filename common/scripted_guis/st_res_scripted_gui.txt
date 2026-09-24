@@ -408,6 +408,59 @@ st_res_adjust_tanks_sgui = {
 	}
 }
 
+st_res_adjust_fertilizer_sgui = {
+	scope = country
+	saved_scopes = { dir }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_fertilizer_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:dir = 0 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_fertilizer_rate > st_res_fertilizer_max_withdrawable
+				var:st_res_fertilizer_rate > st_res_neg_weekly_base_rate_cap
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:dir = 2 }
+			custom_tooltip = {
+				text = "st_res_rate_adjustment_possible"
+				var:st_res_fertilizer_rate < st_res_fertilizer_max_storable
+				var:st_res_fertilizer_rate < st_res_weekly_base_rate_cap
+			}
+		}
+		trigger_else = {
+			custom_tooltip = {
+				text = "st_res_rate_stop_possible"
+				NOT = { var:st_res_fertilizer_rate = 0 }
+			}
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:dir = 0 }
+			st_res_decrease_fertilizer_rate_effect = yes
+		}
+		else_if = {
+			limit = { scope:dir = 2 }
+			st_res_increase_fertilizer_rate_effect = yes
+		}
+		else = {
+			st_res_stop_fertilizer_rate_effect = yes
+		}
+	}
+}
+
 # ============================================================================
 # Reserve policy controls — one scripted GUI per good
 # ============================================================================
@@ -3948,5 +4001,500 @@ st_res_policy_tanks_sgui = {
 		# row's flow and explanation react to the click instead of waiting
 		# for the next weekly pulse.
 		st_res_policy_apply_good_effect = { GOOD = tanks }
+	}
+}
+
+st_res_policy_fertilizer_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_strategic_reserve
+		st_res_fertilizer_unlocked_trigger = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { scope:op = 0 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_fertilizer_policy = 0 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 1 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_fertilizer_policy = 1 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 2 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_fertilizer_policy = 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 3 }
+			custom_tooltip = {
+				text = "st_res_policy_select_possible"
+				NOT = { var:st_res_fertilizer_policy = 3 }
+			}
+		}
+		trigger_else_if = {
+			# Presets 10-12 are always legal: every preset is internally
+			# consistent by construction. Listed explicitly rather than as a
+			# range so an op code nobody defined falls through to the
+			# fail-closed trigger_else at the bottom.
+			limit = {
+				OR = {
+					scope:op = 10
+					scope:op = 11
+					scope:op = 12
+				}
+			}
+			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 20 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_buy_thr > st_res_policy_thr_floor
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 21 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_buy_thr < 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_fertilizer_buy_thr <= st_res_fertilizer_policy_buy_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 22 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_sell_thr > 0
+			}
+			custom_tooltip = {
+				text = "st_res_policy_band_possible"
+				var:st_res_fertilizer_sell_thr >= st_res_fertilizer_policy_sell_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 23 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_sell_thr < st_res_policy_thr_ceiling
+			}
+		}
+		trigger_else_if = {
+			# 24 one step, 44 ten (shift-click), 64 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 24
+					scope:op = 44
+					scope:op = 64
+				}
+			}
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_max_flow > st_res_policy_flow_min
+			}
+		}
+		trigger_else_if = {
+			# 25 one step, 45 ten (shift-click), 65 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 25
+					scope:op = 45
+					scope:op = 65
+				}
+			}
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_max_flow < st_res_policy_flow_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 26 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_floor_pct > st_res_policy_stock_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 27 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_floor_pct < st_res_policy_stock_max
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_fertilizer_floor_pct <= st_res_fertilizer_policy_floor_up_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 28 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_ceil_pct > st_res_policy_stock_min
+			}
+			custom_tooltip = {
+				text = "st_res_policy_stock_band_possible"
+				var:st_res_fertilizer_ceil_pct >= st_res_fertilizer_policy_ceil_down_limit
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 29 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_ceil_pct < st_res_policy_stock_max
+			}
+		}
+		trigger_else_if = {
+			# 30 one step, 50 ten (shift-click), 70 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 30
+					scope:op = 50
+					scope:op = 70
+				}
+			}
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_budget > st_res_policy_budget_min
+			}
+		}
+		trigger_else_if = {
+			# 31 one step, 51 ten (shift-click), 71 a hundred (ctrl-click).
+			limit = {
+				OR = {
+					scope:op = 31
+					scope:op = 51
+					scope:op = 71
+				}
+			}
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_budget < st_res_fertilizer_policy_budget_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 32 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_price_memory > st_res_policy_memory_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 33 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_price_memory < st_res_policy_memory_max
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 34 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_ramp > st_res_policy_ramp_min
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 35 }
+			custom_tooltip = {
+				text = "st_res_policy_range_possible"
+				var:st_res_fertilizer_ramp < st_res_policy_ramp_max
+			}
+		}
+		trigger_else = {
+			# No such op code. Fail closed rather than silently doing nothing.
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { scope:op = 0 }
+			st_res_policy_select_base = { GOOD = fertilizer POLICY = 0 }
+		}
+		else_if = {
+			limit = { scope:op = 1 }
+			st_res_policy_select_base = { GOOD = fertilizer POLICY = 1 }
+		}
+		else_if = {
+			limit = { scope:op = 2 }
+			st_res_policy_select_base = { GOOD = fertilizer POLICY = 2 }
+		}
+		else_if = {
+			limit = { scope:op = 3 }
+			st_res_policy_select_base = { GOOD = fertilizer POLICY = 3 }
+		}
+		else_if = {
+			limit = { scope:op = 10 }
+			st_res_apply_preset_conservative_base = { GOOD = fertilizer }
+		}
+		else_if = {
+			limit = { scope:op = 11 }
+			st_res_apply_preset_standard_base = { GOOD = fertilizer }
+		}
+		else_if = {
+			limit = { scope:op = 12 }
+			st_res_apply_preset_aggressive_base = { GOOD = fertilizer }
+		}
+		else_if = {
+			limit = { scope:op = 20 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 21 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = buy_thr
+				STEP = st_res_policy_thr_step
+				MIN = st_res_policy_thr_floor
+				MAX = 0
+			}
+		}
+		else_if = {
+			limit = { scope:op = 22 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 23 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = sell_thr
+				STEP = st_res_policy_thr_step
+				MIN = 0
+				MAX = st_res_policy_thr_ceiling
+			}
+		}
+		else_if = {
+			limit = { scope:op = 24 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 25 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 44 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 45 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_shift
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 64 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 65 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = max_flow
+				STEP = st_res_policy_flow_step_ctrl
+				MIN = st_res_policy_flow_min
+				MAX = st_res_policy_flow_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 26 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 27 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = floor_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 28 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 29 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = ceil_pct
+				STEP = st_res_policy_pct_step
+				MIN = st_res_policy_stock_min
+				MAX = st_res_policy_stock_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 30 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_fertilizer_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 31 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = budget
+				STEP = st_res_policy_budget_step
+				MIN = st_res_policy_budget_min
+				MAX = st_res_fertilizer_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 50 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_fertilizer_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 51 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = budget
+				STEP = st_res_policy_budget_step_shift
+				MIN = st_res_policy_budget_min
+				MAX = st_res_fertilizer_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 70 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_fertilizer_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 71 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = budget
+				STEP = st_res_policy_budget_step_ctrl
+				MIN = st_res_policy_budget_min
+				MAX = st_res_fertilizer_policy_budget_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 32 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 33 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = price_memory
+				STEP = st_res_policy_memory_step
+				MIN = st_res_policy_memory_min
+				MAX = st_res_policy_memory_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 34 }
+			st_res_policy_step_down_base = {
+				GOOD = fertilizer
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
+			}
+		}
+		else_if = {
+			limit = { scope:op = 35 }
+			st_res_policy_step_up_base = {
+				GOOD = fertilizer
+				SETTING = ramp
+				STEP = st_res_policy_ramp_step
+				MIN = st_res_policy_ramp_min
+				MAX = st_res_policy_ramp_max
+			}
+		}
+
+		# Shared tail: re-decide this good and refresh the hub now, so the
+		# row's flow and explanation react to the click instead of waiting
+		# for the next weekly pulse.
+		st_res_policy_apply_good_effect = { GOOD = fertilizer }
 	}
 }

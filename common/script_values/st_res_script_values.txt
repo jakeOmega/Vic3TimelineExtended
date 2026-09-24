@@ -807,6 +807,107 @@ st_res_tanks_sale_profit = {
 	}
 }
 
+# --- FERTILIZER (Chemicals) ---
+st_res_fertilizer_decay_rate = {
+	value = 0
+	add = modifier:country_st_res_fertilizer_decay_add
+	divide = 52 # convert from per-year to per-week decay
+	min = 0
+	max = 1
+}
+
+st_res_fertilizer_weekly_decay = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_stored }
+		value = var:st_res_fertilizer_stored
+		multiply = st_res_fertilizer_decay_rate
+	}
+}
+
+st_res_fertilizer_actual_rate = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_hub_workforce_cached
+			var:st_res_hub_workforce_cached > 0.99
+			has_variable = st_res_fertilizer_rate
+		}
+		add = var:st_res_fertilizer_rate
+		add = st_res_fertilizer_weekly_decay
+	}
+}
+
+st_res_fertilizer_actual_rate_base_applied = {
+	value = st_res_fertilizer_actual_rate
+	min = {
+		value = 0
+		subtract = st_res_weekly_base_rate_cap
+	}
+	max = st_res_weekly_base_rate_cap
+}
+
+st_res_fertilizer_weekly_delta = {
+	value = 0
+	add = st_res_fertilizer_actual_rate_base_applied
+	subtract = st_res_fertilizer_weekly_decay
+}
+
+st_res_fertilizer_capacity = {
+	value = 0
+	add = modifier:country_st_res_fertilizer_capacity_add
+}
+
+st_res_fertilizer_good_mult = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_fertilizer_stored
+			st_res_fertilizer_actual_rate_base_applied > 0
+		}
+		add = st_res_fertilizer_actual_rate_base_applied
+	}
+	else_if = {
+		limit = { has_variable = st_res_fertilizer_stored }
+		subtract = st_res_fertilizer_actual_rate_base_applied
+	}
+	divide = st_res_throughput_factor
+	subtract = 1  # compensate for PM base 1-unit (see grain block for rationale)
+}
+
+# Bounds for the rate clamp in st_res_clamp_stockpiles_effect — pure storage room.
+# Decay is already netted out in weekly_delta; subtracting it again here would pull
+# the rate variable below zero at full capacity and silently flip Status to "Withdrawing".
+st_res_fertilizer_max_withdrawable = {
+	value = 0
+	add = var:st_res_fertilizer_stored
+	multiply = -1
+}
+
+st_res_fertilizer_max_storable = {
+	value = 0
+	add = st_res_fertilizer_capacity
+	subtract = var:st_res_fertilizer_stored
+}
+
+st_res_fertilizer_sale_profit = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = st_res_fertilizer_stored
+			st_res_fertilizer_actual_rate_base_applied < 0
+		}
+		subtract = st_res_fertilizer_actual_rate_base_applied
+		g:fertilizer = {
+			multiply = base_price
+		}
+		multiply = {
+			value = 1
+			add = this.market.mg:fertilizer.market_goods_pricier
+		}
+	}
+}
+
 # --- Capacity utilization (for AI hints / loc / the JE inventory widget) ---
 # `has_variable` guarded: the inventory widget evaluates these every frame via
 # GuiScope.ScriptValue, including for a country that has the JE visible-but-
@@ -896,6 +997,18 @@ st_res_tanks_fill_pct = {
 		multiply = 100
 	}
 }
+st_res_fertilizer_fill_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_stored }
+		value = var:st_res_fertilizer_stored
+		divide = {
+			value = st_res_fertilizer_capacity
+			min = 1
+		}
+		multiply = 100
+	}
+}
 
 # --- Widget accessors -------------------------------------------------------
 # Guarded read-only wrappers over the bookkeeping variables the JE inventory
@@ -964,6 +1077,13 @@ st_res_tanks_last_net = {
 		value = var:st_res_tanks_last_delta
 	}
 }
+st_res_fertilizer_last_net = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_last_delta }
+		value = var:st_res_fertilizer_last_delta
+	}
+}
 
 # --- Aggregate weekly sales income across all goods ---
 # Sum of every per-good `_sale_profit` (each is 0 unless that good is being sold,
@@ -978,6 +1098,7 @@ st_res_total_sale_profit = {
 	add = st_res_artillery_sale_profit
 	add = st_res_aeroplanes_sale_profit
 	add = st_res_tanks_sale_profit
+	add = st_res_fertilizer_sale_profit
 }
 
 
@@ -1978,6 +2099,130 @@ st_res_tanks_policy_budget_max = {
 	value = st_res_policy_flow_max
 	add = st_res_tanks_weekly_decay
 	multiply = st_res_tanks_unit_price
+	divide = st_res_policy_budget_step
+	ceiling = yes
+	multiply = st_res_policy_budget_step
+	min = st_res_policy_budget_max_base
+}
+
+# --- FERTILIZER (Chemicals) ---
+st_res_fertilizer_price_up = {
+	value = 0
+	market = {
+		mg:fertilizer = {
+			add = market_goods_pricier
+		}
+	}
+	min = 0
+}
+
+st_res_fertilizer_price_down = {
+	value = 0
+	market = {
+		mg:fertilizer = {
+			add = market_goods_cheaper
+		}
+	}
+	min = 0
+}
+
+# Signed premium against base price, as a fraction (+0.20 = 20% above base).
+st_res_fertilizer_price_rel = {
+	value = st_res_fertilizer_price_up
+	subtract = st_res_fertilizer_price_down
+}
+
+# The price signal the policies act on, in percentage points against base
+# price (+20 = 20% above base): the running average kept by
+# st_res_policy_track_price_effect, or the live price until the first weekly
+# tick has seeded it. `has_variable`-guarded because the inventory widget
+# reads it every frame.
+st_res_fertilizer_price_signal = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_price_avg }
+		add = var:st_res_fertilizer_price_avg
+	}
+	else = {
+		add = st_res_fertilizer_price_rel
+		multiply = 100
+	}
+}
+
+# Current market price of one unit, in GBP. Mirrors the shape of
+# st_res_fertilizer_sale_profit. `min = 1` keeps the budget division safe.
+st_res_fertilizer_unit_price = {
+	value = 1
+	g:fertilizer = {
+		multiply = base_price
+	}
+	multiply = {
+		value = 1
+		add = st_res_fertilizer_price_rel
+	}
+	min = 1
+}
+
+# Stepper guard rails. A Paradox trigger needs a `var:` (or another real
+# trigger) on its LEFT side, so the non-overlap rules are expressed as the
+# limit each variable may not step past, rather than as a gap compared to a
+# constant. st_res_policy_<good>_sgui reads them as
+# `var:st_res_fertilizer_buy_thr <= st_res_fertilizer_policy_buy_up_limit`.
+#
+# Highest purchase threshold that still leaves a legal band after one click up.
+st_res_fertilizer_policy_buy_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_sell_thr }
+		add = var:st_res_fertilizer_sell_thr
+	}
+	subtract = st_res_policy_min_gap
+	subtract = st_res_policy_thr_step
+}
+
+# Lowest release threshold that still leaves a legal band after one click down.
+st_res_fertilizer_policy_sell_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_buy_thr }
+		add = var:st_res_fertilizer_buy_thr
+	}
+	add = st_res_policy_min_gap
+	add = st_res_policy_thr_step
+}
+
+# Highest protected floor that still leaves a legal stock band after one click up.
+st_res_fertilizer_policy_floor_up_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_ceil_pct }
+		add = var:st_res_fertilizer_ceil_pct
+	}
+	subtract = st_res_policy_stock_min_gap
+	subtract = st_res_policy_pct_step
+}
+
+# Lowest target ceiling that still leaves a legal stock band after one click down.
+st_res_fertilizer_policy_ceil_down_limit = {
+	value = 0
+	if = {
+		limit = { has_variable = st_res_fertilizer_floor_pct }
+		add = var:st_res_fertilizer_floor_pct
+	}
+	add = st_res_policy_stock_min_gap
+	add = st_res_policy_pct_step
+}
+
+# Weekly-budget ceiling: what a full week at the flow ceiling costs at today's
+# price, this week's decay replacement included because the budget pays for
+# that first (see st_res_policy_afford). Rounded up to a whole budget step,
+# never below st_res_policy_budget_max_base. It moves with the price, so a
+# budget set at the top in a dear week may sit above it in a cheap one; the up
+# stepper then greys out and the next down click lands on the ceiling.
+st_res_fertilizer_policy_budget_max = {
+	value = st_res_policy_flow_max
+	add = st_res_fertilizer_weekly_decay
+	multiply = st_res_fertilizer_unit_price
 	divide = st_res_policy_budget_step
 	ceiling = yes
 	multiply = st_res_policy_budget_step

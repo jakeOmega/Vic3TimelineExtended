@@ -169,6 +169,7 @@ supply_chain_management = {
 		country_institution_ministry_of_urban_planning_max_investment_add = 1
 		country_supply_chain_pb_principles_bool = yes
 		country_st_res_oil_decay_add = -0.001
+		country_st_res_fertilizer_decay_add = -0.001
 	}
 
 	ai_weight = {

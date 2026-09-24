@@ -536,6 +536,7 @@ modern_chemical_processes = {
 		state_arable_land_mult = 0.30
 		country_st_res_ammunition_decay_add = -0.005
 		country_st_res_oil_decay_add = -0.001
+		country_st_res_fertilizer_decay_add = -0.0075
 	}
 
 	unlocking_technologies = {

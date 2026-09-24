@@ -281,6 +281,43 @@ st_res_tanks_mode_text = {
 	}
 }
 
+st_res_fertilizer_mode_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			OR = {
+				var:st_res_fertilizer_last_status = 1
+				var:st_res_fertilizer_last_status = 3
+			}
+		}
+		localization_key = st_res_mode_storing
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			OR = {
+				var:st_res_fertilizer_last_status = 2
+				var:st_res_fertilizer_last_status = 4
+			}
+		}
+		localization_key = st_res_mode_withdrawing
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status >= 5
+		}
+		localization_key = st_res_mode_blocked
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_mode_idle
+	}
+}
+
 st_res_grain_reason_text = {
 	type = country
 	random_valid = no
@@ -743,6 +780,72 @@ st_res_tanks_reason_text = {
 	}
 }
 
+st_res_fertilizer_reason_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status = 8
+		}
+		localization_key = st_res_reason_no_hub
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status = 7
+		}
+		localization_key = st_res_reason_unstaffed
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status = 6
+		}
+		localization_key = st_res_reason_empty
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status = 5
+		}
+		localization_key = st_res_reason_full
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status = 4
+		}
+		localization_key = st_res_reason_cap_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status = 3
+		}
+		localization_key = st_res_reason_cap_store
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status = 2
+		}
+		localization_key = st_res_reason_on_target_withdraw
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_last_status
+			var:st_res_fertilizer_last_status = 1
+		}
+		localization_key = st_res_reason_on_target_store
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_reason_idle
+	}
+}
+
 # ============================================================================
 # Reserve policies
 # ============================================================================
@@ -979,6 +1082,37 @@ st_res_tanks_policy_text = {
 		trigger = {
 			has_variable = st_res_tanks_policy
 			var:st_res_tanks_policy = 3
+		}
+		localization_key = st_res_policy_stabilize
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_policy_manual
+	}
+}
+
+st_res_fertilizer_policy_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy
+			var:st_res_fertilizer_policy = 1
+		}
+		localization_key = st_res_policy_buy_cheap
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy
+			var:st_res_fertilizer_policy = 2
+		}
+		localization_key = st_res_policy_release_high
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy
+			var:st_res_fertilizer_policy = 3
 		}
 		localization_key = st_res_policy_stabilize
 	}
@@ -1490,6 +1624,79 @@ st_res_tanks_policy_reason_text = {
 		trigger = {
 			has_variable = st_res_tanks_policy_status
 			var:st_res_tanks_policy_status = 1
+		}
+		localization_key = st_res_policy_reason_buying
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = st_res_policy_reason_manual
+	}
+}
+
+st_res_fertilizer_policy_reason_text = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy_status
+			var:st_res_fertilizer_policy_status = 9
+		}
+		localization_key = st_res_policy_reason_no_hub
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy_status
+			var:st_res_fertilizer_policy_status = 8
+		}
+		localization_key = st_res_policy_reason_understaffed
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy_status
+			var:st_res_fertilizer_policy_status = 7
+		}
+		localization_key = st_res_policy_reason_budget
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy_status
+			var:st_res_fertilizer_policy_status = 6
+		}
+		localization_key = st_res_policy_reason_floor
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy_status
+			var:st_res_fertilizer_policy_status = 5
+		}
+		localization_key = st_res_policy_reason_ceiling
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy_status
+			var:st_res_fertilizer_policy_status = 4
+		}
+		localization_key = st_res_policy_reason_waiting
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy_status
+			var:st_res_fertilizer_policy_status = 3
+		}
+		localization_key = st_res_policy_reason_releasing
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy_status
+			var:st_res_fertilizer_policy_status = 2
+		}
+		localization_key = st_res_policy_reason_buying_budget
+	}
+	text = {
+		trigger = {
+			has_variable = st_res_fertilizer_policy_status
+			var:st_res_fertilizer_policy_status = 1
 		}
 		localization_key = st_res_policy_reason_buying
 	}
