@@ -4,11 +4,16 @@
 #
 # The rule's production-method flags do the work (common/game_rules/extra_game_rules.txt):
 # the Construction Site is the buildable Construction Sector, its tiers turn
-# goods into points, and nothing makes or uses the construction good. Script
-# only has two jobs:
+# goods into points, and nothing makes or uses the construction good. The rule
+# also gives every country a flat base of construction, so one without sites can
+# still build them (apply_modifier = all:te_direct_construction_base_modifier).
+# Script has three jobs:
 #   - convert the Construction Sectors the history places into Construction
 #     Sites, once, when the game starts (te_direct_construction_convert_sectors);
-#   - restore the law-set private share (te_direct_construction_on_weekly_pulse).
+#   - restore the law-set private share, weekly
+#     (te_direct_construction_on_weekly_pulse, as is the next one);
+#   - put back the Construction Site levels an AI country removes
+#     (te_direct_construction_keep_ai_sites).
 
 # State scope. Replace this state's Construction Sector with a Construction Site
 # of the same level on the matching direct tier. A direct game places no sites
@@ -25,15 +30,15 @@ te_direct_construction_convert_state_sector = {
 		}
 	}
 	set_variable = {
-		name = te_dc_convert_tier
+		name = te_dc_target_tier
 		value = 1
 	}
-	te_direct_construction_read_sector_tier = { TIER = 2 PM = pm_iron_frame_buildings }
-	te_direct_construction_read_sector_tier = { TIER = 3 PM = pm_steel_frame_buildings }
-	te_direct_construction_read_sector_tier = { TIER = 4 PM = pm_arc_welded_buildings }
-	te_direct_construction_read_sector_tier = { TIER = 5 PM = pm_reinforced_concrete_buildings }
-	te_direct_construction_read_sector_tier = { TIER = 6 PM = pm_advanced_construction }
-	te_direct_construction_read_sector_tier = { TIER = 7 PM = pm_nanomaterial_buildings }
+	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 2 PM = pm_iron_frame_buildings }
+	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 3 PM = pm_steel_frame_buildings }
+	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 4 PM = pm_arc_welded_buildings }
+	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 5 PM = pm_reinforced_concrete_buildings }
+	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 6 PM = pm_advanced_construction }
+	te_direct_construction_read_tier = { BUILDING = building_construction_sector TIER = 7 PM = pm_nanomaterial_buildings }
 
 	remove_building = building_construction_sector
 	if = {
@@ -55,20 +60,24 @@ te_direct_construction_convert_state_sector = {
 	te_direct_construction_activate_site_tier = { TIER = 7 PM = pm_te_direct_construction_nanomaterial }
 
 	remove_variable = te_dc_convert_level
-	remove_variable = te_dc_convert_tier
+	remove_variable = te_dc_target_tier
 }
 
-# State scope. Helpers of te_direct_construction_convert_state_sector.
-te_direct_construction_read_sector_tier = {
+# State scope. Tier helpers of the sector conversion and of the AI site guard,
+# which pass the tier through the state variable te_dc_target_tier (1-7, the
+# order of pmg_base_te_construction_market_site's direct tiers).
+#
+# Set te_dc_target_tier to TIER if this state's BUILDING runs PM.
+te_direct_construction_read_tier = {
 	if = {
 		limit = {
 			any_scope_building = {
-				is_building_type = building_construction_sector
+				is_building_type = $BUILDING$
 				has_active_production_method = $PM$
 			}
 		}
 		set_variable = {
-			name = te_dc_convert_tier
+			name = te_dc_target_tier
 			value = $TIER$
 		}
 	}
@@ -76,11 +85,12 @@ te_direct_construction_read_sector_tier = {
 
 # The site's default method (pm_te_construction_market_base) is disabled in
 # direct games, so the engine starts a new site on one of the researched tiers;
-# this moves it to the tier the sector had, tier 1 included.
+# this moves it to tier te_dc_target_tier (the sector's, or the removed site's),
+# tier 1 included.
 te_direct_construction_activate_site_tier = {
 	if = {
 		limit = {
-			var:te_dc_convert_tier = $TIER$
+			var:te_dc_target_tier = $TIER$
 			any_scope_building = {
 				is_building_type = te_construction_market_site
 				NOT = { has_active_production_method = $PM$ }
@@ -119,15 +129,172 @@ te_direct_construction_convert_sectors = {
 	}
 }
 
-# Country scope. The weekly pulse body for direct construction: the private
-# share the economic-system law sets (te_direct_construction_law_private_share,
-# through te_construction_market_private_share_target). Its one refresh site
-# after the setup event (te_construction_market_country_setup).
+# Country scope. Direct-construction setup (te_construction_market_country_setup):
+# the law-set private share from day one. The site guard starts at the first
+# weekly pulse, its one refresh site.
+te_direct_construction_country_setup = {
+	if = {
+		limit = {
+			NOT = { is_country_type = decentralized }
+		}
+		te_construction_market_country_update_private_share = yes
+	}
+}
+
+# Country scope. The weekly pulse body for direct construction:
+#   - the private share the economic-system law sets
+#     (te_direct_construction_law_private_share, through
+#     te_construction_market_private_share_target); its one refresh site after
+#     setup;
+#   - the AI site guard (te_direct_construction_keep_ai_sites).
 te_direct_construction_on_weekly_pulse = {
 	if = {
 		limit = {
 			NOT = { is_country_type = decentralized }
 		}
 		te_construction_market_country_update_private_share = yes
+		te_direct_construction_keep_ai_sites = yes
+	}
+}
+
+# Country scope, weekly. AI countries keep their Construction Sites.
+#
+# In play-tests AI countries lost every Construction Site they had. No script
+# removes a site in a direct game (the market's placement and removal are gated
+# on the rule), so this is the AI downsizing them, which script cannot steer.
+# The site has to stay downsizeable for players (a site's wages are paid whether
+# or not its points are used), so the guard acts after the fact: each state
+# remembers its site's level and tier (te_dc_site_level, te_dc_site_tier;
+# recorded for every country, so a player's own downsizing is never undone after
+# the country passes to the AI), and an AI country gets back any levels it has
+# lost since the last pulse. The AI can still build more levels and sites, and
+# still picks each site's tier.
+#
+# Not for an AI country in default: it may shed sites to cut costs, and the
+# record follows it down. Not without Urbanization, which the site's `possible`
+# requires in direct games. If an AI keeps shedding levels, each restored level
+# rehires within a week (the site's hiring rate is 1.0).
+te_direct_construction_keep_ai_sites = {
+	if = {
+		limit = {
+			is_ai = yes
+			NOT = { in_default = yes }
+			has_technology_researched = urbanization
+		}
+		every_scope_state = {
+			te_direct_construction_restore_state_site = yes
+		}
+	}
+	every_scope_state = {
+		te_direct_construction_record_state_site = yes
+	}
+}
+
+# State scope. Put the site back to its recorded level (capped at 100, the
+# largest te_construction_market_build_specified_level can create) if it has
+# lost levels.
+#
+# A site that is still there is raised with create_building, which keeps the
+# workers it has: the engine's effects.log says that on an existing building
+# create_building sets the larger of the two levels. scripting_best_practices.md
+# records that reading as disputed (it may add the levels instead), so if the
+# site comes out above the target, it is rebuilt at exactly the target, as a
+# removed site is. A rebuilt site starts on a tier the engine picks, so it is
+# moved back to the recorded tier.
+te_direct_construction_restore_state_site = {
+	if = {
+		limit = {
+			has_variable = te_dc_site_level
+			var:te_dc_site_level > te_direct_construction_state_site_level
+		}
+		set_variable = {
+			name = te_dc_restore_level
+			value = {
+				value = var:te_dc_site_level
+				max = 100
+			}
+		}
+		if = {
+			limit = {
+				has_building = te_construction_market_site
+			}
+			te_construction_market_build_specified_level = {
+				SPEC_TYPE = te_construction_market_site
+				SPEC_LEVEL = var:te_dc_restore_level
+			}
+			if = {
+				limit = {
+					b:te_construction_market_site.level > var:te_dc_restore_level
+				}
+				remove_building = te_construction_market_site
+				te_construction_market_build_specified_level = {
+					SPEC_TYPE = te_construction_market_site
+					SPEC_LEVEL = var:te_dc_restore_level
+				}
+				te_direct_construction_restore_site_tier = yes
+			}
+		}
+		else = {
+			te_construction_market_build_specified_level = {
+				SPEC_TYPE = te_construction_market_site
+				SPEC_LEVEL = var:te_dc_restore_level
+			}
+			te_direct_construction_restore_site_tier = yes
+		}
+		remove_variable = te_dc_restore_level
+	}
+}
+
+# State scope. Move a rebuilt site to its recorded tier.
+te_direct_construction_restore_site_tier = {
+	if = {
+		limit = {
+			has_variable = te_dc_site_tier
+		}
+		set_variable = {
+			name = te_dc_target_tier
+			value = var:te_dc_site_tier
+		}
+		te_direct_construction_activate_site_tier = { TIER = 1 PM = pm_te_direct_construction_wooden }
+		te_direct_construction_activate_site_tier = { TIER = 2 PM = pm_te_direct_construction_iron_frame }
+		te_direct_construction_activate_site_tier = { TIER = 3 PM = pm_te_direct_construction_steel_frame }
+		te_direct_construction_activate_site_tier = { TIER = 4 PM = pm_te_direct_construction_arc_welded }
+		te_direct_construction_activate_site_tier = { TIER = 5 PM = pm_te_direct_construction_reinforced_concrete }
+		te_direct_construction_activate_site_tier = { TIER = 6 PM = pm_te_direct_construction_advanced }
+		te_direct_construction_activate_site_tier = { TIER = 7 PM = pm_te_direct_construction_nanomaterial }
+		remove_variable = te_dc_target_tier
+	}
+}
+
+# State scope. Record this state's site level and tier for the guard; clear the
+# record when the state has no site.
+te_direct_construction_record_state_site = {
+	if = {
+		limit = {
+			te_direct_construction_state_site_level > 0
+		}
+		set_variable = {
+			name = te_dc_site_level
+			value = te_direct_construction_state_site_level
+		}
+		set_variable = {
+			name = te_dc_target_tier
+			value = 1
+		}
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 2 PM = pm_te_direct_construction_iron_frame }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 3 PM = pm_te_direct_construction_steel_frame }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 4 PM = pm_te_direct_construction_arc_welded }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 5 PM = pm_te_direct_construction_reinforced_concrete }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 6 PM = pm_te_direct_construction_advanced }
+		te_direct_construction_read_tier = { BUILDING = te_construction_market_site TIER = 7 PM = pm_te_direct_construction_nanomaterial }
+		set_variable = {
+			name = te_dc_site_tier
+			value = var:te_dc_target_tier
+		}
+		remove_variable = te_dc_target_tier
+	}
+	else = {
+		remove_variable = te_dc_site_level
+		remove_variable = te_dc_site_tier
 	}
 }

@@ -5,7 +5,8 @@
 #
 # The rule's production methods do the construction itself (the Construction
 # Site is the buildable Construction Sector, te_construction_market_pms.txt), so
-# script only restores the law-set private share.
+# script only restores the law-set private share and keeps the AI's sites
+# (te_direct_construction_keep_ai_sites).
 
 # Private share of construction (0-100) under direct construction: the
 # economic-system law's vanilla allocation. These are the values
@@ -49,7 +50,19 @@ te_direct_construction_law_private_share = {
 }
 
 # Display: construction points per week from every source (the Construction
-# Sites' levels, the base allocation, Engineering & Logistics barracks, ...).
+# Sites' levels, te_direct_construction_base_modifier, Engineering & Logistics
+# barracks, ...).
 te_direct_construction_display_capacity = {
 	value = modifier:country_construction_add
+}
+
+# State scope. Level of this state's Construction Site, 0 without one.
+te_direct_construction_state_site_level = {
+	value = 0
+	if = {
+		limit = {
+			has_building = te_construction_market_site
+		}
+		value = b:te_construction_market_site.level
+	}
 }
