@@ -3,7 +3,7 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 784
+**Total events:** 785
 **Event files:** 52
 
 ## agricultural_diffusion_events.txt
@@ -4019,6 +4019,12 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Current image:** (unknown)
 
 ### te_construction_market_building_events.2
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
+
+### te_construction_market_building_events.3
 - **Title:** (no localization)
 - **Description:** (no localization)
 - **Flavor:** (none)

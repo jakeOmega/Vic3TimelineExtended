@@ -363,9 +363,12 @@ te_fix_inconsistent_laws_country_pulse = {
 }
 
 # PM RETOOLING - schedule country events at day 0/7/14/21 from the monthly
-# country pulse. Each event iterates all states and cleans up pm_retooling on
-# level-0 building sites. The on_start_expanding_building hook in
-# te_construction_market_on_actions.txt handles single-building cleanup immediately.
+# country pulse. Each event iterates all states and removes pm_retooling where
+# it is waived: level-0 building sites, and every building in games whose
+# free_market_construction_rule setting waives retooling
+# (te_remove_waived_pm_retooling). The on_start_expanding_building and
+# on_production_method_changed hooks in te_construction_market_on_actions.txt
+# handle single-building cleanup immediately; this sweep catches the rest.
 te_pm_retooling_weekly_schedule = {
 	effect = {
 		trigger_event = { id = minor_events_timelineextended.100 }

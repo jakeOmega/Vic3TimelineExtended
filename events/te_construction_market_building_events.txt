@@ -32,3 +32,16 @@ te_construction_market_building_events.2 = {
 		}
 	}
 }
+
+# Fires a day after on_production_method_changed in games whose
+# free_market_construction_rule setting waives retooling
+# (te_on_production_method_changed_retooling): removes pm_retooling in case
+# the engine applied it after the hook ran.
+te_construction_market_building_events.3 = {
+	type = building_event
+	hidden = yes
+
+	immediate = {
+		te_remove_waived_pm_retooling = yes
+	}
+}

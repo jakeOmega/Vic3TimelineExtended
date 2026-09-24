@@ -7,7 +7,8 @@
 # - Border / geopolitical hooks fan out a recalc to every affected country so
 #   sector placement can re-converge on the new map.
 # - Building lifecycle hooks add/remove the construction-site building when
-#   work in a state starts or finishes.
+#   work in a state starts or finishes, and remove pm_retooling where it is
+#   waived (te_remove_waived_pm_retooling).
 
 # ============================================================================
 # GAME START
@@ -339,7 +340,7 @@ te_construction_market_on_war_end = {
 
 te_on_building_retooling_cleanup = {
 	effect = {
-		te_remove_pm_retooling_from_zero_level_building = yes
+		te_remove_waived_pm_retooling = yes
 	}
 }
 
@@ -349,6 +350,31 @@ on_start_expanding_building = {
 	}
 	events = {
 		te_construction_market_building_events.1
+	}
+}
+
+# free_market_construction_rule no_retooling / no_maintenance: the engine puts
+# pm_retooling on a building that switches production methods; take it off
+# again (root = the building). Whether the engine applies the modifier before
+# or after this hook fires is unverified, so the building also re-checks a day
+# later (te_construction_market_building_events.3); the weekly sweep
+# (minor_events_timelineextended.100) catches anything else.
+te_on_production_method_changed_retooling = {
+	effect = {
+		if = {
+			limit = { te_pm_retooling_waived = yes }
+			te_remove_waived_pm_retooling = yes
+			trigger_event = {
+				id = te_construction_market_building_events.3
+				days = 1
+			}
+		}
+	}
+}
+
+on_production_method_changed = {
+	on_actions = {
+		te_on_production_method_changed_retooling
 	}
 }
 
