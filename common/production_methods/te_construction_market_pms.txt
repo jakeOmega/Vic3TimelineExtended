@@ -18,7 +18,7 @@
 #     direct mode with activate_production_method: country-wide each weekly
 #     pulse, and per state straight after a site is placed
 #     (te_direct_construction_sync_site_pms / _sync_state_site_if_direct);
-#   - market games replace, at the start of each weekly pulse, any site someone
+#   - market games replace, at the end of each weekly pulse, any site someone
 #     moved to direct mode by hand (te_construction_market_reset_direct_sites).
 #     Replacing avoids the retooling tax a switch back would charge.
 # A site flipped back to market mode in a direct game is switched again at the

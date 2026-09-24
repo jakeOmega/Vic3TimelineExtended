@@ -18,8 +18,6 @@ te_construction_market_on_weekly_pulse = {
 			}
 			#this = market.owner
 		}
-		# First, so a replaced site gets its capacity modifier in this pulse.
-		te_construction_market_reset_direct_sites = yes
 		te_construction_market_update_price_stabilizer = yes
 		te_construction_market_country_update_data = yes
 		if = {
@@ -28,6 +26,14 @@ te_construction_market_on_weekly_pulse = {
 			}
 			te_construction_market_ai_update_buy = yes
 		}
+		# Last, after this pulse has sized the sites. Before update_data, the
+		# replacement would be sized while unstaffed: num_sites skips it and
+		# the staffing compensator gives it 10x, which it keeps once it hires
+		# (te_construction_market_employment_adjusted_per_site). Run here, it
+		# carries no capacity modifier until the next pulse, when it is
+		# staffed (both hiring rates are 1.0) and sized normally: at worst a
+		# week of reduced construction, never an inflated purchase.
+		te_construction_market_reset_direct_sites = yes
 	}
 }
 

@@ -308,9 +308,11 @@ te_direct_construction_on_weekly_pulse = {
 }
 
 # Country scope, market games only. A site moved to direct mode by hand would
-# buy raw goods for its points instead of the construction good, and the mode
-# ratchet (te_construction_market_pms.txt) cannot move it back. Replace it with
-# a fresh market-mode site; the placement logic only ever wants level 1.
+# buy raw goods for its points instead of the construction good. Replace it
+# with a fresh market-mode site (the placement logic only ever wants level 1)
+# rather than switching its PMs back: a switch would charge the retooling tax
+# on the market PM's construction-good input, about 11x per point. Runs LAST
+# in the market pulse; see te_construction_market_on_weekly_pulse for why.
 te_construction_market_reset_direct_sites = {
 	every_scope_state = {
 		limit = {
