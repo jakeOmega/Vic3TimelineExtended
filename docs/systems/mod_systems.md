@@ -1113,10 +1113,10 @@ AI weights across events are tuned to favor decolonization:
 
 ## Nuclear Program Pause (Treaty Article)
 
-- **Purpose:** Freezes the target country's nuclear weapons program, halting progress toward nuclear capability.
-- **Article type:** Directed (source = concession-maker whose program is frozen, target = requestor).
-- **Mechanism:** Applies a timed modifier that blocks nuclear progress via a journal entry weekly pulse handler; the JE checks whether the country has the modifier and skips progress if so.
-- **Key modifier:** `nuclear_program_paused_modifier` — applied to source country on entry into force.
+- **Purpose:** Freezes the source country's nuclear weapons program, halting progress toward nuclear capability while keeping its stockpile and progress. `nuclear_disarmament` is the harsher sibling, which also destroys both.
+- **Article type:** Directed (source = concession-maker whose program is frozen, target = requestor, who pays the maintenance). The article is listed under the frozen country's articles. Both nuclear articles had the restriction on `target_modifier` until 2026-09-24. See `docs/guides/scripting_best_practices.md` § "Directed Treaty Articles: the SOURCE Concedes".
+- **Mechanism:** `source_modifier = { country_nuclear_program_pause_bool = yes }` lasts as long as the treaty. `on_entry_into_force` zeroes `nuclear_weapons_program_funding`, the `je_nuclear_program` weekly pulse keeps it at zero, and `nuclear_program_possible_increase_funding` refuses to raise it.
+- **Gates:** `possible` / `can_ratify` call `nuclear_program_can_be_paused` (`nuke_triggers.txt`; `nuclear_disarmament` uses `nuclear_program_can_be_disarmed`). The source must have researched `nuclear_weapons`, must not already be frozen or disarmed, and must not be receiving `nuclear_program_aid`. `nuclear_program_aid` refuses a frozen or disarmed recipient, and neither article can share a draft with aid to the same country.
 - **AI logic:** AI will accept if it doesn't yet have nukes and the other party is much stronger, or if relations are very high. AI proposes this against rivals pursuing nuclear weapons.
 - **Files:** `common/treaty_articles/extra_treaty_articles.txt` (article definition), `common/static_modifiers/extra_modifiers.txt` (modifier), localization in main loc file.
 

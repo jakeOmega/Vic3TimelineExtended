@@ -1120,16 +1120,27 @@ suppress_subject_liberty = {
 # TREATY ARTICLE: nuclear_disarmament
 # ---------------------------------
 # This article forces a country to dismantle its nuclear program.
+#
+# DIRECTED: source = the country that DISARMS (concedes), target = the country
+# that demands it. The mod's convention for a hostile directed article
+# (107 forced_disarmament, 113_imposed_currency_peg.txt) and vanilla's for an
+# enforceable concession (trade_privilege, foreign_investment_rights): a
+# directed article is listed in its source's column of the treaty designer, so
+# "Nuclear Disarmament" under a country's articles disarms that country, and a
+# war goal enforcing it has the loser concede. Until 2026-09-24 the modifier
+# sat in target_modifier, on a note claiming war-goal enforcement needs the
+# target side; nothing in vanilla or in the mod's other enforceable articles
+# supports that, and it disarmed the country whose column did NOT list the
+# article. The follow-on event treaty_article_events.5 always assumed
+# source = the disarmed country.
 nuclear_disarmament = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
-	maintenance_paid_by = source_country
+	# The demander wants it, so the demander pays.
+	maintenance_paid_by = target_country
 	cost = 200
 
-	# The restricted party is the TARGET — the country being forced to dismantle
-	# its program. War-goal enforcement applies article modifiers to the article's
-	# named party; using source_modifier here disarmed the *winner* of the war goal.
-	target_modifier = {
+	source_modifier = {
 		country_nuclear_disarmament_bool = yes
 	}
 
@@ -1137,15 +1148,16 @@ nuclear_disarmament = {
 
 	usage_limit = once_per_side
 
+	# ROOT is the source here, as the mod's other directed articles read it
+	# (the aid articles' `visible`, suppress_subject_liberty's `possible`), so
+	# the article is only listed for a country with a program to give up.
+	# can_ratify re-checks the source explicitly in case that reading is wrong.
 	visible = {
 		has_technology_researched = nuclear_weapons
 	}
 
 	possible = {
-		scope:other_country = { has_technology_researched = nuclear_weapons }
-		NOT = { scope:other_country = { modifier:country_nuclear_disarmament_bool = yes } }
-		# Do not demand disarmament from a country that is receiving (or promised) nuclear aid
-		NOT = { scope:other_country = { modifier:country_receiving_nuclear_program_aid_bool = yes } }
+		nuclear_program_can_be_disarmed = yes
 	}
 
 	can_ratify = {
@@ -1153,34 +1165,26 @@ nuclear_disarmament = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
 			no_duplicate_treaty_article = { ARTICLE_TYPE = nuclear_disarmament }
 		}
-		# Disallow if the source already has a nuclear_program_aid treaty
-		# targeting this same country — can't simultaneously aid and demand disarmament.
+		# `possible`'s test again, with the side fixed explicitly. Covers
+		# in-force nuclear_program_aid to the source as well, through
+		# country_receiving_nuclear_program_aid_bool.
 		custom_tooltip = {
-			text = DUPLICATE_ARTICLE_SAME_INPUTS
-			NOT = {
-				scope:source_country = {
-					any_scope_treaty = {
-						any_scope_article = {
-							has_type = nuclear_program_aid
-							target_country = scope:other_country
-						}
-					}
-				}
-			}
+			text = nuclear_disarmament_source_eligible_tt
+			scope:source_country = { nuclear_program_can_be_disarmed = yes }
 		}
-		# Same-draft conflict: same check, but reading from the in-construction
-		# treaty (scope:treaty + any_scope_article_option is the only iterator
-		# that sees siblings being authored right now; the any_scope_treaty
-		# check above only catches IN-FORCE treaties). Vanilla pattern:
+		# Same-draft conflict: no aid to the country being disarmed in this
+		# very draft. scope:treaty + any_scope_article_option is the only
+		# iterator that sees siblings being authored right now (the bool above
+		# only exists once an aid article is in force). Vanilla pattern:
 		# 06_transfer_state.txt § can_ratify. Lives in can_ratify because
 		# scope:treaty is not populated with sibling drafts inside `possible`.
 		custom_tooltip = {
-			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			text = nuclear_article_conflicts_with_aid_tt
 			NOT = {
 				scope:treaty ?= {
 					any_scope_article_option = {
 						has_type = nuclear_program_aid
-						target_country = scope:other_country
+						target_country = scope:source_country
 					}
 				}
 			}
@@ -1241,31 +1245,31 @@ nuclear_disarmament = {
 			value = 0
 			if = {
 				limit = { scope:target_country = this }
-				# SOURCE perspective: do I want this article demanding the other side disarm?
+				# TARGET (demander) perspective: do I want the source, the other side, disarmed?
 				# Strongly want rivals/enemies to disarm
 				if = {
-					limit = { any_rival_country = { THIS = scope:target_country } }
+					limit = { any_rival_country = { THIS = scope:source_country } }
 					add = {
 						desc = "AI_IS_RIVAL"
 						value = 50
 					}
 				}
 				if = {
-					limit = { has_attitude = { who = scope:target_country attitude = domineering } }
+					limit = { has_attitude = { who = scope:source_country attitude = domineering } }
 					add = {
 						desc = "AI_HOSTILE_ATTITUDE"
 						value = 40
 					}
 				}
 				if = {
-					limit = { has_attitude = { who = scope:target_country attitude = belligerent } }
+					limit = { has_attitude = { who = scope:source_country attitude = belligerent } }
 					add = {
 						desc = "AI_BELLIGERENT_ATTITUDE"
 						value = 30
 					}
 				}
 				if = {
-					limit = { has_attitude = { who = scope:target_country attitude = antagonistic } }
+					limit = { has_attitude = { who = scope:source_country attitude = antagonistic } }
 					add = {
 						desc = "AI_ANTAGONISTIC_ATTITUDE"
 						value = 20
@@ -1273,7 +1277,7 @@ nuclear_disarmament = {
 				}
 				# Wary countries still somewhat want rivals disarmed
 				if = {
-					limit = { has_attitude = { who = scope:target_country attitude = wary } }
+					limit = { has_attitude = { who = scope:source_country attitude = wary } }
 					add = {
 						desc = "AI_WARY_ATTITUDE"
 						value = 5
@@ -1283,9 +1287,9 @@ nuclear_disarmament = {
 				if = {
 					limit = {
 						OR = {
-							has_attitude = { who = scope:target_country attitude = genial }
-							has_attitude = { who = scope:target_country attitude = loyal }
-							has_attitude = { who = scope:target_country attitude = protective }
+							has_attitude = { who = scope:source_country attitude = genial }
+							has_attitude = { who = scope:source_country attitude = loyal }
+							has_attitude = { who = scope:source_country attitude = protective }
 						}
 					}
 					add = {
@@ -1295,7 +1299,7 @@ nuclear_disarmament = {
 				}
 				if = {
 					limit = {
-						scope:target_country = { is_in_same_power_bloc = root }
+						scope:source_country = { is_in_same_power_bloc = root }
 					}
 					add = {
 						desc = "AI_SAME_POWER_BLOC"
@@ -1304,7 +1308,7 @@ nuclear_disarmament = {
 				}
 			}
 			else = {
-				# TARGET perspective: I'm being asked to give up my nukes
+				# SOURCE perspective: I'm being asked to give up my nukes
 				add = {
 					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
 					value = -100
@@ -1335,7 +1339,7 @@ nuclear_disarmament = {
 				}
 				# Bad relations with the one asking makes it worse
 				if = {
-					limit = { scope:source_country.relations:target_country < relations_threshold:neutral }
+					limit = { scope:target_country.relations:root < relations_threshold:neutral }
 					add = {
 						desc = "AI_BAD_RELATIONS"
 						value = -50
@@ -1343,8 +1347,8 @@ nuclear_disarmament = {
 				}
 				if = {
 					limit = {
-						scope:source_country.relations:target_country >= relations_threshold:amicable
-						scope:source_country = { country_rank >= rank_value:great_power }
+						scope:target_country.relations:root >= relations_threshold:amicable
+						scope:target_country = { country_rank >= rank_value:great_power }
 					}
 					add = {
 						desc = "AI_GOOD_RELATIONS_WITH_GP"
@@ -1400,7 +1404,7 @@ nuclear_disarmament = {
 	# cleanup cannot be relied on because the JE deactivates (possible
 	# fails) before the pulse fires.
 	on_entry_into_force = {
-		scope:article_options.target_country = {
+		scope:article_options.source_country = {
 			set_variable = { name = nuclear_weapon_stockpile value = 0 }
 			set_variable = { name = nuclear_weapon_program_progress value = 0 }
 			set_variable = { name = nuclear_weapons_program_funding value = 0 }
@@ -1439,14 +1443,12 @@ nuclear_program_aid = {
 		has_modifier = nuclear_power
 		scope:other_country = {
 			NOT = { has_modifier = nuclear_power }
-			NOT = {
-				any_scope_treaty = {
-					any_scope_article = {
-						has_type = nuclear_disarmament
-						target_country = root
-					}
-				}
-			}
+			# No aid to a country under a disarmament or freeze article (the
+			# restricted party of either is its source, and carries the bool).
+			# Mirror of nuclear_program_can_be_disarmed / _paused, which keep
+			# those articles off a country already receiving aid.
+			NOT = { modifier:country_nuclear_disarmament_bool = yes }
+			NOT = { modifier:country_nuclear_program_pause_bool = yes }
 		}
 		# NPT enforcement: At high UN authority with IAEA, nuclear aid is forbidden
 		custom_tooltip = {
@@ -1486,12 +1488,13 @@ nuclear_program_aid = {
 		}
 		# Same-draft conflict: disallow if the in-construction treaty already
 		# contains a nuclear_disarmament or nuclear_program_pause article
-		# targeting the same country. scope:treaty + any_scope_article_option
-		# sees siblings being authored right now; this lives in can_ratify
-		# because scope:treaty is not populated with siblings inside `possible`
-		# (vanilla pattern: 06_transfer_state.txt § can_ratify).
+		# restricting the aid's recipient — that article's SOURCE.
+		# scope:treaty + any_scope_article_option sees siblings being authored
+		# right now; this lives in can_ratify because scope:treaty is not
+		# populated with siblings inside `possible` (vanilla pattern:
+		# 06_transfer_state.txt § can_ratify).
 		custom_tooltip = {
-			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			text = nuclear_article_conflicts_with_aid_tt
 			NOT = {
 				scope:treaty ?= {
 					any_scope_article_option = {
@@ -1499,7 +1502,7 @@ nuclear_program_aid = {
 							has_type = nuclear_disarmament
 							has_type = nuclear_program_pause
 						}
-						target_country = scope:other_country
+						source_country = scope:target_country
 					}
 				}
 			}
@@ -2116,15 +2119,21 @@ join_united_nations = {
 # ---------------------------------
 # Freezes a country's nuclear investment at zero without destroying
 # existing stockpile or progress. Less severe than full disarmament.
+#
+# DIRECTED: source = the country whose program is FROZEN (concedes), target =
+# the country that demands it — nuclear_disarmament's direction, whose header
+# has the reasoning. Listed under a country's articles, it freezes that
+# country's program. The follow-on event treaty_article_events.8 and the AI's
+# inherent_accept_score below always assumed this direction; only the
+# modifier block and the hooks had it the other way round, until 2026-09-24.
 nuclear_program_pause = {
 	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
 	kind = directed
-	maintenance_paid_by = source_country
+	# The demander wants it, so the demander pays.
+	maintenance_paid_by = target_country
 	cost = 100
 
-	# The restricted party is the TARGET — same scoping bug as nuclear_disarmament:
-	# source_modifier would freeze the program of the *enforcing* country.
-	target_modifier = {
+	source_modifier = {
 		country_nuclear_program_pause_bool = yes
 	}
 
@@ -2132,26 +2141,13 @@ nuclear_program_pause = {
 
 	usage_limit = once_per_side
 
+	# ROOT is the source here; see nuclear_disarmament's `visible`.
 	visible = {
 		has_technology_researched = nuclear_weapons
 	}
 
 	possible = {
-		scope:other_country = { has_technology_researched = nuclear_weapons }
-		NOT = { scope:other_country = { modifier:country_nuclear_disarmament_bool = yes } }
-		NOT = { scope:other_country = { modifier:country_nuclear_program_pause_bool = yes } }
-		# Also disallow freezing if the target is receiving (or promised) nuclear aid
-		NOT = { scope:other_country = { modifier:country_receiving_nuclear_program_aid_bool = yes } }
-		# Disallow if WE (root = proposing country) already have an in-force treaty
-		# article giving nuclear aid TO scope:other_country.
-		NOT = {
-			any_scope_treaty = {
-				any_scope_article = {
-					has_type = nuclear_program_aid
-					target_country = scope:other_country
-				}
-			}
-		}
+		nuclear_program_can_be_paused = yes
 	}
 
 	can_ratify = {
@@ -2159,17 +2155,25 @@ nuclear_program_pause = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS
 			no_duplicate_treaty_article = { ARTICLE_TYPE = nuclear_program_pause }
 		}
-		# Same-draft conflict: scope:treaty + any_scope_article_option is the
-		# only iterator that sees siblings being authored in the current draft.
-		# Lives in can_ratify because scope:treaty is not populated with sibling
-		# drafts inside `possible` (vanilla pattern: 06_transfer_state.txt).
+		# `possible`'s test again, with the side fixed explicitly. Covers
+		# in-force nuclear_program_aid to the source as well, through
+		# country_receiving_nuclear_program_aid_bool.
 		custom_tooltip = {
-			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			text = nuclear_program_pause_source_eligible_tt
+			scope:source_country = { nuclear_program_can_be_paused = yes }
+		}
+		# Same-draft conflict: no aid to the country being frozen in this very
+		# draft. scope:treaty + any_scope_article_option is the only iterator
+		# that sees siblings being authored in the current draft. Lives in
+		# can_ratify because scope:treaty is not populated with sibling drafts
+		# inside `possible` (vanilla pattern: 06_transfer_state.txt).
+		custom_tooltip = {
+			text = nuclear_article_conflicts_with_aid_tt
 			NOT = {
 				scope:treaty ?= {
 					any_scope_article_option = {
 						has_type = nuclear_program_aid
-						target_country = scope:other_country
+						target_country = scope:source_country
 					}
 				}
 			}
@@ -2177,7 +2181,7 @@ nuclear_program_pause = {
 	}
 
 	on_entry_into_force = {
-		scope:article_options.target_country = {
+		scope:article_options.source_country = {
 			# Zero out funding without touching stockpile or progress
 			set_variable = {
 				name = nuclear_weapons_program_funding

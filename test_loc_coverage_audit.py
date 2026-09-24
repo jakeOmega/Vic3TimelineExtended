@@ -433,6 +433,66 @@ class MessageTests(unittest.TestCase):
         self.assertEqual(_DIR_MAP["Messages"], "common/messages")
 
 
+class TreatyArticleTests(unittest.TestCase):
+    """Treaty articles resolve four autokeys off the article name. The
+    nuclear_disarmament / nuclear_program_pause defect: both shipped with only
+    `_effects_desc`, so the treaty picker listed them by raw key."""
+
+    KEYS = {
+        "my_article",
+        "my_article_desc",
+        "my_article_effects_desc",
+        "my_article_article_short_desc",
+    }
+
+    def _ms(self, loc_keys, *, base=None):
+        return FakeMS(
+            mod_data={"Treaty Articles": {"my_article": {"kind": "directed"}}},
+            base_data={"Treaty Articles": base or {}},
+            loc_keys=loc_keys,
+        )
+
+    def _tmp(self):
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/treaty_articles/extra_treaty_articles.txt",
+               "my_article = {\n\tkind = directed\n}\n")
+        return tmp
+
+    def test_fully_localized_not_flagged(self):
+        self.assertEqual(audit(self._ms(self.KEYS), mod_path=self._tmp()).flags, [])
+
+    def test_only_effects_desc_flags_the_other_three(self):
+        result = audit(self._ms({"my_article_effects_desc"}), mod_path=self._tmp())
+        self.assertEqual(len(result.flags), 1)
+        f = result.flags[0]
+        self.assertEqual(f.category, "Treaty Articles")
+        self.assertEqual(
+            f.missing_keys,
+            ["my_article", "my_article_desc", "my_article_article_short_desc"],
+        )
+        self.assertEqual(f.file, "common/treaty_articles/extra_treaty_articles.txt")
+        self.assertEqual(f.line, 1)
+
+    def test_missing_short_desc_alone_is_flagged(self):
+        result = audit(
+            self._ms(self.KEYS - {"my_article_article_short_desc"}),
+            mod_path=self._tmp(),
+        )
+        self.assertEqual(
+            [f.missing_keys for f in result.flags],
+            [["my_article_article_short_desc"]],
+        )
+
+    def test_vanilla_article_override_not_flagged(self):
+        ms = self._ms(set(), base={"my_article": {"kind": "directed"}})
+        self.assertEqual(audit(ms, mod_path=self._tmp()).flags, [])
+
+    def test_registered_in_both_rosters(self):
+        from loc_coverage_audit import _REQUIREMENTS, _DIR_MAP
+        self.assertIn("Treaty Articles", _REQUIREMENTS)
+        self.assertEqual(_DIR_MAP["Treaty Articles"], "common/treaty_articles")
+
+
 class RenderTests(unittest.TestCase):
     def test_empty_report_smoke(self):
         from loc_coverage_audit import AuditResult
