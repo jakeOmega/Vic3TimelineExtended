@@ -427,7 +427,7 @@ te_monetary_discover_arrangements = {
 							has_type = imposed_currency_peg
 						}
 						source_country = root
-						target_country = { te_mon_can_be_anchor = yes }
+						te_mon_peg_article_valid = yes
 					}
 				}
 				random_scope_article = {
@@ -437,7 +437,7 @@ te_monetary_discover_arrangements = {
 							has_type = imposed_currency_peg
 						}
 						source_country = root
-						target_country = { te_mon_can_be_anchor = yes }
+						te_mon_peg_article_valid = yes
 					}
 					target_country = { save_scope_as = te_mon_new_anchor }
 				}
@@ -507,12 +507,14 @@ te_monetary_discover_arrangements = {
 			limit = {
 				any_scope_article = {
 					has_type = swap_line
+					te_mon_support_article_valid = yes
 					target_country = root
 				}
 			}
 			random_scope_article = {
 				limit = {
 					has_type = swap_line
+					te_mon_support_article_valid = yes
 					target_country = root
 				}
 				source_country = { save_scope_as = te_mon_new_provider }
@@ -528,12 +530,14 @@ te_monetary_discover_arrangements = {
 			limit = {
 				any_scope_article = {
 					has_type = lender_of_last_resort
+					te_mon_support_article_valid = yes
 					target_country = root
 				}
 			}
 			random_scope_article = {
 				limit = {
 					has_type = lender_of_last_resort
+					te_mon_support_article_valid = yes
 					target_country = root
 				}
 				source_country = { save_scope_as = te_mon_new_guarantor }
@@ -553,12 +557,14 @@ te_monetary_discover_arrangements = {
 			limit = {
 				any_scope_article = {
 					has_type = debt_receivership
+					te_mon_support_article_valid = yes
 					source_country = root
 				}
 			}
 			random_scope_article = {
 				limit = {
 					has_type = debt_receivership
+					te_mon_support_article_valid = yes
 					source_country = root
 				}
 				target_country = { save_scope_as = te_mon_new_receiver }
@@ -574,6 +580,7 @@ te_monetary_discover_arrangements = {
 		every_scope_article = {
 			limit = {
 				has_type = swap_line
+				te_mon_support_article_valid = yes
 				source_country = root
 			}
 			target_country = { save_scope_as = te_mon_arr_party }
@@ -582,6 +589,7 @@ te_monetary_discover_arrangements = {
 		every_scope_article = {
 			limit = {
 				has_type = lender_of_last_resort
+				te_mon_support_article_valid = yes
 				source_country = root
 			}
 			target_country = { save_scope_as = te_mon_arr_party }
@@ -592,6 +600,7 @@ te_monetary_discover_arrangements = {
 		every_scope_article = {
 			limit = {
 				has_type = debt_receivership
+				te_mon_support_article_valid = yes
 				target_country = root
 			}
 			source_country = { save_scope_as = te_mon_arr_party }

@@ -98,6 +98,15 @@ swap_line = {
 		}
 	}
 
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = te_swap_provider_solvent_tt
+				scope:source_country = { in_default = no }
+			}
+		}
+	}
+
 	can_ratify = {
 		custom_tooltip = {
 			text = te_backstop_provider_outranks_tt
@@ -204,6 +213,8 @@ swap_line = {
 				}
 				add = 0.15
 			}
+			# Reduce unsolicited proposals while preserving relative crisis priorities.
+			multiply = 0.25
 		}
 
 		inherent_accept_score = {
@@ -307,11 +318,18 @@ swap_line = {
 					}
 				}
 			}
-			# --- the RECIPIENT'S side: a backstop is worth having ---------------
+			# --- the RECIPIENT: dependence needs a reason ----------------------
 			else = {
 				add = {
-					desc = "te_ai_backstop_wanted"
-					value = 20
+					desc = "te_ai_backstop_dependence"
+					value = -10
+				}
+				if = {
+					limit = { te_mon_in_external_crisis = yes }
+					add = {
+						desc = "te_ai_backstop_wanted"
+						value = 30
+					}
 				}
 			}
 

@@ -420,6 +420,19 @@ Exchange rates and the trilemma. Spec: `monetary_policy_design.md` §15; what sh
 
 ### Monetary Policy (phase 5)
 
+**Treaty eligibility / AI update (2026-09-23).** Peggers must retain a compatible
+currency: fiat/digital accept any eligible anchor; commodity/gold require a
+commodity or convertible-gold anchor. Crypto, dollarisation, command economies,
+boards and common-currency adopters cannot take treaty pegs. Both peg articles
+check this at signing, maintenance and discovery. Support remains currency-neutral,
+but providers/receivers must retain a national bank, stay solvent and remain
+outside command economies; receivership debtors must also remain non-command.
+Discovery filters invalid support before assigning roles or charging costs and
+settles swap balances through the existing role-end path. AI proposal evaluation
+is quartered for all five articles; swap/guarantee demand now depends on external
+crisis / debt >= 50%, and voluntary pegs carry more baseline reluctance. See
+`monetary_policy_design.md` "Treaty eligibility and AI tuning" for the values.
+
 International monetary arrangements. Spec: `monetary_policy_design.md` §15A; what shipped, the rulings (G1–G16) and the in-game checklist (P5-1…18): §0.8. **Not seen in a running game, and built on a phase 4 that has not been either.** Files: `common/script_values/te_monetary_arrangement_script_values.txt` (constants + the phase-5 variable contract) and `te_monetary_union_script_values.txt` (5b), the matching `scripted_triggers/` and `scripted_effects/` pairs, `common/treaty_articles/110_currency_peg.txt` / `111_swap_line.txt` / `112_lender_of_last_resort.txt`, `principle_group_monetary_union` (five principles, five script-only `power_bloc_*_bool` markers), `events/te_monetary_arrangement_events.txt` (`te_lolr.1`, `te_union.1`), `te_peg.2` in `te_peg_events.txt`, `te_monetary_internal.2`, and twelve static modifiers at the foot of `extra_modifiers.txt`.
 
 **The anchored state is the spine.** `te_mon_anchor` (a **scope** variable — the `te_basket_market_owner` contract: cannot hold 0, read as `var:te_mon_anchor = { … }` behind `has_variable`, may be absent) plus `te_mon_anchor_kind`: **1** treaty peg, **2** bloc currency, **3** currency board; highest wins. An anchored country has **no dial** (`te_mon_has_dial` gained `NOT = { te_mon_is_anchored = yes }`), **imports the rate** (third branch of `te_monetary_set_derived_rate`: anchor's rate + spread 0.5 / 0 / 0.25, *no* expected-inflation term — G13), **takes the anchor's `te_fx_index`** (first branch of step 5b's index-by-regime, less a kind-1 `te_mon_peg_parity_offset`) while its own formula runs on as `te_fx_shadow`, cannot monetise or run OMO, and **imports credibility** (`te_mon_credibility_c` = max(own, 0.8 × anchor's); `te_mon_inflation_anchor` = the anchor's target — both were split into `_own` + the consumer-facing name). It **keeps its own inflation, neutral rate, stance gap and cycle**: the three hidden-state gates in the monthly update read `te_mon_has_stance` (dial **or** anchored), not `te_mon_has_dial` (G1). `te_mon_overvaluation` is the one pressure gauge all three kinds read.
