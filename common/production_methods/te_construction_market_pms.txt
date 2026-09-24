@@ -1,10 +1,62 @@
-﻿pm_te_construction_market_base = {
+﻿# Construction-market subsystem — the Construction Site's production methods.
+#
+# te_construction_market_site is the engine's construction camp
+# (common/defines/te_construction_market_defines.txt): its inputs are bought
+# only for the construction points actually spent, by the treasury or the
+# investment pool according to which queue spends them. Two families of
+# methods share its base group, and a mode group picks the family.
+#
+# MODE (pmg_te_construction_market_site_mode): two effect-less PMs, both always
+# available. Each family in the base group is gated on its mode through
+# cross-group unlocking_production_methods, the pattern this repo already uses
+# widely (e.g. pm_computer_aided_design). There is deliberately no self-
+# referencing ratchet: pm_te_construction_market_base sits on every site in
+# every game, and a self-referencing default is unverified in game
+# (scripting_best_practices.md, "There Is No Engine PM Lock"). Script enforces
+# the mode instead:
+#   - direct games (free_market_construction_rule disabled) move every site to
+#     direct mode with activate_production_method: country-wide each weekly
+#     pulse, and per state straight after a site is placed
+#     (te_direct_construction_sync_site_pms / _sync_state_site_if_direct);
+#   - market games replace, at the end of each weekly pulse, any site someone
+#     moved to direct mode by hand (te_construction_market_reset_direct_sites).
+#     Replacing avoids the retooling tax a switch back would charge.
+# A site flipped back to market mode in a direct game is switched again at the
+# next pulse; until then its market method asks for construction good that
+# nobody sells (the retooling tax sits outside the country-level cancel), so
+# the flip earns nothing.
+#
+# BASE (pmg_base_te_construction_market_site):
+#   pm_te_construction_market_base    market mode: 1 construction good -> 1 point
+#   pm_te_direct_construction_<tier>  direct mode: the goods a Construction
+#       Sector of that tier buys for one unit of construction good
+#       (extra_pms.txt input / output, 3 decimals) -> 1 point
+# Every method is hidden when unavailable, so a site shows only its own family.
+# The direct tier is the one delivering most of the country's construction
+# (te_direct_construction_refresh_capacity), and throughput sizes every site
+# the same way in both modes (te_construction_market_apply_per_site_modifier).
+#
+# The direct tiers mirror the sector tiers' inputs. When a sector tier's inputs
+# change in extra_pms.txt, change the matching tier here too.
+
+pm_te_construction_mode_market = {
+	texture = "gfx/interface/icons/production_method_icons/privately_owned.dds"
+	is_default = yes
+}
+
+pm_te_construction_mode_direct = {
+	texture = "gfx/interface/icons/production_method_icons/government_run.dds"
+}
+
+pm_te_construction_market_base = {
 	texture = "gfx/interface/icons/production_method_icons/wooden_buildings.dds"
 
 	is_default = yes
+	is_hidden_when_unavailable = yes
 
-
-
+	unlocking_production_methods = {
+		pm_te_construction_mode_market
+	}
 
 	country_modifiers = {
 		workforce_scaled = {
@@ -15,6 +67,247 @@
 	building_modifiers = {
 		workforce_scaled = {
 			goods_input_construction_add = 1
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 10
+		}
+	}
+}
+
+# pm_wooden_buildings: 1 construction per level
+pm_te_direct_construction_wooden = {
+	texture = "gfx/interface/icons/production_method_icons/wooden_buildings.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_production_methods = {
+		pm_te_construction_mode_direct
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_construction_add = 1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_fabric_add = 10
+			goods_input_wood_add = 40
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 10
+		}
+	}
+}
+
+# pm_iron_frame_buildings: 2 construction per level
+pm_te_direct_construction_iron_frame = {
+	texture = "gfx/interface/icons/production_method_icons/iron_frame_buildings.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		urban_planning
+	}
+
+	unlocking_production_methods = {
+		pm_te_construction_mode_direct
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_construction_add = 1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_wood_add = 8
+			goods_input_fabric_add = 4
+			goods_input_iron_add = 10
+			goods_input_tools_add = 2
+			goods_input_merchant_marine_add = 0.25
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 10
+		}
+	}
+}
+
+# pm_steel_frame_buildings: 3.5 construction per level
+pm_te_direct_construction_steel_frame = {
+	texture = "gfx/interface/icons/production_method_icons/steel_frame_buildings.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		steel_frame_buildings
+	}
+
+	unlocking_production_methods = {
+		pm_te_construction_mode_direct
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_construction_add = 1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_steel_add = 5.714
+			goods_input_glass_add = 4.571
+			goods_input_explosives_add = 1.143
+			goods_input_tools_add = 2.286
+			goods_input_merchant_marine_add = 2.857
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 10
+		}
+	}
+}
+
+# pm_arc_welded_buildings: 5 construction per level
+pm_te_direct_construction_arc_welded = {
+	texture = "gfx/interface/icons/production_method_icons/arc_welded_buildings.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		arc_welding
+	}
+
+	unlocking_production_methods = {
+		pm_te_construction_mode_direct
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_construction_add = 1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_steel_add = 4
+			goods_input_glass_add = 3.2
+			goods_input_explosives_add = 1.6
+			goods_input_tools_add = 3.2
+			goods_input_electricity_add = 3.2
+			goods_input_merchant_marine_add = 4
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 10
+		}
+	}
+}
+
+# pm_reinforced_concrete_buildings: 6 construction per level
+pm_te_direct_construction_reinforced_concrete = {
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p1.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		modern_urban_planning
+	}
+
+	unlocking_production_methods = {
+		pm_te_construction_mode_direct
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_construction_add = 1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_steel_add = 3.333
+			goods_input_glass_add = 2.667
+			goods_input_explosives_add = 1.333
+			goods_input_tools_add = 2.667
+			goods_input_electricity_add = 2.667
+			goods_input_merchant_marine_add = 4.167
+			goods_input_engines_add = 0.333
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 10
+		}
+	}
+}
+
+# pm_advanced_construction: 10 construction per level
+pm_te_direct_construction_advanced = {
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p2.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		prefabricated_construction
+	}
+
+	unlocking_production_methods = {
+		pm_te_construction_mode_direct
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_construction_add = 1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_steel_add = 2
+			goods_input_glass_add = 1.6
+			goods_input_explosives_add = 0.8
+			goods_input_tools_add = 1.6
+			goods_input_electricity_add = 2
+			goods_input_merchant_marine_add = 2.5
+			goods_input_engines_add = 0.4
+			goods_input_digital_assets_add = 2
+		}
+
+		level_scaled = {
+			building_employment_laborers_add = 10
+		}
+	}
+}
+
+# pm_nanomaterial_buildings: 16 construction per level
+pm_te_direct_construction_nanomaterial = {
+	texture = "gfx/interface/icons/production_method_icons/cat_building_gold_p3.dds"
+	is_hidden_when_unavailable = yes
+
+	unlocking_technologies = {
+		advanced_nanofabrication
+	}
+
+	unlocking_production_methods = {
+		pm_te_construction_mode_direct
+	}
+
+	country_modifiers = {
+		workforce_scaled = {
+			country_construction_add = 1
+		}
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			goods_input_steel_add = 1.25
+			goods_input_glass_add = 1
+			goods_input_explosives_add = 0.5
+			goods_input_tools_add = 1
+			goods_input_electricity_add = 1.25
+			goods_input_merchant_marine_add = 1.562
+			goods_input_engines_add = 0.25
+			goods_input_digital_assets_add = 1.25
+			goods_input_advanced_materials_add = 0.062
 		}
 
 		level_scaled = {

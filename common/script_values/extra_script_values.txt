@@ -2158,6 +2158,26 @@ construction_cost_scaling_adjusted_mult = {
 	min = 0
 }
 
+# The same adjustment for games with free_market_construction_rule disabled,
+# where the scaling rides country_construction_goods_cost_mult
+# (construction_cost_scaling_direct) and combines with that modifier's other
+# sources (power-bloc construction principle, war economy, reconstruction).
+# Without a prior variable (first run) it is just the raw scaling scaled by the
+# other sources, which is already correct.
+construction_cost_scaling_direct_adjusted_mult = {
+	value = construction_cost_scaling_mult
+	multiply = {
+		value = 1
+		add = modifier:country_construction_goods_cost_mult
+		if = {
+			limit = { has_variable = prior_construction_scaling }
+			subtract = var:prior_construction_scaling
+		}
+		min = 0
+	}
+	min = 0
+}
+
 # ====================================================================================
 # MIGRATION CROWDING
 # ====================================================================================

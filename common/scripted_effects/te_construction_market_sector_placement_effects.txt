@@ -11,6 +11,8 @@
 			building = te_construction_market_site
 			level = 1
 		}
+		# A new site starts in market mode; move it to direct mode at once.
+		te_direct_construction_sync_state_site_if_direct = yes
 	}
 
 	owner = {
@@ -72,6 +74,7 @@ te_construction_market_state_on_end = {
 					building = te_construction_market_site
 					level = 1
 				}
+				te_direct_construction_sync_state_site_if_direct = yes
 			}
 
 		}

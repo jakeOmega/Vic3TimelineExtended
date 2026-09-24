@@ -87,12 +87,41 @@ te_construction_market_private_use_target = {
 }
 
 
+# What the country's construction sites together deliver this week; the
+# per-site throughput modifier divides it among them.
+#   market:              the government purchase + the private purchase
+#   direct construction: what the Construction Sectors would deliver
+#                        (te_direct_construction_refresh_capacity)
 te_construction_market_total_use_target = {
-	value = te_construction_market_private_use_target
-	add = te_construction_market_public_use_target
+	if = {
+		limit = {
+			te_free_market_construction_off = yes
+		}
+		value = te_direct_construction_display_capacity
+	}
+	else = {
+		value = te_construction_market_private_use_target
+		add = te_construction_market_public_use_target
+	}
 }
 
+# Multiplier of te_construction_market_private_share_modifier: the private
+# share of construction, 0-100.
+#   market:              follows the two purchases (below)
+#   direct construction: the economic-system law's vanilla allocation
 te_construction_market_private_share_target = {
+	if = {
+		limit = {
+			te_free_market_construction_off = yes
+		}
+		value = te_direct_construction_law_private_share
+	}
+	else = {
+		value = te_construction_market_market_private_share_target
+	}
+}
+
+te_construction_market_market_private_share_target = {
 	if = {
 		limit = {
 			te_construction_market_total_use_target > 0

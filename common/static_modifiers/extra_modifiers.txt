@@ -4101,6 +4101,14 @@ construction_cost_scaling = {
 	goods_input_construction_mult = 1
 }
 
+# construction_cost_scaling's twin for games with free_market_construction_rule
+# disabled, where no construction good exists to scale: vanilla's own lever on
+# the cost of the goods a construction point consumes.
+construction_cost_scaling_direct = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_construction_goods_cost_mult = 1
+}
+
 migration_crowding = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_system.dds
 	state_migration_pull_mult = -0.1

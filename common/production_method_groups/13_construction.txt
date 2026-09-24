@@ -12,12 +12,6 @@
 }
 
 
-pmg_base_te_construction_market_site = {
-	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
-	ai_selection = most_productive
-
-	production_methods = {
-		pm_te_construction_market_base
-	}
-
-}
+# The Construction Site's groups (pmg_te_construction_market_site_mode,
+# pmg_base_te_construction_market_site) live in extra_pm_groups.txt, which loads
+# after this file: a copy here would be silently replaced.

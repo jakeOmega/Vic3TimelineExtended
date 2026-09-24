@@ -28,6 +28,8 @@
 			}
 		}
 	}
+	# Sites re-created above start in market mode; move them to direct mode.
+	te_direct_construction_sync_site_pms_if_direct = yes
 }
 
 

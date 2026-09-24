@@ -69,5 +69,11 @@ te_construction_market_country_setup = {
 	# 	}
 	# }
 	#te_construction_market_country_update_private_share = yes
+
+	# Direct construction: move the site just placed to direct mode. Capacity,
+	# the direct modifiers and the private share wait for the first weekly
+	# pulse, their one refresh site (as the market's private share does); see
+	# te_construction_market_on_border_changes for why not here.
+	te_direct_construction_sync_site_pms_if_direct = yes
 }
 

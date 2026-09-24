@@ -174,3 +174,23 @@ universal_aptitude_traits_rule = {
 		flag = universal_aptitude_traits_disabled
 	}
 }
+
+# Free Market Construction (docs/systems/mod_systems.md, "Construction as a
+# Market Good"). Enabled: construction is a market good; Construction Sectors
+# sell it, the government and investors buy it, Construction Sites turn it into
+# points, buildings pay construction as maintenance, and the private share
+# follows the two purchases. Disabled: vanilla-style construction; sectors
+# provide points directly, no construction good anywhere, laws set the private
+# share. Nothing reads the rule directly: ask te_free_market_construction_on /
+# _off (common/scripted_triggers/te_construction_market_triggers.txt).
+free_market_construction_rule = {
+	default = free_market_construction_enabled
+
+	free_market_construction_enabled = {
+		flag = free_market_construction_enabled
+	}
+
+	free_market_construction_disabled = {
+		flag = free_market_construction_disabled
+	}
+}

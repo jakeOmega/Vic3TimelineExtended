@@ -50,6 +50,7 @@ Systems using this pattern:
 - **Tuning:** `construction_cost_gdppc_reference`, `construction_cost_floor_ratio` (1x), `construction_cost_ceiling_ratio` (14x), `construction_cost_max_mult` (10 = +1000%).
 - **Curve:** Linear interpolation from 0 at floor to `max_mult` at ceiling.
 - `goods_input_construction_mult` affects both construction project costs AND ongoing building maintenance.
+- With `free_market_construction_rule` disabled there is no construction good to scale, so the on_action applies `construction_cost_scaling_direct` (`country_construction_goods_cost_mult = 1`, adjusted by `construction_cost_scaling_direct_adjusted_mult`) instead. See § Free Market Construction off.
 
 ## Construction as a Market Good (FMC architecture)
 
@@ -116,6 +117,37 @@ Wiring: `common/on_actions/te_construction_market_on_actions.txt` (yearly heartb
 | `te_construction_market_ai_values.txt` | AI purchase target (income, reserves, debt; war and banking-stress brakes). |
 | `te_construction_market_pulse_values.txt` | Tick bookkeeping for the self-relaying pulse. |
 | `te_construction_market_display_values.txt` | Display-only figures for the construction panel. |
+
+### Free Market Construction off (direct construction)
+
+`free_market_construction_rule` (default enabled) turns the whole market off at game setup for base-game-style construction. Every branch asks `te_free_market_construction_off` / `_on` (`common/scripted_triggers/te_construction_market_triggers.txt`), which test the **disabled** flag so a save from before the rule keeps the market.
+
+**Why the construction site stays.** A game rule can gate script, but not a define, a building group or a production method. `CONSTRUCTION_CAMP_BUILDING` stays `te_construction_market_site`, and the camp is what makes the engine charge construction materials only for the points actually spent, splitting the bill between treasury and investment pool by queue. That is vanilla's cost model, so direct construction keeps the site as the camp and changes where its capacity and its costs come from:
+
+| Piece | Market (rule on) | Direct construction (rule off) |
+|---|---|---|
+| Construction Sector | Sells the construction good; ordinary heavy industry | Idle: `te_direct_construction_sector_idle_modifier` (`building_construction_sector_throughput_add = -1` × the sector's country-level throughput factor, `var:te_dc_throughput_cancel`) stops its goods; `te_direct_construction_modifier` requires subsidies (`country_building_construction_sector_require_subsidies_bool`), so the government pays its wages as vanilla's government-funded sector's are; `te_direct_construction_no_output_modifier` (`goods_output_construction_mult = -1` × `var:te_dc_output_cancel` = 1 + every other country-level source, e.g. the nuclear crash program's −5%) makes the construction-good output exactly zero, barracks included |
+| Site capacity (`te_construction_market_total_use_target`) | Government + private purchase | `var:te_dc_capacity` from `te_direct_construction_refresh_capacity`: staffed levels (level × `te_direct_construction_building_staffing` = max(`occupancy` read as a value, the sites' 10%-step staircase)) summed per sector tier, × tier points (`TE_DC_POINTS_*`: 1 / 2 / 3.5 / 5 / 6 / 10 / 16, the market PMs' output, applied once after the sum), × the throughput factor, + 0.2 per staffed level of Engineering & Logistics barracks. Same buildings, same construction as under the market |
+| Site PM | `pm_te_construction_market_base`: 1 construction good per point | `pm_te_direct_construction_<tier>`: the sector tier's inputs ÷ its output, per point. The tier is the one delivering the most capacity (`var:te_dc_site_tier`, ties to the lower tier) |
+| Maintenance | `pm_maintenance` buys 0.1 construction per level | Cancelled: `te_direct_construction_no_maintenance_modifier` (`goods_input_construction_mult = -1` × `var:te_dc_input_cancel` = 1 + every other country-level source), so the country-level total is exactly −100% |
+| Private share (`te_construction_market_private_share_target`) | Follows the purchases; `construction_system_law_injections.txt` cancels the laws' vanilla allocations | `te_direct_construction_law_private_share` adds those vanilla values back (25 / 50 / 75 / 35 / 10 %); keep it in step with the injections |
+| Construction Cost Scaling | `construction_cost_scaling` (`goods_input_construction_mult`) | `construction_cost_scaling_direct` (`country_construction_goods_cost_mult`, vanilla's lever on construction-material cost), same curve, same multiplicative adjustment |
+| Construction panel | Purchase controls + read-out (`te_construction_market_section`) | Capacity and law-share read-out (`te_direct_construction_section`); `te_construction_market_rule_on_sgui` picks the section, and every purchase handler's `is_shown` is the rule |
+| AI | Buys through `te_construction_market_ai_update_buy` | Nothing to buy |
+
+**Site mode group.** The site has a mode group, `pmg_te_construction_market_site_mode` (defined once, in `extra_pm_groups.txt` — `13_construction.txt` loads first, so a copy there loses; an earlier draft of the rule put the direct tiers in exactly such a copy, where the engine never saw them). Its two PMs have no effects and no gates; each family in the base group is gated on its mode through cross-group `unlocking_production_methods`: the market base PM on `pm_te_construction_mode_market`, the direct tiers on `pm_te_construction_mode_direct` plus their sector tier's tech. There is deliberately no self-referencing ratchet: the market base PM sits on every site in every game, and a self-referencing default is unverified in game. Script enforces the mode instead:
+- direct games move sites with `activate_production_method`, country-wide every pulse (`te_direct_construction_sync_site_pms`) and per state straight after a site is placed (`te_direct_construction_sync_state_site_if_direct`), since a market-mode site's input is cancelled and its points would be free;
+- market games replace any site moved to direct mode by hand (`te_construction_market_reset_direct_sites`), at the **end** of the pulse, after the sites are sized. Run earlier, the replacement would be sized while unstaffed: `te_construction_market_num_sites` skips it and `te_construction_market_employment_adjusted_per_site` gives it ×10, which it keeps once it hires — a sole 100-point site would then offer 1,000. Run last, it carries no capacity modifier until the next pulse, when it has hired (both hiring rates are 1.0) and is sized normally: at worst a week of reduced construction. Replacing beats switching the PMs back, which would charge the retooling tax (+1000%) on the market PM's construction-good input. `pm_te_construction_mode_direct_desc` warns the player.
+
+**One refresh site.** `te_construction_market_on_weekly_pulse` branches on the rule, and the pulse is the only place that refreshes the direct modifiers, the capacity and the per-site / private-share modifiers (`te_direct_construction_on_weekly_pulse`: modifiers for every country, then capacity, site PMs and `te_construction_market_country_update_data` for non-decentralized ones). Setup and border changes only place sites and sync their PMs. Two reasons: the exact-cancel modifiers read their own last contribution back through `modifier:X + var`, which a second refresh on the same day could double-count, and sizing sites right after placing them would hit the staffing compensator (`te_construction_market_num_sites` counts only staffed sites; `te_construction_market_employment_adjusted_per_site` is ×10 below 10% staffing). So a direct game's first week — and a country released mid-week — runs without the direct modifiers until its first pulse, as a market game's first week runs without its private share. Files: `te_construction_market_direct_effects.txt`, `te_construction_market_direct_values.txt`, the new PMs in `te_construction_market_pms.txt`, the modifiers at the bottom of `te_construction_market_modifiers.txt`.
+
+**Approximations — play-test these first.**
+- *Throughput the script cannot read.* Economy of scale and state- or company-level throughput apply per building. They are missing from the throughput factor: capacity ignores those bonuses, and the idle modifier leaves the sector buying that residual fraction of its inputs (paid through the subsidy).
+- *Automation is cheaper than under the market.* The idle modifier also zeroes the automation PMs' goods, so automating a sector only saves wages.
+- *Construction inputs the cancel cannot reach.* Retooling (`pm_retooling`, +1000% building-level) and climate damage (+5% state-level) sit outside the country-level cancel. Those buildings still ask for a little construction good, which nobody sells, and show a small shortage.
+- *Untested cost lever.* It is unverified in game that `country_construction_goods_cost_mult` reaches the camp's materials.
+- *Staffing.* `occupancy` read as a script value has one earlier use in the repo (`extra_script_values.txt`); if it reads as 0, staffing falls back to the 10%-step staircase, which rounds down (a 99% staffed sector counts 0.9).
+- *Unverified engine behaviour — the play-test list.* (1) Market game, new and pre-rule save: a newly placed site sits on Market Construction with the market PM, and the AI never picks Direct; with a non-empty queue, switch the only site to Direct and follow reset → rehire → next pulse — construction should dip for at most a week and never exceed the purchase. (2) Direct game: a newly placed site shows Direct Construction and the right tier straight away — the mode and the tier are activated in the same block, and the tier's availability depends on the mode. (3) Direct game: capacity in the panel matches the sectors, and the site's `country_construction_add` follows its throughput modifier as under the market.
 
 ## Bulk Transportation (Merchant Marine relocalization)
 
@@ -1519,7 +1551,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 
 ## Game Rules
 
-Thirteen mod systems can be toggled on/off at game setup via `common/game_rules/extra_game_rules.txt`.
+Fourteen mod systems can be toggled on/off at game setup via `common/game_rules/extra_game_rules.txt`.
 
 | Rule | Flag (enabled) | Default | Systems Gated |
 |---|---|---|---|
@@ -1536,6 +1568,7 @@ Thirteen mod systems can be toggled on/off at game setup via `common/game_rules/
 | `space_race_rule` | `space_race_enabled` | enabled | Space race JE, satellite/moon/interplanetary events |
 | `social_movements_rule` | `social_movements_enabled` | enabled | 8 social movement JEs and associated events |
 | `universal_aptitude_traits_rule` | `universal_aptitude_traits_enabled` | **disabled** | Assigns admin/diplo/military aptitude traits to ALL adult characters instead of only rulers and heirs — works with Heir Education off too. With both rules off, no aptitude traits at all |
+| `free_market_construction_rule` | `free_market_construction_enabled` | enabled | The construction market (§ Construction as a Market Good); disabled = base-game-style direct construction (§ Free Market Construction off). Read through `te_free_market_construction_on` / `_off`, which test the *disabled* flag so a save from before the rule keeps the market |
 
 **`banking_system_rule` has three settings.** `banking_system_enabled`, `banking_system_simplified`
 and `banking_system_disabled`. The middle one keeps the Banking Cycle journal entry — the cycle,
