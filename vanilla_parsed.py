@@ -2,10 +2,10 @@
 
 ModState's vanilla half — every entity type in mod_state.VANILLA_COMMON_DIRS
 plus the English localization dict — is a pure function of the installed game
-files and the parser. Rebuilding it on every mod_state_server start costs
-~35-60 s and needs a Victoria 3 install. This module writes that parse to
-`vanilla_parsed/` as JSON once per vanilla patch, and loads it back in well
-under a second, so:
+files and the parser. Rebuilding it on every mod_state_server start re-reads
+~800 vanilla files and needs a Victoria 3 install. This module writes that
+parse to `vanilla_parsed/` as JSON once per vanilla patch, and loads it back
+in about a second, so:
 
   * a machine with no game install (cloud sessions, CI) still gets the full
     vanilla view from `ModState`, the server's entity endpoints, and every

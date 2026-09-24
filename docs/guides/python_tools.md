@@ -313,13 +313,13 @@ To start manually (use the venv Python so the post-load generators resolve their
 ```bash
 .venv/bin/python mod_state_server.py
 ```
-Loads in ~60–110 seconds, then listens on `http://127.0.0.1:8950`.
+Loads in ~30 seconds (measured in a cloud container; ~60–110 s before the parser went linear-time in 2026-09), then listens on `http://127.0.0.1:8950`.
 
 ### Vanilla data source: `vanilla_parsed/` or the game files
 
 ModState's vanilla half — every entity type in `mod_state.VANILLA_COMMON_DIRS` (the one list; the server's `base_game_paths` derives from it) plus the English loc dict — can come from two places:
 
-- **`vanilla_parsed/`** — the committed parse, written by `vanilla_parsed.py build`. One JSON file per entity type under `common/`, `localization_english.json`, and `manifest.json` (game version, parser fingerprint, per-type counts, size + sha256 of every source file). Loads in a couple of seconds instead of the ~30–60 s vanilla parse, and needs **no game install**, so a cloud session or CI gets the full vanilla view: every entity endpoint, `/diff`, `/localize`, and every audit that reads parsed vanilla.
+- **`vanilla_parsed/`** — the committed parse, written by `vanilla_parsed.py build`. One JSON file per entity type under `common/`, `localization_english.json`, and `manifest.json` (game version, parser fingerprint, per-type counts, size + sha256 of every source file). Loads in about a second, reads no game file, and needs **no game install**, so a cloud session or CI gets the full vanilla view: every entity endpoint, `/diff`, `/localize`, and every audit that reads parsed vanilla.
 - **The game files** under `<base_game_path>/game` — parsed on every full load, as before.
 
 `VIC3_VANILLA_SOURCE` picks between them. `auto` (the default) uses `vanilla_parsed/` when it is fresh. With the game files on disk and the snapshot stale, it parses the files and warns. With no game files, it loads the snapshot even when stale and warns. It does the same when the game files are a known **older** vanilla than the snapshot, for example an out-of-date vanilla git clone as `base_game_path` in a cloud session (`/status` `vanilla_source.game_files_outdated`). Those files are then also kept away from the raw-vanilla generators below. `game_files` always parses; `vanilla_parsed` always loads the snapshot. "Fresh" means all of the following match:
@@ -463,7 +463,7 @@ This blocks a page in the user's browser from driving the server (CSRF / DNS reb
 
 ##### `/reload` flag table
 
-Timings are order-of-magnitude on a WSL+NTFS checkout and move with the machine; the ordering is the part that matters. The **parse dominates every mode**, so no flag combination is ever slower than an unflagged reload — `audits_only` only drops the regenerators, `mod_only` also drops the vanilla re-read.
+Timings are order-of-magnitude and move with the machine; the ordering is the part that matters. The Cost column was measured on a WSL+NTFS checkout **before the parser went linear-time (2026-09)**, when the parse dominated every mode. Since then the whole ModState parse (vanilla files + mod) takes a few seconds: 3.9 s in a cloud container, where a server start is ~30 s and `?mod_only=true&audits_only=true` ~13 s. The post-load chain is now the bulk of a reload. No flag combination is ever slower than an unflagged reload — `audits_only` only drops the regenerators, `mod_only` also drops the vanilla re-read.
 
 | Query | Cost | Working-tree side effects | What it skips | When to use |
 |---|---|---|---|---|
