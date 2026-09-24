@@ -1,0 +1,20 @@
+﻿# Construction-market subsystem — which construction model this game runs.
+#
+# free_market_construction_rule (common/game_rules/extra_game_rules.txt):
+#   enabled  -> the construction market (the default, and the only model before
+#               the rule existed)
+#   disabled -> "direct construction": Construction Sectors provide construction
+#               points directly, as in the base game
+#
+# Both triggers test the DISABLED flag, never the enabled one, so a save made
+# before the rule existed (where neither flag may be set) keeps the market.
+# Read only a game rule, so they work from any scope — country, state,
+# building, scripted GUI.
+
+te_free_market_construction_on = {
+	NOT = { has_game_rule = free_market_construction_disabled }
+}
+
+te_free_market_construction_off = {
+	has_game_rule = free_market_construction_disabled
+}

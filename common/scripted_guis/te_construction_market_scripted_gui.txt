@@ -6,13 +6,18 @@
 # (te_construction_market_public_target) by a fixed amount: 1 (default click),
 # 10 (shift), 100 (ctrl), 1000 (alt), 10000 (right-click). On the decrease
 # side, right-click resets to 0 instead of stepping by 10000.
+#
+# Every handler is shown only while the construction market runs
+# (te_free_market_construction_on): with free_market_construction_rule
+# disabled there is nothing to buy, and the panel shows the
+# direct-construction read-out instead (te_construction_market_rule_on_sgui).
 
 te_construction_market_increase_target_1 = {
 
 	scope = country
 
 	is_shown = {
-		always = yes
+		te_free_market_construction_on = yes
 	}
 
 	ai_is_valid = {
@@ -40,7 +45,7 @@ te_construction_market_increase_target_10 = {
 	scope = country
 
 	is_shown = {
-		always = yes
+		te_free_market_construction_on = yes
 	}
 
 	ai_is_valid = {
@@ -68,7 +73,7 @@ te_construction_market_increase_target_100 = {
 	scope = country
 
 	is_shown = {
-		always = yes
+		te_free_market_construction_on = yes
 	}
 
 	ai_is_valid = {
@@ -96,7 +101,7 @@ te_construction_market_increase_target_1000 = {
 	scope = country
 
 	is_shown = {
-		always = yes
+		te_free_market_construction_on = yes
 	}
 
 	ai_is_valid = {
@@ -124,7 +129,7 @@ te_construction_market_increase_target_10000 = {
 	scope = country
 
 	is_shown = {
-		always = yes
+		te_free_market_construction_on = yes
 	}
 
 	ai_is_valid = {
@@ -152,7 +157,7 @@ te_construction_market_decrease_target_1 = {
 	scope = country
 
 	is_shown = {
-		always = yes
+		te_free_market_construction_on = yes
 	}
 
 	ai_is_valid = {
@@ -179,7 +184,7 @@ te_construction_market_decrease_target_10 = {
 	scope = country
 
 	is_shown = {
-		always = yes
+		te_free_market_construction_on = yes
 	}
 
 	ai_is_valid = {
@@ -206,7 +211,7 @@ te_construction_market_decrease_target_100 = {
 	scope = country
 
 	is_shown = {
-		always = yes
+		te_free_market_construction_on = yes
 	}
 
 	ai_is_valid = {
@@ -233,7 +238,7 @@ te_construction_market_decrease_target_1000 = {
 	scope = country
 
 	is_shown = {
-		always = yes
+		te_free_market_construction_on = yes
 	}
 
 	ai_is_valid = {
@@ -260,7 +265,7 @@ te_construction_market_decrease_target_reset = {
 	scope = country
 
 	is_shown = {
-		always = yes
+		te_free_market_construction_on = yes
 	}
 
 	ai_is_valid = {
@@ -279,5 +284,28 @@ te_construction_market_decrease_target_reset = {
 		}
 		te_construction_market_country_update_private_share = yes
 		te_construction_market_apply_per_site_modifier = yes
+	}
+}
+
+# Read-only: which of the construction panel's two sections to render — the
+# market's purchase controls or the direct-construction read-out. The GUI
+# cannot test a game rule itself.
+te_construction_market_rule_on_sgui = {
+
+	scope = country
+
+	is_shown = {
+		te_free_market_construction_on = yes
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	is_valid = {
+		always = no
+	}
+
+	effect = {
 	}
 }

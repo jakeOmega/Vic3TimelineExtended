@@ -17,6 +17,7 @@ te_construction_market_site = {
 	#economic_contribution = 0.0
 	#auto_place_buildings = yes
 	production_method_groups = {
+		pmg_te_construction_market_site_mode
 		pmg_base_te_construction_market_site
 	}
 	#possible = {

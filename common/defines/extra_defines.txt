@@ -144,5 +144,7 @@ NDiplomacy = {
 NCountry = {
 	CONSTRUCTION_QUEUE_INCREMENT_SHIFT = 10
 	CONSTRUCTION_QUEUE_INCREMENT_CONTROL = 100
-	CONSTRUCTION_CAMP_BUILDING = building_construction_site
+	# CONSTRUCTION_CAMP_BUILDING lives in te_construction_market_defines.txt.
+	# This file used to set it too, to a building that does not exist
+	# (building_construction_site); only file load order made the other one win.
 }

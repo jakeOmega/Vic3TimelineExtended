@@ -12,12 +12,32 @@
 }
 
 
+# Construction Site. The mode group chooses between the market method and the
+# direct-construction tiers in the base group; both are gated on it through
+# unlocking_production_methods. See te_construction_market_pms.txt.
+pmg_te_construction_market_site_mode = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	ai_selection = most_productive
+
+	production_methods = {
+		pm_te_construction_mode_market
+		pm_te_construction_mode_direct
+	}
+}
+
 pmg_base_te_construction_market_site = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
 
 	production_methods = {
 		pm_te_construction_market_base
+		pm_te_direct_construction_wooden
+		pm_te_direct_construction_iron_frame
+		pm_te_direct_construction_steel_frame
+		pm_te_direct_construction_arc_welded
+		pm_te_direct_construction_reinforced_concrete
+		pm_te_direct_construction_advanced
+		pm_te_direct_construction_nanomaterial
 	}
 
 }

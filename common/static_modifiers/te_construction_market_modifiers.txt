@@ -16,3 +16,36 @@ te_construction_market_private_share_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
 	country_private_construction_allocation_mult = 0.01
 }
+
+# ---- Direct construction (free_market_construction_rule disabled) ----
+# Kept on every country while the rule is off, re-applied weekly by
+# te_direct_construction_apply_modifiers. See docs/systems/mod_systems.md,
+# "Free Market Construction off".
+
+# Unscaled. The construction good is no longer produced (Construction Sectors,
+# Engineering & Logistics barracks), and Construction Sectors - which in this
+# mode only employ - are paid for by the government, as vanilla's are.
+te_direct_construction_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_output_construction_mult = -1
+	country_building_construction_sector_require_subsidies_bool = yes
+}
+
+# Multiplied by var:te_dc_input_cancel = 1 + every OTHER country-level
+# goods_input_construction_mult, so the country-level total is exactly -100%
+# and no building consumes the construction good: no maintenance, no company
+# inputs, no retooling tax. An exact cancel rather than a large negative,
+# because nothing establishes that the engine floors a goods input at zero.
+te_direct_construction_no_maintenance_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	goods_input_construction_mult = -1
+}
+
+# Multiplied by var:te_dc_throughput_cancel = the Construction Sector's
+# throughput from country-level sources (te_direct_construction_throughput_factor),
+# which idles its production method: in this mode the Construction Site buys
+# the goods for each point actually spent, so the sector must not buy them too.
+te_direct_construction_sector_idle_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_construction_sector_throughput_add = -1
+}

@@ -981,8 +981,13 @@ types construction_panel
 				# common/script_values/te_construction_market_display_values.txt.
 				# Text: the TE_CM_* keys. The open flag of the explanation lives in
 				# the GUI variable system only, never in the save.
+				# Shown only while the construction market runs; with
+				# free_market_construction_rule disabled the direct-construction
+				# section below replaces it. The GUI cannot test a game rule, so
+				# te_construction_market_rule_on_sgui answers for it.
 				flowcontainer = {
 					name = "te_construction_market_section"
+					visible = "[GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End )]"
 					using = default_list_position
 					direction = vertical
 					minimumsize = { @panel_width -1 }
@@ -1152,6 +1157,64 @@ types construction_panel
 						max_width = @panel_width_minus_10
 						margin = { 10 5 }
 						align = left|nobaseline
+					}
+				}
+
+				### MOD: direct construction (free_market_construction_rule disabled) ###
+				# Construction Sectors provide construction points directly, so there
+				# is nothing to buy: a read-out of what the sectors deliver and of the
+				# law-set private share. Figures: te_direct_construction_display_capacity
+				# and te_direct_construction_law_private_share
+				# (common/script_values/te_construction_market_direct_values.txt).
+				flowcontainer = {
+					name = "te_direct_construction_section"
+					visible = "[Not( GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
+					using = default_list_position
+					direction = vertical
+					minimumsize = { @panel_width -1 }
+					margin_top = 5
+					margin_bottom = 10
+					spacing = 5
+
+					default_header = {
+						blockoverride "text" {
+							text = "TE_DC_SECTION_HEADER"
+						}
+					}
+
+					textbox = {
+						parentanchor = hcenter
+						text = "TE_DC_SECTION_INTRO"
+						autoresize = yes
+						multiline = yes
+						max_width = @panel_width_minus_10
+						margin = { 10 0 }
+						align = left|nobaseline
+					}
+
+					flowcontainer = {
+						parentanchor = hcenter
+						direction = vertical
+						margin_top = 5
+						spacing = 3
+
+						textbox = {
+							text = "TE_DC_STAT_CAPACITY"
+							tooltip = "TE_DC_STAT_CAPACITY_TT"
+							autoresize = yes
+							multiline = yes
+							max_width = @panel_width_minus_10
+							align = left|nobaseline
+						}
+
+						textbox = {
+							text = "TE_DC_STAT_SHARE"
+							tooltip = "TE_DC_STAT_SHARE_TT"
+							autoresize = yes
+							multiline = yes
+							max_width = @panel_width_minus_10
+							align = left|nobaseline
+						}
 					}
 				}
 

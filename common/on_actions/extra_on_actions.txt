@@ -2432,25 +2432,43 @@ society_technology_events_on_action = {
 # See extra_script_values.txt for tuning constants.
 construction_cost_scaling_on_action = {
 	effect = {
-		remove_modifier = construction_cost_scaling
+		# free_market_construction_rule disabled: there is no construction good
+		# to scale, so the scaling goes on vanilla's own lever for the cost of
+		# the goods construction consumes (construction_cost_scaling_direct).
+		# The rule is fixed for the whole game, so the two branches never share
+		# var:prior_construction_scaling.
 		if = {
-			limit = { NOT = { has_variable = prior_construction_scaling } }
-			# First run (new save or pre-adjustment saves) - use raw scaling
+			limit = { te_free_market_construction_off = yes }
+			# Compute before removing, so the modifier read certainly still holds
+			# the contribution var:prior_construction_scaling backs out.
+			set_variable = { name = prior_construction_scaling value = construction_cost_scaling_direct_adjusted_mult }
+			remove_modifier = construction_cost_scaling_direct
 			if = {
-				limit = { construction_cost_scaling_mult > 0 }
-				add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_mult }
-				set_variable = { name = prior_construction_scaling value = construction_cost_scaling_mult }
+				limit = { var:prior_construction_scaling > 0 }
+				add_modifier = { name = construction_cost_scaling_direct multiplier = var:prior_construction_scaling }
 			}
 		}
 		else = {
-			# Subsequent runs - use adjusted scaling (multiplicative with other modifiers)
+			remove_modifier = construction_cost_scaling
 			if = {
-				limit = { construction_cost_scaling_adjusted_mult > 0 }
-				add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_adjusted_mult }
-				set_variable = { name = prior_construction_scaling value = construction_cost_scaling_adjusted_mult }
+				limit = { NOT = { has_variable = prior_construction_scaling } }
+				# First run (new save or pre-adjustment saves) - use raw scaling
+				if = {
+					limit = { construction_cost_scaling_mult > 0 }
+					add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_mult }
+					set_variable = { name = prior_construction_scaling value = construction_cost_scaling_mult }
+				}
 			}
 			else = {
-				set_variable = { name = prior_construction_scaling value = 0 }
+				# Subsequent runs - use adjusted scaling (multiplicative with other modifiers)
+				if = {
+					limit = { construction_cost_scaling_adjusted_mult > 0 }
+					add_modifier = { name = construction_cost_scaling multiplier = construction_cost_scaling_adjusted_mult }
+					set_variable = { name = prior_construction_scaling value = construction_cost_scaling_adjusted_mult }
+				}
+				else = {
+					set_variable = { name = prior_construction_scaling value = 0 }
+				}
 			}
 		}
 	}

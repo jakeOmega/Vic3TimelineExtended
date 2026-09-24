@@ -1,0 +1,194 @@
+﻿# Construction-market subsystem — direct construction, the model games run
+# with free_market_construction_rule disabled (te_free_market_construction_off).
+# See docs/systems/mod_systems.md, "Free Market Construction off".
+#
+# Construction Sectors produce no construction good and buy nothing; each week
+# te_direct_construction_refresh_capacity adds up what they WOULD deliver and
+# the country's Construction Sites are sized to deliver exactly that many
+# points, buying the matching goods for each point actually spent. Country
+# scope unless marked otherwise.
+
+# Construction per sector level per tier: the sector PMs'
+# goods_output_construction_add in common/production_methods/extra_pms.txt.
+# Direct construction keeps the market's scale, so the same sectors deliver
+# the same construction under either rule setting. Keep in step with
+# extra_pms.txt (and the direct tiers in te_construction_market_pms.txt).
+TE_DC_POINTS_WOODEN = 1
+TE_DC_POINTS_IRON_FRAME = 2
+TE_DC_POINTS_STEEL_FRAME = 3.5
+TE_DC_POINTS_ARC_WELDED = 5
+TE_DC_POINTS_REINFORCED_CONCRETE = 6
+TE_DC_POINTS_ADVANCED = 10
+TE_DC_POINTS_NANOMATERIAL = 16
+# Barracks under the Engineering & Logistics principle
+# (pm_principle_engineering_and_logistics, extra_pms.txt)
+TE_DC_POINTS_BARRACKS_PRINCIPLE = 0.2
+
+# Building scope (a construction sector): construction points per week at base
+# throughput — level × staffing × its tier's points. Staffing uses the same
+# 10%-step occupancy staircase as the construction sites
+# (te_construction_market_employee_slots_filled), since workforce_scaled
+# output follows how full the building is.
+te_direct_construction_building_points = {
+	value = level
+	multiply = te_construction_market_employee_slots_filled
+	multiply = te_direct_construction_building_tier_points
+}
+
+# Building scope: the per-level points of the sector's active tier.
+te_direct_construction_building_tier_points = {
+	value = 0
+	if = {
+		limit = { has_active_production_method = pm_wooden_buildings }
+		value = TE_DC_POINTS_WOODEN
+	}
+	else_if = {
+		limit = { has_active_production_method = pm_iron_frame_buildings }
+		value = TE_DC_POINTS_IRON_FRAME
+	}
+	else_if = {
+		limit = { has_active_production_method = pm_steel_frame_buildings }
+		value = TE_DC_POINTS_STEEL_FRAME
+	}
+	else_if = {
+		limit = { has_active_production_method = pm_arc_welded_buildings }
+		value = TE_DC_POINTS_ARC_WELDED
+	}
+	else_if = {
+		limit = { has_active_production_method = pm_reinforced_concrete_buildings }
+		value = TE_DC_POINTS_REINFORCED_CONCRETE
+	}
+	else_if = {
+		limit = { has_active_production_method = pm_advanced_construction }
+		value = TE_DC_POINTS_ADVANCED
+	}
+	else_if = {
+		limit = { has_active_production_method = pm_nanomaterial_buildings }
+		value = TE_DC_POINTS_NANOMATERIAL
+	}
+}
+
+# Building scope (a barracks on the Engineering & Logistics principle PM).
+te_direct_construction_barracks_points = {
+	value = level
+	multiply = te_construction_market_employee_slots_filled
+	multiply = TE_DC_POINTS_BARRACKS_PRINCIPLE
+}
+
+# The Construction Sector's throughput from country-level sources, as it would
+# be without te_direct_construction_sector_idle_modifier. Two uses:
+#   - the idle modifier's multiplier (var:te_dc_throughput_cancel), which
+#     cancels exactly this much so the sector buys no goods;
+#   - the capacity multiplier, so throughput bonuses and penalties move direct
+#     construction the way they move the sector's output under the market.
+# Parent groups count: bg_construction sits under bg_heavy_industry, which sits
+# under bg_manufacturing. The idle modifier's own contribution is backed out
+# through var:te_dc_throughput_cancel, the multiplier it was last applied with
+# (add_modifier results are not visible inside the effect block that applies
+# them). Economy of scale and state- or company-level throughput are per
+# building and cannot be read here; they are left out of both uses.
+te_direct_construction_throughput_factor = {
+	value = 1
+	add = modifier:building_throughput_add
+	add = modifier:building_group_bg_manufacturing_throughput_add
+	add = modifier:building_group_bg_heavy_industry_throughput_add
+	add = modifier:building_group_bg_construction_throughput_add
+	add = modifier:building_construction_sector_throughput_add
+	if = {
+		limit = { has_variable = te_dc_throughput_cancel }
+		add = var:te_dc_throughput_cancel
+	}
+	min = 0
+}
+
+# Multiplier for te_direct_construction_no_maintenance_modifier
+# (goods_input_construction_mult = -1): 1 + every other country-level
+# goods_input_construction_mult, so the country-level total lands on exactly
+# -100%. The modifier's own contribution (-var:te_dc_input_cancel) is backed
+# out the same way as above. State- and building-level sources (climate
+# damage, retooling) are not in the country total and are not cancelled.
+te_direct_construction_input_cancel_next = {
+	value = 1
+	add = modifier:goods_input_construction_mult
+	if = {
+		limit = { has_variable = te_dc_input_cancel }
+		add = var:te_dc_input_cancel
+	}
+	min = 0
+}
+
+# Construction points per week. te_direct_construction_refresh_capacity sums
+# the sectors' base-throughput points by tier into var:te_dc_cap_1 .. _7 and
+# the barracks' into var:te_dc_cap_barracks. The sectors' part is scaled by
+# var:te_dc_throughput_cancel, the factor te_direct_construction_apply_modifiers
+# stored earlier in the same pulse — not by re-reading
+# te_direct_construction_throughput_factor, which would see this pulse's new
+# variable against last pulse's modifier.
+te_direct_construction_capacity_next = {
+	value = 0
+	if = {
+		limit = {
+			has_variable = te_dc_cap_1
+			has_variable = te_dc_throughput_cancel
+		}
+		add = var:te_dc_cap_1
+		add = var:te_dc_cap_2
+		add = var:te_dc_cap_3
+		add = var:te_dc_cap_4
+		add = var:te_dc_cap_5
+		add = var:te_dc_cap_6
+		add = var:te_dc_cap_7
+		multiply = var:te_dc_throughput_cancel
+		add = var:te_dc_cap_barracks
+	}
+}
+
+# Private share of construction (0-100) under direct construction: the
+# economic-system law's vanilla allocation. These are the values
+# common/laws/construction_system_law_injections.txt cancels so that, under
+# the market, only te_construction_market_private_share_modifier sets the
+# share; this puts them back. Keep the two files in step.
+te_direct_construction_law_private_share = {
+	value = 0
+	if = {
+		limit = { has_law = law_type:law_traditionalism }
+		value = 25
+	}
+	else_if = {
+		limit = { has_law = law_type:law_interventionism }
+		value = 50
+	}
+	else_if = {
+		limit = { has_law = law_type:law_agrarianism }
+		value = 50
+	}
+	else_if = {
+		limit = { has_law = law_type:law_industry_banned }
+		value = 50
+	}
+	else_if = {
+		limit = { has_law = law_type:law_extraction_economy }
+		value = 50
+	}
+	else_if = {
+		limit = { has_law = law_type:law_laissez_faire }
+		value = 75
+	}
+	else_if = {
+		limit = { has_law = law_type:law_cooperative_ownership }
+		value = 35
+	}
+	else_if = {
+		limit = { has_law = law_type:law_command_economy }
+		value = 10
+	}
+}
+
+# Display: construction points the country's sectors deliver this week.
+te_direct_construction_display_capacity = {
+	value = 0
+	if = {
+		limit = { has_variable = te_dc_capacity }
+		value = var:te_dc_capacity
+	}
+}

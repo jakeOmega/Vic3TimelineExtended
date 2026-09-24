@@ -56,7 +56,7 @@ The toggleable subset of these (banking cycle, world war, etc.) is gated on per-
 
 ## Game rules (toggleable systems)
 
-Thirteen mod systems can be turned on or off at game setup. Defaults below; full list in `common/game_rules/extra_game_rules.txt`. Disabled systems hide their journal entry, bypass their on-actions, and skip their events — but baseline content (laws, techs, buildings, modifiers) still applies.
+Fourteen mod systems can be turned on or off at game setup. Defaults below; full list in `common/game_rules/extra_game_rules.txt`. Disabled systems hide their journal entry, bypass their on-actions, and skip their events — but baseline content (laws, techs, buildings, modifiers) still applies.
 
 | Rule | Default | What it gates |
 |---|---|---|
@@ -73,6 +73,7 @@ Thirteen mod systems can be turned on or off at game setup. Defaults below; full
 | `world_war_rule` | **disabled** | World War JE leadup → active → post-war lifecycle |
 | `custom_religions_allowed_rule` | **disabled** | Custom-religion creator JE and events |
 | `universal_aptitude_traits_rule` | **disabled** | Assigns admin/diplo/military aptitude traits to *all* adult characters, not just rulers and heirs — independent of Heir Education. With both rules off, no character has aptitude traits |
+| `free_market_construction_rule` | enabled | The construction market: construction as a tradeable good bought by the government and investors, construction maintenance on industry and infrastructure, a private share that follows the purchases. *Disabled*: base-game construction — Construction Sectors provide points directly, no construction good or maintenance, and the economic-system law sets the private share |
 
 Every rule but `banking_system_rule` is a straight on/off pair; that one has a third,
 *simplified* setting (see the table above).
