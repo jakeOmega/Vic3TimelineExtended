@@ -150,13 +150,23 @@ because both the pillars and the display read it. **(proposed)**
 
 | Pillar | Range | Computed from |
 |---|---|---|
-| **Base** | 20 | constant |
-| **Participation** | 0 … +20 | `20 × Σ power_share` of members |
-| **Great-power commitment** | −25 … +25 | `25 × Σ stance × power_share` over every country. Stance: champion **+1**, member **0**, undermine **−1**, a non-member of major-power rank or above **−0.5**. A member's stance also gains `country_un_institutional_alignment` (the Multilateral Institutions bloc principle), so that hook survives |
+| **Base** | 15 | constant |
+| **Participation** | 0 … +25 | `25 × Σ power_share` of members |
+| **Great-power commitment** | −25 … +25 | `25 × Σ stance × power_share` over **members only**. Stance: champion **+1**, neutral **0**, undermine **−1**. A member's stance also gains `country_un_institutional_alignment` (the Multilateral Institutions bloc principle), so that hook survives |
 | **Credibility** | −15 … +15 | a rolling record of binding decisions enforced vs. defied, vetoed or ignored (§3.4) |
 | **Funding** | −10 … +10 | the share of assessed dues actually paid, weighted by the size of each assessment (§7.2) |
 | **Peace & order** | −20 … 0 | wars between members weighted by power share (the existing `un_member_wars_weight` shape, made power-weighted); aggression without a mandate; nuclear use. Each decays |
 | **Delivery** | 0 … +10 | missions concluded successfully in the last ten years, minus failed ones, weighted by mission size (§9) |
+
+**Non-members count only against participation (decided 2026-09-24).** Participation says
+who is in; commitment says what the members do. A great power outside the UN therefore shows
+up once in the breakdown, not twice. Obstructing from inside and walking out also stay
+distinct choices:
+- An obstructing member keeps its veto and its voice, drains commitment, and pays standing.
+- A leaver loses its seat and its benefits, and drains participation.
+
+What a hostile outsider does is still charged to it, through the other pillars: wars without
+a mandate go to order, defiance goes to credibility.
 
 The existing drift components fold into the pillars:
 - champion and undermine → commitment;
@@ -194,21 +204,24 @@ the same capped-list shape as `un_resolution_history`.
 
 ### 3.5 Worked examples (to hold tuning against) **(proposed)**
 
+Terms are in pillar order: base, participation, commitment, credibility, funding, order,
+delivery.
+
 **A normal multipolar world.** 90% of power in the UN, stances mostly neutral, dues paid,
 some small wars, a few missions.
-`20 + 18 + 0 + 0 + 10 − 5 + 3 = 46`.
+`15 + 22.5 + 0 + 0 + 10 − 5 + 3 ≈ 46`.
 
 **A sole superpower, all in.** 40% of world power; member, championing, paying,
-enforcing; two allies championing.
-- `20 + 19 + 12.5 + 10 + 10 − 2 + 8 = 77.5`.
+enforcing; two allies championing; 95% of power inside.
+- `15 + 23.75 + 12.5 + 10 + 10 − 2 + 8 ≈ 77`.
 - That is capped at 70 until the first charter reform (§4.1).
-- With the reforms, other great powers eventually championing, full credibility and
-  delivery, it reaches `95`.
+- To pass 90 it also needs both reforms, the other great powers eventually championing,
+  and full credibility and delivery.
 - That is decades of work, and other permanent members can veto the reforms along the way.
 
-**The same superpower, all out.** It has left, is undermining, and wages wars without
-mandates.
-- `20 + 11 − 5 − 10 + 2 − 10 + 0 = 8`.
+**The same superpower, all out.** It has left, and wages wars without mandates. Some members
+it still leads are undermining from inside. 55% of power remains in the UN.
+- `15 + 13.75 − 2.5 − 10 + 2 − 10 + 0 ≈ 8`.
 - That opens the dissolution crisis (§4.3) within a few years, unless others step in.
 
 The owner's test: **(decided)** a sole superpower must be able to push the UN to either
@@ -328,7 +341,7 @@ by construction, and makes a real case visible before it lands.
 |---|---|---|---|---|
 | **condemn** | prestige and relations penalty | + infamy-decay penalty, mandate-eligible | + target cannot join defensive pacts | + members get a free defensive war goal against the condemned aggressor **(VERIFY IN-GAME: feasibility)** |
 | **sanctions** | trade-advantage penalty × `E` | × `E`, plus influence | **embargo pacts** from every member that voted yes (`create_diplomatic_pact = { type = embargo }`, **VERIFY IN-GAME**) | embargo pacts from every member; busting is a covert op |
-| **war without a mandate** | nothing | +infamy surcharge on war goals added (`on_wargoal_added`, the hook mandates already use) | surcharge × 2 | surcharge × 5; the AI avoids unmandated wars (strategy weight) |
+| **war without a mandate** | nothing | +infamy surcharge on war goals added (`on_wargoal_added`, the hook mandates already use) | surcharge × 2 | surcharge × 5. The surcharge is the requirement: the AI already weighs infamy before adding goals or starting wars. An AI strategy weight against wars without a mandate is a **nice-to-have (decided 2026-09-24)** |
 | **mandate** | as today | as today | the mandate holder gets war support | the holder's war goal also cannot be contested by members |
 | **peacekeeping** | observer mission | state mission (§9) | the mission state carries a war-goal infamy surcharge | a war goal against a mission state is prohibited for members **(VERIFY IN-GAME)** |
 
@@ -350,8 +363,8 @@ but its effect is multiplied by `E` and it names who pays.
 | **Refugees (UNHCR)** | source states; hosts gain migration pull | hosts: turmoil and SoL strain in the receiving states | migration crowding |
 | **Outer space (UNOOSA)** | laggards: shared progress | the leading space power: `building_orbital_battlestation` barred for members; colony claims registered, not sovereign | space-race globals |
 | **Heritage (UNESCO)** | site states: tourism and cultural pull (`country_cultural_pull_add`) | site states: a construction penalty in protected states | tourism, cultural hegemony |
-| **ICC** | small states get protection | members' leaders can be indicted for nuclear use, exposed regime-change operations or war crimes; the indicted ruler faces exile or removal **(VERIFY IN-GAME: which effect; `kill_character_audit` rules apply)** | covert exposure codes; nuclear strike effects |
-| **Pandemic (WHO)** | — | — | **Deferred.** The mod has no pandemic system; keep it minor until one exists |
+| **ICC** | small states get protection | members' leaders can be indicted for nuclear use, exposed regime-change operations or war crimes. **An indicted ruler is exiled (decided 2026-09-24)** with the vanilla `exile_character` effect, which sends the character to the exile pool. **VERIFY IN-GAME** that exiling a ruler installs the heir cleanly under every government type | covert exposure codes; nuclear strike effects |
+| **Pandemic (WHO)** | members coordinate: faster containment | members accept restrictions (lockdown costs) | **Nice-to-have (decided 2026-09-24).** Hook into vanilla's Spanish Flu, not a new system: `je_spanish_flu`, `plague_modifier` on states, the `plague_lockdown` / `plague_measures` country variables, the `spanish_flu_response` decision and the `plague.*` events. For example, WHO members advance `plague_restrictions_tracker` faster. Until then, keep the topic minor |
 
 Treaty proposers no longer get their modifier up front. Everyone ratifies on passage.
 
@@ -417,8 +430,9 @@ through `ig_approval_effect`:
 ### 7.2 Free riders: dues and the budget **(proposed)**
 
 - **Assessed dues** are `GDP × rate(tier)`: 0 when Moribund, 0.1% when Contested, 0.2% when
-  Established, 0.4% when Strong, and 1.0% when Supranational (the "UN levy"). They are
-  applied as a country-scoped expense, charged where ROOT is the country.
+  Established, 0.4% when Strong, and 1.0% when Supranational (the "UN levy"; **the 1% was
+  decided 2026-09-24**). They are applied as a country-scoped expense, charged where ROOT is
+  the country.
 - **Dues fund the budget, and the budget funds missions (§9).** A mission's strength scales
   with the budget it draws.
 - **Withholding** is a journal-entry button. It saves the money, hurts the funding pillar in
@@ -470,6 +484,7 @@ These are the convention losers in §5.3, plus the embargo symmetry in §5.2.
 | A banking contagion wave / Great Depression | `great_depression_wave_*` | emergency lending facility, with conditions (the `debt_receivership` precedent) |
 | An independence war / colonial collapse | the colonial-empire system, decolonisation events | trusteeship or decolonisation resolution |
 | First space colony claimed | `sr_colony_*` | Outer Space Treaty |
+| *(nice-to-have)* Vanilla Spanish Flu spreading across countries | states carrying `plague_modifier` | WHO coordination (§5.3) |
 
 ### 8.2 Event rules **(proposed)**
 
@@ -576,8 +591,7 @@ of this file, as `monetary_policy_design.md` does.
 |---|---|---|
 | `un_authority_approach_months` | 48 | §3.3 |
 | `un_authority_max_step` | 1.0 / month | §3.3 |
-| pillar ranges | see §3.2 | §3.2 |
-| non-member stance (major power and above) | −0.5 | §3.2 |
+| pillar ranges (base 15, participation 0–25, …) | see §3.2 | §3.2 |
 | credibility entry decay | 15 years | §3.4 |
 | tier boundaries | 20 / 45 / 70 / 85 | §4.1 |
 | tier hysteresis | 4 points | §4.1 |
@@ -587,7 +601,7 @@ of this file, as `monetary_policy_design.md` does.
 | crisis threshold / exit | 10 / 20 | §4.3 |
 | refounding cooldown / cooldown after an opposed conference / starting authority | 20 y / 10 y / 25 | §4.3 |
 | case thresholds (condemn / sanctions / mandate / ICC) | 30 / 50 / 60 / 70 | §5.1 |
-| dues by tier | 0 / 0.1% / 0.2% / 0.4% / 1.0% of GDP | §7.2 |
+| dues by tier | 0 / 0.1% / 0.2% / 0.4% / 1.0% of GDP (the 1.0% is decided) | §7.2 |
 | arrears before losing the vote | 24 months | §7.2 |
 | docket cadence | ≤ 1 new item per 3 months | §8.1 |
 | recess | 3 months | §8.3 |
@@ -595,14 +609,17 @@ of this file, as `monetary_policy_design.md` does.
 
 ---
 
-## 14. Open questions for the owner
+## 14. Owner decisions, 2026-09-24
 
-1. **Supranational war rule:** is "a mandate is effectively the only legitimate route to war"
-   plus AI restraint right, or should the top tier stop short of changing AI war behaviour?
-2. **Non-members in the commitment pillar:** count them at −0.5, or leave them to the
-   participation pillar alone?
-3. **ICC removal:** exile (the ruler is replaced, the character survives), or removal
-   through `kill_character` with the audit's guards?
-4. **The levy at Supranational:** is 1% of GDP the right order of magnitude?
-5. **Pandemics:** keep the WHO topic minor until a pandemic system exists, or scope a small
-   outbreak mechanic as part of phase 4's docket?
+The five questions left open by the first draft, as answered:
+
+1. **Supranational war rule:** the infamy surcharge is the requirement. The AI already
+   weighs infamy before adding war goals or starting wars. An explicit AI strategy weight
+   against wars without a mandate is a nice-to-have (§5.2).
+2. **Non-members:** they count only against participation, not commitment. This was Claude's
+   recommendation; the owner was indifferent. The base and participation were rebalanced to
+   15 and 0–25 so the §3.5 examples hold (§3.2).
+3. **ICC:** an indicted ruler is exiled, not killed (§5.3).
+4. **The levy at Supranational:** 1% of GDP (§7.2).
+5. **Pandemics:** a nice-to-have. If built, the WHO hooks vanilla's Spanish Flu rather than a
+   new outbreak system (§5.3, §8.1).
