@@ -2,7 +2,7 @@
 
 # Victoria 3 — Modifier Type Definitions Reference
 
-*Auto-generated from 7802 modifier entries.*
+*Auto-generated from 7807 modifier entries.*
 
 ## Dynamic Patterns
 
@@ -1852,7 +1852,7 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (534)
+### country (537)
 
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
@@ -1934,10 +1934,12 @@ _Cannon Artillery Offense_
 - `country_can_join_united_nations_bool` — **Enables Joining the #bold United Nations#!**
 - `country_can_only_conscript_peasants_bool` — **Allows only Infantry Conscript Battalions** — Conscript Battalions can only consist of Infantry Military Unit Types, except Mechanized Infantry
 - `country_can_use_asset_relief_bool` — **Enables #bold Asset Relief Program#!**
+- `country_can_use_bail_in_bool` — **Enables Bail-in Regime**
 - `country_can_use_biotech_companies_bool` — **Can Use Biotech Companies**
 - `country_can_use_countercyclical_buffer_bool` — **Enables #bold Countercyclical Buffer#!**
 - `country_can_use_cultural_assimilation_bool` — **Enables #bold Cultural [concept_assimilation] Program#!**
 - `country_can_use_deposit_guarantee_bool` — **Enables #bold Deposit Guarantee Expansion#!**
+- `country_can_use_directed_credit_electrification_bool` — **Enables Directed Credit: Electrification & High Tech**
 - `country_can_use_emergency_liquidity_bool` — **Enables #bold Emergency Liquidity Program#!**
 - `country_can_use_export_credit_bool` — **Enables #bold Export Credit Facility#!**
 - `country_can_use_open_market_ops_bool` — **Enables #bold Open Market Operations#!**
@@ -1990,6 +1992,7 @@ _Cannon Artillery Offense_
 - `country_diplomatic_play_maneuvers_add` — **Maneuvers per Diplomatic Play** — A bonus or penalty to the number of Maneuvers the country can take in a diplomatic play.
 - `country_diplomatic_play_maneuvers_mult` — **Maneuvers per Diplomatic Play** — A multiplier to the number of Maneuvers the country can take in a diplomatic play.
 - `country_diplomatic_reputation_add` — **Diplomatic Reputation** — An increase or decrease to the tendency of other Countries to sign Treaties with or offer Diplomatic Play support to a Country.
+- `country_directed_credit_sectors_add` — **Directed Credit Priority Sectors**
 - `country_disable_investment_pool_bool` — **Disable Investment Pool (except for Companies)** — Disallow all reinvestment into and usage of the Investment Pool (except for Companies)
 - `country_disable_nationalization_bool` — **Disable Nationalization** — Prevent Buildings from being Nationalized
 - `country_disable_nationalization_without_compensation_bool` — **Disable Nationalization without compensation** — Prevent Buildings from being Nationalized without compensation being paid to the owning Pops
@@ -2442,8 +2445,9 @@ _Cannon Artillery Offense_
 - `political_movement_radicalism_from_enactment_approval_mult` — **Political Movement Activism Reduction from Approved Enactment** — An increase or decrease in the Movement Activism impact of enacting Laws that Political Movements approve of
 - `political_movement_radicalism_from_enactment_disapproval_mult` — **Political Movement Activism Increase from Disapproved Enactment** — An increase or decrease in the Movement Activism impact of enacting Laws that Political Movements disapprove of
 
-### power-bloc (20)
+### power-bloc (22)
 
+- `power_bloc_banking_union_bool` — **One supervisor and one deposit guarantee across the union: adopters get #G −25%#! banking crash chance, #G −25%#! random momentum and #G +1#! banking intervention in reserve, and a crash elsewhere in the currency spreads far less readily**
 - `power_bloc_can_enact_decree_cultural_emigration_initiative_bool` — **Can Enact Cultural Emigration Initiative and Forced Migration [Concept('concept_decree', 'Decrees')]**
 - `power_bloc_can_enact_greenest_grass_campaign_bool` — **Can Enact Greenest Grass Campaign**
 - `power_bloc_can_give_development_aid_bool` — **Members Can Give Development Assistance**
@@ -2463,6 +2467,7 @@ _Cannon Artillery Offense_
 - `power_bloc_leader_can_peacefully_annex_bool` — **Leader Can Peacefully Annex Subjects**
 - `power_bloc_monetary_cooperation_bool` — **The leader's central bank backs every member: #G −0.5#! points of risk premium and #G +1#! peg confidence a month**
 - `power_bloc_principle_groups_max_add` — **Maximum [concept_power_bloc] [Concept('concept_power_bloc_principle_group', 'Principle Groups')]**
+- `power_bloc_reserve_currency_bool` — **The union's money is held the world over: the leader mints against those balances and may cut up to #G −1#! point of risk premium, and adopters get a further #G +5%#! trade advantage and #G −0.25#! points of premium**
 - `power_bloc_shared_currency_bool` — **Members may adopt the leader's currency**
 
 ### power_bloc (20)
