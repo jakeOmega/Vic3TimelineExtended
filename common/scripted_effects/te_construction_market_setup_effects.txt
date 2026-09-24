@@ -49,6 +49,7 @@ te_construction_market_country_setup = {
 	# country_replace_sectors = yes
 	if = {
 		limit = {
+			te_free_market_construction_on = yes
 			NOT = {
 				any_scope_building = {
 					is_building_type = te_construction_market_site
@@ -56,10 +57,7 @@ te_construction_market_country_setup = {
 			}
 		}
 		capital = {
-			create_building = {
-				building = te_construction_market_site
-				level = 1
-			}
+			te_construction_market_place_site = yes
 		}
 	}
 	# capital = {
@@ -70,10 +68,14 @@ te_construction_market_country_setup = {
 	# }
 	#te_construction_market_country_update_private_share = yes
 
-	# Direct construction: move the site just placed to direct mode. Capacity,
-	# the direct modifiers and the private share wait for the first weekly
-	# pulse, their one refresh site (as the market's private share does); see
-	# te_construction_market_on_border_changes for why not here.
-	te_direct_construction_sync_site_pms_if_direct = yes
+	# Direct construction: the law-set private share from day one (the laws'
+	# own allocations are cancelled in both modes). The weekly pulse keeps it
+	# current. Nothing to place: the sites are the history's sectors, converted
+	# when the game starts (te_direct_construction_convert_sectors).
+	if = {
+		limit = {
+			te_free_market_construction_off = yes
+		}
+		te_direct_construction_on_weekly_pulse = yes
+	}
 }
-

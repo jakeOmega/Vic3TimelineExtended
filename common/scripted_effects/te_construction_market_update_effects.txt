@@ -1,4 +1,12 @@
-﻿te_construction_market_country_update_sites = {
+﻿# Country scope, market games only (te_construction_market_on_border_changes):
+# re-place the sites after the map changes. te_cm_placing_site lets the site's
+# can_build_government accept these create_building calls (see
+# common/buildings/te_construction_market_site.txt).
+te_construction_market_country_update_sites = {
+	set_global_variable = {
+		name = te_cm_placing_site
+		value = 1
+	}
 	every_state = {
 		if = {
 			limit = {
@@ -28,8 +36,7 @@
 			}
 		}
 	}
-	# Sites re-created above start in market mode; move them to direct mode.
-	te_direct_construction_sync_site_pms_if_direct = yes
+	remove_global_variable = te_cm_placing_site
 }
 
 

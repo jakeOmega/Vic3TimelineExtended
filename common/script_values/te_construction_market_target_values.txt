@@ -87,11 +87,12 @@ te_construction_market_private_use_target = {
 }
 
 
-# What the country's construction sites together deliver this week; the
-# per-site throughput modifier divides it among them.
-#   market:              the government purchase + the private purchase
-#   direct construction: what the Construction Sectors would deliver
-#                        (te_direct_construction_refresh_capacity)
+# What the country's construction sites together deliver this week.
+#   market:              the government purchase + the private purchase; the
+#                        per-site throughput modifier divides it among the sites
+#   direct construction: the country's construction points, which the sites'
+#                        production methods provide themselves (read by
+#                        needed_private_levels; nothing sizes a site here)
 te_construction_market_total_use_target = {
 	if = {
 		limit = {

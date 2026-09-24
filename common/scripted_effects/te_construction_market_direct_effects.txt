@@ -1,213 +1,86 @@
 ﻿# Construction-market subsystem — direct construction, the model games run
 # with free_market_construction_rule disabled (te_free_market_construction_off).
-# See docs/systems/mod_systems.md, "Free Market Construction off", and
-# common/script_values/te_construction_market_direct_values.txt.
+# See docs/systems/mod_systems.md, "Free Market Construction off".
 #
-# The engine's construction camp stays te_construction_market_site (a define,
-# which no game rule can change), so the camp still delivers every point. What
-# changes is where its capacity and its costs come from:
-#   - Construction Sectors are idled (no goods in or out) and subsidised; they
-#     only employ, as vanilla's government-funded sectors do;
-#   - the sites are sized to what the sectors would deliver, and switched to a
-#     direct-construction PM that buys that tier's goods for each point spent
-#     (charged to the treasury or the investment pool by queue, as vanilla
-#     charges its construction goods);
-#   - no building consumes the construction good;
-#   - the economic-system law sets the private share.
+# The rule's production-method flags do the work (common/game_rules/extra_game_rules.txt):
+# the Construction Site is the buildable Construction Sector, its tiers turn
+# goods into points, and nothing makes or uses the construction good. Script
+# only has two jobs:
+#   - convert the Construction Sectors the history places into Construction
+#     Sites, once, when the game starts (te_direct_construction_convert_sectors);
+#   - restore the law-set private share (te_direct_construction_on_weekly_pulse).
 
-# Country scope. Every country, decentralized included: their buildings carry
-# the maintenance PM too, and nothing produces the construction good any more.
-te_direct_construction_apply_modifiers = {
-	remove_modifier = te_direct_construction_modifier
-	add_modifier = {
-		name = te_direct_construction_modifier
-	}
-
-	# Compute each multiplier into its variable first — the variable is what
-	# the modifier's multiplier expression reads on later re-evaluations, so it
-	# must persist (docs/guides/scripting_best_practices.md, "Variables backing
-	# add_modifier { multiplier = ... } must persist beyond the call site").
+# State scope. Replace this state's Construction Sector with a Construction Site
+# of the same level on the matching direct tier. A direct game places no sites
+# of its own, so none is there already (if one were, create_building would keep
+# the larger of the two levels, per the engine's effects.log). Levels above 100
+# are capped at 100, the largest te_construction_market_build_specified_level
+# can create.
+te_direct_construction_convert_state_sector = {
 	set_variable = {
-		name = te_dc_output_cancel
-		value = te_direct_construction_output_cancel_next
+		name = te_dc_convert_level
+		value = {
+			value = b:building_construction_sector.level
+			max = 100
+		}
 	}
-	remove_modifier = te_direct_construction_no_output_modifier
-	add_modifier = {
-		name = te_direct_construction_no_output_modifier
-		multiplier = var:te_dc_output_cancel
-	}
-
 	set_variable = {
-		name = te_dc_input_cancel
-		value = te_direct_construction_input_cancel_next
+		name = te_dc_convert_tier
+		value = 1
 	}
-	remove_modifier = te_direct_construction_no_maintenance_modifier
-	add_modifier = {
-		name = te_direct_construction_no_maintenance_modifier
-		multiplier = var:te_dc_input_cancel
-	}
+	te_direct_construction_read_sector_tier = { TIER = 2 PM = pm_iron_frame_buildings }
+	te_direct_construction_read_sector_tier = { TIER = 3 PM = pm_steel_frame_buildings }
+	te_direct_construction_read_sector_tier = { TIER = 4 PM = pm_arc_welded_buildings }
+	te_direct_construction_read_sector_tier = { TIER = 5 PM = pm_reinforced_concrete_buildings }
+	te_direct_construction_read_sector_tier = { TIER = 6 PM = pm_advanced_construction }
+	te_direct_construction_read_sector_tier = { TIER = 7 PM = pm_nanomaterial_buildings }
 
-	set_variable = {
-		name = te_dc_throughput_cancel
-		value = te_direct_construction_throughput_factor
-	}
-	remove_modifier = te_direct_construction_sector_idle_modifier
-	add_modifier = {
-		name = te_direct_construction_sector_idle_modifier
-		multiplier = var:te_dc_throughput_cancel
-	}
-}
-
-# Country scope. Adds up what the country's Construction Sectors (and
-# Engineering & Logistics barracks) would deliver - staffed levels per tier,
-# then × that tier's points - by sector tier, into
-# var:te_dc_cap_1 .. _7 / var:te_dc_cap_barracks; stores the total in
-# var:te_dc_capacity; and picks the site tier (var:te_dc_site_tier, 1-7) as
-# the tier delivering the most — ties go to the lower tier. Run after
-# te_direct_construction_apply_modifiers in the same pulse (it reads the
-# throughput factor that effect stores).
-te_direct_construction_refresh_capacity = {
-	set_variable = { name = te_dc_cap_1 value = 0 }
-	set_variable = { name = te_dc_cap_2 value = 0 }
-	set_variable = { name = te_dc_cap_3 value = 0 }
-	set_variable = { name = te_dc_cap_4 value = 0 }
-	set_variable = { name = te_dc_cap_5 value = 0 }
-	set_variable = { name = te_dc_cap_6 value = 0 }
-	set_variable = { name = te_dc_cap_7 value = 0 }
-	set_variable = { name = te_dc_cap_barracks value = 0 }
-
-	every_scope_building = {
-		limit = {
-			is_building_type = building_construction_sector
-		}
-		if = {
-			limit = { has_active_production_method = pm_wooden_buildings }
-			owner = {
-				change_variable = { name = te_dc_cap_1 add = prev.te_direct_construction_building_staffed_levels }
-			}
-		}
-		else_if = {
-			limit = { has_active_production_method = pm_iron_frame_buildings }
-			owner = {
-				change_variable = { name = te_dc_cap_2 add = prev.te_direct_construction_building_staffed_levels }
-			}
-		}
-		else_if = {
-			limit = { has_active_production_method = pm_steel_frame_buildings }
-			owner = {
-				change_variable = { name = te_dc_cap_3 add = prev.te_direct_construction_building_staffed_levels }
-			}
-		}
-		else_if = {
-			limit = { has_active_production_method = pm_arc_welded_buildings }
-			owner = {
-				change_variable = { name = te_dc_cap_4 add = prev.te_direct_construction_building_staffed_levels }
-			}
-		}
-		else_if = {
-			limit = { has_active_production_method = pm_reinforced_concrete_buildings }
-			owner = {
-				change_variable = { name = te_dc_cap_5 add = prev.te_direct_construction_building_staffed_levels }
-			}
-		}
-		else_if = {
-			limit = { has_active_production_method = pm_advanced_construction }
-			owner = {
-				change_variable = { name = te_dc_cap_6 add = prev.te_direct_construction_building_staffed_levels }
-			}
-		}
-		else_if = {
-			limit = { has_active_production_method = pm_nanomaterial_buildings }
-			owner = {
-				change_variable = { name = te_dc_cap_7 add = prev.te_direct_construction_building_staffed_levels }
-			}
-		}
-	}
-
-	every_scope_building = {
-		limit = {
-			is_building_type = building_barrack
-			has_active_production_method = pm_principle_engineering_and_logistics
-		}
-		owner = {
-			change_variable = { name = te_dc_cap_barracks add = prev.te_direct_construction_building_staffed_levels }
-		}
-	}
-
-	# Staffed levels -> points per week, at base throughput. The one place the
-	# tier-to-points table (TE_DC_POINTS_*) is applied.
-	change_variable = { name = te_dc_cap_1 multiply = TE_DC_POINTS_WOODEN }
-	change_variable = { name = te_dc_cap_2 multiply = TE_DC_POINTS_IRON_FRAME }
-	change_variable = { name = te_dc_cap_3 multiply = TE_DC_POINTS_STEEL_FRAME }
-	change_variable = { name = te_dc_cap_4 multiply = TE_DC_POINTS_ARC_WELDED }
-	change_variable = { name = te_dc_cap_5 multiply = TE_DC_POINTS_REINFORCED_CONCRETE }
-	change_variable = { name = te_dc_cap_6 multiply = TE_DC_POINTS_ADVANCED }
-	change_variable = { name = te_dc_cap_7 multiply = TE_DC_POINTS_NANOMATERIAL }
-	change_variable = { name = te_dc_cap_barracks multiply = TE_DC_POINTS_BARRACKS_PRINCIPLE }
-
-	set_variable = {
-		name = te_dc_capacity
-		value = te_direct_construction_capacity_next
-	}
-
-	set_variable = { name = te_dc_site_tier value = 1 }
-	set_variable = { name = te_dc_best_cap value = var:te_dc_cap_1 }
-	te_direct_construction_pick_tier = { TIER = 2 }
-	te_direct_construction_pick_tier = { TIER = 3 }
-	te_direct_construction_pick_tier = { TIER = 4 }
-	te_direct_construction_pick_tier = { TIER = 5 }
-	te_direct_construction_pick_tier = { TIER = 6 }
-	te_direct_construction_pick_tier = { TIER = 7 }
-}
-
-# One step of the arg-max in te_direct_construction_refresh_capacity.
-te_direct_construction_pick_tier = {
+	remove_building = building_construction_sector
 	if = {
 		limit = {
-			var:te_dc_cap_$TIER$ > var:te_dc_best_cap
+			var:te_dc_convert_level >= 1
 		}
-		set_variable = { name = te_dc_site_tier value = $TIER$ }
-		set_variable = { name = te_dc_best_cap value = var:te_dc_cap_$TIER$ }
+		te_construction_market_build_specified_level = {
+			SPEC_TYPE = te_construction_market_site
+			SPEC_LEVEL = var:te_dc_convert_level
+		}
 	}
+
+	te_direct_construction_activate_site_tier = { TIER = 1 PM = pm_te_direct_construction_wooden }
+	te_direct_construction_activate_site_tier = { TIER = 2 PM = pm_te_direct_construction_iron_frame }
+	te_direct_construction_activate_site_tier = { TIER = 3 PM = pm_te_direct_construction_steel_frame }
+	te_direct_construction_activate_site_tier = { TIER = 4 PM = pm_te_direct_construction_arc_welded }
+	te_direct_construction_activate_site_tier = { TIER = 5 PM = pm_te_direct_construction_reinforced_concrete }
+	te_direct_construction_activate_site_tier = { TIER = 6 PM = pm_te_direct_construction_advanced }
+	te_direct_construction_activate_site_tier = { TIER = 7 PM = pm_te_direct_construction_nanomaterial }
+
+	remove_variable = te_dc_convert_level
+	remove_variable = te_dc_convert_tier
 }
 
-# Country scope. Moves every Construction Site to direct mode and onto the
-# direct PM of var:te_dc_site_tier. Only activates what is not already active,
-# so a settled country pays nothing. Also called straight after a site is
-# created (sector placement, border changes, setup), because a new site starts
-# in market mode, where its input is cancelled and its points would be free.
-te_direct_construction_sync_site_pms = {
-	if = {
-		limit = {
-			NOT = { has_variable = te_dc_site_tier }
-		}
-		set_variable = { name = te_dc_site_tier value = 1 }
-	}
+# State scope. Helpers of te_direct_construction_convert_state_sector.
+te_direct_construction_read_sector_tier = {
 	if = {
 		limit = {
 			any_scope_building = {
-				is_building_type = te_construction_market_site
-				NOT = { has_active_production_method = pm_te_construction_mode_direct }
+				is_building_type = building_construction_sector
+				has_active_production_method = $PM$
 			}
 		}
-		activate_production_method = {
-			building_type = te_construction_market_site
-			production_method = pm_te_construction_mode_direct
+		set_variable = {
+			name = te_dc_convert_tier
+			value = $TIER$
 		}
 	}
-	te_direct_construction_sync_site_tier = { TIER = 1 PM = pm_te_direct_construction_wooden }
-	te_direct_construction_sync_site_tier = { TIER = 2 PM = pm_te_direct_construction_iron_frame }
-	te_direct_construction_sync_site_tier = { TIER = 3 PM = pm_te_direct_construction_steel_frame }
-	te_direct_construction_sync_site_tier = { TIER = 4 PM = pm_te_direct_construction_arc_welded }
-	te_direct_construction_sync_site_tier = { TIER = 5 PM = pm_te_direct_construction_reinforced_concrete }
-	te_direct_construction_sync_site_tier = { TIER = 6 PM = pm_te_direct_construction_advanced }
-	te_direct_construction_sync_site_tier = { TIER = 7 PM = pm_te_direct_construction_nanomaterial }
 }
 
-te_direct_construction_sync_site_tier = {
+# The site's default method (pm_te_construction_market_base) is disabled in
+# direct games, so the engine starts a new site on one of the researched tiers;
+# this moves it to the tier the sector had, tier 1 included.
+te_direct_construction_activate_site_tier = {
 	if = {
 		limit = {
-			var:te_dc_site_tier = $TIER$
+			var:te_dc_convert_tier = $TIER$
 			any_scope_building = {
 				is_building_type = te_construction_market_site
 				NOT = { has_active_production_method = $PM$ }
@@ -220,111 +93,41 @@ te_direct_construction_sync_site_tier = {
 	}
 }
 
-# Country scope. Same as te_direct_construction_sync_site_pms, but a no-op in
-# a market game — for call sites shared by both rule settings.
-te_direct_construction_sync_site_pms_if_direct = {
-	if = {
-		limit = { te_free_market_construction_off = yes }
-		te_direct_construction_sync_site_pms = yes
-	}
-}
-
-# State scope. te_direct_construction_sync_site_pms for one state's site, for
-# the placement effects, which run on every building start and finish: a
-# country-wide sync there would scan every building in the country each time.
-# No-op in a market game. At state scope activate_production_method targets
-# only this state's buildings of the type.
-te_direct_construction_sync_state_site_if_direct = {
+# Global. Convert every Construction Sector in the world, once, then close the
+# sector to new construction (building_construction_sector's can_build_* read
+# te_direct_construction_converted). Runs from on_game_started_after_lobby, when
+# the game rules are final: a rule read during history could still be changed
+# in the lobby. No-op in market games.
+te_direct_construction_convert_sectors = {
 	if = {
 		limit = {
 			te_free_market_construction_off = yes
-			any_scope_building = {
-				is_building_type = te_construction_market_site
-			}
+			NOT = { has_global_variable = te_direct_construction_converted }
 		}
-		owner = {
-			if = {
+		every_country = {
+			every_scope_state = {
 				limit = {
-					NOT = { has_variable = te_dc_site_tier }
+					has_building = building_construction_sector
 				}
-				set_variable = { name = te_dc_site_tier value = 1 }
+				te_direct_construction_convert_state_sector = yes
 			}
 		}
-		if = {
-			limit = {
-				any_scope_building = {
-					is_building_type = te_construction_market_site
-					NOT = { has_active_production_method = pm_te_construction_mode_direct }
-				}
-			}
-			activate_production_method = {
-				building_type = te_construction_market_site
-				production_method = pm_te_construction_mode_direct
-			}
-		}
-		te_direct_construction_sync_state_site_tier = { TIER = 1 PM = pm_te_direct_construction_wooden }
-		te_direct_construction_sync_state_site_tier = { TIER = 2 PM = pm_te_direct_construction_iron_frame }
-		te_direct_construction_sync_state_site_tier = { TIER = 3 PM = pm_te_direct_construction_steel_frame }
-		te_direct_construction_sync_state_site_tier = { TIER = 4 PM = pm_te_direct_construction_arc_welded }
-		te_direct_construction_sync_state_site_tier = { TIER = 5 PM = pm_te_direct_construction_reinforced_concrete }
-		te_direct_construction_sync_state_site_tier = { TIER = 6 PM = pm_te_direct_construction_advanced }
-		te_direct_construction_sync_state_site_tier = { TIER = 7 PM = pm_te_direct_construction_nanomaterial }
-	}
-}
-
-te_direct_construction_sync_state_site_tier = {
-	if = {
-		limit = {
-			owner = {
-				var:te_dc_site_tier = $TIER$
-			}
-			any_scope_building = {
-				is_building_type = te_construction_market_site
-				NOT = { has_active_production_method = $PM$ }
-			}
-		}
-		activate_production_method = {
-			building_type = te_construction_market_site
-			production_method = $PM$
+		set_global_variable = {
+			name = te_direct_construction_converted
+			value = 1
 		}
 	}
 }
 
-# Country scope. The weekly pulse body for direct construction, and the one
-# place that refreshes the direct modifiers, capacity and site throughput.
-# Setup and border changes only place sites and sync their PMs.
+# Country scope. The weekly pulse body for direct construction: the private
+# share the economic-system law sets (te_direct_construction_law_private_share,
+# through te_construction_market_private_share_target). Its one refresh site
+# after the setup event (te_construction_market_country_setup).
 te_direct_construction_on_weekly_pulse = {
-	te_direct_construction_apply_modifiers = yes
 	if = {
 		limit = {
 			NOT = { is_country_type = decentralized }
 		}
-		te_direct_construction_refresh_capacity = yes
-		te_direct_construction_sync_site_pms = yes
-		# Private share from the law, and every site's throughput sized to
-		# var:te_dc_capacity (both read te_free_market_construction_off).
-		te_construction_market_country_update_data = yes
-	}
-}
-
-# Country scope, market games only. A site moved to direct mode by hand would
-# buy raw goods for its points instead of the construction good. Replace it
-# with a fresh market-mode site (the placement logic only ever wants level 1)
-# rather than switching its PMs back: a switch would charge the retooling tax
-# on the market PM's construction-good input, about 11x per point. Runs LAST
-# in the market pulse; see te_construction_market_on_weekly_pulse for why.
-te_construction_market_reset_direct_sites = {
-	every_scope_state = {
-		limit = {
-			any_scope_building = {
-				is_building_type = te_construction_market_site
-				has_active_production_method = pm_te_construction_mode_direct
-			}
-		}
-		remove_building = te_construction_market_site
-		create_building = {
-			building = te_construction_market_site
-			level = 1
-		}
+		te_construction_market_country_update_private_share = yes
 	}
 }

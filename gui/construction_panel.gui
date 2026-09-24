@@ -1161,10 +1161,12 @@ types construction_panel
 				}
 
 				### MOD: direct construction (free_market_construction_rule disabled) ###
-				# Construction Sectors provide construction points directly, so there
-				# is nothing to buy: a read-out of what the sectors deliver and of the
-				# law-set private share. Figures: te_direct_construction_display_capacity
-				# and te_direct_construction_law_private_share
+				# The Construction Site is the construction sector and provides points
+				# directly, so there is nothing to buy: a read-out of the country's
+				# construction and of the law-set private share. The sites themselves
+				# are listed by the vanilla block below (the engine's construction camp).
+				# Figures: te_direct_construction_display_capacity and
+				# te_direct_construction_law_private_share
 				# (common/script_values/te_construction_market_direct_values.txt).
 				flowcontainer = {
 					name = "te_direct_construction_section"
@@ -1240,11 +1242,61 @@ types construction_panel
 							#visible check in type
 						}
 
-						# No Construction Sector
+						# No Construction Sector. MOD: two copies, one per
+						# free_market_construction_rule setting, since the building to
+						# offer differs: the Construction Sector with the rule on, the
+						# Construction Site (the construction sector) with it off.
 						widget = {
 							size = { @panel_width_plus_14 95 }
-							visible = "[IsDataModelEmpty(BuildingProductionMethodsEntry.GetBuildings)]"
+							visible = "[And( IsDataModelEmpty(BuildingProductionMethodsEntry.GetBuildings), GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) )]"
 							datacontext = "[GetBuildingType('building_construction_sector')]"
+
+
+					    	### building icon
+					    	icon = {
+					    		texture = "[BuildingType.GetIcon]"
+					    		enabled = no
+					    		size = { 100 100 }
+					    		position = { 7 0 }
+					    		parentanchor = vcenter
+					    	}
+
+							### DROPDOWN / EXPAND
+							textbox = {
+								position = { 110 0 }
+								size = { 440 38 }
+
+								raw_text = "CONSTRUCTION_QUEUE_NO_CONSTRUCTION_SECTOR"
+
+								align = nobaseline
+								margin = {10 0}
+
+								using = empty_state_text_properties
+								using = fontsize_large
+
+								background = {
+									using = entry_bg_simple
+								}
+							}
+
+							# INFO AREA BELOW THE DROPDOWN
+							widget = {
+								position = { 110 38 }
+								size = { 440 57 }
+
+								construction_queue_sector_actions = {
+									layoutpolicy_horizontal = expanding
+									layoutpolicy_vertical = expanding
+								}
+
+							}
+						}
+
+						# No Construction Sector (free_market_construction_rule disabled)
+						widget = {
+							size = { @panel_width_plus_14 95 }
+							visible = "[And( IsDataModelEmpty(BuildingProductionMethodsEntry.GetBuildings), Not( GetScriptedGui('te_construction_market_rule_on_sgui').IsShown( GuiScope.SetRoot( GetPlayer.MakeScope ).End ) ) )]"
+							datacontext = "[GetBuildingType('te_construction_market_site')]"
 
 
 					    	### building icon
