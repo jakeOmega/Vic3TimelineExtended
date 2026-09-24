@@ -25,10 +25,10 @@
 #   - downsizeable = yes, which direct games need: a sector whose wages are paid
 #     whether or not its points are used must be shrinkable. The AI downsizes it
 #     too, down to nothing, so in direct games the weekly pulse puts back the
-#     levels an AI country removes (te_direct_construction_keep_ai_sites) and
-#     tops every country up to a minimum of construction
-#     (te_direct_construction_update_floor). In a market game a player or the
-#     AI can remove a site. Capacity is spread over the remaining staffed sites
+#     levels an AI country removes (te_direct_construction_keep_ai_sites), and
+#     the rule gives every country a flat base of construction
+#     (te_direct_construction_base_modifier), so a country without sites can
+#     still build one. In a market game a player or the AI can remove a site. Capacity is spread over the remaining staffed sites
 #     at each weekly pulse, and the pulse re-places a capital site if none is
 #     left (te_construction_market_ensure_site).
 #   - te_construction_market_bg: no economy of scale (as vanilla's sector), no

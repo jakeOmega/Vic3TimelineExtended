@@ -70,7 +70,7 @@ te_construction_market_country_setup = {
 
 	# Direct construction: the law-set private share from day one (the laws'
 	# own allocations are cancelled in both modes). The weekly pulse keeps it
-	# current, and adds the AI site guard and the construction minimum. Nothing
+	# current, and adds the AI site guard. Nothing
 	# to place: the sites are the history's sectors, converted when the game
 	# starts (te_direct_construction_convert_sectors).
 	if = {

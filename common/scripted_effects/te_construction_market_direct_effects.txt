@@ -4,16 +4,16 @@
 #
 # The rule's production-method flags do the work (common/game_rules/extra_game_rules.txt):
 # the Construction Site is the buildable Construction Sector, its tiers turn
-# goods into points, and nothing makes or uses the construction good. Script
-# has four jobs:
+# goods into points, and nothing makes or uses the construction good. The rule
+# also gives every country a flat base of construction, so one without sites can
+# still build them (apply_modifier = all:te_direct_construction_base_modifier).
+# Script has three jobs:
 #   - convert the Construction Sectors the history places into Construction
 #     Sites, once, when the game starts (te_direct_construction_convert_sectors);
 #   - restore the law-set private share, weekly
-#     (te_direct_construction_on_weekly_pulse, as are the next two);
+#     (te_direct_construction_on_weekly_pulse, as is the next one);
 #   - put back the Construction Site levels an AI country removes
-#     (te_direct_construction_keep_ai_sites);
-#   - top every country's construction up to a small minimum, so a country with
-#     no sites can still build one (te_direct_construction_update_floor).
+#     (te_direct_construction_keep_ai_sites).
 
 # State scope. Replace this state's Construction Sector with a Construction Site
 # of the same level on the matching direct tier. A direct game places no sites
@@ -130,8 +130,8 @@ te_direct_construction_convert_sectors = {
 }
 
 # Country scope. Direct-construction setup (te_construction_market_country_setup):
-# the law-set private share from day one. The site guard and the construction
-# minimum start at the first weekly pulse, their one refresh site.
+# the law-set private share from day one. The site guard starts at the first
+# weekly pulse, its one refresh site.
 te_direct_construction_country_setup = {
 	if = {
 		limit = {
@@ -146,10 +146,7 @@ te_direct_construction_country_setup = {
 #     (te_direct_construction_law_private_share, through
 #     te_construction_market_private_share_target); its one refresh site after
 #     setup;
-#   - the AI site guard (te_direct_construction_keep_ai_sites);
-#   - the construction minimum (te_direct_construction_update_floor), after the
-#     guard, which only adds unstaffed levels and so doesn't change this week's
-#     construction.
+#   - the AI site guard (te_direct_construction_keep_ai_sites).
 te_direct_construction_on_weekly_pulse = {
 	if = {
 		limit = {
@@ -157,7 +154,6 @@ te_direct_construction_on_weekly_pulse = {
 		}
 		te_construction_market_country_update_private_share = yes
 		te_direct_construction_keep_ai_sites = yes
-		te_direct_construction_update_floor = yes
 	}
 }
 
@@ -300,33 +296,5 @@ te_direct_construction_record_state_site = {
 	else = {
 		remove_variable = te_dc_site_level
 		remove_variable = te_dc_site_tier
-	}
-}
-
-# Country scope, weekly. Construction minimum: top the country's construction up
-# to te_direct_construction_floor points a week with
-# te_direct_construction_floor_modifier, so a country whose sites are gone, or
-# that has none yet, can still build one. It is a top-up, not a flat bonus: a
-# country whose sites already give the minimum gets nothing, and the first
-# levels of a new site replace it rather than cut it off.
-#
-# The multiplier backs out the modifier's own contribution from the last pulse
-# (te_dc_floor_points, which must persist: the engine re-evaluates the
-# multiplier between pulses). The value is computed before the modifier is
-# removed, as add_modifier / remove_modifier are not visible in the same block.
-te_direct_construction_update_floor = {
-	set_variable = {
-		name = te_dc_floor_points
-		value = te_direct_construction_floor_points_next
-	}
-	remove_modifier = te_direct_construction_floor_modifier
-	if = {
-		limit = {
-			var:te_dc_floor_points > 0
-		}
-		add_modifier = {
-			name = te_direct_construction_floor_modifier
-			multiplier = var:te_dc_floor_points
-		}
 	}
 }
