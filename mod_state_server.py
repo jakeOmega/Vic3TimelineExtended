@@ -35,7 +35,7 @@ from typing import Optional
 from urllib.parse import urlparse, parse_qs, unquote
 from urllib.request import urlopen
 
-from mod_state import ModState, iter_loc_lines
+from mod_state import VANILLA_COMMON_DIRS, ModState, iter_loc_lines
 from paradox_file_parser import ParadoxFileParser
 from path_constants import (
     base_game_path,
@@ -57,6 +57,7 @@ from path_constants import (
 import annotators
 import pm_balance_lib  # noqa: F401 — imported for its annotator side effect
 import tech_unlocks_lib
+import vanilla_parsed
 
 # Also loaded by name in POST_LOAD_AUDITS; imported here so
 # /scripted-helpers/unresolved can call it directly (#288).
@@ -114,59 +115,11 @@ _server_start_time: float = 0.0  # set in main()
 _BASE_COMMON = os.path.join(base_game_path, "game", "common")
 _MOD_COMMON = os.path.join(mod_path, "common")
 
+# Built from mod_state.VANILLA_COMMON_DIRS, the one list of vanilla entity
+# types — vanilla_parsed snapshots exactly the same set.
 base_game_paths = {
-    "Building Groups": os.path.join(_BASE_COMMON, "building_groups"),
-    "Buildings": os.path.join(_BASE_COMMON, "buildings"),
-    "Technologies": os.path.join(_BASE_COMMON, "technology", "technologies"),
-    "PM Groups": os.path.join(_BASE_COMMON, "production_method_groups"),
-    "PMs": os.path.join(_BASE_COMMON, "production_methods"),
-    "Ideologies": os.path.join(_BASE_COMMON, "ideologies"),
-    "Battle Conditions": os.path.join(_BASE_COMMON, "battle_conditions"),
-    "Buy Packages": os.path.join(_BASE_COMMON, "buy_packages"),
-    "Character Interactions": os.path.join(_BASE_COMMON, "character_interactions"),
-    "Character Traits": os.path.join(_BASE_COMMON, "character_traits"),
-    "Combat Unit Groups": os.path.join(_BASE_COMMON, "combat_unit_groups"),
-    "Combat Unit Types": os.path.join(_BASE_COMMON, "combat_unit_types"),
-    "Company Types": os.path.join(_BASE_COMMON, "company_types"),
-    "Diplomatic Actions": os.path.join(_BASE_COMMON, "diplomatic_actions"),
-    "Diplomatic Plays": os.path.join(_BASE_COMMON, "diplomatic_plays"),
-    "Goods": os.path.join(_BASE_COMMON, "goods"),
-    "Government Types": os.path.join(_BASE_COMMON, "government_types"),
-    "Institutions": os.path.join(_BASE_COMMON, "institutions"),
-    "Interest Groups": os.path.join(_BASE_COMMON, "interest_groups"),
-    "Law Groups": os.path.join(_BASE_COMMON, "law_groups"),
-    "Laws": os.path.join(_BASE_COMMON, "laws"),
-    "Messages": os.path.join(_BASE_COMMON, "messages"),
-    "Mobilization Option Groups": os.path.join(_BASE_COMMON, "mobilization_option_groups"),
-    "Mobilization Options": os.path.join(_BASE_COMMON, "mobilization_options"),
-    "Modifier Types": os.path.join(_BASE_COMMON, "modifier_type_definitions"),
-    "Modifiers": os.path.join(_BASE_COMMON, "static_modifiers"),
-    "Pop Needs": os.path.join(_BASE_COMMON, "pop_needs"),
-    "Subject Types": os.path.join(_BASE_COMMON, "subject_types"),
-    "Script Values": os.path.join(_BASE_COMMON, "script_values"),
-    "Scripted Buttons": os.path.join(_BASE_COMMON, "scripted_buttons"),
-    "Ship Types": os.path.join(_BASE_COMMON, "ship_types"),
-    "Ship Groups": os.path.join(_BASE_COMMON, "ship_groups"),
-    "Ship Modifications": os.path.join(_BASE_COMMON, "ship_modifications"),
-    "Ship Modification Slots": os.path.join(_BASE_COMMON, "ship_modification_slots"),
-    "Ship Name Definitions": os.path.join(_BASE_COMMON, "ship_name_definitions"),
-    "Journal Entries": os.path.join(_BASE_COMMON, "journal_entries"),
-    "Journal Entry Groups": os.path.join(_BASE_COMMON, "journal_entry_groups"),
-    "Decisions": os.path.join(_BASE_COMMON, "decisions"),
-    "Country Formation": os.path.join(_BASE_COMMON, "country_formation"),
-    "Treaty Articles": os.path.join(_BASE_COMMON, "treaty_articles"),
-    "Religions": os.path.join(_BASE_COMMON, "religions"),
-    "Decrees": os.path.join(_BASE_COMMON, "decrees"),
-    "Principles": os.path.join(_BASE_COMMON, "power_bloc_principles"),
-    "Principle Groups": os.path.join(_BASE_COMMON, "power_bloc_principle_groups"),
-    "Amendments": os.path.join(_BASE_COMMON, "amendments"),
-    # Vocabularies the engine needs but the loader didn't include before:
-    "Cultures": os.path.join(_BASE_COMMON, "cultures"),
-    "Country Ranks": os.path.join(_BASE_COMMON, "country_ranks"),
-    "Discrimination Traits": os.path.join(_BASE_COMMON, "discrimination_traits"),
-    "Pop Types": os.path.join(_BASE_COMMON, "pop_types"),
-    "Terrains": os.path.join(_BASE_COMMON, "terrain"),
-    "Game Concepts": os.path.join(_BASE_COMMON, "game_concepts"),
+    entity_type: os.path.join(_BASE_COMMON, *rel.split("/"))
+    for entity_type, rel in VANILLA_COMMON_DIRS.items()
 }
 
 mod_paths = {
@@ -1418,12 +1371,11 @@ def _paradox_text(name, entity, indent=0):
     return f"{pad}{name} = {val}"
 
 
-def _vanilla_data_loaded() -> bool:
-    """Cheap precondition: does base_game_path resolve to a populated
-    `game/common` directory? Used by /status to refuse `ready` when the
-    vanilla clone didn't materialize (typical bootstrap failure mode —
-    see issue #93). Vanilla `game/common/` ships hundreds of subdirs, so
-    fewer than ~10 entries means the path is empty/broken."""
+def _vanilla_tree_present() -> bool:
+    """Does base_game_path resolve to a populated `game/common` directory —
+    vanilla FILES on disk, as opposed to vanilla data (see
+    _vanilla_data_loaded)? Vanilla `game/common/` ships hundreds of subdirs,
+    so fewer than ~10 entries means the path is empty/broken."""
     try:
         common = os.path.join(base_game_path, "game", "common")
         if not os.path.isdir(common):
@@ -1431,6 +1383,140 @@ def _vanilla_data_loaded() -> bool:
         return len(os.listdir(common)) > 10
     except OSError:
         return False
+
+
+def _vanilla_data_loaded() -> bool:
+    """Cheap precondition: is vanilla data available — parsed from the game
+    files, or loaded from the committed vanilla_parsed/ snapshot? Used by
+    /status to refuse `ready` when neither materialized (typical bootstrap
+    failure mode — see issue #93)."""
+    return _vanilla_source.get("kind") == "vanilla_parsed" or _vanilla_tree_present()
+
+
+def _vanilla_files_unusable_reason() -> Optional[str]:
+    """Why the vanilla game FILES must not feed generate_docs and
+    VANILLA_FILE_REGENERATORS, or None when they can: there are none, or they
+    are an older vanilla than the vanilla_parsed/ snapshot the load used."""
+    if not _vanilla_tree_present():
+        return f"no vanilla game files under {base_game_path}/game"
+    if _vanilla_source.get("game_files_outdated"):
+        return (
+            f"the vanilla game files under {base_game_path}/game are "
+            f"{_vanilla_source.get('game_files_version')}, older than "
+            f"vanilla_parsed/ ({_vanilla_source.get('game_version')})"
+        )
+    return None
+
+
+# Where the vanilla half of `ms` comes from. VIC3_VANILLA_SOURCE picks:
+#   auto (default)  — vanilla_parsed/ when it matches the code and (when one
+#                     is on disk) the game files; parse the game files when
+#                     they are present and the snapshot is stale or missing;
+#                     vanilla_parsed/ even if stale when there are no files,
+#                     or when the files are an OLDER vanilla than the snapshot
+#                     (e.g. an out-of-date vanilla clone in a cloud session).
+#   game_files      — always parse <base_game_path>/game (pre-snapshot behavior).
+#   vanilla_parsed  — always load vanilla_parsed/, even if stale.
+VANILLA_SOURCE_MODES = ("auto", "game_files", "vanilla_parsed")
+VANILLA_PARSED_DIR = vanilla_parsed.DEFAULT_DIR
+
+# Set by _choose_vanilla_source on every full load; reported by /status
+# `vanilla_source`. `kind` is "game_files" or "vanilla_parsed".
+_vanilla_source: dict = {}
+
+
+def _choose_vanilla_source() -> tuple[dict, list[dict]]:
+    """Decide where this full load takes vanilla from. Returns
+    (source, warnings) with warnings in the POST /reload `{label, detail}`
+    shape."""
+    raw_mode = (os.environ.get("VIC3_VANILLA_SOURCE") or "auto").strip().lower()
+    warnings: list[dict] = []
+    mode = raw_mode if raw_mode in VANILLA_SOURCE_MODES else "auto"
+    if mode != raw_mode:
+        warnings.append({
+            "label": "vanilla_source",
+            "detail": f"VIC3_VANILLA_SOURCE={raw_mode!r} is not one of "
+                      f"{', '.join(VANILLA_SOURCE_MODES)}; using auto",
+        })
+    tree = _vanilla_tree_present()
+    manifest = vanilla_parsed.read_manifest(VANILLA_PARSED_DIR)
+    source = {"mode": mode, "game_files_present": tree}
+    if manifest is None or mode == "game_files":
+        source.update(
+            kind="game_files",
+            reason="VIC3_VANILLA_SOURCE=game_files" if mode == "game_files"
+            else f"no snapshot at {VANILLA_PARSED_DIR}",
+        )
+        return source, warnings
+
+    fresh = vanilla_parsed.check(
+        VANILLA_PARSED_DIR, base_game_path if tree else None, manifest=manifest,
+    )
+    source.update(
+        game_version=manifest.get("game_version"),
+        built_at=manifest.get("built_at"),
+        parser_fingerprint=manifest.get("parser_fingerprint"),
+        freshness=fresh.as_dict(),
+    )
+    loadable = manifest.get("format_version") == vanilla_parsed.FORMAT_VERSION
+    rebuild = "Rebuild: python3 vanilla_parsed.py build (on a machine with the game)."
+    if tree:
+        files_version = vanilla_parsed.game_files_version(base_game_path)
+        source["game_files_version"] = files_version
+        files_key = vanilla_parsed.version_key(files_version)
+        snap_key = vanilla_parsed.version_key(manifest.get("game_version"))
+        if loadable and mode == "auto" and files_key and snap_key and files_key < snap_key:
+            # The files are behind the snapshot, not ahead of it: the snapshot
+            # is the vanilla the mod targets. Keep them away from the
+            # raw-vanilla generators too (_vanilla_files_unusable_reason).
+            source.update(
+                kind="vanilla_parsed",
+                reason=f"game files are vanilla {files_version}, older than the snapshot",
+                game_files_outdated=True,
+            )
+            warnings.append({
+                "label": "vanilla_source",
+                "detail": f"the vanilla game files under {base_game_path}/game are "
+                          f"{files_version}, older than vanilla_parsed/ "
+                          f"({manifest.get('game_version')}): loaded vanilla_parsed/. "
+                          "Update or drop that vanilla tree; set "
+                          "VIC3_VANILLA_SOURCE=game_files to parse it anyway.",
+            })
+            if fresh.code_reasons:
+                warnings.append({
+                    "label": "vanilla_source",
+                    "detail": "vanilla_parsed/ does not match the code: "
+                              + "; ".join(fresh.code_reasons) + f". {rebuild}",
+                })
+            return source, warnings
+    if loadable and (mode == "vanilla_parsed" or fresh.fresh or not tree):
+        source["kind"] = "vanilla_parsed"
+        source["reason"] = (
+            "fresh" if fresh.fresh else
+            "VIC3_VANILLA_SOURCE=vanilla_parsed" if mode == "vanilla_parsed" else
+            "no vanilla game files on disk"
+        )
+        if not fresh.fresh:
+            warnings.append({
+                "label": "vanilla_source",
+                "detail": "loaded vanilla_parsed/ although it is stale: "
+                          + "; ".join(fresh.reasons) + f". {rebuild}",
+            })
+        return source, warnings
+
+    source["kind"] = "game_files"
+    source["reason"] = "vanilla_parsed/ is stale" if loadable else (
+        f"vanilla_parsed/ format {manifest.get('format_version')!r} is unreadable"
+    )
+    warnings.append({
+        "label": "vanilla_source",
+        "detail": f"{source['reason']} ("
+                  + ("; ".join(fresh.reasons) or "format") + "); "
+                  + ("parsed the game files instead. " if tree else
+                     "and there are no game files to parse — vanilla data is empty. ")
+                  + rebuild,
+    })
+    return source, warnings
 
 
 def _engine_docs_source() -> tuple[str, str]:
@@ -2863,52 +2949,43 @@ def _union_vanilla_modifier_decimals(engine_docs: dict) -> None:
     """Annotate vanilla modifier entries with `decimals` and `percent` fields.
 
     The engine snapshot (modifiers.log) carries name/mask/display_name/description
-    only — the `decimals = N` / `percent = yes` declarations live in the source
-    files at <base_game_path>/game/common/modifier_type_definitions/. This pass
-    parses those files and patches the existing engine_docs['modifiers'] entries
-    so downstream tools (the visibility audit in particular) can compute display
+    only — the `decimals = N` / `percent = yes` declarations live in vanilla
+    common/modifier_type_definitions/, which ModState already holds as the
+    vanilla `Modifier Types` (from the install or from vanilla_parsed/). This
+    pass patches the existing engine_docs['modifiers'] entries with them so
+    downstream tools (the visibility audit in particular) can compute display
     rounding without re-reading the vanilla files themselves.
 
     Runs BEFORE _union_mod_modifier_types so mod-side cosmetic redeclarations
     (which may set a different `decimals`) win.
     """
-    vanilla_dir = os.path.join(base_game_path, "game", "common", "modifier_type_definitions")
-    if not os.path.isdir(vanilla_dir):
-        logger.warning(f"Vanilla modifier_type_definitions directory not found: {vanilla_dir}")
+    base = ms.base_parsers.get("Modifier Types") if ms else None
+    vanilla_types = base.data if base is not None else {}
+    if not vanilla_types:
+        logger.warning("Vanilla Modifier Types not loaded; no decimals/percent annotation")
         return
 
     by_name = {e.get("name"): i for i, e in enumerate(engine_docs.get("modifiers", []))}
     annotated = 0
 
-    for fname in sorted(os.listdir(vanilla_dir)):
-        if not fname.endswith(".txt"):
-            continue
-        full = os.path.join(vanilla_dir, fname)
-        try:
-            local = ParadoxFileParser()
-            local.parse_file(full, apply_directives=False)
-        except Exception as e:
-            logger.warning(f"Failed to parse vanilla {fname}: {e}")
-            continue
-        for name, raw in local.data.items():
-            data = _flatten_entity_data(raw)
+    def _unwrap(v):
+        return v[1] if isinstance(v, tuple) and len(v) >= 2 else v
 
-            def _unwrap(v):
-                return v[1] if isinstance(v, tuple) and len(v) >= 2 else v
-
-            decimals = _try_int(_unwrap(data.get("decimals")))
-            percent = _try_bool_yes(_unwrap(data.get("percent")))
-            if decimals is None and percent is None:
-                continue
-            idx = by_name.get(name)
-            if idx is None:
-                continue
-            entry = engine_docs["modifiers"][idx]
-            if decimals is not None:
-                entry["decimals"] = decimals
-            if percent is not None:
-                entry["percent"] = percent
-            annotated += 1
+    for name, raw in vanilla_types.items():
+        data = _flatten_entity_data(raw)
+        decimals = _try_int(_unwrap(data.get("decimals")))
+        percent = _try_bool_yes(_unwrap(data.get("percent")))
+        if decimals is None and percent is None:
+            continue
+        idx = by_name.get(name)
+        if idx is None:
+            continue
+        entry = engine_docs["modifiers"][idx]
+        if decimals is not None:
+            entry["decimals"] = decimals
+        if percent is not None:
+            entry["percent"] = percent
+        annotated += 1
 
     logger.info(f"Vanilla modifier-type decimals/percent: {annotated} entries annotated")
 
@@ -4776,7 +4853,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
                     # parse-time warnings (anchor-or-die rejections, missing
                     # tracked-issue cross-refs, unresolved open_issues.md anchors)
                     # via the shared collector used by POST /validate/registries.
-                    warnings = list(_post_load_warnings) + _collect_registry_warnings()
+                    warnings = (
+                        list(_vanilla_source_warnings)
+                        + list(_post_load_warnings)
+                        + _collect_registry_warnings()
+                    )
                     _record_reload_warnings(
                         flags, warnings,
                         wrote_files=_post_load_wrote_files,
@@ -5009,9 +5090,11 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 "pid": os.getpid(),
                 "reason": (
                     f"Vanilla data not loaded — {base_game_path}/game/common "
-                    "is missing or empty. Check the bootstrap clone step "
-                    "(cloud) or VIC3_BASE_GAME (local dev)."
+                    "is missing or empty and no usable vanilla_parsed/ "
+                    "snapshot was loaded. Check VIC3_BASE_GAME (local dev), "
+                    "or build the snapshot: python3 vanilla_parsed.py build."
                 ),
+                "vanilla_source": _vanilla_source or None,
             })
 
         uptime = time.time() - _server_start_time if _server_start_time else 0
@@ -5138,6 +5221,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "engine_docs_timestamps": engine_mtimes,
             "engine_docs_age_days": age_days,
             "vanilla_snapshot": vanilla_block,
+            # Where ModState's vanilla half came from — the committed
+            # vanilla_parsed/ snapshot or a parse of the game files — and,
+            # for the snapshot, whether it is fresh. Not to be confused with
+            # `vanilla_snapshot` above (the engine-docs .log snapshot).
+            "vanilla_source": dict(
+                _vanilla_source,
+                game_files_present=_vanilla_tree_present(),
+                warnings=[w["detail"] for w in _vanilla_source_warnings],
+            ),
             "versions": _compute_version_status(repo_head),
             "last_reload": _last_reload_warnings or None,
             "pattern_catalog_size": len(pattern_catalog),
@@ -8135,6 +8227,21 @@ POST_LOAD_AUDITS = [
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
 
+# Regenerators that read vanilla game FILES under <base_game_path>/game rather
+# than ModState's parsed vanilla, so vanilla_parsed/ cannot stand in for them.
+# With no game files on disk (a cloud session running from vanilla_parsed/)
+# they are skipped, and the reload says so: run blind, apply_ideologies would
+# rewrite common/ideologies/modified.txt as a bare header, gen_law_consistency
+# would regenerate without the vanilla laws, and the rest would crash.
+VANILLA_FILE_REGENERATORS = frozenset({
+    "pop_needs_curves",
+    "apply_ideologies",
+    "ig_feminism",
+    "pm_costs",
+    "resources",
+    "gen_law_consistency",
+})
+
 
 # Return-dict keys whose nonzero values indicate "actionable issue surfaced
 # by this generator." Audits use a small set of conventional names; if a new
@@ -8354,11 +8461,37 @@ def _run_generator_chain(mod_state, generators) -> None:
             _post_load_warnings.append(_failure_warning(label, module_name, exc))
 
 
-def _run_post_load_generators(mod_state, *, audits_only=False):
+def _run_post_load_generators(mod_state, *, audits_only=False, vanilla_files=True):
+    """Run the post-load chain. `vanilla_files=False` (no usable vanilla game
+    files; see _vanilla_files_unusable_reason) drops VANILLA_FILE_REGENERATORS
+    and records one
+    `vanilla_files_missing` warning naming everything skipped — including
+    generate_docs, which _load_mod_state skips for the same reason."""
     global _post_load_warnings, _post_load_wrote_files, _post_load_reparsed
     _post_load_warnings = []
     _post_load_wrote_files = []
     _post_load_reparsed = False
+    regenerators = POST_LOAD_REGENERATORS
+    if not vanilla_files:
+        regenerators = [
+            (label, module) for label, module in POST_LOAD_REGENERATORS
+            if label not in VANILLA_FILE_REGENERATORS
+        ]
+        skipped = ["generate_docs"] + (
+            [] if audits_only else
+            [label for label, _ in POST_LOAD_REGENERATORS if label in VANILLA_FILE_REGENERATORS]
+        )
+        _post_load_warnings.append({
+            "label": "vanilla_files_missing",
+            "detail": (
+                f"{_vanilla_files_unusable_reason() or 'vanilla game files unusable'}, "
+                f"so skipped {', '.join(skipped)}: they read those files "
+                "directly, and vanilla_parsed/ holds only the parsed data. "
+                "Their outputs on disk were left as they were, not regenerated."
+            ),
+            "skipped": skipped,
+        })
+        logger.warning(f"[post-load WARN] {_post_load_warnings[-1]['detail']}")
     if os.environ.get("VIC3_SKIP_POST_LOAD_GENERATORS"):
         logger.info("[post-load] skipped via VIC3_SKIP_POST_LOAD_GENERATORS")
         return
@@ -8367,7 +8500,7 @@ def _run_post_load_generators(mod_state, *, audits_only=False):
         _run_generator_chain(mod_state, POST_LOAD_AUDITS)
     else:
         before = _snapshot_mod_text_files()
-        _run_generator_chain(mod_state, POST_LOAD_REGENERATORS)
+        _run_generator_chain(mod_state, regenerators)
         _post_load_wrote_files = _changed_files(before, _snapshot_mod_text_files())
         if _post_load_wrote_files:
             logger.info(
@@ -8460,10 +8593,15 @@ def _ensure_modding_digests_fresh() -> None:
 # Refreshed on every full /reload (no flags) so vanilla bumps propagate.
 _VANILLA_LOC_CACHE: Optional[dict] = None
 
+# Warnings about where vanilla came from (stale vanilla_parsed/, unreadable
+# snapshot, bad VIC3_VANILLA_SOURCE), set on every full load and repeated in
+# every POST /reload `warnings` until the next full load clears them.
+_vanilla_source_warnings: list[dict] = []
+
 
 def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     global ms, startup_elapsed, _last_validation_report, _tech_unlocks_index_cache
-    global _VANILLA_LOC_CACHE
+    global _VANILLA_LOC_CACHE, _vanilla_source, _vanilla_source_warnings
 
     if mod_only and (ms is None or _VANILLA_LOC_CACHE is None):
         # mod_only is a fast incremental path; without cached state it has
@@ -8485,8 +8623,22 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
             logger.error(f"Failed to reload mod state: {e}\n{traceback.format_exc()}")
             raise
     else:
+        _vanilla_source, _vanilla_source_warnings = _choose_vanilla_source()
+        for w in _vanilla_source_warnings:
+            logger.warning(f"[vanilla] {w['detail']}")
+        logger.info(
+            f"[vanilla] source: {_vanilla_source['kind']} ({_vanilla_source['reason']})"
+        )
         try:
-            ms = ModState(base_game_paths, mod_paths)
+            if _vanilla_source["kind"] == "vanilla_parsed":
+                snapshot = vanilla_parsed.load(VANILLA_PARSED_DIR)
+                ms = ModState(base_game_paths, mod_paths, vanilla_data=snapshot.data)
+                # Vanilla files the snapshot build skipped, listed like the
+                # ones a live parse skips.
+                ms.parse_failures[:0] = snapshot.parse_failures
+                ms.localization = dict(snapshot.localization)
+            else:
+                ms = ModState(base_game_paths, mod_paths)
         except Exception as e:
             logger.error(f"Failed to initialize ModState: {e}\n{traceback.format_exc()}")
             raise
@@ -8504,6 +8656,9 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
     if mod_only:
         ms.localization = dict(_VANILLA_LOC_CACHE)
         ms._reverse_loc = None
+    elif _vanilla_source["kind"] == "vanilla_parsed":
+        # Vanilla loc came with the snapshot (set above).
+        _VANILLA_LOC_CACHE = dict(ms.localization)
     else:
         vanilla_loc_dir = os.path.join(base_game_path, "game", "localization", "english")
         try:
@@ -8545,17 +8700,22 @@ def _load_mod_state(*, audits_only: bool = False, mod_only: bool = False):
         except Exception as e:
             logger.error(f"Failed to load dev reference docs: {e}\n{traceback.format_exc()}")
 
-    # Regenerate docs/engine/ text files from the freshly parsed data
-    try:
-        from mod_state_script import generate_docs
-        generate_docs(ms)
-    except Exception as e:
-        logger.error(f"Failed to regenerate docs: {e}\n{traceback.format_exc()}")
+    # Regenerate docs/engine/ text files from the freshly parsed data. Its
+    # tech-unlock lines come from a raw scan of the vanilla files, so with none
+    # (or outdated ones) on disk it would rewrite docs/engine/technologies.txt
+    # from the wrong vanilla: skip it then, like VANILLA_FILE_REGENERATORS.
+    vanilla_files = _vanilla_files_unusable_reason() is None
+    if vanilla_files:
+        try:
+            from mod_state_script import generate_docs
+            generate_docs(ms)
+        except Exception as e:
+            logger.error(f"Failed to regenerate docs: {e}\n{traceback.format_exc()}")
 
     # Run idempotent transformers that regenerate mod content from configs
     # + vanilla data (e.g. pop_needs_curves, apply_ideologies). See
     # POST_LOAD_GENERATORS above and docs/guides/python_tools.md for details.
-    _run_post_load_generators(ms, audits_only=audits_only)
+    _run_post_load_generators(ms, audits_only=audits_only, vanilla_files=vanilla_files)
 
     # Last: the post-load chain's re-parse clears the callers index, so warm it
     # after that, not before (#293).
