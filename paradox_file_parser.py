@@ -12,6 +12,7 @@ INDENT_SIZE = 4
 # (not equal), `?=` (scope exists and ...) and `==` all occur in vanilla and
 # mod script; an operator missing here makes parse_object reject the key.
 conditional_tokens = ["=", "<", ">", "<=", ">=", "!=", "?=", "=="]
+_CONDITIONAL_TOKENS = frozenset(conditional_tokens)
 directive_prefixes = ("INJECT:", "REPLACE:", "REPLACE_OR_CREATE:")
 
 
@@ -123,14 +124,25 @@ class ParadoxFileParser:
         else:
             return tokens[0], tokens[1:]
 
+    # -----------------------------------------------------------------
+    # Parsing. The token-list methods below keep their historical
+    # `(value, remaining_tokens)` contract, but the work happens in the
+    # index-based `_*_at` core: one pass pairs every `{` with its `}`
+    # (`_match_braces`), then the parse walks indices into that single token
+    # list. The old implementation re-sliced `tokens[1:]` for every token and
+    # recomputed brace depths over the whole remaining file for every nested
+    # value (is_value_dictionary -> extract_tokens_within_braces ->
+    # calculate_depths), which made a parse quadratic in file size — ~90% of
+    # a mod_state_server load. The results are identical, quirks included:
+    # a bare `}` in value position is taken as the value, a block left open
+    # at the end of its range closes there, and text after an unmatched `}`
+    # that closes a file's top level is dropped.
+    # -----------------------------------------------------------------
+
     def parse_value(self, tokens):
-        if self.is_value_simple(tokens):
-            return self.parse_simple_value(tokens)
-        elif self.is_value_dictionary(tokens):
-            return self.parse_object(tokens)
-        else:
-            list_tokens = self.extract_tokens_within_braces(tokens)
-            return self.parse_list(list_tokens), tokens[len(list_tokens) + 2 :]
+        match = self._match_braces(tokens)
+        value, pos = self._parse_value_at(tokens, match, 0, len(tokens))
+        return value, tokens[pos:]
 
     def parse_list(self, tokens):
         """Walk top-level tokens of a list value. Bare `{ ... }` items
@@ -138,29 +150,7 @@ class ParadoxFileParser:
         (vanilla ship_name_definitions, terrain textures, treaty articles_to_create)
         produce a list of dicts rather than raising.
         """
-        result = []
-        i = 0
-        n = len(tokens)
-        while i < n:
-            tok = tokens[i]
-            if tok == "{":
-                # Find matching close brace, then recurse on the inner block.
-                depth = 1
-                j = i + 1
-                while j < n and depth > 0:
-                    if tokens[j] == "{":
-                        depth += 1
-                    elif tokens[j] == "}":
-                        depth -= 1
-                    j += 1
-                # tokens[i:j] is the brace-delimited block including both braces.
-                nested, _ = self.parse_object(tokens[i:j])
-                result.append(nested)
-                i = j
-            else:
-                result.append(tok)
-                i += 1
-        return result
+        return self._parse_list_at(tokens, self._match_braces(tokens), 0, len(tokens))
 
     def parse_simple_value(self, tokens):
         return tokens[0], tokens[1:]
@@ -177,27 +167,95 @@ class ParadoxFileParser:
         (`add = 5 add = 5 add = 3` is three entries). `_normalize_data`
         later folds that list into `{key: [(op, v), ...]}`.
         """
-        first_token, tokens = self.next_token(tokens)
+        match = self._match_braces(tokens)
+        value, pos = self._parse_object_at(tokens, match, 0, len(tokens))
+        return value, tokens[pos:]
+
+    @staticmethod
+    def _match_braces(tokens):
+        """`match[i]` is the index of the `}` closing the `{` at `i`, or
+        `len(tokens)` when it never closes (entries for other tokens are
+        unused)."""
+        n = len(tokens)
+        match = [n] * n
+        stack = []
+        for i, tok in enumerate(tokens):
+            if tok == "{":
+                stack.append(i)
+            elif tok == "}" and stack:
+                match[stack.pop()] = i
+        return match
+
+    @staticmethod
+    def _has_top_level_operator(tokens, match, start, stop):
+        """True when an operator sits directly inside the block whose inner
+        tokens are `tokens[start:stop]` (not inside a nested block) — what
+        makes a `{ }` block a dict rather than a list (see is_value_dictionary)."""
+        i = start
+        while i < stop:
+            tok = tokens[i]
+            if tok == "{":
+                i = match[i] + 1
+            elif tok in _CONDITIONAL_TOKENS:
+                return True
+            else:
+                i += 1
+        return False
+
+    def _parse_value_at(self, tokens, match, pos, end):
+        if pos >= end:
+            raise IndexError("list index out of range")
+        tok = tokens[pos]
+        if tok != "{":
+            return tok, pos + 1
+        inner_end = min(match[pos], end)
+        if self._has_top_level_operator(tokens, match, pos + 1, inner_end):
+            return self._parse_object_at(tokens, match, pos, end)
+        items = self._parse_list_at(tokens, match, pos + 1, inner_end)
+        return items, min(inner_end + 1, end)
+
+    def _parse_list_at(self, tokens, match, start, stop):
+        result = []
+        i = start
+        while i < stop:
+            tok = tokens[i]
+            if tok == "{":
+                # The block's own range ends at its `}` (or at `stop`).
+                j = min(match[i] + 1, stop)
+                nested, _ = self._parse_object_at(tokens, match, i, j)
+                result.append(nested)
+                i = j
+            else:
+                result.append(tok)
+                i += 1
+        return result
+
+    def _parse_object_at(self, tokens, match, pos, end):
+        first_token = tokens[pos] if pos < end else None
         if first_token != "{":
             raise ValueError(
                 f"Expected '{first_token}' to be '{{' when parsing object, got '{first_token}'"
             )
+        pos += 1
         entries = []
         seen = set()
         has_repeat = False
         while True:
-            token, tokens = self.next_token(tokens)
+            token = tokens[pos] if pos < end else None
             if token is None or token == "}":
+                if token is not None:
+                    pos += 1
                 if has_repeat:
-                    return [{key: (op, value)} for key, op, value in entries], tokens
-                return {key: (op, value) for key, op, value in entries}, tokens
+                    return [{key: (op, value)} for key, op, value in entries], pos
+                return {key: (op, value) for key, op, value in entries}, pos
             key = token
-            symbol, tokens = self.next_token(tokens)
-            if symbol not in conditional_tokens:
+            pos += 1
+            symbol = tokens[pos] if pos < end else None
+            if symbol not in _CONDITIONAL_TOKENS:
                 raise ValueError(
                     f"Expected a valid symbol after key in object, got: '{symbol}' after '{key}'"
                 )
-            value, tokens = self.parse_value(tokens)
+            value, pos = self._parse_value_at(tokens, match, pos + 1, end)
             if key in seen:
                 has_repeat = True
             seen.add(key)
@@ -214,8 +272,8 @@ class ParadoxFileParser:
             if apply_directives:
                 self.merge_data(parsed)
             else:
-                self.data.update(parsed)
-                self.data = self._normalize_data(self.data)
+                for key, value in parsed.items():
+                    self.data[key] = self._normalize_fully(value)
         except Exception as e:
             print(f"Error parsing file: {file_path}")
             raise e
@@ -271,19 +329,43 @@ class ParadoxFileParser:
         return merged
 
     def merge_data(self, new_data):
-        # Merge new data into existing self.data, with new_data taking precedence
+        """Merge new data into self.data, new_data taking precedence.
+
+        self.data is kept fully normalized (see _normalize_fully), so only the
+        keys this call writes are normalized. Re-normalizing the whole
+        accumulated table after every file — what this did before — was
+        quadratic in the number of files and most of a mod_state_server load
+        once parsing itself was linear. Normalizing waits until every key is
+        written, as it always has: an `INJECT:x` later in the same file
+        injects into that file's raw `x`, not a normalized copy."""
+        written = {}
         for raw_key, raw_value in new_data.items():
             directive, key = self._split_directive(raw_key)
-            if directive in ("REPLACE", "REPLACE_OR_CREATE"):
-                self.data[key] = raw_value
-            elif directive == "INJECT":
-                if key in self.data:
-                    self.data[key] = self._inject_value(self.data[key], raw_value)
-                else:
-                    self.data[key] = raw_value
+            if directive == "INJECT" and key in self.data:
+                self.data[key] = self._inject_value(self.data[key], raw_value)
             else:
+                # Plain keys, REPLACE:/REPLACE_OR_CREATE:, and an INJECT: with
+                # nothing to inject into all store the new value as is.
                 self.data[key] = raw_value
-        self.data = self._normalize_data(self.data)
+            written[key] = None
+        for key in written:
+            self.data[key] = self._normalize_fully(self.data[key])
+
+    def _normalize_fully(self, value):
+        """_normalize_data repeated until it changes nothing.
+
+        One pass is not always enough: a list holding a list of repeated-key
+        entries (`{ { a = 1 a = 2 } }`) folds the inner list on the first pass
+        and the outer one on the second. The old whole-table re-normalization
+        applied one pass per later file, so such an entity's shape depended on
+        how many files loaded after it; a fixpoint does not. (Every entity in
+        vanilla and the mod already sat at its fixpoint, so no parse changed.)"""
+        for _ in range(8):
+            normalized = self._normalize_data(value)
+            if normalized == value:
+                return normalized
+            value = normalized
+        return value
 
     def _split_directive(self, key):
         for prefix in directive_prefixes:

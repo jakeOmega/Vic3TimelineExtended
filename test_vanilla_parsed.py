@@ -42,6 +42,8 @@ def _make_vanilla(root, version="1.13.9"):
     _write(os.path.join(root, "game/common/laws/readme.md"), "# notes\n")
     _write(os.path.join(root, "game/localization/english/a_l_english.yml"),
            "l_english:\n law_x:0 \"Law X\"\n mod_a: \"Modifier \\\"A\\\"\"\n")
+    _write(os.path.join(root, "game/localization/english/map/states_l_english.yml"),
+           "l_english:\n STATE_X:0 \"State X\"\n")
     _write(os.path.join(root, "launcher/launcher-settings.json"),
            json.dumps({"rawVersion": version}))
 
@@ -82,7 +84,8 @@ class BuildLoadTests(unittest.TestCase):
         self.assertEqual(manifest["game_version"], "1.13.9")
         self.assertEqual(manifest["game_version_source"], "launcher-settings.json")
         self.assertEqual(manifest["entity_types"]["Laws"]["entities"], 1)
-        self.assertEqual(manifest["localization"]["keys"], 2)
+        self.assertEqual(manifest["localization"]["keys"], 3)
+        self.assertIn("game/localization/english/map/states_l_english.yml", manifest["sources"])
         # Skipped files are not sources, so editing them cannot stale it.
         self.assertIn("game/common/laws/00_laws.txt", manifest["sources"])
         self.assertNotIn("game/common/laws/_ignored.txt", manifest["sources"])
@@ -105,6 +108,7 @@ class BuildLoadTests(unittest.TestCase):
                 vp._strict_equal(live.mod_parsers[et].data, fast.mod_parsers[et].data), et)
         self.assertEqual(snap.localization, live.localization)
         self.assertEqual(snap.localization["mod_a"], 'Modifier \\"A\\"')
+        self.assertEqual(snap.localization["STATE_X"], "State X")
         # The mod layer must not leak into the snapshot's vanilla data.
         self.assertNotIn("law_new", fast.base_parsers["Laws"].data)
         self.assertIn("law_new", fast.mod_parsers["Laws"].data)
