@@ -547,5 +547,95 @@ class ParserSemanticsTests(unittest.TestCase):
         })
 
 
+
+class LinearParserTests(unittest.TestCase):
+    """The index-based parser (see the note above ParadoxFileParser.parse_value)
+    must keep every behavior of the token-slicing one it replaced — including
+    the odd ones below, whose expected values were produced by that old
+    implementation — while parsing in linear time."""
+
+    def _parse(self, *texts, apply_directives=True):
+        parser = ParadoxFileParser()
+        with tempfile.TemporaryDirectory() as tmp:
+            for i, text in enumerate(texts):
+                path = os.path.join(tmp, f"{i}.txt")
+                with open(path, "w", encoding="utf-8") as f:
+                    f.write(text)
+                parser.parse_file(path, apply_directives=apply_directives)
+        return parser.data
+
+    def test_bare_close_brace_in_value_position_is_the_value(self):
+        self.assertEqual(self._parse("a = } b = 1"),
+                         {"a": ("=", "}"), "b": ("=", "1")})
+
+    def test_block_left_open_closes_at_end_of_file(self):
+        self.assertEqual(self._parse("a = { b = 1 c = { d"),
+                         {"a": ("=", {"b": ("=", "1"), "c": ("=", ["d"])})})
+
+    def test_unmatched_close_brace_ends_the_file(self):
+        self.assertEqual(self._parse("a = 1 } b = 2"), {"a": ("=", "1")})
+
+    def test_anonymous_objects_in_a_list(self):
+        self.assertEqual(self._parse("x = { { a = 1 } { b = 2 } }"),
+                         {"x": ("=", {"a": ("=", "1"), "b": ("=", "2")})})
+
+    def test_token_list_api_returns_remaining_tokens(self):
+        value, rest = self.parser_value(["{", "a", "b", "}", "tail", "="])
+        self.assertEqual((value, rest), (["a", "b"], ["tail", "="]))
+        value, rest = self.parser_value(["{", "k", ">", "1", "}", "}"])
+        self.assertEqual((value, rest), ({"k": (">", "1")}, ["}"]))
+        with self.assertRaises(IndexError):
+            ParadoxFileParser().parse_value([])
+        with self.assertRaises(ValueError):
+            ParadoxFileParser().parse_object(["{", "k", "v", "}"])
+
+    def parser_value(self, tokens):
+        return ParadoxFileParser().parse_value(tokens)
+
+    def test_inject_later_in_the_same_file_sees_the_raw_value(self):
+        # merge_data normalizes only after every key of the file is written,
+        # as it did when it re-normalized the whole table.
+        self.assertEqual(
+            self._parse("c = { { a = { a ?= 2 } a = yes a ?= 2 } } INJECT:c = { 1 q }"),
+            {"c": ("=", [{"a": [("=", {"a": ("?=", "2")}), ("=", "yes"), ("?=", "2")]},
+                         "1", "q"])},
+        )
+
+    def test_inject_across_files_and_replace(self):
+        data = self._parse(
+            "a = { x = 1 }\nb = { y = 1 }",
+            "INJECT:a = { z = 2 }\nREPLACE:b = { w = 3 }",
+        )
+        self.assertEqual(data, {
+            "a": ("=", {"x": ("=", "1"), "z": ("=", "2")}),
+            "b": ("=", {"w": ("=", "3")}),
+        })
+
+    def test_normalization_reaches_a_fixpoint(self):
+        # A list holding a repeated-key block folds in two passes; the old
+        # one-pass-per-later-file normalization left its shape depending on
+        # how many files loaded after it.
+        parser = ParadoxFileParser()
+        nested = [[{"a": ("=", "1")}, {"a": ("=", "2")}]]
+        self.assertEqual(parser._normalize_data(nested), [{"a": [("=", "1"), ("=", "2")]}])
+        self.assertEqual(parser._normalize_fully(nested), {"a": [("=", "1"), ("=", "2")]})
+        alone = self._parse("x = { { a = 1 a = 2 } }")
+        followed = self._parse("x = { { a = 1 a = 2 } }", "y = 1", "z = 1")
+        self.assertEqual(alone["x"], followed["x"])
+        self.assertEqual(alone["x"], ("=", {"a": [("=", "1"), ("=", "2")]}))
+
+    def test_parse_is_linear_time(self):
+        # 5,000 entities / 100k tokens: ~0.05 s here, ~46 s with the old
+        # quadratic parser. The bound only catches a return to quadratic.
+        import time
+        body = "\n".join(
+            f"e_{i} = {{ a = {{ b = 1 c = {{ x y }} }} d = 2 }}" for i in range(5000)
+        )
+        start = time.perf_counter()
+        data = self._parse(body)
+        self.assertLess(time.perf_counter() - start, 10)
+        self.assertEqual(len(data), 5000)
+        self.assertEqual(data["e_4999"][1]["a"][1]["c"], ("=", ["x", "y"]))
+
 if __name__ == "__main__":
     unittest.main()

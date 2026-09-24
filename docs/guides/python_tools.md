@@ -311,7 +311,7 @@ To start manually (use the venv Python so the post-load generators resolve their
 ```bash
 .venv/bin/python mod_state_server.py
 ```
-Loads in ~60–110 seconds, then listens on `http://127.0.0.1:8950`.
+Loads in ~30 seconds (measured in a cloud container; ~60–110 s before the parser went linear-time in 2026-09), then listens on `http://127.0.0.1:8950`.
 
 ### Checking If the Server Is Running
 ```powershell
@@ -427,7 +427,7 @@ This blocks a page in the user's browser from driving the server (CSRF / DNS reb
 
 ##### `/reload` flag table
 
-Timings are order-of-magnitude on a WSL+NTFS checkout and move with the machine; the ordering is the part that matters. The **parse dominates every mode**, so no flag combination is ever slower than an unflagged reload — `audits_only` only drops the regenerators, `mod_only` also drops the vanilla re-read.
+Timings are order-of-magnitude and move with the machine; the ordering is the part that matters. The Cost column was measured on a WSL+NTFS checkout **before the parser went linear-time (2026-09)**, when the parse dominated every mode. Since then the whole ModState parse (vanilla files + mod) takes a few seconds: 3.9 s in a cloud container, where a server start is ~30 s and `?mod_only=true&audits_only=true` ~13 s. The post-load chain is now the bulk of a reload. No flag combination is ever slower than an unflagged reload — `audits_only` only drops the regenerators, `mod_only` also drops the vanilla re-read.
 
 | Query | Cost | Working-tree side effects | What it skips | When to use |
 |---|---|---|---|---|
