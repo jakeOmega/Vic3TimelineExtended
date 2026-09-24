@@ -112,6 +112,26 @@ def _message_keys(name: str, body) -> list[tuple[str, bool, str]]:
     ]
 
 
+def _treaty_article_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """Treaty articles are localized through an engine autokey family off the
+    article name, none of it referenced from script: `<name>` (the picker row),
+    `<name>_desc` (the tooltip's closing line), `<name>_effects_desc` (the
+    tooltip's bullet list) and `<name>_article_short_desc` (the one-line
+    summary on the treaty draft). A missing one renders as the raw key —
+    `nuclear_disarmament` and `nuclear_program_pause` shipped with no name at
+    all and thirteen more articles with no short desc (fixed 2026-09-24).
+
+    The directed `_effect_desc_first/_third/_global` variants are not checked:
+    vanilla sets them on a handful of articles only, so a fallback exists.
+    """
+    return [
+        (name, True, "name"),
+        (f"{name}_desc", True, "desc"),
+        (f"{name}_effects_desc", True, "effects_desc"),
+        (f"{name}_article_short_desc", True, "article_short_desc"),
+    ]
+
+
 def _explicit_name_field(name: str, body) -> list[tuple[str, bool, str]]:
     """For entities that declare loc via `name = "KEY"` and `desc = "KEY"`
     fields (scripted_buttons), not via the entity name itself."""
@@ -162,6 +182,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Pop Needs":              _simple_name,
     "Decisions":              _name_and_desc,
     "Amendments":             _name_and_desc,
+    "Treaty Articles":        _treaty_article_keys,
 }
 
 
@@ -194,6 +215,7 @@ _DIR_MAP: dict[str, str] = {
     "Pop Needs":              "common/pop_needs",
     "Decisions":              "common/decisions",
     "Amendments":             "common/amendments",
+    "Treaty Articles":        "common/treaty_articles",
     "Events":                 "events",
 }
 

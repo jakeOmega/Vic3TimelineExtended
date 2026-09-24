@@ -79,6 +79,25 @@ nuclear_program_is_standing = {
 	NOT = { modifier:country_nuclear_disarmament_bool = yes }
 }
 
+# Country scope: can this country be the one a nuclear_disarmament treaty
+# article disarms? That is the article's SOURCE, the conceding side, so the
+# article asks this of ROOT in `possible` and again of scope:source_country in
+# `can_ratify` (113_imposed_currency_peg.txt tests its pretext twice the same
+# way). A country receiving nuclear_program_aid is excluded: nobody can be aided
+# and disarmed at once, and nuclear_program_aid runs the mirror check.
+nuclear_program_can_be_disarmed = {
+	has_technology_researched = nuclear_weapons
+	NOT = { modifier:country_nuclear_disarmament_bool = yes }
+	NOT = { modifier:country_receiving_nuclear_program_aid_bool = yes }
+}
+
+# Country scope: the same for nuclear_program_pause, whose SOURCE is the
+# country that freezes its programme. It also cannot already be frozen.
+nuclear_program_can_be_paused = {
+	nuclear_program_can_be_disarmed = yes
+	NOT = { modifier:country_nuclear_program_pause_bool = yes }
+}
+
 # Country scope: True if scope:country has existential war goals against ROOT
 # (any subjugation war goal, or outright annexation incl. the mod's te_reunify_country)
 # Requires scope:country to be set (the enemy)
