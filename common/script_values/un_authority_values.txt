@@ -1,0 +1,441 @@
+﻿# ============================================================================
+# UN AUTHORITY — THE EQUILIBRIUM MODEL (redesign phase 1)
+# ============================================================================
+# global_var:un_authority no longer drifts toward 50 or takes flat deltas from
+# whoever acted. Every month it moves toward an equilibrium, the TARGET, which
+# is the sum of seven pillars computed from the state of the world. Design:
+# docs/systems/un_redesign_design.md §3; what shipped: §0 of the same file.
+#
+#   base            15                          constant
+#   participation   0 .. +25                    power share of the members
+#   commitment      -25 .. +25                  members' stance x power share
+#   credibility     -15 .. +15                  decaying ledger of the Assembly's record
+#   funding         -5 .. +10                   who pays for the UN's programmes
+#   order           -20 .. 0                    wars between members, nuclear use
+#   delivery        0 .. +10                    decaying ledger of aid / peacekeeping delivered
+#
+# POWER SHARE is a country's share of world prestige, cached monthly as
+# var:un_power_share by un_authority_monthly_update. Every act a country
+# commits is weighted by un_actor_weight (its share against a typical great
+# power's), so a micro-state's act rounds to nothing and a superpower's counts
+# several times over.
+#
+# Every tuning figure is a script value below, defined once. The pillar values
+# are computed here and SNAPSHOTTED into globals by the monthly update; the
+# display reads the snapshots (un_disp_*), never these sweeps, because the
+# journal entry re-renders every frame.
+#
+# Scope: the pillar and share values sweep every_country and read globals, so
+# they evaluate in any scope. un_actor_weight / un_member_stance /
+# un_programmes_running are country-scoped.
+# ============================================================================
+
+# ---- Tuning ----------------------------------------------------------------
+
+un_pillar_base = { value = 15 }
+un_participation_weight = { value = 25 }
+un_commitment_weight = { value = 25 }
+un_credibility_cap = { value = 15 }
+un_delivery_cap = { value = 10 }
+un_order_floor = { value = -20 }
+# Order: -40 per unit of world power share at war with a fellow member,
+# floored at -15 before the ledger's nuclear entries are added.
+un_order_war_weight = { value = -40 }
+un_order_war_floor = { value = -15 }
+# Funding (phase-1 proxy until assessed dues exist, §7.2): the power-weighted
+# share of major-and-above members running UN programmes, 2 programmes = full.
+un_funding_floor = { value = -5 }
+un_funding_span = { value = 15 }
+un_funding_programmes_for_full = { value = 2 }
+
+# Months over which authority closes the gap to its target, and the most it may
+# move in one month. 48 months closes half of a jump in about 2.8 years.
+un_authority_approach_months = { value = 48 }
+un_authority_max_step = { value = 1 }
+
+# The share of world prestige that counts as weight 1.0 (a typical great
+# power), and the cap on any one country's weight.
+un_power_reference_share = { value = 0.10 }
+un_actor_weight_cap = { value = 5 }
+
+# Monthly decay of the three ledgers: 0.5^(1/48), a four-year half-life.
+un_ledger_decay_factor = { value = 0.9857 }
+
+# Ledger entries smaller than this (after weighting) are applied but not
+# written to the display log, so the log is not buried in micro-states.
+un_ledger_log_threshold = { value = 0.05 }
+un_ledger_log_threshold_negative = { value = -0.05 }
+
+# ---- Power share -------------------------------------------------------------
+
+# Sum of world prestige over every country that can hold a UN seat. Never below
+# 1, so the division in un_power_share_value is always defined.
+un_world_prestige_value = {
+	value = 0
+	every_country = {
+		limit = { NOT = { is_country_type = decentralized } }
+		add = {
+			value = prestige
+			min = 0
+		}
+	}
+	min = 1
+}
+
+# This country's share of world prestige, 0..1. Reads the global the monthly
+# update wrote a moment earlier.
+# Scope: country
+un_power_share_value = {
+	value = prestige
+	min = 0
+	divide = global_var:un_world_prestige
+}
+
+# How much this country's acts count, relative to a typical great power.
+# 0 for a country with no cached share (never a member of a founded UN's world).
+# Scope: country
+un_actor_weight = {
+	value = 0
+	if = {
+		limit = { has_variable = un_power_share }
+		add = var:un_power_share
+		divide = un_power_reference_share
+		max = un_actor_weight_cap
+	}
+}
+
+# ---- Pillars (computed; the monthly update snapshots them) -------------------
+
+# Share of world power inside the UN, 0..1.
+un_member_power_share_value = {
+	value = 0
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			has_variable = un_power_share
+		}
+		add = var:un_power_share
+	}
+	max = 1
+}
+
+un_pillar_participation_value = {
+	value = un_member_power_share_value
+	multiply = un_participation_weight
+}
+
+# A member's political stance toward the organisation: championing +1,
+# undermining -1, plus its bloc's Multilateral Institutions alignment
+# (country_un_institutional_alignment, 0.25..0.5), clamped to -1..1.5.
+# Programmes are deliberately NOT here: they are material contribution and
+# feed the funding pillar, so one fact is never counted twice.
+# Scope: country
+un_member_stance = {
+	value = 0
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+		add = 1
+	}
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+		add = -1
+	}
+	add = modifier:country_un_institutional_alignment
+	min = -1
+	max = 1.5
+}
+
+un_pillar_commitment_value = {
+	value = 0
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			has_variable = un_power_share
+		}
+		add = {
+			value = var:un_power_share
+			multiply = un_member_stance
+		}
+	}
+	multiply = un_commitment_weight
+	min = -25
+	max = 25
+}
+
+# How many of the four UN programmes this country is genuinely running (the
+# same "running" test the standing system uses, so a cost-free marker from an
+# old save does not count).
+# Scope: country
+un_programmes_running = {
+	value = 0
+	if = {
+		limit = { un_standing_program_active_peacekeeping = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_standing_program_active_development = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_standing_program_active_human_rights = yes }
+		add = 1
+	}
+	if = {
+		limit = { un_standing_program_active_arms_control = yes }
+		add = 1
+	}
+}
+
+# Power-weighted programme participation of major-and-above members, 0..1.
+un_funding_numerator_value = {
+	value = 0
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			country_rank >= rank_value:major_power
+			has_variable = un_power_share
+		}
+		add = {
+			value = un_programmes_running
+			divide = un_funding_programmes_for_full
+			max = 1
+			multiply = var:un_power_share
+		}
+	}
+}
+
+un_funding_denominator_value = {
+	value = 0
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			country_rank >= rank_value:major_power
+			has_variable = un_power_share
+		}
+		add = var:un_power_share
+	}
+}
+
+un_funding_ratio_value = {
+	value = 0
+	if = {
+		limit = { un_funding_denominator_value > 0 }
+		add = un_funding_numerator_value
+		divide = un_funding_denominator_value
+		max = 1
+	}
+}
+
+un_pillar_funding_value = {
+	value = un_funding_ratio_value
+	multiply = un_funding_span
+	add = un_funding_floor
+}
+
+# Share of world power held by independent members at war with a fellow member.
+# Subjects are left out: an empire at war with its dominions in tow is one
+# belligerent. Same membership and has_war_with = PREV shape as the old
+# un_member_wars_weight, now weighted by power instead of rank.
+un_members_at_war_share_value = {
+	value = 0
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			is_subject = no
+			is_at_war = yes
+			has_variable = un_power_share
+			any_country = {
+				has_war_with = PREV
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+			}
+		}
+		add = var:un_power_share
+	}
+	max = 1
+}
+
+un_pillar_order_value = {
+	value = un_members_at_war_share_value
+	multiply = un_order_war_weight
+	min = un_order_war_floor
+	if = {
+		limit = { has_global_variable = un_ledger_order }
+		add = global_var:un_ledger_order
+	}
+	min = un_order_floor
+	max = 0
+}
+
+un_pillar_credibility_value = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_ledger_credibility }
+		add = global_var:un_ledger_credibility
+	}
+	min = -15
+	max = un_credibility_cap
+}
+
+un_pillar_delivery_value = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_ledger_delivery }
+		add = global_var:un_ledger_delivery
+	}
+	min = 0
+	max = un_delivery_cap
+}
+
+# The equilibrium, from the snapshots the monthly update has just written.
+un_authority_target_value = {
+	value = un_pillar_base
+	add = global_var:un_pillar_participation
+	add = global_var:un_pillar_commitment
+	add = global_var:un_pillar_credibility
+	add = global_var:un_pillar_funding
+	add = global_var:un_pillar_order
+	add = global_var:un_pillar_delivery
+	min = 0
+	max = 100
+}
+
+# This month's move toward the target.
+un_authority_step_value = {
+	value = global_var:un_authority_target
+	subtract = global_var:un_authority
+	divide = un_authority_approach_months
+	min = -1
+	max = un_authority_max_step
+}
+
+# ---- Display (O(1) reads of the snapshots) ------------------------------------
+
+un_disp_authority = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_authority }
+		add = global_var:un_authority
+	}
+}
+
+un_disp_target = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_authority_target }
+		add = global_var:un_authority_target
+	}
+}
+
+un_disp_step = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_authority_step }
+		add = global_var:un_authority_step
+	}
+}
+
+un_disp_pillar_participation = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_pillar_participation }
+		add = global_var:un_pillar_participation
+	}
+}
+
+un_disp_pillar_commitment = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_pillar_commitment }
+		add = global_var:un_pillar_commitment
+	}
+}
+
+un_disp_pillar_credibility = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_pillar_credibility }
+		add = global_var:un_pillar_credibility
+	}
+}
+
+un_disp_pillar_funding = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_pillar_funding }
+		add = global_var:un_pillar_funding
+	}
+}
+
+un_disp_pillar_order = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_pillar_order }
+		add = global_var:un_pillar_order
+	}
+}
+
+un_disp_pillar_delivery = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_pillar_delivery }
+		add = global_var:un_pillar_delivery
+	}
+}
+
+# Percentages for the explanatory lines.
+un_disp_member_power_pct = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_member_power_share }
+		add = global_var:un_member_power_share
+		multiply = 100
+	}
+}
+
+un_disp_funding_pct = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_funding_ratio }
+		add = global_var:un_funding_ratio
+		multiply = 100
+	}
+}
+
+un_disp_at_war_pct = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_members_at_war_share }
+		add = global_var:un_members_at_war_share
+		multiply = 100
+	}
+}
+
+un_disp_ledger_order = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_ledger_order }
+		add = global_var:un_ledger_order
+	}
+}
+
+# Scope: country
+un_disp_power_share_pct = {
+	value = 0
+	if = {
+		limit = { has_variable = un_power_share }
+		add = var:un_power_share
+		multiply = 100
+	}
+}
+
+# Order key for the ledger display log: newest first (ordered_* sorts
+# descending). Scope: ledger log container
+un_ledger_log_recency_order = {
+	value = var:un_led_seq
+}
+
+# Eviction key: oldest first. Scope: ledger log container
+un_ledger_log_age_order = {
+	value = 0
+	subtract = var:un_led_seq
+}

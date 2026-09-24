@@ -14,6 +14,16 @@
 		container = "custom_widget_container_2"
 	}
 
+	# Why authority is moving: the target, its seven pillars, our weight in
+	# world affairs, the recent ledger entries, and the authority history
+	# chart. Display-only (gui/journal_entry_widgets/un_authority_widget.gui).
+	# Sits in container_3, under the chamber and above the button grid.
+	widget = {
+		gui = "gui/journal_entry_widgets/un_authority_widget.gui"
+		name = "widget_je_un_authority"
+		container = "custom_widget_container_3"
+	}
+
 	is_shown_when_inactive = {
 		has_game_rule = united_nations_enabled
 		OR = {
@@ -124,11 +134,12 @@
 			}
 		}
 
-		# 2b. Authority drift details (members only)
+		# 2b. Where authority is heading: the target and this month's step. The
+		# full breakdown is in the "Why authority is moving" widget below.
 		first_valid = {
 			triggered_desc = {
-				desc = je_un_authority_drift
-				trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+				desc = je_un_authority_heading
+				trigger = { has_global_variable = un_authority_target }
 			}
 		}
 
@@ -295,11 +306,10 @@
 			if = {
 				limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 
-				# Authority drift + the 0-100 clamp now run ONCE globally per month in
-				# un_global_authority_on_action (common/on_actions/un_on_actions.txt),
-				# driven by un_authority_drift_total (which already aggregates every
-				# member's base/democracy/champion/undermine/war contribution). Nothing
-				# per-member is applied here anymore.
+				# Authority moves ONCE globally per month, toward the target computed
+				# from the seven pillars, in un_global_authority_on_action
+				# (un_authority_monthly_update, un_authority_effects.txt). Nothing
+				# per-member is applied here.
 
 				# Refresh contributor-cost cached expense vars so the JE-scoped
 				# add_modifier multipliers track current GDP. JE scope can't read
@@ -459,6 +469,9 @@
 				}
 				je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
 			}
+
+			# ---- Authority history (the chart in the authority widget) ----
+			un_authority_record_history = yes
 
 			# ---- International standing (all countries with the JE) ----
 			# The whole national-standing system's monthly work, in one call:

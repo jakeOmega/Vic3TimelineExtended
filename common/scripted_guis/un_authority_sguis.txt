@@ -1,0 +1,50 @@
+﻿# ============================================================================
+# UN AUTHORITY — SCRIPTED GUIS FOR THE "WHY AUTHORITY IS MOVING" WIDGET
+# ============================================================================
+# Tooltip builders only, in the chamber's pattern (un_chamber_sguis.txt, part
+# 1): gui/journal_entry_widgets/un_authority_widget.gui calls
+# `[GetScriptedGui('<key>').ExecuteTooltip(GuiScope.SetRoot(
+# JournalEntry.GetCountry.MakeScope).End)]`, which renders the effect without
+# running it. The effects are in
+# common/scripted_effects/un_authority_display_effects.txt and write nothing.
+#
+# Split into four so that each widget textbox gets lines in the order it
+# expects (root-level lines print before nested ones), and so the collapsed
+# help text costs nothing while it is closed.
+# ============================================================================
+
+# The target, the step, the pillars and the viewer's own weight.
+un_authority_summary_sgui = {
+	scope = country
+
+	effect = {
+		un_authority_summary_block = yes
+	}
+}
+
+# Champions, underminers and great powers outside the UN, one line each.
+un_authority_powers_sgui = {
+	scope = country
+
+	effect = {
+		un_authority_powers_block = yes
+	}
+}
+
+# The twelve most recent ledger entries, newest first.
+un_authority_log_sgui = {
+	scope = country
+
+	effect = {
+		un_authority_log_block = yes
+	}
+}
+
+# How the model works. Static.
+un_authority_help_sgui = {
+	scope = country
+
+	effect = {
+		un_authority_help_block = yes
+	}
+}

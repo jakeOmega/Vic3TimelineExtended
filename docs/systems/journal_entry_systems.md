@@ -572,7 +572,7 @@ Allows monarchies to shape their heir's education through active focus choices. 
 
 ## United Nations (`je_united_nations`)
 
-> **Redesign planned:** see [`un_redesign_design.md`](un_redesign_design.md). It covers the authority model, tiers, grounds and transparent voting, the docket, and missions. This section documents the system as it stands.
+> **Redesign in progress:** see [`un_redesign_design.md`](un_redesign_design.md). Phase 1 (the authority model) has shipped and is described under *Authority* below. Tiers, grounds and transparent voting, the docket, and missions are still to come. Everything else in this section is the system as it stands.
 
 **File:** `common/journal_entries/je_united_nations.txt`
 **Group:** `je_group_foreign_affairs`
@@ -584,12 +584,18 @@ Simulates an intergovernmental organization with membership, authority, Security
 The UN must be actively founded by a Great Power with Intergovernmental Organizations tech via the `un_found_button`. Founding costs prestige and bureaucracy (`un_founding_cost_modifier`). The founder becomes the first member, hosts the HQ, and gains a Security Council seat + `un_founding_member_modifier`. Sets `un_founded` global variable. After founding, any recognized non-subject country can join (no tech requirement).
 
 ### Key Mechanics
-- **Authority bar:** `un_authority_bar` (0-100)
-- **Authority drift:** Trends toward 50 (±0.25/month baseline, slowed from ±0.5)
-  - Democracy bonus: +0.2/month (GP + humanitarian regulations)
-  - Championing order: +0.3/month (+0.2 more if top 3 rank)
-  - Undermining order: -0.3/month (-0.2 more if top 3 rank)
-  - War penalty: -1/month (at war with another UN member)
+- **Authority bar:** `un_authority_bar` (0-100), synced to `global_var:un_authority`.
+- **Authority (redesign phase 1):** authority no longer drifts toward 50, and individual acts no longer add flat amounts to it.
+  - **The target.** Each month `un_authority_monthly_update` (`common/scripted_effects/un_authority_effects.txt`, run from `un_global_authority_on_action`) computes a **target** as the sum of seven pillars: base 15; participation 0..+25; great-power commitment −25..+25; credibility −15..+15; funding −5..+10; peace and order −20..0; delivery 0..+10.
+  - **The step.** Authority moves toward the target by `(target − authority) / 48` a month, capped at ±1.
+  - **Power share.** Every country's share of world prestige is cached monthly as `var:un_power_share`. `un_actor_weight` measures it against a typical great power's 10% share, capped at ×5.
+  - **Pillars read from the world:** participation (members' power share), commitment (members' stance × power share: champion +1, undermine −1, plus bloc alignment), funding (the power-weighted share of major-and-above members running UN programmes), and the war half of order (the share of world power at war with a fellow member).
+  - **Ledger pillars:** credibility, delivery and the nuclear half of order are **ledgers**: decaying global stocks, `un_ledger_<pillar>`, with a four-year half-life. They are written only by `un_ledger_actor_entry` (weighted by the actor), `un_ledger_actor_entry_unweighted` and `un_ledger_entry` (institutional).
+  - **World moments** (`un_authority_actor_shock`: a permanent member walking out −4, a nuclear first strike −3) move authority itself and fade.
+  - **Every former flat delta is now a ledger entry:** the event options, the resolution outcomes, the veto, the mandate hooks and lifting sanctions. The programme toggles no longer touch authority at all; they count toward funding while they run.
+  - **Display.** The last 12 entries are logged for display (`un_ledger_log`). The **Why UN Authority Is Moving** widget (`gui/journal_entry_widgets/un_authority_widget.gui`, container 3) shows the target, the pillars, the viewer's weight, the champions, underminers and outsiders, the recent entries, a help text, and a history chart of authority and its target.
+  - **Files:** `common/script_values/un_authority_values.txt` (every figure and formula), `un_authority_effects.txt` (every writer; the reason-code table is at its top), `un_authority_display_effects.txt` and `common/scripted_guis/un_authority_sguis.txt`.
+  - **Old saves** keep their authority and converge on the target; `un_model_version` marks a converted save.
 - **Authority tiers:** collapsed (0), weak (10-30), moderate (30-60), strong (60-85), dominant (85+)
 - **Authority threshold effects:**
   - **≥30:** Membership benefits activated (scaled by authority/50)
@@ -599,7 +605,7 @@ The UN must be actively founded by a Great Power with Intergovernmental Organiza
   - **≥70:** Great powers refusing humanitarian aid face severe domestic penalties (radicals, IG disapproval, extra authority loss)
   - **≥80:** Non-nuclear member powers face NPT disarmament pressure (`un_npt_disarmament_modifier`: `nuclear_disarmament = yes`) (requires IAEA)
 - **Security Council & Permanent Members:** 5 permanent seats. Granted to the founder + the next 4 Great Powers that join during a 5-year founding window (`un_founding_window_active` global variable, set on `un_found_button`). After the window closes, no new permanent members are auto-created — the only path to a new seat is via the expulsion-vote mechanism (a 2/3 supermajority can strip a permanent member, opening a slot, but the slot is not auto-refilled). Permanent membership is held until: (a) the country leaves the UN, (b) the country has been below Great Power rank for 10+ continuous years (`un_permanent_subgp_months` country variable counts months sub-GP and resets on regaining GP), or (c) a 2/3 supermajority expulsion vote passes against them.
-- **Veto Power (binding resolutions only):** Permanent members can cast a veto on the 5 *binding* topics — sanctions, peacekeeping_request, icc, condemn, reform — via a third option in `un_vote.1`. The veto kills the full binding form and tags the resolution `un_res_vetoed`. The GA simple majority can still pass a graduated/weak form (vetoed sanctions → voluntary partial; vetoed peacekeeping → observer mission only; vetoed ICC → symbolic censure; vetoed condemn → non-binding rebuke; vetoed reform → flat block, no graduated fallback). Vetoing costs the country 5 UN authority, applies `un_veto_isolation_modifier` (short-term diplomatic isolation) and `un_veto_authority_drain_modifier` (long-term influence hit), and adds 3 infamy when used to block punitive resolutions (ICC, condemn, peacekeeping_request).
+- **Veto Power (binding resolutions only):** Permanent members can cast a veto on the 5 *binding* topics — sanctions, peacekeeping_request, icc, condemn, reform — via a third option in `un_vote.1`. The veto kills the full binding form and tags the resolution `un_res_vetoed`. The GA simple majority can still pass a graduated/weak form (vetoed sanctions → voluntary partial; vetoed peacekeeping → observer mission only; vetoed ICC → symbolic censure; vetoed condemn → non-binding rebuke; vetoed reform → flat block, no graduated fallback). Vetoing is a credibility debit of 1.5 × the vetoer's weight in world affairs, applies `un_veto_isolation_modifier` (short-term diplomatic isolation) and `un_veto_authority_drain_modifier` (long-term influence hit), and adds 3 infamy when used to block punitive resolutions (ICC, condemn, peacekeeping_request).
 - **Expulsion Vote (`un_propose_expulsion_button`):** Any UN member can call a 2/3 supermajority vote to strip a permanent member that has recently vetoed (`un_veto_isolation_modifier` is the visibility trigger). The resolution is tagged `un_topic_expulsion`; the special pass condition is `un_vote_expulsion_passed >= 0` (i.e., `un_res_support * 3 >= un_vote_eligible_member_count * 2`). On pass, target loses both `un_permanent_member_modifier` and `un_security_council_modifier`. Non-vetoable.
 - **Treaty obligation:** `join_united_nations` treaty article auto-enrolls target via JE monthly pulse when `un_membership_obligation` modifier is active.
 
@@ -801,7 +807,7 @@ Void and closed mandates stay on the register for five years so the chamber pane
 
 #### Standing hooks (stage 2)
 
-`un_mandate_on_complied` and `un_mandate_on_violated` are called from **container scope**, with the outcome tag already stamped, so a standing implementation can branch on `has_tag = un_mandate_abandoned` vs `un_mandate_violated` without new plumbing. They fire **exactly once per mandate**. v1 contents, built only from effects and modifiers the UN system already ships: complied → `un_authority +5` and `un_vote_success_reward` on the actor; violated / abandoned / complied-while-forfeit → `un_authority −5` and `un_condemned_modifier` on the actor. Stage 2 should *add* to these, not replace them, and the relations/catalyst pair for a third-party beneficiary belongs in `un_mandate_on_complied` once `un_mnd_beneficiary` can differ from the actor.
+`un_mandate_on_complied` and `un_mandate_on_violated` are called from **container scope**, with the outcome tag already stamped, so a standing implementation can branch on `has_tag = un_mandate_abandoned` vs `un_mandate_violated` without new plumbing. They fire **exactly once per mandate**. v1 contents, built only from effects and modifiers the UN system already ships: complied → a delivery ledger entry of 2 × the actor's weight in world affairs, plus `un_vote_success_reward` on the actor; violated / abandoned / complied-while-forfeit → a credibility entry of −3 × the actor's weight, plus `un_condemned_modifier` on the actor. (Before redesign phase 1 these were flat ±5 to `un_authority`.) Stage 2 should *add* to these, not replace them, and the relations/catalyst pair for a third-party beneficiary belongs in `un_mandate_on_complied` once `un_mnd_beneficiary` can differ from the actor.
 
 #### Proposal, eligibility and AI
 

@@ -335,8 +335,8 @@ un_vote_cast_veto = {
 			text = UN_VOTE_VETO_TT
 			# Tags the resolution un_res_vetoed, which kills the binding form
 			# regardless of the GA tally. The vetoer's no still counts toward the
-			# tally (the graduated form needs a majority). Only the first veto on
-			# a resolution dents the single global UN authority.
+			# tally (the graduated form needs a majority). Every veto is a
+			# credibility debit weighted by the vetoer's weight in world affairs.
 			un_resolution_record_veto = yes
 			add_modifier = {
 				name = un_veto_authority_drain_modifier

@@ -55,11 +55,15 @@ un_found_button = {
 			}
 			# Establish the UN
 			set_global_variable = un_founded
-			# UN authority is a single GLOBAL value; born here at founding (neutral 50).
+			# UN authority is a single GLOBAL value; born here at founding (neutral 50),
+			# then moving toward the equilibrium its members give it
+			# (un_authority_effects.txt). The version stamp tells the monthly update
+			# this is not a pre-equilibrium save to migrate.
 			if = {
 				limit = { NOT = { has_global_variable = un_authority } }
 				set_global_variable = { name = un_authority value = 50 }
 			}
+			set_global_variable = { name = un_model_version value = 2 }
 			# 5-year founding window: any GP that joins during this window becomes
 			# a permanent member (until the 5 seats fill). After it expires, new
 			# permanent members can only be created via the expulsion-promotion vote.
@@ -230,6 +234,15 @@ un_leave_button = {
 	}
 
 	effect = {
+		# A permanent member walking out is a world moment: authority itself
+		# drops at once (un_authority_effects.txt), on top of the lasting loss
+		# of our power share from the participation pillar. Checked before the
+		# block below strips the seat.
+		if = {
+			limit = { is_un_permanent_member = yes }
+			custom_tooltip = un_ledger_tt_p5_walkout
+			un_authority_actor_shock = { AMOUNT = -4 REASON = 11 }
+		}
 		custom_tooltip = {
 			text = "UN_LEAVE_DESC"
 			je:je_united_nations ?= { remove_modifier = un_member_modifier }
@@ -429,7 +442,9 @@ un_lift_sanctions_button = {
 				limit = { has_modifier = un_sanctions_target_modifier }
 				remove_modifier = un_sanctions_target_modifier
 			}
-			change_global_variable = { name = un_authority add = -3 }
+			# Walking away from a regime the Assembly imposed costs its credibility,
+			# weighted by the enforcer's weight in world affairs.
+			un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 7 }
 		}
 	}
 }
@@ -469,7 +484,6 @@ un_peacekeeping_mission_button = {
 				days = long_modifier_time
 				is_decaying = yes
 			}
-			change_global_variable = { name = un_authority add = 3 }
 		}
 		# Cache expense in country scope; JE scope can't read gdp directly
 		# (the modifier multiplier is re-evaluated continuously and would
@@ -509,7 +523,6 @@ un_end_peacekeeping_button = {
 			text = "UN_END_PEACEKEEPING_DESC"
 			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
 			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
-			change_global_variable = { name = un_authority add = -2 }
 		}
 	}
 }
@@ -550,7 +563,6 @@ un_fund_development_button = {
 		custom_tooltip = {
 			text = "UN_FUND_DEVELOPMENT_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_development_contributor_modifier } }
-			change_global_variable = { name = un_authority add = 2 }
 		}
 		# Cache expense in country scope; see un_peacekeeping_mission_button.
 		set_variable = { name = un_development_expense_cached value = un_program_expense_value }
@@ -584,7 +596,6 @@ un_defund_development_button = {
 			text = "UN_DEFUND_DEVELOPMENT_DESC"
 			je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
 			je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
-			change_global_variable = { name = un_authority add = -2 }
 		}
 	}
 }
@@ -622,7 +633,6 @@ un_human_rights_resolution_button = {
 		custom_tooltip = {
 			text = "UN_HUMAN_RIGHTS_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_human_rights_champion_modifier } }
-			change_global_variable = { name = un_authority add = 3 }
 		}
 	}
 }
@@ -649,7 +659,6 @@ un_withdraw_human_rights_button = {
 		custom_tooltip = {
 			text = "UN_WITHDRAW_HUMAN_RIGHTS_DESC"
 			je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
-			change_global_variable = { name = un_authority add = -3 }
 		}
 	}
 }
@@ -695,7 +704,6 @@ un_arms_control_button = {
 		custom_tooltip = {
 			text = "UN_ARMS_CONTROL_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_arms_control_participant_modifier } }
-			change_global_variable = { name = un_authority add = 3 }
 		}
 	}
 }
@@ -722,7 +730,6 @@ un_withdraw_arms_control_button = {
 		custom_tooltip = {
 			text = "UN_WITHDRAW_ARMS_CONTROL_DESC"
 			je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
-			change_global_variable = { name = un_authority add = -3 }
 		}
 	}
 }

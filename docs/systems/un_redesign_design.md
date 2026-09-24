@@ -1,6 +1,9 @@
 # United Nations Redesign — Design
 
-> **STATUS: DESIGN AGREED IN OUTLINE, NOT IMPLEMENTED.** Written 2026-09-24 from a design
+> **STATUS: PHASE 1 (THE AUTHORITY MODEL) IMPLEMENTED, PENDING IN-GAME VERIFICATION.**
+> Phases 2–6 are designed but not built. Read [§0.1](#01-phase-1-as-shipped--rulings-deviations-and-open-checks)
+> before anything else if you are working on the code: it records where phase 1 deviates
+> from the sections below. Written 2026-09-24 from a design
 > discussion with the mod owner. It follows a survey of the UN as it stands (§1) and a
 > bug-fix pass that shipped first (§1.4). Decisions the owner made are marked **(decided)**.
 > Everything else is **(proposed)**: a starting shape to implement and tune, not a ruling.
@@ -10,6 +13,113 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.1 Phase 1 as shipped — rulings, deviations and open checks
+
+Built 2026-09-24 on `claude/un-system-redesign-8t6kim` (PR #411). Not yet seen in a running
+game.
+
+### Files
+
+- `common/script_values/un_authority_values.txt`: every figure and every pillar formula.
+- `common/scripted_effects/un_authority_effects.txt`: the monthly update and every writer.
+  The reason-code table is at its top.
+- `common/scripted_effects/un_authority_display_effects.txt` and
+  `common/scripted_guis/un_authority_sguis.txt`: the read-only display.
+- `gui/journal_entry_widgets/un_authority_widget.gui`: the **Why UN Authority Is Moving**
+  widget, in container 3.
+- **Call sites converted:** `events/un_events.txt`, `events/un_vote_events.txt`,
+  `common/scripted_effects/un_vote_effects.txt` (veto), `un_mandate_effects.txt` (the two
+  hooks), `common/scripted_buttons/un_buttons.txt` (lift sanctions; the programme toggles;
+  the permanent-member walkout), and `extra_effects.txt` (the three nuclear strike effects).
+- **Supporting changes:** `gen_un_button_descs.py` learned to describe
+  `un_ledger_actor_entry`. The old drift script values in `un_script_values.txt` are gone.
+
+### Rulings: where phase 1 deviates from, or binds, the sections below
+
+1. **Funding is a proxy until dues exist (phase 5).** It is the power-weighted share of
+   major-and-above members running UN programmes (two programmes count in full), mapped to
+   −5..+10, not the §3.2 −10..+10. Programmes feed **funding only**, never commitment, so no
+   fact is counted twice. Commitment is stance (champion ±1, bloc alignment) × power share.
+2. **Order.** The war half is `−40 × the share of world power at war with a fellow member`,
+   floored at −15. The ledger half holds nuclear use only:
+   - first strike: order −4 plus a direct shock of −3;
+   - tactical strike: −1.5;
+   - retaliation: −2;
+   - all unweighted, because nuclear use is grave whoever does it.
+
+   "Aggression without a mandate" waits for the dossier (phase 3).
+3. **Delivery is a ledger until missions exist (phase 6).** It is fed by aid and peacekeepers
+   delivered (`un_events.4` and `7`, options A/B), aid and peacekeeping resolutions carried,
+   and mandates discharged.
+4. **No charter cap yet.** The target is clamped to 0..100. The 70 / 85 / 100 caps arrive
+   with the reform topics in phase 2, so phase 1 alone cannot make the NPT-at-80 rule
+   unreachable.
+5. **Ledgers decay with a four-year half-life** (`un_ledger_decay_factor` 0.9857 a month),
+   not the fifteen-year entry life of §3.4. At the event rates surveyed in §1.1, the
+   credibility and delivery stocks settle around +7 each in a quiet world, rather than
+   saturating their caps.
+6. **Conversions.** Every flat authority delta became a ledger entry:
+   - **Event options:** half the old points, weighted by the actor. Aid and peacekeeping
+     *delivered* go to delivery; everything else goes to credibility.
+   - **Resolution outcomes:** unweighted "institutional" entries:
+     - carried +1, or +1.5 for the treaties that found an agency;
+     - carried in weaker form after a veto +0.5;
+     - fell −1;
+     - expulsion carried +1, expulsion fell −1;
+     - aid and peacekeeping carried go to delivery.
+   - **Veto:** −1.5 × the vetoer's weight, **every** veto, not only the first.
+   - **Mandates:** discharged is delivery +2 × weight; violated is credibility −3 × weight.
+   - **Lifting sanctions:** credibility −1 × weight.
+   - **Programme toggles:** their ±2–3 authority is simply gone. A programme counts toward
+     funding for exactly as long as it runs.
+7. **World moments shipped:** a permanent member leaving (−4) and a nuclear first strike
+   (−3). Both are logged.
+8. **Old saves keep their authority** (§11 said reseed at the target). Their ledgers start
+   empty, so the first target understates an established UN, and a reseed would have
+   dropped authority by around twenty points in one month. They converge at the ordinary
+   pace instead; `un_model_version` marks the conversion.
+9. **Founding** still sets 50. A new UN therefore sinks toward roughly 30 until its programmes
+   and ledgers fill: the young UN is weak.
+10. **The per-member random events are unchanged** apart from their authority deltas.
+    Replacing them is phase 4.
+
+### Known roughnesses
+
+- **The log records only sizeable entries.** It keeps the 12 most recent entries of at
+  least 0.05 after weighting, so micro-states' gestures never appear. That is intended, but
+  it means the log is not a complete record.
+- **Displayed weights can drift slightly.** The event tooltips print the actor's weight from
+  `var:un_power_share`, which is refreshed monthly, so a tooltip can differ in the second
+  decimal from the weight applied on the day.
+- **New countries have no weight yet.** A country created mid-month has no power share
+  until the next update, so its acts weigh 0 for that month.
+
+### IN-GAME VERIFICATION CHECKLIST (phase 1)
+
+1. After one month in a game with a founded UN:
+   - the widget shows a target and seven pillar values;
+   - the JE status line reads "Moving toward …";
+   - `debug.log` has no "used but never set" for `un_power_share`, `un_ledger_*`,
+     `un_led_stage` or `un_pillar_*`.
+2. `change_global_variable = { … multiply = … }` works on a global. The three ledgers should
+   visibly shrink month to month with no new entries.
+3. `set_global_variable` with an inline `value = { value = un_actor_weight multiply = N }`
+   produces a non-zero entry: take a great-power option in any UN event and check the
+   log.
+4. `always = $WEIGHTED$` / `$WITH_ACTOR$` parameters select the right branch: an
+   institutional entry logs "the General Assembly", an actor entry logs the country.
+5. The event tooltips render
+   `[ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]` as a number.
+6. The powers list shows champions, underminers and outsiders, each with its share. An
+   annexed actor in the log reads "a former member".
+7. The history chart draws both series once a month has been sampled.
+8. A nuclear first strike drops the order pillar and logs both entries. A permanent member
+   leaving logs the −4.
+9. There is no noticeable hitch on the first of the month: about seven `every_country`
+   sweeps run once a month from the global pulse.
 
 ---
 
@@ -561,7 +671,8 @@ These are the convention losers in §5.3, plus the embargo symmetry in §5.2.
 - **Migration runs once**, on the first global pulse after the update, guarded by a
   migration-version global.
 - **What carries over:** membership, seats, standing, mandates and ratified agencies.
-  Authority is reseeded at the computed target, clamped to the charter cap.
+  Authority is kept and converges on the target at the ordinary pace (as shipped in phase
+  1, §0.1 ruling 8; the first draft reseeded it at the target).
 - **What is dropped:** the removed programme modifiers go, through the existing
   `legacy_je_modifier_cleanup_effect` hook, and the old event cooldowns.
 - **Fallback:** if a save's UN state cannot be reconciled, dissolve it with the world-moment
@@ -592,7 +703,9 @@ of this file, as `monetary_policy_design.md` does.
 | `un_authority_approach_months` | 48 | §3.3 |
 | `un_authority_max_step` | 1.0 / month | §3.3 |
 | pillar ranges (base 15, participation 0–25, …) | see §3.2 | §3.2 |
-| credibility entry decay | 15 years | §3.4 |
+| ledger decay (credibility, delivery, order) | 4-year half-life, ×0.9857 a month (phase 1; §0.1 ruling 5) | §3.4 |
+| actor weight: reference share / cap | 0.10 of world prestige = ×1 / ×5 | §3.1 |
+| funding proxy until dues | −5 + 15 × programme ratio (§0.1 ruling 1) | §3.2 |
 | tier boundaries | 20 / 45 / 70 / 85 | §4.1 |
 | tier hysteresis | 4 points | §4.1 |
 | charter caps | 70 / 85 / 100 | §4.1 |
