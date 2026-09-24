@@ -34,13 +34,19 @@ The scripts in this section auto-run inside `mod_state_server.py` after every fu
 | `common/geographic_regions/te_formable_regions_generated.txt` | `scripts/generators/gen_formable_regions.py` | vanilla `common/strategic_regions/*.txt` + inline config in the script | Holds explicit-state-list `geographic_region_united_{europe,africa,north_america,earth}` for the EUN/AFU/UNA/UNE formables. Vic3's formable code only reads `state_regions = {...}` (not `strategic_regions = {...}`) when expanding required states. **Manual rerun only** — not in the post-load chain; rerun after vanilla strategic-region rebalances. Fails loudly if a configured strategic region disappears, which is the prompt to update its inline config. |
 | *(no new files)* — every mod `.txt` under `common/`, `events/`, `gfx/` and every `.gui` under `gui/` | `bom_normalizer.py` | the files themselves | **Runs last in `POST_LOAD_REGENERATORS`.** Prepends the UTF-8 BOM to any in-scope file missing one, so the engine stops logging `should be in utf8-bom encoding` (issues #148, #255). Idempotent — only BOM-less files are rewritten, so it never dirties a clean tree. Never touches YAML / JSON / Python / `.metadata/`. Not a content generator: it owns no file, so hand-editing these files stays fine. |
 
+## Tooling data
+
+| File / glob | Owner script | Input | Notes |
+|---|---|---|---|
+| `vanilla_parsed/**` (`vanilla_parsed/manifest.json`, `vanilla_parsed/common/<entity_type>.json`, `vanilla_parsed/localization_english.json`) | `vanilla_parsed.py build` | vanilla `game/common/<VANILLA_COMMON_DIRS>` + `game/localization/english/*.yml`, through the same parser ModState uses | The committed vanilla parse the mod state server loads instead of re-parsing the game (and without one). **Manual run** on the machine with the game after every vanilla patch and after any parser change; `python3 vanilla_parsed.py check` says when. Not deployed (`scripts/deploy.sh` syncs only the mod dirs). See `docs/guides/python_tools.md` § "Vanilla data source". |
+
 ## Docs
 
 All generator-produced docs files live under `docs/engine/`. Manually-curated audit reports under `docs/audits/` (e.g. `mod_only_tech_modifier_baseline.md`) are bootstrapped by `scripts/analysis/tech_balance_audit.py` and then hand-edited; see "One-shot generator outputs" for that pattern.
 
 | File | Owner | Trigger |
 |---|---|---|
-| `docs/engine/laws.txt`, `docs/engine/technologies.txt`, `docs/engine/buildings.txt`, `docs/engine/goods.txt`, `docs/engine/combat_units.txt` | `mod_state_script.py` | server start + `POST /reload` |
+| `docs/engine/laws.txt`, `docs/engine/technologies.txt`, `docs/engine/buildings.txt`, `docs/engine/goods.txt`, `docs/engine/combat_units.txt` | `mod_state_script.py` | server start + `POST /reload` (skipped when no vanilla game files are on disk — its tech-unlock lines scan them) |
 | `docs/engine/vic3_triggers_effects_reference.md`, `docs/engine/vic3_modifier_type_definitions_reference.md` | `engine_docs_render.py` | manual run / server start |
 | `docs/engine/triggers_summary.txt`, `docs/engine/effects_summary.txt`, `docs/engine/modifiers_summary.txt`, `docs/engine/event_targets_summary.txt`, `docs/engine/on_actions_summary.txt`, `docs/engine/custom_localization_summary.txt`, `docs/engine/triggers_parsed.txt`, `docs/engine/country_triggers.txt`, `docs/engine/modifier_patterns.md` | `engine_docs_render.py` | manual run / server start |
 | `docs/engine/engine_coverage_report.md` | `mod_state_server.py /validate/engine-coverage` | server start + reload |

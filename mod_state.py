@@ -70,8 +70,104 @@ def iter_loc_lines(text):
             yield parsed
 
 
+def iter_script_files(dir_path):
+    """Yield the path of every `.txt` script file ModState parses under
+    `dir_path`, recursing into subdirectories (e.g. events/), in sorted name
+    order. Entries whose name starts with `_` (files or directories) and `.md`
+    files are skipped. Sorted so the load order — and so the key order of the
+    parsed data — is the same on every filesystem (`os.listdir` returns hash
+    order on ext4); vanilla_parsed relies on this to build byte-identical
+    snapshots on any machine."""
+    for file_name in sorted(os.listdir(dir_path)):
+        if file_name.startswith("_") or file_name.endswith(".md"):
+            logger.debug("skipping file: %s", file_name)
+            continue
+        file_path = os.path.join(dir_path, file_name)
+        if os.path.isdir(file_path):
+            yield from iter_script_files(file_path)
+        elif os.path.isfile(file_path) and file_name.endswith(".txt"):
+            yield file_path
+
+
+def iter_loc_files(loc_path):
+    """Yield the path of every `.yml` file ModState.add_localization reads
+    from `loc_path`, in sorted name order. Not recursive: subdirectories
+    (vanilla's english/map/, english/character/, ...) are not read."""
+    for file_name in sorted(os.listdir(loc_path)):
+        if file_name.endswith(".yml"):
+            yield os.path.join(loc_path, file_name)
+
+
+# Vanilla entity types ModState loads for the mod state server, as
+# {entity_type: directory relative to <base_game_path>/game/common, with
+# forward slashes}. mod_state_server builds its absolute base_game_paths from
+# this, and vanilla_parsed snapshots exactly these types — add a vanilla
+# entity type here, not in the server.
+VANILLA_COMMON_DIRS = {
+    "Building Groups": "building_groups",
+    "Buildings": "buildings",
+    "Technologies": "technology/technologies",
+    "PM Groups": "production_method_groups",
+    "PMs": "production_methods",
+    "Ideologies": "ideologies",
+    "Battle Conditions": "battle_conditions",
+    "Buy Packages": "buy_packages",
+    "Character Interactions": "character_interactions",
+    "Character Traits": "character_traits",
+    "Combat Unit Groups": "combat_unit_groups",
+    "Combat Unit Types": "combat_unit_types",
+    "Company Types": "company_types",
+    "Diplomatic Actions": "diplomatic_actions",
+    "Diplomatic Plays": "diplomatic_plays",
+    "Goods": "goods",
+    "Government Types": "government_types",
+    "Institutions": "institutions",
+    "Interest Groups": "interest_groups",
+    "Law Groups": "law_groups",
+    "Laws": "laws",
+    "Messages": "messages",
+    "Mobilization Option Groups": "mobilization_option_groups",
+    "Mobilization Options": "mobilization_options",
+    "Modifier Types": "modifier_type_definitions",
+    "Modifiers": "static_modifiers",
+    "Pop Needs": "pop_needs",
+    "Subject Types": "subject_types",
+    "Script Values": "script_values",
+    "Scripted Buttons": "scripted_buttons",
+    "Ship Types": "ship_types",
+    "Ship Groups": "ship_groups",
+    "Ship Modifications": "ship_modifications",
+    "Ship Modification Slots": "ship_modification_slots",
+    "Ship Name Definitions": "ship_name_definitions",
+    "Journal Entries": "journal_entries",
+    "Journal Entry Groups": "journal_entry_groups",
+    "Decisions": "decisions",
+    "Country Formation": "country_formation",
+    "Treaty Articles": "treaty_articles",
+    "Religions": "religions",
+    "Decrees": "decrees",
+    "Principles": "power_bloc_principles",
+    "Principle Groups": "power_bloc_principle_groups",
+    "Amendments": "amendments",
+    # Vocabularies the engine needs but the loader didn't include before:
+    "Cultures": "cultures",
+    "Country Ranks": "country_ranks",
+    "Discrimination Traits": "discrimination_traits",
+    "Pop Types": "pop_types",
+    "Terrains": "terrain",
+    "Game Concepts": "game_concepts",
+}
+
+
 class ModState:
-    def __init__(self, base_game_dir, mod_dir, diff=False):
+    def __init__(self, base_game_dir, mod_dir, diff=False, vanilla_data=None):
+        """Parse vanilla (`base_game_dir`, {entity_type: dir}) and layer the
+        mod (`mod_dir`, same shape) on top.
+
+        `vanilla_data` ({entity_type: parsed data}, e.g. from
+        vanilla_parsed.load) replaces the vanilla parse: `base_game_dir` then
+        only names the entity types to set up, and no vanilla file is read. A
+        type missing from `vanilla_data` loads with empty vanilla data."""
         self.base_parsers = {}
         self.mod_parsers = {}
         self.localization = {}
@@ -81,13 +177,10 @@ class ModState:
         # Surfaced by mod_state_server in /status and the POST /reload body so
         # a broken file can't hide behind an otherwise-successful reload (#242).
         self.parse_failures = []
-        self.load_directory_files(base_game_dir, mod_dir, diff)
+        self.load_directory_files(base_game_dir, mod_dir, diff, vanilla_data)
 
     def add_localization(self, loc_path):
-        for file_name in os.listdir(loc_path):
-            if not file_name.endswith(".yml"):
-                continue
-            file_path = os.path.join(loc_path, file_name)
+        for file_path in iter_loc_files(loc_path):
             try:
                 with open(file_path, "r", encoding="utf-8") as f:
                     for line in f:
@@ -101,14 +194,19 @@ class ModState:
         # Invalidate reverse localization cache when new loc is added
         self._reverse_loc = None
 
-    def load_directory_files(self, base_game_dir, mod_dir, diff=False):
+    def load_directory_files(self, base_game_dir, mod_dir, diff=False, vanilla_data=None):
         for entity_type, dir_path in base_game_dir.items():
             self.base_parsers[entity_type] = ParadoxFileParser()
             self.mod_parsers[entity_type] = ParadoxFileParser()
-            if not os.path.isdir(dir_path):
+            if vanilla_data is not None:
+                data = vanilla_data.get(entity_type) or {}
+                self.base_parsers[entity_type].data = data
+                self.mod_parsers[entity_type].data = copy.deepcopy(data)
+            elif not os.path.isdir(dir_path):
                 logger.warning(f"Base game directory not found: {dir_path}")
                 continue
-            self.load_files_from_directory(entity_type, dir_path, base_game=True)
+            else:
+                self.load_files_from_directory(entity_type, dir_path, base_game=True)
 
             if diff:
                 self.mod_parsers[entity_type].set_data_from_changes_json(
@@ -167,33 +265,25 @@ class ModState:
             self.load_files_from_directory(entity_type, dir_path, base_game=False)
 
     def load_files_from_directory(self, entity_type, dir_path, base_game=True):
-        for file_name in os.listdir(dir_path):
-            if file_name.startswith("_") or (file_name[-3:] == ".md"):
-                logger.debug("skipping file: %s", file_name)
-                continue
-            file_path = os.path.join(dir_path, file_name)
-            if os.path.isdir(file_path):
-                # Recurse into subdirectories (e.g. events/)
-                self.load_files_from_directory(entity_type, file_path, base_game)
-            elif os.path.isfile(file_path) and file_name.endswith(".txt"):
-                logger.debug("reading file: %s", file_path)
-                try:
-                    if base_game:
-                        self.base_parsers[entity_type].parse_file(file_path)
-                        self.mod_parsers[entity_type].parse_file(file_path)
-                    else:
-                        mod_data = self.parse_mod_file(file_path)
-                        self.mod_parsers[entity_type].merge_data(mod_data)
-                except Exception as e:
-                    logger.warning(
-                        f"skipping file due to parse error: {file_path}: "
-                        f"{type(e).__name__}: {e}"
-                    )
-                    self.parse_failures.append({
-                        "file": file_path,
-                        "error": f"{type(e).__name__}: {e}",
-                        "source": "vanilla" if base_game else "mod",
-                    })
+        for file_path in iter_script_files(dir_path):
+            logger.debug("reading file: %s", file_path)
+            try:
+                if base_game:
+                    self.base_parsers[entity_type].parse_file(file_path)
+                    self.mod_parsers[entity_type].parse_file(file_path)
+                else:
+                    mod_data = self.parse_mod_file(file_path)
+                    self.mod_parsers[entity_type].merge_data(mod_data)
+            except Exception as e:
+                logger.warning(
+                    f"skipping file due to parse error: {file_path}: "
+                    f"{type(e).__name__}: {e}"
+                )
+                self.parse_failures.append({
+                    "file": file_path,
+                    "error": f"{type(e).__name__}: {e}",
+                    "source": "vanilla" if base_game else "mod",
+                })
 
     def parse_mod_file(self, file_path):
         parser = ParadoxFileParser()

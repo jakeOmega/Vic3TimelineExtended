@@ -1,0 +1,3 @@
+# The committed vanilla parse (vanilla_parsed.py build): collapse it in PR
+# diffs, and keep LF everywhere so a rebuild on any machine is byte-identical.
+vanilla_parsed/** linguist-generated=true eol=lf
