@@ -618,8 +618,10 @@ flowcontainer = {
 		}
 
 		# ---- Projected monthly drift, signed ----
-		# Exact: colonial_stability_drift_total, the same sum of leaf script
-		# values the bar applies.
+		# Exact: colonial_stability_drift_total, the same capped sum of leaf
+		# script values the bar applies. The scale is +/-2 because that sum is
+		# capped at +/-colonial_stability_drift_cap (1.667); the cap stripe is
+		# 0.17, the same 1/12 of the half-height the other signed charts use.
 		te_history_chart = {
 			blockoverride "chart_title" {
 				text = "te_hist_chart_colonial_drift_title"
@@ -647,23 +649,23 @@ flowcontainer = {
 					visible = "[ScriptContainer.HasVariable( 'te_hist_v_colonial_drift' )]"
 					blockoverride "positive_values" {
 						min = 0
-						max = 6
+						max = 2
 						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
 					}
 					blockoverride "positive_cover_values" {
 						min = 0
-						max = 6
-						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.5' ) ) )]"
+						max = 2
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
 					}
 					blockoverride "negative_values" {
-						min = -6
+						min = -2
 						max = 0
 						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ) ) )]"
 					}
 					blockoverride "negative_cover_values" {
-						min = -6
+						min = -2
 						max = 0
-						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.5' ) ) )]"
+						value = "[FixedPointToFloat( Min_CFixedPoint( '(CFixedPoint)0', Add_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_colonial_drift' ), '(CFixedPoint)0.17' ) ) )]"
 					}
 				}
 			}

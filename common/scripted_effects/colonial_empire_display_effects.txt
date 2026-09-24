@@ -179,12 +179,16 @@ colonial_empire_refresh_display = {
 		# --- The three drift groups that iterate ---------------------------
 		# Snapshotted because the widget re-evaluates every frame:
 		#   overreach  -> walks every state twice (colonial + metropole counts)
-		#   gp         -> walks every_country twice (condemners + supporters)
+		#   gp         -> walks every_country (prestige weights and share)
 		#   acceptance -> walks every state x every pop
 		# The other six groups are read live; see the header.
 		set_variable = { name = colonial_empire_d_overreach value = colonial_stability_drift_overreach }
 		set_variable = { name = colonial_empire_d_gp value = colonial_stability_drift_gp }
 		set_variable = { name = colonial_empire_d_acceptance value = colonial_stability_drift_acceptance }
+
+		# Condemners' share of great-power prestige (0-1), the number the two
+		# great-power escalations fire on. Read by colonial_empire_pressure_sgui.
+		set_variable = { name = colonial_empire_condemner_share value = colonial_gp_condemner_prestige_share }
 
 		# Projected monthly change. Identical by construction to the sum the bar
 		# applies -- both are built from the same leaf script values. Feeds the

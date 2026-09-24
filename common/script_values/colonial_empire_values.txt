@@ -77,12 +77,15 @@ colonial_round_table_state_count = {
 	}
 }
 
-# Count of great powers with anti-colonial stance (set via event 14)
+# Count of great powers with anti-colonial stance (set via event 14).
+# Self-exclusion is `this = prev`, not `this = ROOT`: the bar reads these
+# through `owner.` from journal-entry scope, where ROOT is not guaranteed to be
+# the empire, while `prev` inside the iterator is the empire for every caller.
 colonial_gp_condemners_count = {
 	value = 0
 	every_country = {
 		limit = {
-			NOT = { this = ROOT }
+			NOT = { this = prev }
 			country_rank >= rank_value:great_power
 			has_variable = gp_anti_colonial_stance
 		}
@@ -95,12 +98,93 @@ colonial_gp_supporters_count = {
 	value = 0
 	every_country = {
 		limit = {
-			NOT = { this = ROOT }
+			NOT = { this = prev }
 			country_rank >= rank_value:great_power
 			has_variable = gp_pro_colonial_stance
 		}
 		add = 1
 	}
+}
+
+# Prestige-weighted versions of the two counts above. Each great power adds
+# its own prestige divided by the empire's, clamped to [0.25, 2.0]: a peer
+# great power weighs 1.0, a great power with double (or more) the empire's
+# prestige weighs 2.0, and one with a quarter (or less) weighs 0.25. `prev`
+# inside the iterator is the empire; its prestige is floored at 1 so a
+# zero-prestige empire cannot divide by zero.
+#
+# These drive the bar's per-power condemnation and support terms; the plain
+# counts above still feed the events' and buttons' AI weights.
+colonial_gp_condemnation_weight = {
+	value = 0
+	every_country = {
+		limit = {
+			NOT = { this = prev }
+			country_rank >= rank_value:great_power
+			has_variable = gp_anti_colonial_stance
+		}
+		add = {
+			value = prestige
+			divide = { value = prev.prestige min = 1 }
+			min = 0.25
+			max = 2
+		}
+	}
+}
+
+colonial_gp_support_weight = {
+	value = 0
+	every_country = {
+		limit = {
+			NOT = { this = prev }
+			country_rank >= rank_value:great_power
+			has_variable = gp_pro_colonial_stance
+		}
+		add = {
+			value = prestige
+			divide = { value = prev.prestige min = 1 }
+			min = 0.25
+			max = 2
+		}
+	}
+}
+
+# Prestige held by every great power plus the empire itself (the empire is
+# counted even when it is not a great power). This is the pool the two tier
+# escalations measure the condemners against. It is not world prestige
+# because the condemners are a subset of the great powers that excludes the
+# empire, so a two-thirds share of world prestige would almost never be
+# reachable. Floored at 1 for the division below.
+colonial_gp_prestige_pool = {
+	value = 0
+	every_country = {
+		limit = {
+			OR = {
+				this = prev
+				country_rank >= rank_value:great_power
+			}
+		}
+		add = prestige
+	}
+	min = 1
+}
+
+# Combined prestige of the condemning great powers as a share of that pool
+# (0-1). Gates the tier escalations: a third -> diplomatic isolation,
+# two-thirds -> international consensus. Because the empire's own prestige is
+# in the pool, a dominant empire is much harder to isolate than a small one.
+# Snapshotted into colonial_empire_condemner_share for the widget.
+colonial_gp_condemner_prestige_share = {
+	value = 0
+	every_country = {
+		limit = {
+			NOT = { this = prev }
+			country_rank >= rank_value:great_power
+			has_variable = gp_anti_colonial_stance
+		}
+		add = prestige
+	}
+	divide = colonial_gp_prestige_pool
 }
 
 # Bureaucracy cost of colonial maintenance - scaled by number of colonial states
@@ -199,6 +283,10 @@ colonial_state_sol_qualifying_floor = {
 # with a matching `desc` key. The full old-term -> leaf mapping is tabulated
 # in docs/systems/mod_systems.md § Stability Bar Formula.
 #
+# The bar's 22nd and last line, colonial_stability_term_cap, is not one of
+# these leaves: it caps the sum of all 21 and lives in the MONTHLY CAP
+# section after the group sums.
+#
 # Every leaf returns 0 when its gate is false (the gate moved from the bar's
 # enclosing `if` into the leaf), so the bar's `add` lines are unconditional.
 # ============================================================================
@@ -276,21 +364,22 @@ colonial_stability_term_non_gp = {
 }
 
 # --- Great-power pressure (linear + two tier escalations) and support ---
+# The per-power terms scale with each great power's prestige relative to ours
+# (colonial_gp_condemnation_weight / _support_weight above), so their figures
+# are what a peer great power contributes; both weights are 0 when nobody
+# holds the stance, so no gate is needed. The two escalations are flat and
+# fire on the condemners' share of great-power prestige
+# (colonial_gp_condemner_prestige_share), not on how many of them there are.
+# They stack: at two-thirds both apply.
 colonial_stability_term_gp_condemnation = {
-	value = 0
-	if = {
-		limit = { colonial_gp_condemners_count > 0 }
-		add = {
-			value = colonial_gp_condemners_count
-			multiply = -0.6
-		}
-	}
+	value = colonial_gp_condemnation_weight
+	multiply = -0.6
 }
 
 colonial_stability_term_gp_high_pressure = {
 	value = 0
 	if = {
-		limit = { colonial_gp_condemners_count >= 4 }
+		limit = { colonial_gp_condemner_prestige_share >= 0.333 }
 		add = -1.0
 	}
 }
@@ -298,20 +387,14 @@ colonial_stability_term_gp_high_pressure = {
 colonial_stability_term_gp_extreme_pressure = {
 	value = 0
 	if = {
-		limit = { colonial_gp_condemners_count >= 6 }
+		limit = { colonial_gp_condemner_prestige_share >= 0.667 }
 		add = -2.0
 	}
 }
 
 colonial_stability_term_gp_support = {
-	value = 0
-	if = {
-		limit = { colonial_gp_supporters_count > 0 }
-		add = {
-			value = colonial_gp_supporters_count
-			multiply = 0.3
-		}
-	}
+	value = colonial_gp_support_weight
+	multiply = 0.3
 }
 
 # --- Active programme effectiveness (aggregated modifiers; see
@@ -430,7 +513,7 @@ colonial_stability_drift_rank = {
 	add = colonial_stability_term_non_gp
 }
 
-# Iterates every_country twice -- snapshotted.
+# Iterates every_country (prestige weights and share) -- snapshotted.
 colonial_stability_drift_gp = {
 	value = colonial_stability_term_gp_condemnation
 	add = colonial_stability_term_gp_high_pressure
@@ -456,10 +539,9 @@ colonial_stability_drift_domestic = {
 	add = colonial_stability_term_turmoil
 }
 
-# Projected monthly change, identical by construction to the sum the bar
-# applies. Snapshotted into colonial_empire_d_total for the signed history
-# series, which is sampled from the monthly pulse and can afford the iteration.
-colonial_stability_drift_total = {
+# Sum of all 21 leaves before the monthly cap: what the bar would move by if
+# nothing limited it. Iterates (it contains the three snapshotted groups).
+colonial_stability_drift_uncapped = {
 	value = colonial_stability_drift_base
 	add = colonial_stability_drift_laws
 	add = colonial_stability_drift_igs
@@ -471,14 +553,53 @@ colonial_stability_drift_total = {
 	add = colonial_stability_drift_domestic
 }
 
-# The same total, but safe to read from the widget every frame: the six O(1)
+# ============================================================================
+# MONTHLY CAP
+#
+# However large the sum of the leaves, the bar moves at most this far in one
+# month, in either direction: 100 / 60, so crossing the whole 0-100 bar takes
+# at least five years. The cap is applied to the TOTAL, after everything is
+# summed, not to any single term. A sudden spike (a superpower condemning a
+# small empire) therefore cannot empty the bar in a few months, but a large
+# enough sum still outweighs the empire's own efforts, and the empire has to
+# change the inputs (win the great power over, integrate the colony, release
+# it) to turn the trend around.
+#
+# The bar applies it as one last leaf, colonial_stability_term_cap: the
+# difference between the capped and the uncapped sum, 0 while the sum is
+# inside the cap. Its hover line therefore shows how much the cap absorbed.
+# ============================================================================
+
+colonial_stability_drift_cap = 1.667
+
+# Projected monthly change after the cap, identical by construction to what
+# the bar applies (its 21 leaves plus colonial_stability_term_cap). Snapshotted
+# into colonial_empire_d_total for the signed history series, which is sampled
+# from the monthly pulse and can afford the iteration.
+colonial_stability_drift_total = {
+	value = colonial_stability_drift_uncapped
+	max = colonial_stability_drift_cap
+	min = {
+		value = colonial_stability_drift_cap
+		multiply = -1
+	}
+}
+
+# The bar's last line. Capped minus uncapped, so the clamp above finishes
+# inside its own script value before the subtraction runs.
+colonial_stability_term_cap = {
+	value = colonial_stability_drift_total
+	subtract = colonial_stability_drift_uncapped
+}
+
+# The uncapped total, but safe to read from the widget every frame: the six O(1)
 # groups are evaluated live and the three iterating ones come from the snapshot
 # variables. That mix is deliberate rather than a compromise -- the six live
 # groups are exactly the ones a button press changes, so the headline moves the
 # frame after a click, which a pure snapshot could never do (add_modifier and
 # remove_modifier results are invisible inside the effect that wrote them).
 # The three snapshotted groups cannot be changed by any button here.
-colonial_stability_drift_total_display = {
+colonial_stability_drift_uncapped_display = {
 	value = colonial_stability_drift_base
 	add = colonial_stability_drift_laws
 	add = colonial_stability_drift_igs
@@ -497,6 +618,23 @@ colonial_stability_drift_total_display = {
 		limit = { has_variable = colonial_empire_d_acceptance }
 		add = var:colonial_empire_d_acceptance
 	}
+}
+
+# The widget's headline: the same, capped. O(1), like the uncapped version.
+colonial_stability_drift_total_display = {
+	value = colonial_stability_drift_uncapped_display
+	max = colonial_stability_drift_cap
+	min = {
+		value = colonial_stability_drift_cap
+		multiply = -1
+	}
+}
+
+# How much the cap is absorbing this month (0 inside the cap), shown as the
+# last row of the widget's breakdown so the rows add up to the headline.
+colonial_stability_drift_cap_display = {
+	value = colonial_stability_drift_total_display
+	subtract = colonial_stability_drift_uncapped_display
 }
 
 # ============================================================================

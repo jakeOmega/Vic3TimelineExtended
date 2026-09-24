@@ -186,6 +186,21 @@ colonial_empire_pressure_sgui = {
 			}
 			custom_tooltip = je_colonial_empire_pressure_quiet_tt
 		}
+		# One line above the whole list (gotcha #18 is about per-group headers;
+		# this one describes every entry): each entry below shows its power's
+		# prestige, and this line shows ours and how the two combine.
+		else = {
+			custom_tooltip = je_colonial_empire_pressure_scaling_tt
+			# The monthly snapshot, not a live walk. has_variable guards the first
+			# month of a save upgraded mid-entry, which has no snapshot yet.
+			if = {
+				limit = {
+					has_variable = colonial_empire_condemner_share
+					var:colonial_empire_condemner_share > 0
+				}
+				custom_tooltip = je_colonial_empire_pressure_share_tt
+			}
+		}
 
 		every_country = {
 			limit = {
