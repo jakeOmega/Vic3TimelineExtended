@@ -2,8 +2,8 @@
  "format_version": 1,
  "game_version": "1.14.4",
  "game_version_source": "launcher-settings.json",
- "parser_fingerprint": "dbc631b08761fe4a",
- "built_at": "2026-09-24T17:09:22+00:00",
+ "parser_fingerprint": "4627473117c4f6ad",
+ "built_at": "2026-09-24T17:50:44+00:00",
  "entity_types": {
   "Building Groups": {
    "dir": "game/common/building_groups",
@@ -264,7 +264,7 @@
  "localization": {
   "dir": "game/localization/english",
   "file": "localization_english.json",
-  "keys": 99896
+  "keys": 102271
  },
  "parse_failures": [],
  "sources": {
@@ -2984,6 +2984,10 @@
    "size": 49391,
    "sha256": "c54c719c518974412bbf97da042285a4b1781f6a13b8cd34d0fb1c7eee056cfe"
   },
+  "game/localization/english/character/character_traits_l_english.yml": {
+   "size": 17086,
+   "sha256": "e6d5e9dfad15341f4884cac569bd2aa57479d2f0e8a9ac5e75ce1b272050e86f"
+  },
   "game/localization/english/character_focused_l_english.yml": {
    "size": 1457,
    "sha256": "42d1ee2f99ef0f04966bc388afbe4e7997bba5323b376a7bd55f5bad09fea58d"
@@ -3168,6 +3172,26 @@
    "size": 96853,
    "sha256": "d0e9c5ee3d11f97b33d704304de0eb0559a994a919b681499180f1fd40f41cda"
   },
+  "game/localization/english/frontend/common_l_english.yml": {
+   "size": 2654,
+   "sha256": "292caffaf68d84fb576e7f2fc14649237bfb85760cf7ebd56819a8fbb80dcfcd"
+  },
+  "game/localization/english/frontend/core_l_english.yml": {
+   "size": 3667,
+   "sha256": "85cac0871bca8823d6e74b17c0d89872e1f6519f11dc8ff5016422d2f599c69d"
+  },
+  "game/localization/english/frontend/frontend_l_english.yml": {
+   "size": 4891,
+   "sha256": "777bd9cbe31bfcacc5467857199371fc4b65f7f5064011be2c7ebc87673759d7"
+  },
+  "game/localization/english/frontend/frontend_mp_game_setup_l_english.yml": {
+   "size": 378,
+   "sha256": "44d9fe41c3581fcffdc1e5f6ff7e5e892434384e2ca6bde020ca0858d504a085"
+  },
+  "game/localization/english/frontend/multiplayer_lobby_l_english.yml": {
+   "size": 726,
+   "sha256": "2c2d46df571533045e0b6c6c5fd238493e1dfe4dc298af757111b672b61f2819"
+  },
   "game/localization/english/game_rules_l_english.yml": {
    "size": 12729,
    "sha256": "fa9a803d2e09b35eaa8af5b3e2b3f85d910f26e6c1bec15dd82238050a2c9728"
@@ -3188,6 +3212,14 @@
    "size": 3249,
    "sha256": "bfaa02f2cdedc6d5b4a4e999b8052dc0e81803e26c73d4a27f151df59704338a"
   },
+  "game/localization/english/historical/military_formations_names_l_english.yml": {
+   "size": 9973,
+   "sha256": "bf20bc29bcc9299ffeb870c0321652879a1009f672f2202db68b72f05b0234dc"
+  },
+  "game/localization/english/historical/texan_war_of_independence_l_english.yml": {
+   "size": 585,
+   "sha256": "fa24c3106433a68d54e3c60c8f757918437a4ad87973dfe421c39950d14f4514"
+  },
   "game/localization/english/hub_names_l_english.yml": {
    "size": 135891,
    "sha256": "621ad610fc634b84213d4c194740acaa917f922e0a0856fd608f183f86288626"
@@ -3199,6 +3231,14 @@
   "game/localization/english/institutions_l_english.yml": {
    "size": 939,
    "sha256": "bcfa39dc22d8fedc03881343596ec380a0e28719fa95d3e81c385d5879d3ccb6"
+  },
+  "game/localization/english/interest_groups/interest_group_traits_l_english.yml": {
+   "size": 24434,
+   "sha256": "fbf76ae826b0a5a4d2cc3fab03c60db192c3506001cd8b51dc0d95256c838594"
+  },
+  "game/localization/english/interest_groups/interest_groups_l_english.yml": {
+   "size": 20785,
+   "sha256": "a49f3fc4ffdd060fe2999799985ad41c57bd98d6f13c56f56a9dc98e70a16db5"
   },
   "game/localization/english/interest_tier_types_l_english.yml": {
    "size": 14469,
@@ -3331,6 +3371,22 @@
   "game/localization/english/lobbies_l_english.yml": {
    "size": 32545,
    "sha256": "de753fd28d1a05bf5b57b892304213ceebc04aca669c633f972517ff51c49340"
+  },
+  "game/localization/english/map/seas_l_english.yml": {
+   "size": 7296,
+   "sha256": "9a7917519956a380fb9adeed059b578aa25c351d4962c65ae55a358ce9324374"
+  },
+  "game/localization/english/map/state_traits_l_english.yml": {
+   "size": 11915,
+   "sha256": "de90f5177227b294f91072157eeb061d42f9acd36a63f86bc80d9a855935ba95"
+  },
+  "game/localization/english/map/states_l_english.yml": {
+   "size": 20743,
+   "sha256": "198e4847eb8bbf20f187358d7e216081d96563437644e834188244ded7aad4cc"
+  },
+  "game/localization/english/map/strategic_regions_l_english.yml": {
+   "size": 12879,
+   "sha256": "aa4841ef10ad4365a03b6f1f4d04cc9f9ca00795b12d607be8b67d157514a6af"
   },
   "game/localization/english/map_editor_l_english.yml": {
    "size": 229,
