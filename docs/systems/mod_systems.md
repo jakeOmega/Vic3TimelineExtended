@@ -39,6 +39,7 @@ Systems using this pattern:
 - Events: `environmentalism_events.txt` — threshold events at 0.5°C, 1.0°C, 2.0°C, 3.0°C.
 - Cooling/reversal support: `global_warming_events_on_action` now also fires one-time recovery events when temperatures decline below 3.0°C, 2.0°C, 1.0°C, 0.5°C, and 0.1°C (`environmentalism_events.17`–`environmentalism_events.21`).
 - **Disabled rule = no climate change.** `global_warming_update_on_action` accumulates emissions only under `global_warming_enabled`, and `global_warming_events_on_action` runs the display snapshots and the threshold events (`.1`–`.4`, `.17`–`.21`) only then. Its `else` holds `global_var:greenhouse_gas_emissions` at 0, which also clears the warming an older disabled-rule save built up, so every outside reader of `temperature_anomaly_display` (UN docket, election events, movements, treaty article 109) sees 0. The JE never activates, so its recurring events never fire. `.7` (pollution scandal) is about pollution, not warming, and fires under both settings. There are no `*_no_gw_modifier` fallbacks any more.
+- `.13` (climate summit) is the fallback for a world without a UN. It needs `united_nations_disabled` or no `un_founded`, because while a UN exists the accord is `un_events.17`.
 - Test console: `event te_debug_gw.1` (`events/te_debug_gw_events.txt`).
 - The JE sits in `je_group_internal_affairs`. A `je_group_environment` is declared in `common/journal_entry_groups/timeline_extended_je_groups.txt` and unused; moving this entry there was deliberately left out of scope.
 

@@ -1055,7 +1055,9 @@ global_warming_events_on_action = {
 					}
 					trigger_event = { id = environmentalism_events.12 }
 				}
-				# Climate summit (major+ power, moderate+ warming)
+				# Climate summit (major+ power, moderate+ warming). The UN's climate
+				# accord (un_events.17) owns this diplomacy while a UN exists, so the
+				# summit is the fallback for a world without one.
 				10 = {
 					trigger = {
 						has_journal_entry = je_global_warming
@@ -1063,6 +1065,10 @@ global_warming_events_on_action = {
 						temperature_anomaly_display >= 1.0
 						country_rank >= rank_value:major_power
 						has_technology_researched = pollution_control
+						OR = {
+							has_game_rule = united_nations_disabled
+							NOT = { has_global_variable = un_founded }
+						}
 					}
 					trigger_event = { id = environmentalism_events.13 }
 				}

@@ -961,6 +961,12 @@ environmentalism_events.13 = {
 		temperature_anomaly_display >= 1.0
 		country_rank >= rank_value:major_power
 		has_technology_researched = pollution_control
+		# The fallback for a world without a UN: while one exists its climate
+		# accord (un_events.17) is where this diplomacy happens.
+		OR = {
+			has_game_rule = united_nations_disabled
+			NOT = { has_global_variable = un_founded }
+		}
 	}
 
 	immediate = {
