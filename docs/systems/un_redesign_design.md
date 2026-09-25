@@ -3,8 +3,10 @@
 > **STATUS: PHASES 1 (THE AUTHORITY MODEL), 2 (THE LADDER, THE CEILING AND THE FLOOR),
 > 3 (GROUNDS, THE ITEMISED LEAN, AI VOTING IN SCRIPT, THE RECESS), 4 (THE DOCKET AND THE
 > EVENT REWRITE), 5 (DUES, TEETH, REGIMES, SOVEREIGNTY, INTELLIGENCE) AND 6 (MISSIONS)
-> IMPLEMENTED.** Phase 1 has been play-tested; phases 2–6 are pending in-game verification.
+> IMPLEMENTED,** with joining missions at will added after phase 6. Phase 1 has been
+> play-tested; phases 2–6 and §0.7 are pending in-game verification.
 > Read
+> [§0.7](#07-joining-missions-at-will--rulings-and-open-checks),
 > [§0.6](#06-phase-6-as-shipped--rulings-deviations-and-open-checks),
 > [§0.5](#05-phase-5-as-shipped--rulings-deviations-and-open-checks),
 > [§0.4](#04-phase-4-as-shipped--rulings-deviations-and-open-checks),
@@ -22,6 +24,133 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.7 Joining missions at will — rulings and open checks
+
+Built 2026-09-25 on `feat/un-join-missions`, after phase 6, at the owner's request: a player
+and the AI can join a mission in the field from the journal entry, without waiting to be asked.
+Not yet seen in a running game. The same branch fixed two display bugs in the chamber
+(rulings 7 and 8).
+
+### Files
+
+- `common/scripted_triggers/un_mission_triggers.txt`: the eligibility and acceptance tests,
+  the display slots.
+- `common/scripted_effects/un_mission_effects.txt`: `un_mission_volunteer`,
+  `un_mission_withdraw`, `un_mission_service_refresh`, `un_mission_ai_monthly`,
+  `un_mission_assign_slot`.
+- `common/script_values/un_mission_values.txt`: the cost, the withdrawal debit, the AI's score,
+  threshold and cap.
+- `common/scripted_guis/un_chamber_sguis.txt`, `gui/journal_entry_widgets/un_chamber_widget.gui`:
+  one row per mission, with a Join or Withdraw control; one row per archived resolution in
+  Voting Details.
+- `common/journal_entries/je_united_nations.txt`: the AI's month and the cost refresh, in the
+  monthly pulse.
+- `test_un_chamber_mission_slots.py`: the row tables agree in the widget, the sguis and the
+  effects.
+
+### Rulings
+
+1. **Who may join:** a member of major-power rank or above that is not under the Assembly's
+   sanctions (`un_mission_volunteer_eligible`). **Which mission:** an active one it does not
+   host, whose host it is not at war with, that it does not already serve in, and that it has
+   not left before (`un_mission_accepts_volunteer`). The rank matches every other way into a
+   mission (the pledges, the appeals, the programme), because strength counts heads up to
+   three and success pays a flat +3 standing each. Tunable in one trigger.
+2. **Cost:** a volunteer pays `un_mission_service_cost`, a quarter of a percent of GDP a year
+   for each mission (`un_mission_service_share` × the programme expense), for as long as it
+   serves. The peacekeeping programme pays for its members' peacekeeping and stabilisation
+   contingents (`un_mission_charges`), which gives the programme a use beyond the docket's
+   offers. Pledgers and appeal-answerers are not charged again: they pay through their own
+   path, and only `un_msn_volunteers` is billed. The cost is refreshed monthly and at once on
+   joining or leaving; a country that leaves the UN stops paying at its next pulse.
+3. **Rewards:** nothing up front. A volunteer is a contributor like any other, so it shares
+   in success (standing, relations with the host), adds strength up to three contributors,
+   and its covert networks in the host grow faster while it serves (§0.6 ruling 10).
+4. **Leaving** (`un_mission_withdraw`): standing −2 (reason 35), relations −10 with the host,
+   and the country cannot rejoin that mission (`un_msn_withdrawn`). A peacekeeping or
+   stabilisation mission left with nobody fails at the next monthly update, which is the
+   existing rule (§0.6 ruling 6), and the Withdraw tooltip says so. Any contributor may leave,
+   pledgers included.
+5. **The AI** runs the same trigger and the same writers from the journal entry's monthly
+   pulse (`un_mission_ai_monthly`). About one month in ten it sends one contingent where
+   `un_mission_ai_join_score` is highest, if that is above 10. The score reads what the
+   mission lacks (5 for each missing contributor up to three), the ties to the host from the
+   vote lean (alliance, bloc, overlord +15 each; rivalry −20; relevance +5; relations ±10),
+   the peacekeeping programme (+15 for peacekeeping and stabilisation), humanitarian law,
+   great-power rank and authority of 40 or more (+5 each), from a base of −10. It serves in
+   at most 2 missions at will (3 for a great power), and not while at war, in default or with
+   scaled debt of 0.5 or more. Attacked, in default or at scaled debt 0.75, it brings one
+   contingent home a month. Only contingents sent at will: a pledge made to the Assembly
+   stands.
+6. **The docket's events are unchanged.** Collapses are still offered to the peacekeeping
+   programme's members first, and the appeals still open or join missions. The docket does
+   not open missions itself: a collapse nobody answers still has no mission to join.
+   **Follow-up if wanted:** open the mission when the docket takes the crisis up, and send the
+   appeals only to the programme's members. That would put every docketed crisis in the field
+   and change the balance.
+7. **Display slots:** every active mission holds a slot, 0 to 7 (`un_msn_slot`, the lowest
+   free one, `un_mission_assign_slot`), freed when it closes and backfilled monthly for old
+   saves. The chamber draws one row per slot: the mission, our part in it, and the Join or
+   Withdraw control. A trigger cannot hold a scope, so a row's controls name their mission by
+   slot. A ninth mission waits for a slot and is listed under the rows meanwhile. Rows read
+   `IsValid`, never `IsShown`, because a saved scope is only thinly evidenced to reach
+   `is_shown` (gui_modding_guide.md gotcha #22).
+8. **The duplicated contributors (bug fix).** A country serving in two missions was listed
+   three times under the first and not at all under the second. In one `ExecuteTooltip` the
+   engine gathers every line printed in a country's scope under its first appearance
+   (gui_modding_guide.md gotcha #27). Contributors now print from the mission's scope, largest
+   economy first, up to eight and then "and others" (`un_chamber_mission_contributor_at`). A
+   contributor that no longer exists is left out, rather than named "a country no longer on
+   the map". The archive's **Voting Details** had the same structure, one block with every
+   member's ballot inside its own scope, so it now draws one row per resolution
+   (`un_chamber_history_details_row_sgui`, 30 rows).
+9. **"102 of 99 nations" (bug fix).** The count divided all members by the independent
+   countries, but nothing revokes membership when a member becomes a subject. The count is
+   now independent members of the independent, non-decentralized countries. When any member
+   is a subject, a variant line adds "and N more seats held by members that have since become
+   subjects" (`un_subject_member_count`). The GDP and population shares still include those
+   seats. The treaty auto-enrolment (`country_un_membership_obligation_bool`) now requires
+   independence, as the Join button always did. **Open question for the owner:** should a
+   member lose its seat when it becomes a subject? `un_regime_member_colony` assumes a
+   subject is never a member.
+
+### Known roughnesses
+
+- **Numbers are restated** in the tooltips: −2 standing, −10 relations, a quarter of a percent,
+  up to +3, three contributors.
+- **A withdrawn country re-enters through an event or a pledge.** `un_msn_withdrawn` bars only
+  joining at will, and the row then shows it as serving.
+- **No map or state-panel control.** Joining is from the chamber only. The state tile's
+  contributor count shows the result.
+
+### IN-GAME VERIFICATION CHECKLIST (§0.7)
+
+1. **The rows.** With missions in the field, Missions in the Field shows one row per mission,
+   each with **Send a Contingent**. A non-member, a minor power or the host sees it greyed,
+   with the reason ticked or crossed.
+2. **A country in two missions** (open two with `te_debug_un.1` option u in two countries, and
+   join both) is named once under each, not three times under the first.
+3. **Join.** The tooltip names the mission, its host, the cost a week (or that the programme
+   covers it) and what leaving costs. After clicking, the row shows "We serve in it", the
+   control becomes **Bring Our Contingent Home**, `un_mission_service_cost` appears in the
+   budget, and the host gets "A UN Mission Reinforced".
+4. **The peacekeeping programme:** a member running it joins a peacekeeping mission and pays
+   nothing more. It pays for an aid mission.
+5. **Withdraw** from a mission we alone serve in. The tooltip warns that it fails. Standing
+   drops by 2, and the chamber's reason reads "brought a contingent home". Relations with the
+   host drop by 10. The mission fails at the next monthly update. The row, while it lasts,
+   says we cannot send it back, and the cost ends.
+6. **The AI.** Over a few years, AI major powers join missions hosted by their allies, bloc
+   partners and subjects, and leave when they are attacked. `un_mission_service_cost` shows
+   on their budgets.
+7. **Voting Details** lists each archived resolution with its own voters.
+8. **The Assembly line** reads "N of M nations" with N ≤ M, plus the subject-seats clause when
+   a member has become a subject.
+9. **`error.log` / `debug.log`**: no "Failed to fetch variable" or "Value of wrong type" from
+   `un_msn_slot`, `un_msn_service_cached` or the chamber rows.
 
 ---
 
