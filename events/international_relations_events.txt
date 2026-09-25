@@ -736,8 +736,11 @@ international_relations_events.7 = {
 }
 
 # Event 8: Nuclear Brinkmanship
+# Fires only in a real dispute: a nuclear-armed country on the other side of a
+# diplomatic play with us (not yet a war), while neither of us is in a
+# deterrence crisis, which the nuclear weapons journal entry would own
+# (te_ea_ir_brinkmanship_opponent). .104 tells that country what we chose.
 international_relations_events.8 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — tie to a real dispute
 	type = country_event
 	placement = root
 
@@ -761,18 +764,14 @@ international_relations_events.8 = {
 			has_modifier = nuclear_deescalation_modifier
 			has_modifier = nuclear_mobilization_modifier
 		}
-		has_modifier = nuclear_power
-		any_rival_country = {
-			has_modifier = nuclear_power
-		}
+		nd_is_armed = yes
+		any_enemy_in_diplo_play = { te_ea_ir_brinkmanship_opponent = yes }
 	}
 
 	immediate = {
 		save_scope_as = nuclear_opponent
-		random_rival_country = {
-			limit = {
-				has_modifier = nuclear_power
-			}
+		random_enemy_in_diplo_play = {
+			limit = { te_ea_ir_brinkmanship_opponent = yes }
 			save_scope_as = nuclear_rival
 		}
 	}

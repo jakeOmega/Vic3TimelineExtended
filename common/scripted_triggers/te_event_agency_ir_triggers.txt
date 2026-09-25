@@ -65,3 +65,15 @@ te_ea_ir_espionage_target = {
 		has_variable = te_ea_ir_spy_caught
 	}
 }
+
+# international_relations_events.8: the other side of a real nuclear dispute.
+# A nuclear-armed country opposing ROOT in a diplomatic play that is not yet a
+# war, with neither party already in a deterrence crisis (a crisis belongs to
+# the nuclear weapons journal entry, nuclear_crisis_effects.txt).
+te_ea_ir_brinkmanship_opponent = {
+	NOT = { this = ROOT }
+	nd_is_armed = yes
+	is_diplomatic_play_enemy_of = ROOT
+	NOT = { has_war_with = ROOT }
+	nd_crisis_parties_free = { TARGET = ROOT }
+}

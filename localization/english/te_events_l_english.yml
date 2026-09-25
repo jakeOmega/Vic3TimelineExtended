@@ -1566,8 +1566,8 @@
  international_relations_events.104.c_terror:0 "Pray the warning is false."
  international_relations_events.104.d:0 "The nuclear standoff with [SCOPE.sCountry('nuclear_opponent').GetName] has brought the world to the edge of annihilation. Our cities lie within range of their warheads. Our people demand answers."
  international_relations_events.104.d_relief:0 "Back-channel contacts indicate that [SCOPE.sCountry('nuclear_opponent').GetName] is trying to cool the crisis. The arsenals remain armed, but the possibility of a negotiated step back has steadied nerves across the country."
- international_relations_events.104.d_tension:0 "[SCOPE.sCountry('nuclear_opponent').GetName] has refused to step back from the brink. Their public defiance and raised readiness have left our population fearful, and every rumor now sounds like a warning siren."
- international_relations_events.104.d_terror:0 "[SCOPE.sCountry('nuclear_opponent').GetName] has escalated the crisis into a full military mobilization. Civil defense offices are overwhelmed, markets are panicking, and ordinary people are preparing for the possibility that the next warning may be the last."
+ international_relations_events.104.d_tension:0 "[SCOPE.sCountry('nuclear_opponent').GetName] has refused to step back from the brink. Their public defiance has left our population fearful, and every rumor now sounds like a warning siren."
+ international_relations_events.104.d_terror:0 "[SCOPE.sCountry('nuclear_opponent').GetName] has answered the dispute with a massive show of military force. Civil defense offices are overwhelmed, markets are panicking, and ordinary people are preparing for the possibility that the next warning may be the last."
  international_relations_events.104.f:0 "The civil defense sirens are tested at noon. Children practise hiding under their desks. In the markets, canned goods sell out within hours.\n\nEveryone pretends this is normal. No one believes it."
  international_relations_events.104.f_relief:0 "\"The line is open again,\" the aide whispers, one hand still pressed to the receiver. \"Not friendly. Not warm. But open.\"\n\nNo one in the room relaxes. Still, for the first time in days, several people exhale."
  international_relations_events.104.f_tension:0 "\"They are calling it resolve,\" the foreign minister says, staring at the latest broadcast. \"The public has another word for it.\"\n\nIn the streets, queues form outside pharmacies and grocers. No one wants to say why."
@@ -1635,8 +1635,8 @@
  international_relations_events.8.a:0 "We shall not blink."
  international_relations_events.8.b:0 "Open the back channels."
  international_relations_events.8.c:0 "Sound the alarm."
- international_relations_events.8.d:0 "A diplomatic crisis with [SCOPE.sCountry('nuclear_rival').GetName] has spiralled to the point where both nations' nuclear arsenals stand at maximum readiness. Military commanders on both sides await orders that could end civilization."
- international_relations_events.8.f:0 "The telephone rings at three in the morning. The aide's voice is strained.\n\n\"Sir, they have raised their alert status. Our forces are requesting authorization to do the same.\"\n\nA long pause.\n\n\"How long do we have?\"\n\n\"Hours, sir. Perhaps less.\""
+ international_relations_events.8.d:0 "In the diplomatic confrontation now under way, [SCOPE.sCountry('nuclear_rival').GetName] stands on the other side from us - and like us, it holds nuclear weapons. Every step in the dispute is now weighed against the unthinkable, and military commanders on both sides are waiting to learn how hard their governments mean to push."
+ international_relations_events.8.f:0 "The telephone rings at three in the morning. The aide's voice is strained.\n\n\"Sir, their foreign minister has said it again on the radio. They will not back down.\"\n\nA long pause.\n\n\"And our commanders?\"\n\n\"Waiting to hear what we say next, sir. So is the rest of the world.\""
  international_relations_events.8.t:0 "Nuclear Brinkmanship"
 
 #
