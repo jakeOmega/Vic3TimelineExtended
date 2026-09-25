@@ -39,6 +39,8 @@ decolonization_events.1 = {
 	}
 
 	immediate = {
+		# The colonial power, named by the notices this event posts to the other party.
+		save_scope_as = decol_colonial_power
 		random_subject_or_below = {
 			limit = {
 				is_qualifying_colonial_subject = yes
@@ -130,6 +132,7 @@ decolonization_events.1 = {
 		}
 		scope:restless_subject = {
 			post_notification = colonial_independence_granted_notice
+			decol_mark_former_colony = { OVERLORD = root }
 			make_independent = yes
 		}
 		decol_record_chosen_release = yes
@@ -167,6 +170,7 @@ decolonization_events.1 = {
 		}
 		scope:restless_subject = {
 			post_notification = colonial_neocolonial_terms_notice
+			decol_mark_former_colony = { OVERLORD = root }
 			make_independent = yes
 			add_modifier = {
 				name = neocolonial_dependency_imposed_modifier
@@ -263,6 +267,8 @@ decolonization_events.2 = {
 	}
 
 	immediate = {
+		# The colonial power, named by the notices this event posts to the other party.
+		save_scope_as = decol_colonial_power
 		random_subject_or_below = {
 			limit = { is_qualifying_colonial_subject = yes }
 			save_scope_as = pressured_subject
@@ -413,6 +419,8 @@ decolonization_events.3 = {
 	}
 
 	immediate = {
+		# The colonial power, named by the notices this event posts to the other party.
+		save_scope_as = decol_colonial_power
 		random_subject_or_below = {
 			limit = {
 				is_qualifying_colonial_subject = yes
@@ -439,6 +447,7 @@ decolonization_events.3 = {
 		}
 		scope:rebellious_subject = {
 			post_notification = colonial_ceasefire_granted_notice
+			decol_mark_former_colony = { OVERLORD = root }
 			make_independent = yes
 		}
 		decol_record_chosen_release = yes
@@ -498,6 +507,7 @@ decolonization_events.3 = {
 		}
 		scope:rebellious_subject = {
 			post_notification = colonial_neocolonial_terms_notice
+			decol_mark_former_colony = { OVERLORD = root }
 			make_independent = yes
 			add_modifier = {
 				name = neocolonial_dependency_imposed_modifier
@@ -1249,6 +1259,8 @@ decolonization_events.11 = {
 	}
 
 	immediate = {
+		# The colonial power, named by the notices this event posts to the other party.
+		save_scope_as = decol_colonial_power
 		random_country = {
 			limit = {
 				NOT = { this = root }
