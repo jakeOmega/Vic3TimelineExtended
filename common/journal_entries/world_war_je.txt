@@ -139,6 +139,7 @@ je_world_war = {
 		remove_variable = ww_peace_concluded
 		remove_variable = ww_peace_months
 		remove_variable = ww_fully_resolved
+		ww_clear_outcome_latches = yes
 		# Clean up any lingering modifiers
 		if = { limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } } je:je_world_war = { remove_modifier = ww_rising_tensions_modifier } }
 		if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
@@ -159,6 +160,12 @@ je_world_war = {
 		remove_variable = ww_peace_concluded
 		remove_variable = ww_peace_months
 		remove_variable = ww_fully_resolved
+		remove_variable = ww_war_began
+		# The outcome latches (ww_fought_as_*, ww_conceded, ww_enforced_war_goal,
+		# ww_peace_terms_received) are kept on purpose: a defeated power often drops
+		# below great power before the victors' peace conference fires, and the
+		# victors find the powers they beat by these latches. The next outbreak
+		# clears them (ww_clear_stale_outcome_latches in world_war_events.5).
 	}
 
 	on_monthly_pulse = {
@@ -190,6 +197,15 @@ je_world_war = {
 					country_is_ww_belligerent = yes
 					is_at_war = yes
 					NOT = { has_variable = ww_peace_concluded }
+				}
+				# The world war has actually begun for us: we are fighting the other
+				# side's belligerents, not just some war (latch; see world_war_triggers.txt)
+				if = {
+					limit = {
+						NOT = { has_variable = ww_war_began }
+						ww_is_fighting_world_war = yes
+					}
+					ww_record_war_began = yes
 				}
 				if = {
 					limit = { NOT = { has_variable = ww_months_counter } }
@@ -232,11 +248,41 @@ je_world_war = {
 				}
 				je:je_world_war = { add_modifier = { name = ww_prolonged_war_exhaustion_modifier } }
 			}
-			# ---- PEACE DETECTION ----
-			# Belligerents: war is over when they stop fighting
+			# ---- CRISIS DEFUSED ----
+			# The play world_war_events.5 launched ended without a war (a side backed
+			# down, or it never formed). Stand everyone who never fought back down, so
+			# the singleton guard in world_war_conditions_met lets a later crisis start one.
 			if = {
 				limit = {
 					country_is_ww_belligerent = yes
+					NOT = { has_variable = ww_war_began }
+					is_at_war = no
+					is_diplomatic_play_initiator = no
+					is_diplomatic_play_target = no
+					is_diplomatic_play_committed_participant = no
+					is_diplomatic_play_undecided_participant = no
+					# Nobody has started fighting it either
+					NOT = {
+						any_country = {
+							country_is_ww_belligerent = yes
+							has_variable = ww_war_began
+						}
+					}
+				}
+				every_country = {
+					limit = {
+						country_is_ww_belligerent = yes
+						NOT = { has_variable = ww_war_began }
+					}
+					ww_clear_unfought_belligerent = yes
+				}
+			}
+			# ---- PEACE DETECTION ----
+			# Belligerents: war is over when they stop fighting, once it has begun
+			if = {
+				limit = {
+					country_is_ww_belligerent = yes
+					has_variable = ww_war_began
 					is_at_war = no
 					NOT = { has_variable = ww_peace_concluded }
 				}
@@ -297,7 +343,7 @@ je_world_war = {
 		random_events = {
 			200 = 0 # mostly nothing
 			# Leadup events (fire when not yet at war, tension rising)
-			10 = world_war_events.1   # ideological confrontation
+			10 = world_war_events.4   # ideological demands (we decide; .1 goes to the target)
 			10 = world_war_events.2   # border incident
 			10 = world_war_events.3   # diplomatic crisis
 			# War outbreak (fire when tension is critical)

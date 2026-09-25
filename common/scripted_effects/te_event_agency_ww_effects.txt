@@ -1,0 +1,106 @@
+﻿# ============================================================================
+# WORLD WAR - OUTCOME BOOKKEEPING
+# The latches read by the peace-conference events (world_war_events.100-.105).
+# What each latch means is documented above ww_fought_world_war in
+# common/scripted_triggers/world_war_triggers.txt.
+# ============================================================================
+
+# Country scope. The first month this belligerent is seen at war: the world war
+# has actually begun for it, and the side it fights on is recorded in a latch
+# that outlives the live side variable.
+ww_record_war_began = {
+	set_variable = ww_war_began
+	if = {
+		limit = { has_variable = ww_aggressor_side }
+		set_variable = ww_fought_as_aggressor
+	}
+	else_if = {
+		limit = { has_variable = ww_defender_side }
+		set_variable = ww_fought_as_defender
+	}
+}
+
+# Country scope. Drops this country's outcome latches.
+ww_clear_outcome_latches = {
+	remove_variable = ww_war_began
+	remove_variable = ww_fought_as_aggressor
+	remove_variable = ww_fought_as_defender
+	remove_variable = ww_conceded
+	remove_variable = ww_enforced_war_goal
+	remove_variable = ww_peace_terms_received
+}
+
+# Any scope. A new world war is breaking out: clear latches left over from the
+# previous one on countries whose journal entry never completed (it failed when
+# they dropped below great power; on_fail keeps the outcome latches).
+ww_clear_stale_outcome_latches = {
+	every_country = {
+		limit = {
+			OR = {
+				has_variable = ww_war_began
+				has_variable = ww_fought_as_aggressor
+				has_variable = ww_fought_as_defender
+				has_variable = ww_conceded
+				has_variable = ww_enforced_war_goal
+				has_variable = ww_peace_terms_received
+			}
+		}
+		ww_clear_outcome_latches = yes
+	}
+}
+
+# Country scope. The diplomatic play that was meant to start the world war ended
+# without a war (a side backed down, or the play never formed): this country is
+# no longer a belligerent, and the singleton guard in world_war_conditions_met
+# is released so a later crisis can start one.
+ww_clear_unfought_belligerent = {
+	remove_variable = ww_active_phase
+	remove_variable = ww_aggressor_side
+	remove_variable = ww_defender_side
+	remove_variable = ww_years_elapsed
+	remove_variable = ww_months_counter
+}
+
+# Country scope. The war is over for this country: drop every war-phase and
+# leadup modifier (world_war_events.100 immediate, and .101/.102 for a loser the
+# victors' terms reach first). The journal-entry half is guarded because a loser
+# whose journal entry failed (it dropped below great power) no longer has one.
+ww_clear_war_phase_modifiers = {
+	if = {
+		limit = { has_journal_entry = je_world_war }
+		if = { limit = { je:je_world_war = { has_modifier = ww_total_war_economy_modifier } } je:je_world_war = { remove_modifier = ww_total_war_economy_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_war_propaganda_modifier } } je:je_world_war = { remove_modifier = ww_war_propaganda_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_wartime_rationing_modifier } } je:je_world_war = { remove_modifier = ww_wartime_rationing_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_rearmament_modifier } } je:je_world_war = { remove_modifier = ww_rearmament_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_lend_lease_modifier } } je:je_world_war = { remove_modifier = ww_lend_lease_modifier } }
+		if = { limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } } je:je_world_war = { remove_modifier = ww_rising_tensions_modifier } }
+	}
+	if = { limit = { has_modifier = ww_fresh_forces_modifier } remove_modifier = ww_fresh_forces_modifier }
+	if = { limit = { has_modifier = ww_arsenal_of_democracy_modifier } remove_modifier = ww_arsenal_of_democracy_modifier }
+}
+
+# ============================================================================
+# WORLD WAR - LEADUP
+# ============================================================================
+
+# Any scope. $GUARANTOR$ guarantees $TARGET$'s independence, in force at once and
+# binding for five years: a unilateral pledge (the article is giftable, and its
+# upkeep is paid by the guarantor). Gate on ww_can_guarantee_sovereignty with the
+# same parameters; keep the treaty block identical to the trigger's.
+ww_guarantee_sovereignty = {
+	create_treaty = {
+		first_country = $GUARANTOR$
+		second_country = $TARGET$
+		is_draft = no
+		binding_period = { years = 5 }
+		articles_to_create = {
+			{
+				article = guarantee_independence
+				source_country = $GUARANTOR$
+				target_country = $TARGET$
+			}
+		}
+	}
+}
