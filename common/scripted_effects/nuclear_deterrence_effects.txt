@@ -1417,7 +1417,10 @@ nd_record_nuclear_use = {
 # .17 — inherit it and swap their "our retribution" text for what actually
 # happened (#430). A saved scope rather than a variable: it lives exactly as
 # long as the event chain it was saved in, so it cannot outlast the popups or
-# leak into a later, deliberate launch, and nothing has to clear it.
+# leak into a deliberate launch from a later chain, and nothing has to clear
+# it. Within the chain it rides on through the victim's retaliation event to
+# ours (.1 → .11); .11's options mark a deliberate answer with
+# scope:nd_deliberate_response, which .2's variants exclude.
 nd_launch_or_intercept = {
 	custom_tooltip = nd_tt_launch_or_intercept
 	hidden_effect = {

@@ -1,7 +1,7 @@
 """The covert operation registry: every operation type in one table, pinned
 against every site that lists operation types by hand.
 
-Adding an operation type touches about fifteen hand-kept places — see
+Adding an operation type touches about fourteen hand-kept places — see
 docs/systems/mod_systems.md § Covert Warfare System, "Adding an operation
 type". OPS is the single list. Each test checks one site against it in both
 directions (no type missing, no stale extra), so a half-added type fails here,

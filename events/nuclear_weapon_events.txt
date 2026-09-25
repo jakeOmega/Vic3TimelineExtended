@@ -195,15 +195,25 @@ nuclear_weapon_events.2 = {
 	# A launch out of an incident (nd_launch_or_intercept) was nobody's
 	# considered retribution: the unconfirmed warning, or a commander cut off
 	# from the capital. That path saves scope:nd_incident_launch_<kind> on us
-	# before the strike fires this event (#430).
+	# before the strike fires this event (#430). Saved scopes ride the whole
+	# chain, so a deliberate counter-strike later in it — the victim retaliates
+	# (.1), we answer (.11 b/c), nuclear_response_response_strike fires this
+	# event on us again — would inherit it; .11 marks its answer with
+	# scope:nd_deliberate_response, which the variants exclude.
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { scope:nd_incident_launch_warning ?= ROOT }
+				trigger = {
+					scope:nd_incident_launch_warning ?= ROOT
+					NOT = { exists = scope:nd_deliberate_response }
+				}
 				desc = nuclear_weapon_events.2.d_warning
 			}
 			triggered_desc = {
-				trigger = { scope:nd_incident_launch_commander ?= ROOT }
+				trigger = {
+					scope:nd_incident_launch_commander ?= ROOT
+					NOT = { exists = scope:nd_deliberate_response }
+				}
 				desc = nuclear_weapon_events.2.d_commander
 			}
 			triggered_desc = {
@@ -220,6 +230,7 @@ nuclear_weapon_events.2 = {
 						scope:nd_incident_launch_warning ?= ROOT
 						scope:nd_incident_launch_commander ?= ROOT
 					}
+					NOT = { exists = scope:nd_deliberate_response }
 				}
 				desc = nuclear_weapon_events.2.f_incident
 			}
@@ -647,6 +658,9 @@ nuclear_weapon_events.11 = {
 	# nuclear_response_strike.
 	option = {
 		name = nuclear_weapon_events.11.b
+		# A deliberate answer: marks the chain, so the .2 it sets off on us does
+		# not read an incident scope inherited from the first launch (#430).
+		save_scope_as = nd_deliberate_response
 		trigger = {
 			scope:attacking_country = {
 				has_modifier = nuclear_power
@@ -708,6 +722,9 @@ nuclear_weapon_events.11 = {
 
 	option = {
 		name = nuclear_weapon_events.11.c
+		# A deliberate answer: marks the chain, so the .2 it sets off on us does
+		# not read an incident scope inherited from the first launch (#430).
+		save_scope_as = nd_deliberate_response
 		trigger = {
 			scope:attacking_country = {
 				has_modifier = nuclear_power
