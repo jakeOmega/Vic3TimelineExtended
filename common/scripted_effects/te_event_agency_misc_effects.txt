@@ -36,3 +36,30 @@ te_ea_bailout_answer_refusal = {
 		trigger_event = { id = banking_cycle_events.69 }
 	}
 }
+
+# ----------------------------------------------------------------------------
+# movement_events_te.4 — ask a great power whether it condemns us
+# ----------------------------------------------------------------------------
+# je_civil_rights on_monthly_pulse (ROOT = the country with the movement).
+# Replaces the direct trigger_event of movement_events_te.4, which picked a
+# random great power in `immediate` and told us it had condemned us. Now a
+# great power that protects its own minorities decides (movement_events_te.17)
+# and .4 reaches us only if it condemns. te_ea_cr_condemned is .4's cooldown
+# (set by .4, ten years) and, set here for 90 days, keeps a second critic from
+# being asked while the first decides.
+te_ea_cr_invite_condemnation = {
+	if = {
+		limit = {
+			te_ea_cr_condemnable = yes
+			NOT = { has_variable = te_ea_cr_condemned }
+			any_country = { te_ea_cr_can_condemn_root = yes }
+		}
+		set_variable = { name = te_ea_cr_condemned value = yes days = 90 }
+		save_scope_as = cr_condemned_country
+		random_country = {
+			limit = { te_ea_cr_can_condemn_root = yes }
+			save_scope_as = criticizing_country
+			trigger_event = { id = movement_events_te.17 }
+		}
+	}
+}

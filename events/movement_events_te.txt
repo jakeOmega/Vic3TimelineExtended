@@ -322,8 +322,10 @@ movement_events_te.3 = {
 
 # Event 4: International Pressure on Human Rights
 # Foreign nations criticize our treatment of minorities, demanding reform.
+# A great power chose to condemn us: je_civil_rights' pulse asks one
+# (movement_events_te.17, through te_ea_cr_invite_condemnation) and only its
+# "condemn" option sends this event, with scope:criticizing_country saved.
 movement_events_te.4 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -341,19 +343,8 @@ movement_events_te.4 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_active_civil_rights_movement = yes
-		OR = {
-			NOT = {
-				has_progressive_minority_law = yes
-			}
-			has_law = law_type:law_active_persecution
-			has_law = law_type:law_no_womens_rights
-		}
-		any_country = {
-			NOT = { this = root }
-			country_rank >= rank_value:great_power
-			has_technology_researched = civil_rights_movement
-		}
+		exists = scope:criticizing_country
+		te_ea_cr_condemnable = yes
 	}
 
 	cancellation_trigger = {
@@ -363,14 +354,8 @@ movement_events_te.4 = {
 	}
 
 	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				country_rank >= rank_value:great_power
-				has_technology_researched = civil_rights_movement
-			}
-			save_scope_as = criticizing_country
-		}
+		# Mirrors this event's cooldown for the dispatch, which cannot read it.
+		set_variable = { name = te_ea_cr_condemned value = yes days = long_modifier_time }
 		save_civil_rights_movement_scope = yes
 	}
 
@@ -464,6 +449,93 @@ movement_events_te.4 = {
 	}
 }
 
+# Event 17: Condemn Their Treatment of Minorities? (precursor to 4)
+# To a great power that itself protects minorities (te_ea_cr_can_condemn_root),
+# from the je_civil_rights pulse of a country whose movement is fighting
+# discriminatory law (te_ea_cr_invite_condemnation saves that country as
+# scope:cr_condemned_country and this one as scope:criticizing_country).
+# Condemning costs relations with the accused and pleases our academics; it
+# sends movement_events_te.4 to the accused, which answers. Asked at most once
+# a year, whatever it answers.
+movement_events_te.17 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/human_rights.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = movement_events_te.17.t
+	desc = movement_events_te.17.d
+	flavor = movement_events_te.17.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:cr_condemned_country
+		NOT = { this = scope:cr_condemned_country }
+		has_progressive_minority_law = yes
+		scope:cr_condemned_country = { te_ea_cr_condemnable = yes }
+	}
+
+	immediate = {
+		set_variable = { name = te_ea_cr_critic_cd value = yes days = 365 }
+	}
+
+	# Condemn them publicly
+	option = {
+		name = movement_events_te.17.a
+		default_option = yes
+		change_relations = {
+			country = scope:cr_condemned_country
+			value = -10
+		}
+		add_loyalists = { value = very_small_radicals pop_type = academics }
+		custom_tooltip = movement_events_te.17.a.tt
+		hidden_effect = {
+			scope:cr_condemned_country = {
+				trigger_event = { id = movement_events_te.4 days = 3 }
+			}
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					OR = {
+						has_diplomatic_pact = { who = scope:cr_condemned_country type = rivalry }
+						scope:cr_condemned_country = { relations:root < relations_threshold:neutral }
+					}
+				}
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					OR = {
+						is_in_same_power_bloc = scope:cr_condemned_country
+						has_treaty_alliance_with = { TARGET = scope:cr_condemned_country }
+					}
+				}
+				factor = 0.25
+			}
+		}
+	}
+
+	# Say nothing
+	option = {
+		name = movement_events_te.17.b
+		custom_tooltip = movement_events_te.17.b.tt
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:cr_condemned_country = { relations:root >= relations_threshold:cordial } }
+				add = 2
+			}
+		}
+	}
+}
+
 # Event 13: Underground Railroad / Refugee Networks
 # Discriminated communities organize secret networks to help their most vulnerable escape.
 movement_events_te.13 = {
@@ -477,7 +549,18 @@ movement_events_te.13 = {
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
 	title = movement_events_te.13.t
-	desc = movement_events_te.13.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { exists = scope:refuge_country }
+				desc = movement_events_te.13.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = movement_events_te.13.d_abroad
+			}
+		}
+	}
 	flavor = movement_events_te.13.f
 
 	duration = 3
@@ -498,18 +581,30 @@ movement_events_te.13 = {
 		}
 	}
 
+	# The refuge is a neighbour with tolerant laws — "across the border" — and
+	# no country acted: its laws are simply better. With no such neighbour the
+	# networks run abroad in general and nobody is named. Relations move only
+	# through our own acts: denouncing the refuge (a) or funding the escape (c).
 	immediate = {
 		random_country = {
 			limit = {
 				NOT = { this = root }
 				has_progressive_minority_law = yes
+				any_neighbouring_state = { owner = root }
 			}
 			save_scope_as = refuge_country
 		}
 	}
 
 	option = {
-		name = movement_events_te.13.a
+		name = {
+			trigger = { exists = scope:refuge_country }
+			text = movement_events_te.13.a_denounce
+		}
+		name = {
+			trigger = { NOT = { exists = scope:refuge_country } }
+			text = movement_events_te.13.a
+		}
 		default_option = yes
 		ai_chance = {
 			base = 1
@@ -528,11 +623,14 @@ movement_events_te.13 = {
 		}
 		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
 		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
-		change_relations = {
-			country = scope:refuge_country
-			value = -20
+		if = {
+			limit = { exists = scope:refuge_country }
+			change_relations = {
+				country = scope:refuge_country
+				value = -20
+			}
+			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:refuge_country }
 		}
-		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:refuge_country }
 	}
 
 	option = {
@@ -576,9 +674,12 @@ movement_events_te.13 = {
 		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
 		discriminated_pops_loyalty_effect = { VALUE = small_radicals }
 		add_loyalists = { value = very_small_radicals pop_type = academics }
-		change_relations = {
-			country = scope:refuge_country
-			value = 10
+		if = {
+			limit = { exists = scope:refuge_country }
+			change_relations = {
+				country = scope:refuge_country
+				value = 10
+			}
 		}
 	}
 }

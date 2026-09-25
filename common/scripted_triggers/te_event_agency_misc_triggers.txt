@@ -40,3 +40,30 @@ te_ea_bailout_answer_is = {
 	has_variable = te_ea_bailout_answer
 	var:te_ea_bailout_answer = $ANSWER$
 }
+
+# ----------------------------------------------------------------------------
+# movement_events_te.4 / .17 — a great power condemns our treatment of minorities
+# ----------------------------------------------------------------------------
+
+# The accused (country scope): what movement_events_te.4's trigger used to
+# require of it — an active civil rights movement facing discriminatory law.
+# Read by the dispatch, by .17 on scope:cr_condemned_country and by .4.
+te_ea_cr_condemnable = {
+	has_active_civil_rights_movement = yes
+	OR = {
+		NOT = { has_progressive_minority_law = yes }
+		has_law = law_type:law_active_persecution
+		has_law = law_type:law_no_womens_rights
+	}
+}
+
+# A candidate critic (country scope; ROOT = the accused): a great power that
+# knows the language of civil rights and protects its own minorities, and has
+# not been asked in the past year (.17 sets te_ea_cr_critic_cd when it fires).
+te_ea_cr_can_condemn_root = {
+	NOT = { this = root }
+	country_rank >= rank_value:great_power
+	has_technology_researched = civil_rights_movement
+	has_progressive_minority_law = yes
+	NOT = { has_variable = te_ea_cr_critic_cd }
+}
