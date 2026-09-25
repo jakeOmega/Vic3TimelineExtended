@@ -1,0 +1,15 @@
+﻿# ============================================================================
+# EVENT AGENCY (package ir) - static modifiers
+# ============================================================================
+# The actor's side of the precursor events (see
+# te_event_agency_ir_triggers.txt): what choosing the act costs and buys.
+
+# international_relations_events.201.a: the buildup a rival will be told about
+# in .1. Close to arms_race_escalation_modifier (the answering side's
+# modifier), slightly smaller, since it is the opening move.
+te_ea_ir_military_buildup_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_prestige_from_army_power_projection_mult = 0.10
+	country_prestige_from_navy_combat_power_mult = 0.10
+	country_military_goods_cost_mult = 0.10
+}

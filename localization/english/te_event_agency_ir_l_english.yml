@@ -1,0 +1,4 @@
+﻿l_english:
+ te_ea_ir_military_buildup_modifier:0 "Military Buildup"
+ te_ea_ir_military_buildup_modifier_desc:0 "We are expanding our armed forces to outmatch a rival power, and paying for every division of it."
+ TE_EA_IR_BUILDUP_RIVAL_TT:0 "[SCOPE.sCountry('arms_race_instigator').GetName] will see the buildup and decide how to answer it."

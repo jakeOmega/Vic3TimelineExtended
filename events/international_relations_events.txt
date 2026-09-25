@@ -6,8 +6,10 @@
 # ============================================================================
 
 # Event 1: Arms Race Escalation (rival powers building up military)
+# Fired only by .201.a, the rival's own choice to build up against us: the
+# rival arrives as scope:arms_race_rival. Its old pool slot and trigger moved
+# to .201 (te_ea_ir_arms_race_target), so the buildup it reports is real.
 international_relations_events.1 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -23,31 +25,12 @@ international_relations_events.1 = {
 
 	duration = 3
 
-	cooldown = { days = normal_modifier_time }
-
 	trigger = {
-		NOR = {
-			has_modifier = arms_race_escalation_modifier
-			has_modifier = diplomatic_overture_modifier
-			has_modifier = diplomatic_overture_rebuffed_modifier
-			has_modifier = arms_race_ignored_modifier
-		}
-		has_technology_researched = radar
-		country_rank >= rank_value:major_power
-		any_rival_country = {
-			country_rank >= rank_value:major_power
-		}
+		exists = scope:arms_race_rival
 	}
 
 	immediate = {
 		save_scope_as = arms_race_instigator
-		random_country = {
-			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-				country_rank >= rank_value:major_power
-			}
-			save_scope_as = arms_race_rival
-		}
 	}
 
 	option = {
@@ -1125,7 +1108,7 @@ international_relations_events.104 = {
 
 # Notification 105: Rival matches our arms buildup
 international_relations_events.105 = {
-	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
+	# REVIEWED 2026-09-25 (unchosen_self_action): "our military expansion" is true: .105 reaches us only through .1.a, and .1 only through our own .201.a (the buildup we chose)
 	type = country_event
 	placement = root
 
@@ -1210,5 +1193,89 @@ international_relations_events.107 = {
 			days = short_modifier_time
 			is_decaying = yes
 		}
+	}
+}
+
+# ============================================================================
+# PRECURSOR EVENTS (the actor's own choice)
+# ============================================================================
+# An event that tells a country "[X] has done this to you" first asks X
+# whether to do it. These fire on the actor from the pool slot the victim's
+# event used to hold; each picks the victim with a te_ea_ir_*_target trigger
+# (te_event_agency_ir_triggers.txt), and only the act option fires the
+# victim's event. Pool weights are raised by roughly 1/(AI act chance) so the
+# victim's event keeps about its old frequency.
+
+# Precursor 201: Military Buildup (-> .1 on the rival, whose answer may fire .105 back on us)
+international_relations_events.201 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = international_relations_events.201.t
+	desc = international_relations_events.201.d
+	flavor = international_relations_events.201.f
+
+	duration = 3
+
+	trigger = {
+		has_technology_researched = radar
+		country_rank >= rank_value:major_power
+		NOR = {
+			has_modifier = te_ea_ir_military_buildup_modifier
+			has_modifier = arms_race_escalation_modifier
+			has_variable = te_ea_ir_arms_declined
+		}
+		any_country = { te_ea_ir_arms_race_target = yes }
+	}
+
+	immediate = {
+		save_scope_as = arms_race_rival
+		random_country = {
+			limit = { te_ea_ir_arms_race_target = yes }
+			save_scope_as = arms_race_instigator
+		}
+	}
+
+	option = {
+		name = international_relations_events.201.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 2
+			}
+		}
+		# Build up against the rival - prestige from military power, but costly
+		add_modifier = {
+			name = te_ea_ir_military_buildup_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		custom_tooltip = TE_EA_IR_BUILDUP_RIVAL_TT
+		scope:arms_race_instigator = {
+			trigger_event = { id = international_relations_events.1 days = 3 }
+		}
+	}
+
+	option = {
+		name = international_relations_events.201.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { country_rank < rank_value:great_power }
+				add = 1
+			}
+		}
+		# Not now - the generals are disappointed
+		set_variable = { name = te_ea_ir_arms_declined value = yes days = 365 }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }

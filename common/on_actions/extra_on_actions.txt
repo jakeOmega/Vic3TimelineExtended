@@ -1473,13 +1473,15 @@ international_relations_events_on_action = {
 			}
 			random_list = {
 				900 = { } # ~90% chance of nothing
-				# Arms Race Escalation
-				10 = {
+				# Arms Race Escalation: offered to the country that would build up
+				# (.201); its rival hears of it in .1 only if it does. 10 → 13 so
+				# .1 keeps about its old rate at the AI's ~75% act chance.
+				13 = {
 					trigger = {
 						has_technology_researched = radar
-						any_rival_country = { country_rank >= rank_value:major_power }
+						any_country = { te_ea_ir_arms_race_target = yes }
 					}
-					trigger_event = { id = international_relations_events.1 }
+					trigger_event = { id = international_relations_events.201 }
 				}
 				# Proxy Conflict
 				10 = {

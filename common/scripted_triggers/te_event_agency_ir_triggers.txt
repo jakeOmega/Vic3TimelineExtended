@@ -1,0 +1,34 @@
+﻿# ============================================================================
+# EVENT AGENCY (package ir) - scripted triggers
+# ============================================================================
+# "Give the accused country the choice first." Each event that used to pick a
+# rival and tell the player that rival had acted (an arms buildup, a
+# propaganda offensive, a spy, election meddling, a terror cell) now starts
+# with a precursor event on the actor, which picks the victim and offers the
+# act. Only if the actor chooses it does the victim's event fire.
+#
+# Each trigger below is the victim's old event trigger, mirrored onto the
+# candidate victim, and is read in three places that must agree: the
+# precursor's pool entry, the precursor's own `trigger`, and the precursor's
+# `random_country` pick. A candidate the pick would reject can't satisfy the
+# trigger either.
+#
+# Scope: the candidate victim country. ROOT: the actor.
+# ============================================================================
+
+# international_relations_events.201 -> .1: a rival the actor's buildup is
+# aimed at. The NOR list is .1's old trigger (a country still carrying the
+# answer to a previous buildup isn't picked again).
+te_ea_ir_arms_race_target = {
+	NOT = { this = ROOT }
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	country_rank >= rank_value:major_power
+	NOT = { is_country_type = decentralized }
+	has_technology_researched = radar
+	NOR = {
+		has_modifier = arms_race_escalation_modifier
+		has_modifier = diplomatic_overture_modifier
+		has_modifier = diplomatic_overture_rebuffed_modifier
+		has_modifier = arms_race_ignored_modifier
+	}
+}
