@@ -200,6 +200,15 @@ Two rules that `event_context_audit` (`docs/engine/event_context_report.md`) che
 
 Suppress an intentional flag with a check-tagged comment anywhere inside the event block (conventionally its own line under the opening brace): `# REVIEWED YYYY-MM-DD (unchosen_self_action): rationale`. A tag that stops matching a flag — the event got fixed — fails `--strict` until it is deleted.
 
+**The precursor pattern ("the actor chooses first").** When a story needs country X to have acted against country A, fire a *precursor* event on X that offers the act, and fire A's event only from X's "act" option. The mod's worked examples are the rival-choice chains of the event-agency work (#427), for instance `international_relations_events.202` → `.4` → `.106`, `banking_cycle_events.68` → `.45` → `.69`, `movement_events_te.17` → `.4` and `decolonization_events.61` → `.6`. The mechanics:
+- **Pool slot.** The precursor takes the pool slot the victim's event used. One shared scripted trigger picks the victim for both the pool entry and the precursor's `immediate`: the victim event's old trigger, rewritten from the actor's side. Scale the pool weight by the AI's chance of acting (old weight ÷ P(act)), so the chain keeps its frequency.
+- **Saved scopes.** The precursor saves both countries under the names the follow-up loc already reads. Saved scopes survive a delayed `trigger_event` (`days = 3`), and a chain may carry them through several events (pulse → `.68` → `.45` → `.69`).
+- **The victim event.** It becomes triggered-only. Its trigger is `exists = scope:<actor>` plus any system gate, and it no longer does its own `random_country` pick.
+- **Cooldowns become variables.** An event `cooldown` on the victim event becomes a timed variable set in its `immediate`, because the precursor's pick can read a variable but not a cooldown. "Decline" sets a short variable of its own, so the precursor doesn't re-ask next month.
+- **Real decisions.** The "act" option carries a real cost or benefit for the actor; the decline option is always available.
+- **Covert-shaped stories.** With covert warfare enabled, the actor's choice *is* launching the covert operation, and the defender hears of it only through `covert_warfare.2` once it is burned. Never gate a defender-side event on a *live* covert pact: that reveals an operation the detection system exists to hide. These chains are covert-disabled fallbacks (`has_game_rule = covert_warfare_disabled` on the precursor, the victim event and the pool entry).
+- **Tagging answer events.** `event_context_audit` still flags an answer event such as `.106` ("[A] has answered our campaign") as `unchosen_self_action`: its dispatch sits inside a `scope:` switch, so the graph can't see that the actor chose. Tag it with a rationale naming the precursor.
+
 ### Verifying Option Balance
 
 The mod state server has an `/event-balance` family of endpoints for catching dominated options.

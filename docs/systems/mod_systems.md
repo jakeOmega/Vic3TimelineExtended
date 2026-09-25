@@ -1210,6 +1210,16 @@ Events 1-15 handle the core colonial cycle: negotiations, crackdowns, releases, 
 - **Event 20 "Gunboats in the Harbor"** — Other GPs respond to military intervention. Options: condemn (+moral authority, relations penalties to intervener), support intervention, stay neutral. **Not in on_actions** — triggered directly by Event 19 option A.
 - **Event 21 "The Non-Aligned Path"** — New nations choose between competing superpowers or non-alignment.
 
+**Choices made by the other party (2026-09, event-agency work, #427):**
+- **Former colonies choose first.** The overlord's pool slots that used to fire `.5` (closer ties) and `.6` (reparations) now fire precursors on the former colony: **`.60`** (propose ties) and **`.61`** (demand reparations). The overlord hears only if the colony asked.
+  - Lockout variables on the overlord replace the old cooldowns: `decol_ties_overture_cd` and `decol_reparations_demand_cd`.
+  - Reparations are a real transfer. The claim is fixed at demand time: 10 % of the payer's yearly revenue, capped at 10 % of the claimant's GDP (`decol_reparations_value`).
+- **Truces need consent.** `.16.b` (federation) and `.17.c` (border) ask the neighbour first, through **`.62`** / **`.63`**, instead of imposing a 60-month truce on it.
+- **Pressure comes from real stances.** `.2`'s pressuring power is picked only from great powers carrying `gp_anti_colonial_stance`. The General Assembly flavour appears only once the decolonization UN regime exists.
+- **`.20` names the real intervener and victim,** saved by `.19.A`, instead of re-picking them.
+- **Only colonial subjects count.** `.1`/`.2`/`.3`/`.8`/`.11` iterate `is_qualifying_colonial_subject` only.
+- **`.206`'s "by decision" epilogue** needs a chosen release. `decol_record_chosen_release` counts them (`decol_chosen_releases`); otherwise a neutral variant shows.
+
 ### AI Behavior Tuning
 
 AI weights across events are tuned to favor decolonization:
