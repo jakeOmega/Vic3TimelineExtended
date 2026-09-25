@@ -4259,3 +4259,15 @@ record. Nothing guarantees the engine keeps a modifier added at ×0, and if it d
 is lost for good, since the next refresh re-adds only what it still finds. Floor such a
 multiplier above 0 (`un_convention_multiplier`: E, min 0.01), or keep the state in a variable
 and the modifier as its effect only.
+
+## Lessons From the Event-Agency Sweep (2026-09-25)
+
+Found while fixing events that ignored the mod's systems or assumed a country's choice (#431, #434–#436). Each was engine-silent.
+
+- **One effect block per key in an entity.** A treaty article with two sibling `on_entry_into_force` blocks (a new "record whether there was a programme" block beside the existing "disarm" block) relies on the engine keeping both. How the engine handles duplicate sibling keys varies by entity type and may be last-wins, which would silently drop either the record or the disarmament. `duplicate_key_audit` only looks inside modifier blocks, so nothing flags it. Put everything in one block, in the order it must run.
+- **Never reuse a loc key across roles.** `extra_law_events.29`/`.31` used the `.d` key both as the event description and as the fourth option's name. A later loc edit made for the option overwrote the description, and for months both events opened with "Grant a ten-year transition period instead." Give every desc, option and tooltip its own key.
+- **Amendments take `possible` only.** There is no `visible` in an amendment definition (vanilla `amendments.md`). Put a game-rule gate in `possible`.
+- **`any_rivaling_country` is the reverse of `any_rival_country`.** It iterates the countries that rival *this* one; `any_rival_country` iterates the countries this one rivals. "Rivals in either direction" needs both.
+- **Messages read `notification_<msg>_name` / `_desc` / `_tooltip`.** A bare `<msg>:` loc key is never read. Six decolonization notices shipped with only bare keys and showed no text at all (#430 lists the rest).
+- **Save the scope before a delayed event from a diplomatic action.** A diplomatic action's own `scope:target_country` reaching an event fired from its `accept_effect` with `days = N` has vanilla precedent only at `days = 0`. Re-save it explicitly (`scope:target_country ?= { save_scope_as = target_country }`) before the `trigger_event`. If the scope is lost, the event's trigger fails silently.
+- **Don't gate a defender-facing event on a live covert pact.** That names an operation the covert detection system exists to hide. Key it to the burn's exposure record instead (`iw_last_exposed_*`; `surveillance_events.5`), or make it the covert-disabled fallback. See `docs/guides/event_creation_guide.md` § Agency and System Coherence.
