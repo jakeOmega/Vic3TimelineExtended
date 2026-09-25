@@ -148,7 +148,7 @@ Tracks a civil rights movement for minority populations. Activates when a countr
 - **Fail (`movement_events_te.100/.230/.231/.232`):** existing `.100` (oppressive aftermath) under suppression/segregationist dominance or any discriminatory law (its desc switches to `.100.desc_faded`, the movement fading under the law, when both suppression trackers are 0). New `.230` (token reform demobilized) under cooptation dominance. New `.231` (gradualist stagnation) when `cr_gradualist_months > 18`. `.232` (lost momentum, neutral) otherwise.
 
 ### Random pool (slimmed)
-- `movement_events_te.1, .2, .3, .4, .14` — kept in JE on_monthly_pulse `random_list` at lower weights (~20% chance per month). Threshold events carry the narrative arc; this pool provides ambient flavor.
+- `movement_events_te.1, .2, .3, .4, .14` — kept in JE on_monthly_pulse `random_list` at lower weights (~20% chance per month). Threshold events carry the narrative arc; this pool provides ambient flavor. `.4` (a great power condemns us) goes through `te_ea_cr_invite_condemnation`: a great power with a progressive minority law is asked first (`.17`), and `.4` follows only if it condemns.
 
 ### Supporting files
 - `common/scripted_progress_bars/extra_progress_bars.txt` — `civil_rights_support_bar`

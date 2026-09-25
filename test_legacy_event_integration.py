@@ -201,6 +201,22 @@ class LegacyIntegrationTests(unittest.TestCase):
         options = body(self.banking, 'banking_cycle_events.45')['option']
         self.assertEqual(sum('banking_transfer_emergency_aid' in option for _, option in options), 2)
 
+    def test_bailout_is_asked_for_before_it_is_answered(self):
+        # The donor's pulse puts the question to the distressed partner (.68);
+        # .45 reaches the donor only from .68's appeal option, and never picks
+        # a partner of its own. Every .45 answer is reported back (.69).
+        text = (ROOT / 'common/scripted_effects/banking_cycle_effects.txt').read_text(encoding='utf-8-sig')
+        self.assertIn('trigger_event = { id = banking_cycle_events.68 }', text)
+        self.assertNotIn('trigger_event = { id = banking_cycle_events.45 }', text)
+        request = body(self.banking, 'banking_cycle_events.45')
+        self.assertNotIn('immediate', request)
+        appeal, alone = [option for _, option in body(self.banking, 'banking_cycle_events.68')['option']]
+        self.assertIn('banking_cycle_events.45', str(appeal))
+        self.assertNotIn('banking_cycle_events.45', str(alone))
+        answers = [str(option) for _, option in request['option']]
+        self.assertEqual(sum('te_ea_bailout_answer_aid' in answer for answer in answers), 2)
+        self.assertEqual(sum('te_ea_bailout_answer_refusal' in answer for answer in answers), 1)
+
 
 if __name__ == '__main__':
     unittest.main()

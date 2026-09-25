@@ -2066,11 +2066,19 @@ cultural_hegemony.17 = {
 # EVENT 18: Rival Models
 # ============================================================================
 # The two leading cultural powers export different political models. A country
-# that trails them both is courted by each and must lean one way or stand
-# apart. Leaning toward a power brings its research exchange and its friendship
-# at the price of the other's, and opens the country to that power's model; the
-# chosen power is saved as scope:cultural_hegemon so the shared pressure effect
-# pushes ITS model. Standing apart costs a little goodwill with both.
+# that trails them both feels both pulls through its press, cinemas and
+# universities and must lean one way or stand apart. Leaning toward a power
+# brings its research exchange and its friendship, and opens the country to
+# that power's model; the chosen power is saved as scope:cultural_hegemon so the
+# shared pressure effect pushes ITS model. Standing apart keeps the country's
+# own counsel.
+#
+# Neither power chose to court this country — the pull is world state, not a
+# campaign — so the text names no envoys and no option costs relations with a
+# power that did nothing. The one campaign that is real is the leader's own:
+# if it chose to champion its model abroad (cultural_hegemony.17 option A,
+# ch_model_champion), the desc says so. Only the leader can hold that modifier,
+# since .17 fires on global_var:ch_rank_1 alone.
 # ============================================================================
 
 cultural_hegemony.18 = {
@@ -2078,7 +2086,18 @@ cultural_hegemony.18 = {
 	placement = root
 
 	title = cultural_hegemony.18.t
-	desc = cultural_hegemony.18.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:ch_bloc_a ?= { has_modifier = ch_model_champion } }
+				desc = cultural_hegemony.18.d_champion
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = cultural_hegemony.18.d
+			}
+		}
+	}
 	flavor = cultural_hegemony.18.f
 
 	event_image = { texture = "gfx/event_pictures/ideological_confrontation_speech.dds" }
@@ -2119,7 +2138,6 @@ cultural_hegemony.18 = {
 		default_option = yes
 
 		change_relations = { country = scope:ch_bloc_a value = 15 }
-		change_relations = { country = scope:ch_bloc_b value = -15 }
 		je:je_cultural_hegemony ?= { add_modifier = {
 				name = ch_cultural_exchange
 				days = normal_modifier_time
@@ -2142,7 +2160,6 @@ cultural_hegemony.18 = {
 		name = cultural_hegemony.18.b
 
 		change_relations = { country = scope:ch_bloc_b value = 15 }
-		change_relations = { country = scope:ch_bloc_a value = -15 }
 		je:je_cultural_hegemony ?= { add_modifier = {
 				name = ch_cultural_exchange
 				days = normal_modifier_time
@@ -2169,8 +2186,6 @@ cultural_hegemony.18 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		change_relations = { country = scope:ch_bloc_a value = -5 }
-		change_relations = { country = scope:ch_bloc_b value = -5 }
 
 		ai_chance = {
 			base = 3

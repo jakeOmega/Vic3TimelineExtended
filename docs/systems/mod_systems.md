@@ -544,7 +544,7 @@ is quartered for all five articles; swap/guarantee demand now depends on externa
 crisis / debt >= 50%, and voluntary pegs carry more baseline reluctance. See
 `monetary_policy_design.md` "Treaty eligibility and AI tuning" for the values.
 
-International monetary arrangements. Spec: `monetary_policy_design.md` §15A; what shipped, the rulings (G1–G16) and the in-game checklist (P5-1…18): §0.8. **Not seen in a running game, and built on a phase 4 that has not been either.** Files: `common/script_values/te_monetary_arrangement_script_values.txt` (constants + the phase-5 variable contract) and `te_monetary_union_script_values.txt` (5b), the matching `scripted_triggers/` and `scripted_effects/` pairs, `common/treaty_articles/110_currency_peg.txt` / `111_swap_line.txt` / `112_lender_of_last_resort.txt`, `principle_group_monetary_union` (five principles, five script-only `power_bloc_*_bool` markers), `events/te_monetary_arrangement_events.txt` (`te_lolr.1`, `te_union.1`), `te_peg.2` in `te_peg_events.txt`, `te_monetary_internal.2`, and twelve static modifiers at the foot of `extra_modifiers.txt`.
+International monetary arrangements. Spec: `monetary_policy_design.md` §15A; what shipped, the rulings (G1–G16) and the in-game checklist (P5-1…18): §0.8. **Not seen in a running game, and built on a phase 4 that has not been either.** Files: `common/script_values/te_monetary_arrangement_script_values.txt` (constants + the phase-5 variable contract) and `te_monetary_union_script_values.txt` (5b), the matching `scripted_triggers/` and `scripted_effects/` pairs, `common/treaty_articles/110_currency_peg.txt` / `111_swap_line.txt` / `112_lender_of_last_resort.txt`, `principle_group_monetary_union` (five principles, five script-only `power_bloc_*_bool` markers), `events/te_monetary_arrangement_events.txt` (`te_lolr.1`, its ward notice `te_lolr.2`, `te_union.1`), `te_peg.2` in `te_peg_events.txt`, `te_monetary_internal.2`, and twelve static modifiers at the foot of `extra_modifiers.txt`.
 
 **The anchored state is the spine.** `te_mon_anchor` (a **scope** variable — the `te_basket_market_owner` contract: cannot hold 0, read as `var:te_mon_anchor = { … }` behind `has_variable`, may be absent) plus `te_mon_anchor_kind`: **1** treaty peg, **2** bloc currency, **3** currency board; highest wins. An anchored country has **no dial** (`te_mon_has_dial` gained `NOT = { te_mon_is_anchored = yes }`), **imports the rate** (third branch of `te_monetary_set_derived_rate`: anchor's rate + spread 0.5 / 0 / 0.25, *no* expected-inflation term — G13), **takes the anchor's `te_fx_index`** (first branch of step 5b's index-by-regime, less a kind-1 `te_mon_peg_parity_offset`) while its own formula runs on as `te_fx_shadow`, cannot monetise or run OMO, and **imports credibility** (`te_mon_credibility_c` = max(own, 0.8 × anchor's); `te_mon_inflation_anchor` = the anchor's target — both were split into `_own` + the consumer-facing name). It **keeps its own inflation, neutral rate, stance gap and cycle**: the three hidden-state gates in the monthly update read `te_mon_has_stance` (dial **or** anchored), not `te_mon_has_dial` (G1). `te_mon_overvaluation` is the one pressure gauge all three kinds read.
 
@@ -1581,7 +1581,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
   | Event | Fired by | Audience | Choices |
   |---|---|---|---|
   | 17 Our Model Abroad | yearly pool | the hegemon, when its model holds ≥ `ch_model_abroad_min_share` (40%) of world culture across ≥ 3 countries | **Champion it:** `ch_model_champion` (+10% prestige, −25 influence, and `ch_model_champion_mult_bonus` +0.25 on the baseline multiplier) plus −15 relations with every ≥ 5% cultural power running another model. **Lead by example:** `ch_model_exemplar` (+10 legitimacy, decaying). |
-  | 18 Rival Models | yearly pool | a trailing country, when #1 and #2 export different models (#2 ≥ 10%) | Lean to either power: ±15 relations, `ch_cultural_exchange`, and a 30-month weak spike toward *that* power's model (saved as `cultural_hegemon`). **Stand apart:** `ch_non_aligned_stance` (+5 legitimacy) and −5 with both. |
+  | 18 Rival Models | yearly pool | a trailing country, when #1 and #2 export different models (#2 ≥ 10%) | The pull is cultural, not a campaign, so no power loses relations over it; the desc names #1's campaign only when #1 holds `ch_model_champion` (.17 A). Lean to either power: +15 relations with it, `ch_cultural_exchange`, and a 30-month weak spike toward *that* power's model (saved as `cultural_hegemon`). **Stand apart:** `ch_non_aligned_stance` (+5 legitimacy). |
   | 19 The Model Falters | `ch_fire_model_change_events`, when rank 1's model code changes between rebuilds | every country still running the old model | **Hold course:** `ch_model_orphaned` (−10 legitimacy, decaying) and +3 approval for IGs in government. **Adapt:** +15 relations with the new leader and a spike toward its model. |
   | 20 Domino | `ch_fire_model_change_events`, when a neighbour's census moves onto rank 1's model (`ch_switched_to_hegemon_model`) | its neighbours running something else, by state adjacency | **Contain:** `ch_ideological_cordon` (−50 authority) and −15 relations with the switcher. **Let it travel:** +10 relations and a spike toward the hegemon's model. |
 
@@ -1860,8 +1860,11 @@ share that protection.
 
 The discretionary bailout (`banking_cycle_events.45`) requires a non-defaulting
 donor at cycle 40+ and a non-hostile, diplomatically relevant trading partner
-in downturn/panic with an active banking JE. Recipient selection uses the same
-gate as dispatch. Rescue options transfer equal treasury amounts (the donor's
+in downturn/panic with an active banking JE. The partner is asked first: the
+donor's banking pulse picks it with the same gate and sends it
+`banking_cycle_events.68` ("appeal to [donor]?", −5% prestige for asking), and
+only its appeal option sends `.45` to the donor; whatever the donor answers
+reaches the partner as `.69`, naming the sum. Rescue options transfer equal treasury amounts (the donor's
 old weekly expense multiplied by duration / 14, approximating its former
 linearly decaying total) and grant temporary banking stability to the recipient.
 This is a grant, not a new swap-line or lender-of-last-resort treaty. The latter
