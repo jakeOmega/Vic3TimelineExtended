@@ -241,13 +241,23 @@ The same effect keeps its older job in every setting: removing the modifier from
 - **Tuning:** `migration_crowding_density_reference` (100000), `migration_crowding_floor_ratio` (1x), `migration_crowding_ceiling_ratio` (10x knee).
 - **Split states:** Arable-land-derived threshold and tooltip breakdown values subtract the same-owner regional `arable_land_added` cache, so fully owned split states do not undercount geographic base land.
 
+## Dynamic Homeland Progress
+
+- **Parallel per-culture tracks:** each eligible culture gets its own script container and progress bar. All eligible homelands can form or decay simultaneously. A new candidate begins at zero and cannot inherit another culture's progress. Containers are parented to the state, kept in separate creation/removal lists, and removed from the list before destruction.
+- **Timing:** the monthly state pulse adds te_homeland_annual_progress units toward 1200; display divides stored units by 12. Base 10 units/month completes in exactly 120 months (10 years). Promote National Values alone makes this 30 months. Existing additive speed modifiers, turmoil/legitimacy multipliers and the 1–95 annual-rate clamp remain.
+- **Gates:** homeland changes enabled on the owner, unified regional ownership, and culture meeting existing primary/homeland/population checks. Creation is inclusive at the formation threshold; removal is strictly below its threshold.
+- **Pausing/resetting:** losing the unlock or unified ownership pauses valid progress. A different owner or invalid target (population, primary status, homeland status) clears that track. Progress cannot pass to another owner/culture. A zero removal threshold cannot be met.
+- **UI:** always-visible Homeland Dynamics tile, including states with no existing homelands. Culture bars show percentage, culture and monthly points, or a live blocker (unlock, split region, no relevant culture, population threshold). A newly eligible project says it starts next month. Tooltip explains thresholds, rate and pause/reset rules.
+- **Files:** homeland_triggers.txt, homeland_effects.txt, homeland_values.txt and homeland_sguis.txt under their respective common/ directories. te_homeland_monthly is wired in extra_on_actions.txt; GUI content lives in te_state_panel_widgets.gui.
+- **Save compatibility:** variables initialize on the first eligible monthly pulse; UI reads missing variables as zero. No migration or new game is required.
+
 ## State Panel GUI Enhancements
 
 Custom `state_panel_status_item_small` tiles added to `gui/states_panel.gui` for mod-specific state info. Each tile's name is the concept alone; its readings are aligned label/value rows in the tile's `extra_widget`, and the detail is in the tooltip:
 
 | Widget | Icon | Concept | Rows | Tooltip |
 |---|---|---|---|---|
-| **Homeland Dynamics** | `state_homelands.dds` | `concept_homeland_dynamics` | Creation / removal threshold (`GetValueWithBreakdownFor`) | Annual change chance, change-speed modifier |
+| **Homeland Dynamics** | `state_homelands.dds` | `concept_homeland_dynamics` | Creation / removal progress bars, target cultures and live status | Effective thresholds, annual progress, speed modifiers and pause/reset rules |
 | **Arable Land** | `wheat_farm.dds` | `concept_arable_land` | Total, regional additions, multiplier % | Geographic base, `GetValueWithBreakdownFor('state_arable_land_mult')` |
 | **Migration Crowding** | `population.dds` | `concept_migration_crowding` | Population, threshold, ratio (+ a bar to the 10x knee), pull penalty | Curve explanation, urban capacity breakdown |
 | **Solar Collector** | `space_elevator.dds` | `concept_solar_collector_array` | Available, generated | Active / reserved / queued |
@@ -263,7 +273,7 @@ Custom `state_panel_status_item_small` tiles added to `gui/states_panel.gui` for
   - Footer "All modifiers": `State.GetModifier.GetValueWithBreakdownFor('goods_output_tourism_mult')` and `('building_tourism_industry_throughput_add')`. These also carry airports, decrees, pollution, grand monuments and so on, and lag the scripted sources by up to a month.
   - Per-source tooltips `te_state_tourism_*_tt` state each tier schedule.
 - **Loc keys:** `TE_STATE_*_STATUS` (tile title), `TE_STATE_*_ROW_*` / `TE_STATE_POINTS_ROW_*` (row labels), `TE_STATE_*_TT` (tooltip) and `te_state_tourism_*` in `localization/english/te_miscellaneous_l_english.yml`.
-- **Script values for GUI:** `arable_land_total`, `arable_land_base`, `arable_land_from_modifiers`, `arable_land_mult_pct`, `migration_crowding_pull_pct`, `migration_crowding_threshold_pop`, `migration_crowding_fill_pct`, `homeland_change_chance`, `solar_*`, `antimatter_*` in `common/script_values/extra_script_values.txt`; `tourism_fill_*_pct` in `common/script_values/tourism.txt`.
+- **Script values for GUI:** `arable_land_total`, `arable_land_base`, `arable_land_from_modifiers`, `arable_land_mult_pct`, `migration_crowding_pull_pct`, `migration_crowding_threshold_pop`, `migration_crowding_fill_pct`, `te_homeland_annual_progress`, `solar_*`, `antimatter_*` in `common/script_values/extra_script_values.txt`; `tourism_fill_*_pct` in `common/script_values/tourism.txt`.
 - **Concepts:** Defined in `common/game_concepts/extra_concepts.txt`, with textures for hoverable tooltip links. The tourism rows label with `concept_tourism_*` and reuse those concept textures as row icons.
 - **Pattern:** Use `[concept_X]` for hoverable concept links, `[State.GetModifier.GetValueWithBreakdownFor('modifier_key')]` for modifier breakdowns, and `[State.MakeScope.ScriptValue('sv_name')]` for computed values. A value cell that shows one expression inlines it as `raw_text = "#v [...]#!"`.
 
@@ -1027,7 +1037,7 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 
 **`on_yearly_pulse_state`** (Root = State):
 - `global_warming_update_on_action` — GHG emissions calculation
-- `remove_or_create_homelands_on_action` — dynamic homeland changes
+- `te_homeland_monthly` — dynamic homeland progress (monthly state pulse)
 - `violent_hostility_on_action` — cultural violence
 - `migration_crowding_on_action` — migration pull reduction
 - `religious_mission_conversion_on_action` — treaty-based conversion

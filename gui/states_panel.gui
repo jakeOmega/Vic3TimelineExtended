@@ -2137,42 +2137,17 @@ types state_panel_types
 			### extra_widget, so their numbers right-align in one column instead of
 			### riding along \n-stacked loc lines.
 
-			### HOMELAND DYNAMICS
+			### HOMELAND DYNAMICS — always visible, including before unlock.
 			state_panel_status_item_small = {
-				visible = "[State.HasHomelands]"
 				tooltip = "TE_STATE_HOMELAND_TT"
-
 				blockoverride "texture" {
 					texture = "gfx/interface/icons/state_status_icons/state_homelands.dds"
 				}
-
 				blockoverride "name" {
 					text = "TE_STATE_HOMELAND_STATUS"
 				}
-
 				blockoverride "extra_widget" {
-					flowcontainer = {
-						direction = vertical
-						ignoreinvisible = yes
-
-						te_state_tile_row = {
-							blockoverride "row_label" {
-								text = "TE_STATE_HOMELAND_ROW_CREATE"
-							}
-							blockoverride "row_value" {
-								raw_text = "[State.GetModifier.GetValueWithBreakdownFor('state_homeland_creation_threshold_add')]"
-							}
-						}
-
-						te_state_tile_row = {
-							blockoverride "row_label" {
-								text = "TE_STATE_HOMELAND_ROW_REMOVE"
-							}
-							blockoverride "row_value" {
-								raw_text = "[State.GetModifier.GetValueWithBreakdownFor('state_homeland_removal_threshold_add')]"
-							}
-						}
-					}
+					te_state_homeland_tracks = {}
 				}
 			}
 
