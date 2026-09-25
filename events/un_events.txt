@@ -365,7 +365,7 @@ un_events.2 = {
 			base = 4
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 102 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -0.5 REASON = 1021 SUBJECT = scope:condemned_country }
 		if = {
 			limit = { exists = scope:un_dkt_victim }
 			change_relations = { country = scope:un_dkt_victim value = -10 }
@@ -477,7 +477,7 @@ un_events.3 = {
 			}
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 103 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 1031 }
 		add_modifier = {
 			name = un_human_rights_refusal_modifier
 			days = normal_modifier_time
@@ -543,8 +543,8 @@ un_events.4 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		# Booked below, once the mission shows which state the force went to.
 		custom_tooltip = un_ledger_tt_delivery_up_1_5
-		un_ledger_actor_entry = { PILLAR = delivery POINTS = 1.5 REASON = 104 }
 		# International standing: an actual deployment, not a pledge. Option B
 		# (observers only) is the token gesture and deliberately pays NOTHING —
 		# the whole point of standing is that only delivery counts. One payout
@@ -573,6 +573,15 @@ un_events.4 = {
 			scope:peacekeeping_target = { save_scope_as = un_msn_host }
 			un_mission_join_host = { TYPE = stabilisation CODE = 3 ORDER = un_docket_state_pop_order }
 			un_mission_add_contributor = yes
+			# The UN's record names the state the force went to, or the
+			# country when every one of its states already holds a mission.
+			if = {
+				limit = { exists = scope:un_msn_new.var:un_msn_state }
+				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1041 SUBJECT = scope:un_msn_new.var:un_msn_state }
+			}
+			else = {
+				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1044 SUBJECT = scope:peacekeeping_target }
+			}
 		}
 		# Notify the target country
 		save_scope_as = peacekeeping_donor
@@ -601,7 +610,7 @@ un_events.4 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_delivery_up_0_5
-		un_ledger_actor_entry = { PILLAR = delivery POINTS = 0.5 REASON = 104 }
+		un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 0.5 REASON = 1042 SUBJECT = scope:peacekeeping_target }
 		change_relations = { country = scope:peacekeeping_target value = 5 }
 	}
 
@@ -616,7 +625,7 @@ un_events.4 = {
 			}
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 104 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1 REASON = 1043 SUBJECT = scope:peacekeeping_target }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -691,7 +700,7 @@ un_events.5 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_up_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 1.5 REASON = 105 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 1.5 REASON = 1051 SUBJECT = scope:sanctioned_country }
 		# International standing: enforcing a sanctions regime at cost to
 		# yourself is compliance with a binding decision, not mere agreement.
 		# One payout per firing of this event, which is gated by the
@@ -718,7 +727,7 @@ un_events.5 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 105 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 0.5 REASON = 1052 SUBJECT = scope:sanctioned_country }
 		change_relations = { country = scope:sanctioned_country value = -5 }
 	}
 
@@ -739,7 +748,7 @@ un_events.5 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 105 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1.5 REASON = 1053 SUBJECT = scope:sanctioned_country }
 		# International standing: quietly trading through a sanctions regime is
 		# defiance of a binding decision, priced the same as refusing one
 		# outright in un_vote.3.
@@ -858,7 +867,7 @@ un_events.6 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 106 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1061 }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Release the vote slot since we didn't start one
@@ -946,8 +955,8 @@ un_events.7 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		# Booked below, once the mission shows which state the aid went to.
 		custom_tooltip = un_ledger_tt_delivery_up_1_5
-		un_ledger_actor_entry = { PILLAR = delivery POINTS = 1.5 REASON = 107 }
 		# International standing: aid actually delivered, at a GDP-scaled cost.
 		# Option B (a token contribution) pays NOTHING — token donations must
 		# not generate standing at all, or the cheapest option would be the
@@ -983,6 +992,15 @@ un_events.7 = {
 				un_mission_join_host = { TYPE = aid CODE = 2 ORDER = un_mission_sol_need_order }
 			}
 			un_mission_add_contributor = yes
+			# The UN's record names the state the aid went to, or the country
+			# when no mission could be opened there.
+			if = {
+				limit = { exists = scope:un_msn_new.var:un_msn_state }
+				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1071 SUBJECT = scope:un_msn_new.var:un_msn_state }
+			}
+			else = {
+				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1075 SUBJECT = scope:crisis_country }
+			}
 		}
 		# Notify the crisis country of incoming aid
 		save_scope_as = aid_donor
@@ -1011,7 +1029,7 @@ un_events.7 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_delivery_up_0_5
-		un_ledger_actor_entry = { PILLAR = delivery POINTS = 0.5 REASON = 107 }
+		un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 0.5 REASON = 1072 SUBJECT = scope:crisis_country }
 		change_relations = { country = scope:crisis_country value = 10 }
 		# GDP-scaled token benefit to crisis country
 		# A flat token (redesign phase 6): the old multiplier read
@@ -1043,7 +1061,7 @@ un_events.7 = {
 			}
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 107 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1 REASON = 1073 SUBJECT = scope:crisis_country }
 		change_relations = { country = scope:crisis_country value = -10 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
@@ -1068,7 +1086,7 @@ un_events.7 = {
 			}
 			custom_tooltip = un_refuse_aid_severe_penalty_tt
 			custom_tooltip = un_ledger_tt_credibility_down_1_5
-			un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 107 }
+			un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1.5 REASON = 1074 SUBJECT = scope:crisis_country }
 			ig_approval_effect = { IG = ig_trade_unions   MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 			ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		}
@@ -1131,7 +1149,7 @@ un_events.8 = {
 			set_global_variable = un_agency_icj
 		}
 		custom_tooltip = un_ledger_tt_credibility_up_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 1.5 REASON = 108 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 1.5 REASON = 1081 SUBJECT = scope:court_plaintiff }
 		# International standing: accepting a ruling against yourself is
 		# compliance at a real cost. Option B (contest the jurisdiction) pays
 		# and costs nothing — arguing a case is legitimate. One payout per
@@ -1158,7 +1176,7 @@ un_events.8 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 108 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -0.5 REASON = 1082 SUBJECT = scope:court_plaintiff }
 	}
 
 	# Option C: Defy the court openly
@@ -1177,7 +1195,7 @@ un_events.8 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_2_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -2.5 REASON = 108 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -2.5 REASON = 1083 SUBJECT = scope:court_plaintiff }
 		custom_tooltip = un_dossier_tt_court
 		un_dossier_record = { RECORD = defiance POINTS = un_dos_points_court }
 		# International standing: openly repudiating the court's jurisdiction,
@@ -1269,7 +1287,7 @@ un_events.9 = {
 			}
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 109 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 1091 }
 		add_loyalists = {
 			value = very_small_radicals
 			strata = upper
@@ -1356,7 +1374,7 @@ un_events.10 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_up_2
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 2 REASON = 110 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = 2 REASON = 1101 }
 		custom_tooltip = un_events.10.a_tt
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
@@ -1419,7 +1437,7 @@ un_events.10 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_2
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -2 REASON = 110 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -2 REASON = 1102 }
 		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
@@ -1515,7 +1533,7 @@ un_events.11 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 111 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1 REASON = 1111 SUBJECT = scope:veto_power }
 		change_relations = { country = scope:veto_power value = -15 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
@@ -1527,7 +1545,7 @@ un_events.11 = {
 			base = 4
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 111 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -0.5 REASON = 1112 SUBJECT = scope:veto_power }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
 
@@ -1547,7 +1565,7 @@ un_events.11 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_up_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 1 REASON = 111 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 1 REASON = 1113 SUBJECT = scope:veto_power }
 		change_relations = { country = scope:veto_power value = -10 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
@@ -1655,7 +1673,7 @@ un_events.12 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 112 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1121 }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		# Release the vote slot since we didn't start one
 		un_vote_release = yes
@@ -1794,7 +1812,7 @@ un_events.14 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 114 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 1141 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Release the vote slot since we didn't start one
 		un_vote_release = yes
@@ -1857,7 +1875,7 @@ un_events.15 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_up_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 1 REASON = 115 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 1 REASON = 1151 SUBJECT = scope:trade_rival }
 		change_relations = { country = scope:trade_rival value = 5 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
@@ -1871,7 +1889,7 @@ un_events.15 = {
 		# Redesign phase 4: settling outside the organisation bypasses it, so
 		# the deal costs the Assembly's credibility rather than adding to it.
 		custom_tooltip = un_ledger_tt_credibility_down_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 115 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -0.5 REASON = 1152 SUBJECT = scope:trade_rival }
 		change_relations = { country = scope:trade_rival value = 15 }
 		# The rival negotiated nothing: its notice says we offered it
 		# concessions (notification_un_trade_deal_received_desc).
@@ -1906,7 +1924,7 @@ un_events.15 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 115 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1 REASON = 1153 SUBJECT = scope:trade_rival }
 		change_relations = { country = scope:trade_rival value = -15 }
 		scope:trade_rival = {
 			post_notification = un_tariff_retaliation_received
@@ -2011,7 +2029,7 @@ un_events.16 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 116 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1161 }
 		add_loyalists = {
 			value = very_small_radicals
 			strata = upper
@@ -2126,7 +2144,7 @@ un_events.17 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 117 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 1171 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Release the vote slot since we didn't start one
 		un_vote_release = yes
@@ -2300,7 +2318,7 @@ un_events.18 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 118 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1 REASON = 1181 SUBJECT = scope:refugee_source }
 		if = {
 			limit = { exists = scope:refugee_source }
 			change_relations = { country = scope:refugee_source value = -10 }
@@ -2412,7 +2430,7 @@ un_events.19 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 119 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1191 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		un_vote_release = yes
 		hidden_effect = {
@@ -2498,7 +2516,7 @@ un_events.20 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_up_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 1 REASON = 120 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 1 REASON = 1201 SUBJECT = scope:walkout_leader }
 		change_relations = { country = scope:walkout_leader value = -15 }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 	}
@@ -2515,7 +2533,7 @@ un_events.20 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 120 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = 0.5 REASON = 1202 SUBJECT = scope:walkout_leader }
 		change_relations = { country = scope:walkout_leader value = 5 }
 	}
 
@@ -2535,7 +2553,7 @@ un_events.20 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 120 }
+		un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1.5 REASON = 1203 SUBJECT = scope:walkout_leader }
 		change_relations = { country = scope:walkout_leader value = 15 }
 		add_loyalists = {
 			value = small_radicals
@@ -2865,7 +2883,7 @@ un_events.21 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 121 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1211 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		un_vote_release = yes
 		hidden_effect = {
@@ -2979,7 +2997,7 @@ un_events.22 = {
 			is_decaying = yes
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 122 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 1221 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		un_vote_release = yes
 		hidden_effect = {
@@ -3462,7 +3480,7 @@ un_events.34 = {
 			}
 		}
 		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 134 }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 1341 }
 	}
 }
 
@@ -3534,7 +3552,7 @@ un_events.35 = {
 		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		custom_tooltip = un_ledger_tt_delivery_institutional_1
-		un_ledger_entry = { PILLAR = delivery POINTS = 1 REASON = 18 }
+		un_ledger_entry_on = { PILLAR = delivery POINTS = 1 REASON = 18 SUBJECT = ROOT }
 	}
 
 	# Option B: weather it alone.

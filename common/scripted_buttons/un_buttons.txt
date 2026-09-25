@@ -503,6 +503,8 @@ un_lift_sanctions_button = {
 			remove_modifier = un_sanctions_enforcer_modifier
 			every_country = {
 				limit = { has_modifier = un_sanctions_target_modifier }
+				# Named in the UN's record below.
+				save_scope_as = un_sanctions_lifted_target
 				remove_modifier = un_sanctions_target_modifier
 				# The embargoes the Assembly imposed go with the regime
 				# (redesign phase 5, un_teeth_effects.txt).
@@ -510,7 +512,7 @@ un_lift_sanctions_button = {
 			}
 			# Walking away from a regime the Assembly imposed costs its credibility,
 			# weighted by the enforcer's weight in world affairs.
-			un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 7 }
+			un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1 REASON = 7 SUBJECT = scope:un_sanctions_lifted_target }
 		}
 	}
 }

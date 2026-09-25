@@ -200,12 +200,19 @@ un_authority_log_block = {
 	}
 }
 
-# One entry: "<year> <who>: <pillar> <amount>", then the reason. The actor is
-# stashed with save_temporary_scope_as and printed from the container's own
-# line, as the chamber prints a resolution's proposer, so an annexed actor
-# reads as "a former member" instead of a blank.
+# One entry: "<year> <who>: <pillar> <amount>", then what was done. The actor
+# and the entry's subject are stashed with save_temporary_scope_as and printed
+# from the container's own lines, as the chamber prints a resolution's
+# proposer, so an annexed actor reads as "a former member" instead of a blank.
+# A temporary scope is still set when the next entry is printed, so the
+# subject is saved only for an entry that has one, and only a line chosen
+# because the entry has one prints it (un_authority_log_reason_on).
 # Scope: ledger log container
 un_authority_log_entry = {
+	if = {
+		limit = { exists = var:un_led_subject }
+		var:un_led_subject = { save_temporary_scope_as = un_led_subject_disp }
+	}
 	if = {
 		limit = { exists = var:un_led_actor }
 		var:un_led_actor ?= { save_temporary_scope_as = un_led_actor_disp }
@@ -242,184 +249,234 @@ un_authority_log_entry = {
 			custom_tooltip = je_un_led_assembly_direct
 		}
 	}
-	un_authority_log_reason_line = yes
+	# A resolution entry names the resolution (un_ledger_log_note_resolution);
+	# one booked before that was recorded falls through to the plain line.
+	if = {
+		limit = { has_variable = un_led_res_seq }
+		un_authority_log_resolution_lines = yes
+	}
+	else = {
+		un_authority_log_reason_line = yes
+	}
 }
 
-# The reason code, in words. Keep in step with the table at the top of
-# un_authority_effects.txt and the je_un_led_reason_<code> keys.
+# The reason code, in words: one line naming what the actor did, or what
+# happened. Keep in step with the table at the top of un_authority_effects.txt
+# and the je_un_led_reason_<code> keys; test_un_ledger_reason_codes.py checks
+# that every code booked anywhere has a case here and a key.
+#
+# Each case is its own `if` (codes are exclusive, and a scripted effect cannot
+# expand into an else_if); the three bands only save checking every case.
 # Scope: ledger log container
 un_authority_log_reason_line = {
 	if = {
-		limit = { var:un_led_reason = 1 }
-		custom_tooltip_no_bullet = je_un_led_reason_1
+		limit = { var:un_led_reason >= 1000 }
+		# 1NNk: the k-th response to UN event un_events.NN, one code per act.
+		# The fallback, for a subject that no longer resolves, is the
+		# event's own title (the 1NN line).
+		un_authority_log_reason_on = { CODE = 1021 KEY = je_un_led_reason_1021 FALLBACK = je_un_led_reason_102 }
+		un_authority_log_reason_case = { CODE = 1031 KEY = je_un_led_reason_1031 }
+		un_authority_log_reason_on = { CODE = 1041 KEY = je_un_led_reason_1041 FALLBACK = je_un_led_reason_104 }
+		un_authority_log_reason_on = { CODE = 1042 KEY = je_un_led_reason_1042 FALLBACK = je_un_led_reason_104 }
+		un_authority_log_reason_on = { CODE = 1043 KEY = je_un_led_reason_1043 FALLBACK = je_un_led_reason_104 }
+		un_authority_log_reason_on = { CODE = 1044 KEY = je_un_led_reason_1044 FALLBACK = je_un_led_reason_104 }
+		un_authority_log_reason_on = { CODE = 1051 KEY = je_un_led_reason_1051 FALLBACK = je_un_led_reason_105 }
+		un_authority_log_reason_on = { CODE = 1052 KEY = je_un_led_reason_1052 FALLBACK = je_un_led_reason_105 }
+		un_authority_log_reason_on = { CODE = 1053 KEY = je_un_led_reason_1053 FALLBACK = je_un_led_reason_105 }
+		un_authority_log_reason_case = { CODE = 1061 KEY = je_un_led_reason_1061 }
+		un_authority_log_reason_on = { CODE = 1071 KEY = je_un_led_reason_1071 FALLBACK = je_un_led_reason_107 }
+		un_authority_log_reason_on = { CODE = 1072 KEY = je_un_led_reason_1072 FALLBACK = je_un_led_reason_107 }
+		un_authority_log_reason_on = { CODE = 1073 KEY = je_un_led_reason_1073 FALLBACK = je_un_led_reason_107 }
+		un_authority_log_reason_on = { CODE = 1074 KEY = je_un_led_reason_1074 FALLBACK = je_un_led_reason_107 }
+		un_authority_log_reason_on = { CODE = 1075 KEY = je_un_led_reason_1075 FALLBACK = je_un_led_reason_107 }
+		un_authority_log_reason_on = { CODE = 1081 KEY = je_un_led_reason_1081 FALLBACK = je_un_led_reason_108 }
+		un_authority_log_reason_on = { CODE = 1082 KEY = je_un_led_reason_1082 FALLBACK = je_un_led_reason_108 }
+		un_authority_log_reason_on = { CODE = 1083 KEY = je_un_led_reason_1083 FALLBACK = je_un_led_reason_108 }
+		un_authority_log_reason_case = { CODE = 1091 KEY = je_un_led_reason_1091 }
+		un_authority_log_reason_case = { CODE = 1101 KEY = je_un_led_reason_1101 }
+		un_authority_log_reason_case = { CODE = 1102 KEY = je_un_led_reason_1102 }
+		un_authority_log_reason_on = { CODE = 1111 KEY = je_un_led_reason_1111 FALLBACK = je_un_led_reason_111 }
+		un_authority_log_reason_on = { CODE = 1112 KEY = je_un_led_reason_1112 FALLBACK = je_un_led_reason_111 }
+		un_authority_log_reason_on = { CODE = 1113 KEY = je_un_led_reason_1113 FALLBACK = je_un_led_reason_111 }
+		un_authority_log_reason_case = { CODE = 1121 KEY = je_un_led_reason_1121 }
+		un_authority_log_reason_case = { CODE = 1141 KEY = je_un_led_reason_1141 }
+		un_authority_log_reason_on = { CODE = 1151 KEY = je_un_led_reason_1151 FALLBACK = je_un_led_reason_115 }
+		un_authority_log_reason_on = { CODE = 1152 KEY = je_un_led_reason_1152 FALLBACK = je_un_led_reason_115 }
+		un_authority_log_reason_on = { CODE = 1153 KEY = je_un_led_reason_1153 FALLBACK = je_un_led_reason_115 }
+		un_authority_log_reason_case = { CODE = 1161 KEY = je_un_led_reason_1161 }
+		un_authority_log_reason_case = { CODE = 1171 KEY = je_un_led_reason_1171 }
+		un_authority_log_reason_on = { CODE = 1181 KEY = je_un_led_reason_1181 FALLBACK = je_un_led_reason_118 }
+		un_authority_log_reason_case = { CODE = 1191 KEY = je_un_led_reason_1191 }
+		un_authority_log_reason_on = { CODE = 1201 KEY = je_un_led_reason_1201 FALLBACK = je_un_led_reason_120 }
+		un_authority_log_reason_on = { CODE = 1202 KEY = je_un_led_reason_1202 FALLBACK = je_un_led_reason_120 }
+		un_authority_log_reason_on = { CODE = 1203 KEY = je_un_led_reason_1203 FALLBACK = je_un_led_reason_120 }
+		un_authority_log_reason_case = { CODE = 1211 KEY = je_un_led_reason_1211 }
+		un_authority_log_reason_case = { CODE = 1221 KEY = je_un_led_reason_1221 }
+		un_authority_log_reason_case = { CODE = 1341 KEY = je_un_led_reason_1341 }
 	}
 	else_if = {
-		limit = { var:un_led_reason = 2 }
-		custom_tooltip_no_bullet = je_un_led_reason_2
+		limit = { var:un_led_reason >= 100 }
+		# 1NN: one code for every response to un_events.NN, as booked before
+		# the codes were split by act. Kept for entries already in a save.
+		un_authority_log_reason_case = { CODE = 102 KEY = je_un_led_reason_102 }
+		un_authority_log_reason_case = { CODE = 103 KEY = je_un_led_reason_103 }
+		un_authority_log_reason_case = { CODE = 104 KEY = je_un_led_reason_104 }
+		un_authority_log_reason_case = { CODE = 105 KEY = je_un_led_reason_105 }
+		un_authority_log_reason_case = { CODE = 106 KEY = je_un_led_reason_106 }
+		un_authority_log_reason_case = { CODE = 107 KEY = je_un_led_reason_107 }
+		un_authority_log_reason_case = { CODE = 108 KEY = je_un_led_reason_108 }
+		un_authority_log_reason_case = { CODE = 109 KEY = je_un_led_reason_109 }
+		un_authority_log_reason_case = { CODE = 110 KEY = je_un_led_reason_110 }
+		un_authority_log_reason_case = { CODE = 111 KEY = je_un_led_reason_111 }
+		un_authority_log_reason_case = { CODE = 112 KEY = je_un_led_reason_112 }
+		un_authority_log_reason_case = { CODE = 113 KEY = je_un_led_reason_113 }
+		un_authority_log_reason_case = { CODE = 114 KEY = je_un_led_reason_114 }
+		un_authority_log_reason_case = { CODE = 115 KEY = je_un_led_reason_115 }
+		un_authority_log_reason_case = { CODE = 116 KEY = je_un_led_reason_116 }
+		un_authority_log_reason_case = { CODE = 117 KEY = je_un_led_reason_117 }
+		un_authority_log_reason_case = { CODE = 118 KEY = je_un_led_reason_118 }
+		un_authority_log_reason_case = { CODE = 119 KEY = je_un_led_reason_119 }
+		un_authority_log_reason_case = { CODE = 120 KEY = je_un_led_reason_120 }
+		un_authority_log_reason_case = { CODE = 121 KEY = je_un_led_reason_121 }
+		un_authority_log_reason_case = { CODE = 122 KEY = je_un_led_reason_122 }
+		un_authority_log_reason_case = { CODE = 134 KEY = je_un_led_reason_134 }
 	}
-	else_if = {
-		limit = { var:un_led_reason = 3 }
-		custom_tooltip_no_bullet = je_un_led_reason_3
+	else = {
+		un_authority_log_reason_case = { CODE = 1 KEY = je_un_led_reason_1 }
+		un_authority_log_reason_case = { CODE = 2 KEY = je_un_led_reason_2 }
+		un_authority_log_reason_case = { CODE = 3 KEY = je_un_led_reason_3 }
+		un_authority_log_reason_case = { CODE = 4 KEY = je_un_led_reason_4 }
+		un_authority_log_reason_on = { CODE = 5 KEY = je_un_led_reason_5_on FALLBACK = je_un_led_reason_5 }
+		un_authority_log_reason_on = { CODE = 6 KEY = je_un_led_reason_6_on FALLBACK = je_un_led_reason_6 }
+		un_authority_log_reason_on = { CODE = 7 KEY = je_un_led_reason_7_on FALLBACK = je_un_led_reason_7 }
+		un_authority_log_reason_on = { CODE = 8 KEY = je_un_led_reason_8_on FALLBACK = je_un_led_reason_8 }
+		un_authority_log_reason_on = { CODE = 9 KEY = je_un_led_reason_9_on FALLBACK = je_un_led_reason_9 }
+		un_authority_log_reason_on = { CODE = 10 KEY = je_un_led_reason_10_on FALLBACK = je_un_led_reason_10 }
+		un_authority_log_reason_case = { CODE = 11 KEY = je_un_led_reason_11 }
+		un_authority_log_reason_case = { CODE = 12 KEY = je_un_led_reason_12 }
+		un_authority_log_reason_case = { CODE = 13 KEY = je_un_led_reason_13 }
+		un_authority_log_reason_case = { CODE = 14 KEY = je_un_led_reason_14 }
+		un_authority_log_reason_on = { CODE = 15 KEY = je_un_led_reason_15_on FALLBACK = je_un_led_reason_15 }
+		un_authority_log_reason_case = { CODE = 16 KEY = je_un_led_reason_16 }
+		un_authority_log_reason_case = { CODE = 17 KEY = je_un_led_reason_17 }
+		un_authority_log_reason_on = { CODE = 18 KEY = je_un_led_reason_18_on FALLBACK = je_un_led_reason_18 }
+		un_authority_log_reason_case = { CODE = 19 KEY = je_un_led_reason_19 }
+		un_authority_log_reason_case = { CODE = 20 KEY = je_un_led_reason_20 }
+		un_authority_log_reason_on = { CODE = 21 KEY = je_un_led_reason_21 FALLBACK = je_un_led_reason_19 }
+		un_authority_log_reason_on = { CODE = 22 KEY = je_un_led_reason_22 FALLBACK = je_un_led_reason_19 }
+		un_authority_log_reason_on = { CODE = 23 KEY = je_un_led_reason_23 FALLBACK = je_un_led_reason_19 }
+		un_authority_log_reason_on = { CODE = 24 KEY = je_un_led_reason_24 FALLBACK = je_un_led_reason_20 }
+		un_authority_log_reason_on = { CODE = 25 KEY = je_un_led_reason_25 FALLBACK = je_un_led_reason_20 }
+		un_authority_log_reason_on = { CODE = 26 KEY = je_un_led_reason_26 FALLBACK = je_un_led_reason_20 }
 	}
-	else_if = {
-		limit = { var:un_led_reason = 4 }
-		custom_tooltip_no_bullet = je_un_led_reason_4
+}
+
+# One reason code that names no one.
+# Parameters: $CODE$, $KEY$ (passed whole, so organize_loc.py sees it in use)
+# Scope: ledger log container
+un_authority_log_reason_case = {
+	if = {
+		limit = { var:un_led_reason = $CODE$ }
+		custom_tooltip_no_bullet = $KEY$
 	}
-	else_if = {
-		limit = { var:un_led_reason = 5 }
-		custom_tooltip_no_bullet = je_un_led_reason_5
+}
+
+# One reason code whose line names the entry's subject, printed through
+# scope:un_led_subject_disp (un_authority_log_entry saves it only when the
+# entry has one). An entry without one — booked before subjects were
+# recorded, or whose state has since gone — gets the plain line.
+# Parameters: $CODE$, $KEY$, $FALLBACK$
+# Scope: ledger log container
+un_authority_log_reason_on = {
+	if = {
+		limit = { var:un_led_reason = $CODE$ }
+		if = {
+			limit = { exists = var:un_led_subject }
+			custom_tooltip_no_bullet = $KEY$
+		}
+		else = {
+			custom_tooltip_no_bullet = $FALLBACK$
+		}
 	}
-	else_if = {
-		limit = { var:un_led_reason = 6 }
-		custom_tooltip_no_bullet = je_un_led_reason_6
+}
+
+# A resolution entry: which resolution, what became of it and whom it was
+# directed at, then its topic. The topic is read off the resolution itself
+# through var:un_led_res, in the same order as un_chamber_topic_line
+# (un_chamber_display_effects.txt), and is simply left out if the resolution
+# has since been pruned from the archive: the first line already names it by
+# number.
+# Scope: ledger log container
+un_authority_log_resolution_lines = {
+	if = {
+		limit = { exists = var:un_led_subject }
+		un_authority_log_reason_case = { CODE = 1 KEY = je_un_led_res_carried_at }
+		un_authority_log_reason_case = { CODE = 2 KEY = je_un_led_res_weaker_at }
+		un_authority_log_reason_case = { CODE = 3 KEY = je_un_led_res_fell_at }
+		un_authority_log_reason_case = { CODE = 4 KEY = je_un_led_res_vetoed_at }
+		un_authority_log_reason_case = { CODE = 12 KEY = je_un_led_res_carried_at }
+		un_authority_log_reason_case = { CODE = 13 KEY = je_un_led_res_fell_at }
+		un_authority_log_reason_case = { CODE = 14 KEY = je_un_led_res_reform }
 	}
-	else_if = {
-		limit = { var:un_led_reason = 7 }
-		custom_tooltip_no_bullet = je_un_led_reason_7
+	else = {
+		un_authority_log_reason_case = { CODE = 1 KEY = je_un_led_res_carried }
+		un_authority_log_reason_case = { CODE = 2 KEY = je_un_led_res_weaker }
+		un_authority_log_reason_case = { CODE = 3 KEY = je_un_led_res_fell }
+		un_authority_log_reason_case = { CODE = 4 KEY = je_un_led_res_vetoed }
+		un_authority_log_reason_case = { CODE = 12 KEY = je_un_led_res_carried }
+		un_authority_log_reason_case = { CODE = 13 KEY = je_un_led_res_fell }
+		un_authority_log_reason_case = { CODE = 14 KEY = je_un_led_res_reform }
 	}
-	else_if = {
-		limit = { var:un_led_reason = 8 }
-		custom_tooltip_no_bullet = je_un_led_reason_8
+	un_authority_log_topic_case = { TOPIC = condemn KEY = je_un_led_topic_condemn }
+	un_authority_log_topic_case = { TOPIC = human_rights KEY = je_un_led_topic_human_rights }
+	if = {
+		limit = { var:un_led_res ?= { has_tag = un_topic_reform } }
+		if = {
+			limit = {
+				var:un_led_res ?= {
+					has_variable = un_res_charter_stage
+					var:un_res_charter_stage = 2
+				}
+			}
+			custom_tooltip_no_bullet = je_un_led_topic_reform_2
+		}
+		else_if = {
+			limit = {
+				var:un_led_res ?= {
+					has_variable = un_res_charter_stage
+					var:un_res_charter_stage = 1
+				}
+			}
+			custom_tooltip_no_bullet = je_un_led_topic_reform_1
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_led_topic_reform
+		}
 	}
-	else_if = {
-		limit = { var:un_led_reason = 9 }
-		custom_tooltip_no_bullet = je_un_led_reason_9
-	}
-	else_if = {
-		limit = { var:un_led_reason = 10 }
-		custom_tooltip_no_bullet = je_un_led_reason_10
-	}
-	else_if = {
-		limit = { var:un_led_reason = 11 }
-		custom_tooltip_no_bullet = je_un_led_reason_11
-	}
-	else_if = {
-		limit = { var:un_led_reason = 12 }
-		custom_tooltip_no_bullet = je_un_led_reason_12
-	}
-	else_if = {
-		limit = { var:un_led_reason = 13 }
-		custom_tooltip_no_bullet = je_un_led_reason_13
-	}
-	else_if = {
-		limit = { var:un_led_reason = 14 }
-		custom_tooltip_no_bullet = je_un_led_reason_14
-	}
-	# Redesign phase 5.
-	else_if = {
-		limit = { var:un_led_reason = 15 }
-		custom_tooltip_no_bullet = je_un_led_reason_15
-	}
-	else_if = {
-		limit = { var:un_led_reason = 16 }
-		custom_tooltip_no_bullet = je_un_led_reason_16
-	}
-	else_if = {
-		limit = { var:un_led_reason = 17 }
-		custom_tooltip_no_bullet = je_un_led_reason_17
-	}
-	else_if = {
-		limit = { var:un_led_reason = 18 }
-		custom_tooltip_no_bullet = je_un_led_reason_18
-	}
-	# Redesign phase 6.
-	else_if = {
-		limit = { var:un_led_reason = 19 }
-		custom_tooltip_no_bullet = je_un_led_reason_19
-	}
-	else_if = {
-		limit = { var:un_led_reason = 20 }
-		custom_tooltip_no_bullet = je_un_led_reason_20
-	}
-	# 1NN: a response to UN event un_events.NN. Each key quotes the event's own
-	# title, so the line cannot drift from the event.
-	else_if = {
-		limit = { var:un_led_reason = 102 }
-		custom_tooltip_no_bullet = je_un_led_reason_102
-	}
-	else_if = {
-		limit = { var:un_led_reason = 103 }
-		custom_tooltip_no_bullet = je_un_led_reason_103
-	}
-	else_if = {
-		limit = { var:un_led_reason = 104 }
-		custom_tooltip_no_bullet = je_un_led_reason_104
-	}
-	else_if = {
-		limit = { var:un_led_reason = 105 }
-		custom_tooltip_no_bullet = je_un_led_reason_105
-	}
-	else_if = {
-		limit = { var:un_led_reason = 106 }
-		custom_tooltip_no_bullet = je_un_led_reason_106
-	}
-	else_if = {
-		limit = { var:un_led_reason = 107 }
-		custom_tooltip_no_bullet = je_un_led_reason_107
-	}
-	else_if = {
-		limit = { var:un_led_reason = 108 }
-		custom_tooltip_no_bullet = je_un_led_reason_108
-	}
-	else_if = {
-		limit = { var:un_led_reason = 109 }
-		custom_tooltip_no_bullet = je_un_led_reason_109
-	}
-	else_if = {
-		limit = { var:un_led_reason = 110 }
-		custom_tooltip_no_bullet = je_un_led_reason_110
-	}
-	else_if = {
-		limit = { var:un_led_reason = 111 }
-		custom_tooltip_no_bullet = je_un_led_reason_111
-	}
-	else_if = {
-		limit = { var:un_led_reason = 112 }
-		custom_tooltip_no_bullet = je_un_led_reason_112
-	}
-	else_if = {
-		limit = { var:un_led_reason = 113 }
-		custom_tooltip_no_bullet = je_un_led_reason_113
-	}
-	else_if = {
-		limit = { var:un_led_reason = 114 }
-		custom_tooltip_no_bullet = je_un_led_reason_114
-	}
-	else_if = {
-		limit = { var:un_led_reason = 115 }
-		custom_tooltip_no_bullet = je_un_led_reason_115
-	}
-	else_if = {
-		limit = { var:un_led_reason = 116 }
-		custom_tooltip_no_bullet = je_un_led_reason_116
-	}
-	else_if = {
-		limit = { var:un_led_reason = 117 }
-		custom_tooltip_no_bullet = je_un_led_reason_117
-	}
-	else_if = {
-		limit = { var:un_led_reason = 118 }
-		custom_tooltip_no_bullet = je_un_led_reason_118
-	}
-	else_if = {
-		limit = { var:un_led_reason = 119 }
-		custom_tooltip_no_bullet = je_un_led_reason_119
-	}
-	else_if = {
-		limit = { var:un_led_reason = 120 }
-		custom_tooltip_no_bullet = je_un_led_reason_120
-	}
-	else_if = {
-		limit = { var:un_led_reason = 121 }
-		custom_tooltip_no_bullet = je_un_led_reason_121
-	}
-	else_if = {
-		limit = { var:un_led_reason = 122 }
-		custom_tooltip_no_bullet = je_un_led_reason_122
-	}
-	else_if = {
-		limit = { var:un_led_reason = 134 }
-		custom_tooltip_no_bullet = je_un_led_reason_134
+	un_authority_log_topic_case = { TOPIC = heritage KEY = je_un_led_topic_heritage }
+	un_authority_log_topic_case = { TOPIC = decolonization KEY = je_un_led_topic_decolonization }
+	un_authority_log_topic_case = { TOPIC = npt KEY = je_un_led_topic_npt }
+	un_authority_log_topic_case = { TOPIC = pandemic KEY = je_un_led_topic_pandemic }
+	un_authority_log_topic_case = { TOPIC = climate KEY = je_un_led_topic_climate }
+	un_authority_log_topic_case = { TOPIC = refugee KEY = je_un_led_topic_refugee }
+	un_authority_log_topic_case = { TOPIC = space KEY = je_un_led_topic_space }
+	un_authority_log_topic_case = { TOPIC = law_of_sea KEY = je_un_led_topic_law_of_sea }
+	un_authority_log_topic_case = { TOPIC = icc KEY = je_un_led_topic_icc }
+	un_authority_log_topic_case = { TOPIC = peacekeeping_request KEY = je_un_led_topic_peacekeeping_request }
+	un_authority_log_topic_case = { TOPIC = aid_request KEY = je_un_led_topic_aid_request }
+	un_authority_log_topic_case = { TOPIC = sanctions KEY = je_un_led_topic_sanctions }
+	un_authority_log_topic_case = { TOPIC = expulsion KEY = je_un_led_topic_expulsion }
+	un_authority_log_topic_case = { TOPIC = military_mandate KEY = je_un_led_topic_military_mandate }
+}
+
+# One topic, printed if the entry's resolution carries its tag. Exactly one
+# topic tag is set on a resolution (un_resolution_open), so at most one prints.
+# Parameters: $TOPIC$ (the un_topic_<TOPIC> tag), $KEY$
+# Scope: ledger log container
+un_authority_log_topic_case = {
+	if = {
+		limit = { var:un_led_res ?= { has_tag = un_topic_$TOPIC$ } }
+		custom_tooltip_no_bullet = $KEY$
 	}
 }
 

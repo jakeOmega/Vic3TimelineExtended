@@ -26,6 +26,14 @@
 #       Scope: any. An institutional entry (a resolution carried or lost),
 #       applied as written and logged without an actor.
 #
+# Each of the three has an _on form taking one more parameter, SUBJECT: the
+# country or state the act was about (un_ledger_actor_entry_on and so on,
+# below). The log names it — "sent a full peacekeeping force to Attica" rather
+# than "in response to: A State Has Collapsed" — and a state prints as a
+# hoverable name. SUBJECT is any scope reference, `?=`-guarded, so a subject
+# that does not exist simply logs the entry without one. Whether a reason code
+# names a country or a state is fixed by its loc key; see the table below.
+#
 # PILLAR is credibility, delivery or order. POINTS may be negative. Each
 # ledger is a global stock (un_ledger_<pillar>) that decays by
 # un_ledger_decay_factor every month, so an entry fades over years rather
@@ -41,20 +49,30 @@
 # it back into the model. Reason codes are mapped to words by
 # un_authority_log_reason_line (un_authority_display_effects.txt) and the
 # je_un_led_reason_<code> keys; keep the table below, that chain and the keys
-# in step.
+# in step. test_un_ledger_reason_codes.py fails on a code with no line.
 #
 #   code  meaning                              code  meaning
-#   1     resolution carried                   8     nuclear first strike
-#   2     carried in weaker form (vetoed)      9     tactical nuclear strike
-#   3     resolution fell                      10    nuclear retaliation
+#   1     resolution carried                   8     nuclear first strike       (state)
+#   2     carried in weaker form (vetoed)      9     tactical nuclear strike    (state)
+#   3     resolution fell                      10    nuclear retaliation        (state)
 #   4     veto cast                            11    permanent member left the UN
-#   5     mandate discharged as written        12    expulsion motion carried
-#   6     mandate violated or abandoned        13    expulsion motion fell
-#   7     sanctions regime lifted              14    charter reform adopted
-#   15    a UN embargo dropped (busting)       16    a leader surrendered to the court
-#   17    the court's indictment defied        18    an emergency loan delivered
-#   19    a UN mission accomplished            20    a UN mission failed
-#                                              1NN   response to UN event un_events.NN
+#   5     mandate discharged as written (c)    12    expulsion motion carried
+#   6     mandate violated or abandoned (c)    13    expulsion motion fell
+#   7     sanctions regime lifted (country)    14    charter reform adopted
+#   15    a UN embargo dropped (country)       16    a leader surrendered to the court
+#   17    the court's indictment defied        18    an emergency loan delivered (c)
+#   19    a UN mission accomplished (legacy)   20    a UN mission failed (legacy)
+#   21-23 peacekeeping / aid / stabilisation mission accomplished   (state)
+#   24-26 peacekeeping / aid / stabilisation mission failed         (state)
+#   1NN   legacy: response to UN event un_events.NN (still rendered, for saves)
+#   1NNk  the k-th response to un_events.NN, one code per act: 1041 is
+#         un_events.4's full peacekeeping force, 1042 its observers, 1043 its
+#         refusal. The subject of each is in its je_un_led_reason_1NNk key.
+#
+# The resolution codes (1, 2, 3, 4, 12, 13, 14) need no SUBJECT: every one is
+# booked while scope:un_resolution is set, and un_ledger_log_add copies the
+# resolution's number, a reference to it (for its topic) and its target onto
+# the log entry itself (un_ledger_log_note_resolution).
 # ============================================================================
 
 # ---- Monthly update ------------------------------------------------------------
@@ -163,7 +181,14 @@ un_authority_actor_shock_weighted = {
 	un_authority_shock_record = { AMOUNT = $AMOUNT$ REASON = $REASON$ WEIGHTED = yes }
 }
 
-# The single implementation behind the two wrappers above; the amount is staged
+# The first form, naming what the moment was about (see the header).
+# Scope: the country responsible
+un_authority_actor_shock_on = {
+	un_ledger_subject_note = { SUBJECT = $SUBJECT$ }
+	un_authority_shock_record = { AMOUNT = $AMOUNT$ REASON = $REASON$ WEIGHTED = no }
+}
+
+# The single implementation behind the wrappers above; the amount is staged
 # in a global for the log, as un_ledger_record stages it.
 un_authority_shock_record = {
 	hidden_effect = {
@@ -187,6 +212,7 @@ un_authority_shock_record = {
 			un_ledger_log_add = { PILLAR = direct REASON = $REASON$ WITH_ACTOR = yes }
 			remove_global_variable = un_led_stage
 		}
+		un_ledger_subject_clear = yes
 	}
 }
 
@@ -205,6 +231,46 @@ un_ledger_actor_entry_unweighted = {
 # Scope: any
 un_ledger_entry = {
 	un_ledger_record = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $REASON$ WEIGHTED = no WITH_ACTOR = no }
+}
+
+# The same three, naming the country or state the act was about (see the
+# header). Nothing here changes the amount booked.
+# Scope: the acting country
+un_ledger_actor_entry_on = {
+	un_ledger_subject_note = { SUBJECT = $SUBJECT$ }
+	un_ledger_record = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $REASON$ WEIGHTED = yes WITH_ACTOR = yes }
+}
+
+# Scope: the acting country
+un_ledger_actor_entry_unweighted_on = {
+	un_ledger_subject_note = { SUBJECT = $SUBJECT$ }
+	un_ledger_record = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $REASON$ WEIGHTED = no WITH_ACTOR = yes }
+}
+
+# Scope: any
+un_ledger_entry_on = {
+	un_ledger_subject_note = { SUBJECT = $SUBJECT$ }
+	un_ledger_record = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $REASON$ WEIGHTED = no WITH_ACTOR = no }
+}
+
+# The subject travels to un_ledger_log_add as a saved scope, and is cleared
+# once the entry is booked (un_ledger_record, un_authority_shock_record):
+# several call sites book more than one entry in one effect — un_vote.2's
+# single option has a dozen — and a subject left behind would be printed
+# against the next entry.
+# Scope: any
+un_ledger_subject_note = {
+	hidden_effect = {
+		$SUBJECT$ ?= { save_scope_as = un_led_subject }
+	}
+}
+
+# Scope: any
+un_ledger_subject_clear = {
+	if = {
+		limit = { exists = scope:un_led_subject }
+		clear_saved_scope = un_led_subject
+	}
 }
 
 # The single implementation behind the three wrappers above. The amount is
@@ -245,6 +311,7 @@ un_ledger_record = {
 			}
 			remove_global_variable = un_led_stage
 		}
+		un_ledger_subject_clear = yes
 	}
 }
 
@@ -279,6 +346,25 @@ un_ledger_log_add = {
 				}
 				set_variable = { name = un_led_actor value = scope:un_led_actor }
 			}
+			if = {
+				limit = { exists = scope:un_led_subject }
+				set_variable = { name = un_led_subject value = scope:un_led_subject }
+			}
+			if = {
+				limit = {
+					exists = scope:un_resolution
+					OR = {
+						var:un_led_reason = 1
+						var:un_led_reason = 2
+						var:un_led_reason = 3
+						var:un_led_reason = 4
+						var:un_led_reason = 12
+						var:un_led_reason = 13
+						var:un_led_reason = 14
+					}
+				}
+				un_ledger_log_note_resolution = yes
+			}
 		}
 		add_to_global_variable_list = { name = un_ledger_log target = scope:un_led_new }
 		if = {
@@ -294,6 +380,29 @@ un_ledger_log_add = {
 			remove_list_global_variable = { name = un_ledger_log target = scope:un_led_evicted }
 			scope:un_led_evicted = { destroy_container = yes }
 		}
+	}
+}
+
+# What a resolution entry needs to name the resolution it is about: its number
+# and its target are copied, and the resolution itself is referenced for its
+# topic, which is a tag the log reads through the reference. The reference
+# outlives the entry in practice — the archive keeps 25 resolutions and every
+# resolution closed books at least one of the log's 12 entries — and the log
+# falls back to the number alone if it does not. An explicit SUBJECT wins
+# over the target.
+# Scope: ledger log container; expects scope:un_resolution
+un_ledger_log_note_resolution = {
+	set_variable = { name = un_led_res value = scope:un_resolution }
+	if = {
+		limit = { scope:un_resolution = { has_variable = un_res_seq } }
+		set_variable = { name = un_led_res_seq value = scope:un_resolution.var:un_res_seq }
+	}
+	if = {
+		limit = {
+			NOT = { has_variable = un_led_subject }
+			scope:un_resolution = { exists = var:un_res_target }
+		}
+		set_variable = { name = un_led_subject value = scope:un_resolution.var:un_res_target }
 	}
 }
 
