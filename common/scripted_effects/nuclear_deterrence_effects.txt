@@ -756,36 +756,46 @@ nd_strike_nfu_amendment = {
 # ----------------------------------------------------------------------------
 # DOMESTIC STANCE (§7) — the single refresh site of nd_posture_approval_*
 # ----------------------------------------------------------------------------
-# Scores per class, written to country variables, then one band per group.
-# A doctrine held less than nd_stance_tenure_months is still being judged: every
-# score is zero until then, so flipping a posture pays nothing.
+# Each interest group's class, lean, terms and capped total, written to the
+# group itself (nd_ig_*; values in nuclear_deterrence_values.txt § AT HOME),
+# then one band per group from that total. A doctrine held less than
+# nd_stance_tenure_months is still being judged: every term but the business
+# ones is zero until then, so flipping a posture pays nothing.
 nd_refresh_domestic_stance = {
 	# Marks that bands may be on our interest groups, so the country pulse can
-	# take them off if the entry deactivates (nd_country_monthly_cleanup): the
-	# bands live on the interest groups, not on the entry, and outlive it.
+	# take them off if the entry deactivates (nd_country_monthly_cleanup).
 	set_variable = { name = nd_stance_applied value = 1 }
-	set_variable = { name = nd_stance_warfighting value = nd_stance_warfighting_value }
-	set_variable = { name = nd_stance_professional value = nd_stance_professional_value }
-	set_variable = { name = nd_stance_dove value = nd_stance_dove_value }
-	set_variable = { name = nd_stance_business value = nd_stance_business_value }
+	# The country-level class scores before 2026-09-25, in an old save.
+	if = {
+		limit = { has_variable = nd_stance_warfighting }
+		remove_variable = nd_stance_warfighting
+	}
+	if = {
+		limit = { has_variable = nd_stance_professional }
+		remove_variable = nd_stance_professional
+	}
+	if = {
+		limit = { has_variable = nd_stance_dove }
+		remove_variable = nd_stance_dove
+	}
+	if = {
+		limit = { has_variable = nd_stance_business }
+		remove_variable = nd_stance_business
+	}
 	every_interest_group = {
 		if = {
-			limit = { nd_ig_stance_militarist = yes }
-			nd_ig_set_band = { VAR = nd_stance_warfighting }
-		}
-		else_if = {
-			limit = { nd_ig_class_professional = yes }
-			nd_ig_set_band = { VAR = nd_stance_professional }
-		}
-		else_if = {
-			limit = { nd_ig_is_restraint = yes }
-			nd_ig_set_band = { VAR = nd_stance_dove }
-		}
-		else_if = {
-			limit = { nd_ig_class_business = yes }
-			nd_ig_set_band = { VAR = nd_stance_business }
+			limit = {
+				OR = {
+					nd_ig_is_fixed_class = yes
+					nd_ig_stance_militarist = yes
+					nd_ig_stance_restraint = yes
+				}
+			}
+			nd_ig_store_opinion = yes
+			nd_ig_set_band = yes
 		}
 		else = {
+			nd_ig_clear_opinion = yes
 			nd_ig_clear_band = yes
 		}
 	}
@@ -794,28 +804,122 @@ nd_refresh_domestic_stance = {
 nd_clear_domestic_stance = {
 	every_interest_group = {
 		nd_ig_clear_band = yes
+		nd_ig_clear_opinion = yes
 	}
 }
 
-# Interest-group scope. Idempotent across months: whatever band is on comes
-# off (each guarded by has_modifier, which is reliable here because nothing
-# earlier in the same block added one), and the wanted band goes on.
+# IG scope: store this group's class, lean, strength, each term and the total.
+nd_ig_store_opinion = {
+	if = {
+		limit = { nd_ig_class_militarist = yes }
+		set_variable = { name = nd_ig_class value = 1 }
+	}
+	else_if = {
+		limit = { nd_ig_class_restraint = yes }
+		set_variable = { name = nd_ig_class value = 2 }
+	}
+	else_if = {
+		limit = { nd_ig_class_professional = yes }
+		set_variable = { name = nd_ig_class value = 3 }
+	}
+	else = {
+		set_variable = { name = nd_ig_class value = 4 }
+	}
+	if = {
+		limit = {
+			nd_ig_is_fixed_class = yes
+			nd_ig_stance_militarist = yes
+		}
+		set_variable = { name = nd_ig_lean value = 1 }
+	}
+	else_if = {
+		limit = {
+			nd_ig_is_fixed_class = yes
+			nd_ig_stance_restraint = yes
+		}
+		set_variable = { name = nd_ig_lean value = 2 }
+	}
+	else = {
+		set_variable = { name = nd_ig_lean value = 0 }
+	}
+	if = {
+		limit = {
+			OR = {
+				nd_ig_stance_militarist = yes
+				nd_ig_stance_restraint = yes
+			}
+			nd_ig_stance_full = no
+		}
+		set_variable = { name = nd_ig_strength value = 1 }
+	}
+	else = {
+		set_variable = { name = nd_ig_strength value = 2 }
+	}
+	set_variable = { name = nd_ig_term_doctrine value = nd_ig_term_doctrine_value }
+	set_variable = { name = nd_ig_term_readiness value = nd_ig_term_readiness_value }
+	set_variable = { name = nd_ig_term_authority value = nd_ig_term_authority_value }
+	set_variable = { name = nd_ig_term_strain value = nd_ig_term_strain_value }
+	set_variable = { name = nd_ig_term_business value = nd_ig_term_business_value }
+	set_variable = { name = nd_ig_stance value = nd_ig_stance_value }
+}
+
+nd_ig_clear_opinion = {
+	if = {
+		limit = { has_variable = nd_ig_class }
+		remove_variable = nd_ig_class
+	}
+	if = {
+		limit = { has_variable = nd_ig_lean }
+		remove_variable = nd_ig_lean
+	}
+	if = {
+		limit = { has_variable = nd_ig_strength }
+		remove_variable = nd_ig_strength
+	}
+	if = {
+		limit = { has_variable = nd_ig_term_doctrine }
+		remove_variable = nd_ig_term_doctrine
+	}
+	if = {
+		limit = { has_variable = nd_ig_term_readiness }
+		remove_variable = nd_ig_term_readiness
+	}
+	if = {
+		limit = { has_variable = nd_ig_term_authority }
+		remove_variable = nd_ig_term_authority
+	}
+	if = {
+		limit = { has_variable = nd_ig_term_strain }
+		remove_variable = nd_ig_term_strain
+	}
+	if = {
+		limit = { has_variable = nd_ig_term_business }
+		remove_variable = nd_ig_term_business
+	}
+	if = {
+		limit = { has_variable = nd_ig_stance }
+		remove_variable = nd_ig_stance
+	}
+}
+
+# IG scope. Idempotent across months: whatever band is on comes off, and the
+# one nd_ig_stance asks for goes on.
 nd_ig_set_band = {
 	nd_ig_clear_band = yes
 	if = {
-		limit = { owner = { var:$VAR$ >= 2 } }
+		limit = { var:nd_ig_stance >= 2 }
 		add_modifier = { name = nd_posture_approval_plus_2 }
 	}
 	else_if = {
-		limit = { owner = { var:$VAR$ >= 1 } }
+		limit = { var:nd_ig_stance >= 1 }
 		add_modifier = { name = nd_posture_approval_plus_1 }
 	}
 	else_if = {
-		limit = { owner = { var:$VAR$ <= -2 } }
+		limit = { var:nd_ig_stance <= -2 }
 		add_modifier = { name = nd_posture_approval_minus_2 }
 	}
 	else_if = {
-		limit = { owner = { var:$VAR$ <= -1 } }
+		limit = { var:nd_ig_stance <= -1 }
 		add_modifier = { name = nd_posture_approval_minus_1 }
 	}
 }

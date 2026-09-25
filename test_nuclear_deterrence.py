@@ -582,6 +582,47 @@ class TestInterestGroupClasses(unittest.TestCase):
         self.assertIn("nd_ig_is_restraint = yes", block(effects, "nd_reward_doves"))
 
 
+IG_VARS = ["nd_ig_class", "nd_ig_lean", "nd_ig_strength", "nd_ig_term_doctrine", "nd_ig_term_readiness",
+           "nd_ig_term_authority", "nd_ig_term_strain", "nd_ig_term_business", "nd_ig_stance"]
+
+
+class TestInterestGroupOpinion(unittest.TestCase):
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.effects = strip_comments(read(EFFECTS))
+
+    def test_country_level_stance_values_are_gone(self):
+        for old in ("nd_stance_warfighting_value", "nd_stance_professional_value",
+                    "nd_stance_dove_value", "nd_stance_business_value"):
+            self.assertNotRegex(self.values, rf"(?m)^{old} = \{{")
+
+    def test_ig_values_exist(self):
+        for name in ("nd_ig_doctrine_militarist_value", "nd_ig_doctrine_restraint_value",
+                     "nd_ig_doctrine_professional_value", "nd_ig_term_doctrine_value",
+                     "nd_ig_term_readiness_value", "nd_ig_term_authority_value", "nd_ig_term_strain_value",
+                     "nd_ig_term_business_value", "nd_ig_stance_value", "nd_display_stance_months_left"):
+            self.assertRegex(self.values, rf"(?m)^{name} = \{{", name)
+
+    def test_store_writes_and_clear_removes_every_variable(self):
+        store = block(self.effects, "nd_ig_store_opinion")
+        clear = block(self.effects, "nd_ig_clear_opinion")
+        for var in IG_VARS:
+            self.assertIn(f"name = {var} value", store, var)
+            self.assertIn(f"remove_variable = {var}", clear, var)
+
+    def test_band_reads_the_stored_stance(self):
+        band = block(self.effects, "nd_ig_set_band")
+        self.assertIn("var:nd_ig_stance >= 2", band)
+        self.assertNotIn("owner", band)
+
+    def test_business_terms_do_not_wait_for_tenure(self):
+        body = block(self.values, "nd_ig_term_business_value")
+        self.assertNotIn("nd_ig_posture_judged", body)
+        for name in ("nd_ig_term_doctrine_value", "nd_ig_term_readiness_value",
+                     "nd_ig_term_authority_value", "nd_ig_term_strain_value"):
+            self.assertIn("nd_ig_posture_judged = yes", block(self.values, name), name)
+
+
 class TestManagedFamilies(unittest.TestCase):
     def test_doctrine_and_readiness_families_exist(self):
         mods = set(re.findall(r"^(nd_\w+)\s*=\s*\{", read(MODIFIERS), re.M))

@@ -699,6 +699,20 @@ nd_ig_is_restraint = {
 	nd_ig_stance_restraint = yes
 }
 
+# Country scope: our posture is judged at home only once the doctrine has
+# been held six months (§0.2 of the nuclear design: months, not a toggle).
+# The business terms do not wait.
+nd_posture_judged = {
+	nd_is_initialized = yes
+	has_variable = nd_doctrine_months
+	var:nd_doctrine_months >= nd_stance_tenure_months
+}
+
+# IG scope: the same question, about the group's country.
+nd_ig_posture_judged = {
+	owner = { nd_posture_judged = yes }
+}
+
 # ----------------------------------------------------------------------------
 # CRISIS STATE
 # ----------------------------------------------------------------------------
