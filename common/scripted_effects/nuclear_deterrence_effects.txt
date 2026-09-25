@@ -1382,6 +1382,10 @@ nd_launch_or_intercept = {
 
 # A launch recalled at the last moment, in peacetime. Nobody died; the other
 # side saw everything. Country scope = the country whose weapons nearly flew.
+# A crisis the two are already in turns acute. Otherwise no crisis opens by
+# itself: an armed victim that is free to may open one from
+# nuclear_incident.5 (its "warn them privately" option) — a crisis's issuer is
+# the country that chose to warn.
 nd_intercepted_launch = {
 	save_scope_as = nd_interceptor
 	change_infamy = 10
@@ -1394,7 +1398,7 @@ nd_intercepted_launch = {
 		save_scope_as = nd_scare_victim
 		trigger_event = { id = nuclear_incident.5 }
 	}
-	# The crisis this starts, or sharpens.
+	# The crisis this sharpens.
 	if = {
 		limit = {
 			nd_in_crisis = yes
@@ -1403,18 +1407,6 @@ nd_intercepted_launch = {
 		nd_crisis_save_parties = yes
 		scope:nd_issuer ?= {
 			set_variable = { name = nd_crisis_stage value = 3 }
-		}
-	}
-	else_if = {
-		limit = {
-			nd_in_crisis = no
-			$VICTIM$ = {
-				nd_in_crisis = no
-				nd_is_armed = yes
-			}
-		}
-		$VICTIM$ = {
-			nd_crisis_open = { TARGET = scope:nd_interceptor PUBLIC = no }
 		}
 	}
 }

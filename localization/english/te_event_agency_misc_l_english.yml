@@ -1,3 +1,7 @@
 ﻿l_english:
  te_ea_bailout_appeal:0 "Hat in Hand"
  te_ea_bailout_appeal_desc:0 "We asked another government to rescue our banks, and the world watched us ask."
+ nd_tt_alert_held:0 "Our readiness stays where it is, and we ask [SCOPE.sCountry('nd_exerciser').GetName] through the usual channels what it thinks it is doing"
+ nd_tt_exercise_invitation_accepted:0 "Talks open: the danger eases, and we stop pressing them while the talks last"
+ nd_tt_exercise_invitation_declined:0 "Nothing changes: the crisis goes on as it was"
+ nd_tt_exercise_invited:0 "They are told in advance and invited to observe. Whether that opens talks is for [SCOPE.sCountry('nd_issuer').GetName] to decide"

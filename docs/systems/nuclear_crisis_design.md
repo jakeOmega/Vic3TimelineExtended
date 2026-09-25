@@ -142,6 +142,8 @@ Each armed country gets one roll per month, in `nd_monthly_update`, never one pe
 | The Cost of Permanent Alert (`.30`) | 35 | high alert held six months or more, or strain ≥ 60 | Goldsboro 1961; Palomares 1966; Thule 1968; Damascus 1980; Minot 2007 |
 | A Routine Mishap (`.40`) | 20 | always | Duluth bear and Volk Field 1962; Kincheloe 1973; Mars Bluff 1958 |
 
+In The Exercise They Mistook, the other side's alert is its own choice: an AI opponent goes to high alert at once, and a player opponent is asked (`.11`). Telling them in advance opens talks on our own record if we issued the crisis; if they did, the invitation goes to them (`.12`) and they decide whether to open talks.
+
 Which branches can launch depends on launch authority:
 - **Central authority:** the Unconfirmed Warning goes to the government (`.1`), and nothing launches unless it is explicitly ordered.
 - **Launch on warning, or delegated authority in a war:** the outcome is rolled against `nd_hold_chance`, with no veto: reliability, +5 per safeguards level, −15 after punishing a sceptic, −10 under launch on warning, clamped to 20–97. A held launch leads to `.2`. An unheld one goes through `nd_launch_or_intercept`, then `.4` and the inquiry `.3`.
@@ -154,7 +156,7 @@ Every launch goes through the fenced dispatch helpers, `nd_dispatch_strategic_st
 - spurring the programmes of proliferating countries;
 - notifying the victim's guarantors.
 
-**Outside a war, the launch branch becomes an intercepted order** (§8.3's boundary). The launch is recalled at the last moment and the suspect sees the preparations (`.5`). The result is infamy +10, relations −50, and either an acute crisis or a private crisis opened by the victim. Nothing is struck, because a peacetime strike has no war context for the existing strike effects.
+**Outside a war, the launch branch becomes an intercepted order** (§8.3's boundary). The launch is recalled at the last moment and the suspect sees the preparations (`.5`). The result is infamy +10 and relations −50. A crisis the two are already in turns acute; otherwise an armed victim that is free to may answer with a private warning from `.5` (a crisis with itself as issuer), which the AI does most of the time. Nothing opens a crisis on the victim's behalf. Nothing is struck, because a peacetime strike has no war context for the existing strike effects.
 
 The Monopoly Window (`nuclear_incident.50`) is not an incident. It is a separate monthly 8 % check for a country with a compellence or warfighting doctrine that is at war with an enemy that is not armed and has no armed ally in that war, and whose doctrine and pledges permit a strike. It can fire at most once a year. A concealed incident can come out at 3 % a month (`.60`).
 
