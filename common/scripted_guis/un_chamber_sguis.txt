@@ -173,22 +173,100 @@ un_chamber_exposure_sgui = {
 	}
 }
 
-# Missions in the field (redesign phase 6): the mission register.
-un_chamber_missions_sgui = {
+# Missions in the field (redesign phase 6): the mission register, in two
+# lists under their own headings in the widget — the missions still at work,
+# and the ones that have ended.
+un_chamber_missions_active_sgui = {
 	scope = country
 
 	effect = {
-		un_chamber_missions_block = yes
+		un_chamber_missions_active_block = yes
 	}
 }
 
-# Our obligations (redesign phase 5): dues and arrears, the regimes that bind
-# us, and the pressure on our sovereignty.
-un_chamber_obligations_sgui = {
+un_chamber_missions_ended_sgui = {
 	scope = country
 
 	effect = {
-		un_chamber_obligations_block = yes
+		un_chamber_missions_ended_block = yes
+	}
+}
+
+# Our obligations (redesign phase 5), one builder per heading in the widget:
+# a member's dues and arrears, the conventions' terms that bind it and the
+# pressure on its sovereignty; a non-member's position; and, for everyone,
+# who pays for the UN. The widget picks which to show (un_chamber_member_sgui,
+# un_chamber_founded_sgui).
+un_chamber_dues_sgui = {
+	scope = country
+
+	effect = {
+		un_chamber_dues_lines = yes
+	}
+}
+
+un_chamber_regimes_sgui = {
+	scope = country
+
+	effect = {
+		un_chamber_regime_lines = yes
+	}
+}
+
+un_chamber_obligations_outside_sgui = {
+	scope = country
+
+	effect = {
+		un_chamber_obligations_outside_block = yes
+	}
+}
+
+un_chamber_budget_sgui = {
+	scope = country
+
+	effect = {
+		custom_tooltip_no_bullet = je_un_chamber_dues_budget
+	}
+}
+
+# Yes/no questions the widget asks to show or hide a heading and the group
+# under it. Never executed; is_shown reads only the root, never a saved scope
+# (gui_modding_guide.md gotcha #22).
+un_chamber_founded_sgui = {
+	scope = country
+
+	is_shown = {
+		has_global_variable = un_founded
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+	}
+}
+
+un_chamber_member_sgui = {
+	scope = country
+
+	is_shown = {
+		has_global_variable = un_founded
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+	}
+}
+
+un_chamber_in_session_sgui = {
+	scope = country
+
+	is_shown = {
+		has_global_variable = un_active_resolution
+		exists = global_var:un_active_resolution
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
 	}
 }
 
@@ -274,6 +352,23 @@ un_chamber_mandates_sgui = {
 
 	effect = {
 		un_chamber_mandates_block = yes
+	}
+}
+
+# The case we would table if we proposed a mandate now, under its own heading;
+# is_shown hides the heading while there is none (un_chamber_mandate_case_line
+# asks the same three things before it prints).
+un_chamber_mandate_case_sgui = {
+	scope = country
+
+	is_shown = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_mandate_has_live_mandate = yes }
+		un_mandate_case_exists = yes
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
 		un_chamber_mandate_case_line = yes
 	}
 }
@@ -587,6 +682,19 @@ un_chamber_propose_row_sgui = {
 				limit = { exists = scope:op scope:op = 6 }
 				un_chamber_propose_reform_row = yes
 			}
+		}
+	}
+}
+
+# The docket: how the Assembly takes up real situations, and what it took up
+# last. Members only, like the list under it.
+un_chamber_docket_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			un_chamber_docket_block = yes
 		}
 	}
 }

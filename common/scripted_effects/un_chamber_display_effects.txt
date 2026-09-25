@@ -1294,7 +1294,6 @@ un_chamber_docket_last_line = {
 
 # Scope: country
 un_chamber_assembly_business_block = {
-	un_chamber_docket_block = yes
 	custom_tooltip_no_bullet = je_un_chamber_assembly_intro
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_human_rights TOPIC = human_rights RAISED = je_un_chamber_raised_human_rights AGENCY = unhrc }
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_icc TOPIC = icc RAISED = je_un_chamber_raised_icc AGENCY = icc }
@@ -1559,7 +1558,8 @@ un_chamber_council_in_line = {
 
 # OUR EXPOSURE: our own dossier, and which punitive topics our record would
 # support against us today (§5.1: "a real case is visible before it lands").
-# Root-level lines only.
+# Root-level lines only. How the record works is static text, under its own
+# heading in the widget (je_un_chamber_exposure_help).
 # Scope: country (the viewer)
 un_chamber_exposure_block = {
 	if = {
@@ -1586,7 +1586,6 @@ un_chamber_exposure_block = {
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_exposure_clean
 		}
-		custom_tooltip_no_bullet = je_un_chamber_exposure_help
 	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_exposure_no_un
@@ -1596,34 +1595,25 @@ un_chamber_exposure_block = {
 # OUR OBLIGATIONS (redesign phase 5): what membership asks of us — our
 # assessed dues and any arrears (§7.2), the conventions' regimes that bind us
 # as winner or loser (§5.3), and the pressure on our sovereignty at home
-# (§7.1) — and the world's picture of who pays. Root-level lines only.
-# Scope: country (the viewer)
-un_chamber_obligations_block = {
+# (§7.1) — and the world's picture of who pays. The widget shows each group
+# under its own heading, through one scripted GUI apiece
+# (un_chamber_dues_sgui, un_chamber_regimes_sgui,
+# un_chamber_obligations_outside_sgui, un_chamber_budget_sgui); the block
+# below is the non-member's group. Root-level lines only.
+
+# Outside the UN: membership asks nothing of us, but a colony of a member is
+# reached by the decolonisation declaration all the same, and dues owed from
+# before still stand.
+# Scope: country (not a member; the UN founded)
+un_chamber_obligations_outside_block = {
+	custom_tooltip_no_bullet = je_un_chamber_obligations_nonmember
 	if = {
-		limit = { NOT = { has_global_variable = un_founded } }
-		custom_tooltip_no_bullet = je_un_chamber_obligations_no_un
+		limit = { has_modifier = un_regime_colony_liberty_modifier }
+		custom_tooltip_no_bullet = je_un_chamber_regime_colony
 	}
-	else = {
-		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-			un_chamber_dues_lines = yes
-			un_chamber_regime_lines = yes
-		}
-		else = {
-			custom_tooltip_no_bullet = je_un_chamber_obligations_nonmember
-			# A colony of a member is reached by the decolonisation
-			# declaration all the same.
-			if = {
-				limit = { has_modifier = un_regime_colony_liberty_modifier }
-				custom_tooltip_no_bullet = je_un_chamber_regime_colony
-			}
-			if = {
-				limit = { has_variable = un_arrears_owed }
-				custom_tooltip_no_bullet = je_un_chamber_dues_owed_outside
-			}
-		}
-		custom_tooltip_no_bullet = je_un_chamber_dues_budget
-		custom_tooltip_no_bullet = je_un_chamber_obligations_help
+	if = {
+		limit = { has_variable = un_arrears_owed }
+		custom_tooltip_no_bullet = je_un_chamber_dues_owed_outside
 	}
 }
 
@@ -1681,6 +1671,9 @@ un_chamber_regime_lines = {
 		limit = { un_regime_any_convention = yes }
 		custom_tooltip_no_bullet = je_un_chamber_regimes_none
 	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_regimes_no_convention
+	}
 	# The court's reach over our ruler.
 	if = {
 		limit = {
@@ -1727,25 +1720,44 @@ un_chamber_regime_line = {
 # ============================================================================
 # MISSIONS IN THE FIELD (redesign phase 6)
 # ============================================================================
-# The mission register, active missions first and newest first, then the ones
-# that have ended. Read in place from un_mission_registry.
+# The mission register, in the two lists the widget shows under their own
+# headings: the missions still at work, newest first, then the ones that have
+# ended. Read in place from un_mission_registry. What a mission is and how it
+# ends is static text, under a third heading (je_un_chamber_missions_intro,
+# je_un_chamber_missions_help).
 # Scope: country (the viewer)
-un_chamber_missions_block = {
+un_chamber_missions_active_block = {
 	if = {
 		limit = {
 			has_global_variable_list = un_mission_registry
 			any_in_global_list = {
 				variable = un_mission_registry
-				has_tag = un_mission
+				has_tag = un_msn_active
 			}
 		}
-		custom_tooltip_no_bullet = je_un_chamber_missions_intro
 		ordered_in_global_list = {
 			variable = un_mission_registry
 			limit = { has_tag = un_msn_active }
 			order_by = un_mission_recency_order
 			max = 100
 			un_chamber_mission_entry = yes
+		}
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_missions_none_active
+	}
+}
+
+# Scope: country (the viewer)
+un_chamber_missions_ended_block = {
+	if = {
+		limit = {
+			has_global_variable_list = un_mission_registry
+			any_in_global_list = {
+				variable = un_mission_registry
+				has_tag = un_mission
+				NOT = { has_tag = un_msn_active }
+			}
 		}
 		ordered_in_global_list = {
 			variable = un_mission_registry
@@ -1756,9 +1768,8 @@ un_chamber_missions_block = {
 		}
 	}
 	else = {
-		custom_tooltip_no_bullet = je_un_chamber_missions_none
+		custom_tooltip_no_bullet = je_un_chamber_missions_none_ended
 	}
-	custom_tooltip_no_bullet = je_un_chamber_missions_help
 }
 
 # One mission: what, where, for whom, how far along, and who serves in it.
