@@ -385,6 +385,60 @@ class HomelandProgressTests(unittest.TestCase):
         sim.root["state_region"]["states"].append(obj("state", owner=obj("country")))
         self.assertEqual(sim.value(status, sim.root), 2)
 
+    @staticmethod
+    def shown(sim):
+        """The tile's visibility values, as the state panel reads them."""
+        names = ("te_homeland_relevant", "te_homeland_pause_status",
+                 "te_homeland_creation_shown", "te_homeland_removal_shown")
+        return tuple(sim.value(sim.values[name], sim.root) for name in names)
+
+    def test_tile_hides_tracks_with_no_culture(self):
+        # "a" is primary and already has a homeland; "b" and "c" have none.
+        sim = self.make(homelands={"a"})
+        self.assertEqual(self.shown(sim), (0, 0, 0, 0))
+        sim.root["owner"]["modifiers"]["country_homelands_can_change_bool"] = False
+        self.assertEqual(self.shown(sim), (0, 1, 0, 0))  # no pause line either
+        sim.root["owner"]["modifiers"]["country_homelands_can_change_bool"] = True
+        sim.root["state_region"]["homelands"].add("b")
+        self.assertEqual(self.shown(sim), (1, 0, 0, 1))  # removal only
+        sim.root["state_region"]["homelands"].discard("a")
+        self.assertEqual(self.shown(sim), (1, 0, 1, 1))
+
+    def test_zero_removal_threshold_hides_removal(self):
+        # "b" keeps a homeland here, but nothing can fall below 0%.
+        sim = self.make(homelands={"a", "b"}, removal="0")
+        self.assertEqual(self.shown(sim), (0, 0, 0, 0))
+        sim.root["modifiers"]["state_homeland_removal_threshold_add"] = Decimal(".1")
+        self.assertEqual(self.shown(sim), (1, 0, 0, 1))
+
+    def test_threshold_blocked_track_is_still_shown(self):
+        sim = self.make(shares={"a": ".4", "b": ".2", "c": ".2"}, homelands={"b"})
+        self.assertEqual(self.shown(sim), (1, 0, 1, 1))
+        self.assertEqual(sim.value(sim.values["te_homeland_creation_status"], sim.root), 4)
+        self.assertEqual(sim.value(sim.values["te_homeland_removal_status"], sim.root), 4)
+
+    def test_pause_shows_only_tracks_with_kept_progress(self):
+        sim = self.make()
+        sim.root["owner"]["modifiers"]["country_homelands_can_change_bool"] = False
+        self.assertEqual(self.shown(sim), (1, 1, 0, 0))
+        sim.root["owner"]["modifiers"]["country_homelands_can_change_bool"] = True
+        sim.month()
+        sim.root["state_region"]["states"].append(obj("state", owner=obj("country")))
+        self.assertEqual(self.shown(sim), (1, 2, 1, 1))
+        sim.root["state_region"]["states"].pop()
+        self.assertEqual(self.shown(sim), (1, 0, 1, 1))
+
+    def test_stale_projects_stay_shown_until_cleanup(self):
+        sim = self.make(homelands={"a", "b", "c"})  # removal projects only
+        sim.month()
+        self.assertEqual(len(sim.projects("removal")), 2)
+        sim.root["state_region"]["homelands"].difference_update({"b", "c"})
+        # Both projects are now invalid and no culture applies, but their
+        # "no longer eligible" rows stay up until the next pulse clears them.
+        self.assertEqual(self.shown(sim), (1, 0, 0, 1))
+        sim.month()
+        self.assertEqual(self.shown(sim), (0, 0, 0, 0))
+
 
 if __name__ == "__main__":
     unittest.main()

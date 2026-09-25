@@ -12,7 +12,14 @@
 # Event 3  "An Opportunity for Union"    (unifier, peaceful proposal)
 # Event 4  "A Sister Nation Asks Us"     (target, follow-up to Event 3 option A)
 #
-# Events 5a/5b (bloc-leader approval) live in Phase 5.
+# Events 5a/5b (bloc-leader approval) live in Phase 5:
+# Event 7  "[Member] Asks Us to Bless a War" (bloc leader). A player member
+#          sends it by choosing the irr_seek_war_blessing diplomatic action
+#          on the target; an AI member by a monthly roll gated on a warlike
+#          government (irredentism_bloc_approval_on_action).
+# Event 10 "[Leader] Blesses Our Claim"   (member, follow-up to Event 7 option A)
+# Event 8  "[Member] Considers Voluntary Union" (bloc leader, about the country
+#          that actually proposed, var:irr_union_proposer from Event 4 option A)
 #
 # See /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
 # ============================================================================
@@ -477,6 +484,11 @@ irredentism.4 = {
 
 	duration = 3
 
+	# The text names the proposer (scope:irr_unifier, carried from Event 3).
+	trigger = {
+		exists = scope:irr_unifier
+	}
+
 	immediate = {
 		save_scope_as = irr_target
 	}
@@ -507,6 +519,19 @@ irredentism.4 = {
 			days = 1825
 			is_decaying = yes
 		}
+		# Remember who proposed, for as long as the modifier lasts, so that
+		# if our bloc leader is asked about the union (Event 8, via
+		# irredentism_bloc_approval_on_action) it is asked about this country.
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:irr_unifier }
+				set_variable = {
+					name = irr_union_proposer
+					value = scope:irr_unifier
+					days = 1825
+				}
+			}
+		}
 	}
 
 	# --- Option B: We will remain a free nation ---
@@ -535,9 +560,13 @@ irredentism.4 = {
 
 # ============================================================================
 # Event 5a: "Our Client Asks Us to Bless a War"
-# Fires on the unifier's bloc leader when a non-leader bloc member is a
-# strong irredentist-pressure candidate but lacks war-path approval.
-# Endorse → sets var on requester unblocking irredentist_bloc_check_war.
+# Fires on the bloc leader of a non-leader member that asked for war-path
+# approval against scope:target_country: a player member by choosing the
+# irr_seek_war_blessing diplomatic action, an AI member by the monthly roll in
+# irredentism_bloc_approval_on_action (warlike governments only). Both send it
+# through irr_send_war_blessing_request.
+# Endorse → sets var on requester unblocking irredentist_bloc_check_war, and
+#           tells the requester (Event 10).
 # Veto → cooldown modifier blocking re-attempt for 5y.
 # ============================================================================
 irredentism.7 = {
@@ -556,18 +585,28 @@ irredentism.7 = {
 
 	duration = 3
 
-	cooldown = { years = 5 }
+	# No event cooldown: a request the player chose to send must always reach
+	# the leader, and a leader-side cooldown would silently swallow it. The AI
+	# roll is throttled by irr_war_blessing_heard instead (set on the leader by
+	# irr_send_war_blessing_request when an AI member asks, read by
+	# irredentism_bloc_approval_on_action): a leader still hears at most one AI
+	# request per 5 years, the rate the old `cooldown = { years = 5 }` set.
 
-	# Inherited scopes (irr_requester, target_country) are saved by the
-	# on-action 3 days before fire. Either may have invalidated by now
-	# (annexation, decentralization). Suppress the event in that case --
-	# vanilla event-target accessor errors otherwise cascade through
-	# every option's ai_chance evaluation.
+	# Inherited scopes (irr_requester, target_country) are saved by
+	# irr_send_war_blessing_request 3 days before fire. Either may have
+	# invalidated by now (annexation, decentralization), or the requester may
+	# have left our bloc. Suppress the event in that case -- vanilla
+	# event-target accessor errors otherwise cascade through every option's
+	# ai_chance evaluation.
 	trigger = {
 		exists = scope:irr_requester
 		exists = scope:target_country
-		scope:irr_requester = { NOT = { is_country_type = decentralized } }
+		scope:irr_requester = {
+			NOT = { is_country_type = decentralized }
+			is_in_same_power_bloc = ROOT
+		}
 		scope:target_country = { NOT = { is_country_type = decentralized } }
+		is_power_bloc_leader = yes
 	}
 
 	immediate = {
@@ -663,10 +702,13 @@ irredentism.7 = {
 				value = scope:target_country
 				days = 1825
 			}
+			hidden_effect = { irr_clear_war_blessing_pending = yes }
 		}
-		# Trigger a notification event on the requester so they know they can act.
+		# Tell the requester, naming the target we approved. Its own event
+		# (not the generic irredentism.1, which re-rolls the target and sits
+		# behind an 8-year cooldown).
 		scope:irr_requester ?= {
-			trigger_event = { id = irredentism.1 days = 7 }
+			trigger_event = { id = irredentism.10 days = 1 }
 		}
 	}
 
@@ -704,6 +746,12 @@ irredentism.7 = {
 				days = 1825
 				is_decaying = yes
 			}
+			hidden_effect = { irr_clear_war_blessing_pending = yes }
+		}
+		# The requester chose to ask, so it hears the answer (irredentism.10
+		# carries a yes).
+		scope:irr_requester ?= {
+			trigger_event = { id = irredentism.11 days = 3 }
 		}
 		if = {
 			limit = { exists = scope:irr_requester }
@@ -712,6 +760,71 @@ irredentism.7 = {
 				value = -10
 			}
 		}
+	}
+}
+
+# ============================================================================
+# Event 10: "[Leader] Blesses Our Claim"
+# Fires on the requester after its bloc leader endorses the war (Event 7
+# option A), naming the leader and the target it approved. Triggered only;
+# no cooldown, so the notice can't be swallowed. Scopes irr_bloc_leader,
+# irr_requester and target_country carry over from Event 7.
+# ============================================================================
+irredentism.10 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.10.t
+	desc = irredentism.10.d
+	flavor = irredentism.10.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:irr_bloc_leader
+		exists = scope:target_country
+	}
+
+	option = {
+		name = irredentism.10.a
+		default_option = yes
+		custom_tooltip = irredentism.10.a.tt
+	}
+}
+
+# Notice to a member whose request for a war blessing was refused (fired by
+# irredentism.7.b). Inherits irr_bloc_leader, irr_requester and target_country.
+irredentism.11 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.11.t
+	desc = irredentism.11.d
+	flavor = irredentism.11.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:irr_bloc_leader
+		exists = scope:target_country
+	}
+
+	option = {
+		name = irredentism.11.a
+		default_option = yes
+		custom_tooltip = irredentism.11.a.tt
 	}
 }
 

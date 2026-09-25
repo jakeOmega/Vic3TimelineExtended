@@ -1,0 +1,78 @@
+﻿# ============================================================================
+# IRREDENTISM: "Seek Blessing for Reunification"
+# ============================================================================
+# A power bloc member that does not lead its bloc may only wage the
+# te_reunify_country war with its leader's blessing (irredentist_bloc_check_war).
+# This is how a player member asks for it. The action is taken on the country
+# it would go to war with, because that is how the player names the target: a
+# diplomatic action is picked from that country's own diplomacy panel. It asks
+# nothing of that country (requires_approval = no); the question goes to our
+# bloc leader as irredentism.7, which a human leader answers and an AI leader
+# weighs. The leader's reply comes back as irredentism.10 (blessed) or as the
+# irr_war_vetoed_modifier and a relations drop (refused).
+#
+# AI members never take this action: they ask through the monthly roll in
+# irredentism_bloc_approval_on_action (common/on_actions/extra_on_actions.txt),
+# gated on a warlike government. Both paths share the eligibility triggers in
+# te_event_agency_irr_triggers.txt and the send effect in
+# te_event_agency_irr_effects.txt.
+#
+# Scopes: `selectable` has ROOT = us and no target; `potential`, `possible` and
+# `accept_effect` have ROOT = us and scope:target_country = the country we
+# would go to war with. The engine re-walks accept_effect for the tooltip while
+# the confirmation box is open, so the real work sits in a hidden_effect.
+# ============================================================================
+
+irr_seek_war_blessing = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = no
+	should_notify_third_parties = no
+	show_in_lens = no   # avoid auto-lookup of gfx/interface/icons/lens_toolbar_icons/irr_seek_war_blessing.dds
+
+	texture = "gfx/interface/icons/diplomatic_action_icons/take_state.dds"
+
+	selectable = {
+		irr_war_blessing_member = yes
+	}
+
+	potential = {
+		scope:target_country = {
+			irr_war_blessing_target_potential = yes
+		}
+	}
+
+	possible = {
+		irr_war_blessing_requester_ready = yes
+		irr_war_blessing_target_ok = yes
+	}
+
+	accept_effect = {
+		custom_tooltip = irr_seek_war_blessing_effect_tt
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:target_country }
+				irr_send_war_blessing_request = yes
+			}
+		}
+	}
+
+	ai = {
+		# The AI asks through irredentism_bloc_approval_on_action instead.
+		evaluation_chance = {
+			value = 0
+		}
+
+		will_propose = {
+			always = no
+		}
+
+		propose_score = {
+			value = 0
+		}
+	}
+}

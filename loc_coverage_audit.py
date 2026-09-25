@@ -17,8 +17,9 @@ Coverage: static modifiers, character traits, journal entries, laws, decrees,
 scripted buttons, buildings, production methods, production method groups,
 goods, government types,
 company types, combat unit types, ship types, ideologies, interest groups,
-institutions, subject types, mobilization options, diplomatic actions, pop
-needs, decisions, amendments, messages, events. Skips scripted_effects/triggers, on_actions, modifier
+institutions, subject types, mobilization options, diplomatic actions (name
+plus the notification family their flags select), pop needs, decisions,
+amendments, messages, treaty articles, events. Skips scripted_effects/triggers, on_actions, modifier
 type definitions, script values (most are arithmetic helpers — only those
 referenced in `custom_tooltip` need loc, deferred until reports show gaps).
 """
@@ -132,6 +133,58 @@ def _treaty_article_keys(name: str, body) -> list[tuple[str, bool, str]]:
     ]
 
 
+def _diplomatic_action_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """Diplomatic actions are localized through an engine autokey family off
+    the action name. Which members the engine renders depends on the body:
+
+    - An action without `requires_approval = yes` executes at once and notifies
+      the target: `<name>_action_notification_name` / `_desc`. With a `pact`
+      the target is also notified when it breaks:
+      `<name>_action_notification_break_name` / `_desc`.
+    - `should_notify_third_parties = yes` on such an action also notifies every
+      observer: `<name>_action_notification_third_party_name` / `_desc`, plus
+      `_third_party_break_name` / `_desc` with a `pact`.
+      `nd_nuclear_ultimatum_action` and `nd_repudiate_pledge_action` shipped
+      without them, and observers saw the raw key (fixed 2026-09-25).
+    - An approval action goes through the `_proposal_*` family instead:
+      `_proposal_notification_*`, `_proposal_accepted_*` and
+      `_proposal_declined_*`, plus `_proposal_third_party_accepted_*` and
+      `_proposal_third_party_declined_*` when it notifies third parties.
+
+    Every localized vanilla action obeys these rules, and
+    `test_loc_coverage_audit` holds them against the committed
+    `vanilla_parsed/` snapshot. Only an explicit `should_notify_third_parties = yes` counts: vanilla leaves
+    the flag unset on actions both with and without third-party loc, so its
+    default is unknown.
+    """
+    keys = [(name, True, "name")]
+    if not isinstance(body, dict):
+        return keys
+
+    def _is_yes(field_name: str) -> bool:
+        return _strip_quotes(_unwrap(body.get(field_name, ""))) == "yes"
+
+    third_party = _is_yes("should_notify_third_parties")
+    if _is_yes("requires_approval"):
+        stems = ["_proposal_notification", "_proposal_accepted", "_proposal_declined"]
+        if third_party:
+            stems += ["_proposal_third_party_accepted", "_proposal_third_party_declined"]
+    else:
+        pact = "pact" in body
+        stems = ["_action_notification"]
+        if pact:
+            stems.append("_action_notification_break")
+        if third_party:
+            stems.append("_action_notification_third_party")
+            if pact:
+                stems.append("_action_notification_third_party_break")
+    for stem in stems:
+        label = stem.lstrip("_")
+        keys.append((f"{name}{stem}_name", True, f"{label}_name"))
+        keys.append((f"{name}{stem}_desc", True, f"{label}_desc"))
+    return keys
+
+
 def _explicit_name_field(name: str, body) -> list[tuple[str, bool, str]]:
     """For entities that declare loc via `name = "KEY"` and `desc = "KEY"`
     fields (scripted_buttons), not via the entity name itself."""
@@ -178,7 +231,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Subject Types":          _simple_name,
     "Messages":               _message_keys,
     "Mobilization Options":   _name_and_desc,
-    "Diplomatic Actions":     _simple_name,
+    "Diplomatic Actions":     _diplomatic_action_keys,
     "Pop Needs":              _simple_name,
     "Decisions":              _name_and_desc,
     "Amendments":             _name_and_desc,
@@ -401,7 +454,10 @@ def render_report(result: AuditResult) -> str:
         "events the keys are whatever `title`/`desc`/`flavor`/option `name`",
         "fields point at; for messages (`common/messages`) the keys are",
         "`notification_<name>_name` / `_desc` / `_tooltip`, never the bare",
-        "message name.",
+        "message name; for diplomatic actions the `_action_notification_*`",
+        "keys (the `_third_party_*` pair when `should_notify_third_parties =",
+        "yes`, the `_break_*` pairs with a `pact`) or, for",
+        "`requires_approval = yes`, the `_proposal_*` keys.",
         "",
         "Suppress an intentional missing key with a same-line comment on the",
         "entity's opening line:",
