@@ -437,6 +437,17 @@ banking_mon_has_dial = {
 	effect = { }
 }
 
+# Is the Inflation Anchoring row drawn under the two pressure rows? Only for a
+# country that holds any (today: central bank independence with an invested
+# National Bank), so everyone else is not shown a standing 0.0% / 0.0%.
+banking_mon_has_anchoring = {
+	scope = country
+	is_shown = { te_mon_anchoring_capacity_display > 0 }
+	ai_is_valid = { always = no }
+	is_valid = { always = no }
+	effect = { }
+}
+
 # Is the open-market operations row drawn under the rate target? Only where the
 # currency law lets the state create unbacked money — fiat and digital, the
 # declarative country_can_create_unbacked_money_bool — because that is the one

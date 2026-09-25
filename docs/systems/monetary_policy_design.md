@@ -1671,6 +1671,14 @@ leakage is visible.
   A **delegated** target is the mandate formula rounded to the nearest integer, with
   hysteresis (it only moves when the formula differs from the current target by ≥ 0.75) so
   it never flaps.
+- **Emergency cuts (2026-09-25):** a bank running its mandate (delegated, AI or CBI —
+  `te_mon_emergency_cuts`) **cuts** at `te_mon_emergency_cut_factor` × the step — 1pp a
+  month, 2 under digital — while the financial cycle is in stagnation or worse
+  (`te_mon_drift_step_down`). Hikes, and a manual dial, keep the third of a point. Without
+  it a bank caught at 12% by a crash stayed maximally tight for over a year of panic on the
+  way down (`docs/audits/banking_cycle_simulation.md` §12). **Owner decision:** it is
+  scoped to mandate-run banks so the manual dial's "reversals are slow by construction"
+  stands; dropping `te_mon_mandate_binds = yes` from the trigger extends it to every dial.
 - **Zero lower bound:** target ≥ 0 except under digital currency. A negative policy rate
   **never reaches `rate_paid_pts`** (0.5 floor, plus premium) — it acts only through the
   stimulus channel. This is intended, not a bug.
@@ -1721,7 +1729,7 @@ politics and the AI enact weights, not research.
 |---|---|
 | `law_no_national_bank` | No policy rate. Country pays world rate + own expected inflation + 1pp spread + premium (§4). |
 | `law_national_bank` | Player sets the target, **or** delegates it to a mandate (§6). |
-| `law_national_bank` + `law_central_bank_independence` | Mandate is **binding**. No manual target, no monetisation. In return: premium floor 0.25 (vs 0.5), premium −0.5pp, expected inflation anchors twice as fast, smaller estimation error. |
+| `law_national_bank` + `law_central_bank_independence` | Mandate is **binding**. No manual target, no monetisation. In return: premium floor 0.25 (vs 0.5), premium −0.5pp, expected inflation anchors twice as fast, smaller estimation error, and **inflation anchoring** — 0.1pp of standing wage and price pressure absorbed per National Bank level (2026-09-25, §6). |
 
 | `law_national_bank` + `law_state_owned_banking` outside a command economy **(proposed)** | The opposite pole from CBI: full political control. Dial and delegation as normal, but the lowest credibility (anchor c = 0.15, no CBI bonuses, structural premium +0.5) — and the state bank absorbs the debt, so monetisation carries no premium surcharge. Under `law_command_economy` the administered rate (§5.3) applies instead. |
 
@@ -1788,14 +1796,19 @@ update sets the target from the mandate formula instead of the player's stepper.
 | Mandate | Target formula (clamped to the regime's range) | Character |
 |---|---|---|
 | **Price stability** | `r̂* + π + 1.0 × (π − 2) + cycle_lean` | leans against inflation first; accepts slumps. (Sanity check: at π = 13 this asks for ~26%, clamped to 25 — Volcker territory; a plain Taylor weight of 0.5 would give ~20%) |
-| **Growth** | `r̂* + π − 0.25 + 0.5 × max(0, π − 4) + cycle_lean/2` | runs warm — `te_mon_mandate_growth_bias`, **−0.25 since 2026-09-22** (was −1.0: measured at 4× price stability's crash rate and a 4.1% equilibrium, not the ~3% intended; −0.25 lands at 3.2% and 1.7× the crashes while still buying about +1pp of manufacturing throughput — `docs/audits/banking_cycle_simulation.md` F7, §5) — and reacts only above 4% (zero-gap point π = 6), or frenzy. Never more hawkish than price stability |
+| **Growth** | `r̂* + π − 0.25 + 1.0 × max(0, π − 4) + cycle_lean/2` | runs warm — `te_mon_mandate_growth_bias`, **−0.25 since 2026-09-22** (was −1.0: measured at 4× price stability's crash rate and a 4.1% equilibrium, not the ~3% intended; −0.25 lands at 3.2% and 1.7× the crashes while still buying about +1pp of manufacturing throughput — `docs/audits/banking_cycle_simulation.md` F7, §5) — and reacts only above 4% (zero-gap point π = 4.25), or frenzy. The reaction is **1.0 since 2026-09-25** (`te_mon_mandate_growth_reaction`, was 0.5): at half weight the mandate could not keep inflation off the 8% wage-spiral edge under standing wage pressure and ended up both hotter and deeper in slump than price stability (§12 of the study). Never more hawkish than price stability |
 | **Peg defence** (gold only) | `world_rate + 0.5 × reserve_shortfall_pp` | keeps gold flows at zero; ignores the domestic cycle |
 
 `π` in these formulas is **core** inflation (§9.1) — mandates look through cost-push.
 `r̂*` is the bank's **estimate** of the neutral rate: true value plus a slow random-walk
 error of ±1.5pp (±0.5pp under CBI; shrinking with finance techs). `cycle_lean` is the
 replacement for the deleted rate-hike button's AI logic: +2 frenzy, +1 boom, +1 if bubble
-pressure ≥ 65, −2 recession, −3 panic.
+pressure ≥ 65, −2 recession, −3 panic — **of the cycle's outlook** since 2026-09-25, not
+its phase today: `te_mon_cycle_outlook` = value + 4.69 × momentum (six months of momentum
+at its 0.9 monthly decay), clamped 0–100. A lean on today's phase arrived at the top of
+its hike just as the boom broke, then held the rate up through the panic; the outlook
+lets the bank stop leaning on a boom that is already turning and start easing before the
+slump line is crossed (`docs/audits/banking_cycle_simulation.md` §12).
 
 **Phase 1 has no inflation, so every π term is dropped — including the −2 target.**
 Price stability is `r̂* + cycle_lean`; growth is `r̂* − 1.0 + cycle_lean/2`. (Plugging
@@ -1807,8 +1820,14 @@ momentum, faster bubble build-up, more crash risk. (Written when the bias was 1p
 **Why CBI is not just "automation".** Delegation already gives everyone automation. CBI is
 a *commitment device*: the player cannot override the bank, cannot monetise deficits, and
 cannot pre-load a loose stance before a war. In exchange markets believe the mandate:
-lower premium and floor, faster-anchoring expectations (disinflation is cheaper), and a
-better estimate of r\*. A player planning to inflate away war debt should not want it.
+lower premium and floor, faster-anchoring expectations (disinflation is cheaper), a
+better estimate of r\*, and — per level of the National Bank institution, on top of the
+institution's own modifier — **inflation anchoring**: `country_inflation_anchoring_add`
++0.1pp a level, which `te_mon_pressure_anchoring` subtracts from the net positive wage and
+price pressure, never past zero. A believed bank holds its target against standing wage
+pressure without holding the economy in stagnation to do it (study §13). It replaced −5%
+crash chance and −2% random momentum a level (2026-09-25), which the simulator found
+almost worthless. A player planning to inflate away war debt should not want it.
 Mandate changes under CBI take effect after a 12-month delay **(proposed)**.
 
 **Players start delegated too (2026-09-22).** `te_monetary_init_variables` seeds
@@ -4247,7 +4266,7 @@ P6-1…13).
 
 | Constant | Start | § |
 |---|---|---|
-| Drift per month | 1/3 pp (2/3 digital) | 4 |
+| Drift per month | 1/3 pp (2/3 digital); a mandate-run bank's **cuts** ×3 (`te_mon_emergency_cut_factor`) while the cycle is below 40, since 2026-09-25 | 4 |
 | Target range: gold / fiat / digital | 0–15 / 0–25 / −3–25 | 5 |
 | Target range: commodity money with a bank (`te_mon_commodity_band_margin_down` / `_up`; centre hysteresis `te_mon_commodity_centre_hysteresis`) | `centre − 1` to `centre + 3`, floored at 0; centre = `round(world)`, re-rounded at 0.75 | 5.1, 0.6 |
 | Commodity price-specie term (`te_mon_commodity_specie_tolerance` / `_per_pp` / `_clamp`) | tolerance 1pp of core above world inflation, then −2pp of pressure per pp, clamped at −6 | 9.1, 0.6 R7 |
@@ -4259,6 +4278,7 @@ P6-1…13).
 | Mod techs (structural) | **−0.3 ×4, −0.15** = −1.35 (was −0.4 ×4, −0.2 = −1.8), re-homed 2026-09-20 to `keynesian_economics` (6), `computer_networks` (8), `knowledge_economy` (9), `machine_learning` (10, the −0.15) and `universal_digital_identity` (11); the last two also carry `country_credit_standing_floor_add` −0.1pp each, so the floor goes 0.5 → 0.3 (CBI 0.25 → 0.05) | 7.5 |
 | Delegated target rounding / hysteresis | integer / 0.75 | 4 |
 | Gold / CBI credibility | −1.0 / −0.5 | 5 |
+| CBI inflation anchoring, per National Bank level | 0.1pp of net positive wage + price pressure absorbed (`country_inflation_anchoring_add` 0.001; 0.9pp at nine levels), since 2026-09-25 | 6 |
 | `_mult` → pp conversion | × 20 | 7.5 |
 | Access base / techs / no exchange | +8 / −4, −2.5, then **−0.25, −0.5, −0.75** (eras 3–5; was −0.5 ×3 — back-loaded 2026-09-20; the first two cannot move without moving §7.4's 1836 rows) / +2 | 7.2 |
 | Rank table | 0.5 · 1 · 2 · 3 · 4 · 6 · 8 | 7.3 |
@@ -4267,7 +4287,8 @@ P6-1…13).
 | Neutral rate: era base / growth coeff / walk | 3 → 2 / 0.25 / ±0.1 | 8 |
 | Estimation error (CBI) | ±1.5 (±0.5) | 6 |
 | Price-stability mandate: inflation weight / target | 1.0 / 2% | 6 |
-| Growth mandate: bias / reaction / threshold | **−0.25** (was −1.0 until 2026-09-22) / 0.5 / 4% | 6 |
+| Growth mandate: bias / reaction / threshold | **−0.25** (was −1.0 until 2026-09-22) / **1.0** (was 0.5 until 2026-09-25) / 4% | 6 |
+| Cycle lean's outlook: momentum months | 4.69 × momentum (six months at 0.9 decay; `te_mon_outlook_momentum_factor`, 2026-09-25) | 6 |
 | Inflation pressure (pp): stance per pp / phases / bubble / deficit / monetisation / QE | 0.4 / ±0.3–1.5 / 0.2 / 0.3 / 2.5 / 1.0 | 9.1 |
 | Core adjustment speed | 0.10 per month | 9.1 |
 | Expectation α: manual, delegated (CBI) | 1/24 (1/12) | 9.1 |

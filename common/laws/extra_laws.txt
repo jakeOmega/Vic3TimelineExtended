@@ -2454,9 +2454,17 @@ law_central_bank_independence = {
 		law_national_bank
 	}
 	institution = institution_national_bank
+	# Per level of the National Bank, on top of the institution's own modifier.
+	# Inflation anchoring (2026-09-25) replaced -5% crash chance and -2% random
+	# momentum a level: the simulator found the pair almost worthless — a lower
+	# crash chance let bubbles run longer and crash harder, and damping the
+	# random nudge also damped the pull back toward a normal cycle — while
+	# standing wage pressure kept an independent bank at 12-14% rates with its
+	# economy near stagnation. 0.1pp a level absorbs up to 0.9pp of standing
+	# wage and price pressure at nine levels, and nothing when there is none
+	# (te_mon_pressure_anchoring; docs/audits/banking_cycle_simulation.md §13).
 	institution_modifier = {
-		country_banking_crash_chance_mult = -0.05
-		country_banking_random_momentum_mult = -0.02
+		country_inflation_anchoring_add = 0.001
 	}
 
 	on_enact = {

@@ -177,6 +177,22 @@ country_wage_pressure_add = {
 	game_data = { ai_value = 0 }
 }
 
+# How much of the standing pressure above a credible central bank absorbs, in
+# pp (2026-09-25; docs/audits/banking_cycle_simulation.md §13). It offsets the
+# NET positive sum of the two types above and never goes past zero, so it
+# cannot turn into a standing disinflation: a flat negative
+# country_inflation_pressure_add of the same size made a delegated bank in an
+# economy with no standing pressure run permanently loose to hold its target,
+# and doubled its crash rate. law_central_bank_independence grants it per
+# level of the National Bank institution.
+country_inflation_anchoring_add = {
+	color = good
+	percent = yes
+	decimals = 1
+	script_only = yes
+	game_data = { ai_value = 0 }
+}
+
 # ============================================================================
 # Monetary policy — the regime rules, carried on the laws that grant them
 # ============================================================================

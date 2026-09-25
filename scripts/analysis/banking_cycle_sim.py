@@ -65,6 +65,11 @@ with if a number here looks wrong.
   world reference rate     te_mon_era_base by tech era: 3.0 / 2.5 / 2.0
   has_healthy_economy      false once scaled_debt > 0.6
   tech unlocks             by year, for the crash event's option list
+  country_wage_pressure_add  0 by default (`--wage-pressure`). THE BIG ONE for
+                           a delegated bank: labour laws grant +0.2 to +1.4pp
+                           in game, and at zero this simulation had no standing
+                           inflation pressure to fight, so it never saw the
+                           15% overshoots players did (audit §12).
 
 DELIBERATELY OUT OF SCOPE (pass 1)
 ----------------------------------
@@ -109,6 +114,7 @@ SCRIPT_VALUE_FILES = [
 ]
 STATIC_MODIFIER_FILE = REPO / "common/static_modifiers/extra_modifiers.txt"
 LAW_FILE = REPO / "common/laws/extra_laws.txt"
+INSTITUTION_FILE = REPO / "common/institutions/extra_institutions.txt"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -157,7 +163,9 @@ class ModConstants:
         self._sv_src = "\n".join(_read(p) for p in SCRIPT_VALUE_FILES)
         self._mod_src = _read(STATIC_MODIFIER_FILE)
         self._law_src = _read(LAW_FILE)
+        self._inst_src = _read(INSTITUTION_FILE)
         self._cache: dict[str, float] = {}
+        self._blocks: dict[str, dict[str, float]] = {}
 
     def sv(self, name: str) -> float:
         """A script value whose whole body is a single numeric `value =`."""
@@ -187,6 +195,50 @@ class ModConstants:
             if m:
                 out[m.group(1)] = float(m.group(2))
         return out
+
+    @staticmethod
+    def _numeric_block(body: str, header: str) -> dict[str, float]:
+        """The numeric fields of the first `<header> = { }` block inside body."""
+        m = re.search(r"(?m)^\s*%s\s*=\s*\{" % re.escape(header), body)
+        if not m:
+            return {}
+        depth, i = 0, m.end() - 1
+        for j in range(i, len(body)):
+            if body[j] == "{":
+                depth += 1
+            elif body[j] == "}":
+                depth -= 1
+                if depth == 0:
+                    inner = body[i + 1 : j]
+                    break
+        else:
+            return {}
+        out: dict[str, float] = {}
+        for line in _strip_comments(inner).splitlines():
+            mm = re.fullmatch(r"\s*(\w+)\s*=\s*(-?[\d.]+)\s*", line)
+            if mm:
+                out[mm.group(1)] = float(mm.group(2))
+        return out
+
+    def law_institution_modifier(self, law: str) -> dict[str, float]:
+        """A law's per-investment-level `institution_modifier = { }` fields.
+
+        Cached: law_modifier_sum asks for it several times a simulated month.
+        """
+        key = "institution_modifier/" + law
+        if key not in self._blocks:
+            body = _block(self._law_src, law)
+            if body is None:
+                raise KeyError(f"law {law!r} not found in {LAW_FILE}")
+            self._blocks[key] = self._numeric_block(body, "institution_modifier")
+        return self._blocks[key]
+
+    def institution_modifier(self, name: str) -> dict[str, float]:
+        """An institution's own per-level `modifier = { }` fields."""
+        body = _block(self._inst_src, name)
+        if body is None:
+            raise KeyError(f"institution {name!r} not found in {INSTITUTION_FILE}")
+        return self._numeric_block(body, "modifier")
 
     def law_modifier(self, law: str) -> dict[str, float]:
         """The numeric fields of a law's `modifier = { }` block."""
@@ -342,6 +394,8 @@ CURRENCY_LAWS = {
     "digital": "law_digital_currency",
 }
 CURRENCY_LAW_MODIFIERS = {k: K.law_modifier(v) for k, v in CURRENCY_LAWS.items()}
+# institution_national_bank's own per-level modifier (every national bank)
+NATIONAL_BANK_INSTITUTION = K.institution_modifier("institution_national_bank")
 
 # The crash event's softening options — events/minor_events.txt,
 # minor_events_timelineextended.6. Each is (cycle_add, momentum_add, modifier),
@@ -424,7 +478,25 @@ PRE_BOOM_RESCUE = {
     "inertia_top": 1.25,    # the inertia curve reached +1.25 at bubble 100
     "currency_bubble": 0.0, # fiat / digital carried no bubble add
 }
-PRESETS = {"pre_retune": PRE_RETUNE, "pre_boom_rescue": PRE_BOOM_RESCUE}
+# The delegated bank as it stood before §12 (2026-09-25): `--tune pre_delegation_fix`.
+PRE_DELEGATION_FIX = {
+    "outlook_factor": 0.0,  # te_mon_cycle_lean read today's phase, not the outlook
+    "emergency_cut": 1.0,   # cuts moved at the ordinary third of a point a month
+    "growth_reaction": 0.5, # te_mon_mandate_growth_reaction was half price stability's
+}
+# Central bank independence's institution_modifier before §13: -5% crash chance
+# and -2% random momentum per National Bank level, no anchoring.
+PRE_ANCHORING = {
+    "inst_crash": -0.05,
+    "inst_momentum": -0.02,
+    "inst_anchoring": 0.0,
+}
+PRESETS = {
+    "pre_retune": PRE_RETUNE,
+    "pre_boom_rescue": PRE_BOOM_RESCUE,
+    "pre_delegation_fix": PRE_DELEGATION_FIX,
+    "pre_anchoring": PRE_ANCHORING,
+}
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
 # `ai_eliq_first` (no measurable effect — the lender of last resort is priced
@@ -481,6 +553,13 @@ class Config:
     war_end_p: float = 1.0 / 24.0
     world_inflation: float = 1.5
     gold_reserves: float = 0.6
+    # Standing country_wage_pressure_add, in pp (labour laws, events). 0 by
+    # default; `--wage-pressure 1.0` is a country with factory councils and
+    # workers' protections (§12).
+    wage_pressure: float = 0.0
+    # Investment level of institution_national_bank (0-9 in this mod). Scales
+    # the institution's modifier and the financial law's institution_modifier.
+    bank_level: int = 0
 
     @property
     def interventions(self) -> bool:
@@ -573,6 +652,14 @@ class State:
     payoff: dict[str, float] = field(default_factory=lambda: {k: 0.0 for k in PAYOFF_KEYS})
     band_months: dict[int, int] = field(default_factory=lambda: {b: 0 for b in range(0, 8)})
     capctl_peace_months: int = 0
+    # The delegated bank's overshoot (audit §12): months the stance sat at
+    # +3 or tighter with the cycle below 40, entries into downturn with no
+    # crash in the year before (the bank's own doing), and the mean clamped
+    # stance over the twelve months after each crash.
+    tight_slump_months: int = 0
+    policy_downturns: int = 0
+    post_crash_gaps: list[float] = field(default_factory=list)
+    gap_series: list[float] = field(default_factory=list)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -660,7 +747,43 @@ def modifier_sum(state: State, key: str) -> float:
 
 
 def law_modifier_sum(cfg: Config, key: str) -> float:
-    return CURRENCY_LAW_MODIFIERS[cfg.currency].get(key, 0.0)
+    """The currency law's line, plus the National Bank's per-level lines.
+
+    With `cfg.bank_level` > 0 (and a national bank) this adds level x the base
+    institution's `modifier` and level x the financial-regulation law's
+    `institution_modifier` (only law_central_bank_independence carries one).
+    Every other line of the financial-regulation law is still not ported (§10).
+    """
+    total = CURRENCY_LAW_MODIFIERS[cfg.currency].get(key, 0.0)
+    if cfg.bank_level and cfg.national_bank:
+        per_level = NATIONAL_BANK_INSTITUTION.get(key, 0.0)
+        per_level += fin_law_institution_modifier(cfg.fin_law).get(key, 0.0)
+        total += per_level * cfg.bank_level
+    return total
+
+
+# `--tune inst_crash=X,inst_momentum=Y,inst_anchoring=Z` override those per-level
+# lines of a financial law's institution_modifier (only a law that carries one:
+# central bank independence). `--tune pre_anchoring` restores the 2026-09-25
+# state, before anchoring replaced the crash and momentum lines (§13).
+_INST_TUNE_KEYS = (
+    ("country_banking_crash_chance_mult", "inst_crash"),
+    ("country_banking_random_momentum_mult", "inst_momentum"),
+    ("country_inflation_anchoring_add", "inst_anchoring"),
+)
+_inst_cache: dict[tuple, dict[str, float]] = {}
+
+
+def fin_law_institution_modifier(law: str) -> dict[str, float]:
+    ck = (law,) + tuple(TUNE.get(t) for _, t in _INST_TUNE_KEYS)
+    if ck not in _inst_cache:
+        mod = dict(K.law_institution_modifier(law))
+        if mod:
+            for field_, tkey in _INST_TUNE_KEYS:
+                if TUNE.get(tkey) is not None:
+                    mod[field_] = float(TUNE[tkey])
+        _inst_cache[ck] = mod
+    return _inst_cache[ck]
 
 
 def intervention_points(cfg: Config, state: State) -> float:
@@ -811,13 +934,13 @@ def monetary_update_target(cfg: Config, state: State, world_rate: float) -> None
         work += lean
 
         if mandate == MANDATE_GROWTH:
-            # 2 growth: lean/2 + r* + error + pi_core - 1.0 + 0.5 x max(0, pi-4)
+            # 2 growth: lean/2 + r* + error + pi_core + bias + 1.0 x max(0, pi-4)
             work2 = lean / 2
             work2 += state.neutral_rate + state.neutral_error + state.inflation_core
             work2 += tuned("growth_bias", K.sv("te_mon_mandate_growth_bias"))
             work2 += (
                 max(0.0, state.inflation_core - K.sv("te_mon_mandate_growth_threshold"))
-                * K.sv("te_mon_mandate_growth_reaction")
+                * tuned("growth_reaction", K.sv("te_mon_mandate_growth_reaction"))
             )
             work = min(work, work2)  # never more hawkish than price stability
 
@@ -828,9 +951,18 @@ def monetary_update_target(cfg: Config, state: State, world_rate: float) -> None
     clamp_target(cfg, state, world_rate)
 
 
+def cycle_outlook(state: State) -> float:
+    """te_mon_cycle_outlook — value plus six months of decaying momentum.
+
+    `--tune outlook_factor=0` reads today's phase, as the lean did before §12.
+    """
+    factor = tuned("outlook_factor", K.sv("te_mon_outlook_momentum_factor"))
+    return max(0.0, min(100.0, state.finance_cycle_value + state.finance_cycle_momentum * factor))
+
+
 def cycle_lean(state: State) -> float:
-    """te_mon_cycle_lean."""
-    p = phase_of(state.finance_cycle_value)
+    """te_mon_cycle_lean — on the phase of the OUTLOOK since §12."""
+    p = phase_of(cycle_outlook(state))
     lean = {FRENZY: 2.0, BOOM: 1.0, PANIC: -3.0, DOWNTURN: -2.0}.get(p, 0.0)
     if state.bubble_pressure >= K.sv("te_mon_bubble_threshold"):
         lean += 1.0
@@ -842,14 +974,23 @@ def clamp_target(cfg: Config, state: State, world_rate: float) -> None:
     state.policy_rate_target = min(hi, max(lo, state.policy_rate_target))
 
 
+def emergency_cuts(cfg: Config, state: State) -> bool:
+    """te_mon_emergency_cuts: a mandate-run bank, cycle in stagnation or worse."""
+    return mandate_for(cfg, state) is not None and state.finance_cycle_value < 40
+
+
 def monetary_drift_rate(cfg: Config, state: State) -> None:
     speed = max(0.1, 1.0 + law_modifier_sum(cfg, "country_policy_rate_drift_speed_mult"))
     step = 0.3333 * speed
+    down = step
+    if emergency_cuts(cfg, state):
+        # te_mon_drift_step_down (§12). `--tune emergency_cut=1` turns it off.
+        down *= tuned("emergency_cut", K.sv("te_mon_emergency_cut_factor"))
     gap = state.policy_rate_target - state.policy_rate
     if gap > step:
         state.policy_rate += step
-    elif gap < -step:
-        state.policy_rate -= step
+    elif gap < -down:
+        state.policy_rate -= down
     else:
         state.policy_rate = state.policy_rate_target
 
@@ -997,15 +1138,23 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     if "omo" in state.tools:
         total += K.sv("te_mon_qe_pressure")
 
-    # the dashboard tools' own country_inflation_pressure_add lines, which the
-    # script's 100 x modifier:country_inflation_pressure_add term reads
-    # (reserve requirements: -0.005, i.e. -0.5pp)
+    # te_mon_pressure_modifiers: the wage half (the standing labour-law
+    # pressure) plus the other half — country_inflation_pressure_add from laws,
+    # the National Bank institution and the dashboard tools (reserve
+    # requirements: -0.005, i.e. -0.5pp), read x 100 as
+    # te_mon_other_pressure_display does — less te_mon_pressure_anchoring, which
+    # absorbs up to the anchoring capacity of the net positive sum (§13).
+    other = 100 * law_modifier_sum(cfg, "country_inflation_pressure_add")
     for tool in state.tools:
-        total += 100 * TOOL_MODIFIERS[tool].get("country_inflation_pressure_add", 0.0)
+        other += 100 * TOOL_MODIFIERS[tool].get("country_inflation_pressure_add", 0.0)
+    modifiers = cfg.wage_pressure + other
+    capacity = max(0.0, 100 * law_modifier_sum(cfg, "country_inflation_anchoring_add"))
+    total += modifiers - min(capacity, max(0.0, modifiers))
 
-    # wage spiral above the high band edge
+    # te_mon_pressure_wage_spiral: above the high band edge the positive wage
+    # pressure counts twice
     if state.inflation >= K.sv("te_mon_band_edge_high"):
-        total += 0.0  # country_wage_pressure_add is granted by events; none here
+        total += max(0.0, cfg.wage_pressure)
 
     total += state.inflation_noise
 
@@ -1911,9 +2060,12 @@ def run_once(cfg: Config, seed: int) -> State:
     state.inflation_expected = 0.0 if is_metallic(cfg) else 2.0
 
     months = cfg.years * 12
+    last_crash = -10_000
     for month in range(months):
         year_index = month // 12
         advance_exogenous(cfg, state, rng, month)
+        value_before = state.finance_cycle_value
+        crashes_before = len(state.crashes)
 
         if cfg.pulse_order == "monetary_first":
             monetary_update(cfg, state, rng, year_index)
@@ -1921,6 +2073,16 @@ def run_once(cfg: Config, seed: int) -> State:
         else:
             cycle_pulse(cfg, state, rng, month)
             monetary_update(cfg, state, rng, year_index)
+
+        crashed = len(state.crashes) > crashes_before
+        if crashed:
+            last_crash = month
+        elif value_before >= 25 > state.finance_cycle_value and month - last_crash > 12:
+            state.policy_downturns += 1
+        gap = clamped_gap(state)
+        state.gap_series.append(gap)
+        if gap >= 3 and state.finance_cycle_value < 40:
+            state.tight_slump_months += 1
 
         if state.pending_recovery is not None and state.finance_cycle_value >= 40:
             state.recovery_months.append(month - state.pending_recovery)
@@ -1949,6 +2111,10 @@ def run_once(cfg: Config, seed: int) -> State:
             if state.policy_rate >= hi - 0.01:
                 state.months_at_ceiling += 1
 
+    for m, _, _ in state.crashes:
+        after = state.gap_series[m + 1 : m + 13]
+        if after:
+            state.post_crash_gaps.append(statistics.mean(after))
     return state
 
 
@@ -1972,6 +2138,8 @@ def summarise(cfg: Config, states: list[State]) -> dict:
     infl = flat("inflation_series")
     bubble = flat("bubble_series")
     rate = flat("rate_series")
+    peak_rates = [max(s.rate_series) for s in states]
+    post_crash = flat("post_crash_gaps")
 
     # longest run below the stable band, a proxy for depression length
     worst = []
@@ -2020,6 +2188,19 @@ def summarise(cfg: Config, states: list[State]) -> dict:
         "inflation_sd": statistics.pstdev(infl),
         "inflation_outside_band": sum(1 for x in infl if x < -1 or x > 3) / len(infl) * 100,
         "policy_rate_mean": statistics.mean(rate),
+        # The delegated bank's overshoot (audit §12). peak = each run's highest
+        # policy rate in the century; tight-slump = months at a stance of +3 or
+        # tighter with the cycle below 40; policy downturns = entries below 25
+        # with no crash in the twelve months before; post-crash stance = mean
+        # clamped gap over the year after a crash (positive = still tight).
+        "peak_rate_median": statistics.median(peak_rates),
+        "peak_rate_p90": percentile(peak_rates, 90),
+        "rate_ge10_pct": sum(1 for x in rate if x >= 10) / len(rate) * 100,
+        "tight_slump_pct": statistics.mean(s.tight_slump_months / months * 100 for s in states),
+        "policy_downturns_per_century": statistics.mean(
+            s.policy_downturns / cfg.years * 100 for s in states
+        ),
+        "post_crash_stance_mean": statistics.mean(post_crash) if post_crash else float("nan"),
         "months_at_floor_pct": statistics.mean(s.months_at_floor / months * 100 for s in states),
         "months_at_ceiling_pct": statistics.mean(
             s.months_at_ceiling / months * 100 for s in states
@@ -2314,6 +2495,16 @@ def main() -> int:
                     help="comma-separated directed-credit sectors whose interest group is "
                          "in government (dc_heavy, dc_agri, dc_arms, dc_elec); armaments "
                          "also has one at war. Default none: Infrastructure only")
+    ap.add_argument("--wage-pressure", type=float, default=0.0,
+                    help="standing country_wage_pressure_add in pp (labour laws; "
+                         "+0.2 to +1.4 in game, 0 by default). Counts twice above "
+                         "the 8%% band edge, as te_mon_pressure_wage_spiral does")
+    ap.add_argument("--bank-level", type=int, default=0,
+                    help="investment level of the National Bank institution (0-9); "
+                         "scales its modifier and the financial law's "
+                         "institution_modifier (default 0: neither)")
+    ap.add_argument("--deficit-mean", type=float, default=1.5,
+                    help="mean peacetime deficit, %% of GDP (x3 at war; default 1.5)")
     ap.add_argument("--simplified", action="store_true",
                     help="the banking_system_simplified game rule: capital controls "
                          "score on the cycle fallback branch instead of the "
@@ -2323,7 +2514,9 @@ def main() -> int:
                          "e.g. --tune sev_scale=0.4,phase_bubble=1.5. Pass "
                          "--tune pre_retune for (approximately) the script as it "
                          "stood before the 2026-09-22 retune, or --tune "
-                         "pre_boom_rescue for the mod as #371 left it (§10).")
+                         "pre_boom_rescue for the mod as #371 left it (§10), or "
+                         "--tune pre_delegation_fix for the delegated bank before §12, or "
+                         "--tune pre_anchoring for independence's institution bonus before §13.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")
@@ -2371,7 +2564,9 @@ def main() -> int:
                 ap.error(f"unknown tool {x!r}; keys are {', '.join(TOOL_MODIFIERS)}")
         rjobs = [
             (Config(currency=c, mode=m, fin_law=args.fin_law,
-                    national_bank=not args.no_national_bank, years=args.years),
+                    national_bank=not args.no_national_bank, years=args.years,
+                    wage_pressure=args.wage_pressure, deficit_mean=args.deficit_mean,
+                    bank_level=args.bank_level),
              args.seed, args.runs, dict(TUNE), tools, args.rescue_delay, args.rescue_entry)
             for c, m in valid_cells(args.only) if m == MODE_PRICE
         ]
@@ -2403,6 +2598,9 @@ def main() -> int:
                     excluded_tools=excluded,
                     simplified=args.simplified,
                     dc_affinity=affinity,
+                    wage_pressure=args.wage_pressure,
+                    deficit_mean=args.deficit_mean,
+                    bank_level=args.bank_level,
                 )
             )
     jobs = [(cfg, args.seed, args.runs, dict(TUNE)) for cfg in cfgs]
@@ -2424,6 +2622,9 @@ def print_table(rows: list[dict], args) -> None:
     print(
         f"Banking cycle simulation — {args.runs} runs x {args.years} years per cell, "
         f"pulse order {args.pulse_order}, no-click weight {args.no_click_weight:g}"
+        + (f", wage pressure {args.wage_pressure:g}" if args.wage_pressure else "")
+        + (f", deficit mean {args.deficit_mean:g}" if args.deficit_mean != 1.5 else "")
+        + (f", bank level {args.bank_level}, {args.fin_law}" if args.bank_level else "")
         + (f", TUNE {args.tune}" if args.tune else "")
     )
     print()
@@ -2432,6 +2633,7 @@ def print_table(rows: list[dict], args) -> None:
         f"{'recess%':>9}{'frenzy%':>8}{'slump':>7}{'bubble':>8}{'infl':>7}"
         f"{'rate':>6}{'floor%':>8}{'slots':>7}{'cyc':>6}{'reform':>7}{'$ised%':>8}"
         f"{'thru':>7}{'serv':>7}{'pool':>7}{'prem':>6}"
+        f"{'peak':>6}{'pk90':>6}{'r>=10%':>7}{'tight%':>7}{'polDn':>6}{'pcGap':>7}"
     )
     print(head)
     print("-" * len(head))
@@ -2457,6 +2659,12 @@ def print_table(rows: list[dict], args) -> None:
             f"{r['payoff']['goods_output_services_mult'] * 100:>7.1f}"
             f"{r['payoff']['state_capitalists_investment_pool_contribution_add'] * 100:>7.2f}"
             f"{r['payoff']['country_risk_premium_add'] * 100:>6.2f}"
+            f"{r['peak_rate_median']:>6.1f}"
+            f"{r['peak_rate_p90']:>6.1f}"
+            f"{r['rate_ge10_pct']:>7.1f}"
+            f"{r['tight_slump_pct']:>7.2f}"
+            f"{r['policy_downturns_per_century']:>6.1f}"
+            f"{r['post_crash_stance_mean']:>7.2f}"
         )
     print()
     print("crash/100y = mean crashes per century   yrs btwn = median gap between crashes")
@@ -2471,6 +2679,11 @@ def print_table(rows: list[dict], args) -> None:
     print("thru / serv / pool / prem = time-weighted mean of the manufacturing throughput (pp),")
     print("      services output (%), capitalists' pool contribution (pp) and risk premium (pp)")
     print("      the cycle's phase, tool, band and intervention modifiers carried")
+    print("peak / pk90 = median / p90 of each run's highest policy rate in the century")
+    print("r>=10% = months with the policy rate at 10% or more")
+    print("tight% = months with the stance at +3 or tighter while the cycle is below 40")
+    print("polDn = entries into downturn per century with no crash in the year before")
+    print("pcGap = mean clamped stance gap over the 12 months after a crash (+ = tight)")
 
 
 if __name__ == "__main__":
