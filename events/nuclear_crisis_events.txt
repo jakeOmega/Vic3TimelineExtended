@@ -532,6 +532,7 @@ nuclear_crisis.4 = {
 			has_war_with = scope:nd_target
 			nd_doctrine_permits_strike = { ENEMY = scope:nd_target }
 			nd_pledge_permits_strike = { ENEMY = scope:nd_target }
+			nd_war_law_permits_strategic_strike = yes
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -808,6 +809,7 @@ nuclear_crisis.7 = {
 			has_war_with = scope:nd_target
 			nd_doctrine_permits_strike = { ENEMY = scope:nd_target }
 			nd_pledge_permits_strike = { ENEMY = scope:nd_target }
+			nd_war_law_permits_strategic_strike = yes
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -925,6 +927,7 @@ nuclear_crisis.20 = {
 			has_war_with = scope:nd_guarantee_attacker
 			nd_doctrine_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
 			nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
+			nd_war_law_permits_strategic_strike = yes
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes

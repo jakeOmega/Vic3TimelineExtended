@@ -34,6 +34,7 @@ DEBUG_EVENTS = ROOT / "events/te_debug_deterrence_events.txt"
 JE_DOC = ROOT / "docs/systems/journal_entry_systems.md"
 LOC_DIR = ROOT / "localization/english"
 LENS_ICONS = ROOT / "gfx/interface/icons/lens_toolbar_icons"
+NUKE = ROOT / "common/diplomatic_actions/nuke.txt"
 
 
 def tracked(path):
@@ -48,7 +49,7 @@ def tracked(path):
 FIRED = r"\b(?:id|EVENT) = ([a-z_]+\.\d+)"
 
 SCRIPT_FILES = (EFFECTS, CRISIS_EFFECTS, TRIGGERS, ACTIONS, ARTICLE, JE, SGUIS,
-                CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS)
+                CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS, NUKE)
 EVENT_FILES = (CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS)
 
 
@@ -221,6 +222,35 @@ class TestLocalization(unittest.TestCase):
         self.assert_keys({"je_nuclear_program", "je_nuclear_program_desc",
                           "je_nuclear_program_reason",
                           "je_nuclear_program_status_line"}, JE.name)
+
+
+def option_body(text, option_name):
+    """The body of the `option = { … }` whose `name` is option_name."""
+    m = re.search(r"name = " + re.escape(option_name) + r"\s", text)
+    if not m:
+        raise AssertionError(f"{option_name} not found")
+    start = text.rfind("option = {", 0, m.start())
+    return block(text[start:], "option")
+
+
+class TestWarLawGate(unittest.TestCase):
+    def test_gate_triggers_exist(self):
+        t = read(TRIGGERS)
+        for name in ("nd_war_law_permits_strategic_strike",
+                     "nd_war_law_permits_tactical_strike",
+                     "nd_war_law_exception"):
+            self.assertRegex(t, rf"(?m)^{name} = \{{")
+
+    def test_strike_actions_use_the_shared_gate(self):
+        text = strip_comments(read(NUKE))
+        self.assertNotIn("has_law = law_type:law_limited_war", text)
+        self.assertIn("nd_war_law_permits_strategic_strike = yes", block(text, "nuke_diplo_action"))
+        self.assertIn("nd_war_law_permits_tactical_strike = yes", block(text, "tactical_nuke_diplo_action"))
+
+    def test_every_crisis_strike_option_checks_the_law(self):
+        text = strip_comments(read(CRISIS_EVENTS))
+        for opt in ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b"):
+            self.assertIn("nd_war_law_permits_strategic_strike = yes", option_body(text, opt), opt)
 
 
 class TestManagedFamilies(unittest.TestCase):

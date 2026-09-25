@@ -255,6 +255,58 @@ nd_doctrine_permits_strike = {
 	}
 }
 
+# The Rules of War gate on a nuclear strike, shared by the strike actions
+# (nuke.txt) and every crisis option that can end in a strike (.4.g, .7.a,
+# .20.b), which used to skip it. Country scope. Humanitarian Regulations and
+# Limited War forbid a strategic strike and Limited War a tactical one, unless
+# nd_war_law_exception holds. A threat the law forbids carrying out is a bluff
+# (nd_threat_law_permits).
+nd_war_law_permits_strategic_strike = {
+	OR = {
+		NOT = {
+			OR = {
+				has_law = law_type:law_humanitarian_regulations
+				has_law = law_type:law_limited_war
+			}
+		}
+		nd_war_law_exception = yes
+	}
+}
+
+nd_war_law_permits_tactical_strike = {
+	OR = {
+		NOT = { has_law = law_type:law_limited_war }
+		nd_war_law_exception = yes
+	}
+}
+
+# Either lifts the law: we have been struck, or a war we are fighting carries an
+# annexation-type war goal against us.
+nd_war_law_exception = {
+	save_temporary_scope_as = nd_wl_self
+	OR = {
+		any_scope_state = {
+			OR = {
+				has_modifier = nuclear_strike_aftermath
+				has_modifier = tactical_nuke_aftermath
+			}
+		}
+		any_scope_war = {
+			is_target_of_wargoal_in_war = scope:nd_wl_self
+			OR = {
+				has_war_goal = make_protectorate
+				has_war_goal = make_dominion
+				has_war_goal = make_tributary
+				has_war_goal = make_personal_union
+				has_war_goal = make_crown_land
+				has_war_goal = make_chartered_company
+				has_war_goal = annex_country
+				has_war_goal = te_reunify_country
+			}
+		}
+	}
+}
+
 # A bilateral non-use pledge with $TARGET$ is in force.
 nd_has_nonuse_pledge_with = {
 	has_variable_list = nd_nonuse_pledges

@@ -3809,3 +3809,5 @@
  ww_war_propaganda_modifier:0 "War Propaganda Campaign"
  ww_wartime_rationing_modifier:0 "Wartime Rationing"
  youth_mental_health_funding_modifier:0 "Youth Mental Health Funding"
+ nd_tt_war_law_permits_strike:0 "Our #v Rules of War#! law permits a nuclear strike — neither Humanitarian Regulations nor Limited War — unless we have been struck, or face annexation in this war"
+ nd_tt_war_law_permits_tactical_strike:0 "Our #v Rules of War#! law is not Limited War — unless we have been struck, or face annexation in this war"
