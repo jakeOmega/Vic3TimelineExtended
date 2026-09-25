@@ -752,6 +752,16 @@ nd_crisis_talks_open_either = {
 	}
 }
 
+# Country scope, the pending outcome record set: scope:nd_outcome_other still
+# exists and is the country the record names. Guards the lines of
+# nd_crisis_apply_outcome_side that pay lobbies and interest groups about the
+# other party, so a vanished opponent — or a scope left over from another
+# party's flush — pays nobody.
+nd_outcome_other_is_live = {
+	exists = scope:nd_outcome_other
+	var:nd_crisis_pending_opponent ?= scope:nd_outcome_other
+}
+
 # Owner scope: the issuer is defending rather than demanding — the target
 # initiated the play we dispute, or we are protecting a beneficiary. A
 # stand-down then achieves our objective and carries no audience cost (§6).

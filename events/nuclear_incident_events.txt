@@ -637,6 +637,14 @@ nuclear_incident.10 = {
 			scope:nd_issuer ?= {
 				set_variable = { name = nd_crisis_exercise_weeks value = 6 }
 			}
+			# Only the threatening side's own exercise presses the target.
+			if = {
+				limit = { nd_is_crisis_owner = yes }
+				scope:nd_issuer ?= { set_variable = { name = nd_crisis_exercise_by_issuer value = 1 } }
+			}
+			else = {
+				scope:nd_issuer ?= { set_variable = { name = nd_crisis_exercise_by_issuer value = 0 } }
+			}
 		}
 		custom_tooltip = nd_tt_exercise_continued
 		ai_chance = {
@@ -660,6 +668,7 @@ nuclear_incident.10 = {
 		change_infamy = 5
 		hidden_effect = {
 			set_variable = { name = nd_crisis_exercise_weeks value = 8 }
+			set_variable = { name = nd_crisis_exercise_by_issuer value = 1 }
 			set_variable = { name = nd_crisis_pressure_weeks value = nd_crisis_pressure_interval_weeks }
 		}
 		custom_tooltip = nd_tt_exercise_exploited
