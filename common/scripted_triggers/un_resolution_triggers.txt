@@ -147,3 +147,61 @@ un_resolution_target_is_beneficiary = {
 		has_tag = un_topic_peacekeeping_request
 	}
 }
+
+# Whether the resolution is a CONVENTION: something each member ratifies for
+# itself, so that it binds only the members that accept it
+# (un_vote_apply_treaty_modifier gives each of them its modifier). A no-voter
+# who refuses it in un_vote.3 simply stays outside it. The pledge topics
+# (un_resolution_target_is_beneficiary) are the other kind a member can opt out
+# of: refusing them means contributing nothing. Every other topic — a
+# condemnation, sanctions, a mandate, an expulsion, a charter reform,
+# decolonization, and an ICC statute vetoed down to a censure — is a decision
+# of the whole Assembly that stands whatever one member says, so refusing it is
+# a public denunciation and nothing more; un_vote.3 says so.
+# Scope: resolution container
+un_resolution_is_convention = {
+	OR = {
+		has_tag = un_topic_human_rights
+		has_tag = un_topic_npt
+		has_tag = un_topic_climate
+		has_tag = un_topic_heritage
+		has_tag = un_topic_pandemic
+		has_tag = un_topic_refugee
+		has_tag = un_topic_space
+		has_tag = un_topic_law_of_sea
+		AND = {
+			has_tag = un_topic_icc
+			NOT = { has_tag = un_res_vetoed }
+		}
+	}
+}
+
+# The three kinds un_vote.3 tells apart for a member that voted against a
+# resolution that carried, one trigger each so the event can name the kind as a
+# parameter (un_vote_3_we_opposed_passed). Exactly one holds for any resolution.
+# Scope: resolution container
+un_resolution_kind_is_convention = {
+	un_resolution_is_convention = yes
+}
+un_resolution_kind_is_pledge = {
+	NOT = { un_resolution_is_convention = yes }
+	un_resolution_target_is_beneficiary = yes
+}
+un_resolution_kind_is_decision = {
+	NOT = { un_resolution_is_convention = yes }
+	NOT = { un_resolution_target_is_beneficiary = yes }
+}
+
+# Whether ROOT voted against scope:un_resolution, the resolution carried, and
+# it is of kind $KIND$ (convention, pledge or decision): the case in which
+# un_vote.3 offers to accept it after all or to refuse, and says what refusing
+# would mean.
+# Parameters: $KIND$ = convention | pledge | decision
+# Scope: the country (un_vote.3's ROOT); expects scope:un_resolution
+un_vote_3_we_opposed_passed = {
+	scope:un_resolution ?= {
+		has_tag = un_res_passed
+		un_resolution_has_vote = { LIST = un_res_no }
+		un_resolution_kind_is_$KIND$ = yes
+	}
+}

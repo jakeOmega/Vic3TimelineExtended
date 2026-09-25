@@ -655,12 +655,15 @@ un_vote.2 = {
 			name = un_display_oppose
 			value = scope:un_resolution.var:un_res_oppose
 		}
-		# Successful-expulsion promotion: pick the highest-ranking eligible
-		# non-permanent UN member to fill the vacated seat. Saved as scope so
-		# the description below and the option block below can reference it.
-		# Eligibility: UN member, GP rank, not already permanent, not the
-		# country we are about to expel. If no candidate exists, scope is
-		# unset and the seat goes vacant (description falls back accordingly).
+		# Successful-expulsion promotion: pick the great-power member with the
+		# most prestige that holds no seat to fill the vacated one. Saved as
+		# scope so the description below and the option block below can
+		# reference it. Eligibility is un_permanent_seat_candidate (the same
+		# test un_seat_monthly_update fills every other open seat by), and
+		# never the country we are about to expel. It used to order by
+		# country_rank, the rank TIER, on which every great power ties. If no
+		# candidate exists, scope is unset and the seat stands open until the
+		# monthly fill finds one (description falls back accordingly).
 		if = {
 			limit = {
 				scope:un_resolution ?= {
@@ -670,12 +673,10 @@ un_vote.2 = {
 			}
 			ordered_country = {
 				limit = {
-					je:je_united_nations ?= { has_modifier = un_member_modifier }
-					country_rank >= rank_value:great_power
-					NOT = { is_un_permanent_member = yes }
+					un_permanent_seat_candidate = yes
 					NOT = { this ?= scope:un_vote_target }
 				}
-				order_by = country_rank
+				order_by = un_prestige_order_value
 				max = 1
 				save_scope_as = un_vote_promoted
 				scope:un_resolution = { set_variable = { name = un_res_promoted value = scope:un_vote_promoted } }
@@ -725,15 +726,14 @@ un_vote.2 = {
 				}
 				change_relations = { country = scope:un_vote_target value = -25 }
 			}
-			# Promote the highest-ranking eligible non-permanent member into the
-			# vacated seat (scope:un_vote_promoted was selected in the immediate
-			# block). No-op when no eligible challenger exists; the seat then
-			# remains vacant.
+			# Seat the great-power member with the most prestige outside the
+			# Council (scope:un_vote_promoted was selected in the immediate
+			# block). No-op when no eligible candidate exists; the seat then
+			# stands open for un_seat_monthly_update.
 			if = {
 				limit = { exists = scope:un_vote_promoted }
 				scope:un_vote_promoted = {
-					je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
-					je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
+					un_seat_grant = yes
 				}
 			}
 		}
@@ -1368,6 +1368,25 @@ un_vote.3 = {
 			}
 			desc = un_vote.3.d_failed
 		}
+		# We voted against a resolution that carried: say what options B and C
+		# actually decide, which depends on the kind of resolution. A
+		# convention binds only the members that ratify it; a request for aid
+		# or peacekeepers asks each member to take part; anything else is a
+		# decision of the whole Assembly that stands whatever we answer.
+		first_valid = {
+			triggered_desc = {
+				trigger = { un_vote_3_we_opposed_passed = { KIND = convention } }
+				desc = un_vote.3.d_choice_convention
+			}
+			triggered_desc = {
+				trigger = { un_vote_3_we_opposed_passed = { KIND = pledge } }
+				desc = un_vote.3.d_choice_pledge
+			}
+			triggered_desc = {
+				trigger = { un_vote_3_we_opposed_passed = { KIND = decision } }
+				desc = un_vote.3.d_choice_decision
+			}
+		}
 	}
 
 	duration = 3
@@ -1425,7 +1444,14 @@ un_vote.3 = {
 
 	# Option B: Vote passed AND you voted no - accept the resolution anyway
 	option = {
-		name = un_vote.3.b
+		name = {
+			trigger = { scope:un_resolution ?= { un_resolution_is_convention = yes } }
+			text = un_vote.3.b_convention
+		}
+		name = {
+			trigger = { always = yes }
+			text = un_vote.3.b
+		}
 		trigger = {
 			scope:un_resolution ?= {
 				has_tag = un_res_passed
@@ -1465,14 +1491,43 @@ un_vote.3 = {
 		ai_chance = { base = 50 }
 	}
 
-	# Option C: Vote passed AND you voted no - refuse to comply
+	# Option C: Vote passed AND you voted no - refuse to comply. What that
+	# means depends on the resolution, and the name and first tooltip line say
+	# which: stay outside a convention, take no part in a request for aid or
+	# peacekeepers, or — for every decision of the whole Assembly (a mandate,
+	# sanctions, a condemnation, an expulsion, a reform) — denounce it on the
+	# record. Refusing never stops or weakens the resolution itself; the
+	# effects below are the whole of it.
 	option = {
-		name = un_vote.3.c
+		name = {
+			trigger = { scope:un_resolution ?= { un_resolution_is_convention = yes } }
+			text = un_vote.3.c_convention
+		}
+		name = {
+			trigger = { scope:un_resolution ?= { un_resolution_target_is_beneficiary = yes } }
+			text = un_vote.3.c_pledge
+		}
+		name = {
+			trigger = { always = yes }
+			text = un_vote.3.c_decision
+		}
 		trigger = {
 			scope:un_resolution ?= {
 				has_tag = un_res_passed
 				un_resolution_has_vote = { LIST = un_res_no }
 			}
+		}
+
+		if = {
+			limit = { scope:un_resolution ?= { un_resolution_is_convention = yes } }
+			custom_tooltip = un_vote.3.c_convention_tt
+		}
+		else_if = {
+			limit = { scope:un_resolution ?= { un_resolution_target_is_beneficiary = yes } }
+			custom_tooltip = un_vote.3.c_pledge_tt
+		}
+		else = {
+			custom_tooltip = un_vote.3.c_decision_tt
 		}
 
 		# Diplomatic penalties for defying the international community

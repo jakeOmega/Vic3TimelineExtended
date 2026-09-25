@@ -168,6 +168,7 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 - **Dynamic references** to IGs, characters, and countries are common.
 - **Each option should have a distinct voice** — one aggressive, one moderate, one cautious, etc.
 - **Tooltip text** (`.a.tt`, `.b.tt`) is used sparingly for extra mechanical clarification.
+- **An option that sounds like it does something must say what it does — and what it doesn't.** `un_vote.3`'s "Refuse to comply." read as a way out of a passed resolution; for a mandate, sanctions or a condemnation it was a denunciation with costs that changed nothing about the decision. When one option means different things by case, give it a name per case (`name = { trigger = { … } text = … }`, first match wins) and lead its effects with a one-line `custom_tooltip` saying what it does and doesn't change.
 
 ### General Tone and Voice
 - **Formal but not archaic.** The writing should feel polished and professional, suitable for a game spanning 1836 to the 2030s. Use language that is timeless where possible.
@@ -285,6 +286,12 @@ After editing modifier or event files, `POST /reload` to refresh the server's vi
 - **Don't drop the `trigger = { }` wrapper.** Script values accept bare conditions inside a
   `modifier` block; event `ai_chance` blocks are written the other way in vanilla by 501 uses to 9.
   Use the wrapper.
+- **Never hand out a scarce reward first-come-first-served from an event sent to many countries
+  at once.** The AI picks an option as soon as the event fires; a human answers a popup when they
+  get to it, so the human loses every such race. The UN's permanent seats went to "the first four
+  great powers to sign" the charter, and a player who was the top great power and signed at once
+  still got none. Hold the reward open for a fixed period and allocate it on a merit the player can
+  see (prestige, rank, score), as `common/scripted_effects/un_seat_effects.txt` now does.
 
 ### Showing a Production Method's Effects in an Option Tooltip
 There is **no `GetProductionMethod('key')` global promote** — nothing in loc can reach a PM you

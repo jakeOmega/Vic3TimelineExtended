@@ -90,6 +90,11 @@ un_global_authority_on_action = {
 			# building stands, in the host's territory (un_hq_effects.txt).
 			un_hq_monthly_update = yes
 
+			# Permanent seats (un_seat_effects.txt): count down the signing
+			# period after a founding, then give every open seat to the
+			# great-power member with the most prestige that holds none.
+			un_seat_monthly_update = yes
+
 			# Last: at 0, during a crisis, the UN dissolves (un_ladder_effects.txt).
 			# After the upkeep above on purpose — that upkeep assumes a UN that
 			# still exists, and a remove_modifier made by the dissolution would not
