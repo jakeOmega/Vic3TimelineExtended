@@ -8,9 +8,9 @@
 # invisible to has_modifier inside the block that ran them
 # (scripting_best_practices.md § Worked case — swapping one member of a banded
 # modifier family). Their single writers:
-#   nd_doctrine_mod_*        nd_apply_posture_modifiers  (je_nuclear_deterrence scope)
-#   nd_readiness_mod_*       nd_apply_posture_modifiers  (je_nuclear_deterrence scope)
-#   nd_upkeep_cost           nd_apply_posture_modifiers  (je_nuclear_deterrence scope,
+#   nd_doctrine_mod_*        nd_apply_posture_modifiers  (je_nuclear_program scope)
+#   nd_readiness_mod_*       nd_apply_posture_modifiers  (je_nuclear_program scope)
+#   nd_upkeep_cost           nd_apply_posture_modifiers  (je_nuclear_program scope,
 #                            multiplier = root.var:nd_upkeep_weekly_cached)
 #   nd_posture_approval_*    nd_refresh_domestic_stance  (interest-group scope)
 # Everything else below is a timed one-off applied by an event or a crisis

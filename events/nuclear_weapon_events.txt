@@ -953,6 +953,7 @@ nuclear_weapon_events.18 = {
 		name = nuclear_weapon_events.18.opt_b
 		trigger = {
 			NOT = { has_modifier = nuclear_power }
+			nuclear_program_has_programme = yes
 			has_variable = nuclear_weapon_program_progress
 			has_variable = nuclear_weapons_program_funding
 		}
@@ -1003,6 +1004,7 @@ nuclear_weapon_events.18 = {
 		name = nuclear_weapon_events.18.opt_c
 		trigger = {
 			NOT = { has_modifier = nuclear_power }
+			nuclear_program_has_programme = yes
 			has_variable = nuclear_weapon_program_progress
 			has_variable = nuclear_weapons_program_funding
 		}
@@ -1065,7 +1067,7 @@ nuclear_weapon_events.18 = {
 			modifier = {
 				trigger = {
 					ruler_is_cautious = yes
-					NOT = { has_variable = nuclear_weapon_program_progress }
+					NOT = { nuclear_program_has_programme = yes }
 				}
 				add = 3
 			}
