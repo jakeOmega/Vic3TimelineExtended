@@ -116,9 +116,13 @@ social_tensions_events.1 = {
 
 # Event 2: Foreign-linked Terrorism
 # A cell with foreign connections is uncovered.
+# Fired only by .17.a when the cell a rival chose to fund is uncovered: the
+# sponsor arrives as scope:terror_linked_country. With covert warfare enabled,
+# funding militants in a rival is the destabilization operation, which the
+# target learns of only if its counterintelligence burns it
+# (covert_warfare.2), so .17 and this event are the covert-disabled path (the
+# PR #418 shape of international_relations_events.6).
 social_tensions_events.2 = {
-	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — the accused country gets the choice first
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = ROOT
 
@@ -131,29 +135,16 @@ social_tensions_events.2 = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
 	duration = 3
-	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_technology_researched = terrorism_and_anti_terrorism
-		country_rank >= rank_value:major_power
-		any_country = {
-			has_diplomatic_pact = { who = ROOT type = rivalry }
-		}
-		NOR = {
-			has_modifier = foreign_terror_retaliation_modifier
-			has_modifier = foreign_terror_diplomacy_modifier
-		}
-		# Strong intelligence ministry (level 5) prevents foreign terror cells
-		NOT = {
-			has_intelligence_ministry_5 = yes
-		}
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
+		exists = scope:terror_linked_country
 	}
 
 	immediate = {
-		random_country = {
-			limit = { has_diplomatic_pact = { who = ROOT type = rivalry } }
-			save_scope_as = terror_linked_country
-		}
+		# Stands in for the old ten-year event cooldown, where .17's pick can read it.
+		set_variable = { name = te_ea_ir_terror_cell_target value = yes days = long_modifier_time }
 	}
 
 	option = { # Blame and sanction the rival
@@ -1403,6 +1394,86 @@ social_tensions_events.16 = {
 		highlighted_option = yes
 		add_modifier = { name = cultural_synthesis_modifier days = long_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals }
+		ai_chance = { base = 3 }
+	}
+}
+
+# =============================================================
+# PRECURSOR EVENTS (the actor's own choice)
+# =============================================================
+
+# Event 17: Friends in Exile (-> .2 on the rival if the cell is uncovered)
+# The would-be sponsor decides whether to fund militant exiles from a rival;
+# .2 fires on the rival only if it does and the cell is found. Covert-disabled
+# only, like .2: with covert warfare enabled this is the destabilization
+# operation.
+social_tensions_events.17 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.17.t
+	desc = social_tensions_events.17.d
+	flavor = social_tensions_events.17.f
+
+	event_image = { texture = "gfx/event_pictures/proxy_war_map.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	duration = 3
+
+	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
+		has_technology_researched = terrorism_and_anti_terrorism
+		NOT = { is_country_type = decentralized }
+		NOR = {
+			has_modifier = proxy_conflict_funding_modifier
+			has_variable = te_ea_ir_militants_declined
+		}
+		any_country = { te_ea_ir_militant_target = yes }
+	}
+
+	immediate = {
+		save_scope_as = terror_linked_country
+		random_country = {
+			limit = { te_ea_ir_militant_target = yes }
+			save_scope_as = terror_cell_target
+		}
+	}
+
+	option = { # Fund the exiles
+		name = social_tensions_events.17.a
+		default_option = yes
+		add_modifier = { name = proxy_conflict_funding_modifier days = normal_modifier_time is_decaying = yes }
+		random_list = {
+			60 = {
+				custom_tooltip = TE_EA_IR_CELL_UNCOVERED_TT
+				scope:terror_cell_target = {
+					trigger_event = { id = social_tensions_events.2 days = 60 }
+				}
+			}
+			40 = {
+				custom_tooltip = TE_EA_IR_CELL_HIDDEN_TT
+			}
+		}
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					OR = {
+						has_attitude = { who = scope:terror_cell_target attitude = antagonistic }
+						has_attitude = { who = scope:terror_cell_target attitude = belligerent }
+					}
+				}
+				add = 2
+			}
+		}
+	}
+
+	option = { # Refuse
+		name = social_tensions_events.17.b
+		# The pool rolls once a year: two years keeps the offer from returning at the next roll.
+		set_variable = { name = te_ea_ir_militants_declined value = yes days = 730 }
 		ai_chance = { base = 3 }
 	}
 }

@@ -101,3 +101,23 @@ te_ea_ir_election_target = {
 		has_variable = te_ea_ir_meddling_target
 	}
 }
+
+# social_tensions_events.17 -> .2: a rival whose exiles the actor could arm.
+# .2's old trigger: a major power with the counter-terrorism era, not still
+# carrying its answer to the last cell, and without the level-5 intelligence
+# ministry that keeps foreign terror cells out. te_ea_ir_terror_cell_target
+# (set by .2) replaces .2's old ten-year event cooldown, which a pick cannot
+# read.
+te_ea_ir_militant_target = {
+	NOT = { this = ROOT }
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	country_rank >= rank_value:major_power
+	NOT = { is_country_type = decentralized }
+	has_technology_researched = terrorism_and_anti_terrorism
+	NOR = {
+		has_modifier = foreign_terror_retaliation_modifier
+		has_modifier = foreign_terror_diplomacy_modifier
+		has_variable = te_ea_ir_terror_cell_target
+	}
+	NOT = { has_intelligence_ministry_5 = yes }
+}
