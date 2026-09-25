@@ -112,6 +112,9 @@ world_war_conditions_met = {
 	# singleton ww_main_aggressor/ww_main_defender scopes. Mirrors can_join_world_war's
 	# global form below.
 	NOT = { any_country = { has_variable = ww_active_phase } }
+	# world_war_events.5 sets ww_active_phase only in its launch option, so while one
+	# great power is still deciding, this global marks the outbreak as taken.
+	NOT = { has_global_variable = ww_outbreak_pending }
 	# Must have at least one great power rival with opposed ideology
 	any_rival_country = {
 		country_rank >= rank_value:great_power
@@ -160,4 +163,88 @@ country_is_ww_aggressor = {
 # --- True if country is on the defender side of the world war ---
 country_is_ww_defender = {
 	has_variable = ww_defender_side
+}
+
+# ============================================================================
+# WAR OUTCOME LATCHES
+# The live side variables (ww_aggressor_side / ww_defender_side) are removed when
+# a loser answers world_war_events.101/.102 and when the journal entry fails, so
+# nothing after the war can read sides from them. These latches record what
+# actually happened and survive until the journal entry completes or the next
+# world war breaks out (ww_clear_outcome_latches / ww_clear_stale_outcome_latches
+# in te_event_agency_ww_effects.txt):
+#   ww_war_began            - this belligerent was seen fighting the other side
+#                             (ww_is_fighting_world_war, in the je_world_war pulse;
+#                             world_war_events.20 for late entrants). Peace
+#                             detection waits for it.
+#   ww_fought_as_aggressor / ww_fought_as_defender
+#                           - the side it fought on, copied from the live variable
+#                             when ww_war_began is set
+#   ww_capitulated          - it lost: it capitulated (on_capitulation) or had an
+#                             enemy war goal enforced on it (on_wargoal_enforced);
+#                             see common/on_actions/te_event_agency_ww_on_actions.txt
+#   ww_peace_terms_received - a victor has already sent it .101 or .102
+# ============================================================================
+
+# --- True if this belligerent is at war with a belligerent of the other side:
+# the world war itself, not some unrelated war it happens to be in ---
+ww_is_fighting_world_war = {
+	country_is_ww_belligerent = yes
+	any_enemy_in_war = { country_is_ww_belligerent = yes }
+}
+
+# --- True if this country fought in the world war (on either side) ---
+ww_fought_world_war = {
+	OR = {
+		has_variable = ww_fought_as_aggressor
+		has_variable = ww_fought_as_defender
+	}
+}
+
+# --- True if this country fought on the opposite side from $COUNTRY$ ---
+ww_fought_against = {
+	OR = {
+		AND = {
+			has_variable = ww_fought_as_aggressor
+			$COUNTRY$ = { has_variable = ww_fought_as_defender }
+		}
+		AND = {
+			has_variable = ww_fought_as_defender
+			$COUNTRY$ = { has_variable = ww_fought_as_aggressor }
+		}
+	}
+}
+
+# --- True if this country fought on the same side as $COUNTRY$ ---
+ww_fought_alongside = {
+	OR = {
+		AND = {
+			has_variable = ww_fought_as_aggressor
+			$COUNTRY$ = { has_variable = ww_fought_as_aggressor }
+		}
+		AND = {
+			has_variable = ww_fought_as_defender
+			$COUNTRY$ = { has_variable = ww_fought_as_defender }
+		}
+	}
+}
+
+# --- True if this country won: it fought, did not capitulate, and at least one
+# belligerent on the other side did. A war that ended in a white peace or a
+# negotiated peace with no enforced war goals has no winner.
+ww_won_world_war = {
+	ww_fought_world_war = yes
+	NOT = { has_variable = ww_capitulated }
+	any_country = {
+		has_variable = ww_capitulated
+		ww_fought_against = { COUNTRY = prev }
+	}
+}
+
+# --- True if this country lost and is still owed peace terms by $VICTOR$ ---
+ww_awaits_terms_from = {
+	has_variable = ww_capitulated
+	NOT = { has_variable = ww_peace_terms_received }
+	is_at_war = no
+	ww_fought_against = { COUNTRY = $VICTOR$ }
 }

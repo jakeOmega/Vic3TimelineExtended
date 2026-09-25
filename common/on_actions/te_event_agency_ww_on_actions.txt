@@ -1,0 +1,62 @@
+﻿# ============================================================================
+# WORLD WAR - who lost
+# ============================================================================
+# The engine unions same-name on_action declarations across files, so extending
+# on_capitulation / on_wargoal_enforced here leaves vanilla's own effects on them
+# (recently_lost_war, recently_won_war) and the other systems that extend them
+# (te_construction_market_on_actions.txt) untouched.
+#
+# Nothing in the live game state says who lost a war once it is over, so the
+# loss is recorded the moment it happens, as the ww_capitulated latch that
+# world_war_events.100-.105 read (see world_war_triggers.txt).
+# ============================================================================
+
+# Root = Country (the one capitulating)
+# (game/common/on_actions/00_code_on_actions.txt:4183-4196)
+on_capitulation = {
+	on_actions = {
+		ww_on_capitulation
+	}
+}
+
+ww_on_capitulation = {
+	effect = {
+		if = {
+			limit = {
+				country_is_ww_belligerent = yes
+				has_variable = ww_war_began
+				NOT = { has_variable = ww_peace_concluded }
+			}
+			set_variable = ww_capitulated
+		}
+	}
+}
+
+# Root = Country (the one enforcing the war goal)
+# scope:target = the country the war goal was enforced against
+# (game/common/on_actions/00_code_on_actions.txt:6219-6223)
+# A negotiated peace enforces war goals without anyone capitulating, so a world
+# war belligerent that has an enemy's war goal enforced on it has lost too.
+on_wargoal_enforced = {
+	on_actions = {
+		ww_on_wargoal_enforced
+	}
+}
+
+ww_on_wargoal_enforced = {
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target
+				scope:target = {
+					has_variable = ww_war_began
+					NOT = { has_variable = ww_peace_concluded }
+					ww_fought_against = { COUNTRY = root }
+				}
+			}
+			scope:target = {
+				set_variable = ww_capitulated
+			}
+		}
+	}
+}

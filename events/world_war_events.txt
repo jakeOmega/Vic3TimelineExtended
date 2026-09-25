@@ -410,8 +410,9 @@ world_war_events.3 = {
 }
 
 # ============================================================================
-# WAR OUTBREAK EVENT (5) - Triggers the actual world war
-# Fired from the on_action when tension reaches critical
+# WAR OUTBREAK EVENT (5) - The brink: launch the world war, or stand down
+# Fired from the je_world_war pulse when tension reaches critical. Nothing marks
+# either country as a belligerent until the launch option is chosen.
 # ============================================================================
 
 world_war_events.5 = {
@@ -446,27 +447,35 @@ world_war_events.5 = {
 			}
 			save_scope_as = war_target
 		}
-		# Mark only the two primary belligerents
-		set_variable = ww_active_phase
-		set_variable = ww_aggressor_side
-		set_variable = { name = ww_years_elapsed value = 0 }
-		set_variable = { name = ww_months_counter value = 0 }
-		scope:war_target = {
-			set_variable = ww_active_phase
-			set_variable = ww_defender_side
-			set_variable = { name = ww_years_elapsed value = 0 }
-			set_variable = { name = ww_months_counter value = 0 }
-		}
-		# Other great powers are NOT auto-marked as participants.
-		# They will see the war via the JE and can choose to join
-		# through event 20 (late entry) or the join_war button.
+		# Hold the outbreak for us while we decide, so no other great power opens a
+		# second world war meanwhile (world_war_conditions_met). Both options clear it.
+		set_global_variable = { name = ww_outbreak_pending days = 90 }
 	}
 
-	# Only option: war has begun
+	# Option A: Launch the war
 	option = {
 		name = world_war_events.5.a
 		default_option = yes
 		ai_chance = { base = 10 }
+		remove_global_variable = ww_outbreak_pending
+		hidden_effect = {
+			# A new world war: forget the outcome of any earlier one
+			ww_clear_stale_outcome_latches = yes
+			# Mark only the two primary belligerents
+			set_variable = ww_active_phase
+			set_variable = ww_aggressor_side
+			set_variable = { name = ww_years_elapsed value = 0 }
+			set_variable = { name = ww_months_counter value = 0 }
+			scope:war_target = {
+				set_variable = ww_active_phase
+				set_variable = ww_defender_side
+				set_variable = { name = ww_years_elapsed value = 0 }
+				set_variable = { name = ww_months_counter value = 0 }
+			}
+			# Other great powers are NOT auto-marked as participants.
+			# They will see the war via the JE and can choose to join
+			# through event 20 (late entry) or the join_war button.
+		}
 		# Create the diplomatic play against the rival
 		create_diplomatic_play = {
 			target_country = scope:war_target
@@ -490,6 +499,34 @@ world_war_events.5 = {
 		add_loyalists = {
 			value = medium_radicals
 			strata = lower
+		}
+	}
+
+	# Option B: Stand down - no play is launched. The general staff and the rank
+	# and file take it badly; this event's cooldown keeps the question from coming
+	# straight back.
+	option = {
+		name = world_war_events.5.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { je:je_world_war = { has_modifier = ww_appeasement_modifier } }
+				add = 3
+			}
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 1
+			}
+		}
+		remove_global_variable = ww_outbreak_pending
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		add_radicals = {
+			value = small_radicals
+			pop_type = soldiers
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
 		}
 	}
 }
@@ -830,6 +867,9 @@ world_war_events.20 = {
 			set_variable = ww_defender_side
 			set_variable = { name = ww_years_elapsed value = 0 }
 			set_variable = { name = ww_months_counter value = 0 }
+			# We enter a war already under way (a late entrant below great power
+			# has no je_world_war pulse to record it)
+			ww_record_war_began = yes
 		}
 		add_modifier = {
 			name = ww_fresh_forces_modifier
@@ -1105,8 +1145,14 @@ world_war_events.31 = {
 # PEACE CONFERENCE EVENTS (100-105)
 # ============================================================================
 
-# Event 100: Victory - the war is over, you won (or survived)
-# Fired directly by JE monthly pulse when peace is detected for belligerents.
+# Event 100: The Peace Conference - the war is over for us. Fired directly by the
+# JE monthly pulse when a belligerent that actually fought is at peace. What it
+# offers depends on how the war ended (latches in world_war_triggers.txt):
+#   won (ww_won_world_war)      - the victor's options; A and B dictate terms to
+#                                 the belligerents we beat (.101 / .102)
+#   lost (ww_capitulated)       - the loser's options; the terms arrive separately
+#   neither (white or negotiated peace with nothing enforced on either side of us)
+#                               - the same non-victor options
 world_war_events.100 = {
 	type = country_event
 	placement = root
@@ -1116,32 +1162,41 @@ world_war_events.100 = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = world_war_events.100.t
-	desc = world_war_events.100.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = ww_capitulated }
+				desc = world_war_events.100.d_defeated
+			}
+			triggered_desc = {
+				trigger = { ww_won_world_war = yes }
+				desc = world_war_events.100.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = world_war_events.100.d_no_victory
+			}
+		}
+	}
 	flavor = world_war_events.100.f
 
 	duration = 3
 
+	# Fired by the je_world_war pulse (trigger_event re-checks this at fire time,
+	# so it must be a fact, never always = no)
 	trigger = {
-		always = no # Only fired directly by JE monthly pulse
+		has_variable = ww_war_began
 	}
 
 	immediate = {
 		# Clean up all war modifiers
-		if = { limit = { je:je_world_war = { has_modifier = ww_total_war_economy_modifier } } je:je_world_war = { remove_modifier = ww_total_war_economy_modifier } }
-		if = { limit = { je:je_world_war = { has_modifier = ww_war_propaganda_modifier } } je:je_world_war = { remove_modifier = ww_war_propaganda_modifier } }
-		if = { limit = { je:je_world_war = { has_modifier = ww_wartime_rationing_modifier } } je:je_world_war = { remove_modifier = ww_wartime_rationing_modifier } }
-		if = { limit = { je:je_world_war = { has_modifier = ww_home_front_strain_modifier } } je:je_world_war = { remove_modifier = ww_home_front_strain_modifier } }
-		if = { limit = { je:je_world_war = { has_modifier = ww_prolonged_war_exhaustion_modifier } } je:je_world_war = { remove_modifier = ww_prolonged_war_exhaustion_modifier } }
-		if = { limit = { je:je_world_war = { has_modifier = ww_rearmament_modifier } } je:je_world_war = { remove_modifier = ww_rearmament_modifier } }
-		if = { limit = { je:je_world_war = { has_modifier = ww_lend_lease_modifier } } je:je_world_war = { remove_modifier = ww_lend_lease_modifier } }
-		if = { limit = { has_modifier = ww_fresh_forces_modifier } remove_modifier = ww_fresh_forces_modifier }
-		if = { limit = { has_modifier = ww_arsenal_of_democracy_modifier } remove_modifier = ww_arsenal_of_democracy_modifier }
-		if = { limit = { je:je_world_war = { has_modifier = ww_rising_tensions_modifier } } je:je_world_war = { remove_modifier = ww_rising_tensions_modifier } }
+		ww_clear_war_phase_modifiers = yes
 	}
 
-	# Option A: Impose a harsh peace - regime change, reparations
+	# Option A: Impose a harsh peace - regime change, reparations (victors only)
 	option = {
 		name = world_war_events.100.a
+		trigger = { ww_won_world_war = yes }
 		default_option = yes
 		ai_chance = {
 			base = 4
@@ -1164,21 +1219,18 @@ world_war_events.100 = {
 			value = large_radicals
 			pop_type = soldiers
 		}
-		# Trigger regime change event on defeated powers
+		# Dictate regime change to the belligerents we beat that have no terms yet
 		every_country = {
-			limit = {
-				country_is_ww_belligerent = yes
-				NOT = { this = root }
-				is_at_war = no
-				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
-			}
+			limit = { ww_awaits_terms_from = { VICTOR = root } }
+			hidden_effect = { set_variable = ww_peace_terms_received }
 			trigger_event = { id = world_war_events.101 }
 		}
 	}
 
-	# Option B: Seek a just peace - reconstruction and reconciliation
+	# Option B: Seek a just peace - reconstruction and reconciliation (victors only)
 	option = {
 		name = world_war_events.100.b
+		trigger = { ww_won_world_war = yes }
 		ai_chance = {
 			base = 3
 			modifier = {
@@ -1201,21 +1253,18 @@ world_war_events.100 = {
 			strata = middle
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		# Trigger reconstruction event on defeated powers
+		# Offer reconstruction to the belligerents we beat that have no terms yet
 		every_country = {
-			limit = {
-				country_is_ww_belligerent = yes
-				NOT = { this = root }
-				is_at_war = no
-				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
-			}
+			limit = { ww_awaits_terms_from = { VICTOR = root } }
+			hidden_effect = { set_variable = ww_peace_terms_received }
 			trigger_event = { id = world_war_events.102 }
 		}
 	}
 
-	# Option C: Establish a new world order - create institutions
+	# Option C: Establish a new world order - create institutions (victors only)
 	option = {
 		name = world_war_events.100.c
+		trigger = { ww_won_world_war = yes }
 		ai_chance = {
 			base = 2
 			modifier = {
@@ -1243,6 +1292,46 @@ world_war_events.100 = {
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
+
+	# Option D: Demobilize and mourn (we lost, or nobody won). The victors' terms,
+	# if any, arrive as .101 / .102 and carry the defeat modifiers; this option
+	# does not add them again.
+	option = {
+		name = world_war_events.100.demobilize
+		trigger = { NOT = { ww_won_world_war = yes } }
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 2
+			}
+		}
+		add_loyalists = {
+			value = medium_radicals
+			strata = lower
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	}
+
+	# Option E: Keep the army ready - this is not the end
+	option = {
+		name = world_war_events.100.stand_ready
+		trigger = { NOT = { ww_won_world_war = yes } }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { country_is_fascist = yes }
+				add = 3
+			}
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
 }
 
 # Event 101: Regime Change Imposed - defeated nation forced to change government
@@ -1260,9 +1349,15 @@ world_war_events.101 = {
 
 	duration = 3
 
-	trigger = { always = no } # Only fired from event 100
+	# Sent by a victor's world_war_events.100 option A, only to a belligerent of
+	# the other side that capitulated (trigger_event re-checks this at fire time)
+	trigger = { has_variable = ww_capitulated }
 
-	immediate = { }
+	# The terms can arrive before our own peace conference (.100), and the options
+	# below clear our side variables so .100 will not follow: end the war phase here.
+	immediate = {
+		ww_clear_war_phase_modifiers = yes
+	}
 
 	# Option A: Accept the imposed changes
 	option = {
@@ -1344,9 +1439,15 @@ world_war_events.102 = {
 
 	duration = 3
 
-	trigger = { always = no } # Only fired from event 100
+	# Sent by a victor's world_war_events.100 option B, only to a belligerent of
+	# the other side that capitulated (trigger_event re-checks this at fire time)
+	trigger = { has_variable = ww_capitulated }
 
-	immediate = { }
+	# The terms can arrive before our own peace conference (.100), and the options
+	# below clear our side variables so .100 will not follow: end the war phase here.
+	immediate = {
+		ww_clear_war_phase_modifiers = yes
+	}
 
 	# Option A: Accept reconstruction aid - rebuild faster but under their influence
 	option = {
@@ -1502,7 +1603,10 @@ world_war_events.103 = {
 	}
 }
 
-# Event 104: Post-War Order - reshaping the world after the conflict
+# Event 104: Post-War Order - reshaping the world after the conflict. The
+# victors decide it; a great power that stayed out of the war (or fought to no
+# decision) gets the neutral reading and cannot claim a victor's sphere. Powers
+# that capitulated do not get it: they receive the victors' terms instead.
 world_war_events.104 = {
 	type = country_event
 	placement = root
@@ -1512,8 +1616,30 @@ world_war_events.104 = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = world_war_events.104.t
-	desc = world_war_events.104.d
-	flavor = world_war_events.104.f
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { ww_won_world_war = yes }
+				desc = world_war_events.104.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = world_war_events.104.d_neutral
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { ww_won_world_war = yes }
+				desc = world_war_events.104.f
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = world_war_events.104.f_neutral
+			}
+		}
+	}
 
 	duration = 3
 
@@ -1521,15 +1647,19 @@ world_war_events.104 = {
 		has_variable = ww_peace_concluded
 		NOT = { has_variable = ww_fully_resolved }
 		country_rank >= rank_value:great_power
+		NOT = { has_variable = ww_capitulated }
+		# Someone won it: after a white peace there is no victors' order to shape
+		any_country = { ww_won_world_war = yes }
 	}
 
 	cooldown = { days = long_modifier_time }
 
 	immediate = { }
 
-	# Option A: Establish a sphere of influence - dominate the post-war order
+	# Option A: Establish a sphere of influence - dominate the post-war order (victors only)
 	option = {
 		name = world_war_events.104.a
+		trigger = { ww_won_world_war = yes }
 		default_option = yes
 		ai_chance = {
 			base = 4
@@ -1614,11 +1744,13 @@ world_war_events.105 = {
 		has_variable = ww_peace_concluded
 		NOT = { has_variable = ww_fully_resolved }
 		country_rank >= rank_value:great_power
-		# Must have a former ally who's now ideologically different
+		# Must have a former ally - a great power that fought on our side of the
+		# world war - whose ideology is now opposed to ours
 		any_country = {
 			country_rank >= rank_value:great_power
 			NOT = { this = root }
 			NOT = { has_war_with = root }
+			ww_fought_alongside = { COUNTRY = root }
 			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
 		}
 	}
@@ -1630,6 +1762,8 @@ world_war_events.105 = {
 			limit = {
 				country_rank >= rank_value:great_power
 				NOT = { this = root }
+				NOT = { has_war_with = root }
+				ww_fought_alongside = { COUNTRY = root }
 				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
 			}
 			save_scope_as = new_rival_power
