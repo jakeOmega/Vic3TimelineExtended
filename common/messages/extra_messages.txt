@@ -2017,6 +2017,14 @@ un_conference_opened_notice = {
 	notification_type = feed
 	color = neutral
 }
+# We have taken a permanent seat on the Security Council (to the new holder;
+# un_seat_grant, un_seat_effects.txt).
+un_permanent_seat_granted_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
 # The post-vote recess is over and the floor is open to every member again (to
 # human members; redesign phase 3, un_recess_monthly_update).
 un_floor_open_notice = {

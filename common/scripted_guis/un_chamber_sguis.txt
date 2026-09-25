@@ -53,6 +53,18 @@ un_chamber_status_sgui = {
 	}
 }
 
+# The Security Council: the permanent members by name, and who is in line for
+# an open seat (un_chamber_council_block). Its own text box, directly under our
+# status, because the list is country blocks and they render after every
+# root-level line of the builder that holds them (gui_modding_guide gotcha #18).
+un_chamber_council_sgui = {
+	scope = country
+
+	effect = {
+		un_chamber_council_block = yes
+	}
+}
+
 # "How standing works" — the sources, the losses and the limits in plain
 # language. Split into its own SGUI behind its own collapsed-by-default toggle
 # for the same reason the archive is: ExecuteTooltip re-renders every frame the

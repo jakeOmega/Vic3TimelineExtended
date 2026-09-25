@@ -87,6 +87,27 @@ un_permanent_seat_count = {
 	}
 }
 
+# Permanent seats open right now (5 less the holders, never below 0).
+un_permanent_seats_vacant = {
+	value = 5
+	subtract = un_permanent_seat_count
+	min = 0
+}
+
+# How long after a founding the four seats beyond the founder's stay open, so
+# every invited great power can answer the charter before they are filled by
+# prestige (un_found_organisation, un_seat_monthly_update).
+un_seat_signing_months = { value = 12 }
+
+# Months left in the signing period, for the chamber's council line.
+un_seat_signing_months_left_display = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_seat_signing_months_left }
+		add = global_var:un_seat_signing_months_left
+	}
+}
+
 # 2/3 supermajority threshold of currently-eligible voting members.
 # Used for expulsion and charter-reform votes: the vote passes when
 # un_res_support * 3 >= count * 2.

@@ -1,0 +1,135 @@
+﻿# ============================================================================
+# UN PERMANENT SEATS — WHO SITS ON THE SECURITY COUNCIL
+# ============================================================================
+# Five permanent seats. The rule:
+#
+#   1. The founder, if a great power, is seated at the founding
+#      (un_found_organisation, un_ladder_effects.txt).
+#   2. The other seats stay open for a signing period of un_seat_signing_months
+#      (global_var:un_seat_signing_months_left, counted down here), so every
+#      invited great power can answer the charter first. Seats used to go to
+#      the first great powers to sign, and the AI answers an event the moment
+#      it fires: a human player lost that race however quickly they clicked.
+#   3. From then on, whenever a seat is open, it goes to the great-power member
+#      with the most prestige that holds none (un_permanent_seat_candidate,
+#      ordered by un_prestige_order_value). That fills the four seats at the
+#      close of the signing period, and every seat vacated later by a walkout
+#      or by ten years below great-power rank, which used to stay empty for
+#      good. A seat vacated by an expulsion vote is filled the same way, at
+#      once, by un_vote.2, which names the new holder in its description.
+#
+# CALL SITES
+#   un_seat_monthly_update   un_global_authority_on_action (un_on_actions.txt),
+#                            once a month while the UN is founded
+#   un_seat_grant            un_seat_fill_one; un_vote.2 (expulsion promotion)
+#   un_seat_join_tooltip     un_join_button, un_events.1 option A,
+#                            un_events.10 option E (display only)
+#
+# global_var:un_seat_signing_months_left is written by un_found_organisation
+# and here, and removed by un_dissolve.
+# ============================================================================
+
+# Scope: none (the global monthly pulse, UN founded). NOT IDEMPOTENT WITHIN A
+# MONTH: the signing period counts down on every call. Call it from nowhere
+# else.
+un_seat_monthly_update = {
+	if = {
+		limit = { has_global_variable = un_seat_signing_months_left }
+		change_global_variable = { name = un_seat_signing_months_left add = -1 }
+		if = {
+			limit = { global_var:un_seat_signing_months_left <= 0 }
+			remove_global_variable = un_seat_signing_months_left
+		}
+	}
+	# A separate block from the countdown above on purpose: the seats open the
+	# month the period ends, not a month later. has_global_variable reads the
+	# removal at once; only modifier changes lag within one effect block.
+	if = {
+		limit = {
+			un_seat_filling_open = yes
+			un_permanent_seats_vacant > 0
+			any_country = { un_permanent_seat_candidate = yes }
+		}
+		# Counted once, up front: a seat granted below is a modifier, and a
+		# modifier added in this effect block is not visible to the checks
+		# that follow it (so un_permanent_seat_count cannot be re-read, and
+		# each pick marks itself with a variable instead). A global rather
+		# than a local variable: this runs in the no-country scope of the
+		# global pulse, where the mod has never exercised local variables.
+		set_global_variable = { name = un_seats_to_fill value = un_permanent_seats_vacant }
+		un_seat_fill_one = yes
+		un_seat_fill_one = yes
+		un_seat_fill_one = yes
+		un_seat_fill_one = yes
+		un_seat_fill_one = yes
+		remove_global_variable = un_seats_to_fill
+		every_country = {
+			limit = { has_variable = un_seat_picked }
+			remove_variable = un_seat_picked
+		}
+	}
+}
+
+# One open seat to the candidate with the most prestige not yet picked this
+# month. Called five times (the most seats there are) and does nothing once the
+# count runs out or no candidate is left.
+# Scope: none (inside un_seat_monthly_update, which sets global_var:un_seats_to_fill)
+un_seat_fill_one = {
+	if = {
+		limit = {
+			global_var:un_seats_to_fill > 0
+			any_country = {
+				un_permanent_seat_candidate = yes
+				NOT = { has_variable = un_seat_picked }
+			}
+		}
+		ordered_country = {
+			limit = {
+				un_permanent_seat_candidate = yes
+				NOT = { has_variable = un_seat_picked }
+			}
+			order_by = un_prestige_order_value
+			max = 1
+			set_variable = un_seat_picked
+			un_seat_grant = yes
+		}
+		change_global_variable = { name = un_seats_to_fill add = -1 }
+	}
+}
+
+# Seat this country on the Security Council as a permanent member, and tell it.
+# The legacy non-permanent Council seat is not added twice. A stale sub-GP
+# counter from an earlier seat goes, so the ten-year clock starts afresh.
+# Scope: country (a UN member, so its journal entry exists)
+un_seat_grant = {
+	if = {
+		limit = { NOT = { je:je_united_nations ?= { has_modifier = un_security_council_modifier } } }
+		je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
+	}
+	je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
+	if = {
+		limit = { has_variable = un_permanent_subgp_months }
+		remove_variable = un_permanent_subgp_months
+	}
+	post_notification = un_permanent_seat_granted_notice
+}
+
+# What joining means for a permanent seat, for the tooltip of every way to join.
+# Display only: custom_tooltip lines and nothing else.
+# Scope: the joining country
+un_seat_join_tooltip = {
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		if = {
+			limit = { has_global_variable = un_seat_signing_months_left }
+			custom_tooltip = un_seat_join_signing_tt
+		}
+		else_if = {
+			limit = { un_permanent_seats_vacant > 0 }
+			custom_tooltip = un_seat_join_vacant_tt
+		}
+		else = {
+			custom_tooltip = un_seat_join_full_tt
+		}
+	}
+}

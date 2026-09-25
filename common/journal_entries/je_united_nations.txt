@@ -307,41 +307,21 @@
 				}
 				je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
 			}
-			# Founding-member SC seat upgrade (legacy save migration).
-			# Charter Option A used to grant un_security_council_modifier without
-			# un_permanent_member_modifier. Upgrade founding-member GPs with an
-			# orphaned SC seat to full permanent member, respecting the 5-seat cap.
-			if = {
-				limit = {
-					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
-					je:je_united_nations ?= { has_modifier = un_founding_member_modifier }
-					NOT = { is_un_permanent_member = yes }
-					country_rank >= rank_value:great_power
-					un_permanent_seat_count < 5
-				}
-				je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
-			}
+			# A great power holding an orphaned Council seat from an old save
+			# (the charter once granted un_security_council_modifier alone) used
+			# to be upgraded here, first come first served. It is now simply a
+			# candidate for the next open seat, filled by prestige
+			# (un_seat_monthly_update, un_seat_effects.txt).
 
 			# ---- Treaty obligation auto-enrollment ----
-			# GPs auto-enrolled by treaty get a permanent seat only during the
-			# founding window (matches the un_join_button rules).
+			# Membership only: a great power enrolled by treaty stands for an
+			# open permanent seat like any other member (un_join_organisation).
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 					modifier:country_un_membership_obligation_bool = yes
 				}
-				je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
-				if = {
-					limit = {
-						country_rank >= rank_value:great_power
-						has_global_variable = un_founding_window_active
-						un_permanent_seat_count < 5
-					}
-					je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
-					je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
-				}
-				# Bind the joiner to any conventions already ratified globally.
-				un_apply_ratified_conventions = yes
+				un_join_organisation = yes
 			}
 
 			# ---- Member-only logic ----
@@ -433,11 +413,13 @@
 				}
 
 				# ---- Permanent Member eligibility re-check ----
-				# Permanent seats are granted via un_join_button during the founding
-				# window. Here we track sub-GP duration: a permanent member that
-				# falls below GP rank for 10+ years (120 months) loses the seat.
-				# (Captures real instability — e.g., a former GP whose collapse is
-				# permanent eventually loses its veto. See Q2 in the design doc.)
+				# Seats are filled by prestige (un_seat_effects.txt). Here we track
+				# sub-GP duration: a permanent member that falls below GP rank for
+				# 10+ years (120 months) loses the seat, which the next month's
+				# un_seat_monthly_update gives to the great-power member with the
+				# most prestige. (Captures real instability — e.g., a former GP whose
+				# collapse is permanent eventually loses its veto. See Q2 in the
+				# design doc.)
 				if = {
 					limit = {
 						is_un_permanent_member = yes
