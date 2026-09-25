@@ -29,3 +29,11 @@ te_ea_ir_agent_in_place_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
 	country_military_tech_spread_mult = 0.15
 }
+
+# society_technology_events.32.a: running a disinformation campaign in a
+# rival's election. The rival's own event (.14) costs it electoral confidence
+# whatever it answers; this is what the campaign costs us.
+te_ea_ir_election_meddling_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_influence_add = -20
+}

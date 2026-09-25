@@ -1254,10 +1254,13 @@ society_technology_events.13 = {
 }
 
 # Event 14: Social Media Election Interference
-# Foreign actors exploit platforms to influence elections
+# Foreign actors exploit platforms to influence elections.
+# Fired only by .32.a, the rival's own choice to meddle in our campaign: the
+# rival arrives as scope:interfering_country. With covert warfare enabled,
+# election interference is a covert operation we learn of only if our
+# counterintelligence burns it (covert_warfare.2), so .32 and this event are
+# the covert-disabled path (the PR #418 shape of international_relations_events.6).
 society_technology_events.14 = {
-	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — the accused country gets the choice first
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -1270,44 +1273,19 @@ society_technology_events.14 = {
 	flavor = society_technology_events.14.f
 
 	duration = 3
-	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
+		exists = scope:interfering_country
 		in_election_campaign = yes
-		has_technology_researched = social_media
-		NOT = { has_modifier = ste_election_interference_counter }
-		NOT = { has_modifier = ste_election_interference_ignored }
-		NOT = { has_law = law_type:law_single_party_state }
-		any_country = {
-			NOT = { this = root }
-			has_technology_researched = social_media
-			AND = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-				country_rank >= rank_value:great_power
-			}
-		}
-		OR = {
-			has_law = law_type:law_universal_suffrage
-			has_law = law_type:law_census_voting
-			has_law = law_type:law_wealth_voting
-			has_law = law_type:law_landed_voting
-		}
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
 
 	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				has_technology_researched = social_media
-				AND = {
-					has_diplomatic_pact = { who = ROOT type = rivalry }
-					country_rank >= rank_value:great_power
-				}
-			}
-			save_scope_as = interfering_country
-		}
+		# Stands in for the old ten-year event cooldown, where .32's pick can read it.
+		set_variable = { name = te_ea_ir_meddling_target value = yes days = long_modifier_time }
 	}
 
 	option = {
@@ -1907,6 +1885,8 @@ society_technology_events.20 = {
 
 # Event 21: Telepathic Diplomacy
 # Can shared consciousness bridge international divides?
+# Our own diplomats propose the channel (the option is our choice); the partner
+# is any other country with telepathic communities.
 society_technology_events.21 = {
 	type = country_event
 	placement = root
@@ -2879,5 +2859,83 @@ society_technology_events.31 = {
 		}
 		add_loyalists = { value = small_radicals strata = lower }
 		add_loyalists = { value = very_small_radicals pop_type = academics }
+	}
+}
+
+# ============================================================================
+# PRECURSOR EVENTS (the actor's own choice)
+# ============================================================================
+
+# Event 32: A Thumb on the Scale (-> .14 on the rival)
+# The rival great power decides whether to meddle in a rival's election
+# campaign; .14 fires on the target only if it does. Covert-disabled only,
+# like .14: with covert warfare enabled this is the election interference
+# operation.
+society_technology_events.32 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/social_media_campaign.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	title = society_technology_events.32.t
+	desc = society_technology_events.32.d
+	flavor = society_technology_events.32.f
+
+	duration = 3
+
+	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
+		has_technology_researched = social_media
+		country_rank >= rank_value:great_power
+		NOR = {
+			has_modifier = te_ea_ir_election_meddling_modifier
+			has_variable = te_ea_ir_meddling_declined
+		}
+		any_country = { te_ea_ir_election_target = yes }
+	}
+
+	immediate = {
+		save_scope_as = interfering_country
+		random_country = {
+			limit = { te_ea_ir_election_target = yes }
+			save_scope_as = interference_target
+		}
+	}
+
+	option = {
+		name = society_technology_events.32.a
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					OR = {
+						has_attitude = { who = scope:interference_target attitude = antagonistic }
+						has_attitude = { who = scope:interference_target attitude = belligerent }
+					}
+				}
+				add = 2
+			}
+		}
+		# Run the campaign - it will be noticed and traced
+		add_modifier = {
+			name = te_ea_ir_election_meddling_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = TE_EA_IR_MEDDLING_RIVAL_TT
+		scope:interference_target = {
+			trigger_event = { id = society_technology_events.14 days = 7 }
+		}
+	}
+
+	option = {
+		name = society_technology_events.32.b
+		ai_chance = { base = 1 }
+		# Leave their voters alone
+		set_variable = { name = te_ea_ir_meddling_declined value = yes days = 365 }
 	}
 }

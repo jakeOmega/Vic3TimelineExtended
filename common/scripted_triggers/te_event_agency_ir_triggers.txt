@@ -77,3 +77,27 @@ te_ea_ir_brinkmanship_opponent = {
 	NOT = { has_war_with = ROOT }
 	nd_crisis_parties_free = { TARGET = ROOT }
 }
+
+# society_technology_events.32 -> .14: a rival in the middle of an election
+# campaign whose voters the actor's troll farms could reach. .14's old
+# trigger (a real election with social media, not still carrying its answer
+# to the last interference). te_ea_ir_meddling_target (set by .14) replaces
+# .14's old ten-year event cooldown, which a pick cannot read.
+te_ea_ir_election_target = {
+	NOT = { this = ROOT }
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	in_election_campaign = yes
+	has_technology_researched = social_media
+	NOT = { has_law = law_type:law_single_party_state }
+	OR = {
+		has_law = law_type:law_universal_suffrage
+		has_law = law_type:law_census_voting
+		has_law = law_type:law_wealth_voting
+		has_law = law_type:law_landed_voting
+	}
+	NOR = {
+		has_modifier = ste_election_interference_counter
+		has_modifier = ste_election_interference_ignored
+		has_variable = te_ea_ir_meddling_target
+	}
+}

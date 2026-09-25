@@ -9,3 +9,6 @@
  te_ea_ir_agent_in_place_modifier_desc:0 "An agent inside a rival's defence ministry is passing its weapons designs to our engineers."
  TE_EA_IR_AGENT_CAUGHT_TT:0 "The agent is caught: [SCOPE.sCountry('espionage_catcher').GetName] decides what to do with him, and we will hear of it."
  TE_EA_IR_AGENT_UNDETECTED_TT:0 "The agent works undetected."
+ te_ea_ir_election_meddling_modifier:0 "Election Meddling Abroad"
+ te_ea_ir_election_meddling_modifier_desc:0 "Diplomatic capital is going into a disinformation campaign in a rival's election."
+ TE_EA_IR_MEDDLING_RIVAL_TT:0 "[SCOPE.sCountry('interference_target').GetName]'s analysts will notice the campaign and trace it to us, and its government will decide how to answer."
