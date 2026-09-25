@@ -1263,3 +1263,22 @@ sr_take_program_losses = {
 	sr_take_program_loss_base = { MILESTONE = solar_colonization }
 	if = { limit = { has_variable = sr_program_loss_report_queued } remove_variable = sr_program_loss_report_queued }
 }
+
+# --- Interstellar probe results describe one shared universe -----------------
+# space_race_events.601–630 each report a specific world. The first nation whose
+# probe returns a result discovers it, and the global record
+# sr_probe_found_$RESULT$ holds that country. A later probe that draws the same
+# result confirms it instead: the event's opening and closing lines say so and
+# name the first finder (scopes saved here, read by the desc's first_valid).
+# The rewards are unchanged — none of them is a "first discovery" reward.
+# Called from each result event's immediate. Country scope.
+sr_record_probe_result = {
+	if = {
+		limit = { has_global_variable = sr_probe_found_$RESULT$ }
+		save_scope_as = sr_probe_repeat
+		global_var:sr_probe_found_$RESULT$ ?= { save_scope_as = sr_probe_first_finder }
+	}
+	else = {
+		set_global_variable = { name = sr_probe_found_$RESULT$ value = ROOT }
+	}
+}

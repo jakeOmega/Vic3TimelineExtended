@@ -6,6 +6,12 @@
 # Each result is its own event with a unique image.
 # Dispatched from the hidden space_race_events.60.
 #
+# Results describe one shared universe. The first nation whose probe returns a
+# result discovers it (global record sr_probe_found_<id>, set by
+# sr_record_probe_result in each event's immediate); a later nation drawing the
+# same result gets the opening and closing lines of a confirmation instead of
+# "unprecedented data", naming the first finder. Same rewards either way.
+#
 # Cat I: Dead Worlds & Data (results 1-8) → events 601-608
 # Cat II: Astrophysical Wonders (results 9-15) → events 609-615
 # Cat III: Biological Discovery (results 16-24) → events 616-624
@@ -25,14 +31,22 @@ space_race_events.601 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.601.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.1 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 601 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -78,14 +92,22 @@ space_race_events.602 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.602.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.2 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 602 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -131,14 +153,22 @@ space_race_events.603 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.603.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.3 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 603 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -184,14 +214,22 @@ space_race_events.604 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.604.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.4 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 604 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -237,14 +275,22 @@ space_race_events.605 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.605.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.5 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 605 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -290,14 +336,22 @@ space_race_events.606 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.606.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.6 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 606 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -343,14 +397,22 @@ space_race_events.607 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.607.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.7 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 607 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -396,14 +458,22 @@ space_race_events.608 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.608.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.8 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 608 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -453,14 +523,22 @@ space_race_events.609 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.609.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.9 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat2
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 609 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -506,14 +584,22 @@ space_race_events.610 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.610.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.10 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat2
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 610 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -559,14 +645,22 @@ space_race_events.611 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.611.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.11 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat2
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 611 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -612,14 +706,22 @@ space_race_events.612 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.612.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.12 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat2
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 612 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -665,14 +767,22 @@ space_race_events.613 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.613.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.13 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat2
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 613 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -718,14 +828,22 @@ space_race_events.614 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.614.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.14 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat2
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 614 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -771,14 +889,22 @@ space_race_events.615 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.615.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.15 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat2
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 615 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -828,14 +954,22 @@ space_race_events.616 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.616.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.16 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat3
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 616 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -881,14 +1015,22 @@ space_race_events.617 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.617.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.17 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat3
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 617 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -934,14 +1076,22 @@ space_race_events.618 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.618.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.18 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat3
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 618 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -987,14 +1137,22 @@ space_race_events.619 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.619.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.19 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat3
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 619 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1040,14 +1198,22 @@ space_race_events.620 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.620.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.20 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat3
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 620 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1093,14 +1259,22 @@ space_race_events.621 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.621.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.21 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat3
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 621 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1146,14 +1320,22 @@ space_race_events.622 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.622.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.22 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat3
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 622 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1199,14 +1381,22 @@ space_race_events.623 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.623.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.23 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat3
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 623 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1252,14 +1442,22 @@ space_race_events.624 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.624.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.24 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat3
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 624 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1309,14 +1507,22 @@ space_race_events.625 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.625.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.25 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat4
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 625 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1362,14 +1568,22 @@ space_race_events.626 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.626.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.26 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat4
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 626 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1415,14 +1629,22 @@ space_race_events.627 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.627.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.27 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat4
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 627 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1468,14 +1690,22 @@ space_race_events.628 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.628.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.28 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat4
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 628 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1521,14 +1751,22 @@ space_race_events.629 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.629.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.29 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat4
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 629 } }
 
 	option = {
 		name = space_race_events.60.a
@@ -1574,14 +1812,22 @@ space_race_events.630 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 	title = space_race_events.630.t
 	desc = {
-		triggered_desc = { desc = space_race_events.60.d.intro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.intro_confirms trigger = { exists = scope:sr_probe_first_finder } }
+			triggered_desc = { desc = space_race_events.60.d.intro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.intro
+		}
 		triggered_desc = { desc = space_race_events.60.d.30 trigger = { always = yes } }
-		triggered_desc = { desc = space_race_events.60.d.outro trigger = { always = yes } }
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.d.outro_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.d.outro
+		}
 	}
 	flavor = space_race_events.60.f.cat4
 	duration = 3
 	trigger = { }
-	immediate = { }
+	# First finder, or a confirmation of an earlier nation's finding.
+	immediate = { sr_record_probe_result = { RESULT = 630 } }
 
 	option = {
 		name = space_race_events.60.a

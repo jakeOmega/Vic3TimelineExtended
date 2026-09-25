@@ -847,7 +847,7 @@ Suborbital Flight (rocketry tech)
   - **Category II: Astrophysical Wonders** (30%, 7 results) — Ringed terrestrials, global oceans, runaway greenhouses. Grants `sr_probe_astro_wonders_data` (good prestige/research/innovation/cultural pull).
   - **Category III: Biological Discovery** (20%, 9 results) — Atmospheric biosignatures, alien vegetation, exotic biochemistry. Grants `sr_probe_biological_data` (major prestige/research/innovation/cultural pull).
   - **Category IV: Intelligence & Tech-signatures** (10%, 6 results) — Orbital debris, technogenic gases, artificial light. Grants `sr_probe_intelligence_data` (exceptional prestige/research/innovation/cultural pull).
-  - Discovery selection uses two-stage `random_list`: first picks category by weight, then picks specific result uniformly within category. Result stored in `sr_probe_category` and `sr_probe_result` variables. Event uses triggered_desc blocks for category-specific titles, flavors, and result-specific descriptions.
+  - Discovery selection uses two-stage `random_list`: first picks category by weight, then picks specific result uniformly within category. Each result event (601–630) records itself globally on first discovery (`sr_record_probe_result`: `sr_probe_found_<id>` = the discoverer). A later nation drawing the same result gets opening/closing lines that confirm the first finder's discovery, named, instead of "unprecedented data"; the rewards are the same (none is a first-discovery reward). Result events use triggered_desc blocks for the confirmation variant and the result-specific description.
 - **Solar System Colonization (Repeatable):** Each completion establishes one colony at a random unclaimed location in the current stage. Colonies are tracked via global variables (`sr_colony_*`), making them first-come-first-served across all nations. Stage advances when all locations in a stage are claimed. Goals increase per stage (100/120/140/160/200). JE only sets `sr_completed_solar_colonization` after all 34 colonies across 5 stages are claimed.
   - **Stage 1:** Mars (5) + Asteroids (5) = 10 colonies
   - **Stage 2:** Jupiter system (6) + Venus clouds (1) = 7 colonies
@@ -900,6 +900,7 @@ Suborbital Flight (rocketry tech)
 | `sr_global_first_interstellar_probe` | First interstellar probe launched |
 | `sr_colonization_stage` | Current colony stage (1-5), advances when all locations in stage are claimed |
 | `sr_all_colonies_complete` | All 34 colonies have been claimed |
+| `sr_probe_found_<601–630>` | The country whose interstellar probe first returned that result |
 | `sr_colony_*` (34 variables) | Individual colony claimed flags (e.g. `sr_colony_valles_marineris`, `sr_colony_europa`, `sr_colony_sedna`) |
 
 ### Important Notes
