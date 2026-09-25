@@ -203,6 +203,24 @@ nd_core_threatened_by = {
 	}
 }
 
+# The scoped country is losing its war with $ENEMY$: a quarter of its land
+# occupied, or, after five significant battles in a war with them, under 35 %
+# of the battles won. is_losing_war_against's rule, with the loser read from
+# this scope rather than ROOT.
+nd_is_losing_war_to = {
+	save_temporary_scope_as = nd_lw_self
+	OR = {
+		enemy_occupation >= 0.25
+		any_scope_war = {
+			is_war_participant = $ENEMY$
+			num_significant_battles >= 5
+			scope:nd_lw_self = {
+				size_weighted_won_battles_fraction = { target = PREV value < 0.35 }
+			}
+		}
+	}
+}
+
 # We defied-or-were-defied bookkeeping: $ENEMY$ rejected a public ultimatum of
 # ours (nd_crisis_record_defiance). Compellence's own licence.
 nd_was_defied_by = {
@@ -672,6 +690,15 @@ nd_crisis_event_valid = {
 nd_crisis_is_public = {
 	has_variable = nd_crisis_public
 	var:nd_crisis_public = 1
+}
+
+# Issuer scope, scope:nd_target saved: the target has no arsenal and no armed
+# protector, so the crisis danger is scaled by 0.7 (nd_crisis_danger_value).
+nd_crisis_danger_dampened = {
+	scope:nd_target = {
+		nd_believed_armed = no
+		NOT = { nd_has_armed_guarantor_against = { AGAINST = scope:nd_issuer } }
+	}
 }
 
 # Owner scope: the issuer is defending rather than demanding — the target

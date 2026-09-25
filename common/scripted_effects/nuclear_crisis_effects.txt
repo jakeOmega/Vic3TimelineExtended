@@ -117,14 +117,14 @@ nd_crisis_open = {
 				set_variable = { name = nd_crisis_stage value = 1 }
 				set_variable = { name = nd_crisis_deadline value = nd_crisis_deadline_private_weeks }
 			}
-			set_variable = { name = nd_crisis_danger value = nd_crisis_danger_value }
 			# ---- the target's mirror ----------------------------------------
 			scope:nd_target = {
 				set_variable = { name = nd_crisis_id value = scope:nd_issuer.var:nd_crisis_id }
 				set_variable = { name = nd_crisis_opponent value = scope:nd_issuer }
 				set_variable = { name = nd_crisis_role value = 2 }
-				set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
 			}
+			# ---- the crisis's figures, before anyone weighs them ------------
+			nd_crisis_refresh_figures = yes
 			# ---- what the world sees ----------------------------------------
 			if = {
 				limit = { always = $PUBLIC$ }
@@ -281,6 +281,163 @@ nd_crisis_notify_guarantors = {
 }
 
 # ----------------------------------------------------------------------------
+# FIGURES — the one writer of the crisis's numbers (2026-09-25 spec §1.2)
+# ----------------------------------------------------------------------------
+# Issuer scope, parties saved. Classifies follow-through, then stores every
+# danger part (issuer-scope values) and every pressure part (target-scope
+# values) on BOTH parties, then the totals. The panel's breakdowns print the
+# stored parts (nd_crisis_*_breakdown_sgui), so what it shows always sums to
+# what the AI weighs.
+nd_crisis_refresh_figures = {
+	nd_crisis_classify_follow_through = { TARGET = scope:nd_target }
+	scope:nd_target = {
+		set_variable = { name = nd_ft_reason value = scope:nd_issuer.var:nd_ft_reason }
+	}
+	nd_crisis_store_cd = { C = nd_cd_stage V = nd_cd_stage_value }
+	nd_crisis_store_cd = { C = nd_cd_issuer_readiness V = nd_cd_issuer_readiness_value }
+	nd_crisis_store_cd = { C = nd_cd_target_readiness V = nd_cd_target_readiness_value }
+	nd_crisis_store_cd = { C = nd_cd_public V = nd_cd_public_value }
+	nd_crisis_store_cd = { C = nd_cd_counter V = nd_cd_counter_value }
+	nd_crisis_store_cd = { C = nd_cd_reliability V = nd_cd_reliability_value }
+	nd_crisis_store_cd = { C = nd_cd_weeks V = nd_cd_weeks_value }
+	nd_crisis_store_cd = { C = nd_cd_talks V = nd_cd_talks_value }
+	nd_crisis_store_cd = { C = nd_cd_backed V = nd_cd_backed_value }
+	nd_crisis_store_cd = { C = nd_cd_exercise V = nd_cd_exercise_value }
+	if = {
+		limit = { nd_crisis_danger_dampened = yes }
+		set_variable = { name = nd_cd_dampened value = 1 }
+	}
+	else = {
+		set_variable = { name = nd_cd_dampened value = 0 }
+	}
+	scope:nd_target = {
+		set_variable = { name = nd_cd_dampened value = scope:nd_issuer.var:nd_cd_dampened }
+	}
+	set_variable = { name = nd_crisis_danger value = nd_crisis_danger_value }
+	scope:nd_target = {
+		nd_crisis_store_yp = { C = nd_yp_base V = nd_yp_base_value }
+		nd_crisis_store_yp = { C = nd_yp_answer V = nd_yp_answer_value }
+		nd_crisis_store_yp = { C = nd_yp_protector V = nd_yp_protector_value }
+		nd_crisis_store_yp = { C = nd_yp_credibility V = nd_yp_credibility_value }
+		nd_crisis_store_yp = { C = nd_yp_alert V = nd_yp_alert_value }
+		nd_crisis_store_yp = { C = nd_yp_danger V = nd_yp_danger_value }
+		nd_crisis_store_yp = { C = nd_yp_exercise V = nd_yp_exercise_value }
+		nd_crisis_store_yp = { C = nd_yp_temperament V = nd_yp_temperament_value }
+		nd_crisis_store_yp = { C = nd_yp_war V = nd_yp_war_value }
+		nd_crisis_store_yp = { C = nd_yp_follow_through V = nd_yp_follow_through_value }
+		set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
+	}
+}
+
+# Issuer scope, parties saved: one danger part, stored and mirrored.
+nd_crisis_store_cd = {
+	set_variable = { name = $C$ value = $V$ }
+	scope:nd_target = {
+		set_variable = { name = $C$ value = scope:nd_issuer.var:$C$ }
+	}
+}
+
+# Target scope, parties saved: one pressure part, stored and mirrored.
+nd_crisis_store_yp = {
+	set_variable = { name = $C$ value = $V$ }
+	scope:nd_issuer = {
+		set_variable = { name = $C$ value = scope:nd_target.var:$C$ }
+	}
+}
+
+# Either party: drop the stored figures (nd_crisis_clear_vars).
+nd_crisis_clear_figures = {
+	if = {
+		limit = { has_variable = nd_ft_reason }
+		remove_variable = nd_ft_reason
+	}
+	if = {
+		limit = { has_variable = nd_cd_dampened }
+		remove_variable = nd_cd_dampened
+	}
+	if = {
+		limit = { has_variable = nd_cd_stage }
+		remove_variable = nd_cd_stage
+	}
+	if = {
+		limit = { has_variable = nd_cd_issuer_readiness }
+		remove_variable = nd_cd_issuer_readiness
+	}
+	if = {
+		limit = { has_variable = nd_cd_target_readiness }
+		remove_variable = nd_cd_target_readiness
+	}
+	if = {
+		limit = { has_variable = nd_cd_public }
+		remove_variable = nd_cd_public
+	}
+	if = {
+		limit = { has_variable = nd_cd_counter }
+		remove_variable = nd_cd_counter
+	}
+	if = {
+		limit = { has_variable = nd_cd_reliability }
+		remove_variable = nd_cd_reliability
+	}
+	if = {
+		limit = { has_variable = nd_cd_weeks }
+		remove_variable = nd_cd_weeks
+	}
+	if = {
+		limit = { has_variable = nd_cd_talks }
+		remove_variable = nd_cd_talks
+	}
+	if = {
+		limit = { has_variable = nd_cd_backed }
+		remove_variable = nd_cd_backed
+	}
+	if = {
+		limit = { has_variable = nd_cd_exercise }
+		remove_variable = nd_cd_exercise
+	}
+	if = {
+		limit = { has_variable = nd_yp_base }
+		remove_variable = nd_yp_base
+	}
+	if = {
+		limit = { has_variable = nd_yp_answer }
+		remove_variable = nd_yp_answer
+	}
+	if = {
+		limit = { has_variable = nd_yp_protector }
+		remove_variable = nd_yp_protector
+	}
+	if = {
+		limit = { has_variable = nd_yp_credibility }
+		remove_variable = nd_yp_credibility
+	}
+	if = {
+		limit = { has_variable = nd_yp_alert }
+		remove_variable = nd_yp_alert
+	}
+	if = {
+		limit = { has_variable = nd_yp_danger }
+		remove_variable = nd_yp_danger
+	}
+	if = {
+		limit = { has_variable = nd_yp_exercise }
+		remove_variable = nd_yp_exercise
+	}
+	if = {
+		limit = { has_variable = nd_yp_temperament }
+		remove_variable = nd_yp_temperament
+	}
+	if = {
+		limit = { has_variable = nd_yp_war }
+		remove_variable = nd_yp_war
+	}
+	if = {
+		limit = { has_variable = nd_yp_follow_through }
+		remove_variable = nd_yp_follow_through
+	}
+}
+
+# ----------------------------------------------------------------------------
 # THE WEEKLY TICK — owner scope, from nd_weekly_update only
 # ----------------------------------------------------------------------------
 nd_crisis_weekly_tick = {
@@ -310,10 +467,7 @@ nd_crisis_weekly_tick = {
 	# Still open after revalidation?
 	if = {
 		limit = { nd_is_crisis_owner = yes }
-		set_variable = { name = nd_crisis_danger value = nd_crisis_danger_value }
-		scope:nd_target = {
-			set_variable = { name = nd_yield_pressure value = nd_yield_pressure_value }
-		}
+		nd_crisis_refresh_figures = yes
 		# ---- confrontation becomes acute ------------------------------------
 		if = {
 			limit = {
@@ -516,6 +670,7 @@ nd_crisis_clear_vars = {
 		limit = { has_variable = nd_crisis_exercise_weeks }
 		remove_variable = nd_crisis_exercise_weeks
 	}
+	nd_crisis_clear_figures = yes
 }
 
 # Target scope, from the target's monthly update: an issuer that vanished

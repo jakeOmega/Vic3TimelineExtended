@@ -277,6 +277,56 @@ class TestFollowThrough(unittest.TestCase):
         self.assertRegex(warn, r"OR = \{\s*nd_threat_backed = \{ TARGET = \$TARGET\$ \}\s*ruler_is_aggressive = yes\s*\}")
 
 
+DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness", "nd_cd_public",
+                "nd_cd_counter", "nd_cd_reliability", "nd_cd_weeks", "nd_cd_talks", "nd_cd_backed",
+                "nd_cd_exercise"]
+PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
+                  "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
+                  "nd_yp_follow_through"]
+
+
+class TestCrisisFigures(unittest.TestCase):
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+
+    def summed(self, total):
+        body = block(self.values, total)
+        return re.findall(r"(?:value|add) = (nd_(?:cd|yp)_\w+)_value\b", body)
+
+    def test_totals_are_exactly_their_parts(self):
+        self.assertEqual(self.summed("nd_crisis_danger_value"), DANGER_PARTS)
+        self.assertEqual(self.summed("nd_yield_pressure_value"), PRESSURE_PARTS)
+
+    def test_every_part_has_a_value(self):
+        for part in DANGER_PARTS + PRESSURE_PARTS:
+            self.assertRegex(self.values, rf"(?m)^{part}_value = \{{", part)
+
+    def test_refresh_stores_every_part_under_its_own_value(self):
+        body = block(self.effects, "nd_crisis_refresh_figures")
+        stored = re.findall(r"nd_crisis_store_(?:cd|yp) = \{ C = (\w+) V = (\w+) \}", body)
+        self.assertEqual([c for c, _ in stored], DANGER_PARTS + PRESSURE_PARTS)
+        for c, v in stored:
+            self.assertEqual(v, c + "_value")
+
+    def test_clear_removes_every_part(self):
+        body = block(self.effects, "nd_crisis_clear_figures")
+        for var in DANGER_PARTS + PRESSURE_PARTS + ["nd_cd_dampened", "nd_ft_reason"]:
+            self.assertIn(f"remove_variable = {var}", body, var)
+
+    def test_losing_war_is_read_from_the_target(self):
+        self.assertNotIn("is_losing_war_against", block(self.values, "nd_yp_war_value"))
+        self.assertIn("nd_is_losing_war_to = { ENEMY = scope:nd_issuer }", block(self.values, "nd_yp_war_value"))
+        self.assertNotIn("ROOT", block(strip_comments(read(TRIGGERS)), "nd_is_losing_war_to"))
+
+    def test_refresh_is_the_only_writer_of_the_totals(self):
+        for path in (CRISIS_EFFECTS, EFFECTS, CRISIS_EVENTS, INCIDENT_EVENTS):
+            text = strip_comments(read(path))
+            if path == CRISIS_EFFECTS:
+                text = text.replace(block(text, "nd_crisis_refresh_figures"), "")
+            self.assertNotRegex(text, r"name = nd_(?:crisis_danger|yield_pressure) value", path.name)
+
+
 class TestManagedFamilies(unittest.TestCase):
     def test_doctrine_and_readiness_families_exist(self):
         mods = set(re.findall(r"^(nd_\w+)\s*=\s*\{", read(MODIFIERS), re.M))
