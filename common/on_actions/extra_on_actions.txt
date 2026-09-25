@@ -1483,9 +1483,11 @@ international_relations_events_on_action = {
 					}
 					trigger_event = { id = international_relations_events.201 }
 				}
-				# Proxy Conflict
+				# Proxy Conflict (covert-disabled fallback; with covert warfare on,
+				# the destabilization and regime-change operations are the tool)
 				10 = {
 					trigger = {
+						has_game_rule = covert_warfare_disabled
 						has_technology_researched = intergovernmental_organizations
 						any_rival_country = {
 							country_rank >= rank_value:major_power
@@ -1502,13 +1504,16 @@ international_relations_events_on_action = {
 					}
 					trigger_event = { id = international_relations_events.3 }
 				}
-				# Propaganda War
-				15 = {
+				# Propaganda War: offered to the country that would run the
+				# offensive (.202); its rival hears of it in .4 only if it does.
+				# Covert-disabled only, like .6. 15 → 20 for the ~75% act chance.
+				20 = {
 					trigger = {
+						has_game_rule = covert_warfare_disabled
 						has_technology_researched = mass_media
-						any_rival_country = { always = yes }
+						any_country = { te_ea_ir_propaganda_target = yes }
 					}
-					trigger_event = { id = international_relations_events.4 }
+					trigger_event = { id = international_relations_events.202 }
 				}
 				# Trade Embargo
 				10 = {

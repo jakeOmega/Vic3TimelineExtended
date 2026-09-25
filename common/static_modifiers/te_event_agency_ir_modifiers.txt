@@ -13,3 +13,12 @@ te_ea_ir_military_buildup_modifier = {
 	country_prestige_from_navy_combat_power_mult = 0.10
 	country_military_goods_cost_mult = 0.10
 }
+
+# international_relations_events.202.a: a propaganda offensive a rival will be
+# told about in .4. Mirrors propaganda_campaign_modifier (the answering side's
+# counter-campaign) at a smaller prestige gain.
+te_ea_ir_propaganda_offensive_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.03
+	country_bureaucracy_mult = -0.03
+}
