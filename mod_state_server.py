@@ -7056,12 +7056,12 @@ class ModStateHandler(BaseHTTPRequestHandler):
         from path_constants import mod_path as _mod_path
 
         if not rest:
-            raise _EndpointError({"error": "usage: /event-dispatch/<event_id>"}, 400)
+            raise BadRequest("usage: /event-dispatch/<event_id>")
         eid = rest[0]
         g = eca.build_graph(_mod_path)
         r = eca.Resolver(g)
         if eid not in g.events and eid not in g.sites_by_event:
-            raise _EndpointError({"error": f"no mod event or dispatch site for {eid}"}, 404)
+            raise NotFound(eid)
         sites = []
         for s in g.sites_by_event.get(eid, []):
             status, reason = r.site_choice(s)
@@ -7100,12 +7100,14 @@ class ModStateHandler(BaseHTTPRequestHandler):
             flags = [f for f in flags if not f.exemption]
         check = (params.get("check") or [None])[0]
         if check:
+            if check not in eca.CHECKS:
+                raise BadRequest(f"unknown check {check!r}", valid=list(eca.CHECKS))
             flags = [f for f in flags if f.check == check]
         event_filter = (params.get("event_id") or [None])[0]
         if event_filter:
             flags = [f for f in flags if f.event_id == event_filter]
         if (params.get("format") or ["json"])[0] == "text":
-            return {"text": eca.render_report(eca.AuditResult(flags=flags, coverage=result.coverage), _mod_path)}
+            return {"text": eca.render_report(eca.AuditResult(flags=flags, coverage=result.coverage))}
         return {
             "flags": [
                 {"check": f.check, "event_id": f.event_id, "file": f.file, "line": f.line,
@@ -7114,6 +7116,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 for f in flags
             ],
             "coverage": result.coverage,
+            "stale_tags": [{"event_id": t.event_id, "check": t.check, "file": t.file, "line": t.line}
+                           for t in result.stale_tags + result.unknown_tags],
         }
 
     def _event_magnitude_audit(self, params):
