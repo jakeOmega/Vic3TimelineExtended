@@ -1,0 +1,198 @@
+﻿# ============================================================================
+# NUCLEAR CRISIS — the diplomatic actions that open a crisis or end a pledge
+# ============================================================================
+# Design: docs/systems/nuclear_crisis_design.md (§0.3 is what shipped).
+#
+# A diplomatic action is the vehicle because a crisis needs a freely chosen
+# target country and an AI path (scripting_best_practices.md § A Diplomatic
+# Action Is the Right Vehicle for "Pick Any Country, and Let Them Answer").
+# None creates a pact and none needs the target's approval: the target answers
+# through nuclear_crisis.1, which the AI answers too.
+#
+# Everything they do lives in nuclear_crisis_effects.txt; every eligibility
+# test in nuclear_deterrence_triggers.txt. The engine re-walks accept_effect for
+# the tooltip every frame the confirmation box is open without running it, so
+# nd_crisis_open does its work inside a hidden_effect whose saved scopes are
+# all `exists`-guarded.
+# ============================================================================
+
+# ---- A private warning ------------------------------------------------------
+# Names a red line without staking the government's public standing on it:
+# less domestic reward, easier to walk back (§5.2).
+nd_nuclear_warning_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	potential = {
+		has_game_rule = nuclear_weapons_enabled
+		nd_is_armed = yes
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	possible = {
+		nd_can_open_crisis_against = { TARGET = scope:target_country }
+	}
+
+	accept_effect = {
+		nd_crisis_open = { TARGET = scope:target_country PUBLIC = no }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { is_at_war = yes }
+				add = 0.03
+			}
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+		}
+
+		will_propose = {
+			nd_ai_would_warn = { TARGET = scope:target_country }
+			NOT = { nd_ai_would_issue_ultimatum = { TARGET = scope:target_country } }
+		}
+
+		propose_score = {
+			value = 10
+			if = {
+				limit = { has_war_with = scope:target_country }
+				add = 10
+			}
+			if = {
+				limit = { nd_dispute_guarantee_against = { TARGET = scope:target_country } }
+				add = 15
+			}
+			if = {
+				limit = { has_diplomatic_pact = { who = scope:target_country type = rivalry } }
+				add = 5
+			}
+		}
+	}
+}
+
+# ---- A public ultimatum -----------------------------------------------------
+# The strongest bargaining signal, and an audience cost if abandoned without
+# achieving the objective (§5.2): +5 infamy on issue, credibility −15 on a
+# climb-down, and a defied ultimatum licenses compellence.
+nd_nuclear_ultimatum_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = yes
+
+	potential = {
+		has_game_rule = nuclear_weapons_enabled
+		nd_is_armed = yes
+		scope:target_country = {
+			NOT = { is_country_type = decentralized }
+		}
+	}
+
+	possible = {
+		nd_can_open_crisis_against = { TARGET = scope:target_country }
+	}
+
+	accept_effect = {
+		nd_crisis_open = { TARGET = scope:target_country PUBLIC = yes }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.02
+			if = {
+				limit = { is_at_war = yes }
+				add = 0.03
+			}
+			if = {
+				limit = { ruler_is_aggressive = yes }
+				add = 0.02
+			}
+		}
+
+		will_propose = {
+			nd_ai_would_issue_ultimatum = { TARGET = scope:target_country }
+		}
+
+		propose_score = {
+			value = 10
+			if = {
+				limit = { has_war_with = scope:target_country }
+				add = 10
+			}
+			if = {
+				limit = { nd_dispute_guarantee_against = { TARGET = scope:target_country } }
+				add = 15
+			}
+			if = {
+				limit = { nd_regime_is_militarist = yes }
+				add = 5
+			}
+		}
+	}
+}
+
+# ---- Renouncing a bilateral non-use pledge ---------------------------------
+# The only way past a pledge short of being struck first (§6): it costs what a
+# broken promise costs, and the partner hears about it.
+nd_repudiate_pledge_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	is_hostile = yes
+	should_notify_third_parties = yes
+
+	potential = {
+		has_game_rule = nuclear_weapons_enabled
+		nd_has_nonuse_pledge_with = { TARGET = scope:target_country }
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = nd_tt_has_pledge_with_target
+			nd_has_nonuse_pledge_with = { TARGET = scope:target_country }
+		}
+	}
+
+	accept_effect = {
+		nd_break_pledge_effects = { CREDIBILITY = 15 INFAMY = 5 }
+		scope:target_country = {
+			change_relations = { country = ROOT value = -30 }
+		}
+		hidden_effect = {
+			nd_remove_pledge_pair = { A = ROOT B = scope:target_country }
+		}
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.01
+		}
+
+		# The AI renounces a pledge only to strike an enemy it is at war with
+		# and has already decided to use nuclear weapons against.
+		will_propose = {
+			has_war_with = scope:target_country
+			nd_doctrine_permits_strike = { ENEMY = scope:target_country }
+			nd_ai_nuclear_use_justified = { ENEMY = scope:target_country }
+		}
+
+		propose_score = {
+			value = 5
+		}
+	}
+}

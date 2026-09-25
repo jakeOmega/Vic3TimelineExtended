@@ -1208,8 +1208,10 @@ nuclear_weapon_events.19 = {
 					has_variable = nuclear_weapon_stockpile
 					any_rival_country = {
 						has_modifier = nuclear_power
-						has_variable = nuclear_weapon_stockpile
-						var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+						# The rival's arsenal as the world estimates it, not its secret
+						# (docs/systems/nuclear_crisis_design.md §0.6).
+						has_variable = nd_public_estimate
+						var:nd_public_estimate > ROOT.var:nuclear_weapon_stockpile
 					}
 				}
 				add = 4
@@ -1247,8 +1249,10 @@ nuclear_weapon_events.19 = {
 					has_variable = nuclear_weapon_stockpile
 					any_rival_country = {
 						has_modifier = nuclear_power
-						has_variable = nuclear_weapon_stockpile
-						var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+						# The rival's arsenal as the world estimates it, not its secret
+						# (docs/systems/nuclear_crisis_design.md §0.6).
+						has_variable = nd_public_estimate
+						var:nd_public_estimate > ROOT.var:nuclear_weapon_stockpile
 					}
 				}
 				add = -4
@@ -1329,8 +1333,10 @@ nuclear_weapon_events.20 = {
 					has_variable = nuclear_weapon_stockpile
 					any_rival_country = {
 						has_modifier = nuclear_power
-						has_variable = nuclear_weapon_stockpile
-						var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+						# The rival's arsenal as the world estimates it, not its secret
+						# (docs/systems/nuclear_crisis_design.md §0.6).
+						has_variable = nd_public_estimate
+						var:nd_public_estimate > ROOT.var:nuclear_weapon_stockpile
 					}
 				}
 				add = 5
@@ -1421,8 +1427,10 @@ nuclear_weapon_events.21 = {
 					has_variable = nuclear_weapon_stockpile
 					any_rival_country = {
 						has_modifier = nuclear_power
-						has_variable = nuclear_weapon_stockpile
-						var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+						# The rival's arsenal as the world estimates it, not its secret
+						# (docs/systems/nuclear_crisis_design.md §0.6).
+						has_variable = nd_public_estimate
+						var:nd_public_estimate > ROOT.var:nuclear_weapon_stockpile
 					}
 				}
 				add = 5
@@ -1522,8 +1530,10 @@ nuclear_weapon_events.22 = {
 					has_variable = nuclear_weapon_stockpile
 					any_rival_country = {
 						has_modifier = nuclear_power
-						has_variable = nuclear_weapon_stockpile
-						var:nuclear_weapon_stockpile > ROOT.var:nuclear_weapon_stockpile
+						# The rival's arsenal as the world estimates it, not its secret
+						# (docs/systems/nuclear_crisis_design.md §0.6).
+						has_variable = nd_public_estimate
+						var:nd_public_estimate > ROOT.var:nuclear_weapon_stockpile
 					}
 				}
 				add = 5

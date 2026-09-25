@@ -16,6 +16,17 @@
 
 	possible = {
 		var:nuclear_weapon_stockpile > 0
+		# Doctrine (je_nuclear_deterrence): when do we say we will use them?
+		# The law gates below stay and apply on top — a strike needs both.
+		# See docs/systems/nuclear_crisis_design.md §0.2.
+		custom_tooltip = {
+			text = nd_tt_doctrine_permits_strike
+			nd_doctrine_permits_strike = { ENEMY = scope:target_country }
+		}
+		custom_tooltip = {
+			text = nd_tt_pledge_permits_strike
+			nd_pledge_permits_strike = { ENEMY = scope:target_country }
+		}
 		OR = {
 			# Normal: can use if no humanitarian/limited war laws
 			NOT = {
@@ -63,21 +74,41 @@
 				save_scope_as = target_state
 				nuclear_first_strike = yes
 			}
+			# Pledges, doctrine breaches, crises, guarantors (§11): once per launch.
+			nd_record_nuclear_use = { VICTIM = scope:target_country }
 		}
 	}
 
 	is_hostile = yes
 
 	ai = {
+		# Whether the AI uses the bomb at all is nd_ai_nuclear_use_justified in
+		# will_propose (doctrine, survival, retaliation, perceived retaliation,
+		# a reserve, a six-month pause); this only sets how often it asks.
+		# docs/systems/nuclear_crisis_design.md §0.2 and §9.
 		evaluation_chance = {
 			value = 0.1 # base 10% chance to evaluate
-			# Existential threats dramatically increase evaluation
 			if = {
 				limit = {
-					exists = scope:country
-					enemy_has_existential_war_goal = yes
+					exists = scope:target_country
+					nd_enemy_threatens_existence = { ENEMY = scope:target_country }
 				}
-				multiply = 7 # 70% - existential threats make the AI seriously consider nuclear use
+				multiply = 7 # existential threats make the AI seriously consider nuclear use
+			}
+			if = {
+				limit = {
+					exists = scope:target_country
+					nd_was_struck_by = { ENEMY = scope:target_country }
+				}
+				multiply = 5 # retaliation is strongly favoured
+			}
+			if = {
+				limit = { nd_doctrine_warfighting = yes }
+				multiply = 3
+			}
+			else_if = {
+				limit = { nd_doctrine_compellence = yes }
+				multiply = 1.5
 			}
 			if = {
 				limit = {
@@ -99,60 +130,21 @@
 				}
 				multiply = 0.25 # very reluctant but not impossible in existential situations
 			}
-			# Retaliation: only if THIS specific enemy nuked us
-			if = {
-				limit = {
-					was_nuked_by_enemy = yes
-				}
-				multiply = 5 # retaliation after being nuked by this enemy is strongly favored
-			}
+			max = 1
 		}
 
 		will_select_as_second_state = {
 			always = yes
 		}
 
+		# The old gate read scope:country. Vanilla never uses that name for the
+		# target in an AI block (scope:target_country, 600+ uses); inside the
+		# state triggers it is the actor. So the gate most likely never passed
+		# and the AI never struck first (unverified in-game). The
+		# doctrine-aware judgement replaces it and names the target properly.
 		will_propose = {
-			# Must be at war with the target
-			has_war_with = scope:country
-
-			# Must face a sufficiently severe threat - no nuking over minor disputes
-			OR = {
-				# Existential threat: enemy wants to subjugate or annex us
-				enemy_has_existential_war_goal = yes
-				# Losing core incorporated territory AND the war is going badly
-				AND = {
-					any_scope_state = {
-						is_target_of_wargoal = scope:country
-						is_incorporated = yes
-					}
-					# Battlefield read (1.14 triggers), not war support: low support can
-					# mean an unpopular war rather than a lost one. See nuke_triggers.txt.
-					is_losing_war_against = { ENEMY = scope:country }
-				}
-				# Retaliation: this specific enemy nuked us
-				was_nuked_by_enemy = yes
-			}
-
-			# Cautious or honorable leaders require extreme circumstances
-			OR = {
-				NOT = { ruler_is_cautious = yes }
-				# Retaliation against the country that nuked us overrides personality
-				was_nuked_by_enemy = yes
-				# Facing complete annexation overrides personality
-				scope:country = {
-					war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
-				}
-			}
-
-			# If target is nuclear-armed, require more desperate circumstances
-			OR = {
-				NOT = { scope:country = { has_modifier = nuclear_power } }
-				# Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
-				was_nuked_by_enemy = yes
-				enemy_has_subjugation_war_goal = yes
-				ruler_is_aggressive = yes
-			}
+			has_war_with = scope:target_country
+			nd_ai_nuclear_use_justified = { ENEMY = scope:target_country }
 		}
 
 		propose_score = {
@@ -169,7 +161,7 @@
 			if = {
 				limit = {
 					any_scope_war = {
-						is_war_participant = scope:country
+						is_war_participant = scope:target_country
 						is_at_war_with_rival = ROOT
 					}
 				}
@@ -200,6 +192,16 @@ tactical_nuke_diplo_action = {
 		has_technology_researched = tactical_nuclear_weapons
 		has_variable = nuclear_weapon_stockpile
 		var:nuclear_weapon_stockpile > 0
+		# Doctrine and pledges, exactly as for the strategic strike: a limited
+		# use is still a use (§3.1).
+		custom_tooltip = {
+			text = nd_tt_doctrine_permits_strike
+			nd_doctrine_permits_strike = { ENEMY = scope:target_country }
+		}
+		custom_tooltip = {
+			text = nd_tt_pledge_permits_strike
+			nd_pledge_permits_strike = { ENEMY = scope:target_country }
+		}
 		OR = {
 			# Normal: can use if no limited war law
 			NOT = {
@@ -247,48 +249,42 @@ tactical_nuke_diplo_action = {
 		save_scope_as = attacking_country
 		if = {
 			limit = { exists = scope:second_state }
-			change_variable = {
-				name = nuclear_weapon_stockpile
-				subtract = 1
-			}
 			scope:second_state = {
 				save_scope_as = target_state
 			}
-			random_list = {
-				0 = {
-					modifier = nuclear_strike_success_chance
-					change_infamy = 10
-					scope:second_state = {
-						nuclear_tactical_strike = yes
-					}
-				}
-				0 = {
-					modifier = nuclear_strike_fail_chance
-					scope:country = {
-						trigger_event = {id = nuclear_weapon_events.7 popup = yes }
-						change_relations = {
-							country = ROOT
-							value = -5
-						}
-					}
-					trigger_event = {id = nuclear_weapon_events.8 popup = yes }
-				}
-			}
+			# The strike itself, shared with the incident chains
+			# (nuclear_deterrence_effects.txt). It used to name the victim as
+			# scope:country, which vanilla uses for the actor, not the target.
+			nd_tactical_strike_resolve = yes
+			nd_record_nuclear_use = { VICTIM = scope:target_country }
 		}
 	}
 
 	is_hostile = yes
 
 	ai = {
+		# As for the strategic strike: nd_ai_nuclear_use_justified decides,
+		# this sets how often the AI asks. Tactical weapons are considered more
+		# readily.
 		evaluation_chance = {
 			value = 0.25 # tactical nukes considered more readily than strategic
-			# Existential threats increase evaluation
 			if = {
 				limit = {
-					exists = scope:country
-					enemy_has_existential_war_goal = yes
+					exists = scope:target_country
+					nd_enemy_threatens_existence = { ENEMY = scope:target_country }
 				}
-				multiply = 3 # 75% evaluation when facing subjugation/annexation
+				multiply = 3
+			}
+			if = {
+				limit = {
+					exists = scope:target_country
+					nd_was_struck_by = { ENEMY = scope:target_country }
+				}
+				multiply = 3
+			}
+			if = {
+				limit = { nd_doctrine_warfighting = yes }
+				multiply = 2
 			}
 			if = {
 				limit = {
@@ -302,19 +298,7 @@ tactical_nuke_diplo_action = {
 				}
 				multiply = 0.25 # reluctant but not impossible
 			}
-			if = {
-				limit = {
-					any_scope_state = {
-						OR = {
-							has_modifier = nuclear_strike_aftermath
-							has_modifier = tactical_nuke_aftermath
-						}
-					}
-					has_variable = nuked_by_country
-					var:nuked_by_country = scope:country
-				}
-				multiply = 3 # retaliation after being nuked by this enemy
-			}
+			max = 1
 		}
 
 		will_select_as_second_state = {
@@ -328,46 +312,8 @@ tactical_nuke_diplo_action = {
 		}
 
 		will_propose = {
-			# Must be at war with the target
-			has_war_with = scope:country
-
-			# Must face a sufficiently severe threat - no tactical nukes over minor disputes
-			OR = {
-				# Existential threat: enemy wants to subjugate or annex us
-				enemy_has_existential_war_goal = yes
-				# Losing core incorporated territory AND the war is going badly
-				AND = {
-					any_scope_state = {
-						is_target_of_wargoal = scope:country
-						is_incorporated = yes
-					}
-					# Battlefield read (1.14 triggers), not war support: low support can
-					# mean an unpopular war rather than a lost one. See nuke_triggers.txt.
-					is_losing_war_against = { ENEMY = scope:country }
-				}
-				# Retaliation: this specific enemy nuked us
-				was_nuked_by_enemy = yes
-			}
-
-			# Cautious or honorable leaders require extreme circumstances
-			OR = {
-				NOT = { ruler_is_cautious = yes }
-				# Retaliation against the country that nuked us overrides personality
-				was_nuked_by_enemy = yes
-				# Facing annexation overrides personality
-				scope:country = {
-					war_side_has_war_goal_of_type_against = { type = annex_country target = ROOT }
-				}
-			}
-
-			# If target is nuclear-armed, require more desperate circumstances
-			OR = {
-				NOT = { scope:country = { has_modifier = nuclear_power } }
-				# Against nuclear powers: only if they nuked us, existential threat, or aggressive leader
-				was_nuked_by_enemy = yes
-				enemy_has_subjugation_war_goal = yes
-				ruler_is_aggressive = yes
-			}
+			has_war_with = scope:target_country
+			nd_ai_nuclear_use_justified = { ENEMY = scope:target_country }
 		}
 
 		propose_score = {
@@ -430,7 +376,7 @@ tactical_nuke_diplo_action = {
 			if = {
 				limit = {
 					any_scope_war = {
-						is_war_participant = scope:country
+						is_war_participant = scope:target_country
 						is_at_war_with_rival = ROOT
 					}
 				}

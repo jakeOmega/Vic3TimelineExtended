@@ -1,0 +1,335 @@
+﻿# ============================================================================
+# NUCLEAR DETERRENCE TEST CONSOLE — `event te_debug_deterrence.1` … `.5`
+# ============================================================================
+# Vic3's console has no `effect` command; `event <id>` is the way to run script
+# by hand. Nothing in the mod fires these. They drive the posture panel, the
+# crisis panel and the incident chains through their states without playing a
+# century. docs/systems/nuclear_crisis_design.md §0.9 is the checklist they
+# serve.
+#
+#   .1  arm and initialise; reset tenure so every posture button is live
+#   .2  force an incident of a chosen family (and toggle forced odds)
+#   .3  open a crisis with a neighbour, private or public
+#   .4  push the live crisis: to its deadline, to acute, or to an outcome
+#   .5  re-observe every public arsenal estimate; give a neighbour a guarantee
+#
+# The .2 options call the incident entry points directly, and .5 calls the
+# yearly estimate helper — both outside their pulses, deliberately
+# (nuclear_deterrence_effects.txt header, call-site contract).
+# ============================================================================
+namespace = te_debug_deterrence
+
+te_debug_deterrence.1 = { # REVIEWED 2026-09-25: console-only test event (`event te_debug_deterrence.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/nuclear_test_mushroom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = te_debug_deterrence.1.t
+	desc = te_debug_deterrence.1.desc
+	flavor = te_debug_deterrence.1.f
+
+	# Ten warheads (or keep more), the nuclear_power modifier, the posture
+	# initialised; the entry activates within days.
+	option = {
+		name = te_debug_deterrence.1.a
+		default_option = yes
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = nuclear_weapon_stockpile }
+					var:nuclear_weapon_stockpile < 10
+				}
+			}
+			set_variable = { name = nuclear_weapon_stockpile value = 10 }
+		}
+		if = {
+			limit = { NOT = { has_modifier = nuclear_power } }
+			add_modifier = { name = nuclear_power }
+		}
+		nd_init_posture = yes
+		nd_apply_posture_modifiers = yes
+	}
+
+	# Tenure satisfied: every doctrine and authority button becomes live.
+	option = {
+		name = te_debug_deterrence.1.b
+		set_variable = { name = nd_doctrine_months value = 24 }
+		set_variable = { name = nd_authority_months value = 12 }
+		if = {
+			limit = { has_variable = nd_readiness_lock_months }
+			remove_variable = nd_readiness_lock_months
+		}
+	}
+
+	# All the technology behind delegation, launch on warning, survivability and
+	# the satellite warning variants.
+	option = {
+		name = te_debug_deterrence.1.c
+		add_technology_researched = radar
+		add_technology_researched = ICBMs
+		add_technology_researched = recon_satellites
+		add_technology_researched = advanced_submarine_technology
+		add_technology_researched = tactical_nuclear_weapons
+	}
+
+	# Readiness straight to the target, and strain to 70: the Cost of
+	# Permanent Alert becomes eligible at once.
+	option = {
+		name = te_debug_deterrence.1.e
+		if = {
+			limit = { nd_is_initialized = yes }
+			set_variable = { name = nd_readiness value = 3 }
+			set_variable = { name = nd_readiness_target value = 3 }
+			set_variable = { name = nd_readiness_months value = 6 }
+			set_variable = { name = nd_strain value = 70 }
+			nd_apply_posture_modifiers = yes
+		}
+	}
+}
+
+te_debug_deterrence.2 = { # REVIEWED 2026-09-25: console-only test event (`event te_debug_deterrence.2`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/nuclear_false_alarm_panic.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = te_debug_deterrence.2.t
+	desc = te_debug_deterrence.2.desc
+	flavor = te_debug_deterrence.2.f
+
+	# The Unconfirmed Warning. Needs another armed country that is a rival,
+	# enemy or crisis opponent; otherwise it falls back to a routine mishap.
+	option = {
+		name = te_debug_deterrence.2.a
+		default_option = yes
+		nd_start_unconfirmed_warning = yes
+	}
+
+	option = {
+		name = te_debug_deterrence.2.b
+		trigger_event = { id = nuclear_incident.20 popup = yes }
+	}
+
+	option = {
+		name = te_debug_deterrence.2.c
+		trigger_event = { id = nuclear_incident.30 popup = yes }
+	}
+
+	option = {
+		name = te_debug_deterrence.2.e
+		trigger_event = { id = nuclear_incident.40 popup = yes }
+	}
+
+	option = {
+		name = te_debug_deterrence.2.g
+		trigger_event = { id = nuclear_incident.10 popup = yes }
+	}
+
+	option = {
+		name = te_debug_deterrence.2.h
+		trigger_event = { id = nuclear_incident.50 popup = yes }
+	}
+
+	# Forced odds: the next monthly roll always fires (nd_incident_permille
+	# reads 1000 and the roll skips its first stage). Pick again to clear.
+	option = {
+		name = te_debug_deterrence.2.i
+		if = {
+			limit = { has_variable = nd_debug_incident_odds }
+			remove_variable = nd_debug_incident_odds
+		}
+		else = {
+			set_variable = { name = nd_debug_incident_odds value = 1 }
+		}
+	}
+}
+
+te_debug_deterrence.3 = { # REVIEWED 2026-09-25: console-only test event (`event te_debug_deterrence.3`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/diplomatic_crisis_ultimatum.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = te_debug_deterrence.3.t
+	desc = te_debug_deterrence.3.desc
+	flavor = te_debug_deterrence.3.f
+
+	immediate = {
+		save_scope_as = te_dbg_self
+		random_country = {
+			limit = {
+				NOT = { this = scope:te_dbg_self }
+				is_adjacent_to_country = scope:te_dbg_self
+				NOT = { is_country_type = decentralized }
+				nd_in_crisis = no
+			}
+			save_scope_as = te_dbg_neighbour
+		}
+	}
+
+	# A private warning. With no real dispute the crisis is classed as an alert
+	# standoff (dispute 5) — enough to exercise every panel line and event.
+	option = {
+		name = te_debug_deterrence.3.a
+		default_option = yes
+		trigger = { exists = scope:te_dbg_neighbour }
+		nd_crisis_open = { TARGET = scope:te_dbg_neighbour PUBLIC = no }
+	}
+
+	option = {
+		name = te_debug_deterrence.3.b
+		trigger = { exists = scope:te_dbg_neighbour }
+		nd_crisis_open = { TARGET = scope:te_dbg_neighbour PUBLIC = yes }
+	}
+
+	# The reverse: the neighbour warns us, so we see the target's side. Arms
+	# the neighbour first.
+	option = {
+		name = te_debug_deterrence.3.c
+		trigger = { exists = scope:te_dbg_neighbour }
+		scope:te_dbg_neighbour = {
+			if = {
+				limit = {
+					OR = {
+						NOT = { has_variable = nuclear_weapon_stockpile }
+						var:nuclear_weapon_stockpile < 5
+					}
+				}
+				set_variable = { name = nuclear_weapon_stockpile value = 5 }
+			}
+			if = {
+				limit = { NOT = { has_modifier = nuclear_power } }
+				add_modifier = { name = nuclear_power }
+			}
+			nd_crisis_open = { TARGET = scope:te_dbg_self PUBLIC = yes }
+		}
+	}
+}
+
+te_debug_deterrence.4 = { # REVIEWED 2026-09-25: console-only test event (`event te_debug_deterrence.4`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = te_debug_deterrence.4.t
+	desc = te_debug_deterrence.4.desc
+	flavor = te_debug_deterrence.4.f
+
+	trigger = {
+		nd_in_crisis = yes
+	}
+
+	immediate = {
+		nd_crisis_save_parties = yes
+	}
+
+	# The deadline fires on the next weekly tick.
+	option = {
+		name = te_debug_deterrence.4.a
+		default_option = yes
+		scope:nd_issuer ?= {
+			set_variable = { name = nd_crisis_weeks value = var:nd_crisis_deadline }
+			set_variable = { name = nd_crisis_deadline_fired value = 0 }
+		}
+	}
+
+	option = {
+		name = te_debug_deterrence.4.b
+		scope:nd_issuer ?= {
+			set_variable = { name = nd_crisis_stage value = 3 }
+		}
+	}
+
+	# The target concedes, through the real act.
+	option = {
+		name = te_debug_deterrence.4.c
+		scope:nd_target ?= { nd_crisis_act_yield = yes }
+	}
+
+	# Both stand down, through the real act.
+	option = {
+		name = te_debug_deterrence.4.e
+		scope:nd_issuer ?= { nd_crisis_act_accept_standdown = yes }
+	}
+
+	# The Exercise They Mistook, for whichever side we are.
+	option = {
+		name = te_debug_deterrence.4.g
+		trigger_event = { id = nuclear_incident.10 popup = yes }
+	}
+}
+
+te_debug_deterrence.5 = { # REVIEWED 2026-09-25: console-only test event (`event te_debug_deterrence.5`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = te_debug_deterrence.5.t
+	desc = te_debug_deterrence.5.desc
+	flavor = te_debug_deterrence.5.f
+
+	# Every armed country's public estimate is re-observed now; the leaderboard
+	# recounts with the new figures.
+	option = {
+		name = te_debug_deterrence.5.a
+		default_option = yes
+		every_country = {
+			limit = { nd_is_armed = yes }
+			nd_observe_public_estimate = yes
+		}
+		update_nuclear_powers_ranking = yes
+	}
+
+	# A nuclear guarantee from us to a neighbour, created in force.
+	option = {
+		name = te_debug_deterrence.5.b
+		save_scope_as = te_dbg_self
+		random_country = {
+			limit = {
+				NOT = { this = scope:te_dbg_self }
+				is_adjacent_to_country = scope:te_dbg_self
+				NOT = { is_country_type = decentralized }
+			}
+			save_scope_as = te_dbg_neighbour
+		}
+		if = {
+			limit = { exists = scope:te_dbg_neighbour }
+			create_treaty = {
+				first_country = scope:te_dbg_self
+				second_country = scope:te_dbg_neighbour
+				is_draft = no
+				binding_period = { years = 5 }
+				articles_to_create = {
+					{
+						article = nuclear_guarantee
+						source_country = scope:te_dbg_self
+						target_country = scope:te_dbg_neighbour
+					}
+				}
+			}
+		}
+	}
+}

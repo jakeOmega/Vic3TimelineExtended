@@ -102,10 +102,13 @@ INJECT:war_support_from_journal_entries = {
 	# ---- Nuclear asymmetry: an enemy has the bomb and we do not ----
 	# Actual strikes already drain war support through devastation
 	# (WAR_SUPPORT_CHANGE_DEVASTATION_FACTOR) and the one-off hit in
-	# nuclear_industrial_strike; this is only the shadow of the arsenal.
+	# nuclear_industrial_strike; this is only the shadow of the arsenal. A
+	# nuclear_guarantee from an armed country lifts it: that is what extended
+	# deterrence is for (docs/systems/nuclear_crisis_design.md §0.5).
 	if = {
 		limit = {
 			NOT = { has_modifier = nuclear_power }
+			NOT = { nd_has_armed_guarantor_against = { AGAINST = ROOT } }
 			scope:war = {
 				any_war_participant = {
 					has_war_with = ROOT

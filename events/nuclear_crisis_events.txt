@@ -1,0 +1,1069 @@
+﻿namespace = nuclear_crisis
+
+# ============================================================================
+# NUCLEAR CRISIS EVENTS
+# ============================================================================
+# Design: docs/systems/nuclear_crisis_design.md (§0.3 is what shipped).
+#
+# Every decision event here is sent by nd_crisis_send_event with the crisis's
+# saved scopes (scope:nd_issuer, scope:nd_target) and a token; its trigger is
+# nd_crisis_event_matches, and every option runs its act through
+# nd_crisis_option, so a popup left open while the crisis ended or changed
+# explains itself instead of acting on another crisis.
+#
+# AI weights read the target's nd_yield_pressure (0–100), the same number the
+# player's crisis panel shows (§9: one explanation for both).
+#
+#   .1   the target receives a warning or an ultimatum
+#   .2   the issuer hears the answer: rejected, or met with a counter-threat
+#   .3   the other side proposes a mutual stand-down
+#   .4   the issuer's deadline arrives
+#   .5   the target is pressed again
+#   .6   outcome notice, to both sides
+#   .7   a public ultimatum was defied by war
+#   .20  a guarantor is asked to honour its guarantee
+#   .21  the beneficiary hears its guarantor's answer
+#   .99  hidden: an AI party reviews its posture (nd_crisis_ai_review)
+#   .100 a human's first posture notice (upkeep has begun)
+# ============================================================================
+
+# ---- .1 A warning or an ultimatum arrives -----------------------------------
+# To the target. Its concession, if it yields, depends on the dispute:
+# nd_crisis_demand_text (custom loc on the issuer) names it.
+nuclear_crisis.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/diplomatic_crisis_ultimatum.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:nd_issuer = { nd_crisis_is_public = yes } }
+				desc = nuclear_crisis.1.t_public
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_crisis.1.t
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { scope:nd_issuer = { nd_crisis_is_public = yes } }
+				desc = nuclear_crisis.1.d_public
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_crisis.1.d
+			}
+		}
+	}
+	flavor = nuclear_crisis.1.f
+
+	duration = 3
+
+	trigger = {
+		nd_crisis_event_matches = yes
+	}
+
+	# Concede.
+	option = {
+		name = nuclear_crisis.1.a
+		nd_crisis_option = { ACT = yield }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					has_variable = nd_yield_pressure
+					var:nd_yield_pressure >= 40
+				}
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_yield_pressure
+					var:nd_yield_pressure >= 60
+				}
+				add = 4
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_yield_pressure
+					var:nd_yield_pressure >= 80
+				}
+				add = 8
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+		}
+	}
+
+	# Refuse.
+	option = {
+		name = nuclear_crisis.1.b
+		default_option = yes
+		nd_crisis_option = { ACT = reject }
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = {
+					has_variable = nd_yield_pressure
+					var:nd_yield_pressure < 40
+				}
+				add = 4
+			}
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { scope:nd_issuer = { nd_crisis_is_public = yes } }
+				add = 1
+			}
+		}
+	}
+
+	# Answer threat with threat. Armed targets only.
+	option = {
+		name = nuclear_crisis.1.c
+		trigger = { nd_is_armed = yes }
+		nd_crisis_option = { ACT = counter_threat }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					has_variable = nd_survivability
+					var:nd_survivability >= 50
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				factor = 0.25
+			}
+		}
+	}
+
+	# Open a line and propose that both sides step back.
+	option = {
+		name = nuclear_crisis.1.e
+		nd_crisis_option = { ACT = propose_talks }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_yield_pressure
+					var:nd_yield_pressure >= 40
+					var:nd_yield_pressure < 80
+				}
+				add = 2
+			}
+			modifier = {
+				trigger = { nd_is_armed = yes }
+				add = 1
+			}
+		}
+	}
+}
+
+# ---- .2 The answer comes back -----------------------------------------------
+# To the issuer, after the target rejected the warning or answered with a
+# counter-threat.
+nuclear_crisis.2 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_crisis.2.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_crisis_counter
+					var:nd_crisis_counter = 1
+				}
+				desc = nuclear_crisis.2.d_counter
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_crisis.2.d
+			}
+		}
+	}
+	flavor = nuclear_crisis.2.f
+
+	duration = 3
+
+	trigger = {
+		nd_crisis_event_matches = yes
+		nd_is_crisis_owner = yes
+	}
+
+	# Go public.
+	option = {
+		name = nuclear_crisis.2.a
+		trigger = { nd_crisis_is_public = no }
+		nd_crisis_option = { ACT = go_public }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_doctrine_at_least_compellence = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { nd_regime_is_militarist = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_credibility
+					var:nd_credibility >= 60
+				}
+				add = 2
+			}
+		}
+	}
+
+	# Hold firm: raise the alert, let them see it.
+	option = {
+		name = nuclear_crisis.2.b
+		nd_crisis_option = { ACT = hold }
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { nd_doctrine_at_least_compellence = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { scope:nd_target = { nd_believed_armed = no } }
+				add = 2
+			}
+		}
+	}
+
+	# Talk.
+	option = {
+		name = nuclear_crisis.2.c
+		default_option = yes
+		nd_crisis_option = { ACT = propose_talks }
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { scope:nd_target = { nd_believed_armed = yes } }
+				add = 3
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_crisis_danger
+					var:nd_crisis_danger >= 50
+				}
+				add = 3
+			}
+		}
+	}
+
+	# Let it go.
+	option = {
+		name = nuclear_crisis.2.e
+		nd_crisis_option = { ACT = back_down }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					scope:nd_target = {
+						OR = {
+							nd_believed_armed = yes
+							nd_is_guaranteed = yes
+						}
+					}
+				}
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_crisis_danger
+					var:nd_crisis_danger >= 70
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = { nd_crisis_is_public = yes }
+				factor = 0.5
+			}
+		}
+	}
+}
+
+# ---- .3 A proposal to step back together ------------------------------------
+# To whichever side did not propose. Accepting ends the crisis: both sides
+# stand down to routine for two years and pledge not to use nuclear weapons
+# against each other. The underlying dispute is untouched.
+nuclear_crisis.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/detente_summit_meeting.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_crisis.3.t
+	desc = nuclear_crisis.3.d
+	flavor = nuclear_crisis.3.f
+
+	duration = 3
+
+	trigger = {
+		nd_crisis_event_matches = yes
+	}
+
+	option = {
+		name = nuclear_crisis.3.a
+		default_option = yes
+		nd_crisis_option = { ACT = accept_standdown }
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { nd_crisis_stage_at_least = { STAGE = 3 } }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					nd_is_crisis_owner = yes
+					nd_crisis_issuer_is_defensive = yes
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					nd_is_crisis_owner = yes
+					nd_doctrine_at_least_compellence = yes
+				}
+				factor = 0.5
+			}
+		}
+	}
+
+	option = {
+		name = nuclear_crisis.3.b
+		nd_crisis_option = { ACT = refuse_talks }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					nd_is_crisis_owner = yes
+					nd_crisis_is_public = yes
+					nd_crisis_issuer_is_defensive = no
+				}
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					nd_is_crisis_target = yes
+					has_variable = nd_yield_pressure
+					var:nd_yield_pressure < 30
+				}
+				add = 2
+			}
+		}
+	}
+}
+
+# ---- .4 The deadline ------------------------------------------------------------
+# To the issuer, when its own deadline passes with no answer that settles it.
+nuclear_crisis.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_crisis.4.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { nd_crisis_is_public = yes }
+				desc = nuclear_crisis.4.d_public
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_crisis.4.d
+			}
+		}
+	}
+	flavor = nuclear_crisis.4.f
+
+	duration = 3
+
+	trigger = {
+		nd_crisis_event_matches = yes
+		nd_is_crisis_owner = yes
+	}
+
+	# More time.
+	option = {
+		name = nuclear_crisis.4.a
+		nd_crisis_option = { ACT = extend }
+		ai_chance = {
+			base = 2
+		}
+	}
+
+	# Hold firm.
+	option = {
+		name = nuclear_crisis.4.b
+		nd_crisis_option = { ACT = hold }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { nd_doctrine_at_least_compellence = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { nd_crisis_is_public = yes }
+				add = 2
+			}
+		}
+	}
+
+	# Talk.
+	option = {
+		name = nuclear_crisis.4.c
+		default_option = yes
+		nd_crisis_option = { ACT = propose_talks }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { scope:nd_target = { nd_believed_armed = yes } }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_crisis_danger
+					var:nd_crisis_danger >= 60
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+		}
+	}
+
+	# Let it go.
+	option = {
+		name = nuclear_crisis.4.e
+		nd_crisis_option = { ACT = back_down }
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					has_variable = nd_crisis_danger
+					var:nd_crisis_danger >= 75
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+		}
+	}
+
+	# Carry out the threat. At war with them, and doctrine and pledges allow it.
+	option = {
+		name = nuclear_crisis.4.g
+		trigger = {
+			nd_is_armed = yes
+			has_war_with = scope:nd_target
+			nd_doctrine_permits_strike = { ENEMY = scope:nd_target }
+			nd_pledge_permits_strike = { ENEMY = scope:nd_target }
+		}
+		highlighted_option = yes
+		nd_crisis_option = { ACT = execute_threat }
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { nd_doctrine_warfighting = yes }
+				add = 6
+			}
+			modifier = {
+				trigger = {
+					nd_doctrine_compellence = yes
+					nd_crisis_is_public = yes
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = { NOT = { nd_faces_retaliation_from = { ENEMY = scope:nd_target } } }
+				add = 3
+			}
+			modifier = {
+				trigger = { NOT = { nd_ai_nuclear_use_justified = { ENEMY = scope:nd_target } } }
+				factor = 0
+			}
+		}
+	}
+}
+
+# ---- .5 Pressed again ---------------------------------------------------------
+# To the target, every few weeks while the crisis is past the warning stage.
+nuclear_crisis.5 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_crisis.5.t
+	desc = nuclear_crisis.5.d
+	flavor = nuclear_crisis.5.f
+
+	duration = 3
+
+	trigger = {
+		nd_crisis_event_matches = yes
+		nd_is_crisis_target = yes
+	}
+
+	option = {
+		name = nuclear_crisis.5.a
+		nd_crisis_option = { ACT = yield }
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					has_variable = nd_yield_pressure
+					var:nd_yield_pressure >= 50
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_yield_pressure
+					var:nd_yield_pressure >= 70
+				}
+				add = 5
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_yield_pressure
+					var:nd_yield_pressure >= 85
+				}
+				add = 8
+			}
+		}
+	}
+
+	option = {
+		name = nuclear_crisis.5.b
+		default_option = yes
+		nd_crisis_option = { ACT = stand_firm }
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_yield_pressure
+					var:nd_yield_pressure < 40
+				}
+				add = 4
+			}
+		}
+	}
+
+	option = {
+		name = nuclear_crisis.5.c
+		nd_crisis_option = { ACT = propose_talks }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { nd_crisis_stage_at_least = { STAGE = 3 } }
+				add = 2
+			}
+		}
+	}
+}
+
+# ---- .6 How it ended ----------------------------------------------------------
+# To both sides after nd_crisis_close. Informational: nothing is left to
+# decide, and it reads only what the close wrote (nd_crisis_last_*).
+nuclear_crisis.6 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 1 } }
+				desc = nuclear_crisis.6.t_yielded
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 4 } }
+				desc = nuclear_crisis.6.t_yielded
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 2 } }
+				desc = nuclear_crisis.6.t_backed_down
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 5 } }
+				desc = nuclear_crisis.6.t_backed_down
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 3 } }
+				desc = nuclear_crisis.6.t_standdown
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 7 } }
+				desc = nuclear_crisis.6.t_use
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_crisis.6.t
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					nd_crisis_last_outcome_is = { O = 1 }
+					nd_crisis_last_role_is = { R = 1 }
+				}
+				desc = nuclear_crisis.6.d_yielded_issuer
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 1 } }
+				desc = nuclear_crisis.6.d_yielded_target
+			}
+			triggered_desc = {
+				trigger = {
+					nd_crisis_last_outcome_is = { O = 4 }
+					nd_crisis_last_role_is = { R = 1 }
+				}
+				desc = nuclear_crisis.6.d_native_win_issuer
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 4 } }
+				desc = nuclear_crisis.6.d_native_win_target
+			}
+			triggered_desc = {
+				trigger = {
+					nd_crisis_last_outcome_is = { O = 2 }
+					nd_crisis_last_role_is = { R = 1 }
+				}
+				desc = nuclear_crisis.6.d_backed_down_issuer
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 2 } }
+				desc = nuclear_crisis.6.d_backed_down_target
+			}
+			triggered_desc = {
+				trigger = {
+					nd_crisis_last_outcome_is = { O = 5 }
+					nd_crisis_last_role_is = { R = 1 }
+				}
+				desc = nuclear_crisis.6.d_native_loss_issuer
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 5 } }
+				desc = nuclear_crisis.6.d_native_loss_target
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 3 } }
+				desc = nuclear_crisis.6.d_standdown
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 6 } }
+				desc = nuclear_crisis.6.d_war_ended
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 7 } }
+				desc = nuclear_crisis.6.d_use
+			}
+			triggered_desc = {
+				trigger = { nd_crisis_last_outcome_is = { O = 8 } }
+				desc = nuclear_crisis.6.d_expired
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_crisis.6.d_neutral
+			}
+		}
+	}
+	flavor = nuclear_crisis.6.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_crisis_last_outcome
+	}
+
+	option = {
+		name = nuclear_crisis.6.a
+		default_option = yes
+	}
+}
+
+# ---- .7 They chose war --------------------------------------------------------
+# To the issuer of a public ultimatum, when the play it was about became a war.
+nuclear_crisis.7 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = nuclear_crisis.7.t
+	desc = nuclear_crisis.7.d
+	flavor = nuclear_crisis.7.f
+
+	duration = 3
+
+	trigger = {
+		nd_crisis_event_matches = yes
+		nd_is_crisis_owner = yes
+	}
+
+	# Carry out the threat.
+	option = {
+		name = nuclear_crisis.7.a
+		trigger = {
+			nd_is_armed = yes
+			has_war_with = scope:nd_target
+			nd_doctrine_permits_strike = { ENEMY = scope:nd_target }
+			nd_pledge_permits_strike = { ENEMY = scope:nd_target }
+		}
+		highlighted_option = yes
+		nd_crisis_option = { ACT = execute_threat }
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { nd_doctrine_warfighting = yes }
+				add = 5
+			}
+			modifier = {
+				trigger = { nd_doctrine_compellence = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { NOT = { nd_faces_retaliation_from = { ENEMY = scope:nd_target } } }
+				add = 3
+			}
+			modifier = {
+				trigger = { NOT = { nd_ai_nuclear_use_justified = { ENEMY = scope:nd_target } } }
+				factor = 0
+			}
+		}
+	}
+
+	# Fight it with conventional forces.
+	option = {
+		name = nuclear_crisis.7.b
+		default_option = yes
+		nd_crisis_option = { ACT = fight_conventional }
+		ai_chance = {
+			base = 4
+		}
+	}
+
+	# Talk, even now.
+	option = {
+		name = nuclear_crisis.7.c
+		nd_crisis_option = { ACT = propose_talks }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { scope:nd_target = { nd_believed_armed = yes } }
+				add = 3
+			}
+		}
+	}
+}
+
+# ---- .20 A guarantee is tested ------------------------------------------------
+# To an armed guarantor, when its beneficiary is put under a nuclear warning
+# (nd_guarantee_context 1) or struck (2). Expects scope:nd_guarantee_attacker
+# and scope:nd_guarantee_beneficiary. Not a crisis-token event: the guarantor
+# is not a party to the crisis.
+nuclear_crisis.20 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_crisis.20.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_context
+					var:nd_guarantee_context = 2
+				}
+				desc = nuclear_crisis.20.d_struck
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_crisis.20.d
+			}
+		}
+	}
+	flavor = nuclear_crisis.20.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nd_guarantee_attacker
+		exists = scope:nd_guarantee_beneficiary
+		scope:nd_guarantee_beneficiary = { nd_is_guaranteed_by = { GUARANTOR = ROOT } }
+	}
+
+	# Stand with them.
+	option = {
+		name = nuclear_crisis.20.a
+		default_option = yes
+		nd_guarantee_act_honour = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { scope:nd_guarantee_beneficiary.relations:root >= relations_threshold:friendly }
+				add = 3
+			}
+		}
+	}
+
+	# Answer the strike in kind: only after a strike, only at war with the
+	# attacker, and only where doctrine and pledges allow it.
+	option = {
+		name = nuclear_crisis.20.b
+		trigger = {
+			var:nd_guarantee_context = 2
+			nd_is_armed = yes
+			has_war_with = scope:nd_guarantee_attacker
+			nd_doctrine_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
+			nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
+		}
+		highlighted_option = yes
+		nd_guarantee_act_retaliate = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { nd_ai_nuclear_use_justified = { ENEMY = scope:nd_guarantee_attacker } }
+				add = 4
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				factor = 0.25
+			}
+		}
+	}
+
+	# Walk away.
+	option = {
+		name = nuclear_crisis.20.c
+		nd_guarantee_act_abandon = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { scope:nd_guarantee_beneficiary.relations:root < relations_threshold:cordial }
+				add = 3
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					scope:nd_guarantee_attacker = { nd_believed_armed = yes }
+					has_variable = nd_survivability
+					var:nd_survivability < 30
+				}
+				add = 3
+			}
+		}
+	}
+}
+
+# ---- .21 The guarantor's answer -----------------------------------------------
+# To the beneficiary. nd_guarantee_answer: 1 stood by us, 0 walked away.
+nuclear_crisis.21 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 0
+				}
+				desc = nuclear_crisis.21.t_abandoned
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_crisis.21.t
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 0
+				}
+				desc = nuclear_crisis.21.d_abandoned
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_crisis.21.d
+			}
+		}
+	}
+	flavor = nuclear_crisis.21.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_guarantee_answer
+	}
+
+	option = {
+		name = nuclear_crisis.21.a
+		default_option = yes
+	}
+}
+
+# ---- .99 Hidden: an AI party reviews its posture --------------------------------
+# Fired by nd_crisis_ai_review so that the posture effects run with this
+# country as ROOT (nuclear_deterrence_effects.txt, "ROOT").
+nuclear_crisis.99 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		is_ai = yes
+		nd_is_armed = yes
+	}
+
+	immediate = {
+		nd_ai_review_posture = yes
+	}
+}
+
+# ---- .100 A standing deterrent --------------------------------------------------
+# To a human, the first time the posture is initialised: the deterrent now
+# costs money every week, whatever the programme's funding (§11).
+nuclear_crisis.100 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_crisis.100.t
+	desc = nuclear_crisis.100.d
+	flavor = nuclear_crisis.100.f
+
+	duration = 3
+
+	trigger = {
+		nd_is_armed = yes
+	}
+
+	option = {
+		name = nuclear_crisis.100.a
+		default_option = yes
+	}
+}

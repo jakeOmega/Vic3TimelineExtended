@@ -1,0 +1,211 @@
+﻿# ============================================================================
+# NUCLEAR DETERRENCE AND CRISIS DIPLOMACY — static modifiers
+# ============================================================================
+# Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
+#
+# Three families are *managed*: exactly one member is on at a time and a
+# tracking variable records which, because add_modifier / remove_modifier are
+# invisible to has_modifier inside the block that ran them
+# (scripting_best_practices.md § Worked case — swapping one member of a banded
+# modifier family). Their single writers:
+#   nd_doctrine_mod_*        nd_apply_posture_modifiers  (je_nuclear_deterrence scope)
+#   nd_readiness_mod_*       nd_apply_posture_modifiers  (je_nuclear_deterrence scope)
+#   nd_upkeep_cost           nd_apply_posture_modifiers  (je_nuclear_deterrence scope,
+#                            multiplier = root.var:nd_upkeep_weekly_cached)
+#   nd_posture_approval_*    nd_refresh_domestic_stance  (interest-group scope)
+# Everything else below is a timed one-off applied by an event or a crisis
+# outcome.
+# ============================================================================
+
+# ---- Doctrine: when we say we will use nuclear weapons --------------------
+# The international half of each doctrine (§3.1). The domestic half is the
+# nd_posture_approval_* family; the launch permission is
+# nd_doctrine_permits_strike in nuclear_deterrence_triggers.txt.
+
+# 1 — No first use / assured retaliation: reassures, weak for coercion.
+nd_doctrine_mod_1 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_infamy_decay_mult = 0.1
+	country_improve_relations_speed_mult = 0.1
+	country_diplomatic_play_maneuvers_mult = -0.1
+}
+
+# 2 — Existential deterrence: the baseline. Carries no international effect;
+# it exists so the entry always names the doctrine in force.
+nd_doctrine_mod_2 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_leverage_resistance_mult = 0.05
+}
+
+# 3 — Flexible first use: deters a superior conventional attacker.
+nd_doctrine_mod_3 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_leverage_resistance_mult = 0.1
+	country_diplomatic_play_maneuvers_mult = 0.05
+	country_infamy_decay_mult = -0.05
+}
+
+# 4 — Nuclear compellence: stronger threats, worse reputation.
+nd_doctrine_mod_4 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_diplomatic_play_maneuvers_mult = 0.15
+	country_leverage_generation_mult = 0.1
+	country_infamy_generation_mult = 0.1
+	country_improve_relations_speed_mult = -0.1
+}
+
+# 5 — Nuclear warfighting: nuclear weapons as an ordinary instrument.
+nd_doctrine_mod_5 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_diplomatic_play_maneuvers_mult = 0.2
+	country_leverage_generation_mult = 0.1
+	country_infamy_generation_mult = 0.2
+	country_infamy_decay_mult = -0.1
+	country_improve_relations_speed_mult = -0.2
+}
+
+# ---- Readiness: how quickly forces can respond ----------------------------
+# Routine carries no modifier. The benefit is response preparedness (the same
+# attack-success knob the strike resolution reads) — never a general combat
+# bonus (§3.2). The cost is nd_upkeep_cost, strain and incident exposure.
+nd_readiness_mod_2 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nuclear_weapon_attack_success_add = 0.05
+}
+
+nd_readiness_mod_3 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_nuclear_weapon_attack_success_add = 0.1
+	country_diplomatic_play_maneuvers_add = 5
+}
+
+# ---- Upkeep ---------------------------------------------------------------
+# Applied once with multiplier = root.var:nd_upkeep_weekly_cached; the monthly
+# pulse and every panel change rewrite the cached figure, and the engine
+# re-evaluates the multiplier continuously (un_buttons.txt precedent).
+nd_upkeep_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+# ---- Domestic stance: one per interest group, refreshed monthly -----------
+nd_posture_approval_plus_2 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_approval_add = 2
+}
+
+nd_posture_approval_plus_1 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_approval_add = 1
+}
+
+nd_posture_approval_minus_1 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_approval_add = -1
+}
+
+nd_posture_approval_minus_2 = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_approval_add = -2
+}
+
+# ---- Crisis outcomes (timed, decaying) ------------------------------------
+# One-off IG reactions use the mod's generic ig_approval_positive_modifier /
+# ig_approval_negative_modifier; these are the country-level ones.
+
+# The issuer achieved its stated objective.
+nd_crisis_coercive_success = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.05
+	country_leverage_generation_mult = 0.1
+}
+
+# The issuer abandoned a threat it had made.
+nd_crisis_climbdown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.05
+	country_leverage_generation_mult = -0.1
+}
+
+# The target faced a nuclear threat down.
+nd_crisis_stood_firm = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	country_prestige_mult = 0.05
+	country_leverage_resistance_mult = 0.1
+}
+
+# The target conceded under nuclear threat.
+nd_crisis_yielded = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.05
+	country_leverage_resistance_mult = -0.1
+}
+
+# Both sides stepped back together.
+nd_crisis_mutual_restraint = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_infamy_decay_mult = 0.1
+	country_improve_relations_speed_mult = 0.1
+}
+
+# The concession a proliferating target makes: its programme freezes. Carries
+# the same bool the pause treaty article does, so every existing programme
+# gate (funding, sabotage eligibility, the panel's status) already honours it.
+nd_crisis_programme_freeze = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_nuclear_program_pause_bool = yes
+}
+
+# A public exercise or a scramble: a few months of real expense. Applied with
+# multiplier = sv_money_flow_event_* (GDP-scaled, weekly).
+nd_exercise_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+# ---- Pledges and reputation -----------------------------------------------
+
+# We repudiated no-first-use or a bilateral non-use pledge.
+nd_pledge_broken_mod = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_infamy_decay_mult = -0.2
+	country_improve_relations_speed_mult = -0.15
+}
+
+# A guarantor walked away from a covered commitment.
+nd_guarantee_abandoned = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
+	country_prestige_mult = -0.1
+	country_leverage_generation_mult = -0.15
+}
+
+# Somebody used a nuclear weapon: every functioning programme in the world
+# hurries (§8.5 — use stimulates proliferation and balancing).
+nd_proliferation_spur = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_nuclear_program_progress_mult = 0.25
+}
+
+# ---- Incidents --------------------------------------------------------------
+
+# An accident or a false alarm became public.
+nd_incident_scandal = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_legitimacy_base_add = -5
+	country_authority_mult = -0.05
+}
+
+# A concealed incident came out: worse than admitting it.
+nd_incident_coverup_exposed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_legitimacy_base_add = -10
+	country_authority_mult = -0.1
+	country_prestige_mult = -0.05
+}
+
+# Radioactive contamination around a weapons accident (state scope).
+nd_weapons_accident_contamination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	state_mortality_mult = 0.05
+	state_standard_of_living_add = -1
+}
