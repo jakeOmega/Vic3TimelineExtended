@@ -722,7 +722,7 @@ social_tensions_events.8 = {
 		}
 	}
 
-	option = { # Demand international tribunal
+	option = { # Demand that the perpetrators face justice
 		name = social_tensions_events.8.b
 		add_modifier = { name = enemy_war_crime_tribunal_modifier days = long_modifier_time is_decaying = yes }
 		ai_chance = {
@@ -1348,6 +1348,13 @@ social_tensions_events.16 = {
 		OR = {
 			has_technology_researched = globalization
 			has_technology_researched = world_wide_web
+		}
+		# With cultural hegemony on, "foreign culture swamping ours" needs a real
+		# foreign hegemon ahead of us: the benchmark modifier je_cultural_hegemony
+		# puts on every country that trails the leader (never on the hegemon).
+		OR = {
+			has_game_rule = cultural_hegemony_disabled
+			has_modifier = cultural_hegemony_foreign_benchmark
 		}
 		NOR = {
 			has_modifier = cultural_openness_modifier

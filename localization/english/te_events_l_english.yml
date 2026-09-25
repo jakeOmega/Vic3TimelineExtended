@@ -2814,6 +2814,7 @@
 # POST_SCARCITY_EVENTS
 #
  post_scarcity_events.1.a:0 "Expand UBI programs"
+ post_scarcity_events.1.a_emergency:0 "Introduce emergency income support"
  post_scarcity_events.1.b:0 "Retrain the workforce"
  post_scarcity_events.1.c:0 "Suppress the protests"
  post_scarcity_events.1.d:0 "Automation has made millions of workers redundant. Angry crowds fill the streets, demanding the government address the growing crisis of purposelessness. The old economic order is crumbling."
@@ -3109,7 +3110,7 @@
  social_tensions_events.7.f:0 "The lieutenant's hands were steady as he gave his testimony. He described the village, the orders, the screaming, in the same flat tone one might use to describe the weather.\n\n'And then?' the investigator asked.\n\n'And then it was quiet.'\n\n'Were you ordered to -'\n\n'I was ordered to secure the area. I was not ordered to do what was done. But I did not stop it either.' He paused. 'Nobody stopped it. That is the part I cannot explain.'"
  social_tensions_events.7.t:0 "Wartime Atrocity Uncovered"
  social_tensions_events.8.a:0 "Use it as propaganda"
- social_tensions_events.8.b:0 "Demand an international tribunal"
+ social_tensions_events.8.b:0 "Demand that the perpetrators face justice"
  social_tensions_events.8.d:0 "Horrifying reports emerge of enemy forces committing atrocities against our captured soldiers and civilians in occupied territories. The accounts speak of summary executions, torture, and deliberate targeting of non-combatants. Public fury is white-hot."
  social_tensions_events.8.f:0 "The returning prisoner sat in the debriefing room and stared at the table. When he finally spoke, it was barely above a whisper.\n\n'They lined us up in the yard every morning. To count us, they said. But some mornings the count was shorter than the night before, and nobody explained why.'\n\nThe officer recording the testimony stopped writing. 'Can you describe -'\n\n'No,' the prisoner said. 'I cannot. And you would not want me to.'"
  social_tensions_events.8.t:0 "Enemy Atrocities Against Our People"
