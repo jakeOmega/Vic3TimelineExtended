@@ -145,7 +145,7 @@ Tracks a civil rights movement for minority populations. Activates when a countr
 
 ### Path-dependent resolution
 - **Complete (`movement_events_te.220-.223`):** dispatches on the months-tracker that led for ≥18 months. Federal Mandate / Grassroots Triumph / Negotiated Settlement / Coopted Reform. Falls through to existing single-option `.200` if no track took clear lead.
-- **Fail (`movement_events_te.100/.230/.231`):** existing `.100` (oppressive aftermath) under suppression/segregationist dominance or any discriminatory law. New `.230` (token reform demobilized) under cooptation dominance. New `.231` (gradualist stagnation) otherwise.
+- **Fail (`movement_events_te.100/.230/.231/.232`):** existing `.100` (oppressive aftermath) under suppression/segregationist dominance or any discriminatory law (its desc switches to `.100.desc_faded`, the movement fading under the law, when both suppression trackers are 0). New `.230` (token reform demobilized) under cooptation dominance. New `.231` (gradualist stagnation) when `cr_gradualist_months > 18`. `.232` (lost momentum, neutral) otherwise.
 
 ### Random pool (slimmed)
 - `movement_events_te.1, .2, .3, .4, .14` — kept in JE on_monthly_pulse `random_list` at lower weights (~20% chance per month). Threshold events carry the narrative arc; this pool provides ambient flavor.
@@ -1228,17 +1228,19 @@ Persistent. Revolution inheritable.
 
 ---
 
-## Nuclear Program (`je_nuclear_program`)
+## Nuclear Weapons (`je_nuclear_program`)
 
 **File:** `common/journal_entries/je_nuclear_program.txt` (buttons: `common/scripted_buttons/nuclear_program_buttons.txt`)
 **Group:** `je_group_foreign_affairs`
 
 ### Purpose
-Tracks nuclear weapon development and stockpile. Requires Great Power status (or Major Power + ICBMs tech). Progress builds toward producing nuclear weapons.
+The whole nuclear system in one entry, shown as "Nuclear Weapons": the programme that builds warheads, and — since 2026-09-25, when the separate `je_nuclear_deterrence` was folded in to save a journal slot — the posture and crises of **Nuclear Deterrence Widget** below. The key stays `je_nuclear_program` so existing saves keep the entry.
+
+Two gates. The **entry** is active for anyone it applies to (`possible = nuclear_program_entry_applies`): a country with a programme, a country holding warheads whatever its rank, or a party to a nuclear crisis; `is_shown_when_inactive` also shows it, inactive, to a country with the `nuclear_weapons` tech. The **programme** runs only while `nuclear_program_has_programme` holds — the game rule, the tech, and Great Power status (or Major Power + ICBMs, or programme aid) without disarmament. Ask that trigger, never `has_journal_entry = je_nuclear_program`, for "does this country have a programme?".
 
 ### Key Mechanics
 - **Progress:** `nuclear_weapon_program_progress` / `nuclear_weapon_program_goal_value`
-- **Weekly pulse:** Adds `nuclear_weapon_program_monthly_progress / 4` per week
+- **Weekly pulse:** `nuclear_program_weekly_progress` adds `nuclear_weapon_program_monthly_progress / 4` per week — only while `nuclear_program_has_programme` holds; otherwise the pulse zeroes funding, so a demoted power stops paying. Then `nuclear_program_refresh_state_effect`, then the posture and crisis step (`nd_weekly_update`)
 - **Nuke creation:** When progress ≥ goal, increments stockpile, decrements progress, checks for world-first achievement
 - **World first detection:** Sets `is_world_first_nuclear_power` + global `world_first_nuclear_weapon`
 - **Subsequent nukes:** Cost reduced by `nuclear_weapon_program_additional_nuke_multiplier`
@@ -1262,17 +1264,17 @@ Tracks nuclear weapon development and stockpile. Requires Great Power status (or
 - `possible` and `effect` are single-sourced in `nuclear_program_possible_<up|down>_funding` (`common/scripted_triggers/nuke_triggers.txt`) and `nuclear_program_effect_<up|down>_funding` (`common/scripted_effects/nuclear_weapon_effects.txt`). Retune the helper, never the button.
 
 ### Nuclear Programme Widget (journal-entry widget)
-Two panels, mounted either side of the entry's native progress bar so the figures that explain the bar sit next to it.
+Two panels. The programme panel sits directly above the entry's native progress bar so the figures that explain the bar sit next to it; the other closes the entry, after the posture and crisis panels of the **Nuclear Deterrence Widget** below. Whole entry, top to bottom: status line · programme (container `_3`) · native bar · posture, crisis and reputation, delivery and defence plus nuclear powers (all container `_4`, in the entry's declaration order).
 
-- **File:** `gui/journal_entry_widgets/nuclear_program_widget.gui` — `widget_je_nuclear_programme` in `custom_widget_container_3` (above the bar), `widget_je_nuclear_deterrence` in `custom_widget_container_4` (below it). Both roots gated on `visible = "[JournalEntry.IsActive]"`.
-- **Handlers:** `common/scripted_guis/nuclear_program_sguis.txt` — `nuclear_program_funding_sgui` (the stepper) and `nuclear_program_powers_sgui` (the leaderboard, display-only). Both carry `ai_is_valid = { always = no }`.
-- **Shared helpers:** `nuclear_program_possible_*` / `nuclear_program_effect_*` (the same two the buttons call), `nuclear_program_can_run_programme` (the same trigger the entry's `possible` calls), `nuclear_program_refresh_state_effect`.
+- **File:** `gui/journal_entry_widgets/nuclear_program_widget.gui` — `widget_je_nuclear_programme` in `custom_widget_container_3` (above the bar), drawn only while there is a programme (`nuclear_program_has_programme_sgui`); `widget_je_nuclear_balance` last in `custom_widget_container_4`, drawn for everyone the entry is active for. Both roots also gated on `JournalEntry.IsActive`.
+- **Handlers:** `common/scripted_guis/nuclear_program_sguis.txt` — `nuclear_program_funding_sgui` (the stepper), `nuclear_program_powers_sgui` (the leaderboard, display-only) and `nuclear_program_has_programme_sgui` (display-only yes/no). All carry `ai_is_valid = { always = no }`.
+- **Shared helpers:** `nuclear_program_possible_*` / `nuclear_program_effect_*` (the same two the buttons call), `nuclear_program_has_programme` (the panel, the pulse and the status line), `nuclear_program_refresh_state_effect`.
 - **Display-only reads:** the `nuclear_program_display_*` family in `extra_script_values.txt` — `stockpile`, `funding`, `weekly_cost`, `progress_remaining`, `monthly_progress`, `weekly_progress_floor`, `months_to_next`, `first_device_year`, `aid_bonus`, `attack_rating`, `defense_rating`. Each starts at 0 and reads a variable only inside a `has_variable` guard.
 - **Branchy text:** `common/customizable_localization/nuclear_program_custom_loc.txt` — `nuclear_program_status_line`, `_rate_note`, `_aid_note`, `_next_warhead`, `_first_device`, `_world_first_note`.
 
 Areas:
 1. **The Programme** (open by default) — funding as a `[−] step N · @innovation N/week [+]` stepper; warhead production per month with a tooltip naming what sets it (funding step, the ×10 post-first-device rate, foreign assistance, a pause); time to the next warhead; warheads held; the year of the first device with its world-first mark.
-2. **Deterrence** (collapsed) — our delivery capability and home defence as percentages, each tooltip listing the contributing technologies through the nine pre-existing `te_nuke_attack_*` / `te_nuke_defense_*` customizable-localization blocks, plus one line on how a strike's odds are resolved.
+2. **Delivery and Defence** (collapsed) — our delivery capability and home defence as percentages, each tooltip listing the contributing technologies through the nine pre-existing `te_nuke_attack_*` / `te_nuke_defense_*` customizable-localization blocks, plus one line on how a strike's odds are resolved.
 3. **Nuclear Powers** (collapsed) — the ten largest arsenals, one `ExecuteTooltip` row each, entering the `nuke_rank_N` globals in script. Disclosure is unchanged from the eleven `triggered_desc` lines this replaced.
 
 Op table (repeated in the sgui header and the `.gui` header — keep all three in step):
@@ -1286,12 +1288,12 @@ Op table (repeated in the sgui header and the `.gui` header — keep all three i
 **Editing rules.**
 - Change a rate, a cost or an eligibility rule in the **helper or the script value**, never in the `.gui` or in localization. No threshold or rate is restated in the `.gui`.
 - **No control's `visible` comes from an `op`-branching `IsShown`.** Whether a saved scope passed through `IsShown( … AddScope('op', …) … )` reaches a handler's `is_shown` is unproven in this mod — `is_valid` provably receives it (the `st_res_*` handlers depend on that), but no vanilla handler reads a saved scope inside `is_shown`. Because the button grid is hidden from humans, a stepper whose `visible` quietly evaluated false would leave the player unable to act, so `nuclear_program_funding_sgui`'s `is_shown` is scope-free (`has_journal_entry`) and the two stepper buttons have no `visible` at all — `is_valid` greys them and explains why. `nuclear_program_powers_sgui` does read `scope:op` in `is_shown`, but fail-open (no `scope:op` ⇒ yes) with emptiness guarded inside the effect, so its worst case is a blank line in a collapsed section. Keep any new yes/no visibility question scope-free.
-- `nuclear_program_last_status` has exactly one writer, `nuclear_program_refresh_state_effect`, called from the entry's `immediate`, the tail of its weekly pulse, and both button effects — so the panel reacts to a click instead of lagging a week. Do not derive the state anywhere else.
-- **`status_desc` is the only surface that renders for a deactivated entry** (`gui/journal_entry.gui:188` has no `IsActive` gate, unlike the progress bar at `:670`). Because `possible` fails the instant a disarmament settlement lands and the entry carries `can_deactivate = yes`, the widget is gone in that state. Blocking conditions therefore belong in `je_nuclear_program_status_line`, not in the panel.
+- `nuclear_program_last_status` has exactly one writer, `nuclear_program_refresh_state_effect`, called from the entry's `immediate`, its weekly pulse right after the programme step, and both button effects — so the panel reacts to a click instead of lagging a week. Do not derive the state anywhere else.
+- **`status_desc` is the only surface that renders for a deactivated entry** (`gui/journal_entry.gui:188` has no `IsActive` gate, unlike the progress bar at `:670`). Because `possible` fails the instant a disarmament settlement lands on a country not in a crisis and the entry carries `can_deactivate = yes`, the widget is gone in that state. Blocking conditions therefore belong in `je_nuclear_program_status_line`, not in the panel. The line is `nuclear_program_status_line`, the stockpile, then `nd_status_line` (posture while armed, a crisis note for an unarmed party, nothing otherwise).
 - Loc roots differ by context: `status_desc` reaches the country through `ROOT.GetCountry`, widget loc through `JournalEntry.GetCountry`. The `nuclear_program_status_line` branches therefore carry **no** country accessor at all — the stockpile is appended by the calling key.
-- Custom-loc blocks here are `random_valid = no`, so every branch's trigger is evaluated until one matches. Pair every variable read with `has_variable`, and keep the two live-modifier branches (disarmament, ineligibility) first: by the time they apply, the weekly pulse has stopped and the status code is stale.
+- Custom-loc blocks here are `random_valid = no`, so every branch's trigger is evaluated until one matches. Pair every variable read with `has_variable`, and keep the three no-programme branches (disarmament, no `nuclear_weapons` tech, no standing) first: the entry may be inactive with the status code stale, or active for an armed power or crisis party with no programme at all.
 
-Traced states: fresh activation (status variable absent → guarded fallback branch); inactive-but-shown (both roots hidden, no sgui runs); disarmament (entry deactivates, status line speaks); pause treaty (status 3, both steppers greyed with the pause named); unaffordable increase; first warhead completing; AI country (grid visible to the AI only); old save (status and first-device year absent until the next pulse); rank lost then regained; aid treaty doubling the rate; funding stepped to 0 (modifier removed rather than left at `multiplier = 0`).
+Traced states: fresh activation (status variable absent → guarded fallback branch); inactive-but-shown (both roots hidden, no sgui runs); disarmament (entry deactivates unless in a crisis, status line speaks); pause treaty (status 3, both steppers greyed with the pause named); unaffordable increase; first warhead completing (posture initialised by `nd_weekly_update` the same week); AI country (grid visible to the AI only); old save (status and first-device year absent until the next pulse); rank lost while armed (entry stays, programme panel hides, funding zeroed and the modifier removed, posture and upkeep continue); rank lost unarmed (entry deactivates); non-nuclear crisis target (entry active; only the crisis and the delivery-and-defence panels draw); aid treaty doubling the rate; funding stepped to 0 (modifier removed rather than left at `multiplier = 0`).
 
 ### Modifiers
 - `nuclear_power` — applied when stockpile > 0
@@ -1310,16 +1312,16 @@ Persistent journal entry. `immediate` therefore runs again on every re-activatio
 
 
 ### Nuclear Deterrence Widget (journal-entry widget)
-Two panels on `je_nuclear_deterrence` (the posture and crisis entry — `mod_systems.md` § Nuclear Deterrence and Crisis Diplomacy; design and what shipped in `nuclear_crisis_design.md` §0).
+Two more panels on `je_nuclear_program` — posture and crises, which had their own entry, `je_nuclear_deterrence`, until 2026-09-25 (`mod_systems.md` § Nuclear Deterrence and Crisis Diplomacy; design and what shipped in `nuclear_crisis_design.md` §0).
 
-- **File:** `gui/journal_entry_widgets/nuclear_deterrence_widget.gui` — `widget_je_nuclear_posture` in `custom_widget_container_3`, drawn only while armed (`nd_armed_sgui`); `widget_je_nuclear_crisis` in `custom_widget_container_4`. Both roots gated on `JournalEntry.IsActive`.
-- **Handlers:** `common/scripted_guis/nuclear_deterrence_sguis.txt` — two action handlers (`nd_posture_sgui`, `nd_crisis_action_sgui`) and four display handlers (`nd_armed_sgui`, `nd_in_crisis_sgui`, `nd_crisis_opponent_sgui`, `nd_last_crisis_sgui`). All carry `ai_is_valid = { always = no }`: the AI sets its posture in `nd_ai_review_posture` and answers crises through the crisis events, which call the same effects.
-- **Branchy text:** `common/customizable_localization/nuclear_deterrence_custom_loc.txt`. Every block but `nd_status_line` is widget/event-only and accessor-free; `nd_status_line` is the entry's `status_desc` and speaks for a non-nuclear crisis party.
+- **File:** `gui/journal_entry_widgets/nuclear_deterrence_widget.gui` — `widget_je_nuclear_posture` first in `custom_widget_container_4`, just below the warhead bar, drawn only while armed (`nd_armed_sgui`); `widget_je_nuclear_crisis` second. Both roots gated on `JournalEntry.IsActive`.
+- **Handlers:** `common/scripted_guis/nuclear_deterrence_sguis.txt` — two action handlers (`nd_posture_sgui`, `nd_crisis_action_sgui`) and five display handlers (`nd_armed_sgui`, `nd_in_crisis_sgui`, `nd_crisis_opponent_sgui`, `nd_last_crisis_sgui`, `nd_has_reputation_sgui`). All carry `ai_is_valid = { always = no }`: the AI sets its posture in `nd_ai_review_posture` and answers crises through the crisis events, which call the same effects.
+- **Branchy text:** `common/customizable_localization/nuclear_deterrence_custom_loc.txt`. Every block but `nd_status_line` is widget/event-only and accessor-free; `nd_status_line` is appended to the entry's `status_desc` by `je_nuclear_program_status_line` — posture while armed, a line for a non-nuclear crisis party, empty otherwise.
 - **Numbers:** the `nd_display_*` family and the `nd_upkeep_weekly_at_readiness_*` / `_step` values in `common/script_values/nuclear_deterrence_values.txt`. The incident band is projected into `nd_risk_band` by `nd_apply_posture_modifiers`; nothing re-derives it.
 
 Areas (posture): **Nuclear Posture** (open) — doctrine, readiness (with the step under way), authority, weekly upkeep, incident exposure band. **Doctrine** — five choice rows, each tooltip listing the doctrine's modifier through `GetStaticModifier(...).GetDesc`. **Readiness and Launch Authority** — three and three choice rows; readiness tooltips show the weekly upkeep at that level. **Forces** — warheads (exact, with the world's estimate), survivability against its ceiling, reliability, strain, the chance a delegated sequence is halted, and the safeguards / hardening steppers. **At Home** — how each interest-group class receives the posture.
 
-Areas (crisis): **Nuclear Crisis** (open, only while in one) — the opponent (printed in script), our side, the dispute and whether it is public, stage, weeks to the deadline, danger, the pressure on the target, and five action rows. Between crises, the last opponent and how it ended. **Reputation** — credibility and pledges.
+Areas (crisis): **Nuclear Crisis** (open, only while in one) — the opponent (printed in script), our side, the dispute and whether it is public, stage, weeks to the deadline, danger, the pressure on the target, and five action rows. Between crises, the last opponent and how it ended. **Reputation** — credibility and pledges, once there is a record (`nd_has_reputation_sgui`: credibility exists once the posture is initialised or a crisis has touched us).
 
 Op table (repeated in the sgui header and the `.gui` header — keep all three in step):
 

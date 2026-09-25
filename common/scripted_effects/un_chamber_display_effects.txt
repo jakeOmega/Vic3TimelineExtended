@@ -1299,7 +1299,12 @@ un_chamber_assembly_business_block = {
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_human_rights TOPIC = human_rights RAISED = je_un_chamber_raised_human_rights AGENCY = unhrc }
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_icc TOPIC = icc RAISED = je_un_chamber_raised_icc AGENCY = icc }
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_npt TOPIC = npt RAISED = je_un_chamber_raised_npt AGENCY = iaea }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_climate TOPIC = climate RAISED = je_un_chamber_raised_climate AGENCY = unep }
+	# Under the disabled global warming rule the climate accord is never raised
+	# (un_docket_warming_ready), so the chamber does not list it.
+	if = {
+		limit = { has_game_rule = global_warming_enabled }
+		un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_climate TOPIC = climate RAISED = je_un_chamber_raised_climate AGENCY = unep }
+	}
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_pandemic TOPIC = pandemic RAISED = je_un_chamber_raised_agenda AGENCY = who }
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_refugee TOPIC = refugee RAISED = je_un_chamber_raised_agenda AGENCY = unhcr }
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_heritage TOPIC = heritage RAISED = je_un_chamber_raised_agenda AGENCY = unesco }

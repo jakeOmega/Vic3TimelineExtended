@@ -7,6 +7,7 @@
 
 # Event 1: Arms Race Escalation (rival powers building up military)
 international_relations_events.1 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -172,6 +173,8 @@ international_relations_events.1 = {
 
 # Event 2: Proxy Conflict (supporting insurgency in rival's sphere)
 international_relations_events.2 = {
+	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — becomes the covert-disabled fallback
+	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427
 	type = country_event
 	placement = root
 
@@ -399,6 +402,8 @@ international_relations_events.3 = {
 
 # Event 4: Propaganda War (information warfare)
 international_relations_events.4 = {
+	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — the accused country gets the choice first
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -483,6 +488,7 @@ international_relations_events.4 = {
 
 # Event 5: Trade Embargo (economic pressure)
 international_relations_events.5 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): the embargo is our own option; the rival is told what we chose (.102)
 	type = country_event
 	placement = root
 
@@ -576,6 +582,7 @@ international_relations_events.5 = {
 
 # Event 6: Espionage Scandal (spy caught)
 international_relations_events.6 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -761,6 +768,7 @@ international_relations_events.7 = {
 
 # Event 8: Nuclear Brinkmanship
 international_relations_events.8 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — tie to a real dispute
 	type = country_event
 	placement = root
 
@@ -883,6 +891,7 @@ international_relations_events.8 = {
 
 # Notification 101: Rival discovers proxy conflict funding
 international_relations_events.101 = {
+	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — follows .2
 	type = country_event
 	placement = root
 
@@ -941,6 +950,7 @@ international_relations_events.102 = {
 
 # Notification 103: Rival's spy caught abroad
 international_relations_events.103 = {
+	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -1115,6 +1125,7 @@ international_relations_events.104 = {
 
 # Notification 105: Rival matches our arms buildup
 international_relations_events.105 = {
+	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -1144,6 +1155,7 @@ international_relations_events.105 = {
 
 # Notification 106: Counter-propaganda backlash
 international_relations_events.106 = {
+	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -1173,6 +1185,7 @@ international_relations_events.106 = {
 
 # Notification 107: Agent quietly exchanged
 international_relations_events.107 = {
+	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 

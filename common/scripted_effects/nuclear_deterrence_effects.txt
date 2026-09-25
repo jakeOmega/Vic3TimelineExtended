@@ -8,13 +8,19 @@
 # CALL-SITE CONTRACT for the three pulse effects. They advance state and are
 # NOT idempotent within their period (scripting_best_practices.md § A
 # Non-Idempotent Pulse Effect Needs an Explicit Call-Site Contract):
-#   nd_weekly_update   je_nuclear_deterrence on_weekly_pulse — steps readiness
-#                      toward its target, runs the crisis tick for an owner.
-#   nd_monthly_update  je_nuclear_deterrence on_monthly_pulse — tenure and
+#   nd_weekly_update   je_nuclear_program on_weekly_pulse — initialises a
+#                      newly armed country, steps readiness toward its target,
+#                      runs the crisis tick for an owner.
+#   nd_monthly_update  je_nuclear_program on_monthly_pulse — tenure and
 #                      countdowns, capability steps, the incident roll, the AI
 #                      posture review, the domestic stance.
-#   nd_yearly_update   je_nuclear_deterrence on_yearly_pulse — the public
+#   nd_yearly_update   je_nuclear_program on_yearly_pulse — the public
 #                      arsenal estimate.
+# Posture and crises used to have their own entry, je_nuclear_deterrence; it
+# was merged into je_nuclear_program on 2026-09-25 (see that file's header).
+# The entry is now also active for a great power with a programme and no
+# warheads, so every effect here must be a no-op for a country that is neither
+# armed nor in a crisis.
 # Never call them from an event, a scripted GUI or a diplomatic action; the
 # console harness (events/te_debug_deterrence_events.txt) is the one exception
 # and says so. Panel actions call the nd_set_* / nd_step_* effects, which only
@@ -32,9 +38,10 @@
 # ----------------------------------------------------------------------------
 # INITIALISATION AND MIGRATION
 # ----------------------------------------------------------------------------
-# Runs from the journal entry's immediate (every activation) and at the top of
-# every monthly update, so an old save, a re-armed country and a country that
-# built its first warhead yesterday all reach the same conservative defaults
+# Runs from the journal entry's immediate (every activation), from the weekly
+# update the week a country is first armed, and at the top of every monthly
+# update, so an old save, a re-armed country and a country that built its
+# first warhead this week all reach the same conservative defaults
 # (§11): existential deterrence, routine readiness, central authority, no
 # investment, no incidents. Only missing variables are created — a country
 # that drops out of the entry and comes back keeps its posture.
@@ -111,6 +118,65 @@ nd_init_posture = {
 	}
 }
 
+# Puts the posture modifiers on the entry from scratch, once per activation,
+# from the first weekly pulse after it. Two cases need it:
+#   * The week after activation. The entry's immediate only zeroes the
+#     trackers and clears the marker: whether `je:je_nuclear_program` resolves
+#     while the entry is still being activated is untested, and if it did not,
+#     applying there would set the trackers to "on" with nothing on the entry,
+#     and nothing would ever re-add them. A running pulse is known to resolve.
+#   * A save made while posture had its own entry. Until 2026-09-25 the
+#     posture modifiers sat on je_nuclear_deterrence; that entry's definition
+#     is gone and its modifiers with it, but the trackers still say they are
+#     on, and je_nuclear_program — already active in such a save — never
+#     re-runs its immediate. The marker did not exist then, so this runs.
+# Every member is taken off first (guarded: a remove_modifier on a missing
+# modifier logs), so it is safe however the trackers and the entry disagree.
+nd_rebuild_posture_modifiers = {
+	if = {
+		limit = { NOT = { has_variable = nd_posture_on_merged_entry } }
+		je:je_nuclear_program ?= {
+			if = {
+				limit = { has_modifier = nd_doctrine_mod_1 }
+				remove_modifier = nd_doctrine_mod_1
+			}
+			if = {
+				limit = { has_modifier = nd_doctrine_mod_2 }
+				remove_modifier = nd_doctrine_mod_2
+			}
+			if = {
+				limit = { has_modifier = nd_doctrine_mod_3 }
+				remove_modifier = nd_doctrine_mod_3
+			}
+			if = {
+				limit = { has_modifier = nd_doctrine_mod_4 }
+				remove_modifier = nd_doctrine_mod_4
+			}
+			if = {
+				limit = { has_modifier = nd_doctrine_mod_5 }
+				remove_modifier = nd_doctrine_mod_5
+			}
+			if = {
+				limit = { has_modifier = nd_readiness_mod_2 }
+				remove_modifier = nd_readiness_mod_2
+			}
+			if = {
+				limit = { has_modifier = nd_readiness_mod_3 }
+				remove_modifier = nd_readiness_mod_3
+			}
+			if = {
+				limit = { has_modifier = nd_upkeep_cost }
+				remove_modifier = nd_upkeep_cost
+			}
+		}
+		set_variable = { name = nd_doctrine_mod_on value = 0 }
+		set_variable = { name = nd_readiness_mod_on value = 0 }
+		set_variable = { name = nd_upkeep_mod_on value = 0 }
+		set_variable = { name = nd_posture_on_merged_entry value = 1 }
+		nd_apply_posture_modifiers = yes
+	}
+}
+
 # ----------------------------------------------------------------------------
 # MODIFIERS — the single writer of the three managed families
 # ----------------------------------------------------------------------------
@@ -120,12 +186,12 @@ nd_init_posture = {
 #   nd_doctrine_mod_on   which nd_doctrine_mod_N is on the entry (0 = none)
 #   nd_readiness_mod_on  which nd_readiness_mod_N is on (0 = none; routine has none)
 #   nd_upkeep_mod_on     1 if nd_upkeep_cost is on
-# je_nuclear_deterrence's immediate zeroes all three: a freshly activated entry
+# je_nuclear_program's immediate zeroes all three: a freshly activated entry
 # is a new object with no modifiers, whatever the old variables say.
 nd_apply_posture_modifiers = {
 	if = {
 		limit = {
-			has_journal_entry = je_nuclear_deterrence
+			has_journal_entry = je_nuclear_program
 			nd_is_armed = yes
 			nd_is_initialized = yes
 		}
@@ -140,22 +206,22 @@ nd_apply_posture_modifiers = {
 			nd_remove_doctrine_modifier = yes
 			if = {
 				limit = { var:nd_doctrine = 1 }
-				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_doctrine_mod_1 } }
+				je:je_nuclear_program ?= { add_modifier = { name = nd_doctrine_mod_1 } }
 			}
 			else_if = {
 				limit = { var:nd_doctrine = 3 }
-				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_doctrine_mod_3 } }
+				je:je_nuclear_program ?= { add_modifier = { name = nd_doctrine_mod_3 } }
 			}
 			else_if = {
 				limit = { var:nd_doctrine = 4 }
-				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_doctrine_mod_4 } }
+				je:je_nuclear_program ?= { add_modifier = { name = nd_doctrine_mod_4 } }
 			}
 			else_if = {
 				limit = { var:nd_doctrine = 5 }
-				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_doctrine_mod_5 } }
+				je:je_nuclear_program ?= { add_modifier = { name = nd_doctrine_mod_5 } }
 			}
 			else = {
-				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_doctrine_mod_2 } }
+				je:je_nuclear_program ?= { add_modifier = { name = nd_doctrine_mod_2 } }
 			}
 			set_variable = { name = nd_doctrine_mod_on value = var:nd_doctrine }
 		}
@@ -170,11 +236,11 @@ nd_apply_posture_modifiers = {
 			nd_remove_readiness_modifier = yes
 			if = {
 				limit = { var:nd_readiness = 2 }
-				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_readiness_mod_2 } }
+				je:je_nuclear_program ?= { add_modifier = { name = nd_readiness_mod_2 } }
 			}
 			else_if = {
 				limit = { var:nd_readiness = 3 }
-				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_readiness_mod_3 } }
+				je:je_nuclear_program ?= { add_modifier = { name = nd_readiness_mod_3 } }
 			}
 			set_variable = { name = nd_readiness_mod_on value = var:nd_readiness }
 		}
@@ -189,7 +255,7 @@ nd_apply_posture_modifiers = {
 					var:nd_upkeep_mod_on = 0
 				}
 			}
-			je:je_nuclear_deterrence ?= {
+			je:je_nuclear_program ?= {
 				add_modifier = {
 					name = nd_upkeep_cost
 					multiplier = root.var:nd_upkeep_weekly_cached
@@ -218,10 +284,11 @@ nd_apply_posture_modifiers = {
 			set_variable = { name = nd_risk_band value = 3 }
 		}
 	}
-	# Unarmed (the last warhead was used, or this is a non-nuclear crisis
-	# party): nothing to maintain, nothing to pay.
+	# Unarmed (the last warhead was used, a non-nuclear crisis party, or a
+	# programme that has not built one yet): nothing to maintain, nothing to
+	# pay.
 	else_if = {
-		limit = { has_journal_entry = je_nuclear_deterrence }
+		limit = { has_journal_entry = je_nuclear_program }
 		nd_remove_doctrine_modifier = yes
 		set_variable = { name = nd_doctrine_mod_on value = 0 }
 		nd_remove_readiness_modifier = yes
@@ -231,7 +298,7 @@ nd_apply_posture_modifiers = {
 				has_variable = nd_upkeep_mod_on
 				var:nd_upkeep_mod_on = 1
 			}
-			je:je_nuclear_deterrence ?= { remove_modifier = nd_upkeep_cost }
+			je:je_nuclear_program ?= { remove_modifier = nd_upkeep_cost }
 			set_variable = { name = nd_upkeep_mod_on value = 0 }
 		}
 		set_variable = { name = nd_upkeep_weekly_cached value = 0 }
@@ -244,23 +311,23 @@ nd_remove_doctrine_modifier = {
 		limit = { has_variable = nd_doctrine_mod_on }
 		if = {
 			limit = { var:nd_doctrine_mod_on = 1 }
-			je:je_nuclear_deterrence ?= { remove_modifier = nd_doctrine_mod_1 }
+			je:je_nuclear_program ?= { remove_modifier = nd_doctrine_mod_1 }
 		}
 		else_if = {
 			limit = { var:nd_doctrine_mod_on = 2 }
-			je:je_nuclear_deterrence ?= { remove_modifier = nd_doctrine_mod_2 }
+			je:je_nuclear_program ?= { remove_modifier = nd_doctrine_mod_2 }
 		}
 		else_if = {
 			limit = { var:nd_doctrine_mod_on = 3 }
-			je:je_nuclear_deterrence ?= { remove_modifier = nd_doctrine_mod_3 }
+			je:je_nuclear_program ?= { remove_modifier = nd_doctrine_mod_3 }
 		}
 		else_if = {
 			limit = { var:nd_doctrine_mod_on = 4 }
-			je:je_nuclear_deterrence ?= { remove_modifier = nd_doctrine_mod_4 }
+			je:je_nuclear_program ?= { remove_modifier = nd_doctrine_mod_4 }
 		}
 		else_if = {
 			limit = { var:nd_doctrine_mod_on = 5 }
-			je:je_nuclear_deterrence ?= { remove_modifier = nd_doctrine_mod_5 }
+			je:je_nuclear_program ?= { remove_modifier = nd_doctrine_mod_5 }
 		}
 	}
 }
@@ -270,11 +337,11 @@ nd_remove_readiness_modifier = {
 		limit = { has_variable = nd_readiness_mod_on }
 		if = {
 			limit = { var:nd_readiness_mod_on = 2 }
-			je:je_nuclear_deterrence ?= { remove_modifier = nd_readiness_mod_2 }
+			je:je_nuclear_program ?= { remove_modifier = nd_readiness_mod_2 }
 		}
 		else_if = {
 			limit = { var:nd_readiness_mod_on = 3 }
-			je:je_nuclear_deterrence ?= { remove_modifier = nd_readiness_mod_3 }
+			je:je_nuclear_program ?= { remove_modifier = nd_readiness_mod_3 }
 		}
 	}
 }
@@ -283,6 +350,20 @@ nd_remove_readiness_modifier = {
 # PULSES
 # ----------------------------------------------------------------------------
 nd_weekly_update = {
+	# ---- a newly armed country -----------------------------------------------
+	# The entry is usually already active when a programme finishes its first
+	# warhead, so its immediate cannot be what puts the country under a
+	# posture. Doing it here, the same week, means the posture panel (drawn
+	# only once initialised, nd_armed_sgui) and the upkeep appear with the
+	# warhead. nd_monthly_update would reach the same state within a month.
+	if = {
+		limit = {
+			nd_is_armed = yes
+			NOT = { nd_is_initialized = yes }
+		}
+		nd_init_posture = yes
+		nd_apply_posture_modifiers = yes
+	}
 	# ---- readiness transition: one step every nd_readiness_step_weeks ------
 	if = {
 		limit = {
@@ -361,10 +442,16 @@ nd_monthly_update = {
 		nd_apply_posture_modifiers = yes
 	}
 	else = {
-		# A non-nuclear crisis party, or an arsenal that has just gone: take
-		# off anything posture-related the entry still carries.
+		# A non-nuclear crisis party, a programme with no warhead yet, or an
+		# arsenal that has just gone: take off anything posture-related the
+		# entry still carries. The interest-group sweep runs only when bands
+		# may be on, so an unarmed great power's month costs nothing.
 		nd_apply_posture_modifiers = yes
-		nd_clear_domestic_stance = yes
+		if = {
+			limit = { has_variable = nd_stance_applied }
+			nd_clear_domestic_stance = yes
+			remove_variable = nd_stance_applied
+		}
 	}
 	# ---- countdowns that outlive the arsenal ---------------------------------
 	nd_tick_countdown = { VAR = nd_readiness_lock_months }
@@ -1217,7 +1304,7 @@ nd_record_nuclear_use = {
 		# Use spurs every working programme in the world (§8.5).
 		every_country = {
 			limit = {
-				has_journal_entry = je_nuclear_program
+				nuclear_program_has_programme = yes
 				nuclear_program_is_proliferating = yes
 				NOT = { has_modifier = nd_proliferation_spur }
 			}
@@ -1428,15 +1515,16 @@ nd_readiness_step_down = {
 # CLEANUP OUTSIDE THE ENTRY — on_monthly_pulse_country
 # ----------------------------------------------------------------------------
 # The domestic-stance bands sit on interest groups and so survive the entry
-# deactivating (disarmament, the last warhead used, a crisis ending for a
-# non-nuclear party). Nothing inside the entry can run once it is inactive, so
-# the country pulse removes them. Cheap: one has_variable for every country
+# deactivating (disarmament, the last warhead used by a country without a
+# programme, a crisis ending for a non-nuclear party). Nothing inside the entry
+# can run once it is inactive, so the country pulse removes them. While the
+# entry is active, nd_monthly_update does the same for an unarmed country. Cheap: one has_variable for every country
 # that never had the entry.
 nd_country_monthly_cleanup = {
 	if = {
 		limit = {
 			has_variable = nd_stance_applied
-			NOT = { has_journal_entry = je_nuclear_deterrence }
+			NOT = { has_journal_entry = je_nuclear_program }
 		}
 		nd_clear_domestic_stance = yes
 		remove_variable = nd_stance_applied

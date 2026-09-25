@@ -117,8 +117,11 @@ un_regime_refresh_country = {
 		un_regime_reapply_conventions = yes
 
 		# Climate (UNEP): the high emitters pay, the low emitters are helped.
+		# Not under the disabled global warming rule, which stops the
+		# emissions and temperature the terms are read from.
 		if = {
 			limit = {
+				has_game_rule = global_warming_enabled
 				has_global_variable = un_agency_unep
 				je:je_united_nations ?= { has_modifier = un_climate_binding_modifier }
 			}

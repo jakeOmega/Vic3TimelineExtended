@@ -1106,6 +1106,11 @@ society_technology_events.12 = {
 			has_technology_researched = cybersecurity
 			has_technology_researched = social_media
 		}
+		# The debate is already settled in law at either end of the privacy scale.
+		NOR = {
+			has_law = law_type:law_strong_privacy_rights
+			has_law = law_type:law_intrusive_surveillance
+		}
 	}
 
 	immediate = {
@@ -1251,6 +1256,8 @@ society_technology_events.13 = {
 # Event 14: Social Media Election Interference
 # Foreign actors exploit platforms to influence elections
 society_technology_events.14 = {
+	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — the accused country gets the choice first
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -1459,7 +1466,24 @@ society_technology_events.16 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = society_technology_events.16.t
-	desc = society_technology_events.16.d
+	desc = {
+		first_valid = {
+			# Under a ban the devices are on sale abroad, not at home.
+			triggered_desc = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_no_augmentation
+						has_law = law_type:law_human_purity
+					}
+				}
+				desc = society_technology_events.16.d_banned
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = society_technology_events.16.d
+			}
+		}
+	}
 	flavor = society_technology_events.16.f
 
 	duration = 3
@@ -1471,6 +1495,16 @@ society_technology_events.16 = {
 		NOT = { has_modifier = ste_bci_regulated_access }
 		NOT = { has_modifier = ste_bci_banned }
 		NOT = { has_variable = ste_event_16_fired }
+		# Every option below is gated on the augmentation law it agrees with; this
+		# guarantees one is always available.
+		OR = {
+			has_law = law_type:law_no_augmentation
+			has_law = law_type:law_human_purity
+			has_law = law_type:law_medical_augmentation_only
+			has_law = law_type:law_regulated_augmentation_market
+			has_law = law_type:law_unrestricted_augmentation
+			has_law = law_type:law_mandatory_augmentation
+		}
 	}
 
 	immediate = {
@@ -1480,6 +1514,14 @@ society_technology_events.16 = {
 	option = {
 		name = society_technology_events.16.a
 		default_option = yes
+		# An open consumer market needs a law that allows elective augmentation.
+		trigger = {
+			OR = {
+				has_law = law_type:law_regulated_augmentation_market
+				has_law = law_type:law_unrestricted_augmentation
+				has_law = law_type:law_mandatory_augmentation
+			}
+		}
 		ai_chance = {
 			base = 3
 		}
@@ -1495,17 +1537,17 @@ society_technology_events.16 = {
 
 	option = {
 		name = society_technology_events.16.b
-		ai_chance = {
-			base = 2
-			modifier = {
-				trigger = {
-					OR = {
-						has_law = law_type:law_medical_augmentation_only
-						has_law = law_type:law_regulated_augmentation_market
-					}
-				}
-				add = 2
+		# Medical-only approval: what the medical-only law already requires, and a
+		# regulator's choice under the regulated market. It would loosen a ban and
+		# tighten an unrestricted or mandatory regime, so it is not offered there.
+		trigger = {
+			OR = {
+				has_law = law_type:law_medical_augmentation_only
+				has_law = law_type:law_regulated_augmentation_market
 			}
+		}
+		ai_chance = {
+			base = 4
 		}
 		# Strict medical-only approval
 		add_modifier = {
@@ -1519,7 +1561,13 @@ society_technology_events.16 = {
 
 	option = {
 		name = society_technology_events.16.c
-		trigger = { has_law = law_type:law_human_purity }
+		default_option = yes
+		trigger = {
+			OR = {
+				has_law = law_type:law_no_augmentation
+				has_law = law_type:law_human_purity
+			}
+		}
 		highlighted_option = yes
 		ai_chance = {
 			base = 5
@@ -1562,7 +1610,11 @@ society_technology_events.17 = {
 		NOT = { has_modifier = ste_augmented_sports_separate }
 		NOT = { has_modifier = ste_augmented_sports_embrace }
 		NOT = { has_variable = ste_event_17_fired }
-		NOT = { has_law = law_type:law_human_purity }
+		# Augmented athletes competing at home need a law that permits enhancement.
+		NOR = {
+			has_law = law_type:law_human_purity
+			has_law = law_type:law_no_augmentation
+		}
 	}
 
 	immediate = {
@@ -2313,7 +2365,26 @@ society_technology_events.26 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = society_technology_events.26.t
-	desc = society_technology_events.26.d
+	desc = {
+		first_valid = {
+			# Only a country that has actually put algorithms in charge of public
+			# decisions owns "a government AI system". Otherwise the system is a
+			# contractor's pilot.
+			triggered_desc = {
+				trigger = {
+					OR = {
+						has_modifier = ste_algo_gov_adopt
+						has_law = law_type:law_algorithmic_governance
+					}
+				}
+				desc = society_technology_events.26.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = society_technology_events.26.d_pilot
+			}
+		}
+	}
 	flavor = society_technology_events.26.f
 
 	duration = 3

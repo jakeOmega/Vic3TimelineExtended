@@ -779,6 +779,7 @@ nuclear_crisis.6 = {
 # ---- .7 They chose war --------------------------------------------------------
 # To the issuer of a public ultimatum, when the play it was about became a war.
 nuclear_crisis.7 = {
+	# REVIEWED 2026-09-25 (unchosen_self_action): the issuer chose the ultimatum through nd_nuclear_ultimatum_action; the weekly tick only reports that its dispute became a war
 	type = country_event
 	placement = root
 

@@ -12,6 +12,7 @@
 
 # Event 1: The Tether Rises (construction, positive)
 wonder_events.1 = {
+	# REVIEWED 2026-09-25 (system_ungated): the space elevator is a wonder building the country chose to build, not space-race state
 	type = country_event
 	placement = root
 
@@ -270,6 +271,7 @@ wonder_events.5 = {
 
 # Event 6: The Astronaut Generation (completed, positive)
 wonder_events.6 = {
+	# REVIEWED 2026-09-25 (system_ungated): flavour of the space elevator wonder, not space-race state
 	type = country_event
 	placement = root
 

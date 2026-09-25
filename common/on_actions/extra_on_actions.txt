@@ -304,6 +304,7 @@ on_become_independent = {
 
 on_monthly_pulse_state = {
 	on_actions = {
+		te_homeland_monthly
 		space_elevator_on_action
 		solar_collector_on_action
 		orbital_battlestation_on_action
@@ -394,7 +395,6 @@ st_dp_escalation_weekly_schedule = {
 on_yearly_pulse_state = {
 	on_actions = {
 		global_warming_update_on_action
-		remove_or_create_homelands_on_action
 		violent_hostility_on_action
 		migration_crowding_on_action
 		religious_mission_conversion_on_action
@@ -830,33 +830,6 @@ cheaty_on_action = {
 	}
 }
 
-remove_or_create_homelands_on_action = {
-	effect = {
-		if = {
-			limit = {
-				NOT = {
-					state_region = {
-						any_scope_state = {
-							NOT = { owner = ROOT.owner }
-						}
-					}
-				}
-				owner = {
-					modifier:country_homelands_can_change_bool = yes
-				}
-			}
-			random = {
-				chance = homeland_change_chance
-				remove_homelands_effect = yes
-			}
-			random = {
-				chance = homeland_change_chance
-				create_homelands_effect = yes
-			}
-		}
-	}
-}
-
 pollution_on_action = {
 	effect = {
 		te_update_pollution_modifier = yes
@@ -874,8 +847,12 @@ global_warming_update_on_action = {
 				value = 0
 			}
 		}
+		# With the rule disabled there is no climate change: emissions never
+		# accumulate, so temperature_anomaly_display stays 0 for every reader
+		# (UN docket, election events, movements, treaty article 109).
 		if = {
 			limit = {
+				has_game_rule = global_warming_enabled
 				owner.market_capital = THIS
 			}
 			owner = {
@@ -903,26 +880,41 @@ global_warming_events_on_action = {
 		# gw_refresh_global_counts_effect is a single country sweep that fills
 		# all eight adoption counters; gw_rebase_annual_emissions_effect is O(1)
 		# and only does work in January. Neither has a gameplay effect.
-		gw_rebase_annual_emissions_effect = yes
-		gw_refresh_global_counts_effect = yes
+		# Everything climate-specific in this pulse is gated on the rule: with it
+		# disabled there are no greenhouse figures to show and no threshold events.
+		if = {
+			limit = { has_game_rule = global_warming_enabled }
+			gw_rebase_annual_emissions_effect = yes
+			gw_refresh_global_counts_effect = yes
 
-		# Fire warming-threshold environmentalism events exactly once globally when
-		# temperature_anomaly_display crosses each threshold upward. Runs in the
-		# global (world) scope of on_monthly_pulse — every_country inside the
-		# helper reaches all countries without per-country duplication.
-		gw_fire_warming_threshold_event = { THRESHOLD = 0.5 FLAG = gw_mild_event_fired         EVENT_ID = environmentalism_events.1 }
-		gw_fire_warming_threshold_event = { THRESHOLD = 1.0 FLAG = gw_moderate_event_fired     EVENT_ID = environmentalism_events.2 }
-		gw_fire_warming_threshold_event = { THRESHOLD = 2.0 FLAG = gw_severe_event_fired       EVENT_ID = environmentalism_events.3 }
-		gw_fire_warming_threshold_event = { THRESHOLD = 3.0 FLAG = gw_catastrophic_event_fired EVENT_ID = environmentalism_events.4 }
+			# Fire warming-threshold environmentalism events exactly once globally when
+			# temperature_anomaly_display crosses each threshold upward. Runs in the
+			# global (world) scope of on_monthly_pulse — every_country inside the
+			# helper reaches all countries without per-country duplication.
+			gw_fire_warming_threshold_event = { THRESHOLD = 0.5 FLAG = gw_mild_event_fired         EVENT_ID = environmentalism_events.1 }
+			gw_fire_warming_threshold_event = { THRESHOLD = 1.0 FLAG = gw_moderate_event_fired     EVENT_ID = environmentalism_events.2 }
+			gw_fire_warming_threshold_event = { THRESHOLD = 2.0 FLAG = gw_severe_event_fired       EVENT_ID = environmentalism_events.3 }
+			gw_fire_warming_threshold_event = { THRESHOLD = 3.0 FLAG = gw_catastrophic_event_fired EVENT_ID = environmentalism_events.4 }
 
-		# Cooling / reversal threshold events: fire once globally when temperatures
-		# move back below a threshold, gated on the matching warming flag so cooling
-		# only fires if the warming side already fired earlier in the run.
-		gw_fire_cooling_threshold_event = { THRESHOLD = 3.0 PREREQ = gw_catastrophic_event_fired FLAG = gw_cooling_below_3_event_fired       EVENT_ID = environmentalism_events.17 }
-		gw_fire_cooling_threshold_event = { THRESHOLD = 2.0 PREREQ = gw_severe_event_fired       FLAG = gw_cooling_below_2_event_fired       EVENT_ID = environmentalism_events.18 }
-		gw_fire_cooling_threshold_event = { THRESHOLD = 1.0 PREREQ = gw_moderate_event_fired     FLAG = gw_cooling_below_1_event_fired       EVENT_ID = environmentalism_events.19 }
-		gw_fire_cooling_threshold_event = { THRESHOLD = 0.5 PREREQ = gw_mild_event_fired         FLAG = gw_cooling_below_0_5_event_fired     EVENT_ID = environmentalism_events.20 }
-		gw_fire_cooling_threshold_event = { THRESHOLD = 0.1 PREREQ = gw_mild_event_fired         FLAG = gw_cooling_near_baseline_event_fired EVENT_ID = environmentalism_events.21 }
+			# Cooling / reversal threshold events: fire once globally when temperatures
+			# move back below a threshold, gated on the matching warming flag so cooling
+			# only fires if the warming side already fired earlier in the run.
+			gw_fire_cooling_threshold_event = { THRESHOLD = 3.0 PREREQ = gw_catastrophic_event_fired FLAG = gw_cooling_below_3_event_fired       EVENT_ID = environmentalism_events.17 }
+			gw_fire_cooling_threshold_event = { THRESHOLD = 2.0 PREREQ = gw_severe_event_fired       FLAG = gw_cooling_below_2_event_fired       EVENT_ID = environmentalism_events.18 }
+			gw_fire_cooling_threshold_event = { THRESHOLD = 1.0 PREREQ = gw_moderate_event_fired     FLAG = gw_cooling_below_1_event_fired       EVENT_ID = environmentalism_events.19 }
+			gw_fire_cooling_threshold_event = { THRESHOLD = 0.5 PREREQ = gw_mild_event_fired         FLAG = gw_cooling_below_0_5_event_fired     EVENT_ID = environmentalism_events.20 }
+			gw_fire_cooling_threshold_event = { THRESHOLD = 0.1 PREREQ = gw_mild_event_fired         FLAG = gw_cooling_near_baseline_event_fired EVENT_ID = environmentalism_events.21 }
+		}
+		else = {
+			# Save compatibility: before the rule gated accumulation, a disabled-rule
+			# game still built up emissions. Hold the global at 0 so no reader of
+			# temperature_anomaly_display acts on that phantom warming. The cooling
+			# events cannot fire from the drop, since they are gated above.
+			set_global_variable = {
+				name = greenhouse_gas_emissions
+				value = 0
+			}
+		}
 
 		# Recurring random events for countries experiencing global warming.
 		# Each country has a small monthly chance of getting one event.
@@ -1036,7 +1028,9 @@ global_warming_events_on_action = {
 					}
 					trigger_event = { id = environmentalism_events.12 }
 				}
-				# Climate summit (major+ power, moderate+ warming)
+				# Climate summit (major+ power, moderate+ warming). The UN's climate
+				# accord (un_events.17) owns this diplomacy while a UN exists, so the
+				# summit is the fallback for a world without one.
 				10 = {
 					trigger = {
 						has_journal_entry = je_global_warming
@@ -1044,6 +1038,10 @@ global_warming_events_on_action = {
 						temperature_anomaly_display >= 1.0
 						country_rank >= rank_value:major_power
 						has_technology_researched = pollution_control
+						OR = {
+							has_game_rule = united_nations_disabled
+							NOT = { has_global_variable = un_founded }
+						}
 					}
 					trigger_event = { id = environmentalism_events.13 }
 				}
@@ -1544,11 +1542,12 @@ international_relations_events_on_action = {
 					}
 					trigger_event = { id = international_relations_events.8 }
 				}
-				# Nuclear Close Call
+				# Nuclear Close Call (outside the deterrence system — see the event)
 				3 = {
 					trigger = {
 						has_modifier = nuclear_power
 						any_rival_country = { has_modifier = nuclear_power }
+						NOT = { nd_is_armed = yes }
 					}
 					trigger_event = { id = nuclear_weapon_events.21 }
 				}
@@ -3150,5 +3149,15 @@ agdiff_backfill_on_released_country = {
 		scope:target = {
 			agdiff_backfill_diffusion_for_country = yes
 		}
+	}
+}
+
+# Both homeland tracks use deterministic monthly progress.
+te_homeland_monthly = {
+	effect = {
+		set_variable = { name = te_homeland_monthly_units value = te_homeland_annual_progress }
+		te_homeland_creation_monthly_effect = yes
+		te_homeland_removal_monthly_effect = yes
+		remove_variable = te_homeland_monthly_units
 	}
 }

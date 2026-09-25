@@ -133,6 +133,7 @@ un_events.1 = {
 # costs something: tabling a censure costs relations and the tabling marker, a
 # court case costs relations, letting it rest costs prestige or credibility.
 un_events.2 = {
+	# REVIEWED 2026-09-25 (system_ungated): fired by the nuclear strike itself (extra_effects.txt); the UN condemnation of a real use
 	type = country_event
 	placement = root
 
@@ -386,6 +387,15 @@ un_events.3 = {
 
 	title = un_events.3.t
 	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 10), from
+		# the docket's last item. A human can sit on a passed-on offer while
+		# the docket moves on; a stale read then only drops this sentence.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.3.d_cause_war
+				trigger = { global_var:un_dkt_last_type ?= 10 }
+			}
+		}
 		first_valid = {
 			triggered_desc = { desc = un_events.3.d_council trigger = { has_law = law_type:law_council_republic } }
 			triggered_desc = { desc = un_events.3.d_theocratic trigger = { has_law = law_type:law_theocracy } }
@@ -1441,6 +1451,36 @@ un_events.11 = {
 			triggered_desc = { desc = un_events.11.d_theocratic trigger = { scope:veto_power = { has_law = law_type:law_theocracy } } }
 			desc = un_events.11.d
 		}
+		# What the veto does to our resolution while its vote is still open
+		# (scope:un_resolution comes down from un_resolution_record_veto). The
+		# vote is not over: the text must not claim the resolution had broad
+		# support, or that it is finished when the Assembly can still act.
+		#   reform           needs every permanent member; never overridden
+		#                    (un_resolution_veto_restraint is simple-majority only)
+		#   Charter Reform II  a two-thirds supermajority overrides the veto
+		#   military mandate   no weaker form: blocked outright
+		#   the rest         a simple majority still carries the weaker form
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.11.d_after_reform
+				trigger = { scope:un_resolution ?= { has_tag = un_res_voting has_tag = un_topic_reform } }
+			}
+			triggered_desc = {
+				desc = un_events.11.d_after_override
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_res_voting }
+					un_charter_level_value >= 2
+				}
+			}
+			triggered_desc = {
+				desc = un_events.11.d_after_mandate
+				trigger = { scope:un_resolution ?= { has_tag = un_res_voting has_tag = un_topic_military_mandate } }
+			}
+			triggered_desc = {
+				desc = un_events.11.d_after_open
+				trigger = { scope:un_resolution ?= { has_tag = un_res_voting } }
+			}
+		}
 	}
 	flavor = un_events.11.f
 
@@ -1517,6 +1557,7 @@ un_events.11 = {
 # Event 12: Decolonization Resolution
 # The Assembly debates colonial liberation. Framing depends on the player's ideology.
 un_events.12 = {
+	# REVIEWED 2026-09-25 (system_ungated): a UN topic raised by a real colonial collapse (docket item 8); UN history, independent of the decolonization JE
 	type = country_event
 	placement = root
 
@@ -1528,6 +1569,19 @@ un_events.12 = {
 
 	title = un_events.12.t
 	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 8), from
+		# the docket's last item. A human can sit on a passed-on offer while
+		# the docket moves on; a stale read then only drops this sentence.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.12.d_cause_collapse
+				trigger = {
+					global_var:un_dkt_last_type ?= 8
+					exists = scope:un_dkt_subject
+					NOT = { scope:un_dkt_subject ?= ROOT }
+				}
+			}
+		}
 		first_valid = {
 			triggered_desc = { desc = un_events.12.d_council trigger = { has_law = law_type:law_council_republic } }
 			triggered_desc = { desc = un_events.12.d_colonial trigger = { any_subject_or_below = { is_direct_subject_of = ROOT } } }
@@ -1640,9 +1694,28 @@ un_events.14 = {
 
 	title = un_events.14.t
 	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 6), from
+		# the docket's last item. A human can sit on a passed-on offer while
+		# the docket moves on; a stale read then only drops this sentence.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.14.d_cause_self
+				trigger = {
+					global_var:un_dkt_last_type ?= 6
+					scope:un_dkt_subject ?= ROOT
+				}
+			}
+			triggered_desc = {
+				desc = un_events.14.d_cause_other
+				trigger = {
+					global_var:un_dkt_last_type ?= 6
+					exists = scope:un_dkt_subject
+				}
+			}
+		}
 		first_valid = {
 			triggered_desc = { desc = un_events.14.d_nuclear trigger = { var:nuclear_weapon_stockpile >= 1 } }
-			triggered_desc = { desc = un_events.14.d_aspiring trigger = { has_journal_entry = je_nuclear_program } }
+			triggered_desc = { desc = un_events.14.d_aspiring trigger = { nuclear_program_has_programme = yes } }
 			desc = un_events.14.d
 		}
 	}
@@ -1800,6 +1873,9 @@ un_events.15 = {
 		custom_tooltip = un_ledger_tt_credibility_down_0_5
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 115 }
 		change_relations = { country = scope:trade_rival value = 15 }
+		# The rival negotiated nothing: its notice says we offered it
+		# concessions (notification_un_trade_deal_received_desc).
+		save_scope_as = un_trade_concession_offerer
 		scope:trade_rival = {
 			post_notification = un_trade_deal_received
 			add_modifier = {
@@ -1961,6 +2037,15 @@ un_events.17 = {
 
 	title = un_events.17.t
 	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 7), from
+		# the docket's last item. A human can sit on a passed-on offer while
+		# the docket moves on; a stale read then only drops this sentence.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.17.d_cause_threshold
+				trigger = { global_var:un_dkt_last_type ?= 7 }
+			}
+		}
 		first_valid = {
 			triggered_desc = { desc = un_events.17.d_command trigger = { has_law = law_type:law_command_economy } }
 			triggered_desc = { desc = un_events.17.d_laissez trigger = { has_law = law_type:law_laissez_faire } }
@@ -1972,6 +2057,9 @@ un_events.17 = {
 	duration = 3
 
 	trigger = {
+		# Raised only by a warming threshold (docket item 7), which the
+		# disabled global warming rule never crosses.
+		has_game_rule = global_warming_enabled
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 30
 		has_technology_researched = environmental_movement
@@ -2062,6 +2150,21 @@ un_events.18 = {
 
 	title = un_events.18.t
 	desc = {
+		# What is driving people out of the named country, read from its state
+		# now, so the text never claims a war or a famine that is not there.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.18.d_famine
+				trigger = { scope:refugee_source ?= { any_scope_state = { has_famine = yes } } }
+			}
+			triggered_desc = {
+				desc = un_events.18.d_war
+				trigger = { scope:refugee_source ?= { is_at_war = yes } }
+			}
+			desc = un_events.18.d_hardship
+		}
+		# Our position, and the offer: a convention we could table. Nothing is
+		# before the Assembly until option A tables it.
 		first_valid = {
 			triggered_desc = { desc = un_events.18.d_open trigger = { has_law = law_type:law_no_migration_controls } }
 			triggered_desc = { desc = un_events.18.d_closed trigger = { has_law = law_type:law_closed_borders } }
@@ -2091,15 +2194,49 @@ un_events.18 = {
 
 	immediate = {
 		un_vote_reserve = yes
-		random_country = {
+		# The country the displaced are fleeing: one struck by famine, or by a
+		# war that has devastated a state, when there is one; otherwise any
+		# country the trigger found (at war, or with a state in misery).
+		if = {
 			limit = {
-				NOT = { this = ROOT }
-				OR = {
-					is_at_war = yes
-					any_scope_state = { average_sol < 6 }
+				any_country = {
+					NOT = { this = ROOT }
+					NOT = { is_country_type = decentralized }
+					OR = {
+						any_scope_state = { has_famine = yes }
+						AND = {
+							is_at_war = yes
+							any_scope_state = { devastation > un_docket_war_devastation }
+						}
+					}
 				}
 			}
-			save_scope_as = refugee_source
+			random_country = {
+				limit = {
+					NOT = { this = ROOT }
+					NOT = { is_country_type = decentralized }
+					OR = {
+						any_scope_state = { has_famine = yes }
+						AND = {
+							is_at_war = yes
+							any_scope_state = { devastation > un_docket_war_devastation }
+						}
+					}
+				}
+				save_scope_as = refugee_source
+			}
+		}
+		else = {
+			random_country = {
+				limit = {
+					NOT = { this = ROOT }
+					OR = {
+						is_at_war = yes
+						any_scope_state = { average_sol < 6 }
+					}
+				}
+				save_scope_as = refugee_source
+			}
 		}
 	}
 
@@ -2118,17 +2255,16 @@ un_events.18 = {
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
 		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
+		# Open the vote: every other UN member votes, results in a year.
+		# The source is the resolution's target, so that un_vote.2 can offer
+		# its displaced resettlement when the resolution carries
+		# (un_events.103). A refugee resolution accuses nobody: the vote
+		# effects treat a target as accused only on the accusing topics
+		# (un_resolution_accuses_target), so the source voting for it is an
+		# ordinary yes, not a confession.
 		hidden_effect = {
 			scope:refugee_source ?= { save_scope_as = un_vote_target }
 			un_resolution_open = { TOPIC = refugee }
-		}
-		# Notify refugee source country
-		if = {
-			limit = { exists = scope:refugee_source }
-			scope:refugee_source = {
-				trigger_event = { id = un_events.103 days = 14 }
-			}
 		}
 	}
 
@@ -2190,6 +2326,15 @@ un_events.19 = {
 
 	title = un_events.19.t
 	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 9), from
+		# the docket's last item. A human can sit on a passed-on offer while
+		# the docket moves on; a stale read then only drops this sentence.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.19.d_cause_world
+				trigger = { global_var:un_dkt_last_type ?= 9 }
+			}
+		}
 		first_valid = {
 			triggered_desc = { desc = un_events.19.d_council trigger = { has_law = law_type:law_council_republic } }
 			triggered_desc = { desc = un_events.19.d_authoritarian trigger = { has_law = law_type:law_single_party_state } }
@@ -2553,7 +2698,12 @@ un_events.102 = {
 }
 
 # Event 103: International Refugee Resettlement
-# Fired on refugee_source when a foreign power launches a major resettlement program (from event 18, option A)
+# Fired to the country a refugee resolution named (its un_res_target, picked in
+# un_events.18) when the resolution carries: un_vote.2's refugee branch saves
+# its proposer, which secured the programme, as scope:resettlement_host. It
+# used to fire from event 18 option A two weeks after tabling and pick a host
+# from the holders of un_refugee_program_modifier, which nobody holds until
+# the resolution passes (redesign phase 5), so the host was always empty.
 un_events.103 = {
 	type = country_event
 	placement = root
@@ -2570,19 +2720,12 @@ un_events.103 = {
 
 	duration = 3
 
+	# A queued 103 from before this change carries no host and does not fire.
 	trigger = {
-		# always fires - triggered by event 18 option A
+		exists = scope:resettlement_host
+		NOT = { this = scope:resettlement_host }
 	}
 
-	immediate = {
-		random_country = {
-			limit = {
-				je:je_united_nations ?= { has_modifier = un_refugee_program_modifier }
-				NOT = { this = ROOT }
-			}
-			save_scope_as = resettlement_host
-		}
-	}
 	option = {
 		name = un_events.103.a
 		default_option = yes
@@ -3064,13 +3207,30 @@ un_events.33 = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
 	title = un_events.33.t
+	# REVIEWED 2026-09-25 (system_ungated): the nuclear text shows only when var:un_icc_crime = 1, which un_regime_icc_note_crime writes from inside the nuclear strike effects themselves (extra_effects.txt); the strike is game state, not a premise.
 	desc = {
+		# The crime. "Launched by [our] forces", not "on [our] orders": a
+		# launch can come from an incident under delegated authority or launch
+		# on warning (nuclear_deterrence_effects.txt, nd_launch_or_intercept),
+		# which nobody in government ordered, and the same path also carries a
+		# government's own order (nuclear_incident.1.c), so the two cannot be
+		# told apart here.
 		first_valid = {
 			triggered_desc = {
 				desc = un_events.33.d_nuclear
 				trigger = { var:un_icc_crime ?= 1 }
 			}
 			desc = un_events.33.d_regime_change
+		}
+		# The court's claim on us: a statute we ratified, or, for a country
+		# that never did, the jurisdiction a Supranational Assembly claims over
+		# everyone (un_regime_icc_note_crime).
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.33.d_ratified
+				trigger = { has_modifier = un_icc_member_modifier }
+			}
+			desc = un_events.33.d_jurisdiction
 		}
 	}
 	flavor = un_events.33.f

@@ -25,9 +25,12 @@
 #    is evaluated until one matches, so an unguarded `var:` read in an early
 #    branch would log "Failed to fetch variable" on every frame for those
 #    countries (gotcha #14). Every variable read below is therefore paired with
-#    `has_variable`, and the two branches that describe a *deactivated* entry
-#    come first and test modifiers and a scripted trigger live — by then the
-#    weekly pulse has stopped and nuclear_program_last_status is stale.
+#    `has_variable`, and the three branches that describe a country with no
+#    programme come first and test modifiers, the tech and a scripted trigger
+#    live — the entry may be deactivated, with the weekly pulse stopped and
+#    nuclear_program_last_status stale, or active for an armed power or a
+#    crisis party that has no programme at all (je_nuclear_program also
+#    carries posture and crises; see its header).
 #
 # nuclear_program_last_status is written in exactly one place,
 # nuclear_program_refresh_state_effect. Nothing here re-derives it.
@@ -48,8 +51,15 @@ nuclear_program_status_line = {
 		trigger = { modifier:country_nuclear_disarmament_bool = yes }
 		localization_key = nuclear_program_status_disarmed
 	}
-	# Deactivated for want of standing. Same scripted trigger the entry's
-	# `possible` asks, so the two can never disagree.
+	# No programme: the entry is inactive, or active for an armed power or a
+	# crisis party. The same triggers nuclear_program_has_programme asks, so
+	# the line and the programme panel can never disagree.
+	text = {
+		trigger = {
+			NOT = { has_technology_researched = nuclear_weapons }
+		}
+		localization_key = nuclear_program_status_no_science
+	}
 	text = {
 		trigger = { nuclear_program_can_run_programme = no }
 		localization_key = nuclear_program_status_ineligible

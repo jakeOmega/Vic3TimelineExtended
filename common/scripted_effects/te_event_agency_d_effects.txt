@@ -1,0 +1,19 @@
+﻿# Event-agency package D — scripted effects.
+
+# A reaction to the proliferation alert (nuclear_weapon_events.18) takes
+# progress off the proliferator's programme. Several recipients can reply
+# to the same alert, so the total is clamped at zero, and a programme whose
+# progress variable is gone (dismantled, disarmed) is left alone rather than
+# re-created negative.
+# Scope: the proliferating country.
+# $AMOUNT$ — progress points to remove (a positive number).
+nw_prolif_progress_setback = {
+	if = {
+		limit = { has_variable = nuclear_weapon_program_progress }
+		change_variable = { name = nuclear_weapon_program_progress subtract = $AMOUNT$ }
+		if = {
+			limit = { var:nuclear_weapon_program_progress < 0 }
+			set_variable = { name = nuclear_weapon_program_progress value = 0 }
+		}
+	}
+}

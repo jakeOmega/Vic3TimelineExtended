@@ -1,0 +1,16 @@
+﻿
+# Read-only culture label, using a proven state root + explicitly passed container.
+te_homeland_project_culture_sgui = {
+	scope = state
+	saved_scopes = { project }
+	is_shown = { always = yes }
+	is_valid = { always = no }
+	effect = {
+		if = {
+			limit = { exists = scope:project }
+			scope:project.var:te_homeland_culture = {
+				custom_tooltip_no_bullet = TE_HOMELAND_TARGET_CULTURE
+			}
+		}
+	}
+}
