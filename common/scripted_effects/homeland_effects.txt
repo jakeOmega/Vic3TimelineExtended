@@ -1,0 +1,163 @@
+﻿# Per-state, per-culture containers. Both tracks progress in parallel.
+
+# ROOT and current scope = state.
+te_homeland_creation_monthly_effect = {
+	# Discover new candidates; existing containers keep their own progress.
+	if = {
+		limit = {
+			te_homeland_system_enabled = yes
+			te_homeland_region_unified = yes
+		}
+		every_scope_culture = {
+			limit = { te_homeland_creation_candidate = yes }
+			save_scope_as = te_homeland_candidate
+			ROOT = {
+				if = {
+					limit = {
+						NOT = {
+							AND = {
+								has_variable_list = te_homeland_creation_projects
+								any_in_list = {
+									variable = te_homeland_creation_projects
+									var:te_homeland_culture = scope:te_homeland_candidate
+									te_homeland_creation_project_valid = yes
+								}
+							}
+						}
+					}
+					create_container = {
+						tags = { te_homeland_project te_homeland_creation }
+						parent = ROOT
+						save_scope_as = te_homeland_new_project
+					}
+					if = {
+						limit = { exists = scope:te_homeland_new_project }
+						scope:te_homeland_new_project = {
+							set_variable = { name = te_homeland_state value = ROOT }
+							set_variable = { name = te_homeland_owner value = ROOT.owner }
+							set_variable = { name = te_homeland_culture value = scope:te_homeland_candidate }
+							set_variable = { name = te_homeland_progress value = 0 }
+						}
+						add_to_variable_list = { name = te_homeland_creation_projects target = scope:te_homeland_new_project }
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = { has_variable_list = te_homeland_creation_projects }
+		every_in_list = {
+			variable = te_homeland_creation_projects
+			if = {
+				limit = { NOT = { te_homeland_creation_project_valid = yes } }
+				add_to_temporary_list = te_homeland_creation_finished
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						te_homeland_system_enabled = yes
+						te_homeland_region_unified = yes
+					}
+				}
+				# Twelfths of a percentage point: 10 units/month = 120 months.
+				change_variable = { name = te_homeland_progress add = ROOT.var:te_homeland_monthly_units }
+				if = {
+					limit = { var:te_homeland_progress >= 1200 }
+					var:te_homeland_culture = { save_scope_as = form_culture }
+					ROOT = {
+						state_region = { add_homeland = scope:form_culture }
+						post_notification = homeland_created
+					}
+					add_to_temporary_list = te_homeland_creation_finished
+				}
+			}
+		}
+		# Never mutate the persistent list while iterating it.
+		every_in_list = {
+			list = te_homeland_creation_finished
+			ROOT = { remove_list_variable = { name = te_homeland_creation_projects target = PREV } }
+			destroy_container = yes
+		}
+	}
+}
+
+# ROOT and current scope = state.
+te_homeland_removal_monthly_effect = {
+	# Discover new candidates; existing containers keep their own progress.
+	if = {
+		limit = {
+			te_homeland_system_enabled = yes
+			te_homeland_region_unified = yes
+		}
+		every_scope_culture = {
+			limit = { te_homeland_removal_candidate = yes }
+			save_scope_as = te_homeland_candidate
+			ROOT = {
+				if = {
+					limit = {
+						NOT = {
+							AND = {
+								has_variable_list = te_homeland_removal_projects
+								any_in_list = {
+									variable = te_homeland_removal_projects
+									var:te_homeland_culture = scope:te_homeland_candidate
+									te_homeland_removal_project_valid = yes
+								}
+							}
+						}
+					}
+					create_container = {
+						tags = { te_homeland_project te_homeland_removal }
+						parent = ROOT
+						save_scope_as = te_homeland_new_project
+					}
+					if = {
+						limit = { exists = scope:te_homeland_new_project }
+						scope:te_homeland_new_project = {
+							set_variable = { name = te_homeland_state value = ROOT }
+							set_variable = { name = te_homeland_owner value = ROOT.owner }
+							set_variable = { name = te_homeland_culture value = scope:te_homeland_candidate }
+							set_variable = { name = te_homeland_progress value = 0 }
+						}
+						add_to_variable_list = { name = te_homeland_removal_projects target = scope:te_homeland_new_project }
+					}
+				}
+			}
+		}
+	}
+	if = {
+		limit = { has_variable_list = te_homeland_removal_projects }
+		every_in_list = {
+			variable = te_homeland_removal_projects
+			if = {
+				limit = { NOT = { te_homeland_removal_project_valid = yes } }
+				add_to_temporary_list = te_homeland_removal_finished
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						te_homeland_system_enabled = yes
+						te_homeland_region_unified = yes
+					}
+				}
+				# Twelfths of a percentage point: 10 units/month = 120 months.
+				change_variable = { name = te_homeland_progress add = ROOT.var:te_homeland_monthly_units }
+				if = {
+					limit = { var:te_homeland_progress >= 1200 }
+					var:te_homeland_culture = { save_scope_as = removal_culture }
+					ROOT = {
+						state_region = { remove_homeland = scope:removal_culture }
+						post_notification = homeland_removed
+					}
+					add_to_temporary_list = te_homeland_removal_finished
+				}
+			}
+		}
+		# Never mutate the persistent list while iterating it.
+		every_in_list = {
+			list = te_homeland_removal_finished
+			ROOT = { remove_list_variable = { name = te_homeland_removal_projects target = PREV } }
+			destroy_container = yes
+		}
+	}
+}

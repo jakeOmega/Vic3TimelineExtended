@@ -90,7 +90,10 @@ treaty_article_events.1 = {
 
 	option = {
 		name = treaty_article_events.1.b
-		# Use the intelligence to harden our counter-espionage
+		# Use the intelligence to harden our counter-espionage. Its payoff is
+		# covert defence, which only the covert-warfare system reads; without
+		# that system the option would be a strictly weaker copy of option a.
+		trigger = { has_game_rule = covert_warfare_enabled }
 		add_modifier = {
 			name = intelligence_tip_off_modifier
 			days = short_modifier_time
@@ -209,7 +212,8 @@ treaty_article_events.2 = {
 	option = {
 		name = treaty_article_events.2.a
 		default_option = yes
-		# Demand answers from our partner
+		# Blame the partner in public for a delay that was ours: our choice,
+		# and the relations hit is its price.
 		add_modifier = {
 			name = intelligence_failure_modifier
 			days = normal_modifier_time
@@ -437,6 +441,11 @@ treaty_article_events.5 = {
 				source_country = ROOT
 			}
 		}
+		# The generals rage over a programme the treaty actually took away:
+		# nuclear_disarmament's on_entry_into_force sets this only when the
+		# country had warheads or development progress to give up.
+		has_game_rule = nuclear_weapons_enabled
+		has_variable = te_nuclear_disarmament_ended_program
 		NOT = { has_modifier = military_disarmament_anger_modifier }
 	}
 
@@ -666,7 +675,21 @@ treaty_article_events.8 = {
 				source_country = ROOT
 			}
 		}
+		# The pause always leaves this variable at 0, so it proves nothing on its
+		# own: require a programme with something in it to freeze. A pause
+		# zeroes funding but keeps progress and stockpile.
+		has_game_rule = nuclear_weapons_enabled
 		has_variable = nuclear_weapons_program_funding
+		OR = {
+			AND = {
+				has_variable = nuclear_weapon_program_progress
+				var:nuclear_weapon_program_progress > 0
+			}
+			AND = {
+				has_variable = nuclear_weapon_stockpile
+				var:nuclear_weapon_stockpile > 0
+			}
+		}
 		NOT = { has_modifier = nuclear_freeze_tension_modifier }
 	}
 

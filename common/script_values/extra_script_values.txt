@@ -184,7 +184,7 @@ investment_pool_banking_cycle_add = {
 }
 
 # Homeland thresholds: read from state modifier system (base values in INJECT:base_values)
-# Evaluated in state scope (via scripted effects called from on_yearly_pulse_state)
+# Evaluated in state scope (via scripted effects called from on_monthly_pulse_state)
 # Laws/techs apply these to all states; decrees/buildings modify per-state
 homeland_culture_disappear_threshold = {
 	value = modifier:state_homeland_removal_threshold_add
@@ -197,9 +197,9 @@ homeland_culture_form_threshold = {
 	max = 0.90
 }
 
-# Annual chance (0-100) that homeland creation/removal fires in this state
-# Base 10%, scaled by state speed modifier, turmoil, and government legitimacy
-homeland_change_chance = {
+# Annual progress in percentage points for both monthly homeland tracks.
+# Base 10 points/year, scaled by speed modifiers, turmoil and legitimacy.
+te_homeland_annual_progress = {
 	value = 10
 
 	# Apply state-level speed modifier from laws, techs, decrees, buildings, power blocs

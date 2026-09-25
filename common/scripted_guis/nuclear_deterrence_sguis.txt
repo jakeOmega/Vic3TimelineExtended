@@ -5,7 +5,7 @@
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
 # Two ACTION handlers, parameterized by a saved scope `op` (the Strategic
-# Reserve / nuclear programme pattern), and four DISPLAY handlers. The op
+# Reserve / nuclear programme pattern), and five DISPLAY handlers. The op
 # tables are repeated in the .gui header and in
 # docs/systems/journal_entry_systems.md — keep all three in step.
 #
@@ -39,7 +39,7 @@ nd_posture_sgui = {
 	saved_scopes = { op }
 
 	is_shown = {
-		has_journal_entry = je_nuclear_deterrence
+		has_journal_entry = je_nuclear_program
 	}
 
 	is_valid = {
@@ -189,7 +189,7 @@ nd_crisis_action_sgui = {
 	saved_scopes = { op }
 
 	is_shown = {
-		has_journal_entry = je_nuclear_deterrence
+		has_journal_entry = je_nuclear_program
 	}
 
 	is_valid = {
@@ -252,6 +252,18 @@ nd_armed_sgui = {
 	is_shown = {
 		nd_is_armed = yes
 		nd_is_initialized = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# Is there a reputation to show? Credibility is created with the posture, or
+# by a crisis; a great power still building its first warhead has neither.
+nd_has_reputation_sgui = {
+	scope = country
+	is_shown = {
+		has_variable = nd_credibility
 	}
 	is_valid = { always = no }
 	ai_is_valid = { always = no }

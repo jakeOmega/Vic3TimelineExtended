@@ -8,6 +8,7 @@
 # ideological demands. Fired only by that rival's own choice in world_war_events.4
 # (scope:ideological_rival = the rival, which chose to issue them).
 world_war_events.1 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -269,6 +270,7 @@ world_war_events.2 = {
 # (or the war it became) against a smaller country in our sphere: a fellow power
 # bloc member, or one we are already bound to defend. Both are real and named.
 world_war_events.3 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — gate on real pressure
 	type = country_event
 	placement = root
 

@@ -15,7 +15,20 @@ surveillance_events.1 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	title = surveillance_events.1.t
-	desc = surveillance_events.1.d
+	desc = {
+		first_valid = {
+			# Under the data privacy law, domestic surveillance is not state policy: what the
+			# leak exposes is a programme run in defiance of that law.
+			triggered_desc = {
+				trigger = { has_law = law_type:law_moderate_data_privacy }
+				desc = surveillance_events.1.d_rogue
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = surveillance_events.1.d
+			}
+		}
+	}
 	flavor = surveillance_events.1.f
 
 	duration = 3
@@ -167,7 +180,20 @@ surveillance_events.3 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	title = surveillance_events.3.t
-	desc = surveillance_events.3.d
+	desc = {
+		first_valid = {
+			# Under the data privacy law, domestic surveillance is not state policy: what the
+			# leak exposes is a programme run in defiance of that law.
+			triggered_desc = {
+				trigger = { has_law = law_type:law_moderate_data_privacy }
+				desc = surveillance_events.3.d_rogue
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = surveillance_events.3.d
+			}
+		}
+	}
 	flavor = surveillance_events.3.f
 
 	duration = 3
@@ -343,7 +369,19 @@ surveillance_events.5 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	title = surveillance_events.5.t
-	desc = surveillance_events.5.d
+	desc = {
+		first_valid = {
+			# Covert warfare on: the event follows an operation our counterintelligence exposed.
+			triggered_desc = {
+				trigger = { has_game_rule = covert_warfare_enabled }
+				desc = surveillance_events.5.d_exposed
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = surveillance_events.5.d
+			}
+		}
+	}
 	flavor = surveillance_events.5.f
 
 	duration = 3
@@ -355,12 +393,36 @@ surveillance_events.5 = {
 			has_technology_researched = cybersecurity
 		}
 		NOT = { has_law = law_type:law_strong_privacy_rights }
-		any_rival_country = {
-			has_technology_researched = cybersecurity
+		OR = {
+			# Covert warfare off: a cyber-capable rival stands in for the spy.
+			AND = {
+				has_game_rule = covert_warfare_disabled
+				any_rival_country = {
+					has_technology_researched = cybersecurity
+				}
+			}
+			# Covert warfare on: only after our counterintelligence has actually caught
+			# an espionage-tier operation (covert_op_burn's exposure record), within
+			# the last two years. Gating on a live covert pact instead would tell us
+			# about an operation we never detected, which the covert system withholds
+			# by design (see covert_op_burn's header). The age only ticks while
+			# je_covert_warfare runs, so a country without that JE active sees this
+			# at most once (te_ea_b_surv5_answered) instead of on every cooldown.
+			AND = {
+				has_game_rule = covert_warfare_enabled
+				covert_code_tier_mild = { VAR = iw_last_exposed_type }
+				has_variable = iw_last_exposed_age
+				var:iw_last_exposed_age < 24
+				OR = {
+					has_journal_entry = je_covert_warfare
+					NOT = { has_variable = te_ea_b_surv5_answered }
+				}
+			}
 		}
 	}
 
 	immediate = {
+		set_variable = te_ea_b_surv5_answered
 	}
 
 	# Strengthen cybersecurity defenses

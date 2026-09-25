@@ -2,7 +2,7 @@
 #
 # Mod homeland-formation system: country-level enable flag plus per-state
 # creation/removal thresholds and change-speed multiplier. Consumed by the
-# homelands annual pulse and related scripted_effects.
+# homelands monthly pulse and related scripted_effects.
 
 # Country-level binary: enables homeland creation/removal independent of power bloc
 country_homelands_can_change_bool = {
@@ -38,9 +38,9 @@ state_homeland_removal_threshold_add = {
 	script_only = yes
 }
 
-# Percentage multiplier on annual homeland change chance (base 10%)
+# Percentage multiplier on annual homeland progress (base 10 percentage points)
 # State-level: laws apply to all states, decrees/buildings per-state
-# +1.0 = +100% speed (doubles chance); -0.5 = -50% speed (halves chance)
+# +1.0 = +100% speed (doubles progress); -0.5 = -50% speed (halves progress)
 state_homeland_change_speed_mult = {
 	color = good
 	percent = yes

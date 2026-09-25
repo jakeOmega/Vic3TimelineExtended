@@ -572,18 +572,11 @@ sr_establish_colony_effect = {
 		limit = { NOT = { has_global_variable = sr_colonization_stage } }
 		set_global_variable = { name = sr_colonization_stage value = 1 }
 	}
-	# Increment colony count for this country
-	change_variable = { name = sr_colony_count add = 1 }
-	# The national/international charter story follows a real first colony.
-	# Delay it past the location's own specialization event (duration = 3).
-	if = {
-		limit = {
-			var:sr_colony_count = 1
-			NOT = { has_variable = ste_event_18_fired }
-		}
-		set_variable = { name = sr_colony_charter_pending value = yes days = 14 }
-		trigger_event = { id = society_technology_events.18 days = 7 }
-	}
+	# Count the world's claimed sites before the draw. Once every site is
+	# claimed (stage 5 full) the stage lists below have no valid entry and
+	# claim nothing, so the colony count and the first-colony charter must
+	# follow an actual claim, not the bar filling.
+	set_local_variable = { name = sr_colonies_claimed_before value = sr_total_global_colonies }
 
 	# ===== STAGE 1: Mars & Asteroids =====
 	if = {
@@ -786,6 +779,22 @@ sr_establish_colony_effect = {
 		}
 	}
 
+	# A site was claimed: count it for this country. The national/
+	# international charter story follows a real first colony. Delay it past
+	# the location's own specialization event (duration = 3).
+	if = {
+		limit = { local_var:sr_colonies_claimed_before < sr_total_global_colonies }
+		change_variable = { name = sr_colony_count add = 1 }
+		if = {
+			limit = {
+				var:sr_colony_count = 1
+				NOT = { has_variable = ste_event_18_fired }
+			}
+			set_variable = { name = sr_colony_charter_pending value = yes days = 14 }
+			trigger_event = { id = society_technology_events.18 days = 7 }
+		}
+	}
+
 	# Check stage advancement after establishing colony
 	sr_check_colony_stage_effect = yes
 }
@@ -960,8 +969,19 @@ sr_fire_ambitious_failure_event = {
 		10 = {
 			trigger_event = { id = space_race_events.18 }
 		}
-		# Suspected Sabotage (always available)
+		# Suspected Sabotage: "a rival power that cannot afford to see us
+		# succeed". With covert warfare on, only while a foreign operation is
+		# really working against us — space espionage on the programme, or
+		# infrastructure sabotage in one of our states. With the rule off it is
+		# the fallback. Events 10, 18, 70 and 74 keep the pool non-empty.
 		10 = {
+			trigger = {
+				OR = {
+					has_game_rule = covert_warfare_disabled
+					has_modifier = covert_space_espionage_detected
+					any_scope_state = { has_modifier = covert_infrastructure_sabotage }
+				}
+			}
 			trigger_event = { id = space_race_events.19 }
 		}
 		# Launch Pad Explosion (always: targets building)

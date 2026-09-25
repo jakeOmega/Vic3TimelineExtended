@@ -417,6 +417,12 @@ repeatable_events.70 = {
 			has_technology_researched = orbital_manufacturing
 			has_technology_researched = orbital_weapon_platforms
 		}
+		# The text is about our platform in orbit: with the space race on, only a
+		# country that has reached orbit has one.
+		OR = {
+			has_game_rule = space_race_disabled
+			has_variable = sr_completed_orbital
+		}
 	}
 
 	option = {
@@ -463,6 +469,12 @@ repeatable_events.80 = {
 
 	trigger = {
 		has_technology_researched = space_based_solar_power
+		# Only a grid fed from orbit can lose an array: a receiver needs the
+		# slots an orbital collector grants (solar_receiver_slots_remaining).
+		any_scope_building = {
+			is_building_type = building_solar_receiver
+			level >= 1
+		}
 	}
 
 	option = {

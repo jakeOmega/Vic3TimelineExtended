@@ -5,6 +5,7 @@
 > Sections 1–14 remain the design (written 2026-09-24, baseline main at 4fbb27c67ce517dc9236233244548eecf6cb4f12); where they disagree with §0, §0 is what shipped.
 > Companion work: [UN redesign, PR #411](https://github.com/jakeOmega/Vic3TimelineExtended/pull/411).
 > The nuclear system must function with the UN, covert-warfare, and world-war systems disabled.
+> **2026-09-25:** posture and crises no longer have their own journal entry. `je_nuclear_deterrence` was merged into `je_nuclear_program`, shown as "Nuclear Weapons", to spend one journal slot instead of two; §0.1 and §0.7 say how the separation §2 and §10 asked for is kept.
 
 ## 0. Implementation as shipped
 
@@ -14,7 +15,7 @@ Built on 2026-09-25 in one pass from §1–§14. None of it has run in a game ye
 
 | Piece | File |
 |---|---|
-| Journal entry `je_nuclear_deterrence` (active while armed or in a crisis) | `common/journal_entries/je_nuclear_deterrence.txt` |
+| Journal entry `je_nuclear_program` ("Nuclear Weapons"): the programme, posture and crises in one entry, active with a programme, while armed, or in a crisis (`nuclear_program_entry_applies`). Posture and crises had their own entry, `je_nuclear_deterrence`, until 2026-09-25 | `common/journal_entries/je_nuclear_program.txt` |
 | Posture, upkeep, capabilities, domestic stance, incidents, launch dispatch | `common/scripted_effects/nuclear_deterrence_effects.txt` |
 | Crisis lifecycle, settlements, credibility, native-outcome observation, guarantor acts | `common/scripted_effects/nuclear_crisis_effects.txt` |
 | Doctrine gates, eligibility, AI judgement, dispute tests, panel eligibility | `common/scripted_triggers/nuclear_deterrence_triggers.txt` |
@@ -30,7 +31,7 @@ Built on 2026-09-25 in one pass from §1–§14. None of it has run in a game ye
 | Consistency tests (panel ops, fired events, loc keys, modifier families) | `test_nuclear_deterrence.py` |
 | Existing strike actions, now doctrine-gated and recorded | `common/diplomatic_actions/nuke.txt` |
 
-Every country variable carries the `nd_` prefix. The entry is gated on `nuclear_weapons_enabled` and on holding at least one warhead, so a country with no arsenal gets nothing.
+Every country variable carries the `nd_` prefix. Posture, upkeep and incidents are gated on `nuclear_weapons_enabled` and on holding at least one warhead (`nd_is_armed`), so a country with no arsenal gets nothing. The shared entry is also active for a programme that has not built a warhead yet; every `nd_*` pulse effect is a no-op for such a country.
 
 ### 0.2 Posture (phase 1)
 
@@ -201,6 +202,7 @@ The beneficiary hears the answer through `.21`. Programme freezes and disarmamen
 - A peacetime launch branch never strikes (§8.3's own boundary).
 - The Unconfirmed Warning is always a false alarm; the genuine-warning variant is not built. Nothing in its text says "false alarm" before the inquiry.
 - Exercises exist as an incident (`.10`) and as a crisis act, not as a standing action.
+- Posture and crises share the programme's journal entry (§2 and §10 kept them apart). The separations those sections care about are kept without a second entry: arsenal ownership is still separate from programme eligibility — the entry's `possible` admits anyone armed, while the programme half of its weekly pulse runs only under `nuclear_program_has_programme`, so a demoted power keeps its posture, upkeep and accidents and stops building — and production still does not share a bar with the crisis: the native bar is warhead progress, and the crisis has its own panel.
 - The AI's first use in `nuke.txt` used to test `scope:country` (the actor) and so probably never passed. It now tests `scope:target_country` and goes through `nd_ai_nuclear_use_justified`, so an AI warfighting monopolist **can** use weapons in an ordinary war, as §9 requires. Expect more AI nuclear use than before.
 
 ### 0.8 Tuning constants
@@ -209,7 +211,7 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 
 ### 0.9 In-game checklist
 
-1. On a **new game** (a save started before the entry existed never activates it), the entry appears the month a country's first warhead exists and goes away when it is disarmed. A demoted former great power keeps it, and its upkeep, while it holds warheads.
+1. On a **new game**, "Nuclear Weapons" activates for a great power with the `nuclear_weapons` tech; the posture panel and the upkeep event appear the week its first warhead exists. A demoted power holding warheads keeps the entry and its upkeep, but its programme panel disappears and its funding (and the funding modifier) drops to zero. A non-nuclear crisis target gets the entry for the crisis and loses it when the crisis ends. The entry goes away on disarmament unless the country is in a crisis. In a save that had the old `je_nuclear_deterrence` entry, the posture modifiers (and upkeep) are back on the merged entry within a week (`nd_rebuild_posture_modifiers`), and in a save older than that, an armed country with the programme entry is put under a posture for the first time. The three container-4 panels (posture, crisis, delivery and defence) draw in that order.
 2. The posture panel's buttons work, grey out with the right reason, and show the upkeep a change would cost.
 3. The weekly figure on `nd_upkeep_cost` matches `nd_upkeep_weekly_cached` and follows a readiness change within the same month.
 4. AI nuclear powers settle on varied postures, not all warfighting and not all routine.
