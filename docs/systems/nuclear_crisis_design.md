@@ -209,7 +209,7 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 
 ### 0.9 In-game checklist
 
-1. The entry appears the month a country's first warhead exists and goes away when it is disarmed. A demoted former great power keeps it, and its upkeep, while it holds warheads.
+1. On a **new game** (a save started before the entry existed never activates it), the entry appears the month a country's first warhead exists and goes away when it is disarmed. A demoted former great power keeps it, and its upkeep, while it holds warheads.
 2. The posture panel's buttons work, grey out with the right reason, and show the upkeep a change would cost.
 3. The weekly figure on `nd_upkeep_cost` matches `nd_upkeep_weekly_cached` and follows a readiness change within the same month.
 4. AI nuclear powers settle on varied postures, not all warfighting and not all routine.

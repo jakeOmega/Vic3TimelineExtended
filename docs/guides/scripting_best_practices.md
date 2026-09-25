@@ -2360,6 +2360,8 @@ When moving a modifier to JE scope, update **every** reference across the codeba
 
 Per vanilla `journal_entries.md`: a JE auto-activates "when both this and is_shown_when_inactive is true" (both are ignored for `add_journal_entry`-added JEs). So a game-rule or era gate placed only in `is_shown_when_inactive` DOES gate activation — the social-movement JE family (`je_mental_health`, `je_digital_rights`, `je_post_scarcity`, `je_human_augmentation`, `je_civil_rights`) deliberately keeps `has_game_rule = social_movements_enabled` there and only the tech/condition in `possible`. Don't flag that shape as a gating leak, and conversely don't assume `possible` alone is the activation trigger when auditing.
 
+**A new auto-activating JE does not appear in a save started before it existed.** In play-testing on 2026-09-25, `je_nuclear_deterrence` never activated in an older save across several in-game years, although its `possible` was true the whole time: the same trigger showed the country the new diplomatic actions. Test a new auto-activating JE on a new game. If existing saves must get it, add it explicitly with `add_journal_entry`.
+
 ### JE Lifecycle: `invalid` + `on_invalid` Cleanup
 
 A JE with only an `invalid` trigger will disappear when the trigger fires, but **country-scoped state (variables, modifiers applied outside the JE scope) is not cleaned up**. Always pair `invalid` with `on_invalid` when the JE sets country variables or applies country-scoped modifiers that should be removed on invalidation.
