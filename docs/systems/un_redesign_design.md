@@ -2,9 +2,10 @@
 
 > **STATUS: PHASES 1 (THE AUTHORITY MODEL), 2 (THE LADDER, THE CEILING AND THE FLOOR),
 > 3 (GROUNDS, THE ITEMISED LEAN, AI VOTING IN SCRIPT, THE RECESS), 4 (THE DOCKET AND THE
-> EVENT REWRITE) AND 5 (DUES, TEETH, REGIMES, SOVEREIGNTY, INTELLIGENCE) IMPLEMENTED.** Phase 1
-> has been play-tested; phases 2–5 are pending in-game verification. Phase 6 is designed but
-> not built. Read
+> EVENT REWRITE), 5 (DUES, TEETH, REGIMES, SOVEREIGNTY, INTELLIGENCE) AND 6 (MISSIONS)
+> IMPLEMENTED.** Phase 1 has been play-tested; phases 2–6 are pending in-game verification.
+> Read
+> [§0.6](#06-phase-6-as-shipped--rulings-deviations-and-open-checks),
 > [§0.5](#05-phase-5-as-shipped--rulings-deviations-and-open-checks),
 > [§0.4](#04-phase-4-as-shipped--rulings-deviations-and-open-checks),
 > [§0.3](#03-phase-3-as-shipped--rulings-deviations-and-open-checks),
@@ -21,6 +22,147 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.6 Phase 6 as shipped — rulings, deviations and open checks
+
+Built 2026-09-25 on `claude/amazing-clarke-r5wz67`, after phase 5. Not yet seen in a running
+game. Implements §9 (missions), the delivery that feeds on them (§3.2), the mission hosts'
+covert price (§7.4) and the mission forms of §5.2's peacekeeping row.
+
+### Files
+
+- `common/script_values/un_mission_values.txt`: the mission types table, the tuning, the
+  strength formula, and the state panel tile's values.
+- `common/scripted_triggers/un_mission_triggers.txt`.
+- `common/scripted_effects/un_mission_effects.txt`: every writer; the container schema and the
+  call sites are at its top.
+- `common/on_actions/un_mission_on_actions.txt`: the state monthly pulse.
+- **Call sites changed:**
+  - `un_vote.2` (a peacekeeping request carried in full, and an aid request carried, open
+    missions);
+  - `un_vote_apply_resolution_compliance` (pledgers join);
+  - `un_events.4` A (stabilisation), `un_events.7` A (aid), `un_events.7` B (a flat token);
+  - `un_events.102` (the host's welcome notes the covert price; resentment expels the mission);
+  - `un_teeth_war_goal_surcharge` (a mission host is under protection);
+  - `covert_nets_sync` (contributors' networks in the host);
+  - `un_dissolve` (every mission ends).
+- **Display:** the chamber's **Missions in the Field** register; a **UN mission tile** in the
+  state panel (`gui/states_panel.gui`, after the antimatter tile); the delivery pillar's
+  tooltip.
+- **Console:** `te_debug_un.1` option u (a peacekeeping mission to our most devastated state).
+
+### Rulings: where phase 6 deviates from, or binds, the sections below
+
+1. **The container (§9)** is a script container in the mandate pattern.
+   - It carries a type tag, an active tag closed as succeeded, failed or lapsed, the host, the
+     state, months, progress, strength, the years it began and ended, and a contributor list.
+   - It is filed in `un_mission_registry` (12 kept; active missions are never evicted).
+   - The state carries `un_msn_here`, so a state holds **one mission at a time**.
+2. **Three types, not six (deviation).**
+   - Built: **peacekeeping**, **aid** and **stabilisation**. Each is tied to a situation that
+     already reaches the Assembly: a peacekeeping request, an aid request or a famine, and a
+     state collapse.
+   - Not built: the refugee camp, heritage site and inspection missions. The refugee and
+     heritage conventions and the NPT's inspections (§0.5 ruling 15) carry those ideas as
+     regimes.
+3. **Where a mission goes:**
+   - **Peacekeeping** goes to the requester's most devastated state.
+   - **Aid** goes to the requester's state with the lowest standard of living, or, for a
+     famine, the famine state the docket named.
+   - **Stabilisation** goes to the collapsing country's most populous state.
+   - A second responder to the same crisis joins the mission already there.
+   - If every state of the host already holds another kind, a resolution falls back to the
+     country-wide modifier of old.
+4. **Strength (§9, §7.2)** is written monthly on the mission and copied to the state
+   (`var:un_msn_power`):
+   `E × (1 − 0.5 × the withholders' share of the members' GDP) × (0.75 + 0.25 × contributors, up to 3)`.
+   - At Moribund a mission does nothing.
+   - Withheld dues starve every mission. This is how "the budget funds missions" shipped:
+     through the dues' funding share, not a money amount, because GDP scales are too wide for a
+     fixed budget line to mean anything.
+5. **State modifiers (§9):** applied from `on_monthly_pulse_state`, the single refresh site, ×
+   strength. The multiplier's variable is removed only after the modifiers are.
+   - **Peacekeeping:** turmoil effects −20%, devastation recovery +50%.
+   - **Aid:** SoL +1.5, food security +0.2, mortality −5%.
+   - **Stabilisation:** turmoil effects −30%, SoL +0.5.
+6. **Outcomes (§9):**
+   - **Succeeds when:**
+     - peacekeeping: 24 months of peace for its host (progress stalls while the host is at war);
+     - aid: at least 6 months in, the state has no famine and an average SoL of 10;
+     - stabilisation: 12 months after the collapse ends (48 while it lasts).
+   - **Fails when** the host is attacked (at war, not as the initiator), or for peacekeeping
+     and stabilisation when every contributor is gone. A stabilisation mission also fails when
+     its host **expels** it (`un_events.102` B, resenting the peacekeepers).
+   - **Lapses** after 60 months, when its host loses the state or stops existing, or when a host
+     that requested it leaves the UN (`un_msn_requested`). A mission sent to a collapse or a
+     famine may serve a country outside the UN.
+   - **Success:** delivery +2 (institutional, reason 19), standing +3 for each contributor
+     (reason 34), relations +15 with the host, and word to all of them.
+   - **Failure:** credibility −1 (reason 20).
+   - **Lapse:** nothing.
+7. **Contributors:**
+   - **Resolutions:** the members that pledge in `un_vote.3` join the mission their resolution
+     opened (`un_res_mission`).
+   - **Appeals:** the powers that answer a collapse or famine appeal in full join or open one.
+   - **Pruning:** contributors that leave the UN or stop existing are dropped monthly.
+   - **Deviation:** "the contributors withdraw" is read from membership, not from the
+     programme toggles. The docket already offers collapses to the peacekeeping programme's
+     members first, which is how §10's "programmes become mission contributions" shipped.
+8. **Protection (§5.2):** the host of an active peacekeeping or stabilisation mission counts as
+   "under UN peacekeeping" for the war-goal surcharge, doubled from Strong (§0.5 ruling 8).
+   **Not built:** the Supranational prohibition of war goals against a mission state.
+9. **Covert (§7.4):** a contributor's covert networks in the host grow 25% faster
+   (`iw_net_un_mult`), and the host's welcome event says so. The headquarters host's bonus
+   (phase 5) takes precedence where both apply.
+10. **Display (deviations):**
+    - **Built:** the chamber's register, and the state tile (the kind in its name, then months,
+      strength, progress and a bar; a tooltip explaining the rules and the contributor count).
+    - **The UN map mode is not built.** The mod's overlay system (`te_apply_map_mode_overlay`) is
+      dormant: its decision is hidden, it has never shipped live, and waking it for one metric
+      needs its own in-game test.
+    - **Headlines are not built.**
+11. **Delivery (§3.2)** stays a decaying ledger, as §0.1 ruling 3 planned until missions
+    existed. Mission outcomes now feed it beside the old sources.
+12. **Old saves:**
+    - Country-wide received modifiers already running expire on their own.
+    - The first missions open from the next carried request, collapse or famine.
+    - A dissolution closes every active mission as lapsed and keeps the register, like the
+      mandates'.
+
+### Known roughnesses
+
+- **One mission per state.** A peacekeeping request from a country whose every state already
+  holds an aid mission gets the country-wide modifier instead.
+- **The attack test is coarse:** any war the host did not start fails its mission, even one
+  far from the mission's state.
+- **Mission modifiers restate numbers** in the tile's tooltip and the chamber's help (24
+  months, SoL 10, five years).
+- **The state tile** has not been seen: the `AddLocalizationIf` in its name, and its place in
+  the status grid (it must fit the grid's two-column pairing), need a look.
+
+### IN-GAME VERIFICATION CHECKLIST (phase 6)
+
+1. **Open one.** `event te_debug_un.1` option u: a UN peacekeeping mission in our most
+   devastated state, with the most prestigious other member contributing.
+   - The next state pulse gives the state the peacekeeping modifier × strength.
+   - The state panel shows the UN tile with its months, strength and progress.
+   - The chamber's Missions in the Field lists it with its contributor.
+2. **Progress.** Month by month, progress rises about 4 points while we are at peace, and
+   stalls while we are at war.
+3. **Failure.** Declare nothing; have a rival attack us: the mission fails at the next monthly
+   update, the credibility debit shows in the ledger log, and the state modifier goes at the
+   state's next pulse.
+4. **A carried peacekeeping request** at Established opens a mission in the requester's most
+   devastated state, and the pledgers in `un_vote.3` join it. Their contributor count shows in
+   the tile's tooltip.
+5. **A famine appeal answered in full** opens an aid mission in the famine state. The next
+   donor joins it rather than opening a second one.
+6. **A collapse:** a power answering `un_events.4` in full opens a stabilisation mission. The
+   host resenting the peacekeepers (`un_events.102` B) ends it as failed.
+7. **The multiplier** `var:un_msn_power` on a state modifier refreshes month to month, with no
+   "Value of wrong type" in `error.log`.
 
 ---
 
@@ -786,7 +928,8 @@ pillars, the ledger log and the nuclear hooks work in game.
    - all unweighted, because nuclear use is grave whoever does it.
 
    "Aggression without a mandate" waits for the dossier (phase 3).
-3. **Delivery is a ledger until missions exist (phase 6).** It is fed by aid and peacekeepers
+3. **Delivery is a ledger until missions exist (phase 6).** *(Phase 6, §0.6 ruling 11: it
+   stays a ledger, and mission outcomes feed it.)* It is fed by aid and peacekeepers
    delivered (`un_events.4` and `7`, options A/B), aid and peacekeeping resolutions carried,
    and mandates discharged.
 4. **No charter cap yet.** The target is clamped to 0..100. The 70 / 85 / 100 caps arrive
@@ -1430,7 +1573,7 @@ These are the convention losers in §5.3, plus the embargo symmetry in §5.2.
 | **3** | Dossier and grounds; the itemised lean; AI voting in script; the chamber's reasons and exposure panel; recess and notifications | Must land **before** teeth (§5.2) get sharp, or high-tier sanctions will feel arbitrary (owner requirement) |
 | **4** | The docket replacing the random roll; the event rewrite | Needs the lean and pillars to route consequences |
 | **5** | Tradeoffs: dues and Article 19, interest-group sovereignty, covert hooks, convention regimes (§5.3), topic effects by tier (§5.2). *Shipped, §0.5; with the lending facility deferred from phase 4* | Needs `E`, grounds and the docket |
-| **6** | Missions, the state tile, the map mode, delivery feeding the pillars | The largest new surface; everything it feeds exists by then |
+| **6** | Missions, the state tile, the map mode, delivery feeding the pillars. *Shipped, §0.6; the map mode is not built* | The largest new surface; everything it feeds exists by then |
 
 Each phase ships a playable UN. Each is documented in a §0-style "as shipped" block at the top
 of this file, as `monetary_policy_design.md` does.
@@ -1480,6 +1623,10 @@ of this file, as `monetary_policy_design.md` does.
 | space leader / laggard | the most milestones, at least 3 / 3 or more behind (phase 5) | §5.3 |
 | headquarters host's network growth in members | ×1.25 (phase 5) | §7.4 |
 | lending facility: loan / repayment / score | min(2% of GDP, 26 weeks of the budget) / 110% over 5 years / 45 (phase 5) | §8.1 |
+| missions: register / lapse / peacekeeping / stabilisation / aid | 12 / 60 months / 24 months of peace / 12 months after the collapse (48 during) / no famine and SoL 10 after 6 months (phase 6) | §9 |
+| mission strength | E × (1 − 0.5 × arrears share) × (0.75 + 0.25 × contributors, up to 3) (phase 6) | §9 |
+| mission outcomes | success: delivery +2, contributors' standing +3; failure: credibility −1 (phase 6) | §9 |
+| contributors' network growth in a host | ×1.25 (phase 6) | §7.4 |
 
 ---
 
