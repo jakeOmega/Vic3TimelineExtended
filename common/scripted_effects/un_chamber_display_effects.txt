@@ -311,6 +311,13 @@ un_chamber_veto_line = {
 			custom_tooltip_no_bullet = je_un_chamber_vetoed_unknown
 		}
 	}
+	# Veto restraint (Charter Reform II; redesign phase 5): a veto the
+	# supermajority overrode.
+	else_if = {
+		limit = { has_tag = un_res_veto_overridden }
+		var:un_res_vetoer ?= { save_temporary_scope_as = un_chamber_vetoer }
+		custom_tooltip_no_bullet = je_un_chamber_veto_overridden
+	}
 	else_if = {
 		limit = { un_resolution_is_binding = yes }
 		custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
@@ -411,6 +418,11 @@ un_chamber_consequences_line = {
 		if = {
 			limit = { has_tag = un_res_vetoed }
 			custom_tooltip_no_bullet = je_un_chamber_conseq_peacekeeping_request_vetoed
+		}
+		# Below Established a carried request sends observers only (phase 5).
+		else_if = {
+			limit = { un_resolution_peacekeeping_full = no }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_peacekeeping_request_weak
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_conseq_peacekeeping_request
@@ -518,6 +530,11 @@ un_chamber_outcome_line = {
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_vetoed_unknown
 		}
+	}
+	else_if = {
+		limit = { has_tag = un_res_veto_overridden }
+		var:un_res_vetoer ?= { save_temporary_scope_as = un_chamber_vetoer }
+		custom_tooltip_no_bullet = je_un_chamber_veto_overridden
 	}
 }
 
@@ -870,6 +887,9 @@ un_standing_reason_line = {
 	else_if = { limit = { var:un_standing_last_reason = 29 } custom_tooltip_no_bullet = je_un_standing_reason_29 }
 	else_if = { limit = { var:un_standing_last_reason = 30 } custom_tooltip_no_bullet = je_un_standing_reason_30 }
 	else_if = { limit = { var:un_standing_last_reason = 31 } custom_tooltip_no_bullet = je_un_standing_reason_31 }
+	else_if = { limit = { var:un_standing_last_reason = 32 } custom_tooltip_no_bullet = je_un_standing_reason_32 }
+	else_if = { limit = { var:un_standing_last_reason = 33 } custom_tooltip_no_bullet = je_un_standing_reason_33 }
+	else_if = { limit = { var:un_standing_last_reason = 34 } custom_tooltip_no_bullet = je_un_standing_reason_34 }
 	else = { custom_tooltip_no_bullet = je_un_standing_reason_none }
 }
 
@@ -1260,6 +1280,13 @@ un_chamber_docket_last_line = {
 		limit = { global_var:un_dkt_last_type = 13 }
 		custom_tooltip_no_bullet = je_un_chamber_docket_last_13
 	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 14
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_14
+	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_docket_last_other
 	}
@@ -1533,6 +1560,12 @@ un_chamber_exposure_block = {
 	if = {
 		limit = { has_global_variable = un_founded }
 		custom_tooltip_no_bullet = je_un_chamber_exposure_case
+		# The Supranational standing case against an outsider (redesign
+		# phase 5): already inside the case strength above; named here.
+		if = {
+			limit = { un_case_standing_applies = yes }
+			custom_tooltip_no_bullet = je_un_chamber_exposure_standing_case
+		}
 		if = {
 			limit = { un_case_supports = { TOPIC = mandate } }
 			custom_tooltip_no_bullet = je_un_chamber_exposure_mandate
@@ -1552,5 +1585,234 @@ un_chamber_exposure_block = {
 	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_exposure_no_un
+	}
+}
+
+# OUR OBLIGATIONS (redesign phase 5): what membership asks of us — our
+# assessed dues and any arrears (§7.2), the conventions' regimes that bind us
+# as winner or loser (§5.3), and the pressure on our sovereignty at home
+# (§7.1) — and the world's picture of who pays. Root-level lines only.
+# Scope: country (the viewer)
+un_chamber_obligations_block = {
+	if = {
+		limit = { NOT = { has_global_variable = un_founded } }
+		custom_tooltip_no_bullet = je_un_chamber_obligations_no_un
+	}
+	else = {
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			un_chamber_dues_lines = yes
+			un_chamber_regime_lines = yes
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_obligations_nonmember
+			# A colony of a member is reached by the decolonisation
+			# declaration all the same.
+			if = {
+				limit = { has_modifier = un_regime_colony_liberty_modifier }
+				custom_tooltip_no_bullet = je_un_chamber_regime_colony
+			}
+			if = {
+				limit = { has_variable = un_arrears_owed }
+				custom_tooltip_no_bullet = je_un_chamber_dues_owed_outside
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_dues_budget
+		custom_tooltip_no_bullet = je_un_chamber_obligations_help
+	}
+}
+
+# Our own dues: paying, withholding, or silenced by Article 19.
+# Scope: country (a member)
+un_chamber_dues_lines = {
+	if = {
+		limit = { un_dues_is_withholding = yes }
+		if = {
+			limit = { un_dues_vote_suspended = yes }
+			custom_tooltip_no_bullet = je_un_chamber_dues_article_19
+		}
+		else_if = {
+			limit = { un_dues_assessed = yes }
+			custom_tooltip_no_bullet = je_un_chamber_dues_withheld
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_dues_withheld_moribund
+		}
+	}
+	else_if = {
+		limit = { un_dues_assessed = yes }
+		custom_tooltip_no_bullet = je_un_chamber_dues_paying
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_dues_none
+	}
+}
+
+# The regimes' terms for us (§5.3), shared intelligence (§7.4) and our
+# interest groups' reaction (§7.1): one line per modifier we carry, read
+# straight off the modifiers un_regime_refresh_country applies, so the list
+# is the rule.
+# Scope: country (a member)
+un_chamber_regime_lines = {
+	if = {
+		limit = { un_regime_has_terms = yes }
+		custom_tooltip_no_bullet = je_un_chamber_regimes_header
+		un_chamber_regime_line = { MODIFIER = un_regime_climate_emitter_modifier LINE = je_un_chamber_regime_climate_emitter }
+		un_chamber_regime_line = { MODIFIER = un_regime_climate_adaptation_modifier LINE = je_un_chamber_regime_climate_adaptation }
+		un_chamber_regime_line = { MODIFIER = un_regime_npt_inspection_modifier LINE = je_un_chamber_regime_npt_inspection }
+		un_chamber_regime_line = { MODIFIER = un_regime_npt_guarantee_modifier LINE = je_un_chamber_regime_npt_guarantee }
+		un_chamber_regime_line = { MODIFIER = un_regime_naval_curb_modifier LINE = je_un_chamber_regime_naval_curb }
+		un_chamber_regime_line = { MODIFIER = un_regime_rights_violator_modifier LINE = je_un_chamber_regime_rights_violator }
+		un_chamber_regime_line = { MODIFIER = un_regime_colonial_pressure_modifier LINE = je_un_chamber_regime_colonial_pressure }
+		un_chamber_regime_line = { MODIFIER = un_regime_refugee_host_modifier LINE = je_un_chamber_regime_refugee_host }
+		un_chamber_regime_line = { MODIFIER = un_regime_refugee_source_modifier LINE = je_un_chamber_regime_refugee_source }
+		un_chamber_regime_line = { MODIFIER = un_regime_space_leader_modifier LINE = je_un_chamber_regime_space_leader }
+		un_chamber_regime_line = { MODIFIER = un_regime_space_laggard_modifier LINE = je_un_chamber_regime_space_laggard }
+		un_chamber_regime_line = { MODIFIER = un_regime_space_weapon_modifier LINE = je_un_chamber_regime_space_weapon }
+		un_chamber_regime_line = { MODIFIER = un_regime_heritage_site_modifier LINE = je_un_chamber_regime_heritage_site }
+		un_chamber_regime_line = { MODIFIER = un_regime_shared_intelligence_modifier LINE = je_un_chamber_regime_shared_intelligence }
+	}
+	else_if = {
+		limit = { un_regime_any_convention = yes }
+		custom_tooltip_no_bullet = je_un_chamber_regimes_none
+	}
+	# The court's reach over our ruler.
+	if = {
+		limit = {
+			has_global_variable = un_agency_icc
+			un_tier_at_least_established = yes
+			OR = {
+				has_modifier = un_icc_member_modifier
+				un_tier_is_supranational = yes
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_regime_icc
+	}
+	# Sovereignty: our interest groups' reaction, from the Strong tier.
+	if = {
+		limit = {
+			un_tier_at_least_strong = yes
+			any_interest_group = { has_modifier = un_sovereignty_resentment_ig_modifier }
+		}
+		custom_tooltip_no_bullet = je_un_chamber_sovereignty_resent
+	}
+	if = {
+		limit = {
+			un_tier_at_least_strong = yes
+			any_interest_group = { has_modifier = un_sovereignty_welcome_ig_modifier }
+		}
+		custom_tooltip_no_bullet = je_un_chamber_sovereignty_welcome
+	}
+	if = {
+		limit = { un_regime_any_convention = yes }
+		custom_tooltip_no_bullet = je_un_chamber_regimes_scale
+	}
+}
+
+# Parameters: $MODIFIER$ = a regime modifier, $LINE$ = its line (passed whole,
+# so organize_loc.py sees the key in use)
+# Scope: country
+un_chamber_regime_line = {
+	if = {
+		limit = { has_modifier = $MODIFIER$ }
+		custom_tooltip_no_bullet = $LINE$
+	}
+}
+
+# ============================================================================
+# MISSIONS IN THE FIELD (redesign phase 6)
+# ============================================================================
+# The mission register, active missions first and newest first, then the ones
+# that have ended. Read in place from un_mission_registry.
+# Scope: country (the viewer)
+un_chamber_missions_block = {
+	if = {
+		limit = {
+			has_global_variable_list = un_mission_registry
+			any_in_global_list = {
+				variable = un_mission_registry
+				has_tag = un_mission
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_missions_intro
+		ordered_in_global_list = {
+			variable = un_mission_registry
+			limit = { has_tag = un_msn_active }
+			order_by = un_mission_recency_order
+			max = 100
+			un_chamber_mission_entry = yes
+		}
+		ordered_in_global_list = {
+			variable = un_mission_registry
+			limit = { NOT = { has_tag = un_msn_active } }
+			order_by = un_mission_recency_order
+			max = 100
+			un_chamber_mission_entry = yes
+		}
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_missions_none
+	}
+	custom_tooltip_no_bullet = je_un_chamber_missions_help
+}
+
+# One mission: what, where, for whom, how far along, and who serves in it.
+# The host and the state are printed only while both still exist: a temporary
+# scope saved for the entry before would otherwise print in their place (a
+# host that has stopped existing is itself a reason to lapse).
+# Scope: mission container
+un_chamber_mission_entry = {
+	if = {
+		limit = {
+			exists = var:un_msn_host
+			exists = var:un_msn_state
+		}
+		var:un_msn_host = { save_temporary_scope_as = un_chamber_msn_host }
+		var:un_msn_state = { save_temporary_scope_as = un_chamber_msn_state }
+		if = {
+			limit = { has_tag = un_msn_peacekeeping }
+			custom_tooltip_no_bullet = je_un_chamber_mission_peacekeeping
+		}
+		else_if = {
+			limit = { has_tag = un_msn_aid }
+			custom_tooltip_no_bullet = je_un_chamber_mission_aid
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_mission_stabilisation
+		}
+	}
+	else_if = {
+		limit = { has_tag = un_msn_peacekeeping }
+		custom_tooltip_no_bullet = je_un_chamber_mission_peacekeeping_gone
+	}
+	else_if = {
+		limit = { has_tag = un_msn_aid }
+		custom_tooltip_no_bullet = je_un_chamber_mission_aid_gone
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_mission_stabilisation_gone
+	}
+	if = {
+		limit = { has_tag = un_msn_active }
+		custom_tooltip_no_bullet = je_un_chamber_mission_active
+	}
+	else_if = {
+		limit = { has_tag = un_msn_succeeded }
+		custom_tooltip_no_bullet = je_un_chamber_mission_succeeded
+	}
+	else_if = {
+		limit = { has_tag = un_msn_failed }
+		custom_tooltip_no_bullet = je_un_chamber_mission_failed
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_mission_lapsed
+	}
+	if = {
+		limit = { un_lobby_list_has_entries = { LIST = un_msn_contributors } }
+		custom_tooltip_no_bullet = je_un_chamber_mission_contributors
+		every_in_list = {
+			variable = un_msn_contributors
+			custom_tooltip_no_bullet = je_un_chamber_mission_contributor
+		}
 	}
 }

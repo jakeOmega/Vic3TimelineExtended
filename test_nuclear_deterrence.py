@@ -12,6 +12,7 @@ Run: python3 -m unittest test_nuclear_deterrence -v
 """
 
 import re
+import subprocess
 import unittest
 from pathlib import Path
 
@@ -33,6 +34,15 @@ DEBUG_EVENTS = ROOT / "events/te_debug_deterrence_events.txt"
 JE_DOC = ROOT / "docs/systems/journal_entry_systems.md"
 LOC_DIR = ROOT / "localization/english"
 LENS_ICONS = ROOT / "gfx/interface/icons/lens_toolbar_icons"
+
+
+def tracked(path):
+    """Whether git tracks path. CI checks out without gfx/ (sparse), so a
+    texture can be committed yet absent from the working tree."""
+    rel = path.relative_to(ROOT).as_posix()
+    result = subprocess.run(["git", "ls-files", "--error-unmatch", rel],
+                            cwd=ROOT, capture_output=True)
+    return result.returncode == 0
 
 # `trigger_event = { id = X }`, or nd_crisis_send_event's EVENT parameter.
 FIRED = r"\b(?:id|EVENT) = ([a-z_]+\.\d+)"
@@ -204,7 +214,7 @@ class TestLocalization(unittest.TestCase):
             if re.search(r"show_in_lens\s*=\s*no", block(text, action)):
                 continue
             icon = LENS_ICONS / f"{action}.dds"
-            self.assertTrue(icon.exists(), f"missing {icon.relative_to(ROOT)}")
+            self.assertTrue(icon.exists() or tracked(icon), f"missing {icon.relative_to(ROOT)}")
 
     def test_journal_entry_keys(self):
         self.assert_keys({"je_nuclear_deterrence", "je_nuclear_deterrence_reason",

@@ -1,0 +1,227 @@
+﻿# ============================================================================
+# UN DUES — ASSESSMENTS, ARREARS AND ARTICLE 19 (redesign phase 5)
+# ============================================================================
+# docs/systems/un_redesign_design.md §7.2; as shipped, §0.5 of the same file.
+#
+# Every member pays an ASSESSMENT: a share of its GDP set by the UN's tier,
+# charged as a weekly expense (un_dues_modifier, country scope). The rate
+# grows with the tier, because a stronger UN does more and costs more:
+#
+#     Moribund 0   Contested 0.1%   Established 0.2%   Strong 0.4%
+#     Supranational 1.0% (the "UN levy", decided 2026-09-24)
+#
+# A member may WITHHOLD its dues (un_withhold_dues_button). It saves the
+# money, but:
+#   - the funding pillar falls with the withholders' share of the members'
+#     GDP (un_funding_arrears_share_value, un_authority_values.txt);
+#   - it costs international standing, once, when it starts;
+#   - every month it withholds while dues are assessed is a month in
+#     ARREARS, and what it would have paid is added to what it owes;
+#   - after un_dues_article_19_months in arrears it loses its vote in the
+#     General Assembly (Article 19 of the real Charter) until it pays: it
+#     casts no ballot, tables no resolution, and is not counted in the
+#     two-thirds supermajority.
+# Resuming payment (un_pay_dues_button) settles everything owed at once.
+#
+# The writers are in common/scripted_effects/un_dues_effects.txt, the tests in
+# common/scripted_triggers/un_dues_triggers.txt. Every figure is here, once;
+# the rates and the 24 months are also written in words in the
+# je_un_dues_* loc keys and the UN Dues concept; change both.
+#
+# Scope: the rates read globals only; everything marked "Scope: country" is
+# evaluated on the paying member.
+# ============================================================================
+
+# ---- Tuning ----------------------------------------------------------------
+
+# The assessment, a share of GDP a year, by tier.
+un_dues_rate_moribund = { value = 0 }
+un_dues_rate_contested = { value = 0.001 }
+un_dues_rate_established = { value = 0.002 }
+un_dues_rate_strong = { value = 0.004 }
+un_dues_rate_supranational = { value = 0.01 }
+
+# Months in arrears before a member loses its vote.
+un_dues_article_19_months = { value = 24 }
+
+# How hard the withholders' share of the members' GDP pulls the funding pillar
+# down: withholders holding a third of it cost 5 points.
+un_funding_arrears_weight = { value = 15 }
+
+# ---- The assessment --------------------------------------------------------
+
+# The rate at the current tier. 0 while no UN exists.
+un_dues_rate = {
+	value = un_dues_rate_moribund
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_global_variable = un_tier
+		}
+		if = {
+			limit = { global_var:un_tier >= 1 }
+			add = {
+				value = un_dues_rate_contested
+				subtract = un_dues_rate_moribund
+			}
+		}
+		if = {
+			limit = { global_var:un_tier >= 2 }
+			add = {
+				value = un_dues_rate_established
+				subtract = un_dues_rate_contested
+			}
+		}
+		if = {
+			limit = { global_var:un_tier >= 3 }
+			add = {
+				value = un_dues_rate_strong
+				subtract = un_dues_rate_established
+			}
+		}
+		if = {
+			limit = { global_var:un_tier >= 4 }
+			add = {
+				value = un_dues_rate_supranational
+				subtract = un_dues_rate_strong
+			}
+		}
+	}
+}
+
+# This member's dues a week: the multiplier on un_dues_modifier, whose one
+# field is country_expenses_add = 1.
+# Scope: country
+un_dues_weekly_value = {
+	value = gdp
+	multiply = un_dues_rate
+	divide = 52
+}
+
+# What a month in arrears adds to what the member owes.
+# Scope: country
+un_dues_monthly_value = {
+	value = gdp
+	multiply = un_dues_rate
+	divide = 12
+}
+
+# ---- The funding pillar's dues term ------------------------------------------
+
+# The withholders' share of the members' GDP, 0..1: the funding pillar
+# subtracts un_funding_arrears_weight times this. Weighted by GDP because the
+# assessment is (the rate is the same for every member at a given tier).
+un_funding_arrears_share_value = {
+	value = 0
+	# Nothing is owed while nothing is assessed (Moribund), so nothing is
+	# withheld either.
+	if = {
+		limit = {
+			un_dues_assessed = yes
+			un_members_gdp_value > 0
+		}
+		add = un_withholders_gdp_value
+		divide = un_members_gdp_value
+		max = 1
+	}
+}
+
+un_members_gdp_value = {
+	value = 0
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		add = gdp
+	}
+}
+
+un_withholders_gdp_value = {
+	value = 0
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			has_variable = un_dues_withheld
+		}
+		add = gdp
+	}
+}
+
+# The budget: what the paying members pay a week, together. Snapshotted
+# monthly into global_var:un_budget_weekly for the display (and, in phase 6,
+# for the missions it pays for).
+un_budget_weekly_value = {
+	value = 0
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			NOT = { has_variable = un_dues_withheld }
+		}
+		add = un_dues_weekly_value
+	}
+}
+
+# ---- Display (O(1) reads) --------------------------------------------------------
+
+# The rate as a percentage of GDP, for the loc.
+un_disp_dues_rate_pct = {
+	value = un_dues_rate
+	multiply = 100
+}
+
+# Scope: country
+un_disp_arrears_months = {
+	value = 0
+	if = {
+		limit = { has_variable = un_arrears_months }
+		add = var:un_arrears_months
+	}
+}
+
+# Months left before Article 19 takes our vote. Scope: country
+un_disp_article_19_months_left = {
+	value = un_dues_article_19_months
+	subtract = un_disp_arrears_months
+	min = 0
+}
+
+# Scope: country
+un_disp_arrears_owed = {
+	value = 0
+	if = {
+		limit = { has_variable = un_arrears_owed }
+		add = var:un_arrears_owed
+	}
+}
+
+# The amount the pay button settles: what we owe, as a negative treasury change.
+# Scope: country
+un_dues_settlement_value = {
+	value = 0
+	subtract = un_disp_arrears_owed
+}
+
+un_disp_arrears_share_pct = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_funding_arrears_share }
+		add = global_var:un_funding_arrears_share
+		multiply = 100
+	}
+}
+
+# What the withholders cost the funding pillar, in points.
+un_disp_arrears_funding_cost = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_funding_arrears_share }
+		add = global_var:un_funding_arrears_share
+		multiply = un_funding_arrears_weight
+	}
+}
+
+un_disp_budget_weekly = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_budget_weekly }
+		add = global_var:un_budget_weekly
+	}
+}

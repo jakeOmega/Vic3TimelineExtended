@@ -51,6 +51,9 @@
 #   5     mandate discharged as written        12    expulsion motion carried
 #   6     mandate violated or abandoned        13    expulsion motion fell
 #   7     sanctions regime lifted              14    charter reform adopted
+#   15    a UN embargo dropped (busting)       16    a leader surrendered to the court
+#   17    the court's indictment defied        18    an emergency loan delivered
+#   19    a UN mission accomplished            20    a UN mission failed
 #                                              1NN   response to UN event un_events.NN
 # ============================================================================
 
@@ -89,6 +92,10 @@ un_authority_monthly_update = {
 	# 3. Snapshot the pillars (and the shares the display explains them with).
 	set_global_variable = { name = un_member_power_share value = un_member_power_share_value }
 	set_global_variable = { name = un_funding_ratio value = un_funding_ratio_value }
+	# Dues (phase 5, un_dues_values.txt): who is withholding, and what the
+	# paying members pay a week together.
+	set_global_variable = { name = un_funding_arrears_share value = un_funding_arrears_share_value }
+	set_global_variable = { name = un_budget_weekly value = un_budget_weekly_value }
 	set_global_variable = { name = un_members_at_war_share value = un_members_at_war_share_value }
 	set_global_variable = { name = un_pillar_participation value = un_pillar_participation_value }
 	set_global_variable = { name = un_pillar_commitment value = un_pillar_commitment_value }

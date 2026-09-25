@@ -114,7 +114,12 @@ un_seat_signing_months_left_display = {
 un_vote_eligible_member_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			# Article 19 (redesign phase 5): a member that has lost its vote
+			# for arrears is not counted.
+			NOT = { un_dues_vote_suspended = yes }
+		}
 		add = 1
 	}
 }

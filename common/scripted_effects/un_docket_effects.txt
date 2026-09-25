@@ -24,10 +24,11 @@
 #   11    charter outgrown        un_charter_reform_ripe                    a great power (un_events.6)
 #   12    trade embargo           two members under an embargo              the weaker party (un_events.15)
 #   13    Assembly business       nothing graver, every 24 months at most   a proposer (a convention event)
+#   14    banking contagion       a member in panic or default in a wave    that member: the lending facility (un_events.35)
 #
 # Items 1-3 and 6-11 and 13 open a resolution if accepted, so they wait for a
-# free floor (un_docket_floor_free: no vote in session, no recess). Items 4, 5
-# and 12 open none and are taken up whatever the floor is doing.
+# free floor (un_docket_floor_free: no vote in session, no recess). Items 4, 5,
+# 12 and 14 open none and are taken up whatever the floor is doing.
 #
 # WHO GOES FIRST. An item with an aggrieved party (1-3) goes to it first; if
 # it declines, or cannot table, the item passes to one member with a stake
@@ -377,6 +378,15 @@ un_docket_scan = {
 		save_temporary_scope_as = un_dkt_found_embargo
 		un_docket_consider = { TYPE = 12 SCORE = un_docket_score_embargo }
 	}
+	# 14. A banking contagion (redesign phase 5): the emergency lending
+	# facility, for the largest member in a panic or a default.
+	ordered_country = {
+		limit = { un_docket_loan_candidate = yes }
+		order_by = un_docket_share_order
+		max = 1
+		save_temporary_scope_as = un_dkt_found_loan
+		un_docket_consider = { TYPE = 14 SCORE = un_docket_score_loan }
+	}
 
 	# ---- Take up the gravest ----
 	if = {
@@ -452,6 +462,10 @@ un_docket_scan = {
 	else_if = {
 		limit = { global_var:un_dkt_best_type = 12 }
 		un_docket_take_up_embargo = yes
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 14 }
+		un_docket_take_up_loan = yes
 	}
 	else_if = {
 		limit = { global_var:un_dkt_best_type = 13 }
@@ -672,11 +686,7 @@ un_docket_take_up_famine = {
 un_docket_take_up_embargo = {
 	scope:un_dkt_found_embargo = {
 		ordered_country = {
-			limit = {
-				NOT = { this = PREV }
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
-				has_diplomatic_pact = { who = PREV type = embargo }
-			}
+			limit = { un_docket_embargo_counterpart = yes }
 			order_by = un_docket_share_order
 			max = 1
 			save_scope_as = un_dkt_embargo_other
@@ -812,5 +822,20 @@ un_docket_walkout_consequence = {
 			}
 			trigger_event = { id = un_events.20 days = 7 }
 		}
+	}
+}
+
+# A banking contagion (item 14, redesign phase 5): the member in trouble is
+# offered the emergency lending facility (un_events.35). It opens no
+# resolution. The same member is not offered it again for ten years.
+# Scope: any, with the temporary scope un_dkt_found_loan
+un_docket_take_up_loan = {
+	scope:un_dkt_found_loan = {
+		save_scope_as = un_dkt_subject
+		set_variable = { name = un_dkt_loan_raised value = 1 days = 3650 }
+	}
+	un_docket_log = { TYPE = 14 }
+	scope:un_dkt_found_loan = {
+		trigger_event = { id = un_events.35 days = 1 }
 	}
 }

@@ -305,6 +305,32 @@ un_authority_log_reason_line = {
 		limit = { var:un_led_reason = 14 }
 		custom_tooltip_no_bullet = je_un_led_reason_14
 	}
+	# Redesign phase 5.
+	else_if = {
+		limit = { var:un_led_reason = 15 }
+		custom_tooltip_no_bullet = je_un_led_reason_15
+	}
+	else_if = {
+		limit = { var:un_led_reason = 16 }
+		custom_tooltip_no_bullet = je_un_led_reason_16
+	}
+	else_if = {
+		limit = { var:un_led_reason = 17 }
+		custom_tooltip_no_bullet = je_un_led_reason_17
+	}
+	else_if = {
+		limit = { var:un_led_reason = 18 }
+		custom_tooltip_no_bullet = je_un_led_reason_18
+	}
+	# Redesign phase 6.
+	else_if = {
+		limit = { var:un_led_reason = 19 }
+		custom_tooltip_no_bullet = je_un_led_reason_19
+	}
+	else_if = {
+		limit = { var:un_led_reason = 20 }
+		custom_tooltip_no_bullet = je_un_led_reason_20
+	}
 	# 1NN: a response to UN event un_events.NN. Each key quotes the event's own
 	# title, so the line cannot drift from the event.
 	else_if = {
@@ -390,6 +416,10 @@ un_authority_log_reason_line = {
 	else_if = {
 		limit = { var:un_led_reason = 122 }
 		custom_tooltip_no_bullet = je_un_led_reason_122
+	}
+	else_if = {
+		limit = { var:un_led_reason = 134 }
+		custom_tooltip_no_bullet = je_un_led_reason_134
 	}
 }
 

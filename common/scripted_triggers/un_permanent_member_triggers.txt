@@ -38,6 +38,9 @@ un_permanent_seat_candidate = {
 	country_rank >= rank_value:great_power
 	is_subject = no
 	NOT = { has_modifier = un_withdrawal_penalty_modifier }
+	# Article 19 (redesign phase 5): a member two years in arrears on its
+	# dues has no vote, and no claim to a seat, until it pays.
+	NOT = { un_dues_vote_suspended = yes }
 }
 
 # Whether open permanent seats are being filled: the UN exists and the signing

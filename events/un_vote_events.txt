@@ -242,6 +242,7 @@ un_vote.1 = {
 	# before containers have none and fail here.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_dues_vote_suspended = yes }
 		scope:un_resolution ?= {
 			has_tag = un_res_voting
 			NOT = { un_resolution_has_vote = { LIST = un_res_yes } }
@@ -497,6 +498,18 @@ un_vote.2 = {
 					}
 				}
 				desc = un_vote.2.d_peacekeeping_request_passed_vetoed
+			}
+			# Peacekeeping Request - Passed, but the UN is below Established
+			# (redesign phase 5): observers only
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_peacekeeping_request
+						has_tag = un_res_passed
+					}
+					NOT = { un_tier_at_least_established = yes }
+				}
+				desc = un_vote.2.d_peacekeeping_request_passed_weak
 			}
 			# Peacekeeping Request - Passed
 			triggered_desc = {
@@ -756,6 +769,14 @@ un_vote.2 = {
 				}
 			}
 
+			# Veto restraint (Charter Reform II; redesign phase 5): a veto the
+			# two-thirds supermajority overrode (un_resolution_decide) left the
+			# resolution in its full form.
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_res_veto_overridden } }
+				custom_tooltip = un_vote_veto_overridden_tt
+			}
+
 			# ---- Condemn: target gets condemnation, proposer gets prestige ----
 			# If the target voted to accept the resolution, they already bear
 			# un_self_corrected_modifier (set in un_vote.1 option A target branch);
@@ -784,6 +805,9 @@ un_vote.2 = {
 								days = long_modifier_time
 								is_decaying = yes
 							}
+							# Teeth by tier (redesign phase 5, §5.2): shunned
+							# from Strong, restrained as well at Supranational.
+							un_teeth_condemn_by_tier = yes
 							custom_tooltip = {
 								text = un_standing_censured_tt
 								un_standing_loss = { AMOUNT = un_standing_condemned_loss REASON = 22 }
@@ -933,6 +957,17 @@ un_vote.2 = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
 				custom_tooltip = un_vote_decolonization_passed_tt
 				un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
+				# The declaration becomes a standing regime (redesign phase 5,
+				# §5.3): colonial powers lose colonial stability and members'
+				# colonies gain liberty desire, both scaled by E, from every
+				# country's next re-reading of its terms (un_regime_effects.txt).
+				hidden_effect = {
+					if = {
+						limit = { NOT = { has_global_variable = un_regime_decolonization } }
+						set_global_variable = un_regime_decolonization
+					}
+					un_regime_bump = yes
+				}
 				# Cash the loc promise of "Colonial powers face increased
 				# international pressure" — apply a one-shot decaying
 				# pressure modifier on every overseas-colonial owner.
@@ -987,22 +1022,47 @@ un_vote.2 = {
 			# ---- Peacekeeping Request: Deploy peacekeepers to requesting country ----
 			# Vetoed: deploy a non-coercive observer mission instead — the
 			# proposer gets a small benefit but no contributors are levied.
+			# A full deployment needs an un-vetoed resolution and, since
+			# redesign phase 5 (§5.2), an Established UN: below that a carried
+			# request sends observers only (the branch after this one).
 			if = {
 				limit = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+					scope:un_resolution ?= { un_resolution_peacekeeping_full = yes }
 				}
 				custom_tooltip = un_vote_peacekeeping_request_passed_tt
 				un_ledger_entry = { PILLAR = delivery POINTS = 1 REASON = 1 }
-				# Apply scaled peacekeeping benefit to the requesting country
+				# The mission (redesign phase 6, un_mission_effects.txt):
+				# peacekeepers in the requester's most devastated state, with
+				# the members who pledge in un_vote.3 as its contributors. Its
+				# effect is that state's, not the whole country's. If every
+				# state already holds another mission, the country-wide
+				# modifier of old stands in.
 				if = {
 					limit = { exists = scope:un_vote_proposer }
-					scope:un_vote_proposer = {
-						add_modifier = {
-							name = un_peacekeeping_received_modifier
-							multiplier = un_peacekeeping_benefit_scale
-							days = long_modifier_time
-							is_decaying = yes
+					if = {
+						limit = { scope:un_vote_proposer = { un_mission_can_join_host = { TYPE = peacekeeping } } }
+						custom_tooltip = un_mission_pk_opened_tt
+					}
+					else = {
+						custom_tooltip = un_mission_pk_fallback_tt
+					}
+					hidden_effect = {
+						scope:un_vote_proposer = { save_scope_as = un_msn_host }
+						un_mission_join_host = { TYPE = peacekeeping CODE = 1 ORDER = un_docket_devastation_order }
+						if = {
+							limit = { exists = scope:un_msn_new }
+							scope:un_resolution = { set_variable = { name = un_res_mission value = scope:un_msn_new } }
+							scope:un_msn_new = { set_variable = un_msn_requested }
+						}
+						else = {
+							scope:un_vote_proposer = {
+								add_modifier = {
+									name = un_peacekeeping_received_modifier
+									multiplier = un_peacekeeping_benefit_scale
+									days = long_modifier_time
+									is_decaying = yes
+								}
+							}
 						}
 					}
 				}
@@ -1027,8 +1087,15 @@ un_vote.2 = {
 			}
 			else_if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
-				custom_tooltip = un_vote_peacekeeping_request_passed_vetoed_tt
-				un_ledger_entry = { PILLAR = delivery POINTS = 0.5 REASON = 2 }
+				if = {
+					limit = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+					custom_tooltip = un_vote_peacekeeping_request_passed_vetoed_tt
+					un_ledger_entry = { PILLAR = delivery POINTS = 0.5 REASON = 2 }
+				}
+				else = {
+					custom_tooltip = un_vote_peacekeeping_request_passed_weak_tt
+					un_ledger_entry = { PILLAR = delivery POINTS = 0.5 REASON = 1 }
+				}
 				# Observer mission to the proposer only — no enforcement, no levies
 				if = {
 					limit = { exists = scope:un_vote_proposer }
@@ -1057,15 +1124,36 @@ un_vote.2 = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_aid_request } }
 				custom_tooltip = un_vote_aid_request_passed_tt
 				un_ledger_entry = { PILLAR = delivery POINTS = 1 REASON = 1 }
-				# Apply scaled aid benefit to the requesting country
+				# The mission (redesign phase 6): aid to the requester's state
+				# most in need, with the members who pledge in un_vote.3 as its
+				# donors. If every state already holds another mission, the
+				# country-wide modifier of old stands in.
 				if = {
 					limit = { exists = scope:un_vote_proposer }
-					scope:un_vote_proposer = {
-						add_modifier = {
-							name = un_aid_received_modifier
-							multiplier = un_aid_benefit_scale
-							days = long_modifier_time
-							is_decaying = yes
+					if = {
+						limit = { scope:un_vote_proposer = { un_mission_can_join_host = { TYPE = aid } } }
+						custom_tooltip = un_mission_aid_opened_tt
+					}
+					else = {
+						custom_tooltip = un_mission_aid_fallback_tt
+					}
+					hidden_effect = {
+						scope:un_vote_proposer = { save_scope_as = un_msn_host }
+						un_mission_join_host = { TYPE = aid CODE = 2 ORDER = un_mission_sol_need_order }
+						if = {
+							limit = { exists = scope:un_msn_new }
+							scope:un_resolution = { set_variable = { name = un_res_mission value = scope:un_msn_new } }
+							scope:un_msn_new = { set_variable = un_msn_requested }
+						}
+						else = {
+							scope:un_vote_proposer = {
+								add_modifier = {
+									name = un_aid_received_modifier
+									multiplier = un_aid_benefit_scale
+									days = long_modifier_time
+									is_decaying = yes
+								}
+							}
 						}
 					}
 				}
@@ -1116,6 +1204,19 @@ un_vote.2 = {
 							add_modifier = {
 								name = un_sanctions_target_modifier
 								multiplier = un_enforcement
+							}
+							# Teeth by tier (redesign phase 5, §5.2): from Strong
+							# the members who voted for it embargo the target; at
+							# Supranational every major-power member does.
+							if = {
+								limit = { un_tier_is_supranational = yes }
+								custom_tooltip = un_teeth_embargo_all_tt
+								hidden_effect = { un_teeth_sanctions_embargo = yes }
+							}
+							else_if = {
+								limit = { un_tier_at_least_strong = yes }
+								custom_tooltip = un_teeth_embargo_voters_tt
+								hidden_effect = { un_teeth_sanctions_embargo = yes }
 							}
 							custom_tooltip = {
 								text = un_standing_sanctioned_tt
@@ -1217,6 +1318,13 @@ un_vote.2 = {
 					is_decaying = yes
 				}
 			}
+
+			# The proposer ratifies on passage, like every other member
+			# (redesign phase 5, §5.3): it no longer takes the convention's
+			# modifier up front when it tables the resolution. After the
+			# per-topic branches above, so the agency they found is in force
+			# when the convention's terms are read.
+			un_vote_apply_treaty_modifier = yes
 
 			# Influence reward for leading a successful resolution.
 			# Skipped for vetoed binding resolutions — only the graduated form

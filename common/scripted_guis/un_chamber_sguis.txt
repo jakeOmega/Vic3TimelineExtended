@@ -173,6 +173,25 @@ un_chamber_exposure_sgui = {
 	}
 }
 
+# Missions in the field (redesign phase 6): the mission register.
+un_chamber_missions_sgui = {
+	scope = country
+
+	effect = {
+		un_chamber_missions_block = yes
+	}
+}
+
+# Our obligations (redesign phase 5): dues and arrears, the regimes that bind
+# us, and the pressure on our sovereignty.
+un_chamber_obligations_sgui = {
+	scope = country
+
+	effect = {
+		un_chamber_obligations_block = yes
+	}
+}
+
 # Closed resolutions, newest first. Read straight out of the bounded
 # un_resolution_history global list, so pruning in un_resolution_archive is
 # invisible here: no index, count or cap is assumed. The `has_tag`
@@ -364,6 +383,12 @@ un_chamber_vote_sgui = {
 			# Nothing on the record: the clause that actually gates the control,
 			# and the one green tick a player who can vote sees.
 			trigger_else = {
+				# Article 19 (redesign phase 5): two years in arrears on our
+				# dues and the vote is gone until we pay.
+				custom_tooltip = {
+					text = je_un_chamber_vote_article_19_tt
+					NOT = { un_dues_vote_suspended = yes }
+				}
 				custom_tooltip = {
 					text = je_un_chamber_vote_not_yet_cast_tt
 					un_chamber_ballot_open = yes

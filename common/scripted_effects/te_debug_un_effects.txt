@@ -240,3 +240,122 @@ te_debug_un_stage_grievance = {
 	}
 	te_debug_un_open_docket = yes
 }
+
+# ---- Redesign phase 5: dues, teeth, regimes ----
+
+# Raise the UN one tier: adopt the charter reform the next tier needs, set
+# authority at that tier's floor, and re-read the tier and every country's
+# terms at once (the regimes' refresh, for us now and for everyone at their
+# next monthly pulse).
+# Scope: country (the player)
+te_debug_un_raise_tier = {
+	if = {
+		limit = { has_global_variable = un_founded }
+		if = {
+			limit = { global_var:un_tier >= 2 }
+			set_global_variable = {
+				name = un_charter_level
+				value = {
+					value = global_var:un_tier
+					subtract = 1
+					max = 2
+				}
+			}
+		}
+		if = {
+			limit = { global_var:un_tier = 0 }
+			set_global_variable = { name = un_authority value = un_tier_contested_floor }
+		}
+		else_if = {
+			limit = { global_var:un_tier = 1 }
+			set_global_variable = { name = un_authority value = un_tier_established_floor }
+		}
+		else_if = {
+			limit = { global_var:un_tier = 2 }
+			set_global_variable = { name = un_authority value = un_tier_strong_floor }
+		}
+		else = {
+			set_global_variable = { name = un_authority value = un_tier_supranational_floor }
+		}
+		un_ladder_tier_update = yes
+		un_regime_bump = yes
+		un_regime_refresh_country = yes
+	}
+}
+
+# Put us two years in arrears: withholding, 24 months counted, and what those
+# months would have cost owed. Article 19 applies at once.
+# Scope: country (the player, a member)
+te_debug_un_arrears = {
+	if = {
+		limit = { NOT = { un_dues_is_withholding = yes } }
+		un_dues_withhold = yes
+	}
+	set_variable = { name = un_arrears_months value = un_dues_article_19_months }
+	set_variable = {
+		name = un_arrears_owed
+		value = {
+			value = un_dues_monthly_value
+			multiply = un_dues_article_19_months
+		}
+	}
+}
+
+# The International Criminal Court indicts our ruler now, for a nuclear
+# strike. The court is founded and we are made a party to it if need be.
+# Scope: country (the player)
+te_debug_un_indict_us = {
+	if = {
+		limit = { NOT = { has_global_variable = un_agency_icc } }
+		set_global_variable = un_agency_icc
+	}
+	if = {
+		limit = { NOT = { has_modifier = un_icc_member_modifier } }
+		add_modifier = {
+			name = un_icc_member_modifier
+			multiplier = un_convention_multiplier
+		}
+	}
+	set_variable = { name = un_icc_crime value = 1 }
+	trigger_event = { id = un_events.33 }
+}
+
+# The emergency lending facility is offered to us now. The budget it lends
+# from is topped up if the members have not yet paid enough into it.
+# Scope: country (the player, a member)
+te_debug_un_offer_loan = {
+	if = {
+		limit = { NOT = { un_loan_amount_value > 0 } }
+		set_global_variable = {
+			name = un_budget_weekly
+			value = {
+				value = gdp
+				multiply = 0.002
+			}
+		}
+	}
+	trigger_event = { id = un_events.35 }
+}
+
+# ---- Redesign phase 6: missions ----
+
+# A UN peacekeeping mission to our most devastated state (or joins the one we
+# have), with the most prestigious other member as its contributor, so the
+# state tile, the register and the monthly progress can be watched at once.
+# Scope: country (the player, a member)
+te_debug_un_open_mission = {
+	save_scope_as = un_msn_host
+	un_mission_join_host = { TYPE = peacekeeping CODE = 1 ORDER = un_docket_devastation_order }
+	if = {
+		limit = { exists = scope:un_msn_new }
+		ordered_country = {
+			limit = {
+				NOT = { this = scope:un_msn_host }
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+			}
+			order_by = un_prestige_order_value
+			max = 1
+			un_mission_add_contributor = yes
+		}
+	}
+}

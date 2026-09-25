@@ -39,6 +39,9 @@
 #                                             28 withdrew from the UN
 #                                             29 stripped of a permanent seat
 #                                             31 a pledged vote broken
+#                                             32 withheld its UN dues
+#                                             33 lost its vote for arrears
+#   34 a UN mission accomplished its work
 #
 # The 30+ range belongs to resolution lobbying
 # (common/scripted_effects/un_lobby_effects.txt). Both of its codes are stamped

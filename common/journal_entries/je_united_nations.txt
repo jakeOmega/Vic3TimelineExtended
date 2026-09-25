@@ -59,6 +59,10 @@
 	# phase 2 only a human could table one (from the chamber).
 	scripted_button = un_propose_expulsion_button
 
+	# ---- Dues (redesign phase 5) ----
+	scripted_button = un_withhold_dues_button
+	scripted_button = un_pay_dues_button
+
 	# ---- Policy buttons (members only) ----
 	scripted_button = un_propose_sanctions_button
 	scripted_button = un_lift_sanctions_button
@@ -345,6 +349,12 @@
 					set_variable = { name = un_development_expense_cached value = un_program_expense_value }
 				}
 
+				# ---- Assessed dues (redesign phase 5, un_dues_effects.txt) ----
+				# This month's assessment, or a month in arrears for a member
+				# withholding its dues (Article 19 after 24 of them). The single
+				# refresh site for un_dues_modifier.
+				un_dues_country_monthly_update = yes
+
 				# ---- Apply scaled UN membership modifier ----
 				# Modifier stays applied per-member; the multiplier reads the shared
 				# global authority. Members of a bloc with the Multilateral Institutions
@@ -371,40 +381,35 @@
 					je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
 				}
 
-				# ---- High authority: infamy generation scales for everyone ----
+				# ---- Retired: the blanket infamy modifier ----
+				# Redesign phase 5 (§5.2): a war goal added without a mandate now
+				# carries its own infamy surcharge (un_teeth_war_goal_surcharge),
+				# so the flat +10% infamy generation every member used to carry
+				# at authority 50+ is gone. A save that carries it loses it here.
 				if = {
-					limit = { global_var:un_authority >= 50 }
-					je:je_united_nations ?= { remove_modifier = un_high_authority_infamy_modifier }
-					je:je_united_nations ?= { add_modifier = {
-							name = un_high_authority_infamy_modifier
-							multiplier = {
-								value = global_var:un_authority
-								subtract = 40
-								divide = 30
-							} }
-					}
-				}
-				else = {
+					limit = { je:je_united_nations ?= { has_modifier = un_high_authority_infamy_modifier } }
 					je:je_united_nations ?= { remove_modifier = un_high_authority_infamy_modifier }
 				}
 
-				# ---- NPT enforcement tiers (requires IAEA agency) ----
-				# Authority 80+: Non-nuclear member powers face disarmament pressure
+				# ---- NPT enforcement (requires the IAEA) ----
+				# From the Strong tier (redesign phase 5; it was authority 80,
+				# leaving at 75), non-nuclear members are held to disarmament.
+				# The tier carries the hysteresis the 80/75 pair used to.
 				if = {
 					limit = {
 						has_global_variable = un_agency_iaea
-						global_var:un_authority >= 80
+						un_tier_at_least_strong = yes
 						NOT = { has_modifier = nuclear_power }
 						NOT = { je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier } }
 					}
 					je:je_united_nations ?= { add_modifier = { name = un_npt_disarmament_modifier } }
 				}
-				# Remove if authority drops or they become nuclear
+				# Remove if the tier drops or they become nuclear
 				if = {
 					limit = {
 						je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier }
 						OR = {
-							global_var:un_authority < 75
+							NOT = { un_tier_at_least_strong = yes }
 							has_modifier = nuclear_power
 							NOT = { has_global_variable = un_agency_iaea }
 						}
@@ -500,6 +505,16 @@
 			# ---- Authority history (the chart in the authority widget) ----
 			un_authority_record_history = yes
 
+			# ---- The convention regimes (redesign phase 5) ----
+			# Re-read our terms when the tier has changed or a year has
+			# passed: the conventions' member modifiers at the current E, the
+			# winner or loser modifier each gives us, shared intelligence and
+			# our interest groups' reaction from Strong, and a colony's liberty
+			# under the decolonisation declaration. The single refresh site
+			# for every un_regime_* modifier (un_regime_effects.txt). Outside
+			# the member block: a colony is not a member.
+			un_regime_country_pulse = yes
+
 			# ---- International standing (all countries with the JE) ----
 			# The whole national-standing system's monthly work, in one call:
 			# seed a new member at the neutral value, advance the rolling year,
@@ -524,10 +539,15 @@
 		}
 	}
 	event_outcome_activated_effect_desc = {
-		header = je_un_preview_high_authority_infamy_header
+		header = je_un_preview_war_surcharge_header
 		effect = {
-			custom_tooltip = je_un_preview_high_authority_infamy_tt
-			add_modifier = { name = un_high_authority_infamy_modifier }
+			custom_tooltip = je_un_preview_war_surcharge_tt
+		}
+	}
+	event_outcome_activated_effect_desc = {
+		header = je_un_preview_dues_header
+		effect = {
+			custom_tooltip = je_un_preview_dues_tt
 		}
 	}
 	event_outcome_activated_effect_desc = {

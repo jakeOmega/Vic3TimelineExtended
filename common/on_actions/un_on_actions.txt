@@ -15,6 +15,19 @@ un_events_on_action = {
 			remove_variable = un_mandate_current
 		}
 
+		# The bound mandate's war support at Strong and above (redesign phase
+		# 5, un_teeth_effects.txt): removed and re-added every month, here
+		# because the multiplier needs a country ROOT.
+		if = {
+			limit = {
+				OR = {
+					has_variable = un_mandate_current
+					has_modifier = un_mandate_war_support_modifier
+				}
+			}
+			un_teeth_mandate_support_refresh = yes
+		}
+
 		# The per-member random event roll that used to follow is gone (redesign
 		# phase 4): the UN's events are raised by the docket, a global scan of
 		# real situations (un_docket_effects.txt, from
@@ -86,6 +99,12 @@ un_global_authority_on_action = {
 			# mandate is issued.
 			un_mandates_monthly_update = yes
 
+			# Missions (redesign phase 6, un_mission_effects.txt): each active
+			# mission's contributors, strength, progress and outcome. The
+			# state's modifier is refreshed from the state pulse
+			# (un_mission_on_actions.txt).
+			un_missions_monthly_update = yes
+
 			# Headquarters upkeep: a live member hosts, and exactly one HQ
 			# building stands, in the host's territory (un_hq_effects.txt).
 			un_hq_monthly_update = yes
@@ -94,6 +113,15 @@ un_global_authority_on_action = {
 			# period after a founding, then give every open seat to the
 			# great-power member with the most prestige that holds none.
 			un_seat_monthly_update = yes
+
+			# Resolutions with teeth (redesign phase 5, un_teeth_effects.txt):
+			# sanctions busting, and the mandate holder's war support.
+			un_teeth_monthly_update = yes
+
+			# The convention regimes (redesign phase 5, un_regime_effects.txt):
+			# every country re-reads its terms when the tier changes and once a
+			# year, at its own monthly pulse.
+			un_regime_monthly_update = yes
 
 			# Last: at 0, during a crisis, the UN dissolves (un_ladder_effects.txt).
 			# After the upkeep above on purpose — that upkeep assumes a UN that

@@ -3617,6 +3617,162 @@ un_authority_crisis_modifier = {
 # un_events.10's old option rewards; the event no longer applies them, and they
 # stay defined only so saves that carry them still load.
 #
+# ---- UN redesign phase 6: missions (un_mission_effects.txt) ----
+# State modifiers, each applied with multiplier = var:un_msn_power (the
+# mission's strength: E x the budget x its contributors) by
+# un_mission_state_refresh, the single refresh site, from the state pulse.
+un_mission_peacekeeping_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_turmoil_effects_mult = -0.2
+	state_devastation_decay_mult = 0.5
+}
+un_mission_aid_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_standard_of_living_add = 1.5
+	state_food_security_add = 0.2
+	state_mortality_mult = -0.05
+}
+un_mission_stabilisation_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_turmoil_effects_mult = -0.3
+	state_standard_of_living_add = 0.5
+}
+
+# ---- UN redesign phase 5: resolutions with teeth (un_teeth_effects.txt) ----
+# All three are unit values applied with multiplier = un_enforcement (E).
+# A full condemnation from the Strong tier: the condemned are shunned — other
+# countries are less willing to sign treaties with them or back them in plays.
+un_condemned_isolation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_diplomatic_reputation_add = -6
+}
+# ...and at Supranational, restrained: fewer maneuvers in its plays, and every
+# act of aggression costs more.
+un_condemned_restraint_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_diplomatic_play_maneuvers_mult = -0.1
+	country_infamy_generation_mult = 0.1
+}
+# The holder of a bound military mandate, from the Strong tier: the war the
+# Assembly authorized keeps the nation behind it (single refresh site:
+# un_teeth_monthly_update).
+un_mandate_war_support_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_war_support_casualties_mult = -0.15
+	country_war_support_battles_decrease_mult = -0.15
+}
+
+# ---- UN redesign phase 5: convention regimes (un_regime_effects.txt) ----
+# Each is a unit value applied with multiplier = un_enforcement (E) by
+# un_regime_refresh_country, the single refresh site, except the climate
+# adaptation aid (x temperature anomaly x E) and shared intelligence (x the
+# steps above Established: 1 at Strong, 2 at Supranational).
+# Climate, a high emitter: the binding cut, paid in heavy-industry output.
+un_regime_climate_emitter_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_negative.dds
+	country_greenhouse_gas_emissions_mult = -0.08
+	building_group_bg_heavy_industry_throughput_add = -0.02
+}
+# Climate, a low emitter: adaptation aid, a fifth of the global_warming
+# modifier's harm per degree, inverted.
+un_regime_climate_adaptation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_fire_positive.dds
+	state_mortality_mult = -0.01
+	state_standard_of_living_add = 0.2
+	building_group_bg_agriculture_throughput_add = 0.02
+}
+# Non-proliferation, a threshold state: the inspections slow its programme.
+un_regime_npt_inspection_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_nuclear_program_progress_mult = -0.25
+}
+# Non-proliferation, a state without the bomb: the treaty's security guarantee.
+un_regime_npt_guarantee_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_nuclear_weapon_defense_chance_add = 0.05
+}
+# The law of the sea, a great power: its fleets are held to the convention.
+un_regime_naval_curb_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_from_navy_power_projection_mult = -0.1
+}
+# Human rights, a member whose laws the declaration condemns.
+un_regime_rights_violator_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -5
+	country_prestige_mult = -0.05
+}
+# Decolonisation, a colonial power.
+un_regime_colonial_pressure_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_colonial_stability_drift_add = -0.3
+}
+# Decolonisation, a colony of a member.
+un_regime_colony_liberty_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_liberty_desire_add = 0.05
+}
+# Refugees, a host: more arrivals, and the strain they bring.
+un_regime_refugee_host_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_migration_pull_mult = 0.1
+	state_turmoil_effects_mult = 0.05
+}
+# Refugees, a source: relief.
+un_regime_refugee_source_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_standard_of_living_add = 0.25
+}
+# Outer space, the leader: it shares what it learns.
+un_regime_space_leader_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_negative.dds
+	country_space_race_progress_mult = -0.05
+}
+# Outer space, a laggard: shared progress.
+un_regime_space_laggard_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_space_race_progress_mult = 0.1
+}
+# Outer space, a member holding an orbital battlestation the treaty bars.
+un_regime_space_weapon_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.05
+	country_diplomatic_reputation_add = -3
+}
+# Cultural heritage, a wonder state: pull and visitors, and slower building
+# around what is protected.
+un_regime_heritage_site_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_lightbulb_positive.dds
+	country_cultural_pull_add = 3
+	building_tourism_industry_throughput_add = 0.05
+	state_construction_mult = -0.02
+}
+# Intelligence, members from the Strong tier (§7.4; the
+# intelligence_sharing_pact shield's shape).
+un_regime_shared_intelligence_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_covert_defense_economic_add = 1
+	country_covert_defense_ideological_add = 1
+	country_covert_defense_military_add = 1
+}
+# Sovereignty (§7.1), interest-group scope, from the Strong tier: nationalist
+# groups resent the UN's reach, humanitarian and pacifist ones welcome it.
+un_sovereignty_resentment_ig_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	interest_group_approval_add = -2
+}
+un_sovereignty_welcome_ig_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	interest_group_approval_add = 1
+}
+# un_events.34 option B: the concessions that bought off the nationalists'
+# demand to leave the UN (five years, decaying).
+un_sovereignty_concession_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -75
+	country_influence_mult = -0.05
+}
+
 # Non-members, from the Strong tier up (on top of un_nonmember_pariah_modifier,
 # which applies from Established): trade and leverage.
 un_nonmember_pariah_strong_modifier = {
@@ -3921,6 +4077,28 @@ un_humanitarian_token_cost = {
 un_observer_mission_cost = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
+}
+
+# Redesign phase 5 (§7.2): a member's assessed dues, a share of its GDP set by
+# the UN's tier. Applied with multiplier = var:un_dues_cached (the weekly
+# dues, un_dues_weekly_value) by un_dues_country_monthly_update, the single
+# refresh site; removed while the member withholds.
+un_dues_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+# Redesign phase 5, un_events.35: the emergency lending facility. The
+# repayment is applied with multiplier = un_loan_weekly_repayment_value (the
+# loan x 1.1 over 260 weeks) for 1825 days; the conditions run as long.
+un_loan_repayment_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+un_loan_conditions_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_legitimacy_base_add = -5
+	country_authority_add = -50
 }
 
 # un_events.2 option E: the aggrieved party let the matter rest.

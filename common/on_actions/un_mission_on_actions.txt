@@ -1,0 +1,31 @@
+﻿# ============================================================================
+# UN MISSIONS — THE STATE PULSE (redesign phase 6)
+# ============================================================================
+# A mission's effect lives on its state and scales with the mission's strength,
+# so it is applied from the state's own monthly pulse (the CLAUDE.md rule for
+# state-scoped scaling): un_mission_state_refresh, the single refresh site for
+# the three un_mission_*_state_modifier (un_mission_effects.txt). The engine
+# unions same-name on_action declarations across files, so declaring
+# on_monthly_pulse_state here leaves the other systems that extend it alone.
+# ============================================================================
+
+on_monthly_pulse_state = {
+	on_actions = {
+		un_mission_state_on_action
+	}
+}
+
+# Root = state. Cheap for the states with no mission: two variable tests.
+un_mission_state_on_action = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					has_variable = un_msn_here
+					has_variable = un_msn_power
+				}
+			}
+			un_mission_state_refresh = yes
+		}
+	}
+}

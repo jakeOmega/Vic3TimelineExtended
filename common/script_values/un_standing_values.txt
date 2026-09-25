@@ -126,6 +126,11 @@ un_standing_sanctioned_loss = 6
 un_standing_sanctioned_partial_loss = 3
 un_standing_leave_loss = 5
 un_standing_seat_stripped_loss = 5
+# Redesign phase 5 (§7.2): withholding assessed dues costs the record once,
+# when it starts; losing the vote under Article 19 after 24 months in arrears
+# costs it again.
+un_standing_dues_withheld_loss = 3
+un_standing_article_19_loss = 5
 
 # ---- Gates ----
 

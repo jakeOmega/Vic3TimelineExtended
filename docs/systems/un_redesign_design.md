@@ -1,9 +1,12 @@
 # United Nations Redesign — Design
 
 > **STATUS: PHASES 1 (THE AUTHORITY MODEL), 2 (THE LADDER, THE CEILING AND THE FLOOR),
-> 3 (GROUNDS, THE ITEMISED LEAN, AI VOTING IN SCRIPT, THE RECESS) AND 4 (THE DOCKET AND THE
-> EVENT REWRITE) IMPLEMENTED.** Phase 1 has been play-tested; phases 2–4 are pending in-game
-> verification. Phases 5 and 6 are designed but not built. Read
+> 3 (GROUNDS, THE ITEMISED LEAN, AI VOTING IN SCRIPT, THE RECESS), 4 (THE DOCKET AND THE
+> EVENT REWRITE), 5 (DUES, TEETH, REGIMES, SOVEREIGNTY, INTELLIGENCE) AND 6 (MISSIONS)
+> IMPLEMENTED.** Phase 1 has been play-tested; phases 2–6 are pending in-game verification.
+> Read
+> [§0.6](#06-phase-6-as-shipped--rulings-deviations-and-open-checks),
+> [§0.5](#05-phase-5-as-shipped--rulings-deviations-and-open-checks),
 > [§0.4](#04-phase-4-as-shipped--rulings-deviations-and-open-checks),
 > [§0.3](#03-phase-3-as-shipped--rulings-deviations-and-open-checks),
 > [§0.2](#02-phase-2-as-shipped--rulings-deviations-and-open-checks) and
@@ -19,6 +22,489 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.6 Phase 6 as shipped — rulings, deviations and open checks
+
+Built 2026-09-25 on `claude/amazing-clarke-r5wz67`, after phase 5. Not yet seen in a running
+game. Implements §9 (missions), the delivery that feeds on them (§3.2), the mission hosts'
+covert price (§7.4) and the mission forms of §5.2's peacekeeping row.
+
+### Files
+
+- `common/script_values/un_mission_values.txt`: the mission types table, the tuning, the
+  strength formula, and the state panel tile's values.
+- `common/scripted_triggers/un_mission_triggers.txt`.
+- `common/scripted_effects/un_mission_effects.txt`: every writer; the container schema and the
+  call sites are at its top.
+- `common/on_actions/un_mission_on_actions.txt`: the state monthly pulse.
+- **Call sites changed:**
+  - `un_vote.2` (a peacekeeping request carried in full, and an aid request carried, open
+    missions);
+  - `un_vote_apply_resolution_compliance` (pledgers join);
+  - `un_events.4` A (stabilisation), `un_events.7` A (aid), `un_events.7` B (a flat token);
+  - `un_events.102` (the host's welcome notes the covert price; resentment expels the mission);
+  - `un_teeth_war_goal_surcharge` (a mission host is under protection);
+  - `covert_nets_sync` (contributors' networks in the host);
+  - `un_dissolve` (every mission ends).
+- **Display:** the chamber's **Missions in the Field** register; a **UN mission tile** in the
+  state panel (`gui/states_panel.gui`, after the antimatter tile); the delivery pillar's
+  tooltip.
+- **Console:** `te_debug_un.1` option u (a peacekeeping mission to our most devastated state).
+
+### Rulings: where phase 6 deviates from, or binds, the sections below
+
+1. **The container (§9)** is a script container in the mandate pattern.
+   - It carries a type tag, an active tag closed as succeeded, failed or lapsed, the host, the
+     state, months, progress, strength, the years it began and ended, and a contributor list.
+   - It is filed in `un_mission_registry` (12 kept; active missions are never evicted).
+   - The state carries `un_msn_here`, so a state holds **one mission at a time**.
+2. **Three types, not six (deviation).**
+   - Built: **peacekeeping**, **aid** and **stabilisation**. Each is tied to a situation that
+     already reaches the Assembly: a peacekeeping request, an aid request or a famine, and a
+     state collapse.
+   - Not built: the refugee camp, heritage site and inspection missions. The refugee and
+     heritage conventions and the NPT's inspections (§0.5 ruling 15) carry those ideas as
+     regimes.
+3. **Where a mission goes:**
+   - **Peacekeeping** goes to the requester's most devastated state.
+   - **Aid** goes to the requester's state most in need (the lowest standard of living, plus
+     its devastation, since an aid request can be carried on devastation alone), or, for a
+     famine, the famine state the docket named.
+   - **Stabilisation** goes to the collapsing country's most populous state.
+   - A second responder to the same crisis joins the mission already there.
+   - If every state of the host already holds another kind, a resolution falls back to the
+     country-wide modifier of old.
+4. **Strength (§9, §7.2)** is written monthly on the mission and copied to the state
+   (`var:un_msn_power`):
+   `E × (1 − 0.5 × the withholders' share of the members' GDP) × (0.75 + 0.25 × contributors, up to 3)`.
+   - At Moribund a mission does nothing.
+   - Withheld dues starve every mission. This is how "the budget funds missions" shipped:
+     through the dues' funding share, not a money amount, because GDP scales are too wide for a
+     fixed budget line to mean anything.
+5. **State modifiers (§9):** applied from `on_monthly_pulse_state`, the single refresh site, ×
+   strength. The multiplier's variable is removed only after the modifiers are.
+   - **Peacekeeping:** turmoil effects −20%, devastation recovery +50%.
+   - **Aid:** SoL +1.5, food security +0.2, mortality −5%.
+   - **Stabilisation:** turmoil effects −30%, SoL +0.5.
+6. **Outcomes (§9):**
+   - **Succeeds when:**
+     - peacekeeping: 24 months of peace for its host (progress stalls while the host is at war);
+     - aid: at least 6 months in, the state has no famine and its **underlying** SoL (the
+       average less what the aid modifier itself adds, `un_mission_underlying_sol`) has reached
+       its goal: 10, or 1 above what it was at opening if that is higher
+       (`un_mission_aid_goal`). A mission cannot succeed on its own modifier, or in a state that
+       never needed it (review fix);
+     - stabilisation: 12 months after the collapse ends (48 while it lasts).
+   - **Fails when** the host is attacked **after the mission opened** (at war, not as the
+     initiator; `un_mission_attacked_since_open`), or for peacekeeping and stabilisation when
+     every contributor it **had** is gone (`un_msn_staffed`). A mission sent into a war the
+     host did not start (`un_msn_war_at_open`) is not failed by it; the flag clears at the
+     host's first month of peace, and peacekeeping stalls meanwhile. A stabilisation mission
+     also fails when its host **expels** it (`un_events.102` B, resenting the peacekeepers).
+   - **Lapses** after 60 months; when its host loses the state or stops existing; when a host
+     that requested it leaves the UN (`un_msn_requested`); or, for peacekeeping and
+     stabilisation, when no member has joined it within 6 months (a resolution opens its
+     mission before the pledges in `un_vote.3` arrive). A mission sent to a collapse or a famine
+     may serve a country outside the UN.
+   - **Success:** delivery +2 (institutional, reason 19), standing +3 for each contributor
+     (reason 34), relations +15 with the host, and word to all of them.
+   - **Failure:** credibility −1 (reason 20).
+   - **Lapse:** nothing.
+7. **Contributors:**
+   - **Resolutions:** the members that pledge in `un_vote.3` join the mission their resolution
+     opened (`un_res_mission`).
+   - **Appeals:** the powers that answer a collapse or famine appeal in full join or open one.
+   - **Pruning:** contributors that leave the UN or stop existing are dropped monthly.
+   - **Deviation:** "the contributors withdraw" is read from membership, not from the
+     programme toggles. The docket already offers collapses to the peacekeeping programme's
+     members first, which is how §10's "programmes become mission contributions" shipped.
+8. **One request per mission:** a country hosting an active aid or peacekeeping mission cannot
+   table another request of that kind (`un_mission_hosts`, in the propose triggers).
+9. **Protection (§5.2):** the host of an active peacekeeping or stabilisation mission counts as
+   "under UN peacekeeping" for the war-goal surcharge, doubled from Strong (§0.5 ruling 8).
+   **Not built:** the Supranational prohibition of war goals against a mission state.
+10. **Covert (§7.4):** a contributor's covert networks in the host grow 25% faster
+   (`iw_net_un_mult`), and the host's welcome event says so. The headquarters host's bonus
+   (phase 5) takes precedence where both apply.
+11. **Display (deviations):**
+    - **Built:** the chamber's register (a host or state no longer on the map is named as such),
+      and the state tile (`[concept_un_mission]` for its name, as the other status tiles; then
+      the kind, months, strength, progress and a bar; a tooltip explaining the rules and the
+      contributor count). The events' mission lines show only when a mission can be found or
+      opened (`un_mission_can_join_host`), and otherwise say what stands in.
+    - **The UN map mode is not built.** The mod's overlay system (`te_apply_map_mode_overlay`) is
+      dormant: its decision is hidden, it has never shipped live, and waking it for one metric
+      needs its own in-game test.
+    - **Headlines are not built.**
+12. **Delivery (§3.2)** stays a decaying ledger, as §0.1 ruling 3 planned until missions
+    existed. Mission outcomes now feed it beside the old sources.
+13. **Old saves:**
+    - Country-wide received modifiers already running expire on their own.
+    - The first missions open from the next carried request, collapse or famine.
+    - A dissolution closes every active mission as lapsed and keeps the register, like the
+      mandates'.
+
+### Known roughnesses
+
+- **One mission per state.** A peacekeeping request from a country whose every state already
+  holds an aid mission gets the country-wide modifier instead.
+- **The attack test is coarse:** any war the host did not start, once the mission is there,
+  fails it, even one far from the mission's state.
+- **An aid mission's goal is read against a SoL that moves with everything else** (prices,
+  wages, other modifiers); only the mission's own share is taken out.
+- **Mission modifiers restate numbers** in the tile's tooltip and the chamber's help (24
+  months, SoL 10, five years).
+- **The state tile** has not been seen: the `AddLocalizationIf` in its kind row, and its place
+  in the status grid (it must fit the grid's two-column pairing), need a look.
+
+### IN-GAME VERIFICATION CHECKLIST (phase 6)
+
+1. **Open one.** `event te_debug_un.1` option u: a UN peacekeeping mission in our most
+   devastated state, with the most prestigious other member contributing.
+   - The next state pulse gives the state the peacekeeping modifier × strength.
+   - The state panel shows the UN tile with its months, strength and progress.
+   - The chamber's Missions in the Field lists it with its contributor.
+2. **Progress.** Month by month, progress rises about 4 points while we are at peace, and
+   stalls while we are at war.
+3. **Failure.** Declare nothing; have a rival attack us: the mission fails at the next monthly
+   update, the credibility debit shows in the ledger log, and the state modifier goes at the
+   state's next pulse. A mission opened while we were already defending a war does not fail;
+   it stalls until the war ends.
+4. **A carried peacekeeping request** at Established opens a mission in the requester's most
+   devastated state, and the pledgers in `un_vote.3` join it. Their contributor count shows in
+   the tile's tooltip. With no pledger, the mission lapses after six months, without a debit.
+5. **A famine appeal answered in full** opens an aid mission in the famine state. The next
+   donor joins it rather than opening a second one.
+6. **A collapse:** a power answering `un_events.4` in full opens a stabilisation mission. The
+   host resenting the peacekeepers (`un_events.102` B) ends it as failed.
+7. **The multiplier** `var:un_msn_power` on a state modifier refreshes month to month, with no
+   "Value of wrong type" in `error.log`.
+
+---
+
+## 0.5 Phase 5 as shipped — rulings, deviations and open checks
+
+Built 2026-09-25 on `claude/amazing-clarke-r5wz67`, after phase 4 and after PR #422 (permanent
+seats by prestige, the named Security Council, and "refuse to ratify") had merged. Not yet seen
+in a running game. Implements §7.2 (dues and Article 19), §5.2 (topic effects by tier, the
+charter reforms' own teeth), §5.3 (convention regimes, the ICC indictment), §7.1 (sovereignty),
+§7.4 (intelligence) and the emergency lending facility that §0.4 deferred from the docket.
+
+### Files
+
+- **Dues:** `common/script_values/un_dues_values.txt` (the rates, Article 19's 24 months, the
+  budget, the funding pillar's dues term), `common/scripted_triggers/un_dues_triggers.txt`,
+  `common/scripted_effects/un_dues_effects.txt` (every writer). Buttons
+  `un_withhold_dues_button` and `un_pay_dues_button`.
+- **Teeth:** `common/script_values/un_teeth_values.txt` (the table of what changes at each
+  tier, the surcharge, the standing case), `common/scripted_triggers/un_teeth_triggers.txt`,
+  `common/scripted_effects/un_teeth_effects.txt`.
+- **Regimes, sovereignty, intelligence, the ICC:** `common/script_values/un_regime_values.txt`
+  (the winners-and-losers table at its top), `common/scripted_triggers/un_regime_triggers.txt`,
+  `common/scripted_effects/un_regime_effects.txt` (every writer and call site at its top).
+- **The lending facility:** docket item 14 in `un_docket_values.txt` / `un_docket_triggers.txt`
+  / `un_docket_effects.txt`.
+- **Events:** `un_events.33` (the court indicts our leader), `un_events.34` (sovereignty first),
+  `un_events.35` (an emergency lending facility). The Leave button's effect is now the shared
+  `un_leave_organisation` (`un_ladder_effects.txt`), which `un_events.34` also calls.
+- **Call sites changed:** the journal entry's pulse (dues in the member block; the regimes'
+  re-reading for every holder; the blanket infamy modifier stripped; NPT disarmament by tier),
+  `un_global_authority_on_action` (`un_teeth_monthly_update`, `un_regime_monthly_update`),
+  `un_mandate_on_wargoal_added` (the surcharge, last), `un_vote.2` (condemnation and sanctions by
+  tier, peacekeeping by tier, the veto-override line, the proposer ratifying on passage, the
+  decolonisation regime), `un_resolution_decide` (veto restraint), `un_vote_apply_treaty_modifier`
+  and `un_apply_ratified_conventions` (× E and the regimes' refresh), the propose triggers and
+  `un_vote_can_cast_ballot` (Article 19), the covert network tick (`covert_nets_sync`,
+  `covert_net_tick_gain`), the nuclear strike effects and `covert_warfare.1` (the ICC).
+- **Chamber:** a new **Our Obligations** section (dues and arrears, the regimes' terms for us, the
+  court's reach, sovereignty pressure); an overridden veto on the card and in the archive; the
+  Supranational standing case in Our Exposure; the docket's item 14.
+- **Console:** `te_debug_un.1` options o (raise the UN one tier), p (two years in arrears), q (the
+  ICC indicts our ruler), r (the demand to leave), s (the lending facility offered to us).
+
+### Rulings: where phase 5 deviates from, or binds, the sections below
+
+1. **Dues (§7.2) as designed:** 0 / 0.1 / 0.2 / 0.4 / 1.0 % of GDP a year by tier, charged as
+   the weekly expense `un_dues_modifier` × `var:un_dues_cached` (`un_dues_weekly_value`),
+   re-applied every month in the journal entry's member block, the single refresh site. The
+   cached variable is never removed while the modifier stands (the engine re-reads a stored
+   multiplier; `modifier_multiplier_var_audit`).
+2. **Withholding** (`un_withhold_dues_button`) costs standing −3 once (reason 32). Every month
+   withheld **while dues are assessed** (above Moribund) is a month in arrears, and the month's
+   dues are added to what is owed. Dues are billed by the month: withholding owes the current
+   month at once (`un_dues_prebilled`, so the next monthly update adds no second one), so
+   withholding and paying again inside a month saves nothing (review fix). The button needs a
+   tier that assesses dues.
+   **Paying** (`un_pay_dues_button`) settles all arrears at once through `add_treasury`.
+   **Leaving keeps the arrears**: a member that walks out owing money rejoins still
+   withholding. A dissolution writes them off.
+3. **Article 19 (deviation):** after 24 months in arrears (`un_dues_vote_suspended`) the member
+   casts no ballot (`un_vote_can_cast_ballot`, `un_vote.1`, the chamber's controls), **tables
+   nothing** (the seven propose triggers, `un_docket_can_be_offered`), is left out of
+   `un_vote_eligible_member_count` (the two-thirds rule), and is not a candidate for a
+   permanent seat (`un_permanent_seat_candidate`, PR #422). The real Charter takes only the
+   vote; tabling is barred too because tabling books the proposer's own yes vote. Standing −5
+   once (reason 33), and a notification.
+4. **The funding pillar (deviation).** §3.2 made funding the share of assessed dues paid,
+   −10..+10. Shipped: the phase-1 programme proxy stays (−5..+10) and the dues **subtract**
+   `15 × the withholders' share of the members' GDP` (`un_funding_arrears_share`), clamped to
+   −10..+10. When every member pays, funding is exactly what it was in phases 1–4, so the
+   tuning the owner has seen is untouched; the programmes keep a job until missions replace
+   them (phase 6). Weighted by GDP because the assessment is. Nothing is withheld while nothing
+   is assessed, so the dues term is 0 at Moribund.
+5. **The budget:** `global_var:un_budget_weekly`, what the paying members pay a week together,
+   snapshotted monthly. The lending facility lends from it; phase 6's missions will draw on it.
+6. **Condemnation by tier (§5.2):**
+   - Contested and Established are unchanged: the modifier × E, and the grounds already decide
+     mandate eligibility.
+   - **Strong (deviation):** "the target cannot join defensive pacts" has no modifier, and
+     defensive pacts are treaty articles now, which script cannot bar. The condemned instead
+     carry `un_condemned_isolation_modifier`: diplomatic reputation −6 × E, which the engine
+     describes as the "tendency of other countries to sign treaties with or offer diplomatic
+     play support to" it. Ten years, decaying.
+   - **Supranational (deviation):** "members get a free defensive war goal" is not buildable.
+     The condemned also carry `un_condemned_restraint_modifier` (play maneuvers −10%, infamy
+     generation +10%, × E; five years). `country_disallow_aggressive_plays_bool` was rejected:
+     the vanilla embargo pact requires both sides to be allowed aggressive plays, so it would
+     have dissolved any UN embargo on the same country.
+7. **Sanctions by tier:** from Strong a carried (un-vetoed) regime is also an **embargo**.
+   - Every major-power member with diplomatic relevance to the target that voted for it
+     creates the vanilla embargo pact against it; at Supranational every such member does.
+   - Major rank and relevance, because the pact costs its holder 100 influence and requires
+     relevance to stand: a minor could not hold one.
+   - **The pact must be able to stand (review fix).** Vanilla's embargo holds only while
+     relations are Poor or worse, neither side is isolationist, and no customs union, treaty
+     trade privilege or investment right joins them. So the verdict first sours each called
+     member's relations with the target by 30 (`un_embargo_relations_drop`), and a member
+     embargoes only if the pact would then stand (`un_teeth_embargo_can_stand`: relations
+     ≤ Poor, checked explicitly, and `can_create_diplomatic_pact`). A friend of the target that
+     stays above Poor is not listed, and so cannot be busting.
+   - Each such embargo is listed on the target (`un_embargo_by`). `un_lift_sanctions_button`
+     and a dissolution remove exactly these, and no embargo a member chose for itself.
+   - A member whose listed embargo is gone while the regime stands is **busting** it only if it
+     broke it by choice (`un_teeth_embargo_busted`): the pact's forced year is over (the target
+     carries `un_embargo_forced` for 365 days; before it only a failed requirement ends the
+     pact) and the pact could stand again. Then dossier +8 and a credibility debit of 0.5 × its
+     weight (reason 15). An embargo that broke on its own is struck from the list without
+     either. Found by `un_teeth_monthly_update`.
+   - The docket's trade-embargo dispute (item 12) ignores UN embargoes
+     (`un_docket_embargo_counterpart`), so enforcing sanctions never brings arbitration.
+   - **Not built:** "busting is a covert op" at Supranational.
+8. **War without a mandate:** every war goal the **initiator** of a play adds without a bound
+   mandate costs 2 / 4 / 10 infamy at Established / Strong / Supranational
+   (`un_war_surcharge_value`), twice that from Strong against a country carrying
+   `un_peacekeeping_received_modifier`. Subjects, plays against decentralized peoples and
+   holders of a bound mandate are exempt. A human initiator is notified. It runs last in
+   `un_mandate_on_wargoal_added`, after the mandate has had its chance to bind, so an
+   authorized goal is never charged. It **replaces** `un_high_authority_infamy_modifier` (the
+   flat +10% infamy generation every member carried at authority 50+), which the member pulse
+   now strips from saves. **Not built:** the Supranational "war goal against a mission state
+   is prohibited" (phase 6's missions) and the AI strategy weight (a nice-to-have, §14).
+9. **Peacekeeping by tier:** below Established a carried request sends observers only (the
+   vetoed form's outcome and text, and the chamber's "If it carries" line says so); from
+   Established a full deployment. The state-mission forms wait for phase 6.
+10. **Mandates by tier:** from Strong the holder of a bound mandate carries
+    `un_mandate_war_support_modifier` (war support lost to casualties and defeats −15% × E),
+    removed and re-added every month from the country pulse (`un_teeth_mandate_support_refresh`
+    in `un_events_on_action`), so a tier change reaches it, and from a country ROOT, which the
+    multiplier slot needs. **Not built:** "cannot be contested by members" at Supranational.
+11. **Veto restraint (Charter Reform II):** §4.1 names the reform but not the rule. Ruling: once
+    the charter carries Reform II, a simple-majority topic that a veto would have downgraded or
+    blocked carries in full when it also has a two-thirds supermajority of the members with a
+    vote (`un_resolution_veto_restraint`, in `un_resolution_decide`; `un_res_veto_overridden`).
+    The vetoer still pays for its veto. Reform I's teeth are the Strong tier it opens (embargoes,
+    isolation, the surcharge ×2, dues at 0.4%); Reform II's are veto restraint and the
+    Supranational tier, whose dues are the 1% levy.
+12. **NPT disarmament** pressure on non-nuclear members moves from authority 80/75 to the
+    Strong tier (the tier carries the hysteresis).
+13. **The Supranational standing case (§4.2, §5.3):** an outsider of major rank, or one with a
+    nuclear programme or arsenal, carries +50 in `un_case_strength` (`un_case_standing_term`):
+    enough for sanctions on its own. Our Exposure names it.
+14. **Convention regimes (§5.3):**
+    - Every convention's member modifier is applied with `multiplier = un_convention_multiplier`:
+      E, but never below 0.01, so ×0.01 at Moribund and ×2.5 at Supranational. Holding the
+      member modifier **is** having ratified (the terms, the court's reach and the lean read
+      it), and nothing guarantees a ×0 modifier is kept, so a Moribund spell leaves the
+      conventions dormant rather than risk every ratification (review fix).
+    - Each convention names a winner or a loser (`un_regime_*_modifier`, × E); the table is at
+      the top of `un_regime_values.txt`.
+    - **Ratification binds (reconciled with PR #422):** the terms reach only members that carry
+      the convention's member modifier. A member that chose "Refuse to ratify it" stays outside
+      the convention: no benefit and no cost. The decolonisation declaration is a decision, not
+      a convention, and binds every member.
+    - **When the terms are read:** on a tier change and once a year (`un_regime_epoch`, bumped
+      by `un_regime_monthly_update`; each country re-reads at its own monthly pulse), when it
+      ratifies (`un_vote_apply_treaty_modifier`) and when it joins
+      (`un_apply_ratified_conventions`). Leaving clears them.
+    - **Treaty proposers ratify on passage,** in `un_vote.2`, after the agency is founded, like
+      every other member. They no longer take the convention up front, which also ends §1.4's
+      "treaty proposers keep their modifier when the vote fails".
+    - **The lean weighs the terms** (`un_lean_regime`, part of `un_lean_interests`): an emitter
+      leans against the climate accord, a host against the refugee convention, a space leader
+      against the space treaty, and so on. The NPT and decolonisation were already weighed there.
+15. **The regimes as shipped, with their deviations:**
+    - **Climate:** "high emitter" is a market leader with 10% or more of world emissions
+      (emissions are a property of the market, and only the leader's own
+      `country_greenhouse_gas_emissions_mult` counts). It gets −8% × E emissions and −2% × E
+      heavy-industry throughput. A low emitter (no market to lead, or under 2%) gets adaptation
+      aid: a fifth of the `global_warming` modifier's harm per degree, inverted, × the anomaly ×
+      E. `has_emissions_reduction_treaty` is left to the treaty article that owns it.
+    - **NPT:** threshold states (running `je_nuclear_program` with no bomb) get
+      `country_nuclear_program_progress_mult` −0.25 × E. States without the bomb get the
+      security guarantee, `country_nuclear_weapon_defense_chance_add` +0.05 × E.
+    - **Law of the sea (deviation):** the mod does not use vanilla piracy, so the pirates' side
+      is not built. Great powers' naval prestige projection is curbed (−10% × E).
+    - **Human rights:** a member with an ethnostate, outlawed dissent or any slavery law loses
+      5 × E legitimacy and 5% × E prestige. The authoritarian interest groups' dislike is §7.1's
+      job.
+    - **Decolonisation:** now a standing regime (`un_regime_decolonization`, set when the
+      declaration carries; the topic is closed while it stands). Colonial powers (running
+      `je_colonial_empire`) get colonial stability drift −0.3 × E; qualifying colonial subjects
+      of members get liberty desire +0.05 × E. A member that leaves takes it off its colonies at
+      once (`un_membership_end_effect`).
+    - **Refugees (deviation):** hosts and sources are read from GDP-per-head rank (the top 20
+      host, below 60 are sources), not from migration flows. Hosts get migration pull +10% and
+      turmoil effects +5%; sources get +0.25 SoL, all × E.
+    - **Outer space:** the leader is the country with the most main-sequence milestones (at
+      least 3; `un_space_top_score`, taken at each bump). It gets progress −5% × E; laggards,
+      three or more milestones behind, get +10% × E. A member holding an orbital battlestation
+      loses prestige and diplomatic reputation × E ("barred" in effect; a building cannot be
+      forbidden by modifier).
+    - **Heritage:** a member holding a wonder (`bg_monuments`) gets cultural pull +3, tourism
+      throughput +5% and construction −2%, all × E.
+    - **Pandemic:** × E only (a nice-to-have, §14).
+16. **The ICC indictment (§5.3):**
+    - **Reach:** the court indicts the ruler of a member that ratified the Rome Statute from
+      Established, and of anyone at Supranational.
+    - **Crimes:** a nuclear first or tactical strike (not retaliation), or an exposed
+      regime-change operation (covert code 9). War crimes are not detected.
+    - **Pace:** at most once a decade per country, a month after the crime
+      (`un_regime_icc_note_crime` → `un_events.33`).
+    - **Surrender:** the ruler is exiled (`exile_character`, owner decision 2026-09-24). An heir
+      takes the throne first (`set_character_as_ruler`), so the accused is no longer the ruler
+      when exiled; vanilla's own exile interaction is not offered on a ruler. With no heir the
+      game picks the successor. The court does not indict an immortal ruler. Credibility +1.5 ×
+      weight (reason 16), standing +, and the ruler's interest group is angered.
+    - **Defiance:** `un_court_defiance_modifier` × E, dossier defiance +10, standing −5, and
+      credibility −1.5 × weight (reason 17).
+17. **Sovereignty (§7.1):**
+    - **Resent and welcome:** from Strong, interest groups with the patriotic, jingoist,
+      isolationist or sovereignist ideology carry `un_sovereignty_resentment_ig_modifier`
+      (approval −2 at Strong, −4 at Supranational). Those led by a humanitarian or a pacifist
+      carry `un_sovereignty_welcome_ig_modifier` (+1 / +2). Those two are leader ideologies in
+      this game, not interest-group ones.
+    - **The demand to leave:** a yearly check sends `un_events.34` when one resentful group is
+      powerful and in government, or two are powerful. At most once a decade. The options are
+      leave (the shared `un_leave_organisation`), concede (the resentful groups placated, and
+      `un_sovereignty_concession_modifier` for five years), or hold the line (the resentful
+      groups angered; credibility +0.5 × weight, reason 134).
+    - **Deviation:** the populist party and `law_isolationism` are not separate triggers. The
+      demand follows the interest groups' strength; the Leave button's own AI weights already
+      read isolationism.
+18. **Intelligence (§7.4):**
+    - **Shared intelligence:** from Strong, members get +1 of each covert defense, ×2 at
+      Supranational.
+    - **The headquarters host:** its covert networks in members grow 25% faster
+      (`iw_net_un_mult`, written by `covert_nets_sync`'s tick and read by `covert_net_tick_gain`).
+      As with every network, growth needs an operation running against the target.
+    - **Mission hosts** wait for phase 6.
+19. **The emergency lending facility (deferred from §0.4 ruling 3):**
+    - **Docket item 14 (score 45).** It is raised for the largest member with the banking cycle
+      in a panic or in default during a contagion wave (hit by the last wave, or a Great
+      Depression somewhere). It opens no resolution, is offered to no second member, and is
+      offered to the same member at most once a decade.
+    - **The loan:** the smaller of 2% of the borrower's GDP and 26 weeks of the budget.
+    - **Repayment:** 110% of the loan over five years, as a weekly expense
+      (`un_loan_repayment_modifier` × `un_loan_weekly_repayment_value`). It reads
+      `var:un_loan_amount`, which outlives the modifier.
+    - **Conditions** for as long: legitimacy −5, authority −50, trade unions and rural folk
+      angered, industrialists pleased. The banking cycle gets `finreg_banking_stability` and
+      +10.
+    - **Delivery:** +1, institutional (reason 18).
+    - **Deviation:** the facility lends from the dues-funded budget, not from named donors, so
+      no member's treasury is drawn on without its consent.
+20. **Not built in phase 5:**
+    - breaches of a ratified convention as a dossier record (§5.1's list): a regime's loser pays
+      through its modifier instead;
+    - sanctions busting as a covert operation, a free defensive war goal against the condemned,
+      and a mandate's war goal that members may not contest (all Supranational forms);
+    - the pirates' side of the law of the sea, and the pandemic regime's winners and losers.
+
+    Mission-state protection waits for phase 6.
+21. **Old saves:**
+    - Dues begin at the first monthly pulse.
+    - The regimes are read at the first bump (the first month).
+    - The blanket infamy modifier is stripped.
+    - A decolonisation declaration carried before this version does not set the regime; the
+      topic can carry it again.
+
+### Known roughnesses
+
+- **The loc restates numbers:** the rates, the 24 months, the surcharge's 2 / 4 / 10, the
+  facility's 2% and 110%. Edit them with the script values.
+- **Refusing to ratify stays cheap** (PR #422 kept the refusal's costs), so a convention's
+  losers can stay outside it. That is the real-world tradeoff, and the refuser also gives up the
+  member modifier, but it lets violators opt out of the human-rights regime.
+- **The AI withholds by `ai_chance`,** and may withhold, pay and withhold again. Each withholding
+  costs it standing.
+- **Terms are re-read once a year:** a member that becomes a high emitter or a space leader
+  mid-year waits for the next bump (or a tier change).
+- **The space leader** is measured over every country, not only members.
+- **UN embargoes cost their holders 100 influence each.** An AI member may drop one after the
+  pact's forced year, and is then recorded as busting.
+- **Busting is inferred,** not observed: a pact gone after its forced year, which could stand
+  again, is taken as broken by choice. A requirement that failed and then recovered within the
+  month reads as busting.
+- **The embargo's relations cost falls on every called member,** including a friend of the
+  target that stays above Poor and so does not embargo.
+- **A Moribund UN's conventions keep 1% of their effect** (×0.01), the price of never losing
+  a ratification to a ×0 modifier.
+
+### IN-GAME VERIFICATION CHECKLIST (phase 5)
+
+1. **Dues.** After a month with a founded UN above Moribund, every member carries "UN Dues" with
+   a weekly expense of GDP × rate / 52, and Our Obligations shows it. The funding pillar's
+   tooltip mentions dues.
+2. **Arrears.**
+   - Withhold: standing −3, and the months in arrears tick monthly.
+   - `event te_debug_un.1` option p (two years in arrears): no `un_vote.1` for the next
+     resolution; the chamber's vote controls refuse with the Article 19 line; the propose rows
+     are disabled; the supermajority line counts one member fewer.
+   - Pay: the treasury drops by what is owed, and the vote is back.
+3. **Embargoes.** Option o twice (to Strong), then sanctions carried un-vetoed:
+   - the major members that voted yes, with relevance, lose 30 relations with the target, and
+     those now at Poor or worse hold embargo pacts against it (**VERIFY** that
+     `create_diplomatic_pact = { type = embargo }` makes them, and whether
+     `can_create_diplomatic_pact` reads the pact's requirements to maintain);
+   - lifting the sanctions removes them;
+   - cancelling one by hand after its forced year records busting next month; one that breaks
+     on its own (raise relations above Poor from the console) is struck without it;
+   - no embargo-dispute arbitration (`un_events.15`) is offered between an enforcer and the
+     target.
+4. **The surcharge.** At Established, start a play without a mandate: +2 infamy per war goal,
+   and the notification. **VERIFY** that `on_wargoal_added` fires for the goals a play opens
+   with, not only for goals added later.
+5. **Condemnation at Strong:** the target carries "Shunned by the United Nations" at −9
+   diplomatic reputation.
+6. **Veto restraint:** with the charter at Reform II, a condemnation carried by two thirds over
+   a veto applies in full, and the card says the veto was overridden.
+7. **Regimes.** After option o, Our Obligations lists our terms, and each modifier's values are
+   scaled by E. A member that refused to ratify has none of that convention's terms.
+8. **The ICC.** Option q: `un_events.33`. Surrender crowns the heir and exiles the ruler.
+   **VERIFY** that a republic and a one-party state, which have no heir, get a new head of
+   state.
+9. **Sovereignty.** At Strong, a nationalist interest group shows "Resents the United Nations".
+   Option r sends `un_events.34`; leave through it runs the Leave button's effect.
+10. **The lending facility.** Option s: `un_events.35` names the amount. Accepting adds it to the
+    treasury and a repayment expense of 110% ÷ 260 a week.
+11. **Intelligence.** The headquarters host's network in a member, with an operation running,
+    gains about a quarter more a month than a comparable network elsewhere.
+12. **Moribund.** Let authority fall to Moribund: ratified members still carry each convention
+    modifier, at ×0.01, and ratify nothing afresh when it recovers.
+13. **Dues billed by the month.** Withhold: Our Obligations shows one month owed at once; pay
+    the same week: the treasury drops by that month.
 
 ---
 
@@ -229,7 +715,8 @@ script, what the chamber prints) and the recess of §8.3.
    abandoned +20), `un_dos_covert` (a severe operation exposed, when the exposure is not
    costless, +15), `un_dos_nuclear` (first strike +40, tactical +20, retaliation +10). Records
    are written only while a UN exists. **Breaches of ratified conventions** wait for the
-   convention regimes of phase 5.
+   convention regimes of phase 5. *(Phase 5 charges a regime's losers through modifiers
+   instead, and records no breach; §0.5 ruling 20.)*
 2. **Grounds.** Condemnation needs a case of 30, sanctions 50, a military mandate 60.
    The gates sit in the shared propose triggers and selectors, in `un_events.2`'s trigger
    and pick, and in `un_mandate_target_is_notorious`, whose old test (infamy 25 or already
@@ -356,7 +843,9 @@ Implements §4 (tiers, `E`, charter caps and reforms, the crisis, dissolution, r
    conventions (§5.3 regimes are phase 5), membership benefits (still `authority / 50`,
    now paid from Contested up), `un_high_authority_infamy_modifier` (unchanged until the
    §5.2 mandate surcharge replaces it in phase 5), and NPT disarmament (still 80 / 75, which
-   the ceiling now makes reachable only after Reform I). `un_enforcement` reads only
+   the ceiling now makes reachable only after Reform I). *(Phase 5, §0.5: the conventions
+   and the surcharge now scale with E, the blanket infamy modifier is retired, and NPT
+   disarmament follows the Strong tier.)* `un_enforcement` reads only
    globals, so the multiplier is sound in any scope; the loc prints it from the snapshot
    `un_enforcement_now` with `GetGlobalVariable`.
 3. **Moribund.** A veto costs nothing: the credibility entry, the drain and isolation
@@ -380,7 +869,9 @@ Implements §4 (tiers, `E`, charter caps and reforms, the crisis, dissolution, r
    Outgrown", rolled only when ripe). Adoption is a credibility entry of +2 (reason 14) and
    raises the ceiling. **The reforms' own teeth** (embargoes, the mandate surcharge, the
    levy, veto restraint as a rule) are §5.2 / §7.2 material and wait for phase 5; for now
-   a reform raises the ceiling and unlocks the tier.
+   a reform raises the ceiling and unlocks the tier. *(Built in phase 5, §0.5 rulings 7,
+   8 and 11: embargoes and the doubled surcharge from Strong; veto restraint and the 1% levy
+   with Reform II.)*
 6. **AI leans on a reform:** champions, human-rights champions and humanitarian-law
    countries +20; minor powers +10; isolationists and underminers −30; permanent members
    −20 (and +25 to vote against) on Reform II only. Veto: +30 against a non-permanent
@@ -497,7 +988,8 @@ pillars, the ledger log and the nuclear hooks work in game.
    - all unweighted, because nuclear use is grave whoever does it.
 
    "Aggression without a mandate" waits for the dossier (phase 3).
-3. **Delivery is a ledger until missions exist (phase 6).** It is fed by aid and peacekeepers
+3. **Delivery is a ledger until missions exist (phase 6).** *(Phase 6, §0.6 ruling 12: it
+   stays a ledger, and mission outcomes feed it.)* It is fed by aid and peacekeepers
    delivered (`un_events.4` and `7`, options A/B), aid and peacekeeping resolutions carried,
    and mandates discharged.
 4. **No charter cap yet.** The target is clamped to 0..100. The 70 / 85 / 100 caps arrive
@@ -1140,8 +1632,8 @@ These are the convention losers in §5.3, plus the embargo symmetry in §5.2.
 | **2** | Tiers and `E`; charter caps and the two reform topics; the crisis situation, dissolution and refounding | Makes the extremes real |
 | **3** | Dossier and grounds; the itemised lean; AI voting in script; the chamber's reasons and exposure panel; recess and notifications | Must land **before** teeth (§5.2) get sharp, or high-tier sanctions will feel arbitrary (owner requirement) |
 | **4** | The docket replacing the random roll; the event rewrite | Needs the lean and pillars to route consequences |
-| **5** | Tradeoffs: dues and Article 19, interest-group sovereignty, covert hooks, convention regimes (§5.3), topic effects by tier (§5.2) | Needs `E`, grounds and the docket |
-| **6** | Missions, the state tile, the map mode, delivery feeding the pillars | The largest new surface; everything it feeds exists by then |
+| **5** | Tradeoffs: dues and Article 19, interest-group sovereignty, covert hooks, convention regimes (§5.3), topic effects by tier (§5.2). *Shipped, §0.5; with the lending facility deferred from phase 4* | Needs `E`, grounds and the docket |
+| **6** | Missions, the state tile, the map mode, delivery feeding the pillars. *Shipped, §0.6; the map mode is not built* | The largest new surface; everything it feeds exists by then |
 
 Each phase ships a playable UN. Each is documented in a §0-style "as shipped" block at the top
 of this file, as `monetary_policy_design.md` does.
@@ -1181,6 +1673,20 @@ of this file, as `monetary_policy_design.md` does.
 | token aid and observers | a quarter of a programme's GDP-scaled expense (phase 4) | §8.2 |
 | recess | 3 months | §8.3 |
 | victim's first refusal | 30 days (phase 4: no clock, the appeal waits for an answer; §0.4 ruling 4) | §8.3 |
+| funding pillar's dues term | −15 × the withholders' share of the members' GDP; pillar −10..+10 (phase 5; §0.5 ruling 4) | §3.2, §7.2 |
+| standing: withholding / Article 19 | −3 once / −5 once (phase 5) | §7.2 |
+| war-goal surcharge | 2 / 4 / 10 infamy at Established / Strong / Supranational; ×2 against a peacekept country from Strong (phase 5) | §5.2 |
+| condemnation from Strong / at Supranational | diplomatic reputation −6 × E / play maneuvers −10% and infamy generation +10% × E (phase 5) | §5.2 |
+| Supranational standing case | +50 to an outsider's case (phase 5) | §4.2 |
+| climate emitter / low emitter | ≥ 10% / < 2% of world emissions, as market leader (phase 5) | §5.3 |
+| refugee hosts / sources | GDP-per-head rank ≤ 20 / > 60 (phase 5) | §5.3 |
+| space leader / laggard | the most milestones, at least 3 / 3 or more behind (phase 5) | §5.3 |
+| headquarters host's network growth in members | ×1.25 (phase 5) | §7.4 |
+| lending facility: loan / repayment / score | min(2% of GDP, 26 weeks of the budget) / 110% over 5 years / 45 (phase 5) | §8.1 |
+| missions: register / lapse / peacekeeping / stabilisation / aid | 12 / 60 months / 24 months of peace / 12 months after the collapse (48 during) / no famine and SoL 10 after 6 months (phase 6) | §9 |
+| mission strength | E × (1 − 0.5 × arrears share) × (0.75 + 0.25 × contributors, up to 3) (phase 6) | §9 |
+| mission outcomes | success: delivery +2, contributors' standing +3; failure: credibility −1 (phase 6) | §9 |
+| contributors' network growth in a host | ×1.25 (phase 6) | §7.4 |
 
 ---
 

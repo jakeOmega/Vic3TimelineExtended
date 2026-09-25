@@ -217,60 +217,110 @@ un_leave_button = {
 	}
 
 	effect = {
-		# A permanent member walking out is a world moment: authority itself
-		# drops at once (un_authority_effects.txt), on top of the lasting loss
-		# of our power share from the participation pillar. Weighted by our
-		# weight in world affairs (at most x2), so a faded power still holding
-		# its seat costs the UN far less than a superpower. Checked before the
-		# block below strips the seat. Only this button ends a membership:
-		# a member absorbed by a merger or annexation never passes through it.
+		# Everything leaving means, shared with un_events.34 (the interest
+		# groups' demand to leave): un_leave_organisation, un_ladder_effects.txt.
+		un_leave_organisation = yes
+	}
+}
+
+# ---- 1b-bis. ASSESSED DUES (redesign phase 5, §7.2) ----
+# Every member pays a share of its GDP set by the UN's tier
+# (un_dues_values.txt). A member may withhold it: the money is saved, the
+# funding pillar falls with the withholders' share of the members' GDP, the
+# record takes a standing loss, and after 24 months in arrears the member loses
+# its vote (Article 19). Paying again settles everything owed at once.
+
+un_withhold_dues_button = {
+	name = "UN_WITHHOLD_DUES"
+	desc = "UN_WITHHOLD_DUES_DESC"
+
+	visible = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_dues_is_withholding = yes }
+	}
+
+	possible = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_dues_is_withholding = yes }
+		custom_tooltip = {
+			text = un_dues_assessed_tt
+			un_dues_assessed = yes
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		# An isolationist or an underminer has no wish to pay for the order.
+		if = { limit = { has_law = law_type:law_isolationism } add = 15 }
 		if = {
-			limit = { is_un_permanent_member = yes }
-			custom_tooltip = un_ledger_tt_p5_walkout
-			un_authority_actor_shock_weighted = { AMOUNT = -4 REASON = 11 }
+			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+			add = 20
 		}
-		# A great power walking out: the other great-power members answer it
-		# (un_events.20; redesign phase 4, un_docket_effects.txt).
-		hidden_effect = {
-			un_docket_walkout_consequence = yes
+		# The levy bites: 0.4% of GDP at Strong, 1% at Supranational.
+		if = { limit = { un_tier_at_least_strong = yes } add = 5 }
+		if = { limit = { un_tier_is_supranational = yes } add = 10 }
+		# A treasury in trouble looks for savings.
+		if = { limit = { in_default = yes } add = 25 }
+		else_if = { limit = { scaled_debt > 0.75 } add = 10 }
+		# A champion of the order pays; so does anyone who values the vote.
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+			add = -50
 		}
+		if = { limit = { is_un_permanent_member = yes } add = -10 }
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = -10 }
+	}
+
+	effect = {
 		custom_tooltip = {
-			text = "UN_LEAVE_DESC"
-			# Membership, seats, programmes and their costs, our own sanctions
-			# enforcement and every convention we were bound by
-			# (un_membership_end_effect, un_ladder_effects.txt). Sanctions
-			# AGAINST us stay: they are the members' measure, not a membership
-			# obligation. Only un_lift_sanctions_button lifts a regime.
-			un_membership_end_effect = yes
-			# If we host the HQ, it moves to another member and our HQ building
-			# is demolished, so the new host can build the only one
-			# (un_hq_effects.txt; the helper excludes us from the pick itself).
-			if = {
-				limit = { un_hq_is_host = yes }
-				un_hq_assign_host = yes
-				un_hq_enforce_single_building = yes
-			}
-			# A host modifier on a country that is not the host (saves from
-			# before the HQ hand-off was fixed) just goes.
-			else_if = {
-				limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
-				je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
-			}
-			add_modifier = {
-				name = un_withdrawal_penalty_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
+			text = un_dues_withhold_effect_tt
+			un_dues_withhold = yes
 		}
-		# International standing: walking out costs the record, once. The score
-		# itself is FROZEN rather than reset — resigning must not let a
-		# disgraced member launder its history by rejoining at the neutral
-		# value. The monthly pulse drops the programme duration counters
-		# without charging for them separately, so this is the only charge for
-		# leaving. Wrapped so the variable write is not tooltip noise.
+	}
+}
+
+un_pay_dues_button = {
+	name = "UN_PAY_DUES"
+	desc = "UN_PAY_DUES_DESC"
+
+	visible = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_dues_is_withholding = yes
+	}
+
+	possible = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_dues_is_withholding = yes
+	}
+
+	ai_chance = {
+		value = 5
+		# Settle when the treasury can carry it...
+		if = {
+			limit = {
+				NOT = { in_default = yes }
+				scaled_debt < 0.25
+			}
+			add = 15
+		}
+		# ...and above all once the vote is gone.
+		if = { limit = { un_dues_vote_suspended = yes } add = 20 }
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+			add = 30
+		}
+		if = { limit = { has_law = law_type:law_isolationism } add = -15 }
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+			add = -20
+		}
+		if = { limit = { in_default = yes } add = -30 }
+	}
+
+	effect = {
 		custom_tooltip = {
-			text = un_standing_leave_tt
-			un_standing_loss = { AMOUNT = un_standing_leave_loss REASON = 28 }
+			text = un_dues_resume_effect_tt
+			un_dues_resume = yes
 		}
 	}
 }
@@ -454,6 +504,9 @@ un_lift_sanctions_button = {
 			every_country = {
 				limit = { has_modifier = un_sanctions_target_modifier }
 				remove_modifier = un_sanctions_target_modifier
+				# The embargoes the Assembly imposed go with the regime
+				# (redesign phase 5, un_teeth_effects.txt).
+				un_teeth_lift_embargoes = yes
 			}
 			# Walking away from a regime the Assembly imposed costs its credibility,
 			# weighted by the enforcer's weight in world affairs.

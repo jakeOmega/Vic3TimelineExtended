@@ -31,6 +31,7 @@
 #   un_ladder_bloc_vacuum_update  every month, founded or not
 #   un_conference_monthly_update  every month, founded or not
 #   un_found_organisation         un_found_button, un_conference_conclude
+#   un_leave_organisation         un_leave_button, un_events.34 option A (phase 5)
 #   un_conference_open            un_found_button, when founding is a refounding
 #   un_conference_wreck           un_events.31 option C
 #   un_charter_adopt_reform       un_vote.2, a charter reform carried un-vetoed
@@ -328,6 +329,10 @@ un_dissolve = {
 		remove_global_variable = un_vote_active
 	}
 
+	# 4b. Every mission ends (redesign phase 6, un_mission_effects.txt); the
+	#     register is kept as the record, like the mandates'.
+	un_missions_dissolve = yes
+
 	# 5. Every live mandate is voided (un_mandate_close tells the holder).
 	if = {
 		limit = { has_global_variable_list = un_mandate_registry }
@@ -416,6 +421,14 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_world_prestige }
 	un_dissolve_remove_global = { NAME = un_member_power_share }
 	un_dissolve_remove_global = { NAME = un_funding_ratio }
+	un_dissolve_remove_global = { NAME = un_funding_arrears_share }
+	un_dissolve_remove_global = { NAME = un_budget_weekly }
+	# The convention regimes (redesign phase 5).
+	un_dissolve_remove_global = { NAME = un_regime_epoch }
+	un_dissolve_remove_global = { NAME = un_regime_months }
+	un_dissolve_remove_global = { NAME = un_regime_tier }
+	un_dissolve_remove_global = { NAME = un_regime_decolonization }
+	un_dissolve_remove_global = { NAME = un_space_top_score }
 	un_dissolve_remove_global = { NAME = un_members_at_war_share }
 	un_dissolve_remove_global = { NAME = un_pillar_participation }
 	un_dissolve_remove_global = { NAME = un_pillar_commitment }
@@ -443,6 +456,8 @@ un_dissolve_remove_global = {
 # Scope: country
 un_dissolve_strip_country = {
 	un_membership_end_effect = yes
+	# The organisation's claims die with it (redesign phase 5).
+	un_dues_clear = yes
 	je:je_united_nations ?= { remove_modifier = un_high_authority_infamy_modifier }
 	je:je_united_nations ?= { remove_modifier = un_npt_disarmament_modifier }
 	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
@@ -453,6 +468,10 @@ un_dissolve_strip_country = {
 	remove_modifier = un_sanctions_voluntary_target_modifier
 	remove_modifier = un_sanctions_enforcement_modifier
 	remove_modifier = un_sanctions_partial_modifier
+	# Resolutions with teeth (redesign phase 5): the Assembly's embargoes and
+	# the mandate holder's war support end with it.
+	un_teeth_lift_embargoes = yes
+	remove_modifier = un_mandate_war_support_modifier
 	if = {
 		limit = { has_variable = un_charter_signed }
 		remove_variable = un_charter_signed
@@ -477,6 +496,21 @@ un_dissolve_strip_country = {
 # Scope: country
 un_membership_end_effect = {
 	je:je_united_nations ?= { remove_modifier = un_member_modifier }
+	# Dues stop with membership; arrears do not (redesign phase 5): a member
+	# that walks out owing money rejoins still withholding.
+	remove_modifier = un_dues_modifier
+	# So do the convention regimes' terms (redesign phase 5); the stamp goes
+	# so that a member that rejoins reads them afresh.
+	un_regime_clear_country = yes
+	if = {
+		limit = { has_variable = un_regime_stamp }
+		remove_variable = un_regime_stamp
+	}
+	# The decolonisation regime reached our colonies through our membership.
+	every_direct_subject = {
+		limit = { has_modifier = un_regime_colony_liberty_modifier }
+		remove_modifier = un_regime_colony_liberty_modifier
+	}
 	je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
 	je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
 	je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
@@ -564,6 +598,70 @@ un_charter_invitations = {
 un_join_organisation = {
 	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
 	un_apply_ratified_conventions = yes
+}
+
+# Leave the UN: the Leave button, and un_events.34 (the interest groups'
+# demand to leave; redesign phase 5). A permanent member's walkout is a world
+# moment; a great power's brings the other great powers un_events.20; the
+# membership and everything it carries ends (un_membership_end_effect); the
+# headquarters moves if we hosted it; standing takes its one charge.
+# Scope: the leaving country
+un_leave_organisation = {
+	# A permanent member walking out is a world moment: authority itself
+	# drops at once (un_authority_effects.txt), on top of the lasting loss
+	# of our power share from the participation pillar. Weighted by our
+	# weight in world affairs (at most x2), so a faded power still holding
+	# its seat costs the UN far less than a superpower. Checked before the
+	# block below strips the seat. Only this effect ends a membership: a
+	# member absorbed by a merger or annexation never passes through it.
+	if = {
+		limit = { is_un_permanent_member = yes }
+		custom_tooltip = un_ledger_tt_p5_walkout
+		un_authority_actor_shock_weighted = { AMOUNT = -4 REASON = 11 }
+	}
+	# A great power walking out: the other great-power members answer it
+	# (un_events.20; redesign phase 4, un_docket_effects.txt).
+	hidden_effect = {
+		un_docket_walkout_consequence = yes
+	}
+	custom_tooltip = {
+		text = "UN_LEAVE_DESC"
+		# Membership, seats, programmes and their costs, our own sanctions
+		# enforcement and every convention we were bound by
+		# (un_membership_end_effect, un_ladder_effects.txt). Sanctions
+		# AGAINST us stay: they are the members' measure, not a membership
+		# obligation. Only un_lift_sanctions_button lifts a regime.
+		un_membership_end_effect = yes
+		# If we host the HQ, it moves to another member and our HQ building
+		# is demolished, so the new host can build the only one
+		# (un_hq_effects.txt; the helper excludes us from the pick itself).
+		if = {
+			limit = { un_hq_is_host = yes }
+			un_hq_assign_host = yes
+			un_hq_enforce_single_building = yes
+		}
+		# A host modifier on a country that is not the host (saves from
+		# before the HQ hand-off was fixed) just goes.
+		else_if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
+			je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
+		}
+		add_modifier = {
+			name = un_withdrawal_penalty_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+	# International standing: walking out costs the record, once. The score
+	# itself is FROZEN rather than reset — resigning must not let a
+	# disgraced member launder its history by rejoining at the neutral
+	# value. The monthly pulse drops the programme duration counters
+	# without charging for them separately, so this is the only charge for
+	# leaving. Wrapped so the variable write is not tooltip noise.
+	custom_tooltip = {
+		text = un_standing_leave_tt
+		un_standing_loss = { AMOUNT = un_standing_leave_loss REASON = 28 }
+	}
 }
 
 # ---- Refounding: the founding conference ---------------------------------------------

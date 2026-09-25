@@ -116,6 +116,9 @@ un_case_strength = {
 		limit = { has_variable = un_dos_nuclear }
 		add = var:un_dos_nuclear
 	}
+	# The Supranational standing case against an outsider (redesign phase 5,
+	# un_teeth_values.txt): 0 for everyone else.
+	add = un_case_standing_term
 	min = 0
 	max = 100
 }
@@ -613,6 +616,69 @@ un_lean_interests = {
 				global_var:un_authority < 50
 			}
 			add = -20
+		}
+	}
+	# The regime's terms for us (redesign phase 5): un_lean_regime below.
+	add = un_lean_regime
+}
+
+# Part of OUR INTERESTS (un_lean_interests adds it): the regime's terms for us
+# (redesign phase 5, §5.3). A convention now names who pays and who gains, and
+# a member weighs its own part: a loser leans against, a winner for. The tests
+# are the regimes' own (un_regime_triggers.txt), so the vote reads the rule
+# that will bind. The NPT and decolonisation are left out: un_lean_interests
+# already weighs nuclear programmes and colonial subjects on them.
+un_lean_regime = {
+	value = 0
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_climate } }
+		if = {
+			limit = { un_regime_climate_emitter = yes }
+			add = -25
+		}
+		else_if = {
+			limit = { un_regime_climate_low_emitter = yes }
+			add = 10
+		}
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
+		if = {
+			limit = { un_regime_naval_power = yes }
+			add = -10
+		}
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_refugee } }
+		if = {
+			limit = { un_regime_refugee_host = yes }
+			add = -15
+		}
+		else_if = {
+			limit = { un_regime_refugee_source = yes }
+			add = 10
+		}
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_space } }
+		if = {
+			limit = { un_regime_space_leader = yes }
+			add = -15
+		}
+		else_if = {
+			limit = { un_regime_space_laggard = yes }
+			add = 10
+		}
+		if = {
+			limit = { un_regime_space_weaponized = yes }
+			add = -20
+		}
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
+		if = {
+			limit = { un_regime_heritage_site = yes }
+			add = 10
 		}
 	}
 }
