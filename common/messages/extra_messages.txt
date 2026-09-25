@@ -1986,3 +1986,34 @@ covert_severe_exposure_notice = {
 	notification_type = feed
 	color = bad
 }
+
+# ---- UN redesign phase 2 (un_ladder_effects.txt) ----
+# A charter reform may now be tabled (to member major and great powers).
+un_charter_reform_ripe_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+# The UN crisis has opened (to members below great-power rank; great powers
+# get un_events.10 instead).
+un_crisis_opened_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+# The crisis has passed (to every member).
+un_crisis_closed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+# A founding conference for a new UN is in session (to major and great powers).
+un_conference_opened_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	notification_type = feed
+	color = neutral
+}

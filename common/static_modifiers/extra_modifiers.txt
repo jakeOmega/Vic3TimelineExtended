@@ -3611,6 +3611,48 @@ un_authority_crisis_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_influence_mult = -0.05
 }
+# ---- UN redesign phase 2: the ladder, the crisis and the floor ----
+# un_authority_restored_modifier / un_authority_crisis_modifier above were
+# un_events.10's old option rewards; the event no longer applies them, and they
+# stay defined only so saves that carry them still load.
+#
+# Non-members, from the Strong tier up (on top of un_nonmember_pariah_modifier,
+# which applies from Established): trade and leverage.
+un_nonmember_pariah_strong_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	state_trade_advantage_mult = -0.10
+	country_leverage_generation_mult = -0.10
+}
+# Power blocs fill the vacuum while the UN is Moribund or dissolved (power-bloc
+# scope; single refresh site: un_ladder_bloc_vacuum_update).
+un_bloc_vacuum_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	power_bloc_cohesion_add = 10
+	power_bloc_leverage_generation_mult = 0.10
+}
+# The one-time bonus every power bloc receives when the UN dissolves
+# (power-bloc scope, ten years, decaying; un_dissolve).
+un_dissolution_vacuum_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	power_bloc_cohesion_add = 20
+	power_bloc_leverage_generation_mult = 0.20
+}
+# un_events.10 option A: standing by a UN in crisis spends influence.
+un_crisis_rescue_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_influence_mult = -0.10
+}
+# un_events.10 option C: letting it fall frees what it cost us.
+un_crisis_abandon_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_influence_mult = 0.05
+}
+# un_events.31 option C: the leading power that wrecked a founding conference.
+un_conference_opposed_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.05
+	country_improve_relations_speed_mult = -0.10
+}
 
 
 # ---- Permanent Member & Veto Modifiers ----

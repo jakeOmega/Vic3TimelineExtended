@@ -1,9 +1,11 @@
 # United Nations Redesign — Design
 
-> **STATUS: PHASE 1 (THE AUTHORITY MODEL) IMPLEMENTED, PENDING IN-GAME VERIFICATION.**
-> Phases 2–6 are designed but not built. Read [§0.1](#01-phase-1-as-shipped--rulings-deviations-and-open-checks)
-> before anything else if you are working on the code: it records where phase 1 deviates
-> from the sections below. Written 2026-09-24 from a design
+> **STATUS: PHASES 1 (THE AUTHORITY MODEL) AND 2 (THE LADDER, THE CEILING AND THE FLOOR)
+> IMPLEMENTED.** Phase 1 has been play-tested; phase 2 is pending in-game verification.
+> Phases 3–6 are designed but not built. Read [§0.2](#02-phase-2-as-shipped--rulings-deviations-and-open-checks)
+> and [§0.1](#01-phase-1-as-shipped--rulings-deviations-and-open-checks) before anything
+> else if you are working on the code: they record where each phase deviates from the
+> sections below. Written 2026-09-24 from a design
 > discussion with the mod owner. It follows a survey of the UN as it stands (§1) and a
 > bug-fix pass that shipped first (§1.4). Decisions the owner made are marked **(decided)**.
 > Everything else is **(proposed)**: a starting shape to implement and tune, not a ruling.
@@ -16,10 +18,161 @@
 
 ---
 
+## 0.2 Phase 2 as shipped — rulings, deviations and open checks
+
+Built 2026-09-25 on `claude/un-rework-continuation-8xn1se`. Not yet seen in a running game.
+Implements §4 (tiers, `E`, charter caps and reforms, the crisis, dissolution, refounding).
+
+### Files
+
+- `common/script_values/un_ladder_values.txt`: every phase-2 figure (tier floors and
+  hysteresis, `E` by tier, charter ceilings, the reform clock, the crisis band and clock,
+  founding values) and every derived value (`un_enforcement`, `un_charter_cap`,
+  `un_tier_entry_value` / `_exit_value`, the crisis projections).
+- `common/scripted_triggers/un_ladder_triggers.txt`: the tier tests
+  (`un_tier_is_moribund`, `un_tier_at_least_contested` … `un_tier_is_supranational`, all
+  numeric "at least" tests on `global_var:un_tier`), the charter tests, the crisis tests.
+- `common/scripted_effects/un_ladder_effects.txt`: every writer of a phase-2 global (the
+  table at its top), the monthly update, dissolution, the founding conference, and the
+  shared `un_found_organisation` / `un_join_organisation` / `un_membership_end_effect`
+  that the found, join and leave buttons now call.
+- **Call sites changed:** `un_authority_monthly_update` (calls `un_ladder_monthly_update`
+  after the step), `un_authority_target_value` (capped at `un_charter_cap`),
+  `un_authority_step_value` (the collapse clock), `un_global_authority_on_action`
+  (dissolution check last; bloc vacuum and conference every month), `je_united_nations`
+  (tier status lines, crisis and dissolution lines, benefits and pariah re-keyed to tiers),
+  `un_buttons.txt` (found / join / leave through the shared effects; a new charter-reform
+  button), `un_vote_events.txt` (charter reform outcome and leans, `E` on condemnation and
+  sanctions), `un_events.txt` (events 6, 10 reworked; 30–32 new; `E` on event 5),
+  `un_vote_effects.txt` / `un_vote_cast_effects.txt` (supermajority, the free veto at
+  Moribund), the chamber (op 6) and the authority widget (the ladder lines, the crisis
+  panel).
+
+### Rulings: where phase 2 deviates from, or binds, the sections below
+
+1. **The tier is a stored global with hysteresis, capped by the charter.** `un_tier` (0–4)
+   rises to the highest tier whose floor authority has reached and falls to the highest
+   tier whose floor minus 4 it still holds. Both are capped at Established under the
+   founding charter, Strong after Reform I. Only an old save can have authority above the
+   ceiling; its tier is capped and its authority converges down.
+2. **Where `E` applies (phase 2).** `multiplier = un_enforcement` on the Assembly's
+   penalties: `un_condemned_modifier`, `un_non_binding_rebuke_modifier`,
+   `un_sanctions_target_modifier`, `un_sanctions_voluntary_target_modifier` (un_vote.2), and
+   the enforcers' bundles in `un_events.5` (`un_sanctions_enforcement_modifier`,
+   `un_sanctions_partial_modifier`, `un_sanctions_busting_modifier`). **Not** applied to:
+   `un_self_corrected_modifier` (the target's own act of contrition, at vote time), the
+   conventions (§5.3 regimes are phase 5), membership benefits (still `authority / 50`,
+   now paid from Contested up), `un_high_authority_infamy_modifier` (unchanged until the
+   §5.2 mandate surcharge replaces it in phase 5), and NPT disarmament (still 80 / 75, which
+   the ceiling now makes reachable only after Reform I). `un_enforcement` reads only
+   globals, so the multiplier is sound in any scope; the loc prints it from the snapshot
+   `un_enforcement_now` with `GetGlobalVariable`.
+3. **Moribund.** A veto costs nothing: the credibility entry, the drain and isolation
+   modifiers and the infamy are all waived; the proposer's anger (relations, catalyst)
+   stays, because that is diplomacy, not the institution. Members receive no benefits.
+   Every power bloc carries `un_bloc_vacuum_modifier` (+10 cohesion, +10% leverage
+   generation), refreshed monthly by `un_ladder_bloc_vacuum_update`.
+4. **Pariah steps (§4.2).** From Established a non-member carries
+   `un_nonmember_pariah_modifier` (it was ≥ 60 / < 55); from Strong also
+   `un_nonmember_pariah_strong_modifier` (−10% trade advantage, −10% leverage generation).
+   The Supranational standing sanctions case waits for the dossier (phase 3).
+5. **The charter reforms are the old `reform` topic.** It did nothing but book a
+   credibility entry, so it was repurposed rather than duplicated. The resolution carries
+   `un_res_charter_stage` (1 or 2, written by `un_charter_reform_open`), needs a two-thirds
+   supermajority of all members (`un_resolution_needs_supermajority`, shared with
+   expulsion; `un_vote_expulsion_passed` is renamed `un_vote_supermajority_passed`), and is
+   flat-blocked by a veto as before. Tabling needs major-power rank and a ripe charter:
+   24 consecutive months at or above `ceiling − 5` (a month below resets the count). Three
+   paths share the gates: the chamber's Propose row (op 6), the new
+   `un_propose_charter_reform_button` (the AI), and `un_events.6` (now "The Charter Has Been
+   Outgrown", rolled only when ripe). Adoption is a credibility entry of +2 (reason 14) and
+   raises the ceiling. **The reforms' own teeth** (embargoes, the mandate surcharge, the
+   levy, veto restraint as a rule) are §5.2 / §7.2 material and wait for phase 5; for now
+   a reform raises the ceiling and unlocks the tier.
+6. **AI leans on a reform:** champions, human-rights champions and humanitarian-law
+   countries +20; minor powers +10; isolationists and underminers −30; permanent members
+   −20 (and +25 to vote against) on Reform II only. Veto: +30 against a non-permanent
+   proposer (existing), +20 on Reform II, −80 for a champion of the order.
+7. **The crisis replaces `un_events.10`'s roll.** It opens below 10 and closes above 20.
+   When it opens, every great power, member or not, receives `un_events.10` once (stand by
+   it at a cost in influence; join it; wait; let it fall for influence), and every other
+   member a notification. The widget's crisis panel lists every great power that could lift
+   the target and by how much (`un_crisis_rescue_gain`: 25 × its power share, for joining,
+   championing, or ending its undermining).
+8. **The collapse clock (deviation).** "At 0 the UN dissolves" cannot happen under the
+   phase-1 approach: a step proportional to the gap approaches a target of 0 but never
+   reaches it. So while the crisis is open **and the target itself is below 5**
+   (`un_collapse_target_line`), the step is at most −0.25 a month. A UN the world has given
+   up on then reaches 0 in at most forty months from 10; one whose target is 5 or more
+   lingers in crisis instead. Dissolution fires at authority 0 during a crisis, checked
+   last in the global pulse so the month's upkeep runs against a UN that still exists.
+9. **Dissolution (§4.3) as designed,** with these choices: the resolution history and the
+   mandate register are kept as the record; the ledger log is destroyed; sanctions regimes
+   lapse on both sides; timed condemnations run out on their own; standing is frozen (the
+   variable stays, the tier modifiers go); `un_charter_signed` is cleared so the charter
+   event can fire again. Power blocs receive `un_dissolution_vacuum_modifier` (+20
+   cohesion, +20% leverage generation, ten years, decaying).
+10. **Refounding.** After a dissolution the found button convenes a founding conference
+    (`un_conference_open`) once the 20-year cooldown has run. The world's leading power —
+    the highest-prestige great power, unless that is the convener — receives
+    `un_events.31` (join / stay out / oppose). Opposing wrecks the conference, restarts the
+    cooldown at ten years and tells the convener (`un_events.32`). Otherwise, twelve months
+    on, the UN is refounded at 25 under the founding charter with no agencies, the
+    convener as founder, the leading power as a member if it chose to join, and a fresh
+    five-year founding window for permanent seats. A convener that stops existing ends the
+    conference without a new cooldown.
+11. **Bug fix found on the way:** `un_propose_expulsion_button` was defined but never
+    registered on `je_united_nations`, so the AI could never move to strip a permanent seat.
+    It is registered now.
+12. **Old saves:** the charter starts at level 0 and the tier is computed on the first
+    monthly update. A save whose authority is above 70 keeps it and converges down to the
+    ceiling.
+
+### Known roughnesses
+
+- **A lingering crisis can last for ever** if the target settles between 5 and 10; that is
+  intended (the organisation limps on), but nothing ends it except the world changing.
+- **An empty UN never dissolves.** With no members its target is about 10, so it hovers at
+  the crisis line. Not reachable in ordinary play (the founder would have to leave too).
+- **The pariah and benefits changes move thresholds** in existing games: pariah status now
+  starts at 45 rather than 60, and benefits at 20 (Contested) rather than 30.
+- **Whether a stored `multiplier` re-reads `E` live** is unverified. If it does, a
+  sanctions regime strengthens and weakens with the tier; if not, it keeps the `E` of the
+  month it was imposed. Either reading is acceptable.
+
+### IN-GAME VERIFICATION CHECKLIST (phase 2)
+
+1. After one month in a game with a founded UN: the journal entry shows a tier line; the
+   widget shows the tier, the charter and the reform clock; `debug.log` has no "used but
+   never set" for `un_tier`, `un_enforcement_now`, `un_charter_level` or
+   `un_charter_pressure_months`.
+2. `[GetGlobalVariable('un_enforcement_now').GetValue|1]` renders in the condemnation and
+   sanctions tooltips (vote popup and chamber card).
+3. A condemnation carried at Contested gives the target half the modifier's values.
+4. `event te_debug_un.1` → *Put the next charter reform on the table*: the chamber's
+   Charter Reform row enables; table it; the card names "Charter Reform I" and the
+   supermajority rule; carried un-vetoed, the widget shows the ceiling at 85. A permanent
+   member's veto blocks it outright.
+5. A veto cast at Moribund shows the Moribund tooltip and books no ledger entry.
+6. *Doom the UN*: at the next monthly update the crisis opens (great powers get
+   `un_events.10`, other members a notification, the widget its crisis panel); authority
+   falls a quarter point a month; at 0 the UN dissolves: `un_events.30` to every member and
+   great power, the headquarters demolished, agencies gone, mandates void, both vacuum
+   modifiers on every power bloc (`power_bloc ?= { add_modifier }` from country scope, as
+   `te_unused_mandate_reserve_on_action` does), and the Found button greyed with the
+   cooldown tooltip.
+7. *Skip the refounding cooldown*, then Found: a conference opens and the leading power gets
+   `un_events.31`. Opposing sends `un_events.32` to the convener and restores a ten-year
+   cooldown. Otherwise, skipping again ends the conference's year: at the next monthly
+   update the UN is refounded at 25, and the charter event goes out again.
+8. The AI tables charter reforms and expulsion motions through the journal-entry buttons.
+
+---
+
 ## 0.1 Phase 1 as shipped — rulings, deviations and open checks
 
-Built 2026-09-24 on `claude/un-system-redesign-8t6kim` (PR #411). Not yet seen in a running
-game.
+Built 2026-09-24 on `claude/un-system-redesign-8t6kim` (PR #411) and play-tested: the
+pillars, the ledger log and the nuclear hooks work in game.
 
 ### Files
 
@@ -56,7 +209,7 @@ game.
    and mandates discharged.
 4. **No charter cap yet.** The target is clamped to 0..100. The 70 / 85 / 100 caps arrive
    with the reform topics in phase 2, so phase 1 alone cannot make the NPT-at-80 rule
-   unreachable.
+   unreachable. *(Superseded by phase 2, §0.2.)*
 5. **Ledgers decay with a four-year half-life** (`un_ledger_decay_factor` 0.9857 a month),
    not the fifteen-year entry life of §3.4. At the event rates surveyed in §1.1, the
    credibility and delivery stocks settle around +7 each in a quiet world, rather than
@@ -718,6 +871,9 @@ of this file, as `monetary_policy_design.md` does.
 | reform eligibility | within 5 of the cap for 24 months | §4.1 |
 | `E` by tier | 0 / 0.5 / 1.0 / 1.5 / 2.5 | §4.1 |
 | crisis threshold / exit | 10 / 20 | §4.3 |
+| collapse line / minimum fall while the clock runs | target < 5 / 0.25 a month (phase 2; §0.2 ruling 8) | §4.3 |
+| bloc vacuum (Moribund or dissolved) / at dissolution | +10 cohesion, +10% leverage / +20, +20% for 10 years | §4.1, §4.3 |
+| pariah steps | Established: relations and prestige; Strong: also −10% trade advantage and leverage | §4.2 |
 | refounding cooldown / cooldown after an opposed conference / starting authority | 20 y / 10 y / 25 | §4.3 |
 | case thresholds (condemn / sanctions / mandate / ICC) | 30 / 50 / 60 / 70 | §5.1 |
 | dues by tier | 0 / 0.1% / 0.2% / 0.4% / 1.0% of GDP (the 1.0% is decided) | §7.2 |

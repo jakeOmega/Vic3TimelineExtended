@@ -331,43 +331,58 @@ un_vote_cast_veto = {
 			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
 		}
 
-		custom_tooltip = {
-			text = UN_VOTE_VETO_TT
-			# Tags the resolution un_res_vetoed, which kills the binding form
-			# regardless of the GA tally. The vetoer's no still counts toward the
-			# tally (the graduated form needs a majority). Every veto is a
-			# credibility debit weighted by the vetoer's weight in world affairs.
-			un_resolution_record_veto = yes
-			add_modifier = {
-				name = un_veto_authority_drain_modifier
-				days = long_modifier_time
-				is_decaying = yes
-			}
-			# Diplomatic isolation
-			add_modifier = {
-				name = un_veto_isolation_modifier
-				days = normal_modifier_time
-				is_decaying = yes
+		# At Moribund (redesign phase 2) a veto costs nothing: the Assembly's
+		# decisions are recommendations, and blocking one is no scandal. The
+		# resolution is still tagged vetoed and the vote still recorded
+		# (un_resolution_record_veto, which skips its credibility entry itself);
+		# only the institutional costs are waived. The bilateral cost below —
+		# the proposer's anger — is diplomacy, not the institution, and stays.
+		if = {
+			limit = { un_tier_is_moribund = yes }
+			custom_tooltip = {
+				text = UN_VOTE_VETO_MORIBUND_TT
+				un_resolution_record_veto = yes
 			}
 		}
-
-		# Infamy hit on punitive resolutions (vetoing humanitarian intervention,
-		# accountability, or peacekeeping requests is read poorly internationally).
-		# Recommendatory and protective topics don't trigger this.
-		#
-		# military_mandate is deliberately NOT on this list: blocking an
-		# authorization to go to war is not the same kind of act as blocking a
-		# humanitarian one, and charging infamy for restraint would read as the
-		# system punishing peace.
-		if = {
-			limit = {
-				OR = {
-					scope:un_resolution ?= { has_tag = un_topic_icc }
-					scope:un_resolution ?= { has_tag = un_topic_condemn }
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+		else = {
+			custom_tooltip = {
+				text = UN_VOTE_VETO_TT
+				# Tags the resolution un_res_vetoed, which kills the binding form
+				# regardless of the GA tally. The vetoer's no still counts toward the
+				# tally (the graduated form needs a majority). Every veto is a
+				# credibility debit weighted by the vetoer's weight in world affairs.
+				un_resolution_record_veto = yes
+				add_modifier = {
+					name = un_veto_authority_drain_modifier
+					days = long_modifier_time
+					is_decaying = yes
+				}
+				# Diplomatic isolation
+				add_modifier = {
+					name = un_veto_isolation_modifier
+					days = normal_modifier_time
+					is_decaying = yes
 				}
 			}
-			change_infamy = 3
+
+			# Infamy hit on punitive resolutions (vetoing humanitarian intervention,
+			# accountability, or peacekeeping requests is read poorly internationally).
+			# Recommendatory and protective topics don't trigger this.
+			#
+			# military_mandate is deliberately NOT on this list: blocking an
+			# authorization to go to war is not the same kind of act as blocking a
+			# humanitarian one, and charging infamy for restraint would read as the
+			# system punishing peace.
+			if = {
+				limit = {
+					OR = {
+						scope:un_resolution ?= { has_tag = un_topic_icc }
+						scope:un_resolution ?= { has_tag = un_topic_condemn }
+						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
+					}
+				}
+				change_infamy = 3
+			}
 		}
 
 		# Relations damage with proposer

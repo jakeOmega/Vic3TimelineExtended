@@ -72,7 +72,7 @@ un_events_on_action = {
 						NOT = { has_global_variable = un_vote_active }
 						NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
 						country_rank >= rank_value:great_power
-						global_var:un_authority >= 30
+						un_charter_reform_ripe = yes
 						NOT = { has_modifier = un_reform_champion_modifier }
 						NOT = { has_modifier = un_reform_opponent_modifier }
 					}
@@ -114,15 +114,9 @@ un_events_on_action = {
 					}
 					trigger_event = { id = un_events.9 }
 				}
-				3 = {
-					trigger = {
-						country_rank >= rank_value:great_power
-						global_var:un_authority < 25
-						NOT = { has_modifier = un_authority_restored_modifier }
-						NOT = { has_modifier = un_authority_crisis_modifier }
-					}
-					trigger_event = { id = un_events.10 }
-				}
+				# un_events.10 (the authority crisis) is no longer rolled here.
+				# Since redesign phase 2 it fires once, to every great power,
+				# when the crisis opens (un_ladder_crisis_open).
 				# ---- Expanded events (11-20) ----
 				2 = {
 					trigger = {
@@ -339,7 +333,19 @@ un_global_authority_on_action = {
 			# Headquarters upkeep: a live member hosts, and exactly one HQ
 			# building stands, in the host's territory (un_hq_effects.txt).
 			un_hq_monthly_update = yes
+
+			# Last: at 0, during a crisis, the UN dissolves (un_ladder_effects.txt).
+			# After the upkeep above on purpose — that upkeep assumes a UN that
+			# still exists, and a remove_modifier made by the dissolution would not
+			# be visible to it within this same effect block.
+			un_ladder_dissolution_check = yes
 		}
+
+		# Founded or not (un_ladder_effects.txt): power blocs fill the vacuum
+		# while the UN is Moribund or dissolved, and a founding conference for a
+		# new UN ages toward its founding.
+		un_ladder_bloc_vacuum_update = yes
+		un_conference_monthly_update = yes
 	}
 }
 

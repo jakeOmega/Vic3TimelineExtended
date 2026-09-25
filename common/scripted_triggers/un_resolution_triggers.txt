@@ -40,6 +40,19 @@ un_resolution_is_binding = {
 	}
 }
 
+# Whether the resolution is decided by a two-thirds supermajority of ALL
+# current members (un_vote_supermajority_passed) rather than a simple majority
+# of the votes cast: the motion to strip a permanent seat, and (since redesign
+# phase 2) a charter reform. un_resolution_decide and the chamber's tally and
+# projection lines all read this one trigger.
+# Scope: resolution container
+un_resolution_needs_supermajority = {
+	OR = {
+		has_tag = un_topic_expulsion
+		has_tag = un_topic_reform
+	}
+}
+
 # Whether ROOT is on the resolution's $LIST$ of voters.
 # Parameters: $LIST$ = un_res_yes | un_res_no
 # Scope: resolution container; ROOT = the country asked about

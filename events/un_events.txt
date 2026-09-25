@@ -535,6 +535,7 @@ un_events.5 = {
 		}
 		add_modifier = {
 			name = un_sanctions_enforcement_modifier
+			multiplier = un_enforcement
 			days = normal_modifier_time
 			is_decaying = yes
 		}
@@ -561,6 +562,7 @@ un_events.5 = {
 		}
 		add_modifier = {
 			name = un_sanctions_partial_modifier
+			multiplier = un_enforcement
 			days = normal_modifier_time
 			is_decaying = yes
 		}
@@ -581,6 +583,7 @@ un_events.5 = {
 		}
 		add_modifier = {
 			name = un_sanctions_busting_modifier
+			multiplier = un_enforcement
 			days = normal_modifier_time
 			is_decaying = yes
 		}
@@ -627,10 +630,16 @@ un_events.6 = {
 
 	cooldown = { days = long_modifier_time }
 
+	# Redesign phase 2: the reform on the table is the charter's next stage
+	# (Reform I raises the ceiling on authority from 70 to 85, Reform II to
+	# 100), and it can be tabled only once the organisation has outgrown its
+	# charter — the same gate as the chamber and the button
+	# (un_charter_reform_ripe, un_ladder_triggers.txt).
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
-		global_var:un_authority >= 30
+		un_charter_reform_ripe = yes
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
 		NOT = { has_modifier = un_reform_champion_modifier }
 		NOT = { has_modifier = un_reform_opponent_modifier }
 		NOT = { has_global_variable = un_vote_active }
@@ -675,9 +684,10 @@ un_events.6 = {
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
+		# Open the vote on the charter's next stage: every other UN member
+		# votes, results in a year (un_charter_reform_open, un_propose_effects.txt).
 		hidden_effect = {
-			un_resolution_open = { TOPIC = reform }
+			un_charter_reform_open = yes
 		}
 	}
 
@@ -1134,6 +1144,12 @@ un_events.10 = {
 
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
+	# Redesign phase 2: no longer a random roll. Fired ONCE, to every great
+	# power in the UN or out of it, when UN authority falls below 10 and the
+	# crisis opens (un_ladder_crisis_open, un_ladder_effects.txt) — the powers
+	# who could save the organisation, each told what its own act would be
+	# worth to the target. The crisis panel in the journal entry keeps the
+	# same list up to date.
 	title = un_events.10.t
 	desc = {
 		first_valid = {
@@ -1141,62 +1157,99 @@ un_events.10 = {
 			triggered_desc = { desc = un_events.10.d_council trigger = { has_law = law_type:law_council_republic } }
 			desc = un_events.10.d
 		}
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.10.d_clock
+				trigger = { un_crisis_clock_running = yes }
+			}
+			desc = un_events.10.d_linger
+		}
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.10.d_member
+				trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			}
+			desc = un_events.10.d_outsider
+		}
 	}
 	flavor = un_events.10.f
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
 	trigger = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_crisis_is_open = yes
 		country_rank >= rank_value:great_power
-		global_var:un_authority < 25
-		NOT = { has_modifier = un_authority_restored_modifier }
-		NOT = { has_modifier = un_authority_crisis_modifier }
 	}
 
-	immediate = {
-	}
-
-	# Option A: Rally support - invest political capital to restore faith
+	# Option A (member): stand by the organisation, at a price in influence.
 	option = {
 		name = un_events.10.a
 		default_option = yes
+		trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		ai_chance = {
 			base = 5
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				add = 5
+			}
 			modifier = {
 				trigger = { has_law = law_type:law_humanitarian_regulations }
 				add = 3
 			}
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				add = -5
+			}
 		}
 		add_modifier = {
-			name = un_authority_restored_modifier
+			name = un_crisis_rescue_cost
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_2_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 2.5 REASON = 110 }
+		custom_tooltip = un_ledger_tt_credibility_up_2
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = 2 REASON = 110 }
+		custom_tooltip = un_events.10.a_tt
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
-	# Option B: Propose incremental fixes
+	# Option A (outsider): join, and bring our share of world power in with us.
+	option = {
+		name = un_events.10.e
+		trigger = {
+			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			has_global_variable = un_founded
+			is_subject = no
+			NOT = { has_modifier = un_expelled_cooldown }
+			NOT = { has_modifier = un_withdrawal_penalty_modifier }
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_humanitarian_regulations }
+				add = 3
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = -3
+			}
+		}
+		custom_tooltip = un_events.10.e_tt
+		un_join_organisation = yes
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: wait and see. Costs nothing — and does nothing for it.
 	option = {
 		name = un_events.10.b
 		ai_chance = {
 			base = 4
 		}
-		add_modifier = {
-			name = un_authority_crisis_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		custom_tooltip = un_ledger_tt_credibility_up_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 1.5 REASON = 110 }
+		custom_tooltip = un_events.10.b_tt
 	}
 
-	# Option C: Let it collapse - the UN has failed
+	# Option C: let it fall, and take back the influence it cost us.
 	option = {
 		name = un_events.10.c
 		ai_chance = {
@@ -1205,9 +1258,18 @@ un_events.10 = {
 				trigger = { has_law = law_type:law_isolationism }
 				add = 4
 			}
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				add = 4
+			}
 		}
-		custom_tooltip = un_ledger_tt_credibility_down_2_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -2.5 REASON = 110 }
+		add_modifier = {
+			name = un_crisis_abandon_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_ledger_tt_credibility_down_2
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -2 REASON = 110 }
 		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
@@ -2789,5 +2851,208 @@ un_events.22 = {
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 122 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		un_vote_release = yes
+	}
+}
+
+
+# ============================================================================
+# THE FLOOR: DISSOLUTION AND REFOUNDING (redesign phase 2)
+# ============================================================================
+# un_dissolve and the founding conference are in
+# common/scripted_effects/un_ladder_effects.txt.
+
+# Event 30: The United Nations Dissolves — the world moment, to every member
+# and every great power, queued by un_dissolve before membership is stripped.
+un_events.30 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/program_cancelled_empty.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = un_events.30.t
+	desc = un_events.30.d
+	flavor = un_events.30.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_dissolution_count
+	}
+
+	# Option A: mourn it.
+	option = {
+		name = un_events.30.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_law = law_type:law_humanitarian_regulations }
+				add = 3
+			}
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: good riddance.
+	option = {
+		name = un_events.30.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = 4
+			}
+		}
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Event 31: A Founding Conference — to the world's leading power, when another
+# great power convenes a conference to found a new UN (un_conference_open).
+# The leading power may join as a founding member, stay out, or oppose the
+# refounding outright, which wrecks the conference and bars another for ten
+# years. The USA-and-the-League case: the top power may stay out, but it
+# must not block.
+un_events.31 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/un_charter_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = un_events.31.t
+	desc = un_events.31.d
+	flavor = un_events.31.f
+
+	duration = 3
+
+	trigger = {
+		un_conference_in_session = yes
+		has_global_variable = un_conference_top_power
+		global_var:un_conference_top_power ?= ROOT
+	}
+
+	immediate = {
+		global_var:un_founding_conference ?= { save_scope_as = un_conference_convener }
+	}
+
+	# Option A: join the new organisation as a founding member.
+	option = {
+		name = un_events.31.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_law = law_type:law_humanitarian_regulations }
+				add = 3
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = -4
+			}
+			modifier = {
+				trigger = {
+					exists = scope:un_conference_convener
+					has_diplomatic_pact = { who = scope:un_conference_convener type = rivalry }
+				}
+				add = -3
+			}
+		}
+		custom_tooltip = un_events.31.a_tt
+		set_global_variable = un_conference_top_power_joins
+		if = {
+			limit = { exists = scope:un_conference_convener }
+			change_relations = { country = scope:un_conference_convener value = 20 }
+		}
+	}
+
+	# Option B: stay out, but let it be founded.
+	option = {
+		name = un_events.31.b
+		ai_chance = {
+			base = 4
+		}
+		custom_tooltip = un_events.31.b_tt
+		if = {
+			limit = { exists = scope:un_conference_convener }
+			change_relations = { country = scope:un_conference_convener value = -10 }
+		}
+	}
+
+	# Option C: oppose the refounding. The conference collapses.
+	option = {
+		name = un_events.31.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					exists = scope:un_conference_convener
+					has_diplomatic_pact = { who = scope:un_conference_convener type = rivalry }
+				}
+				add = 4
+			}
+		}
+		custom_tooltip = un_events.31.c_tt
+		add_modifier = {
+			name = un_conference_opposed_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:un_conference_convener }
+			change_relations = { country = scope:un_conference_convener value = -30 }
+		}
+		hidden_effect = {
+			un_conference_wreck = yes
+		}
+	}
+}
+
+# Event 32: The Conference Collapses — to the convener, when the leading power
+# wrecks its founding conference (un_conference_wreck).
+un_events.32 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/program_cancelled_empty.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = un_events.32.t
+	desc = un_events.32.d
+	flavor = un_events.32.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_conference_wrecked_by
+	}
+
+	immediate = {
+		global_var:un_conference_wrecked_by ?= { save_scope_as = un_conference_wrecker }
+	}
+
+	option = {
+		name = un_events.32.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:un_conference_wrecker }
+			change_relations = { country = scope:un_conference_wrecker value = -20 }
+		}
 	}
 }

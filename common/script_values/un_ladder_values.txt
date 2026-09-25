@@ -1,0 +1,368 @@
+﻿# ============================================================================
+# UN AUTHORITY — THE LADDER, THE CEILING AND THE FLOOR (redesign phase 2)
+# ============================================================================
+# docs/systems/un_redesign_design.md §4; what shipped is in §0.2 of the same
+# file. Phase 1 made authority a verdict on the world (un_authority_values.txt).
+# Phase 2 makes its level MEAN something and makes its extremes real:
+#
+#   TIERS        global_var:un_tier, 0..4, written once a month by
+#                un_ladder_tier_update (un_ladder_effects.txt) with a 4-point
+#                hysteresis band, so a UN hovering at a boundary does not
+#                flicker between tiers:
+#                  0 Moribund      below 20     E 0
+#                  1 Contested     20-45        E 0.5
+#                  2 Established   45-70        E 1.0
+#                  3 Strong        70-85        E 1.5   needs Charter Reform I
+#                  4 Supranational 85-100       E 2.5   needs Charter Reform II
+#   ENFORCEMENT  un_enforcement (E): ONE script value, read wherever a
+#                resolution's penalty is applied, as `multiplier = un_enforcement`.
+#                At Moribund a resolution is a recommendation and costs nothing.
+#   THE CHARTER  global_var:un_charter_level, 0..2. It caps the target
+#                (un_authority_target_value) at 70 / 85 / 100 and the tier at
+#                Established / Strong / Supranational. Each level is a charter
+#                reform: the `reform` topic, a vetoable two-thirds supermajority,
+#                which may be tabled only once authority has sat within 5
+#                points of the ceiling for 24 months running.
+#   THE FLOOR    below 10 a crisis opens (global_var:un_crisis_active); it
+#                closes above 20. While it is open and the target itself is below
+#                the collapse line (5), authority falls by at least a quarter of
+#                a point a month, so a doomed UN has a real clock rather than
+#                approaching 0 for ever. At 0 the UN dissolves; a new one can be
+#                founded after twenty years, through a founding conference that
+#                the world's leading power may join, stay out of, or wreck.
+#
+# Every figure is defined once, here. The tier boundaries are also written in
+# words in the je_un_tier_* and concept loc keys; change both.
+#
+# Scope: everything below reads globals only and evaluates in any scope,
+# except un_prestige_order_value (country).
+# ============================================================================
+
+# ---- Tuning ----------------------------------------------------------------
+
+# Tier entry floors. A tier is entered on reaching its floor and left only on
+# falling un_tier_hysteresis below it.
+un_tier_contested_floor = { value = 20 }
+un_tier_established_floor = { value = 45 }
+un_tier_strong_floor = { value = 70 }
+un_tier_supranational_floor = { value = 85 }
+un_tier_hysteresis = { value = 4 }
+
+# Enforcement, E, by tier.
+un_enforcement_moribund = { value = 0 }
+un_enforcement_contested = { value = 0.5 }
+un_enforcement_established = { value = 1 }
+un_enforcement_strong = { value = 1.5 }
+un_enforcement_supranational = { value = 2.5 }
+
+# The charter's ceiling on the target, by charter level.
+un_charter_cap_founding = { value = 70 }
+un_charter_cap_reform_1 = { value = 85 }
+un_charter_cap_reform_2 = { value = 100 }
+
+# "The organisation has outgrown its charter": authority must have sat at or
+# above (ceiling - margin) for this many consecutive months before a charter
+# reform may be tabled.
+un_charter_reform_margin = { value = 5 }
+un_charter_reform_months_needed = { value = 24 }
+
+# The crisis band, and the clock.
+un_crisis_open_below = { value = 10 }
+un_crisis_close_above = { value = 20 }
+# While the crisis is open and the TARGET is below this line, the world has
+# given up on the organisation: authority falls by at least un_crisis_min_fall
+# a month (written as the upper clamp on the monthly step, so it is negative).
+un_collapse_target_line = { value = 5 }
+un_crisis_min_fall = { value = -0.25 }
+
+# Founding values. The first UN is born at 50 (phase 1, ruling 9); a UN
+# refounded after a dissolution starts weak, under the founding charter, with
+# no reforms and no agencies.
+un_founding_authority = { value = 50 }
+un_refounding_authority = { value = 25 }
+# How long a founding conference sits before the new UN is founded.
+un_conference_months_needed = { value = 12 }
+# The refounding cooldowns are literal `days` on the timed global
+# un_refounding_cooldown (set_global_variable's `days` is not documented to
+# take a script value): 7300 days (20 years) after a dissolution, 3650 (10
+# years) after a conference the leading power wrecked. See un_ladder_effects.txt.
+
+# ---- The charter ---------------------------------------------------------------
+
+# 0 = the founding charter, 1 = Reform I adopted, 2 = Reform II adopted.
+un_charter_level_value = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_charter_level }
+		add = global_var:un_charter_level
+	}
+}
+
+# The ceiling the target may not pass.
+un_charter_cap = {
+	value = un_charter_cap_founding
+	if = {
+		limit = {
+			has_global_variable = un_charter_level
+			global_var:un_charter_level >= 1
+		}
+		add = {
+			value = un_charter_cap_reform_1
+			subtract = un_charter_cap_founding
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = un_charter_level
+			global_var:un_charter_level >= 2
+		}
+		add = {
+			value = un_charter_cap_reform_2
+			subtract = un_charter_cap_reform_1
+		}
+	}
+}
+
+# The highest tier the charter allows: Established under the founding charter,
+# one more per reform.
+un_charter_max_tier = {
+	value = 2
+	add = un_charter_level_value
+}
+
+# The line authority must hold for a charter reform to ripen.
+un_charter_reform_threshold = {
+	value = un_charter_cap
+	subtract = un_charter_reform_margin
+}
+
+# Which reform the next one is: 1 or 2.
+un_charter_next_stage = {
+	value = un_charter_level_value
+	add = 1
+	max = 2
+}
+
+# ---- Tiers ---------------------------------------------------------------------
+
+un_tier_contested_exit = {
+	value = un_tier_contested_floor
+	subtract = un_tier_hysteresis
+}
+un_tier_established_exit = {
+	value = un_tier_established_floor
+	subtract = un_tier_hysteresis
+}
+un_tier_strong_exit = {
+	value = un_tier_strong_floor
+	subtract = un_tier_hysteresis
+}
+un_tier_supranational_exit = {
+	value = un_tier_supranational_floor
+	subtract = un_tier_hysteresis
+}
+
+# The highest tier whose ENTRY floor authority has reached, capped by the
+# charter. The tier rises to this.
+un_tier_entry_value = {
+	value = 0
+	if = {
+		limit = { global_var:un_authority >= un_tier_contested_floor }
+		add = 1
+	}
+	if = {
+		limit = { global_var:un_authority >= un_tier_established_floor }
+		add = 1
+	}
+	if = {
+		limit = { global_var:un_authority >= un_tier_strong_floor }
+		add = 1
+	}
+	if = {
+		limit = { global_var:un_authority >= un_tier_supranational_floor }
+		add = 1
+	}
+	max = un_charter_max_tier
+}
+
+# The highest tier whose EXIT floor authority still holds, capped by the
+# charter. The tier falls to this.
+un_tier_exit_value = {
+	value = 0
+	if = {
+		limit = { global_var:un_authority >= un_tier_contested_exit }
+		add = 1
+	}
+	if = {
+		limit = { global_var:un_authority >= un_tier_established_exit }
+		add = 1
+	}
+	if = {
+		limit = { global_var:un_authority >= un_tier_strong_exit }
+		add = 1
+	}
+	if = {
+		limit = { global_var:un_authority >= un_tier_supranational_exit }
+		add = 1
+	}
+	max = un_charter_max_tier
+}
+
+# ---- Enforcement ---------------------------------------------------------------
+
+# E: how hard the Assembly's decisions bite. The ONE value every resolution
+# penalty is multiplied by (`multiplier = un_enforcement`). 0 while the UN does
+# not exist. Reads globals only, so it is safe as a stored multiplier on a
+# modifier of any scope.
+un_enforcement = {
+	value = un_enforcement_moribund
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_global_variable = un_tier
+		}
+		if = {
+			limit = { global_var:un_tier >= 1 }
+			add = {
+				value = un_enforcement_contested
+				subtract = un_enforcement_moribund
+			}
+		}
+		if = {
+			limit = { global_var:un_tier >= 2 }
+			add = {
+				value = un_enforcement_established
+				subtract = un_enforcement_contested
+			}
+		}
+		if = {
+			limit = { global_var:un_tier >= 3 }
+			add = {
+				value = un_enforcement_strong
+				subtract = un_enforcement_established
+			}
+		}
+		if = {
+			limit = { global_var:un_tier >= 4 }
+			add = {
+				value = un_enforcement_supranational
+				subtract = un_enforcement_strong
+			}
+		}
+	}
+}
+
+# ---- The crisis ------------------------------------------------------------------
+
+# The collapse clock's minimum fall, as a positive rate.
+un_crisis_min_fall_rate = {
+	value = 0
+	subtract = un_crisis_min_fall
+}
+
+# How fast authority is falling, for the projection below: this month's fall,
+# and at least the collapse clock's minimum while the clock runs. The floor
+# matters in the month the crisis opens: that month's step was taken before
+# the clock started, and would project a collapse far later than the one the
+# clock will deliver from next month on.
+un_crisis_fall_rate = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_authority_step }
+		subtract = global_var:un_authority_step
+	}
+	if = {
+		limit = { un_crisis_clock_running = yes }
+		min = un_crisis_min_fall_rate
+	}
+}
+
+# Months until authority reaches 0 at the current rate of fall, for the crisis
+# panel, the status line and un_events.10. A linear projection, which the
+# collapse clock makes honest (the fall is then at least a quarter point a
+# month, and larger falls shrink toward it). 0 when authority is not falling.
+un_crisis_months_to_collapse = {
+	value = 0
+	if = {
+		limit = {
+			has_global_variable = un_authority
+			un_crisis_fall_rate > 0
+		}
+		add = global_var:un_authority
+		divide = un_crisis_fall_rate
+	}
+}
+
+# What a great power could add to the target by acting, for the crisis panel's
+# list of saviours. Joining adds its whole share to participation; championing
+# (from a neutral stance) or ending its undermining adds it to commitment.
+# Scope: country
+un_crisis_rescue_gain = {
+	value = 0
+	if = {
+		limit = { has_variable = un_power_share }
+		add = var:un_power_share
+		multiply = un_commitment_weight
+	}
+}
+
+# ---- Refounding ------------------------------------------------------------------
+
+# Order key for "the world's leading power": plain prestige, the same measure
+# UN power share is built from. Scope: country
+un_prestige_order_value = {
+	value = prestige
+}
+
+# Months left in a founding conference, for the status line.
+un_conference_months_left = {
+	value = un_conference_months_needed
+	if = {
+		limit = { has_global_variable = un_conference_months }
+		subtract = global_var:un_conference_months
+	}
+	min = 0
+}
+
+# The year a new UN may next be founded, for the status line.
+un_refounding_year = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_refounding_open_year }
+		add = global_var:un_refounding_open_year
+	}
+}
+
+# ---- Display (O(1) reads) --------------------------------------------------------
+
+un_disp_tier = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_tier }
+		add = global_var:un_tier
+	}
+}
+
+un_disp_charter_pressure_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_charter_pressure_months }
+		add = global_var:un_charter_pressure_months
+	}
+}
+
+un_disp_crisis_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_crisis_months }
+		add = global_var:un_crisis_months
+	}
+}
+
+un_disp_dissolved_year = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_dissolved_year }
+		add = global_var:un_dissolved_year
+	}
+}

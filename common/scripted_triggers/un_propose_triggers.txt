@@ -18,8 +18,12 @@
 # un_chamber_propose_sgui's `is_valid` asks the same trigger. The AI still
 # proposes through the buttons' ai_chance, so both callers must stay honest.
 #
-# The remaining eleven topics (human rights, reform, heritage, decolonization,
-# NPT, pandemic, climate, refugee, space, law of the sea, ICC) are raised by the
+# Charter reform joined them in redesign phase 2 as the seventh (the reform
+# topic, un_propose_reform_*): it is also still raised by its proposer event,
+# un_events.6, under the same gates.
+#
+# The remaining ten topics (human rights, heritage, decolonization, NPT,
+# pandemic, climate, refugee, space, law of the sea, ICC) are raised by the
 # proposer events in events/un_events.txt and have no button and no trigger
 # here — see docs/systems/journal_entry_systems.md § The chamber widget.
 # ============================================================================
@@ -231,4 +235,37 @@ un_propose_aid_possible = {
 			devastation > 5
 		}
 	}
+}
+
+# Charter reform (redesign phase 2) — binding, with no graduated form (a veto
+# blocks it outright), and decided by a two-thirds supermajority of all
+# members, like the motion to strip a seat. Always tabled for the next stage:
+# Reform I under the founding charter, Reform II after it. It may be tabled
+# only once the organisation has outgrown its charter: authority within
+# un_charter_reform_margin of the ceiling for un_charter_reform_months_needed
+# months running (un_charter_reform_ripe).
+# Scope: the proposing country
+un_propose_reform_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_charter_can_be_reformed = yes
+}
+
+# Scope: the proposing country
+un_propose_reform_possible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	country_rank >= rank_value:major_power
+	custom_tooltip = {
+		text = un_no_active_vote_tt
+		NOT = { has_global_variable = un_vote_active }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
+	}
+	custom_tooltip = {
+		text = un_charter_reform_ripe_tt
+		un_charter_reform_ripe = yes
+	}
+	NOT = { has_modifier = un_ga_resolution_modifier }
+	NOT = { has_modifier = un_request_cooldown }
 }

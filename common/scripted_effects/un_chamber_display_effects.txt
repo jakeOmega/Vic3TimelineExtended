@@ -54,7 +54,25 @@ un_chamber_topic_line = {
 	}
 	else_if = {
 		limit = { has_tag = un_topic_reform }
-		custom_tooltip_no_bullet = je_un_chamber_topic_reform
+		# Charter reform (redesign phase 2) names its stage; a reform tabled
+		# before phase 2 names none.
+		if = {
+			limit = {
+				has_variable = un_res_charter_stage
+				var:un_res_charter_stage = 2
+			}
+			custom_tooltip_no_bullet = je_un_chamber_topic_reform_2
+		}
+		else_if = {
+			limit = {
+				has_variable = un_res_charter_stage
+				var:un_res_charter_stage = 1
+			}
+			custom_tooltip_no_bullet = je_un_chamber_topic_reform_1
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_topic_reform
+		}
 	}
 	else_if = {
 		limit = { has_tag = un_topic_heritage }
@@ -172,11 +190,12 @@ un_chamber_parties_line = {
 }
 
 # Vote tally plus the passage rule the resolve step actually applies.
-# Mirrors un_resolution_decide (un_vote_effects.txt:156-175): expulsion needs
-# un_vote_expulsion_passed >= 0 (a 2/3 supermajority of all current members);
-# every other topic needs un_res_margin >= 1 (a simple majority of the votes
-# cast). The same two script values are evaluated here, so the projection line
-# can never drift from the rule.
+# Mirrors un_resolution_decide (un_vote_effects.txt): expulsion and charter
+# reform (un_resolution_needs_supermajority) need un_vote_supermajority_passed
+# >= 0 (a 2/3 supermajority of all current members); every other topic needs
+# un_res_margin >= 1 (a simple majority of the votes cast). The same trigger and
+# the same two script values are evaluated here, so the projection line can
+# never drift from the rule.
 # Scope: resolution container
 un_chamber_tally_line = {
 	custom_tooltip_no_bullet = je_un_chamber_tally
@@ -197,7 +216,7 @@ un_chamber_tally_line = {
 		custom_tooltip_no_bullet = je_un_chamber_tally_committed
 	}
 	if = {
-		limit = { has_tag = un_topic_expulsion }
+		limit = { un_resolution_needs_supermajority = yes }
 		custom_tooltip_no_bullet = je_un_chamber_rule_supermajority
 	}
 	else = {
@@ -209,9 +228,9 @@ un_chamber_tally_line = {
 # Scope: resolution container
 un_chamber_projection_line = {
 	if = {
-		limit = { has_tag = un_topic_expulsion }
+		limit = { un_resolution_needs_supermajority = yes }
 		if = {
-			limit = { un_vote_expulsion_passed >= 0 }
+			limit = { un_vote_supermajority_passed >= 0 }
 			custom_tooltip_no_bullet = je_un_chamber_projection_pass
 		}
 		else = {
@@ -278,6 +297,20 @@ un_chamber_consequences_line = {
 		if = {
 			limit = { has_tag = un_res_vetoed }
 			custom_tooltip_no_bullet = je_un_chamber_conseq_reform_vetoed
+		}
+		else_if = {
+			limit = {
+				has_variable = un_res_charter_stage
+				var:un_res_charter_stage = 2
+			}
+			custom_tooltip_no_bullet = je_un_chamber_conseq_reform_2
+		}
+		else_if = {
+			limit = {
+				has_variable = un_res_charter_stage
+				var:un_res_charter_stage = 1
+			}
+			custom_tooltip_no_bullet = je_un_chamber_conseq_reform_1
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_conseq_reform
@@ -1003,7 +1036,33 @@ un_chamber_propose_aid_row = {
 	}
 }
 
-# One line per topic that has no proposal control of its own: the eleven
+# Charter reform (redesign phase 2): binding with no graduated form, decided by
+# a two-thirds supermajority, and tabled only once the organisation has
+# outgrown its charter. The row names the next stage and shows how far the
+# 24-month clock has run.
+# Scope: country
+un_chamber_propose_reform_row = {
+	if = {
+		limit = { un_charter_next_stage >= 2 }
+		custom_tooltip_no_bullet = je_un_chamber_propose_topic_reform_2
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_propose_topic_reform_1
+	}
+	custom_tooltip_no_bullet = je_un_chamber_binding_flat_block
+	custom_tooltip_no_bullet = je_un_chamber_rule_supermajority
+	if = {
+		limit = { un_charter_can_be_reformed = yes }
+		custom_tooltip_no_bullet = je_un_chamber_propose_reform_clock
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_reform_available
+		POSSIBLE = un_propose_reform_possible
+		NO_CASE = je_un_chamber_propose_no_case_reform
+	}
+}
+
+# One line per topic that has no proposal control of its own: the ten
 # conventions, declarations and programmes that reach the floor only when the
 # proposer events in events/un_events.txt fire. Listing them is the point —
 # without it a player has no way of knowing the Assembly can take them up at
@@ -1026,7 +1085,6 @@ un_chamber_assembly_topic_line = {
 un_chamber_assembly_business_block = {
 	custom_tooltip_no_bullet = je_un_chamber_assembly_intro
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_human_rights TOPIC = human_rights }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_reform TOPIC = reform }
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_icc TOPIC = icc }
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_npt TOPIC = npt }
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_climate TOPIC = climate }

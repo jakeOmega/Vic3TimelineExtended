@@ -18,9 +18,10 @@
 ### The widget is no longer display-only. Two of its scripted GUIs act:
 ###   un_chamber_vote_sgui     casts our ballot on the resolution in session
 ###                            (op 0 favour / 1 against / 2 veto)
-###   un_chamber_propose_sgui  tables one of the six member-initiated topics
+###   un_chamber_propose_sgui  tables one of the seven member-initiated topics
 ###                            (op 0 condemn / 1 sanctions / 2 expulsion /
-###                             3 mandate / 4 peacekeepers / 5 aid)
+###                             3 mandate / 4 peacekeepers / 5 aid /
+###                             6 charter reform)
 ### Both run the same script the existing paths run — un_vote.1's option bodies
 ### and the journal entry's own proposal buttons — so the AI, which still votes
 ### by event and proposes by button, behaves exactly as before. Every other
@@ -328,12 +329,14 @@ flowcontainer = {
 	# Collapsed by default like every other section: six ExecuteTooltip rows
 	# and an eleven-line list re-render every frame the panel is open.
 	#
-	# The six rows are the topics a member can put before the Assembly on its
+	# The seven rows are the topics a member can put before the Assembly on its
 	# own initiative, in the order the chamber thinks about them — censure and
-	# enforcement first, then requests for help. Each row's op code:
+	# enforcement first, then requests for help, then the charter itself. Each
+	# row's op code:
 	#
 	#   0 condemnation   1 sanctions   2 expulsion
 	#   3 military mandate            4 peacekeepers   5 humanitarian aid
+	#   6 charter reform (redesign phase 2)
 	#
 	# The table is repeated in common/scripted_guis/un_chamber_sguis.txt and in
 	# the row renderers in
@@ -435,7 +438,19 @@ flowcontainer = {
 			}
 		}
 
-		# The eleven topics with no proposal control of their own — they reach
+		un_chamber_propose_row = {
+			blockoverride "row_text" {
+				text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End)]"
+			}
+			blockoverride "row_action" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End )]"
+				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End ) ) )]"
+			}
+		}
+
+		# The ten topics with no proposal control of their own — they reach
 		# the floor through the proposer events in events/un_events.txt. Listed
 		# so a player knows the Assembly can take them up at all.
 		un_chamber_row_text = {

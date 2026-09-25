@@ -88,7 +88,8 @@ un_permanent_seat_count = {
 }
 
 # 2/3 supermajority threshold of currently-eligible voting members.
-# Used for expulsion votes: vote passes when un_res_support * 3 >= count * 2.
+# Used for expulsion and charter-reform votes: the vote passes when
+# un_res_support * 3 >= count * 2.
 un_vote_eligible_member_count = {
 	value = 0
 	every_country = {
@@ -97,10 +98,11 @@ un_vote_eligible_member_count = {
 	}
 }
 
-# Expulsion-vote pass check: positive when un_res_support * 3 >= count * 2,
-# i.e., 2/3 supermajority achieved. Trigger with: un_vote_expulsion_passed >= 0.
+# Supermajority pass check (expulsion, charter reform): positive when
+# un_res_support * 3 >= count * 2, i.e., 2/3 supermajority achieved. Trigger
+# with: un_vote_supermajority_passed >= 0.
 # Scope: resolution container (read by un_resolution_decide)
-un_vote_expulsion_passed = {
+un_vote_supermajority_passed = {
 	value = var:un_res_support
 	multiply = 3
 	# Subtracted twice on purpose — that is the `- count * 2` of the 2/3 test,

@@ -678,20 +678,51 @@ un_vote.1 = {
 			}
 
 			# ================================================================
-			# TOPIC: UN Reform
+			# TOPIC: Charter reform (redesign phase 2)
 			# ================================================================
-			# Countries frustrated with the current order support reform
+			# Reform I raises the ceiling on UN authority to 85, Reform II to
+			# 100 (veto restraint and a real levy). A supermajority of all
+			# members is needed, so every lean here matters.
+			# The organisation's friends want it to grow.
 			modifier = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_reform }
-					global_var:un_authority < 40
+					OR = {
+						je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+						je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+						has_law = law_type:law_humanitarian_regulations
+					}
 				}
-				add = 15
+				add = 20
 			}
-			# SC members resist losing their privilege
+			# Small and middle powers gain most from a stronger Assembly.
 			modifier = {
 				trigger = {
 					scope:un_resolution ?= { has_tag = un_topic_reform }
+					NOT = { country_rank >= rank_value:major_power }
+				}
+				add = 10
+			}
+			# Sovereigntists and underminers do not.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_reform }
+					OR = {
+						has_law = law_type:law_isolationism
+						je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+					}
+				}
+				add = -30
+			}
+			# SC members resist losing their privilege: Reform II restrains
+			# the veto itself.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_reform
+						has_variable = un_res_charter_stage
+						var:un_res_charter_stage >= 2
+					}
 					country_rank >= rank_value:great_power
 					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 				}
@@ -1269,14 +1300,29 @@ un_vote.1 = {
 			}
 
 			# ================================================================
-			# TOPIC: Reform - SC privileged members oppose
+			# TOPIC: Charter reform - sovereigntists, and SC privileged members
+			# facing Reform II's veto restraint, oppose
 			# ================================================================
 			modifier = {
 				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_reform }
+					scope:un_resolution ?= {
+						has_tag = un_topic_reform
+						has_variable = un_res_charter_stage
+						var:un_res_charter_stage >= 2
+					}
 					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
 				}
 				add = 25
+			}
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_reform }
+					OR = {
+						has_law = law_type:law_isolationism
+						je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+					}
+				}
+				add = 20
 			}
 
 			# ================================================================
@@ -1538,6 +1584,25 @@ un_vote.1 = {
 				}
 				add = 30
 			}
+			# Reform II restrains the veto itself.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_reform
+						has_variable = un_res_charter_stage
+						var:un_res_charter_stage >= 2
+					}
+				}
+				add = 20
+			}
+			# A power that champions the order does not kill its growth.
+			modifier = {
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_topic_reform }
+					je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+				}
+				add = -80
+			}
 
 			# Authorizing force is the thing the veto exists for. A permanent
 			# member leans toward blocking any mandate, and blocks outright when
@@ -1586,11 +1651,14 @@ un_vote.1 = {
 			}
 
 			# Costs / restraints — discourage vetoing when:
-			# Our UN authority is already weak (cost is steep)
+			# Our UN authority is already weak (cost is steep). A Moribund UN
+			# charges nothing for a veto (redesign phase 2), so the restraint
+			# applies only from Contested up.
 			modifier = {
 				trigger = {
 					has_global_variable = un_authority
 					global_var:un_authority < 30
+					un_tier_at_least_contested = yes
 				}
 				add = -25
 			}
@@ -2041,8 +2109,11 @@ un_vote.2 = {
 					scope:un_vote_target = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
+							# Scaled by the UN's enforcement (redesign phase 2):
+							# nothing at Moribund, x2.5 at Supranational.
 							add_modifier = {
 								name = un_condemned_modifier
+								multiplier = un_enforcement
 								days = long_modifier_time
 								is_decaying = yes
 							}
@@ -2081,6 +2152,7 @@ un_vote.2 = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
 							add_modifier = {
 								name = un_non_binding_rebuke_modifier
+								multiplier = un_enforcement
 								days = normal_modifier_time
 								is_decaying = yes
 							}
@@ -2129,7 +2201,12 @@ un_vote.2 = {
 				}
 			}
 
-			# ---- Reform: Modernize UN institutions ----
+			# ---- Reform: amend the Charter (redesign phase 2) ----
+			# The charter gains the resolution's stage and the ceiling on
+			# authority rises (un_charter_adopt_reform, un_ladder_effects.txt,
+			# which also books the credibility entry, reason 14). It carried a
+			# two-thirds supermajority of all members to get here
+			# (un_resolution_decide).
 			# Vetoed reform is the one binding topic with NO graduated fallback —
 			# charter changes really do need P5 unanimity (no Uniting-for-Peace
 			# style override is available here). The vote.3 notification still
@@ -2139,8 +2216,33 @@ un_vote.2 = {
 					scope:un_resolution ?= { has_tag = un_topic_reform }
 					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
-				custom_tooltip = un_vote_reform_passed_tt
-				un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
+				if = {
+					limit = {
+						scope:un_resolution ?= {
+							has_variable = un_res_charter_stage
+							var:un_res_charter_stage = 2
+						}
+					}
+					custom_tooltip = un_vote_reform_2_passed_tt
+				}
+				else_if = {
+					limit = {
+						scope:un_resolution ?= {
+							has_variable = un_res_charter_stage
+							var:un_res_charter_stage = 1
+						}
+					}
+					custom_tooltip = un_vote_reform_1_passed_tt
+				}
+				else = {
+					# A pre-phase-2 reform resolution still in session when the
+					# mod updated: it names no stage and changes no charter.
+					custom_tooltip = un_vote_reform_passed_tt
+					un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
+				}
+				hidden_effect = {
+					un_charter_adopt_reform = yes
+				}
 			}
 			else_if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_reform } }
@@ -2329,7 +2431,13 @@ un_vote.2 = {
 					scope:un_vote_target = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
-							add_modifier = { name = un_sanctions_target_modifier }
+							# Scaled by the UN's enforcement (redesign phase 2).
+							# un_enforcement reads only globals, so the stored
+							# multiplier is sound whenever the engine re-reads it.
+							add_modifier = {
+								name = un_sanctions_target_modifier
+								multiplier = un_enforcement
+							}
 							custom_tooltip = {
 								text = un_standing_sanctioned_tt
 								un_standing_loss = { AMOUNT = un_standing_sanctioned_loss REASON = 24 }
@@ -2356,6 +2464,7 @@ un_vote.2 = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
 							add_modifier = {
 								name = un_sanctions_voluntary_target_modifier
+								multiplier = un_enforcement
 								days = normal_modifier_time
 								is_decaying = yes
 							}

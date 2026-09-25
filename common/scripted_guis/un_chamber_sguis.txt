@@ -338,6 +338,7 @@ un_chamber_vote_sgui = {
 #   op 3   authorized military mandate
 #   op 4   request a peacekeeping deployment
 #   op 5   request humanitarian aid
+#   op 6   charter reform (redesign phase 2)
 #
 # The op table is repeated in the widget and in the row renderers in
 # common/scripted_effects/un_chamber_display_effects.txt; keep all three in
@@ -410,6 +411,14 @@ un_chamber_propose_sgui = {
 			}
 			un_propose_aid_possible = yes
 		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_reform
+				un_propose_reform_available = yes
+			}
+			un_propose_reform_possible = yes
+		}
 		trigger_else = {
 			always = no
 		}
@@ -439,6 +448,10 @@ un_chamber_propose_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 5 }
 			un_propose_aid_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_propose_reform_effect = yes
 		}
 	}
 }
@@ -484,11 +497,15 @@ un_chamber_propose_row_sgui = {
 				limit = { exists = scope:op scope:op = 5 }
 				un_chamber_propose_aid_row = yes
 			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 6 }
+				un_chamber_propose_reform_row = yes
+			}
 		}
 	}
 }
 
-# The eleven topics with no proposal control: what they are, and whether a
+# The ten topics with no proposal control: what they are, and whether a
 # recent resolution has put one on cooldown.
 un_chamber_assembly_business_sgui = {
 	scope = country

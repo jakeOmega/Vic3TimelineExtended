@@ -109,6 +109,40 @@ te_debug_un.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 		te_debug_un_set_standing = { VALUE = 10 }
 	}
 
+	# ---- Redesign phase 2 ----
+	# Doom the UN: the crisis opens next month and it dissolves a few months on.
+	option = {
+		name = te_debug_un.1.i
+		trigger = { has_global_variable = un_founded }
+		te_debug_un_doom = yes
+	}
+
+	# Dissolve the UN at once, exactly as a collapse would.
+	option = {
+		name = te_debug_un.1.j
+		trigger = { has_global_variable = un_founded }
+		hidden_effect = { un_dissolve = yes }
+	}
+
+	# Put the next charter reform on the table now.
+	option = {
+		name = te_debug_un.1.k
+		trigger = { un_charter_can_be_reformed = yes }
+		te_debug_un_ripen_charter = yes
+	}
+
+	# Skip the refounding cooldown (and, if a conference sits, end its year).
+	option = {
+		name = te_debug_un.1.l
+		trigger = {
+			OR = {
+				has_global_variable = un_refounding_cooldown
+				has_global_variable = un_founding_conference
+			}
+		}
+		te_debug_un_skip_refounding_cooldown = yes
+	}
+
 	option = {
 		name = te_debug_un.1.z
 	}

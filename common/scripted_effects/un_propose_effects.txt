@@ -238,3 +238,43 @@ un_propose_aid_effect = {
 		un_resolution_open = { TOPIC = aid_request }
 	}
 }
+
+# Charter reform (redesign phase 2) — binding, no graduated form, two-thirds
+# supermajority. The gates are un_propose_reform_possible.
+# Scope: the proposing country
+un_propose_reform_effect = {
+	custom_tooltip = {
+		text = "UN_PROPOSE_CHARTER_REFORM_TT"
+		add_modifier = {
+			name = un_ga_resolution_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_modifier = {
+			name = un_request_cooldown
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# The proposer champions reform (as un_events.6's own option does).
+		add_modifier = {
+			name = un_reform_champion_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		un_charter_reform_open = yes
+	}
+}
+
+# Open a charter-reform resolution for the charter's next stage. The one place
+# the reform topic is opened, shared by the button, the chamber and
+# un_events.6. The stage rides on the resolution (un_res_charter_stage), so
+# un_vote.1/.2 and the chamber read which reform it is without a
+# country-side copy, and a resolution tabled for Reform I cannot be adopted as
+# Reform II.
+# Scope: the proposing country
+un_charter_reform_open = {
+	un_resolution_open = { TOPIC = reform }
+	scope:un_resolution ?= {
+		set_variable = { name = un_res_charter_stage value = un_charter_next_stage }
+	}
+}

@@ -1,0 +1,108 @@
+﻿# ============================================================================
+# UN AUTHORITY — TIER, CHARTER AND CRISIS TRIGGERS (redesign phase 2)
+# ============================================================================
+# The figures are in common/script_values/un_ladder_values.txt and the writers
+# in common/scripted_effects/un_ladder_effects.txt.
+#
+# The tier tests read global_var:un_tier, which carries the hysteresis, never
+# global_var:un_authority: a UN sitting at 44.9 after falling from Established
+# is still Established. Every "at least" trigger is a numeric comparison, so
+# adding a tier above Supranational would not silently break the shorter
+# ladders (scripting_best_practices.md, "An 'at least tier N' trigger must
+# list every higher tier").
+#
+# All are false while the UN does not exist: un_tier is written by the first
+# monthly update after founding and removed by dissolution.
+# Scope: any
+# ============================================================================
+
+un_tier_is_moribund = {
+	has_global_variable = un_founded
+	has_global_variable = un_tier
+	global_var:un_tier < 1
+}
+
+un_tier_at_least_contested = {
+	has_global_variable = un_founded
+	has_global_variable = un_tier
+	global_var:un_tier >= 1
+}
+
+un_tier_at_least_established = {
+	has_global_variable = un_founded
+	has_global_variable = un_tier
+	global_var:un_tier >= 2
+}
+
+un_tier_at_least_strong = {
+	has_global_variable = un_founded
+	has_global_variable = un_tier
+	global_var:un_tier >= 3
+}
+
+un_tier_is_supranational = {
+	has_global_variable = un_founded
+	has_global_variable = un_tier
+	global_var:un_tier >= 4
+}
+
+# The charter has room for another reform.
+un_charter_can_be_reformed = {
+	has_global_variable = un_founded
+	OR = {
+		NOT = { has_global_variable = un_charter_level }
+		global_var:un_charter_level < 2
+	}
+}
+
+# "The organisation has outgrown its charter": authority has sat within
+# un_charter_reform_margin of the ceiling for un_charter_reform_months_needed
+# months running. The counter is kept by un_ladder_charter_pressure_update.
+un_charter_reform_ripe = {
+	un_charter_can_be_reformed = yes
+	has_global_variable = un_charter_pressure_months
+	global_var:un_charter_pressure_months >= un_charter_reform_months_needed
+}
+
+# The crisis is open.
+un_crisis_is_open = {
+	has_global_variable = un_founded
+	has_global_variable = un_crisis_active
+}
+
+# The collapse clock is running: the crisis is open and the target itself is
+# below the collapse line, so authority is falling at least a quarter point a
+# month toward dissolution.
+un_crisis_clock_running = {
+	un_crisis_is_open = yes
+	has_global_variable = un_authority_target
+	global_var:un_authority_target < un_collapse_target_line
+}
+
+# A UN existed once and was dissolved (whether or not a new one stands now).
+un_has_been_dissolved = {
+	has_global_variable = un_dissolution_count
+}
+
+# Founding now would be a refounding, which goes through a founding conference.
+un_founding_is_refounding = {
+	NOT = { has_global_variable = un_founded }
+	un_has_been_dissolved = yes
+}
+
+# Power blocs fill the vacuum: the UN is Moribund, or has been dissolved and
+# not yet refounded.
+un_bloc_vacuum_active = {
+	OR = {
+		un_tier_is_moribund = yes
+		AND = {
+			NOT = { has_global_variable = un_founded }
+			un_has_been_dissolved = yes
+		}
+	}
+}
+
+# A founding conference is in session.
+un_conference_in_session = {
+	has_global_variable = un_founding_conference
+}
