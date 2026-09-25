@@ -143,8 +143,7 @@ social_tensions_events.2 = {
 	}
 
 	immediate = {
-		# Stands in for the old ten-year event cooldown, where .17's pick can read it.
-		set_variable = { name = te_ea_ir_terror_cell_target value = yes days = long_modifier_time }
+		save_scope_as = terror_cell_target
 	}
 
 	option = { # Blame and sanction the rival
@@ -161,6 +160,13 @@ social_tensions_events.2 = {
 			FACTOR = appeasement_relations_decreased
 		}
 		add_loyalists = { value = small_radicals pop_type = officers }
+		# The sponsor learns its cell was found and how we answered (.18).
+		hidden_effect = {
+			scope:terror_linked_country = {
+				set_variable = { name = te_ea_ir_cell_outcome value = 1 days = 30 }
+				trigger_event = { id = social_tensions_events.18 days = 3 }
+			}
+		}
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_attitude = { who = scope:terror_linked_country attitude = belligerent } } add = 5 }
@@ -180,6 +186,12 @@ social_tensions_events.2 = {
 			ANTI_AMOUNT = -1
 			FACTOR = appeasement_relations_increased
 		}
+		hidden_effect = {
+			scope:terror_linked_country = {
+				set_variable = { name = te_ea_ir_cell_outcome value = 2 days = 30 }
+				trigger_event = { id = social_tensions_events.18 days = 3 }
+			}
+		}
 		ai_chance = {
 			base = 5
 			modifier = { trigger = { has_attitude = { who = scope:terror_linked_country attitude = cooperative } } add = 5 }
@@ -189,6 +201,12 @@ social_tensions_events.2 = {
 	option = { # Focus on domestic defense
 		name = social_tensions_events.2.c
 		add_modifier = { name = terror_resilience_modifier days = normal_modifier_time is_decaying = yes }
+		hidden_effect = {
+			scope:terror_linked_country = {
+				set_variable = { name = te_ea_ir_cell_outcome value = 3 days = 30 }
+				trigger_event = { id = social_tensions_events.18 days = 3 }
+			}
+		}
 		ai_chance = { base = 3 }
 	}
 }
@@ -1438,12 +1456,15 @@ social_tensions_events.17 = {
 		random_country = {
 			limit = { te_ea_ir_militant_target = yes }
 			save_scope_as = terror_cell_target
+			# The victim's lockout (.2's old ten-year cooldown), set when we are
+			# asked so no second country can pick it inside .2's delay. Refusing,
+			# or a cell that is never found, shortens it below.
+			set_variable = { name = te_ea_ir_terror_cell_lockout value = yes days = long_modifier_time }
 		}
 	}
 
 	option = { # Fund the exiles
 		name = social_tensions_events.17.a
-		default_option = yes
 		add_modifier = { name = proxy_conflict_funding_modifier days = normal_modifier_time is_decaying = yes }
 		random_list = {
 			60 = {
@@ -1454,6 +1475,11 @@ social_tensions_events.17 = {
 			}
 			40 = {
 				custom_tooltip = TE_EA_IR_CELL_HIDDEN_TT
+				hidden_effect = {
+					scope:terror_cell_target = {
+						set_variable = { name = te_ea_ir_terror_cell_lockout value = yes days = 730 }
+					}
+				}
 			}
 		}
 		ai_chance = {
@@ -1472,8 +1498,74 @@ social_tensions_events.17 = {
 
 	option = { # Refuse
 		name = social_tensions_events.17.b
+		# Decline is the default: a lapsed event must not fund a terror cell.
+		default_option = yes
 		# The pool rolls once a year: two years keeps the offer from returning at the next roll.
 		set_variable = { name = te_ea_ir_militants_declined value = yes days = 730 }
+		# Nothing happened to them, so their slot reopens sooner.
+		hidden_effect = {
+			scope:terror_cell_target = {
+				set_variable = { name = te_ea_ir_terror_cell_lockout value = yes days = 730 }
+			}
+		}
 		ai_chance = { base = 3 }
+	}
+}
+
+# =============================================================
+# NOTICES (the other party's answer)
+# =============================================================
+
+# Event 18: The Cell Is Blown (-> the sponsor, after the target answers .2)
+# Root = scope:terror_linked_country. var:te_ea_ir_cell_outcome says which
+# option the target took: 1 blamed and sanctioned us, 2 quiet intelligence
+# cooperation, 3 domestic defense.
+social_tensions_events.18 = {
+	type = country_event
+	placement = ROOT
+
+	title = social_tensions_events.18.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = te_ea_ir_cell_outcome
+					var:te_ea_ir_cell_outcome = 2
+				}
+				desc = social_tensions_events.18.d_quiet
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = te_ea_ir_cell_outcome
+					var:te_ea_ir_cell_outcome = 3
+				}
+				desc = social_tensions_events.18.d_defense
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = social_tensions_events.18.d_blamed
+			}
+		}
+	}
+	flavor = social_tensions_events.18.f
+
+	event_image = { texture = "gfx/event_pictures/sabotage_investigation.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	duration = 3
+
+	trigger = {
+		exists = scope:terror_cell_target
+	}
+
+	option = {
+		name = social_tensions_events.18.a
+		default_option = yes
+		if = {
+			limit = { has_variable = te_ea_ir_cell_outcome }
+			remove_variable = te_ea_ir_cell_outcome
+		}
+		ai_chance = { base = 100 }
 	}
 }

@@ -586,8 +586,6 @@ international_relations_events.6 = {
 
 	immediate = {
 		save_scope_as = espionage_catcher
-		# Stands in for the old event cooldown, where .203's pick can read it.
-		set_variable = { name = te_ea_ir_spy_caught value = yes days = normal_modifier_time }
 	}
 
 	option = {
@@ -937,6 +935,11 @@ international_relations_events.103 = {
 		name = international_relations_events.103.a
 		default_option = yes
 		ai_chance = { base = 100 }
+		# The agent planted in .203.a is in their hands: his reports stop.
+		if = {
+			limit = { has_modifier = te_ea_ir_agent_in_place_modifier }
+			remove_modifier = te_ea_ir_agent_in_place_modifier
+		}
 		add_modifier = {
 			name = espionage_agent_exposed_modifier
 			days = normal_modifier_time
@@ -1172,6 +1175,11 @@ international_relations_events.107 = {
 		name = international_relations_events.107.a
 		default_option = yes
 		ai_chance = { base = 100 }
+		# The agent planted in .203.a is coming home: his reports stop.
+		if = {
+			limit = { has_modifier = te_ea_ir_agent_in_place_modifier }
+			remove_modifier = te_ea_ir_agent_in_place_modifier
+		}
 		add_modifier = {
 			name = espionage_agent_exposed_modifier
 			days = short_modifier_time
@@ -1223,12 +1231,15 @@ international_relations_events.201 = {
 		random_country = {
 			limit = { te_ea_ir_arms_race_target = yes }
 			save_scope_as = arms_race_instigator
+			# The victim's lockout (.1's old five-year cooldown), set when we are
+			# asked so no second country can pick it inside .1's delay.
+			# Declining shortens it below.
+			set_variable = { name = te_ea_ir_arms_race_lockout value = yes days = normal_modifier_time }
 		}
 	}
 
 	option = {
 		name = international_relations_events.201.a
-		default_option = yes
 		ai_chance = {
 			base = 3
 			modifier = {
@@ -1251,6 +1262,8 @@ international_relations_events.201 = {
 
 	option = {
 		name = international_relations_events.201.b
+		# Decline is the default: a lapsed event must not start an arms race.
+		default_option = yes
 		ai_chance = {
 			base = 1
 			modifier = {
@@ -1260,6 +1273,12 @@ international_relations_events.201 = {
 		}
 		# Not now - the generals are disappointed
 		set_variable = { name = te_ea_ir_arms_declined value = yes days = 365 }
+		# Nothing happened to them, so their slot reopens sooner.
+		hidden_effect = {
+			scope:arms_race_instigator = {
+				set_variable = { name = te_ea_ir_arms_race_lockout value = yes days = very_short_modifier_time }
+			}
+		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }
@@ -1303,12 +1322,15 @@ international_relations_events.202 = {
 		random_country = {
 			limit = { te_ea_ir_propaganda_target = yes }
 			save_scope_as = propaganda_instigator
+			# The victim's lockout (.4's old five-year cooldown), set when we are
+			# asked so no second country can pick it inside .4's delay.
+			# Declining shortens it below.
+			set_variable = { name = te_ea_ir_propaganda_lockout value = yes days = normal_modifier_time }
 		}
 	}
 
 	option = {
 		name = international_relations_events.202.a
-		default_option = yes
 		ai_chance = {
 			base = 3
 			modifier = {
@@ -1330,6 +1352,8 @@ international_relations_events.202 = {
 
 	option = {
 		name = international_relations_events.202.b
+		# Decline is the default: a lapsed event must not launch a campaign.
+		default_option = yes
 		ai_chance = {
 			base = 1
 			modifier = {
@@ -1339,6 +1363,12 @@ international_relations_events.202 = {
 		}
 		# Not now
 		set_variable = { name = te_ea_ir_propaganda_declined value = yes days = 365 }
+		# Nothing happened to them, so their slot reopens sooner.
+		hidden_effect = {
+			scope:propaganda_instigator = {
+				set_variable = { name = te_ea_ir_propaganda_lockout value = yes days = very_short_modifier_time }
+			}
+		}
 	}
 }
 
@@ -1379,12 +1409,15 @@ international_relations_events.203 = {
 		random_country = {
 			limit = { te_ea_ir_espionage_target = yes }
 			save_scope_as = espionage_catcher
+			# The victim's lockout (.6's old five-year cooldown), set when we are
+			# asked so no second country can pick it inside .6's delay.
+			# Declining, or an agent who is never caught, shortens it below.
+			set_variable = { name = te_ea_ir_spy_lockout value = yes days = normal_modifier_time }
 		}
 	}
 
 	option = {
 		name = international_relations_events.203.a
-		default_option = yes
 		ai_chance = { base = 3 }
 		# Plant the agent - stolen designs, at the risk of a public scandal
 		add_modifier = {
@@ -1401,12 +1434,19 @@ international_relations_events.203 = {
 			}
 			50 = {
 				custom_tooltip = TE_EA_IR_AGENT_UNDETECTED_TT
+				hidden_effect = {
+					scope:espionage_catcher = {
+						set_variable = { name = te_ea_ir_spy_lockout value = yes days = very_short_modifier_time }
+					}
+				}
 			}
 		}
 	}
 
 	option = {
 		name = international_relations_events.203.b
+		# Decline is the default: a lapsed event must not plant a spy.
+		default_option = yes
 		ai_chance = {
 			base = 1
 			modifier = {
@@ -1418,5 +1458,11 @@ international_relations_events.203 = {
 		}
 		# Too risky
 		set_variable = { name = te_ea_ir_spy_declined value = yes days = 365 }
+		# Nothing happened to them, so their slot reopens sooner.
+		hidden_effect = {
+			scope:espionage_catcher = {
+				set_variable = { name = te_ea_ir_spy_lockout value = yes days = very_short_modifier_time }
+			}
+		}
 	}
 }
