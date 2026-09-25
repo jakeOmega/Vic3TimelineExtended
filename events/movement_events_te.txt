@@ -1578,7 +1578,8 @@ movement_events_te.10 = {
 			is_political_movement_type = movement_transhumanist
 		}
 		has_technology_researched = biohacking_and_human_augmentation
-		# No legal augmentation market under a ban, so no divide for it to open.
+		# No legal augmentation market under human purity (a ban) or the starting
+		# law (nothing licensed yet), so no divide for the story to describe.
 		NOR = {
 			has_law = law_type:law_no_augmentation
 			has_law = law_type:law_human_purity

@@ -1470,13 +1470,13 @@ society_technology_events.16 = {
 		first_valid = {
 			# Under a ban the devices are on sale abroad, not at home.
 			triggered_desc = {
-				trigger = {
-					OR = {
-						has_law = law_type:law_no_augmentation
-						has_law = law_type:law_human_purity
-					}
-				}
+				trigger = { has_law = law_type:law_human_purity }
 				desc = society_technology_events.16.d_banned
+			}
+			# The starting law licenses nothing yet but bans nothing either.
+			triggered_desc = {
+				trigger = { has_law = law_type:law_no_augmentation }
+				desc = society_technology_events.16.d_unlicensed
 			}
 			triggered_desc = {
 				trigger = { always = yes }
