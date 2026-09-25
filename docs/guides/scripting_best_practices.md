@@ -4178,3 +4178,16 @@ facts that may have changed in transit (membership, the vote lock, the target st
 The same applies to a delayed event's `cooldown`: the dispatcher already paces the item, and a
 cooldown on the event is a second, invisible gate that makes an offer vanish for a country that
 answered some earlier one. The docket-fired UN events dropped theirs for this reason.
+
+## Claims Are on State Regions, So a Split Region Reads as Claimed Both Ways
+
+`has_claim_by = X` in state scope asks whether X claims the state's **state region** (vanilla
+`concept_claim_desc`: "a claim that a country has on a state region"), and conquering an
+incorporated state gives its previous owner such a claim. So when a region is split, each holder
+usually "claims" the other's part, and the state panel lists only the other side's claim. That
+can make correct script look inverted. The UN mandate picker (`un_mandate_select_case`) offered
+India a mandate for the British Republic's part of split Ceylon. From India's own Ceylon, which
+showed only the British claim, the pick looked backwards. It was not: vanilla `return_state`
+tests `has_claim_by = root` in the same direction. When script names a region taken under a
+claim, say which part and whose it is, and whether the other side claims ours
+(`un_chamber_mandate_split_lines`).

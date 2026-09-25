@@ -732,6 +732,8 @@
  je_un_chamber_mandate_expiry:0 "  Lapses in [THIS.ScriptValue('un_mandate_months_left')|0] months if it is not exercised."
  je_un_chamber_mandate_forfeit:0 "  #R The authorized power has left the organisation. Finishing the war now earns it nothing.#!"
  je_un_chamber_mandate_header:0 "#bold Mandate No. [THIS.Var('un_mnd_seq').GetValue|0]#!"
+ je_un_chamber_mandate_split:0 "    #v A divided region:#! [SCOPE.sCountry('un_chamber_split_holder').GetName] already holds part of [SCOPE.sStateRegion('un_chamber_split_region').GetName]. The mandate covers only the part [SCOPE.sCountry('un_chamber_split_target').GetName] holds."
+ je_un_chamber_mandate_split_mutual:0 "    [SCOPE.sCountry('un_chamber_split_target').GetName] has a [concept_claim] on [SCOPE.sCountry('un_chamber_split_holder').GetName]'s part in turn: each side claims the other's part of the region."
  je_un_chamber_mandate_status_abandoned:0 "  #R Abandoned.#! The authorized power backed down from the play it raised."
  je_un_chamber_mandate_status_active:0 "  #G In force#! — issued, not yet exercised. It covers one demand only: any other demand against that country for territory, subjugation, regime change or humiliation voids it."
  je_un_chamber_mandate_status_bound:0 "  #Y Being exercised.#! It is bound to the one play it was raised in and cannot be carried into another. #R Adding any other demand against that country for territory, subjugation, regime change or humiliation voids it and is condemned;#! so does backing down."

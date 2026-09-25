@@ -156,6 +156,54 @@ un_chamber_mandate_terms_line = {
 		var:un_res_mandate_beneficiary ?= { save_temporary_scope_as = un_chamber_res_beneficiary }
 		custom_tooltip_no_bullet = je_un_chamber_res_mandate_beneficiary
 	}
+	# A divided region: while the vote is open, say which part is at stake.
+	if = {
+		limit = {
+			has_tag = un_res_voting
+			exists = var:un_res_mandate_region
+			exists = var:un_res_target
+			exists = var:un_res_mandate_beneficiary
+		}
+		var:un_res_mandate_region = { save_temporary_scope_as = un_chamber_split_region }
+		var:un_res_target = { save_temporary_scope_as = un_chamber_split_target }
+		var:un_res_mandate_beneficiary = { save_temporary_scope_as = un_chamber_split_holder }
+		un_chamber_mandate_split_lines = yes
+	}
+}
+
+# A mandate names a whole state region, but claims cover a whole region too,
+# so in a split region the beneficiary may already hold part of it, and the
+# target may claim that part in turn: the holders of a split region usually
+# claim each other's part (the previous owner of a conquered incorporated
+# state gets a claim on its region). Say so, so "Territory named: Ceylon, to
+# be restored to India" is not read as India's own Ceylon. Found in play,
+# 2026-09-25: the rule is right, the card was ambiguous.
+# Expects temporary scopes un_chamber_split_region, un_chamber_split_target
+# and un_chamber_split_holder (the beneficiary).
+# Scope: any
+un_chamber_mandate_split_lines = {
+	if = {
+		limit = {
+			exists = scope:un_chamber_split_region
+			exists = scope:un_chamber_split_target
+			exists = scope:un_chamber_split_holder
+			scope:un_chamber_split_region = {
+				any_scope_state = { owner = scope:un_chamber_split_holder }
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_mandate_split
+		if = {
+			limit = {
+				scope:un_chamber_split_region = {
+					any_scope_state = {
+						owner = scope:un_chamber_split_holder
+						has_claim_by = scope:un_chamber_split_target
+					}
+				}
+			}
+			custom_tooltip_no_bullet = je_un_chamber_mandate_split_mutual
+		}
+	}
 }
 
 # Proposer and (when the topic names one) target. Both reads are guarded
@@ -613,6 +661,22 @@ un_chamber_mandate_entry = {
 		var:un_mnd_beneficiary ?= { save_temporary_scope_as = un_chamber_mnd_beneficiary }
 		custom_tooltip_no_bullet = je_un_chamber_mandate_beneficiary
 	}
+	# A divided region (un_chamber_mandate_split_lines), while the mandate is live.
+	if = {
+		limit = {
+			OR = {
+				has_tag = un_mandate_active
+				has_tag = un_mandate_bound
+			}
+			exists = var:un_mnd_region
+			exists = var:un_mnd_target
+			exists = var:un_mnd_beneficiary
+		}
+		var:un_mnd_region = { save_temporary_scope_as = un_chamber_split_region }
+		var:un_mnd_target = { save_temporary_scope_as = un_chamber_split_target }
+		var:un_mnd_beneficiary = { save_temporary_scope_as = un_chamber_split_holder }
+		un_chamber_mandate_split_lines = yes
+	}
 	# Status. Exactly one of these tags is set at a time; the live pair comes
 	# first so a closed mandate can never be read as still standing.
 	if = {
@@ -863,6 +927,10 @@ un_chamber_mandate_case_line = {
 				state_region = { save_temporary_scope_as = un_chamber_case_region }
 			}
 			custom_tooltip_no_bullet = je_un_chamber_mandate_case
+			scope:un_chamber_case_region = { save_temporary_scope_as = un_chamber_split_region }
+			scope:un_mandate_case_target = { save_temporary_scope_as = un_chamber_split_target }
+			save_temporary_scope_as = un_chamber_split_holder
+			un_chamber_mandate_split_lines = yes
 		}
 	}
 }
@@ -1000,6 +1068,10 @@ un_chamber_propose_mandate_row = {
 				state_region = { save_temporary_scope_as = un_chamber_case_region }
 			}
 			custom_tooltip_no_bullet = je_un_chamber_propose_target_mandate
+			scope:un_chamber_case_region = { save_temporary_scope_as = un_chamber_split_region }
+			scope:un_mandate_case_target = { save_temporary_scope_as = un_chamber_split_target }
+			save_temporary_scope_as = un_chamber_split_holder
+			un_chamber_mandate_split_lines = yes
 		}
 	}
 	un_chamber_propose_status_line = {
