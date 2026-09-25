@@ -8223,6 +8223,7 @@ POST_LOAD_AUDITS = [
     ("attitude_key_audit",            "attitude_key_audit"),
     ("event_image_audit",             "event_image_audit"),
     ("treaty_leverage_side_audit",    "treaty_leverage_side_audit"),
+    ("event_context_audit",           "event_context_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS
