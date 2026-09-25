@@ -17,9 +17,15 @@
 # between them), so the variable is the anomaly in hundredths of a degree times
 # 100 -- i.e. 10000 = 1.00 C.
 #
-# Setting this activates je_global_warming at the next evaluation once the value
-# is above 0.1 C, and will fire the one-shot environmentalism threshold events
-# for every tier crossed, which is the point: it exercises the real path.
+# With the global warming rule ENABLED, setting this activates je_global_warming
+# at the next evaluation once the value is above 0.1 C, and the next monthly
+# pulse fires the one-shot environmentalism threshold events for every tier
+# crossed, which is the point: it exercises the real path.
+#
+# With global_warming_disabled it does neither. The journal entry is gated on the
+# rule, global_warming_events_on_action skips the threshold dispatch, and the
+# same pulse holds the global at 0 (extra_on_actions.txt), so the value set here
+# is gone within a month. Only the display snapshots below move until then.
 #
 # Parameters: $HUNDREDTHS$ = the target value for the global variable
 # Scope: any
