@@ -24,6 +24,7 @@ world_war_events.1 = {
 	# No cooldown: world_war_events.4 paces this on the rival's side.
 	trigger = {
 		exists = scope:ideological_rival
+		has_journal_entry = je_world_war
 		NOT = { has_variable = ww_active_phase }
 	}
 
@@ -312,7 +313,7 @@ world_war_events.3 = {
 			text = world_war_events.3.a
 		}
 		name = {
-			trigger = { always = yes }
+			trigger = { NOT = { ww_can_guarantee_sovereignty = { GUARANTOR = ROOT TARGET = scope:crisis_victim } } }
 			text = world_war_events.3.a_bound
 		}
 		default_option = yes
@@ -439,8 +440,10 @@ world_war_events.4 = {
 	trigger = {
 		NOT = { has_variable = ww_active_phase }
 		ww_ideological_tension >= 30
+		# The target answers in world_war_events.1, whose options read its journal entry
 		any_rival_country = {
 			country_rank >= rank_value:great_power
+			has_journal_entry = je_world_war
 			NOT = { has_variable = ww_active_phase }
 			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
 		}
@@ -454,6 +457,7 @@ world_war_events.4 = {
 			limit = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 				country_rank >= rank_value:great_power
+				has_journal_entry = je_world_war
 				NOT = { has_variable = ww_active_phase }
 				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
 			}
@@ -537,11 +541,15 @@ world_war_events.5 = {
 	cooldown = { days = long_modifier_time }
 
 	immediate = {
-		# Find the primary rival for the war
+		# Find the primary rival for the war. It must hold the journal entry, whose
+		# pulse latches and clears its side variables (world_war_conditions_met
+		# checks the same, so one always exists)
 		random_country = {
 			limit = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 				country_rank >= rank_value:great_power
+				has_journal_entry = je_world_war
+				NOT = { has_variable = ww_peace_concluded }
 				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
 			}
 			save_scope_as = war_target
@@ -844,7 +852,8 @@ world_war_events.12 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
 
-	# Option B: Crack down ruthlessly - secure but brutal
+	# Option B: Rein the resistance in - no attacks without army orders, to spare
+	# civilians the occupier's reprisals; the army approves, the intelligentsia does not
 	option = {
 		name = world_war_events.12.b
 		ai_chance = {
@@ -970,9 +979,6 @@ world_war_events.20 = {
 			set_variable = ww_defender_side
 			set_variable = { name = ww_years_elapsed value = 0 }
 			set_variable = { name = ww_months_counter value = 0 }
-			# We enter a war already under way (a late entrant below great power
-			# has no je_world_war pulse to record it)
-			ww_record_war_began = yes
 		}
 		add_modifier = {
 			name = ww_fresh_forces_modifier
@@ -1252,9 +1258,9 @@ world_war_events.31 = {
 # JE monthly pulse when a belligerent that actually fought is at peace. What it
 # offers depends on how the war ended (latches in world_war_triggers.txt):
 #   won (ww_won_world_war)      - the victor's options; A and B dictate terms to
-#                                 the belligerents we beat (.101 / .102)
-#   lost (ww_capitulated)       - the loser's options; the terms arrive separately
-#   neither (white or negotiated peace with nothing enforced on either side of us)
+#                                 the belligerents we beat outright (.101 / .102)
+#   lost (ww_lost_world_war)    - the loser's options; the terms arrive separately
+#   neither (white peace, or a peace that enforced goals both ways on us)
 #                               - the same non-victor options
 world_war_events.100 = {
 	type = country_event
@@ -1268,7 +1274,7 @@ world_war_events.100 = {
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { has_variable = ww_capitulated }
+				trigger = { ww_lost_world_war = yes }
 				desc = world_war_events.100.d_defeated
 			}
 			triggered_desc = {
@@ -1281,7 +1287,24 @@ world_war_events.100 = {
 			}
 		}
 	}
-	flavor = world_war_events.100.f
+	# The conference scene (a loser receiving terms) fits a war someone won or lost
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						ww_lost_world_war = yes
+						ww_won_world_war = yes
+					}
+				}
+				desc = world_war_events.100.f
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = world_war_events.100.f_no_victory
+			}
+		}
+	}
 
 	duration = 3
 
@@ -1453,8 +1476,8 @@ world_war_events.101 = {
 	duration = 3
 
 	# Sent by a victor's world_war_events.100 option A, only to a belligerent of
-	# the other side that capitulated (trigger_event re-checks this at fire time)
-	trigger = { has_variable = ww_capitulated }
+	# the other side that lost outright (trigger_event re-checks this at fire time)
+	trigger = { ww_lost_world_war = yes }
 
 	# The terms can arrive before our own peace conference (.100), and the options
 	# below clear our side variables so .100 will not follow: end the war phase here.
@@ -1543,8 +1566,8 @@ world_war_events.102 = {
 	duration = 3
 
 	# Sent by a victor's world_war_events.100 option B, only to a belligerent of
-	# the other side that capitulated (trigger_event re-checks this at fire time)
-	trigger = { has_variable = ww_capitulated }
+	# the other side that lost outright (trigger_event re-checks this at fire time)
+	trigger = { ww_lost_world_war = yes }
 
 	# The terms can arrive before our own peace conference (.100), and the options
 	# below clear our side variables so .100 will not follow: end the war phase here.
@@ -1709,7 +1732,7 @@ world_war_events.103 = {
 # Event 104: Post-War Order - reshaping the world after the conflict. The
 # victors decide it; a great power that stayed out of the war (or fought to no
 # decision) gets the neutral reading and cannot claim a victor's sphere. Powers
-# that capitulated do not get it: they receive the victors' terms instead.
+# that lost outright do not get it: they receive the victors' terms instead.
 world_war_events.104 = {
 	type = country_event
 	placement = root
@@ -1750,7 +1773,7 @@ world_war_events.104 = {
 		has_variable = ww_peace_concluded
 		NOT = { has_variable = ww_fully_resolved }
 		country_rank >= rank_value:great_power
-		NOT = { has_variable = ww_capitulated }
+		NOT = { ww_lost_world_war = yes }
 		# Someone won it: after a white peace there is no victors' order to shape
 		any_country = { ww_won_world_war = yes }
 	}

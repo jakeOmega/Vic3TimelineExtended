@@ -25,13 +25,14 @@ ww_clear_outcome_latches = {
 	remove_variable = ww_war_began
 	remove_variable = ww_fought_as_aggressor
 	remove_variable = ww_fought_as_defender
-	remove_variable = ww_capitulated
+	remove_variable = ww_conceded
+	remove_variable = ww_enforced_war_goal
 	remove_variable = ww_peace_terms_received
 }
 
 # Any scope. A new world war is breaking out: clear latches left over from the
 # previous one on countries whose journal entry never completed (it failed when
-# they dropped below great power, or they were late entrants without one).
+# they dropped below great power; on_fail keeps the outcome latches).
 ww_clear_stale_outcome_latches = {
 	every_country = {
 		limit = {
@@ -39,7 +40,8 @@ ww_clear_stale_outcome_latches = {
 				has_variable = ww_war_began
 				has_variable = ww_fought_as_aggressor
 				has_variable = ww_fought_as_defender
-				has_variable = ww_capitulated
+				has_variable = ww_conceded
+				has_variable = ww_enforced_war_goal
 				has_variable = ww_peace_terms_received
 			}
 		}
@@ -61,8 +63,8 @@ ww_clear_unfought_belligerent = {
 
 # Country scope. The war is over for this country: drop every war-phase and
 # leadup modifier (world_war_events.100 immediate, and .101/.102 for a loser the
-# victors' terms reach first). The journal-entry half is guarded because a late
-# entrant below great power, or a power whose journal entry failed, has none.
+# victors' terms reach first). The journal-entry half is guarded because a loser
+# whose journal entry failed (it dropped below great power) no longer has one.
 ww_clear_war_phase_modifiers = {
 	if = {
 		limit = { has_journal_entry = je_world_war }

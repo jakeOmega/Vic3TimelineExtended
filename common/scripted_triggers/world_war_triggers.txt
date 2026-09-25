@@ -115,9 +115,13 @@ world_war_conditions_met = {
 	# world_war_events.5 sets ww_active_phase only in its launch option, so while one
 	# great power is still deciding, this global marks the outbreak as taken.
 	NOT = { has_global_variable = ww_outbreak_pending }
-	# Must have at least one great power rival with opposed ideology
+	# Must have at least one great power rival with opposed ideology that holds the
+	# journal entry (world_war_events.5 picks its target among these: a target
+	# without the entry would never have its side variables latched or cleared)
 	any_rival_country = {
 		country_rank >= rank_value:great_power
+		has_journal_entry = je_world_war
+		NOT = { has_variable = ww_peace_concluded }
 		ROOT = { country_has_opposed_ideology = { TARGET = prev } }
 	}
 	# At least 3 great powers exist (need enough participants)
@@ -175,15 +179,21 @@ country_is_ww_defender = {
 # in te_event_agency_ww_effects.txt):
 #   ww_war_began            - this belligerent was seen fighting the other side
 #                             (ww_is_fighting_world_war, in the je_world_war pulse;
-#                             world_war_events.20 for late entrants). Peace
-#                             detection waits for it.
+#                             every belligerent, late entrants included, holds the
+#                             journal entry). Peace detection waits for it.
 #   ww_fought_as_aggressor / ww_fought_as_defender
 #                           - the side it fought on, copied from the live variable
 #                             when ww_war_began is set
-#   ww_capitulated          - it lost: it capitulated (on_capitulation) or had an
-#                             enemy war goal enforced on it (on_wargoal_enforced);
-#                             see common/on_actions/te_event_agency_ww_on_actions.txt
+#   ww_conceded             - a belligerent of the other side enforced a war goal
+#                             on it (capitulation or negotiated peace alike)
+#   ww_enforced_war_goal    - it enforced a war goal on a belligerent of the
+#                             other side
+#                             (both from on_wargoal_enforced; see
+#                             common/on_actions/te_event_agency_ww_on_actions.txt)
 #   ww_peace_terms_received - a victor has already sent it .101 or .102
+# Outcomes are per country, not per side: a power can win against a beaten enemy
+# while one of its own allies lost to another, and a peace that enforced goals
+# both ways leaves a power that did both with no victory and no defeat.
 # ============================================================================
 
 # --- True if this belligerent is at war with a belligerent of the other side:
@@ -229,21 +239,30 @@ ww_fought_alongside = {
 	}
 }
 
-# --- True if this country won: it fought, did not capitulate, and at least one
-# belligerent on the other side did. A war that ended in a white peace or a
-# negotiated peace with no enforced war goals has no winner.
+# --- True if this country won: it fought, conceded nothing, and at least one
+# belligerent on the other side conceded a war goal. A war that ended in a white
+# peace, or with no war goal enforced on anyone, has no winner.
 ww_won_world_war = {
 	ww_fought_world_war = yes
-	NOT = { has_variable = ww_capitulated }
+	NOT = { has_variable = ww_conceded }
 	any_country = {
-		has_variable = ww_capitulated
+		has_variable = ww_conceded
 		ww_fought_against = { COUNTRY = prev }
 	}
 }
 
-# --- True if this country lost and is still owed peace terms by $VICTOR$ ---
+# --- True if this country lost outright: it conceded war goals to the other
+# side and enforced none of its own. A peace that enforced goals both ways
+# (ww_conceded and ww_enforced_war_goal) is no defeat, and no victory either.
+ww_lost_world_war = {
+	has_variable = ww_conceded
+	NOT = { has_variable = ww_enforced_war_goal }
+}
+
+# --- True if this country lost outright and is still owed peace terms by
+# $VICTOR$ (world_war_events.101 / .102) ---
 ww_awaits_terms_from = {
-	has_variable = ww_capitulated
+	ww_lost_world_war = yes
 	NOT = { has_variable = ww_peace_terms_received }
 	is_at_war = no
 	ww_fought_against = { COUNTRY = $VICTOR$ }

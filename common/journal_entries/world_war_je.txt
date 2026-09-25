@@ -161,11 +161,11 @@ je_world_war = {
 		remove_variable = ww_peace_months
 		remove_variable = ww_fully_resolved
 		remove_variable = ww_war_began
-		# The outcome latches (ww_fought_as_*, ww_capitulated, ww_peace_terms_received)
-		# are kept on purpose: a defeated power often drops below great power before
-		# the victors' peace conference fires, and the victors find the powers they
-		# beat by these latches. The next outbreak clears them
-		# (ww_clear_stale_outcome_latches in world_war_events.5).
+		# The outcome latches (ww_fought_as_*, ww_conceded, ww_enforced_war_goal,
+		# ww_peace_terms_received) are kept on purpose: a defeated power often drops
+		# below great power before the victors' peace conference fires, and the
+		# victors find the powers they beat by these latches. The next outbreak
+		# clears them (ww_clear_stale_outcome_latches in world_war_events.5).
 	}
 
 	on_monthly_pulse = {
