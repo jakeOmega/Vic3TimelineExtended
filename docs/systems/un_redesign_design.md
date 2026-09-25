@@ -125,6 +125,12 @@ Not yet seen in a running game. The same branch fixed two display bugs in the ch
   joining at will, and the row then shows it as serving.
 - **No map or state-panel control.** Joining is from the chamber only. The state tile's
   contributor count shows the result.
+- **A volunteer that later pledges or answers an appeal for the same mission** stops being
+  billed as a volunteer (`un_mission_add_contributor` drops it from `un_msn_volunteers`), but
+  the cost modifier only updates at its next monthly pulse, so for up to a month it pays both.
+- **Within one resolution's row**, a country that both voted and holds a lobbying commitment
+  still has both lines gathered under one header (gotcha #27). The lines stay together and
+  readable, so this was left alone.
 
 ### IN-GAME VERIFICATION CHECKLIST (§0.7)
 

@@ -191,8 +191,10 @@ un_mission_ai_join_score = {
 			limit = { has_diplomatic_pact = { who = ROOT type = rivalry } }
 			add = -20
 		}
+		# The host matters to us (the lean's direction: relevant FOR the
+		# scoped country).
 		if = {
-			limit = { has_diplomatic_relevance = ROOT }
+			limit = { ROOT = { has_diplomatic_relevance = PREV } }
 			add = 5
 		}
 		add = {

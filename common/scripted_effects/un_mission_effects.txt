@@ -172,11 +172,18 @@ un_mission_join_host = {
 }
 
 # The scoped country joins scope:un_msn_new as a contributor (once), and the
-# mission's strength is re-read at once.
+# mission's strength is re-read at once. A volunteer that now pledges or
+# answers an appeal for the same mission pays through that path from now on,
+# so it is no longer billed as a volunteer (un_mission_volunteer adds it to
+# un_msn_volunteers after this).
 # Scope: the contributing country; expects scope:un_msn_new
 un_mission_add_contributor = {
 	save_scope_as = un_msn_contributor
 	scope:un_msn_new ?= {
+		if = {
+			limit = { un_lobby_in_list = { LIST = un_msn_volunteers COUNTRY = scope:un_msn_contributor } }
+			remove_list_variable = { name = un_msn_volunteers target = scope:un_msn_contributor }
+		}
 		if = {
 			limit = {
 				has_tag = un_msn_active
@@ -311,6 +318,7 @@ un_mission_volunteer = {
 	save_temporary_scope_as = un_msn_volunteer
 	un_mission_volunteer_tooltip = yes
 	hidden_effect = {
+		un_mission_add_contributor = yes
 		scope:un_msn_new ?= {
 			if = {
 				limit = { NOT = { un_lobby_in_list = { LIST = un_msn_volunteers COUNTRY = scope:un_msn_volunteer } } }
@@ -318,7 +326,6 @@ un_mission_volunteer = {
 			}
 			var:un_msn_host ?= { post_notification = un_mission_reinforced_notice }
 		}
-		un_mission_add_contributor = yes
 		un_mission_service_refresh = yes
 	}
 }
