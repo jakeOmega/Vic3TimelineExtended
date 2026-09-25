@@ -1304,7 +1304,10 @@ decolonization_events.12 = {
 		}
 	}
 
+	# REVIEWED 2026-09-25 (imputed_foreign_action): supporting_power is picked only among great powers carrying gp_pro_colonial_stance, which each chose (decolonization_events.14.c); the text describes that public stance, not an offer it never made, and the notices it receives report how we answered its stance.
+
 	immediate = {
+		save_scope_as = backed_colonial_power
 		random_country = {
 			limit = {
 				NOT = { this = root }
