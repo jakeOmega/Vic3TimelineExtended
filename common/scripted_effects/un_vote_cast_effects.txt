@@ -198,19 +198,19 @@ un_vote_cast_yes = {
 
 			# Relations damage with vote target on hostile resolutions
 			# (mirrors the NO-vote +15-with-target solidarity bonus). Voting yes
-			# on a condemn/sanctions/icc/expulsion vote is a public hostile act
-			# against the target — it shouldn't be a free vote. Skip when voter
-			# == target (the target-perspective branch above handles that case).
+			# on a resolution that accuses its target — condemnation, sanctions,
+			# a military mandate against it, a motion to strip its seat — is a
+			# public hostile act against the target; it shouldn't be a free
+			# vote. un_resolution_accuses_target is the one list of those
+			# topics, shared with the lean (un_lean_target) and the
+			# target-perspective branch above; the mandate used to be missing
+			# here, so a member could license a war on its own ally for free.
+			# Skip when voter == target (the branch above handles that case).
 			if = {
 				limit = {
 					exists = scope:un_vote_target
 					NOT = { scope:un_vote_target ?= this }
-					OR = {
-						scope:un_resolution ?= { has_tag = un_topic_condemn }
-						scope:un_resolution ?= { has_tag = un_topic_sanctions }
-						scope:un_resolution ?= { has_tag = un_topic_icc }
-						scope:un_resolution ?= { has_tag = un_topic_expulsion }
-					}
+					scope:un_resolution ?= { un_resolution_accuses_target = yes }
 				}
 				change_relations = { country = scope:un_vote_target value = -15 }
 				create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_target }
@@ -275,16 +275,15 @@ un_vote_cast_no = {
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
 		}
 
-		# Relations boost with vote target (solidarity against condemnation/sanctions).
+		# Relations boost with vote target: solidarity against a resolution
+		# that accuses it (condemnation, sanctions, a military mandate against
+		# it, a motion to strip its seat — un_resolution_accuses_target).
 		# Skip when voter == target — self-loop relations / catalyst is a no-op.
 		if = {
 			limit = {
 				exists = scope:un_vote_target
 				NOT = { scope:un_vote_target ?= this }
-				OR = {
-					scope:un_resolution ?= { has_tag = un_topic_condemn }
-					scope:un_resolution ?= { has_tag = un_topic_sanctions }
-				}
+				scope:un_resolution ?= { un_resolution_accuses_target = yes }
 			}
 			change_relations = { country = scope:un_vote_target value = 15 }
 			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_target }
@@ -400,15 +399,13 @@ un_vote_cast_veto = {
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:un_vote_proposer }
 		}
 
-		# Relations boost with the protected target (sanctions/condemn)
+		# Relations boost with the protected target, on every resolution that
+		# accuses it (un_resolution_accuses_target).
 		if = {
 			limit = {
 				exists = scope:un_vote_target
 				NOT = { scope:un_vote_target ?= this }
-				OR = {
-					scope:un_resolution ?= { has_tag = un_topic_condemn }
-					scope:un_resolution ?= { has_tag = un_topic_sanctions }
-				}
+				scope:un_resolution ?= { un_resolution_accuses_target = yes }
 			}
 			change_relations = { country = scope:un_vote_target value = 20 }
 			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:un_vote_target }
