@@ -1395,7 +1395,7 @@ law_minority_rights_violent_hostility = {
 		state_violence_against_minorities_bool = yes
 
 		# Homeland system: violence both clears minorities and lets the dominant culture stake homelands cheaply (most extreme minority-rights law).
-		# As one of the two "most extreme" laws, it self-enables the dynamic-homeland system (alongside ethnostate, the decolonization tech, and power-bloc principles).
+		# One of the three laws that self-enable the dynamic-homeland system (with ethnostate and linguistic purity); the mass_media tech and Cultural Unity principle tiers II+ also enable it.
 		country_homelands_can_change_bool = yes
 		state_homeland_creation_threshold_add = -0.20
 		state_homeland_removal_threshold_add = 0.10
@@ -2755,8 +2755,8 @@ law_linguistic_purity = {
 		country_acceptance_no_shared_language_trait_add = -20
 
 		# Homeland system: coercive suppression aggressively reshapes demographics.
-		# One of the three "most extreme" laws that self-enable the system (alongside ethnostate + violent_hostility);
-		# also enabled by the decolonization tech and power-bloc principles.
+		# One of the three laws that self-enable the system (with ethnostate and violent_hostility);
+		# the mass_media tech and Cultural Unity principle tiers II+ also enable it.
 		country_homelands_can_change_bool = yes
 		state_homeland_creation_threshold_add = -0.10
 		state_homeland_removal_threshold_add = 0.10
