@@ -31,6 +31,11 @@ un_events.1 = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = un_events.1.t
+	# The organisation already exists when this arrives: it is the founder's
+	# invitation (un_charter_invitations, which saves scope:un_charter_founder),
+	# sent after un_found_button or a founding conference (a refounding after a
+	# dissolution). The first paragraph is our government's view; the second
+	# names who invites us, and says so when this is a refounding.
 	desc = {
 		first_valid = {
 			triggered_desc = { desc = un_events.1.d_council trigger = { has_law = law_type:law_council_republic } }
@@ -38,13 +43,27 @@ un_events.1 = {
 			triggered_desc = { desc = un_events.1.d_theocratic trigger = { has_law = law_type:law_theocracy } }
 			desc = un_events.1.d
 		}
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.1.d_refounded
+				trigger = {
+					exists = scope:un_charter_founder
+					un_has_been_dissolved = yes
+				}
+			}
+			triggered_desc = {
+				desc = un_events.1.d_founder
+				trigger = { exists = scope:un_charter_founder }
+			}
+		}
 	}
 	flavor = un_events.1.f
 
 	duration = 3
 
 	trigger = {
-		# Fired globally by on_action when 3+ great powers have the tech
+		# Fired by un_charter_invitations to every other recognized independent
+		# country once the UN is founded or refounded
 		NOT = { has_variable = un_charter_signed }
 		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		is_subject = no
@@ -66,7 +85,9 @@ un_events.1 = {
 				add = -6
 			}
 		}
-		# First signatory hosts UN Headquarters
+		# Hosts UN Headquarters only if no host is set. un_found_organisation
+		# makes the founder the host before any invitation goes out, so this is a
+		# fallback, not the usual path.
 		if = {
 			limit = { NOT = { has_global_variable = un_hq_country } }
 			set_global_variable = { name = un_hq_country value = ROOT }
@@ -636,7 +657,17 @@ un_events.5 = {
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = un_events.5.t
-	desc = un_events.5.d
+	# "The very institution we helped create" only for a founding member (the
+	# founder or a charter signatory, un_founding_member_modifier).
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.5.d_founder
+				trigger = { je:je_united_nations ?= { has_modifier = un_founding_member_modifier } }
+			}
+			desc = un_events.5.d
+		}
+	}
 	flavor = un_events.5.f
 
 	duration = 3
@@ -1087,8 +1118,23 @@ un_events.8 = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
 	title = un_events.8.t
+	# The case is the appeal the plaintiff took to court from un_events.2,
+	# whose cause still sits on us (var:un_dkt_cause lasts 180 days; this fires
+	# 30 days after the filing). An exposed covert operation (cause 3) is not a
+	# matter of military conduct. Cause 3 is written only from the covert
+	# system's exposure (covert_warfare.1), so the rule check restates a
+	# dependency rather than adding a condition.
 	desc = {
-		desc = un_events.8.d
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.8.d_covert
+				trigger = {
+					has_game_rule = covert_warfare_enabled
+					un_docket_cause_is = { CAUSE = 3 }
+				}
+			}
+			desc = un_events.8.d
+		}
 		triggered_desc = {
 			desc = un_events.8.d_plaintiff
 			trigger = { exists = scope:court_plaintiff }
