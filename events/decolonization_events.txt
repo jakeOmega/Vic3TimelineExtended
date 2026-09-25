@@ -633,8 +633,11 @@ decolonization_events.5 = {
 
 	duration = 3
 
+	# The overture must still stand three days on: a colony annexed or
+	# collapsed in the meantime has proposed nothing we could answer.
 	trigger = {
 		exists = scope:former_colony
+		scope:former_colony = { is_country_alive = yes }
 	}
 
 	immediate = {
@@ -700,8 +703,15 @@ decolonization_events.6 = {
 
 	duration = 3
 
+	# The claim must still stand three days on: a claimant annexed or
+	# collapsed in the meantime is owed nothing, and option A reads the sum
+	# it named (var:decol_reparations_claim, set by .61).
 	trigger = {
 		exists = scope:reparations_claimant
+		scope:reparations_claimant = {
+			is_country_alive = yes
+			has_variable = decol_reparations_claim
+		}
 	}
 
 	immediate = {
@@ -714,8 +724,8 @@ decolonization_events.6 = {
 		ai_chance = { base = 1 }
 		# The sum the claimant named in decolonization_events.61 changes hands:
 		# out of our treasury, into theirs (the swap-settle shape of
-		# te_mon_effect_swap_settle). decol_reparations_value sized it.
-		custom_tooltip = decolonization_events.6.a_tt
+		# te_mon_effect_swap_settle). decol_reparations_value sized it; .6.d
+		# names it, and the two add_treasury tooltips show it moving.
 		add_treasury = {
 			value = scope:reparations_claimant.var:decol_reparations_claim
 			multiply = -1
@@ -3206,7 +3216,18 @@ decolonization_events.206 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
-	title = decolonization_events.206.t
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = decol_chosen_releases }
+				desc = decolonization_events.206.t
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.206.t_neutral
+			}
+		}
+	}
 	desc = {
 		first_valid = {
 			triggered_desc = {
@@ -3252,13 +3273,16 @@ decolonization_events.206 = {
 		remove_variable = decol_chosen_releases
 	}
 
+	# Nothing was negotiated or chosen on this branch, so it does not get the
+	# "Negotiated Withdrawal" label: post_imperial_modifier carries the same
+	# values under a name that is true however the colonies went.
 	option = {
 		name = decolonization_events.206.b
 		trigger = { NOT = { has_variable = decol_chosen_releases } }
 		default_option = yes
 		ai_chance = { base = 5 }
 		add_modifier = {
-			name = negotiated_withdrawal_modifier
+			name = post_imperial_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}
