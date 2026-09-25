@@ -1220,6 +1220,12 @@ Events 1-15 handle the core colonial cycle: negotiations, crackdowns, releases, 
 - **Only colonial subjects count.** `.1`/`.2`/`.3`/`.8`/`.11` iterate `is_qualifying_colonial_subject` only.
 - **`.206`'s "by decision" epilogue** needs a chosen release. `decol_record_chosen_release` counts them (`decol_chosen_releases`); otherwise a neutral variant shows.
 
+**Former colonies, colonial wars and notices (2026-09, #430):**
+- **Every freed colony is a former colony.** `decol_mark_former_colony` (`decolonization.txt`) sets `var:former_overlord` (untimed) and `recently_decolonized` (7300 days), the shapes the vanilla release actions set in `te_construction_market_on_released_*`. `apply_decolonization_path` calls it for every country `form_decolonized_country` creates, and so do the `make_independent` options `.1.c`, `.1.d_neo`, `.3.a` and `.3.c`. Before this, those countries never reached the former-colony events (`.5`, `.6`, `.7`, `.19`, `.60`, `.61`) or the post-independence ones (`.16`, `.17`, `.18`, `.21`).
+- **`.51` (Conscription Crisis) fires only in a colonial war.** The trigger is `decol_fighting_colonial_war` (`colonial_empire_triggers.txt`), used by both the event and its pool entry. It is true when the country is at war and one of these holds: the colonial crackdown is running, an enemy is its own qualifying colonial subject, or an enemy is a secessionist people sharing no heritage with it. Other wars still drain the bar through `colonial_stability_term_war`.
+- **`.50`'s City-and-sterling text is Britain's** (`c:GBR ?= this`). Every other empire gets a generic treasury text, since the mod models no per-country currency.
+- **Notices name the colonial power.** `.1`, `.2`, `.3` and `.11` save it as `scope:decol_colonial_power` for their `notification_*` loc. A message reads only `notification_<msg>_name/_desc/_tooltip`, never a bare key.
+
 ### AI Behavior Tuning
 
 AI weights across events are tuned to favor decolonization:
@@ -1644,6 +1650,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 - **Activation gate:** JE shows once the rule is enabled, any country has `mass_media`, and the player has `romanticism`.
 - **Monument scoring:** `cultural_pull_from_monuments` now excludes `building_power_bloc_statue`, even though power bloc statues sit inside `bg_monuments`.
 - **Scope pattern:** Persistent cultural-hegemony policy effects live on `je:je_cultural_hegemony`, not on the country, so the JE remains the single source of truth for both display and cleanup.
+- **Event modifiers live there too.** Every `ch_*` modifier an event grants goes on `je:je_cultural_hegemony`, and an event's cooldown guard reads it there: `NOT = { je:je_cultural_hegemony ?= { has_modifier = X } }`. `legacy_je_modifier_cleanup_effect` strips a country-level copy of any of them every month. Until #430, `.6.b` and `.9.a` granted theirs to the country, so those rewards vanished at the next pulse. The guards in `.1`, `.3`, `.5`, `.10`–`.13` and `.16` also read the country, so they never fired.
 
 ---
 
