@@ -88,6 +88,7 @@ un_events.1 = {
 		# Hosts UN Headquarters only if no host is set. un_found_organisation
 		# makes the founder the host before any invitation goes out, so this is a
 		# fallback, not the usual path.
+		# REVIEWED 2026-09-25 (silent_variable): the un_headquarters_modifier beside it shows as "UN Headquarters Host"
 		if = {
 			limit = { NOT = { has_global_variable = un_hq_country } }
 			set_global_variable = { name = un_hq_country value = ROOT }
@@ -473,13 +474,9 @@ un_events.3 = {
 		custom_tooltip = un_vote_initiated_tt
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
-		# Progressives love it
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
-		hidden_effect = {
-			un_resolution_open = { TOPIC = human_rights }
-		}
+		# What tabling it does — the same script the chamber's Propose
+		# control runs (un_propose_human_rights_table, un_propose_effects.txt).
+		un_propose_human_rights_table = yes
 	}
 
 	# Option B: Leave it to another delegation. Redesign phase 4: the docket
@@ -1320,11 +1317,9 @@ un_events.9 = {
 		custom_tooltip = un_vote_initiated_tt
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
-		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
-		hidden_effect = {
-			un_resolution_open = { TOPIC = heritage }
-		}
+		# What tabling it does — the same script the chamber's Propose
+		# control runs (un_propose_heritage_table, un_propose_effects.txt).
+		un_propose_heritage_table = yes
 	}
 
 	# Option B: Leave it to another delegation. Redesign phase 4: the docket
@@ -1709,18 +1704,9 @@ un_events.12 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer champions decolonization
-		add_modifier = {
-			name = un_decolonization_champion_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
-		hidden_effect = {
-			un_resolution_open = { TOPIC = decolonization }
-		}
+		# What tabling it does — the same script the chamber's Propose
+		# control runs (un_propose_decolonization_table, un_propose_effects.txt).
+		un_propose_decolonization_table = yes
 	}
 
 	# Option B: Defend development programs in overseas territories
@@ -1835,12 +1821,9 @@ un_events.14 = {
 		custom_tooltip = un_vote_initiated_tt
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
-		hidden_effect = {
-			un_resolution_open = { TOPIC = npt }
-		}
+		# What tabling it does — the same script the chamber's Propose
+		# control runs (un_propose_npt_table, un_propose_effects.txt).
+		un_propose_npt_table = yes
 	}
 
 	# Option B: Leave it to another delegation. Redesign phase 4: the docket
@@ -1850,6 +1833,12 @@ un_events.14 = {
 		name = un_docket_option_pass
 		ai_chance = {
 			base = 3
+			# An AI that lobbied for the treaty (nuclear_weapon_events.18
+			# option d, which offered it this item) tables it.
+			modifier = {
+				trigger = { has_variable = nuclear_npt_lobbied }
+				factor = 0
+			}
 		}
 		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
@@ -1870,6 +1859,11 @@ un_events.14 = {
 			modifier = {
 				trigger = { is_at_war = yes }
 				add = 3
+			}
+			# As for passing: an AI that lobbied for the treaty does not refuse it.
+			modifier = {
+				trigger = { has_variable = nuclear_npt_lobbied }
+				factor = 0
 			}
 		}
 		add_modifier = {
@@ -2056,12 +2050,9 @@ un_events.16 = {
 		custom_tooltip = un_vote_initiated_tt
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
-		hidden_effect = {
-			un_resolution_open = { TOPIC = pandemic }
-		}
+		# What tabling it does — the same script the chamber's Propose
+		# control runs (un_propose_pandemic_table, un_propose_effects.txt).
+		un_propose_pandemic_table = yes
 	}
 
 	# Option B: Leave it to another delegation. Redesign phase 4: the docket
@@ -2171,12 +2162,9 @@ un_events.17 = {
 		custom_tooltip = un_vote_initiated_tt
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
-		hidden_effect = {
-			un_resolution_open = { TOPIC = climate }
-		}
+		# What tabling it does — the same script the chamber's Propose
+		# control runs (un_propose_climate_table, un_propose_effects.txt).
+		un_propose_climate_table = yes
 	}
 
 	# Option B: Leave it to another delegation. Redesign phase 4: the docket
@@ -2280,49 +2268,10 @@ un_events.18 = {
 		un_vote_reserve = yes
 		# The country the displaced are fleeing: one struck by famine, or by a
 		# war that has devastated a state, when there is one; otherwise any
-		# country the trigger found (at war, or with a state in misery).
-		if = {
-			limit = {
-				any_country = {
-					NOT = { this = ROOT }
-					NOT = { is_country_type = decentralized }
-					OR = {
-						any_scope_state = { has_famine = yes }
-						AND = {
-							is_at_war = yes
-							any_scope_state = { devastation > un_docket_war_devastation }
-						}
-					}
-				}
-			}
-			random_country = {
-				limit = {
-					NOT = { this = ROOT }
-					NOT = { is_country_type = decentralized }
-					OR = {
-						any_scope_state = { has_famine = yes }
-						AND = {
-							is_at_war = yes
-							any_scope_state = { devastation > un_docket_war_devastation }
-						}
-					}
-				}
-				save_scope_as = refugee_source
-			}
-		}
-		else = {
-			random_country = {
-				limit = {
-					NOT = { this = ROOT }
-					NOT = { is_country_type = decentralized }
-					OR = {
-						is_at_war = yes
-						any_scope_state = { average_sol < 6 }
-					}
-				}
-				save_scope_as = refugee_source
-			}
-		}
+		# country at war or with a state in misery. The same pick the
+		# chamber's Propose control previews (un_propose_refugee_select_target).
+		un_propose_refugee_select_target = yes
+		scope:un_propose_refugee_target ?= { save_scope_as = refugee_source }
 	}
 
 	# Option A: Propose international refugee resolution to the General Assembly
@@ -2339,18 +2288,9 @@ un_events.18 = {
 		custom_tooltip = un_vote_initiated_tt
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
-		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
-		# Open the vote: every other UN member votes, results in a year.
-		# The source is the resolution's target, so that un_vote.2 can offer
-		# its displaced resettlement when the resolution carries
-		# (un_events.103). A refugee resolution accuses nobody: the vote
-		# effects treat a target as accused only on the accusing topics
-		# (un_resolution_accuses_target), so the source voting for it is an
-		# ordinary yes, not a confession.
-		hidden_effect = {
-			scope:refugee_source ?= { save_scope_as = un_vote_target }
-			un_resolution_open = { TOPIC = refugee }
-		}
+		# What tabling it does — the same script the chamber's Propose
+		# control runs (un_propose_refugee_table, un_propose_effects.txt).
+		un_propose_refugee_table = yes
 	}
 
 	# Option B: Leave it to another delegation. Redesign phase 4: the docket
@@ -2458,11 +2398,9 @@ un_events.19 = {
 		custom_tooltip = un_vote_initiated_tt
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
-		hidden_effect = {
-			un_resolution_open = { TOPIC = space }
-		}
+		# What tabling it does — the same script the chamber's Propose
+		# control runs (un_propose_space_table, un_propose_effects.txt).
+		un_propose_space_table = yes
 	}
 
 	# Option B: Leave it to another delegation. Redesign phase 4: the docket
@@ -2910,12 +2848,9 @@ un_events.21 = {
 		custom_tooltip = un_vote_initiated_tt
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
-		hidden_effect = {
-			un_resolution_open = { TOPIC = law_of_sea }
-		}
+		# What tabling it does — the same script the chamber's Propose
+		# control runs (un_propose_law_of_sea_table, un_propose_effects.txt).
+		un_propose_law_of_sea_table = yes
 	}
 
 	# Option B: Leave it to another delegation. Redesign phase 4: the docket
@@ -3020,12 +2955,9 @@ un_events.22 = {
 		custom_tooltip = un_vote_initiated_tt
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
-		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
-		hidden_effect = {
-			un_resolution_open = { TOPIC = icc }
-		}
+		# What tabling it does — the same script the chamber's Propose
+		# control runs (un_propose_icc_table, un_propose_effects.txt).
+		un_propose_icc_table = yes
 	}
 
 	# Option B: Leave it to another delegation. Redesign phase 4: the docket

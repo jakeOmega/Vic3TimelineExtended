@@ -521,12 +521,26 @@ un_chamber_vote_sgui = {
 #   op 5   request humanitarian aid
 #   op 6   charter reform (redesign phase 2)
 #
+#   The ten conventions, which the docket also raises (no scripted button):
+#   op 7   Universal Declaration of Human Rights
+#   op 8   International Criminal Court
+#   op 9   Nuclear Non-Proliferation Treaty
+#   op 10  Climate Accord
+#   op 11  Global Pandemic Response
+#   op 12  International Refugee Resolution
+#   op 13  Cultural Heritage Program
+#   op 14  Decolonization Resolution
+#   op 15  International Space Cooperation
+#   op 16  Convention on the Law of the Sea
+#
 # The op table is repeated in the widget and in the row renderers in
 # common/scripted_effects/un_chamber_display_effects.txt; keep all three in
-# step. Every gate and every effect is the journal-entry button's own, shared
-# through common/scripted_triggers/un_propose_triggers.txt and
-# common/scripted_effects/un_propose_effects.txt, so a human proposing here and
-# an AI proposing through the button grid run identical script.
+# step (test_un_chamber_propose_ops.py checks that they are). Every gate and
+# every effect is shared through common/scripted_triggers/un_propose_triggers.txt
+# and common/scripted_effects/un_propose_effects.txt: ops 0-6 with the
+# journal-entry buttons, so a human proposing here and an AI proposing through
+# the button grid run identical script; ops 7-16 with the docket's proposer
+# events, which call the same un_propose_<key>_table the Propose control does.
 #
 # `is_shown` is membership alone, deliberately: a topic we have no case for
 # stays visible and disabled, with the reason in the row and in the button's
@@ -600,6 +614,86 @@ un_chamber_propose_sgui = {
 			}
 			un_propose_reform_possible = yes
 		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_human_rights
+				un_propose_human_rights_available = yes
+			}
+			un_propose_human_rights_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_icc
+				un_propose_icc_available = yes
+			}
+			un_propose_icc_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_npt
+				un_propose_npt_available = yes
+			}
+			un_propose_npt_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_climate
+				un_propose_climate_available = yes
+			}
+			un_propose_climate_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_pandemic
+				un_propose_pandemic_available = yes
+			}
+			un_propose_pandemic_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_refugee
+				un_propose_refugee_available = yes
+			}
+			un_propose_refugee_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_heritage
+				un_propose_heritage_available = yes
+			}
+			un_propose_heritage_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_decolonization
+				un_propose_decolonization_available = yes
+			}
+			un_propose_decolonization_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_space
+				un_propose_space_available = yes
+			}
+			un_propose_space_possible = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_law_of_sea
+				un_propose_law_of_sea_available = yes
+			}
+			un_propose_law_of_sea_possible = yes
+		}
 		trigger_else = {
 			always = no
 		}
@@ -633,6 +727,46 @@ un_chamber_propose_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 6 }
 			un_propose_reform_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_propose_human_rights_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			un_propose_icc_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			un_propose_npt_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			un_propose_climate_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			un_propose_pandemic_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			un_propose_refugee_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			un_propose_heritage_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			un_propose_decolonization_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			un_propose_space_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			un_propose_law_of_sea_effect = yes
 		}
 	}
 }
@@ -682,6 +816,46 @@ un_chamber_propose_row_sgui = {
 				limit = { exists = scope:op scope:op = 6 }
 				un_chamber_propose_reform_row = yes
 			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 7 }
+				un_chamber_propose_human_rights_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 8 }
+				un_chamber_propose_icc_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 9 }
+				un_chamber_propose_npt_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 10 }
+				un_chamber_propose_climate_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 11 }
+				un_chamber_propose_pandemic_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 12 }
+				un_chamber_propose_refugee_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 13 }
+				un_chamber_propose_heritage_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 14 }
+				un_chamber_propose_decolonization_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 15 }
+				un_chamber_propose_space_row = yes
+			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 16 }
+				un_chamber_propose_law_of_sea_row = yes
+			}
 		}
 	}
 }
@@ -699,16 +873,19 @@ un_chamber_docket_sgui = {
 	}
 }
 
-# The ten topics with no proposal control: what they are, and whether a
-# recent resolution has put one on cooldown.
-un_chamber_assembly_business_sgui = {
+# Whether the climate accord's proposal row is shown at all: never under the
+# disabled global warming rule, where the accord is never raised. A yes/no
+# question read from the root only, like the ones above (gotcha #22), so the
+# row's visibility does not depend on a saved scope reaching is_shown.
+un_chamber_climate_rule_sgui = {
 	scope = country
 
+	is_shown = {
+		has_game_rule = global_warming_enabled
+	}
+	ai_is_valid = { always = no }
+
 	effect = {
-		if = {
-			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-			un_chamber_assembly_business_block = yes
-		}
 	}
 }
 

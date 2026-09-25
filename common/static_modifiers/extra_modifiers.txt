@@ -4769,6 +4769,9 @@ banking_event_cooperative_growth = {
 	building_group_bg_agriculture_throughput_add = 0.03
 }
 
+# PENDING REMOVAL (2026-09-25, #428): banking_cycle_events.31 now enacts the
+# dashboard's cb_bank_holiday instead. Kept for saves that carry it — see
+# common/scripted_effects/legacy_modifier_cleanup.txt.
 banking_event_bank_holiday = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	goods_output_services_mult = -0.05
@@ -6474,8 +6477,9 @@ covert_space_espionage = {
 }
 
 # Applied to TARGET while a space-programme espionage operation runs against
-# it, so covert_warfare.2 can tell the defender when one is burned. Same shape
-# as the industrial and military espionage markers.
+# it: the same counter-intel cost as the industrial and military espionage
+# markers. (It was added so covert_warfare.2 could key on it; since #430 that
+# event reads covert_op_burn's exposure record instead.)
 covert_space_espionage_detected = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	country_authority_add = -3

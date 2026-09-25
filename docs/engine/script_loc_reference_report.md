@@ -104,6 +104,11 @@ Suppress an intentional case with a trailing comment on the same line:
 - line 357: `desc = POWER_BLOC_MANDATE_PROGRESS_AVERAGE_LITERACY`
 - line 362: `desc = POWER_BLOC_MANDATE_PROGRESS_NUM_STATES`
 
+### `common/scripted_effects/un_chamber_display_effects.txt` (2)
+
+- line 1192: `custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown`
+- line 1296: `custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown`
+
 ### `common/treaty_articles/05_transfer_money.txt` (1)
 
 - line 550: `desc = INFAMY_MONEY_TRANSFER_QUANTITY_ROOT_HAS_ALREADY_ESTABLISHED_FACTOR`
@@ -120,8 +125,8 @@ _None._
 ## Coverage
 
 - files audited: 489
-- references checked: 7236
-- total flags: 73
-- unreviewed: 73
+- references checked: 7038
+- total flags: 75
+- unreviewed: 75
 - exempted: 0
 

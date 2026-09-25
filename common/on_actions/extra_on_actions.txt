@@ -2912,9 +2912,10 @@ irredentism_events_on_action = {
 				any_country = {
 					NOT = { THIS = ROOT }
 					NOT = { is_country_type = decentralized }
-					ROOT = {
-						any_primary_culture = { is_primary_culture_of = PREV }
-					}
+					# Shares a primary culture with ROOT. Not `ROOT = { any_primary_culture
+					# = { is_primary_culture_of = PREV } }`: PREV there is ROOT itself,
+					# which made this test always true (prev_scope_audit).
+					any_primary_culture = { is_primary_culture_of = ROOT }
 					any_scope_state = {
 						is_homeland_of_country_cultures = ROOT
 						has_claim_by = ROOT
@@ -2932,9 +2933,10 @@ irredentism_events_on_action = {
 					trigger = {
 						any_country = {
 							NOT = { THIS = ROOT }
-							ROOT = {
-								any_primary_culture = { is_primary_culture_of = PREV }
-							}
+							# Shares a primary culture with ROOT. Not `ROOT = { any_primary_culture
+							# = { is_primary_culture_of = PREV } }`: PREV there is ROOT itself,
+							# which made this test always true (prev_scope_audit).
+							any_primary_culture = { is_primary_culture_of = ROOT }
 							ROOT.relations:THIS >= relations_threshold:amicable
 						}
 					}

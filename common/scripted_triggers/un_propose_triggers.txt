@@ -22,10 +22,26 @@
 # topic, un_propose_reform_*): it is also still raised by its proposer event,
 # un_events.6, under the same gates.
 #
-# The remaining ten topics (human rights, heritage, decolonization, NPT,
-# pandemic, climate, refugee, space, law of the sea, ICC) are raised by the
-# proposer events in events/un_events.txt and have no button and no trigger
-# here — see docs/systems/journal_entry_systems.md § The chamber widget.
+# THE TEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
+# heritage, decolonization, space, law of the sea) are at the bottom of the
+# file. The docket raises them for everyone through the proposer events in
+# events/un_events.txt; a human member may also table one from the chamber on
+# its own motion. They have no scripted button: the AI reaches them only
+# through the docket, which paces the floor (un_docket_effects.txt), and a
+# button with an ai_chance would let it skip that pacing. Each has, besides
+# the two gates above,
+#
+#   un_propose_<key>_in_force    the question is settled: its agency founded,
+#                                or (decolonization) its regime standing. The
+#                                chamber hides the Propose control.
+#   un_propose_<key>_qualifies   the per-country conditions the docket also
+#                                asks before offering it (technology, rank,
+#                                not already a party, no recent refusal):
+#                                un_docket_may_propose_<key> calls it, so the
+#                                two paths cannot drift.
+#
+# and its global conditions (cooldown, authority) are the docket's own
+# un_docket_topic_open_<key>, called here rather than restated.
 # ============================================================================
 
 # Condemnation of aggression — binding, simple majority, names a rival that is
@@ -356,4 +372,404 @@ un_propose_reform_possible = {
 		text = un_article_19_table_tt
 		NOT = { un_dues_vote_suspended = yes }
 	}
+}
+
+# ============================================================================
+# THE TEN CONVENTIONS
+# ============================================================================
+# Tabled on our own motion from the chamber (ops 7-16 of
+# un_chamber_propose_sgui), or on the docket's offer through the proposer
+# events. Every topic below is recommendatory except the ICC, which is binding
+# and can be vetoed; all pass by simple majority.
+
+# The gates every convention tabled on our own motion shares: the floor is
+# free and we are free to table — the same clauses, in the same words, as the
+# seven topics above.
+# Scope: the proposing country
+un_propose_own_motion_possible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	custom_tooltip = {
+		text = un_no_active_vote_tt
+		NOT = { has_global_variable = un_vote_active }
+	}
+	NOT = { has_modifier = un_ga_resolution_modifier }
+	NOT = { has_modifier = un_request_cooldown }
+	custom_tooltip = {
+		text = un_recess_ai_tt
+		un_may_table_now = yes
+	}
+	custom_tooltip = {
+		text = un_article_19_table_tt
+		NOT = { un_dues_vote_suspended = yes }
+	}
+}
+
+# ---- Universal Declaration of Human Rights (UNHRC) ----
+# Scope: any
+un_propose_human_rights_in_force = {
+	has_global_variable = un_agency_unhrc
+}
+
+# Scope: the prospective proposer
+un_propose_human_rights_qualifies = {
+	has_technology_researched = human_rights
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+	}
+}
+
+# Scope: the proposing country
+un_propose_human_rights_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_human_rights_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_human_rights_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_human_rights = yes
+	un_propose_human_rights_qualifies = yes
+}
+
+# ---- International Criminal Court ----
+# The one binding convention. On our own motion it waits for the Declaration
+# of Human Rights, as the docket's Assembly business does (un_docket_agenda_ready);
+# only the docket's "never again" item raises it sooner.
+# Scope: any
+un_propose_icc_in_force = {
+	has_global_variable = un_agency_icc
+}
+
+# Scope: the prospective proposer
+un_propose_icc_qualifies = {
+	country_rank >= rank_value:major_power
+	has_technology_researched = human_rights
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_icc_member_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_icc_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_icc_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_icc_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_icc_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_icc = yes
+	custom_tooltip = {
+		text = un_propose_icc_needs_unhrc_tt
+		un_propose_human_rights_in_force = yes
+	}
+	un_propose_icc_qualifies = yes
+}
+
+# ---- Nuclear Non-Proliferation Treaty (IAEA) ----
+# Scope: any
+un_propose_npt_in_force = {
+	has_global_variable = un_agency_iaea
+}
+
+# Scope: the prospective proposer
+un_propose_npt_qualifies = {
+	has_technology_researched = nuclear_weapons
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_nonproliferation_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_npt_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_npt_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_npt_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_npt = yes
+	un_propose_npt_qualifies = yes
+}
+
+# ---- Climate Accord (UNEP) ----
+# Never under the disabled global warming rule, where the chamber hides the row.
+# Scope: any
+un_propose_climate_in_force = {
+	has_global_variable = un_agency_unep
+}
+
+# Scope: the prospective proposer
+un_propose_climate_qualifies = {
+	has_game_rule = global_warming_enabled
+	has_technology_researched = environmental_movement
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_climate_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_climate_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	has_game_rule = global_warming_enabled
+	NOT = { un_propose_climate_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_climate_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_climate = yes
+	un_propose_climate_qualifies = yes
+}
+
+# ---- Global Pandemic Response (WHO) ----
+# Scope: any
+un_propose_pandemic_in_force = {
+	has_global_variable = un_agency_who
+}
+
+# Scope: the prospective proposer
+un_propose_pandemic_qualifies = {
+	country_rank >= rank_value:major_power
+	has_technology_researched = antibiotics
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_pandemic_isolationist_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_pandemic_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_pandemic_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_pandemic_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_pandemic = yes
+	un_propose_pandemic_qualifies = yes
+}
+
+# ---- International Refugee Resolution (UNHCR) ----
+# The one convention that names a country: the one the displaced are fleeing
+# (un_propose_refugee_select_target). It accuses nobody.
+
+# A country the displaced could be fleeing: at war, or with a state in misery.
+# Call it directly inside a country iterator entered from the proposer, so
+# that PREV is the proposer.
+# Scope: the candidate source
+un_propose_refugee_source = {
+	NOT = { this = PREV }
+	NOT = { is_country_type = decentralized }
+	OR = {
+		is_at_war = yes
+		any_scope_state = { average_sol < 6 }
+	}
+}
+
+# The graver case, preferred when there is one: famine, or a war that has
+# devastated a state. Same calling rule as un_propose_refugee_source.
+# Scope: the candidate source
+un_propose_refugee_grave_source = {
+	NOT = { this = PREV }
+	NOT = { is_country_type = decentralized }
+	OR = {
+		any_scope_state = { has_famine = yes }
+		AND = {
+			is_at_war = yes
+			any_scope_state = { devastation > un_docket_war_devastation }
+		}
+	}
+}
+
+# Scope: any
+un_propose_refugee_in_force = {
+	has_global_variable = un_agency_unhcr
+}
+
+# Scope: the prospective proposer
+un_propose_refugee_qualifies = {
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_refugee_closed_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_refugee_grounds_tt
+		any_country = { un_propose_refugee_source = yes }
+	}
+}
+
+# Scope: the proposing country
+un_propose_refugee_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_refugee_in_force = yes }
+	any_country = { un_propose_refugee_source = yes }
+}
+
+# Scope: the proposing country
+un_propose_refugee_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_refugee = yes
+	un_propose_refugee_qualifies = yes
+}
+
+# ---- Cultural Heritage Program (UNESCO) ----
+# Scope: any
+un_propose_heritage_in_force = {
+	has_global_variable = un_agency_unesco
+}
+
+# Scope: the prospective proposer
+un_propose_heritage_qualifies = {
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_heritage_token_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_heritage_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_heritage_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_heritage_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_heritage = yes
+	un_propose_heritage_qualifies = yes
+}
+
+# ---- Decolonization Resolution ----
+# Founds no agency: a declaration in force is a standing regime (redesign
+# phase 5), and the question is only live while some country holds subjects.
+# Scope: any
+un_propose_decolonization_in_force = {
+	has_global_variable = un_regime_decolonization
+}
+
+# Scope: the prospective proposer
+un_propose_decolonization_qualifies = {
+	has_technology_researched = decolonization
+	custom_tooltip = {
+		text = un_propose_decolonization_champion_tt
+		NOT = { has_modifier = un_decolonization_champion_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_colonial_defender_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_decolonization_collapsed_tt
+		NOT = { has_variable = colonial_empire_collapsed_recently }
+	}
+}
+
+# Scope: the proposing country
+un_propose_decolonization_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_decolonization_in_force = yes }
+	any_country = { any_subject_or_below = { count >= 1 } }
+}
+
+# Scope: the proposing country
+un_propose_decolonization_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_decolonization = yes
+	un_propose_decolonization_qualifies = yes
+}
+
+# ---- International Space Cooperation (UNOOSA) ----
+# Scope: any
+un_propose_space_in_force = {
+	has_global_variable = un_agency_unoosa
+}
+
+# Scope: the prospective proposer
+un_propose_space_qualifies = {
+	country_rank >= rank_value:major_power
+	has_technology_researched = space_exploration
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_space_independent_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_space_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_space_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_space_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_space = yes
+	un_propose_space_qualifies = yes
+}
+
+# ---- Convention on the Law of the Sea (ITLOS) ----
+# Scope: any
+un_propose_law_of_sea_in_force = {
+	has_global_variable = un_agency_itlos
+}
+
+# Scope: the prospective proposer
+un_propose_law_of_sea_qualifies = {
+	has_technology_researched = international_trade
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_law_of_sea_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_law_of_sea_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_law_of_sea_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_law_of_sea_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_law_of_sea_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_law_of_sea = yes
+	un_propose_law_of_sea_qualifies = yes
 }

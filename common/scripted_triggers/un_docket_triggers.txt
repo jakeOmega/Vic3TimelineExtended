@@ -45,7 +45,9 @@ un_docket_loan_candidate = {
 		banking_cycle_is_panic = yes
 	}
 	OR = {
-		has_variable = banking_crisis_wave_crashed
+		# Reached by the wave, crash or scare — what the old _crashed mark
+		# meant until #428 narrowed it to real crashes.
+		banking_crisis_wave_reached = yes
 		any_country = { has_modifier = great_depression_modifier }
 	}
 	NOT = { has_variable = un_dkt_loan_raised }
@@ -204,139 +206,229 @@ un_docket_appeal_second = {
 	}
 }
 
-# A convention topic is open for the docket: not on cooldown, and its agency
-# not yet founded (a convention adopted in full is not raised again).
+# A convention topic is open: not in force (its agency founded, or for
+# decolonization its regime standing — a convention adopted in full is not
+# raised again), not on cooldown, and the organisation strong enough to take it
+# up. The chamber's Propose control asks the same trigger
+# (un_propose_<key>_possible), so each clause carries the tooltip a player
+# sees when it fails; the docket only evaluates it.
 # Scope: any
 un_docket_topic_open_human_rights = {
-	NOT = { un_resolution_topic_on_cooldown = { TOPIC = human_rights } }
-	NOT = { has_global_variable = un_agency_unhrc }
-	global_var:un_authority >= 40
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_human_rights_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = human_rights } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_40_tt
+		global_var:un_authority >= 40
+	}
 }
+
 un_docket_topic_open_icc = {
-	NOT = { un_resolution_topic_on_cooldown = { TOPIC = icc } }
-	NOT = { has_global_variable = un_agency_icc }
-	global_var:un_authority >= 40
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_icc_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = icc } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_40_tt
+		global_var:un_authority >= 40
+	}
 }
+
 un_docket_topic_open_heritage = {
-	NOT = { un_resolution_topic_on_cooldown = { TOPIC = heritage } }
-	NOT = { has_global_variable = un_agency_unesco }
-	global_var:un_authority >= 40
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_heritage_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = heritage } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_40_tt
+		global_var:un_authority >= 40
+	}
 }
+
 un_docket_topic_open_npt = {
-	NOT = { un_resolution_topic_on_cooldown = { TOPIC = npt } }
-	NOT = { has_global_variable = un_agency_iaea }
-	global_var:un_authority >= 40
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_npt_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = npt } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_40_tt
+		global_var:un_authority >= 40
+	}
 }
+
 un_docket_topic_open_climate = {
 	# No climate accord under the disabled global warming rule.
 	has_game_rule = global_warming_enabled
-	NOT = { un_resolution_topic_on_cooldown = { TOPIC = climate } }
-	NOT = { has_global_variable = un_agency_unep }
-	global_var:un_authority >= 30
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_climate_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = climate } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_30_tt
+		global_var:un_authority >= 30
+	}
 }
+
 un_docket_topic_open_pandemic = {
-	NOT = { un_resolution_topic_on_cooldown = { TOPIC = pandemic } }
-	NOT = { has_global_variable = un_agency_who }
-	global_var:un_authority >= 20
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_pandemic_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = pandemic } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_20_tt
+		global_var:un_authority >= 20
+	}
 }
+
 un_docket_topic_open_refugee = {
-	NOT = { un_resolution_topic_on_cooldown = { TOPIC = refugee } }
-	NOT = { has_global_variable = un_agency_unhcr }
-	global_var:un_authority >= 20
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_refugee_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = refugee } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_20_tt
+		global_var:un_authority >= 20
+	}
 }
+
 un_docket_topic_open_space = {
-	NOT = { un_resolution_topic_on_cooldown = { TOPIC = space } }
-	NOT = { has_global_variable = un_agency_unoosa }
-	global_var:un_authority >= 40
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_space_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = space } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_40_tt
+		global_var:un_authority >= 40
+	}
 }
+
 un_docket_topic_open_law_of_sea = {
-	NOT = { un_resolution_topic_on_cooldown = { TOPIC = law_of_sea } }
-	NOT = { has_global_variable = un_agency_itlos }
-	global_var:un_authority >= 30
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_law_of_sea_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = law_of_sea } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_30_tt
+		global_var:un_authority >= 30
+	}
 }
+
 un_docket_topic_open_decolonization = {
-	NOT = { un_resolution_topic_on_cooldown = { TOPIC = decolonization } }
-	# A declaration in force is a standing regime (redesign phase 5).
-	NOT = { has_global_variable = un_regime_decolonization }
-	global_var:un_authority >= 30
-	any_country = { any_subject_or_below = { count >= 1 } }
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_decolonization_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = decolonization } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_30_tt
+		global_var:un_authority >= 30
+	}
+	custom_tooltip = {
+		text = un_propose_decolonization_grounds_tt
+		any_country = { any_subject_or_below = { count >= 1 } }
+	}
 }
+
 un_docket_topic_open_reform = {
 	un_charter_reform_ripe = yes
 	NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
 }
 
-# Who may be offered each topic: the old proposer events' own per-country
-# gates. Scope: the prospective proposer
+# Who may be offered each topic: that the member can be offered business at
+# all (un_docket_can_be_offered), and each convention's per-country conditions,
+# which the chamber's Propose control asks too (un_propose_<key>_qualifies,
+# un_propose_triggers.txt).
+# Scope: the prospective proposer
 un_docket_may_propose_human_rights = {
 	un_docket_can_be_offered = yes
-	has_technology_researched = human_rights
-	NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+	un_propose_human_rights_qualifies = yes
 }
+
 un_docket_may_propose_icc = {
 	un_docket_can_be_offered = yes
-	country_rank >= rank_value:major_power
-	has_technology_researched = human_rights
-	NOT = { has_modifier = un_icc_member_modifier }
-	NOT = { has_modifier = un_icc_refusal_modifier }
+	un_propose_icc_qualifies = yes
 }
+
 un_docket_may_propose_heritage = {
 	un_docket_can_be_offered = yes
-	NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
-	NOT = { has_modifier = un_heritage_token_modifier }
+	un_propose_heritage_qualifies = yes
 }
+
 un_docket_may_propose_npt = {
 	un_docket_can_be_offered = yes
-	has_technology_researched = nuclear_weapons
-	NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
-	NOT = { has_modifier = un_nonproliferation_refusal_modifier }
+	un_propose_npt_qualifies = yes
 }
+
 un_docket_may_propose_climate = {
-	has_game_rule = global_warming_enabled
 	un_docket_can_be_offered = yes
-	has_technology_researched = environmental_movement
-	NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
-	NOT = { has_modifier = un_climate_refusal_modifier }
+	un_propose_climate_qualifies = yes
 }
+
 un_docket_may_propose_pandemic = {
 	un_docket_can_be_offered = yes
-	country_rank >= rank_value:major_power
-	has_technology_researched = antibiotics
-	NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
-	NOT = { has_modifier = un_pandemic_isolationist_modifier }
+	un_propose_pandemic_qualifies = yes
 }
+
 un_docket_may_propose_refugee = {
 	un_docket_can_be_offered = yes
-	NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
-	NOT = { has_modifier = un_refugee_closed_modifier }
-	any_country = {
-		NOT = { this = PREV }
-		OR = {
-			is_at_war = yes
-			any_scope_state = { average_sol < 6 }
-		}
-	}
+	un_propose_refugee_qualifies = yes
 }
+
 un_docket_may_propose_space = {
 	un_docket_can_be_offered = yes
-	country_rank >= rank_value:major_power
-	has_technology_researched = space_exploration
-	NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
-	NOT = { has_modifier = un_space_independent_modifier }
+	un_propose_space_qualifies = yes
 }
+
 un_docket_may_propose_law_of_sea = {
 	un_docket_can_be_offered = yes
-	has_technology_researched = international_trade
-	NOT = { has_modifier = un_law_of_sea_modifier }
-	NOT = { has_modifier = un_law_of_sea_refusal_modifier }
+	un_propose_law_of_sea_qualifies = yes
 }
+
 un_docket_may_propose_decolonization = {
 	un_docket_can_be_offered = yes
-	has_technology_researched = decolonization
-	NOT = { has_modifier = un_decolonization_champion_modifier }
-	NOT = { has_modifier = un_colonial_defender_modifier }
-	NOT = { has_variable = colonial_empire_collapsed_recently }
+	un_propose_decolonization_qualifies = yes
 }
+
 un_docket_may_propose_reform = {
 	un_docket_can_be_offered = yes
 	country_rank >= rank_value:great_power

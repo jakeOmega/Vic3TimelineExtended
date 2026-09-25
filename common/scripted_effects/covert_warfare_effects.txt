@@ -248,6 +248,10 @@ covert_op_end = {
 # (covert_last_exposed_sgui), so an annexed attacker falls back to an anonymous
 # line instead of a months-old capital naming whoever conquered it.
 # iw_last_exposed_age is aged by the journal entry's monthly pulse.
+# iw_last_exposed_phase is the phase the operation was caught in. The record is
+# also the whole trigger of the defender's event, covert_warfare.2, which fires
+# only from covert_warfare.1's `after`, straight after this effect — so every
+# burn reaches the defender, one caught in preparation included (#430).
 #
 # Also costs the target's network covert_net_burn_loss (slice 4), inside the
 # lookup itself: `after` can be walked by the option tooltips' render pass,
@@ -274,6 +278,18 @@ covert_op_burn = {
 		set_variable = { name = iw_last_exposed_country value = ROOT }
 		set_variable = { name = iw_last_exposed_type value = $CODE$ }
 		set_variable = { name = iw_last_exposed_age value = 0 }
+		# The phase it was caught in (1 preparatory, 2 establishing, 3 fully
+		# operational), from the copy covert_warfare.1's immediate put on the
+		# operator (ROOT) — so the defender's event can tell an operation
+		# stopped before it took effect from a campaign already running (#430).
+		if = {
+			limit = { ROOT = { has_variable = iw_burned_phase } }
+			set_variable = { name = iw_last_exposed_phase value = ROOT.var:iw_burned_phase }
+		}
+		else_if = {
+			limit = { has_variable = iw_last_exposed_phase }
+			remove_variable = iw_last_exposed_phase
+		}
 	}
 }
 
@@ -484,6 +500,31 @@ covert_net_loss = {
 		}
 	}
 	covert_net_clamp = yes
+}
+
+# Retaliation in kind (#430) — covert_warfare.2 option b. The defender's own
+# service turns an exposure (the other side's agents caught, its couriers and
+# channels blown) into a foothold inside the service that ran the operation:
+# a network in the perpetrator's country, created if there is none, grown by
+# covert_net_retaliation_seed through covert_net_gain, so like any gain it
+# counts for less above half strength. It launches nothing: the defender
+# decides whether and when to use the foothold. What it buys is what any
+# network buys — a head start and cover for operations against that country —
+# and, unused, it decays like any other (covert_nets_sync), so the offer lasts
+# a year or two. The lookup does its work inside the random_in_list, like
+# every "network for target X" lookup here.
+# Parameters: $TARGET$ = the perpetrator (a scope: reference)
+# Scope: the defender country, which becomes the network's operator
+covert_retaliation_seed_network = {
+	covert_net_create = { TARGET = $TARGET$ }
+	if = {
+		limit = { has_variable_list = iw_nets }
+		random_in_list = {
+			variable = iw_nets
+			limit = { var:iw_target ?= $TARGET$ }
+			covert_net_gain = { AMOUNT = covert_net_retaliation_seed }
+		}
+	}
 }
 
 # The monthly network pass. Called ONCE a month from je_covert_warfare's pulse,
@@ -1132,12 +1173,14 @@ covert_ops_apply_all_phase_effects = {
 		# Innovation is always applied; tech spread always applies since target must have tech advantage
 		covert_op_apply_self_effect = { TYPE = industrial_espionage MODIFIER = covert_espionage_base }
 		covert_op_apply_self_effect = { TYPE = industrial_espionage MODIFIER = covert_industrial_espionage }
-		# Weak counter-intel marker on the TARGET so covert_warfare.2 can notify them (#158)
+		# Weak counter-intel marker on the TARGET (authority -3). #158 added it so
+		# covert_warfare.2 could key on it; since #430 that event reads
+		# covert_op_burn's exposure record instead.
 		covert_op_apply_target_effect = { TYPE = industrial_espionage MODIFIER = covert_industrial_espionage_detected }
 
 		# ---- Military Espionage: self modifiers (unit stats always, tech spread conditional) ----
 		covert_op_apply_self_effect = { TYPE = military_espionage MODIFIER = covert_military_espionage_unit }
-		# Weak counter-intel marker on the TARGET so covert_warfare.2 can notify them (#158)
+		# Weak counter-intel marker on the TARGET (authority -3; see industrial espionage above)
 		covert_op_apply_target_effect = { TYPE = military_espionage MODIFIER = covert_military_espionage_detected }
 		# Conditional tech spread: only if target has tech advantage, from the
 		# strongest military espionage operation (phase x priority)
@@ -1248,8 +1291,8 @@ covert_ops_apply_all_phase_effects = {
 		covert_op_apply_target_effect = { TYPE = nuclear_sabotage MODIFIER = covert_nuclear_sabotage }
 
 		# ---- Space Programme Espionage (slice 6): self modifier from the
-		#      strongest operation; marker on TARGET so covert_warfare.2 can
-		#      notify them ----
+		#      strongest operation; counter-intel marker on TARGET, like the
+		#      other espionage types ----
 		covert_op_apply_self_effect = { TYPE = space_espionage MODIFIER = covert_space_espionage }
 		covert_op_apply_target_effect = { TYPE = space_espionage MODIFIER = covert_space_espionage_detected }
 

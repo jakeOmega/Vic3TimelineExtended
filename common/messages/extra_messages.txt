@@ -105,6 +105,15 @@ tactical_nuke_fails_defender = {
 	color = good
 }
 
+# The No-First-Strike Pledge amendment, in force, has moved our deterrence
+# doctrine to No First Use (nd_weekly_update, #430). Human players only.
+nd_doctrine_bound_by_law = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/laws.dds"
+	notification_type = feed
+	color = neutral
+}
+
 # Homelands
 homeland_created = {
 	type = state

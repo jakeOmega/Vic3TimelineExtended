@@ -1154,28 +1154,220 @@ un_chamber_propose_reform_row = {
 	}
 }
 
-# One line per topic that has no proposal control of its own: the ten
-# conventions, declarations and programmes that reach the floor only when the
-# docket offers them to a delegation (redesign phase 4, un_docket_effects.txt).
-# Listing them is the point — without it a player has no way of knowing the
-# Assembly can take them up at all. Each line says what raises the topic, and
-# whether it is in force (its agency founded: the docket never raises it
-# again) or on the five-year cooldown a closed resolution leaves behind.
-# Parameters: $NAME$   = the topic's loc key
-#             $TOPIC$  = topic key for un_resolution_topic_on_cooldown
-#             $RAISED$ = the loc key saying what raises it
-#             $AGENCY$ = the un_agency_<agency> global it founds (none: none)
+# The ten conventions and declarations (ops 7-16). The docket raises them for
+# everyone (redesign phase 4, un_docket_effects.txt), and a member may table
+# one on its own motion. Each row says what the topic is, whether it binds,
+# its passage rule, when the docket raises it anyway, and then either that it
+# is in force — adopted in full, never tabled again — or whether we may
+# table it now. Nothing here restates a gate: the in-force test, the no-case
+# test and the status line ask the triggers in un_propose_triggers.txt.
+# Loc keys are passed whole, never built from a topic key, so that
+# organize_loc.py can see they are used.
+# Parameters: $NAME$      the topic's title
+#             $BINDING$   je_un_chamber_recommendatory or _binding_not_vetoed
+#             $RAISED$    when the docket raises it
+#             $IN_FORCE$  un_propose_<key>_in_force
+#             $AVAILABLE$ / $POSSIBLE$  un_propose_<key>_available / _possible
+#             $NO_CASE$   the line for a topic with no case right now. Only the
+#                         refugee and decolonization rows can reach it: every
+#                         other topic's _available is membership and "not in
+#                         force", both already true where the status line runs
+#                         (the else of the IN_FORCE test), so they
+#                         pass je_un_chamber_topic_in_force as a placeholder.
+#             $TOPIC$     the topic key, for un_resolution_topic_on_cooldown
 # Scope: country
-un_chamber_assembly_topic_line = {
+un_chamber_propose_convention_row = {
 	custom_tooltip_no_bullet = $NAME$
+	custom_tooltip_no_bullet = $BINDING$
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
 	custom_tooltip_no_bullet = $RAISED$
 	if = {
-		limit = { has_global_variable = un_agency_$AGENCY$ }
+		limit = { $IN_FORCE$ = yes }
 		custom_tooltip_no_bullet = je_un_chamber_topic_in_force
 	}
-	else_if = {
-		limit = { un_resolution_topic_on_cooldown = { TOPIC = $TOPIC$ } }
-		custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown
+	else = {
+		# A closed resolution on the question holds it for five years.
+		if = {
+			limit = { un_resolution_topic_on_cooldown = { TOPIC = $TOPIC$ } }
+			custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown
+		}
+		un_chamber_propose_status_line = {
+			AVAILABLE = $AVAILABLE$
+			POSSIBLE = $POSSIBLE$
+			NO_CASE = $NO_CASE$
+		}
+	}
+}
+
+# Universal Declaration of Human Rights.
+# Scope: country
+un_chamber_propose_human_rights_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_human_rights
+		TOPIC = human_rights
+		BINDING = je_un_chamber_recommendatory
+		RAISED = je_un_chamber_raised_human_rights
+		IN_FORCE = un_propose_human_rights_in_force
+		AVAILABLE = un_propose_human_rights_available
+		POSSIBLE = un_propose_human_rights_possible
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# International Criminal Court.
+# Scope: country
+un_chamber_propose_icc_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_icc
+		TOPIC = icc
+		BINDING = je_un_chamber_binding_not_vetoed
+		RAISED = je_un_chamber_raised_icc
+		IN_FORCE = un_propose_icc_in_force
+		AVAILABLE = un_propose_icc_available
+		POSSIBLE = un_propose_icc_possible
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# Nuclear Non-Proliferation Treaty.
+# Scope: country
+un_chamber_propose_npt_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_npt
+		TOPIC = npt
+		BINDING = je_un_chamber_recommendatory
+		RAISED = je_un_chamber_raised_npt
+		IN_FORCE = un_propose_npt_in_force
+		AVAILABLE = un_propose_npt_available
+		POSSIBLE = un_propose_npt_possible
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# Climate Accord.
+# The widget hides this row under the disabled global warming rule
+# (un_chamber_climate_rule_sgui).
+# Scope: country
+un_chamber_propose_climate_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_climate
+		TOPIC = climate
+		BINDING = je_un_chamber_recommendatory
+		RAISED = je_un_chamber_raised_climate
+		IN_FORCE = un_propose_climate_in_force
+		AVAILABLE = un_propose_climate_available
+		POSSIBLE = un_propose_climate_possible
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# Global Pandemic Response.
+# Scope: country
+un_chamber_propose_pandemic_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_pandemic
+		TOPIC = pandemic
+		BINDING = je_un_chamber_recommendatory
+		RAISED = je_un_chamber_raised_agenda
+		IN_FORCE = un_propose_pandemic_in_force
+		AVAILABLE = un_propose_pandemic_available
+		POSSIBLE = un_propose_pandemic_possible
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# International Refugee Resolution. The one convention that names a country —
+# the one its displaced are fleeing — so the row previews the pick, from the
+# same selector the proposal runs (un_propose_refugee_select_target). It
+# accuses nobody.
+# Scope: country
+un_chamber_propose_refugee_row = {
+	custom_tooltip_no_bullet = je_un_chamber_propose_topic_refugee
+	custom_tooltip_no_bullet = je_un_chamber_recommendatory
+	custom_tooltip_no_bullet = je_un_chamber_rule_majority
+	custom_tooltip_no_bullet = je_un_chamber_raised_agenda
+	if = {
+		limit = { un_propose_refugee_in_force = yes }
+		custom_tooltip_no_bullet = je_un_chamber_topic_in_force
+	}
+	else = {
+		if = {
+			limit = { un_resolution_topic_on_cooldown = { TOPIC = refugee } }
+			custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown
+		}
+		if = {
+			limit = { un_propose_refugee_available = yes }
+			un_propose_refugee_select_target = yes
+			if = {
+				limit = { exists = scope:un_propose_refugee_target }
+				custom_tooltip_no_bullet = je_un_chamber_propose_target_refugee
+			}
+		}
+		un_chamber_propose_status_line = {
+			AVAILABLE = un_propose_refugee_available
+			POSSIBLE = un_propose_refugee_possible
+			NO_CASE = je_un_chamber_propose_no_case_refugee
+		}
+	}
+}
+
+# Cultural Heritage Program.
+# Scope: country
+un_chamber_propose_heritage_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_heritage
+		TOPIC = heritage
+		BINDING = je_un_chamber_recommendatory
+		RAISED = je_un_chamber_raised_agenda
+		IN_FORCE = un_propose_heritage_in_force
+		AVAILABLE = un_propose_heritage_available
+		POSSIBLE = un_propose_heritage_possible
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# Decolonization Resolution.
+# Scope: country
+un_chamber_propose_decolonization_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_decolonization
+		TOPIC = decolonization
+		BINDING = je_un_chamber_recommendatory
+		RAISED = je_un_chamber_raised_decolonization
+		IN_FORCE = un_propose_decolonization_in_force
+		AVAILABLE = un_propose_decolonization_available
+		POSSIBLE = un_propose_decolonization_possible
+		NO_CASE = je_un_chamber_propose_no_case_decolonization
+	}
+}
+
+# International Space Cooperation.
+# Scope: country
+un_chamber_propose_space_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_space
+		TOPIC = space
+		BINDING = je_un_chamber_recommendatory
+		RAISED = je_un_chamber_raised_space
+		IN_FORCE = un_propose_space_in_force
+		AVAILABLE = un_propose_space_available
+		POSSIBLE = un_propose_space_possible
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# Convention on the Law of the Sea.
+# Scope: country
+un_chamber_propose_law_of_sea_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_law_of_sea
+		TOPIC = law_of_sea
+		BINDING = je_un_chamber_recommendatory
+		RAISED = je_un_chamber_raised_agenda
+		IN_FORCE = un_propose_law_of_sea_in_force
+		AVAILABLE = un_propose_law_of_sea_available
+		POSSIBLE = un_propose_law_of_sea_possible
+		NO_CASE = je_un_chamber_topic_in_force
 	}
 }
 
@@ -1292,25 +1484,6 @@ un_chamber_docket_last_line = {
 	}
 }
 
-# Scope: country
-un_chamber_assembly_business_block = {
-	custom_tooltip_no_bullet = je_un_chamber_assembly_intro
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_human_rights TOPIC = human_rights RAISED = je_un_chamber_raised_human_rights AGENCY = unhrc }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_icc TOPIC = icc RAISED = je_un_chamber_raised_icc AGENCY = icc }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_npt TOPIC = npt RAISED = je_un_chamber_raised_npt AGENCY = iaea }
-	# Under the disabled global warming rule the climate accord is never raised
-	# (un_docket_warming_ready), so the chamber does not list it.
-	if = {
-		limit = { has_game_rule = global_warming_enabled }
-		un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_climate TOPIC = climate RAISED = je_un_chamber_raised_climate AGENCY = unep }
-	}
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_pandemic TOPIC = pandemic RAISED = je_un_chamber_raised_agenda AGENCY = who }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_refugee TOPIC = refugee RAISED = je_un_chamber_raised_agenda AGENCY = unhcr }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_heritage TOPIC = heritage RAISED = je_un_chamber_raised_agenda AGENCY = unesco }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_decolonization TOPIC = decolonization RAISED = je_un_chamber_raised_decolonization AGENCY = none }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_space TOPIC = space RAISED = je_un_chamber_raised_space AGENCY = unoosa }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_law_of_sea TOPIC = law_of_sea RAISED = je_un_chamber_raised_agenda AGENCY = itlos }
-}
 
 # ============================================================================
 # REDESIGN PHASE 3 — GROUNDS, LEANS, REASONS, EXPOSURE, RECESS
