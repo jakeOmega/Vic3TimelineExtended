@@ -61,14 +61,8 @@ banking_cycle_events.1 = {
 	option = {
 		name = banking_cycle_events.1.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -83,14 +77,8 @@ banking_cycle_events.1 = {
 	# Option B: Issue a regulatory warning - moderate caution
 	option = {
 		name = banking_cycle_events.1.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		ai_chance = {
 			base = 35
 			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
@@ -100,14 +88,8 @@ banking_cycle_events.1 = {
 	# Option C: Impose emergency lending restrictions - aggressive cooling
 	option = {
 		name = banking_cycle_events.1.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = -3 }
-		}
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
 		add_radicals = {
 			value = medium_radicals
 			strata = upper
@@ -150,14 +132,8 @@ banking_cycle_events.101 = {
 	option = {
 		name = banking_cycle_events.101.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_loyalists = {
 			value = small_radicals
 			pop_type = bureaucrats
@@ -172,14 +148,8 @@ banking_cycle_events.101 = {
 	# Option B: Issue a corrective addendum: scale targets to proven capacity
 	option = {
 		name = banking_cycle_events.101.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		ai_chance = {
 			base = 35
 			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
@@ -189,14 +159,8 @@ banking_cycle_events.101 = {
 	# Option C: Suspend the directive and enforce emergency production ceilings
 	option = {
 		name = banking_cycle_events.101.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = -3 }
-		}
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
 		add_radicals = {
 			value = medium_radicals
 			pop_type = bureaucrats
@@ -234,14 +198,8 @@ banking_cycle_events.151 = {
 	option = {
 		name = banking_cycle_events.151.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -256,14 +214,8 @@ banking_cycle_events.151 = {
 	# Option B: Issue advisory guidance: call on cooperatives to align distributions with realised profits
 	option = {
 		name = banking_cycle_events.151.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		ai_chance = {
 			base = 35
 			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
@@ -273,14 +225,8 @@ banking_cycle_events.151 = {
 	# Option C: Mandate surplus reserves before distributions are permitted
 	option = {
 		name = banking_cycle_events.151.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = -3 }
-		}
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
 		add_radicals = {
 			value = medium_radicals
 			strata = upper
@@ -317,9 +263,9 @@ banking_cycle_events.104 = {
 	option = {
 		name = banking_cycle_events.104.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_15_DESC" change_variable = { name = finance_cycle_value add = -15 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_4_DESC" change_variable = { name = finance_cycle_momentum add = -4 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_20_DESC" change_variable = { name = bubble_pressure add = -20 } }
+		banking_change_cycle_value = { ADD = -15 TEXT = CYCLE_VALUE_MINUS_15_DESC }
+		banking_change_momentum = { ADD = -4 TEXT = MOMENTUM_MINUS_4_DESC }
+		banking_change_bubble_pressure = { ADD = -20 TEXT = BUBBLE_PRESSURE_MINUS_20_DESC }
 		add_radicals = { value = large_radicals }
 		ai_chance = { base = 20 }
 	}
@@ -327,8 +273,8 @@ banking_cycle_events.104 = {
 	# Option B: Emergency stockpile release: tap strategic reserves to bridge the gap
 	option = {
 		name = banking_cycle_events.104.b
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_5_DESC" change_variable = { name = finance_cycle_value add = -5 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_10_DESC" change_variable = { name = bubble_pressure add = -10 } }
+		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
+		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
 		add_modifier = { name = banking_event_deposit_guarantee_emergency multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 60 }
@@ -337,8 +283,8 @@ banking_cycle_events.104 = {
 	# Option C: Priority triage: fully fund the most critical sectors, abandon the rest
 	option = {
 		name = banking_cycle_events.104.c
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
+		banking_change_cycle_value = { ADD = -8 TEXT = CYCLE_VALUE_MINUS_8_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = { name = banking_event_selective_bailout days = normal_modifier_time is_decaying = yes }
 		add_modifier = { name = banking_event_selective_bailout_cost multiplier = banking_event_expense_medium days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals strata = lower }
@@ -371,9 +317,9 @@ banking_cycle_events.154 = {
 	option = {
 		name = banking_cycle_events.154.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_15_DESC" change_variable = { name = finance_cycle_value add = -15 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_4_DESC" change_variable = { name = finance_cycle_momentum add = -4 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_20_DESC" change_variable = { name = bubble_pressure add = -20 } }
+		banking_change_cycle_value = { ADD = -15 TEXT = CYCLE_VALUE_MINUS_15_DESC }
+		banking_change_momentum = { ADD = -4 TEXT = MOMENTUM_MINUS_4_DESC }
+		banking_change_bubble_pressure = { ADD = -20 TEXT = BUBBLE_PRESSURE_MINUS_20_DESC }
 		add_radicals = { value = large_radicals }
 		ai_chance = { base = 20 }
 	}
@@ -381,8 +327,8 @@ banking_cycle_events.154 = {
 	# Option B: Activate the Federation Emergency Relief Fund: deploy collective reserves
 	option = {
 		name = banking_cycle_events.154.b
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_5_DESC" change_variable = { name = finance_cycle_value add = -5 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_10_DESC" change_variable = { name = bubble_pressure add = -10 } }
+		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
+		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
 		add_modifier = { name = banking_event_deposit_guarantee_emergency multiplier = banking_event_expense_huge days = normal_modifier_time is_decaying = yes }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 60 }
@@ -391,8 +337,8 @@ banking_cycle_events.154 = {
 	# Option C: Facilitate forced mergers: weaker cooperatives absorbed by larger members
 	option = {
 		name = banking_cycle_events.154.c
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
+		banking_change_cycle_value = { ADD = -8 TEXT = CYCLE_VALUE_MINUS_8_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = { name = banking_event_selective_bailout days = normal_modifier_time is_decaying = yes }
 		add_modifier = { name = banking_event_selective_bailout_cost multiplier = banking_event_expense_medium days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals strata = lower }
@@ -425,7 +371,7 @@ banking_cycle_events.106 = {
 	option = {
 		name = banking_cycle_events.106.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_4_DESC" change_variable = { name = bubble_pressure add = 4 } }
+		banking_change_bubble_pressure = { ADD = 4 TEXT = BUBBLE_PRESSURE_4_DESC }
 		add_modifier = { name = banking_event_rural_credit days = short_modifier_time is_decaying = yes }
 		add_modifier = { name = banking_event_rural_credit_cost multiplier = banking_event_expense_small days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 50 }
@@ -471,7 +417,7 @@ banking_cycle_events.156 = {
 	option = {
 		name = banking_cycle_events.156.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_4_DESC" change_variable = { name = bubble_pressure add = 4 } }
+		banking_change_bubble_pressure = { ADD = 4 TEXT = BUBBLE_PRESSURE_4_DESC }
 		add_modifier = { name = banking_event_rural_credit days = short_modifier_time is_decaying = yes }
 		add_modifier = { name = banking_event_rural_credit_cost multiplier = banking_event_expense_small days = short_modifier_time is_decaying = yes }
 		ai_chance = { base = 50 }
@@ -523,18 +469,9 @@ banking_cycle_events.2 = {
 	option = {
 		name = banking_cycle_events.2.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_5_DESC"
-			change_variable = { name = finance_cycle_value add = 5 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_10_DESC"
-			change_variable = { name = bubble_pressure add = 10 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = 10 TEXT = BUBBLE_PRESSURE_10_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 40
 			modifier = { add = 20 banking_cycle_is_stagnation = yes }
@@ -545,14 +482,8 @@ banking_cycle_events.2 = {
 	# Option B: Apply modest screening - moderate approach
 	option = {
 		name = banking_cycle_events.2.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_4_DESC"
-			change_variable = { name = bubble_pressure add = 4 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = 4 TEXT = BUBBLE_PRESSURE_4_DESC }
 		ai_chance = {
 			base = 40
 			modifier = { add = 10 banking_cycle_bubble_risk_rising = yes }
@@ -562,14 +493,8 @@ banking_cycle_events.2 = {
 	# Option C: Restrict capital inflows - defensive
 	option = {
 		name = banking_cycle_events.2.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
-			change_variable = { name = bubble_pressure add = -2 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = -2 TEXT = BUBBLE_PRESSURE_MINUS_2_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -611,18 +536,9 @@ banking_cycle_events.3 = {
 	option = {
 		name = banking_cycle_events.3.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_5_DESC"
-			change_variable = { name = finance_cycle_value add = 5 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -678,18 +594,9 @@ banking_cycle_events.4 = {
 	option = {
 		name = banking_cycle_events.4.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_15_DESC"
-			change_variable = { name = finance_cycle_value add = -15 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_4_DESC"
-			change_variable = { name = finance_cycle_momentum add = -4 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_20_DESC"
-			change_variable = { name = bubble_pressure add = -20 }
-		}
+		banking_change_cycle_value = { ADD = -15 TEXT = CYCLE_VALUE_MINUS_15_DESC }
+		banking_change_momentum = { ADD = -4 TEXT = MOMENTUM_MINUS_4_DESC }
+		banking_change_bubble_pressure = { ADD = -20 TEXT = BUBBLE_PRESSURE_MINUS_20_DESC }
 		add_radicals = {
 			value = large_radicals
 		}
@@ -701,14 +608,8 @@ banking_cycle_events.4 = {
 	# Option B: Government guarantee of deposits - costly but stabilizing
 	option = {
 		name = banking_cycle_events.4.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_5_DESC"
-			change_variable = { name = finance_cycle_value add = -5 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_10_DESC"
-			change_variable = { name = bubble_pressure add = -10 }
-		}
+		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
+		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
 		add_modifier = {
 			name = banking_event_deposit_guarantee_emergency
 			multiplier = banking_event_expense_huge
@@ -729,14 +630,8 @@ banking_cycle_events.4 = {
 	# Option C: Selective bailout of key institutions
 	option = {
 		name = banking_cycle_events.4.c
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_8_DESC"
-			change_variable = { name = finance_cycle_value add = -8 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_15_DESC"
-			change_variable = { name = bubble_pressure add = -15 }
-		}
+		banking_change_cycle_value = { ADD = -8 TEXT = CYCLE_VALUE_MINUS_8_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = {
 			name = banking_event_selective_bailout
 			days = normal_modifier_time
@@ -792,14 +687,8 @@ banking_cycle_events.5 = {
 	option = {
 		name = banking_cycle_events.5.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_6_DESC"
-			change_variable = { name = bubble_pressure add = 6 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 6 TEXT = BUBBLE_PRESSURE_6_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_modifier = {
 			name = banking_event_railway_fever
 			days = normal_modifier_time
@@ -814,14 +703,8 @@ banking_cycle_events.5 = {
 	# Option B: Insist on due diligence for bond offerings
 	option = {
 		name = banking_cycle_events.5.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_2_DESC"
-			change_variable = { name = bubble_pressure add = 2 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 50
 			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
@@ -859,10 +742,7 @@ banking_cycle_events.6 = {
 	option = {
 		name = banking_cycle_events.6.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_4_DESC"
-			change_variable = { name = bubble_pressure add = 4 }
-		}
+		banking_change_bubble_pressure = { ADD = 4 TEXT = BUBBLE_PRESSURE_4_DESC }
 		add_modifier = {
 			name = banking_event_rural_credit
 			days = short_modifier_time
@@ -886,14 +766,8 @@ banking_cycle_events.6 = {
 	# Option B: Let rural debtors default - harsh but clears risk
 	option = {
 		name = banking_cycle_events.6.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_5_DESC"
-			change_variable = { name = finance_cycle_value add = -5 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
+		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_radicals = {
 			value = medium_radicals
 			strata = lower
@@ -910,10 +784,7 @@ banking_cycle_events.6 = {
 	# Option C: Import grain and subsidize - costly fiscal approach
 	option = {
 		name = banking_cycle_events.6.c
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_modifier = {
 			name = banking_event_harvest_subsidy
 			days = short_modifier_time
@@ -966,10 +837,7 @@ banking_cycle_events.7 = {
 	option = {
 		name = banking_cycle_events.7.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_6_DESC"
-			change_variable = { name = bubble_pressure add = 6 }
-		}
+		banking_change_bubble_pressure = { ADD = 6 TEXT = BUBBLE_PRESSURE_6_DESC }
 		add_modifier = {
 			name = banking_event_consolidation_boom
 			days = normal_modifier_time
@@ -992,14 +860,8 @@ banking_cycle_events.7 = {
 				has_law = law_type:law_command_cooperative_economy
 			}
 		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_2_DESC"
-			change_variable = { name = bubble_pressure add = 2 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_loyalists = {
 			value = small_radicals
 		}
@@ -1040,14 +902,8 @@ banking_cycle_events.8 = {
 	option = {
 		name = banking_cycle_events.8.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_12_DESC"
-			change_variable = { name = bubble_pressure add = 12 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = 3 }
-		}
+		banking_change_bubble_pressure = { ADD = 12 TEXT = BUBBLE_PRESSURE_12_DESC }
+		banking_change_momentum = { ADD = 3 TEXT = MOMENTUM_3_DESC }
 		add_modifier = {
 			name = banking_event_new_instrument_boom
 			days = short_modifier_time
@@ -1063,14 +919,8 @@ banking_cycle_events.8 = {
 	# Option B: Require disclosure and registration - moderate
 	option = {
 		name = banking_cycle_events.8.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_5_DESC"
-			change_variable = { name = bubble_pressure add = 5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 45
 			modifier = { add = 10 banking_cycle_bubble_risk_rising = yes }
@@ -1080,14 +930,8 @@ banking_cycle_events.8 = {
 	# Option C: Ban it outright - deflationary but safe
 	option = {
 		name = banking_cycle_events.8.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_radicals = {
 			value = medium_radicals
 			strata = upper
@@ -1130,14 +974,8 @@ banking_cycle_events.9 = {
 	option = {
 		name = banking_cycle_events.9.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_6_DESC"
-			change_variable = { name = bubble_pressure add = 6 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 6 TEXT = BUBBLE_PRESSURE_6_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -1152,14 +990,8 @@ banking_cycle_events.9 = {
 	# Option B: Commission an investigation - short-term pain, bubble relief
 	option = {
 		name = banking_cycle_events.9.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_modifier = {
 			name = banking_event_investigation_chill
 			days = short_modifier_time
@@ -1174,10 +1006,7 @@ banking_cycle_events.9 = {
 	# Option C: Take no public position - mild neglect worsens uncertainty
 	option = {
 		name = banking_cycle_events.9.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		ai_chance = {
 			base = 30
 		}
@@ -1223,14 +1052,8 @@ banking_cycle_events.10 = {
 	option = {
 		name = banking_cycle_events.10.a
 		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		add_modifier = {
 			name = banking_event_austerity
 			days = normal_modifier_time
@@ -1252,14 +1075,8 @@ banking_cycle_events.10 = {
 	# Option B: Reassure markets with central bank intervention
 	option = {
 		name = banking_cycle_events.10.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_5_DESC"
-			change_variable = { name = bubble_pressure add = 5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		ai_chance = {
 			base = 35
 			modifier = { add = 15 banking_cycle_is_panic = yes }
@@ -1271,14 +1088,8 @@ banking_cycle_events.10 = {
 	option = {
 		name = banking_cycle_events.10.c
 		custom_tooltip = banking_cycle_events.10.c.tt
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_10_DESC"
-			change_variable = { name = finance_cycle_value add = -10 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_15_DESC"
-			change_variable = { name = bubble_pressure add = -15 }
-		}
+		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = {
 			name = banking_event_partial_default
 			days = long_modifier_time
@@ -1320,8 +1131,8 @@ banking_cycle_events.110 = {
 	option = {
 		name = banking_cycle_events.110.a
 		default_option = yes
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		add_modifier = { name = banking_event_austerity days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals strata = lower }
 		add_loyalists = { value = small_radicals pop_type = bureaucrats }
@@ -1331,16 +1142,16 @@ banking_cycle_events.110 = {
 	# Option B: Seek emergency external financing to recapitalise the planning reserve
 	option = {
 		name = banking_cycle_events.110.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
-		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
 	}
 
 	# Option C: Formally cancel some commitments: partial plan default
 	option = {
 		name = banking_cycle_events.110.c
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_10_DESC" change_variable = { name = finance_cycle_value add = -10 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
+		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = { name = banking_event_partial_default days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = bureaucrats }
 		ai_chance = { base = 20 modifier = { add = 20 banking_cycle_is_panic = yes } }
@@ -1371,8 +1182,8 @@ banking_cycle_events.160 = {
 	option = {
 		name = banking_cycle_events.160.a
 		default_option = yes
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		add_modifier = { name = banking_event_austerity days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals strata = lower }
 		add_loyalists = { value = small_radicals strata = upper }
@@ -1382,16 +1193,16 @@ banking_cycle_events.160 = {
 	# Option B: Seek new cooperative credit from allied institutions
 	option = {
 		name = banking_cycle_events.160.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
-		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
 	}
 
 	# Option C: Dissolve some inter-cooperative agreements: partial defaults on shared obligations
 	option = {
 		name = banking_cycle_events.160.c
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_10_DESC" change_variable = { name = finance_cycle_value add = -10 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
+		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = { name = banking_event_partial_default days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals strata = upper }
 		ai_chance = { base = 20 modifier = { add = 20 banking_cycle_is_panic = yes } }
@@ -1429,14 +1240,8 @@ banking_cycle_events.11 = {
 	option = {
 		name = banking_cycle_events.11.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_4_DESC"
-			change_variable = { name = bubble_pressure add = 4 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = 4 TEXT = BUBBLE_PRESSURE_4_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		ai_chance = {
 			base = 40
 		}
@@ -1445,14 +1250,8 @@ banking_cycle_events.11 = {
 	# Option B: Force insurers to increase reserves - costly for sector
 	option = {
 		name = banking_cycle_events.11.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_modifier = {
 			name = banking_event_insurance_reserves
 			days = normal_modifier_time
@@ -1471,14 +1270,8 @@ banking_cycle_events.11 = {
 	# Option C: Government backstop for critical policies - moral hazard
 	option = {
 		name = banking_cycle_events.11.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -1529,10 +1322,7 @@ banking_cycle_events.13 = {
 	option = {
 		name = banking_cycle_events.13.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -1546,14 +1336,8 @@ banking_cycle_events.13 = {
 	# Option B: Redirect credit toward consumption sectors
 	option = {
 		name = banking_cycle_events.13.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_modifier = {
 			name = banking_event_credit_rebalance
 			days = normal_modifier_time
@@ -1568,14 +1352,8 @@ banking_cycle_events.13 = {
 	# Option C: Order a halt to new factory loans - aggressive cooldown
 	option = {
 		name = banking_cycle_events.13.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_8_DESC"
-			change_variable = { name = bubble_pressure add = -8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = -3 }
-		}
+		banking_change_bubble_pressure = { ADD = -8 TEXT = BUBBLE_PRESSURE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
 		add_radicals = {
 			value = medium_radicals
 			strata = upper
@@ -1622,14 +1400,8 @@ banking_cycle_events.14 = {
 	option = {
 		name = banking_cycle_events.14.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_15_DESC"
-			change_variable = { name = bubble_pressure add = 15 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 15 TEXT = BUBBLE_PRESSURE_15_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_modifier = {
 			name = banking_event_housing_boom
 			days = normal_modifier_time
@@ -1648,14 +1420,8 @@ banking_cycle_events.14 = {
 	# Option B: Impose lending standards - moderate cooling
 	option = {
 		name = banking_cycle_events.14.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_5_DESC"
-			change_variable = { name = bubble_pressure add = 5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = middle
@@ -1669,14 +1435,8 @@ banking_cycle_events.14 = {
 	# Option C: Cap mortgage lending entirely - deflationary
 	option = {
 		name = banking_cycle_events.14.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = -3 }
-		}
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
 		add_radicals = {
 			value = medium_radicals
 			strata = middle
@@ -1723,10 +1483,7 @@ banking_cycle_events.15 = {
 	option = {
 		name = banking_cycle_events.15.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		te_mon_effect_fx_shock_tt = { TEXT = TE_FX_SHOCK_PLUS_5_DESC POINTS = 13 } # [P4] a defence that works props the currency (~5 points; a shock lands 38% of nominal)
 		add_modifier = {
 			name = banking_event_fx_defense
@@ -1742,14 +1499,8 @@ banking_cycle_events.15 = {
 	# Option B: Impose emergency capital controls
 	option = {
 		name = banking_cycle_events.15.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_8_DESC"
-			change_variable = { name = bubble_pressure add = -8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
+		banking_change_bubble_pressure = { ADD = -8 TEXT = BUBBLE_PRESSURE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_modifier = {
 			name = banking_event_emergency_controls
 			days = normal_modifier_time
@@ -1768,18 +1519,9 @@ banking_cycle_events.15 = {
 	# Option C: Let the currency float - painful adjustment
 	option = {
 		name = banking_cycle_events.15.c
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_8_DESC"
-			change_variable = { name = finance_cycle_value add = -8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_15_DESC"
-			change_variable = { name = bubble_pressure add = -15 }
-		}
+		banking_change_cycle_value = { ADD = -8 TEXT = CYCLE_VALUE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_radicals = {
 			value = medium_radicals
 		}
@@ -1819,7 +1561,7 @@ banking_cycle_events.115 = {
 	option = {
 		name = banking_cycle_events.115.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		te_mon_effect_fx_shock_tt = { TEXT = TE_FX_SHOCK_PLUS_5_DESC POINTS = 13 } # [P4] a defence that works props the currency (~5 points; a shock lands 38% of nominal)
 		add_modifier = { name = banking_event_fx_defense multiplier = banking_event_expense_large days = normal_modifier_time is_decaying = yes }
 		ai_chance = { base = 40 }
@@ -1828,8 +1570,8 @@ banking_cycle_events.115 = {
 	# Option B: Impose strict import licensing: restrict inputs to critical sectors only
 	option = {
 		name = banking_cycle_events.115.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		banking_change_bubble_pressure = { ADD = -8 TEXT = BUBBLE_PRESSURE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_modifier = { name = banking_event_emergency_controls days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = bureaucrats }
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
@@ -1838,9 +1580,9 @@ banking_cycle_events.115 = {
 	# Option C: Permit factor prices to adjust: accept production disruption as the cost of rebalancing
 	option = {
 		name = banking_cycle_events.115.c
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_3_DESC" change_variable = { name = finance_cycle_momentum add = -3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
+		banking_change_cycle_value = { ADD = -8 TEXT = CYCLE_VALUE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = { name = banking_event_currency_collapse days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals }
 		ai_chance = { base = 25 }
@@ -1871,7 +1613,7 @@ banking_cycle_events.165 = {
 	option = {
 		name = banking_cycle_events.165.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		te_mon_effect_fx_shock_tt = { TEXT = TE_FX_SHOCK_PLUS_5_DESC POINTS = 13 } # [P4] a defence that works props the currency (~5 points; a shock lands 38% of nominal)
 		add_modifier = { name = banking_event_fx_defense multiplier = banking_event_expense_large days = normal_modifier_time is_decaying = yes }
 		ai_chance = { base = 40 }
@@ -1880,8 +1622,8 @@ banking_cycle_events.165 = {
 	# Option B: Mandate cooperative import substitution: source domestically wherever possible
 	option = {
 		name = banking_cycle_events.165.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		banking_change_bubble_pressure = { ADD = -8 TEXT = BUBBLE_PRESSURE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_modifier = { name = banking_event_emergency_controls days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals strata = upper }
 		ai_chance = { base = 35 modifier = { add = 15 banking_cycle_is_panic = yes } }
@@ -1890,9 +1632,9 @@ banking_cycle_events.165 = {
 	# Option C: Let the adjustment flow through: accept hardship, rebuild structural independence
 	option = {
 		name = banking_cycle_events.165.c
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_8_DESC" change_variable = { name = finance_cycle_value add = -8 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_3_DESC" change_variable = { name = finance_cycle_momentum add = -3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
+		banking_change_cycle_value = { ADD = -8 TEXT = CYCLE_VALUE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = { name = banking_event_currency_collapse days = normal_modifier_time is_decaying = yes }
 		add_radicals = { value = medium_radicals }
 		ai_chance = { base = 25 }
@@ -1945,10 +1687,7 @@ banking_cycle_events.16 = {
 	option = {
 		name = banking_cycle_events.16.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_modifier = {
 			name = banking_event_cb_independence
 			days = long_modifier_time
@@ -1956,10 +1695,7 @@ banking_cycle_events.16 = {
 		}
 		if = {
 			limit = { has_law = law_type:law_central_bank_independence }
-			custom_tooltip = {
-				text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-				change_variable = { name = bubble_pressure add = -3 }
-			}
+			banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		}
 		add_radicals = {
 			value = small_radicals
@@ -1974,14 +1710,8 @@ banking_cycle_events.16 = {
 	# Option B: Override the central bank for political goals - short-term gain
 	option = {
 		name = banking_cycle_events.16.b
-		custom_tooltip = {
-			text = "MOMENTUM_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = 3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
+		banking_change_momentum = { ADD = 3 TEXT = MOMENTUM_3_DESC }
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
 		# The override is a new rule for the bank: the Growth mandate.
 		if = {
 			limit = {
@@ -2010,14 +1740,8 @@ banking_cycle_events.16 = {
 	# Option C: Restructure the central bank mandate - compromise
 	option = {
 		name = banking_cycle_events.16.c
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_2_DESC"
-			change_variable = { name = bubble_pressure add = 2 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		add_modifier = {
 			name = banking_event_dual_mandate
 			days = normal_modifier_time
@@ -2054,7 +1778,7 @@ banking_cycle_events.116 = {
 	option = {
 		name = banking_cycle_events.116.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_modifier = { name = banking_event_cb_independence days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = academics }
 		ai_chance = { base = 50 }
@@ -2063,8 +1787,8 @@ banking_cycle_events.116 = {
 	# Option B: Side with Party leadership: political goals take precedence over technocratic limits
 	option = {
 		name = banking_cycle_events.116.b
-		custom_tooltip = { text = "MOMENTUM_3_DESC" change_variable = { name = finance_cycle_momentum add = 3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_8_DESC" change_variable = { name = bubble_pressure add = 8 } }
+		banking_change_momentum = { ADD = 3 TEXT = MOMENTUM_3_DESC }
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 30 modifier = { add = 15 banking_cycle_is_recession = yes } }
 	}
@@ -2072,8 +1796,8 @@ banking_cycle_events.116 = {
 	# Option C: Form a joint Planning-Party review committee: balance technical and political goals
 	option = {
 		name = banking_cycle_events.116.c
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_2_DESC" change_variable = { name = bubble_pressure add = 2 } }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		add_modifier = { name = banking_event_dual_mandate days = normal_modifier_time is_decaying = yes }
 		ai_chance = { base = 40 }
 	}
@@ -2103,7 +1827,7 @@ banking_cycle_events.166 = {
 	option = {
 		name = banking_cycle_events.166.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_modifier = { name = banking_event_cb_independence days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = small_radicals pop_type = capitalists }
 		ai_chance = { base = 50 }
@@ -2112,8 +1836,8 @@ banking_cycle_events.166 = {
 	# Option B: Allow the reformers to succeed: efficiency over orthodoxy
 	option = {
 		name = banking_cycle_events.166.b
-		custom_tooltip = { text = "MOMENTUM_3_DESC" change_variable = { name = finance_cycle_momentum add = 3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_8_DESC" change_variable = { name = bubble_pressure add = 8 } }
+		banking_change_momentum = { ADD = 3 TEXT = MOMENTUM_3_DESC }
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 30 modifier = { add = 15 banking_cycle_is_recession = yes } }
 	}
@@ -2121,8 +1845,8 @@ banking_cycle_events.166 = {
 	# Option C: Form a mixed-mandate council: balance cooperative values with practical flexibility
 	option = {
 		name = banking_cycle_events.166.c
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_2_DESC" change_variable = { name = bubble_pressure add = 2 } }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		add_modifier = { name = banking_event_dual_mandate days = normal_modifier_time is_decaying = yes }
 		ai_chance = { base = 40 }
 	}
@@ -2159,14 +1883,8 @@ banking_cycle_events.17 = {
 	option = {
 		name = banking_cycle_events.17.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_10_DESC"
-			change_variable = { name = bubble_pressure add = 10 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 10 TEXT = BUBBLE_PRESSURE_10_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
@@ -2184,10 +1902,7 @@ banking_cycle_events.17 = {
 	# Option B: Introduce borrowing limits - moderate
 	option = {
 		name = banking_cycle_events.17.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = middle
@@ -2201,14 +1916,8 @@ banking_cycle_events.17 = {
 	# Option C: Ban consumer lending - draconian
 	option = {
 		name = banking_cycle_events.17.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_radicals = {
 			value = medium_radicals
 			strata = middle
@@ -2249,8 +1958,8 @@ banking_cycle_events.117 = {
 	option = {
 		name = banking_cycle_events.117.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_10_DESC" change_variable = { name = bubble_pressure add = 10 } }
-		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
+		banking_change_bubble_pressure = { ADD = 10 TEXT = BUBBLE_PRESSURE_10_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_loyalists = { value = small_radicals strata = middle }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 35 modifier = { add = -25 banking_cycle_bubble_risk_high = yes } }
@@ -2259,7 +1968,7 @@ banking_cycle_events.117 = {
 	# Option B: Formalise and regulate informal production: bring it under state oversight
 	option = {
 		name = banking_cycle_events.117.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_radicals = { value = small_radicals strata = middle }
 		ai_chance = { base = 40 modifier = { add = 10 banking_cycle_bubble_risk_rising = yes } }
 	}
@@ -2267,8 +1976,8 @@ banking_cycle_events.117 = {
 	# Option C: Suppress the informal economy: enforce plan discipline
 	option = {
 		name = banking_cycle_events.117.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_radicals = { value = medium_radicals strata = middle }
 		add_radicals = { value = medium_radicals strata = lower }
 		ai_chance = { base = 15 modifier = { add = 20 banking_cycle_bubble_risk_high = yes } }
@@ -2299,8 +2008,8 @@ banking_cycle_events.167 = {
 	option = {
 		name = banking_cycle_events.167.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_10_DESC" change_variable = { name = bubble_pressure add = 10 } }
-		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
+		banking_change_bubble_pressure = { ADD = 10 TEXT = BUBBLE_PRESSURE_10_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_loyalists = { value = small_radicals strata = middle }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = { base = 35 modifier = { add = -25 banking_cycle_bubble_risk_high = yes } }
@@ -2309,7 +2018,7 @@ banking_cycle_events.167 = {
 	# Option B: Introduce per-member borrowing caps to moderate the expansion
 	option = {
 		name = banking_cycle_events.167.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_radicals = { value = small_radicals strata = middle }
 		ai_chance = { base = 40 modifier = { add = 10 banking_cycle_bubble_risk_rising = yes } }
 	}
@@ -2317,8 +2026,8 @@ banking_cycle_events.167 = {
 	# Option C: Restrict all personal lending against dividends: enforce mandatory savings
 	option = {
 		name = banking_cycle_events.167.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_radicals = { value = medium_radicals strata = middle }
 		add_radicals = { value = medium_radicals strata = lower }
 		ai_chance = { base = 15 modifier = { add = 20 banking_cycle_bubble_risk_high = yes } }
@@ -2356,18 +2065,9 @@ banking_cycle_events.18 = {
 	option = {
 		name = banking_cycle_events.18.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_10_DESC"
-			change_variable = { name = finance_cycle_value add = -10 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_15_DESC"
-			change_variable = { name = bubble_pressure add = -15 }
-		}
+		banking_change_cycle_value = { ADD = -10 TEXT = CYCLE_VALUE_MINUS_10_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
 		add_modifier = {
 			name = banking_event_derivatives_crackdown
 			days = long_modifier_time
@@ -2389,14 +2089,8 @@ banking_cycle_events.18 = {
 	# Option B: Arrange a quiet rescue - contain the damage, moral hazard
 	option = {
 		name = banking_cycle_events.18.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_value add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_modifier = {
 			name = banking_event_quiet_rescue
 			multiplier = banking_event_expense_large
@@ -2411,10 +2105,7 @@ banking_cycle_events.18 = {
 	# Option C: Deny knowledge and hope it blows over - risky cover-up
 	option = {
 		name = banking_cycle_events.18.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_10_DESC"
-			change_variable = { name = bubble_pressure add = 10 }
-		}
+		banking_change_bubble_pressure = { ADD = 10 TEXT = BUBBLE_PRESSURE_10_DESC }
 		ai_chance = {
 			base = 10
 		}
@@ -2452,14 +2143,8 @@ banking_cycle_events.19 = {
 	option = {
 		name = banking_cycle_events.19.a
 		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_modifier = {
 			name = banking_event_sovereign_wealth_fund
 			days = long_modifier_time
@@ -2483,14 +2168,8 @@ banking_cycle_events.19 = {
 	# Option B: Invest the surplus into the economy directly
 	option = {
 		name = banking_cycle_events.19.b
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_5_DESC"
-			change_variable = { name = bubble_pressure add = 5 }
-		}
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = lower
@@ -2503,14 +2182,8 @@ banking_cycle_events.19 = {
 	# Option C: Return the surplus as tax cuts
 	option = {
 		name = banking_cycle_events.19.c
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -2556,18 +2229,9 @@ banking_cycle_events.20 = {
 	option = {
 		name = banking_cycle_events.20.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_15_DESC"
-			change_variable = { name = finance_cycle_value add = -15 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_4_DESC"
-			change_variable = { name = finance_cycle_momentum add = -4 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_25_DESC"
-			change_variable = { name = bubble_pressure add = -25 }
-		}
+		banking_change_cycle_value = { ADD = -15 TEXT = CYCLE_VALUE_MINUS_15_DESC }
+		banking_change_momentum = { ADD = -4 TEXT = MOMENTUM_MINUS_4_DESC }
+		banking_change_bubble_pressure = { ADD = -25 TEXT = BUBBLE_PRESSURE_MINUS_25_DESC }
 		add_modifier = {
 			name = banking_event_shadow_regulation
 			days = long_modifier_time
@@ -2588,14 +2252,8 @@ banking_cycle_events.20 = {
 	# Option B: Extend an implicit guarantee - stabilize but grow the problem
 	option = {
 		name = banking_cycle_events.20.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_15_DESC"
-			change_variable = { name = bubble_pressure add = 15 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
+		banking_change_bubble_pressure = { ADD = 15 TEXT = BUBBLE_PRESSURE_15_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 30
 			modifier = { add = -20 banking_cycle_bubble_risk_high = yes }
@@ -2605,10 +2263,7 @@ banking_cycle_events.20 = {
 	# Option C: Ignore it - willful blindness
 	option = {
 		name = banking_cycle_events.20.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_20_DESC"
-			change_variable = { name = bubble_pressure add = 20 }
-		}
+		banking_change_bubble_pressure = { ADD = 20 TEXT = BUBBLE_PRESSURE_20_DESC }
 		ai_chance = {
 			base = 15
 		}
@@ -2640,9 +2295,9 @@ banking_cycle_events.120 = {
 	option = {
 		name = banking_cycle_events.120.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_15_DESC" change_variable = { name = finance_cycle_value add = -15 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_4_DESC" change_variable = { name = finance_cycle_momentum add = -4 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_25_DESC" change_variable = { name = bubble_pressure add = -25 } }
+		banking_change_cycle_value = { ADD = -15 TEXT = CYCLE_VALUE_MINUS_15_DESC }
+		banking_change_momentum = { ADD = -4 TEXT = MOMENTUM_MINUS_4_DESC }
+		banking_change_bubble_pressure = { ADD = -25 TEXT = BUBBLE_PRESSURE_MINUS_25_DESC }
 		add_modifier = { name = banking_event_shadow_regulation days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = large_radicals pop_type = bureaucrats }
 		ai_chance = { base = 40 modifier = { add = 20 banking_cycle_bubble_risk_high = yes } }
@@ -2651,15 +2306,15 @@ banking_cycle_events.120 = {
 	# Option B: Tacitly accept the blat network: unofficial coordination is filling real gaps in the plan
 	option = {
 		name = banking_cycle_events.120.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_15_DESC" change_variable = { name = bubble_pressure add = 15 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_bubble_pressure = { ADD = 15 TEXT = BUBBLE_PRESSURE_15_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = { base = 30 modifier = { add = -20 banking_cycle_bubble_risk_high = yes } }
 	}
 
 	# Option C: Quietly regularise the network through new coordination regulations
 	option = {
 		name = banking_cycle_events.120.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_20_DESC" change_variable = { name = bubble_pressure add = 20 } }
+		banking_change_bubble_pressure = { ADD = 20 TEXT = BUBBLE_PRESSURE_20_DESC }
 		ai_chance = { base = 15 }
 	}
 
@@ -2688,9 +2343,9 @@ banking_cycle_events.170 = {
 	option = {
 		name = banking_cycle_events.170.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_15_DESC" change_variable = { name = finance_cycle_value add = -15 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_4_DESC" change_variable = { name = finance_cycle_momentum add = -4 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_25_DESC" change_variable = { name = bubble_pressure add = -25 } }
+		banking_change_cycle_value = { ADD = -15 TEXT = CYCLE_VALUE_MINUS_15_DESC }
+		banking_change_momentum = { ADD = -4 TEXT = MOMENTUM_MINUS_4_DESC }
+		banking_change_bubble_pressure = { ADD = -25 TEXT = BUBBLE_PRESSURE_MINUS_25_DESC }
 		add_modifier = { name = banking_event_shadow_regulation days = long_modifier_time is_decaying = yes }
 		add_radicals = { value = large_radicals strata = upper }
 		ai_chance = { base = 40 modifier = { add = 20 banking_cycle_bubble_risk_high = yes } }
@@ -2699,15 +2354,15 @@ banking_cycle_events.170 = {
 	# Option B: Conduct a quiet internal audit: acknowledge but minimise public exposure
 	option = {
 		name = banking_cycle_events.170.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_15_DESC" change_variable = { name = bubble_pressure add = 15 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_bubble_pressure = { ADD = 15 TEXT = BUBBLE_PRESSURE_15_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = { base = 30 modifier = { add = -20 banking_cycle_bubble_risk_high = yes } }
 	}
 
 	# Option C: Ignore the allegation: it falls within cooperative internal autonomy
 	option = {
 		name = banking_cycle_events.170.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_20_DESC" change_variable = { name = bubble_pressure add = 20 } }
+		banking_change_bubble_pressure = { ADD = 20 TEXT = BUBBLE_PRESSURE_20_DESC }
 		ai_chance = { base = 15 }
 	}
 
@@ -2753,18 +2408,9 @@ banking_cycle_events.21 = {
 	option = {
 		name = banking_cycle_events.21.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_2_DESC"
-			change_variable = { name = bubble_pressure add = 2 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		add_modifier = {
 			name = banking_event_merchant_prosperity
 			days = normal_modifier_time
@@ -2777,10 +2423,7 @@ banking_cycle_events.21 = {
 
 	option = {
 		name = banking_cycle_events.21.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
 		add_loyalists = {
 			value = very_small_radicals
 			strata = upper
@@ -2821,14 +2464,8 @@ banking_cycle_events.22 = {
 	option = {
 		name = banking_cycle_events.22.a
 		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_4_DESC"
-			change_variable = { name = bubble_pressure add = 4 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 4 TEXT = BUBBLE_PRESSURE_4_DESC }
 		add_modifier = {
 			name = banking_event_provincial_exchange
 			days = normal_modifier_time
@@ -2841,10 +2478,7 @@ banking_cycle_events.22 = {
 
 	option = {
 		name = banking_cycle_events.22.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_2_DESC"
-			change_variable = { name = bubble_pressure add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		ai_chance = {
 			base = 45
 		}
@@ -2881,14 +2515,8 @@ banking_cycle_events.23 = {
 	option = {
 		name = banking_cycle_events.23.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_value add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		add_modifier = {
 			name = banking_event_scandal_fallout
 			days = short_modifier_time
@@ -2905,10 +2533,7 @@ banking_cycle_events.23 = {
 
 	option = {
 		name = banking_cycle_events.23.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_5_DESC"
-			change_variable = { name = finance_cycle_value add = -5 }
-		}
+		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -2950,18 +2575,9 @@ banking_cycle_events.24 = {
 	option = {
 		name = banking_cycle_events.24.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_5_DESC"
-			change_variable = { name = finance_cycle_value add = -5 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_8_DESC"
-			change_variable = { name = bubble_pressure add = -8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
+		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
+		banking_change_bubble_pressure = { ADD = -8 TEXT = BUBBLE_PRESSURE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -2974,14 +2590,8 @@ banking_cycle_events.24 = {
 
 	option = {
 		name = banking_cycle_events.24.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_value add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		ai_chance = {
 			base = 35
 		}
@@ -2989,10 +2599,7 @@ banking_cycle_events.24 = {
 
 	option = {
 		name = banking_cycle_events.24.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_5_DESC"
-			change_variable = { name = bubble_pressure add = 5 }
-		}
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
 		ai_chance = {
 			base = 20
 		}
@@ -3029,10 +2636,7 @@ banking_cycle_events.25 = {
 	option = {
 		name = banking_cycle_events.25.a
 		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		add_modifier = {
 			name = banking_event_trade_bills
 			days = normal_modifier_time
@@ -3045,14 +2649,8 @@ banking_cycle_events.25 = {
 
 	option = {
 		name = banking_cycle_events.25.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_modifier = {
 			name = banking_event_trade_bills
 			days = normal_modifier_time
@@ -3104,14 +2702,8 @@ banking_cycle_events.26 = {
 	option = {
 		name = banking_cycle_events.26.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
-			change_variable = { name = bubble_pressure add = -2 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = -2 TEXT = BUBBLE_PRESSURE_MINUS_2_DESC }
 		add_modifier = {
 			name = banking_event_pension_stability
 			days = normal_modifier_time
@@ -3124,14 +2716,8 @@ banking_cycle_events.26 = {
 
 	option = {
 		name = banking_cycle_events.26.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_5_DESC"
-			change_variable = { name = finance_cycle_value add = 5 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_4_DESC"
-			change_variable = { name = bubble_pressure add = 4 }
-		}
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = 4 TEXT = BUBBLE_PRESSURE_4_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -3174,14 +2760,8 @@ banking_cycle_events.27 = {
 	option = {
 		name = banking_cycle_events.27.a
 		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_modifier = {
 			name = banking_event_telegraph_settlement
 			days = normal_modifier_time
@@ -3194,10 +2774,7 @@ banking_cycle_events.27 = {
 
 	option = {
 		name = banking_cycle_events.27.b
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 45
 		}
@@ -3235,18 +2812,9 @@ banking_cycle_events.28 = {
 	option = {
 		name = banking_cycle_events.28.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_5_DESC"
-			change_variable = { name = finance_cycle_value add = -5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
+		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -3258,14 +2826,8 @@ banking_cycle_events.28 = {
 
 	option = {
 		name = banking_cycle_events.28.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_value add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
-			change_variable = { name = bubble_pressure add = -2 }
-		}
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -2 TEXT = BUBBLE_PRESSURE_MINUS_2_DESC }
 		add_modifier = {
 			name = banking_event_interbank_guarantee
 			multiplier = banking_event_expense_medium
@@ -3279,14 +2841,8 @@ banking_cycle_events.28 = {
 
 	option = {
 		name = banking_cycle_events.28.c
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_6_DESC"
-			change_variable = { name = bubble_pressure add = 6 }
-		}
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
+		banking_change_bubble_pressure = { ADD = 6 TEXT = BUBBLE_PRESSURE_6_DESC }
 		ai_chance = {
 			base = 25
 		}
@@ -3324,14 +2880,8 @@ banking_cycle_events.29 = {
 	option = {
 		name = banking_cycle_events.29.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
-			change_variable = { name = bubble_pressure add = -2 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = -2 TEXT = BUBBLE_PRESSURE_MINUS_2_DESC }
 		add_modifier = {
 			name = banking_event_cooperative_growth
 			days = normal_modifier_time
@@ -3339,10 +2889,7 @@ banking_cycle_events.29 = {
 		}
 		if = {
 			limit = { has_law = law_type:law_free_mutual_banking }
-			custom_tooltip = {
-				text = "CYCLE_VALUE_2_DESC"
-				change_variable = { name = finance_cycle_value add = 2 }
-			}
+			banking_change_cycle_value = { ADD = 2 TEXT = CYCLE_VALUE_2_DESC }
 		}
 		add_loyalists = {
 			value = very_small_radicals
@@ -3356,14 +2903,8 @@ banking_cycle_events.29 = {
 
 	option = {
 		name = banking_cycle_events.29.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_5_DESC"
-			change_variable = { name = finance_cycle_value add = 5 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_loyalists = {
 			value = very_small_radicals
 			strata = lower
@@ -3409,14 +2950,8 @@ banking_cycle_events.30 = {
 	option = {
 		name = banking_cycle_events.30.a
 		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -3429,14 +2964,8 @@ banking_cycle_events.30 = {
 
 	option = {
 		name = banking_cycle_events.30.b
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		ai_chance = {
 			base = 40
 		}
@@ -3444,14 +2973,8 @@ banking_cycle_events.30 = {
 
 	option = {
 		name = banking_cycle_events.30.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -3511,14 +3034,8 @@ banking_cycle_events.31 = {
 			limit = { banking_can_enact_cb_bank_holiday = yes }
 			banking_effect_cb_bank_holiday = yes
 		}
-		custom_tooltip = {
-			text = "CYCLE_VALUE_5_DESC"
-			change_variable = { name = finance_cycle_value add = 5 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_10_DESC"
-			change_variable = { name = bubble_pressure add = -10 }
-		}
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -3530,18 +3047,9 @@ banking_cycle_events.31 = {
 
 	option = {
 		name = banking_cycle_events.31.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_8_DESC"
-			change_variable = { name = finance_cycle_value add = -8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
+		banking_change_cycle_value = { ADD = -8 TEXT = CYCLE_VALUE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_radicals = {
 			value = medium_radicals
 			strata = lower
@@ -3553,14 +3061,8 @@ banking_cycle_events.31 = {
 
 	option = {
 		name = banking_cycle_events.31.c
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_value add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		add_modifier = {
 			name = banking_event_interbank_guarantee
 			multiplier = banking_event_expense_small
@@ -3604,18 +3106,9 @@ banking_cycle_events.32 = {
 	option = {
 		name = banking_cycle_events.32.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_8_DESC"
-			change_variable = { name = finance_cycle_value add = -8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_10_DESC"
-			change_variable = { name = bubble_pressure add = -10 }
-		}
+		banking_change_cycle_value = { ADD = -8 TEXT = CYCLE_VALUE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
 		add_modifier = {
 			name = banking_event_trust_collapse
 			days = normal_modifier_time
@@ -3632,14 +3125,8 @@ banking_cycle_events.32 = {
 
 	option = {
 		name = banking_cycle_events.32.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_value add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_modifier = {
 			name = banking_event_interbank_guarantee
 			multiplier = banking_event_expense_large
@@ -3657,10 +3144,7 @@ banking_cycle_events.32 = {
 
 	option = {
 		name = banking_cycle_events.32.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
 		ai_chance = {
 			base = 20
 		}
@@ -3698,14 +3182,8 @@ banking_cycle_events.33 = {
 	option = {
 		name = banking_cycle_events.33.a
 		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_2_DESC"
-			change_variable = { name = bubble_pressure add = 2 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		add_modifier = {
 			name = banking_event_commercial_paper
 			days = normal_modifier_time
@@ -3718,14 +3196,8 @@ banking_cycle_events.33 = {
 
 	option = {
 		name = banking_cycle_events.33.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_5_DESC"
-			change_variable = { name = bubble_pressure add = 5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_modifier = {
 			name = banking_event_commercial_paper
 			days = normal_modifier_time
@@ -3797,14 +3269,8 @@ banking_cycle_events.34 = {
 	option = {
 		name = banking_cycle_events.34.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_modifier = {
 			name = banking_event_deposit_insurance
 			days = long_modifier_time
@@ -3827,10 +3293,7 @@ banking_cycle_events.34 = {
 
 	option = {
 		name = banking_cycle_events.34.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = upper
@@ -3842,14 +3305,8 @@ banking_cycle_events.34 = {
 
 	option = {
 		name = banking_cycle_events.34.c
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		add_modifier = {
 			name = banking_event_deposit_insurance
 			days = normal_modifier_time
@@ -3892,14 +3349,8 @@ banking_cycle_events.35 = {
 	option = {
 		name = banking_cycle_events.35.a
 		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_6_DESC"
-			change_variable = { name = bubble_pressure add = 6 }
-		}
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
+		banking_change_bubble_pressure = { ADD = 6 TEXT = BUBBLE_PRESSURE_6_DESC }
 		add_modifier = {
 			name = banking_event_joint_stock_boom
 			days = normal_modifier_time
@@ -3913,14 +3364,8 @@ banking_cycle_events.35 = {
 
 	option = {
 		name = banking_cycle_events.35.b
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_2_DESC"
-			change_variable = { name = bubble_pressure add = 2 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		ai_chance = {
 			base = 50
 			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
@@ -3964,14 +3409,8 @@ banking_cycle_events.36 = {
 	option = {
 		name = banking_cycle_events.36.a
 		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_6_DESC"
-			change_variable = { name = bubble_pressure add = 6 }
-		}
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
+		banking_change_bubble_pressure = { ADD = 6 TEXT = BUBBLE_PRESSURE_6_DESC }
 		add_modifier = {
 			name = banking_event_fintech_growth
 			days = normal_modifier_time
@@ -3985,14 +3424,8 @@ banking_cycle_events.36 = {
 
 	option = {
 		name = banking_cycle_events.36.b
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_2_DESC"
-			change_variable = { name = bubble_pressure add = 2 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		ai_chance = {
 			base = 40
 		}
@@ -4000,10 +3433,7 @@ banking_cycle_events.36 = {
 
 	option = {
 		name = banking_cycle_events.36.c
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -4049,14 +3479,8 @@ banking_cycle_events.37 = {
 	option = {
 		name = banking_cycle_events.37.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_12_DESC"
-			change_variable = { name = bubble_pressure add = 12 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
+		banking_change_bubble_pressure = { ADD = 12 TEXT = BUBBLE_PRESSURE_12_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		add_modifier = {
 			name = banking_event_mbs_boom
 			days = normal_modifier_time
@@ -4070,14 +3494,8 @@ banking_cycle_events.37 = {
 
 	option = {
 		name = banking_cycle_events.37.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_5_DESC"
-			change_variable = { name = bubble_pressure add = 5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 45
 		}
@@ -4085,14 +3503,8 @@ banking_cycle_events.37 = {
 
 	option = {
 		name = banking_cycle_events.37.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -4135,14 +3547,8 @@ banking_cycle_events.38 = {
 	option = {
 		name = banking_cycle_events.38.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
-			change_variable = { name = bubble_pressure add = -2 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = -2 TEXT = BUBBLE_PRESSURE_MINUS_2_DESC }
 		add_modifier = {
 			name = banking_event_microfinance
 			days = normal_modifier_time
@@ -4165,10 +3571,7 @@ banking_cycle_events.38 = {
 
 	option = {
 		name = banking_cycle_events.38.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
 		add_loyalists = {
 			value = very_small_radicals
 			strata = lower
@@ -4237,18 +3640,9 @@ banking_cycle_events.39 = {
 	option = {
 		name = banking_cycle_events.39.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_5_DESC"
-			change_variable = { name = finance_cycle_value add = 5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_3_DESC"
-			change_variable = { name = finance_cycle_momentum add = 3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_8_DESC"
-			change_variable = { name = bubble_pressure add = 8 }
-		}
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_momentum = { ADD = 3 TEXT = MOMENTUM_3_DESC }
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
 		if = {
 			limit = { te_mon_full_system = yes }
 			# The dashboard tool, asked again: the event stays open for months,
@@ -4281,18 +3675,9 @@ banking_cycle_events.39 = {
 
 	option = {
 		name = banking_cycle_events.39.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		ai_chance = {
 			base = 35
 		}
@@ -4300,14 +3685,8 @@ banking_cycle_events.39 = {
 
 	option = {
 		name = banking_cycle_events.39.c
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = lower
@@ -4353,18 +3732,9 @@ banking_cycle_events.40 = {
 	option = {
 		name = banking_cycle_events.40.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_5_DESC"
-			change_variable = { name = finance_cycle_value add = -5 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_8_DESC"
-			change_variable = { name = bubble_pressure add = -8 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = -2 }
-		}
+		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
+		banking_change_bubble_pressure = { ADD = -8 TEXT = BUBBLE_PRESSURE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_modifier = {
 			name = banking_event_rating_crackdown
 			days = normal_modifier_time
@@ -4381,14 +3751,8 @@ banking_cycle_events.40 = {
 
 	option = {
 		name = banking_cycle_events.40.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_value add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		ai_chance = {
 			base = 35
 		}
@@ -4396,10 +3760,7 @@ banking_cycle_events.40 = {
 
 	option = {
 		name = banking_cycle_events.40.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_5_DESC"
-			change_variable = { name = bubble_pressure add = 5 }
-		}
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
 		ai_chance = {
 			base = 20
 		}
@@ -4437,10 +3798,7 @@ banking_cycle_events.41 = {
 	option = {
 		name = banking_cycle_events.41.a
 		default_option = yes
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_4_DESC"
-			change_variable = { name = bubble_pressure add = 4 }
-		}
+		banking_change_bubble_pressure = { ADD = 4 TEXT = BUBBLE_PRESSURE_4_DESC }
 		add_modifier = {
 			name = banking_event_student_debt_relief
 			days = normal_modifier_time
@@ -4463,10 +3821,7 @@ banking_cycle_events.41 = {
 
 	option = {
 		name = banking_cycle_events.41.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_radicals = {
 			value = small_radicals
 			pop_type = academics
@@ -4478,14 +3833,8 @@ banking_cycle_events.41 = {
 
 	option = {
 		name = banking_cycle_events.41.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = upper
@@ -4531,14 +3880,8 @@ banking_cycle_events.42 = {
 	option = {
 		name = banking_cycle_events.42.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_3_DESC"
-			change_variable = { name = finance_cycle_value add = 3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
-			change_variable = { name = bubble_pressure add = -2 }
-		}
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = -2 TEXT = BUBBLE_PRESSURE_MINUS_2_DESC }
 		add_modifier = {
 			name = banking_event_green_bonds
 			days = normal_modifier_time
@@ -4559,14 +3902,8 @@ banking_cycle_events.42 = {
 
 	option = {
 		name = banking_cycle_events.42.b
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_3_DESC"
-			change_variable = { name = bubble_pressure add = 3 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_loyalists = {
 			value = very_small_radicals
 			strata = upper
@@ -4608,14 +3945,8 @@ banking_cycle_events.43 = {
 	option = {
 		name = banking_cycle_events.43.a
 		default_option = yes
-		custom_tooltip = {
-			text = "MOMENTUM_2_DESC"
-			change_variable = { name = finance_cycle_momentum add = 2 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_6_DESC"
-			change_variable = { name = bubble_pressure add = 6 }
-		}
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
+		banking_change_bubble_pressure = { ADD = 6 TEXT = BUBBLE_PRESSURE_6_DESC }
 		add_modifier = {
 			name = banking_event_venture_boom
 			days = normal_modifier_time
@@ -4629,14 +3960,8 @@ banking_cycle_events.43 = {
 
 	option = {
 		name = banking_cycle_events.43.b
-		custom_tooltip = {
-			text = "MOMENTUM_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = 1 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_2_DESC"
-			change_variable = { name = bubble_pressure add = 2 }
-		}
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		ai_chance = {
 			base = 50
 			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
@@ -4675,18 +4000,9 @@ banking_cycle_events.44 = {
 	option = {
 		name = banking_cycle_events.44.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_value add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_5_DESC"
-			change_variable = { name = bubble_pressure add = -5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_modifier = {
 			name = banking_event_predatory_crackdown
 			days = normal_modifier_time
@@ -4707,10 +4023,7 @@ banking_cycle_events.44 = {
 
 	option = {
 		name = banking_cycle_events.44.b
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
-			change_variable = { name = bubble_pressure add = -2 }
-		}
+		banking_change_bubble_pressure = { ADD = -2 TEXT = BUBBLE_PRESSURE_MINUS_2_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = lower
@@ -4722,10 +4035,7 @@ banking_cycle_events.44 = {
 
 	option = {
 		name = banking_cycle_events.44.c
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_4_DESC"
-			change_variable = { name = bubble_pressure add = 4 }
-		}
+		banking_change_bubble_pressure = { ADD = 4 TEXT = BUBBLE_PRESSURE_4_DESC }
 		add_radicals = {
 			value = medium_radicals
 			strata = lower
@@ -4779,14 +4089,8 @@ banking_cycle_events.45 = {
 	option = {
 		name = banking_cycle_events.45.a
 		default_option = yes
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_value add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
-			change_variable = { name = bubble_pressure add = -3 }
-		}
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		banking_transfer_emergency_aid = {
 			AMOUNT = banking_event_expense_large
 			DAYS = normal_modifier_time
@@ -4814,14 +4118,8 @@ banking_cycle_events.45 = {
 
 	option = {
 		name = banking_cycle_events.45.b
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_3_DESC"
-			change_variable = { name = finance_cycle_value add = -3 }
-		}
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
-			change_variable = { name = bubble_pressure add = -2 }
-		}
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -2 TEXT = BUBBLE_PRESSURE_MINUS_2_DESC }
 		banking_transfer_emergency_aid = {
 			AMOUNT = banking_event_expense_small
 			DAYS = short_modifier_time
@@ -4843,14 +4141,8 @@ banking_cycle_events.45 = {
 
 	option = {
 		name = banking_cycle_events.45.c
-		custom_tooltip = {
-			text = "CYCLE_VALUE_MINUS_5_DESC"
-			change_variable = { name = finance_cycle_value add = -5 }
-		}
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		if = {
 			limit = { exists = scope:bailout_country }
 			change_relations = {
@@ -5051,8 +4343,8 @@ banking_cycle_events.50 = {
 	option = {
 		name = banking_cycle_events.50.a
 		default_option = yes
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_3_DESC" change_variable = { name = finance_cycle_value add = -3 } }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
 		add_radicals = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 30
@@ -5063,8 +4355,8 @@ banking_cycle_events.50 = {
 	# Option B: Quietly revise targets downward to match reality
 	option = {
 		name = banking_cycle_events.50.b
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		ai_chance = {
 			base = 45
 		}
@@ -5073,8 +4365,8 @@ banking_cycle_events.50 = {
 	# Option C: Launch a propaganda campaign to rally workers
 	option = {
 		name = banking_cycle_events.50.c
-		custom_tooltip = { text = "CYCLE_VALUE_3_DESC" change_variable = { name = finance_cycle_value add = 3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 25
@@ -5107,9 +4399,9 @@ banking_cycle_events.51 = {
 	option = {
 		name = banking_cycle_events.51.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_5_DESC" change_variable = { name = finance_cycle_value add = -5 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
+		banking_change_cycle_value = { ADD = -5 TEXT = CYCLE_VALUE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
+		banking_change_bubble_pressure = { ADD = -8 TEXT = BUBBLE_PRESSURE_MINUS_8_DESC }
 		ai_chance = {
 			base = 40
 			modifier = { add = 20 banking_cycle_bubble_risk_high = yes }
@@ -5119,8 +4411,8 @@ banking_cycle_events.51 = {
 	# Option B: Quietly replace the worst offenders
 	option = {
 		name = banking_cycle_events.51.b
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_3_DESC" change_variable = { name = finance_cycle_value add = -3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		ai_chance = {
 			base = 40
 		}
@@ -5129,8 +4421,8 @@ banking_cycle_events.51 = {
 	# Option C: Turn a blind eye: the reports look good on paper
 	option = {
 		name = banking_cycle_events.51.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_10_DESC" change_variable = { name = bubble_pressure add = 10 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_bubble_pressure = { ADD = 10 TEXT = BUBBLE_PRESSURE_10_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 20
 			modifier = { add = -15 banking_cycle_bubble_risk_high = yes }
@@ -5163,8 +4455,8 @@ banking_cycle_events.52 = {
 	option = {
 		name = banking_cycle_events.52.a
 		default_option = yes
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_radicals = { value = small_radicals strata = upper }
 		ai_chance = {
 			base = 40
@@ -5175,8 +4467,8 @@ banking_cycle_events.52 = {
 	# Option B: Allow limited regional strategic reserves
 	option = {
 		name = banking_cycle_events.52.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 35
 		}
@@ -5185,8 +4477,8 @@ banking_cycle_events.52 = {
 	# Option C: Use the military to enforce redistribution
 	option = {
 		name = banking_cycle_events.52.c
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_3_DESC" change_variable = { name = finance_cycle_value add = -3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_10_DESC" change_variable = { name = bubble_pressure add = -10 } }
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
 		add_radicals = { value = medium_radicals }
 		ai_chance = {
 			base = 25
@@ -5220,7 +4512,7 @@ banking_cycle_events.53 = {
 	option = {
 		name = banking_cycle_events.53.a
 		default_option = yes
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_radicals = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 35
@@ -5230,8 +4522,8 @@ banking_cycle_events.53 = {
 	# Option B: Tacitly tolerate it as an economic safety valve
 	option = {
 		name = banking_cycle_events.53.b
-		custom_tooltip = { text = "CYCLE_VALUE_5_DESC" change_variable = { name = finance_cycle_value add = 5 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 40
@@ -5242,8 +4534,8 @@ banking_cycle_events.53 = {
 	# Option C: Legalize limited private trade to ease shortages
 	option = {
 		name = banking_cycle_events.53.c
-		custom_tooltip = { text = "CYCLE_VALUE_5_DESC" change_variable = { name = finance_cycle_value add = 5 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_8_DESC" change_variable = { name = bubble_pressure add = 8 } }
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
 		add_radicals = { value = small_radicals strata = upper }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = {
@@ -5278,8 +4570,8 @@ banking_cycle_events.54 = {
 	option = {
 		name = banking_cycle_events.54.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_3_DESC" change_variable = { name = finance_cycle_value add = 3 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 45
@@ -5289,8 +4581,8 @@ banking_cycle_events.54 = {
 	# Option B: Ideological campaign emphasizing socialist duty
 	option = {
 		name = banking_cycle_events.54.b
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_2_DESC" change_variable = { name = bubble_pressure add = 2 } }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		ai_chance = {
 			base = 30
 		}
@@ -5299,8 +4591,8 @@ banking_cycle_events.54 = {
 	# Option C: Focus incentives on key strategic industries only
 	option = {
 		name = banking_cycle_events.54.c
-		custom_tooltip = { text = "CYCLE_VALUE_2_DESC" change_variable = { name = finance_cycle_value add = 2 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_2_DESC" change_variable = { name = bubble_pressure add = -2 } }
+		banking_change_cycle_value = { ADD = 2 TEXT = CYCLE_VALUE_2_DESC }
+		banking_change_bubble_pressure = { ADD = -2 TEXT = BUBBLE_PRESSURE_MINUS_2_DESC }
 		ai_chance = {
 			base = 25
 		}
@@ -5343,9 +4635,9 @@ banking_cycle_events.55 = {
 	option = {
 		name = banking_cycle_events.55.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_5_DESC" change_variable = { name = finance_cycle_value add = 5 } }
-		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		ai_chance = {
 			base = 50
 			modifier = { add = 20 banking_cycle_is_panic = yes }
@@ -5355,8 +4647,8 @@ banking_cycle_events.55 = {
 	# Option B: Accept with conditions: joint planning committees
 	option = {
 		name = banking_cycle_events.55.b
-		custom_tooltip = { text = "CYCLE_VALUE_3_DESC" change_variable = { name = finance_cycle_value add = 3 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 35
 		}
@@ -5415,9 +4707,9 @@ banking_cycle_events.56 = {
 	option = {
 		name = banking_cycle_events.56.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_3_DESC" change_variable = { name = finance_cycle_value add = -3 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		ai_chance = {
 			base = 40
 			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
@@ -5427,7 +4719,7 @@ banking_cycle_events.56 = {
 	# Option B: Increase security without public acknowledgment
 	option = {
 		name = banking_cycle_events.56.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		ai_chance = {
 			base = 35
 		}
@@ -5436,8 +4728,8 @@ banking_cycle_events.56 = {
 	# Option C: Blame foreign agents and rally patriotic support
 	option = {
 		name = banking_cycle_events.56.c
-		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
 		add_loyalists = { value = small_radicals }
 		ai_chance = {
 			base = 25
@@ -5470,9 +4762,9 @@ banking_cycle_events.57 = {
 	option = {
 		name = banking_cycle_events.57.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_5_DESC" change_variable = { name = finance_cycle_value add = 5 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_10_DESC" change_variable = { name = bubble_pressure add = 10 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = 10 TEXT = BUBBLE_PRESSURE_10_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 35
 			modifier = { add = -20 banking_cycle_bubble_risk_high = yes }
@@ -5482,8 +4774,8 @@ banking_cycle_events.57 = {
 	# Option B: Gradual merger program over several years
 	option = {
 		name = banking_cycle_events.57.b
-		custom_tooltip = { text = "CYCLE_VALUE_2_DESC" change_variable = { name = finance_cycle_value add = 2 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
+		banking_change_cycle_value = { ADD = 2 TEXT = CYCLE_VALUE_2_DESC }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		ai_chance = {
 			base = 40
 		}
@@ -5492,7 +4784,7 @@ banking_cycle_events.57 = {
 	# Option C: Abandon the consolidation drive
 	option = {
 		name = banking_cycle_events.57.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_radicals = { value = small_radicals strata = upper }
 		ai_chance = {
 			base = 25
@@ -5530,8 +4822,8 @@ banking_cycle_events.60 = {
 	option = {
 		name = banking_cycle_events.60.a
 		default_option = yes
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_3_DESC" change_variable = { name = finance_cycle_value add = -3 } }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
 		add_radicals = { value = small_radicals strata = upper }
 		ai_chance = {
 			base = 35
@@ -5541,8 +4833,8 @@ banking_cycle_events.60 = {
 	# Option B: Bring in mediators from the federation council
 	option = {
 		name = banking_cycle_events.60.b
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		ai_chance = {
 			base = 40
 		}
@@ -5551,8 +4843,8 @@ banking_cycle_events.60 = {
 	# Option C: Allow each cooperative to decide independently
 	option = {
 		name = banking_cycle_events.60.c
-		custom_tooltip = { text = "CYCLE_VALUE_3_DESC" change_variable = { name = finance_cycle_value add = 3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
 		ai_chance = {
 			base = 25
 		}
@@ -5584,8 +4876,8 @@ banking_cycle_events.61 = {
 	option = {
 		name = banking_cycle_events.61.a
 		default_option = yes
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		add_radicals = { value = small_radicals }
 		ai_chance = {
 			base = 35
@@ -5596,8 +4888,8 @@ banking_cycle_events.61 = {
 	# Option B: Public accountability: name and shame
 	option = {
 		name = banking_cycle_events.61.b
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_3_DESC" change_variable = { name = finance_cycle_value add = -3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_2_DESC" change_variable = { name = bubble_pressure add = -2 } }
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_bubble_pressure = { ADD = -2 TEXT = BUBBLE_PRESSURE_MINUS_2_DESC }
 		ai_chance = {
 			base = 35
 		}
@@ -5606,7 +4898,7 @@ banking_cycle_events.61 = {
 	# Option C: Accept it as the cost of voluntary cooperation
 	option = {
 		name = banking_cycle_events.61.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 30
@@ -5640,8 +4932,8 @@ banking_cycle_events.62 = {
 	option = {
 		name = banking_cycle_events.62.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_8_DESC" change_variable = { name = bubble_pressure add = 8 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		add_radicals = { value = small_radicals }
 		ai_chance = {
 			base = 30
@@ -5652,8 +4944,8 @@ banking_cycle_events.62 = {
 	# Option B: Call for extended deliberation: take the time to get it right
 	option = {
 		name = banking_cycle_events.62.b
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_3_DESC" change_variable = { name = finance_cycle_value add = -3 } }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
 		ai_chance = {
 			base = 35
 			modifier = { add = 15 banking_cycle_bubble_risk_high = yes }
@@ -5663,8 +4955,8 @@ banking_cycle_events.62 = {
 	# Option C: Split into smaller, less controversial projects
 	option = {
 		name = banking_cycle_events.62.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_3_DESC" change_variable = { name = finance_cycle_value add = -3 } }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
 		ai_chance = {
 			base = 35
 		}
@@ -5696,8 +4988,8 @@ banking_cycle_events.63 = {
 	option = {
 		name = banking_cycle_events.63.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_5_DESC" change_variable = { name = finance_cycle_value add = 5 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_radicals = { value = small_radicals strata = upper }
 		ai_chance = {
 			base = 35
@@ -5708,8 +5000,8 @@ banking_cycle_events.63 = {
 	# Option B: Reduce governance obligations temporarily
 	option = {
 		name = banking_cycle_events.63.b
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		ai_chance = {
 			base = 40
 		}
@@ -5718,7 +5010,7 @@ banking_cycle_events.63 = {
 	# Option C: Organize solidarity campaigns to sustain morale
 	option = {
 		name = banking_cycle_events.63.c
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 25
@@ -5751,9 +5043,9 @@ banking_cycle_events.64 = {
 	option = {
 		name = banking_cycle_events.64.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_5_DESC" change_variable = { name = finance_cycle_value add = 5 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
-		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
 		ai_chance = {
 			base = 40
 			modifier = { add = -15 banking_cycle_bubble_risk_high = yes }
@@ -5763,8 +5055,8 @@ banking_cycle_events.64 = {
 	# Option B: Expand modestly and reinvest profits locally
 	option = {
 		name = banking_cycle_events.64.b
-		custom_tooltip = { text = "CYCLE_VALUE_3_DESC" change_variable = { name = finance_cycle_value add = 3 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 40
 		}
@@ -5773,7 +5065,7 @@ banking_cycle_events.64 = {
 	# Option C: Focus on the domestic market
 	option = {
 		name = banking_cycle_events.64.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		add_loyalists = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 20
@@ -5806,8 +5098,8 @@ banking_cycle_events.65 = {
 	option = {
 		name = banking_cycle_events.65.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_MINUS_3_DESC" change_variable = { name = finance_cycle_value add = -3 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
+		banking_change_cycle_value = { ADD = -3 TEXT = CYCLE_VALUE_MINUS_3_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_radicals = { value = small_radicals }
 		ai_chance = {
 			base = 35
@@ -5817,8 +5109,8 @@ banking_cycle_events.65 = {
 	# Option B: Seek external credit to shore up the fund
 	option = {
 		name = banking_cycle_events.65.b
-		custom_tooltip = { text = "CYCLE_VALUE_3_DESC" change_variable = { name = finance_cycle_value add = 3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
 		ai_chance = {
 			base = 40
 			modifier = { add = -10 banking_cycle_bubble_risk_high = yes }
@@ -5828,7 +5120,7 @@ banking_cycle_events.65 = {
 	# Option C: Cut benefits and reorganize the fund
 	option = {
 		name = banking_cycle_events.65.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
 		add_radicals = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 25
@@ -5862,9 +5154,9 @@ banking_cycle_events.66 = {
 	option = {
 		name = banking_cycle_events.66.a
 		default_option = yes
-		custom_tooltip = { text = "CYCLE_VALUE_5_DESC" change_variable = { name = finance_cycle_value add = 5 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_cycle_value = { ADD = 5 TEXT = CYCLE_VALUE_5_DESC }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		ai_chance = {
 			base = 40
 			modifier = { add = -15 banking_cycle_bubble_risk_high = yes }
@@ -5874,8 +5166,8 @@ banking_cycle_events.66 = {
 	# Option B: Let cooperatives share knowledge voluntarily
 	option = {
 		name = banking_cycle_events.66.b
-		custom_tooltip = { text = "CYCLE_VALUE_3_DESC" change_variable = { name = finance_cycle_value add = 3 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_2_DESC" change_variable = { name = bubble_pressure add = 2 } }
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		ai_chance = {
 			base = 35
 		}
@@ -5884,7 +5176,7 @@ banking_cycle_events.66 = {
 	# Option C: Focus resources on proven technologies only
 	option = {
 		name = banking_cycle_events.66.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		ai_chance = {
 			base = 25
 			modifier = { add = 15 banking_cycle_bubble_risk_rising = yes }
@@ -5917,9 +5209,9 @@ banking_cycle_events.67 = {
 	option = {
 		name = banking_cycle_events.67.a
 		default_option = yes
-		custom_tooltip = { text = "MOMENTUM_2_DESC" change_variable = { name = finance_cycle_momentum add = 2 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_5_DESC" change_variable = { name = bubble_pressure add = 5 } }
-		custom_tooltip = { text = "CYCLE_VALUE_3_DESC" change_variable = { name = finance_cycle_value add = 3 } }
+		banking_change_momentum = { ADD = 2 TEXT = MOMENTUM_2_DESC }
+		banking_change_bubble_pressure = { ADD = 5 TEXT = BUBBLE_PRESSURE_5_DESC }
+		banking_change_cycle_value = { ADD = 3 TEXT = CYCLE_VALUE_3_DESC }
 		ai_chance = {
 			base = 35
 			modifier = { add = -15 banking_cycle_bubble_risk_high = yes }
@@ -5929,8 +5221,8 @@ banking_cycle_events.67 = {
 	# Option B: Establish mentorship programs for a smooth transition
 	option = {
 		name = banking_cycle_events.67.b
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_2_DESC" change_variable = { name = bubble_pressure add = 2 } }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
+		banking_change_bubble_pressure = { ADD = 2 TEXT = BUBBLE_PRESSURE_2_DESC }
 		ai_chance = {
 			base = 40
 		}
@@ -5939,8 +5231,8 @@ banking_cycle_events.67 = {
 	# Option C: Founding members retain advisory oversight roles
 	option = {
 		name = banking_cycle_events.67.c
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
 		add_radicals = { value = small_radicals strata = lower }
 		ai_chance = {
 			base = 25
@@ -5979,8 +5271,8 @@ banking_cycle_events.46 = {
 	option = {
 		name = banking_cycle_events.46.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_10_DESC" change_variable = { name = bubble_pressure add = 10 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
+		banking_change_bubble_pressure = { ADD = 10 TEXT = BUBBLE_PRESSURE_10_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_loyalists = {
 			value = small_radicals
 			pop_type = capitalists
@@ -5998,7 +5290,7 @@ banking_cycle_events.46 = {
 	# Option B: Broker a pooled settlement between the combatants — a costly political favor, but it stabilizes the exchange
 	option = {
 		name = banking_cycle_events.46.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_3_DESC" change_variable = { name = bubble_pressure add = 3 } }
+		banking_change_bubble_pressure = { ADD = 3 TEXT = BUBBLE_PRESSURE_3_DESC }
 		add_modifier = {
 			name = banking_event_selective_bailout_cost
 			multiplier = banking_event_expense_small
@@ -6014,8 +5306,8 @@ banking_cycle_events.46 = {
 	# Option C: Order an emergency suspension of trading — crushes the bubble but enrages the financial class
 	option = {
 		name = banking_cycle_events.46.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		banking_change_bubble_pressure = { ADD = -8 TEXT = BUBBLE_PRESSURE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_radicals = {
 			value = medium_radicals
 			pop_type = capitalists
@@ -6063,8 +5355,8 @@ banking_cycle_events.47 = {
 	option = {
 		name = banking_cycle_events.47.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_10_DESC" change_variable = { name = bubble_pressure add = -10 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		banking_change_bubble_pressure = { ADD = -10 TEXT = BUBBLE_PRESSURE_MINUS_10_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_radicals = {
 			value = medium_radicals
 			strata = middle
@@ -6081,8 +5373,8 @@ banking_cycle_events.47 = {
 	# Option B: Organize a private rescue consortium — the bankers bail each other out, at moderate public cost
 	option = {
 		name = banking_cycle_events.47.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_loyalists = {
 			value = small_radicals
 			pop_type = capitalists
@@ -6107,8 +5399,8 @@ banking_cycle_events.47 = {
 	# Option C: Commit public treasury funds to guarantee deposits — expensive and politically charged
 	option = {
 		name = banking_cycle_events.47.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		add_loyalists = {
 			value = small_radicals
 			strata = middle
@@ -6156,8 +5448,8 @@ banking_cycle_events.48 = {
 	option = {
 		name = banking_cycle_events.48.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_15_DESC" change_variable = { name = bubble_pressure add = 15 } }
-		custom_tooltip = { text = "MOMENTUM_3_DESC" change_variable = { name = finance_cycle_momentum add = 3 } }
+		banking_change_bubble_pressure = { ADD = 15 TEXT = BUBBLE_PRESSURE_15_DESC }
+		banking_change_momentum = { ADD = 3 TEXT = MOMENTUM_3_DESC }
 		add_loyalists = {
 			value = medium_radicals
 			pop_type = capitalists
@@ -6172,7 +5464,7 @@ banking_cycle_events.48 = {
 	# Option B: Decline to comment — the state has no business pronouncing on valuations
 	option = {
 		name = banking_cycle_events.48.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_8_DESC" change_variable = { name = bubble_pressure add = 8 } }
+		banking_change_bubble_pressure = { ADD = 8 TEXT = BUBBLE_PRESSURE_8_DESC }
 		ai_chance = {
 			base = 40
 		}
@@ -6181,8 +5473,8 @@ banking_cycle_events.48 = {
 	# Option C: Publish a Treasury warning that arithmetic still applies — furious capitalists, grateful intelligentsia
 	option = {
 		name = banking_cycle_events.48.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_radicals = {
 			value = medium_radicals
 			pop_type = capitalists
@@ -6233,8 +5525,8 @@ banking_cycle_events.58 = {
 	option = {
 		name = banking_cycle_events.58.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_15_DESC" change_variable = { name = bubble_pressure add = -15 } }
-		custom_tooltip = { text = "MOMENTUM_1_DESC" change_variable = { name = finance_cycle_momentum add = 1 } }
+		banking_change_bubble_pressure = { ADD = -15 TEXT = BUBBLE_PRESSURE_MINUS_15_DESC }
+		banking_change_momentum = { ADD = 1 TEXT = MOMENTUM_1_DESC }
 		add_radicals = {
 			value = small_radicals
 			strata = lower
@@ -6258,8 +5550,8 @@ banking_cycle_events.58 = {
 	# Option B: Defend the peg with emergency spending — ruinously expensive, may not even work
 	option = {
 		name = banking_cycle_events.58.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_modifier = {
 			name = banking_event_gold_defense
 			days = normal_modifier_time
@@ -6281,7 +5573,7 @@ banking_cycle_events.58 = {
 	# Option C: Convene an international currency conference — slow, modest cost, preserves standing
 	option = {
 		name = banking_cycle_events.58.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
+		banking_change_bubble_pressure = { ADD = -8 TEXT = BUBBLE_PRESSURE_MINUS_8_DESC }
 		te_mon_effect_fx_shock_tt = { TEXT = TE_FX_SHOCK_PLUS_5_DESC POINTS = 13 } # [P4] a defence that works props the currency (~5 points; a shock lands 38% of nominal)
 		add_modifier = {
 			name = banking_event_fx_defense
@@ -6325,8 +5617,8 @@ banking_cycle_events.59 = {
 	option = {
 		name = banking_cycle_events.59.a
 		default_option = yes
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_8_DESC" change_variable = { name = bubble_pressure add = -8 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_3_DESC" change_variable = { name = finance_cycle_momentum add = -3 } }
+		banking_change_bubble_pressure = { ADD = -8 TEXT = BUBBLE_PRESSURE_MINUS_8_DESC }
+		banking_change_momentum = { ADD = -3 TEXT = MOMENTUM_MINUS_3_DESC }
 		add_radicals = {
 			value = medium_radicals
 			pop_type = capitalists
@@ -6340,8 +5632,8 @@ banking_cycle_events.59 = {
 	# Option B: Arrange a quiet acquisition before the news breaks — the public pays the bill invisibly
 	option = {
 		name = banking_cycle_events.59.b
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_3_DESC" change_variable = { name = bubble_pressure add = -3 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_1_DESC" change_variable = { name = finance_cycle_momentum add = -1 } }
+		banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 		add_modifier = {
 			name = banking_event_selective_bailout_cost
 			multiplier = banking_event_expense_medium
@@ -6356,8 +5648,8 @@ banking_cycle_events.59 = {
 	# Option C: Mandate sector-wide public audits — honest money chills the whole market
 	option = {
 		name = banking_cycle_events.59.c
-		custom_tooltip = { text = "BUBBLE_PRESSURE_MINUS_5_DESC" change_variable = { name = bubble_pressure add = -5 } }
-		custom_tooltip = { text = "MOMENTUM_MINUS_2_DESC" change_variable = { name = finance_cycle_momentum add = -2 } }
+		banking_change_bubble_pressure = { ADD = -5 TEXT = BUBBLE_PRESSURE_MINUS_5_DESC }
+		banking_change_momentum = { ADD = -2 TEXT = MOMENTUM_MINUS_2_DESC }
 		add_radicals = {
 			value = medium_radicals
 			pop_type = capitalists

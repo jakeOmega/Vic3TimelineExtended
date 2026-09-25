@@ -1769,6 +1769,56 @@ banking_crisis_wave_check_great_depression = {
 
 # ---- End of crisis wave tracking ----
 
+# ---- Event options that move the cycle (#428) ----
+# Every event option that moves one of the cycle's three variables does it
+# through one of these, with the line's loc key:
+#
+#   banking_change_bubble_pressure = { ADD = -3 TEXT = BUBBLE_PRESSURE_MINUS_3_DESC }
+#   banking_change_momentum        = { ADD = 1  TEXT = MOMENTUM_1_DESC }
+#   banking_change_cycle_value     = { ADD = 5  TEXT = CYCLE_VALUE_5_DESC }
+#
+# The tooltip line shows, and the variable moves, only for a country that holds
+# the banking journal entry — the only place the cycle's bars are drawn. For
+# any other country both are skipped: it has no cycle, and should it gain the
+# entry later, the entry's `immediate` sets all three variables afresh, so an
+# earlier write would be thrown away. Almost every caller can only reach a
+# holder already (the events fire from the entry's own pulse);
+# society_technology_events.30 fires from a technology on-action and reaches
+# every country.
+#
+# Pass the whole loc key as TEXT, never a key assembled from a parameter, or
+# organize_loc.py cannot see it and moves it to te_unused_l_english.yml.
+# Scope: country
+banking_change_bubble_pressure = {
+	if = {
+		limit = { has_journal_entry = je_banking_cycle }
+		custom_tooltip = {
+			text = $TEXT$
+			change_variable = { name = bubble_pressure add = $ADD$ }
+		}
+	}
+}
+
+banking_change_momentum = {
+	if = {
+		limit = { has_journal_entry = je_banking_cycle }
+		custom_tooltip = {
+			text = $TEXT$
+			change_variable = { name = finance_cycle_momentum add = $ADD$ }
+		}
+	}
+}
+
+banking_change_cycle_value = {
+	if = {
+		limit = { has_journal_entry = je_banking_cycle }
+		custom_tooltip = {
+			text = $TEXT$
+			change_variable = { name = finance_cycle_value add = $ADD$ }
+		}
+	}
+}
+
 # 0. Weekly effects
 banking_cycle_weekly_effects = {
 	add_investment_pool = investment_pool_banking_cycle_add
