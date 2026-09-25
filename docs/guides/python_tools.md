@@ -317,6 +317,15 @@ To start manually (use the venv Python so the post-load generators resolve their
 ```
 Loads in ~30 seconds (measured in a cloud container; ~60–110 s before the parser went linear-time in 2026-09), then listens on `http://127.0.0.1:8950`.
 
+**Reload-checking a worktree branch without touching the main checkout.** `mod_path` comes from the imported module's own location and the PID file lives in that checkout, so a second server started *from a worktree* on another port parses and regenerates that worktree only. `PORT` is a module constant with no CLI flag, so set it before `main()`:
+```bash
+cd <worktree> && cp <main checkout>/paths.local.json .   # gitignored; the worktree has none
+<main checkout>/.venv/bin/python -c "import sys; sys.argv=['mod_state_server.py']; import mod_state_server as m; m.PORT=8951; m.main()"
+curl -X POST http://127.0.0.1:8951/reload                 # read `warnings` as usual
+kill $(cat mod_state_server.pid) && git checkout -- docs/engine/   # the audits rewrote their reports
+```
+Stop it by its PID file, not `pkill -f "m.PORT=8951"`: that pattern also matches the shell running the `pkill`, which kills your own command. Used to reload-check each branch of the #428–#430 wave (#441–#444) while the main server kept serving `main`.
+
 ### Vanilla data source: `vanilla_parsed/` or the game files
 
 ModState's vanilla half — every entity type in `mod_state.VANILLA_COMMON_DIRS` (the one list; the server's `base_game_paths` derives from it) plus the English loc dict — can come from two places:
