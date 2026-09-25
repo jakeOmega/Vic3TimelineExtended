@@ -2,10 +2,10 @@
 
 Events whose text does not match the context they fire in: events about a mod system that ignore it, and events that claim a country acted when it never chose to. Heuristic ranking for a human read — see `event_context_audit.py` for the rules. Suppress a reviewed flag with a check-tagged comment on its own line inside the event block: `# REVIEWED YYYY-MM-DD (<check>): rationale`.
 
-- Events defined: **843**, visible: **825**, dispatch sites traced: **1019**
+- Events defined: **844**, visible: **826**, dispatch sites traced: **1020**
 - `system_ungated`: **0** unreviewed, 11 REVIEWED
 - `unchosen_self_action`: **0** unreviewed, 6 REVIEWED
-- `imputed_foreign_action`: **0** unreviewed, 8 REVIEWED
+- `imputed_foreign_action`: **0** unreviewed, 6 REVIEWED
 - Tags to remove: **0**
 
 ## `system_ungated`
@@ -57,5 +57,3 @@ No unreviewed flags. ✅
 - `decolonization_events.19` — events/decolonization_events.txt:2437 (REVIEWED 2026-09-25: the former colony chose to nationalize (decolonization_events.15))
 - `international_relations_events.5` — events/international_relations_events.txt:468 (REVIEWED 2026-09-25: the embargo is our own option; the rival is told what we chose (.102))
 - `irredentism.3` — events/irredentism_events.txt:367 (REVIEWED 2026-09-25: false positive: the subject of "have begun" is the voices on both sides; this is the unifier's own proposal)
-- `world_war_events.1` — events/world_war_events.txt:8 (REVIEWED 2026-09-25: tracked in #427 — the accused country gets the choice first)
-- `world_war_events.3` — events/world_war_events.txt:279 (REVIEWED 2026-09-25: tracked in #427 — gate on real pressure)

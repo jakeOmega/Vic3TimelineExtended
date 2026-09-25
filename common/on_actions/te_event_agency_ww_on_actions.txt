@@ -1,0 +1,50 @@
+﻿# ============================================================================
+# WORLD WAR - who conceded what
+# ============================================================================
+# The engine unions same-name on_action declarations across files, so
+# extending on_wargoal_enforced here leaves vanilla's own effect on it
+# (recently_won_war) and the other systems that extend it untouched.
+#
+# Nothing in the live game state says who lost a war once it is over, so the
+# outcome is recorded the moment it happens, as the ww_conceded /
+# ww_enforced_war_goal latches that world_war_events.100-.105 read (see
+# world_war_triggers.txt).
+#
+# Only war-goal enforcement is read. on_capitulation passes no war scope, so a
+# capitulation cannot be told apart from one in an unrelated side war fought
+# during the world war; and a capitulation enforces the war goals held against
+# the capitulating country anyway, which lands here. A negotiated peace also
+# enforces war goals without anyone capitulating, and lands here too.
+# ============================================================================
+
+# Root = Country (the one enforcing the war goal)
+# scope:target = the country the war goal was enforced against
+# (game/common/on_actions/00_code_on_actions.txt:6219-6223)
+on_wargoal_enforced = {
+	on_actions = {
+		ww_on_wargoal_enforced
+	}
+}
+
+# Gated on the fought-side latches, which je_world_war's on_fail keeps (it strips
+# the side variables and ww_war_began when a losing great power drops rank
+# mid-war). Both countries must have fought the world war on opposite sides; a
+# war goal enforced in another war is counted only between two such powers.
+ww_on_wargoal_enforced = {
+	effect = {
+		if = {
+			limit = {
+				exists = scope:target
+				NOT = { has_variable = ww_peace_concluded }
+				scope:target = {
+					NOT = { has_variable = ww_peace_concluded }
+					ww_fought_against = { COUNTRY = root }
+				}
+			}
+			set_variable = ww_enforced_war_goal
+			scope:target = {
+				set_variable = ww_conceded
+			}
+		}
+	}
+}
