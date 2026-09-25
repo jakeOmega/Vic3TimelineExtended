@@ -1972,6 +1972,9 @@ un_events.17 = {
 	duration = 3
 
 	trigger = {
+		# Raised only by a warming threshold (docket item 7), which the
+		# disabled global warming rule never crosses.
+		has_game_rule = global_warming_enabled
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 30
 		has_technology_researched = environmental_movement
