@@ -594,6 +594,8 @@ international_relations_events.6 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
 		NOR = {
 			has_modifier = espionage_scandal_modifier
 			has_modifier = espionage_prisoner_exchange_modifier
@@ -702,6 +704,8 @@ international_relations_events.7 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = space_race_disabled
 		NOR = {
 			has_modifier = space_race_achievement_modifier
 			has_modifier = space_race_redirected_modifier

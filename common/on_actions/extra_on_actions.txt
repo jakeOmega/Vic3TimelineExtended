@@ -1521,6 +1521,7 @@ international_relations_events_on_action = {
 				# Espionage Scandal
 				15 = {
 					trigger = {
+						has_game_rule = covert_warfare_disabled
 						has_technology_researched = cryptography
 						any_rival_country = { always = yes }
 					}
@@ -1529,6 +1530,7 @@ international_relations_events_on_action = {
 				# Space Race Achievement
 				5 = {
 					trigger = {
+						has_game_rule = space_race_disabled
 						has_technology_researched = space_exploration
 						country_rank >= rank_value:great_power
 					}
@@ -2139,17 +2141,42 @@ society_technology_events_on_action = {
 			}
 
 			# === SPACE COLONIZATION ===
+			# Establishment dispatches the first-colony story. The enabled monthly
+			# branch backfills existing saves without racing that delayed event.
 			5 = {
 				trigger = {
-					has_technology_researched = space_colonization
-					any_scope_building = { is_building_type = building_space_program level >= 3 }
+					NOT = { has_variable = ste_event_18_fired }
+					OR = {
+						AND = {
+							has_game_rule = space_race_enabled
+							has_variable = sr_colony_count
+							var:sr_colony_count > 0
+							NOT = { has_variable = sr_colony_charter_pending }
+						}
+						AND = {
+							has_game_rule = space_race_disabled
+							has_technology_researched = space_colonization
+							any_scope_building = { is_building_type = building_aerospace_industry level >= 3 }
+						}
+					}
 				}
 				trigger_event = { id = society_technology_events.18 }
 			}
 			5 = {
 				trigger = {
-					has_technology_researched = space_colonization
-					any_scope_building = { is_building_type = building_space_elevator level >= 1 }
+					OR = {
+						AND = {
+							has_game_rule = space_race_enabled
+							has_variable = sr_colony_count
+							var:sr_colony_count > 0
+							has_variable = ste_event_18_fired
+						}
+						AND = {
+							has_game_rule = space_race_disabled
+							has_technology_researched = space_colonization
+							any_scope_building = { is_building_type = building_space_elevator level >= 1 }
+						}
+					}
 				}
 				trigger_event = { id = society_technology_events.19 }
 			}

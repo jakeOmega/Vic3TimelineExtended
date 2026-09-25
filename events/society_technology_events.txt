@@ -1627,13 +1627,23 @@ society_technology_events.18 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_technology_researched = space_colonization
 		NOT = { has_modifier = ste_space_colony_national }
 		NOT = { has_modifier = ste_space_colony_international }
 		NOT = { has_variable = ste_event_18_fired }
-		any_scope_building = {
-			is_building_type = building_aerospace_industry
-			level >= 3
+		OR = {
+			AND = {
+				has_game_rule = space_race_enabled
+				has_variable = sr_colony_count
+				var:sr_colony_count > 0
+			}
+			AND = {
+				has_game_rule = space_race_disabled
+				has_technology_researched = space_colonization
+				any_scope_building = {
+					is_building_type = building_aerospace_industry
+					level >= 3
+				}
+			}
 		}
 	}
 
@@ -1694,13 +1704,24 @@ society_technology_events.19 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_technology_researched = space_colonization
 		NOT = { has_modifier = ste_space_gov_direct }
 		NOT = { has_modifier = ste_space_gov_autonomy }
 		NOT = { has_variable = ste_event_19_fired }
-		any_scope_building = {
-			is_building_type = building_space_elevator
-			level >= 1
+		OR = {
+			AND = {
+				has_game_rule = space_race_enabled
+				has_variable = sr_colony_count
+				var:sr_colony_count > 0
+				has_variable = ste_event_18_fired
+			}
+			AND = {
+				has_game_rule = space_race_disabled
+				has_technology_researched = space_colonization
+				any_scope_building = {
+					is_building_type = building_space_elevator
+					level >= 1
+				}
+			}
 		}
 	}
 

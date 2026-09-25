@@ -4629,7 +4629,7 @@ banking_cycle_events.44 = {
 
 # --------------------------------------------------------------------------
 # 45. International Bailout Request
-# Fires during downturn/panic. Requires keynesian_economics.
+# Requires a solvent donor and a trading partner in downturn/panic.
 # A trading partner asks for emergency financial assistance.
 # COMPLEX (3 options)
 # --------------------------------------------------------------------------
@@ -4648,11 +4648,14 @@ banking_cycle_events.45 = {
 
 	duration = 3
 
+	trigger = { banking_can_offer_bailout = yes }
+
+	cancellation_trigger = { NOT = { exists = scope:bailout_country } }
+
 	immediate = {
 		random_country = {
 			limit = {
-				NOT = { this = root }
-				has_diplomatic_relevance = root
+				banking_is_bailout_recipient = yes
 			}
 			save_scope_as = bailout_country
 		}
@@ -4669,11 +4672,9 @@ banking_cycle_events.45 = {
 			text = "BUBBLE_PRESSURE_MINUS_3_DESC"
 			change_variable = { name = bubble_pressure add = -3 }
 		}
-		add_modifier = {
-			name = banking_event_bailout_cost
-			multiplier = banking_event_expense_large
-			days = normal_modifier_time
-			is_decaying = yes
+		banking_transfer_emergency_aid = {
+			AMOUNT = banking_event_expense_large
+			DAYS = normal_modifier_time
 		}
 		add_modifier = {
 			name = banking_event_bailout_goodwill
@@ -4703,11 +4704,9 @@ banking_cycle_events.45 = {
 			text = "BUBBLE_PRESSURE_MINUS_2_DESC"
 			change_variable = { name = bubble_pressure add = -2 }
 		}
-		add_modifier = {
-			name = banking_event_bailout_cost
-			multiplier = banking_event_expense_small
-			days = short_modifier_time
-			is_decaying = yes
+		banking_transfer_emergency_aid = {
+			AMOUNT = banking_event_expense_small
+			DAYS = short_modifier_time
 		}
 		if = {
 			limit = { exists = scope:bailout_country }
