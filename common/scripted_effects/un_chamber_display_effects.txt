@@ -1168,7 +1168,12 @@ un_chamber_propose_reform_row = {
 #             $RAISED$    when the docket raises it
 #             $IN_FORCE$  un_propose_<key>_in_force
 #             $AVAILABLE$ / $POSSIBLE$  un_propose_<key>_available / _possible
-#             $NO_CASE$   the line for a topic with no case right now
+#             $NO_CASE$   the line for a topic with no case right now. Only the
+#                         refugee and decolonization rows can reach it: every
+#                         other topic's _available is membership and "not in
+#                         force", both already true where the status line runs
+#                         (the else of the IN_FORCE test), so they
+#                         pass je_un_chamber_topic_in_force as a placeholder.
 #             $TOPIC$     the topic key, for un_resolution_topic_on_cooldown
 # Scope: country
 un_chamber_propose_convention_row = {
