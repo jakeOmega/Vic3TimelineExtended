@@ -289,18 +289,20 @@ flowcontainer = {
 			un_auth_text = {
 				text = "[GetScriptedGui('un_authority_ladder_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
+		}
 
-			# Who is championing or undermining the organisation, and which
-			# great powers stay outside it. Inside the ready group: before the
-			# UN is founded the builder prints nothing.
-			un_auth_subheader = {
-				blockoverride "subheader_text" {
-					text = "je_un_auth_sub_powers"
-				}
+		# Who is championing or undermining the organisation, and which great
+		# powers stay outside it. From the founding, not the first monthly
+		# update: the list reads modifiers, not the pillar snapshots. Before
+		# the founding the builder prints nothing, so the heading waits too.
+		un_auth_subheader = {
+			visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_auth_sub_powers"
 			}
-			un_auth_text = {
-				text = "[GetScriptedGui('un_authority_powers_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
-			}
+		}
+		un_auth_text = {
+			text = "[GetScriptedGui('un_authority_powers_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
 
 		# The ledger's display log: what each member did to the organisation,

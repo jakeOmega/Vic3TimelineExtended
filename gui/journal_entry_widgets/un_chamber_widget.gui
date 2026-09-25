@@ -658,6 +658,7 @@ flowcontainer = {
 		}
 
 		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			blockoverride "subheader_text" {
 				text = "je_un_chamber_sub_propose_censure"
 			}
@@ -711,6 +712,7 @@ flowcontainer = {
 		}
 
 		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			blockoverride "subheader_text" {
 				text = "je_un_chamber_sub_propose_help"
 			}
@@ -740,6 +742,7 @@ flowcontainer = {
 		}
 
 		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			blockoverride "subheader_text" {
 				text = "je_un_chamber_sub_propose_charter"
 			}
@@ -819,6 +822,8 @@ flowcontainer = {
 				text = "je_un_chamber_sub_mandate_case"
 			}
 		}
+		# Hidden with its heading, so an empty text box leaves no blank line.
+		# The case search runs only while this section is open.
 		un_chamber_text = {
 			visible = "[GetScriptedGui('un_chamber_mandate_case_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			text = "[GetScriptedGui('un_chamber_mandate_case_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"

@@ -89,14 +89,22 @@ def _value_of(node):
     return node
 
 
+# The weighted ledger booking a button can make, in both forms: the _on form
+# takes one more parameter, SUBJECT, which only the UN's log reads; the points
+# booked are the same.
+LEDGER_ACTOR_ENTRY_KEYS = ("un_ledger_actor_entry", "un_ledger_actor_entry_on")
+
+
 def _walk_for_effects(node, found):
     """Recursively walk an effect-block subtree and collect:
         added_modifiers   — names of modifiers added without a `multiplier =`
         removed_modifiers — names of modifiers removed
         authority_delta   — net signed change applied to global_var:un_authority
-        ledger_entries    — (pillar, points) of each un_ledger_actor_entry call,
-                            the way an act moves UN authority since the
-                            equilibrium model (un_authority_effects.txt)
+        ledger_entries    — (pillar, points) of each un_ledger_actor_entry call
+                            (or its _on form, which also names the act's
+                            subject for the UN's log), the way an act moves
+                            UN authority since the equilibrium model
+                            (un_authority_effects.txt)
     Skips contents of `limit` / `trigger` (conditions, not effects)."""
     if isinstance(node, list):
         for item in node:
@@ -153,7 +161,7 @@ def _dispatch(key, val, found):
                     continue
             found["authority_delta"] += delta
         return
-    if key == "un_ledger_actor_entry":
+    if key in LEDGER_ACTOR_ENTRY_KEYS:
         if isinstance(val, dict):
             pillar = _value_of(val.get("PILLAR"))
             try:

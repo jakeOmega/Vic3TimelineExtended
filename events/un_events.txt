@@ -575,9 +575,12 @@ un_events.4 = {
 			un_mission_add_contributor = yes
 			# The UN's record names the state the force went to, or the
 			# country when every one of its states already holds a mission.
+			scope:un_msn_new ?= {
+				var:un_msn_state ?= { save_scope_as = un_led_msn_state }
+			}
 			if = {
-				limit = { exists = scope:un_msn_new.var:un_msn_state }
-				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1041 SUBJECT = scope:un_msn_new.var:un_msn_state }
+				limit = { exists = scope:un_led_msn_state }
+				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1041 SUBJECT = scope:un_led_msn_state }
 			}
 			else = {
 				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1044 SUBJECT = scope:peacekeeping_target }
@@ -994,9 +997,12 @@ un_events.7 = {
 			un_mission_add_contributor = yes
 			# The UN's record names the state the aid went to, or the country
 			# when no mission could be opened there.
+			scope:un_msn_new ?= {
+				var:un_msn_state ?= { save_scope_as = un_led_msn_state }
+			}
 			if = {
-				limit = { exists = scope:un_msn_new.var:un_msn_state }
-				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1071 SUBJECT = scope:un_msn_new.var:un_msn_state }
+				limit = { exists = scope:un_led_msn_state }
+				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1071 SUBJECT = scope:un_led_msn_state }
 			}
 			else = {
 				un_ledger_actor_entry_on = { PILLAR = delivery POINTS = 1.5 REASON = 1075 SUBJECT = scope:crisis_country }
