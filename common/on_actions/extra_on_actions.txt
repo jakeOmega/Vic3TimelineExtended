@@ -1882,11 +1882,13 @@ decolonization_events_on_action = {
 					}
 					trigger_event = { id = decolonization_events.50 }
 				}
-				# Metropole pressure: Conscription Crisis (long war + colonial empire)
+				# Metropole pressure: Conscription Crisis (a colonial war + colonial
+				# empire). Same trigger as the event's own, so the slot is not
+				# spent on a war the event will not narrate.
 				12 = {
 					trigger = {
 						any_scope_state = { is_overseas_colonial_state = yes }
-						is_at_war = yes
+						decol_fighting_colonial_war = yes
 					}
 					trigger_event = { id = decolonization_events.51 }
 				}

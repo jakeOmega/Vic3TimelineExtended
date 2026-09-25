@@ -171,6 +171,15 @@ colonial_neocolonial_terms_notice = {
 	color = bad
 }
 
+# decolonization_events.2.c: reforms with economic strings, the subject not
+# freed (colonial_neocolonial_terms_notice is for the options that free it).
+colonial_neocolonial_reforms_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
 colonial_ceasefire_granted_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
