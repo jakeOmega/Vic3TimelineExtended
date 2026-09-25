@@ -21,3 +21,22 @@ te_ea_lolr_answer_honoured = {
 	has_variable = te_lolr_answer
 	var:te_lolr_answer = 1
 }
+
+# ----------------------------------------------------------------------------
+# banking_cycle_events.45 / .68 — the bailout appeal
+# ----------------------------------------------------------------------------
+
+# Candidate scope (a distressed trading partner, beside
+# banking_is_bailout_recipient). Not already deciding whether to ask, or just
+# having decided: .68 sets te_ea_bailout_asked for a year when it fires, so a
+# human in a long downturn is not asked every month by another donor's pulse.
+te_ea_bailout_can_be_asked = {
+	NOT = { has_variable = te_ea_bailout_asked }
+}
+
+# banking_cycle_events.69 (ROOT = the country that asked). Which answer came
+# back: 1 rescue package, 2 smaller grant, 3 refusal.
+te_ea_bailout_answer_is = {
+	has_variable = te_ea_bailout_answer
+	var:te_ea_bailout_answer = $ANSWER$
+}
