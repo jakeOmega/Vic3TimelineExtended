@@ -6,11 +6,14 @@
 
 # international_relations_events.201.a: the buildup a rival will be told about
 # in .1. Close to arms_race_escalation_modifier (the answering side's
-# modifier), slightly smaller, since it is the opening move.
+# modifier), slightly smaller, since it is the opening move. The navy line is
+# country_prestige_from_navy_power_projection_mult: the
+# country_prestige_from_navy_combat_power_mult that modifier carries is not an
+# engine modifier and is silently ignored.
 te_ea_ir_military_buildup_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
 	country_prestige_from_army_power_projection_mult = 0.10
-	country_prestige_from_navy_combat_power_mult = 0.10
+	country_prestige_from_navy_power_projection_mult = 0.10
 	country_military_goods_cost_mult = 0.10
 }
 
