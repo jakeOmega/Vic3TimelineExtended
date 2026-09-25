@@ -236,12 +236,15 @@ un_leave_button = {
 	effect = {
 		# A permanent member walking out is a world moment: authority itself
 		# drops at once (un_authority_effects.txt), on top of the lasting loss
-		# of our power share from the participation pillar. Checked before the
-		# block below strips the seat.
+		# of our power share from the participation pillar. Weighted by our
+		# weight in world affairs (at most x2), so a faded power still holding
+		# its seat costs the UN far less than a superpower. Checked before the
+		# block below strips the seat. Only this button ends a membership:
+		# a member absorbed by a merger or annexation never passes through it.
 		if = {
 			limit = { is_un_permanent_member = yes }
 			custom_tooltip = un_ledger_tt_p5_walkout
-			un_authority_actor_shock = { AMOUNT = -4 REASON = 11 }
+			un_authority_actor_shock_weighted = { AMOUNT = -4 REASON = 11 }
 		}
 		custom_tooltip = {
 			text = "UN_LEAVE_DESC"

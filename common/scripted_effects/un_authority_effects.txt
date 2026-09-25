@@ -7,7 +7,7 @@
 #
 # WHO MAY WRITE global_var:un_authority:
 #   un_authority_monthly_update    the monthly step toward the target
-#   un_authority_shock             a world moment (rare; see below)
+#   un_authority_shock_record      a world moment (rare; see below)
 #   un_found_button                the founding value
 #   the debug helpers in te_debug_un_effects.txt
 # Nothing else. An act that used to add or subtract authority directly now
@@ -131,14 +131,45 @@ un_authority_clamp = {
 # A world moment moves authority itself, not the target. Authority then drifts
 # back toward the target, so a moment that changed nothing underneath fades
 # over a few years. Rare by design (§3.3); most acts belong in a ledger.
-# Scope: the country responsible.
+#
+#   un_authority_actor_shock = { AMOUNT = n REASON = r }
+#       Applies n as written, for moments whose gravity does not depend on
+#       who causes them (a nuclear first strike).
+#   un_authority_actor_shock_weighted = { AMOUNT = n REASON = r }
+#       Applies n x un_shock_weight (the actor's weight, capped at x2), for
+#       moments that matter in proportion to who causes them: a permanent
+#       member walking out costs -4 for a typical great power, up to -8 for a
+#       superpower, and about -1 for a faded one still holding its seat.
+# Scope: the country responsible, for both.
 un_authority_actor_shock = {
+	un_authority_shock_record = { AMOUNT = $AMOUNT$ REASON = $REASON$ WEIGHTED = no }
+}
+
+un_authority_actor_shock_weighted = {
+	un_authority_shock_record = { AMOUNT = $AMOUNT$ REASON = $REASON$ WEIGHTED = yes }
+}
+
+# The single implementation behind the two wrappers above; the amount is staged
+# in a global for the log, as un_ledger_record stages it.
+un_authority_shock_record = {
 	hidden_effect = {
 		if = {
 			limit = { has_global_variable = un_authority }
-			change_global_variable = { name = un_authority add = $AMOUNT$ }
+			if = {
+				limit = { always = $WEIGHTED$ }
+				set_global_variable = {
+					name = un_led_stage
+					value = {
+						value = un_shock_weight
+						multiply = $AMOUNT$
+					}
+				}
+			}
+			else = {
+				set_global_variable = { name = un_led_stage value = $AMOUNT$ }
+			}
+			change_global_variable = { name = un_authority add = global_var:un_led_stage }
 			un_authority_clamp = yes
-			set_global_variable = { name = un_led_stage value = $AMOUNT$ }
 			un_ledger_log_add = { PILLAR = direct REASON = $REASON$ WITH_ACTOR = yes }
 			remove_global_variable = un_led_stage
 		}

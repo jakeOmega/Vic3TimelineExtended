@@ -57,6 +57,10 @@ un_authority_max_step = { value = 1 }
 # power), and the cap on any one country's weight.
 un_power_reference_share = { value = 0.10 }
 un_actor_weight_cap = { value = 5 }
+# A weighted world moment is capped lower than a ledger entry: a shock hits
+# authority at once rather than fading in through the target, so a superpower's
+# walkout is held to twice a typical great power's.
+un_shock_weight_cap = { value = 2 }
 
 # Monthly decay of the three ledgers: 0.5^(1/48), a four-year half-life.
 un_ledger_decay_factor = { value = 0.9857 }
@@ -102,6 +106,13 @@ un_actor_weight = {
 		divide = un_power_reference_share
 		max = un_actor_weight_cap
 	}
+}
+
+# The weight a weighted world moment applies (un_authority_actor_shock_weighted).
+# Scope: country
+un_shock_weight = {
+	value = un_actor_weight
+	max = un_shock_weight_cap
 }
 
 # ---- Pillars (computed; the monthly update snapshots them) -------------------

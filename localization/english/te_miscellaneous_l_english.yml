@@ -3159,7 +3159,7 @@
  un_ledger_tt_credibility_up_2_5:0 "#G UN credibility +2.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target"
  un_ledger_tt_delivery_up_0_5:0 "#G UN delivery +0.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target"
  un_ledger_tt_delivery_up_1_5:0 "#G UN delivery +1.5#! × our weight in world affairs (#v [ROOT.GetCountry.MakeScope.ScriptValue('un_actor_weight')|2]#!), moving [concept_un_authority]'s target"
- un_ledger_tt_p5_walkout:0 "#R UN authority −4 at once#!: a permanent member walking out is a world moment, on top of our share of world power leaving the participation pillar."
+ un_ledger_tt_p5_walkout:0 "#R UN authority −4#! × our weight in world affairs (#v ×[ROOT.GetCountry.MakeScope.ScriptValue('un_shock_weight')|2]#!, at most ×2), at once: a permanent member walking out is a world moment, on top of our share of world power leaving the participation pillar."
  un_lobby_commitment_struck_tt:0 "If they accept, they undertake to vote #G in favour#! of the resolution before the [concept_un_general_assembly], and we owe them an [concept_obligation] for it. They are free to break their word; if they do, the [concept_obligation] is struck off and their standing in the organisation suffers."
  un_lobby_has_not_voted_tt:0 "They have not yet cast their vote on the resolution"
  un_lobby_no_obligation_owed_tt:0 "We do not already owe them an [concept_obligation]"

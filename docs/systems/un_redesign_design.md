@@ -75,8 +75,14 @@ game.
    - **Lifting sanctions:** credibility −1 × weight.
    - **Programme toggles:** their ±2–3 authority is simply gone. A programme counts toward
      funding for exactly as long as it runs.
-7. **World moments shipped:** a permanent member leaving (−4) and a nuclear first strike
-   (−3). Both are logged.
+7. **World moments shipped:**
+   - **A permanent member leaving** through the Leave button costs −4 × the leaver's weight,
+     capped at ×2 (`un_shock_weight`). That is −4 for a typical great power, up to −8 for
+     a superpower, and about −1 for a faded power still holding its seat. The owner asked
+     for the weighting on 2026-09-25. A member absorbed by a merger or annexation never
+     passes through the button, so it causes no shock.
+   - **A nuclear first strike** costs −3, unweighted.
+   - Both are logged.
 8. **Old saves keep their authority** (§11 said reseed at the target). Their ledgers start
    empty, so the first target understates an established UN, and a reseed would have
    dropped authority by around twenty points in one month. They converge at the ordinary
@@ -117,7 +123,7 @@ game.
    annexed actor in the log reads "a former member".
 7. The history chart draws both series once a month has been sampled.
 8. A nuclear first strike drops the order pillar and logs both entries. A permanent member
-   leaving logs the −4.
+   leaving logs −4 × its weight (at most ×2).
 9. There is no noticeable hitch on the first of the month: about seven `every_country`
    sweeps run once a month from the global pulse.
 
