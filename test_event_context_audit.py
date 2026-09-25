@@ -255,20 +255,127 @@ class EventContextAuditTests(unittest.TestCase):
         self.assertIsNone(eia.parse_reviewed_comment(
             "# REVIEWED 2026-09-25 (system_ungated): rationale"))
 
-    def test_hidden_and_console_events_are_skipped(self):
+    def test_hidden_events_are_skipped(self):
+        # The hidden event carries flaggable text; only the hidden skip saves it.
+        src = ("flav.1 = {\n\ttype = country_event\n\thidden = yes\n"
+               "\ttitle = flav.1.t\n\tdesc = flav.1.d\n}\n")
+        mod = self._mod({"events/flav.txt": src, "common/on_actions/p.txt": self.PULSE},
+                        self.SPY_LOC)
+        self.assertEqual(self._flags(mod), set())
+        shown = self._mod({"events/flav.txt": src.replace("\thidden = yes\n", ""),
+                           "common/on_actions/p.txt": self.PULSE}, self.SPY_LOC)
+        self.assertEqual(self._flags(shown, "system_ungated"), {("system_ungated", "flav.1")})
+
+    def test_console_events_are_skipped(self):
         loc = {"te_debug_x.1.t": "Spy", "te_debug_x.1.d": "A foreign spy was caught."}
-        mod = self._mod({"events/flav.txt": _event("flav.1", hidden=True),
-                         "events/te_debug_x_events.txt": _event("te_debug_x.1"),
-                         "common/on_actions/p.txt": self.PULSE}, loc)
+        mod = self._mod({"events/te_debug_x_events.txt": _event("te_debug_x.1"),
+                         "common/on_actions/p.txt": self.PULSE.replace("flav.1", "te_debug_x.1")}, loc)
         self.assertEqual(self._flags(mod), set())
 
     def test_report_renders_every_check(self):
         mod = self._mod({"events/flav.txt": _event("flav.1"),
                          "common/on_actions/p.txt": self.PULSE}, self.SPY_LOC)
-        report = eca.render_report(eca.audit(mod), mod)
+        report = eca.render_report(eca.audit(mod))
         for c in eca.CHECKS:
             self.assertIn(f"## `{c}`", report)
         self.assertIn("flav.1", report)
+
+    # -- review follow-ups ------------------------------------------------
+
+    def test_fixed_event_into_parameterised_scope_is_a_switch(self):
+        # `notify_it = { $WHO$ = { trigger_event = { id = flav.1 } } }` called with
+        # WHO = scope:rival: the .106 pattern hidden behind a helper.
+        eff = "notify_it = {\n\t$WHO$ = {\n\t\ttrigger_event = { id = flav.1 }\n\t}\n}\n"
+        pre = _event("flav.2", "\toption = { notify_it = { WHO = scope:rival } }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre,
+                         "common/scripted_effects/h.txt": eff}, self.CAMPAIGN_LOC)
+        sites = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual([s.switches for s in sites], [["scope:rival"]])
+        self.assertEqual(self._flags(mod, "unchosen_self_action"),
+                         {("unchosen_self_action", "flav.1")})
+
+    def test_unsubstituted_parameter_scope_counts_as_a_switch(self):
+        eff = "notify_it = {\n\t$WHO$ = {\n\t\ttrigger_event = { id = flav.1 }\n\t}\n}\n"
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "common/scripted_effects/h.txt": eff}, self.CAMPAIGN_LOC)
+        self.assertEqual(self._flags(mod, "unchosen_self_action"),
+                         {("unchosen_self_action", "flav.1")})
+
+    def test_forwarded_event_parameter_resolves_through_helpers(self):
+        inner = "send_it = {\n\ttrigger_event = { id = $EVENT$ }\n}\n"
+        outer = "offer_it = {\n\tsend_it = { EVENT = $EVENT$ }\n}\n"
+        pre = _event("flav.2", "\toption = { offer_it = { EVENT = flav.1 } }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre,
+                         "common/scripted_effects/h.txt": inner + outer}, self.CAMPAIGN_LOC)
+        g = eca.build_graph(mod)
+        self.assertEqual([(s.entity, s.in_option) for s in g.sites_by_event["flav.1"]],
+                         [("flav.2", True)])
+        self.assertFalse(any("$" in k for k in g.sites_by_event))
+
+    def test_dispatch_cycle_does_not_flag_gated_events(self):
+        # A gated pulse fires A; A's option fires B; B's option fires A.
+        pulse = ("my_pulse = {\n\teffect = {\n\t\tif = {\n"
+                 "\t\t\tlimit = { has_game_rule = covert_warfare_disabled }\n"
+                 "\t\t\ttrigger_event = { id = flav.1 }\n\t\t}\n\t}\n}\n")
+        a = _event("flav.1", "\toption = { trigger_event = { id = flav.2 } }\n")
+        b = _event("flav.2", "\toption = { trigger_event = { id = flav.1 } }\n")
+        loc = dict(self.SPY_LOC, **{"flav.2.t": "Spies", "flav.2.d": "Another spy was caught."})
+        for order in ((a, b), (b, a)):
+            mod = self._mod({"events/flav.txt": order[0] + order[1],
+                             "common/on_actions/p.txt": pulse}, loc)
+            self.assertEqual(self._flags(mod, "system_ungated"), set())
+
+    def test_else_if_inherits_the_if_chain_guard(self):
+        pulse = (
+            "my_pulse = {\n\teffect = {\n"
+            "\t\tif = {\n\t\t\tlimit = { has_game_rule = covert_warfare_enabled }\n"
+            "\t\t\tcovert_do_the_real_thing = yes\n\t\t}\n"
+            "\t\telse_if = {\n\t\t\tlimit = { always = yes }\n"
+            "\t\t\ttrigger_event = { id = flav.1 }\n\t\t}\n\t}\n}\n"
+        )
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "common/on_actions/p.txt": pulse}, self.SPY_LOC)
+        self.assertEqual(self._flags(mod, "system_ungated"), set())
+
+    def test_optional_assignment_scope_is_a_switch(self):
+        pre = _event("flav.2", "\toption = { scope:rival ?= { trigger_event = { id = flav.1 } } }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre}, self.CAMPAIGN_LOC)
+        self.assertEqual(self._flags(mod, "unchosen_self_action"),
+                         {("unchosen_self_action", "flav.1")})
+
+    def test_journal_entry_tick_is_unchosen(self):
+        je = "je_x = {\n\ton_monthly_pulse = { effect = { trigger_event = { id = flav.1 } } }\n}\n"
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "common/journal_entries/je_x.txt": je}, self.CAMPAIGN_LOC)
+        self.assertEqual(self._flags(mod, "unchosen_self_action"),
+                         {("unchosen_self_action", "flav.1")})
+
+    def test_pre_attribution_names_the_picked_country_as_source(self):
+        mod = self._imputing("The evidence points to [SCOPE.sCountry('rival').GetName].",
+                             "\toption = { scope:rival = { trigger_event = { id = flav.1 } } }\n")
+        self.assertEqual(self._flags(mod, "imputed_foreign_action"),
+                         {("imputed_foreign_action", "flav.2")})
+        mod = self._imputing("We received a proposal of union from [SCOPE.sCountry('rival').GetName].",
+                             "\toption = { change_relations = { country = scope:rival value = -10 } }\n")
+        self.assertEqual(self._flags(mod, "imputed_foreign_action"),
+                         {("imputed_foreign_action", "flav.2")})
+
+    def test_every_iterator_is_not_a_country_picker(self):
+        loc = {"flav.2.t": "x", "flav.2.d": "[SCOPE.sCountry('rival').GetName] has launched a campaign.",
+               "flav.1.t": "t", "flav.1.d": "d"}
+        body = ("\timmediate = {\n\t\tevery_country = {\n\t\t\tsave_scope_as = rival\n\t\t}\n\t}\n"
+                "\toption = { scope:rival = { trigger_event = { id = flav.1 } } }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.2", body) + _event("flav.1")}, loc)
+        self.assertEqual(self._flags(mod, "imputed_foreign_action"), set())
+
+    def test_stale_and_unknown_tags_are_reported(self):
+        body = ("\t# REVIEWED 2026-09-25 (system_ungated): no longer needed\n"
+                "\t# REVIEWED 2026-09-25 (sytem_ungated): typo\n")
+        loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens."}
+        mod = self._mod({"events/flav.txt": _event("flav.1", body)}, loc)
+        res = eca.audit(mod)
+        self.assertEqual([(t.event_id, t.check) for t in res.stale_tags], [("flav.1", "system_ungated")])
+        self.assertEqual([(t.event_id, t.check) for t in res.unknown_tags], [("flav.1", "sytem_ungated")])
 
 
 if __name__ == "__main__":
