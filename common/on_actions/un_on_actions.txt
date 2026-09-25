@@ -90,6 +90,11 @@ un_global_authority_on_action = {
 			# building stands, in the host's territory (un_hq_effects.txt).
 			un_hq_monthly_update = yes
 
+			# Permanent seats (un_seat_effects.txt): count down the signing
+			# period after a founding, then give every open seat to the
+			# great-power member with the most prestige that holds none.
+			un_seat_monthly_update = yes
+
 			# Resolutions with teeth (redesign phase 5, un_teeth_effects.txt):
 			# sanctions busting, and the mandate holder's war support.
 			un_teeth_monthly_update = yes

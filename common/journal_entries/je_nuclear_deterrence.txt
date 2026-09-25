@@ -1,0 +1,89 @@
+﻿# ============================================================================
+# NUCLEAR DETERRENCE — the posture and crisis journal entry
+# ============================================================================
+# Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
+#
+# Separate from je_nuclear_program on purpose (§2): the programme builds
+# warheads and is gated on rank; this entry is gated on HOLDING warheads, so a
+# demoted power keeps its posture, its upkeep and its accidents, and a paused or
+# unfunded programme cannot shed them. It is also active for a non-nuclear
+# country while it is party to a nuclear crisis, which needs the crisis panel
+# as much as the country that made the threat.
+#
+# All logic lives in scripted effects (nuclear_deterrence_effects.txt,
+# nuclear_crisis_effects.txt); the pulses below are their only callers.
+# ============================================================================
+je_nuclear_deterrence = {
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	group = je_group_foreign_affairs
+
+	# Auto-activation needs this and `possible` together (journal_entries.md);
+	# with the same trigger in both, the entry is never shown inactive.
+	is_shown_when_inactive = {
+		nd_journal_possible = yes
+	}
+
+	possible = {
+		nd_journal_possible = yes
+	}
+
+	immediate = {
+		# A freshly activated entry is a new object: none of the managed
+		# modifiers are on it, whatever the trackers from a previous
+		# activation say.
+		set_variable = { name = nd_doctrine_mod_on value = 0 }
+		set_variable = { name = nd_readiness_mod_on value = 0 }
+		set_variable = { name = nd_upkeep_mod_on value = 0 }
+		if = {
+			limit = { nd_is_armed = yes }
+			nd_init_posture = yes
+		}
+		nd_apply_posture_modifiers = yes
+	}
+
+	complete = {
+		always = no
+	}
+
+	on_weekly_pulse = {
+		effect = {
+			nd_weekly_update = yes
+		}
+	}
+
+	on_monthly_pulse = {
+		effect = {
+			nd_monthly_update = yes
+			nd_crisis_target_watchdog = yes
+		}
+	}
+
+	on_yearly_pulse = {
+		effect = {
+			nd_yearly_update = yes
+		}
+	}
+
+	# Posture, capabilities and home politics above; the crisis below.
+	widget = {
+		gui = "gui/journal_entry_widgets/nuclear_deterrence_widget.gui"
+		name = "widget_je_nuclear_posture"
+		container = "custom_widget_container_3"
+	}
+
+	widget = {
+		gui = "gui/journal_entry_widgets/nuclear_deterrence_widget.gui"
+		name = "widget_je_nuclear_crisis"
+		container = "custom_widget_container_4"
+	}
+
+	status_desc = je_nuclear_deterrence_status
+
+	should_update_on_player_command = yes
+	should_be_pinned_by_default_uninvolved_or_context = yes
+	# Country variables do not follow a revolution; a successor starts a fresh
+	# entry from its own arsenal.
+	can_revolution_inherit = no
+	can_deactivate = yes
+}

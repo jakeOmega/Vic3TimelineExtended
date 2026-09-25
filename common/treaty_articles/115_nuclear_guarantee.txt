@@ -1,0 +1,223 @@
+﻿# ============================================================================
+# NUCLEAR GUARANTEE — extended deterrence as a treaty article (§6, §0.5)
+# ============================================================================
+# Directed: SOURCE = the guarantor (it concedes the commitment and pays the
+# upkeep), TARGET = the beneficiary. Modelled on vanilla guarantee_independence:
+# the leverage line sits on the beneficiary's target_modifier, the party being
+# leaned on (scripting_best_practices.md § country_treaty_leverage_generation_add
+# sits on the DOMINATED party's block), and the guarantor pays.
+#
+# What it does lives elsewhere, and reads the article as the source of truth
+# (nd_has_armed_guarantor_against / nd_is_guaranteed_by in
+# nuclear_deterrence_triggers.txt):
+#   * the beneficiary does not suffer the nuclear-shadow war-support drain
+#     (zz_te_war_support_injections.txt);
+#   * an attacker's AI counts the guarantor's arsenal as perceived retaliation
+#     (nd_faces_retaliation_from) and its crisis pressure (nd_yield_pressure_value);
+#   * the guarantor may open a guarantee crisis against the beneficiary's
+#     attacker (dispute 3), and is asked to honour the guarantee when the
+#     beneficiary is threatened or struck (nuclear_crisis.20).
+# A guarantee is not invulnerability and not an automatic war (§6): the
+# guarantor chooses, and walking away costs it (nd_guarantee_act_abandon).
+# Multiple guarantors do not add up: the pressure term is a flat −20 for
+# "somebody armed stands behind us".
+# ============================================================================
+nuclear_guarantee = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/guarantee_independence_treaties.dds"
+	kind = directed
+	maintenance_paid_by = source_country
+	cost = 100
+	relations_progress_per_day = 1
+	relations_improvement_max = 60
+
+	flags = { can_be_renegotiated giftable friendly }
+
+	usage_limit = once_per_side
+
+	# The beneficiary is the one leaned on (see header).
+	target_modifier = {
+		country_treaty_leverage_generation_add = 200
+	}
+
+	# ROOT is the source (the guarantor) in visible and possible, as in the
+	# other nuclear articles.
+	visible = {
+		has_game_rule = nuclear_weapons_enabled
+		nd_believed_armed = yes
+	}
+
+	possible = {
+		nd_is_armed = yes
+		scope:other_country = {
+			NOT = { has_war_with = ROOT }
+		}
+		custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+			scope:other_country.relations:root > relations_threshold:poor
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = nd_tt_guarantor_armed
+				scope:source_country = { nd_believed_armed = yes }
+			}
+		}
+	}
+	requirement_to_maintain = {
+		trigger = {
+			scope:source_country = {
+				NOT = { has_war_with = scope:target_country }
+			}
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			NOT = {
+				scope:source_country = {
+					any_scope_treaty = {
+						hidden_trigger = {
+							OR = {
+								scope:treaty = {
+									is_renegotiation = no
+								}
+								scope:treaty.amended_treaty != this
+							}
+						}
+						any_scope_article = {
+							has_type = nuclear_guarantee
+							source_country = scope:source_country
+							target_country = scope:target_country
+						}
+					}
+				}
+			}
+		}
+		custom_tooltip = {
+			text = nd_tt_guarantor_armed
+			scope:source_country = { nd_is_armed = yes }
+		}
+	}
+
+	ai = {
+		treaty_categories = { military_defense }
+		article_ai_usage = { offer request }
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = {
+					nd_is_armed = yes
+					country_rank >= rank_value:major_power
+				}
+				add = 0.05
+			}
+			if = {
+				limit = {
+					exists = scope:other_country
+					has_attitude = { who = scope:other_country attitude = protective }
+				}
+				add = 0.1
+			}
+		}
+		inherent_accept_score = {
+			value = 0
+			if = {
+				# The guarantor weighs the commitment.
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -40
+				}
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:target_country attitude = domineering }
+							has_attitude = { who = scope:target_country attitude = belligerent }
+							has_attitude = { who = scope:target_country attitude = antagonistic }
+						}
+					}
+					add = {
+						desc = "AI_HOSTILE_ATTITUDE"
+						value = -1000
+					}
+				}
+				if = {
+					limit = { has_attitude = { who = scope:target_country attitude = protective } }
+					add = {
+						desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
+						value = 30
+					}
+				}
+				if = {
+					limit = { is_in_same_power_bloc = scope:target_country }
+					add = {
+						desc = "AI_SAME_POWER_BLOC"
+						value = 25
+					}
+				}
+				if = {
+					limit = { scope:target_country.relations:root >= relations_threshold:cordial }
+					add = {
+						desc = "AI_CORDIAL_RELATIONS"
+						value = 20
+					}
+				}
+				if = {
+					limit = {
+						"num_shared_rivals(scope:target_country)" > 0
+					}
+					add = {
+						desc = "AI_SHARED_RIVALS"
+						value = 20
+					}
+				}
+				# Don't walk into a live war.
+				if = {
+					limit = { scope:target_country = { is_at_war = yes } }
+					add = {
+						desc = "nd_ai_beneficiary_at_war"
+						value = -40
+					}
+				}
+			}
+			else = {
+				# The beneficiary weighs the protection.
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = 20
+				}
+				if = {
+					limit = { nd_believed_armed = no }
+					add = {
+						desc = "nd_ai_we_are_unarmed"
+						value = 15
+					}
+				}
+				if = {
+					limit = {
+						any_rival_country = { nd_believed_armed = yes }
+					}
+					add = {
+						desc = "nd_ai_armed_rival"
+						value = 30
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_diplomatic_pact = { who = scope:source_country type = rivalry }
+							has_attitude = { who = scope:source_country attitude = wary }
+						}
+					}
+					add = {
+						desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
+						value = -40
+					}
+				}
+			}
+		}
+	}
+}

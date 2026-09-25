@@ -1471,6 +1471,81 @@ un_chamber_ballot_lines_active = {
 	un_chamber_commitment_lines = yes
 }
 
+# THE SECURITY COUNCIL: who holds the five permanent seats, and who is in line
+# for an open one (un_seat_effects.txt fills them by prestige). The one
+# root-level line is the header, chosen by the state of the seats; the holders
+# and those in line are country blocks, which render after it (gui_modding_guide
+# gotcha #18), so each entry names its own group. A custom_tooltip inside a
+# country scope gets its bullet and flag for free (gotcha #19).
+# Scope: country (the viewer)
+un_chamber_council_block = {
+	if = {
+		limit = { has_global_variable = un_founded }
+		if = {
+			limit = { has_global_variable = un_seat_signing_months_left }
+			custom_tooltip_no_bullet = je_un_chamber_council_signing
+		}
+		else_if = {
+			limit = { un_permanent_seats_vacant > 0 }
+			custom_tooltip_no_bullet = je_un_chamber_council_open
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_council_full
+		}
+		every_country = {
+			limit = { is_un_permanent_member = yes }
+			custom_tooltip = je_un_chamber_council_member_entry
+		}
+		# In line: as many candidates as there are open seats, or the one next
+		# in line when the Council is full. Distinct positions of one ordering,
+		# each shown only when that many candidates exist (an ordered_ position
+		# past the end of the list clamps to the last element rather than
+		# skipping; scripting_best_practices.md).
+		un_chamber_council_in_line = { POS = 0 NEED = 1 }
+		if = {
+			limit = { un_permanent_seats_vacant >= 2 }
+			un_chamber_council_in_line = { POS = 1 NEED = 2 }
+		}
+		if = {
+			limit = { un_permanent_seats_vacant >= 3 }
+			un_chamber_council_in_line = { POS = 2 NEED = 3 }
+		}
+		if = {
+			limit = { un_permanent_seats_vacant >= 4 }
+			un_chamber_council_in_line = { POS = 3 NEED = 4 }
+		}
+		if = {
+			limit = { un_permanent_seats_vacant >= 5 }
+			un_chamber_council_in_line = { POS = 4 NEED = 5 }
+		}
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_council_no_un
+	}
+}
+
+# The candidate at position $POS$ of the prestige order (0 = the most), shown
+# when at least $NEED$ (= $POS$ + 1) candidates exist. How many positions to
+# show is un_chamber_council_block's to decide.
+# Parameters: $POS$, $NEED$
+# Scope: country (the viewer)
+un_chamber_council_in_line = {
+	if = {
+		limit = {
+			any_country = {
+				un_permanent_seat_candidate = yes
+				count >= $NEED$
+			}
+		}
+		ordered_country = {
+			limit = { un_permanent_seat_candidate = yes }
+			order_by = un_prestige_order_value
+			position = $POS$
+			custom_tooltip = je_un_chamber_council_in_line_entry
+		}
+	}
+}
+
 # OUR EXPOSURE: our own dossier, and which punitive topics our record would
 # support against us today (§5.1: "a real case is visible before it lands").
 # Root-level lines only.

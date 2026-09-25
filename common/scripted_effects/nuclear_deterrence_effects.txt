@@ -1,0 +1,1444 @@
+﻿# ============================================================================
+# NUCLEAR DETERRENCE — posture, capabilities, domestic stance, incidents,
+# launch dispatch
+# ============================================================================
+# Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped). The
+# crisis lifecycle is in nuclear_crisis_effects.txt.
+#
+# CALL-SITE CONTRACT for the three pulse effects. They advance state and are
+# NOT idempotent within their period (scripting_best_practices.md § A
+# Non-Idempotent Pulse Effect Needs an Explicit Call-Site Contract):
+#   nd_weekly_update   je_nuclear_deterrence on_weekly_pulse — steps readiness
+#                      toward its target, runs the crisis tick for an owner.
+#   nd_monthly_update  je_nuclear_deterrence on_monthly_pulse — tenure and
+#                      countdowns, capability steps, the incident roll, the AI
+#                      posture review, the domestic stance.
+#   nd_yearly_update   je_nuclear_deterrence on_yearly_pulse — the public
+#                      arsenal estimate.
+# Never call them from an event, a scripted GUI or a diplomatic action; the
+# console harness (events/te_debug_deterrence_events.txt) is the one exception
+# and says so. Panel actions call the nd_set_* / nd_step_* effects, which only
+# write their own variable and re-apply modifiers.
+#
+# ROOT. Every effect here runs in the country's own scope with ROOT = that
+# country: the journal entry's pulses, its immediate, the scripted GUI (scope =
+# country), country events and the diplomatic actions' accept_effect all
+# satisfy this. nd_apply_posture_modifiers depends on it —
+# `multiplier = root.var:nd_upkeep_weekly_cached` resolves against ROOT
+# (scripting_best_practices.md § add_modifier { multiplier = var:X } Resolves
+# Against ROOT).
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# INITIALISATION AND MIGRATION
+# ----------------------------------------------------------------------------
+# Runs from the journal entry's immediate (every activation) and at the top of
+# every monthly update, so an old save, a re-armed country and a country that
+# built its first warhead yesterday all reach the same conservative defaults
+# (§11): existential deterrence, routine readiness, central authority, no
+# investment, no incidents. Only missing variables are created — a country
+# that drops out of the entry and comes back keeps its posture.
+nd_init_posture = {
+	if = {
+		limit = { NOT = { has_variable = nd_doctrine } }
+		set_variable = { name = nd_doctrine value = 2 }
+		# Tenure starts satisfied, so the first choice is free.
+		set_variable = { name = nd_doctrine_months value = nd_doctrine_tenure_months }
+		# First initialisation for a human: say that upkeep has started (§11).
+		if = {
+			limit = { is_ai = no }
+			trigger_event = { id = nuclear_crisis.100 days = 1 }
+		}
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_readiness } }
+		set_variable = { name = nd_readiness value = 1 }
+		set_variable = { name = nd_readiness_target value = 1 }
+		set_variable = { name = nd_readiness_months value = 0 }
+		set_variable = { name = nd_readiness_transition value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_readiness_target } }
+		set_variable = { name = nd_readiness_target value = var:nd_readiness }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_authority } }
+		set_variable = { name = nd_authority value = 1 }
+		set_variable = { name = nd_authority_months value = nd_authority_tenure_months }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_safeguards } }
+		set_variable = { name = nd_safeguards value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_hardening } }
+		set_variable = { name = nd_hardening value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_survivability } }
+		set_variable = {
+			name = nd_survivability
+			value = {
+				value = nd_survivability_cap
+				multiply = 0.4
+			}
+		}
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_reliability } }
+		set_variable = { name = nd_reliability value = 60 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_strain } }
+		set_variable = { name = nd_strain value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_credibility } }
+		set_variable = { name = nd_credibility value = 50 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_months_since_incident } }
+		set_variable = { name = nd_months_since_incident value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_ai_review_months } }
+		set_variable = { name = nd_ai_review_months value = 6 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_public_estimate } }
+		set_variable = { name = nd_public_estimate value = nd_stockpile }
+		set_variable = { name = nd_estimate_year value = year }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# MODIFIERS — the single writer of the three managed families
+# ----------------------------------------------------------------------------
+# Decides from tracking variables, never from has_modifier: add/remove results
+# are invisible inside the block that ran them, and this effect is called from
+# button effects that may run it twice in one block. The trackers:
+#   nd_doctrine_mod_on   which nd_doctrine_mod_N is on the entry (0 = none)
+#   nd_readiness_mod_on  which nd_readiness_mod_N is on (0 = none; routine has none)
+#   nd_upkeep_mod_on     1 if nd_upkeep_cost is on
+# je_nuclear_deterrence's immediate zeroes all three: a freshly activated entry
+# is a new object with no modifiers, whatever the old variables say.
+nd_apply_posture_modifiers = {
+	if = {
+		limit = {
+			has_journal_entry = je_nuclear_deterrence
+			nd_is_armed = yes
+			nd_is_initialized = yes
+		}
+		# ---- doctrine -------------------------------------------------------
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = nd_doctrine_mod_on }
+					NOT = { var:nd_doctrine_mod_on = var:nd_doctrine }
+				}
+			}
+			nd_remove_doctrine_modifier = yes
+			if = {
+				limit = { var:nd_doctrine = 1 }
+				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_doctrine_mod_1 } }
+			}
+			else_if = {
+				limit = { var:nd_doctrine = 3 }
+				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_doctrine_mod_3 } }
+			}
+			else_if = {
+				limit = { var:nd_doctrine = 4 }
+				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_doctrine_mod_4 } }
+			}
+			else_if = {
+				limit = { var:nd_doctrine = 5 }
+				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_doctrine_mod_5 } }
+			}
+			else = {
+				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_doctrine_mod_2 } }
+			}
+			set_variable = { name = nd_doctrine_mod_on value = var:nd_doctrine }
+		}
+		# ---- readiness ------------------------------------------------------
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = nd_readiness_mod_on }
+					NOT = { var:nd_readiness_mod_on = var:nd_readiness }
+				}
+			}
+			nd_remove_readiness_modifier = yes
+			if = {
+				limit = { var:nd_readiness = 2 }
+				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_readiness_mod_2 } }
+			}
+			else_if = {
+				limit = { var:nd_readiness = 3 }
+				je:je_nuclear_deterrence ?= { add_modifier = { name = nd_readiness_mod_3 } }
+			}
+			set_variable = { name = nd_readiness_mod_on value = var:nd_readiness }
+		}
+		# ---- upkeep ---------------------------------------------------------
+		# The cache is what the multiplier reads; it must never be removed
+		# while the modifier is on (modifier_multiplier_var_audit).
+		set_variable = { name = nd_upkeep_weekly_cached value = nd_upkeep_weekly }
+		if = {
+			limit = {
+				OR = {
+					NOT = { has_variable = nd_upkeep_mod_on }
+					var:nd_upkeep_mod_on = 0
+				}
+			}
+			je:je_nuclear_deterrence ?= {
+				add_modifier = {
+					name = nd_upkeep_cost
+					multiplier = root.var:nd_upkeep_weekly_cached
+				}
+			}
+			set_variable = { name = nd_upkeep_mod_on value = 1 }
+		}
+		# ---- the incident-exposure band the panel shows ------------------------
+		# Projected into an enum here, the one site that already re-evaluates
+		# posture, so no threshold is restated in loc or .gui (§10: no fake
+		# precision about hidden risk). 0 very low, 1 low, 2 elevated, 3 high.
+		set_variable = { name = nd_risk_permille value = nd_incident_permille }
+		if = {
+			limit = { var:nd_risk_permille < 2 }
+			set_variable = { name = nd_risk_band value = 0 }
+		}
+		else_if = {
+			limit = { var:nd_risk_permille < 5 }
+			set_variable = { name = nd_risk_band value = 1 }
+		}
+		else_if = {
+			limit = { var:nd_risk_permille < 12 }
+			set_variable = { name = nd_risk_band value = 2 }
+		}
+		else = {
+			set_variable = { name = nd_risk_band value = 3 }
+		}
+	}
+	# Unarmed (the last warhead was used, or this is a non-nuclear crisis
+	# party): nothing to maintain, nothing to pay.
+	else_if = {
+		limit = { has_journal_entry = je_nuclear_deterrence }
+		nd_remove_doctrine_modifier = yes
+		set_variable = { name = nd_doctrine_mod_on value = 0 }
+		nd_remove_readiness_modifier = yes
+		set_variable = { name = nd_readiness_mod_on value = 0 }
+		if = {
+			limit = {
+				has_variable = nd_upkeep_mod_on
+				var:nd_upkeep_mod_on = 1
+			}
+			je:je_nuclear_deterrence ?= { remove_modifier = nd_upkeep_cost }
+			set_variable = { name = nd_upkeep_mod_on value = 0 }
+		}
+		set_variable = { name = nd_upkeep_weekly_cached value = 0 }
+	}
+}
+
+# Removes whichever doctrine modifier the tracker says is on.
+nd_remove_doctrine_modifier = {
+	if = {
+		limit = { has_variable = nd_doctrine_mod_on }
+		if = {
+			limit = { var:nd_doctrine_mod_on = 1 }
+			je:je_nuclear_deterrence ?= { remove_modifier = nd_doctrine_mod_1 }
+		}
+		else_if = {
+			limit = { var:nd_doctrine_mod_on = 2 }
+			je:je_nuclear_deterrence ?= { remove_modifier = nd_doctrine_mod_2 }
+		}
+		else_if = {
+			limit = { var:nd_doctrine_mod_on = 3 }
+			je:je_nuclear_deterrence ?= { remove_modifier = nd_doctrine_mod_3 }
+		}
+		else_if = {
+			limit = { var:nd_doctrine_mod_on = 4 }
+			je:je_nuclear_deterrence ?= { remove_modifier = nd_doctrine_mod_4 }
+		}
+		else_if = {
+			limit = { var:nd_doctrine_mod_on = 5 }
+			je:je_nuclear_deterrence ?= { remove_modifier = nd_doctrine_mod_5 }
+		}
+	}
+}
+
+nd_remove_readiness_modifier = {
+	if = {
+		limit = { has_variable = nd_readiness_mod_on }
+		if = {
+			limit = { var:nd_readiness_mod_on = 2 }
+			je:je_nuclear_deterrence ?= { remove_modifier = nd_readiness_mod_2 }
+		}
+		else_if = {
+			limit = { var:nd_readiness_mod_on = 3 }
+			je:je_nuclear_deterrence ?= { remove_modifier = nd_readiness_mod_3 }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# PULSES
+# ----------------------------------------------------------------------------
+nd_weekly_update = {
+	# ---- readiness transition: one step every nd_readiness_step_weeks ------
+	if = {
+		limit = {
+			nd_is_armed = yes
+			nd_is_initialized = yes
+			NOT = { var:nd_readiness = var:nd_readiness_target }
+		}
+		change_variable = { name = nd_readiness_transition add = 1 }
+		if = {
+			limit = { var:nd_readiness_transition >= nd_readiness_step_weeks }
+			set_variable = { name = nd_readiness_transition value = 0 }
+			set_variable = { name = nd_readiness_months value = 0 }
+			if = {
+				limit = { var:nd_readiness < var:nd_readiness_target }
+				change_variable = { name = nd_readiness add = 1 }
+			}
+			else = {
+				change_variable = { name = nd_readiness subtract = 1 }
+			}
+			nd_apply_posture_modifiers = yes
+		}
+	}
+	# ---- the crisis this country owns --------------------------------------
+	if = {
+		limit = { nd_is_crisis_owner = yes }
+		nd_crisis_weekly_tick = yes
+	}
+}
+
+nd_monthly_update = {
+	if = {
+		limit = { nd_is_armed = yes }
+		nd_init_posture = yes
+		# ---- tenure and countdowns --------------------------------------------
+		change_variable = { name = nd_doctrine_months add = 1 }
+		change_variable = { name = nd_authority_months add = 1 }
+		change_variable = { name = nd_readiness_months add = 1 }
+		change_variable = { name = nd_months_since_incident add = 1 }
+		# ---- capabilities -----------------------------------------------------
+		change_variable = { name = nd_strain add = nd_strain_step }
+		clamp_variable = { name = nd_strain min = 0 max = 100 }
+		change_variable = { name = nd_survivability add = nd_survivability_step }
+		clamp_variable = { name = nd_survivability min = 0 max = 100 }
+		change_variable = { name = nd_reliability add = nd_reliability_step }
+		clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		# ---- AI posture: every sixth month -----------------------------------
+		if = {
+			limit = { is_ai = yes }
+			change_variable = { name = nd_ai_review_months add = 1 }
+			if = {
+				limit = { var:nd_ai_review_months >= 6 }
+				set_variable = { name = nd_ai_review_months value = 0 }
+				nd_ai_review_posture = yes
+			}
+		}
+		# ---- the one incident roll of the month --------------------------------
+		nd_roll_incident = yes
+		# ---- the Monopoly Window (not an incident: a decision, §8.5) ----------
+		if = {
+			limit = { nd_monopoly_window_eligible = yes }
+			random = {
+				chance = 8
+				trigger_event = { id = nuclear_incident.50 }
+			}
+		}
+		# ---- a concealed incident can come out --------------------------------
+		if = {
+			limit = { has_variable = nd_concealed_incident }
+			random = {
+				chance = 3
+				trigger_event = { id = nuclear_incident.60 }
+			}
+		}
+		# ---- at home and in the world -----------------------------------------
+		nd_refresh_domestic_stance = yes
+		nd_apply_posture_modifiers = yes
+	}
+	else = {
+		# A non-nuclear crisis party, or an arsenal that has just gone: take
+		# off anything posture-related the entry still carries.
+		nd_apply_posture_modifiers = yes
+		nd_clear_domestic_stance = yes
+	}
+	# ---- countdowns that outlive the arsenal ---------------------------------
+	nd_tick_countdown = { VAR = nd_readiness_lock_months }
+	nd_tick_countdown = { VAR = nd_crisis_cooldown_months }
+	nd_tick_countdown = { VAR = nd_pledge_broken_months }
+	nd_tick_countdown = { VAR = nd_monopoly_window_months }
+	nd_tick_countdown = { VAR = nd_first_use_cooldown }
+	if = {
+		limit = { has_variable = nd_credibility }
+		change_variable = { name = nd_credibility add = nd_credibility_step }
+		clamp_variable = { name = nd_credibility min = 0 max = 100 }
+	}
+}
+
+# Counts a month off a countdown variable and removes it at zero, so every
+# "is this still running" test can be a plain has_variable.
+nd_tick_countdown = {
+	if = {
+		limit = { has_variable = $VAR$ }
+		change_variable = { name = $VAR$ subtract = 1 }
+		if = {
+			limit = { var:$VAR$ <= 0 }
+			remove_variable = $VAR$
+		}
+	}
+}
+
+nd_yearly_update = {
+	if = {
+		limit = { nd_is_armed = yes }
+		nd_observe_public_estimate = yes
+	}
+	else_if = {
+		limit = { has_variable = nd_public_estimate }
+		remove_variable = nd_public_estimate
+	}
+}
+
+# ----------------------------------------------------------------------------
+# PUBLIC ARSENAL ESTIMATE (§4, §0.6)
+# ----------------------------------------------------------------------------
+# The world's view of our arsenal: re-observed once a year from the truth with
+# an error that persists until the next observation — never rerolled by
+# loading or by opening a panel. Tests and strikes snap it to the truth
+# (nd_snap_public_estimate).
+nd_observe_public_estimate = {
+	random_list = {
+		15 = { set_variable = { name = nd_estimate_factor value = 0.6 } }
+		20 = { set_variable = { name = nd_estimate_factor value = 0.8 } }
+		30 = { set_variable = { name = nd_estimate_factor value = 1 } }
+		20 = { set_variable = { name = nd_estimate_factor value = 1.25 } }
+		15 = { set_variable = { name = nd_estimate_factor value = 1.5 } }
+	}
+	set_variable = { name = nd_public_estimate value = nd_public_estimate_observed }
+	set_variable = { name = nd_estimate_year value = year }
+}
+
+nd_snap_public_estimate = {
+	set_variable = { name = nd_public_estimate value = nd_stockpile }
+	set_variable = { name = nd_estimate_year value = year }
+}
+
+# ----------------------------------------------------------------------------
+# POSTURE CHANGES — shared by the panel (nuclear_deterrence_sguis.txt) and the
+# AI review below. Each writes its own variable and re-applies modifiers;
+# none advances time.
+# ----------------------------------------------------------------------------
+
+# ---- The three axes. Callers use the per-value wrappers (nd_set_doctrine_3 =
+# yes, …), which pass the literal flags the core effects branch on. A flag,
+# not a variable written a line earlier, because an effect preview (a button
+# tooltip, an event option) evaluates each `limit` against the CURRENT state
+# without running the effects above it: a `var:` just "set" would still read
+# the old value, and the authority tooltip would hide the one warning it
+# exists to show. `always = yes/no` reads the same in the preview and the run.
+nd_set_doctrine_1 = { nd_set_doctrine = { D = 1 OFFENSIVE = no LEAVES_NFU = no } }
+nd_set_doctrine_2 = { nd_set_doctrine = { D = 2 OFFENSIVE = no LEAVES_NFU = yes } }
+nd_set_doctrine_3 = { nd_set_doctrine = { D = 3 OFFENSIVE = no LEAVES_NFU = yes } }
+nd_set_doctrine_4 = { nd_set_doctrine = { D = 4 OFFENSIVE = yes LEAVES_NFU = yes } }
+nd_set_doctrine_5 = { nd_set_doctrine = { D = 5 OFFENSIVE = yes LEAVES_NFU = yes } }
+
+# D = 1..5; OFFENSIVE / LEAVES_NFU = yes | no. Call through the wrappers.
+nd_set_doctrine = {
+	save_scope_as = nd_sd_self
+	# Leaving no first use is a repudiation (§3.1): it is announced, it is
+	# remembered, and it costs everything a broken promise costs.
+	if = {
+		limit = {
+			always = $LEAVES_NFU$
+			nd_doctrine_nfu = yes
+		}
+		nd_break_pledge_effects = { CREDIBILITY = 20 INFAMY = 10 }
+	}
+	custom_tooltip = {
+		text = nd_tt_doctrine_adopted_$D$
+		set_variable = { name = nd_doctrine value = $D$ }
+		set_variable = { name = nd_doctrine_months value = 0 }
+	}
+	# Announcing an offensive doctrine alarms the neighbourhood. The rival
+	# loop is hidden behind one line: an every_* renders every member in a
+	# tooltip preview.
+	if = {
+		limit = { always = $OFFENSIVE$ }
+		change_infamy = 5
+		custom_tooltip = nd_tt_doctrine_alarms_rivals
+		hidden_effect = {
+			every_country = {
+				limit = {
+					NOT = { this = scope:nd_sd_self }
+					has_diplomatic_pact = { who = scope:nd_sd_self type = rivalry }
+				}
+				change_relations = { country = scope:nd_sd_self value = -10 }
+			}
+		}
+	}
+	nd_apply_posture_modifiers = yes
+}
+
+nd_set_readiness_target_1 = { nd_set_readiness_target = { R = 1 STANDDOWN = yes } }
+nd_set_readiness_target_2 = { nd_set_readiness_target = { R = 2 STANDDOWN = no } }
+nd_set_readiness_target_3 = { nd_set_readiness_target = { R = 3 STANDDOWN = no } }
+
+# R = 1..3: the target; nd_weekly_update walks the actual readiness there.
+nd_set_readiness_target = {
+	custom_tooltip = {
+		text = nd_tt_readiness_target_$R$
+		set_variable = { name = nd_readiness_target value = $R$ }
+		set_variable = { name = nd_readiness_transition value = 0 }
+	}
+	# A stand-down is visible at once, even though the forces take weeks.
+	if = {
+		limit = {
+			always = $STANDDOWN$
+			nd_in_crisis = yes
+		}
+		custom_tooltip = nd_tt_standdown_signal
+	}
+}
+
+nd_set_authority_1 = { nd_set_authority = { A = 1 DELEGATED = no } }
+nd_set_authority_2 = { nd_set_authority = { A = 2 DELEGATED = yes } }
+nd_set_authority_3 = { nd_set_authority = { A = 3 DELEGATED = yes } }
+
+# A = 1..3. The caller has checked nd_can_set_authority.
+nd_set_authority = {
+	custom_tooltip = {
+		text = nd_tt_authority_adopted_$A$
+		set_variable = { name = nd_authority value = $A$ }
+		set_variable = { name = nd_authority_months value = 0 }
+	}
+	if = {
+		limit = { always = $DELEGATED$ }
+		custom_tooltip = nd_tt_authority_consequence
+	}
+}
+
+# VAR = nd_safeguards | nd_hardening; OP = add | subtract (substituted into
+# the change_variable key). The caller has checked the step is allowed.
+nd_step_investment = {
+	custom_tooltip = {
+		text = nd_tt_$VAR$_$OP$
+		change_variable = { name = $VAR$ $OP$ = 1 }
+	}
+	clamp_variable = { name = $VAR$ min = 0 max = 3 }
+	nd_apply_posture_modifiers = yes
+}
+
+# The costs of a broken pledge: no first use repudiated, or a bilateral non-use
+# pledge renounced. CREDIBILITY and INFAMY are literals.
+nd_break_pledge_effects = {
+	custom_tooltip = {
+		text = nd_tt_pledge_broken
+		change_variable = { name = nd_credibility subtract = $CREDIBILITY$ }
+		clamp_variable = { name = nd_credibility min = 0 max = 100 }
+		set_variable = { name = nd_pledge_broken_months value = nd_pledge_broken_months_value }
+	}
+	change_infamy = $INFAMY$
+	add_modifier = {
+		name = nd_pledge_broken_mod
+		years = 10
+		is_decaying = yes
+	}
+	every_interest_group = {
+		limit = { nd_ig_class_dove = yes }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# DOMESTIC STANCE (§7) — the single refresh site of nd_posture_approval_*
+# ----------------------------------------------------------------------------
+# Scores per class, written to country variables, then one band per group.
+# A doctrine held less than nd_stance_tenure_months is still being judged: every
+# score is zero until then, so flipping a posture pays nothing.
+nd_refresh_domestic_stance = {
+	# Marks that bands may be on our interest groups, so the country pulse can
+	# take them off if the entry deactivates (nd_country_monthly_cleanup): the
+	# bands live on the interest groups, not on the entry, and outlive it.
+	set_variable = { name = nd_stance_applied value = 1 }
+	set_variable = { name = nd_stance_warfighting value = nd_stance_warfighting_value }
+	set_variable = { name = nd_stance_professional value = nd_stance_professional_value }
+	set_variable = { name = nd_stance_dove value = nd_stance_dove_value }
+	set_variable = { name = nd_stance_business value = nd_stance_business_value }
+	every_interest_group = {
+		if = {
+			limit = { nd_ig_class_warfighting = yes }
+			nd_ig_set_band = { VAR = nd_stance_warfighting }
+		}
+		else_if = {
+			limit = { nd_ig_class_professional = yes }
+			nd_ig_set_band = { VAR = nd_stance_professional }
+		}
+		else_if = {
+			limit = { nd_ig_class_dove = yes }
+			nd_ig_set_band = { VAR = nd_stance_dove }
+		}
+		else_if = {
+			limit = { nd_ig_class_business = yes }
+			nd_ig_set_band = { VAR = nd_stance_business }
+		}
+		else = {
+			nd_ig_clear_band = yes
+		}
+	}
+}
+
+nd_clear_domestic_stance = {
+	every_interest_group = {
+		nd_ig_clear_band = yes
+	}
+}
+
+# Interest-group scope. Idempotent across months: whatever band is on comes
+# off (each guarded by has_modifier, which is reliable here because nothing
+# earlier in the same block added one), and the wanted band goes on.
+nd_ig_set_band = {
+	nd_ig_clear_band = yes
+	if = {
+		limit = { owner = { var:$VAR$ >= 2 } }
+		add_modifier = { name = nd_posture_approval_plus_2 }
+	}
+	else_if = {
+		limit = { owner = { var:$VAR$ >= 1 } }
+		add_modifier = { name = nd_posture_approval_plus_1 }
+	}
+	else_if = {
+		limit = { owner = { var:$VAR$ <= -2 } }
+		add_modifier = { name = nd_posture_approval_minus_2 }
+	}
+	else_if = {
+		limit = { owner = { var:$VAR$ <= -1 } }
+		add_modifier = { name = nd_posture_approval_minus_1 }
+	}
+}
+
+nd_ig_clear_band = {
+	if = {
+		limit = { has_modifier = nd_posture_approval_plus_2 }
+		remove_modifier = nd_posture_approval_plus_2
+	}
+	if = {
+		limit = { has_modifier = nd_posture_approval_plus_1 }
+		remove_modifier = nd_posture_approval_plus_1
+	}
+	if = {
+		limit = { has_modifier = nd_posture_approval_minus_1 }
+		remove_modifier = nd_posture_approval_minus_1
+	}
+	if = {
+		limit = { has_modifier = nd_posture_approval_minus_2 }
+		remove_modifier = nd_posture_approval_minus_2
+	}
+}
+
+# ----------------------------------------------------------------------------
+# AI POSTURE REVIEW (§9) — every sixth month, and when a crisis opens
+# ----------------------------------------------------------------------------
+# Deterministic scoring with a weighted tie-break, not scripted buttons: one
+# weighted roll over a dozen posture buttons would make an AI's doctrine a
+# lottery. The current doctrine gets a large inertia weight so a review rarely
+# changes it; tenure still applies.
+nd_ai_review_posture = {
+	nd_init_posture = yes
+	save_scope_as = nd_ai_self
+	# ---- doctrine -----------------------------------------------------------
+	if = {
+		limit = { var:nd_doctrine_months >= nd_doctrine_tenure_months }
+		random_list = {
+			# Keep what we have.
+			60 = { }
+			# No first use: cautious rulers, democracies, dovish governments,
+			# countries with no armed rival.
+			0 = {
+				modifier = {
+					if = {
+						limit = { ruler_is_cautious = yes }
+						add = 15
+					}
+					if = {
+						limit = { country_is_democratic = yes }
+						add = 10
+					}
+					if = {
+						limit = { nd_regime_is_militarist = yes }
+						multiply = 0
+					}
+				}
+				if = {
+					limit = { NOT = { var:nd_doctrine = 1 } }
+					nd_set_doctrine_1 = yes
+				}
+			}
+			# Existential deterrence: the default.
+			25 = {
+				modifier = {
+					if = {
+						limit = { nd_regime_is_militarist = yes }
+						add = -15
+					}
+				}
+				if = {
+					limit = { NOT = { var:nd_doctrine = 2 } }
+					nd_set_doctrine_2 = yes
+				}
+			}
+			# Flexible first use: a conventionally weaker power, or a hawkish one.
+			10 = {
+				modifier = {
+					if = {
+						limit = { country_rank < rank_value:great_power }
+						add = 10
+					}
+					if = {
+						limit = { ruler_is_aggressive = yes }
+						add = 5
+					}
+					if = {
+						limit = { ruler_is_cautious = yes }
+						add = -10
+					}
+				}
+				if = {
+					limit = { NOT = { var:nd_doctrine = 3 } }
+					nd_set_doctrine_3 = yes
+				}
+			}
+			# Compellence: militarists, aggressive rulers.
+			0 = {
+				modifier = {
+					if = {
+						limit = { nd_regime_is_militarist = yes }
+						add = 20
+					}
+					if = {
+						limit = { ruler_is_aggressive = yes }
+						add = 10
+					}
+					if = {
+						limit = { ruler_is_cautious = yes }
+						multiply = 0
+					}
+				}
+				if = {
+					limit = { NOT = { var:nd_doctrine = 4 } }
+					nd_set_doctrine_4 = yes
+				}
+			}
+			# Warfighting: militarists — above all a militarist monopolist that
+			# nobody can answer (§9).
+			0 = {
+				modifier = {
+					if = {
+						limit = { nd_regime_is_militarist = yes }
+						add = 10
+						if = {
+							limit = { NOT = { nd_has_plausible_attacker = yes } }
+							add = 20
+						}
+						if = {
+							limit = { country_is_fascist = yes }
+							add = 10
+						}
+					}
+					if = {
+						limit = { ruler_is_cautious = yes }
+						multiply = 0
+					}
+				}
+				if = {
+					limit = { NOT = { var:nd_doctrine = 5 } }
+					nd_set_doctrine_5 = yes
+				}
+			}
+		}
+	}
+	# ---- readiness ----------------------------------------------------------
+	if = {
+		limit = { nd_readiness_locked = no }
+		if = {
+			limit = {
+				var:nd_strain < 70
+				OR = {
+					nd_crisis_stage_at_least = { STAGE = 3 }
+					any_country = {
+						has_war_with = scope:nd_ai_self
+						nd_believed_armed = yes
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { var:nd_readiness_target = 3 } }
+				nd_set_readiness_target_3 = yes
+			}
+		}
+		else_if = {
+			limit = {
+				OR = {
+					is_at_war = yes
+					nd_crisis_stage_at_least = { STAGE = 2 }
+					AND = {
+						nd_has_plausible_attacker = yes
+						OR = {
+							nd_regime_is_militarist = yes
+							nd_doctrine_at_least_compellence = yes
+						}
+					}
+				}
+			}
+			if = {
+				limit = { NOT = { var:nd_readiness_target = 2 } }
+				nd_set_readiness_target_2 = yes
+			}
+		}
+		else = {
+			if = {
+				limit = { NOT = { var:nd_readiness_target = 1 } }
+				nd_set_readiness_target_1 = yes
+			}
+		}
+	}
+	# ---- launch authority ---------------------------------------------------
+	if = {
+		limit = { var:nd_authority_months >= nd_authority_tenure_months }
+		if = {
+			limit = {
+				nd_can_adopt_launch_on_warning = yes
+				nd_regime_is_militarist = yes
+				nd_has_plausible_attacker = yes
+				var:nd_survivability < 50
+				NOT = { var:nd_authority = 3 }
+			}
+			random = {
+				chance = 25
+				nd_set_authority_3 = yes
+			}
+		}
+		else_if = {
+			limit = {
+				nd_can_adopt_delegation = yes
+				nd_has_plausible_attacker = yes
+				OR = {
+					nd_regime_is_militarist = yes
+					var:nd_survivability < 40
+				}
+				var:nd_authority = 1
+			}
+			random = {
+				chance = 30
+				nd_set_authority_2 = yes
+			}
+		}
+		else_if = {
+			limit = {
+				NOT = { var:nd_authority = 1 }
+				ruler_is_cautious = yes
+			}
+			nd_set_authority_1 = yes
+		}
+	}
+	# ---- investment ---------------------------------------------------------
+	# Safeguards track the risk the AI is running; hardening tracks whether
+	# anybody could strike back at us. Nothing while in default.
+	set_variable = { name = nd_ai_want_safeguards value = 1 }
+	if = {
+		limit = { var:nd_authority >= 2 }
+		change_variable = { name = nd_ai_want_safeguards add = 1 }
+	}
+	if = {
+		limit = { var:nd_readiness_target = 3 }
+		change_variable = { name = nd_ai_want_safeguards add = 1 }
+	}
+	set_variable = { name = nd_ai_want_hardening value = 0 }
+	if = {
+		limit = { nd_has_plausible_attacker = yes }
+		change_variable = { name = nd_ai_want_hardening add = 1 }
+		if = {
+			limit = { country_rank >= rank_value:great_power }
+			change_variable = { name = nd_ai_want_hardening add = 1 }
+		}
+	}
+	if = {
+		limit = { in_default = yes }
+		set_variable = { name = nd_ai_want_safeguards value = 0 }
+		set_variable = { name = nd_ai_want_hardening value = 0 }
+	}
+	clamp_variable = { name = nd_ai_want_safeguards min = 0 max = 3 }
+	set_variable = { name = nd_safeguards value = var:nd_ai_want_safeguards }
+	set_variable = { name = nd_hardening value = var:nd_ai_want_hardening }
+	nd_apply_posture_modifiers = yes
+}
+
+# ----------------------------------------------------------------------------
+# INCIDENTS (§8)
+# ----------------------------------------------------------------------------
+# One roll a month. Two-stage (10 % × permille %) so that the inner chance is
+# never a fraction; nd_debug_incident_odds skips straight to the draw.
+nd_roll_incident = {
+	if = {
+		limit = { has_variable = nd_debug_incident_odds }
+		nd_fire_incident = yes
+	}
+	else = {
+		random = {
+			chance = 10
+			random = {
+				chance = nd_incident_permille
+				nd_fire_incident = yes
+			}
+		}
+	}
+}
+
+# Draw an incident family from those this country is eligible for. A Routine
+# Mishap is always eligible, so the draw can never come up empty.
+nd_fire_incident = {
+	set_variable = { name = nd_months_since_incident value = 0 }
+	random_list = {
+		20 = {
+			trigger_event = { id = nuclear_incident.40 }
+		}
+		0 = {
+			modifier = {
+				if = {
+					limit = { nd_incident_eligible_warning = yes }
+					add = 40
+					if = {
+						limit = { nd_crisis_stage_at_least = { STAGE = 2 } }
+						add = 20
+					}
+				}
+			}
+			nd_start_unconfirmed_warning = yes
+		}
+		0 = {
+			modifier = {
+				if = {
+					limit = { nd_incident_eligible_exercise = yes }
+					add = 25
+				}
+			}
+			trigger_event = { id = nuclear_incident.10 }
+		}
+		0 = {
+			modifier = {
+				if = {
+					limit = { nd_incident_eligible_commander = yes }
+					add = 30
+				}
+			}
+			trigger_event = { id = nuclear_incident.20 }
+		}
+		0 = {
+			modifier = {
+				if = {
+					limit = { nd_incident_eligible_permanent_alert = yes }
+					add = 35
+				}
+			}
+			trigger_event = { id = nuclear_incident.30 }
+		}
+	}
+}
+
+# The Unconfirmed Warning (§8.1). Picks the suspected attacker — our crisis
+# opponent if it is believed armed, else an armed enemy, else an armed rival or
+# hostile power — and the hidden cause, then opens the chain. The cause is not
+# revealed until the inquiry (.3) and nothing before it says "false alarm".
+nd_start_unconfirmed_warning = {
+	save_scope_as = nd_warning_country
+	if = {
+		limit = {
+			nd_in_crisis = yes
+			var:nd_crisis_opponent ?= { nd_believed_armed = yes }
+		}
+		var:nd_crisis_opponent = { save_scope_as = nd_warning_suspect }
+	}
+	else_if = {
+		limit = {
+			any_country = {
+				has_war_with = scope:nd_warning_country
+				nd_believed_armed = yes
+			}
+		}
+		random_country = {
+			limit = {
+				has_war_with = scope:nd_warning_country
+				nd_believed_armed = yes
+			}
+			save_scope_as = nd_warning_suspect
+		}
+	}
+	else = {
+		random_country = {
+			limit = {
+				NOT = { this = scope:nd_warning_country }
+				nd_believed_armed = yes
+				OR = {
+					has_diplomatic_pact = { who = scope:nd_warning_country type = rivalry }
+					has_attitude = { who = scope:nd_warning_country attitude = antagonistic }
+					has_attitude = { who = scope:nd_warning_country attitude = belligerent }
+				}
+			}
+			save_scope_as = nd_warning_suspect
+		}
+	}
+	if = {
+		limit = { exists = scope:nd_warning_suspect }
+		# The hidden cause. 5 (sunlight on high cloud) needs satellites; 7 (a
+		# research rocket) needs somebody else to have launched one.
+		random_list = {
+			15 = { set_variable = { name = nd_warning_cause value = 1 } }   # moonrise over the radar horizon
+			15 = { set_variable = { name = nd_warning_cause value = 2 } }   # a training tape in the live system
+			15 = { set_variable = { name = nd_warning_cause value = 3 } }   # a failed computer chip
+			10 = { set_variable = { name = nd_warning_cause value = 4 } }   # a relay station failure
+			0 = {
+				modifier = {
+					if = {
+						limit = { has_technology_researched = recon_satellites }
+						add = 20
+					}
+				}
+				set_variable = { name = nd_warning_cause value = 5 }        # sunlight on high-altitude cloud
+			}
+			10 = { set_variable = { name = nd_warning_cause value = 6 } }   # a solar storm
+			0 = {
+				modifier = {
+					if = {
+						limit = { has_technology_researched = rocketry }
+						add = 10
+					}
+				}
+				set_variable = { name = nd_warning_cause value = 7 }        # a foreign research rocket
+			}
+			10 = { set_variable = { name = nd_warning_cause value = 8 } }   # swans, a fighter escort and an exercise at once
+		}
+		set_variable = { name = nd_warning_suspect value = scope:nd_warning_suspect }
+		set_variable = { name = nd_warning_launched value = 0 }
+		# Who decides (§8.1). Under launch on warning — or delegated authority
+		# in a war with the suspect — the warning reaches the launch crews
+		# before it reaches the government, and the outcome is rolled with no
+		# further veto: someone in the chain halts it (.2) or nobody does and
+		# the standing orders are executed. Otherwise the government decides
+		# (.1), and a launch happens only if it is ordered.
+		if = {
+			limit = {
+				OR = {
+					nd_authority_launch_on_warning = yes
+					AND = {
+						nd_authority_delegated_or_warning = yes
+						has_war_with = scope:nd_warning_suspect
+					}
+				}
+			}
+			nd_roll_launch_hold = yes
+			if = {
+				limit = { var:nd_launch_held = 1 }
+				trigger_event = { id = nuclear_incident.2 popup = yes }
+			}
+			else = {
+				set_variable = { name = nd_warning_launched value = 1 }
+				nd_launch_or_intercept = { VICTIM = scope:nd_warning_suspect NARRATE = yes }
+				trigger_event = { id = nuclear_incident.3 days = 10 }
+			}
+		}
+		else = {
+			trigger_event = { id = nuclear_incident.1 popup = yes }
+		}
+	}
+	else = {
+		# No plausible attacker after all (the eligibility test saw one this
+		# month; the pick can still come up empty if relations moved): a routine
+		# mishap instead of an impossible warning.
+		trigger_event = { id = nuclear_incident.40 }
+	}
+}
+
+# Rolls whether a launch sequence already under way under delegated authority
+# or launch on warning is halted, and writes the answer the event text reads:
+#   nd_launch_held = 1  someone in the chain refused (Petrov, Arkhipov)
+#   nd_launch_held = 0  the sequence completed
+# There is no player veto after this (§8.1); nd_hold_chance is the protection.
+nd_roll_launch_hold = {
+	set_variable = { name = nd_launch_held value = 0 }
+	random = {
+		chance = nd_hold_chance
+		set_variable = { name = nd_launch_held value = 1 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# LAUNCH DISPATCH (§11) — every launch goes through one of these two
+# ----------------------------------------------------------------------------
+# Country scope = the attacker. Expects scope:nd_strike_victim. Revalidates the
+# arsenal and the war, consumes exactly one warhead through the existing strike
+# effects (nuclear_first_strike / nd_tactical_strike_resolve), and records the
+# use once. A failed validation spends nothing and records nothing.
+# Fenced (scope:nd_dispatching exists only in the real run): a preview of the
+# event option that calls this would otherwise walk nuclear_first_strike with
+# scope:attacking_country unset.
+nd_dispatch_strategic_strike = {
+	save_scope_as = nd_dispatching
+	if = {
+		limit = {
+			exists = scope:nd_dispatching
+			exists = scope:nd_strike_victim
+			nd_is_armed = yes
+			has_war_with = scope:nd_strike_victim
+			scope:nd_strike_victim = {
+				any_scope_state = { always = yes }
+			}
+		}
+		save_scope_as = attacking_country
+		scope:nd_strike_victim = {
+			save_scope_as = target_country
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 0
+				nuclear_first_strike = yes
+			}
+		}
+		nd_record_nuclear_use = { VICTIM = scope:nd_strike_victim }
+	}
+}
+
+# Tactical: a military target. Falls back to a strategic strike when the
+# attacker has no tactical weapons or the victim no military installation.
+nd_dispatch_tactical_strike = {
+	save_scope_as = nd_dispatching
+	if = {
+		limit = {
+			exists = scope:nd_dispatching
+			exists = scope:nd_strike_victim
+			nd_is_armed = yes
+			has_war_with = scope:nd_strike_victim
+			has_technology_researched = tactical_nuclear_weapons
+			scope:nd_strike_victim = {
+				any_scope_state = { nd_state_has_military_target = yes }
+			}
+		}
+		save_scope_as = attacking_country
+		scope:nd_strike_victim = {
+			save_scope_as = target_country
+			random_scope_state = {
+				limit = { nd_state_has_military_target = yes }
+				save_scope_as = target_state
+			}
+		}
+		if = {
+			limit = { exists = scope:target_state }
+			nd_tactical_strike_resolve = yes
+			nd_record_nuclear_use = { VICTIM = scope:nd_strike_victim }
+		}
+	}
+	else = {
+		nd_dispatch_strategic_strike = yes
+	}
+}
+
+# The body of tactical_nuke_diplo_action's accept_effect, lifted verbatim so
+# the action and the incident chains share it. Country scope = attacker;
+# expects scope:target_state and scope:target_country.
+nd_tactical_strike_resolve = {
+	change_variable = {
+		name = nuclear_weapon_stockpile
+		subtract = 1
+	}
+	random_list = {
+		0 = {
+			modifier = nuclear_strike_success_chance
+			change_infamy = 10
+			scope:target_state = {
+				nuclear_tactical_strike = yes
+			}
+		}
+		0 = {
+			modifier = nuclear_strike_fail_chance
+			scope:target_country = {
+				trigger_event = { id = nuclear_weapon_events.7 popup = yes }
+				change_relations = {
+					country = scope:attacking_country
+					value = -5
+				}
+			}
+			trigger_event = { id = nuclear_weapon_events.8 popup = yes }
+		}
+	}
+}
+
+# Record a nuclear use by this country against $VICTIM$, once per launch
+# (§11). Country scope = the attacker.
+nd_record_nuclear_use = {
+	save_scope_as = nd_rec_attacker
+	hidden_effect = {
+		# A pledge is breached unless the victim struck first; either way the
+		# pledge is gone.
+		if = {
+			limit = {
+				nd_has_nonuse_pledge_with = { TARGET = $VICTIM$ }
+			}
+			if = {
+				limit = { NOT = { nd_was_struck_by = { ENEMY = $VICTIM$ } } }
+				nd_break_pledge_effects = { CREDIBILITY = 25 INFAMY = 15 }
+			}
+			nd_remove_pledge_pair = { A = scope:nd_rec_attacker B = $VICTIM$ }
+		}
+		# Under no first use, anything but retaliation — an unauthorised or
+		# mistaken launch included — breaks the pledge (§3.1).
+		if = {
+			limit = {
+				nd_doctrine_nfu = yes
+				NOT = { nd_was_struck_by = { ENEMY = $VICTIM$ } }
+			}
+			nd_break_pledge_effects = { CREDIBILITY = 30 INFAMY = 10 }
+		}
+		set_variable = { name = nd_has_used value = 1 }
+		set_variable = { name = nd_first_use_cooldown value = 6 }
+		nd_snap_public_estimate = yes
+		# Any crisis between the two ends in use.
+		if = {
+			limit = {
+				nd_in_crisis = yes
+				var:nd_crisis_opponent ?= $VICTIM$
+			}
+			nd_crisis_close_from_either = { OUTCOME = 7 }
+		}
+		# Use spurs every working programme in the world (§8.5).
+		every_country = {
+			limit = {
+				has_journal_entry = je_nuclear_program
+				nuclear_program_is_proliferating = yes
+				NOT = { has_modifier = nd_proliferation_spur }
+			}
+			add_modifier = {
+				name = nd_proliferation_spur
+				years = 5
+				is_decaying = yes
+			}
+		}
+		# The victim's guarantors are asked whether they will honour it.
+		save_scope_as = nd_guarantee_attacker
+		$VICTIM$ = {
+			save_scope_as = nd_guarantee_beneficiary
+			every_scope_treaty = {
+				every_scope_article = {
+					limit = {
+						has_type = nuclear_guarantee
+						target_country = scope:nd_guarantee_beneficiary
+						NOT = { source_country = scope:nd_guarantee_attacker }
+					}
+					source_country = {
+						set_variable = { name = nd_guarantee_context value = 2 }
+						trigger_event = { id = nuclear_crisis.20 }
+					}
+				}
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# INCIDENT CONSEQUENCES — called from events/nuclear_incident_events.txt
+# ----------------------------------------------------------------------------
+
+# A launch that actually happens: in a war with $VICTIM$ it strikes through
+# the dispatch path; outside one it becomes an intercepted order (§8.3's
+# boundary — no strike without a war context). Writes nd_last_launch_kind
+# (1 struck, 2 intercepted) for the narrative event, which it fires when
+# NARRATE = yes (the Isolated Commander narrates its own). Country scope = the
+# launching country.
+nd_launch_or_intercept = {
+	custom_tooltip = nd_tt_launch_or_intercept
+	hidden_effect = {
+		save_scope_as = nd_launcher
+		if = {
+			limit = {
+				nd_is_armed = yes
+				has_war_with = $VICTIM$
+			}
+			set_variable = { name = nd_last_launch_kind value = 1 }
+			$VICTIM$ = { save_scope_as = nd_strike_victim }
+			if = {
+				limit = { has_variable = nd_launch_tactical }
+				nd_dispatch_tactical_strike = yes
+			}
+			else = {
+				nd_dispatch_strategic_strike = yes
+			}
+		}
+		else = {
+			set_variable = { name = nd_last_launch_kind value = 2 }
+			nd_intercepted_launch = { VICTIM = $VICTIM$ }
+		}
+		if = {
+			limit = { has_variable = nd_launch_tactical }
+			remove_variable = nd_launch_tactical
+		}
+		$VICTIM$ = { save_scope_as = nd_launch_victim }
+		if = {
+			limit = { always = $NARRATE$ }
+			trigger_event = { id = nuclear_incident.4 popup = yes }
+		}
+	}
+}
+
+# A launch recalled at the last moment, in peacetime. Nobody died; the other
+# side saw everything. Country scope = the country whose weapons nearly flew.
+nd_intercepted_launch = {
+	save_scope_as = nd_interceptor
+	change_infamy = 10
+	change_variable = { name = nd_strain add = 10 }
+	clamp_variable = { name = nd_strain min = 0 max = 100 }
+	change_variable = { name = nd_reliability subtract = 10 }
+	clamp_variable = { name = nd_reliability min = 0 max = 100 }
+	$VICTIM$ = {
+		change_relations = { country = scope:nd_interceptor value = -50 }
+		save_scope_as = nd_scare_victim
+		trigger_event = { id = nuclear_incident.5 }
+	}
+	# The crisis this starts, or sharpens.
+	if = {
+		limit = {
+			nd_in_crisis = yes
+			var:nd_crisis_opponent ?= $VICTIM$
+		}
+		nd_crisis_save_parties = yes
+		scope:nd_issuer ?= {
+			set_variable = { name = nd_crisis_stage value = 3 }
+		}
+	}
+	else_if = {
+		limit = {
+			nd_in_crisis = no
+			$VICTIM$ = {
+				nd_in_crisis = no
+				nd_is_armed = yes
+			}
+		}
+		$VICTIM$ = {
+			nd_crisis_open = { TARGET = scope:nd_interceptor PUBLIC = no }
+		}
+	}
+}
+
+# The inquiry's three verdicts (§8.1 step 4).
+nd_inquiry_reward_skeptic = {
+	custom_tooltip = nd_tt_inquiry_reward
+	change_variable = { name = nd_reliability add = 10 }
+	clamp_variable = { name = nd_reliability min = 0 max = 100 }
+	if = {
+		limit = { has_variable = nd_punished_skeptic }
+		remove_variable = nd_punished_skeptic
+	}
+	every_interest_group = {
+		limit = { nd_ig_class_dove = yes }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+	}
+	add_modifier = {
+		name = nd_incident_scandal
+		days = short_modifier_time
+		is_decaying = yes
+	}
+}
+
+nd_inquiry_conceal = {
+	custom_tooltip = nd_tt_inquiry_conceal
+	set_variable = { name = nd_concealed_incident value = 1 }
+}
+
+nd_inquiry_punish_skeptic = {
+	custom_tooltip = nd_tt_inquiry_punish
+	set_variable = { name = nd_punished_skeptic value = 1 }
+	every_interest_group = {
+		limit = { nd_ig_class_warfighting = yes }
+		add_modifier = {
+			name = ig_approval_positive_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+	}
+	every_interest_group = {
+		limit = { nd_ig_class_dove = yes }
+		add_modifier = {
+			name = ig_approval_negative_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+	}
+}
+
+# A weapons accident at home: local contamination in the state the event
+# picked (scope:nd_accident_state), and a public scandal.
+nd_accident_local_damage = {
+	if = {
+		limit = { exists = scope:nd_accident_state }
+		scope:nd_accident_state = {
+			add_modifier = {
+				name = nd_weapons_accident_contamination
+				years = 3
+				is_decaying = yes
+			}
+			state_region = {
+				add_devastation = 10
+			}
+		}
+	}
+}
+
+# A lost weapon is a lost weapon.
+nd_accident_lose_warhead = {
+	custom_tooltip = {
+		text = use_one_nuke_desc
+		if = {
+			limit = { nd_is_armed = yes }
+			change_variable = { name = nuclear_weapon_stockpile subtract = 1 }
+		}
+	}
+}
+
+# Stand-downs forced on us by an accident or a scare: one readiness step down,
+# unless we are already at routine.
+nd_readiness_step_down = {
+	if = {
+		limit = {
+			has_variable = nd_readiness_target
+			var:nd_readiness_target >= 2
+		}
+		change_variable = { name = nd_readiness_target subtract = 1 }
+		custom_tooltip = nd_tt_readiness_step_down
+	}
+}
+
+# ----------------------------------------------------------------------------
+# CLEANUP OUTSIDE THE ENTRY — on_monthly_pulse_country
+# ----------------------------------------------------------------------------
+# The domestic-stance bands sit on interest groups and so survive the entry
+# deactivating (disarmament, the last warhead used, a crisis ending for a
+# non-nuclear party). Nothing inside the entry can run once it is inactive, so
+# the country pulse removes them. Cheap: one has_variable for every country
+# that never had the entry.
+nd_country_monthly_cleanup = {
+	if = {
+		limit = {
+			has_variable = nd_stance_applied
+			NOT = { has_journal_entry = je_nuclear_deterrence }
+		}
+		nd_clear_domestic_stance = yes
+		remove_variable = nd_stance_applied
+	}
+}

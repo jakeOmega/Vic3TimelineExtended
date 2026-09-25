@@ -117,11 +117,13 @@ un_join_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_JOIN_DESC"
-			# Membership; for a great power joining in the founding window while
-			# seats remain, a permanent seat; and every convention already
-			# ratified (un_join_organisation, un_ladder_effects.txt).
+			# Membership and every convention already ratified
+			# (un_join_organisation, un_ladder_effects.txt).
 			un_join_organisation = yes
 		}
+		# A great power stands for an open permanent seat, filled by prestige
+		# rather than by who joins first; this says where things stand.
+		un_seat_join_tooltip = yes
 	}
 }
 

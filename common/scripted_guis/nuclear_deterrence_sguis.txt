@@ -1,0 +1,311 @@
+﻿# ============================================================================
+# NUCLEAR DETERRENCE — scripted GUIs for
+# gui/journal_entry_widgets/nuclear_deterrence_widget.gui
+# ============================================================================
+# Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
+#
+# Two ACTION handlers, parameterized by a saved scope `op` (the Strategic
+# Reserve / nuclear programme pattern), and four DISPLAY handlers. The op
+# tables are repeated in the .gui header and in
+# docs/systems/journal_entry_systems.md — keep all three in step.
+#
+# ---- nd_posture_sgui — op table ---------------------------------------------
+#   11..15  adopt doctrine 1..5           -> nd_set_doctrine
+#   21..23  set readiness target 1..3     -> nd_set_readiness_target
+#   31..33  adopt launch authority 1..3   -> nd_set_authority
+#   40 / 41 safeguards down / up          -> nd_step_investment
+#   50 / 51 hardening down / up           -> nd_step_investment
+#
+# ---- nd_crisis_action_sgui — op table ---------------------------------------
+#   1  go public (issuer)                 -> nd_crisis_act_go_public
+#   2  propose a mutual stand-down        -> nd_crisis_act_propose_talks
+#   3  a demonstration exercise (armed)   -> nd_crisis_act_exercise
+#   4  concede (target)                   -> nd_crisis_act_yield
+#   5  let it go (issuer)                 -> nd_crisis_act_back_down
+#
+# Every `is_valid` delegates to a scripted trigger in
+# nuclear_deterrence_triggers.txt and every effect to the same scripted effect
+# the AI's path uses (the posture review, the crisis events), so the panel and
+# the AI cannot drift apart. The AI never uses these: `ai_is_valid = no`.
+#
+# `is_shown` on the action handlers is scope-free (gui_modding_guide.md gotcha
+# #22): the buttons carry no `visible` from IsShown and are simply greyed by
+# is_valid, which says why. The display handlers' is_shown are scope-free
+# too, and are what the .gui asks its yes/no questions with.
+# ============================================================================
+
+nd_posture_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_nuclear_deterrence
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op  scope:op = 11 }
+			nd_can_set_doctrine = { D = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 12 }
+			nd_can_set_doctrine = { D = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 13 }
+			nd_can_set_doctrine = { D = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 14 }
+			nd_can_set_doctrine = { D = 4 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 15 }
+			nd_can_set_doctrine = { D = 5 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 21 }
+			nd_can_set_readiness = { R = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 22 }
+			nd_can_set_readiness = { R = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 23 }
+			nd_can_set_readiness = { R = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 31 }
+			nd_can_set_authority = { A = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 32 }
+			nd_can_set_authority = { A = 2 }
+			custom_tooltip = {
+				text = nd_tt_need_radar
+				nd_can_adopt_delegation = yes
+			}
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 33 }
+			nd_can_set_authority = { A = 3 }
+			custom_tooltip = {
+				text = nd_tt_need_icbms
+				nd_can_adopt_launch_on_warning = yes
+			}
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 40 }
+			nd_can_step_investment_down = { VAR = nd_safeguards }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 41 }
+			nd_can_step_investment_up = { VAR = nd_safeguards }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 50 }
+			nd_can_step_investment_down = { VAR = nd_hardening }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 51 }
+			nd_can_step_investment_up = { VAR = nd_hardening }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op  scope:op = 11 }
+			nd_set_doctrine_1 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 12 }
+			nd_set_doctrine_2 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 13 }
+			nd_set_doctrine_3 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 14 }
+			nd_set_doctrine_4 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 15 }
+			nd_set_doctrine_5 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 21 }
+			nd_set_readiness_target_1 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 22 }
+			nd_set_readiness_target_2 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 23 }
+			nd_set_readiness_target_3 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 31 }
+			nd_set_authority_1 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 32 }
+			nd_set_authority_2 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 33 }
+			nd_set_authority_3 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 40 }
+			nd_step_investment = { VAR = nd_safeguards OP = subtract }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 41 }
+			nd_step_investment = { VAR = nd_safeguards OP = add }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 50 }
+			nd_step_investment = { VAR = nd_hardening OP = subtract }
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 51 }
+			nd_step_investment = { VAR = nd_hardening OP = add }
+		}
+	}
+}
+
+nd_crisis_action_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_journal_entry = je_nuclear_deterrence
+	}
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op  scope:op = 1 }
+			nd_can_go_public = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 2 }
+			nd_can_propose_talks = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 3 }
+			nd_can_exercise = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 4 }
+			nd_can_yield = yes
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 5 }
+			nd_can_back_down = yes
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	ai_is_valid = {
+		always = no
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op  scope:op = 1 }
+			nd_crisis_act_go_public = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 2 }
+			nd_crisis_act_propose_talks = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 3 }
+			nd_crisis_act_exercise = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 4 }
+			nd_crisis_act_yield = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 5 }
+			nd_crisis_act_back_down = yes
+		}
+	}
+}
+
+# ---- Yes/no questions the .gui asks (scope-free is_shown) --------------------
+nd_armed_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_armed = yes
+		nd_is_initialized = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+nd_in_crisis_sgui = {
+	scope = country
+	is_shown = {
+		nd_in_crisis = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# ---- Names: the opponent, and last time's opponent ---------------------------
+# A country held in a variable is printed from inside its own scope
+# ([THIS.GetCountry.GetName]) — gui_modding_guide.md gotchas #11 and #15.
+nd_crisis_opponent_sgui = {
+	scope = country
+	is_shown = {
+		nd_in_crisis = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		if = {
+			limit = { nd_in_crisis = yes }
+			var:nd_crisis_opponent ?= {
+				custom_tooltip_no_bullet = nd_crisis_opponent_line
+			}
+		}
+	}
+}
+
+nd_last_crisis_sgui = {
+	scope = country
+	is_shown = {
+		nd_in_crisis = no
+		has_variable = nd_crisis_last_outcome
+		has_variable = nd_crisis_last_opponent
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		if = {
+			limit = {
+				nd_in_crisis = no
+				has_variable = nd_crisis_last_opponent
+			}
+			var:nd_crisis_last_opponent ?= {
+				custom_tooltip_no_bullet = nd_last_crisis_line
+			}
+		}
+	}
+}

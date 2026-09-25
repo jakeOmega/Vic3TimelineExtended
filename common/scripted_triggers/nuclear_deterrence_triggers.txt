@@ -1,0 +1,1055 @@
+﻿# ============================================================================
+# NUCLEAR DETERRENCE AND CRISIS DIPLOMACY — scripted triggers
+# ============================================================================
+# Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
+#
+# Conventions for every trigger here:
+#   * Country scope unless the header says otherwise.
+#   * Every `var:nd_*` read is paired with `has_variable` — the journal entry
+#     and the diplomatic actions are evaluated for countries that never ran the
+#     posture initialiser.
+#   * A parameter naming another country ($ENEMY$, $TARGET$, …) takes a scope:
+#     `scope:target_country`, a saved scope, or `var:nd_crisis_opponent`.
+#   * Never pass `PREV` or a bare `var:` as a parameter: parameters are
+#     substituted textually, so either one silently changes meaning inside the
+#     scope changes of the trigger it is passed into (a `var:` read inside
+#     `any_scope_state` reads the STATE's variable). Save a temporary scope
+#     first and pass that.
+#   * Nothing reads ROOT unless the header says so. Where an existing trigger
+#     that does (is_losing_war_against) is reused, the caller's ROOT is the
+#     country being asked, which holds for the diplomatic actions, the journal
+#     entry pulses and country events alike.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# ARSENAL AND JOURNAL ENTRY
+# ----------------------------------------------------------------------------
+
+# Does this country hold at least one warhead it is allowed to keep? The gate
+# for upkeep, incidents, posture and every threat. Deliberately not the
+# programme's eligibility (rank, ICBMs, aid): a demoted power keeps its arsenal,
+# its upkeep and its accidents (§2).
+nd_is_armed = {
+	has_variable = nuclear_weapon_stockpile
+	var:nuclear_weapon_stockpile >= 1
+	NOT = { modifier:country_nuclear_disarmament_bool = yes }
+}
+
+# The journal entry's `possible`: armed, or a party to a live crisis (a
+# non-nuclear target needs the crisis panel as much as the issuer does).
+nd_journal_possible = {
+	has_game_rule = nuclear_weapons_enabled
+	OR = {
+		nd_is_armed = yes
+		nd_in_crisis = yes
+	}
+}
+
+# Has the posture initialiser run for this country?
+nd_is_initialized = {
+	has_variable = nd_doctrine
+	has_variable = nd_readiness
+	has_variable = nd_authority
+}
+
+# ----------------------------------------------------------------------------
+# DOCTRINE — one trigger per value, missing variable = existential (the default)
+# ----------------------------------------------------------------------------
+nd_doctrine_nfu = {
+	has_variable = nd_doctrine
+	var:nd_doctrine = 1
+}
+
+nd_doctrine_existential = {
+	OR = {
+		NOT = { has_variable = nd_doctrine }
+		var:nd_doctrine = 2
+	}
+}
+
+nd_doctrine_flexible = {
+	has_variable = nd_doctrine
+	var:nd_doctrine = 3
+}
+
+nd_doctrine_compellence = {
+	has_variable = nd_doctrine
+	var:nd_doctrine = 4
+}
+
+nd_doctrine_warfighting = {
+	has_variable = nd_doctrine
+	var:nd_doctrine = 5
+}
+
+# "At least" ladders list every higher tier explicitly
+# (scripting_best_practices.md § An "at least tier N" trigger must list every
+# higher tier).
+nd_doctrine_at_least_flexible = {
+	has_variable = nd_doctrine
+	OR = {
+		var:nd_doctrine = 3
+		var:nd_doctrine = 4
+		var:nd_doctrine = 5
+	}
+}
+
+nd_doctrine_at_least_compellence = {
+	has_variable = nd_doctrine
+	OR = {
+		var:nd_doctrine = 4
+		var:nd_doctrine = 5
+	}
+}
+
+# ----------------------------------------------------------------------------
+# READINESS AND AUTHORITY
+# ----------------------------------------------------------------------------
+nd_readiness_heightened_or_higher = {
+	has_variable = nd_readiness
+	var:nd_readiness >= 2
+}
+
+nd_readiness_high_alert = {
+	has_variable = nd_readiness
+	var:nd_readiness = 3
+}
+
+nd_authority_delegated_or_warning = {
+	has_variable = nd_authority
+	var:nd_authority >= 2
+}
+
+nd_authority_launch_on_warning = {
+	has_variable = nd_authority
+	var:nd_authority = 3
+}
+
+# Technology behind each authority setting (§3.3). Conditional delegation has a
+# bomber-era form once radar exists; launch on warning needs missiles fast
+# enough that warning time, not flight time, decides.
+nd_can_adopt_delegation = {
+	has_technology_researched = radar
+}
+
+nd_can_adopt_launch_on_warning = {
+	has_technology_researched = radar
+	has_technology_researched = ICBMs
+}
+
+# Is the readiness lock from a stand-down agreement or a concession still on?
+nd_readiness_locked = {
+	has_variable = nd_readiness_lock_months
+	var:nd_readiness_lock_months > 0
+}
+
+# ----------------------------------------------------------------------------
+# DOCTRINE PERMISSION TO STRIKE — one gate for every launch entry point
+# ----------------------------------------------------------------------------
+# ENEMY = the country to be struck. Read by nuke_diplo_action and
+# tactical_nuke_diplo_action (`possible` and AI `will_propose`), by the
+# Monopoly Window and by every incident branch that can end in a deliberate
+# launch. Unauthorised and mistaken launches deliberately do NOT consult it:
+# that they can breach a doctrine is the point of §8.
+
+# Did $ENEMY$ — or anyone on its side of a war with us — strike us? Retaliation
+# is permitted under every doctrine, including no first use.
+nd_was_struck_by = {
+	has_war_with = $ENEMY$
+	OR = {
+		AND = {
+			has_variable = nuked_by_country
+			var:nuked_by_country ?= $ENEMY$
+		}
+		any_scope_state = {
+			OR = {
+				has_modifier = nuclear_strike_aftermath
+				has_modifier = tactical_nuke_aftermath
+			}
+		}
+	}
+}
+
+# $ENEMY$'s side holds a subjugation or annexation goal against us. PREV inside
+# the $ENEMY$ block is this country.
+nd_enemy_threatens_existence = {
+	$ENEMY$ = {
+		OR = {
+			war_side_has_war_goal_of_type_against = { type = annex_country target = PREV }
+			war_side_has_war_goal_of_type_against = { type = te_reunify_country target = PREV }
+			war_side_has_war_goal_of_type_against = { type = make_protectorate target = PREV }
+			war_side_has_war_goal_of_type_against = { type = make_dominion target = PREV }
+			war_side_has_war_goal_of_type_against = { type = make_tributary target = PREV }
+			war_side_has_war_goal_of_type_against = { type = make_personal_union target = PREV }
+			war_side_has_war_goal_of_type_against = { type = make_crown_land target = PREV }
+			war_side_has_war_goal_of_type_against = { type = make_chartered_company target = PREV }
+		}
+	}
+}
+
+# One of our incorporated states is a war-goal target of $ENEMY$.
+nd_core_threatened_by = {
+	any_scope_state = {
+		is_incorporated = yes
+		is_target_of_wargoal = $ENEMY$
+	}
+}
+
+# We defied-or-were-defied bookkeeping: $ENEMY$ rejected a public ultimatum of
+# ours (nd_crisis_record_defiance). Compellence's own licence.
+nd_was_defied_by = {
+	has_variable_list = nd_defied_us
+	is_target_in_variable_list = { name = nd_defied_us target = $ENEMY$ }
+}
+
+# Does our doctrine permit a strike on $ENEMY$ right now? Law gates
+# (humanitarian regulations, limited war) are separate and stay on the actions.
+nd_doctrine_permits_strike = {
+	has_war_with = $ENEMY$
+	OR = {
+		# Retaliation: every doctrine.
+		nd_was_struck_by = { ENEMY = $ENEMY$ }
+		# Warfighting: any war.
+		nd_doctrine_warfighting = yes
+		# Compellence: a defied public ultimatum, or our crisis with them past
+		# the warning stage.
+		AND = {
+			nd_doctrine_at_least_compellence = yes
+			OR = {
+				nd_was_defied_by = { ENEMY = $ENEMY$ }
+				AND = {
+					nd_is_crisis_owner = yes
+					var:nd_crisis_opponent ?= $ENEMY$
+					has_variable = nd_crisis_stage
+					var:nd_crisis_stage >= 2
+				}
+			}
+		}
+		# Flexible first use: losing to them, or our core under threat.
+		AND = {
+			nd_doctrine_at_least_flexible = yes
+			OR = {
+				is_losing_war_against = { ENEMY = $ENEMY$ }
+				nd_core_threatened_by = { ENEMY = $ENEMY$ }
+			}
+		}
+		# Existential deterrence (and everything above it): national survival.
+		AND = {
+			nd_doctrine_nfu = no
+			OR = {
+				nd_enemy_threatens_existence = { ENEMY = $ENEMY$ }
+				AND = {
+					nd_core_threatened_by = { ENEMY = $ENEMY$ }
+					is_losing_war_against = { ENEMY = $ENEMY$ }
+				}
+			}
+		}
+	}
+}
+
+# A bilateral non-use pledge with $TARGET$ is in force.
+nd_has_nonuse_pledge_with = {
+	has_variable_list = nd_nonuse_pledges
+	is_target_in_variable_list = { name = nd_nonuse_pledges target = $TARGET$ }
+}
+
+# A pledge blocks a strike unless the partner struck first (the pledge is then
+# void, and nd_record_nuclear_use deletes it on both sides).
+nd_pledge_permits_strike = {
+	OR = {
+		NOT = { nd_has_nonuse_pledge_with = { TARGET = $ENEMY$ } }
+		nd_was_struck_by = { ENEMY = $ENEMY$ }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# PERCEIVED RETALIATION AND MONOPOLY (§9)
+# ----------------------------------------------------------------------------
+# What any observer can see: a country that has tested (holds nuclear_power) is
+# believed armed. Its SIZE is uncertain (nd_public_estimate), its existence is
+# not — a first device is a world event.
+nd_believed_armed = {
+	has_modifier = nuclear_power
+}
+
+# Is this country (the beneficiary) covered by an in-force nuclear_guarantee
+# whose guarantor is believed armed and is not $AGAINST$?
+nd_has_armed_guarantor_against = {
+	save_temporary_scope_as = nd_guarantee_ben
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = nuclear_guarantee
+			target_country = scope:nd_guarantee_ben
+			source_country = {
+				nd_believed_armed = yes
+				NOT = { this = $AGAINST$ }
+			}
+		}
+	}
+}
+
+# Is this country covered by any in-force nuclear_guarantee at all?
+nd_is_guaranteed = {
+	save_temporary_scope_as = nd_guarantee_ben2
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = nuclear_guarantee
+			target_country = scope:nd_guarantee_ben2
+		}
+	}
+}
+
+# Does $GUARANTOR$ guarantee this country?
+nd_is_guaranteed_by = {
+	save_temporary_scope_as = nd_guarantee_ben3
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = nuclear_guarantee
+			target_country = scope:nd_guarantee_ben3
+			source_country = $GUARANTOR$
+		}
+	}
+}
+
+# Would striking $ENEMY$ invite nuclear retaliation, as far as we can tell?
+# Their own arsenal, or an armed guarantor who is not us.
+nd_faces_retaliation_from = {
+	save_temporary_scope_as = nd_fr_self
+	$ENEMY$ = {
+		OR = {
+			nd_believed_armed = yes
+			nd_has_armed_guarantor_against = { AGAINST = scope:nd_fr_self }
+		}
+	}
+}
+
+# A local monopoly in a war: at war with $ENEMY$, and nobody fighting us in a
+# war $ENEMY$ is part of is believed armed, nor is $ENEMY$ covered by an armed
+# guarantor.
+nd_local_monopoly_over = {
+	has_war_with = $ENEMY$
+	nd_is_armed = yes
+	NOT = { nd_faces_retaliation_from = { ENEMY = $ENEMY$ } }
+	save_temporary_scope_as = nd_lm_self
+	NOT = {
+		any_scope_war = {
+			is_war_participant = $ENEMY$
+			any_war_participant = {
+				has_war_with = scope:nd_lm_self
+				nd_believed_armed = yes
+			}
+		}
+	}
+}
+
+# A militarist or expansionist regime, for AI judgement and the Monopoly Window.
+nd_regime_is_militarist = {
+	OR = {
+		country_is_fascist = yes
+		AND = {
+			exists = ruler
+			ruler = {
+				OR = {
+					has_ideology = ideology:ideology_jingoist_leader
+					has_ideology = ideology:ideology_fascist
+					has_ideology = ideology:ideology_ethno_nationalist
+				}
+			}
+		}
+		ig:ig_armed_forces ?= {
+			is_in_government = yes
+			is_powerful = yes
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# INTEREST-GROUP CLASSES (interest-group scope) — §7
+# ----------------------------------------------------------------------------
+# A group is placed in exactly one class, tested in this order: warfighting
+# faction, professional officers, dove, business. Unclassified groups have no
+# nuclear stance.
+
+nd_ig_leader_is_hawk = {
+	leader ?= {
+		OR = {
+			has_ideology = ideology:ideology_jingoist_leader
+			has_ideology = ideology:ideology_fascist
+			has_ideology = ideology:ideology_ethno_nationalist
+		}
+	}
+}
+
+nd_ig_leader_is_dove = {
+	leader ?= {
+		OR = {
+			has_ideology = ideology:ideology_pacifist
+			has_ideology = ideology:ideology_humanitarian
+			has_ideology = ideology:ideology_humanitarian_royalist
+		}
+	}
+}
+
+# Hawks who want nuclear weapons usable: a jingoist/fascist leader anywhere, or
+# the Armed Forces of a fascist state.
+nd_ig_class_warfighting = {
+	nd_ig_leader_is_dove = no
+	OR = {
+		nd_ig_leader_is_hawk = yes
+		AND = {
+			is_interest_group_type = ig_armed_forces
+			owner = { country_is_fascist = yes }
+		}
+	}
+}
+
+# The Armed Forces under an ordinary leader: credible, funded, not reckless.
+nd_ig_class_professional = {
+	is_interest_group_type = ig_armed_forces
+	nd_ig_class_warfighting = no
+	nd_ig_leader_is_dove = no
+}
+
+nd_ig_class_dove = {
+	nd_ig_class_warfighting = no
+	OR = {
+		nd_ig_leader_is_dove = yes
+		AND = {
+			is_interest_group_type = ig_intelligentsia
+			nd_ig_leader_is_hawk = no
+		}
+	}
+}
+
+nd_ig_class_business = {
+	is_interest_group_type = ig_industrialists
+	nd_ig_class_warfighting = no
+	nd_ig_class_dove = no
+}
+
+# ----------------------------------------------------------------------------
+# CRISIS STATE
+# ----------------------------------------------------------------------------
+nd_in_crisis = {
+	has_variable = nd_crisis_id
+	has_variable = nd_crisis_opponent
+	has_variable = nd_crisis_role
+}
+
+nd_is_crisis_owner = {
+	nd_in_crisis = yes
+	var:nd_crisis_role = 1
+}
+
+nd_is_crisis_target = {
+	nd_in_crisis = yes
+	var:nd_crisis_role = 2
+}
+
+# Both records still point at each other with the same id. Owner scope.
+nd_crisis_pair_intact = {
+	nd_is_crisis_owner = yes
+	save_temporary_scope_as = nd_pi_owner
+	var:nd_crisis_opponent ?= {
+		nd_is_crisis_target = yes
+		var:nd_crisis_opponent ?= scope:nd_pi_owner
+		var:nd_crisis_id = scope:nd_pi_owner.var:nd_crisis_id
+	}
+}
+
+# Is this country's crisis at stage $STAGE$ or later? Works for either party:
+# the stage lives on the owner.
+nd_crisis_stage_at_least = {
+	nd_in_crisis = yes
+	OR = {
+		AND = {
+			var:nd_crisis_role = 1
+			has_variable = nd_crisis_stage
+			var:nd_crisis_stage >= $STAGE$
+		}
+		AND = {
+			var:nd_crisis_role = 2
+			var:nd_crisis_opponent ?= {
+				has_variable = nd_crisis_stage
+				var:nd_crisis_stage >= $STAGE$
+			}
+		}
+	}
+}
+
+# The decision event this country is looking at still belongs to its live
+# crisis. Every crisis event's `trigger` and every option body test this: a
+# delayed event re-checks its trigger at fire time, but a popup that has
+# already fired is never re-checked (scripting_best_practices.md § A Delayed
+# trigger_event Re-Checks Its Trigger When It Fires).
+nd_crisis_event_valid = {
+	nd_in_crisis = yes
+	has_variable = nd_crisis_event_token
+	var:nd_crisis_event_token = var:nd_crisis_id
+}
+
+# Owner scope: the crisis rests on a public commitment.
+nd_crisis_is_public = {
+	has_variable = nd_crisis_public
+	var:nd_crisis_public = 1
+}
+
+# Owner scope: the issuer is defending rather than demanding — the target
+# initiated the play we dispute, or we are protecting a beneficiary. A
+# stand-down then achieves our objective and carries no audience cost (§6).
+nd_crisis_issuer_is_defensive = {
+	has_variable = nd_crisis_dispute
+	var:nd_crisis_opponent ?= { save_temporary_scope_as = nd_def_opp }
+	OR = {
+		var:nd_crisis_dispute = 3
+		AND = {
+			var:nd_crisis_dispute = 1
+			scope:nd_def_opp = { is_diplomatic_play_initiator = yes }
+			is_diplomatic_play_target = yes
+		}
+		AND = {
+			var:nd_crisis_dispute = 2
+			nd_core_threatened_by = { ENEMY = scope:nd_def_opp }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# OPENING A CRISIS — ROOT = issuer, $TARGET$ = the country warned
+# ----------------------------------------------------------------------------
+
+# Either party already in a crisis blocks a new one.
+nd_crisis_parties_free = {
+	nd_in_crisis = no
+	$TARGET$ = { nd_in_crisis = no }
+}
+
+# The 24-month cooldown after a crisis with the same country (anti-farming,
+# §7). Waived in war.
+nd_crisis_cooldown_clear = {
+	OR = {
+		has_war_with = $TARGET$
+		NOT = { has_variable = nd_crisis_cooldown_target }
+		NOT = { var:nd_crisis_cooldown_target ?= $TARGET$ }
+		NOT = { has_variable = nd_crisis_cooldown_months }
+		var:nd_crisis_cooldown_months <= 0
+	}
+}
+
+# Dispute 1: we are enemies in a diplomatic play (not yet a war) that $TARGET$
+# leads, on either side — the only case in which its concession can be
+# enforced with resolve_play_for.
+nd_dispute_play_with = {
+	is_diplomatic_play_enemy_of = $TARGET$
+	NOT = { has_war_with = $TARGET$ }
+	save_temporary_scope_as = nd_dp_self
+	any_diplomatic_play = {
+		is_war = no
+		OR = {
+			initiator_is = $TARGET$
+			target_is = $TARGET$
+		}
+		any_scope_play_involved = { this = scope:nd_dp_self }
+	}
+}
+
+# Dispute 2: at war.
+nd_dispute_war_with = {
+	has_war_with = $TARGET$
+}
+
+# Dispute 3: $TARGET$ leads a play, or fights a war, against a country we
+# guarantee, and we are not a party to it ourselves. Walks OUR treaties (a
+# handful), not every country.
+nd_dispute_guarantee_against = {
+	NOT = { is_diplomatic_play_enemy_of = $TARGET$ }
+	NOT = { has_war_with = $TARGET$ }
+	save_temporary_scope_as = nd_dg_self
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = nuclear_guarantee
+			source_country = scope:nd_dg_self
+			target_country = {
+				OR = {
+					has_war_with = $TARGET$
+					AND = {
+						is_diplomatic_play_enemy_of = $TARGET$
+						any_diplomatic_play = {
+							is_war = no
+							OR = {
+								initiator_is = $TARGET$
+								target_is = $TARGET$
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+# Dispute 4: $TARGET$ is building a bomb and is our rival or antagonist.
+nd_dispute_proliferation_by = {
+	$TARGET$ = { nuclear_program_is_proliferating = yes }
+	OR = {
+		has_diplomatic_pact = { who = $TARGET$ type = rivalry }
+		has_attitude = { who = $TARGET$ attitude = antagonistic }
+		has_attitude = { who = $TARGET$ attitude = belligerent }
+		has_attitude = { who = $TARGET$ attitude = domineering }
+	}
+}
+
+# Dispute 5: $TARGET$ keeps its forces on alert and is our rival.
+nd_dispute_alert_by = {
+	has_diplomatic_pact = { who = $TARGET$ type = rivalry }
+	$TARGET$ = {
+		nd_is_armed = yes
+		nd_readiness_heightened_or_higher = yes
+	}
+}
+
+nd_has_crisis_dispute_with = {
+	OR = {
+		nd_dispute_play_with = { TARGET = $TARGET$ }
+		nd_dispute_war_with = { TARGET = $TARGET$ }
+		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_dispute_proliferation_by = { TARGET = $TARGET$ }
+		nd_dispute_alert_by = { TARGET = $TARGET$ }
+	}
+}
+
+# Everything the two opening actions require of ROOT and $TARGET$, each clause
+# with its own failure line.
+nd_can_open_crisis_against = {
+	custom_tooltip = {
+		text = nd_tt_need_arsenal
+		nd_is_armed = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_parties_free
+		nd_crisis_parties_free = { TARGET = $TARGET$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_cooldown_clear
+		nd_crisis_cooldown_clear = { TARGET = $TARGET$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_has_dispute
+		nd_has_crisis_dispute_with = { TARGET = $TARGET$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_no_pledge
+		NOT = { nd_has_nonuse_pledge_with = { TARGET = $TARGET$ } }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# INCIDENT ELIGIBILITY (§8) — country scope
+# ----------------------------------------------------------------------------
+
+# A plausible attacker exists, as far as our information goes: another country
+# we believe armed that is our crisis opponent, an enemy, a rival or hostile.
+# A monopolist never qualifies — it never gets a known-rival missile warning.
+nd_has_plausible_attacker = {
+	save_temporary_scope_as = nd_pa_self
+	any_country = {
+		NOT = { this = scope:nd_pa_self }
+		nd_believed_armed = yes
+		save_temporary_scope_as = nd_pa_cand
+		OR = {
+			scope:nd_pa_self = {
+				nd_in_crisis = yes
+				var:nd_crisis_opponent ?= scope:nd_pa_cand
+			}
+			has_war_with = scope:nd_pa_self
+			has_diplomatic_pact = { who = scope:nd_pa_self type = rivalry }
+			has_attitude = { who = scope:nd_pa_self attitude = antagonistic }
+			has_attitude = { who = scope:nd_pa_self attitude = belligerent }
+		}
+	}
+}
+
+nd_incident_eligible_warning = {
+	has_technology_researched = radar
+	nd_readiness_heightened_or_higher = yes
+	nd_has_plausible_attacker = yes
+}
+
+nd_incident_eligible_exercise = {
+	nd_readiness_heightened_or_higher = yes
+	nd_crisis_stage_at_least = { STAGE = 2 }
+}
+
+nd_incident_eligible_commander = {
+	nd_authority_delegated_or_warning = yes
+	OR = {
+		is_at_war = yes
+		nd_crisis_stage_at_least = { STAGE = 3 }
+	}
+}
+
+nd_incident_eligible_permanent_alert = {
+	OR = {
+		AND = {
+			nd_readiness_high_alert = yes
+			has_variable = nd_readiness_months
+			var:nd_readiness_months >= 6
+		}
+		AND = {
+			has_variable = nd_strain
+			var:nd_strain >= 60
+		}
+	}
+}
+
+# The Monopoly Window (§8.5): a compellence or warfighting power at war with an
+# enemy that cannot answer in kind. Country scope; the enemy is picked by the
+# caller with the same test. The event (nuclear_incident.50) re-checks only the
+# conditions; the monthly roll also requires the yearly cooldown to be clear —
+# the event's immediate starts it.
+nd_monopoly_window_eligible = {
+	NOT = {
+		has_variable = nd_monopoly_window_months
+	}
+	nd_monopoly_window_conditions = yes
+}
+
+nd_monopoly_window_conditions = {
+	nd_is_armed = yes
+	nd_doctrine_at_least_compellence = yes
+	is_at_war = yes
+	save_temporary_scope_as = nd_mw_self
+	any_country = {
+		has_war_with = scope:nd_mw_self
+		NOT = { is_country_type = decentralized }
+		save_temporary_scope_as = nd_mw_enemy
+		scope:nd_mw_self = {
+			nd_local_monopoly_over = { ENEMY = scope:nd_mw_enemy }
+			nd_doctrine_permits_strike = { ENEMY = scope:nd_mw_enemy }
+			nd_pledge_permits_strike = { ENEMY = scope:nd_mw_enemy }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# TARGETS
+# ----------------------------------------------------------------------------
+# State scope: a military installation, the tactical strike's target list
+# (the same list tactical_nuke_diplo_action's second_state_trigger uses).
+nd_state_has_military_target = {
+	OR = {
+		has_building = building_barrack
+		has_building = building_naval_administration
+		has_building = building_naval_fortification
+		has_building = building_naval_logistics_center
+		has_building = building_conscription_center
+	}
+}
+
+# ----------------------------------------------------------------------------
+# AI JUDGEMENT ON NUCLEAR USE (§9) — ROOT = the AI deciding
+# ----------------------------------------------------------------------------
+# Read by both strike actions' `will_propose`, on top of the doctrine and law
+# gates in `possible`. Replaces the old universal severe-threat gate: a
+# warfighting power that nobody can answer may use nuclear weapons in an
+# ordinary war it is winning; a flexible one when it is losing; everyone for
+# survival or retaliation. Perceived retaliation (their arsenal or an armed
+# guarantor) and a six-month pause between first uses bound it.
+nd_ai_nuclear_use_justified = {
+	nd_is_armed = yes
+	OR = {
+		# Retaliation is always on the table.
+		nd_was_struck_by = { ENEMY = $ENEMY$ }
+		AND = {
+			# Keep a warhead in reserve unless survival is at stake.
+			OR = {
+				var:nuclear_weapon_stockpile >= 2
+				nd_enemy_threatens_existence = { ENEMY = $ENEMY$ }
+			}
+			NOT = { has_variable = nd_first_use_cooldown }
+			OR = {
+				# National survival.
+				nd_enemy_threatens_existence = { ENEMY = $ENEMY$ }
+				AND = {
+					nd_core_threatened_by = { ENEMY = $ENEMY$ }
+					is_losing_war_against = { ENEMY = $ENEMY$ }
+				}
+				# Flexible first use: a war we are losing, against an enemy that
+				# cannot answer — or with a reckless leader regardless.
+				AND = {
+					nd_doctrine_at_least_flexible = yes
+					is_losing_war_against = { ENEMY = $ENEMY$ }
+					OR = {
+						NOT = { nd_faces_retaliation_from = { ENEMY = $ENEMY$ } }
+						ruler_is_aggressive = yes
+					}
+				}
+				# Compellence: a defied ultimatum, against an enemy that cannot answer.
+				AND = {
+					nd_doctrine_at_least_compellence = yes
+					nd_was_defied_by = { ENEMY = $ENEMY$ }
+					NOT = { nd_faces_retaliation_from = { ENEMY = $ENEMY$ } }
+				}
+				# Warfighting: any war against an enemy that cannot answer.
+				AND = {
+					nd_doctrine_warfighting = yes
+					NOT = { nd_faces_retaliation_from = { ENEMY = $ENEMY$ } }
+				}
+			}
+			# A cautious ruler only for survival.
+			OR = {
+				ruler_is_cautious = no
+				nd_enemy_threatens_existence = { ENEMY = $ENEMY$ }
+			}
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# AI JUDGEMENT ON OPENING A CRISIS (§9) — ROOT = the AI, $TARGET$ the country
+# ----------------------------------------------------------------------------
+# A warning is worth issuing when there is something the threat can move and
+# the target is unlikely to answer in kind. Defending a beneficiary or our own
+# survival needs no licence beyond an arsenal; demanding needs a hawkish
+# doctrine or regime.
+nd_ai_would_warn = {
+	nd_is_armed = yes
+	in_default = no
+	OR = {
+		# Protecting a country we guarantee.
+		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		# Our survival or our core is at stake in a play or war with them.
+		AND = {
+			OR = {
+				nd_dispute_play_with = { TARGET = $TARGET$ }
+				nd_dispute_war_with = { TARGET = $TARGET$ }
+			}
+			OR = {
+				nd_enemy_threatens_existence = { ENEMY = $TARGET$ }
+				nd_core_threatened_by = { ENEMY = $TARGET$ }
+				$TARGET$ = { is_diplomatic_play_initiator = yes }
+			}
+		}
+		# Coercion: a hawkish doctrine or regime against a target that cannot
+		# answer, over a play or a war.
+		AND = {
+			OR = {
+				nd_dispute_play_with = { TARGET = $TARGET$ }
+				nd_dispute_war_with = { TARGET = $TARGET$ }
+			}
+			OR = {
+				nd_doctrine_at_least_compellence = yes
+				nd_regime_is_militarist = yes
+			}
+			NOT = { nd_faces_retaliation_from = { ENEMY = $TARGET$ } }
+		}
+		# A rival's bomb, for a great power that has one.
+		AND = {
+			nd_dispute_proliferation_by = { TARGET = $TARGET$ }
+			country_rank >= rank_value:great_power
+			nd_doctrine_nfu = no
+		}
+	}
+	# A cautious ruler warns only in defence.
+	OR = {
+		ruler_is_cautious = no
+		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_enemy_threatens_existence = { ENEMY = $TARGET$ }
+	}
+}
+
+# The public form: an AI that means it and can afford the audience cost.
+nd_ai_would_issue_ultimatum = {
+	nd_ai_would_warn = { TARGET = $TARGET$ }
+	OR = {
+		nd_doctrine_at_least_compellence = yes
+		nd_regime_is_militarist = yes
+		nd_enemy_threatens_existence = { ENEMY = $TARGET$ }
+	}
+	has_variable = nd_credibility
+	var:nd_credibility >= 40
+}
+
+# Event scope (either party). The crisis popup still belongs to this pair's
+# live crisis: the token matches, and our opponent is one of the two scopes the
+# event was sent with. The token alone would let an old popup from a finished
+# crisis act on a newer one with a different country.
+nd_crisis_event_matches = {
+	nd_crisis_event_valid = yes
+	exists = scope:nd_issuer
+	exists = scope:nd_target
+	OR = {
+		var:nd_crisis_opponent ?= scope:nd_issuer
+		var:nd_crisis_opponent ?= scope:nd_target
+	}
+}
+
+# How the last crisis ended for this country, and which side it was on
+# (nd_crisis_close writes both). Event loc branches on them.
+nd_crisis_last_outcome_is = {
+	has_variable = nd_crisis_last_outcome
+	var:nd_crisis_last_outcome = $O$
+}
+
+nd_crisis_last_role_is = {
+	has_variable = nd_crisis_last_role
+	var:nd_crisis_last_role = $R$
+}
+
+# Incident flavour selectors (events/nuclear_incident_events.txt).
+nd_warning_cause_is = {
+	has_variable = nd_warning_cause
+	var:nd_warning_cause = $C$
+}
+
+nd_accident_kind_is = {
+	has_variable = nd_accident_kind
+	var:nd_accident_kind = $K$
+}
+
+nd_mishap_kind_is = {
+	has_variable = nd_mishap_kind
+	var:nd_mishap_kind = $K$
+}
+
+# ----------------------------------------------------------------------------
+# PANEL ELIGIBILITY — the scripted GUIs' is_valid, one failure line per clause
+# ----------------------------------------------------------------------------
+nd_can_set_doctrine = {
+	custom_tooltip = {
+		text = nd_tt_need_arsenal
+		nd_is_armed = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_already_current
+		nd_is_initialized = yes
+		NOT = { var:nd_doctrine = $D$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_doctrine_tenure
+		has_variable = nd_doctrine_months
+		var:nd_doctrine_months >= nd_doctrine_tenure_months
+	}
+}
+
+nd_can_set_readiness = {
+	custom_tooltip = {
+		text = nd_tt_need_arsenal
+		nd_is_armed = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_already_current
+		nd_is_initialized = yes
+		NOT = { var:nd_readiness_target = $R$ }
+	}
+	# An agreed or conceded stand-down holds readiness at routine; lowering is
+	# never blocked.
+	custom_tooltip = {
+		text = nd_tt_readiness_locked
+		OR = {
+			nd_readiness_locked = no
+			var:nd_readiness_target > $R$
+		}
+	}
+}
+
+nd_can_set_authority = {
+	custom_tooltip = {
+		text = nd_tt_need_arsenal
+		nd_is_armed = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_already_current
+		nd_is_initialized = yes
+		NOT = { var:nd_authority = $A$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_authority_tenure
+		has_variable = nd_authority_months
+		var:nd_authority_months >= nd_authority_tenure_months
+	}
+}
+
+nd_can_step_investment_up = {
+	custom_tooltip = {
+		text = nd_tt_need_arsenal
+		nd_is_armed = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_investment_max
+		has_variable = $VAR$
+		var:$VAR$ < 3
+	}
+}
+
+nd_can_step_investment_down = {
+	custom_tooltip = {
+		text = nd_tt_investment_min
+		has_variable = $VAR$
+		var:$VAR$ > 0
+	}
+}
+
+# Crisis panel actions. Each names who may take it.
+nd_can_go_public = {
+	custom_tooltip = {
+		text = nd_tt_only_issuer
+		nd_is_crisis_owner = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_already_public
+		nd_crisis_is_public = no
+	}
+}
+
+nd_can_propose_talks = {
+	custom_tooltip = {
+		text = nd_tt_in_crisis
+		nd_in_crisis = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_talks_pending
+		OR = {
+			AND = {
+				nd_is_crisis_owner = yes
+				var:nd_crisis_talks = 0
+			}
+			AND = {
+				nd_is_crisis_target = yes
+				var:nd_crisis_opponent ?= {
+					has_variable = nd_crisis_talks
+					var:nd_crisis_talks = 0
+				}
+			}
+		}
+	}
+}
+
+nd_can_exercise = {
+	custom_tooltip = {
+		text = nd_tt_in_crisis
+		nd_in_crisis = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_need_arsenal
+		nd_is_armed = yes
+	}
+	custom_tooltip = {
+		text = nd_tt_exercise_running
+		NOT = { has_modifier = nd_exercise_cost }
+	}
+}
+
+nd_can_yield = {
+	custom_tooltip = {
+		text = nd_tt_only_target
+		nd_is_crisis_target = yes
+	}
+}
+
+nd_can_back_down = {
+	custom_tooltip = {
+		text = nd_tt_only_issuer
+		nd_is_crisis_owner = yes
+	}
+}

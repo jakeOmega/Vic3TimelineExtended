@@ -1,0 +1,45 @@
+﻿# ============================================================================
+# NUCLEAR CRISIS — diplomatic-play lifecycle hook
+# ============================================================================
+# The engine unions same-name on_action declarations across files, so
+# declaring on_diplo_play_back_down here leaves the other systems that extend it
+# (te_construction_market_on_actions.txt, un_mandate_on_actions.txt) untouched.
+#
+# A back-down is the one play outcome that cannot be recovered afterwards —
+# once the play has resolved, nothing says who yielded — so it is observed the
+# moment it happens. Everything else (a play turning into a war, a war
+# ending, a proliferator stopping) the owner's weekly tick detects from the
+# live state; see nd_crisis_revalidate_dispute in nuclear_crisis_effects.txt.
+# ============================================================================
+
+# Root = Diplomatic Play
+# scope:actor = the country that backed down
+# (game/common/on_actions/00_code_on_actions.txt:4264-4292)
+on_diplo_play_back_down = {
+	on_actions = {
+		nd_on_diplo_play_back_down
+	}
+}
+
+nd_on_diplo_play_back_down = {
+	effect = {
+		if = {
+			limit = { exists = scope:actor }
+			nd_crisis_on_back_down = yes
+		}
+	}
+}
+
+# Root = Country. Takes the domestic-stance bands off interest groups once
+# je_nuclear_deterrence is no longer active (nd_country_monthly_cleanup).
+on_monthly_pulse_country = {
+	on_actions = {
+		nd_country_monthly_cleanup_on_action
+	}
+}
+
+nd_country_monthly_cleanup_on_action = {
+	effect = {
+		nd_country_monthly_cleanup = yes
+	}
+}

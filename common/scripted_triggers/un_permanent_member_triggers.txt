@@ -4,12 +4,14 @@
 # ============================================================================
 
 # Whether THIS country currently holds a permanent UN seat.
-# Permanent members are granted via the charter event (un_events.1) and
-# un_join_button during the 5-year founding window, and via promotion when
-# a 2/3 expulsion vote vacates a seat (the highest-ranking eligible GP outside
-# the Council fills it; see un_vote.2's immediate + option blocks). They lose
-# the seat by leaving the UN, by sustained sub-GP rank (10+ years), or by 2/3
-# expulsion.
+# The founder, if a great power, is seated at the founding
+# (un_found_organisation). Every other seat is filled by prestige, never by the
+# order countries joined in: after the signing period, and whenever a seat
+# falls vacant later, un_seat_monthly_update gives it to the great-power member
+# with the most prestige that holds none (un_permanent_seat_candidate). A 2/3
+# expulsion vote fills the seat it vacates the same way, at once (un_vote.2).
+# A seat is lost by leaving the UN, by sustained sub-GP rank (10+ years), or by
+# 2/3 expulsion. The helpers are in common/scripted_effects/un_seat_effects.txt.
 is_un_permanent_member = {
 	je:je_united_nations ?= { has_modifier = un_permanent_member_modifier }
 }
@@ -22,4 +24,31 @@ un_permanent_member_eligibility_lost = {
 	NOT = { country_rank >= rank_value:great_power }
 	has_variable = un_permanent_subgp_months
 	var:un_permanent_subgp_months >= 120
+}
+
+# Whether THIS country may take a permanent seat that is open: a great-power
+# member of the UN, not a subject, holding no seat already. A member whose seat
+# was voted away carries un_withdrawal_penalty_modifier for ten years and is not
+# handed it straight back; a country that walked out carries the same modifier,
+# but is no longer a member anyway.
+# Candidates are ranked by un_prestige_order_value (un_seat_fill_one).
+un_permanent_seat_candidate = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { is_un_permanent_member = yes }
+	country_rank >= rank_value:great_power
+	is_subject = no
+	NOT = { has_modifier = un_withdrawal_penalty_modifier }
+	# Article 19 (redesign phase 5): a member two years in arrears on its
+	# dues has no vote, and no claim to a seat, until it pays.
+	NOT = { un_dues_vote_suspended = yes }
+}
+
+# Whether open permanent seats are being filled: the UN exists and the signing
+# period that follows a founding is over. Until then only the founder is
+# seated, so a great power that answers the charter a few days after the AI
+# does is not beaten to a seat by the speed of its reply.
+# Scope: any
+un_seat_filling_open = {
+	has_global_variable = un_founded
+	NOT = { has_global_variable = un_seat_signing_months_left }
 }

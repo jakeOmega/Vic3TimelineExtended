@@ -9,7 +9,11 @@
 # WHAT A COUNTRY'S "TERMS" ARE. For a member:
 #   - the member modifier of every convention it has ratified, multiplied by
 #     the UN's enforcement E (un_regime_reapply_conventions);
-#   - the winner or loser modifier each convention in force gives it (§5.3);
+#   - the winner or loser modifier each convention it has RATIFIED gives it
+#     (§5.3). A member that refused to ratify (un_vote.3's "Refuse to ratify
+#     it", PR #422) stays outside the convention: neither its member modifier
+#     nor its terms. The decolonisation declaration is a decision, not a
+#     convention, and binds every member;
 #   - from the Strong tier, shared intelligence (§7.4) and the reaction of its
 #     interest groups (§7.1): nationalists resent the UN, humanitarians and
 #     pacifists welcome it.
@@ -114,7 +118,10 @@ un_regime_refresh_country = {
 
 		# Climate (UNEP): the high emitters pay, the low emitters are helped.
 		if = {
-			limit = { has_global_variable = un_agency_unep }
+			limit = {
+				has_global_variable = un_agency_unep
+				je:je_united_nations ?= { has_modifier = un_climate_binding_modifier }
+			}
 			if = {
 				limit = { un_regime_climate_emitter = yes }
 				add_modifier = {
@@ -136,7 +143,10 @@ un_regime_refresh_country = {
 		# Non-proliferation (IAEA): inspections for the threshold states, a
 		# guarantee for those without the bomb.
 		if = {
-			limit = { has_global_variable = un_agency_iaea }
+			limit = {
+				has_global_variable = un_agency_iaea
+				je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier }
+			}
 			if = {
 				limit = { un_regime_npt_threshold = yes }
 				add_modifier = {
@@ -156,6 +166,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_itlos
+				has_modifier = un_law_of_sea_modifier
 				un_regime_naval_power = yes
 			}
 			add_modifier = {
@@ -167,6 +178,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_unhrc
+				je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
 				un_regime_human_rights_violator = yes
 			}
 			add_modifier = {
@@ -187,7 +199,10 @@ un_regime_refresh_country = {
 		}
 		# Refugees (UNHCR): the hosts take the strain, the sources the relief.
 		if = {
-			limit = { has_global_variable = un_agency_unhcr }
+			limit = {
+				has_global_variable = un_agency_unhcr
+				je:je_united_nations ?= { has_modifier = un_refugee_program_modifier }
+			}
 			if = {
 				limit = { un_regime_refugee_host = yes }
 				add_modifier = {
@@ -206,7 +221,10 @@ un_regime_refresh_country = {
 		# Outer space (UNOOSA): the leader shares, the laggards gain, and a
 		# battlestation is barred.
 		if = {
-			limit = { has_global_variable = un_agency_unoosa }
+			limit = {
+				has_global_variable = un_agency_unoosa
+				je:je_united_nations ?= { has_modifier = un_space_partnership_modifier }
+			}
 			if = {
 				limit = { un_regime_space_leader = yes }
 				add_modifier = {
@@ -233,6 +251,7 @@ un_regime_refresh_country = {
 		if = {
 			limit = {
 				has_global_variable = un_agency_unesco
+				je:je_united_nations ?= { has_modifier = un_heritage_program_modifier }
 				un_regime_heritage_site = yes
 			}
 			add_modifier = {

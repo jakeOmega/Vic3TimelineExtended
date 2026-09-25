@@ -19,6 +19,8 @@
 #   un_refounding_open_year       the same two, for the status line
 #   un_founding_conference        un_conference_open / un_conference_clear
 #   un_conference_*               the same
+#   un_seat_signing_months_left   un_found_organisation (counted down and removed
+#                                 by un_seat_monthly_update, un_seat_effects.txt)
 #
 # CALL SITES (all from common/on_actions/un_on_actions.txt unless stated):
 #   un_ladder_monthly_update      end of un_authority_monthly_update, after the step
@@ -391,7 +393,10 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_charter_pressure_months }
 	un_dissolve_remove_global = { NAME = un_crisis_active }
 	un_dissolve_remove_global = { NAME = un_crisis_months }
+	# The five-year founding window of earlier versions (seats went to the
+	# first great powers to join); nothing reads it now, but a save may hold it.
 	un_dissolve_remove_global = { NAME = un_founding_window_active }
+	un_dissolve_remove_global = { NAME = un_seat_signing_months_left }
 	un_dissolve_remove_global = { NAME = un_recess_months }
 	# The docket (redesign phase 4). A refounded UN seeds it afresh.
 	un_dissolve_remove_global = { NAME = un_docket_seeded }
@@ -534,10 +539,11 @@ un_membership_end_effect = {
 
 # Found the United Nations with this country as founder, at $AUTHORITY$, under
 # the founding charter. The founder becomes the first member, a founding
-# member, the headquarters host and, if a great power, a permanent member. A
-# five-year founding window seats the next great powers to join. The charter
+# member, the headquarters host and, if a great power, a permanent member. The
+# other permanent seats stay open for the signing period and then go to the
+# great-power members with the most prestige (un_seat_effects.txt). The charter
 # invitations (un_charter_invitations) are the caller's to send, after any
-# other founding member has been seated.
+# other founding member has joined.
 # Parameters: $AUTHORITY$ = the founding authority (a script value or number)
 # Scope: the founding country
 un_found_organisation = {
@@ -549,7 +555,7 @@ un_found_organisation = {
 	set_global_variable = { name = un_charter_level value = 0 }
 	set_global_variable = { name = un_charter_pressure_months value = 0 }
 	un_ladder_tier_update = yes
-	set_global_variable = { name = un_founding_window_active days = normal_modifier_time }
+	set_global_variable = { name = un_seat_signing_months_left value = un_seat_signing_months }
 	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
 	je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
 	je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
@@ -575,20 +581,13 @@ un_charter_invitations = {
 	}
 }
 
-# Join the UN: membership, a permanent seat for a great power joining in the
-# founding window while seats remain, and every convention already ratified.
+# Join the UN: membership and every convention already ratified. Joining
+# never seats a country by itself: a great-power member stands for any open
+# permanent seat, filled by prestige (un_seat_monthly_update). Callers that
+# show a tooltip add un_seat_join_tooltip beside this.
 # Scope: the joining country
 un_join_organisation = {
 	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
-	if = {
-		limit = {
-			country_rank >= rank_value:great_power
-			has_global_variable = un_founding_window_active
-			un_permanent_seat_count < 5
-		}
-		je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
-		je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
-	}
 	un_apply_ratified_conventions = yes
 }
 

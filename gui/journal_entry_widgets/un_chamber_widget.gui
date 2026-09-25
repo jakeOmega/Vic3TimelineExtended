@@ -160,6 +160,10 @@ flowcontainer = {
 		un_chamber_text = {
 			text = "[GetScriptedGui('un_chamber_status_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
+		# Who holds the five permanent seats, and who is in line for an open one.
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_council_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
 		un_chamber_text = {
 			text = "[GetScriptedGui('un_chamber_active_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}

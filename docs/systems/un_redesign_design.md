@@ -411,8 +411,9 @@ Implements §4 (tiers, `E`, charter caps and reforms, the crisis, dissolution, r
     cooldown at ten years and tells the convener (`un_events.32`). Otherwise, twelve months
     on, the UN is refounded at 25 under the founding charter with no agencies, the
     convener as founder, the leading power as a member if it chose to join, and a fresh
-    five-year founding window for permanent seats. A convener that stops existing ends the
-    conference without a new cooldown.
+    signing period for permanent seats (originally a five-year founding window; seats now go
+    by prestige, see `common/scripted_effects/un_seat_effects.txt`). A convener that stops
+    existing ends the conference without a new cooldown.
 11. **Bug fix found on the way:** `un_propose_expulsion_button` was defined but never
     registered on `je_united_nations`, so the AI could never move to strip a permanent seat.
     It is registered now.
