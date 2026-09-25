@@ -566,8 +566,8 @@ nd_crisis_apply_outcome = {
 				is_decaying = yes
 			}
 			nd_reward_hawks = { OTHER = scope:nd_target LIST = nd_lob_iw GOOD = yes }
-			nd_lobby_react = { OTHER = scope:nd_target TYPE = anti AMOUNT = 3 SIGN = positive }
-			nd_lobby_react = { OTHER = scope:nd_target TYPE = pro AMOUNT = -3 SIGN = negative }
+			nd_lobby_react = { OTHER = scope:nd_target TYPE = anti AMOUNT = 3 EVENT = negative }
+			nd_lobby_react = { OTHER = scope:nd_target TYPE = pro AMOUNT = -3 EVENT = negative }
 		}
 		scope:nd_target = {
 			nd_change_credibility = { AMOUNT = -5 }
@@ -577,8 +577,8 @@ nd_crisis_apply_outcome = {
 				is_decaying = yes
 			}
 			nd_reward_hawks = { OTHER = scope:nd_issuer LIST = nd_lob_tl GOOD = no }
-			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = anti AMOUNT = -3 SIGN = negative }
-			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = pro AMOUNT = 2 SIGN = positive }
+			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = anti AMOUNT = -3 EVENT = positive }
+			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = pro AMOUNT = 2 EVENT = positive }
 		}
 	}
 	# ---- the issuer backed down (2, 5) -------------------------------------
@@ -601,8 +601,8 @@ nd_crisis_apply_outcome = {
 					is_decaying = yes
 				}
 				nd_reward_hawks = { OTHER = scope:nd_target LIST = nd_lob_il GOOD = no }
-				nd_lobby_react = { OTHER = scope:nd_target TYPE = anti AMOUNT = -4 SIGN = negative }
-				nd_lobby_react = { OTHER = scope:nd_target TYPE = pro AMOUNT = 2 SIGN = positive }
+				nd_lobby_react = { OTHER = scope:nd_target TYPE = anti AMOUNT = -4 EVENT = positive }
+				nd_lobby_react = { OTHER = scope:nd_target TYPE = pro AMOUNT = 2 EVENT = positive }
 			}
 			else = {
 				nd_change_credibility = { AMOUNT = -5 }
@@ -616,8 +616,8 @@ nd_crisis_apply_outcome = {
 				is_decaying = yes
 			}
 			nd_reward_hawks = { OTHER = scope:nd_issuer LIST = nd_lob_tw GOOD = yes }
-			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = anti AMOUNT = 3 SIGN = positive }
-			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = pro AMOUNT = -2 SIGN = negative }
+			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = anti AMOUNT = 3 EVENT = negative }
+			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = pro AMOUNT = -2 EVENT = negative }
 		}
 	}
 	# ---- reciprocal stand-down (3) -------------------------------------------
@@ -632,12 +632,12 @@ nd_crisis_apply_outcome = {
 					nd_crisis_issuer_is_defensive = no
 				}
 				nd_change_credibility = { AMOUNT = -5 }
-				nd_lobby_react = { OTHER = scope:nd_target TYPE = anti AMOUNT = -2 SIGN = negative }
+				nd_lobby_react = { OTHER = scope:nd_target TYPE = anti AMOUNT = -2 EVENT = positive }
 			}
 			else = {
 				nd_change_credibility = { AMOUNT = 5 }
 			}
-			nd_lobby_react = { OTHER = scope:nd_target TYPE = pro AMOUNT = 2 SIGN = positive }
+			nd_lobby_react = { OTHER = scope:nd_target TYPE = pro AMOUNT = 2 EVENT = positive }
 			add_modifier = {
 				name = nd_crisis_mutual_restraint
 				days = normal_modifier_time
@@ -653,7 +653,7 @@ nd_crisis_apply_outcome = {
 				is_decaying = yes
 			}
 			nd_reward_doves = yes
-			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = pro AMOUNT = 2 SIGN = positive }
+			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = pro AMOUNT = 2 EVENT = positive }
 		}
 	}
 	# ---- an ultimatum left to lapse (8) --------------------------------------
@@ -731,10 +731,15 @@ nd_reward_doves = {
 	}
 }
 
-# Country scope. Native lobby appeasement (§7) through vanilla's own call
-# shape (02_rivalry.txt's break effects): the lobbies in this country that are
-# about $OTHER$. TYPE = anti | pro; AMOUNT is a signed literal; SIGN = positive
-# | negative picks the vanilla "From Events" factor line.
+# Country scope. Native lobby appeasement (§7): the lobbies in this country
+# that are about $OTHER$. TYPE = anti | pro; AMOUNT is a signed literal.
+# EVENT = positive | negative is how the event treats $OTHER$, not the sign of
+# AMOUNT. It picks the vanilla "From Events" factor line, and a pro/anti pair
+# reacting to one event passes the same EVENT with opposite-signed amounts, as
+# vanilla's add_lobby_appeasement_from_diplomacy_unidirectional does with its
+# FACTOR. The engine rejects a factor that the lobby type does not list for the
+# sign of the amount (00_political_lobbies.txt): an anti lobby gains on
+# _negative and loses on _positive.
 nd_lobby_react = {
 	every_political_lobby = {
 		limit = {
@@ -743,7 +748,7 @@ nd_lobby_react = {
 		}
 		change_appeasement = {
 			amount = $AMOUNT$
-			factor = appeasement_special_events_$SIGN$
+			factor = appeasement_special_events_$EVENT$
 		}
 	}
 }

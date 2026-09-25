@@ -241,7 +241,7 @@
  building_group_bg_heavy_industry_infrastructure_usage_mult_desc:0 "A bonus or penalty to the [concept_infrastructure_usage] of $bg_heavy_industry$ buildings"
  building_group_bg_high_tech_construction_efficiency_add:0 "$bg_high_tech$ Construction Efficiency"
  building_group_bg_high_tech_construction_efficiency_add_desc:0 "An increase or decrease to the weekly [concept_construction] progress for $bg_high_tech$ buildings"
- building_group_bg_military_standard_of_living_add:0 "Soldiers' [concept_ch_sol]"
+ building_group_bg_military_standard_of_living_add:0 "Soldiers’ [concept_ch_sol]"
  building_group_bg_military_standard_of_living_add_desc:0 "A bonus or penalty to the [concept_sol] of [Concept('concept_pop', '$concept_pops$')] working in $bg_military$ buildings"
  building_group_bg_power_construction_efficiency_add:0 "$bg_power$ Construction Efficiency"
  building_group_bg_power_construction_efficiency_add_desc:0 "An increase or decrease to the weekly [concept_construction] progress for $bg_power$"
