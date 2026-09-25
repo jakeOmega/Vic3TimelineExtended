@@ -1177,13 +1177,16 @@ te_monetary_update_monetisation = {
 # looks THROUGH a supply shock and steers on the persistent half (§9.1):
 #
 #   price stability   r^* + pi + 1.0 x (pi - anchor) + cycle_lean
-#   growth            r^* + pi - 1.0 + 0.5 x max(0, pi - 4) + cycle_lean / 2
+#   growth            r^* + pi - 0.25 + 1.0 x max(0, pi - 4) + cycle_lean / 2
 #   peg defence       the world reference rate (gold only; ignores pi and the cycle)
 #
 # The second pi term is what makes price stability move MORE than one for one
 # with inflation — the Taylor principle, and the reason a delegated bank can
 # disinflate where a fixed manual target cannot (§9.1). Growth's zero-gap point
-# is pi = 6, so below 4% it simply does not see inflation.
+# is pi = 4.25, and below 4% it simply does not see inflation.
+#
+# cycle_lean reads the cycle's OUTLOOK (te_mon_cycle_outlook: value plus six
+# months of momentum), not its phase today — see te_mon_cycle_lean.
 #
 # GROWTH IS NEVER MORE HAWKISH THAN PRICE STABILITY. The two formulas cross at
 # low inflation under a negative cycle lean: at pi = 0 in a panic (lean -3),
@@ -1316,9 +1319,10 @@ te_monetary_update_target = {
 			change_variable = { name = te_mon_work add = te_mon_cycle_lean }
 
 			if = {
-				# 2 growth: r^* + pi - 1.0 + 0.5 x max(0, pi - 4) + lean / 2.
-				# Runs a standing point loose, which is the point — more
-				# momentum, faster bubbles, more crashes.
+				# 2 growth: r^* + pi - 0.25 + 1.0 x max(0, pi - 4) + lean / 2.
+				# Runs warm below 4%, which is the point — more momentum,
+				# faster bubbles, more crashes (te_mon_mandate_growth_bias,
+				# te_mon_mandate_growth_reaction).
 				#
 				# The lean is halved FIRST because change_variable's divide
 				# applies to the whole running total; everything after it is an
@@ -1438,6 +1442,14 @@ te_monetary_clamp_target = {
 # threshold's 0.0067 epsilon reproduces the old 0.34 exactly, and a 1pp move is
 # three months at the baseline as it always was. te_mon_work2 carries the step
 # (not the threshold) because it is what actually gets added.
+#
+# EMERGENCY CUTS (2026-09-25). A cut moves at te_mon_drift_step_down, which is
+# te_mon_emergency_cut_factor (3x) the ordinary step while
+# te_mon_emergency_cuts holds: a bank running its mandate, with the financial
+# cycle in stagnation or worse. Hikes, and every manual dial, keep the ordinary
+# speed. Without it a delegated bank caught at 12% by a crash spent more than
+# a year of panic still maximally tight on the way back down
+# (docs/audits/banking_cycle_simulation.md §12).
 te_monetary_drift_policy_rate = {
 	set_variable = { name = te_mon_work value = var:te_policy_rate_target }
 	change_variable = { name = te_mon_work subtract = var:te_policy_rate }
@@ -1447,7 +1459,8 @@ te_monetary_drift_policy_rate = {
 		change_variable = { name = te_policy_rate add = var:te_mon_work2 }
 	}
 	else_if = {
-		limit = { var:te_mon_work < te_mon_drift_step_threshold_neg }
+		limit = { var:te_mon_work < te_mon_drift_step_down_threshold_neg }
+		set_variable = { name = te_mon_work2 value = te_mon_drift_step_down }
 		change_variable = { name = te_policy_rate subtract = var:te_mon_work2 }
 	}
 	else = {

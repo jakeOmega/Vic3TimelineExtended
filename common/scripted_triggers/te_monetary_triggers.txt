@@ -329,6 +329,20 @@ te_mon_mandate_binds = {
 	}
 }
 
+# Does a cut move at the emergency speed (te_mon_drift_step_down)? Only for a
+# bank running its mandate — delegated, AI (te_monetary_update_target writes
+# te_mon_delegated = 1 for every AI before the drift step reads this) or
+# independent — and only while the financial cycle is in stagnation or worse
+# (the banking_cycle_is_stagnation edge, market_triggers.txt:4). A manual dial
+# keeps the ordinary speed: reversals under the player's own hand stay slow by
+# construction (§4). A country without the journal entry has no cycle and so
+# never cuts in an emergency; its mandate still runs, at the ordinary speed.
+te_mon_emergency_cuts = {
+	has_variable = finance_cycle_value
+	var:finance_cycle_value < 40
+	te_mon_mandate_binds = yes
+}
+
 # Is there room left to step the target down / up inside the regime's range?
 # The bounds are te_mon_target_min / te_mon_target_max
 # (common/script_values/te_monetary_script_values.txt), the same two values

@@ -647,6 +647,36 @@ te_mon_drift_step_threshold_neg = {
 	multiply = -1
 }
 
+# How far a CUT moves the rate in one month (2026-09-25): the ordinary step,
+# times te_mon_emergency_cut_factor while te_mon_emergency_cuts holds — a bank
+# running its mandate, with the financial cycle in stagnation or worse. A
+# point a month at the baseline, two under digital currency. Hikes always use
+# te_mon_drift_step, so tightening stays slow and deliberate while a bank that
+# has just watched a boom break can get out of the way within a season rather
+# than a year (docs/audits/banking_cycle_simulation.md §12).
+te_mon_drift_step_down = {
+	value = te_mon_drift_step
+	if = {
+		limit = { te_mon_emergency_cuts = yes }
+		multiply = te_mon_emergency_cut_factor
+	}
+}
+
+# The multiplier on a cut's speed while te_mon_emergency_cuts holds. Three
+# turns the third of a point a month into a whole point. Printed on the
+# dashboard's Policy Rate tooltip.
+te_mon_emergency_cut_factor = {
+	value = 3
+}
+
+# te_mon_drift_step_threshold's epsilon on the downward step, negated, for the
+# same reason as the pair above: at 3x a 1.0pp gap is one step, not two.
+te_mon_drift_step_down_threshold_neg = {
+	value = te_mon_drift_step_down
+	add = 0.0067
+	multiply = -1
+}
+
 
 # --- Structural premium terms -----------------------------------------------
 
@@ -765,50 +795,64 @@ te_mon_scaled_debt_premium = {
 # How hard a delegated central bank leans against the financial cycle, in pp
 # (§6). This is the replacement for the deleted rate-hike button's AI logic:
 #
-#   frenzy                                       +2
-#   boom                                         +1
+#   outlook frenzy   (>= 88)                     +2
+#   outlook boom     (75-88)                     +1
 #   bubble pressure >= te_mon_bubble_threshold   +1   (on top of the phase term)
-#   downturn                                     -2
-#   panic                                        -3
+#   outlook downturn (10-25)                     -2
+#   outlook panic    (< 10)                      -3
 #
 # Price stability takes the whole lean; growth takes half of it; peg defence
 # ignores the domestic cycle entirely.
+#
+# THE PHASE IS THE OUTLOOK'S, NOT TODAY'S (2026-09-25). The lean used to read
+# the banking_cycle_is_* phase of the cycle as it stood, and the policy rate
+# only closes on its target at a third of a point a month — so a bank leaned
+# hardest exactly when a boom was about to break, arrived at the top of its
+# hike just as the crash came, and then spent a year or more of panic still
+# maximally tight while the rate crawled back down. The simulator showed it
+# driving a fiat economy into downturn with no crash behind it four times a
+# century once labour laws added +1pp of wage pressure (0.6 now)
+# (docs/audits/banking_cycle_simulation.md §12). Reading the phase of
+# te_mon_cycle_outlook — where the cycle is heading, not where it is — lets the
+# bank stop leaning into a boom that is already turning, and ease into a slump
+# before the phase line is crossed.
+#
+# The thresholds are the banking_cycle_is_* ones (market_triggers.txt:2-8),
+# restated here because those triggers read var:finance_cycle_value itself.
 #
 # finance_cycle_value and bubble_pressure are COUNTRY variables owned by
 # je_banking_cycle's `immediate` (je_banking.txt:119-133) — the same variables
 # harvest conditions read through `owner = { ... }`. A country without the
 # journal entry has neither, so every branch carries its own has_variable guard
-# and such a country simply leans by 0. The banking_cycle_is_* triggers are the
-# canonical phase thresholds (market_triggers.txt:2-8); they read
-# var:finance_cycle_value unguarded, which is why the guard is in the limit
-# beside them rather than around them.
+# and such a country simply leans by 0. The guard matters doubly now: without
+# the variables the outlook reads 0, which is the panic band.
 te_mon_cycle_lean = {
 	value = 0
 	if = {
 		limit = {
 			has_variable = finance_cycle_value
-			banking_cycle_is_frenzy = yes
+			te_mon_cycle_outlook >= 88
 		}
 		add = 2
 	}
 	else_if = {
 		limit = {
 			has_variable = finance_cycle_value
-			banking_cycle_is_boom = yes
+			te_mon_cycle_outlook >= 75
 		}
 		add = 1
 	}
 	else_if = {
 		limit = {
 			has_variable = finance_cycle_value
-			banking_cycle_is_panic = yes
+			te_mon_cycle_outlook < 10
 		}
 		subtract = 3
 	}
 	else_if = {
 		limit = {
 			has_variable = finance_cycle_value
-			banking_cycle_is_downturn = yes
+			te_mon_cycle_outlook < 25
 		}
 		subtract = 2
 	}
@@ -819,6 +863,39 @@ te_mon_cycle_lean = {
 		}
 		add = 1
 	}
+}
+
+# Where the financial cycle is heading: today's value plus the momentum it is
+# carrying, projected te_mon_outlook_momentum_factor months' worth forward and
+# clamped to the 0-100 scale. Momentum decays by a tenth a month
+# (banking_cycle_advance_variables), so momentum m left alone moves the cycle
+# m x (1 - 0.9^n) / 0.1 over the next n months: 4.69 x m over six. HIDDEN in
+# the sense te_mon_cycle_lean is — nothing prints it — though both of its
+# inputs are on the journal entry.
+#
+# Six months, not twelve: a year's projection measured slightly better on
+# slumps but reversed the target up to a quarter more often, because a single
+# ±1 random nudge to momentum is then worth 7 cycle points of outlook (§12).
+te_mon_cycle_outlook = {
+	value = 0
+	if = {
+		limit = { has_variable = finance_cycle_value }
+		add = var:finance_cycle_value
+	}
+	if = {
+		limit = { has_variable = finance_cycle_momentum }
+		add = {
+			value = var:finance_cycle_momentum
+			multiply = te_mon_outlook_momentum_factor
+		}
+	}
+	min = 0
+	max = 100
+}
+
+# (1 - 0.9^6) / 0.1 — six months of momentum at the cycle's 0.9 monthly decay.
+te_mon_outlook_momentum_factor = {
+	value = 4.69
 }
 
 
@@ -2507,14 +2584,29 @@ te_mon_mandate_growth_bias = {
 }
 
 # How hard the growth mandate reacts to inflation once it is past the threshold
-# below — half price stability's weight (§6, §21).
+# below (§6, §21) — price stability's own weight, so above 4% growth is
+# price stability run 2.25pp warmer (the gap between the two thresholds plus
+# the -0.25 bias) and half as hard on the cycle.
+#
+# 1.0, NOT THE 0.5 §6 FIRST WROTE (2026-09-25). At half weight the mandate could
+# not stop inflation reaching te_mon_band_edge_high (8%), where the wage spiral
+# doubles any standing wage pressure and no stance inside the +4 clamp may be
+# tight enough to turn it back: with labour laws worth +1pp of wage pressure
+# the simulator had a fiat growth bank at 8.7% mean inflation, a policy rate at
+# 10% or more for half the century, a quarter of all months in downturn or
+# panic and a median longest slump of 25 years — worse than price stability on
+# every count, growth included. At 1.0 the same country averages 5.3% and
+# spends 6% of its months in recession, and the calm-world trade growth was
+# tuned for (warmer and more throughput than price stability) is unchanged
+# (docs/audits/banking_cycle_simulation.md §12). Every AI at war or with
+# scaled_debt >= 0.5 runs this mandate.
 te_mon_mandate_growth_reaction = {
-	value = 0.5
+	value = 1.0
 }
 
 # Where growth starts reacting to inflation at all, in pp (§6, §21). Below it
-# the mandate does not see inflation; with the reaction above, its zero-gap
-# point is pi = 6.
+# the mandate does not see inflation; with the reaction and the bias above, its
+# zero-gap point is pi = 4.25.
 #
 # NOT DEFINED FROM te_mon_inflation_anchor. §21 lists it as its own constant,
 # and the two mean different things: the anchor is the target inflation is
@@ -2541,7 +2633,7 @@ te_mon_mandate_price_reaction = {
 	multiply = te_mon_mandate_inflation_weight
 }
 
-# 0.5 x max( 0 , pi_core - 4 ) — growth's reaction term (§6). Below the
+# 1.0 x max( 0 , pi_core - 4 ) — growth's reaction term (§6). Below the
 # threshold it is exactly zero, which is what "runs warm" means and why §6 puts
 # the mandate's equilibrium around 3% rather than at target.
 #

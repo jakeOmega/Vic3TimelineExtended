@@ -14,7 +14,9 @@
 those sections means that state). §3 is the retune it proposed and the subset that was written into the mod.
 §5–§8 are the second pass: what the growth mandate actually buys, the fiscal channel, the AI's tool weights,
 and the final matrix of #371. §10 is the follow-up that lets a maxed player pull back a boom (and occasionally a
-frenzy), with `--rescue` and the refreshed matrix. Every table states which script it measured.
+frenzy), with `--rescue` and the refreshed matrix. §12 (2026-09-25) is the delegated bank's overshoot under
+standing wage pressure (`--wage-pressure`) and the three changes that answer it. Every table states which script
+it measured.
 
 ---
 
@@ -1046,3 +1048,145 @@ which §10 already accepted as the intended direction.
 A seven-point leaning stack pulls back about a third of metallic booms, the top of §10's "a quarter to a
 third", and a little over half of digital ones. That is a real improvement, not booms tamed for free, so the
 tool's −0.9 bubble line was left as designed.
+
+---
+
+## 12. The delegated bank's overshoot (2026-09-25)
+
+**Report.** Delegated central banks overcompensate in play: they set very high rates (around 15%), the
+economy crashes, and the rate is still high long after. Nothing in §1–§11 showed this. A price-stability
+dial peaked at about 10% a century and almost never reached the tight clamp. §1 even records "a steered dial
+almost never reaches the clamp".
+
+### Why the simulator never saw it
+
+The simulator stubbed standing inflation pressure at zero. In game the labour laws grant
+`country_wage_pressure_add` of +0.2 to +1.4pp (`common/laws/te_monetary_wage_pressure_injections.txt`), and
+`te_mon_pressure_wage_spiral` counts it a second time above 8%. The price-stability rule is proportional
+(`r̂* + π + 1.0 × (π − anchor) + lean`), so a standing pressure is met with a standing inflation error that the
+rule then *doubles* into the nominal target. At +1pp, inflation settles near 3.6%. The target sits around 8%
+before any lean, and the boom and bubble leans push it to 12–14%. The simulator now has `--wage-pressure`
+(and `--deficit-mean`), plus six overshoot columns: each run's peak rate (median and p90), months at 10% or
+more, months at a stance of +3 or tighter with the cycle below 40, downturns with no crash in the year before
+("policy downturns"), and the mean stance over the year after a crash.
+
+### F13 — The lean arrives as the boom breaks, and the rate cannot come back down
+
+One run, fiat, price stability, +1pp wage pressure, as the script stood:
+
+- **Months 0–28:** the target climbs 1 → 10 while the rate, drifting a third of a point a month, trails it.
+  The stance stays *loose* for twenty months while inflation climbs, and bubble pressure goes 0 → 66.
+- **Months 30–38:** boom. The phase lean (+1) and the bubble lean (+1) take the target to 12. The rate gets
+  there in month 36, with the bubble at 82 and still climbing, and the stance hits the +4 clamp.
+- **Month 40:** crash into panic. The target falls to 5 at once, but the rate is at 10.7 and can only come
+  down a third of a point a month. The stance stays at +3 or tighter for about a year of panic, and the cycle
+  sits at 0 for fourteen months.
+
+Three things compound:
+
+1. **The lean reads today's phase.** By the time the phase says "boom", the boom is nearly over.
+2. **Cuts are as slow as hikes.** The drift is symmetric, so a crash finds the bank at the top of its hike
+   and a year away from neutral.
+3. **Standing pressure keeps π, and so the target, high** (F15 below; not fixed).
+
+At +1pp the old script drove a fiat economy into downturn with no crash behind it 4.2 times a century, and
+held a positive stance through the year after a crash (+1.0).
+
+### F14 — Growth's half-weight reaction cannot hold the 8% wage-spiral edge
+
+Growth ignores inflation below 4% and reacted at 0.5 above it. Under standing wage pressure that lets
+inflation reach 8%. There the wage spiral doubles the pressure, and a +4 stance buys only −1.6pp against it.
+At +1pp, fiat growth ran 8.7% mean inflation, a rate of 10% or more in 53% of months, 24% of months in
+recession and a median longest slump of 295 months. That is worse than price stability on every count,
+growth included. Every AI at war or with `scaled_debt ≥ 0.5` runs this mandate.
+
+### What was tried
+
+Measured with a scratch harness around the simulator (not committed): 120–150 runs, `--event-channel` on,
+0 points, several wage/deficit settings.
+
+| candidate | verdict |
+|---|---|
+| Inflation weight 1.0 → 0.5 | **Worse.** At +1pp, fiat price stability's p90 peak went 14 → 24, months ≥ 10% 10 → 27, recession 5 → 9%. A weaker reaction lets π climb and the nominal rate follows it. |
+| Cap the desired real stance at +4 / +3 / +2.5 | +4 is a no-op. +3 and +2.5 cut slumps but let inflation escape under pressure: with +1pp wage and a 3% deficit, π99 went 9 → 40–48 and the median run's peak rate hit the 25% ceiling. |
+| Cap the stance in a slump (+1 stagnation, 0 downturn, −1 panic) | The same trade, sharper. At +1pp, the growth mandate's π99 reached 48, the hyperinflation edge. |
+| Growth → price stability above 5% core | Similar gains to the shipped reaction change, but the target jumps ~3pp at the switch, and under pressure it reversed direction 1.7–1.9× as often. |
+| Outlook horizon 3 / 6 / 12 months | 12 is marginally better on slumps, but reverses the target up to a quarter more often than 6 (one ±1 random nudge is worth 7 cycle points of outlook). 3 is between the two. |
+| Emergency cuts ×2 / ×3 / ×6, below 25 or 40, on today's value or the outlook | ×3 below 40 on today's value. ×6 adds little; below 25 misses stagnation; the outlook trigger measured the same. |
+
+### What shipped
+
+1. **The lean reads the cycle's outlook** — `te_mon_cycle_outlook` = value + 4.69 × momentum (six months at
+   the 0.9 decay), clamped 0–100, on the same 88/75/25/10 edges. The bank stops leaning on a boom that is
+   already turning and eases before the slump line is crossed.
+2. **Emergency cuts** — `te_mon_drift_step_down`: a mandate-run bank (`te_mon_emergency_cuts`: delegated,
+   AI or CBI) cuts at `te_mon_emergency_cut_factor` (3×) while the cycle is below 40. Hikes and the manual
+   dial keep a third of a point a month. Scoping it to mandate-run banks is an **owner decision** (design §4).
+3. **Growth reacts at full weight above 4%** — `te_mon_mandate_growth_reaction` 0.5 → 1.0. Growth is now
+   price stability run 2.25pp warmer above the threshold, and unchanged below it.
+
+`--tune pre_delegation_fix` restores all three. It reproduces the earlier simulator run for run.
+
+### Result — 400 runs × 100 years per cell, `pre_delegation_fix` → shipped
+
+**As the simulator stood (no wage pressure).** Recession months, policy downturns and the post-crash stance fall in every
+price and growth cell. Crashes are flat or lower (gold growth +0.3–0.6, within noise), and peg defence is unchanged.
+
+| cell | crashes | recession % | longest <40, mo | peak rate | p90 peak | rate ≥10 % | tight in slump % | policy downturns | post-crash stance | inflation |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `commodity/price/0pt` | 9.7 → 9.6 | 8.6 → 6.8 | 36 → 32 | 6.0 → 6.0 | 6.0 → 6.0 | 0.0 → 0.0 | 0.04 → 0.01 | 0.6 → 0.3 | 0.01 → -0.64 | 0.09 → 0.10 |
+| `gold/price/0pt` | 9.0 → 9.0 | 10.2 → 6.8 | 50 → 40 | 9.7 → 9.7 | 11.0 → 11.0 | 0.2 → 0.2 | 1.99 → 0.44 | 1.9 → 0.5 | 0.01 → -0.82 | 0.11 → 0.14 |
+| `gold/price/5pt` | 5.6 → 4.9 | 4.1 → 2.0 | 39 → 32 | 9.0 → 9.0 | 10.0 → 10.0 | 0.1 → 0.1 | 1.58 → 0.48 | 1.6 → 0.3 | -0.32 → -0.97 | 0.12 → 0.12 |
+| `fiat/price/0pt` | 9.9 → 8.5 | 8.9 → 5.5 | 29 → 26 | 10.0 → 10.0 | 11.7 → 12.0 | 1.3 → 1.2 | 0.49 → 0.17 | 0.3 → 0.0 | 0.34 → -1.06 | 2.32 → 2.43 |
+| `fiat/price/5pt` | 5.1 → 4.8 | 2.6 → 1.7 | 24 → 18 | 9.0 → 9.0 | 11.0 → 11.0 | 0.8 → 0.9 | 0.34 → 0.20 | 0.2 → 0.0 | -0.21 → -1.14 | 2.25 → 2.29 |
+| `fiat/growth/0pt` | 17.0 → 16.0 | 11.7 → 9.9 | 23 → 21 | 10.0 → 10.0 | 12.7 → 12.0 | 2.2 → 2.1 | 0.01 → 0.02 | 0.0 → 0.0 | -0.68 → -1.14 | 3.25 → 3.22 |
+| `digital/price/0pt` | 9.0 → 8.3 | 6.1 → 4.8 | 23 → 23 | 10.0 → 10.0 | 11.0 → 11.0 | 1.2 → 1.2 | 0.24 → 0.17 | 0.3 → 0.0 | -0.66 → -1.03 | 2.38 → 2.39 |
+
+**`--wage-pressure 1.0`** — labour laws worth +1pp:
+
+| cell | crashes | recession % | longest <40, mo | peak rate | p90 peak | rate ≥10 % | tight in slump % | policy downturns | post-crash stance | inflation |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `gold/price/0pt` | 5.5 → 5.3 | 6.2 → 3.8 | 46 → 41 | 9.7 → 9.7 | 11.0 → 11.0 | 0.2 → 0.2 | 1.62 → 0.41 | 1.6 → 0.2 | 0.14 → -0.68 | 0.58 → 0.59 |
+| `fiat/price/0pt` | 0.9 → 0.8 | 4.0 → 1.3 | 91 → 106 | 12.0 → 12.0 | 14.0 → 14.0 | 10.6 → 11.1 | 3.83 → 3.13 | 4.2 → 0.6 | 1.00 → -0.37 | 3.60 → 3.67 |
+| `fiat/price/5pt` | 0.1 → 0.1 | 2.2 → 0.4 | 75 → 76 | 12.0 → 12.0 | 14.0 → 14.0 | 10.4 → 10.6 | 4.57 → 3.44 | 2.8 → 0.4 | 0.97 → 0.12 | 3.62 → 3.64 |
+| `fiat/growth/0pt` | 5.0 → 3.4 | 24.4 → 6.1 | 295 → 71 | 21.0 → 14.0 | 25.0 → 18.0 | 53.4 → 29.4 | 21.45 → 4.36 | 8.3 → 1.9 | -0.38 → -0.48 | 8.66 → 5.32 |
+| `fiat/growth/5pt` | 3.7 → 1.9 | 17.0 → 3.1 | 202 → 50 | 21.0 → 13.0 | 25.0 → 18.0 | 49.9 → 26.7 | 20.30 → 3.95 | 7.5 → 1.5 | -0.63 → -0.61 | 8.48 → 5.19 |
+| `digital/growth/0pt` | 5.0 → 3.1 | 18.8 → 5.4 | 177 → 62 | 22.0 → 13.0 | 25.0 → 19.0 | 52.8 → 30.0 | 20.98 → 5.21 | 8.4 → 2.1 | -0.68 → -0.35 | 8.79 → 5.31 |
+
+At +0.5pp the direction is the same and smaller. Fiat price stability's recession share goes 3.3 → 1.6% and its
+policy downturns 1.1 → 0.1. Fiat growth's p90 peak goes 18 → 14 and its months at 10% or more 16 → 9.
+
+**The calm-world trade growth was tuned for survives.** With no wage pressure, fiat growth against price
+stability is 3.2% against 2.4% inflation, +0.17 against −0.11pp of manufacturing throughput, and +4.3%
+against +2.7% services. At 0 points, throughput and services rise in every price and growth cell at 0, +0.5 and
++1pp.
+
+**Sensitivities** (200 runs, +0.5pp): `--pulse-order monetary_first`, where the outlook reads a month-stale
+momentum, and `--event-channel` both move in the same direction by about the same amount. **Boom rescue**
+(`--rescue`): the passive arm stays at 0.2–3.9% (0.2–5.7% before). The maxed arm goes 25–53% → 34–50%;
+digital is within noise.
+
+### F15 — Not fixed: the standing-pressure trap (owner decision)
+
+The package changes *how* a bank moves, not *where* the balance of pressures puts it. Against +1pp of
+wage pressure, price stability needs a standing stance near +2.5 (−0.4pp of pressure per point, and the +4
+clamp buys at most −1.6pp). So fiat price stability still peaks at 12% (p90 14%) and spends about 11% of its
+months at 10% or more. The economy sits near the stagnation line: mean cycle about 40, and the longest run
+below 40 is 91 → 106 months — shallower, since recession months fall 4.0 → 1.3%, but longer.
+
+With +1pp *and* a 3% average deficit (`--deficit-mean 3`) the fiat bank is overwhelmed. Recession months go
+20 → 17% and policy downturns 11.0 → 4.6, but the rate is at 10% or more 40–45% of the time with a p90 peak
+at the 25% ceiling, and growth still averages 8.7% inflation (14.5% before).
+
+No reaction function tried above removes this without letting inflation escape. The levers are outside the
+bank: the size of the wage-pressure grants, `te_mon_stance_pressure_coeff` (0.4), or a real-balance pull
+under fiat (§4's `fiat_pull`).
+
+**Reproduce:**
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --years 100 --points 0,2,5,8                                  # shipped
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --years 100 --points 0,2,5,8 --tune pre_delegation_fix        # before
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --years 100 --points 0,2,5 --wage-pressure 1.0 [--tune pre_delegation_fix]
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --years 100 --points 0,5 --wage-pressure 1.0 --deficit-mean 3 [--tune pre_delegation_fix]
+```
