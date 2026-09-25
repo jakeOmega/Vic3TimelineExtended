@@ -35,16 +35,6 @@ nd_is_armed = {
 	NOT = { modifier:country_nuclear_disarmament_bool = yes }
 }
 
-# The journal entry's `possible`: armed, or a party to a live crisis (a
-# non-nuclear target needs the crisis panel as much as the issuer does).
-nd_journal_possible = {
-	has_game_rule = nuclear_weapons_enabled
-	OR = {
-		nd_is_armed = yes
-		nd_in_crisis = yes
-	}
-}
-
 # Has the posture initialiser run for this country?
 nd_is_initialized = {
 	has_variable = nd_doctrine

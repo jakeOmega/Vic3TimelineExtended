@@ -26,7 +26,7 @@ un_case_standing_applies = {
 	OR = {
 		country_rank >= rank_value:major_power
 		has_modifier = nuclear_power
-		has_journal_entry = je_nuclear_program
+		nuclear_program_has_programme = yes
 	}
 }
 

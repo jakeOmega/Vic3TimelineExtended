@@ -70,13 +70,137 @@ nuclear_program_effect_decrease_funding = {
 }
 
 # ----------------------------------------------------------------------------
+# The programme's weekly step: progress, warheads, development events.
+# ----------------------------------------------------------------------------
+# CALL-SITE CONTRACT. Advances state and is NOT idempotent within a week (it
+# adds progress and may build a warhead). Its one caller is je_nuclear_program's
+# on_weekly_pulse, which calls it only while nuclear_program_has_programme
+# holds, and runs nuclear_program_refresh_state_effect straight after it.
+# Never call it from an event, a scripted GUI or a diplomatic action. ROOT is
+# the country.
+#
+# Moved here verbatim from the entry when posture and crises were merged into
+# it (2026-09-25), so the entry's pulse reads as programme, then posture.
+nuclear_program_weekly_progress = {
+	# A pause treaty zeroes funding. Taking the funding modifier back off is
+	# left to nuclear_program_refresh_state_effect, which the entry's pulse runs
+	# straight after this effect — the one site that owns that modifier. The
+	# remove_modifier that used to sit here ran in *country* scope, while the
+	# buttons apply the modifier in `je:je_nuclear_program` scope — so it was a
+	# silent no-op and a paused programme went on paying its full weekly
+	# innovation bill for ever.
+	if = {
+		limit = {
+			modifier:country_nuclear_program_pause_bool = yes
+		}
+		set_variable = {
+			name = nuclear_weapons_program_funding
+			value = 0
+		}
+	}
+	change_variable = {
+		name = nuclear_weapon_program_progress
+		add = {
+			value = nuclear_weapon_program_monthly_progress
+			divide = 4
+			multiply = {
+				value = 1
+				add = modifier:country_nuclear_program_progress_mult
+			}
+		}
+	}
+	while = {
+		limit = {var:nuclear_weapon_program_progress >= nuclear_weapon_program_goal_value}
+		change_variable = {
+			name = nuclear_weapon_program_progress
+			subtract = nuclear_weapon_program_goal_value
+		}
+		change_variable = {
+			name = nuclear_weapon_stockpile
+			add = 1
+		}
+		if = {
+			limit = { var:nuclear_weapons_program_first_nuke_done = 0 }
+			set_variable = {
+				name = nuclear_weapons_program_first_nuke_done
+				value = 1
+			}
+			change_variable = {
+				name = nuclear_weapon_program_progress
+				multiply = nuclear_weapon_program_additional_nuke_progress_multiplier
+			}
+			# The year of the first device, for the panel's "First
+			# device" row. `year` is a valid script value (see
+			# common/script_values/te_history_values.txt).
+			set_variable = {
+				name = nuclear_program_first_device_year
+				value = year
+			}
+			# Track whether this is the first nuclear power in the world
+			if = {
+				limit = { NOT = { has_global_variable = world_first_nuclear_weapon } }
+				set_variable = { name = is_world_first_nuclear_power value = yes }
+			}
+			set_global_variable = { name = world_first_nuclear_weapon value = yes }
+			trigger_event = { id = nuclear_weapon_events.10 }
+			save_scope_as = first_nuke_country
+			every_country = {
+				limit = {
+					NOT = { THIS = scope:first_nuke_country }
+				}
+				trigger_event = { id = nuclear_weapon_events.9 days = 14 }
+			}
+		}
+	}
+
+	# ---- Development events (only during first nuke, with active funding) ----
+	if = {
+		limit = {
+			var:nuclear_weapons_program_first_nuke_done = 0
+			has_variable = nuclear_weapons_program_funding
+			var:nuclear_weapons_program_funding >= 1
+			var:nuclear_weapon_program_progress >= 5
+		}
+		random_list = {
+			490 = { } # nothing happens
+			5 = {
+				trigger_event = { id = nuclear_weapon_events.19 }
+			}
+			5 = {
+				trigger_event = { id = nuclear_weapon_events.20 }
+			}
+		}
+	}
+
+	# ---- Proliferation alert (non-first country nearing completion) ----
+	if = {
+		limit = {
+			has_global_variable = world_first_nuclear_weapon
+			NOT = { has_variable = is_world_first_nuclear_power }
+			var:nuclear_weapons_program_first_nuke_done = 0
+			var:nuclear_weapon_program_progress >= 75
+			NOT = { has_variable = nuclear_proliferation_alert_sent }
+		}
+		set_variable = { name = nuclear_proliferation_alert_sent value = 1 }
+		save_scope_as = proliferating_country
+		every_country = {
+			limit = {
+				NOT = { THIS = ROOT }
+				NOT = { is_country_type = decentralized }
+			}
+			trigger_event = { id = nuclear_weapon_events.18 days = 7 }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
 # The single derivation site for everything the panel displays.
 # ----------------------------------------------------------------------------
 # Called from exactly four places in play, which between them cover every way the
 # programme's state can move: je_nuclear_program's `immediate` (so an active
-# entry always has a status code), the tail of its on_weekly_pulse, and the two
-# button effects above — and therefore both stepper ops in the widget, which
-# delegate to those effects. (events/te_debug_nuclear_events.txt also calls it,
+# entry always has a status code), its on_weekly_pulse right after the
+# programme step, and the two button effects above — and therefore both stepper
+# ops in the widget, which delegate to those effects. (events/te_debug_nuclear_events.txt also calls it,
 # from the console only, after forcing state by hand.)
 # In `immediate` the journal entry is still being
 # activated, which is why the modifier guard below reaches it through `?=`:
@@ -108,6 +232,9 @@ nuclear_program_effect_decrease_funding = {
 #   pulse, pause in force    the pulse zeroes funding earlier in the same block;
 #                            the modifier is genuinely still present, so the read
 #                            is true and the innovation drain finally stops.
+#   pulse, standing lost     the same, from the entry's own else_if: an armed
+#                            power demoted below nuclear_program_has_programme
+#                            keeps the entry but stops paying.
 #   pulse, already at 0      modifier absent, read false, so no remove_modifier
 #                            on a missing modifier (which logs an error).
 #   pulse, steady funding>=1 funding /= 0, guard skipped, modifier left exactly

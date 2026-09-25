@@ -475,7 +475,7 @@ un_lean_interests = {
 		else = {
 			add = 20
 		}
-		if = { limit = { has_journal_entry = je_nuclear_program } add = -25 }
+		if = { limit = { nuclear_program_has_programme = yes } add = -25 }
 	}
 	else_if = {
 		limit = { scope:un_resolution ?= { has_tag = un_topic_climate } }

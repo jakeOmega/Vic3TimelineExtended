@@ -1642,7 +1642,7 @@ un_events.14 = {
 	desc = {
 		first_valid = {
 			triggered_desc = { desc = un_events.14.d_nuclear trigger = { var:nuclear_weapon_stockpile >= 1 } }
-			triggered_desc = { desc = un_events.14.d_aspiring trigger = { has_journal_entry = je_nuclear_program } }
+			triggered_desc = { desc = un_events.14.d_aspiring trigger = { nuclear_program_has_programme = yes } }
 			desc = un_events.14.d
 		}
 	}

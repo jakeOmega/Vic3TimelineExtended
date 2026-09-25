@@ -12,11 +12,9 @@
 # GUI both call the helper, so the two surfaces cannot drift apart.
 # See docs/systems/journal_entry_systems.md, "Nuclear Programme Widget".
 
-# Country scope: can this country sustain a nuclear weapons programme at all?
-# The body of je_nuclear_program's `possible`. Also read by the programme's
-# status line (common/customizable_localization/nuclear_program_custom_loc.txt),
-# which has to explain a *deactivated* entry — the entry drops back to inactive
-# the moment this goes false, because it carries can_deactivate = yes.
+# Country scope: does this country have the standing to sustain a nuclear
+# weapons programme? Rank, or a patron's aid, and no disarmament. Read through
+# nuclear_program_has_programme, which adds the science and the game rule.
 nuclear_program_can_run_programme = {
 	OR = {
 		country_rank >= rank_value:great_power
@@ -31,12 +29,46 @@ nuclear_program_can_run_programme = {
 	}
 }
 
+# Country scope: does this country have a nuclear weapons programme — the
+# half of je_nuclear_program that builds warheads? The entry also carries
+# posture and crises, so it is active for an armed power that has lost the
+# standing to build more and for a non-nuclear party to a crisis; neither
+# `has_journal_entry = je_nuclear_program` nor the existence of the
+# programme's variables (the entry's immediate creates them for everyone it
+# activates for) answers this any more. Ask this instead. Also gates the
+# programme half of the entry's weekly pulse, and the programme panel.
+nuclear_program_has_programme = {
+	has_game_rule = nuclear_weapons_enabled
+	has_technology_researched = nuclear_weapons
+	nuclear_program_can_run_programme = yes
+}
+
+# Country scope: the body of je_nuclear_program's `possible` — everyone the
+# entry applies to: a country with a programme, one that holds warheads
+# (whatever its rank: a demoted power keeps its posture, upkeep and
+# accidents), and one party to a nuclear crisis (a non-nuclear target needs
+# the crisis panel as much as the country that made the threat).
+nuclear_program_entry_applies = {
+	has_game_rule = nuclear_weapons_enabled
+	OR = {
+		nuclear_program_has_programme = yes
+		nd_is_armed = yes
+		nd_in_crisis = yes
+	}
+}
+
 # Country scope: may funding be stepped up? Body of
-# increase_funding_nuclear_program's `possible`. Deliberately carries no
-# custom_tooltip: the engine renders these three clauses with a tick or a cross
-# each, which is both more informative than a hand-written line and impossible
-# to let drift away from the real condition.
+# increase_funding_nuclear_program's `possible`. The engine renders the last
+# three clauses with a tick or a cross each, which is both more informative
+# than a hand-written line and impossible to let drift away from the real
+# condition. The first is wrapped because it would otherwise expand into five
+# lines; it matters since the entry stays active for an armed power without
+# the standing to build (the panel is hidden then, but the AI's button is not).
 nuclear_program_possible_increase_funding = {
+	custom_tooltip = {
+		text = nuclear_program_tt_has_programme
+		nuclear_program_has_programme = yes
+	}
 	country_innovation > nuclear_weapon_program_funding_step
 	NOT = {
 		modifier:country_nuclear_disarmament_bool = yes
@@ -72,8 +104,10 @@ nuclear_program_is_proliferating = {
 # funded or not? covert_nuclear_sabotage_action's maintain condition. Funding
 # is deliberately not read: stepping it to 0 for a week costs the target
 # nothing, and would otherwise end a year-old sabotage operation for free. A
-# pause treaty or disarmament does end it — that programme has really stopped.
+# pause treaty, disarmament or the loss of the standing to run a programme
+# does end it — that programme has really stopped.
 nuclear_program_is_standing = {
+	nuclear_program_has_programme = yes
 	has_variable = nuclear_weapon_program_progress
 	NOT = { modifier:country_nuclear_program_pause_bool = yes }
 	NOT = { modifier:country_nuclear_disarmament_bool = yes }

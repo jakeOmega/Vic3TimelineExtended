@@ -1689,7 +1689,7 @@ Journal-entry widgets are **additive**, not overrides: a `.gui` under `gui/journ
 | `space_race_widget.gui` | the nine `je_space_race_*` | one shared milestone panel instanced by nine named widgets: pace, setback risk, approach selector, funding stepper, rivals list, programme overview |
 | `colonial_empire_widget.gui` | `je_colonial_empire` | colonial stability: the bar's own per-term breakdown, nine drift groups, great-power pressure roster, three programme rows, three decolonization decisions, two history charts |
 | `global_warming_widget.gui` | `je_global_warming` | climate conditions readout, all eight mitigation policies as rows, world adoption counts, two history charts |
-| `nuclear_program_widget.gui` | `je_nuclear_program` | programme panel (funding stepper, production rate, time to next warhead, stockpile) and a collapsed deterrence + nuclear-powers readout, bracketing the native bar |
+| `nuclear_program_widget.gui` | `je_nuclear_program` | programme panel (funding stepper, production rate, time to next warhead, stockpile) above the native bar, and a collapsed delivery-and-defence + nuclear-powers readout at the foot of the entry; the posture and crisis panels between them come from `nuclear_deterrence_widget.gui` |
 | `te_history_chart.gui` | (type library) | reusable `te_history_chart` column-chart types, usable from any JE widget |
 
 **The state view uses the same idiom, from its own type library.** `gui/te_state_panel_widgets.gui` holds the types; `states_panel.gui`, a full-file override re-merged every vanilla patch, holds only instances.

@@ -1,15 +1,22 @@
-﻿### Nuclear Deterrence journal-entry widget — two panels for je_nuclear_deterrence.
+﻿### Nuclear Deterrence widgets — two panels for je_nuclear_program ("Nuclear
+### Weapons"), which since 2026-09-25 carries posture and crises as well as the
+### programme. Both sit in custom_widget_container_4, below the warhead bar,
+### after the programme panel above it and before the delivery-and-defence and
+### nuclear-powers panel (widget_je_nuclear_balance, nuclear_program_widget.gui)
+### — the order is the order of the entry's widget declarations.
 ###
-### widget_je_nuclear_posture   custom_widget_container_3
+### widget_je_nuclear_posture   custom_widget_container_4 (first)
 ###     Posture (doctrine, readiness, launch authority) with what each costs and
 ###     risks, the forces behind it (arsenal, survivability, reliability,
 ###     strain, the two investment steppers), and how the posture is received
 ###     at home. Only drawn while the country is armed (nd_armed_sgui).
 ###
-### widget_je_nuclear_crisis    custom_widget_container_4
+### widget_je_nuclear_crisis    custom_widget_container_4 (second)
 ###     The live crisis — opponent, dispute, stage, danger, the pressure on the
 ###     target, the deadline, and the crisis actions — or, between crises, how
-###     the last one ended. Then reputation (credibility).
+###     the last one ended. Then reputation (credibility), once there is one
+###     (nd_has_reputation_sgui): a great power still building its first
+###     warhead has no record to show.
 ###
 ### Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped); the
 ### panel is described in docs/systems/journal_entry_systems.md, "Nuclear
@@ -144,7 +151,7 @@ types nuclear_deterrence_widget_types
 
 
 ### ==========================================================================
-### POSTURE — container_3
+### POSTURE — container_4, first
 ### ==========================================================================
 flowcontainer = {
 	name = "widget_je_nuclear_posture"
@@ -739,7 +746,7 @@ flowcontainer = {
 
 
 ### ==========================================================================
-### CRISIS AND REPUTATION — container_4
+### CRISIS AND REPUTATION — container_4, second
 ### ==========================================================================
 flowcontainer = {
 	name = "widget_je_nuclear_crisis"
@@ -972,8 +979,9 @@ flowcontainer = {
 		}
 	}
 
-	### ---- Reputation (collapsed) --------------------------------------------------
+	### ---- Reputation (collapsed; once there is a record) --------------------------
 	nd_section_header = {
+		visible = "[GetScriptedGui('nd_has_reputation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 		blockoverride "left_text" {
 			text = "nd_w_reputation_header"
 		}
@@ -989,7 +997,7 @@ flowcontainer = {
 	}
 
 	nd_panel = {
-		visible = "[GetVariableSystem.Exists('nd_reputation_open')]"
+		visible = "[And( GetScriptedGui('nd_has_reputation_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), GetVariableSystem.Exists('nd_reputation_open') )]"
 
 		nd_row = {
 			blockoverride "row_label" {
