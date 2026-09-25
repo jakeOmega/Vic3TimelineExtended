@@ -59,7 +59,9 @@ te_ea_cr_condemnable = {
 
 # A candidate critic (country scope; ROOT = the accused): a great power that
 # knows the language of civil rights and protects its own minorities, and has
-# not been asked in the past year (.17 sets te_ea_cr_critic_cd when it fires).
+# not been asked in the past 90 days (.17 sets te_ea_cr_critic_cd when it
+# fires). World-wide, so kept short: a year let each critic answer only one
+# accused a year, well below .4's old rate.
 te_ea_cr_can_condemn_root = {
 	NOT = { this = root }
 	country_rank >= rank_value:great_power

@@ -338,7 +338,8 @@ nuclear_incident.3 = {
 # ---- .4 After the Launch --------------------------------------------------------
 # nd_last_launch_kind: 1 the weapon struck scope:nd_launch_victim (a war —
 # the existing strike events carry the damage), 2 recalled at the last moment
-# (peacetime: no strike, a crisis, and the other side saw everything).
+# (peacetime: no strike; a crisis we are already in with them turns acute, and
+# they saw everything and may answer with a warning of their own, .5 option c).
 nuclear_incident.4 = {
 	type = country_event
 	placement = root
@@ -481,7 +482,9 @@ nuclear_incident.5 = {
 #
 # The other side's readiness is its own choice. An AI opponent goes to its
 # highest alert here, as its posture allows; a player opponent is asked
-# (.11), and the desc says it is deciding. Telling them in advance (option a)
+# (.11), and the desc says it is deciding. The desc claims their alert only
+# when it is really at High Alert; an opponent that is unarmed or locked
+# (a recent stand-down) is alarmed but does not move. Telling them in advance (option a)
 # opens talks on our own record if we issued the crisis; if they did, it
 # invites them to (.12) rather than writing their record for them.
 nuclear_incident.10 = {
@@ -502,8 +505,18 @@ nuclear_incident.10 = {
 				desc = nuclear_incident.10.d_deciding
 			}
 			triggered_desc = {
-				trigger = { always = yes }
+				trigger = {
+					scope:nd_exercise_opponent ?= {
+						has_variable = nd_readiness_target
+						var:nd_readiness_target = 3
+					}
+				}
 				desc = nuclear_incident.10.d
+			}
+			# Unarmed, or its readiness locked by a stand-down: alarm, no alert.
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_incident.10.d_alarmed
 			}
 		}
 	}
@@ -561,19 +574,20 @@ nuclear_incident.10 = {
 				set_variable = { name = nd_crisis_talks value = 1 }
 			}
 		}
-		else = {
-			custom_tooltip = nd_tt_exercise_invited
-			hidden_effect = {
-				if = {
-					limit = {
-						scope:nd_issuer ?= {
-							has_variable = nd_crisis_talks
-							var:nd_crisis_talks = 0
-						}
-					}
-					nd_crisis_send_event = { WHO = scope:nd_issuer EVENT = nuclear_incident.12 }
+		else_if = {
+			limit = {
+				scope:nd_issuer ?= {
+					has_variable = nd_crisis_talks
+					var:nd_crisis_talks = 0
 				}
 			}
+			custom_tooltip = nd_tt_exercise_invited
+			hidden_effect = {
+				nd_crisis_send_event = { WHO = scope:nd_issuer EVENT = nuclear_incident.12 }
+			}
+		}
+		else = {
+			custom_tooltip = nd_tt_exercise_notified_talks_open
 		}
 		every_interest_group = {
 			limit = { nd_ig_class_warfighting = yes }
@@ -687,7 +701,13 @@ nuclear_incident.11 = {
 			nd_is_armed = yes
 			nd_readiness_locked = no
 		}
-		nd_set_readiness_target_3 = yes
+		if = {
+			limit = { nd_crisis_event_matches = yes }
+			nd_set_readiness_target_3 = yes
+		}
+		else = {
+			custom_tooltip = nd_tt_crisis_stale
+		}
 		ai_chance = {
 			base = 3
 		}

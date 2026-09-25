@@ -4800,7 +4800,6 @@ banking_cycle_events.68 = {
 	# Appeal: a chance of a rescue, at the cost of face and the risk of a snub.
 	option = {
 		name = banking_cycle_events.68.a
-		default_option = yes
 		add_modifier = {
 			name = te_ea_bailout_appeal
 			days = short_modifier_time
@@ -4824,6 +4823,8 @@ banking_cycle_events.68 = {
 	# Weather it alone: nothing asked, nothing owed.
 	option = {
 		name = banking_cycle_events.68.b
+		# The default: an unanswered event must not make the appeal (or pay for it).
+		default_option = yes
 		custom_tooltip = banking_cycle_events.68.b.tt
 		ai_chance = {
 			base = 1

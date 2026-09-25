@@ -361,7 +361,8 @@
 				15 = { trigger_event = { id = movement_events_te.2 } }
 				10 = { trigger_event = { id = movement_events_te.3 } }
 				# International condemnation: a great power decides (.17) and .4
-				# follows only if it condemns. 13 (was 10) offsets its refusals.
+				# follows only if it condemns. 13 (was 10) offsets its refusals;
+				# a critic is asked at most once per 90 days, by anyone.
 				13 = { te_ea_cr_invite_condemnation = yes }
 				10 = { trigger_event = { id = movement_events_te.14 } }
 			}

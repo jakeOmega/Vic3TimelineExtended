@@ -455,8 +455,10 @@ movement_events_te.4 = {
 # discriminatory law (te_ea_cr_invite_condemnation saves that country as
 # scope:cr_condemned_country and this one as scope:criticizing_country).
 # Condemning costs relations with the accused and pleases our academics; it
-# sends movement_events_te.4 to the accused, which answers. Asked at most once
-# a year, whatever it answers.
+# sends movement_events_te.4 to the accused, which answers. A critic is asked
+# at most once a quarter, whatever it answers, so a player great power is not
+# handed a stack of these; any one accused is protected for longer by its own
+# te_ea_cr_condemned.
 movement_events_te.17 = {
 	type = country_event
 	placement = root
@@ -481,13 +483,12 @@ movement_events_te.17 = {
 	}
 
 	immediate = {
-		set_variable = { name = te_ea_cr_critic_cd value = yes days = 365 }
+		set_variable = { name = te_ea_cr_critic_cd value = yes days = 90 }
 	}
 
 	# Condemn them publicly
 	option = {
 		name = movement_events_te.17.a
-		default_option = yes
 		change_relations = {
 			country = scope:cr_condemned_country
 			value = -10
@@ -525,6 +526,8 @@ movement_events_te.17 = {
 	# Say nothing
 	option = {
 		name = movement_events_te.17.b
+		# The default: an unanswered event must not condemn anyone.
+		default_option = yes
 		custom_tooltip = movement_events_te.17.b.tt
 		ai_chance = {
 			base = 1
