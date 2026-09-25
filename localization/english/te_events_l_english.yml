@@ -481,7 +481,7 @@
  banking_cycle_events.58.a:0 "Suspend convertibility — float the currency"
  banking_cycle_events.58.b:0 "Defend the peg whatever it costs"
  banking_cycle_events.58.c:0 "Convene an international currency conference"
- banking_cycle_events.58.d:0 "Foreign central banks have spent the week presenting dollars at [ROOT.GetCountry.GetName]'s treasury and demanding gold in exchange. The vaults are draining faster than anyone thought possible. At current rates, the peg cannot be held through the end of the month. A decision is due before trading opens Monday."
+ banking_cycle_events.58.d:0 "Foreign central banks have spent the week presenting [ROOT.GetCountry.GetAdjective] notes at the treasury and demanding gold in exchange. The vaults are draining faster than anyone thought possible. At current rates, the peg cannot be held through the end of the month. A decision is due before trading opens Monday."
  banking_cycle_events.58.f:0 "\"We are all Keynesians now, even those of us who spent forty years arguing we were not.\"\n\n— Governor of the Central Bank"
  banking_cycle_events.58.t:0 "The Gold Window Closes"
  banking_cycle_events.59.a:0 "Let the firm fail"

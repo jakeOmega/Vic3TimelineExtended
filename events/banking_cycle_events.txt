@@ -5907,6 +5907,9 @@ banking_cycle_events.48 = {
 # 58. End the Gold Standard
 # Downturn/panic with modern financial instruments. The fixed-rate convertibility
 # system is collapsing. Abandon the peg in a surprise address, or defend it?
+# Gold standard (convertible) only, and only under the simplified setting of
+# banking_system_rule: with the full monetary system on, te_peg.1 is this
+# crisis. The gate lives in the draw in banking_cycle_effects.txt.
 # --------------------------------------------------------------------------
 banking_cycle_events.58 = {
 	type = country_event
