@@ -568,7 +568,9 @@ un_found_organisation = {
 	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
 	je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
 	je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
-	set_global_variable = { name = un_hq_country value = ROOT }
+	# THIS, not ROOT: un_conference_conclude reaches here from the global
+	# monthly pulse, which has no root.
+	set_global_variable = { name = un_hq_country value = THIS }
 	if = {
 		limit = { country_rank >= rank_value:great_power }
 		je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
@@ -586,7 +588,7 @@ un_charter_invitations = {
 	save_scope_as = un_charter_founder
 	every_country = {
 		limit = {
-			NOT = { this = ROOT }
+			NOT = { this = scope:un_charter_founder }
 			is_subject = no
 			NOT = { is_country_type = decentralized }
 		}
