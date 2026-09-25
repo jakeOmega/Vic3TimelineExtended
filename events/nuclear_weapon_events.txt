@@ -32,10 +32,27 @@ nuclear_weapon_events.1 = {
 		}
 	}
 
+	# Retaliate (#430): the gates and bookkeeping nuke_diplo_action puts on any
+	# launch — an arsenal no disarmament binds, still at war with the striker
+	# (retaliation is permitted under every doctrine), no pledge in the way —
+	# and the use recorded once per salvo with nd_record_nuclear_use. The
+	# strike stays nuclear_response_strike: nd_dispatch_strategic_strike would
+	# book a retaliation as a first strike (+25 infamy, the first-strike UN
+	# dossier and ICC entries). This event is triggered in the struck state's
+	# scope, so every gate names the retaliator explicitly: scope:target_country
+	# (the struck country), answering scope:attacking_country. The AI retaliates
+	# only when nd_ai_nuclear_use_justified agrees, like the strike actions.
 	option = {
 		name = nuclear_weapon_events.1.b
 		trigger = {
-			owner = {
+			scope:target_country = {
+				has_modifier = nuclear_power
+				var:nuclear_weapon_stockpile > 0
+				nd_retaliation_permitted = { ENEMY = scope:attacking_country }
+			}
+		}
+		show_as_unavailable = {
+			scope:target_country = {
 				has_modifier = nuclear_power
 				var:nuclear_weapon_stockpile > 0
 			}
@@ -66,6 +83,13 @@ nuclear_weapon_events.1 = {
 				}
 				add = -6
 			}
+			# Last: a factor applies to what the modifiers above have added.
+			modifier = {
+				trigger = {
+					NOT = { scope:target_country = { nd_ai_nuclear_use_justified = { ENEMY = scope:attacking_country } } }
+				}
+				factor = 0
+			}
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
@@ -74,12 +98,23 @@ nuclear_weapon_events.1 = {
 				nuclear_response_strike = yes
 			}
 		}
+		scope:target_country = {
+			nd_record_nuclear_use = { VICTIM = scope:attacking_country }
+		}
 	}
 
+	# Full retaliation: as option b, three warheads, one record.
 	option = {
 		name = nuclear_weapon_events.1.c
 		trigger = {
-			owner = {
+			scope:target_country = {
+				has_modifier = nuclear_power
+				var:nuclear_weapon_stockpile > 2
+				nd_retaliation_permitted = { ENEMY = scope:attacking_country }
+			}
+		}
+		show_as_unavailable = {
+			scope:target_country = {
 				has_modifier = nuclear_power
 				var:nuclear_weapon_stockpile > 2
 			}
@@ -112,6 +147,13 @@ nuclear_weapon_events.1 = {
 				trigger = { var:nuclear_weapon_stockpile <= nuclear_ai_desired_stockpile }
 				add = -8
 			}
+			# Last: a factor applies to what the modifiers above have added.
+			modifier = {
+				trigger = {
+					NOT = { scope:target_country = { nd_ai_nuclear_use_justified = { ENEMY = scope:attacking_country } } }
+				}
+				factor = 0
+			}
 		}
 
 		scope:attacking_country = {
@@ -133,6 +175,9 @@ nuclear_weapon_events.1 = {
 				nuclear_response_strike = yes
 			}
 		}
+		scope:target_country = {
+			nd_record_nuclear_use = { VICTIM = scope:attacking_country }
+		}
 	}
 }
 
@@ -146,9 +191,51 @@ nuclear_weapon_events.2 = {
 
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-	title = nuclear_weapon_events.2.t
-	desc = nuclear_weapon_events.2.d
-	flavor = nuclear_weapon_events.2.f
+	# A launch out of an incident (nd_launch_or_intercept) was nobody's
+	# considered retribution: the unconfirmed warning, or a commander cut off
+	# from the capital (#430). nd_strike_from_incident says which, and keeps a
+	# deliberate counter-strike later in the same chain (.11 b/c) on the
+	# ordinary text; the title, desc, flavor and option all read it.
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { nd_strike_from_incident = yes }
+				desc = nuclear_weapon_events.2.t_incident
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.2.t
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { nd_strike_from_incident_of = { KIND = warning } }
+				desc = nuclear_weapon_events.2.d_warning
+			}
+			triggered_desc = {
+				trigger = { nd_strike_from_incident_of = { KIND = commander } }
+				desc = nuclear_weapon_events.2.d_commander
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.2.d
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { nd_strike_from_incident = yes }
+				desc = nuclear_weapon_events.2.f_incident
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.2.f
+			}
+		}
+	}
 
 	duration = 3
 
@@ -160,8 +247,17 @@ nuclear_weapon_events.2 = {
 		post_notification = industrial_nuke_succeeds_attacker
 	}
 
+	# "The necessity of this dire action" — only for a strike someone chose.
 	option = {
 		name = nuclear_weapon_events.2.a
+		trigger = { nd_strike_from_incident = no }
+		default_option = yes
+	}
+
+	# The same answer to a launch nobody in the capital ordered.
+	option = {
+		name = nuclear_weapon_events.2.a_incident
+		trigger = { nd_strike_from_incident = yes }
 		default_option = yes
 	}
 }
@@ -267,8 +363,33 @@ nuclear_weapon_events.6 = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
 	title = nuclear_weapon_events.6.t
-	desc = nuclear_weapon_events.6.d
-	flavor = nuclear_weapon_events.6.f
+	# As .2: a commander cut off from the capital fires tactically
+	# (nuclear_incident.20 sets nd_launch_tactical); the warning chain
+	# launches strategically, so it never reaches this event (#430).
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { nd_strike_from_incident_of = { KIND = commander } }
+				desc = nuclear_weapon_events.6.d_commander
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.6.d
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { nd_strike_from_incident_of = { KIND = commander } }
+				desc = nuclear_weapon_events.6.f_commander
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.6.f
+			}
+		}
+	}
 
 	duration = 3
 
@@ -280,8 +401,17 @@ nuclear_weapon_events.6 = {
 		post_notification = tactical_nuke_succeeds_attacker
 	}
 
+	# "A victory" — for a strike someone chose.
 	option = {
 		name = nuclear_weapon_events.6.a
+		trigger = { NOT = { nd_strike_from_incident_of = { KIND = commander } } }
+		default_option = yes
+	}
+
+	# The same answer to a commander's own launch (#430).
+	option = {
+		name = nuclear_weapon_events.6.a_commander
+		trigger = { nd_strike_from_incident_of = { KIND = commander } }
 		default_option = yes
 	}
 }
@@ -534,10 +664,26 @@ nuclear_weapon_events.11 = {
 		}
 	}
 
+	# Answer the retaliation (#430): as nuclear_weapon_events.1 options b and c,
+	# with the roles the other way round — the retaliator here is
+	# scope:attacking_country (the first striker, whose state was just hit),
+	# answering scope:target_country. The strike stays
+	# nuclear_response_response_strike for the same reason .1 keeps
+	# nuclear_response_strike.
 	option = {
 		name = nuclear_weapon_events.11.b
+		# A deliberate answer: marks the chain, so the .2 it sets off on us does
+		# not read an incident scope inherited from the first launch (#430).
+		save_scope_as = nd_deliberate_response
 		trigger = {
-			owner = {
+			scope:attacking_country = {
+				has_modifier = nuclear_power
+				var:nuclear_weapon_stockpile > 0
+				nd_retaliation_permitted = { ENEMY = scope:target_country }
+			}
+		}
+		show_as_unavailable = {
+			scope:attacking_country = {
 				has_modifier = nuclear_power
 				var:nuclear_weapon_stockpile > 0
 			}
@@ -568,6 +714,13 @@ nuclear_weapon_events.11 = {
 				}
 				add = -4
 			}
+			# Last: a factor applies to what the modifiers above have added.
+			modifier = {
+				trigger = {
+					NOT = { scope:attacking_country = { nd_ai_nuclear_use_justified = { ENEMY = scope:target_country } } }
+				}
+				factor = 0
+			}
 		}
 		scope:target_country = {
 			ordered_scope_state = {
@@ -576,12 +729,25 @@ nuclear_weapon_events.11 = {
 				nuclear_response_response_strike = yes
 			}
 		}
+		scope:attacking_country = {
+			nd_record_nuclear_use = { VICTIM = scope:target_country }
+		}
 	}
 
 	option = {
 		name = nuclear_weapon_events.11.c
+		# A deliberate answer: marks the chain, so the .2 it sets off on us does
+		# not read an incident scope inherited from the first launch (#430).
+		save_scope_as = nd_deliberate_response
 		trigger = {
-			owner = {
+			scope:attacking_country = {
+				has_modifier = nuclear_power
+				var:nuclear_weapon_stockpile > 2
+				nd_retaliation_permitted = { ENEMY = scope:target_country }
+			}
+		}
+		show_as_unavailable = {
+			scope:attacking_country = {
 				has_modifier = nuclear_power
 				var:nuclear_weapon_stockpile > 2
 			}
@@ -614,6 +780,13 @@ nuclear_weapon_events.11 = {
 				trigger = { var:nuclear_weapon_stockpile <= nuclear_ai_desired_stockpile }
 				add = -6
 			}
+			# Last: a factor applies to what the modifiers above have added.
+			modifier = {
+				trigger = {
+					NOT = { scope:attacking_country = { nd_ai_nuclear_use_justified = { ENEMY = scope:target_country } } }
+				}
+				factor = 0
+			}
 		}
 		scope:target_country = {
 			ordered_scope_state = {
@@ -633,6 +806,9 @@ nuclear_weapon_events.11 = {
 				position = 2
 				nuclear_response_response_strike = yes
 			}
+		}
+		scope:attacking_country = {
+			nd_record_nuclear_use = { VICTIM = scope:target_country }
 		}
 	}
 }
@@ -798,7 +974,20 @@ nuclear_weapon_events.17 = {
 	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
 
 	title = nuclear_weapon_events.17.t
-	desc = nuclear_weapon_events.17.d
+	# As .2: the world's first use may have come out of an incident, not a
+	# decision (#430).
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { nd_strike_from_incident = yes }
+				desc = nuclear_weapon_events.17.d_incident
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.17.d
+			}
+		}
+	}
 	flavor = nuclear_weapon_events.17.f
 
 	duration = 3
@@ -834,9 +1023,26 @@ nuclear_weapon_events.17 = {
 		}
 	}
 
-	# "History will judge us."
+	# "History will judge us — but we did what we had to." Only for a use
+	# someone chose; after an incident the same answer reads as .b_incident
+	# (#430). Identical effects.
 	option = {
 		name = nuclear_weapon_events.17.b
+		trigger = { nd_strike_from_incident = no }
+		add_modifier = { name = prestige_gain_small days = normal_modifier_time is_decaying = yes }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { ruler_is_cautious = yes } add = 5 }
+		}
+	}
+
+	option = {
+		name = nuclear_weapon_events.17.b_incident
+		trigger = { nd_strike_from_incident = yes }
 		add_modifier = { name = prestige_gain_small days = normal_modifier_time is_decaying = yes }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
@@ -901,10 +1107,65 @@ nuclear_weapon_events.18 = {
 	immediate = {
 	}
 
-	# Option A — Nuclear powers: "Issue a strategic deterrent ultimatum."
+	# Option A — Nuclear powers: "Issue a strategic deterrent ultimatum." (#430)
+	# A real one: the public ultimatum of the crisis system
+	# (nd_nuclear_ultimatum_action's own effect, nd_crisis_open), whenever that
+	# action could be taken against them over their bomb. The crisis charges
+	# the ultimatum's infamy and relations itself, and a yield freezes their
+	# programme for ten years; the flat setback below would double it. The
+	# AI issues it only when the crisis system's AI would.
 	option = {
 		name = nuclear_weapon_events.18.opt_a
-		trigger = { has_modifier = nuclear_power }
+		trigger = {
+			exists = scope:proliferating_country
+			nd_can_issue_proliferation_ultimatum = { TARGET = scope:proliferating_country }
+		}
+		highlighted_option = yes
+		nd_crisis_open = { TARGET = scope:proliferating_country PUBLIC = yes }
+		add_radicals = {
+			value = small_radicals
+			interest_group = ig:ig_intelligentsia
+		}
+		add_loyalists = {
+			value = small_radicals
+			interest_group = ig:ig_armed_forces
+		}
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { any_rival_country = { THIS = scope:proliferating_country } }
+				add = 12
+			}
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 6
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = -6
+			}
+			modifier = {
+				trigger = { NOT = { nd_ai_would_issue_ultimatum = { TARGET = scope:proliferating_country } } }
+				factor = 0
+			}
+		}
+	}
+
+	# Option A, where no crisis can be opened (no dispute over their bomb, a
+	# crisis already running, the cooldown, a pledge, no warheads to hand):
+	# the one-off public warning this option always was, under an honest
+	# name. It opens no crisis and stakes nothing on it (#430).
+	option = {
+		name = nuclear_weapon_events.18.opt_a_sabre
+		trigger = {
+			has_modifier = nuclear_power
+			NOT = {
+				AND = {
+					exists = scope:proliferating_country
+					nd_can_issue_proliferation_ultimatum = { TARGET = scope:proliferating_country }
+				}
+			}
+		}
 		highlighted_option = yes
 		custom_tooltip = {
 			text = NW_PROLIF_ULTIMATUM_TT
@@ -1021,15 +1282,48 @@ nuclear_weapon_events.18 = {
 	}
 
 	# Option D — Anyone: "Lobby for international non-proliferation."
+	# Through the United Nations when the Assembly can take it up (#430): the
+	# Non-Proliferation Treaty goes on the docket as an item offered to us
+	# first, through its own proposer event, un_events.14 — which reserves
+	# the floor and opens the vote, and whose inspections are then what slows
+	# threshold programmes. Otherwise — no UN, not a member, the treaty
+	# already in force, the floor taken, or an offer already made to us —
+	# bilateral pressure, as before.
+	#
+	# The offer is made the docket's way, so un_events.14's "leave it to
+	# another delegation" and "we will not limit our deterrent" options, which
+	# pass the item on (un_docket_offer_topic_next), work as they do for a
+	# docket item: un_docket_offer_topic with us as the first offeree. The
+	# offer count restarts at our offer (a new item: the docket's own item in
+	# hand, if any, loses no offers to ours), and we are marked offered for 60
+	# days, so a pass cannot send the item straight back to us. This is
+	# un_docket_send_offer's body without its one-day delay: fired at once,
+	# un_events.14 reserves the floor before anyone else answering the same
+	# alert can pick this option, and they lobby bilaterally instead of
+	# queueing an offer the reserved floor would silently drop.
+	# nuclear_npt_lobbied tells un_events.14 that we asked for it: an AI that
+	# did then tables the treaty rather than passing or refusing it.
 	option = {
 		name = nuclear_weapon_events.18.opt_d
 		default_option = yes
-		custom_tooltip = {
-			text = NW_PROLIF_LOBBY_TT
-			if = {
-				limit = { exists = scope:proliferating_country }
-				scope:proliferating_country = {
-					nw_prolif_progress_setback = { AMOUNT = 1 }
+		if = {
+			limit = { nuclear_program_can_table_npt = yes }
+			custom_tooltip = NW_PROLIF_LOBBY_UN_TT
+			hidden_effect = {
+				set_variable = { name = nuclear_npt_lobbied value = 1 days = 30 }
+				set_variable = { name = un_dkt_offered value = 1 days = 60 }
+				set_global_variable = { name = un_dkt_offers value = 1 }
+				trigger_event = { id = un_events.14 }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = NW_PROLIF_LOBBY_TT
+				if = {
+					limit = { exists = scope:proliferating_country }
+					scope:proliferating_country = {
+						nw_prolif_progress_setback = { AMOUNT = 1 }
+					}
 				}
 			}
 		}

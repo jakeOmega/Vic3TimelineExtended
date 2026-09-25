@@ -253,7 +253,7 @@
  amendment_military_necessity_clause_desc:0 "An [concept_amendment] carving out exceptions for 'military necessity' in humanitarian regulations, appeasing the armed forces at the cost of international reputation."
  amendment_minority_script_preservation_desc:0 "An [concept_amendment] requiring that minority writing systems be taught alongside the reformed national script in regions where they are traditionally used."
  amendment_national_champion_exemption_desc:0 "An [concept_amendment] exempting the nation's largest company from antitrust breakup, preserving a 'national champion' capable of competing internationally."
- amendment_no_first_strike_desc:0 "An [concept_amendment] formally committing the nation never to initiate the use of nuclear weapons, enhancing diplomatic standing."
+ amendment_no_first_strike_desc:0 "An [concept_amendment] formally committing the nation never to initiate the use of nuclear weapons, enhancing diplomatic standing. While it is in force, our nuclear doctrine is held at #v No First Use#!; abandoning that doctrine repudiates the pledge and strikes this amendment from our laws."
  amendment_official_bilingualism:0 "Official Bilingualism"
  amendment_official_bilingualism_desc:0 "An [concept_amendment] establishing the most widely spoken minority language as a co-official language alongside the national tongue, with all government services available in both."
  amendment_purist_modifier:0 "Unamended Bill"

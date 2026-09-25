@@ -1850,6 +1850,12 @@ un_events.14 = {
 		name = un_docket_option_pass
 		ai_chance = {
 			base = 3
+			# An AI that lobbied for the treaty (nuclear_weapon_events.18
+			# option d, which offered it this item) tables it.
+			modifier = {
+				trigger = { has_variable = nuclear_npt_lobbied }
+				factor = 0
+			}
 		}
 		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
@@ -1870,6 +1876,11 @@ un_events.14 = {
 			modifier = {
 				trigger = { is_at_war = yes }
 				add = 3
+			}
+			# As for passing: an AI that lobbied for the treaty does not refuse it.
+			modifier = {
+				trigger = { has_variable = nuclear_npt_lobbied }
+				factor = 0
 			}
 		}
 		add_modifier = {

@@ -1,7 +1,7 @@
 """The covert operation registry: every operation type in one table, pinned
 against every site that lists operation types by hand.
 
-Adding an operation type touches about fifteen hand-kept places — see
+Adding an operation type touches about fourteen hand-kept places — see
 docs/systems/mod_systems.md § Covert Warfare System, "Adding an operation
 type". OPS is the single list. Each test checks one site against it in both
 directions (no type missing, no stale extra), so a half-added type fails here,
@@ -33,9 +33,9 @@ LENS_ICONS = ROOT / "gfx/interface/icons/lens_toolbar_icons"
 #
 # The code is what iw_type_code / iw_burned_type_code / iw_last_exposed_type
 # carry. The marker is the country-scope modifier the operation leaves on its
-# target, which covert_warfare.2 keys on to tell the defender about a burn;
-# None for an operation that leaves nothing on its target, whose burn is keyed
-# on iw_last_exposed_type instead.
+# target; None for an operation that leaves nothing on its target. (Until #430
+# covert_warfare.2 keyed on the markers; it now reads covert_op_burn's
+# exposure record, which every type writes.)
 OPS = (
     ("election_interference", 0, "ideological", "moderate", "covert_election_interference"),
     ("financial_subversion", 1, "economic", "moderate", "covert_financial_subversion"),
@@ -200,17 +200,22 @@ class DetectionEventTests(unittest.TestCase):
                 )
 
     def test_defender_event_hears_every_type(self):
+        # covert_warfare.2 keys on the exposure record covert_op_burn writes
+        # for every code (test_after_burns_every_code_as_its_own_type), not on
+        # the per-type markers: those are applied only once an operation is
+        # established, so a burn during preparation never reached the defender
+        # (#430). No per-type line may creep back into the trigger.
         ev = _event(2)
-        trigger = ev[ev.index("trigger = {"): ev.index("immediate = {")]
-        self.assertEqual(
-            set(re.findall(r"has_modifier = (\w+)", trigger)),
-            {op[4] for op in OPS if op[4]},
-        )
-        for t, code, _, _, marker in OPS:
-            if marker is None:
-                with self.subTest(type=t):
-                    self.assertIn("has_variable = iw_last_exposed_type", trigger)
-                    self.assertIn("var:iw_last_exposed_type = %d" % code, trigger)
+        # The event's own trigger, not the text variants' (tab-indented once).
+        trigger = ev[ev.index("\n\ttrigger = {"): ev.index("\n\timmediate = {")]
+        self.assertIn("has_variable = iw_last_exposed_type", trigger)
+        self.assertNotRegex(trigger, r"has_modifier = covert_")
+        self.assertNotRegex(trigger, r"var:iw_last_exposed_type = \d")
+        burn = _top_level_block(_text(EFFECTS), "covert_op_burn = {")
+        self.assertIn("set_variable = { name = iw_last_exposed_type value = $CODE$ }", burn)
+        # ...and records the phase, which the event's text reads.
+        self.assertIn("name = iw_last_exposed_phase", burn)
+        self.assertIn("var:iw_last_exposed_phase = 1", ev)
 
     def test_markers_are_what_the_operation_leaves_on_its_target(self):
         block = _top_level_block(_text(EFFECTS), "covert_ops_apply_all_phase_effects = {")
