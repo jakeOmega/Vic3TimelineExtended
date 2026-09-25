@@ -68,6 +68,36 @@ types un_authority_widget_types
 		}
 	}
 
+	### A heading inside a section's panel, over one group of its lines, with a
+	### faint rule under it. Same shape as un_chamber_subheader in
+	### un_chamber_widget.gui (see there for why headings are GUI rows rather
+	### than script-built lines); declared here as well so neither widget
+	### depends on the other's file loading first. The panel's own spacing
+	### already separates the groups, so the margin is smaller.
+	type un_auth_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 6
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
 	### One row of the pillar table: the pillar, its value, and a short reading
 	### of what drives it. The long explanation (range, formula) is the row's
 	### tooltip. Same three-column shape as ch_breakdown_row in the cultural
@@ -173,6 +203,12 @@ flowcontainer = {
 			spacing = 2
 			visible = "[GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 
+			un_auth_subheader = {
+				blockoverride "subheader_margin" {}
+				blockoverride "subheader_text" {
+					text = "je_un_auth_sub_pillars"
+				}
+			}
 			un_auth_text = {
 				text = "je_un_auth_tbl_headline"
 			}
@@ -245,15 +281,38 @@ flowcontainer = {
 
 			# Redesign phase 2: the tier and its enforcement, the charter's
 			# ceiling, and the reform clock.
+			un_auth_subheader = {
+				blockoverride "subheader_text" {
+					text = "je_un_auth_sub_ladder"
+				}
+			}
 			un_auth_text = {
 				text = "[GetScriptedGui('un_authority_ladder_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 		}
 
+		# Who is championing or undermining the organisation, and which great
+		# powers stay outside it. From the founding, not the first monthly
+		# update: the list reads modifiers, not the pillar snapshots. Before
+		# the founding the builder prints nothing, so the heading waits too.
+		un_auth_subheader = {
+			visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_auth_sub_powers"
+			}
+		}
 		un_auth_text = {
 			text = "[GetScriptedGui('un_authority_powers_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
-		un_auth_text = {
+
+		# The ledger's display log: what each member did to the organisation,
+		# and what became of the Assembly's resolutions and missions.
+		un_auth_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_auth_sub_log"
+			}
+		}
+		un_auth_note_text = {
 			text = "je_un_auth_log_intro"
 		}
 		un_auth_text = {

@@ -458,8 +458,8 @@ nuclear_first_strike = { # Scope is target state
 					change_infamy = 25
 					# UN: a nuclear first strike is a world moment and a lasting
 					# blow to the order pillar, whoever strikes (un_authority_effects.txt).
-					un_authority_actor_shock = { AMOUNT = -3 REASON = 8 }
-					un_ledger_actor_entry_unweighted = { PILLAR = order POINTS = -4 REASON = 8 }
+					un_authority_actor_shock_on = { AMOUNT = -3 REASON = 8 SUBJECT = scope:target_state }
+					un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -4 REASON = 8 SUBJECT = scope:target_state }
 					# ...and a record the Assembly can hold against the striker
 					# (redesign phase 3, un_dossier_effects.txt).
 					un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_first_strike }
@@ -535,7 +535,7 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 					text = industrial_nuke_succeeds_desc
 					# UN: retaliation still erodes the order pillar, less than a
 					# first strike (un_authority_effects.txt).
-					un_ledger_actor_entry_unweighted = { PILLAR = order POINTS = -2 REASON = 10 }
+					un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -2 REASON = 10 SUBJECT = scope:target_state }
 					un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_retaliation }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
@@ -582,7 +582,7 @@ nuclear_response_response_strike = {  # Scope is target state
 				custom_tooltip = {
 					text = industrial_nuke_succeeds_desc
 					# UN: retaliation erodes the order pillar (un_authority_effects.txt).
-					un_ledger_actor_entry_unweighted = { PILLAR = order POINTS = -2 REASON = 10 }
+					un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -2 REASON = 10 SUBJECT = scope:target_state }
 					un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_retaliation }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
@@ -665,11 +665,13 @@ nuclear_tactical_strike = {
 
 	trigger_event = { id = nuclear_weapon_events.5 popup = yes }
 	owner = { save_scope_as = un_dkt_struck_country }
+	# The UN's record names the state struck.
+	save_scope_as = un_tactical_struck_state
 	scope:attacking_country = {
 		trigger_event = { id = nuclear_weapon_events.6 popup = yes }
 		# UN: battlefield nuclear use erodes the order pillar, whoever strikes
 		# (un_authority_effects.txt).
-		un_ledger_actor_entry_unweighted = { PILLAR = order POINTS = -1.5 REASON = 9 }
+		un_ledger_actor_entry_unweighted_on = { PILLAR = order POINTS = -1.5 REASON = 9 SUBJECT = scope:un_tactical_struck_state }
 		un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_tactical }
 		un_docket_note_grievance = { KIND = nuclear VICTIM = scope:un_dkt_struck_country }
 		un_regime_icc_note_crime = { CRIME = 1 }

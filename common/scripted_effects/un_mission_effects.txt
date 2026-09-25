@@ -40,7 +40,9 @@
 #                                             un_mission_*_state_modifier
 #   un_missions_dissolve                      a dissolution closes every mission
 #
-# REASON CODES: ledger 19 (a mission accomplished), 20 (a mission failed);
+# REASON CODES: ledger 21/22/23 (a peacekeeping / aid / stabilisation mission
+# accomplished), 24/25/26 (one failed), each naming the mission's state —
+# 19 and 20, the same without the kind or the state, survive only in saves;
 # standing 34 (a mission we contributed to accomplished its work).
 # ============================================================================
 
@@ -391,7 +393,7 @@ un_mission_close = {
 # for every contributor, and word to all of them.
 # Scope: mission container
 un_mission_outcome_succeeded = {
-	un_ledger_entry = { PILLAR = delivery POINTS = un_mission_success_delivery REASON = 19 }
+	un_mission_ledger_outcome = { PILLAR = delivery POINTS = un_mission_success_delivery PEACEKEEPING = 21 AID = 22 STABILISATION = 23 }
 	var:un_msn_host ?= {
 		save_scope_as = un_msn_host_done
 		post_notification = un_mission_succeeded_notice
@@ -413,7 +415,7 @@ un_mission_outcome_succeeded = {
 # Failure: the Assembly promised and did not deliver.
 # Scope: mission container
 un_mission_outcome_failed = {
-	un_ledger_entry = { PILLAR = credibility POINTS = un_mission_failure_credibility REASON = 20 }
+	un_mission_ledger_outcome = { PILLAR = credibility POINTS = un_mission_failure_credibility PEACEKEEPING = 24 AID = 25 STABILISATION = 26 }
 	var:un_msn_host ?= { post_notification = un_mission_failed_notice }
 	if = {
 		limit = { has_variable_list = un_msn_contributors }
@@ -421,6 +423,25 @@ un_mission_outcome_failed = {
 			variable = un_msn_contributors
 			post_notification = un_mission_failed_notice
 		}
+	}
+}
+
+# The ledger entry for an outcome: one reason code per kind of mission, and
+# the mission's state as its subject, so the log reads "the peacekeeping
+# mission in Attica" and the state can be hovered.
+# Parameters: $PILLAR$, $POINTS$, and the code for each kind
+# Scope: mission container
+un_mission_ledger_outcome = {
+	if = {
+		limit = { has_tag = un_msn_peacekeeping }
+		un_ledger_entry_on = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $PEACEKEEPING$ SUBJECT = var:un_msn_state }
+	}
+	else_if = {
+		limit = { has_tag = un_msn_aid }
+		un_ledger_entry_on = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $AID$ SUBJECT = var:un_msn_state }
+	}
+	else = {
+		un_ledger_entry_on = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $STABILISATION$ SUBJECT = var:un_msn_state }
 	}
 }
 
