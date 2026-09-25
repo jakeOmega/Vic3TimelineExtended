@@ -12,6 +12,8 @@ import unittest
 
 from loc_render_audit import (
     audit,
+    check_quoted_expansion,
+    check_quoted_name,
     check_value,
     render_report,
     _parse_loc_line,
@@ -53,6 +55,68 @@ class CheckValueTests(unittest.TestCase):
         # such values must pass cleanly now.
         self.assertEqual(check_value("#R unclosed red text"), [])
         self.assertEqual(check_value("trailing reset only #!"), [])
+
+
+class CheckQuotedExpansionTests(unittest.TestCase):
+    """The UN button defect: `[Concept('…','$un_peacekeeping_contributor_modifier$')]`
+    expanded a concept link into the quoted argument and broke the parse."""
+
+    LOC = {
+        "linked_name": "[concept_un_peacekeeping] Contributor",
+        "apostrophe_name": "Women's Integration",
+        "plain_name": "Arms Control Participant",
+    }
+
+    def _issues(self, value):
+        return [i for i, _d in check_quoted_expansion(value, self.LOC)]
+
+    def test_bracket_in_expansion_flagged(self):
+        self.assertEqual(
+            self._issues("Applies [Concept('concept_x','$linked_name$')]"),
+            ["quoted_arg_expansion"])
+
+    def test_apostrophe_in_expansion_flagged(self):
+        self.assertEqual(
+            self._issues("[Concept('concept_x', '$apostrophe_name$')]"),
+            ["quoted_arg_expansion"])
+
+    def test_plain_expansion_not_flagged(self):
+        self.assertEqual(self._issues("[Concept('concept_x','$plain_name$')]"), [])
+
+    def test_top_level_reference_not_flagged(self):
+        # Outside a data expression the expansion renders normally.
+        self.assertEqual(self._issues("Applies $linked_name$ (+5%)"), [])
+
+    def test_unknown_reference_not_flagged(self):
+        # Runtime parameters ($VALUE$ etc.) are not loc keys.
+        self.assertEqual(self._issues("[Concept('concept_x','$VALUE$')]"), [])
+
+    def test_prose_apostrophes_do_not_pair_into_arguments(self):
+        value = "It's [Concept('concept_x','$plain_name$')] and it's $linked_name$"
+        self.assertEqual(self._issues(value), [])
+
+
+class CheckQuotedNameTests(unittest.TestCase):
+    """The "Women's Integration" defect: vanilla's add-modifier tooltip pastes
+    the modifier name into `GetRawTextTooltipTag('…')`."""
+
+    def _flagged(self, value, loc=None):
+        return bool(check_quoted_name(value, loc or {}))
+
+    def test_straight_apostrophe_flagged(self):
+        self.assertTrue(self._flagged("Women's Integration"))
+
+    def test_typographic_apostrophe_not_flagged(self):
+        self.assertFalse(self._flagged("Women\u2019s Integration"))
+
+    def test_quotes_inside_data_expressions_not_flagged(self):
+        self.assertFalse(self._flagged(
+            "[Concept('concept_power_bloc_leader', 'Bloc Leader')] Forbade Union"))
+        self.assertFalse(self._flagged(
+            "Enables [GetTechnology('x').GetName] principles"))
+
+    def test_apostrophe_reached_through_reference_flagged(self):
+        self.assertTrue(self._flagged("$base$ Bonus", {"base": "Victor's Peace"}))
 
 
 class ParseLineTests(unittest.TestCase):
@@ -114,6 +178,42 @@ class EndToEndTests(unittest.TestCase):
             self.assertEqual(len(exemp), 1)
             self.assertEqual(exemp[0].loc_key, "ok_key")
             self.assertEqual(exemp[0].exemption["date"], "2026-05-21")
+
+    def test_quoted_name_only_checks_modifier_and_modifier_type_names(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(
+                td,
+                'l_english:\n'
+                ' my_static_mod:0 "Women\'s Integration"\n'
+                ' my_mod_type_add:0 "Soldiers\' [concept_x]"\n'
+                ' my_reviewed_mod:0 "Victor\'s Peace" # REVIEWED 2026-09-25: demo\n'
+                ' my_event_title:0 "The People\'s Choice"\n',
+            )
+            for rel, body in (
+                ("common/static_modifiers/m.txt",
+                 "my_static_mod = {\n}\nmy_reviewed_mod = {\n}\n"),
+                ("common/modifier_type_definitions/t.txt", "my_mod_type_add = {\n}\n"),
+            ):
+                os.makedirs(os.path.dirname(os.path.join(td, rel)), exist_ok=True)
+                with open(os.path.join(td, rel), "w", encoding="utf-8") as fh:
+                    fh.write(body)
+            result = audit(mod_path=td)
+        got = sorted((f.loc_key, f.issue, bool(f.exemption)) for f in result.flags)
+        self.assertEqual(got, [
+            ("my_mod_type_add", "quoted_name_apostrophe", False),
+            ("my_reviewed_mod", "quoted_name_apostrophe", True),
+            ("my_static_mod", "quoted_name_apostrophe", False),
+        ])
+
+    def test_quoted_expansion_resolves_across_files(self):
+        with tempfile.TemporaryDirectory() as td:
+            self._write(td, 'l_english:\n uses:0 "[Concept(\'concept_x\',\'$linked$\')]"\n')
+            with open(os.path.join(td, "localization", "english", "other_l_english.yml"),
+                      "w", encoding="utf-8") as fh:
+                fh.write('l_english:\n linked:0 "[concept_y] Contributor"\n')
+            result = audit(mod_path=td)
+        self.assertEqual([(f.loc_key, f.issue) for f in result.flags],
+                         [("uses", "quoted_arg_expansion")])
 
     def test_report_renders(self):
         with tempfile.TemporaryDirectory() as td:
