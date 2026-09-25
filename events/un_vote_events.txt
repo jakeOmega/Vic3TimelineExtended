@@ -260,9 +260,14 @@ un_vote.1 = {
 	# Option A: Vote in favor
 	option = {
 		# Target-perspective override: voting "in favor" of a condemnation /
-		# sanctions resolution against ROOT means accepting the verdict.
+		# sanctions resolution against ROOT means accepting the verdict. Only
+		# on a resolution that accuses its target: a refugee resolution names
+		# the country its refugees flee, and voting for it accepts nothing.
 		name = {
-			trigger = { scope:un_vote_target ?= this }
+			trigger = {
+				scope:un_vote_target ?= this
+				scope:un_resolution ?= { un_resolution_accuses_target = yes }
+			}
 			text = un_vote.1.a_target
 		}
 		name = {
@@ -292,8 +297,12 @@ un_vote.1 = {
 	option = {
 		# Target-perspective override: voting "against" a condemnation /
 		# sanctions resolution targeting ROOT means rejecting the charges.
+		# Accusing topics only, as option A.
 		name = {
-			trigger = { scope:un_vote_target ?= this }
+			trigger = {
+				scope:un_vote_target ?= this
+				scope:un_resolution ?= { un_resolution_accuses_target = yes }
+			}
 			text = un_vote.1.b_target
 		}
 		name = {
@@ -1006,6 +1015,24 @@ un_vote.2 = {
 					limit = { NOT = { has_global_variable = un_agency_unhcr } }
 					set_global_variable = un_agency_unhcr
 				}
+				# The country the resolution named (un_events.18's refugee
+				# source) is told that we have secured a resettlement
+				# programme for its displaced (un_events.103). Fired here, on
+				# passage, because the programme exists only once the
+				# resolution carries. The source may have been annexed during
+				# the year the vote took.
+				if = {
+					limit = {
+						exists = scope:un_vote_target
+						NOT = { scope:un_vote_target ?= this }
+					}
+					hidden_effect = {
+						save_scope_as = resettlement_host
+						scope:un_vote_target = {
+							trigger_event = { id = un_events.103 days = 14 }
+						}
+					}
+				}
 			}
 
 			# ---- Space: UNOOSA established ----
@@ -1523,9 +1550,12 @@ un_vote.3 = {
 	}
 
 	# Option A: Catch-all "acknowledge" — vote failed, you voted yes, or you
-	# joined the UN after vote.1 fired and never had a chance to vote. In the
-	# last case the country still gets bound by the passed resolution (default
-	# acceptance) since the apply blocks below already gate on the passed tag.
+	# cast no ballot (joined the UN after vote.1 fired, or lost the vote under
+	# Article 19). In the last case the country is still bound by a passed
+	# convention (default acceptance), since the apply blocks below gate on
+	# the passed tag; but what only a ballot commits a member to — a great
+	# power's anti-colonial stance, a pledge of peacekeepers or aid — is
+	# gated inside those effects on having voted (un_lobby_has_voted).
 	option = {
 		name = un_vote.3.a
 		default_option = yes
