@@ -1400,6 +1400,17 @@ flowcontainer = {
 			blockoverride "bar_tooltip" {
 				tooltip = "te_hist_tt_ch_share"
 			}
+			# The shared store also holds banking events. Show only cultural
+			# programme changes here, including those already saved before this fix.
+			blockoverride "marker_pips" {
+				icon = {
+					visible = "[Or( Or( Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_outreach'), ScriptContainer.HasVariable('te_hist_mk_ch_off_outreach') ), Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_institutes'), ScriptContainer.HasVariable('te_hist_mk_ch_off_institutes') ) ), Or( Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_media'), ScriptContainer.HasVariable('te_hist_mk_ch_off_media') ), Or( ScriptContainer.HasVariable('te_hist_mk_ch_on_protectionism'), ScriptContainer.HasVariable('te_hist_mk_ch_off_protectionism') ) ) )]"
+					parentanchor = hcenter
+					alwaystransparent = yes
+					size = { 9 9 }
+					texture = "gfx/interface/icons/generic_icons/information.dds"
+				}
+			}
 			blockoverride "bar_body" {
 				te_history_bar_unsigned = {
 					visible = "[ScriptContainer.HasVariable( 'te_hist_v_ch_share' )]"
