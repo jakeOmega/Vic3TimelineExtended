@@ -53,8 +53,9 @@ from a threat.
 - **No `save_scope_value_as`.** It is not in this engine's `effects.log`, so a number cannot ride along a
   `trigger_event` as a scope value. Events that must know "which outcome" read a record on the country, guarded by a
   token (the `nd_crisis_event_token` pattern).
-- **IG-scope variables have no vanilla precedent.** The data types exist for the display (`Country.AccessActiveInterestGroups`,
-  `InterestGroup.MakeScope`), and `set_variable` is documented for any scope. §4 lists the fallback.
+- **IG-scope variables work.** Vanilla sets them (`00_communism.txt`: `ig:ig_trade_unions ?= { set_variable =
+  communist_ig_var }`), and the display has the data types it needs (`Country.AccessActiveInterestGroups`,
+  `InterestGroup.MakeScope`).
 - **Loc style.** `#b`/`#v`/`#R`/`#G` formatting, never `[b]`; explanatory, causal wording
   ("Canada's war support falls by 35", not "concession: war support"); new key families need `organize_loc.py` rules if
   their base has 4+ tokens.
@@ -70,9 +71,15 @@ Two new scripted triggers, issuer scope, `$TARGET$` = the country threatened. Th
 
 | Level | `nd_threat_backed = { TARGET }` / `nd_threat_uncertain = { TARGET }` |
 |---|---|
-| **Backed** | At war with the target: our doctrine permits a strike now (`nd_doctrine_permits_strike`), **or** our doctrine is Compellence or higher (a defied public ultimatum, or a crisis past the warning stage, licenses it). Not at war: Compellence or higher. **And** the war-law gate permits a strike (§1.4). |
+| **Backed** | At war with the target: our doctrine permits a strike now (`nd_doctrine_permits_strike`), **or** our doctrine is Compellence or higher (a defied public ultimatum, or a crisis past the warning stage, licenses it). Not at war: Compellence or higher. |
 | **Uncertain** | Not at war, and either Flexible first use, or Existential deterrence when the dispute protects a country we guarantee (dispute 3) or the target's war goals in the play fall on our incorporated states (`nd_core_threatened_by`). |
-| **Bluff** | Anything else. |
+| **Bluff** | Anything else — **and any case where the war-law gate (§1.4) forbids the strike**, whatever the doctrine. |
+
+**The war-law gate, in and out of war.** At war it is exactly `nuke.txt`'s strategic gate (§1.4). Not at war, the
+law must permit a strategic strike, or the play's war goals against us must be annexation-type (the
+`nd_enemy_threatens_existence` goal list). That trigger is written with `war_side_has_war_goal_of_type_against`;
+planning verifies whether it evaluates on a play that is not yet a war, and if not, adds a play-scope variant over the
+same goal list. The "we were struck" exception carries over through `nd_was_struck_by`.
 
 The level is evaluated live, so a doctrine change or a war turning against us moves it the same week.
 
@@ -114,13 +121,15 @@ strike through a crisis.
 
 Fix: move the strategic gate into `nd_war_law_permits_strategic_strike = { ENEMY }` (and the tactical one into
 `nd_war_law_permits_tactical_strike`) in `nuclear_deterrence_triggers.txt`, called from both `nuke.txt` actions and all
-three crisis options, with a `custom_tooltip`. `nd_threat_backed` requires the strategic gate.
+three crisis options, with a `custom_tooltip`. Both `nd_threat_backed` and `nd_threat_uncertain` require it (§1.1: a strike the law forbids makes any threat a bluff).
 
 ### 1.5 The AI
 
 - `nd_ai_would_issue_ultimatum` adds `nd_threat_backed = { TARGET = $TARGET$ }`: the AI never makes a public bluff.
 - `nd_ai_would_warn`'s coercion branch (a hawkish doctrine or regime against a target that cannot answer) adds
   `OR = { nd_threat_backed  ruler_is_aggressive }`: private bluffs only under an aggressive ruler.
+- The proliferation ultimatum (`nuclear_weapon_events.18` option a, #430) already zeroes its AI weight unless
+  `nd_ai_would_issue_ultimatum` holds, so the first change covers it.
 - The target's AI needs no change: it reads `nd_yield_pressure`, which now carries the bluff.
 
 ---
@@ -190,8 +199,11 @@ nothing. After this change:
   pending record.
 - The description adds what the other side gave up: "[target]'s war support fell by 35."
 - **Two closes before one click.** If `nd_crisis_close` finds a pending record still on a party, it applies that side's
-  consequences first (`nd_crisis_flush_pending`) and then writes the new one. The stale `.6` fails its token check and
-  is withdrawn (the `nd_crisis_event_valid` pattern). Nothing is lost or applied twice.
+  consequences first (`nd_crisis_flush_pending`) and then writes the new one. A popup that has already fired is not
+  withdrawn — Vic3 evaluates an event's `trigger` only when it fires — so the stale `.6`'s option re-checks the token,
+  as `nd_crisis_option` does, and shows `nd_tt_crisis_stale` and does nothing. Its text still narrates the old outcome;
+  that is acceptable for a case that needs a second crisis to open and close before one click. Nothing is lost or
+  applied twice.
 - **The concession itself is not deferred.** The target's war-support loss, the play resolved for the other side, the
   programme freeze or the readiness lock still happen inside `nd_crisis_act_yield`, at the moment of yielding; only the
   reputational consequences (credibility, modifiers, IG and lobby reactions, the cooldown) move into `.6`.
@@ -236,6 +248,8 @@ A visible move that is blocked stays greyed with its failing clause, as now.
   talks are open", or "none before the Confrontation stage".
 - **Stakes** — our credibility if they concede, if we back down, if it lapses (issuer); the target's version shows what
   standing firm and conceding do to ours.
+- **Role-aware labels.** Every row is worded from our side: "Pressure on the target" becomes "Pressure on us" when we
+  are the target, and its tooltip explains the figure as the one an AI government in our place would weigh.
 
 ### 3.3 Tooltips become breakdowns
 
@@ -266,6 +280,10 @@ Replaces `nd_ig_class_*` in `nuclear_deterrence_triggers.txt`. Stances are read 
 | **Restraint** | any other IG whose stance on `law_limited_war` beats its stance on `law_total_war` and is at least approve |
 | none | everyone else (a tie, or neither approved) — no nuclear opinion |
 
+`law_stance` compares one law at a time, so "beats" is an enumeration: militarist-full is `law_total_war >=
+strongly_approve` and `law_limited_war < strongly_approve`; militarist-mild is `law_total_war = approve` and
+`law_limited_war < approve`; restraint mirrors it.
+
 **Strength:** approve → mild (the IG's total is capped at ±1); strongly approve → full (±2).
 
 **Lean:** the Armed Forces and Industrialists compute a militarist or restraint lean by the same test. The lean's
@@ -280,7 +298,7 @@ liberal, market liberal, pacifist, humanitarian, anarchist, the pacifist religio
 
 Existing terms, regrouped per IG (§0.2 of the nuclear design):
 
-| Class | Doctrine terms (need six months' tenure) | Readiness / authority / strain terms |
+| Class | Doctrine terms | Readiness / authority / strain terms |
 |---|---|---|
 | Militarist | NFU −2, Existential −1, Compellence +1, Warfighting +2 | Routine −1, High Alert +1 |
 | Restraint | NFU +2, Existential +1, Flexible −1, Compellence or Warfighting −2 | High Alert −1, Launch on warning −1 |
@@ -288,6 +306,11 @@ Existing terms, regrouped per IG (§0.2 of the nuclear design):
 | Business | none — the lean's doctrine terms under a lean | High Alert held 3+ months −1, a crisis at Confrontation or beyond −1 |
 
 The total is capped at ±2 (±1 for a mild class) and maps onto the existing `nd_posture_approval_*` bands.
+
+**Tenure, unchanged from today.** Every militarist, restraint and professional term — doctrine *and* readiness,
+authority and strain — waits until the doctrine has been held six months (`nd_stance_tenure_months`), so a posture is
+judged on months, not a toggle (§0.2 of the nuclear design). The business terms do not wait, as now; a lean's doctrine
+terms do.
 
 ### 4.3 One writer
 
@@ -297,9 +320,9 @@ The total is capped at ±2 (±1 for a mild class) and maps onto the existing `nd
 `nd_ig_term_business`, and `nd_ig_stance` (the capped total); then applies the band from `nd_ig_stance` as today. An IG
 with no class has its variables removed and its band cleared. The four country-level `nd_stance_*` variables go.
 
-**Fallback if IG-scope variables fail in game:** a variable map on the country keyed by the IG
-(`add_to_variable_map`), read by the display handlers. The class triggers and the band application do not depend on the
-storage.
+**Fallback if IG-scope variables misbehave in game:** per-IG-type country variables (`nd_ig_stance_ig_armed_forces`,
+…; the IG types are a short, fixed list), read by a custom-loc branch per type. The class triggers and the band
+application do not depend on the storage.
 
 ### 4.4 Display
 
@@ -312,7 +335,8 @@ storage.
 - **Approval** — `nd_ig_stance`, signed and coloured.
 - **Tooltip** — each non-zero term with its reason ("Doctrine: Existential Deterrence −1"), the cap if it bit, and
   "the same figure appears in this group's approval breakdown".
-- **Footer** — "Reviewed monthly." Plus, while doctrine tenure is under six months, "Doctrine opinions start in N months."
+- **Footer** — "Reviewed monthly." Plus, while doctrine tenure is under six months, "Opinions of our posture start in
+  N months; the Industrialists' business concerns count already."
 
 ### 4.5 Knock-on
 
