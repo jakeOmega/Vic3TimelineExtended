@@ -131,7 +131,7 @@ nuclear_incident.1 = {
 		trigger = { nd_is_armed = yes }
 		highlighted_option = yes
 		set_variable = { name = nd_warning_launched value = 1 }
-		nd_launch_or_intercept = { VICTIM = scope:nd_warning_suspect NARRATE = yes }
+		nd_launch_or_intercept = { VICTIM = scope:nd_warning_suspect NARRATE = yes KIND = warning }
 		trigger_event = { id = nuclear_incident.3 days = 10 }
 		ai_chance = {
 			base = 0
@@ -929,7 +929,7 @@ nuclear_incident.20 = {
 				exists = scope:nd_ic_enemy
 			}
 			set_variable = { name = nd_launch_tactical value = 1 }
-			nd_launch_or_intercept = { VICTIM = scope:nd_ic_enemy NARRATE = no }
+			nd_launch_or_intercept = { VICTIM = scope:nd_ic_enemy NARRATE = no KIND = commander }
 		}
 		else = {
 			set_variable = { name = nd_launch_held value = 1 }

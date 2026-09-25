@@ -48,7 +48,15 @@
 nd_init_posture = {
 	if = {
 		limit = { NOT = { has_variable = nd_doctrine } }
-		set_variable = { name = nd_doctrine value = 2 }
+		# An arsenal built while the No-First-Strike Pledge is law starts
+		# under it (#430); otherwise existential deterrence.
+		if = {
+			limit = { nd_nfu_amendment_in_force = yes }
+			set_variable = { name = nd_doctrine value = 1 }
+		}
+		else = {
+			set_variable = { name = nd_doctrine value = 2 }
+		}
 		# Tenure starts satisfied, so the first choice is free.
 		set_variable = { name = nd_doctrine_months value = nd_doctrine_tenure_months }
 		# First initialisation for a human: say that upkeep has started (§11).
@@ -364,6 +372,63 @@ nd_weekly_update = {
 		nd_init_posture = yes
 		nd_apply_posture_modifiers = yes
 	}
+	# ---- the law binds the doctrine (#430) -----------------------------------
+	# While the No-First-Strike Pledge amendment is in force, our doctrine is
+	# no first use: the one writer for every way the amendment can come into
+	# force — extra_law_events.32's pledge, an interest group sponsoring it in
+	# the enactment negotiation, a save from before the two were tied — and
+	# the law's force outranks the doctrine tenure. Moving to no first use is
+	# never a repudiation. Leaving it strikes the amendment (nd_set_doctrine),
+	# so this never pulls a country back to a doctrine it has repudiated.
+	#
+	# The law made the move, not the government, so it does not start the
+	# doctrine clock: nd_doctrine_months is put back as it was (tenure
+	# satisfied if it was missing). The two-year lock (nd_can_set_doctrine)
+	# and the six months before the interest groups judge a doctrine
+	# (nd_stance_*_value) both run on from the government's own last change —
+	# a country that repeals the amendment is not then held at no first use
+	# for two years. A human is told (nd_doctrine_bound_by_law).
+	#
+	# nd_nfu_amendment_repudiated (nd_strike_nfu_amendment) comes first: a
+	# repudiation made while the amendment was on the law being enacted. If
+	# the removal did not take there and the law has since passed with it, the
+	# amendment is struck from the passed law now, instead of binding us to a
+	# pledge we have paid to break. Once the amendment is not on file at all,
+	# the marker has done its job.
+	if = {
+		limit = { has_variable = nd_nfu_amendment_repudiated }
+		if = {
+			limit = { nd_nfu_amendment_in_force = yes }
+			remove_variable = nd_nfu_amendment_repudiated
+			nd_strike_nfu_amendment = yes
+		}
+		else_if = {
+			limit = { nd_nfu_amendment_on_file = no }
+			remove_variable = nd_nfu_amendment_repudiated
+		}
+	}
+	else_if = {
+		limit = {
+			nd_is_armed = yes
+			nd_is_initialized = yes
+			nd_doctrine_nfu = no
+			nd_nfu_amendment_in_force = yes
+		}
+		if = {
+			limit = { has_variable = nd_doctrine_months }
+			set_variable = { name = nd_doctrine_months_before_law value = var:nd_doctrine_months }
+		}
+		else = {
+			set_variable = { name = nd_doctrine_months_before_law value = nd_doctrine_tenure_months }
+		}
+		nd_set_doctrine_1 = yes
+		set_variable = { name = nd_doctrine_months value = var:nd_doctrine_months_before_law }
+		remove_variable = nd_doctrine_months_before_law
+		if = {
+			limit = { is_ai = no }
+			post_notification = nd_doctrine_bound_by_law
+		}
+	}
 	# ---- readiness transition: one step every nd_readiness_step_weeks ------
 	if = {
 		limit = {
@@ -544,6 +609,11 @@ nd_set_doctrine = {
 			nd_doctrine_nfu = yes
 		}
 		nd_break_pledge_effects = { CREDIBILITY = 20 INFAMY = 10 }
+		# ...and a pledge written into our laws is struck from them (#430).
+		if = {
+			limit = { nd_nfu_amendment_on_file = yes }
+			nd_strike_nfu_amendment = yes
+		}
 	}
 	custom_tooltip = {
 		text = nd_tt_doctrine_adopted_$D$
@@ -640,6 +710,45 @@ nd_break_pledge_effects = {
 			name = ig_approval_negative_modifier
 			days = normal_modifier_time
 			is_decaying = yes
+		}
+	}
+}
+
+# Strike the No-First-Strike Pledge amendment from the law it is on — the law
+# in force and the law we are enacting alike, so a repudiation during the
+# enactment is not undone when the law passes. Called from nd_set_doctrine,
+# when leaving no first use repudiates it (#430), and from nd_weekly_update's
+# fallback for a removal from the enacting law that did not take. The
+# vanilla removal shape (remove_electoral_fraud_effect,
+# 00_victoria_ip4_scripted_effects.txt). No on_deactivate hangs off the
+# amendment, so nothing loops back into the doctrine.
+nd_strike_nfu_amendment = {
+	custom_tooltip = nd_tt_nfu_amendment_struck
+	hidden_effect = {
+		# remove_amendment on a law still being enacted has no vanilla
+		# precedent. Should it not take, the law would pass with the
+		# amendment and the weekly binding would pull us back to no first use
+		# for free, after we had paid for the repudiation; this marker makes
+		# nd_weekly_update strike it from the passed law instead.
+		if = {
+			limit = { currently_enacting_law ?= { has_amendment = amendment_type:amendment_no_first_strike } }
+			set_variable = nd_nfu_amendment_repudiated
+		}
+		every_active_law = {
+			limit = { has_amendment = amendment_type:amendment_no_first_strike }
+			every_scope_amendment = {
+				limit = { type = amendment_type:amendment_no_first_strike }
+				remove_amendment = yes
+			}
+		}
+		currently_enacting_law ?= {
+			if = {
+				limit = { has_amendment = amendment_type:amendment_no_first_strike }
+				every_scope_amendment = {
+					limit = { type = amendment_type:amendment_no_first_strike }
+					remove_amendment = yes
+				}
+			}
 		}
 	}
 }
@@ -741,8 +850,14 @@ nd_ai_review_posture = {
 	nd_init_posture = yes
 	save_scope_as = nd_ai_self
 	# ---- doctrine -----------------------------------------------------------
+	# Not while the No-First-Strike Pledge is on our laws (#430): the AI never
+	# repeals it (ai_will_revoke = no), and leaving No First Use would
+	# repudiate it — a cost the review's lottery should not pay by chance.
 	if = {
-		limit = { var:nd_doctrine_months >= nd_doctrine_tenure_months }
+		limit = {
+			var:nd_doctrine_months >= nd_doctrine_tenure_months
+			nd_nfu_amendment_on_file = no
+		}
 		random_list = {
 			# Keep what we have.
 			60 = { }
@@ -1136,7 +1251,7 @@ nd_start_unconfirmed_warning = {
 			}
 			else = {
 				set_variable = { name = nd_warning_launched value = 1 }
-				nd_launch_or_intercept = { VICTIM = scope:nd_warning_suspect NARRATE = yes }
+				nd_launch_or_intercept = { VICTIM = scope:nd_warning_suspect NARRATE = yes KIND = warning }
 				trigger_event = { id = nuclear_incident.3 days = 10 }
 			}
 		}
@@ -1345,10 +1460,23 @@ nd_record_nuclear_use = {
 # (1 struck, 2 intercepted) for the narrative event, which it fires when
 # NARRATE = yes (the Isolated Commander narrates its own). Country scope = the
 # launching country.
+# KIND = warning (a launch on an early warning nobody had confirmed: the
+# Unconfirmed Warning chain) | commander (a unit cut off from the capital
+# firing on its own authority: nuclear_incident.20). It is saved as the scope
+# nd_incident_launch_<KIND> on the launcher BEFORE the dispatch, so the strike
+# events the dispatch fires on the attacker — nuclear_weapon_events.2, .6 and
+# .17 — inherit it and swap their "our retribution" text for what actually
+# happened (#430). A saved scope rather than a variable: it lives exactly as
+# long as the event chain it was saved in, so it cannot outlast the popups or
+# leak into a deliberate launch from a later chain, and nothing has to clear
+# it. Within the chain it rides on through the victim's retaliation event to
+# ours (.1 → .11); .11's options mark a deliberate answer with
+# scope:nd_deliberate_response, which .2's variants exclude.
 nd_launch_or_intercept = {
 	custom_tooltip = nd_tt_launch_or_intercept
 	hidden_effect = {
 		save_scope_as = nd_launcher
+		save_scope_as = nd_incident_launch_$KIND$
 		if = {
 			limit = {
 				nd_is_armed = yes
