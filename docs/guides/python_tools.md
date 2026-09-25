@@ -317,14 +317,18 @@ To start manually (use the venv Python so the post-load generators resolve their
 ```
 Loads in ~30 seconds (measured in a cloud container; ~60–110 s before the parser went linear-time in 2026-09), then listens on `http://127.0.0.1:8950`.
 
-**Reload-checking a worktree branch without touching the main checkout.** `mod_path` comes from the imported module's own location and the PID file lives in that checkout, so a second server started *from a worktree* on another port parses and regenerates that worktree only. `PORT` is a module constant with no CLI flag, so set it before `main()`:
+**Reload-checking a worktree branch without touching the main checkout.** `mod_path` comes from the imported module's own location and the PID file lives in that checkout, so a second server started *from a worktree* on another port parses, regenerates and audits that worktree instead of the main one. `PORT` is a module constant with no CLI flag, so set it before `main()`. `main()` blocks in `serve_forever()`, so start it in its own terminal or as a background task (an agent: `run_in_background`, not `&`):
 ```bash
 cd <worktree> && cp <main checkout>/paths.local.json .   # gitignored; the worktree has none
-<main checkout>/.venv/bin/python -c "import sys; sys.argv=['mod_state_server.py']; import mod_state_server as m; m.PORT=8951; m.main()"
-curl -X POST http://127.0.0.1:8951/reload                 # read `warnings` as usual
-kill $(cat mod_state_server.pid) && git checkout -- docs/engine/   # the audits rewrote their reports
+VIC3_SKIP_DIGESTS_FETCH=1 <main checkout>/.venv/bin/python -c "import mod_state_server as m; m.PORT=8951; m.main()"
 ```
-Stop it by its PID file, not `pkill -f "m.PORT=8951"`: that pattern also matches the shell running the `pkill`, which kills your own command. Used to reload-check each branch of the #428–#430 wave (#441–#444) while the main server kept serving `main`.
+Then, from another shell in the worktree:
+```bash
+curl -X POST http://127.0.0.1:8951/reload      # read `warnings` and `generators_wrote_files` as usual
+git status --short                             # see below
+kill $(cat mod_state_server.pid)
+```
+Startup and the reload both run the full post-load chain against the worktree, regenerators included; that is the point, since it shows the churn the branch would produce on the next reload of `main`. Sort `git status` afterwards: `docs/engine/*` is audit-report churn (`git checkout -- docs/engine/`). Anything under `common/` or `localization/` is regeneration churn: commit it if the branch caused it (e.g. `organize_loc` placing new keys, `bom_normalizer` restoring a BOM), and discard it if it is vanilla-version drift (see `/status` `versions`). `VIC3_SKIP_DIGESTS_FETCH=1` keeps this throwaway server off the Modding-Digests clone, which it would otherwise fetch and fast-forward alongside the main server. Stop it by its PID file, not `pkill -f "m.PORT=8951"`: that pattern also matches the shell running the `pkill`, which kills your own command. Used to reload-check each branch of the #428–#430 wave (#441–#444) while the main server kept serving `main`.
 
 ### Vanilla data source: `vanilla_parsed/` or the game files
 
