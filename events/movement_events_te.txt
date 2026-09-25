@@ -917,10 +917,10 @@ movement_events_te.100 = {
 			# at 0 it came through the law alone: nobody was imprisoned or exiled.
 			triggered_desc = {
 				trigger = {
+					# The default text is about suppression (leaders imprisoned,
+					# exiled); without any suppression the movement faded instead.
 					has_variable = cr_suppression_months
-					has_variable = cr_segregationist_months
 					var:cr_suppression_months = 0
-					var:cr_segregationist_months = 0
 				}
 				desc = movement_events_te.100.desc_faded
 			}
