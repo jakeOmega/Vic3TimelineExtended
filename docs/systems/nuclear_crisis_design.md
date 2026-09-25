@@ -73,9 +73,9 @@ Domestic stance (§7) is refreshed in one place, `nd_refresh_domestic_stance`. I
 - **Militarist**: any other group whose stance on Total War beats its stance on Limited War and is at least approving. It wants compellence or warfighting and high alert.
 - **Restraint**: any other group whose stance on Limited War beats Total War. It rewards no first use and punishes compellence, warfighting, high alert and launch on warning.
 - Any other group has no view. Strongly approving makes a full view (±2), approving a mild one (±1).
-- **Leans.** The Armed Forces and the Industrialists keep their own concerns, but a militarist or restraint stance of their own replaces (officers) or adds (business) the doctrine terms of that class — so a fascist-led army wants compellence.
+- **Leans.** The Armed Forces and the Industrialists keep their own concerns, but a militarist or restraint stance of their **leader** replaces (officers) or adds (business) the doctrine terms of that class — so a jingoist- or fascist-led army wants compellence, and a pacifist-led one restraint. The lean reads the leader, not the group, because the Armed Forces' core ideology (patriotic) strongly approves Total War: a group-stance lean would make every army hawkish and the officers' own view would never apply.
 
-`nd_ig_store_opinion` writes each group's class, lean, strength, terms and capped total on the group (`nd_ig_*`), the band is read from that total, and the At Home list (`nd_home_list_sgui`) prints the same numbers. Every term but the business ones waits for six months of doctrine tenure. Crisis outcomes pay `nd_ig_is_hawk` groups (militarist stance, or the Armed Forces unless they lean restraint) and `nd_ig_is_restraint` groups.
+`nd_ig_store_opinion` writes each group's class, lean, strength, terms and capped total on the group (`nd_ig_*`), the band is read from that total, and the At Home list (`nd_home_list_sgui`) prints the same numbers. Every term but the business ones waits for six months of doctrine tenure. Crisis outcomes pay `nd_ig_is_hawk` groups (a militarist class or lean, or the Armed Forces unless they lean restraint) and `nd_ig_is_restraint` groups; the incident events that please or anger "militarists" pay `nd_ig_is_militarist` (class or lean), not the Armed Forces as such.
 
 Groups are judged on a posture held for months, not on a toggle, so the approval can't be farmed. The modifiers come off in `nd_country_monthly_cleanup` (`on_monthly_pulse_country`) once the entry is inactive.
 
@@ -265,6 +265,8 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 25. With the target winning battles against us, the pressure breakdown shows no +15 "how the war is going" line for it (`nd_is_losing_war_to`).
 26. Yield in a war crisis that carries an annexation goal, let the target be annexed before answering "The Demand Is Met", then answer it: the +15 credibility and the modifier still land.
 27. A target's own exercise raises the crisis danger but not the pressure on itself.
+28. At Home prints one pair of lines per interest group and nothing else between them (`every_interest_group` inside `ExecuteTooltip`; proven here before only for country iterators), and "Reviewed monthly." below the list.
+29. A pacifist-led Armed Forces reads "officers, restrained", a moderate-led one "officers", and a fascist-led Intelligentsia "militarist" (the leader's ideology reaching `law_stance`).
 
 ## 1. Intent and owner requirements
 

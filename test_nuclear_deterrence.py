@@ -552,10 +552,11 @@ class TestCrisisPanel(unittest.TestCase):
 
 class TestInterestGroupClasses(unittest.TestCase):
     OLD = ("nd_ig_leader_is_hawk", "nd_ig_leader_is_dove", "nd_ig_class_warfighting", "nd_ig_class_dove")
-    NEW = ("nd_ig_stance_militarist_full", "nd_ig_stance_militarist_mild", "nd_ig_stance_restraint_full",
-           "nd_ig_stance_restraint_mild", "nd_ig_stance_militarist", "nd_ig_stance_restraint",
-           "nd_ig_stance_full", "nd_ig_is_fixed_class", "nd_ig_class_professional", "nd_ig_class_business",
-           "nd_ig_class_militarist", "nd_ig_class_restraint", "nd_ig_is_hawk", "nd_ig_is_restraint")
+    NEW = ("nd_stance_militarist_full", "nd_stance_militarist_mild", "nd_stance_restraint_full",
+           "nd_stance_restraint_mild", "nd_stance_militarist", "nd_stance_restraint",
+           "nd_stance_full", "nd_ig_is_fixed_class", "nd_ig_class_professional", "nd_ig_class_business",
+           "nd_ig_class_militarist", "nd_ig_class_restraint", "nd_ig_lean_militarist", "nd_ig_lean_restraint",
+           "nd_ig_is_militarist", "nd_ig_is_restraint", "nd_ig_is_hawk", "nd_ig_view_full")
 
     def test_new_triggers_exist(self):
         t = read(TRIGGERS)
@@ -570,7 +571,7 @@ class TestInterestGroupClasses(unittest.TestCase):
 
     def test_stances_read_the_rules_of_war_laws(self):
         t = strip_comments(read(TRIGGERS))
-        for name in ("nd_ig_stance_militarist_full", "nd_ig_stance_restraint_full"):
+        for name in ("nd_stance_militarist_full", "nd_stance_restraint_full"):
             body = block(t, name)
             self.assertIn("law_type:law_total_war", body)
             self.assertIn("law_type:law_limited_war", body)
@@ -634,7 +635,7 @@ class TestAtHome(unittest.TestCase):
     def test_every_class_line_is_printed_and_localised(self):
         body = block(strip_comments(read(EFFECTS)), "nd_home_line")
         for key in HOME_LINES + HOME_TERMS:
-            self.assertIn(f"custom_tooltip_no_bullet = {key}", body, key)
+            self.assertRegex(body, rf"custom_tooltip_no_bullet = {key}\s", key)
             self.assertIn("THIS.Var('nd_ig_", loc_value(key), key)
         for key in HOME_LINES:
             self.assertIn("[THIS.GetInterestGroup.GetName]", loc_value(key), key)
@@ -727,6 +728,84 @@ class TestReviewFixes(unittest.TestCase):
         header = loc_value("nd_tt_open_factors_header")
         self.assertIn("30", header)
         self.assertIn("journal entry", header)
+
+
+STANCES = ["strongly_disapprove", "disapprove", "neutral", "approve", "strongly_approve", "count"]
+
+
+def stance_clauses(trigger_body):
+    """(negated, law, threshold) for each `law_stance = { law = … value > … }`
+    in a trigger body, top-level or under one NOT."""
+    out = []
+    for m in re.finditer(r"(NOT = \{\s*)?law_stance = \{\s*law = law_type:(\w+)\s*value > (\w+)\s*\}", trigger_body):
+        out.append((bool(m.group(1)), m.group(2), m.group(3)))
+    return out
+
+
+def holds(clauses, total, limited):
+    for negated, law, threshold in clauses:
+        value = total if law == "law_total_war" else limited
+        result = STANCES.index(value) > STANCES.index(threshold)
+        if result == negated:
+            return False
+    return True
+
+
+class TestAtHomeReviewFixes(unittest.TestCase):
+    """Fixes from the PR 2 whole-branch review."""
+
+    def setUp(self):
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.sguis = strip_comments(read(SGUIS))
+
+    def test_stance_truth_table(self):
+        """Spec §4.1 over every pair of stances: the stronger approval of Total
+        War or Limited War wins, a tie is no view, and `count` is never
+        approval."""
+        names = ("nd_stance_militarist_full", "nd_stance_militarist_mild",
+                 "nd_stance_restraint_full", "nd_stance_restraint_mild")
+        clauses = {n: stance_clauses(block(self.triggers, n)) for n in names}
+        for n in names:
+            self.assertTrue(clauses[n], n)
+        real = STANCES[:5]
+        for total in STANCES:
+            for limited in STANCES:
+                got = [n for n in names if holds(clauses[n], total, limited)]
+                self.assertLessEqual(len(got), 1, (total, limited, got))
+                if "count" in (total, limited):
+                    expected = []
+                else:
+                    t, l = real.index(total), real.index(limited)
+                    expected = []
+                    if t > l and t >= 3:
+                        expected = ["nd_stance_militarist_full" if t == 4 else "nd_stance_militarist_mild"]
+                    elif l > t and l >= 3:
+                        expected = ["nd_stance_restraint_full" if l == 4 else "nd_stance_restraint_mild"]
+                self.assertEqual(got, expected, (total, limited))
+
+    def test_fixed_class_leans_read_the_leader(self):
+        self.assertIn("leader ?= { nd_stance_militarist = yes }", block(self.triggers, "nd_ig_lean_militarist"))
+        self.assertIn("leader ?= { nd_stance_restraint = yes }", block(self.triggers, "nd_ig_lean_restraint"))
+        self.assertIn("leader ?= { nd_stance_full = yes }", block(self.triggers, "nd_ig_view_full"))
+
+    def test_incident_sites_pay_militarists_including_leans(self):
+        text = strip_comments(read(INCIDENT_EVENTS))
+        self.assertIn("limit = { nd_ig_is_militarist = yes }", text)
+        for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").glob("*.txt")):
+            self.assertNotRegex(strip_comments(read(path)), r"nd_ig_stance_(militarist|restraint|full)", path.name)
+
+    def test_footer_follows_the_list_and_always_says_reviewed(self):
+        gui = read(GUI)
+        self.assertLess(gui.index("nd_home_list_sgui"), gui.index("nd_home_footer_sgui"))
+        footer = block(self.sguis, "nd_home_footer_sgui")
+        self.assertRegex(footer, r"custom_tooltip_no_bullet = nd_home_list_reviewed\s")
+        self.assertIn("custom_tooltip_no_bullet = nd_home_list_waiting", footer)
+        self.assertNotIn("nd_home_list_waiting", block(self.sguis, "nd_home_list_sgui"))
+
+    def test_list_before_the_first_review_says_so(self):
+        body = block(self.sguis, "nd_home_list_sgui")
+        self.assertIn("has_variable = nd_stance_applied", body)
+        self.assertIn("custom_tooltip_no_bullet = nd_home_list_not_reviewed", body)
 
 
 class TestManagedFamilies(unittest.TestCase):

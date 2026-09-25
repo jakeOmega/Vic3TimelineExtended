@@ -1019,20 +1019,20 @@ nd_ig_doctrine_professional_value = {
 	}
 }
 
-# A militarist or restraint stance picks its table, for any group (a class,
-# or the Armed Forces' and Industrialists' lean); the Armed Forces with no
-# lean judge as officers; the Industrialists with none have no doctrine view.
-# A mild stance is capped at ±1.
+# A militarist or restraint view picks its table (a class, or the Armed
+# Forces' and Industrialists' lean from their leader); the Armed Forces with
+# no lean judge as officers; the Industrialists with none have no doctrine
+# view. A mild view is capped at ±1.
 nd_ig_term_doctrine_value = {
 	value = 0
 	if = {
 		limit = { nd_ig_posture_judged = yes }
 		if = {
-			limit = { nd_ig_stance_militarist = yes }
+			limit = { nd_ig_is_militarist = yes }
 			add = nd_ig_doctrine_militarist_value
 		}
 		else_if = {
-			limit = { nd_ig_stance_restraint = yes }
+			limit = { nd_ig_is_restraint = yes }
 			add = nd_ig_doctrine_restraint_value
 		}
 		else_if = {
@@ -1042,10 +1042,10 @@ nd_ig_term_doctrine_value = {
 		if = {
 			limit = {
 				OR = {
-					nd_ig_stance_militarist = yes
-					nd_ig_stance_restraint = yes
+					nd_ig_is_militarist = yes
+					nd_ig_is_restraint = yes
 				}
-				nd_ig_stance_full = no
+				nd_ig_view_full = no
 			}
 			min = -1
 			max = 1
@@ -1160,7 +1160,7 @@ nd_ig_stance_value = {
 	if = {
 		limit = {
 			nd_ig_is_fixed_class = no
-			nd_ig_stance_full = no
+			nd_ig_view_full = no
 		}
 		min = -1
 		max = 1

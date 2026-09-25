@@ -708,6 +708,13 @@ flowcontainer = {
 				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			}
 		}
+
+		nd_script_line = {
+			datacontext = "[GetScriptedGui('nd_home_footer_sgui')]"
+			blockoverride "line_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			}
+		}
 	}
 }
 

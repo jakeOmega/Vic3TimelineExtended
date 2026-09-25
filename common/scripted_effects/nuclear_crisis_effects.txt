@@ -1865,7 +1865,7 @@ nd_crisis_act_fight_conventional = {
 		nd_change_credibility = { AMOUNT = -10 }
 	}
 	every_interest_group = {
-		limit = { nd_ig_stance_militarist = yes }
+		limit = { nd_ig_is_militarist = yes }
 		add_modifier = {
 			name = ig_approval_negative_modifier
 			days = normal_modifier_time
