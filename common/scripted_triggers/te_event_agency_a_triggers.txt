@@ -5,12 +5,13 @@
 # ministry of intelligence. Used by events whose text says government agents
 # have intercepted private correspondence or run a mass-surveillance programme
 # (extra_law_events.5, modern_election_events.25), so a country without one is
-# not told it did.
+# not told it did. has_law_or_variant: vanilla's law_shinsengumi is a
+# law_secret_police variant.
 te_ea_has_surveillance_apparatus = {
 	OR = {
-		has_law = law_type:law_intrusive_surveillance
-		has_law = law_type:law_secret_police
-		has_law = law_type:law_ministry_of_intelligence_and_security
+		has_law_or_variant = law_type:law_intrusive_surveillance
+		has_law_or_variant = law_type:law_secret_police
+		has_law_or_variant = law_type:law_ministry_of_intelligence_and_security
 	}
 }
 
