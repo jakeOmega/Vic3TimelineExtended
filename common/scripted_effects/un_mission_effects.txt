@@ -18,13 +18,21 @@
 #           un_msn_sol_open (the state's underlying SoL at opening: the aid
 #           goal's base), un_msn_war_at_open (the host was at war and not the
 #           initiator when it opened; cleared by its first month of peace),
-#           un_msn_staffed (a contributor has joined at some point)
-#   list    un_msn_contributors (countries)
+#           un_msn_staffed (a contributor has joined at some point),
+#           un_msn_slot (0-7, the chamber's display slot while active;
+#           un_mission_assign_slot)
+#   list    un_msn_contributors (countries),
+#           un_msn_volunteers (the contributors that joined at will and pay
+#           for it: un_mission_volunteer, un_mission_charges),
+#           un_msn_withdrawn (members that brought their contingent home and
+#           cannot send it back: un_mission_withdraw)
 #   global  un_mission_registry (every mission, capped at
 #           un_mission_registry_cap; active ones are never evicted),
 #           un_mission_seq
 #   state   un_msn_here (the state's active mission), un_msn_power (the
 #           strength its modifier is multiplied by)
+#   country un_msn_service_cached (the weekly cost of the missions it serves
+#           in at will: un_mission_service_cost's multiplier)
 #
 # WHO WRITES WHAT
 #   un_mission_open / un_mission_join_host   the openers (un_vote.2, un_events.4 A,
@@ -39,11 +47,22 @@
 #                                             the single refresh site for the three
 #                                             un_mission_*_state_modifier
 #   un_missions_dissolve                      a dissolution closes every mission
+#   un_mission_volunteer / un_mission_withdraw a member joins or leaves at
+#                                             will: the chamber's Missions in
+#                                             the Field rows
+#                                             (un_mission_slot_volunteer /
+#                                             _withdraw) and the AI
+#                                             (un_mission_ai_monthly)
+#   un_mission_service_refresh                the single refresh site for
+#                                             un_mission_service_cost (the JE's
+#                                             monthly pulse, and at once on
+#                                             joining or leaving)
 #
 # REASON CODES: ledger 21/22/23 (a peacekeeping / aid / stabilisation mission
 # accomplished), 24/25/26 (one failed), each naming the mission's state —
 # 19 and 20, the same without the kind or the state, survive only in saves;
-# standing 34 (a mission we contributed to accomplished its work).
+# standing 34 (a mission we contributed to accomplished its work), 35 (we
+# brought a contingent home before the work was done).
 # ============================================================================
 
 # ---- Opening and joining ------------------------------------------------------------
@@ -103,6 +122,7 @@ un_mission_open = {
 				set_variable = { name = un_msn_here value = scope:un_msn_new }
 			}
 			un_mission_register = yes
+			scope:un_msn_new = { un_mission_assign_slot = yes }
 			scope:un_msn_host = { post_notification = un_mission_opened_notice }
 		}
 	}
@@ -227,6 +247,338 @@ un_mission_register = {
 	}
 }
 
+# Give the scoped active mission the lowest free display slot (0-7), if it has
+# none. With all eight taken it waits, and un_mission_monthly asks again. The
+# chain is the slot table: keep it in step with the three mission sguis and
+# the widget's rows (test_un_chamber_mission_slots.py).
+# Scope: mission container
+un_mission_assign_slot = {
+	if = {
+		limit = {
+			has_tag = un_msn_active
+			NOT = { has_variable = un_msn_slot }
+		}
+		if = {
+			limit = { NOT = { un_mission_slot_filled = { SLOT = 0 } } }
+			set_variable = { name = un_msn_slot value = 0 }
+		}
+		else_if = {
+			limit = { NOT = { un_mission_slot_filled = { SLOT = 1 } } }
+			set_variable = { name = un_msn_slot value = 1 }
+		}
+		else_if = {
+			limit = { NOT = { un_mission_slot_filled = { SLOT = 2 } } }
+			set_variable = { name = un_msn_slot value = 2 }
+		}
+		else_if = {
+			limit = { NOT = { un_mission_slot_filled = { SLOT = 3 } } }
+			set_variable = { name = un_msn_slot value = 3 }
+		}
+		else_if = {
+			limit = { NOT = { un_mission_slot_filled = { SLOT = 4 } } }
+			set_variable = { name = un_msn_slot value = 4 }
+		}
+		else_if = {
+			limit = { NOT = { un_mission_slot_filled = { SLOT = 5 } } }
+			set_variable = { name = un_msn_slot value = 5 }
+		}
+		else_if = {
+			limit = { NOT = { un_mission_slot_filled = { SLOT = 6 } } }
+			set_variable = { name = un_msn_slot value = 6 }
+		}
+		else_if = {
+			limit = { NOT = { un_mission_slot_filled = { SLOT = 7 } } }
+			set_variable = { name = un_msn_slot value = 7 }
+		}
+	}
+}
+
+# ---- Joining at will ----------------------------------------------------------------
+# Any major-power member may send a contingent to a mission in the field, and
+# bring it home again, without waiting for the Assembly to ask: the player
+# through the chamber's Missions in the Field rows, the AI through
+# un_mission_ai_monthly. Both ask un_mission_volunteer_eligible and
+# un_mission_accepts_volunteer (un_mission_triggers.txt) and run the two
+# writers below. The docket's appeals (un_events.4, un_events.7) and the
+# Assembly's resolutions still bring their own contributors, who pay through
+# those paths; a volunteer pays un_mission_service_cost instead.
+
+# The scoped country sends a contingent to scope:un_msn_new. It serves as a
+# contributor, listed as a volunteer, so it pays for as long as it serves
+# (un_mission_charges); the host hears of it.
+# Scope: the volunteering country; expects scope:un_msn_new
+un_mission_volunteer = {
+	save_temporary_scope_as = un_msn_volunteer
+	un_mission_volunteer_tooltip = yes
+	hidden_effect = {
+		scope:un_msn_new ?= {
+			if = {
+				limit = { NOT = { un_lobby_in_list = { LIST = un_msn_volunteers COUNTRY = scope:un_msn_volunteer } } }
+				add_to_variable_list = { name = un_msn_volunteers target = scope:un_msn_volunteer }
+			}
+			var:un_msn_host ?= { post_notification = un_mission_reinforced_notice }
+		}
+		un_mission_add_contributor = yes
+		un_mission_service_refresh = yes
+	}
+}
+
+# What un_mission_volunteer does, in words: where the contingent goes, what
+# it costs, what it adds, and what leaving would cost.
+# Scope: the volunteering country; expects scope:un_msn_new
+un_mission_volunteer_tooltip = {
+	scope:un_msn_new ?= {
+		var:un_msn_state ?= { save_temporary_scope_as = un_msn_tt_state }
+		var:un_msn_host ?= { save_temporary_scope_as = un_msn_tt_host }
+	}
+	if = {
+		limit = {
+			exists = scope:un_msn_tt_state
+			exists = scope:un_msn_tt_host
+		}
+		if = {
+			limit = { scope:un_msn_new ?= { has_tag = un_msn_peacekeeping } }
+			custom_tooltip = un_mission_volunteer_peacekeeping_tt
+		}
+		else_if = {
+			limit = { scope:un_msn_new ?= { has_tag = un_msn_aid } }
+			custom_tooltip = un_mission_volunteer_aid_tt
+		}
+		else = {
+			custom_tooltip = un_mission_volunteer_stabilisation_tt
+		}
+		custom_tooltip = un_mission_volunteer_rewards_tt
+	}
+	if = {
+		limit = {
+			scope:un_msn_new ?= {
+				OR = {
+					has_tag = un_msn_peacekeeping
+					has_tag = un_msn_stabilisation
+				}
+			}
+			un_standing_program_active_peacekeeping = yes
+		}
+		custom_tooltip = un_mission_volunteer_covered_tt
+	}
+	else = {
+		custom_tooltip = un_mission_volunteer_cost_tt
+	}
+	if = {
+		limit = { scope:un_msn_new ?= { un_mission_contributor_count >= 3 } }
+		custom_tooltip = un_mission_volunteer_full_tt
+	}
+	else = {
+		custom_tooltip = un_mission_volunteer_strength_tt
+	}
+	custom_tooltip = un_mission_volunteer_commitment_tt
+}
+
+# The scoped country brings its contingent home from scope:un_msn_new. It
+# loses standing and the host's regard, and cannot send it back. A
+# peacekeeping or stabilisation mission left with nobody fails at the next
+# monthly update (un_mission_monthly), as it would if its last contributor
+# left the UN.
+# Scope: the withdrawing country; expects scope:un_msn_new
+un_mission_withdraw = {
+	save_temporary_scope_as = un_msn_leaver
+	scope:un_msn_new ?= {
+		var:un_msn_state ?= { save_temporary_scope_as = un_msn_tt_state }
+		var:un_msn_host ?= { save_temporary_scope_as = un_msn_tt_host }
+	}
+	if = {
+		limit = { exists = scope:un_msn_tt_state }
+		custom_tooltip = un_mission_withdraw_tt
+	}
+	custom_tooltip = {
+		text = un_mission_withdraw_standing_tt
+		un_standing_loss = { AMOUNT = un_mission_withdraw_standing REASON = 35 }
+	}
+	if = {
+		limit = { exists = scope:un_msn_tt_host }
+		custom_tooltip = {
+			text = un_mission_withdraw_relations_tt
+			scope:un_msn_tt_host = {
+				change_relations = { country = scope:un_msn_leaver value = -10 }
+			}
+		}
+	}
+	if = {
+		limit = {
+			scope:un_msn_new ?= {
+				NOT = { has_tag = un_msn_aid }
+				NOT = {
+					any_in_list = {
+						variable = un_msn_contributors
+						exists = this
+						NOT = { this = scope:un_msn_leaver }
+					}
+				}
+			}
+		}
+		custom_tooltip = un_mission_withdraw_last_tt
+	}
+	custom_tooltip = un_mission_withdraw_final_tt
+	hidden_effect = {
+		scope:un_msn_new ?= {
+			if = {
+				limit = { un_mission_served_by = { WHO = scope:un_msn_leaver } }
+				remove_list_variable = { name = un_msn_contributors target = scope:un_msn_leaver }
+			}
+			if = {
+				limit = { un_lobby_in_list = { LIST = un_msn_volunteers COUNTRY = scope:un_msn_leaver } }
+				remove_list_variable = { name = un_msn_volunteers target = scope:un_msn_leaver }
+			}
+			if = {
+				limit = { NOT = { un_mission_withdrawn_by = { WHO = scope:un_msn_leaver } } }
+				add_to_variable_list = { name = un_msn_withdrawn target = scope:un_msn_leaver }
+			}
+			set_variable = { name = un_msn_strength value = un_mission_strength_value }
+			var:un_msn_host ?= { post_notification = un_mission_withdrawn_notice }
+		}
+		un_mission_service_refresh = yes
+	}
+}
+
+# The mission in display slot $SLOT$, as scope:un_msn_new (unset if the slot
+# is empty).
+# Scope: any
+un_mission_slot_select = {
+	if = {
+		limit = { un_mission_slot_filled = { SLOT = $SLOT$ } }
+		ordered_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = $SLOT$ } }
+			order_by = un_mission_recency_order
+			max = 1
+			save_temporary_scope_as = un_msn_new
+		}
+	}
+}
+
+# The chamber's Join and Withdraw controls, for the mission in slot $SLOT$
+# (un_chamber_mission_join_sgui / un_chamber_mission_withdraw_sgui; their
+# is_valid asks un_mission_slot_can_volunteer / un_mission_slot_served).
+# Scope: country (the player)
+un_mission_slot_volunteer = {
+	un_mission_slot_select = { SLOT = $SLOT$ }
+	if = {
+		limit = { exists = scope:un_msn_new }
+		un_mission_volunteer = yes
+	}
+}
+
+un_mission_slot_withdraw = {
+	un_mission_slot_select = { SLOT = $SLOT$ }
+	if = {
+		limit = { exists = scope:un_msn_new }
+		un_mission_withdraw = yes
+	}
+}
+
+# The weekly cost of the missions the scoped country serves in at will. The
+# single refresh site for un_mission_service_cost: the journal entry's monthly
+# pulse, and un_mission_volunteer / un_mission_withdraw, so a contingent is
+# paid for from the week it goes to the week it comes home. The multiplier's
+# variable is removed only after the modifier is.
+# Scope: country
+un_mission_service_refresh = {
+	if = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_mission_service_count > 0
+		}
+		set_variable = { name = un_msn_service_cached value = un_mission_service_expense_value }
+		if = {
+			limit = { has_modifier = un_mission_service_cost }
+			remove_modifier = un_mission_service_cost
+		}
+		add_modifier = {
+			name = un_mission_service_cost
+			multiplier = var:un_msn_service_cached
+		}
+	}
+	else = {
+		if = {
+			limit = { has_modifier = un_mission_service_cost }
+			remove_modifier = un_mission_service_cost
+		}
+		if = {
+			limit = { has_variable = un_msn_service_cached }
+			remove_variable = un_msn_service_cached
+		}
+	}
+}
+
+# An AI member's month in the field. A member attacked, in default or deep
+# in debt brings one contingent home; otherwise, now and then, one that is
+# under its cap sends a contingent where it is wanted most
+# (un_mission_ai_join_score). Only contingents sent at will come home here:
+# a pledge made to the Assembly stands.
+# Scope: country (an AI member; ROOT); from je_united_nations' monthly pulse
+un_mission_ai_monthly = {
+	if = {
+		limit = {
+			has_global_variable_list = un_mission_registry
+			OR = {
+				AND = {
+					is_at_war = yes
+					is_diplomatic_play_initiator = no
+				}
+				in_default = yes
+				scaled_debt >= 0.75
+			}
+			any_in_global_list = {
+				variable = un_mission_registry
+				has_tag = un_msn_active
+				un_mission_served_by = { WHO = ROOT }
+				un_lobby_in_list = { LIST = un_msn_volunteers COUNTRY = ROOT }
+			}
+		}
+		ordered_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				has_tag = un_msn_active
+				un_mission_served_by = { WHO = ROOT }
+				un_lobby_in_list = { LIST = un_msn_volunteers COUNTRY = ROOT }
+			}
+			order_by = un_mission_recency_order
+			max = 1
+			save_scope_as = un_msn_new
+		}
+		un_mission_withdraw = yes
+	}
+	else_if = {
+		limit = {
+			has_global_variable_list = un_mission_registry
+			un_mission_volunteer_eligible = yes
+			is_at_war = no
+			in_default = no
+			scaled_debt < 0.5
+			un_mission_volunteer_count < un_mission_ai_volunteer_cap
+			any_in_global_list = {
+				variable = un_mission_registry
+				un_mission_accepts_volunteer = { WHO = ROOT }
+				un_mission_ai_join_score > un_mission_ai_join_threshold
+			}
+		}
+		random = {
+			chance = 10
+			ordered_in_global_list = {
+				variable = un_mission_registry
+				limit = {
+					un_mission_accepts_volunteer = { WHO = ROOT }
+					un_mission_ai_join_score > un_mission_ai_join_threshold
+				}
+				order_by = un_mission_ai_join_score
+				max = 1
+				save_scope_as = un_msn_new
+			}
+			un_mission_volunteer = yes
+		}
+	}
+}
+
 # ---- Monthly ---------------------------------------------------------------------------
 
 # Global monthly upkeep (no-country scope; from un_global_authority_on_action,
@@ -248,6 +600,9 @@ un_missions_monthly_update = {
 un_mission_monthly = {
 	save_scope_as = un_msn_this
 	change_variable = { name = un_msn_months add = 1 }
+	# A mission from an older save, or one opened while all eight display
+	# slots were taken, takes the lowest free one.
+	un_mission_assign_slot = yes
 	var:un_msn_host ?= { save_scope_as = un_msn_host_now }
 	# The war the mission opened into is over.
 	if = {
@@ -380,6 +735,10 @@ un_mission_close = {
 	remove_tag = un_msn_active
 	add_tag = un_msn_$STATUS$
 	set_variable = { name = un_msn_end_year value = te_history_current_year }
+	if = {
+		limit = { has_variable = un_msn_slot }
+		remove_variable = un_msn_slot
+	}
 	var:un_msn_state ?= {
 		if = {
 			limit = { var:un_msn_here ?= scope:un_msn_closing }
@@ -464,6 +823,10 @@ un_missions_dissolve = {
 			remove_tag = un_msn_active
 			add_tag = un_msn_lapsed
 			set_variable = { name = un_msn_end_year value = te_history_current_year }
+			if = {
+				limit = { has_variable = un_msn_slot }
+				remove_variable = un_msn_slot
+			}
 			var:un_msn_state ?= {
 				if = {
 					limit = { var:un_msn_here ?= scope:un_msn_closing }

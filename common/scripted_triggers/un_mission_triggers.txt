@@ -99,3 +99,166 @@ un_mission_aid_recovered = {
 	var:un_msn_state ?= { NOT = { has_famine = yes } }
 	un_mission_underlying_sol >= un_mission_aid_goal
 }
+
+# ---- Joining at will -------------------------------------------------------------------
+# Any major-power member can send a contingent to a mission in the field, and
+# bring it home again: the chamber's Missions in the Field rows for a player
+# (un_chamber_mission_join_sgui / un_chamber_mission_withdraw_sgui), and
+# un_mission_ai_monthly for the AI. Both ask the triggers below, so the
+# rules cannot drift between them. The writers are un_mission_volunteer and
+# un_mission_withdraw (un_mission_effects.txt).
+
+# The scoped country may send contingents at all: a member, of major-power
+# rank (every other path into a mission asks the same, and strength counts
+# heads up to three), and not under the Assembly's sanctions.
+# Scope: country
+un_mission_volunteer_eligible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	country_rank >= rank_value:major_power
+	NOT = { has_modifier = un_sanctions_target_modifier }
+}
+
+# $WHO$ is not the scoped mission's host.
+# Scope: mission container
+un_mission_not_hosted_by = {
+	NOT = { var:un_msn_host ?= $WHO$ }
+}
+
+# $WHO$ is not at war with the scoped mission's host.
+# Scope: mission container
+un_mission_not_at_war_with_host = {
+	NOT = { var:un_msn_host ?= { has_war_with = $WHO$ } }
+}
+
+# $WHO$ serves in the scoped mission.
+# Scope: mission container
+un_mission_served_by = {
+	un_lobby_in_list = { LIST = un_msn_contributors COUNTRY = $WHO$ }
+}
+
+# $WHO$ brought its contingent home from the scoped mission, and so cannot
+# send it back.
+# Scope: mission container
+un_mission_withdrawn_by = {
+	un_lobby_in_list = { LIST = un_msn_withdrawn COUNTRY = $WHO$ }
+}
+
+# The scoped mission takes $WHO$ as a volunteer. $WHO$'s own eligibility
+# (un_mission_volunteer_eligible) is asked separately.
+# Scope: mission container
+un_mission_accepts_volunteer = {
+	has_tag = un_msn_active
+	un_mission_not_hosted_by = { WHO = $WHO$ }
+	un_mission_not_at_war_with_host = { WHO = $WHO$ }
+	NOT = { un_mission_served_by = { WHO = $WHO$ } }
+	NOT = { un_mission_withdrawn_by = { WHO = $WHO$ } }
+}
+
+# $WHO$ serves in the scoped mission at will, and pays for it
+# (un_mission_service_cost): an active mission it joined through
+# un_mission_volunteer and has not left. A peacekeeping or stabilisation
+# mission is paid for by the peacekeeping programme when $WHO$ runs it.
+# Scope: mission container
+un_mission_charges = {
+	has_tag = un_msn_active
+	un_mission_served_by = { WHO = $WHO$ }
+	un_lobby_in_list = { LIST = un_msn_volunteers COUNTRY = $WHO$ }
+	NOT = {
+		AND = {
+			OR = {
+				has_tag = un_msn_peacekeeping
+				has_tag = un_msn_stabilisation
+			}
+			$WHO$ = { un_standing_program_active_peacekeeping = yes }
+		}
+	}
+}
+
+# ---- The register's slots ----------------------------------------------------------------
+# Every active mission holds a display slot, 0 to 7 (un_mission_slot_count),
+# the lowest free one when it opens (un_mission_assign_slot); it gives the slot
+# up when it closes. The chamber shows one row per slot, and a row's controls
+# name their mission by slot, because a trigger cannot hold a scope. A
+# mission opened while all eight are taken waits for one to free up
+# (un_mission_monthly), and is listed under the rows meanwhile.
+
+# The scoped mission is active and holds slot $SLOT$.
+# Scope: mission container
+un_mission_in_slot = {
+	has_tag = un_msn_active
+	has_variable = un_msn_slot
+	var:un_msn_slot = $SLOT$
+}
+
+# Some active mission holds slot $SLOT$.
+# Scope: any
+un_mission_slot_filled = {
+	has_global_variable_list = un_mission_registry
+	any_in_global_list = {
+		variable = un_mission_registry
+		un_mission_in_slot = { SLOT = $SLOT$ }
+	}
+}
+
+# The scoped country may send a contingent to the mission in slot $SLOT$. For
+# the chamber's Join control: every clause says why it fails.
+# Scope: country
+un_mission_slot_can_volunteer = {
+	has_global_variable_list = un_mission_registry
+	custom_tooltip = {
+		text = un_mission_volunteer_need_member_tt
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+	}
+	custom_tooltip = {
+		text = un_mission_volunteer_need_rank_tt
+		country_rank >= rank_value:major_power
+	}
+	custom_tooltip = {
+		text = un_mission_volunteer_need_not_sanctioned_tt
+		NOT = { has_modifier = un_sanctions_target_modifier }
+	}
+	custom_tooltip = {
+		text = un_mission_volunteer_need_not_host_tt
+		any_in_global_list = {
+			variable = un_mission_registry
+			un_mission_in_slot = { SLOT = $SLOT$ }
+			un_mission_not_hosted_by = { WHO = ROOT }
+		}
+	}
+	custom_tooltip = {
+		text = un_mission_volunteer_need_peace_tt
+		any_in_global_list = {
+			variable = un_mission_registry
+			un_mission_in_slot = { SLOT = $SLOT$ }
+			un_mission_not_at_war_with_host = { WHO = ROOT }
+		}
+	}
+	custom_tooltip = {
+		text = un_mission_volunteer_need_not_withdrawn_tt
+		any_in_global_list = {
+			variable = un_mission_registry
+			un_mission_in_slot = { SLOT = $SLOT$ }
+			NOT = { un_mission_withdrawn_by = { WHO = ROOT } }
+		}
+	}
+	# The whole rule, as the AI asks it: whatever the clauses above miss
+	# (serving already, which hides the control) still fails here.
+	un_mission_volunteer_eligible = yes
+	any_in_global_list = {
+		variable = un_mission_registry
+		un_mission_in_slot = { SLOT = $SLOT$ }
+		un_mission_accepts_volunteer = { WHO = ROOT }
+	}
+}
+
+# The scoped country serves in the mission in slot $SLOT$, and so may bring
+# its contingent home.
+# Scope: country
+un_mission_slot_served = {
+	has_global_variable_list = un_mission_registry
+	any_in_global_list = {
+		variable = un_mission_registry
+		un_mission_in_slot = { SLOT = $SLOT$ }
+		un_mission_served_by = { WHO = ROOT }
+	}
+}

@@ -84,6 +84,152 @@ un_mission_success_standing = { value = 3 }
 # (§7.4): accepting help has a price.
 un_mission_net_gain_mult = { value = 1.25 }
 
+# ---- Joining at will -----------------------------------------------------------
+# A major-power member may send a contingent to any mission in the field, and
+# bring it home again (un_mission_volunteer / un_mission_withdraw). It pays
+# for each mission it serves in this way; the members that pledged through the
+# Assembly, or answered a collapse or a famine, pay through that path instead.
+# The chamber shows the missions in eight display slots (0-7); the slot table
+# is unrolled in un_mission_assign_slot, the three mission sguis and the
+# widget's rows (test_un_chamber_mission_slots.py keeps them in step).
+
+# A week's service in one mission is this share of what a programme costs
+# (un_program_expense_value, half a percent of GDP a year): a quarter of a
+# percent of GDP a year for each mission. The peacekeeping programme pays for
+# its members' peacekeeping and stabilisation contingents (un_mission_charges).
+un_mission_service_share = { value = 0.5 }
+
+# Bringing a contingent home before the work is done: standing lost (a loss,
+# so not scaled), and the host's regard (written as the literal -10 in
+# un_mission_withdraw; change both).
+un_mission_withdraw_standing = { value = 2 }
+
+# The AI sends a contingent when a mission scores above this
+# (un_mission_ai_join_score), to at most un_mission_ai_volunteer_cap missions.
+un_mission_ai_join_threshold = { value = 10 }
+
+# Scope: country
+un_mission_ai_volunteer_cap = {
+	value = 2
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		add = 1
+	}
+}
+
+# One mission's weekly service cost. Scope: country
+un_mission_service_one_expense_value = {
+	value = un_program_expense_value
+	multiply = un_mission_service_share
+}
+
+# The missions the scoped country serves in at will and pays for. Scope: country
+un_mission_service_count = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_charges = { WHO = PREV } }
+			add = 1
+		}
+	}
+}
+
+# Every active mission the scoped country serves in at will, paid for or not:
+# what the AI's cap counts. Scope: country
+un_mission_volunteer_count = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				has_tag = un_msn_active
+				un_mission_served_by = { WHO = PREV }
+				un_lobby_in_list = { LIST = un_msn_volunteers COUNTRY = PREV }
+			}
+			add = 1
+		}
+	}
+}
+
+# The week's cost of every mission the scoped country pays to serve in.
+# Cached as var:un_msn_service_cached by un_mission_service_refresh, the
+# multiplier of un_mission_service_cost. Scope: country
+un_mission_service_expense_value = {
+	value = un_mission_service_one_expense_value
+	multiply = un_mission_service_count
+}
+
+# How much the AI member (ROOT) wants to serve in the scoped mission: the ties
+# the lean reads (un_dossier_values.txt), what the mission lacks, and what the
+# member stands for. Scope: mission container; ROOT: the AI member.
+un_mission_ai_join_score = {
+	value = -10
+	# The mission needs hands: it is stronger with every contributor up to three.
+	add = {
+		value = 3
+		subtract = un_mission_contributor_count
+		min = 0
+		multiply = 5
+	}
+	var:un_msn_host ?= {
+		if = {
+			limit = { has_treaty_alliance_with = { TARGET = ROOT } }
+			add = 15
+		}
+		if = {
+			limit = { is_in_same_power_bloc = ROOT }
+			add = 15
+		}
+		if = {
+			limit = { is_subject_of = ROOT }
+			add = 15
+		}
+		if = {
+			limit = { has_diplomatic_pact = { who = ROOT type = rivalry } }
+			add = -20
+		}
+		if = {
+			limit = { has_diplomatic_relevance = ROOT }
+			add = 5
+		}
+		add = {
+			value = relations:root
+			divide = 10
+			min = -10
+			max = 10
+		}
+	}
+	# The peacekeeping programme already pays for these.
+	if = {
+		limit = {
+			OR = {
+				has_tag = un_msn_peacekeeping
+				has_tag = un_msn_stabilisation
+			}
+			ROOT = { un_standing_program_active_peacekeeping = yes }
+		}
+		add = 15
+	}
+	if = {
+		limit = { ROOT = { has_law = law_type:law_humanitarian_regulations } }
+		add = 5
+	}
+	if = {
+		limit = { ROOT = { country_rank >= rank_value:great_power } }
+		add = 5
+	}
+	if = {
+		limit = {
+			has_global_variable = un_authority
+			global_var:un_authority >= 40
+		}
+		add = 5
+	}
+}
+
 # ---- Strength ------------------------------------------------------------------
 
 # Scope: mission container

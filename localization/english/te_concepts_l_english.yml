@@ -2443,6 +2443,7 @@
  un_membership_benefits_modifier_desc:0 "Scaled benefits from UN membership. Higher [concept_un_authority] means greater rewards for cooperation."
  un_mission_aid_state_modifier_desc:0 "A UN humanitarian aid mission is working in this state. Its strength follows the UN's enforcement, its budget and its donors."
  un_mission_peacekeeping_state_modifier_desc:0 "A UN peacekeeping mission is deployed in this state. Its strength follows the UN's enforcement, its budget and its contributors."
+ un_mission_service_cost_desc:0 "The cost of the contingents this country has sent to UN missions of its own accord: a quarter of a percent of its GDP a year for each mission it pays to serve in."
  un_mission_stabilisation_state_modifier_desc:0 "A UN stabilisation mission is working in this state to end the collapse. Its strength follows the UN's enforcement, its budget and its contributors."
  un_nonmember_pariah_modifier_desc:0 "As the UN's authority grows, nations outside the international order face diplomatic isolation, reduced [concept_prestige], and diminished influence."
  un_nonmember_pariah_strong_modifier_desc:0 "The United Nations is strong, and this country stands outside it: members trade with it less willingly and give it less leverage."
