@@ -158,8 +158,6 @@
  SR_INCREASE_FUNDING:0 "Increase Funding"
  SR_SAFE_APPROACH:0 "Safe Approach"
  SUBJECTS:0 "Subjects"
- TE_HOMELAND_CREATION:0 "Creation"
- TE_HOMELAND_REMOVAL:0 "Removal"
  TP_EXP_TOOLTIP:0 "#tooltip_header Export Reliance#!\nFraction of your market's [concept_sell_orders] filled by exports to [Country.GetName].\n\nHigher values mean this partner absorbs more of your exports."
  TP_IMP_TOOLTIP:0 "#tooltip_header Import Reliance#!\nFraction of your market's [concept_buy_orders] filled by imports from [Country.GetName].\n\nHigher values mean greater dependency on this partner for your imports."
  UN_ARMS_CONTROL:0 "Join Arms Control Treaty"

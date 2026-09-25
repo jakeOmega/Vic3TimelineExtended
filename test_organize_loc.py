@@ -6,7 +6,9 @@ import os
 import tempfile
 import unittest
 
-from organize_loc import find_diplo_action_keys, find_quoted_loc_args, organize_all
+from organize_loc import (
+    categorize_key, find_diplo_action_keys, find_quoted_loc_args, organize_all,
+)
 
 
 class FindQuotedLocArgsTests(unittest.TestCase):
@@ -33,6 +35,14 @@ class FindQuotedLocArgsTests(unittest.TestCase):
     def test_prose_between_expressions_ignored(self):
         value = "\"[Localize('key_one')]'s rival, the 'x' of [Localize('key_two')]\""
         self.assertEqual(find_quoted_loc_args(value), ["key_one", "key_two"])
+
+
+class CategorizeKeyTests(unittest.TestCase):
+    def test_homeland_panel_family_stays_together(self):
+        for key in ("TE_HOMELAND_CREATION", "TE_HOMELAND_REMOVAL",
+                    "TE_HOMELAND_PAUSED_LOCKED", "TE_HOMELAND_CREATION_THRESHOLD"):
+            with self.subTest(key=key):
+                self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
 
 
 class OrganizeAllUnusedTests(unittest.TestCase):
@@ -62,6 +72,32 @@ class OrganizeAllUnusedTests(unittest.TestCase):
         self.assertNotIn(" widget_row_none:", unused)
         self.assertNotIn(" widget_root:", unused)
         self.assertIn(" widget_prose:", unused)
+        self.assertIn(" widget_dead:", unused)
+
+    def test_embedded_tooltip_keeps_key_out_of_unused(self):
+        loc = (
+            "l_english:\n"
+            " widget_root:0 \"needs #tooltippable #tooltip:[State.GetTooltipTag],widget_tt #v 60%#!#!#!\"\n"
+            " widget_tt:0 \"breakdown [SelectLocalization( X.HasVariable('v'), 'widget_note', '' )]\"\n"
+            " widget_note:0 \"note\"\n"
+            " widget_bare:0 \"#tooltip:widget_bare_tt text#!\"\n"
+            " widget_bare_tt:0 \"bare\"\n"
+            " widget_dead:0 \"never referenced\"\n"
+        )
+        with tempfile.TemporaryDirectory() as td:
+            loc_dir = os.path.join(td, "localization", "english")
+            os.makedirs(loc_dir)
+            with open(os.path.join(loc_dir, "x_l_english.yml"), "w", encoding="utf-8-sig") as fh:
+                fh.write(loc)
+            os.makedirs(os.path.join(td, "gui"))
+            with open(os.path.join(td, "gui", "w.gui"), "w", encoding="utf-8-sig") as fh:
+                fh.write('textbox = { text = "widget_root" }\ntextbox = { text = "widget_bare" }\n')
+            with contextlib.redirect_stdout(io.StringIO()):
+                organize_all(td)
+            with open(os.path.join(loc_dir, "te_unused_l_english.yml"), encoding="utf-8-sig") as fh:
+                unused = fh.read()
+        for key in ("widget_root", "widget_tt", "widget_note", "widget_bare_tt"):
+            self.assertNotIn(f" {key}:", unused)
         self.assertIn(" widget_dead:", unused)
 
 

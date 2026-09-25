@@ -13,14 +13,7 @@ te_homeland_creation_status = {
 		value = 2
 	}
 	else_if = {
-		limit = {
-			NOT = {
-				any_scope_culture = {
-					is_primary_culture_of = ROOT.owner
-					NOT = { has_homeland = ROOT }
-				}
-			}
-		}
+		limit = { NOT = { te_homeland_creation_culture_present = yes } }
 		value = 3
 	}
 	else_if = {
@@ -59,14 +52,7 @@ te_homeland_removal_status = {
 		value = 2
 	}
 	else_if = {
-		limit = {
-			NOT = {
-				any_scope_culture = {
-					NOT = { is_primary_culture_of = ROOT.owner }
-					has_homeland = ROOT
-				}
-			}
-		}
+		limit = { NOT = { te_homeland_removal_culture_present = yes } }
 		value = 3
 	}
 	else_if = {
@@ -90,6 +76,68 @@ te_homeland_removal_project_count = {
 		limit = { has_variable_list = te_homeland_removal_projects }
 		every_in_list = { variable = te_homeland_removal_projects add = 1 }
 	}
+}
+
+# What the tile shows. A track is shown while it has projects (running,
+# paused with their progress kept, or awaiting next month's cleanup), and
+# otherwise only while it can run here: removal also needs a removal threshold
+# above 0%. The pause reason is shown once for the whole tile, and only when
+# some track applies.
+
+# 0 running, 1 homeland changes not enabled, 2 region divided between owners.
+te_homeland_pause_status = {
+	value = 0
+	if = {
+		limit = { NOT = { te_homeland_system_enabled = yes } }
+		value = 1
+	}
+	else_if = {
+		limit = { NOT = { te_homeland_region_unified = yes } }
+		value = 2
+	}
+}
+# 1 when any track applies here or has projects, paused or not.
+te_homeland_relevant = {
+	value = te_homeland_creation_project_count
+	add = te_homeland_removal_project_count
+	if = {
+		limit = {
+			OR = {
+				te_homeland_creation_culture_present = yes
+				AND = {
+					te_homeland_removal_culture_present = yes
+					te_homeland_removal_threshold_open = yes
+				}
+			}
+		}
+		value = 1
+	}
+	max = 1
+}
+te_homeland_creation_shown = {
+	value = te_homeland_creation_project_count
+	if = {
+		limit = {
+			te_homeland_system_enabled = yes
+			te_homeland_region_unified = yes
+			te_homeland_creation_culture_present = yes
+		}
+		value = 1
+	}
+	max = 1
+}
+te_homeland_removal_shown = {
+	value = te_homeland_removal_project_count
+	if = {
+		limit = {
+			te_homeland_system_enabled = yes
+			te_homeland_region_unified = yes
+			te_homeland_removal_culture_present = yes
+			te_homeland_removal_threshold_open = yes
+		}
+		value = 1
+	}
+	max = 1
 }
 
 # Container scope, used by each culture's row.

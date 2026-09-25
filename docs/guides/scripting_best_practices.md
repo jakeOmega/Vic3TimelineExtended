@@ -2138,6 +2138,8 @@ When displaying a multi-component breakdown (like Cultural Hegemony score), crea
 | `#tooltip_header text#!` | Header line in a tooltip |
 | `#tooltippable #tooltip:SCOPE,key text#!#!` | Inline hoverable text with custom tooltip |
 
+`SCOPE` is a tooltip tag such as `[State.GetTooltipTag]`; `key` then renders with that object in context (`[State.GetName]` works inside it). Every format code needs its own `#!`, so a `#v` around the number makes three (`… #v [X|%0]#!#!#!`); `loc_render_audit` does not check the count. For a threshold that a script value clamps, show the clamped script value (what the trigger actually tests) and put `[State.GetModifier.GetDescFor('<modifier>')]` in the tooltip: `GetValueWithBreakdownFor` shows the raw modifier sum, which is wrong whenever the clamp binds. Worked example: `TE_HOMELAND_REMOVAL_THRESHOLD` / `_TT` (base 0%, pushed negative by several laws, clamped to 0).
+
 ### Value Formatting
 | Code | Effect |
 |---|---|
