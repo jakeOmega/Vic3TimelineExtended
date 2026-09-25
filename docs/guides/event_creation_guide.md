@@ -198,7 +198,7 @@ Two rules that `event_context_audit` (`docs/engine/event_context_report.md`) che
 - **Don't let an event pick another country, say that country acted, and then punish it.** When the event itself chooses X in `immediate` (`random_country`, `random_rival_country`, …), a follow-up event, relation hit or modifier landing on X is fine only if it follows from the *recipient's* choice, narrated as the recipient's action (we embargo them → "[A] has embargoed us"). If the premise is X's action, tie it to real state or give X the choice first.
 - **An event about a mod system must read that system.** A spy caught, a bank run, a space milestone, a nuclear standoff, a UN vote: if a mod system models it, the event either gates on the system's state (its JE, variables, game rule), or it is the explicit *disabled-rule fallback* (`has_game_rule = <system>_disabled`, as `international_relations_events.6`/`.7` are). A free-running flavour event that narrates the system's outcome can contradict it.
 
-Suppress an intentional flag with a check-tagged comment on its own line inside the event: `# REVIEWED YYYY-MM-DD (unchosen_self_action): rationale`.
+Suppress an intentional flag with a check-tagged comment anywhere inside the event block (conventionally its own line under the opening brace): `# REVIEWED YYYY-MM-DD (unchosen_self_action): rationale`. A tag that stops matching a flag — the event got fixed — fails `--strict` until it is deleted.
 
 ### Verifying Option Balance
 

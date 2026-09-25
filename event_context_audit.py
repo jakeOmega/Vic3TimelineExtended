@@ -40,6 +40,13 @@ September 2026, where the checks caught 27 of 42 confirmed findings):
   plural phrasings ("both powers have sent envoys") slip through.
 - **Vocabulary is per system** and deliberately narrow (see `SYSTEMS`);
   a system mentioned in flavour text only is ignored.
+- **Polarity is ignored.** Any read of a system's state counts as gating:
+  `has_game_rule = X_enabled` alone satisfies `system_ungated` for X even
+  where the event should be the disabled-rule fallback instead.
+- **Unparsed chaining.** `random_on_actions`, `first_valid_on_action` and
+  `fallback` on-action links are not followed (the mod uses none today), and
+  the block matcher treats a `#` inside a quoted string as a comment (no event
+  file has one).
 
 How the dispatch graph is built
 -------------------------------
@@ -73,8 +80,11 @@ Comment Suppresses Every Audit That Reads That Line"), so this audit uses a
     # REVIEWED 2026-09-25 (system_ungated): fires only from the disabled-rule branch
 
 The tag sits between the date and the colon, so the other audits' regex
-(which wants the colon straight after the date) never reads it. One comment
-suppresses one check; `(all)` suppresses every check on that event.
+(which wants the colon straight after the date) never reads it. It may sit
+anywhere in the event block. One comment suppresses one check; `(all)`
+suppresses every check on that event. A tag that suppresses nothing — its
+check no longer fires there, or the check name is misspelled — is reported
+under "Tags to remove" and fails `--strict`.
 
 Report: docs/engine/event_context_report.md. Registered in POST_LOAD_AUDITS.
 """
@@ -151,7 +161,7 @@ SYSTEMS: tuple[System, ...] = (
     System(
         "nuclear", "Nuclear weapons / deterrence",
         _rx(r"\bnuclear_weapons_(?:enabled|disabled)\b|\bje_nuclear_program\b"
-            r"|\bnuclear_\w+|\bnuke_\w+|\bnd_\w+|\bnuclear_power\b"),
+            r"|\bnuclear_\w+|\bnuke_\w+|\bnd_\w+"),
         _rx(r"^(?:nuclear_|nuke_|te_debug_nuclear|te_debug_deterrence)"),
         _rx(r"\bnuclear (?:weapons?|arsenals?|warheads?|tests?|standoff|war|deterrent|deterrence"
             r"|brinkmanship|crisis|strikes?|annihilation|attack)\b|\batomic (?:bombs?|weapons?)\b"
@@ -311,6 +321,9 @@ _COND_KEYS = {"limit", "trigger", "possible", "is_shown", "potential", "is_valid
               "can_be_enacted", "visible"}
 _NUMERIC_RE = re.compile(r"^-?\d+(?:\.\d+)?$")
 _PARAM_RE = re.compile(r"^\$\w+\$$")
+# Console-only test harnesses (`event te_debug_x.1`): skipped as flag targets and
+# as dispatch sources — they are not how anything reaches a player.
+_CONSOLE_FILE_RE = re.compile(r"^te_debug_")
 
 
 def _strip_comments(text: str) -> str:
@@ -352,10 +365,6 @@ class Site:
     def in_option(self) -> bool:
         return "option" in self.path
 
-    @property
-    def in_immediate(self) -> bool:
-        return "immediate" in self.path or "after" in self.path
-
 
 @dataclass
 class _Frame:
@@ -369,8 +378,10 @@ class _Frame:
 def _is_switch(key: str) -> bool:
     if key in _CONTROL_KEYS or key == "<anon>":
         return False
-    if _NUMERIC_RE.match(key) or _PARAM_RE.match(key) or _EVENT_ID_RE.match(key):
+    if _NUMERIC_RE.match(key) or _EVENT_ID_RE.match(key):
         return False
+    # A `$WHO$ = { … }` block left unsubstituted (no caller passes WHO) is a
+    # scope we can't see: count it as a switch, the conservative reading.
     return True
 
 
@@ -564,6 +575,17 @@ _HIDDEN_RE = re.compile(r"^[ \t]*hidden[ \t]*=[ \t]*yes\b", re.M)
 
 
 @dataclass
+class Tag:
+    """One check-tagged `# REVIEWED` comment inside an event."""
+    event_id: str
+    check: str
+    file: str
+    line: int
+    date: str
+    rationale: str
+
+
+@dataclass
 class EventDef:
     event_id: str
     file: str   # mod-relative
@@ -574,6 +596,7 @@ class EventDef:
     desc_keys: list[str]
     flavor_keys: list[str]
     reviewed: dict[str, dict]  # check -> {date, rationale}
+    tags: list[Tag] = field(default_factory=list)
 
     @property
     def code(self) -> str:
@@ -610,15 +633,19 @@ def load_events(mod_path: str) -> dict[str, EventDef]:
                 title, desc, flavor = [], [], []
                 for fm in _LOC_FIELD_RE.finditer(code):
                     {"title": title, "desc": desc, "flavor": flavor}[fm.group(1)].append(fm.group(2))
+                start_line = text.count("\n", 0, m.start()) + 1
                 reviewed: dict[str, dict] = {}
+                tags: list[Tag] = []
                 for rm in _TAGGED_REVIEWED_RE.finditer(block):
                     for chk in re.split(r"[\s,]+", rm.group("checks").strip()):
                         if chk:
                             reviewed[chk] = {"date": rm.group("date"),
                                              "rationale": rm.group("rationale").strip()}
+                            tags.append(Tag(eid, chk, rel, start_line + block.count("\n", 0, rm.start()),
+                                            rm.group("date"), rm.group("rationale").strip()))
                 events[eid] = EventDef(
-                    eid, rel, text.count("\n", 0, m.start()) + 1, block,
-                    bool(_HIDDEN_RE.search(code)), title, desc, flavor, reviewed,
+                    eid, rel, start_line, block,
+                    bool(_HIDDEN_RE.search(code)), title, desc, flavor, reviewed, tags,
                 )
     return events
 
@@ -725,6 +752,8 @@ def build_graph(mod_path: str) -> Graph:
                     continue
                 p = os.path.join(dirpath, f)
                 rel = os.path.relpath(p, mod_path).replace("\\", "/")
+                if _CONSOLE_FILE_RE.search(f):
+                    continue  # console-only harnesses: not how anything reaches a player
                 fs = scan_file(p, rel, effect_names)
                 for s in fs.sites:
                     sites_by_event[s.event].append(s)
@@ -738,36 +767,59 @@ def build_graph(mod_path: str) -> Graph:
 
 
 def _substitute_params(sites_by_event: dict[str, list[Site]], effect_calls: dict[str, list]) -> None:
-    """Resolve `trigger_event = { id = $EVENT$ }` inside a scripted effect into one
-    concrete site per caller that passes `EVENT = <id>`, carrying the caller's
-    path, guards and scope switches plus the helper's own (`$WHO$ = { … }`
-    becomes the caller's `WHO` value)."""
-    for _round in range(4):  # helpers that forward $EVENT$ to other helpers
-        pending = [(k, s) for k, lst in sites_by_event.items() if _PARAM_RE.match(k) for s in lst]
-        if not pending:
-            return
-        for k, _lst in list(sites_by_event.items()):
-            if _PARAM_RE.match(k):
-                del sites_by_event[k]
-        added = False
-        for key, s in pending:
-            pname = key.strip("$")
-            if s.entity_kind != "scripted_effect":
-                continue
-            for (rel, ln, pk, sw, conds, entity, kind, params) in effect_calls.get(s.entity, []):
-                if pname not in params:
+    """Resolve dispatch sites inside a scripted effect that depend on its
+    parameters — `trigger_event = { id = $EVENT$ }`, or a fixed id fired into
+    `$WHO$ = { … }` — into one concrete site per caller, carrying the caller's
+    path, guards and scope switches plus the helper's own, with `$X$` replaced
+    by the caller's value. Runs in bounded rounds so a helper forwarding its
+    parameters to another helper (renamed or not) resolves too; new sites are
+    buffered per round, so a self-forwarding helper cannot grow the list being
+    walked, and leftover `$X$` keys are dropped only once, at the end."""
+    def needs(s: Site) -> bool:
+        return s.entity_kind == "scripted_effect" and (
+            bool(_PARAM_RE.match(s.event)) or any("$" in p for p in s.path) or "$" in s.conds)
+
+    for _round in range(8):
+        changed = False
+        added: dict[str, list[Site]] = defaultdict(list)
+        for key in list(sites_by_event):
+            keep: list[Site] = []
+            for s in sites_by_event[key]:
+                calls = effect_calls.get(s.entity, []) if needs(s) else []
+                if not calls:
+                    keep.append(s)
                     continue
-
-                def sub(x: str, params=params) -> str:
-                    return re.sub(r"\$(\w+)\$", lambda m: params.get(m.group(1), m.group(0)), x)
-
-                inner = [sub(p) for p in s.path]
-                sites_by_event[params[pname]].append(Site(
-                    params[pname], rel, ln, entity, kind, pk + inner,
-                    sw + [p for p in inner if _is_switch(p)], conds + " " + sub(s.conds), s.via))
-                added = True
-        if not added:
-            return
+                changed = True
+                for (rel, ln, pk, sw, conds, entity, kind, params) in calls:
+                    if _PARAM_RE.match(s.event) and s.event.strip("$") not in params:
+                        continue  # this caller doesn't say which event
+                    # A caller that forwards `EVENT = $EVENT$` (or renames it)
+                    # yields a site that is still parameterised; the next round
+                    # resolves it.
+                    def sub(x: str, params=params) -> str:
+                        return re.sub(r"\$(\w+)\$", lambda m: params.get(m.group(1), m.group(0)), x)
+                    event = sub(s.event)
+                    inner = [sub(p) for p in s.path]
+                    added[event].append(Site(
+                        event, rel, ln, entity, kind, pk + inner,
+                        sw + [p for p in inner if _is_switch(p)], conds + " " + sub(s.conds), s.via))
+            sites_by_event[key] = keep
+        for k, v in added.items():
+            sites_by_event.setdefault(k, []).extend(v)
+        if not changed:
+            break
+    for key in [k for k, v in sites_by_event.items() if not v or _PARAM_RE.match(k)]:
+        del sites_by_event[key]
+    # A recursive helper re-derives the same caller site every round.
+    for key, lst in sites_by_event.items():
+        seen: set = set()
+        uniq = []
+        for s in lst:
+            sig = (s.file, s.line, s.entity, tuple(s.path), tuple(s.switches), s.via)
+            if sig not in seen:
+                seen.add(sig)
+                uniq.append(s)
+        sites_by_event[key] = uniq
 
 
 # Chooser status of a dispatch source, resolved through immediates, effects and
@@ -780,12 +832,29 @@ def _basename(rel: str) -> str:
 
 
 class Resolver:
+    """Chooser status and system gating over the dispatch graph.
+
+    Both walks recurse through events, scripted effects and on-action chains,
+    which can form cycles (event A's option fires B, B's fires A). A revisit is
+    *neutral* — it neither proves nor disproves the property; the other paths
+    decide — and results are memoised only for top-level calls, so a value
+    computed under a partial `seen` set never leaks into another query.
+    """
+
     def __init__(self, g: Graph):
         self.g = g
-        self._event_choice: dict[str, tuple[str, str]] = {}
-        self._effect_choice: dict[str, tuple[str, str]] = {}
-        self._oa_choice: dict[str, tuple[str, str]] = {}
-        self._gate_cache: dict[tuple[str, str, str], bool] = {}
+        self._memo: dict[tuple, object] = {}
+
+    def _cached(self, key: tuple, seen: frozenset, compute, top_default):
+        # A top-level result is final, so nested lookups may reuse it too.
+        if key in self._memo:
+            return self._memo[key]
+        res = compute(seen | {key})
+        if not seen:
+            if res is None:  # every path led back into a cycle
+                res = top_default
+            self._memo[key] = res
+        return res
 
     # -- chooser -----------------------------------------------------------
     def site_choice(self, s: Site, seen: frozenset = frozenset()) -> tuple[str, str]:
@@ -808,7 +877,13 @@ class Resolver:
             return UNCHOSEN, f"journal entry tick ({s.entity})"
         return UNCHOSEN, f"{k} {s.entity}"
 
-    def _combine(self, results: list[tuple[str, str]], none_reason: str) -> tuple[str, str]:
+    @staticmethod
+    def _combine(results: list[tuple[str, str]], none_reason: str) -> tuple[str, str]:
+        # A revisit comes back as None: neutral, skipped; all-neutral stays
+        # neutral so the caller's other paths decide.
+        if results and all(r is None for r in results):
+            return None
+        results = [r for r in results if r is not None]
         if not results:
             return UNCHOSEN, none_reason
         for r in results:
@@ -816,57 +891,49 @@ class Resolver:
                 return r
         return results[0]
 
-    def event_choice(self, eid: str, seen: frozenset = frozenset()) -> tuple[str, str]:
-        if eid in self._event_choice:
-            return self._event_choice[eid]
-        if ("e", eid) in seen:
-            return CHOSEN, "cycle"
-        seen = seen | {("e", eid)}
-        res = self._combine([self.site_choice(s, seen) for s in self.g.sites_by_event.get(eid, [])],
-                            f"{eid} has no mod dispatch site (pulse-fired or vanilla hook)")
-        self._event_choice[eid] = res
-        return res
+    def event_choice(self, eid: str, seen: frozenset = frozenset()):
+        key = ("e", eid)
+        if key in seen:
+            return None
+        return self._cached(key, seen, lambda sn: self._combine(
+            [self.site_choice(s, sn) for s in self.g.sites_by_event.get(eid, [])],
+            f"{eid} has no mod dispatch site (pulse-fired or vanilla hook)"), (CHOSEN, "only reachable through a dispatch cycle"))
 
-    def effect_choice(self, name: str, seen: frozenset = frozenset()) -> tuple[str, str]:
-        if name in self._effect_choice:
-            return self._effect_choice[name]
-        if ("f", name) in seen:
-            return CHOSEN, "cycle"
-        seen = seen | {("f", name)}
-        results = []
-        for (rel, ln, pk, sw, conds, entity, kind, _params) in self.g.effect_calls.get(name, []):
-            s = Site("", rel, ln, entity, kind, pk, sw, conds)
-            results.append(self.site_choice(s, seen))
-        res = self._combine(results, f"effect {name} has no callers")
-        self._effect_choice[name] = res
-        return res
+    def effect_choice(self, name: str, seen: frozenset = frozenset()):
+        key = ("f", name)
+        if key in seen:
+            return None
+        return self._cached(key, seen, lambda sn: self._combine(
+            [self.site_choice(Site("", rel, ln, entity, kind, pk, sw, conds), sn)
+             for (rel, ln, pk, sw, conds, entity, kind, _params) in self.g.effect_calls.get(name, [])],
+            f"effect {name} has no callers"), (CHOSEN, "only reachable through a dispatch cycle"))
 
-    def on_action_choice(self, name: str, seen: frozenset = frozenset()) -> tuple[str, str]:
-        if name in self._oa_choice:
-            return self._oa_choice[name]
-        if ("o", name) in seen:
-            return CHOSEN, "cycle"
-        seen = seen | {("o", name)}
-        parents = self.g.on_action_parents.get(name, [])
-        if not parents:
-            if _CHOSEN_HOOK_RE.search(name):
-                res = (CHOSEN, f"engine hook {name}")
-            elif _PULSE_RE.search(name):
-                res = (UNCHOSEN, f"pulse {name}")
-            else:
-                res = (UNCHOSEN, f"engine hook {name}")
-        else:
-            res = self._combine([self.on_action_choice(p, seen) for p, _ln, _f in parents], name)
+    def on_action_choice(self, name: str, seen: frozenset = frozenset()):
+        key = ("o", name)
+        if key in seen:
+            return None
+
+        def compute(sn):
+            parents = self.g.on_action_parents.get(name, [])
+            if not parents:
+                if _CHOSEN_HOOK_RE.search(name):
+                    return CHOSEN, f"engine hook {name}"
+                if _PULSE_RE.search(name):
+                    return UNCHOSEN, f"pulse {name}"
+                return UNCHOSEN, f"engine hook {name}"
+            res = self._combine([self.on_action_choice(p, sn) for p, _ln, _f in parents], name)
+            if res is None:  # every parent is a revisit: neutral
+                return None
             if res[0] == UNCHOSEN and "pulse" in res[1] and name not in res[1]:
                 res = (UNCHOSEN, f"{res[1]} > {name}")
-        self._oa_choice[name] = res
-        return res
+            return res
+        return self._cached(key, seen, compute, (CHOSEN, "only reachable through a dispatch cycle"))
 
     # -- system gating -------------------------------------------------------
     def owns(self, sysm: System, rel: str) -> bool:
         return bool(sysm.file_re.search(_basename(rel)))
 
-    def site_gated(self, s: Site, sysm: System, seen: frozenset) -> bool:
+    def site_gated(self, s: Site, sysm: System, seen: frozenset) -> bool | None:
         if sysm.state_re.search(s.conds):
             return True
         if self.owns(sysm, s.file):
@@ -882,60 +949,59 @@ class Resolver:
             return bool(sysm.state_re.search(s.entity))
         return False
 
-    def event_gated(self, eid: str, sysm: System, seen: frozenset = frozenset()) -> bool:
-        key = ("e", eid, sysm.key)
-        if key in self._gate_cache:
-            return self._gate_cache[key]
-        if key in seen:
-            return False
-        seen = seen | {key}
-        ev = self.g.events.get(eid)
-        if ev is not None and (sysm.state_re.search(ev.code) or self.owns(sysm, ev.file)):
-            res = True
-        else:
-            sites = self.g.sites_by_event.get(eid, [])
-            res = bool(sites) and all(self.site_gated(s, sysm, seen) for s in sites)
-        self._gate_cache[key] = res
-        return res
+    @staticmethod
+    def _all_gated(results) -> bool:
+        # None = a revisit on a cycle: neutral. Gated when at least one path
+        # decided and every decided path is gated.
+        results = list(results)
+        decided = [r for r in results if r is not None]
+        if results and not decided:
+            return None
+        return bool(decided) and all(decided)
 
-    def effect_gated(self, name: str, sysm: System, seen: frozenset) -> bool:
-        key = ("f", name, sysm.key)
-        if key in self._gate_cache:
-            return self._gate_cache[key]
+    def event_gated(self, eid: str, sysm: System, seen: frozenset = frozenset()):
+        key = ("eg", eid, sysm.key)
         if key in seen:
-            return False
-        seen = seen | {key}
-        if self.owns(sysm, self.g.effect_file.get(name, "")) or sysm.state_re.search(name):
-            res = True
-        else:
-            calls = self.g.effect_calls.get(name, [])
-            res = bool(calls) and all(
-                self.site_gated(Site("", rel, ln, entity, kind, pk, sw, conds), sysm, seen)
-                for (rel, ln, pk, sw, conds, entity, kind, _params) in calls)
-        self._gate_cache[key] = res
-        return res
+            return None
 
-    def on_action_gated(self, name: str, sysm: System, seen: frozenset) -> bool:
-        key = ("o", name, sysm.key)
-        if key in self._gate_cache:
-            return self._gate_cache[key]
+        def compute(sn):
+            ev = self.g.events.get(eid)
+            if ev is not None and (sysm.state_re.search(ev.code) or self.owns(sysm, ev.file)):
+                return True
+            return self._all_gated(self.site_gated(s, sysm, sn)
+                                   for s in self.g.sites_by_event.get(eid, []))
+        return self._cached(key, seen, compute, False)
+
+    def effect_gated(self, name: str, sysm: System, seen: frozenset = frozenset()):
+        key = ("fg", name, sysm.key)
         if key in seen:
-            return False
-        seen = seen | {key}
-        # Engine hooks (on_monthly_pulse_country, …) are merged from many files,
-        # so a hook is owned only if every file defining it is; a chain link is
-        # gated when the `on_actions = { name }` reference sits in an owned file
-        # or its parent on-action is itself gated.
-        files = self.g.on_action_files.get(name, [])
-        if (files and all(self.owns(sysm, f) for f in files)) or sysm.state_re.search(name):
-            res = True
-        else:
-            parents = self.g.on_action_parents.get(name, [])
-            res = bool(parents) and all(
-                self.owns(sysm, f) or self.on_action_gated(p, sysm, seen)
-                for p, _ln, f in parents)
-        self._gate_cache[key] = res
-        return res
+            return None
+
+        def compute(sn):
+            if self.owns(sysm, self.g.effect_file.get(name, "")) or sysm.state_re.search(name):
+                return True
+            return self._all_gated(
+                self.site_gated(Site("", rel, ln, entity, kind, pk, sw, conds), sysm, sn)
+                for (rel, ln, pk, sw, conds, entity, kind, _params) in self.g.effect_calls.get(name, []))
+        return self._cached(key, seen, compute, False)
+
+    def on_action_gated(self, name: str, sysm: System, seen: frozenset = frozenset()):
+        key = ("og", name, sysm.key)
+        if key in seen:
+            return None
+
+        def compute(sn):
+            # Engine hooks (on_monthly_pulse_country, …) are merged from many
+            # files, so a hook is owned only if every file defining it is; a
+            # chain link is gated when the `on_actions = { name }` reference
+            # sits in an owned file or its parent on-action is itself gated.
+            files = self.g.on_action_files.get(name, [])
+            if (files and all(self.owns(sysm, f) for f in files)) or sysm.state_re.search(name):
+                return True
+            return self._all_gated(
+                True if self.owns(sysm, f) else self.on_action_gated(p, sysm, sn)
+                for p, _ln, f in self.g.on_action_parents.get(name, []))
+        return self._cached(key, seen, compute, False)
 
 
 # ---------------------------------------------------------------------------
@@ -959,13 +1025,17 @@ class Flag:
 class AuditResult:
     flags: list[Flag] = field(default_factory=list)
     coverage: dict = field(default_factory=dict)
+    # A tag whose check no longer fires on its event (the event was fixed, or
+    # the heuristic moved): delete it, or it will hide the next regression.
+    stale_tags: list[Tag] = field(default_factory=list)
+    # A tag naming no check (a typo): it suppresses nothing.
+    unknown_tags: list[Tag] = field(default_factory=list)
 
-
-def _first_sentence(text: str, limit: int = 220) -> str:
-    text = re.sub(r"\\n", " ", text)
-    m = re.search(r"^(.+?[.!?])(\s|$)", text)
-    s = m.group(1) if m else text
-    return s if len(s) <= limit else s[:limit - 1] + "…"
+    @property
+    def failing(self) -> int:
+        """What --strict and the reload warning count."""
+        return (sum(1 for f in self.flags if not f.exemption)
+                + len(self.stale_tags) + len(self.unknown_tags))
 
 
 def _dispatch_summary(g: Graph, r: Resolver, eid: str) -> list[str]:
@@ -992,7 +1062,6 @@ def _event_text(ev: EventDef, loc: dict[str, str], fields=("title", "desc", "fla
     return " \n ".join(_expand_loc(loc.get(k, ""), loc) for k in keys)
 
 
-_CONSOLE_FILE_RE = re.compile(r"^te_debug_")
 _COUNTRY_PICKER_RE = re.compile(r"^(?:random|ordered)_\w*countr(?:y|ies)$")
 
 
@@ -1076,7 +1145,7 @@ def audit(mod_path: str, graph: Graph | None = None) -> AuditResult:
                     f"…{ctx}…", _dispatch_summary(g, r, eid)))
 
         # 3. imputed_foreign_action
-        desc_text = _event_text(ev, g.loc, ("title", "desc"))
+        desc_text = head_text
         for scope in sorted(_picked_scopes(ev)):
             hits = _consequences_on(ev, scope)
             if not hits:
@@ -1108,12 +1177,26 @@ def audit(mod_path: str, graph: Graph | None = None) -> AuditResult:
         f.exemption = ev.reviewed.get(f.check) or ev.reviewed.get("all")
 
     flags.sort(key=lambda f: (CHECKS.index(f.check), f.file, f.line))
+    flagged = {(f.event_id, f.check) for f in flags}
+    flagged_any = {f.event_id for f in flags}
+    stale: list[Tag] = []
+    unknown: list[Tag] = []
+    for ev in g.events.values():
+        for t in ev.tags:
+            if t.check == "all":
+                if t.event_id not in flagged_any:
+                    stale.append(t)
+            elif t.check not in CHECKS:
+                unknown.append(t)
+            elif (t.event_id, t.check) not in flagged:
+                stale.append(t)
+    key = lambda t: (t.file, t.line)  # noqa: E731
     return AuditResult(flags, {
         "events_defined": len(g.events),
         "visible": visible,
         "dispatch_sites": sum(len(v) for v in g.sites_by_event.values()),
         **{c: sum(1 for f in flags if f.check == c) for c in CHECKS},
-    })
+    }, sorted(stale, key=key), sorted(unknown, key=key))
 
 
 # ---------------------------------------------------------------------------
@@ -1146,7 +1229,7 @@ _CHECK_HELP = {
 }
 
 
-def render_report(result: AuditResult, mod_path: str = "") -> str:
+def render_report(result: AuditResult) -> str:
     cov = result.coverage
     out = ["# Event Context Report", ""]
     out.append(
@@ -1164,6 +1247,7 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
         un = sum(1 for f in result.flags if f.check == c and not f.exemption)
         ex = sum(1 for f in result.flags if f.check == c and f.exemption)
         out.append(f"- `{c}`: **{un}** unreviewed, {ex} REVIEWED")
+    out.append(f"- Tags to remove: **{len(result.stale_tags) + len(result.unknown_tags)}**")
     out.append("")
 
     for c in CHECKS:
@@ -1194,6 +1278,19 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
                 out.append(f"- `{f.event_id}` — {f.file}:{f.line} (REVIEWED {e.get('date', '?')}: "
                            f"{e.get('rationale', '')})")
             out.append("")
+    if result.stale_tags or result.unknown_tags:
+        out.append("## Tags to remove")
+        out.append("")
+        out.append("Check-tagged REVIEWED comments that suppress nothing: the check no longer "
+                   "fires on that event (fixed, or the heuristic changed), or the check name is "
+                   "not one of " + ", ".join(f"`{c}`" for c in CHECKS) + " / `all`. "
+                   "`--strict` fails on these so suppressions cannot outlive their flags.")
+        out.append("")
+        for t in result.stale_tags:
+            out.append(f"- stale: `{t.event_id}` ({t.check}) — {t.file}:{t.line}")
+        for t in result.unknown_tags:
+            out.append(f"- unknown check `{t.check}`: `{t.event_id}` — {t.file}:{t.line}")
+        out.append("")
     return "\n".join(out)
 
 
@@ -1209,9 +1306,11 @@ def regenerate(mod_state=None) -> dict:
     out_path = os.path.join(mod_path, "docs", "engine", "event_context_report.md")
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
     with open(out_path, "w", encoding="utf-8") as fh:
-        fh.write(render_report(result, mod_path))
+        fh.write(render_report(result))
     return {
-        "unreviewed": sum(1 for f in result.flags if not f.exemption),
+        # Flags without a tag, plus tags that suppress nothing.
+        "unreviewed": result.failing,
+        "stale_tags": len(result.stale_tags) + len(result.unknown_tags),
         "exempted": sum(1 for f in result.flags if f.exemption),
         **{c: result.coverage.get(c, 0) for c in CHECKS},
         "path": out_path,
@@ -1224,7 +1323,8 @@ if __name__ == "__main__":
     from path_constants import mod_path as _mp
 
     res = audit(_mp)
-    print(render_report(res, _mp))
-    # --strict: CI mode. Exit 1 if any flag lacks a check-tagged REVIEWED comment.
+    print(render_report(res))
+    # --strict: CI mode. Exit 1 if any flag lacks a check-tagged REVIEWED
+    # comment, or any such comment suppresses nothing (stale or misspelled).
     if "--strict" in sys.argv:
-        raise SystemExit(1 if any(not f.exemption for f in res.flags) else 0)
+        raise SystemExit(1 if res.failing else 0)
