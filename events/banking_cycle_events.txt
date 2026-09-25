@@ -1717,6 +1717,9 @@ banking_cycle_events.16 = {
 			limit = {
 				te_mon_full_system = yes
 				te_mon_has_dial = yes
+				# The dashboard's own mandate gate, asked again: the event stays
+				# open for months, and the dial may have been taken back since.
+				te_mon_mandate_binds = yes
 				NOT = {
 					AND = {
 						has_variable = te_mon_mandate
@@ -4607,10 +4610,8 @@ banking_cycle_events.54 = {
 # The ally is real and named (#428): the largest planned economy on cordial
 # terms or better, at peace with us and not in a banking slump of its own
 # (banking_is_fraternal_aid_donor, legacy_event_integration_triggers.txt). The
-# draw in banking_cycle_random_event_effect picks it and saves it as
-# scope:fraternal_ally before firing this, as the .68 -> .45 chain does, so
-# nothing here reads ROOT. Nothing lands on the ally — the offer is flavour for
-# the aid our own cycle receives.
+# draw and this trigger ask that one exists, and immediate picks it. Nothing
+# lands on the ally — the offer is flavour for the aid our own cycle receives.
 banking_cycle_events.55 = {
 	type = country_event
 	placement = root
@@ -4626,10 +4627,17 @@ banking_cycle_events.55 = {
 	duration = 3
 
 	trigger = {
-		exists = scope:fraternal_ally
+		any_country = { banking_is_fraternal_aid_donor = yes }
 	}
 
-	immediate = {}
+	immediate = {
+		# The largest economy that qualifies: the one best placed to lend.
+		ordered_country = {
+			limit = { banking_is_fraternal_aid_donor = yes }
+			order_by = gdp
+			save_scope_as = fraternal_ally
+		}
+	}
 
 	# Option A: Accept the full aid package
 	option = {

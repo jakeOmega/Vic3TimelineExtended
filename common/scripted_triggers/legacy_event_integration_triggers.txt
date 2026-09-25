@@ -24,10 +24,9 @@ banking_can_offer_bailout = {
 # aid (banking_cycle_events.55, Socialist Fraternal Aid). The ideological ally the
 # event names: another planned economy, on cordial terms or better, not at war
 # with ROOT, and not in a banking downturn or panic of its own — a country in a
-# slump is not handing out development credits. Read only from the draw in
-# banking_cycle_random_event_effect, where ROOT is the recipient country: it
-# asks any_country, then picks the largest economy that qualifies and saves it
-# as scope:fraternal_ally for the event to name.
+# slump is not handing out development credits. The draw and the event's
+# trigger ask any_country; the event's immediate picks the largest economy that
+# qualifies and saves it as scope:fraternal_ally for its text to name.
 banking_is_fraternal_aid_donor = {
 	NOT = { this = root }
 	has_law_or_variant = law_type:law_command_economy

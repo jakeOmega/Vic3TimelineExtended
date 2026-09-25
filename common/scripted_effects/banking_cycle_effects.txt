@@ -1049,12 +1049,8 @@ banking_cycle_random_event_effect = {
 			}
 			# Event 55: Socialist Fraternal Aid (downturn/panic, keynesian)
 			# Needs the ally it names: another planned economy on good terms
-			# (banking_is_fraternal_aid_donor). It used to cite an "ideological
-			# ally" that need not exist (#428). The ally is picked HERE, where
-			# ROOT is this country, and reaches the event as scope:fraternal_ally
-			# — the .45 bailout precedent below — so the event itself never
-			# reads ROOT (see scripting_best_practices.md, "JE Localization
-			# Scope").
+			# (banking_is_fraternal_aid_donor, which the event's immediate picks
+			# from). It used to cite an "ideological ally" that need not exist (#428).
 			0 = {
 				trigger = {
 					has_law = law_type:law_command_economy
@@ -1065,16 +1061,7 @@ banking_cycle_random_event_effect = {
 					if = { limit = { banking_cycle_is_downturn = yes } add = 4 }
 					if = { limit = { banking_cycle_is_panic = yes } add = 6 }
 				}
-				# The largest economy that qualifies: the one best placed to lend.
-				ordered_country = {
-					limit = { banking_is_fraternal_aid_donor = yes }
-					order_by = gdp
-					save_scope_as = fraternal_ally
-				}
-				if = {
-					limit = { exists = scope:fraternal_ally }
-					trigger_event = { id = banking_cycle_events.55 }
-				}
+				trigger_event = { id = banking_cycle_events.55 }
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 56: Industrial Sabotage Investigation (expansion+, central_banking)
@@ -1619,6 +1606,12 @@ banking_contagion_crash_check = {
 			set_variable = { name = crash_severity value = 100 }
 		}
 	}
+	else = {
+		# A scare, decided here too. Marked separately from _hit, which the
+		# country has carried since banking_cycle_spread_contagion reached it:
+		# until this roll, it is neither a casualty nor a survivor (#428).
+		set_variable = { name = banking_crisis_wave_scared value = 1 }
+	}
 }
 
 # Apply contagion effects to a country hit by financial contagion (event .7).
@@ -1688,16 +1681,19 @@ apply_banking_contagion_effects = {
 # Initialize a new crisis wave when an origin crash fires.
 # Clears any previous wave tracking and starts fresh.
 #
-# TWO MARKS, TWO QUESTIONS (#428). banking_crisis_wave_hit: the wave reached
-# this country — its origin, or a target banking_cycle_spread_contagion sent the
-# contagion event (minor_events_timelineextended.7) to. It is the "already hit"
-# dedupe for cascades, and what the UN docket's emergency loan asks
+# THREE MARKS (#428). banking_crisis_wave_hit: the wave reached this country —
+# its origin, or a target banking_cycle_spread_contagion sent the contagion event
+# (minor_events_timelineextended.7) to. It is the "already hit" dedupe for
+# cascades, and what the UN docket's emergency loan asks
 # (un_docket_loan_candidate, through banking_crisis_wave_reached).
-# banking_crisis_wave_crashed: this country's banks actually crashed — the
-# origin here, a target only in banking_contagion_crash_check. The Great
-# Depression event reads it to tell a casualty from a country that only took a
-# scare. Until #428 _crashed was set on every target before the contagion event
-# decided anything, so a scare read as a crash.
+# banking_crisis_wave_crashed / banking_crisis_wave_scared: the outcome — the
+# origin crashed here; a target learns which in banking_contagion_crash_check,
+# when its contagion event fires, seven days after it was reached. Between the
+# two a target is hit and UNDECIDED, and the Great Depression event (fired three
+# days after the wave crosses its threshold) can reach it then, so .8 keys its
+# casualty text on _crashed and its survivor text on _scared, and an undecided
+# country reads the general text. Until #428 _crashed was set on every target
+# before the contagion event decided anything, so a scare read as a crash.
 banking_crisis_wave_init = {
 	# Clear previous wave flags from all countries
 	every_country = {
@@ -1705,11 +1701,13 @@ banking_crisis_wave_init = {
 			OR = {
 				has_variable = banking_crisis_wave_hit
 				has_variable = banking_crisis_wave_crashed
+				has_variable = banking_crisis_wave_scared
 				has_variable = banking_crisis_wave_counted
 			}
 		}
 		if = { limit = { has_variable = banking_crisis_wave_hit } remove_variable = banking_crisis_wave_hit }
 		if = { limit = { has_variable = banking_crisis_wave_crashed } remove_variable = banking_crisis_wave_crashed }
+		if = { limit = { has_variable = banking_crisis_wave_scared } remove_variable = banking_crisis_wave_scared }
 		if = { limit = { has_variable = banking_crisis_wave_counted } remove_variable = banking_crisis_wave_counted }
 	}
 	# Initialize global wave counter
@@ -2174,7 +2172,7 @@ banking_cycle_spread_contagion = {
 				# Mark target immediately so cascading spreads from other countries
 				# in this wave cannot hit the same country twice. Reached, not
 				# crashed: whether it crashes is the contagion event's to decide
-				# (banking_contagion_crash_check sets _crashed).
+				# (banking_contagion_crash_check sets _crashed or _scared).
 				set_variable = { name = banking_crisis_wave_hit value = 1 }
 
 				trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 7 }

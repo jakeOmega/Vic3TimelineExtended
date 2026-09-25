@@ -712,11 +712,11 @@ banking_sovereign_debt_is_priced = {
 
 # Was this country reached by the current crisis wave — hit by contagion, or the
 # crash that started it? banking_crisis_wave_hit marks every country the wave
-# reached, whether its banks crashed or only took a scare;
-# banking_crisis_wave_crashed marks only the ones that crashed (the Great
-# Depression event, minor_events_timelineextended.8, reads that one). A wave in
-# flight in a save from before the split has only _crashed on every country it
-# reached, so this reads both.
+# reached, from the moment it is reached; banking_crisis_wave_crashed and
+# banking_crisis_wave_scared record how its contagion roll came out (the Great
+# Depression event, minor_events_timelineextended.8, reads those two — see
+# banking_crisis_wave_init). A wave in flight in a save from before the split
+# has only _crashed on every country it reached, so this reads both.
 banking_crisis_wave_reached = {
 	OR = {
 		has_variable = banking_crisis_wave_hit
