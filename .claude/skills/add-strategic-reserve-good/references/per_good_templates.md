@@ -15,15 +15,21 @@ The templates assume tab indentation. Existing entries in the source files are t
 
 Append the main section after the existing `--- TANKS ---` section (or whichever section is currently last). Then add `_fill_pct` and `_last_net` at the bottom alongside their siblings.
 
-### Main section (10 values)
+### Main section (11 values)
+
+`_annual_decay_rate` is the single derivation site for the good's decay: the weekly bookkeeping divides it by 52, and the widget row's *Decay: X%/yr* cell shows it as-is. It reads only a modifier, so it needs no `has_variable` guard.
 
 ```
 # --- <GOOD_DISPLAY upper> ---
-st_res_<GOOD>_decay_rate = {
+st_res_<GOOD>_annual_decay_rate = {
 	value = 0
 	add = modifier:country_st_res_<GOOD>_decay_add
-	divide = 52 # convert from per-year to per-week decay
 	min = 0
+}
+
+st_res_<GOOD>_decay_rate = {
+	value = st_res_<GOOD>_annual_decay_rate
+	divide = 52 # convert from per-year to per-week decay
 	max = 1
 }
 
@@ -535,6 +541,7 @@ One row instance, appended to the root `widget_je_strategic_reserve_inventory` f
 		blockoverride "row_amount" { text = "st_res_row_<GOOD>_amount" }
 		blockoverride "row_status" { text = "st_res_row_<GOOD>_status" }
 		blockoverride "row_flow" { text = "st_res_row_<GOOD>_flow" }
+		blockoverride "row_decay" { text = "st_res_row_<GOOD>_decay" }
 		blockoverride "row_bar_value" {
 			value = "[FixedPointToFloat(GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).ScriptValue('st_res_<GOOD>_fill_pct'))]"
 		}
@@ -624,8 +631,12 @@ All row expressions use `JournalEntry.GetCountry…`, **not** `ROOT…` — the 
  st_res_row_<GOOD>_name:0 "@<GOOD>! #bold <GOOD_DISPLAY>#!"
  st_res_row_<GOOD>_amount:0 "[JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0]"
  st_res_row_<GOOD>_status:0 "[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')]"
+ st_res_row_<GOOD>_decay:0 "#bold Decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_annual_decay_rate')|%1]/yr"
  st_res_row_<GOOD>_flow:0 "#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0]  #bold Last wk:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1]/wk"
+ st_res_row_<GOOD>_tooltip:0 "#header @<GOOD>! <GOOD_DISPLAY> Reserve#!\n#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct')|1]%)\n#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0] / week\n#bold [concept_st_res_active_rate]:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_actual_rate')|+1] / week\n#bold Net movement last week:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1] / week\n#bold Decay rate:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_<GOOD>_decay_add')] of the stockpile per year\n#bold Weekly decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_weekly_decay')|1] / week\n#bold Hub flow cap:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0] / week per good\n#bold Hub staffing:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_hub_staffing')|%0]\n\n#bold Status:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')] — [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_reason_text')]\n\n#bold Reserve policy:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_text')]\n[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_reason_text')]\n#bold National market price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_rel')|%0] against base price (this is the market the hub's purchases and sales clear on)\n#bold Averaged price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_signal')|+0]% against base ([JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_price_memory').GetValue|0]-week average — the figure the policy acts on)\n#bold Response ramp:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_ramp').GetValue|0] points past each threshold (0 = full flow at the threshold)\n#bold Price signal at the last review:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_policy_price').GetValue|+0]%"
 ```
+
+`st_res_row_<GOOD>_decay`'s `%N` is per good: enough decimals to show the good's finest decay step, and no more. Grain moves in 5 pp steps (`%0`), oil and Chemicals in 0.05–0.25 pp steps (`%2`), everything else in 0.1–0.7 pp steps (`%1`, as above). Too few decimals and a tech's cut rounds away on the row. The row tooltip's *Decay rate* line carries the exact figure with a hoverable per-source breakdown.
 
 `@<GOOD>!` is the goods texticon — confirm it exists with `grep -n "icon = <GOOD>$" "$VIC3/game/gui/goods_texticons.gui"` (a mod-only good needs an entry in `gui/zzz_extra_goods_texticons.gui` instead).
 
@@ -640,12 +651,11 @@ Everything else the policy panel shows — policy names, preset names, settings 
 
 ---
 
-### te_concepts_l_english.yml (row tooltip + flow modifier descs)
+### te_concepts_l_english.yml (flow modifier descs)
 
 ```
  st_res_<GOOD>_store_flow_desc:0 "This hub is purchasing <GOOD_DISPLAY lower> for the strategic reserve."
  st_res_<GOOD>_withdraw_flow_desc:0 "This hub is releasing <GOOD_DISPLAY lower> from the strategic reserve."
- st_res_row_<GOOD>_tooltip:0 "#header @<GOOD>! <GOOD_DISPLAY> Reserve#!\n#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct')|1]%)\n#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0] / week\n#bold [concept_st_res_active_rate]:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_actual_rate')|+1] / week\n#bold Net movement last week:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1] / week\n#bold Weekly decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_weekly_decay')|1] / week\n#bold Hub flow cap:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0] / week per good\n#bold Hub staffing:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_hub_staffing')|%0]\n\n#bold Status:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')] — [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_reason_text')]\n\n#bold Reserve policy:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_text')]\n[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_reason_text')]\n#bold National market price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_rel')|%0] against base price (this is the market the hub's purchases and sales clear on)\n#bold Averaged price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_signal')|+0]% against base ([JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_price_memory').GetValue|0]-week average — the figure the policy acts on)\n#bold Response ramp:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_ramp').GetValue|0] points past each threshold (0 = full flow at the threshold)\n#bold Price signal at the last review:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_policy_price').GetValue|+0]%"
 ```
 
 The three control-button tooltips (`st_res_row_decrease_tooltip`, `st_res_row_stop_tooltip`, `st_res_row_increase_tooltip`) are shared across all goods — they already exist.

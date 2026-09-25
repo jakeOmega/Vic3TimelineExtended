@@ -129,7 +129,7 @@ $$
 
 where
 - $r$ = `var:st_res_<good>_rate` (signed configured weekly rate),
-- $d$ = `modifier:country_st_res_<good>_decay_add` (**annual** decay rate; divided by 52 and clamped to $[0,1]$),
+- $d$ = `st_res_<good>_annual_decay_rate`, i.e. `modifier:country_st_res_<good>_decay_add` floored at 0 (the **annual** decay rate; `st_res_<good>_decay_rate` is $d/52$, capped at 1),
 - $S$ = current stored amount,
 - $C$ = `st_res_weekly_base_rate_cap` (§2).
 
@@ -168,9 +168,9 @@ Decay rates are **custom country modifier types** (`country_st_res_<good>_decay_
 
 Chemicals decay follows how chemical storage actually changed. In era 2 the stock sits in wooden casks, jute sacks and glass carboys: saltpetre and other hygroscopic salts cake, superphosphate "reverts" (its water-soluble phosphate turns insoluble), bleaching powder loses its chlorine, and carboys break. So 4% sits above ammunition's 2% and far below grain's 25%. The cuts track purer product grades (era 3), Haber-Bosch product in steel tanks and drums (era 4), prilling and anti-caking coatings (era 6), polyethylene sacks and tank liners (era 7), vapour recovery and spill containment (era 7), stock rotation (era 9), and impermeable coatings and on-site re-synthesis (era 12). The 0.1% endpoint sits between oil (0.05%) and ammunition (0.5%). Decay models physical and quality loss only. The real modern cost of holding bulk chemicals is storage rent, which the reserve charges through the hub's construction and staffing.
 
-`st_res_<good>_decay_rate` divides the annual rate by 52, and the modifier's `GetValueWithBreakdownFor` gives the player a hoverable breakdown of every source.
+`st_res_<good>_annual_decay_rate` reads the modifier and floors it at 0, so further tech reductions cannot push decay negative; `st_res_<good>_decay_rate` divides it by 52 (capped at 1) for the weekly tick. The annual value is the single derivation site: the inventory row shows it as *Decay: X%/yr* (§5), and the row tooltip adds the modifier's `GetValueWithBreakdownFor`, a hoverable breakdown of every source. The breakdown is the raw modifier, so it would read below 0% if tech ever cut a good past zero, while the row and the bookkeeping stop at 0%. No good does today; grain lands exactly on 0%.
 
-Decay is clamped to `[0, 1]` in the script values, so further tech reductions cannot push it negative.
+Each good's row key picks its own decimals to match that good's finest tech step: `%0` for grain (5 pp steps), `%2` for oil and chemicals (0.05–0.25 pp steps), `%1` for the rest. A new tech with a finer step needs the good's `st_res_row_<good>_decay` format widened, or the row rounds it away.
 
 ### 4.5 Hub-flow safeguards
 
@@ -333,7 +333,7 @@ Two things — and only two — switch a good back to Manual, both of them expli
 
 - **Activation:** `possible` = the country has a hub built. `is_shown_when_inactive` requires `logistics`. The widget root is gated on `[JournalEntry.IsActive]` so it does not render — and does not read reserve variables — for a country that has never built a hub.
 - **Summary text (`status_desc`):** hub status (no hub / deactivated / active), weekly sales income, and the hub flow cap. Deliberately short, because `status_desc` also renders in the journal *list*, where one block per good was unreadable.
-- **Inventory rows:** one per unlocked good — `@good!` icon and name, `stored / capacity`, a fill bar driven by `st_res_<good>_fill_pct`, the configured signed rate, the actual net weekly movement (`st_res_<good>_last_net`), a Storing / Withdrawing / Idle / Blocked label, and decrease / stop / increase controls. The row tooltip breaks down stock, rate setting, active rate, net movement, weekly decay, hub flow cap and hub staffing, then states the reason movement differs from the setting.
+- **Inventory rows:** one per unlocked good — `@good!` icon and name, `stored / capacity`, a fill bar driven by `st_res_<good>_fill_pct`, the configured signed rate, the actual net weekly movement (`st_res_<good>_last_net`), the annual decay rate (`st_res_<good>_annual_decay_rate`, §4.4), a Storing / Withdrawing / Idle / Blocked label, and decrease / stop / increase controls. The row tooltip breaks down stock, rate setting, active rate, net movement, the decay rate with its per-source breakdown, weekly decay, hub flow cap and hub staffing, then states the reason movement differs from the setting.
 - **Row visibility** is `ScriptedGui.IsShown`, delegating to `st_res_<good>_unlocked_trigger` — the unlock conditions are never duplicated in a GUI expression.
 - **Row controls** call `st_res_adjust_<good>_sgui` with the action in a `dir` saved scope (`0` decrease, `1` stop, `2` increase). Each branch delegates to the existing `st_res_{increase,decrease,stop}_<good>_rate_effect` helpers, so the rate rules live in script, not in GUI. "Stop" zeroes only that good's rate. All three also switch the good to Manual — see §4.6.
 - **Policy lines (3 and 4):** the good's policy, the live national market price against base with the averaged price the policy acts on beside it, and the weekly flow the policy settled on; then the plain-language explanation, straight from `st_res_<good>_policy_reason_text`. A gear button expands the per-good **settings panel**: the four policy buttons, the three presets, and eight +/− steppers.
