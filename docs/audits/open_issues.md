@@ -37,14 +37,13 @@ Detail lives on the issues; this tracker only keeps the pointer so the review he
 | L21 server hardening nits | #254 |
 | L22 packaging nits | #255 |
 
-### M_NEW2. Deferred event-tooling categories (#2-#4)
-**Tooling:** `event_magnitude_audit.py` covers category #1 of a four-part event-quality plan (work landed 2026-05-04, see `docs/engine/event_magnitude_report.md`). Three categories still TODO:
+### M_NEW2. Event-tooling categories (#2-#4) — tooling landed 2026-09-25
+**Tooling:** `event_magnitude_audit.py` covers category #1 of the four-part event-quality plan (2026-05-04, `docs/engine/event_magnitude_report.md`). The rest:
 
-- **#2 Pulse-event narrative drift.** Flavor events fired from `on_yearly_pulse` / `on_monthly_pulse` narrate game actions the player didn't take (e.g. a `events/un_events.txt` veto-flavor event that fires regardless of whether the player used a veto). Tooling needed: scan event localization for action-implying tokens, cross-reference event triggers for matching game-state checks, flag drift.
-- **#3 Event-chain invisibility.** Backfires/sequels don't surface their precursor to the player (e.g. `international_relations_events.106` "The Narrative Turns" is a backfire of `international_relations_events.4` Option A but reads as orphan to the player). Tooling needed: build event-chain graph; for events with predecessors, check whether the description references the prior choice and otherwise prepend a contextual reminder.
-- **#4 Orphan event-bug detection.** Events meant to fire mechanically but never wired anywhere. Tooling needed: list events that appear in no `trigger_event` call and no `random_events` pool, then cross-reference against titles/descriptions to identify which are mechanically required vs intentionally pulse-only.
+- **#2 Pulse-event narrative drift** and **#3 event-chain invisibility** — covered by `event_context_audit.py` (2026-09-25; `docs/engine/event_context_report.md`, `GET /event-context-audit`, `GET /event-dispatch/<id>`, `--strict` in CI). It builds a dispatch graph of every mod event (with scope switches, guards and chooser status) and flags `unchosen_self_action` (text claims the recipient's own action though it can arrive unchosen — `international_relations_events.106` "answered our information campaign" was the canonical case), `imputed_foreign_action` (the event picks another country, says it acted, and punishes it) and `system_ungated` (the event talks about a mod system without reading it — the class PR #418 fixed by hand). A manual sweep of all 820 events ran alongside; its findings were fixed across the event-agency PRs, and the checks are heuristics (27 of that sweep's 42 confirmed findings), so a judgement pass stays worthwhile for new content. The example given here originally — a `un_events.txt` veto flavour event firing without a veto — was `un_events.11`, already fixed by the UN redesign (#419).
+- **#4 Orphan event-bug detection** — done by `orphaned_event_audit.py`.
 
-Each round should reuse the audit + inline-`# REVIEWED YYYY-MM-DD: rationale` suppression pattern established for category #1.
+Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEWED YYYY-MM-DD (<check>): rationale` line inside the event (not the opening line, which three other audits read).
 
 ---
 
