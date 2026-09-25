@@ -317,6 +317,9 @@ _COND_KEYS = {"limit", "trigger", "possible", "is_shown", "potential", "is_valid
               "can_be_enacted", "visible"}
 _NUMERIC_RE = re.compile(r"^-?\d+(?:\.\d+)?$")
 _PARAM_RE = re.compile(r"^\$\w+\$$")
+# Console-only test harnesses (`event te_debug_x.1`): skipped as flag targets and
+# as dispatch sources — they are not how anything reaches a player.
+_CONSOLE_FILE_RE = re.compile(r"^te_debug_")
 
 
 def _strip_comments(text: str) -> str:
@@ -745,6 +748,8 @@ def build_graph(mod_path: str) -> Graph:
                     continue
                 p = os.path.join(dirpath, f)
                 rel = os.path.relpath(p, mod_path).replace("\\", "/")
+                if _CONSOLE_FILE_RE.search(f):
+                    continue  # console-only harnesses: not how anything reaches a player
                 fs = scan_file(p, rel, effect_names)
                 for s in fs.sites:
                     sites_by_event[s.event].append(s)
@@ -762,14 +767,17 @@ def _substitute_params(sites_by_event: dict[str, list[Site]], effect_calls: dict
     parameters — `trigger_event = { id = $EVENT$ }`, or a fixed id fired into
     `$WHO$ = { … }` — into one concrete site per caller, carrying the caller's
     path, guards and scope switches plus the helper's own, with `$X$` replaced
-    by the caller's value. Runs in rounds so a helper forwarding its parameters
-    to another helper resolves too."""
+    by the caller's value. Runs in bounded rounds so a helper forwarding its
+    parameters to another helper (renamed or not) resolves too; new sites are
+    buffered per round, so a self-forwarding helper cannot grow the list being
+    walked, and leftover `$X$` keys are dropped only once, at the end."""
     def needs(s: Site) -> bool:
         return s.entity_kind == "scripted_effect" and (
             bool(_PARAM_RE.match(s.event)) or any("$" in p for p in s.path) or "$" in s.conds)
 
     for _round in range(8):
         changed = False
+        added: dict[str, list[Site]] = defaultdict(list)
         for key in list(sites_by_event):
             keep: list[Site] = []
             for s in sites_by_event[key]:
@@ -779,23 +787,35 @@ def _substitute_params(sites_by_event: dict[str, list[Site]], effect_calls: dict
                     continue
                 changed = True
                 for (rel, ln, pk, sw, conds, entity, kind, params) in calls:
-                    def sub(x: str, params=params) -> str:
-                        return re.sub(r"\$(\w+)\$", lambda m: params.get(m.group(1), m.group(0)), x)
                     if _PARAM_RE.match(s.event) and s.event.strip("$") not in params:
                         continue  # this caller doesn't say which event
-                    # A caller that forwards `EVENT = $EVENT$` yields a site
-                    # that is still parameterised; the next round resolves it.
+                    # A caller that forwards `EVENT = $EVENT$` (or renames it)
+                    # yields a site that is still parameterised; the next round
+                    # resolves it.
+                    def sub(x: str, params=params) -> str:
+                        return re.sub(r"\$(\w+)\$", lambda m: params.get(m.group(1), m.group(0)), x)
                     event = sub(s.event)
                     inner = [sub(p) for p in s.path]
-                    sites_by_event.setdefault(event, []).append(Site(
+                    added[event].append(Site(
                         event, rel, ln, entity, kind, pk + inner,
                         sw + [p for p in inner if _is_switch(p)], conds + " " + sub(s.conds), s.via))
             sites_by_event[key] = keep
-        for key in [k for k, v in sites_by_event.items() if not v or _PARAM_RE.match(k)]:
-            if not sites_by_event[key] or _PARAM_RE.match(key):
-                del sites_by_event[key]
+        for k, v in added.items():
+            sites_by_event.setdefault(k, []).extend(v)
         if not changed:
-            return
+            break
+    for key in [k for k, v in sites_by_event.items() if not v or _PARAM_RE.match(k)]:
+        del sites_by_event[key]
+    # A recursive helper re-derives the same caller site every round.
+    for key, lst in sites_by_event.items():
+        seen: set = set()
+        uniq = []
+        for s in lst:
+            sig = (s.file, s.line, s.entity, tuple(s.path), tuple(s.switches), s.via)
+            if sig not in seen:
+                seen.add(sig)
+                uniq.append(s)
+        sites_by_event[key] = uniq
 
 
 # Chooser status of a dispatch source, resolved through immediates, effects and
@@ -822,7 +842,8 @@ class Resolver:
         self._memo: dict[tuple, object] = {}
 
     def _cached(self, key: tuple, seen: frozenset, compute, top_default):
-        if not seen and key in self._memo:
+        # A top-level result is final, so nested lookups may reuse it too.
+        if key in self._memo:
             return self._memo[key]
         res = compute(seen | {key})
         if not seen:
@@ -897,6 +918,8 @@ class Resolver:
                     return UNCHOSEN, f"pulse {name}"
                 return UNCHOSEN, f"engine hook {name}"
             res = self._combine([self.on_action_choice(p, sn) for p, _ln, _f in parents], name)
+            if res is None:  # every parent is a revisit: neutral
+                return None
             if res[0] == UNCHOSEN and "pulse" in res[1] and name not in res[1]:
                 res = (UNCHOSEN, f"{res[1]} > {name}")
             return res
@@ -1035,7 +1058,6 @@ def _event_text(ev: EventDef, loc: dict[str, str], fields=("title", "desc", "fla
     return " \n ".join(_expand_loc(loc.get(k, ""), loc) for k in keys)
 
 
-_CONSOLE_FILE_RE = re.compile(r"^te_debug_")
 _COUNTRY_PICKER_RE = re.compile(r"^(?:random|ordered)_\w*countr(?:y|ies)$")
 
 

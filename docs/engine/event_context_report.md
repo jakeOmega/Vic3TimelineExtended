@@ -2,8 +2,8 @@
 
 Events whose text does not match the context they fire in: events about a mod system that ignore it, and events that claim a country acted when it never chose to. Heuristic ranking for a human read — see `event_context_audit.py` for the rules. Suppress a reviewed flag with a check-tagged comment on its own line inside the event block: `# REVIEWED YYYY-MM-DD (<check>): rationale`.
 
-- Events defined: **822**, visible: **804**, dispatch sites traced: **1011**
-- `system_ungated`: **0** unreviewed, 17 REVIEWED
+- Events defined: **822**, visible: **804**, dispatch sites traced: **994**
+- `system_ungated`: **0** unreviewed, 16 REVIEWED
 - `unchosen_self_action`: **0** unreviewed, 7 REVIEWED
 - `imputed_foreign_action`: **0** unreviewed, 21 REVIEWED
 - Tags to remove: **0**
@@ -27,7 +27,6 @@ No unreviewed flags. ✅
 - `society_technology_events.14` — events/society_technology_events.txt:1258 (REVIEWED 2026-09-25: tracked in #427 — the accused country gets the choice first)
 - `un_events.2` — events/un_events.txt:135 (REVIEWED 2026-09-25: fired by the nuclear strike itself (extra_effects.txt); the UN condemnation of a real use)
 - `un_events.12` — events/un_events.txt:1559 (REVIEWED 2026-09-25: a UN topic raised by a real colonial collapse (docket item 8); UN history, independent of the decolonization JE)
-- `un_events.33` — events/un_events.txt:3199 (REVIEWED 2026-09-25: the nuclear text shows only when var:un_icc_crime = 1, which un_regime_icc_note_crime writes from inside the nuclear strike effects themselves (extra_effects.txt); the strike is game state, not a premise.)
 - `un_vote.1` — events/un_vote_events.txt:49 (REVIEWED 2026-09-25: the generic vote event names every resolution topic; each topic is raised by its own gated docket item)
 - `un_vote.1` — events/un_vote_events.txt:49 (REVIEWED 2026-09-25: the generic vote event names every resolution topic; each topic is raised by its own gated docket item)
 - `un_vote.2` — events/un_vote_events.txt:365 (REVIEWED 2026-09-25: the generic result event; the non-proliferation text shows only for that resolution)
