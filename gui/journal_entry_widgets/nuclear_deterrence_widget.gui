@@ -45,8 +45,13 @@
 ### NO ACTION BUTTON'S `visible` COMES FROM AN op-BRANCHING IsShown
 ### (gui_modding_guide.md gotcha #22). The buttons are always drawn while their
 ### section is; is_valid greys them and says why. The yes/no questions this
-### file does ask (armed? in a crisis? a last crisis to report?) go to
-### scope-free display handlers.
+### file does ask (armed? in a crisis? a last crisis to report? which side of
+### the crisis are we on?) go to scope-free display handlers — the crisis move
+### rows a side cannot make are hidden that way (nd_crisis_we_issued_sgui,
+### nd_crisis_we_are_target_sgui, nd_crisis_private_sgui, nd_armed_sgui), and
+### the pressure and danger breakdowns and the next-pressure line are
+### script-built text from display handlers (nd_crisis_*_breakdown_sgui,
+### nd_crisis_next_pressure_sgui).
 ###
 ### BOTH ROOTS ARE GATED ON JournalEntry.IsActive (gotcha #14).
 ###
@@ -836,18 +841,62 @@ flowcontainer = {
 				text = "nd_w_crisis_danger_value"
 			}
 			blockoverride "row_tooltip" {
-				tooltip = "nd_w_crisis_danger_tt"
+				tooltip = "[Concatenate( Localize( 'nd_w_crisis_danger_tt' ), GetScriptedGui('nd_crisis_danger_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 			}
 		}
 		nd_row = {
 			blockoverride "row_label" {
-				text = "nd_w_crisis_pressure_label"
+				text = "nd_w_crisis_pressure_label_value"
 			}
 			blockoverride "row_value" {
 				text = "nd_w_crisis_pressure_value"
 			}
 			blockoverride "row_tooltip" {
-				tooltip = "nd_w_crisis_pressure_tt"
+				tooltip = "[Concatenate( Localize( 'nd_w_crisis_pressure_tt' ), GetScriptedGui('nd_crisis_pressure_breakdown_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+			}
+		}
+		nd_row = {
+			blockoverride "row_label" {
+				text = "nd_w_crisis_concede_label_value"
+			}
+			blockoverride "row_value" {
+				text = "nd_w_crisis_concession_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "nd_w_crisis_concession_tt"
+			}
+		}
+		nd_row = {
+			blockoverride "row_label" {
+				text = "nd_w_crisis_ft_label_value"
+			}
+			blockoverride "row_value" {
+				text = "nd_w_crisis_ft_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "nd_w_crisis_ft_tt"
+			}
+		}
+		nd_row = {
+			blockoverride "row_label" {
+				text = "nd_w_crisis_next_pressure_label"
+			}
+			blockoverride "row_value" {
+				text = "[GetScriptedGui('nd_crisis_next_pressure_sgui').ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "nd_w_crisis_next_pressure_tt"
+			}
+		}
+		nd_row = {
+			blockoverride "row_label" {
+				text = "nd_w_crisis_stakes_label"
+			}
+			blockoverride "row_value" {
+				text = "nd_w_crisis_stakes_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "nd_w_crisis_stakes_tt"
 			}
 		}
 
@@ -857,6 +906,7 @@ flowcontainer = {
 		}
 
 		nd_choice_row = {
+			visible = "[GetScriptedGui('nd_crisis_private_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
 			textbox = {
 				size = { 360 30 }
@@ -899,6 +949,7 @@ flowcontainer = {
 			}
 		}
 		nd_choice_row = {
+			visible = "[GetScriptedGui('nd_armed_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
 			textbox = {
 				size = { 360 30 }
@@ -920,6 +971,7 @@ flowcontainer = {
 			}
 		}
 		nd_choice_row = {
+			visible = "[GetScriptedGui('nd_crisis_we_are_target_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
 			textbox = {
 				size = { 360 30 }
@@ -941,6 +993,7 @@ flowcontainer = {
 			}
 		}
 		nd_choice_row = {
+			visible = "[GetScriptedGui('nd_crisis_we_issued_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			datacontext = "[GetScriptedGui('nd_crisis_action_sgui')]"
 			textbox = {
 				size = { 360 30 }

@@ -734,6 +734,24 @@ nd_crisis_public_either = {
 	}
 }
 
+# Either party: talks are open (the pressure events are paused).
+nd_crisis_talks_open_either = {
+	OR = {
+		AND = {
+			nd_is_crisis_owner = yes
+			has_variable = nd_crisis_talks
+			var:nd_crisis_talks = 1
+		}
+		AND = {
+			nd_is_crisis_target = yes
+			var:nd_crisis_opponent ?= {
+				has_variable = nd_crisis_talks
+				var:nd_crisis_talks = 1
+			}
+		}
+	}
+}
+
 # Owner scope: the issuer is defending rather than demanding — the target
 # initiated the play we dispute, or we are protecting a beneficiary. A
 # stand-down then achieves our objective and carries no audience cost (§6).

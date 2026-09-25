@@ -487,6 +487,70 @@ class TestActLines(unittest.TestCase):
         self.assertIn("6", loc_value("nd_tt_exercise_effect"))
 
 
+BREAKDOWN_KEYS = {p: p + "_line" for p in DANGER_PARTS + PRESSURE_PARTS}
+
+
+class TestCrisisPanel(unittest.TestCase):
+    def setUp(self):
+        self.sguis = strip_comments(read(SGUIS))
+        self.gui = read(GUI)
+        self.custom = strip_comments(read(CUSTOM_LOC))
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_display_handlers_exist_and_are_display_only(self):
+        for name in ("nd_crisis_we_issued_sgui", "nd_crisis_we_are_target_sgui", "nd_crisis_private_sgui",
+                     "nd_crisis_pressure_breakdown_sgui", "nd_crisis_danger_breakdown_sgui",
+                     "nd_crisis_next_pressure_sgui"):
+            body = block(self.sguis, name)
+            self.assertIn("is_valid = { always = no }", body, name)
+            self.assertIn("ai_is_valid = { always = no }", body, name)
+            self.assertIn(name, self.gui, f"{name} is never drawn")
+
+    def test_breakdowns_print_every_stored_part(self):
+        pressure = block(self.sguis, "nd_crisis_pressure_breakdown_sgui")
+        danger = block(self.sguis, "nd_crisis_danger_breakdown_sgui")
+        for part in PRESSURE_PARTS:
+            self.assertIn(f"nd_crisis_breakdown_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} }}", pressure)
+        for part in DANGER_PARTS:
+            self.assertIn(f"nd_crisis_breakdown_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} }}", danger)
+
+    def test_breakdown_lines_guard_their_variable(self):
+        body = block(self.effects, "nd_crisis_breakdown_line")
+        self.assertIn("has_variable = $C$", body)
+        for part, key in BREAKDOWN_KEYS.items():
+            self.assertIn(f"THIS.Var('{part}').GetValue", loc_value(key), key)
+
+    def test_role_rows_are_gated(self):
+        for key, sgui in (("nd_w_crisis_act_public", "nd_crisis_private_sgui"),
+                          ("nd_w_crisis_act_yield", "nd_crisis_we_are_target_sgui"),
+                          ("nd_w_crisis_act_back_down", "nd_crisis_we_issued_sgui"),
+                          ("nd_w_crisis_act_exercise", "nd_armed_sgui")):
+            i = self.gui.index(f'text = "{key}"')
+            row = self.gui.rfind("nd_choice_row = {", 0, i)
+            self.assertIn(f"GetScriptedGui('{sgui}')", self.gui[row:i], key)
+
+    def test_new_custom_loc_blocks_have_fallbacks(self):
+        for name in ("nd_crisis_pressure_label", "nd_crisis_concede_label", "nd_crisis_concession_short",
+                     "nd_crisis_concession_long", "nd_crisis_ft_label", "nd_crisis_ft_word",
+                     "nd_crisis_ft_reason", "nd_crisis_stakes_short", "nd_crisis_stakes_long",
+                     "nd_crisis_concession_past", "nd_crisis_stage_next"):
+            body = block(self.custom, name)
+            self.assertRegex(body, r"text = \{\s*trigger = \{ always = yes \}\s*localization_key = \w+\s*\}\s*$", name)
+
+    def test_localize_keys_in_gui_exist(self):
+        keys = set(re.findall(r"Localize\( '(\w+)' \)", self.gui))
+        self.assertTrue(keys)
+        missing = sorted(k for k in keys if k not in loc_keys())
+        self.assertFalse(missing, missing)
+
+    def test_pressure_thresholds_match_the_events(self):
+        events = strip_comments(read(CRISIS_EVENTS))
+        concede = option_body(events, "nuclear_crisis.5.a")
+        for n in ("50", "70", "85"):
+            self.assertIn(f"var:nd_yield_pressure >= {n}", concede)
+            self.assertIn(n, loc_value("nd_w_crisis_pressure_tt"))
+
+
 class TestManagedFamilies(unittest.TestCase):
     def test_doctrine_and_readiness_families_exist(self):
         mods = set(re.findall(r"^(nd_\w+)\s*=\s*\{", read(MODIFIERS), re.M))

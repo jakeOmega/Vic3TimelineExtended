@@ -920,3 +920,230 @@ nd_status_line = {
 		localization_key = nd_empty
 	}
 }
+
+# ---- The crisis panel's role-aware words (2026-09-25 spec §3) ----------------
+nd_crisis_pressure_label = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_is_crisis_target = yes }
+		localization_key = nd_w_crisis_pressure_label_us
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_crisis_pressure_label
+	}
+}
+
+nd_crisis_concede_label = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_is_crisis_target = yes }
+		localization_key = nd_w_crisis_concede_label_us
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_crisis_concede_label_them
+	}
+}
+
+nd_crisis_concession_short = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 1 } }
+		localization_key = nd_concession_short_1
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 2 } }
+		localization_key = nd_concession_short_2
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 3 } }
+		localization_key = nd_concession_short_3
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 4 } }
+		localization_key = nd_concession_short_4
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_concession_short_5
+	}
+}
+
+nd_crisis_concession_long = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 1 } }
+		localization_key = nd_concession_long_1
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 2 } }
+		localization_key = nd_concession_long_2
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 3 } }
+		localization_key = nd_concession_long_3
+	}
+	text = {
+		trigger = { nd_crisis_dispute_is = { D = 4 } }
+		localization_key = nd_concession_long_4
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_concession_long_5
+	}
+}
+
+nd_crisis_ft_label = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_is_crisis_target = yes }
+		localization_key = nd_w_crisis_ft_label_them
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_w_crisis_ft_label_us
+	}
+}
+
+nd_crisis_ft_word = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason <= 2
+		}
+		localization_key = nd_ft_word_backed
+	}
+	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason <= 4
+		}
+		localization_key = nd_ft_word_uncertain
+	}
+	text = {
+		trigger = { has_variable = nd_ft_reason }
+		localization_key = nd_ft_word_bluff
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_ft_word_unknown
+	}
+}
+
+nd_crisis_ft_reason = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason = 1
+		}
+		localization_key = nd_ft_reason_1
+	}
+	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason = 2
+		}
+		localization_key = nd_ft_reason_2
+	}
+	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason = 3
+		}
+		localization_key = nd_ft_reason_3
+	}
+	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason = 4
+		}
+		localization_key = nd_ft_reason_4
+	}
+	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason = 5
+		}
+		localization_key = nd_ft_reason_5
+	}
+	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason = 6
+		}
+		localization_key = nd_ft_reason_6
+	}
+	text = {
+		trigger = {
+			has_variable = nd_ft_reason
+			var:nd_ft_reason = 7
+		}
+		localization_key = nd_ft_reason_7
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_ft_reason_unknown
+	}
+}
+
+nd_crisis_stakes_short = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_is_crisis_target = yes }
+		localization_key = nd_stakes_short_target
+	}
+	text = {
+		trigger = { nd_crisis_is_public = yes }
+		localization_key = nd_stakes_short_public
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_stakes_short_private
+	}
+}
+
+nd_crisis_stakes_long = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_is_crisis_target = yes }
+		localization_key = nd_stakes_long_target
+	}
+	text = {
+		trigger = { nd_crisis_is_public = yes }
+		localization_key = nd_stakes_long_public
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_stakes_long_private
+	}
+}
+
+# What would move THIS crisis to its next stage (§0.3's rules, by stage).
+nd_crisis_stage_next = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = { nd_crisis_stage_at_least = { STAGE = 3 } }
+		localization_key = nd_stage_next_3
+	}
+	text = {
+		trigger = { nd_crisis_stage_at_least = { STAGE = 2 } }
+		localization_key = nd_stage_next_2
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_stage_next_1
+	}
+}

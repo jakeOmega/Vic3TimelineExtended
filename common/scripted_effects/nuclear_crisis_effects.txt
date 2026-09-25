@@ -562,6 +562,19 @@ nd_crisis_clear_figures = {
 	}
 }
 
+# Country scope, display only: one breakdown line for a stored part, when it
+# is set and non-zero (nd_crisis_*_breakdown_sgui). KEY is passed literally so
+# organize_loc.py sees it.
+nd_crisis_breakdown_line = {
+	if = {
+		limit = {
+			has_variable = $C$
+			NOT = { var:$C$ = 0 }
+		}
+		custom_tooltip_no_bullet = $KEY$
+	}
+}
+
 # ----------------------------------------------------------------------------
 # THE WEEKLY TICK — owner scope, from nd_weekly_update only
 # ----------------------------------------------------------------------------

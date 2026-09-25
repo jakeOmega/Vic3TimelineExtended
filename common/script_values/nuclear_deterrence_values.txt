@@ -899,6 +899,35 @@ nd_display_yield_pressure = {
 	}
 }
 
+# Weeks until the target is pressed again (nd_crisis_weekly_tick fires the
+# event on the tick at which the counter reaches the interval), from either
+# side. At least 1: the soonest is next week.
+nd_display_next_pressure_weeks = {
+	value = 0
+	if = {
+		limit = {
+			nd_is_crisis_owner = yes
+			has_variable = nd_crisis_pressure_weeks
+		}
+		add = nd_crisis_pressure_interval_weeks
+		subtract = var:nd_crisis_pressure_weeks
+	}
+	else_if = {
+		limit = {
+			nd_is_crisis_target = yes
+			exists = var:nd_crisis_opponent
+		}
+		var:nd_crisis_opponent = {
+			if = {
+				limit = { has_variable = nd_crisis_pressure_weeks }
+				add = nd_crisis_pressure_interval_weeks
+				subtract = var:nd_crisis_pressure_weeks
+			}
+		}
+	}
+	min = 1
+}
+
 # The public estimate of this country's arsenal (§0.6), or the truth before
 # the first yearly observation.
 nd_display_public_estimate = {
