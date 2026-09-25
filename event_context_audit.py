@@ -160,7 +160,7 @@ SYSTEMS: tuple[System, ...] = (
     System(
         "global_warming", "Global warming",
         _rx(r"\bglobal_warming_(?:enabled|disabled)\b|\bje_global_warming\b|\bglobal_warming_\w+"
-            r"|\bgw_\w+"),
+            r"|\bgw_\w+|\btemperature_anomaly_\w+|\bgreenhouse_gas_emissions\b"),
         _rx(r"^(?:global_warming|gw_|te_debug_gw)"),
         _rx(r"\bclimate (?:change|crisis|catastrophe)\b|\bglobal warming\b|\brising seas?\b"
             r"|\bsea levels? (?:rise|rising)\b|\bcarbon emissions?\b|\bextreme weather\b"
