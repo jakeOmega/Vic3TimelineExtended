@@ -8,6 +8,16 @@
 # common/scripted_buttons/nuclear_program_buttons.txt, with one call appended.
 # The button and the widget's nuclear_program_funding_sgui both call the helper,
 # so the hidden grid and the panel cannot drift apart.
+#
+# The funding modifier sits on the journal entry, and the engine re-evaluates a
+# journal-entry modifier's multiplier in JE scope, where the bare
+# `var:nuclear_weapons_program_funding` inside nuclear_weapons_program_current_cost
+# reads 'none' ("Value of wrong type ... Got value of type 'none'" on the
+# add_modifier line, every recalculation). So the cost is cached on the country
+# and read through root, as the UN and banking entries do
+# (scripting_best_practices.md, "JE scope can't read country properties").
+# nuclear_program_refresh_state_effect re-applies a modifier left over from the
+# old form once.
 
 nuclear_program_effect_increase_funding = {
 	custom_tooltip = {
@@ -16,6 +26,10 @@ nuclear_program_effect_increase_funding = {
 			name = nuclear_weapons_program_funding
 			add = 1
 		}
+		set_variable = {
+			name = nuclear_weapons_program_cost_cached
+			value = nuclear_weapons_program_current_cost
+		}
 		je:je_nuclear_program = {
 			if = {
 				limit = { has_modifier = nuclear_weapon_program_funding }
@@ -23,7 +37,7 @@ nuclear_program_effect_increase_funding = {
 			}
 			add_modifier = {
 				name = nuclear_weapon_program_funding
-				multiplier = nuclear_weapons_program_current_cost
+				multiplier = root.var:nuclear_weapons_program_cost_cached
 			}
 		}
 	}
@@ -37,6 +51,10 @@ nuclear_program_effect_decrease_funding = {
 			name = nuclear_weapons_program_funding
 			subtract = 1
 		}
+		set_variable = {
+			name = nuclear_weapons_program_cost_cached
+			value = nuclear_weapons_program_current_cost
+		}
 		je:je_nuclear_program = {
 			if = {
 				limit = { has_modifier = nuclear_weapon_program_funding }
@@ -44,7 +62,7 @@ nuclear_program_effect_decrease_funding = {
 			}
 			add_modifier = {
 				name = nuclear_weapon_program_funding
-				multiplier = nuclear_weapons_program_current_cost
+				multiplier = root.var:nuclear_weapons_program_cost_cached
 			}
 		}
 	}
@@ -98,6 +116,29 @@ nuclear_program_effect_decrease_funding = {
 # live state, because the only caller where the two differ is "decrease 1 -> 0",
 # and there both readings say "present".
 nuclear_program_refresh_state_effect = {
+	# Migration: a save funded before the cost was cached carries the modifier
+	# with the old JE-scope multiplier; re-apply it once in the cached form.
+	if = {
+		limit = {
+			has_variable = nuclear_weapons_program_funding
+			var:nuclear_weapons_program_funding >= 1
+			NOT = { has_variable = nuclear_weapons_program_cost_cached }
+		}
+		set_variable = {
+			name = nuclear_weapons_program_cost_cached
+			value = nuclear_weapons_program_current_cost
+		}
+		je:je_nuclear_program ?= {
+			if = {
+				limit = { has_modifier = nuclear_weapon_program_funding }
+				remove_modifier = nuclear_weapon_program_funding
+			}
+			add_modifier = {
+				name = nuclear_weapon_program_funding
+				multiplier = root.var:nuclear_weapons_program_cost_cached
+			}
+		}
+	}
 	if = {
 		limit = {
 			has_variable = nuclear_weapons_program_funding
