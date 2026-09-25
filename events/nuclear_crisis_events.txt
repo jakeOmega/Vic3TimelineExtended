@@ -771,9 +771,37 @@ nuclear_crisis.6 = {
 		has_variable = nd_crisis_last_outcome
 	}
 
+	# The other party of THIS notice, from the scopes it was sent with. The
+	# option applies the pending record only if it is still this pair's.
+	immediate = {
+		if = {
+			limit = {
+				has_variable = nd_crisis_pending_role
+				var:nd_crisis_pending_role = 1
+				exists = scope:nd_target
+			}
+			scope:nd_target = { save_scope_as = nd_outcome_other }
+		}
+		else_if = {
+			limit = { exists = scope:nd_issuer }
+			scope:nd_issuer = { save_scope_as = nd_outcome_other }
+		}
+	}
+
 	option = {
 		name = nuclear_crisis.6.a
 		default_option = yes
+		if = {
+			limit = {
+				has_variable = nd_crisis_pending_outcome
+				exists = scope:nd_outcome_other
+				var:nd_crisis_pending_opponent ?= scope:nd_outcome_other
+			}
+			nd_crisis_apply_outcome_side = yes
+		}
+		else = {
+			custom_tooltip = nd_tt_outcome_already_settled
+		}
 	}
 }
 

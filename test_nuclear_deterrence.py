@@ -72,8 +72,11 @@ def loc_keys():
 
 
 def block(text, name):
-    """The body of the first `name = { ... }` block that opens a line."""
-    m = re.search(r"^[ \t]*" + re.escape(name) + r"\s*=\s*\{", text, re.M)
+    """The body of the first `name = { ... }` block that opens a line: a
+    top-level definition if there is one, else the first indented one (an
+    indented `name = { PARAM = … }` call must not shadow the definition)."""
+    m = (re.search(r"^" + re.escape(name) + r"\s*=\s*\{", text, re.M)
+         or re.search(r"^[ \t]*" + re.escape(name) + r"\s*=\s*\{", text, re.M))
     if not m:
         raise AssertionError(f"{name} not found")
     depth, i = 1, m.end()
@@ -325,6 +328,42 @@ class TestCrisisFigures(unittest.TestCase):
             if path == CRISIS_EFFECTS:
                 text = text.replace(block(text, "nd_crisis_refresh_figures"), "")
             self.assertNotRegex(text, r"name = nd_(?:crisis_danger|yield_pressure) value", path.name)
+
+
+class TestOutcomeNotice(unittest.TestCase):
+    def setUp(self):
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+        self.events = strip_comments(read(CRISIS_EVENTS))
+
+    def test_close_no_longer_applies_consequences(self):
+        self.assertNotRegex(self.effects, r"(?m)^nd_crisis_apply_outcome = \{")
+        self.assertNotIn("nd_crisis_apply_outcome = yes", block(self.effects, "nd_crisis_close"))
+
+    def test_close_flushes_before_recording(self):
+        body = block(self.effects, "nd_crisis_close")
+        flush = body.index("nd_crisis_flush_pending = yes")
+        record = body.index("nd_crisis_record_pending = yes")
+        self.assertLess(flush, record)
+        self.assertEqual(body.count("nd_crisis_flush_pending = yes"), 2)
+
+    def test_outcome_nine_records_nothing(self):
+        body = block(self.effects, "nd_crisis_close")
+        self.assertRegex(body, r"NOT = \{ var:nd_crisis_outcome_now = 9 \}(\s*\})+\s*nd_crisis_record_pending = yes")
+
+    def test_outcome_option_guards_pending(self):
+        body = option_body(self.events, "nuclear_crisis.6.a")
+        self.assertIn("has_variable = nd_crisis_pending_outcome", body)
+        self.assertIn("var:nd_crisis_pending_opponent ?= scope:nd_outcome_other", body)
+        self.assertIn("nd_crisis_apply_outcome_side = yes", body)
+        self.assertIn("custom_tooltip = nd_tt_outcome_already_settled", body)
+
+    def test_every_credibility_change_says_its_number(self):
+        body = block(self.effects, "nd_crisis_apply_outcome_side") + block(self.effects, "nd_crisis_bluff_called")
+        pairs = re.findall(r"text = nd_tt_credibility_(up|down)_(\d+)(?:_bluff)?\s*nd_change_credibility = \{ AMOUNT = (-?\d+) \}", body)
+        self.assertTrue(pairs)
+        for direction, n, amount in pairs:
+            self.assertEqual(int(amount), int(n) if direction == "up" else -int(n))
+        self.assertEqual(body.count("nd_change_credibility"), len(pairs), "a credibility change without its number line")
 
 
 class TestManagedFamilies(unittest.TestCase):

@@ -684,6 +684,96 @@ nd_crisis_demand_text = {
 	}
 }
 
+# What the target gave up, for the outcome notice. Reads the reader's own
+# pending record (nd_crisis_write_pending): role 1 speaks of "they", role 2
+# of "we". Empty when there is no record.
+nd_crisis_concession_past = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 1
+		}
+		localization_key = nd_concession_past_they_1
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 2
+		}
+		localization_key = nd_concession_past_they_2
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 3
+		}
+		localization_key = nd_concession_past_they_3
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 4
+		}
+		localization_key = nd_concession_past_they_4
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_role
+			var:nd_crisis_pending_role = 1
+		}
+		localization_key = nd_concession_past_they_5
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 1
+		}
+		localization_key = nd_concession_past_we_1
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 2
+		}
+		localization_key = nd_concession_past_we_2
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 3
+		}
+		localization_key = nd_concession_past_we_3
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 4
+		}
+		localization_key = nd_concession_past_we_4
+	}
+	text = {
+		trigger = {
+			has_variable = nd_crisis_pending_dispute
+			var:nd_crisis_pending_dispute = 5
+		}
+		localization_key = nd_concession_past_we_5
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_concession_past_none
+	}
+}
+
 # How the last crisis ended for us, by outcome and side (nd_crisis_close writes both).
 nd_crisis_last_outcome_word = {
 	type = country

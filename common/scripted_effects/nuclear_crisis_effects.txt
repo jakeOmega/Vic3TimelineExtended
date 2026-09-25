@@ -692,10 +692,11 @@ nd_crisis_target_watchdog = {
 # ----------------------------------------------------------------------------
 # CLOSING — scope:nd_issuer and scope:nd_target saved, any scope
 # ----------------------------------------------------------------------------
-# Applies the outcome once and cleans both records. OUTCOME is a literal.
-# Fenced like nd_crisis_open: an option tooltip walks this without running it,
-# and nd_crisis_apply_outcome reads the nd_crisis_outcome_now written a line
-# earlier, which a preview would find missing.
+# Records the outcome once, for each side's outcome notice to apply
+# (nd_crisis_record_pending; nuclear_crisis.6), and cleans both records.
+# OUTCOME is a literal. Fenced like nd_crisis_open: an option tooltip walks
+# this without running it, and the record reads the nd_crisis_outcome_now
+# written a line earlier, which a preview would find missing.
 nd_crisis_close = {
 	save_scope_as = nd_crisis_closing
 	if = {
@@ -705,10 +706,19 @@ nd_crisis_close = {
 			exists = scope:nd_target
 			scope:nd_issuer = { nd_is_crisis_owner = yes }
 		}
+		# An outcome notice still unanswered from an earlier crisis settles
+		# now, before this crisis's record replaces it (2026-09-25 spec §2.3).
+		scope:nd_issuer = { nd_crisis_flush_pending = yes }
+		scope:nd_target = { nd_crisis_flush_pending = yes }
 		scope:nd_issuer = {
 			set_variable = { name = nd_crisis_outcome_now value = $OUTCOME$ }
 		}
-		nd_crisis_apply_outcome = yes
+		# Each side's consequences wait on its outcome notice's option
+		# (nd_crisis_apply_outcome_side), so the option's tooltip shows them.
+		if = {
+			limit = { scope:nd_issuer = { NOT = { var:nd_crisis_outcome_now = 9 } } }
+			nd_crisis_record_pending = yes
+		}
 		scope:nd_issuer = {
 			set_variable = { name = nd_crisis_last_outcome value = $OUTCOME$ }
 			set_variable = { name = nd_crisis_last_opponent value = scope:nd_target }
@@ -743,132 +753,285 @@ nd_crisis_close_from_either = {
 	nd_crisis_close = { OUTCOME = $OUTCOME$ }
 }
 
-# The consequences of each outcome (§6). Reads
-# scope:nd_issuer.var:nd_crisis_outcome_now; the crisis variables are still set.
-nd_crisis_apply_outcome = {
-	# ---- the issuer's objective was achieved (1, 4) --------------------------
+# Issuer scope, parties saved, var:nd_crisis_outcome_now set, the crisis
+# record still in place. Writes each party's outcome-notice record: what
+# nuclear_crisis.6's option applies (nd_crisis_apply_outcome_side).
+nd_crisis_record_pending = {
+	scope:nd_issuer = {
+		nd_crisis_write_pending = { ROLE = 1 OPPONENT = scope:nd_target }
+	}
+	scope:nd_target = {
+		nd_crisis_write_pending = { ROLE = 2 OPPONENT = scope:nd_issuer }
+	}
+}
+
+# Country scope. The crisis facts come from scope:nd_issuer, which holds the
+# record for both sides.
+nd_crisis_write_pending = {
+	set_variable = { name = nd_crisis_pending_outcome value = scope:nd_issuer.var:nd_crisis_outcome_now }
+	set_variable = { name = nd_crisis_pending_role value = $ROLE$ }
+	set_variable = { name = nd_crisis_pending_opponent value = $OPPONENT$ }
+	set_variable = { name = nd_crisis_pending_dispute value = scope:nd_issuer.var:nd_crisis_dispute }
+	set_variable = { name = nd_crisis_pending_public value = scope:nd_issuer.var:nd_crisis_public }
+	if = {
+		limit = { scope:nd_issuer = { nd_crisis_issuer_is_defensive = yes } }
+		set_variable = { name = nd_crisis_pending_defensive value = 1 }
+	}
+	else = {
+		set_variable = { name = nd_crisis_pending_defensive value = 0 }
+	}
 	if = {
 		limit = {
 			scope:nd_issuer = {
-				OR = {
-					var:nd_crisis_outcome_now = 1
-					var:nd_crisis_outcome_now = 4
-				}
+				has_variable = nd_ft_reason
+				var:nd_ft_reason >= 5
 			}
 		}
-		scope:nd_issuer = {
-			nd_change_credibility = { AMOUNT = 10 }
+		set_variable = { name = nd_crisis_pending_bluff value = 1 }
+	}
+	else = {
+		set_variable = { name = nd_crisis_pending_bluff value = 0 }
+	}
+}
+
+# Country scope. Settles an outcome notice still waiting on a click, so a new
+# close cannot overwrite it. The stale notice's option then finds its pair's
+# record gone and says so (nuclear_crisis.6). Reached only through
+# nd_crisis_close, which runs from pulses and hidden_effects: never call it
+# from a visible option, or its credibility lines would render there.
+nd_crisis_flush_pending = {
+	if = {
+		limit = { has_variable = nd_crisis_pending_outcome }
+		var:nd_crisis_pending_opponent ?= { save_scope_as = nd_outcome_other }
+		nd_crisis_apply_outcome_side = yes
+	}
+}
+
+# Country scope, the pending record set, scope:nd_outcome_other saved (the
+# other party: nuclear_crisis.6's immediate, or nd_crisis_flush_pending).
+# One side's consequences of a closed crisis (§6 of the nuclear design).
+# Every line renders in the outcome notice's option tooltip.
+nd_crisis_apply_outcome_side = {
+	# ---- the objective was achieved (1, 4) ----------------------------------
+	if = {
+		limit = {
+			OR = {
+				var:nd_crisis_pending_outcome = 1
+				var:nd_crisis_pending_outcome = 4
+			}
+		}
+		if = {
+			limit = { var:nd_crisis_pending_role = 1 }
 			if = {
-				limit = { nd_crisis_is_public = yes }
-				nd_change_credibility = { AMOUNT = 5 }
+				limit = { var:nd_crisis_pending_public = 1 }
+				custom_tooltip = {
+					text = nd_tt_credibility_up_15
+					nd_change_credibility = { AMOUNT = 15 }
+				}
+			}
+			else = {
+				custom_tooltip = {
+					text = nd_tt_credibility_up_10
+					nd_change_credibility = { AMOUNT = 10 }
+				}
 			}
 			add_modifier = {
 				name = nd_crisis_coercive_success
 				days = normal_modifier_time
 				is_decaying = yes
 			}
-			nd_reward_hawks = { OTHER = scope:nd_target LIST = nd_lob_iw GOOD = yes }
-			nd_lobby_react = { OTHER = scope:nd_target TYPE = anti AMOUNT = 3 EVENT = negative }
-			nd_lobby_react = { OTHER = scope:nd_target TYPE = pro AMOUNT = -3 EVENT = negative }
+			if = {
+				limit = { exists = scope:nd_outcome_other }
+				custom_tooltip = {
+					text = nd_tt_outcome_hawks_approve
+					nd_reward_hawks = { OTHER = scope:nd_outcome_other LIST = nd_lob_iw GOOD = yes }
+				}
+				nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = anti AMOUNT = 3 EVENT = negative }
+				nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = pro AMOUNT = -3 EVENT = negative }
+			}
 		}
-		scope:nd_target = {
-			nd_change_credibility = { AMOUNT = -5 }
+		else = {
+			custom_tooltip = {
+				text = nd_tt_credibility_down_5
+				nd_change_credibility = { AMOUNT = -5 }
+			}
 			add_modifier = {
 				name = nd_crisis_yielded
 				days = normal_modifier_time
 				is_decaying = yes
 			}
-			nd_reward_hawks = { OTHER = scope:nd_issuer LIST = nd_lob_tl GOOD = no }
-			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = anti AMOUNT = -3 EVENT = positive }
-			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = pro AMOUNT = 2 EVENT = positive }
-		}
-	}
-	# ---- the issuer backed down (2, 5) -------------------------------------
-	else_if = {
-		limit = {
-			scope:nd_issuer = {
-				OR = {
-					var:nd_crisis_outcome_now = 2
-					var:nd_crisis_outcome_now = 5
+			if = {
+				limit = { exists = scope:nd_outcome_other }
+				custom_tooltip = {
+					text = nd_tt_outcome_hawks_disapprove
+					nd_reward_hawks = { OTHER = scope:nd_outcome_other LIST = nd_lob_tl GOOD = no }
 				}
+				nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = anti AMOUNT = -3 EVENT = positive }
+				nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = pro AMOUNT = 2 EVENT = positive }
 			}
 		}
-		scope:nd_issuer = {
+	}
+	# ---- the issuer backed down (2, 5) ----------------------------------------
+	else_if = {
+		limit = {
+			OR = {
+				var:nd_crisis_pending_outcome = 2
+				var:nd_crisis_pending_outcome = 5
+			}
+		}
+		if = {
+			limit = { var:nd_crisis_pending_role = 1 }
 			if = {
-				limit = { nd_crisis_is_public = yes }
-				nd_change_credibility = { AMOUNT = -15 }
+				limit = { var:nd_crisis_pending_public = 1 }
+				custom_tooltip = {
+					text = nd_tt_credibility_down_15
+					nd_change_credibility = { AMOUNT = -15 }
+				}
+				nd_crisis_bluff_called = yes
 				add_modifier = {
 					name = nd_crisis_climbdown
 					days = normal_modifier_time
 					is_decaying = yes
 				}
-				nd_reward_hawks = { OTHER = scope:nd_target LIST = nd_lob_il GOOD = no }
-				nd_lobby_react = { OTHER = scope:nd_target TYPE = anti AMOUNT = -4 EVENT = positive }
-				nd_lobby_react = { OTHER = scope:nd_target TYPE = pro AMOUNT = 2 EVENT = positive }
+				if = {
+					limit = { exists = scope:nd_outcome_other }
+					custom_tooltip = {
+						text = nd_tt_outcome_hawks_disapprove
+						nd_reward_hawks = { OTHER = scope:nd_outcome_other LIST = nd_lob_il GOOD = no }
+					}
+					nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = anti AMOUNT = -4 EVENT = positive }
+					nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = pro AMOUNT = 2 EVENT = positive }
+				}
 			}
 			else = {
-				nd_change_credibility = { AMOUNT = -5 }
+				custom_tooltip = {
+					text = nd_tt_credibility_down_5
+					nd_change_credibility = { AMOUNT = -5 }
+				}
 			}
 		}
-		scope:nd_target = {
-			nd_change_credibility = { AMOUNT = 10 }
+		else = {
+			custom_tooltip = {
+				text = nd_tt_credibility_up_10
+				nd_change_credibility = { AMOUNT = 10 }
+			}
 			add_modifier = {
 				name = nd_crisis_stood_firm
 				days = normal_modifier_time
 				is_decaying = yes
 			}
-			nd_reward_hawks = { OTHER = scope:nd_issuer LIST = nd_lob_tw GOOD = yes }
-			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = anti AMOUNT = 3 EVENT = negative }
-			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = pro AMOUNT = -2 EVENT = negative }
+			if = {
+				limit = { exists = scope:nd_outcome_other }
+				custom_tooltip = {
+					text = nd_tt_outcome_hawks_approve
+					nd_reward_hawks = { OTHER = scope:nd_outcome_other LIST = nd_lob_tw GOOD = yes }
+				}
+				nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = anti AMOUNT = 3 EVENT = negative }
+				nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = pro AMOUNT = -2 EVENT = negative }
+			}
 		}
 	}
-	# ---- reciprocal stand-down (3) -------------------------------------------
+	# ---- reciprocal stand-down (3) --------------------------------------------
 	else_if = {
-		limit = { scope:nd_issuer = { var:nd_crisis_outcome_now = 3 } }
-		scope:nd_issuer = {
-			# A public demand traded away for a stand-down it did not ask for is
-			# half an audience cost; a defensive issuer got what it wanted.
-			if = {
-				limit = {
-					nd_crisis_is_public = yes
-					nd_crisis_issuer_is_defensive = no
-				}
-				nd_change_credibility = { AMOUNT = -5 }
-				nd_lobby_react = { OTHER = scope:nd_target TYPE = anti AMOUNT = -2 EVENT = positive }
+		limit = { var:nd_crisis_pending_outcome = 3 }
+		# A public demand traded away for a stand-down it did not ask for is
+		# half an audience cost; a defensive issuer got what it wanted.
+		if = {
+			limit = {
+				var:nd_crisis_pending_role = 1
+				var:nd_crisis_pending_public = 1
+				var:nd_crisis_pending_defensive = 0
 			}
-			else = {
+			custom_tooltip = {
+				text = nd_tt_credibility_down_5
+				nd_change_credibility = { AMOUNT = -5 }
+			}
+			if = {
+				limit = { exists = scope:nd_outcome_other }
+				nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = anti AMOUNT = -2 EVENT = positive }
+			}
+		}
+		else = {
+			custom_tooltip = {
+				text = nd_tt_credibility_up_5
 				nd_change_credibility = { AMOUNT = 5 }
 			}
-			nd_lobby_react = { OTHER = scope:nd_target TYPE = pro AMOUNT = 2 EVENT = positive }
-			add_modifier = {
-				name = nd_crisis_mutual_restraint
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-			nd_reward_doves = yes
 		}
-		scope:nd_target = {
-			nd_change_credibility = { AMOUNT = 5 }
-			add_modifier = {
-				name = nd_crisis_mutual_restraint
-				days = normal_modifier_time
-				is_decaying = yes
-			}
+		if = {
+			limit = { exists = scope:nd_outcome_other }
+			nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = pro AMOUNT = 2 EVENT = positive }
+		}
+		add_modifier = {
+			name = nd_crisis_mutual_restraint
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = {
+			text = nd_tt_outcome_doves_approve
 			nd_reward_doves = yes
-			nd_lobby_react = { OTHER = scope:nd_issuer TYPE = pro AMOUNT = 2 EVENT = positive }
 		}
 	}
-	# ---- an ultimatum left to lapse (8) --------------------------------------
+	# ---- an ultimatum left to lapse (8) ---------------------------------------
 	else_if = {
 		limit = {
-			scope:nd_issuer = {
-				var:nd_crisis_outcome_now = 8
-				nd_crisis_is_public = yes
-			}
+			var:nd_crisis_pending_outcome = 8
+			var:nd_crisis_pending_role = 1
+			var:nd_crisis_pending_public = 1
 		}
-		scope:nd_issuer = {
+		custom_tooltip = {
+			text = nd_tt_credibility_down_10
 			nd_change_credibility = { AMOUNT = -10 }
 		}
+		nd_crisis_bluff_called = yes
+	}
+	# ---- the cooldown, for the side that made the threat ---------------------
+	if = {
+		limit = { var:nd_crisis_pending_role = 1 }
+		custom_tooltip = nd_tt_outcome_cooldown
+	}
+	nd_crisis_clear_pending = yes
+}
+
+# A public threat our doctrine or law never let us carry out, called: every
+# government knew (spec §1.3).
+nd_crisis_bluff_called = {
+	if = {
+		limit = { var:nd_crisis_pending_bluff = 1 }
+		custom_tooltip = {
+			text = nd_tt_credibility_down_5_bluff
+			nd_change_credibility = { AMOUNT = -5 }
+		}
+	}
+}
+
+nd_crisis_clear_pending = {
+	if = {
+		limit = { has_variable = nd_crisis_pending_outcome }
+		remove_variable = nd_crisis_pending_outcome
+	}
+	if = {
+		limit = { has_variable = nd_crisis_pending_role }
+		remove_variable = nd_crisis_pending_role
+	}
+	if = {
+		limit = { has_variable = nd_crisis_pending_opponent }
+		remove_variable = nd_crisis_pending_opponent
+	}
+	if = {
+		limit = { has_variable = nd_crisis_pending_dispute }
+		remove_variable = nd_crisis_pending_dispute
+	}
+	if = {
+		limit = { has_variable = nd_crisis_pending_public }
+		remove_variable = nd_crisis_pending_public
+	}
+	if = {
+		limit = { has_variable = nd_crisis_pending_defensive }
+		remove_variable = nd_crisis_pending_defensive
+	}
+	if = {
+		limit = { has_variable = nd_crisis_pending_bluff }
+		remove_variable = nd_crisis_pending_bluff
 	}
 }
 
