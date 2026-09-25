@@ -1597,20 +1597,26 @@ decolonization_events_on_action = {
 				# fires often but cooldown-gated so it's not spammy
 				12 = {
 					trigger = {
-						any_subject_or_below = { liberty_desire >= 50 }
+						any_subject_or_below = {
+							is_qualifying_colonial_subject = yes
+							liberty_desire >= 50
+						}
 					}
 					trigger_event = { id = decolonization_events.1 }
 				}
 				# International Pressure to Decolonize — marquee event (UN era);
-				# weight 15 reflects the narrative weight of "world is watching"
+				# weight 15 reflects the narrative weight of "world is watching".
+				# Needs a great power that has declared against colonialism
+				# (gp_anti_colonial_stance): the event names it as the one
+				# pressing us.
 				15 = {
 					trigger = {
 						has_technology_researched = intergovernmental_organizations
-						any_subject_or_below = { always = yes }
+						any_subject_or_below = { is_qualifying_colonial_subject = yes }
 						any_country = {
 							NOT = { this = root }
 							country_rank >= rank_value:great_power
-							has_technology_researched = decolonization
+							has_variable = gp_anti_colonial_stance
 						}
 					}
 					trigger_event = { id = decolonization_events.2 }
@@ -1619,7 +1625,10 @@ decolonization_events_on_action = {
 				10 = {
 					trigger = {
 						has_technology_researched = civil_rights_movement
-						any_subject_or_below = { liberty_desire >= 75 }
+						any_subject_or_below = {
+							is_qualifying_colonial_subject = yes
+							liberty_desire >= 75
+						}
 					}
 					trigger_event = { id = decolonization_events.3 }
 				}
@@ -1633,30 +1642,44 @@ decolonization_events_on_action = {
 					}
 					trigger_event = { id = decolonization_events.4 }
 				}
-				# Former Colony Seeks Closer Ties
+				# Former Colony Seeks Closer Ties. Rolled here, on us, the former
+				# overlord (so the roll frequency is what .5 always had), but the
+				# overture is the former colony's decision: .60 asks one of our
+				# former colonies, and only its "propose" option sends .5 back.
 				10 = {
 					trigger = {
-						country_rank >= rank_value:major_power
-						NOT = { any_subject_or_below = { always = yes } }
+						decol_ties_overture_target_ok = yes
 						any_country = {
-							NOT = { this = root }
-							has_variable = recently_decolonized
-							is_subject = no
+							decol_can_seek_ties_with_former_overlord = yes
+							var:former_overlord = root
 						}
 					}
-					trigger_event = { id = decolonization_events.5 }
+					random_country = {
+						limit = {
+							decol_can_seek_ties_with_former_overlord = yes
+							var:former_overlord = root
+						}
+						trigger_event = { id = decolonization_events.60 }
+					}
 				}
-				# Colonial Reparations Demanded
+				# Colonial Reparations Demanded. Same shape: .61 asks one of our
+				# former colonies whether to press a claim; only its "demand"
+				# option sends .6 back to us.
 				10 = {
 					trigger = {
-						country_rank >= rank_value:major_power
+						decol_reparations_demand_target_ok = yes
 						any_country = {
-							NOT = { this = root }
-							has_variable = recently_decolonized
-							is_subject = no
+							decol_can_demand_reparations_from_former_overlord = yes
+							var:former_overlord = root
 						}
 					}
-					trigger_event = { id = decolonization_events.6 }
+					random_country = {
+						limit = {
+							decol_can_demand_reparations_from_former_overlord = yes
+							var:former_overlord = root
+						}
+						trigger_event = { id = decolonization_events.61 }
+					}
 				}
 				# Post-Colonial Nation Building (for new countries)
 				10 = {
@@ -1671,7 +1694,7 @@ decolonization_events_on_action = {
 				# trigger is restrictive (anti-colonialist intelligentsia)
 				12 = {
 					trigger = {
-						any_subject_or_below = { always = yes }
+						any_subject_or_below = { is_qualifying_colonial_subject = yes }
 						ig:ig_intelligentsia ?= {
 							leader = { has_ideology = ideology:ideology_anti_colonialist }
 						}
