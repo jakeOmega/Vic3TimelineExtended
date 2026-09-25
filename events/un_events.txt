@@ -141,6 +141,8 @@ un_events.2 = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
 			is_at_war = yes
 			is_diplomatic_play_initiator = yes
+			# Grounds (redesign phase 3).
+			un_case_supports = { TOPIC = condemn }
 		}
 		NOT = { has_modifier = un_ga_resolution_modifier }
 		NOT = { has_global_variable = un_vote_active }
@@ -152,6 +154,7 @@ un_events.2 = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 				is_at_war = yes
 				is_diplomatic_play_initiator = yes
+				un_case_supports = { TOPIC = condemn }
 			}
 			save_scope_as = condemned_country
 		}
@@ -596,6 +599,8 @@ un_events.5 = {
 			text = un_standing_defied_tt
 			un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }
 		}
+		custom_tooltip = un_dossier_tt_busting
+		un_dossier_record = { RECORD = defiance POINTS = un_dos_points_busting }
 		change_relations = { country = scope:sanctioned_country value = 10 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
@@ -1031,6 +1036,8 @@ un_events.8 = {
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_2_5
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -2.5 REASON = 108 }
+		custom_tooltip = un_dossier_tt_court
+		un_dossier_record = { RECORD = defiance POINTS = un_dos_points_court }
 		# International standing: openly repudiating the court's jurisdiction,
 		# priced the same as any other defiance of a binding decision.
 		custom_tooltip = {

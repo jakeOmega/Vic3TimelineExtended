@@ -53,6 +53,32 @@ un_resolution_needs_supermajority = {
 	}
 }
 
+# Whether the resolution is PUNITIVE: it punishes a named country on the
+# strength of that country's record, so it needs grounds (the target's case
+# strength must reach the topic's threshold, un_res_case_threshold) and it is
+# weighed on the grounds in every member's lean (redesign phase 3).
+# Scope: resolution container
+un_resolution_is_punitive = {
+	OR = {
+		has_tag = un_topic_condemn
+		has_tag = un_topic_sanctions
+		has_tag = un_topic_military_mandate
+	}
+}
+
+# Whether the resolution ACCUSES its target: the punitive topics, and the
+# motion to strip a permanent seat. Allies and rivals of the target, and the
+# target itself, weigh these as such (un_lean_target, un_lean_self). The
+# motion needs no grounds from the dossier: its case is the veto abuse its
+# proposal gate already requires.
+# Scope: resolution container
+un_resolution_accuses_target = {
+	OR = {
+		un_resolution_is_punitive = yes
+		has_tag = un_topic_expulsion
+	}
+}
+
 # Whether ROOT is on the resolution's $LIST$ of voters.
 # Parameters: $LIST$ = un_res_yes | un_res_no
 # Scope: resolution container; ROOT = the country asked about

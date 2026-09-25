@@ -164,6 +164,13 @@ flowcontainer = {
 			text = "[GetScriptedGui('un_chamber_active_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
 
+		# Redesign phase 3: how the Assembly reads our own position on the
+		# resolution in session — the lean the AI votes by, term by term.
+		un_chamber_text = {
+			visible = "[GetScriptedGui('un_chamber_position_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "[GetScriptedGui('un_chamber_position_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+
 		# ---- Our ballot ----
 		# Available from the day the resolution opens; the un_vote.1 popup that
 		# arrives on day 30 is the same three options and is skipped entirely
@@ -301,6 +308,32 @@ flowcontainer = {
 		}
 	}
 
+	# ---- Our exposure (redesign phase 3) ----
+	# Our own dossier, and which punitive resolutions our record would support
+	# against us today. Collapsed by default, like every other section.
+	un_chamber_section_header = {
+		blockoverride "left_text" {
+			text = "je_un_chamber_exposure_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_chamber_exposure')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_exposure'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('un_chamber_exposure')]"
+		}
+	}
+
+	un_chamber_panel = {
+		visible = "[GetVariableSystem.Exists('un_chamber_exposure')]"
+
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_exposure_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+	}
+
 	# ---- Recorded ballot of the resolution in session ----
 	un_chamber_section_header = {
 		blockoverride "left_text" {
@@ -320,6 +353,10 @@ flowcontainer = {
 	un_chamber_panel = {
 		visible = "[GetVariableSystem.Exists('un_chamber_votes')]"
 
+		# Redesign phase 3: why the members voted as they did.
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_reasons_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
 		un_chamber_text = {
 			text = "[GetScriptedGui('un_chamber_active_voters_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}

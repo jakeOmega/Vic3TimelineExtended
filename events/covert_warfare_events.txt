@@ -56,6 +56,16 @@ covert_warfare.1 = {
 				}
 			}
 		}
+		# UN redesign phase 3: an exposed severe operation is a record the
+		# General Assembly can hold against us (un_dossier_effects.txt), unless
+		# the exposure is costless (a wartime operation caught at war).
+		if = {
+			limit = {
+				covert_code_tier_severe = { VAR = iw_burned_type_code }
+				NOT = { covert_exposure_is_costless = yes }
+			}
+			un_dossier_record = { RECORD = covert POINTS = un_dos_points_covert }
+		}
 	}
 
 	option = {

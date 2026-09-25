@@ -391,6 +391,7 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_crisis_active }
 	un_dissolve_remove_global = { NAME = un_crisis_months }
 	un_dissolve_remove_global = { NAME = un_founding_window_active }
+	un_dissolve_remove_global = { NAME = un_recess_months }
 	un_dissolve_remove_global = { NAME = un_ledger_credibility }
 	un_dissolve_remove_global = { NAME = un_ledger_delivery }
 	un_dissolve_remove_global = { NAME = un_ledger_order }

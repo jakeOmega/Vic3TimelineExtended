@@ -35,6 +35,7 @@ un_propose_condemn_select_target = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 				is_at_war = yes
 				is_diplomatic_play_initiator = yes
+				un_case_supports = { TOPIC = condemn }
 			}
 			save_temporary_scope_as = un_propose_condemn_target
 		}
@@ -45,6 +46,7 @@ un_propose_condemn_select_target = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 				is_at_war = yes
 				is_diplomatic_play_initiator = yes
+				un_case_supports = { TOPIC = condemn }
 			}
 			order_by = country_rank
 			max = 1
@@ -63,6 +65,7 @@ un_propose_sanctions_select_target = {
 			limit = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 				NOT = { has_modifier = un_sanctions_target_modifier }
+				un_case_supports = { TOPIC = sanctions }
 			}
 			save_temporary_scope_as = un_propose_sanctions_target
 		}
@@ -72,6 +75,7 @@ un_propose_sanctions_select_target = {
 			limit = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 				NOT = { has_modifier = un_sanctions_target_modifier }
+				un_case_supports = { TOPIC = sanctions }
 			}
 			order_by = country_rank
 			max = 1

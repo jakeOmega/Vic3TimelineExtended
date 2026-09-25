@@ -1,0 +1,75 @@
+﻿# ============================================================================
+# UN GROUNDS AND THE FLOOR — TRIGGERS (redesign phase 3)
+# ============================================================================
+# The figures are in common/script_values/un_dossier_values.txt, the writers in
+# common/scripted_effects/un_dossier_effects.txt.
+# ============================================================================
+
+# Whether the scoped country's record gives grounds for a $TOPIC$ resolution
+# against it: its case strength reaches the topic's threshold.
+# Parameters: $TOPIC$ = condemn | sanctions | mandate
+# Scope: the prospective target
+un_case_supports = {
+	un_case_strength >= un_case_threshold_$TOPIC$
+}
+
+# Whether the scoped country has any record in its dossier (the decay sweep
+# and the exposure panel skip clean countries).
+# Scope: country
+un_dossier_has_records = {
+	OR = {
+		has_variable = un_dos_aggression
+		has_variable = un_dos_defiance
+		has_variable = un_dos_violation
+		has_variable = un_dos_covert
+		has_variable = un_dos_nuclear
+	}
+}
+
+# The floor is open to AI proposals: no recess is running (§8.3). After every
+# resolution closes the floor sits in recess for un_recess_months_after_vote
+# months, during which only human members may table business.
+# Scope: any
+un_floor_open_to_ai = {
+	NOT = { has_global_variable = un_recess_months }
+}
+
+# The scoped country may table business now, as far as the recess goes: a
+# human member always; the AI only while the floor is open. Every proposal
+# path (the propose triggers, the proposer-event roll) asks this.
+# Scope: the prospective proposer
+un_may_table_now = {
+	OR = {
+		is_ai = no
+		un_floor_open_to_ai = yes
+	}
+}
+
+# The AI's veto rule (un_vote_ai_cast): a permanent member vetoes a binding
+# resolution when its lean is at or below the veto line — lower after a
+# recent veto of its own, higher when a veto costs nothing (Moribund) — and
+# never against a resolution it pledged to carry. Deterministic: the noise
+# moves only the yes/no choice.
+# Scope: the voter (= ROOT, un_vote.4), after un_lean_snapshot
+un_vote_ai_should_veto = {
+	is_un_permanent_member = yes
+	scope:un_resolution ?= { un_resolution_is_binding = yes }
+	NOT = { un_lobby_holds_pending_commitment = yes }
+	has_variable = un_lean_total
+	OR = {
+		AND = {
+			un_tier_is_moribund = yes
+			var:un_lean_total <= un_lean_veto_line_moribund
+		}
+		AND = {
+			NOT = { un_tier_is_moribund = yes }
+			has_modifier = un_veto_isolation_modifier
+			var:un_lean_total <= un_lean_veto_line_recent
+		}
+		AND = {
+			NOT = { un_tier_is_moribund = yes }
+			NOT = { has_modifier = un_veto_isolation_modifier }
+			var:un_lean_total <= un_lean_veto_line
+		}
+	}
+}

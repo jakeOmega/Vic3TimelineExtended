@@ -1,9 +1,11 @@
 # United Nations Redesign — Design
 
-> **STATUS: PHASES 1 (THE AUTHORITY MODEL) AND 2 (THE LADDER, THE CEILING AND THE FLOOR)
-> IMPLEMENTED.** Phase 1 has been play-tested; phase 2 is pending in-game verification.
-> Phases 3–6 are designed but not built. Read [§0.2](#02-phase-2-as-shipped--rulings-deviations-and-open-checks)
-> and [§0.1](#01-phase-1-as-shipped--rulings-deviations-and-open-checks) before anything
+> **STATUS: PHASES 1 (THE AUTHORITY MODEL), 2 (THE LADDER, THE CEILING AND THE FLOOR) AND
+> 3 (GROUNDS, THE ITEMISED LEAN, AI VOTING IN SCRIPT, THE RECESS) IMPLEMENTED.** Phase 1 has
+> been play-tested; phases 2 and 3 are pending in-game verification. Phases 4–6 are designed
+> but not built. Read [§0.3](#03-phase-3-as-shipped--rulings-deviations-and-open-checks),
+> [§0.2](#02-phase-2-as-shipped--rulings-deviations-and-open-checks) and
+> [§0.1](#01-phase-1-as-shipped--rulings-deviations-and-open-checks) before anything
 > else if you are working on the code: they record where each phase deviates from the
 > sections below. Written 2026-09-24 from a design
 > discussion with the mod owner. It follows a survey of the UN as it stands (§1) and a
@@ -15,6 +17,123 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.3 Phase 3 as shipped — rulings, deviations and open checks
+
+Built 2026-09-25 on `claude/un-rework-continuation-8xn1se`, after phase 2. Not yet seen in a
+running game. Implements §5.1 (the dossier and grounds), §6 (the itemised lean, AI voting in
+script, what the chamber prints) and the recess of §8.3.
+
+### Files
+
+- `common/script_values/un_dossier_values.txt`: the dossier's tuning, `un_case_strength`, the
+  grounds thresholds, and the lean: one script value per term (`un_lean_*`) and their sum,
+  `un_vote_lean`.
+- `common/scripted_triggers/un_dossier_triggers.txt`: `un_case_supports = { TOPIC }`, the
+  recess tests (`un_floor_open_to_ai`, `un_may_table_now`) and the AI's veto rule
+  (`un_vote_ai_should_veto`).
+- `common/scripted_effects/un_dossier_effects.txt`: the only dossier writer
+  (`un_dossier_record`), the monthly update (decay, the war-without-a-mandate detector, the
+  recess clock), the lean snapshot, the AI ballot, the dispatchers and the reason tallies.
+- **Events:** `un_vote.4` (hidden: one member's lean, and the AI's ballot) and `un_vote.5`
+  (hidden: sends the AI its ballots thirty days after a resolution opens). `un_vote.1` now goes
+  to human members only, and its AI weights are gone.
+- **Record hooks:** `un_vote.3` option C, `un_events.5` option C, `un_events.8` option C,
+  `un_mandate_on_violated`, `covert_warfare.1`'s immediate, and the three nuclear strike
+  effects in `extra_effects.txt`.
+- **Chamber:** the grounds on the card, "How the Assembly reads our position", why the
+  members voted, each voter's lean in the ballot, a new "Our Exposure" section, and the
+  recess line in the proposal section.
+
+### Rulings: where phase 3 deviates from, or binds, the sections below
+
+1. **The dossier's records.** Five decaying country variables, each capped at 60, with a
+   five-year half-life (`un_dossier_decay_factor` 0.98851 a month), plus 0.8 × infamy up to
+   50: `un_dos_aggression` (a war begun without a bound mandate: 10 + 100 × the world power
+   share at war with the aggressor, at most 30; recorded once per war by a monthly detector
+   on `is_diplomatic_play_initiator`), `un_dos_defiance` (a binding resolution refused +10,
+   sanctions busted +8, the court defied +6), `un_dos_violation` (a mandate violated or
+   abandoned +20), `un_dos_covert` (a severe operation exposed, when the exposure is not
+   costless, +15), `un_dos_nuclear` (first strike +40, tactical +20, retaliation +10). Records
+   are written only while a UN exists. **Breaches of ratified conventions** wait for the
+   convention regimes of phase 5.
+2. **Grounds.** Condemnation needs a case of 30, sanctions 50, a military mandate 60.
+   The gates sit in the shared propose triggers and selectors, in `un_events.2`'s trigger
+   and pick, and in `un_mandate_target_is_notorious`, whose old test (infamy 25 or already
+   censured) is replaced by the mandate threshold. The ICC referral topic of the §5.1 table
+   does not exist yet (the ICC topic founds the court); its threshold waits for it. The
+   motion to strip a seat needs no dossier grounds: its case is the veto abuse its gate
+   already requires.
+3. **The lean** is the sum of ten named terms: the habit of consensus (+10), the grounds
+   (half the target's case above or below the threshold, −20..+30), the target itself
+   (−50, +20 at Strong or above), ties to the proposer (alliance +20, bloc +20, rivalry −30,
+   relevance +5, relations ÷ 10), ties to the target (alliance −60, bloc −35, rivalry +30,
+   relations ÷ −10), glass houses (−10 at a case of 30, −20 at 50), the proposer's standing
+   (±2 / ±5), a pledge (+100), the target's acceptance (+15), the burden of an aid or
+   peacekeeping request, and the member's interests on the topic.
+4. **Porting the old weights.** Every per-topic `ai_chance` modifier moved into
+   `un_lean_interests` or `un_lean_burden`. One that sat on the yes option alone keeps its
+   size; one that sat on both options is ported as **half** the difference, because the old
+   vote was proportional and a lean decides outright. The full difference would have made
+   every great-power permanent member veto every ICC resolution.
+5. **The AI's ballot.** `un_vote.5`, thirty days after a resolution opens, sends every AI
+   member `un_vote.4`, which writes its lean and casts: a veto if it is a permanent member,
+   the topic is binding, it pledged nothing and its lean is at or below −30 (−50 after a veto
+   of its own, −10 at Moribund, where a veto costs nothing); otherwise yes when lean + noise
+   > 0, the noise being one of −20 / −10 / 0 / +10 / +20. The monthly pulse sends the ballots
+   two months in if `un_vote.5` did not fire. The ballot runs through the very
+   `un_vote_cast_*` effects a human's vote does. The AI's target no longer accepts its own
+   censure four times in five, as the old proportional weights made it do; it now almost
+   never does.
+6. **Human members** get `un_vote.1` as before, and see their own lean in the chamber from
+   the day a resolution opens (`un_vote.4` is sent to them at opening and every month; it
+   writes, it never casts).
+7. **What the chamber prints (§6.3).** On the card: the target's case when the resolution
+   was tabled against the topic's threshold, and its record now. Under the card: our own
+   lean, term by term. In the ballot: every voter's lean, and a tally of the reasons that
+   moved the members each way (a member counts once for every term of 10 or more in the
+   direction it voted). **Deviation:** the design asked for the top three reasons each side;
+   all are printed, which is simpler and as short in practice. **Deviation:** the exposure
+   panel shows our record and which punitive topics it would support, but not "how the vote
+   would likely go": that needs a hypothetical resolution to evaluate leans against, and was
+   left out.
+8. **The recess (§8.3).** When a resolution closes the floor is in recess for three months
+   (`un_recess_months`). Every proposal path asks `un_may_table_now`: the propose triggers
+   (so the AI's buttons and the chamber both) and every proposer event in the monthly roll.
+   A human member may always table; the chamber tells it the floor is its own for now.
+   Human members are notified when the floor opens. **Not built:** docket prompts reaching
+   humans and the victim's first refusal, which belong to the docket (phase 4).
+
+### Known roughnesses
+
+- **The war detector sees one war at a time.** A country already recorded for a war it
+  initiated is not recorded again for a second one begun before the first ends.
+- **The words restate two numbers:** "−30 or below" and "give or take up to 20 points of
+  chance" in `je_un_chamber_position_total`, and the thresholds in the exposure lines. Edit
+  them with the script values.
+- **Old saves:** a vote in session at the update is finished by the AI through the monthly
+  fallback; un_vote.1 events already queued to AI members still fire, with the minimal
+  weights left on the event, and count.
+
+### IN-GAME VERIFICATION CHECKLIST (phase 3)
+
+1. `scope:X = { add = sv }` inside a script value (`un_lean_grounds`) evaluates the script
+   value in X's scope, as vanilla's `owner = { add = … }` does: a condemnation of a target
+   with a heavy record shows a positive "case against the target" in our position.
+2. `scope:un_vote_proposer.relations:root` inside a script value, evaluated in a hidden
+   event whose ROOT is the voter, reads real relations.
+3. A resolution opened by the AI: thirty days later every AI member has voted at once; the
+   ballot shows each voter's lean; the reasons appear; our own position shows under the card.
+4. `un_lean_tally_$LIST$` (a scripted-effect name built from a parameter) resolves: the
+   reasons tally is non-empty after a vote.
+5. A permanent member allied to a condemned target vetoes it; one merely rivalling the
+   proposer does not.
+6. After a vote closes, the proposal section shows the recess line for three months, the AI
+   tables nothing in that time, and a notification says when the floor opens.
+7. Starting a war against a great power without a mandate raises the aggressor's case by
+   about 20 at the next monthly update ("Our Exposure").
 
 ---
 
@@ -878,6 +997,9 @@ of this file, as `monetary_policy_design.md` does.
 | case thresholds (condemn / sanctions / mandate / ICC) | 30 / 50 / 60 / 70 | §5.1 |
 | dues by tier | 0 / 0.1% / 0.2% / 0.4% / 1.0% of GDP (the 1.0% is decided) | §7.2 |
 | arrears before losing the vote | 24 months | §7.2 |
+| dossier: half-life / record cap / infamy weight and cap | 5 years / 60 / 0.8 up to 50 (phase 3; §0.3 ruling 1) | §5.1 |
+| dossier points: aggression / defiance / busting / court / violation / covert / first strike / tactical / retaliation | 10 + 100 × share, max 30 / 10 / 8 / 6 / 20 / 15 / 40 / 20 / 10 | §5.1 |
+| lean: consensus / veto line (recent veto, Moribund) / noise / reason size | +10 / −30 (−50, −10) / ±20 in steps of 10 / 10 | §6.2 |
 | docket cadence | ≤ 1 new item per 3 months | §8.1 |
 | recess | 3 months | §8.3 |
 | victim's first refusal | 30 days | §8.3 |

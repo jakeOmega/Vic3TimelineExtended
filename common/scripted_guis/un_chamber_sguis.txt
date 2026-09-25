@@ -84,6 +84,7 @@ un_chamber_active_sgui = {
 				un_chamber_veto_line = yes
 				custom_tooltip_no_bullet = je_un_chamber_months
 				un_chamber_consequences_line = yes
+				un_chamber_grounds_line = yes
 			}
 		}
 		else = {
@@ -103,12 +104,60 @@ un_chamber_active_voters_sgui = {
 				exists = global_var:un_active_resolution
 			}
 			global_var:un_active_resolution ?= {
-				un_chamber_ballot_lines = yes
+				un_chamber_ballot_lines_active = yes
 			}
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_no_active_votes
 		}
+	}
+}
+
+# Redesign phase 3: why the members of the resolution in session have voted
+# as they have — the reasons tallied from their leans.
+un_chamber_reasons_sgui = {
+	scope = country
+
+	effect = {
+		if = {
+			limit = {
+				has_global_variable = un_active_resolution
+				exists = global_var:un_active_resolution
+			}
+			global_var:un_active_resolution ?= {
+				un_chamber_reasons_block = yes
+			}
+		}
+	}
+}
+
+# Redesign phase 3: how the Assembly reads our own position on the
+# resolution in session. is_shown gates the textbox: only while our lean has
+# been written for the resolution in session. Never executed.
+un_chamber_position_sgui = {
+	scope = country
+
+	is_shown = {
+		has_global_variable = un_active_resolution
+		exists = global_var:un_active_resolution
+		has_variable = un_lean_total
+		has_variable = un_lean_res
+		var:un_lean_res ?= global_var:un_active_resolution
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+		un_chamber_position_block = yes
+	}
+}
+
+# Redesign phase 3: our own dossier, and which punitive topics it would
+# support against us.
+un_chamber_exposure_sgui = {
+	scope = country
+
+	effect = {
+		un_chamber_exposure_block = yes
 	}
 }
 
@@ -527,6 +576,11 @@ un_chamber_propose_intro_sgui = {
 		if = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			custom_tooltip_no_bullet = je_un_chamber_propose_intro
+			# The recess (redesign phase 3): the floor is ours for a while.
+			if = {
+				limit = { has_global_variable = un_recess_months }
+				custom_tooltip_no_bullet = je_un_chamber_propose_recess
+			}
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_propose_nonmember

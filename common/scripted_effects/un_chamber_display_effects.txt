@@ -1095,3 +1095,202 @@ un_chamber_assembly_business_block = {
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_space TOPIC = space }
 	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_law_of_sea TOPIC = law_of_sea }
 }
+
+# ============================================================================
+# REDESIGN PHASE 3 — GROUNDS, LEANS, REASONS, EXPOSURE, RECESS
+# ============================================================================
+# Read-only like everything above. The dossier and the lean are defined in
+# common/script_values/un_dossier_values.txt; every figure printed here is a
+# stored variable (the lean snapshot un_vote.4 writes, the tallies on the
+# resolution, the case recorded when it was tabled) or an O(1) read of one.
+
+# The grounds of a punitive resolution: the target's case when it was tabled,
+# against the topic's threshold, and — while the vote is open — the target's
+# record as it stands now.
+# Scope: resolution container
+un_chamber_grounds_line = {
+	if = {
+		limit = {
+			un_resolution_is_punitive = yes
+			has_variable = un_res_case
+		}
+		custom_tooltip_no_bullet = je_un_chamber_grounds
+		if = {
+			limit = { has_tag = un_res_voting }
+			var:un_res_target ?= { save_temporary_scope_as = un_chamber_grounds_target }
+			if = {
+				limit = { exists = scope:un_chamber_grounds_target }
+				custom_tooltip_no_bullet = je_un_chamber_grounds_record
+			}
+		}
+	}
+}
+
+# Why the members voted as they did: every reason counted on the resolution
+# when its ballots were recorded (un_lean_tally_*), one line per reason that
+# moved at least one member. Root-level lines only.
+# Scope: resolution container
+un_chamber_reasons_block = {
+	if = {
+		limit = {
+			OR = {
+				has_variable = un_res_why_yes_grounds
+				has_variable = un_res_why_yes_proposer
+				has_variable = un_res_why_yes_target
+				has_variable = un_res_why_yes_pledge
+				has_variable = un_res_why_yes_accepted
+				has_variable = un_res_why_yes_interests
+				has_variable = un_res_why_no_grounds
+				has_variable = un_res_why_no_self
+				has_variable = un_res_why_no_proposer
+				has_variable = un_res_why_no_target
+				has_variable = un_res_why_no_glass
+				has_variable = un_res_why_no_burden
+				has_variable = un_res_why_no_interests
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_reasons_intro
+		un_chamber_reason_line = { NAME = un_res_why_yes_grounds KEY = je_un_res_why_yes_grounds }
+		un_chamber_reason_line = { NAME = un_res_why_yes_proposer KEY = je_un_res_why_yes_proposer }
+		un_chamber_reason_line = { NAME = un_res_why_yes_target KEY = je_un_res_why_yes_target }
+		un_chamber_reason_line = { NAME = un_res_why_yes_pledge KEY = je_un_res_why_yes_pledge }
+		un_chamber_reason_line = { NAME = un_res_why_yes_accepted KEY = je_un_res_why_yes_accepted }
+		un_chamber_reason_line = { NAME = un_res_why_yes_interests KEY = je_un_res_why_yes_interests }
+		un_chamber_reason_line = { NAME = un_res_why_no_grounds KEY = je_un_res_why_no_grounds }
+		un_chamber_reason_line = { NAME = un_res_why_no_self KEY = je_un_res_why_no_self }
+		un_chamber_reason_line = { NAME = un_res_why_no_proposer KEY = je_un_res_why_no_proposer }
+		un_chamber_reason_line = { NAME = un_res_why_no_target KEY = je_un_res_why_no_target }
+		un_chamber_reason_line = { NAME = un_res_why_no_glass KEY = je_un_res_why_no_glass }
+		un_chamber_reason_line = { NAME = un_res_why_no_burden KEY = je_un_res_why_no_burden }
+		un_chamber_reason_line = { NAME = un_res_why_no_interests KEY = je_un_res_why_no_interests }
+	}
+	else_if = {
+		limit = { has_tag = un_res_voting }
+		custom_tooltip_no_bullet = je_un_chamber_reasons_pending
+	}
+}
+
+# One reason, with its count, printed only if it moved anyone. The loc key is
+# passed whole (not built from NAME) so organize_loc.py can see it is used.
+# Parameters: $NAME$ = un_res_why_<side>_<term>, $KEY$ = its loc key
+# Scope: resolution container
+un_chamber_reason_line = {
+	if = {
+		limit = { has_variable = $NAME$ }
+		custom_tooltip_no_bullet = $KEY$
+	}
+}
+
+# How the Assembly reads OUR position on the resolution in session: the lean
+# the AI would vote by, term by term, from the snapshot un_vote.4 wrote. Shown
+# only when the snapshot is for this resolution (un_chamber_position_sgui).
+# Root-level lines only.
+# Scope: country (the viewer)
+un_chamber_position_block = {
+	if = {
+		limit = {
+			has_variable = un_lean_total
+			has_variable = un_lean_res
+			var:un_lean_res ?= global_var:un_active_resolution
+		}
+		custom_tooltip_no_bullet = je_un_chamber_position_total
+		un_chamber_position_term = { TERM = grounds KEY = je_un_chamber_position_grounds }
+		un_chamber_position_term = { TERM = self KEY = je_un_chamber_position_self }
+		un_chamber_position_term = { TERM = proposer KEY = je_un_chamber_position_proposer }
+		un_chamber_position_term = { TERM = target KEY = je_un_chamber_position_target }
+		un_chamber_position_term = { TERM = glass KEY = je_un_chamber_position_glass }
+		un_chamber_position_term = { TERM = standing KEY = je_un_chamber_position_standing }
+		un_chamber_position_term = { TERM = pledge KEY = je_un_chamber_position_pledge }
+		un_chamber_position_term = { TERM = accepted KEY = je_un_chamber_position_accepted }
+		un_chamber_position_term = { TERM = burden KEY = je_un_chamber_position_burden }
+		un_chamber_position_term = { TERM = interests KEY = je_un_chamber_position_interests }
+		custom_tooltip_no_bullet = je_un_chamber_position_consensus
+	}
+}
+
+# One term of our lean, printed only when it is not zero. The loc key is
+# passed whole so organize_loc.py can see it is used.
+# Parameters: $TERM$ = the term's suffix (un_lean_<TERM>), $KEY$ = its loc key
+# Scope: country (the viewer)
+un_chamber_position_term = {
+	if = {
+		limit = {
+			has_variable = un_lean_$TERM$
+			NOT = { var:un_lean_$TERM$ = 0 }
+		}
+		custom_tooltip_no_bullet = $KEY$
+	}
+}
+
+# The recorded ballot of the resolution in session, each voter with the lean
+# it voted by where its snapshot is for this resolution: what the target (and
+# everyone else) most needs to see, why each member voted as it did. The
+# archive keeps un_chamber_ballot_lines, which prints no lean: a closed
+# resolution's voters have since been snapshotted for other business.
+# Scope: resolution container (the one in session)
+un_chamber_ballot_lines_active = {
+	custom_tooltip_no_bullet = je_un_chamber_ballot_intro
+	if = {
+		limit = { has_variable_list = un_res_yes }
+		every_in_list = {
+			variable = un_res_yes
+			if = {
+				limit = {
+					has_variable = un_lean_res
+					var:un_lean_res ?= PREV
+				}
+				custom_tooltip = je_un_chamber_voter_entry_yes_lean
+			}
+			else = {
+				custom_tooltip = je_un_chamber_voter_entry_yes
+			}
+		}
+	}
+	if = {
+		limit = { has_variable_list = un_res_no }
+		every_in_list = {
+			variable = un_res_no
+			if = {
+				limit = {
+					has_variable = un_lean_res
+					var:un_lean_res ?= PREV
+				}
+				custom_tooltip = je_un_chamber_voter_entry_no_lean
+			}
+			else = {
+				custom_tooltip = je_un_chamber_voter_entry_no
+			}
+		}
+	}
+	un_chamber_commitment_lines = yes
+}
+
+# OUR EXPOSURE: our own dossier, and which punitive topics our record would
+# support against us today (§5.1: "a real case is visible before it lands").
+# Root-level lines only.
+# Scope: country (the viewer)
+un_chamber_exposure_block = {
+	if = {
+		limit = { has_global_variable = un_founded }
+		custom_tooltip_no_bullet = je_un_chamber_exposure_case
+		if = {
+			limit = { un_case_supports = { TOPIC = mandate } }
+			custom_tooltip_no_bullet = je_un_chamber_exposure_mandate
+		}
+		else_if = {
+			limit = { un_case_supports = { TOPIC = sanctions } }
+			custom_tooltip_no_bullet = je_un_chamber_exposure_sanctions
+		}
+		else_if = {
+			limit = { un_case_supports = { TOPIC = condemn } }
+			custom_tooltip_no_bullet = je_un_chamber_exposure_condemn
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_exposure_clean
+		}
+		custom_tooltip_no_bullet = je_un_chamber_exposure_help
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_exposure_no_un
+	}
+}

@@ -2017,3 +2017,11 @@ un_conference_opened_notice = {
 	notification_type = feed
 	color = neutral
 }
+# The post-vote recess is over and the floor is open to every member again (to
+# human members; redesign phase 3, un_recess_monthly_update).
+un_floor_open_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	notification_type = feed
+	color = neutral
+}
