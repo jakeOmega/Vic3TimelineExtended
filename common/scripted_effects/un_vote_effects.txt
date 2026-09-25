@@ -387,21 +387,21 @@ un_vote_apply_treaty_modifier = {
 			scope:un_resolution ?= { has_tag = un_topic_human_rights }
 			NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier multiplier = un_enforcement } }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_npt }
 			NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier multiplier = un_enforcement } }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_climate }
 			NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier multiplier = un_enforcement } }
 	}
 	# A vetoed reform is flat-blocked (un_vote.2 applies nothing), so members
 	# ratify nothing either.
@@ -422,7 +422,7 @@ un_vote_apply_treaty_modifier = {
 			scope:un_resolution ?= { has_tag = un_topic_heritage }
 			NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier multiplier = un_enforcement } }
 	}
 	if = {
 		limit = {
@@ -465,28 +465,28 @@ un_vote_apply_treaty_modifier = {
 			scope:un_resolution ?= { has_tag = un_topic_pandemic }
 			NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier multiplier = un_enforcement } }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_refugee }
 			NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier multiplier = un_enforcement } }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_space }
 			NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier multiplier = un_enforcement } }
 	}
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
 			NOT = { has_modifier = un_law_of_sea_modifier }
 		}
-		add_modifier = { name = un_law_of_sea_modifier }
+		add_modifier = { name = un_law_of_sea_modifier multiplier = un_enforcement }
 	}
 	# ICC membership: skipped when the resolution was vetoed (graduated form
 	# is symbolic censure only — no court jurisdiction is established).
@@ -496,7 +496,14 @@ un_vote_apply_treaty_modifier = {
 			NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 			NOT = { has_modifier = un_icc_member_modifier }
 		}
-		add_modifier = { name = un_icc_member_modifier }
+		add_modifier = { name = un_icc_member_modifier multiplier = un_enforcement }
+	}
+	# The convention regimes (redesign phase 5, §5.3): read our terms now —
+	# the member modifiers at the current E, and whatever the regimes make us
+	# win or pay (un_regime_effects.txt; the chamber's Our Obligations lists
+	# them).
+	hidden_effect = {
+		un_regime_refresh_country = yes
 	}
 }
 
@@ -516,7 +523,7 @@ un_apply_ratified_conventions = {
 			has_global_variable = un_agency_unhrc
 			NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier multiplier = un_enforcement } }
 	}
 	# Nuclear Non-Proliferation Treaty (IAEA established)
 	if = {
@@ -524,7 +531,7 @@ un_apply_ratified_conventions = {
 			has_global_variable = un_agency_iaea
 			NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier multiplier = un_enforcement } }
 	}
 	# Climate Binding Framework (UNEP established)
 	if = {
@@ -532,7 +539,7 @@ un_apply_ratified_conventions = {
 			has_global_variable = un_agency_unep
 			NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier multiplier = un_enforcement } }
 	}
 	# Cultural Heritage Program (UNESCO established)
 	if = {
@@ -540,7 +547,7 @@ un_apply_ratified_conventions = {
 			has_global_variable = un_agency_unesco
 			NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier multiplier = un_enforcement } }
 	}
 	# Pandemic Cooperation (WHO established)
 	if = {
@@ -548,7 +555,7 @@ un_apply_ratified_conventions = {
 			has_global_variable = un_agency_who
 			NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier multiplier = un_enforcement } }
 	}
 	# Refugee Protection Program (UNHCR established)
 	if = {
@@ -556,7 +563,7 @@ un_apply_ratified_conventions = {
 			has_global_variable = un_agency_unhcr
 			NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier multiplier = un_enforcement } }
 	}
 	# Space Partnership (UNOOSA established)
 	if = {
@@ -564,7 +571,7 @@ un_apply_ratified_conventions = {
 			has_global_variable = un_agency_unoosa
 			NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
 		}
-		je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier multiplier = un_enforcement } }
 	}
 	# Convention on the Law of the Sea (ITLOS established).
 	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
@@ -573,7 +580,7 @@ un_apply_ratified_conventions = {
 			has_global_variable = un_agency_itlos
 			NOT = { has_modifier = un_law_of_sea_modifier }
 		}
-		add_modifier = { name = un_law_of_sea_modifier }
+		add_modifier = { name = un_law_of_sea_modifier multiplier = un_enforcement }
 	}
 	# International Criminal Court (ICC established, non-vetoed pass).
 	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
@@ -582,8 +589,10 @@ un_apply_ratified_conventions = {
 			has_global_variable = un_agency_icc
 			NOT = { has_modifier = un_icc_member_modifier }
 		}
-		add_modifier = { name = un_icc_member_modifier }
+		add_modifier = { name = un_icc_member_modifier multiplier = un_enforcement }
 	}
+	# The joiner's terms under the regimes in force (redesign phase 5).
+	un_regime_refresh_country = yes
 }
 
 # Standing award for actually taking on a share of a peacekeeping deployment

@@ -58,15 +58,15 @@ un_vote_cast_yes = {
 		show_as_tooltip = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_human_rights } }
-				je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
+				je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier multiplier = un_enforcement } }
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_npt } }
-				je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
+				je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier multiplier = un_enforcement } }
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_climate } }
-				je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
+				je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier multiplier = un_enforcement } }
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_reform } }
@@ -78,7 +78,7 @@ un_vote_cast_yes = {
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
-				je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
+				je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier multiplier = un_enforcement } }
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
@@ -90,26 +90,26 @@ un_vote_cast_yes = {
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_pandemic } }
-				je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
+				je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier multiplier = un_enforcement } }
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_refugee } }
-				je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
+				je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier multiplier = un_enforcement } }
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_space } }
-				je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
+				je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier multiplier = un_enforcement } }
 			}
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
-				add_modifier = { name = un_law_of_sea_modifier }
+				add_modifier = { name = un_law_of_sea_modifier multiplier = un_enforcement }
 			}
 			if = {
 				limit = {
 					scope:un_resolution ?= { has_tag = un_topic_icc }
 					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
-				add_modifier = { name = un_icc_member_modifier }
+				add_modifier = { name = un_icc_member_modifier multiplier = un_enforcement }
 			}
 		}
 

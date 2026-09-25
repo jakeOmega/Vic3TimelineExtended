@@ -777,11 +777,6 @@ un_vote.2 = {
 				custom_tooltip = un_vote_veto_overridden_tt
 			}
 
-			# The proposer ratifies on passage, like every other member
-			# (redesign phase 5, §5.3). It no longer takes the convention's
-			# modifier up front when it tables the resolution.
-			un_vote_apply_treaty_modifier = yes
-
 			# ---- Condemn: target gets condemnation, proposer gets prestige ----
 			# If the target voted to accept the resolution, they already bear
 			# un_self_corrected_modifier (set in un_vote.1 option A target branch);
@@ -962,6 +957,17 @@ un_vote.2 = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
 				custom_tooltip = un_vote_decolonization_passed_tt
 				un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
+				# The declaration becomes a standing regime (redesign phase 5,
+				# §5.3): colonial powers lose colonial stability and members'
+				# colonies gain liberty desire, both scaled by E, from every
+				# country's next re-reading of its terms (un_regime_effects.txt).
+				hidden_effect = {
+					if = {
+						limit = { NOT = { has_global_variable = un_regime_decolonization } }
+						set_global_variable = un_regime_decolonization
+					}
+					un_regime_bump = yes
+				}
 				# Cash the loc promise of "Colonial powers face increased
 				# international pressure" — apply a one-shot decaying
 				# pressure modifier on every overseas-colonial owner.
@@ -1268,6 +1274,13 @@ un_vote.2 = {
 					is_decaying = yes
 				}
 			}
+
+			# The proposer ratifies on passage, like every other member
+			# (redesign phase 5, §5.3): it no longer takes the convention's
+			# modifier up front when it tables the resolution. After the
+			# per-topic branches above, so the agency they found is in force
+			# when the convention's terms are read.
+			un_vote_apply_treaty_modifier = yes
 
 			# Influence reward for leading a successful resolution.
 			# Skipped for vetoed binding resolutions — only the graduated form

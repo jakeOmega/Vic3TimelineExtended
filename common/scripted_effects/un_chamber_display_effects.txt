@@ -1274,6 +1274,13 @@ un_chamber_docket_last_line = {
 		limit = { global_var:un_dkt_last_type = 13 }
 		custom_tooltip_no_bullet = je_un_chamber_docket_last_13
 	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 14
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_14
+	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_docket_last_other
 	}
@@ -1514,9 +1521,16 @@ un_chamber_obligations_block = {
 		if = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			un_chamber_dues_lines = yes
+			un_chamber_regime_lines = yes
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_obligations_nonmember
+			# A colony of a member is reached by the decolonisation
+			# declaration all the same.
+			if = {
+				limit = { has_modifier = un_regime_colony_liberty_modifier }
+				custom_tooltip_no_bullet = je_un_chamber_regime_colony
+			}
 			if = {
 				limit = { has_variable = un_arrears_owed }
 				custom_tooltip_no_bullet = je_un_chamber_dues_owed_outside
@@ -1550,5 +1564,76 @@ un_chamber_dues_lines = {
 	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_dues_none
+	}
+}
+
+# The regimes' terms for us (§5.3), shared intelligence (§7.4) and our
+# interest groups' reaction (§7.1): one line per modifier we carry, read
+# straight off the modifiers un_regime_refresh_country applies, so the list
+# is the rule.
+# Scope: country (a member)
+un_chamber_regime_lines = {
+	if = {
+		limit = { un_regime_has_terms = yes }
+		custom_tooltip_no_bullet = je_un_chamber_regimes_header
+		un_chamber_regime_line = { MODIFIER = un_regime_climate_emitter_modifier LINE = je_un_chamber_regime_climate_emitter }
+		un_chamber_regime_line = { MODIFIER = un_regime_climate_adaptation_modifier LINE = je_un_chamber_regime_climate_adaptation }
+		un_chamber_regime_line = { MODIFIER = un_regime_npt_inspection_modifier LINE = je_un_chamber_regime_npt_inspection }
+		un_chamber_regime_line = { MODIFIER = un_regime_npt_guarantee_modifier LINE = je_un_chamber_regime_npt_guarantee }
+		un_chamber_regime_line = { MODIFIER = un_regime_naval_curb_modifier LINE = je_un_chamber_regime_naval_curb }
+		un_chamber_regime_line = { MODIFIER = un_regime_rights_violator_modifier LINE = je_un_chamber_regime_rights_violator }
+		un_chamber_regime_line = { MODIFIER = un_regime_colonial_pressure_modifier LINE = je_un_chamber_regime_colonial_pressure }
+		un_chamber_regime_line = { MODIFIER = un_regime_refugee_host_modifier LINE = je_un_chamber_regime_refugee_host }
+		un_chamber_regime_line = { MODIFIER = un_regime_refugee_source_modifier LINE = je_un_chamber_regime_refugee_source }
+		un_chamber_regime_line = { MODIFIER = un_regime_space_leader_modifier LINE = je_un_chamber_regime_space_leader }
+		un_chamber_regime_line = { MODIFIER = un_regime_space_laggard_modifier LINE = je_un_chamber_regime_space_laggard }
+		un_chamber_regime_line = { MODIFIER = un_regime_space_weapon_modifier LINE = je_un_chamber_regime_space_weapon }
+		un_chamber_regime_line = { MODIFIER = un_regime_heritage_site_modifier LINE = je_un_chamber_regime_heritage_site }
+		un_chamber_regime_line = { MODIFIER = un_regime_shared_intelligence_modifier LINE = je_un_chamber_regime_shared_intelligence }
+	}
+	else_if = {
+		limit = { un_regime_any_convention = yes }
+		custom_tooltip_no_bullet = je_un_chamber_regimes_none
+	}
+	# The court's reach over our ruler.
+	if = {
+		limit = {
+			has_global_variable = un_agency_icc
+			un_tier_at_least_established = yes
+			OR = {
+				has_modifier = un_icc_member_modifier
+				un_tier_is_supranational = yes
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_regime_icc
+	}
+	# Sovereignty: our interest groups' reaction, from the Strong tier.
+	if = {
+		limit = {
+			un_tier_at_least_strong = yes
+			any_interest_group = { has_modifier = un_sovereignty_resentment_ig_modifier }
+		}
+		custom_tooltip_no_bullet = je_un_chamber_sovereignty_resent
+	}
+	if = {
+		limit = {
+			un_tier_at_least_strong = yes
+			any_interest_group = { has_modifier = un_sovereignty_welcome_ig_modifier }
+		}
+		custom_tooltip_no_bullet = je_un_chamber_sovereignty_welcome
+	}
+	if = {
+		limit = { un_regime_any_convention = yes }
+		custom_tooltip_no_bullet = je_un_chamber_regimes_scale
+	}
+}
+
+# Parameters: $MODIFIER$ = a regime modifier, $LINE$ = its line (passed whole,
+# so organize_loc.py sees the key in use)
+# Scope: country
+un_chamber_regime_line = {
+	if = {
+		limit = { has_modifier = $MODIFIER$ }
+		custom_tooltip_no_bullet = $LINE$
 	}
 }

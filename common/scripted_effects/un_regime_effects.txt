@@ -1,0 +1,418 @@
+﻿# ============================================================================
+# UN CONVENTION REGIMES, SOVEREIGNTY AND INTELLIGENCE — THE WRITERS (phase 5)
+# ============================================================================
+# docs/systems/un_redesign_design.md §5.3, §7.1 and §7.4; as shipped, §0.5.
+# The table of who wins and who pays is at the top of
+# common/script_values/un_regime_values.txt; the tests are in
+# common/scripted_triggers/un_regime_triggers.txt.
+#
+# WHAT A COUNTRY'S "TERMS" ARE. For a member:
+#   - the member modifier of every convention it has ratified, multiplied by
+#     the UN's enforcement E (un_regime_reapply_conventions);
+#   - the winner or loser modifier each convention in force gives it (§5.3);
+#   - from the Strong tier, shared intelligence (§7.4) and the reaction of its
+#     interest groups (§7.1): nationalists resent the UN, humanitarians and
+#     pacifists welcome it.
+# For a colony of a member, the decolonisation declaration's liberty desire.
+# For anyone else, nothing.
+#
+# WHO WRITES WHAT
+#   un_regime_*_modifier (country)         un_regime_refresh_country, the single
+#   un_sovereignty_*_ig_modifier (IG)      refresh site; un_regime_clear_country
+#                                          removes them all
+#   var:un_regime_stamp (country)          un_regime_refresh_country
+#   un_regime_epoch / _months / _tier      un_regime_monthly_update, un_regime_bump
+#   un_space_top_score (global)            un_regime_bump
+#   un_regime_decolonization (global)      un_vote.2, the declaration carried
+#   un_sov_leave_demand_cd (country)       un_regime_sovereignty_leave_check
+#   un_icc_indicted_cd (country)           un_regime_icc_note_crime
+#
+# CALL SITES
+#   un_regime_monthly_update       un_global_authority_on_action (UN founded)
+#   un_regime_country_pulse        je_united_nations on_monthly_pulse (everyone)
+#   un_regime_refresh_country      the pulse above; un_vote_apply_treaty_modifier
+#                                  (ratifying); un_apply_ratified_conventions
+#                                  (joining)
+#   un_regime_clear_country        un_membership_end_effect (leaving, dissolving)
+#   un_regime_icc_note_crime       the first-strike and tactical nuclear effects
+#                                  (extra_effects.txt), covert_warfare.1
+# ============================================================================
+
+# ---- Monthly ------------------------------------------------------------------
+
+# Global monthly upkeep (no-country scope, UN founded). Every country re-reads
+# its terms when the tier changes and once a year.
+un_regime_monthly_update = {
+	if = {
+		limit = {
+			OR = {
+				NOT = { has_global_variable = un_regime_epoch }
+				NOT = { has_global_variable = un_regime_tier }
+				NOT = { global_var:un_regime_tier = un_disp_tier }
+				global_var:un_regime_months >= un_regime_refresh_months
+			}
+		}
+		un_regime_bump = yes
+	}
+	else = {
+		change_global_variable = { name = un_regime_months add = 1 }
+	}
+}
+
+# Tell every country to re-read its terms at its next monthly pulse, and take
+# the space race's standings for the outer-space regime.
+# Scope: any
+un_regime_bump = {
+	if = {
+		limit = { NOT = { has_global_variable = un_regime_epoch } }
+		set_global_variable = { name = un_regime_epoch value = 0 }
+	}
+	change_global_variable = { name = un_regime_epoch add = 1 }
+	set_global_variable = { name = un_regime_months value = 0 }
+	set_global_variable = { name = un_regime_tier value = un_disp_tier }
+	set_global_variable = { name = un_space_top_score value = 0 }
+	ordered_country = {
+		order_by = un_space_milestones
+		max = 1
+		set_global_variable = { name = un_space_top_score value = un_space_milestones }
+	}
+}
+
+# Scope: country (every holder of the journal entry, monthly)
+un_regime_country_pulse = {
+	if = {
+		limit = {
+			has_global_variable = un_regime_epoch
+			OR = {
+				NOT = { has_variable = un_regime_stamp }
+				NOT = { var:un_regime_stamp = global_var:un_regime_epoch }
+			}
+		}
+		un_regime_refresh_country = yes
+		# Once a year, at Strong and above: whether our resentful interest
+		# groups demand we leave (un_events.34).
+		un_regime_sovereignty_leave_check = yes
+	}
+}
+
+# ---- Reading a country's terms ------------------------------------------------------
+
+# Clear and re-apply everything the regimes do to this country.
+# Scope: country
+un_regime_refresh_country = {
+	un_regime_clear_country = yes
+	if = {
+		limit = { has_global_variable = un_regime_epoch }
+		set_variable = { name = un_regime_stamp value = global_var:un_regime_epoch }
+	}
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		un_regime_reapply_conventions = yes
+
+		# Climate (UNEP): the high emitters pay, the low emitters are helped.
+		if = {
+			limit = { has_global_variable = un_agency_unep }
+			if = {
+				limit = { un_regime_climate_emitter = yes }
+				add_modifier = {
+					name = un_regime_climate_emitter_modifier
+					multiplier = un_enforcement
+				}
+			}
+			else_if = {
+				limit = {
+					un_regime_climate_low_emitter = yes
+					un_regime_adaptation_multiplier > 0
+				}
+				add_modifier = {
+					name = un_regime_climate_adaptation_modifier
+					multiplier = un_regime_adaptation_multiplier
+				}
+			}
+		}
+		# Non-proliferation (IAEA): inspections for the threshold states, a
+		# guarantee for those without the bomb.
+		if = {
+			limit = { has_global_variable = un_agency_iaea }
+			if = {
+				limit = { un_regime_npt_threshold = yes }
+				add_modifier = {
+					name = un_regime_npt_inspection_modifier
+					multiplier = un_enforcement
+				}
+			}
+			else_if = {
+				limit = { un_regime_npt_guaranteed = yes }
+				add_modifier = {
+					name = un_regime_npt_guarantee_modifier
+					multiplier = un_enforcement
+				}
+			}
+		}
+		# The law of the sea (ITLOS): the naval powers are held to it.
+		if = {
+			limit = {
+				has_global_variable = un_agency_itlos
+				un_regime_naval_power = yes
+			}
+			add_modifier = {
+				name = un_regime_naval_curb_modifier
+				multiplier = un_enforcement
+			}
+		}
+		# Human rights (UNHRC): the violators pay.
+		if = {
+			limit = {
+				has_global_variable = un_agency_unhrc
+				un_regime_human_rights_violator = yes
+			}
+			add_modifier = {
+				name = un_regime_rights_violator_modifier
+				multiplier = un_enforcement
+			}
+		}
+		# Decolonisation: the colonial powers pay.
+		if = {
+			limit = {
+				has_global_variable = un_regime_decolonization
+				un_regime_colonial_power = yes
+			}
+			add_modifier = {
+				name = un_regime_colonial_pressure_modifier
+				multiplier = un_enforcement
+			}
+		}
+		# Refugees (UNHCR): the hosts take the strain, the sources the relief.
+		if = {
+			limit = { has_global_variable = un_agency_unhcr }
+			if = {
+				limit = { un_regime_refugee_host = yes }
+				add_modifier = {
+					name = un_regime_refugee_host_modifier
+					multiplier = un_enforcement
+				}
+			}
+			else_if = {
+				limit = { un_regime_refugee_source = yes }
+				add_modifier = {
+					name = un_regime_refugee_source_modifier
+					multiplier = un_enforcement
+				}
+			}
+		}
+		# Outer space (UNOOSA): the leader shares, the laggards gain, and a
+		# battlestation is barred.
+		if = {
+			limit = { has_global_variable = un_agency_unoosa }
+			if = {
+				limit = { un_regime_space_leader = yes }
+				add_modifier = {
+					name = un_regime_space_leader_modifier
+					multiplier = un_enforcement
+				}
+			}
+			else_if = {
+				limit = { un_regime_space_laggard = yes }
+				add_modifier = {
+					name = un_regime_space_laggard_modifier
+					multiplier = un_enforcement
+				}
+			}
+			if = {
+				limit = { un_regime_space_weaponized = yes }
+				add_modifier = {
+					name = un_regime_space_weapon_modifier
+					multiplier = un_enforcement
+				}
+			}
+		}
+		# Cultural heritage (UNESCO): the wonder states gain and are bound.
+		if = {
+			limit = {
+				has_global_variable = un_agency_unesco
+				un_regime_heritage_site = yes
+			}
+			add_modifier = {
+				name = un_regime_heritage_site_modifier
+				multiplier = un_enforcement
+			}
+		}
+		# Intelligence (§7.4): from the Strong tier, members share it.
+		if = {
+			limit = { un_regime_shared_intelligence = yes }
+			add_modifier = {
+				name = un_regime_shared_intelligence_modifier
+				multiplier = un_regime_strong_steps
+			}
+		}
+		# Sovereignty (§7.1): from the Strong tier, our interest groups react.
+		if = {
+			limit = { un_tier_at_least_strong = yes }
+			every_interest_group = {
+				limit = { un_regime_ig_resents_un = yes }
+				add_modifier = {
+					name = un_sovereignty_resentment_ig_modifier
+					multiplier = un_regime_strong_steps
+				}
+			}
+			every_interest_group = {
+				limit = {
+					un_regime_ig_welcomes_un = yes
+					NOT = { un_regime_ig_resents_un = yes }
+				}
+				add_modifier = {
+					name = un_sovereignty_welcome_ig_modifier
+					multiplier = un_regime_strong_steps
+				}
+			}
+		}
+	}
+	# Decolonisation reaches the colonies of members, which are not members.
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_global_variable = un_regime_decolonization
+			un_regime_member_colony = yes
+		}
+		add_modifier = {
+			name = un_regime_colony_liberty_modifier
+			multiplier = un_enforcement
+		}
+	}
+}
+
+# Re-apply each convention member modifier this country carries, at the
+# current E (nothing at Moribund, x2.5 at Supranational).
+# Scope: country (a member)
+un_regime_reapply_conventions = {
+	un_regime_reapply_je = { MODIFIER = un_human_rights_declaration_modifier }
+	un_regime_reapply_je = { MODIFIER = un_nonproliferation_modifier }
+	un_regime_reapply_je = { MODIFIER = un_climate_binding_modifier }
+	un_regime_reapply_je = { MODIFIER = un_heritage_program_modifier }
+	un_regime_reapply_je = { MODIFIER = un_pandemic_cooperation_modifier }
+	un_regime_reapply_je = { MODIFIER = un_refugee_program_modifier }
+	un_regime_reapply_je = { MODIFIER = un_space_partnership_modifier }
+	un_regime_reapply_country = { MODIFIER = un_law_of_sea_modifier }
+	un_regime_reapply_country = { MODIFIER = un_icc_member_modifier }
+}
+
+# Parameters: $MODIFIER$ = a convention member modifier on the journal entry
+# Scope: country
+un_regime_reapply_je = {
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = $MODIFIER$ } }
+		je:je_united_nations ?= { remove_modifier = $MODIFIER$ }
+		je:je_united_nations ?= {
+			add_modifier = {
+				name = $MODIFIER$
+				multiplier = un_enforcement
+			}
+		}
+	}
+}
+
+# Parameters: $MODIFIER$ = a convention member modifier on the country
+# Scope: country
+un_regime_reapply_country = {
+	if = {
+		limit = { has_modifier = $MODIFIER$ }
+		remove_modifier = $MODIFIER$
+		add_modifier = {
+			name = $MODIFIER$
+			multiplier = un_enforcement
+		}
+	}
+}
+
+# Remove every regime modifier from this country and its interest groups.
+# The convention member modifiers are not touched here: ratifying adds them,
+# leaving removes them (un_membership_end_effect).
+# Scope: country
+un_regime_clear_country = {
+	un_regime_clear_modifier = { MODIFIER = un_regime_climate_emitter_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_climate_adaptation_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_npt_inspection_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_npt_guarantee_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_naval_curb_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_rights_violator_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_colonial_pressure_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_colony_liberty_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_refugee_host_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_refugee_source_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_space_leader_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_space_laggard_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_space_weapon_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_heritage_site_modifier }
+	un_regime_clear_modifier = { MODIFIER = un_regime_shared_intelligence_modifier }
+	every_interest_group = {
+		limit = {
+			OR = {
+				has_modifier = un_sovereignty_resentment_ig_modifier
+				has_modifier = un_sovereignty_welcome_ig_modifier
+			}
+		}
+		un_regime_clear_modifier = { MODIFIER = un_sovereignty_resentment_ig_modifier }
+		un_regime_clear_modifier = { MODIFIER = un_sovereignty_welcome_ig_modifier }
+	}
+}
+
+# Parameters: $MODIFIER$
+# Scope: country or interest group
+un_regime_clear_modifier = {
+	if = {
+		limit = { has_modifier = $MODIFIER$ }
+		remove_modifier = $MODIFIER$
+	}
+}
+
+# ---- Sovereignty: the demand to leave (§7.1) ---------------------------------------------
+
+# Once a year, at Strong and above: when the interest groups that resent the
+# UN are strong enough (un_regime_sovereignty_demand), they demand that the
+# country leave (un_events.34). At most once a decade.
+# Scope: country
+un_regime_sovereignty_leave_check = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_tier_at_least_strong = yes
+			NOT = { has_variable = un_sov_leave_demand_cd }
+			un_regime_sovereignty_demand = yes
+		}
+		set_variable = { name = un_sov_leave_demand_cd days = 3650 }
+		trigger_event = { id = un_events.34 days = 30 }
+	}
+}
+
+# ---- The ICC: indictments (§5.3) ------------------------------------------------------------
+
+# Note a crime the International Criminal Court may indict our ruler for: a
+# nuclear strike, or an exposed operation to overthrow a government. The court
+# has jurisdiction over the members that ratified the Rome Statute
+# (un_icc_member_modifier) from the Established tier, and over everyone at
+# Supranational. It indicts at most once a decade; the indictment arrives a
+# month later (un_events.33).
+# Parameters: $CRIME$ = 1 nuclear use, 2 an exposed regime-change operation
+# Scope: the offender
+un_regime_icc_note_crime = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_global_variable = un_agency_icc
+			un_tier_at_least_established = yes
+			exists = ruler
+			NOT = { has_variable = un_icc_indicted_cd }
+			OR = {
+				has_modifier = un_icc_member_modifier
+				un_tier_is_supranational = yes
+			}
+		}
+		set_variable = { name = un_icc_indicted_cd days = 3650 }
+		set_variable = { name = un_icc_crime value = $CRIME$ }
+		trigger_event = { id = un_events.33 days = 30 }
+	}
+}

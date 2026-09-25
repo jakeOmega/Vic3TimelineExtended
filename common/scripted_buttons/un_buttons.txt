@@ -215,61 +215,9 @@ un_leave_button = {
 	}
 
 	effect = {
-		# A permanent member walking out is a world moment: authority itself
-		# drops at once (un_authority_effects.txt), on top of the lasting loss
-		# of our power share from the participation pillar. Weighted by our
-		# weight in world affairs (at most x2), so a faded power still holding
-		# its seat costs the UN far less than a superpower. Checked before the
-		# block below strips the seat. Only this button ends a membership:
-		# a member absorbed by a merger or annexation never passes through it.
-		if = {
-			limit = { is_un_permanent_member = yes }
-			custom_tooltip = un_ledger_tt_p5_walkout
-			un_authority_actor_shock_weighted = { AMOUNT = -4 REASON = 11 }
-		}
-		# A great power walking out: the other great-power members answer it
-		# (un_events.20; redesign phase 4, un_docket_effects.txt).
-		hidden_effect = {
-			un_docket_walkout_consequence = yes
-		}
-		custom_tooltip = {
-			text = "UN_LEAVE_DESC"
-			# Membership, seats, programmes and their costs, our own sanctions
-			# enforcement and every convention we were bound by
-			# (un_membership_end_effect, un_ladder_effects.txt). Sanctions
-			# AGAINST us stay: they are the members' measure, not a membership
-			# obligation. Only un_lift_sanctions_button lifts a regime.
-			un_membership_end_effect = yes
-			# If we host the HQ, it moves to another member and our HQ building
-			# is demolished, so the new host can build the only one
-			# (un_hq_effects.txt; the helper excludes us from the pick itself).
-			if = {
-				limit = { un_hq_is_host = yes }
-				un_hq_assign_host = yes
-				un_hq_enforce_single_building = yes
-			}
-			# A host modifier on a country that is not the host (saves from
-			# before the HQ hand-off was fixed) just goes.
-			else_if = {
-				limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
-				je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
-			}
-			add_modifier = {
-				name = un_withdrawal_penalty_modifier
-				days = normal_modifier_time
-				is_decaying = yes
-			}
-		}
-		# International standing: walking out costs the record, once. The score
-		# itself is FROZEN rather than reset — resigning must not let a
-		# disgraced member launder its history by rejoining at the neutral
-		# value. The monthly pulse drops the programme duration counters
-		# without charging for them separately, so this is the only charge for
-		# leaving. Wrapped so the variable write is not tooltip noise.
-		custom_tooltip = {
-			text = un_standing_leave_tt
-			un_standing_loss = { AMOUNT = un_standing_leave_loss REASON = 28 }
-		}
+		# Everything leaving means, shared with un_events.34 (the interest
+		# groups' demand to leave): un_leave_organisation, un_ladder_effects.txt.
+		un_leave_organisation = yes
 	}
 }
 

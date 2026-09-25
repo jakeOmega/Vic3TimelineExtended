@@ -56,6 +56,9 @@ un_docket_score_colonial = { value = 45 }
 un_docket_score_space = { value = 40 }
 un_docket_score_embargo = { value = 30 }
 un_docket_score_agenda = { value = 20 }
+# Redesign phase 5: a member in a banking panic or default during a contagion
+# wave, offered the emergency lending facility (item 14).
+un_docket_score_loan = { value = 45 }
 
 # Warming: a higher threshold is a graver summit.
 un_docket_score_warming = {
@@ -199,5 +202,50 @@ un_disp_docket_age = {
 	if = {
 		limit = { has_global_variable = un_dkt_last_age }
 		add = global_var:un_dkt_last_age
+	}
+}
+
+# ---- The emergency lending facility (item 14, redesign phase 5) -------------------------
+# The facility lends out of the budget the paying members' dues make: at most
+# un_loan_share_of_gdp of the borrower's GDP, and at most un_loan_budget_weeks
+# weeks of the budget. The borrower repays un_loan_interest times the loan
+# over un_loan_term_days, as a weekly expense (un_loan_repayment_modifier),
+# and accepts the conditions (un_loan_conditions_modifier) for as long.
+
+un_loan_share_of_gdp = { value = 0.02 }
+un_loan_budget_weeks = { value = 26 }
+un_loan_interest = { value = 1.1 }
+# 1825 days: written as a literal on the modifiers' `days` (un_events.35).
+un_loan_term_weeks = { value = 260 }
+
+# The loan this member would receive. Scope: country (the borrower)
+un_loan_amount_value = {
+	value = gdp
+	multiply = un_loan_share_of_gdp
+	max = un_loan_budget_cap
+	min = 0
+}
+
+# What the budget can lend at once: un_loan_budget_weeks weeks of it. Globals only.
+un_loan_budget_cap = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_budget_weekly }
+		add = global_var:un_budget_weekly
+		multiply = un_loan_budget_weeks
+	}
+}
+
+# The weekly repayment on the loan the borrower took, read from the loan it
+# was granted (var:un_loan_amount, written when it accepted). The multiplier
+# on un_loan_repayment_modifier.
+# Scope: country (the borrower)
+un_loan_weekly_repayment_value = {
+	value = 0
+	if = {
+		limit = { has_variable = un_loan_amount }
+		add = var:un_loan_amount
+		multiply = un_loan_interest
+		divide = un_loan_term_weeks
 	}
 }

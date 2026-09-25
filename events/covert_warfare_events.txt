@@ -68,6 +68,13 @@ covert_warfare.1 = {
 			# ...and a grievance the target may bring before the Assembly
 			# (redesign phase 4, un_docket_effects.txt).
 			un_docket_note_grievance = { KIND = covert VICTIM = scope:detected_by_country }
+			# An exposed attempt to overthrow a government (regime change,
+			# code 9) is a crime the International Criminal Court may indict
+			# our ruler for (UN redesign phase 5).
+			if = {
+				limit = { var:iw_burned_type_code = 9 }
+				un_regime_icc_note_crime = { CRIME = 2 }
+			}
 		}
 	}
 

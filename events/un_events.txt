@@ -431,8 +431,8 @@ un_events.3 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer adopts immediately
-		je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier } }
+		# The proposer ratifies on passage with every other member (redesign
+		# phase 5, §5.3); it no longer takes the convention up front.
 		# Progressives love it
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
@@ -1223,8 +1223,8 @@ un_events.9 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer adopts immediately
-		je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier } }
+		# The proposer ratifies on passage with every other member (redesign
+		# phase 5, §5.3); it no longer takes the convention up front.
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Open the vote: every other UN member votes, results in a year
 		hidden_effect = {
@@ -1674,8 +1674,8 @@ un_events.14 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer adopts immediately
-		je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier } }
+		# The proposer ratifies on passage with every other member (redesign
+		# phase 5, §5.3); it no longer takes the convention up front.
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Open the vote: every other UN member votes, results in a year
@@ -1892,8 +1892,8 @@ un_events.16 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer cooperates immediately
-		je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier } }
+		# The proposer ratifies on passage with every other member (redesign
+		# phase 5, §5.3); it no longer takes the convention up front.
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Open the vote: every other UN member votes, results in a year
@@ -1995,8 +1995,8 @@ un_events.17 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer adopts immediately
-		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
+		# The proposer ratifies on passage with every other member (redesign
+		# phase 5, §5.3); it no longer takes the convention up front.
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		# Open the vote: every other UN member votes, results in a year
@@ -2113,8 +2113,8 @@ un_events.18 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer commits to resettlement
-		je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier } }
+		# The proposer ratifies on passage with every other member (redesign
+		# phase 5, §5.3); it no longer takes the convention up front.
 		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
 		# Open the vote: every other UN member votes, results in a year
 		hidden_effect = {
@@ -2224,8 +2224,8 @@ un_events.19 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer commits to partnership immediately
-		je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier } }
+		# The proposer ratifies on passage with every other member (redesign
+		# phase 5, §5.3); it no longer takes the convention up front.
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Open the vote: every other UN member votes, results in a year
 		hidden_effect = {
@@ -2665,8 +2665,8 @@ un_events.21 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer ratifies immediately
-		add_modifier = { name = un_law_of_sea_modifier }
+		# The proposer ratifies on passage with every other member (redesign
+		# phase 5, §5.3); it no longer takes the convention up front.
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Open the vote: every other UN member votes, results in a year
@@ -2775,8 +2775,8 @@ un_events.22 = {
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer ratifies immediately
-		add_modifier = { name = un_icc_member_modifier }
+		# The proposer ratifies on passage with every other member (redesign
+		# phase 5, §5.3); it no longer takes the convention up front.
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
 		# Open the vote: every other UN member votes, results in a year
@@ -3029,5 +3029,338 @@ un_events.32 = {
 			limit = { exists = scope:un_conference_wrecker }
 			change_relations = { country = scope:un_conference_wrecker value = -20 }
 		}
+	}
+}
+
+# Event 33: The Court Indicts Our Leader — to a country whose ruler the
+# International Criminal Court indicts (redesign phase 5, §5.3;
+# un_regime_icc_note_crime, a month after the crime): a nuclear strike, or an
+# exposed operation to overthrow a government. The court reaches the members
+# that ratified the Rome Statute from the Established tier, and everyone at
+# Supranational. Surrender the ruler to the court (exile), or defy it.
+un_events.33 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/international_court_chamber.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_events.33.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.33.d_nuclear
+				trigger = { var:un_icc_crime ?= 1 }
+			}
+			desc = un_events.33.d_regime_change
+		}
+	}
+	flavor = un_events.33.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_founded
+		has_global_variable = un_agency_icc
+		exists = ruler
+	}
+
+	immediate = {
+		ruler = { save_scope_as = un_icc_accused }
+	}
+
+	# Option A: surrender the accused to the court. The ruler goes into exile
+	# (VERIFY IN-GAME: that the heir takes over cleanly under every form of
+	# government); the Assembly's credibility gains, weighted by us.
+	option = {
+		name = un_events.33.a
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { un_tier_is_supranational = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				add = 3
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_universal_suffrage }
+				add = 2
+			}
+			modifier = {
+				trigger = {
+					OR = {
+						has_law = law_type:law_autocracy
+						has_law = law_type:law_single_party_state
+					}
+				}
+				add = -1
+			}
+		}
+		custom_tooltip = un_events.33.a_tt
+		scope:un_icc_accused = {
+			interest_group ?= {
+				add_modifier = {
+					name = ig_approval_negative_modifier
+					days = normal_modifier_time
+					is_decaying = yes
+				}
+			}
+			exile_character = yes
+		}
+		custom_tooltip = un_ledger_tt_credibility_up_1_5
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = 1.5 REASON = 16 }
+		custom_tooltip = {
+			text = un_standing_complied_tt
+			un_standing_gain = { AMOUNT = un_standing_compliance_gain REASON = 5 }
+		}
+	}
+
+	# Option B: defy the court. The ruler stays; the record, our standing and
+	# the Assembly's credibility pay for it, and the court's defiance
+	# modifier scales with E.
+	option = {
+		name = un_events.33.b
+		default_option = yes
+		ai_chance = {
+			base = 5
+		}
+		custom_tooltip = un_events.33.b_tt
+		add_modifier = {
+			name = un_court_defiance_modifier
+			multiplier = un_enforcement
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		scope:un_icc_accused = {
+			interest_group ?= {
+				add_modifier = {
+					name = ig_approval_positive_modifier
+					days = short_modifier_time
+					is_decaying = yes
+				}
+			}
+		}
+		custom_tooltip = un_dossier_tt_defiance
+		un_dossier_record = { RECORD = defiance POINTS = un_dos_points_defiance }
+		custom_tooltip = {
+			text = un_standing_defied_tt
+			un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }
+		}
+		custom_tooltip = un_ledger_tt_credibility_down_1_5
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 17 }
+	}
+}
+
+# Event 34: Sovereignty First — to a member of a Strong or Supranational UN
+# whose nationalist interest groups have grown strong enough to demand that
+# it leave (redesign phase 5, §7.1; un_regime_sovereignty_leave_check, at
+# most once a decade). Leave, buy them off, or hold the line.
+un_events.34 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nationalist_backlash_flags.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = un_events.34.t
+	desc = un_events.34.d
+	flavor = un_events.34.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_founded
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_tier_at_least_strong = yes
+		any_interest_group = {
+			un_regime_ig_resents_un = yes
+			is_powerful = yes
+		}
+	}
+
+	immediate = {
+		random_interest_group = {
+			limit = {
+				un_regime_ig_resents_un = yes
+				is_powerful = yes
+			}
+			save_scope_as = un_sov_ig
+		}
+	}
+
+	# Option A: leave the United Nations, as they demand.
+	option = {
+		name = un_events.34.a
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = 4
+			}
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				add = 4
+			}
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				add = -1
+			}
+		}
+		every_interest_group = {
+			limit = { un_regime_ig_resents_un = yes }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		un_leave_organisation = yes
+	}
+
+	# Option B: buy them off. The resentful groups are placated, and the
+	# concession costs authority and influence for five years.
+	option = {
+		name = un_events.34.b
+		default_option = yes
+		ai_chance = {
+			base = 5
+		}
+		every_interest_group = {
+			limit = { un_regime_ig_resents_un = yes }
+			add_modifier = {
+				name = ig_approval_positive_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		add_modifier = {
+			name = un_sovereignty_concession_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+	}
+
+	# Option C: hold the line. The resentful groups are angered; the world
+	# sees a member that stayed.
+	option = {
+		name = un_events.34.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				add = 5
+			}
+			modifier = {
+				trigger = { is_un_permanent_member = yes }
+				add = 2
+			}
+		}
+		every_interest_group = {
+			limit = { un_regime_ig_resents_un = yes }
+			add_modifier = {
+				name = ig_approval_very_negative_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			}
+		}
+		custom_tooltip = un_ledger_tt_credibility_up_0_5
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 134 }
+	}
+}
+
+# Event 35: An Emergency Lending Facility — to a member in a banking panic or
+# a default during a contagion wave (redesign phase 5; the docket's item 14,
+# un_docket_take_up_loan). The United Nations lends out of the budget its
+# members' dues make, on conditions, repayable with interest over five years.
+un_events.35 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = un_events.35.t
+	desc = un_events.35.d
+	flavor = un_events.35.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_founded
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { has_modifier = un_loan_repayment_modifier }
+		un_loan_amount_value > 0
+	}
+
+	# Option A: take the loan, and its conditions.
+	option = {
+		name = un_events.35.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { in_default = yes }
+				add = 3
+			}
+		}
+		custom_tooltip = un_events.35.a_tt
+		# The loan, recorded for its repayment (the variable outlives the
+		# modifier whose multiplier reads it).
+		set_variable = { name = un_loan_amount value = un_loan_amount_value days = 1860 }
+		add_treasury = un_loan_amount_value
+		add_modifier = {
+			name = un_loan_repayment_modifier
+			multiplier = un_loan_weekly_repayment_value
+			days = 1825
+		}
+		add_modifier = {
+			name = un_loan_conditions_modifier
+			days = 1825
+		}
+		add_modifier = {
+			name = finreg_banking_stability
+			days = 1825
+		}
+		if = {
+			limit = { has_journal_entry = je_banking_cycle }
+			custom_tooltip = un_events.35.a_confidence_tt
+			hidden_effect = {
+				change_variable = { name = finance_cycle_value add = 10 }
+				banking_cycle_post_event_refresh = yes
+			}
+		}
+		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_rural_folk MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		custom_tooltip = un_ledger_tt_delivery_institutional_1
+		un_ledger_entry = { PILLAR = delivery POINTS = 1 REASON = 18 }
+	}
+
+	# Option B: weather it alone.
+	option = {
+		name = un_events.35.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = 4
+			}
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				add = 3
+			}
+		}
+		custom_tooltip = un_events.35.b_tt
 	}
 }

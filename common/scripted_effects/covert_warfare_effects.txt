@@ -34,6 +34,8 @@
 #           iw_net_trend            1 growing, 2 decaying, 0 holding at max (display)
 #           iw_net_head_start_offer months of head start a new operation would get
 #           iw_net_tc_mult          operator's Tradecraft growth multiplier, copied each tick (slice 5)
+#           iw_net_un_mult          the UN headquarters host's growth multiplier in a UN member,
+#                                   written each tick (UN redesign phase 5); absent otherwise
 #           iw_net_cultivating      1 while a cultivate-assets operation runs against the target (slice 6)
 #           iw_net_intel_tier       0 / 1 / 2, what the network reports on its target (slice 7, display)
 #           iw_net_intel_ic         target's intelligence capacity, last report (tier >= 1, display)
@@ -567,6 +569,20 @@ covert_nets_sync = {
 		every_in_list = {
 			variable = iw_nets
 			set_variable = { name = iw_net_tc_mult value = scope:iw_net_operator.var:iw_tc_net_mult_staging }
+			# The UN headquarters (UN redesign phase 5, §7.4): the host's
+			# networks in every UN member grow faster, because every member's
+			# delegation sits in its capital (un_regime_triggers.txt).
+			if = {
+				limit = {
+					scope:iw_net_operator = { un_regime_hq_intelligence_host = yes }
+					var:iw_target ?= { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+				}
+				set_variable = { name = iw_net_un_mult value = un_regime_hq_net_gain_mult }
+			}
+			else_if = {
+				limit = { has_variable = iw_net_un_mult }
+				remove_variable = iw_net_un_mult
+			}
 			if = {
 				limit = { var:iw_net_ops >= 1 }
 				covert_net_gain = { AMOUNT = covert_net_tick_gain }

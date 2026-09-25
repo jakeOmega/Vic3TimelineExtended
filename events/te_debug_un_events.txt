@@ -164,6 +164,56 @@ te_debug_un.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 		te_debug_un_stage_grievance = yes
 	}
 
+	# ---- Redesign phase 5 ----
+	# Raise the UN one tier: the charter reform it needs, and authority at the
+	# tier's floor; the tier, E and every country's terms follow at once.
+	option = {
+		name = te_debug_un.1.o
+		trigger = {
+			has_global_variable = un_founded
+			NOT = { un_tier_is_supranational = yes }
+		}
+		te_debug_un_raise_tier = yes
+	}
+
+	# Put us two years in arrears on our dues: Article 19 takes our vote.
+	option = {
+		name = te_debug_un.1.p
+		trigger = {
+			has_global_variable = un_founded
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		te_debug_un_arrears = yes
+	}
+
+	# The International Criminal Court indicts our ruler (un_events.33 now).
+	option = {
+		name = te_debug_un.1.q
+		trigger = { has_global_variable = un_founded }
+		te_debug_un_indict_us = yes
+	}
+
+	# Our nationalists demand that we leave (un_events.34 now; it needs a
+	# Strong UN and a powerful resentful interest group).
+	option = {
+		name = te_debug_un.1.r
+		trigger = {
+			has_global_variable = un_founded
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		trigger_event = { id = un_events.34 }
+	}
+
+	# The emergency lending facility is offered to us (un_events.35 now).
+	option = {
+		name = te_debug_un.1.s
+		trigger = {
+			has_global_variable = un_founded
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		te_debug_un_offer_loan = yes
+	}
+
 	option = {
 		name = te_debug_un.1.z
 	}

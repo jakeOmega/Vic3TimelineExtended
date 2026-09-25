@@ -31,6 +31,28 @@ un_docket_can_be_offered = {
 
 # ---- Situations --------------------------------------------------------------------------
 
+# A member the emergency lending facility could help (item 14, redesign
+# phase 5): a banking panic, or a default, in a contagion wave (it was hit
+# by the last wave, or a Great Depression is on somewhere), with no loan
+# already running and none offered in the last ten years, while the paying
+# members' dues give the UN a budget to lend from.
+# Scope: the prospective borrower
+un_docket_loan_candidate = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	has_journal_entry = je_banking_cycle
+	OR = {
+		in_default = yes
+		banking_cycle_is_panic = yes
+	}
+	OR = {
+		has_variable = banking_crisis_wave_crashed
+		any_country = { has_modifier = great_depression_modifier }
+	}
+	NOT = { has_variable = un_dkt_loan_raised }
+	NOT = { has_modifier = un_loan_repayment_modifier }
+	un_loan_amount_value > 0
+}
+
 # A war of aggression the docket should take up, seen from the aggressor: it
 # began the war (the dossier's test), has fought it un_docket_war_months, holds
 # no bound mandate for it, has not been docketed for it, and some member it is
@@ -220,6 +242,8 @@ un_docket_topic_open_law_of_sea = {
 }
 un_docket_topic_open_decolonization = {
 	NOT = { un_resolution_topic_on_cooldown = { TOPIC = decolonization } }
+	# A declaration in force is a standing regime (redesign phase 5).
+	NOT = { has_global_variable = un_regime_decolonization }
 	global_var:un_authority >= 30
 	any_country = { any_subject_or_below = { count >= 1 } }
 }

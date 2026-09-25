@@ -1,0 +1,153 @@
+﻿# ============================================================================
+# UN CONVENTION REGIMES — THE FIGURES (redesign phase 5)
+# ============================================================================
+# docs/systems/un_redesign_design.md §5.3; as shipped, §0.5 of the same file.
+#
+# A convention in force used to give nearly every member the same small
+# bonus, so its relative effect was about zero. Now it is a REGIME:
+#   - its member modifier is multiplied by the UN's enforcement, E, like every
+#     resolution penalty (nothing at Moribund, x2.5 at Supranational);
+#   - it names a winner or a loser among the members, with a modifier of its
+#     own, also multiplied by E:
+#
+#   convention        loser (pays)                     winner (gains)
+#   climate (UNEP)    high emitters: an emissions cut  low emitters: adaptation
+#                     and heavy-industry output        aid against warming damage
+#   NPT (IAEA)        threshold states: inspections    states without the bomb: a
+#                     slow the programme               security guarantee
+#   law of the sea    great powers: naval prestige     (every member: the
+#   (ITLOS)           projection curbed                 member modifier)
+#   human rights      violators: legitimacy and        (every member: acceptance)
+#   (UNHRC)           prestige
+#   decolonisation    colonial powers: colonial        colonies of members:
+#   (the declaration) stability drift                  liberty desire
+#   refugees (UNHCR)  hosts (the richest): arrivals    sources (the poorest):
+#                     and strain                       relief
+#   outer space       the leader: slower; holders of   laggards: shared progress
+#   (UNOOSA)          a battlestation: prestige and
+#                     reputation
+#   heritage (UNESCO) wonder states: slower building   wonder states: cultural
+#                                                      pull and tourism
+#   pandemic (WHO)    (the member modifier only: its winners and losers are a
+#                     nice-to-have, owner decision 2026-09-24)
+#
+# The ICC's regime is the indictment (un_regime_effects.txt, un_events.33).
+#
+# WHEN THE TERMS ARE READ. Every country re-reads its terms when the tier
+# changes, once a year, when it ratifies a convention, and when it joins or
+# leaves (un_regime_refresh_country). global_var:un_regime_epoch counts the
+# re-readings; a country whose var:un_regime_stamp differs re-reads at its
+# next monthly pulse. So a stored multiplier is refreshed at every tier
+# change whether or not the engine re-reads it live.
+#
+# Scope: the thresholds and multipliers read globals only; un_space_milestones
+# is country-scoped.
+# ============================================================================
+
+# ---- Tuning ----------------------------------------------------------------
+
+# Climate: a market leader with this share of the world's emissions or more
+# is a high emitter; one below the lower line (or no leader at all) is a low
+# emitter. Between the two, neither.
+un_regime_emitter_share_pct = { value = 10 }
+un_regime_low_emitter_share_pct = { value = 2 }
+
+# Refugees: the hosts are the richest countries by GDP per head, the sources
+# every country ranked below the second line.
+un_regime_refugee_host_rank = { value = 20 }
+un_regime_refugee_source_rank = { value = 60 }
+
+# Outer space: the leader must have at least this many milestones before
+# anyone counts as leading or lagging; a laggard is this many behind.
+un_regime_space_lead_min = { value = 3 }
+un_regime_space_laggard_gap = { value = 3 }
+
+# Months between the yearly re-readings of every country's terms.
+un_regime_refresh_months = { value = 12 }
+
+# Intelligence (§7.4): the headquarters host's covert networks in members grow
+# this much faster.
+un_regime_hq_net_gain_mult = { value = 1.25 }
+
+# ---- Multipliers ---------------------------------------------------------------
+
+# The climate winners' adaptation aid scales with the warming it offsets: its
+# modifier is a fifth of the global_warming modifier's per-degree harm,
+# inverted, times the temperature anomaly, times E.
+un_regime_adaptation_multiplier = {
+	value = 0
+	if = {
+		limit = { has_global_variable = greenhouse_gas_emissions }
+		add = temperature_anomaly_display
+		multiply = un_enforcement
+	}
+	min = 0
+}
+
+# Sovereignty and intelligence (§7.1, §7.4) start at the Strong tier and grow
+# with it: 1 at Strong, 2 at Supranational, 0 below. Globals only.
+un_regime_strong_steps = {
+	value = un_disp_tier
+	subtract = 2
+	min = 0
+}
+
+# ---- Outer space ----------------------------------------------------------------
+
+# Main-sequence milestones this country has completed (0..8).
+# Scope: country
+un_space_milestones = {
+	value = 0
+	if = {
+		limit = { has_variable = sr_completed_suborbital }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = sr_completed_orbital }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = sr_completed_probe }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = sr_completed_moon_landing }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = sr_completed_moon_base }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = sr_completed_mars_landing }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = sr_completed_interstellar_probe }
+		add = 1
+	}
+	if = {
+		limit = { has_variable = sr_completed_solar_colonization }
+		add = 1
+	}
+}
+
+# The line at or below which a country lags the leader. Globals only.
+un_regime_space_laggard_line = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_space_top_score }
+		add = global_var:un_space_top_score
+		subtract = un_regime_space_laggard_gap
+	}
+}
+
+# ---- Display ----------------------------------------------------------------------
+
+un_disp_space_top_score = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_space_top_score }
+		add = global_var:un_space_top_score
+	}
+}

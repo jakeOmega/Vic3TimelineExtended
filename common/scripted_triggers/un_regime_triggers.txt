@@ -1,0 +1,236 @@
+﻿# ============================================================================
+# UN CONVENTION REGIMES — WHO WINS AND WHO PAYS (redesign phase 5)
+# ============================================================================
+# docs/systems/un_redesign_design.md §5.3; as shipped, §0.5. Each convention in
+# force binds every member through its member modifier, and now also names a
+# winner or a loser among them. These are the tests; the writers are in
+# common/scripted_effects/un_regime_effects.txt, the figures in
+# common/script_values/un_regime_values.txt.
+#
+# Every test is about the scoped country (a member unless it says otherwise).
+# ============================================================================
+
+# ---- Climate (UNEP) ------------------------------------------------------------
+
+# A high emitter: it leads a market that puts out at least
+# un_regime_emitter_share_pct of the world's emissions. Emissions are a
+# property of the market, and only the leader's own
+# country_greenhouse_gas_emissions_mult changes them
+# (gw_emission_multiplier_script_value), so the binding cut lands on the
+# leader.
+un_regime_climate_emitter = {
+	gw_is_market_leader = yes
+	gw_has_yearly_figures = yes
+	gw_share_pct_display >= un_regime_emitter_share_pct
+}
+
+# A low emitter: it leads no market, or one with a small share of the
+# world's emissions. It is owed the adaptation the accord pays for.
+un_regime_climate_low_emitter = {
+	OR = {
+		NOT = { gw_is_market_leader = yes }
+		NOT = { gw_has_yearly_figures = yes }
+		gw_share_pct_display < un_regime_low_emitter_share_pct
+	}
+}
+
+# ---- Non-proliferation (IAEA) ----------------------------------------------------
+
+# A nuclear-threshold state: running a programme with no bomb yet. The
+# inspections slow it.
+un_regime_npt_threshold = {
+	has_journal_entry = je_nuclear_program
+	NOT = { has_modifier = nuclear_power }
+	has_variable = nuclear_weapons_program_first_nuke_done
+	var:nuclear_weapons_program_first_nuke_done = 0
+}
+
+# A state with no bomb and no programme: the treaty's security guarantee is
+# for it.
+un_regime_npt_guaranteed = {
+	NOT = { has_modifier = nuclear_power }
+	NOT = { un_regime_npt_threshold = yes }
+}
+
+# ---- Human rights (UNHRC) -----------------------------------------------------------
+
+# A member whose laws the declaration condemns: an ethnostate, outlawed
+# dissent, or slavery in any form.
+un_regime_human_rights_violator = {
+	OR = {
+		has_law = law_type:law_ethnostate
+		has_law = law_type:law_outlawed_dissent
+		has_law = law_type:law_slave_trade
+		has_law = law_type:law_legacy_slavery
+		has_law = law_type:law_debt_slavery
+		has_law = law_type:law_colonial_slavery
+	}
+}
+
+# ---- Decolonisation ---------------------------------------------------------------
+
+# A colonial power: it is running a colonial empire (je_colonial_empire, the
+# colonial system's own test of one).
+un_regime_colonial_power = {
+	has_journal_entry = je_colonial_empire
+}
+
+# A colony of a member: a qualifying colonial subject (a colony, a chartered
+# company, an overseas protectorate of another heritage) whose overlord is in
+# the UN. Not itself a member: subjects cannot join.
+un_regime_member_colony = {
+	is_subject = yes
+	is_qualifying_colonial_subject = yes
+	overlord ?= { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+}
+
+# ---- Refugees (UNHCR) -----------------------------------------------------------------
+
+# A host: one of the richest countries by GDP per head, where refugees go.
+un_regime_refugee_host = {
+	gdp_per_capita_ranking <= un_regime_refugee_host_rank
+}
+
+# A source: one of the poorer countries, which refugees leave.
+un_regime_refugee_source = {
+	gdp_per_capita_ranking > un_regime_refugee_source_rank
+}
+
+# ---- The law of the sea (ITLOS) --------------------------------------------------------
+
+# A naval power: a great power, whose fleets the convention constrains.
+un_regime_naval_power = {
+	country_rank >= rank_value:great_power
+}
+
+# ---- Outer space (UNOOSA) --------------------------------------------------------------
+
+# The space leader: as far along the race as anyone (un_space_milestones is the
+# count of main-sequence milestones completed), once someone has reached three.
+un_regime_space_leader = {
+	has_global_variable = un_space_top_score
+	global_var:un_space_top_score >= un_regime_space_lead_min
+	un_space_milestones >= global_var:un_space_top_score
+}
+
+# A laggard: at least three milestones behind the leader.
+un_regime_space_laggard = {
+	has_global_variable = un_space_top_score
+	global_var:un_space_top_score >= un_regime_space_lead_min
+	un_space_milestones <= un_regime_space_laggard_line
+}
+
+# A member holding an orbital battlestation, which the treaty bars.
+un_regime_space_weaponized = {
+	any_scope_state = { has_building = building_orbital_battlestation }
+}
+
+# ---- Intelligence (§7.4) ---------------------------------------------------------------
+
+# The headquarters host, while the UN is above Moribund: its covert networks in
+# every member grow faster (covert_nets_sync).
+# Scope: country
+un_regime_hq_intelligence_host = {
+	has_global_variable = un_founded
+	un_tier_at_least_contested = yes
+	un_hq_is_host = yes
+}
+
+# Members share intelligence from the Strong tier: a small counter-intelligence
+# bonus against every kind of covert operation.
+# Scope: country
+un_regime_shared_intelligence = {
+	un_tier_at_least_strong = yes
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+}
+
+# ---- Cultural heritage (UNESCO) ---------------------------------------------------------
+
+# A heritage state: it holds a wonder of the world.
+un_regime_heritage_site = {
+	any_scope_building = { is_building_group = bg_monuments }
+}
+
+# ---- Sovereignty (§7.1) -------------------------------------------------------------------
+
+# An interest group that resents the UN's reach: a nationalist, jingoist,
+# isolationist or sovereignist one.
+# Scope: interest group
+un_regime_ig_resents_un = {
+	OR = {
+		has_ideology = ideology:ideology_patriotic
+		has_ideology = ideology:ideology_jingoist
+		has_ideology = ideology:ideology_isolationist
+		has_ideology = ideology:ideology_sovereignist
+	}
+}
+
+# An interest group that welcomes it: one led by a humanitarian or a pacifist
+# (in this game those are leaders' ideologies, not interest groups').
+# Scope: interest group
+un_regime_ig_welcomes_un = {
+	leader ?= {
+		OR = {
+			has_ideology = ideology:ideology_humanitarian
+			has_ideology = ideology:ideology_pacifist
+		}
+	}
+}
+
+# The resentful interest groups are strong enough to demand that we leave:
+# one of them is powerful and in government, or two of them are powerful.
+# Scope: country
+un_regime_sovereignty_demand = {
+	OR = {
+		any_interest_group = {
+			un_regime_ig_resents_un = yes
+			is_powerful = yes
+			is_in_government = yes
+		}
+		any_interest_group = {
+			un_regime_ig_resents_un = yes
+			is_powerful = yes
+			count >= 2
+		}
+	}
+}
+
+# ---- Display ------------------------------------------------------------------------------
+
+# Some convention is in force (the chamber's Our Obligations).
+# Scope: any
+un_regime_any_convention = {
+	OR = {
+		has_global_variable = un_agency_unep
+		has_global_variable = un_agency_iaea
+		has_global_variable = un_agency_itlos
+		has_global_variable = un_agency_unhrc
+		has_global_variable = un_regime_decolonization
+		has_global_variable = un_agency_unhcr
+		has_global_variable = un_agency_unoosa
+		has_global_variable = un_agency_unesco
+		has_global_variable = un_agency_who
+		has_global_variable = un_agency_icc
+	}
+}
+
+# The scoped country carries some regime modifier.
+# Scope: country
+un_regime_has_terms = {
+	OR = {
+		has_modifier = un_regime_climate_emitter_modifier
+		has_modifier = un_regime_climate_adaptation_modifier
+		has_modifier = un_regime_npt_inspection_modifier
+		has_modifier = un_regime_npt_guarantee_modifier
+		has_modifier = un_regime_naval_curb_modifier
+		has_modifier = un_regime_rights_violator_modifier
+		has_modifier = un_regime_colonial_pressure_modifier
+		has_modifier = un_regime_refugee_host_modifier
+		has_modifier = un_regime_refugee_source_modifier
+		has_modifier = un_regime_space_leader_modifier
+		has_modifier = un_regime_space_laggard_modifier
+		has_modifier = un_regime_space_weapon_modifier
+		has_modifier = un_regime_heritage_site_modifier
+		has_modifier = un_regime_shared_intelligence_modifier
+	}
+}

@@ -94,6 +94,11 @@ un_global_authority_on_action = {
 			# sanctions busting, and the mandate holder's war support.
 			un_teeth_monthly_update = yes
 
+			# The convention regimes (redesign phase 5, un_regime_effects.txt):
+			# every country re-reads its terms when the tier changes and once a
+			# year, at its own monthly pulse.
+			un_regime_monthly_update = yes
+
 			# Last: at 0, during a crisis, the UN dissolves (un_ladder_effects.txt).
 			# After the upkeep above on purpose — that upkeep assumes a UN that
 			# still exists, and a remove_modifier made by the dissolution would not

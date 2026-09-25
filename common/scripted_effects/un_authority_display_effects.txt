@@ -408,6 +408,10 @@ un_authority_log_reason_line = {
 		limit = { var:un_led_reason = 122 }
 		custom_tooltip_no_bullet = je_un_led_reason_122
 	}
+	else_if = {
+		limit = { var:un_led_reason = 134 }
+		custom_tooltip_no_bullet = je_un_led_reason_134
+	}
 }
 
 # How the model works, in plain language. Static text. Scope: country

@@ -523,6 +523,16 @@
 			# ---- Authority history (the chart in the authority widget) ----
 			un_authority_record_history = yes
 
+			# ---- The convention regimes (redesign phase 5) ----
+			# Re-read our terms when the tier has changed or a year has
+			# passed: the conventions' member modifiers at the current E, the
+			# winner or loser modifier each gives us, shared intelligence and
+			# our interest groups' reaction from Strong, and a colony's liberty
+			# under the decolonisation declaration. The single refresh site
+			# for every un_regime_* modifier (un_regime_effects.txt). Outside
+			# the member block: a colony is not a member.
+			un_regime_country_pulse = yes
+
 			# ---- International standing (all countries with the JE) ----
 			# The whole national-standing system's monthly work, in one call:
 			# seed a new member at the neutral value, advance the rolling year,
