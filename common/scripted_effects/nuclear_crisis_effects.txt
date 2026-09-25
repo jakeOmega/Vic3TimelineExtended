@@ -75,13 +75,18 @@ nd_crisis_send_event = {
 # (nd_crisis_parties_free), so they are not fenced.
 nd_crisis_preview = {
 	# ---- what the world sees ------------------------------------------------
+	# Charged only if the crisis will open: nd_crisis_open's fence checks the
+	# same (every caller checks it too; this keeps a future caller honest).
 	if = {
-		limit = { always = $PUBLIC$ }
-		change_infamy = 5
-		change_relations = { country = $TARGET$ value = -20 }
-	}
-	else = {
-		change_relations = { country = $TARGET$ value = -5 }
+		limit = { nd_crisis_parties_free = { TARGET = $TARGET$ } }
+		if = {
+			limit = { always = $PUBLIC$ }
+			change_infamy = 5
+			change_relations = { country = $TARGET$ value = -20 }
+		}
+		else = {
+			change_relations = { country = $TARGET$ value = -5 }
+		}
 	}
 	# ---- what it is about, and what conceding would cost them ----------------
 	if = {
@@ -598,6 +603,10 @@ nd_crisis_weekly_tick = {
 			if = {
 				limit = { var:nd_crisis_exercise_weeks <= 0 }
 				remove_variable = nd_crisis_exercise_weeks
+				if = {
+					limit = { has_variable = nd_crisis_exercise_by_issuer }
+					remove_variable = nd_crisis_exercise_by_issuer
+				}
 			}
 		}
 		nd_crisis_revalidate_dispute = yes
@@ -809,6 +818,10 @@ nd_crisis_clear_vars = {
 		remove_variable = nd_crisis_exercise_weeks
 	}
 	nd_crisis_clear_figures = yes
+	if = {
+		limit = { has_variable = nd_crisis_exercise_by_issuer }
+		remove_variable = nd_crisis_exercise_by_issuer
+	}
 }
 
 # Target scope, from the target's monthly update: an issuer that vanished
@@ -879,8 +892,8 @@ nd_crisis_close = {
 		}
 		if = {
 			limit = { scope:nd_issuer = { NOT = { var:nd_crisis_last_outcome = 9 } } }
-			scope:nd_issuer = { trigger_event = { id = nuclear_crisis.6 } }
-			scope:nd_target = { trigger_event = { id = nuclear_crisis.6 } }
+			scope:nd_issuer = { trigger_event = { id = nuclear_crisis.6 popup = yes } }
+			scope:nd_target = { trigger_event = { id = nuclear_crisis.6 popup = yes } }
 		}
 	}
 }
@@ -941,6 +954,9 @@ nd_crisis_flush_pending = {
 	if = {
 		limit = { has_variable = nd_crisis_pending_outcome }
 		var:nd_crisis_pending_opponent ?= { save_scope_as = nd_outcome_other }
+		# If the opponent is gone, a scope saved by the other party's flush a
+		# line earlier may still be set; nd_outcome_other_is_live keeps it
+		# from being paid.
 		nd_crisis_apply_outcome_side = yes
 	}
 }
@@ -979,7 +995,7 @@ nd_crisis_apply_outcome_side = {
 				is_decaying = yes
 			}
 			if = {
-				limit = { exists = scope:nd_outcome_other }
+				limit = { nd_outcome_other_is_live = yes }
 				custom_tooltip = {
 					text = nd_tt_outcome_hawks_approve
 					nd_reward_hawks = { OTHER = scope:nd_outcome_other LIST = nd_lob_iw GOOD = yes }
@@ -999,7 +1015,7 @@ nd_crisis_apply_outcome_side = {
 				is_decaying = yes
 			}
 			if = {
-				limit = { exists = scope:nd_outcome_other }
+				limit = { nd_outcome_other_is_live = yes }
 				custom_tooltip = {
 					text = nd_tt_outcome_hawks_disapprove
 					nd_reward_hawks = { OTHER = scope:nd_outcome_other LIST = nd_lob_tl GOOD = no }
@@ -1032,7 +1048,7 @@ nd_crisis_apply_outcome_side = {
 					is_decaying = yes
 				}
 				if = {
-					limit = { exists = scope:nd_outcome_other }
+					limit = { nd_outcome_other_is_live = yes }
 					custom_tooltip = {
 						text = nd_tt_outcome_hawks_disapprove
 						nd_reward_hawks = { OTHER = scope:nd_outcome_other LIST = nd_lob_il GOOD = no }
@@ -1059,7 +1075,7 @@ nd_crisis_apply_outcome_side = {
 				is_decaying = yes
 			}
 			if = {
-				limit = { exists = scope:nd_outcome_other }
+				limit = { nd_outcome_other_is_live = yes }
 				custom_tooltip = {
 					text = nd_tt_outcome_hawks_approve
 					nd_reward_hawks = { OTHER = scope:nd_outcome_other LIST = nd_lob_tw GOOD = yes }
@@ -1085,7 +1101,7 @@ nd_crisis_apply_outcome_side = {
 				nd_change_credibility = { AMOUNT = -5 }
 			}
 			if = {
-				limit = { exists = scope:nd_outcome_other }
+				limit = { nd_outcome_other_is_live = yes }
 				nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = anti AMOUNT = -2 EVENT = positive }
 			}
 		}
@@ -1096,7 +1112,7 @@ nd_crisis_apply_outcome_side = {
 			}
 		}
 		if = {
-			limit = { exists = scope:nd_outcome_other }
+			limit = { nd_outcome_other_is_live = yes }
 			nd_lobby_react = { OTHER = scope:nd_outcome_other TYPE = pro AMOUNT = 2 EVENT = positive }
 		}
 		add_modifier = {
@@ -1605,6 +1621,13 @@ nd_standdown_one_side = {
 # Either party, answering .3: refuse.
 nd_crisis_act_refuse_talks = {
 	custom_tooltip = nd_tt_act_refuse_talks
+	if = {
+		limit = { nd_crisis_stage_at_least = { STAGE = 2 } }
+		custom_tooltip = nd_tt_refuse_talks_resume
+	}
+	else = {
+		custom_tooltip = nd_tt_refuse_talks_no_pressure_yet
+	}
 	hidden_effect = {
 		nd_crisis_save_parties = yes
 		if = {
@@ -1699,6 +1722,15 @@ nd_crisis_act_exercise = {
 					set_variable = { name = nd_crisis_stage value = 2 }
 				}
 				set_variable = { name = nd_crisis_exercise_weeks value = 6 }
+			}
+			# Whose exercise it is: only the threatening side's presses the
+			# target (nd_yp_exercise_value); either side's raises the danger.
+			if = {
+				limit = { this = scope:nd_issuer }
+				scope:nd_issuer = { set_variable = { name = nd_crisis_exercise_by_issuer value = 1 } }
+			}
+			else = {
+				scope:nd_issuer = { set_variable = { name = nd_crisis_exercise_by_issuer value = 0 } }
 			}
 		}
 	}
@@ -1828,7 +1860,10 @@ nd_crisis_act_stand_firm = {
 # it conventionally. The threat was not carried out, and everyone saw.
 nd_crisis_act_fight_conventional = {
 	custom_tooltip = nd_tt_act_fight_conventional
-	nd_change_credibility = { AMOUNT = -10 }
+	custom_tooltip = {
+		text = nd_tt_credibility_down_10
+		nd_change_credibility = { AMOUNT = -10 }
+	}
 	every_interest_group = {
 		limit = { nd_ig_stance_militarist = yes }
 		add_modifier = {
@@ -1849,7 +1884,25 @@ nd_crisis_act_fight_conventional = {
 # Stand with the beneficiary.
 nd_guarantee_act_honour = {
 	custom_tooltip = nd_tt_guarantee_honour
-	nd_change_credibility = { AMOUNT = 5 }
+	custom_tooltip = {
+		text = nd_tt_credibility_up_5
+		nd_change_credibility = { AMOUNT = 5 }
+	}
+	# After a strike, with no war to answer in: a public ultimatum of our own
+	# against the attacker, if neither of us is in a crisis already. Outside
+	# the hidden block so the option shows what the ultimatum does
+	# (nd_crisis_preview).
+	if = {
+		limit = {
+			exists = scope:nd_guarantee_attacker
+			exists = scope:nd_guarantee_beneficiary
+			var:nd_guarantee_context = 2
+			nd_is_armed = yes
+			nd_crisis_parties_free = { TARGET = scope:nd_guarantee_attacker }
+			nd_has_crisis_dispute_with = { TARGET = scope:nd_guarantee_attacker }
+		}
+		nd_crisis_open = { TARGET = scope:nd_guarantee_attacker PUBLIC = yes }
+	}
 	hidden_effect = {
 		if = {
 			limit = {
@@ -1873,17 +1926,6 @@ nd_guarantee_act_honour = {
 					set_variable = { name = nd_crisis_backed value = 1 }
 				}
 			}
-			# After a strike, with no war to answer in: a public ultimatum of our
-			# own against the attacker, if neither of us is in a crisis already.
-			else_if = {
-				limit = {
-					var:nd_guarantee_context = 2
-					nd_is_armed = yes
-					nd_crisis_parties_free = { TARGET = scope:nd_guarantee_attacker }
-					nd_has_crisis_dispute_with = { TARGET = scope:nd_guarantee_attacker }
-				}
-				nd_crisis_open = { TARGET = scope:nd_guarantee_attacker PUBLIC = yes }
-			}
 			nd_crisis_ai_review = yes
 			scope:nd_guarantee_beneficiary = {
 				set_variable = { name = nd_guarantee_answer value = 1 }
@@ -1897,7 +1939,10 @@ nd_guarantee_act_honour = {
 # doctrine and pledges permitting. Through the one dispatch path.
 nd_guarantee_act_retaliate = {
 	custom_tooltip = nd_tt_guarantee_retaliate
-	nd_change_credibility = { AMOUNT = 10 }
+	custom_tooltip = {
+		text = nd_tt_credibility_up_10
+		nd_change_credibility = { AMOUNT = 10 }
+	}
 	hidden_effect = {
 		if = {
 			limit = { exists = scope:nd_guarantee_attacker }
@@ -1914,7 +1959,10 @@ nd_guarantee_act_retaliate = {
 # Walk away (§6: abandoning a covered commitment shakes every beneficiary).
 nd_guarantee_act_abandon = {
 	custom_tooltip = nd_tt_guarantee_abandon
-	nd_change_credibility = { AMOUNT = -15 }
+	custom_tooltip = {
+		text = nd_tt_credibility_down_15
+		nd_change_credibility = { AMOUNT = -15 }
+	}
 	add_modifier = {
 		name = nd_guarantee_abandoned
 		years = 5

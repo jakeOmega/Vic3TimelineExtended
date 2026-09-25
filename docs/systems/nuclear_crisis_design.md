@@ -148,11 +148,11 @@ Domestic rewards are one-off decaying IG modifiers plus native lobby appeasement
 | 6 | the Rules of War law forbids it (`nd_war_law_permits_strategic_strike`) | −25 (a bluff) |
 | 7 | No First Use | −35 (a bluff) |
 
-A public bluff that ends in a climb-down or lapses costs the issuer 5 credibility more. The AI never makes a public bluff, and makes a private one only under an aggressive ruler (`nd_ai_would_issue_ultimatum`, `nd_ai_would_warn`).
+A public bluff that ends in a climb-down or lapses costs the issuer 5 credibility more. The AI never makes a public bluff (`nd_ai_would_issue_ultimatum`). Of its private warnings, only the coercive kind — a hawkish doctrine or regime against a target that cannot answer — needs a backed threat or an aggressive ruler (`nd_ai_would_warn`); a warning in defence of a guaranteed country, of its survival or core, or against a rival's bomb can still be a bluff.
 
 **Figures.** `nd_crisis_refresh_figures` is the one writer of `nd_crisis_danger`, `nd_yield_pressure` and `nd_ft_reason`. Both totals are sums of named parts (`nd_cd_*`, `nd_yp_*` in `nuclear_deterrence_values.txt`), and every part is stored on both parties, so the panel's breakdowns print stored numbers that add up to the stored totals. The losing-war part reads the target through `nd_is_losing_war_to`: `is_losing_war_against` reads ROOT, and the old formula ran it in the target's scope with the issuer as ROOT.
 
-**The outcome notice applies the consequences.** `nd_crisis_close` writes a pending record on each party (`nd_crisis_pending_*`) and fires `nuclear_crisis.6`, whose option runs `nd_crisis_apply_outcome_side`: credibility, the decaying modifier, the interest-group and lobby reactions. So the option's tooltip shows them. The concession itself (war support, the play, the freeze, the stand-down) still happens at the moment of yielding. If another crisis closes before a notice is answered, `nd_crisis_flush_pending` applies the older record first, and the stale notice's option does nothing.
+**The outcome notice applies the consequences.** `nd_crisis_close` writes a pending record on each party (`nd_crisis_pending_*`) and fires `nuclear_crisis.6`, whose option runs `nd_crisis_apply_outcome_side`: credibility, the decaying modifier, the interest-group and lobby reactions. So the option's tooltip shows them. The concession itself (war support, the play, the freeze, the stand-down) still happens at the moment of yielding. If another crisis closes before a notice is answered, `nd_crisis_flush_pending` applies the older record first, and the stale notice's option does nothing — unless the second crisis was with the same country, in which case the stale notice applies that newer record under its own text and the newer notice says it was already settled. Nothing is lost or applied twice either way. If the other party no longer exists when the notice is answered (annexed after conceding a war), the notice still applies its record; the lines about the other party (lobbies, interest-group reactions) are skipped.
 
 ### 0.4 Incidents (phase 3)
 
@@ -263,6 +263,8 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 23. A country under Limited War has no "carry out the threat" option.
 24. The accessors first used here render: `[THIS.ScriptValue(…)]` in the ultimatum's confirmation box (`nd_tt_open_f_credibility`), `[THIS.Var(…)]` in the panel breakdowns, `[ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]` in the outcome notice.
 25. With the target winning battles against us, the pressure breakdown shows no +15 "how the war is going" line for it (`nd_is_losing_war_to`).
+26. Yield in a war crisis that carries an annexation goal, let the target be annexed before answering "The Demand Is Met", then answer it: the +15 credibility and the modifier still land.
+27. A target's own exercise raises the crisis danger but not the pressure on itself.
 
 ## 1. Intent and owner requirements
 

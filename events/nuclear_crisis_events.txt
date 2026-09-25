@@ -791,11 +791,17 @@ nuclear_crisis.6 = {
 	option = {
 		name = nuclear_crisis.6.a
 		default_option = yes
+		# Apply this notice's record: the pending record is this pair's, or
+		# the other party no longer exists (annexed after conceding a war), in
+		# which case no newer record about it can have replaced this one.
 		if = {
 			limit = {
 				has_variable = nd_crisis_pending_outcome
-				exists = scope:nd_outcome_other
-				var:nd_crisis_pending_opponent ?= scope:nd_outcome_other
+				OR = {
+					NOT = { exists = scope:nd_outcome_other }
+					NOT = { exists = var:nd_crisis_pending_opponent }
+					var:nd_crisis_pending_opponent ?= scope:nd_outcome_other
+				}
 			}
 			nd_crisis_apply_outcome_side = yes
 		}

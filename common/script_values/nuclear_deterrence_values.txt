@@ -523,7 +523,9 @@ nd_cd_backed_value = {
 }
 
 # An exercise either side can see (nd_crisis_act_exercise,
-# nuclear_incident.10) runs hot for a few weeks.
+# nuclear_incident.10) runs hot for a few weeks. (Pressure on the target,
+# nd_yp_exercise_value, counts only the threatening side's exercise:
+# nd_crisis_exercise_by_issuer.)
 nd_cd_exercise_value = {
 	value = 0
 	if = {
@@ -656,6 +658,8 @@ nd_yp_exercise_value = {
 			limit = {
 				has_variable = nd_crisis_exercise_weeks
 				var:nd_crisis_exercise_weeks > 0
+				has_variable = nd_crisis_exercise_by_issuer
+				var:nd_crisis_exercise_by_issuer = 1
 			}
 			add = 10
 		}
