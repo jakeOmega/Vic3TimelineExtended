@@ -14,8 +14,9 @@ country_un_membership_obligation_bool = {
 # Institutional-alignment scaler for the Multilateral Institutions principle group
 # (identity_diplomatic). Granted on member_modifier, scaling with tier (0.25 -> 0.5).
 # Read by:
-#   - un_script_values.txt (un_authority_drift_institutional): each aligned member
-#     feeds the single global un_authority, weighted by rank so heft drives it, not
+#   - un_authority_values.txt (un_member_stance): an aligned member's stance toward
+#     the organisation rises by its alignment, which feeds the great-power
+#     commitment pillar weighted by its power share, so heft drives it, not
 #     headcount.
 #   - je_united_nations.txt: scales that member's un_membership_benefits_modifier by
 #     (1 + alignment), so the bloc both feeds and feeds off UN authority.

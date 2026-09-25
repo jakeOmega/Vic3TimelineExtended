@@ -149,7 +149,9 @@ un_resolution_record_vote = {
 }
 
 # Record a permanent member's veto on scope:un_resolution: a no vote plus the
-# un_res_vetoed tag. Only the first veto dents the global UN authority.
+# un_res_vetoed tag. Every veto is a credibility debit weighted by the vetoer's
+# weight in world affairs (un_authority_effects.txt): a superpower killing a
+# resolution costs the Assembly far more than a fading one does.
 #
 # A veto books a NO vote, so it settles a lobbying commitment exactly as an
 # ordinary no vote does — as broken. The veto RIGHT is never bound by a pledge
@@ -158,12 +160,15 @@ un_resolution_record_vote = {
 # Scope: vetoing country
 un_resolution_record_veto = {
 	save_scope_as = un_res_voter
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_res_voting } }
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 4 }
+	}
 	scope:un_resolution ?= {
 		if = {
 			limit = { has_tag = un_res_voting }
 			if = {
 				limit = { NOT = { has_tag = un_res_vetoed } }
-				change_global_variable = { name = un_authority add = -5 }
 				add_tag = un_res_vetoed
 			}
 			set_variable = { name = un_res_vetoer value = scope:un_res_voter }
@@ -313,9 +318,12 @@ un_vote_apply_treaty_modifier = {
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier } }
 	}
+	# A vetoed reform is flat-blocked (un_vote.2 applies nothing), so members
+	# ratify nothing either.
 	if = {
 		limit = {
 			scope:un_resolution ?= { has_tag = un_topic_reform }
+			NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 			NOT = { has_modifier = un_reform_champion_modifier }
 		}
 		add_modifier = {
@@ -498,10 +506,11 @@ un_apply_ratified_conventions = {
 # two pledge branches of un_vote_apply_resolution_compliance below.
 #
 # WHY THIS IS THE DELIVERY SITE, AND WHY IT CANNOT PAY TWICE.
-# un_vote.2 (which levies the costs) iterates every country that *currently
-# carries* the contributor marker, so it sweeps up donors from earlier
-# resolutions and, for peacekeeping, every standing programme member as well —
-# awarding standing there would pay the same country on every future request.
+# un_vote.2 (which puts contributors on cooldown) iterates every country that
+# *currently carries* the contributor marker, so it sweeps up donors from
+# earlier resolutions and, for peacekeeping, every standing programme member
+# as well — awarding standing there would pay the same country on every future
+# request.
 # The pledge is made HERE instead, in un_vote.3, which un_vote.2 fires exactly
 # once per member per resolution; an event runs exactly one option, and the two
 # options that reach this effect (A and B) are mutually exclusive by their own
@@ -566,6 +575,12 @@ un_vote_apply_resolution_compliance = {
 	}
 
 	# ---- Peacekeeping/aid pledges ----
+	# A pledge is charged HERE, when it is made. un_vote.2 used to levy the
+	# costs, but it runs before un_vote.3 pledges anyone, so a pledger paid
+	# nothing until some later request passed; the peacekeeping levy also
+	# evaluated gdp in journal-entry scope (reads 'none') and the aid levy was
+	# stripped every month by the legacy cleanup. ROOT is the pledger here
+	# (un_vote.3), so the root.var: multiplier below resolves correctly.
 	# Peacekeeping contributions are skipped when the resolution was vetoed —
 	# the graduated form is observer-mission-only and doesn't levy contributors.
 	if = {
@@ -575,6 +590,19 @@ un_vote_apply_resolution_compliance = {
 			country_rank >= rank_value:major_power
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
+		# Joining the deployment enrols the pledger in the paid peacekeeping
+		# programme — the same cost un_peacekeeping_mission_button charges.
+		# A member already running it keeps its existing cost.
+		if = {
+			limit = { NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } } }
+			set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
+			je:je_united_nations ?= {
+				add_modifier = {
+					name = un_peacekeeping_contributor_cost
+					multiplier = root.var:un_peacekeeping_expense_cached
+				}
+			}
+		}
 		if = {
 			limit = { NOT = { has_variable = un_peacekeeping_contribution_count } }
 			set_variable = { name = un_peacekeeping_contribution_count value = 0 }
@@ -589,6 +617,13 @@ un_vote_apply_resolution_compliance = {
 		}
 		add_modifier = {
 			name = un_humanitarian_aid_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		# The pledge's cost runs as long as the aid modifier it pays for.
+		add_modifier = {
+			name = un_humanitarian_aid_cost
+			multiplier = un_program_expense_value
 			days = long_modifier_time
 			is_decaying = yes
 		}

@@ -52,7 +52,9 @@ un_events_on_action = {
 						any_country = {
 							NOT = { this = ROOT }
 							is_at_war = yes
-							NOT = { has_modifier = un_peacekeeping_deployed_modifier }
+							NOT = { has_war_with = ROOT }
+							NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
+							NOT = { has_modifier = un_peacekeeping_resented_modifier }
 						}
 					}
 					trigger_event = { id = un_events.4 }
@@ -61,6 +63,7 @@ un_events_on_action = {
 					trigger = {
 						has_modifier = un_sanctions_enforcer_modifier
 						NOT = { has_modifier = un_sanctions_enforcement_modifier }
+						any_country = { has_modifier = un_sanctions_target_modifier }
 					}
 					trigger_event = { id = un_events.5 }
 				}
@@ -317,20 +320,11 @@ un_global_authority_on_action = {
 				}
 			}
 
-			# Monthly drift on the single global value. un_authority_drift_total already
-			# aggregates every member's contribution (base toward-50 + democracy +
-			# champion + undermine + wars), so it is applied once here, not per-member.
-			change_global_variable = { name = un_authority add = un_authority_drift_total }
-
-			# Manual clamp 0-100 (change_global_variable has no clamp argument).
-			if = {
-				limit = { global_var:un_authority > 100 }
-				set_global_variable = { name = un_authority value = 100 }
-			}
-			else_if = {
-				limit = { global_var:un_authority < 0 }
-				set_global_variable = { name = un_authority value = 0 }
-			}
+			# The equilibrium model (un_authority_effects.txt): cache every
+			# country's power share, fade the ledgers, snapshot the seven pillars
+			# and the target, and move authority one step toward it. Replaces the
+			# old drift toward 50.
+			un_authority_monthly_update = yes
 
 			# General Assembly upkeep: lapse a resolution whose results event never
 			# fired, and free an orphaned vote lock (un_vote_effects.txt).
@@ -364,6 +358,7 @@ un_hq_on_state_owner_change = {
 		if = {
 			limit = { has_building = building_un_headquarters }
 			un_hq_enforce_single_building = yes
+			un_hq_refresh_state = yes
 		}
 	}
 }

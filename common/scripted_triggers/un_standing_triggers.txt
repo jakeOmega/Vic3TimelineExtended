@@ -81,13 +81,12 @@ un_standing_benefits_suspended = {
 # genuinely under way" rather than "is its marker present".
 #
 # The distinction is not academic for the two programmes that carry a separate
-# GDP-scaled cost modifier. un_vote_apply_resolution_compliance (un_vote.3)
-# pledges a country to peacekeeping by adding ONLY
-# un_peacekeeping_contributor_modifier — un_vote.2 already ran its levy before
-# un_vote.3 fires, so the pledger carries no un_peacekeeping_contributor_cost
-# until the NEXT request resolution carries. A pledge that costs nothing yet
-# must not start a standing clock, or a free marker would quietly accrue; and
-# when un_vote.2's failed/vetoed branches revoke exactly those cost-free
+# GDP-scaled cost modifier. A peacekeeping pledge in
+# un_vote_apply_resolution_compliance (un_vote.3) now adds the marker AND the
+# cost together, but saves from before that fix can still hold a cost-free
+# marker (the pledge used to wait for a later request's levy). A marker that
+# costs nothing must not start a standing clock, or it would quietly accrue;
+# and when un_vote.2's failed/vetoed branches revoke exactly those cost-free
 # markers, no clock should be discarded and no early-exit charge levied for an
 # exit the member never chose. Requiring the cost closes both.
 #

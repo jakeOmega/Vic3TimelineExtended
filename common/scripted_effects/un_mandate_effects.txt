@@ -206,9 +206,10 @@ un_mandate_close = {
 # Fires when the authorized war goal was enforced by an actor still in good
 # standing. Scope: mandate container (tagged un_mandate_complied).
 un_mandate_on_complied = {
-	if = {
-		limit = { has_global_variable = un_authority }
-		change_global_variable = { name = un_authority add = 5 }
+	# A licence to use force, discharged exactly as written: the Assembly
+	# delivered, weighted by the actor's weight in world affairs.
+	var:un_mnd_actor ?= {
+		un_ledger_actor_entry = { PILLAR = delivery POINTS = 2 REASON = 5 }
 	}
 	var:un_mnd_actor ?= {
 		if = {
@@ -239,9 +240,10 @@ un_mandate_on_complied = {
 # the actor backed down from the play it raised, or it complied after walking
 # out of the organisation. Scope: mandate container (outcome tag stamped).
 un_mandate_on_violated = {
-	if = {
-		limit = { has_global_variable = un_authority }
-		change_global_variable = { name = un_authority add = -5 }
+	# A licence abused is the sharpest credibility debit an actor can cause
+	# short of defiance at war, weighted by its weight in world affairs.
+	var:un_mnd_actor ?= {
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -3 REASON = 6 }
 	}
 	var:un_mnd_actor ?= {
 		if = {

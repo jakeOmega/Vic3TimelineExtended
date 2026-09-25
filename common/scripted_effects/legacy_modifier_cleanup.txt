@@ -183,7 +183,10 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = un_arms_control_participant_modifier } remove_modifier = un_arms_control_participant_modifier }
 	if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost }
 	if = { limit = { has_modifier = un_development_contributor_cost } remove_modifier = un_development_contributor_cost }
-	if = { limit = { has_modifier = un_humanitarian_aid_cost } remove_modifier = un_humanitarian_aid_cost }
+	# un_humanitarian_aid_cost is deliberately NOT listed: it was never moved to
+	# the journal entry. un_events.7 and the aid-request pledge in
+	# un_vote_apply_resolution_compliance add it to the country, so stripping it
+	# here made every aid commitment free after its first month.
 	# One-shot membership program modifiers moved to JE scope
 	if = {
 		limit = { has_modifier = un_human_rights_declaration_modifier }

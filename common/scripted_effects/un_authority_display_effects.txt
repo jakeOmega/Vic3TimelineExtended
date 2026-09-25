@@ -1,0 +1,289 @@
+﻿# ============================================================================
+# UN AUTHORITY — DISPLAY-ONLY TOOLTIP BUILDERS
+# ============================================================================
+# Read-only, like un_chamber_display_effects.txt: nothing but custom_tooltip
+# lines and scope navigation, rendered by the scripted GUIs in
+# common/scripted_guis/un_authority_sguis.txt through ExecuteTooltip, which
+# renders an effect without running it. NOTHING HERE MAY WRITE GAMEPLAY STATE.
+#
+# Every figure is an O(1) read of a snapshot the monthly update wrote (the
+# un_disp_* script values in un_authority_values.txt), never a live world
+# sweep: the journal entry re-renders every frame it is on screen.
+#
+# Ordering: tooltip generation prints a scope's own lines before the lines
+# its nested scope blocks produce (found in the chamber's first play test).
+# So each builder below either prints only root-level lines, or only nested
+# lines that are self-describing — never a header meant to sit above a list.
+# ============================================================================
+
+# The empty states only: the UN not founded, or founded but not yet through
+# its first monthly update. Once the pillars exist the widget draws them as a
+# GUI table instead (gated by un_authority_ready_sgui), so this prints nothing.
+# Scope: country (the viewer)
+un_authority_summary_block = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			NOT = { has_global_variable = un_authority_target }
+		}
+		custom_tooltip_no_bullet = je_un_auth_pending
+	}
+	else_if = {
+		limit = { NOT = { has_global_variable = un_founded } }
+		custom_tooltip_no_bullet = je_un_auth_not_founded
+	}
+}
+
+# Who is driving the commitment and participation pillars: every champion,
+# every underminer, and every great power outside the UN, each line saying
+# which it is. Scope: country (the viewer)
+un_authority_powers_block = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			any_country = {
+				OR = {
+					je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+					je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+					AND = {
+						country_rank >= rank_value:great_power
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					}
+				}
+			}
+		}
+		every_country = {
+			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+			custom_tooltip = je_un_auth_power_champion
+		}
+		every_country = {
+			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+			custom_tooltip = je_un_auth_power_underminer
+		}
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			}
+			custom_tooltip = je_un_auth_power_outsider
+		}
+	}
+	else_if = {
+		limit = { has_global_variable = un_founded }
+		custom_tooltip_no_bullet = je_un_auth_powers_none
+	}
+}
+
+# The recent ledger entries, newest first, two lines each. Scope: country
+un_authority_log_block = {
+	if = {
+		limit = { has_global_variable_list = un_ledger_log }
+		ordered_in_global_list = {
+			variable = un_ledger_log
+			order_by = un_ledger_log_recency_order
+			max = 12
+			un_authority_log_entry = yes
+		}
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_auth_log_empty
+	}
+}
+
+# One entry: "<year> <who>: <pillar> <amount>", then the reason. The actor is
+# stashed with save_temporary_scope_as and printed from the container's own
+# line, as the chamber prints a resolution's proposer, so an annexed actor
+# reads as "a former member" instead of a blank.
+# Scope: ledger log container
+un_authority_log_entry = {
+	if = {
+		limit = { exists = var:un_led_actor }
+		var:un_led_actor ?= { save_temporary_scope_as = un_led_actor_disp }
+		if = {
+			limit = { has_tag = un_led_credibility }
+			custom_tooltip = je_un_led_actor_credibility
+		}
+		else_if = {
+			limit = { has_tag = un_led_delivery }
+			custom_tooltip = je_un_led_actor_delivery
+		}
+		else_if = {
+			limit = { has_tag = un_led_order }
+			custom_tooltip = je_un_led_actor_order
+		}
+		else = {
+			custom_tooltip = je_un_led_actor_direct
+		}
+	}
+	else = {
+		if = {
+			limit = { has_tag = un_led_credibility }
+			custom_tooltip = je_un_led_assembly_credibility
+		}
+		else_if = {
+			limit = { has_tag = un_led_delivery }
+			custom_tooltip = je_un_led_assembly_delivery
+		}
+		else_if = {
+			limit = { has_tag = un_led_order }
+			custom_tooltip = je_un_led_assembly_order
+		}
+		else = {
+			custom_tooltip = je_un_led_assembly_direct
+		}
+	}
+	un_authority_log_reason_line = yes
+}
+
+# The reason code, in words. Keep in step with the table at the top of
+# un_authority_effects.txt and the je_un_led_reason_<code> keys.
+# Scope: ledger log container
+un_authority_log_reason_line = {
+	if = {
+		limit = { var:un_led_reason = 1 }
+		custom_tooltip_no_bullet = je_un_led_reason_1
+	}
+	else_if = {
+		limit = { var:un_led_reason = 2 }
+		custom_tooltip_no_bullet = je_un_led_reason_2
+	}
+	else_if = {
+		limit = { var:un_led_reason = 3 }
+		custom_tooltip_no_bullet = je_un_led_reason_3
+	}
+	else_if = {
+		limit = { var:un_led_reason = 4 }
+		custom_tooltip_no_bullet = je_un_led_reason_4
+	}
+	else_if = {
+		limit = { var:un_led_reason = 5 }
+		custom_tooltip_no_bullet = je_un_led_reason_5
+	}
+	else_if = {
+		limit = { var:un_led_reason = 6 }
+		custom_tooltip_no_bullet = je_un_led_reason_6
+	}
+	else_if = {
+		limit = { var:un_led_reason = 7 }
+		custom_tooltip_no_bullet = je_un_led_reason_7
+	}
+	else_if = {
+		limit = { var:un_led_reason = 8 }
+		custom_tooltip_no_bullet = je_un_led_reason_8
+	}
+	else_if = {
+		limit = { var:un_led_reason = 9 }
+		custom_tooltip_no_bullet = je_un_led_reason_9
+	}
+	else_if = {
+		limit = { var:un_led_reason = 10 }
+		custom_tooltip_no_bullet = je_un_led_reason_10
+	}
+	else_if = {
+		limit = { var:un_led_reason = 11 }
+		custom_tooltip_no_bullet = je_un_led_reason_11
+	}
+	else_if = {
+		limit = { var:un_led_reason = 12 }
+		custom_tooltip_no_bullet = je_un_led_reason_12
+	}
+	else_if = {
+		limit = { var:un_led_reason = 13 }
+		custom_tooltip_no_bullet = je_un_led_reason_13
+	}
+	# 1NN: a response to UN event un_events.NN. Each key quotes the event's own
+	# title, so the line cannot drift from the event.
+	else_if = {
+		limit = { var:un_led_reason = 102 }
+		custom_tooltip_no_bullet = je_un_led_reason_102
+	}
+	else_if = {
+		limit = { var:un_led_reason = 103 }
+		custom_tooltip_no_bullet = je_un_led_reason_103
+	}
+	else_if = {
+		limit = { var:un_led_reason = 104 }
+		custom_tooltip_no_bullet = je_un_led_reason_104
+	}
+	else_if = {
+		limit = { var:un_led_reason = 105 }
+		custom_tooltip_no_bullet = je_un_led_reason_105
+	}
+	else_if = {
+		limit = { var:un_led_reason = 106 }
+		custom_tooltip_no_bullet = je_un_led_reason_106
+	}
+	else_if = {
+		limit = { var:un_led_reason = 107 }
+		custom_tooltip_no_bullet = je_un_led_reason_107
+	}
+	else_if = {
+		limit = { var:un_led_reason = 108 }
+		custom_tooltip_no_bullet = je_un_led_reason_108
+	}
+	else_if = {
+		limit = { var:un_led_reason = 109 }
+		custom_tooltip_no_bullet = je_un_led_reason_109
+	}
+	else_if = {
+		limit = { var:un_led_reason = 110 }
+		custom_tooltip_no_bullet = je_un_led_reason_110
+	}
+	else_if = {
+		limit = { var:un_led_reason = 111 }
+		custom_tooltip_no_bullet = je_un_led_reason_111
+	}
+	else_if = {
+		limit = { var:un_led_reason = 112 }
+		custom_tooltip_no_bullet = je_un_led_reason_112
+	}
+	else_if = {
+		limit = { var:un_led_reason = 113 }
+		custom_tooltip_no_bullet = je_un_led_reason_113
+	}
+	else_if = {
+		limit = { var:un_led_reason = 114 }
+		custom_tooltip_no_bullet = je_un_led_reason_114
+	}
+	else_if = {
+		limit = { var:un_led_reason = 115 }
+		custom_tooltip_no_bullet = je_un_led_reason_115
+	}
+	else_if = {
+		limit = { var:un_led_reason = 116 }
+		custom_tooltip_no_bullet = je_un_led_reason_116
+	}
+	else_if = {
+		limit = { var:un_led_reason = 117 }
+		custom_tooltip_no_bullet = je_un_led_reason_117
+	}
+	else_if = {
+		limit = { var:un_led_reason = 118 }
+		custom_tooltip_no_bullet = je_un_led_reason_118
+	}
+	else_if = {
+		limit = { var:un_led_reason = 119 }
+		custom_tooltip_no_bullet = je_un_led_reason_119
+	}
+	else_if = {
+		limit = { var:un_led_reason = 120 }
+		custom_tooltip_no_bullet = je_un_led_reason_120
+	}
+	else_if = {
+		limit = { var:un_led_reason = 121 }
+		custom_tooltip_no_bullet = je_un_led_reason_121
+	}
+	else_if = {
+		limit = { var:un_led_reason = 122 }
+		custom_tooltip_no_bullet = je_un_led_reason_122
+	}
+}
+
+# How the model works, in plain language. Static text. Scope: country
+un_authority_help_block = {
+	custom_tooltip_no_bullet = je_un_auth_help_1
+	custom_tooltip_no_bullet = je_un_auth_help_2
+	custom_tooltip_no_bullet = je_un_auth_help_3
+	custom_tooltip_no_bullet = je_un_auth_help_4
+	custom_tooltip_no_bullet = je_un_auth_help_5
+}

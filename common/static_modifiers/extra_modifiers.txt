@@ -3493,6 +3493,18 @@ un_sanctions_partial_modifier = {
 	state_trade_advantage_mult = -0.02
 }
 
+# The TARGET of a sanctions resolution that passed but was vetoed: members apply
+# voluntary measures only. About a third of un_sanctions_target_modifier.
+# (un_sanctions_partial_modifier above is the ENFORCER's token-compliance
+# option in un_events.5 and used to be applied here too, which handed the
+# sanctioned country +2% leverage.)
+un_sanctions_voluntary_target_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_influence_mult = -0.03
+	country_prestige_mult = -0.02
+	state_trade_advantage_mult = -0.05
+}
+
 un_sanctions_busting_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_positive.dds
 	country_infamy_decay_mult = -0.15
@@ -3623,8 +3635,8 @@ un_veto_isolation_modifier = {
 }
 
 # Applied to the vetoing country after using a veto. Diplomatic-influence penalty.
-# The veto also drains the single global un_authority once per resolution (see the
-# un_res_vetoed-gated change_global_variable in un_resolution_record_veto).
+# The veto is also a credibility-ledger debit weighted by the vetoer's weight in
+# world affairs (un_resolution_record_veto).
 un_veto_authority_drain_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_influence_mult = -0.05

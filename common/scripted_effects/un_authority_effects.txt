@@ -1,0 +1,302 @@
+﻿# ============================================================================
+# UN AUTHORITY — MONTHLY UPDATE, LEDGERS, AND THE ONLY WRITE PATHS
+# ============================================================================
+# The equilibrium model of docs/systems/un_redesign_design.md §3. The figures
+# and the pillar formulas are in common/script_values/un_authority_values.txt;
+# this file holds everything that WRITES.
+#
+# WHO MAY WRITE global_var:un_authority:
+#   un_authority_monthly_update    the monthly step toward the target
+#   un_authority_shock_record      a world moment (rare; see below)
+#   un_found_button                the founding value
+#   the debug helpers in te_debug_un_effects.txt
+# Nothing else. An act that used to add or subtract authority directly now
+# writes a LEDGER ENTRY, which moves a pillar and therefore the target:
+#
+#   un_ledger_actor_entry = { PILLAR = x POINTS = n REASON = r }
+#       Scope: the acting country. Applies n x un_actor_weight, so the act of
+#       a micro-state rounds to nothing and a superpower's counts several
+#       times over. Logged with the actor's name.
+#   un_ledger_actor_entry_unweighted = { PILLAR = x POINTS = n REASON = r }
+#       Scope: the acting country. Applies n as written, for acts whose
+#       gravity does not depend on who commits them (nuclear use). Logged with
+#       the actor's name.
+#   un_ledger_entry = { PILLAR = x POINTS = n REASON = r }
+#       Scope: any. An institutional entry (a resolution carried or lost),
+#       applied as written and logged without an actor.
+#
+# PILLAR is credibility, delivery or order. POINTS may be negative. Each
+# ledger is a global stock (un_ledger_<pillar>) that decays by
+# un_ledger_decay_factor every month, so an entry fades over years rather
+# than sitting in the target forever. The call sites print their own
+# custom_tooltip line (un_ledger_tt_*), exactly as they printed the old
+# un_authority_change_* lines; every helper here is wrapped in hidden_effect,
+# because several sites are rendered as button and event tooltips.
+#
+# THE DISPLAY LOG. Every entry at or above un_ledger_log_threshold is also
+# written to a script container in the global list un_ledger_log (capped at
+# 12, oldest evicted and destroyed), which the journal entry's "Why authority
+# is moving" panel prints newest first. The log is display-only: nothing reads
+# it back into the model. Reason codes are mapped to words by
+# un_authority_log_reason_line (un_authority_display_effects.txt) and the
+# je_un_led_reason_<code> keys; keep the table below, that chain and the keys
+# in step.
+#
+#   code  meaning                              code  meaning
+#   1     resolution carried                   8     nuclear first strike
+#   2     carried in weaker form (vetoed)      9     tactical nuclear strike
+#   3     resolution fell                      10    nuclear retaliation
+#   4     veto cast                            11    permanent member left the UN
+#   5     mandate discharged as written        12    expulsion motion carried
+#   6     mandate violated or abandoned        13    expulsion motion fell
+#   7     sanctions regime lifted              1NN   response to UN event un_events.NN
+# ============================================================================
+
+# ---- Monthly update ------------------------------------------------------------
+# Called once a month from un_global_authority_on_action (no-country scope),
+# only once the UN exists.
+un_authority_monthly_update = {
+	# 1. Power share. Cached on every country, because both the pillars and
+	#    the actor weight of any act this month read it.
+	set_global_variable = { name = un_world_prestige value = un_world_prestige_value }
+	every_country = {
+		if = {
+			limit = { NOT = { is_country_type = decentralized } }
+			set_variable = { name = un_power_share value = un_power_share_value }
+		}
+		else_if = {
+			limit = { has_variable = un_power_share }
+			remove_variable = un_power_share
+		}
+	}
+
+	# 2. The ledgers fade.
+	if = {
+		limit = { has_global_variable = un_ledger_credibility }
+		change_global_variable = { name = un_ledger_credibility multiply = un_ledger_decay_factor }
+	}
+	if = {
+		limit = { has_global_variable = un_ledger_delivery }
+		change_global_variable = { name = un_ledger_delivery multiply = un_ledger_decay_factor }
+	}
+	if = {
+		limit = { has_global_variable = un_ledger_order }
+		change_global_variable = { name = un_ledger_order multiply = un_ledger_decay_factor }
+	}
+
+	# 3. Snapshot the pillars (and the shares the display explains them with).
+	set_global_variable = { name = un_member_power_share value = un_member_power_share_value }
+	set_global_variable = { name = un_funding_ratio value = un_funding_ratio_value }
+	set_global_variable = { name = un_members_at_war_share value = un_members_at_war_share_value }
+	set_global_variable = { name = un_pillar_participation value = un_pillar_participation_value }
+	set_global_variable = { name = un_pillar_commitment value = un_pillar_commitment_value }
+	set_global_variable = { name = un_pillar_credibility value = un_pillar_credibility_value }
+	set_global_variable = { name = un_pillar_funding value = un_pillar_funding_value }
+	set_global_variable = { name = un_pillar_order value = un_pillar_order_value }
+	set_global_variable = { name = un_pillar_delivery value = un_pillar_delivery_value }
+	set_global_variable = { name = un_authority_target value = un_authority_target_value }
+
+	# 4. Saves from the drift model. Their authority is kept, NOT reseeded at the
+	#    target: the credibility and delivery ledgers start empty in such a save,
+	#    so its first target understates an established UN, and a reseed would
+	#    drop authority by twenty points in one month. Kept, it converges at the
+	#    ordinary pace (half the gap in about 2.8 years) while the ledgers fill.
+	#    The stamp marks the save as converted; a UN founded under this version
+	#    is stamped at founding.
+	if = {
+		limit = { NOT = { has_global_variable = un_model_version } }
+		set_global_variable = { name = un_model_version value = 2 }
+	}
+
+	# 5. Step toward the target.
+	set_global_variable = { name = un_authority_step value = un_authority_step_value }
+	change_global_variable = { name = un_authority add = global_var:un_authority_step }
+	un_authority_clamp = yes
+}
+
+# change_global_variable has no clamp argument.
+# Scope: any
+un_authority_clamp = {
+	if = {
+		limit = { global_var:un_authority > 100 }
+		set_global_variable = { name = un_authority value = 100 }
+	}
+	else_if = {
+		limit = { global_var:un_authority < 0 }
+		set_global_variable = { name = un_authority value = 0 }
+	}
+}
+
+# ---- World moments -------------------------------------------------------------
+# A world moment moves authority itself, not the target. Authority then drifts
+# back toward the target, so a moment that changed nothing underneath fades
+# over a few years. Rare by design (§3.3); most acts belong in a ledger.
+#
+#   un_authority_actor_shock = { AMOUNT = n REASON = r }
+#       Applies n as written, for moments whose gravity does not depend on
+#       who causes them (a nuclear first strike).
+#   un_authority_actor_shock_weighted = { AMOUNT = n REASON = r }
+#       Applies n x un_shock_weight (the actor's weight, capped at x2), for
+#       moments that matter in proportion to who causes them: a permanent
+#       member walking out costs -4 for a typical great power, up to -8 for a
+#       superpower, and about -1 for a faded one still holding its seat.
+# Scope: the country responsible, for both.
+un_authority_actor_shock = {
+	un_authority_shock_record = { AMOUNT = $AMOUNT$ REASON = $REASON$ WEIGHTED = no }
+}
+
+un_authority_actor_shock_weighted = {
+	un_authority_shock_record = { AMOUNT = $AMOUNT$ REASON = $REASON$ WEIGHTED = yes }
+}
+
+# The single implementation behind the two wrappers above; the amount is staged
+# in a global for the log, as un_ledger_record stages it.
+un_authority_shock_record = {
+	hidden_effect = {
+		if = {
+			limit = { has_global_variable = un_authority }
+			if = {
+				limit = { always = $WEIGHTED$ }
+				set_global_variable = {
+					name = un_led_stage
+					value = {
+						value = un_shock_weight
+						multiply = $AMOUNT$
+					}
+				}
+			}
+			else = {
+				set_global_variable = { name = un_led_stage value = $AMOUNT$ }
+			}
+			change_global_variable = { name = un_authority add = global_var:un_led_stage }
+			un_authority_clamp = yes
+			un_ledger_log_add = { PILLAR = direct REASON = $REASON$ WITH_ACTOR = yes }
+			remove_global_variable = un_led_stage
+		}
+	}
+}
+
+# ---- Ledger entries --------------------------------------------------------------
+
+# Scope: the acting country
+un_ledger_actor_entry = {
+	un_ledger_record = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $REASON$ WEIGHTED = yes WITH_ACTOR = yes }
+}
+
+# Scope: the acting country
+un_ledger_actor_entry_unweighted = {
+	un_ledger_record = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $REASON$ WEIGHTED = no WITH_ACTOR = yes }
+}
+
+# Scope: any
+un_ledger_entry = {
+	un_ledger_record = { PILLAR = $PILLAR$ POINTS = $POINTS$ REASON = $REASON$ WEIGHTED = no WITH_ACTOR = no }
+}
+
+# The single implementation behind the three wrappers above. The amount is
+# staged in a global, as te_history_record_global_sample stages its value,
+# because it has to be read again inside the log container's scope.
+# Parameters: $PILLAR$ credibility|delivery|order, $POINTS$ number,
+#             $REASON$ code (table above), $WEIGHTED$ / $WITH_ACTOR$ yes|no.
+un_ledger_record = {
+	hidden_effect = {
+		if = {
+			limit = { has_global_variable = un_founded }
+			if = {
+				limit = { always = $WEIGHTED$ }
+				set_global_variable = {
+					name = un_led_stage
+					value = {
+						value = un_actor_weight
+						multiply = $POINTS$
+					}
+				}
+			}
+			else = {
+				set_global_variable = { name = un_led_stage value = $POINTS$ }
+			}
+			if = {
+				limit = { NOT = { has_global_variable = un_ledger_$PILLAR$ } }
+				set_global_variable = { name = un_ledger_$PILLAR$ value = 0 }
+			}
+			change_global_variable = { name = un_ledger_$PILLAR$ add = global_var:un_led_stage }
+			if = {
+				limit = {
+					OR = {
+						global_var:un_led_stage >= un_ledger_log_threshold
+						global_var:un_led_stage <= un_ledger_log_threshold_negative
+					}
+				}
+				un_ledger_log_add = { PILLAR = $PILLAR$ REASON = $REASON$ WITH_ACTOR = $WITH_ACTOR$ }
+			}
+			remove_global_variable = un_led_stage
+		}
+	}
+}
+
+# Append one entry to the display log, evicting and destroying the oldest past
+# the cap. Reads global_var:un_led_stage for the amount.
+# Scope: the acting country when WITH_ACTOR = yes; any scope otherwise.
+un_ledger_log_add = {
+	if = {
+		limit = { always = $WITH_ACTOR$ }
+		save_scope_as = un_led_actor
+	}
+	if = {
+		limit = { NOT = { has_global_variable = un_ledger_seq } }
+		set_global_variable = { name = un_ledger_seq value = 0 }
+	}
+	change_global_variable = { name = un_ledger_seq add = 1 }
+	create_container = {
+		tags = { un_ledger_log un_led_$PILLAR$ }
+		save_scope_as = un_led_new
+	}
+	if = {
+		limit = { exists = scope:un_led_new }
+		scope:un_led_new = {
+			set_variable = { name = un_led_seq value = global_var:un_ledger_seq }
+			set_variable = { name = un_led_value value = global_var:un_led_stage }
+			set_variable = { name = un_led_reason value = $REASON$ }
+			set_variable = { name = un_led_year value = te_history_current_year }
+			if = {
+				limit = {
+					always = $WITH_ACTOR$
+					exists = scope:un_led_actor
+				}
+				set_variable = { name = un_led_actor value = scope:un_led_actor }
+			}
+		}
+		add_to_global_variable_list = { name = un_ledger_log target = scope:un_led_new }
+		if = {
+			# N is un_ledger_log_cap + 1 (the cap is 12). `any_in_*list = { count }`
+			# rather than *variable_list_size, as un_resolution_archive explains.
+			limit = { any_in_global_list = { variable = un_ledger_log count >= 13 has_tag = un_ledger_log } }
+			ordered_in_global_list = {
+				variable = un_ledger_log
+				position = 0
+				order_by = un_ledger_log_age_order
+				save_scope_as = un_led_evicted
+			}
+			remove_list_global_variable = { name = un_ledger_log target = scope:un_led_evicted }
+			scope:un_led_evicted = { destroy_container = yes }
+		}
+	}
+}
+
+# ---- History ---------------------------------------------------------------------
+# Two monthly series for the journal entry's chart: authority itself and the
+# target it is moving toward. Global numbers, stored per tracked country for
+# the same reason the global-warming temperature is (te_history_chart reads the
+# country's list; see te_history_global_warming_effects.txt).
+# te_history_record_sample gates on te_history_country_is_tracked itself.
+# Scope: country (je_united_nations' monthly pulse)
+un_authority_record_history = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_global_variable = un_authority_target
+		}
+		te_history_record_sample = { METRIC = un_auth VALUE = global_var:un_authority }
+		te_history_record_sample = { METRIC = un_target VALUE = global_var:un_authority_target }
+	}
+}

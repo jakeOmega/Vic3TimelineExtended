@@ -39,6 +39,7 @@ docs/
 | [`systems/journal_entry_systems.md`](systems/journal_entry_systems.md) | All 10+ custom journal-entry systems in detail | Working on or debugging a journal entry system |
 | [`systems/strategic_reserve_system.md`](systems/strategic_reserve_system.md) | Architecture and file layout of the Strategic Reserve journal-entry system | Adding goods to the SR; touching the SR JE / Hub building |
 | [`systems/monetary_policy_design.md`](systems/monetary_policy_design.md) | **Phases 1–5 implemented, pending in-game verification.** Policy-rate dial, risk premium, inflation, currency-regime ladder, gold flows, the exchange-rate index and international monetary arrangements (treaty pegs, swap lines, a lender of last resort, a power-bloc common currency, subject currency boards) for the banking JE; §0 holds what each phase shipped (§0.8 for phase 5), the deviations and the in-game checklists | Implementing or reviewing any phase of the monetary-policy rework; touching interest-rate modifiers |
+| [`systems/un_redesign_design.md`](systems/un_redesign_design.md) | **Phase 1 (authority model) implemented, pending in-game verification; phases 2–6 designed.** United Nations redesign: UN authority as an equilibrium computed from power-weighted pillars, tiers with charter caps, dissolution and refounding, resolutions whose teeth scale with authority, grounds and itemised vote leans, a situation-driven docket, and missions in states. §1 surveys the UN as it stood | Before changing anything in the UN system |
 
 ## Vanilla & Patch References — `vanilla/`
 

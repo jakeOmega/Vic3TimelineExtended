@@ -1966,7 +1966,7 @@ un_vote.2 = {
 				}
 			}
 			custom_tooltip = un_vote_expulsion_passed_tt
-			change_global_variable = { name = un_authority add = 5 }
+			un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 12 }
 			if = {
 				limit = { exists = scope:un_vote_target }
 				scope:un_vote_target = {
@@ -2005,7 +2005,7 @@ un_vote.2 = {
 		else_if = {
 			limit = { scope:un_resolution ?= { has_tag = un_topic_expulsion } }
 			custom_tooltip = un_vote_expulsion_failed_tt
-			change_global_variable = { name = un_authority add = -3 }
+			un_ledger_entry = { PILLAR = credibility POINTS = -1 REASON = 13 }
 			if = {
 				limit = { exists = scope:un_vote_target }
 				change_relations = { country = scope:un_vote_target value = -15 }
@@ -2034,7 +2034,7 @@ un_vote.2 = {
 					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_condemn_passed_tt
-				change_global_variable = { name = un_authority add = 5 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				if = {
 					limit = { exists = scope:un_vote_target }
 					change_relations = { country = scope:un_vote_target value = -30 }
@@ -2072,7 +2072,7 @@ un_vote.2 = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_condemn } }
 				# Graduated condemn: SC veto downgrades to non-binding rebuke
 				custom_tooltip = un_vote_condemn_passed_vetoed_tt
-				change_global_variable = { name = un_authority add = 2 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 0.5 REASON = 2 }
 				if = {
 					limit = { exists = scope:un_vote_target }
 					change_relations = { country = scope:un_vote_target value = -10 }
@@ -2100,7 +2100,7 @@ un_vote.2 = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_human_rights } }
 				custom_tooltip = un_vote_human_rights_passed_tt
-				change_global_variable = { name = un_authority add = 10 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unhrc } }
 					set_global_variable = un_agency_unhrc
@@ -2111,7 +2111,7 @@ un_vote.2 = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_npt } }
 				custom_tooltip = un_vote_npt_passed_tt
-				change_global_variable = { name = un_authority add = 10 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_iaea } }
 					set_global_variable = un_agency_iaea
@@ -2122,7 +2122,7 @@ un_vote.2 = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_climate } }
 				custom_tooltip = un_vote_climate_passed_tt
-				change_global_variable = { name = un_authority add = 10 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unep } }
 					set_global_variable = un_agency_unep
@@ -2140,7 +2140,7 @@ un_vote.2 = {
 					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_reform_passed_tt
-				change_global_variable = { name = un_authority add = 10 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
 			}
 			else_if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_reform } }
@@ -2152,7 +2152,7 @@ un_vote.2 = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
 				custom_tooltip = un_vote_heritage_passed_tt
-				change_global_variable = { name = un_authority add = 5 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unesco } }
 					set_global_variable = un_agency_unesco
@@ -2163,7 +2163,7 @@ un_vote.2 = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
 				custom_tooltip = un_vote_decolonization_passed_tt
-				change_global_variable = { name = un_authority add = 10 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
 				# Cash the loc promise of "Colonial powers face increased
 				# international pressure" — apply a one-shot decaying
 				# pressure modifier on every overseas-colonial owner.
@@ -2186,7 +2186,7 @@ un_vote.2 = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_pandemic } }
 				custom_tooltip = un_vote_pandemic_passed_tt
-				change_global_variable = { name = un_authority add = 10 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_who } }
 					set_global_variable = un_agency_who
@@ -2197,7 +2197,7 @@ un_vote.2 = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_refugee } }
 				custom_tooltip = un_vote_refugee_passed_tt
-				change_global_variable = { name = un_authority add = 5 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unhcr } }
 					set_global_variable = un_agency_unhcr
@@ -2208,7 +2208,7 @@ un_vote.2 = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_space } }
 				custom_tooltip = un_vote_space_passed_tt
-				change_global_variable = { name = un_authority add = 5 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unoosa } }
 					set_global_variable = un_agency_unoosa
@@ -2224,7 +2224,7 @@ un_vote.2 = {
 					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_peacekeeping_request_passed_tt
-				change_global_variable = { name = un_authority add = 5 }
+				un_ledger_entry = { PILLAR = delivery POINTS = 1 REASON = 1 }
 				# Apply scaled peacekeeping benefit to the requesting country
 				if = {
 					limit = { exists = scope:un_vote_proposer }
@@ -2237,18 +2237,17 @@ un_vote.2 = {
 						}
 					}
 				}
-				# Apply costs to all countries that pledged contributions
+				# Contributors already carry their programme cost (charged by
+				# un_peacekeeping_mission_button, or at pledge time in
+				# un_vote_apply_resolution_compliance); the deployment only
+				# puts them on cooldown. This block used to strip that cost and
+				# re-add it with a multiplier that read gdp in journal-entry
+				# scope ('none'), from a loop whose ROOT is another country.
 				hidden_effect = {
 					every_country = {
 						limit = {
 							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 						}
-						# Remove old cost to re-apply with updated count-based scaling
-						je:je_united_nations ?= { if = { limit = { has_modifier = un_peacekeeping_contributor_cost } remove_modifier = un_peacekeeping_contributor_cost } }
-						je:je_united_nations ?= { add_modifier = {
-								name = un_peacekeeping_contributor_cost
-								multiplier = un_peacekeeping_total_expense_value
-							} }
 						add_modifier = {
 							name = un_peacekeeping_cooldown
 							days = long_modifier_time
@@ -2260,7 +2259,7 @@ un_vote.2 = {
 			else_if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
 				custom_tooltip = un_vote_peacekeeping_request_passed_vetoed_tt
-				change_global_variable = { name = un_authority add = 2 }
+				un_ledger_entry = { PILLAR = delivery POINTS = 0.5 REASON = 2 }
 				# Observer mission to the proposer only — no enforcement, no levies
 				if = {
 					limit = { exists = scope:un_vote_proposer }
@@ -2288,7 +2287,7 @@ un_vote.2 = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_aid_request } }
 				custom_tooltip = un_vote_aid_request_passed_tt
-				change_global_variable = { name = un_authority add = 5 }
+				un_ledger_entry = { PILLAR = delivery POINTS = 1 REASON = 1 }
 				# Apply scaled aid benefit to the requesting country
 				if = {
 					limit = { exists = scope:un_vote_proposer }
@@ -2301,35 +2300,27 @@ un_vote.2 = {
 						}
 					}
 				}
-				# Apply costs to all countries that pledged aid
-				hidden_effect = {
-					every_country = {
-						limit = { has_modifier = un_humanitarian_aid_modifier }
-						# Remove old cost to re-apply with updated count-based scaling
-						if = { limit = { has_modifier = un_humanitarian_aid_cost } remove_modifier = un_humanitarian_aid_cost }
-						add_modifier = {
-							name = un_humanitarian_aid_cost
-							multiplier = un_aid_total_expense_value
-							days = long_modifier_time
-							is_decaying = yes
-						}
-					}
-				}
+				# No levy here: each donor is charged when it pledges, in
+				# un_vote_apply_resolution_compliance (un_vote.3). Levying
+				# every current aid-modifier holder at this point charged
+				# donors from earlier resolutions again, with a multiplier
+				# that grew with their lifetime pledge count.
 			}
 
 			# ---- Sanctions: Apply sanctions to the target country ----
 			# If the target voted to accept the resolution, they already bear
 			# un_self_corrected_modifier; skip un_sanctions_target_modifier so
 			# the player isn't double-penalized.
-			# Vetoed: voluntary partial sanctions — apply un_sanctions_partial_modifier
-			# to the target instead of the full sanctions package.
+			# Vetoed: voluntary partial sanctions — apply
+			# un_sanctions_voluntary_target_modifier to the target instead of the
+			# full sanctions package, for five years.
 			if = {
 				limit = {
 					scope:un_resolution ?= { has_tag = un_topic_sanctions }
 					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_sanctions_passed_tt
-				change_global_variable = { name = un_authority add = 5 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				# Proposer becomes sanctions enforcer
 				add_modifier = { name = un_sanctions_enforcer_modifier }
 				# Apply sanctions to target
@@ -2357,13 +2348,17 @@ un_vote.2 = {
 			else_if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_sanctions } }
 				custom_tooltip = un_vote_sanctions_passed_vetoed_tt
-				change_global_variable = { name = un_authority add = 2 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 0.5 REASON = 2 }
 				if = {
 					limit = { exists = scope:un_vote_target }
 					scope:un_vote_target = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
-							add_modifier = { name = un_sanctions_partial_modifier }
+							add_modifier = {
+								name = un_sanctions_voluntary_target_modifier
+								days = normal_modifier_time
+								is_decaying = yes
+							}
 							custom_tooltip = {
 								text = un_standing_sanctioned_partial_tt
 								un_standing_loss = { AMOUNT = un_standing_sanctioned_partial_loss REASON = 25 }
@@ -2378,7 +2373,7 @@ un_vote.2 = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
 				custom_tooltip = un_vote_law_of_sea_passed_tt
-				change_global_variable = { name = un_authority add = 5 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				set_global_variable = un_agency_itlos
 			}
 
@@ -2396,7 +2391,7 @@ un_vote.2 = {
 					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_military_mandate_passed_tt
-				change_global_variable = { name = un_authority add = 3 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				# Hidden: create_container / set_variable have no player-facing
 				# tooltip worth showing, and letting them render would push the
 				# container's internals in under the custom_tooltip above. Same
@@ -2421,13 +2416,13 @@ un_vote.2 = {
 					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
 				custom_tooltip = un_vote_icc_passed_tt
-				change_global_variable = { name = un_authority add = 5 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				set_global_variable = un_agency_icc
 			}
 			else_if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 				custom_tooltip = un_vote_icc_passed_vetoed_tt
-				change_global_variable = { name = un_authority add = 2 }
+				un_ledger_entry = { PILLAR = credibility POINTS = 0.5 REASON = 2 }
 				add_modifier = {
 					name = un_court_contested_modifier
 					days = normal_modifier_time
@@ -2490,7 +2485,7 @@ un_vote.2 = {
 				}
 			}
 			custom_tooltip = un_vote_failed_tt
-			change_global_variable = { name = un_authority add = -3 }
+			un_ledger_entry = { PILLAR = credibility POINTS = -1 REASON = 3 }
 			add_modifier = {
 				name = un_vote_failure_penalty
 				days = normal_modifier_time

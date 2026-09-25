@@ -94,6 +94,9 @@ def _walk_for_effects(node, found):
         added_modifiers   — names of modifiers added without a `multiplier =`
         removed_modifiers — names of modifiers removed
         authority_delta   — net signed change applied to global_var:un_authority
+        ledger_entries    — (pillar, points) of each un_ledger_actor_entry call,
+                            the way an act moves UN authority since the
+                            equilibrium model (un_authority_effects.txt)
     Skips contents of `limit` / `trigger` (conditions, not effects)."""
     if isinstance(node, list):
         for item in node:
@@ -150,6 +153,16 @@ def _dispatch(key, val, found):
                     continue
             found["authority_delta"] += delta
         return
+    if key == "un_ledger_actor_entry":
+        if isinstance(val, dict):
+            pillar = _value_of(val.get("PILLAR"))
+            try:
+                points = float(_value_of(val.get("POINTS")))
+            except (TypeError, ValueError):
+                return
+            if pillar:
+                found["ledger_entries"].append((pillar, points))
+        return
     # Recurse into scope hops, if/else, hidden_effect, custom_tooltip, etc.
     if isinstance(val, (dict, list)):
         _walk_for_effects(val, found)
@@ -177,6 +190,7 @@ def collect_button_effects():
             "added_modifiers": [],
             "removed_modifiers": [],
             "authority_delta": 0.0,
+            "ledger_entries": [],
         }
         _walk_for_effects(effect_block, found)
         out[button_id] = found
@@ -253,6 +267,15 @@ def render_effects_text(button_data, modifier_effects):
             f"{int(abs(delta))}" if abs(delta) == int(abs(delta)) else f"{abs(delta):g}"
         )
         parts.append(f"#{color} {sign}{delta_str} [concept_un_authority]#!")
+
+    for pillar, points in button_data.get("ledger_entries", []):
+        sign = "+" if points > 0 else MINUS
+        color = "G" if points > 0 else "R"
+        pts = f"{int(abs(points))}" if abs(points) == int(abs(points)) else f"{abs(points):g}"
+        parts.append(
+            f"#{color} UN {pillar} {sign}{pts}#! × our weight in world affairs, "
+            f"moving [concept_un_authority]'s target"
+        )
 
     if not parts:
         return ""

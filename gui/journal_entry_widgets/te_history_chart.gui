@@ -267,19 +267,27 @@ types te_history_chart_types
 
 				### Marker pips. The tooltip that explains them is part
 				### of the bar tooltip, so the icons stay mouse-through.
-				icon = {
-					visible = "[ScriptContainer.HasVariable( 'te_hist_mk' )]"
-					parentanchor = hcenter
-					alwaystransparent = yes
-					size = { 9 9 }
-					texture = "gfx/interface/icons/generic_icons/information.dds"
-				}
-				icon = {
-					visible = "[Or( ScriptContainer.HasVariable( 'te_hist_mk_crash' ), ScriptContainer.HasVariable( 'te_hist_mk_crash_contagion' ) )]"
-					parentanchor = hcenter
-					alwaystransparent = yes
-					size = { 11 11 }
-					texture = "gfx/interface/icons/generic_icons/warning.dds"
+				### The markers live on the month's shared sample container,
+				### so every chart reading this country's store would draw the
+				### banking policy and crash pips. A chart whose series has no
+				### markers of its own (the UN authority charts) overrides
+				### "marker_pips" to nothing, so its bars are not decorated
+				### with another system's events.
+				block "marker_pips" {
+					icon = {
+						visible = "[ScriptContainer.HasVariable( 'te_hist_mk' )]"
+						parentanchor = hcenter
+						alwaystransparent = yes
+						size = { 9 9 }
+						texture = "gfx/interface/icons/generic_icons/information.dds"
+					}
+					icon = {
+						visible = "[Or( ScriptContainer.HasVariable( 'te_hist_mk_crash' ), ScriptContainer.HasVariable( 'te_hist_mk_crash_contagion' ) )]"
+						parentanchor = hcenter
+						alwaystransparent = yes
+						size = { 11 11 }
+						texture = "gfx/interface/icons/generic_icons/warning.dds"
+					}
 				}
 			}
 		}
@@ -288,7 +296,8 @@ types te_history_chart_types
 	### The chart itself.
 	###
 	### Required blockoverrides: "chart_title", "chart_legend", "bar_body",
-	### "bar_tooltip". Optional: "zero_axis" (signed series only).
+	### "bar_tooltip". Optional: "zero_axis" (signed series only) and
+	### "marker_pips" (override to nothing for a series with no markers).
 	###
 	### ORDER COMES FROM THE STORE, NOT FROM HERE. A datamodel is drawn in raw
 	### `GetList` order and nothing in the GUI can sort or reverse one
