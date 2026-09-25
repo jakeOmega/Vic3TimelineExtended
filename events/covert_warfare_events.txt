@@ -250,8 +250,13 @@ covert_warfare.1 = {
 # ============================================================================
 # EVENT 2: Foreign Covert Operation Detected (Defender's Perspective)
 # ============================================================================
-# Fired on the target country when they detect that someone is running
-# operations against them. Gives them options to respond.
+# Fired on the target country when its counterintelligence has exposed an
+# operation run against it: only from covert_warfare.1's `after`, straight
+# after covert_op_burn has written the target's exposure record
+# (iw_last_exposed_country / _type / _phase / _age). The record is the
+# trigger, so a burn reaches the defender in every phase, preparation
+# included, and exactly once per burn (#430). The text says whether the
+# operation was stopped before it took effect (iw_last_exposed_phase = 1).
 # ============================================================================
 
 covert_warfare.2 = {
@@ -259,8 +264,37 @@ covert_warfare.2 = {
 	placement = root
 
 	title = covert_warfare.2.t
-	desc = covert_warfare.2.d
-	flavor = covert_warfare.2.f
+	desc = {
+		first_valid = {
+			# Caught during preparation: nothing had happened to us yet.
+			triggered_desc = {
+				trigger = {
+					has_variable = iw_last_exposed_phase
+					var:iw_last_exposed_phase = 1
+				}
+				desc = covert_warfare.2.d_preparatory
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = covert_warfare.2.d
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = iw_last_exposed_phase
+					var:iw_last_exposed_phase = 1
+				}
+				desc = covert_warfare.2.f_preparatory
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = covert_warfare.2.f
+			}
+		}
+	}
 
 	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
@@ -268,31 +302,13 @@ covert_warfare.2 = {
 	duration = 3
 
 	trigger = {
-		# Only fire when someone has run an operation on us (#158). One line per
-		# operation type: the country-scope modifier that type leaves on its
-		# target (infrastructure sabotage's own modifier sits on a state, so its
-		# line is the country-scope morale one). Pinned by test_covert_op_registry.
-		OR = {
-			has_modifier = covert_election_interference
-			has_modifier = covert_financial_subversion
-			has_modifier = covert_infra_sabotage_morale
-			has_modifier = covert_comms_disruption
-			has_modifier = covert_influence_campaign
-			has_modifier = covert_ideological_subversion_resist
-			has_modifier = covert_destabilization_resist
-			has_modifier = covert_industrial_espionage_detected
-			has_modifier = covert_military_espionage_detected
-			has_modifier = covert_regime_change
-			has_modifier = covert_nuclear_sabotage
-			has_modifier = covert_space_espionage_detected
-			# Cultivate assets (slice 6) leaves nothing on its target, so its
-			# burn is keyed on the record covert_op_burn has just written
-			# (covert_warfare.2 fires only from there).
-			AND = {
-				has_variable = iw_last_exposed_type
-				var:iw_last_exposed_type = 12
-			}
-		}
+		# Only fire when someone's operation against us has just been exposed
+		# (#158): the record covert_op_burn writes. It used to be one
+		# has_modifier line per operation type — the modifier each type leaves
+		# on its target — but those are applied only once an operation is
+		# established, so a burn during preparation never reached the defender
+		# (#430). The record covers every type and every phase.
+		has_variable = iw_last_exposed_type
 		NOT = { has_variable = iw_defender_event_cooldown }
 	}
 
@@ -302,6 +318,10 @@ covert_warfare.2 = {
 		# Without this, the event can only fire once per defender per game.
 		set_variable = { name = iw_defender_event_cooldown value = yes }
 		set_variable = { name = iw_defender_event_cooldown_age value = 0 }
+		# Who ran it, for option b and its text. The record holds the country
+		# itself (covert_op_burn), so a perpetrator that has since been annexed
+		# leaves this unset and option b stays closed.
+		var:iw_last_exposed_country ?= { save_scope_as = iw_exposed_by }
 	}
 
 	option = {
@@ -321,10 +341,43 @@ covert_warfare.2 = {
 		}
 	}
 
+	# Retaliate in kind (#430): our own service turns the exposure into a
+	# foothold inside theirs — a network in the perpetrator's country
+	# (covert_retaliation_seed_network), the part of the covert system that
+	# makes the next operation against them start further along and stay
+	# hidden longer. Until #430 this option only took 3 infamy off us, and no
+	# retaliation happened; that effect is option c now. Needs a service of
+	# our own: networks tick only on the covert journal entry's pulse.
 	option = {
 		name = covert_warfare.2.b
+		trigger = {
+			exists = scope:iw_exposed_by
+			NOT = { this = scope:iw_exposed_by }
+			custom_tooltip = {
+				text = covert_warfare.2.b_needs_service_tt
+				has_game_rule = covert_warfare_enabled
+				has_journal_entry = je_covert_warfare
+			}
+		}
+		show_as_unavailable = {
+			exists = scope:iw_exposed_by
+			NOT = { this = scope:iw_exposed_by }
+		}
+		custom_tooltip = covert_warfare.2.b_tt
+		hidden_effect = {
+			covert_retaliation_seed_network = { TARGET = scope:iw_exposed_by }
+		}
 
-		# Retaliate: reduce infamy — use the detection to gain diplomatic credibility
+		ai_chance = {
+			base = 5
+		}
+	}
+
+	# Make the evidence public: the exposure buys us diplomatic credibility.
+	# The effect "Retaliate in kind" carried until #430, under its honest name.
+	option = {
+		name = covert_warfare.2.c
+
 		change_infamy = -3
 
 		ai_chance = {

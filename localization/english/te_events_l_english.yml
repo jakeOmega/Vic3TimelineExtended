@@ -591,8 +591,13 @@
  covert_warfare.1.t:0 "Operation Compromised"
  covert_warfare.2.a:0 "Shore up our counterintelligence"
  covert_warfare.2.b:0 "Retaliate in kind"
+ covert_warfare.2.b_needs_service_tt:0 "We run an intelligence service of our own: the #bold Covert Warfare#! journal entry is active"
+ covert_warfare.2.b_tt:0 "Our service turns what the exposure gave us — their agents, their couriers, their channels — into a foothold inside [SCOPE.sCountry('iw_exposed_by').GetName]: our network there grows by up to #G [GetPlayer.MakeScope.ScriptValue('covert_net_retaliation_seed')|0]#! strength. [concept_covert_operations] we launch against them start further along and are harder to detect for as long as the network lasts. Left unused, it decays."
+ covert_warfare.2.c:0 "Make the evidence public"
  covert_warfare.2.d:0 "Our counterintelligence services have uncovered evidence of a sustained campaign of foreign [concept_covert_operations] against us — [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')], conducted by agents of a foreign power. We must decide how to respond."
+ covert_warfare.2.d_preparatory:0 "Our counterintelligence services have caught a foreign service laying the groundwork for [concept_covert_operations] against us — [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')], stopped before it could do any harm. Its agents are blown and its channels are known to us. We must decide how to respond."
  covert_warfare.2.f:0 "\"The anomalies in the election data were too precise to be accidental, too subtle to be domestic in origin.\"\n\n\"Foreign?\"\n\n\"Foreign. The signature matches three other operations we have catalogued over the last two years. The same patience. The same restraint. The same preference for influence over disruption.\"\n\n\"And the response?\"\n\n\"That is your decision, Minister. Ours was to detect it. The decision to respond — or not — is above our pay grade, and for once we are grateful for that.\""
+ covert_warfare.2.f_preparatory:0 "\"They had not done anything yet.\"\n\n\"Then how do we know it was them?\"\n\n\"Because doing nothing takes preparation too. A flat rented under a name that does not exist. A courier who crossed the border four times in a month and never bought a meal. A clerk in the ministry who suddenly paid off his debts.\"\n\n\"And now?\"\n\n\"Now the flat is empty and the clerk is talking. Whatever they were building, they will have to start again — and they know that we know.\""
  covert_warfare.2.t:0 "Foreign Interference Detected"
 
 #

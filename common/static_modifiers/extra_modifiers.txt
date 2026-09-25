@@ -6474,8 +6474,9 @@ covert_space_espionage = {
 }
 
 # Applied to TARGET while a space-programme espionage operation runs against
-# it, so covert_warfare.2 can tell the defender when one is burned. Same shape
-# as the industrial and military espionage markers.
+# it: the same counter-intel cost as the industrial and military espionage
+# markers. (It was added so covert_warfare.2 could key on it; since #430 that
+# event reads covert_op_burn's exposure record instead.)
 covert_space_espionage_detected = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
 	country_authority_add = -3

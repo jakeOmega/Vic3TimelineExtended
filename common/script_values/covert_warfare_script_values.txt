@@ -144,6 +144,11 @@ covert_net_maintain_funding_level = 3
 covert_net_maintain_decay_mult = 0.5
 # Being caught rolls up part of the network (about a year of single-op work).
 covert_net_burn_loss = 25
+# Retaliation in kind (covert_warfare.2 option b, #430): the defender turns
+# the exposure into a network inside the perpetrator's country, worth what the
+# burn cost the perpetrator's own network — one country's loss, the other's
+# foothold. Through covert_net_gain, so it adds less above half strength.
+covert_net_retaliation_seed = 25
 # Raw detection points removed per point of strength (-5 at full strength),
 # before covert efficiency like the rest of the raw score.
 covert_net_detect_factor = 0.05
