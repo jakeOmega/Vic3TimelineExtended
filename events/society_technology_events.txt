@@ -1540,8 +1540,12 @@ society_technology_events.16 = {
 		# Medical-only approval: what the medical-only law already requires, and a
 		# regulator's choice under the regulated market. It would loosen a ban and
 		# tighten an unrestricted or mandatory regime, so it is not offered there.
+		# Also offered under law_no_augmentation, every country's starting law
+		# (no augmentation licensed yet, the question still open): a
+		# medical-only stance is a live choice there, not a contradiction.
 		trigger = {
 			OR = {
+				has_law = law_type:law_no_augmentation
 				has_law = law_type:law_medical_augmentation_only
 				has_law = law_type:law_regulated_augmentation_market
 			}

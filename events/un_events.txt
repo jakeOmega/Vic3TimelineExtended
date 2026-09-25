@@ -2230,6 +2230,7 @@ un_events.18 = {
 			random_country = {
 				limit = {
 					NOT = { this = ROOT }
+					NOT = { is_country_type = decentralized }
 					OR = {
 						is_at_war = yes
 						any_scope_state = { average_sol < 6 }
