@@ -2360,6 +2360,8 @@ When moving a modifier to JE scope, update **every** reference across the codeba
 
 Per vanilla `journal_entries.md`: a JE auto-activates "when both this and is_shown_when_inactive is true" (both are ignored for `add_journal_entry`-added JEs). So a game-rule or era gate placed only in `is_shown_when_inactive` DOES gate activation — the social-movement JE family (`je_mental_health`, `je_digital_rights`, `je_post_scarcity`, `je_human_augmentation`, `je_civil_rights`) deliberately keeps `has_game_rule = social_movements_enabled` there and only the tech/condition in `possible`. Don't flag that shape as a gating leak, and conversely don't assume `possible` alone is the activation trigger when auditing.
 
+**A new auto-activating JE does not appear in a save started before it existed.** In play-testing on 2026-09-25, `je_nuclear_deterrence` never activated in an older save across several in-game years, although its `possible` was true the whole time: the same trigger showed the country the new diplomatic actions. Test a new auto-activating JE on a new game. If existing saves must get it, add it explicitly with `add_journal_entry`.
+
 ### JE Lifecycle: `invalid` + `on_invalid` Cleanup
 
 A JE with only an `invalid` trigger will disappear when the trigger fires, but **country-scoped state (variables, modifiers applied outside the JE scope) is not cleaned up**. Always pair `invalid` with `on_invalid` when the JE sets country variables or applies country-scoped modifiers that should be removed on invalidation.
@@ -4175,6 +4177,10 @@ A numeric parameter substituted into a condition gives `2 = 1`, which has no lef
 ## In a Diplomatic Action's AI Blocks the Target Is `scope:target_country`
 
 Vanilla names the target `scope:target_country` in every AI block (600+ uses in `common/diplomatic_actions/`) and uses `scope:country` only inside `first_state_trigger` / `second_state_trigger`, where it is the **actor** (`first_state_trigger = { owner = scope:country }`). The original `nuke_diplo_action` / `tactical_nuke_diplo_action` AI gates read `has_war_with = scope:country` and `enemy_has_existential_war_goal` (which also reads `scope:country`), so the AI's first-use gate most likely never passed; the tactical action's failure branch sent its "strike intercepted" event and a relations change to `scope:country` too. Both now name the target properly (docs/systems/nuclear_crisis_design.md §0). Unverified in-game — but a gate built on the actor's own war with itself cannot be what was meant.
+
+## Every New Diplomatic Action Needs a Lens-Toolbar Icon
+
+The engine loads `gfx/interface/icons/lens_toolbar_icons/<action_key>.dds` for every diplomatic action without `show_in_lens = no`, whatever `texture =` says. A missing file does not hide the action. It shows up as `VFSOpen Error: gfx/interface/icons/lens_toolbar_icons/<action_key>.dds not found` in `debug.log` every session, and the button draws with no icon. Ship a DDS with the action: a copy of the nearest existing icon is enough. The covert operations do this (`test_covert_op_registry.py` checks it), as do the three nuclear-crisis actions (`test_nuclear_deterrence.py`), whose 100×100 icons are downscaled from the 1024×1024 `nuke_diplo_action.dds` so the repository does not carry two more 4 MB copies.
 
 ## An Approach-to-Target Model Never Reaches an Absorbing Boundary — Give the Step a Floor There
 

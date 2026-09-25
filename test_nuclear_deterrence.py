@@ -32,6 +32,7 @@ INCIDENT_EVENTS = ROOT / "events/nuclear_incident_events.txt"
 DEBUG_EVENTS = ROOT / "events/te_debug_deterrence_events.txt"
 JE_DOC = ROOT / "docs/systems/journal_entry_systems.md"
 LOC_DIR = ROOT / "localization/english"
+LENS_ICONS = ROOT / "gfx/interface/icons/lens_toolbar_icons"
 
 # `trigger_event = { id = X }`, or nd_crisis_send_event's EVENT parameter.
 FIRED = r"\b(?:id|EVENT) = ([a-z_]+\.\d+)"
@@ -194,6 +195,16 @@ class TestLocalization(unittest.TestCase):
         needed |= {"nuclear_guarantee", "nuclear_guarantee_desc",
                    "nuclear_guarantee_article_short_desc", "nuclear_guarantee_effects_desc"}
         self.assert_keys(needed, "actions and article")
+
+    def test_diplomatic_actions_have_lens_icons(self):
+        """The engine loads lens_toolbar_icons/<action>.dds for every action
+        without show_in_lens = no; a missing one is a VFSOpen error per session."""
+        text = strip_comments(read(ACTIONS))
+        for action in re.findall(r"^(nd_\w+_action)\s*=\s*\{", text, re.M):
+            if re.search(r"show_in_lens\s*=\s*no", block(text, action)):
+                continue
+            icon = LENS_ICONS / f"{action}.dds"
+            self.assertTrue(icon.exists(), f"missing {icon.relative_to(ROOT)}")
 
     def test_journal_entry_keys(self):
         self.assert_keys({"je_nuclear_deterrence", "je_nuclear_deterrence_reason",
