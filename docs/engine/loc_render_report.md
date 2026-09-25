@@ -14,6 +14,13 @@ does not nest, so the whole value fails to parse and any widget whose
 Fix: pass data-function arguments as bare expressions, not as their own
 bracketed expressions.
 
+Also flagged: a `$key$` inside a quoted data-function argument whose
+value contains `[` or `'` (the expansion breaks the string literal),
+and a straight apostrophe in a static modifier's or modifier type's
+name (the engine pastes it into `GetRawTextTooltipTag('…')` for the
+add/remove-modifier tooltip). Fix: move the reference out of the
+argument; write `’` (U+2019) in the name.
+
 Suppress an intentional flag with a trailing comment on the loc line:
 `my_loc_key:0 "…" # REVIEWED YYYY-MM-DD: rationale`
 
@@ -28,7 +35,7 @@ _None._
 ## Coverage
 
 - loc files scanned: 30
-- loc values checked: 17694
+- loc values checked: 18981
 - total flags: 0
 - unreviewed: 0
 - exempted: 0
