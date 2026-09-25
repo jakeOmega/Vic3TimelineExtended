@@ -2,7 +2,7 @@
 
 Events whose text does not match the context they fire in: events about a mod system that ignore it, and events that claim a country acted when it never chose to. Heuristic ranking for a human read — see `event_context_audit.py` for the rules. Suppress a reviewed flag with a check-tagged comment on its own line inside the event block: `# REVIEWED YYYY-MM-DD (<check>): rationale`.
 
-- Events defined: **822**, visible: **804**, dispatch sites traced: **994**
+- Events defined: **824**, visible: **806**, dispatch sites traced: **995**
 - `system_ungated`: **0** unreviewed, 16 REVIEWED
 - `unchosen_self_action`: **0** unreviewed, 7 REVIEWED
 - `imputed_foreign_action`: **0** unreviewed, 21 REVIEWED
@@ -72,7 +72,7 @@ No unreviewed flags. ✅
 - `international_relations_events.5` — events/international_relations_events.txt:490 (REVIEWED 2026-09-25: the embargo is our own option; the rival is told what we chose (.102))
 - `international_relations_events.6` — events/international_relations_events.txt:584 (REVIEWED 2026-09-25: tracked in #427 — the accused country gets the choice first)
 - `international_relations_events.8` — events/international_relations_events.txt:770 (REVIEWED 2026-09-25: tracked in #427 — tie to a real dispute)
-- `irredentism.3` — events/irredentism_events.txt:360 (REVIEWED 2026-09-25: false positive: the subject of "have begun" is the voices on both sides; this is the unifier's own proposal)
+- `irredentism.3` — events/irredentism_events.txt:367 (REVIEWED 2026-09-25: false positive: the subject of "have begun" is the voices on both sides; this is the unifier's own proposal)
 - `movement_events_te.4` — events/movement_events_te.txt:325 (REVIEWED 2026-09-25: tracked in #427 — the accused country gets the choice first)
 - `social_tensions_events.2` — events/social_tensions_events.txt:119 (REVIEWED 2026-09-25: tracked in #427 — the accused country gets the choice first)
 - `society_technology_events.14` — events/society_technology_events.txt:1258 (REVIEWED 2026-09-25: tracked in #427 — the accused country gets the choice first)

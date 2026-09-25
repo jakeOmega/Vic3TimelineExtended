@@ -1,0 +1,95 @@
+﻿# ============================================================================
+# IRREDENTISM: ASKING THE BLOC LEADER TO BLESS A WAR OF REUNIFICATION
+#
+# A power bloc member that does not lead its bloc needs its leader's blessing
+# (var:irredentist_war_approval) before it can use the te_reunify_country war
+# goal (irredentist_bloc_check_war). The request reaches the leader as
+# irredentism.7, sent by irr_send_war_blessing_request
+# (te_event_agency_irr_effects.txt) from one of two places:
+#   - a player member chooses to ask, with the irr_seek_war_blessing
+#     diplomatic action on the country it would go to war with
+#     (common/diplomatic_actions/te_event_agency_irr_actions.txt);
+#   - an AI member rolls for it monthly in irredentism_bloc_approval_on_action,
+#     and only while its government is warlike toward that target.
+# Both paths read these triggers, so the player and the AI play by one rule.
+# ============================================================================
+
+# Country scope (the member). The structural gates, which decide whether the
+# question can come up at all. This is the action's `selectable`, so a country
+# outside a bloc, or leading one, never sees the action.
+irr_war_blessing_member = {
+	has_technology_researched = decolonization
+	NOT = { is_country_type = decentralized }
+	is_in_power_bloc = yes
+	is_power_bloc_leader = no
+}
+
+# Country scope (the member). Whether it can put a request to its leader now.
+# One custom_tooltip per clause, so a greyed-out action says which rule fails.
+irr_war_blessing_requester_ready = {
+	custom_tooltip = {
+		text = irr_war_blessing_driver_tt
+		irredentist_unifier_can_act = yes
+	}
+	custom_tooltip = {
+		text = irr_war_blessing_not_vetoed_tt
+		NOT = { has_modifier = irr_war_vetoed_modifier }
+	}
+	custom_tooltip = {
+		text = irr_war_blessing_no_standing_approval_tt
+		NOT = {
+			AND = {
+				has_variable = irredentist_war_approval
+				exists = var:irredentist_war_approval
+			}
+		}
+	}
+	custom_tooltip = {
+		text = irr_war_blessing_not_pending_tt
+		NOT = { has_variable = irr_war_blessing_pending }
+	}
+}
+
+# Target scope: THIS is the country the member would go to war with, ROOT is
+# the member. A cheap first filter: THIS shares one of our primary cultures and
+# holds a homeland state of ours that we claim. It is the action's `potential`,
+# so the action only appears against a country it could concern, and the AI
+# roll's first filter. Excludes the member's own bloc leader: nobody asks a
+# patron to bless a war against that patron.
+irr_war_blessing_target_potential = {
+	NOT = { THIS = ROOT }
+	NOT = { is_country_type = decentralized }
+	any_primary_culture = { is_primary_culture_of = ROOT }
+	any_scope_state = {
+		is_homeland_of_country_cultures = ROOT
+		has_claim_by = ROOT
+	}
+	NOT = {
+		AND = {
+			is_power_bloc_leader = yes
+			is_in_same_power_bloc = ROOT
+		}
+	}
+}
+
+# Country scope (the member), reads scope:target_country. The target test that
+# te_reunify_country itself applies to the war this blessing would permit
+# (is_irredentist_candidate_for plus the war goal's historic-unification
+# exclusions). Without it a leader could bless a war the member can never
+# declare.
+irr_war_blessing_target_ok = {
+	custom_tooltip = {
+		text = irr_war_blessing_candidate_tt
+		is_irredentist_candidate_for = yes
+	}
+	custom_tooltip = {
+		text = irr_war_blessing_not_historic_unification_tt
+		scope:target_country = {
+			NOR = {
+				has_journal_entry = je_reunify_china
+				has_journal_entry = je_german_unification
+				has_journal_entry = je_risorgimento
+			}
+		}
+	}
+}
