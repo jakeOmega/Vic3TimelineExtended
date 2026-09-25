@@ -192,6 +192,14 @@ The following patterns are derived from analysis of 40+ vanilla events across `e
 - **Single-option events** (forced crises) are acceptable.
 - **Option text does NOT need to spell out the tradeoff.** Keep button text thematic and concise.
 
+### Agency and System Coherence
+Two rules that `event_context_audit` (`docs/engine/event_context_report.md`) checks for on every `/reload` and in CI:
+- **Never tell a country it did something it did not choose.** An event that reaches country R from a pulse, a journal-entry tick or *another country's* option must not say "our campaign", "our agents", "our military expansion". Either R chose it (the event follows R's own option, decision, button or law), or the premise is true in game state (e.g. R really runs a covert operation against the other country), or the text describes the *other* country's action: "[A] accuses us of…", "[A] has launched…". The canonical bug was `international_relations_events.4` → `.106`: A's random event claimed rival B was running a disinformation campaign, and if A retaliated, B was told "[A] has answered **our** information campaign" and fined for it.
+- **Don't let an event pick another country, say that country acted, and then punish it.** When the event itself chooses X in `immediate` (`random_country`, `random_rival_country`, …), a follow-up event, relation hit or modifier landing on X is fine only if it follows from the *recipient's* choice, narrated as the recipient's action (we embargo them → "[A] has embargoed us"). If the premise is X's action, tie it to real state or give X the choice first.
+- **An event about a mod system must read that system.** A spy caught, a bank run, a space milestone, a nuclear standoff, a UN vote: if a mod system models it, the event either gates on the system's state (its JE, variables, game rule), or it is the explicit *disabled-rule fallback* (`has_game_rule = <system>_disabled`, as `international_relations_events.6`/`.7` are). A free-running flavour event that narrates the system's outcome can contradict it.
+
+Suppress an intentional flag with a check-tagged comment on its own line inside the event: `# REVIEWED YYYY-MM-DD (unchosen_self_action): rationale`.
+
 ### Verifying Option Balance
 
 The mod state server has an `/event-balance` family of endpoints for catching dominated options.

@@ -24,6 +24,23 @@ All three are **ranking heuristics, not verdicts**: they surface candidates
 for a human read. Each flag carries the event's dispatch sites (who fires it,
 in which scope, under which gate) so the read is quick.
 
+Known blind spots (measured against a full manual sweep of all 820 events in
+September 2026, where the checks caught 27 of 42 confirmed findings):
+- **A system's own files are trusted.** An event in `space_race_events.txt`
+  is "gated" by construction, so an in-system mismatch (a failure event that
+  narrates the wrong milestone) is invisible here.
+- **Choice made earlier, elsewhere.** `nuclear_crisis.7` reaches the crisis
+  issuer through a helper fired from a weekly tick, so the graph calls it
+  unchosen, but the issuer chose the ultimatum via a diplomatic action months
+  before. Likewise a country picked because it *carries* a stance it chose
+  (`gp_anti_colonial_stance`) looks imputed. Tag these REVIEWED.
+- **Grammar.** Attribution needs the picked country as the subject of an
+  action verb ("[X] has launched", "[X] is pressuring", "[X] requests") or
+  named as the source ("points to [X]", "a proposal … from [X]"). Passive or
+  plural phrasings ("both powers have sent envoys") slip through.
+- **Vocabulary is per system** and deliberately narrow (see `SYSTEMS`);
+  a system mentioned in flavour text only is ignored.
+
 How the dispatch graph is built
 -------------------------------
 Every `trigger_event` and every event listed in an on-action `events` /
@@ -104,7 +121,8 @@ SYSTEMS: tuple[System, ...] = (
         _rx(r"^(?:banking_|te_monetary|te_mon_|te_peg|te_inflation|monetary_)"),
         _rx(r"\bbank runs?\b|\brun on the banks?\b|\bbanking (?:crisis|panic|collapse)\b"
             r"|\bcentral bank\b|\bbail-?outs?\b|\bfinancial (?:panic|contagion)\b"
-            r"|\bcredit crunch\b|\bhyperinflation\b|\bmonetary policy\b|\bcurrency peg\b", _I),
+            r"|\bcredit crunch\b|\bhyperinflation\b|\bmonetary policy\b|\bcurrency peg\b"
+            r"|\beconom(?:y|ies) (?:is|are) booming\b|\beconomic miracle\b", _I),
     ),
     System(
         "covert", "Covert warfare",
@@ -114,7 +132,8 @@ SYSTEMS: tuple[System, ...] = (
             r"|\bintelligence (?:operatives?|agents?|networks?)\b|\bforeign (?:operatives?|agents?)\b"
             r"|\bcovert(?:ly)? (?:operations?|funding|funded|action)\b|\bcampaign of disinformation\b"
             r"|\bforeign disinformation\b|\belection interference\b"
-            r"|\bforeign (?:interference|meddling)\b", _I),
+            r"|\bforeign (?:interference|meddling|actors)\b|\bcyber-?(?:attacks?|espionage|operations)\b"
+            r"|\b(?:deliberate|foreign) sabotage\b|\bhack(?:ed|ing) (?:campaign|election|government)\b", _I),
     ),
     System(
         "space", "Space race",
@@ -127,7 +146,7 @@ SYSTEMS: tuple[System, ...] = (
         _rx(r"\bspace (?:program(?:me)?s?|race|probes?|colon(?:y|ies)|agency)\b|\bastronauts?\b"
             r"|\bcosmonauts?\b|\b(?:moon|lunar|mars|martian) (?:landings?|bases?|colon(?:y|ies)|missions?)\b"
             r"|\boff-world colon(?:y|ies)\b|\binterstellar probes?\b|\b(?:first|artificial) satellites?\b"
-            r"|\bmanned (?:space ?)?flights?\b", _I),
+            r"|\bmanned (?:space ?)?flights?\b|\bspace achievements?\b|\borbital habitats?\b", _I),
     ),
     System(
         "nuclear", "Nuclear weapons / deterrence",
@@ -144,7 +163,8 @@ SYSTEMS: tuple[System, ...] = (
             r"|\bgw_\w+"),
         _rx(r"^(?:global_warming|gw_|te_debug_gw)"),
         _rx(r"\bclimate (?:change|crisis|catastrophe)\b|\bglobal warming\b|\brising seas?\b"
-            r"|\bsea levels? (?:rise|rising)\b|\bcarbon emissions?\b", _I),
+            r"|\bsea levels? (?:rise|rising)\b|\bcarbon emissions?\b|\bextreme weather\b"
+            r"|\bclimate refugees?\b|\b(?:rise|rising) (?:in )?global temperatures?\b", _I),
     ),
     System(
         "un", "United Nations",
@@ -158,7 +178,8 @@ SYSTEMS: tuple[System, ...] = (
         _rx(r"\bcultural_hegemony_(?:enabled|disabled)\b|\bje_cultural_hegemony\b"
             r"|\bcultural_hegemony_\w+|\bch_\w+"),
         _rx(r"^(?:cultural_hegemony|te_debug_ch)"),
-        _rx(r"\bcultural hegemony\b|\bsoft power\b|\bcultural imperialism\b", _I),
+        _rx(r"\bcultural hegemony\b|\bsoft power\b|\bcultural imperialism\b"
+            r"|\bforeign (?:music|films?|culture|entertainment)\b", _I),
     ),
     System(
         "world_war", "World war",
@@ -179,6 +200,37 @@ SYSTEMS: tuple[System, ...] = (
         _rx(r"^heir_"),
         _rx(r"\bheir'?s? (?:education|tutors?|schooling)\b", _I),
     ),
+    # Law-driven systems: the "state" is the law group the JE watches, so an
+    # event about them must read the law in force (or the JE).
+    System(
+        "civil_rights", "Civil rights movement",
+        _rx(r"\bje_civil_rights\b|\bhas_active_civil_rights_movement\b|\bmovement_civil_rights\b"
+            r"|\bcr_\w+|\bhas_(?:progressive|discriminatory|severe_discriminatory)_minority_law\b"),
+        _rx(r"^civil_rights"),
+        _rx(r"\bcivil rights movement\b", _I),
+    ),
+    System(
+        "digital_rights", "Digital rights / surveillance law",
+        _rx(r"\bje_digital_rights\b|\blaw_(?:intrusive_surveillance|strong_privacy_rights|moderate_data_privacy"
+            r"|minimal_privacy\w*|secret_police|ministry_of_intelligence_and_security)\b|\blawgroup_privacy\w*"),
+        _rx(r"^surveillance_"),
+        _rx(r"\b(?:mass|state|domestic|warrantless) surveillance\b|\bsurveillance (?:program(?:me)?s?|powers|apparatus)\b"
+            r"|\bintercepting (?:the )?private correspondence\b", _I),
+    ),
+    System(
+        "augmentation", "Human augmentation law",
+        _rx(r"\bje_human_augmentation\b|\blaw_(?:no_augmentation|human_purity|medical_augmentation_only"
+            r"|regulated_augmentation|unrestricted_augmentation|mandatory_augmentation)\b"),
+        _rx(r"^augmentation_"),
+        _rx(r"\bneural implants?\b|\bbrain-computer interfaces?\b|\bcybernetic implants?\b"
+            r"|\b(?:human|genetic) augmentation\b|\baugmented (?:athletes|elite|citizens)\b", _I),
+    ),
+    System(
+        "post_scarcity", "Post-scarcity / UBI",
+        _rx(r"\bje_post_scarcity\b|\blaw_universal_basic_income\b|\blaw_post_scarcity\w*"),
+        _rx(r"^post_scarcity"),
+        _rx(r"\bpost-scarcity\b|\bUBI program(?:me)?s?\b|\bwork no longer necessary\b", _I),
+    ),
 )
 
 SYSTEM_BY_KEY = {s.key: s for s in SYSTEMS}
@@ -193,13 +245,15 @@ SYSTEM_BY_KEY = {s.key: s for s in SYSTEMS}
 _SELF_ACTION_RE = re.compile(
     r"\bour (?:own )?(?:information campaign|propaganda campaign|disinformation campaign"
     r"|campaign of|military (?:expansion|buildup|build-up)|arms (?:buildup|build-up)"
-    r"|intelligence operatives?|operatives?|agents?|spies|spy|covert (?:operations?|funding)"
+    r"|intelligence operatives?|(?:\w+ )?operatives?|agents?|spies|spy|covert (?:operations?|funding)"
     r"|veto|ultimatum|embargo|sanctions|blockade|invasion|intervention|strike on"
     r"|nuclear tests?|weapons tests?|crackdown|purge|annexation|bailout"
     r"|decision to|order to|refusal to)\b"
     r"|\bwe (?:have |had )?(?:launched|ordered|vetoed|imposed|declared|deployed|authori[sz]ed"
     r"|detonated|tested|annexed|seized|expelled|blockaded|invaded|sanctioned|embargoed"
-    r"|funded|financed|bailed out|nationali[sz]ed|devalued|sabotaged|infiltrated|bombed)\b",
+    r"|funded|financed|bailed out|nationali[sz]ed|devalued|sabotaged|infiltrated|bombed)\b"
+    r"|\b(?:program(?:me)?|campaign|operation)s? (?:operated|run|launched|ordered) by (?:the|our) government\b"
+    r"|\bgovernment agents have\b",
     re.IGNORECASE,
 )
 
@@ -208,9 +262,19 @@ _SCOPE_REF_RE = re.compile(r"\[SCOPE\.s(?:Country|Character)\('(?P<name>\w+)'\)[
 # A present-perfect / past-perfect finite verb: "has launched", "has been
 # apprehended", "have begun". Used within one sentence after an X reference.
 _PERFECT_RE = re.compile(
-    r"\b(?:has|have|had)\s+(?:been\s+|quietly\s+|now\s+|already\s+|secretly\s+|covertly\s+)?"
+    r"\b(?:(?:has|have|had)\s+(?:been\s+|now\s+|already\s+)?(?:\w+ly\s+)?"
     r"(?:\w+ed|begun|sent|made|taken|built|won|struck|thrown|drawn|set|held|led|brought|put"
-    r"|given|broken|stolen|spread|shown|begun)\b",
+    r"|given|broken|stolen|spread|shown)"
+    r"|(?:is|are)\s+(?:\w+ly\s+)?(?:pressuring|demanding|threatening|funding|financing|arming|backing"
+    r"|sponsoring|meddling|interfering|spying|massing|mobilizing|mobilising|preparing|courting)"
+    r"|(?:requests|demands|threatens|accuses|insists|proposes|offers|asks))\b",
+    re.IGNORECASE,
+)
+# The picked country named as the source/culprit *before* the reference:
+# "the evidence points to [X]", "a proposal of union from [X]".
+_PRE_ATTRIBUTION_RE = re.compile(
+    r"(?:\bpoints? to|\bagents of|\blinked to|\bties to|\bsponsored by|\bbacked by"
+    r"|\b(?:proposal|offer|demand|request|ultimatum|campaign|pressure)s?\b[^.]{0,40}?\b(?:from|by))\s*$",
     re.IGNORECASE,
 )
 
@@ -1026,6 +1090,10 @@ def audit(mod_path: str, graph: Graph | None = None) -> AuditResult:
                 pm = _PERFECT_RE.search(sentence)
                 if pm:
                     attributed = (desc_text[sm.start():sm.end() + pm.end()]).strip()
+                    break
+                head = re.split(r"[.!?]", desc_text[:sm.start()])[-1]
+                if _PRE_ATTRIBUTION_RE.search(head):
+                    attributed = (head[-60:] + desc_text[sm.start():sm.end()]).strip()
                     break
             if not attributed:
                 continue
