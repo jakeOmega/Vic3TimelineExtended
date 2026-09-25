@@ -432,6 +432,61 @@ class TestActionPreview(unittest.TestCase):
             self.assertIn(n, loc_value("nd_tt_open_stakes_private"))
 
 
+ACT_LINES = {
+    "nd_crisis_act_yield": ["nd_crisis_yield_lines = yes", "custom_tooltip = nd_tt_then_yield"],
+    "nd_crisis_yield_lines": ["nd_tt_yield_war", "nd_tt_yield_play", "nd_tt_yield_guarantee",
+                              "nd_tt_yield_freeze", "nd_tt_yield_alert"],
+    "nd_crisis_act_reject": ["nd_tt_stage_to_confrontation", "nd_tt_reject_defiance"],
+    "nd_crisis_act_counter_threat": ["nd_tt_stage_to_confrontation", "nd_tt_counter_danger"],
+    "nd_crisis_act_propose_talks": ["nd_tt_talks_terms", "nd_crisis_talks_credibility_lines = yes",
+                                    "nd_tt_talks_meanwhile"],
+    "nd_crisis_act_accept_standdown": ["nd_tt_standdown_terms", "nd_crisis_talks_credibility_lines = yes"],
+    "nd_crisis_act_hold": ["nd_tt_hold_deadline", "nd_tt_hold_alert_4w", "nd_tt_hold_alert_2w"],
+    "nd_crisis_act_extend": ["text = nd_tt_credibility_down_3"],
+    "nd_crisis_act_back_down": ["nd_tt_then_back_down_public", "nd_tt_then_back_down_private",
+                                "nd_tt_then_bluff_called"],
+    "nd_crisis_act_go_public": ["change_infamy = 5", "change_relations", "nd_tt_go_public_terms"],
+    "nd_crisis_act_exercise": ["text = nd_tt_strain_up_5", "text = nd_tt_credibility_up_3",
+                               "nd_tt_exercise_effect"],
+}
+
+
+class TestActLines(unittest.TestCase):
+    def setUp(self):
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_every_act_names_its_numbers(self):
+        for act, needles in ACT_LINES.items():
+            body = block(self.effects, act)
+            for needle in needles:
+                self.assertIn(needle, body, f"{act} lacks {needle}")
+
+    def test_visible_act_lines_read_no_saved_scopes(self):
+        """The panel renders these acts with no saved scopes."""
+        for act in ACT_LINES:
+            body = block(self.effects, act)
+            hidden = re.findall(r"hidden_effect = \{", body)
+            visible = body
+            for _ in hidden:
+                visible = visible.replace("hidden_effect = {" + block(visible, "hidden_effect") + "}", "")
+            self.assertNotRegex(visible, r"scope:nd_(issuer|target)", act)
+
+    def test_act_numbers_match_their_constants(self):
+        values = strip_comments(read(VALUES))
+        self.assertRegex(values, r"nd_crisis_deadline_extension_weeks = 6\b")
+        self.assertIn("6", loc_value("nd_tt_hold_deadline"))
+        self.assertIn("6", loc_value("nd_tt_act_extend"))
+        self.assertIn("6", loc_value("nd_tt_act_refuse_talks"))
+        self.assertRegex(block(values, "nd_cd_counter_value"), r"add = 10\b")
+        self.assertIn("10", loc_value("nd_tt_counter_danger"))
+        self.assertRegex(block(values, "nd_cd_talks_value"), r"subtract = 15\b")
+        self.assertIn("15", loc_value("nd_tt_talks_meanwhile"))
+        self.assertRegex(block(values, "nd_yp_alert_value"), r"add = 10\b")
+        self.assertIn("10", loc_value("nd_tt_hold_alert_2w"))
+        self.assertIn("name = nd_crisis_exercise_weeks value = 6", block(self.effects, "nd_crisis_act_exercise"))
+        self.assertIn("6", loc_value("nd_tt_exercise_effect"))
+
+
 class TestManagedFamilies(unittest.TestCase):
     def test_doctrine_and_readiness_families_exist(self):
         mods = set(re.findall(r"^(nd_\w+)\s*=\s*\{", read(MODIFIERS), re.M))

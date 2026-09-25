@@ -1257,6 +1257,8 @@ nd_lobby_react = {
 # so either way it closes exactly once.
 nd_crisis_act_yield = {
 	custom_tooltip = nd_tt_act_yield
+	nd_crisis_yield_lines = yes
+	custom_tooltip = nd_tt_then_yield
 	hidden_effect = {
 		nd_crisis_save_parties = yes
 		if = {
@@ -1320,6 +1322,30 @@ nd_crisis_act_yield = {
 	}
 }
 
+# Target scope: the concession this crisis demands, in one line.
+nd_crisis_yield_lines = {
+	if = {
+		limit = { nd_crisis_dispute_is = { D = 2 } }
+		custom_tooltip = nd_tt_yield_war
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 1 } }
+		custom_tooltip = nd_tt_yield_play
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 3 } }
+		custom_tooltip = nd_tt_yield_guarantee
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 4 } }
+		custom_tooltip = nd_tt_yield_freeze
+	}
+	else_if = {
+		limit = { nd_crisis_dispute_is = { D = 5 } }
+		custom_tooltip = nd_tt_yield_alert
+	}
+}
+
 # scope:nd_target (the yielder, a lead of the play) and
 # scope:nd_crisis_other_side (the issuer, or the beneficiary it protects).
 # Ends the play for the other side with resolve_play_for — the engine's own
@@ -1375,6 +1401,20 @@ nd_crisis_concede_war = {
 # Issuer scope: abandon the threat.
 nd_crisis_act_back_down = {
 	custom_tooltip = nd_tt_act_back_down
+	if = {
+		limit = { nd_crisis_is_public = yes }
+		custom_tooltip = nd_tt_then_back_down_public
+		if = {
+			limit = {
+				has_variable = nd_ft_reason
+				var:nd_ft_reason >= 5
+			}
+			custom_tooltip = nd_tt_then_bluff_called
+		}
+	}
+	else = {
+		custom_tooltip = nd_tt_then_back_down_private
+	}
 	hidden_effect = {
 		nd_crisis_close_from_either = { OUTCOME = 2 }
 	}
@@ -1384,6 +1424,11 @@ nd_crisis_act_back_down = {
 nd_crisis_act_go_public = {
 	custom_tooltip = nd_tt_act_go_public
 	change_infamy = 5
+	if = {
+		limit = { exists = var:nd_crisis_opponent }
+		change_relations = { country = var:nd_crisis_opponent value = -15 }
+	}
+	custom_tooltip = nd_tt_go_public_terms
 	hidden_effect = {
 		nd_crisis_save_parties = yes
 		if = {
@@ -1396,9 +1441,6 @@ nd_crisis_act_go_public = {
 			set_variable = { name = nd_crisis_deadline value = var:nd_crisis_weeks }
 			change_variable = { name = nd_crisis_deadline add = nd_crisis_deadline_public_weeks }
 			set_variable = { name = nd_crisis_deadline_fired value = 0 }
-			scope:nd_target = {
-				change_relations = { country = scope:nd_issuer value = -15 }
-			}
 		}
 	}
 }
@@ -1407,6 +1449,14 @@ nd_crisis_act_go_public = {
 # compellence's licence to strike (nd_doctrine_permits_strike).
 nd_crisis_act_reject = {
 	custom_tooltip = nd_tt_act_reject
+	if = {
+		limit = { NOT = { nd_crisis_stage_at_least = { STAGE = 2 } } }
+		custom_tooltip = nd_tt_stage_to_confrontation
+	}
+	if = {
+		limit = { nd_crisis_public_either = yes }
+		custom_tooltip = nd_tt_reject_defiance
+	}
 	hidden_effect = {
 		nd_crisis_save_parties = yes
 		if = {
@@ -1427,6 +1477,11 @@ nd_crisis_act_reject = {
 # Target scope, armed targets only: answer threat with threat.
 nd_crisis_act_counter_threat = {
 	custom_tooltip = nd_tt_act_counter
+	if = {
+		limit = { NOT = { nd_crisis_stage_at_least = { STAGE = 2 } } }
+		custom_tooltip = nd_tt_stage_to_confrontation
+	}
+	custom_tooltip = nd_tt_counter_danger
 	if = {
 		limit = {
 			has_variable = nd_readiness_target
@@ -1468,6 +1523,9 @@ nd_crisis_record_defiance = {
 # Either party: propose a reciprocal stand-down. The other party gets .3.
 nd_crisis_act_propose_talks = {
 	custom_tooltip = nd_tt_act_talks
+	custom_tooltip = nd_tt_talks_terms
+	nd_crisis_talks_credibility_lines = yes
+	custom_tooltip = nd_tt_talks_meanwhile
 	hidden_effect = {
 		nd_crisis_save_parties = yes
 		if = {
@@ -1492,6 +1550,8 @@ nd_crisis_act_propose_talks = {
 # Either party, answering .3: both sides stand down and pledge non-use.
 nd_crisis_act_accept_standdown = {
 	custom_tooltip = nd_tt_act_accept_standdown
+	custom_tooltip = nd_tt_standdown_terms
+	nd_crisis_talks_credibility_lines = yes
 	hidden_effect = {
 		nd_crisis_save_parties = yes
 		if = {
@@ -1504,6 +1564,22 @@ nd_crisis_act_accept_standdown = {
 			nd_add_pledge_pair = { A = scope:nd_issuer B = scope:nd_target }
 			nd_crisis_close = { OUTCOME = 3 }
 		}
+	}
+}
+
+# Either party: what a stand-down does to our credibility (applied by the
+# outcome notice; nd_crisis_apply_outcome_side, outcome 3).
+nd_crisis_talks_credibility_lines = {
+	if = {
+		limit = {
+			nd_is_crisis_owner = yes
+			nd_crisis_is_public = yes
+			nd_crisis_issuer_is_defensive = no
+		}
+		custom_tooltip = nd_tt_talks_cred_public_demand
+	}
+	else = {
+		custom_tooltip = nd_tt_talks_cred_plus
 	}
 }
 
@@ -1535,6 +1611,7 @@ nd_crisis_act_refuse_talks = {
 # deadline moves out once more.
 nd_crisis_act_hold = {
 	custom_tooltip = nd_tt_act_hold
+	custom_tooltip = nd_tt_hold_deadline
 	hidden_effect = {
 		if = {
 			limit = { nd_is_crisis_owner = yes }
@@ -1552,13 +1629,23 @@ nd_crisis_act_hold = {
 			var:nd_readiness_target < 3
 		}
 		nd_set_readiness_target_3 = yes
+		if = {
+			limit = { var:nd_readiness = 1 }
+			custom_tooltip = nd_tt_hold_alert_4w
+		}
+		else = {
+			custom_tooltip = nd_tt_hold_alert_2w
+		}
 	}
 }
 
 # Issuer scope, at the deadline: give them more time. Hesitation is noticed.
 nd_crisis_act_extend = {
 	custom_tooltip = nd_tt_act_extend
-	nd_change_credibility = { AMOUNT = -3 }
+	custom_tooltip = {
+		text = nd_tt_credibility_down_3
+		nd_change_credibility = { AMOUNT = -3 }
+	}
 	hidden_effect = {
 		if = {
 			limit = { nd_is_crisis_owner = yes }
@@ -1579,8 +1666,19 @@ nd_crisis_act_exercise = {
 		multiplier = sv_money_flow_event_large
 		days = 90
 	}
-	change_variable = { name = nd_strain add = 5 }
-	clamp_variable = { name = nd_strain min = 0 max = 100 }
+	custom_tooltip = {
+		text = nd_tt_strain_up_5
+		change_variable = { name = nd_strain add = 5 }
+		clamp_variable = { name = nd_strain min = 0 max = 100 }
+	}
+	if = {
+		limit = { nd_is_crisis_owner = yes }
+		custom_tooltip = {
+			text = nd_tt_credibility_up_3
+			nd_change_credibility = { AMOUNT = 3 }
+		}
+	}
+	custom_tooltip = nd_tt_exercise_effect
 	hidden_effect = {
 		nd_crisis_save_parties = yes
 		if = {
@@ -1592,10 +1690,6 @@ nd_crisis_act_exercise = {
 				}
 				set_variable = { name = nd_crisis_exercise_weeks value = 6 }
 			}
-		}
-		if = {
-			limit = { this = scope:nd_issuer }
-			nd_change_credibility = { AMOUNT = 3 }
 		}
 	}
 }

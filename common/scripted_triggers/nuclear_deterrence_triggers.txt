@@ -701,6 +701,39 @@ nd_crisis_danger_dampened = {
 	}
 }
 
+# Either party: the crisis's dispute code is $D$. The record is the issuer's;
+# the target reads it through its mirror (var:nd_crisis_opponent).
+nd_crisis_dispute_is = {
+	OR = {
+		AND = {
+			nd_is_crisis_owner = yes
+			has_variable = nd_crisis_dispute
+			var:nd_crisis_dispute = $D$
+		}
+		AND = {
+			nd_is_crisis_target = yes
+			var:nd_crisis_opponent ?= {
+				has_variable = nd_crisis_dispute
+				var:nd_crisis_dispute = $D$
+			}
+		}
+	}
+}
+
+# Either party: the threat is public.
+nd_crisis_public_either = {
+	OR = {
+		AND = {
+			nd_is_crisis_owner = yes
+			nd_crisis_is_public = yes
+		}
+		AND = {
+			nd_is_crisis_target = yes
+			var:nd_crisis_opponent ?= { nd_crisis_is_public = yes }
+		}
+	}
+}
+
 # Owner scope: the issuer is defending rather than demanding — the target
 # initiated the play we dispute, or we are protecting a beneficiary. A
 # stand-down then achieves our objective and carries no audience cost (§6).
