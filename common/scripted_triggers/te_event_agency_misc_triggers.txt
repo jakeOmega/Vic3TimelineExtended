@@ -1,0 +1,23 @@
+﻿# Event-agency package E2 ("misc") — scripted triggers.
+# Each block names the event(s) that read it.
+
+# ----------------------------------------------------------------------------
+# te_lolr.1 / te_lolr.2 — who is calling the guarantee
+# ----------------------------------------------------------------------------
+
+# te_lolr.1 (ROOT = the guarantor, scope:te_lolr_ward saved). True when ROOT
+# was called as a TREATY guarantor, the first branch of
+# te_monetary_on_country_default; false when it was called as the leader of
+# the ward's monetary union (the else branch), which signed no article.
+te_ea_lolr_called_by_treaty = {
+	scope:te_lolr_ward ?= {
+		te_mon_lolr_is_effective = yes
+		var:te_mon_lolr_guarantor ?= root
+	}
+}
+
+# te_lolr.2 (ROOT = the ward). The guarantor paid.
+te_ea_lolr_answer_honoured = {
+	has_variable = te_lolr_answer
+	var:te_lolr_answer = 1
+}

@@ -4283,9 +4283,18 @@
  te_lolr.1.a:0 "We gave our word. Pay."
  te_lolr.1.b:0 "Their debts are not ours."
  te_lolr.1.b.tt:0 "You #b withdraw from the treaty#!. For #b five years#! every other guarantee you have given is #b worth nothing#! to the country that holds it: guarantees are only worth the last one honoured."
+ te_lolr.1.b.union.tt:0 "No treaty binds us, so there is none to leave. For #b five years#! our backstop is #b suspended#!: no country that uses our currency — nor any we have guaranteed by treaty — can count on us to stand behind its debts. A promise is only worth the last one kept."
  te_lolr.1.d:0 "[SCOPE.sCountry('te_lolr_ward').GetName] has defaulted. We are its lender of last resort — we said so, in a treaty, and its creditors lent on the strength of our name as much as theirs. They are at our door this morning. The sum is large. So is what every other government that holds our guarantee will conclude if we decline to pay it."
+ te_lolr.1.d_union:0 "[SCOPE.sCountry('te_lolr_ward').GetName] has defaulted. No treaty binds us to it, but it uses our currency, and the leader of a monetary union is its lender of last resort whether or not anyone wrote it down. Its creditors lent on the strength of the common money as much as on its own, and they are at our door this morning. The sum is large. So is what every other government that uses our money will conclude if we decline to pay it."
  te_lolr.1.f:0 "\"Lend freely, at a high rate, on good collateral — and if you have promised to, lend anyway.\""
  te_lolr.1.t:0 "The Guarantee Is Called"
+ te_lolr.2.a_honoured:0 "We will not forget who stood by us."
+ te_lolr.2.a_refused:0 "We will not forget who walked away."
+ te_lolr.2.d_honoured:0 "Our default has been answered. [SCOPE.sCountry('te_lolr_guarantor').GetName], our lender of last resort, has paid our creditors @money![ROOT.GetCountry.MakeScope.Var('te_lolr_paid').GetValue|D] from its own treasury. The markets that were pricing our collapse this morning are pricing its credit instead, and for once they are pricing it high."
+ te_lolr.2.d_refused:0 "Our default has been answered, and the answer is no. [SCOPE.sCountry('te_lolr_guarantor').GetName], our lender of last resort, has declined to stand behind our debts. Our creditors have been told to look to us alone, and every other country that relied on its word has been told something too."
+ te_lolr.2.f:0 "\"They sent the cable at nine. It was two lines long.\"\n\n\"Which two lines?\"\n\n\"That depends on which morning you are asking about. There is only ever one cable, and only ever two lines. The whole of the next ten years is in which two.\""
+ te_lolr.2.t_honoured:0 "Our Guarantor Pays"
+ te_lolr.2.t_refused:0 "Our Guarantor Walks Away"
 
 #
 # TE_MAP_MODES
