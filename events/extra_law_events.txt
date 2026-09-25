@@ -120,6 +120,7 @@ extra_law_events.2 = {
 	}
 
 	immediate = {
+		banking_enactment_run_shock = yes
 		currently_enacting_law = {
 			save_scope_as = current_law_scope
 		}
@@ -4107,6 +4108,7 @@ extra_law_events.38 = {
 	}
 
 	immediate = {
+		banking_enactment_run_shock = yes
 		currently_enacting_law = {
 			save_scope_as = current_law_scope
 		}

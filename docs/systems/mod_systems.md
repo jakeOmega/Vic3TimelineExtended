@@ -1809,3 +1809,33 @@ The worst-case mod-added negative `decrease` sum is −0.50 (`/modifier-grants/c
 **World War stalemate event** `world_war_events.31` (weight 5 in the `je_world_war` monthly pulse): `ww_years_elapsed >= 2` (world-war-wide counter) **and** a war with `war_duration_months >= 24`, `num_significant_battles >= 10`, `has_stalled_wargoal_held_by = ROOT`. Options use one-off `add_war_war_support` (+5 hold the line / −10 armistice talks); `add_war_support_change` is avoided because it accumulates for the war (see `docs/guides/scripting_best_practices.md`).
 
 **Not moved into the hook:** `war_propaganda_on_action` (`extra_on_actions.txt`, monthly per-state `add_war_war_support` driven by the state-scoped `state_war_support_monthly_add`, which does not cascade to a country-scope read) stays a one-off level change; a phase-scaled covert line would need a country variable written by the covert JE pulse.
+
+## Legacy narrative event integration
+
+Law-enactment bank runs (`extra_law_events.2` / `.38`) now apply a small
+confidence shock (-5 cycle, -1 momentum) when the banking JE exists, including
+simplified banking. With banking disabled they remain enactment flavor.
+`finreg_banking_stability` retains its company-throughput benefit and also
+reduces banking crash probability by 10% of base; deposit guarantees in `.62`
+share that protection.
+
+The discretionary bailout (`banking_cycle_events.45`) requires a non-defaulting
+donor at cycle 40+ and a non-hostile, diplomatically relevant trading partner
+in downturn/panic with an active banking JE. Recipient selection uses the same
+gate as dispatch. Rescue options transfer equal treasury amounts (the donor's
+old weekly expense multiplied by duration / 14, approximating its former
+linearly decaying total) and grant temporary banking stability to the recipient.
+This is a grant, not a new swap-line or lender-of-last-resort treaty. The latter
+continues to use its own default-driven event. Protected recipients cannot draw
+another discretionary bailout while the stability modifier lasts.
+
+`international_relations_events.6` and `.7` are disabled-system fallbacks only.
+Enabled covert warfare owns detection and exposure; enabled space race owns
+milestone celebrations. The first-colony charter story (`society_technology_events.18`)
+is dispatched seven days after a country's first tracked colony, after its
+location-specialization event. Governance (`.19`) requires a tracked colony and
+the charter story to have fired. Both retain their building-based flavor gates
+when space race is disabled; enabled-system governance no longer needs an
+unrelated space-elevator building or era-12 technology (colonization begins in
+era 11). The monthly first-colony draw backfills existing saves, with a short
+pending flag preventing it from racing the delayed establishment event.

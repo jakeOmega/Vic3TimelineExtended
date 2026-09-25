@@ -1,0 +1,30 @@
+﻿# Law-induced bank runs can start in any phase. Never seed a disabled system.
+banking_enactment_run_shock = {
+	if = {
+		limit = { has_journal_entry = je_banking_cycle }
+		change_variable = { name = finance_cycle_value add = -5 }
+		change_variable = { name = finance_cycle_momentum add = -1 }
+		banking_cycle_post_event_refresh = yes
+	}
+}
+
+# ROOT is the donor. Transfer the same amount between treasuries, as te_lolr.1
+# does. AMOUNT is the donor's GDP-scaled weekly cost; DAYS / 14 preserves the
+# approximate total cost of the old linearly decaying weekly expense stream.
+# No treaty is created: this is discretionary aid, not a swap or guarantee.
+banking_transfer_emergency_aid = {
+	add_treasury = {
+		value = $AMOUNT$
+		multiply = $DAYS$
+		divide = 14
+		multiply = -1
+	}
+	scope:bailout_country = {
+		add_treasury = {
+			value = root.$AMOUNT$
+			multiply = $DAYS$
+			divide = 14
+		}
+		add_modifier = { name = finreg_banking_stability days = $DAYS$ }
+	}
+}

@@ -1,0 +1,21 @@
+﻿# Evaluated on a candidate recipient; ROOT is the donor event/pulse country.
+banking_is_bailout_recipient = {
+	NOT = { this = root }
+	has_journal_entry = je_banking_cycle
+	has_diplomatic_relevance = root
+	NOT = { has_war_with = root }
+	banking_bilateral_bailout_trade > 0
+	OR = {
+		banking_cycle_is_downturn = yes
+		banking_cycle_is_panic = yes
+	}
+	NOT = { has_modifier = finreg_banking_stability }
+}
+
+banking_can_offer_bailout = {
+	has_journal_entry = je_banking_cycle
+	has_technology_researched = keynesian_economics
+	var:finance_cycle_value >= 40
+	NOT = { in_default = yes }
+	any_country = { banking_is_bailout_recipient = yes }
+}

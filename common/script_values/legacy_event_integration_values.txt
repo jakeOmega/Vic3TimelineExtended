@@ -1,0 +1,4 @@
+﻿# Evaluated on the prospective recipient, ROOT is the donor.
+banking_bilateral_bailout_trade = {
+	value = "mutual_trade_value_with_country(root)"
+}

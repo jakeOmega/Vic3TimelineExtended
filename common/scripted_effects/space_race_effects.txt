@@ -574,6 +574,16 @@ sr_establish_colony_effect = {
 	}
 	# Increment colony count for this country
 	change_variable = { name = sr_colony_count add = 1 }
+	# The national/international charter story follows a real first colony.
+	# Delay it past the location's own specialization event (duration = 3).
+	if = {
+		limit = {
+			var:sr_colony_count = 1
+			NOT = { has_variable = ste_event_18_fired }
+		}
+		set_variable = { name = sr_colony_charter_pending value = yes days = 14 }
+		trigger_event = { id = society_technology_events.18 days = 7 }
+	}
 
 	# ===== STAGE 1: Mars & Asteroids =====
 	if = {
