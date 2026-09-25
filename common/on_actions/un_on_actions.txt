@@ -86,6 +86,12 @@ un_global_authority_on_action = {
 			# mandate is issued.
 			un_mandates_monthly_update = yes
 
+			# Missions (redesign phase 6, un_mission_effects.txt): each active
+			# mission's contributors, strength, progress and outcome. The
+			# state's modifier is refreshed from the state pulse
+			# (un_mission_on_actions.txt).
+			un_missions_monthly_update = yes
+
 			# Headquarters upkeep: a live member hosts, and exactly one HQ
 			# building stands, in the host's territory (un_hq_effects.txt).
 			un_hq_monthly_update = yes

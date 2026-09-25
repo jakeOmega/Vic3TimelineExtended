@@ -3619,6 +3619,27 @@ un_authority_crisis_modifier = {
 #
 # Non-members, from the Strong tier up (on top of un_nonmember_pariah_modifier,
 # which applies from Established): trade and leverage.
+# ---- UN redesign phase 6: missions (un_mission_effects.txt) ----
+# State modifiers, each applied with multiplier = var:un_msn_power (the
+# mission's strength: E x the budget x its contributors) by
+# un_mission_state_refresh, the single refresh site, from the state pulse.
+un_mission_peacekeeping_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_turmoil_effects_mult = -0.2
+	state_devastation_decay_mult = 0.5
+}
+un_mission_aid_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	state_standard_of_living_add = 1.5
+	state_food_security_add = 0.2
+	state_mortality_mult = -0.05
+}
+un_mission_stabilisation_state_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_positive.dds
+	state_turmoil_effects_mult = -0.3
+	state_standard_of_living_add = 0.5
+}
+
 # ---- UN redesign phase 5: resolutions with teeth (un_teeth_effects.txt) ----
 # All three are unit values applied with multiplier = un_enforcement (E).
 # A full condemnation from the Strong tier: the condemned are shunned — other

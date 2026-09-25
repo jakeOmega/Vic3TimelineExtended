@@ -5102,3 +5102,4 @@
  heir_education_event_cooldown_desc:0 "The [concept_heir]'s education continues without interruption for the time being."
  nuclear_event_prestige:0 "Nuclear Achievement"
  nuclear_event_prestige_desc:0 "This country's nuclear capabilities have affected its standing in the eyes of the world."
+ te_debug_un.1.u:0 "Send a UN peacekeeping mission to our most devastated state"

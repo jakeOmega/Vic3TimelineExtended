@@ -2372,6 +2372,71 @@ types state_panel_types
 				}
 			}
 
+			### UN MISSION (UN redesign phase 6)
+			### One tile while an active UN mission works in this state: its
+			### kind, months, strength and progress. Every value reads 0 with no
+			### mission (un_mission_values.txt), so the gate never reads a
+			### missing variable.
+			state_panel_status_item_small = {
+				visible = "[GreaterThan_CFixedPoint(State.MakeScope.ScriptValue('un_state_mission_type'), '(CFixedPoint)0')]"
+				tooltip = "TE_STATE_UN_TT"
+
+				blockoverride "texture" {
+					texture = "gfx/interface/icons/event_icons/waving_flag.dds"
+				}
+
+				blockoverride "name" {
+					text = "TE_STATE_UN_STATUS"
+				}
+
+				blockoverride "extra_widget" {
+					flowcontainer = {
+						direction = vertical
+						ignoreinvisible = yes
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_UN_ROW_MONTHS"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('un_state_mission_months')|0]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_UN_ROW_STRENGTH"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v ×[State.MakeScope.ScriptValue('un_state_mission_strength')|2]#!"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
+								text = "TE_STATE_UN_ROW_PROGRESS"
+							}
+							blockoverride "row_value" {
+								raw_text = "#v [State.MakeScope.ScriptValue('un_state_mission_progress')|0]%#!"
+							}
+						}
+
+						te_state_stat_bar = {
+							blockoverride "bar_indent" {}
+							blockoverride "bar_size" {
+								size = { 160 4 }
+							}
+							blockoverride "bar_value" {
+								value = "[FixedPointToFloat(State.MakeScope.ScriptValue('un_state_mission_progress'))]"
+							}
+							blockoverride "bar_color" {
+								color = { 0.36 0.62 0.86 1.0 }
+							}
+						}
+					}
+				}
+			}
+
 			datamodel = "[State.AccessStateRegion.AccessTraits]"
 
 			item = {

@@ -1,0 +1,67 @@
+﻿# ============================================================================
+# UN MISSIONS — TRIGGERS (redesign phase 6)
+# ============================================================================
+# The figures are in common/script_values/un_mission_values.txt, the writers in
+# common/scripted_effects/un_mission_effects.txt.
+# ============================================================================
+
+# The scoped state already hosts an active mission (one per state at a time).
+# Scope: state
+un_mission_state_occupied = {
+	var:un_msn_here ?= { has_tag = un_msn_active }
+}
+
+# The scoped country hosts an active peacekeeping or stabilisation mission: it
+# is under UN protection, which the war-goal surcharge doubles from Strong
+# (un_teeth_war_goal_surcharge).
+# Scope: country
+un_mission_protected = {
+	has_global_variable_list = un_mission_registry
+	any_in_global_list = {
+		variable = un_mission_registry
+		has_tag = un_msn_active
+		OR = {
+			has_tag = un_msn_peacekeeping
+			has_tag = un_msn_stabilisation
+		}
+		var:un_msn_host ?= PREV
+	}
+}
+
+# The scoped country contributes to an active mission hosted by
+# scope:un_msn_intel_host: its covert networks there grow faster
+# (covert_nets_sync; §7.4).
+# Scope: country (the operator); expects scope:un_msn_intel_host
+un_mission_contributes_in = {
+	has_global_variable_list = un_mission_registry
+	any_in_global_list = {
+		variable = un_mission_registry
+		has_tag = un_msn_active
+		var:un_msn_host ?= scope:un_msn_intel_host
+		is_target_in_variable_list = { name = un_msn_contributors target = PREV }
+	}
+}
+
+# The host has been attacked: it is at war, and not as the initiator of the
+# play that started it.
+# Scope: country (the host)
+un_mission_host_attacked = {
+	is_at_war = yes
+	is_diplomatic_play_initiator = no
+}
+
+# The host is a failed or collapsing state (the docket's collapse test).
+# Scope: country (the host)
+un_mission_host_collapsing = {
+	OR = {
+		has_modifier = failed_state_modifier
+		has_journal_entry = je_state_collapse
+	}
+}
+
+# An aid mission's state has recovered.
+# Scope: state
+un_mission_aid_recovered = {
+	NOT = { has_famine = yes }
+	average_sol >= un_mission_aid_sol_target
+}

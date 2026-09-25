@@ -129,10 +129,18 @@ un_teeth_war_goal_surcharge = {
 		scope:actor = {
 			change_infamy = un_war_surcharge_value
 		}
+		# Under UN protection: the host of an active peacekeeping or
+		# stabilisation mission (phase 6), or a country still carrying the
+		# country-wide peacekeeping modifier of old.
 		if = {
 			limit = {
 				un_tier_at_least_strong = yes
-				target ?= { has_modifier = un_peacekeeping_received_modifier }
+				target ?= {
+					OR = {
+						un_mission_protected = yes
+						has_modifier = un_peacekeeping_received_modifier
+					}
+				}
 			}
 			scope:actor = {
 				change_infamy = un_war_surcharge_value

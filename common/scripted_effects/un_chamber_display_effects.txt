@@ -884,6 +884,7 @@ un_standing_reason_line = {
 	else_if = { limit = { var:un_standing_last_reason = 31 } custom_tooltip_no_bullet = je_un_standing_reason_31 }
 	else_if = { limit = { var:un_standing_last_reason = 32 } custom_tooltip_no_bullet = je_un_standing_reason_32 }
 	else_if = { limit = { var:un_standing_last_reason = 33 } custom_tooltip_no_bullet = je_un_standing_reason_33 }
+	else_if = { limit = { var:un_standing_last_reason = 34 } custom_tooltip_no_bullet = je_un_standing_reason_34 }
 	else = { custom_tooltip_no_bullet = je_un_standing_reason_none }
 }
 
@@ -1710,5 +1711,83 @@ un_chamber_regime_line = {
 	if = {
 		limit = { has_modifier = $MODIFIER$ }
 		custom_tooltip_no_bullet = $LINE$
+	}
+}
+
+# ============================================================================
+# MISSIONS IN THE FIELD (redesign phase 6)
+# ============================================================================
+# The mission register, active missions first and newest first, then the ones
+# that have ended. Read in place from un_mission_registry.
+# Scope: country (the viewer)
+un_chamber_missions_block = {
+	if = {
+		limit = {
+			has_global_variable_list = un_mission_registry
+			any_in_global_list = {
+				variable = un_mission_registry
+				has_tag = un_mission
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_missions_intro
+		ordered_in_global_list = {
+			variable = un_mission_registry
+			limit = { has_tag = un_msn_active }
+			order_by = un_mission_recency_order
+			max = 100
+			un_chamber_mission_entry = yes
+		}
+		ordered_in_global_list = {
+			variable = un_mission_registry
+			limit = { NOT = { has_tag = un_msn_active } }
+			order_by = un_mission_recency_order
+			max = 100
+			un_chamber_mission_entry = yes
+		}
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_missions_none
+	}
+	custom_tooltip_no_bullet = je_un_chamber_missions_help
+}
+
+# One mission: what, where, for whom, how far along, and who serves in it.
+# Scope: mission container
+un_chamber_mission_entry = {
+	var:un_msn_host ?= { save_temporary_scope_as = un_chamber_msn_host }
+	var:un_msn_state ?= { save_temporary_scope_as = un_chamber_msn_state }
+	if = {
+		limit = { has_tag = un_msn_peacekeeping }
+		custom_tooltip_no_bullet = je_un_chamber_mission_peacekeeping
+	}
+	else_if = {
+		limit = { has_tag = un_msn_aid }
+		custom_tooltip_no_bullet = je_un_chamber_mission_aid
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_mission_stabilisation
+	}
+	if = {
+		limit = { has_tag = un_msn_active }
+		custom_tooltip_no_bullet = je_un_chamber_mission_active
+	}
+	else_if = {
+		limit = { has_tag = un_msn_succeeded }
+		custom_tooltip_no_bullet = je_un_chamber_mission_succeeded
+	}
+	else_if = {
+		limit = { has_tag = un_msn_failed }
+		custom_tooltip_no_bullet = je_un_chamber_mission_failed
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_mission_lapsed
+	}
+	if = {
+		limit = { un_lobby_list_has_entries = { LIST = un_msn_contributors } }
+		custom_tooltip_no_bullet = je_un_chamber_mission_contributors
+		every_in_list = {
+			variable = un_msn_contributors
+			custom_tooltip_no_bullet = je_un_chamber_mission_contributor
+		}
 	}
 }

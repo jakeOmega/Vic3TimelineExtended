@@ -572,12 +572,24 @@ covert_nets_sync = {
 			# The UN headquarters (UN redesign phase 5, §7.4): the host's
 			# networks in every UN member grow faster, because every member's
 			# delegation sits in its capital (un_regime_triggers.txt).
+			# ...and a contributor's networks in the host of a UN mission it
+			# serves in (phase 6): accepting help has a price.
+			var:iw_target ?= { save_scope_as = un_msn_intel_host }
 			if = {
 				limit = {
 					scope:iw_net_operator = { un_regime_hq_intelligence_host = yes }
 					var:iw_target ?= { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 				}
 				set_variable = { name = iw_net_un_mult value = un_regime_hq_net_gain_mult }
+			}
+			else_if = {
+				limit = {
+					# The target itself: the scope saved above lingers from an
+					# earlier network in this pass when this one has none.
+					exists = var:iw_target
+					scope:iw_net_operator = { un_mission_contributes_in = yes }
+				}
+				set_variable = { name = iw_net_un_mult value = un_mission_net_gain_mult }
 			}
 			else_if = {
 				limit = { has_variable = iw_net_un_mult }

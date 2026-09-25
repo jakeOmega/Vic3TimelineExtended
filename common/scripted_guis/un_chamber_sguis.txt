@@ -173,6 +173,15 @@ un_chamber_exposure_sgui = {
 	}
 }
 
+# Missions in the field (redesign phase 6): the mission register.
+un_chamber_missions_sgui = {
+	scope = country
+
+	effect = {
+		un_chamber_missions_block = yes
+	}
+}
+
 # Our obligations (redesign phase 5): dues and arrears, the regimes that bind
 # us, and the pressure on our sovereignty.
 un_chamber_obligations_sgui = {

@@ -2042,6 +2042,32 @@ un_war_surcharge_notice = {
 	notification_type = feed
 	color = bad
 }
+# UN missions (redesign phase 6, un_mission_effects.txt): to the host when a
+# mission opens, and to the host and every contributor when it ends.
+un_mission_opened_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+un_mission_succeeded_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+un_mission_failed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+un_mission_lapsed_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	notification_type = feed
+	color = neutral
+}
 # Article 19: two years in arrears on our UN dues have cost us our vote in the
 # General Assembly (to the member itself; redesign phase 5,
 # un_dues_country_monthly_update).

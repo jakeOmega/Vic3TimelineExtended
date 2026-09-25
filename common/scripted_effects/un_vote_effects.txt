@@ -703,6 +703,8 @@ un_vote_apply_resolution_compliance = {
 		}
 		change_variable = { name = un_peacekeeping_contribution_count add = 1 }
 		un_vote_standing_request_contribution = yes
+		# ...and joins the mission the resolution opened (redesign phase 6).
+		un_mission_join_resolution = yes
 	}
 	if = {
 		limit = {
@@ -727,6 +729,8 @@ un_vote_apply_resolution_compliance = {
 		}
 		change_variable = { name = un_aid_contribution_count add = 1 }
 		un_vote_standing_request_contribution = yes
+		# ...and joins the mission the resolution opened (redesign phase 6).
+		un_mission_join_resolution = yes
 	}
 
 	# Power bloc leader providing aid/peacekeeping: gain leverage over the recipient

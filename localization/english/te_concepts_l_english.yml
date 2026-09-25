@@ -2583,3 +2583,6 @@
  ww_war_propaganda_modifier_desc:0 "The government has mobilized the press and media to maintain public support for the war effort."
  ww_wartime_rationing_modifier_desc:0 "Strict rationing has been imposed to ensure the military has the supplies it needs. Civilian consumption suffers."
  youth_mental_health_funding_modifier_desc:0 "Youth mental health services reduce mortality among young people."
+ un_mission_peacekeeping_state_modifier_desc:0 "A UN peacekeeping mission is deployed in this state. Its strength follows the UN's enforcement, its budget and its contributors."
+ un_mission_aid_state_modifier_desc:0 "A UN humanitarian aid mission is working in this state. Its strength follows the UN's enforcement, its budget and its donors."
+ un_mission_stabilisation_state_modifier_desc:0 "A UN stabilisation mission is working in this state to end the collapse. Its strength follows the UN's enforcement, its budget and its contributors."

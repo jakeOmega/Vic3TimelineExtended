@@ -338,6 +338,32 @@ flowcontainer = {
 		}
 	}
 
+	# ---- Missions in the field (redesign phase 6) ----
+	# The mission register: where the UN is, for whom, how far along, and
+	# who serves in each mission. Collapsed by default.
+	un_chamber_section_header = {
+		blockoverride "left_text" {
+			text = "je_un_chamber_missions_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_chamber_missions')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_missions'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('un_chamber_missions')]"
+		}
+	}
+
+	un_chamber_panel = {
+		visible = "[GetVariableSystem.Exists('un_chamber_missions')]"
+
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_missions_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+	}
+
 	# ---- Our obligations (redesign phase 5) ----
 	# What membership asks of us: dues and arrears, the conventions' regimes
 	# that bind us, and the pressure on our sovereignty at home. Collapsed by

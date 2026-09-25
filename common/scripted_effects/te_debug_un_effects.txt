@@ -336,3 +336,26 @@ te_debug_un_offer_loan = {
 	}
 	trigger_event = { id = un_events.35 }
 }
+
+# ---- Redesign phase 6: missions ----
+
+# A UN peacekeeping mission to our most devastated state (or joins the one we
+# have), with the most prestigious other member as its contributor, so the
+# state tile, the register and the monthly progress can be watched at once.
+# Scope: country (the player, a member)
+te_debug_un_open_mission = {
+	save_scope_as = un_msn_host
+	un_mission_join_host = { TYPE = peacekeeping CODE = 1 ORDER = un_docket_devastation_order }
+	if = {
+		limit = { exists = scope:un_msn_new }
+		ordered_country = {
+			limit = {
+				NOT = { this = scope:un_msn_host }
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+			}
+			order_by = un_prestige_order_value
+			max = 1
+			un_mission_add_contributor = yes
+		}
+	}
+}

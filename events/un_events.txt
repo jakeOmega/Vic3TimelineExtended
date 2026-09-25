@@ -553,6 +553,14 @@ un_events.4 = {
 			value = small_radicals
 			strata = upper
 		}
+		# The mission (redesign phase 6): a stabilisation mission in the
+		# collapsing country's most populous state, which we join or open.
+		custom_tooltip = un_mission_stab_joined_tt
+		hidden_effect = {
+			scope:peacekeeping_target = { save_scope_as = un_msn_host }
+			un_mission_join_host = { TYPE = stabilisation CODE = 3 ORDER = un_docket_state_pop_order }
+			un_mission_add_contributor = yes
+		}
 		# Notify the target country
 		save_scope_as = peacekeeping_donor
 		scope:peacekeeping_target = {
@@ -942,24 +950,23 @@ un_events.7 = {
 		create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:crisis_country }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		# GDP-scaled benefit to crisis country: min(giver, receiver) / receiver * 2
-		set_variable = { name = temp_giver_gdp value = gdp }
-		scope:crisis_country = {
-			add_modifier = {
-				name = un_humanitarian_aid_received_modifier
-				multiplier = {
-					value = prev.var:temp_giver_gdp
-					divide = {
-						value = gdp
-						min = 100000
-					}
-					multiply = 2
-					min = 0.5
-					max = 3.0
-				}
-				days = normal_modifier_time
-				is_decaying = yes
+		# The mission (redesign phase 6): aid to the famine state, which we
+		# join or open. It replaces the country-wide received modifier, whose
+		# multiplier read prev.var:temp_giver_gdp and so could not survive the
+		# engine re-reading it (§1.4).
+		custom_tooltip = un_mission_aid_joined_tt
+		hidden_effect = {
+			scope:crisis_country = { save_scope_as = un_msn_host }
+			if = {
+				limit = { exists = scope:crisis_state }
+				scope:crisis_state = { save_scope_as = un_msn_state }
+				un_mission_open = { TYPE = aid CODE = 2 }
 			}
+			if = {
+				limit = { NOT = { exists = scope:un_msn_new } }
+				un_mission_join_host = { TYPE = aid CODE = 2 ORDER = un_mission_sol_need_order }
+			}
+			un_mission_add_contributor = yes
 		}
 		# Notify the crisis country of incoming aid
 		save_scope_as = aid_donor
@@ -991,20 +998,13 @@ un_events.7 = {
 		un_ledger_actor_entry = { PILLAR = delivery POINTS = 0.5 REASON = 107 }
 		change_relations = { country = scope:crisis_country value = 10 }
 		# GDP-scaled token benefit to crisis country
-		set_variable = { name = temp_giver_gdp value = gdp }
+		# A flat token (redesign phase 6): the old multiplier read
+		# prev.var:temp_giver_gdp, which does not survive the engine
+		# re-reading it (§1.4).
 		scope:crisis_country = {
 			post_notification = un_humanitarian_token_received
 			add_modifier = {
 				name = un_humanitarian_token_received_modifier
-				multiplier = {
-					value = prev.var:temp_giver_gdp
-					divide = {
-						value = gdp
-						min = 100000
-					}
-					min = 0.3
-					max = 1.0
-				}
 				days = normal_modifier_time
 				is_decaying = yes
 			}
@@ -2497,6 +2497,8 @@ un_events.102 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		# Redesign phase 6 (§7.4): accepting help has a price.
+		custom_tooltip = un_mission_host_intel_tt
 		change_relations = { country = scope:peacekeeping_donor value = 10 }
 		add_loyalists = {
 			value = very_small_radicals
@@ -2524,6 +2526,10 @@ un_events.102 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		# Redesign phase 6: resenting the peacekeepers sends them home; the
+		# stabilisation mission fails.
+		custom_tooltip = un_mission_expelled_tt
+		hidden_effect = { un_mission_expel = { TYPE = stabilisation } }
 		change_relations = { country = scope:peacekeeping_donor value = -15 }
 		add_loyalists = {
 			value = small_radicals

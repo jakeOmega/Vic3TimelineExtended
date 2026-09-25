@@ -214,6 +214,18 @@ te_debug_un.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 		te_debug_un_offer_loan = yes
 	}
 
+	# ---- Redesign phase 6 ----
+	# A UN peacekeeping mission comes to our most devastated state, with the
+	# strongest other member serving in it.
+	option = {
+		name = te_debug_un.1.u
+		trigger = {
+			has_global_variable = un_founded
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		te_debug_un_open_mission = yes
+	}
+
 	option = {
 		name = te_debug_un.1.z
 	}

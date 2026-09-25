@@ -1,0 +1,511 @@
+﻿# ============================================================================
+# UN MISSIONS — THE ONLY WRITERS (redesign phase 6)
+# ============================================================================
+# docs/systems/un_redesign_design.md §9; as shipped, §0.6. The figures and the
+# table of mission types are at the top of
+# common/script_values/un_mission_values.txt; the tests are in
+# common/scripted_triggers/un_mission_triggers.txt.
+#
+# A MISSION is a script container, in the mandate pattern:
+#   tags    un_mission, un_msn_<type> (peacekeeping | aid | stabilisation),
+#           un_msn_active, closed as un_msn_succeeded / un_msn_failed /
+#           un_msn_lapsed
+#   vars    un_msn_seq, un_msn_type (1 / 2 / 3), un_msn_host (country),
+#           un_msn_requested (the host asked the Assembly for it: it lapses if
+#           the host leaves the UN),
+#           un_msn_state (state), un_msn_months, un_msn_progress (0-100),
+#           un_msn_strength (this month's), un_msn_start_year, un_msn_end_year
+#   list    un_msn_contributors (countries)
+#   global  un_mission_registry (every mission, capped at
+#           un_mission_registry_cap; active ones are never evicted),
+#           un_mission_seq
+#   state   un_msn_here (the state's active mission), un_msn_power (the
+#           strength its modifier is multiplied by)
+#
+# WHO WRITES WHAT
+#   un_mission_open / un_mission_join_host   the openers (un_vote.2, un_events.4 A,
+#                                             un_events.7 A), and joiners
+#                                             (un_vote_apply_resolution_compliance)
+#   un_missions_monthly_update                every month, from
+#                                             un_global_authority_on_action:
+#                                             months, contributors, strength,
+#                                             progress, outcome
+#   un_mission_state_refresh                  the state's modifier, from the state
+#                                             monthly pulse (un_mission_on_actions.txt):
+#                                             the single refresh site for the three
+#                                             un_mission_*_state_modifier
+#   un_missions_dissolve                      a dissolution closes every mission
+#
+# REASON CODES: ledger 19 (a mission accomplished), 20 (a mission failed);
+# standing 34 (a mission we contributed to accomplished its work).
+# ============================================================================
+
+# ---- Opening and joining ------------------------------------------------------------
+
+# Open a mission of $TYPE$ ($CODE$ 1 peacekeeping, 2 aid, 3 stabilisation) for
+# scope:un_msn_host in scope:un_msn_state, or, if that state already holds an
+# active mission of the same type, take that one. Leaves scope:un_msn_new
+# pointing at the mission (unset if the state holds a mission of another type).
+# Scope: any
+un_mission_open = {
+	if = {
+		limit = {
+			scope:un_msn_state = {
+				var:un_msn_here ?= {
+					has_tag = un_msn_active
+					has_tag = un_msn_$TYPE$
+				}
+			}
+		}
+		scope:un_msn_state = {
+			var:un_msn_here = { save_scope_as = un_msn_new }
+		}
+	}
+	else_if = {
+		limit = {
+			scope:un_msn_state = { NOT = { un_mission_state_occupied = yes } }
+		}
+		if = {
+			limit = { NOT = { has_global_variable = un_mission_seq } }
+			set_global_variable = { name = un_mission_seq value = 0 }
+		}
+		change_global_variable = { name = un_mission_seq add = 1 }
+		create_container = {
+			tags = { un_mission un_msn_$TYPE$ un_msn_active }
+			save_scope_as = un_msn_new
+		}
+		if = {
+			limit = { exists = scope:un_msn_new }
+			scope:un_msn_new = {
+				set_variable = { name = un_msn_seq value = global_var:un_mission_seq }
+				set_variable = { name = un_msn_type value = $CODE$ }
+				set_variable = { name = un_msn_host value = scope:un_msn_host }
+				set_variable = { name = un_msn_state value = scope:un_msn_state }
+				set_variable = { name = un_msn_months value = 0 }
+				set_variable = { name = un_msn_progress value = 0 }
+				set_variable = { name = un_msn_start_year value = te_history_current_year }
+				set_variable = { name = un_msn_strength value = un_mission_strength_value }
+			}
+			scope:un_msn_state = {
+				set_variable = { name = un_msn_here value = scope:un_msn_new }
+			}
+			un_mission_register = yes
+			scope:un_msn_host = { post_notification = un_mission_opened_notice }
+		}
+	}
+}
+
+# Take the host's active mission of $TYPE$ if it has one, or open one in its
+# state chosen by $ORDER$ (a state-scope script value; the highest wins) among
+# those without a mission. Leaves scope:un_msn_new pointing at the mission
+# (unset if every state of the host already holds another kind).
+# Parameters: $TYPE$, $CODE$, $ORDER$
+# Scope: any; expects scope:un_msn_host
+un_mission_join_host = {
+	if = {
+		limit = {
+			has_global_variable_list = un_mission_registry
+			any_in_global_list = {
+				variable = un_mission_registry
+				has_tag = un_msn_active
+				has_tag = un_msn_$TYPE$
+				var:un_msn_host ?= scope:un_msn_host
+			}
+		}
+		random_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				has_tag = un_msn_active
+				has_tag = un_msn_$TYPE$
+				var:un_msn_host ?= scope:un_msn_host
+			}
+			save_scope_as = un_msn_new
+		}
+	}
+	else = {
+		scope:un_msn_host = {
+			ordered_scope_state = {
+				limit = { NOT = { un_mission_state_occupied = yes } }
+				order_by = $ORDER$
+				max = 1
+				save_scope_as = un_msn_state
+			}
+		}
+		if = {
+			limit = { exists = scope:un_msn_state }
+			un_mission_open = { TYPE = $TYPE$ CODE = $CODE$ }
+		}
+	}
+}
+
+# The scoped country joins scope:un_msn_new as a contributor (once), and the
+# mission's strength is re-read at once.
+# Scope: the contributing country; expects scope:un_msn_new
+un_mission_add_contributor = {
+	save_scope_as = un_msn_contributor
+	scope:un_msn_new ?= {
+		if = {
+			limit = {
+				has_tag = un_msn_active
+				NOT = { un_lobby_in_list = { LIST = un_msn_contributors COUNTRY = scope:un_msn_contributor } }
+			}
+			add_to_variable_list = { name = un_msn_contributors target = scope:un_msn_contributor }
+			set_variable = { name = un_msn_strength value = un_mission_strength_value }
+		}
+	}
+}
+
+# A member pledging to a carried aid or peacekeeping request joins the mission
+# the resolution opened (un_res_mission), if it opened one.
+# Scope: the pledging country; expects scope:un_resolution
+un_mission_join_resolution = {
+	scope:un_resolution ?= {
+		var:un_res_mission ?= { save_scope_as = un_msn_new }
+	}
+	if = {
+		limit = { scope:un_msn_new ?= { has_tag = un_msn_active } }
+		custom_tooltip = un_mission_joined_tt
+		hidden_effect = { un_mission_add_contributor = yes }
+	}
+}
+
+# The host sends the mission home: its active mission of $TYPE$ fails.
+# Scope: the host country
+un_mission_expel = {
+	save_scope_as = un_msn_expeller
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = {
+				has_tag = un_msn_active
+				has_tag = un_msn_$TYPE$
+				var:un_msn_host ?= scope:un_msn_expeller
+			}
+			un_mission_close = { STATUS = failed }
+		}
+	}
+}
+
+# File a new mission in the register; past the cap, destroy the oldest closed
+# one. Active missions are never evicted.
+# Scope: any; expects scope:un_msn_new
+un_mission_register = {
+	add_to_global_variable_list = { name = un_mission_registry target = scope:un_msn_new }
+	if = {
+		limit = {
+			# N is un_mission_registry_cap + 1 (the cap is 12).
+			any_in_global_list = { variable = un_mission_registry count >= 13 has_tag = un_mission }
+			any_in_global_list = {
+				variable = un_mission_registry
+				NOT = { has_tag = un_msn_active }
+			}
+		}
+		ordered_in_global_list = {
+			variable = un_mission_registry
+			position = 0
+			limit = { NOT = { has_tag = un_msn_active } }
+			order_by = un_mission_age_order
+			save_scope_as = un_msn_evicted
+		}
+		remove_list_global_variable = { name = un_mission_registry target = scope:un_msn_evicted }
+		scope:un_msn_evicted = { destroy_container = yes }
+	}
+}
+
+# ---- Monthly ---------------------------------------------------------------------------
+
+# Global monthly upkeep (no-country scope; from un_global_authority_on_action,
+# UN founded). NOT IDEMPOTENT WITHIN A MONTH: the months and progress advance.
+un_missions_monthly_update = {
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { has_tag = un_msn_active }
+			un_mission_monthly = yes
+		}
+	}
+}
+
+# One active mission's month: the contributors still in it, its strength, its
+# progress, and its outcome.
+# Scope: mission container
+un_mission_monthly = {
+	save_scope_as = un_msn_this
+	change_variable = { name = un_msn_months add = 1 }
+	var:un_msn_host ?= { save_scope_as = un_msn_host_now }
+	un_mission_prune_contributors = yes
+	set_variable = { name = un_msn_strength value = un_mission_strength_value }
+	if = {
+		# The host is gone or no longer holds the state, or it asked the
+		# Assembly for the mission and has since left the UN: the mission has
+		# nothing left to do. (A mission sent to a collapse or a famine the
+		# docket took up may serve a country outside the UN.)
+		limit = {
+			OR = {
+				# The variable itself, not the saved scope: a scope saved for
+				# an earlier mission in this sweep would still exist.
+				NOT = { exists = var:un_msn_host }
+				NOT = { var:un_msn_state ?= { owner ?= scope:un_msn_host_now } }
+				AND = {
+					has_variable = un_msn_requested
+					scope:un_msn_host_now = {
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					}
+				}
+			}
+		}
+		un_mission_close = { STATUS = lapsed }
+	}
+	else_if = {
+		# The host has been attacked, or (peacekeeping and stabilisation)
+		# every contributor has gone home.
+		limit = {
+			OR = {
+				scope:un_msn_host_now = { un_mission_host_attacked = yes }
+				AND = {
+					NOT = { has_tag = un_msn_aid }
+					NOT = { un_lobby_list_has_entries = { LIST = un_msn_contributors } }
+				}
+			}
+		}
+		un_mission_close = { STATUS = failed }
+	}
+	else = {
+		if = {
+			limit = { has_tag = un_msn_peacekeeping }
+			if = {
+				limit = { scope:un_msn_host_now = { is_at_war = no } }
+				change_variable = { name = un_msn_progress add = un_mission_pk_progress }
+			}
+		}
+		else_if = {
+			limit = { has_tag = un_msn_stabilisation }
+			if = {
+				limit = { scope:un_msn_host_now = { un_mission_host_collapsing = yes } }
+				change_variable = { name = un_msn_progress add = un_mission_stab_progress_collapsing }
+			}
+			else = {
+				change_variable = { name = un_msn_progress add = un_mission_stab_progress_recovered }
+			}
+		}
+		else_if = {
+			limit = { has_tag = un_msn_aid }
+			set_variable = { name = un_msn_progress value = un_mission_aid_progress_value }
+			if = {
+				limit = {
+					var:un_msn_months >= un_mission_aid_min_months
+					var:un_msn_state ?= { un_mission_aid_recovered = yes }
+				}
+				set_variable = { name = un_msn_progress value = 100 }
+			}
+		}
+		if = {
+			limit = { var:un_msn_progress >= 100 }
+			un_mission_close = { STATUS = succeeded }
+		}
+		else_if = {
+			limit = { var:un_msn_months >= un_mission_max_months }
+			un_mission_close = { STATUS = lapsed }
+		}
+	}
+}
+
+# Drop the contributors that have gone: annexed, or out of the UN. The list is
+# rebuilt rather than edited while it is iterated.
+# Scope: mission container (saved as scope:un_msn_this)
+un_mission_prune_contributors = {
+	if = {
+		limit = { has_variable_list = un_msn_contributors }
+		every_in_list = {
+			variable = un_msn_contributors
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			scope:un_msn_this = {
+				add_to_variable_list = { name = un_msn_contributors_next target = PREV }
+			}
+		}
+		clear_variable_list = un_msn_contributors
+		if = {
+			limit = { has_variable_list = un_msn_contributors_next }
+			every_in_list = {
+				variable = un_msn_contributors_next
+				scope:un_msn_this = {
+					add_to_variable_list = { name = un_msn_contributors target = PREV }
+				}
+			}
+			clear_variable_list = un_msn_contributors_next
+		}
+	}
+}
+
+# ---- Closing ---------------------------------------------------------------------------
+
+# Close the mission as $STATUS$ (succeeded | failed | lapsed). The state's
+# marker goes now; its modifier goes at the state's next monthly pulse
+# (un_mission_state_refresh, the single refresh site).
+# Scope: mission container
+un_mission_close = {
+	save_scope_as = un_msn_closing
+	remove_tag = un_msn_active
+	add_tag = un_msn_$STATUS$
+	set_variable = { name = un_msn_end_year value = te_history_current_year }
+	var:un_msn_state ?= {
+		if = {
+			limit = { var:un_msn_here ?= scope:un_msn_closing }
+			remove_variable = un_msn_here
+		}
+	}
+	un_mission_outcome_$STATUS$ = yes
+}
+
+# Success: the UN delivered. A delivery entry, standing and the host's thanks
+# for every contributor, and word to all of them.
+# Scope: mission container
+un_mission_outcome_succeeded = {
+	un_ledger_entry = { PILLAR = delivery POINTS = un_mission_success_delivery REASON = 19 }
+	var:un_msn_host ?= {
+		save_scope_as = un_msn_host_done
+		post_notification = un_mission_succeeded_notice
+	}
+	if = {
+		limit = { has_variable_list = un_msn_contributors }
+		every_in_list = {
+			variable = un_msn_contributors
+			un_standing_gain = { AMOUNT = un_mission_success_standing REASON = 34 }
+			if = {
+				limit = { exists = scope:un_msn_host_done }
+				change_relations = { country = scope:un_msn_host_done value = 15 }
+			}
+			post_notification = un_mission_succeeded_notice
+		}
+	}
+}
+
+# Failure: the Assembly promised and did not deliver.
+# Scope: mission container
+un_mission_outcome_failed = {
+	un_ledger_entry = { PILLAR = credibility POINTS = un_mission_failure_credibility REASON = 20 }
+	var:un_msn_host ?= { post_notification = un_mission_failed_notice }
+	if = {
+		limit = { has_variable_list = un_msn_contributors }
+		every_in_list = {
+			variable = un_msn_contributors
+			post_notification = un_mission_failed_notice
+		}
+	}
+}
+
+# Lapsed: the mission ran out its time, or had nothing left to do. No entry.
+# Scope: mission container
+un_mission_outcome_lapsed = {
+	var:un_msn_host ?= { post_notification = un_mission_lapsed_notice }
+}
+
+# A dissolution ends every mission, without entries: there is no Assembly
+# left to credit or blame.
+# Scope: any
+un_missions_dissolve = {
+	if = {
+		limit = { has_global_variable_list = un_mission_registry }
+		every_in_global_list = {
+			variable = un_mission_registry
+			limit = { has_tag = un_msn_active }
+			save_scope_as = un_msn_closing
+			remove_tag = un_msn_active
+			add_tag = un_msn_lapsed
+			set_variable = { name = un_msn_end_year value = te_history_current_year }
+			var:un_msn_state ?= {
+				if = {
+					limit = { var:un_msn_here ?= scope:un_msn_closing }
+					remove_variable = un_msn_here
+				}
+			}
+		}
+	}
+}
+
+# ---- The state -----------------------------------------------------------------------------
+
+# The mission's effect on its state: the type's modifier, multiplied by the
+# mission's strength. Removed once the state holds no active mission.
+# The single refresh site for un_mission_peacekeeping_state_modifier,
+# un_mission_aid_state_modifier and un_mission_stabilisation_state_modifier.
+# The multiplier reads var:un_msn_power on the state, which is removed only
+# after the modifiers are.
+# Scope: state (from on_monthly_pulse_state, un_mission_on_actions.txt)
+un_mission_state_refresh = {
+	if = {
+		limit = { var:un_msn_here ?= { has_tag = un_msn_active } }
+		set_variable = { name = un_msn_power value = var:un_msn_here.var:un_msn_strength }
+		un_mission_state_clear_modifiers = yes
+		if = {
+			limit = { var:un_msn_here = { has_tag = un_msn_peacekeeping } }
+			add_modifier = {
+				name = un_mission_peacekeeping_state_modifier
+				multiplier = var:un_msn_power
+			}
+		}
+		else_if = {
+			limit = { var:un_msn_here = { has_tag = un_msn_aid } }
+			add_modifier = {
+				name = un_mission_aid_state_modifier
+				multiplier = var:un_msn_power
+			}
+		}
+		else_if = {
+			limit = { var:un_msn_here = { has_tag = un_msn_stabilisation } }
+			add_modifier = {
+				name = un_mission_stabilisation_state_modifier
+				multiplier = var:un_msn_power
+			}
+		}
+	}
+	else_if = {
+		limit = {
+			OR = {
+				has_variable = un_msn_here
+				has_variable = un_msn_power
+			}
+		}
+		# The modifiers go before the variable their multiplier reads
+		# (written out here, not through un_mission_state_clear_modifiers, so
+		# modifier_multiplier_var_audit can see the order).
+		if = {
+			limit = { has_modifier = un_mission_peacekeeping_state_modifier }
+			remove_modifier = un_mission_peacekeeping_state_modifier
+		}
+		if = {
+			limit = { has_modifier = un_mission_aid_state_modifier }
+			remove_modifier = un_mission_aid_state_modifier
+		}
+		if = {
+			limit = { has_modifier = un_mission_stabilisation_state_modifier }
+			remove_modifier = un_mission_stabilisation_state_modifier
+		}
+		if = {
+			limit = { has_variable = un_msn_here }
+			remove_variable = un_msn_here
+		}
+		if = {
+			limit = { has_variable = un_msn_power }
+			remove_variable = un_msn_power
+		}
+	}
+}
+
+# Scope: state
+un_mission_state_clear_modifiers = {
+	if = {
+		limit = { has_modifier = un_mission_peacekeeping_state_modifier }
+		remove_modifier = un_mission_peacekeeping_state_modifier
+	}
+	if = {
+		limit = { has_modifier = un_mission_aid_state_modifier }
+		remove_modifier = un_mission_aid_state_modifier
+	}
+	if = {
+		limit = { has_modifier = un_mission_stabilisation_state_modifier }
+		remove_modifier = un_mission_stabilisation_state_modifier
+	}
+}

@@ -1,0 +1,208 @@
+﻿# ============================================================================
+# UN MISSIONS — THE FIGURES (redesign phase 6)
+# ============================================================================
+# docs/systems/un_redesign_design.md §9; as shipped, §0.6. The UN happens in
+# places: a mission sits in one state, its effects are that state's, and its
+# outcome is the delivery the Assembly is judged on.
+#
+#   type            opened by                                 succeeds when
+#   1 peacekeeping  a peacekeeping request carried in full     24 months of peace
+#                   (un_vote.2, Established and above)         for the host
+#   2 aid           an aid request carried (un_vote.2); a      the state has no famine
+#                   donor answering a famine (un_events.7 A)   and its SoL recovers
+#   3 stabilisation a power answering a state collapse         the host is no longer a
+#                   (un_events.4 A)                            failed state (then 12
+#                                                              months to wind down)
+#
+# A mission FAILS when its host is attacked (at war and not the war's
+# initiator) or, for peacekeeping and stabilisation, when every contributor
+# has gone. It LAPSES after un_mission_max_months. Success is a delivery entry
+# and standing for the contributors; failure is a credibility debit.
+#
+# STRENGTH. Each month a mission's strength is
+#     E x (1 - 0.5 x the share of the members' GDP withholding dues)
+#       x (0.75 + 0.25 x its contributors, counted up to 3)
+# so a Moribund UN's missions do nothing, withheld dues starve every mission
+# (the budget is what the paying members pay), and a mission with three
+# contributors is half as strong again as one with a single one. The state's
+# modifier is multiplied by it.
+#
+# The writers are in common/scripted_effects/un_mission_effects.txt, the tests
+# in common/scripted_triggers/un_mission_triggers.txt. Every figure is here,
+# once; some are also written in words in the loc; change both.
+#
+# Scope: the strength values are evaluated on the mission container; the
+# ordering values on a state.
+# ============================================================================
+
+# ---- Tuning ----------------------------------------------------------------
+
+# Missions kept in the register, closed ones evicted oldest first. Active
+# missions are never evicted. Also written as the literal 13 (cap + 1) in
+# un_mission_register; change both.
+un_mission_registry_cap = { value = 12 }
+
+# A mission still open after this many months lapses.
+un_mission_max_months = { value = 60 }
+
+# Progress a month, out of 100: peacekeeping over 24 months of peace, a
+# stabilisation over 12 months once the collapse is over (48 while it lasts).
+un_mission_pk_progress = { value = 4.17 }
+un_mission_stab_progress_recovered = { value = 8.34 }
+un_mission_stab_progress_collapsing = { value = 2.09 }
+
+# Aid succeeds once the state has no famine and its average standard of living
+# is at least this, after at least un_mission_aid_min_months.
+un_mission_aid_sol_target = { value = 10 }
+un_mission_aid_min_months = { value = 6 }
+
+# What an outcome is worth. Delivery and credibility are institutional ledger
+# entries; standing goes to each contributor.
+un_mission_success_delivery = { value = 2 }
+un_mission_failure_credibility = { value = -1 }
+un_mission_success_standing = { value = 3 }
+
+# The contributors' covert networks in a mission's host grow this much faster
+# (§7.4): accepting help has a price.
+un_mission_net_gain_mult = { value = 1.25 }
+
+# ---- Strength ------------------------------------------------------------------
+
+# Scope: mission container
+un_mission_contributor_count = {
+	value = 0
+	if = {
+		limit = { has_variable_list = un_msn_contributors }
+		every_in_list = {
+			variable = un_msn_contributors
+			add = 1
+		}
+	}
+}
+
+# Scope: mission container
+un_mission_strength_value = {
+	value = un_mission_contributor_count
+	max = 3
+	multiply = 0.25
+	add = 0.75
+	multiply = un_mission_budget_factor
+	multiply = un_enforcement
+}
+
+# The budget's share of the strength: withheld dues starve every mission.
+# Globals only.
+un_mission_budget_factor = {
+	value = 1
+	if = {
+		limit = { has_global_variable = un_funding_arrears_share }
+		subtract = {
+			value = global_var:un_funding_arrears_share
+			multiply = 0.5
+		}
+	}
+}
+
+# An aid mission's progress, for the display: how far its state's standard of
+# living has come toward the target (99 at most; success is decided by
+# un_mission_aid_recovered). Scope: mission container
+un_mission_aid_progress_value = {
+	value = 0
+	var:un_msn_state ?= { add = average_sol }
+	divide = un_mission_aid_sol_target
+	multiply = 100
+	min = 0
+	max = 99
+}
+
+# ---- Where a mission goes (Scope: state) ---------------------------------------------
+
+# Aid: the state most in need, by standard of living.
+un_mission_sol_need_order = {
+	value = 100
+	subtract = average_sol
+}
+
+# ---- Display ------------------------------------------------------------------------
+
+# Scope: mission container
+un_disp_msn_progress = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_progress }
+		add = var:un_msn_progress
+	}
+}
+
+un_disp_msn_months = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_months }
+		add = var:un_msn_months
+	}
+}
+
+un_disp_msn_strength = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_strength }
+		add = var:un_msn_strength
+	}
+}
+
+# Order key for the register display and eviction: newest first / oldest first.
+# Scope: mission container
+un_mission_recency_order = {
+	value = var:un_msn_seq
+}
+un_mission_age_order = {
+	value = 0
+	subtract = var:un_msn_seq
+}
+
+# ---- The state panel's UN Mission tile (Scope: state) ------------------------------
+# Every value is 0 for a state with no active mission, so the tile can gate on
+# the first and never read a missing variable.
+
+# 0 none, 1 peacekeeping, 2 aid, 3 stabilisation.
+un_state_mission_type = {
+	value = 0
+	if = {
+		limit = { var:un_msn_here ?= { has_tag = un_msn_active } }
+		var:un_msn_here = { add = var:un_msn_type }
+	}
+}
+
+un_state_mission_months = {
+	value = 0
+	if = {
+		limit = { var:un_msn_here ?= { has_tag = un_msn_active } }
+		var:un_msn_here = { add = var:un_msn_months }
+	}
+}
+
+un_state_mission_progress = {
+	value = 0
+	if = {
+		limit = { var:un_msn_here ?= { has_tag = un_msn_active } }
+		var:un_msn_here = { add = var:un_msn_progress }
+	}
+	min = 0
+	max = 100
+}
+
+un_state_mission_strength = {
+	value = 0
+	if = {
+		limit = { var:un_msn_here ?= { has_tag = un_msn_active } }
+		var:un_msn_here = { add = var:un_msn_strength }
+	}
+}
+
+un_state_mission_contributors = {
+	value = 0
+	if = {
+		limit = { var:un_msn_here ?= { has_tag = un_msn_active } }
+		var:un_msn_here = { add = un_mission_contributor_count }
+	}
+}

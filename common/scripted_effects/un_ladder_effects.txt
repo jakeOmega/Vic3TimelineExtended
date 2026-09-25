@@ -329,6 +329,10 @@ un_dissolve = {
 		remove_global_variable = un_vote_active
 	}
 
+	# 4b. Every mission ends (redesign phase 6, un_mission_effects.txt); the
+	#     register is kept as the record, like the mandates'.
+	un_missions_dissolve = yes
+
 	# 5. Every live mandate is voided (un_mandate_close tells the holder).
 	if = {
 		limit = { has_global_variable_list = un_mandate_registry }

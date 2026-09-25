@@ -53,6 +53,7 @@
 #   7     sanctions regime lifted              14    charter reform adopted
 #   15    a UN embargo dropped (busting)       16    a leader surrendered to the court
 #   17    the court's indictment defied        18    an emergency loan delivered
+#   19    a UN mission accomplished            20    a UN mission failed
 #                                              1NN   response to UN event un_events.NN
 # ============================================================================
 

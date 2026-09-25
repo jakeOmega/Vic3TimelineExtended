@@ -1031,15 +1031,32 @@ un_vote.2 = {
 				}
 				custom_tooltip = un_vote_peacekeeping_request_passed_tt
 				un_ledger_entry = { PILLAR = delivery POINTS = 1 REASON = 1 }
-				# Apply scaled peacekeeping benefit to the requesting country
+				# The mission (redesign phase 6, un_mission_effects.txt):
+				# peacekeepers in the requester's most devastated state, with
+				# the members who pledge in un_vote.3 as its contributors. Its
+				# effect is that state's, not the whole country's. If every
+				# state already holds another mission, the country-wide
+				# modifier of old stands in.
 				if = {
 					limit = { exists = scope:un_vote_proposer }
-					scope:un_vote_proposer = {
-						add_modifier = {
-							name = un_peacekeeping_received_modifier
-							multiplier = un_peacekeeping_benefit_scale
-							days = long_modifier_time
-							is_decaying = yes
+					custom_tooltip = un_mission_pk_opened_tt
+					hidden_effect = {
+						scope:un_vote_proposer = { save_scope_as = un_msn_host }
+						un_mission_join_host = { TYPE = peacekeeping CODE = 1 ORDER = un_docket_devastation_order }
+						if = {
+							limit = { exists = scope:un_msn_new }
+							scope:un_resolution = { set_variable = { name = un_res_mission value = scope:un_msn_new } }
+							scope:un_msn_new = { set_variable = un_msn_requested }
+						}
+						else = {
+							scope:un_vote_proposer = {
+								add_modifier = {
+									name = un_peacekeeping_received_modifier
+									multiplier = un_peacekeeping_benefit_scale
+									days = long_modifier_time
+									is_decaying = yes
+								}
+							}
 						}
 					}
 				}
@@ -1101,15 +1118,30 @@ un_vote.2 = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_aid_request } }
 				custom_tooltip = un_vote_aid_request_passed_tt
 				un_ledger_entry = { PILLAR = delivery POINTS = 1 REASON = 1 }
-				# Apply scaled aid benefit to the requesting country
+				# The mission (redesign phase 6): aid to the requester's state
+				# most in need, with the members who pledge in un_vote.3 as its
+				# donors. If every state already holds another mission, the
+				# country-wide modifier of old stands in.
 				if = {
 					limit = { exists = scope:un_vote_proposer }
-					scope:un_vote_proposer = {
-						add_modifier = {
-							name = un_aid_received_modifier
-							multiplier = un_aid_benefit_scale
-							days = long_modifier_time
-							is_decaying = yes
+					custom_tooltip = un_mission_aid_opened_tt
+					hidden_effect = {
+						scope:un_vote_proposer = { save_scope_as = un_msn_host }
+						un_mission_join_host = { TYPE = aid CODE = 2 ORDER = un_mission_sol_need_order }
+						if = {
+							limit = { exists = scope:un_msn_new }
+							scope:un_resolution = { set_variable = { name = un_res_mission value = scope:un_msn_new } }
+							scope:un_msn_new = { set_variable = un_msn_requested }
+						}
+						else = {
+							scope:un_vote_proposer = {
+								add_modifier = {
+									name = un_aid_received_modifier
+									multiplier = un_aid_benefit_scale
+									days = long_modifier_time
+									is_decaying = yes
+								}
+							}
 						}
 					}
 				}
