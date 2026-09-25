@@ -72,9 +72,7 @@ sr_controls_shown = {
 # (it holds the colony modifiers) and while the production method is switched
 # off, and in neither state may funding or approach be touched.
 sr_solar_controls_shown = {
-	has_variable = sr_active_solar_colonization
-	modifier:country_sr_solar_colonization_program_bool = yes
-	NOT = { has_variable = sr_completed_solar_colonization }
+	sr_solar_colonization_running = yes
 }
 
 sr_possible_safe = {
@@ -102,5 +100,87 @@ sr_possible_fund_down = {
 	custom_tooltip = {
 		text = "SR_MIN_FUNDING_NOT_REACHED"
 		var:sr_funding_$MILESTONE$ > 0
+	}
+}
+
+# ---------------------------------------------------------------------------
+# State the space race events read
+# ---------------------------------------------------------------------------
+
+# Solar colonization is actually running: the journal entry is open, its
+# production method is switched on, and colonies remain to claim. The same test
+# as the colonization pulse's own gate — outside it the entry is open but frozen
+# (passive mode, holding the colony modifiers), so an event must not narrate or
+# move its progress. Also the gate of the entry's four controls.
+sr_solar_colonization_running = {
+	has_variable = sr_active_solar_colonization
+	modifier:country_sr_solar_colonization_program_bool = yes
+	NOT = { has_variable = sr_completed_solar_colonization }
+}
+
+# We have really claimed at least one colony (sr_establish_colony_effect counts
+# only real claims). The same test society_technology_events.18 uses.
+sr_has_space_colony = {
+	has_variable = sr_colony_count
+	var:sr_colony_count > 0
+}
+
+# Failure-event themes, keyed on the milestone that failed
+# (scope:sr_setback_<milestone>, saved by the failure dispatchers in
+# common/scripted_effects/space_race_effects.txt).
+sr_setback_is_deep_space_probe = {
+	OR = {
+		exists = scope:sr_setback_probe
+		exists = scope:sr_setback_interstellar_probe
+	}
+}
+
+sr_setback_is_crewed_outpost = {
+	OR = {
+		exists = scope:sr_setback_moon_base
+		exists = scope:sr_setback_mars_landing
+		exists = scope:sr_setback_solar_colonization
+	}
+}
+
+# Scope: a country. It has a space programme of its own: a milestone reached or
+# one under way.
+sr_is_spacefaring = {
+	OR = {
+		has_variable = sr_completed_suborbital
+		has_variable = sr_active_milestone
+	}
+}
+
+# Scope: a foreign country. A space power our relations with have really soured:
+# a rivalry either way (has_diplomatic_pact without is_initiator matches both
+# directions), or relations at cold or worse. space_race_events.26 ("When
+# Politics Reaches Orbit") needs one to name. ROOT is our country.
+sr_is_estranged_space_power = {
+	NOT = { THIS = ROOT }
+	sr_is_spacefaring = yes
+	OR = {
+		has_diplomatic_pact = { who = ROOT type = rivalry }
+		relations:root <= relations_threshold:cold
+	}
+}
+
+# Scope: a foreign country. A United Nations member that has reached orbit — a
+# partner space_race_events.52's joint orbital station could really be built
+# with. ROOT is our country.
+sr_is_station_partner = {
+	NOT = { THIS = ROOT }
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	has_variable = sr_completed_orbital
+}
+
+# Scope: the receiver of space_race_events.20. A milestone notification for
+# $MILESTONE$ is waiting (sr_notify_milestone_achievement adds one entry per
+# completion).
+sr_has_milestone_notice = {
+	has_variable_list = sr_notify_achievers_$MILESTONE$
+	any_in_list = {
+		variable = sr_notify_achievers_$MILESTONE$
+		always = yes
 	}
 }

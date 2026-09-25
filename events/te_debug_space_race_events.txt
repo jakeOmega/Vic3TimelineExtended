@@ -44,6 +44,21 @@ te_debug_space_race.1 = { # REVIEWED 2026-09-18: console-only test event (`event
 		te_debug_sr_force_setback = yes
 	}
 
+	# A real setback event on the most advanced running milestone, through the
+	# themed dispatcher: its theme, and its options' progress loss, should
+	# follow that milestone only.
+	option = {
+		name = te_debug_space_race.1.j
+		trigger = { has_variable = sr_active_milestone }
+		te_debug_sr_fire_setback = yes
+	}
+
+	# Two other powers report the same milestone within the notification delay.
+	option = {
+		name = te_debug_space_race.1.k
+		te_debug_sr_mock_notices = yes
+	}
+
 	# Back to an exposed programme showing a real risk figure.
 	option = {
 		name = te_debug_space_race.1.e

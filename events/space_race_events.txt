@@ -14,7 +14,17 @@ space_race_events.1 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = space_race_events.1.t
-	desc = space_race_events.1.d
+	# The world-first text only for the country that really was first
+	# (sr_was_first_suborbital is set in on_complete before this event fires).
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.1.d
+				trigger = { has_variable = sr_was_first_suborbital }
+			}
+			desc = space_race_events.1.d_later
+		}
+	}
 	flavor = space_race_events.1.f
 
 	duration = 3
@@ -136,8 +146,26 @@ space_race_events.3 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = space_race_events.3.t
-	desc = space_race_events.3.d
-	flavor = space_race_events.3.f
+	# The world-first text only for the country that really was first
+	# (sr_was_first_moon_landing is set in on_complete before this event fires).
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.3.d
+				trigger = { has_variable = sr_was_first_moon_landing }
+			}
+			desc = space_race_events.3.d_later
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.3.f
+				trigger = { has_variable = sr_was_first_moon_landing }
+			}
+			desc = space_race_events.3.f_later
+		}
+	}
 
 	duration = 3
 
@@ -403,7 +431,17 @@ space_race_events.6 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = space_race_events.6.t
-	desc = space_race_events.6.d
+	# The world-first text only for the country that really was first
+	# (sr_was_first_moon_base is set in on_complete before this event fires).
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.6.d
+				trigger = { has_variable = sr_was_first_moon_base }
+			}
+			desc = space_race_events.6.d_later
+		}
+	}
 	flavor = space_race_events.6.f
 
 	duration = 3
@@ -483,8 +521,26 @@ space_race_events.7 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = space_race_events.7.t
-	desc = space_race_events.7.d
-	flavor = space_race_events.7.f
+	# The world-first text only for the country that really was first
+	# (sr_was_first_mars_landing is set in on_complete before this event fires).
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.7.d
+				trigger = { has_variable = sr_was_first_mars_landing }
+			}
+			desc = space_race_events.7.d_later
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.7.f
+				trigger = { has_variable = sr_was_first_mars_landing }
+			}
+			desc = space_race_events.7.f_later
+		}
+	}
 
 	duration = 3
 
@@ -561,7 +617,17 @@ space_race_events.8 = {
 	icon = "gfx/interface/icons/event_icons/event_industry.dds"
 
 	title = space_race_events.8.t
-	desc = space_race_events.8.d
+	# The world-first text only for the country that really was first
+	# (sr_was_first_interstellar_probe is set in on_complete before this event fires).
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.8.d
+				trigger = { has_variable = sr_was_first_interstellar_probe }
+			}
+			desc = space_race_events.8.d_later
+		}
+	}
 	flavor = space_race_events.8.f
 
 	duration = 3
@@ -646,9 +712,11 @@ space_race_events.10 = {
 	option = {
 		name = space_race_events.10.b
 		ai_chance = { base = 3 }
-		# Switch to safe approach
+		# Switch the failed milestone to the safe approach (the same body the
+		# journal-entry button runs), plus a safety review
 		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
 		sr_apply_ambitious_failure_progress_loss = yes
+		sr_switch_setback_milestone_to_safe = yes
 		sr_temporary_safety_review_effect = yes
 		sr_mission_failure_effect = yes
 	}
@@ -662,7 +730,7 @@ space_race_events.10 = {
 		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = large_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals }
 		sr_clear_failed_milestone_flags = yes
@@ -696,7 +764,7 @@ space_race_events.11 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		sr_clear_failed_milestone_flags = yes
 	}
 
@@ -708,7 +776,7 @@ space_race_events.11 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = small_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -763,68 +831,58 @@ space_race_events.20 = {
 
 	duration = 3
 
-	trigger = { }
+	# One queued popup per completion; each takes exactly one pending entry
+	# (sr_notify_milestone_achievement). A popup queued before the per-milestone
+	# lists existed carries none and is dropped here rather than shown blank.
+	trigger = {
+		OR = {
+			sr_has_milestone_notice = { MILESTONE = suborbital }
+			sr_has_milestone_notice = { MILESTONE = orbital }
+			sr_has_milestone_notice = { MILESTONE = moon_landing }
+			sr_has_milestone_notice = { MILESTONE = probe }
+			sr_has_milestone_notice = { MILESTONE = moon_base }
+			sr_has_milestone_notice = { MILESTONE = mars_landing }
+			sr_has_milestone_notice = { MILESTONE = interstellar_probe }
+		}
+	}
 
 	immediate = {
 		create_character = {
 			save_scope_as = flavor_speaker
 			on_created = { place_character_in_void = 6 }
 		}
-		# Load achiever from capital variable (save-reload safe, capital chain works for loc display)
+		# Take ONE pending completion (an else_if chain, so a second completion
+		# waiting in the same 14-day window is left for its own popup). Saves
+		# sr_achiever, sr_milestone_<m>, and sr_is_first / sr_already_achieved.
 		if = {
-			limit = { has_variable = sr_notify_achiever_capital }
-			var:sr_notify_achiever_capital = { owner = { save_scope_as = sr_achiever } }
-			remove_variable = sr_notify_achiever_capital
+			limit = { sr_has_milestone_notice = { MILESTONE = suborbital } }
+			sr_take_milestone_notice_base = { MILESTONE = suborbital }
 		}
-		# Check if world first
-		if = {
-			limit = { has_variable = sr_notify_is_first }
-			save_scope_as = sr_is_first
-			remove_variable = sr_notify_is_first
+		else_if = {
+			limit = { sr_has_milestone_notice = { MILESTONE = orbital } }
+			sr_take_milestone_notice_base = { MILESTONE = orbital }
 		}
-		# Determine milestone type and whether we already achieved it
-		if = {
-			limit = { has_variable = sr_notify_suborbital }
-			save_scope_as = sr_milestone_suborbital
-			if = { limit = { has_variable = sr_completed_suborbital } save_scope_as = sr_already_achieved }
-			remove_variable = sr_notify_suborbital
+		else_if = {
+			limit = { sr_has_milestone_notice = { MILESTONE = moon_landing } }
+			sr_take_milestone_notice_base = { MILESTONE = moon_landing }
 		}
-		if = {
-			limit = { has_variable = sr_notify_orbital }
-			save_scope_as = sr_milestone_orbital
-			if = { limit = { has_variable = sr_completed_orbital } save_scope_as = sr_already_achieved }
-			remove_variable = sr_notify_orbital
+		else_if = {
+			limit = { sr_has_milestone_notice = { MILESTONE = probe } }
+			sr_take_milestone_notice_base = { MILESTONE = probe }
 		}
-		if = {
-			limit = { has_variable = sr_notify_moon_landing }
-			save_scope_as = sr_milestone_moon_landing
-			if = { limit = { has_variable = sr_completed_moon_landing } save_scope_as = sr_already_achieved }
-			remove_variable = sr_notify_moon_landing
+		else_if = {
+			limit = { sr_has_milestone_notice = { MILESTONE = moon_base } }
+			sr_take_milestone_notice_base = { MILESTONE = moon_base }
 		}
-		if = {
-			limit = { has_variable = sr_notify_probe }
-			save_scope_as = sr_milestone_probe
-			if = { limit = { has_variable = sr_completed_probe } save_scope_as = sr_already_achieved }
-			remove_variable = sr_notify_probe
+		else_if = {
+			limit = { sr_has_milestone_notice = { MILESTONE = mars_landing } }
+			sr_take_milestone_notice_base = { MILESTONE = mars_landing }
 		}
-		if = {
-			limit = { has_variable = sr_notify_moon_base }
-			save_scope_as = sr_milestone_moon_base
-			if = { limit = { has_variable = sr_completed_moon_base } save_scope_as = sr_already_achieved }
-			remove_variable = sr_notify_moon_base
+		else_if = {
+			limit = { sr_has_milestone_notice = { MILESTONE = interstellar_probe } }
+			sr_take_milestone_notice_base = { MILESTONE = interstellar_probe }
 		}
-		if = {
-			limit = { has_variable = sr_notify_mars_landing }
-			save_scope_as = sr_milestone_mars_landing
-			if = { limit = { has_variable = sr_completed_mars_landing } save_scope_as = sr_already_achieved }
-			remove_variable = sr_notify_mars_landing
-		}
-		if = {
-			limit = { has_variable = sr_notify_interstellar_probe }
-			save_scope_as = sr_milestone_interstellar_probe
-			if = { limit = { has_variable = sr_completed_interstellar_probe } save_scope_as = sr_already_achieved }
-			remove_variable = sr_notify_interstellar_probe
-		}
+		sr_clear_legacy_milestone_notice = yes
 	}
 
 	option = {
@@ -1187,8 +1245,12 @@ space_race_events.35 = {
 	duration = 3
 	cooldown = { days = long_modifier_time }
 
+	# "Keep the settlements supplied": only once a colony has really been claimed,
+	# and only while the colonization programme is running (not frozen with its
+	# production method switched off).
 	trigger = {
-		has_variable = sr_active_solar_colonization
+		sr_solar_colonization_running = yes
+		sr_has_space_colony = yes
 		var:sr_progress_solar_colonization >= 30
 		NOT = { has_modifier = sr_mission_failure }
 	}
@@ -1770,7 +1832,7 @@ space_race_events.44 = {
 				var:sr_progress_mars_landing >= 15
 			}
 			AND = {
-				has_variable = sr_active_solar_colonization
+				sr_solar_colonization_running = yes
 				var:sr_progress_solar_colonization >= 15
 			}
 		}
@@ -1780,7 +1842,7 @@ space_race_events.44 = {
 			has_variable = sr_active_moon_landing
 			has_variable = sr_active_moon_base
 			has_variable = sr_active_mars_landing
-			has_variable = sr_active_solar_colonization
+			sr_solar_colonization_running = yes
 		}
 	}
 
@@ -1805,7 +1867,7 @@ space_race_events.44 = {
 			change_variable = { name = sr_progress_mars_landing subtract = 3 }
 		}
 		if = {
-			limit = { has_variable = sr_active_solar_colonization }
+			limit = { sr_solar_colonization_running = yes }
 			change_variable = { name = sr_progress_solar_colonization subtract = 3 }
 		}
 	}
@@ -1830,7 +1892,7 @@ space_race_events.44 = {
 					change_variable = { name = sr_progress_mars_landing add = 2 }
 				}
 				if = {
-					limit = { has_variable = sr_active_solar_colonization }
+					limit = { sr_solar_colonization_running = yes }
 					change_variable = { name = sr_progress_solar_colonization add = 2 }
 				}
 				custom_tooltip = {
@@ -1852,7 +1914,7 @@ space_race_events.44 = {
 					change_variable = { name = sr_progress_mars_landing subtract = 8 }
 				}
 				if = {
-					limit = { has_variable = sr_active_solar_colonization }
+					limit = { sr_solar_colonization_running = yes }
 					change_variable = { name = sr_progress_solar_colonization subtract = 8 }
 				}
 				add_radicals = { value = small_radicals pop_type = academics }
@@ -2118,7 +2180,7 @@ space_race_events.48 = {
 	trigger = {
 		OR = {
 			has_variable = sr_active_mars_landing
-			has_variable = sr_active_solar_colonization
+			sr_solar_colonization_running = yes
 		}
 		OR = {
 			AND = {
@@ -2126,7 +2188,7 @@ space_race_events.48 = {
 				var:sr_progress_mars_landing >= 30
 			}
 			AND = {
-				has_variable = sr_active_solar_colonization
+				sr_solar_colonization_running = yes
 				var:sr_progress_solar_colonization >= 30
 			}
 		}
@@ -2146,7 +2208,7 @@ space_race_events.48 = {
 			change_variable = { name = sr_progress_mars_landing add = 4 }
 		}
 		if = {
-			limit = { has_variable = sr_active_solar_colonization }
+			limit = { sr_solar_colonization_running = yes }
 			change_variable = { name = sr_progress_solar_colonization add = 4 }
 		}
 		add_loyalists = { value = medium_radicals pop_type = academics }
@@ -2162,7 +2224,7 @@ space_race_events.48 = {
 			change_variable = { name = sr_progress_mars_landing add = 5 }
 		}
 		if = {
-			limit = { has_variable = sr_active_solar_colonization }
+			limit = { sr_solar_colonization_running = yes }
 			change_variable = { name = sr_progress_solar_colonization add = 5 }
 		}
 		add_loyalists = { value = small_radicals }
@@ -2178,7 +2240,7 @@ space_race_events.48 = {
 			change_variable = { name = sr_progress_mars_landing add = 7 }
 		}
 		if = {
-			limit = { has_variable = sr_active_solar_colonization }
+			limit = { sr_solar_colonization_running = yes }
 			change_variable = { name = sr_progress_solar_colonization add = 7 }
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -2235,7 +2297,7 @@ space_race_events.49 = {
 				var:sr_progress_interstellar_probe >= 20
 			}
 			AND = {
-				has_variable = sr_active_solar_colonization
+				sr_solar_colonization_running = yes
 				var:sr_progress_solar_colonization >= 20
 			}
 		}
@@ -2319,7 +2381,7 @@ space_race_events.50 = {
 				var:sr_progress_interstellar_probe >= 15
 			}
 			AND = {
-				has_variable = sr_active_solar_colonization
+				sr_solar_colonization_running = yes
 				var:sr_progress_solar_colonization >= 15
 			}
 		}
@@ -2457,9 +2519,18 @@ space_race_events.52 = {
 		NOT = { has_variable = sr_completed_moon_landing }
 		NOT = { has_modifier = sr_iss_cooperation }
 		NOT = { has_modifier = sr_iss_independence }
+		# A station needs a partner: another UN member that has reached orbit.
+		any_country = { sr_is_station_partner = yes }
 	}
 
-	immediate = { }
+	# The text names that partner; the proposal is our own space agency's.
+	immediate = {
+		ordered_country = {
+			limit = { sr_is_station_partner = yes }
+			order_by = prestige
+			save_scope_as = sr_station_partner
+		}
+	}
 
 	option = {
 		name = space_race_events.52.a
@@ -2527,7 +2598,7 @@ space_race_events.53 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_variable = sr_active_solar_colonization
+		sr_solar_colonization_running = yes
 		any_scope_building = {
 			is_building_type = building_space_mine
 		}
@@ -2695,7 +2766,7 @@ space_race_events.55 = {
 		OR = {
 			has_variable = sr_active_moon_base
 			has_variable = sr_active_mars_landing
-			has_variable = sr_active_solar_colonization
+			sr_solar_colonization_running = yes
 		}
 		OR = {
 			AND = {
@@ -2707,7 +2778,7 @@ space_race_events.55 = {
 				var:sr_progress_mars_landing >= 30
 			}
 			AND = {
-				has_variable = sr_active_solar_colonization
+				sr_solar_colonization_running = yes
 				var:sr_progress_solar_colonization >= 30
 			}
 		}
@@ -2731,7 +2802,7 @@ space_race_events.55 = {
 			change_variable = { name = sr_progress_mars_landing add = 12 }
 		}
 		if = {
-			limit = { has_variable = sr_active_solar_colonization }
+			limit = { sr_solar_colonization_running = yes }
 			change_variable = { name = sr_progress_solar_colonization add = 12 }
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -2751,7 +2822,7 @@ space_race_events.55 = {
 			change_variable = { name = sr_progress_mars_landing add = 8 }
 		}
 		if = {
-			limit = { has_variable = sr_active_solar_colonization }
+			limit = { sr_solar_colonization_running = yes }
 			change_variable = { name = sr_progress_solar_colonization add = 8 }
 		}
 	}
@@ -2884,7 +2955,7 @@ space_race_events.12 = {
 		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = large_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals }
 		sr_clear_failed_milestone_flags = yes
@@ -2906,17 +2977,10 @@ space_race_events.13 = {
 
 	duration = 3
 
+	# The probe that failed is the one this event reports (scope:sr_setback_*,
+	# saved by sr_fire_ambitious_failure_event). Same gate as its pool entry.
 	trigger = {
-		OR = {
-			AND = {
-				has_journal_entry = je_space_race_probe
-				has_variable = sr_active_probe
-			}
-			AND = {
-				has_journal_entry = je_space_race_interstellar_probe
-				has_variable = sr_active_interstellar_probe
-			}
-		}
+		sr_setback_is_deep_space_probe = yes
 	}
 	immediate = { }
 
@@ -2949,7 +3013,7 @@ space_race_events.13 = {
 		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = medium_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3002,7 +3066,7 @@ space_race_events.14 = {
 		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = large_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3067,9 +3131,10 @@ space_race_events.15 = {
 	option = {
 		name = space_race_events.15.c
 		ai_chance = { base = 3 }
-		# Switch to safe approach: recalibrate everything
+		# Switch the Moon landing to the safe approach: recalibrate everything
 		custom_tooltip = SR_PROGRESS_LOSE_25_PERCENT_TT
 		sr_apply_ambitious_failure_progress_loss = yes
+		sr_switch_setback_milestone_to_safe = yes
 		sr_temporary_safety_review_effect = yes
 		sr_mission_failure_effect = yes
 	}
@@ -3122,7 +3187,7 @@ space_race_events.16 = {
 		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = large_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3165,7 +3230,7 @@ space_race_events.17 = {
 		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_radicals = { value = small_radicals }
 		sr_clear_failed_milestone_flags = yes
@@ -3180,7 +3245,7 @@ space_race_events.17 = {
 		sr_temporary_safety_review_effect = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
 	}
 }
@@ -3223,7 +3288,7 @@ space_race_events.18 = {
 		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_10_TT
 		set_variable = { name = sr_progress_boost value = -10 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = small_radicals strata = lower }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3236,7 +3301,7 @@ space_race_events.18 = {
 		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = small_radicals }
 		sr_clear_failed_milestone_flags = yes
@@ -3292,7 +3357,7 @@ space_race_events.19 = {
 		sr_apply_ambitious_failure_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = large_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3330,7 +3395,7 @@ space_race_events.21 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		sr_clear_failed_milestone_flags = yes
 	}
 
@@ -3342,7 +3407,7 @@ space_race_events.21 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = small_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3355,7 +3420,7 @@ space_race_events.21 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3388,7 +3453,7 @@ space_race_events.22 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		sr_clear_failed_milestone_flags = yes
 	}
 
@@ -3409,7 +3474,7 @@ space_race_events.22 = {
 				# Scrubbed anyway after aborted countdown
 				custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 				set_variable = { name = sr_progress_boost value = -6 }
-				sr_boost_active_milestones = yes
+				sr_boost_setback_milestone = yes
 				add_radicals = { value = small_radicals pop_type = academics }
 				custom_tooltip = {
 					text = "SR_WEATHER_LAUNCH_ABORT_TT"
@@ -3462,7 +3527,7 @@ space_race_events.23 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		sr_clear_failed_milestone_flags = yes
 	}
 
@@ -3474,7 +3539,7 @@ space_race_events.23 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = small_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3487,7 +3552,7 @@ space_race_events.23 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3520,7 +3585,7 @@ space_race_events.24 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_loyalists = { value = small_radicals }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3533,7 +3598,7 @@ space_race_events.24 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_3_TT
 		set_variable = { name = sr_progress_boost value = -3 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = small_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3546,7 +3611,7 @@ space_race_events.24 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_loyalists = { value = medium_radicals }
 		add_radicals = { value = medium_radicals strata = upper }
 		sr_clear_failed_milestone_flags = yes
@@ -3580,7 +3645,7 @@ space_race_events.25 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = small_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3593,7 +3658,7 @@ space_race_events.25 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_10_TT
 		set_variable = { name = sr_progress_boost value = -10 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_loyalists = { value = small_radicals pop_type = academics }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3614,8 +3679,19 @@ space_race_events.26 = {
 
 	duration = 3
 
-	trigger = { }
-	immediate = { }
+	# The text names a real foreign space power our relations with have soured
+	# (a rivalry, or relations at cold or worse). Same gate as its pool entry in
+	# sr_fire_safe_setback_event, so the roll never picks it without one.
+	trigger = {
+		any_country = { sr_is_estranged_space_power = yes }
+	}
+	immediate = {
+		ordered_country = {
+			limit = { sr_is_estranged_space_power = yes }
+			order_by = prestige
+			save_scope_as = sr_estranged_space_power
+		}
+	}
 
 	option = {
 		name = space_race_events.26.a
@@ -3626,7 +3702,7 @@ space_race_events.26 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		sr_clear_failed_milestone_flags = yes
 	}
 
@@ -3638,7 +3714,7 @@ space_race_events.26 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_loyalists = { value = medium_radicals }
 		add_radicals = { value = medium_radicals interest_group = ig:ig_intelligentsia }
 		sr_clear_failed_milestone_flags = yes
@@ -3652,7 +3728,7 @@ space_race_events.26 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		custom_tooltip = {
 			text = SR_OLIVE_BRANCH_RELATIONS_TT
 			every_country = {
@@ -3819,7 +3895,7 @@ space_race_events.72 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
@@ -3840,7 +3916,7 @@ space_race_events.72 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
@@ -3883,7 +3959,7 @@ space_race_events.73 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = medium_radicals pop_type = academics }
 		add_radicals = { value = medium_radicals pop_type = engineers }
 		sr_clear_failed_milestone_flags = yes
@@ -3897,7 +3973,7 @@ space_race_events.73 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_radicals = { value = large_radicals }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -3910,7 +3986,7 @@ space_race_events.73 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
@@ -3960,9 +4036,8 @@ space_race_events.74 = {
 		}
 		add_loyalists = { value = medium_radicals pop_type = engineers }
 		add_loyalists = { value = medium_radicals pop_type = academics }
-		# Drawn from the failure pool, which has just set sr_failed_<milestone>.
-		# Every sibling clears it in each option: the progress-loss and
-		# safety-review helpers act on any milestone whose flag is still set.
+		# Drawn from the failure pool, which has just set sr_failed_<milestone>
+		# for the milestone this event reports; clear it, as every sibling does.
 		sr_clear_failed_milestone_flags = yes
 	}
 
@@ -4013,7 +4088,7 @@ space_race_events.75 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_6_TT
 		set_variable = { name = sr_progress_boost value = -6 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
@@ -4034,7 +4109,7 @@ space_race_events.75 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_4_TT
 		set_variable = { name = sr_progress_boost value = -4 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		random_scope_state = {
 			limit = {
 				any_scope_building = { is_building_type = building_space_program }
@@ -4055,7 +4130,7 @@ space_race_events.75 = {
 		sr_apply_safe_setback_progress_loss = yes
 		custom_tooltip = SR_PROGRESS_SUBTRACT_8_TT
 		set_variable = { name = sr_progress_boost value = -8 }
-		sr_boost_active_milestones = yes
+		sr_boost_setback_milestone = yes
 		add_loyalists = { value = small_radicals pop_type = engineers }
 		sr_clear_failed_milestone_flags = yes
 	}
@@ -4066,7 +4141,12 @@ space_race_events.75 = {
 ##############################################
 
 # Event 76: Space Program Cancelled
-# Fires when a JE fails due to losing the space program PM
+# One report per change to the launch complex, however many milestones it
+# closed: the journal entries' on_fail blocks record their milestone and queue
+# this once (sr_report_program_loss). The text follows what actually happened,
+# read at fire time: the complex is gone (lost with its state, or demolished —
+# not a choice this event may pin on us), or it still stands but now runs a
+# production method too small for those milestones (a refit, which is a choice).
 space_race_events.76 = {
 	type = country_event
 	placement = root
@@ -4075,19 +4155,66 @@ space_race_events.76 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
-	title = space_race_events.76.t
-	desc = space_race_events.76.d
-	flavor = space_race_events.76.f
+	title = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.76.t
+				trigger = { exists = scope:sr_program_refitted }
+			}
+			desc = space_race_events.76.t_lost
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.76.d
+				trigger = { exists = scope:sr_program_refitted }
+			}
+			desc = space_race_events.76.d_lost
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				desc = space_race_events.76.f
+				trigger = { exists = scope:sr_program_refitted }
+			}
+			desc = space_race_events.76.f_lost
+		}
+	}
 
 	duration = 3
 
 	trigger = { }
-	immediate = { }
+	immediate = {
+		sr_take_program_losses = yes
+		if = {
+			limit = { sr_has_space_program = yes }
+			save_scope_as = sr_program_refitted
+		}
+	}
 
 	option = {
-		name = space_race_events.76.a
+		name = {
+			trigger = { exists = scope:sr_program_refitted }
+			text = space_race_events.76.a
+		}
+		name = {
+			trigger = { NOT = { exists = scope:sr_program_refitted } }
+			text = space_race_events.76.a_lost
+		}
 		default_option = yes
 		ai_chance = { base = 5 }
+		# Which programmes closed. Their journal entries' on_fail already reset
+		# the progress; this only names them.
+		if = { limit = { exists = scope:sr_program_lost_suborbital         } custom_tooltip = sr_program_lost_suborbital_tt         }
+		if = { limit = { exists = scope:sr_program_lost_orbital            } custom_tooltip = sr_program_lost_orbital_tt            }
+		if = { limit = { exists = scope:sr_program_lost_moon_landing       } custom_tooltip = sr_program_lost_moon_landing_tt       }
+		if = { limit = { exists = scope:sr_program_lost_probe              } custom_tooltip = sr_program_lost_probe_tt              }
+		if = { limit = { exists = scope:sr_program_lost_moon_base          } custom_tooltip = sr_program_lost_moon_base_tt          }
+		if = { limit = { exists = scope:sr_program_lost_mars_landing       } custom_tooltip = sr_program_lost_mars_landing_tt       }
+		if = { limit = { exists = scope:sr_program_lost_interstellar_probe } custom_tooltip = sr_program_lost_interstellar_probe_tt }
+		if = { limit = { exists = scope:sr_program_lost_solar_colonization } custom_tooltip = sr_program_lost_solar_colonization_tt }
 	}
 }
 
