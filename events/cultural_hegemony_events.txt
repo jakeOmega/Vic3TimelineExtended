@@ -26,7 +26,7 @@ cultural_hegemony.1 = {
 		has_variable = ch_total
 		var:ch_total >= 10
 		has_technology_researched = mass_media
-		NOT = { has_modifier = ch_cultural_renaissance }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_renaissance } }
 	}
 
 	immediate = {
@@ -242,8 +242,8 @@ cultural_hegemony.3 = {
 		has_variable = ch_total
 		var:ch_total >= 20
 		has_technology_researched = mass_media
-		NOT = { has_modifier = ch_media_dominance }
-		NOT = { has_modifier = ch_media_freedom }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_media_dominance } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_media_freedom } }
 	}
 
 	immediate = {
@@ -429,8 +429,8 @@ cultural_hegemony.5 = {
 		has_variable = ch_total
 		var:ch_total >= 8
 		has_technology_researched = mass_media
-		NOT = { has_modifier = ch_soft_power_dividend }
-		NOT = { has_modifier = ch_cultural_investment }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_soft_power_dividend } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_investment } }
 	}
 
 	immediate = {
@@ -1007,8 +1007,8 @@ cultural_hegemony.10 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 10
-		NOT = { has_modifier = ch_touring_exhibition }
-		NOT = { has_modifier = ch_art_commercialization }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_touring_exhibition } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_art_commercialization } }
 	}
 
 	immediate = {
@@ -1084,8 +1084,8 @@ cultural_hegemony.11 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 8
-		NOT = { has_modifier = ch_tourism_infrastructure }
-		NOT = { has_modifier = ch_tourism_exploitation }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_tourism_infrastructure } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_tourism_exploitation } }
 	}
 
 	immediate = {
@@ -1162,8 +1162,8 @@ cultural_hegemony.12 = {
 		has_variable = ch_total
 		var:ch_total >= 12
 		has_technology_researched = mass_media
-		NOT = { has_modifier = ch_international_university }
-		NOT = { has_modifier = ch_domestic_university_focus }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_international_university } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_domestic_university_focus } }
 	}
 
 	immediate = {
@@ -1237,8 +1237,8 @@ cultural_hegemony.13 = {
 		has_variable = ch_total
 		var:ch_total >= 20
 		has_technology_researched = mass_media
-		NOT = { has_modifier = ch_language_academies }
-		NOT = { has_modifier = ch_natural_lingua_franca }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_language_academies } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_natural_lingua_franca } }
 	}
 
 	immediate = {
@@ -1647,8 +1647,8 @@ cultural_hegemony.16 = {
 		exists = global_var:ch_rank_1
 		NOT = { this = global_var:ch_rank_1 }
 		NOT = { enacting_any_law = yes }
-		NOT = { has_modifier = ch_hegemonic_law_adopted }
-		NOT = { has_modifier = ch_hegemonic_law_resistance }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_hegemonic_law_adopted } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_hegemonic_law_resistance } }
 		# At least one culturally exportable law group has a mismatch with the hegemon
 		global_var:ch_rank_1 = {
 			any_active_law = {
