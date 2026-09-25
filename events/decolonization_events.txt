@@ -2474,7 +2474,11 @@ decolonization_events.19 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 		add_radicals = { value = large_radicals pop_type = academics }
-		# Trigger GP response event for all other great powers
+		# Trigger GP response event for all other great powers. The two saved
+		# scopes travel with the trigger_event, so .20 names the real
+		# intervener and its real target instead of re-picking them.
+		save_scope_as = intervening_power
+		scope:nationalizing_country = { save_scope_as = intervention_victim }
 		custom_tooltip = {
 			text = GP_MILITARY_INTERVENTION_NOTIFY_TT
 			every_country = {
@@ -2565,30 +2569,18 @@ decolonization_events.20 = {
 
 	duration = 3
 
+	# Fired only by decolonization_events.19 option A, which saves
+	# scope:intervening_power (its ROOT) and scope:intervention_victim (its
+	# scope:nationalizing_country) before the trigger_event. They used to be
+	# re-picked here with random_country, which named whichever power had
+	# intervened anywhere, not necessarily this one.
 	trigger = {
 		has_journal_entry = je_colonial_empire
-		# Always fires when triggered directly by event 19
-		always = yes
+		exists = scope:intervening_power
+		exists = scope:intervention_victim
 	}
 
 	immediate = {
-		# The intervening power is whoever triggered this via event 19
-		# We need to find them
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				country_rank >= rank_value:great_power
-				has_modifier = gp_military_intervention_modifier
-			}
-			save_scope_as = intervening_power
-		}
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				has_modifier = gp_intervention_target_modifier
-			}
-			save_scope_as = intervention_victim
-		}
 	}
 
 	# Option A: Condemn the intervention: demand withdrawal
