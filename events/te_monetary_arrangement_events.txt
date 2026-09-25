@@ -74,8 +74,8 @@ te_lolr.1 = {
 		}
 		scope:te_lolr_ward = {
 			hidden_effect = {
-				set_variable = { name = te_lolr_paid value = te_mon_lolr_honour_cost days = 30 }
-				set_variable = { name = te_lolr_answer value = 1 days = 30 }
+				set_variable = { name = te_lolr_paid value = te_mon_lolr_honour_cost days = 120 }
+				set_variable = { name = te_lolr_answer value = 1 days = 120 }
 			}
 			add_treasury = te_mon_lolr_honour_cost
 			change_relations = {
@@ -152,7 +152,7 @@ te_lolr.1 = {
 				value = -40
 			}
 			hidden_effect = {
-				set_variable = { name = te_lolr_answer value = 2 days = 30 }
+				set_variable = { name = te_lolr_answer value = 2 days = 120 }
 			}
 			hidden_effect = { trigger_event = { id = te_lolr.2 } }
 		}

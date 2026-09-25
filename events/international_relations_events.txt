@@ -798,7 +798,7 @@ international_relations_events.8 = {
 		add_radicals = { value = medium_radicals }
 		custom_tooltip = IR_NUCLEAR_RIVAL_TENSION_TT
 		scope:nuclear_rival = {
-			set_variable = { name = ir_nuclear_standoff_outcome value = 1 days = 30 }
+			set_variable = { name = ir_nuclear_standoff_outcome value = 1 days = 120 }
 			trigger_event = { id = international_relations_events.104 days = 3 }
 		}
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
@@ -823,7 +823,7 @@ international_relations_events.8 = {
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		custom_tooltip = IR_NUCLEAR_RIVAL_RELIEF_TT
 		scope:nuclear_rival = {
-			set_variable = { name = ir_nuclear_standoff_outcome value = 2 days = 30 }
+			set_variable = { name = ir_nuclear_standoff_outcome value = 2 days = 120 }
 			trigger_event = { id = international_relations_events.104 days = 3 }
 		}
 	}
@@ -845,7 +845,7 @@ international_relations_events.8 = {
 		add_radicals = { value = large_radicals }
 		custom_tooltip = IR_NUCLEAR_RIVAL_TERROR_TT
 		scope:nuclear_rival = {
-			set_variable = { name = ir_nuclear_standoff_outcome value = 3 days = 30 }
+			set_variable = { name = ir_nuclear_standoff_outcome value = 3 days = 120 }
 			trigger_event = { id = international_relations_events.104 days = 3 }
 		}
 	}

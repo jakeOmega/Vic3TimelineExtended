@@ -163,7 +163,7 @@ social_tensions_events.2 = {
 		# The sponsor learns its cell was found and how we answered (.18).
 		hidden_effect = {
 			scope:terror_linked_country = {
-				set_variable = { name = te_ea_ir_cell_outcome value = 1 days = 30 }
+				set_variable = { name = te_ea_ir_cell_outcome value = 1 days = 120 }
 				trigger_event = { id = social_tensions_events.18 days = 3 }
 			}
 		}
@@ -188,7 +188,7 @@ social_tensions_events.2 = {
 		}
 		hidden_effect = {
 			scope:terror_linked_country = {
-				set_variable = { name = te_ea_ir_cell_outcome value = 2 days = 30 }
+				set_variable = { name = te_ea_ir_cell_outcome value = 2 days = 120 }
 				trigger_event = { id = social_tensions_events.18 days = 3 }
 			}
 		}
@@ -203,7 +203,7 @@ social_tensions_events.2 = {
 		add_modifier = { name = terror_resilience_modifier days = normal_modifier_time is_decaying = yes }
 		hidden_effect = {
 			scope:terror_linked_country = {
-				set_variable = { name = te_ea_ir_cell_outcome value = 3 days = 30 }
+				set_variable = { name = te_ea_ir_cell_outcome value = 3 days = 120 }
 				trigger_event = { id = social_tensions_events.18 days = 3 }
 			}
 		}

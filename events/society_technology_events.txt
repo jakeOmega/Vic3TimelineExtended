@@ -1312,7 +1312,7 @@ society_technology_events.14 = {
 			# The meddler learns what we found and how we answered (.33).
 			hidden_effect = {
 				scope:interfering_country = {
-					set_variable = { name = te_ea_ir_meddling_outcome value = 1 days = 30 }
+					set_variable = { name = te_ea_ir_meddling_outcome value = 1 days = 120 }
 					trigger_event = { id = society_technology_events.33 days = 3 }
 				}
 			}
@@ -1337,7 +1337,7 @@ society_technology_events.14 = {
 			limit = { exists = scope:interfering_country }
 			hidden_effect = {
 				scope:interfering_country = {
-					set_variable = { name = te_ea_ir_meddling_outcome value = 2 days = 30 }
+					set_variable = { name = te_ea_ir_meddling_outcome value = 2 days = 120 }
 					trigger_event = { id = society_technology_events.33 days = 3 }
 				}
 			}
@@ -1369,7 +1369,7 @@ society_technology_events.14 = {
 			}
 			hidden_effect = {
 				scope:interfering_country = {
-					set_variable = { name = te_ea_ir_meddling_outcome value = 3 days = 30 }
+					set_variable = { name = te_ea_ir_meddling_outcome value = 3 days = 120 }
 					trigger_event = { id = society_technology_events.33 days = 3 }
 				}
 			}
@@ -3069,7 +3069,7 @@ society_technology_events.34 = {
 		custom_tooltip = STE_TELEPATHIC_ACCEPTED_TT
 		hidden_effect = {
 			scope:telepathic_proposer = {
-				set_variable = { name = ste_telepathic_answer value = 1 days = 30 }
+				set_variable = { name = ste_telepathic_answer value = 1 days = 120 }
 				trigger_event = { id = society_technology_events.35 days = 3 }
 			}
 		}
@@ -3083,7 +3083,7 @@ society_technology_events.34 = {
 		custom_tooltip = STE_TELEPATHIC_DECLINED_TT
 		hidden_effect = {
 			scope:telepathic_proposer = {
-				set_variable = { name = ste_telepathic_answer value = 2 days = 30 }
+				set_variable = { name = ste_telepathic_answer value = 2 days = 120 }
 				trigger_event = { id = society_technology_events.35 days = 3 }
 			}
 		}
