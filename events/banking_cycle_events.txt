@@ -5101,7 +5101,25 @@ banking_cycle_events.56 = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
 	title = banking_cycle_events.56.t
-	desc = banking_cycle_events.56.d
+	# No foreign country is involved unless one really is: the foreign-hand
+	# variant needs a live covert infrastructure-sabotage operation against one
+	# of our states (covert_warfare_effects.txt). Otherwise the causes on offer
+	# are domestic — option C's "blame foreign agents" is then a scapegoat we
+	# choose, not a fact the event asserts.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					any_scope_state = { has_modifier = covert_infrastructure_sabotage }
+				}
+				desc = banking_cycle_events.56.d_foreign
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = banking_cycle_events.56.d
+			}
+		}
+	}
 	flavor = banking_cycle_events.56.f
 
 	duration = 3
