@@ -2913,67 +2913,61 @@ irredentism_events_on_action = {
 # ============================================================================
 # IRREDENTIST BLOC APPROVAL — fires Events 5a/5b on bloc leaders when one of
 # their non-leader members would activate the war or peace path but lacks
-# the corresponding approval var. Low fire rate (~1.5%/month combined per
-# eligible non-leader member).
+# the corresponding approval var. Low fire rate (~1.5%/month per eligible
+# non-leader member).
 #
-# 5a: bloc member is a strong irredentist candidate (warlike-tilted) without
-#     war approval. Bloc leader endorses or vetoes.
+# 5a: an AI bloc member whose government is warlike toward a reunification
+#     candidate (irredentist_war_tilt >= 1) asks its leader to bless the war.
+#     A player member asks only when it chooses to, through the
+#     irr_seek_war_blessing diplomatic action; both paths share the triggers
+#     in te_event_agency_irr_triggers.txt. A leader hears at most one AI
+#     request per 5 years (irr_war_blessing_heard, set by irredentism.7).
 # 5b: bloc member has just received an irr_offered_union_modifier (proposed
 #     to via Event 3) without peace approval. Bloc leader blesses or forbids.
 # ============================================================================
 irredentism_bloc_approval_on_action = {
 	effect = {
-		# 5a: warlike client asks bloc leader to bless a war
+		# 5a: warlike AI client asks bloc leader to bless a war
 		if = {
 			limit = {
-				NOT = { is_country_type = decentralized }
-				has_technology_researched = decolonization
-				is_in_power_bloc = yes
-				is_power_bloc_leader = no
-				irredentist_unifier_can_act = yes
-				NOT = { has_modifier = irr_war_vetoed_modifier }
-				# No standing approval for any target
-				NOT = {
-					AND = {
-						has_variable = irredentist_war_approval
-						exists = var:irredentist_war_approval
+				is_ai = yes
+				irr_war_blessing_member = yes
+				irr_war_blessing_requester_ready = yes
+				# Stands in for irredentism.7's old 5-year event cooldown, which
+				# would also have swallowed a player's request.
+				power_bloc ?= {
+					power_bloc_leader ?= {
+						NOT = { has_variable = irr_war_blessing_heard }
 					}
 				}
-				# At least one strong candidate
+				# At least one candidate
 				any_country = {
-					NOT = { THIS = ROOT }
-					NOT = { is_country_type = decentralized }
-					ROOT = {
-						any_primary_culture = { is_primary_culture_of = PREV }
-					}
-					any_scope_state = {
-						is_homeland_of_country_cultures = ROOT
-						has_claim_by = ROOT
-					}
+					irr_war_blessing_target_potential = yes
 				}
 			}
 			random_list = {
 				985 = { } # 98.5% nothing
 				15 = {
-					save_scope_as = irr_requester
 					random_country = {
 						limit = {
-							NOT = { THIS = ROOT }
-							NOT = { is_country_type = decentralized }
+							irr_war_blessing_target_potential = yes
+							# The full target test and the war tilt both read
+							# scope:target_country; bind it to this candidate.
+							save_temporary_scope_as = target_country
 							ROOT = {
-								any_primary_culture = { is_primary_culture_of = PREV }
-							}
-							any_scope_state = {
-								is_homeland_of_country_cultures = ROOT
-								has_claim_by = ROOT
+								irr_war_blessing_target_ok = yes
+								irredentist_war_tilt >= 1
 							}
 						}
 						save_scope_as = target_country
 					}
-					power_bloc ?= {
-						power_bloc_leader ?= {
-							trigger_event = { id = irredentism.7 days = 3 }
+					if = {
+						limit = {
+							exists = scope:target_country
+							irr_war_blessing_target_ok = yes
+							irredentist_war_tilt >= 1
 						}
+						irr_send_war_blessing_request = yes
 					}
 				}
 			}

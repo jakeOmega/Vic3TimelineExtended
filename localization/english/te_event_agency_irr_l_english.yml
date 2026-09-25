@@ -1,0 +1,18 @@
+﻿l_english:
+
+# IRREDENTISM: seeking the bloc leader's blessing for a war of reunification
+# (common/diplomatic_actions/te_event_agency_irr_actions.txt,
+#  common/scripted_triggers/te_event_agency_irr_triggers.txt)
+ irr_seek_war_blessing:0 "Seek Blessing for Reunification"
+ irr_seek_war_blessing_action_name:0 "Seek Blessing for Reunification"
+ irr_seek_war_blessing_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has asked its [Concept('concept_power_bloc_leader', 'bloc leader')] to bless a war to reunify our lands with theirs."
+ irr_seek_war_blessing_action_notification_name:0 "Blessing for Reunification Sought"
+ irr_seek_war_blessing_action_propose_name:0 "Seek Blessing for Reunification"
+ irr_seek_war_blessing_desc:0 "Ask our [Concept('concept_power_bloc_leader', 'bloc leader')] to bless a war to reunify our people with the target country. A [Concept('concept_power_bloc_member', 'bloc member')] that does not lead its [concept_power_bloc] cannot use the reunification [concept_war_goal] without that blessing. If our leader agrees, the blessing lasts #v 5 years#!. If it refuses, our [concept_relations] with it fall, the refusal stirs up radicals at home, and we cannot ask again for #v 5 years#!. Only possible against a country that shares one of our [concept_primary_cultures] and holds a [concept_homeland] state of ours that we [Concept('concept_claim', 'claim')]."
+ irr_seek_war_blessing_effect_tt:0 "Our [Concept('concept_power_bloc_leader', 'bloc leader')] will be asked to bless a war to reunify [SCOPE.sCountry('target_country').GetName] with us. If it agrees, our [concept_power_bloc] will not stand in the way of that war for #v 5 years#!. If it refuses, our [concept_relations] with it fall by #N 10#!, and the refusal stirs up radicals at home for #v 5 years#!, during which we cannot ask again"
+ irr_war_blessing_candidate_tt:0 "[SCOPE.sCountry('target_country').GetName] is a candidate for reunification: it shares one of our [concept_primary_cultures] and holds no [concept_homeland] of a people we do not share, it holds a homeland state of ours that we [Concept('concept_claim', 'claim')] and where our people still live, and it borders us or shares a sea with us"
+ irr_war_blessing_driver_tt:0 "Our government gives the reunification cause a voice: a law such as $law_ethnostate$, $law_national_supremacy$, $law_council_republic$ or $law_multicultural$, or a governing [concept_interest_group] whose leader's ideology takes up the cause"
+ irr_war_blessing_no_standing_approval_tt:0 "We do not already hold our [Concept('concept_power_bloc_leader', 'bloc leader')]'s blessing for a war of reunification"
+ irr_war_blessing_not_historic_unification_tt:0 "[SCOPE.sCountry('target_country').GetName] is not in the midst of a historic unification of its own (German, Italian or Chinese), which follows its own path"
+ irr_war_blessing_not_pending_tt:0 "We are not already awaiting our [Concept('concept_power_bloc_leader', 'bloc leader')]'s answer to such a request"
+ irr_war_blessing_not_vetoed_tt:0 "Our [Concept('concept_power_bloc_leader', 'bloc leader')] has not refused us such a blessing in the last #v 5 years#!"
