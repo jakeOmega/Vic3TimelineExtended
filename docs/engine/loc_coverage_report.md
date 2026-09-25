@@ -14,7 +14,10 @@ entity name itself; for journal entries also `<name>_desc`; for
 events the keys are whatever `title`/`desc`/`flavor`/option `name`
 fields point at; for messages (`common/messages`) the keys are
 `notification_<name>_name` / `_desc` / `_tooltip`, never the bare
-message name.
+message name; for diplomatic actions the `_action_notification_*`
+keys (the `_third_party_*` pair when `should_notify_third_parties =
+yes`, the `_break_*` pairs with a `pact`) or, for
+`requires_approval = yes`, the `_proposal_*` keys.
 
 Suppress an intentional missing key with a same-line comment on the
 entity's opening line:
@@ -61,7 +64,7 @@ entity's opening line:
 
 ## Coverage
 
-- files audited: 151
+- files audited: 172
 - flags by category:
   - Messages: 17
   - Modifiers: 14

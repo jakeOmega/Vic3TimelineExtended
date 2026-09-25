@@ -10,6 +10,27 @@ te_homeland_system_enabled = {
 	owner = { modifier:country_homelands_can_change_bool = yes }
 }
 
+# State scope. Whether a track applies here at all, whatever its thresholds:
+# a primary culture without a homeland here could gain one; a non-primary
+# culture with a homeland here could lose it.
+te_homeland_creation_culture_present = {
+	any_scope_culture = {
+		is_primary_culture_of = ROOT.owner
+		NOT = { has_homeland = ROOT }
+	}
+}
+te_homeland_removal_culture_present = {
+	any_scope_culture = {
+		NOT = { is_primary_culture_of = ROOT.owner }
+		has_homeland = ROOT
+	}
+}
+# State scope. Removal can happen here at all: at the base removal threshold
+# of 0% no culture's share can ever fall below it.
+te_homeland_removal_threshold_open = {
+	modifier:state_homeland_removal_threshold_add > 0
+}
+
 # Culture scope; ROOT = state.
 te_homeland_creation_candidate = {
 	is_primary_culture_of = ROOT.owner
