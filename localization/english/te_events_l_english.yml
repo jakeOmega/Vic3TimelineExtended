@@ -3914,6 +3914,7 @@
  surveillance_events.1.b:0 "Prosecute the traitor"
  surveillance_events.1.c:0 "Suppress the story"
  surveillance_events.1.d:0 "A government insider has leaked classified documents revealing the extent of state surveillance on ordinary citizens. The revelations have sparked outrage among civil liberties advocates and a fierce debate about security versus privacy."
+ surveillance_events.1.d_rogue:0 "A government insider has leaked classified documents revealing a surveillance programme that the security services kept running in open defiance of our data privacy law. Officials sworn to uphold that law quietly went on collecting everything it forbade them to collect. The revelations have sparked outrage among civil liberties advocates and a fierce debate about who, exactly, governs the watchers."
  surveillance_events.1.f:0 "The leaked files filled fourteen boxes. A clerk in the ministry had been copying them for six months before anyone noticed.\n\n\"How did he manage it?\" the inspector asked.\n\n\"He used the photocopier in his department, after hours, three nights a week. He used a paper trolley. He carried the boxes out through the loading dock, where the security cameras had been broken for two years.\"\n\n\"And the cameras?\"\n\n\"Were on the maintenance schedule. The maintenance was outsourced. The contract had been allowed to lapse. The lapsing of the contract was noticed by exactly one person in this building. That person was the clerk.\""
  surveillance_events.1.t:0 "The Whistleblower"
  surveillance_events.100.a:0 "Security is the highest good"
@@ -3935,6 +3936,7 @@
  surveillance_events.3.b:0 "Hunt them down"
  surveillance_events.3.c:0 "Justify massive surveillance expansion"
  surveillance_events.3.d:0 "A sophisticated hacker collective has breached government systems, leaking classified data to the public. The leaked documents reveal the extent of domestic surveillance programs. The hackers claim to be freedom fighters; the state calls them criminals."
+ surveillance_events.3.d_rogue:0 "A sophisticated hacker collective has breached government systems, leaking classified data to the public. Among the leaks is proof of a domestic surveillance programme that the security services kept running in defiance of our data privacy law. The hackers claim to be freedom fighters; the state calls them criminals."
  surveillance_events.3.f:0 "The hackers published everything: surveillance logs, internal memos, the personal browsing history of three senior officials. The public reaction was divided between outrage at the surveillance and amusement at the browsing history."
  surveillance_events.3.t:0 "Hacker Collective Attack"
  surveillance_events.4.a:0 "Deploy predictive policing"
@@ -3947,6 +3949,7 @@
  surveillance_events.5.b:0 "Retaliate with counter-espionage"
  surveillance_events.5.c:0 "Justify domestic surveillance expansion"
  surveillance_events.5.d:0 "Intelligence services have uncovered evidence that a rival power has been conducting systematic cyber-espionage against our government and critical [concept_infrastructure]. The breach is extensive and has compromised sensitive data."
+ surveillance_events.5.d_exposed:0 "The foreign espionage operation our counterintelligence recently exposed was only the part we could see. Tracing its infrastructure, analysts have found that the same service had been conducting systematic cyber-espionage against our government and critical [concept_infrastructure] for far longer than anyone suspected. The breach is extensive and has compromised sensitive data."
  surveillance_events.5.f:0 "The breach was discovered on a Monday. By Thursday, the analysts had mapped its extent. By Friday, they wished they hadn't.\n\n\"How long had they been inside?\" the minister asked.\n\n\"Two years. Possibly three. The earliest indicators of presence predate our current logging system.\"\n\n\"And what did they take?\"\n\n\"Everything they could find. Personnel files. Operational records. The complete schedule of cabinet meetings. They knew when you would be where, and with whom, for the last eighteen months.\"\n\n\"And what did they do with what they took?\"\n\n\"That is the question we cannot answer. The answer is in the consequences of decisions you have already made, and we have no way of unpicking which of those decisions were affected.\""
  surveillance_events.5.t:0 "Foreign Cyber-Espionage"
 
