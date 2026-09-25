@@ -199,7 +199,11 @@ def check_quoted_name(value: str, loc_values: dict[str, str]) -> list[tuple[str,
     `GetRawTextTooltipTag('…')` for the add/remove-modifier tooltip, and the
     apostrophe ends the literal: "Women's Integration" filled debug.log with
     `Expected ','` and the tooltip broke. Vanilla writes `’` (U+2019) in these
-    names; 3 of its ~8,500 modifier and modifier-type names use `'`."""
+    names; 3 of its ~8,500 modifier and modifier-type names use `'`.
+
+    Known limit: data expressions are dropped, not evaluated, so an apostrophe
+    that reaches the name through one (`[GetBuildingType('x').GetName]` naming
+    "Workers' Cooperative") is missed."""
     if "'" not in _rendered_text(value, loc_values):
         return []
     return [(
