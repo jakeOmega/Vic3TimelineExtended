@@ -195,7 +195,12 @@ banking_cycle_random_event_effect = {
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 10: Sovereign Debt Scare (stagnation/downturn/panic, central_banking)
+			# Only with a debt the markets price (scaled_debt > 0.25, where the
+			# debt-load premium starts) and not already in default — it used to
+			# reach debt-free countries (#428). All three variants: each ends in
+			# the same partial-default option.
 			0 = {
+				trigger = { banking_sovereign_debt_is_priced = yes }
 				modifier = {
 					if = {
 						limit = {
@@ -319,7 +324,21 @@ banking_cycle_random_event_effect = {
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 16: CB Independence Debate (stable+, keynesian_economics, not unregulated banking)
+			# The market event (.16) has a governor push back on the government,
+			# so it needs a central bank whose rate the government has handed
+			# over (banking_cbi_debate_has_governor: under the full system a
+			# delegated or independent dial, under the simplified rule a national
+			# bank). The planned (.116) and cooperative (.166) variants are a
+			# bureau-vs-secretariat and a council dispute, not a governor's, and
+			# keep their old reach (#428).
 			0 = {
+				trigger = {
+					OR = {
+						banking_is_command_economy = yes
+						banking_is_cooperative_economy = yes
+						banking_cbi_debate_has_governor = yes
+					}
+				}
 				modifier = {
 					if = {
 						limit = {
@@ -635,8 +654,16 @@ banking_cycle_random_event_effect = {
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 31: Bank Holiday Proposal (downturn/panic, central_banking)
+			# The prompt for the dashboard's cb_bank_holiday, which option A
+			# enacts: offered only while that button could be pressed (not
+			# running, not on its five-year cooldown, a downturn or panic, the
+			# two points it holds). It used to grant a bespoke modifier beside
+			# a running or cooling-down holiday (#428).
 			0 = {
-				trigger = { banking_is_market_economy = yes }
+				trigger = {
+					banking_is_market_economy = yes
+					banking_can_enact_cb_bank_holiday = yes
+				}
 				modifier = {
 					if = {
 						limit = {
@@ -688,8 +715,14 @@ banking_cycle_random_event_effect = {
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 34: Deposit Insurance Debate (stagnation+, central_banking)
+			# Not while a deposit guarantee is already in force — the dashboard's
+			# Expanded Deposit Guarantee, a bloc banking union's, or the scheme a
+			# previous debate set up (#428).
 			0 = {
-				trigger = { banking_is_market_economy = yes }
+				trigger = {
+					banking_is_market_economy = yes
+					NOT = { banking_deposit_guarantee_in_force = yes }
+				}
 				modifier = {
 					if = {
 						limit = {
@@ -792,8 +825,16 @@ banking_cycle_random_event_effect = {
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 39: Quantitative Easing Debate (downturn/panic, keynesian_economics, requires fiat/digital currency + regulated banking)
+			# Never while open-market operations already run. Under the full
+			# monetary system QE IS that tool — option A enacts it — so the
+			# debate needs its whole gate: a dial at its floor, fiat or digital
+			# money, the points (banking_qe_debate_possible). It used to fire at
+			# any rate and without a national bank (#428).
 			0 = {
-				trigger = { banking_is_market_economy = yes }
+				trigger = {
+					banking_is_market_economy = yes
+					banking_qe_debate_possible = yes
+				}
 				modifier = {
 					if = {
 						limit = {
@@ -1007,16 +1048,33 @@ banking_cycle_random_event_effect = {
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 55: Socialist Fraternal Aid (downturn/panic, keynesian)
+			# Needs the ally it names: another planned economy on good terms
+			# (banking_is_fraternal_aid_donor). It used to cite an "ideological
+			# ally" that need not exist (#428). The ally is picked HERE, where
+			# ROOT is this country, and reaches the event as scope:fraternal_ally
+			# — the .45 bailout precedent below — so the event itself never
+			# reads ROOT (see scripting_best_practices.md, "JE Localization
+			# Scope").
 			0 = {
 				trigger = {
 					has_law = law_type:law_command_economy
 					has_technology_researched = keynesian_economics
+					any_country = { banking_is_fraternal_aid_donor = yes }
 				}
 				modifier = {
 					if = { limit = { banking_cycle_is_downturn = yes } add = 4 }
 					if = { limit = { banking_cycle_is_panic = yes } add = 6 }
 				}
-				trigger_event = { id = banking_cycle_events.55 }
+				# The largest economy that qualifies: the one best placed to lend.
+				ordered_country = {
+					limit = { banking_is_fraternal_aid_donor = yes }
+					order_by = gdp
+					save_scope_as = fraternal_ally
+				}
+				if = {
+					limit = { exists = scope:fraternal_ally }
+					trigger_event = { id = banking_cycle_events.55 }
+				}
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 56: Industrial Sabotage Investigation (expansion+, central_banking)
@@ -1501,6 +1559,13 @@ banking_contagion_crash_check = {
 		limit = { var:contagion_crash > 0 }
 		# History-chart marker on this month's bar (te_history_effects.txt)
 		te_history_record_banking_marker = { MARK = crash_contagion }
+		# This is where a contagion crash is decided, so this is where the
+		# country joins the wave's casualties — every country the wave reaches
+		# carries banking_crisis_wave_hit, only these carry _crashed. The Great
+		# Depression event (minor_events_timelineextended.8) reads it (#428).
+		set_variable = { name = banking_crisis_wave_crashed value = 1 }
+		# Five years of "recent banking failures" (banking_had_recent_crash).
+		set_variable = { name = banking_recent_crash value = 1 days = 1825 }
 		# Crash severity = target's own bubble pressure (scaled as for an origin
 		# crash — banking_crash_severity_scale_value) + boost from origin severity
 		set_variable = {
@@ -1622,22 +1687,36 @@ apply_banking_contagion_effects = {
 
 # Initialize a new crisis wave when an origin crash fires.
 # Clears any previous wave tracking and starts fresh.
+#
+# TWO MARKS, TWO QUESTIONS (#428). banking_crisis_wave_hit: the wave reached
+# this country — its origin, or a target banking_cycle_spread_contagion sent the
+# contagion event (minor_events_timelineextended.7) to. It is the "already hit"
+# dedupe for cascades, and what the UN docket's emergency loan asks
+# (un_docket_loan_candidate, through banking_crisis_wave_reached).
+# banking_crisis_wave_crashed: this country's banks actually crashed — the
+# origin here, a target only in banking_contagion_crash_check. The Great
+# Depression event reads it to tell a casualty from a country that only took a
+# scare. Until #428 _crashed was set on every target before the contagion event
+# decided anything, so a scare read as a crash.
 banking_crisis_wave_init = {
 	# Clear previous wave flags from all countries
 	every_country = {
 		limit = {
 			OR = {
+				has_variable = banking_crisis_wave_hit
 				has_variable = banking_crisis_wave_crashed
 				has_variable = banking_crisis_wave_counted
 			}
 		}
+		if = { limit = { has_variable = banking_crisis_wave_hit } remove_variable = banking_crisis_wave_hit }
 		if = { limit = { has_variable = banking_crisis_wave_crashed } remove_variable = banking_crisis_wave_crashed }
 		if = { limit = { has_variable = banking_crisis_wave_counted } remove_variable = banking_crisis_wave_counted }
 	}
 	# Initialize global wave counter
 	set_global_variable = { name = great_depression_wave_count value = 1 }
 	set_global_variable = { name = great_depression_wave_gdp value = this_country_gdp_value }
-	# Mark this country as part of the wave
+	# Mark this country as part of the wave: reached, and crashed.
+	set_variable = { name = banking_crisis_wave_hit value = 1 }
 	set_variable = { name = banking_crisis_wave_crashed value = 1 }
 }
 
@@ -1853,6 +1932,8 @@ banking_cycle_check_and_execute_crash = {
 
 		# History-chart marker on this month's bar (te_history_effects.txt)
 		te_history_record_banking_marker = { MARK = crash }
+		# Five years of "recent banking failures" (banking_had_recent_crash).
+		set_variable = { name = banking_recent_crash value = 1 days = 1825 }
 
 		# Severity scales with bubble pressure (random multiplier 0.5–2.0).
 		# Seeded from banking_crash_severity_scale_value x bubble, not bubble
@@ -1907,7 +1988,7 @@ banking_cycle_spread_contagion = {
 			limit = {
 				NOT = { THIS = scope:banking_crash_origin_country }
 				# Already hit by this crisis wave? Skip (prevents double-hits during cascades)
-				NOT = { has_variable = banking_crisis_wave_crashed }
+				NOT = { banking_crisis_wave_reached = yes }
 				has_journal_entry = je_banking_cycle
 				# Trade-reachable
 				OR = {
@@ -2041,8 +2122,10 @@ banking_cycle_spread_contagion = {
 				}
 
 				# Mark target immediately so cascading spreads from other countries
-				# in this wave cannot hit the same country twice
-				set_variable = { name = banking_crisis_wave_crashed value = 1 }
+				# in this wave cannot hit the same country twice. Reached, not
+				# crashed: whether it crashes is the contagion event's to decide
+				# (banking_contagion_crash_check sets _crashed).
+				set_variable = { name = banking_crisis_wave_hit value = 1 }
 
 				trigger_event = { id = minor_events_timelineextended.7 popup = yes days = 7 }
 			}

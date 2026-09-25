@@ -794,6 +794,9 @@ minor_events_timelineextended.7 = {
 # wave hits 10+ countries covering 20%+ of world GDP.
 # Mostly notificational with long-lasting momentum penalty.
 # Isolated countries can avoid the worst effects.
+# banking_crisis_wave_crashed marks a country whose banks crashed in the wave;
+# one the wave reached that only took a scare carries banking_crisis_wave_hit
+# alone and reads the bystander text (see banking_crisis_wave_init).
 minor_events_timelineextended.8 = {
 	type = country_event
 	placement = root
@@ -822,6 +825,8 @@ minor_events_timelineextended.8 = {
 				}
 				desc = minor_events_timelineextended.8.d_isolated
 			}
+			# The contagion reached us and our banks held: only a scare (#428).
+			triggered_desc = { trigger = { banking_crisis_wave_reached = yes } desc = minor_events_timelineextended.8.d_scare }
 			triggered_desc = { trigger = { always = yes } desc = minor_events_timelineextended.8.d }
 		}
 	}

@@ -618,3 +618,108 @@ banking_dc_ai_candidate_electrification = {
 	banking_tool_directed_credit_electrification_active = no
 	banking_possible_cb_directed_credit_electrification = yes
 }
+
+# ----------------------------------------------------------------------------
+# Legacy cycle events that must answer to the dashboard (#428)
+# ----------------------------------------------------------------------------
+# banking_cycle_random_event_effect (common/scripted_effects/banking_cycle_effects.txt)
+# draws events that offer a policy the dashboard owns, or narrate monetary
+# state. Each random_list entry asks the triggers below in its `trigger`, so an
+# event can never offer what the dashboard's own button would refuse, nor tell
+# a story the system's state contradicts. Precedent: events 15 and 58, which
+# defer to the monetary layer under te_mon_full_system (PR #416).
+
+# banking_cycle_events.31 (the bank holiday). Option A enacts the dashboard's
+# cb_bank_holiday through banking_effect_cb_bank_holiday, so the event is
+# offered only when that button could be pressed: the holiday is not already
+# running (the button's `visible`), and banking_possible_cb_bank_holiday holds
+# whole — a downturn or panic, no five-year cooldown, and the two intervention
+# points. The points line stays in because banking_bank_holiday itself carries
+# country_banking_intervention_max_add = -2: the event cannot enact the tool
+# without holding the points for its 90 days, and a country short of them would
+# be driven below zero and locked out of every other tool until it expired.
+# Option A asks again when it is picked, because the event stays open for months.
+banking_can_enact_cb_bank_holiday = {
+	banking_tool_bank_holiday_active = no
+	banking_possible_cb_bank_holiday = yes
+}
+
+# banking_cycle_events.39 (the quantitative easing debate). Buying bonds with
+# new money is open-market operations, so it never fires while OMO is already
+# running. Under the full monetary system option A enacts cb_open_market_ops,
+# and the debate needs that button's whole gate — fiat or digital money, a
+# national bank with a dial, the policy rate at its floor, the unlock, four
+# points (held by banking_open_market_ops' own modifier) and no law lock. Under
+# the simplified rule there is no dial and no floor; the event keeps its old
+# law and phase gates and its bespoke stimulus.
+banking_qe_debate_possible = {
+	banking_tool_omo_active = no
+	trigger_if = {
+		limit = { te_mon_full_system = yes }
+		banking_possible_cb_open_market_ops = yes
+	}
+}
+
+# banking_cycle_events.34 (the deposit insurance debate). Is a deposit guarantee
+# already in force? The dashboard's Expanded Deposit Guarantee; a power-bloc
+# banking union's common guarantee (tier 4 and up, on the currency's adopters —
+# the te_mon_union_banking_union managed modifier, which only exists under the
+# full monetary system); or the scheme a previous debate set up.
+banking_deposit_guarantee_in_force = {
+	OR = {
+		banking_tool_deposit_active = yes
+		te_mon_mod_has = { NAME = te_mon_union_banking_union }
+		has_modifier = banking_event_deposit_insurance
+	}
+}
+
+# Has this country had a banking crash — its own, or one that contagion brought
+# — in the last five years? banking_recent_crash is a timed variable (1825
+# days), set where each crash is decided: banking_cycle_check_and_execute_crash
+# and banking_contagion_crash_check (banking_cycle_effects.txt). Read by the text
+# of banking_cycle_events.34, which may only say "after recent banking failures"
+# when there were some.
+banking_had_recent_crash = {
+	has_variable = banking_recent_crash
+}
+
+# banking_cycle_events.16 (market branch: the central bank governor pushes back
+# on politicians who want cheaper money). There has to be a central bank whose
+# rate is not the government's to set. Under the full monetary system that is a
+# dial (te_mon_has_dial: a national bank and a regime with a rate) that the
+# government has handed over — delegated from the dashboard, or bound by central
+# bank independence (te_mon_mandate_binds). Under the simplified rule nobody
+# holds a dial, so a national bank is all the event can ask for.
+banking_cbi_debate_has_governor = {
+	has_law_or_variant = law_type:law_national_bank
+	trigger_if = {
+		limit = { te_mon_full_system = yes }
+		te_mon_has_dial = yes
+		te_mon_mandate_binds = yes
+	}
+}
+
+# banking_cycle_events.10 (the sovereign debt scare) and its planned and
+# cooperative variants .110 / .160. Bondholders only take fright at a debt worth
+# pricing: scaled_debt above 0.25 is where the rate stack's debt-load premium
+# starts (te_mon_scaled_debt_premium, monetary_policy_design.md §7.6), under both
+# the full and the simplified rule. A country already in default has no credit
+# left to lose, which is what the scare threatens.
+banking_sovereign_debt_is_priced = {
+	scaled_debt > 0.25
+	in_default = no
+}
+
+# Was this country reached by the current crisis wave — hit by contagion, or the
+# crash that started it? banking_crisis_wave_hit marks every country the wave
+# reached, whether its banks crashed or only took a scare;
+# banking_crisis_wave_crashed marks only the ones that crashed (the Great
+# Depression event, minor_events_timelineextended.8, reads that one). A wave in
+# flight in a save from before the split has only _crashed on every country it
+# reached, so this reads both.
+banking_crisis_wave_reached = {
+	OR = {
+		has_variable = banking_crisis_wave_hit
+		has_variable = banking_crisis_wave_crashed
+	}
+}

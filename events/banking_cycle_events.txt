@@ -1192,6 +1192,14 @@ banking_cycle_events.9 = {
 # 10. Sovereign Debt Scare
 # Fires during stagnation/downturn/panic. Requires central_banking.
 # Government borrowing costs spike as bond market loses confidence.
+#
+# Drawn only with a debt the markets price and no default already declared
+# (banking_sovereign_debt_is_priced: scaled_debt > 0.25, where the rate stack's
+# debt-load premium starts). Option C used to read "Default on some
+# obligations" but no effect can put a country into the engine's default, and
+# the option never touched the debt: it is a THREAT, priced by the markets
+# (banking_event_partial_default's premium and prestige) and felt by the
+# banks (cycle value, bubble). Its text says so now (#428).
 # --------------------------------------------------------------------------
 banking_cycle_events.10 = {
 	type = country_event
@@ -1258,9 +1266,11 @@ banking_cycle_events.10 = {
 		}
 	}
 
-	# Option C: Default on some obligations - drastic
+	# Option C: Threaten a partial default - drastic. Nothing is defaulted on:
+	# no effect enters the engine's default state, and the debt stands.
 	option = {
 		name = banking_cycle_events.10.c
+		custom_tooltip = banking_cycle_events.10.c.tt
 		custom_tooltip = {
 			text = "CYCLE_VALUE_MINUS_10_DESC"
 			change_variable = { name = finance_cycle_value add = -10 }
@@ -1897,6 +1907,21 @@ banking_cycle_events.165 = {
 # 16. Central Bank Independence Debate
 # Fires during stable/expansion+. Requires keynesian_economics.
 # Political pressure to override central bank decisions.
+#
+# A governor can only push back if a central bank holds the rate. The draw asks
+# banking_cbi_debate_has_governor: under the full monetary system a dial the
+# government has handed to the bank (delegated from the dashboard, or bound by
+# central bank independence); under the simplified rule, a national bank (#428).
+# How the options act on the monetary layer (full system only):
+#   A  affirm      — nothing to change: the bank already holds the dial.
+#   B  override    — puts the bank on the Growth mandate, the rule that runs
+#                    looser and ignores inflation below about 4%: what the
+#                    politicians are asking for. te_mon_effect_set_mandate, the
+#                    dashboard's own control, legal under independence too.
+#   C  restructure — no dial write: the monetary layer has no dual mandate, so
+#                    the compromise stays the bespoke banking_event_dual_mandate.
+# An AI's mandate is re-derived every month (te_monetary_update_target), so
+# B's write lasts only for a player — the same rule the dashboard lives by.
 # --------------------------------------------------------------------------
 banking_cycle_events.16 = {
 	type = country_event
@@ -1956,6 +1981,20 @@ banking_cycle_events.16 = {
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_8_DESC"
 			change_variable = { name = bubble_pressure add = 8 }
+		}
+		# The override is a new rule for the bank: the Growth mandate.
+		if = {
+			limit = {
+				te_mon_full_system = yes
+				te_mon_has_dial = yes
+				NOT = {
+					AND = {
+						has_variable = te_mon_mandate
+						var:te_mon_mandate = 2
+					}
+				}
+			}
+			te_mon_effect_set_mandate = { MANDATE = 2 TT = banking_cycle_events.16.b.mandate_tt }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -3433,6 +3472,15 @@ banking_cycle_events.30 = {
 # Fires during downturn/panic. Requires central_banking.
 # Close all banks temporarily to halt a panic.
 # COMPLEX (3 options)
+#
+# The prompt for the dashboard's Bank Holiday (cb_bank_holiday). The draw
+# offers it only while that button could be pressed
+# (banking_can_enact_cb_bank_holiday), and option A enacts the tool itself —
+# banking_effect_cb_bank_holiday: 90 days, the five-year cooldown, the two
+# intervention points the holiday holds, the history marker — rather than a
+# bespoke modifier beside it (#428). banking_event_bank_holiday, which option A
+# used to grant, stays defined for saves that carry it (PENDING REMOVAL in
+# common/scripted_effects/legacy_modifier_cleanup.txt).
 # --------------------------------------------------------------------------
 banking_cycle_events.31 = {
 	type = country_event
@@ -3455,6 +3503,14 @@ banking_cycle_events.31 = {
 	option = {
 		name = banking_cycle_events.31.a
 		default_option = yes
+		# The dashboard tool, asked again: the event stays open for months, and
+		# the holiday may have been declared from the dashboard, or the points
+		# spent, in the meantime. Asked FIRST: the +5 below can lift a late
+		# downturn into stagnation, and the tool is for a downturn or panic.
+		if = {
+			limit = { banking_can_enact_cb_bank_holiday = yes }
+			banking_effect_cb_bank_holiday = yes
+		}
 		custom_tooltip = {
 			text = "CYCLE_VALUE_5_DESC"
 			change_variable = { name = finance_cycle_value add = 5 }
@@ -3462,11 +3518,6 @@ banking_cycle_events.31 = {
 		custom_tooltip = {
 			text = "BUBBLE_PRESSURE_MINUS_10_DESC"
 			change_variable = { name = bubble_pressure add = -10 }
-		}
-		add_modifier = {
-			name = banking_event_bank_holiday
-			days = short_modifier_time
-			is_decaying = yes
 		}
 		add_radicals = {
 			value = small_radicals
@@ -3700,6 +3751,19 @@ banking_cycle_events.33 = {
 # Fires during stagnation+. Requires central_banking.
 # Should the government guarantee ordinary deposits?
 # MIXED, COMPLEX (3 options)
+#
+# Not drawn while a deposit guarantee is already in force
+# (banking_deposit_guarantee_in_force: the dashboard's Expanded Deposit
+# Guarantee, a bloc banking union, or this event's own scheme). "After recent
+# banking failures" only when there were some — a crash in the last five years
+# (banking_had_recent_crash); otherwise the proposal is made in calm (#428).
+#
+# The scheme stays this event's own modifier rather than the dashboard tool:
+# banking_event_deposit_insurance is the founding legislation (central_banking
+# era, a one-off confidence effect that decays over ten years for the full
+# guarantee and five for the limited one), while cb_expand_deposit_guarantee is
+# a crisis-time extension of coverage unlocked with consumer_credit that holds
+# four intervention points for as long as it runs.
 # --------------------------------------------------------------------------
 banking_cycle_events.34 = {
 	type = country_event
@@ -3711,7 +3775,18 @@ banking_cycle_events.34 = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
 	title = banking_cycle_events.34.t
-	desc = banking_cycle_events.34.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { banking_had_recent_crash = yes }
+				desc = banking_cycle_events.34.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = banking_cycle_events.34.d_calm
+			}
+		}
+	}
 	flavor = banking_cycle_events.34.f
 
 	duration = 3
@@ -4113,6 +4188,16 @@ banking_cycle_events.38 = {
 # Fires during downturn/panic. Requires keynesian_economics.
 # The central bank proposes buying government bonds.
 # COMPLEX (3 options)
+#
+# Under the full monetary system quantitative easing IS the dashboard's
+# open-market operations: the draw needs that tool's own gate — a dial at the
+# policy rate's floor, fiat or digital money, the points
+# (banking_qe_debate_possible) — and option A enacts it
+# (banking_effect_cb_open_market_ops), so QE brings the tool's standing bubble
+# push and its inflation pressure rather than a bespoke modifier (#428). Under
+# the simplified rule there is no policy rate to be at the floor of: the event
+# keeps its bespoke stimulus, and its text no longer claims that rates are
+# near zero.
 # --------------------------------------------------------------------------
 banking_cycle_events.39 = {
 	type = country_event
@@ -4124,7 +4209,24 @@ banking_cycle_events.39 = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
 	title = banking_cycle_events.39.t
-	desc = banking_cycle_events.39.d
+	desc = {
+		first_valid = {
+			# No dial and no floor: nothing to say about where the rate stands.
+			triggered_desc = {
+				trigger = { te_mon_full_system = no }
+				desc = banking_cycle_events.39.d_simplified
+			}
+			# Digital money's floor is below zero (te_mon_target_min).
+			triggered_desc = {
+				trigger = { has_law_or_variant = law_type:law_digital_currency }
+				desc = banking_cycle_events.39.d_below_zero
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = banking_cycle_events.39.d
+			}
+		}
+	}
 	flavor = banking_cycle_events.39.f
 
 	duration = 3
@@ -4147,10 +4249,25 @@ banking_cycle_events.39 = {
 			text = "BUBBLE_PRESSURE_8_DESC"
 			change_variable = { name = bubble_pressure add = 8 }
 		}
-		add_modifier = {
-			name = banking_event_qe_stimulus
-			days = normal_modifier_time
-			is_decaying = yes
+		if = {
+			limit = { te_mon_full_system = yes }
+			# The dashboard tool, asked again: the event stays open for months,
+			# and the rate may have left its floor, or OMO been started from the
+			# dashboard, in the meantime.
+			if = {
+				limit = { banking_qe_debate_possible = yes }
+				banking_effect_cb_open_market_ops = yes
+				# The tool's inflation pressure (+1pp while it runs) is read by
+				# the monetary update, not carried by the modifier, so name it.
+				custom_tooltip = banking_omo_inflation_cost_tt
+			}
+		}
+		else = {
+			add_modifier = {
+				name = banking_event_qe_stimulus
+				days = normal_modifier_time
+				is_decaying = yes
+			}
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -5195,6 +5312,13 @@ banking_cycle_events.54 = {
 }
 
 # Event 55: Socialist Fraternal Aid (downturn/panic, keynesian)
+# The ally is real and named (#428): the largest planned economy on cordial
+# terms or better, at peace with us and not in a banking slump of its own
+# (banking_is_fraternal_aid_donor, legacy_event_integration_triggers.txt). The
+# draw in banking_cycle_random_event_effect picks it and saves it as
+# scope:fraternal_ally before firing this, as the .68 -> .45 chain does, so
+# nothing here reads ROOT. Nothing lands on the ally — the offer is flavour for
+# the aid our own cycle receives.
 banking_cycle_events.55 = {
 	type = country_event
 	placement = root
@@ -5208,6 +5332,10 @@ banking_cycle_events.55 = {
 	flavor = banking_cycle_events.55.f
 
 	duration = 3
+
+	trigger = {
+		exists = scope:fraternal_ally
+	}
 
 	immediate = {}
 
