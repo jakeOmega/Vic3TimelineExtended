@@ -383,6 +383,10 @@ state_pop_support_movement_<name>_mult = {
 }
 ```
 
+## A `desc = "KEY"` in Script Is a Loc Lookup — Define the Key
+
+A script value's `desc = "KEY"` labels its line in whatever breakdown shows it: a movement's `additional_radicalism_factors`, a party's attraction, a treaty's AI acceptance, a power bloc's cohesion. `custom_tooltip = KEY`, an event's `title`/`flavor` and a journal entry's `custom_*_header` work the same way. The engine looks the key up at render time and, if no loc file defines it, prints the raw key. Nothing is logged. Copying a vanilla block copies the reference but not the loc: vanilla defines `INSTITUTION_FUNDING_LEVEL_<x>` / `NO_INSTITUTION_<x>` in `interfaces_l_english.yml` for its own seven institutions only. The mod's movements used the same pattern for four mod institutions, and the radicalism tooltip showed `INSTITUTION_FUNDING_LEVEL_ministry_of_foreign_affairs` (fixed 2026-09-25). `script_loc_reference_audit` flags every such reference on `/reload`. Vanilla resolves every one of its own, so a flag is a real raw key. `text` is a loc key only inside `custom_tooltip = { }`. Inside `custom_description = { }` it names a `common/trigger_localization` entry instead.
+
 ## Effect/Trigger Scope Requirements
 
 - **`any_` triggers do NOT accept `limit`.** In trigger context, conditions go directly as siblings: `any_scope_diplomatic_pact = { count >= 3 is_diplomatic_action_type = X }`. The `limit = { }` sub-block is ONLY valid in effect iterators (`every_X`, `random_X`, `ordered_X`). Using `limit` inside `any_` produces "Unknown trigger type: limit" in debug.log and silently breaks the trigger evaluation (may match ALL pacts instead of filtered ones).
