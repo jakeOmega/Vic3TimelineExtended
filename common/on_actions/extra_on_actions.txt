@@ -2920,7 +2920,7 @@ irredentism_events_on_action = {
 #     A player member asks only when it chooses to, through the
 #     irr_seek_war_blessing diplomatic action; both paths share the triggers
 #     in te_event_agency_irr_triggers.txt. A leader hears at most one AI
-#     request per 5 years (irr_war_blessing_heard, set by irredentism.7).
+#     request per 5 years (irr_war_blessing_heard, set when an AI request is sent).
 # 5b: bloc member chose to hear a union proposal (irredentism.4.a) and lacks
 #     peace approval. The leader is asked about the country that actually
 #     proposed (var:irr_union_proposer, set by irredentism.4.a).

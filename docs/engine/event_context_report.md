@@ -2,7 +2,7 @@
 
 Events whose text does not match the context they fire in: events about a mod system that ignore it, and events that claim a country acted when it never chose to. Heuristic ranking for a human read — see `event_context_audit.py` for the rules. Suppress a reviewed flag with a check-tagged comment on its own line inside the event block: `# REVIEWED YYYY-MM-DD (<check>): rationale`.
 
-- Events defined: **823**, visible: **805**, dispatch sites traced: **994**
+- Events defined: **824**, visible: **806**, dispatch sites traced: **995**
 - `system_ungated`: **0** unreviewed, 16 REVIEWED
 - `unchosen_self_action`: **0** unreviewed, 7 REVIEWED
 - `imputed_foreign_action`: **0** unreviewed, 21 REVIEWED

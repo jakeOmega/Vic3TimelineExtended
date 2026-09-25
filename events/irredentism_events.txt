@@ -587,7 +587,8 @@ irredentism.7 = {
 
 	# No event cooldown: a request the player chose to send must always reach
 	# the leader, and a leader-side cooldown would silently swallow it. The AI
-	# roll is throttled by irr_war_blessing_heard instead (set below, read by
+	# roll is throttled by irr_war_blessing_heard instead (set on the leader by
+	# irr_send_war_blessing_request when an AI member asks, read by
 	# irredentism_bloc_approval_on_action): a leader still hears at most one AI
 	# request per 5 years, the rate the old `cooldown = { years = 5 }` set.
 
@@ -610,17 +611,6 @@ irredentism.7 = {
 
 	immediate = {
 		save_scope_as = irr_bloc_leader
-		# Only an AI request starts the AI throttle: a player member's request
-		# doesn't stop AI members asking.
-		if = {
-			limit = {
-				scope:irr_requester ?= { is_ai = yes }
-			}
-			set_variable = {
-				name = irr_war_blessing_heard
-				days = 1825
-			}
-		}
 	}
 
 	# --- Endorse the war ---
@@ -758,6 +748,11 @@ irredentism.7 = {
 			}
 			hidden_effect = { irr_clear_war_blessing_pending = yes }
 		}
+		# The requester chose to ask, so it hears the answer (irredentism.10
+		# carries a yes).
+		scope:irr_requester ?= {
+			trigger_event = { id = irredentism.11 days = 3 }
+		}
 		if = {
 			limit = { exists = scope:irr_requester }
 			change_relations = {
@@ -800,6 +795,36 @@ irredentism.10 = {
 		name = irredentism.10.a
 		default_option = yes
 		custom_tooltip = irredentism.10.a.tt
+	}
+}
+
+# Notice to a member whose request for a war blessing was refused (fired by
+# irredentism.7.b). Inherits irr_bloc_leader, irr_requester and target_country.
+irredentism.11 = {
+	type = country_event
+	placement = root
+
+	event_image = { video = "africa_diplomats_negotiating" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = irredentism.11.t
+	desc = irredentism.11.d
+	flavor = irredentism.11.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:irr_bloc_leader
+		exists = scope:target_country
+	}
+
+	option = {
+		name = irredentism.11.a
+		default_option = yes
+		custom_tooltip = irredentism.11.a.tt
 	}
 }
 
