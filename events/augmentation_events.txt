@@ -23,6 +23,14 @@ augmentation_events.1 = {
 
 	trigger = {
 		has_augmentation_tech = yes
+		# Augmentation is illegal under these laws, so there is no market to divide
+		# society, as augmentation_events.3/.5 already assume.
+		NOT = {
+			OR = {
+				has_law = law_type:law_human_purity
+				has_law = law_type:law_no_augmentation
+			}
+		}
 	}
 
 	immediate = {
@@ -61,17 +69,15 @@ augmentation_events.1 = {
 	# Ban non-medical augmentation
 	option = {
 		name = augmentation_events.1.c
+		# Unrestricted and mandatory augmentation are the opposite settlement.
+		trigger = {
+			NOR = {
+				has_law = law_type:law_unrestricted_augmentation
+				has_law = law_type:law_mandatory_augmentation
+			}
+		}
 		ai_chance = {
 			base = 1
-			modifier = {
-				trigger = {
-					OR = {
-						has_law = law_type:law_human_purity
-						has_law = law_type:law_no_augmentation
-					}
-				}
-				add = 4
-			}
 		}
 		add_modifier = {
 			name = augmentation_ban_modifier
@@ -100,6 +106,14 @@ augmentation_events.2 = {
 
 	trigger = {
 		has_augmentation_tech = yes
+		# Augmentation is illegal under these laws, and the desc's "regulated
+		# procedures" do not exist, as augmentation_events.3/.5 already assume.
+		NOT = {
+			OR = {
+				has_law = law_type:law_human_purity
+				has_law = law_type:law_no_augmentation
+			}
+		}
 	}
 
 	immediate = {
@@ -434,7 +448,7 @@ augmentation_events.5 = {
 	}
 }
 
-# Event 100: The Great Divide (fail state)
+# Event 100: The Purity Laws (fail state: law_human_purity)
 augmentation_events.100 = {
 	type = country_event
 	placement = root
@@ -457,7 +471,10 @@ augmentation_events.100 = {
 	immediate = {
 	}
 
-	# Accept the divide
+	# Fired only by je_human_augmentation's on_fail, i.e. law_human_purity has just
+	# passed. The question left is what to do about the already-augmented.
+
+	# Enforce purity without exception
 	option = {
 		name = augmentation_events.100.a
 		default_option = yes
@@ -465,20 +482,20 @@ augmentation_events.100 = {
 			base = 3
 		}
 		add_modifier = {
-			name = augmentation_divide_permanent_modifier
+			name = human_purity_enforced_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}
 	}
 
-	# Mandate purity
+	# Exempt the already-augmented: a permanent, legally recognised divide
 	option = {
 		name = augmentation_events.100.b
 		ai_chance = {
 			base = 2
 		}
 		add_modifier = {
-			name = human_purity_enforced_modifier
+			name = augmentation_divide_permanent_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}

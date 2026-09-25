@@ -902,14 +902,33 @@ movement_events_te.100 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/movement_triumph_celebration.dds" }
+	event_image = { texture = "gfx/event_pictures/movement_crushed_aftermath.dds" }
 
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
 	title = movement_events_te.100.t
-	desc = movement_events_te.100.desc
+	desc = {
+		first_valid = {
+			# je_civil_rights.on_fail sends .100 when suppression or segregation led,
+			# or when a discriminatory minority law is in force. With both trackers
+			# at 0 it came through the law alone: nobody was imprisoned or exiled.
+			triggered_desc = {
+				trigger = {
+					has_variable = cr_suppression_months
+					has_variable = cr_segregationist_months
+					var:cr_suppression_months = 0
+					var:cr_segregationist_months = 0
+				}
+				desc = movement_events_te.100.desc_faded
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = movement_events_te.100.desc
+			}
+		}
+	}
 	flavor = movement_events_te.100.f
 
 	duration = 3
@@ -1557,6 +1576,14 @@ movement_events_te.10 = {
 			is_political_movement_type = movement_transhumanist
 		}
 		has_technology_researched = biohacking_and_human_augmentation
+		# No legal augmentation market under a ban, so no divide for it to open.
+		NOR = {
+			has_law = law_type:law_no_augmentation
+			has_law = law_type:law_human_purity
+		}
+		# While the augmentation debate runs, its own augmentation_events.1 tells
+		# this story.
+		NOT = { has_journal_entry = je_human_augmentation }
 	}
 
 	cancellation_trigger = {
@@ -1817,7 +1844,7 @@ movement_events_te.200 = {
 	type = country_event
 	placement = root
 
-	event_image = { texture = "gfx/event_pictures/movement_crushed_aftermath.dds" }
+	event_image = { texture = "gfx/event_pictures/movement_triumph_celebration.dds" }
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
 
@@ -2008,7 +2035,7 @@ movement_events_te.223 = {
 }
 
 # ============================================================================
-# Civil Rights — path-dependent FAILURE events (230-231). Dispatched from
+# Civil Rights — path-dependent FAILURE events (230-232). Dispatched from
 # je_civil_rights.on_fail when the bar reaches 0 or the political movement
 # disbands. .100 still handles the "discriminatory regime" aftermath.
 # ============================================================================
@@ -2135,6 +2162,37 @@ movement_events_te.231 = {
 
 	option = {
 		name = movement_events_te.231.a
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_radicals = {
+			value = small_radicals
+			strata = lower
+		}
+	}
+}
+
+# Lost momentum — neutral fallback when no policy track dominated
+# (je_civil_rights.on_fail: no suppression lead, no cooptation or gradualist
+# track over 18 months). Keeps .231's consequence, which this case used to get.
+movement_events_te.232 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/movement_crushed_aftermath.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = movement_events_te.232.t
+	desc = movement_events_te.232.d
+	flavor = movement_events_te.232.f
+
+	duration = 3
+
+	trigger = { }
+	immediate = { }
+
+	option = {
+		name = movement_events_te.232.a
 		default_option = yes
 		ai_chance = { base = 5 }
 		add_radicals = {
