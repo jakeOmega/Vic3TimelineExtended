@@ -4931,6 +4931,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
             "event-balance": lambda: self._event_balance(rest, params),
             # Event magnitude audit (hardcoded fast-scaling values)
             "event-magnitude-audit": lambda: self._event_magnitude_audit(params),
+            # Event dispatch graph + context audit (system gating, unchosen actions)
+            "event-dispatch": lambda: self._event_dispatch(rest),
+            "event-context-audit": lambda: self._event_context_audit(params),
             "institutions": lambda: self._institutions(rest),
             "production-methods": lambda: self._production_methods(rest, params),
             "journal-entries": lambda: self._journal_entries(rest),
@@ -5053,6 +5056,8 @@ class ModStateHandler(BaseHTTPRequestHandler):
                 {"path": "/dev-docs/<section?>", "desc": "Vanilla developer-reference markdown docs."},
                 {"path": "/technology-effects/<tech>", "desc": "Aggregate of all effects applied by a tech."},
                 {"path": "/event-magnitude-audit", "desc": "Hardcoded fast-scaling event-value audit."},
+                {"path": "/event-dispatch/<event_id>", "desc": "Every site that fires a mod event (trigger_event, on-action lists, via scripted effects incl. $EVENT$ helpers), with scope switches, enclosing limit/trigger guards, whether the recipient chose it, and which mod systems gate it."},
+                {"path": "/event-context-audit?check=&event_id=&show_reviewed=", "desc": "event_context_audit flags: system_ungated / unchosen_self_action / imputed_foreign_action."},
                 {"path": "/gui/render-sites/<loc_key>", "desc": "Every GUI file:line that references <loc_key> via text/tooltip/raw_text/... — mod + vanilla."},
                 {"path": "/gui/render-paths/<EntityType>?field=<role>", "desc": "Every GUI file:line that renders <field> of <EntityType> via [DataType.GetX]. Fields: name/desc/icon/tooltip."},
                 {"path": "/unlocalized", "desc": "Mod-introduced keys missing English loc."},
@@ -7037,6 +7042,79 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if fmt == "text":
             return {"text": _render_event_balance_issues_text(len(ids), flagged, mode=mode, reviewed_count=len(reviewed_exemptions))}
         return result
+
+    def _event_dispatch(self, rest):
+        """GET /event-dispatch/<event_id> — who fires this event, from where, in
+        which scope and under which guard (event_context_audit's graph).
+
+        Reads the mod tree from disk on each call (~1 s), so it reflects edits
+        without a /reload. `chosen` says whether the recipient country reached
+        the event through its own choice (own option, decision, button, law…);
+        `gated_systems` lists the mod systems every dispatch path is gated on.
+        """
+        import event_context_audit as eca
+        from path_constants import mod_path as _mod_path
+
+        if not rest:
+            raise _EndpointError({"error": "usage: /event-dispatch/<event_id>"}, 400)
+        eid = rest[0]
+        g = eca.build_graph(_mod_path)
+        r = eca.Resolver(g)
+        if eid not in g.events and eid not in g.sites_by_event:
+            raise _EndpointError({"error": f"no mod event or dispatch site for {eid}"}, 404)
+        sites = []
+        for s in g.sites_by_event.get(eid, []):
+            status, reason = r.site_choice(s)
+            sites.append({
+                "file": s.file, "line": s.line, "entity": s.entity,
+                "entity_kind": s.entity_kind, "via": s.via, "path": s.path,
+                "scope_switches": s.switches, "in_option": s.in_option,
+                "guards": s.conds.strip(), "chosen": status == eca.CHOSEN,
+                "reason": reason,
+            })
+        status, reason = r.event_choice(eid)
+        ev = g.events.get(eid)
+        return {
+            "event_id": eid,
+            "defined_in": f"{ev.file}:{ev.line}" if ev else None,
+            "hidden": ev.hidden if ev else None,
+            "chosen_by_recipient": status == eca.CHOSEN,
+            "reason": reason,
+            "gated_systems": [sysm.key for sysm in eca.SYSTEMS if r.event_gated(eid, sysm)],
+            "sites": sites,
+        }
+
+    def _event_context_audit(self, params):
+        """GET /event-context-audit — event_context_audit flags as JSON.
+
+        Filters: ?check=system_ungated|unchosen_self_action|imputed_foreign_action,
+        ?event_id=foo.5, ?show_reviewed=true, ?format=text (markdown report).
+        """
+        import event_context_audit as eca
+        from path_constants import mod_path as _mod_path
+
+        result = eca.audit(_mod_path)
+        flags = result.flags
+        show_reviewed = (params.get("show_reviewed") or ["false"])[0].lower() in ("true", "1", "yes")
+        if not show_reviewed:
+            flags = [f for f in flags if not f.exemption]
+        check = (params.get("check") or [None])[0]
+        if check:
+            flags = [f for f in flags if f.check == check]
+        event_filter = (params.get("event_id") or [None])[0]
+        if event_filter:
+            flags = [f for f in flags if f.event_id == event_filter]
+        if (params.get("format") or ["json"])[0] == "text":
+            return {"text": eca.render_report(eca.AuditResult(flags=flags, coverage=result.coverage), _mod_path)}
+        return {
+            "flags": [
+                {"check": f.check, "event_id": f.event_id, "file": f.file, "line": f.line,
+                 "detail": f.detail, "evidence": f.evidence, "dispatch": f.dispatch,
+                 "exemption": f.exemption}
+                for f in flags
+            ],
+            "coverage": result.coverage,
+        }
 
     def _event_magnitude_audit(self, params):
         """GET /event-magnitude-audit — flag hardcoded fast-scaling resource deltas in events.

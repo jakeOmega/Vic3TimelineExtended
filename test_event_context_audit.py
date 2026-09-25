@@ -118,6 +118,19 @@ class EventContextAuditTests(unittest.TestCase):
                          "common/on_actions/p.txt": pulse}, self.SPY_LOC)
         self.assertEqual(self._flags(mod, "system_ungated"), set())
 
+    def test_merged_engine_hook_is_not_owned_by_first_defining_file(self):
+        # on_monthly_pulse_country is declared in many files and merged; the
+        # alphabetically-first one belonging to a system must not make every
+        # chain hanging off the hook "owned" by that system.
+        sys_hook = "on_monthly_pulse_country = {\n\ton_actions = { cultural_hegemony_tick }\n}\n"
+        pulse = ("on_monthly_pulse_country = {\n\ton_actions = { my_pulse }\n}\n"
+                 "my_pulse = {\n\teffect = { trigger_event = { id = flav.1 } }\n}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "common/on_actions/cultural_hegemony_on_actions.txt": sys_hook,
+                         "common/on_actions/zz_misc.txt": pulse},
+                        {"flav.1.t": "Soft Power", "flav.1.d": "Our cultural hegemony grows."})
+        self.assertEqual(self._flags(mod, "system_ungated"), {("system_ungated", "flav.1")})
+
     def test_flavor_text_mentions_do_not_count(self):
         loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens.",
                "flav.1.f": "\\\"Like the espionage of old,\\\" he said."}

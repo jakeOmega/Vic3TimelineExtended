@@ -338,7 +338,7 @@ def _entity_kind(rel: str) -> str:
 class FileScan:
     sites: list[Site]
     effect_calls: dict[str, list[tuple[str, int, list[str], list[str], str]]]
-    on_action_refs: dict[str, list[tuple[str, int]]]  # child on_action -> (parent, line)
+    on_action_refs: dict[str, list[tuple[str, int, str]]]  # child -> (parent, line, file)
 
 
 def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
@@ -463,7 +463,7 @@ def scan_file(path: str, rel: str, effect_names: set[str]) -> FileScan:
                 entity, pk, sw, conds = context()
                 sites.append(Site(t, rel, ln, entity, kind, pk, sw, conds, via=parent))
             elif parent == "on_actions" and kind == "on_action" and not _NUMERIC_RE.match(t):
-                on_action_refs[t].append((stack[0].key, ln))
+                on_action_refs[t].append((stack[0].key, ln, rel))
         pending_key = None
         i += 1
 
@@ -601,8 +601,8 @@ class Graph:
     sites_by_event: dict[str, list[Site]]
     effect_calls: dict[str, list[tuple]]
     effect_file: dict[str, str]
-    on_action_parents: dict[str, list[tuple[str, int]]]
-    on_action_file: dict[str, str]
+    on_action_parents: dict[str, list[tuple[str, int, str]]]
+    on_action_files: dict[str, list[str]]
     loc: dict[str, str]
 
 
@@ -623,10 +623,30 @@ def _collect_defs(mod_path: str, sub: str) -> dict[str, str]:
     return out
 
 
+def _collect_def_files(mod_path: str, sub: str) -> dict[str, list[str]]:
+    """Like `_collect_defs`, but every file defining each name (engine hooks
+    such as `on_monthly_pulse_country` are declared in many files and merged)."""
+    out: dict[str, list[str]] = defaultdict(list)
+    base = os.path.join(mod_path, "common", sub)
+    if not os.path.isdir(base):
+        return {}
+    def_re = re.compile(r"^(?:REPLACE:|INJECT:|REPLACE_OR_CREATE:)?([A-Za-z_][\w]*)\s*=\s*\{", re.M)
+    for dirpath, _d, files in os.walk(base):
+        for f in sorted(files):
+            if f.endswith(".txt"):
+                p = os.path.join(dirpath, f)
+                rel = os.path.relpath(p, mod_path).replace("\\", "/")
+                with open(p, encoding="utf-8-sig", errors="replace") as fh:
+                    for m in def_re.finditer(fh.read()):
+                        if rel not in out[m.group(1)]:
+                            out[m.group(1)].append(rel)
+    return dict(out)
+
+
 def build_graph(mod_path: str) -> Graph:
     events = load_events(mod_path)
     effect_file = _collect_defs(mod_path, "scripted_effects")
-    on_action_file = _collect_defs(mod_path, "on_actions")
+    on_action_files = _collect_def_files(mod_path, "on_actions")
     effect_names = set(effect_file)
     sites_by_event: dict[str, list[Site]] = defaultdict(list)
     effect_calls: dict[str, list] = defaultdict(list)
@@ -650,7 +670,7 @@ def build_graph(mod_path: str) -> Graph:
                     on_action_parents[child].extend(parents)
     _substitute_params(sites_by_event, effect_calls)
     return Graph(events, dict(sites_by_event), dict(effect_calls), effect_file,
-                 dict(on_action_parents), on_action_file, load_loc(mod_path))
+                 dict(on_action_parents), on_action_files, load_loc(mod_path))
 
 
 def _substitute_params(sites_by_event: dict[str, list[Site]], effect_calls: dict[str, list]) -> None:
@@ -772,7 +792,7 @@ class Resolver:
             else:
                 res = (UNCHOSEN, f"engine hook {name}")
         else:
-            res = self._combine([self.on_action_choice(p, seen) for p, _ in parents], name)
+            res = self._combine([self.on_action_choice(p, seen) for p, _ln, _f in parents], name)
             if res[0] == UNCHOSEN and "pulse" in res[1] and name not in res[1]:
                 res = (UNCHOSEN, f"{res[1]} > {name}")
         self._oa_choice[name] = res
@@ -838,11 +858,18 @@ class Resolver:
         if key in seen:
             return False
         seen = seen | {key}
-        if self.owns(sysm, self.g.on_action_file.get(name, "")) or sysm.state_re.search(name):
+        # Engine hooks (on_monthly_pulse_country, …) are merged from many files,
+        # so a hook is owned only if every file defining it is; a chain link is
+        # gated when the `on_actions = { name }` reference sits in an owned file
+        # or its parent on-action is itself gated.
+        files = self.g.on_action_files.get(name, [])
+        if (files and all(self.owns(sysm, f) for f in files)) or sysm.state_re.search(name):
             res = True
         else:
             parents = self.g.on_action_parents.get(name, [])
-            res = bool(parents) and all(self.on_action_gated(p, sysm, seen) for p, _ in parents)
+            res = bool(parents) and all(
+                self.owns(sysm, f) or self.on_action_gated(p, sysm, seen)
+                for p, _ln, f in parents)
         self._gate_cache[key] = res
         return res
 
