@@ -128,6 +128,7 @@ decolonization_events.1 = {
 			post_notification = colonial_independence_granted_notice
 			make_independent = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = peaceful_decolonization_modifier
 			days = long_modifier_time
@@ -169,6 +170,7 @@ decolonization_events.1 = {
 				is_decaying = yes
 			}
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = neocolonial_economic_extraction_modifier
 			days = long_modifier_time
@@ -401,6 +403,7 @@ decolonization_events.3 = {
 			post_notification = colonial_ceasefire_granted_notice
 			make_independent = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = colonial_war_exhaustion_modifier
 			days = normal_modifier_time
@@ -464,6 +467,7 @@ decolonization_events.3 = {
 				is_decaying = yes
 			}
 		}
+		decol_record_chosen_release = yes
 		impose_neocolonial_investment_trade_treaty = {
 			FIRST = root
 			SECOND = scope:rebellious_subject
@@ -1027,6 +1031,7 @@ decolonization_events.9 = {
 			set_variable = decolonization_marker
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = peaceful_decolonization_modifier
 			days = normal_modifier_time
@@ -1051,6 +1056,7 @@ decolonization_events.9 = {
 			set_variable = decolonization_marker
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = neocolonial_economic_extraction_modifier
 			days = long_modifier_time
@@ -1416,6 +1422,7 @@ decolonization_events.13 = {
 			set_variable = decolonization_marker
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = colonial_war_exhaustion_modifier
 			days = normal_modifier_time
@@ -1462,6 +1469,7 @@ decolonization_events.13 = {
 			set_variable = decolonization_marker
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = neocolonial_economic_extraction_modifier
 			days = long_modifier_time
@@ -3147,8 +3155,13 @@ decolonization_events.205 = {
 	}
 }
 
-# Event 206: Voluntary Decolonization — empire dissolved on the player's own terms
-# before the bar hit zero. No colony-release effects: the player already handled that.
+# Event 206: Voluntary Decolonization — the JE's fail branch with the bar above
+# zero: no overseas colonial state or qualifying colonial subject is left. That
+# can follow our own releases, but also conquest, integration (.10.a), rising
+# acceptance or a subject breaking free, so the "by decision" text needs
+# var:decol_chosen_releases, which decol_record_chosen_release counts in every
+# option that releases a colony by our choice (.1, .3, .9, .13, .400, .401).
+# Otherwise the neutral variant. No colony-release effects: nothing is left.
 decolonization_events.206 = {
 	type = country_event
 	placement = root
@@ -3158,15 +3171,54 @@ decolonization_events.206 = {
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
 	title = decolonization_events.206.t
-	desc = decolonization_events.206.d
-	flavor = decolonization_events.206.f
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = decol_chosen_releases }
+				desc = decolonization_events.206.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.206.d_neutral
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = decol_chosen_releases }
+				desc = decolonization_events.206.f
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.206.f_neutral
+			}
+		}
+	}
 
 	duration = 3
 
 	immediate = { }
 
+	# The counter is cleared here, after the text has read it, rather than in
+	# colonial_empire_je_cleanup_effect, which on_fail runs right after firing
+	# this event. The other end-of-JE paths clear it in je_colonial_empire.
 	option = {
 		name = decolonization_events.206.a
+		trigger = { has_variable = decol_chosen_releases }
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = {
+			name = negotiated_withdrawal_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		remove_variable = decol_chosen_releases
+	}
+
+	option = {
+		name = decolonization_events.206.b
+		trigger = { NOT = { has_variable = decol_chosen_releases } }
 		default_option = yes
 		ai_chance = { base = 5 }
 		add_modifier = {
@@ -3971,6 +4023,7 @@ decolonization_events.400 = {
 		scope:decolonization_target_state_1 = {
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 
 		# Path-specific country modifiers (moved here from the original buttons
 		# so they apply only on confirm, not on the preview click).
@@ -4022,6 +4075,7 @@ decolonization_events.400 = {
 		scope:decolonization_target_state_2 = {
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 
 		if = {
 			limit = { has_variable = decolonization_path_round_table }
@@ -4068,6 +4122,7 @@ decolonization_events.400 = {
 		scope:decolonization_target_state_3 = {
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 
 		if = {
 			limit = { has_variable = decolonization_path_round_table }
@@ -4188,6 +4243,7 @@ decolonization_events.401 = {
 				remove_variable = decolonization_marker
 			}
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = peaceful_decolonization_modifier
 			days = long_modifier_time
