@@ -207,6 +207,11 @@ un_authority_log_block = {
 # A temporary scope is still set when the next entry is printed, so the
 # subject is saved only for an entry that has one, and only a line chosen
 # because the entry has one prints it (un_authority_log_reason_on).
+# A state subject prints by name alone (je_un_led_subject_state), which can be
+# hovered for its owner. Printing the owner here would read it now, not when
+# the entry was booked, and the states the log names — struck, or holding a
+# mission that failed because its host was attacked — are the ones most
+# likely to have changed hands since.
 # Scope: ledger log container
 un_authority_log_entry = {
 	if = {

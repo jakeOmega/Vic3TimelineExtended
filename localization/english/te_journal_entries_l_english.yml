@@ -1077,7 +1077,7 @@
  je_un_led_res_weaker:0 "      #lore Resolution No. [THIS.Var('un_led_res_seq').GetValue|0] carried only in weaker form, after a [concept_un_veto]:#!"
  je_un_led_res_weaker_at:0 "      #lore Resolution No. [THIS.Var('un_led_res_seq').GetValue|0], directed at#! $je_un_led_subject_country$#lore , carried only in weaker form, after a [concept_un_veto]:#!"
  je_un_led_subject_country:0 "[AddLocalizationIf(SCOPE.sCountry('un_led_subject_disp').Exists, SCOPE.sCountry('un_led_subject_disp').GetName)][AddLocalizationIf(Not(SCOPE.sCountry('un_led_subject_disp').Exists), 'je_un_led_country_gone')]"
- je_un_led_subject_state:0 "[SCOPE.sState('un_led_subject_disp').GetName], in [SCOPE.sState('un_led_subject_disp').GetOwner.GetName]"
+ je_un_led_subject_state:0 "[SCOPE.sState('un_led_subject_disp').GetName]"
  je_un_led_topic_aid_request:0 "        Humanitarian Aid Request"
  je_un_led_topic_climate:0 "        Climate Accord"
  je_un_led_topic_condemn:0 "        Condemnation of Aggression"
