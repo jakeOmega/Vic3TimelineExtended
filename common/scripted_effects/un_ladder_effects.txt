@@ -392,6 +392,19 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_crisis_months }
 	un_dissolve_remove_global = { NAME = un_founding_window_active }
 	un_dissolve_remove_global = { NAME = un_recess_months }
+	# The docket (redesign phase 4). A refounded UN seeds it afresh.
+	un_dissolve_remove_global = { NAME = un_docket_seeded }
+	un_dissolve_remove_global = { NAME = un_docket_months_left }
+	un_dissolve_remove_global = { NAME = un_dkt_agenda_months_left }
+	un_dissolve_remove_global = { NAME = un_dkt_offers }
+	un_dissolve_remove_global = { NAME = un_dkt_last_type }
+	un_dissolve_remove_global = { NAME = un_dkt_last_age }
+	un_dissolve_remove_global = { NAME = un_dkt_last_subject }
+	un_dissolve_remove_global = { NAME = un_dkt_last_place }
+	un_dissolve_remove_global = { NAME = un_dkt_warming_next }
+	un_dissolve_remove_global = { NAME = un_dkt_space_raised }
+	un_dissolve_remove_global = { NAME = un_dkt_gp_war_months }
+	un_dissolve_remove_global = { NAME = un_dkt_gp_war_ended }
 	un_dissolve_remove_global = { NAME = un_ledger_credibility }
 	un_dissolve_remove_global = { NAME = un_ledger_delivery }
 	un_dissolve_remove_global = { NAME = un_ledger_order }

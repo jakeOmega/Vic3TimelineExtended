@@ -1,9 +1,11 @@
 # United Nations Redesign — Design
 
-> **STATUS: PHASES 1 (THE AUTHORITY MODEL), 2 (THE LADDER, THE CEILING AND THE FLOOR) AND
-> 3 (GROUNDS, THE ITEMISED LEAN, AI VOTING IN SCRIPT, THE RECESS) IMPLEMENTED.** Phase 1 has
-> been play-tested; phases 2 and 3 are pending in-game verification. Phases 4–6 are designed
-> but not built. Read [§0.3](#03-phase-3-as-shipped--rulings-deviations-and-open-checks),
+> **STATUS: PHASES 1 (THE AUTHORITY MODEL), 2 (THE LADDER, THE CEILING AND THE FLOOR),
+> 3 (GROUNDS, THE ITEMISED LEAN, AI VOTING IN SCRIPT, THE RECESS) AND 4 (THE DOCKET AND THE
+> EVENT REWRITE) IMPLEMENTED.** Phase 1 has been play-tested; phases 2–4 are pending in-game
+> verification. Phases 5 and 6 are designed but not built. Read
+> [§0.4](#04-phase-4-as-shipped--rulings-deviations-and-open-checks),
+> [§0.3](#03-phase-3-as-shipped--rulings-deviations-and-open-checks),
 > [§0.2](#02-phase-2-as-shipped--rulings-deviations-and-open-checks) and
 > [§0.1](#01-phase-1-as-shipped--rulings-deviations-and-open-checks) before anything
 > else if you are working on the code: they record where each phase deviates from the
@@ -17,6 +19,175 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.4 Phase 4 as shipped — rulings, deviations and open checks
+
+Built 2026-09-25 on `claude/un-rework-continuation-8xn1se`, after phase 3. Not yet seen in a
+running game. Implements §8: the docket replacing the per-member random roll, the event rules,
+docket prompts reaching human players, and the aggrieved party going first.
+
+### Files
+
+- `common/script_values/un_docket_values.txt`: the cadence, the thresholds and every score.
+- `common/scripted_triggers/un_docket_triggers.txt`: the situation detectors, who may be offered
+  what (`un_docket_may_propose_<topic>`, `un_docket_appeal_second`), and when a topic is open.
+- `common/scripted_effects/un_docket_effects.txt`: the monthly update, the scan, one take-up per
+  kind of item, the offers, and the two consequences that are not docket items (a veto, a
+  walkout). The item table is at its top.
+- **Events:**
+  - `un_events.2` is rewritten as **An Appeal to the Assembly**.
+  - `un_events.3`–`22` are rerouted: none is rolled any more.
+  - `un_events.13` (the ideological confrontation) is deleted.
+- **Hooks:**
+  - the first-strike and tactical nuclear effects (`extra_effects.txt`) and `covert_warfare.1`
+    note a grievance (`un_docket_note_grievance`);
+  - `un_resolution_record_veto` fires `un_events.11`;
+  - `un_leave_button` fires `un_events.20`;
+  - adopted sanctions in `un_vote.2` fire `un_events.5`.
+- **Chamber:** "The docket" lines (the last item and when the next is due), and for each
+  topic raised as Assembly business, what raises it and whether it is in force.
+- **Console:** `te_debug_un.1` options m (open the docket now) and n (stage a grievance against
+  us and open the docket).
+
+### Rulings: where phase 4 deviates from, or binds, the sections below
+
+1. **The roll is gone.**
+   - `un_events_on_action` keeps only its mandate-index hygiene.
+   - `un_docket_monthly_update` runs once a month from the global pulse, after the resolution
+     upkeep, so a lock it frees counts as a free floor.
+   - It takes up at most one item every three months (`un_docket_cadence_months`), and
+     Assembly business at most once in 24 months.
+2. **Scores.** The gravest situation wins. Most kinds score a constant; three depend on the
+   situation:
+
+   | Item | Score | Goes to |
+   |---|---|---|
+   | nuclear strike (in the last two years) | 95 | the struck country, then a member with a stake (`un_events.2`) |
+   | "never again": a war of 12+ months between great powers has ended | 75 | a proposer: human rights (`un_events.3`), else the ICC (`un_events.22`) |
+   | war of aggression on a member, 6+ months, a state devastated past 30 | 40 + 100 × the power share at war with the aggressor, max 85 | the attacked member, then a member with a stake (`un_events.2`) |
+   | warming threshold crossed (0.5 / 1 / 2 / 3 °C) | 50 / 55 / 65 / 75 | a proposer (`un_events.17`) |
+   | a new nuclear power (first bomb built) | 60 | a proposer (`un_events.14`) |
+   | severe covert operation exposed (in the last two years) | 55 | the target, then a member with a stake (`un_events.2`) |
+   | state collapse (`failed_state_modifier` or `je_state_collapse`) | 50 | three peacekeeping powers (`un_events.4`) |
+   | charter outgrown (`un_charter_reform_ripe`) | 50 | a great power (`un_events.6`) |
+   | famine | 35 + 5 per famine state, max 60 | three donor powers (`un_events.7`) |
+   | colonial collapse (`colonial_empire_collapsed_recently`) | 45 | a proposer (`un_events.12`) |
+   | the first Moon landing or colony | 40 | a proposer (`un_events.19`) |
+   | trade embargo between two members | 30 | the weaker party (`un_events.15`) |
+   | Assembly business | 20 | a proposer: human rights, ICC (after the Declaration), heritage, pandemic, refugee, law of the sea or decolonisation |
+
+3. **How the §8.1 table shipped:**
+   - **War.** An aggressor is a war's `is_diplomatic_play_initiator`, as in the dossier. The
+     docket counts war months itself (`un_dkt_war_months`), because the engine exposes no war
+     duration.
+     - **Deviation:** the design's Security Council session offered a ceasefire, a peacekeeping
+       mission, a mandate or mediation. Ceasefires and mediation do not exist.
+     - The appeal instead offers a condemnation, sanctions, a peacekeeping request (the attacked
+       member only) or a World Court case.
+     - The mandate stays in the chamber, under its own gates.
+     - Each war is taken up once per aggressor, until it is at peace.
+   - **Collapse and famine** are appeals to three major-power members, not missions:
+     stabilisation and aid missions are phase 6. Devastation alone does not raise an aid appeal.
+   - **Nuclear strike** is an appeal by the struck country. The order-pillar entry was already
+     phase 1. Relief for struck states waits for missions (phase 6).
+   - **Nuclear test (deviation).** The item is a *new nuclear power*: the first bomb built
+     (`nuclear_weapons_program_first_nuke_done`), taken up as the NPT while the NPT is open.
+     Once the IAEA exists, new nuclear powers pass silently until convention regimes exist
+     (phase 5).
+   - **Covert.** An exposed operation is an appeal by its target. The ICC referral topic does not
+     exist, so the alternative to a vote is a World Court case (`un_events.8`, which now names
+     its plaintiff).
+   - **Banking contagion: not built.** An emergency lending facility is new machinery; it moves
+     to phase 5.
+   - **Decolonisation** is raised by a colonial collapse only; independence wars are not
+     detected.
+   - **Space (deviation):** the first Moon landing or colony, rather than only the first colony.
+   - **Pandemics: not built** (a nice-to-have). The pandemic topic is Assembly business.
+   - **Added:** "never again", the charter outgrown, trade embargoes, and Assembly business
+     for the conventions no situation raises.
+4. **Who goes first (§8.3).**
+   - **An item with a wronged party (1–3)** goes to that party first. If it declines, or cannot
+     table, the item passes to one member with a stake (`un_docket_appeal_second`): a permanent
+     member, a rival of the accused, or an ally or bloc partner of the wronged. It never goes
+     to anyone on the accused's side.
+   - **An item without one** goes to a human delegation first when one qualifies (the §8.3
+     prompt), then to the strongest qualifying member.
+   - **Offers.** An item is offered to at most two members (`un_docket_max_offers`), and a
+     member offered it carries `un_dkt_offered` for 60 days.
+   - **Deviation: no 30-day clock.** The appeal holds the floor until it is answered, as every
+     proposer event always has, and passes on only when declined.
+5. **The floor.** Items that would open a resolution wait for a free floor: no vote, no
+   reservation and no recess (`un_docket_floor_free`). So the AI is never handed one during the
+   recess. Appeals for aid or peacekeepers and embargo disputes open no resolution, and are
+   taken up at any time.
+6. **Event rules (§8.2).**
+   - **Declining earns nothing.** Every proposer event's free exit (+0.5 credibility,
+     sometimes with a bonus modifier) is replaced by "Leave it to another delegation", which
+     passes the item on. Opposing passes it on too.
+   - **The cheap answers cost money.** A token aid contribution and an observer mission cost
+     a quarter of a programme's GDP-scaled expense (`un_humanitarian_token_cost`,
+     `un_observer_mission_cost`).
+   - **Deals outside the UN cost credibility.** A bilateral trade deal made outside the UN
+     costs −0.5 credibility instead of adding +0.5.
+   - **The defiant payoffs of §1.3 are cut:**
+     - walking out: +250 → +100 authority;
+     - refusing the human rights declaration: +100 → +50;
+     - pandemic isolationism: +100 → +50, and −3% prestige;
+     - resenting peacekeepers: +100 → +50, and −10% relations speed;
+     - an independent space programme: +10% → +3% prestige.
+   - **No event cooldowns.** Docket-fired events have lost their `cooldown`: the docket paces
+     them.
+7. **Consequences, fired where they happen:**
+   - `un_events.5` goes to the enforcer 90 days after sanctions are adopted.
+   - `un_events.11` goes to the proposer a week after a permanent member vetoes (not at
+     Moribund).
+   - `un_events.20` goes to every other great-power member when a great power leaves through
+     the Leave button.
+   - `un_events.8` is fired when a wronged member takes the accused to the World Court.
+8. **Seeding.** The first time the docket runs for a UN, whatever has already happened is
+   treated as history: existing nuclear powers, collapsed empires, warming thresholds already
+   crossed and a space age already begun.
+9. **Old saves.** The roll stops at once. Events it had already queued are checked against
+   their new triggers:
+   - those that now need a docket scope (2, 4, 7, 8, 11, 15, 20) fail harmlessly;
+   - the proposer events still fire if their gates hold.
+   - `un_events.13`'s modifiers stay defined for saves that carry them.
+
+### Known roughnesses
+
+- **In single player, a human who qualifies is offered every topic first.** This is the
+  intended "player opportunity" rule, but it means the AI tables a convention only after the
+  player passes on it.
+- **A second victim of the same aggressor gets no appeal** while the first war runs.
+- **Embargo direction is unverified.** Which way `has_diplomatic_pact = { type = embargo }`
+  points is unverified. The weaker party gets the dispute either way.
+- **The chamber restates numbers.** The docket intro and the grounds line restate "every three
+  months" and the thresholds 30 / 50. Edit them with the script values.
+
+### IN-GAME VERIFICATION CHECKLIST (phase 4)
+
+1. **No stray warnings.** After a month with a founded UN, `un_docket_seeded` is set, and
+   `debug.log` has no "used but never set" for `un_dkt_*` or `un_docket_*`.
+2. **The appeal.** Run `event te_debug_un.1` and pick option n.
+   - The next day `un_events.2` arrives, naming the strongest member.
+   - Tabling the condemnation opens a vote.
+   - Instead, "Leave the matter to the Council" sends the appeal to a permanent member or a
+     rival of the accused.
+3. **Parameter-built trigger names.** Option m, with a convention open and the player
+   qualified, offers the convention to the player. This proves that `un_docket_may_propose_$TOPIC$`
+   (a scripted-trigger name built from a parameter) resolves.
+4. **Three donors.** A famine sends `un_events.7` to three donors and names the worst-hit
+   state.
+5. **Embargo.** Embargo a fellow member; within a few months the weaker party gets
+   `un_events.15`.
+6. **Veto and walkout.** A veto brings the proposer `un_events.11` a week later. A great power
+   leaving brings the other great-power members `un_events.20`.
+7. **Sanctions.** When sanctions are adopted, the proposer gets `un_events.5` about 90 days
+   later, naming the target.
+8. **Chamber.** "The docket" shows the last item and the countdown.
+9. **Nothing else fires.** No member gets a UN event by any other route: the roll is gone.
 
 ---
 
@@ -104,7 +275,9 @@ script, what the chamber prints) and the recess of §8.3.
    (so the AI's buttons and the chamber both) and every proposer event in the monthly roll.
    A human member may always table; the chamber tells it the floor is its own for now.
    Human members are notified when the floor opens. **Not built:** docket prompts reaching
-   humans and the victim's first refusal, which belong to the docket (phase 4).
+   humans and the victim's first refusal, which belong to the docket (phase 4). *(Built in
+   phase 4, §0.4 ruling 4. The monthly roll's recess gates went with the roll: the docket
+   raises no resolution-opening item during the recess.)*
 
 ### Known roughnesses
 
@@ -362,7 +535,7 @@ pillars, the ledger log and the nuclear hooks work in game.
 9. **Founding** still sets 50. A new UN therefore sinks toward roughly 30 until its programmes
    and ledgers fill: the young UN is weak.
 10. **The per-member random events are unchanged** apart from their authority deltas.
-    Replacing them is phase 4.
+    Replacing them is phase 4. *(Done: §0.4.)*
 
 ### Known roughnesses
 
@@ -1000,9 +1173,13 @@ of this file, as `monetary_policy_design.md` does.
 | dossier: half-life / record cap / infamy weight and cap | 5 years / 60 / 0.8 up to 50 (phase 3; §0.3 ruling 1) | §5.1 |
 | dossier points: aggression / defiance / busting / court / violation / covert / first strike / tactical / retaliation | 10 + 100 × share, max 30 / 10 / 8 / 6 / 20 / 15 / 40 / 20 / 10 | §5.1 |
 | lean: consensus / veto line (recent veto, Moribund) / noise / reason size | +10 / −30 (−50, −10) / ±20 in steps of 10 / 10 | §6.2 |
-| docket cadence | ≤ 1 new item per 3 months | §8.1 |
+| docket cadence | ≤ 1 new item per 3 months (phase 4) | §8.1 |
+| docket: Assembly business / offers per item | ≤ 1 per 24 months / 2 (phase 4; §0.4 rulings 1, 4) | §8.1, §8.3 |
+| docket: war threshold | 6 months at war and a member's state devastated past 30 (phase 4) | §8.1 |
+| docket scores | see §0.4 ruling 2 | §8.1 |
+| token aid and observers | a quarter of a programme's GDP-scaled expense (phase 4) | §8.2 |
 | recess | 3 months | §8.3 |
-| victim's first refusal | 30 days | §8.3 |
+| victim's first refusal | 30 days (phase 4: no clock, the appeal waits for an answer; §0.4 ruling 4) | §8.3 |
 
 ---
 

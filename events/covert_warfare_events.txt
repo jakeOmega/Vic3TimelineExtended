@@ -65,6 +65,9 @@ covert_warfare.1 = {
 				NOT = { covert_exposure_is_costless = yes }
 			}
 			un_dossier_record = { RECORD = covert POINTS = un_dos_points_covert }
+			# ...and a grievance the target may bring before the Assembly
+			# (redesign phase 4, un_docket_effects.txt).
+			un_docket_note_grievance = { KIND = covert VICTIM = scope:detected_by_country }
 		}
 	}
 

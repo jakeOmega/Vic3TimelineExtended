@@ -1,0 +1,348 @@
+﻿# ============================================================================
+# UN DOCKET — TRIGGERS (redesign phase 4)
+# ============================================================================
+# The figures are in common/script_values/un_docket_values.txt, the writers in
+# common/scripted_effects/un_docket_effects.txt.
+# ============================================================================
+
+# ---- The floor -------------------------------------------------------------------------
+
+# The docket may take up an item that opens a resolution: no vote is in session
+# or reserved, and the post-vote recess is over. (Business that opens no
+# resolution — an aid appeal, a peacekeeping appeal, a trade dispute — is
+# taken up whatever the floor is doing.)
+# Scope: any
+un_docket_floor_free = {
+	NOT = { has_global_variable = un_vote_active }
+	un_floor_open_to_ai = yes
+}
+
+# The scoped member could be offered a docket item now: a member, not already
+# offered the item in hand, and able to table (the recess binds only the AI).
+# Scope: the prospective recipient
+un_docket_can_be_offered = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { has_variable = un_dkt_offered }
+	un_may_table_now = yes
+}
+
+# ---- Situations --------------------------------------------------------------------------
+
+# A war of aggression the docket should take up, seen from the aggressor: it
+# began the war (the dossier's test), has fought it un_docket_war_months, holds
+# no bound mandate for it, has not been docketed for it, and some member it is
+# at war with has a state devastated past un_docket_war_devastation.
+# Scope: the prospective aggressor
+un_docket_war_candidate = {
+	is_at_war = yes
+	is_diplomatic_play_initiator = yes
+	has_variable = un_dkt_war_months
+	var:un_dkt_war_months >= un_docket_war_months
+	NOT = { has_variable = un_dkt_war_raised }
+	NOT = { var:un_mandate_current ?= { has_tag = un_mandate_bound } }
+	any_country = {
+		has_war_with = PREV
+		is_diplomatic_play_initiator = no
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		any_scope_state = { devastation > un_docket_war_devastation }
+	}
+}
+
+# A member attacked by scope:condemned_country, with a state devastated past
+# the threshold: a victim the war item can name.
+# Scope: the prospective victim
+un_docket_war_victim = {
+	has_war_with = scope:condemned_country
+	is_diplomatic_play_initiator = no
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	any_scope_state = { devastation > un_docket_war_devastation }
+}
+
+# A collapsing state the docket should take up. Scope: country
+un_docket_collapse_candidate = {
+	NOT = { is_country_type = decentralized }
+	NOT = { has_variable = un_dkt_collapse_raised }
+	OR = {
+		has_modifier = failed_state_modifier
+		has_journal_entry = je_state_collapse
+	}
+}
+
+# A famine the docket should take up. Scope: country
+un_docket_famine_candidate = {
+	NOT = { is_country_type = decentralized }
+	NOT = { has_variable = un_dkt_famine_raised }
+	any_scope_state = { has_famine = yes }
+}
+
+# A new nuclear power the docket has not yet seen. Scope: country
+un_docket_proliferation_candidate = {
+	NOT = { has_variable = un_dkt_nuke_raised }
+	has_variable = nuclear_weapons_program_first_nuke_done
+	var:nuclear_weapons_program_first_nuke_done > 0
+}
+
+# A colonial empire that has collapsed and not yet been docketed. Scope: country
+un_docket_colonial_candidate = {
+	has_variable = colonial_empire_collapsed_recently
+	NOT = { has_variable = un_dkt_colonial_raised }
+}
+
+# Humanity has reached another world (the first Moon landing or the first
+# colony) and the Assembly has not yet taken it up. Scope: any
+un_docket_space_ready = {
+	NOT = { has_global_variable = un_dkt_space_raised }
+	OR = {
+		has_global_variable = sr_global_first_moon_landing
+		has_global_variable = sr_colonization_stage
+	}
+}
+
+# A warming threshold has been crossed that the Assembly has not yet taken up.
+# Scope: any
+un_docket_warming_ready = {
+	has_global_variable = un_dkt_warming_next
+	global_var:un_dkt_warming_next < 4
+	temperature_anomaly_display >= un_docket_warming_threshold
+}
+
+# Two members trading under an embargo, seen from the party that is not yet
+# docketed. Scope: country
+un_docket_embargo_candidate = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { has_variable = un_dkt_embargo_raised }
+	any_country = {
+		NOT = { this = PREV }
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		has_diplomatic_pact = { who = PREV type = embargo }
+	}
+}
+
+# A power that can be asked to send peacekeepers to a collapsing state: a
+# major-power member not already deployed or observing somewhere. The docket
+# also excludes the host and anyone at war with it.
+# Scope: country
+un_docket_peacekeeping_power = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	country_rank >= rank_value:major_power
+	NOT = { has_modifier = un_peacekeeping_deployed_modifier }
+	NOT = { has_modifier = un_observer_mission_modifier }
+}
+
+# A power that can be asked for famine aid: a major-power member not already
+# giving. The docket also excludes the famine-struck country and anyone at
+# war with it.
+# Scope: country
+un_docket_aid_power = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	country_rank >= rank_value:major_power
+	NOT = { has_modifier = un_humanitarian_aid_modifier }
+	NOT = { has_modifier = un_humanitarian_token_modifier }
+}
+
+# ---- Who may be offered what ---------------------------------------------------------------
+
+# An appeal (un_events.2) passed on by the aggrieved party goes to a member
+# with a stake: a permanent member, a rival of the accused, or an ally or
+# bloc partner of the aggrieved. Never one on the accused's side.
+# Scope: the prospective recipient, with scope:condemned_country and
+# scope:un_dkt_victim saved
+un_docket_appeal_second = {
+	un_docket_can_be_offered = yes
+	NOT = { this = scope:condemned_country }
+	# The aggrieved party may no longer exist (annexed by the war it appealed).
+	NOT = { scope:un_dkt_victim ?= this }
+	NOT = { is_in_war_together = scope:condemned_country }
+	NOT = { has_treaty_alliance_with = { TARGET = scope:condemned_country } }
+	NOT = { is_in_same_power_bloc = scope:condemned_country }
+	OR = {
+		is_un_permanent_member = yes
+		has_diplomatic_pact = { who = scope:condemned_country type = rivalry }
+		scope:un_dkt_victim ?= {
+			OR = {
+				has_treaty_alliance_with = { TARGET = PREV }
+				is_in_same_power_bloc = PREV
+			}
+		}
+	}
+}
+
+# A convention topic is open for the docket: not on cooldown, and its agency
+# not yet founded (a convention adopted in full is not raised again).
+# Scope: any
+un_docket_topic_open_human_rights = {
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = human_rights } }
+	NOT = { has_global_variable = un_agency_unhrc }
+	global_var:un_authority >= 40
+}
+un_docket_topic_open_icc = {
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = icc } }
+	NOT = { has_global_variable = un_agency_icc }
+	global_var:un_authority >= 40
+}
+un_docket_topic_open_heritage = {
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = heritage } }
+	NOT = { has_global_variable = un_agency_unesco }
+	global_var:un_authority >= 40
+}
+un_docket_topic_open_npt = {
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = npt } }
+	NOT = { has_global_variable = un_agency_iaea }
+	global_var:un_authority >= 40
+}
+un_docket_topic_open_climate = {
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = climate } }
+	NOT = { has_global_variable = un_agency_unep }
+	global_var:un_authority >= 30
+}
+un_docket_topic_open_pandemic = {
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = pandemic } }
+	NOT = { has_global_variable = un_agency_who }
+	global_var:un_authority >= 20
+}
+un_docket_topic_open_refugee = {
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = refugee } }
+	NOT = { has_global_variable = un_agency_unhcr }
+	global_var:un_authority >= 20
+}
+un_docket_topic_open_space = {
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = space } }
+	NOT = { has_global_variable = un_agency_unoosa }
+	global_var:un_authority >= 40
+}
+un_docket_topic_open_law_of_sea = {
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = law_of_sea } }
+	NOT = { has_global_variable = un_agency_itlos }
+	global_var:un_authority >= 30
+}
+un_docket_topic_open_decolonization = {
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = decolonization } }
+	global_var:un_authority >= 30
+	any_country = { any_subject_or_below = { count >= 1 } }
+}
+un_docket_topic_open_reform = {
+	un_charter_reform_ripe = yes
+	NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
+}
+
+# Who may be offered each topic: the old proposer events' own per-country
+# gates. Scope: the prospective proposer
+un_docket_may_propose_human_rights = {
+	un_docket_can_be_offered = yes
+	has_technology_researched = human_rights
+	NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+}
+un_docket_may_propose_icc = {
+	un_docket_can_be_offered = yes
+	country_rank >= rank_value:major_power
+	has_technology_researched = human_rights
+	NOT = { has_modifier = un_icc_member_modifier }
+	NOT = { has_modifier = un_icc_refusal_modifier }
+}
+un_docket_may_propose_heritage = {
+	un_docket_can_be_offered = yes
+	NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
+	NOT = { has_modifier = un_heritage_token_modifier }
+}
+un_docket_may_propose_npt = {
+	un_docket_can_be_offered = yes
+	has_technology_researched = nuclear_weapons
+	NOT = { je:je_united_nations ?= { has_modifier = un_nonproliferation_modifier } }
+	NOT = { has_modifier = un_nonproliferation_refusal_modifier }
+}
+un_docket_may_propose_climate = {
+	un_docket_can_be_offered = yes
+	has_technology_researched = environmental_movement
+	NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }
+	NOT = { has_modifier = un_climate_refusal_modifier }
+}
+un_docket_may_propose_pandemic = {
+	un_docket_can_be_offered = yes
+	country_rank >= rank_value:major_power
+	has_technology_researched = antibiotics
+	NOT = { je:je_united_nations ?= { has_modifier = un_pandemic_cooperation_modifier } }
+	NOT = { has_modifier = un_pandemic_isolationist_modifier }
+}
+un_docket_may_propose_refugee = {
+	un_docket_can_be_offered = yes
+	NOT = { je:je_united_nations ?= { has_modifier = un_refugee_program_modifier } }
+	NOT = { has_modifier = un_refugee_closed_modifier }
+	any_country = {
+		NOT = { this = PREV }
+		OR = {
+			is_at_war = yes
+			any_scope_state = { average_sol < 6 }
+		}
+	}
+}
+un_docket_may_propose_space = {
+	un_docket_can_be_offered = yes
+	country_rank >= rank_value:major_power
+	has_technology_researched = space_exploration
+	NOT = { je:je_united_nations ?= { has_modifier = un_space_partnership_modifier } }
+	NOT = { has_modifier = un_space_independent_modifier }
+}
+un_docket_may_propose_law_of_sea = {
+	un_docket_can_be_offered = yes
+	has_technology_researched = international_trade
+	NOT = { has_modifier = un_law_of_sea_modifier }
+	NOT = { has_modifier = un_law_of_sea_refusal_modifier }
+}
+un_docket_may_propose_decolonization = {
+	un_docket_can_be_offered = yes
+	has_technology_researched = decolonization
+	NOT = { has_modifier = un_decolonization_champion_modifier }
+	NOT = { has_modifier = un_colonial_defender_modifier }
+	NOT = { has_variable = colonial_empire_collapsed_recently }
+}
+un_docket_may_propose_reform = {
+	un_docket_can_be_offered = yes
+	country_rank >= rank_value:great_power
+	NOT = { has_modifier = un_reform_champion_modifier }
+	NOT = { has_modifier = un_reform_opponent_modifier }
+}
+
+# Business with no situation behind it that the docket could take up now.
+# Scope: any
+un_docket_agenda_ready = {
+	NOT = { has_global_variable = un_dkt_agenda_months_left }
+	OR = {
+		AND = {
+			un_docket_topic_open_human_rights = yes
+			any_country = { un_docket_may_propose_human_rights = yes }
+		}
+		AND = {
+			un_docket_topic_open_icc = yes
+			has_global_variable = un_agency_unhrc
+			any_country = { un_docket_may_propose_icc = yes }
+		}
+		AND = {
+			un_docket_topic_open_heritage = yes
+			any_country = { un_docket_may_propose_heritage = yes }
+		}
+		AND = {
+			un_docket_topic_open_pandemic = yes
+			any_country = { un_docket_may_propose_pandemic = yes }
+		}
+		AND = {
+			un_docket_topic_open_refugee = yes
+			any_country = { un_docket_may_propose_refugee = yes }
+		}
+		AND = {
+			un_docket_topic_open_law_of_sea = yes
+			any_country = { un_docket_may_propose_law_of_sea = yes }
+		}
+		AND = {
+			un_docket_topic_open_decolonization = yes
+			any_country = { un_docket_may_propose_decolonization = yes }
+		}
+	}
+}
+
+# The accused's grievance is of cause $CAUSE$ (1 nuclear, 2 war, 3 covert), as
+# the docket wrote it on the accused when it took the item up.
+# Scope: the accused (scope:condemned_country)
+un_docket_cause_is = {
+	has_variable = un_dkt_cause
+	var:un_dkt_cause = $CAUSE$
+}

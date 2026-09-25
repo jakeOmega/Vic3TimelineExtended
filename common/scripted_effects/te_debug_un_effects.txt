@@ -197,3 +197,46 @@ te_debug_un_skip_refounding_cooldown = {
 		set_global_variable = { name = un_conference_months value = un_conference_months_needed }
 	}
 }
+
+# ---- Redesign phase 4: the docket ----
+
+# Open the docket now: clear its cadence, the Assembly-business cadence and
+# the recess, and scan at once (un_docket_effects.txt). A vote in session
+# still holds the floor, so only business that opens no resolution can be
+# taken up while one is voting.
+# Scope: any
+te_debug_un_open_docket = {
+	if = {
+		limit = { has_global_variable = un_docket_months_left }
+		remove_global_variable = un_docket_months_left
+	}
+	if = {
+		limit = { has_global_variable = un_dkt_agenda_months_left }
+		remove_global_variable = un_dkt_agenda_months_left
+	}
+	if = {
+		limit = { has_global_variable = un_recess_months }
+		remove_global_variable = un_recess_months
+	}
+	un_docket_seed = yes
+	un_docket_scan = yes
+}
+
+# Stage a grievance against us: the strongest other member is caught running a
+# severe covert operation on us, with a covert record heavy enough for a
+# condemnation, and the docket opens at once.
+# Scope: the country that ran the console event
+te_debug_un_stage_grievance = {
+	save_scope_as = te_debug_un_wronged
+	ordered_country = {
+		limit = {
+			NOT = { this = scope:te_debug_un_wronged }
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		order_by = un_docket_share_order
+		max = 1
+		un_dossier_record = { RECORD = covert POINTS = 40 }
+		un_docket_note_grievance = { KIND = covert VICTIM = scope:te_debug_un_wronged }
+	}
+	te_debug_un_open_docket = yes
+}

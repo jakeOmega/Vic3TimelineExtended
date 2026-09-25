@@ -36,7 +36,9 @@ un_floor_open_to_ai = {
 
 # The scoped country may table business now, as far as the recess goes: a
 # human member always; the AI only while the floor is open. Every proposal
-# path (the propose triggers, the proposer-event roll) asks this.
+# path asks this: the propose triggers directly, and the docket through
+# un_docket_can_be_offered (redesign phase 4), which never raises business
+# that would open a resolution while the floor is in recess.
 # Scope: the prospective proposer
 un_may_table_now = {
 	OR = {

@@ -202,6 +202,8 @@ un_resolution_record_veto = {
 	if = {
 		limit = { scope:un_resolution ?= { has_tag = un_res_voting } }
 		un_lean_tally_un_res_no = yes
+		# The proposer answers the veto (un_events.11; redesign phase 4).
+		un_docket_veto_consequence = yes
 	}
 	scope:un_resolution ?= {
 		if = {

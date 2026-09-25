@@ -4163,3 +4163,18 @@ A game rule reaches script through `has_game_rule`, reaches production methods t
 ## An Approach-to-Target Model Never Reaches an Absorbing Boundary — Give the Step a Floor There
 
 A quantity that moves each month by `(target − value) / N` approaches its target geometrically and **never arrives**. That is the point of the model (a shock fades, a new equilibrium phases in), but it silently disarms any rule that fires *at* the boundary: with a target of 0, UN authority would fall from 10 to 1 in about nine years and then take for ever to reach 0, so "at 0 the UN dissolves" could never fire, and a linear "months until 0" projection would read the same number every month (the step shrinks exactly as fast as the distance). UN redesign phase 2 fixes it at the boundary only: while the crisis is open **and the target itself is past the collapse line**, the step is clamped to at most −0.25 a month (`un_authority_step_value`, a `max =` inside an `if`, written last so it bounds the final step). Two things to copy: gate the floor on the *target* being beyond the line, not on the value alone, so a system whose equilibrium sits just above the boundary lingers rather than being dragged over it; and floor the display projection at the same rate, or the month the clamp starts will project a collapse far later than the one the clamp delivers.
+
+## A Flag the Sender Sets Before `trigger_event` Must Not Gate the Event It Fires
+
+When a dispatcher marks a country and then fires an event at it — the UN docket sets
+`un_dkt_offered` on the recipient so the same item is never offered to it twice, then
+`trigger_event`s the proposer event — the receiving event's own `trigger` must not re-test the
+dispatcher's eligibility trigger if that trigger includes the mark. `un_docket_may_propose_<topic>`
+contains `NOT = { has_variable = un_dkt_offered }`; had the proposer events used it as their
+`trigger`, every offer would have failed on arrival, silently (a failed event trigger logs
+nothing), and the docket would have looked like it raised items no one ever received. Keep the
+two apart: the dispatcher's trigger decides *who is asked*, the event's trigger only re-checks the
+facts that may have changed in transit (membership, the vote lock, the target still existing).
+The same applies to a delayed event's `cooldown`: the dispatcher already paces the item, and a
+cooldown on the event is a second, invisible gate that makes an offer vanish for a country that
+answered some earlier one. The docket-fired UN events dropped theirs for this reason.

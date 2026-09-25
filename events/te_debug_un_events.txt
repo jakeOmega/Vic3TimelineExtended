@@ -143,6 +143,27 @@ te_debug_un.1 = { # REVIEWED 2026-09-18: console-only test event (`event te_debu
 		te_debug_un_skip_refounding_cooldown = yes
 	}
 
+	# ---- Redesign phase 4 ----
+	# Open the docket now: end its cadence and the recess, and take up the
+	# gravest live situation at once.
+	option = {
+		name = te_debug_un.1.m
+		trigger = { has_global_variable = un_founded }
+		te_debug_un_open_docket = yes
+	}
+
+	# Stage a grievance against us: the strongest other member is caught
+	# running a severe covert operation on us, with a record to match, and
+	# the docket opens at once, so our appeal (un_events.2) arrives tomorrow.
+	option = {
+		name = te_debug_un.1.n
+		trigger = {
+			has_global_variable = un_founded
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		te_debug_un_stage_grievance = yes
+	}
+
 	option = {
 		name = te_debug_un.1.z
 	}

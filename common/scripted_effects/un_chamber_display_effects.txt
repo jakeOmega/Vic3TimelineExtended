@@ -1064,36 +1064,149 @@ un_chamber_propose_reform_row = {
 
 # One line per topic that has no proposal control of its own: the ten
 # conventions, declarations and programmes that reach the floor only when the
-# proposer events in events/un_events.txt fire. Listing them is the point —
-# without it a player has no way of knowing the Assembly can take them up at
-# all. The only gate that is cheaply knowable from script is the five-year
-# topic cooldown a closed resolution leaves behind; each event also carries its
-# own `cooldown = { days = ... }` and its own trigger (technology, authority,
-# laws), neither of which script can read.
-# Parameters: $NAME$  = the topic's loc key
-#             $TOPIC$ = topic key for un_resolution_topic_on_cooldown
+# docket offers them to a delegation (redesign phase 4, un_docket_effects.txt).
+# Listing them is the point — without it a player has no way of knowing the
+# Assembly can take them up at all. Each line says what raises the topic, and
+# whether it is in force (its agency founded: the docket never raises it
+# again) or on the five-year cooldown a closed resolution leaves behind.
+# Parameters: $NAME$   = the topic's loc key
+#             $TOPIC$  = topic key for un_resolution_topic_on_cooldown
+#             $RAISED$ = the loc key saying what raises it
+#             $AGENCY$ = the un_agency_<agency> global it founds (none: none)
 # Scope: country
 un_chamber_assembly_topic_line = {
 	custom_tooltip_no_bullet = $NAME$
+	custom_tooltip_no_bullet = $RAISED$
 	if = {
+		limit = { has_global_variable = un_agency_$AGENCY$ }
+		custom_tooltip_no_bullet = je_un_chamber_topic_in_force
+	}
+	else_if = {
 		limit = { un_resolution_topic_on_cooldown = { TOPIC = $TOPIC$ } }
 		custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown
 	}
 }
 
+# The docket (redesign phase 4): what it last took up, and when it takes up the
+# next item. Root-level lines only.
+# Scope: country
+un_chamber_docket_block = {
+	custom_tooltip_no_bullet = je_un_chamber_docket_intro
+	if = {
+		limit = { has_global_variable = un_dkt_last_type }
+		un_chamber_docket_last_line = yes
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_docket_none
+	}
+	if = {
+		limit = { has_global_variable = un_docket_months_left }
+		custom_tooltip_no_bullet = je_un_chamber_docket_next
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_docket_open
+	}
+}
+
+# The last item, in words, by its code (the table in un_docket_effects.txt).
+# The codes that name a country leave it in global_var:un_dkt_last_subject.
+# Scope: country
+un_chamber_docket_last_line = {
+	if = {
+		limit = {
+			global_var:un_dkt_last_type = 1
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_1
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 2
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_2
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 3
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_3
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 4
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_4
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 5
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_5
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 6
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_6
+	}
+	else_if = {
+		limit = { global_var:un_dkt_last_type = 7 }
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_7
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 8
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_8
+	}
+	else_if = {
+		limit = { global_var:un_dkt_last_type = 9 }
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_9
+	}
+	else_if = {
+		limit = { global_var:un_dkt_last_type = 10 }
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_10
+	}
+	else_if = {
+		limit = { global_var:un_dkt_last_type = 11 }
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_11
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 12
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_12
+	}
+	else_if = {
+		limit = { global_var:un_dkt_last_type = 13 }
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_13
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_other
+	}
+}
+
 # Scope: country
 un_chamber_assembly_business_block = {
+	un_chamber_docket_block = yes
 	custom_tooltip_no_bullet = je_un_chamber_assembly_intro
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_human_rights TOPIC = human_rights }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_icc TOPIC = icc }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_npt TOPIC = npt }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_climate TOPIC = climate }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_pandemic TOPIC = pandemic }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_refugee TOPIC = refugee }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_heritage TOPIC = heritage }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_decolonization TOPIC = decolonization }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_space TOPIC = space }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_law_of_sea TOPIC = law_of_sea }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_human_rights TOPIC = human_rights RAISED = je_un_chamber_raised_human_rights AGENCY = unhrc }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_icc TOPIC = icc RAISED = je_un_chamber_raised_icc AGENCY = icc }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_npt TOPIC = npt RAISED = je_un_chamber_raised_npt AGENCY = iaea }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_climate TOPIC = climate RAISED = je_un_chamber_raised_climate AGENCY = unep }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_pandemic TOPIC = pandemic RAISED = je_un_chamber_raised_agenda AGENCY = who }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_refugee TOPIC = refugee RAISED = je_un_chamber_raised_agenda AGENCY = unhcr }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_heritage TOPIC = heritage RAISED = je_un_chamber_raised_agenda AGENCY = unesco }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_decolonization TOPIC = decolonization RAISED = je_un_chamber_raised_decolonization AGENCY = none }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_space TOPIC = space RAISED = je_un_chamber_raised_space AGENCY = unoosa }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_law_of_sea TOPIC = law_of_sea RAISED = je_un_chamber_raised_agenda AGENCY = itlos }
 }
 
 # ============================================================================

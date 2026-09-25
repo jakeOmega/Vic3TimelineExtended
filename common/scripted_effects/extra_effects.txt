@@ -463,6 +463,9 @@ nuclear_first_strike = { # Scope is target state
 					# ...and a record the Assembly can hold against the striker
 					# (redesign phase 3, un_dossier_effects.txt).
 					un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_first_strike }
+					# ...and a grievance the struck country may bring before the
+					# Assembly (redesign phase 4, un_docket_effects.txt).
+					un_docket_note_grievance = { KIND = nuclear VICTIM = scope:target_country }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
 						trigger_event = { id = nuclear_weapon_events.1 popup = yes }
@@ -662,12 +665,14 @@ nuclear_tactical_strike = {
 	}
 
 	trigger_event = { id = nuclear_weapon_events.5 popup = yes }
+	owner = { save_scope_as = un_dkt_struck_country }
 	scope:attacking_country = {
 		trigger_event = { id = nuclear_weapon_events.6 popup = yes }
 		# UN: battlefield nuclear use erodes the order pillar, whoever strikes
 		# (un_authority_effects.txt).
 		un_ledger_actor_entry_unweighted = { PILLAR = order POINTS = -1.5 REASON = 9 }
 		un_dossier_record = { RECORD = nuclear POINTS = un_dos_points_tactical }
+		un_docket_note_grievance = { KIND = nuclear VICTIM = scope:un_dkt_struck_country }
 		# First nuclear weapon used in combat — world-historical event
 		if = {
 			limit = { NOT = { has_global_variable = world_first_nuclear_weapon_used } }

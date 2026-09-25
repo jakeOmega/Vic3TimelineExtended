@@ -227,6 +227,11 @@ un_leave_button = {
 			custom_tooltip = un_ledger_tt_p5_walkout
 			un_authority_actor_shock_weighted = { AMOUNT = -4 REASON = 11 }
 		}
+		# A great power walking out: the other great-power members answer it
+		# (un_events.20; redesign phase 4, un_docket_effects.txt).
+		hidden_effect = {
+			un_docket_walkout_consequence = yes
+		}
 		custom_tooltip = {
 			text = "UN_LEAVE_DESC"
 			# Membership, seats, programmes and their costs, our own sanctions

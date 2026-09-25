@@ -1092,6 +1092,18 @@ un_vote.2 = {
 				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				# Proposer becomes sanctions enforcer
 				add_modifier = { name = un_sanctions_enforcer_modifier }
+				# ...and in three months decides how strictly to enforce
+				# (un_events.5; redesign phase 4: fired here, not rolled).
+				if = {
+					limit = {
+						exists = scope:un_vote_target
+						NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
+					}
+					hidden_effect = {
+						scope:un_vote_target = { save_scope_as = sanctioned_country }
+						trigger_event = { id = un_events.5 days = 90 }
+					}
+				}
 				# Apply sanctions to target
 				if = {
 					limit = { exists = scope:un_vote_target }
