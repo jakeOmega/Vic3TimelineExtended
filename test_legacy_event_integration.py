@@ -24,6 +24,19 @@ def body(data, key):
     return data[key][1]
 
 
+def find_dispatch(block, event):
+    """The `trigger` of the random-list entry that fires `event`, or None."""
+    if any(key == 'trigger_event' and isinstance(value, dict) and body(value, 'id') == event
+           for key, _, value in entries(block)):
+        return body(block, 'trigger')
+    for _, _, value in entries(block):
+        if isinstance(value, dict):
+            found = find_dispatch(value, event)
+            if found is not None:
+                return found
+    return None
+
+
 class LegacyIntegrationTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
@@ -60,8 +73,10 @@ class LegacyIntegrationTests(unittest.TestCase):
                 answer = {'=': operator.eq, '>': operator.gt, '>=': operator.ge, '<': operator.lt}[op](number, float(value))
             elif key == 'any_scope_building':
                 answer = current.get('building', False)
-            elif key in ('any_rival_country', 'country_rank'):
-                answer = True  # These scenarios hold the unrelated eligibility gates satisfied.
+            elif key in ('any_rival_country', 'country_rank', 'exists'):
+                # These scenarios hold the unrelated eligibility gates satisfied
+                # (`exists` is a follow-up event's check for the saved actor).
+                answer = True
             else:
                 self.fail(f'Unhandled trigger: {key}')
             answers.append(answer)
@@ -108,6 +123,44 @@ class LegacyIntegrationTests(unittest.TestCase):
                                        techs={'cryptography', 'space_exploration'}, building=True)
                 self.assertEqual(self.evaluate(gate, country, country), not enabled)
 
+    def test_covert_shaped_chains_are_disabled_system_fallbacks(self):
+        # Propaganda, proxy funding, espionage, election meddling and funding a
+        # rival's militants are covert operations when the system is on, so both
+        # the actor's precursor (.202/.203/.32/.17) and the victim's event exist
+        # only with it off.
+        social = parse('events/social_tensions_events.txt')
+        for events, namespace, numbers in [(self.ir, 'international_relations_events', (2, 4, 6, 202, 203)),
+                                           (self.society, 'society_technology_events', (14, 32)),
+                                           (social, 'social_tensions_events', (2, 17))]:
+            for number in numbers:
+                name = f'{namespace}.{number}'
+                gate = body(body(events, name), 'trigger')
+                rules = [value for key, _, value in entries(gate) if key == 'has_game_rule']
+                with self.subTest(event=name):
+                    self.assertEqual(rules, ['covert_warfare_disabled'])
+
+    def test_covert_shaped_pool_entries_are_gated(self):
+        # The monthly pools offer the precursors only with covert warfare off,
+        # and the victims' events no longer have pool entries of their own.
+        actions = parse('common/on_actions/extra_on_actions.txt')
+        for event in ('international_relations_events.2', 'international_relations_events.202',
+                      'international_relations_events.203', 'society_technology_events.32'):
+            gate = find_dispatch(actions, event)
+            with self.subTest(event=event):
+                self.assertIsNotNone(gate)
+                rules = [value for key, _, value in entries(gate) if key == 'has_game_rule']
+                self.assertEqual(rules, ['covert_warfare_disabled'])
+        for event in ('international_relations_events.1', 'international_relations_events.4',
+                      'international_relations_events.6', 'society_technology_events.14'):
+            with self.subTest(event=event):
+                self.assertIsNone(find_dispatch(actions, event))
+        # The yearly pool is a bare `weight = id` list, so .17 carries its own
+        # gate (checked above); .2 must not be in it.
+        yearly = parse('common/on_actions/social_tensions_on_actions.txt')
+        pool = [value for _, _, value in entries(body(body(yearly, 'on_yearly_events'), 'random_events'))]
+        self.assertIn('social_tensions_events.17', pool)
+        self.assertNotIn('social_tensions_events.2', pool)
+
     def test_colony_stories_require_real_settlements_when_enabled(self):
         for number in (18, 19):
             gate = body(body(self.society, f'society_technology_events.{number}'), 'trigger')
@@ -123,15 +176,6 @@ class LegacyIntegrationTests(unittest.TestCase):
 
     def test_colony_dispatch_backfills_saves_without_racing_establishment(self):
         actions = parse('common/on_actions/extra_on_actions.txt')
-        def find_dispatch(block, event):
-            if any(key == 'trigger_event' and body(value, 'id') == event for key, _, value in entries(block)):
-                return body(block, 'trigger')
-            for _, _, value in entries(block):
-                if isinstance(value, dict):
-                    found = find_dispatch(value, event)
-                    if found is not None:
-                        return found
-            return None
         first = find_dispatch(actions, 'society_technology_events.18')
         governance = find_dispatch(actions, 'society_technology_events.19')
         self.assertIsNotNone(first)
@@ -185,6 +229,22 @@ class LegacyIntegrationTests(unittest.TestCase):
                 self.assertEqual(arithmetic(debit, amount, days) + arithmetic(credit, amount, days), 0)
         options = body(self.banking, 'banking_cycle_events.45')['option']
         self.assertEqual(sum('banking_transfer_emergency_aid' in option for _, option in options), 2)
+
+    def test_bailout_is_asked_for_before_it_is_answered(self):
+        # The donor's pulse puts the question to the distressed partner (.68);
+        # .45 reaches the donor only from .68's appeal option, and never picks
+        # a partner of its own. Every .45 answer is reported back (.69).
+        text = (ROOT / 'common/scripted_effects/banking_cycle_effects.txt').read_text(encoding='utf-8-sig')
+        self.assertIn('trigger_event = { id = banking_cycle_events.68 }', text)
+        self.assertNotIn('trigger_event = { id = banking_cycle_events.45 }', text)
+        request = body(self.banking, 'banking_cycle_events.45')
+        self.assertNotIn('immediate', request)
+        appeal, alone = [option for _, option in body(self.banking, 'banking_cycle_events.68')['option']]
+        self.assertIn('banking_cycle_events.45', str(appeal))
+        self.assertNotIn('banking_cycle_events.45', str(alone))
+        answers = [str(option) for _, option in request['option']]
+        self.assertEqual(sum('te_ea_bailout_answer_aid' in answer for answer in answers), 2)
+        self.assertEqual(sum('te_ea_bailout_answer_refusal' in answer for answer in answers), 1)
 
 
 if __name__ == '__main__':

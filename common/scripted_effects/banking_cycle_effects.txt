@@ -913,14 +913,35 @@ banking_cycle_random_event_effect = {
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 			# Event 45: A distressed trading partner requests aid from a solvent donor.
+			# The partner decides whether to ask (banking_cycle_events.68); .45
+			# reaches us, the donor, only if it does. Weight 4 (was 3, when .45
+			# fired here directly) keeps .45's rate near where it was, given the
+			# partner's ~75% appeal odds.
 			0 = {
 				modifier = {
 					if = {
-						limit = { banking_can_offer_bailout = yes }
-						add = 3
+						limit = {
+							banking_can_offer_bailout = yes
+							any_country = {
+								banking_is_bailout_recipient = yes
+								te_ea_bailout_can_be_asked = yes
+							}
+						}
+						add = 4
 					}
 				}
-				trigger_event = { id = banking_cycle_events.45 }
+				save_scope_as = bailout_donor
+				random_country = {
+					limit = {
+						banking_is_bailout_recipient = yes
+						te_ea_bailout_can_be_asked = yes
+					}
+					save_scope_as = bailout_country
+				}
+				if = {
+					limit = { exists = scope:bailout_country }
+					scope:bailout_country = { trigger_event = { id = banking_cycle_events.68 } }
+				}
 				set_variable = { name = banking_event_cooldown value = 18 }
 			}
 

@@ -157,6 +157,9 @@
 		else = {
 			trigger_event = { id = decolonization_events.200 }   # generic Empire Endures
 		}
+		# Chosen-release count (decol_record_chosen_release) is read only by
+		# the voluntary-fail event .206; drop it on every other ending.
+		remove_variable = decol_chosen_releases
 
 		# Clean up persistent state from this JE run. Path-tracking variables,
 		# country-scope policy modifiers, civil-rights movement modifiers, and
@@ -204,6 +207,7 @@
 					"scripted_bar_progress(colonial_stability_bar)" > 0
 				}
 			}
+			# .206 reads and then clears var:decol_chosen_releases itself.
 			trigger_event = { id = decolonization_events.206 }   # Voluntary Decolonization
 		}
 		else_if = {
@@ -218,6 +222,7 @@
 				}
 			}
 			trigger_event = { id = decolonization_events.204 }   # Negotiated Withdrawal
+			remove_variable = decol_chosen_releases   # read only by .206
 			# Bar reached zero -- 10-year cooldown blocks re-entry even if
 			# colonies are reacquired. Voluntary fail (bar>0) above does not
 			# set this flag, so peaceful decolonizers can re-engage freely.
@@ -225,6 +230,7 @@
 		}
 		else = {
 			trigger_event = { id = decolonization_events.201 }   # The Empire Crumbles (bloody)
+			remove_variable = decol_chosen_releases   # read only by .206
 			set_variable = { name = colonial_empire_collapsed_recently value = yes days = 3650 }
 		}
 

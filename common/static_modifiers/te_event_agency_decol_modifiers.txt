@@ -1,0 +1,15 @@
+﻿# ============================================================================
+# EVENT AGENCY — DECOLONIZATION
+# ============================================================================
+
+# decolonization_events.206, neutral branch: je_colonial_empire ended with no
+# colony left and none released by our own choice (lost, integrated, grown out
+# of the colonial label). Same values as negotiated_withdrawal_modifier, which
+# the chosen-release branch keeps, under a label that does not claim a
+# negotiation that never happened.
+post_imperial_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_diplomatic_reputation_add = 5
+	country_cultural_pull_mult = 0.03
+	character_loyalty_add = 1
+}
