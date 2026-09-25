@@ -1551,16 +1551,29 @@ un_vote.3 = {
 # member (which then casts), and by un_vote_refresh_human_leans to every human
 # member (which only has its lean written, for the chamber). ROOT is the voter,
 # which the relations terms of the lean need.
+# Both senders save scope:un_resolution first. If it did not reach the event,
+# the open resolution (global_var:un_active_resolution) stands in, so a lost
+# scope costs the chamber nothing and the AI still votes.
 un_vote.4 = {
 	type = country_event
 	hidden = yes
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		scope:un_resolution ?= { has_tag = un_res_voting }
+		OR = {
+			scope:un_resolution ?= { has_tag = un_res_voting }
+			AND = {
+				NOT = { exists = scope:un_resolution }
+				global_var:un_active_resolution ?= { has_tag = un_res_voting }
+			}
+		}
 	}
 
 	immediate = {
+		if = {
+			limit = { NOT = { exists = scope:un_resolution } }
+			global_var:un_active_resolution = { save_scope_as = un_resolution }
+		}
 		scope:un_resolution = {
 			var:un_res_proposer ?= { save_scope_as = un_vote_proposer }
 			var:un_res_target ?= { save_scope_as = un_vote_target }
@@ -1578,19 +1591,33 @@ un_vote.4 = {
 
 # Thirty days after a resolution opens: send the AI members their ballots.
 # Hidden; fired to the proposer by un_resolution_open. If the proposer is gone
-# the monthly pulse sends them instead (un_resolutions_monthly_update).
+# the monthly pulse sends them instead (un_resolutions_monthly_update). The
+# same stand-in as un_vote.4 if scope:un_resolution did not arrive.
 un_vote.5 = {
 	type = country_event
 	hidden = yes
 
 	trigger = {
-		scope:un_resolution ?= {
-			has_tag = un_res_voting
-			NOT = { has_variable = un_res_ai_cast }
+		OR = {
+			scope:un_resolution ?= {
+				has_tag = un_res_voting
+				NOT = { has_variable = un_res_ai_cast }
+			}
+			AND = {
+				NOT = { exists = scope:un_resolution }
+				global_var:un_active_resolution ?= {
+					has_tag = un_res_voting
+					NOT = { has_variable = un_res_ai_cast }
+				}
+			}
 		}
 	}
 
 	immediate = {
+		if = {
+			limit = { NOT = { exists = scope:un_resolution } }
+			global_var:un_active_resolution = { save_scope_as = un_resolution }
+		}
 		un_vote_dispatch_ai_ballots = yes
 	}
 }
