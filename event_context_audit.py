@@ -43,6 +43,10 @@ September 2026, where the checks caught 27 of 42 confirmed findings):
 - **Polarity is ignored.** Any read of a system's state counts as gating:
   `has_game_rule = X_enabled` alone satisfies `system_ungated` for X even
   where the event should be the disabled-rule fallback instead.
+- **Unparsed chaining.** `random_on_actions`, `first_valid_on_action` and
+  `fallback` on-action links are not followed (the mod uses none today), and
+  the block matcher treats a `#` inside a quoted string as a comment (no event
+  file has one).
 
 How the dispatch graph is built
 -------------------------------
