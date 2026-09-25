@@ -1,0 +1,38 @@
+﻿# ============================================================================
+# EVENT AGENCY — DECOLONIZATION
+# ============================================================================
+
+# The reparations a former colony names when it demands them of its former
+# overlord. decolonization_events.61 fixes the figure into the claimant's
+# var:decol_reparations_claim; .6 option A moves exactly that sum from the
+# payer's treasury to the claimant's.
+#
+# A tenth of the payer's yearly revenue (about 1-2% of its GDP), in line with
+# the mod's other country-to-country sums (un_loan_amount_value lends 2% of GDP,
+# the swap line caps at 2%). Capped at a tenth of the claimant's own GDP, so a
+# superpower settling with a small state does not hand it years of output.
+#
+# `income` is WEEKLY (docs/engine/event_targets_summary.txt), so it is
+# annualised through te_mon_deficit_annualise_factor — the mod's single
+# hypothesis constant for that cadence, shared so both flip together if a
+# running game shows the flows to be annual already.
+#
+# Scope: any, with scope:reparations_payer and scope:reparations_claimant saved.
+decol_reparations_value = {
+	value = scope:reparations_payer.income
+	multiply = te_mon_deficit_annualise_factor
+	multiply = decol_reparations_income_share
+	max = decol_reparations_cap
+	min = 0
+	round = yes
+}
+
+decol_reparations_income_share = {
+	value = 0.1
+}
+
+# Scope: any, with scope:reparations_claimant saved.
+decol_reparations_cap = {
+	value = scope:reparations_claimant.gdp
+	multiply = 0.1
+}

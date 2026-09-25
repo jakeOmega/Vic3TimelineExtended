@@ -1,0 +1,20 @@
+﻿# ============================================================================
+# EVENT AGENCY — DECOLONIZATION
+# The proposer of a five-year truce (decolonization_events.16.b / .17.c) hears
+# how the neighbour answered in decolonization_events.62 / .63.
+# Loc: localization/english/te_event_agency_decol_l_english.yml.
+# ============================================================================
+
+decol_truce_proposal_accepted_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+
+decol_truce_proposal_declined_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = neutral
+}

@@ -1623,30 +1623,44 @@ decolonization_events_on_action = {
 					}
 					trigger_event = { id = decolonization_events.4 }
 				}
-				# Former Colony Seeks Closer Ties
+				# Former Colony Seeks Closer Ties. Rolled here, on us, the former
+				# overlord (so the roll frequency is what .5 always had), but the
+				# overture is the former colony's decision: .60 asks one of our
+				# former colonies, and only its "propose" option sends .5 back.
 				10 = {
 					trigger = {
-						country_rank >= rank_value:major_power
-						NOT = { any_subject_or_below = { always = yes } }
+						decol_ties_overture_target_ok = yes
 						any_country = {
-							NOT = { this = root }
-							has_variable = recently_decolonized
-							is_subject = no
+							decol_can_seek_ties_with_former_overlord = yes
+							var:former_overlord = root
 						}
 					}
-					trigger_event = { id = decolonization_events.5 }
+					random_country = {
+						limit = {
+							decol_can_seek_ties_with_former_overlord = yes
+							var:former_overlord = root
+						}
+						trigger_event = { id = decolonization_events.60 }
+					}
 				}
-				# Colonial Reparations Demanded
+				# Colonial Reparations Demanded. Same shape: .61 asks one of our
+				# former colonies whether to press a claim; only its "demand"
+				# option sends .6 back to us.
 				10 = {
 					trigger = {
-						country_rank >= rank_value:major_power
+						decol_reparations_demand_target_ok = yes
 						any_country = {
-							NOT = { this = root }
-							has_variable = recently_decolonized
-							is_subject = no
+							decol_can_demand_reparations_from_former_overlord = yes
+							var:former_overlord = root
 						}
 					}
-					trigger_event = { id = decolonization_events.6 }
+					random_country = {
+						limit = {
+							decol_can_demand_reparations_from_former_overlord = yes
+							var:former_overlord = root
+						}
+						trigger_event = { id = decolonization_events.61 }
+					}
 				}
 				# Post-Colonial Nation Building (for new countries)
 				10 = {

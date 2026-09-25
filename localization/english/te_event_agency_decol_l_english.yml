@@ -1,0 +1,23 @@
+﻿l_english:
+# Decolonization notices. The messages are defined in
+# common/messages/extra_messages.txt (the older ones) and
+# common/messages/te_event_agency_decol_messages.txt (the truce pair); the
+# engine reads only notification_<message>_name/_desc/_tooltip.
+ notification_colonial_reparations_paid_notice_name:0 "Reparations Paid"
+ notification_colonial_reparations_paid_notice_desc:0 "[SCOPE.sCountry('reparations_payer').GetName] has accepted our claim and paid the colonial reparations we demanded."
+ notification_colonial_reparations_paid_notice_tooltip:0 "#header $notification_colonial_reparations_paid_notice_name$#!\n$notification_colonial_reparations_paid_notice_desc$"
+ notification_colonial_reparations_refused_notice_name:0 "Reparations Refused"
+ notification_colonial_reparations_refused_notice_desc:0 "[SCOPE.sCountry('reparations_payer').GetName] has refused our demand for colonial reparations."
+ notification_colonial_reparations_refused_notice_tooltip:0 "#header $notification_colonial_reparations_refused_notice_name$#!\n$notification_colonial_reparations_refused_notice_desc$"
+ notification_decol_truce_proposal_accepted_notice_name:0 "Truce Accepted"
+ notification_decol_truce_proposal_accepted_notice_desc:0 "[SCOPE.sCountry('truce_responder').GetName] has accepted our offer: a five-year truce now binds both our nations."
+ notification_decol_truce_proposal_accepted_notice_tooltip:0 "#header $notification_decol_truce_proposal_accepted_notice_name$#!\n$notification_decol_truce_proposal_accepted_notice_desc$"
+ notification_decol_truce_proposal_declined_notice_name:0 "Truce Refused"
+ notification_decol_truce_proposal_declined_notice_desc:0 "[SCOPE.sCountry('truce_responder').GetName] has refused our offer of a five-year truce."
+ notification_decol_truce_proposal_declined_notice_tooltip:0 "#header $notification_decol_truce_proposal_declined_notice_name$#!\n$notification_decol_truce_proposal_declined_notice_desc$"
+ notification_former_colony_ties_declined_notice_name:0 "Overture Rebuffed"
+ notification_former_colony_ties_declined_notice_desc:0 "[SCOPE.sCountry('ties_former_overlord').GetName] has turned down our proposal for closer ties."
+ notification_former_colony_ties_declined_notice_tooltip:0 "#header $notification_former_colony_ties_declined_notice_name$#!\n$notification_former_colony_ties_declined_notice_desc$"
+ notification_former_colony_ties_welcomed_notice_name:0 "Closer Ties Welcomed"
+ notification_former_colony_ties_welcomed_notice_desc:0 "[SCOPE.sCountry('ties_former_overlord').GetName] has welcomed our proposal for closer ties."
+ notification_former_colony_ties_welcomed_notice_tooltip:0 "#header $notification_former_colony_ties_welcomed_notice_name$#!\n$notification_former_colony_ties_welcomed_notice_desc$"
