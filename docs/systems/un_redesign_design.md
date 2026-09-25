@@ -66,7 +66,7 @@ script, what the chamber prints) and the recess of §8.3.
    does not exist yet (the ICC topic founds the court); its threshold waits for it. The
    motion to strip a seat needs no dossier grounds: its case is the veto abuse its gate
    already requires.
-3. **The lean** is the sum of ten named terms: the habit of consensus (+10), the grounds
+3. **The lean** is the sum of eleven named terms: the habit of consensus (+10), the grounds
    (half the target's case above or below the threshold, −20..+30), the target itself
    (−50, +20 at Strong or above), ties to the proposer (alliance +20, bloc +20, rivalry −30,
    relevance +5, relations ÷ 10), ties to the target (alliance −60, bloc −35, rivalry +30,
