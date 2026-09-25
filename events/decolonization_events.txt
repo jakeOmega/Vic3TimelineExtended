@@ -3319,8 +3319,27 @@ decolonization_events.50 = {
 	icon = "gfx/interface/icons/event_icons/event_trade.dds"
 
 	title = decolonization_events.50.t
-	desc = decolonization_events.50.d
-	flavor = decolonization_events.50.f
+	# The City of London and sterling are Britain's alone; the mod models no
+	# per-country currency or financial centre, so every other empire gets the
+	# generic text.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = decolonization_events.50.d_gbr
+				trigger = { c:GBR ?= this }
+			}
+			desc = decolonization_events.50.d
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				desc = decolonization_events.50.f_gbr
+				trigger = { c:GBR ?= this }
+			}
+			desc = decolonization_events.50.f
+		}
+	}
 
 	duration = 3
 	cooldown = { days = long_modifier_time }
@@ -3367,7 +3386,11 @@ decolonization_events.50 = {
 	}
 }
 
-# Event 51: Conscription Crisis — fires after long wars where the army's been bled
+# Event 51: Conscription Crisis — a colonial war is bleeding the army. Its text
+# and options ("Pacification requires manpower", "Demobilize colonial
+# garrisons") describe a war in the colonies, so it fires only during one
+# (decol_fighting_colonial_war). Any other war still drains the stability bar
+# through the bar's own at-war term (colonial_stability_term_war).
 decolonization_events.51 = {
 	type = country_event
 	placement = root
@@ -3387,7 +3410,7 @@ decolonization_events.51 = {
 		has_journal_entry = je_colonial_empire
 		has_technology_researched = decolonization
 		any_scope_state = { is_overseas_colonial_state = yes }
-		is_at_war = yes
+		decol_fighting_colonial_war = yes
 	}
 
 	# Option A: Tighten conscription — bar suffers; army holds together

@@ -470,6 +470,43 @@ country_has_qualifying_colonial_subject = {
 	}
 }
 
+# Country-scope (evaluated on a METROPOLE): is it fighting a colonial war?
+# At war, and one of:
+#   - its colonial crackdown is running (colonial_crackdown_modifier, from
+#     decolonization_events .1.b / .2.b / .3.b / .8): the pacification campaign
+#     the empire chose;
+#   - an enemy in one of its wars is its own qualifying colonial subject, i.e.
+#     a colony fighting for independence (the independence war goal is valid
+#     only while the holder's overlord is the target, so the colony is still
+#     our subject until that war ends);
+#   - an enemy is a secessionist country of a people that shares no heritage
+#     with ours: the same "culturally distinct" test is_qualifying_colonial_subject
+#     applies to protectorates.
+# Used by decolonization_events.51 (the conscription crisis of a colonial war).
+decol_fighting_colonial_war = {
+	is_at_war = yes
+	save_temporary_scope_as = decol_cw_metropole
+	OR = {
+		has_modifier = colonial_crackdown_modifier
+		any_enemy_in_war = {
+			OR = {
+				AND = {
+					is_subject_of = scope:decol_cw_metropole
+					is_qualifying_colonial_subject = yes
+				}
+				AND = {
+					is_secessionist = yes
+					NOT = {
+						any_primary_culture = {
+							shares_heritage_trait_group_with_any_primary_culture = scope:decol_cw_metropole
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 # State-scope: the state has the cultural/population profile of an
 # unintegrated colony but skips the overseas-from-capital geography check.
 # Used when iterating from a metropole INTO a subject's states (where the
