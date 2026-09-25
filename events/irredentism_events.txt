@@ -588,7 +588,7 @@ irredentism.7 = {
 	# the leader, and a leader-side cooldown would silently swallow it. The AI
 	# roll is throttled by irr_war_blessing_heard instead (set below, read by
 	# irredentism_bloc_approval_on_action): a leader still hears at most one AI
-	# request per 5 years, as the old `cooldown = { years = 5 }` allowed.
+	# request per 5 years, the rate the old `cooldown = { years = 5 }` set.
 
 	# Inherited scopes (irr_requester, target_country) are saved by
 	# irr_send_war_blessing_request 3 days before fire. Either may have
@@ -609,9 +609,16 @@ irredentism.7 = {
 
 	immediate = {
 		save_scope_as = irr_bloc_leader
-		set_variable = {
-			name = irr_war_blessing_heard
-			days = 1825
+		# Only an AI request starts the AI throttle: a player member's request
+		# doesn't stop AI members asking.
+		if = {
+			limit = {
+				scope:irr_requester ?= { is_ai = yes }
+			}
+			set_variable = {
+				name = irr_war_blessing_heard
+				days = 1825
+			}
 		}
 	}
 
