@@ -639,6 +639,52 @@ un_vote_standing_request_contribution = {
 	}
 }
 
+# A power-bloc leader's resolution has closed: its bloc gains leverage in (or,
+# with a negative $VALUE$, loses leverage in) every other bloc member that sits
+# in the Assembly. Called from un_vote.2's carried and failed branches.
+#
+# The member is named with a saved scope rather than reached with `prev`. The
+# first version re-entered the proposer inside the member loop —
+# `every_power_bloc_member = { root = { power_bloc ?= { add_leverage = {
+# target = prev ... } } } }` — where `prev` is the scope `root = { }` pushed,
+# i.e. the proposer itself, not the member. The bloc piled leverage on its own
+# leader, once per member.
+#
+# One summary line ($TT$) instead of the engine's line per member, which ran
+# to twenty identical lines in a large bloc.
+# Parameters: $VALUE$ = leverage per member, $TT$ = the summary tooltip key
+# Scope: the proposer
+un_vote_proposer_bloc_leverage = {
+	save_temporary_scope_as = un_vote_bloc_leader
+	if = {
+		limit = {
+			is_power_bloc_leader = yes
+			power_bloc ?= {
+				any_power_bloc_member = {
+					NOT = { THIS = scope:un_vote_bloc_leader }
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
+				}
+			}
+		}
+		custom_tooltip = $TT$
+		hidden_effect = {
+			power_bloc ?= {
+				save_temporary_scope_as = un_vote_leader_bloc
+				every_power_bloc_member = {
+					limit = {
+						NOT = { THIS = scope:un_vote_bloc_leader }
+						je:je_united_nations ?= { has_modifier = un_member_modifier }
+					}
+					save_temporary_scope_as = un_vote_bloc_member
+					scope:un_vote_leader_bloc = {
+						add_leverage = { target = scope:un_vote_bloc_member value = $VALUE$ }
+					}
+				}
+			}
+		}
+	}
+}
+
 # Apply the residual (non-modifier) effects of complying with a passed UN
 # resolution: infamy reduction, power-bloc leverage, peacekeeping/aid contributor
 # pledges, and leader leverage on aid/peacekeeping. Per-topic treaty modifiers

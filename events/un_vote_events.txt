@@ -1382,23 +1382,9 @@ un_vote.2 = {
 				change_infamy = -3
 			}
 
-			# Power bloc leverage: successful proposer gains leverage over bloc members who voted
-			if = {
-				limit = { is_power_bloc_leader = yes }
-				power_bloc ?= {
-					every_power_bloc_member = {
-						limit = {
-							je:je_united_nations ?= { has_modifier = un_member_modifier }
-							NOT = { THIS = ROOT }
-						}
-						root = {
-							power_bloc ?= {
-								add_leverage = { target = prev value = 3 }
-							}
-						}
-					}
-				}
-			}
+			# Power bloc leverage: a bloc leader whose resolution carries gains
+			# leverage in every bloc member that sits in the Assembly.
+			un_vote_proposer_bloc_leverage = { VALUE = 3 TT = un_vote_bloc_leverage_gain_tt }
 		}
 
 		# ---- RESOLUTION FAILED ----
@@ -1427,23 +1413,9 @@ un_vote.2 = {
 				}
 				change_infamy = 2
 			}
-			# Power bloc leverage loss: failed proposer loses credibility with bloc
-			if = {
-				limit = { is_power_bloc_leader = yes }
-				power_bloc ?= {
-					every_power_bloc_member = {
-						limit = {
-							je:je_united_nations ?= { has_modifier = un_member_modifier }
-							NOT = { THIS = ROOT }
-						}
-						root = {
-							power_bloc ?= {
-								add_leverage = { target = prev value = -3 }
-							}
-						}
-					}
-				}
-			}
+			# Power bloc leverage loss: a bloc leader whose resolution falls
+			# loses leverage in every bloc member that sits in the Assembly.
+			un_vote_proposer_bloc_leverage = { VALUE = -3 TT = un_vote_bloc_leverage_loss_tt }
 			# Revoke unfulfilled pledges from voters
 			hidden_effect = {
 				if = {

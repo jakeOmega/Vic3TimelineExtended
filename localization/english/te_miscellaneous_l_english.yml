@@ -3652,6 +3652,8 @@
  un_veto_crisis_modifier:0 "Veto Crisis Denouncer"
  un_veto_isolation_modifier:0 "Diplomatic Isolation After [concept_un_veto]"
  un_vote_aid_request_passed_tt:0 "The humanitarian aid program was authorized. #G UN delivery +1, moving [concept_un_authority]'s target.#! Contributing nations will provide aid. The requesting country receives benefits scaled by donor count."
+ un_vote_bloc_leverage_gain_tt:0 "Our [concept_power_bloc] gains #G 3#! [concept_power_bloc_leverage] in each of its other members that sits in the Assembly: we have shown the bloc we can deliver."
+ un_vote_bloc_leverage_loss_tt:0 "Our [concept_power_bloc] loses #R 3#! [concept_power_bloc_leverage] in each of its other members that sits in the Assembly: we could not carry the vote we called."
  un_vote_climate_passed_tt:0 "The Climate Accord was adopted. #G UN credibility +1.5, moving [concept_un_authority]'s target.#! The UN Environment Programme (UNEP) is established."
  un_vote_condemn_passed_tt:0 "The condemnation resolution passed. #G UN credibility +1, moving [concept_un_authority]'s target.#! Relations with the condemned nation deteriorate. Its penalties are scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#! at the current tier)."
  un_vote_condemn_passed_vetoed_tt:0 "The condemnation passed the GA but was vetoed in the Security Council. #G UN credibility +0.5, moving [concept_un_authority]'s target.#! The target receives a non-binding rebuke instead of formal condemnation, scaled by the UN's [concept_un_enforcement] (#v ×[GetGlobalVariable('un_enforcement_now').GetValue|1]#!)."
