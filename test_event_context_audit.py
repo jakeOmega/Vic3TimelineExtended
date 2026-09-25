@@ -295,11 +295,52 @@ class EventContextAuditTests(unittest.TestCase):
                          {("unchosen_self_action", "flav.1")})
 
     def test_unsubstituted_parameter_scope_counts_as_a_switch(self):
+        # The caller passes no WHO, so `$WHO$ = { … }` stays an unknown scope;
+        # from an own option it would otherwise read as chosen.
         eff = "notify_it = {\n\t$WHO$ = {\n\t\ttrigger_event = { id = flav.1 }\n\t}\n}\n"
-        mod = self._mod({"events/flav.txt": _event("flav.1"),
+        pre = _event("flav.2", "\toption = { notify_it = yes }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre,
                          "common/scripted_effects/h.txt": eff}, self.CAMPAIGN_LOC)
+        sites = eca.build_graph(mod).sites_by_event["flav.1"]
+        self.assertEqual([s.switches for s in sites], [["$WHO$"]])
         self.assertEqual(self._flags(mod, "unchosen_self_action"),
                          {("unchosen_self_action", "flav.1")})
+
+    def test_self_forwarding_helper_terminates(self):
+        eff = "loop_send = {\n\ttrigger_event = { id = $EVENT$ }\n\tloop_send = { EVENT = $EVENT$ }\n}\n"
+        pre = _event("flav.2", "\toption = { loop_send = { EVENT = flav.1 } }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre,
+                         "common/scripted_effects/h.txt": eff}, self.CAMPAIGN_LOC)
+        g = eca.build_graph(mod)  # must return
+        self.assertEqual([(s.entity, s.in_option) for s in g.sites_by_event["flav.1"]],
+                         [("flav.2", True)])
+        self.assertFalse(any("$" in k for k in g.sites_by_event))
+
+    def test_renamed_forwarding_resolves(self):
+        inner = "a_send = {\n\t$WHO$ = { trigger_event = { id = $EVENT$ } }\n}\n"
+        outer = "b_fwd = {\n\ta_send = { WHO = $TARGET$ EVENT = $EV$ }\n}\n"
+        pre = _event("flav.2", "\toption = { b_fwd = { TARGET = scope:rival EV = flav.1 } }\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1") + pre,
+                         "common/scripted_effects/h.txt": inner + outer}, self.CAMPAIGN_LOC)
+        sites = eca.build_graph(mod).sites_by_event.get("flav.1", [])
+        self.assertEqual([(s.entity, s.switches) for s in sites], [("flav.2", ["scope:rival"])])
+
+    def test_on_action_cycle_does_not_crash(self):
+        oa = ("on_yearly_pulse_country = {\n\ton_actions = { oa_a }\n}\n"
+              "oa_a = {\n\ton_actions = { oa_b }\n\teffect = { trigger_event = { id = flav.1 } }\n}\n"
+              "oa_b = {\n\ton_actions = { oa_a }\n}\n")
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "common/on_actions/o.txt": oa}, self.CAMPAIGN_LOC)
+        self.assertEqual(self._flags(mod, "unchosen_self_action"),
+                         {("unchosen_self_action", "flav.1")})
+
+    def test_console_files_are_not_dispatch_sources(self):
+        dbg = _event("te_debug_x.1", "\toption = { scope:rival = { trigger_event = { id = flav.1 } } }\n")
+        dec = "my_decision = {\n\twhen_taken = { trigger_event = { id = flav.1 } }\n}\n"
+        mod = self._mod({"events/flav.txt": _event("flav.1"),
+                         "events/te_debug_x_events.txt": dbg,
+                         "common/decisions/d.txt": dec}, self.CAMPAIGN_LOC)
+        self.assertEqual(self._flags(mod, "unchosen_self_action"), set())
 
     def test_forwarded_event_parameter_resolves_through_helpers(self):
         inner = "send_it = {\n\ttrigger_event = { id = $EVENT$ }\n}\n"
@@ -376,6 +417,14 @@ class EventContextAuditTests(unittest.TestCase):
         res = eca.audit(mod)
         self.assertEqual([(t.event_id, t.check) for t in res.stale_tags], [("flav.1", "system_ungated")])
         self.assertEqual([(t.event_id, t.check) for t in res.unknown_tags], [("flav.1", "sytem_ungated")])
+        self.assertEqual(res.failing, 2)
+
+    def test_all_tag_on_a_clean_event_is_stale(self):
+        body = "\t# REVIEWED 2026-09-25 (all): nothing to hide\n"
+        loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens."}
+        res = eca.audit(self._mod({"events/flav.txt": _event("flav.1", body)}, loc))
+        self.assertEqual([(t.event_id, t.check) for t in res.stale_tags], [("flav.1", "all")])
+        self.assertEqual(res.failing, 1)
 
 
 if __name__ == "__main__":

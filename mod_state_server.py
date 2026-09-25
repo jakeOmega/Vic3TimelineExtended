@@ -7107,7 +7107,9 @@ class ModStateHandler(BaseHTTPRequestHandler):
         if event_filter:
             flags = [f for f in flags if f.event_id == event_filter]
         if (params.get("format") or ["json"])[0] == "text":
-            return {"text": eca.render_report(eca.AuditResult(flags=flags, coverage=result.coverage))}
+            return {"text": eca.render_report(eca.AuditResult(
+                flags=flags, coverage=result.coverage,
+                stale_tags=result.stale_tags, unknown_tags=result.unknown_tags))}
         return {
             "flags": [
                 {"check": f.check, "event_id": f.event_id, "file": f.file, "line": f.line,

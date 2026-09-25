@@ -3208,7 +3208,6 @@ un_events.33 = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
 	title = un_events.33.t
-	# REVIEWED 2026-09-25 (system_ungated): the nuclear text shows only when var:un_icc_crime = 1, which un_regime_icc_note_crime writes from inside the nuclear strike effects themselves (extra_effects.txt); the strike is game state, not a premise.
 	desc = {
 		# The crime. "Launched by [our] forces", not "on [our] orders": a
 		# launch can come from an incident under delegated authority or launch
