@@ -26,7 +26,7 @@ cultural_hegemony.1 = {
 		has_variable = ch_total
 		var:ch_total >= 10
 		has_technology_researched = mass_media
-		NOT = { has_modifier = ch_cultural_renaissance }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_renaissance } }
 	}
 
 	immediate = {
@@ -242,8 +242,8 @@ cultural_hegemony.3 = {
 		has_variable = ch_total
 		var:ch_total >= 20
 		has_technology_researched = mass_media
-		NOT = { has_modifier = ch_media_dominance }
-		NOT = { has_modifier = ch_media_freedom }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_media_dominance } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_media_freedom } }
 	}
 
 	immediate = {
@@ -429,8 +429,8 @@ cultural_hegemony.5 = {
 		has_variable = ch_total
 		var:ch_total >= 8
 		has_technology_researched = mass_media
-		NOT = { has_modifier = ch_soft_power_dividend }
-		NOT = { has_modifier = ch_cultural_investment }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_soft_power_dividend } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_cultural_investment } }
 	}
 
 	immediate = {
@@ -539,11 +539,14 @@ cultural_hegemony.6 = {
 				value = small_radicals
 			}
 		}
-		add_modifier = {
-			name = ch_brain_drain_remittances
-			days = normal_modifier_time
-			is_decaying = yes
-		}
+		# On the journal entry, like every other cultural-hegemony event
+		# modifier: legacy_je_modifier_cleanup_effect strips a country-level
+		# ch_brain_drain_remittances every month.
+		je:je_cultural_hegemony ?= { add_modifier = {
+				name = ch_brain_drain_remittances
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		add_treasury = {
 			value = money_amount_multiplier_very_large
 			multiply = 4
@@ -969,11 +972,13 @@ cultural_hegemony.9 = {
 		name = cultural_hegemony.9.a
 		default_option = yes
 
-		add_modifier = {
-			name = ch_soft_power_dividend
-			days = long_modifier_time
-			is_decaying = yes
-		}
+		# On the journal entry, as in .5 and .8: legacy_je_modifier_cleanup_effect
+		# strips a country-level ch_soft_power_dividend every month.
+		je:je_cultural_hegemony ?= { add_modifier = {
+				name = ch_soft_power_dividend
+				days = long_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 10
@@ -1007,8 +1012,8 @@ cultural_hegemony.10 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 10
-		NOT = { has_modifier = ch_touring_exhibition }
-		NOT = { has_modifier = ch_art_commercialization }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_touring_exhibition } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_art_commercialization } }
 	}
 
 	immediate = {
@@ -1084,8 +1089,8 @@ cultural_hegemony.11 = {
 		has_journal_entry = je_cultural_hegemony
 		has_variable = ch_total
 		var:ch_total >= 8
-		NOT = { has_modifier = ch_tourism_infrastructure }
-		NOT = { has_modifier = ch_tourism_exploitation }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_tourism_infrastructure } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_tourism_exploitation } }
 	}
 
 	immediate = {
@@ -1162,8 +1167,8 @@ cultural_hegemony.12 = {
 		has_variable = ch_total
 		var:ch_total >= 12
 		has_technology_researched = mass_media
-		NOT = { has_modifier = ch_international_university }
-		NOT = { has_modifier = ch_domestic_university_focus }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_international_university } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_domestic_university_focus } }
 	}
 
 	immediate = {
@@ -1237,8 +1242,8 @@ cultural_hegemony.13 = {
 		has_variable = ch_total
 		var:ch_total >= 20
 		has_technology_researched = mass_media
-		NOT = { has_modifier = ch_language_academies }
-		NOT = { has_modifier = ch_natural_lingua_franca }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_language_academies } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_natural_lingua_franca } }
 	}
 
 	immediate = {
@@ -1647,8 +1652,8 @@ cultural_hegemony.16 = {
 		exists = global_var:ch_rank_1
 		NOT = { this = global_var:ch_rank_1 }
 		NOT = { enacting_any_law = yes }
-		NOT = { has_modifier = ch_hegemonic_law_adopted }
-		NOT = { has_modifier = ch_hegemonic_law_resistance }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_hegemonic_law_adopted } }
+		NOT = { je:je_cultural_hegemony ?= { has_modifier = ch_hegemonic_law_resistance } }
 		# At least one culturally exportable law group has a mismatch with the hegemon
 		global_var:ch_rank_1 = {
 			any_active_law = {

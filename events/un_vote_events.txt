@@ -668,6 +668,9 @@ un_vote.2 = {
 			un_resolution_decide = yes
 			var:un_res_proposer ?= { save_scope_as = un_vote_proposer }
 			var:un_res_target ?= { save_scope_as = un_vote_target }
+			# The last permanent member to veto: the vetoed-ICC branch below
+			# names it.
+			var:un_res_vetoer ?= { save_scope_as = un_vote_vetoer }
 		}
 		# Vote counts as country vars for loc display (loc has no accessor
 		# for a script container held in a saved scope)
@@ -1326,8 +1329,13 @@ un_vote.2 = {
 			}
 
 			# ---- International Criminal Court: Global criminal justice ----
-			# Vetoed: no agency established, just a symbolic censure (proposer
-			# gets un_court_contested_modifier as a small accountability gesture).
+			# Vetoed: no agency established, just a symbolic censure, which names
+			# the power that blocked the court. That power rejected the Rome
+			# Statute, so it takes what un_events.22 option C gives a country that
+			# refuses the statute (un_icc_refusal_modifier). The proposer
+			# championed the court and takes nothing; it used to be given
+			# un_court_contested_modifier ("ICJ Jurisdiction Contested"), the
+			# stance of a country contesting a court, which was its opposite.
 			if = {
 				limit = {
 					scope:un_resolution ?= { has_tag = un_topic_icc }
@@ -1341,10 +1349,21 @@ un_vote.2 = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_icc } }
 				custom_tooltip = un_vote_icc_passed_vetoed_tt
 				un_ledger_entry = { PILLAR = credibility POINTS = 0.5 REASON = 2 }
-				add_modifier = {
-					name = un_court_contested_modifier
-					days = normal_modifier_time
-					is_decaying = yes
+				# Waived while the UN is Moribund, where blocking a resolution
+				# costs nothing (un_vote_cast_veto, UN_VOTE_VETO_MORIBUND_TT).
+				if = {
+					limit = {
+						exists = scope:un_vote_vetoer
+						un_tier_is_moribund = no
+						scope:un_vote_vetoer = { NOT = { has_modifier = un_icc_refusal_modifier } }
+					}
+					scope:un_vote_vetoer = {
+						add_modifier = {
+							name = un_icc_refusal_modifier
+							days = normal_modifier_time
+							is_decaying = yes
+						}
+					}
 				}
 			}
 

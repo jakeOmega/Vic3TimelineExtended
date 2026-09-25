@@ -16,9 +16,12 @@
 #
 # IT ABSORBED banking_cycle_events.12, "Gold Standard Pressure" — a random draw
 # that told a gold country its reserves were leaving whether or not they were.
-# Now they are, the dashboard shows it for months beforehand, and this event is
-# the end of that road rather than a bolt from the blue. The old event's flavour
-# text lives on as te_peg.1.f.
+# Now they are, and this event is the end of that road rather than a bolt from
+# the blue: a country with the banking journal entry watches Peg Confidence
+# fall on its dashboard for months beforehand. One without the entry (a dial
+# needs only a national bank, not the entry) has no dashboard, so none of the
+# player text — the desc or the option tooltips — may rely on having seen it
+# coming (#428). The old event's flavour text lives on as te_peg.1.f.
 #
 # EVERY OPTION WRITES AN INPUT, NEVER THE RATE. Defend writes a month counter
 # that te_mon_target_min reads; Suspend writes the counter te_mon_is_on_gold
