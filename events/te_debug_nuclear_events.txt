@@ -37,6 +37,10 @@ te_debug_nuclear.1 = { # REVIEWED 2026-09-18: console-only test event (`event te
 		name = te_debug_nuclear.1.a
 		default_option = yes
 		set_variable = { name = nuclear_weapons_program_funding value = 3 }
+		set_variable = {
+			name = nuclear_weapons_program_cost_cached
+			value = nuclear_weapons_program_current_cost
+		}
 		je:je_nuclear_program ?= {
 			if = {
 				limit = { has_modifier = nuclear_weapon_program_funding }
@@ -44,7 +48,7 @@ te_debug_nuclear.1 = { # REVIEWED 2026-09-18: console-only test event (`event te
 			}
 			add_modifier = {
 				name = nuclear_weapon_program_funding
-				multiplier = nuclear_weapons_program_current_cost
+				multiplier = root.var:nuclear_weapons_program_cost_cached
 			}
 		}
 		nuclear_program_refresh_state_effect = yes
