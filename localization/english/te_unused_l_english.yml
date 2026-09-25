@@ -446,8 +446,6 @@
  nd_tt_authority_adopted_1:0 "Launch authority becomes #v Central Authorization#!. It can next be changed in a year."
  nd_tt_authority_adopted_2:0 "Launch authority becomes #v Conditional Delegation#!. It can next be changed in a year."
  nd_tt_authority_adopted_3:0 "Launch authority becomes #v Launch on Warning#!. It can next be changed in a year."
- nd_tt_crisis_opens_no:0 "Opens a #bold private#! nuclear crisis: they must decide whether to concede. Deadline: ten weeks."
- nd_tt_crisis_opens_yes:0 "Opens a #bold public#! nuclear crisis — an ultimatum we will be judged on. Deadline: eight weeks."
  nd_tt_doctrine_adopted_1:0 "Our doctrine becomes #v No First Use#!:\n[GetStaticModifier('nd_doctrine_mod_1').GetDesc]\nIt can next be changed in two years."
  nd_tt_doctrine_adopted_2:0 "Our doctrine becomes #v Existential Deterrence#!:\n[GetStaticModifier('nd_doctrine_mod_2').GetDesc]\nIt can next be changed in two years."
  nd_tt_doctrine_adopted_3:0 "Our doctrine becomes #v Flexible First Use#!:\n[GetStaticModifier('nd_doctrine_mod_3').GetDesc]\nIt can next be changed in two years."

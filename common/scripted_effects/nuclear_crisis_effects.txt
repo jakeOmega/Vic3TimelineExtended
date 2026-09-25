@@ -65,6 +65,142 @@ nd_crisis_send_event = {
 # ----------------------------------------------------------------------------
 # OPENING
 # ----------------------------------------------------------------------------
+# Issuer scope. What opening a crisis against $TARGET$ does and risks, for the
+# diplomatic actions' confirmation box and the event options that open one
+# (2026-09-25 spec §2.1). Reads only our own state and $TARGET$, which exist in
+# a tooltip preview (a temporary scope saved inside a `limit` does exist
+# there; a scope saved by an effect does not). Every line sits at this scope
+# level so the lines print in order (gui_modding_guide.md gotcha #18). The infamy and relations lines are
+# the real effects: every caller has already checked that the crisis opens
+# (nd_crisis_parties_free), so they are not fenced.
+nd_crisis_preview = {
+	# ---- what the world sees ------------------------------------------------
+	if = {
+		limit = { always = $PUBLIC$ }
+		change_infamy = 5
+		change_relations = { country = $TARGET$ value = -20 }
+	}
+	else = {
+		change_relations = { country = $TARGET$ value = -5 }
+	}
+	# ---- what it is about, and what conceding would cost them ----------------
+	if = {
+		limit = { nd_dispute_war_with = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_war
+	}
+	else_if = {
+		limit = { nd_dispute_play_with = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_play
+	}
+	else_if = {
+		limit = { nd_dispute_guarantee_against = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_guarantee
+	}
+	else_if = {
+		limit = { nd_dispute_proliferation_by = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_over_proliferation
+	}
+	else = {
+		custom_tooltip = nd_tt_open_over_alert
+	}
+	# ---- can we carry it out? ---------------------------------------------------
+	if = {
+		limit = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_bluff_nfu
+	}
+	else_if = {
+		limit = { NOT = { nd_threat_law_permits = { TARGET = $TARGET$ } } }
+		custom_tooltip = nd_tt_open_bluff_law
+	}
+	else_if = {
+		limit = { nd_threat_backed = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_backed
+	}
+	else_if = {
+		limit = { nd_threat_uncertain = { TARGET = $TARGET$ } }
+		custom_tooltip = nd_tt_open_uncertain
+	}
+	else_if = {
+		limit = { nd_doctrine_flexible = yes }
+		custom_tooltip = nd_tt_open_bluff_flexible
+	}
+	else = {
+		custom_tooltip = nd_tt_open_bluff_existential
+	}
+	# ---- what else weighs on them (nd_yp_*; danger and exercises come later) --
+	custom_tooltip = nd_tt_open_factors_header
+	if = {
+		limit = { $TARGET$ = { nd_believed_armed = no } }
+		custom_tooltip = nd_tt_open_f_unarmed
+	}
+	else_if = {
+		limit = {
+			$TARGET$ = {
+				has_variable = nd_survivability
+				var:nd_survivability >= 50
+			}
+		}
+		custom_tooltip = nd_tt_open_f_survivable
+	}
+	else = {
+		custom_tooltip = nd_tt_open_f_armed
+	}
+	if = {
+		limit = {
+			save_temporary_scope_as = nd_pv_self
+			$TARGET$ = { nd_has_armed_guarantor_against = { AGAINST = scope:nd_pv_self } }
+		}
+		custom_tooltip = nd_tt_open_f_protector
+	}
+	custom_tooltip = nd_tt_open_f_credibility
+	if = {
+		limit = { nd_readiness_high_alert = yes }
+		custom_tooltip = nd_tt_open_f_alert
+	}
+	if = {
+		limit = { $TARGET$ = { ruler_is_aggressive = yes } }
+		custom_tooltip = nd_tt_open_f_aggressive
+	}
+	if = {
+		limit = { $TARGET$ = { ruler_is_cautious = yes } }
+		custom_tooltip = nd_tt_open_f_cautious
+	}
+	if = {
+		limit = {
+			save_temporary_scope_as = nd_pv_self
+			$TARGET$ = {
+				has_war_with = scope:nd_pv_self
+				nd_is_losing_war_to = { ENEMY = scope:nd_pv_self }
+			}
+		}
+		custom_tooltip = nd_tt_open_f_losing
+	}
+	if = {
+		limit = {
+			save_temporary_scope_as = nd_pv_self
+			$TARGET$ = { nd_enemy_threatens_existence = { ENEMY = scope:nd_pv_self } }
+		}
+		custom_tooltip = nd_tt_open_f_existence
+	}
+	# ---- the stakes, and what happens next ------------------------------------
+	if = {
+		limit = { always = $PUBLIC$ }
+		custom_tooltip = nd_tt_open_stakes_public
+		if = {
+			limit = {
+				NOT = { nd_threat_backed = { TARGET = $TARGET$ } }
+				NOT = { nd_threat_uncertain = { TARGET = $TARGET$ } }
+			}
+			custom_tooltip = nd_tt_open_stakes_bluff
+		}
+		custom_tooltip = nd_tt_open_next_public
+	}
+	else = {
+		custom_tooltip = nd_tt_open_stakes_private
+		custom_tooltip = nd_tt_open_next_private
+	}
+}
+
 # Issuer scope (ROOT = issuer: the diplomatic actions' accept_effect).
 # TARGET = scope:target_country. PUBLIC = no (private warning) | yes
 # (ultimatum) — a literal flag, so `always = $PUBLIC$` reads the same in a
@@ -77,8 +213,10 @@ nd_crisis_send_event = {
 # crisis variable below would then hit a variable that does not exist yet. So
 # the body is fenced by a scope saved on the first line: save_scope_as is not
 # run by the preview, so scope:nd_crisis_opening only exists in the real run.
+# What the world sees — the infamy and relations — is nd_crisis_preview's,
+# outside the fence, so the confirmation box shows it as a real effect.
 nd_crisis_open = {
-	custom_tooltip = nd_tt_crisis_opens_$PUBLIC$
+	nd_crisis_preview = { TARGET = $TARGET$ PUBLIC = $PUBLIC$ }
 	hidden_effect = {
 		save_scope_as = nd_crisis_opening
 		if = {
@@ -125,19 +263,6 @@ nd_crisis_open = {
 			}
 			# ---- the crisis's figures, before anyone weighs them ------------
 			nd_crisis_refresh_figures = yes
-			# ---- what the world sees ----------------------------------------
-			if = {
-				limit = { always = $PUBLIC$ }
-				change_infamy = 5
-				scope:nd_target = {
-					change_relations = { country = scope:nd_issuer value = -20 }
-				}
-			}
-			else = {
-				scope:nd_target = {
-					change_relations = { country = scope:nd_issuer value = -5 }
-				}
-			}
 			# ---- both AIs reconsider their posture now ------------------------
 			scope:nd_issuer = { nd_crisis_ai_review = yes }
 			scope:nd_target = { nd_crisis_ai_review = yes }

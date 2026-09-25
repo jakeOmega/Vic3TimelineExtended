@@ -181,7 +181,6 @@ class TestLocalization(unittest.TestCase):
         expanded |= {f"nd_tt_doctrine_adopted_{d}" for d in range(1, 6)}
         expanded |= {f"nd_tt_readiness_target_{r}" for r in range(1, 4)}
         expanded |= {f"nd_tt_authority_adopted_{a}" for a in range(1, 4)}
-        expanded |= {"nd_tt_crisis_opens_yes", "nd_tt_crisis_opens_no"}
         expanded |= {f"nd_tt_{v}_{o}" for v in ("nd_safeguards", "nd_hardening") for o in ("add", "subtract")}
         self.assert_keys(expanded, "custom tooltips")
 
@@ -364,6 +363,73 @@ class TestOutcomeNotice(unittest.TestCase):
         for direction, n, amount in pairs:
             self.assertEqual(int(amount), int(n) if direction == "up" else -int(n))
         self.assertEqual(body.count("nd_change_credibility"), len(pairs), "a credibility change without its number line")
+
+
+PREVIEW_PINS = {
+    # loc key: (script value holding the constant, operation, number)
+    "nd_tt_open_f_unarmed": ("nd_yp_answer_value", "add", 20),
+    "nd_tt_open_f_survivable": ("nd_yp_answer_value", "subtract", 25),
+    "nd_tt_open_f_armed": ("nd_yp_answer_value", "subtract", 10),
+    "nd_tt_open_f_protector": ("nd_yp_protector_value", "subtract", 20),
+    "nd_tt_open_f_aggressive": ("nd_yp_temperament_value", "subtract", 15),
+    "nd_tt_open_f_cautious": ("nd_yp_temperament_value", "add", 10),
+    "nd_tt_open_f_losing": ("nd_yp_war_value", "add", 15),
+    "nd_tt_open_f_existence": ("nd_yp_war_value", "subtract", 15),
+    "nd_tt_open_f_alert": ("nd_yp_alert_value", "add", 10),
+    "nd_tt_open_backed": ("nd_yp_follow_through_value", "add", 10),
+    "nd_tt_open_bluff_existential": ("nd_yp_follow_through_value", "subtract", 25),
+    "nd_tt_open_bluff_flexible": ("nd_yp_follow_through_value", "subtract", 25),
+    "nd_tt_open_bluff_law": ("nd_yp_follow_through_value", "subtract", 25),
+    "nd_tt_open_bluff_nfu": ("nd_yp_follow_through_value", "subtract", 35),
+}
+
+
+def loc_value(key):
+    for path in LOC_DIR.glob("*.yml"):
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            m = re.match(r"\s+" + re.escape(key) + r":\d*\s+\"(.*)\"\s*$", line)
+            if m:
+                return m.group(1)
+    raise AssertionError(f"loc key {key} not found")
+
+
+class TestActionPreview(unittest.TestCase):
+    def setUp(self):
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+        self.values = strip_comments(read(VALUES))
+
+    def test_open_uses_the_preview(self):
+        body = block(self.effects, "nd_crisis_open")
+        self.assertIn("nd_crisis_preview = { TARGET = $TARGET$ PUBLIC = $PUBLIC$ }", body)
+        self.assertNotIn("nd_tt_crisis_opens_", body)
+        self.assertNotIn("change_infamy", body)
+        self.assertNotIn("change_relations", body)
+
+    def test_preview_reads_no_crisis_scopes(self):
+        body = block(self.effects, "nd_crisis_preview")
+        self.assertNotRegex(body, r"scope:nd_(?!pv_self\b)")
+        self.assertNotRegex(body, r"(?<!temporary_)save_scope_as")
+        self.assertNotRegex(body, r"= PREV\b", "PREV passed as a parameter")
+
+    def test_preview_numbers_match_the_formula(self):
+        preview = block(self.effects, "nd_crisis_preview")
+        for key, (value, op, n) in PREVIEW_PINS.items():
+            self.assertIn(key, preview, key)
+            self.assertRegex(block(self.values, value), rf"{op} = {n}\b", f"{value} lost {op} {n}")
+            self.assertIn(str(n), loc_value(key), key)
+
+    def test_preview_stakes_and_deadlines(self):
+        self.assertRegex(self.values, r"nd_crisis_deadline_public_weeks = 8\b")
+        self.assertRegex(self.values, r"nd_crisis_deadline_private_weeks = 10\b")
+        self.assertRegex(self.values, r"nd_crisis_pressure_interval_weeks = 6\b")
+        self.assertIn("8", loc_value("nd_tt_open_next_public"))
+        self.assertIn("10", loc_value("nd_tt_open_next_private"))
+        for key in ("nd_tt_open_next_public", "nd_tt_open_next_private"):
+            self.assertIn("6", loc_value(key))
+        for n in ("15", "10"):
+            self.assertIn(n, loc_value("nd_tt_open_stakes_public"))
+        for n in ("10", "5"):
+            self.assertIn(n, loc_value("nd_tt_open_stakes_private"))
 
 
 class TestManagedFamilies(unittest.TestCase):
