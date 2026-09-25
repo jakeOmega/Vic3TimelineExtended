@@ -185,6 +185,16 @@ def _diplomatic_action_keys(name: str, body) -> list[tuple[str, bool, str]]:
     return keys
 
 
+def _institution_keys(name: str, body) -> list[tuple[str, bool, str]]:
+    """`<name>_desc` is required, not optional: the institution tooltip ends
+    with `#lore [InstitutionType.GetDesc]#!` (vanilla
+    `DATA_INSTITUTION_TYPE_NAME_TOOLTIP`) and prints the raw key when it is
+    missing. All 17 of the mod's institutions shipped without one (fixed
+    2026-09-25); vanilla defines it for every institution.
+    """
+    return [(name, True, "name"), (f"{name}_desc", True, "desc")]
+
+
 def _explicit_name_field(name: str, body) -> list[tuple[str, bool, str]]:
     """For entities that declare loc via `name = "KEY"` and `desc = "KEY"`
     fields (scripted_buttons), not via the entity name itself."""
@@ -227,7 +237,7 @@ _REQUIREMENTS: dict[str, Callable[[str, object], list[tuple[str, bool, str]]]] =
     "Ship Types":             _simple_name,
     "Ideologies":             _simple_name,
     "Interest Groups":        _simple_name,
-    "Institutions":           _simple_name,
+    "Institutions":           _institution_keys,
     "Subject Types":          _simple_name,
     "Messages":               _message_keys,
     "Mobilization Options":   _name_and_desc,
@@ -450,7 +460,8 @@ def render_report(result: AuditResult) -> str:
         "",
         "Fix: add the missing key(s) to a `localization/english/*_l_english.yml`",
         "file. For static modifiers and most simple entities the key is the",
-        "entity name itself; for journal entries also `<name>_desc`; for",
+        "entity name itself; for journal entries and institutions also",
+        "`<name>_desc`; for",
         "events the keys are whatever `title`/`desc`/`flavor`/option `name`",
         "fields point at; for messages (`common/messages`) the keys are",
         "`notification_<name>_name` / `_desc` / `_tooltip`, never the bare",

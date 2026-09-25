@@ -493,6 +493,49 @@ class TreatyArticleTests(unittest.TestCase):
         self.assertEqual(_DIR_MAP["Treaty Articles"], "common/treaty_articles")
 
 
+class InstitutionTests(unittest.TestCase):
+    """The institution tooltip renders `[InstitutionType.GetDesc]` with no
+    guard, so a missing `<name>_desc` prints the raw key. All 17 mod
+    institutions shipped without one."""
+
+    def _run(self, loc_keys):
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/institutions/extra_institutions.txt",
+               "institution_my_ministry = {\n\tmodifier = { }\n}\n")
+        ms = FakeMS(
+            mod_data={"Institutions": {"institution_my_ministry": {}}},
+            loc_keys=loc_keys,
+        )
+        return audit(ms, mod_path=tmp).flags
+
+    def test_missing_desc_alone_is_flagged(self):
+        flags = self._run({"institution_my_ministry"})
+        self.assertEqual([f.missing_keys for f in flags], [["institution_my_ministry_desc"]])
+
+    def test_name_and_desc_satisfy_the_requirement(self):
+        self.assertEqual(
+            self._run({"institution_my_ministry", "institution_my_ministry_desc"}), [],
+        )
+
+    def test_rules_hold_for_every_vanilla_institution(self):
+        import vanilla_parsed
+        from loc_coverage_audit import _institution_keys
+        snap = vanilla_parsed.load()
+        institutions = snap.data["Institutions"]
+        self.assertGreaterEqual(len(institutions), 7)
+        missing = {
+            name: [k for k, req, _ in _institution_keys(name, body)
+                   if req and k not in snap.localization]
+            for name, body in institutions.items()
+        }
+        self.assertEqual({n: m for n, m in missing.items() if m}, {})
+
+    def test_registered_in_both_rosters(self):
+        from loc_coverage_audit import _REQUIREMENTS, _DIR_MAP, _institution_keys
+        self.assertIs(_REQUIREMENTS["Institutions"], _institution_keys)
+        self.assertEqual(_DIR_MAP["Institutions"], "common/institutions")
+
+
 class DiplomaticActionTests(unittest.TestCase):
     """Diplomatic actions resolve a notification autokey family chosen by
     `requires_approval`, `pact` and `should_notify_third_parties`. The

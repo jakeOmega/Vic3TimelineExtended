@@ -349,7 +349,7 @@ def categorize_key(key, technology_keys):
         return "BUILDINGS"
     if key.startswith(("law_", "lawgroup_")):
         return "LAWS"
-    if key.startswith("institution_"):
+    if key.startswith(("institution_", "INSTITUTION_FUNDING_LEVEL_", "NO_INSTITUTION_")):
         return "INSTITUTIONS"
     if key.endswith(("_add", "_mult", "_add_desc", "_mult_desc")):
         return "MODIFIERS"
