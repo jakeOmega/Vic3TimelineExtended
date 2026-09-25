@@ -1871,6 +1871,9 @@ un_events.15 = {
 		custom_tooltip = un_ledger_tt_credibility_down_0_5
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 115 }
 		change_relations = { country = scope:trade_rival value = 15 }
+		# The rival negotiated nothing: its notice says we offered it
+		# concessions (notification_un_trade_deal_received_desc).
+		save_scope_as = un_trade_concession_offerer
 		scope:trade_rival = {
 			post_notification = un_trade_deal_received
 			add_modifier = {
@@ -3202,13 +3205,30 @@ un_events.33 = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
 	title = un_events.33.t
+	# REVIEWED 2026-09-25 (system_ungated): the nuclear text shows only when var:un_icc_crime = 1, which un_regime_icc_note_crime writes from inside the nuclear strike effects themselves (extra_effects.txt); the strike is game state, not a premise.
 	desc = {
+		# The crime. "Launched by [our] forces", not "on [our] orders": a
+		# launch can come from an incident under delegated authority or launch
+		# on warning (nuclear_deterrence_effects.txt, nd_launch_or_intercept),
+		# which nobody in government ordered, and the same path also carries a
+		# government's own order (nuclear_incident.1.c), so the two cannot be
+		# told apart here.
 		first_valid = {
 			triggered_desc = {
 				desc = un_events.33.d_nuclear
 				trigger = { var:un_icc_crime ?= 1 }
 			}
 			desc = un_events.33.d_regime_change
+		}
+		# The court's claim on us: a statute we ratified, or, for a country
+		# that never did, the jurisdiction a Supranational Assembly claims over
+		# everyone (un_regime_icc_note_crime).
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.33.d_ratified
+				trigger = { has_modifier = un_icc_member_modifier }
+			}
+			desc = un_events.33.d_jurisdiction
 		}
 	}
 	flavor = un_events.33.f
