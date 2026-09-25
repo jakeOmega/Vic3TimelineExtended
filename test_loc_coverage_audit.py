@@ -493,6 +493,115 @@ class TreatyArticleTests(unittest.TestCase):
         self.assertEqual(_DIR_MAP["Treaty Articles"], "common/treaty_articles")
 
 
+class DiplomaticActionTests(unittest.TestCase):
+    """Diplomatic actions resolve a notification autokey family chosen by
+    `requires_approval`, `pact` and `should_notify_third_parties`. The
+    nd_nuclear_ultimatum_action defect: it set `should_notify_third_parties =
+    yes` with no `_action_notification_third_party_*` loc, so every observer
+    got a notification titled with the raw key."""
+
+    def _keys(self, body):
+        from loc_coverage_audit import _diplomatic_action_keys
+        return [k for k, req, _label in _diplomatic_action_keys("my_action", body) if req]
+
+    def test_no_approval_notifies_target_only(self):
+        self.assertEqual(self._keys({"requires_approval": "no"}), [
+            "my_action",
+            "my_action_action_notification_name",
+            "my_action_action_notification_desc",
+        ])
+
+    def test_third_party_flag_adds_observer_keys(self):
+        keys = self._keys({"should_notify_third_parties": "yes"})
+        self.assertIn("my_action_action_notification_third_party_name", keys)
+        self.assertIn("my_action_action_notification_third_party_desc", keys)
+        self.assertNotIn("my_action_action_notification_third_party_break_name", keys)
+
+    def test_pact_adds_break_keys(self):
+        keys = self._keys({"should_notify_third_parties": "yes", "pact": {}})
+        for stem in ("_action_notification_break", "_action_notification_third_party_break"):
+            self.assertIn(f"my_action{stem}_name", keys)
+            self.assertIn(f"my_action{stem}_desc", keys)
+
+    def test_unset_or_no_flag_requires_no_observer_keys(self):
+        for body in ({}, {"should_notify_third_parties": "no"}):
+            self.assertFalse(
+                [k for k in self._keys(body) if "third_party" in k], body)
+
+    def test_approval_action_uses_proposal_family(self):
+        keys = self._keys({"requires_approval": "yes", "should_notify_third_parties": "yes"})
+        self.assertIn("my_action_proposal_notification_name", keys)
+        self.assertIn("my_action_proposal_accepted_desc", keys)
+        self.assertIn("my_action_proposal_declined_name", keys)
+        self.assertIn("my_action_proposal_third_party_accepted_name", keys)
+        self.assertIn("my_action_proposal_third_party_declined_desc", keys)
+        self.assertNotIn("my_action_action_notification_name", keys)
+        self.assertNotIn("my_action_action_notification_third_party_name", keys)
+
+    def test_unwraps_parser_tuples(self):
+        keys = self._keys({"should_notify_third_parties": ("=", "yes")})
+        self.assertIn("my_action_action_notification_third_party_desc", keys)
+
+    def test_non_dict_body_checks_name_only(self):
+        self.assertEqual(self._keys(None), ["my_action"])
+
+    def test_missing_third_party_keys_flagged(self):
+        tmp = tempfile.mkdtemp()
+        _write(tmp, "common/diplomatic_actions/x.txt",
+               "my_action = {\n\trequires_approval = no\n"
+               "\tshould_notify_third_parties = yes\n}\n")
+        body = {"requires_approval": "no", "should_notify_third_parties": "yes"}
+        ms = FakeMS(
+            mod_data={"Diplomatic Actions": {"my_action": body}},
+            base_data={"Diplomatic Actions": {}},
+            loc_keys={
+                "my_action",
+                "my_action_action_notification_name",
+                "my_action_action_notification_desc",
+            },
+        )
+        result = audit(ms, mod_path=tmp)
+        self.assertEqual([(f.category, f.entity, f.missing_keys, f.line) for f in result.flags], [(
+            "Diplomatic Actions", "my_action",
+            ["my_action_action_notification_third_party_name",
+             "my_action_action_notification_third_party_desc"],
+            1,
+        )])
+
+    def test_rules_hold_for_every_localized_vanilla_action(self):
+        # The rules are read off vanilla, so vanilla must satisfy them. The
+        # two exceptions are internal pacts with no loc at all, not even a name.
+        # A failure right after a vanilla bump + `vanilla_parsed.py build`
+        # means re-derive the rules from the new corpus, not a mod bug.
+        import vanilla_parsed
+        from loc_coverage_audit import _diplomatic_action_keys, _unwrap
+        snap = vanilla_parsed.load()
+        actions = snap.data["Diplomatic Actions"]
+        self.assertGreater(len(actions), 40)
+        failures = {}
+        for name, body in actions.items():
+            if name not in snap.localization:
+                continue
+            missing = [k for k, req, _ in _diplomatic_action_keys(name, _unwrap(body))
+                       if req and k not in snap.localization]
+            if missing:
+                failures[name] = missing
+        self.assertEqual(failures, {})
+        # Guard against a rule that passes because it derives nothing.
+        rivalry = self._keys_for(_diplomatic_action_keys, "rivalry", actions)
+        self.assertIn("rivalry_action_notification_third_party_break_desc", rivalry)
+
+    @staticmethod
+    def _keys_for(fn, name, actions):
+        from loc_coverage_audit import _unwrap
+        return [k for k, req, _ in fn(name, _unwrap(actions[name])) if req]
+
+    def test_registered_in_both_rosters(self):
+        from loc_coverage_audit import _REQUIREMENTS, _DIR_MAP, _diplomatic_action_keys
+        self.assertIs(_REQUIREMENTS["Diplomatic Actions"], _diplomatic_action_keys)
+        self.assertEqual(_DIR_MAP["Diplomatic Actions"], "common/diplomatic_actions")
+
+
 class RenderTests(unittest.TestCase):
     def test_empty_report_smoke(self):
         from loc_coverage_audit import AuditResult

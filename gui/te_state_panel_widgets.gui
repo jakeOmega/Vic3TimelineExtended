@@ -508,6 +508,11 @@ types te_state_panel_widget_types
 		}
 	}
 
+	### HOMELAND DYNAMICS
+
+	### One culture's project: its name and progress, the bar, and a warning
+	### line once it has stopped qualifying (the container is destroyed on the
+	### next monthly pulse).
 	type te_state_homeland_project = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -540,164 +545,148 @@ types te_state_panel_widget_types
 		}
 	}
 
+	### The Homeland Dynamics tile's extra_widget. Every line is conditional,
+	### on state-scope values in common/script_values/homeland_values.txt:
+	### - te_homeland_relevant = 0: one line saying nothing here can change.
+	### - te_homeland_pause_status: the pause reason, once for the tile.
+	### - te_homeland_<track>_shown: a track appears only while it has
+	###   projects or can run here, so a core state with nothing to form or
+	###   lose shows no empty Creation / Removal sections.
+	### - Bars exist only for real per-culture projects; there is no empty
+	###   placeholder bar.
 	type te_state_homeland_tracks = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
-		spacing = 3
+		spacing = 6
 
 		textbox = {
-			text = "TE_HOMELAND_CREATION"
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_relevant'), '(CFixedPoint)0')]"
+			text = "TE_HOMELAND_NOTHING_TO_CHANGE"
 			autoresize = yes
 			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
 		}
+
+		textbox = {
+			visible = "[And(NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_relevant'), '(CFixedPoint)0'), EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_pause_status'), '(CFixedPoint)1'))]"
+			text = "TE_HOMELAND_PAUSED_LOCKED"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[And(NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_relevant'), '(CFixedPoint)0'), EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_pause_status'), '(CFixedPoint)2'))]"
+			text = "TE_HOMELAND_PAUSED_SPLIT"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		### CREATION. Statuses 1-2 (paused) are the tile-level line above and
+		### 3 (no culture) hides the track, so only 4-6 have a line here.
 		flowcontainer = {
+			visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_shown'), '(CFixedPoint)0')]"
 			direction = vertical
+			ignoreinvisible = yes
 			spacing = 3
-			datamodel = "[State.MakeScope.GetList('te_homeland_creation_projects')]"
-			item = {
-				te_state_homeland_project = {
-					datacontext = "[Scope.GetScriptContainer]"
+
+			textbox = {
+				text = "TE_HOMELAND_CREATION"
+				autoresize = yes
+				maximumsize = { 160 -1 }
+			}
+			flowcontainer = {
+				direction = vertical
+				spacing = 3
+				datamodel = "[State.MakeScope.GetList('te_homeland_creation_projects')]"
+				item = {
+					te_state_homeland_project = {
+						datacontext = "[Scope.GetScriptContainer]"
+					}
 				}
 			}
-		}
-		flowcontainer = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_project_count'), '(CFixedPoint)0')]"
-			te_state_stat_bar = {
-				blockoverride "bar_indent" {}
-				blockoverride "bar_size" { size = { 160 6 } }
+
+			textbox = {
+				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)4')]"
+				text = "TE_HOMELAND_CREATION_THRESHOLD"
+				autoresize = yes
+				maximumsize = { 160 -1 }
+				multiline = yes
+				using = fontsize_small
+			}
+
+			textbox = {
+				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)5')]"
+				text = "TE_HOMELAND_TRACK_ACTIVE"
+				autoresize = yes
+				maximumsize = { 160 -1 }
+				multiline = yes
+				using = fontsize_small
+			}
+
+			textbox = {
+				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)6')]"
+				text = "TE_HOMELAND_TRACK_WAITING"
+				autoresize = yes
+				maximumsize = { 160 -1 }
+				multiline = yes
+				using = fontsize_small
 			}
 		}
 
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)1')]"
-			text = "TE_HOMELAND_CREATION_LOCKED"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)2')]"
-			text = "TE_HOMELAND_CREATION_SPLIT"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)3')]"
-			text = "TE_HOMELAND_CREATION_NO_CULTURE"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)4')]"
-			text = "TE_HOMELAND_CREATION_THRESHOLD"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)5')]"
-			text = "TE_HOMELAND_CREATION_ACTIVE"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)6')]"
-			text = "TE_HOMELAND_CREATION_WAITING"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			text = "TE_HOMELAND_REMOVAL"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-		}
+		### REMOVAL, laid out like CREATION.
 		flowcontainer = {
+			visible = "[NotEqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_shown'), '(CFixedPoint)0')]"
 			direction = vertical
+			ignoreinvisible = yes
 			spacing = 3
-			datamodel = "[State.MakeScope.GetList('te_homeland_removal_projects')]"
-			item = {
-				te_state_homeland_project = {
-					datacontext = "[Scope.GetScriptContainer]"
+
+			textbox = {
+				text = "TE_HOMELAND_REMOVAL"
+				autoresize = yes
+				maximumsize = { 160 -1 }
+			}
+			flowcontainer = {
+				direction = vertical
+				spacing = 3
+				datamodel = "[State.MakeScope.GetList('te_homeland_removal_projects')]"
+				item = {
+					te_state_homeland_project = {
+						datacontext = "[Scope.GetScriptContainer]"
+					}
 				}
 			}
-		}
-		flowcontainer = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_project_count'), '(CFixedPoint)0')]"
-			te_state_stat_bar = {
-				blockoverride "bar_indent" {}
-				blockoverride "bar_size" { size = { 160 6 } }
+
+			textbox = {
+				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)4')]"
+				text = "TE_HOMELAND_REMOVAL_THRESHOLD"
+				autoresize = yes
+				maximumsize = { 160 -1 }
+				multiline = yes
+				using = fontsize_small
+			}
+
+			textbox = {
+				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)5')]"
+				text = "TE_HOMELAND_TRACK_ACTIVE"
+				autoresize = yes
+				maximumsize = { 160 -1 }
+				multiline = yes
+				using = fontsize_small
+			}
+
+			textbox = {
+				visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)6')]"
+				text = "TE_HOMELAND_TRACK_WAITING"
+				autoresize = yes
+				maximumsize = { 160 -1 }
+				multiline = yes
+				using = fontsize_small
 			}
 		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)1')]"
-			text = "TE_HOMELAND_REMOVAL_LOCKED"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)2')]"
-			text = "TE_HOMELAND_REMOVAL_SPLIT"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)3')]"
-			text = "TE_HOMELAND_REMOVAL_NO_CULTURE"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)4')]"
-			text = "TE_HOMELAND_REMOVAL_THRESHOLD"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)5')]"
-			text = "TE_HOMELAND_REMOVAL_ACTIVE"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
-		textbox = {
-			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)6')]"
-			text = "TE_HOMELAND_REMOVAL_WAITING"
-			autoresize = yes
-			maximumsize = { 160 -1 }
-			multiline = yes
-			using = fontsize_small
-		}
-
 	}
 }

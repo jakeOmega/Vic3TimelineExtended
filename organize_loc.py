@@ -132,7 +132,15 @@ def find_law_keys(project_directory):
 
 
 def find_diplo_action_keys(project_directory):
-    """Finds implicit key suites for diplomatic actions."""
+    """Finds implicit key suites for diplomatic actions.
+
+    The suffix list is the autokey family vanilla localizes off its own action
+    names (`diplomacy_l_english.yml` and friends). The third-party, break and
+    directed `_effect_desc_*` / `_trigger_*desc_*` variants were missing until
+    2026-09-25, so live keys such as
+    `voluntary_union_decentralized_action_notification_third_party_desc` were
+    filed to te_unused_l_english.yml.
+    """
     diplo_keys = set()
     diplo_path = os.path.join(project_directory, "common", "diplomatic_actions")
     if not os.path.isdir(diplo_path):
@@ -140,12 +148,33 @@ def find_diplo_action_keys(project_directory):
     suffixes = [
         "", "_desc", "_action_name", "_action_propose_name",
         "_action_notification_name", "_action_notification_desc",
-        "_action_break_name", "_action_notification_break_name",
-        "_action_notification_break_desc",
+        "_action_break_name", "_action_ask_to_break_name",
+        "_action_notification_break_name", "_action_notification_break_desc",
+        "_action_notification_third_party_name",
+        "_action_notification_third_party_desc",
+        "_action_notification_third_party_break_name",
+        "_action_notification_third_party_break_desc",
+        "_action_third_party_notification_break_name",
+        "_action_third_party_notification_break_desc",
         "_proposal_accepted_name", "_proposal_accepted_desc",
         "_proposal_declined_name", "_proposal_declined_desc",
         "_proposal_notification_name", "_proposal_notification_desc",
-        "_proposal_notification_effects_desc", "_pact_desc",
+        "_proposal_notification_effects_desc",
+        "_proposal_third_party_accepted_name", "_proposal_third_party_accepted_desc",
+        "_proposal_third_party_declined_name", "_proposal_third_party_declined_desc",
+        "_proposal_notification_break_name", "_proposal_notification_break_desc",
+        "_proposal_notification_break_effects_desc",
+        "_proposal_break_accepted_name", "_proposal_break_accepted_desc",
+        "_proposal_break_declined_name", "_proposal_break_declined_desc",
+        "_proposal_third_party_break_accepted_name",
+        "_proposal_third_party_break_accepted_desc",
+        "_proposal_third_party_break_declined_name",
+        "_proposal_third_party_break_declined_desc",
+        "_effect_desc_first", "_effect_desc_third", "_effect_desc_global",
+        "_trigger_desc_first", "_trigger_desc_third", "_trigger_desc_global",
+        "_trigger_false_desc_first", "_trigger_false_desc_third",
+        "_trigger_false_desc_global",
+        "_pact_desc", "_type_break_desc",
     ]
     for file in os.listdir(diplo_path):
         if file.endswith(".txt"):
@@ -394,6 +423,11 @@ def categorize_key(key, technology_keys):
     if key.startswith(("te_monetary_", "te_mon_", "te_monetisation_", "te_inflation_",
                        "te_fx_", "te_capital_controls_")):
         return "MISCELLANEOUS"
+    # The state panel's Homeland Dynamics lines: three-token section headers
+    # (`TE_HOMELAND_CREATION`) would otherwise fall to CONCEPTS while their
+    # longer siblings stay in MISCELLANEOUS.
+    if key.startswith("TE_HOMELAND_"):
+        return "MISCELLANEOUS"
     if "_desc" in key or (re.match(r"^[a-zA-Z_]+$", key) and len(key.split("_")) < 4):
         return "CONCEPTS"
     return "MISCELLANEOUS"
@@ -558,6 +592,9 @@ def organize_all(project_directory, dry_run=False):
                     m[1] for m in re.findall(r"\[\w+\.Get(Named)?(\w+)", all_loc[key])
                 )
                 found.extend(find_quoted_loc_args(all_loc[key]))
+                # Embedded tooltips: `#tooltip:[X.GetTooltipTag],KEY` (and the
+                # `;tooltip:` / bare `#tooltip:KEY` forms) render KEY on hover.
+                found.extend(re.findall(r"tooltip:(?:[^,\s\"]+,)?(\w+)", all_loc[key]))
                 for fk in found:
                     if fk in all_keys and fk not in used_keys:
                         newly_found.add(fk)

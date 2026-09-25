@@ -1,0 +1,46 @@
+﻿# ============================================================================
+# IRREDENTISM: ASKING THE BLOC LEADER TO BLESS A WAR OF REUNIFICATION
+# See te_event_agency_irr_triggers.txt for the two paths that send a request.
+# ============================================================================
+
+# Country scope (the member asking), with scope:target_country bound to the
+# country it would go to war with. Sends irredentism.7 to the member's bloc
+# leader and marks the request as awaiting an answer, which blocks a second
+# request (irr_war_blessing_requester_ready) until irredentism.7 is answered.
+# The 90-day expiry only matters if irredentism.7 never fires (its trigger
+# fails because the member left the bloc, say); an answer clears it at once.
+irr_send_war_blessing_request = {
+	save_scope_as = irr_requester
+	# Re-save the target explicitly: a diplomatic action's own
+	# scope:target_country reaching an event fired 3 days later has no
+	# vanilla precedent with a delay, and without it irredentism.7's trigger
+	# fails silently while the pending flag blocks another request for 90 days.
+	scope:target_country ?= { save_scope_as = target_country }
+	set_variable = {
+		name = irr_war_blessing_pending
+		days = 90
+	}
+	power_bloc ?= {
+		power_bloc_leader ?= {
+			# The AI throttle starts when the request is sent, not when
+			# irredentism.7 fires, so several AI members of one bloc cannot all
+			# queue a request inside the 3-day window.
+			if = {
+				limit = { scope:irr_requester = { is_ai = yes } }
+				set_variable = {
+					name = irr_war_blessing_heard
+					days = 1825
+				}
+			}
+			trigger_event = { id = irredentism.7 days = 3 }
+		}
+	}
+}
+
+# Country scope (the member that asked). Called by both irredentism.7 options.
+irr_clear_war_blessing_pending = {
+	if = {
+		limit = { has_variable = irr_war_blessing_pending }
+		remove_variable = irr_war_blessing_pending
+	}
+}
