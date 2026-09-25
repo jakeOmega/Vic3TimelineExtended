@@ -1523,14 +1523,17 @@ international_relations_events_on_action = {
 					}
 					trigger_event = { id = international_relations_events.5 }
 				}
-				# Espionage Scandal
-				15 = {
+				# Espionage Scandal: offered to the country that would plant the
+				# agent (.203); its rival catches him in .6 half the time.
+				# Covert-disabled only. 15 → 20: .6 lands at about half its old
+				# rate, which is the capture roll's price.
+				20 = {
 					trigger = {
 						has_game_rule = covert_warfare_disabled
 						has_technology_researched = cryptography
-						any_rival_country = { always = yes }
+						any_country = { te_ea_ir_espionage_target = yes }
 					}
-					trigger_event = { id = international_relations_events.6 }
+					trigger_event = { id = international_relations_events.203 }
 				}
 				# Space Race Achievement
 				5 = {

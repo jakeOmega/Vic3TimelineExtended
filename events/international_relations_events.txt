@@ -559,8 +559,10 @@ international_relations_events.5 = {
 }
 
 # Event 6: Espionage Scandal (spy caught)
+# Fired only by .203.a when the agent the rival chose to plant is caught: the
+# rival arrives as scope:espionage_rival. Covert-disabled only; with covert
+# warfare on, espionage is a covert operation the system burns itself.
 international_relations_events.6 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -576,27 +578,16 @@ international_relations_events.6 = {
 
 	duration = 3
 
-	cooldown = { days = normal_modifier_time }
-
 	trigger = {
 		# The dedicated system owns this outcome when enabled.
 		has_game_rule = covert_warfare_disabled
-		NOR = {
-			has_modifier = espionage_scandal_modifier
-			has_modifier = espionage_prisoner_exchange_modifier
-		}
-		has_technology_researched = cryptography
-		any_rival_country = { always = yes }
+		exists = scope:espionage_rival
 	}
 
 	immediate = {
 		save_scope_as = espionage_catcher
-		random_country = {
-			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-			}
-			save_scope_as = espionage_rival
-		}
+		# Stands in for the old event cooldown, where .203's pick can read it.
+		set_variable = { name = te_ea_ir_spy_caught value = yes days = normal_modifier_time }
 	}
 
 	option = {
@@ -927,7 +918,7 @@ international_relations_events.102 = {
 
 # Notification 103: Rival's spy caught abroad
 international_relations_events.103 = {
-	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
+	# REVIEWED 2026-09-25 (unchosen_self_action): "our intelligence operatives" is true: .103 reaches us only through .6.a/.c, and .6 only when the agent we chose to plant in .203.a is caught
 	type = country_event
 	placement = root
 
@@ -1162,7 +1153,7 @@ international_relations_events.106 = {
 
 # Notification 107: Agent quietly exchanged
 international_relations_events.107 = {
-	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
+	# REVIEWED 2026-09-25 (unchosen_self_action): "our intelligence operatives" is true: .107 reaches us only through .6.b, and .6 only when the agent we chose to plant in .203.a is caught
 	type = country_event
 	placement = root
 
@@ -1346,5 +1337,84 @@ international_relations_events.202 = {
 		}
 		# Not now
 		set_variable = { name = te_ea_ir_propaganda_declined value = yes days = 365 }
+	}
+}
+
+# Precursor 203: An Agent in Place (-> .6 on the rival if the agent is caught; its answer fires .103 or .107 back on us)
+# Covert-disabled only, like .6: with covert warfare enabled this is an
+# industrial or military espionage operation.
+international_relations_events.203 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = international_relations_events.203.t
+	desc = international_relations_events.203.d
+	flavor = international_relations_events.203.f
+
+	duration = 3
+
+	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
+		has_technology_researched = cryptography
+		country_rank >= rank_value:major_power
+		NOR = {
+			has_modifier = te_ea_ir_agent_in_place_modifier
+			has_modifier = espionage_agent_exposed_modifier
+			has_variable = te_ea_ir_spy_declined
+		}
+		any_country = { te_ea_ir_espionage_target = yes }
+	}
+
+	immediate = {
+		save_scope_as = espionage_rival
+		random_country = {
+			limit = { te_ea_ir_espionage_target = yes }
+			save_scope_as = espionage_catcher
+		}
+	}
+
+	option = {
+		name = international_relations_events.203.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		# Plant the agent - stolen designs, at the risk of a public scandal
+		add_modifier = {
+			name = te_ea_ir_agent_in_place_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		random_list = {
+			50 = {
+				custom_tooltip = TE_EA_IR_AGENT_CAUGHT_TT
+				scope:espionage_catcher = {
+					trigger_event = { id = international_relations_events.6 days = 30 }
+				}
+			}
+			50 = {
+				custom_tooltip = TE_EA_IR_AGENT_UNDETECTED_TT
+			}
+		}
+	}
+
+	option = {
+		name = international_relations_events.203.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					has_attitude = { who = scope:espionage_catcher attitude = cautious }
+				}
+				add = 1
+			}
+		}
+		# Too risky
+		set_variable = { name = te_ea_ir_spy_declined value = yes days = 365 }
 	}
 }

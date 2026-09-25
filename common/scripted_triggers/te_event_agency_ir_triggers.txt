@@ -47,3 +47,21 @@ te_ea_ir_propaganda_target = {
 		has_modifier = propaganda_ignored_modifier
 	}
 }
+
+# international_relations_events.203 -> .6: a rival the actor plants an agent
+# in. .6's old trigger (cryptography for the counterintelligence that catches
+# him; not still carrying its answer to the last spy), plus the pool's rank
+# gate. te_ea_ir_spy_caught (set by .6) replaces .6's old event cooldown,
+# which a pick cannot read.
+te_ea_ir_espionage_target = {
+	NOT = { this = ROOT }
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	country_rank >= rank_value:major_power
+	NOT = { is_country_type = decentralized }
+	has_technology_researched = cryptography
+	NOR = {
+		has_modifier = espionage_scandal_modifier
+		has_modifier = espionage_prisoner_exchange_modifier
+		has_variable = te_ea_ir_spy_caught
+	}
+}

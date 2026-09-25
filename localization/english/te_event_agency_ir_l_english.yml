@@ -5,3 +5,7 @@
  te_ea_ir_propaganda_offensive_modifier:0 "Propaganda Offensive"
  te_ea_ir_propaganda_offensive_modifier_desc:0 "Our broadcasters and friendly foreign papers are running a coordinated campaign against a rival power's institutions."
  TE_EA_IR_PROPAGANDA_RIVAL_TT:0 "[SCOPE.sCountry('propaganda_instigator').GetName] will hear the broadcasts and decide whether to answer them."
+ te_ea_ir_agent_in_place_modifier:0 "Agent in Place"
+ te_ea_ir_agent_in_place_modifier_desc:0 "An agent inside a rival's defence ministry is passing its weapons designs to our engineers."
+ TE_EA_IR_AGENT_CAUGHT_TT:0 "The agent is caught: [SCOPE.sCountry('espionage_catcher').GetName] decides what to do with him, and we will hear of it."
+ TE_EA_IR_AGENT_UNDETECTED_TT:0 "The agent works undetected."

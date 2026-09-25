@@ -22,3 +22,10 @@ te_ea_ir_propaganda_offensive_modifier = {
 	country_prestige_mult = 0.03
 	country_bureaucracy_mult = -0.03
 }
+
+# international_relations_events.203.a: what an agent inside a rival's defence
+# ministry passes home. Kept whether or not he is later caught (.6).
+te_ea_ir_agent_in_place_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_military_tech_spread_mult = 0.15
+}
