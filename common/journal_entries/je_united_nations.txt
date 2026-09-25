@@ -143,15 +143,28 @@
 			}
 		}
 
-		# 3. UN Headquarters
+		# 3. UN Headquarters. Named only once the building stands
+		# (global_var:un_hq_state, refreshed by un_hq_monthly_update); the host
+		# is told when it has yet to build it, and everyone else hears nothing
+		# about a headquarters that does not exist.
 		first_valid = {
 			triggered_desc = {
 				desc = je_un_hq_host
+				trigger = {
+					je:je_united_nations ?= { has_modifier = un_headquarters_modifier }
+					has_global_variable = un_hq_state
+				}
+			}
+			triggered_desc = {
+				desc = je_un_hq_host_unbuilt
 				trigger = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
 			}
 			triggered_desc = {
 				desc = je_un_hq_established
-				trigger = { has_global_variable = un_hq_country }
+				trigger = {
+					has_global_variable = un_hq_country
+					has_global_variable = un_hq_state
+				}
 			}
 		}
 

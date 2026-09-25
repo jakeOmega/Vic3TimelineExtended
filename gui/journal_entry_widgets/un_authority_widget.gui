@@ -36,6 +36,17 @@ types un_authority_widget_types
 		using = fontsize_large
 	}
 
+	### Smaller explanatory line under the headline.
+	type un_auth_note_text = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		default_format = "#lore"
+	}
+
 	type un_auth_panel = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -53,6 +64,57 @@ types un_authority_widget_types
 		blockoverride "layout" {
 			parentanchor = hcenter
 			size = { 520 38 }
+		}
+	}
+
+	### One row of the pillar table: the pillar, its value, and a short reading
+	### of what drives it. The long explanation (range, formula) is the row's
+	### tooltip. Same three-column shape as ch_breakdown_row in the cultural
+	### hegemony widget, so the two breakdowns read alike. Every value is an
+	### O(1) read of a snapshot (un_disp_* in un_authority_values.txt).
+	type un_auth_pillar_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+
+		widget = {
+			size = { 164 22 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 164
+				elide = right
+				align = nobaseline
+				using = fontsize_medium
+				block "pillar_label" {}
+			}
+		}
+
+		widget = {
+			size = { 56 22 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 56
+				elide = right
+				align = nobaseline
+				using = fontsize_medium
+				block "pillar_value" {}
+			}
+		}
+
+		widget = {
+			size = { 252 22 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 252
+				elide = right
+				align = nobaseline
+				using = fontsize_small
+				default_format = "#lore"
+				block "pillar_detail" {}
+			}
 		}
 	}
 }
@@ -89,9 +151,90 @@ flowcontainer = {
 	un_auth_panel = {
 		visible = "[Not(GetVariableSystem.Exists('un_auth_why_closed'))]"
 
+		# Empty states only (not founded; no monthly update yet).
 		un_auth_text = {
+			visible = "[Not( GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 			text = "[GetScriptedGui('un_authority_summary_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
+
+		# ---- Authority, its target, and the pillars that make the target ----
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			visible = "[GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+			un_auth_text = {
+				text = "je_un_auth_tbl_headline"
+			}
+			un_auth_note_text = {
+				text = "je_un_auth_tbl_explain"
+			}
+
+			# Column headings
+			un_auth_pillar_row = {
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_h_pillar" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_h_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_h_reading" }
+			}
+
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_participation_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_participation_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_participation_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_participation_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_commitment_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_commitment_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_commitment_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_commitment_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_credibility_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_credibility_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_credibility_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_credibility_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_funding_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_funding_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_funding_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_funding_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_order_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_order_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_order_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_order_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_delivery_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_delivery_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_delivery_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_delivery_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_base_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_base_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_base_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_base_detail" }
+			}
+
+			# The sum
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_target_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_target_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_target_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_target_detail" }
+			}
+
+			un_auth_text = {
+				tooltip = "je_un_auth_tbl_weight_tt"
+				text = "je_un_auth_tbl_weight"
+			}
+		}
+
 		un_auth_text = {
 			text = "[GetScriptedGui('un_authority_powers_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
@@ -212,6 +355,9 @@ flowcontainer = {
 			blockoverride "chart_legend" {
 				text = "un_hist_chart_auth_legend"
 			}
+			# The store's marker pips belong to the banking system; the UN
+			# series has none of its own.
+			blockoverride "marker_pips" {}
 			blockoverride "bar_tooltip" {
 				tooltip = "un_hist_tt_auth"
 			}
@@ -243,6 +389,9 @@ flowcontainer = {
 			blockoverride "chart_legend" {
 				text = "un_hist_chart_target_legend"
 			}
+			# The store's marker pips belong to the banking system; the UN
+			# series has none of its own.
+			blockoverride "marker_pips" {}
 			blockoverride "bar_tooltip" {
 				tooltip = "un_hist_tt_target"
 			}

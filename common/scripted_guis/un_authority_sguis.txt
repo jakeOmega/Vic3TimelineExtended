@@ -13,7 +13,20 @@
 # help text costs nothing while it is closed.
 # ============================================================================
 
-# The target, the step, the pillars and the viewer's own weight.
+# Whether the pillars exist yet: the gate for the widget's pillar table,
+# which reads the snapshots un_authority_monthly_update writes. Never executed.
+un_authority_ready_sgui = {
+	scope = country
+
+	is_shown = {
+		has_global_variable = un_founded
+		has_global_variable = un_authority_target
+	}
+	ai_is_valid = { always = no }
+}
+
+# The empty states (not founded; no monthly update yet). Prints nothing once
+# the pillar table can be drawn.
 un_authority_summary_sgui = {
 	scope = country
 

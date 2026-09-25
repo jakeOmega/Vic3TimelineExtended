@@ -16,30 +16,20 @@
 # lines that are self-describing — never a header meant to sit above a list.
 # ============================================================================
 
-# The target, the step, the seven pillars and our own weight. Root-level lines
-# only. Scope: country (the viewer)
+# The empty states only: the UN not founded, or founded but not yet through
+# its first monthly update. Once the pillars exist the widget draws them as a
+# GUI table instead (gated by un_authority_ready_sgui), so this prints nothing.
+# Scope: country (the viewer)
 un_authority_summary_block = {
 	if = {
 		limit = {
 			has_global_variable = un_founded
-			has_global_variable = un_authority_target
+			NOT = { has_global_variable = un_authority_target }
 		}
-		custom_tooltip_no_bullet = je_un_auth_headline
-		custom_tooltip_no_bullet = je_un_auth_explain
-		custom_tooltip_no_bullet = je_un_auth_p_base
-		custom_tooltip_no_bullet = je_un_auth_p_participation
-		custom_tooltip_no_bullet = je_un_auth_p_commitment
-		custom_tooltip_no_bullet = je_un_auth_p_credibility
-		custom_tooltip_no_bullet = je_un_auth_p_funding
-		custom_tooltip_no_bullet = je_un_auth_p_order
-		custom_tooltip_no_bullet = je_un_auth_p_delivery
-		custom_tooltip_no_bullet = je_un_auth_our_weight
-	}
-	else_if = {
-		limit = { has_global_variable = un_founded }
 		custom_tooltip_no_bullet = je_un_auth_pending
 	}
-	else = {
+	else_if = {
+		limit = { NOT = { has_global_variable = un_founded } }
 		custom_tooltip_no_bullet = je_un_auth_not_founded
 	}
 }

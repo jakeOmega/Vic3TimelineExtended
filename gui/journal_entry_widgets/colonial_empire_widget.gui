@@ -594,6 +594,9 @@ flowcontainer = {
 			blockoverride "chart_legend" {
 				text = "te_hist_chart_colonial_stability_legend"
 			}
+			# This series records no markers; the store's pips belong to
+			# other systems (banking, cultural hegemony) and would go unexplained.
+			blockoverride "marker_pips" {}
 			blockoverride "bar_tooltip" {
 				tooltip = "te_hist_tt_colonial_stability"
 			}
@@ -627,6 +630,9 @@ flowcontainer = {
 			blockoverride "chart_legend" {
 				text = "te_hist_chart_colonial_drift_legend"
 			}
+			# This series records no markers; the store's pips belong to
+			# other systems (banking, cultural hegemony) and would go unexplained.
+			blockoverride "marker_pips" {}
 			blockoverride "zero_axis" {
 				widget = {
 					size = { 100% 2 }

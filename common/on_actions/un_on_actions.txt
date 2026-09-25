@@ -358,6 +358,7 @@ un_hq_on_state_owner_change = {
 		if = {
 			limit = { has_building = building_un_headquarters }
 			un_hq_enforce_single_building = yes
+			un_hq_refresh_state = yes
 		}
 	}
 }

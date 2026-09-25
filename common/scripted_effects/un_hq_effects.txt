@@ -179,4 +179,33 @@ un_hq_monthly_update = {
 		}
 	}
 	un_hq_enforce_single_building = yes
+
+	# Where the building stands, for the journal entry's status line.
+	un_hq_refresh_state = yes
+}
+
+# Record where the headquarters building stands in global_var:un_hq_state, or
+# clear it when none stands, for the journal entry's status line: the line
+# names the state when the headquarters exists and says nothing about one
+# that has not been built. Called after every enforcement (monthly, and when
+# the HQ state changes hands), so a demolished HQ is never still named. The
+# building is single-copy, so the random pick finds the only one.
+# Scope: any
+un_hq_refresh_state = {
+	if = {
+		limit = {
+			any_country = { any_scope_state = { has_building = building_un_headquarters } }
+		}
+		random_country = {
+			limit = { any_scope_state = { has_building = building_un_headquarters } }
+			random_scope_state = {
+				limit = { has_building = building_un_headquarters }
+				set_global_variable = { name = un_hq_state value = this }
+			}
+		}
+	}
+	else_if = {
+		limit = { has_global_variable = un_hq_state }
+		remove_global_variable = un_hq_state
+	}
 }
