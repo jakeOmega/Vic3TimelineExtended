@@ -2357,11 +2357,7 @@ modern_election_events.25 = {
 		has_technology_researched = automated_surveillance
 		# The leak exposes a programme the government actually runs: a
 		# surveillance apparatus, and not under strong privacy rights.
-		OR = {
-			has_law = law_type:law_intrusive_surveillance
-			has_law = law_type:law_secret_police
-			has_law = law_type:law_ministry_of_intelligence_and_security
-		}
+		te_ea_has_surveillance_apparatus = yes
 		NOT = { has_law = law_type:law_strong_privacy_rights }
 	}
 

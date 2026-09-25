@@ -1,0 +1,28 @@
+﻿# Scripted triggers for the event agency / system gating fixes (package a).
+
+# Country scope: the state runs a surveillance apparatus that could be reading
+# citizens' communications — intrusive surveillance, a secret police, or a
+# ministry of intelligence. Used by events whose text says government agents
+# have intercepted private correspondence or run a mass-surveillance programme
+# (extra_law_events.5, modern_election_events.25), so a country without one is
+# not told it did.
+te_ea_has_surveillance_apparatus = {
+	OR = {
+		has_law = law_type:law_intrusive_surveillance
+		has_law = law_type:law_secret_police
+		has_law = law_type:law_ministry_of_intelligence_and_security
+	}
+}
+
+# Country scope, while enacting a rules-of-war law: can extra_law_events.32
+# offer the no-first-strike pledge (option a)? Mirrors
+# amendment_no_first_strike's `possible` and allowed_laws, and lets the event
+# drop the pledge sentence from its description when the option is hidden.
+te_ea_no_first_strike_pledge_available = {
+	has_game_rule = nuclear_weapons_enabled
+	has_technology_researched = nuclear_weapons
+	OR = {
+		is_enacting_law = law_type:law_humanitarian_regulations
+		is_enacting_law = law_type:law_limited_war
+	}
+}

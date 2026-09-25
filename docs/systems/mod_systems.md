@@ -960,8 +960,8 @@ Three amendments can be attached **temporarily** (`add_amendment = { … timeout
 | Amendment | Delivery (DEBATE checkpoint) | cooldown / timeout (months) | Expiry event |
 |-----------|------------------------------|-----------------------------|--------------|
 | `amendment_env_grandfather_clause` (new; +5% pollution, +5% emissions, +2 Industrialist approval on `law_ministry_of_the_environment`; cancels one institution level) | `ministry_law_events.58` option a | 48 / 120 | `ministry_law_events.59` |
-| `amendment_national_champion_exemption` | `extra_law_events.29` option d (option a remains the permanent variant) | 48 / 120 | `extra_law_events.85` |
-| `amendment_corporate_data_exemption` | `extra_law_events.31` option d (option a remains the permanent variant) | 12 / 36 | `extra_law_events.86` |
+| `amendment_national_champion_exemption` | `extra_law_events.29` option e (option a remains the permanent variant) | 48 / 120 | `extra_law_events.85` |
+| `amendment_corporate_data_exemption` | `extra_law_events.31` option e (option a remains the permanent variant) | 12 / 36 | `extra_law_events.86` |
 
 The `has_amendment` guards on events 29/31/58 make the permanent and temporary variants mutually exclusive within one enactment. The expiry events re-derive `sunset_law` from `active_law:<lawgroup>` and `industrialists_ig` in `immediate`, and are not in any checkpoint pool. Deferred from issue #278: a financial-regulation phase-in (the three laws' penalties are structurally different — numeric, none, boolean lock) and a wartime rules-of-war clause (no per-country war-start on-action; would need a timeout on an already-active law).
 
