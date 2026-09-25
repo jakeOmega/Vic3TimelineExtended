@@ -25,6 +25,11 @@ te_homeland_removal_culture_present = {
 		has_homeland = ROOT
 	}
 }
+# State scope. Removal can happen here at all: at the base removal threshold
+# of 0% no culture's share can ever fall below it.
+te_homeland_removal_threshold_open = {
+	modifier:state_homeland_removal_threshold_add > 0
+}
 
 # Culture scope; ROOT = state.
 te_homeland_creation_candidate = {

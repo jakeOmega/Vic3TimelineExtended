@@ -80,8 +80,9 @@ te_homeland_removal_project_count = {
 
 # What the tile shows. A track is shown while it has projects (running,
 # paused with their progress kept, or awaiting next month's cleanup), and
-# otherwise only while it can run here. The pause reason is shown once for
-# the whole tile, and only when some track applies.
+# otherwise only while it can run here: removal also needs a removal threshold
+# above 0%. The pause reason is shown once for the whole tile, and only when
+# some track applies.
 
 # 0 running, 1 homeland changes not enabled, 2 region divided between owners.
 te_homeland_pause_status = {
@@ -103,7 +104,10 @@ te_homeland_relevant = {
 		limit = {
 			OR = {
 				te_homeland_creation_culture_present = yes
-				te_homeland_removal_culture_present = yes
+				AND = {
+					te_homeland_removal_culture_present = yes
+					te_homeland_removal_threshold_open = yes
+				}
 			}
 		}
 		value = 1
@@ -129,6 +133,7 @@ te_homeland_removal_shown = {
 			te_homeland_system_enabled = yes
 			te_homeland_region_unified = yes
 			te_homeland_removal_culture_present = yes
+			te_homeland_removal_threshold_open = yes
 		}
 		value = 1
 	}

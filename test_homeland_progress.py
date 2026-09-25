@@ -404,6 +404,13 @@ class HomelandProgressTests(unittest.TestCase):
         sim.root["state_region"]["homelands"].discard("a")
         self.assertEqual(self.shown(sim), (1, 0, 1, 1))
 
+    def test_zero_removal_threshold_hides_removal(self):
+        # "b" keeps a homeland here, but nothing can fall below 0%.
+        sim = self.make(homelands={"a", "b"}, removal="0")
+        self.assertEqual(self.shown(sim), (0, 0, 0, 0))
+        sim.root["modifiers"]["state_homeland_removal_threshold_add"] = Decimal(".1")
+        self.assertEqual(self.shown(sim), (1, 0, 0, 1))
+
     def test_threshold_blocked_track_is_still_shown(self):
         sim = self.make(shares={"a": ".4", "b": ".2", "c": ".2"}, homelands={"b"})
         self.assertEqual(self.shown(sim), (1, 0, 1, 1))
