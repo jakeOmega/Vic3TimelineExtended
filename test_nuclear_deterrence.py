@@ -253,6 +253,30 @@ class TestWarLawGate(unittest.TestCase):
             self.assertIn("nd_war_law_permits_strategic_strike = yes", option_body(text, opt), opt)
 
 
+class TestFollowThrough(unittest.TestCase):
+    def setUp(self):
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_triggers_exist(self):
+        for name in ("nd_threat_bluff_nfu", "nd_threat_law_permits", "nd_threat_existential_stake",
+                     "nd_threat_backed", "nd_threat_uncertain", "nd_enemy_threatens_existence_in_play"):
+            self.assertRegex(self.triggers, rf"(?m)^{name} = \{{")
+
+    def test_classification_writes_every_reason_once(self):
+        body = block(self.effects, "nd_crisis_classify_follow_through")
+        codes = re.findall(r"name = nd_ft_reason value = (\d)", body)
+        self.assertEqual(sorted(codes), [str(c) for c in range(1, 8)])
+
+    def test_ai_never_bluffs_in_public(self):
+        self.assertIn("nd_threat_backed = { TARGET = $TARGET$ }",
+                      block(self.triggers, "nd_ai_would_issue_ultimatum"))
+
+    def test_ai_bluffs_in_private_only_when_aggressive(self):
+        warn = block(self.triggers, "nd_ai_would_warn")
+        self.assertRegex(warn, r"OR = \{\s*nd_threat_backed = \{ TARGET = \$TARGET\$ \}\s*ruler_is_aggressive = yes\s*\}")
+
+
 class TestManagedFamilies(unittest.TestCase):
     def test_doctrine_and_readiness_families_exist(self):
         mods = set(re.findall(r"^(nd_\w+)\s*=\s*\{", read(MODIFIERS), re.M))

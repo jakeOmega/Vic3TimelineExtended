@@ -193,6 +193,53 @@ nd_crisis_classify_dispute = {
 	}
 }
 
+# Issuer scope. Records which follow-through branch holds against $TARGET$
+# (nd_ft_reason, table in nuclear_deterrence_triggers.txt § FOLLOW-THROUGH):
+#   1 at war, the doctrine permits a strike now     backed
+#   2 Compellence or higher (defiance licenses it)  backed
+#   3 not at war, Flexible first use                uncertain
+#   4 not at war, Existential with a stake          uncertain
+#   5 the doctrine does not allow it                bluff
+#   6 the Rules of War law forbids it               bluff
+#   7 No First Use                                  bluff
+# Called by nd_crisis_refresh_figures on opening and every week, so a doctrine
+# change or a war turning against us counts the same week.
+nd_crisis_classify_follow_through = {
+	if = {
+		limit = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
+		set_variable = { name = nd_ft_reason value = 7 }
+	}
+	else_if = {
+		limit = { NOT = { nd_threat_law_permits = { TARGET = $TARGET$ } } }
+		set_variable = { name = nd_ft_reason value = 6 }
+	}
+	else_if = {
+		limit = {
+			has_war_with = $TARGET$
+			nd_doctrine_permits_strike = { ENEMY = $TARGET$ }
+		}
+		set_variable = { name = nd_ft_reason value = 1 }
+	}
+	else_if = {
+		limit = { nd_threat_backed = { TARGET = $TARGET$ } }
+		set_variable = { name = nd_ft_reason value = 2 }
+	}
+	else_if = {
+		limit = {
+			nd_threat_uncertain = { TARGET = $TARGET$ }
+			nd_doctrine_flexible = yes
+		}
+		set_variable = { name = nd_ft_reason value = 3 }
+	}
+	else_if = {
+		limit = { nd_threat_uncertain = { TARGET = $TARGET$ } }
+		set_variable = { name = nd_ft_reason value = 4 }
+	}
+	else = {
+		set_variable = { name = nd_ft_reason value = 5 }
+	}
+}
+
 # Either party's scope: an AI party reviews its posture at once, in its own
 # event so that its posture effects see it as ROOT
 # (nuclear_deterrence_effects.txt header, "ROOT").

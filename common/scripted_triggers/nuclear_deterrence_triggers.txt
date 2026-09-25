@@ -307,6 +307,83 @@ nd_war_law_exception = {
 	}
 }
 
+# ----------------------------------------------------------------------------
+# FOLLOW-THROUGH — can the threatening side carry its threat out? (2026-09-25
+# spec §1.1). Issuer scope; $TARGET$ is the country threatened. Written for a
+# tooltip preview as well as a live crisis: they read only ROOT-side state and
+# $TARGET$. nd_crisis_classify_follow_through records which branch held
+# (nd_ft_reason); the pressure on the target reads that record.
+# ----------------------------------------------------------------------------
+
+# $ENEMY$'s side in a diplomatic play holds an annexation-type goal against us —
+# nd_enemy_threatens_existence's goal list, for a play not yet a war.
+nd_enemy_threatens_existence_in_play = {
+	$ENEMY$ = {
+		OR = {
+			play_side_has_war_goal_of_type_against = { type = annex_country target = PREV }
+			play_side_has_war_goal_of_type_against = { type = te_reunify_country target = PREV }
+			play_side_has_war_goal_of_type_against = { type = make_protectorate target = PREV }
+			play_side_has_war_goal_of_type_against = { type = make_dominion target = PREV }
+			play_side_has_war_goal_of_type_against = { type = make_tributary target = PREV }
+			play_side_has_war_goal_of_type_against = { type = make_personal_union target = PREV }
+			play_side_has_war_goal_of_type_against = { type = make_crown_land target = PREV }
+			play_side_has_war_goal_of_type_against = { type = make_chartered_company target = PREV }
+		}
+	}
+}
+
+# No First Use, and they have not struck us (retaliation is allowed under
+# every doctrine).
+nd_threat_bluff_nfu = {
+	nd_doctrine_nfu = yes
+	NOT = { nd_was_struck_by = { ENEMY = $TARGET$ } }
+}
+
+# The Rules of War law would let us carry it out: in a war, the strike gate
+# itself; in a play, the law, or an annexation-type goal against us in it.
+nd_threat_law_permits = {
+	OR = {
+		nd_war_law_permits_strategic_strike = yes
+		nd_enemy_threatens_existence_in_play = { ENEMY = $TARGET$ }
+	}
+}
+
+# Existential deterrence has something to deter here: a country we guarantee,
+# our core, or our existence.
+nd_threat_existential_stake = {
+	OR = {
+		nd_dispute_guarantee_against = { TARGET = $TARGET$ }
+		nd_core_threatened_by = { ENEMY = $TARGET$ }
+		nd_enemy_threatens_existence_in_play = { ENEMY = $TARGET$ }
+	}
+}
+
+nd_threat_backed = {
+	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
+	nd_threat_law_permits = { TARGET = $TARGET$ }
+	OR = {
+		AND = {
+			has_war_with = $TARGET$
+			nd_doctrine_permits_strike = { ENEMY = $TARGET$ }
+		}
+		nd_doctrine_at_least_compellence = yes
+	}
+}
+
+nd_threat_uncertain = {
+	NOT = { nd_threat_backed = { TARGET = $TARGET$ } }
+	NOT = { nd_threat_bluff_nfu = { TARGET = $TARGET$ } }
+	nd_threat_law_permits = { TARGET = $TARGET$ }
+	NOT = { has_war_with = $TARGET$ }
+	OR = {
+		nd_doctrine_flexible = yes
+		AND = {
+			nd_doctrine_existential = yes
+			nd_threat_existential_stake = { TARGET = $TARGET$ }
+		}
+	}
+}
+
 # A bilateral non-use pledge with $TARGET$ is in force.
 nd_has_nonuse_pledge_with = {
 	has_variable_list = nd_nonuse_pledges
@@ -958,6 +1035,10 @@ nd_ai_would_warn = {
 				nd_regime_is_militarist = yes
 			}
 			NOT = { nd_faces_retaliation_from = { ENEMY = $TARGET$ } }
+			OR = {
+				nd_threat_backed = { TARGET = $TARGET$ }
+				ruler_is_aggressive = yes
+			}
 		}
 		# A rival's bomb, for a great power that has one.
 		AND = {
@@ -977,6 +1058,7 @@ nd_ai_would_warn = {
 # The public form: an AI that means it and can afford the audience cost.
 nd_ai_would_issue_ultimatum = {
 	nd_ai_would_warn = { TARGET = $TARGET$ }
+	nd_threat_backed = { TARGET = $TARGET$ }
 	OR = {
 		nd_doctrine_at_least_compellence = yes
 		nd_regime_is_militarist = yes
