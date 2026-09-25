@@ -2,8 +2,21 @@
 
 # ============================================================================
 # UNITED NATIONS EVENTS
-# Gated by intergovernmental_organizations technology (Era 6+)
-# 10 events covering UN formation, resolutions, crises, and reform
+# Gated by intergovernmental_organizations technology (Era 6+).
+#
+# Redesign phase 4 (docs/systems/un_redesign_design.md §8, §0.4): nothing here
+# is rolled at random any more. Each event is raised by the docket
+# (common/scripted_effects/un_docket_effects.txt) for a real situation and sent
+# to the countries it concerns, or fired where the thing it answers happens:
+#   docket    2 (an appeal: nuclear strike, aggression, covert operation),
+#             3, 6, 9, 12, 14, 16, 17, 18, 19, 21, 22 (topics to table),
+#             4 (a collapsing state), 7 (a famine), 15 (an embargo)
+#   hooks     5 (sanctions adopted), 8 (a court case from event 2),
+#             10 (the crisis opens), 11 (a veto), 20 (a great power leaves),
+#             30-32 (dissolution and refounding), 101-103 (notifications)
+# Event 13 (an ideological confrontation) was retired: no situation drives it.
+# Every option costs something; a proposer event's decline hands the item to
+# another delegation (un_docket_offer_topic_next) and earns nothing.
 # ============================================================================
 
 # Event 1: The United Nations Charter - Formation Event (fires once)
@@ -115,7 +128,15 @@ un_events.1 = {
 	}
 }
 
-# Event 2: General Assembly Crisis - A rival's aggression is condemned
+# Event 2: An Appeal to the Assembly (redesign phase 4)
+# Raised by the docket (un_docket_effects.txt, items 1-3) against
+# scope:condemned_country: a nuclear strike, a war of aggression against a
+# member, or a severe covert operation exposed (var:un_dkt_cause on the accused:
+# 1, 2, 3). Offered first to the aggrieved party (scope:un_dkt_victim); if it
+# lets the matter rest, to one member with a stake (un_docket_appeal_second);
+# then the item lapses. Holds the floor while it is answered. Every answer
+# costs something: tabling a censure costs relations and the tabling marker, a
+# court case costs relations, letting it rest costs prestige or credibility.
 un_events.2 = {
 	type = country_event
 	placement = root
@@ -126,119 +147,233 @@ un_events.2 = {
 
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
-	title = un_events.2.t
-	desc = un_events.2.d
+	title = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.2.t_ours
+				trigger = { scope:un_dkt_victim ?= ROOT }
+			}
+			desc = un_events.2.t
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.2.d_nuclear_ours
+				trigger = {
+					scope:un_dkt_victim ?= ROOT
+					scope:condemned_country = { un_docket_cause_is = { CAUSE = 1 } }
+				}
+			}
+			triggered_desc = {
+				desc = un_events.2.d_war_ours
+				trigger = {
+					scope:un_dkt_victim ?= ROOT
+					scope:condemned_country = { un_docket_cause_is = { CAUSE = 2 } }
+				}
+			}
+			triggered_desc = {
+				desc = un_events.2.d_covert_ours
+				trigger = {
+					scope:un_dkt_victim ?= ROOT
+					scope:condemned_country = { un_docket_cause_is = { CAUSE = 3 } }
+				}
+			}
+			triggered_desc = {
+				desc = un_events.2.d_nuclear
+				trigger = { scope:condemned_country = { un_docket_cause_is = { CAUSE = 1 } } }
+			}
+			triggered_desc = {
+				desc = un_events.2.d_war
+				trigger = { scope:condemned_country = { un_docket_cause_is = { CAUSE = 2 } } }
+			}
+			triggered_desc = {
+				desc = un_events.2.d_covert
+				trigger = { scope:condemned_country = { un_docket_cause_is = { CAUSE = 3 } } }
+			}
+			desc = un_events.2.d
+		}
+		triggered_desc = {
+			desc = un_events.2.d_place
+			trigger = { exists = scope:un_dkt_place }
+		}
+		desc = un_events.2.d_grounds
+	}
 	flavor = un_events.2.f
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		is_at_war = no
-		any_country = {
-			has_diplomatic_pact = { who = ROOT type = rivalry }
-			is_at_war = yes
-			is_diplomatic_play_initiator = yes
-		}
-		NOT = { has_modifier = un_ga_resolution_modifier }
+		exists = scope:condemned_country
+		NOT = { this = scope:condemned_country }
 		NOT = { has_global_variable = un_vote_active }
 	}
 
 	immediate = {
-		random_country = {
-			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-				is_at_war = yes
-				is_diplomatic_play_initiator = yes
-			}
-			save_scope_as = condemned_country
-		}
-		random_country = {
-			limit = {
-				NOT = { this = ROOT }
-				has_war_with = scope:condemned_country
-				is_diplomatic_play_initiator = no
-			}
-			save_scope_as = defender_country
-		}
-		# Reserve the vote slot immediately so no other country can start one
+		# Hold the floor while we answer.
 		un_vote_reserve = yes
 	}
 
-	# Option A: Propose condemnation resolution to the General Assembly
+	# Option A: Table a condemnation — if the accused's record gives grounds
 	option = {
 		name = un_events.2.a
-		default_option = yes
+		trigger = {
+			scope:condemned_country = { un_case_supports = { TOPIC = condemn } }
+			NOT = { un_resolution_topic_on_cooldown = { TOPIC = condemn } }
+		}
 		ai_chance = {
-			base = 5
+			base = 10
 			modifier = {
-				trigger = { country_rank >= rank_value:great_power }
-				add = 3
+				trigger = { scope:un_dkt_victim ?= ROOT }
+				add = 5
+			}
+			modifier = {
+				trigger = { has_diplomatic_pact = { who = scope:condemned_country type = rivalry } }
+				add = 5
 			}
 		}
 		custom_tooltip = un_vote_initiated_tt
-		# Proposer takes a personal stance
 		add_modifier = {
 			name = un_ga_resolution_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		# Open the vote: every other UN member votes, results in a year
+		change_relations = { country = scope:condemned_country value = -20 }
 		hidden_effect = {
 			scope:condemned_country = { save_scope_as = un_vote_target }
 			un_resolution_open = { TOPIC = condemn }
 		}
 	}
 
-	# Option B: Vote in favor but don't lead
+	# Option B: Call for sanctions — heavier grounds, and a major power to lead them
 	option = {
 		name = un_events.2.b
-		ai_chance = {
-			base = 5
+		trigger = {
+			country_rank >= rank_value:major_power
+			NOT = { has_modifier = un_sanctions_enforcer_modifier }
+			NOT = { un_resolution_topic_on_cooldown = { TOPIC = sanctions } }
+			scope:condemned_country = {
+				un_case_supports = { TOPIC = sanctions }
+				NOT = { has_modifier = un_sanctions_target_modifier }
+			}
 		}
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { scope:condemned_country = { un_docket_cause_is = { CAUSE = 1 } } }
+				add = 6
+			}
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 3
+			}
+		}
+		custom_tooltip = un_vote_initiated_tt
 		add_modifier = {
 			name = un_ga_resolution_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 102 }
-		change_relations = { country = scope:condemned_country value = -5 }
-		add_lobby_appeasement_from_diplomacy_unidirectional = {
-			FIRST = root
-			SECOND = scope:condemned_country
-			PRO_AMOUNT = 1
-			ANTI_AMOUNT = -1
-			FACTOR = appeasement_relations_decreased
+		add_modifier = {
+			name = un_request_cooldown
+			days = long_modifier_time
+			is_decaying = yes
 		}
-		change_relations = { country = scope:defender_country value = 5 }
-		add_lobby_appeasement_from_diplomacy_unidirectional = {
-			FIRST = root
-			SECOND = scope:defender_country
-			PRO_AMOUNT = 1
-			ANTI_AMOUNT = -1
-			FACTOR = appeasement_relations_increased
+		change_relations = { country = scope:condemned_country value = -30 }
+		hidden_effect = {
+			scope:condemned_country = { save_scope_as = un_vote_target }
+			un_resolution_open = { TOPIC = sanctions }
 		}
-		# Release the vote slot since we didn't start one
-		un_vote_release = yes
 	}
 
-	# Option C: Abstain - avoid entanglements
+	# Option C: Ask for peacekeepers on our own soil — the attacked member only
 	option = {
 		name = un_events.2.c
+		trigger = {
+			scope:un_dkt_victim ?= ROOT
+			scope:condemned_country = { un_docket_cause_is = { CAUSE = 2 } }
+			NOT = { un_resolution_topic_on_cooldown = { TOPIC = peacekeeping_request } }
+			NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
+			NOT = { has_modifier = un_request_cooldown }
+		}
+		ai_chance = {
+			base = 6
+		}
+		un_propose_peacekeepers_effect = yes
+	}
+
+	# Option D: Bring a case before the World Court — no grounds needed, no vote
+	option = {
+		name = un_events.2.court
+		trigger = {
+			scope:condemned_country = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				NOT = { has_modifier = un_court_compliance_modifier }
+				NOT = { has_modifier = un_court_defiance_modifier }
+			}
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					NOT = { scope:condemned_country = { un_case_supports = { TOPIC = condemn } } }
+				}
+				add = 8
+			}
+		}
+		custom_tooltip = un_events.2.court_tt
+		change_relations = { country = scope:condemned_country value = -15 }
+		un_vote_release = yes
+		hidden_effect = {
+			save_scope_as = court_plaintiff
+			scope:condemned_country = { trigger_event = { id = un_events.8 days = 30 } }
+		}
+	}
+
+	# Option E (the aggrieved party): Leave it to the Council
+	option = {
+		name = un_events.2.e
+		trigger = { scope:un_dkt_victim ?= ROOT }
+		default_option = yes
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { has_law = law_type:law_isolationism }
-				add = 5
+				trigger = {
+					OR = {
+						has_treaty_alliance_with = { TARGET = scope:condemned_country }
+						is_in_same_power_bloc = scope:condemned_country
+					}
+				}
+				add = 10
 			}
+		}
+		add_modifier = {
+			name = un_appeal_withheld_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_events.2.pass_tt
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_pass_appeal = yes
+		}
+	}
+
+	# Option G (a member with a stake): Not our quarrel — the item lapses
+	option = {
+		name = un_events.2.g
+		trigger = { NOT = { scope:un_dkt_victim ?= ROOT } }
+		default_option = yes
+		ai_chance = {
+			base = 4
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_0_5
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 102 }
-		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-		# Release the vote slot since we didn't start one
+		if = {
+			limit = { exists = scope:un_dkt_victim }
+			change_relations = { country = scope:un_dkt_victim value = -10 }
+		}
 		un_vote_release = yes
 	}
 }
@@ -266,8 +401,6 @@ un_events.3 = {
 	flavor = un_events.3.f
 
 	duration = 3
-
-	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -309,25 +442,19 @@ un_events.3 = {
 		}
 	}
 
-	# Option B: Sign with reservations
+	# Option B: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.3.b
+		name = un_docket_option_pass
 		ai_chance = {
-			base = 4
-			modifier = {
-				trigger = { has_law = law_type:law_national_supremacy }
-				add = 3
-			}
+			base = 3
 		}
-		add_modifier = {
-			name = un_human_rights_reservations_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 103 }
-		# Release the vote slot since we didn't start one
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = human_rights EVENT = un_events.3 }
+		}
 	}
 
 	# Option C: Refuse to sign
@@ -354,6 +481,9 @@ un_events.3 = {
 		ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		# Release the vote slot since we didn't start one
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = human_rights EVENT = un_events.3 }
+		}
 	}
 }
 
@@ -374,35 +504,21 @@ un_events.4 = {
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
+	# Redesign phase 4: no longer rolled against a random war anywhere. The
+	# docket (un_docket_take_up_collapse, item 4) sends it to up to three
+	# major-power members, those running the peacekeeping programme first,
+	# when a state collapses: scope:peacekeeping_target is the host. The host
+	# carries un_peacekeeping_welcomed/resented_modifier (un_events.102) once
+	# peacekeepers are there.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 		country_rank >= rank_value:major_power
-		# A host that is not our own enemy and has no peacekeepers yet. The
-		# host carries un_peacekeeping_welcomed/resented_modifier (un_events.102);
-		# un_peacekeeping_deployed_modifier sits on the CONTRIBUTOR, so testing
-		# it here never excluded anyone. Keep in step with the immediate below.
-		any_country = {
-			NOT = { this = ROOT }
-			is_at_war = yes
-			NOT = { has_war_with = ROOT }
+		exists = scope:peacekeeping_target
+		NOT = { this = scope:peacekeeping_target }
+		NOT = { has_war_with = scope:peacekeeping_target }
+		scope:peacekeeping_target = {
 			NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
 			NOT = { has_modifier = un_peacekeeping_resented_modifier }
-		}
-	}
-
-	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = ROOT }
-				is_at_war = yes
-				NOT = { has_war_with = ROOT }
-				NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
-				NOT = { has_modifier = un_peacekeeping_resented_modifier }
-			}
-			save_scope_as = peacekeeping_target
 		}
 	}
 
@@ -460,6 +576,14 @@ un_events.4 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
+		# Redesign phase 4: observers are not free. A quarter of what a full
+		# programme costs, for as long as the mission runs.
+		add_modifier = {
+			name = un_observer_mission_cost
+			multiplier = un_docket_token_expense_value
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		custom_tooltip = un_ledger_tt_delivery_up_0_5
 		un_ledger_actor_entry = { PILLAR = delivery POINTS = 0.5 REASON = 104 }
 		change_relations = { country = scope:peacekeeping_target value = 5 }
@@ -501,8 +625,10 @@ un_events.5 = {
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
+	# Redesign phase 4: no longer rolled. un_vote.2 fires it to the proposer of
+	# adopted sanctions (the enforcer) three months on, with
+	# scope:sanctioned_country the target. A queued event from an older save
+	# has no saved target and picks one, as the rolled event used to.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_modifier = un_sanctions_enforcer_modifier
@@ -510,15 +636,24 @@ un_events.5 = {
 		# A regime must actually be in force. The enforcer modifier outlives a
 		# target that accepted its censure (no target modifier is applied) or
 		# that no longer exists, and every option below acts on the target.
-		any_country = { has_modifier = un_sanctions_target_modifier }
+		OR = {
+			scope:sanctioned_country ?= { has_modifier = un_sanctions_target_modifier }
+			AND = {
+				NOT = { exists = scope:sanctioned_country }
+				any_country = { has_modifier = un_sanctions_target_modifier }
+			}
+		}
 	}
 
 	immediate = {
-		random_country = {
-			limit = {
-				has_modifier = un_sanctions_target_modifier
+		if = {
+			limit = { NOT = { exists = scope:sanctioned_country } }
+			random_country = {
+				limit = {
+					has_modifier = un_sanctions_target_modifier
+				}
+				save_scope_as = sanctioned_country
 			}
-			save_scope_as = sanctioned_country
 		}
 	}
 
@@ -535,6 +670,7 @@ un_events.5 = {
 		}
 		add_modifier = {
 			name = un_sanctions_enforcement_modifier
+			multiplier = un_enforcement
 			days = normal_modifier_time
 			is_decaying = yes
 		}
@@ -561,6 +697,7 @@ un_events.5 = {
 		}
 		add_modifier = {
 			name = un_sanctions_partial_modifier
+			multiplier = un_enforcement
 			days = normal_modifier_time
 			is_decaying = yes
 		}
@@ -581,6 +718,7 @@ un_events.5 = {
 		}
 		add_modifier = {
 			name = un_sanctions_busting_modifier
+			multiplier = un_enforcement
 			days = normal_modifier_time
 			is_decaying = yes
 		}
@@ -593,6 +731,8 @@ un_events.5 = {
 			text = un_standing_defied_tt
 			un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }
 		}
+		custom_tooltip = un_dossier_tt_busting
+		un_dossier_record = { RECORD = defiance POINTS = un_dos_points_busting }
 		change_relations = { country = scope:sanctioned_country value = 10 }
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 	}
@@ -625,12 +765,16 @@ un_events.6 = {
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
+	# Redesign phase 2: the reform on the table is the charter's next stage
+	# (Reform I raises the ceiling on authority from 70 to 85, Reform II to
+	# 100), and it can be tabled only once the organisation has outgrown its
+	# charter — the same gate as the chamber and the button
+	# (un_charter_reform_ripe, un_ladder_triggers.txt).
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
-		global_var:un_authority >= 30
+		un_charter_reform_ripe = yes
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
 		NOT = { has_modifier = un_reform_champion_modifier }
 		NOT = { has_modifier = un_reform_opponent_modifier }
 		NOT = { has_global_variable = un_vote_active }
@@ -675,9 +819,10 @@ un_events.6 = {
 		}
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
+		# Open the vote on the charter's next stage: every other UN member
+		# votes, results in a year (un_charter_reform_open, un_propose_effects.txt).
 		hidden_effect = {
-			un_resolution_open = { TOPIC = reform }
+			un_charter_reform_open = yes
 		}
 	}
 
@@ -702,23 +847,24 @@ un_events.6 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 		# Release the vote slot since we didn't start one
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = reform EVENT = un_events.6 }
+		}
 	}
 
-	# Option C: Propose a compromise
+	# Option C: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.6.c
+		name = un_docket_option_pass
 		ai_chance = {
 			base = 3
 		}
-		add_modifier = {
-			name = un_reform_compromise_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 106 }
-		# Release the vote slot since we didn't start one
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = reform EVENT = un_events.6 }
+		}
 	}
 }
 
@@ -734,36 +880,29 @@ un_events.7 = {
 	icon = "gfx/interface/icons/event_icons/event_default.dds"
 
 	title = un_events.7.t
-	desc = un_events.7.d
+	desc = {
+		desc = un_events.7.d
+		triggered_desc = {
+			desc = un_events.7.d_place
+			trigger = { exists = scope:crisis_state }
+		}
+	}
 	flavor = un_events.7.f
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
+	# Redesign phase 4: no longer rolled against "any state anywhere below SoL
+	# 8" (always true). The docket (un_docket_take_up_famine, item 5) sends it
+	# to up to three major-power members when a famine strikes:
+	# scope:crisis_country, and scope:crisis_state the worst-hit state.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
+		exists = scope:crisis_country
+		NOT = { this = scope:crisis_country }
+		NOT = { has_war_with = scope:crisis_country }
 		NOT = { has_modifier = un_humanitarian_aid_modifier }
 		NOT = { has_modifier = un_humanitarian_token_modifier }
-		any_country = {
-			NOT = { this = ROOT }
-			any_scope_state = {
-				average_sol < 8
-			}
-		}
-	}
-
-	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = ROOT }
-				any_scope_state = {
-					average_sol < 8
-				}
-			}
-			save_scope_as = crisis_country
-		}
 	}
 
 	# Option A: Major humanitarian aid - expensive but builds authority
@@ -842,6 +981,14 @@ un_events.7 = {
 		}
 		add_modifier = {
 			name = un_humanitarian_token_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		# Redesign phase 4: a token is not free. A quarter of what the full
+		# relief effort costs, for as long as it runs.
+		add_modifier = {
+			name = un_humanitarian_token_cost
+			multiplier = un_docket_token_expense_value
 			days = normal_modifier_time
 			is_decaying = yes
 		}
@@ -929,28 +1076,26 @@ un_events.8 = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
 	title = un_events.8.t
-	desc = un_events.8.d
+	desc = {
+		desc = un_events.8.d
+		triggered_desc = {
+			desc = un_events.8.d_plaintiff
+			trigger = { exists = scope:court_plaintiff }
+		}
+	}
 	flavor = un_events.8.f
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
+	# Redesign phase 4: no longer rolled against anyone at war. A member that
+	# brings its appeal to the World Court (un_events.2 option D) sues the
+	# accused: scope:court_plaintiff.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		global_var:un_authority >= 30
-		OR = {
-			is_at_war = yes
-			any_scope_state = {
-				is_incorporated = no
-			}
-			has_law = law_type:law_total_war
-		}
+		exists = scope:court_plaintiff
+		NOT = { this = scope:court_plaintiff }
 		NOT = { has_modifier = un_court_compliance_modifier }
 		NOT = { has_modifier = un_court_defiance_modifier }
-	}
-
-	immediate = {
 	}
 
 	# Option A: Accept the ruling - painful but legitimate
@@ -987,6 +1132,7 @@ un_events.8 = {
 		}
 		ig_approval_effect = { IG = ig_armed_forces  MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		change_relations = { country = scope:court_plaintiff value = 10 }
 	}
 
 	# Option B: Contest the jurisdiction
@@ -1021,6 +1167,8 @@ un_events.8 = {
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_2_5
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -2.5 REASON = 108 }
+		custom_tooltip = un_dossier_tt_court
+		un_dossier_record = { RECORD = defiance POINTS = un_dos_points_court }
 		# International standing: openly repudiating the court's jurisdiction,
 		# priced the same as any other defiance of a binding decision.
 		custom_tooltip = {
@@ -1029,6 +1177,7 @@ un_events.8 = {
 		}
 		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+		change_relations = { country = scope:court_plaintiff value = -20 }
 	}
 }
 
@@ -1048,8 +1197,6 @@ un_events.9 = {
 	flavor = un_events.9.f
 
 	duration = 3
-
-	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -1085,21 +1232,19 @@ un_events.9 = {
 		}
 	}
 
-	# Option B: Contribute nominally
+	# Option B: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.9.b
+		name = un_docket_option_pass
 		ai_chance = {
-			base = 5
+			base = 3
 		}
-		add_modifier = {
-			name = un_heritage_token_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 109 }
-		# Release the vote slot since we didn't start one
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = heritage EVENT = un_events.9 }
+		}
 	}
 
 	# Option C: Culture is a domestic matter
@@ -1120,6 +1265,9 @@ un_events.9 = {
 		}
 		# Release the vote slot since we didn't start one
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = heritage EVENT = un_events.9 }
+		}
 	}
 }
 
@@ -1134,6 +1282,12 @@ un_events.10 = {
 
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
+	# Redesign phase 2: no longer a random roll. Fired ONCE, to every great
+	# power in the UN or out of it, when UN authority falls below 10 and the
+	# crisis opens (un_ladder_crisis_open, un_ladder_effects.txt) — the powers
+	# who could save the organisation, each told what its own act would be
+	# worth to the target. The crisis panel in the journal entry keeps the
+	# same list up to date.
 	title = un_events.10.t
 	desc = {
 		first_valid = {
@@ -1141,62 +1295,99 @@ un_events.10 = {
 			triggered_desc = { desc = un_events.10.d_council trigger = { has_law = law_type:law_council_republic } }
 			desc = un_events.10.d
 		}
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.10.d_clock
+				trigger = { un_crisis_clock_running = yes }
+			}
+			desc = un_events.10.d_linger
+		}
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.10.d_member
+				trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			}
+			desc = un_events.10.d_outsider
+		}
 	}
 	flavor = un_events.10.f
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
 	trigger = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_crisis_is_open = yes
 		country_rank >= rank_value:great_power
-		global_var:un_authority < 25
-		NOT = { has_modifier = un_authority_restored_modifier }
-		NOT = { has_modifier = un_authority_crisis_modifier }
 	}
 
-	immediate = {
-	}
-
-	# Option A: Rally support - invest political capital to restore faith
+	# Option A (member): stand by the organisation, at a price in influence.
 	option = {
 		name = un_events.10.a
 		default_option = yes
+		trigger = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 		ai_chance = {
 			base = 5
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				add = 5
+			}
 			modifier = {
 				trigger = { has_law = law_type:law_humanitarian_regulations }
 				add = 3
 			}
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				add = -5
+			}
 		}
 		add_modifier = {
-			name = un_authority_restored_modifier
+			name = un_crisis_rescue_cost
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_2_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 2.5 REASON = 110 }
+		custom_tooltip = un_ledger_tt_credibility_up_2
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = 2 REASON = 110 }
+		custom_tooltip = un_events.10.a_tt
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_landowners    MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 
-	# Option B: Propose incremental fixes
+	# Option A (outsider): join, and bring our share of world power in with us.
+	option = {
+		name = un_events.10.e
+		trigger = {
+			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			has_global_variable = un_founded
+			is_subject = no
+			NOT = { has_modifier = un_expelled_cooldown }
+			NOT = { has_modifier = un_withdrawal_penalty_modifier }
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_humanitarian_regulations }
+				add = 3
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = -3
+			}
+		}
+		custom_tooltip = un_events.10.e_tt
+		un_join_organisation = yes
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: wait and see. Costs nothing — and does nothing for it.
 	option = {
 		name = un_events.10.b
 		ai_chance = {
 			base = 4
 		}
-		add_modifier = {
-			name = un_authority_crisis_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		custom_tooltip = un_ledger_tt_credibility_up_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 1.5 REASON = 110 }
+		custom_tooltip = un_events.10.b_tt
 	}
 
-	# Option C: Let it collapse - the UN has failed
+	# Option C: let it fall, and take back the influence it cost us.
 	option = {
 		name = un_events.10.c
 		ai_chance = {
@@ -1205,9 +1396,18 @@ un_events.10 = {
 				trigger = { has_law = law_type:law_isolationism }
 				add = 4
 			}
+			modifier = {
+				trigger = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				add = 4
+			}
 		}
-		custom_tooltip = un_ledger_tt_credibility_down_2_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -2.5 REASON = 110 }
+		add_modifier = {
+			name = un_crisis_abandon_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_ledger_tt_credibility_down_2
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -2 REASON = 110 }
 		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 	}
@@ -1244,30 +1444,16 @@ un_events.11 = {
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
+	# Redesign phase 4: no longer rolled against a random great power. Fired
+	# to the proposer of a resolution a permanent member has just vetoed
+	# (un_docket_veto_consequence, from un_resolution_record_veto), with
+	# scope:veto_power the vetoer. Not at Moribund, where a veto costs nothing.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		country_rank >= rank_value:great_power
-		global_var:un_authority >= 30
+		exists = scope:veto_power
+		NOT = { this = scope:veto_power }
 		NOT = { has_modifier = un_veto_crisis_modifier }
 		NOT = { has_modifier = un_veto_abolition_modifier }
-		any_country = {
-			NOT = { this = ROOT }
-			country_rank >= rank_value:great_power
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-		}
-	}
-
-	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = ROOT }
-				country_rank >= rank_value:great_power
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
-			}
-			save_scope_as = veto_power
-		}
 	}
 
 	# Option A: Denounce the veto publicly
@@ -1350,8 +1536,6 @@ un_events.12 = {
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_technology_researched = decolonization
@@ -1419,160 +1603,24 @@ un_events.12 = {
 		ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		# Release the vote slot since we didn't start one
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = decolonization EVENT = un_events.12 }
+		}
 	}
 
-	# Option C: Call for a gradual, orderly transition
+	# Option C: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.12.c
+		name = un_docket_option_pass
 		ai_chance = {
-			base = 4
+			base = 3
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 112 }
-		# Release the vote slot since we didn't start one
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
-	}
-}
-
-# Event 13: Ideological Confrontation at the Assembly
-# Two rival ideological blocs clash. Description adapts to the rival's governance type.
-un_events.13 = {
-	type = country_event
-	placement = root
-
-	event_image = { texture = "gfx/event_pictures/un_assembly_hall_vote.dds" }
-
-	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
-
-	icon = "gfx/interface/icons/event_icons/event_map.dds"
-
-	title = un_events.13.t
-	desc = {
-		first_valid = {
-			triggered_desc = { desc = un_events.13.d_vs_council trigger = { scope:ideological_rival = { has_law = law_type:law_council_republic } } }
-			triggered_desc = { desc = un_events.13.d_vs_authoritarian trigger = { scope:ideological_rival = { has_law = law_type:law_single_party_state } } }
-			triggered_desc = { desc = un_events.13.d_vs_theocratic trigger = { scope:ideological_rival = { has_law = law_type:law_theocracy } } }
-			triggered_desc = { desc = un_events.13.d_vs_monarchy trigger = { scope:ideological_rival = { has_law = law_type:law_monarchy } } }
-			desc = un_events.13.d
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = decolonization EVENT = un_events.12 }
 		}
-		triggered_desc = {
-			trigger = { exists = scope:un_hq_state }
-			desc = un_events.13.d_hq
-		}
-	}
-	flavor = un_events.13.f
-
-	duration = 3
-
-	cooldown = { days = long_modifier_time }
-
-	trigger = {
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		country_rank >= rank_value:great_power
-		global_var:un_authority >= 20
-		NOT = { has_modifier = un_ideological_champion_modifier }
-		NOT = { has_modifier = un_coexistence_modifier }
-		any_country = {
-			NOT = { this = ROOT }
-			country_rank >= rank_value:great_power
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-			has_diplomatic_pact = { who = ROOT type = rivalry }
-		}
-	}
-
-	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = ROOT }
-				country_rank >= rank_value:great_power
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-			}
-			save_scope_as = ideological_rival
-		}
-		# Try to find UN HQ for loc reference
-		if = {
-			limit = {
-				any_country = {
-					any_scope_state = { has_building = building_un_headquarters }
-				}
-			}
-			random_country = {
-				limit = { any_scope_state = { has_building = building_un_headquarters } }
-				random_scope_state = {
-					limit = { has_building = building_un_headquarters }
-					save_scope_as = un_hq_state
-				}
-			}
-		}
-	}
-
-	# Option A: Champion our system as the model for the world
-	option = {
-		name = un_events.13.a
-		default_option = yes
-		ai_chance = {
-			base = 5
-			modifier = {
-				trigger = { country_rank >= rank_value:great_power }
-				add = 3
-			}
-		}
-		add_modifier = {
-			name = un_ideological_champion_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		custom_tooltip = un_ledger_tt_credibility_down_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 113 }
-		change_relations = { country = scope:ideological_rival value = -20 }
-		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:ideological_rival }
-		add_loyalists = {
-			value = small_radicals
-			strata = upper
-		}
-		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-	}
-
-	# Option B: Call for peaceful coexistence despite differences
-	option = {
-		name = un_events.13.b
-		ai_chance = {
-			base = 4
-			modifier = {
-				trigger = { has_law = law_type:law_humanitarian_regulations }
-				add = 3
-			}
-		}
-		add_modifier = {
-			name = un_coexistence_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		custom_tooltip = un_ledger_tt_credibility_up_1
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 1 REASON = 113 }
-		change_relations = { country = scope:ideological_rival value = 10 }
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
-	}
-
-	# Option C: Walk out in dramatic protest
-	option = {
-		name = un_events.13.c
-		ai_chance = {
-			base = 2
-			modifier = {
-				trigger = { has_law = law_type:law_outlawed_dissent }
-				add = 3
-			}
-		}
-		custom_tooltip = un_ledger_tt_credibility_down_1_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 113 }
-		change_relations = { country = scope:ideological_rival value = -15 }
-		add_loyalists = {
-			value = small_radicals
-			strata = upper
-		}
-		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }
 
@@ -1599,8 +1647,6 @@ un_events.14 = {
 	flavor = un_events.14.f
 
 	duration = 3
-
-	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -1638,20 +1684,19 @@ un_events.14 = {
 		}
 	}
 
-	# Option B: Sign with reservations on existing arsenals
+	# Option B: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.14.b
+		name = un_docket_option_pass
 		ai_chance = {
-			base = 4
-			modifier = {
-				trigger = { var:nuclear_weapon_stockpile >= 1 }
-				add = 4
-			}
+			base = 3
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 114 }
-		# Release the vote slot since we didn't start one
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = npt EVENT = un_events.14 }
+		}
 	}
 
 	# Option C: We will not limit our deterrent
@@ -1678,6 +1723,9 @@ un_events.14 = {
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Release the vote slot since we didn't start one
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = npt EVENT = un_events.14 }
+		}
 	}
 }
 
@@ -1700,34 +1748,21 @@ un_events.15 = {
 			triggered_desc = { desc = un_events.15.d_protectionist trigger = { has_law = law_type:law_protectionism } }
 			desc = un_events.15.d
 		}
+		desc = un_events.15.d_embargo
 	}
 	flavor = un_events.15.f
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
+	# Redesign phase 4: no longer rolled against any rival. The docket
+	# (un_docket_take_up_embargo, item 12) sends it to the weaker of two
+	# members trading under an embargo, with scope:trade_rival the other.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		global_var:un_authority >= 30
+		exists = scope:trade_rival
+		NOT = { this = scope:trade_rival }
 		NOT = { has_modifier = un_trade_arbitration_modifier }
 		NOT = { has_modifier = un_unilateral_tariffs_modifier }
-		any_country = {
-			NOT = { this = ROOT }
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-			has_diplomatic_pact = { who = ROOT type = rivalry }
-		}
-	}
-
-	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = ROOT }
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-			}
-			save_scope_as = trade_rival
-		}
 	}
 
 	# Option A: Accept international arbitration
@@ -1758,8 +1793,10 @@ un_events.15 = {
 		ai_chance = {
 			base = 4
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 115 }
+		# Redesign phase 4: settling outside the organisation bypasses it, so
+		# the deal costs the Assembly's credibility rather than adding to it.
+		custom_tooltip = un_ledger_tt_credibility_down_0_5
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 115 }
 		change_relations = { country = scope:trade_rival value = 15 }
 		scope:trade_rival = {
 			post_notification = un_trade_deal_received
@@ -1829,8 +1866,6 @@ un_events.16 = {
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:major_power
@@ -1867,15 +1902,19 @@ un_events.16 = {
 		}
 	}
 
-	# Option B: Cooperate selectively - share what doesn't hurt us
+	# Option B: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.16.b
+		name = un_docket_option_pass
 		ai_chance = {
-			base = 4
+			base = 3
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 116 }
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = pandemic EVENT = un_events.16 }
+		}
 	}
 
 	# Option C: Prioritize our domestic response entirely
@@ -1900,6 +1939,9 @@ un_events.16 = {
 			strata = upper
 		}
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = pandemic EVENT = un_events.16 }
+		}
 	}
 }
 
@@ -1926,8 +1968,6 @@ un_events.17 = {
 	flavor = un_events.17.f
 
 	duration = 3
-
-	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -1965,16 +2005,19 @@ un_events.17 = {
 		}
 	}
 
-	# Option B: Pledge voluntary targets - no binding commitments
+	# Option B: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.17.b
+		name = un_docket_option_pass
 		ai_chance = {
-			base = 5
+			base = 3
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 117 }
-		# Release the vote slot since we didn't start one
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = climate EVENT = un_events.17 }
+		}
 	}
 
 	# Option C: Economic growth must come first
@@ -1997,6 +2040,9 @@ un_events.17 = {
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		# Release the vote slot since we didn't start one
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = climate EVENT = un_events.17 }
+		}
 	}
 }
 
@@ -2023,8 +2069,6 @@ un_events.18 = {
 	flavor = un_events.18.f
 
 	duration = 3
-
-	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -2086,19 +2130,19 @@ un_events.18 = {
 		}
 	}
 
-	# Option B: Accept a managed resettlement quota
+	# Option B: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.18.b
+		name = un_docket_option_pass
 		ai_chance = {
-			base = 5
+			base = 3
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 118 }
-		if = {
-			limit = { exists = scope:refugee_source }
-			change_relations = { country = scope:refugee_source value = 10 }
-		}
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = refugee EVENT = un_events.18 }
+		}
 	}
 
 	# Option C: Close our borders - we have our own problems
@@ -2124,6 +2168,9 @@ un_events.18 = {
 		}
 		social_regressive_reaction_effect = { DAYS = normal_modifier_time }
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = refugee EVENT = un_events.18 }
+		}
 	}
 }
 
@@ -2150,8 +2197,6 @@ un_events.19 = {
 	flavor = un_events.19.f
 
 	duration = 3
-
-	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -2188,15 +2233,19 @@ un_events.19 = {
 		}
 	}
 
-	# Option B: Limited contribution - observe but don't lead
+	# Option B: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.19.b
+		name = un_docket_option_pass
 		ai_chance = {
-			base = 4
+			base = 3
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 119 }
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = space EVENT = un_events.19 }
+		}
 	}
 
 	# Option C: Our space program serves national interests
@@ -2218,6 +2267,9 @@ un_events.19 = {
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 119 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = space EVENT = un_events.19 }
+		}
 	}
 }
 
@@ -2250,32 +2302,20 @@ un_events.20 = {
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
+	# Redesign phase 4: no longer rolled while authority is below 50. Fired to
+	# every other great-power member when a great power leaves the UN
+	# (un_docket_walkout_consequence, from un_leave_button), with
+	# scope:walkout_leader the leaver.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		country_rank >= rank_value:great_power
-		global_var:un_authority < 50
+		exists = scope:walkout_leader
+		NOT = { this = scope:walkout_leader }
 		NOT = { has_modifier = un_walkout_condemn_modifier }
 		NOT = { has_modifier = un_walkout_join_modifier }
-		any_country = {
-			NOT = { this = ROOT }
-			country_rank >= rank_value:major_power
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-			has_diplomatic_pact = { who = ROOT type = rivalry }
-		}
 	}
 
 	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = ROOT }
-				country_rank >= rank_value:major_power
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-			}
-			save_scope_as = walkout_leader
-		}
 		# Try to find UN HQ for loc reference
 		if = {
 			limit = {
@@ -2592,8 +2632,6 @@ un_events.21 = {
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 30
@@ -2637,24 +2675,19 @@ un_events.21 = {
 		}
 	}
 
-	# Option B: Sign with reservations on sovereignty
+	# Option B: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.21.b
+		name = un_docket_option_pass
 		ai_chance = {
-			base = 4
-			modifier = {
-				trigger = { has_law = law_type:law_protectionism }
-				add = 3
-			}
+			base = 3
 		}
-		add_modifier = {
-			name = un_law_of_sea_reservations_modifier
-			days = normal_modifier_time
-			is_decaying = yes
-		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 121 }
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = law_of_sea EVENT = un_events.21 }
+		}
 	}
 
 	# Option C: Our waters are our own affair
@@ -2676,6 +2709,9 @@ un_events.21 = {
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 121 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = law_of_sea EVENT = un_events.21 }
+		}
 	}
 }
 
@@ -2702,8 +2738,6 @@ un_events.22 = {
 	flavor = un_events.22.f
 
 	duration = 3
-
-	cooldown = { days = long_modifier_time }
 
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
@@ -2751,19 +2785,19 @@ un_events.22 = {
 		}
 	}
 
-	# Option B: Support the idea but preserve national jurisdiction
+	# Option B: Leave it to another delegation. Redesign phase 4: the docket
+	# offers the item to the next member (un_docket_offer_topic_next); declining
+	# earns nothing, so it is no longer a free exit.
 	option = {
-		name = un_events.22.b
+		name = un_docket_option_pass
 		ai_chance = {
-			base = 4
-			modifier = {
-				trigger = { country_rank >= rank_value:great_power }
-				add = 3
-			}
+			base = 3
 		}
-		custom_tooltip = un_ledger_tt_credibility_up_0_5
-		un_ledger_actor_entry = { PILLAR = credibility POINTS = 0.5 REASON = 122 }
+		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = icc EVENT = un_events.22 }
+		}
 	}
 
 	# Option C: We will not submit our soldiers to foreign courts
@@ -2789,5 +2823,211 @@ un_events.22 = {
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 122 }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
 		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = icc EVENT = un_events.22 }
+		}
+	}
+}
+
+
+# ============================================================================
+# THE FLOOR: DISSOLUTION AND REFOUNDING (redesign phase 2)
+# ============================================================================
+# un_dissolve and the founding conference are in
+# common/scripted_effects/un_ladder_effects.txt.
+
+# Event 30: The United Nations Dissolves — the world moment, to every member
+# and every great power, queued by un_dissolve before membership is stripped.
+un_events.30 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/program_cancelled_empty.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = un_events.30.t
+	desc = un_events.30.d
+	flavor = un_events.30.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_dissolution_count
+	}
+
+	# Option A: mourn it.
+	option = {
+		name = un_events.30.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_law = law_type:law_humanitarian_regulations }
+				add = 3
+			}
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: good riddance.
+	option = {
+		name = un_events.30.b
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = 4
+			}
+		}
+		ig_approval_effect = { IG = ig_armed_forces   MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Event 31: A Founding Conference — to the world's leading power, when another
+# great power convenes a conference to found a new UN (un_conference_open).
+# The leading power may join as a founding member, stay out, or oppose the
+# refounding outright, which wrecks the conference and bars another for ten
+# years. The USA-and-the-League case: the top power may stay out, but it
+# must not block.
+un_events.31 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/un_charter_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = un_events.31.t
+	desc = un_events.31.d
+	flavor = un_events.31.f
+
+	duration = 3
+
+	trigger = {
+		un_conference_in_session = yes
+		has_global_variable = un_conference_top_power
+		global_var:un_conference_top_power ?= ROOT
+	}
+
+	immediate = {
+		global_var:un_founding_conference ?= { save_scope_as = un_conference_convener }
+	}
+
+	# Option A: join the new organisation as a founding member.
+	option = {
+		name = un_events.31.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_law = law_type:law_humanitarian_regulations }
+				add = 3
+			}
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = -4
+			}
+			modifier = {
+				trigger = {
+					exists = scope:un_conference_convener
+					has_diplomatic_pact = { who = scope:un_conference_convener type = rivalry }
+				}
+				add = -3
+			}
+		}
+		custom_tooltip = un_events.31.a_tt
+		set_global_variable = un_conference_top_power_joins
+		if = {
+			limit = { exists = scope:un_conference_convener }
+			change_relations = { country = scope:un_conference_convener value = 20 }
+		}
+	}
+
+	# Option B: stay out, but let it be founded.
+	option = {
+		name = un_events.31.b
+		ai_chance = {
+			base = 4
+		}
+		custom_tooltip = un_events.31.b_tt
+		if = {
+			limit = { exists = scope:un_conference_convener }
+			change_relations = { country = scope:un_conference_convener value = -10 }
+		}
+	}
+
+	# Option C: oppose the refounding. The conference collapses.
+	option = {
+		name = un_events.31.c
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = 3
+			}
+			modifier = {
+				trigger = {
+					exists = scope:un_conference_convener
+					has_diplomatic_pact = { who = scope:un_conference_convener type = rivalry }
+				}
+				add = 4
+			}
+		}
+		custom_tooltip = un_events.31.c_tt
+		add_modifier = {
+			name = un_conference_opposed_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		if = {
+			limit = { exists = scope:un_conference_convener }
+			change_relations = { country = scope:un_conference_convener value = -30 }
+		}
+		hidden_effect = {
+			un_conference_wreck = yes
+		}
+	}
+}
+
+# Event 32: The Conference Collapses — to the convener, when the leading power
+# wrecks its founding conference (un_conference_wreck).
+un_events.32 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/program_cancelled_empty.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = un_events.32.t
+	desc = un_events.32.d
+	flavor = un_events.32.f
+
+	duration = 3
+
+	trigger = {
+		has_global_variable = un_conference_wrecked_by
+	}
+
+	immediate = {
+		global_var:un_conference_wrecked_by ?= { save_scope_as = un_conference_wrecker }
+	}
+
+	option = {
+		name = un_events.32.a
+		default_option = yes
+		if = {
+			limit = { exists = scope:un_conference_wrecker }
+			change_relations = { country = scope:un_conference_wrecker value = -20 }
+		}
 	}
 }

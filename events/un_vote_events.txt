@@ -9,8 +9,10 @@
 # from a proposer event (un_events) or a JE button, and every event here gets
 # it as scope:un_resolution.
 #
-# Phase 1: un_vote.1 fires to every other UN member 30 days later. Votes go
-#          into the resolution's un_res_yes / un_res_no lists.
+# Phase 1: un_vote.1 fires to every other HUMAN member 30 days later; the AI
+#          votes in script by the itemised lean (un_vote.4, fired by un_vote.5
+#          at 30 days, redesign phase 3). Votes go into the resolution's
+#          un_res_yes / un_res_no lists.
 # Phase 2: un_vote.2 fires to the proposer 365 days after opening. Its
 #          immediate closes the vote; its option applies the outcome.
 # Phase 3: un_vote.3 notifies every other member, who comply or refuse.
@@ -277,830 +279,12 @@ un_vote.1 = {
 		# already-voted guard.
 		un_vote_cast_yes = yes
 
-		ai_chance = {
-			base = 40
-
-			# ================================================================
-			# SHARED PROPOSER-STANDING LEAN  <-- LOBBYING STAGE: ADD YOURS HERE
-			# ================================================================
-			# The Assembly listens harder to a member with a record. One block per
-			# standing tier, literal adds (range -5 .. +5 against the base of 40),
-			# kept together here rather than spread per topic. Literal adds on
-			# purpose: no vanilla or mod event uses a named script value as an
-			# ai_chance modifier's `add`, and a rejected value would fail silently.
-			# The tier triggers are mutually exclusive and treat a proposer with no
-			# recorded standing as Neutral, so at most one block ever applies.
-			#
-			# The lobbying stage should add its own block(s) right here, in the
-			# same literal form, not fold itself into these. Standing and lobbying
-			# have to stay separately tunable and separately attributable.
-			#
-			# Only the yes option is touched. Option B ("vote against") is left
-			# exactly as it was: raising A already lowers B's share of the roll,
-			# and a symmetric penalty there would double the effect of a
-			# deliberately modest nudge.
-			modifier = {
-				trigger = { scope:un_vote_proposer ?= { un_standing_tier_exemplary = yes } }
-				add = 5
-			}
-			modifier = {
-				trigger = { scope:un_vote_proposer ?= { un_standing_tier_respected = yes } }
-				add = 2
-			}
-			modifier = {
-				trigger = { scope:un_vote_proposer ?= { un_standing_tier_poor = yes } }
-				add = -2
-			}
-			modifier = {
-				trigger = { scope:un_vote_proposer ?= { un_standing_tier_disgraced = yes } }
-				add = -5
-			}
-
-			# ================================================================
-			# RESOLUTION LOBBYING — A PLEDGED VOTE
-			# ================================================================
-			# We gave our word and took an obligation for it. Kept separate from
-			# the standing block above on purpose: standing is a lean, this is a
-			# promise, and the two must stay separately tunable and separately
-			# attributable.
-			#
-			# +150 against a base of 40 dwarfs every other term in this block
-			# (the largest of which is ±30), which together with the mirrored
-			# penalties on option B and on the veto is what "a committed AI
-			# honours its pledge" means in practice. It is a weight, not a
-			# bypass: the AI still runs the event and could in principle roll
-			# another way, and the option itself is never removed.
-			#
-			# Literal, like every other add here — a named script value in an
-			# ai_chance modifier is not a shape any vanilla or mod event uses and
-			# a rejected one fails silently (see *Why literals* above).
-			modifier = {
-				trigger = { un_lobby_holds_pending_commitment = yes }
-				add = 150
-			}
-
-			# ================================================================
-			# DIPLOMATIC RELATIONSHIP MODIFIERS
-			# ================================================================
-
-			# Allies of proposer lean support
-			modifier = {
-				trigger = {
-					exists = scope:un_vote_proposer
-					has_treaty_alliance_with = { TARGET = scope:un_vote_proposer }
-				}
-				add = 20
-			}
-			# Same power bloc as proposer: bloc solidarity
-			modifier = {
-				trigger = {
-					exists = scope:un_vote_proposer
-					is_in_same_power_bloc = scope:un_vote_proposer
-				}
-				add = 15
-			}
-			# Diplomatically relevant proposer: pay more attention
-			modifier = {
-				trigger = {
-					exists = scope:un_vote_proposer
-					has_diplomatic_relevance = scope:un_vote_proposer
-				}
-				add = 5
-			}
-			# Rivals of proposer lean oppose
-			modifier = {
-				trigger = {
-					exists = scope:un_vote_proposer
-					has_diplomatic_pact = {
-						who = scope:un_vote_proposer
-						type = rivalry
-					}
-				}
-				add = -30
-			}
-			# Great powers more opinionated
-			modifier = {
-				trigger = { country_rank >= rank_value:great_power }
-				factor = 1.5
-			}
-			# Target accepted the resolution: lowers political cost for other
-			# voters to support it ("permission" effect). Gated on NOT-target so
-			# the target's own ai_chance doesn't double-dip its own gesture.
-			# Note: vote events fire concurrently; only AI evaluated AFTER the
-			# target's tick will see the tag — partial coverage by design.
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_res_target_accepted }
-					NOT = { scope:un_vote_target ?= this }
-				}
-				add = 15
-			}
-
-			# ================================================================
-			# INFAMY-BURNING INCENTIVE: countries with high infamy support
-			# humanitarian votes to rehabilitate their image
-			# ================================================================
-			modifier = {
-				trigger = {
-					infamy >= 25
-					OR = {
-						scope:un_resolution ?= { has_tag = un_topic_aid_request }
-						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-						scope:un_resolution ?= { has_tag = un_topic_human_rights }
-						scope:un_resolution ?= { has_tag = un_topic_refugee }
-						scope:un_resolution ?= { has_tag = un_topic_pandemic }
-					}
-				}
-				add = 25
-			}
-			modifier = {
-				trigger = {
-					infamy >= 50
-					OR = {
-						scope:un_resolution ?= { has_tag = un_topic_aid_request }
-						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-						scope:un_resolution ?= { has_tag = un_topic_human_rights }
-						scope:un_resolution ?= { has_tag = un_topic_refugee }
-						scope:un_resolution ?= { has_tag = un_topic_pandemic }
-					}
-				}
-				add = 15
-			}
-
-			# ================================================================
-			# DIMINISHING RETURNS: each existing commitment reduces enthusiasm
-			# for pledging more (stacking penalty per program funded)
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					has_variable = un_aid_contribution_count
-					var:un_aid_contribution_count >= 1
-				}
-				add = -15
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					has_variable = un_aid_contribution_count
-					var:un_aid_contribution_count >= 2
-				}
-				add = -15
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					has_variable = un_aid_contribution_count
-					var:un_aid_contribution_count >= 3
-				}
-				add = -15
-			}
-			# ================================================================
-			# MEANS TEST: aid is for countries that need it. The Assembly is
-			# far less moved by a great power with one poor province than by a
-			# poor country, and nobody likes paying for someone richer per head
-			# than themselves. (The request only needs one state with low standard
-			# of living or devastation, so without this the world's largest
-			# economy could pass the hat as easily as its poorest.)
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					scope:un_vote_proposer ?= { country_rank >= rank_value:great_power }
-				}
-				add = -50
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					scope:un_vote_proposer ?= {
-						country_rank >= rank_value:major_power
-						country_rank < rank_value:great_power
-					}
-				}
-				add = -25
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					# Per head, not in total: Luxembourg may well vote aid to a Nigeria
-					# whose economy is larger than its own.
-					scope:un_vote_proposer ?= { country_gdp_per_capita > root.country_gdp_per_capita }
-				}
-				add = -25
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					scope:un_vote_proposer ?= { gdp_per_capita_ranking <= 15 }
-				}
-				add = -15
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					has_variable = un_peacekeeping_contribution_count
-					var:un_peacekeeping_contribution_count >= 1
-				}
-				add = -15
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					has_variable = un_peacekeeping_contribution_count
-					var:un_peacekeeping_contribution_count >= 2
-				}
-				add = -15
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					has_variable = un_peacekeeping_contribution_count
-					var:un_peacekeeping_contribution_count >= 3
-				}
-				add = -15
-			}
-
-			# Power bloc leaders are more willing to fund aid/peacekeeping (leverage gain)
-			modifier = {
-				trigger = {
-					OR = {
-						scope:un_resolution ?= { has_tag = un_topic_aid_request }
-						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					}
-					is_power_bloc_leader = yes
-				}
-				add = 20
-			}
-
-			# ================================================================
-			# TOPIC: Condemn aggressor
-			# ================================================================
-			# Support if target is our rival
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_condemn }
-					exists = scope:un_vote_target
-					has_diplomatic_pact = {
-						who = scope:un_vote_target
-						type = rivalry
-					}
-				}
-				add = 30
-			}
-			# Oppose if target is our ally
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_condemn }
-					exists = scope:un_vote_target
-					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
-				}
-				add = -40
-			}
-			# Same power bloc as target: protect bloc member
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_condemn }
-					exists = scope:un_vote_target
-					is_in_same_power_bloc = scope:un_vote_target
-				}
-				add = -20
-			}
-			# Peaceful nations support condemnation
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_condemn }
-					has_law = law_type:law_humanitarian_regulations
-				}
-				add = 15
-			}
-
-			# ================================================================
-			# TOPIC: Human Rights
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_human_rights }
-					has_law = law_type:law_multicultural
-				}
-				add = 20
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_human_rights }
-					has_law = law_type:law_universal_suffrage
-				}
-				add = 15
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_human_rights }
-					has_law = law_type:law_ethnostate
-				}
-				add = -40
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_human_rights }
-					has_law = law_type:law_outlawed_dissent
-				}
-				add = -30
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_human_rights }
-					has_law = law_type:law_guaranteed_liberties
-				}
-				add = 15
-			}
-
-			# ================================================================
-			# TOPIC: Non-Proliferation
-			# ================================================================
-			# Nations without nukes support disarmament
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_npt }
-					NOT = {
-						has_variable = nuclear_weapon_stockpile
-					}
-				}
-				add = 20
-			}
-			# Nuclear powers resist
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_npt }
-					has_variable = nuclear_weapon_stockpile
-					var:nuclear_weapon_stockpile >= 1
-				}
-				add = -30
-			}
-			# Those developing nukes strongly oppose
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_npt }
-					has_journal_entry = je_nuclear_program
-				}
-				add = -25
-			}
-
-			# ================================================================
-			# TOPIC: Climate Accord
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_climate }
-					has_technology_researched = green_revolution
-				}
-				add = 20
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_climate }
-					has_technology_researched = environmental_movement
-				}
-				add = 10
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_climate }
-					has_law = law_type:law_laissez_faire
-				}
-				add = -20
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_climate }
-					has_law = law_type:law_command_economy
-				}
-				add = -10
-			}
-
-			# ================================================================
-			# TOPIC: UN Reform
-			# ================================================================
-			# Countries frustrated with the current order support reform
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_reform }
-					global_var:un_authority < 40
-				}
-				add = 15
-			}
-			# SC members resist losing their privilege
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_reform }
-					country_rank >= rank_value:great_power
-					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
-				}
-				add = -20
-			}
-
-			# ================================================================
-			# TOPIC: Heritage
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_heritage }
-					has_law = law_type:law_multicultural
-				}
-				add = 15
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_heritage }
-					country_rank >= rank_value:major_power
-				}
-				add = 10
-			}
-
-			# ================================================================
-			# TOPIC: Decolonization
-			# ================================================================
-			# Colonial powers strongly oppose
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_decolonization }
-					any_subject_or_below = {
-						is_direct_subject_of = ROOT
-					}
-				}
-				add = -40
-			}
-			# Anti-imperialist nations support
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_decolonization }
-					has_law = law_type:law_council_republic
-				}
-				add = 20
-			}
-			# Non-colonial nations lean in favor
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_decolonization }
-					NOT = {
-						any_subject_or_below = {
-							count >= 1
-						}
-					}
-				}
-				add = 15
-			}
-
-			# ================================================================
-			# TOPIC: Pandemic
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_pandemic }
-					has_law = law_type:law_worker_protections
-				}
-				add = 15
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_pandemic }
-					has_law = law_type:law_isolationism
-				}
-				add = -20
-			}
-
-			# ================================================================
-			# TOPIC: Refugee
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_refugee }
-					has_law = law_type:law_no_migration_controls
-				}
-				add = 20
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_refugee }
-					has_law = law_type:law_closed_borders
-				}
-				add = -30
-			}
-
-			# ================================================================
-			# TOPIC: Space
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_space }
-					has_technology_researched = space_exploration
-				}
-				add = 20
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_space }
-					has_law = law_type:law_single_party_state
-				}
-				add = -15
-			}
-
-			# ================================================================
-			# TOPIC: Peacekeeping Request
-			# ================================================================
-			# Humanitarian nations support
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					has_law = law_type:law_humanitarian_regulations
-				}
-				add = 25
-			}
-			# GPs want to project power
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					country_rank >= rank_value:great_power
-				}
-				add = 15
-			}
-			# Isolationists resist
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					has_law = law_type:law_isolationism
-				}
-				add = -20
-			}
-
-			# ================================================================
-			# TOPIC: Humanitarian Aid Request
-			# ================================================================
-			# Wealthy nations more likely to support
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					country_rank >= rank_value:great_power
-				}
-				add = 20
-			}
-			# Interventionist/humanitarian support
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					has_law = law_type:law_humanitarian_regulations
-				}
-				add = 20
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					has_law = law_type:law_isolationism
-				}
-				add = -25
-			}
-
-			# ================================================================
-			# TOPIC: Sanctions
-			# ================================================================
-			# Rivals of the target support sanctions
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_sanctions }
-					exists = scope:un_vote_target
-					has_diplomatic_pact = { who = scope:un_vote_target type = rivalry }
-				}
-				add = 30
-			}
-			# Same power bloc as target: protect bloc member
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_sanctions }
-					exists = scope:un_vote_target
-					is_in_same_power_bloc = scope:un_vote_target
-				}
-				add = -25
-			}
-			# Great powers want to project authority
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_sanctions }
-					country_rank >= rank_value:great_power
-				}
-				add = 15
-			}
-			# Humanitarian nations support sanctions against aggressors
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_sanctions }
-					OR = {
-						has_law = law_type:law_humanitarian_regulations
-						has_law = law_type:law_limited_war
-					}
-				}
-				add = 15
-			}
-			# Isolationists resist involvement
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_sanctions }
-					has_law = law_type:law_isolationism
-				}
-				add = -20
-			}
-
-			# ================================================================
-			# TOPIC: Law of the Sea
-			# ================================================================
-			# Free traders support maritime regulation
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
-					has_law = law_type:law_free_trade
-				}
-				add = 20
-			}
-			# Great powers benefit from codified maritime rules
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
-					country_rank >= rank_value:great_power
-				}
-				add = 10
-			}
-			# Isolationists oppose
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
-					has_law = law_type:law_isolationism
-				}
-				add = -15
-			}
-
-			# ================================================================
-			# TOPIC: International Criminal Court
-			# ================================================================
-			# Democracies support accountability
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_icc }
-					has_law = law_type:law_universal_suffrage
-				}
-				add = 15
-			}
-			# Human rights-conscious nations support
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_icc }
-					has_law = law_type:law_multicultural
-				}
-				add = 10
-			}
-			# Great powers wary of sovereignty loss
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_icc }
-					country_rank >= rank_value:great_power
-				}
-				add = -20
-			}
-			# Warring nations strongly oppose
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_icc }
-					is_at_war = yes
-				}
-				add = -30
-			}
-			# Authoritarian governments oppose accountability
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_icc }
-					has_law = law_type:law_single_party_state
-				}
-				add = -25
-			}
-
-			# ================================================================
-			# TOPIC: Authorized military mandate
-			# ================================================================
-			# Licensing force is the Assembly's gravest act, so the base lean
-			# is against and the inputs are the same ones the other
-			# target-naming topics use: how we stand to the target, how we
-			# stand to the proposer, and how we read the use of force.
-			# Authorising a war against our ally or bloc partner is
-			# unthinkable; authorising one against a rival is cheap.
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-				}
-				add = -25
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					exists = scope:un_vote_target
-					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
-				}
-				add = -60
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					exists = scope:un_vote_target
-					is_in_same_power_bloc = scope:un_vote_target
-				}
-				add = -30
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					exists = scope:un_vote_target
-					has_diplomatic_pact = {
-						who = scope:un_vote_target
-						type = rivalry
-					}
-				}
-				add = 35
-			}
-			# The target already stands censured by this Assembly — the case
-			# for enforcement makes itself.
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					exists = scope:un_vote_target
-					scope:un_vote_target = { has_modifier = un_condemned_modifier }
-				}
-				add = 25
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					exists = scope:un_vote_target
-					scope:un_vote_target = { has_modifier = un_sanctions_target_modifier }
-				}
-				add = 20
-			}
-			# Allies and bloc partners of the proposer back their own.
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					exists = scope:un_vote_proposer
-					has_treaty_alliance_with = { TARGET = scope:un_vote_proposer }
-				}
-				add = 25
-			}
-			# Doctrine: states that have restrained war by law are the least
-			# willing to license it; states that have not are the most.
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					has_law = law_type:law_humanitarian_regulations
-				}
-				add = -20
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					has_law = law_type:law_isolationism
-				}
-				add = -25
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					has_law = law_type:law_total_war
-				}
-				add = 15
-			}
-			# A strong Assembly can afford to act; a weak one cannot carry it.
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					has_global_variable = un_authority
-					global_var:un_authority >= 70
-				}
-				add = 15
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					has_global_variable = un_authority
-					global_var:un_authority < 50
-				}
-				add = -20
-			}
-			# Nobody wants a precedent that could be turned on them: a state
-			# that is itself censurable enough to be a future target votes its
-			# fears. Same test the propose button applies to the target
-			# (un_mandate_target_is_notorious).
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					un_mandate_target_is_notorious = yes
-				}
-				add = -25
-			}
-		}
+		# The AI no longer answers this event (redesign phase 3): it votes in
+		# script by the itemised lean (un_vote.4, un_dossier_values.txt), so the
+		# weights that used to sit here are the lean's terms now. Only a human
+		# member receives un_vote.1; the base below matters only for an event
+		# an AI received before the update.
+		ai_chance = { base = 40 }
 	}
 
 	# Option B: Vote against
@@ -1122,316 +306,12 @@ un_vote.1 = {
 		# Body shared with the chamber widget's Vote Against button — see
 		# un_vote_cast_no in common/scripted_effects/un_vote_cast_effects.txt.
 		un_vote_cast_no = yes
-		ai_chance = {
-			base = 10
-
-			# ================================================================
-			# RESOLUTION LOBBYING — THE MIRROR OF OPTION A's PLEDGE BONUS
-			# ================================================================
-			# Voting against a resolution we pledged to carry. The one place in
-			# this event where a negative mirror is warranted: option A's lean
-			# terms are nudges that only need to move a probability, but a
-			# pledge is supposed to be kept, and leaving option B untouched
-			# would let an AI with strong independent reasons to oppose take the
-			# obligation and then renege anyway.
-			modifier = {
-				trigger = { un_lobby_holds_pending_commitment = yes }
-				add = -100
-			}
-
-			# ================================================================
-			# DIPLOMATIC RELATIONSHIP MODIFIERS
-			# ================================================================
-
-			# Rivals of proposer lean oppose
-			modifier = {
-				trigger = {
-					exists = scope:un_vote_proposer
-					has_diplomatic_pact = {
-						who = scope:un_vote_proposer
-						type = rivalry
-					}
-				}
-				add = 30
-			}
-			# Same power bloc as proposer: bloc solidarity discourages opposition
-			modifier = {
-				trigger = {
-					exists = scope:un_vote_proposer
-					is_in_same_power_bloc = scope:un_vote_proposer
-				}
-				add = -20
-			}
-			# Allies of proposer less likely to oppose openly
-			modifier = {
-				trigger = {
-					exists = scope:un_vote_proposer
-					has_treaty_alliance_with = { TARGET = scope:un_vote_proposer }
-				}
-				add = -15
-			}
-			# Great powers more willing to take public stands
-			modifier = {
-				trigger = { country_rank >= rank_value:great_power }
-				factor = 1.3
-			}
-
-			# ================================================================
-			# INFAMY-CONSCIOUS: high infamy countries avoid opposing humanitarian votes
-			# (voting no on human rights looks bad)
-			# ================================================================
-			modifier = {
-				trigger = {
-					infamy >= 25
-					OR = {
-						scope:un_resolution ?= { has_tag = un_topic_human_rights }
-						scope:un_resolution ?= { has_tag = un_topic_refugee }
-						scope:un_resolution ?= { has_tag = un_topic_pandemic }
-					}
-				}
-				add = -20
-			}
-
-			# ================================================================
-			# TOPIC: Condemn - allies of target oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_condemn }
-					exists = scope:un_vote_target
-					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
-				}
-				add = 40
-			}
-			# Same power bloc as target: protect bloc member
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_condemn }
-					exists = scope:un_vote_target
-					is_in_same_power_bloc = scope:un_vote_target
-				}
-				add = 25
-			}
-
-			# ================================================================
-			# TOPIC: Human Rights - authoritarian regimes oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_human_rights }
-					has_law = law_type:law_ethnostate
-				}
-				add = 30
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_human_rights }
-					has_law = law_type:law_outlawed_dissent
-				}
-				add = 25
-			}
-
-			# ================================================================
-			# TOPIC: NPT - nuclear powers oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_npt }
-					has_variable = nuclear_weapon_stockpile
-					var:nuclear_weapon_stockpile >= 1
-				}
-				add = 35
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_npt }
-					has_journal_entry = je_nuclear_program
-				}
-				add = 25
-			}
-
-			# ================================================================
-			# TOPIC: Climate - industrial economies oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_climate }
-					has_law = law_type:law_laissez_faire
-				}
-				add = 25
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_climate }
-					has_law = law_type:law_command_economy
-				}
-				add = 15
-			}
-
-			# ================================================================
-			# TOPIC: Reform - SC privileged members oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_reform }
-					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
-				}
-				add = 25
-			}
-
-			# ================================================================
-			# TOPIC: Decolonization - colonial powers oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_decolonization }
-					any_subject_or_below = {
-						is_direct_subject_of = ROOT
-					}
-				}
-				add = 40
-			}
-
-			# ================================================================
-			# TOPIC: Pandemic - isolationists oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_pandemic }
-					has_law = law_type:law_isolationism
-				}
-				add = 25
-			}
-
-			# ================================================================
-			# TOPIC: Refugee - closed borders oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_refugee }
-					has_law = law_type:law_closed_borders
-				}
-				add = 30
-			}
-
-			# ================================================================
-			# TOPIC: Space - authoritarian regimes oppose sharing
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_space }
-					has_law = law_type:law_single_party_state
-				}
-				add = 20
-			}
-
-			# ================================================================
-			# TOPIC: Peacekeeping Request - isolationists/warmongers oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					has_law = law_type:law_isolationism
-				}
-				add = 25
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					has_law = law_type:law_total_war
-				}
-				add = 15
-			}
-
-			# ================================================================
-			# TOPIC: Aid Request - laissez-faire/isolationists oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					has_law = law_type:law_isolationism
-				}
-				add = 25
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_aid_request }
-					has_law = law_type:law_laissez_faire
-				}
-				add = 15
-			}
-
-			# ================================================================
-			# TOPIC: Sanctions - allies of target oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_sanctions }
-					exists = scope:un_vote_target
-					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
-				}
-				add = 40
-			}
-			# Same power bloc as target: protect bloc member
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_sanctions }
-					exists = scope:un_vote_target
-					is_in_same_power_bloc = scope:un_vote_target
-				}
-				add = 25
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_sanctions }
-					has_law = law_type:law_isolationism
-				}
-				add = 20
-			}
-
-			# ================================================================
-			# TOPIC: Law of the Sea - protectionists oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
-					has_law = law_type:law_protectionism
-				}
-				add = 20
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_law_of_sea }
-					has_law = law_type:law_isolationism
-				}
-				add = 25
-			}
-
-			# ================================================================
-			# TOPIC: ICC - great powers and warring nations oppose
-			# ================================================================
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_icc }
-					country_rank >= rank_value:great_power
-				}
-				add = 30
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_icc }
-					is_at_war = yes
-				}
-				add = 40
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_icc }
-					has_law = law_type:law_single_party_state
-				}
-				add = 30
-			}
-		}
+		# The AI no longer answers this event (redesign phase 3): it votes in
+		# script by the itemised lean (un_vote.4, un_dossier_values.txt), so the
+		# weights that used to sit here are the lean's terms now. Only a human
+		# member receives un_vote.1; the base below matters only for an event
+		# an AI received before the update.
+		ai_chance = { base = 10 }
 	}
 
 	# Option C: VETO (permanent members only, on binding topics only)
@@ -1461,157 +341,12 @@ un_vote.1 = {
 		# This option's own trigger above stays the veto's eligibility gate on the
 		# event path.
 		un_vote_cast_veto = yes
-		ai_chance = {
-			base = 0
-
-			# Resolution lobbying: a pledged vote weighs against reaching for the
-			# veto at all. The RIGHT is untouched (this option's trigger never
-			# reads a commitment) — this is only the AI declining to spend it on
-			# a resolution it promised to carry.
-			modifier = {
-				trigger = { un_lobby_holds_pending_commitment = yes }
-				add = -100
-			}
-
-			# Only consider vetoing when the resolution would otherwise pass.
-			# (un_veto_would_change_outcome checks a margin >= 2, meaning even our
-			# "no" alone wouldn't sink it — so a veto is needed to actually block.)
-			modifier = {
-				trigger = { un_veto_would_change_outcome = yes }
-				add = 30
-			}
-
-			# Strongly veto rivals' proposals
-			modifier = {
-				trigger = {
-					exists = scope:un_vote_proposer
-					has_diplomatic_pact = { who = scope:un_vote_proposer type = rivalry }
-				}
-				add = 35
-			}
-
-			# Protect allied / same-bloc targets from sanctions or condemnation
-			modifier = {
-				trigger = {
-					OR = {
-						scope:un_resolution ?= { has_tag = un_topic_sanctions }
-						scope:un_resolution ?= { has_tag = un_topic_condemn }
-					}
-					exists = scope:un_vote_target
-					has_treaty_alliance_with = { TARGET = scope:un_vote_target }
-				}
-				add = 40
-			}
-			modifier = {
-				trigger = {
-					OR = {
-						scope:un_resolution ?= { has_tag = un_topic_sanctions }
-						scope:un_resolution ?= { has_tag = un_topic_condemn }
-					}
-					exists = scope:un_vote_target
-					is_in_same_power_bloc = scope:un_vote_target
-				}
-				add = 25
-			}
-
-			# ICC referrals targeting US or our allies are existential — strongly veto
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_icc }
-					OR = {
-						scope:un_vote_target ?= this
-						AND = {
-							exists = scope:un_vote_target
-							has_treaty_alliance_with = { TARGET = scope:un_vote_target }
-						}
-					}
-				}
-				add = 50
-			}
-
-			# Reform that would weaken SC privileges (i.e., proposer is non-permanent)
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_reform }
-					exists = scope:un_vote_proposer
-					NOT = { scope:un_vote_proposer = { is_un_permanent_member = yes } }
-				}
-				add = 30
-			}
-
-			# Authorizing force is the thing the veto exists for. A permanent
-			# member leans toward blocking any mandate, and blocks outright when
-			# the country about to be invaded is its ally or bloc partner —
-			# there is no graduated form to fall back on, so the veto is the
-			# only instrument available.
-			modifier = {
-				trigger = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
-				add = 20
-			}
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					exists = scope:un_vote_target
-					OR = {
-						scope:un_vote_target ?= this
-						has_treaty_alliance_with = { TARGET = scope:un_vote_target }
-						is_in_same_power_bloc = scope:un_vote_target
-					}
-				}
-				add = 55
-			}
-			# ...but not against a rival we would rather see cut down to size.
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_military_mandate }
-					exists = scope:un_vote_target
-					has_diplomatic_pact = {
-						who = scope:un_vote_target
-						type = rivalry
-					}
-				}
-				add = -40
-			}
-
-			# Peacekeeping deployment requested by an aligned target — let it go
-			# (we want our friends helped); but veto when requested by a rival's bloc
-			modifier = {
-				trigger = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					exists = scope:un_vote_proposer
-					NOT = { is_in_same_power_bloc = scope:un_vote_proposer }
-					NOT = { has_treaty_alliance_with = { TARGET = scope:un_vote_proposer } }
-				}
-				add = 10
-			}
-
-			# Costs / restraints — discourage vetoing when:
-			# Our UN authority is already weak (cost is steep)
-			modifier = {
-				trigger = {
-					has_global_variable = un_authority
-					global_var:un_authority < 30
-				}
-				add = -25
-			}
-			# We've recently vetoed (cool down)
-			modifier = {
-				trigger = { has_modifier = un_veto_isolation_modifier }
-				add = -20
-			}
-			# Our infamy is already high and this topic would add more
-			modifier = {
-				trigger = {
-					infamy >= 25
-					OR = {
-						scope:un_resolution ?= { has_tag = un_topic_icc }
-						scope:un_resolution ?= { has_tag = un_topic_condemn }
-						scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					}
-				}
-				add = -15
-			}
-		}
+		# The AI no longer answers this event (redesign phase 3): it votes in
+		# script by the itemised lean (un_vote.4, un_dossier_values.txt), so the
+		# weights that used to sit here are the lean's terms now. Only a human
+		# member receives un_vote.1; the base below matters only for an event
+		# an AI received before the update.
+		ai_chance = { base = 0 }
 	}
 }
 
@@ -2041,8 +776,11 @@ un_vote.2 = {
 					scope:un_vote_target = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
+							# Scaled by the UN's enforcement (redesign phase 2):
+							# nothing at Moribund, x2.5 at Supranational.
 							add_modifier = {
 								name = un_condemned_modifier
+								multiplier = un_enforcement
 								days = long_modifier_time
 								is_decaying = yes
 							}
@@ -2081,6 +819,7 @@ un_vote.2 = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
 							add_modifier = {
 								name = un_non_binding_rebuke_modifier
+								multiplier = un_enforcement
 								days = normal_modifier_time
 								is_decaying = yes
 							}
@@ -2129,7 +868,12 @@ un_vote.2 = {
 				}
 			}
 
-			# ---- Reform: Modernize UN institutions ----
+			# ---- Reform: amend the Charter (redesign phase 2) ----
+			# The charter gains the resolution's stage and the ceiling on
+			# authority rises (un_charter_adopt_reform, un_ladder_effects.txt,
+			# which also books the credibility entry, reason 14). It carried a
+			# two-thirds supermajority of all members to get here
+			# (un_resolution_decide).
 			# Vetoed reform is the one binding topic with NO graduated fallback —
 			# charter changes really do need P5 unanimity (no Uniting-for-Peace
 			# style override is available here). The vote.3 notification still
@@ -2139,8 +883,33 @@ un_vote.2 = {
 					scope:un_resolution ?= { has_tag = un_topic_reform }
 					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
 				}
-				custom_tooltip = un_vote_reform_passed_tt
-				un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
+				if = {
+					limit = {
+						scope:un_resolution ?= {
+							has_variable = un_res_charter_stage
+							var:un_res_charter_stage = 2
+						}
+					}
+					custom_tooltip = un_vote_reform_2_passed_tt
+				}
+				else_if = {
+					limit = {
+						scope:un_resolution ?= {
+							has_variable = un_res_charter_stage
+							var:un_res_charter_stage = 1
+						}
+					}
+					custom_tooltip = un_vote_reform_1_passed_tt
+				}
+				else = {
+					# A pre-phase-2 reform resolution still in session when the
+					# mod updated: it names no stage and changes no charter.
+					custom_tooltip = un_vote_reform_passed_tt
+					un_ledger_entry = { PILLAR = credibility POINTS = 1.5 REASON = 1 }
+				}
+				hidden_effect = {
+					un_charter_adopt_reform = yes
+				}
 			}
 			else_if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_reform } }
@@ -2323,13 +1092,31 @@ un_vote.2 = {
 				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				# Proposer becomes sanctions enforcer
 				add_modifier = { name = un_sanctions_enforcer_modifier }
+				# ...and in three months decides how strictly to enforce
+				# (un_events.5; redesign phase 4: fired here, not rolled).
+				if = {
+					limit = {
+						exists = scope:un_vote_target
+						NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } }
+					}
+					hidden_effect = {
+						scope:un_vote_target = { save_scope_as = sanctioned_country }
+						trigger_event = { id = un_events.5 days = 90 }
+					}
+				}
 				# Apply sanctions to target
 				if = {
 					limit = { exists = scope:un_vote_target }
 					scope:un_vote_target = {
 						if = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
-							add_modifier = { name = un_sanctions_target_modifier }
+							# Scaled by the UN's enforcement (redesign phase 2).
+							# un_enforcement reads only globals, so the stored
+							# multiplier is sound whenever the engine re-reads it.
+							add_modifier = {
+								name = un_sanctions_target_modifier
+								multiplier = un_enforcement
+							}
 							custom_tooltip = {
 								text = un_standing_sanctioned_tt
 								un_standing_loss = { AMOUNT = un_standing_sanctioned_loss REASON = 24 }
@@ -2356,6 +1143,7 @@ un_vote.2 = {
 							limit = { NOT = { scope:un_resolution ?= { has_tag = un_res_target_accepted } } }
 							add_modifier = {
 								name = un_sanctions_voluntary_target_modifier
+								multiplier = un_enforcement
 								days = normal_modifier_time
 								is_decaying = yes
 							}
@@ -2705,6 +1493,10 @@ un_vote.3 = {
 				text = un_standing_defied_tt
 				un_standing_loss = { AMOUNT = un_standing_defiance_loss REASON = 26 }
 			}
+			# The dossier (redesign phase 3): refusing a binding decision is
+			# a record the Assembly can later hold against us.
+			custom_tooltip = un_dossier_tt_defiance
+			un_dossier_record = { RECORD = defiance POINTS = un_dos_points_defiance }
 		}
 
 		# Power bloc leverage: defying bloc decision
@@ -2759,5 +1551,85 @@ un_vote.3 = {
 				add = 25
 			}
 		}
+	}
+}
+
+# ---- The ballot in script (redesign phase 3) ----
+# docs/systems/un_redesign_design.md §6.2. The AI no longer answers un_vote.1:
+# it votes here, by the itemised lean (common/script_values/un_dossier_values.txt),
+# so the chamber's explanation of a vote is the rule that decided it.
+
+# One member's ballot. Hidden. Fired by un_vote_dispatch_ai_ballots to every AI
+# member (which then casts), and by un_vote_refresh_human_leans to every human
+# member (which only has its lean written, for the chamber). ROOT is the voter,
+# which the relations terms of the lean need.
+# Both senders save scope:un_resolution first. If it did not reach the event,
+# the open resolution (global_var:un_active_resolution) stands in, so a lost
+# scope costs the chamber nothing and the AI still votes.
+un_vote.4 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		OR = {
+			scope:un_resolution ?= { has_tag = un_res_voting }
+			AND = {
+				NOT = { exists = scope:un_resolution }
+				global_var:un_active_resolution ?= { has_tag = un_res_voting }
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { exists = scope:un_resolution } }
+			global_var:un_active_resolution = { save_scope_as = un_resolution }
+		}
+		scope:un_resolution = {
+			var:un_res_proposer ?= { save_scope_as = un_vote_proposer }
+			var:un_res_target ?= { save_scope_as = un_vote_target }
+		}
+		un_lean_snapshot = yes
+		if = {
+			limit = {
+				is_ai = yes
+				un_vote_can_cast_ballot = yes
+			}
+			un_vote_ai_cast = yes
+		}
+	}
+}
+
+# Thirty days after a resolution opens: send the AI members their ballots.
+# Hidden; fired to the proposer by un_resolution_open. If the proposer is gone
+# the monthly pulse sends them instead (un_resolutions_monthly_update). The
+# same stand-in as un_vote.4 if scope:un_resolution did not arrive.
+un_vote.5 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		OR = {
+			scope:un_resolution ?= {
+				has_tag = un_res_voting
+				NOT = { has_variable = un_res_ai_cast }
+			}
+			AND = {
+				NOT = { exists = scope:un_resolution }
+				global_var:un_active_resolution ?= {
+					has_tag = un_res_voting
+					NOT = { has_variable = un_res_ai_cast }
+				}
+			}
+		}
+	}
+
+	immediate = {
+		if = {
+			limit = { NOT = { exists = scope:un_resolution } }
+			global_var:un_active_resolution = { save_scope_as = un_resolution }
+		}
+		un_vote_dispatch_ai_ballots = yes
 	}
 }

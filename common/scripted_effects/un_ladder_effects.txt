@@ -1,0 +1,676 @@
+﻿# ============================================================================
+# UN AUTHORITY — TIERS, THE CHARTER, CRISIS, DISSOLUTION AND REFOUNDING
+# ============================================================================
+# Redesign phase 2 (docs/systems/un_redesign_design.md §4; as shipped, §0.2).
+# The figures are in common/script_values/un_ladder_values.txt and the tests in
+# common/scripted_triggers/un_ladder_triggers.txt. This file holds every
+# writer of the phase-2 globals:
+#
+#   global                        written by
+#   un_tier                       un_ladder_tier_update (monthly), un_found_organisation
+#   un_enforcement_now            the same two (a snapshot of un_enforcement for loc)
+#   un_charter_level              un_found_organisation, un_charter_adopt_reform,
+#                                 un_ladder_monthly_update (old saves: 0)
+#   un_charter_pressure_months    un_ladder_charter_pressure_update, un_charter_adopt_reform
+#   un_crisis_active / _months    un_ladder_crisis_update
+#   un_dissolution_count          un_dissolve
+#   un_dissolved_year             un_dissolve
+#   un_refounding_cooldown        un_dissolve (20 years), un_conference_wreck (10)
+#   un_refounding_open_year       the same two, for the status line
+#   un_founding_conference        un_conference_open / un_conference_clear
+#   un_conference_*               the same
+#
+# CALL SITES (all from common/on_actions/un_on_actions.txt unless stated):
+#   un_ladder_monthly_update      end of un_authority_monthly_update, after the step
+#   un_ladder_dissolution_check   LAST in un_global_authority_on_action's founded
+#                                 block, so the month's other upkeep (resolutions,
+#                                 mandates, headquarters) has run against a UN
+#                                 that still exists
+#   un_ladder_bloc_vacuum_update  every month, founded or not
+#   un_conference_monthly_update  every month, founded or not
+#   un_found_organisation         un_found_button, un_conference_conclude
+#   un_conference_open            un_found_button, when founding is a refounding
+#   un_conference_wreck           un_events.31 option C
+#   un_charter_adopt_reform       un_vote.2, a charter reform carried un-vetoed
+#
+# Nothing here writes global_var:un_authority except un_found_organisation (the
+# founding value) and un_dissolve (which removes it). The phase-1 rule stands:
+# authority moves only through un_authority_monthly_update and the world-moment
+# helpers in un_authority_effects.txt.
+# ============================================================================
+
+# ---- Monthly --------------------------------------------------------------------
+
+# Scope: none (the global monthly pulse, UN founded). Called once a month from
+# the end of un_authority_monthly_update, after authority has taken its step.
+# NOT IDEMPOTENT WITHIN A MONTH: the charter pressure and crisis counters
+# advance on every call. Call it from nowhere else.
+un_ladder_monthly_update = {
+	# A save from phase 1, or a UN founded before this version, is under the
+	# founding charter.
+	if = {
+		limit = { NOT = { has_global_variable = un_charter_level } }
+		set_global_variable = { name = un_charter_level value = 0 }
+	}
+	un_ladder_tier_update = yes
+	un_ladder_charter_pressure_update = yes
+	un_ladder_crisis_update = yes
+}
+
+# Move the tier with hysteresis: up to the highest tier whose entry floor
+# authority has reached, or down to the highest tier whose exit floor it still
+# holds; otherwise unchanged. Both are capped by the charter. A first write
+# (founding, an old save) takes the entry value.
+# Scope: any (UN founded)
+un_ladder_tier_update = {
+	if = {
+		limit = { NOT = { has_global_variable = un_tier } }
+		set_global_variable = { name = un_tier value = un_tier_entry_value }
+	}
+	else_if = {
+		limit = { global_var:un_tier < un_tier_entry_value }
+		set_global_variable = { name = un_tier value = un_tier_entry_value }
+	}
+	else_if = {
+		limit = { global_var:un_tier > un_tier_exit_value }
+		set_global_variable = { name = un_tier value = un_tier_exit_value }
+	}
+	# The loc reads E as a global (GetGlobalVariable), which needs no scope.
+	set_global_variable = { name = un_enforcement_now value = un_enforcement }
+}
+
+# Count the months authority has sat within the margin of the charter's
+# ceiling; any month below it starts the count again. Nothing is counted once
+# both reforms are in the charter.
+# Scope: any (UN founded)
+un_ladder_charter_pressure_update = {
+	if = {
+		limit = {
+			un_charter_can_be_reformed = yes
+			global_var:un_authority >= un_charter_reform_threshold
+		}
+		if = {
+			limit = { NOT = { has_global_variable = un_charter_pressure_months } }
+			set_global_variable = { name = un_charter_pressure_months value = 0 }
+		}
+		change_global_variable = { name = un_charter_pressure_months add = 1 }
+		# The month it ripens, the members who can table it are told.
+		if = {
+			limit = { global_var:un_charter_pressure_months = un_charter_reform_months_needed }
+			every_country = {
+				limit = {
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
+					country_rank >= rank_value:major_power
+				}
+				post_notification = un_charter_reform_ripe_notice
+			}
+		}
+	}
+	else = {
+		set_global_variable = { name = un_charter_pressure_months value = 0 }
+	}
+}
+
+# Open the crisis below un_crisis_open_below, close it above
+# un_crisis_close_above, and count its months.
+# Scope: any (UN founded)
+un_ladder_crisis_update = {
+	if = {
+		limit = {
+			NOT = { has_global_variable = un_crisis_active }
+			global_var:un_authority < un_crisis_open_below
+		}
+		un_ladder_crisis_open = yes
+	}
+	else_if = {
+		limit = {
+			has_global_variable = un_crisis_active
+			global_var:un_authority > un_crisis_close_above
+		}
+		un_ladder_crisis_close = yes
+	}
+	if = {
+		limit = { has_global_variable = un_crisis_active }
+		change_global_variable = { name = un_crisis_months add = 1 }
+	}
+}
+
+# The crisis opens. Every great power, in the UN or out of it, is asked what
+# it will do (un_events.10 — the powers who could save it); every other member
+# is told.
+# Scope: any
+un_ladder_crisis_open = {
+	set_global_variable = un_crisis_active
+	set_global_variable = { name = un_crisis_months value = 0 }
+	every_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			is_subject = no
+			NOT = { is_country_type = decentralized }
+		}
+		trigger_event = { id = un_events.10 }
+	}
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			NOT = { country_rank >= rank_value:great_power }
+		}
+		post_notification = un_crisis_opened_notice
+	}
+}
+
+# Scope: any
+un_ladder_crisis_close = {
+	remove_global_variable = un_crisis_active
+	if = {
+		limit = { has_global_variable = un_crisis_months }
+		remove_global_variable = un_crisis_months
+	}
+	every_country = {
+		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		post_notification = un_crisis_closed_notice
+	}
+}
+
+# At 0, during a crisis, the UN dissolves. Called last in the founded block of
+# un_global_authority_on_action.
+# Scope: none
+un_ladder_dissolution_check = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_global_variable = un_crisis_active
+			global_var:un_authority <= 0
+		}
+		un_dissolve = yes
+	}
+}
+
+# Power blocs fill the vacuum while the UN is Moribund, and while no UN
+# exists after a dissolution: every bloc carries un_bloc_vacuum_modifier.
+# The single refresh site for that modifier.
+# Scope: none (every month, founded or not)
+un_ladder_bloc_vacuum_update = {
+	if = {
+		limit = { un_bloc_vacuum_active = yes }
+		every_country = {
+			limit = { is_power_bloc_leader = yes }
+			power_bloc ?= {
+				if = {
+					limit = { NOT = { has_modifier = un_bloc_vacuum_modifier } }
+					add_modifier = { name = un_bloc_vacuum_modifier }
+				}
+			}
+		}
+	}
+	else = {
+		every_country = {
+			limit = { is_power_bloc_leader = yes }
+			power_bloc ?= {
+				if = {
+					limit = { has_modifier = un_bloc_vacuum_modifier }
+					remove_modifier = un_bloc_vacuum_modifier
+				}
+			}
+		}
+	}
+}
+
+# ---- The charter -------------------------------------------------------------------
+
+# A charter reform carried the Assembly un-vetoed: the charter gains the
+# resolution's stage, the ceiling rises, and the pressure count starts again
+# for the next reform. A resolution tabled for a stage the charter has already
+# reached (two reforms tabled back to back across a save load) changes nothing.
+# Scope: any, with scope:un_resolution the carried resolution
+un_charter_adopt_reform = {
+	if = {
+		limit = {
+			scope:un_resolution ?= {
+				has_variable = un_res_charter_stage
+				var:un_res_charter_stage > un_charter_level_value
+			}
+		}
+		set_global_variable = {
+			name = un_charter_level
+			value = scope:un_resolution.var:un_res_charter_stage
+		}
+		set_global_variable = { name = un_charter_pressure_months value = 0 }
+		un_ledger_entry = { PILLAR = credibility POINTS = 2 REASON = 14 }
+	}
+}
+
+# ---- Dissolution -------------------------------------------------------------------
+
+# The United Nations dissolves (§4.3):
+#   - every member and every great power is told (un_events.30);
+#   - power blocs receive a one-time vacuum bonus;
+#   - the resolution in session lapses and the floor is cleared;
+#   - every live mandate is voided;
+#   - every country leaves: membership, seats, programmes and their costs,
+#     conventions, sanctions regimes, pariah status and standing tier
+#     modifiers all go (standing itself is frozen, as for a member that
+#     leaves);
+#   - the headquarters is demolished and the agencies lapse;
+#   - the organisation's own state is removed, and a new one may be founded
+#     after twenty years.
+# The resolution history and the mandate register are kept as the record of
+# the old organisation.
+# Scope: none (un_ladder_dissolution_check)
+un_dissolve = {
+	# 1. The record.
+	if = {
+		limit = { NOT = { has_global_variable = un_dissolution_count } }
+		set_global_variable = { name = un_dissolution_count value = 0 }
+	}
+	change_global_variable = { name = un_dissolution_count add = 1 }
+	set_global_variable = { name = un_dissolved_year value = te_history_current_year }
+	set_global_variable = {
+		name = un_refounding_open_year
+		value = {
+			value = te_history_current_year
+			add = 20
+		}
+	}
+	set_global_variable = { name = un_refounding_cooldown days = 7300 }
+
+	# 2. The world moment. Queued before membership is stripped so the
+	#    recipients are still the members; the event's own trigger reads only
+	#    the dissolution record.
+	every_country = {
+		limit = {
+			OR = {
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				AND = {
+					country_rank >= rank_value:great_power
+					is_subject = no
+				}
+			}
+		}
+		trigger_event = { id = un_events.30 }
+	}
+
+	# 3. Power blocs fill the vacuum.
+	every_country = {
+		limit = { is_power_bloc_leader = yes }
+		power_bloc ?= {
+			add_modifier = {
+				name = un_dissolution_vacuum_modifier
+				days = 3650
+				is_decaying = yes
+			}
+		}
+	}
+
+	# 4. The business before the Assembly lapses. un_resolution_archive frees
+	#    the lock when the open resolution held it; the flags below cover a
+	#    reservation and any orphan.
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = { has_tag = un_res_voting }
+			remove_tag = un_res_voting
+			add_tag = un_res_lapsed
+			un_resolution_archive = yes
+		}
+	}
+	if = {
+		limit = { has_global_variable = un_active_resolution }
+		remove_global_variable = un_active_resolution
+	}
+	if = {
+		limit = { has_global_variable = un_vote_reservation }
+		remove_global_variable = un_vote_reservation
+	}
+	if = {
+		limit = { has_global_variable = un_vote_active }
+		remove_global_variable = un_vote_active
+	}
+
+	# 5. Every live mandate is voided (un_mandate_close tells the holder).
+	if = {
+		limit = { has_global_variable_list = un_mandate_registry }
+		every_in_global_list = {
+			variable = un_mandate_registry
+			limit = {
+				OR = {
+					has_tag = un_mandate_active
+					has_tag = un_mandate_bound
+				}
+			}
+			un_mandate_close = { STATUS = void }
+		}
+	}
+
+	# 6. Every country leaves.
+	every_country = {
+		un_dissolve_strip_country = yes
+	}
+
+	# 7. The headquarters is demolished. With no host,
+	#    un_hq_enforce_single_building removes every HQ building there is.
+	if = {
+		limit = { has_global_variable = un_hq_country }
+		remove_global_variable = un_hq_country
+	}
+	un_hq_enforce_single_building = yes
+	if = {
+		limit = { has_global_variable = un_hq_state }
+		remove_global_variable = un_hq_state
+	}
+
+	# 8. The agencies lapse.
+	un_dissolve_remove_global = { NAME = un_agency_who }
+	un_dissolve_remove_global = { NAME = un_agency_unesco }
+	un_dissolve_remove_global = { NAME = un_agency_icj }
+	un_dissolve_remove_global = { NAME = un_agency_unhrc }
+	un_dissolve_remove_global = { NAME = un_agency_iaea }
+	un_dissolve_remove_global = { NAME = un_agency_unep }
+	un_dissolve_remove_global = { NAME = un_agency_unhcr }
+	un_dissolve_remove_global = { NAME = un_agency_unoosa }
+	un_dissolve_remove_global = { NAME = un_agency_itlos }
+	un_dissolve_remove_global = { NAME = un_agency_icc }
+
+	# 9. The organisation's own state. Its record of acts (the ledger log)
+	#    goes with it; the next UN starts with an empty one.
+	if = {
+		limit = { has_global_variable_list = un_ledger_log }
+		every_in_global_list = {
+			variable = un_ledger_log
+			destroy_container = yes
+		}
+		clear_global_variable_list = un_ledger_log
+	}
+	un_dissolve_remove_global = { NAME = un_founded }
+	un_dissolve_remove_global = { NAME = un_authority }
+	un_dissolve_remove_global = { NAME = un_authority_target }
+	un_dissolve_remove_global = { NAME = un_authority_step }
+	un_dissolve_remove_global = { NAME = un_tier }
+	un_dissolve_remove_global = { NAME = un_enforcement_now }
+	un_dissolve_remove_global = { NAME = un_charter_level }
+	un_dissolve_remove_global = { NAME = un_charter_pressure_months }
+	un_dissolve_remove_global = { NAME = un_crisis_active }
+	un_dissolve_remove_global = { NAME = un_crisis_months }
+	un_dissolve_remove_global = { NAME = un_founding_window_active }
+	un_dissolve_remove_global = { NAME = un_recess_months }
+	# The docket (redesign phase 4). A refounded UN seeds it afresh.
+	un_dissolve_remove_global = { NAME = un_docket_seeded }
+	un_dissolve_remove_global = { NAME = un_docket_months_left }
+	un_dissolve_remove_global = { NAME = un_dkt_agenda_months_left }
+	un_dissolve_remove_global = { NAME = un_dkt_offers }
+	un_dissolve_remove_global = { NAME = un_dkt_last_type }
+	un_dissolve_remove_global = { NAME = un_dkt_last_age }
+	un_dissolve_remove_global = { NAME = un_dkt_last_subject }
+	un_dissolve_remove_global = { NAME = un_dkt_last_place }
+	un_dissolve_remove_global = { NAME = un_dkt_warming_next }
+	un_dissolve_remove_global = { NAME = un_dkt_space_raised }
+	un_dissolve_remove_global = { NAME = un_dkt_gp_war_months }
+	un_dissolve_remove_global = { NAME = un_dkt_gp_war_ended }
+	un_dissolve_remove_global = { NAME = un_ledger_credibility }
+	un_dissolve_remove_global = { NAME = un_ledger_delivery }
+	un_dissolve_remove_global = { NAME = un_ledger_order }
+	un_dissolve_remove_global = { NAME = un_world_prestige }
+	un_dissolve_remove_global = { NAME = un_member_power_share }
+	un_dissolve_remove_global = { NAME = un_funding_ratio }
+	un_dissolve_remove_global = { NAME = un_members_at_war_share }
+	un_dissolve_remove_global = { NAME = un_pillar_participation }
+	un_dissolve_remove_global = { NAME = un_pillar_commitment }
+	un_dissolve_remove_global = { NAME = un_pillar_credibility }
+	un_dissolve_remove_global = { NAME = un_pillar_funding }
+	un_dissolve_remove_global = { NAME = un_pillar_order }
+	un_dissolve_remove_global = { NAME = un_pillar_delivery }
+}
+
+# Remove a global variable if it is set.
+# Parameters: $NAME$
+# Scope: any
+un_dissolve_remove_global = {
+	if = {
+		limit = { has_global_variable = $NAME$ }
+		remove_global_variable = $NAME$
+	}
+}
+
+# One country's part in a dissolution: everything a member sheds on leaving
+# (un_membership_end_effect), plus what only the end of the organisation
+# ends — pariah status, the authority-scaled modifiers, the standing tier
+# modifier, the headquarters marker, sanctions regimes on either side, and the
+# fire-once and cached variables the next UN must start without.
+# Scope: country
+un_dissolve_strip_country = {
+	un_membership_end_effect = yes
+	je:je_united_nations ?= { remove_modifier = un_high_authority_infamy_modifier }
+	je:je_united_nations ?= { remove_modifier = un_npt_disarmament_modifier }
+	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
+	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_strong_modifier }
+	je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
+	un_standing_clear_tier_modifiers = yes
+	remove_modifier = un_sanctions_target_modifier
+	remove_modifier = un_sanctions_voluntary_target_modifier
+	remove_modifier = un_sanctions_enforcement_modifier
+	remove_modifier = un_sanctions_partial_modifier
+	if = {
+		limit = { has_variable = un_charter_signed }
+		remove_variable = un_charter_signed
+	}
+	if = {
+		limit = { has_variable = un_permanent_subgp_months }
+		remove_variable = un_permanent_subgp_months
+	}
+	if = {
+		limit = { has_variable = un_power_share }
+		remove_variable = un_power_share
+	}
+}
+
+# Everything a member sheds when its membership ends: the membership and its
+# benefits, any seat, every programme and its cost, our own sanctions
+# enforcement, and every convention we were bound by. Sanctions AGAINST us are
+# deliberately not here: they are the members' measure, not a membership
+# obligation, so walking out must not shed them (only un_lift_sanctions_button
+# or a dissolution ends a regime).
+# Called from un_leave_button (inside its tooltip) and un_dissolve_strip_country.
+# Scope: country
+un_membership_end_effect = {
+	je:je_united_nations ?= { remove_modifier = un_member_modifier }
+	je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
+	je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
+	je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
+	je:je_united_nations ?= { remove_modifier = un_founding_member_modifier }
+	remove_modifier = un_sanctions_enforcer_modifier
+	je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
+	je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
+	je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
+	je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
+	# The aid programme ends with its cost; keeping the prestige marker
+	# while dropping the bill made leaving a way to stop paying for aid.
+	remove_modifier = un_humanitarian_aid_modifier
+	remove_modifier = un_humanitarian_aid_cost
+	je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
+	je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
+	je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
+	je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
+	# Permanent treaty commitments
+	je:je_united_nations ?= { remove_modifier = un_human_rights_declaration_modifier }
+	remove_modifier = un_human_rights_reservations_modifier
+	je:je_united_nations ?= { remove_modifier = un_nonproliferation_modifier }
+	je:je_united_nations ?= { remove_modifier = un_climate_binding_modifier }
+	je:je_united_nations ?= { remove_modifier = un_heritage_program_modifier }
+	je:je_united_nations ?= { remove_modifier = un_pandemic_cooperation_modifier }
+	je:je_united_nations ?= { remove_modifier = un_refugee_program_modifier }
+	je:je_united_nations ?= { remove_modifier = un_space_partnership_modifier }
+	# The two conventions that sit on the country rather than the journal
+	# entry. un_apply_ratified_conventions re-adds both on rejoining,
+	# exactly as it does the journal-entry ones above.
+	remove_modifier = un_law_of_sea_modifier
+	remove_modifier = un_icc_member_modifier
+}
+
+# ---- Founding and joining ------------------------------------------------------------
+
+# Found the United Nations with this country as founder, at $AUTHORITY$, under
+# the founding charter. The founder becomes the first member, a founding
+# member, the headquarters host and, if a great power, a permanent member. A
+# five-year founding window seats the next great powers to join. The charter
+# invitations (un_charter_invitations) are the caller's to send, after any
+# other founding member has been seated.
+# Parameters: $AUTHORITY$ = the founding authority (a script value or number)
+# Scope: the founding country
+un_found_organisation = {
+	set_global_variable = un_founded
+	set_global_variable = { name = un_authority value = $AUTHORITY$ }
+	# The version stamp tells un_authority_monthly_update this is not a
+	# pre-equilibrium save to migrate.
+	set_global_variable = { name = un_model_version value = 2 }
+	set_global_variable = { name = un_charter_level value = 0 }
+	set_global_variable = { name = un_charter_pressure_months value = 0 }
+	un_ladder_tier_update = yes
+	set_global_variable = { name = un_founding_window_active days = normal_modifier_time }
+	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+	je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
+	je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
+	set_global_variable = { name = un_hq_country value = ROOT }
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
+	}
+}
+
+# Invite every other recognized independent country to sign the charter
+# (un_events.1, which skips a country already in).
+# Scope: the founding country
+un_charter_invitations = {
+	every_country = {
+		limit = {
+			NOT = { this = ROOT }
+			is_subject = no
+			NOT = { is_country_type = decentralized }
+		}
+		trigger_event = { id = un_events.1 }
+	}
+}
+
+# Join the UN: membership, a permanent seat for a great power joining in the
+# founding window while seats remain, and every convention already ratified.
+# Scope: the joining country
+un_join_organisation = {
+	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+	if = {
+		limit = {
+			country_rank >= rank_value:great_power
+			has_global_variable = un_founding_window_active
+			un_permanent_seat_count < 5
+		}
+		je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
+	}
+	un_apply_ratified_conventions = yes
+}
+
+# ---- Refounding: the founding conference ---------------------------------------------
+
+# Convene a founding conference (§4.3). It sits for
+# un_conference_months_needed months; if the world's leading power has not
+# wrecked it by then, the new UN is founded with the convener as founder. The
+# leading power — the highest-prestige great power, if that is not us — is
+# asked to join, stay out, or oppose (un_events.31).
+# Scope: the convening country
+un_conference_open = {
+	set_global_variable = { name = un_founding_conference value = ROOT }
+	set_global_variable = { name = un_conference_months value = 0 }
+	add_modifier = {
+		name = un_founding_cost_modifier
+		days = normal_modifier_time
+		is_decaying = yes
+	}
+	ordered_country = {
+		limit = {
+			country_rank >= rank_value:great_power
+			is_subject = no
+			NOT = { is_country_type = decentralized }
+		}
+		order_by = un_prestige_order_value
+		max = 1
+		if = {
+			limit = { NOT = { this = ROOT } }
+			set_global_variable = { name = un_conference_top_power value = this }
+			trigger_event = { id = un_events.31 }
+		}
+	}
+	every_country = {
+		limit = {
+			NOT = { this = ROOT }
+			country_rank >= rank_value:major_power
+			is_subject = no
+		}
+		post_notification = un_conference_opened_notice
+	}
+}
+
+# Scope: none (every month, founded or not)
+un_conference_monthly_update = {
+	if = {
+		limit = { has_global_variable = un_founding_conference }
+		if = {
+			limit = { NOT = { exists = global_var:un_founding_conference } }
+			# The convener is gone: the conference simply breaks up. No new
+			# cooldown — nobody wrecked it.
+			un_conference_clear = yes
+		}
+		else = {
+			change_global_variable = { name = un_conference_months add = 1 }
+			if = {
+				limit = { global_var:un_conference_months >= un_conference_months_needed }
+				global_var:un_founding_conference = {
+					un_conference_conclude = yes
+				}
+			}
+		}
+	}
+}
+
+# The conference ends in a founding: a new, weak UN under the founding
+# charter, with the leading power in it if it chose to join.
+# Scope: the convening country
+un_conference_conclude = {
+	un_found_organisation = { AUTHORITY = un_refounding_authority }
+	if = {
+		limit = {
+			has_global_variable = un_conference_top_power_joins
+			has_global_variable = un_conference_top_power
+			exists = global_var:un_conference_top_power
+		}
+		global_var:un_conference_top_power = {
+			un_join_organisation = yes
+		}
+	}
+	un_conference_clear = yes
+	un_charter_invitations = yes
+}
+
+# The leading power opposes the refounding: the conference collapses and no
+# new one may be convened for ten years. The convener is told.
+# Scope: the opposing country
+un_conference_wreck = {
+	set_global_variable = { name = un_conference_wrecked_by value = ROOT }
+	global_var:un_founding_conference ?= {
+		trigger_event = { id = un_events.32 }
+	}
+	set_global_variable = { name = un_refounding_cooldown days = 3650 }
+	set_global_variable = {
+		name = un_refounding_open_year
+		value = {
+			value = te_history_current_year
+			add = 10
+		}
+	}
+	un_conference_clear = yes
+}
+
+# Scope: any
+un_conference_clear = {
+	un_dissolve_remove_global = { NAME = un_founding_conference }
+	un_dissolve_remove_global = { NAME = un_conference_months }
+	un_dissolve_remove_global = { NAME = un_conference_top_power }
+	un_dissolve_remove_global = { NAME = un_conference_top_power_joins }
+}

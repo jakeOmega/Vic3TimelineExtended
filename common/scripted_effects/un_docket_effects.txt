@@ -1,0 +1,816 @@
+﻿# ============================================================================
+# UN DOCKET — THE SCAN, THE ITEMS, THE OFFERS (redesign phase 4)
+# ============================================================================
+# docs/systems/un_redesign_design.md §8; as shipped, §0.4. Replaces the
+# per-member monthly event roll that un_events_on_action used to run.
+#
+# ONCE A MONTH (un_docket_monthly_update, from the global pulse, UN founded):
+# unless the docket took up an item in the last un_docket_cadence_months, it
+# scores every live situation and takes up the gravest. Each item goes to the
+# countries it concerns, names them (and the place, where there is one), and
+# is taken up once.
+#
+#   code  item                    raised when                               goes to
+#   1     nuclear strike          a strike in the last two years            the struck country, then the Council (un_events.2)
+#   2     war of aggression       6+ months, a member's state devastated    the attacked member, then the Council (un_events.2)
+#   3     covert operation        a severe operation exposed, last 2 years  the target, then the Council (un_events.2)
+#   4     state collapse          a failed or collapsing state              three peacekeeping powers (un_events.4)
+#   5     famine                  a famine not yet docketed                 three donor powers (un_events.7)
+#   6     a new nuclear power     a first bomb built                        a proposer (un_events.14, the NPT)
+#   7     warming threshold       0.5 / 1 / 2 / 3 degrees crossed           a proposer (un_events.17, the climate accord)
+#   8     colonial collapse       a colonial empire has collapsed           a proposer (un_events.12)
+#   9     another world reached   the first Moon landing or colony          a proposer (un_events.19)
+#   10    "never again"           a war between great powers has ended      a proposer (un_events.3, else un_events.22)
+#   11    charter outgrown        un_charter_reform_ripe                    a great power (un_events.6)
+#   12    trade embargo           two members under an embargo              the weaker party (un_events.15)
+#   13    Assembly business       nothing graver, every 24 months at most   a proposer (a convention event)
+#
+# Items 1-3 and 6-11 and 13 open a resolution if accepted, so they wait for a
+# free floor (un_docket_floor_free: no vote in session, no recess). Items 4, 5
+# and 12 open none and are taken up whatever the floor is doing.
+#
+# WHO GOES FIRST. An item with an aggrieved party (1-3) goes to it first; if
+# it declines, or cannot table, the item passes to one member with a stake
+# (un_docket_appeal_second). An item without one goes to a human delegation
+# first when one qualifies (a docket prompt reaches humans too, §8.3), then to
+# the strongest qualifying member. Every item is offered to at most
+# un_docket_max_offers members; a member offered it carries un_dkt_offered for
+# 60 days so it is not offered it twice.
+#
+# WHO WRITES WHAT
+#   un_dkt_war_months (country)        months at war, while at war
+#   un_dkt_war_raised (country)        this aggressor's war is docketed, until peace
+#   un_dkt_<kind>_victim (country)     a nuclear or covert grievance, timed
+#                                      (un_docket_note_grievance, from the hooks)
+#   un_dkt_cause (country, timed)      on the accused: 1 nuclear, 2 war, 3 covert
+#   un_dkt_*_raised (country)          collapse / famine / nuke / colonial / embargo
+#   un_dkt_offered (country, 60 days)  offered the item in hand
+#   un_docket_months_left (global)     the cadence
+#   un_dkt_agenda_months_left (global) the Assembly-business cadence
+#   un_dkt_offers (global)             offers made for the item in hand
+#   un_dkt_last_type / _age / _subject / _place (global)  for the chamber
+#   un_dkt_warming_next (global)       the next warming threshold, 0..4
+#   un_dkt_space_raised, un_dkt_gp_war, un_dkt_gp_war_months,
+#   un_dkt_gp_war_ended, un_docket_seeded (global)
+# ============================================================================
+
+# ---- Grievances (the hooks) ------------------------------------------------------------
+
+# Note that the scoped country wronged $VICTIM$ in a way the docket takes up:
+# $KIND$ = nuclear (a nuclear strike) or covert (a severe operation exposed).
+# Called from the nuclear strike effects (extra_effects.txt) and covert_warfare.1.
+# A no-op while no UN exists. The grievance keeps for two years: an appeal
+# opens a resolution, so it waits for a free floor, and a vote in session
+# plus the recess after it can hold the floor for fifteen months.
+# Scope: the culprit
+un_docket_note_grievance = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			exists = $VICTIM$
+			NOT = { this = $VICTIM$ }
+		}
+		set_variable = { name = un_dkt_$KIND$_victim value = $VICTIM$ days = 730 }
+	}
+}
+
+# ---- The monthly update --------------------------------------------------------------------
+
+# Global monthly upkeep (no-country scope; from un_global_authority_on_action,
+# UN founded). NOT IDEMPOTENT WITHIN A MONTH: the clocks advance on every call.
+un_docket_monthly_update = {
+	un_docket_seed = yes
+
+	# War clocks: how long each country has been at war, and the end of a war
+	# already docketed.
+	every_country = {
+		limit = { is_at_war = yes }
+		if = {
+			limit = { NOT = { has_variable = un_dkt_war_months } }
+			set_variable = { name = un_dkt_war_months value = 0 }
+		}
+		change_variable = { name = un_dkt_war_months add = 1 }
+	}
+	every_country = {
+		limit = {
+			is_at_war = no
+			OR = {
+				has_variable = un_dkt_war_months
+				has_variable = un_dkt_war_raised
+			}
+		}
+		remove_variable = un_dkt_war_months
+		remove_variable = un_dkt_war_raised
+	}
+
+	# "Never again": a war between great powers that lasted a year and has
+	# ended leaves un_dkt_gp_war_ended for two years.
+	if = {
+		limit = {
+			any_country = {
+				country_rank >= rank_value:great_power
+				is_at_war = yes
+				any_country = {
+					country_rank >= rank_value:great_power
+					has_war_with = PREV
+				}
+			}
+		}
+		if = {
+			limit = { NOT = { has_global_variable = un_dkt_gp_war_months } }
+			set_global_variable = { name = un_dkt_gp_war_months value = 0 }
+		}
+		change_global_variable = { name = un_dkt_gp_war_months add = 1 }
+	}
+	else_if = {
+		limit = { has_global_variable = un_dkt_gp_war_months }
+		if = {
+			limit = { global_var:un_dkt_gp_war_months >= 12 }
+			set_global_variable = { name = un_dkt_gp_war_ended days = 730 }
+		}
+		remove_global_variable = un_dkt_gp_war_months
+	}
+
+	# Situations whose business is closed for good pass silently: a new
+	# nuclear power once the NPT is in force, a warming threshold once the
+	# climate accord is.
+	if = {
+		limit = { has_global_variable = un_agency_iaea }
+		every_country = {
+			limit = { un_docket_proliferation_candidate = yes }
+			set_variable = un_dkt_nuke_raised
+		}
+	}
+	if = {
+		limit = {
+			has_global_variable = un_agency_unep
+			un_docket_warming_ready = yes
+		}
+		change_global_variable = { name = un_dkt_warming_next add = 1 }
+	}
+
+	# The clocks.
+	if = {
+		limit = { has_global_variable = un_docket_months_left }
+		change_global_variable = { name = un_docket_months_left add = -1 }
+		if = {
+			limit = { global_var:un_docket_months_left <= 0 }
+			remove_global_variable = un_docket_months_left
+		}
+	}
+	if = {
+		limit = { has_global_variable = un_dkt_agenda_months_left }
+		change_global_variable = { name = un_dkt_agenda_months_left add = -1 }
+		if = {
+			limit = { global_var:un_dkt_agenda_months_left <= 0 }
+			remove_global_variable = un_dkt_agenda_months_left
+		}
+	}
+	if = {
+		limit = { has_global_variable = un_dkt_last_age }
+		change_global_variable = { name = un_dkt_last_age add = 1 }
+	}
+
+	# Take up the next item.
+	if = {
+		limit = { NOT = { has_global_variable = un_docket_months_left } }
+		un_docket_scan = yes
+	}
+}
+
+# The first time the docket runs for a UN (a new save, a new or refounded
+# UN), what has already happened is history, not business: existing nuclear
+# powers, collapsed empires, warming thresholds already crossed and a space
+# age already begun are marked as seen.
+# Scope: any
+un_docket_seed = {
+	if = {
+		limit = { NOT = { has_global_variable = un_docket_seeded } }
+		set_global_variable = un_docket_seeded
+		every_country = {
+			limit = { un_docket_proliferation_candidate = yes }
+			set_variable = un_dkt_nuke_raised
+		}
+		every_country = {
+			limit = { un_docket_colonial_candidate = yes }
+			set_variable = { name = un_dkt_colonial_raised days = 3650 }
+		}
+		set_global_variable = { name = un_dkt_warming_next value = 0 }
+		# One step per threshold already crossed (each test reads the next).
+		if = {
+			limit = { un_docket_warming_ready = yes }
+			change_global_variable = { name = un_dkt_warming_next add = 1 }
+		}
+		if = {
+			limit = { un_docket_warming_ready = yes }
+			change_global_variable = { name = un_dkt_warming_next add = 1 }
+		}
+		if = {
+			limit = { un_docket_warming_ready = yes }
+			change_global_variable = { name = un_dkt_warming_next add = 1 }
+		}
+		if = {
+			limit = { un_docket_warming_ready = yes }
+			change_global_variable = { name = un_dkt_warming_next add = 1 }
+		}
+		if = {
+			limit = { un_docket_space_ready = yes }
+			set_global_variable = un_dkt_space_raised
+		}
+	}
+}
+
+# ---- The scan ------------------------------------------------------------------------------
+
+# Record a situation as the best so far if it outscores the best so far.
+# Parameters: $TYPE$ = the item code, $SCORE$ = its score (a script value,
+# evaluated in the current scope)
+# Scope: any (the situation's own country, for a per-country score)
+un_docket_consider = {
+	if = {
+		limit = { $SCORE$ > global_var:un_dkt_best }
+		set_global_variable = { name = un_dkt_best value = $SCORE$ }
+		set_global_variable = { name = un_dkt_best_type value = $TYPE$ }
+	}
+}
+
+# Score every live situation and take up the gravest. The found candidates are
+# held in temporary scopes (un_dkt_found_*) for the take-up.
+# Scope: any
+un_docket_scan = {
+	set_global_variable = { name = un_dkt_best value = 0 }
+	set_global_variable = { name = un_dkt_best_type value = 0 }
+
+	# ---- Business that would open a resolution: only on a free floor ----
+	if = {
+		limit = { un_docket_floor_free = yes }
+		# 1. A nuclear strike.
+		ordered_country = {
+			limit = { has_variable = un_dkt_nuclear_victim }
+			order_by = un_docket_share_order
+			max = 1
+			save_temporary_scope_as = un_dkt_found_nuclear
+			un_docket_consider = { TYPE = 1 SCORE = un_docket_score_nuclear }
+		}
+		# 2. A war of aggression against a member.
+		ordered_country = {
+			limit = { un_docket_war_candidate = yes }
+			order_by = un_docket_score_war
+			max = 1
+			save_temporary_scope_as = un_dkt_found_war
+			un_docket_consider = { TYPE = 2 SCORE = un_docket_score_war }
+		}
+		# 3. A severe covert operation exposed.
+		ordered_country = {
+			limit = { has_variable = un_dkt_covert_victim }
+			order_by = un_docket_share_order
+			max = 1
+			save_temporary_scope_as = un_dkt_found_covert
+			un_docket_consider = { TYPE = 3 SCORE = un_docket_score_covert }
+		}
+		# 6. A new nuclear power, while the NPT is open.
+		if = {
+			limit = {
+				un_docket_topic_open_npt = yes
+				any_country = { un_docket_may_propose_npt = yes }
+			}
+			ordered_country = {
+				limit = { un_docket_proliferation_candidate = yes }
+				order_by = un_docket_share_order
+				max = 1
+				save_temporary_scope_as = un_dkt_found_nuke
+				un_docket_consider = { TYPE = 6 SCORE = un_docket_score_proliferation }
+			}
+		}
+		# 7. A warming threshold crossed, while the climate accord is open.
+		if = {
+			limit = {
+				un_docket_warming_ready = yes
+				un_docket_topic_open_climate = yes
+				any_country = { un_docket_may_propose_climate = yes }
+			}
+			un_docket_consider = { TYPE = 7 SCORE = un_docket_score_warming }
+		}
+		# 8. A colonial empire collapsed, while decolonisation is open.
+		if = {
+			limit = {
+				un_docket_topic_open_decolonization = yes
+				any_country = { un_docket_may_propose_decolonization = yes }
+			}
+			ordered_country = {
+				limit = { un_docket_colonial_candidate = yes }
+				order_by = un_docket_share_order
+				max = 1
+				save_temporary_scope_as = un_dkt_found_colonial
+				un_docket_consider = { TYPE = 8 SCORE = un_docket_score_colonial }
+			}
+		}
+		# 9. Another world reached, while space cooperation is open.
+		if = {
+			limit = {
+				un_docket_space_ready = yes
+				un_docket_topic_open_space = yes
+				any_country = { un_docket_may_propose_space = yes }
+			}
+			un_docket_consider = { TYPE = 9 SCORE = un_docket_score_space }
+		}
+		# 10. "Never again": a great-power war has ended.
+		if = {
+			limit = {
+				has_global_variable = un_dkt_gp_war_ended
+				OR = {
+					AND = {
+						un_docket_topic_open_human_rights = yes
+						any_country = { un_docket_may_propose_human_rights = yes }
+					}
+					AND = {
+						un_docket_topic_open_icc = yes
+						any_country = { un_docket_may_propose_icc = yes }
+					}
+				}
+			}
+			un_docket_consider = { TYPE = 10 SCORE = un_docket_score_never_again }
+		}
+		# 11. The charter outgrown.
+		if = {
+			limit = {
+				un_docket_topic_open_reform = yes
+				any_country = { un_docket_may_propose_reform = yes }
+			}
+			un_docket_consider = { TYPE = 11 SCORE = un_docket_score_charter }
+		}
+		# 13. Assembly business, when nothing graver is pending.
+		if = {
+			limit = { un_docket_agenda_ready = yes }
+			un_docket_consider = { TYPE = 13 SCORE = un_docket_score_agenda }
+		}
+	}
+
+	# ---- Business that opens no resolution ----
+	# 4. A state collapsing.
+	if = {
+		limit = { any_country = { un_docket_peacekeeping_power = yes } }
+		ordered_country = {
+			limit = { un_docket_collapse_candidate = yes }
+			order_by = un_docket_share_order
+			max = 1
+			save_temporary_scope_as = un_dkt_found_collapse
+			un_docket_consider = { TYPE = 4 SCORE = un_docket_score_collapse }
+		}
+	}
+	# 5. A famine.
+	if = {
+		limit = { any_country = { un_docket_aid_power = yes } }
+		ordered_country = {
+			limit = { un_docket_famine_candidate = yes }
+			order_by = un_docket_score_famine
+			max = 1
+			save_temporary_scope_as = un_dkt_found_famine
+			un_docket_consider = { TYPE = 5 SCORE = un_docket_score_famine }
+		}
+	}
+	# 12. A trade embargo between members.
+	ordered_country = {
+		limit = { un_docket_embargo_candidate = yes }
+		order_by = un_docket_share_order
+		max = 1
+		save_temporary_scope_as = un_dkt_found_embargo
+		un_docket_consider = { TYPE = 12 SCORE = un_docket_score_embargo }
+	}
+
+	# ---- Take up the gravest ----
+	if = {
+		limit = { global_var:un_dkt_best_type = 1 }
+		un_docket_take_up_grievance = { KIND = nuclear CAUSE = 1 FOUND = scope:un_dkt_found_nuclear }
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 2 }
+		un_docket_take_up_war = yes
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 3 }
+		un_docket_take_up_grievance = { KIND = covert CAUSE = 3 FOUND = scope:un_dkt_found_covert }
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 4 }
+		un_docket_take_up_collapse = yes
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 5 }
+		un_docket_take_up_famine = yes
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 6 }
+		scope:un_dkt_found_nuke = {
+			set_variable = un_dkt_nuke_raised
+			save_scope_as = un_dkt_subject
+		}
+		un_docket_log = { TYPE = 6 }
+		un_docket_offer_topic = { TOPIC = npt EVENT = un_events.14 }
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 7 }
+		change_global_variable = { name = un_dkt_warming_next add = 1 }
+		un_docket_log = { TYPE = 7 }
+		un_docket_offer_topic = { TOPIC = climate EVENT = un_events.17 }
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 8 }
+		scope:un_dkt_found_colonial = {
+			set_variable = { name = un_dkt_colonial_raised days = 3650 }
+			save_scope_as = un_dkt_subject
+		}
+		un_docket_log = { TYPE = 8 }
+		un_docket_offer_topic = { TOPIC = decolonization EVENT = un_events.12 }
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 9 }
+		set_global_variable = un_dkt_space_raised
+		un_docket_log = { TYPE = 9 }
+		un_docket_offer_topic = { TOPIC = space EVENT = un_events.19 }
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 10 }
+		remove_global_variable = un_dkt_gp_war_ended
+		un_docket_log = { TYPE = 10 }
+		if = {
+			limit = {
+				un_docket_topic_open_human_rights = yes
+				any_country = { un_docket_may_propose_human_rights = yes }
+			}
+			un_docket_offer_topic = { TOPIC = human_rights EVENT = un_events.3 }
+		}
+		else = {
+			un_docket_offer_topic = { TOPIC = icc EVENT = un_events.22 }
+		}
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 11 }
+		un_docket_log = { TYPE = 11 }
+		un_docket_offer_topic = { TOPIC = reform EVENT = un_events.6 }
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 12 }
+		un_docket_take_up_embargo = yes
+	}
+	else_if = {
+		limit = { global_var:un_dkt_best_type = 13 }
+		un_docket_take_up_agenda = yes
+	}
+
+	remove_global_variable = un_dkt_best
+	remove_global_variable = un_dkt_best_type
+}
+
+# ---- Taking an item up ---------------------------------------------------------------------
+
+# Note the item for the chamber and start the cadence. Items that name a country
+# or a state leave it in scope:un_dkt_subject / scope:un_dkt_place first.
+# Scope: any
+un_docket_log = {
+	set_global_variable = { name = un_dkt_last_type value = $TYPE$ }
+	set_global_variable = { name = un_dkt_last_age value = 0 }
+	set_global_variable = { name = un_docket_months_left value = un_docket_cadence_months }
+	set_global_variable = { name = un_dkt_offers value = 0 }
+	if = {
+		limit = { exists = scope:un_dkt_subject }
+		set_global_variable = { name = un_dkt_last_subject value = scope:un_dkt_subject }
+	}
+	else_if = {
+		limit = { has_global_variable = un_dkt_last_subject }
+		remove_global_variable = un_dkt_last_subject
+	}
+	if = {
+		limit = { exists = scope:un_dkt_place }
+		set_global_variable = { name = un_dkt_last_place value = scope:un_dkt_place }
+	}
+	else_if = {
+		limit = { has_global_variable = un_dkt_last_place }
+		remove_global_variable = un_dkt_last_place
+	}
+}
+
+# A nuclear strike (CAUSE 1) or an exposed covert operation (CAUSE 3): the
+# struck or targeted country may appeal to the Assembly against the culprit.
+# Parameters: $KIND$ = nuclear | covert, $CAUSE$ = 1 | 3,
+#             $FOUND$ = the culprit (a temporary scope from the scan)
+# Scope: any
+un_docket_take_up_grievance = {
+	$FOUND$ = {
+		save_scope_as = condemned_country
+		save_scope_as = un_dkt_subject
+		var:un_dkt_$KIND$_victim ?= { save_scope_as = un_dkt_victim }
+		remove_variable = un_dkt_$KIND$_victim
+		set_variable = { name = un_dkt_cause value = $CAUSE$ days = 180 }
+	}
+	un_docket_log = { TYPE = $CAUSE$ }
+	un_docket_raise_appeal = yes
+}
+
+# A war of aggression against a member (item 2): the attacked member with the
+# most power may appeal, naming its most devastated state.
+# Scope: any, with the temporary scope un_dkt_found_war
+un_docket_take_up_war = {
+	scope:un_dkt_found_war = {
+		save_scope_as = condemned_country
+		save_scope_as = un_dkt_subject
+		set_variable = un_dkt_war_raised
+		set_variable = { name = un_dkt_cause value = 2 days = 180 }
+	}
+	ordered_country = {
+		limit = { un_docket_war_victim = yes }
+		order_by = un_docket_share_order
+		max = 1
+		save_scope_as = un_dkt_victim
+		ordered_scope_state = {
+			limit = { devastation > un_docket_war_devastation }
+			order_by = un_docket_devastation_order
+			max = 1
+			save_scope_as = un_dkt_place
+		}
+	}
+	un_docket_log = { TYPE = 2 }
+	un_docket_raise_appeal = yes
+}
+
+# Offer an appeal (un_events.2) to the aggrieved party, or, if it cannot take
+# it, straight to a member with a stake.
+# Scope: any, with scope:condemned_country (and scope:un_dkt_victim) saved
+un_docket_raise_appeal = {
+	if = {
+		limit = { scope:un_dkt_victim ?= { un_docket_can_be_offered = yes } }
+		scope:un_dkt_victim = { un_docket_send_offer = { EVENT = un_events.2 } }
+	}
+	else = {
+		un_docket_pass_appeal = yes
+	}
+}
+
+# Pass an appeal on to the member with a stake and the most power, if the item
+# has an offer left.
+# Scope: any, with scope:condemned_country (and scope:un_dkt_victim) saved
+un_docket_pass_appeal = {
+	if = {
+		limit = { global_var:un_dkt_offers < un_docket_max_offers }
+		ordered_country = {
+			limit = { un_docket_appeal_second = yes }
+			order_by = un_docket_share_order
+			max = 1
+			un_docket_send_offer = { EVENT = un_events.2 }
+		}
+	}
+}
+
+# Offer a convention topic: a human delegation first when one qualifies, then
+# the strongest qualifying member.
+# Parameters: $TOPIC$ = the topic (its un_docket_may_propose_<topic> gate),
+#             $EVENT$ = its proposer event
+# Scope: any
+un_docket_offer_topic = {
+	set_global_variable = { name = un_dkt_offers value = 0 }
+	un_docket_offer_topic_next = { TOPIC = $TOPIC$ EVENT = $EVENT$ }
+}
+
+# The next offer of a topic, if the item has one left. Also the "leave it to
+# another member" option of every proposer event.
+# Scope: any
+un_docket_offer_topic_next = {
+	if = {
+		limit = {
+			has_global_variable = un_dkt_offers
+			global_var:un_dkt_offers < un_docket_max_offers
+		}
+		if = {
+			limit = {
+				any_country = {
+					is_ai = no
+					un_docket_may_propose_$TOPIC$ = yes
+				}
+			}
+			ordered_country = {
+				limit = {
+					is_ai = no
+					un_docket_may_propose_$TOPIC$ = yes
+				}
+				order_by = un_docket_share_order
+				max = 1
+				un_docket_send_offer = { EVENT = $EVENT$ }
+			}
+		}
+		else = {
+			ordered_country = {
+				limit = { un_docket_may_propose_$TOPIC$ = yes }
+				order_by = un_docket_share_order
+				max = 1
+				un_docket_send_offer = { EVENT = $EVENT$ }
+			}
+		}
+	}
+}
+
+# Send the scoped member the item's event, and count the offer.
+# Scope: the recipient
+un_docket_send_offer = {
+	set_variable = { name = un_dkt_offered value = 1 days = 60 }
+	change_global_variable = { name = un_dkt_offers add = 1 }
+	trigger_event = { id = $EVENT$ days = 1 }
+}
+
+# A state collapsing (item 4): the peacekeeping powers are asked to deploy.
+# Scope: any, with the temporary scope un_dkt_found_collapse
+un_docket_take_up_collapse = {
+	scope:un_dkt_found_collapse = {
+		save_scope_as = peacekeeping_target
+		save_scope_as = un_dkt_subject
+		set_variable = { name = un_dkt_collapse_raised value = 1 days = 1825 }
+	}
+	un_docket_log = { TYPE = 4 }
+	ordered_country = {
+		limit = {
+			un_docket_peacekeeping_power = yes
+			NOT = { this = scope:peacekeeping_target }
+			NOT = { has_war_with = scope:peacekeeping_target }
+		}
+		order_by = un_docket_peacekeeper_order
+		max = 3
+		trigger_event = { id = un_events.4 days = 1 }
+	}
+}
+
+# A famine (item 5): the donor powers are asked for aid, naming the worst-hit
+# state.
+# Scope: any, with the temporary scope un_dkt_found_famine
+un_docket_take_up_famine = {
+	scope:un_dkt_found_famine = {
+		save_scope_as = crisis_country
+		save_scope_as = un_dkt_subject
+		set_variable = { name = un_dkt_famine_raised value = 1 days = 1825 }
+		ordered_scope_state = {
+			limit = { has_famine = yes }
+			order_by = un_docket_state_pop_order
+			max = 1
+			save_scope_as = crisis_state
+			save_scope_as = un_dkt_place
+		}
+	}
+	un_docket_log = { TYPE = 5 }
+	ordered_country = {
+		limit = {
+			un_docket_aid_power = yes
+			NOT = { this = scope:crisis_country }
+			NOT = { has_war_with = scope:crisis_country }
+		}
+		order_by = un_docket_share_order
+		max = 3
+		trigger_event = { id = un_events.7 days = 1 }
+	}
+}
+
+# A trade embargo between members (item 12): the weaker party is offered
+# arbitration against the other.
+# Scope: any, with the temporary scope un_dkt_found_embargo
+un_docket_take_up_embargo = {
+	scope:un_dkt_found_embargo = {
+		ordered_country = {
+			limit = {
+				NOT = { this = PREV }
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				has_diplomatic_pact = { who = PREV type = embargo }
+			}
+			order_by = un_docket_share_order
+			max = 1
+			save_scope_as = un_dkt_embargo_other
+		}
+	}
+	if = {
+		limit = { exists = scope:un_dkt_embargo_other }
+		scope:un_dkt_found_embargo = {
+			set_global_variable = { name = un_dkt_embargo_share value = un_docket_share_order }
+		}
+		if = {
+			limit = {
+				scope:un_dkt_embargo_other = {
+					un_docket_share_order < global_var:un_dkt_embargo_share
+				}
+			}
+			scope:un_dkt_embargo_other = { save_scope_as = un_dkt_embargo_weaker }
+			scope:un_dkt_found_embargo = { save_scope_as = trade_rival }
+		}
+		else = {
+			scope:un_dkt_found_embargo = { save_scope_as = un_dkt_embargo_weaker }
+			scope:un_dkt_embargo_other = { save_scope_as = trade_rival }
+		}
+		scope:un_dkt_found_embargo = { set_variable = { name = un_dkt_embargo_raised value = 1 days = 1825 } }
+		scope:un_dkt_embargo_other = { set_variable = { name = un_dkt_embargo_raised value = 1 days = 1825 } }
+		scope:trade_rival = { save_scope_as = un_dkt_subject }
+		un_docket_log = { TYPE = 12 }
+		scope:un_dkt_embargo_weaker = { trigger_event = { id = un_events.15 days = 1 } }
+		remove_global_variable = un_dkt_embargo_share
+	}
+}
+
+# Assembly business (item 13): one convention whose time may have come, chosen
+# at random among those open with a member to table them.
+# Scope: any
+un_docket_take_up_agenda = {
+	set_global_variable = { name = un_dkt_agenda_months_left value = un_docket_agenda_months }
+	un_docket_log = { TYPE = 13 }
+	random_list = {
+		10 = {
+			trigger = {
+				un_docket_topic_open_human_rights = yes
+				any_country = { un_docket_may_propose_human_rights = yes }
+			}
+			un_docket_offer_topic = { TOPIC = human_rights EVENT = un_events.3 }
+		}
+		10 = {
+			trigger = {
+				un_docket_topic_open_icc = yes
+				has_global_variable = un_agency_unhrc
+				any_country = { un_docket_may_propose_icc = yes }
+			}
+			un_docket_offer_topic = { TOPIC = icc EVENT = un_events.22 }
+		}
+		10 = {
+			trigger = {
+				un_docket_topic_open_heritage = yes
+				any_country = { un_docket_may_propose_heritage = yes }
+			}
+			un_docket_offer_topic = { TOPIC = heritage EVENT = un_events.9 }
+		}
+		10 = {
+			trigger = {
+				un_docket_topic_open_pandemic = yes
+				any_country = { un_docket_may_propose_pandemic = yes }
+			}
+			un_docket_offer_topic = { TOPIC = pandemic EVENT = un_events.16 }
+		}
+		10 = {
+			trigger = {
+				un_docket_topic_open_refugee = yes
+				any_country = { un_docket_may_propose_refugee = yes }
+			}
+			un_docket_offer_topic = { TOPIC = refugee EVENT = un_events.18 }
+		}
+		10 = {
+			trigger = {
+				un_docket_topic_open_law_of_sea = yes
+				any_country = { un_docket_may_propose_law_of_sea = yes }
+			}
+			un_docket_offer_topic = { TOPIC = law_of_sea EVENT = un_events.21 }
+		}
+		10 = {
+			trigger = {
+				un_docket_topic_open_decolonization = yes
+				any_country = { un_docket_may_propose_decolonization = yes }
+			}
+			un_docket_offer_topic = { TOPIC = decolonization EVENT = un_events.12 }
+		}
+	}
+}
+
+# ---- Consequences that are not docket items ---------------------------------------------------
+# Fired where the thing happens, not by the scan, and outside the cadence.
+
+# A veto blocked the proposer's resolution: the proposer answers it
+# (un_events.11). Not at Moribund, where a veto costs nothing and is routine.
+# Scope: the vetoing country, with scope:un_resolution saved
+un_docket_veto_consequence = {
+	if = {
+		limit = { NOT = { un_tier_is_moribund = yes } }
+		save_scope_as = veto_power
+		scope:un_resolution ?= {
+			var:un_res_proposer ?= {
+				if = {
+					limit = {
+						NOT = { this = scope:veto_power }
+						je:je_united_nations ?= { has_modifier = un_member_modifier }
+						NOT = { has_modifier = un_veto_crisis_modifier }
+						NOT = { has_modifier = un_veto_abolition_modifier }
+					}
+					trigger_event = { id = un_events.11 days = 7 }
+				}
+			}
+		}
+	}
+}
+
+# A great power left the organisation: the other great-power members answer
+# the walkout (un_events.20).
+# Scope: the country leaving
+un_docket_walkout_consequence = {
+	if = {
+		limit = { country_rank >= rank_value:great_power }
+		save_scope_as = walkout_leader
+		every_country = {
+			limit = {
+				NOT = { this = scope:walkout_leader }
+				country_rank >= rank_value:great_power
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				NOT = { has_modifier = un_walkout_condemn_modifier }
+				NOT = { has_modifier = un_walkout_join_modifier }
+			}
+			trigger_event = { id = un_events.20 days = 7 }
+		}
+	}
+}

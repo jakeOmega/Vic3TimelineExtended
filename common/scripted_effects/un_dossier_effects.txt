@@ -1,0 +1,312 @@
+﻿# ============================================================================
+# UN GROUNDS AND VOTES — THE DOSSIER, THE LEAN, THE AI BALLOT, THE RECESS
+# ============================================================================
+# Redesign phase 3 (docs/systems/un_redesign_design.md §5.1, §6, §8.3; as
+# shipped, §0.3). The figures and the lean's terms are in
+# common/script_values/un_dossier_values.txt, the tests in
+# common/scripted_triggers/un_dossier_triggers.txt.
+#
+# WHO WRITES WHAT
+#   un_dos_<record> (country)     un_dossier_record, and the monthly decay
+#   un_dos_war_logged (country)   un_dossier_monthly_update (a war already
+#                                 recorded, so a long war is recorded once)
+#   un_lean_* (country)           un_lean_snapshot, in un_vote.4 only
+#   un_res_why_* (resolution)     the reason tallies, from un_resolution_record_vote
+#                                 and un_resolution_record_veto
+#   un_res_case (resolution)      un_resolution_open: the target's case when tabled
+#   un_res_ai_cast (resolution)   un_vote_dispatch_ai_ballots: the AI has voted
+#   un_recess_months (global)     un_resolution_archive sets it,
+#                                 un_recess_monthly_update counts it down
+#
+# RECORD CALL SITES (un_dossier_record = { RECORD = x POINTS = n }):
+#   aggression  un_dossier_monthly_update (a war begun without a bound mandate)
+#   defiance    un_vote.3 option C (a binding resolution refused),
+#               un_events.5 option C (sanctions busted), un_events.8 option C
+#               (the court defied)
+#   violation   un_mandate_on_violated (un_mandate_effects.txt)
+#   covert      covert_warfare.1's immediate (a severe operation exposed)
+#   nuclear     nuclear_first_strike / _tactical_strike / _response_strike
+#               (extra_effects.txt)
+# ============================================================================
+
+# ---- The dossier -------------------------------------------------------------------
+
+# Add $POINTS$ to this country's $RECORD$, capped at un_dossier_record_cap. A
+# no-op while no UN exists: the dossier is the Assembly's file on a country,
+# and there is no Assembly to keep one.
+# Parameters: $RECORD$ = aggression | defiance | violation | covert | nuclear
+#             $POINTS$ = a number or a script value (evaluated in this scope)
+# Scope: the country the record is against
+un_dossier_record = {
+	hidden_effect = {
+		if = {
+			limit = { has_global_variable = un_founded }
+			if = {
+				limit = { NOT = { has_variable = un_dos_$RECORD$ } }
+				set_variable = { name = un_dos_$RECORD$ value = 0 }
+			}
+			change_variable = { name = un_dos_$RECORD$ add = $POINTS$ }
+			if = {
+				limit = { var:un_dos_$RECORD$ > un_dossier_record_cap }
+				set_variable = { name = un_dos_$RECORD$ value = un_dossier_record_cap }
+			}
+		}
+	}
+}
+
+# Scope: country
+un_dossier_decay_record = {
+	if = {
+		limit = { has_variable = un_dos_$RECORD$ }
+		change_variable = { name = un_dos_$RECORD$ multiply = un_dossier_decay_factor }
+		if = {
+			limit = { var:un_dos_$RECORD$ < un_dossier_floor }
+			remove_variable = un_dos_$RECORD$
+		}
+	}
+}
+
+# Global monthly upkeep (no-country scope; from un_global_authority_on_action,
+# UN founded). NOT IDEMPOTENT WITHIN A MONTH: the records decay and the recess
+# counts down on every call.
+#   1. Every record fades.
+#   2. A war begun without a mandate is recorded once, when it is first seen:
+#      the initiator of a war it is fighting, unless it holds a mandate bound
+#      to a play. The flag un_dos_war_logged holds the war as recorded until
+#      the country is at peace again.
+#   3. The recess counts down.
+un_dossier_monthly_update = {
+	every_country = {
+		limit = { un_dossier_has_records = yes }
+		un_dossier_decay_record = { RECORD = aggression }
+		un_dossier_decay_record = { RECORD = defiance }
+		un_dossier_decay_record = { RECORD = violation }
+		un_dossier_decay_record = { RECORD = covert }
+		un_dossier_decay_record = { RECORD = nuclear }
+	}
+	every_country = {
+		limit = {
+			has_variable = un_dos_war_logged
+			OR = {
+				is_at_war = no
+				is_diplomatic_play_initiator = no
+			}
+		}
+		remove_variable = un_dos_war_logged
+	}
+	every_country = {
+		limit = {
+			is_at_war = yes
+			is_diplomatic_play_initiator = yes
+			NOT = { has_variable = un_dos_war_logged }
+		}
+		set_variable = un_dos_war_logged
+		if = {
+			limit = {
+				NOT = { var:un_mandate_current ?= { has_tag = un_mandate_bound } }
+			}
+			un_dossier_record = { RECORD = aggression POINTS = un_dos_points_aggression }
+		}
+	}
+	un_recess_monthly_update = yes
+}
+
+# ---- The recess ----------------------------------------------------------------------
+
+# Count the recess down; when it ends, tell the human members the floor is open.
+# Scope: any
+un_recess_monthly_update = {
+	if = {
+		limit = { has_global_variable = un_recess_months }
+		change_global_variable = { name = un_recess_months add = -1 }
+		if = {
+			limit = { global_var:un_recess_months <= 0 }
+			remove_global_variable = un_recess_months
+			every_country = {
+				limit = {
+					is_ai = no
+					je:je_united_nations ?= { has_modifier = un_member_modifier }
+				}
+				post_notification = un_floor_open_notice
+			}
+		}
+	}
+}
+
+# ---- The lean --------------------------------------------------------------------------
+
+# Write this voter's lean on scope:un_resolution, term by term, as country
+# variables the chamber prints (un_lean_total and one variable per term), and
+# note which resolution they belong to. The ONLY writer of those variables.
+# Called from un_vote.4, whose ROOT is the voter, because the relations terms
+# read relations:root.
+# Scope: the voter (= ROOT), with scope:un_resolution, scope:un_vote_proposer
+# and scope:un_vote_target saved
+un_lean_snapshot = {
+	set_variable = { name = un_lean_res value = scope:un_resolution }
+	set_variable = { name = un_lean_grounds value = un_lean_grounds }
+	set_variable = { name = un_lean_self value = un_lean_self }
+	set_variable = { name = un_lean_proposer value = un_lean_proposer }
+	set_variable = { name = un_lean_target value = un_lean_target }
+	set_variable = { name = un_lean_glass value = un_lean_glass }
+	set_variable = { name = un_lean_standing value = un_lean_standing }
+	set_variable = { name = un_lean_pledge value = un_lean_pledge }
+	set_variable = { name = un_lean_accepted value = un_lean_accepted }
+	set_variable = { name = un_lean_burden value = un_lean_burden }
+	set_variable = { name = un_lean_interests value = un_lean_interests }
+	set_variable = { name = un_lean_total value = un_vote_lean }
+}
+
+# The AI's ballot: the lean, plus noise, decides. A permanent member vetoes a
+# binding resolution when its lean (without noise) is at or below the veto
+# line; otherwise it votes yes when lean + noise > 0. The same three effects a
+# human's ballot runs (un_vote_cast_effects.txt) record the vote, so the tally,
+# lobbying settlement and IG reactions are identical.
+# Scope: the voter (= ROOT), after un_lean_snapshot, with the same saved scopes
+un_vote_ai_cast = {
+	set_variable = { name = un_lean_roll value = var:un_lean_total }
+	random_list = {
+		20 = { change_variable = { name = un_lean_roll add = -20 } }
+		20 = { change_variable = { name = un_lean_roll add = -10 } }
+		20 = { }
+		20 = { change_variable = { name = un_lean_roll add = 10 } }
+		20 = { change_variable = { name = un_lean_roll add = 20 } }
+	}
+	if = {
+		limit = { un_vote_ai_should_veto = yes }
+		un_vote_cast_veto = yes
+	}
+	else_if = {
+		limit = { var:un_lean_roll > 0 }
+		un_vote_cast_yes = yes
+	}
+	else = {
+		un_vote_cast_no = yes
+	}
+	remove_variable = un_lean_roll
+}
+
+# Send every AI member its ballot (un_vote.4) and mark the resolution so it is
+# sent once. From un_vote.5 thirty days after the resolution opens, with the
+# global monthly pulse as the fallback if un_vote.5 never fires (its recipient,
+# the proposer, is gone).
+# Scope: any, with scope:un_resolution saved
+un_vote_dispatch_ai_ballots = {
+	scope:un_resolution = {
+		if = {
+			limit = { NOT = { has_variable = un_res_ai_cast } }
+			set_variable = un_res_ai_cast
+		}
+	}
+	every_country = {
+		limit = {
+			is_ai = yes
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		trigger_event = { id = un_vote.4 }
+	}
+}
+
+# Refresh the human members' lean snapshots, so the chamber shows each human
+# member how the Assembly reads its position on the resolution in session.
+# Scope: any, with scope:un_resolution saved
+un_vote_refresh_human_leans = {
+	every_country = {
+		limit = {
+			is_ai = no
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		trigger_event = { id = un_vote.4 }
+	}
+}
+
+# ---- Why they voted: the reason tallies -------------------------------------------------
+# When a ballot is recorded, each term of the voter's lean that pushed it the way
+# it voted, by at least un_lean_reason_size, is counted on the resolution, so
+# the chamber can say "Opposed: ties to the target (12 members)". The voter's
+# snapshot must be for this resolution (un_lean_res); a ballot cast with none
+# (a vote from a save made before phase 3) counts no reasons.
+# Called as un_lean_tally_$LIST$ from un_resolution_record_vote (so the list
+# name picks the side) and from un_resolution_record_veto.
+# Scope: the voter, with scope:un_resolution saved
+
+un_lean_tally_un_res_yes = {
+	if = {
+		limit = {
+			has_variable = un_lean_res
+			var:un_lean_res ?= scope:un_resolution
+		}
+		if = {
+			limit = { var:un_lean_grounds >= un_lean_reason_size }
+			un_lean_count_reason = { NAME = un_res_why_yes_grounds }
+		}
+		if = {
+			limit = { var:un_lean_proposer >= un_lean_reason_size }
+			un_lean_count_reason = { NAME = un_res_why_yes_proposer }
+		}
+		if = {
+			limit = { var:un_lean_target >= un_lean_reason_size }
+			un_lean_count_reason = { NAME = un_res_why_yes_target }
+		}
+		if = {
+			limit = { var:un_lean_pledge >= un_lean_reason_size }
+			un_lean_count_reason = { NAME = un_res_why_yes_pledge }
+		}
+		if = {
+			limit = { var:un_lean_accepted >= un_lean_reason_size }
+			un_lean_count_reason = { NAME = un_res_why_yes_accepted }
+		}
+		if = {
+			limit = { var:un_lean_interests >= un_lean_reason_size }
+			un_lean_count_reason = { NAME = un_res_why_yes_interests }
+		}
+	}
+}
+
+un_lean_tally_un_res_no = {
+	if = {
+		limit = {
+			has_variable = un_lean_res
+			var:un_lean_res ?= scope:un_resolution
+		}
+		if = {
+			limit = { var:un_lean_grounds <= un_lean_reason_size_negative }
+			un_lean_count_reason = { NAME = un_res_why_no_grounds }
+		}
+		if = {
+			limit = { var:un_lean_self <= un_lean_reason_size_negative }
+			un_lean_count_reason = { NAME = un_res_why_no_self }
+		}
+		if = {
+			limit = { var:un_lean_proposer <= un_lean_reason_size_negative }
+			un_lean_count_reason = { NAME = un_res_why_no_proposer }
+		}
+		if = {
+			limit = { var:un_lean_target <= un_lean_reason_size_negative }
+			un_lean_count_reason = { NAME = un_res_why_no_target }
+		}
+		if = {
+			limit = { var:un_lean_glass <= un_lean_reason_size_negative }
+			un_lean_count_reason = { NAME = un_res_why_no_glass }
+		}
+		if = {
+			limit = { var:un_lean_burden <= un_lean_reason_size_negative }
+			un_lean_count_reason = { NAME = un_res_why_no_burden }
+		}
+		if = {
+			limit = { var:un_lean_interests <= un_lean_reason_size_negative }
+			un_lean_count_reason = { NAME = un_res_why_no_interests }
+		}
+	}
+}
+
+# Scope: any, with scope:un_resolution saved
+un_lean_count_reason = {
+	scope:un_resolution = {
+		if = {
+			limit = { NOT = { has_variable = $NAME$ } }
+			set_variable = { name = $NAME$ value = 0 }
+		}
+		change_variable = { name = $NAME$ add = 1 }
+	}
+}

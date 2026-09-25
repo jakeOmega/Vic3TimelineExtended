@@ -156,3 +156,87 @@ te_debug_un_clear_vote = {
 		remove_global_variable = un_vote_active
 	}
 }
+
+# ---- Redesign phase 2: the ladder, the crisis and the floor ----
+
+# Doom the UN: authority 1, and the credibility and order ledgers driven to
+# their floors so the target falls below the collapse line. The next monthly
+# update opens the crisis and starts the collapse clock; the UN dissolves a
+# few months later (authority falls at least a quarter point a month).
+# Scope: any
+te_debug_un_doom = {
+	if = {
+		limit = { has_global_variable = un_founded }
+		set_global_variable = { name = un_authority value = 1 }
+		set_global_variable = { name = un_ledger_credibility value = -15 }
+		set_global_variable = { name = un_ledger_order value = -20 }
+	}
+}
+
+# Put the charter's next reform on the table now: authority at the ceiling and
+# the 24-month clock already run. The chamber's Charter Reform row goes live at
+# once (un_charter_reform_ripe reads the counter directly).
+# Scope: any
+te_debug_un_ripen_charter = {
+	if = {
+		limit = { un_charter_can_be_reformed = yes }
+		set_global_variable = { name = un_authority value = un_charter_cap }
+		set_global_variable = { name = un_charter_pressure_months value = un_charter_reform_months_needed }
+	}
+}
+
+# Skip the refounding cooldown, so a founding conference can be convened now.
+# Scope: any
+te_debug_un_skip_refounding_cooldown = {
+	if = {
+		limit = { has_global_variable = un_refounding_cooldown }
+		remove_global_variable = un_refounding_cooldown
+	}
+	if = {
+		limit = { has_global_variable = un_founding_conference }
+		set_global_variable = { name = un_conference_months value = un_conference_months_needed }
+	}
+}
+
+# ---- Redesign phase 4: the docket ----
+
+# Open the docket now: clear its cadence, the Assembly-business cadence and
+# the recess, and scan at once (un_docket_effects.txt). A vote in session
+# still holds the floor, so only business that opens no resolution can be
+# taken up while one is voting.
+# Scope: any
+te_debug_un_open_docket = {
+	if = {
+		limit = { has_global_variable = un_docket_months_left }
+		remove_global_variable = un_docket_months_left
+	}
+	if = {
+		limit = { has_global_variable = un_dkt_agenda_months_left }
+		remove_global_variable = un_dkt_agenda_months_left
+	}
+	if = {
+		limit = { has_global_variable = un_recess_months }
+		remove_global_variable = un_recess_months
+	}
+	un_docket_seed = yes
+	un_docket_scan = yes
+}
+
+# Stage a grievance against us: the strongest other member is caught running a
+# severe covert operation on us, with a covert record heavy enough for a
+# condemnation, and the docket opens at once.
+# Scope: the country that ran the console event
+te_debug_un_stage_grievance = {
+	save_scope_as = te_debug_un_wronged
+	ordered_country = {
+		limit = {
+			NOT = { this = scope:te_debug_un_wronged }
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+		}
+		order_by = un_docket_share_order
+		max = 1
+		un_dossier_record = { RECORD = covert POINTS = 40 }
+		un_docket_note_grievance = { KIND = covert VICTIM = scope:te_debug_un_wronged }
+	}
+	te_debug_un_open_docket = yes
+}

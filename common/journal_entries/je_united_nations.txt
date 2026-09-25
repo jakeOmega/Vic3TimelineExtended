@@ -53,6 +53,11 @@
 	scripted_button = un_request_humanitarian_aid_button
 	scripted_button = un_propose_condemn_button
 	scripted_button = un_propose_mandate_button
+	scripted_button = un_propose_charter_reform_button
+	# The AI's only path to a motion to strip a permanent seat. It was
+	# defined in un_buttons.txt but never registered here, so until redesign
+	# phase 2 only a human could table one (from the chamber).
+	scripted_button = un_propose_expulsion_button
 
 	# ---- Policy buttons (members only) ----
 	scripted_button = un_propose_sanctions_button
@@ -110,27 +115,51 @@
 			}
 		}
 
-		# 2. Authority tier (only once the global exists, i.e. UN founded)
+		# 2. Authority tier (redesign phase 2): the tier global carries the
+		# hysteresis, so the line never flickers at a boundary. Before the first
+		# monthly update of a founded UN there is no tier yet and nothing prints.
+		# While no UN exists: dissolved, a founding conference in session, or
+		# never founded (the widget says so).
 		first_valid = {
 			triggered_desc = {
-				desc = je_un_authority_collapsed
-				trigger = { has_global_variable = un_authority global_var:un_authority < 10 }
+				desc = je_un_tier_line_supranational
+				trigger = { un_tier_is_supranational = yes }
 			}
 			triggered_desc = {
-				desc = je_un_authority_weak
-				trigger = { has_global_variable = un_authority global_var:un_authority >= 10 global_var:un_authority < 30 }
+				desc = je_un_tier_line_strong
+				trigger = { un_tier_at_least_strong = yes }
 			}
 			triggered_desc = {
-				desc = je_un_authority_moderate
-				trigger = { has_global_variable = un_authority global_var:un_authority >= 30 global_var:un_authority < 60 }
+				desc = je_un_tier_line_established
+				trigger = { un_tier_at_least_established = yes }
 			}
 			triggered_desc = {
-				desc = je_un_authority_strong
-				trigger = { has_global_variable = un_authority global_var:un_authority >= 60 global_var:un_authority < 85 }
+				desc = je_un_tier_line_contested
+				trigger = { un_tier_at_least_contested = yes }
 			}
 			triggered_desc = {
-				desc = je_un_authority_dominant
-				trigger = { has_global_variable = un_authority global_var:un_authority >= 85 }
+				desc = je_un_tier_line_moribund
+				trigger = { un_tier_is_moribund = yes }
+			}
+			triggered_desc = {
+				desc = je_un_status_conference
+				trigger = { un_conference_in_session = yes }
+			}
+			triggered_desc = {
+				desc = je_un_status_dissolved
+				trigger = { un_founding_is_refounding = yes }
+			}
+		}
+
+		# 2a. The crisis: the collapse clock, or the lingering form.
+		first_valid = {
+			triggered_desc = {
+				desc = je_un_crisis_line_clock
+				trigger = { un_crisis_clock_running = yes }
+			}
+			triggered_desc = {
+				desc = je_un_crisis_line_open
+				trigger = { un_crisis_is_open = yes }
 			}
 		}
 
@@ -341,8 +370,10 @@
 				# global authority. Members of a bloc with the Multilateral Institutions
 				# principle scale the benefit further by (1 + country_un_institutional_alignment)
 				# -- 0.5 alignment = +50% magnitude. Non-aligned members read 0, so x1.
+				# Paid from the Contested tier up (redesign phase 2): a Moribund UN
+				# pays its members nothing.
 				if = {
-					limit = { global_var:un_authority >= 30 }
+					limit = { un_tier_at_least_contested = yes }
 					je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
 					je:je_united_nations ?= { add_modifier = {
 							name = un_membership_benefits_modifier
@@ -450,37 +481,38 @@
 				}
 			}
 
-			# ---- Non-member penalties at high authority (all countries with JE) ----
+			# ---- Non-member pariah status (all countries with JE) ----
+			# Grows in steps with the tier (redesign phase 2, design §4.2):
+			# relations and prestige from Established, trade and leverage as
+			# well from Strong. The tier carries the hysteresis the old 60/55
+			# pair used to. The single refresh site for both modifiers.
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-					has_global_variable = un_founded
-					# UN authority (single global value) is high enough to shun outsiders.
-					has_global_variable = un_authority
-					global_var:un_authority >= 60
+					un_tier_at_least_established = yes
 				}
-				# Apply pariah status: non-members face diplomatic pressure
 				if = {
 					limit = { NOT = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_modifier } } }
 					je:je_united_nations ?= { add_modifier = { name = un_nonmember_pariah_modifier } }
 				}
 			}
-			# Remove if authority drops or UN not founded or they join
+			else_if = {
+				limit = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_modifier } }
+				je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
+			}
 			if = {
 				limit = {
-					je:je_united_nations ?= { has_modifier = un_nonmember_pariah_modifier }
-					OR = {
-						je:je_united_nations ?= { has_modifier = un_member_modifier }
-						NOT = { has_global_variable = un_founded }
-						NOT = {
-							AND = {
-								has_global_variable = un_authority
-								global_var:un_authority >= 55
-							}
-						}
-					}
+					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					un_tier_at_least_strong = yes
 				}
-				je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
+				if = {
+					limit = { NOT = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_strong_modifier } } }
+					je:je_united_nations ?= { add_modifier = { name = un_nonmember_pariah_strong_modifier } }
+				}
+			}
+			else_if = {
+				limit = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_strong_modifier } }
+				je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_strong_modifier }
 			}
 
 			# ---- Authority history (the chart in the authority widget) ----
@@ -528,6 +560,7 @@
 		effect = {
 			custom_tooltip = je_un_preview_pariah_tt
 			add_modifier = { name = un_nonmember_pariah_modifier }
+			add_modifier = { name = un_nonmember_pariah_strong_modifier }
 		}
 	}
 

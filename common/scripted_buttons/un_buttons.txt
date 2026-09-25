@@ -25,16 +25,25 @@ un_found_button = {
 	name = "UN_FOUND"
 	desc = "UN_FOUND_DESC"
 
+	# After a dissolution the same button convenes a founding conference
+	# instead (redesign phase 2, un_ladder_effects.txt): hidden while one sits,
+	# and greyed out until the refounding cooldown has run.
 	visible = {
 		NOT = { has_global_variable = un_founded }
+		NOT = { un_conference_in_session = yes }
 		has_technology_researched = intergovernmental_organizations
 	}
 
 	possible = {
 		NOT = { has_global_variable = un_founded }
+		NOT = { un_conference_in_session = yes }
 		has_technology_researched = intergovernmental_organizations
 		country_rank >= rank_value:great_power
 		is_subject = no
+		custom_tooltip = {
+			text = un_refounding_cooldown_tt
+			NOT = { has_global_variable = un_refounding_cooldown }
+		}
 	}
 
 	ai_chance = {
@@ -45,48 +54,31 @@ un_found_button = {
 	}
 
 	effect = {
-		custom_tooltip = {
-			text = "UN_FOUND_DESC"
-			# Cost: prestige and bureaucracy
-			add_modifier = {
-				name = un_founding_cost_modifier
-				days = normal_modifier_time
-				is_decaying = yes
+		if = {
+			limit = { un_founding_is_refounding = yes }
+			custom_tooltip = {
+				text = "UN_CONVENE_CONFERENCE_TT"
+				un_conference_open = yes
 			}
-			# Establish the UN
-			set_global_variable = un_founded
-			# UN authority is a single GLOBAL value; born here at founding (neutral 50),
-			# then moving toward the equilibrium its members give it
-			# (un_authority_effects.txt). The version stamp tells the monthly update
-			# this is not a pre-equilibrium save to migrate.
-			if = {
-				limit = { NOT = { has_global_variable = un_authority } }
-				set_global_variable = { name = un_authority value = 50 }
-			}
-			set_global_variable = { name = un_model_version value = 2 }
-			# 5-year founding window: any GP that joins during this window becomes
-			# a permanent member (until the 5 seats fill). After it expires, new
-			# permanent members can only be created via the expulsion-promotion vote.
-			set_global_variable = { name = un_founding_window_active days = normal_modifier_time }
-			# Founder becomes first member, HQ host, and founding member
-			je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
-			je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
-			je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
-			set_global_variable = { name = un_hq_country value = ROOT }
-			# GP founder gets Security Council seat AND permanent membership
-			if = {
-				limit = { country_rank >= rank_value:great_power }
-				je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
-				je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
-			}
-			# Fire charter event for all other recognized independent countries
-			every_country = {
-				limit = {
-					NOT = { this = ROOT }
-					is_subject = no
-					NOT = { is_country_type = decentralized }
+		}
+		else = {
+			custom_tooltip = {
+				text = "UN_FOUND_DESC"
+				# Cost: prestige and bureaucracy
+				add_modifier = {
+					name = un_founding_cost_modifier
+					days = normal_modifier_time
+					is_decaying = yes
 				}
-				trigger_event = { id = un_events.1 }
+				# UN authority is a single GLOBAL value; born here at founding (50),
+				# then moving toward the equilibrium its members give it
+				# (un_authority_effects.txt). The founder becomes first member, HQ
+				# host, founding member and, as a great power, a permanent member;
+				# a 5-year founding window seats the next great powers to join
+				# (un_found_organisation, un_ladder_effects.txt).
+				un_found_organisation = { AUTHORITY = un_founding_authority }
+				# Fire the charter event for all other recognized independent countries
+				un_charter_invitations = yes
 			}
 		}
 	}
@@ -125,21 +117,10 @@ un_join_button = {
 	effect = {
 		custom_tooltip = {
 			text = "UN_JOIN_DESC"
-			je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
-			# GPs joining during the founding window become permanent members
-			# (and pick up the SC seat that goes with the permanent role) so long
-			# as the 5-seat cap isn't already full.
-			if = {
-				limit = {
-					country_rank >= rank_value:great_power
-					has_global_variable = un_founding_window_active
-					un_permanent_seat_count < 5
-				}
-				je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
-				je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
-			}
-			# Bind the joiner to any conventions already ratified globally.
-			un_apply_ratified_conventions = yes
+			# Membership; for a great power joining in the founding window while
+			# seats remain, a permanent seat; and every convention already
+			# ratified (un_join_organisation, un_ladder_effects.txt).
+			un_join_organisation = yes
 		}
 	}
 }
@@ -246,43 +227,19 @@ un_leave_button = {
 			custom_tooltip = un_ledger_tt_p5_walkout
 			un_authority_actor_shock_weighted = { AMOUNT = -4 REASON = 11 }
 		}
+		# A great power walking out: the other great-power members answer it
+		# (un_events.20; redesign phase 4, un_docket_effects.txt).
+		hidden_effect = {
+			un_docket_walkout_consequence = yes
+		}
 		custom_tooltip = {
 			text = "UN_LEAVE_DESC"
-			je:je_united_nations ?= { remove_modifier = un_member_modifier }
-			je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
-			je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
-			je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
-			je:je_united_nations ?= { remove_modifier = un_founding_member_modifier }
-			# Sanctions AGAINST us stay: they are the members' measure, not a
-			# membership obligation, so walking out must not shed them. Only
-			# un_lift_sanctions_button lifts a regime. Our own enforcement ends.
-			remove_modifier = un_sanctions_enforcer_modifier
-			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
-			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
-			je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
-			je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
-			# The aid programme ends with its cost; keeping the prestige marker
-			# while dropping the bill made leaving a way to stop paying for aid.
-			remove_modifier = un_humanitarian_aid_modifier
-			remove_modifier = un_humanitarian_aid_cost
-			je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
-			je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
-			je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
-			je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
-			# Remove permanent treaty commitments
-			je:je_united_nations ?= { remove_modifier = un_human_rights_declaration_modifier }
-			remove_modifier = un_human_rights_reservations_modifier
-			je:je_united_nations ?= { remove_modifier = un_nonproliferation_modifier }
-			je:je_united_nations ?= { remove_modifier = un_climate_binding_modifier }
-			je:je_united_nations ?= { remove_modifier = un_heritage_program_modifier }
-			je:je_united_nations ?= { remove_modifier = un_pandemic_cooperation_modifier }
-			je:je_united_nations ?= { remove_modifier = un_refugee_program_modifier }
-			je:je_united_nations ?= { remove_modifier = un_space_partnership_modifier }
-			# The two conventions that sit on the country rather than the journal
-			# entry. un_apply_ratified_conventions re-adds both on rejoining,
-			# exactly as it does the journal-entry ones above.
-			remove_modifier = un_law_of_sea_modifier
-			remove_modifier = un_icc_member_modifier
+			# Membership, seats, programmes and their costs, our own sanctions
+			# enforcement and every convention we were bound by
+			# (un_membership_end_effect, un_ladder_effects.txt). Sanctions
+			# AGAINST us stay: they are the members' measure, not a membership
+			# obligation. Only un_lift_sanctions_button lifts a regime.
+			un_membership_end_effect = yes
 			# If we host the HQ, it moves to another member and our HQ building
 			# is demolished, so the new host can build the only one
 			# (un_hq_effects.txt; the helper excludes us from the pick itself).
@@ -349,6 +306,57 @@ un_propose_expulsion_button = {
 	}
 
 	effect = { un_propose_expulsion_effect = yes }
+}
+
+# ---- 1c-bis. TABLE A CHARTER REFORM ----
+# Redesign phase 2. The charter caps UN authority at 70; Reform I raises the
+# ceiling to 85 and Reform II to 100. A reform may be tabled only once
+# authority has sat within 5 points of the ceiling for 24 months running;
+# it needs a two-thirds supermajority of all members, and any permanent
+# member can veto it outright. Gates and effect are shared with the
+# chamber's Propose row (un_propose_triggers.txt / un_propose_effects.txt).
+
+un_propose_charter_reform_button = {
+	name = "UN_PROPOSE_CHARTER_REFORM"
+	desc = "UN_PROPOSE_CHARTER_REFORM_DESC"
+
+	visible = { un_propose_reform_available = yes }
+
+	possible = { un_propose_reform_possible = yes }
+
+	ai_chance = {
+		value = 0
+		# A power that champions the order wants the organisation to grow.
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+			add = 30
+		}
+		if = {
+			limit = {
+				OR = {
+					un_standing_tier_respected = yes
+					un_standing_tier_exemplary = yes
+				}
+			}
+			add = 10
+		}
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 10 }
+		# A permanent member gives up the most under Reform II (veto restraint).
+		if = {
+			limit = {
+				is_un_permanent_member = yes
+				un_charter_next_stage >= 2
+			}
+			add = -20
+		}
+		if = { limit = { has_law = law_type:law_isolationism } add = -40 }
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+			add = -60
+		}
+	}
+
+	effect = { un_propose_reform_effect = yes }
 }
 
 # ---- 1d. PROPOSE AN AUTHORIZED MILITARY MANDATE ----

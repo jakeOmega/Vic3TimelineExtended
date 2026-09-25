@@ -16,9 +16,10 @@
 # lines that are self-describing — never a header meant to sit above a list.
 # ============================================================================
 
-# The empty states only: the UN not founded, or founded but not yet through
-# its first monthly update. Once the pillars exist the widget draws them as a
-# GUI table instead (gated by un_authority_ready_sgui), so this prints nothing.
+# The empty states only: the UN not founded (never, or since a dissolution,
+# or while a founding conference sits), or founded but not yet through its
+# first monthly update. Once the pillars exist the widget draws them as a GUI
+# table instead (gated by un_authority_ready_sgui), so this prints nothing.
 # Scope: country (the viewer)
 un_authority_summary_block = {
 	if = {
@@ -29,8 +30,117 @@ un_authority_summary_block = {
 		custom_tooltip_no_bullet = je_un_auth_pending
 	}
 	else_if = {
+		limit = { un_conference_in_session = yes }
+		custom_tooltip_no_bullet = je_un_auth_conference
+	}
+	else_if = {
+		limit = { un_founding_is_refounding = yes }
+		if = {
+			limit = { has_global_variable = un_refounding_cooldown }
+			custom_tooltip_no_bullet = je_un_auth_dissolved_cooldown
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_auth_dissolved_open
+		}
+	}
+	else_if = {
 		limit = { NOT = { has_global_variable = un_founded } }
 		custom_tooltip_no_bullet = je_un_auth_not_founded
+	}
+}
+
+# Redesign phase 2: the tier and its enforcement, the charter's ceiling, and
+# how far the next charter reform has ripened. Root-level lines only.
+# Scope: country (the viewer)
+un_authority_ladder_block = {
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_global_variable = un_tier
+		}
+		if = {
+			limit = { un_tier_is_supranational = yes }
+			custom_tooltip_no_bullet = je_un_auth_tier_supranational
+		}
+		else_if = {
+			limit = { un_tier_at_least_strong = yes }
+			custom_tooltip_no_bullet = je_un_auth_tier_strong
+		}
+		else_if = {
+			limit = { un_tier_at_least_established = yes }
+			custom_tooltip_no_bullet = je_un_auth_tier_established
+		}
+		else_if = {
+			limit = { un_tier_at_least_contested = yes }
+			custom_tooltip_no_bullet = je_un_auth_tier_contested
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_auth_tier_moribund
+		}
+		if = {
+			limit = { un_charter_level_value >= 2 }
+			custom_tooltip_no_bullet = je_un_auth_charter_2
+		}
+		else_if = {
+			limit = { un_charter_level_value >= 1 }
+			custom_tooltip_no_bullet = je_un_auth_charter_1
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_auth_charter_0
+		}
+		if = {
+			limit = { un_charter_reform_ripe = yes }
+			custom_tooltip_no_bullet = je_un_auth_reform_ripe
+		}
+		else_if = {
+			limit = { un_charter_can_be_reformed = yes }
+			custom_tooltip_no_bullet = je_un_auth_reform_clock
+		}
+	}
+}
+
+# Redesign phase 2: the crisis — its clock, and every great power that could
+# save the organisation, with what its act would add to the target. Shown only
+# while the crisis is open (un_authority_crisis_sgui's is_shown). The clock
+# line is root-level and prints first; the powers are nested, each line
+# self-describing.
+# Scope: country (the viewer)
+un_authority_crisis_block = {
+	if = {
+		limit = { un_crisis_is_open = yes }
+		if = {
+			limit = { un_crisis_clock_running = yes }
+			custom_tooltip_no_bullet = je_un_auth_crisis_clock
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_auth_crisis_linger
+		}
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				is_subject = no
+				NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+				has_variable = un_power_share
+			}
+			custom_tooltip = je_un_auth_saviour_join
+		}
+		every_country = {
+			limit = {
+				je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+				has_variable = un_power_share
+			}
+			custom_tooltip = je_un_auth_saviour_stop_undermining
+		}
+		every_country = {
+			limit = {
+				country_rank >= rank_value:great_power
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+				NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+				has_variable = un_power_share
+			}
+			custom_tooltip = je_un_auth_saviour_champion
+		}
 	}
 }
 
@@ -191,6 +301,10 @@ un_authority_log_reason_line = {
 		limit = { var:un_led_reason = 13 }
 		custom_tooltip_no_bullet = je_un_led_reason_13
 	}
+	else_if = {
+		limit = { var:un_led_reason = 14 }
+		custom_tooltip_no_bullet = je_un_led_reason_14
+	}
 	# 1NN: a response to UN event un_events.NN. Each key quotes the event's own
 	# title, so the line cannot drift from the event.
 	else_if = {
@@ -286,4 +400,7 @@ un_authority_help_block = {
 	custom_tooltip_no_bullet = je_un_auth_help_3
 	custom_tooltip_no_bullet = je_un_auth_help_4
 	custom_tooltip_no_bullet = je_un_auth_help_5
+	custom_tooltip_no_bullet = je_un_auth_help_6
+	custom_tooltip_no_bullet = je_un_auth_help_7
+	custom_tooltip_no_bullet = je_un_auth_help_8
 }

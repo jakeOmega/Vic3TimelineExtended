@@ -18,8 +18,12 @@
 # un_chamber_propose_sgui's `is_valid` asks the same trigger. The AI still
 # proposes through the buttons' ai_chance, so both callers must stay honest.
 #
-# The remaining eleven topics (human rights, reform, heritage, decolonization,
-# NPT, pandemic, climate, refugee, space, law of the sea, ICC) are raised by the
+# Charter reform joined them in redesign phase 2 as the seventh (the reform
+# topic, un_propose_reform_*): it is also still raised by its proposer event,
+# un_events.6, under the same gates.
+#
+# The remaining ten topics (human rights, heritage, decolonization, NPT,
+# pandemic, climate, refugee, space, law of the sea, ICC) are raised by the
 # proposer events in events/un_events.txt and have no button and no trigger
 # here — see docs/systems/journal_entry_systems.md § The chamber widget.
 # ============================================================================
@@ -33,6 +37,8 @@ un_propose_condemn_available = {
 		has_diplomatic_pact = { who = ROOT type = rivalry }
 		is_at_war = yes
 		is_diplomatic_play_initiator = yes
+		# Grounds (redesign phase 3): its record must support a censure.
+		un_case_supports = { TOPIC = condemn }
 	}
 }
 
@@ -49,10 +55,18 @@ un_propose_condemn_possible = {
 	}
 	NOT = { has_modifier = un_ga_resolution_modifier }
 	NOT = { has_modifier = un_request_cooldown }
-	any_country = {
-		has_diplomatic_pact = { who = ROOT type = rivalry }
-		is_at_war = yes
-		is_diplomatic_play_initiator = yes
+	custom_tooltip = {
+		text = un_recess_ai_tt
+		un_may_table_now = yes
+	}
+	custom_tooltip = {
+		text = un_grounds_condemn_tt
+		any_country = {
+			has_diplomatic_pact = { who = ROOT type = rivalry }
+			is_at_war = yes
+			is_diplomatic_play_initiator = yes
+			un_case_supports = { TOPIC = condemn }
+		}
 	}
 }
 
@@ -62,6 +76,12 @@ un_propose_condemn_possible = {
 un_propose_sanctions_available = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	NOT = { has_modifier = un_sanctions_enforcer_modifier }
+	# Grounds (redesign phase 3): some rival's record must support sanctions.
+	any_country = {
+		has_diplomatic_pact = { who = ROOT type = rivalry }
+		NOT = { has_modifier = un_sanctions_target_modifier }
+		un_case_supports = { TOPIC = sanctions }
+	}
 }
 
 # Scope: the proposing country
@@ -78,9 +98,17 @@ un_propose_sanctions_possible = {
 	}
 	NOT = { has_modifier = un_ga_resolution_modifier }
 	NOT = { has_modifier = un_request_cooldown }
-	any_country = {
-		has_diplomatic_pact = { who = ROOT type = rivalry }
-		NOT = { has_modifier = un_sanctions_target_modifier }
+	custom_tooltip = {
+		text = un_recess_ai_tt
+		un_may_table_now = yes
+	}
+	custom_tooltip = {
+		text = un_grounds_sanctions_tt
+		any_country = {
+			has_diplomatic_pact = { who = ROOT type = rivalry }
+			NOT = { has_modifier = un_sanctions_target_modifier }
+			un_case_supports = { TOPIC = sanctions }
+		}
 	}
 }
 
@@ -108,6 +136,10 @@ un_propose_expulsion_possible = {
 		NOT = { un_resolution_topic_on_cooldown = { TOPIC = expulsion } }
 	}
 	NOT = { has_modifier = un_request_cooldown }
+	custom_tooltip = {
+		text = un_recess_ai_tt
+		un_may_table_now = yes
+	}
 	any_country = {
 		NOT = { this = ROOT }
 		is_un_permanent_member = yes
@@ -165,6 +197,10 @@ un_propose_mandate_possible = {
 	}
 	NOT = { has_modifier = un_ga_resolution_modifier }
 	NOT = { has_modifier = un_request_cooldown }
+	custom_tooltip = {
+		text = un_recess_ai_tt
+		un_may_table_now = yes
+	}
 }
 
 # Request a peacekeeping deployment on our own soil — binding, simple majority.
@@ -192,6 +228,10 @@ un_propose_peacekeepers_possible = {
 	}
 	NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
 	NOT = { has_modifier = un_request_cooldown }
+	custom_tooltip = {
+		text = un_recess_ai_tt
+		un_may_table_now = yes
+	}
 	OR = {
 		is_at_war = yes
 		any_scope_state = { devastation > 5 }
@@ -225,10 +265,51 @@ un_propose_aid_possible = {
 	}
 	NOT = { has_modifier = un_humanitarian_aid_received_modifier }
 	NOT = { has_modifier = un_request_cooldown }
+	custom_tooltip = {
+		text = un_recess_ai_tt
+		un_may_table_now = yes
+	}
 	any_scope_state = {
 		OR = {
 			average_sol < 8
 			devastation > 5
 		}
+	}
+}
+
+# Charter reform (redesign phase 2) — binding, with no graduated form (a veto
+# blocks it outright), and decided by a two-thirds supermajority of all
+# members, like the motion to strip a seat. Always tabled for the next stage:
+# Reform I under the founding charter, Reform II after it. It may be tabled
+# only once the organisation has outgrown its charter: authority within
+# un_charter_reform_margin of the ceiling for un_charter_reform_months_needed
+# months running (un_charter_reform_ripe).
+# Scope: the proposing country
+un_propose_reform_available = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_charter_can_be_reformed = yes
+}
+
+# Scope: the proposing country
+un_propose_reform_possible = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	country_rank >= rank_value:major_power
+	custom_tooltip = {
+		text = un_no_active_vote_tt
+		NOT = { has_global_variable = un_vote_active }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
+	}
+	custom_tooltip = {
+		text = un_charter_reform_ripe_tt
+		un_charter_reform_ripe = yes
+	}
+	NOT = { has_modifier = un_ga_resolution_modifier }
+	NOT = { has_modifier = un_request_cooldown }
+	custom_tooltip = {
+		text = un_recess_ai_tt
+		un_may_table_now = yes
 	}
 }

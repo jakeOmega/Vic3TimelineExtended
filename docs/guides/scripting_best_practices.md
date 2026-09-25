@@ -3793,7 +3793,7 @@ For any country history doesn't give a law in some group, the engine auto-assign
 
 Event-option `ai_chance` blocks are MTTH-shaped (`base = N` plus `modifier = { trigger = { … } add|factor = N }`), not script-value-shaped — that much is already documented in `docs/guides/event_creation_guide.md`. What is *not* settled is whether the `add`/`factor` value may be a **named script value**. A brace-balanced sweep of `~/vic3/game` (2026-09-18) found zero precedents at that level: every hit for `add = <identifier>` inside an `ai_chance` block turned out to be inside a nested `trigger`, and the script-value-shaped `ai_impose_chance` / `ai_*_chance` blocks in `common/laws/` are a different construct (`value = 0` + `if`). Scripted buttons, decisions and character interactions *do* use script-value syntax for `ai_chance`; events do not.
 
-If you use one anyway (the UN Standing vote lean does, deliberately — one shared, separately-tunable value beats four literal tier blocks), know the failure mode: the term silently contributes nothing and the AI weights behave exactly as they did before. That is benign but invisible, so grep `debug.log` for the script value's name on the first load after the change, and keep the literal-per-tier fallback in mind — it is a drop-in replacement for the single block.
+If you use one anyway, know the failure mode: the term silently contributes nothing and the AI weights behave exactly as they did before. That is benign but invisible, so grep `debug.log` for the script value's name on the first load after the change, and keep the literal-per-tier fallback in mind — it is a drop-in replacement for the single block. (The UN's vote leans sidestepped the question entirely in redesign phase 3: the AI now votes in script, through a hidden event that evaluates the lean as an ordinary script value, and `un_vote.1` carries no AI weights at all.)
 
 ## `un_vote.2`'s Contributor Sweeps Iterate Current Marker-Holders, Not This Resolution's Pledgers
 
@@ -3854,6 +3854,8 @@ The wrapper is behaviour-neutral in every state that was reachable before the pa
 ## Journal-Entry Buttons Are the AI's Only Path — Don't Move Them Into a Widget
 
 The AI activates a journal entry's policies by evaluating the `ai_chance` block on each `scripted_button` declared on the JE (vanilla `common/scripted_buttons/scripted_buttons.md`: "#Country scope `ai_chance`"). Scripted GUIs have their own, separate AI hook (`ai_is_valid` + `ai_chance` + `ai_frequency`). So when you replace a JE's button grid with a custom widget, **keep every `scripted_button = …` line on the JE** — deleting one, or gating its `visible` on `is_ai = no`, silently removes that option from the AI with no log line and no test that catches it. Give the widget's handlers `ai_is_valid = { always = no }` so the AI never double-dips.
+
+The converse bites too: a button defined in `common/scripted_buttons/` but **never listed** on its journal entry exists for nobody, and nothing logs it. `un_propose_expulsion_button` sat unregistered for months, so the AI could never move to strip a permanent seat while humans could from the chamber; UN redesign phase 2 registered it. When adding a button, grep the JE for its `scripted_button = …` line.
 
 To hide the now-redundant grid from humans, add `is_ai = yes` to each button's `visible` (alongside its existing conditions): the AI still sees and picks the button through `ai_chance`, a human sees nothing. The banking policy dashboard ships this on all 62 buttons and it was **confirmed in play testing (2026-09-18)** — see the header comment in `common/scripted_buttons/banking_alt_economy_buttons.txt` and `docs/systems/journal_entry_systems.md` § Policy Dashboard. Two obligations come with it: the widget must then offer **every** action a human could previously take (there is no grid left to fall back on if a scripted-GUI name is mistyped), and "the AI still uses the system" belongs at the top of that PR's in-game checklist, because nothing offline can verify it. A JE binds its `scripted_button` *declarations* at activation (`docs/systems/strategic_reserve_system.md`); whether an edited `visible` reaches an entry that is already active in an old save is untested, so judge the hide on a new game first.
 
@@ -4162,9 +4164,9 @@ A game rule reaches script through `has_game_rule`, reaches production methods t
 
 `$ENEMY$` is substituted as text before parsing, so the argument is re-read wherever the placeholder sits — including inside the helper's own scope changes. `nd_core_threatened_by = { ENEMY = var:nd_crisis_opponent }` expands to `any_scope_state = { is_target_of_wargoal = var:nd_crisis_opponent }`, which reads the **state's** variable; `ENEMY = PREV` means a different scope at every nesting level (inside `source_country = { … }` it is the treaty article). Neither fails loudly. Save a temporary scope and pass that: `var:nd_crisis_opponent ?= { save_temporary_scope_as = nd_def_opp }` then `ENEMY = scope:nd_def_opp`. `save_temporary_scope_as` works inside triggers (vanilla `guarantee_independence`'s `possible` does it). The nuclear-deterrence helpers do this throughout (`common/scripted_triggers/nuclear_deterrence_triggers.txt` header).
 
-## `$D$ = 1` Is Not a Trigger — Compare a Variable, Not Two Literals
+## `$D$ = 1` Is Not a Trigger — Branch on a Literal `yes`/`no` Flag
 
-A numeric parameter substituted into a condition gives `2 = 1`, which has no left-hand variable and is not a trigger (the same rule as § A trigger needs a `var:` on its LEFT side). When a helper needs to branch on its own argument, write the argument into a variable first and test that: `set_variable = { name = nd_doctrine_new value = $D$ }` … `limit = { var:nd_doctrine_new >= 4 }` (`nd_set_doctrine`). Comparing a variable *to* a parameter (`var:nd_doctrine = $D$`) is fine.
+A numeric parameter substituted into a condition gives `2 = 1`, which has no left-hand variable and is not a trigger (the same rule as § A trigger needs a `var:` on its LEFT side). Writing the argument into a variable first and testing that (`set_variable = { name = x value = $D$ }` … `limit = { var:x >= 4 }`) runs correctly but **previews wrongly**: a button or option tooltip evaluates every `limit` against the current state without running the effects above it, so the `var:` still holds the old value and the preview shows the wrong branch. Have the caller pass the branch as a literal flag and test it with `always = $FLAG$`, which reads the same in the preview and in the run. One wrapper per value keeps call sites short: `nd_set_doctrine_4 = { nd_set_doctrine = { D = 4 OFFENSIVE = yes LEAVES_NFU = yes } }` (`nuclear_deterrence_effects.txt`). Comparing a variable *to* a parameter (`var:nd_doctrine = $D$`) is fine.
 
 ## A Per-Mille Chance: Roll Twice Rather Than Pass a Fraction to `random`
 
@@ -4173,3 +4175,35 @@ A numeric parameter substituted into a condition gives `2 = 1`, which has no lef
 ## In a Diplomatic Action's AI Blocks the Target Is `scope:target_country`
 
 Vanilla names the target `scope:target_country` in every AI block (600+ uses in `common/diplomatic_actions/`) and uses `scope:country` only inside `first_state_trigger` / `second_state_trigger`, where it is the **actor** (`first_state_trigger = { owner = scope:country }`). The original `nuke_diplo_action` / `tactical_nuke_diplo_action` AI gates read `has_war_with = scope:country` and `enemy_has_existential_war_goal` (which also reads `scope:country`), so the AI's first-use gate most likely never passed; the tactical action's failure branch sent its "strike intercepted" event and a relations change to `scope:country` too. Both now name the target properly (docs/systems/nuclear_crisis_design.md §0). Unverified in-game — but a gate built on the actor's own war with itself cannot be what was meant.
+
+## An Approach-to-Target Model Never Reaches an Absorbing Boundary — Give the Step a Floor There
+
+A quantity that moves each month by `(target − value) / N` approaches its target geometrically and **never arrives**. That is the point of the model (a shock fades, a new equilibrium phases in), but it silently disarms any rule that fires *at* the boundary: with a target of 0, UN authority would fall from 10 to 1 in about nine years and then take for ever to reach 0, so "at 0 the UN dissolves" could never fire, and a linear "months until 0" projection would read the same number every month (the step shrinks exactly as fast as the distance). UN redesign phase 2 fixes it at the boundary only: while the crisis is open **and the target itself is past the collapse line**, the step is clamped to at most −0.25 a month (`un_authority_step_value`, a `max =` inside an `if`, written last so it bounds the final step). Two things to copy: gate the floor on the *target* being beyond the line, not on the value alone, so a system whose equilibrium sits just above the boundary lingers rather than being dragged over it; and floor the display projection at the same rate, or the month the clamp starts will project a collapse far later than the one the clamp delivers.
+
+## A Flag the Sender Sets Before `trigger_event` Must Not Gate the Event It Fires
+
+When a dispatcher marks a country and then fires an event at it — the UN docket sets
+`un_dkt_offered` on the recipient so the same item is never offered to it twice, then
+`trigger_event`s the proposer event — the receiving event's own `trigger` must not re-test the
+dispatcher's eligibility trigger if that trigger includes the mark. `un_docket_may_propose_<topic>`
+contains `NOT = { has_variable = un_dkt_offered }`; had the proposer events used it as their
+`trigger`, every offer would have failed on arrival, silently (a failed event trigger logs
+nothing), and the docket would have looked like it raised items no one ever received. Keep the
+two apart: the dispatcher's trigger decides *who is asked*, the event's trigger only re-checks the
+facts that may have changed in transit (membership, the vote lock, the target still existing).
+The same applies to a delayed event's `cooldown`: the dispatcher already paces the item, and a
+cooldown on the event is a second, invisible gate that makes an offer vanish for a country that
+answered some earlier one. The docket-fired UN events dropped theirs for this reason.
+
+## Claims Are on State Regions, So a Split Region Reads as Claimed Both Ways
+
+`has_claim_by = X` in state scope asks whether X claims the state's **state region** (vanilla
+`concept_claim_desc`: "a claim that a country has on a state region"), and conquering an
+incorporated state gives its previous owner such a claim. So when a region is split, each holder
+usually "claims" the other's part, and the state panel lists only the other side's claim. That
+can make correct script look inverted. The UN mandate picker (`un_mandate_select_case`) offered
+India a mandate for the British Republic's part of split Ceylon. From India's own Ceylon, which
+showed only the British claim, the pick looked backwards. It was not: vanilla `return_state`
+tests `has_claim_by = root` in the same direction. When script names a region taken under a
+claim, say which part and whose it is, and whether the other side claims ours
+(`un_chamber_mandate_split_lines`).

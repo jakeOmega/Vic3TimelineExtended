@@ -1,0 +1,203 @@
+﻿# ============================================================================
+# UN DOCKET — TUNING AND SCORES (redesign phase 4)
+# ============================================================================
+# docs/systems/un_redesign_design.md §8; as shipped, §0.4. The docket replaces
+# the per-member monthly event roll: once a month a global scan looks for real
+# situations (a nuclear strike, a war of aggression against a member, a famine,
+# a collapsing state, a warming threshold crossed, ...), scores each by how
+# grave it is and how much power is involved, and takes up the gravest one,
+# sending it to the countries involved. The writers are in
+# common/scripted_effects/un_docket_effects.txt, the tests in
+# common/scripted_triggers/un_docket_triggers.txt.
+# ============================================================================
+
+# ---- Cadence -------------------------------------------------------------------------
+
+# At most one new item every this many months.
+un_docket_cadence_months = { value = 3 }
+# Assembly business with no situation behind it (the conventions' "agenda"
+# items) is taken up at most once in this many months.
+un_docket_agenda_months = { value = 24 }
+# How many members an item is offered to before it lapses: the first choice
+# (the aggrieved party, or a human delegation for Assembly business) and one
+# more if that one declines.
+un_docket_max_offers = { value = 2 }
+# Written as literals where they are used (a timed variable's `days` takes a
+# number): a raised famine, collapse or embargo is left alone for 1825 days
+# before the same country can be its subject again; a nuclear strike or an
+# exposed covert operation stays actionable for 730 days
+# (un_docket_note_grievance); a member offered an item carries un_dkt_offered
+# for 60 days.
+
+# ---- Situation thresholds -------------------------------------------------------------
+
+# A war of aggression reaches the docket once it has run this many months...
+un_docket_war_months = { value = 6 }
+# ...and some state of a member it attacked is devastated past this.
+un_docket_war_devastation = { value = 30 }
+
+# ---- Scores (0..100): the gravest situation wins ---------------------------------------
+
+un_docket_score_nuclear = { value = 95 }
+un_docket_score_never_again = { value = 75 }
+un_docket_score_war_base = { value = 40 }
+# ...plus this much per unit of world power share at war with the aggressor
+# (a war on a typical great power, 10% of world prestige, adds 10), up to:
+un_docket_score_war_per_share = { value = 100 }
+un_docket_score_war_cap = { value = 85 }
+un_docket_score_proliferation = { value = 60 }
+un_docket_score_covert = { value = 55 }
+un_docket_score_collapse = { value = 50 }
+un_docket_score_charter = { value = 50 }
+un_docket_score_famine_base = { value = 35 }
+un_docket_score_famine_per_state = { value = 5 }
+un_docket_score_famine_cap = { value = 60 }
+un_docket_score_colonial = { value = 45 }
+un_docket_score_space = { value = 40 }
+un_docket_score_embargo = { value = 30 }
+un_docket_score_agenda = { value = 20 }
+
+# Warming: a higher threshold is a graver summit.
+un_docket_score_warming = {
+	value = 50
+	if = {
+		limit = {
+			has_global_variable = un_dkt_warming_next
+			global_var:un_dkt_warming_next = 1
+		}
+		value = 55
+	}
+	else_if = {
+		limit = {
+			has_global_variable = un_dkt_warming_next
+			global_var:un_dkt_warming_next = 2
+		}
+		value = 65
+	}
+	else_if = {
+		limit = {
+			has_global_variable = un_dkt_warming_next
+			global_var:un_dkt_warming_next = 3
+		}
+		value = 75
+	}
+}
+
+# The temperature anomaly the next unseen warming threshold sits at
+# (0.5 / 1 / 2 / 3 degrees for un_dkt_warming_next = 0..3).
+un_docket_warming_threshold = {
+	value = 0.5
+	if = {
+		limit = {
+			has_global_variable = un_dkt_warming_next
+			global_var:un_dkt_warming_next = 1
+		}
+		value = 1
+	}
+	else_if = {
+		limit = {
+			has_global_variable = un_dkt_warming_next
+			global_var:un_dkt_warming_next = 2
+		}
+		value = 2
+	}
+	else_if = {
+		limit = {
+			has_global_variable = un_dkt_warming_next
+			global_var:un_dkt_warming_next = 3
+		}
+		value = 3
+	}
+}
+
+# ---- Costs -----------------------------------------------------------------------------
+
+# What the cheaper answers to an appeal cost (a token donation, an observer
+# mission): a quarter of a UN programme's GDP-scaled weekly expense.
+# Scope: country
+un_docket_token_expense_value = {
+	value = un_program_expense_value
+	multiply = 0.25
+}
+
+# ---- Scored reads ----------------------------------------------------------------------
+
+# The world power share at war with the scoped country. Scope: country
+un_docket_share_at_war_with = {
+	value = 0
+	every_country = {
+		limit = {
+			has_war_with = PREV
+			has_variable = un_power_share
+		}
+		add = var:un_power_share
+	}
+}
+
+# Scope: the aggressor
+un_docket_score_war = {
+	value = un_docket_share_at_war_with
+	multiply = un_docket_score_war_per_share
+	add = un_docket_score_war_base
+	max = un_docket_score_war_cap
+}
+
+# Scope: the famine-struck country
+un_docket_score_famine = {
+	value = 0
+	every_scope_state = {
+		limit = { has_famine = yes }
+		add = un_docket_score_famine_per_state
+	}
+	add = un_docket_score_famine_base
+	max = un_docket_score_famine_cap
+}
+
+# Order a pick of countries by their cached power share (the strongest first).
+# Scope: country
+un_docket_share_order = {
+	value = 0
+	if = {
+		limit = { has_variable = un_power_share }
+		add = var:un_power_share
+	}
+}
+
+# Order the powers asked for peacekeepers: those already running the
+# peacekeeping programme first, then by power share. Scope: country
+un_docket_peacekeeper_order = {
+	value = un_docket_share_order
+	if = {
+		limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+		add = 1
+	}
+}
+
+# Order a famine's states by population (the worst-hit is the largest).
+# Scope: state
+un_docket_state_pop_order = {
+	value = state_population
+}
+
+# Order a victim's states by how devastated they are. Scope: state
+un_docket_devastation_order = {
+	value = devastation
+}
+
+# Months until the docket takes up its next item, for the chamber. Scope: any
+un_disp_docket_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_docket_months_left }
+		add = global_var:un_docket_months_left
+	}
+}
+
+# Months since the last item, for the chamber. Scope: any
+un_disp_docket_age = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_dkt_last_age }
+		add = global_var:un_dkt_last_age
+	}
+}

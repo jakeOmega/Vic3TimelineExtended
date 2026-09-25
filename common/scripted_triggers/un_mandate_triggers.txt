@@ -14,18 +14,14 @@
 # ============================================================================
 
 # Whether the scoped country is a defensible target for an authorized mandate:
-# the Assembly only licenses force against a state it has already censured, or
-# one whose reputation already speaks for itself. This is what keeps the topic
-# from becoming a general-purpose land-grab licence.
+# the Assembly only licenses force against a state whose record gives it
+# grounds — since redesign phase 3, a case strength of at least
+# un_case_threshold_mandate (60) in its dossier (un_dossier_values.txt). This
+# is what keeps the topic from becoming a general-purpose land-grab licence.
+# (The name predates the dossier; it replaced "infamy 25 or already censured".)
 # Scope: the prospective target country
 un_mandate_target_is_notorious = {
-	OR = {
-		infamy >= 25
-		has_modifier = un_condemned_modifier
-		has_modifier = un_non_binding_rebuke_modifier
-		has_modifier = un_sanctions_target_modifier
-		has_modifier = un_sanctions_voluntary_target_modifier
-	}
+	un_case_supports = { TOPIC = mandate }
 }
 
 # Whether ROOT could table a mandate resolution at all: some other country
