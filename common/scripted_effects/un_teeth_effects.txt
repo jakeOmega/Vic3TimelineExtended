@@ -15,8 +15,8 @@
 #   the war-goal surcharge (infamy)      un_teeth_war_goal_surcharge
 #                                        (un_mandate_on_wargoal_added, after the
 #                                        mandate has had its chance to bind)
-#   un_mandate_war_support_modifier      un_teeth_monthly_update (the single
-#                                        refresh site)
+#   un_mandate_war_support_modifier      un_teeth_mandate_support_refresh (the
+#                                        country pulse; the single refresh site)
 # ============================================================================
 
 # ---- Condemnation --------------------------------------------------------------
@@ -49,34 +49,42 @@ un_teeth_condemn_by_tier = {
 
 # From Strong, a sanctions regime is also an embargo: every major-power member
 # that voted for it (at Supranational, every major-power member) and has
-# diplomatic relevance to the target embargoes it. The embargo pact is the
-# vanilla one: it costs the embargoing member influence and trade, which is
-# the enforcers' share of the cost (§5.2). Relevance is also the pact's own
-# requirement to stand, so a member without it could not hold one.
+# diplomatic relevance to the target is called on (un_teeth_embargo_enforcer).
+# The embargo pact is the vanilla one: it costs the embargoing member influence
+# and trade, which is the enforcers' share of the cost (§5.2).
+# Vanilla's pact stands only while relations are Poor or worse, so the verdict
+# first sours each enforcer's relations with the target
+# (un_embargo_relations_drop); an enforcer then embargoes only if the pact
+# would stand (un_teeth_embargo_can_stand). A friend of the target that stays
+# above Poor is not listed, and so cannot be busting.
 # Every embargo imposed this way is listed on the target (un_embargo_by), so
 # lifting the regime lifts exactly these and no embargo a member chose for
-# itself.
+# itself. The target also carries un_embargo_forced for the pact's forced
+# duration, while no embargo can be broken by choice.
 # Scope: any; expects scope:un_resolution and scope:un_vote_target
 un_teeth_sanctions_embargo = {
 	scope:un_vote_target = { save_scope_as = un_embargo_target }
 	every_country = {
-		limit = {
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-			NOT = { this = scope:un_embargo_target }
-			country_rank >= rank_value:major_power
-			has_diplomatic_relevance = scope:un_embargo_target
-			NOT = { has_diplomatic_pact = { who = scope:un_embargo_target type = embargo } }
-			OR = {
-				un_tier_is_supranational = yes
-				scope:un_resolution = { un_lobby_in_list = { LIST = un_res_yes COUNTRY = PREV } }
+		limit = { un_teeth_embargo_enforcer = yes }
+		change_relations = {
+			country = scope:un_embargo_target
+			value = un_embargo_relations_drop
+		}
+		if = {
+			limit = { un_teeth_embargo_can_stand = yes }
+			create_diplomatic_pact = {
+				country = scope:un_embargo_target
+				type = embargo
+			}
+			scope:un_embargo_target = {
+				add_to_variable_list = { name = un_embargo_by target = PREV }
 			}
 		}
-		create_diplomatic_pact = {
-			country = scope:un_embargo_target
-			type = embargo
-		}
-		scope:un_embargo_target = {
-			add_to_variable_list = { name = un_embargo_by target = PREV }
+	}
+	scope:un_embargo_target = {
+		if = {
+			limit = { has_variable_list = un_embargo_by }
+			set_variable = { name = un_embargo_forced days = un_embargo_forced_days }
 		}
 	}
 }
@@ -100,6 +108,7 @@ un_teeth_lift_embargoes = {
 		}
 		clear_variable_list = un_embargo_by
 	}
+	remove_variable = un_embargo_forced
 }
 
 # ---- War without a mandate: the surcharge ---------------------------------------
@@ -158,12 +167,12 @@ un_teeth_war_goal_surcharge = {
 # ---- Monthly --------------------------------------------------------------------
 
 # Global monthly upkeep (no-country scope; from un_global_authority_on_action,
-# UN founded).
-#   1. Sanctions busting: a member that has dropped the embargo the Assembly
-#      imposed, while the regime still stands, is recorded as busting it
-#      (the dossier's +8, and a credibility debit weighted by the member), and
-#      struck from the list. A regime that has ended forgets its list.
-#   2. The mandate's war support (the single refresh site).
+# UN founded): sanctions busting. A member that has broken the embargo the
+# Assembly imposed, while the regime still stands and when it could have kept
+# it (un_teeth_embargo_busted), is recorded as busting it (the dossier's +8,
+# and a credibility debit weighted by the member). Every member whose embargo
+# is gone, busted or lapsed, is struck from the list. A regime that has ended
+# forgets its list.
 un_teeth_monthly_update = {
 	every_country = {
 		limit = { has_variable_list = un_embargo_by }
@@ -176,14 +185,17 @@ un_teeth_monthly_update = {
 				}
 			}
 			# The list is rebuilt rather than edited while it is iterated:
-			# the members still embargoing go to un_embargo_by_next, the
-			# busters are recorded and left out.
+			# the members still embargoing go to un_embargo_by_next; the rest
+			# are left out, and the busters among them recorded.
 			every_in_list = {
 				variable = un_embargo_by
 				if = {
 					limit = { un_teeth_embargo_dropped = yes }
-					un_dossier_record = { RECORD = defiance POINTS = un_dos_points_busting }
-					un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 15 }
+					if = {
+						limit = { un_teeth_embargo_busted = yes }
+						un_dossier_record = { RECORD = defiance POINTS = un_dos_points_busting }
+						un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 15 }
+					}
 				}
 				else = {
 					scope:un_embargo_target = {
@@ -205,28 +217,30 @@ un_teeth_monthly_update = {
 		}
 		else = {
 			clear_variable_list = un_embargo_by
+			remove_variable = un_embargo_forced
 		}
 	}
-	every_country = {
+}
+
+# The mandate's war support, from the monthly country pulse
+# (un_events_on_action; the single refresh site). Removed and re-added every
+# month, so a tier change reaches it; from a country pulse because the
+# multiplier slot is resolved against ROOT, which the global pulse lacks
+# (scripting_best_practices.md, "ROOT is none").
+# Scope: country
+un_teeth_mandate_support_refresh = {
+	if = {
+		limit = { has_modifier = un_mandate_war_support_modifier }
+		remove_modifier = un_mandate_war_support_modifier
+	}
+	if = {
 		limit = {
-			OR = {
-				has_variable = un_mandate_current
-				has_modifier = un_mandate_war_support_modifier
-			}
+			has_global_variable = un_founded
+			un_teeth_mandate_support_applies = yes
 		}
-		if = {
-			limit = { un_teeth_mandate_support_applies = yes }
-			if = {
-				limit = { NOT = { has_modifier = un_mandate_war_support_modifier } }
-				add_modifier = {
-					name = un_mandate_war_support_modifier
-					multiplier = un_enforcement
-				}
-			}
-		}
-		else_if = {
-			limit = { has_modifier = un_mandate_war_support_modifier }
-			remove_modifier = un_mandate_war_support_modifier
+		add_modifier = {
+			name = un_mandate_war_support_modifier
+			multiplier = un_enforcement
 		}
 	}
 }

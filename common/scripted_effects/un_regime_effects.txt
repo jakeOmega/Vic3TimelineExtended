@@ -304,7 +304,7 @@ un_regime_refresh_country = {
 }
 
 # Re-apply each convention member modifier this country carries, at the
-# current E (nothing at Moribund, x2.5 at Supranational).
+# current E (x0.01 at Moribund, x2.5 at Supranational: un_convention_multiplier).
 # Scope: country (a member)
 un_regime_reapply_conventions = {
 	un_regime_reapply_je = { MODIFIER = un_human_rights_declaration_modifier }
@@ -327,7 +327,7 @@ un_regime_reapply_je = {
 		je:je_united_nations ?= {
 			add_modifier = {
 				name = $MODIFIER$
-				multiplier = un_enforcement
+				multiplier = un_convention_multiplier
 			}
 		}
 	}
@@ -341,7 +341,7 @@ un_regime_reapply_country = {
 		remove_modifier = $MODIFIER$
 		add_modifier = {
 			name = $MODIFIER$
-			multiplier = un_enforcement
+			multiplier = un_convention_multiplier
 		}
 	}
 }

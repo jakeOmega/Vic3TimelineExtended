@@ -225,6 +225,10 @@ un_propose_mandate_possible = {
 un_propose_peacekeepers_available = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
+	custom_tooltip = {
+		text = un_mission_hosts_peacekeeping_tt
+		NOT = { un_mission_hosts = { TYPE = peacekeeping } }
+	}
 	OR = {
 		is_at_war = yes
 		any_scope_state = { devastation > 5 }
@@ -243,6 +247,10 @@ un_propose_peacekeepers_possible = {
 		NOT = { un_resolution_topic_on_cooldown = { TOPIC = peacekeeping_request } }
 	}
 	NOT = { has_modifier = un_peacekeeping_welcomed_modifier }
+	custom_tooltip = {
+		text = un_mission_hosts_peacekeeping_tt
+		NOT = { un_mission_hosts = { TYPE = peacekeeping } }
+	}
 	NOT = { has_modifier = un_request_cooldown }
 	custom_tooltip = {
 		text = un_recess_ai_tt
@@ -264,6 +272,10 @@ un_propose_peacekeepers_possible = {
 un_propose_aid_available = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	NOT = { has_modifier = un_humanitarian_aid_received_modifier }
+	custom_tooltip = {
+		text = un_mission_hosts_aid_tt
+		NOT = { un_mission_hosts = { TYPE = aid } }
+	}
 	any_scope_state = {
 		OR = {
 			average_sol < 8
@@ -284,6 +296,10 @@ un_propose_aid_possible = {
 		NOT = { un_resolution_topic_on_cooldown = { TOPIC = aid_request } }
 	}
 	NOT = { has_modifier = un_humanitarian_aid_received_modifier }
+	custom_tooltip = {
+		text = un_mission_hosts_aid_tt
+		NOT = { un_mission_hosts = { TYPE = aid } }
+	}
 	NOT = { has_modifier = un_request_cooldown }
 	custom_tooltip = {
 		text = un_recess_ai_tt

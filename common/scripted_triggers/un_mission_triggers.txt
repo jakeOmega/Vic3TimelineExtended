@@ -42,12 +42,45 @@ un_mission_contributes_in = {
 	}
 }
 
-# The host has been attacked: it is at war, and not as the initiator of the
-# play that started it.
+# The scoped country hosts an active mission of $TYPE$ (peacekeeping | aid |
+# stabilisation). A country hosting one cannot ask the Assembly for another.
+# Scope: country
+un_mission_hosts = {
+	has_global_variable_list = un_mission_registry
+	any_in_global_list = {
+		variable = un_mission_registry
+		has_tag = un_msn_active
+		has_tag = un_msn_$TYPE$
+		var:un_msn_host ?= PREV
+	}
+}
+
+# A mission of $TYPE$ can be found or opened for the scoped host: it already
+# hosts one, or it holds a state with no mission (un_mission_join_host). For
+# the tooltips, which are shown before the effect runs.
+# Scope: country (the host)
+un_mission_can_join_host = {
+	OR = {
+		un_mission_hosts = { TYPE = $TYPE$ }
+		any_scope_state = { NOT = { un_mission_state_occupied = yes } }
+	}
+}
+
+# The host is at war, and not as the initiator of the play that started it.
 # Scope: country (the host)
 un_mission_host_attacked = {
 	is_at_war = yes
 	is_diplomatic_play_initiator = no
+}
+
+# The mission's host has been attacked since the mission opened: it is at war
+# and not the initiator (un_mission_host_attacked), and the mission did not
+# open into that war (un_msn_war_at_open, cleared by the host's first month
+# of peace).
+# Scope: mission container; expects scope:un_msn_host_now
+un_mission_attacked_since_open = {
+	NOT = { has_variable = un_msn_war_at_open }
+	scope:un_msn_host_now = { un_mission_host_attacked = yes }
 }
 
 # The host is a failed or collapsing state (the docket's collapse test).
@@ -59,9 +92,10 @@ un_mission_host_collapsing = {
 	}
 }
 
-# An aid mission's state has recovered.
-# Scope: state
+# An aid mission's state has recovered: no famine, and its standard of living
+# without the mission's help has reached the goal (un_mission_aid_goal).
+# Scope: mission container
 un_mission_aid_recovered = {
-	NOT = { has_famine = yes }
-	average_sol >= un_mission_aid_sol_target
+	var:un_msn_state ?= { NOT = { has_famine = yes } }
+	un_mission_underlying_sol >= un_mission_aid_goal
 }

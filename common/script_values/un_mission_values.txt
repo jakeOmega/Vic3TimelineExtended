@@ -9,14 +9,20 @@
 #   1 peacekeeping  a peacekeeping request carried in full     24 months of peace
 #                   (un_vote.2, Established and above)         for the host
 #   2 aid           an aid request carried (un_vote.2); a      the state has no famine
-#                   donor answering a famine (un_events.7 A)   and its SoL recovers
+#                   donor answering a famine (un_events.7 A)   and its SoL, less the
+#                                                              mission's own help, has
+#                                                              risen past its goal
 #   3 stabilisation a power answering a state collapse         the host is no longer a
 #                   (un_events.4 A)                            failed state (then 12
 #                                                              months to wind down)
 #
 # A mission FAILS when its host is attacked (at war and not the war's
-# initiator) or, for peacekeeping and stabilisation, when every contributor
-# has gone. It LAPSES after un_mission_max_months. Success is a delivery entry
+# initiator) after it opened, or, for peacekeeping and stabilisation, when
+# every contributor it had has gone. A host already at war when the mission
+# opened is not "attacked" until it has known a month of peace; the war
+# stalls a peacekeeping mission instead. A peacekeeping or stabilisation
+# mission nobody has joined within un_mission_unstaffed_months LAPSES, as
+# does any mission after un_mission_max_months. Success is a delivery entry
 # and standing for the contributors; failure is a credibility debit.
 #
 # STRENGTH. Each month a mission's strength is
@@ -51,10 +57,22 @@ un_mission_pk_progress = { value = 4.17 }
 un_mission_stab_progress_recovered = { value = 8.34 }
 un_mission_stab_progress_collapsing = { value = 2.09 }
 
-# Aid succeeds once the state has no famine and its average standard of living
-# is at least this, after at least un_mission_aid_min_months.
+# Aid succeeds once the state has no famine and its standard of living, less
+# what the mission itself adds, has reached its GOAL: this target, or this
+# much above what it was when the mission opened, whichever is higher; after
+# at least un_mission_aid_min_months. So a mission cannot succeed by its own
+# modifier, or in a state that never needed it.
 un_mission_aid_sol_target = { value = 10 }
+un_mission_aid_sol_gain = { value = 1 }
 un_mission_aid_min_months = { value = 6 }
+
+# The standard of living un_mission_aid_state_modifier adds at strength 1.
+# Also written in the modifier (extra_modifiers.txt); change both.
+un_mission_aid_sol_add = { value = 1.5 }
+
+# A peacekeeping or stabilisation mission that no member has joined within
+# this many months lapses: the Assembly voted for a force nobody sent.
+un_mission_unstaffed_months = { value = 6 }
 
 # What an outcome is worth. Delivery and credibility are institutional ledger
 # entries; standing goes to each contributor.
@@ -103,13 +121,59 @@ un_mission_budget_factor = {
 	}
 }
 
-# An aid mission's progress, for the display: how far its state's standard of
-# living has come toward the target (99 at most; success is decided by
-# un_mission_aid_recovered). Scope: mission container
-un_mission_aid_progress_value = {
+# The state's standard of living without the mission's own help: its average
+# SoL less what the aid modifier adds at the state's current strength.
+# Scope: mission container
+un_mission_underlying_sol = {
 	value = 0
-	var:un_msn_state ?= { add = average_sol }
-	divide = un_mission_aid_sol_target
+	var:un_msn_state ?= {
+		add = average_sol
+		if = {
+			limit = {
+				has_variable = un_msn_power
+				has_modifier = un_mission_aid_state_modifier
+			}
+			subtract = {
+				value = var:un_msn_power
+				multiply = un_mission_aid_sol_add
+			}
+		}
+	}
+}
+
+# An aid mission's goal (see un_mission_aid_sol_target), and how far it has
+# to go from where it started (at least un_mission_aid_sol_gain).
+# Scope: mission container
+un_mission_aid_goal = {
+	value = 0
+	if = {
+		limit = { has_variable = un_msn_sol_open }
+		add = var:un_msn_sol_open
+	}
+	add = un_mission_aid_sol_gain
+	min = un_mission_aid_sol_target
+}
+
+un_mission_aid_span = {
+	value = un_mission_aid_goal
+	if = {
+		limit = { has_variable = un_msn_sol_open }
+		subtract = var:un_msn_sol_open
+	}
+	min = un_mission_aid_sol_gain
+}
+
+# An aid mission's progress, for the display: how far the state's underlying
+# standard of living has come from where it started toward the goal (99 at
+# most; success is decided by un_mission_aid_recovered).
+# Scope: mission container
+un_mission_aid_progress_value = {
+	value = un_mission_underlying_sol
+	if = {
+		limit = { has_variable = un_msn_sol_open }
+		subtract = var:un_msn_sol_open
+	}
+	divide = un_mission_aid_span
 	multiply = 100
 	min = 0
 	max = 99
@@ -117,10 +181,12 @@ un_mission_aid_progress_value = {
 
 # ---- Where a mission goes (Scope: state) ---------------------------------------------
 
-# Aid: the state most in need, by standard of living.
+# Aid: the state most in need, by standard of living, and by devastation,
+# since an aid request can be carried on devastation alone.
 un_mission_sol_need_order = {
 	value = 100
 	subtract = average_sol
+	add = devastation
 }
 
 # ---- Display ------------------------------------------------------------------------

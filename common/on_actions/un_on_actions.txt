@@ -15,6 +15,19 @@ un_events_on_action = {
 			remove_variable = un_mandate_current
 		}
 
+		# The bound mandate's war support at Strong and above (redesign phase
+		# 5, un_teeth_effects.txt): removed and re-added every month, here
+		# because the multiplier needs a country ROOT.
+		if = {
+			limit = {
+				OR = {
+					has_variable = un_mandate_current
+					has_modifier = un_mandate_war_support_modifier
+				}
+			}
+			un_teeth_mandate_support_refresh = yes
+		}
+
 		# The per-member random event roll that used to follow is gone (redesign
 		# phase 4): the UN's events are raised by the docket, a global scan of
 		# real situations (un_docket_effects.txt, from

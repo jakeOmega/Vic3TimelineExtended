@@ -555,7 +555,10 @@ un_events.4 = {
 		}
 		# The mission (redesign phase 6): a stabilisation mission in the
 		# collapsing country's most populous state, which we join or open.
-		custom_tooltip = un_mission_stab_joined_tt
+		if = {
+			limit = { scope:peacekeeping_target = { un_mission_can_join_host = { TYPE = stabilisation } } }
+			custom_tooltip = un_mission_stab_joined_tt
+		}
 		hidden_effect = {
 			scope:peacekeeping_target = { save_scope_as = un_msn_host }
 			un_mission_join_host = { TYPE = stabilisation CODE = 3 ORDER = un_docket_state_pop_order }
@@ -954,7 +957,10 @@ un_events.7 = {
 		# join or open. It replaces the country-wide received modifier, whose
 		# multiplier read prev.var:temp_giver_gdp and so could not survive the
 		# engine re-reading it (§1.4).
-		custom_tooltip = un_mission_aid_joined_tt
+		if = {
+			limit = { scope:crisis_country = { un_mission_can_join_host = { TYPE = aid } } }
+			custom_tooltip = un_mission_aid_joined_tt
+		}
 		hidden_effect = {
 			scope:crisis_country = { save_scope_as = un_msn_host }
 			if = {
@@ -2498,7 +2504,10 @@ un_events.102 = {
 			is_decaying = yes
 		}
 		# Redesign phase 6 (§7.4): accepting help has a price.
-		custom_tooltip = un_mission_host_intel_tt
+		if = {
+			limit = { un_mission_hosts = { TYPE = stabilisation } }
+			custom_tooltip = un_mission_host_intel_tt
+		}
 		change_relations = { country = scope:peacekeeping_donor value = 10 }
 		add_loyalists = {
 			value = very_small_radicals
@@ -2527,9 +2536,13 @@ un_events.102 = {
 			is_decaying = yes
 		}
 		# Redesign phase 6: resenting the peacekeepers sends them home; the
-		# stabilisation mission fails.
-		custom_tooltip = un_mission_expelled_tt
-		hidden_effect = { un_mission_expel = { TYPE = stabilisation } }
+		# stabilisation mission fails. With several responders the host is
+		# asked once for each; a mission already sent home is not sent again.
+		if = {
+			limit = { un_mission_hosts = { TYPE = stabilisation } }
+			custom_tooltip = un_mission_expelled_tt
+			hidden_effect = { un_mission_expel = { TYPE = stabilisation } }
+		}
 		change_relations = { country = scope:peacekeeping_donor value = -15 }
 		add_loyalists = {
 			value = small_radicals
@@ -3068,15 +3081,21 @@ un_events.33 = {
 		has_global_variable = un_founded
 		has_global_variable = un_agency_icc
 		exists = ruler
+		# The court does not indict a character the game keeps alive by
+		# design (vanilla's own exile and abdication exclude them).
+		ruler = { is_immortal = no }
 	}
 
 	immediate = {
 		ruler = { save_scope_as = un_icc_accused }
 	}
 
-	# Option A: surrender the accused to the court. The ruler goes into exile
-	# (VERIFY IN-GAME: that the heir takes over cleanly under every form of
-	# government); the Assembly's credibility gains, weighted by us.
+	# Option A: surrender the accused to the court. An heir takes the throne
+	# first, so that the accused is no longer the ruler when exiled (vanilla's
+	# own exile interaction is not offered on a ruler); with no heir the game
+	# picks the successor as it does on a ruler's death (VERIFY IN-GAME, under
+	# a republic and a one-party state). The Assembly's credibility gains,
+	# weighted by us.
 	option = {
 		name = un_events.33.a
 		ai_chance = {
@@ -3112,8 +3131,17 @@ un_events.33 = {
 					is_decaying = yes
 				}
 			}
-			exile_character = yes
 		}
+		if = {
+			limit = {
+				heir ?= {
+					NOT = { this = scope:un_icc_accused }
+					is_immortal = no
+				}
+			}
+			heir = { set_character_as_ruler = yes }
+		}
+		scope:un_icc_accused = { exile_character = yes }
 		custom_tooltip = un_ledger_tt_credibility_up_1_5
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = 1.5 REASON = 16 }
 		custom_tooltip = {

@@ -506,6 +506,11 @@ un_membership_end_effect = {
 		limit = { has_variable = un_regime_stamp }
 		remove_variable = un_regime_stamp
 	}
+	# The decolonisation regime reached our colonies through our membership.
+	every_direct_subject = {
+		limit = { has_modifier = un_regime_colony_liberty_modifier }
+		remove_modifier = un_regime_colony_liberty_modifier
+	}
 	je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
 	je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
 	je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }

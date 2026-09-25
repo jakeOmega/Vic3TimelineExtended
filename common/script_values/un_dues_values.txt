@@ -113,8 +113,13 @@ un_dues_monthly_value = {
 # assessment is (the rate is the same for every member at a given tier).
 un_funding_arrears_share_value = {
 	value = 0
+	# Nothing is owed while nothing is assessed (Moribund), so nothing is
+	# withheld either.
 	if = {
-		limit = { un_members_gdp_value > 0 }
+		limit = {
+			un_dues_assessed = yes
+			un_members_gdp_value > 0
+		}
 		add = un_withholders_gdp_value
 		divide = un_members_gdp_value
 		max = 1

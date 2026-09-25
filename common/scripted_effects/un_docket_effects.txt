@@ -686,11 +686,7 @@ un_docket_take_up_famine = {
 un_docket_take_up_embargo = {
 	scope:un_dkt_found_embargo = {
 		ordered_country = {
-			limit = {
-				NOT = { this = PREV }
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
-				has_diplomatic_pact = { who = PREV type = embargo }
-			}
+			limit = { un_docket_embargo_counterpart = yes }
 			order_by = un_docket_share_order
 			max = 1
 			save_scope_as = un_dkt_embargo_other

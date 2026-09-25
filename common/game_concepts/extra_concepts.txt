@@ -45,6 +45,7 @@ concept_un_specialized_agencies = {}
 concept_un_enforcement = {}
 concept_un_charter = {}
 concept_un_dues = {}
+concept_un_mission = {}
 concept_heir_education_system = {}
 concept_sol_expectations = {}
 concept_world_war_system = {}

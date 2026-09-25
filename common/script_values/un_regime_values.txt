@@ -6,7 +6,8 @@
 # A convention in force used to give nearly every member the same small
 # bonus, so its relative effect was about zero. Now it is a REGIME:
 #   - its member modifier is multiplied by the UN's enforcement, E, like every
-#     resolution penalty (nothing at Moribund, x2.5 at Supranational);
+#     resolution penalty (next to nothing at Moribund, x2.5 at Supranational;
+#     un_convention_multiplier);
 #   - it names a winner or a loser among the members, with a modifier of its
 #     own, also multiplied by E:
 #
@@ -45,6 +46,16 @@
 # ============================================================================
 
 # ---- Tuning ----------------------------------------------------------------
+
+# The multiplier on a convention's member modifier: E, but never below 0.01.
+# Holding the member modifier IS having ratified the convention (the regime's
+# terms, the court's reach and the lean all read it), and nothing guarantees
+# that a modifier added at x0 is kept, so a Moribund UN leaves its conventions
+# dormant (x0.01) rather than risk every member's ratification. Globals only.
+un_convention_multiplier = {
+	value = un_enforcement
+	min = 0.01
+}
 
 # Climate: a market leader with this share of the world's emissions or more
 # is a high emitter; one below the lower line (or no leader at all) is a low

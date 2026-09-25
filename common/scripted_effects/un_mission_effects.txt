@@ -14,7 +14,11 @@
 #           un_msn_requested (the host asked the Assembly for it: it lapses if
 #           the host leaves the UN),
 #           un_msn_state (state), un_msn_months, un_msn_progress (0-100),
-#           un_msn_strength (this month's), un_msn_start_year, un_msn_end_year
+#           un_msn_strength (this month's), un_msn_start_year, un_msn_end_year,
+#           un_msn_sol_open (the state's underlying SoL at opening: the aid
+#           goal's base), un_msn_war_at_open (the host was at war and not the
+#           initiator when it opened; cleared by its first month of peace),
+#           un_msn_staffed (a contributor has joined at some point)
 #   list    un_msn_contributors (countries)
 #   global  un_mission_registry (every mission, capped at
 #           un_mission_registry_cap; active ones are never evicted),
@@ -85,6 +89,13 @@ un_mission_open = {
 				set_variable = { name = un_msn_progress value = 0 }
 				set_variable = { name = un_msn_start_year value = te_history_current_year }
 				set_variable = { name = un_msn_strength value = un_mission_strength_value }
+				set_variable = { name = un_msn_sol_open value = un_mission_underlying_sol }
+				# A mission sent into a war the host did not start is not
+				# failed by that war (un_mission_attacked_since_open).
+				if = {
+					limit = { scope:un_msn_host = { un_mission_host_attacked = yes } }
+					set_variable = un_msn_war_at_open
+				}
 			}
 			scope:un_msn_state = {
 				set_variable = { name = un_msn_here value = scope:un_msn_new }
@@ -150,6 +161,7 @@ un_mission_add_contributor = {
 				NOT = { un_lobby_in_list = { LIST = un_msn_contributors COUNTRY = scope:un_msn_contributor } }
 			}
 			add_to_variable_list = { name = un_msn_contributors target = scope:un_msn_contributor }
+			set_variable = un_msn_staffed
 			set_variable = { name = un_msn_strength value = un_mission_strength_value }
 		}
 	}
@@ -235,6 +247,14 @@ un_mission_monthly = {
 	save_scope_as = un_msn_this
 	change_variable = { name = un_msn_months add = 1 }
 	var:un_msn_host ?= { save_scope_as = un_msn_host_now }
+	# The war the mission opened into is over.
+	if = {
+		limit = {
+			has_variable = un_msn_war_at_open
+			var:un_msn_host ?= { is_at_war = no }
+		}
+		remove_variable = un_msn_war_at_open
+	}
 	un_mission_prune_contributors = yes
 	set_variable = { name = un_msn_strength value = un_mission_strength_value }
 	if = {
@@ -254,18 +274,26 @@ un_mission_monthly = {
 						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 					}
 				}
+				# A force nobody sent (peacekeeping and stabilisation).
+				AND = {
+					NOT = { has_tag = un_msn_aid }
+					NOT = { has_variable = un_msn_staffed }
+					var:un_msn_months >= un_mission_unstaffed_months
+				}
 			}
 		}
 		un_mission_close = { STATUS = lapsed }
 	}
 	else_if = {
-		# The host has been attacked, or (peacekeeping and stabilisation)
-		# every contributor has gone home.
+		# The host has been attacked since the mission opened, or
+		# (peacekeeping and stabilisation) every contributor it had has gone
+		# home.
 		limit = {
 			OR = {
-				scope:un_msn_host_now = { un_mission_host_attacked = yes }
+				un_mission_attacked_since_open = yes
 				AND = {
 					NOT = { has_tag = un_msn_aid }
+					has_variable = un_msn_staffed
 					NOT = { un_lobby_list_has_entries = { LIST = un_msn_contributors } }
 				}
 			}
@@ -296,7 +324,7 @@ un_mission_monthly = {
 			if = {
 				limit = {
 					var:un_msn_months >= un_mission_aid_min_months
-					var:un_msn_state ?= { un_mission_aid_recovered = yes }
+					un_mission_aid_recovered = yes
 				}
 				set_variable = { name = un_msn_progress value = 100 }
 			}

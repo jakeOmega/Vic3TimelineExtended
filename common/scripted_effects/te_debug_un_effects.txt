@@ -313,7 +313,7 @@ te_debug_un_indict_us = {
 		limit = { NOT = { has_modifier = un_icc_member_modifier } }
 		add_modifier = {
 			name = un_icc_member_modifier
-			multiplier = un_enforcement
+			multiplier = un_convention_multiplier
 		}
 	}
 	set_variable = { name = un_icc_crime value = 1 }

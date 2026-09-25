@@ -419,6 +419,11 @@ un_chamber_consequences_line = {
 			limit = { has_tag = un_res_vetoed }
 			custom_tooltip_no_bullet = je_un_chamber_conseq_peacekeeping_request_vetoed
 		}
+		# Below Established a carried request sends observers only (phase 5).
+		else_if = {
+			limit = { un_resolution_peacekeeping_full = no }
+			custom_tooltip_no_bullet = je_un_chamber_conseq_peacekeeping_request_weak
+		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_conseq_peacekeeping_request
 		}
@@ -1752,20 +1757,40 @@ un_chamber_missions_block = {
 }
 
 # One mission: what, where, for whom, how far along, and who serves in it.
+# The host and the state are printed only while both still exist: a temporary
+# scope saved for the entry before would otherwise print in their place (a
+# host that has stopped existing is itself a reason to lapse).
 # Scope: mission container
 un_chamber_mission_entry = {
-	var:un_msn_host ?= { save_temporary_scope_as = un_chamber_msn_host }
-	var:un_msn_state ?= { save_temporary_scope_as = un_chamber_msn_state }
 	if = {
+		limit = {
+			exists = var:un_msn_host
+			exists = var:un_msn_state
+		}
+		var:un_msn_host = { save_temporary_scope_as = un_chamber_msn_host }
+		var:un_msn_state = { save_temporary_scope_as = un_chamber_msn_state }
+		if = {
+			limit = { has_tag = un_msn_peacekeeping }
+			custom_tooltip_no_bullet = je_un_chamber_mission_peacekeeping
+		}
+		else_if = {
+			limit = { has_tag = un_msn_aid }
+			custom_tooltip_no_bullet = je_un_chamber_mission_aid
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_mission_stabilisation
+		}
+	}
+	else_if = {
 		limit = { has_tag = un_msn_peacekeeping }
-		custom_tooltip_no_bullet = je_un_chamber_mission_peacekeeping
+		custom_tooltip_no_bullet = je_un_chamber_mission_peacekeeping_gone
 	}
 	else_if = {
 		limit = { has_tag = un_msn_aid }
-		custom_tooltip_no_bullet = je_un_chamber_mission_aid
+		custom_tooltip_no_bullet = je_un_chamber_mission_aid_gone
 	}
 	else = {
-		custom_tooltip_no_bullet = je_un_chamber_mission_stabilisation
+		custom_tooltip_no_bullet = je_un_chamber_mission_stabilisation_gone
 	}
 	if = {
 		limit = { has_tag = un_msn_active }

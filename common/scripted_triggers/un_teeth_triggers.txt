@@ -30,11 +30,49 @@ un_case_standing_applies = {
 	}
 }
 
-# A member's UN embargo on a sanctioned country has been dropped while the
-# regime still stands: sanctions busting.
+# The scoped member is called on to enforce a sanctions regime with an
+# embargo (un_teeth_sanctions_embargo): a member of major-power rank with
+# diplomatic relevance to the target, not already embargoing it, that voted
+# for the sanctions (every such member at Supranational).
+# Scope: country; expects scope:un_embargo_target and scope:un_resolution
+un_teeth_embargo_enforcer = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { this = scope:un_embargo_target }
+	country_rank >= rank_value:major_power
+	has_diplomatic_relevance = scope:un_embargo_target
+	NOT = { has_diplomatic_pact = { who = scope:un_embargo_target type = embargo } }
+	OR = {
+		un_tier_is_supranational = yes
+		scope:un_resolution = { un_lobby_in_list = { LIST = un_res_yes COUNTRY = PREV } }
+	}
+}
+
+# Vanilla's embargo pact would stand between the scoped member and the target:
+# relations Poor or worse (the pact's own requirement to maintain, checked
+# explicitly in case can_create_diplomatic_pact reads only `possible`), and
+# the engine agrees the pact can be created.
+# Scope: country; expects scope:un_embargo_target
+un_teeth_embargo_can_stand = {
+	scope:un_embargo_target.relations:this <= relations_threshold:poor
+	can_create_diplomatic_pact = { target = scope:un_embargo_target type = embargo }
+}
+
+# A member's UN embargo on a sanctioned country is gone.
 # Scope: the embargoing country; expects scope:un_embargo_target
 un_teeth_embargo_dropped = {
 	NOT = { has_diplomatic_pact = { who = scope:un_embargo_target type = embargo } }
+}
+
+# ... and it was dropped by choice: sanctions busting. The pact's forced
+# duration is over (before it, only a broken requirement can end the pact),
+# and the pact could stand again, so no requirement to maintain it had failed.
+# An embargo that broke on its own (relations recovered, a customs union, a
+# treaty's trade privilege, isolationism) is not busting.
+# Scope: the embargoing country; expects scope:un_embargo_target
+un_teeth_embargo_busted = {
+	un_teeth_embargo_dropped = yes
+	NOT = { scope:un_embargo_target = { has_variable = un_embargo_forced } }
+	un_teeth_embargo_can_stand = yes
 }
 
 # The holder of a bound mandate keeps its war support (Strong and above).

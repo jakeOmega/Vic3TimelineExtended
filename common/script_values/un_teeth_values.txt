@@ -11,9 +11,13 @@
 #                  (un_condemned_restraint_modifier, play maneuvers and infamy).
 #   sanctions      Strong: every major-power member that voted for them, and has
 #                  diplomatic relevance to the target, embargoes it. Supranational:
-#                  every such member. A member that drops a UN embargo while the
-#                  regime stands is busting it (a dossier record and a credibility
-#                  debit).
+#                  every such member. The verdict sours their relations with the
+#                  target by un_embargo_relations_drop; a member embargoes only if
+#                  vanilla's pact would then stand (relations Poor or worse, and
+#                  can_create_diplomatic_pact). A member that breaks a UN embargo
+#                  while the regime stands, and could still hold it, is busting it
+#                  (a dossier record and a credibility debit); one that lapsed on
+#                  its own is only struck from the list.
 #   war without    Established: every war goal the initiator of a play adds without
 #   a mandate      a bound mandate costs un_war_surcharge_base infamy; Strong x2;
 #                  Supranational x5. Against a country under a UN peacekeeping
@@ -31,7 +35,8 @@
 #
 # The writers are in common/scripted_effects/un_teeth_effects.txt, the tests in
 # common/scripted_triggers/un_teeth_triggers.txt. Every figure is here, once;
-# the surcharge's 2 / 4 / 10 are also written in words in the loc; change both.
+# the surcharge's 2 / 4 / 10 and the embargo's 30 are also written in words in
+# the loc; change both.
 # ============================================================================
 
 # ---- Tuning ----------------------------------------------------------------
@@ -43,6 +48,17 @@ un_war_surcharge_base = { value = 2 }
 # The standing case against an outsider at Supranational: enough for sanctions
 # on its own (their threshold is 50).
 un_case_standing_value = { value = 50 }
+
+# A UN embargo is vanilla's embargo pact, which stands only while relations are
+# Poor or worse. The Assembly's verdict sours each enforcer's relations with
+# the target by this much; a member still above Poor after it does not
+# embargo. The pact's own -1 a day keeps them there once it stands.
+un_embargo_relations_drop = { value = -30 }
+
+# Vanilla's forced duration for the embargo pact, in days (12 months): a
+# member cannot break its UN embargo before then, so one missing in that
+# window has broken automatically and is not busting.
+un_embargo_forced_days = { value = 365 }
 
 # ---- The surcharge -----------------------------------------------------------
 

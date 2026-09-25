@@ -2396,6 +2396,15 @@ types state_panel_types
 
 						te_state_tile_row = {
 							blockoverride "row_label" {
+								text = "TE_STATE_UN_ROW_TYPE"
+							}
+							blockoverride "row_value" {
+								text = "TE_STATE_UN_ROW_TYPE_VALUE"
+							}
+						}
+
+						te_state_tile_row = {
+							blockoverride "row_label" {
 								text = "TE_STATE_UN_ROW_MONTHS"
 							}
 							blockoverride "row_value" {
@@ -2408,7 +2417,7 @@ types state_panel_types
 								text = "TE_STATE_UN_ROW_STRENGTH"
 							}
 							blockoverride "row_value" {
-								raw_text = "#v ×[State.MakeScope.ScriptValue('un_state_mission_strength')|2]#!"
+								text = "TE_STATE_UN_ROW_STRENGTH_VALUE"
 							}
 						}
 

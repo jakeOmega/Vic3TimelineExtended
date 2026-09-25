@@ -3617,8 +3617,6 @@ un_authority_crisis_modifier = {
 # un_events.10's old option rewards; the event no longer applies them, and they
 # stay defined only so saves that carry them still load.
 #
-# Non-members, from the Strong tier up (on top of un_nonmember_pariah_modifier,
-# which applies from Established): trade and leverage.
 # ---- UN redesign phase 6: missions (un_mission_effects.txt) ----
 # State modifiers, each applied with multiplier = var:un_msn_power (the
 # mission's strength: E x the budget x its contributors) by
@@ -3775,6 +3773,8 @@ un_sovereignty_concession_modifier = {
 	country_influence_mult = -0.05
 }
 
+# Non-members, from the Strong tier up (on top of un_nonmember_pariah_modifier,
+# which applies from Established): trade and leverage.
 un_nonmember_pariah_strong_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	state_trade_advantage_mult = -0.10

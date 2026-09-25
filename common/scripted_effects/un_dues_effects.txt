@@ -16,7 +16,9 @@
 #                              stored multiplier; modifier_multiplier_var_audit)
 #   un_dues_withheld           un_dues_withhold / un_dues_resume
 #   un_arrears_months          un_dues_country_monthly_update, un_dues_resume
-#   un_arrears_owed            the same
+#   un_arrears_owed            the same, and un_dues_withhold (the first month)
+#   un_dues_prebilled          un_dues_withhold; cleared by the next monthly
+#                              update, un_dues_resume and un_dues_clear
 #   un_budget_weekly (global)  un_authority_monthly_update (snapshot)
 #   un_funding_arrears_share   the same
 #
@@ -55,7 +57,14 @@ un_dues_country_monthly_update = {
 				set_variable = { name = un_arrears_owed value = 0 }
 			}
 			change_variable = { name = un_arrears_months add = 1 }
-			change_variable = { name = un_arrears_owed add = un_dues_monthly_value }
+			# The first month was billed when the member stopped paying.
+			if = {
+				limit = { has_variable = un_dues_prebilled }
+				remove_variable = un_dues_prebilled
+			}
+			else = {
+				change_variable = { name = un_arrears_owed add = un_dues_monthly_value }
+			}
 			# The month Article 19 bites: the vote goes, and the record says so.
 			if = {
 				limit = { var:un_arrears_months = un_dues_article_19_months }
@@ -83,13 +92,24 @@ un_dues_country_monthly_update = {
 }
 
 # Stop paying. The money is saved from this week; the months in arrears start
-# counting at the next monthly update. Costs standing once.
+# counting at the next monthly update. Dues are billed by the month, so the
+# current month is owed at once: withholding and paying again inside a month
+# saves nothing. Costs standing once.
 # Scope: country (a member)
 un_dues_withhold = {
 	set_variable = un_dues_withheld
 	if = {
 		limit = { has_modifier = un_dues_modifier }
 		remove_modifier = un_dues_modifier
+	}
+	if = {
+		limit = { un_dues_assessed = yes }
+		if = {
+			limit = { NOT = { has_variable = un_arrears_owed } }
+			set_variable = { name = un_arrears_owed value = 0 }
+		}
+		change_variable = { name = un_arrears_owed add = un_dues_monthly_value }
+		set_variable = un_dues_prebilled
 	}
 	un_standing_loss = { AMOUNT = un_standing_dues_withheld_loss REASON = 32 }
 }
@@ -108,6 +128,10 @@ un_dues_resume = {
 		remove_variable = un_arrears_months
 	}
 	remove_variable = un_dues_withheld
+	if = {
+		limit = { has_variable = un_dues_prebilled }
+		remove_variable = un_dues_prebilled
+	}
 	if = {
 		limit = { un_dues_assessed = yes }
 		set_variable = { name = un_dues_cached value = un_dues_weekly_value }
@@ -144,5 +168,9 @@ un_dues_clear = {
 	if = {
 		limit = { has_variable = un_arrears_owed }
 		remove_variable = un_arrears_owed
+	}
+	if = {
+		limit = { has_variable = un_dues_prebilled }
+		remove_variable = un_dues_prebilled
 	}
 }

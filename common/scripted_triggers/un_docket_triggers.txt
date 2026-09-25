@@ -136,11 +136,20 @@ un_docket_warming_ready = {
 un_docket_embargo_candidate = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	NOT = { has_variable = un_dkt_embargo_raised }
-	any_country = {
-		NOT = { this = PREV }
-		je:je_united_nations ?= { has_modifier = un_member_modifier }
-		has_diplomatic_pact = { who = PREV type = embargo }
-	}
+	any_country = { un_docket_embargo_counterpart = yes }
+}
+
+# The scoped country is a member under an embargo with PREV, a member, that is
+# a dispute between them. An embargo the Assembly imposed to enforce sanctions
+# (either one in the other's un_embargo_by, phase 5) is the Assembly's own
+# policy, not a dispute to arbitrate.
+# Scope: country; PREV the other member
+un_docket_embargo_counterpart = {
+	NOT = { this = PREV }
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	has_diplomatic_pact = { who = PREV type = embargo }
+	NOT = { is_target_in_variable_list = { name = un_embargo_by target = PREV } }
+	NOT = { PREV = { is_target_in_variable_list = { name = un_embargo_by target = PREV } } }
 }
 
 # A power that can be asked to send peacekeepers to a collapsing state: a

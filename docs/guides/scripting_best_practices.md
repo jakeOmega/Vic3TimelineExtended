@@ -4221,6 +4221,17 @@ for a third party (`create_diplomatic_pact = { country = X type = embargo }`) sh
 holders that can keep it (`un_teeth_sanctions_embargo`: major rank and relevance). Check a pact's
 `requirement_to_maintain` before combining it with a modifier that changes what either side may do.
 
+The same list also holds **relations ≤ `relations_threshold:poor`** (and no isolationism, customs
+union, treaty trade privilege or investment rights between them). A pact made by script where
+relations are better breaks on its own at the next check, and anything that watches for it
+disappearing then reads a break the holder never chose. So: gate creation on
+`can_create_diplomatic_pact = { target = X type = embargo }` **and** the requirements you know
+(it is not documented whether that trigger reads `requirement_to_maintain` or only `possible`),
+and treat a pact that vanished as broken **by choice** only when it could stand again and its
+`forced_duration` (12 months for the embargo, during which the holder cannot break it) is over
+(`un_teeth_embargo_busted`). The phase-5 review caught UN embargoes that would all have broken
+by themselves and been booked as sanctions busting.
+
 ## A Loc Key Built From a Parameter Is Invisible to `organize_loc.py`
 
 `custom_tooltip_no_bullet = je_un_chamber_$MODIFIER$` renders correctly, but `organize_loc.py`
@@ -4229,3 +4240,12 @@ looks for key names in script files and never sees `je_un_chamber_un_regime_…`
 parameter instead (`un_chamber_regime_line = { MODIFIER = … LINE = je_un_chamber_regime_… }`),
 as the UN chamber's regime lines and assembly-topic lines do. The same goes for any
 `$PARAM$`-assembled key: the literal must appear somewhere in script.
+
+## Don't Let a Modifier That Is Also a Flag Be Re-Added at ×0
+
+When `has_modifier = X` doubles as the record of a state (the UN conventions: holding the member
+modifier *is* having ratified), re-applying X with a multiplier that can reach 0 risks that
+record. Nothing guarantees the engine keeps a modifier added at ×0, and if it drops it the state
+is lost for good, since the next refresh re-adds only what it still finds. Floor such a
+multiplier above 0 (`un_convention_multiplier`: E, min 0.01), or keep the state in a variable
+and the modifier as its effect only.

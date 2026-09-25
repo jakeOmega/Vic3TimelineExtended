@@ -1039,7 +1039,13 @@ un_vote.2 = {
 				# modifier of old stands in.
 				if = {
 					limit = { exists = scope:un_vote_proposer }
-					custom_tooltip = un_mission_pk_opened_tt
+					if = {
+						limit = { scope:un_vote_proposer = { un_mission_can_join_host = { TYPE = peacekeeping } } }
+						custom_tooltip = un_mission_pk_opened_tt
+					}
+					else = {
+						custom_tooltip = un_mission_pk_fallback_tt
+					}
 					hidden_effect = {
 						scope:un_vote_proposer = { save_scope_as = un_msn_host }
 						un_mission_join_host = { TYPE = peacekeeping CODE = 1 ORDER = un_docket_devastation_order }
@@ -1124,7 +1130,13 @@ un_vote.2 = {
 				# country-wide modifier of old stands in.
 				if = {
 					limit = { exists = scope:un_vote_proposer }
-					custom_tooltip = un_mission_aid_opened_tt
+					if = {
+						limit = { scope:un_vote_proposer = { un_mission_can_join_host = { TYPE = aid } } }
+						custom_tooltip = un_mission_aid_opened_tt
+					}
+					else = {
+						custom_tooltip = un_mission_aid_fallback_tt
+					}
 					hidden_effect = {
 						scope:un_vote_proposer = { save_scope_as = un_msn_host }
 						un_mission_join_host = { TYPE = aid CODE = 2 ORDER = un_mission_sol_need_order }
