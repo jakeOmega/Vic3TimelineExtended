@@ -48,19 +48,21 @@ te_debug_sr_finish_now = {
 	sr_recalculate_cost = yes
 }
 
-# Raise the failure flag on every running milestone. Scope: country.
+# Raise the failure flag on every running milestone, and mark it as the
+# milestone the setback helpers act on (they read scope:sr_setback_<milestone>,
+# which the failure dispatchers save in real play). Scope: country.
 te_debug_sr_flag_setback_base = {
 	if = {
 		limit = { has_variable = sr_active_$MILESTONE$ }
 		set_variable = { name = sr_failed_$MILESTONE$ value = yes }
 		sr_count_setback_base = { MILESTONE = $MILESTONE$ }
+		save_scope_as = sr_setback_$MILESTONE$
 	}
 }
 
 # One real setback on every running milestone, down the same path the monthly
 # pulse takes: flag, progress loss, safety review on the journal entry, cooldown.
-# The order matters — the progress loss reads the flags and the safety review
-# clears them. Ends on sr_recalculate_cost so the panel's status flips to
+# No event fires (option j does that). Ends on sr_recalculate_cost so the panel's status flips to
 # "shielded" immediately instead of next month. Scope: country.
 te_debug_sr_force_setback = {
 	te_debug_sr_flag_setback_base = { MILESTONE = suborbital         }
@@ -75,6 +77,86 @@ te_debug_sr_force_setback = {
 	sr_temporary_safety_review_effect = yes
 	set_variable = { name = sr_failure_cooldown value = 6 }
 	sr_recalculate_cost = yes
+}
+
+# One real setback EVENT for the most advanced running milestone, down the
+# monthly pulse's own path: flag, setback counter, then the themed dispatcher for
+# its approach (ambitious pool, otherwise the safe pool). Checks that the event's
+# theme and its options follow the milestone that failed. Exactly one milestone
+# (else_if): the dispatcher's marker is a saved scope, and a second dispatch in
+# the same script run would hand the second event both markers — in real play
+# every journal entry's pulse is its own run. Scope: country.
+te_debug_sr_fire_setback_base = {
+	set_variable = { name = sr_failed_$MILESTONE$ value = yes }
+	sr_count_setback_base = { MILESTONE = $MILESTONE$ }
+	if = {
+		limit = { has_variable = sr_ambitious_$MILESTONE$ }
+		sr_fire_ambitious_failure_event = { MILESTONE = $MILESTONE$ }
+	}
+	else = {
+		sr_fire_safe_setback_event = { MILESTONE = $MILESTONE$ }
+	}
+}
+
+te_debug_sr_fire_setback = {
+	if = {
+		limit = { has_variable = sr_active_solar_colonization }
+		te_debug_sr_fire_setback_base = { MILESTONE = solar_colonization }
+	}
+	else_if = {
+		limit = { has_variable = sr_active_interstellar_probe }
+		te_debug_sr_fire_setback_base = { MILESTONE = interstellar_probe }
+	}
+	else_if = {
+		limit = { has_variable = sr_active_mars_landing }
+		te_debug_sr_fire_setback_base = { MILESTONE = mars_landing }
+	}
+	else_if = {
+		limit = { has_variable = sr_active_moon_base }
+		te_debug_sr_fire_setback_base = { MILESTONE = moon_base }
+	}
+	else_if = {
+		limit = { has_variable = sr_active_probe }
+		te_debug_sr_fire_setback_base = { MILESTONE = probe }
+	}
+	else_if = {
+		limit = { has_variable = sr_active_moon_landing }
+		te_debug_sr_fire_setback_base = { MILESTONE = moon_landing }
+	}
+	else_if = {
+		limit = { has_variable = sr_active_orbital }
+		te_debug_sr_fire_setback_base = { MILESTONE = orbital }
+	}
+	else_if = {
+		limit = { has_variable = sr_active_suborbital }
+		te_debug_sr_fire_setback_base = { MILESTONE = suborbital }
+	}
+}
+
+# The two most prestigious other powers each "complete" Suborbital Flight, down
+# the real notification path, inside one 14-day window. Every recognized country
+# (us included) should get TWO popups, each naming its own achiever — the case a
+# single shared receiver variable used to get wrong. Touches no milestone state:
+# only the notification. Scope: country (the player).
+te_debug_sr_mock_notices = {
+	ordered_country = {
+		limit = {
+			NOT = { THIS = ROOT }
+			is_country_type = recognized
+		}
+		order_by = prestige
+		position = 0
+		sr_notify_milestone_achievement = { MILESTONE = suborbital }
+	}
+	ordered_country = {
+		limit = {
+			NOT = { THIS = ROOT }
+			is_country_type = recognized
+		}
+		order_by = prestige
+		position = 1
+		sr_notify_milestone_achievement = { MILESTONE = suborbital }
+	}
 }
 
 # Drop the cooldown, so the panel goes back to showing a real setback risk.

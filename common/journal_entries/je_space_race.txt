@@ -84,7 +84,7 @@ je_space_race_suborbital = {
 	}
 
 	on_fail = {
-		trigger_event = { id = space_race_events.76 }
+		sr_report_program_loss = { MILESTONE = suborbital }
 		custom_tooltip = {
 			text = sr_milestone_fail_cleanup_tt
 			sr_cleanup_milestone_variables_effect = { MILESTONE = suborbital }
@@ -209,7 +209,7 @@ je_space_race_orbital = {
 	}
 
 	on_fail = {
-		trigger_event = { id = space_race_events.76 }
+		sr_report_program_loss = { MILESTONE = orbital }
 		custom_tooltip = {
 			text = sr_milestone_fail_cleanup_tt
 			sr_cleanup_milestone_variables_effect = { MILESTONE = orbital }
@@ -334,7 +334,7 @@ je_space_race_moon_landing = {
 	}
 
 	on_fail = {
-		trigger_event = { id = space_race_events.76 }
+		sr_report_program_loss = { MILESTONE = moon_landing }
 		custom_tooltip = {
 			text = sr_milestone_fail_cleanup_tt
 			sr_cleanup_milestone_variables_effect = { MILESTONE = moon_landing }
@@ -460,7 +460,7 @@ je_space_race_probe = {
 	}
 
 	on_fail = {
-		trigger_event = { id = space_race_events.76 }
+		sr_report_program_loss = { MILESTONE = probe }
 		custom_tooltip = {
 			text = sr_milestone_fail_cleanup_tt
 			sr_cleanup_milestone_variables_effect = { MILESTONE = probe }
@@ -584,7 +584,7 @@ je_space_race_moon_base = {
 	}
 
 	on_fail = {
-		trigger_event = { id = space_race_events.76 }
+		sr_report_program_loss = { MILESTONE = moon_base }
 		custom_tooltip = {
 			text = sr_milestone_fail_cleanup_tt
 			sr_cleanup_milestone_variables_effect = { MILESTONE = moon_base }
@@ -710,7 +710,7 @@ je_space_race_mars_landing = {
 	}
 
 	on_fail = {
-		trigger_event = { id = space_race_events.76 }
+		sr_report_program_loss = { MILESTONE = mars_landing }
 		custom_tooltip = {
 			text = sr_milestone_fail_cleanup_tt
 			sr_cleanup_milestone_variables_effect = { MILESTONE = mars_landing }
@@ -839,7 +839,7 @@ je_space_race_interstellar_probe = {
 	}
 
 	on_fail = {
-		trigger_event = { id = space_race_events.76 }
+		sr_report_program_loss = { MILESTONE = interstellar_probe }
 		custom_tooltip = {
 			text = sr_milestone_fail_cleanup_tt
 			sr_cleanup_milestone_variables_effect = { MILESTONE = interstellar_probe }
@@ -1101,7 +1101,7 @@ je_space_race_solar_colonization = {
 	}
 
 	on_fail = {
-		trigger_event = { id = space_race_events.76 }
+		sr_report_program_loss = { MILESTONE = solar_colonization }
 		custom_tooltip = {
 			text = sr_milestone_fail_cleanup_tt
 			sr_cleanup_milestone_variables_effect = { MILESTONE = solar_colonization }
@@ -1134,10 +1134,10 @@ je_space_race_solar_colonization = {
 								sr_count_setback_base = { MILESTONE = solar_colonization }
 								if = {
 									limit = { has_variable = sr_ambitious_solar_colonization }
-									sr_fire_ambitious_failure_event = yes
+									sr_fire_ambitious_failure_event = { MILESTONE = solar_colonization }
 								}
 								else = {
-									sr_fire_safe_setback_event = yes
+									sr_fire_safe_setback_event = { MILESTONE = solar_colonization }
 								}
 							}
 						}

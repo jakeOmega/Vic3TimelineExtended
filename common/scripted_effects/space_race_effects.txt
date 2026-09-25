@@ -35,10 +35,10 @@ sr_monthly_progress_update_effect = {
 					sr_count_setback_base = { MILESTONE = $MILESTONE$ }
 					if = {
 						limit = { has_variable = sr_ambitious_$MILESTONE$ }
-						sr_fire_ambitious_failure_event = yes
+						sr_fire_ambitious_failure_event = { MILESTONE = $MILESTONE$ }
 					}
 					else = {
-						sr_fire_safe_setback_event = yes
+						sr_fire_safe_setback_event = { MILESTONE = $MILESTONE$ }
 					}
 				}
 			}
@@ -78,6 +78,15 @@ sr_recalculate_cost = {
 	# completion and the monthly cleanup, so the panel's status label reacts to a
 	# click instead of lagging a month. Status is derived from variables only
 	# (never from a modifier), so the add_modifier churn above cannot affect it.
+	sr_refresh_milestone_statuses = yes
+}
+
+# Re-derive every milestone's widget status (sr_<m>_last_status). The tail of
+# sr_recalculate_cost, and of the two mission-failure effects: those start the
+# post-setback cooldown, which moves a running milestone from "exposed" (1/2) to
+# "shielded" (3/4) — without this the panel showed the old state until the next
+# monthly pulse, even right after an option switched the approach.
+sr_refresh_milestone_statuses = {
 	sr_set_milestone_status_base = { MILESTONE = suborbital         }
 	sr_set_milestone_status_base = { MILESTONE = orbital            }
 	sr_set_milestone_status_base = { MILESTONE = moon_landing       }
@@ -140,10 +149,31 @@ sr_cleanup_inactive_space_race_milestones = {
 	}
 }
 
-# Apply a temporary safety review to every milestone whose failure flag is set.
-# Each flag sr_failed_<m> is set in the monthly pulse before firing failure events.
-# Uses independent if (not else_if) so multiple simultaneous failures all process.
+# --- The setback a failure event reports -------------------------------------
+# A failure event is about ONE milestone: the one whose monthly roll failed.
+# sr_fire_ambitious_failure_event / sr_fire_safe_setback_event save the country
+# as scope:sr_setback_<milestone> before they dispatch, and saved scopes travel
+# with trigger_event, so the event and each of its options know which milestone
+# failed. The five helpers below act on that marked milestone only — never on
+# "every running milestone", and never on the sr_failed_<milestone> flags, which
+# two journal entries can raise in the same month (each entry's pulse is its own
+# script run, so markers never mix between entries).
+#
+# sr_failed_<milestone> is still raised by the pulse: it is the "setback not yet
+# answered" bookkeeping, and each option clears the flag of its own milestone.
+#
+# A failure event that carries no marker — one already open in a save from
+# before the marker existed, or one fired from the console — falls back to the
+# pre-marker behaviour: every helper first runs sr_resolve_setback_markers, which
+# (only when no marker exists) marks each milestone whose sr_failed_ flag is
+# raised. The first helper of an option does it; the rest then see the markers
+# even after the safety review has cleared the flags. te_debug_space_race.1
+# option j fires a setback through the real dispatcher;
+# te_debug_sr_force_setback saves the markers itself.
+
+# Apply a temporary safety review to the failed milestone's journal entry.
 sr_temporary_safety_review_effect = {
+	sr_resolve_setback_markers = yes
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = suborbital         }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = orbital            }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = moon_landing       }
@@ -155,6 +185,7 @@ sr_temporary_safety_review_effect = {
 }
 
 sr_apply_ambitious_failure_progress_loss = {
+	sr_resolve_setback_markers = yes
 	sr_apply_progress_loss_base = { MILESTONE = suborbital         MULT = 0.75 }
 	sr_apply_progress_loss_base = { MILESTONE = orbital            MULT = 0.75 }
 	sr_apply_progress_loss_base = { MILESTONE = moon_landing       MULT = 0.75 }
@@ -166,6 +197,7 @@ sr_apply_ambitious_failure_progress_loss = {
 }
 
 sr_apply_safe_setback_progress_loss = {
+	sr_resolve_setback_markers = yes
 	sr_apply_progress_loss_base = { MILESTONE = suborbital         MULT = 0.85 }
 	sr_apply_progress_loss_base = { MILESTONE = orbital            MULT = 0.85 }
 	sr_apply_progress_loss_base = { MILESTONE = moon_landing       MULT = 0.85 }
@@ -177,6 +209,7 @@ sr_apply_safe_setback_progress_loss = {
 }
 
 sr_clear_failed_milestone_flags = {
+	sr_resolve_setback_markers = yes
 	sr_clear_failed_flag_base = { MILESTONE = suborbital         }
 	sr_clear_failed_flag_base = { MILESTONE = orbital            }
 	sr_clear_failed_flag_base = { MILESTONE = moon_landing       }
@@ -187,6 +220,43 @@ sr_clear_failed_milestone_flags = {
 	sr_clear_failed_flag_base = { MILESTONE = solar_colonization }
 }
 
+# Add var:sr_progress_boost (negative in every failure event) to the failed
+# milestone only. The failure events' counterpart of sr_boost_active_milestones,
+# which the in-progress events (49, 50, 52) use to push every running milestone.
+# Set sr_progress_boost before calling.
+sr_boost_setback_milestone = {
+	sr_resolve_setback_markers = yes
+	sr_boost_setback_milestone_base = { MILESTONE = suborbital         }
+	sr_boost_setback_milestone_base = { MILESTONE = orbital            }
+	sr_boost_setback_milestone_base = { MILESTONE = moon_landing       }
+	sr_boost_setback_milestone_base = { MILESTONE = probe              }
+	sr_boost_setback_milestone_base = { MILESTONE = moon_base          }
+	sr_boost_setback_milestone_base = { MILESTONE = mars_landing       }
+	sr_boost_setback_milestone_base = { MILESTONE = interstellar_probe }
+	sr_boost_setback_milestone_base = { MILESTONE = solar_colonization }
+	remove_variable = sr_progress_boost
+}
+
+# "A more cautious approach" (space_race_events.10.b, .15.c): switch the failed
+# milestone to the safe approach through sr_effect_safe, the same body the
+# journal-entry button runs, so the approach flags, the approach modifiers on the
+# journal entry (risk and speed), the cost and the widget status all follow.
+sr_switch_setback_milestone_to_safe = {
+	sr_resolve_setback_markers = yes
+	sr_switch_setback_milestone_to_safe_base = { MILESTONE = suborbital         }
+	sr_switch_setback_milestone_to_safe_base = { MILESTONE = orbital            }
+	sr_switch_setback_milestone_to_safe_base = { MILESTONE = moon_landing       }
+	sr_switch_setback_milestone_to_safe_base = { MILESTONE = probe              }
+	sr_switch_setback_milestone_to_safe_base = { MILESTONE = moon_base          }
+	sr_switch_setback_milestone_to_safe_base = { MILESTONE = mars_landing       }
+	sr_switch_setback_milestone_to_safe_base = { MILESTONE = interstellar_probe }
+	# Only while its controls are offered (sr_solar_controls_shown), so the event
+	# never changes an approach the panel would not let the player change.
+	if = {
+		limit = { sr_solar_colonization_running = yes }
+		sr_switch_setback_milestone_to_safe_base = { MILESTONE = solar_colonization }
+	}
+}
 
 # Boost progress for all active milestones
 # Set sr_progress_boost before calling (can be negative for penalties)
@@ -198,7 +268,13 @@ sr_boost_active_milestones = {
 	sr_boost_active_milestone_base = { MILESTONE = moon_base          }
 	sr_boost_active_milestone_base = { MILESTONE = mars_landing       }
 	sr_boost_active_milestone_base = { MILESTONE = interstellar_probe }
-	sr_boost_active_milestone_base = { MILESTONE = solar_colonization }
+	# Solar colonization's journal entry stays open, frozen, while its production
+	# method is switched off (and after the last colony); its pulse adds nothing
+	# then, and neither does an event.
+	if = {
+		limit = { sr_solar_colonization_running = yes }
+		sr_boost_active_milestone_base = { MILESTONE = solar_colonization }
+	}
 	remove_variable = sr_progress_boost
 }
 
@@ -215,15 +291,19 @@ sr_complete_milestone_effect = {
 
 # Notify all countries about a space race milestone achievement
 # Scope: Country that achieved the milestone
-# Set sr_is_world_first variable to yes before calling if this is a first
 # $MILESTONE$ = suborbital, orbital, moon_landing, probe, moon_base, mars_landing, interstellar_probe
+#
+# Each receiver gets one entry per completion on a per-milestone LIST
+# (sr_notify_achievers_<m>, holding the achiever's capital — the capital chain is
+# save-reload safe for loc display) and one queued space_race_events.20. Each
+# popup takes exactly one entry, so two completions inside the 14-day delay —
+# of different milestones, or the same milestone by two countries — give two
+# popups, each naming its own achiever. A single shared receiver variable used to
+# be overwritten by the second completion, crediting the wrong country in the
+# first popup and blanking the second. "World first" is read at fire time from
+# the achiever's own sr_was_first_<m>.
 sr_notify_milestone_achievement = {
 	save_scope_as = sr_achiever
-	if = {
-		limit = { has_variable = sr_is_world_first }
-		save_scope_as = sr_is_first
-		remove_variable = sr_is_world_first
-	}
 	custom_tooltip = {
 		text = sr_notify_achievement_tt
 		every_country = {
@@ -231,16 +311,68 @@ sr_notify_milestone_achievement = {
 				NOT = { THIS = scope:sr_achiever }
 				is_country_type = recognized
 			}
-			# Store achiever capital on each receiver (capital chain is save-reload safe for loc display)
-			set_variable = { name = sr_notify_achiever_capital value = scope:sr_achiever.capital }
-			set_variable = { name = sr_notify_$MILESTONE$ value = yes }
-			if = {
-				limit = { exists = scope:sr_is_first }
-				set_variable = { name = sr_notify_is_first value = yes }
-			}
+			add_to_variable_list = { name = sr_notify_achievers_$MILESTONE$ target = scope:sr_achiever.capital }
 			trigger_event = { id = space_race_events.20 days = 14 }
 		}
 	}
+}
+
+# space_race_events.20's side of the list above. Country scope (the receiver).
+# Takes one pending entry for $MILESTONE$ and turns it into the scopes the
+# event's text and options read.
+sr_take_milestone_notice_base = {
+	# The world first's entry goes first. The list has no order to rely on
+	# (remove_list_variable swaps the last element into the hole), so with the
+	# first and a follower both pending an unfiltered pick would, half the time,
+	# show the follower on day 14 and "No nation has done this before" days later.
+	if = {
+		limit = {
+			any_in_list = {
+				variable = sr_notify_achievers_$MILESTONE$
+				owner ?= { has_variable = sr_was_first_$MILESTONE$ }
+			}
+		}
+		random_in_list = {
+			variable = sr_notify_achievers_$MILESTONE$
+			limit = { owner ?= { has_variable = sr_was_first_$MILESTONE$ } }
+			save_scope_as = sr_notice_capital
+		}
+	}
+	else = {
+		random_in_list = {
+			variable = sr_notify_achievers_$MILESTONE$
+			save_scope_as = sr_notice_capital
+		}
+	}
+	remove_list_variable = { name = sr_notify_achievers_$MILESTONE$ target = scope:sr_notice_capital }
+	scope:sr_notice_capital = { owner = { save_scope_as = sr_achiever } }
+	save_scope_as = sr_milestone_$MILESTONE$
+	if = {
+		limit = { has_variable = sr_completed_$MILESTONE$ }
+		save_scope_as = sr_already_achieved
+	}
+	if = {
+		limit = { scope:sr_achiever = { has_variable = sr_was_first_$MILESTONE$ } }
+		save_scope_as = sr_is_first
+	}
+}
+
+# Old-save migration: a receiver can still hold the single-variable format a
+# notification queued before the per-milestone lists wrote. Such a queued .20
+# fails its trigger and is dropped (its immediate never runs); the variables it
+# left behind are inert and are stripped here, by the next new-format
+# notification that reaches that receiver. Called from space_race_events.20's
+# immediate.
+sr_clear_legacy_milestone_notice = {
+	if = { limit = { has_variable = sr_notify_achiever_capital      } remove_variable = sr_notify_achiever_capital      }
+	if = { limit = { has_variable = sr_notify_is_first              } remove_variable = sr_notify_is_first              }
+	if = { limit = { has_variable = sr_notify_suborbital            } remove_variable = sr_notify_suborbital            }
+	if = { limit = { has_variable = sr_notify_orbital               } remove_variable = sr_notify_orbital               }
+	if = { limit = { has_variable = sr_notify_moon_landing          } remove_variable = sr_notify_moon_landing          }
+	if = { limit = { has_variable = sr_notify_probe                 } remove_variable = sr_notify_probe                 }
+	if = { limit = { has_variable = sr_notify_moon_base             } remove_variable = sr_notify_moon_base             }
+	if = { limit = { has_variable = sr_notify_mars_landing          } remove_variable = sr_notify_mars_landing          }
+	if = { limit = { has_variable = sr_notify_interstellar_probe    } remove_variable = sr_notify_interstellar_probe    }
 }
 
 # --- Per-milestone completion / reward / cleanup helpers ---------------------
@@ -260,7 +392,6 @@ sr_complete_milestone_effect_base = {
 		limit = { NOT = { has_global_variable = sr_global_first_$MILESTONE$ } }
 		set_global_variable = { name = sr_global_first_$MILESTONE$ value = yes }
 		set_variable = { name = sr_was_first_$MILESTONE$ value = yes }
-		set_variable = { name = sr_is_world_first value = yes }
 	}
 	sr_notify_milestone_achievement = { MILESTONE = $MILESTONE$ }
 	if = { limit = { has_variable = sr_funding_$MILESTONE$ } remove_variable = sr_funding_$MILESTONE$ }
@@ -299,12 +430,14 @@ sr_cleanup_milestone_variables_effect = {
 # these bases and the orchestrator lists the tokens explicitly so the support
 # matrix stays grep-able at the call site.
 
-# Apply a temporary safety review modifier to the JE owning the failed milestone.
-# Country scope. Caller iterates the standard 8 milestone tokens.
+# Apply a temporary safety review modifier to the JE owning the failed milestone
+# (scope:sr_setback_$MILESTONE$ — see "The setback a failure event reports"
+# above), and clear that milestone's failure flag. Country scope. Caller
+# iterates the standard 8 milestone tokens.
 sr_apply_safety_review_to_milestone_base = {
 	if = {
-		limit = { has_variable = sr_failed_$MILESTONE$ }
-		remove_variable = sr_failed_$MILESTONE$
+		limit = { exists = scope:sr_setback_$MILESTONE$ }
+		if = { limit = { has_variable = sr_failed_$MILESTONE$ } remove_variable = sr_failed_$MILESTONE$ }
 		if = {
 			limit = { has_journal_entry = je_space_race_$MILESTONE$ }
 			je:je_space_race_$MILESTONE$ = {
@@ -315,21 +448,74 @@ sr_apply_safety_review_to_milestone_base = {
 	}
 }
 
-# Multiplicatively reduce a milestone's progress when its failure flag is set.
-# Country scope. $MULT$ is the retention factor (0.75 ambitious, 0.85 safe).
+# Multiplicatively reduce the failed milestone's progress. Country scope.
+# $MULT$ is the retention factor (0.75 ambitious, 0.85 safe).
 sr_apply_progress_loss_base = {
 	if = {
 		limit = {
-			has_variable = sr_failed_$MILESTONE$
+			exists = scope:sr_setback_$MILESTONE$
 			has_variable = sr_progress_$MILESTONE$
 		}
 		change_variable = { name = sr_progress_$MILESTONE$ multiply = $MULT$ }
 	}
 }
 
-# Clear the failure flag for one milestone if present. Country scope.
+# Clear the failed milestone's failure flag if present. Country scope.
 sr_clear_failed_flag_base = {
-	if = { limit = { has_variable = sr_failed_$MILESTONE$ } remove_variable = sr_failed_$MILESTONE$ }
+	if = {
+		limit = {
+			exists = scope:sr_setback_$MILESTONE$
+			has_variable = sr_failed_$MILESTONE$
+		}
+		remove_variable = sr_failed_$MILESTONE$
+	}
+}
+
+# sr_boost_setback_milestone's body: the failed milestone only. Country scope.
+sr_boost_setback_milestone_base = {
+	if = {
+		limit = { exists = scope:sr_setback_$MILESTONE$ }
+		sr_boost_active_milestone_base = { MILESTONE = $MILESTONE$ }
+	}
+}
+
+# sr_switch_setback_milestone_to_safe's body. Only a milestone that is still
+# running and not already safe (the player may have pressed the button while the
+# event waited). Country scope.
+sr_switch_setback_milestone_to_safe_base = {
+	if = {
+		limit = {
+			exists = scope:sr_setback_$MILESTONE$
+			has_variable = sr_active_$MILESTONE$
+			has_journal_entry = je_space_race_$MILESTONE$
+			NOT = { has_variable = sr_safe_$MILESTONE$ }
+		}
+		sr_effect_safe = { MILESTONE = $MILESTONE$ }
+	}
+}
+
+# The fallback described under "The setback a failure event reports": with no
+# scope:sr_setback_<m> at all, mark every milestone whose failure flag is raised.
+# A no-op whenever the dispatcher's marker is present. Country scope.
+sr_resolve_setback_markers = {
+	if = {
+		limit = { NOT = { sr_has_setback_marker = yes } }
+		sr_resolve_setback_marker_base = { MILESTONE = suborbital         }
+		sr_resolve_setback_marker_base = { MILESTONE = orbital            }
+		sr_resolve_setback_marker_base = { MILESTONE = moon_landing       }
+		sr_resolve_setback_marker_base = { MILESTONE = probe              }
+		sr_resolve_setback_marker_base = { MILESTONE = moon_base          }
+		sr_resolve_setback_marker_base = { MILESTONE = mars_landing       }
+		sr_resolve_setback_marker_base = { MILESTONE = interstellar_probe }
+		sr_resolve_setback_marker_base = { MILESTONE = solar_colonization }
+	}
+}
+
+sr_resolve_setback_marker_base = {
+	if = {
+		limit = { has_variable = sr_failed_$MILESTONE$ }
+		save_scope_as = sr_setback_$MILESTONE$
+	}
 }
 
 # Add var:sr_progress_boost (signed) to one active milestone's progress, clamped
@@ -464,9 +650,10 @@ sr_effect_fund_down = {
 # variables. Neither the GUI nor localization re-derives them.
 
 # The one derivation site for sr_<MILESTONE>_last_status, the integer the widget
-# and the profile custom loc branch on. Country scope. Called from exactly two
-# places: sr_recalculate_cost (the shared tail of every button, every journal
-# entry's `immediate`, completion and cleanup) and the tail of the monthly
+# and the profile custom loc branch on. Country scope. Called from two places:
+# sr_refresh_milestone_statuses (the tail of sr_recalculate_cost — every button,
+# every journal entry's `immediate`, completion and cleanup — and of the two
+# mission-failure effects, which start the cooldown) and the tail of the monthly
 # progress pulse.
 #
 #   (no variable)  the milestone is not running — the panel shows its passive text
@@ -881,6 +1068,7 @@ sr_mission_failure_effect = {
 	}
 	set_variable = { name = sr_failure_cooldown value = 6 }
 	add_radicals = { value = medium_radicals pop_type = academics }
+	sr_refresh_milestone_statuses = yes
 }
 
 # Catastrophic failure effect - the major progress setback is applied in the JE pulse before the event fires
@@ -893,11 +1081,21 @@ sr_mission_catastrophic_failure_effect = {
 	set_variable = { name = sr_failure_cooldown value = 6 }
 	add_radicals = { value = large_radicals pop_type = academics }
 	add_radicals = { value = medium_radicals }
+	sr_refresh_milestone_statuses = yes
 }
 
-# Dispatches a milestone-themed ambitious failure event
-# Called from JE monthly pulse instead of directly triggering event 10
+# Dispatches a milestone-themed ambitious failure event for the milestone whose
+# monthly roll just failed. Called from sr_monthly_progress_update_effect and the
+# solar colonization pulse, once per failed roll.
+#
+# $MILESTONE$ is the failed milestone. It is saved as scope:sr_setback_$MILESTONE$
+# first; the themed entries below read that marker, not "any running milestone",
+# and the event and its options inherit it (saved scopes travel with
+# trigger_event). A theme whose milestones did not fail is simply not eligible:
+# a probe failure can no longer play out as a habitat breach, and a Moon landing
+# failure can no longer say the probe was lost.
 sr_fire_ambitious_failure_event = {
+	save_scope_as = sr_setback_$MILESTONE$
 	random_list = {
 		# Generic mission failure (always available)
 		10 = {
@@ -907,62 +1105,40 @@ sr_fire_ambitious_failure_event = {
 		10 = {
 			trigger = {
 				OR = {
-					has_variable = sr_active_suborbital
-					has_variable = sr_active_orbital
+					exists = scope:sr_setback_suborbital
+					exists = scope:sr_setback_orbital
 				}
 			}
 			trigger_event = { id = space_race_events.12 }
 		}
-		# Deep Space Signal Lost (probe/interstellar)
+		# Deep Space Signal Lost (probe/interstellar). Same gate as the event's
+		# own trigger, so the roll can never pick an event that then refuses to fire.
 		10 = {
-			trigger = {
-				OR = {
-					AND = {
-						has_journal_entry = je_space_race_probe
-						has_variable = sr_active_probe
-					}
-					AND = {
-						has_journal_entry = je_space_race_interstellar_probe
-						has_variable = sr_active_interstellar_probe
-					}
-				}
-			}
+			trigger = { sr_setback_is_deep_space_probe = yes }
 			trigger_event = { id = space_race_events.13 }
 		}
 		# Habitat Depressurization (moon base/mars/colonization)
 		10 = {
-			trigger = {
-				OR = {
-					has_variable = sr_active_moon_base
-					has_variable = sr_active_mars_landing
-					has_variable = sr_active_solar_colonization
-				}
-			}
+			trigger = { sr_setback_is_crewed_outpost = yes }
 			trigger_event = { id = space_race_events.14 }
 		}
 		# Guidance System Malfunction (moon landing)
 		10 = {
 			trigger = {
-				has_variable = sr_active_moon_landing
+				exists = scope:sr_setback_moon_landing
 			}
 			trigger_event = { id = space_race_events.15 }
 		}
 		# Booster Separation Failure (orbital)
 		10 = {
 			trigger = {
-				has_variable = sr_active_orbital
+				exists = scope:sr_setback_orbital
 			}
 			trigger_event = { id = space_race_events.16 }
 		}
 		# Crew Medical Emergency (moon base/mars/colonization)
 		10 = {
-			trigger = {
-				OR = {
-					has_variable = sr_active_moon_base
-					has_variable = sr_active_mars_landing
-					has_variable = sr_active_solar_colonization
-				}
-			}
+			trigger = { sr_setback_is_crewed_outpost = yes }
 			trigger_event = { id = space_race_events.17 }
 		}
 		# Program Mismanagement Exposed (always available)
@@ -990,13 +1166,7 @@ sr_fire_ambitious_failure_event = {
 		}
 		# Capsule Depressurization (moon base/mars/colonization)
 		10 = {
-			trigger = {
-				OR = {
-					has_variable = sr_active_moon_base
-					has_variable = sr_active_mars_landing
-					has_variable = sr_active_solar_colonization
-				}
-			}
+			trigger = { sr_setback_is_crewed_outpost = yes }
 			trigger_event = { id = space_race_events.71 }
 		}
 		# Engineering Breakthrough (always: silver lining from failure)
@@ -1006,9 +1176,11 @@ sr_fire_ambitious_failure_event = {
 	}
 }
 
-# Dispatches a milestone-themed safe setback event
-# Called from JE monthly pulse instead of directly triggering event 11
+# Dispatches a milestone-themed safe setback event. Same contract as
+# sr_fire_ambitious_failure_event above: $MILESTONE$ is the failed milestone,
+# saved as scope:sr_setback_$MILESTONE$ for the themed entries and the event.
 sr_fire_safe_setback_event = {
+	save_scope_as = sr_setback_$MILESTONE$
 	random_list = {
 		# Generic minor setback (always available)
 		10 = {
@@ -1022,9 +1194,9 @@ sr_fire_safe_setback_event = {
 		10 = {
 			trigger = {
 				OR = {
-					has_variable = sr_active_suborbital
-					has_variable = sr_active_orbital
-					has_variable = sr_active_moon_landing
+					exists = scope:sr_setback_suborbital
+					exists = scope:sr_setback_orbital
+					exists = scope:sr_setback_moon_landing
 				}
 			}
 			trigger_event = { id = space_race_events.22 }
@@ -1041,8 +1213,10 @@ sr_fire_safe_setback_event = {
 		10 = {
 			trigger_event = { id = space_race_events.25 }
 		}
-		# Diplomatic Incident (always available)
+		# Diplomatic Incident: only when relations with a real foreign space
+		# power have actually soured. Same gate as the event's own trigger.
 		10 = {
+			trigger = { any_country = { sr_is_estranged_space_power = yes } }
 			trigger_event = { id = space_race_events.26 }
 		}
 		# Facility Fire (always: targets building)
@@ -1116,5 +1290,68 @@ sr_rivals_participants_base = {
 	}
 	else = {
 		custom_tooltip_no_bullet = sr_rivals_none
+	}
+}
+
+# --- A launch complex that can no longer carry a milestone -------------------
+# Every milestone journal entry fails when the space programme building stops
+# granting its tier's country_sr_*_program_bool: the building was lost (the
+# state it stood in changed hands, it was demolished) or its production method
+# was lowered. One such change fails every milestone that tier was carrying, and
+# the journal entries notice it on their own update schedule (every
+# JOURNAL_ENTRY_UPDATE_ACTIVE = 4 days, not necessarily in step), so each
+# on_fail used to fire its own identical space_race_events.76. Each on_fail now
+# records its milestone, and only the first one queues the report — five days
+# out, so every journal entry failing over the same change has recorded itself
+# by the time it fires. Country scope. Called from the eight on_fail blocks.
+sr_report_program_loss = {
+	set_variable = { name = sr_program_lost_$MILESTONE$ value = yes }
+	if = {
+		limit = { NOT = { has_variable = sr_program_loss_report_queued } }
+		# .76's immediate removes this; the timer only guards against a report
+		# that never fires (the country gone within the five days).
+		set_variable = { name = sr_program_loss_report_queued value = yes days = 30 }
+		trigger_event = { id = space_race_events.76 days = 5 }
+	}
+}
+
+# space_race_events.76's side: turn one recorded milestone into the scope its
+# tooltip reads, and clear the record. Country scope.
+sr_take_program_loss_base = {
+	if = {
+		limit = { has_variable = sr_program_lost_$MILESTONE$ }
+		remove_variable = sr_program_lost_$MILESTONE$
+		save_scope_as = sr_program_lost_$MILESTONE$
+	}
+}
+
+sr_take_program_losses = {
+	sr_take_program_loss_base = { MILESTONE = suborbital         }
+	sr_take_program_loss_base = { MILESTONE = orbital            }
+	sr_take_program_loss_base = { MILESTONE = moon_landing       }
+	sr_take_program_loss_base = { MILESTONE = probe              }
+	sr_take_program_loss_base = { MILESTONE = moon_base          }
+	sr_take_program_loss_base = { MILESTONE = mars_landing       }
+	sr_take_program_loss_base = { MILESTONE = interstellar_probe }
+	sr_take_program_loss_base = { MILESTONE = solar_colonization }
+	if = { limit = { has_variable = sr_program_loss_report_queued } remove_variable = sr_program_loss_report_queued }
+}
+
+# --- Interstellar probe results describe one shared universe -----------------
+# space_race_events.601–630 each report a specific world. The first nation whose
+# probe returns a result discovers it, and the global record
+# sr_probe_found_$RESULT$ holds that country. A later probe that draws the same
+# result confirms it instead: the event's opening and closing lines say so and
+# name the first finder (scopes saved here, read by the desc's first_valid).
+# The rewards are unchanged — none of them is a "first discovery" reward.
+# Called from each result event's immediate. Country scope.
+sr_record_probe_result = {
+	if = {
+		limit = { has_global_variable = sr_probe_found_$RESULT$ }
+		save_scope_as = sr_probe_repeat
+		global_var:sr_probe_found_$RESULT$ ?= { save_scope_as = sr_probe_first_finder }
+	}
+	else = {
+		set_global_variable = { name = sr_probe_found_$RESULT$ value = ROOT }
 	}
 }
