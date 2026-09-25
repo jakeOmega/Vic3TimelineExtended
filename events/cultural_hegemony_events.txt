@@ -2073,12 +2073,12 @@ cultural_hegemony.17 = {
 # shared pressure effect pushes ITS model. Standing apart keeps the country's
 # own counsel.
 #
-# Neither power chose to court this country — the pull is world state, not a
-# campaign — so the text names no envoys and no option costs relations with a
-# power that did nothing. The one campaign that is real is the leader's own:
-# if it chose to champion its model abroad (cultural_hegemony.17 option A,
-# ch_model_champion), the desc says so. Only the leader can hold that modifier,
-# since .17 fires on global_var:ch_rank_1 alone.
+# Neither power courted this country in particular — the pull is world state,
+# not a campaign — so no option costs relations with a power that did nothing.
+# The one campaign that is real is a power's own choice to champion its model
+# abroad (cultural_hegemony.17 option A, ch_model_champion), and the desc names
+# it for whichever power holds that modifier. .17 grants it only to the leader,
+# but it lasts five years, so a power since overtaken can still carry it.
 # ============================================================================
 
 cultural_hegemony.18 = {
@@ -2089,8 +2089,19 @@ cultural_hegemony.18 = {
 	desc = {
 		first_valid = {
 			triggered_desc = {
+				trigger = {
+					scope:ch_bloc_a ?= { has_modifier = ch_model_champion }
+					scope:ch_bloc_b ?= { has_modifier = ch_model_champion }
+				}
+				desc = cultural_hegemony.18.d_champion_both
+			}
+			triggered_desc = {
 				trigger = { scope:ch_bloc_a ?= { has_modifier = ch_model_champion } }
 				desc = cultural_hegemony.18.d_champion
+			}
+			triggered_desc = {
+				trigger = { scope:ch_bloc_b ?= { has_modifier = ch_model_champion } }
+				desc = cultural_hegemony.18.d_champion_b
 			}
 			triggered_desc = {
 				trigger = { always = yes }
