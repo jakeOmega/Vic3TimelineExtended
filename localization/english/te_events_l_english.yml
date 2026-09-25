@@ -4245,7 +4245,7 @@
  te_debug_gw.1.b:0 "Set warming to 1.0°C (Significant)"
  te_debug_gw.1.c:0 "Set warming to 2.0°C (Severe)"
  te_debug_gw.1.d:0 "Set warming to 3.2°C (Catastrophic)"
- te_debug_gw.1.desc:0 "Console-only shortcuts for testing the climate dashboard. Nothing in the mod fires this event, and every option skips the gates a player would face.\n\n#lore Setting the temperature will also fire the one-shot warming threshold events for every tier it crosses, which is deliberate: it exercises the real path.#!"
+ te_debug_gw.1.desc:0 "Console-only shortcuts for testing the climate dashboard. Nothing in the mod fires this event, and every option skips the gates a player would face.\n\n#lore With the global warming rule enabled, setting the temperature also fires the one-shot warming threshold events for every tier it crosses at the next monthly pulse, which is deliberate: it exercises the real path. With the rule disabled there are no threshold events, and the monthly pulse puts the temperature back to 0.#!"
  te_debug_gw.1.e:0 "Cool the world back to 0.05°C (below the activation threshold)"
  te_debug_gw.1.f:0 "Bind us to an emissions-reduction treaty (locks repeals)"
  te_debug_gw.1.flavor:0 "'The models are unambiguous, minister.'\n\n'Then get better models.'"
