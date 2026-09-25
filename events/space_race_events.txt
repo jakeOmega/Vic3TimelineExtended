@@ -2557,10 +2557,16 @@ space_race_events.52 = {
 			text = SR_ISS_COOPERATION_RELATIONS_TT
 			every_country = {
 				limit = {
-					je:je_united_nations ?= { has_modifier = un_member_modifier }
-					has_technology_researched = space_exploration
-					NOT = { THIS = ROOT }
-					has_diplomatic_relevance = ROOT
+					OR = {
+						AND = {
+							je:je_united_nations ?= { has_modifier = un_member_modifier }
+							has_technology_researched = space_exploration
+							NOT = { THIS = ROOT }
+							has_diplomatic_relevance = ROOT
+						}
+						# The partner the text names is always among them.
+						THIS = scope:sr_station_partner
+					}
 				}
 				change_relations = { country = ROOT value = 15 }
 			}
@@ -3737,9 +3743,15 @@ space_race_events.26 = {
 			text = SR_OLIVE_BRANCH_RELATIONS_TT
 			every_country = {
 				limit = {
-					has_technology_researched = rocketry
-					NOT = { THIS = ROOT }
-					has_diplomatic_relevance = ROOT
+					OR = {
+						AND = {
+							has_technology_researched = rocketry
+							NOT = { THIS = ROOT }
+							has_diplomatic_relevance = ROOT
+						}
+						# The power the text names is always among them.
+						THIS = scope:sr_estranged_space_power
+					}
 				}
 				change_relations = { country = ROOT value = 10 }
 			}

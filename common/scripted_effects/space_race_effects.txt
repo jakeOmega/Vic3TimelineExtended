@@ -78,6 +78,15 @@ sr_recalculate_cost = {
 	# completion and the monthly cleanup, so the panel's status label reacts to a
 	# click instead of lagging a month. Status is derived from variables only
 	# (never from a modifier), so the add_modifier churn above cannot affect it.
+	sr_refresh_milestone_statuses = yes
+}
+
+# Re-derive every milestone's widget status (sr_<m>_last_status). The tail of
+# sr_recalculate_cost, and of the two mission-failure effects: those start the
+# post-setback cooldown, which moves a running milestone from "exposed" (1/2) to
+# "shielded" (3/4) — without this the panel showed the old state until the next
+# monthly pulse, even right after an option switched the approach.
+sr_refresh_milestone_statuses = {
 	sr_set_milestone_status_base = { MILESTONE = suborbital         }
 	sr_set_milestone_status_base = { MILESTONE = orbital            }
 	sr_set_milestone_status_base = { MILESTONE = moon_landing       }
@@ -153,12 +162,18 @@ sr_cleanup_inactive_space_race_milestones = {
 # sr_failed_<milestone> is still raised by the pulse: it is the "setback not yet
 # answered" bookkeeping, and each option clears the flag of its own milestone.
 #
-# An event fired from the console carries no marker, so these helpers do
-# nothing there. te_debug_space_race.1 option j fires a setback through the real
-# dispatcher; te_debug_sr_force_setback saves the markers itself.
+# A failure event that carries no marker — one already open in a save from
+# before the marker existed, or one fired from the console — falls back to the
+# pre-marker behaviour: every helper first runs sr_resolve_setback_markers, which
+# (only when no marker exists) marks each milestone whose sr_failed_ flag is
+# raised. The first helper of an option does it; the rest then see the markers
+# even after the safety review has cleared the flags. te_debug_space_race.1
+# option j fires a setback through the real dispatcher;
+# te_debug_sr_force_setback saves the markers itself.
 
 # Apply a temporary safety review to the failed milestone's journal entry.
 sr_temporary_safety_review_effect = {
+	sr_resolve_setback_markers = yes
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = suborbital         }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = orbital            }
 	sr_apply_safety_review_to_milestone_base = { MILESTONE = moon_landing       }
@@ -170,6 +185,7 @@ sr_temporary_safety_review_effect = {
 }
 
 sr_apply_ambitious_failure_progress_loss = {
+	sr_resolve_setback_markers = yes
 	sr_apply_progress_loss_base = { MILESTONE = suborbital         MULT = 0.75 }
 	sr_apply_progress_loss_base = { MILESTONE = orbital            MULT = 0.75 }
 	sr_apply_progress_loss_base = { MILESTONE = moon_landing       MULT = 0.75 }
@@ -181,6 +197,7 @@ sr_apply_ambitious_failure_progress_loss = {
 }
 
 sr_apply_safe_setback_progress_loss = {
+	sr_resolve_setback_markers = yes
 	sr_apply_progress_loss_base = { MILESTONE = suborbital         MULT = 0.85 }
 	sr_apply_progress_loss_base = { MILESTONE = orbital            MULT = 0.85 }
 	sr_apply_progress_loss_base = { MILESTONE = moon_landing       MULT = 0.85 }
@@ -192,6 +209,7 @@ sr_apply_safe_setback_progress_loss = {
 }
 
 sr_clear_failed_milestone_flags = {
+	sr_resolve_setback_markers = yes
 	sr_clear_failed_flag_base = { MILESTONE = suborbital         }
 	sr_clear_failed_flag_base = { MILESTONE = orbital            }
 	sr_clear_failed_flag_base = { MILESTONE = moon_landing       }
@@ -207,6 +225,7 @@ sr_clear_failed_milestone_flags = {
 # which the in-progress events (49, 50, 52) use to push every running milestone.
 # Set sr_progress_boost before calling.
 sr_boost_setback_milestone = {
+	sr_resolve_setback_markers = yes
 	sr_boost_setback_milestone_base = { MILESTONE = suborbital         }
 	sr_boost_setback_milestone_base = { MILESTONE = orbital            }
 	sr_boost_setback_milestone_base = { MILESTONE = moon_landing       }
@@ -223,6 +242,7 @@ sr_boost_setback_milestone = {
 # journal-entry button runs, so the approach flags, the approach modifiers on the
 # journal entry (risk and speed), the cost and the widget status all follow.
 sr_switch_setback_milestone_to_safe = {
+	sr_resolve_setback_markers = yes
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = suborbital         }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = orbital            }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = moon_landing       }
@@ -230,7 +250,12 @@ sr_switch_setback_milestone_to_safe = {
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = moon_base          }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = mars_landing       }
 	sr_switch_setback_milestone_to_safe_base = { MILESTONE = interstellar_probe }
-	sr_switch_setback_milestone_to_safe_base = { MILESTONE = solar_colonization }
+	# Only while its controls are offered (sr_solar_controls_shown), so the event
+	# never changes an approach the panel would not let the player change.
+	if = {
+		limit = { sr_solar_colonization_running = yes }
+		sr_switch_setback_milestone_to_safe_base = { MILESTONE = solar_colonization }
+	}
 }
 
 # Boost progress for all active milestones
@@ -296,9 +321,28 @@ sr_notify_milestone_achievement = {
 # Takes one pending entry for $MILESTONE$ and turns it into the scopes the
 # event's text and options read.
 sr_take_milestone_notice_base = {
-	random_in_list = {
-		variable = sr_notify_achievers_$MILESTONE$
-		save_scope_as = sr_notice_capital
+	# The world first's entry goes first. The list has no order to rely on
+	# (remove_list_variable swaps the last element into the hole), so with the
+	# first and a follower both pending an unfiltered pick would, half the time,
+	# show the follower on day 14 and "No nation has done this before" days later.
+	if = {
+		limit = {
+			any_in_list = {
+				variable = sr_notify_achievers_$MILESTONE$
+				owner ?= { has_variable = sr_was_first_$MILESTONE$ }
+			}
+		}
+		random_in_list = {
+			variable = sr_notify_achievers_$MILESTONE$
+			limit = { owner ?= { has_variable = sr_was_first_$MILESTONE$ } }
+			save_scope_as = sr_notice_capital
+		}
+	}
+	else = {
+		random_in_list = {
+			variable = sr_notify_achievers_$MILESTONE$
+			save_scope_as = sr_notice_capital
+		}
 	}
 	remove_list_variable = { name = sr_notify_achievers_$MILESTONE$ target = scope:sr_notice_capital }
 	scope:sr_notice_capital = { owner = { save_scope_as = sr_achiever } }
@@ -450,6 +494,30 @@ sr_switch_setback_milestone_to_safe_base = {
 	}
 }
 
+# The fallback described under "The setback a failure event reports": with no
+# scope:sr_setback_<m> at all, mark every milestone whose failure flag is raised.
+# A no-op whenever the dispatcher's marker is present. Country scope.
+sr_resolve_setback_markers = {
+	if = {
+		limit = { NOT = { sr_has_setback_marker = yes } }
+		sr_resolve_setback_marker_base = { MILESTONE = suborbital         }
+		sr_resolve_setback_marker_base = { MILESTONE = orbital            }
+		sr_resolve_setback_marker_base = { MILESTONE = moon_landing       }
+		sr_resolve_setback_marker_base = { MILESTONE = probe              }
+		sr_resolve_setback_marker_base = { MILESTONE = moon_base          }
+		sr_resolve_setback_marker_base = { MILESTONE = mars_landing       }
+		sr_resolve_setback_marker_base = { MILESTONE = interstellar_probe }
+		sr_resolve_setback_marker_base = { MILESTONE = solar_colonization }
+	}
+}
+
+sr_resolve_setback_marker_base = {
+	if = {
+		limit = { has_variable = sr_failed_$MILESTONE$ }
+		save_scope_as = sr_setback_$MILESTONE$
+	}
+}
+
 # Add var:sr_progress_boost (signed) to one active milestone's progress, clamped
 # at zero. Country scope. Caller sets sr_progress_boost before the orchestrator
 # and removes it afterwards.
@@ -582,9 +650,10 @@ sr_effect_fund_down = {
 # variables. Neither the GUI nor localization re-derives them.
 
 # The one derivation site for sr_<MILESTONE>_last_status, the integer the widget
-# and the profile custom loc branch on. Country scope. Called from exactly two
-# places: sr_recalculate_cost (the shared tail of every button, every journal
-# entry's `immediate`, completion and cleanup) and the tail of the monthly
+# and the profile custom loc branch on. Country scope. Called from two places:
+# sr_refresh_milestone_statuses (the tail of sr_recalculate_cost — every button,
+# every journal entry's `immediate`, completion and cleanup — and of the two
+# mission-failure effects, which start the cooldown) and the tail of the monthly
 # progress pulse.
 #
 #   (no variable)  the milestone is not running — the panel shows its passive text
@@ -999,6 +1068,7 @@ sr_mission_failure_effect = {
 	}
 	set_variable = { name = sr_failure_cooldown value = 6 }
 	add_radicals = { value = medium_radicals pop_type = academics }
+	sr_refresh_milestone_statuses = yes
 }
 
 # Catastrophic failure effect - the major progress setback is applied in the JE pulse before the event fires
@@ -1011,6 +1081,7 @@ sr_mission_catastrophic_failure_effect = {
 	set_variable = { name = sr_failure_cooldown value = 6 }
 	add_radicals = { value = large_radicals pop_type = academics }
 	add_radicals = { value = medium_radicals }
+	sr_refresh_milestone_statuses = yes
 }
 
 # Dispatches a milestone-themed ambitious failure event for the milestone whose

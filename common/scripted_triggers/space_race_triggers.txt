@@ -135,6 +135,21 @@ sr_setback_is_deep_space_probe = {
 	}
 }
 
+# Any failure-event marker at all. Without one the setback helpers fall back to
+# the sr_failed_ flags (sr_resolve_setback_markers).
+sr_has_setback_marker = {
+	OR = {
+		exists = scope:sr_setback_suborbital
+		exists = scope:sr_setback_orbital
+		exists = scope:sr_setback_moon_landing
+		exists = scope:sr_setback_probe
+		exists = scope:sr_setback_moon_base
+		exists = scope:sr_setback_mars_landing
+		exists = scope:sr_setback_interstellar_probe
+		exists = scope:sr_setback_solar_colonization
+	}
+}
+
 sr_setback_is_crewed_outpost = {
 	OR = {
 		exists = scope:sr_setback_moon_base
