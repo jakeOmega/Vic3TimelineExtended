@@ -6,6 +6,7 @@
 
 # Event 1: Ideological Confrontation - rival ideological bloc demands concessions
 world_war_events.1 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -276,6 +277,7 @@ world_war_events.2 = {
 
 # Event 3: Diplomatic Crisis - an allied minor power is threatened
 world_war_events.3 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — gate on real pressure
 	type = country_event
 	placement = root
 

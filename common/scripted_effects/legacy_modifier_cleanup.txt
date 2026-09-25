@@ -53,6 +53,22 @@
 #   3. the monthly strip at the foot of te_monetary_init_arrangement_variables in
 #      common/scripted_effects/te_monetary_arrangement_effects.txt
 #   4. the `banking_fx_swap_lines` line in legacy_je_modifier_cleanup_effect below
+#
+# ── PENDING REMOVAL: the eight *_no_gw_modifier fallbacks (added 2026-09-25) ──
+# With the global warming rule disabled the climate simulation now stops
+# (event-agency PR #431), so the environmentalism events' disabled-rule branches
+# that granted these were removed. The static modifiers survive so a save made
+# while one was running loads clean; they are timed and decaying, so no strip is
+# needed — they expire on their own. Remove ALL of the following together, one
+# release after 2026-09-25 and no earlier than long_modifier_time of game time
+# into any save worth keeping:
+#   1. the blocks in common/static_modifiers/extra_modifiers.txt:
+#      fossil_lobby_concessions_no_gw_modifier, climate_summit_leader_no_gw_modifier,
+#      climate_summit_pledge_no_gw_modifier, climate_dismissal_boost_no_gw_modifier,
+#      climate_accord_rejection_no_gw_modifier, climate_deregulation_no_gw_modifier,
+#      climate_measures_sunset_no_gw_modifier, climate_victory_dividend_no_gw_modifier
+#   2. their names in te_miscellaneous_l_english.yml and their `_desc` keys in
+#      te_concepts_l_english.yml
 ########################################
 
 legacy_je_modifier_cleanup_effect = {

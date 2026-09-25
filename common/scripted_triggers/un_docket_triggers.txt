@@ -124,8 +124,11 @@ un_docket_space_ready = {
 }
 
 # A warming threshold has been crossed that the Assembly has not yet taken up.
+# Never under the disabled global warming rule: there is no warming to answer,
+# and the climate accord is not raised at all.
 # Scope: any
 un_docket_warming_ready = {
+	has_game_rule = global_warming_enabled
 	has_global_variable = un_dkt_warming_next
 	global_var:un_dkt_warming_next < 4
 	temperature_anomaly_display >= un_docket_warming_threshold
@@ -225,6 +228,8 @@ un_docket_topic_open_npt = {
 	global_var:un_authority >= 40
 }
 un_docket_topic_open_climate = {
+	# No climate accord under the disabled global warming rule.
+	has_game_rule = global_warming_enabled
 	NOT = { un_resolution_topic_on_cooldown = { TOPIC = climate } }
 	NOT = { has_global_variable = un_agency_unep }
 	global_var:un_authority >= 30
@@ -287,6 +292,7 @@ un_docket_may_propose_npt = {
 	NOT = { has_modifier = un_nonproliferation_refusal_modifier }
 }
 un_docket_may_propose_climate = {
+	has_game_rule = global_warming_enabled
 	un_docket_can_be_offered = yes
 	has_technology_researched = environmental_movement
 	NOT = { je:je_united_nations ?= { has_modifier = un_climate_binding_modifier } }

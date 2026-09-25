@@ -440,9 +440,17 @@ un_vote_apply_treaty_modifier = {
 	# je_colonial_empire bar (via colonial_gp_condemners_count). Setting
 	# the cooldown variable prevents decolonization_events.14 from firing
 	# afterward and letting the player re-deliberate the same stance.
+	# Only a member that cast a ballot takes the stance: a yes voter (the
+	# proposer included), or a no voter that accepts the declaration anyway
+	# (un_vote.3 option B). A member that cast none — its vote suspended
+	# under Article 19, or joined after the ballot — is bound by the
+	# declaration through un_vote.3 option A but committed itself to nothing.
 	if = {
 		limit = {
-			scope:un_resolution ?= { has_tag = un_topic_decolonization }
+			scope:un_resolution ?= {
+				has_tag = un_topic_decolonization
+				un_lobby_has_voted = { COUNTRY = ROOT }
+			}
 			country_rank >= rank_value:great_power
 		}
 		set_variable = gp_anti_colonial_stance
@@ -678,9 +686,16 @@ un_vote_apply_resolution_compliance = {
 	# Peacekeeping contributions are skipped when the resolution sent observers
 	# only — vetoed, or (redesign phase 5) carried by a UN below Established —
 	# because the observer mission doesn't levy contributors.
+	# A pledge is made only by a member that cast a ballot: a yes voter, or a
+	# no voter that takes part anyway (un_vote.3 option B). A member that
+	# cast none (Article 19, or a late joiner) reaches this through option A's
+	# acknowledgement and is not signed up for a deployment or its costs.
 	if = {
 		limit = {
-			scope:un_resolution ?= { un_resolution_peacekeeping_full = yes }
+			scope:un_resolution ?= {
+				un_resolution_peacekeeping_full = yes
+				un_lobby_has_voted = { COUNTRY = ROOT }
+			}
 			country_rank >= rank_value:major_power
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
@@ -708,7 +723,10 @@ un_vote_apply_resolution_compliance = {
 	}
 	if = {
 		limit = {
-			scope:un_resolution ?= { has_tag = un_topic_aid_request }
+			scope:un_resolution ?= {
+				has_tag = un_topic_aid_request
+				un_lobby_has_voted = { COUNTRY = ROOT }
+			}
 			country_rank >= rank_value:major_power
 		}
 		add_modifier = {
@@ -733,13 +751,16 @@ un_vote_apply_resolution_compliance = {
 		un_mission_join_resolution = yes
 	}
 
-	# Power bloc leader providing aid/peacekeeping: gain leverage over the recipient
+	# Power bloc leader providing aid/peacekeeping: gain leverage over the
+	# recipient. A member that cast no ballot pledged nothing above, so it is
+	# not credited with providing anything either.
 	if = {
 		limit = {
 			OR = {
 				scope:un_resolution ?= { has_tag = un_topic_aid_request }
 				scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
 			}
+			scope:un_resolution ?= { un_lobby_has_voted = { COUNTRY = ROOT } }
 			is_power_bloc_leader = yes
 			exists = scope:un_vote_proposer
 			NOT = { THIS = scope:un_vote_proposer }
