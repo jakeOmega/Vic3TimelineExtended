@@ -3216,7 +3216,18 @@ decolonization_events.206 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
-	title = decolonization_events.206.t
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = decol_chosen_releases }
+				desc = decolonization_events.206.t
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.206.t_neutral
+			}
+		}
+	}
 	desc = {
 		first_valid = {
 			triggered_desc = {
@@ -3262,13 +3273,16 @@ decolonization_events.206 = {
 		remove_variable = decol_chosen_releases
 	}
 
+	# Nothing was negotiated or chosen on this branch, so it does not get the
+	# "Negotiated Withdrawal" label: post_imperial_modifier carries the same
+	# values under a name that is true however the colonies went.
 	option = {
 		name = decolonization_events.206.b
 		trigger = { NOT = { has_variable = decol_chosen_releases } }
 		default_option = yes
 		ai_chance = { base = 5 }
 		add_modifier = {
-			name = negotiated_withdrawal_modifier
+			name = post_imperial_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}

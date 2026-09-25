@@ -803,6 +803,7 @@
  decolonization_events.206.f:0 "\"We did not wait to be forced,\" the minister told the assembled representatives. \"That is the only distinction history will remember clearly. Everything else — the terms, the dates, the arguments — those will be debated. But this was ours to choose.\""
  decolonization_events.206.f_neutral:0 "\"There was no ceremony,\" the old colonial secretary said, turning the atlas toward the window. \"No band, no flag coming down at dusk. One year the map simply had fewer of our colours on it.\"\n\nHe closed the book.\n\n\"Someone will write that we planned it. Someone else will write that we lost it. Neither of them was in this office.\""
  decolonization_events.206.t:0 "The Last Flag Lowered"
+ decolonization_events.206.t_neutral:0 "The Colonial Chapter Closes"
  decolonization_events.21.a:0 "We chart our own course."
  decolonization_events.21.b:0 "Stand with [SCOPE.sCountry('anti_colonial_gp').GetName]."
  decolonization_events.21.c:0 "Align with [SCOPE.sCountry('pro_colonial_gp').GetName] for economic gain."

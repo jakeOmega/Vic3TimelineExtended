@@ -1696,6 +1696,8 @@
  population_transfer_neglect_modifier_desc:0 "Transferred populations have been left to fend for themselves, breeding resentment."
  post_colonial_partnership_modifier_desc:0 "We have established a productive partnership with a former colony, maintaining mutual economic and diplomatic ties."
  post_colonial_self_reliance_modifier_desc:0 "The nation has chosen a path of self-reliance, building capacity from within rather than depending on foreign powers."
+ post_imperial_modifier:0 "Post-Imperial Standing"
+ post_imperial_modifier_desc:0 "No colonies remain under our rule. However the empire came to its end, the charge of colonialism no longer clings to our diplomacy."
  post_scarcity_achieved_modifier_desc:0 "The transition to a post-scarcity economy has been achieved."
  post_scarcity_stagnation_modifier_desc:0 "The failed transition to post-scarcity leaves society in [concept_turmoil]."
  post_scarcity_transition_active_modifier_desc:0 "Mass automation creates social upheaval as traditional employment collapses."
