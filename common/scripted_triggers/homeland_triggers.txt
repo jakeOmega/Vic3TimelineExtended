@@ -1,0 +1,65 @@
+﻿# State scope; ROOT remains the state during candidate discovery.
+te_homeland_region_unified = {
+	NOT = {
+		state_region = {
+			any_scope_state = { NOT = { owner = ROOT.owner } }
+		}
+	}
+}
+te_homeland_system_enabled = {
+	owner = { modifier:country_homelands_can_change_bool = yes }
+}
+
+# Culture scope; ROOT = state.
+te_homeland_creation_candidate = {
+	is_primary_culture_of = ROOT.owner
+	NOT = { has_homeland = ROOT }
+	ROOT = {
+		culture_percent_state = { target = PREV value >= homeland_culture_form_threshold }
+	}
+}
+te_homeland_creation_has_candidate = {
+	any_scope_culture = { te_homeland_creation_candidate = yes }
+}
+# Container scope; this also works when GUI evaluation makes ROOT the container.
+te_homeland_creation_project_valid = {
+	var:te_homeland_state = { owner = PREV.var:te_homeland_owner }
+	var:te_homeland_culture = {
+		is_primary_culture_of = PREV.var:te_homeland_state.owner
+		NOT = { has_homeland = PREV.var:te_homeland_state }
+		PREV.var:te_homeland_state = {
+			culture_percent_state = { target = PREV value >= homeland_culture_form_threshold }
+		}
+	}
+}
+
+# Culture scope; ROOT = state.
+te_homeland_removal_candidate = {
+	NOT = { is_primary_culture_of = ROOT.owner }
+	has_homeland = ROOT
+	ROOT = {
+		culture_percent_state = { target = PREV value < homeland_culture_disappear_threshold }
+	}
+}
+te_homeland_removal_has_candidate = {
+	any_scope_culture = { te_homeland_removal_candidate = yes }
+}
+# Container scope; this also works when GUI evaluation makes ROOT the container.
+te_homeland_removal_project_valid = {
+	var:te_homeland_state = { owner = PREV.var:te_homeland_owner }
+	var:te_homeland_culture = {
+		NOT = { is_primary_culture_of = PREV.var:te_homeland_state.owner }
+		has_homeland = PREV.var:te_homeland_state
+		PREV.var:te_homeland_state = {
+			culture_percent_state = { target = PREV value < homeland_culture_disappear_threshold }
+		}
+	}
+}
+
+# Container scope. Dispatch to the appropriate culture eligibility rule.
+te_homeland_project_valid = {
+	OR = {
+		AND = { has_tag = te_homeland_creation te_homeland_creation_project_valid = yes }
+		AND = { has_tag = te_homeland_removal te_homeland_removal_project_valid = yes }
+	}
+}

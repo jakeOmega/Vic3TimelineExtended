@@ -27,7 +27,7 @@ MODIFIERS = ROOT / "common/static_modifiers/nuclear_deterrence_modifiers.txt"
 CUSTOM_LOC = ROOT / "common/customizable_localization/nuclear_deterrence_custom_loc.txt"
 ACTIONS = ROOT / "common/diplomatic_actions/nuclear_crisis_actions.txt"
 ARTICLE = ROOT / "common/treaty_articles/115_nuclear_guarantee.txt"
-JE = ROOT / "common/journal_entries/je_nuclear_deterrence.txt"
+JE = ROOT / "common/journal_entries/je_nuclear_program.txt"
 CRISIS_EVENTS = ROOT / "events/nuclear_crisis_events.txt"
 INCIDENT_EVENTS = ROOT / "events/nuclear_incident_events.txt"
 DEBUG_EVENTS = ROOT / "events/te_debug_deterrence_events.txt"
@@ -217,8 +217,10 @@ class TestLocalization(unittest.TestCase):
             self.assertTrue(icon.exists() or tracked(icon), f"missing {icon.relative_to(ROOT)}")
 
     def test_journal_entry_keys(self):
-        self.assert_keys({"je_nuclear_deterrence", "je_nuclear_deterrence_reason",
-                          "je_nuclear_deterrence_status"}, JE.name)
+        # Posture and crises share je_nuclear_program since 2026-09-25.
+        self.assert_keys({"je_nuclear_program", "je_nuclear_program_desc",
+                          "je_nuclear_program_reason",
+                          "je_nuclear_program_status_line"}, JE.name)
 
 
 class TestManagedFamilies(unittest.TestCase):

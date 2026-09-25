@@ -808,20 +808,25 @@ nd_pledge_state_word = {
 	}
 }
 
-# The journal entry's status line (je_nuclear_deterrence_status only — the
-# one block here reached from a status_desc, so its targets may use
-# ROOT.GetCountry and must not be called from widget loc).
+# The second line of the journal entry's status (appended by
+# je_nuclear_program_status_line only — the one block here reached from a
+# status_desc, so its targets may use ROOT.GetCountry and must not be called
+# from widget loc). Each target starts with its own line break, and a country
+# that is neither armed nor in a crisis — a programme still building, or an
+# inactive entry — gets nothing.
 nd_status_line = {
 	type = country
 	random_valid = no
 	text = {
-		trigger = {
-			nd_is_armed = no
-		}
+		trigger = { nd_is_armed = yes }
+		localization_key = nd_status_armed
+	}
+	text = {
+		trigger = { nd_in_crisis = yes }
 		localization_key = nd_status_unarmed
 	}
 	text = {
 		trigger = { always = yes }
-		localization_key = nd_status_armed
+		localization_key = nd_empty
 	}
 }

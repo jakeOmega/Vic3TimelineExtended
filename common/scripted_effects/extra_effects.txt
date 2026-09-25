@@ -807,50 +807,6 @@ remove_all_ideologies = {
 	remove_ideology = ideology_bonapartist
 }
 
-remove_homelands_effect = {
-	every_scope_culture = {
-		limit = {
-			ROOT = {
-				culture_percent_state = {
-					target = PREV
-					value < homeland_culture_disappear_threshold
-				}
-			}
-			NOT = { is_primary_culture_of = ROOT.owner }
-			has_homeland = ROOT
-		}
-		save_scope_as = removal_culture
-		ROOT = {
-			state_region = {
-				remove_homeland = scope:removal_culture
-			}
-			post_notification = homeland_removed
-		}
-	}
-}
-
-create_homelands_effect = {
-	every_scope_culture = {
-		limit = {
-			ROOT = {
-				culture_percent_state = {
-					target = PREV
-					value >= homeland_culture_form_threshold
-				}
-			}
-			is_primary_culture_of = ROOT.owner
-			NOT = { has_homeland = ROOT }
-		}
-		save_scope_as = form_culture
-		ROOT = {
-			state_region = {
-				add_homeland = scope:form_culture
-			}
-			post_notification = homeland_created
-		}
-	}
-}
-
 fix_incompatible_laws = {
 	if = {
 		limit = {

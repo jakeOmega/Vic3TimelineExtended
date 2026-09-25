@@ -1,16 +1,23 @@
-﻿### Nuclear Programme journal-entry widget — two panels for je_nuclear_program.
+﻿### Nuclear Programme widgets — two panels for je_nuclear_program ("Nuclear
+### Weapons"). The entry also carries the posture and crisis panels of
+### nuclear_deterrence_widget.gui; see the entry's header for the whole order.
 ###
 ### widget_je_nuclear_programme   custom_widget_container_3
 ###     The programme itself: funding (a stepper), the warhead production rate,
 ###     how long the next warhead will take, the stockpile and the date of the
 ###     first device. Mounted in container_3 so it sits immediately ABOVE the
 ###     entry's native progress bar, which is progress toward that next warhead —
-###     the numbers that explain the bar are next to it.
+###     the numbers that explain the bar are next to it. Drawn only while the
+###     country has a programme (nuclear_program_has_programme_sgui): the entry
+###     is also active for an armed power without the standing to build and
+###     for a non-nuclear party to a crisis, and neither has anything to fund.
 ###
-### widget_je_nuclear_deterrence  custom_widget_container_4
-###     Two collapsed sections below the bar: what our warheads can reach and
-###     what our skies can stop, and the global nuclear-powers leaderboard that
-###     used to be eleven triggered_desc lines on the entry.
+### widget_je_nuclear_balance     custom_widget_container_4 (last)
+###     Two collapsed sections at the foot of the entry, after posture and
+###     crisis: what our warheads can reach and what our skies can stop, and the
+###     global nuclear-powers leaderboard that used to be eleven triggered_desc
+###     lines on the entry. Drawn for everyone the entry is active for — a
+###     non-nuclear crisis target has a home defence too.
 ###
 ### Panel order in gui/journal_entry.gui, for anyone moving these: status
 ### desc(188), container_2(207), scripted button grid(215), container_3(236),
@@ -214,7 +221,7 @@ flowcontainer = {
 	ignoreinvisible = yes
 	spacing = 2
 
-	visible = "[JournalEntry.IsActive]"
+	visible = "[And( JournalEntry.IsActive, GetScriptedGui('nuclear_program_has_programme_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 
 	nuclear_program_section_header = {
 		blockoverride "left_text" {
@@ -288,10 +295,10 @@ flowcontainer = {
 
 
 ### ==========================================================================
-### DETERRENCE AND THE NUCLEAR POWERS — container_4, below the progress bar
+### DELIVERY AND DEFENCE, AND THE NUCLEAR POWERS — container_4, last
 ### ==========================================================================
 flowcontainer = {
-	name = "widget_je_nuclear_deterrence"
+	name = "widget_je_nuclear_balance"
 	direction = vertical
 	parentanchor = hcenter
 	ignoreinvisible = yes
@@ -306,21 +313,21 @@ flowcontainer = {
 	### localization blocks that already existed for exactly this breakdown.
 	nuclear_program_section_header = {
 		blockoverride "left_text" {
-			text = "je_nuclear_program_widget_deterrence_header"
+			text = "je_nuclear_program_widget_odds_header"
 		}
 		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('nuclear_program_deterrence')]"
+			onclick = "[GetVariableSystem.Toggle('nuclear_program_odds')]"
 		}
 		blockoverride "onclick_showmore" {
-			visible = "[Not(GetVariableSystem.Exists('nuclear_program_deterrence'))]"
+			visible = "[Not(GetVariableSystem.Exists('nuclear_program_odds'))]"
 		}
 		blockoverride "onclick_showless" {
-			visible = "[GetVariableSystem.Exists('nuclear_program_deterrence')]"
+			visible = "[GetVariableSystem.Exists('nuclear_program_odds')]"
 		}
 	}
 
 	nuclear_program_panel = {
-		visible = "[GetVariableSystem.Exists('nuclear_program_deterrence')]"
+		visible = "[GetVariableSystem.Exists('nuclear_program_odds')]"
 
 		nuclear_program_row = {
 			blockoverride "row_label" {

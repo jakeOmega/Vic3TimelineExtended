@@ -304,6 +304,7 @@ on_become_independent = {
 
 on_monthly_pulse_state = {
 	on_actions = {
+		te_homeland_monthly
 		space_elevator_on_action
 		solar_collector_on_action
 		orbital_battlestation_on_action
@@ -394,7 +395,6 @@ st_dp_escalation_weekly_schedule = {
 on_yearly_pulse_state = {
 	on_actions = {
 		global_warming_update_on_action
-		remove_or_create_homelands_on_action
 		violent_hostility_on_action
 		migration_crowding_on_action
 		religious_mission_conversion_on_action
@@ -826,33 +826,6 @@ cheaty_on_action = {
 				has_modifier = cheaty
 			}
 			remove_modifier = cheaty
-		}
-	}
-}
-
-remove_or_create_homelands_on_action = {
-	effect = {
-		if = {
-			limit = {
-				NOT = {
-					state_region = {
-						any_scope_state = {
-							NOT = { owner = ROOT.owner }
-						}
-					}
-				}
-				owner = {
-					modifier:country_homelands_can_change_bool = yes
-				}
-			}
-			random = {
-				chance = homeland_change_chance
-				remove_homelands_effect = yes
-			}
-			random = {
-				chance = homeland_change_chance
-				create_homelands_effect = yes
-			}
 		}
 	}
 }
@@ -1574,7 +1547,7 @@ international_relations_events_on_action = {
 					trigger = {
 						has_modifier = nuclear_power
 						any_rival_country = { has_modifier = nuclear_power }
-						NOT = { has_journal_entry = je_nuclear_deterrence }
+						NOT = { nd_is_armed = yes }
 					}
 					trigger_event = { id = nuclear_weapon_events.21 }
 				}
@@ -3153,5 +3126,15 @@ agdiff_backfill_on_released_country = {
 		scope:target = {
 			agdiff_backfill_diffusion_for_country = yes
 		}
+	}
+}
+
+# Both homeland tracks use deterministic monthly progress.
+te_homeland_monthly = {
+	effect = {
+		set_variable = { name = te_homeland_monthly_units value = te_homeland_annual_progress }
+		te_homeland_creation_monthly_effect = yes
+		te_homeland_removal_monthly_effect = yes
+		remove_variable = te_homeland_monthly_units
 	}
 }

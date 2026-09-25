@@ -150,7 +150,7 @@ SYSTEMS: tuple[System, ...] = (
     ),
     System(
         "nuclear", "Nuclear weapons / deterrence",
-        _rx(r"\bnuclear_weapons_(?:enabled|disabled)\b|\bje_nuclear_(?:program|deterrence)\b"
+        _rx(r"\bnuclear_weapons_(?:enabled|disabled)\b|\bje_nuclear_program\b"
             r"|\bnuclear_\w+|\bnuke_\w+|\bnd_\w+|\bnuclear_power\b"),
         _rx(r"^(?:nuclear_|nuke_|te_debug_nuclear|te_debug_deterrence)"),
         _rx(r"\bnuclear (?:weapons?|arsenals?|warheads?|tests?|standoff|war|deterrent|deterrence"

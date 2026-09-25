@@ -39,7 +39,7 @@ un_regime_climate_low_emitter = {
 # A nuclear-threshold state: running a programme with no bomb yet. The
 # inspections slow it.
 un_regime_npt_threshold = {
-	has_journal_entry = je_nuclear_program
+	nuclear_program_has_programme = yes
 	NOT = { has_modifier = nuclear_power }
 	has_variable = nuclear_weapons_program_first_nuke_done
 	var:nuclear_weapons_program_first_nuke_done = 0

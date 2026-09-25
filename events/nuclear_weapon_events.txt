@@ -953,6 +953,7 @@ nuclear_weapon_events.18 = {
 		name = nuclear_weapon_events.18.opt_b
 		trigger = {
 			NOT = { has_modifier = nuclear_power }
+			nuclear_program_has_programme = yes
 			has_variable = nuclear_weapon_program_progress
 			has_variable = nuclear_weapons_program_funding
 		}
@@ -1003,6 +1004,7 @@ nuclear_weapon_events.18 = {
 		name = nuclear_weapon_events.18.opt_c
 		trigger = {
 			NOT = { has_modifier = nuclear_power }
+			nuclear_program_has_programme = yes
 			has_variable = nuclear_weapon_program_progress
 			has_variable = nuclear_weapons_program_funding
 		}
@@ -1065,7 +1067,7 @@ nuclear_weapon_events.18 = {
 			modifier = {
 				trigger = {
 					ruler_is_cautious = yes
-					NOT = { has_variable = nuclear_weapon_program_progress }
+					NOT = { nuclear_program_has_programme = yes }
 				}
 				add = 3
 			}
@@ -1391,13 +1393,14 @@ nuclear_weapon_events.21 = {
 	duration = 3
 	cooldown = { days = very_long_modifier_time }
 
-	# Outside the deterrence system only: je_nuclear_deterrence owns warning
-	# incidents (the Unconfirmed Warning family, nuclear_incident.1-.5), which
-	# read the country's posture and readiness; this one does not.
+	# Outside the deterrence system only: an armed country's warning incidents
+	# (the Unconfirmed Warning family, nuclear_incident.1-.5) are rolled by
+	# nd_roll_incident from its posture and readiness; this one reads neither.
+	# The deterrence half of je_nuclear_program is gated on nd_is_armed.
 	trigger = {
 		has_modifier = nuclear_power
 		any_rival_country = { has_modifier = nuclear_power }
-		NOT = { has_journal_entry = je_nuclear_deterrence }
+		NOT = { nd_is_armed = yes }
 	}
 
 	immediate = {
