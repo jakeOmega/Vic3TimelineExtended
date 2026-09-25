@@ -365,6 +365,7 @@ irredentism.2 = {
 # diplomatic catalyst on the target) or withdraw to bank the goodwill.
 # ============================================================================
 irredentism.3 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): false positive: the subject of "have begun" is the voices on both sides; this is the unifier's own proposal
 	type = country_event
 	placement = root
 

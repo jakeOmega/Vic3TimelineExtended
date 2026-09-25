@@ -192,7 +192,8 @@
 	}
 
 	# Path-dependent failure: distinguish suppression (oppressive aftermath),
-	# cooptation (movement demobilized by token reform), and gradualist drift.
+	# cooptation (movement demobilized by token reform), gradualist drift, and a
+	# movement that simply lost momentum with no track dominant (.232).
 	on_fail = {
 		cr_ensure_tracker_vars_effect = yes
 		if = {
@@ -209,8 +210,12 @@
 			limit = { var:cr_cooptation_months > 18 }
 			trigger_event = { id = movement_events_te.230 } # demobilized by tokenism
 		}
-		else = {
+		else_if = {
+			limit = { var:cr_gradualist_months > 18 }
 			trigger_event = { id = movement_events_te.231 } # gradualist stagnation
+		}
+		else = {
+			trigger_event = { id = movement_events_te.232 } # lost momentum, no dominant track
 		}
 
 		cr_je_cleanup_effect = yes

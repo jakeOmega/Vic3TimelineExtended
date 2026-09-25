@@ -29,18 +29,41 @@ post_scarcity_events.1 = {
 	immediate = {
 	}
 
-	# Expand UBI programs
+	# Expand UBI programs (only a country with a UBI has programs to expand)
 	option = {
 		name = post_scarcity_events.1.a
 		default_option = yes
+		trigger = { has_law = law_type:law_universal_basic_income }
+		ai_chance = {
+			base = 4
+			# welfare/redistributive economies naturally expand UBI in a jobs crisis;
+			# a country with the UBI law always gets the +2 it earned here before
+		}
+		add_modifier = {
+			name = ubi_expansion_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.25
+		}
+	}
+
+	# Without a UBI: the same relief, as emergency income support
+	option = {
+		name = post_scarcity_events.1.a_emergency
+		default_option = yes
+		trigger = {
+			NOT = { has_law = law_type:law_universal_basic_income }
+		}
 		ai_chance = {
 			base = 2
-			# welfare/redistributive economies naturally expand UBI in a jobs crisis
+			# welfare/redistributive economies naturally reach for income support in a jobs crisis
 			modifier = {
 				trigger = {
 					OR = {
 						has_law = law_type:law_wage_subsidies
-						has_law = law_type:law_universal_basic_income
 						has_law = law_type:law_command_economy
 						has_law = law_type:law_council_republic
 					}
@@ -49,7 +72,7 @@ post_scarcity_events.1 = {
 			}
 		}
 		add_modifier = {
-			name = ubi_expansion_modifier
+			name = emergency_income_support_modifier
 			days = normal_modifier_time
 			is_decaying = yes
 		}
@@ -122,6 +145,9 @@ post_scarcity_events.2 = {
 	trigger = {
 		has_technology_researched = universal_basic_income
 		NOT = { has_law = law_type:law_post-scarcity }
+		# "Basic needs met and work no longer necessary" is the UBI stage, as .5
+		# already requires; before it the JE reads "mass unemployment looms".
+		has_law = law_type:law_universal_basic_income
 	}
 
 	immediate = {

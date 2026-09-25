@@ -1387,6 +1387,8 @@ ministry_law_events.20 = {
 			has_modifier = ministry_staffing_advance
 			has_modifier = ministry_staffing_cautious
 			has_modifier = ministry_staffing_stall
+			# .39.a chose competitive examinations: no patronage scandal after that.
+			has_modifier = ministry_staffing_professional
 		}
 		any_interest_group = {
 			ig_counts_as_marginal = no

@@ -507,4 +507,197 @@ types te_state_panel_widget_types
 			}
 		}
 	}
+
+	type te_state_homeland_project = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		te_state_tile_row = {
+			blockoverride "row_label" {
+				text = "[GetScriptedGui('te_homeland_project_culture_sgui').ExecuteTooltip(GuiScope.SetRoot(State.MakeScope).AddScope('project', ScriptContainer.MakeScope).End)]"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "[GetScriptedGui('te_homeland_project_culture_sgui').ExecuteTooltip(GuiScope.SetRoot(State.MakeScope).AddScope('project', ScriptContainer.MakeScope).End)]"
+			}
+			blockoverride "row_value" {
+				raw_text = "#v [ScriptContainer.MakeScope.ScriptValue('te_homeland_project_progress_pct')|1]%#!"
+			}
+		}
+		te_state_stat_bar = {
+			blockoverride "bar_indent" {}
+			blockoverride "bar_size" { size = { 160 6 } }
+			blockoverride "bar_value" {
+				value = "[FixedPointToFloat(ScriptContainer.MakeScope.ScriptValue('te_homeland_project_progress_pct'))]"
+			}
+		}
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(ScriptContainer.MakeScope.ScriptValue('te_homeland_project_eligible'), '(CFixedPoint)0')]"
+			text = "TE_HOMELAND_PROJECT_INVALID"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+	}
+
+	type te_state_homeland_tracks = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 3
+
+		textbox = {
+			text = "TE_HOMELAND_CREATION"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+		}
+		flowcontainer = {
+			direction = vertical
+			spacing = 3
+			datamodel = "[State.MakeScope.GetList('te_homeland_creation_projects')]"
+			item = {
+				te_state_homeland_project = {
+					datacontext = "[Scope.GetScriptContainer]"
+				}
+			}
+		}
+		flowcontainer = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_project_count'), '(CFixedPoint)0')]"
+			te_state_stat_bar = {
+				blockoverride "bar_indent" {}
+				blockoverride "bar_size" { size = { 160 6 } }
+			}
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)1')]"
+			text = "TE_HOMELAND_CREATION_LOCKED"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)2')]"
+			text = "TE_HOMELAND_CREATION_SPLIT"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)3')]"
+			text = "TE_HOMELAND_CREATION_NO_CULTURE"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)4')]"
+			text = "TE_HOMELAND_CREATION_THRESHOLD"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)5')]"
+			text = "TE_HOMELAND_CREATION_ACTIVE"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_creation_status'), '(CFixedPoint)6')]"
+			text = "TE_HOMELAND_CREATION_WAITING"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			text = "TE_HOMELAND_REMOVAL"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+		}
+		flowcontainer = {
+			direction = vertical
+			spacing = 3
+			datamodel = "[State.MakeScope.GetList('te_homeland_removal_projects')]"
+			item = {
+				te_state_homeland_project = {
+					datacontext = "[Scope.GetScriptContainer]"
+				}
+			}
+		}
+		flowcontainer = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_project_count'), '(CFixedPoint)0')]"
+			te_state_stat_bar = {
+				blockoverride "bar_indent" {}
+				blockoverride "bar_size" { size = { 160 6 } }
+			}
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)1')]"
+			text = "TE_HOMELAND_REMOVAL_LOCKED"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)2')]"
+			text = "TE_HOMELAND_REMOVAL_SPLIT"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)3')]"
+			text = "TE_HOMELAND_REMOVAL_NO_CULTURE"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)4')]"
+			text = "TE_HOMELAND_REMOVAL_THRESHOLD"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)5')]"
+			text = "TE_HOMELAND_REMOVAL_ACTIVE"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+		textbox = {
+			visible = "[EqualTo_CFixedPoint(State.MakeScope.ScriptValue('te_homeland_removal_status'), '(CFixedPoint)6')]"
+			text = "TE_HOMELAND_REMOVAL_WAITING"
+			autoresize = yes
+			maximumsize = { 160 -1 }
+			multiline = yes
+			using = fontsize_small
+		}
+
+	}
 }

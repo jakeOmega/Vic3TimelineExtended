@@ -1,0 +1,117 @@
+﻿# State status and container progress; all UI conditions are evaluated live.
+
+# 1 locked, 2 divided region, 3 no relevant culture, 4 population threshold,
+# 5 progressing, 6 waiting for next month. Each culture has its own bar.
+te_homeland_creation_status = {
+	value = 6
+	if = {
+		limit = { NOT = { te_homeland_system_enabled = yes } }
+		value = 1
+	}
+	else_if = {
+		limit = { NOT = { te_homeland_region_unified = yes } }
+		value = 2
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				any_scope_culture = {
+					is_primary_culture_of = ROOT.owner
+					NOT = { has_homeland = ROOT }
+				}
+			}
+		}
+		value = 3
+	}
+	else_if = {
+		limit = { NOT = { te_homeland_creation_has_candidate = yes } }
+		value = 4
+	}
+	else_if = {
+		limit = {
+			has_variable_list = te_homeland_creation_projects
+			any_in_list = {
+				variable = te_homeland_creation_projects
+				te_homeland_creation_project_valid = yes
+			}
+		}
+		value = 5
+	}
+}
+te_homeland_creation_project_count = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_homeland_creation_projects }
+		every_in_list = { variable = te_homeland_creation_projects add = 1 }
+	}
+}
+
+# 1 locked, 2 divided region, 3 no relevant culture, 4 population threshold,
+# 5 progressing, 6 waiting for next month. Each culture has its own bar.
+te_homeland_removal_status = {
+	value = 6
+	if = {
+		limit = { NOT = { te_homeland_system_enabled = yes } }
+		value = 1
+	}
+	else_if = {
+		limit = { NOT = { te_homeland_region_unified = yes } }
+		value = 2
+	}
+	else_if = {
+		limit = {
+			NOT = {
+				any_scope_culture = {
+					NOT = { is_primary_culture_of = ROOT.owner }
+					has_homeland = ROOT
+				}
+			}
+		}
+		value = 3
+	}
+	else_if = {
+		limit = { NOT = { te_homeland_removal_has_candidate = yes } }
+		value = 4
+	}
+	else_if = {
+		limit = {
+			has_variable_list = te_homeland_removal_projects
+			any_in_list = {
+				variable = te_homeland_removal_projects
+				te_homeland_removal_project_valid = yes
+			}
+		}
+		value = 5
+	}
+}
+te_homeland_removal_project_count = {
+	value = 0
+	if = {
+		limit = { has_variable_list = te_homeland_removal_projects }
+		every_in_list = { variable = te_homeland_removal_projects add = 1 }
+	}
+}
+
+# Container scope, used by each culture's row.
+te_homeland_project_progress_pct = {
+	value = 0
+	if = {
+		limit = { te_homeland_project_valid = yes }
+		value = var:te_homeland_progress
+		divide = 12
+	}
+	min = 0
+	max = 100
+}
+te_homeland_monthly_points = {
+	value = te_homeland_annual_progress
+	divide = 12
+}
+
+te_homeland_project_eligible = {
+	value = 0
+	if = {
+		limit = { te_homeland_project_valid = yes }
+		value = 1
+	}
+}

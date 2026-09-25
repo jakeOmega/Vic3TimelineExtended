@@ -16,7 +16,8 @@
 
 	possible = {
 		var:nuclear_weapon_stockpile > 0
-		# Doctrine (je_nuclear_deterrence): when do we say we will use them?
+		# Doctrine (the posture panel of je_nuclear_program): when do we say we
+		# will use them?
 		# The law gates below stay and apply on top — a strike needs both.
 		# See docs/systems/nuclear_crisis_design.md §0.2.
 		custom_tooltip = {

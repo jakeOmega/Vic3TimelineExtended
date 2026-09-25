@@ -1,11 +1,17 @@
 ﻿# ============================================================================
 # NUCLEAR PROGRAMME — scripted GUIs for gui/journal_entry_widgets/nuclear_program_widget.gui
 # ============================================================================
-# Two handlers, and that is deliberately all: the programme panel's rows are
+# Three handlers, and that is deliberately all: the programme panel's rows are
 # ordinary localization reading display-only script values and
 # common/customizable_localization/nuclear_program_custom_loc.txt, which is
 # cheaper per frame than ExecuteTooltip and needs no handler at all. A scripted
 # GUI is used only where nothing else can do the job.
+#
+# ---- nuclear_program_has_programme_sgui — display only ---------------------
+# Scope-free yes/no: does this country have a programme? The programme panel's
+# root asks it, because the entry is also active for an armed power without
+# the standing to build and for a non-nuclear party to a crisis, and neither
+# has anything to fund.
 #
 # ---- nuclear_program_funding_sgui — op table -------------------------------
 # Keep in step with the .gui header and docs/systems/journal_entry_systems.md.
@@ -50,6 +56,19 @@
 #
 # `effect` reading `scope:op` to pick which rank to render IS the proven path.
 # ============================================================================
+
+# ---------------------------------------------------------------------------
+# IS THERE A PROGRAMME?
+# ---------------------------------------------------------------------------
+nuclear_program_has_programme_sgui = {
+	scope = country
+	is_shown = {
+		nuclear_program_has_programme = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
 
 # ---------------------------------------------------------------------------
 # THE FUNDING STEPPER

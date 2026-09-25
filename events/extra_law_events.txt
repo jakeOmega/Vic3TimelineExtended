@@ -113,9 +113,12 @@ extra_law_events.2 = {
 			is_enacting_law = law_type:law_central_bank_independence
 			is_enacting_law = law_type:law_universal_banking_light_prudence
 		}
+		# Any of the three means a bank-run story already ran this enactment
+		# (.2 or .38); .38.b adds the stall one.
 		NOR = {
 			has_modifier = finreg_bank_panic_advance
 			has_modifier = finreg_bank_panic_cautious
+			has_modifier = finreg_bank_panic_stall
 		}
 	}
 
@@ -309,9 +312,45 @@ extra_law_events.5 = {
 	type = country_event
 	placement = root
 
-	title = extra_law_events.5.t
-	desc = extra_law_events.5.d
-	flavor = extra_law_events.5.f
+	# Government agents reading citizens' mail is a fact only where the state
+	# runs a surveillance apparatus. Elsewhere the expose shows how easily
+	# correspondence could be intercepted, which is what the bill debates.
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_ea_has_surveillance_apparatus = yes }
+				desc = extra_law_events.5.t
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.5.t_exposure
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_ea_has_surveillance_apparatus = yes }
+				desc = extra_law_events.5.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.5.d_exposure
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_ea_has_surveillance_apparatus = yes }
+				desc = extra_law_events.5.f
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.5.f_exposure
+			}
+		}
+	}
 
 	category = enactment
 
@@ -2826,7 +2865,7 @@ extra_law_events.29 = {
 	}
 
 	option = { # Temporary national champion exemption — ten-year sunset clause (issue #278)
-		name = extra_law_events.29.d
+		name = extra_law_events.29.e
 		currently_enacting_law = {
 			add_amendment = {
 				type = amendment_national_champion_exemption
@@ -3073,7 +3112,7 @@ extra_law_events.31 = {
 	}
 
 	option = { # Temporary corporate data exemption — three-year compliance grace period (issue #278)
-		name = extra_law_events.31.d
+		name = extra_law_events.31.e
 		currently_enacting_law = {
 			add_amendment = {
 				type = amendment_corporate_data_exemption
@@ -3116,7 +3155,19 @@ extra_law_events.32 = {
 	placement = root
 
 	title = extra_law_events.32.t
-	desc = extra_law_events.32.d
+	# The pledge sentence only when option a can actually be taken.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_ea_no_first_strike_pledge_available = yes }
+				desc = extra_law_events.32.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.32.d_no_pledge
+			}
+		}
+	}
 	flavor = extra_law_events.32.f
 
 	category = enactment
@@ -3165,13 +3216,7 @@ extra_law_events.32 = {
 
 	option = { # No-first-strike pledge
 		name = extra_law_events.32.a
-		trigger = {
-			has_technology_researched = nuclear_weapons
-			OR = {
-				is_enacting_law = law_type:law_humanitarian_regulations
-				is_enacting_law = law_type:law_limited_war
-			}
-		}
+		trigger = { te_ea_no_first_strike_pledge_available = yes }
 		custom_tooltip = ele_amend_no_first_strike_tt
 		currently_enacting_law = {
 			add_amendment = {
@@ -4159,9 +4204,46 @@ extra_law_events.39 = {
 	type = country_event
 	placement = root
 
-	title = extra_law_events.39.t
-	desc = extra_law_events.39.d
-	flavor = extra_law_events.39.f
+	# Specie actually leaving the vaults is a claim about the monetary layer's
+	# gold vault: only when gold flows run for this country (gold standard,
+	# national bank, full banking system). Otherwise the outflow is the
+	# opposing interest group's warning, not an observation.
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_mon_has_gold_flows = yes }
+				desc = extra_law_events.39.t
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.39.t_warning
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_mon_has_gold_flows = yes }
+				desc = extra_law_events.39.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.39.d_warning
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_mon_has_gold_flows = yes }
+				desc = extra_law_events.39.f
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.39.f_warning
+			}
+		}
+	}
 
 	category = enactment
 
@@ -4216,7 +4298,14 @@ extra_law_events.39 = {
 	}
 
 	option = {
-		name = extra_law_events.39.a
+		name = {
+			trigger = { te_mon_has_gold_flows = yes }
+			text = extra_law_events.39.a
+		}
+		name = {
+			trigger = { te_mon_has_gold_flows = no }
+			text = extra_law_events.39.a_warning
+		}
 		default_option = yes
 		trigger = { enactment_setback_count < max_setbacks_minus_one }
 		highlighted_option = yes
@@ -6154,7 +6243,32 @@ extra_law_events.62 = {
 	placement = root
 
 	title = extra_law_events.62.t
-	desc = extra_law_events.62.d
+	# "Panic spreading" only when there is one: a bank-run story this
+	# enactment (.2 / .38 leave a finreg_bank_panic_* enactment modifier) or
+	# the banking cycle in panic or downturn.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					OR = {
+						has_modifier = finreg_bank_panic_advance
+						has_modifier = finreg_bank_panic_cautious
+						has_modifier = finreg_bank_panic_stall
+						AND = {
+							has_journal_entry = je_banking_cycle
+							has_variable = finance_cycle_value
+							banking_cycle_is_recession = yes
+						}
+					}
+				}
+				desc = extra_law_events.62.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = extra_law_events.62.d_memory
+			}
+		}
+	}
 	flavor = extra_law_events.62.f
 
 	category = enactment
@@ -7434,7 +7548,7 @@ extra_law_events.84 = {
 #  AMENDMENT EXPIRY EVENTS (85–86)  — issue #278
 #  Fired by te_amendment_timeout_on_action
 #  (common/on_actions/amendment_on_actions.txt) when a TEMPORARY amendment
-#  attached by extra_law_events.29.d / .31.d expires. The engine has
+#  attached by extra_law_events.29.e / .31.e expires. The engine has
 #  already removed the amendment; "keep" re-adds it permanently (no
 #  timeout — a re-timeout on an already-active law is unverified and could
 #  expire immediately, re-firing the event). Not pooled; no cooldown.

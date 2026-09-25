@@ -1,0 +1,14 @@
+﻿# ============================================================================
+# EVENT AGENCY (package b) - static modifiers
+# ============================================================================
+
+# post_scarcity_events.1.a_emergency: the relief a country without a universal
+# basic income can offer in a mass-unemployment crisis. Same values as
+# ubi_expansion_modifier, which .1.a now reserves for countries with the UBI
+# law, so the tooltip no longer promises to expand a programme that does not
+# exist.
+emergency_income_support_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_turmoil_effects_mult = -0.05
+	country_bureaucracy_mult = -0.03
+}
