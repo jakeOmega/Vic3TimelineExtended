@@ -18,6 +18,8 @@
 #          on the target; an AI member by a monthly roll gated on a warlike
 #          government (irredentism_bloc_approval_on_action).
 # Event 10 "[Leader] Blesses Our Claim"   (member, follow-up to Event 7 option A)
+# Event 8  "[Member] Considers Voluntary Union" (bloc leader, about the country
+#          that actually proposed, var:irr_union_proposer from Event 4 option A)
 #
 # See /home/jakef/.claude/plans/can-we-make-a-sparkling-pine.md.
 # ============================================================================
@@ -481,6 +483,11 @@ irredentism.4 = {
 
 	duration = 3
 
+	# The text names the proposer (scope:irr_unifier, carried from Event 3).
+	trigger = {
+		exists = scope:irr_unifier
+	}
+
 	immediate = {
 		save_scope_as = irr_target
 	}
@@ -510,6 +517,19 @@ irredentism.4 = {
 			name = irr_open_to_union_modifier
 			days = 1825
 			is_decaying = yes
+		}
+		# Remember who proposed, for as long as the modifier lasts, so that
+		# if our bloc leader is asked about the union (Event 8, via
+		# irredentism_bloc_approval_on_action) it is asked about this country.
+		hidden_effect = {
+			if = {
+				limit = { exists = scope:irr_unifier }
+				set_variable = {
+					name = irr_union_proposer
+					value = scope:irr_unifier
+					days = 1825
+				}
+			}
 		}
 	}
 

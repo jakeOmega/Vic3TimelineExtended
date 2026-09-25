@@ -2922,8 +2922,9 @@ irredentism_events_on_action = {
 #     irr_seek_war_blessing diplomatic action; both paths share the triggers
 #     in te_event_agency_irr_triggers.txt. A leader hears at most one AI
 #     request per 5 years (irr_war_blessing_heard, set by irredentism.7).
-# 5b: bloc member has just received an irr_offered_union_modifier (proposed
-#     to via Event 3) without peace approval. Bloc leader blesses or forbids.
+# 5b: bloc member chose to hear a union proposal (irredentism.4.a) and lacks
+#     peace approval. The leader is asked about the country that actually
+#     proposed (var:irr_union_proposer, set by irredentism.4.a).
 # ============================================================================
 irredentism_bloc_approval_on_action = {
 	effect = {
@@ -2994,13 +2995,13 @@ irredentism_bloc_approval_on_action = {
 						exists = var:irredentist_peace_approval
 					}
 				}
-				# Some same-culture amicable+ neighbor exists -- the unifier
 				NOT = { has_modifier = irr_union_forbidden_modifier }
-				any_country = {
-					NOT = { THIS = ROOT }
-					ROOT = {
-						any_primary_culture = { is_primary_culture_of = PREV }
-					}
+				# The country whose proposal we agreed to hear (irredentism.4.a)
+				# still exists and is still on warm terms with us.
+				has_variable = irr_union_proposer
+				exists = var:irr_union_proposer
+				var:irr_union_proposer ?= {
+					NOT = { is_country_type = decentralized }
 					relations:ROOT >= relations_threshold:amicable
 				}
 			}
@@ -3008,14 +3009,7 @@ irredentism_bloc_approval_on_action = {
 				985 = { }
 				15 = {
 					save_scope_as = irr_proposed_target
-					random_country = {
-						limit = {
-							NOT = { THIS = ROOT }
-							ROOT = {
-								any_primary_culture = { is_primary_culture_of = PREV }
-							}
-							relations:ROOT >= relations_threshold:amicable
-						}
+					var:irr_union_proposer ?= {
 						save_scope_as = irr_unifier
 					}
 					power_bloc ?= {
