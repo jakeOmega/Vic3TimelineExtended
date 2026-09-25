@@ -630,7 +630,7 @@ Two habits that go with it:
 ## JE Localization Scope: ROOT = JournalEntry, NOT Country
 
 - In journal entry `status_desc`, `reason`, and custom tooltip loc strings, `ROOT` is the **JournalEntry scope**, not the country.
-- **This also applies to events fired from a JE-scoped scripted effect** (e.g. via `trigger_event = { id = X }` inside a JE monthly/yearly pulse). The triggered event inherits the caller's ROOT — the JE — not the country, even when the event is `type = country_event`.
+- **Correction (2026-09-25): an event fired from a journal entry's pulse, `immediate` or `on_complete` has ROOT = the country, not the JE.** An earlier version of this bullet said the triggered event inherits the JE as ROOT. Vanilla contradicts that in script: `communism.2`, fired from `je_communism`'s `on_complete`, reads `root.bureaucracy > 0` and `c:RUS = ROOT`, and `congo_free_state_events.1`, fired from `je_congo_free_state`'s `immediate`, runs `ruler = { â¦ }` and `create_country = { origin = ROOT }`. The `[ROOT.GetName]` failure that prompted the old claim (f1113cfb) is the loc typing rule below â in *any* event's loc, ROOT needs the `.GetCountry` hop â not evidence that ROOT was the JE. So `relations:root`, `root.var:x` and `owner = ROOT` in a JE-dispatched country event read the country; the `.GetCountry` rule applies only to loc.
 - **Invalid:** `[ROOT.GetName]` — engine logs `Could not find data system function 'GetName' in 'ROOT.GetName'` and the loc string fails to render (everything up to the broken token disappears).
 - **Valid:** `[ROOT.GetCountry.GetName]`, `[ROOT.GetCountry.GetAdjective]`.
 - For script values: vanilla uses `[GetPlayer.MakeScope.ScriptValue('...')]`, though `[ROOT.ScriptValue('...')]` appears to work in some contexts.
