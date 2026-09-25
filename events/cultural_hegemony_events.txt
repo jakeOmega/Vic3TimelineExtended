@@ -539,11 +539,14 @@ cultural_hegemony.6 = {
 				value = small_radicals
 			}
 		}
-		add_modifier = {
-			name = ch_brain_drain_remittances
-			days = normal_modifier_time
-			is_decaying = yes
-		}
+		# On the journal entry, like every other cultural-hegemony event
+		# modifier: legacy_je_modifier_cleanup_effect strips a country-level
+		# ch_brain_drain_remittances every month.
+		je:je_cultural_hegemony ?= { add_modifier = {
+				name = ch_brain_drain_remittances
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		add_treasury = {
 			value = money_amount_multiplier_very_large
 			multiply = 4
@@ -969,11 +972,13 @@ cultural_hegemony.9 = {
 		name = cultural_hegemony.9.a
 		default_option = yes
 
-		add_modifier = {
-			name = ch_soft_power_dividend
-			days = long_modifier_time
-			is_decaying = yes
-		}
+		# On the journal entry, as in .5 and .8: legacy_je_modifier_cleanup_effect
+		# strips a country-level ch_soft_power_dividend every month.
+		je:je_cultural_hegemony ?= { add_modifier = {
+				name = ch_soft_power_dividend
+				days = long_modifier_time
+				is_decaying = yes
+			} }
 
 		ai_chance = {
 			base = 10
