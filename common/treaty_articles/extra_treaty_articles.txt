@@ -1153,11 +1153,42 @@ nuclear_disarmament = {
 	# the article is only listed for a country with a program to give up.
 	# can_ratify re-checks the source explicitly in case that reading is wrong.
 	visible = {
+		has_game_rule = nuclear_weapons_enabled
 		has_technology_researched = nuclear_weapons
 	}
 
 	possible = {
+		has_game_rule = nuclear_weapons_enabled
 		nuclear_program_can_be_disarmed = yes
+	}
+
+	# Record whether there was anything to disarm, before je_nuclear_program's
+	# weekly pulse zeroes the stockpile and progress. treaty_article_events.5
+	# (the officer corps' fury) reads it. Only one nuclear_disarmament can bind
+	# a source at a time (`possible` excludes an already-disarmed country), so
+	# each entry simply overwrites the last answer.
+	on_entry_into_force = {
+		scope:article_options.source_country = {
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							has_variable = nuclear_weapon_stockpile
+							var:nuclear_weapon_stockpile > 0
+						}
+						AND = {
+							has_variable = nuclear_weapon_program_progress
+							var:nuclear_weapon_program_progress > 0
+						}
+					}
+				}
+				set_variable = te_nuclear_disarmament_ended_program
+			}
+			else_if = {
+				limit = { has_variable = te_nuclear_disarmament_ended_program }
+				remove_variable = te_nuclear_disarmament_ended_program
+			}
+		}
 	}
 
 	can_ratify = {
@@ -2143,10 +2174,12 @@ nuclear_program_pause = {
 
 	# ROOT is the source here; see nuclear_disarmament's `visible`.
 	visible = {
+		has_game_rule = nuclear_weapons_enabled
 		has_technology_researched = nuclear_weapons
 	}
 
 	possible = {
+		has_game_rule = nuclear_weapons_enabled
 		nuclear_program_can_be_paused = yes
 	}
 
