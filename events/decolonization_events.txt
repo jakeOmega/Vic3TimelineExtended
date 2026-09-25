@@ -200,7 +200,6 @@ decolonization_events.1 = {
 
 # Event 2: International Pressure to Decolonize
 decolonization_events.2 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -619,7 +618,6 @@ decolonization_events.4 = {
 # decol_ties_overture_cd lockout .60 sets, so a colony that did propose is
 # always answered.
 decolonization_events.5 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -687,7 +685,6 @@ decolonization_events.5 = {
 # claimant carries var:decol_reparations_claim, the sum it named. Paying moves
 # that sum between the treasuries.
 decolonization_events.6 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -1241,8 +1238,6 @@ decolonization_events.11 = {
 		}
 	}
 
-	# REVIEWED 2026-09-25 (imputed_foreign_action): condemning_power is picked only among great powers carrying gp_anti_colonial_stance, a stance each chose (decolonization_events.14.a, or its yes vote on the UN declaration); the denunciation is that stance.
-
 	immediate = {
 		random_country = {
 			limit = {
@@ -1320,7 +1315,6 @@ decolonization_events.11 = {
 
 # Event 12: Great Power Supports Colonial Regime
 decolonization_events.12 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427
 	type = country_event
 	placement = root
 
@@ -1351,8 +1345,6 @@ decolonization_events.12 = {
 			has_variable = gp_pro_colonial_stance
 		}
 	}
-
-	# REVIEWED 2026-09-25 (imputed_foreign_action): supporting_power is picked only among great powers carrying gp_pro_colonial_stance, which each chose (decolonization_events.14.c); the text describes that public stance, not an offer it never made, and the notices it receives report how we answered its stance.
 
 	immediate = {
 		save_scope_as = backed_colonial_power
@@ -2470,8 +2462,6 @@ decolonization_events.19 = {
 		}
 	}
 
-	# REVIEWED 2026-09-25 (imputed_foreign_action): nationalizing_country carries independence_nationalization_modifier only from its own choice of full nationalization (decolonization_events.15.a); the seizure the text describes is real.
-
 	immediate = {
 		random_country = {
 			limit = {
@@ -2608,7 +2598,6 @@ decolonization_events.19 = {
 # Fires for other GPs when a great power intervenes militarily in a former colony.
 # Models the international reaction to the Suez Crisis / similar interventions.
 decolonization_events.20 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — pass the real intervener from .19
 	type = country_event
 	placement = root
 
@@ -2742,7 +2731,6 @@ decolonization_events.20 = {
 # Fires for newly independent countries when competing great powers
 # seek to pull them into their orbit. Models the Non-Aligned Movement.
 decolonization_events.21 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427
 	type = country_event
 	placement = root
 
@@ -2781,8 +2769,6 @@ decolonization_events.21 = {
 			has_variable = gp_pro_colonial_stance
 		}
 	}
-
-	# REVIEWED 2026-09-25 (imputed_foreign_action): both great powers are picked for colonial stances they chose (decolonization_events.14 / the UN declaration vote); the text frames those public stances as competing offers, and the only consequences are our own relations choices between them.
 
 	immediate = {
 		random_country = {
