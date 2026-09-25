@@ -194,7 +194,7 @@ un_teeth_monthly_update = {
 					if = {
 						limit = { un_teeth_embargo_busted = yes }
 						un_dossier_record = { RECORD = defiance POINTS = un_dos_points_busting }
-						un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 15 }
+						un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -0.5 REASON = 15 SUBJECT = scope:un_embargo_target }
 					}
 				}
 				else = {

@@ -501,6 +501,25 @@ un_lift_sanctions_button = {
 		custom_tooltip = {
 			text = "UN_LIFT_SANCTIONS_DESC"
 			remove_modifier = un_sanctions_enforcer_modifier
+			# The UN's record below names the sanctioned country when there is
+			# one. The button lifts every regime in force, so with several it
+			# books the entry with no subject, and the log prints the plain
+			# line. One booking either way: gen_un_button_descs.py prints a
+			# line for every booking it finds.
+			if = {
+				limit = {
+					NOT = {
+						any_country = {
+							count >= 2
+							has_modifier = un_sanctions_target_modifier
+						}
+					}
+				}
+				random_country = {
+					limit = { has_modifier = un_sanctions_target_modifier }
+					save_scope_as = un_sanctions_lifted_target
+				}
+			}
 			every_country = {
 				limit = { has_modifier = un_sanctions_target_modifier }
 				remove_modifier = un_sanctions_target_modifier
@@ -510,7 +529,7 @@ un_lift_sanctions_button = {
 			}
 			# Walking away from a regime the Assembly imposed costs its credibility,
 			# weighted by the enforcer's weight in world affairs.
-			un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 7 }
+			un_ledger_actor_entry_on = { PILLAR = credibility POINTS = -1 REASON = 7 SUBJECT = scope:un_sanctions_lifted_target }
 		}
 	}
 }
