@@ -135,8 +135,16 @@ un_vote_cast_yes = {
 		# modifier on pass, and other AI voters lean yes: "permission"), and
 		# produces an asymmetric IG reaction set instead of the standard
 		# topic-conditional one.
+		# Only on a resolution that accuses its target (condemnation,
+		# sanctions, a mandate, expulsion): a refugee resolution names the
+		# country its refugees flee as its target, and that country voting
+		# for it is an ordinary yes, not a confession. The AI casts through
+		# this same effect (un_vote_ai_cast), so the gate covers it too.
 		if = {
-			limit = { scope:un_vote_target ?= this }
+			limit = {
+				scope:un_vote_target ?= this
+				scope:un_resolution ?= { un_resolution_accuses_target = yes }
+			}
 			custom_tooltip = UN_VOTE_ACCEPT_TARGET_TT
 			hidden_effect = {
 				scope:un_resolution ?= {

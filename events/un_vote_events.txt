@@ -260,9 +260,14 @@ un_vote.1 = {
 	# Option A: Vote in favor
 	option = {
 		# Target-perspective override: voting "in favor" of a condemnation /
-		# sanctions resolution against ROOT means accepting the verdict.
+		# sanctions resolution against ROOT means accepting the verdict. Only
+		# on a resolution that accuses its target: a refugee resolution names
+		# the country its refugees flee, and voting for it accepts nothing.
 		name = {
-			trigger = { scope:un_vote_target ?= this }
+			trigger = {
+				scope:un_vote_target ?= this
+				scope:un_resolution ?= { un_resolution_accuses_target = yes }
+			}
 			text = un_vote.1.a_target
 		}
 		name = {
@@ -292,8 +297,12 @@ un_vote.1 = {
 	option = {
 		# Target-perspective override: voting "against" a condemnation /
 		# sanctions resolution targeting ROOT means rejecting the charges.
+		# Accusing topics only, as option A.
 		name = {
-			trigger = { scope:un_vote_target ?= this }
+			trigger = {
+				scope:un_vote_target ?= this
+				scope:un_resolution ?= { un_resolution_accuses_target = yes }
+			}
 			text = un_vote.1.b_target
 		}
 		name = {
@@ -1005,6 +1014,24 @@ un_vote.2 = {
 				if = {
 					limit = { NOT = { has_global_variable = un_agency_unhcr } }
 					set_global_variable = un_agency_unhcr
+				}
+				# The country the resolution named (un_events.18's refugee
+				# source) is told that we have secured a resettlement
+				# programme for its displaced (un_events.103). Fired here, on
+				# passage, because the programme exists only once the
+				# resolution carries. The source may have been annexed during
+				# the year the vote took.
+				if = {
+					limit = {
+						exists = scope:un_vote_target
+						NOT = { scope:un_vote_target ?= this }
+					}
+					hidden_effect = {
+						save_scope_as = resettlement_host
+						scope:un_vote_target = {
+							trigger_event = { id = un_events.103 days = 14 }
+						}
+					}
 				}
 			}
 

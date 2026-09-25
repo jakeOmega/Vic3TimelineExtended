@@ -2062,6 +2062,21 @@ un_events.18 = {
 
 	title = un_events.18.t
 	desc = {
+		# What is driving people out of the named country, read from its state
+		# now, so the text never claims a war or a famine that is not there.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.18.d_famine
+				trigger = { scope:refugee_source ?= { any_scope_state = { has_famine = yes } } }
+			}
+			triggered_desc = {
+				desc = un_events.18.d_war
+				trigger = { scope:refugee_source ?= { is_at_war = yes } }
+			}
+			desc = un_events.18.d_hardship
+		}
+		# Our position, and the offer: a convention we could table. Nothing is
+		# before the Assembly until option A tables it.
 		first_valid = {
 			triggered_desc = { desc = un_events.18.d_open trigger = { has_law = law_type:law_no_migration_controls } }
 			triggered_desc = { desc = un_events.18.d_closed trigger = { has_law = law_type:law_closed_borders } }
@@ -2091,15 +2106,49 @@ un_events.18 = {
 
 	immediate = {
 		un_vote_reserve = yes
-		random_country = {
+		# The country the displaced are fleeing: one struck by famine, or by a
+		# war that has devastated a state, when there is one; otherwise any
+		# country the trigger found (at war, or with a state in misery).
+		if = {
 			limit = {
-				NOT = { this = ROOT }
-				OR = {
-					is_at_war = yes
-					any_scope_state = { average_sol < 6 }
+				any_country = {
+					NOT = { this = ROOT }
+					NOT = { is_country_type = decentralized }
+					OR = {
+						any_scope_state = { has_famine = yes }
+						AND = {
+							is_at_war = yes
+							any_scope_state = { devastation > un_docket_war_devastation }
+						}
+					}
 				}
 			}
-			save_scope_as = refugee_source
+			random_country = {
+				limit = {
+					NOT = { this = ROOT }
+					NOT = { is_country_type = decentralized }
+					OR = {
+						any_scope_state = { has_famine = yes }
+						AND = {
+							is_at_war = yes
+							any_scope_state = { devastation > un_docket_war_devastation }
+						}
+					}
+				}
+				save_scope_as = refugee_source
+			}
+		}
+		else = {
+			random_country = {
+				limit = {
+					NOT = { this = ROOT }
+					OR = {
+						is_at_war = yes
+						any_scope_state = { average_sol < 6 }
+					}
+				}
+				save_scope_as = refugee_source
+			}
 		}
 	}
 
@@ -2118,17 +2167,16 @@ un_events.18 = {
 		# The proposer ratifies on passage with every other member (redesign
 		# phase 5, §5.3); it no longer takes the convention up front.
 		social_progressive_reaction_effect = { DAYS = normal_modifier_time }
-		# Open the vote: every other UN member votes, results in a year
+		# Open the vote: every other UN member votes, results in a year.
+		# The source is the resolution's target, so that un_vote.2 can offer
+		# its displaced resettlement when the resolution carries
+		# (un_events.103). A refugee resolution accuses nobody: the vote
+		# effects treat a target as accused only on the accusing topics
+		# (un_resolution_accuses_target), so the source voting for it is an
+		# ordinary yes, not a confession.
 		hidden_effect = {
 			scope:refugee_source ?= { save_scope_as = un_vote_target }
 			un_resolution_open = { TOPIC = refugee }
-		}
-		# Notify refugee source country
-		if = {
-			limit = { exists = scope:refugee_source }
-			scope:refugee_source = {
-				trigger_event = { id = un_events.103 days = 14 }
-			}
 		}
 	}
 
@@ -2553,7 +2601,12 @@ un_events.102 = {
 }
 
 # Event 103: International Refugee Resettlement
-# Fired on refugee_source when a foreign power launches a major resettlement program (from event 18, option A)
+# Fired to the country a refugee resolution named (its un_res_target, picked in
+# un_events.18) when the resolution carries: un_vote.2's refugee branch saves
+# its proposer, which secured the programme, as scope:resettlement_host. It
+# used to fire from event 18 option A two weeks after tabling and pick a host
+# from the holders of un_refugee_program_modifier, which nobody holds until
+# the resolution passes (redesign phase 5), so the host was always empty.
 un_events.103 = {
 	type = country_event
 	placement = root
@@ -2570,19 +2623,12 @@ un_events.103 = {
 
 	duration = 3
 
+	# A queued 103 from before this change carries no host and does not fire.
 	trigger = {
-		# always fires - triggered by event 18 option A
+		exists = scope:resettlement_host
+		NOT = { this = scope:resettlement_host }
 	}
 
-	immediate = {
-		random_country = {
-			limit = {
-				je:je_united_nations ?= { has_modifier = un_refugee_program_modifier }
-				NOT = { this = ROOT }
-			}
-			save_scope_as = resettlement_host
-		}
-	}
 	option = {
 		name = un_events.103.a
 		default_option = yes
