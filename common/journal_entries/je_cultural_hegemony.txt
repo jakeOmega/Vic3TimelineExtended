@@ -147,7 +147,8 @@ je_cultural_hegemony = {
 			te_history_record_cultural_hegemony_samples = yes
 
 			# Milestone events — self-gated by ch_milestone_* variables, fire
-			# at most once per country when cultural_pull_total crosses 10 / 25.
+			# at most once per country when cultural_pull_total crosses 10 / 25
+			# (.9 at 25 also needs the world's #1 rank).
 			trigger_event = { id = cultural_hegemony.8 }
 			trigger_event = { id = cultural_hegemony.9 }
 		}

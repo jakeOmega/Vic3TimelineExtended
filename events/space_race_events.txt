@@ -3960,6 +3960,10 @@ space_race_events.74 = {
 		}
 		add_loyalists = { value = medium_radicals pop_type = engineers }
 		add_loyalists = { value = medium_radicals pop_type = academics }
+		# Drawn from the failure pool, which has just set sr_failed_<milestone>.
+		# Every sibling clears it in each option: the progress-loss and
+		# safety-review helpers act on any milestone whose flag is still set.
+		sr_clear_failed_milestone_flags = yes
 	}
 
 	option = {
@@ -3977,6 +3981,7 @@ space_race_events.74 = {
 		}
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_radicals = { value = small_radicals pop_type = academics }
+		sr_clear_failed_milestone_flags = yes
 	}
 }
 

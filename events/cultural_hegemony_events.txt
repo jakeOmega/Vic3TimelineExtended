@@ -947,9 +947,17 @@ cultural_hegemony.9 = {
 
 	duration = 3
 
+	# "The undisputed cultural center of the world": a 25% share alone can be
+	# held by up to four countries, so the event also needs this country to
+	# be the leaderboard's #1 (ch_rank_1, set by the monthly ranking pass).
+	# The latch is set in `immediate`, so a country at 25% but not #1 keeps
+	# the milestone open and the JE pulse re-offers it once it takes the lead.
 	trigger = {
 		has_journal_entry = je_cultural_hegemony
 		cultural_pull_total >= 25
+		has_global_variable = ch_rank_1
+		exists = global_var:ch_rank_1
+		THIS = global_var:ch_rank_1
 		NOT = { has_variable = ch_milestone_dominant }
 	}
 

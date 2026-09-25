@@ -1569,11 +1569,12 @@ international_relations_events_on_action = {
 					}
 					trigger_event = { id = international_relations_events.8 }
 				}
-				# Nuclear Close Call
+				# Nuclear Close Call (outside the deterrence system — see the event)
 				3 = {
 					trigger = {
 						has_modifier = nuclear_power
 						any_rival_country = { has_modifier = nuclear_power }
+						NOT = { has_journal_entry = je_nuclear_deterrence }
 					}
 					trigger_event = { id = nuclear_weapon_events.21 }
 				}

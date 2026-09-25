@@ -911,7 +911,7 @@ nuclear_weapon_events.18 = {
 			if = {
 				limit = { exists = scope:proliferating_country }
 				scope:proliferating_country = {
-					change_variable = { name = nuclear_weapon_program_progress add = -5 }
+					nw_prolif_progress_setback = { AMOUNT = 5 }
 				}
 			}
 		}
@@ -1027,7 +1027,7 @@ nuclear_weapon_events.18 = {
 			if = {
 				limit = { exists = scope:proliferating_country }
 				scope:proliferating_country = {
-					change_variable = { name = nuclear_weapon_program_progress add = -1 }
+					nw_prolif_progress_setback = { AMOUNT = 1 }
 				}
 			}
 		}
@@ -1072,9 +1072,13 @@ nuclear_weapon_events.18 = {
 		}
 	}
 
-	# Option F — Anyone: "Sponsor covert sabotage of their program."
+	# Option F — Anyone, covert warfare disabled: "Sponsor covert sabotage of
+	# their program." With the rule on, covert_nuclear_sabotage_action owns
+	# sabotage of a nuclear programme (network, phases, detection); a one-click
+	# version here would bypass all of it.
 	option = {
 		name = nuclear_weapon_events.18.opt_f
+		trigger = { has_game_rule = covert_warfare_disabled }
 		highlighted_option = yes
 		random_list = {
 			55 = {
@@ -1083,7 +1087,7 @@ nuclear_weapon_events.18 = {
 					if = {
 						limit = { exists = scope:proliferating_country }
 						scope:proliferating_country = {
-							change_variable = { name = nuclear_weapon_program_progress add = -10 }
+							nw_prolif_progress_setback = { AMOUNT = 10 }
 						}
 					}
 				}
@@ -1387,9 +1391,13 @@ nuclear_weapon_events.21 = {
 	duration = 3
 	cooldown = { days = very_long_modifier_time }
 
+	# Outside the deterrence system only: je_nuclear_deterrence owns warning
+	# incidents (the Unconfirmed Warning family, nuclear_incident.1-.5), which
+	# read the country's posture and readiness; this one does not.
 	trigger = {
 		has_modifier = nuclear_power
 		any_rival_country = { has_modifier = nuclear_power }
+		NOT = { has_journal_entry = je_nuclear_deterrence }
 	}
 
 	immediate = {
@@ -1562,3 +1570,38 @@ nuclear_weapon_events.22 = {
 	}
 }
 
+
+# Event 23: The World Takes Notice — sent to the proliferator by the
+# je_nuclear_program pulse on the same day the proliferation alert
+# (nuclear_weapon_events.18) reaches its rivals, the great powers and its
+# neighbours, so the country whose programme is being discussed learns that
+# it is. Triggered only; no on_action entry.
+nuclear_weapon_events.23 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = nuclear_weapon_events.23.t
+	desc = nuclear_weapon_events.23.d
+	flavor = nuclear_weapon_events.23.f
+
+	duration = 3
+
+	trigger = {
+		# triggered by JE pulse
+	}
+
+	immediate = {
+	}
+
+	option = {
+		name = nuclear_weapon_events.23.a
+		default_option = yes
+		ai_chance = { base = 1 }
+	}
+}

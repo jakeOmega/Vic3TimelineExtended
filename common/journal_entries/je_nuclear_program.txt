@@ -238,13 +238,25 @@
 				}
 				set_variable = { name = nuclear_proliferation_alert_sent value = 1 }
 				save_scope_as = proliferating_country
+				# Only countries with a reason to care: great powers, rivals in
+				# either direction, and neighbours. Every recipient's reply can
+				# shave progress off this programme, so sending it to the whole
+				# world let ~90 bystanders each chip at it.
 				every_country = {
 					limit = {
 						NOT = { THIS = ROOT }
 						NOT = { is_country_type = decentralized }
+						OR = {
+							country_rank >= rank_value:great_power
+							any_rival_country = { THIS = scope:proliferating_country }
+							any_rivaling_country = { THIS = scope:proliferating_country }
+							any_neighbouring_state = { owner = scope:proliferating_country }
+						}
 					}
 					trigger_event = { id = nuclear_weapon_events.18 days = 7 }
 				}
+				# ...and the proliferator learns that the world has noticed.
+				trigger_event = { id = nuclear_weapon_events.23 days = 7 }
 			}
 
 			# The one site that derives the programme's display state. Last in
