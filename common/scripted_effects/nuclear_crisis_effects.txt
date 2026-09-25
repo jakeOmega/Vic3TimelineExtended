@@ -1199,10 +1199,7 @@ nd_reward_hawks = {
 	}
 	every_interest_group = {
 		limit = {
-			OR = {
-				nd_ig_class_warfighting = yes
-				nd_ig_class_professional = yes
-			}
+			nd_ig_is_hawk = yes
 			NOT = { is_in_list = $LIST$ }
 		}
 		if = {
@@ -1225,7 +1222,7 @@ nd_reward_hawks = {
 
 nd_reward_doves = {
 	every_interest_group = {
-		limit = { nd_ig_class_dove = yes }
+		limit = { nd_ig_is_restraint = yes }
 		add_modifier = {
 			name = ig_approval_positive_modifier
 			days = normal_modifier_time
@@ -1833,7 +1830,7 @@ nd_crisis_act_fight_conventional = {
 	custom_tooltip = nd_tt_act_fight_conventional
 	nd_change_credibility = { AMOUNT = -10 }
 	every_interest_group = {
-		limit = { nd_ig_class_warfighting = yes }
+		limit = { nd_ig_stance_militarist = yes }
 		add_modifier = {
 			name = ig_approval_negative_modifier
 			days = normal_modifier_time

@@ -551,6 +551,37 @@ class TestCrisisPanel(unittest.TestCase):
             self.assertIn(n, loc_value("nd_w_crisis_pressure_tt"))
 
 
+class TestInterestGroupClasses(unittest.TestCase):
+    OLD = ("nd_ig_leader_is_hawk", "nd_ig_leader_is_dove", "nd_ig_class_warfighting", "nd_ig_class_dove")
+    NEW = ("nd_ig_stance_militarist_full", "nd_ig_stance_militarist_mild", "nd_ig_stance_restraint_full",
+           "nd_ig_stance_restraint_mild", "nd_ig_stance_militarist", "nd_ig_stance_restraint",
+           "nd_ig_stance_full", "nd_ig_is_fixed_class", "nd_ig_class_professional", "nd_ig_class_business",
+           "nd_ig_class_militarist", "nd_ig_class_restraint", "nd_ig_is_hawk", "nd_ig_is_restraint")
+
+    def test_new_triggers_exist(self):
+        t = read(TRIGGERS)
+        for name in self.NEW:
+            self.assertRegex(t, rf"(?m)^{name} = \{{", name)
+
+    def test_old_triggers_are_gone_everywhere(self):
+        for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").glob("*.txt")):
+            text = strip_comments(read(path))
+            for name in self.OLD:
+                self.assertNotIn(name, text, f"{path.name} still uses {name}")
+
+    def test_stances_read_the_rules_of_war_laws(self):
+        t = strip_comments(read(TRIGGERS))
+        for name in ("nd_ig_stance_militarist_full", "nd_ig_stance_restraint_full"):
+            body = block(t, name)
+            self.assertIn("law_type:law_total_war", body)
+            self.assertIn("law_type:law_limited_war", body)
+
+    def test_rewards_pay_hawks_and_doves(self):
+        effects = strip_comments(read(CRISIS_EFFECTS))
+        self.assertIn("nd_ig_is_hawk = yes", block(effects, "nd_reward_hawks"))
+        self.assertIn("nd_ig_is_restraint = yes", block(effects, "nd_reward_doves"))
+
+
 class TestManagedFamilies(unittest.TestCase):
     def test_doctrine_and_readiness_families_exist(self):
         mods = set(re.findall(r"^(nd_\w+)\s*=\s*\{", read(MODIFIERS), re.M))

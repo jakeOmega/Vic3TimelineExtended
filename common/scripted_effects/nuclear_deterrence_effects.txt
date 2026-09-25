@@ -705,7 +705,7 @@ nd_break_pledge_effects = {
 		is_decaying = yes
 	}
 	every_interest_group = {
-		limit = { nd_ig_class_dove = yes }
+		limit = { nd_ig_is_restraint = yes }
 		add_modifier = {
 			name = ig_approval_negative_modifier
 			days = normal_modifier_time
@@ -770,7 +770,7 @@ nd_refresh_domestic_stance = {
 	set_variable = { name = nd_stance_business value = nd_stance_business_value }
 	every_interest_group = {
 		if = {
-			limit = { nd_ig_class_warfighting = yes }
+			limit = { nd_ig_stance_militarist = yes }
 			nd_ig_set_band = { VAR = nd_stance_warfighting }
 		}
 		else_if = {
@@ -778,7 +778,7 @@ nd_refresh_domestic_stance = {
 			nd_ig_set_band = { VAR = nd_stance_professional }
 		}
 		else_if = {
-			limit = { nd_ig_class_dove = yes }
+			limit = { nd_ig_is_restraint = yes }
 			nd_ig_set_band = { VAR = nd_stance_dove }
 		}
 		else_if = {
@@ -1549,7 +1549,7 @@ nd_inquiry_reward_skeptic = {
 		remove_variable = nd_punished_skeptic
 	}
 	every_interest_group = {
-		limit = { nd_ig_class_dove = yes }
+		limit = { nd_ig_is_restraint = yes }
 		add_modifier = {
 			name = ig_approval_positive_modifier
 			days = short_modifier_time
@@ -1572,7 +1572,7 @@ nd_inquiry_punish_skeptic = {
 	custom_tooltip = nd_tt_inquiry_punish
 	set_variable = { name = nd_punished_skeptic value = 1 }
 	every_interest_group = {
-		limit = { nd_ig_class_warfighting = yes }
+		limit = { nd_ig_stance_militarist = yes }
 		add_modifier = {
 			name = ig_approval_positive_modifier
 			days = short_modifier_time
@@ -1580,7 +1580,7 @@ nd_inquiry_punish_skeptic = {
 		}
 	}
 	every_interest_group = {
-		limit = { nd_ig_class_dove = yes }
+		limit = { nd_ig_is_restraint = yes }
 		add_modifier = {
 			name = ig_approval_negative_modifier
 			days = short_modifier_time

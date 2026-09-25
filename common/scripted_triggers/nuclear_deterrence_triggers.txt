@@ -562,67 +562,141 @@ nd_regime_is_militarist = {
 }
 
 # ----------------------------------------------------------------------------
-# INTEREST-GROUP CLASSES (interest-group scope) — §7
+# INTEREST GROUPS AND THE BOMB (2026-09-25 spec §4). IG scope.
 # ----------------------------------------------------------------------------
-# A group is placed in exactly one class, tested in this order: warfighting
-# faction, professional officers, dove, business. Unclassified groups have no
-# nuclear stance.
+# The Armed Forces are professional officers and the Industrialists business,
+# whatever their politics; every other group is militarist or restraint by
+# its Rules of War stance, or has no view. A stance already folds in the
+# leader's ideology, so a fascist-led Intelligentsia is militarist with no
+# special case. law_stance compares one law at a time, so "its stance on Total
+# War beats its stance on Limited War" is spelled out. Strongly approving is a
+# full view (±2); approving is a mild one (±1).
 
-nd_ig_leader_is_hawk = {
-	leader ?= {
-		OR = {
-			has_ideology = ideology:ideology_jingoist_leader
-			has_ideology = ideology:ideology_fascist
-			has_ideology = ideology:ideology_ethno_nationalist
+nd_ig_stance_militarist_full = {
+	law_stance = {
+		law = law_type:law_total_war
+		value > approve
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_limited_war
+			value > approve
 		}
 	}
 }
 
-nd_ig_leader_is_dove = {
-	leader ?= {
-		OR = {
-			has_ideology = ideology:ideology_pacifist
-			has_ideology = ideology:ideology_humanitarian
-			has_ideology = ideology:ideology_humanitarian_royalist
+nd_ig_stance_militarist_mild = {
+	law_stance = {
+		law = law_type:law_total_war
+		value > neutral
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_total_war
+			value > approve
+		}
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_limited_war
+			value > neutral
 		}
 	}
 }
 
-# Hawks who want nuclear weapons usable: a jingoist/fascist leader anywhere, or
-# the Armed Forces of a fascist state.
-nd_ig_class_warfighting = {
-	nd_ig_leader_is_dove = no
+nd_ig_stance_restraint_full = {
+	law_stance = {
+		law = law_type:law_limited_war
+		value > approve
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_total_war
+			value > approve
+		}
+	}
+}
+
+nd_ig_stance_restraint_mild = {
+	law_stance = {
+		law = law_type:law_limited_war
+		value > neutral
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_limited_war
+			value > approve
+		}
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_total_war
+			value > neutral
+		}
+	}
+}
+
+nd_ig_stance_militarist = {
 	OR = {
-		nd_ig_leader_is_hawk = yes
-		AND = {
-			is_interest_group_type = ig_armed_forces
-			owner = { country_is_fascist = yes }
-		}
+		nd_ig_stance_militarist_full = yes
+		nd_ig_stance_militarist_mild = yes
 	}
 }
 
-# The Armed Forces under an ordinary leader: credible, funded, not reckless.
+nd_ig_stance_restraint = {
+	OR = {
+		nd_ig_stance_restraint_full = yes
+		nd_ig_stance_restraint_mild = yes
+	}
+}
+
+nd_ig_stance_full = {
+	OR = {
+		nd_ig_stance_militarist_full = yes
+		nd_ig_stance_restraint_full = yes
+	}
+}
+
+nd_ig_is_fixed_class = {
+	OR = {
+		is_interest_group_type = ig_armed_forces
+		is_interest_group_type = ig_industrialists
+	}
+}
+
 nd_ig_class_professional = {
 	is_interest_group_type = ig_armed_forces
-	nd_ig_class_warfighting = no
-	nd_ig_leader_is_dove = no
-}
-
-nd_ig_class_dove = {
-	nd_ig_class_warfighting = no
-	OR = {
-		nd_ig_leader_is_dove = yes
-		AND = {
-			is_interest_group_type = ig_intelligentsia
-			nd_ig_leader_is_hawk = no
-		}
-	}
 }
 
 nd_ig_class_business = {
 	is_interest_group_type = ig_industrialists
-	nd_ig_class_warfighting = no
-	nd_ig_class_dove = no
+}
+
+nd_ig_class_militarist = {
+	nd_ig_is_fixed_class = no
+	nd_ig_stance_militarist = yes
+}
+
+nd_ig_class_restraint = {
+	nd_ig_is_fixed_class = no
+	nd_ig_stance_restraint = yes
+}
+
+# Who crisis outcomes pay (§4.5). Hawks: militarist groups and leans, and the
+# Armed Forces unless they lean restraint. Restraint: restraint groups and
+# leans.
+nd_ig_is_hawk = {
+	OR = {
+		nd_ig_stance_militarist = yes
+		AND = {
+			nd_ig_class_professional = yes
+			nd_ig_stance_restraint = no
+		}
+	}
+}
+
+nd_ig_is_restraint = {
+	nd_ig_stance_restraint = yes
 }
 
 # ----------------------------------------------------------------------------
