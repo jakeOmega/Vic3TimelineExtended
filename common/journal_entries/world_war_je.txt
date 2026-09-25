@@ -257,8 +257,10 @@ je_world_war = {
 					country_is_ww_belligerent = yes
 					NOT = { has_variable = ww_war_began }
 					is_at_war = no
-					is_diplomatic_play_committed_participant = no
+					is_diplomatic_play_initiator = no
 					is_diplomatic_play_target = no
+					is_diplomatic_play_committed_participant = no
+					is_diplomatic_play_undecided_participant = no
 					# Nobody has started fighting it either
 					NOT = {
 						any_country = {

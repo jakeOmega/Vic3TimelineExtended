@@ -556,8 +556,8 @@ world_war_events.5 = {
 		name = world_war_events.5.a
 		default_option = yes
 		ai_chance = { base = 10 }
-		remove_global_variable = ww_outbreak_pending
 		hidden_effect = {
+			remove_global_variable = ww_outbreak_pending
 			# A new world war: forget the outcome of any earlier one
 			ww_clear_stale_outcome_latches = yes
 			# Mark only the two primary belligerents
@@ -617,7 +617,7 @@ world_war_events.5 = {
 				add = 1
 			}
 		}
-		remove_global_variable = ww_outbreak_pending
+		hidden_effect = { remove_global_variable = ww_outbreak_pending }
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
 		add_radicals = {
 			value = small_radicals

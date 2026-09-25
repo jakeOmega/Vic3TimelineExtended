@@ -19,12 +19,14 @@ on_capitulation = {
 	}
 }
 
+# Gated on the fought-side latch, not on the side variables or ww_war_began:
+# je_world_war's on_fail strips those when a losing great power drops rank
+# mid-war, which is exactly when it is about to capitulate.
 ww_on_capitulation = {
 	effect = {
 		if = {
 			limit = {
-				country_is_ww_belligerent = yes
-				has_variable = ww_war_began
+				ww_fought_world_war = yes
 				NOT = { has_variable = ww_peace_concluded }
 			}
 			set_variable = ww_capitulated
@@ -49,7 +51,6 @@ ww_on_wargoal_enforced = {
 			limit = {
 				exists = scope:target
 				scope:target = {
-					has_variable = ww_war_began
 					NOT = { has_variable = ww_peace_concluded }
 					ww_fought_against = { COUNTRY = root }
 				}
