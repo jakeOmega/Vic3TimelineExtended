@@ -3632,7 +3632,6 @@ decolonization_events.60 = {
 	# Option A: Propose closer ties
 	option = {
 		name = decolonization_events.60.a
-		default_option = yes
 		ai_chance = {
 			base = 3
 			modifier = {
@@ -3663,6 +3662,9 @@ decolonization_events.60 = {
 	# Option B: Not now
 	option = {
 		name = decolonization_events.60.b
+		# Declining is the default: a lapsed popup must not file a claim or an
+		# overture the country never chose (event_creation_guide.md § Agency).
+		default_option = yes
 		ai_chance = {
 			base = 1
 			modifier = {
@@ -3718,7 +3720,6 @@ decolonization_events.61 = {
 	# Option A: Present the accounting and demand reparations
 	option = {
 		name = decolonization_events.61.a
-		default_option = yes
 		ai_chance = {
 			base = 3
 			modifier = {
@@ -3742,6 +3743,9 @@ decolonization_events.61 = {
 	# Option B: Not now
 	option = {
 		name = decolonization_events.61.b
+		# Declining is the default: a lapsed popup must not file a claim or an
+		# overture the country never chose (event_creation_guide.md § Agency).
+		default_option = yes
 		ai_chance = {
 			base = 1
 			modifier = {
