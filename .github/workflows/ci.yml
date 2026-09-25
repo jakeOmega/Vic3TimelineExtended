@@ -162,6 +162,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 event_context_audit.py --strict
 
+      - name: Audit — silent variable writes in event options
+        if: ${{ !cancelled() }}
+        run: python3 silent_variable_audit.py --strict
+
       - name: Audit — prev resolving to a named scope
         if: ${{ !cancelled() }}
         run: python3 prev_scope_audit.py --strict

@@ -218,3 +218,19 @@ is_losing_war_against = {
 		}
 	}
 }
+
+# Country scope: can this country take nuclear_weapon_events.18's option d
+# ("lobby for an international non-proliferation regime") to the United
+# Nations — table the Non-Proliferation Treaty now, through the Assembly's own
+# proposer event, un_events.14 (#430)? That event's trigger (a member, the
+# science, no treaty ratified or refused, no vote in session) plus the docket's
+# own gates for raising the topic (not on cooldown, no IAEA yet, authority 40
+# or more; a member free to table). Once the treaty is in force there is
+# nothing left to table, and outside the UN there is no Assembly: option d then
+# lobbies bilaterally, as it always did.
+nuclear_program_can_table_npt = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_docket_topic_open_npt = yes
+	un_docket_may_propose_npt = yes
+	NOT = { has_global_variable = un_vote_active }
+}

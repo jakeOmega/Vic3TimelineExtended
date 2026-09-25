@@ -88,6 +88,7 @@ un_events.1 = {
 		# Hosts UN Headquarters only if no host is set. un_found_organisation
 		# makes the founder the host before any invitation goes out, so this is a
 		# fallback, not the usual path.
+		# REVIEWED 2026-09-25 (silent_variable): the un_headquarters_modifier beside it shows as "UN Headquarters Host"
 		if = {
 			limit = { NOT = { has_global_variable = un_hq_country } }
 			set_global_variable = { name = un_hq_country value = ROOT }
@@ -1832,6 +1833,12 @@ un_events.14 = {
 		name = un_docket_option_pass
 		ai_chance = {
 			base = 3
+			# An AI that lobbied for the treaty (nuclear_weapon_events.18
+			# option d, which offered it this item) tables it.
+			modifier = {
+				trigger = { has_variable = nuclear_npt_lobbied }
+				factor = 0
+			}
 		}
 		custom_tooltip = un_docket_pass_tt
 		un_vote_release = yes
@@ -1852,6 +1859,11 @@ un_events.14 = {
 			modifier = {
 				trigger = { is_at_war = yes }
 				add = 3
+			}
+			# As for passing: an AI that lobbied for the treaty does not refuse it.
+			modifier = {
+				trigger = { has_variable = nuclear_npt_lobbied }
+				factor = 0
 			}
 		}
 		add_modifier = {
