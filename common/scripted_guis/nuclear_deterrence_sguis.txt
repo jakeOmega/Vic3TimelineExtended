@@ -457,11 +457,11 @@ nd_home_list_sgui = {
 			}
 		}
 		else = {
-			custom_tooltip_no_bullet = nd_home_none
+			custom_tooltip_no_bullet = nd_home_list_none
 		}
 		if = {
 			limit = { nd_posture_judged = no }
-			custom_tooltip_no_bullet = nd_home_waiting
+			custom_tooltip_no_bullet = nd_home_list_waiting
 		}
 	}
 }
