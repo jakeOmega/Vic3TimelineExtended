@@ -1,0 +1,4 @@
+﻿l_english:
+ STE_TELEPATHIC_PROPOSAL_TT:0 "[SCOPE.sCountry('telepathic_partner').GetName] decides whether to open the channel. If it accepts, both governments gain #bold $ste_telepathic_diplomacy$#! and relations between us improve."
+ STE_TELEPATHIC_ACCEPTED_TT:0 "[SCOPE.sCountry('telepathic_proposer').GetName] also gains #bold $ste_telepathic_diplomacy$#!."
+ STE_TELEPATHIC_DECLINED_TT:0 "[SCOPE.sCountry('telepathic_proposer').GetName] is told that we declined."
