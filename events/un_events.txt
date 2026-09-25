@@ -386,6 +386,15 @@ un_events.3 = {
 
 	title = un_events.3.t
 	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 10), from
+		# the docket's last item. A human can sit on a passed-on offer while
+		# the docket moves on; a stale read then only drops this sentence.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.3.d_cause_war
+				trigger = { global_var:un_dkt_last_type ?= 10 }
+			}
+		}
 		first_valid = {
 			triggered_desc = { desc = un_events.3.d_council trigger = { has_law = law_type:law_council_republic } }
 			triggered_desc = { desc = un_events.3.d_theocratic trigger = { has_law = law_type:law_theocracy } }
@@ -1441,6 +1450,36 @@ un_events.11 = {
 			triggered_desc = { desc = un_events.11.d_theocratic trigger = { scope:veto_power = { has_law = law_type:law_theocracy } } }
 			desc = un_events.11.d
 		}
+		# What the veto does to our resolution while its vote is still open
+		# (scope:un_resolution comes down from un_resolution_record_veto). The
+		# vote is not over: the text must not claim the resolution had broad
+		# support, or that it is finished when the Assembly can still act.
+		#   reform           needs every permanent member; never overridden
+		#                    (un_resolution_veto_restraint is simple-majority only)
+		#   Charter Reform II  a two-thirds supermajority overrides the veto
+		#   military mandate   no weaker form: blocked outright
+		#   the rest         a simple majority still carries the weaker form
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.11.d_after_reform
+				trigger = { scope:un_resolution ?= { has_tag = un_res_voting has_tag = un_topic_reform } }
+			}
+			triggered_desc = {
+				desc = un_events.11.d_after_override
+				trigger = {
+					scope:un_resolution ?= { has_tag = un_res_voting }
+					un_charter_level_value >= 2
+				}
+			}
+			triggered_desc = {
+				desc = un_events.11.d_after_mandate
+				trigger = { scope:un_resolution ?= { has_tag = un_res_voting has_tag = un_topic_military_mandate } }
+			}
+			triggered_desc = {
+				desc = un_events.11.d_after_open
+				trigger = { scope:un_resolution ?= { has_tag = un_res_voting } }
+			}
+		}
 	}
 	flavor = un_events.11.f
 
@@ -1528,6 +1567,19 @@ un_events.12 = {
 
 	title = un_events.12.t
 	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 8), from
+		# the docket's last item. A human can sit on a passed-on offer while
+		# the docket moves on; a stale read then only drops this sentence.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.12.d_cause_collapse
+				trigger = {
+					global_var:un_dkt_last_type ?= 8
+					exists = scope:un_dkt_subject
+					NOT = { scope:un_dkt_subject ?= ROOT }
+				}
+			}
+		}
 		first_valid = {
 			triggered_desc = { desc = un_events.12.d_council trigger = { has_law = law_type:law_council_republic } }
 			triggered_desc = { desc = un_events.12.d_colonial trigger = { any_subject_or_below = { is_direct_subject_of = ROOT } } }
@@ -1640,6 +1692,25 @@ un_events.14 = {
 
 	title = un_events.14.t
 	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 6), from
+		# the docket's last item. A human can sit on a passed-on offer while
+		# the docket moves on; a stale read then only drops this sentence.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.14.d_cause_self
+				trigger = {
+					global_var:un_dkt_last_type ?= 6
+					scope:un_dkt_subject ?= ROOT
+				}
+			}
+			triggered_desc = {
+				desc = un_events.14.d_cause_other
+				trigger = {
+					global_var:un_dkt_last_type ?= 6
+					exists = scope:un_dkt_subject
+				}
+			}
+		}
 		first_valid = {
 			triggered_desc = { desc = un_events.14.d_nuclear trigger = { var:nuclear_weapon_stockpile >= 1 } }
 			triggered_desc = { desc = un_events.14.d_aspiring trigger = { has_journal_entry = je_nuclear_program } }
@@ -1961,6 +2032,15 @@ un_events.17 = {
 
 	title = un_events.17.t
 	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 7), from
+		# the docket's last item. A human can sit on a passed-on offer while
+		# the docket moves on; a stale read then only drops this sentence.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.17.d_cause_threshold
+				trigger = { global_var:un_dkt_last_type ?= 7 }
+			}
+		}
 		first_valid = {
 			triggered_desc = { desc = un_events.17.d_command trigger = { has_law = law_type:law_command_economy } }
 			triggered_desc = { desc = un_events.17.d_laissez trigger = { has_law = law_type:law_laissez_faire } }
@@ -2241,6 +2321,15 @@ un_events.19 = {
 
 	title = un_events.19.t
 	desc = {
+		# Why the docket raised it now (un_docket_effects.txt, item 9), from
+		# the docket's last item. A human can sit on a passed-on offer while
+		# the docket moves on; a stale read then only drops this sentence.
+		first_valid = {
+			triggered_desc = {
+				desc = un_events.19.d_cause_world
+				trigger = { global_var:un_dkt_last_type ?= 9 }
+			}
+		}
 		first_valid = {
 			triggered_desc = { desc = un_events.19.d_council trigger = { has_law = law_type:law_council_republic } }
 			triggered_desc = { desc = un_events.19.d_authoritarian trigger = { has_law = law_type:law_single_party_state } }
