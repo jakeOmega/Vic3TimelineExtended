@@ -2697,6 +2697,7 @@
  nuke_defense_line_missile:0 "\n#variable +50%#! from $missile_defense_systems$"
  nuke_defense_line_orbital:0 "\n#variable +50%#! from $orbital_weapon_platforms$"
  nuke_defense_line_radar:0 "\n#variable +25%#! from $radar$"
+ nuke_success_final_chance_breakdown_tt:0 "#tooltip_header Final Success Chance Formula#!\n$TOOLTIP_DELIMITER$\n[Country.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')] our attack modifier\n[Country.MakeScope.sCountry('target_country').GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_defense_chance_add')] their defense modifier\n\nResult is clamped between #variable 5%#! and #variable 100%#!."
  oil_spill_cleanup_modifier:0 "Oil Spill Cleanup"
  one_party_consolidation_modifier:0 "One-Party Consolidation"
  partition_accepted_borders_modifier:0 "Accepted Borders"

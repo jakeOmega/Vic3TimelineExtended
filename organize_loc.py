@@ -563,6 +563,9 @@ def organize_all(project_directory, dry_run=False):
                     m[1] for m in re.findall(r"\[\w+\.Get(Named)?(\w+)", all_loc[key])
                 )
                 found.extend(find_quoted_loc_args(all_loc[key]))
+                # Embedded tooltips: `#tooltip:[X.GetTooltipTag],KEY` (and the
+                # `;tooltip:` / bare `#tooltip:KEY` forms) render KEY on hover.
+                found.extend(re.findall(r"tooltip:(?:[^,\s\"]+,)?(\w+)", all_loc[key]))
                 for fk in found:
                     if fk in all_keys and fk not in used_keys:
                         newly_found.add(fk)
