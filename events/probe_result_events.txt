@@ -42,7 +42,12 @@ space_race_events.601 = {
 			desc = space_race_events.60.d.outro
 		}
 	}
-	flavor = space_race_events.60.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.f_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.f
+		}
+	}
 	duration = 3
 	trigger = { }
 	# First finder, or a confirmation of an earlier nation's finding.
@@ -103,7 +108,12 @@ space_race_events.602 = {
 			desc = space_race_events.60.d.outro
 		}
 	}
-	flavor = space_race_events.60.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.f_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.f
+		}
+	}
 	duration = 3
 	trigger = { }
 	# First finder, or a confirmation of an earlier nation's finding.
@@ -164,7 +174,12 @@ space_race_events.603 = {
 			desc = space_race_events.60.d.outro
 		}
 	}
-	flavor = space_race_events.60.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.f_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.f
+		}
+	}
 	duration = 3
 	trigger = { }
 	# First finder, or a confirmation of an earlier nation's finding.
@@ -225,7 +240,12 @@ space_race_events.604 = {
 			desc = space_race_events.60.d.outro
 		}
 	}
-	flavor = space_race_events.60.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.f_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.f
+		}
+	}
 	duration = 3
 	trigger = { }
 	# First finder, or a confirmation of an earlier nation's finding.
@@ -286,7 +306,12 @@ space_race_events.605 = {
 			desc = space_race_events.60.d.outro
 		}
 	}
-	flavor = space_race_events.60.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.f_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.f
+		}
+	}
 	duration = 3
 	trigger = { }
 	# First finder, or a confirmation of an earlier nation's finding.
@@ -347,7 +372,12 @@ space_race_events.606 = {
 			desc = space_race_events.60.d.outro
 		}
 	}
-	flavor = space_race_events.60.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.f_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.f
+		}
+	}
 	duration = 3
 	trigger = { }
 	# First finder, or a confirmation of an earlier nation's finding.
@@ -408,7 +438,12 @@ space_race_events.607 = {
 			desc = space_race_events.60.d.outro
 		}
 	}
-	flavor = space_race_events.60.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.f_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.f
+		}
+	}
 	duration = 3
 	trigger = { }
 	# First finder, or a confirmation of an earlier nation's finding.
@@ -469,7 +504,12 @@ space_race_events.608 = {
 			desc = space_race_events.60.d.outro
 		}
 	}
-	flavor = space_race_events.60.f
+	flavor = {
+		first_valid = {
+			triggered_desc = { desc = space_race_events.60.f_repeat trigger = { exists = scope:sr_probe_repeat } }
+			desc = space_race_events.60.f
+		}
+	}
 	duration = 3
 	trigger = { }
 	# First finder, or a confirmation of an earlier nation's finding.

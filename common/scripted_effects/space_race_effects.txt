@@ -315,8 +315,10 @@ sr_take_milestone_notice_base = {
 
 # Old-save migration: a receiver can still hold the single-variable format a
 # notification queued before the per-milestone lists wrote. Such a queued .20
-# fails its trigger and is dropped; this strips what it left behind. Called
-# from space_race_events.20's immediate.
+# fails its trigger and is dropped (its immediate never runs); the variables it
+# left behind are inert and are stripped here, by the next new-format
+# notification that reaches that receiver. Called from space_race_events.20's
+# immediate.
 sr_clear_legacy_milestone_notice = {
 	if = { limit = { has_variable = sr_notify_achiever_capital      } remove_variable = sr_notify_achiever_capital      }
 	if = { limit = { has_variable = sr_notify_is_first              } remove_variable = sr_notify_is_first              }
