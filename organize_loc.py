@@ -394,6 +394,11 @@ def categorize_key(key, technology_keys):
     if key.startswith(("te_monetary_", "te_mon_", "te_monetisation_", "te_inflation_",
                        "te_fx_", "te_capital_controls_")):
         return "MISCELLANEOUS"
+    # The state panel's Homeland Dynamics lines: three-token section headers
+    # (`TE_HOMELAND_CREATION`) would otherwise fall to CONCEPTS while their
+    # longer siblings stay in MISCELLANEOUS.
+    if key.startswith("TE_HOMELAND_"):
+        return "MISCELLANEOUS"
     if "_desc" in key or (re.match(r"^[a-zA-Z_]+$", key) and len(key.split("_")) < 4):
         return "CONCEPTS"
     return "MISCELLANEOUS"

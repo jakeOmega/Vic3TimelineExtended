@@ -6,7 +6,7 @@ import os
 import tempfile
 import unittest
 
-from organize_loc import find_quoted_loc_args, organize_all
+from organize_loc import categorize_key, find_quoted_loc_args, organize_all
 
 
 class FindQuotedLocArgsTests(unittest.TestCase):
@@ -33,6 +33,14 @@ class FindQuotedLocArgsTests(unittest.TestCase):
     def test_prose_between_expressions_ignored(self):
         value = "\"[Localize('key_one')]'s rival, the 'x' of [Localize('key_two')]\""
         self.assertEqual(find_quoted_loc_args(value), ["key_one", "key_two"])
+
+
+class CategorizeKeyTests(unittest.TestCase):
+    def test_homeland_panel_family_stays_together(self):
+        for key in ("TE_HOMELAND_CREATION", "TE_HOMELAND_REMOVAL",
+                    "TE_HOMELAND_PAUSED_LOCKED", "TE_HOMELAND_CREATION_THRESHOLD"):
+            with self.subTest(key=key):
+                self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
 
 
 class OrganizeAllUnusedTests(unittest.TestCase):
