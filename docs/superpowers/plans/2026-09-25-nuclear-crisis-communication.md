@@ -21,7 +21,8 @@
 - Tooltip previews run effects without running them: `save_scope_as` does not run, so scopes saved inside an effect do not exist in its own tooltip. Preview-visible lines may read only ROOT/THIS, the scopes the caller already has (`scope:target_country`; an event's saved scopes), and variables.
 - A write to a variable the UI reads, inside an event option, must sit in a `custom_tooltip = { text = <key with the number> … }` (silent_variable_audit, `--strict` in CI).
 - Script-built text (display scripted GUIs printed with `ExecuteTooltip`) prints a scope's own lines before lines from nested scopes (gotcha #18): keep line order at one scope level.
-- Unit tests: `python3 -m unittest test_nuclear_deterrence -v` (no game, no server).
+- Unit tests: `python3 -m unittest test_nuclear_deterrence -v` (no game, no server). **Rerun them after tab-formatting**, before each commit: some tests match exact text.
+- Scripted-trigger parameters (`nuclear_deterrence_triggers.txt` header): **never pass `PREV` or a bare `var:`** as a parameter — they are substituted textually and change meaning inside the trigger's own scope changes. Save a temporary scope (`save_temporary_scope_as`, which does run inside a `limit` in a tooltip preview) and pass that. **`is_losing_war_against` reads ROOT** as the country asked; do not call it from a scope that is not ROOT.
 - Commit by path, never `git commit -a`. End every commit message with:
   ```
   Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
@@ -502,6 +503,11 @@ class TestCrisisFigures(unittest.TestCase):
         for var in DANGER_PARTS + PRESSURE_PARTS + ["nd_cd_dampened", "nd_ft_reason"]:
             self.assertIn(f"remove_variable = {var}", body, var)
 
+    def test_losing_war_is_read_from_the_target(self):
+        self.assertNotIn("is_losing_war_against", block(self.values, "nd_yp_war_value"))
+        self.assertIn("nd_is_losing_war_to = { ENEMY = scope:nd_issuer }", block(self.values, "nd_yp_war_value"))
+        self.assertNotIn("ROOT", block(strip_comments(read(TRIGGERS)), "nd_is_losing_war_to"))
+
     def test_refresh_is_the_only_writer_of_the_totals(self):
         for path in (CRISIS_EFFECTS, EFFECTS, CRISIS_EVENTS, INCIDENT_EVENTS):
             text = strip_comments(read(path))
@@ -778,7 +784,7 @@ nd_yp_war_value = {
 	if = {
 		limit = {
 			has_war_with = scope:nd_issuer
-			is_losing_war_against = { ENEMY = scope:nd_issuer }
+			nd_is_losing_war_to = { ENEMY = scope:nd_issuer }
 		}
 		add = 15
 	}
@@ -833,11 +839,33 @@ nd_yield_pressure_value = {
 }
 ```
 
-Before replacing, open the old `nd_yield_pressure_value` and confirm its `is_losing_war_against` call uses the same `{ ENEMY = scope:nd_issuer }` form as above; keep whatever form the old code used.
+`nd_yp_war_value` deliberately uses `nd_is_losing_war_to` (Step 4), not the old `is_losing_war_against`: that fixes the perspective bug described there. Mention it in the PR body.
 
-- [ ] **Step 4: Add the dampening trigger**
+- [ ] **Step 4: Add the dampening trigger, and a losing-war test that does not read ROOT**
 
-Add to `nuclear_deterrence_triggers.txt` in the `# CRISIS STATE` section (after `nd_crisis_is_public`):
+`is_losing_war_against` (`nuke_triggers.txt`) reads ROOT as the country asked. The old pressure formula called it in the **target's** scope while ROOT was the **issuer** (the weekly pulse, the diplomatic action), so "the target is losing to us" fired when the *issuer* was losing battles. Add a ROOT-free twin to `nuclear_deterrence_triggers.txt` (next to `nd_core_threatened_by`), used by `nd_yp_war_value` above and by the preview (Task 5):
+
+```
+# The scoped country is losing its war with $ENEMY$: a quarter of its land
+# occupied, or, after five significant battles in a war with them, under 35 %
+# of the battles won. is_losing_war_against's rule, with the loser read from
+# this scope rather than ROOT.
+nd_is_losing_war_to = {
+	save_temporary_scope_as = nd_lw_self
+	OR = {
+		enemy_occupation >= 0.25
+		any_scope_war = {
+			is_war_participant = $ENEMY$
+			num_significant_battles >= 5
+			scope:nd_lw_self = {
+				size_weighted_won_battles_fraction = { target = PREV value < 0.35 }
+			}
+		}
+	}
+}
+```
+
+Then add to `nuclear_deterrence_triggers.txt` in the `# CRISIS STATE` section (after `nd_crisis_is_public`):
 
 ```
 # Issuer scope, scope:nd_target saved: the target has no arsenal and no armed
@@ -1227,7 +1255,9 @@ nd_crisis_write_pending = {
 
 # Country scope. Settles an outcome notice still waiting on a click, so a new
 # close cannot overwrite it. The stale notice's option then finds its pair's
-# record gone and says so (nuclear_crisis.6).
+# record gone and says so (nuclear_crisis.6). Reached only through
+# nd_crisis_close, which runs from pulses and hidden_effects: never call it
+# from a visible option, or its credibility lines would render there.
 nd_crisis_flush_pending = {
 	if = {
 		limit = { has_variable = nd_crisis_pending_outcome }
@@ -1475,9 +1505,9 @@ In `nuclear_crisis.6`, add an `immediate` block right after `trigger = { has_var
 	immediate = {
 		if = {
 			limit = {
-				exists = scope:nd_issuer
+				has_variable = nd_crisis_pending_role
+				var:nd_crisis_pending_role = 1
 				exists = scope:nd_target
-				this = scope:nd_issuer
 			}
 			scope:nd_target = { save_scope_as = nd_outcome_other }
 		}
@@ -1707,8 +1737,9 @@ class TestActionPreview(unittest.TestCase):
 
     def test_preview_reads_no_crisis_scopes(self):
         body = block(self.effects, "nd_crisis_preview")
-        self.assertNotRegex(body, r"scope:nd_")
-        self.assertNotIn("save_scope_as", body)
+        self.assertNotRegex(body, r"scope:nd_(?!pv_self\b)")
+        self.assertNotRegex(body, r"(?<!temporary_)save_scope_as")
+        self.assertNotRegex(body, r"= PREV\b", "PREV passed as a parameter")
 
     def test_preview_numbers_match_the_formula(self):
         preview = block(self.effects, "nd_crisis_preview")
@@ -1747,8 +1778,9 @@ Insert in `nuclear_crisis_effects.txt` directly before `nd_crisis_open`:
 # Issuer scope. What opening a crisis against $TARGET$ does and risks, for the
 # diplomatic actions' confirmation box and the event options that open one
 # (2026-09-25 spec §2.1). Reads only our own state and $TARGET$, which exist in
-# a tooltip preview. Every line sits at this scope level so the lines print in
-# order (gui_modding_guide.md gotcha #18). The infamy and relations lines are
+# a tooltip preview (a temporary scope saved inside a `limit` does exist
+# there; a scope saved by an effect does not). Every line sits at this scope
+# level so the lines print in order (gui_modding_guide.md gotcha #18). The infamy and relations lines are
 # the real effects: every caller has already checked that the crisis opens
 # (nd_crisis_parties_free), so they are not fenced.
 nd_crisis_preview = {
@@ -1824,7 +1856,10 @@ nd_crisis_preview = {
 		custom_tooltip = nd_tt_open_f_armed
 	}
 	if = {
-		limit = { $TARGET$ = { nd_has_armed_guarantor_against = { AGAINST = PREV } } }
+		limit = {
+			save_temporary_scope_as = nd_pv_self
+			$TARGET$ = { nd_has_armed_guarantor_against = { AGAINST = scope:nd_pv_self } }
+		}
 		custom_tooltip = nd_tt_open_f_protector
 	}
 	custom_tooltip = nd_tt_open_f_credibility
@@ -1842,15 +1877,19 @@ nd_crisis_preview = {
 	}
 	if = {
 		limit = {
+			save_temporary_scope_as = nd_pv_self
 			$TARGET$ = {
-				has_war_with = PREV
-				is_losing_war_against = { ENEMY = PREV }
+				has_war_with = scope:nd_pv_self
+				nd_is_losing_war_to = { ENEMY = scope:nd_pv_self }
 			}
 		}
 		custom_tooltip = nd_tt_open_f_losing
 	}
 	if = {
-		limit = { $TARGET$ = { nd_enemy_threatens_existence = { ENEMY = PREV } } }
+		limit = {
+			save_temporary_scope_as = nd_pv_self
+			$TARGET$ = { nd_enemy_threatens_existence = { ENEMY = scope:nd_pv_self } }
+		}
 		custom_tooltip = nd_tt_open_f_existence
 	}
 	# ---- the stakes, and what happens next ------------------------------------
@@ -3040,7 +3079,7 @@ Claude-Session: https://claude.ai/code/session_01J7jQeEPzj8XPNiXozzxnYk"
 `nuclear_crisis_design.md`:
 - §0.3, after the credibility list: a **Follow-through** paragraph (the seven `nd_ft_reason` codes, the pressure part, the called-bluff −5, the AI rule) and an **Outcome notice** paragraph (pending record, `.6` applies it, flush, the concession stays at yielding).
 - §0.7: add "A strike through a crisis option now needs the war-law gate too (it used to skip it)."
-- §0.9: append the seven in-game checks from the spec's *Testing* section, numbered 17–23.
+- §0.9: append the seven in-game checks from the spec's *Testing* section, numbered 17–23, plus 24: "the accessors first used here render: `[THIS.ScriptValue(…)]` in the ultimatum's confirmation box (`nd_tt_open_f_credibility`), `[THIS.Var(…)]` in the panel breakdowns, `[ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]` in the outcome notice"; and 25: "with Canada winning battles against us, the pressure breakdown shows no +15 'how the war is going' line for Canada" (the `nd_is_losing_war_to` fix).
 
 `mod_systems.md` **Crises** paragraph: append "`nd_crisis_refresh_figures` is the one writer of the crisis's numbers and stores every part on both parties; the outcome notice (`nuclear_crisis.6`) applies each side's consequences from a pending record." **Launch gates** paragraph: append "`nd_war_law_permits_strategic_strike` / `_tactical_strike` carry the Rules of War gate for the strike actions and the crisis strike options alike."
 
