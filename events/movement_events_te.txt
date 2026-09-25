@@ -615,7 +615,7 @@ movement_events_te.13 = {
 				add = 3
 			}
 		}
-		# Crack down on the networks - order preserved, international condemnation
+		# Crack down on the networks - order preserved; with a named refuge, we also denounce it (the -20 and the catalyst)
 		add_modifier = {
 			name = refugee_network_crackdown_modifier
 			days = normal_modifier_time
