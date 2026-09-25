@@ -1550,9 +1550,12 @@ un_vote.3 = {
 	}
 
 	# Option A: Catch-all "acknowledge" — vote failed, you voted yes, or you
-	# joined the UN after vote.1 fired and never had a chance to vote. In the
-	# last case the country still gets bound by the passed resolution (default
-	# acceptance) since the apply blocks below already gate on the passed tag.
+	# cast no ballot (joined the UN after vote.1 fired, or lost the vote under
+	# Article 19). In the last case the country is still bound by a passed
+	# convention (default acceptance), since the apply blocks below gate on
+	# the passed tag; but what only a ballot commits a member to — a great
+	# power's anti-colonial stance, a pledge of peacekeepers or aid — is
+	# gated inside those effects on having voted (un_lobby_has_voted).
 	option = {
 		name = un_vote.3.a
 		default_option = yes
