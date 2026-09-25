@@ -38,6 +38,8 @@ Systems using this pattern:
 - **History charts:** two series (`gw_temp`, `gw_share`) recorded by `common/scripted_effects/te_history_global_warming_effects.txt`. Both step once a year because that is the cadence emissions move at. Temperature is global but stored per tracked country, because `te_history_chart`'s datamodel is hard-coded to the country list — see **History Store and Charts**. No markers this wave.
 - Events: `environmentalism_events.txt` — threshold events at 0.5°C, 1.0°C, 2.0°C, 3.0°C.
 - Cooling/reversal support: `global_warming_events_on_action` now also fires one-time recovery events when temperatures decline below 3.0°C, 2.0°C, 1.0°C, 0.5°C, and 0.1°C (`environmentalism_events.17`–`environmentalism_events.21`).
+- **Disabled rule = no climate change.** `global_warming_update_on_action` accumulates emissions only under `global_warming_enabled`, and `global_warming_events_on_action` runs the display snapshots and the threshold events (`.1`–`.4`, `.17`–`.21`) only then. Its `else` holds `global_var:greenhouse_gas_emissions` at 0, which also clears the warming an older disabled-rule save built up, so every outside reader of `temperature_anomaly_display` (UN docket, election events, movements, treaty article 109) sees 0. The JE never activates, so its recurring events never fire. `.7` (pollution scandal) is about pollution, not warming, and fires under both settings. There are no `*_no_gw_modifier` fallbacks any more.
+- `.13` (climate summit) is the fallback for a world without a UN. It needs `united_nations_disabled` or no `un_founded`, because while a UN exists the accord is `un_events.17`.
 - Test console: `event te_debug_gw.1` (`events/te_debug_gw_events.txt`).
 - The JE sits in `je_group_internal_affairs`. A `je_group_environment` is declared in `common/journal_entry_groups/timeline_extended_je_groups.txt` and unused; moving this entry there was deliberately left out of scope.
 
@@ -974,8 +976,8 @@ Three amendments can be attached **temporarily** (`add_amendment = { … timeout
 | Amendment | Delivery (DEBATE checkpoint) | cooldown / timeout (months) | Expiry event |
 |-----------|------------------------------|-----------------------------|--------------|
 | `amendment_env_grandfather_clause` (new; +5% pollution, +5% emissions, +2 Industrialist approval on `law_ministry_of_the_environment`; cancels one institution level) | `ministry_law_events.58` option a | 48 / 120 | `ministry_law_events.59` |
-| `amendment_national_champion_exemption` | `extra_law_events.29` option d (option a remains the permanent variant) | 48 / 120 | `extra_law_events.85` |
-| `amendment_corporate_data_exemption` | `extra_law_events.31` option d (option a remains the permanent variant) | 12 / 36 | `extra_law_events.86` |
+| `amendment_national_champion_exemption` | `extra_law_events.29` option e (option a remains the permanent variant) | 48 / 120 | `extra_law_events.85` |
+| `amendment_corporate_data_exemption` | `extra_law_events.31` option e (option a remains the permanent variant) | 12 / 36 | `extra_law_events.86` |
 
 The `has_amendment` guards on events 29/31/58 make the permanent and temporary variants mutually exclusive within one enactment. The expiry events re-derive `sunset_law` from `active_law:<lawgroup>` and `industrialists_ig` in `immediate`, and are not in any checkpoint pool. Deferred from issue #278: a financial-regulation phase-in (the three laws' penalties are structurally different — numeric, none, boolean lock) and a wartime rules-of-war clause (no per-country war-start on-action; would need a timeout on an already-active law).
 

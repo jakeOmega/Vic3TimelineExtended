@@ -15,7 +15,18 @@ augmentation_events.1 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	title = augmentation_events.1.t
-	desc = augmentation_events.1.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_law = law_type:law_no_augmentation }
+				desc = augmentation_events.1.d_unlicensed
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = augmentation_events.1.d
+			}
+		}
+	}
 	flavor = augmentation_events.1.f
 
 	duration = 3
@@ -23,6 +34,10 @@ augmentation_events.1 = {
 
 	trigger = {
 		has_augmentation_tech = yes
+		# Human purity bans augmentation outright, so there is no market to divide
+		# society. Under law_no_augmentation (the starting law: nothing licensed
+		# yet) the divide is real but bought abroad — the desc says so.
+		NOT = { has_law = law_type:law_human_purity }
 	}
 
 	immediate = {
@@ -61,17 +76,15 @@ augmentation_events.1 = {
 	# Ban non-medical augmentation
 	option = {
 		name = augmentation_events.1.c
+		# Unrestricted and mandatory augmentation are the opposite settlement.
+		trigger = {
+			NOR = {
+				has_law = law_type:law_unrestricted_augmentation
+				has_law = law_type:law_mandatory_augmentation
+			}
+		}
 		ai_chance = {
 			base = 1
-			modifier = {
-				trigger = {
-					OR = {
-						has_law = law_type:law_human_purity
-						has_law = law_type:law_no_augmentation
-					}
-				}
-				add = 4
-			}
 		}
 		add_modifier = {
 			name = augmentation_ban_modifier
@@ -92,7 +105,18 @@ augmentation_events.2 = {
 	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
 
 	title = augmentation_events.2.t
-	desc = augmentation_events.2.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_law = law_type:law_no_augmentation }
+				desc = augmentation_events.2.d_unlicensed
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = augmentation_events.2.d
+			}
+		}
+	}
 	flavor = augmentation_events.2.f
 
 	duration = 3
@@ -100,6 +124,11 @@ augmentation_events.2 = {
 
 	trigger = {
 		has_augmentation_tech = yes
+		# Human purity bans augmentation outright (and its "regulate and
+		# legalize" option would contradict it). Under law_no_augmentation (the
+		# starting law: nothing licensed yet) there are no regulated procedures
+		# at home — the desc says so.
+		NOT = { has_law = law_type:law_human_purity }
 	}
 
 	immediate = {
@@ -434,7 +463,7 @@ augmentation_events.5 = {
 	}
 }
 
-# Event 100: The Great Divide (fail state)
+# Event 100: The Purity Laws (fail state: law_human_purity)
 augmentation_events.100 = {
 	type = country_event
 	placement = root
@@ -457,7 +486,10 @@ augmentation_events.100 = {
 	immediate = {
 	}
 
-	# Accept the divide
+	# Fired only by je_human_augmentation's on_fail, i.e. law_human_purity has just
+	# passed. The question left is what to do about the already-augmented.
+
+	# Enforce purity without exception
 	option = {
 		name = augmentation_events.100.a
 		default_option = yes
@@ -465,20 +497,20 @@ augmentation_events.100 = {
 			base = 3
 		}
 		add_modifier = {
-			name = augmentation_divide_permanent_modifier
+			name = human_purity_enforced_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}
 	}
 
-	# Mandate purity
+	# Exempt the already-augmented: a permanent, legally recognised divide
 	option = {
 		name = augmentation_events.100.b
 		ai_chance = {
 			base = 2
 		}
 		add_modifier = {
-			name = human_purity_enforced_modifier
+			name = augmentation_divide_permanent_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}

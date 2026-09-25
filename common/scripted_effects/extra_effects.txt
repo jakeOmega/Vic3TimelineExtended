@@ -606,13 +606,9 @@ nuclear_response_response_strike = {  # Scope is target state
 						trigger_event = { id = nuclear_weapon_events.3 popup = yes }
 					}
 					trigger_event = { id = nuclear_weapon_events.4 popup = yes }
-					every_country = {
-						limit = {
-							NOT = { THIS = scope:attacking_country }
-							NOT = { THIS = scope:target_country }
-						}
-						trigger_event = nuclear_weapon_events.15
-					}
+					# No world notice: nuclear_weapon_events.15 reports a city
+					# devastated, and an intercepted strike devastated nothing.
+					# Only the success branch above broadcasts it.
 				}
 			}
 		}
