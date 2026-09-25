@@ -4,7 +4,9 @@
 # LEADUP EVENTS (1-9) - Fired during rising tensions before war breaks out
 # ============================================================================
 
-# Event 1: Ideological Confrontation - rival ideological bloc demands concessions
+# Event 1: Ideological Confrontation - a rival great power has presented us with
+# ideological demands. Fired only by that rival's own choice in world_war_events.4
+# (scope:ideological_rival = the rival, which chose to issue them).
 world_war_events.1 = {
 	type = country_event
 	placement = root
@@ -19,27 +21,13 @@ world_war_events.1 = {
 
 	duration = 3
 
+	# No cooldown: world_war_events.4 paces this on the rival's side.
 	trigger = {
+		exists = scope:ideological_rival
 		NOT = { has_variable = ww_active_phase }
-		ww_ideological_tension >= 30
-		any_rival_country = {
-			country_rank >= rank_value:great_power
-			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
-		}
 	}
 
-	cooldown = { days = normal_modifier_time }
-
-	immediate = {
-		random_country = {
-			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-				country_rank >= rank_value:great_power
-				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
-			}
-			save_scope_as = ideological_rival
-		}
-	}
+	immediate = { }
 
 	# Option A: Stand firm - refuse concessions, escalate
 	option = {
@@ -145,7 +133,8 @@ world_war_events.1 = {
 	}
 }
 
-# Event 2: Border Incident - military skirmish on the frontier
+# Event 2: Border Incident - military skirmish on the frontier with a rival we
+# actually share a border with
 world_war_events.2 = {
 	type = country_event
 	placement = root
@@ -165,6 +154,7 @@ world_war_events.2 = {
 		ww_ideological_tension >= 40
 		any_rival_country = {
 			country_rank >= rank_value:great_power
+			is_adjacent_to_country = ROOT
 			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
 		}
 	}
@@ -176,6 +166,7 @@ world_war_events.2 = {
 			limit = {
 				has_diplomatic_pact = { who = ROOT type = rivalry }
 				country_rank >= rank_value:great_power
+				is_adjacent_to_country = ROOT
 				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
 			}
 			save_scope_as = border_rival
@@ -274,7 +265,9 @@ world_war_events.2 = {
 	}
 }
 
-# Event 3: Diplomatic Crisis - an allied minor power is threatened
+# Event 3: Diplomatic Crisis - a rival great power has started a diplomatic play
+# (or the war it became) against a smaller country in our sphere: a fellow power
+# bloc member, or one we are already bound to defend. Both are real and named.
 world_war_events.3 = {
 	type = country_event
 	placement = root
@@ -293,28 +286,35 @@ world_war_events.3 = {
 		NOT = { has_variable = ww_active_phase }
 		ww_ideological_tension >= 50
 		country_rank >= rank_value:great_power
-		any_rival_country = {
-			country_rank >= rank_value:great_power
-			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+		any_diplomatic_play = {
+			ww_play_is_rival_pressure_on_sphere_of = { COUNTRY = ROOT }
 		}
 	}
 
 	cooldown = { days = normal_modifier_time }
 
 	immediate = {
-		random_country = {
+		random_diplomatic_play = {
 			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-				country_rank >= rank_value:great_power
-				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+				ww_play_is_rival_pressure_on_sphere_of = { COUNTRY = ROOT }
 			}
-			save_scope_as = crisis_aggressor
+			initiator = { save_scope_as = crisis_aggressor }
+			target = { save_scope_as = crisis_victim }
 		}
 	}
 
-	# Option A: Guarantee the threatened nation - draw a line
+	# Option A: Guarantee the threatened nation's independence - draw a line.
+	# If a guarantee is not possible (we are already bound to them by an alliance or
+	# defensive pact, or already guarantee them), we invoke those commitments instead.
 	option = {
-		name = world_war_events.3.a
+		name = {
+			trigger = { ww_can_guarantee_sovereignty = { GUARANTOR = ROOT TARGET = scope:crisis_victim } }
+			text = world_war_events.3.a
+		}
+		name = {
+			trigger = { always = yes }
+			text = world_war_events.3.a_bound
+		}
 		default_option = yes
 		ai_chance = {
 			base = 4
@@ -337,6 +337,10 @@ world_war_events.3 = {
 		change_tension = {
 			country = scope:crisis_aggressor
 			value = 25
+		}
+		if = {
+			limit = { ww_can_guarantee_sovereignty = { GUARANTOR = ROOT TARGET = scope:crisis_victim } }
+			ww_guarantee_sovereignty = { GUARANTOR = ROOT TARGET = scope:crisis_victim }
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -373,7 +377,7 @@ world_war_events.3 = {
 		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
 	}
 
-	# Option C: Form a defensive alliance - commit fully
+	# Option C: Mobilize in their defence - commit fully (rearmament)
 	option = {
 		name = world_war_events.3.c
 		ai_chance = {
@@ -398,6 +402,11 @@ world_war_events.3 = {
 			country = scope:crisis_aggressor
 			value = 40
 		}
+		je:je_world_war = { add_modifier = {
+				name = ww_rearmament_modifier
+				days = normal_modifier_time
+				is_decaying = yes
+			} }
 		add_loyalists = {
 			value = medium_radicals
 			pop_type = soldiers
@@ -406,6 +415,96 @@ world_war_events.3 = {
 			value = small_radicals
 			strata = upper
 		}
+	}
+}
+
+# Event 4: Ideological Demands - we decide whether to press a rival great power of
+# the opposing camp to renounce its system. Fires from the je_world_war pulse on
+# the would-be issuer; only if we issue the demands does the rival receive
+# world_war_events.1 and answer them.
+world_war_events.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/ideological_confrontation_speech.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = world_war_events.4.t
+	desc = world_war_events.4.d
+	flavor = world_war_events.4.f
+
+	duration = 3
+
+	trigger = {
+		NOT = { has_variable = ww_active_phase }
+		ww_ideological_tension >= 30
+		any_rival_country = {
+			country_rank >= rank_value:great_power
+			NOT = { has_variable = ww_active_phase }
+			ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+		}
+	}
+
+	cooldown = { days = normal_modifier_time }
+
+	immediate = {
+		save_scope_as = ideological_rival
+		random_country = {
+			limit = {
+				has_diplomatic_pact = { who = ROOT type = rivalry }
+				country_rank >= rank_value:great_power
+				NOT = { has_variable = ww_active_phase }
+				ROOT = { country_has_opposed_ideology = { TARGET = prev } }
+			}
+			save_scope_as = ww_demand_target
+		}
+	}
+
+	# Option A: Issue the demands - the rival must now answer them (world_war_events.1)
+	option = {
+		name = world_war_events.4.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_is_fascist = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { je:je_world_war = { has_modifier = ww_rearmament_modifier } }
+				add = 2
+			}
+		}
+		scope:ww_demand_target = {
+			trigger_event = { id = world_war_events.1 }
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		add_radicals = {
+			value = small_radicals
+			strata = middle
+		}
+	}
+
+	# Option B: Hold back - no demands are sent
+	option = {
+		name = world_war_events.4.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { country_is_democratic = yes }
+				add = 2
+			}
+			modifier = {
+				trigger = { je:je_world_war = { has_modifier = ww_appeasement_modifier } }
+				add = 3
+			}
+		}
+		add_loyalists = {
+			value = small_radicals
+			strata = middle
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
 	}
 }
 

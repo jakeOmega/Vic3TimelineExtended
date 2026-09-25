@@ -248,3 +248,72 @@ ww_awaits_terms_from = {
 	is_at_war = no
 	ww_fought_against = { COUNTRY = $VICTOR$ }
 }
+
+# ============================================================================
+# LEADUP EVENT GATES
+# ============================================================================
+
+# --- True if this (smaller) country sits in $COUNTRY$'s sphere: a fellow member
+# of $COUNTRY$'s power bloc, or a country $COUNTRY$ is already bound to defend by
+# an alliance, a defensive pact or its own guarantee. Subjects are left out:
+# a play against a subject involves its overlord directly.
+ww_is_in_sphere_of = {
+	NOT = { this = $COUNTRY$ }
+	country_rank < rank_value:great_power
+	is_subject = no
+	OR = {
+		AND = {
+			$COUNTRY$ = { is_in_power_bloc = yes }
+			is_in_same_power_bloc = $COUNTRY$
+		}
+		any_scope_treaty = {
+			binds = $COUNTRY$
+			any_scope_article = {
+				OR = {
+					has_type = alliance
+					has_type = defensive_pact
+					AND = {
+						has_type = guarantee_independence
+						source_country = $COUNTRY$
+					}
+				}
+			}
+		}
+	}
+}
+
+# --- Diplomatic play scope: a great-power rival of $COUNTRY$ with an opposed
+# ideology started this play (or the war it became) against a smaller country in
+# $COUNTRY$'s sphere, and $COUNTRY$ is not already part of it.
+ww_play_is_rival_pressure_on_sphere_of = {
+	initiator = {
+		has_diplomatic_pact = { who = $COUNTRY$ type = rivalry }
+		country_rank >= rank_value:great_power
+		$COUNTRY$ = { country_has_opposed_ideology = { TARGET = prev } }
+	}
+	target = {
+		ww_is_in_sphere_of = { COUNTRY = $COUNTRY$ }
+	}
+	NOT = {
+		any_scope_play_involved = { this = $COUNTRY$ }
+	}
+}
+
+# --- $GUARANTOR$ can give $TARGET$ a guarantee of independence right now (the
+# treaty world_war_events.3's first option creates; ww_guarantee_sovereignty).
+# Keep the treaty block identical to the effect's. ---
+ww_can_guarantee_sovereignty = {
+	can_create_treaty = {
+		first_country = $GUARANTOR$
+		second_country = $TARGET$
+		is_draft = no
+		binding_period = { years = 5 }
+		articles_to_create = {
+			{
+				article = guarantee_independence
+				source_country = $GUARANTOR$
+				target_country = $TARGET$
+			}
+		}
+	}
+}

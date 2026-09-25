@@ -1422,7 +1422,9 @@ Models a World War lifecycle from rising tensions through active total war to po
 - **Leadup tension tiers:** simmering → rising (30+) → high (50+) → crisis (70+)
 - **War duration tracking:** Months counter → years elapsed
 - **Strain escalation:** Home front strain at 2+ years, prolonged exhaustion at 4+ years
-- **Peace detection:** Checks belligerent status changes, triggers peace conference event, 36-month post-war timer
+- **Peace detection:** a belligerent that has actually fought (`ww_war_began`) and is at peace gets the peace conference event; 36-month post-war timer
+- **Crisis defused:** if the play `world_war_events.5` launched ends without a war (a side backs down, or it never forms), the pulse stands every belligerent that never fought back down (`ww_clear_unfought_belligerent`), releasing the one-world-war guard
+- **Outcome latch (who won):** nothing in the live game says who lost once a war is over, so it is recorded as it happens. `ww_war_began` + `ww_fought_as_aggressor`/`ww_fought_as_defender` are set the first month a belligerent is at war with the other side (`ww_is_fighting_world_war`; `world_war_events.20` for late entrants). `ww_capitulated` is set from `on_capitulation` and from `on_wargoal_enforced` (an enemy war goal enforced on it) in `common/on_actions/te_event_agency_ww_on_actions.txt`. `ww_won_world_war` = fought, not capitulated, and someone on the other side did; a white peace has no winner. These latches outlive the side variables (which `.101`/`.102` and `on_fail` remove), are cleared in `on_complete` and, globally, when the next world war is launched; `on_fail` keeps them so victors still find a loser that dropped below great power. Triggers in `world_war_triggers.txt`, effects in `te_event_agency_ww_effects.txt`
 - **Ideology classification:** democratic, communist, fascist, authoritarian, non-aligned
 
 ### Variables
@@ -1436,6 +1438,11 @@ Models a World War lifecycle from rising tensions through active total war to po
 | `ww_peace_months` | Post-war timer (36-month goal) |
 | `ww_fully_resolved` | JE completion flag |
 | `ww_peace_event_fired` | Event control flag |
+| `ww_war_began` | Latch: this belligerent has fought the other side (peace detection waits for it) |
+| `ww_fought_as_aggressor` / `ww_fought_as_defender` | Latch: the side it fought on |
+| `ww_capitulated` | Latch: it lost (capitulated, or had an enemy war goal enforced on it) |
+| `ww_peace_terms_received` | Latch: a victor already sent it `.101`/`.102` |
+| `ww_outbreak_pending` (global, 90 days) | A great power is deciding `.5`; no other may open a world war meanwhile |
 
 ### Buttons (12+)
 - **Leadup phase:** rearm, appease, lend-lease (toggle pairs)
@@ -1450,11 +1457,11 @@ Models a World War lifecycle from rising tensions through active total war to po
 - **War support (1.14):** the two strain modifiers are read from the JE (`je:je_world_war ?= { has_modifier = … }`) by `common/script_values/zz_te_war_support_injections.txt` for −0.5 per beat each (see `mod_systems.md` § War Support Feeds)
 
 ### Events
-- **Leadup:** `world_war_events.1` (confrontation), `.2` (border incident), `.3` (crisis)
-- **Outbreak:** `world_war_events.5` (war breaks out)
+- **Leadup:** `world_war_events.4` (we decide whether to issue ideological demands to a rival) → `.1` on that rival (it answers them); `.2` (border incident, only with a rival we border); `.3` (a rival great power's real diplomatic play against a smaller country in our power bloc or under our treaty protection; the first option creates a guarantee-of-independence treaty when one is possible)
+- **Outbreak:** `world_war_events.5` (launch the play against the rival, or stand down; the side variables are set only on launch)
 - **Active war:** `.10` (rally), `.11` (bombing), `.12` (resistance), `.20` (join opportunity)
 - **Prolonged:** `.30` (weariness), `.31` (stalemate on the front — 1.14 war reads `war_duration_months`, `num_significant_battles`, `has_stalled_wargoal_held_by`; one-off `add_war_war_support` ±)
-- **Post-war:** `.100` (peace conference), `.103` (war crimes), `.104` (new order), `.105` (new rivalry)
+- **Post-war:** `.100` (peace conference: victor options for `ww_won_world_war`, whose harsh/just peace sends `.101`/`.102` only to capitulated belligerents of the other side, once each; loser and no-victor variants otherwise), `.103` (war crimes), `.104` (new order: not for capitulated powers, only when someone won; neutral text for non-victors), `.105` (new rivalry with a great power that fought on our side)
 
 ### Related Triggers/Values
 - `country_is_ww_belligerent`, `country_has_opposed_ideology`

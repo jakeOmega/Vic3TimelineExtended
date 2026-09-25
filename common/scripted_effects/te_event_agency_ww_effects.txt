@@ -78,3 +78,27 @@ ww_clear_war_phase_modifiers = {
 	if = { limit = { has_modifier = ww_fresh_forces_modifier } remove_modifier = ww_fresh_forces_modifier }
 	if = { limit = { has_modifier = ww_arsenal_of_democracy_modifier } remove_modifier = ww_arsenal_of_democracy_modifier }
 }
+
+# ============================================================================
+# WORLD WAR - LEADUP
+# ============================================================================
+
+# Any scope. $GUARANTOR$ guarantees $TARGET$'s independence, in force at once and
+# binding for five years: a unilateral pledge (the article is giftable, and its
+# upkeep is paid by the guarantor). Gate on ww_can_guarantee_sovereignty with the
+# same parameters; keep the treaty block identical to the trigger's.
+ww_guarantee_sovereignty = {
+	create_treaty = {
+		first_country = $GUARANTOR$
+		second_country = $TARGET$
+		is_draft = no
+		binding_period = { years = 5 }
+		articles_to_create = {
+			{
+				article = guarantee_independence
+				source_country = $GUARANTOR$
+				target_country = $TARGET$
+			}
+		}
+	}
+}

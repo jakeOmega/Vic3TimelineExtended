@@ -341,7 +341,7 @@ je_world_war = {
 		random_events = {
 			200 = 0 # mostly nothing
 			# Leadup events (fire when not yet at war, tension rising)
-			10 = world_war_events.1   # ideological confrontation
+			10 = world_war_events.4   # ideological demands (we decide; .1 goes to the target)
 			10 = world_war_events.2   # border incident
 			10 = world_war_events.3   # diplomatic crisis
 			# War outbreak (fire when tension is critical)
