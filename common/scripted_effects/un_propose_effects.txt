@@ -1,9 +1,10 @@
 ﻿# ============================================================================
 # TABLING A RESOLUTION — SHARED EFFECTS
 # ============================================================================
-# What each of the six member-initiated topics actually does when tabled:
+# What each of the seven member-initiated topics actually does when tabled:
 # the costs and cooldowns it takes, the target it names, and the
-# un_resolution_open call that opens the vote.
+# un_resolution_open call that opens the vote. The ten conventions follow at
+# the bottom of the file, with their own header.
 #
 # Extracted word for word out of each scripted button's `effect` in
 # common/scripted_buttons/un_buttons.txt, so the button (which is how the AI
@@ -281,4 +282,283 @@ un_charter_reform_open = {
 	scope:un_resolution ?= {
 		set_variable = { name = un_res_charter_stage value = un_charter_next_stage }
 	}
+}
+
+# ============================================================================
+# THE TEN CONVENTIONS
+# ============================================================================
+# Human rights, ICC, NPT, climate, pandemic, refugee, heritage,
+# decolonization, space and the law of the sea. Each has two effects:
+#
+#   un_propose_<key>_table   what tabling it does, whoever tables it: the
+#                            domestic reaction and the vote itself. The
+#                            proposer event's first option calls it when a
+#                            member accepts the docket's offer, and
+#                            un_propose_<key>_effect calls it too, so the two
+#                            paths cannot drift.
+#   un_propose_<key>_effect  tabling it on our own motion from the chamber
+#                            (ops 7-16 of un_chamber_propose_sgui): _table,
+#                            plus the costs every own-motion proposal takes.
+#
+# Accepting the docket's offer costs nothing extra: the docket paces the floor
+# (at most one item every few months), so taking up what it raised is not
+# jumping the queue. Tabling on our own motion is, and pays for it. This is the
+# charter reform precedent — un_events.6 is free, un_propose_reform_effect
+# takes the same two modifiers as below.
+#
+# The gates are in un_propose_triggers.txt (un_propose_<key>_available /
+# _possible). There are no scripted buttons: the AI reaches these topics only
+# through the docket.
+# ============================================================================
+
+# The price of tabling business on our own motion, the same two modifiers the
+# seven topics above take: un_ga_resolution_modifier marks us as a sponsor for
+# five years, and un_request_cooldown bars our next own-motion proposal, of any
+# topic, for ten. Shown rather than folded into a custom tooltip, because the
+# ten-year bar is the real price of the choice.
+# Scope: the proposing country
+un_propose_own_motion_costs = {
+	add_modifier = {
+		name = un_ga_resolution_modifier
+		days = normal_modifier_time
+		is_decaying = yes
+	}
+	add_modifier = {
+		name = un_request_cooldown
+		days = long_modifier_time
+		is_decaying = yes
+	}
+}
+
+# ---- Universal Declaration of Human Rights (UNHRC) — un_events.3 ----
+# The proposer ratifies on passage with every other member (redesign phase 5,
+# §5.3); it takes nothing up front.
+# Scope: the proposing country
+un_propose_human_rights_table = {
+	# Progressives love it
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	# Open the vote: every other UN member votes, results in a year
+	hidden_effect = {
+		un_resolution_open = { TOPIC = human_rights }
+	}
+}
+
+# Scope: the proposing country
+un_propose_human_rights_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_human_rights_table = yes
+}
+
+# ---- International Criminal Court — un_events.22 ----
+# Scope: the proposing country
+un_propose_icc_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = icc }
+	}
+}
+
+# Scope: the proposing country
+un_propose_icc_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_icc_table = yes
+}
+
+# ---- Nuclear Non-Proliferation Treaty (IAEA) — un_events.14 ----
+# Scope: the proposing country
+un_propose_npt_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = npt }
+	}
+}
+
+# Scope: the proposing country
+un_propose_npt_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_npt_table = yes
+}
+
+# ---- Climate Accord (UNEP) — un_events.17 ----
+# Scope: the proposing country
+un_propose_climate_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = normal_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = climate }
+	}
+}
+
+# Scope: the proposing country
+un_propose_climate_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_climate_table = yes
+}
+
+# ---- Global Pandemic Response (WHO) — un_events.16 ----
+# Scope: the proposing country
+un_propose_pandemic_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = pandemic }
+	}
+}
+
+# Scope: the proposing country
+un_propose_pandemic_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_pandemic_table = yes
+}
+
+# ---- International Refugee Resolution (UNHCR) — un_events.18 ----
+# The country the displaced are fleeing, which becomes the resolution's target
+# so that un_vote.2 can offer its displaced resettlement when the resolution
+# carries (un_events.103). A graver case (famine, or a war that has devastated
+# a state) is preferred over a merely troubled one. As with condemnation and
+# sanctions, a human proposer gets the highest-ranked candidate, so the
+# chamber row can preview it; the AI keeps a random pick from the same pool.
+# un_events.18's immediate calls this too.
+# Scope: the proposing country
+un_propose_refugee_select_target = {
+	if = {
+		limit = { any_country = { un_propose_refugee_grave_source = yes } }
+		if = {
+			limit = { is_ai = yes }
+			random_country = {
+				limit = { un_propose_refugee_grave_source = yes }
+				save_temporary_scope_as = un_propose_refugee_target
+			}
+		}
+		else = {
+			ordered_country = {
+				limit = { un_propose_refugee_grave_source = yes }
+				order_by = country_rank
+				max = 1
+				save_temporary_scope_as = un_propose_refugee_target
+			}
+		}
+	}
+	else = {
+		if = {
+			limit = { is_ai = yes }
+			random_country = {
+				limit = { un_propose_refugee_source = yes }
+				save_temporary_scope_as = un_propose_refugee_target
+			}
+		}
+		else = {
+			ordered_country = {
+				limit = { un_propose_refugee_source = yes }
+				order_by = country_rank
+				max = 1
+				save_temporary_scope_as = un_propose_refugee_target
+			}
+		}
+	}
+}
+
+# A refugee resolution accuses nobody: the vote effects treat a target as
+# accused only on the accusing topics (un_resolution_accuses_target), so the
+# source voting for it is an ordinary yes, not a confession.
+# Expects: scope:refugee_source (when there is one)
+# Scope: the proposing country
+un_propose_refugee_table = {
+	social_progressive_reaction_effect = { DAYS = normal_modifier_time }
+	hidden_effect = {
+		scope:refugee_source ?= { save_scope_as = un_vote_target }
+		un_resolution_open = { TOPIC = refugee }
+	}
+}
+
+# Scope: the proposing country
+un_propose_refugee_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	hidden_effect = {
+		un_propose_refugee_select_target = yes
+		scope:un_propose_refugee_target ?= { save_scope_as = refugee_source }
+	}
+	un_propose_refugee_table = yes
+}
+
+# ---- Cultural Heritage Program (UNESCO) — un_events.9 ----
+# Scope: the proposing country
+un_propose_heritage_table = {
+	ig_approval_effect = { IG = ig_devout MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = heritage }
+	}
+}
+
+# Scope: the proposing country
+un_propose_heritage_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_heritage_table = yes
+}
+
+# ---- Decolonization Resolution — un_events.12 ----
+# The proposer champions decolonization, up front: the declaration founds no
+# agency to ratify.
+# Scope: the proposing country
+un_propose_decolonization_table = {
+	add_modifier = {
+		name = un_decolonization_champion_modifier
+		days = normal_modifier_time
+		is_decaying = yes
+	}
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_landowners MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = decolonization }
+	}
+}
+
+# Scope: the proposing country
+un_propose_decolonization_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_decolonization_table = yes
+}
+
+# ---- International Space Cooperation (UNOOSA) — un_events.19 ----
+# Scope: the proposing country
+un_propose_space_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = space }
+	}
+}
+
+# Scope: the proposing country
+un_propose_space_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_space_table = yes
+}
+
+# ---- Convention on the Law of the Sea (ITLOS) — un_events.21 ----
+# Scope: the proposing country
+un_propose_law_of_sea_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = law_of_sea }
+	}
+}
+
+# Scope: the proposing country
+un_propose_law_of_sea_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_law_of_sea_table = yes
 }

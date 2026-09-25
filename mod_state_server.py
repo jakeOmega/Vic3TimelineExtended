@@ -8309,6 +8309,7 @@ POST_LOAD_AUDITS = [
     ("treaty_leverage_side_audit",    "treaty_leverage_side_audit"),
     ("event_context_audit",           "event_context_audit"),
     ("silent_variable_audit",         "silent_variable_audit"),
+    ("prev_scope_audit",              "prev_scope_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS

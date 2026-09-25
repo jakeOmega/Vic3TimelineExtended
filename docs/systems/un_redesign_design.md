@@ -1560,6 +1560,10 @@ These are the convention losers in §5.3, plus the embargo symmetry in §5.2.
   the recess countdown.
 - **The victim goes first:** for a situation's own docket item, the aggrieved party gets
   first refusal for 30 days.
+- **Conventions on our own motion (shipped after phase 6):** a human member may also table
+  any of the ten conventions from the chamber (ops 7–16), under the docket's own gates plus
+  the costs every own-motion proposal takes. The AI still reaches them only through the
+  docket, so its pacing is unchanged. See `journal_entry_systems.md` § Chamber Widget.
 
 ---
 
