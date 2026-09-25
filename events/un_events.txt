@@ -344,7 +344,21 @@ un_events.2 = {
 		un_vote_release = yes
 		hidden_effect = {
 			save_scope_as = court_plaintiff
-			scope:condemned_country = { trigger_event = { id = un_events.8 days = 30 } }
+			scope:condemned_country = {
+				# Whether the case is an exposed covert operation, fixed at filing
+				# for un_events.8's text. var:un_dkt_cause runs 180 days from the
+				# docket's take-up, which a late answer here, the 30-day delay and
+				# .8's own months-long lifetime can outrun.
+				if = {
+					limit = { un_docket_cause_is = { CAUSE = 3 } }
+					set_variable = { name = un_court_case_covert days = 180 }
+				}
+				else_if = {
+					limit = { has_variable = un_court_case_covert }
+					remove_variable = un_court_case_covert
+				}
+				trigger_event = { id = un_events.8 days = 30 }
+			}
 		}
 	}
 
@@ -1118,19 +1132,19 @@ un_events.8 = {
 	icon = "gfx/interface/icons/event_icons/event_scales.dds"
 
 	title = un_events.8.t
-	# The case is the appeal the plaintiff took to court from un_events.2,
-	# whose cause still sits on us (var:un_dkt_cause lasts 180 days; this fires
-	# 30 days after the filing). An exposed covert operation (cause 3) is not a
-	# matter of military conduct. Cause 3 is written only from the covert
-	# system's exposure (covert_warfare.1), so the rule check restates a
-	# dependency rather than adding a condition.
+	# The case is the appeal the plaintiff took to court from un_events.2. When
+	# that appeal was an exposed covert operation (docket cause 3), .2 option D
+	# marks us un_court_case_covert, and the case is not a matter of military
+	# conduct. Cause 3 is written only from the covert system's exposure
+	# (covert_warfare.1), so the rule check restates a dependency rather than
+	# adding a condition.
 	desc = {
 		first_valid = {
 			triggered_desc = {
 				desc = un_events.8.d_covert
 				trigger = {
 					has_game_rule = covert_warfare_enabled
-					un_docket_cause_is = { CAUSE = 3 }
+					has_variable = un_court_case_covert
 				}
 			}
 			desc = un_events.8.d
