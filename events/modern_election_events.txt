@@ -205,6 +205,12 @@ modern_election_events.3 = {
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
 		has_technology_researched = clean_energy_technologies
+		# Global warming owns extreme-weather and climate-refugee stories: only
+		# with the system on, and once the anomaly reaches the tier its own events
+		# use (environmentalism_events .2/.6/.9 fire at >= 1.0 C).
+		has_game_rule = global_warming_enabled
+		has_global_variable = greenhouse_gas_emissions
+		temperature_anomaly_display >= 1.0
 	}
 
 	immediate = {
@@ -517,6 +523,14 @@ modern_election_events.6 = {
 			NOT = { this = ROOT }
 			country_rank >= rank_value:major_power
 			has_technology_researched = cybersecurity
+		}
+		# With covert warfare on, "undeniable" foreign interference must be a real
+		# operation: covert_election_interference sits on the target only while an
+		# established election-interference operation runs against us. With it off,
+		# this is the fallback story (the #418 shape of international_relations_events.6).
+		OR = {
+			has_game_rule = covert_warfare_disabled
+			has_modifier = covert_election_interference
 		}
 	}
 
@@ -1375,6 +1389,19 @@ modern_election_events.15 = {
 			is_in_government = yes
 			ig_clout >= 0.15
 		}
+		# A boom story: with the banking cycle running, only in its expansion,
+		# boom or frenzy phases; never announce a boom in the middle of a panic.
+		OR = {
+			NOT = { has_journal_entry = je_banking_cycle }
+			AND = {
+				has_variable = finance_cycle_value
+				OR = {
+					banking_cycle_is_expansion = yes
+					banking_cycle_is_boom = yes
+					banking_cycle_is_frenzy = yes
+				}
+			}
+		}
 	}
 
 	immediate = {
@@ -1464,6 +1491,9 @@ modern_election_events.16 = {
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
 		has_technology_researched = civil_rights_movement
+		# Marchers in the streets need the movement to exist (it disbands once
+		# the rights it demands are granted).
+		has_active_civil_rights_movement = yes
 	}
 
 	immediate = {
@@ -1557,6 +1587,18 @@ modern_election_events.17 = {
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
 		has_technology_researched = space_exploration
+		# Space achievements must be real: an orbital milestone with the space
+		# race on, a space programme building with it off.
+		OR = {
+			AND = {
+				has_game_rule = space_race_enabled
+				has_variable = sr_completed_orbital
+			}
+			AND = {
+				has_game_rule = space_race_disabled
+				sr_has_space_program = yes
+			}
+		}
 	}
 
 	immediate = {
@@ -2313,6 +2355,14 @@ modern_election_events.25 = {
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
 		has_technology_researched = automated_surveillance
+		# The leak exposes a programme the government actually runs: a
+		# surveillance apparatus, and not under strong privacy rights.
+		OR = {
+			has_law = law_type:law_intrusive_surveillance
+			has_law = law_type:law_secret_police
+			has_law = law_type:law_ministry_of_intelligence_and_security
+		}
+		NOT = { has_law = law_type:law_strong_privacy_rights }
 	}
 
 	immediate = {
@@ -2494,6 +2544,12 @@ modern_election_events.27 = {
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
 		has_technology_researched = clean_energy_technologies
+		# Global warming owns extreme-weather and climate-refugee stories: only
+		# with the system on, and once the anomaly reaches the tier its own events
+		# use (environmentalism_events .2/.6/.9 fire at >= 1.0 C).
+		has_game_rule = global_warming_enabled
+		has_global_variable = greenhouse_gas_emissions
+		temperature_anomaly_display >= 1.0
 	}
 
 	immediate = {
@@ -2945,6 +3001,23 @@ modern_election_events.32 = {
 		NOT = { has_variable = mute_election_events }
 		NOT = { has_law_or_variant = law_type:law_single_party_state }
 		has_technology_researched = reusable_rocketry
+		# Off-world citizens need a real colony: the colony gate of
+		# society_technology_events.18.
+		OR = {
+			AND = {
+				has_game_rule = space_race_enabled
+				has_variable = sr_colony_count
+				var:sr_colony_count > 0
+			}
+			AND = {
+				has_game_rule = space_race_disabled
+				has_technology_researched = space_colonization
+				any_scope_building = {
+					is_building_type = building_aerospace_industry
+					level >= 3
+				}
+			}
+		}
 	}
 
 	immediate = {
