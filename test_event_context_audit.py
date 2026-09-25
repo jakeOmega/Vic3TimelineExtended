@@ -419,6 +419,15 @@ class EventContextAuditTests(unittest.TestCase):
         self.assertEqual([(t.event_id, t.check) for t in res.unknown_tags], [("flav.1", "sytem_ungated")])
         self.assertEqual(res.failing, 2)
 
+    def test_another_audits_check_tag_is_ignored(self):
+        # silent_variable_audit uses the same tagged shape inside an option;
+        # it is neither honoured here nor reported as a misspelled check.
+        body = "\toption = {\n\t\t# REVIEWED 2026-09-25 (silent_variable): shown elsewhere\n\t}\n"
+        loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens."}
+        res = eca.audit(self._mod({"events/flav.txt": _event("flav.1", body)}, loc))
+        self.assertEqual(res.unknown_tags, [])
+        self.assertEqual(res.failing, 0)
+
     def test_all_tag_on_a_clean_event_is_stale(self):
         body = "\t# REVIEWED 2026-09-25 (all): nothing to hide\n"
         loc = {"flav.1.t": "Quiet", "flav.1.d": "Nothing happens."}
