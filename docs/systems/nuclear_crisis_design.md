@@ -106,7 +106,7 @@ A crisis has three stages: 1, a private warning; 2, confrontation (a public ulti
 
 Every decision event is keyed to the crisis it was sent for. The sender writes `nd_crisis_event_token = nd_crisis_id` on the recipient, the event's `trigger` requires the token to still match, and every option re-checks it (`nd_crisis_event_valid`), because a popup that has already fired is never re-triggered. The crisis buttons in the panel and the event options call the same effects, `nd_crisis_act_*`.
 
-`nd_crisis_close = { OUTCOME = N }` applies an outcome once and cleans up both sides. The outcomes are:
+`nd_crisis_close = { OUTCOME = N }` records an outcome once, for each side's outcome notice to apply, and cleans up both sides. The outcomes are:
 
 | Code | Outcome |
 |---|---|
@@ -131,6 +131,24 @@ Credibility and audience costs:
 - Extending a deadline: −3. Declining to honour a guarantee: −15.
 
 Domestic rewards are one-off decaying IG modifiers plus native lobby appeasement. The appeasement goes through `every_political_lobby` of type `lobby_anti_country` or `lobby_pro_country` whose `target` is the opponent, with factor `appeasement_special_events_*`. An IG in an anti-opponent lobby is paid through the lobby only. Opening a crisis earns nothing by itself.
+
+**Follow-through (2026-09-25).** Whether the threatening side could carry its threat out is public, because doctrine is. `nd_crisis_classify_follow_through` records it on both parties as `nd_ft_reason`:
+
+| `nd_ft_reason` | Meaning | Pressure on the target |
+|---|---|---|
+| 1 | at war, and the doctrine permits a strike now | +10 (backed) |
+| 2 | Compellence or higher: a defied threat licenses a strike | +10 (backed) |
+| 3 | not at war, Flexible first use | 0 (uncertain) |
+| 4 | not at war, Existential deterrence with something at stake (a guaranteed country, our core, our existence) | 0 (uncertain) |
+| 5 | the doctrine does not allow it | −25 (a bluff) |
+| 6 | the Rules of War law forbids it (`nd_war_law_permits_strategic_strike`) | −25 (a bluff) |
+| 7 | No First Use | −35 (a bluff) |
+
+A public bluff that ends in a climb-down or lapses costs the issuer 5 credibility more. The AI never makes a public bluff, and makes a private one only under an aggressive ruler (`nd_ai_would_issue_ultimatum`, `nd_ai_would_warn`).
+
+**Figures.** `nd_crisis_refresh_figures` is the one writer of `nd_crisis_danger`, `nd_yield_pressure` and `nd_ft_reason`. Both totals are sums of named parts (`nd_cd_*`, `nd_yp_*` in `nuclear_deterrence_values.txt`), and every part is stored on both parties, so the panel's breakdowns print stored numbers that add up to the stored totals. The losing-war part reads the target through `nd_is_losing_war_to`: `is_losing_war_against` reads ROOT, and the old formula ran it in the target's scope with the issuer as ROOT.
+
+**The outcome notice applies the consequences.** `nd_crisis_close` writes a pending record on each party (`nd_crisis_pending_*`) and fires `nuclear_crisis.6`, whose option runs `nd_crisis_apply_outcome_side`: credibility, the decaying modifier, the interest-group and lobby reactions. So the option's tooltip shows them. The concession itself (war support, the play, the freeze, the stand-down) still happens at the moment of yielding. If another crisis closes before a notice is answered, `nd_crisis_flush_pending` applies the older record first, and the stale notice's option does nothing.
 
 ### 0.4 Incidents (phase 3)
 
@@ -207,6 +225,7 @@ The beneficiary hears the answer through `.21`. Programme freezes and disarmamen
 - The Unconfirmed Warning is always a false alarm; the genuine-warning variant is not built. Nothing in its text says "false alarm" before the inquiry.
 - Exercises exist as an incident (`.10`) and as a crisis act, not as a standing action.
 - Posture and crises share the programme's journal entry (§2 and §10 kept them apart). The separations those sections care about are kept without a second entry: arsenal ownership is still separate from programme eligibility — the entry's `possible` admits anyone armed, while the programme half of its weekly pulse runs only under `nuclear_program_has_programme`, so a demoted power keeps its posture, upkeep and accidents and stops building — and production still does not share a bar with the crisis: the native bar is warhead progress, and the crisis has its own panel.
+- A strike through a crisis option (`.4.g`, `.7.a`, `.20.b`) now needs the Rules of War gate as well (`nd_war_law_permits_strategic_strike`). It used to check doctrine and pledges only, so a country under Limited War could strike through a crisis.
 - The AI's first use in `nuke.txt` used to test `scope:country` (the actor) and so probably never passed. It now tests `scope:target_country` and goes through `nd_ai_nuclear_use_justified`, so an AI warfighting monopolist **can** use weapons in an ordinary war, as §9 requires. Expect more AI nuclear use than before.
 
 ### 0.8 Tuning constants
@@ -231,6 +250,15 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 14. `error.log` stays quiet while a crisis action's confirmation box is open, even though its tooltip re-walks `accept_effect` every frame.
 15. The Exercise They Mistook (`.10`): an AI opponent's readiness target goes to High Alert at once. A player opponent that could raise its alert gets `.11` instead, and its readiness moves only if it picks "go to our highest alert"; `.10`'s text says it is deciding. An unarmed or locked opponent gets the variant with no alert claim.
 16. In `.10`, "send them the schedule" from the crisis **target** sends the issuer `.12` (only while its talks flag is 0). Talks open, and the pressure events stop, only if the issuer accepts; from the issuer's side the option opens talks on its own record as before.
+17. The ultimatum's confirmation box shows the infamy and relations, what the crisis is about and what conceding costs, whether the threat is backed or a bluff, the pressure factors, the stakes and "follow it in the journal entry"; `error.log` stays quiet while it is open.
+18. Existential Deterrence in a minor war reads "A bluff", and the panel's pressure breakdown shows −25 for it.
+19. Every crisis event's options show their numbers.
+20. "The Demand Is Met" shows the credibility gain and the modifier in its option and the target's lost war support in its text; answering it applies them once.
+21. The issuer's panel has no Concede row; a public crisis has no Go public row; the target's has no Back down row.
+22. At Home lists the interest groups with the numbers their approval breakdowns show; a fascist-led Intelligentsia is militarist.
+23. A country under Limited War has no "carry out the threat" option.
+24. The accessors first used here render: `[THIS.ScriptValue(…)]` in the ultimatum's confirmation box (`nd_tt_open_f_credibility`), `[THIS.Var(…)]` in the panel breakdowns, `[ROOT.GetCountry.GetCustom('nd_crisis_concession_past')]` in the outcome notice.
+25. With the target winning battles against us, the pressure breakdown shows no +15 "how the war is going" line for it (`nd_is_losing_war_to`).
 
 ## 1. Intent and owner requirements
 
