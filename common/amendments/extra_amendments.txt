@@ -455,6 +455,12 @@ amendment_whistleblower_shield = {
 
 # No-First-Strike Pledge - a formal commitment never to initiate use of
 # nuclear weapons. Boosts diplomacy but limits military options.
+# It is the legal codification of the deterrence doctrine's No First Use
+# (nd_doctrine = 1, #430): while it is in force the doctrine is held there
+# (nd_weekly_update; nd_init_posture for an arsenal built under it), and
+# leaving No First Use repudiates it and strikes it from the law
+# (nd_set_doctrine → nd_strike_nfu_amendment). No on_activate / on_deactivate:
+# the weekly binding covers every way in, and a hook on removal would loop.
 amendment_no_first_strike = {
 	parent = law_limited_war
 

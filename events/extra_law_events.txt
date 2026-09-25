@@ -3217,6 +3217,11 @@ extra_law_events.32 = {
 	option = { # No-first-strike pledge
 		name = extra_law_events.32.a
 		trigger = { te_ea_no_first_strike_pledge_available = yes }
+		# The amendment is the legal codification of the deterrence doctrine's
+		# No First Use (#430): once the law passes, nd_weekly_update holds the
+		# doctrine there, and leaving it repudiates the pledge and strikes the
+		# amendment (nuclear_deterrence_effects.txt). The doctrine is not set
+		# here — the pledge binds when it becomes law, not before.
 		custom_tooltip = ele_amend_no_first_strike_tt
 		currently_enacting_law = {
 			add_amendment = {

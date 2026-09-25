@@ -92,6 +92,24 @@ nd_doctrine_at_least_compellence = {
 	}
 }
 
+# The No-First-Strike Pledge (amendment_no_first_strike, #430) is the legal
+# codification of doctrine 1. In force: on a law we hold (it attaches to a
+# rules-of-war law). On file: in force, or attached to the law we are
+# enacting, where it will be in force if the law passes.
+#   in force  → the doctrine is held at no first use (nd_weekly_update, and
+#               nd_init_posture for an arsenal built under it)
+#   on file   → leaving no first use strikes it (nd_set_doctrine)
+nd_nfu_amendment_in_force = {
+	any_active_law = { has_amendment = amendment_type:amendment_no_first_strike }
+}
+
+nd_nfu_amendment_on_file = {
+	OR = {
+		nd_nfu_amendment_in_force = yes
+		currently_enacting_law ?= { has_amendment = amendment_type:amendment_no_first_strike }
+	}
+}
+
 # ----------------------------------------------------------------------------
 # READINESS AND AUTHORITY
 # ----------------------------------------------------------------------------
@@ -249,6 +267,28 @@ nd_pledge_permits_strike = {
 	OR = {
 		NOT = { nd_has_nonuse_pledge_with = { TARGET = $ENEMY$ } }
 		nd_was_struck_by = { ENEMY = $ENEMY$ }
+	}
+}
+
+# May this country strike back at $ENEMY$ from a strike-response event
+# (nuclear_weapon_events.1 and .11 — the retaliation options, #430)? The gates
+# nuke_diplo_action puts on every launch, minus the law gates, which yield to
+# retaliation there too: no disarmament settlement or NPT disarmament on us,
+# the doctrine's permission (retaliation qualifies under every doctrine, but
+# only while the war with $ENEMY$ lasts) and no non-use pledge in the way. The
+# caller checks the warheads, which differ per option. One failure line each.
+nd_retaliation_permitted = {
+	custom_tooltip = {
+		text = nd_tt_not_disarmed
+		NOT = { modifier:country_nuclear_disarmament_bool = yes }
+	}
+	custom_tooltip = {
+		text = nd_tt_doctrine_permits_strike
+		nd_doctrine_permits_strike = { ENEMY = $ENEMY$ }
+	}
+	custom_tooltip = {
+		text = nd_tt_pledge_permits_strike
+		nd_pledge_permits_strike = { ENEMY = $ENEMY$ }
 	}
 }
 
@@ -630,6 +670,19 @@ nd_can_open_crisis_against = {
 	custom_tooltip = {
 		text = nd_tt_no_pledge
 		NOT = { nd_has_nonuse_pledge_with = { TARGET = $TARGET$ } }
+	}
+}
+
+# Can we answer $TARGET$'s nearly finished bomb (nuclear_weapon_events.18,
+# option a) with a public ultimatum through the crisis system (#430)?
+# Everything nd_nuclear_ultimatum_action asks, and a proliferation dispute in
+# particular, so the crisis is about the bomb (dispute 4) unless a war or a
+# play with them outranks it in nd_crisis_classify_dispute.
+nd_can_issue_proliferation_ultimatum = {
+	nd_can_open_crisis_against = { TARGET = $TARGET$ }
+	custom_tooltip = {
+		text = nd_tt_dispute_proliferation
+		nd_dispute_proliferation_by = { TARGET = $TARGET$ }
 	}
 }
 
