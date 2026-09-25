@@ -85,11 +85,20 @@ st_res_adjust_step_value = {
 }
 
 # --- GRAIN ---
-st_res_grain_decay_rate = {
+# Annual decay rate, as a 0-1 fraction of the stockpile. The single
+# derivation site: the weekly bookkeeping divides it by 52 below, and the
+# inventory widget shows it as a percentage, so the rate the player sees is
+# the rate the weekly tick applies. Reads only a modifier, so it needs no
+# `has_variable` guard for the widget's every-frame evaluation.
+st_res_grain_annual_decay_rate = {
 	value = 0
 	add = modifier:country_st_res_grain_decay_add
-	divide = 52 # convert from per-year to per-week decay
 	min = 0
+}
+
+st_res_grain_decay_rate = {
+	value = st_res_grain_annual_decay_rate
+	divide = 52 # convert from per-year to per-week decay
 	max = 1
 }
 
@@ -200,11 +209,15 @@ st_res_grain_sale_profit = {
 }
 
 # --- AMMUNITION ---
-st_res_ammunition_decay_rate = {
+st_res_ammunition_annual_decay_rate = {
 	value = 0
 	add = modifier:country_st_res_ammunition_decay_add
-	divide = 52 # convert from per-year to per-week decay
 	min = 0
+}
+
+st_res_ammunition_decay_rate = {
+	value = st_res_ammunition_annual_decay_rate
+	divide = 52 # convert from per-year to per-week decay
 	max = 1
 }
 
@@ -303,11 +316,15 @@ st_res_ammunition_sale_profit = {
 }
 
 # --- OIL ---
-st_res_oil_decay_rate = {
+st_res_oil_annual_decay_rate = {
 	value = 0
 	add = modifier:country_st_res_oil_decay_add
-	divide = 52 # convert from per-year to per-week decay
 	min = 0
+}
+
+st_res_oil_decay_rate = {
+	value = st_res_oil_annual_decay_rate
+	divide = 52 # convert from per-year to per-week decay
 	max = 1
 }
 
@@ -404,11 +421,15 @@ st_res_oil_sale_profit = {
 }
 
 # --- SMALL ARMS ---
-st_res_small_arms_decay_rate = {
+st_res_small_arms_annual_decay_rate = {
 	value = 0
 	add = modifier:country_st_res_small_arms_decay_add
-	divide = 52 # convert from per-year to per-week decay
 	min = 0
+}
+
+st_res_small_arms_decay_rate = {
+	value = st_res_small_arms_annual_decay_rate
+	divide = 52 # convert from per-year to per-week decay
 	max = 1
 }
 
@@ -505,11 +526,15 @@ st_res_small_arms_sale_profit = {
 }
 
 # --- ARTILLERY ---
-st_res_artillery_decay_rate = {
+st_res_artillery_annual_decay_rate = {
 	value = 0
 	add = modifier:country_st_res_artillery_decay_add
-	divide = 52 # convert from per-year to per-week decay
 	min = 0
+}
+
+st_res_artillery_decay_rate = {
+	value = st_res_artillery_annual_decay_rate
+	divide = 52 # convert from per-year to per-week decay
 	max = 1
 }
 
@@ -606,11 +631,15 @@ st_res_artillery_sale_profit = {
 }
 
 # --- AEROPLANES ---
-st_res_aeroplanes_decay_rate = {
+st_res_aeroplanes_annual_decay_rate = {
 	value = 0
 	add = modifier:country_st_res_aeroplanes_decay_add
-	divide = 52 # convert from per-year to per-week decay
 	min = 0
+}
+
+st_res_aeroplanes_decay_rate = {
+	value = st_res_aeroplanes_annual_decay_rate
+	divide = 52 # convert from per-year to per-week decay
 	max = 1
 }
 
@@ -707,11 +736,15 @@ st_res_aeroplanes_sale_profit = {
 }
 
 # --- TANKS ---
-st_res_tanks_decay_rate = {
+st_res_tanks_annual_decay_rate = {
 	value = 0
 	add = modifier:country_st_res_tanks_decay_add
-	divide = 52 # convert from per-year to per-week decay
 	min = 0
+}
+
+st_res_tanks_decay_rate = {
+	value = st_res_tanks_annual_decay_rate
+	divide = 52 # convert from per-year to per-week decay
 	max = 1
 }
 
@@ -808,11 +841,15 @@ st_res_tanks_sale_profit = {
 }
 
 # --- FERTILIZER (Chemicals) ---
-st_res_fertilizer_decay_rate = {
+st_res_fertilizer_annual_decay_rate = {
 	value = 0
 	add = modifier:country_st_res_fertilizer_decay_add
-	divide = 52 # convert from per-year to per-week decay
 	min = 0
+}
+
+st_res_fertilizer_decay_rate = {
+	value = st_res_fertilizer_annual_decay_rate
+	divide = 52 # convert from per-year to per-week decay
 	max = 1
 }
 
