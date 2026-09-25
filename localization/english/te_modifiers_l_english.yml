@@ -89,6 +89,8 @@
  country_greenhouse_gas_emissions_mult_desc:0 "Modifies the rate at which this country contributes to global [concept_greenhouse_gas_emissions]."
  country_ideology_resistance_mult:0 "Ideology Resistance"
  country_ideology_resistance_mult_desc:0 "Resistance to foreign ideological influence from the [concept_cultural_hegemony_system]. Reduces the impact of [concept_foreign_cultural_benchmark] and ideological pressure from cultural hegemons."
+ country_inflation_anchoring_add:0 "Inflation Anchoring"
+ country_inflation_anchoring_add_desc:0 "How much standing upward pressure on prices a credible central bank absorbs before it reaches them. It offsets the net pressure from wages and every other standing source, up to this much — and only ever downward to zero, so it never pushes prices down on its own. A bank markets believe can hold its target without holding the economy down to do it."
  country_inflation_pressure_add:0 "Inflationary Pressure"
  country_inflation_pressure_add_desc:0 "Standing upward pressure on prices — how far above expectations inflation settles for as long as this source lasts, not an amount added every month. Devaluing the currency pushes here. Money printed to pay the government pushes prices too, but it is counted on its own, from the monetisation level rather than from this figure. A negative figure pushes prices the other way. Your central bank can lean against the pressure by holding a tighter stance, and how much of it ends up in prices depends on whether anyone believes the bank's target."
  country_institution_cost_institution_migration_controls_mult:0 "@bur![Nbsp][concept_bureaucracy] Cost of [GetInstitutionType('institution_migration_controls').GetName]"

@@ -114,6 +114,7 @@ SCRIPT_VALUE_FILES = [
 ]
 STATIC_MODIFIER_FILE = REPO / "common/static_modifiers/extra_modifiers.txt"
 LAW_FILE = REPO / "common/laws/extra_laws.txt"
+INSTITUTION_FILE = REPO / "common/institutions/extra_institutions.txt"
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -162,7 +163,9 @@ class ModConstants:
         self._sv_src = "\n".join(_read(p) for p in SCRIPT_VALUE_FILES)
         self._mod_src = _read(STATIC_MODIFIER_FILE)
         self._law_src = _read(LAW_FILE)
+        self._inst_src = _read(INSTITUTION_FILE)
         self._cache: dict[str, float] = {}
+        self._blocks: dict[str, dict[str, float]] = {}
 
     def sv(self, name: str) -> float:
         """A script value whose whole body is a single numeric `value =`."""
@@ -192,6 +195,50 @@ class ModConstants:
             if m:
                 out[m.group(1)] = float(m.group(2))
         return out
+
+    @staticmethod
+    def _numeric_block(body: str, header: str) -> dict[str, float]:
+        """The numeric fields of the first `<header> = { }` block inside body."""
+        m = re.search(r"(?m)^\s*%s\s*=\s*\{" % re.escape(header), body)
+        if not m:
+            return {}
+        depth, i = 0, m.end() - 1
+        for j in range(i, len(body)):
+            if body[j] == "{":
+                depth += 1
+            elif body[j] == "}":
+                depth -= 1
+                if depth == 0:
+                    inner = body[i + 1 : j]
+                    break
+        else:
+            return {}
+        out: dict[str, float] = {}
+        for line in _strip_comments(inner).splitlines():
+            mm = re.fullmatch(r"\s*(\w+)\s*=\s*(-?[\d.]+)\s*", line)
+            if mm:
+                out[mm.group(1)] = float(mm.group(2))
+        return out
+
+    def law_institution_modifier(self, law: str) -> dict[str, float]:
+        """A law's per-investment-level `institution_modifier = { }` fields.
+
+        Cached: law_modifier_sum asks for it several times a simulated month.
+        """
+        key = "institution_modifier/" + law
+        if key not in self._blocks:
+            body = _block(self._law_src, law)
+            if body is None:
+                raise KeyError(f"law {law!r} not found in {LAW_FILE}")
+            self._blocks[key] = self._numeric_block(body, "institution_modifier")
+        return self._blocks[key]
+
+    def institution_modifier(self, name: str) -> dict[str, float]:
+        """An institution's own per-level `modifier = { }` fields."""
+        body = _block(self._inst_src, name)
+        if body is None:
+            raise KeyError(f"institution {name!r} not found in {INSTITUTION_FILE}")
+        return self._numeric_block(body, "modifier")
 
     def law_modifier(self, law: str) -> dict[str, float]:
         """The numeric fields of a law's `modifier = { }` block."""
@@ -347,6 +394,8 @@ CURRENCY_LAWS = {
     "digital": "law_digital_currency",
 }
 CURRENCY_LAW_MODIFIERS = {k: K.law_modifier(v) for k, v in CURRENCY_LAWS.items()}
+# institution_national_bank's own per-level modifier (every national bank)
+NATIONAL_BANK_INSTITUTION = K.institution_modifier("institution_national_bank")
 
 # The crash event's softening options — events/minor_events.txt,
 # minor_events_timelineextended.6. Each is (cycle_add, momentum_add, modifier),
@@ -435,10 +484,18 @@ PRE_DELEGATION_FIX = {
     "emergency_cut": 1.0,   # cuts moved at the ordinary third of a point a month
     "growth_reaction": 0.5, # te_mon_mandate_growth_reaction was half price stability's
 }
+# Central bank independence's institution_modifier before §13: -5% crash chance
+# and -2% random momentum per National Bank level, no anchoring.
+PRE_ANCHORING = {
+    "inst_crash": -0.05,
+    "inst_momentum": -0.02,
+    "inst_anchoring": 0.0,
+}
 PRESETS = {
     "pre_retune": PRE_RETUNE,
     "pre_boom_rescue": PRE_BOOM_RESCUE,
     "pre_delegation_fix": PRE_DELEGATION_FIX,
+    "pre_anchoring": PRE_ANCHORING,
 }
 # Measured but NOT shipped (§3): `crash_mult`, `stance_bubble`, `hyper_edge`,
 # `fiat_pull` (the last two contradict the documented fiat design), and
@@ -500,6 +557,9 @@ class Config:
     # default; `--wage-pressure 1.0` is a country with factory councils and
     # workers' protections (§12).
     wage_pressure: float = 0.0
+    # Investment level of institution_national_bank (0-9 in this mod). Scales
+    # the institution's modifier and the financial law's institution_modifier.
+    bank_level: int = 0
 
     @property
     def interventions(self) -> bool:
@@ -687,7 +747,43 @@ def modifier_sum(state: State, key: str) -> float:
 
 
 def law_modifier_sum(cfg: Config, key: str) -> float:
-    return CURRENCY_LAW_MODIFIERS[cfg.currency].get(key, 0.0)
+    """The currency law's line, plus the National Bank's per-level lines.
+
+    With `cfg.bank_level` > 0 (and a national bank) this adds level x the base
+    institution's `modifier` and level x the financial-regulation law's
+    `institution_modifier` (only law_central_bank_independence carries one).
+    Every other line of the financial-regulation law is still not ported (§10).
+    """
+    total = CURRENCY_LAW_MODIFIERS[cfg.currency].get(key, 0.0)
+    if cfg.bank_level and cfg.national_bank:
+        per_level = NATIONAL_BANK_INSTITUTION.get(key, 0.0)
+        per_level += fin_law_institution_modifier(cfg.fin_law).get(key, 0.0)
+        total += per_level * cfg.bank_level
+    return total
+
+
+# `--tune inst_crash=X,inst_momentum=Y,inst_anchoring=Z` override those per-level
+# lines of a financial law's institution_modifier (only a law that carries one:
+# central bank independence). `--tune pre_anchoring` restores the 2026-09-25
+# state, before anchoring replaced the crash and momentum lines (§13).
+_INST_TUNE_KEYS = (
+    ("country_banking_crash_chance_mult", "inst_crash"),
+    ("country_banking_random_momentum_mult", "inst_momentum"),
+    ("country_inflation_anchoring_add", "inst_anchoring"),
+)
+_inst_cache: dict[tuple, dict[str, float]] = {}
+
+
+def fin_law_institution_modifier(law: str) -> dict[str, float]:
+    ck = (law,) + tuple(TUNE.get(t) for _, t in _INST_TUNE_KEYS)
+    if ck not in _inst_cache:
+        mod = dict(K.law_institution_modifier(law))
+        if mod:
+            for field_, tkey in _INST_TUNE_KEYS:
+                if TUNE.get(tkey) is not None:
+                    mod[field_] = float(TUNE[tkey])
+        _inst_cache[ck] = mod
+    return _inst_cache[ck]
 
 
 def intervention_points(cfg: Config, state: State) -> float:
@@ -1042,14 +1138,18 @@ def pressure_total(cfg: Config, state: State, world_rate: float) -> float:
     if "omo" in state.tools:
         total += K.sv("te_mon_qe_pressure")
 
-    # the dashboard tools' own country_inflation_pressure_add lines, which the
-    # script's 100 x modifier:country_inflation_pressure_add term reads
-    # (reserve requirements: -0.005, i.e. -0.5pp)
+    # te_mon_pressure_modifiers: the wage half (the standing labour-law
+    # pressure) plus the other half — country_inflation_pressure_add from laws,
+    # the National Bank institution and the dashboard tools (reserve
+    # requirements: -0.005, i.e. -0.5pp), read x 100 as
+    # te_mon_other_pressure_display does — less te_mon_pressure_anchoring, which
+    # absorbs up to the anchoring capacity of the net positive sum (§13).
+    other = 100 * law_modifier_sum(cfg, "country_inflation_pressure_add")
     for tool in state.tools:
-        total += 100 * TOOL_MODIFIERS[tool].get("country_inflation_pressure_add", 0.0)
-
-    # te_mon_pressure_modifiers' wage half: the standing labour-law pressure
-    total += cfg.wage_pressure
+        other += 100 * TOOL_MODIFIERS[tool].get("country_inflation_pressure_add", 0.0)
+    modifiers = cfg.wage_pressure + other
+    capacity = max(0.0, 100 * law_modifier_sum(cfg, "country_inflation_anchoring_add"))
+    total += modifiers - min(capacity, max(0.0, modifiers))
 
     # te_mon_pressure_wage_spiral: above the high band edge the positive wage
     # pressure counts twice
@@ -2399,6 +2499,10 @@ def main() -> int:
                     help="standing country_wage_pressure_add in pp (labour laws; "
                          "+0.2 to +1.4 in game, 0 by default). Counts twice above "
                          "the 8%% band edge, as te_mon_pressure_wage_spiral does")
+    ap.add_argument("--bank-level", type=int, default=0,
+                    help="investment level of the National Bank institution (0-9); "
+                         "scales its modifier and the financial law's "
+                         "institution_modifier (default 0: neither)")
     ap.add_argument("--deficit-mean", type=float, default=1.5,
                     help="mean peacetime deficit, %% of GDP (x3 at war; default 1.5)")
     ap.add_argument("--simplified", action="store_true",
@@ -2411,7 +2515,8 @@ def main() -> int:
                          "--tune pre_retune for (approximately) the script as it "
                          "stood before the 2026-09-22 retune, or --tune "
                          "pre_boom_rescue for the mod as #371 left it (§10), or "
-                         "--tune pre_delegation_fix for the delegated bank before §12.")
+                         "--tune pre_delegation_fix for the delegated bank before §12, or "
+                         "--tune pre_anchoring for independence's institution bonus before §13.")
     ap.add_argument("--self-test", action="store_true",
                     help="check the monetary port against the expected numbers in "
                          "events/te_debug_monetary_events.txt")
@@ -2460,7 +2565,8 @@ def main() -> int:
         rjobs = [
             (Config(currency=c, mode=m, fin_law=args.fin_law,
                     national_bank=not args.no_national_bank, years=args.years,
-                    wage_pressure=args.wage_pressure, deficit_mean=args.deficit_mean),
+                    wage_pressure=args.wage_pressure, deficit_mean=args.deficit_mean,
+                    bank_level=args.bank_level),
              args.seed, args.runs, dict(TUNE), tools, args.rescue_delay, args.rescue_entry)
             for c, m in valid_cells(args.only) if m == MODE_PRICE
         ]
@@ -2494,6 +2600,7 @@ def main() -> int:
                     dc_affinity=affinity,
                     wage_pressure=args.wage_pressure,
                     deficit_mean=args.deficit_mean,
+                    bank_level=args.bank_level,
                 )
             )
     jobs = [(cfg, args.seed, args.runs, dict(TUNE)) for cfg in cfgs]
@@ -2517,6 +2624,7 @@ def print_table(rows: list[dict], args) -> None:
         f"pulse order {args.pulse_order}, no-click weight {args.no_click_weight:g}"
         + (f", wage pressure {args.wage_pressure:g}" if args.wage_pressure else "")
         + (f", deficit mean {args.deficit_mean:g}" if args.deficit_mean != 1.5 else "")
+        + (f", bank level {args.bank_level}, {args.fin_law}" if args.bank_level else "")
         + (f", TUNE {args.tune}" if args.tune else "")
     )
     print()

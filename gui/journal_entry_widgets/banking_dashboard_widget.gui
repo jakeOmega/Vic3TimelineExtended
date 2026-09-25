@@ -1856,6 +1856,23 @@ flowcontainer = {
 						}
 					}
 
+					### Inflation anchoring — how much of the two rows above a
+					### credible bank absorbs, out of how much it could
+					### (te_mon_pressure_anchoring). Only for a country that
+					### holds any.
+					banking_dash_condition_row = {
+						visible = "[GetScriptedGui('banking_mon_has_anchoring').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+						tooltip = "banking_dash_mon_anchoring_tt"
+						blockoverride "condition_label" {
+							text = "banking_dash_mon_anchoring_label"
+						}
+						blockoverride "condition_value" {
+							banking_dash_condition_value = {
+								text = "banking_dash_mon_anchoring_value"
+							}
+						}
+					}
+
 					### Monetising the deficit — ops 7 (down) and 8 (up) of
 					### banking_mon_control_sgui, the same shape as the target
 					### stepper above.

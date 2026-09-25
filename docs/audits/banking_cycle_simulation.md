@@ -15,7 +15,8 @@ those sections means that state). §3 is the retune it proposed and the subset t
 §5–§8 are the second pass: what the growth mandate actually buys, the fiscal channel, the AI's tool weights,
 and the final matrix of #371. §10 is the follow-up that lets a maxed player pull back a boom (and occasionally a
 frenzy), with `--rescue` and the refreshed matrix. §12 (2026-09-25) is the delegated bank's overshoot under
-standing wage pressure (`--wage-pressure`) and the three changes that answer it. Every table states which script
+standing wage pressure (`--wage-pressure`) and the three changes that answer it; §13 replaces independence's
+crash and momentum bonus with inflation anchoring (`--bank-level`). Every table states which script
 it measured.
 
 ---
@@ -1180,7 +1181,8 @@ at the 25% ceiling, and growth still averages 8.7% inflation (14.5% before).
 
 No reaction function tried above removes this without letting inflation escape. The levers are outside the
 bank: the size of the wage-pressure grants, `te_mon_stance_pressure_coeff` (0.4), or a real-balance pull
-under fiat (§4's `fiat_pull`).
+under fiat (§4's `fiat_pull`). **§13 takes the first route for independent banks:** inflation anchoring
+absorbs up to 0.1pp of standing pressure per National Bank level.
 
 **Reproduce:**
 
@@ -1189,4 +1191,94 @@ under fiat (§4's `fiat_pull`).
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --years 100 --points 0,2,5,8 --tune pre_delegation_fix        # before
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --years 100 --points 0,2,5 --wage-pressure 1.0 [--tune pre_delegation_fix]
 .venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 400 --years 100 --points 0,5 --wage-pressure 1.0 --deficit-mean 3 [--tune pre_delegation_fix]
+```
+
+---
+
+## 13. Central bank independence: inflation anchoring instead of crash and momentum damping (2026-09-25)
+
+**Question (owner).** §12's F15 left price stability peaking at 12–14% under +1pp of standing wage
+pressure, with the cycle held near stagnation. Separately, independence's per-level bonus on top of the
+National Bank institution's own modifier — −5% `country_banking_crash_chance_mult` and −2%
+`country_banking_random_momentum_mult` a level — looked weak and partly self-defeating. A lower crash
+chance means crashes come later and off bigger bubbles. Damper random momentum means a frenzy is less
+likely to be broken by chance. Could that bonus reduce inflation pressure instead?
+
+The simulator now ports the institution: `--bank-level N` scales `institution_national_bank`'s modifier
+and the financial law's `institution_modifier`. Every other financial-law line is still unported (§10).
+
+### F16 — The old bonus bought a little boom time and slightly worse crashes
+
+Independence, 400 runs, +0.5pp wage pressure, level 9 (−45% crash chance, −18% random momentum), each line
+alone and together:
+
+- **Crash chance alone:** crash counts barely move (fiat 1.89 → 1.85 a century, gold 4.43 → 4.33). Crashes
+  come off bigger bubbles (gold 85 → 90 at the crash), severity rises, gold's depression share rises
+  26 → 28%, and gold spends twice as long in frenzy. It also buys boom time: services output rises.
+- **Random momentum alone:** crashes are mixed (fiat −8%, gold at 8 points +9%) and services fall. The
+  random nudge is weighted back toward 50, so damping it also slows recoveries.
+- **Frenzy escapes** are too rare under a delegated independent bank to measure: frenzy occupies 0.02–0.7%
+  of months.
+
+With no wage pressure the pair was worth about −10% crashes and +1pp of services at level 9. That is small,
+and it is what dropping it costs (table below, `+0pp` rows).
+
+### F17 — A flat pressure reduction makes the bank run loose; a capped one does not
+
+Two forms of a per-level reduction were measured, with a scratch harness at 250 runs and 0 points:
+
+| form | no wage pressure | under wage pressure |
+|---|---|---|
+| **flat** `country_inflation_pressure_add` −0.05 / −0.1pp a level | Crashes **double to triple** (independent fiat at level 9: 8.7 → 17.5 at −0.05, → 23.9 at −0.1) and inflation undershoots to 1.4–1.9%. With nothing to offset, the bank holds a permanently loose stance to reach its target. | Same as capped while the reduction is smaller than the pressure. |
+| **capped** — absorbs up to the capacity of the net positive wage + price pressure, never past zero | **Exactly no effect** (identical runs). | Same as flat until the pressure is fully absorbed, then stops. |
+
+The capped form is what shipped. The same measurement on a non-independent delegated bank (universal
+banking) gave the same shape, so the grant would work on the base institution too (below).
+
+### What shipped
+
+`law_central_bank_independence`'s `institution_modifier` is now `country_inflation_anchoring_add = 0.001`
+(+0.1pp a National Bank level, 0.9pp at nine). `te_mon_pressure_anchoring` = clamp(wage + other modifier
+pressure, 0, capacity) is subtracted in `te_mon_pressure_modifiers`. The dashboard shows an **Inflation
+Anchoring** row ("absorbed / capacity") under the two pressure rows, for a country that holds any. 0.1pp a
+level also renders cleanly: the modifier type shows one decimal, so 0.05pp would print as 0.0% or 0.1%.
+
+### Result — independent bank, 200 runs × 100 years, `--tune pre_anchoring` → shipped, 0 points unless marked
+
+| CBI cell (level, wage) | crashes | recession % | longest <40 | peak | p90 peak | rate ≥10 % | inflation | cycle | throughput | services |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| `digital/price` L9, +1pp | 0.4 → 6.4 | 0.4 → 3.9 | 55 → 20 | 11.0 → 10.0 | 13.0 → 11.0 | 4.6 → 0.8 | 3.23 → 2.39 | 42.0 → 50.1 | -1.95 → 0.22 | -3.49 → 3.40 |
+| `fiat/growth` L9, +1pp | 9.4 → 17.4 | 8.0 → 11.0 | 27 → 20 | 12.0 → 10.0 | 15.1 → 12.0 | 9.4 → 1.0 | 4.40 → 2.94 | 50.2 → 52.0 | 0.21 → 0.47 | 3.78 → 5.56 |
+| `fiat/price` L9, +0pp | 8.2 → 9.0 | 6.0 → 6.1 | 21 → 21 | 10.0 → 10.0 | 11.4 → 11.0 | 1.0 → 0.9 | 2.33 → 2.31 | 51.6 → 50.5 | 0.67 → 0.29 | 5.17 → 3.97 |
+| `fiat/price` L9, +0.5pp | 1.7 → 8.9 | 1.3 → 5.9 | 32 → 20 | 10.0 → 10.0 | 12.0 → 11.0 | 1.5 → 0.5 | 2.76 → 2.32 | 44.3 → 50.5 | -0.91 → 0.29 | -0.93 → 3.95 |
+| `fiat/price` L5, +1pp | 0.8 → 1.9 | 0.8 → 1.4 | 58 → 32 | 11.0 → 10.0 | 13.0 → 12.0 | 4.2 → 1.5 | 3.24 → 2.76 | 41.5 → 44.7 | -2.09 → -0.91 | -3.65 → -0.90 |
+| `fiat/price` L9, +1pp | 0.8 → 7.2 | 0.8 → 4.9 | 55 → 22 | 11.0 → 10.0 | 13.0 → 11.0 | 4.0 → 0.9 | 3.23 → 2.42 | 41.4 → 49.2 | -2.11 → 0.04 | -3.68 → 2.83 |
+| `fiat/price` L9, +0.5pp, 8pt | 0.5 → 3.5 | 0.1 → 0.5 | 19 → 16 | 10.0 → 9.0 | 12.0 → 10.7 | 1.4 → 0.4 | 2.75 → 2.34 | 45.2 → 52.2 | -0.47 → 0.97 | 0.12 → 5.59 |
+| `gold/price` L9, +0pp | 6.3 → 6.7 | 6.2 → 5.4 | 39 → 35 | 10.0 → 10.0 | 11.3 → 11.0 | 0.4 → 0.2 | 0.13 → 0.13 | 48.7 → 47.9 | -0.23 → -0.48 | 2.42 → 1.43 |
+| `gold/price` L9, +1pp | 2.5 → 6.4 | 2.2 → 5.2 | 34 → 36 | 9.8 → 10.0 | 11.0 → 11.0 | 0.3 → 0.2 | 0.61 → 0.18 | 45.1 → 47.7 | -0.89 → -0.51 | -0.56 → 1.35 |
+
+**Under standing pressure the bank is let out of stagnation.** At +1pp and level 9, fiat price stability's
+p90 peak goes 13 → 11%, months at 10% or more 4.0 → 0.9%, and the longest run below 40 goes 55 → 22 months.
+The mean cycle goes 41 → 49, throughput −2.1 → 0.0pp and services −3.7 → +2.8%. **Crashes rise with
+it**, 0.8 → 7.2 a century, and recession months 0.8 → 4.9%. That is the calm-world rate: the low count
+before was the stagnation itself, a bank too tight for a boom to form. Growth tells the same story (fiat
++1pp: crashes 9.4 → 17.4, inflation 4.4 → 2.9%, p90 peak 15 → 12%). Gold changes least, since its regime
+pull already absorbs most standing pressure. Level 5 lands about halfway.
+
+**With no standing pressure, independence is a little worse than before**, by exactly what the old bonus
+was worth (F16). Recession months and peak rates are unchanged.
+
+### Owner decisions
+
+- **Placement.** Only independence carries the grant, so a delegated bank without independence still sits
+  in §12's F15 trap. Putting the same line on `institution_national_bank`'s own modifier would reach every
+  National Bank country. Measured on a universal-banking delegated bank at level 9 and +1pp: p90 peak
+  14 → 12%, longest slump 104 → 30 months, mean cycle 40 → 47, services −5.5 → +1.4%, crashes 0.8 → 6.5.
+  Independence would then want something else that sets it apart, or a larger capacity.
+- **Size.** 0.1pp a level fully absorbs +0.5pp of wage pressure from level 5, but at most 0.9 of +1pp (at level 9).
+
+**Reproduce:**
+
+```
+.venv/bin/python scripts/analysis/banking_cycle_sim.py --runs 200 --points 0 --fin-law law_central_bank_independence --bank-level 9 --wage-pressure 1.0 [--tune pre_anchoring]
 ```

@@ -1729,7 +1729,7 @@ politics and the AI enact weights, not research.
 |---|---|
 | `law_no_national_bank` | No policy rate. Country pays world rate + own expected inflation + 1pp spread + premium (§4). |
 | `law_national_bank` | Player sets the target, **or** delegates it to a mandate (§6). |
-| `law_national_bank` + `law_central_bank_independence` | Mandate is **binding**. No manual target, no monetisation. In return: premium floor 0.25 (vs 0.5), premium −0.5pp, expected inflation anchors twice as fast, smaller estimation error. |
+| `law_national_bank` + `law_central_bank_independence` | Mandate is **binding**. No manual target, no monetisation. In return: premium floor 0.25 (vs 0.5), premium −0.5pp, expected inflation anchors twice as fast, smaller estimation error, and **inflation anchoring** — 0.1pp of standing wage and price pressure absorbed per National Bank level (2026-09-25, §6). |
 
 | `law_national_bank` + `law_state_owned_banking` outside a command economy **(proposed)** | The opposite pole from CBI: full political control. Dial and delegation as normal, but the lowest credibility (anchor c = 0.15, no CBI bonuses, structural premium +0.5) — and the state bank absorbs the debt, so monetisation carries no premium surcharge. Under `law_command_economy` the administered rate (§5.3) applies instead. |
 
@@ -1820,8 +1820,14 @@ momentum, faster bubble build-up, more crash risk. (Written when the bias was 1p
 **Why CBI is not just "automation".** Delegation already gives everyone automation. CBI is
 a *commitment device*: the player cannot override the bank, cannot monetise deficits, and
 cannot pre-load a loose stance before a war. In exchange markets believe the mandate:
-lower premium and floor, faster-anchoring expectations (disinflation is cheaper), and a
-better estimate of r\*. A player planning to inflate away war debt should not want it.
+lower premium and floor, faster-anchoring expectations (disinflation is cheaper), a
+better estimate of r\*, and — per level of the National Bank institution, on top of the
+institution's own modifier — **inflation anchoring**: `country_inflation_anchoring_add`
++0.1pp a level, which `te_mon_pressure_anchoring` subtracts from the net positive wage and
+price pressure, never past zero. A believed bank holds its target against standing wage
+pressure without holding the economy in stagnation to do it (study §13). It replaced −5%
+crash chance and −2% random momentum a level (2026-09-25), which the simulator found
+almost worthless. A player planning to inflate away war debt should not want it.
 Mandate changes under CBI take effect after a 12-month delay **(proposed)**.
 
 **Players start delegated too (2026-09-22).** `te_monetary_init_variables` seeds
@@ -4272,6 +4278,7 @@ P6-1…13).
 | Mod techs (structural) | **−0.3 ×4, −0.15** = −1.35 (was −0.4 ×4, −0.2 = −1.8), re-homed 2026-09-20 to `keynesian_economics` (6), `computer_networks` (8), `knowledge_economy` (9), `machine_learning` (10, the −0.15) and `universal_digital_identity` (11); the last two also carry `country_credit_standing_floor_add` −0.1pp each, so the floor goes 0.5 → 0.3 (CBI 0.25 → 0.05) | 7.5 |
 | Delegated target rounding / hysteresis | integer / 0.75 | 4 |
 | Gold / CBI credibility | −1.0 / −0.5 | 5 |
+| CBI inflation anchoring, per National Bank level | 0.1pp of net positive wage + price pressure absorbed (`country_inflation_anchoring_add` 0.001; 0.9pp at nine levels), since 2026-09-25 | 6 |
 | `_mult` → pp conversion | × 20 | 7.5 |
 | Access base / techs / no exchange | +8 / −4, −2.5, then **−0.25, −0.5, −0.75** (eras 3–5; was −0.5 ×3 — back-loaded 2026-09-20; the first two cannot move without moving §7.4's 1836 rows) / +2 | 7.2 |
 | Rank table | 0.5 · 1 · 2 · 3 · 4 · 6 · 8 | 7.3 |
