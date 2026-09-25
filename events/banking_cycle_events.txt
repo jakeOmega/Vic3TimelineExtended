@@ -4634,6 +4634,7 @@ banking_cycle_events.44 = {
 # COMPLEX (3 options)
 # --------------------------------------------------------------------------
 banking_cycle_events.45 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 

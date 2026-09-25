@@ -2335,6 +2335,7 @@ modern_election_events.24 = {
 # A whistleblower exposes a classified surveillance program mid-campaign
 # =============================================================
 modern_election_events.25 = {
+	# REVIEWED 2026-09-25 (unchosen_self_action): gated on a surveillance apparatus law (te_ea_has_surveillance_apparatus): the government does run the programme
 	type = country_event
 	placement = ROOT
 
@@ -2799,6 +2800,7 @@ modern_election_events.29 = {
 # A cyberattack strikes election infrastructure on the eve of the vote
 # =============================================================
 modern_election_events.30 = {
+	# REVIEWED 2026-09-25 (system_ungated): hedged: failures some call a cyberattack; no foreign actor is named or confirmed
 	type = country_event
 	placement = ROOT
 
@@ -3083,6 +3085,7 @@ modern_election_events.32 = {
 # Neural-interface direct democracy is proposed as a replacement for elections
 # =============================================================
 modern_election_events.33 = {
+	# REVIEWED 2026-09-25 (system_ungated): a campaign proposal the voters debate, not an augmentation outcome
 	type = country_event
 	placement = ROOT
 

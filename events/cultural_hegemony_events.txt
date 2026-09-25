@@ -1468,6 +1468,7 @@ cultural_hegemony.14 = {
 # ============================================================================
 
 cultural_hegemony.15 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): our reformers cite the hegemon's universities; the hegemon is not said to act
 	type = country_event
 	placement = root
 

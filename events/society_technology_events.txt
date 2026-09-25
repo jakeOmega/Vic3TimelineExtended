@@ -1256,6 +1256,8 @@ society_technology_events.13 = {
 # Event 14: Social Media Election Interference
 # Foreign actors exploit platforms to influence elections
 society_technology_events.14 = {
+	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — the accused country gets the choice first
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 

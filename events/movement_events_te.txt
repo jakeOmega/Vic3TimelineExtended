@@ -323,6 +323,7 @@ movement_events_te.3 = {
 # Event 4: International Pressure on Human Rights
 # Foreign nations criticize our treatment of minorities, demanding reform.
 movement_events_te.4 = {
+	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -1455,6 +1456,7 @@ movement_events_te.8 = {
 # Event 9: Neural Implant Human Trials
 # Scientists request approval for the first human trials of neural implants.
 movement_events_te.9 = {
+	# REVIEWED 2026-09-25 (system_ungated): scientists petition for trials; the options are the government deciding
 	type = country_event
 	placement = root
 

@@ -47,6 +47,7 @@
 
 # ---- Phase 1: All UN members vote on the proposed resolution ----
 un_vote.1 = {
+	# REVIEWED 2026-09-25 (system_ungated): the generic vote event names every resolution topic; each topic is raised by its own gated docket item
 	type = country_event
 	placement = ROOT
 
@@ -362,6 +363,7 @@ un_vote.1 = {
 
 # ---- Phase 2: Vote results - fires for the proposer 365 days after opening ----
 un_vote.2 = {
+	# REVIEWED 2026-09-25 (system_ungated): the generic result event; the non-proliferation text shows only for that resolution
 	type = country_event
 	placement = ROOT
 
