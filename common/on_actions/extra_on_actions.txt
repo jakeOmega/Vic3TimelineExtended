@@ -1473,17 +1473,21 @@ international_relations_events_on_action = {
 			}
 			random_list = {
 				900 = { } # ~90% chance of nothing
-				# Arms Race Escalation
-				10 = {
+				# Arms Race Escalation: offered to the country that would build up
+				# (.201); its rival hears of it in .1 only if it does. 10 → 13 so
+				# .1 keeps about its old rate at the AI's ~75% act chance.
+				13 = {
 					trigger = {
 						has_technology_researched = radar
-						any_rival_country = { country_rank >= rank_value:major_power }
+						any_country = { te_ea_ir_arms_race_target = yes }
 					}
-					trigger_event = { id = international_relations_events.1 }
+					trigger_event = { id = international_relations_events.201 }
 				}
-				# Proxy Conflict
+				# Proxy Conflict (covert-disabled fallback; with covert warfare on,
+				# the destabilization and regime-change operations are the tool)
 				10 = {
 					trigger = {
+						has_game_rule = covert_warfare_disabled
 						has_technology_researched = intergovernmental_organizations
 						any_rival_country = {
 							country_rank >= rank_value:major_power
@@ -1500,13 +1504,16 @@ international_relations_events_on_action = {
 					}
 					trigger_event = { id = international_relations_events.3 }
 				}
-				# Propaganda War
-				15 = {
+				# Propaganda War: offered to the country that would run the
+				# offensive (.202); its rival hears of it in .4 only if it does.
+				# Covert-disabled only, like .6. 15 → 20 for the ~75% act chance.
+				20 = {
 					trigger = {
+						has_game_rule = covert_warfare_disabled
 						has_technology_researched = mass_media
-						any_rival_country = { always = yes }
+						any_country = { te_ea_ir_propaganda_target = yes }
 					}
-					trigger_event = { id = international_relations_events.4 }
+					trigger_event = { id = international_relations_events.202 }
 				}
 				# Trade Embargo
 				10 = {
@@ -1516,14 +1523,17 @@ international_relations_events_on_action = {
 					}
 					trigger_event = { id = international_relations_events.5 }
 				}
-				# Espionage Scandal
-				15 = {
+				# Espionage Scandal: offered to the country that would plant the
+				# agent (.203); its rival catches him in .6 half the time.
+				# Covert-disabled only. 15 → 20: .6 lands at about half its old
+				# rate, which is the capture roll's price.
+				20 = {
 					trigger = {
 						has_game_rule = covert_warfare_disabled
 						has_technology_researched = cryptography
-						any_rival_country = { always = yes }
+						any_country = { te_ea_ir_espionage_target = yes }
 					}
-					trigger_event = { id = international_relations_events.6 }
+					trigger_event = { id = international_relations_events.203 }
 				}
 				# Space Race Achievement
 				5 = {
@@ -1534,11 +1544,12 @@ international_relations_events_on_action = {
 					}
 					trigger_event = { id = international_relations_events.7 }
 				}
-				# Nuclear Brinkmanship
+				# Nuclear Brinkmanship: only across a real diplomatic play with a
+				# nuclear-armed opponent, outside a deterrence crisis
 				5 = {
 					trigger = {
-						has_modifier = nuclear_power
-						any_rival_country = { has_modifier = nuclear_power }
+						nd_is_armed = yes
+						any_enemy_in_diplo_play = { te_ea_ir_brinkmanship_opponent = yes }
 					}
 					trigger_event = { id = international_relations_events.8 }
 				}
@@ -2102,17 +2113,17 @@ society_technology_events_on_action = {
 				trigger = { has_technology_researched = social_media }
 				trigger_event = { id = society_technology_events.13 }
 			}
-			5 = {
+			# Election interference: offered to the rival great power that
+			# would meddle (.32); the campaigning country hears of it in .14
+			# only if it does. Covert-disabled only. 5 → 8 for the ~67% act chance.
+			8 = {
 				trigger = {
-					in_election_campaign = yes
+					has_game_rule = covert_warfare_disabled
 					has_technology_researched = social_media
-					NOT = { has_law = law_type:law_single_party_state }
-					any_country = {
-						NOT = { this = root }
-						has_technology_researched = social_media
-					}
+					country_rank >= rank_value:great_power
+					any_country = { te_ea_ir_election_target = yes }
 				}
-				trigger_event = { id = society_technology_events.14 }
+				trigger_event = { id = society_technology_events.32 }
 			}
 
 			# === SOCIAL JUSTICE ===

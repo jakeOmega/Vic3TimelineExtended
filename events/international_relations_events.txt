@@ -6,8 +6,10 @@
 # ============================================================================
 
 # Event 1: Arms Race Escalation (rival powers building up military)
+# Fired only by .201.a, the rival's own choice to build up against us: the
+# rival arrives as scope:arms_race_rival. Its old pool slot and trigger moved
+# to .201 (te_ea_ir_arms_race_target), so the buildup it reports is real.
 international_relations_events.1 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -23,31 +25,12 @@ international_relations_events.1 = {
 
 	duration = 3
 
-	cooldown = { days = normal_modifier_time }
-
 	trigger = {
-		NOR = {
-			has_modifier = arms_race_escalation_modifier
-			has_modifier = diplomatic_overture_modifier
-			has_modifier = diplomatic_overture_rebuffed_modifier
-			has_modifier = arms_race_ignored_modifier
-		}
-		has_technology_researched = radar
-		country_rank >= rank_value:major_power
-		any_rival_country = {
-			country_rank >= rank_value:major_power
-		}
+		exists = scope:arms_race_rival
 	}
 
 	immediate = {
 		save_scope_as = arms_race_instigator
-		random_country = {
-			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-				country_rank >= rank_value:major_power
-			}
-			save_scope_as = arms_race_rival
-		}
 	}
 
 	option = {
@@ -172,9 +155,10 @@ international_relations_events.1 = {
 }
 
 # Event 2: Proxy Conflict (supporting insurgency in rival's sphere)
+# Covert-disabled fallback (the PR #418 shape of .6): with covert warfare
+# enabled, funding a rival's opposition is the destabilization and
+# regime-change operations, whose exposure the covert system narrates.
 international_relations_events.2 = {
-	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — becomes the covert-disabled fallback
-	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427
 	type = country_event
 	placement = root
 
@@ -193,6 +177,8 @@ international_relations_events.2 = {
 	cooldown = { days = normal_modifier_time }
 
 	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
 		NOR = {
 			has_modifier = proxy_conflict_funding_modifier
 			has_modifier = proxy_conflict_avoided_modifier
@@ -401,9 +387,12 @@ international_relations_events.3 = {
 }
 
 # Event 4: Propaganda War (information warfare)
+# Fired only by .202.a, the rival's own choice to open a propaganda offensive
+# against us: the rival arrives as scope:propaganda_rival. With covert warfare
+# enabled, an influence campaign is a covert operation the rival launches and
+# we learn of only if our counterintelligence burns it (covert_warfare.2), so
+# .202 and this event are the covert-disabled path (the PR #418 shape of .6).
 international_relations_events.4 = {
-	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — the accused country gets the choice first
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -419,25 +408,14 @@ international_relations_events.4 = {
 
 	duration = 3
 
-	cooldown = { days = normal_modifier_time }
-
 	trigger = {
-		NOR = {
-			has_modifier = propaganda_campaign_modifier
-			has_modifier = propaganda_ignored_modifier
-		}
-		has_technology_researched = mass_media
-		any_rival_country = { always = yes }
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
+		exists = scope:propaganda_rival
 	}
 
 	immediate = {
 		save_scope_as = propaganda_instigator
-		random_country = {
-			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-			}
-			save_scope_as = propaganda_rival
-		}
 	}
 
 	option = {
@@ -581,8 +559,10 @@ international_relations_events.5 = {
 }
 
 # Event 6: Espionage Scandal (spy caught)
+# Fired only by .203.a when the agent the rival chose to plant is caught: the
+# rival arrives as scope:espionage_rival. Covert-disabled only; with covert
+# warfare on, espionage is a covert operation the system burns itself.
 international_relations_events.6 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -598,27 +578,16 @@ international_relations_events.6 = {
 
 	duration = 3
 
-	cooldown = { days = normal_modifier_time }
-
 	trigger = {
 		# The dedicated system owns this outcome when enabled.
 		has_game_rule = covert_warfare_disabled
-		NOR = {
-			has_modifier = espionage_scandal_modifier
-			has_modifier = espionage_prisoner_exchange_modifier
-		}
-		has_technology_researched = cryptography
-		any_rival_country = { always = yes }
+		exists = scope:espionage_rival
 	}
 
 	immediate = {
 		save_scope_as = espionage_catcher
-		random_country = {
-			limit = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-			}
-			save_scope_as = espionage_rival
-		}
+		# Stands in for the old event cooldown, where .203's pick can read it.
+		set_variable = { name = te_ea_ir_spy_caught value = yes days = normal_modifier_time }
 	}
 
 	option = {
@@ -767,8 +736,11 @@ international_relations_events.7 = {
 }
 
 # Event 8: Nuclear Brinkmanship
+# Fires only in a real dispute: a nuclear-armed country on the other side of a
+# diplomatic play with us (not yet a war), while neither of us is in a
+# deterrence crisis, which the nuclear weapons journal entry would own
+# (te_ea_ir_brinkmanship_opponent). .104 tells that country what we chose.
 international_relations_events.8 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — tie to a real dispute
 	type = country_event
 	placement = root
 
@@ -792,18 +764,14 @@ international_relations_events.8 = {
 			has_modifier = nuclear_deescalation_modifier
 			has_modifier = nuclear_mobilization_modifier
 		}
-		has_modifier = nuclear_power
-		any_rival_country = {
-			has_modifier = nuclear_power
-		}
+		nd_is_armed = yes
+		any_enemy_in_diplo_play = { te_ea_ir_brinkmanship_opponent = yes }
 	}
 
 	immediate = {
 		save_scope_as = nuclear_opponent
-		random_rival_country = {
-			limit = {
-				has_modifier = nuclear_power
-			}
+		random_enemy_in_diplo_play = {
+			limit = { te_ea_ir_brinkmanship_opponent = yes }
 			save_scope_as = nuclear_rival
 		}
 	}
@@ -891,7 +859,6 @@ international_relations_events.8 = {
 
 # Notification 101: Rival discovers proxy conflict funding
 international_relations_events.101 = {
-	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — follows .2
 	type = country_event
 	placement = root
 
@@ -950,7 +917,7 @@ international_relations_events.102 = {
 
 # Notification 103: Rival's spy caught abroad
 international_relations_events.103 = {
-	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
+	# REVIEWED 2026-09-25 (unchosen_self_action): "our intelligence operatives" is true: .103 reaches us only through .6.a/.c, and .6 only when the agent we chose to plant in .203.a is caught
 	type = country_event
 	placement = root
 
@@ -1125,7 +1092,7 @@ international_relations_events.104 = {
 
 # Notification 105: Rival matches our arms buildup
 international_relations_events.105 = {
-	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
+	# REVIEWED 2026-09-25 (unchosen_self_action): "our military expansion" is true: .105 reaches us only through .1.a, and .1 only through our own .201.a (the buildup we chose)
 	type = country_event
 	placement = root
 
@@ -1155,7 +1122,7 @@ international_relations_events.105 = {
 
 # Notification 106: Counter-propaganda backlash
 international_relations_events.106 = {
-	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
+	# REVIEWED 2026-09-25 (unchosen_self_action): "our information campaign" is true: .106 reaches us only through .4.a, and .4 only through our own .202.a (the offensive we chose)
 	type = country_event
 	placement = root
 
@@ -1185,7 +1152,7 @@ international_relations_events.106 = {
 
 # Notification 107: Agent quietly exchanged
 international_relations_events.107 = {
-	# REVIEWED 2026-09-25 (unchosen_self_action): tracked in #427 — the accused country gets the choice first
+	# REVIEWED 2026-09-25 (unchosen_self_action): "our intelligence operatives" is true: .107 reaches us only through .6.b, and .6 only when the agent we chose to plant in .203.a is caught
 	type = country_event
 	placement = root
 
@@ -1210,5 +1177,246 @@ international_relations_events.107 = {
 			days = short_modifier_time
 			is_decaying = yes
 		}
+	}
+}
+
+# ============================================================================
+# PRECURSOR EVENTS (the actor's own choice)
+# ============================================================================
+# An event that tells a country "[X] has done this to you" first asks X
+# whether to do it. These fire on the actor from the pool slot the victim's
+# event used to hold; each picks the victim with a te_ea_ir_*_target trigger
+# (te_event_agency_ir_triggers.txt), and only the act option fires the
+# victim's event. Pool weights are raised by roughly 1/(AI act chance) so the
+# victim's event keeps about its old frequency.
+
+# Precursor 201: Military Buildup (-> .1 on the rival, whose answer may fire .105 back on us)
+international_relations_events.201 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/military_parade.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = international_relations_events.201.t
+	desc = international_relations_events.201.d
+	flavor = international_relations_events.201.f
+
+	duration = 3
+
+	trigger = {
+		has_technology_researched = radar
+		country_rank >= rank_value:major_power
+		NOR = {
+			has_modifier = te_ea_ir_military_buildup_modifier
+			has_modifier = arms_race_escalation_modifier
+			has_variable = te_ea_ir_arms_declined
+		}
+		any_country = { te_ea_ir_arms_race_target = yes }
+	}
+
+	immediate = {
+		save_scope_as = arms_race_rival
+		random_country = {
+			limit = { te_ea_ir_arms_race_target = yes }
+			save_scope_as = arms_race_instigator
+		}
+	}
+
+	option = {
+		name = international_relations_events.201.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 2
+			}
+		}
+		# Build up against the rival - prestige from military power, but costly
+		add_modifier = {
+			name = te_ea_ir_military_buildup_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+		custom_tooltip = TE_EA_IR_BUILDUP_RIVAL_TT
+		scope:arms_race_instigator = {
+			trigger_event = { id = international_relations_events.1 days = 3 }
+		}
+	}
+
+	option = {
+		name = international_relations_events.201.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { country_rank < rank_value:great_power }
+				add = 1
+			}
+		}
+		# Not now - the generals are disappointed
+		set_variable = { name = te_ea_ir_arms_declined value = yes days = 365 }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Precursor 202: Propaganda Offensive (-> .4 on the rival, whose answer may fire .106 back on us)
+# Covert-disabled only, like .4: with covert warfare enabled this is an
+# influence campaign or ideological subversion operation.
+international_relations_events.202 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/media_broadcast_global.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = international_relations_events.202.t
+	desc = international_relations_events.202.d
+	flavor = international_relations_events.202.f
+
+	duration = 3
+
+	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
+		has_technology_researched = mass_media
+		country_rank >= rank_value:major_power
+		NOR = {
+			has_modifier = te_ea_ir_propaganda_offensive_modifier
+			# Already running a counter-campaign (.4.a), as .201 skips a country
+			# already answering a buildup.
+			has_modifier = propaganda_campaign_modifier
+			has_variable = te_ea_ir_propaganda_declined
+		}
+		any_country = { te_ea_ir_propaganda_target = yes }
+	}
+
+	immediate = {
+		save_scope_as = propaganda_rival
+		random_country = {
+			limit = { te_ea_ir_propaganda_target = yes }
+			save_scope_as = propaganda_instigator
+		}
+	}
+
+	option = {
+		name = international_relations_events.202.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 1
+			}
+		}
+		# Take the fight to their airwaves - prestige abroad, bureaucratic cost
+		add_modifier = {
+			name = te_ea_ir_propaganda_offensive_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = TE_EA_IR_PROPAGANDA_RIVAL_TT
+		scope:propaganda_instigator = {
+			trigger_event = { id = international_relations_events.4 days = 7 }
+		}
+	}
+
+	option = {
+		name = international_relations_events.202.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { country_rank < rank_value:great_power }
+				add = 1
+			}
+		}
+		# Not now
+		set_variable = { name = te_ea_ir_propaganda_declined value = yes days = 365 }
+	}
+}
+
+# Precursor 203: An Agent in Place (-> .6 on the rival if the agent is caught; its answer fires .103 or .107 back on us)
+# Covert-disabled only, like .6: with covert warfare enabled this is an
+# industrial or military espionage operation.
+international_relations_events.203 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/espionage_dead_drop.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = international_relations_events.203.t
+	desc = international_relations_events.203.d
+	flavor = international_relations_events.203.f
+
+	duration = 3
+
+	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
+		has_technology_researched = cryptography
+		country_rank >= rank_value:major_power
+		NOR = {
+			has_modifier = te_ea_ir_agent_in_place_modifier
+			has_modifier = espionage_agent_exposed_modifier
+			has_variable = te_ea_ir_spy_declined
+		}
+		any_country = { te_ea_ir_espionage_target = yes }
+	}
+
+	immediate = {
+		save_scope_as = espionage_rival
+		random_country = {
+			limit = { te_ea_ir_espionage_target = yes }
+			save_scope_as = espionage_catcher
+		}
+	}
+
+	option = {
+		name = international_relations_events.203.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		# Plant the agent - stolen designs, at the risk of a public scandal
+		add_modifier = {
+			name = te_ea_ir_agent_in_place_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		random_list = {
+			50 = {
+				custom_tooltip = TE_EA_IR_AGENT_CAUGHT_TT
+				scope:espionage_catcher = {
+					trigger_event = { id = international_relations_events.6 days = 30 }
+				}
+			}
+			50 = {
+				custom_tooltip = TE_EA_IR_AGENT_UNDETECTED_TT
+			}
+		}
+	}
+
+	option = {
+		name = international_relations_events.203.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					has_attitude = { who = scope:espionage_catcher attitude = cautious }
+				}
+				add = 1
+			}
+		}
+		# Too risky
+		set_variable = { name = te_ea_ir_spy_declined value = yes days = 365 }
 	}
 }

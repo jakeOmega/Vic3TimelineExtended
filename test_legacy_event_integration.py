@@ -60,8 +60,10 @@ class LegacyIntegrationTests(unittest.TestCase):
                 answer = {'=': operator.eq, '>': operator.gt, '>=': operator.ge, '<': operator.lt}[op](number, float(value))
             elif key == 'any_scope_building':
                 answer = current.get('building', False)
-            elif key in ('any_rival_country', 'country_rank'):
-                answer = True  # These scenarios hold the unrelated eligibility gates satisfied.
+            elif key in ('any_rival_country', 'country_rank', 'exists'):
+                # These scenarios hold the unrelated eligibility gates satisfied
+                # (`exists` is a follow-up event's check for the saved actor).
+                answer = True
             else:
                 self.fail(f'Unhandled trigger: {key}')
             answers.append(answer)
@@ -107,6 +109,19 @@ class LegacyIntegrationTests(unittest.TestCase):
                 country = self.country(rules={system + ('_enabled' if enabled else '_disabled')},
                                        techs={'cryptography', 'space_exploration'}, building=True)
                 self.assertEqual(self.evaluate(gate, country, country), not enabled)
+
+    def test_covert_shaped_chains_are_disabled_system_fallbacks(self):
+        # Propaganda, proxy funding, espionage and election meddling are covert
+        # operations when the system is on, so both the actor's precursor
+        # (.202/.203/.32) and the victim's event exist only with it off.
+        for events, namespace, numbers in [(self.ir, 'international_relations_events', (2, 4, 6, 202, 203)),
+                                           (self.society, 'society_technology_events', (14, 32))]:
+            for number in numbers:
+                name = f'{namespace}.{number}'
+                gate = body(body(events, name), 'trigger')
+                rules = [value for key, _, value in entries(gate) if key == 'has_game_rule']
+                with self.subTest(event=name):
+                    self.assertEqual(rules, ['covert_warfare_disabled'])
 
     def test_colony_stories_require_real_settlements_when_enabled(self):
         for number in (18, 19):
