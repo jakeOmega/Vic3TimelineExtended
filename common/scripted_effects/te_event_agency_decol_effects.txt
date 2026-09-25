@@ -1,0 +1,27 @@
+﻿# ============================================================================
+# EVENT AGENCY — DECOLONIZATION
+# ============================================================================
+
+# Counts a colony the metropole let go by its own choice, for
+# decolonization_events.206 (the voluntary end of je_colonial_empire), whose
+# "by decision" text is true only if at least one release was chosen.
+#
+# Called from every option that releases a colony by choice: .1.c / .1.d_neo,
+# .3.a / .3.c, .9.c / .9.d, .13.a / .13.c, and the button confirmations .400
+# (a/b/c) and .401.a. NOT from form_decolonized_country, which the forced
+# collapse events .201 / .204 also call.
+#
+# Cleared by .206's option once read, and by je_colonial_empire's other
+# on_complete / on_fail branches. Deliberately not in
+# colonial_empire_je_cleanup_effect: on_fail runs that right after firing .206.
+#
+# Scope: country (the metropole).
+decol_record_chosen_release = {
+	if = {
+		limit = { has_variable = decol_chosen_releases }
+		change_variable = { name = decol_chosen_releases add = 1 }
+	}
+	else = {
+		set_variable = { name = decol_chosen_releases value = 1 }
+	}
+}

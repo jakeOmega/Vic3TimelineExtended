@@ -1,0 +1,11 @@
+﻿# ============================================================================
+# EVENT AGENCY (package E2, "misc") - static modifiers
+# ============================================================================
+
+# banking_cycle_events.68 option A: we asked another government to rescue our
+# banks, and the world saw us ask. The price of the appeal, paid whatever the
+# answer (.45 / .69).
+te_ea_bailout_appeal = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.05
+}

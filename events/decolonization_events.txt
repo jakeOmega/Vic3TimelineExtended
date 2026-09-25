@@ -33,13 +33,17 @@ decolonization_events.1 = {
 		}
 		has_technology_researched = decolonization
 		any_subject_or_below = {
+			is_qualifying_colonial_subject = yes
 			liberty_desire >= 50
 		}
 	}
 
 	immediate = {
 		random_subject_or_below = {
-			limit = { liberty_desire >= 50 }
+			limit = {
+				is_qualifying_colonial_subject = yes
+				liberty_desire >= 50
+			}
 			save_scope_as = restless_subject
 		}
 	}
@@ -128,6 +132,7 @@ decolonization_events.1 = {
 			post_notification = colonial_independence_granted_notice
 			make_independent = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = peaceful_decolonization_modifier
 			days = long_modifier_time
@@ -169,6 +174,7 @@ decolonization_events.1 = {
 				is_decaying = yes
 			}
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = neocolonial_economic_extraction_modifier
 			days = long_modifier_time
@@ -194,7 +200,6 @@ decolonization_events.1 = {
 
 # Event 2: International Pressure to Decolonize
 decolonization_events.2 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -205,12 +210,38 @@ decolonization_events.2 = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = decolonization_events.2.t
-	desc = decolonization_events.2.d
-	flavor = decolonization_events.2.f
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { colonial_gp_condemners_count >= 2 }
+				desc = decolonization_events.2.d_many
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.2.d
+			}
+		}
+	}
+	# The General Assembly scene only once the UN's decolonization declaration
+	# has actually carried (un_vote.2 sets un_regime_decolonization).
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_global_variable = un_regime_decolonization }
+				desc = decolonization_events.2.f
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.2.f_no_un
+			}
+		}
+	}
 
 	duration = 3
 
 	cooldown = { days = long_modifier_time }
+
+	# REVIEWED 2026-09-25 (imputed_foreign_action): pressuring_power is picked only among great powers carrying gp_anti_colonial_stance, a stance each chose (decolonization_events.14.a, or its yes vote on the UN declaration via un_vote_effects); calling on colonial powers to decolonize is what that stance is.
 
 	trigger = {
 		has_journal_entry = je_colonial_empire
@@ -220,23 +251,27 @@ decolonization_events.2 = {
 		}
 		has_technology_researched = decolonization
 		has_technology_researched = intergovernmental_organizations
-		any_subject_or_below = { always = yes }
+		any_subject_or_below = { is_qualifying_colonial_subject = yes }
+		# The pressure comes from a great power that has declared against
+		# colonialism, as in decolonization_events.11 — never from one that
+		# merely has the technology.
 		any_country = {
 			NOT = { this = root }
 			country_rank >= rank_value:great_power
-			has_technology_researched = decolonization
+			has_variable = gp_anti_colonial_stance
 		}
 	}
 
 	immediate = {
 		random_subject_or_below = {
+			limit = { is_qualifying_colonial_subject = yes }
 			save_scope_as = pressured_subject
 		}
 		random_country = {
 			limit = {
 				NOT = { this = root }
 				country_rank >= rank_value:great_power
-				has_technology_researched = decolonization
+				has_variable = gp_anti_colonial_stance
 			}
 			save_scope_as = pressuring_power
 		}
@@ -372,13 +407,17 @@ decolonization_events.3 = {
 		}
 		has_technology_researched = civil_rights_movement
 		any_subject_or_below = {
+			is_qualifying_colonial_subject = yes
 			liberty_desire >= 75
 		}
 	}
 
 	immediate = {
 		random_subject_or_below = {
-			limit = { liberty_desire >= 75 }
+			limit = {
+				is_qualifying_colonial_subject = yes
+				liberty_desire >= 75
+			}
 			save_scope_as = rebellious_subject
 		}
 	}
@@ -402,6 +441,7 @@ decolonization_events.3 = {
 			post_notification = colonial_ceasefire_granted_notice
 			make_independent = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = colonial_war_exhaustion_modifier
 			days = normal_modifier_time
@@ -465,6 +505,7 @@ decolonization_events.3 = {
 				is_decaying = yes
 			}
 		}
+		decol_record_chosen_release = yes
 		impose_neocolonial_investment_trade_treaty = {
 			FIRST = root
 			SECOND = scope:rebellious_subject
@@ -569,8 +610,14 @@ decolonization_events.4 = {
 }
 
 # Event 5: Former Colony Seeks Closer Ties
+# Root = the former overlord. Fired only by decolonization_events.60's
+# "propose" option, on the former colony that chose to make the overture, three
+# days on; scope:former_colony and scope:ties_former_overlord come from there.
+# The pool slot and the eligibility checks this event used to carry moved to
+# .60 and decol_ties_overture_target_ok; the old 10-year `cooldown` became the
+# decol_ties_overture_cd lockout .60 sets, so a colony that did propose is
+# always answered.
 decolonization_events.5 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -586,32 +633,14 @@ decolonization_events.5 = {
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
+	# The overture must still stand three days on: a colony annexed or
+	# collapsed in the meantime has proposed nothing we could answer.
 	trigger = {
-		has_journal_entry = je_colonial_empire
-		NOT = { has_modifier = post_colonial_partnership_modifier }
-		has_technology_researched = decolonization
-		country_rank >= rank_value:major_power
-		NOT = { any_subject_or_below = { always = yes } }
-		any_country = {
-			NOT = { this = root }
-			has_variable = former_overlord
-			var:former_overlord = root
-			is_subject = no
-		}
+		exists = scope:former_colony
+		scope:former_colony = { is_country_alive = yes }
 	}
 
 	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				has_variable = former_overlord
-				var:former_overlord = root
-				is_subject = no
-			}
-			save_scope_as = former_colony
-		}
 	}
 
 	# Option A: Welcome closer ties
@@ -653,8 +682,12 @@ decolonization_events.5 = {
 }
 
 # Event 6: Colonial Reparations Demanded
+# Root = the former overlord. Fired only by decolonization_events.61's "demand"
+# option, on the former colony that chose to press the claim, three days on;
+# scope:reparations_claimant / scope:reparations_payer come from there, and the
+# claimant carries var:decol_reparations_claim, the sum it named. Paying moves
+# that sum between the treasuries.
 decolonization_events.6 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -670,31 +703,18 @@ decolonization_events.6 = {
 
 	duration = 3
 
-	cooldown = { days = long_modifier_time }
-
+	# The claim must still stand three days on: a claimant annexed or
+	# collapsed in the meantime is owed nothing, and option A reads the sum
+	# it named (var:decol_reparations_claim, set by .61).
 	trigger = {
-		has_journal_entry = je_colonial_empire
-		NOT = { has_modifier = colonial_reparations_modifier }
-		has_technology_researched = decolonization
-		country_rank >= rank_value:major_power
-		any_country = {
-			NOT = { this = root }
-			has_variable = former_overlord
-			var:former_overlord = root
-			is_subject = no
+		exists = scope:reparations_claimant
+		scope:reparations_claimant = {
+			is_country_alive = yes
+			has_variable = decol_reparations_claim
 		}
 	}
 
 	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				has_variable = former_overlord
-				var:former_overlord = root
-				is_subject = no
-			}
-			save_scope_as = reparations_claimant
-		}
 	}
 
 	# Option A: Pay reparations
@@ -702,6 +722,18 @@ decolonization_events.6 = {
 		name = decolonization_events.6.a
 		default_option = yes
 		ai_chance = { base = 1 }
+		# The sum the claimant named in decolonization_events.61 changes hands:
+		# out of our treasury, into theirs (the swap-settle shape of
+		# te_mon_effect_swap_settle). decol_reparations_value sized it; .6.d
+		# names it, and the two add_treasury tooltips show it moving.
+		add_treasury = {
+			value = scope:reparations_claimant.var:decol_reparations_claim
+			multiply = -1
+		}
+		scope:reparations_claimant = {
+			add_treasury = var:decol_reparations_claim
+			remove_variable = decol_reparations_claim
+		}
 		add_modifier = {
 			name = colonial_reparations_modifier
 			days = long_modifier_time
@@ -731,6 +763,7 @@ decolonization_events.6 = {
 		}
 		create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:reparations_claimant }
 		scope:reparations_claimant = {
+			remove_variable = decol_reparations_claim
 			post_notification = colonial_reparations_refused_notice
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
@@ -868,7 +901,7 @@ decolonization_events.8 = {
 			has_modifier = colonial_crackdown_modifier
 		}
 		has_technology_researched = decolonization
-		any_subject_or_below = { always = yes }
+		any_subject_or_below = { is_qualifying_colonial_subject = yes }
 		ig:ig_intelligentsia ?= {
 			leader = { has_ideology = ideology:ideology_anti_colonialist }
 		}
@@ -876,6 +909,7 @@ decolonization_events.8 = {
 
 	immediate = {
 		random_subject_or_below = {
+			limit = { is_qualifying_colonial_subject = yes }
 			save_scope_as = closest_subject
 		}
 	}
@@ -893,8 +927,9 @@ decolonization_events.8 = {
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
-		# All subjects gain hope
+		# All colonial subjects gain hope
 		every_subject_or_below = {
+			limit = { is_qualifying_colonial_subject = yes }
 			add_liberty_desire = 10
 		}
 		# Intelligentsia delighted, landowners and armed forces dismayed
@@ -1046,6 +1081,7 @@ decolonization_events.9 = {
 			set_variable = decolonization_marker
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = peaceful_decolonization_modifier
 			days = normal_modifier_time
@@ -1070,6 +1106,7 @@ decolonization_events.9 = {
 			set_variable = decolonization_marker
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = neocolonial_economic_extraction_modifier
 			days = long_modifier_time
@@ -1245,8 +1282,9 @@ decolonization_events.11 = {
 		scope:condemning_power = {
 			post_notification = gp_condemnation_reforms_announced_notice
 		}
-		# All subjects gain hope from announced reforms
+		# All colonial subjects gain hope from announced reforms
 		every_subject_or_below = {
+			limit = { is_qualifying_colonial_subject = yes }
 			add_liberty_desire = 10
 		}
 		# Intelligentsia approve, landowners dismayed
@@ -1287,7 +1325,6 @@ decolonization_events.11 = {
 
 # Event 12: Great Power Supports Colonial Regime
 decolonization_events.12 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427
 	type = country_event
 	placement = root
 
@@ -1320,6 +1357,7 @@ decolonization_events.12 = {
 	}
 
 	immediate = {
+		save_scope_as = backed_colonial_power
 		random_country = {
 			limit = {
 				NOT = { this = root }
@@ -1437,6 +1475,7 @@ decolonization_events.13 = {
 			set_variable = decolonization_marker
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = colonial_war_exhaustion_modifier
 			days = normal_modifier_time
@@ -1483,6 +1522,7 @@ decolonization_events.13 = {
 			set_variable = decolonization_marker
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = neocolonial_economic_extraction_modifier
 			days = long_modifier_time
@@ -2073,9 +2113,12 @@ decolonization_events.16 = {
 				country = scope:partition_neighbor
 				value = 30
 			}
-			create_bidirectional_truce = {
-				country = scope:partition_neighbor
-				months = 60
+			# The five-year truce binds the neighbour too, so it is theirs to
+			# accept: decolonization_events.62 asks them.
+			custom_tooltip = decolonization_events.16.b_tt
+			save_scope_as = truce_proposer
+			scope:partition_neighbor = {
+				trigger_event = { id = decolonization_events.62 days = 3 }
 			}
 		}
 		add_modifier = {
@@ -2243,9 +2286,12 @@ decolonization_events.17 = {
 				country = scope:border_rival
 				value = 25
 			}
-			create_bidirectional_truce = {
-				country = scope:border_rival
-				months = 60
+			# The five-year truce binds the neighbour too, so it is theirs to
+			# accept: decolonization_events.63 asks them.
+			custom_tooltip = decolonization_events.17.c_tt
+			save_scope_as = truce_proposer
+			scope:border_rival = {
+				trigger_event = { id = decolonization_events.63 days = 3 }
 			}
 		}
 		add_loyalists = { value = medium_radicals }
@@ -2482,7 +2528,11 @@ decolonization_events.19 = {
 		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_very_negative_modifier DAYS = normal_modifier_time }
 		ig_approval_effect = { IG = ig_trade_unions MODIFIER = ig_approval_very_negative_modifier DAYS = short_modifier_time }
 		add_radicals = { value = large_radicals pop_type = academics }
-		# Trigger GP response event for all other great powers
+		# Trigger GP response event for all other great powers. The two saved
+		# scopes travel with the trigger_event, so .20 names the real
+		# intervener and its real target instead of re-picking them.
+		save_scope_as = intervening_power
+		scope:nationalizing_country = { save_scope_as = intervention_victim }
 		custom_tooltip = {
 			text = GP_MILITARY_INTERVENTION_NOTIFY_TT
 			every_country = {
@@ -2558,7 +2608,6 @@ decolonization_events.19 = {
 # Fires for other GPs when a great power intervenes militarily in a former colony.
 # Models the international reaction to the Suez Crisis / similar interventions.
 decolonization_events.20 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — pass the real intervener from .19
 	type = country_event
 	placement = root
 
@@ -2574,30 +2623,18 @@ decolonization_events.20 = {
 
 	duration = 3
 
+	# Fired only by decolonization_events.19 option A, which saves
+	# scope:intervening_power (its ROOT) and scope:intervention_victim (its
+	# scope:nationalizing_country) before the trigger_event. They used to be
+	# re-picked here with random_country, which named whichever power had
+	# intervened anywhere, not necessarily this one.
 	trigger = {
 		has_journal_entry = je_colonial_empire
-		# Always fires when triggered directly by event 19
-		always = yes
+		exists = scope:intervening_power
+		exists = scope:intervention_victim
 	}
 
 	immediate = {
-		# The intervening power is whoever triggered this via event 19
-		# We need to find them
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				country_rank >= rank_value:great_power
-				has_modifier = gp_military_intervention_modifier
-			}
-			save_scope_as = intervening_power
-		}
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				has_modifier = gp_intervention_target_modifier
-			}
-			save_scope_as = intervention_victim
-		}
 	}
 
 	# Option A: Condemn the intervention: demand withdrawal
@@ -2704,7 +2741,6 @@ decolonization_events.20 = {
 # Fires for newly independent countries when competing great powers
 # seek to pull them into their orbit. Models the Non-Aligned Movement.
 decolonization_events.21 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427
 	type = country_event
 	placement = root
 
@@ -3165,8 +3201,13 @@ decolonization_events.205 = {
 	}
 }
 
-# Event 206: Voluntary Decolonization — empire dissolved on the player's own terms
-# before the bar hit zero. No colony-release effects: the player already handled that.
+# Event 206: Voluntary Decolonization — the JE's fail branch with the bar above
+# zero: no overseas colonial state or qualifying colonial subject is left. That
+# can follow our own releases, but also conquest, integration (.10.a), rising
+# acceptance or a subject breaking free, so the "by decision" text needs
+# var:decol_chosen_releases, which decol_record_chosen_release counts in every
+# option that releases a colony by our choice (.1, .3, .9, .13, .400, .401).
+# Otherwise the neutral variant. No colony-release effects: nothing is left.
 decolonization_events.206 = {
 	type = country_event
 	placement = root
@@ -3175,20 +3216,73 @@ decolonization_events.206 = {
 	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
 	icon = "gfx/interface/icons/event_icons/event_protest.dds"
 
-	title = decolonization_events.206.t
-	desc = decolonization_events.206.d
-	flavor = decolonization_events.206.f
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = decol_chosen_releases }
+				desc = decolonization_events.206.t
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.206.t_neutral
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = decol_chosen_releases }
+				desc = decolonization_events.206.d
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.206.d_neutral
+			}
+		}
+	}
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_variable = decol_chosen_releases }
+				desc = decolonization_events.206.f
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.206.f_neutral
+			}
+		}
+	}
 
 	duration = 3
 
 	immediate = { }
 
+	# The counter is cleared here, after the text has read it, rather than in
+	# colonial_empire_je_cleanup_effect, which on_fail runs right after firing
+	# this event. The other end-of-JE paths clear it in je_colonial_empire.
 	option = {
 		name = decolonization_events.206.a
+		trigger = { has_variable = decol_chosen_releases }
 		default_option = yes
 		ai_chance = { base = 5 }
 		add_modifier = {
 			name = negotiated_withdrawal_modifier
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		remove_variable = decol_chosen_releases
+	}
+
+	# Nothing was negotiated or chosen on this branch, so it does not get the
+	# "Negotiated Withdrawal" label: post_imperial_modifier carries the same
+	# values under a name that is true however the colonies went.
+	option = {
+		name = decolonization_events.206.b
+		trigger = { NOT = { has_variable = decol_chosen_releases } }
+		default_option = yes
+		ai_chance = { base = 5 }
+		add_modifier = {
+			name = post_imperial_modifier
 			days = long_modifier_time
 			is_decaying = yes
 		}
@@ -3487,6 +3581,342 @@ decolonization_events.54 = {
 }
 
 # ============================================================================
+# THE OTHER PARTY'S CHOICE (60–63)
+# Events that used to tell a country another country had acted — proposed
+# ties, demanded reparations, accepted a truce — when that country never chose
+# to. Each now asks the actor first; only its own option sends the event that
+# describes the act.
+#   60  former colony: seek closer ties with the former overlord?  -> .5
+#   61  former colony: demand reparations of the former overlord?  -> .6
+#   62  neighbour: accept the proposed federation truce (from .16.b)
+#   63  neighbour: accept the offered border truce (from .17.c)
+# 60 and 61 are rolled in decolonization_events_on_action on the FORMER
+# OVERLORD, in the slots that used to fire .5 / .6 directly, so the roll
+# frequency is today's; the slot fires the question on one of its former
+# colonies instead. Eligibility lives in te_event_agency_decol_triggers.txt.
+# ============================================================================
+
+# Event 60: Old Ties, New Terms? — should we approach our former ruler?
+# Root = a former colony (var:former_overlord). The system gate is the former
+# overlord's je_colonial_empire, read through decol_can_seek_ties_with_former_overlord.
+decolonization_events.60 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/diplomatic_meeting.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = decolonization_events.60.t
+	desc = decolonization_events.60.d
+	flavor = decolonization_events.60.f
+
+	duration = 3
+
+	trigger = {
+		decol_can_seek_ties_with_former_overlord = yes
+	}
+
+	immediate = {
+		save_scope_as = former_colony
+		var:former_overlord = {
+			save_scope_as = ties_former_overlord
+			# One overture per former overlord per long_modifier_time — the
+			# 10-year cooldown .5 used to carry. "Not now" shortens it below.
+			set_variable = { name = decol_ties_overture_cd days = long_modifier_time }
+		}
+	}
+
+	# Option A: Propose closer ties
+	option = {
+		name = decolonization_events.60.a
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					scope:ties_former_overlord = { relations:root >= relations_threshold:cordial }
+				}
+				add = 2
+			}
+			modifier = {
+				trigger = { has_modifier = commonwealth_legacy_modifier }
+				add = 2
+			}
+			modifier = {
+				trigger = { has_modifier = bloody_decolonization_legacy_modifier }
+				add = -2
+			}
+		}
+		custom_tooltip = decolonization_events.60.a_tt
+		scope:ties_former_overlord = {
+			trigger_event = { id = decolonization_events.5 days = 3 }
+		}
+		# Business wants the old trade links back; the intelligentsia calls it
+		# a return to the old master by the side door.
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		add_radicals = { value = very_small_radicals pop_type = academics }
+	}
+
+	# Option B: Not now
+	option = {
+		name = decolonization_events.60.b
+		# Declining is the default: a lapsed popup must not file a claim or an
+		# overture the country never chose (event_creation_guide.md § Agency).
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:ties_former_overlord = { relations:root < relations_threshold:neutral }
+				}
+				add = 3
+			}
+		}
+		set_variable = { name = decol_ties_not_now days = normal_modifier_time }
+		# We were not asked by them, so their slot reopens sooner.
+		scope:ties_former_overlord = {
+			set_variable = { name = decol_ties_overture_cd days = short_modifier_time }
+		}
+		add_loyalists = { value = very_small_radicals strata = lower }
+	}
+}
+
+# Event 61: The Accounting — should we demand reparations?
+# Root = a former colony (var:former_overlord). The claim is fixed here, in
+# var:decol_reparations_claim, so the sum we name is the sum .6 pays.
+decolonization_events.61 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/international_court_chamber.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = decolonization_events.61.t
+	desc = decolonization_events.61.d
+	flavor = decolonization_events.61.f
+
+	duration = 3
+
+	trigger = {
+		decol_can_demand_reparations_from_former_overlord = yes
+	}
+
+	immediate = {
+		save_scope_as = reparations_claimant
+		var:former_overlord = {
+			save_scope_as = reparations_payer
+			# One claim per former overlord per long_modifier_time — the
+			# 10-year cooldown .6 used to carry. "Not now" shortens it below.
+			set_variable = { name = decol_reparations_demand_cd days = long_modifier_time }
+		}
+		set_variable = { name = decol_reparations_claim value = decol_reparations_value }
+	}
+
+	# Option A: Present the accounting and demand reparations
+	option = {
+		name = decolonization_events.61.a
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_modifier = bloody_decolonization_legacy_modifier }
+				add = 3
+			}
+		}
+		custom_tooltip = decolonization_events.61.a_tt
+		scope:reparations_payer = {
+			trigger_event = { id = decolonization_events.6 days = 3 }
+		}
+		# A formal claim sours the mood before any answer comes; at home it is
+		# a point of national dignity.
+		change_relations = {
+			country = scope:reparations_payer
+			value = -10
+		}
+		add_loyalists = { value = small_radicals strata = lower }
+	}
+
+	# Option B: Not now
+	option = {
+		name = decolonization_events.61.b
+		# Declining is the default: a lapsed popup must not file a claim or an
+		# overture the country never chose (event_creation_guide.md § Agency).
+		default_option = yes
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					scope:reparations_payer = { relations:root >= relations_threshold:amicable }
+				}
+				add = 2
+			}
+			modifier = {
+				trigger = { has_modifier = commonwealth_legacy_modifier }
+				add = 2
+			}
+		}
+		remove_variable = decol_reparations_claim
+		set_variable = { name = decol_reparations_not_now days = normal_modifier_time }
+		# We made no claim, so their slot reopens sooner.
+		scope:reparations_payer = {
+			set_variable = { name = decol_reparations_demand_cd days = short_modifier_time }
+		}
+		add_radicals = { value = very_small_radicals pop_type = academics }
+	}
+}
+
+# Event 62: A Fraternal Proposal — the neighbour answers .16.b
+# Root = scope:partition_neighbor of decolonization_events.16. The five-year
+# truce binds both countries, so it is the neighbour's to accept.
+decolonization_events.62 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/peace_conference_grand.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = decolonization_events.62.t
+	desc = decolonization_events.62.d
+	flavor = decolonization_events.62.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:truce_proposer
+		scope:truce_proposer = { is_country_alive = yes }
+		NOT = { has_war_with = scope:truce_proposer }
+	}
+
+	immediate = {
+		save_scope_as = truce_responder
+	}
+
+	# Option A: Accept the truce
+	option = {
+		name = decolonization_events.62.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = {
+					scope:truce_proposer = { relations:root >= relations_threshold:cordial }
+				}
+				add = 2
+			}
+		}
+		create_bidirectional_truce = {
+			country = scope:truce_proposer
+			months = 60
+		}
+		scope:truce_proposer = {
+			post_notification = decol_truce_proposal_accepted_notice
+		}
+		ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Decline
+	option = {
+		name = decolonization_events.62.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_modifier = partition_territorial_claims_modifier }
+				add = 4
+			}
+		}
+		change_relations = {
+			country = scope:truce_proposer
+			value = -10
+		}
+		scope:truce_proposer = {
+			post_notification = decol_truce_proposal_declined_notice
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+}
+
+# Event 63: The Line on the Map — the neighbour answers .17.c
+# Root = scope:border_rival of decolonization_events.17. Recognising the border
+# is the proposer's own act; the five-year truce that comes with it binds us
+# too, so it is ours to accept.
+decolonization_events.63 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/partition_border_drawing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = decolonization_events.63.t
+	desc = decolonization_events.63.d
+	flavor = decolonization_events.63.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:truce_proposer
+		scope:truce_proposer = { is_country_alive = yes }
+		NOT = { has_war_with = scope:truce_proposer }
+	}
+
+	immediate = {
+		save_scope_as = truce_responder
+	}
+
+	# Option A: Accept the truce
+	option = {
+		name = decolonization_events.63.a
+		default_option = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = {
+					scope:truce_proposer = { relations:root >= relations_threshold:cordial }
+				}
+				add = 2
+			}
+		}
+		create_bidirectional_truce = {
+			country = scope:truce_proposer
+			months = 60
+		}
+		scope:truce_proposer = {
+			post_notification = decol_truce_proposal_accepted_notice
+		}
+		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+
+	# Option B: Keep our claims open
+	option = {
+		name = decolonization_events.63.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_modifier = border_dispute_active_modifier }
+				add = 4
+			}
+		}
+		change_relations = {
+			country = scope:truce_proposer
+			value = -10
+		}
+		scope:truce_proposer = {
+			post_notification = decol_truce_proposal_declined_notice
+		}
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+	}
+}
+
+# ============================================================================
 # CAPSTONE EVENTS 300 / 301 — Imperial Federation Act
 # Fired by je_colonial_empire on_complete when the IF Act decision is taken.
 # These are the satisfying narrative endpoint for a well-played hold strategy.
@@ -3657,6 +4087,7 @@ decolonization_events.400 = {
 		scope:decolonization_target_state_1 = {
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 
 		# Path-specific country modifiers (moved here from the original buttons
 		# so they apply only on confirm, not on the preview click).
@@ -3708,6 +4139,7 @@ decolonization_events.400 = {
 		scope:decolonization_target_state_2 = {
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 
 		if = {
 			limit = { has_variable = decolonization_path_round_table }
@@ -3754,6 +4186,7 @@ decolonization_events.400 = {
 		scope:decolonization_target_state_3 = {
 			form_decolonized_country = yes
 		}
+		decol_record_chosen_release = yes
 
 		if = {
 			limit = { has_variable = decolonization_path_round_table }
@@ -3874,6 +4307,7 @@ decolonization_events.401 = {
 				remove_variable = decolonization_marker
 			}
 		}
+		decol_record_chosen_release = yes
 		add_modifier = {
 			name = peaceful_decolonization_modifier
 			days = long_modifier_time

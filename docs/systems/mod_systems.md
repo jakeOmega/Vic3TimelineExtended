@@ -315,7 +315,7 @@ Posture and crises share the **Nuclear Weapons** entry with the programme (above
 
 **Launch gates.** `nd_doctrine_permits_strike = { ENEMY }` is the one doctrine gate, read by both strike actions' `possible` (with a custom tooltip, on top of the unchanged war-law gates), the crisis and incident branches that can end in a deliberate strike, and the AI. `nd_pledge_permits_strike` blocks a strike on a pledge partner. All launches go through `nd_dispatch_strategic_strike` / `nd_dispatch_tactical_strike` and record themselves once with `nd_record_nuclear_use` (pledge breaches, crisis close, proliferation spur, guarantors). Outside a war, a launch branch becomes an intercepted order (`nd_intercepted_launch`), never a strike.
 
-**Crises.** Opened by `nd_nuclear_warning_action` / `nd_nuclear_ultimatum_action`; one per country; the record is on the issuer (`nd_crisis_*`), mirrored on the target. `nd_crisis_weekly_tick` (issuer's weekly pulse) revalidates, recomputes danger and the target's `nd_yield_pressure`, fires the deadline and pressure events and expires the crisis. Decision events carry a token (`nd_crisis_event_token`) and re-check it in every option through `nd_crisis_option`. The target's concession is enforced by dispute: `resolve_play_for` (play), −35 war support (war), a ten-year programme freeze, or a two-year readiness lock.
+**Crises.** Opened by `nd_nuclear_warning_action` / `nd_nuclear_ultimatum_action`, or by the target of a recalled peacetime launch through `nuclear_incident.5` option c ("warn them privately"; no dispute test or cooldown); one per country; the record is on the issuer (`nd_crisis_*`), mirrored on the target. `nd_crisis_weekly_tick` (issuer's weekly pulse) revalidates, recomputes danger and the target's `nd_yield_pressure`, fires the deadline and pressure events and expires the crisis. Decision events carry a token (`nd_crisis_event_token`) and re-check it in every option through `nd_crisis_option`. The target's concession is enforced by dispute: `resolve_play_for` (play), −35 war support (war), a ten-year programme freeze, or a two-year readiness lock.
 
 **Domestic stance.** `nd_refresh_domestic_stance` is the single site of `nd_posture_approval_*` on interest groups; classes are defined by triggers (`nd_ig_class_*`) and scored by `nd_stance_*_value`, zero until a doctrine has been held six months. Crisis outcomes pay hawks/doves one-off IG modifiers and adjust native lobby appeasement (`nd_lobby_react`); an IG in an anti-opponent lobby is paid through the lobby only.
 
@@ -544,7 +544,7 @@ is quartered for all five articles; swap/guarantee demand now depends on externa
 crisis / debt >= 50%, and voluntary pegs carry more baseline reluctance. See
 `monetary_policy_design.md` "Treaty eligibility and AI tuning" for the values.
 
-International monetary arrangements. Spec: `monetary_policy_design.md` §15A; what shipped, the rulings (G1–G16) and the in-game checklist (P5-1…18): §0.8. **Not seen in a running game, and built on a phase 4 that has not been either.** Files: `common/script_values/te_monetary_arrangement_script_values.txt` (constants + the phase-5 variable contract) and `te_monetary_union_script_values.txt` (5b), the matching `scripted_triggers/` and `scripted_effects/` pairs, `common/treaty_articles/110_currency_peg.txt` / `111_swap_line.txt` / `112_lender_of_last_resort.txt`, `principle_group_monetary_union` (five principles, five script-only `power_bloc_*_bool` markers), `events/te_monetary_arrangement_events.txt` (`te_lolr.1`, `te_union.1`), `te_peg.2` in `te_peg_events.txt`, `te_monetary_internal.2`, and twelve static modifiers at the foot of `extra_modifiers.txt`.
+International monetary arrangements. Spec: `monetary_policy_design.md` §15A; what shipped, the rulings (G1–G16) and the in-game checklist (P5-1…18): §0.8. **Not seen in a running game, and built on a phase 4 that has not been either.** Files: `common/script_values/te_monetary_arrangement_script_values.txt` (constants + the phase-5 variable contract) and `te_monetary_union_script_values.txt` (5b), the matching `scripted_triggers/` and `scripted_effects/` pairs, `common/treaty_articles/110_currency_peg.txt` / `111_swap_line.txt` / `112_lender_of_last_resort.txt`, `principle_group_monetary_union` (five principles, five script-only `power_bloc_*_bool` markers), `events/te_monetary_arrangement_events.txt` (`te_lolr.1`, its ward notice `te_lolr.2`, `te_union.1`), `te_peg.2` in `te_peg_events.txt`, `te_monetary_internal.2`, and twelve static modifiers at the foot of `extra_modifiers.txt`.
 
 **The anchored state is the spine.** `te_mon_anchor` (a **scope** variable — the `te_basket_market_owner` contract: cannot hold 0, read as `var:te_mon_anchor = { … }` behind `has_variable`, may be absent) plus `te_mon_anchor_kind`: **1** treaty peg, **2** bloc currency, **3** currency board; highest wins. An anchored country has **no dial** (`te_mon_has_dial` gained `NOT = { te_mon_is_anchored = yes }`), **imports the rate** (third branch of `te_monetary_set_derived_rate`: anchor's rate + spread 0.5 / 0 / 0.25, *no* expected-inflation term — G13), **takes the anchor's `te_fx_index`** (first branch of step 5b's index-by-regime, less a kind-1 `te_mon_peg_parity_offset`) while its own formula runs on as `te_fx_shadow`, cannot monetise or run OMO, and **imports credibility** (`te_mon_credibility_c` = max(own, 0.8 × anchor's); `te_mon_inflation_anchor` = the anchor's target — both were split into `_own` + the consumer-facing name). It **keeps its own inflation, neutral rate, stance gap and cycle**: the three hidden-state gates in the monthly update read `te_mon_has_stance` (dial **or** anchored), not `te_mon_has_dial` (G1). `te_mon_overvaluation` is the one pressure gauge all three kinds read.
 
@@ -1210,6 +1210,16 @@ Events 1-15 handle the core colonial cycle: negotiations, crackdowns, releases, 
 - **Event 20 "Gunboats in the Harbor"** — Other GPs respond to military intervention. Options: condemn (+moral authority, relations penalties to intervener), support intervention, stay neutral. **Not in on_actions** — triggered directly by Event 19 option A.
 - **Event 21 "The Non-Aligned Path"** — New nations choose between competing superpowers or non-alignment.
 
+**Choices made by the other party (2026-09, event-agency work, #427):**
+- **Former colonies choose first.** The overlord's pool slots that used to fire `.5` (closer ties) and `.6` (reparations) now fire precursors on the former colony: **`.60`** (propose ties) and **`.61`** (demand reparations). The overlord hears only if the colony asked.
+  - Lockout variables on the overlord replace the old cooldowns: `decol_ties_overture_cd` and `decol_reparations_demand_cd`.
+  - Reparations are a real transfer. The claim is fixed at demand time: 10 % of the payer's yearly revenue, capped at 10 % of the claimant's GDP (`decol_reparations_value`).
+- **Truces need consent.** `.16.b` (federation) and `.17.c` (border) ask the neighbour first, through **`.62`** / **`.63`**, instead of imposing a 60-month truce on it.
+- **Pressure comes from real stances.** `.2`'s pressuring power is picked only from great powers carrying `gp_anti_colonial_stance`. The General Assembly flavour appears only once the decolonization UN regime exists.
+- **`.20` names the real intervener and victim,** saved by `.19.A`, instead of re-picking them.
+- **Only colonial subjects count.** `.1`/`.2`/`.3`/`.8`/`.11` iterate `is_qualifying_colonial_subject` only.
+- **`.206`'s "by decision" epilogue** needs a chosen release. `decol_record_chosen_release` counts them (`decol_chosen_releases`); otherwise a neutral variant shows.
+
 ### AI Behavior Tuning
 
 AI weights across events are tuned to favor decolonization:
@@ -1581,7 +1591,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
   | Event | Fired by | Audience | Choices |
   |---|---|---|---|
   | 17 Our Model Abroad | yearly pool | the hegemon, when its model holds ≥ `ch_model_abroad_min_share` (40%) of world culture across ≥ 3 countries | **Champion it:** `ch_model_champion` (+10% prestige, −25 influence, and `ch_model_champion_mult_bonus` +0.25 on the baseline multiplier) plus −15 relations with every ≥ 5% cultural power running another model. **Lead by example:** `ch_model_exemplar` (+10 legitimacy, decaying). |
-  | 18 Rival Models | yearly pool | a trailing country, when #1 and #2 export different models (#2 ≥ 10%) | Lean to either power: ±15 relations, `ch_cultural_exchange`, and a 30-month weak spike toward *that* power's model (saved as `cultural_hegemon`). **Stand apart:** `ch_non_aligned_stance` (+5 legitimacy) and −5 with both. |
+  | 18 Rival Models | yearly pool | a trailing country, when #1 and #2 export different models (#2 ≥ 10%) | The pull is cultural, not a campaign, so no power loses relations over it; the desc names a power's campaign only when it holds `ch_model_champion` (.17 A; granted to #1, but it outlasts a fall to #2). Lean to either power: +15 relations with it, `ch_cultural_exchange`, and a 30-month weak spike toward *that* power's model (saved as `cultural_hegemon`). **Stand apart:** `ch_non_aligned_stance` (+5 legitimacy). |
   | 19 The Model Falters | `ch_fire_model_change_events`, when rank 1's model code changes between rebuilds | every country still running the old model | **Hold course:** `ch_model_orphaned` (−10 legitimacy, decaying) and +3 approval for IGs in government. **Adapt:** +15 relations with the new leader and a spike toward its model. |
   | 20 Domino | `ch_fire_model_change_events`, when a neighbour's census moves onto rank 1's model (`ch_switched_to_hegemon_model`) | its neighbours running something else, by state adjacency | **Contain:** `ch_ideological_cordon` (−50 authority) and −15 relations with the switcher. **Let it travel:** +10 relations and a spike toward the hegemon's model. |
 
@@ -1860,8 +1870,11 @@ share that protection.
 
 The discretionary bailout (`banking_cycle_events.45`) requires a non-defaulting
 donor at cycle 40+ and a non-hostile, diplomatically relevant trading partner
-in downturn/panic with an active banking JE. Recipient selection uses the same
-gate as dispatch. Rescue options transfer equal treasury amounts (the donor's
+in downturn/panic with an active banking JE. The partner is asked first: the
+donor's banking pulse picks it with the same gate and sends it
+`banking_cycle_events.68` ("appeal to [donor]?", −5% prestige for asking), and
+only its appeal option sends `.45` to the donor; whatever the donor answers
+reaches the partner as `.69`, naming the sum. Rescue options transfer equal treasury amounts (the donor's
 old weekly expense multiplied by duration / 14, approximating its former
 linearly decaying total) and grant temporary banking stability to the recipient.
 This is a grant, not a new swap-line or lender-of-last-resort treaty. The latter

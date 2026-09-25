@@ -3364,6 +3364,10 @@ The crash does not produce a `script_parse_error`, `inject_to_missing`, or fatal
 
 The full forensic record of one domestic-lobby crash, including ruled-out hypotheses and a staged re-implementation plan, is preserved in `docs/archive/political_lobbies_design.md` § Re-implementation Notes.
 
+## `change_appeasement`'s `appeasement_special_events_*` Factor Names the Event, Not the Sign
+
+Each lobby type lists, per direction, which factors may move its appeasement: `appeasement_factors_pro` for a positive `amount`, and `appeasement_factors_anti` for a negative one (`00_political_lobbies.txt`). `appeasement_special_events_positive` / `_negative` describe how the event treats the lobby's target country. So `lobby_pro_country` gains on `_positive`, and `lobby_anti_country` gains on `_negative` and loses on `_positive`. Vanilla's `add_lobby_appeasement_from_diplomacy_unidirectional` passes one `FACTOR` with `PRO_AMOUNT = 1` / `ANTI_AMOUNT = -1`. Any other pairing is rejected and skipped, and error.log shows `Appeasement change failed, check that '<factor>' is a valid appeasement reason for political lobby '<type>'`. The nuclear-crisis helper `nd_lobby_react` picked the factor from the sign of the amount, so all five of its anti-lobby calls failed until 2026-09-25. Its parameter is now `EVENT`, and a pro/anti pair reacting to one event passes the same value.
+
 ## Engine Vocabulary That Doesn't Exist — Verify Before Designing
 
 Several plausible-sounding names turn up empty when you go to use them. Discovered the hard way during the colonial-empire redesign; recording so the next pass doesn't re-walk the same diff.
@@ -4007,6 +4011,15 @@ Caught during phase 2: `ideology_isolationist` was already a key, and adding a s
 
 Bit the four cultural-hegemony programme status lines (`je_ch_widget_prog_*_status`, 2026-09-20). Their second bug is worth repeating on its own: the status read went through `ch_policy_sgui`, whose `is_shown` is deliberately **scope-free** (`has_journal_entry = je_cultural_hegemony`), so `IsShown(… AddScope('op', N) …)` returns the same answer for every `op`. When a scripted GUI's `is_shown` ignores the saved scope by design, no `AddScope` on the call side can make it discriminate — ask the per-state handler instead (`ch_active_<programme>_sgui`, which is what the same widget's `visible` lines already use).
 
+## Nothing Pasted Into a Quoted Loc Argument May Carry `[` or `'`
+
+A single-quoted data-function argument is a plain string literal, and text substituted into it is not escaped. Two routes paste text in, and both break on the same characters.
+
+- **`$key$` inside the quotes.** The expansion happens before the data function is parsed. `[Concept('concept_x','$some_name$')]` is safe only while `some_name` is plain text. The UN button effects (`gen_un_button_descs.py`) wrapped `$un_peacekeeping_contributor_modifier$` this way. That key's value is `[concept_un_peacekeeping] Contributor`, and its `[` opened an expression inside the literal. debug.log logged `Failed to find the last quote for this argument literal` and `Missing parenthesis at end`, and the whole `Concept()` failed to parse. Put the reference outside the argument, where a nested concept link renders normally. The generator also passed a modifier name as `Concept()`'s first argument. That argument must be a game concept key: vanilla uses a non-`concept_*` key 2 times out of 8,971.
+- **A static modifier's or modifier type's display name.** Vanilla's add/remove-modifier tooltip is `GetRawTextTooltipTag('#header $MODIFIER_NAME$#!…')`, and the breakdown inside it lists each modifier type by display name. A straight apostrophe in either ends the literal. `ste_women_workforce` ("Women's Integration") produced 34 distinct `Expected ','` entries (`pdx_data_statementparser.cpp:43`) in one session's deduped debug.log. Write `’` (U+2019) in these names, as vanilla does: 3 of its ~8,500 modifier and modifier-type names use `'`. Descriptions are safe, because the tooltip passes them base64-encoded (`tooltip:TEXT,<base64>`).
+
+Quotes inside the data expressions in a name are fine, e.g. `[Concept('concept_power_bloc_leader', 'Bloc Leader')] Forbade Union`. They are resolved before the name is pasted. `loc_render_audit` flags both routes (`quoted_arg_expansion`, `quoted_name_apostrophe`, 2026-09-25). It resolves `$key$` against mod loc only, because vanilla's `$UPPER_CASE$` runtime parameters (`$TIMED_MODIFIERS$`) arrive already rendered and sometimes share a name with a loc key.
+
 ## A Treaty Article's `on_entry_into_force` Is Re-Walked by the Designer Tooltip With `scope:article_options` Unbound
 
 Same shape as **Script Containers** rule 6, one layer out. While the treaty designer has an article listed, the engine re-evaluates its `on_entry_into_force` every frame to render the preview, and in that pass `scope:article_options` is never bound — so `scope:article_options = { source_country = { save_scope_as = source_country } }` is a no-op and everything downstream reads an unset scope. A `multiplier = scope:source_country.var:X` inside a called effect then logs `Value of wrong type in '<file>:<line>'. Got value of type 'none'` once per frame per read.
@@ -4265,3 +4278,16 @@ record. Nothing guarantees the engine keeps a modifier added at ×0, and if it d
 is lost for good, since the next refresh re-adds only what it still finds. Floor such a
 multiplier above 0 (`un_convention_multiplier`: E, min 0.01), or keep the state in a variable
 and the modifier as its effect only.
+
+## Lessons From the Event-Agency Sweep (2026-09-25)
+
+Found while fixing events that ignored the mod's systems or assumed a country's choice (#431, #434–#436). Each was engine-silent.
+
+- **One effect block per key in an entity.** A treaty article with two sibling `on_entry_into_force` blocks (a new "record whether there was a programme" block beside the existing "disarm" block) relies on the engine keeping both. How the engine handles duplicate sibling keys varies by entity type and may be last-wins, which would silently drop either the record or the disarmament. `duplicate_key_audit` only looks inside modifier blocks, so nothing flags it. Put everything in one block, in the order it must run.
+- **Never reuse a loc key across roles.** `extra_law_events.29`/`.31` used the `.d` key both as the event description and as the fourth option's name. A later loc edit made for the option overwrote the description, and for months both events opened with "Grant a ten-year transition period instead." Give every desc, option and tooltip its own key.
+- **Amendments take `possible` only.** There is no `visible` in an amendment definition (vanilla `amendments.md`). Put a game-rule gate in `possible`.
+- **`any_rivaling_country` is the reverse of `any_rival_country`.** It iterates the countries that rival *this* one; `any_rival_country` iterates the countries this one rivals. "Rivals in either direction" needs both.
+- **Messages read `notification_<msg>_name` / `_desc` / `_tooltip`.** A bare `<msg>:` loc key is never read. Six decolonization notices shipped with only bare keys and showed no text at all (#430 lists the rest).
+- **Save the scope before a delayed event from a diplomatic action.** A diplomatic action's own `scope:target_country` reaching an event fired from its `accept_effect` with `days = N` has vanilla precedent only at `days = 0`. Re-save it explicitly (`scope:target_country ?= { save_scope_as = target_country }`) before the `trigger_event`. If the scope is lost, the event's trigger fails silently.
+- **An event's `duration` is in months, so an answer variable must outlive it.** `duration = 3` keeps an unanswered event open for about three months (`NEvents.DEFAULT_MONTHS_VALID`), and the engine auto-opens it about 30 days before it expires. A notice whose text or option triggers read an outcome variable set with `days = 30` therefore shows the wrong outcome, or fails its option trigger, for a player who opens it late. Set such variables above the event's lifetime (the event-agency notices use `days = 120`) and remove them when the notice is answered.
+- **Don't gate a defender-facing event on a live covert pact.** That names an operation the covert detection system exists to hide. Key it to the burn's exposure record instead (`iw_last_exposed_*`; `surveillance_events.5`), or make it the covert-disabled fallback. See `docs/guides/event_creation_guide.md` § Agency and System Coherence.

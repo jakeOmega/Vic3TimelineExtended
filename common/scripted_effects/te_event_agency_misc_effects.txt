@@ -1,0 +1,68 @@
+﻿# Event-agency package E2 ("misc") — scripted effects.
+# Each block names the event(s) that call it.
+
+# ----------------------------------------------------------------------------
+# banking_cycle_events.45 — the donor answers an appeal
+# ----------------------------------------------------------------------------
+# ROOT = the donor, scope:bailout_country = the country that asked
+# (banking_cycle_events.68). Records the answer on the asker and sends it
+# banking_cycle_events.69, so the treasury transfer (or the refusal's
+# relations hit) arrives with an explanation.
+#
+# Each option calls one of these last, after its own effects.
+# te_ea_bailout_answer_aid takes the AMOUNT and DAYS the option passed to
+# banking_transfer_emergency_aid (legacy_event_integration_effects.txt) and
+# repeats its arithmetic (root.$AMOUNT$ x $DAYS$ / 14) so the notice can name
+# the sum; ANSWER is 1 for the rescue package, 2 for the smaller grant.
+# The answer variables outlive the notice's lifetime (duration = 3 is months;
+# an unopened event auto-opens around day 60), so a late reader still sees the
+# answer that was given.
+te_ea_bailout_answer_aid = {
+	scope:bailout_country = {
+		set_variable = { name = te_ea_bailout_answer value = $ANSWER$ days = 120 }
+		set_variable = {
+			name = te_ea_bailout_amount
+			value = {
+				value = root.$AMOUNT$
+				multiply = $DAYS$
+				divide = 14
+			}
+			days = 120
+		}
+		trigger_event = { id = banking_cycle_events.69 }
+	}
+}
+
+te_ea_bailout_answer_refusal = {
+	scope:bailout_country = {
+		set_variable = { name = te_ea_bailout_answer value = 3 days = 120 }
+		trigger_event = { id = banking_cycle_events.69 }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# movement_events_te.4 — ask a great power whether it condemns us
+# ----------------------------------------------------------------------------
+# je_civil_rights on_monthly_pulse (ROOT = the country with the movement).
+# Replaces the direct trigger_event of movement_events_te.4, which picked a
+# random great power in `immediate` and told us it had condemned us. Now a
+# great power that protects its own minorities decides (movement_events_te.17)
+# and .4 reaches us only if it condemns. te_ea_cr_condemned is .4's cooldown
+# (set by .4, ten years) and, set here for 90 days, keeps a second critic from
+# being asked while the first decides.
+te_ea_cr_invite_condemnation = {
+	if = {
+		limit = {
+			te_ea_cr_condemnable = yes
+			NOT = { has_variable = te_ea_cr_condemned }
+			any_country = { te_ea_cr_can_condemn_root = yes }
+		}
+		set_variable = { name = te_ea_cr_condemned value = yes days = 90 }
+		save_scope_as = cr_condemned_country
+		random_country = {
+			limit = { te_ea_cr_can_condemn_root = yes }
+			save_scope_as = criticizing_country
+			trigger_event = { id = movement_events_te.17 }
+		}
+	}
+}

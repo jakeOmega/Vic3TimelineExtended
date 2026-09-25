@@ -1,0 +1,42 @@
+﻿# ============================================================================
+# EVENT AGENCY (package ir) - static modifiers
+# ============================================================================
+# The actor's side of the precursor events (see
+# te_event_agency_ir_triggers.txt): what choosing the act costs and buys.
+
+# international_relations_events.201.a: the buildup a rival will be told about
+# in .1. Close to arms_race_escalation_modifier (the answering side's
+# modifier), slightly smaller, since it is the opening move. The navy line is
+# country_prestige_from_navy_power_projection_mult: the
+# country_prestige_from_navy_combat_power_mult that modifier carries is not an
+# engine modifier and is silently ignored.
+te_ea_ir_military_buildup_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	country_prestige_from_army_power_projection_mult = 0.10
+	country_prestige_from_navy_power_projection_mult = 0.10
+	country_military_goods_cost_mult = 0.10
+}
+
+# international_relations_events.202.a: a propaganda offensive a rival will be
+# told about in .4. Mirrors propaganda_campaign_modifier (the answering side's
+# counter-campaign) at a smaller prestige gain.
+te_ea_ir_propaganda_offensive_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.03
+	country_bureaucracy_mult = -0.03
+}
+
+# international_relations_events.203.a: what an agent inside a rival's defence
+# ministry passes home. Kept whether or not he is later caught (.6).
+te_ea_ir_agent_in_place_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	country_military_tech_spread_mult = 0.15
+}
+
+# society_technology_events.32.a: running a disinformation campaign in a
+# rival's election. The rival's own event (.14) costs it electoral confidence
+# whatever it answers; this is what the campaign costs us.
+te_ea_ir_election_meddling_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_influence_add = -20
+}

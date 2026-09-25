@@ -2066,11 +2066,19 @@ cultural_hegemony.17 = {
 # EVENT 18: Rival Models
 # ============================================================================
 # The two leading cultural powers export different political models. A country
-# that trails them both is courted by each and must lean one way or stand
-# apart. Leaning toward a power brings its research exchange and its friendship
-# at the price of the other's, and opens the country to that power's model; the
-# chosen power is saved as scope:cultural_hegemon so the shared pressure effect
-# pushes ITS model. Standing apart costs a little goodwill with both.
+# that trails them both feels both pulls through its press, cinemas and
+# universities and must lean one way or stand apart. Leaning toward a power
+# brings its research exchange and its friendship, and opens the country to
+# that power's model; the chosen power is saved as scope:cultural_hegemon so the
+# shared pressure effect pushes ITS model. Standing apart keeps the country's
+# own counsel.
+#
+# Neither power courted this country in particular — the pull is world state,
+# not a campaign — so no option costs relations with a power that did nothing.
+# The one campaign that is real is a power's own choice to champion its model
+# abroad (cultural_hegemony.17 option A, ch_model_champion), and the desc names
+# it for whichever power holds that modifier. .17 grants it only to the leader,
+# but it lasts five years, so a power since overtaken can still carry it.
 # ============================================================================
 
 cultural_hegemony.18 = {
@@ -2078,7 +2086,29 @@ cultural_hegemony.18 = {
 	placement = root
 
 	title = cultural_hegemony.18.t
-	desc = cultural_hegemony.18.d
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:ch_bloc_a ?= { has_modifier = ch_model_champion }
+					scope:ch_bloc_b ?= { has_modifier = ch_model_champion }
+				}
+				desc = cultural_hegemony.18.d_champion_both
+			}
+			triggered_desc = {
+				trigger = { scope:ch_bloc_a ?= { has_modifier = ch_model_champion } }
+				desc = cultural_hegemony.18.d_champion
+			}
+			triggered_desc = {
+				trigger = { scope:ch_bloc_b ?= { has_modifier = ch_model_champion } }
+				desc = cultural_hegemony.18.d_champion_b
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = cultural_hegemony.18.d
+			}
+		}
+	}
 	flavor = cultural_hegemony.18.f
 
 	event_image = { texture = "gfx/event_pictures/ideological_confrontation_speech.dds" }
@@ -2119,7 +2149,6 @@ cultural_hegemony.18 = {
 		default_option = yes
 
 		change_relations = { country = scope:ch_bloc_a value = 15 }
-		change_relations = { country = scope:ch_bloc_b value = -15 }
 		je:je_cultural_hegemony ?= { add_modifier = {
 				name = ch_cultural_exchange
 				days = normal_modifier_time
@@ -2142,7 +2171,6 @@ cultural_hegemony.18 = {
 		name = cultural_hegemony.18.b
 
 		change_relations = { country = scope:ch_bloc_b value = 15 }
-		change_relations = { country = scope:ch_bloc_a value = -15 }
 		je:je_cultural_hegemony ?= { add_modifier = {
 				name = ch_cultural_exchange
 				days = normal_modifier_time
@@ -2169,8 +2197,6 @@ cultural_hegemony.18 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		change_relations = { country = scope:ch_bloc_a value = -5 }
-		change_relations = { country = scope:ch_bloc_b value = -5 }
 
 		ai_chance = {
 			base = 3

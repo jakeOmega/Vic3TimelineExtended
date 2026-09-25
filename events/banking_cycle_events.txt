@@ -4632,9 +4632,13 @@ banking_cycle_events.44 = {
 # Requires a solvent donor and a trading partner in downturn/panic.
 # A trading partner asks for emergency financial assistance.
 # COMPLEX (3 options)
+#
+# The partner asked: the donor's banking pulse (banking_cycle_random_event_effect)
+# picks it and sends it .68, and only its "appeal" option sends this event to
+# the donor, with scope:bailout_country saved. Every answer is reported back
+# to the partner through .69.
 # --------------------------------------------------------------------------
 banking_cycle_events.45 = {
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -4649,18 +4653,11 @@ banking_cycle_events.45 = {
 
 	duration = 3
 
-	trigger = { banking_can_offer_bailout = yes }
+	# Once asked, we answer: the donor's own gate (banking_can_offer_bailout)
+	# was read when its pulse put the question to the partner (.68).
+	trigger = { exists = scope:bailout_country }
 
 	cancellation_trigger = { NOT = { exists = scope:bailout_country } }
-
-	immediate = {
-		random_country = {
-			limit = {
-				banking_is_bailout_recipient = yes
-			}
-			save_scope_as = bailout_country
-		}
-	}
 
 	option = {
 		name = banking_cycle_events.45.a
@@ -4689,6 +4686,9 @@ banking_cycle_events.45 = {
 				value = 30
 			}
 			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:bailout_country }
+			hidden_effect = {
+				te_ea_bailout_answer_aid = { ANSWER = 1 AMOUNT = banking_event_expense_large DAYS = normal_modifier_time }
+			}
 		}
 		ai_chance = {
 			base = 40
@@ -4715,6 +4715,9 @@ banking_cycle_events.45 = {
 				country = scope:bailout_country
 				value = 10
 			}
+			hidden_effect = {
+				te_ea_bailout_answer_aid = { ANSWER = 2 AMOUNT = banking_event_expense_small DAYS = short_modifier_time }
+			}
 		}
 		ai_chance = {
 			base = 35
@@ -4738,6 +4741,9 @@ banking_cycle_events.45 = {
 				value = -20
 			}
 			create_diplomatic_catalyst = { type = catalyst_event_negative target = scope:bailout_country }
+			hidden_effect = {
+				te_ea_bailout_answer_refusal = yes
+			}
 		}
 		add_loyalists = {
 			value = small_radicals
@@ -4750,6 +4756,156 @@ banking_cycle_events.45 = {
 
 	after = {
 		banking_cycle_post_event_refresh = yes
+	}
+}
+
+# --------------------------------------------------------------------------
+# 68. Appeal for a Rescue? (precursor to 45)
+# To a trading partner in downturn/panic, from a solvent donor's banking pulse
+# (banking_cycle_random_event_effect, the Event 45 entry), which saves itself
+# as scope:bailout_donor and this country as scope:bailout_country. Asking
+# costs face; only "appeal" sends .45 to the donor, whose answer comes back
+# as .69. Sets te_ea_bailout_asked for a year so other donors' pulses do not
+# ask again while this is open or just decided.
+# --------------------------------------------------------------------------
+banking_cycle_events.68 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/banking_boardroom.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = banking_cycle_events.68.t
+	desc = banking_cycle_events.68.d
+	flavor = banking_cycle_events.68.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:bailout_donor
+		has_journal_entry = je_banking_cycle
+		OR = {
+			banking_cycle_is_downturn = yes
+			banking_cycle_is_panic = yes
+		}
+		NOT = { has_modifier = finreg_banking_stability }
+	}
+
+	immediate = {
+		set_variable = { name = te_ea_bailout_asked value = yes days = 365 }
+	}
+
+	# Appeal: a chance of a rescue, at the cost of face and the risk of a snub.
+	option = {
+		name = banking_cycle_events.68.a
+		add_modifier = {
+			name = te_ea_bailout_appeal
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = banking_cycle_events.68.a.tt
+		hidden_effect = {
+			scope:bailout_donor = {
+				trigger_event = { id = banking_cycle_events.45 days = 3 }
+			}
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { banking_cycle_is_panic = yes }
+				add = 2
+			}
+		}
+	}
+
+	# Weather it alone: nothing asked, nothing owed.
+	option = {
+		name = banking_cycle_events.68.b
+		# The default: an unanswered event must not make the appeal (or pay for it).
+		default_option = yes
+		custom_tooltip = banking_cycle_events.68.b.tt
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 1
+			}
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# 69. The Donor's Answer (follow-up to 45)
+# To the country that appealed (.68), from whichever .45 option the donor
+# chose. te_ea_bailout_answer on ROOT: 1 rescue package, 2 smaller grant,
+# 3 refusal; te_ea_bailout_amount is the sum transferred. The treasury,
+# banking-stability and relations effects already happened in the donor's
+# option; this only tells us.
+# --------------------------------------------------------------------------
+banking_cycle_events.69 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/central_bank_policy.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_ea_bailout_answer_is = { ANSWER = 1 } }
+				desc = banking_cycle_events.69.t_rescue
+			}
+			triggered_desc = {
+				trigger = { te_ea_bailout_answer_is = { ANSWER = 2 } }
+				desc = banking_cycle_events.69.t_grant
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = banking_cycle_events.69.t_refused
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { te_ea_bailout_answer_is = { ANSWER = 1 } }
+				desc = banking_cycle_events.69.d_rescue
+			}
+			triggered_desc = {
+				trigger = { te_ea_bailout_answer_is = { ANSWER = 2 } }
+				desc = banking_cycle_events.69.d_grant
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = banking_cycle_events.69.d_refused
+			}
+		}
+	}
+	flavor = banking_cycle_events.69.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:bailout_donor
+		has_variable = te_ea_bailout_answer
+	}
+
+	option = {
+		name = {
+			trigger = { te_ea_bailout_answer_is = { ANSWER = 3 } }
+			text = banking_cycle_events.69.a_refused
+		}
+		name = {
+			trigger = {
+				NOT = { te_ea_bailout_answer_is = { ANSWER = 3 } }
+			}
+			text = banking_cycle_events.69.a_aid
+		}
+		default_option = yes
 	}
 }
 

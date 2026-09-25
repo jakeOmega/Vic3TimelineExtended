@@ -3,7 +3,10 @@
 		chance_to_happen = 65
 		# Terrorism
 		10 = social_tensions_events.1
-		8 = social_tensions_events.2
+		# Foreign-linked terror: offered to the would-be sponsor (.17); its
+		# rival sees social_tensions_events.2 only if the sponsor funds the
+		# cell and the cell is uncovered. Covert-disabled only (.17's trigger).
+		12 = social_tensions_events.17
 		# Corporate Lobbying
 		12 = social_tensions_events.3
 		10 = social_tensions_events.4

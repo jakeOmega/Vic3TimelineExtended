@@ -238,9 +238,18 @@ def _format_value(key, value):
 
 
 def _render_modifier_phrase(name, modifier_effects):
-    """`[Concept('un_X_modifier','$un_X_modifier$')] (+5% $...$, −25 $...$, ...)`."""
+    """`$un_X_modifier$ (+5% $...$, −25 $...$, ...)`.
+
+    The modifier's display name goes in as a plain `$name$` substitution. It
+    used to be `[Concept('<name>','$<name>$')]`, but `Concept()` takes a game
+    concept key and no modifier is one. The expansion also landed inside a
+    quoted argument, so a name that is itself a link
+    (`un_peacekeeping_contributor_modifier` is "[concept_un_peacekeeping]
+    Contributor") broke the whole expression, and debug.log filled with parse
+    errors. At top level the nested concept link renders normally.
+    """
     effects = modifier_effects.get(name, [])
-    link = f"[Concept('{name}','${name}$')]"
+    link = f"${name}$"
     if not effects:
         return link
     rendered = ", ".join(_format_value(k, v) for k, v in effects)

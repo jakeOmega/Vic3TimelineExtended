@@ -1254,10 +1254,13 @@ society_technology_events.13 = {
 }
 
 # Event 14: Social Media Election Interference
-# Foreign actors exploit platforms to influence elections
+# Foreign actors exploit platforms to influence elections.
+# Fired only by .32.a, the rival's own choice to meddle in our campaign: the
+# rival arrives as scope:interfering_country. With covert warfare enabled,
+# election interference is a covert operation we learn of only if our
+# counterintelligence burns it (covert_warfare.2), so .32 and this event are
+# the covert-disabled path (the PR #418 shape of international_relations_events.6).
 society_technology_events.14 = {
-	# REVIEWED 2026-09-25 (system_ungated): tracked in #427 — the accused country gets the choice first
-	# REVIEWED 2026-09-25 (imputed_foreign_action): tracked in #427 — the accused country gets the choice first
 	type = country_event
 	placement = root
 
@@ -1270,44 +1273,18 @@ society_technology_events.14 = {
 	flavor = society_technology_events.14.f
 
 	duration = 3
-	cooldown = { days = long_modifier_time }
 
 	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
+		exists = scope:interfering_country
 		in_election_campaign = yes
-		has_technology_researched = social_media
-		NOT = { has_modifier = ste_election_interference_counter }
-		NOT = { has_modifier = ste_election_interference_ignored }
-		NOT = { has_law = law_type:law_single_party_state }
-		any_country = {
-			NOT = { this = root }
-			has_technology_researched = social_media
-			AND = {
-				has_diplomatic_pact = { who = ROOT type = rivalry }
-				country_rank >= rank_value:great_power
-			}
-		}
-		OR = {
-			has_law = law_type:law_universal_suffrage
-			has_law = law_type:law_census_voting
-			has_law = law_type:law_wealth_voting
-			has_law = law_type:law_landed_voting
-		}
 	}
 
 	cancellation_trigger = { in_election_campaign = no }
 
 	immediate = {
-		random_country = {
-			limit = {
-				NOT = { this = root }
-				has_technology_researched = social_media
-				AND = {
-					has_diplomatic_pact = { who = ROOT type = rivalry }
-					country_rank >= rank_value:great_power
-				}
-			}
-			save_scope_as = interfering_country
-		}
+		save_scope_as = interference_target
 	}
 
 	option = {
@@ -1332,6 +1309,13 @@ society_technology_events.14 = {
 				ANTI_AMOUNT = -1
 				FACTOR = appeasement_relations_decreased
 			}
+			# The meddler learns what we found and how we answered (.33).
+			hidden_effect = {
+				scope:interfering_country = {
+					set_variable = { name = te_ea_ir_meddling_outcome value = 1 days = 120 }
+					trigger_event = { id = society_technology_events.33 days = 3 }
+				}
+			}
 		}
 		add_electoral_confidence = -0.1
 	}
@@ -1349,6 +1333,15 @@ society_technology_events.14 = {
 		}
 		add_radicals = { value = small_radicals pop_type = academics }
 		add_electoral_confidence = -0.05
+		if = {
+			limit = { exists = scope:interfering_country }
+			hidden_effect = {
+				scope:interfering_country = {
+					set_variable = { name = te_ea_ir_meddling_outcome value = 2 days = 120 }
+					trigger_event = { id = society_technology_events.33 days = 3 }
+				}
+			}
+		}
 	}
 
 	option = {
@@ -1373,6 +1366,12 @@ society_technology_events.14 = {
 				PRO_AMOUNT = 1
 				ANTI_AMOUNT = -1
 				FACTOR = appeasement_relations_decreased
+			}
+			hidden_effect = {
+				scope:interfering_country = {
+					set_variable = { name = te_ea_ir_meddling_outcome value = 3 days = 120 }
+					trigger_event = { id = society_technology_events.33 days = 3 }
+				}
 			}
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
@@ -1911,6 +1910,9 @@ society_technology_events.20 = {
 
 # Event 21: Telepathic Diplomacy
 # Can shared consciousness bridge international divides?
+# Our own diplomats propose the channel (the option is our choice); the partner
+# is any other country with telepathic communities, and it decides in .34
+# whether the channel opens.
 society_technology_events.21 = {
 	type = country_event
 	placement = root
@@ -1939,6 +1941,7 @@ society_technology_events.21 = {
 
 	immediate = {
 		set_variable = ste_event_21_fired
+		save_scope_as = telepathic_proposer
 		random_country = {
 			limit = {
 				NOT = { this = root }
@@ -1954,15 +1957,14 @@ society_technology_events.21 = {
 		ai_chance = {
 			base = 3
 		}
-		# Attempt telepathic diplomatic channel
-		add_modifier = {
-			name = ste_telepathic_diplomacy
-			days = long_modifier_time
-			is_decaying = yes
-		}
+		# Propose the channel: it opens (for both, +30 relations) only if the
+		# partner accepts in .34; we hear its answer in .35.
 		if = {
 			limit = { exists = scope:telepathic_partner }
-			change_relations = { country = scope:telepathic_partner value = 30 }
+			custom_tooltip = STE_TELEPATHIC_PROPOSAL_TT
+			scope:telepathic_partner = {
+				trigger_event = { id = society_technology_events.34 days = 7 }
+			}
 		}
 	}
 
@@ -2883,5 +2885,275 @@ society_technology_events.31 = {
 		}
 		add_loyalists = { value = small_radicals strata = lower }
 		add_loyalists = { value = very_small_radicals pop_type = academics }
+	}
+}
+
+# ============================================================================
+# PRECURSOR EVENTS (the actor's own choice)
+# ============================================================================
+
+# Event 32: A Thumb on the Scale (-> .14 on the rival)
+# The rival great power decides whether to meddle in a rival's election
+# campaign; .14 fires on the target only if it does. Covert-disabled only,
+# like .14: with covert warfare enabled this is the election interference
+# operation.
+society_technology_events.32 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/social_media_campaign.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	title = society_technology_events.32.t
+	desc = society_technology_events.32.d
+	flavor = society_technology_events.32.f
+
+	duration = 3
+
+	trigger = {
+		# The dedicated system owns this outcome when enabled.
+		has_game_rule = covert_warfare_disabled
+		has_technology_researched = social_media
+		country_rank >= rank_value:great_power
+		NOR = {
+			has_modifier = te_ea_ir_election_meddling_modifier
+			has_variable = te_ea_ir_meddling_declined
+		}
+		any_country = { te_ea_ir_election_target = yes }
+	}
+
+	immediate = {
+		save_scope_as = interfering_country
+		random_country = {
+			limit = { te_ea_ir_election_target = yes }
+			save_scope_as = interference_target
+			# The victim's lockout (.14's old ten-year cooldown), set when we are
+			# asked so no second country can pick it inside .14's delay.
+			# Declining shortens it below.
+			set_variable = { name = te_ea_ir_meddling_lockout value = yes days = long_modifier_time }
+		}
+	}
+
+	option = {
+		name = society_technology_events.32.a
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = {
+					OR = {
+						has_attitude = { who = scope:interference_target attitude = antagonistic }
+						has_attitude = { who = scope:interference_target attitude = belligerent }
+					}
+				}
+				add = 2
+			}
+		}
+		# Run the campaign - it will be noticed and traced
+		add_modifier = {
+			name = te_ea_ir_election_meddling_modifier
+			days = short_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = TE_EA_IR_MEDDLING_RIVAL_TT
+		scope:interference_target = {
+			trigger_event = { id = society_technology_events.14 days = 3 }
+		}
+	}
+
+	option = {
+		name = society_technology_events.32.b
+		# Decline is the default: a lapsed event must not start a campaign.
+		default_option = yes
+		ai_chance = { base = 1 }
+		# Leave their voters alone
+		set_variable = { name = te_ea_ir_meddling_declined value = yes days = 365 }
+		# Nothing happened to them, so their slot reopens sooner.
+		hidden_effect = {
+			scope:interference_target = {
+				set_variable = { name = te_ea_ir_meddling_lockout value = yes days = very_short_modifier_time }
+			}
+		}
+	}
+}
+
+# ============================================================================
+# NOTICES (the other party's answer)
+# ============================================================================
+
+# Event 33: Traced to Us (-> the meddler, after the target answers .14)
+# Root = scope:interfering_country. var:te_ea_ir_meddling_outcome says which
+# option the target took: 1 counter-influence, 2 downplayed, 3 cyber defense.
+society_technology_events.33 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/social_media_crisis.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/event_election.dds"
+
+	title = society_technology_events.33.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = te_ea_ir_meddling_outcome
+					var:te_ea_ir_meddling_outcome = 2
+				}
+				desc = society_technology_events.33.d_downplayed
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = te_ea_ir_meddling_outcome
+					var:te_ea_ir_meddling_outcome = 3
+				}
+				desc = society_technology_events.33.d_cyber
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = society_technology_events.33.d_counter
+			}
+		}
+	}
+	flavor = society_technology_events.33.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:interference_target
+	}
+
+	option = {
+		name = society_technology_events.33.a
+		default_option = yes
+		ai_chance = { base = 100 }
+		if = {
+			limit = { has_variable = te_ea_ir_meddling_outcome }
+			remove_variable = te_ea_ir_meddling_outcome
+		}
+	}
+}
+
+# Event 34: A Channel Offered (-> the partner chosen in .21)
+# Root = scope:telepathic_partner. The proposer chose to ask; the channel, its
+# modifier and the +30 relations happen only if we accept.
+society_technology_events.34 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/telepathic_diplomacy_link.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = society_technology_events.34.t
+	desc = society_technology_events.34.d
+	flavor = society_technology_events.34.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:telepathic_proposer
+	}
+
+	option = {
+		name = society_technology_events.34.a
+		default_option = yes
+		ai_chance = { base = 3 }
+		# Open the channel for both governments
+		add_modifier = {
+			name = ste_telepathic_diplomacy
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		change_relations = { country = scope:telepathic_proposer value = 30 }
+		custom_tooltip = STE_TELEPATHIC_ACCEPTED_TT
+		hidden_effect = {
+			scope:telepathic_proposer = {
+				set_variable = { name = ste_telepathic_answer value = 1 days = 120 }
+				trigger_event = { id = society_technology_events.35 days = 3 }
+			}
+		}
+	}
+
+	option = {
+		name = society_technology_events.34.b
+		ai_chance = { base = 2 }
+		# Keep our thoughts our own
+		add_loyalists = { value = small_radicals strata = upper }
+		custom_tooltip = STE_TELEPATHIC_DECLINED_TT
+		hidden_effect = {
+			scope:telepathic_proposer = {
+				set_variable = { name = ste_telepathic_answer value = 2 days = 120 }
+				trigger_event = { id = society_technology_events.35 days = 3 }
+			}
+		}
+	}
+}
+
+# Event 35: The Partner's Answer (-> the proposer of .21)
+# Root = scope:telepathic_proposer. var:ste_telepathic_answer: 1 accepted (the
+# channel opens here too), 2 declined.
+society_technology_events.35 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/telepathic_diplomacy_link.dds" }
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	title = society_technology_events.35.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = ste_telepathic_answer
+					var:ste_telepathic_answer = 1
+				}
+				desc = society_technology_events.35.d_accepted
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = society_technology_events.35.d_declined
+			}
+		}
+	}
+	flavor = society_technology_events.35.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:telepathic_partner
+	}
+
+	option = {
+		name = society_technology_events.35.a
+		trigger = {
+			has_variable = ste_telepathic_answer
+			var:ste_telepathic_answer = 1
+		}
+		default_option = yes
+		ai_chance = { base = 100 }
+		add_modifier = {
+			name = ste_telepathic_diplomacy
+			days = long_modifier_time
+			is_decaying = yes
+		}
+		remove_variable = ste_telepathic_answer
+	}
+
+	option = {
+		name = society_technology_events.35.b
+		trigger = {
+			OR = {
+				NOT = { has_variable = ste_telepathic_answer }
+				NOT = { var:ste_telepathic_answer = 1 }
+			}
+		}
+		default_option = yes
+		ai_chance = { base = 100 }
+		if = {
+			limit = { has_variable = ste_telepathic_answer }
+			remove_variable = ste_telepathic_answer
+		}
 	}
 }

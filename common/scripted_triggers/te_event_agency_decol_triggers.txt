@@ -1,0 +1,66 @@
+﻿# ============================================================================
+# EVENT AGENCY — DECOLONIZATION
+# Who may be asked the questions in decolonization_events.60 / .61, the
+# precursors that give a former colony the choice before its former overlord
+# hears of an overture (.5) or a reparations claim (.6).
+#
+# Both are rolled in decolonization_events_on_action on the former overlord and
+# fired on one of its former colonies; the pool entry and the precursor's own
+# `trigger` call the same triggers below, so they cannot drift apart.
+# var:former_overlord is set on the released country by
+# te_construction_market_on_released_* (common/on_actions/
+# te_construction_market_on_actions.txt).
+# ============================================================================
+
+# Scope: country (a candidate former colony). Independent, and its former
+# overlord still exists.
+decol_is_independent_former_colony = {
+	has_variable = former_overlord
+	is_subject = no
+	var:former_overlord ?= {
+		is_country_alive = yes
+	}
+}
+
+# Scope: country (a former overlord). It may be approached for closer ties —
+# the conditions decolonization_events.5 used to check on itself — and no other
+# overture is in flight (decol_ties_overture_cd, set by .60).
+decol_ties_overture_target_ok = {
+	has_journal_entry = je_colonial_empire
+	has_technology_researched = decolonization
+	country_rank >= rank_value:major_power
+	NOT = { any_subject_or_below = { always = yes } }
+	NOT = { has_modifier = post_colonial_partnership_modifier }
+	NOT = { has_variable = decol_ties_overture_cd }
+}
+
+# Scope: country (a former colony). It can be asked whether to seek closer ties
+# with its former overlord (decolonization_events.60).
+decol_can_seek_ties_with_former_overlord = {
+	decol_is_independent_former_colony = yes
+	NOT = { has_variable = decol_ties_not_now }
+	var:former_overlord ?= {
+		decol_ties_overture_target_ok = yes
+	}
+}
+
+# Scope: country (a former overlord). A reparations claim may be put to it —
+# the conditions decolonization_events.6 used to check on itself — and no other
+# claim is in flight (decol_reparations_demand_cd, set by .61).
+decol_reparations_demand_target_ok = {
+	has_journal_entry = je_colonial_empire
+	has_technology_researched = decolonization
+	country_rank >= rank_value:major_power
+	NOT = { has_modifier = colonial_reparations_modifier }
+	NOT = { has_variable = decol_reparations_demand_cd }
+}
+
+# Scope: country (a former colony). It can be asked whether to demand
+# reparations of its former overlord (decolonization_events.61).
+decol_can_demand_reparations_from_former_overlord = {
+	decol_is_independent_former_colony = yes
+	NOT = { has_variable = decol_reparations_not_now }
+	var:former_overlord ?= {
+		decol_reparations_demand_target_ok = yes
+	}
+}

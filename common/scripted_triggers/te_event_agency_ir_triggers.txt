@@ -1,0 +1,131 @@
+﻿# ============================================================================
+# EVENT AGENCY (package ir) - scripted triggers
+# ============================================================================
+# "Give the accused country the choice first." Each event that used to pick a
+# rival and tell the player that rival had acted (an arms buildup, a
+# propaganda offensive, a spy, election meddling, a terror cell) now starts
+# with a precursor event on the actor, which picks the victim and offers the
+# act. Only if the actor chooses it does the victim's event fire.
+#
+# Each trigger below is the victim's old event trigger, mirrored onto the
+# candidate victim, and is read in three places that must agree: the
+# precursor's pool entry, the precursor's own `trigger`, and the precursor's
+# `random_country` pick. A candidate the pick would reject can't satisfy the
+# trigger either.
+#
+# Each precursor also sets a timed lockout variable on the victim it picks,
+# in its own `immediate` (so the victim is off the table from the moment an
+# actor is asked, and two actors can't pick it inside the delay before the
+# victim's event). It stands in for the victim event's old `cooldown`, which
+# a pick can't read; declining shortens it to a year.
+#
+# Scope: the candidate victim country. ROOT: the actor.
+# ============================================================================
+
+# international_relations_events.201 -> .1: a rival the actor's buildup is
+# aimed at. The modifiers are .1's old trigger (a country still carrying the
+# answer to a previous buildup isn't picked again); te_ea_ir_arms_race_lockout
+# is .201's lockout.
+te_ea_ir_arms_race_target = {
+	NOT = { this = ROOT }
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	country_rank >= rank_value:major_power
+	NOT = { is_country_type = decentralized }
+	has_technology_researched = radar
+	NOR = {
+		has_modifier = arms_race_escalation_modifier
+		has_modifier = diplomatic_overture_modifier
+		has_modifier = diplomatic_overture_rebuffed_modifier
+		has_modifier = arms_race_ignored_modifier
+		has_variable = te_ea_ir_arms_race_lockout
+	}
+}
+
+# international_relations_events.202 -> .4: a rival whose press the actor's
+# propaganda offensive targets. .4's old trigger (mass media, and not still
+# carrying its answer to a previous campaign), plus the pool's rank gate;
+# te_ea_ir_propaganda_lockout is .202's lockout.
+te_ea_ir_propaganda_target = {
+	NOT = { this = ROOT }
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	country_rank >= rank_value:major_power
+	NOT = { is_country_type = decentralized }
+	has_technology_researched = mass_media
+	NOR = {
+		has_modifier = propaganda_campaign_modifier
+		has_modifier = propaganda_ignored_modifier
+		has_variable = te_ea_ir_propaganda_lockout
+	}
+}
+
+# international_relations_events.203 -> .6: a rival the actor plants an agent
+# in. .6's old trigger (cryptography for the counterintelligence that catches
+# him; not still carrying its answer to the last spy), plus the pool's rank
+# gate; te_ea_ir_spy_lockout is .203's lockout.
+te_ea_ir_espionage_target = {
+	NOT = { this = ROOT }
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	country_rank >= rank_value:major_power
+	NOT = { is_country_type = decentralized }
+	has_technology_researched = cryptography
+	NOR = {
+		has_modifier = espionage_scandal_modifier
+		has_modifier = espionage_prisoner_exchange_modifier
+		has_variable = te_ea_ir_spy_lockout
+	}
+}
+
+# international_relations_events.8: the other side of a real nuclear dispute.
+# A nuclear-armed country opposing ROOT in a diplomatic play that is not yet a
+# war, with neither party already in a deterrence crisis (a crisis belongs to
+# the nuclear weapons journal entry, nuclear_crisis_effects.txt).
+te_ea_ir_brinkmanship_opponent = {
+	NOT = { this = ROOT }
+	nd_is_armed = yes
+	is_diplomatic_play_enemy_of = ROOT
+	NOT = { has_war_with = ROOT }
+	nd_crisis_parties_free = { TARGET = ROOT }
+}
+
+# society_technology_events.32 -> .14: a rival in the middle of an election
+# campaign whose voters the actor's troll farms could reach. .14's old
+# trigger (a real election with social media, not still carrying its answer
+# to the last interference); te_ea_ir_meddling_lockout is .32's lockout (.14's
+# old ten-year cooldown).
+te_ea_ir_election_target = {
+	NOT = { this = ROOT }
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	in_election_campaign = yes
+	has_technology_researched = social_media
+	NOT = { has_law = law_type:law_single_party_state }
+	OR = {
+		has_law = law_type:law_universal_suffrage
+		has_law = law_type:law_census_voting
+		has_law = law_type:law_wealth_voting
+		has_law = law_type:law_landed_voting
+	}
+	NOR = {
+		has_modifier = ste_election_interference_counter
+		has_modifier = ste_election_interference_ignored
+		has_variable = te_ea_ir_meddling_lockout
+	}
+}
+
+# social_tensions_events.17 -> .2: a rival whose exiles the actor could arm.
+# .2's old trigger: a major power with the counter-terrorism era, not still
+# carrying its answer to the last cell, and without the level-5 intelligence
+# ministry that keeps foreign terror cells out; te_ea_ir_terror_cell_lockout is
+# .17's lockout (.2's old ten-year cooldown).
+te_ea_ir_militant_target = {
+	NOT = { this = ROOT }
+	has_diplomatic_pact = { who = ROOT type = rivalry }
+	country_rank >= rank_value:major_power
+	NOT = { is_country_type = decentralized }
+	has_technology_researched = terrorism_and_anti_terrorism
+	NOR = {
+		has_modifier = foreign_terror_retaliation_modifier
+		has_modifier = foreign_terror_diplomacy_modifier
+		has_variable = te_ea_ir_terror_cell_lockout
+	}
+	NOT = { has_intelligence_ministry_5 = yes }
+}
