@@ -1,8 +1,12 @@
 ﻿### Strategic Reserve JE widget — reserve inventory
 ###
-### One row per unlocked reserve good: icon + name, stored / capacity, fill
-### bar, configured signed rate, actual net weekly movement, annual decay rate,
-### status label, and decrease / stop / increase controls. Replaces the old
+### One row per unlocked reserve good, five lines deep:
+###   1. icon + name, fill bar, status label, decrease / stop / increase
+###   2. stored / capacity, configured signed rate, actual net weekly movement
+###   3. annual decay rate and this week's decay loss
+###   4. reserve policy, price signal, policy flow (gear opens the settings)
+###   5. the policy's plain-language explanation
+### Clicking the good's name collapses the row to line 1. Replaces the old
 ### stand-alone step badge, the seven full-width scripted progress bars and the
 ### fourteen per-good journal-entry buttons.
 ###
@@ -25,14 +29,17 @@
 ###   - net movement    -> ScriptValue('st_res_<good>_last_net'), i.e. the
 ###                        post-clamp delta recorded by the weekly pulse
 ###   - decay rate      -> ScriptValue('st_res_<good>_annual_decay_rate'), the
-###                        same value the weekly bookkeeping divides by 52
+###                        same value the weekly bookkeeping divides by 52,
+###                        and ScriptValue('st_res_<good>_weekly_decay')
+###   - collapsed       -> GetVariableSystem key 'st_res_row_collapsed_<good>',
+###                        presentation only (no script reads it)
 ###
 ### The three controls share one scripted GUI per good and differ only by the
 ### 'dir' saved scope (0 = decrease, 1 = stop, 2 = increase). Adding a good
 ### means one new row instance here plus two new sguis — see
 ### .claude/skills/add-strategic-reserve-good/SKILL.md.
 ###
-### RESERVE POLICIES (lines 3-4 and the collapsible settings panel)
+### RESERVE POLICIES (lines 4-5 and the collapsible settings panel)
 ###   - policy name    -> GetCustom('st_res_<good>_policy_text'), driven by the
 ###                       st_res_<good>_policy variable
 ###   - explanation    -> GetCustom('st_res_<good>_policy_reason_text'), driven
@@ -52,7 +59,7 @@
 ###   0-3   select policy   Manual / Buy When Cheap / Release When Expensive /
 ###                         Stabilize Prices. The four buttons use the SHORT
 ###                         labels (st_res_policy_short_*) so they fit the
-###                         116px button; line 3 and the tooltips carry the
+###                         116px button; line 4 and the tooltips carry the
 ###                         full names.
 ###   10-12 apply preset    Conservative / Standard / Aggressive
 ###   20/21 purchase threshold  - / +      26/27 protected stockpile - / +
@@ -97,9 +104,16 @@ types strategic_reserve_widget_types
 	}
 
 	### One inventory row. The instance supplies `datacontext` (the good's
-	### scripted GUI), `visible`, `tooltip` and the six text/value blocks;
-	### everything else — including all three control buttons — is identical
-	### for every good because the buttons read the inherited ScriptedGui.
+	### scripted GUI), `visible`, `tooltip`, the six text/value blocks and the
+	### two collapse blocks; everything else — including all three control
+	### buttons — is identical for every good because the buttons read the
+	### inherited ScriptedGui.
+	###
+	### Line 1 is always shown. Lines 2-5 and the settings panel sit in one
+	### container that `row_details_visible` hides when the player collapses
+	### the row by clicking the good's name. Like the settings panel, that is
+	### presentation only: a GetVariableSystem key no script reads, not saved,
+	### and a collapsed good keeps storing, releasing and running its policy.
 	type widget_je_st_res_inventory_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -112,27 +126,37 @@ types strategic_reserve_widget_types
 			alpha = 0.5
 		}
 
-		### Line 1 — good, stock vs capacity, status, controls
+		### Line 1 — good (click to collapse), fill bar, status, controls
 		flowcontainer = {
 			direction = horizontal
 			spacing = 4
 
-			textbox = {
-				block "row_name" {}
+			### Untextured button: the name reads as plain text, and clicking it
+			### toggles the row. Its tooltip replaces the row tooltip over the
+			### name only.
+			button = {
 				size = { 150 30 }
-				align = left|nobaseline
-				using = fontsize_large
 				parentanchor = vcenter
-				elide = right
+				block "row_collapse_toggle" {}
+
+				textbox = {
+					block "row_name" {}
+					size = { 150 30 }
+					align = left|nobaseline
+					using = fontsize_large
+					elide = right
+				}
 			}
 
-			textbox = {
-				block "row_amount" {}
-				size = { 135 30 }
-				align = right|nobaseline
-				using = fontsize_medium
+			default_progressbar_horizontal = {
+				size = { 135 16 }
 				parentanchor = vcenter
-				elide = right
+
+				blockoverride "values" {
+					block "row_bar_value" {}
+					min = 0
+					max = 100
+				}
 			}
 
 			textbox = {
@@ -177,79 +201,84 @@ types strategic_reserve_widget_types
 			}
 		}
 
-		### Line 2 — fill bar, the configured rate vs. the actual net change, and
-		### the annual decay rate. 120 + 270 + 106 + two 6px gaps = 508, the
-		### width line 1 already sets, so the decay cell does not widen the row.
+		### Lines 2-5 and the settings panel — hidden while the row is collapsed.
 		flowcontainer = {
-			direction = horizontal
-			spacing = 6
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			block "row_details_visible" {}
 
-			default_progressbar_horizontal = {
-				size = { 120 16 }
-				parentanchor = vcenter
+			### Line 2 — stored vs. capacity, the configured rate and the actual
+			### net change. 170 + 6 + 332 = 508, the width line 1 sets.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 6
 
-				blockoverride "values" {
-					block "row_bar_value" {}
-					min = 0
-					max = 100
+				textbox = {
+					block "row_amount" {}
+					size = { 170 22 }
+					align = left|nobaseline
+					using = fontsize_medium
+					parentanchor = vcenter
+					elide = right
+				}
+
+				textbox = {
+					block "row_flow" {}
+					size = { 332 22 }
+					align = left|nobaseline
+					using = fontsize_medium
+					parentanchor = vcenter
+					elide = right
 				}
 			}
 
-			textbox = {
-				block "row_flow" {}
-				size = { 270 22 }
-				align = left|nobaseline
-				using = fontsize_medium
-				parentanchor = vcenter
-				elide = right
-			}
-
+			### Line 3 — annual decay rate and what it costs this week.
 			textbox = {
 				block "row_decay" {}
-				size = { 106 22 }
-				align = right|nobaseline
-				using = fontsize_medium
-				parentanchor = vcenter
-				elide = right
-			}
-		}
-
-		### Line 3 — the good's reserve policy, the market price signal driving
-		### it, and the weekly flow that policy has settled on. The gear button
-		### expands the settings panel below.
-		flowcontainer = {
-			direction = horizontal
-			spacing = 4
-
-			button_icon_settings = {
-				size = { 24 24 }
-				parentanchor = vcenter
-				block "row_policy_toggle" {}
-			}
-
-			textbox = {
-				block "row_policy" {}
-				size = { 462 22 }
+				size = { 490 22 }
 				align = left|nobaseline
 				using = fontsize_medium
-				parentanchor = vcenter
 				elide = right
 			}
-		}
 
-		### Line 4 — the plain-language explanation. Comes straight from
-		### st_res_<good>_policy_status via customizable localization; the GUI
-		### never works out why a lane is paused.
-		textbox = {
-			block "row_policy_reason" {}
-			size = { 490 22 }
-			align = left|nobaseline
-			using = fontsize_small
-			elide = right
-		}
+			### Line 4 — the good's reserve policy, the market price signal
+			### driving it, and the weekly flow that policy has settled on. The
+			### gear button expands the settings panel below.
+			flowcontainer = {
+				direction = horizontal
+				spacing = 4
 
-		### Settings panel, collapsed by default.
-		block "row_policy_panel" {}
+				button_icon_settings = {
+					size = { 24 24 }
+					parentanchor = vcenter
+					block "row_policy_toggle" {}
+				}
+
+				textbox = {
+					block "row_policy" {}
+					size = { 462 22 }
+					align = left|nobaseline
+					using = fontsize_medium
+					parentanchor = vcenter
+					elide = right
+				}
+			}
+
+			### Line 5 — the plain-language explanation. Comes straight from
+			### st_res_<good>_policy_status via customizable localization; the
+			### GUI never works out why a lane is paused.
+			textbox = {
+				block "row_policy_reason" {}
+				size = { 490 22 }
+				align = left|nobaseline
+				using = fontsize_small
+				elide = right
+			}
+
+			### Settings panel, collapsed by default.
+			block "row_policy_panel" {}
+		}
 	}
 
 	### One control in the policy selector or the preset row. The op code is the
@@ -587,6 +616,13 @@ flowcontainer = {
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 		tooltip = "st_res_row_grain_tooltip"
 
+		blockoverride "row_collapse_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_grain' )]"
+			tooltip = "st_res_row_collapse_tooltip"
+		}
+		blockoverride "row_details_visible" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_grain' ) )]"
+		}
 		blockoverride "row_name" { text = "st_res_row_grain_name" }
 		blockoverride "row_amount" { text = "st_res_row_grain_amount" }
 		blockoverride "row_status" { text = "st_res_row_grain_status" }
@@ -642,6 +678,13 @@ flowcontainer = {
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 		tooltip = "st_res_row_ammunition_tooltip"
 
+		blockoverride "row_collapse_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_ammunition' )]"
+			tooltip = "st_res_row_collapse_tooltip"
+		}
+		blockoverride "row_details_visible" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_ammunition' ) )]"
+		}
 		blockoverride "row_name" { text = "st_res_row_ammunition_name" }
 		blockoverride "row_amount" { text = "st_res_row_ammunition_amount" }
 		blockoverride "row_status" { text = "st_res_row_ammunition_status" }
@@ -697,6 +740,13 @@ flowcontainer = {
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 		tooltip = "st_res_row_oil_tooltip"
 
+		blockoverride "row_collapse_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_oil' )]"
+			tooltip = "st_res_row_collapse_tooltip"
+		}
+		blockoverride "row_details_visible" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_oil' ) )]"
+		}
 		blockoverride "row_name" { text = "st_res_row_oil_name" }
 		blockoverride "row_amount" { text = "st_res_row_oil_amount" }
 		blockoverride "row_status" { text = "st_res_row_oil_status" }
@@ -752,6 +802,13 @@ flowcontainer = {
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 		tooltip = "st_res_row_small_arms_tooltip"
 
+		blockoverride "row_collapse_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_small_arms' )]"
+			tooltip = "st_res_row_collapse_tooltip"
+		}
+		blockoverride "row_details_visible" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_small_arms' ) )]"
+		}
 		blockoverride "row_name" { text = "st_res_row_small_arms_name" }
 		blockoverride "row_amount" { text = "st_res_row_small_arms_amount" }
 		blockoverride "row_status" { text = "st_res_row_small_arms_status" }
@@ -807,6 +864,13 @@ flowcontainer = {
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 		tooltip = "st_res_row_artillery_tooltip"
 
+		blockoverride "row_collapse_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_artillery' )]"
+			tooltip = "st_res_row_collapse_tooltip"
+		}
+		blockoverride "row_details_visible" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_artillery' ) )]"
+		}
 		blockoverride "row_name" { text = "st_res_row_artillery_name" }
 		blockoverride "row_amount" { text = "st_res_row_artillery_amount" }
 		blockoverride "row_status" { text = "st_res_row_artillery_status" }
@@ -862,6 +926,13 @@ flowcontainer = {
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 		tooltip = "st_res_row_aeroplanes_tooltip"
 
+		blockoverride "row_collapse_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_aeroplanes' )]"
+			tooltip = "st_res_row_collapse_tooltip"
+		}
+		blockoverride "row_details_visible" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_aeroplanes' ) )]"
+		}
 		blockoverride "row_name" { text = "st_res_row_aeroplanes_name" }
 		blockoverride "row_amount" { text = "st_res_row_aeroplanes_amount" }
 		blockoverride "row_status" { text = "st_res_row_aeroplanes_status" }
@@ -917,6 +988,13 @@ flowcontainer = {
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 		tooltip = "st_res_row_tanks_tooltip"
 
+		blockoverride "row_collapse_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_tanks' )]"
+			tooltip = "st_res_row_collapse_tooltip"
+		}
+		blockoverride "row_details_visible" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_tanks' ) )]"
+		}
 		blockoverride "row_name" { text = "st_res_row_tanks_name" }
 		blockoverride "row_amount" { text = "st_res_row_tanks_amount" }
 		blockoverride "row_status" { text = "st_res_row_tanks_status" }
@@ -972,6 +1050,13 @@ flowcontainer = {
 		visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'dir', MakeScopeValue( '(CFixedPoint)1' ) ).End )]"
 		tooltip = "st_res_row_fertilizer_tooltip"
 
+		blockoverride "row_collapse_toggle" {
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_fertilizer' )]"
+			tooltip = "st_res_row_collapse_tooltip"
+		}
+		blockoverride "row_details_visible" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_fertilizer' ) )]"
+		}
 		blockoverride "row_name" { text = "st_res_row_fertilizer_name" }
 		blockoverride "row_amount" { text = "st_res_row_fertilizer_amount" }
 		blockoverride "row_status" { text = "st_res_row_fertilizer_status" }
