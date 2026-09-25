@@ -633,8 +633,11 @@ decolonization_events.5 = {
 
 	duration = 3
 
+	# The overture must still stand three days on: a colony annexed or
+	# collapsed in the meantime has proposed nothing we could answer.
 	trigger = {
 		exists = scope:former_colony
+		scope:former_colony = { is_country_alive = yes }
 	}
 
 	immediate = {
@@ -700,8 +703,15 @@ decolonization_events.6 = {
 
 	duration = 3
 
+	# The claim must still stand three days on: a claimant annexed or
+	# collapsed in the meantime is owed nothing, and option A reads the sum
+	# it named (var:decol_reparations_claim, set by .61).
 	trigger = {
 		exists = scope:reparations_claimant
+		scope:reparations_claimant = {
+			is_country_alive = yes
+			has_variable = decol_reparations_claim
+		}
 	}
 
 	immediate = {
@@ -714,8 +724,8 @@ decolonization_events.6 = {
 		ai_chance = { base = 1 }
 		# The sum the claimant named in decolonization_events.61 changes hands:
 		# out of our treasury, into theirs (the swap-settle shape of
-		# te_mon_effect_swap_settle). decol_reparations_value sized it.
-		custom_tooltip = decolonization_events.6.a_tt
+		# te_mon_effect_swap_settle). decol_reparations_value sized it; .6.d
+		# names it, and the two add_treasury tooltips show it moving.
 		add_treasury = {
 			value = scope:reparations_claimant.var:decol_reparations_claim
 			multiply = -1
