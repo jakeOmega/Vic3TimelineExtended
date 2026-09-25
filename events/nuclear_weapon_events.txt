@@ -191,29 +191,31 @@ nuclear_weapon_events.2 = {
 
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
-	title = nuclear_weapon_events.2.t
 	# A launch out of an incident (nd_launch_or_intercept) was nobody's
 	# considered retribution: the unconfirmed warning, or a commander cut off
-	# from the capital. That path saves scope:nd_incident_launch_<kind> on us
-	# before the strike fires this event (#430). Saved scopes ride the whole
-	# chain, so a deliberate counter-strike later in it — the victim retaliates
-	# (.1), we answer (.11 b/c), nuclear_response_response_strike fires this
-	# event on us again — would inherit it; .11 marks its answer with
-	# scope:nd_deliberate_response, which the variants exclude.
+	# from the capital (#430). nd_strike_from_incident says which, and keeps a
+	# deliberate counter-strike later in the same chain (.11 b/c) on the
+	# ordinary text; the title, desc, flavor and option all read it.
+	title = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { nd_strike_from_incident = yes }
+				desc = nuclear_weapon_events.2.t_incident
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.2.t
+			}
+		}
+	}
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = {
-					scope:nd_incident_launch_warning ?= ROOT
-					NOT = { exists = scope:nd_deliberate_response }
-				}
+				trigger = { nd_strike_from_incident_of = { KIND = warning } }
 				desc = nuclear_weapon_events.2.d_warning
 			}
 			triggered_desc = {
-				trigger = {
-					scope:nd_incident_launch_commander ?= ROOT
-					NOT = { exists = scope:nd_deliberate_response }
-				}
+				trigger = { nd_strike_from_incident_of = { KIND = commander } }
 				desc = nuclear_weapon_events.2.d_commander
 			}
 			triggered_desc = {
@@ -225,13 +227,7 @@ nuclear_weapon_events.2 = {
 	flavor = {
 		first_valid = {
 			triggered_desc = {
-				trigger = {
-					OR = {
-						scope:nd_incident_launch_warning ?= ROOT
-						scope:nd_incident_launch_commander ?= ROOT
-					}
-					NOT = { exists = scope:nd_deliberate_response }
-				}
+				trigger = { nd_strike_from_incident = yes }
 				desc = nuclear_weapon_events.2.f_incident
 			}
 			triggered_desc = {
@@ -251,8 +247,17 @@ nuclear_weapon_events.2 = {
 		post_notification = industrial_nuke_succeeds_attacker
 	}
 
+	# "The necessity of this dire action" — only for a strike someone chose.
 	option = {
 		name = nuclear_weapon_events.2.a
+		trigger = { nd_strike_from_incident = no }
+		default_option = yes
+	}
+
+	# The same answer to a launch nobody in the capital ordered.
+	option = {
+		name = nuclear_weapon_events.2.a_incident
+		trigger = { nd_strike_from_incident = yes }
 		default_option = yes
 	}
 }
@@ -364,7 +369,7 @@ nuclear_weapon_events.6 = {
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { scope:nd_incident_launch_commander ?= ROOT }
+				trigger = { nd_strike_from_incident_of = { KIND = commander } }
 				desc = nuclear_weapon_events.6.d_commander
 			}
 			triggered_desc = {
@@ -376,7 +381,7 @@ nuclear_weapon_events.6 = {
 	flavor = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { scope:nd_incident_launch_commander ?= ROOT }
+				trigger = { nd_strike_from_incident_of = { KIND = commander } }
 				desc = nuclear_weapon_events.6.f_commander
 			}
 			triggered_desc = {
@@ -396,8 +401,17 @@ nuclear_weapon_events.6 = {
 		post_notification = tactical_nuke_succeeds_attacker
 	}
 
+	# "A victory" — for a strike someone chose.
 	option = {
 		name = nuclear_weapon_events.6.a
+		trigger = { NOT = { nd_strike_from_incident_of = { KIND = commander } } }
+		default_option = yes
+	}
+
+	# The same answer to a commander's own launch (#430).
+	option = {
+		name = nuclear_weapon_events.6.a_commander
+		trigger = { nd_strike_from_incident_of = { KIND = commander } }
 		default_option = yes
 	}
 }
@@ -965,12 +979,7 @@ nuclear_weapon_events.17 = {
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = {
-					OR = {
-						scope:nd_incident_launch_warning ?= ROOT
-						scope:nd_incident_launch_commander ?= ROOT
-					}
-				}
+				trigger = { nd_strike_from_incident = yes }
 				desc = nuclear_weapon_events.17.d_incident
 			}
 			triggered_desc = {
@@ -1014,9 +1023,26 @@ nuclear_weapon_events.17 = {
 		}
 	}
 
-	# "History will judge us."
+	# "History will judge us — but we did what we had to." Only for a use
+	# someone chose; after an incident the same answer reads as .b_incident
+	# (#430). Identical effects.
 	option = {
 		name = nuclear_weapon_events.17.b
+		trigger = { nd_strike_from_incident = no }
+		add_modifier = { name = prestige_gain_small days = normal_modifier_time is_decaying = yes }
+		every_interest_group = {
+			limit = { is_interest_group_type = ig_intelligentsia }
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time is_decaying = yes }
+		}
+		ai_chance = {
+			base = 3
+			modifier = { trigger = { ruler_is_cautious = yes } add = 5 }
+		}
+	}
+
+	option = {
+		name = nuclear_weapon_events.17.b_incident
+		trigger = { nd_strike_from_incident = yes }
 		add_modifier = { name = prestige_gain_small days = normal_modifier_time is_decaying = yes }
 		every_interest_group = {
 			limit = { is_interest_group_type = ig_intelligentsia }
@@ -1256,19 +1282,39 @@ nuclear_weapon_events.18 = {
 	}
 
 	# Option D — Anyone: "Lobby for international non-proliferation."
-	# Through the United Nations when the Assembly can take it up (#430): we
-	# table the Non-Proliferation Treaty with its own proposer event,
-	# un_events.14, which reserves the floor and opens the vote, and whose
-	# inspections are then what slows threshold programmes. Otherwise —
-	# no UN, not a member, the treaty already in force or the floor taken —
+	# Through the United Nations when the Assembly can take it up (#430): the
+	# Non-Proliferation Treaty goes on the docket as an item offered to us
+	# first, through its own proposer event, un_events.14 — which reserves
+	# the floor and opens the vote, and whose inspections are then what slows
+	# threshold programmes. Otherwise — no UN, not a member, the treaty
+	# already in force, the floor taken, or an offer already made to us —
 	# bilateral pressure, as before.
+	#
+	# The offer is made the docket's way, so un_events.14's "leave it to
+	# another delegation" and "we will not limit our deterrent" options, which
+	# pass the item on (un_docket_offer_topic_next), work as they do for a
+	# docket item: un_docket_offer_topic with us as the first offeree. The
+	# offer count restarts at our offer (a new item: the docket's own item in
+	# hand, if any, loses no offers to ours), and we are marked offered for 60
+	# days, so a pass cannot send the item straight back to us. This is
+	# un_docket_send_offer's body without its one-day delay: fired at once,
+	# un_events.14 reserves the floor before anyone else answering the same
+	# alert can pick this option, and they lobby bilaterally instead of
+	# queueing an offer the reserved floor would silently drop.
+	# nuclear_npt_lobbied tells un_events.14 that we asked for it: an AI that
+	# did then tables the treaty rather than passing or refusing it.
 	option = {
 		name = nuclear_weapon_events.18.opt_d
 		default_option = yes
 		if = {
 			limit = { nuclear_program_can_table_npt = yes }
 			custom_tooltip = NW_PROLIF_LOBBY_UN_TT
-			trigger_event = { id = un_events.14 }
+			hidden_effect = {
+				set_variable = { name = nuclear_npt_lobbied value = 1 days = 30 }
+				set_variable = { name = un_dkt_offered value = 1 days = 60 }
+				set_global_variable = { name = un_dkt_offers value = 1 }
+				trigger_event = { id = un_events.14 }
+			}
 		}
 		else = {
 			custom_tooltip = {

@@ -270,6 +270,27 @@ nd_pledge_permits_strike = {
 	}
 }
 
+# Event scope, in the strike events nd_launch_or_intercept sets off on the
+# launcher (nuclear_weapon_events.2, .6, .17; ROOT = the launcher): did this
+# strike come out of an incident rather than a decision (#430)? KIND = warning
+# (a launch on an unconfirmed early warning) | commander (a unit cut off from
+# the capital). nd_launch_or_intercept saves scope:nd_incident_launch_<KIND> on
+# the launcher. Saved scopes ride the whole event chain, so a deliberate
+# counter-strike later in it (.11 options b/c → .2 again) marks itself with
+# scope:nd_deliberate_response, which rules this out. Read by those events'
+# title, desc, flavor and option variants, so they cannot disagree.
+nd_strike_from_incident_of = {
+	scope:nd_incident_launch_$KIND$ ?= ROOT
+	NOT = { exists = scope:nd_deliberate_response }
+}
+
+nd_strike_from_incident = {
+	OR = {
+		nd_strike_from_incident_of = { KIND = warning }
+		nd_strike_from_incident_of = { KIND = commander }
+	}
+}
+
 # May this country strike back at $ENEMY$ from a strike-response event
 # (nuclear_weapon_events.1 and .11 — the retaliation options, #430)? The gates
 # nuke_diplo_action puts on every launch, minus the law gates, which yield to

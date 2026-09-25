@@ -380,13 +380,54 @@ nd_weekly_update = {
 	# the law's force outranks the doctrine tenure. Moving to no first use is
 	# never a repudiation. Leaving it strikes the amendment (nd_set_doctrine),
 	# so this never pulls a country back to a doctrine it has repudiated.
+	#
+	# The law made the move, not the government, so it does not start the
+	# doctrine clock: nd_doctrine_months is put back as it was (tenure
+	# satisfied if it was missing). The two-year lock (nd_can_set_doctrine)
+	# and the six months before the interest groups judge a doctrine
+	# (nd_stance_*_value) both run on from the government's own last change —
+	# a country that repeals the amendment is not then held at no first use
+	# for two years. A human is told (nd_doctrine_bound_by_law).
+	#
+	# nd_nfu_amendment_repudiated (nd_strike_nfu_amendment) comes first: a
+	# repudiation made while the amendment was on the law being enacted. If
+	# the removal did not take there and the law has since passed with it, the
+	# amendment is struck from the passed law now, instead of binding us to a
+	# pledge we have paid to break. Once the amendment is not on file at all,
+	# the marker has done its job.
 	if = {
+		limit = { has_variable = nd_nfu_amendment_repudiated }
+		if = {
+			limit = { nd_nfu_amendment_in_force = yes }
+			remove_variable = nd_nfu_amendment_repudiated
+			nd_strike_nfu_amendment = yes
+		}
+		else_if = {
+			limit = { nd_nfu_amendment_on_file = no }
+			remove_variable = nd_nfu_amendment_repudiated
+		}
+	}
+	else_if = {
 		limit = {
+			nd_is_armed = yes
 			nd_is_initialized = yes
 			nd_doctrine_nfu = no
 			nd_nfu_amendment_in_force = yes
 		}
+		if = {
+			limit = { has_variable = nd_doctrine_months }
+			set_variable = { name = nd_doctrine_months_before_law value = var:nd_doctrine_months }
+		}
+		else = {
+			set_variable = { name = nd_doctrine_months_before_law value = nd_doctrine_tenure_months }
+		}
 		nd_set_doctrine_1 = yes
+		set_variable = { name = nd_doctrine_months value = var:nd_doctrine_months_before_law }
+		remove_variable = nd_doctrine_months_before_law
+		if = {
+			limit = { is_ai = no }
+			post_notification = nd_doctrine_bound_by_law
+		}
 	}
 	# ---- readiness transition: one step every nd_readiness_step_weeks ------
 	if = {
@@ -675,14 +716,24 @@ nd_break_pledge_effects = {
 
 # Strike the No-First-Strike Pledge amendment from the law it is on — the law
 # in force and the law we are enacting alike, so a repudiation during the
-# enactment is not undone when the law passes. Called only from
-# nd_set_doctrine, when leaving no first use repudiates it (#430). The
+# enactment is not undone when the law passes. Called from nd_set_doctrine,
+# when leaving no first use repudiates it (#430), and from nd_weekly_update's
+# fallback for a removal from the enacting law that did not take. The
 # vanilla removal shape (remove_electoral_fraud_effect,
 # 00_victoria_ip4_scripted_effects.txt). No on_deactivate hangs off the
 # amendment, so nothing loops back into the doctrine.
 nd_strike_nfu_amendment = {
 	custom_tooltip = nd_tt_nfu_amendment_struck
 	hidden_effect = {
+		# remove_amendment on a law still being enacted has no vanilla
+		# precedent. Should it not take, the law would pass with the
+		# amendment and the weekly binding would pull us back to no first use
+		# for free, after we had paid for the repudiation; this marker makes
+		# nd_weekly_update strike it from the passed law instead.
+		if = {
+			limit = { currently_enacting_law ?= { has_amendment = amendment_type:amendment_no_first_strike } }
+			set_variable = nd_nfu_amendment_repudiated
+		}
 		every_active_law = {
 			limit = { has_amendment = amendment_type:amendment_no_first_strike }
 			every_scope_amendment = {

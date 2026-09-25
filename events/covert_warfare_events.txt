@@ -319,8 +319,9 @@ covert_warfare.2 = {
 		set_variable = { name = iw_defender_event_cooldown value = yes }
 		set_variable = { name = iw_defender_event_cooldown_age value = 0 }
 		# Who ran it, for option b and its text. The record holds the country
-		# itself (covert_op_burn), so a perpetrator that has since been annexed
-		# leaves this unset and option b stays closed.
+		# itself (covert_op_burn), written on the burn's own tick; option b
+		# checks the perpetrator is still alive when it is clicked, so a
+		# country annexed while the popup is open closes it.
 		var:iw_last_exposed_country ?= { save_scope_as = iw_exposed_by }
 	}
 
@@ -352,6 +353,7 @@ covert_warfare.2 = {
 		name = covert_warfare.2.b
 		trigger = {
 			exists = scope:iw_exposed_by
+			scope:iw_exposed_by = { is_country_alive = yes }
 			NOT = { this = scope:iw_exposed_by }
 			custom_tooltip = {
 				text = covert_warfare.2.b_needs_service_tt
@@ -361,6 +363,7 @@ covert_warfare.2 = {
 		}
 		show_as_unavailable = {
 			exists = scope:iw_exposed_by
+			scope:iw_exposed_by = { is_country_alive = yes }
 			NOT = { this = scope:iw_exposed_by }
 		}
 		custom_tooltip = covert_warfare.2.b_tt
