@@ -2476,6 +2476,7 @@
  nd_tt_exercise_invitation_declined:0 "Nothing changes: the crisis goes on as it was"
  nd_tt_exercise_invited:0 "They are told in advance and invited to observe. Whether that opens talks is for [SCOPE.sCountry('nd_issuer').GetName] to decide"
  nd_tt_exercise_notified:0 "They are told in advance and invited to observe: talks open and the danger eases"
+ nd_tt_exercise_notified_talks_open:0 "They are told in advance and invited to observe. Talks are already open"
  nd_tt_exercise_running:0 "No exercise is already under way"
  nd_tt_guarantee_abandon:0 "We walk away from our guarantee. Our #v credibility#! collapses and every country we protect takes note"
  nd_tt_guarantee_honour:0 "We stand with them publicly: their attacker faces our guarantee, and our #v credibility#! rises"

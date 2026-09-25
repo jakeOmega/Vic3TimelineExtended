@@ -94,6 +94,8 @@ A crisis opens with `nd_nuclear_warning_action` (private: relations −5) or `nd
 | 4 | The target is proliferating and is our rival, or we are antagonistic, belligerent or domineering toward it | `nd_crisis_programme_freeze`: 10 years of `country_nuclear_program_pause_bool` |
 | 5 | The target is our rival, is armed, and is at heightened alert or higher | readiness to routine, locked for 24 months |
 
+One crisis opens without an action. When a peacetime launch is recalled (§0.4), the country it was aimed at gets `nuclear_incident.5`, and its option c, "warn them privately", opens a private crisis with itself as issuer. The option needs an arsenal, both sides free and no non-use pledge; it skips the dispute test and the 24-month cooldown, because the recalled launch is the grievance. With no weightier dispute it classifies as code 5. Nothing opens a crisis on a country's behalf.
+
 A crisis has three stages: 1, a private warning; 2, confrontation (a public ultimatum, a rejected warning or a counter-threat); and 3, acute (from stage 2: danger of 70 or more, or the issuer at high alert while the target is at heightened readiness or higher; or the issuer holding firm past its deadline, a play that became a war, or an intercepted launch). Each week the issuer's entry runs `nd_crisis_weekly_tick`:
 - revalidate the parties and the dispute;
 - convert a play that became a war;
@@ -223,10 +225,12 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 8. Doctrine gates: an existential-deterrence country cannot strike in an ordinary war, but a warfighting monopolist can, human or AI.
 9. With the forced odds from `te_debug_deterrence.2`, an incident fires every month. Without them, it fires within a few years at high alert and rarely at routine.
 10. Under launch on warning, the Unconfirmed Warning resolves with no option to cancel. Under central authority it launches only if ordered.
-11. Silence from the Capital strikes only in a war; outside a war it produces the intercepted-order crisis.
+11. Silence from the Capital strikes only in a war; outside a war it produces an intercepted order. The country it was aimed at gets `nuclear_incident.5`, and a crisis opens only if that country picks "warn them privately" (`.5` option c, offered when it is armed, both sides are free and no pledge binds them). A crisis the two were already in turns acute instead.
 12. `nuclear_guarantee` can be proposed, removes the war-support shadow from the beneficiary, and gives the guarantor the honour-or-abandon event when the beneficiary is threatened.
 13. The leaderboard shows estimates that differ from the true counts, and they change only once a year.
 14. `error.log` stays quiet while a crisis action's confirmation box is open, even though its tooltip re-walks `accept_effect` every frame.
+15. The Exercise They Mistook (`.10`): an AI opponent's readiness target goes to High Alert at once. A player opponent that could raise its alert gets `.11` instead, and its readiness moves only if it picks "go to our highest alert"; `.10`'s text says it is deciding. An unarmed or locked opponent gets the variant with no alert claim.
+16. In `.10`, "send them the schedule" from the crisis **target** sends the issuer `.12` (only while its talks flag is 0). Talks open, and the pressure events stop, only if the issuer accepts; from the issuer's side the option opens talks on its own record as before.
 
 ## 1. Intent and owner requirements
 
