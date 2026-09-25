@@ -6,7 +6,7 @@ import os
 import tempfile
 import unittest
 
-from organize_loc import find_quoted_loc_args, organize_all
+from organize_loc import find_diplo_action_keys, find_quoted_loc_args, organize_all
 
 
 class FindQuotedLocArgsTests(unittest.TestCase):
@@ -63,6 +63,27 @@ class OrganizeAllUnusedTests(unittest.TestCase):
         self.assertNotIn(" widget_root:", unused)
         self.assertIn(" widget_prose:", unused)
         self.assertIn(" widget_dead:", unused)
+
+
+class FindDiploActionKeysTests(unittest.TestCase):
+    def test_third_party_and_directed_autokeys_are_used(self):
+        # The engine renders these off the action name with no script
+        # reference; missing them exiled live keys to te_unused.
+        with tempfile.TemporaryDirectory() as td:
+            da_dir = os.path.join(td, "common", "diplomatic_actions")
+            os.makedirs(da_dir)
+            with open(os.path.join(da_dir, "a.txt"), "w", encoding="utf-8-sig") as fh:
+                fh.write("my_action = {\n\tshould_notify_third_parties = yes\n}\n")
+            keys = find_diplo_action_keys(td)
+        for suffix in (
+            "", "_action_notification_name",
+            "_action_notification_third_party_name",
+            "_action_notification_third_party_desc",
+            "_action_notification_third_party_break_desc",
+            "_proposal_third_party_accepted_desc",
+            "_effect_desc_first", "_effect_desc_third", "_effect_desc_global",
+        ):
+            self.assertIn(f"my_action{suffix}", keys)
 
 
 if __name__ == "__main__":
