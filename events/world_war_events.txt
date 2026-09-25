@@ -716,7 +716,8 @@ world_war_events.11 = {
 	trigger = {
 		country_is_ww_belligerent = yes
 		is_at_war = yes
-		has_technology_researched = bombing_aircraft
+		# The bombers are the enemy's: someone we are at war with must have them
+		any_enemy_in_war = { has_technology_researched = bombing_aircraft }
 	}
 
 	cooldown = { days = normal_modifier_time }
@@ -745,9 +746,10 @@ world_war_events.11 = {
 		}
 	}
 
-	# Option B: Retaliate with strategic bombing - escalation
+	# Option B: Retaliate with strategic bombing - escalation (needs bombers of our own)
 	option = {
 		name = world_war_events.11.b
+		trigger = { has_technology_researched = bombing_aircraft }
 		ai_chance = {
 			base = 3
 			modifier = {
@@ -796,7 +798,7 @@ world_war_events.11 = {
 	}
 }
 
-# Event 12: Resistance Movement - occupied territories fight back
+# Event 12: Resistance Movement - our territory under enemy occupation fights back
 world_war_events.12 = {
 	type = country_event
 	placement = root
@@ -816,6 +818,8 @@ world_war_events.12 = {
 		is_at_war = yes
 		has_variable = ww_years_elapsed
 		var:ww_years_elapsed >= 1
+		# There are occupied territories: the enemy holds part of our land
+		enemy_occupation >= 0.05
 	}
 
 	cooldown = { days = normal_modifier_time }
