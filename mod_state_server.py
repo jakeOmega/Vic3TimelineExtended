@@ -8310,6 +8310,7 @@ POST_LOAD_AUDITS = [
     ("event_context_audit",           "event_context_audit"),
     ("silent_variable_audit",         "silent_variable_audit"),
     ("prev_scope_audit",              "prev_scope_audit"),
+    ("script_loc_reference_audit",    "script_loc_reference_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS

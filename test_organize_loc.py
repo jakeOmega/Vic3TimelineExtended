@@ -101,6 +101,17 @@ class OrganizeAllUnusedTests(unittest.TestCase):
         self.assertIn(" widget_dead:", unused)
 
 
+class CategorizeInstitutionKeysTests(unittest.TestCase):
+    def test_breakdown_labels_file_with_their_institution(self):
+        # 5+ tokens, so without the rule these fall through to MISCELLANEOUS.
+        for key in (
+            "INSTITUTION_FUNDING_LEVEL_ministry_of_foreign_affairs",
+            "NO_INSTITUTION_ministry_of_foreign_affairs",
+            "institution_ministry_of_foreign_affairs_desc",
+        ):
+            self.assertEqual(categorize_key(key, set()), "INSTITUTIONS", key)
+
+
 class FindDiploActionKeysTests(unittest.TestCase):
     def test_third_party_and_directed_autokeys_are_used(self):
         # The engine renders these off the action name with no script
