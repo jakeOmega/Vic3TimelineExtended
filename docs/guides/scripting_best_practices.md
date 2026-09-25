@@ -877,6 +877,9 @@ Both can store scope references, but they differ in persistence and loc access:
 - **Numeric display:** `[Country.MakeScope.Var('bonapartist_progress_from_characters').GetValue\|+=]` (agitators_1_l_english.yml).
 - **Scope in pulse for tooltip:** `save_scope_as = expulsion_destination_state` in `on_monthly_pulse` → `[SCOPE.sState('expulsion_destination_state').GetName]` in `custom_tooltip` within the same effect (03_russia.txt circassian expulsion).
 
+### A saved scope outlives the helper that read it — clear it when the helper can run again
+`save_scope_as` lasts until the whole effect chain ends, not until the scripted effect that set it returns. A helper that takes an optional scope *through* a saved scope — set it if you have one, the helper reads `exists = scope:X` — will find the last caller's value on its next call in the same effect, and act on the wrong thing without any error. `un_vote.2`'s one option books a dozen UN ledger entries, so a subject saved for one would have been printed against the next. Clear it once it has been used: `if = { limit = { exists = scope:X } clear_saved_scope = X }` (vanilla: `00_the_grand_collapse_scripted_effects.txt`). `un_ledger_subject_note` / `un_ledger_subject_clear` in `un_authority_effects.txt` are the worked pair.
+
 ## Localization Accessor Chains: Magic Scopes Are Per-Rendering-Context
 
 `[X.Y.Z]` accessor chains in `localization/english/*.yml` are validated against the *rendering context* of the loc key. The first step (the magic scope) is context-specific; using the wrong one renders an empty string and the engine emits **no debug.log entry** — the bug is only visible by hovering the in-game UI. Vanilla magic scopes per context (verified against vanilla loc samples; see `localization_accessor_audit.py:_MAGIC_SCOPES_BY_CONTEXT`):

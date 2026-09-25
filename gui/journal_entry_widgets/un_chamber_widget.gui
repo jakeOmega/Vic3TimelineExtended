@@ -39,6 +39,12 @@
 ### CFixedPoint that cannot be fed to Concatenate), so a per-row toggle key
 ### cannot be built. One toggle switches the whole history between the brief
 ### and the detailed rendering instead.
+###
+### Inside a section, each group of lines sits under its own heading
+### (un_chamber_subheader), one scripted GUI per group, so a section reads as
+### its parts rather than one block of text. A section nested in another —
+### the history's "Voting Details" — is an un_chamber_subsection_header inside
+### the parent's panel, set in from its edge.
 
 types un_chamber_widget_types
 {
@@ -67,6 +73,71 @@ types un_chamber_widget_types
 		blockoverride "layout" {
 			parentanchor = hcenter
 			size = { 520 38 }
+		}
+	}
+
+	### A heading inside a section's panel, over one group of its lines, with a
+	### faint rule under it. The sections grew a group per redesign phase, and
+	### read as one undivided wall without these. Headings are GUI rows, not
+	### script-built lines: in one ExecuteTooltip every root-level line prints
+	### before any nested scope's (gui_modding_guide.md gotcha #18), so a
+	### "heading, list, heading, list" builder prints both headings first. A
+	### heading over a group that can be empty carries the group's `visible`.
+	type un_chamber_subheader = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		spacing = 1
+		block "subheader_margin" {
+			margin_top = 10
+		}
+
+		textbox = {
+			autoresize = yes
+			multiline = yes
+			maximumsize = { 480 -1 }
+			align = left|nobaseline
+			using = fontsize_large
+			default_format = "#title"
+			block "subheader_text" {}
+		}
+		divider_clean = {
+			blockoverride "size" {
+				size = { 480 2 }
+			}
+		}
+	}
+
+	### Explanatory text under a heading: how a group works, rather than what it
+	### says now. Static keys only — the datacontext here is the journal entry,
+	### so a key that reads THIS or a script value stays in its scripted GUI.
+	type un_chamber_note = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		default_format = "#lore"
+	}
+
+	### An expandable section nested inside another section's panel. Narrower,
+	### lower and in a smaller type than un_chamber_section_header, and set in
+	### from the panel's edge by the flowcontainer that holds it, so it reads as
+	### part of the section it sits in. "Voting Details" used to be a full-width
+	### header between "Resolutions on the Record" and its panel, and looked
+	### like the next section.
+	type un_chamber_subsection_header = section_header_button {
+		blockoverride "layout" {
+			size = { 440 30 }
+		}
+		blockoverride "fontsize" {
+			using = fontsize_medium
+		}
+		blockoverride "arrow_size" {
+			size = { 20 20 }
+		}
+		blockoverride "left_textbox_margin_left" {
+			margin_left = 32
 		}
 	}
 
@@ -157,12 +228,28 @@ flowcontainer = {
 
 	# ---- Our own standing, and the resolution in session ----
 	un_chamber_panel = {
+		un_chamber_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_standing"
+			}
+		}
 		un_chamber_text = {
 			text = "[GetScriptedGui('un_chamber_status_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
 		# Who holds the five permanent seats, and who is in line for an open one.
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_council"
+			}
+		}
 		un_chamber_text = {
 			text = "[GetScriptedGui('un_chamber_council_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_session"
+			}
 		}
 		un_chamber_text = {
 			text = "[GetScriptedGui('un_chamber_active_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -333,8 +420,27 @@ flowcontainer = {
 	un_chamber_panel = {
 		visible = "[GetVariableSystem.Exists('un_chamber_exposure')]"
 
+		# The headings wait for the UN: before it is founded, or once it has
+		# dissolved, the builder prints the one line saying there is no record.
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_record"
+			}
+		}
 		un_chamber_text = {
 			text = "[GetScriptedGui('un_chamber_exposure_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_record_help"
+			}
+		}
+		un_chamber_note = {
+			visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "je_un_chamber_exposure_help"
 		}
 	}
 
@@ -359,8 +465,35 @@ flowcontainer = {
 	un_chamber_panel = {
 		visible = "[GetVariableSystem.Exists('un_chamber_missions')]"
 
+		# Missions still at work, then the ones that have ended, then how a
+		# mission works. Each list prints its own empty line.
+		un_chamber_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_missions_active"
+			}
+		}
 		un_chamber_text = {
-			text = "[GetScriptedGui('un_chamber_missions_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			text = "[GetScriptedGui('un_chamber_missions_active_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_missions_ended"
+			}
+		}
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_missions_ended_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_chamber_subheader = {
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_missions_help"
+			}
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_missions_intro"
+		}
+		un_chamber_note = {
+			text = "je_un_chamber_missions_help"
 		}
 	}
 
@@ -386,8 +519,56 @@ flowcontainer = {
 	un_chamber_panel = {
 		visible = "[GetVariableSystem.Exists('un_chamber_obligations')]"
 
+		# No UN: one line, and nothing else.
 		un_chamber_text = {
-			text = "[GetScriptedGui('un_chamber_obligations_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+			visible = "[Not( GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+			text = "je_un_chamber_obligations_no_un"
+		}
+
+		# Our dues: a member's assessment and arrears, or, outside, what
+		# membership would ask and anything still owed from before.
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_dues"
+			}
+		}
+		un_chamber_text = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "[GetScriptedGui('un_chamber_dues_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_chamber_text = {
+			visible = "[And( GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ), Not( GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) ) )]"
+			text = "[GetScriptedGui('un_chamber_obligations_outside_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+
+		# A member: the conventions' terms for us.
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_regimes"
+			}
+		}
+		un_chamber_text = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "[GetScriptedGui('un_chamber_regimes_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+
+		# Everyone: who pays for the UN, and how dues work.
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_budget"
+			}
+		}
+		un_chamber_text = {
+			visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "[GetScriptedGui('un_chamber_budget_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_chamber_note = {
+			visible = "[GetScriptedGui('un_chamber_founded_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "je_un_chamber_obligations_help"
 		}
 	}
 
@@ -410,9 +591,25 @@ flowcontainer = {
 	un_chamber_panel = {
 		visible = "[GetVariableSystem.Exists('un_chamber_votes')]"
 
-		# Redesign phase 3: why the members voted as they did.
+		# Redesign phase 3: why the members voted as they did. Both headings
+		# wait for a resolution to be in session; without one, the ballot
+		# builder prints the one line saying so.
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_in_session_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_reasons"
+			}
+		}
 		un_chamber_text = {
+			visible = "[GetScriptedGui('un_chamber_in_session_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			text = "[GetScriptedGui('un_chamber_reasons_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_in_session_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_ballot"
+			}
 		}
 		un_chamber_text = {
 			text = "[GetScriptedGui('un_chamber_active_voters_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -460,6 +657,12 @@ flowcontainer = {
 			text = "[GetScriptedGui('un_chamber_propose_intro_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
 
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_propose_censure"
+			}
+		}
 		un_chamber_propose_row = {
 			blockoverride "row_text" {
 				text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)0' ) ).End)]"
@@ -508,6 +711,12 @@ flowcontainer = {
 			}
 		}
 
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_propose_help"
+			}
+		}
 		un_chamber_propose_row = {
 			blockoverride "row_text" {
 				text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)4' ) ).End)]"
@@ -532,6 +741,12 @@ flowcontainer = {
 			}
 		}
 
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_propose_charter"
+			}
+		}
 		un_chamber_propose_row = {
 			blockoverride "row_text" {
 				text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)6' ) ).End)]"
@@ -544,9 +759,25 @@ flowcontainer = {
 			}
 		}
 
-		# The ten topics with no proposal control of their own — they reach
-		# the floor through the proposer events in events/un_events.txt. Listed
-		# so a player knows the Assembly can take them up at all.
+		# How the Assembly takes up business of its own: the docket, and the
+		# ten topics with no proposal control of their own — they reach the
+		# floor through the proposer events in events/un_events.txt. Listed so
+		# a player knows the Assembly can take them up at all.
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_docket"
+			}
+		}
+		un_chamber_row_text = {
+			text = "[GetScriptedGui('un_chamber_docket_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_assembly_business"
+			}
+		}
 		un_chamber_row_text = {
 			text = "[GetScriptedGui('un_chamber_assembly_business_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
@@ -574,8 +805,28 @@ flowcontainer = {
 	un_chamber_panel = {
 		visible = "[GetVariableSystem.Exists('un_chamber_mandates')]"
 
+		un_chamber_subheader = {
+			blockoverride "subheader_margin" {}
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_mandate_register"
+			}
+		}
 		un_chamber_text = {
 			text = "[GetScriptedGui('un_chamber_mandates_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		# The case we could table ourselves, while we hold no mandate and our
+		# claims give us one.
+		un_chamber_subheader = {
+			visible = "[GetScriptedGui('un_chamber_mandate_case_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "subheader_text" {
+				text = "je_un_chamber_sub_mandate_case"
+			}
+		}
+		# Hidden with its heading, so an empty text box leaves no blank line.
+		# The case search runs only while this section is open.
+		un_chamber_text = {
+			visible = "[GetScriptedGui('un_chamber_mandate_case_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "[GetScriptedGui('un_chamber_mandate_case_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 		}
 	}
 
@@ -595,28 +846,35 @@ flowcontainer = {
 		}
 	}
 
-	# Voting-detail depth for the archive. Only offered while the archive is
-	# open, and rebuilt from the containers every frame, so nothing about it
-	# survives a save/load beyond the toggle itself.
-	un_chamber_section_header = {
-		visible = "[GetVariableSystem.Exists('un_chamber_history')]"
-
-		blockoverride "left_text" {
-			text = "je_un_chamber_details_header"
-		}
-		blockoverride "onclick" {
-			onclick = "[GetVariableSystem.Toggle('un_chamber_history_details')]"
-		}
-		blockoverride "onclick_showmore" {
-			visible = "[Not(GetVariableSystem.Exists('un_chamber_history_details'))]"
-		}
-		blockoverride "onclick_showless" {
-			visible = "[GetVariableSystem.Exists('un_chamber_history_details')]"
-		}
-	}
-
 	un_chamber_panel = {
 		visible = "[GetVariableSystem.Exists('un_chamber_history')]"
+
+		# Voting-detail depth for the archive: a section nested in this one,
+		# so it sits inside the archive's panel, set in from its edge, rather
+		# than between the archive's header and its panel where it read as the
+		# next section. Rebuilt from the containers every frame, so nothing
+		# about it survives a save/load beyond the toggle itself.
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			margin_left = 20
+			margin_bottom = 6
+
+			un_chamber_subsection_header = {
+				blockoverride "left_text" {
+					text = "je_un_chamber_details_header"
+				}
+				blockoverride "onclick" {
+					onclick = "[GetVariableSystem.Toggle('un_chamber_history_details')]"
+				}
+				blockoverride "onclick_showmore" {
+					visible = "[Not(GetVariableSystem.Exists('un_chamber_history_details'))]"
+				}
+				blockoverride "onclick_showless" {
+					visible = "[GetVariableSystem.Exists('un_chamber_history_details')]"
+				}
+			}
+		}
 
 		un_chamber_text = {
 			visible = "[Not(GetVariableSystem.Exists('un_chamber_history_details'))]"
