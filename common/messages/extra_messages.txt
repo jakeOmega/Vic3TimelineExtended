@@ -2025,3 +2025,21 @@ un_floor_open_notice = {
 	notification_type = feed
 	color = neutral
 }
+# A war goal we added without a mandate carried the Assembly's infamy
+# surcharge (to the initiator, human only; redesign phase 5,
+# un_teeth_war_goal_surcharge).
+un_war_surcharge_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+# Article 19: two years in arrears on our UN dues have cost us our vote in the
+# General Assembly (to the member itself; redesign phase 5,
+# un_dues_country_monthly_update).
+un_article_19_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}

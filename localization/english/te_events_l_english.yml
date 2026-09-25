@@ -4848,3 +4848,4 @@
  heir_education_event_cooldown_desc:0 "The [concept_heir]'s education continues without interruption for the time being."
  nuclear_event_prestige:0 "Nuclear Achievement"
  nuclear_event_prestige_desc:0 "This country's nuclear capabilities have affected its standing in the eyes of the world."
+ un_vote.2.d_peacekeeping_request_passed_weak:0 "The General Assembly carried the request for peacekeepers, but an organisation of so little authority cannot field a force: no member will put its soldiers under a flag the world does not yet respect. An [concept_un_peacekeeping] observer mission goes instead. Unarmed monitors will report on the situation; no contributing forces are deployed."

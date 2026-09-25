@@ -273,6 +273,108 @@ un_leave_button = {
 	}
 }
 
+# ---- 1b-bis. ASSESSED DUES (redesign phase 5, §7.2) ----
+# Every member pays a share of its GDP set by the UN's tier
+# (un_dues_values.txt). A member may withhold it: the money is saved, the
+# funding pillar falls with the withholders' share of the members' GDP, the
+# record takes a standing loss, and after 24 months in arrears the member loses
+# its vote (Article 19). Paying again settles everything owed at once.
+
+un_withhold_dues_button = {
+	name = "UN_WITHHOLD_DUES"
+	desc = "UN_WITHHOLD_DUES_DESC"
+
+	visible = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_dues_is_withholding = yes }
+	}
+
+	possible = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_dues_is_withholding = yes }
+		custom_tooltip = {
+			text = un_dues_assessed_tt
+			un_dues_assessed = yes
+		}
+	}
+
+	ai_chance = {
+		value = 0
+		# An isolationist or an underminer has no wish to pay for the order.
+		if = { limit = { has_law = law_type:law_isolationism } add = 15 }
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+			add = 20
+		}
+		# The levy bites: 0.4% of GDP at Strong, 1% at Supranational.
+		if = { limit = { un_tier_at_least_strong = yes } add = 5 }
+		if = { limit = { un_tier_is_supranational = yes } add = 10 }
+		# A treasury in trouble looks for savings.
+		if = { limit = { in_default = yes } add = 25 }
+		else_if = { limit = { scaled_debt > 0.75 } add = 10 }
+		# A champion of the order pays; so does anyone who values the vote.
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+			add = -50
+		}
+		if = { limit = { is_un_permanent_member = yes } add = -10 }
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = -10 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = un_dues_withhold_effect_tt
+			un_dues_withhold = yes
+		}
+	}
+}
+
+un_pay_dues_button = {
+	name = "UN_PAY_DUES"
+	desc = "UN_PAY_DUES_DESC"
+
+	visible = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_dues_is_withholding = yes
+	}
+
+	possible = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		un_dues_is_withholding = yes
+	}
+
+	ai_chance = {
+		value = 5
+		# Settle when the treasury can carry it...
+		if = {
+			limit = {
+				NOT = { in_default = yes }
+				scaled_debt < 0.25
+			}
+			add = 15
+		}
+		# ...and above all once the vote is gone.
+		if = { limit = { un_dues_vote_suspended = yes } add = 20 }
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
+			add = 30
+		}
+		if = { limit = { has_law = law_type:law_isolationism } add = -15 }
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
+			add = -20
+		}
+		if = { limit = { in_default = yes } add = -30 }
+	}
+
+	effect = {
+		custom_tooltip = {
+			text = un_dues_resume_effect_tt
+			un_dues_resume = yes
+		}
+	}
+}
+
 # ---- 1c. PROPOSE EXPULSION OF A PERMANENT MEMBER ----
 # Any UN member can call a 2/3 supermajority vote to strip a permanent
 # member's seat. Triggered against a permanent member that has recently
@@ -452,6 +554,9 @@ un_lift_sanctions_button = {
 			every_country = {
 				limit = { has_modifier = un_sanctions_target_modifier }
 				remove_modifier = un_sanctions_target_modifier
+				# The embargoes the Assembly imposed go with the regime
+				# (redesign phase 5, un_teeth_effects.txt).
+				un_teeth_lift_embargoes = yes
 			}
 			# Walking away from a regime the Assembly imposed costs its credibility,
 			# weighted by the enforcer's weight in world affairs.

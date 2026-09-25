@@ -240,9 +240,31 @@ un_resolution_decide = {
 	else_if = {
 		limit = { un_res_margin >= 1 }
 		add_tag = un_res_passed
+		un_resolution_veto_restraint = yes
 	}
 	else = {
 		add_tag = un_res_failed
+	}
+}
+
+# Veto restraint (Charter Reform II; redesign phase 5, §4.1): once the charter
+# carries both reforms, a veto no longer stops a resolution that a two-thirds
+# supermajority of the members with a vote has carried. The resolution loses
+# its un_res_vetoed tag, so un_vote.2 applies the full form, and carries
+# un_res_veto_overridden for the record. The vetoer has already paid for its
+# veto (the credibility entry, un_events.11). The un_res_vetoed tag was set
+# when the veto was cast, so it is readable here; the passed tag is not
+# re-read, which is why this sits inside the branch that set it.
+# Scope: resolution container (a simple-majority topic just carried)
+un_resolution_veto_restraint = {
+	if = {
+		limit = {
+			has_tag = un_res_vetoed
+			un_charter_level_value >= 2
+			un_vote_supermajority_passed >= 0
+		}
+		remove_tag = un_res_vetoed
+		add_tag = un_res_veto_overridden
 	}
 }
 
@@ -644,12 +666,12 @@ un_vote_apply_resolution_compliance = {
 	# evaluated gdp in journal-entry scope (reads 'none') and the aid levy was
 	# stripped every month by the legacy cleanup. ROOT is the pledger here
 	# (un_vote.3), so the root.var: multiplier below resolves correctly.
-	# Peacekeeping contributions are skipped when the resolution was vetoed —
-	# the graduated form is observer-mission-only and doesn't levy contributors.
+	# Peacekeeping contributions are skipped when the resolution sent observers
+	# only — vetoed, or (redesign phase 5) carried by a UN below Established —
+	# because the observer mission doesn't levy contributors.
 	if = {
 		limit = {
-			scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-			NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+			scope:un_resolution ?= { un_resolution_peacekeeping_full = yes }
 			country_rank >= rank_value:major_power
 		}
 		je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }

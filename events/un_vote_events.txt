@@ -242,6 +242,7 @@ un_vote.1 = {
 	# before containers have none and fail here.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_dues_vote_suspended = yes }
 		scope:un_resolution ?= {
 			has_tag = un_res_voting
 			NOT = { un_resolution_has_vote = { LIST = un_res_yes } }
@@ -497,6 +498,18 @@ un_vote.2 = {
 					}
 				}
 				desc = un_vote.2.d_peacekeeping_request_passed_vetoed
+			}
+			# Peacekeeping Request - Passed, but the UN is below Established
+			# (redesign phase 5): observers only
+			triggered_desc = {
+				trigger = {
+					scope:un_resolution ?= {
+						has_tag = un_topic_peacekeeping_request
+						has_tag = un_res_passed
+					}
+					NOT = { un_tier_at_least_established = yes }
+				}
+				desc = un_vote.2.d_peacekeeping_request_passed_weak
 			}
 			# Peacekeeping Request - Passed
 			triggered_desc = {
@@ -756,6 +769,19 @@ un_vote.2 = {
 				}
 			}
 
+			# Veto restraint (Charter Reform II; redesign phase 5): a veto the
+			# two-thirds supermajority overrode (un_resolution_decide) left the
+			# resolution in its full form.
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_res_veto_overridden } }
+				custom_tooltip = un_vote_veto_overridden_tt
+			}
+
+			# The proposer ratifies on passage, like every other member
+			# (redesign phase 5, §5.3). It no longer takes the convention's
+			# modifier up front when it tables the resolution.
+			un_vote_apply_treaty_modifier = yes
+
 			# ---- Condemn: target gets condemnation, proposer gets prestige ----
 			# If the target voted to accept the resolution, they already bear
 			# un_self_corrected_modifier (set in un_vote.1 option A target branch);
@@ -784,6 +810,9 @@ un_vote.2 = {
 								days = long_modifier_time
 								is_decaying = yes
 							}
+							# Teeth by tier (redesign phase 5, §5.2): shunned
+							# from Strong, restrained as well at Supranational.
+							un_teeth_condemn_by_tier = yes
 							custom_tooltip = {
 								text = un_standing_censured_tt
 								un_standing_loss = { AMOUNT = un_standing_condemned_loss REASON = 22 }
@@ -987,10 +1016,12 @@ un_vote.2 = {
 			# ---- Peacekeeping Request: Deploy peacekeepers to requesting country ----
 			# Vetoed: deploy a non-coercive observer mission instead — the
 			# proposer gets a small benefit but no contributors are levied.
+			# A full deployment needs an un-vetoed resolution and, since
+			# redesign phase 5 (§5.2), an Established UN: below that a carried
+			# request sends observers only (the branch after this one).
 			if = {
 				limit = {
-					scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request }
-					NOT = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+					scope:un_resolution ?= { un_resolution_peacekeeping_full = yes }
 				}
 				custom_tooltip = un_vote_peacekeeping_request_passed_tt
 				un_ledger_entry = { PILLAR = delivery POINTS = 1 REASON = 1 }
@@ -1027,8 +1058,15 @@ un_vote.2 = {
 			}
 			else_if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
-				custom_tooltip = un_vote_peacekeeping_request_passed_vetoed_tt
-				un_ledger_entry = { PILLAR = delivery POINTS = 0.5 REASON = 2 }
+				if = {
+					limit = { scope:un_resolution ?= { has_tag = un_res_vetoed } }
+					custom_tooltip = un_vote_peacekeeping_request_passed_vetoed_tt
+					un_ledger_entry = { PILLAR = delivery POINTS = 0.5 REASON = 2 }
+				}
+				else = {
+					custom_tooltip = un_vote_peacekeeping_request_passed_weak_tt
+					un_ledger_entry = { PILLAR = delivery POINTS = 0.5 REASON = 1 }
+				}
 				# Observer mission to the proposer only — no enforcement, no levies
 				if = {
 					limit = { exists = scope:un_vote_proposer }
@@ -1116,6 +1154,19 @@ un_vote.2 = {
 							add_modifier = {
 								name = un_sanctions_target_modifier
 								multiplier = un_enforcement
+							}
+							# Teeth by tier (redesign phase 5, §5.2): from Strong
+							# the members who voted for it embargo the target; at
+							# Supranational every major-power member does.
+							if = {
+								limit = { un_tier_is_supranational = yes }
+								custom_tooltip = un_teeth_embargo_all_tt
+								hidden_effect = { un_teeth_sanctions_embargo = yes }
+							}
+							else_if = {
+								limit = { un_tier_at_least_strong = yes }
+								custom_tooltip = un_teeth_embargo_voters_tt
+								hidden_effect = { un_teeth_sanctions_embargo = yes }
 							}
 							custom_tooltip = {
 								text = un_standing_sanctioned_tt

@@ -3619,6 +3619,30 @@ un_authority_crisis_modifier = {
 #
 # Non-members, from the Strong tier up (on top of un_nonmember_pariah_modifier,
 # which applies from Established): trade and leverage.
+# ---- UN redesign phase 5: resolutions with teeth (un_teeth_effects.txt) ----
+# All three are unit values applied with multiplier = un_enforcement (E).
+# A full condemnation from the Strong tier: the condemned are shunned — other
+# countries are less willing to sign treaties with them or back them in plays.
+un_condemned_isolation_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_diplomatic_reputation_add = -6
+}
+# ...and at Supranational, restrained: fewer maneuvers in its plays, and every
+# act of aggression costs more.
+un_condemned_restraint_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_diplomatic_play_maneuvers_mult = -0.1
+	country_infamy_generation_mult = 0.1
+}
+# The holder of a bound military mandate, from the Strong tier: the war the
+# Assembly authorized keeps the nation behind it (single refresh site:
+# un_teeth_monthly_update).
+un_mandate_war_support_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_war_support_casualties_mult = -0.15
+	country_war_support_battles_decrease_mult = -0.15
+}
+
 un_nonmember_pariah_strong_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	state_trade_advantage_mult = -0.10
@@ -3919,6 +3943,15 @@ un_humanitarian_token_cost = {
 }
 
 un_observer_mission_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
+# Redesign phase 5 (§7.2): a member's assessed dues, a share of its GDP set by
+# the UN's tier. Applied with multiplier = var:un_dues_cached (the weekly
+# dues, un_dues_weekly_value) by un_dues_country_monthly_update, the single
+# refresh site; removed while the member withholds.
+un_dues_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
 	country_expenses_add = 1
 }

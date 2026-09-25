@@ -60,6 +60,10 @@ un_propose_condemn_possible = {
 		un_may_table_now = yes
 	}
 	custom_tooltip = {
+		text = un_article_19_table_tt
+		NOT = { un_dues_vote_suspended = yes }
+	}
+	custom_tooltip = {
 		text = un_grounds_condemn_tt
 		any_country = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
@@ -103,6 +107,10 @@ un_propose_sanctions_possible = {
 		un_may_table_now = yes
 	}
 	custom_tooltip = {
+		text = un_article_19_table_tt
+		NOT = { un_dues_vote_suspended = yes }
+	}
+	custom_tooltip = {
 		text = un_grounds_sanctions_tt
 		any_country = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
@@ -139,6 +147,10 @@ un_propose_expulsion_possible = {
 	custom_tooltip = {
 		text = un_recess_ai_tt
 		un_may_table_now = yes
+	}
+	custom_tooltip = {
+		text = un_article_19_table_tt
+		NOT = { un_dues_vote_suspended = yes }
 	}
 	any_country = {
 		NOT = { this = ROOT }
@@ -201,6 +213,10 @@ un_propose_mandate_possible = {
 		text = un_recess_ai_tt
 		un_may_table_now = yes
 	}
+	custom_tooltip = {
+		text = un_article_19_table_tt
+		NOT = { un_dues_vote_suspended = yes }
+	}
 }
 
 # Request a peacekeeping deployment on our own soil — binding, simple majority.
@@ -231,6 +247,10 @@ un_propose_peacekeepers_possible = {
 	custom_tooltip = {
 		text = un_recess_ai_tt
 		un_may_table_now = yes
+	}
+	custom_tooltip = {
+		text = un_article_19_table_tt
+		NOT = { un_dues_vote_suspended = yes }
 	}
 	OR = {
 		is_at_war = yes
@@ -268,6 +288,10 @@ un_propose_aid_possible = {
 	custom_tooltip = {
 		text = un_recess_ai_tt
 		un_may_table_now = yes
+	}
+	custom_tooltip = {
+		text = un_article_19_table_tt
+		NOT = { un_dues_vote_suspended = yes }
 	}
 	any_scope_state = {
 		OR = {
@@ -311,5 +335,9 @@ un_propose_reform_possible = {
 	custom_tooltip = {
 		text = un_recess_ai_tt
 		un_may_table_now = yes
+	}
+	custom_tooltip = {
+		text = un_article_19_table_tt
+		NOT = { un_dues_vote_suspended = yes }
 	}
 }

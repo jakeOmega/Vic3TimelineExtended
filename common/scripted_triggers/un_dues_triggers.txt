@@ -1,0 +1,29 @@
+﻿# ============================================================================
+# UN DUES — TRIGGERS (redesign phase 5)
+# ============================================================================
+# The figures are in common/script_values/un_dues_values.txt, the writers in
+# common/scripted_effects/un_dues_effects.txt.
+# ============================================================================
+
+# Dues are assessed at all: a UN exists and its tier is above Moribund.
+# Scope: any
+un_dues_assessed = {
+	has_global_variable = un_founded
+	un_dues_rate > 0
+}
+
+# The scoped member is withholding its dues.
+# Scope: country
+un_dues_is_withholding = {
+	has_variable = un_dues_withheld
+}
+
+# Article 19: the scoped member has been in arrears long enough to lose its
+# vote. It casts no ballot, tables no resolution and is not counted in the
+# two-thirds supermajority until it pays (un_pay_dues_button).
+# Scope: country
+un_dues_vote_suspended = {
+	has_variable = un_dues_withheld
+	has_variable = un_arrears_months
+	var:un_arrears_months >= un_dues_article_19_months
+}

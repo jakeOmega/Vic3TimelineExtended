@@ -1,0 +1,148 @@
+﻿# ============================================================================
+# UN DUES — THE ONLY WRITERS (redesign phase 5)
+# ============================================================================
+# docs/systems/un_redesign_design.md §7.2; as shipped, §0.5. The figures are in
+# common/script_values/un_dues_values.txt, the tests in
+# common/scripted_triggers/un_dues_triggers.txt.
+#
+#   variable / modifier        written by
+#   un_dues_modifier           un_dues_country_monthly_update (the single
+#                              refresh site), un_dues_resume; removed by
+#                              un_dues_withhold, un_membership_end_effect and
+#                              un_dues_clear
+#   un_dues_cached (country)   the same refresh site: the weekly dues the
+#                              modifier's multiplier reads. Never removed while
+#                              the modifier stands (the engine re-reads a
+#                              stored multiplier; modifier_multiplier_var_audit)
+#   un_dues_withheld           un_dues_withhold / un_dues_resume
+#   un_arrears_months          un_dues_country_monthly_update, un_dues_resume
+#   un_arrears_owed            the same
+#   un_budget_weekly (global)  un_authority_monthly_update (snapshot)
+#   un_funding_arrears_share   the same
+#
+# CALL SITES
+#   un_dues_country_monthly_update   je_united_nations on_monthly_pulse,
+#                                    member branch
+#   un_dues_withhold / un_dues_resume  un_withhold_dues_button / un_pay_dues_button
+#   un_dues_clear                    un_dissolve_strip_country (a dissolved UN
+#                                    has no claims)
+#
+# LEAVING does not clear arrears: a member that walks out owing money still
+# owes it, and rejoins still withholding (it must pay to vote again). Only a
+# dissolution writes the debt off.
+# ============================================================================
+
+# One member's month (UN founded or not; a no-op for a country that pays and is
+# assessed nothing).
+# Scope: country (a member)
+un_dues_country_monthly_update = {
+	if = {
+		limit = { un_dues_is_withholding = yes }
+		if = {
+			limit = { has_modifier = un_dues_modifier }
+			remove_modifier = un_dues_modifier
+		}
+		# A month in arrears only while dues are assessed: a Moribund UN
+		# asks nothing, so there is nothing to owe.
+		if = {
+			limit = { un_dues_assessed = yes }
+			if = {
+				limit = { NOT = { has_variable = un_arrears_months } }
+				set_variable = { name = un_arrears_months value = 0 }
+			}
+			if = {
+				limit = { NOT = { has_variable = un_arrears_owed } }
+				set_variable = { name = un_arrears_owed value = 0 }
+			}
+			change_variable = { name = un_arrears_months add = 1 }
+			change_variable = { name = un_arrears_owed add = un_dues_monthly_value }
+			# The month Article 19 bites: the vote goes, and the record says so.
+			if = {
+				limit = { var:un_arrears_months = un_dues_article_19_months }
+				un_standing_loss = { AMOUNT = un_standing_article_19_loss REASON = 33 }
+				post_notification = un_article_19_notice
+			}
+		}
+	}
+	else_if = {
+		limit = { un_dues_assessed = yes }
+		set_variable = { name = un_dues_cached value = un_dues_weekly_value }
+		if = {
+			limit = { has_modifier = un_dues_modifier }
+			remove_modifier = un_dues_modifier
+		}
+		add_modifier = {
+			name = un_dues_modifier
+			multiplier = var:un_dues_cached
+		}
+	}
+	else_if = {
+		limit = { has_modifier = un_dues_modifier }
+		remove_modifier = un_dues_modifier
+	}
+}
+
+# Stop paying. The money is saved from this week; the months in arrears start
+# counting at the next monthly update. Costs standing once.
+# Scope: country (a member)
+un_dues_withhold = {
+	set_variable = un_dues_withheld
+	if = {
+		limit = { has_modifier = un_dues_modifier }
+		remove_modifier = un_dues_modifier
+	}
+	un_standing_loss = { AMOUNT = un_standing_dues_withheld_loss REASON = 32 }
+}
+
+# Resume paying: everything owed is settled at once, the months in arrears are
+# forgiven, the vote comes back, and this week's dues are charged again.
+# Scope: country (a member)
+un_dues_resume = {
+	if = {
+		limit = { has_variable = un_arrears_owed }
+		add_treasury = un_dues_settlement_value
+		remove_variable = un_arrears_owed
+	}
+	if = {
+		limit = { has_variable = un_arrears_months }
+		remove_variable = un_arrears_months
+	}
+	remove_variable = un_dues_withheld
+	if = {
+		limit = { un_dues_assessed = yes }
+		set_variable = { name = un_dues_cached value = un_dues_weekly_value }
+		if = {
+			limit = { has_modifier = un_dues_modifier }
+			remove_modifier = un_dues_modifier
+		}
+		add_modifier = {
+			name = un_dues_modifier
+			multiplier = var:un_dues_cached
+		}
+	}
+}
+
+# The organisation is gone: so are its claims.
+# Scope: country
+un_dues_clear = {
+	if = {
+		limit = { has_modifier = un_dues_modifier }
+		remove_modifier = un_dues_modifier
+	}
+	if = {
+		limit = { has_variable = un_dues_cached }
+		remove_variable = un_dues_cached
+	}
+	if = {
+		limit = { has_variable = un_dues_withheld }
+		remove_variable = un_dues_withheld
+	}
+	if = {
+		limit = { has_variable = un_arrears_months }
+		remove_variable = un_arrears_months
+	}
+	if = {
+		limit = { has_variable = un_arrears_owed }
+		remove_variable = un_arrears_owed
+	}
+}

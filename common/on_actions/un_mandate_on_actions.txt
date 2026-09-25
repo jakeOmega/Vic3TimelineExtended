@@ -40,6 +40,10 @@ un_mandate_on_wargoal_added = {
 			# the diplomatic play, which is the scope remove_war_goal needs.
 			un_mandate_ai_strike_prohibited = yes
 			scope:actor = { un_mandate_check_prohibited = yes }
+			# Last: the surcharge on a war goal added without a mandate
+			# (redesign phase 5, un_teeth_effects.txt). After the binding
+			# above, so the goal that binds a mandate is never charged.
+			un_teeth_war_goal_surcharge = yes
 		}
 	}
 }

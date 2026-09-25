@@ -10,7 +10,8 @@
 #   participation   0 .. +25                    power share of the members
 #   commitment      -25 .. +25                  members' stance x power share
 #   credibility     -15 .. +15                  decaying ledger of the Assembly's record
-#   funding         -5 .. +10                   who pays for the UN's programmes
+#   funding         -10 .. +10                  who pays for the UN's programmes, less
+#                                               the members withholding their dues
 #   order           -20 .. 0                    wars between members, nuclear use
 #   delivery        0 .. +10                    decaying ledger of aid / peacekeeping delivered
 #
@@ -47,6 +48,9 @@ un_order_war_floor = { value = -15 }
 un_funding_floor = { value = -5 }
 un_funding_span = { value = 15 }
 un_funding_programmes_for_full = { value = 2 }
+# The pillar's range once dues exist (phase 5): arrears can take it to -10.
+un_funding_pillar_min = { value = -10 }
+un_funding_pillar_max = { value = 10 }
 
 # Months over which authority closes the gap to its target, and the most it may
 # move in one month. 48 months closes half of a jump in about 2.8 years.
@@ -237,10 +241,23 @@ un_funding_ratio_value = {
 	}
 }
 
+# Dues (redesign phase 5, un_dues_values.txt): members withholding their
+# assessed dues pull funding down by their share of the members' GDP, times
+# un_funding_arrears_weight. When every member pays, funding is the programme
+# proxy alone, as in phase 1; the pillar's range widens to -10..+10.
 un_pillar_funding_value = {
 	value = un_funding_ratio_value
 	multiply = un_funding_span
 	add = un_funding_floor
+	if = {
+		limit = { has_global_variable = un_funding_arrears_share }
+		subtract = {
+			value = global_var:un_funding_arrears_share
+			multiply = un_funding_arrears_weight
+		}
+	}
+	min = un_funding_pillar_min
+	max = un_funding_pillar_max
 }
 
 # Share of world power held by independent members at war with a fellow member.

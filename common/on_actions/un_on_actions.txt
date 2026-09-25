@@ -90,6 +90,10 @@ un_global_authority_on_action = {
 			# building stands, in the host's territory (un_hq_effects.txt).
 			un_hq_monthly_update = yes
 
+			# Resolutions with teeth (redesign phase 5, un_teeth_effects.txt):
+			# sanctions busting, and the mandate holder's war support.
+			un_teeth_monthly_update = yes
+
 			# Last: at 0, during a crisis, the UN dissolves (un_ladder_effects.txt).
 			# After the upkeep above on purpose — that upkeep assumes a UN that
 			# still exists, and a remove_modifier made by the dissolution would not

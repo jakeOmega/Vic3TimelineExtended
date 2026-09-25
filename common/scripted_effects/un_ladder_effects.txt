@@ -411,6 +411,8 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_world_prestige }
 	un_dissolve_remove_global = { NAME = un_member_power_share }
 	un_dissolve_remove_global = { NAME = un_funding_ratio }
+	un_dissolve_remove_global = { NAME = un_funding_arrears_share }
+	un_dissolve_remove_global = { NAME = un_budget_weekly }
 	un_dissolve_remove_global = { NAME = un_members_at_war_share }
 	un_dissolve_remove_global = { NAME = un_pillar_participation }
 	un_dissolve_remove_global = { NAME = un_pillar_commitment }
@@ -438,6 +440,8 @@ un_dissolve_remove_global = {
 # Scope: country
 un_dissolve_strip_country = {
 	un_membership_end_effect = yes
+	# The organisation's claims die with it (redesign phase 5).
+	un_dues_clear = yes
 	je:je_united_nations ?= { remove_modifier = un_high_authority_infamy_modifier }
 	je:je_united_nations ?= { remove_modifier = un_npt_disarmament_modifier }
 	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
@@ -448,6 +452,10 @@ un_dissolve_strip_country = {
 	remove_modifier = un_sanctions_voluntary_target_modifier
 	remove_modifier = un_sanctions_enforcement_modifier
 	remove_modifier = un_sanctions_partial_modifier
+	# Resolutions with teeth (redesign phase 5): the Assembly's embargoes and
+	# the mandate holder's war support end with it.
+	un_teeth_lift_embargoes = yes
+	remove_modifier = un_mandate_war_support_modifier
 	if = {
 		limit = { has_variable = un_charter_signed }
 		remove_variable = un_charter_signed
@@ -472,6 +480,9 @@ un_dissolve_strip_country = {
 # Scope: country
 un_membership_end_effect = {
 	je:je_united_nations ?= { remove_modifier = un_member_modifier }
+	# Dues stop with membership; arrears do not (redesign phase 5): a member
+	# that walks out owing money rejoins still withholding.
+	remove_modifier = un_dues_modifier
 	je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
 	je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
 	je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }

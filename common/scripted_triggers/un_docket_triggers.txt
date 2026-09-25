@@ -24,6 +24,9 @@ un_docket_can_be_offered = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	NOT = { has_variable = un_dkt_offered }
 	un_may_table_now = yes
+	# Article 19 (redesign phase 5): a member that has lost its vote tables
+	# nothing.
+	NOT = { un_dues_vote_suspended = yes }
 }
 
 # ---- Situations --------------------------------------------------------------------------

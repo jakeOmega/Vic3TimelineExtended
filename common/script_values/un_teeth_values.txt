@@ -1,0 +1,79 @@
+﻿# ============================================================================
+# UN RESOLUTIONS WITH TEETH — WHAT A RESOLUTION DOES AT EACH TIER (phase 5)
+# ============================================================================
+# docs/systems/un_redesign_design.md §5.2 and §4.2; as shipped, §0.5.
+# Strength means reach, not just size: above Established a resolution changes
+# what it does, not only how hard it bites (un_enforcement already scales every
+# penalty).
+#
+#   condemnation   Strong: the condemned are shunned (un_condemned_isolation_modifier,
+#                  diplomatic reputation). Supranational: restrained as well
+#                  (un_condemned_restraint_modifier, play maneuvers and infamy).
+#   sanctions      Strong: every major-power member that voted for them, and has
+#                  diplomatic relevance to the target, embargoes it. Supranational:
+#                  every such member. A member that drops a UN embargo while the
+#                  regime stands is busting it (a dossier record and a credibility
+#                  debit).
+#   war without    Established: every war goal the initiator of a play adds without
+#   a mandate      a bound mandate costs un_war_surcharge_base infamy; Strong x2;
+#                  Supranational x5. Against a country under a UN peacekeeping
+#                  deployment, twice that from Strong. Replaces the blanket
+#                  un_high_authority_infamy_modifier.
+#   mandate        Strong: the holder of a bound mandate keeps its war support
+#                  (un_mandate_war_support_modifier).
+#   peacekeeping   below Established a carried request sends observers only.
+#   the veto       after Charter Reform II (veto restraint) a veto is overridden
+#                  when the resolution carries a two-thirds supermajority of the
+#                  members with a vote.
+#   standing case  Supranational: a non-member of major-power rank, or a
+#                  non-member with a nuclear programme or arsenal, carries a
+#                  standing case of un_case_standing_value in its dossier.
+#
+# The writers are in common/scripted_effects/un_teeth_effects.txt, the tests in
+# common/scripted_triggers/un_teeth_triggers.txt. Every figure is here, once;
+# the surcharge's 2 / 4 / 10 are also written in words in the loc; change both.
+# ============================================================================
+
+# ---- Tuning ----------------------------------------------------------------
+
+# Infamy per war goal added without a mandate, at Established. Strong doubles
+# it, Supranational multiplies it by five.
+un_war_surcharge_base = { value = 2 }
+
+# The standing case against an outsider at Supranational: enough for sanctions
+# on its own (their threshold is 50).
+un_case_standing_value = { value = 50 }
+
+# ---- The surcharge -----------------------------------------------------------
+
+# Infamy per war goal at the current tier: 0 below Established, then x1 / x2 /
+# x5 the base. Globals only.
+un_war_surcharge_value = {
+	value = 0
+	if = {
+		limit = { un_tier_at_least_established = yes }
+		add = un_war_surcharge_base
+	}
+	if = {
+		limit = { un_tier_at_least_strong = yes }
+		add = un_war_surcharge_base
+	}
+	if = {
+		limit = { un_tier_is_supranational = yes }
+		add = {
+			value = un_war_surcharge_base
+			multiply = 3
+		}
+	}
+}
+
+# ---- The standing case ----------------------------------------------------------
+
+# Scope: country
+un_case_standing_term = {
+	value = 0
+	if = {
+		limit = { un_case_standing_applies = yes }
+		add = un_case_standing_value
+	}
+}

@@ -1,0 +1,45 @@
+﻿# ============================================================================
+# UN RESOLUTIONS WITH TEETH — TRIGGERS (redesign phase 5)
+# ============================================================================
+# The figures are in common/script_values/un_teeth_values.txt, the writers in
+# common/scripted_effects/un_teeth_effects.txt.
+# ============================================================================
+
+# A carried peacekeeping request sends a full deployment: nobody vetoed it and
+# the UN is at least Established. Below that, or vetoed, it sends observers.
+# Scope: resolution container
+un_resolution_peacekeeping_full = {
+	has_tag = un_topic_peacekeeping_request
+	NOT = { has_tag = un_res_vetoed }
+	un_tier_at_least_established = yes
+}
+
+# The Supranational standing case (§4.2, §5.3): an outsider of major-power rank,
+# or an outsider with a nuclear programme or arsenal, is a sanctions case by
+# being what it is.
+# Scope: country
+un_case_standing_applies = {
+	un_tier_is_supranational = yes
+	NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+	is_subject = no
+	NOT = { is_country_type = decentralized }
+	OR = {
+		country_rank >= rank_value:major_power
+		has_modifier = nuclear_power
+		has_journal_entry = je_nuclear_program
+	}
+}
+
+# A member's UN embargo on a sanctioned country has been dropped while the
+# regime still stands: sanctions busting.
+# Scope: the embargoing country; expects scope:un_embargo_target
+un_teeth_embargo_dropped = {
+	NOT = { has_diplomatic_pact = { who = scope:un_embargo_target type = embargo } }
+}
+
+# The holder of a bound mandate keeps its war support (Strong and above).
+# Scope: country
+un_teeth_mandate_support_applies = {
+	un_tier_at_least_strong = yes
+	var:un_mandate_current ?= { has_tag = un_mandate_bound }
+}

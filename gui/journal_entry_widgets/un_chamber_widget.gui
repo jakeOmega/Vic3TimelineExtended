@@ -334,6 +334,33 @@ flowcontainer = {
 		}
 	}
 
+	# ---- Our obligations (redesign phase 5) ----
+	# What membership asks of us: dues and arrears, the conventions' regimes
+	# that bind us, and the pressure on our sovereignty at home. Collapsed by
+	# default, like every other section.
+	un_chamber_section_header = {
+		blockoverride "left_text" {
+			text = "je_un_chamber_obligations_header"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_chamber_obligations')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('un_chamber_obligations'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('un_chamber_obligations')]"
+		}
+	}
+
+	un_chamber_panel = {
+		visible = "[GetVariableSystem.Exists('un_chamber_obligations')]"
+
+		un_chamber_text = {
+			text = "[GetScriptedGui('un_chamber_obligations_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+	}
+
 	# ---- Recorded ballot of the resolution in session ----
 	un_chamber_section_header = {
 		blockoverride "left_text" {

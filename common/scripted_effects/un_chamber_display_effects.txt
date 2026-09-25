@@ -311,6 +311,13 @@ un_chamber_veto_line = {
 			custom_tooltip_no_bullet = je_un_chamber_vetoed_unknown
 		}
 	}
+	# Veto restraint (Charter Reform II; redesign phase 5): a veto the
+	# supermajority overrode.
+	else_if = {
+		limit = { has_tag = un_res_veto_overridden }
+		var:un_res_vetoer ?= { save_temporary_scope_as = un_chamber_vetoer }
+		custom_tooltip_no_bullet = je_un_chamber_veto_overridden
+	}
 	else_if = {
 		limit = { un_resolution_is_binding = yes }
 		custom_tooltip_no_bullet = je_un_chamber_binding_not_vetoed
@@ -518,6 +525,11 @@ un_chamber_outcome_line = {
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_vetoed_unknown
 		}
+	}
+	else_if = {
+		limit = { has_tag = un_res_veto_overridden }
+		var:un_res_vetoer ?= { save_temporary_scope_as = un_chamber_vetoer }
+		custom_tooltip_no_bullet = je_un_chamber_veto_overridden
 	}
 }
 
@@ -870,6 +882,8 @@ un_standing_reason_line = {
 	else_if = { limit = { var:un_standing_last_reason = 29 } custom_tooltip_no_bullet = je_un_standing_reason_29 }
 	else_if = { limit = { var:un_standing_last_reason = 30 } custom_tooltip_no_bullet = je_un_standing_reason_30 }
 	else_if = { limit = { var:un_standing_last_reason = 31 } custom_tooltip_no_bullet = je_un_standing_reason_31 }
+	else_if = { limit = { var:un_standing_last_reason = 32 } custom_tooltip_no_bullet = je_un_standing_reason_32 }
+	else_if = { limit = { var:un_standing_last_reason = 33 } custom_tooltip_no_bullet = je_un_standing_reason_33 }
 	else = { custom_tooltip_no_bullet = je_un_standing_reason_none }
 }
 
@@ -1458,6 +1472,12 @@ un_chamber_exposure_block = {
 	if = {
 		limit = { has_global_variable = un_founded }
 		custom_tooltip_no_bullet = je_un_chamber_exposure_case
+		# The Supranational standing case against an outsider (redesign
+		# phase 5): already inside the case strength above; named here.
+		if = {
+			limit = { un_case_standing_applies = yes }
+			custom_tooltip_no_bullet = je_un_chamber_exposure_standing_case
+		}
 		if = {
 			limit = { un_case_supports = { TOPIC = mandate } }
 			custom_tooltip_no_bullet = je_un_chamber_exposure_mandate
@@ -1477,5 +1497,58 @@ un_chamber_exposure_block = {
 	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_exposure_no_un
+	}
+}
+
+# OUR OBLIGATIONS (redesign phase 5): what membership asks of us — our
+# assessed dues and any arrears (§7.2), the conventions' regimes that bind us
+# as winner or loser (§5.3), and the pressure on our sovereignty at home
+# (§7.1) — and the world's picture of who pays. Root-level lines only.
+# Scope: country (the viewer)
+un_chamber_obligations_block = {
+	if = {
+		limit = { NOT = { has_global_variable = un_founded } }
+		custom_tooltip_no_bullet = je_un_chamber_obligations_no_un
+	}
+	else = {
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			un_chamber_dues_lines = yes
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_obligations_nonmember
+			if = {
+				limit = { has_variable = un_arrears_owed }
+				custom_tooltip_no_bullet = je_un_chamber_dues_owed_outside
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_dues_budget
+		custom_tooltip_no_bullet = je_un_chamber_obligations_help
+	}
+}
+
+# Our own dues: paying, withholding, or silenced by Article 19.
+# Scope: country (a member)
+un_chamber_dues_lines = {
+	if = {
+		limit = { un_dues_is_withholding = yes }
+		if = {
+			limit = { un_dues_vote_suspended = yes }
+			custom_tooltip_no_bullet = je_un_chamber_dues_article_19
+		}
+		else_if = {
+			limit = { un_dues_assessed = yes }
+			custom_tooltip_no_bullet = je_un_chamber_dues_withheld
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_dues_withheld_moribund
+		}
+	}
+	else_if = {
+		limit = { un_dues_assessed = yes }
+		custom_tooltip_no_bullet = je_un_chamber_dues_paying
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_dues_none
 	}
 }
