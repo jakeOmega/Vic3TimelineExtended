@@ -8,7 +8,8 @@
 # WHO MAY WRITE global_var:un_authority:
 #   un_authority_monthly_update    the monthly step toward the target
 #   un_authority_shock_record      a world moment (rare; see below)
-#   un_found_button                the founding value
+#   un_found_organisation          the founding value (un_ladder_effects.txt)
+#   un_dissolve                    removes it when the UN dissolves (ditto)
 #   the debug helpers in te_debug_un_effects.txt
 # Nothing else. An act that used to add or subtract authority directly now
 # writes a LEDGER ENTRY, which moves a pillar and therefore the target:
@@ -49,7 +50,8 @@
 #   4     veto cast                            11    permanent member left the UN
 #   5     mandate discharged as written        12    expulsion motion carried
 #   6     mandate violated or abandoned        13    expulsion motion fell
-#   7     sanctions regime lifted              1NN   response to UN event un_events.NN
+#   7     sanctions regime lifted              14    charter reform adopted
+#                                              1NN   response to UN event un_events.NN
 # ============================================================================
 
 # ---- Monthly update ------------------------------------------------------------
@@ -112,6 +114,11 @@ un_authority_monthly_update = {
 	set_global_variable = { name = un_authority_step value = un_authority_step_value }
 	change_global_variable = { name = un_authority add = global_var:un_authority_step }
 	un_authority_clamp = yes
+
+	# 6. The ladder (phase 2, un_ladder_effects.txt): the tier and its
+	#    enforcement, the charter's reform clock, and the crisis. Dissolution
+	#    itself is checked last in un_global_authority_on_action.
+	un_ladder_monthly_update = yes
 }
 
 # change_global_variable has no clamp argument.

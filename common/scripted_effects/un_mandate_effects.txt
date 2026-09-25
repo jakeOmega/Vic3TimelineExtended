@@ -270,6 +270,11 @@ un_mandate_on_violated = {
 		un_standing_loss = { AMOUNT = un_standing_mandate_violated_loss REASON = 27 }
 		un_standing_suspend = { DAYS = 3650 }
 	}
+	# The dossier (redesign phase 3): a licence abused is a record the
+	# Assembly can hold against the actor — grounds for its next censure.
+	var:un_mnd_actor ?= {
+		un_dossier_record = { RECORD = violation POINTS = un_dos_points_violation }
+	}
 }
 
 # ============================================================================

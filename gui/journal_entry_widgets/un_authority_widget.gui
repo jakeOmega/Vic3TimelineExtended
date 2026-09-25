@@ -2,7 +2,8 @@
 ###
 ### The equilibrium model of docs/systems/un_redesign_design.md §3, shown to the
 ### player: the target authority is moving toward, its seven pillars, the
-### viewer's own weight in world affairs, who is championing or undermining
+### viewer's own weight in world affairs, the tier and charter (phase 2), the
+### crisis panel while one is open (phase 2), who is championing or undermining
 ### the organisation, the most recent ledger entries, how the model works, and
 ### the authority history chart.
 ###
@@ -151,7 +152,15 @@ flowcontainer = {
 	un_auth_panel = {
 		visible = "[Not(GetVariableSystem.Exists('un_auth_why_closed'))]"
 
-		# Empty states only (not founded; no monthly update yet).
+		# Redesign phase 2: the crisis panel, only while the crisis is open —
+		# the collapse clock and the powers that could save the organisation.
+		un_auth_text = {
+			visible = "[GetScriptedGui('un_authority_crisis_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			text = "[GetScriptedGui('un_authority_crisis_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+
+		# Empty states only (not founded, dissolved, a founding conference in
+		# session; no monthly update yet).
 		un_auth_text = {
 			visible = "[Not( GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
 			text = "[GetScriptedGui('un_authority_summary_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
@@ -232,6 +241,12 @@ flowcontainer = {
 			un_auth_text = {
 				tooltip = "je_un_auth_tbl_weight_tt"
 				text = "je_un_auth_tbl_weight"
+			}
+
+			# Redesign phase 2: the tier and its enforcement, the charter's
+			# ceiling, and the reform clock.
+			un_auth_text = {
+				text = "[GetScriptedGui('un_authority_ladder_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
 			}
 		}
 

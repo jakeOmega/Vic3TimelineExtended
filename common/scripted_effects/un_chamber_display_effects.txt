@@ -54,7 +54,25 @@ un_chamber_topic_line = {
 	}
 	else_if = {
 		limit = { has_tag = un_topic_reform }
-		custom_tooltip_no_bullet = je_un_chamber_topic_reform
+		# Charter reform (redesign phase 2) names its stage; a reform tabled
+		# before phase 2 names none.
+		if = {
+			limit = {
+				has_variable = un_res_charter_stage
+				var:un_res_charter_stage = 2
+			}
+			custom_tooltip_no_bullet = je_un_chamber_topic_reform_2
+		}
+		else_if = {
+			limit = {
+				has_variable = un_res_charter_stage
+				var:un_res_charter_stage = 1
+			}
+			custom_tooltip_no_bullet = je_un_chamber_topic_reform_1
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_topic_reform
+		}
 	}
 	else_if = {
 		limit = { has_tag = un_topic_heritage }
@@ -138,6 +156,54 @@ un_chamber_mandate_terms_line = {
 		var:un_res_mandate_beneficiary ?= { save_temporary_scope_as = un_chamber_res_beneficiary }
 		custom_tooltip_no_bullet = je_un_chamber_res_mandate_beneficiary
 	}
+	# A divided region: while the vote is open, say which part is at stake.
+	if = {
+		limit = {
+			has_tag = un_res_voting
+			exists = var:un_res_mandate_region
+			exists = var:un_res_target
+			exists = var:un_res_mandate_beneficiary
+		}
+		var:un_res_mandate_region = { save_temporary_scope_as = un_chamber_split_region }
+		var:un_res_target = { save_temporary_scope_as = un_chamber_split_target }
+		var:un_res_mandate_beneficiary = { save_temporary_scope_as = un_chamber_split_holder }
+		un_chamber_mandate_split_lines = yes
+	}
+}
+
+# A mandate names a whole state region, but claims cover a whole region too,
+# so in a split region the beneficiary may already hold part of it, and the
+# target may claim that part in turn: the holders of a split region usually
+# claim each other's part (the previous owner of a conquered incorporated
+# state gets a claim on its region). Say so, so "Territory named: Ceylon, to
+# be restored to India" is not read as India's own Ceylon. Found in play,
+# 2026-09-25: the rule is right, the card was ambiguous.
+# Expects temporary scopes un_chamber_split_region, un_chamber_split_target
+# and un_chamber_split_holder (the beneficiary).
+# Scope: any
+un_chamber_mandate_split_lines = {
+	if = {
+		limit = {
+			exists = scope:un_chamber_split_region
+			exists = scope:un_chamber_split_target
+			exists = scope:un_chamber_split_holder
+			scope:un_chamber_split_region = {
+				any_scope_state = { owner = scope:un_chamber_split_holder }
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_mandate_split
+		if = {
+			limit = {
+				scope:un_chamber_split_region = {
+					any_scope_state = {
+						owner = scope:un_chamber_split_holder
+						has_claim_by = scope:un_chamber_split_target
+					}
+				}
+			}
+			custom_tooltip_no_bullet = je_un_chamber_mandate_split_mutual
+		}
+	}
 }
 
 # Proposer and (when the topic names one) target. Both reads are guarded
@@ -172,11 +238,12 @@ un_chamber_parties_line = {
 }
 
 # Vote tally plus the passage rule the resolve step actually applies.
-# Mirrors un_resolution_decide (un_vote_effects.txt:156-175): expulsion needs
-# un_vote_expulsion_passed >= 0 (a 2/3 supermajority of all current members);
-# every other topic needs un_res_margin >= 1 (a simple majority of the votes
-# cast). The same two script values are evaluated here, so the projection line
-# can never drift from the rule.
+# Mirrors un_resolution_decide (un_vote_effects.txt): expulsion and charter
+# reform (un_resolution_needs_supermajority) need un_vote_supermajority_passed
+# >= 0 (a 2/3 supermajority of all current members); every other topic needs
+# un_res_margin >= 1 (a simple majority of the votes cast). The same trigger and
+# the same two script values are evaluated here, so the projection line can
+# never drift from the rule.
 # Scope: resolution container
 un_chamber_tally_line = {
 	custom_tooltip_no_bullet = je_un_chamber_tally
@@ -197,7 +264,7 @@ un_chamber_tally_line = {
 		custom_tooltip_no_bullet = je_un_chamber_tally_committed
 	}
 	if = {
-		limit = { has_tag = un_topic_expulsion }
+		limit = { un_resolution_needs_supermajority = yes }
 		custom_tooltip_no_bullet = je_un_chamber_rule_supermajority
 	}
 	else = {
@@ -209,9 +276,9 @@ un_chamber_tally_line = {
 # Scope: resolution container
 un_chamber_projection_line = {
 	if = {
-		limit = { has_tag = un_topic_expulsion }
+		limit = { un_resolution_needs_supermajority = yes }
 		if = {
-			limit = { un_vote_expulsion_passed >= 0 }
+			limit = { un_vote_supermajority_passed >= 0 }
 			custom_tooltip_no_bullet = je_un_chamber_projection_pass
 		}
 		else = {
@@ -278,6 +345,20 @@ un_chamber_consequences_line = {
 		if = {
 			limit = { has_tag = un_res_vetoed }
 			custom_tooltip_no_bullet = je_un_chamber_conseq_reform_vetoed
+		}
+		else_if = {
+			limit = {
+				has_variable = un_res_charter_stage
+				var:un_res_charter_stage = 2
+			}
+			custom_tooltip_no_bullet = je_un_chamber_conseq_reform_2
+		}
+		else_if = {
+			limit = {
+				has_variable = un_res_charter_stage
+				var:un_res_charter_stage = 1
+			}
+			custom_tooltip_no_bullet = je_un_chamber_conseq_reform_1
 		}
 		else = {
 			custom_tooltip_no_bullet = je_un_chamber_conseq_reform
@@ -580,6 +661,22 @@ un_chamber_mandate_entry = {
 		var:un_mnd_beneficiary ?= { save_temporary_scope_as = un_chamber_mnd_beneficiary }
 		custom_tooltip_no_bullet = je_un_chamber_mandate_beneficiary
 	}
+	# A divided region (un_chamber_mandate_split_lines), while the mandate is live.
+	if = {
+		limit = {
+			OR = {
+				has_tag = un_mandate_active
+				has_tag = un_mandate_bound
+			}
+			exists = var:un_mnd_region
+			exists = var:un_mnd_target
+			exists = var:un_mnd_beneficiary
+		}
+		var:un_mnd_region = { save_temporary_scope_as = un_chamber_split_region }
+		var:un_mnd_target = { save_temporary_scope_as = un_chamber_split_target }
+		var:un_mnd_beneficiary = { save_temporary_scope_as = un_chamber_split_holder }
+		un_chamber_mandate_split_lines = yes
+	}
 	# Status. Exactly one of these tags is set at a time; the live pair comes
 	# first so a closed mandate can never be read as still standing.
 	if = {
@@ -830,6 +927,10 @@ un_chamber_mandate_case_line = {
 				state_region = { save_temporary_scope_as = un_chamber_case_region }
 			}
 			custom_tooltip_no_bullet = je_un_chamber_mandate_case
+			scope:un_chamber_case_region = { save_temporary_scope_as = un_chamber_split_region }
+			scope:un_mandate_case_target = { save_temporary_scope_as = un_chamber_split_target }
+			save_temporary_scope_as = un_chamber_split_holder
+			un_chamber_mandate_split_lines = yes
 		}
 	}
 }
@@ -967,6 +1068,10 @@ un_chamber_propose_mandate_row = {
 				state_region = { save_temporary_scope_as = un_chamber_case_region }
 			}
 			custom_tooltip_no_bullet = je_un_chamber_propose_target_mandate
+			scope:un_chamber_case_region = { save_temporary_scope_as = un_chamber_split_region }
+			scope:un_mandate_case_target = { save_temporary_scope_as = un_chamber_split_target }
+			save_temporary_scope_as = un_chamber_split_holder
+			un_chamber_mandate_split_lines = yes
 		}
 	}
 	un_chamber_propose_status_line = {
@@ -1003,37 +1108,374 @@ un_chamber_propose_aid_row = {
 	}
 }
 
-# One line per topic that has no proposal control of its own: the eleven
+# Charter reform (redesign phase 2): binding with no graduated form, decided by
+# a two-thirds supermajority, and tabled only once the organisation has
+# outgrown its charter. The row names the next stage and shows how far the
+# 24-month clock has run.
+# Scope: country
+un_chamber_propose_reform_row = {
+	if = {
+		limit = { un_charter_next_stage >= 2 }
+		custom_tooltip_no_bullet = je_un_chamber_propose_topic_reform_2
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_propose_topic_reform_1
+	}
+	custom_tooltip_no_bullet = je_un_chamber_binding_flat_block
+	custom_tooltip_no_bullet = je_un_chamber_rule_supermajority
+	if = {
+		limit = { un_charter_can_be_reformed = yes }
+		custom_tooltip_no_bullet = je_un_chamber_propose_reform_clock
+	}
+	un_chamber_propose_status_line = {
+		AVAILABLE = un_propose_reform_available
+		POSSIBLE = un_propose_reform_possible
+		NO_CASE = je_un_chamber_propose_no_case_reform
+	}
+}
+
+# One line per topic that has no proposal control of its own: the ten
 # conventions, declarations and programmes that reach the floor only when the
-# proposer events in events/un_events.txt fire. Listing them is the point —
-# without it a player has no way of knowing the Assembly can take them up at
-# all. The only gate that is cheaply knowable from script is the five-year
-# topic cooldown a closed resolution leaves behind; each event also carries its
-# own `cooldown = { days = ... }` and its own trigger (technology, authority,
-# laws), neither of which script can read.
-# Parameters: $NAME$  = the topic's loc key
-#             $TOPIC$ = topic key for un_resolution_topic_on_cooldown
+# docket offers them to a delegation (redesign phase 4, un_docket_effects.txt).
+# Listing them is the point — without it a player has no way of knowing the
+# Assembly can take them up at all. Each line says what raises the topic, and
+# whether it is in force (its agency founded: the docket never raises it
+# again) or on the five-year cooldown a closed resolution leaves behind.
+# Parameters: $NAME$   = the topic's loc key
+#             $TOPIC$  = topic key for un_resolution_topic_on_cooldown
+#             $RAISED$ = the loc key saying what raises it
+#             $AGENCY$ = the un_agency_<agency> global it founds (none: none)
 # Scope: country
 un_chamber_assembly_topic_line = {
 	custom_tooltip_no_bullet = $NAME$
+	custom_tooltip_no_bullet = $RAISED$
 	if = {
+		limit = { has_global_variable = un_agency_$AGENCY$ }
+		custom_tooltip_no_bullet = je_un_chamber_topic_in_force
+	}
+	else_if = {
 		limit = { un_resolution_topic_on_cooldown = { TOPIC = $TOPIC$ } }
 		custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown
 	}
 }
 
+# The docket (redesign phase 4): what it last took up, and when it takes up the
+# next item. Root-level lines only.
+# Scope: country
+un_chamber_docket_block = {
+	custom_tooltip_no_bullet = je_un_chamber_docket_intro
+	if = {
+		limit = { has_global_variable = un_dkt_last_type }
+		un_chamber_docket_last_line = yes
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_docket_none
+	}
+	if = {
+		limit = { has_global_variable = un_docket_months_left }
+		custom_tooltip_no_bullet = je_un_chamber_docket_next
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_docket_open
+	}
+}
+
+# The last item, in words, by its code (the table in un_docket_effects.txt).
+# The codes that name a country leave it in global_var:un_dkt_last_subject.
+# Scope: country
+un_chamber_docket_last_line = {
+	if = {
+		limit = {
+			global_var:un_dkt_last_type = 1
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_1
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 2
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_2
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 3
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_3
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 4
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_4
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 5
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_5
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 6
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_6
+	}
+	else_if = {
+		limit = { global_var:un_dkt_last_type = 7 }
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_7
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 8
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_8
+	}
+	else_if = {
+		limit = { global_var:un_dkt_last_type = 9 }
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_9
+	}
+	else_if = {
+		limit = { global_var:un_dkt_last_type = 10 }
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_10
+	}
+	else_if = {
+		limit = { global_var:un_dkt_last_type = 11 }
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_11
+	}
+	else_if = {
+		limit = {
+			global_var:un_dkt_last_type = 12
+			has_global_variable = un_dkt_last_subject
+		}
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_12
+	}
+	else_if = {
+		limit = { global_var:un_dkt_last_type = 13 }
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_13
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_docket_last_other
+	}
+}
+
 # Scope: country
 un_chamber_assembly_business_block = {
+	un_chamber_docket_block = yes
 	custom_tooltip_no_bullet = je_un_chamber_assembly_intro
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_human_rights TOPIC = human_rights }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_reform TOPIC = reform }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_icc TOPIC = icc }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_npt TOPIC = npt }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_climate TOPIC = climate }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_pandemic TOPIC = pandemic }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_refugee TOPIC = refugee }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_heritage TOPIC = heritage }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_decolonization TOPIC = decolonization }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_space TOPIC = space }
-	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_law_of_sea TOPIC = law_of_sea }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_human_rights TOPIC = human_rights RAISED = je_un_chamber_raised_human_rights AGENCY = unhrc }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_icc TOPIC = icc RAISED = je_un_chamber_raised_icc AGENCY = icc }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_npt TOPIC = npt RAISED = je_un_chamber_raised_npt AGENCY = iaea }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_climate TOPIC = climate RAISED = je_un_chamber_raised_climate AGENCY = unep }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_pandemic TOPIC = pandemic RAISED = je_un_chamber_raised_agenda AGENCY = who }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_refugee TOPIC = refugee RAISED = je_un_chamber_raised_agenda AGENCY = unhcr }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_heritage TOPIC = heritage RAISED = je_un_chamber_raised_agenda AGENCY = unesco }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_decolonization TOPIC = decolonization RAISED = je_un_chamber_raised_decolonization AGENCY = none }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_space TOPIC = space RAISED = je_un_chamber_raised_space AGENCY = unoosa }
+	un_chamber_assembly_topic_line = { NAME = je_un_chamber_assembly_topic_law_of_sea TOPIC = law_of_sea RAISED = je_un_chamber_raised_agenda AGENCY = itlos }
+}
+
+# ============================================================================
+# REDESIGN PHASE 3 — GROUNDS, LEANS, REASONS, EXPOSURE, RECESS
+# ============================================================================
+# Read-only like everything above. The dossier and the lean are defined in
+# common/script_values/un_dossier_values.txt; every figure printed here is a
+# stored variable (the lean snapshot un_vote.4 writes, the tallies on the
+# resolution, the case recorded when it was tabled) or an O(1) read of one.
+
+# The grounds of a punitive resolution: the target's case when it was tabled,
+# against the topic's threshold, and — while the vote is open — the target's
+# record as it stands now.
+# Scope: resolution container
+un_chamber_grounds_line = {
+	if = {
+		limit = {
+			un_resolution_is_punitive = yes
+			has_variable = un_res_case
+		}
+		custom_tooltip_no_bullet = je_un_chamber_grounds
+		if = {
+			limit = { has_tag = un_res_voting }
+			var:un_res_target ?= { save_temporary_scope_as = un_chamber_grounds_target }
+			if = {
+				limit = { exists = scope:un_chamber_grounds_target }
+				custom_tooltip_no_bullet = je_un_chamber_grounds_record
+			}
+		}
+	}
+}
+
+# Why the members voted as they did: every reason counted on the resolution
+# when its ballots were recorded (un_lean_tally_*), one line per reason that
+# moved at least one member. Root-level lines only.
+# Scope: resolution container
+un_chamber_reasons_block = {
+	if = {
+		limit = {
+			OR = {
+				has_variable = un_res_why_yes_grounds
+				has_variable = un_res_why_yes_proposer
+				has_variable = un_res_why_yes_target
+				has_variable = un_res_why_yes_pledge
+				has_variable = un_res_why_yes_accepted
+				has_variable = un_res_why_yes_interests
+				has_variable = un_res_why_no_grounds
+				has_variable = un_res_why_no_self
+				has_variable = un_res_why_no_proposer
+				has_variable = un_res_why_no_target
+				has_variable = un_res_why_no_glass
+				has_variable = un_res_why_no_burden
+				has_variable = un_res_why_no_interests
+			}
+		}
+		custom_tooltip_no_bullet = je_un_chamber_reasons_intro
+		un_chamber_reason_line = { NAME = un_res_why_yes_grounds KEY = je_un_res_why_yes_grounds }
+		un_chamber_reason_line = { NAME = un_res_why_yes_proposer KEY = je_un_res_why_yes_proposer }
+		un_chamber_reason_line = { NAME = un_res_why_yes_target KEY = je_un_res_why_yes_target }
+		un_chamber_reason_line = { NAME = un_res_why_yes_pledge KEY = je_un_res_why_yes_pledge }
+		un_chamber_reason_line = { NAME = un_res_why_yes_accepted KEY = je_un_res_why_yes_accepted }
+		un_chamber_reason_line = { NAME = un_res_why_yes_interests KEY = je_un_res_why_yes_interests }
+		un_chamber_reason_line = { NAME = un_res_why_no_grounds KEY = je_un_res_why_no_grounds }
+		un_chamber_reason_line = { NAME = un_res_why_no_self KEY = je_un_res_why_no_self }
+		un_chamber_reason_line = { NAME = un_res_why_no_proposer KEY = je_un_res_why_no_proposer }
+		un_chamber_reason_line = { NAME = un_res_why_no_target KEY = je_un_res_why_no_target }
+		un_chamber_reason_line = { NAME = un_res_why_no_glass KEY = je_un_res_why_no_glass }
+		un_chamber_reason_line = { NAME = un_res_why_no_burden KEY = je_un_res_why_no_burden }
+		un_chamber_reason_line = { NAME = un_res_why_no_interests KEY = je_un_res_why_no_interests }
+	}
+	else_if = {
+		limit = { has_tag = un_res_voting }
+		custom_tooltip_no_bullet = je_un_chamber_reasons_pending
+	}
+}
+
+# One reason, with its count, printed only if it moved anyone. The loc key is
+# passed whole (not built from NAME) so organize_loc.py can see it is used.
+# Parameters: $NAME$ = un_res_why_<side>_<term>, $KEY$ = its loc key
+# Scope: resolution container
+un_chamber_reason_line = {
+	if = {
+		limit = { has_variable = $NAME$ }
+		custom_tooltip_no_bullet = $KEY$
+	}
+}
+
+# How the Assembly reads OUR position on the resolution in session: the lean
+# the AI would vote by, term by term, from the snapshot un_vote.4 wrote. Shown
+# only when the snapshot is for this resolution (un_chamber_position_sgui).
+# Root-level lines only.
+# Scope: country (the viewer)
+un_chamber_position_block = {
+	if = {
+		limit = {
+			has_variable = un_lean_total
+			has_variable = un_lean_res
+			var:un_lean_res ?= global_var:un_active_resolution
+		}
+		custom_tooltip_no_bullet = je_un_chamber_position_total
+		un_chamber_position_term = { TERM = grounds KEY = je_un_chamber_position_grounds }
+		un_chamber_position_term = { TERM = self KEY = je_un_chamber_position_self }
+		un_chamber_position_term = { TERM = proposer KEY = je_un_chamber_position_proposer }
+		un_chamber_position_term = { TERM = target KEY = je_un_chamber_position_target }
+		un_chamber_position_term = { TERM = glass KEY = je_un_chamber_position_glass }
+		un_chamber_position_term = { TERM = standing KEY = je_un_chamber_position_standing }
+		un_chamber_position_term = { TERM = pledge KEY = je_un_chamber_position_pledge }
+		un_chamber_position_term = { TERM = accepted KEY = je_un_chamber_position_accepted }
+		un_chamber_position_term = { TERM = burden KEY = je_un_chamber_position_burden }
+		un_chamber_position_term = { TERM = interests KEY = je_un_chamber_position_interests }
+		custom_tooltip_no_bullet = je_un_chamber_position_consensus
+	}
+}
+
+# One term of our lean, printed only when it is not zero. The loc key is
+# passed whole so organize_loc.py can see it is used.
+# Parameters: $TERM$ = the term's suffix (un_lean_<TERM>), $KEY$ = its loc key
+# Scope: country (the viewer)
+un_chamber_position_term = {
+	if = {
+		limit = {
+			has_variable = un_lean_$TERM$
+			NOT = { var:un_lean_$TERM$ = 0 }
+		}
+		custom_tooltip_no_bullet = $KEY$
+	}
+}
+
+# The recorded ballot of the resolution in session, each voter with the lean
+# it voted by where its snapshot is for this resolution: what the target (and
+# everyone else) most needs to see, why each member voted as it did. The
+# archive keeps un_chamber_ballot_lines, which prints no lean: a closed
+# resolution's voters have since been snapshotted for other business.
+# Scope: resolution container (the one in session)
+un_chamber_ballot_lines_active = {
+	custom_tooltip_no_bullet = je_un_chamber_ballot_intro
+	if = {
+		limit = { has_variable_list = un_res_yes }
+		every_in_list = {
+			variable = un_res_yes
+			if = {
+				limit = {
+					has_variable = un_lean_res
+					var:un_lean_res ?= PREV
+				}
+				custom_tooltip = je_un_chamber_voter_entry_yes_lean
+			}
+			else = {
+				custom_tooltip = je_un_chamber_voter_entry_yes
+			}
+		}
+	}
+	if = {
+		limit = { has_variable_list = un_res_no }
+		every_in_list = {
+			variable = un_res_no
+			if = {
+				limit = {
+					has_variable = un_lean_res
+					var:un_lean_res ?= PREV
+				}
+				custom_tooltip = je_un_chamber_voter_entry_no_lean
+			}
+			else = {
+				custom_tooltip = je_un_chamber_voter_entry_no
+			}
+		}
+	}
+	un_chamber_commitment_lines = yes
+}
+
+# OUR EXPOSURE: our own dossier, and which punitive topics our record would
+# support against us today (§5.1: "a real case is visible before it lands").
+# Root-level lines only.
+# Scope: country (the viewer)
+un_chamber_exposure_block = {
+	if = {
+		limit = { has_global_variable = un_founded }
+		custom_tooltip_no_bullet = je_un_chamber_exposure_case
+		if = {
+			limit = { un_case_supports = { TOPIC = mandate } }
+			custom_tooltip_no_bullet = je_un_chamber_exposure_mandate
+		}
+		else_if = {
+			limit = { un_case_supports = { TOPIC = sanctions } }
+			custom_tooltip_no_bullet = je_un_chamber_exposure_sanctions
+		}
+		else_if = {
+			limit = { un_case_supports = { TOPIC = condemn } }
+			custom_tooltip_no_bullet = je_un_chamber_exposure_condemn
+		}
+		else = {
+			custom_tooltip_no_bullet = je_un_chamber_exposure_clean
+		}
+		custom_tooltip_no_bullet = je_un_chamber_exposure_help
+	}
+	else = {
+		custom_tooltip_no_bullet = je_un_chamber_exposure_no_un
+	}
 }

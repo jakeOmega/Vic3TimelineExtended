@@ -8,9 +8,9 @@
 # running it. The effects are in
 # common/scripted_effects/un_authority_display_effects.txt and write nothing.
 #
-# Split into four so that each widget textbox gets lines in the order it
-# expects (root-level lines print before nested ones), and so the collapsed
-# help text costs nothing while it is closed.
+# Split so that each widget textbox gets lines in the order it expects
+# (root-level lines print before nested ones), and so the collapsed help text
+# costs nothing while it is closed.
 # ============================================================================
 
 # Whether the pillars exist yet: the gate for the widget's pillar table,
@@ -32,6 +32,30 @@ un_authority_summary_sgui = {
 
 	effect = {
 		un_authority_summary_block = yes
+	}
+}
+
+# Redesign phase 2: the tier and its enforcement, the charter, the reform clock.
+un_authority_ladder_sgui = {
+	scope = country
+
+	effect = {
+		un_authority_ladder_block = yes
+	}
+}
+
+# Redesign phase 2: the crisis panel. is_shown gates the textbox, so the widget
+# spends no space on it while the UN is not in crisis. Never executed.
+un_authority_crisis_sgui = {
+	scope = country
+
+	is_shown = {
+		un_crisis_is_open = yes
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+		un_authority_crisis_block = yes
 	}
 }
 

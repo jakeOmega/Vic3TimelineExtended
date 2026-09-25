@@ -85,6 +85,22 @@ un_resolution_open = {
 			set_variable = { name = un_res_months value = 0 }
 			add_to_variable_list = { name = un_res_yes target = scope:un_res_proposer_scope }
 		}
+		# The grounds (redesign phase 3): the target's case strength when the
+		# resolution was tabled, kept on the resolution for the chamber card.
+		# Staged in a global because it is evaluated in the target's scope.
+		if = {
+			limit = {
+				exists = scope:un_resolution
+				exists = scope:un_vote_target
+			}
+			scope:un_vote_target = {
+				set_global_variable = { name = un_case_stage value = un_case_strength }
+			}
+			scope:un_resolution = {
+				set_variable = { name = un_res_case value = global_var:un_case_stage }
+			}
+			remove_global_variable = un_case_stage
+		}
 	}
 	set_global_variable = un_vote_active
 	set_global_variable = { name = un_active_resolution value = scope:un_resolution }
@@ -92,13 +108,21 @@ un_resolution_open = {
 		limit = { has_global_variable = un_vote_reservation }
 		remove_global_variable = un_vote_reservation
 	}
+	# The ballot (redesign phase 3). Human members get un_vote.1 in thirty
+	# days and see their lean in the chamber at once (un_vote.4 writes it).
+	# The AI votes in script, by the same lean: un_vote.5 fires to the
+	# proposer in thirty days and sends every AI member its un_vote.4, with the
+	# monthly pulse as the fallback (un_resolutions_monthly_update).
 	every_country = {
 		limit = {
 			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			NOT = { this = scope:un_res_proposer_scope }
+			is_ai = no
 		}
 		trigger_event = { id = un_vote.1 days = 30 }
 	}
+	un_vote_refresh_human_leans = yes
+	trigger_event = { id = un_vote.5 days = 30 }
 	trigger_event = { id = un_vote.2 days = 365 }
 }
 
@@ -138,6 +162,13 @@ un_vote_release = {
 # Scope: voting country
 un_resolution_record_vote = {
 	save_scope_as = un_res_voter
+	# Why it voted this way, counted on the resolution (redesign phase 3,
+	# un_dossier_effects.txt). The list name picks the side. Before the vote
+	# is booked, while the resolution is still voting.
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_res_voting } }
+		un_lean_tally_$LIST$ = yes
+	}
 	scope:un_resolution ?= {
 		if = {
 			limit = { has_tag = un_res_voting }
@@ -151,7 +182,8 @@ un_resolution_record_vote = {
 # Record a permanent member's veto on scope:un_resolution: a no vote plus the
 # un_res_vetoed tag. Every veto is a credibility debit weighted by the vetoer's
 # weight in world affairs (un_authority_effects.txt): a superpower killing a
-# resolution costs the Assembly far more than a fading one does.
+# resolution costs the Assembly far more than a fading one does. At Moribund
+# (redesign phase 2) a veto costs nothing, so no entry is booked.
 #
 # A veto books a NO vote, so it settles a lobbying commitment exactly as an
 # ordinary no vote does — as broken. The veto RIGHT is never bound by a pledge
@@ -161,8 +193,17 @@ un_resolution_record_vote = {
 un_resolution_record_veto = {
 	save_scope_as = un_res_voter
 	if = {
-		limit = { scope:un_resolution ?= { has_tag = un_res_voting } }
+		limit = {
+			scope:un_resolution ?= { has_tag = un_res_voting }
+			NOT = { un_tier_is_moribund = yes }
+		}
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1.5 REASON = 4 }
+	}
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_res_voting } }
+		un_lean_tally_un_res_no = yes
+		# The proposer answers the veto (un_events.11; redesign phase 4).
+		un_docket_veto_consequence = yes
 	}
 	scope:un_resolution ?= {
 		if = {
@@ -180,15 +221,16 @@ un_resolution_record_veto = {
 }
 
 # Settle the vote: swap un_res_voting for un_res_passed or un_res_failed.
-# Expulsion needs a 2/3 supermajority of current members; every other topic a
-# simple majority (more yes than no votes).
+# Expulsion and charter reform need a 2/3 supermajority of current members
+# (un_resolution_needs_supermajority); every other topic a simple majority
+# (more yes than no votes).
 # Scope: resolution container
 un_resolution_decide = {
 	remove_tag = un_res_voting
 	if = {
-		limit = { has_tag = un_topic_expulsion }
+		limit = { un_resolution_needs_supermajority = yes }
 		if = {
-			limit = { un_vote_expulsion_passed >= 0 }
+			limit = { un_vote_supermajority_passed >= 0 }
 			add_tag = un_res_passed
 		}
 		else = {
@@ -226,6 +268,9 @@ un_resolution_archive = {
 			limit = { has_global_variable = un_vote_active }
 			remove_global_variable = un_vote_active
 		}
+		# The recess (redesign phase 3, §8.3): for three months only human
+		# members may table business (un_floor_open_to_ai).
+		set_global_variable = { name = un_recess_months value = un_recess_months_after_vote }
 	}
 	if = {
 		limit = {
@@ -275,6 +320,24 @@ un_resolutions_monthly_update = {
 			remove_tag = un_res_voting
 			add_tag = un_res_lapsed
 			un_resolution_archive = yes
+		}
+	}
+	# The ballot (redesign phase 3). While a resolution is voting: refresh the
+	# human members' lean snapshots, and send the AI its ballots if un_vote.5
+	# has not (its recipient, the proposer, is gone, or the resolution predates
+	# phase 3). Two months in, so the thirty-day event normally goes first.
+	global_var:un_active_resolution ?= {
+		if = {
+			limit = { has_tag = un_res_voting }
+			save_scope_as = un_resolution
+			if = {
+				limit = {
+					NOT = { has_variable = un_res_ai_cast }
+					var:un_res_months >= 2
+				}
+				un_vote_dispatch_ai_ballots = yes
+			}
+			un_vote_refresh_human_leans = yes
 		}
 	}
 	if = {

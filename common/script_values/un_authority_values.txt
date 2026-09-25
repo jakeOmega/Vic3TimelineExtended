@@ -298,6 +298,8 @@ un_pillar_delivery_value = {
 }
 
 # The equilibrium, from the snapshots the monthly update has just written.
+# Held under the charter's ceiling (un_charter_cap: 70 under the founding
+# charter, 85 after Reform I, 100 after Reform II; un_ladder_values.txt).
 un_authority_target_value = {
 	value = un_pillar_base
 	add = global_var:un_pillar_participation
@@ -307,16 +309,25 @@ un_authority_target_value = {
 	add = global_var:un_pillar_order
 	add = global_var:un_pillar_delivery
 	min = 0
-	max = 100
+	max = un_charter_cap
 }
 
 # This month's move toward the target.
+# The collapse clock (phase 2): while the crisis is open and the target itself
+# is below the collapse line, authority falls by at least a quarter point a
+# month, so a UN the world has given up on reaches 0 and dissolves instead of
+# approaching it for ever. The clamp is written last on purpose: it must bound
+# the final step, after the ordinary one.
 un_authority_step_value = {
 	value = global_var:un_authority_target
 	subtract = global_var:un_authority
 	divide = un_authority_approach_months
 	min = -1
 	max = un_authority_max_step
+	if = {
+		limit = { un_crisis_clock_running = yes }
+		max = un_crisis_min_fall
+	}
 }
 
 # ---- Display (O(1) reads of the snapshots) ------------------------------------

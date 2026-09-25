@@ -1,0 +1,657 @@
+﻿# ============================================================================
+# UN GROUNDS AND VOTES — THE DOSSIER AND THE ITEMISED LEAN (redesign phase 3)
+# ============================================================================
+# docs/systems/un_redesign_design.md §5.1, §6 and §8.3; as shipped, §0.3.
+#
+# THE DOSSIER. Every country carries a record of what it has done that the
+# Assembly could hold against it: five decaying country variables written only
+# by un_dossier_record (un_dossier_effects.txt), plus its infamy, read live.
+#
+#   un_dos_aggression   wars begun without a mandate, weighted by the power
+#                       of the countries attacked
+#   un_dos_defiance     binding resolutions refused, sanctions busted, the
+#                       court defied
+#   un_dos_violation    authorized mandates violated or abandoned
+#   un_dos_covert       severe covert operations exposed
+#   un_dos_nuclear      nuclear use
+#
+# Their sum, with the infamy term, is the CASE STRENGTH (0-100). A punitive
+# topic can be tabled against a country only when its case reaches the topic's
+# threshold: condemnation 30, sanctions 50, military mandate 60. A country with
+# a clean record cannot be targeted.
+#
+# THE LEAN. Every vote is decided by one signed number, un_vote_lean, the sum
+# of the named terms below. The AI votes yes when lean + noise > 0 and a
+# permanent member vetoes a binding resolution when the lean is below the veto
+# line (un_dossier_effects.txt, un_vote_ai_cast). The chamber prints the same
+# terms to explain every vote. There is no second rule: un_vote.1 goes to human
+# members only, and its ai_chance blocks are gone.
+#
+# Scope for every un_lean_* term: the voting country, as both THIS and ROOT
+# (they are evaluated only inside un_vote.4, a hidden event fired to the
+# voter), with scope:un_resolution, scope:un_vote_proposer and
+# scope:un_vote_target saved by that event.
+# ============================================================================
+
+# ---- Tuning: the dossier ------------------------------------------------------
+
+# Monthly decay of every record: 0.5^(1/60), a five-year half-life ("wars in
+# the last ten years" fade to a quarter).
+un_dossier_decay_factor = { value = 0.98851 }
+# A record below this is dropped rather than kept as dust.
+un_dossier_floor = { value = 0.5 }
+# No single record holds more than this.
+un_dossier_record_cap = { value = 60 }
+
+# Infamy counts 0.8 per point, up to 50.
+un_case_infamy_weight = { value = 0.8 }
+un_case_infamy_cap = { value = 50 }
+
+# What each act writes.
+un_dos_points_aggression_base = { value = 10 }
+# ...plus this much per unit of world power share at war with the aggressor
+# (attacking a typical great power, 10% of world prestige, adds 10), up to:
+un_dos_points_aggression_per_share = { value = 100 }
+un_dos_points_aggression_cap = { value = 30 }
+un_dos_points_defiance = { value = 10 }
+un_dos_points_busting = { value = 8 }
+un_dos_points_court = { value = 6 }
+un_dos_points_violation = { value = 20 }
+un_dos_points_covert = { value = 15 }
+un_dos_points_first_strike = { value = 40 }
+un_dos_points_tactical = { value = 20 }
+un_dos_points_retaliation = { value = 10 }
+
+# The grounds each punitive topic needs.
+un_case_threshold_condemn = { value = 30 }
+un_case_threshold_sanctions = { value = 50 }
+un_case_threshold_mandate = { value = 60 }
+
+# ---- Tuning: the lean ---------------------------------------------------------
+
+# The habit of consensus: most resolutions carry.
+un_lean_consensus_value = { value = 10 }
+# The veto line: a permanent member vetoes a binding resolution when its lean
+# is at or below this (un_vote_ai_cast). Lower after a recent veto; higher when
+# a veto costs nothing (Moribund).
+un_lean_veto_line = { value = -30 }
+un_lean_veto_line_recent = { value = -50 }
+un_lean_veto_line_moribund = { value = -10 }
+# A term counts as a voter's reason, for the chamber's tally of reasons, at
+# this size or more.
+un_lean_reason_size = { value = 10 }
+un_lean_reason_size_negative = { value = -10 }
+
+# ---- The dossier: reads ---------------------------------------------------------
+
+# Scope: country
+un_case_infamy_term = {
+	value = infamy
+	multiply = un_case_infamy_weight
+	min = 0
+	max = un_case_infamy_cap
+}
+
+# The case the Assembly could make against this country, 0-100.
+# Scope: country
+un_case_strength = {
+	value = un_case_infamy_term
+	if = {
+		limit = { has_variable = un_dos_aggression }
+		add = var:un_dos_aggression
+	}
+	if = {
+		limit = { has_variable = un_dos_defiance }
+		add = var:un_dos_defiance
+	}
+	if = {
+		limit = { has_variable = un_dos_violation }
+		add = var:un_dos_violation
+	}
+	if = {
+		limit = { has_variable = un_dos_covert }
+		add = var:un_dos_covert
+	}
+	if = {
+		limit = { has_variable = un_dos_nuclear }
+		add = var:un_dos_nuclear
+	}
+	min = 0
+	max = 100
+}
+
+# The points a war begun now without a mandate writes: a base, plus the
+# power of everyone this country is now at war with.
+# Scope: the aggressor
+un_dos_points_aggression = {
+	value = 0
+	every_country = {
+		limit = {
+			has_war_with = PREV
+			has_variable = un_power_share
+		}
+		add = var:un_power_share
+	}
+	multiply = un_dos_points_aggression_per_share
+	add = un_dos_points_aggression_base
+	max = un_dos_points_aggression_cap
+}
+
+# Display reads, O(1). Scope: country
+un_disp_dos_aggression = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dos_aggression }
+		add = var:un_dos_aggression
+	}
+}
+un_disp_dos_defiance = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dos_defiance }
+		add = var:un_dos_defiance
+	}
+}
+un_disp_dos_violation = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dos_violation }
+		add = var:un_dos_violation
+	}
+}
+un_disp_dos_covert = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dos_covert }
+		add = var:un_dos_covert
+	}
+}
+un_disp_dos_nuclear = {
+	value = 0
+	if = {
+		limit = { has_variable = un_dos_nuclear }
+		add = var:un_dos_nuclear
+	}
+}
+
+# The threshold this resolution's topic needs, 0 for a non-punitive topic.
+# Scope: resolution container
+un_res_case_threshold = {
+	value = 0
+	if = {
+		limit = { has_tag = un_topic_condemn }
+		add = un_case_threshold_condemn
+	}
+	else_if = {
+		limit = { has_tag = un_topic_sanctions }
+		add = un_case_threshold_sanctions
+	}
+	else_if = {
+		limit = { has_tag = un_topic_military_mandate }
+		add = un_case_threshold_mandate
+	}
+}
+
+# ---- The lean: its terms -----------------------------------------------------------
+
+un_lean_consensus = {
+	value = un_lean_consensus_value
+}
+
+# THE GROUNDS. For a punitive topic, how far the target's case clears the
+# topic's threshold, halved, between -20 and +30. The target itself does not
+# weigh its own case here (un_lean_self does that).
+un_lean_grounds = {
+	value = 0
+	if = {
+		limit = {
+			scope:un_resolution ?= { un_resolution_is_punitive = yes }
+			exists = scope:un_vote_target
+			NOT = { scope:un_vote_target ?= this }
+		}
+		# A scope block inside a script value evaluates its lines in that
+		# scope (the owner = { add = ... } shape vanilla uses).
+		scope:un_vote_target = { add = un_case_strength }
+		scope:un_resolution = { subtract = un_res_case_threshold }
+		multiply = 0.5
+		min = -20
+		max = 30
+	}
+}
+
+# THE TARGET ITSELF. Nobody votes for its own censure, or the loss of its own
+# seat, lightly; a strong UN is harder to defy.
+un_lean_self = {
+	value = 0
+	if = {
+		limit = {
+			scope:un_resolution ?= { un_resolution_accuses_target = yes }
+			scope:un_vote_target ?= this
+		}
+		add = -50
+		if = {
+			limit = { un_tier_at_least_strong = yes }
+			add = 20
+		}
+	}
+}
+
+# TIES TO THE PROPOSER: alliance, bloc, rivalry, relevance and relations.
+un_lean_proposer = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:un_vote_proposer
+			NOT = { scope:un_vote_proposer ?= this }
+		}
+		if = {
+			limit = { has_treaty_alliance_with = { TARGET = scope:un_vote_proposer } }
+			add = 20
+		}
+		if = {
+			limit = { is_in_same_power_bloc = scope:un_vote_proposer }
+			add = 20
+		}
+		if = {
+			limit = { has_diplomatic_pact = { who = scope:un_vote_proposer type = rivalry } }
+			add = -30
+		}
+		if = {
+			limit = { has_diplomatic_relevance = scope:un_vote_proposer }
+			add = 5
+		}
+		add = {
+			value = scope:un_vote_proposer.relations:root
+			divide = 10
+			min = -10
+			max = 10
+		}
+	}
+}
+
+# TIES TO THE TARGET, for a topic that accuses one: nobody censures its ally
+# lightly, and a rival's censure is welcome.
+un_lean_target = {
+	value = 0
+	if = {
+		limit = {
+			scope:un_resolution ?= { un_resolution_accuses_target = yes }
+			exists = scope:un_vote_target
+			NOT = { scope:un_vote_target ?= this }
+		}
+		if = {
+			limit = { has_treaty_alliance_with = { TARGET = scope:un_vote_target } }
+			add = -60
+		}
+		if = {
+			limit = { is_in_same_power_bloc = scope:un_vote_target }
+			add = -35
+		}
+		if = {
+			limit = { has_diplomatic_pact = { who = scope:un_vote_target type = rivalry } }
+			add = 30
+		}
+		add = {
+			value = scope:un_vote_target.relations:root
+			divide = -10
+			min = -10
+			max = 10
+		}
+	}
+}
+
+# GLASS HOUSES: a member whose own record is heavy fears the precedent of a
+# punitive resolution.
+un_lean_glass = {
+	value = 0
+	if = {
+		limit = {
+			scope:un_resolution ?= { un_resolution_is_punitive = yes }
+			NOT = { scope:un_vote_target ?= this }
+			un_case_strength >= un_case_threshold_condemn
+		}
+		add = -10
+		if = {
+			limit = { un_case_strength >= un_case_threshold_sanctions }
+			add = -10
+		}
+	}
+}
+
+# THE PROPOSER'S STANDING: the Assembly listens harder to a member with a record.
+un_lean_standing = {
+	value = 0
+	if = {
+		limit = { scope:un_vote_proposer ?= { un_standing_tier_exemplary = yes } }
+		add = 5
+	}
+	else_if = {
+		limit = { scope:un_vote_proposer ?= { un_standing_tier_respected = yes } }
+		add = 2
+	}
+	else_if = {
+		limit = { scope:un_vote_proposer ?= { un_standing_tier_poor = yes } }
+		add = -2
+	}
+	else_if = {
+		limit = { scope:un_vote_proposer ?= { un_standing_tier_disgraced = yes } }
+		add = -5
+	}
+}
+
+# A PLEDGE: a vote committed through lobbying is a promise, not a lean.
+un_lean_pledge = {
+	value = 0
+	if = {
+		limit = { un_lobby_holds_pending_commitment = yes }
+		add = 100
+	}
+}
+
+# PERMISSION: the target accepted its own censure, which lowers the political
+# cost of voting for it.
+un_lean_accepted = {
+	value = 0
+	if = {
+		limit = {
+			scope:un_resolution ?= { has_tag = un_res_target_accepted }
+			NOT = { scope:un_vote_target ?= this }
+		}
+		add = 15
+	}
+}
+
+# THE BURDEN: what an aid or peacekeeping request would cost us, and whether
+# the requester has any business asking.
+un_lean_burden = {
+	value = 0
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_aid_request } }
+		if = {
+			limit = { has_variable = un_aid_contribution_count }
+			add = {
+				value = var:un_aid_contribution_count
+				max = 3
+				multiply = -15
+			}
+		}
+		if = {
+			limit = { scope:un_vote_proposer ?= { country_rank >= rank_value:great_power } }
+			add = -50
+		}
+		else_if = {
+			limit = { scope:un_vote_proposer ?= { country_rank >= rank_value:major_power } }
+			add = -25
+		}
+		if = {
+			limit = { scope:un_vote_proposer ?= { country_gdp_per_capita > root.country_gdp_per_capita } }
+			add = -25
+		}
+		if = {
+			limit = { scope:un_vote_proposer ?= { gdp_per_capita_ranking <= 15 } }
+			add = -15
+		}
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
+		if = {
+			limit = { has_variable = un_peacekeeping_contribution_count }
+			add = {
+				value = var:un_peacekeeping_contribution_count
+				max = 3
+				multiply = -15
+			}
+		}
+	}
+}
+
+# OUR INTERESTS on the topic: laws, technologies and situations that make a
+# member for or against this kind of resolution. Ported from the per-topic
+# ai_chance modifiers un_vote.1 used to carry. A modifier that sat on the yes
+# option only keeps its weight; one that sat on both options (a yes penalty
+# mirrored by a no bonus) is ported as HALF the difference, because the old
+# vote was proportional (yes weight / total) and a lean decides outright: the
+# full difference would have made, for instance, every great-power permanent
+# member veto every ICC resolution.
+un_lean_interests = {
+	value = 0
+	# Image repair: the infamous back humanitarian resolutions.
+	if = {
+		limit = {
+			scope:un_resolution ?= {
+				OR = {
+					has_tag = un_topic_aid_request
+					has_tag = un_topic_peacekeeping_request
+					has_tag = un_topic_human_rights
+					has_tag = un_topic_refugee
+					has_tag = un_topic_pandemic
+				}
+			}
+			infamy >= 25
+		}
+		add = 25
+		if = {
+			limit = { infamy >= 50 }
+			add = 15
+		}
+	}
+	# A bloc leader buys leverage by helping.
+	if = {
+		limit = {
+			scope:un_resolution ?= {
+				OR = {
+					has_tag = un_topic_aid_request
+					has_tag = un_topic_peacekeeping_request
+				}
+			}
+			is_power_bloc_leader = yes
+		}
+		add = 20
+	}
+	if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_condemn } }
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 15 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_human_rights } }
+		if = { limit = { has_law = law_type:law_multicultural } add = 20 }
+		if = { limit = { has_law = law_type:law_universal_suffrage } add = 15 }
+		if = { limit = { has_law = law_type:law_guaranteed_liberties } add = 15 }
+		if = { limit = { has_law = law_type:law_ethnostate } add = -35 }
+		if = { limit = { has_law = law_type:law_outlawed_dissent } add = -30 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_npt } }
+		if = {
+			limit = {
+				has_variable = nuclear_weapon_stockpile
+				var:nuclear_weapon_stockpile >= 1
+			}
+			add = -30
+		}
+		else = {
+			add = 20
+		}
+		if = { limit = { has_journal_entry = je_nuclear_program } add = -25 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_climate } }
+		if = { limit = { has_technology_researched = green_revolution } add = 20 }
+		if = { limit = { has_technology_researched = environmental_movement } add = 10 }
+		if = { limit = { has_law = law_type:law_laissez_faire } add = -25 }
+		if = { limit = { has_law = law_type:law_command_economy } add = -15 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_reform } }
+		if = {
+			limit = {
+				OR = {
+					je:je_united_nations ?= { has_modifier = un_champion_order_cost }
+					je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier }
+					has_law = law_type:law_humanitarian_regulations
+				}
+			}
+			add = 20
+		}
+		if = {
+			limit = { NOT = { country_rank >= rank_value:major_power } }
+			add = 10
+		}
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_isolationism
+					je:je_united_nations ?= { has_modifier = un_undermine_order_cost }
+				}
+			}
+			add = -25
+		}
+		# Reform II restrains the veto itself.
+		if = {
+			limit = {
+				scope:un_resolution ?= {
+					has_variable = un_res_charter_stage
+					var:un_res_charter_stage >= 2
+				}
+				je:je_united_nations ?= { has_modifier = un_security_council_modifier }
+			}
+			add = -25
+		}
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_heritage } }
+		if = { limit = { has_law = law_type:law_multicultural } add = 15 }
+		if = { limit = { country_rank >= rank_value:major_power } add = 10 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_decolonization } }
+		if = {
+			limit = { any_subject_or_below = { is_direct_subject_of = ROOT } }
+			add = -40
+		}
+		else = {
+			add = 15
+		}
+		if = { limit = { has_law = law_type:law_council_republic } add = 20 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_pandemic } }
+		if = { limit = { has_law = law_type:law_worker_protections } add = 15 }
+		if = { limit = { has_law = law_type:law_isolationism } add = -25 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_refugee } }
+		if = { limit = { has_law = law_type:law_no_migration_controls } add = 20 }
+		if = { limit = { has_law = law_type:law_closed_borders } add = -30 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_space } }
+		if = { limit = { has_technology_researched = space_exploration } add = 20 }
+		if = { limit = { has_law = law_type:law_single_party_state } add = -20 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_peacekeeping_request } }
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 25 }
+		if = { limit = { country_rank >= rank_value:great_power } add = 15 }
+		if = { limit = { has_law = law_type:law_isolationism } add = -25 }
+		if = { limit = { has_law = law_type:law_total_war } add = -10 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_aid_request } }
+		if = { limit = { country_rank >= rank_value:great_power } add = 20 }
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = 20 }
+		if = { limit = { has_law = law_type:law_isolationism } add = -25 }
+		if = { limit = { has_law = law_type:law_laissez_faire } add = -10 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_sanctions } }
+		if = { limit = { country_rank >= rank_value:great_power } add = 15 }
+		if = {
+			limit = {
+				OR = {
+					has_law = law_type:law_humanitarian_regulations
+					has_law = law_type:law_limited_war
+				}
+			}
+			add = 15
+		}
+		if = { limit = { has_law = law_type:law_isolationism } add = -20 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
+		if = { limit = { has_law = law_type:law_free_trade } add = 20 }
+		if = { limit = { country_rank >= rank_value:great_power } add = 10 }
+		if = { limit = { has_law = law_type:law_isolationism } add = -20 }
+		if = { limit = { has_law = law_type:law_protectionism } add = -10 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_icc } }
+		if = { limit = { has_law = law_type:law_universal_suffrage } add = 15 }
+		if = { limit = { has_law = law_type:law_multicultural } add = 10 }
+		if = { limit = { country_rank >= rank_value:great_power } add = -25 }
+		if = { limit = { is_at_war = yes } add = -35 }
+		if = { limit = { has_law = law_type:law_single_party_state } add = -30 }
+	}
+	else_if = {
+		limit = { scope:un_resolution ?= { has_tag = un_topic_military_mandate } }
+		# Licensing force is grave; the grounds and the ties do the rest.
+		add = -25
+		if = { limit = { has_law = law_type:law_humanitarian_regulations } add = -20 }
+		if = { limit = { has_law = law_type:law_isolationism } add = -25 }
+		if = { limit = { has_law = law_type:law_total_war } add = 15 }
+		# A strong Assembly can afford to act; a weak one cannot carry it.
+		if = {
+			limit = {
+				has_global_variable = un_authority
+				global_var:un_authority >= 70
+			}
+			add = 15
+		}
+		else_if = {
+			limit = {
+				has_global_variable = un_authority
+				global_var:un_authority < 50
+			}
+			add = -20
+		}
+	}
+}
+
+# The whole lean: the sum of every term above.
+un_vote_lean = {
+	value = un_lean_consensus
+	add = un_lean_grounds
+	add = un_lean_self
+	add = un_lean_proposer
+	add = un_lean_target
+	add = un_lean_glass
+	add = un_lean_standing
+	add = un_lean_pledge
+	add = un_lean_accepted
+	add = un_lean_burden
+	add = un_lean_interests
+}
+
+# ---- The lean: display reads (O(1), from the snapshot un_vote.4 wrote) ------------
+# Scope: country
+
+un_disp_lean_total = {
+	value = 0
+	if = {
+		limit = { has_variable = un_lean_total }
+		add = var:un_lean_total
+	}
+}
+
+# ---- Recess ------------------------------------------------------------------------
+
+# Months the floor stays in recess after a resolution closes (§8.3).
+un_recess_months_after_vote = { value = 3 }
+
+un_disp_recess_months = {
+	value = 0
+	if = {
+		limit = { has_global_variable = un_recess_months }
+		add = global_var:un_recess_months
+	}
+}
