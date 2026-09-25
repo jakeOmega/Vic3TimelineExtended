@@ -2,10 +2,10 @@
 
 Events whose text does not match the context they fire in: events about a mod system that ignore it, and events that claim a country acted when it never chose to. Heuristic ranking for a human read — see `event_context_audit.py` for the rules. Suppress a reviewed flag with a check-tagged comment on its own line inside the event block: `# REVIEWED YYYY-MM-DD (<check>): rationale`.
 
-- Events defined: **824**, visible: **806**, dispatch sites traced: **995**
+- Events defined: **825**, visible: **807**, dispatch sites traced: **996**
 - `system_ungated`: **0** unreviewed, 16 REVIEWED
 - `unchosen_self_action`: **0** unreviewed, 7 REVIEWED
-- `imputed_foreign_action`: **0** unreviewed, 21 REVIEWED
+- `imputed_foreign_action`: **0** unreviewed, 19 REVIEWED
 - Tags to remove: **0**
 
 ## `system_ungated`
@@ -76,5 +76,3 @@ No unreviewed flags. ✅
 - `movement_events_te.4` — events/movement_events_te.txt:325 (REVIEWED 2026-09-25: tracked in #427 — the accused country gets the choice first)
 - `social_tensions_events.2` — events/social_tensions_events.txt:119 (REVIEWED 2026-09-25: tracked in #427 — the accused country gets the choice first)
 - `society_technology_events.14` — events/society_technology_events.txt:1258 (REVIEWED 2026-09-25: tracked in #427 — the accused country gets the choice first)
-- `world_war_events.1` — events/world_war_events.txt:8 (REVIEWED 2026-09-25: tracked in #427 — the accused country gets the choice first)
-- `world_war_events.3` — events/world_war_events.txt:279 (REVIEWED 2026-09-25: tracked in #427 — gate on real pressure)
