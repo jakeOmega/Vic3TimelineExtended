@@ -148,11 +148,18 @@ apply_decolonization_path = {
 # variables, shapes and durations the vanilla release actions set
 # (te_construction_market_on_released_independent in
 # common/on_actions/te_construction_market_on_actions.txt):
-#   former_overlord       untimed; read by decolonization_events .7 and .19 and,
-#                         through decol_is_independent_former_colony, by the
-#                         precursors .60 / .61 that lead to .5 / .6
-#   recently_decolonized  ~20 years; the post-independence events (.7, .16,
-#                         .17, .18, .21) and their pool entries
+#   former_overlord       untimed; read through decol_is_independent_former_colony
+#                         by the precursors .60 / .61 that lead to .5 / .6
+#                         (also by .7 and .19)
+#   recently_decolonized  ~20 years; read by the post-independence events (.7,
+#                         .16, .17, .18, .21) and their pool entries
+# Only .60 / .61 (and so .5 / .6) are reachable through these variables alone.
+# .7, .15, .16, .17, .18 and .21 also require je_colonial_empire on the former
+# colony itself, which a freed colony almost never holds (its possible needs an
+# overseas colonial state or a colonial subject), and .19 needs .15's
+# nationalization modifier. That gate predates this helper and blocks
+# vanilla-released countries too; recently_decolonized is still set so the two
+# release paths match.
 # A country the mod frees itself never passes through those release actions
 # (create_dynamic_country makes a new country; make_independent frees an
 # existing subject), so every decolonization path that frees a colony calls this:

@@ -378,7 +378,7 @@ decolonization_events.2 = {
 		}
 		scope:pressured_subject = {
 			add_liberty_desire = -5
-			post_notification = colonial_neocolonial_terms_notice
+			post_notification = colonial_neocolonial_reforms_notice
 		}
 		# Industrialists approve, intelligentsia skeptical
 		ig_approval_effect = { IG = ig_industrialists MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }

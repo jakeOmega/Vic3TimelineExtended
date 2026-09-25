@@ -473,8 +473,8 @@ country_has_qualifying_colonial_subject = {
 # Country-scope (evaluated on a METROPOLE): is it fighting a colonial war?
 # At war, and one of:
 #   - its colonial crackdown is running (colonial_crackdown_modifier, from
-#     decolonization_events .1.b / .2.b / .3.b / .8): the pacification campaign
-#     the empire chose;
+#     decolonization_events .1.b / .2.b / .3.b / .8.b / .13.b): the pacification
+#     campaign the empire chose;
 #   - an enemy in one of its wars is its own qualifying colonial subject, i.e.
 #     a colony fighting for independence (the independence war goal is valid
 #     only while the holder's overlord is the target, so the colony is still
