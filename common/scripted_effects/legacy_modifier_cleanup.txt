@@ -69,6 +69,17 @@
 #      climate_measures_sunset_no_gw_modifier, climate_victory_dividend_no_gw_modifier
 #   2. their names in te_miscellaneous_l_english.yml and their `_desc` keys in
 #      te_concepts_l_english.yml
+#
+# ── PENDING REMOVAL: banking_event_bank_holiday (added 2026-09-25) ──
+# banking_cycle_events.31's option A now enacts the dashboard's Bank Holiday
+# (banking_effect_cb_bank_holiday) instead of granting this bespoke modifier
+# (#428). It survives so a save made while one was running loads clean; it is
+# timed (short_modifier_time) and decaying, so no strip is needed. Remove BOTH
+# of the following together, one release after 2026-09-25:
+#   1. the `banking_event_bank_holiday` block in
+#      common/static_modifiers/extra_modifiers.txt
+#   2. its loc keys `banking_event_bank_holiday` and
+#      `banking_event_bank_holiday_desc` in te_events_l_english.yml
 ########################################
 
 legacy_je_modifier_cleanup_effect = {

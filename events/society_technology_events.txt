@@ -2751,10 +2751,7 @@ society_technology_events.30 = {
 		}
 		add_radicals = { value = medium_radicals strata = lower }
 		add_loyalists = { value = small_radicals strata = upper }
-		custom_tooltip = {
-			text = "BUBBLE_PRESSURE_6_DESC"
-			change_variable = { name = bubble_pressure add = 6 }
-		}
+		banking_change_bubble_pressure = { ADD = 6 TEXT = BUBBLE_PRESSURE_6_DESC }
 	}
 
 	option = {
@@ -2793,10 +2790,7 @@ society_technology_events.30 = {
 		}
 		add_loyalists = { value = medium_radicals strata = lower }
 		add_radicals = { value = small_radicals strata = upper }
-		custom_tooltip = {
-			text = "MOMENTUM_MINUS_1_DESC"
-			change_variable = { name = finance_cycle_momentum add = -1 }
-		}
+		banking_change_momentum = { ADD = -1 TEXT = MOMENTUM_MINUS_1_DESC }
 	}
 
 	after = {

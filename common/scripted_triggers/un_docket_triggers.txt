@@ -45,7 +45,9 @@ un_docket_loan_candidate = {
 		banking_cycle_is_panic = yes
 	}
 	OR = {
-		has_variable = banking_crisis_wave_crashed
+		# Reached by the wave, crash or scare — what the old _crashed mark
+		# meant until #428 narrowed it to real crashes.
+		banking_crisis_wave_reached = yes
 		any_country = { has_modifier = great_depression_modifier }
 	}
 	NOT = { has_variable = un_dkt_loan_raised }
