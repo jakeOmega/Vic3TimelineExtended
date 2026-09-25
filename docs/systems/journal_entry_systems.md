@@ -1286,6 +1286,38 @@ Traced states: fresh activation (status variable absent → guarded fallback bra
 ### Never Completes
 Persistent journal entry. `immediate` therefore runs again on every re-activation, which is why the stockpile and the first-device flag are created only when absent — progress and funding are still zeroed unconditionally, because the bar's goal is fixed at activation from `current_value + goal_add_value`.
 
+
+### Nuclear Deterrence Widget (journal-entry widget)
+Two panels on `je_nuclear_deterrence` (the posture and crisis entry — `mod_systems.md` § Nuclear Deterrence and Crisis Diplomacy; design and what shipped in `nuclear_crisis_design.md` §0).
+
+- **File:** `gui/journal_entry_widgets/nuclear_deterrence_widget.gui` — `widget_je_nuclear_posture` in `custom_widget_container_3`, drawn only while armed (`nd_armed_sgui`); `widget_je_nuclear_crisis` in `custom_widget_container_4`. Both roots gated on `JournalEntry.IsActive`.
+- **Handlers:** `common/scripted_guis/nuclear_deterrence_sguis.txt` — two action handlers (`nd_posture_sgui`, `nd_crisis_action_sgui`) and four display handlers (`nd_armed_sgui`, `nd_in_crisis_sgui`, `nd_crisis_opponent_sgui`, `nd_last_crisis_sgui`). All carry `ai_is_valid = { always = no }`: the AI sets its posture in `nd_ai_review_posture` and answers crises through the crisis events, which call the same effects.
+- **Branchy text:** `common/customizable_localization/nuclear_deterrence_custom_loc.txt`. Every block but `nd_status_line` is widget/event-only and accessor-free; `nd_status_line` is the entry's `status_desc` and speaks for a non-nuclear crisis party.
+- **Numbers:** the `nd_display_*` family and the `nd_upkeep_weekly_at_readiness_*` / `_step` values in `common/script_values/nuclear_deterrence_values.txt`. The incident band is projected into `nd_risk_band` by `nd_apply_posture_modifiers`; nothing re-derives it.
+
+Areas (posture): **Nuclear Posture** (open) — doctrine, readiness (with the step under way), authority, weekly upkeep, incident exposure band. **Doctrine** — five choice rows, each tooltip listing the doctrine's modifier through `GetStaticModifier(...).GetDesc`. **Readiness and Launch Authority** — three and three choice rows; readiness tooltips show the weekly upkeep at that level. **Forces** — warheads (exact, with the world's estimate), survivability against its ceiling, reliability, strain, the chance a delegated sequence is halted, and the safeguards / hardening steppers. **At Home** — how each interest-group class receives the posture.
+
+Areas (crisis): **Nuclear Crisis** (open, only while in one) — the opponent (printed in script), our side, the dispute and whether it is public, stage, weeks to the deadline, danger, the pressure on the target, and five action rows. Between crises, the last opponent and how it ended. **Reputation** — credibility and pledges.
+
+Op table (repeated in the sgui header and the `.gui` header — keep all three in step):
+
+| sgui | op | meaning |
+|---|---|---|
+| `nd_posture_sgui` | 11–15 | adopt doctrine 1–5 |
+| | 21–23 | set readiness target 1–3 |
+| | 31–33 | adopt launch authority 1–3 |
+| | 40 / 41 | safeguards down / up |
+| | 50 / 51 | hardening down / up |
+| `nd_crisis_action_sgui` | 1 | go public (issuer) |
+| | 2 | propose a mutual stand-down |
+| | 3 | a demonstration exercise (armed) |
+| | 4 | concede (target) |
+| | 5 | let it go (issuer) |
+
+**Editing rules.** As for the programme widget: no action button's `visible` comes from an `op`-branching `IsShown` — buttons are always drawn while their section is and `is_valid` greys them with the failing clause; yes/no questions go to the scope-free display handlers; change a rate or threshold in the script value or trigger, never in the `.gui` or loc.
+
+**Not verified in-game** (§0.9 of the design doc is the checklist): the whole panel, including `GetStaticModifier(...).GetDesc` inside a choice tooltip and the `GetPlayer` accessor used by tooltips that both the panel and events render.
+
 ---
 
 ## State Collapse (`je_state_collapse`)
