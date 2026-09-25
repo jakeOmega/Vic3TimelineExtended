@@ -756,6 +756,9 @@ flowcontainer = {
 			blockoverride "chart_legend" {
 				text = "gw_hist_chart_temp_legend"
 			}
+			# This series records no markers; the store's pips belong to
+			# other systems (banking, cultural hegemony) and would go unexplained.
+			blockoverride "marker_pips" {}
 			blockoverride "bar_tooltip" {
 				tooltip = "gw_hist_tt_temp"
 			}
@@ -787,6 +790,9 @@ flowcontainer = {
 			blockoverride "chart_legend" {
 				text = "gw_hist_chart_share_legend"
 			}
+			# This series records no markers; the store's pips belong to
+			# other systems (banking, cultural hegemony) and would go unexplained.
+			blockoverride "marker_pips" {}
 			blockoverride "bar_tooltip" {
 				tooltip = "gw_hist_tt_share"
 			}

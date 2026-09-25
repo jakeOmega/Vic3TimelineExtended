@@ -1,0 +1,418 @@
+﻿### United Nations JE widget — why UN authority is moving.
+###
+### The equilibrium model of docs/systems/un_redesign_design.md §3, shown to the
+### player: the target authority is moving toward, its seven pillars, the
+### viewer's own weight in world affairs, who is championing or undermining
+### the organisation, the most recent ledger entries, how the model works, and
+### the authority history chart.
+###
+### Display-only. Every text block is built in script by
+### common/scripted_guis/un_authority_sguis.txt over the read-only effects in
+### common/scripted_effects/un_authority_display_effects.txt and rendered with
+### ExecuteTooltip, the chamber's pattern (see un_chamber_widget.gui for why
+### country names are printed that way). Every figure is an O(1) read of a
+### snapshot the monthly update wrote. The chart reuses te_history_chart from
+### te_history_chart.gui; its samples come from un_authority_record_history
+### (un_authority_effects.txt).
+###
+### Wired via `widget = { name = "widget_je_un_authority" container =
+### "custom_widget_container_3" }` in je_united_nations: under the chamber,
+### above the button grid.
+###
+### Expand/collapse state lives in GetVariableSystem (client-side, never saved).
+### "Why authority is moving" is OPEN by default — it is the answer to the
+### question the whole redesign exists to answer — so its key records that the
+### player CLOSED it. The help text and the chart are closed by default: the
+### chart builds 240 bar widgets when open.
+
+types un_authority_widget_types
+{
+	type un_auth_text = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_large
+	}
+
+	### Smaller explanatory line under the headline.
+	type un_auth_note_text = textbox {
+		autoresize = yes
+		multiline = yes
+		minimumsize = { 480 -1 }
+		maximumsize = { 480 -1 }
+		align = left|nobaseline
+		using = fontsize_medium
+		default_format = "#lore"
+	}
+
+	type un_auth_panel = flowcontainer {
+		direction = vertical
+		ignoreinvisible = yes
+		parentanchor = hcenter
+		margin = { 20 8 }
+		spacing = 6
+
+		background = {
+			using = entry_bg_fancy_dark
+			alpha = 0.5
+		}
+	}
+
+	type un_auth_section_header = section_header_button {
+		blockoverride "layout" {
+			parentanchor = hcenter
+			size = { 520 38 }
+		}
+	}
+
+	### One row of the pillar table: the pillar, its value, and a short reading
+	### of what drives it. The long explanation (range, formula) is the row's
+	### tooltip. Same three-column shape as ch_breakdown_row in the cultural
+	### hegemony widget, so the two breakdowns read alike. Every value is an
+	### O(1) read of a snapshot (un_disp_* in un_authority_values.txt).
+	type un_auth_pillar_row = flowcontainer {
+		direction = horizontal
+		ignoreinvisible = yes
+		spacing = 4
+
+		widget = {
+			size = { 164 22 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 164
+				elide = right
+				align = nobaseline
+				using = fontsize_medium
+				block "pillar_label" {}
+			}
+		}
+
+		widget = {
+			size = { 56 22 }
+			textbox = {
+				parentanchor = right|vcenter
+				autoresize = yes
+				max_width = 56
+				elide = right
+				align = nobaseline
+				using = fontsize_medium
+				block "pillar_value" {}
+			}
+		}
+
+		widget = {
+			size = { 252 22 }
+			textbox = {
+				parentanchor = left|vcenter
+				autoresize = yes
+				max_width = 252
+				elide = right
+				align = nobaseline
+				using = fontsize_small
+				default_format = "#lore"
+				block "pillar_detail" {}
+			}
+		}
+	}
+}
+
+
+### WIDGETS
+flowcontainer = {
+	name = "widget_je_un_authority"
+	direction = vertical
+	parentanchor = hcenter
+	ignoreinvisible = yes
+	spacing = 4
+
+	# Same gate as the chamber: je_united_nations is shown while inactive, and
+	# there is nothing to explain before the entry activates.
+	visible = "[JournalEntry.IsActive]"
+
+	# ---- Why authority is moving (open by default) ----
+	un_auth_section_header = {
+		blockoverride "left_text" {
+			text = "je_un_auth_header_why"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_auth_why_closed')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[GetVariableSystem.Exists('un_auth_why_closed')]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[Not(GetVariableSystem.Exists('un_auth_why_closed'))]"
+		}
+	}
+
+	un_auth_panel = {
+		visible = "[Not(GetVariableSystem.Exists('un_auth_why_closed'))]"
+
+		# Empty states only (not founded; no monthly update yet).
+		un_auth_text = {
+			visible = "[Not( GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End ) )]"
+			text = "[GetScriptedGui('un_authority_summary_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+
+		# ---- Authority, its target, and the pillars that make the target ----
+		flowcontainer = {
+			direction = vertical
+			ignoreinvisible = yes
+			spacing = 2
+			visible = "[GetScriptedGui('un_authority_ready_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+
+			un_auth_text = {
+				text = "je_un_auth_tbl_headline"
+			}
+			un_auth_note_text = {
+				text = "je_un_auth_tbl_explain"
+			}
+
+			# Column headings
+			un_auth_pillar_row = {
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_h_pillar" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_h_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_h_reading" }
+			}
+
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_participation_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_participation_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_participation_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_participation_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_commitment_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_commitment_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_commitment_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_commitment_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_credibility_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_credibility_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_credibility_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_credibility_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_funding_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_funding_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_funding_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_funding_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_order_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_order_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_order_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_order_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_delivery_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_delivery_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_delivery_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_delivery_detail" }
+			}
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_base_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_base_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_base_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_base_detail" }
+			}
+
+			# The sum
+			un_auth_pillar_row = {
+				tooltip = "je_un_auth_tbl_target_tt"
+				blockoverride "pillar_label" { text = "je_un_auth_tbl_target_label" }
+				blockoverride "pillar_value" { text = "je_un_auth_tbl_target_value" }
+				blockoverride "pillar_detail" { text = "je_un_auth_tbl_target_detail" }
+			}
+
+			un_auth_text = {
+				tooltip = "je_un_auth_tbl_weight_tt"
+				text = "je_un_auth_tbl_weight"
+			}
+		}
+
+		un_auth_text = {
+			text = "[GetScriptedGui('un_authority_powers_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+		un_auth_text = {
+			text = "je_un_auth_log_intro"
+		}
+		un_auth_text = {
+			text = "[GetScriptedGui('un_authority_log_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+	}
+
+	# ---- How UN authority works (closed by default) ----
+	un_auth_section_header = {
+		blockoverride "left_text" {
+			text = "je_un_auth_header_help"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_auth_help_open')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('un_auth_help_open'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('un_auth_help_open')]"
+		}
+	}
+
+	un_auth_panel = {
+		visible = "[GetVariableSystem.Exists('un_auth_help_open')]"
+
+		un_auth_text = {
+			text = "[GetScriptedGui('un_authority_help_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).End)]"
+		}
+	}
+
+	# ---- Authority history (closed by default) ----
+	un_auth_section_header = {
+		blockoverride "left_text" {
+			text = "je_un_auth_header_history"
+		}
+		blockoverride "onclick" {
+			onclick = "[GetVariableSystem.Toggle('un_auth_hist_open')]"
+		}
+		blockoverride "onclick_showmore" {
+			visible = "[Not(GetVariableSystem.Exists('un_auth_hist_open'))]"
+		}
+		blockoverride "onclick_showless" {
+			visible = "[GetVariableSystem.Exists('un_auth_hist_open')]"
+		}
+	}
+
+	flowcontainer = {
+		direction = vertical
+		parentanchor = hcenter
+		ignoreinvisible = yes
+		spacing = 2
+		visible = "[GetVariableSystem.Exists('un_auth_hist_open')]"
+
+		### Range selector — the shared type and the shared GUI variable, so the
+		### range picked here is the range on every history chart in the game.
+		flowcontainer = {
+			direction = horizontal
+			ignoreinvisible = yes
+			parentanchor = hcenter
+			spacing = 4
+			margin = { 4 4 }
+
+			te_history_range_button = {
+				blockoverride "range_text" {
+					text = "te_hist_range_1y"
+				}
+				blockoverride "range_enabled" {
+					enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '1' ))]"
+				}
+				blockoverride "range_onclick" {
+					onclick = "[GetVariableSystem.Set( 'te_hist_range', '1' )]"
+				}
+			}
+			te_history_range_button = {
+				blockoverride "range_text" {
+					text = "te_hist_range_5y"
+				}
+				blockoverride "range_enabled" {
+					enabled = "[Not(GetVariableSystem.HasValue( 'te_hist_range', '5' ))]"
+				}
+				blockoverride "range_onclick" {
+					onclick = "[GetVariableSystem.Set( 'te_hist_range', '5' )]"
+				}
+			}
+			te_history_range_button = {
+				blockoverride "range_text" {
+					text = "te_hist_range_20y"
+				}
+				blockoverride "range_enabled" {
+					enabled = "[Or( GetVariableSystem.HasValue( 'te_hist_range', '1' ), GetVariableSystem.HasValue( 'te_hist_range', '5' ) )]"
+				}
+				blockoverride "range_onclick" {
+					onclick = "[GetVariableSystem.Set( 'te_hist_range', '20' )]"
+				}
+			}
+		}
+
+		textbox = {
+			visible = "[Not( IsDataModelEmpty( JournalEntry.GetCountry.MakeScope.GetList('te_hist') ) )]"
+			parentanchor = hcenter
+			autoresize = yes
+			multiline = yes
+			max_width = 480
+			align = hcenter|nobaseline
+			text = "te_hist_since"
+		}
+
+		### ---- UN authority (0-100) ----------------------------------------
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "un_hist_chart_auth_title"
+			}
+			blockoverride "chart_legend" {
+				text = "un_hist_chart_auth_legend"
+			}
+			# The store's marker pips belong to the banking system; the UN
+			# series has none of its own.
+			blockoverride "marker_pips" {}
+			blockoverride "bar_tooltip" {
+				tooltip = "un_hist_tt_auth"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_un_auth' )]"
+					blockoverride "values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_un_auth' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_un_auth' ), '(CFixedPoint)4' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.36 0.60 0.85 1.0 }
+					}
+				}
+			}
+		}
+
+		### ---- The target authority was moving toward (0-100) -------------
+		te_history_chart = {
+			blockoverride "chart_title" {
+				text = "un_hist_chart_target_title"
+			}
+			blockoverride "chart_legend" {
+				text = "un_hist_chart_target_legend"
+			}
+			# The store's marker pips belong to the banking system; the UN
+			# series has none of its own.
+			blockoverride "marker_pips" {}
+			blockoverride "bar_tooltip" {
+				tooltip = "un_hist_tt_target"
+			}
+			blockoverride "bar_body" {
+				te_history_bar_unsigned = {
+					visible = "[ScriptContainer.HasVariable( 'te_hist_v_un_target' )]"
+					blockoverride "values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)2', ScriptContainer.GetVariableValue( 'te_hist_v_un_target' ) ) )]"
+					}
+					blockoverride "cover_values" {
+						min = 0
+						max = 100
+						value = "[FixedPointToFloat( Max_CFixedPoint( '(CFixedPoint)0', Subtract_CFixedPoint( ScriptContainer.GetVariableValue( 'te_hist_v_un_target' ), '(CFixedPoint)4' ) ) )]"
+					}
+					blockoverride "color" {
+						color = { 0.55 0.55 0.70 1.0 }
+					}
+				}
+			}
+		}
+	}
+}

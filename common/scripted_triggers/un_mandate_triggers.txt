@@ -24,7 +24,7 @@ un_mandate_target_is_notorious = {
 		has_modifier = un_condemned_modifier
 		has_modifier = un_non_binding_rebuke_modifier
 		has_modifier = un_sanctions_target_modifier
-		has_modifier = un_sanctions_partial_modifier
+		has_modifier = un_sanctions_voluntary_target_modifier
 	}
 }
 

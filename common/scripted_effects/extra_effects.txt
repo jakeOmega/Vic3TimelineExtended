@@ -456,6 +456,10 @@ nuclear_first_strike = { # Scope is target state
 					text = industrial_nuke_succeeds_desc
 
 					change_infamy = 25
+					# UN: a nuclear first strike is a world moment and a lasting
+					# blow to the order pillar, whoever strikes (un_authority_effects.txt).
+					un_authority_actor_shock = { AMOUNT = -3 REASON = 8 }
+					un_ledger_actor_entry_unweighted = { PILLAR = order POINTS = -4 REASON = 8 }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
 						trigger_event = { id = nuclear_weapon_events.1 popup = yes }
@@ -520,6 +524,9 @@ nuclear_response_strike = {  # Scope is target state, target/attacking_country r
 
 				custom_tooltip = {
 					text = industrial_nuke_succeeds_desc
+					# UN: retaliation still erodes the order pillar, less than a
+					# first strike (un_authority_effects.txt).
+					un_ledger_actor_entry_unweighted = { PILLAR = order POINTS = -2 REASON = 10 }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
 						trigger_event = { id = nuclear_weapon_events.11 popup = yes }
@@ -564,6 +571,8 @@ nuclear_response_response_strike = {  # Scope is target state
 
 				custom_tooltip = {
 					text = industrial_nuke_succeeds_desc
+					# UN: retaliation erodes the order pillar (un_authority_effects.txt).
+					un_ledger_actor_entry_unweighted = { PILLAR = order POINTS = -2 REASON = 10 }
 					scope:target_state = {
 						nuclear_industrial_strike = yes
 						trigger_event = { id = nuclear_weapon_events.1 popup = yes }
@@ -650,6 +659,9 @@ nuclear_tactical_strike = {
 	trigger_event = { id = nuclear_weapon_events.5 popup = yes }
 	scope:attacking_country = {
 		trigger_event = { id = nuclear_weapon_events.6 popup = yes }
+		# UN: battlefield nuclear use erodes the order pillar, whoever strikes
+		# (un_authority_effects.txt).
+		un_ledger_actor_entry_unweighted = { PILLAR = order POINTS = -1.5 REASON = 9 }
 		# First nuclear weapon used in combat — world-historical event
 		if = {
 			limit = { NOT = { has_global_variable = world_first_nuclear_weapon_used } }
