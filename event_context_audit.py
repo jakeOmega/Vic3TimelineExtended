@@ -97,6 +97,10 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 
 CHECKS = ("system_ungated", "unchosen_self_action", "imputed_foreign_action")
+# Check-tagged REVIEWED comments that belong to other audits, which use the
+# same `# REVIEWED YYYY-MM-DD (<check>): …` shape inside an event. Not ours to
+# judge, so neither honoured nor reported as unknown.
+FOREIGN_CHECKS = frozenset({"silent_variable"})  # silent_variable_audit
 
 # ---------------------------------------------------------------------------
 # System registry
@@ -638,7 +642,7 @@ def load_events(mod_path: str) -> dict[str, EventDef]:
                 tags: list[Tag] = []
                 for rm in _TAGGED_REVIEWED_RE.finditer(block):
                     for chk in re.split(r"[\s,]+", rm.group("checks").strip()):
-                        if chk:
+                        if chk and chk not in FOREIGN_CHECKS:
                             reviewed[chk] = {"date": rm.group("date"),
                                              "rationale": rm.group("rationale").strip()}
                             tags.append(Tag(eid, chk, rel, start_line + block.count("\n", 0, rm.start()),

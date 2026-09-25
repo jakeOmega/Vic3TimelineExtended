@@ -88,6 +88,7 @@ un_events.1 = {
 		# Hosts UN Headquarters only if no host is set. un_found_organisation
 		# makes the founder the host before any invitation goes out, so this is a
 		# fallback, not the usual path.
+		# REVIEWED 2026-09-25 (silent_variable): the un_headquarters_modifier beside it shows as "UN Headquarters Host"
 		if = {
 			limit = { NOT = { has_global_variable = un_hq_country } }
 			set_global_variable = { name = un_hq_country value = ROOT }

@@ -92,8 +92,11 @@ nuclear_incident.1 = {
 			multiplier = sv_money_flow_event_medium
 			days = 60
 		}
-		change_variable = { name = nd_strain add = 10 }
-		clamp_variable = { name = nd_strain min = 0 max = 100 }
+		custom_tooltip = {
+			text = nd_tt_strain_up_10
+			change_variable = { name = nd_strain add = 10 }
+			clamp_variable = { name = nd_strain min = 0 max = 100 }
+		}
 		scope:nd_warning_suspect = {
 			change_relations = { country = ROOT value = -10 }
 		}
@@ -610,7 +613,10 @@ nuclear_incident.10 = {
 	option = {
 		name = nuclear_incident.10.b
 		nd_readiness_step_down = yes
-		nd_change_credibility = { AMOUNT = -3 }
+		custom_tooltip = {
+			text = nd_tt_credibility_down_3
+			nd_change_credibility = { AMOUNT = -3 }
+		}
 		ai_chance = {
 			base = 3
 		}
@@ -647,7 +653,10 @@ nuclear_incident.10 = {
 		name = nuclear_incident.10.e
 		trigger = { nd_is_crisis_owner = yes }
 		highlighted_option = yes
-		nd_change_credibility = { AMOUNT = 5 }
+		custom_tooltip = {
+			text = nd_tt_credibility_up_5
+			nd_change_credibility = { AMOUNT = 5 }
+		}
 		change_infamy = 5
 		hidden_effect = {
 			set_variable = { name = nd_crisis_exercise_weeks value = 8 }
@@ -1124,8 +1133,11 @@ nuclear_incident.30 = {
 		name = nuclear_incident.30.a
 		default_option = yes
 		nd_readiness_step_down = yes
-		change_variable = { name = nd_strain subtract = 20 }
-		clamp_variable = { name = nd_strain min = 0 max = 100 }
+		custom_tooltip = {
+			text = nd_tt_strain_down_20
+			change_variable = { name = nd_strain subtract = 20 }
+			clamp_variable = { name = nd_strain min = 0 max = 100 }
+		}
 		add_modifier = {
 			name = nd_incident_scandal
 			days = short_modifier_time
@@ -1156,10 +1168,16 @@ nuclear_incident.30 = {
 			multiplier = sv_money_flow_event_huge
 			days = 180
 		}
-		change_variable = { name = nd_strain subtract = 30 }
-		clamp_variable = { name = nd_strain min = 0 max = 100 }
-		change_variable = { name = nd_reliability add = 10 }
-		clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		custom_tooltip = {
+			text = nd_tt_strain_down_30
+			change_variable = { name = nd_strain subtract = 30 }
+			clamp_variable = { name = nd_strain min = 0 max = 100 }
+		}
+		custom_tooltip = {
+			text = nd_tt_reliability_up_10
+			change_variable = { name = nd_reliability add = 10 }
+			clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		}
 		add_modifier = {
 			name = nd_incident_scandal
 			days = short_modifier_time
@@ -1177,8 +1195,11 @@ nuclear_incident.30 = {
 	# Accept it and carry on at full alert.
 	option = {
 		name = nuclear_incident.30.c
-		change_variable = { name = nd_reliability subtract = 15 }
-		clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		custom_tooltip = {
+			text = nd_tt_reliability_down_15
+			change_variable = { name = nd_reliability subtract = 15 }
+			clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		}
 		add_modifier = {
 			name = nd_incident_scandal
 			days = short_modifier_time
@@ -1283,8 +1304,11 @@ nuclear_incident.40 = {
 			multiplier = sv_money_flow_event_small
 			days = 60
 		}
-		change_variable = { name = nd_reliability add = 3 }
-		clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		custom_tooltip = {
+			text = nd_tt_reliability_up_3
+			change_variable = { name = nd_reliability add = 3 }
+			clamp_variable = { name = nd_reliability min = 0 max = 100 }
+		}
 		ai_chance = {
 			base = 3
 		}
@@ -1484,7 +1508,10 @@ nuclear_incident.60 = {
 			days = normal_modifier_time
 			is_decaying = yes
 		}
-		nd_change_credibility = { AMOUNT = -5 }
+		custom_tooltip = {
+			text = nd_tt_credibility_down_5
+			nd_change_credibility = { AMOUNT = -5 }
+		}
 		ai_chance = {
 			base = 3
 			modifier = {
@@ -1502,7 +1529,10 @@ nuclear_incident.60 = {
 			days = short_modifier_time
 			is_decaying = yes
 		}
-		nd_change_credibility = { AMOUNT = -10 }
+		custom_tooltip = {
+			text = nd_tt_credibility_down_10
+			nd_change_credibility = { AMOUNT = -10 }
+		}
 		add_radicals = {
 			value = small_radicals
 		}
