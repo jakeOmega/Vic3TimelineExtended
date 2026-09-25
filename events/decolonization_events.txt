@@ -33,13 +33,17 @@ decolonization_events.1 = {
 		}
 		has_technology_researched = decolonization
 		any_subject_or_below = {
+			is_qualifying_colonial_subject = yes
 			liberty_desire >= 50
 		}
 	}
 
 	immediate = {
 		random_subject_or_below = {
-			limit = { liberty_desire >= 50 }
+			limit = {
+				is_qualifying_colonial_subject = yes
+				liberty_desire >= 50
+			}
 			save_scope_as = restless_subject
 		}
 	}
@@ -206,12 +210,38 @@ decolonization_events.2 = {
 	icon = "gfx/interface/icons/event_icons/event_map.dds"
 
 	title = decolonization_events.2.t
-	desc = decolonization_events.2.d
-	flavor = decolonization_events.2.f
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { colonial_gp_condemners_count >= 2 }
+				desc = decolonization_events.2.d_many
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.2.d
+			}
+		}
+	}
+	# The General Assembly scene only once the UN's decolonization declaration
+	# has actually carried (un_vote.2 sets un_regime_decolonization).
+	flavor = {
+		first_valid = {
+			triggered_desc = {
+				trigger = { has_global_variable = un_regime_decolonization }
+				desc = decolonization_events.2.f
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = decolonization_events.2.f_no_un
+			}
+		}
+	}
 
 	duration = 3
 
 	cooldown = { days = long_modifier_time }
+
+	# REVIEWED 2026-09-25 (imputed_foreign_action): pressuring_power is picked only among great powers carrying gp_anti_colonial_stance, a stance each chose (decolonization_events.14.a, or its yes vote on the UN declaration via un_vote_effects); calling on colonial powers to decolonize is what that stance is.
 
 	trigger = {
 		has_journal_entry = je_colonial_empire
@@ -221,23 +251,27 @@ decolonization_events.2 = {
 		}
 		has_technology_researched = decolonization
 		has_technology_researched = intergovernmental_organizations
-		any_subject_or_below = { always = yes }
+		any_subject_or_below = { is_qualifying_colonial_subject = yes }
+		# The pressure comes from a great power that has declared against
+		# colonialism, as in decolonization_events.11 — never from one that
+		# merely has the technology.
 		any_country = {
 			NOT = { this = root }
 			country_rank >= rank_value:great_power
-			has_technology_researched = decolonization
+			has_variable = gp_anti_colonial_stance
 		}
 	}
 
 	immediate = {
 		random_subject_or_below = {
+			limit = { is_qualifying_colonial_subject = yes }
 			save_scope_as = pressured_subject
 		}
 		random_country = {
 			limit = {
 				NOT = { this = root }
 				country_rank >= rank_value:great_power
-				has_technology_researched = decolonization
+				has_variable = gp_anti_colonial_stance
 			}
 			save_scope_as = pressuring_power
 		}
@@ -373,13 +407,17 @@ decolonization_events.3 = {
 		}
 		has_technology_researched = civil_rights_movement
 		any_subject_or_below = {
+			is_qualifying_colonial_subject = yes
 			liberty_desire >= 75
 		}
 	}
 
 	immediate = {
 		random_subject_or_below = {
-			limit = { liberty_desire >= 75 }
+			limit = {
+				is_qualifying_colonial_subject = yes
+				liberty_desire >= 75
+			}
 			save_scope_as = rebellious_subject
 		}
 	}
@@ -853,7 +891,7 @@ decolonization_events.8 = {
 			has_modifier = colonial_crackdown_modifier
 		}
 		has_technology_researched = decolonization
-		any_subject_or_below = { always = yes }
+		any_subject_or_below = { is_qualifying_colonial_subject = yes }
 		ig:ig_intelligentsia ?= {
 			leader = { has_ideology = ideology:ideology_anti_colonialist }
 		}
@@ -861,6 +899,7 @@ decolonization_events.8 = {
 
 	immediate = {
 		random_subject_or_below = {
+			limit = { is_qualifying_colonial_subject = yes }
 			save_scope_as = closest_subject
 		}
 	}
@@ -878,8 +917,9 @@ decolonization_events.8 = {
 			is_decaying = yes
 		}
 		add_loyalists = { value = small_radicals pop_type = academics }
-		# All subjects gain hope
+		# All colonial subjects gain hope
 		every_subject_or_below = {
+			limit = { is_qualifying_colonial_subject = yes }
 			add_liberty_desire = 10
 		}
 		# Intelligentsia delighted, landowners and armed forces dismayed
@@ -1197,6 +1237,8 @@ decolonization_events.11 = {
 		}
 	}
 
+	# REVIEWED 2026-09-25 (imputed_foreign_action): condemning_power is picked only among great powers carrying gp_anti_colonial_stance, a stance each chose (decolonization_events.14.a, or its yes vote on the UN declaration); the denunciation is that stance.
+
 	immediate = {
 		random_country = {
 			limit = {
@@ -1231,8 +1273,9 @@ decolonization_events.11 = {
 		scope:condemning_power = {
 			post_notification = gp_condemnation_reforms_announced_notice
 		}
-		# All subjects gain hope from announced reforms
+		# All colonial subjects gain hope from announced reforms
 		every_subject_or_below = {
+			limit = { is_qualifying_colonial_subject = yes }
 			add_liberty_desire = 10
 		}
 		# Intelligentsia approve, landowners dismayed
@@ -2421,6 +2464,8 @@ decolonization_events.19 = {
 		}
 	}
 
+	# REVIEWED 2026-09-25 (imputed_foreign_action): nationalizing_country carries independence_nationalization_modifier only from its own choice of full nationalization (decolonization_events.15.a); the seizure the text describes is real.
+
 	immediate = {
 		random_country = {
 			limit = {
@@ -2728,6 +2773,8 @@ decolonization_events.21 = {
 			has_variable = gp_pro_colonial_stance
 		}
 	}
+
+	# REVIEWED 2026-09-25 (imputed_foreign_action): both great powers are picked for colonial stances they chose (decolonization_events.14 / the UN declaration vote); the text frames those public stances as competing offers, and the only consequences are our own relations choices between them.
 
 	immediate = {
 		random_country = {

@@ -1587,20 +1587,26 @@ decolonization_events_on_action = {
 				# fires often but cooldown-gated so it's not spammy
 				12 = {
 					trigger = {
-						any_subject_or_below = { liberty_desire >= 50 }
+						any_subject_or_below = {
+							is_qualifying_colonial_subject = yes
+							liberty_desire >= 50
+						}
 					}
 					trigger_event = { id = decolonization_events.1 }
 				}
 				# International Pressure to Decolonize — marquee event (UN era);
-				# weight 15 reflects the narrative weight of "world is watching"
+				# weight 15 reflects the narrative weight of "world is watching".
+				# Needs a great power that has declared against colonialism
+				# (gp_anti_colonial_stance): the event names it as the one
+				# pressing us.
 				15 = {
 					trigger = {
 						has_technology_researched = intergovernmental_organizations
-						any_subject_or_below = { always = yes }
+						any_subject_or_below = { is_qualifying_colonial_subject = yes }
 						any_country = {
 							NOT = { this = root }
 							country_rank >= rank_value:great_power
-							has_technology_researched = decolonization
+							has_variable = gp_anti_colonial_stance
 						}
 					}
 					trigger_event = { id = decolonization_events.2 }
@@ -1609,7 +1615,10 @@ decolonization_events_on_action = {
 				10 = {
 					trigger = {
 						has_technology_researched = civil_rights_movement
-						any_subject_or_below = { liberty_desire >= 75 }
+						any_subject_or_below = {
+							is_qualifying_colonial_subject = yes
+							liberty_desire >= 75
+						}
 					}
 					trigger_event = { id = decolonization_events.3 }
 				}
@@ -1675,7 +1684,7 @@ decolonization_events_on_action = {
 				# trigger is restrictive (anti-colonialist intelligentsia)
 				12 = {
 					trigger = {
-						any_subject_or_below = { always = yes }
+						any_subject_or_below = { is_qualifying_colonial_subject = yes }
 						ig:ig_intelligentsia ?= {
 							leader = { has_ideology = ideology:ideology_anti_colonialist }
 						}
