@@ -623,6 +623,38 @@ class TestInterestGroupOpinion(unittest.TestCase):
             self.assertIn("nd_ig_posture_judged = yes", block(self.values, name), name)
 
 
+HOME_LINES = ["nd_home_line_militarist", "nd_home_line_militarist_mild", "nd_home_line_restraint",
+              "nd_home_line_restraint_mild", "nd_home_line_officers", "nd_home_line_officers_hawkish",
+              "nd_home_line_officers_restrained", "nd_home_line_business", "nd_home_line_business_hawkish",
+              "nd_home_line_business_restrained"]
+HOME_TERMS = ["nd_home_terms_militarist", "nd_home_terms_restraint", "nd_home_terms_officers",
+              "nd_home_terms_business", "nd_home_terms_business_lean"]
+
+
+class TestAtHome(unittest.TestCase):
+    def test_every_class_line_is_printed_and_localised(self):
+        body = block(strip_comments(read(EFFECTS)), "nd_home_line")
+        for key in HOME_LINES + HOME_TERMS:
+            self.assertIn(f"custom_tooltip_no_bullet = {key}", body, key)
+            self.assertIn("THIS.Var('nd_ig_", loc_value(key), key)
+        for key in HOME_LINES:
+            self.assertIn("[THIS.GetInterestGroup.GetName]", loc_value(key), key)
+
+    def test_list_is_drawn_and_old_rows_are_gone(self):
+        gui = read(GUI)
+        self.assertIn("nd_home_list_sgui", gui)
+        for old in ("nd_w_home_warfighting_value", "nd_w_home_professional_value",
+                    "nd_w_home_dove_value", "nd_w_home_business_value"):
+            self.assertNotIn(old, gui)
+        custom = strip_comments(read(CUSTOM_LOC))
+        self.assertNotIn("nd_stance_warfighting_word", custom)
+
+    def test_list_handler_is_display_only(self):
+        body = block(strip_comments(read(SGUIS)), "nd_home_list_sgui")
+        self.assertIn("is_valid = { always = no }", body)
+        self.assertIn("every_interest_group", body)
+
+
 class TestManagedFamilies(unittest.TestCase):
     def test_doctrine_and_readiness_families_exist(self):
         mods = set(re.findall(r"^(nd_\w+)\s*=\s*\{", read(MODIFIERS), re.M))

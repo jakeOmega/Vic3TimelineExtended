@@ -924,6 +924,68 @@ nd_ig_set_band = {
 	}
 }
 
+# IG scope, display only (nd_home_list_sgui): this group's line and its terms.
+# Both lines sit at this scope level, so each group's pair prints together.
+nd_home_line = {
+	if = {
+		limit = { var:nd_ig_class = 1 }
+		if = {
+			limit = { var:nd_ig_strength = 2 }
+			custom_tooltip_no_bullet = nd_home_line_militarist
+		}
+		else = {
+			custom_tooltip_no_bullet = nd_home_line_militarist_mild
+		}
+		custom_tooltip_no_bullet = nd_home_terms_militarist
+	}
+	else_if = {
+		limit = { var:nd_ig_class = 2 }
+		if = {
+			limit = { var:nd_ig_strength = 2 }
+			custom_tooltip_no_bullet = nd_home_line_restraint
+		}
+		else = {
+			custom_tooltip_no_bullet = nd_home_line_restraint_mild
+		}
+		custom_tooltip_no_bullet = nd_home_terms_restraint
+	}
+	else_if = {
+		limit = { var:nd_ig_class = 3 }
+		if = {
+			limit = { var:nd_ig_lean = 1 }
+			custom_tooltip_no_bullet = nd_home_line_officers_hawkish
+		}
+		else_if = {
+			limit = { var:nd_ig_lean = 2 }
+			custom_tooltip_no_bullet = nd_home_line_officers_restrained
+		}
+		else = {
+			custom_tooltip_no_bullet = nd_home_line_officers
+		}
+		custom_tooltip_no_bullet = nd_home_terms_officers
+	}
+	else = {
+		if = {
+			limit = { var:nd_ig_lean = 1 }
+			custom_tooltip_no_bullet = nd_home_line_business_hawkish
+		}
+		else_if = {
+			limit = { var:nd_ig_lean = 2 }
+			custom_tooltip_no_bullet = nd_home_line_business_restrained
+		}
+		else = {
+			custom_tooltip_no_bullet = nd_home_line_business
+		}
+		if = {
+			limit = { var:nd_ig_lean > 0 }
+			custom_tooltip_no_bullet = nd_home_terms_business_lean
+		}
+		else = {
+			custom_tooltip_no_bullet = nd_home_terms_business
+		}
+	}
+}
+
 nd_ig_clear_band = {
 	if = {
 		limit = { has_modifier = nd_posture_approval_plus_2 }

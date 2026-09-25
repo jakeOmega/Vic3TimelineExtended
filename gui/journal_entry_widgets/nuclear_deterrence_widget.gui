@@ -702,48 +702,10 @@ flowcontainer = {
 			default_format = "#lore"
 		}
 
-		nd_row = {
-			blockoverride "row_label" {
-				text = "nd_w_home_warfighting_label"
-			}
-			blockoverride "row_value" {
-				text = "nd_w_home_warfighting_value"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "nd_w_home_warfighting_tt"
-			}
-		}
-		nd_row = {
-			blockoverride "row_label" {
-				text = "nd_w_home_professional_label"
-			}
-			blockoverride "row_value" {
-				text = "nd_w_home_professional_value"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "nd_w_home_professional_tt"
-			}
-		}
-		nd_row = {
-			blockoverride "row_label" {
-				text = "nd_w_home_dove_label"
-			}
-			blockoverride "row_value" {
-				text = "nd_w_home_dove_value"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "nd_w_home_dove_tt"
-			}
-		}
-		nd_row = {
-			blockoverride "row_label" {
-				text = "nd_w_home_business_label"
-			}
-			blockoverride "row_value" {
-				text = "nd_w_home_business_value"
-			}
-			blockoverride "row_tooltip" {
-				tooltip = "nd_w_home_business_tt"
+		nd_script_line = {
+			datacontext = "[GetScriptedGui('nd_home_list_sgui')]"
+			blockoverride "line_text" {
+				text = "[ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			}
 		}
 	}

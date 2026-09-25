@@ -67,11 +67,15 @@ Upkeep is a single JE-scoped modifier, `nd_upkeep_cost` (`country_expenses_add =
 
 The size factor runs from 0.4 to 1.0 with arsenal size, and the total is capped at 40 units, about 2 % of GDP a year. Every armed country pays it, whatever the funding or rank of its programme, because the entry is gated on the arsenal.
 
-Domestic stance (§7) is refreshed in one place, `nd_refresh_domestic_stance`. It gives each interest group at most one of four modifiers (`nd_posture_approval_plus_2`, `plus_1`, `minus_1`, `minus_2`), and only once the doctrine has been held for six months. Groups fall into four classes:
-- **Warfighting**: a jingoist, fascist or ethno-nationalist leader, or the Armed Forces of a fascist state. It wants compellence or warfighting and high alert.
-- **Professional officers**: the Armed Forces under any other leader. They want flexible deterrence at heightened readiness, and dislike no first use, warfighting, routine readiness against a plausible attacker, and a high alert with strain of 50 or more.
-- **Doves**: a pacifist or humanitarian leader, or the Intelligentsia under a leader who is not a hawk. They reward no first use and punish compellence, warfighting, high alert and launch on warning.
+Domestic stance (§7) is refreshed in one place, `nd_refresh_domestic_stance`. It gives each interest group at most one of four modifiers (`nd_posture_approval_plus_2`, `plus_1`, `minus_1`, `minus_2`). Since 2026-09-25 (`docs/superpowers/specs/2026-09-25-nuclear-crisis-communication-design.md` §4) a group's class comes from its type or its Rules of War stance, which already folds in its leader's ideology:
+- **Professional officers**: the Armed Forces, whatever their politics. They want flexible deterrence at heightened readiness, and dislike no first use, warfighting, routine readiness against a plausible attacker, and a high alert with strain of 50 or more.
 - **Business**: the Industrialists. They dislike a high alert held three months or more, and any crisis at stage 2 or higher.
+- **Militarist**: any other group whose stance on Total War beats its stance on Limited War and is at least approving. It wants compellence or warfighting and high alert.
+- **Restraint**: any other group whose stance on Limited War beats Total War. It rewards no first use and punishes compellence, warfighting, high alert and launch on warning.
+- Any other group has no view. Strongly approving makes a full view (±2), approving a mild one (±1).
+- **Leans.** The Armed Forces and the Industrialists keep their own concerns, but a militarist or restraint stance of their own replaces (officers) or adds (business) the doctrine terms of that class — so a fascist-led army wants compellence.
+
+`nd_ig_store_opinion` writes each group's class, lean, strength, terms and capped total on the group (`nd_ig_*`), the band is read from that total, and the At Home list (`nd_home_list_sgui`) prints the same numbers. Every term but the business ones waits for six months of doctrine tenure. Crisis outcomes pay `nd_ig_is_hawk` groups (militarist stance, or the Armed Forces unless they lean restraint) and `nd_ig_is_restraint` groups.
 
 Groups are judged on a posture held for months, not on a toggle, so the approval can't be farmed. The modifiers come off in `nd_country_monthly_cleanup` (`on_monthly_pulse_country`) once the entry is inactive.
 
