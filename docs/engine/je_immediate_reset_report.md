@@ -21,88 +21,15 @@ line around it, or on a call line leading to it.
 
 ## Unreviewed Flags
 
+_None._
+
+## Reviewed Exemptions
+
 ### `je_banking_cycle` (`common/journal_entries/je_banking.txt`)
 
 can_revolution_inherit: yes; can_deactivate: unset (= no)
 
-- `set_variable` `finance_cycle_value` = `50` at `common/journal_entries/je_banking.txt:145`
-- `set_variable` `finance_cycle_momentum` = `0` at `common/journal_entries/je_banking.txt:146`
-- `set_variable` `bubble_pressure` = `0` at `common/journal_entries/je_banking.txt:147`
-
-### `je_civil_rights` (`common/journal_entries/je_civil_rights.txt`)
-
-can_revolution_inherit: yes; can_deactivate: unset (= no)
-
-- `set_variable` `cr_grassroots_months` = `0` at `common/journal_entries/je_civil_rights.txt:49`
-- `set_variable` `cr_federal_months` = `0` at `common/journal_entries/je_civil_rights.txt:50`
-- `set_variable` `cr_gradualist_months` = `0` at `common/journal_entries/je_civil_rights.txt:51`
-- `set_variable` `cr_cooptation_months` = `0` at `common/journal_entries/je_civil_rights.txt:52`
-- `set_variable` `cr_suppression_months` = `0` at `common/journal_entries/je_civil_rights.txt:53`
-- `set_variable` `cr_segregationist_months` = `0` at `common/journal_entries/je_civil_rights.txt:54`
-- `remove_variable` `cr_tier_25_seen` at `common/journal_entries/je_civil_rights.txt:55`
-- `remove_variable` `cr_tier_50_seen` at `common/journal_entries/je_civil_rights.txt:56`
-- `remove_variable` `cr_tier_75_seen` at `common/journal_entries/je_civil_rights.txt:57`
-- `remove_variable` `cr_tier_90_seen` at `common/journal_entries/je_civil_rights.txt:58`
-
-### `je_space_race_interstellar_probe` (`common/journal_entries/je_space_race.txt`)
-
-can_revolution_inherit: yes; can_deactivate: yes
-
-- `set_variable` `sr_funding_interstellar_probe` = `1` at `common/journal_entries/je_space_race.txt:795`
-
-### `je_space_race_mars_landing` (`common/journal_entries/je_space_race.txt`)
-
-can_revolution_inherit: yes; can_deactivate: yes
-
-- `set_variable` `sr_funding_mars_landing` = `1` at `common/journal_entries/je_space_race.txt:664`
-
-### `je_space_race_moon_base` (`common/journal_entries/je_space_race.txt`)
-
-can_revolution_inherit: yes; can_deactivate: yes
-
-- `set_variable` `sr_funding_moon_base` = `1` at `common/journal_entries/je_space_race.txt:538`
-
-### `je_space_race_moon_landing` (`common/journal_entries/je_space_race.txt`)
-
-can_revolution_inherit: yes; can_deactivate: yes
-
-- `set_variable` `sr_funding_moon_landing` = `1` at `common/journal_entries/je_space_race.txt:288`
-
-### `je_space_race_orbital` (`common/journal_entries/je_space_race.txt`)
-
-can_revolution_inherit: yes; can_deactivate: yes
-
-- `set_variable` `sr_funding_orbital` = `1` at `common/journal_entries/je_space_race.txt:163`
-
-### `je_space_race_probe` (`common/journal_entries/je_space_race.txt`)
-
-can_revolution_inherit: yes; can_deactivate: yes
-
-- `set_variable` `sr_funding_probe` = `1` at `common/journal_entries/je_space_race.txt:414`
-
-### `je_space_race_solar_colonization` (`common/journal_entries/je_space_race.txt`)
-
-can_revolution_inherit: yes; can_deactivate: yes
-
-- `set_variable` `sr_funding_solar_colonization` = `1` at `common/journal_entries/je_space_race.txt:1039`
-
-### `je_space_race_suborbital` (`common/journal_entries/je_space_race.txt`)
-
-can_revolution_inherit: yes; can_deactivate: yes
-
-- `set_variable` `sr_funding_suborbital` = `1` at `common/journal_entries/je_space_race.txt:40`
-
-### `je_create_new_religion` (`common/journal_entries/timeline_extended_journal_entries.txt`)
-
-can_revolution_inherit: unset (= yes); can_deactivate: yes
-
-- `set_variable` `selected_idelogies` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:223`
-- `set_variable` `selected_traits` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:227`
-- `set_variable` `selected_name` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:231`
-- `set_variable` `selected_religion_group` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:235`
-- `set_variable` `current_stage` = `1` at `common/journal_entries/timeline_extended_journal_entries.txt:239`
-
-## Reviewed Exemptions
+- `set_variable` `te_mon_stance_band_applied` = `0` at `common/journal_entries/je_banking.txt:177` — **2026-09-26**: reset on purpose; a fresh or inherited entry holds no stance band, so the tracker must say none (civil_war_inheritance_audit.md F7)
 
 ### `je_heir_education` (`common/journal_entries/je_heir_education.txt`)
 
@@ -124,6 +51,12 @@ can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)
 
 - 89 writes of `st_res_grain_actual_rate_cached`, `st_res_ammunition_actual_rate_cached`, `st_res_oil_actual_rate_cached`, `st_res_small_arms_actual_rate_cached`, `st_res_artillery_actual_rate_cached`, `st_res_aeroplanes_actual_rate_cached`, +11 more, first at `common/scripted_effects/st_res_effects.txt:402` — **2026-09-26**: rate caches, sell profit and status labels, recomputed from the stockpiles and rates, which it leaves alone
 
+### `je_united_nations` (`common/journal_entries/je_united_nations.txt`)
+
+can_revolution_inherit: yes; can_deactivate: no
+
+- 25 writes of `un_headquarters_modifier_on`, `un_security_council_modifier_on`, `un_permanent_member_modifier_on`, `un_undermine_order_cost_on`, `un_peacekeeping_expense_cached`, `un_development_expense_cached`, +19 more, first at `common/scripted_effects/un_state_effects.txt:69` — **2026-09-26**: a rebuild, not a reset. It forgets a mirror only when the country no longer qualifies for it (not a member, representation suspended, not the HQ host, seats full), re-prices the programme costs it re-adds, and drops un_regime_stamp so the regime terms come back (§0.9)
+
 ## Not Failing
 
 ### Progress-bar inputs
@@ -136,15 +69,7 @@ player the progress made.
 
 - `je_heir_education` (inherited): `set_variable` `heir_ed_total` = `0` at `common/journal_entries/je_heir_education.txt:50` — the entry's `current_value` reads it (+23 more writes)
 - `je_nuclear_program` (not inherited): `set_variable` `nuclear_weapon_program_progress` = `0` at `common/journal_entries/je_nuclear_program.txt:135` — the entry's `current_value` reads it
-- `je_space_race_interstellar_probe` (inherited): `set_variable` `sr_progress_interstellar_probe` = `0` at `common/journal_entries/je_space_race.txt:794` — the entry's `current_value` reads it
-- `je_space_race_interstellar_results` (inherited): `set_variable` `sr_interstellar_transit_progress` = `0` at `common/journal_entries/je_space_race.txt:916` — the entry's `current_value` reads it
-- `je_space_race_mars_landing` (inherited): `set_variable` `sr_progress_mars_landing` = `0` at `common/journal_entries/je_space_race.txt:663` — the entry's `current_value` reads it
-- `je_space_race_moon_base` (inherited): `set_variable` `sr_progress_moon_base` = `0` at `common/journal_entries/je_space_race.txt:537` — the entry's `current_value` reads it
-- `je_space_race_moon_landing` (inherited): `set_variable` `sr_progress_moon_landing` = `0` at `common/journal_entries/je_space_race.txt:287` — the entry's `current_value` reads it
-- `je_space_race_orbital` (inherited): `set_variable` `sr_progress_orbital` = `0` at `common/journal_entries/je_space_race.txt:162` — the entry's `current_value` reads it
-- `je_space_race_probe` (inherited): `set_variable` `sr_progress_probe` = `0` at `common/journal_entries/je_space_race.txt:413` — the entry's `current_value` reads it
-- `je_space_race_solar_colonization` (inherited): `set_variable` `sr_progress_solar_colonization` = `0` at `common/journal_entries/je_space_race.txt:1038` — the entry's `current_value` reads it
-- `je_space_race_suborbital` (inherited): `set_variable` `sr_progress_suborbital` = `0` at `common/journal_entries/je_space_race.txt:39` — the entry's `current_value` reads it
+- `je_space_race_solar_colonization` (inherited): `set_variable` `sr_progress_solar_colonization` = `0` at `common/journal_entries/je_space_race.txt:1127` — the entry's `current_value` reads it
 - `je_state_collapse` (inherited): `set_variable` `state_collapse_progress` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:16` — the entry's `current_value` reads it
 
 ### Pulse refreshes
@@ -173,6 +98,16 @@ Written only while a different variable is missing — a group
 initialised behind one sentinel. It resets only if the sentinel was
 removed while this variable was kept.
 
+- `je_civil_rights` (inherited): `set_variable` `cr_grassroots_months` = `0` at `common/journal_entries/je_civil_rights.txt:64` — runs only while `cr_run_in_progress` is missing (`common/journal_entries/je_civil_rights.txt:62`)
+- `je_civil_rights` (inherited): `set_variable` `cr_federal_months` = `0` at `common/journal_entries/je_civil_rights.txt:65` — runs only while `cr_run_in_progress` is missing (`common/journal_entries/je_civil_rights.txt:62`)
+- `je_civil_rights` (inherited): `set_variable` `cr_gradualist_months` = `0` at `common/journal_entries/je_civil_rights.txt:66` — runs only while `cr_run_in_progress` is missing (`common/journal_entries/je_civil_rights.txt:62`)
+- `je_civil_rights` (inherited): `set_variable` `cr_cooptation_months` = `0` at `common/journal_entries/je_civil_rights.txt:67` — runs only while `cr_run_in_progress` is missing (`common/journal_entries/je_civil_rights.txt:62`)
+- `je_civil_rights` (inherited): `set_variable` `cr_suppression_months` = `0` at `common/journal_entries/je_civil_rights.txt:68` — runs only while `cr_run_in_progress` is missing (`common/journal_entries/je_civil_rights.txt:62`)
+- `je_civil_rights` (inherited): `set_variable` `cr_segregationist_months` = `0` at `common/journal_entries/je_civil_rights.txt:69` — runs only while `cr_run_in_progress` is missing (`common/journal_entries/je_civil_rights.txt:62`)
+- `je_civil_rights` (inherited): `remove_variable` `cr_tier_25_seen` at `common/journal_entries/je_civil_rights.txt:70` — runs only while `cr_run_in_progress` is missing (`common/journal_entries/je_civil_rights.txt:62`)
+- `je_civil_rights` (inherited): `remove_variable` `cr_tier_50_seen` at `common/journal_entries/je_civil_rights.txt:71` — runs only while `cr_run_in_progress` is missing (`common/journal_entries/je_civil_rights.txt:62`)
+- `je_civil_rights` (inherited): `remove_variable` `cr_tier_75_seen` at `common/journal_entries/je_civil_rights.txt:72` — runs only while `cr_run_in_progress` is missing (`common/journal_entries/je_civil_rights.txt:62`)
+- `je_civil_rights` (inherited): `remove_variable` `cr_tier_90_seen` at `common/journal_entries/je_civil_rights.txt:73` — runs only while `cr_run_in_progress` is missing (`common/journal_entries/je_civil_rights.txt:62`)
 - `je_cultural_hegemony` (inherited): `set_variable` `ch_art` = `0` at `common/journal_entries/je_cultural_hegemony.txt:83` — runs only while `ch_total` is missing (`common/journal_entries/je_cultural_hegemony.txt:81`)
 - `je_cultural_hegemony` (inherited): `set_variable` `ch_sol` = `0` at `common/journal_entries/je_cultural_hegemony.txt:84` — runs only while `ch_total` is missing (`common/journal_entries/je_cultural_hegemony.txt:81`)
 - `je_cultural_hegemony` (inherited): `set_variable` `ch_monuments` = `0` at `common/journal_entries/je_cultural_hegemony.txt:85` — runs only while `ch_total` is missing (`common/journal_entries/je_cultural_hegemony.txt:81`)
@@ -188,9 +123,9 @@ removed while this variable was kept.
 
 - journal-entry files audited: 17
 - journal entries: 26 (26 with an `immediate`)
-- unreviewed: 26
-- exempted: 129
-- progress-bar inputs: 35
+- unreviewed: 0
+- exempted: 155
+- progress-bar inputs: 27
 - pulse refreshes: 690
-- guarded by another variable: 10
+- guarded by another variable: 20
 
