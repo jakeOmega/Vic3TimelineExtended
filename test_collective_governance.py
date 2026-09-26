@@ -21,6 +21,8 @@ import re
 import unittest
 from collections import namedtuple
 
+import ideology_modifications
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -457,6 +459,46 @@ class CallSiteTests(unittest.TestCase):
 
     def test_instrument_question_does_not_call_the_law_direct_democracy(self):
         self.assertNotIn("direct-democracy bill", _loc()["extra_law_events.84.d"])
+
+
+EXTRA_IDEOLOGIES = _path("common", "ideologies", "extra_ideologies.txt")
+MODIFIED_IDEOLOGIES = _path("common", "ideologies", "modified.txt")
+
+# Spec §6: stances re-read against "no single head". Changes only.
+STANCE_CHANGES = {
+    "ideology_anarchist": "strongly_approve",
+    "ideology_anarchist_movement": "strongly_approve",
+    "ideology_bonapartist": "strongly_disapprove",
+    "ideology_bonapartist_movement": "strongly_disapprove",
+    "ideology_caudillismo": "strongly_disapprove",
+    "ideology_fascist_movement": "strongly_disapprove",
+    "ideology_absolutist_movement": "strongly_disapprove",
+    "ideology_plutocratic": "neutral",
+}
+CUSTOM_RELIGION_CHANGES = {
+    "ideology_custom_religion_aristocratic_governance": "neutral",
+    "ideology_custom_religion_technocratic_governance": "neutral",
+}
+
+
+class IdeologyTests(unittest.TestCase):
+    def test_vanilla_ideology_stances(self):
+        for ideology, stance in STANCE_CHANGES.items():
+            with self.subTest(ideology=ideology):
+                pairs = dict(ideology_modifications.modifications[ideology]["lawgroup_governance_principles"])
+                self.assertEqual(pairs["law_direct_democracy"], stance)
+
+    def test_generated_file_is_current(self):
+        text = _read(MODIFIED_IDEOLOGIES)
+        for ideology, stance in STANCE_CHANGES.items():
+            with self.subTest(ideology=ideology):
+                self.assertRegex(_block(text, ideology), rf"law_direct_democracy\s*=\s*{stance}\b")
+
+    def test_custom_religion_stances(self):
+        text = _read(EXTRA_IDEOLOGIES)
+        for ideology, stance in CUSTOM_RELIGION_CHANGES.items():
+            with self.subTest(ideology=ideology):
+                self.assertRegex(_block(text, ideology), rf"law_direct_democracy\s*=\s*{stance}\b")
 
 
 if __name__ == "__main__":
