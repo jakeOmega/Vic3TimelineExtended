@@ -42,6 +42,8 @@
 #                                             32 withheld its UN dues
 #                                             33 lost its vote for arrears
 #   34 a UN mission accomplished its work
+#                                             35 brought a contingent home from a
+#                                                UN mission before its work was done
 #
 # The 30+ range belongs to resolution lobbying
 # (common/scripted_effects/un_lobby_effects.txt). Both of its codes are stamped

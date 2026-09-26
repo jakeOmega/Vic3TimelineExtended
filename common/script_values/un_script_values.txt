@@ -5,10 +5,30 @@
 
 # ---- Member Statistics ----
 
+# The General Assembly line reads "N of M nations": members that are
+# independent, of the countries that could join (independent and not
+# decentralized — un_join_button's own gates). A member that has since become
+# a subject keeps its seat (nothing revokes un_member_modifier on
+# subjugation), so it is counted apart, by un_subject_member_count, rather
+# than in a numerator whose denominator leaves it out ("102 of 99").
 un_member_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			is_subject = no
+		}
+		add = 1
+	}
+}
+
+un_subject_member_count = {
+	value = 0
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			is_subject = yes
+		}
 		add = 1
 	}
 }
@@ -16,7 +36,10 @@ un_member_count = {
 un_independent_country_count = {
 	value = 0
 	every_country = {
-		limit = { is_subject = no }
+		limit = {
+			is_subject = no
+			NOT = { is_country_type = decentralized }
+		}
 		add = 1
 	}
 }

@@ -2080,6 +2080,18 @@ un_mission_failed_notice = {
 	notification_type = feed
 	color = bad
 }
+un_mission_reinforced_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
+un_mission_withdrawn_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
 un_mission_lapsed_notice = {
 	type = country
 	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"

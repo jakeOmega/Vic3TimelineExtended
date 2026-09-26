@@ -209,3 +209,15 @@ un_vote_3_we_opposed_passed = {
 		un_resolution_kind_is_$KIND$ = yes
 	}
 }
+
+# The resolution archive holds at least $COUNT$ resolutions: row $COUNT$ - 1 of
+# the chamber's Voting Details has one to show (un_chamber_history_details_row_sgui).
+# Scope: any
+un_chamber_history_has_entry = {
+	has_global_variable_list = un_resolution_history
+	any_in_global_list = {
+		variable = un_resolution_history
+		count >= $COUNT$
+		has_tag = un_resolution
+	}
+}

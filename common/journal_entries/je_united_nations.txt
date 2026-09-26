@@ -201,8 +201,18 @@
 			}
 		}
 
-		# 4. General Assembly statistics
+		# 4. General Assembly statistics. Members that have become subjects
+		# keep their seats and are counted apart (un_subject_member_count).
 		first_valid = {
+			triggered_desc = {
+				desc = je_un_statistics_subject_seats
+				trigger = {
+					any_country = {
+						je:je_united_nations ?= { has_modifier = un_member_modifier }
+						is_subject = yes
+					}
+				}
+			}
 			triggered_desc = {
 				desc = je_un_statistics
 				trigger = {
@@ -320,12 +330,30 @@
 			# ---- Treaty obligation auto-enrollment ----
 			# Membership only: a great power enrolled by treaty stands for an
 			# open permanent seat like any other member (un_join_organisation).
+			# Only an independent country: subjects cannot join (un_join_button),
+			# and a treaty obligation is no way round that.
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 					modifier:country_un_membership_obligation_bool = yes
+					is_subject = no
+					NOT = { is_country_type = decentralized }
 				}
 				un_join_organisation = yes
+			}
+
+			# A member that has left stops paying for the contingents it sent at
+			# will (un_mission_service_refresh removes the cost for a
+			# non-member; the members' refresh is below).
+			if = {
+				limit = {
+					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					OR = {
+						has_modifier = un_mission_service_cost
+						has_variable = un_msn_service_cached
+					}
+				}
+				un_mission_service_refresh = yes
 			}
 
 			# ---- Member-only logic ----
@@ -354,6 +382,16 @@
 				# withholding its dues (Article 19 after 24 of them). The single
 				# refresh site for un_dues_modifier.
 				un_dues_country_monthly_update = yes
+
+				# ---- Missions joined at will (un_mission_effects.txt) ----
+				# The AI sends or recalls a contingent the way a player does from
+				# the chamber; then this month's cost of every mission we serve
+				# in at will (un_mission_service_cost's refresh).
+				if = {
+					limit = { is_ai = yes }
+					un_mission_ai_monthly = yes
+				}
+				un_mission_service_refresh = yes
 
 				# ---- Apply scaled UN membership modifier ----
 				# Modifier stays applied per-member; the multiplier reads the shared

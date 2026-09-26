@@ -4079,6 +4079,15 @@ un_observer_mission_cost = {
 	country_expenses_add = 1
 }
 
+# The contingents a member sends to UN missions at will (un_mission_volunteer).
+# Applied with multiplier = var:un_msn_service_cached (the week's cost of
+# every mission it pays to serve in, un_mission_service_expense_value) by
+# un_mission_service_refresh, the single refresh site.
+un_mission_service_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_coins_negative.dds
+	country_expenses_add = 1
+}
+
 # Redesign phase 5 (§7.2): a member's assessed dues, a share of its GDP set by
 # the UN's tier. Applied with multiplier = var:un_dues_cached (the weekly
 # dues, un_dues_weekly_value) by un_dues_country_monthly_update, the single
