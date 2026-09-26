@@ -110,7 +110,7 @@
 			limit = { NOT = { has_variable = un_state_rebuild_pending } }
 			set_variable = un_state_rebuild_pending
 		}
-		un_state_rebuild = yes
+		un_state_rebuild = yes # REVIEWED 2026-09-26: a rebuild, not a reset. It forgets a mirror only when the country no longer qualifies for it (not a member, representation suspended, not the HQ host, seats full), re-prices the programme costs it re-adds, and drops un_regime_stamp so the regime terms come back (§0.9)
 	}
 
 	complete = {
