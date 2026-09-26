@@ -15,6 +15,9 @@
 # green_revolution, gene_splicing, biotechnology.
 #
 # Wired in via on_acquired_technology in common/on_actions/extra_on_actions.txt.
+# Countries the broadcast misses (new tags, and the rebels in a civil war) are
+# caught by the backfill below, and a civil war's winner is repaired by
+# agdiff_repair_after_civil_war at the end of this file.
 
 # --- Dispatcher (called from agricultural_diffusion_on_action) --------------
 # Guard + dispatch in one parameterized block: if $TECH$ is researched and
@@ -93,6 +96,15 @@ agdiff_handle_tech_acquired_effect = {
 		set_global_variable = { name = world_first_$TECH$ value = yes }
 		set_global_variable = { name = first_$TECH$_country value = ROOT }
 		set_variable = { name = is_world_first_$TECH$ value = yes }
+		# The month the first-mover reward starts, for
+		# agdiff_restore_first_mover_prestige: the title above is permanent
+		# but the reward is a 20-year decaying modifier, so a revolution's
+		# winner needs to know how much of it is left. Recorded here, beside
+		# the title, rather than in the event's .a_first option that grants
+		# the modifier: that option is the only one open to the first
+		# researcher, and the event fires on it at once. One variable for all
+		# five techs, like the modifier: a later title refreshes both.
+		set_variable = { name = agdiff_first_mover_month value = te_history_month_index }
 		# Country-event narrative: same event ID to first researcher and
 		# others; the event uses triggered_desc on is_world_first_$TECH$ to
 		# branch between first-mover and notification flavor, and applies the
@@ -108,13 +120,32 @@ agdiff_handle_tech_acquired_effect = {
 	}
 }
 
-# --- Backfill for newly-formed countries -----------------------------------
+# --- Backfill for countries the broadcast missed ----------------------------
 # Countries that come into existence AFTER the first researcher (decolonization,
-# release-as-subject, formables, civil-war secession) miss the every_country
-# broadcast in agdiff_handle_tech_acquired_effect. This catch-up effect adds
-# any diffusion modifier whose global-first flag is already set but which
-# isn't yet on the country. Wired into on_country_formed and the three
-# release on-actions in common/on_actions/extra_on_actions.txt.
+# releases, formables, secession) miss the every_country broadcast in
+# agdiff_handle_tech_acquired_effect, and so do the rebels in a revolution: a
+# second country object with the same tag, which starts with no modifiers.
+# This catch-up effect adds any diffusion modifier whose global-first flag is
+# already set but which isn't yet on the country. It reads only global flags
+# and the country's own modifiers, so it is safe to run on any country at any
+# time, as often as you like.
+#
+# Wired into (common/on_actions/extra_on_actions.txt, agricultural diffusion
+# section):
+#   on_country_formed                           ROOT = the new country
+#   on_country_released_as_independent          scope:target = released country
+#   on_country_released_as_own_subject          scope:target = released country
+#   on_country_released_as_overlord_subject     scope:target = released country
+#   on_country_released_as_company_subject      scope:target = released country
+#   on_revolution_start, on_secession_start     scope:target = uprising country
+#   on_civil_war_won                            ROOT = the winner, through
+#                                               agdiff_repair_after_civil_war
+#
+# The rebels get it when the uprising starts, not only when they win: they
+# are the object that survives a rebel victory, and a revolution's winner
+# inherits none of the loser's modifiers (docs/guides/scripting_best_practices.md
+# § "What a Civil War's Winner Inherits"; in the German-revolution saves the
+# winner held none of the five). The on_civil_war_won pass is the backstop.
 #
 # Without this, decolonized 1960+ African nations (the exact target of issue
 # #114) would get zero benefit from the Green Revolution diffusion that fired
@@ -138,4 +169,90 @@ agdiff_backfill_diffusion_for_country = {
 	agdiff_backfill_one_tech = { TECH = green_revolution }
 	agdiff_backfill_one_tech = { TECH = gene_splicing }
 	agdiff_backfill_one_tech = { TECH = biotechnology }
+}
+
+# --- After a civil war ------------------------------------------------------
+# A revolution's winner inherits the loser's variables but none of its
+# modifiers (docs/guides/scripting_best_practices.md § "What a Civil War's
+# Winner Inherits"). When the rebels win, the loyalist object dies holding the
+# five diffusion modifiers and, if it was a first researcher, the first-mover
+# reward. The winner continues the nation, so it gets both back.
+#
+# Scope: the winner, which must also be ROOT (called bare from
+# agdiff_on_civil_war_won; on_civil_war_won runs with ROOT = the winner, after
+# the loser's variables have merged in). Every step is a no-op for a winner
+# that still holds what it restores, which is what a loyalist victory
+# presumably leaves: the original keeps its own modifiers.
+agdiff_repair_after_civil_war = {
+	agdiff_backfill_diffusion_for_country = yes
+	agdiff_restore_first_mover_prestige = yes
+	agdiff_repoint_first_country = { TECH = nitrogen_fixation }
+	agdiff_repoint_first_country = { TECH = modern_chemical_processes }
+	agdiff_repoint_first_country = { TECH = green_revolution }
+	agdiff_repoint_first_country = { TECH = gene_splicing }
+	agdiff_repoint_first_country = { TECH = biotechnology }
+}
+
+# The first-mover reward. is_world_first_<tech> reaches the winner, but it is
+# permanent and the reward is a 20-year decaying modifier, so keying on the
+# title alone would hand a fresh 20 years to a country whose reward ran out
+# decades ago. agdiff_first_mover_month (recorded with the title, and inherited
+# like it) says how much is left, and the reward comes back only while some is.
+#
+# The restored modifier starts at the strength the lost one had decayed to
+# (multiplier = the fraction of the 20 years still to run), so the number the
+# player was watching carries straight across the win. It then fades over a
+# full very_long_modifier_time instead of over what was left, so it fades more
+# slowly than the original would have. A duration computed from a script value
+# would end it on the original date, but no add_modifier in vanilla or this mod
+# takes a non-constant duration, and one the engine ignored would leave the
+# modifier permanent.
+#
+# A title won before agdiff_first_mover_month existed has no record and is not
+# restored: there is no way to tell whether its 20 years have run out.
+#
+# Scope: a country, which must also be ROOT: add_modifier's multiplier is
+# resolved against ROOT (docs/guides/scripting_best_practices.md
+# § "`add_modifier { multiplier = var:X }` Resolves Against ROOT, Not the
+# Scope It Runs In"). `root ?= this` makes any other call site a no-op rather
+# than a restore at another country's strength.
+agdiff_restore_first_mover_prestige = {
+	if = {
+		limit = {
+			root ?= this
+			has_variable = agdiff_first_mover_month
+			NOT = { has_modifier = agdiff_first_mover_prestige }
+			agdiff_first_mover_months_left > 0
+		}
+		add_modifier = {
+			name = agdiff_first_mover_prestige
+			days = very_long_modifier_time
+			multiplier = agdiff_first_mover_strength_left
+			is_decaying = yes
+		}
+	}
+}
+
+# Re-point global first_$TECH$_country, the originator the diffusion events
+# name, at the winner when it points at the loser. Only the five .d loc strings
+# in te_events_l_english.yml read it, in the notification every other country
+# gets 14 days after the first research, so this matters only when a revolution
+# ends inside that window. The pointer moves only when it names a dead country
+# with the winner's own definition, i.e. this war's loser; a loyalist winner
+# that holds the title is alive, and keeps it.
+#
+# Untested: whether the dead loser can still be read here (it is still in the
+# save just after on_civil_war_won). If it can't, the ?= makes this a no-op.
+#
+# Scope: the winner, as ROOT.
+agdiff_repoint_first_country = {
+	if = {
+		limit = {
+			global_var:first_$TECH$_country ?= {
+				is_country_alive = no
+				country_definition = root.country_definition
+			}
+		}
+		set_global_variable = { name = first_$TECH$_country value = ROOT }
+	}
 }
