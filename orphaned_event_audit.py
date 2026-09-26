@@ -225,7 +225,6 @@ def audit(mod_path: str) -> AuditResult:
 def render_report(result: AuditResult, mod_path: str = "") -> str:
     unreviewed = [f for f in result.flags if not f.exemption]
     exempted = [f for f in result.flags if f.exemption]
-    cov = result.coverage
 
     out: list[str] = []
     out.append("# Orphaned Event Report")
@@ -238,19 +237,17 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
         "`Event X is orphaned` at game start)."
     )
     out.append("")
-    out.append(
-        f"- Events defined: **{cov.get('events_defined', 0)}** "
-        f"(dispatch-required candidates: "
-        f"**{cov.get('dispatch_required_candidates', 0)}**)"
-    )
-    out.append(f"- Distinct referenced ids seen: **{cov.get('references_seen', 0)}**")
+    # Finding counts only: the event / reference counts stay in `coverage`
+    # (and the regenerate() summary) but move with every new event.
     out.append(f"- Orphaned (unreviewed): **{len(unreviewed)}**")
     out.append(f"- Orphaned (REVIEWED-suppressed): **{len(exempted)}**")
     out.append("")
 
+    def _rel(f: OrphanFlag) -> str:
+        return os.path.relpath(f.file, mod_path) if mod_path else f.file
+
     def _loc(f: OrphanFlag) -> str:
-        rel = os.path.relpath(f.file, mod_path) if mod_path else f.file
-        return f"{rel}:{f.line}"
+        return f"{_rel(f)}:{f.line}"
 
     if unreviewed:
         out.append("## Unreviewed orphans")
@@ -271,10 +268,12 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
     if exempted:
         out.append("## REVIEWED-suppressed")
         out.append("")
+        # No line number on a reviewed entry: the event id names it, and an
+        # edit above it would otherwise churn the report.
         for f in exempted:
             ex = f.exemption or {}
             out.append(
-                f"- `{f.event_id}` — {_loc(f)} "
+                f"- `{f.event_id}` — {_rel(f)} "
                 f"(REVIEWED {ex.get('date', '?')}: {ex.get('rationale', '')})"
             )
         out.append("")

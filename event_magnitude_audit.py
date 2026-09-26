@@ -442,18 +442,20 @@ def render_report(result: AuditResult) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line number on a reviewed entry: the event id and effect name it,
+        # and an edit above it would otherwise churn the report.
         for f in exemp:
             out.append(
-                f"- `{f.file}:{f.line}` — `{f.event_id or '?'}` — "
+                f"- `{f.file}` — `{f.event_id or '?'}` — "
                 f"`{f.effect} = {f.value}` — {f.exemption['date']}: "
                 f"{f.exemption['rationale']}"
             )
         out.append("")
 
+    # Flag counts only: `files_audited` stays in `result.coverage` (and the
+    # regenerate() summary) but moves with every new event file.
     out.append("## Coverage")
     out.append("")
-    for k, v in result.coverage.items():
-        out.append(f"- {k}: {v}")
     out.append(f"- total flags: {len(result.flags)}")
     out.append(f"- unreviewed: {len(unrev)}")
     out.append(f"- exempted: {len(exemp)}")

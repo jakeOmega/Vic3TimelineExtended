@@ -234,6 +234,27 @@ class IntegrationTests(unittest.TestCase):
         report = render_report(result)
         self.assertIn("_None._", report)
 
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and Coverage no file or
+        judged-article count, so the report changes only when the findings do."""
+        from treaty_leverage_side_audit import AuditResult, Flag
+        result = AuditResult(
+            flags=[Flag("common/treaty_articles/a.txt", 20, "request_influence", 3,
+                        "source_modifier", "source_country",
+                        exemption={"date": "2026-09-21", "rationale": "petitioner pays"})],
+            files_audited=17, articles_checked=14, articles_undetermined=0,
+        )
+        report = render_report(result)
+        self.assertIn(
+            "- `common/treaty_articles/a.txt` — `request_influence`: leverage in "
+            "`source_modifier` with `maintenance_paid_by = source_country` — "
+            "**2026-09-21**: petitioner pays", report)
+        self.assertNotIn("a.txt:20", report)
+        for gone in ("files audited", "directed articles judged", "17", "14"):
+            self.assertNotIn(gone, report)
+        self.assertIn("- articles with a leverage line but no `maintenance_paid_by`: 0",
+                      report)
+
     def test_missing_treaty_articles_dir_is_not_an_error(self):
         with tempfile.TemporaryDirectory() as tmp:
             result = audit(mod_path=tmp)

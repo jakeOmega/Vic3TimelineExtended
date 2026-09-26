@@ -1794,6 +1794,12 @@ def _parse_event_targets_log(filepath: str) -> list[dict]:
     current = None
     for line in lines:
         stripped = line.rstrip("\n")
+        if stripped.startswith("----"):
+            # The documented targets end at a `----` rule, followed by a bare
+            # "Event Targets Saved from Code:" name list. Read on and that list
+            # lands in the description of whichever entry the engine printed
+            # last, which differs between dumps.
+            break
         if stripped.startswith("### "):
             if current:
                 current["description"] = current["description"].strip()
@@ -8595,7 +8601,16 @@ def _run_generator_chain(mod_state, generators) -> None:
                     "summary": summary,
                 })
             else:
-                logger.info(f"[post-load] {label} ok ({elapsed:.2f}s)")
+                # Coverage counts (files audited, references checked, …) live
+                # here rather than in the committed reports, where they would
+                # re-diff on every PR that adds a file.
+                counts = ""
+                if isinstance(summary, dict):
+                    counts = "".join(
+                        f" {k}={v}" for k, v in summary.items()
+                        if isinstance(v, int) and not isinstance(v, bool)
+                    )
+                logger.info(f"[post-load] {label} ok ({elapsed:.2f}s){counts}")
         except Exception as exc:  # noqa: BLE001
             # An ImportError, a crash inside regenerate(), or a missing
             # `regenerate` used to be logged and forgotten, so POST /reload

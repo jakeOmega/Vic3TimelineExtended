@@ -410,17 +410,21 @@ def render_report(result: AuditResult) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line numbers on a reviewed entry: the block, modifier and
+        # variable name it, and an edit above it would otherwise churn the
+        # report.
         for f in exemp:
             out.append(
-                f"- `{f.file}:{f.add_line}` — `{f.multiplier}` removed at line "
-                f"{f.remove_line} — **{f.exemption['date']}**: "
-                f"{f.exemption['rationale']}"
+                f"- `{f.file}` — `{f.block}`: `{f.modifier_name}` with "
+                f"`multiplier = {f.multiplier}`, `{f.variable}` removed — "
+                f"**{f.exemption['date']}**: {f.exemption['rationale']}"
             )
         out.append("")
 
+    # Flag counts only: `files_audited` stays on the result (and in the
+    # regenerate() summary) but moves with every new file.
     out.append("## Coverage")
     out.append("")
-    out.append(f"- files audited: {result.files_audited}")
     out.append(f"- total flags: {len(result.flags)}")
     out.append(f"- unreviewed: {len(unrev)}")
     out.append(f"- exempted: {len(exemp)}")

@@ -169,6 +169,40 @@ Requires Data: yes
         # "scopes" alias preserved for filter consistency
         self.assertEqual(entries[0]["scopes"], ["province", "state"])
 
+    def test_saved_from_code_trailer_does_not_bleed_into_last_entry(self):
+        # The real log ends with a `----` rule and a bare list of event targets
+        # saved from code. It used to be appended to whichever entry the engine
+        # happened to print last, so it moved between entries across dumps.
+        path = _write(
+            """# Event Target Documentation
+### sponsor
+Links from an amendment scope to the interest group that sponsored the amendment
+Input Scopes: amendment
+Output Scopes: interest_group
+
+### country
+Scope to the country of a military formation
+Input Scopes: military_formation
+Output Scopes: country
+
+
+--------------------
+
+Event Targets Saved from Code:
+
+context
+amendment
+area
+"""
+        )
+        try:
+            entries = _parse_event_targets_log(path)
+        finally:
+            os.remove(path)
+        self.assertEqual([e["name"] for e in entries], ["sponsor", "country"])
+        self.assertEqual(entries[1]["description"], "Scope to the country of a military formation")
+        self.assertEqual(entries[1]["output_scopes"], ["country"])
+
 
 class OnActionsLogTests(unittest.TestCase):
     def test_parses_basic_entries(self):

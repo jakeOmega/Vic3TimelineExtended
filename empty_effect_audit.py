@@ -482,24 +482,26 @@ def render_report(result: AuditResult) -> str:
     if not exemp_b and not exemp_o:
         out += ["_None._", ""]
     else:
+        # No line number on a reviewed entry: an edit above it would otherwise
+        # churn the report. An option is named by its id; a block by its key
+        # and why it is empty, and by its rationale.
         for f in exemp_b:
             out.append(
-                f"- `{f.file}:{f.line}` — `{f.key}` (empty_block) — "
+                f"- `{f.file}` — `{f.key}` {_REASON_TEXT[f.reason]} (empty_block) — "
                 f"**{f.exemption['date']}**: {f.exemption['rationale']}"
             )
         for f in exemp_o:
             out.append(
-                f"- `{f.file}:{f.line}` — `{f.event_id}` option `{f.option}` "
+                f"- `{f.file}` — `{f.event_id}` option `{f.option}` "
                 f"(no_effect_option) — **{f.exemption['date']}**: {f.exemption['rationale']}"
             )
         out.append("")
 
     out += [
+        # Flag counts only: the file / event / option counts stay on the
+        # result but move with every new event.
         "## Coverage",
         "",
-        f"- files audited: {result.files_audited}",
-        f"- events scanned for options: {result.events_scanned}",
-        f"- options scanned: {result.options_scanned}",
         f"- empty blocks: {len(result.block_flags)} ({len(unrev_b)} unreviewed)",
         f"- no-effect options: {len(result.option_flags)} ({len(unrev_o)} unreviewed)",
         f"- stale tags: {len(result.stale_tags)}",

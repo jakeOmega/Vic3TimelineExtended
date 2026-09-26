@@ -613,9 +613,11 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
     exempted = [f for f in result.flags if f.exemption]
     cov = result.coverage
 
+    def _rel(f: Flag) -> str:
+        return os.path.relpath(f.file, mod_path) if mod_path else f.file
+
     def _loc(f: Flag) -> str:
-        rel = os.path.relpath(f.file, mod_path) if mod_path else f.file
-        return f"{rel}:{f.line}"
+        return f"{_rel(f)}:{f.line}"
 
     out: list[str] = []
     out.append("# Effect / Trigger Name Validity Report")
@@ -640,15 +642,10 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
         "names are validated by `modifier_visibility_audit`."
     )
     out.append("")
-    out.append(
-        f"- Roots scanned: **{cov.get('roots_scanned', 0)}**, files scanned: "
-        f"**{cov.get('files_scanned', 0)}**, keys checked: "
-        f"**{cov.get('keys_checked', 0)}**"
-    )
-    out.append(
-        f"- Catalog size: **{cov.get('catalog_size', 0)}** + mod-defined names: "
-        f"**{cov.get('mod_defined_names', 0)}**"
-    )
+    # The frozen vanilla catalog changes only on an engine update; the root /
+    # file / key / mod-name counts stay in `coverage` but move with unrelated
+    # mod content.
+    out.append(f"- Catalog size: **{cov.get('catalog_size', 0)}**")
     out.append(f"- Flags (unreviewed): **{len(unreviewed)}**")
     out.append(f"- Flags (REVIEWED-suppressed): **{len(exempted)}**")
     out.append("")
@@ -672,10 +669,12 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
     if exempted:
         out.append("## REVIEWED-suppressed")
         out.append("")
+        # No line number on a reviewed entry: the keyword names it, and an
+        # edit above it would otherwise churn the report.
         for f in exempted:
             ex = f.exemption or {}
             out.append(
-                f"- `{f.keyword}` ({f.kind}) — {_loc(f)} "
+                f"- `{f.keyword}` ({f.kind}) — {_rel(f)} "
                 f"(REVIEWED {ex.get('date', '?')}: {ex.get('rationale', '')})"
             )
         out.append("")

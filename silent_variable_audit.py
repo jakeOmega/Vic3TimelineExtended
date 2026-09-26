@@ -434,9 +434,11 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
     exempted = [f for f in result.flags if f.exemption]
     cov = result.coverage
 
+    def _rel(file: str) -> str:
+        return os.path.relpath(file, mod_path) if mod_path else file
+
     def _loc(file: str, line: int) -> str:
-        rel = os.path.relpath(file, mod_path) if mod_path else file
-        return f"{rel}:{line}"
+        return f"{_rel(file)}:{line}"
 
     def _writes(f: OptionFlag) -> str:
         parts = []
@@ -456,12 +458,8 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
         "<effects> }` naming the change."
     )
     out.append("")
-    out.append(f"- Events scanned: **{cov.get('events_scanned', 0)}**")
-    out.append(f"- Options scanned: **{cov.get('options_scanned', 0)}**")
-    out.append(
-        f"- Displayed variables: **{cov.get('displayed_scope_variables', 0)}** scope, "
-        f"**{cov.get('displayed_global_variables', 0)}** global"
-    )
+    # Finding counts only: the event / option / displayed-variable counts stay
+    # in `coverage` but move with unrelated events and UI.
     out.append(f"- Silent writes (unreviewed): **{len(unreviewed)}**")
     out.append(f"- Silent writes (REVIEWED-suppressed): **{len(exempted)}**")
     out.append(f"- Stale `({CHECK})` tags: **{len(result.stale_tags)}**")
@@ -495,10 +493,12 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
     if exempted:
         out.append("## REVIEWED-suppressed")
         out.append("")
+        # No line number on a reviewed entry: the event and option name it,
+        # and an edit above it would otherwise churn the report.
         for f in exempted:
             ex = f.exemption or {}
             out.append(
-                f"- `{f.event_id}` option `{f.option}` — {_loc(f.file, f.line)} — {_writes(f)} "
+                f"- `{f.event_id}` option `{f.option}` — {_rel(f.file)} — {_writes(f)} "
                 f"(REVIEWED {ex.get('date', '?')}: {ex.get('rationale', '')})"
             )
         out.append("")

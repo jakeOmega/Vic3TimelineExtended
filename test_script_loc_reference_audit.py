@@ -126,6 +126,24 @@ class AuditTests(unittest.TestCase):
         self.assertIn("- unreviewed: 1", report)
         self.assertIn("_None._", render_report(audit(lambda k: True, mod_path=root)))
 
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and Coverage no file or
+        reference count, so the report changes only when the findings do."""
+        from script_loc_reference_audit import AuditResult, Flag
+        result = AuditResult(flags=[
+            Flag("common/x/a.txt", 764, "desc", "UPPER_CLASS"),
+            Flag("common/x/b.txt", 1192, "custom_tooltip", "KEY_LATER",
+                 exemption={"date": "2026-09-25", "rationale": "loc lands next"}),
+        ], files_audited=418, references_checked=12345)
+        report = render_report(result)
+        self.assertIn(
+            "- `common/x/b.txt` — `custom_tooltip = KEY_LATER` — **2026-09-25**: "
+            "loc lands next", report)
+        self.assertNotIn("1192", report)
+        self.assertIn("- line 764: `desc = UPPER_CLASS`", report)  # unreviewed
+        for gone in ("files audited", "references checked", "418", "12345"):
+            self.assertNotIn(gone, report)
+
 
 class RegistrationTests(unittest.TestCase):
     def test_registered_as_post_load_audit(self):

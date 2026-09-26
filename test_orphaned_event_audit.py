@@ -92,5 +92,27 @@ class OrphanedEventAuditTests(unittest.TestCase):
         self.assertNotIn("my.1", ids)
 
 
+class RenderReportTests(unittest.TestCase):
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and the summary no event
+        counts, so the report changes only when the findings do."""
+        result = oea.AuditResult(
+            flags=[
+                oea.OrphanFlag("my.1", "/mod/events/e.txt", 3),
+                oea.OrphanFlag("my.2", "/mod/events/e.txt", 30,
+                               exemption={"date": "2026-05-24", "rationale": "dynamic id"}),
+            ],
+            coverage={"events_defined": 784, "dispatch_required_candidates": 784,
+                      "references_seen": 799, "orphaned": 2},
+        )
+        report = oea.render_report(result, "/mod")
+        self.assertIn("- `my.2` — events/e.txt (REVIEWED 2026-05-24: dynamic id)", report)
+        self.assertNotIn("e.txt:30", report)
+        self.assertIn("- `my.1` — events/e.txt:3", report)  # unreviewed keeps its line
+        for gone in ("- Events defined", "referenced ids", "784", "799"):
+            self.assertNotIn(gone, report)
+        self.assertIn("- Orphaned (REVIEWED-suppressed): **1**", report)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -295,6 +295,9 @@ def audit(events_dir: str) -> list[AuditFlag]:
 
 
 def render_report(flags: list[AuditFlag], files_audited: int) -> str:
+    # `files_audited` is no longer printed (it moves with every new event
+    # file, churning the report); the parameter stays for the two callers,
+    # and regenerate() still returns it.
     fails = [f for f in flags if not f.exemption and not (f.has_void6 and f.has_exists_guard)
              and not (f.has_void6 or f.has_exists_guard)]
     partial = [f for f in flags if not f.exemption and (f.has_void6 ^ f.has_exists_guard)]
@@ -313,7 +316,6 @@ def render_report(flags: list[AuditFlag], files_audited: int) -> str:
         "Suppress an intentional flag with a same-line comment:",
         "`kill_character = scope:X  # REVIEWED YYYY-MM-DD: rationale`",
         "",
-        f"Files audited: **{files_audited}**.  ",
         f"Total `kill_character` occurrences flagged: **{len(flags)}**.  ",
         f"Hard fails (neither guard): **{len(fails)}**.  ",
         f"Defense-in-depth gaps (only one guard): **{len(partial)}**.  ",
@@ -352,10 +354,12 @@ def render_report(flags: list[AuditFlag], files_audited: int) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line number on a reviewed entry: the event and target name it,
+        # and an edit above it would otherwise churn the report.
         for f in exempted:
             assert f.exemption is not None
             out.append(
-                f"- `{f.file}:{f.line}` — event `{f.event_id or '?'}` — "
+                f"- `{f.file}` — event `{f.event_id or '?'}` — "
                 f"target `scope:{f.target_scope or '?'}` — {f.exemption['date']}: "
                 f"{f.exemption['rationale']}"
             )

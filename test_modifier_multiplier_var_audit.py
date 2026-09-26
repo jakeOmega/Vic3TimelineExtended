@@ -276,6 +276,24 @@ class AuditAndReportTests(unittest.TestCase):
             self.assertIn("_None._", report)
             self.assertIn("- total flags: 0", report)
 
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line numbers but names its block,
+        modifier and variable, and Coverage prints no file count, so the report
+        changes only when the findings do."""
+        from modifier_multiplier_var_audit import AuditResult, Flag
+        result = AuditResult(flags=[
+            Flag("common/scripted_effects/y.txt", 120, 131, "_boost", "var:_boost",
+                 "boost_mod", "te_apply_boost", 110,
+                 exemption={"date": "2026-06-02", "rationale": "timed elsewhere"}),
+        ], files_audited=201)
+        report = render_report(result)
+        self.assertIn(
+            "- `common/scripted_effects/y.txt` — `te_apply_boost`: `boost_mod` with "
+            "`multiplier = var:_boost`, `_boost` removed — **2026-06-02**: "
+            "timed elsewhere", report)
+        for gone in ("y.txt:120", "line 131", "files audited", "201"):
+            self.assertNotIn(gone, report)
+
 
 if __name__ == "__main__":
     unittest.main()
