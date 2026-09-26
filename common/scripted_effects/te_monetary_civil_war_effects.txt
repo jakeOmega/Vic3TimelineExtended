@@ -27,7 +27,8 @@
 # winner, after the merge) and, only when it names a different object that is
 # no longer alive — a rebel win — and that object's rate paid reads as a real
 # rate (a canary against a read that resolves but returns zeros), saves it as
-# scope:te_cw_loser and calls te_monetary_inherit_central_bank below. That
+# scope:te_cw_loser and calls te_monetary_inherit_central_bank below — once
+# per loser, which te_mon_cw_bank_taken enforces (the on-action says why). That
 # rests on an engine fact nobody has observed yet: that a dead but not yet
 # deleted country can still be read through a stored scope variable. The
 # loser was still in the save after this hook, with every variable and
@@ -358,8 +359,11 @@ te_mon_cw_take_scope = {
 # ----------------------------------------------------------------------------
 # Add the timed modifier $NAME$ for var:te_mon_work months
 # ----------------------------------------------------------------------------
-# Scope: the country receiving it. Rounded UP to the next half-year, so a
-# penalty is never cut short by the rounding; 0 or less adds nothing.
+# Scope: the country receiving it. Exact to the month under six months — the
+# tail of a clock is where a rounding error is largest in proportion, and a
+# counter at 1 should not buy six more months of premium — and to the NEAREST
+# half-year above that (ties up), so the error is never more than three months
+# either way and does not lean toward the penalty. 0 or less adds nothing.
 #
 # WHY A LADDER OF LITERALS. Nothing in vanilla or the mod passes add_modifier a
 # duration that depends on scope: every non-literal one is a $PARAMETER$, and
@@ -368,84 +372,104 @@ te_mon_cw_take_scope = {
 # timed modifier with no time is a permanent one, so this does not gamble.
 te_mon_cw_add_timed = {
 	if = {
-		limit = { var:te_mon_work > 114 }
+		limit = { var:te_mon_work > 116 }
 		add_modifier = { name = $NAME$ months = 120 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 108 }
+		limit = { var:te_mon_work > 110 }
 		add_modifier = { name = $NAME$ months = 114 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 102 }
+		limit = { var:te_mon_work > 104 }
 		add_modifier = { name = $NAME$ months = 108 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 96 }
+		limit = { var:te_mon_work > 98 }
 		add_modifier = { name = $NAME$ months = 102 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 90 }
+		limit = { var:te_mon_work > 92 }
 		add_modifier = { name = $NAME$ months = 96 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 84 }
+		limit = { var:te_mon_work > 86 }
 		add_modifier = { name = $NAME$ months = 90 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 78 }
+		limit = { var:te_mon_work > 80 }
 		add_modifier = { name = $NAME$ months = 84 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 72 }
+		limit = { var:te_mon_work > 74 }
 		add_modifier = { name = $NAME$ months = 78 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 66 }
+		limit = { var:te_mon_work > 68 }
 		add_modifier = { name = $NAME$ months = 72 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 60 }
+		limit = { var:te_mon_work > 62 }
 		add_modifier = { name = $NAME$ months = 66 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 54 }
+		limit = { var:te_mon_work > 56 }
 		add_modifier = { name = $NAME$ months = 60 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 48 }
+		limit = { var:te_mon_work > 50 }
 		add_modifier = { name = $NAME$ months = 54 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 42 }
+		limit = { var:te_mon_work > 44 }
 		add_modifier = { name = $NAME$ months = 48 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 36 }
+		limit = { var:te_mon_work > 38 }
 		add_modifier = { name = $NAME$ months = 42 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 30 }
+		limit = { var:te_mon_work > 32 }
 		add_modifier = { name = $NAME$ months = 36 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 24 }
+		limit = { var:te_mon_work > 26 }
 		add_modifier = { name = $NAME$ months = 30 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 18 }
+		limit = { var:te_mon_work > 20 }
 		add_modifier = { name = $NAME$ months = 24 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 12 }
+		limit = { var:te_mon_work > 14 }
 		add_modifier = { name = $NAME$ months = 18 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 6 }
+		limit = { var:te_mon_work > 8 }
 		add_modifier = { name = $NAME$ months = 12 }
 	}
 	else_if = {
-		limit = { var:te_mon_work > 0 }
+		limit = { var:te_mon_work > 5 }
 		add_modifier = { name = $NAME$ months = 6 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 4 }
+		add_modifier = { name = $NAME$ months = 5 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 3 }
+		add_modifier = { name = $NAME$ months = 4 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 2 }
+		add_modifier = { name = $NAME$ months = 3 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 1 }
+		add_modifier = { name = $NAME$ months = 2 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 0 }
+		add_modifier = { name = $NAME$ months = 1 }
 	}
 }
 
