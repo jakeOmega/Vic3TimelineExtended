@@ -223,7 +223,12 @@ class RenderTests(unittest.TestCase):
             file="common/buildings/x.txt", line=77,
             exemption={"date": "2026-06-03", "rationale": "shared cutter"},
         )
-        out = render_report(AuditResult(flags=[flag], coverage={
+        unreviewed = EmploymentFlag(
+            building="building_y", profession="clerks", scaling="level_scaled",
+            total=-900.0, combo=[], mod_relevant=True,
+            file="common/buildings/y.txt", line=12,
+        )
+        out = render_report(AuditResult(flags=[flag, unreviewed], coverage={
             "buildings_audited": 522, "buildings_enumerated": 86,
             "buildings_skipped_large": 0,
         }))
@@ -231,6 +236,7 @@ class RenderTests(unittest.TestCase):
             "- `common/buildings/x.txt` — `building_x` — **laborers** (level_scaled) "
             "total -2500 — **2026-06-03**: shared cutter", out)
         self.assertNotIn("x.txt:77", out)
+        self.assertIn("### `building_y` (`common/buildings/y.txt:12`)", out)  # unreviewed keeps its line
         for gone in ("buildings audited", "buildings enumerated", "522", "86"):
             self.assertNotIn(gone, out)
         self.assertIn("- buildings skipped (combo count > ", out)

@@ -1796,10 +1796,14 @@ def _parse_event_targets_log(filepath: str) -> list[dict]:
         stripped = line.rstrip("\n")
         if stripped.startswith("----"):
             # The documented targets end at a `----` rule, followed by a bare
-            # "Event Targets Saved from Code:" name list. Read on and that list
-            # lands in the description of whichever entry the engine printed
-            # last, which differs between dumps.
-            break
+            # "Event Targets Saved from Code:" name list. Keep `current` open
+            # past it and that list lands in the description of whichever
+            # entry the engine printed last, which differs between dumps.
+            if current:
+                current["description"] = current["description"].strip()
+                entries.append(current)
+            current = None
+            continue
         if stripped.startswith("### "):
             if current:
                 current["description"] = current["description"].strip()

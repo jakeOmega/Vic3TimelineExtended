@@ -531,7 +531,8 @@ def regenerate(mod_state=None) -> dict:
         "unreviewed": result.failing,
         "stale_tags": len(result.stale_tags),
         "exempted": sum(1 for f in result.flags if f.exemption),
-        "options_scanned": result.coverage.get("options_scanned", 0),
+        # Coverage, which the committed report no longer prints.
+        **result.coverage,
         "path": out_path,
     }
 

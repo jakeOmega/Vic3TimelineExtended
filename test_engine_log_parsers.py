@@ -193,13 +193,19 @@ Event Targets Saved from Code:
 context
 amendment
 area
+
+### later
+An entry after a `----` rule still parses
+Input Scopes: state
+Output Scopes: country
 """
         )
         try:
             entries = _parse_event_targets_log(path)
         finally:
             os.remove(path)
-        self.assertEqual([e["name"] for e in entries], ["sponsor", "country"])
+        self.assertEqual([e["name"] for e in entries], ["sponsor", "country", "later"])
+        self.assertEqual(entries[2]["output_scopes"], ["country"])
         self.assertEqual(entries[1]["description"], "Scope to the country of a military formation")
         self.assertEqual(entries[1]["output_scopes"], ["country"])
 

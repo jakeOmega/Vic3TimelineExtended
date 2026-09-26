@@ -525,6 +525,11 @@ def regenerate(mod_state=None) -> dict:
         "no_effect_options": len(result.option_flags),
         "stale_tags": len(result.stale_tags),
         "exempted": sum(1 for f in result.block_flags + result.option_flags if f.exemption),
+        # Coverage lives here (and in the server's "ok" log line), not in the
+        # committed report, where it would re-diff on every new event.
+        "files_audited": result.files_audited,
+        "events_scanned": result.events_scanned,
+        "options_scanned": result.options_scanned,
         "path": out_path,
     }
 

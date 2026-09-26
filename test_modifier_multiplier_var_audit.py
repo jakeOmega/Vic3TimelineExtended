@@ -285,6 +285,8 @@ class AuditAndReportTests(unittest.TestCase):
             Flag("common/scripted_effects/y.txt", 120, 131, "_boost", "var:_boost",
                  "boost_mod", "te_apply_boost", 110,
                  exemption={"date": "2026-06-02", "rationale": "timed elsewhere"}),
+            Flag("common/scripted_effects/z.txt", 60, 64, "_rate", "var:_rate",
+                 "rate_mod", "te_apply_rate", 55),
         ], files_audited=201)
         report = render_report(result)
         self.assertIn(
@@ -293,6 +295,9 @@ class AuditAndReportTests(unittest.TestCase):
             "timed elsewhere", report)
         for gone in ("y.txt:120", "line 131", "files audited", "201"):
             self.assertNotIn(gone, report)
+        # The unreviewed entry keeps its lines.
+        self.assertIn("- `te_apply_rate` (line 55): `rate_mod` applied at line 60", report)
+        self.assertIn("is removed at line 64", report)
 
 
 if __name__ == "__main__":

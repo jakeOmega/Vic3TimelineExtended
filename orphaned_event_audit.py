@@ -300,7 +300,8 @@ def regenerate(mod_state=None) -> dict:
     return {
         "unreviewed": unreviewed,
         "exempted": sum(1 for f in result.flags if f.exemption),
-        "events_defined": result.coverage.get("events_defined", 0),
+        # Coverage, which the committed report no longer prints.
+        **result.coverage,
         "path": out_path,
     }
 

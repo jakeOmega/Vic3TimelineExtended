@@ -241,7 +241,9 @@ class IntegrationTests(unittest.TestCase):
         result = AuditResult(
             flags=[Flag("common/treaty_articles/a.txt", 20, "request_influence", 3,
                         "source_modifier", "source_country",
-                        exemption={"date": "2026-09-21", "rationale": "petitioner pays"})],
+                        exemption={"date": "2026-09-21", "rationale": "petitioner pays"}),
+                   Flag("common/treaty_articles/b.txt", 45, "grant_loan", 30,
+                        "target_modifier", "target_country")],
             files_audited=17, articles_checked=14, articles_undetermined=0,
         )
         report = render_report(result)
@@ -250,6 +252,7 @@ class IntegrationTests(unittest.TestCase):
             "`source_modifier` with `maintenance_paid_by = source_country` — "
             "**2026-09-21**: petitioner pays", report)
         self.assertNotIn("a.txt:20", report)
+        self.assertIn("- line 45: `grant_loan` (opened at line 30)", report)  # unreviewed keeps its lines
         for gone in ("files audited", "directed articles judged", "17", "14"):
             self.assertNotIn(gone, report)
         self.assertIn("- articles with a leverage line but no `maintenance_paid_by`: 0",

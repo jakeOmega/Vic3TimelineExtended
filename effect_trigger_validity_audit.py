@@ -702,7 +702,8 @@ def regenerate(mod_state=None) -> dict:
             1 for f in result.flags
             if f.kind == "unresolved-helper-call" and not f.exemption
         ),
-        "roots_scanned": result.coverage.get("roots_scanned", 0),
+        # Coverage, which the committed report no longer prints.
+        **result.coverage,
         "path": out_path,
     }
 

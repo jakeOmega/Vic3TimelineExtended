@@ -247,7 +247,8 @@ def regenerate(mod_state=None) -> dict:
     return {
         "unreviewed": sum(1 for f in result.flags if not f.exemption),
         "exempted": sum(1 for f in result.flags if f.exemption),
-        "visible": result.coverage.get("visible", 0),
+        # Coverage, which the committed report no longer prints.
+        **result.coverage,
         "path": out_path,
     }
 

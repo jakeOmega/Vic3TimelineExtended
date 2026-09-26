@@ -360,6 +360,7 @@ def regenerate(mod_state=None) -> dict:
     exemp = sum(1 for f in result.flags if f.exemption)
     return {
         "files_audited": result.files_audited,
+        "container_var_names": result.container_var_names,
         "total_flags": len(result.flags),
         "unreviewed": unrev,
         "exempted": exemp,

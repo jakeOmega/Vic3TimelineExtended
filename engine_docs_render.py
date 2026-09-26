@@ -122,7 +122,7 @@ _SCOPE_PRIORITY = [
 ]
 
 _REGIONAL_ITER_RE = re.compile(
-    r"^(any|every|random|ordered)_(country|state|province|state_region|strategic_region)_in_\w+$"
+    r"^(?:any|every|random|ordered)_(country|state|province|state_region|strategic_region)_in_(\w+)$"
 )
 
 
@@ -130,9 +130,6 @@ def _is_regional_iterator(name: str) -> bool:
     return bool(_REGIONAL_ITER_RE.match(name))
 
 
-_REGIONAL_ITER_PARTS_RE = re.compile(
-    r"^(?:any|every|random|ordered)_(country|state|province|state_region|strategic_region)_in_(\w+)$"
-)
 _REGIONAL_ITER_NOUNS = {
     "country": "countries",
     "state": "states",
@@ -147,7 +144,7 @@ REGIONAL_ITERATOR_NOTE = (
 
 
 def _regional_iterator_desc(name: str) -> str:
-    m = _REGIONAL_ITER_PARTS_RE.match(name)
+    m = _REGIONAL_ITER_RE.match(name)
     return f"Iterate through all {_REGIONAL_ITER_NOUNS[m.group(1)]} in geographic region {m.group(2)}"
 
 
