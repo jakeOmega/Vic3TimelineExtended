@@ -152,7 +152,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   `un_hq_country` to ROOT when it names a dead same-tag object.
 
 ### F3. The central bank's gold and the whole monetary state are replaced by the rebel's (H2). HIGH (#462)
-- **FIXED (#462), pending the probe.** The audit's preferred option, with the pointer renamed `te_cw_parent` (system-neutral; contract at the foot of `te_monetary_on_actions.txt`). On a rebel win `te_monetary_inherit_central_bank` adds the two vaults and their hot money, and copies the loser's inflation, peg and FX state and the player's mandate, delegation and rate target. The monetary regime is a law, so it follows the winner's laws. It copies no tracker, and re-adds the peg's timed modifiers from their month counters. It logs `TE_CW_PROBE monetary 1/2` and `2/2`.
+- **FIXED (#462), pending the probe.** The audit's preferred option, built on the shared civil-war layer (#467): `te_civil_war_on_won` calls `te_monetary_repair_after_civil_war`, which on a rebel win (`te_cw_rebels_won = 1`) whose `scope:te_cw_loser` resolves dead and reads (a rate-paid canary) — and only once per loser (`te_mon_cw_bank_taken`) — runs `te_monetary_inherit_central_bank`. It adds the two vaults and their hot money, and copies the loser's inflation, peg and FX state and the player's mandate, delegation and rate target. The monetary regime is a law, so it follows the winner's laws. It copies no tracker, and re-adds the peg's timed modifiers from their month counters. It logs `TE_CW_PROBE monetary 1/2` and `2/2` (the loser's own figures). Concurrent revolutions are a known limitation (`monetary_policy_design.md` §0.4 item 32).
 - `common/on_actions/te_monetary_on_actions.txt:222-262` initialises the rebel at `on_revolution_start`
   (dispatching `te_monetary_internal.1`, `events/te_monetary_events.txt:56-63`). Under winner precedence,
   the rebel's value then beats the nation's on every `te_*` variable. The vault `te_bank_gold` is seeded
@@ -324,7 +324,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   intended conquest semantics, document it.
 
 ### F13. Monetary arrangement pointers keep naming the dead loser (H3). LOW
-- **Pointer half FIXED (#462).** `te_mon_cw_repoint_to_winner` repoints `te_mon_anchor` / `te_mon_swap_provider` / `te_mon_lolr_guarantor` / `te_mon_receiver` on third countries to the winner, and flags them for discovery. It rests on the same loser read as F3.
+- **Pointer half FIXED (#462).** `te_mon_cw_repoint_to_winner` repoints `te_mon_anchor` / `te_mon_swap_provider` / `te_mon_lolr_guarantor` / `te_mon_receiver` on third countries from the dead loser (`scope:te_cw_loser`) to the winner, and flags them for discovery. It rests on the same loser read as F3.
 - `te_mon_anchor` / `te_mon_receiver` / `te_mon_swap_provider` on third countries (E6: D42, E17, NEJ, SOK, UNL,
   POR). Every read is guarded with `exists = var:te_mon_anchor` or `?=`
   (`te_monetary_arrangement_effects.txt:60-66, 260-275`; `te_monetary_arrangement_triggers.txt:24-32`), and
