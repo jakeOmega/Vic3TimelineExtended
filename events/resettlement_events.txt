@@ -469,6 +469,8 @@ resettlement.20 = {
 
 	option = {
 		name = resettlement.20.a
+		# REVIEWED 2026-09-26 (no_effect_option): continuing the coercive program
+		# is a decline; the tooltip says the Declaration keeps being violated.
 		default_option = yes
 		custom_tooltip = resettlement_declaration_continue_tt
 		ai_chance = { base = 50 }
