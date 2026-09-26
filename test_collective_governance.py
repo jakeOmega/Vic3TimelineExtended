@@ -283,5 +283,62 @@ class RefreshTests(unittest.TestCase):
             self.assertEqual(f.read(3), b"\xef\xbb\xbf")
 
 
+LAWS = _path("common", "laws", "extra_laws.txt")
+
+BASE_MODIFIERS = {
+    "country_legitimacy_govt_size_add": "1",
+    "country_authority_mult": "-0.15",
+    "country_law_enactment_speed_mult": "-0.1",
+    "country_legitimacy_ideological_incoherence_mult": "-0.3",
+}
+
+
+class LawTests(unittest.TestCase):
+    def setUp(self):
+        self.body = _block(_read(LAWS), "law_direct_democracy")
+
+    def test_prerequisites_are_exactly_the_expressions(self):
+        laws = set(_inner(self.body, "unlocking_laws").split())
+        self.assertEqual(laws, set().union(*(e.dop_laws for e in EXPRESSIONS)))
+        for excluded in ("law_autocracy", "law_bakufu", "law_neo_absolutism",
+                         "law_algorithmic_governance", "law_elder_council"):
+            self.assertNotIn(excluded, laws)
+
+    def test_tech_gate(self):
+        self.assertEqual(_inner(self.body, "unlocking_technologies").split(), ["political_agitation"])
+
+    def test_can_enact(self):
+        self.assertEqual(_norm(_inner(self.body, "can_enact")),
+                         "NOT = { has_government_type = gov_chartered_company }")
+
+    def test_base_modifiers(self):
+        self.assertEqual(_modifiers(_inner(self.body, "modifier")), BASE_MODIFIERS)
+
+    def test_preview_names_each_expression(self):
+        body = _norm(_inner(self.body, "on_enact"))
+        for e in EXPRESSIONS:
+            with self.subTest(trigger=e.trigger):
+                self.assertIn(f"limit = {{ {e.trigger} = yes }} custom_tooltip = {e.tooltip}", body)
+        self.assertTrue(body.endswith("custom_tooltip = COLLECTIVE_GOVERNANCE_TT_FOLLOWS_DOP"))
+
+    def test_activation_attaches_hidden(self):
+        self.assertEqual(_norm(_inner(self.body, "on_activate")),
+                         "hidden_effect = { te_refresh_collective_governance_amendment = yes }")
+
+    def test_ai(self):
+        will = _norm(_inner(self.body, "ai_will_do"))
+        self.assertIn("has_ideology = ideology:ideology_radical", will)
+        self.assertIn("has_ideology = ideology:ideology_anarchist", will)
+        self.assertNotIn("law_council_republic", _inner(self.body, "ai_impose_chance"))
+
+    def test_loc(self):
+        loc = _loc()
+        self.assertEqual(loc["law_direct_democracy"], "Collective Governance")
+        self.assertNotIn("participate directly", loc["law_direct_democracy_desc"])
+        for key in [e.tooltip for e in EXPRESSIONS] + ["COLLECTIVE_GOVERNANCE_TT_FOLLOWS_DOP"]:
+            with self.subTest(key=key):
+                self.assertTrue(key in loc, f"no loc for {key}")
+
+
 if __name__ == "__main__":
     unittest.main()
