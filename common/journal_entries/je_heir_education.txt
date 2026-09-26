@@ -40,17 +40,17 @@ je_heir_education = {
 	scripted_button = he_disable_regressive
 
 	immediate = {
-		set_variable = { name = heir_ed_admin value = 0 }
-		set_variable = { name = heir_ed_diplo value = 0 }
-		set_variable = { name = heir_ed_military value = 0 }
-		set_variable = { name = heir_ed_ideology value = 0 }
-		set_variable = { name = heir_ed_ig_radical value = 0 }
-		set_variable = { name = heir_ed_ig_moderate value = 0 }
-		set_variable = { name = heir_ed_ig_regressive value = 0 }
+		set_variable = { name = heir_ed_admin value = 0 } # REVIEWED 2026-09-26: per-heir state; only a revolution's winner re-runs this, and its heir is a new character
+		set_variable = { name = heir_ed_diplo value = 0 } # REVIEWED 2026-09-26: per-heir state; only a revolution's winner re-runs this, and its heir is a new character
+		set_variable = { name = heir_ed_military value = 0 } # REVIEWED 2026-09-26: per-heir state; only a revolution's winner re-runs this, and its heir is a new character
+		set_variable = { name = heir_ed_ideology value = 0 } # REVIEWED 2026-09-26: per-heir state; only a revolution's winner re-runs this, and its heir is a new character
+		set_variable = { name = heir_ed_ig_radical value = 0 } # REVIEWED 2026-09-26: per-heir state; only a revolution's winner re-runs this, and its heir is a new character
+		set_variable = { name = heir_ed_ig_moderate value = 0 } # REVIEWED 2026-09-26: per-heir state; only a revolution's winner re-runs this, and its heir is a new character
+		set_variable = { name = heir_ed_ig_regressive value = 0 } # REVIEWED 2026-09-26: per-heir state; only a revolution's winner re-runs this, and its heir is a new character
 		set_variable = { name = heir_ed_total value = 0 }
 		# Hidden intelligence score (1-5): affects gain amount per pulse tick
 		# Higher = faster learning, but player never sees exact value
-		random_list = {
+		random_list = { # REVIEWED 2026-09-26: per-heir state; only a revolution's winner re-runs this, and its heir is a new character
 			20 = { set_variable = { name = heir_ed_intelligence value = 1 } }
 			20 = { set_variable = { name = heir_ed_intelligence value = 2 } }
 			20 = { set_variable = { name = heir_ed_intelligence value = 3 } }
@@ -61,7 +61,7 @@ je_heir_education = {
 			set_variable = being_educated
 		}
 		# Pre-initialize adult heirs based on their age
-		heir_education_init_adult = yes
+		heir_education_init_adult = yes # REVIEWED 2026-09-26: per-heir state; only a revolution's winner re-runs this, and its heir is a new character
 		# Update progress bar with any pre-initialized total
 		scope:journal_entry = {
 			set_bar_progress = { name = heir_education_progress_bar value = root.var:heir_ed_total }
