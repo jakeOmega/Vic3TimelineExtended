@@ -235,5 +235,53 @@ class AmendmentTests(unittest.TestCase):
         self.assertTrue("COLLECTIVE_GOVERNANCE_TT_REPEAL" in loc, "no loc for COLLECTIVE_GOVERNANCE_TT_REPEAL")
 
 
+EFFECTS = _path("common", "scripted_effects", "collective_governance_effects.txt")
+ON_ACTIONS = _path("common", "on_actions", "extra_on_actions.txt")
+
+
+class RefreshTests(unittest.TestCase):
+    def test_refresh_syncs_every_amendment_once(self):
+        body = _block(_read(EFFECTS), "te_refresh_collective_governance_amendment")
+        calls = re.findall(
+            r"te_cg_sync_amendment\s*=\s*\{\s*AMENDMENT\s*=\s*(\w+)\s+TRIGGER\s*=\s*(\w+)\s*\}", body)
+        self.assertEqual(sorted(calls), sorted((e.amendment, e.trigger) for e in EXPRESSIONS))
+
+    def test_refresh_only_touches_the_governance_law_of_holders(self):
+        body = _norm(_block(_read(EFFECTS), "te_refresh_collective_governance_amendment"))
+        self.assertIn("limit = { has_law = law_type:law_direct_democracy }", body)
+        self.assertIn("save_scope_as = cg_country", body)
+        self.assertIn("ruler ?= { interest_group ?= { save_scope_as = cg_sponsor } }", body)
+        self.assertIn("active_law:lawgroup_governance_principles ?= {", body)
+
+    def test_sync_removes_on_mismatch_and_adds_on_match(self):
+        body = _norm(_block(_read(EFFECTS), "te_cg_sync_amendment"))
+        self.assertIn(
+            "limit = { has_amendment = amendment_type:$AMENDMENT$ scope:cg_country = { $TRIGGER$ = no } } "
+            "random_scope_amendment = { limit = { amendment_type:$AMENDMENT$ ?= this.type } remove_amendment = yes }",
+            body)
+        self.assertIn(
+            "limit = { NOT = { has_amendment = amendment_type:$AMENDMENT$ } "
+            "scope:cg_country = { $TRIGGER$ = yes } exists = scope:cg_sponsor } "
+            "add_amendment = { type = $AMENDMENT$ sponsor = scope:cg_sponsor cooldown = 0 }",
+            body)
+
+    def test_hooks_are_wired(self):
+        text = _read(ON_ACTIONS)
+        law_hooks = _inner(_block(text, "on_law_activated"), "on_actions").split()
+        self.assertIn("te_collective_governance_from_law_scope", law_hooks)
+        self.assertGreater(law_hooks.index("te_collective_governance_from_law_scope"),
+                           law_hooks.index("te_fix_inconsistent_laws_from_law_scope"))
+        monthly = _inner(_block(text, "on_monthly_pulse_country"), "on_actions").split()
+        self.assertIn("te_collective_governance_country_pulse", monthly)
+        self.assertEqual(_norm(_block(text, "te_collective_governance_from_law_scope")),
+                         "effect = { owner = { te_refresh_collective_governance_amendment = yes } }")
+        self.assertEqual(_norm(_block(text, "te_collective_governance_country_pulse")),
+                         "effect = { te_refresh_collective_governance_amendment = yes }")
+
+    def test_file_has_bom(self):
+        with open(EFFECTS, "rb") as f:
+            self.assertEqual(f.read(3), b"\xef\xbb\xbf")
+
+
 if __name__ == "__main__":
     unittest.main()
