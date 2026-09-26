@@ -408,20 +408,35 @@ un_state_reconcile = {
 # ---- The headquarters host across a revolution ------------------------------------------
 
 # global_var:un_hq_country names a country object, and a revolution's loser is
-# a different object from its winner. When the winner inherited the host
-# record (the headquarters mirror) and the named host is dead with our country
-# definition, or no longer resolves at all, the winner is the host. A loyalist
-# winner is still the named, living host, so nothing changes for it.
-# Called from un_on_civil_war_won (un_on_actions.txt). un_hq_is_host already
-# counts such a winner, so no headquarters is demolished before this runs.
-# Scope: country (the civil war's winner)
+# a different object from its winner. When a living country holds the host
+# record (the headquarters mirror, inherited by the winner) and the named host
+# is dead with our country definition, the winner is the host. When the named
+# host no longer resolves at all (the loser already deleted), the definition
+# cannot be compared, and a living holder of the record that is a represented
+# member by the record takes it: nobody else carries that mirror, since every
+# path that moves the headquarters forgets it (un_state_off), and the monthly
+# reconcile drops a stale one.
+# Safe on any holder, every month:
+#   - the living named host: the host is alive, so nothing happens;
+#   - the dead loser: it is not alive, so nothing happens;
+#   - anyone else: only a dead host of its own definition, or none at all.
+# A loyalist winner is still the named, living host, so nothing changes for it.
+# Called from un_on_civil_war_won (un_on_actions.txt), and every month for
+# every holder of the mirror from un_hq_monthly_update (un_hq_effects.txt).
+# un_hq_is_host already counts such a winner, so no headquarters is demolished
+# before this runs.
+# Scope: country
 un_hq_adopt_as_successor = {
 	if = {
 		limit = {
+			is_country_alive = yes
 			has_variable = un_headquarters_modifier_on
 			has_global_variable = un_hq_country
 			OR = {
-				NOT = { exists = global_var:un_hq_country }
+				AND = {
+					NOT = { exists = global_var:un_hq_country }
+					un_member_represented_by_record = yes
+				}
 				AND = {
 					global_var:un_hq_country ?= { is_country_alive = no }
 					country_definition = global_var:un_hq_country.country_definition

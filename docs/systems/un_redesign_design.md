@@ -158,8 +158,15 @@ credit, its conventions, and its terms under the regimes.
     headquarters mirror while the named host is not a living country. The single-building
     enforcement asks it in both of its branches.
 - **At `on_civil_war_won`:** `un_hq_adopt_as_successor` re-points the variable to the winner.
-  It does so when the winner inherited the headquarters mirror, and the named host is dead with
-  the winner's country definition or no longer resolves.
+  It does so when the winner, alive, inherited the headquarters mirror, and the named host is
+  either dead with the winner's country definition, or no longer resolves at all (then the winner
+  must also be a represented member by the record).
+- **Every month, as a net:** `un_hq_monthly_update` first asks every holder of the headquarters
+  mirror to adopt, before anything can reassign the host. The hook works only if the loser
+  already reads as dead at the win, which is untested. Without the net, the loser's deletion
+  about two weeks later would hand the headquarters to a random member. It asks every holder,
+  not a random one, because the lingering loser holds the mirror too. The adopt does nothing for
+  the living named host or for the dead loser. The cost is one filtered pass a month.
 - **A loyalist winner** is still the named, living host, and nothing changes.
 
 ### Files

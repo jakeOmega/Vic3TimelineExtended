@@ -45,8 +45,9 @@ un_hq_make_host = {
 # so it still names the outgoing host; when it is unset or names a country
 # that no longer exists, un_hq_is_host is false and nobody is excluded, except
 # a revolution's winner that inherited the host's record before its journal
-# entry was rebuilt (un_hq_is_host counts it; un_on_civil_war_won re-points
-# the variable to it, so this is not reached for it in practice).
+# entry was rebuilt (un_hq_is_host counts it; un_on_civil_war_won, and the
+# monthly update before it calls this, re-point the variable to it, so this
+# is not reached for it in practice).
 un_hq_assign_host = {
 	every_country = {
 		limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
@@ -163,6 +164,19 @@ un_hq_enforce_single_building = {
 # pulse may run before a revolution's winner has had its journal entry
 # rebuilt, and the winner must not lose the headquarters in that month.
 un_hq_monthly_update = {
+	# First, a revolution's winner claims the headquarters its predecessor
+	# hosted (§0.9, un_hq_adopt_as_successor). un_on_civil_war_won does this at
+	# the win, but only if the loser already reads as dead or gone there, which
+	# is untested; this is the monthly net, before anything below can hand the
+	# headquarters to someone else once the loser is deleted. Every holder of
+	# the headquarters mirror is asked, not a random one: the lingering loser
+	# holds it too. It is one filtered pass a month over countries that hold a
+	# variable only a host or its successor carries, and the adopt is a no-op
+	# for the living named host and for the dead loser.
+	every_country = {
+		limit = { has_variable = un_headquarters_modifier_on }
+		un_hq_adopt_as_successor = yes
+	}
 	if = {
 		limit = { NOT = { has_global_variable = un_hq_country } }
 		un_hq_assign_host = yes
