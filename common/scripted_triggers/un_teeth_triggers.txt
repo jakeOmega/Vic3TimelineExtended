@@ -21,8 +21,9 @@ un_resolution_peacekeeping_full = {
 un_case_standing_applies = {
 	un_tier_is_supranational = yes
 	NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-	is_subject = no
-	NOT = { is_country_type = decentralized }
+	# Only a country that could join (§0.8 ruling 10): a puppet or colony is
+	# no outsider by choice.
+	un_membership_eligible = yes
 	OR = {
 		country_rank >= rank_value:major_power
 		has_modifier = nuclear_power

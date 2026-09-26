@@ -3620,6 +3620,7 @@
  un_appeal_withheld_modifier:0 "Grievance Left Unanswered"
  un_arms_control_participant_modifier:0 "Arms Control Participant"
  un_article_19_table_tt:0 "Our delegation has a vote: we are not two years in arrears on our [concept_un_dues] (Article 19)"
+ un_membership_eligible_tt:0 "We conduct our own foreign policy: we are independent, or a dominion, protectorate or tributary"
  un_authority_at_least_20_tt:0 "[concept_un_authority] is at least 20"
  un_authority_at_least_30_tt:0 "[concept_un_authority] is at least 30"
  un_authority_at_least_40_tt:0 "[concept_un_authority] is at least 40"

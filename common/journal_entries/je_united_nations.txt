@@ -330,14 +330,14 @@
 			# ---- Treaty obligation auto-enrollment ----
 			# Membership only: a great power enrolled by treaty stands for an
 			# open permanent seat like any other member (un_join_organisation).
-			# Only an independent country: subjects cannot join (un_join_button),
-			# and a treaty obligation is no way round that.
+			# Only a country that conducts its own foreign policy
+			# (un_membership_eligible, §0.8): a treaty obligation is no way
+			# round the Join button's gate.
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 					modifier:country_un_membership_obligation_bool = yes
-					is_subject = no
-					NOT = { is_country_type = decentralized }
+					un_membership_eligible = yes
 				}
 				un_join_organisation = yes
 			}
@@ -511,9 +511,13 @@
 			# relations and prestige from Established, trade and leverage as
 			# well from Strong. The tier carries the hysteresis the old 60/55
 			# pair used to. The single refresh site for both modifiers.
+			# Only an eligible outsider is a pariah (§0.8 ruling 10): a puppet or
+			# colony cannot join, so staying out is not its choice. An expelled
+			# country, or one that walked out, is eligible by type and stays one.
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					un_membership_eligible = yes
 					un_tier_at_least_established = yes
 				}
 				if = {
@@ -528,6 +532,7 @@
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					un_membership_eligible = yes
 					un_tier_at_least_strong = yes
 				}
 				if = {

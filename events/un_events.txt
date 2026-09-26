@@ -62,12 +62,12 @@ un_events.1 = {
 	duration = 3
 
 	trigger = {
-		# Fired by un_charter_invitations to every other recognized independent
-		# country once the UN is founded or refounded
+		# Fired by un_charter_invitations to every other country that conducts
+		# its own foreign policy (un_membership_eligible, §0.8) once the UN is
+		# founded or refounded
 		NOT = { has_variable = un_charter_signed }
 		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-		is_subject = no
-		NOT = { is_country_type = decentralized }
+		un_membership_eligible = yes
 	}
 
 	immediate = {
@@ -1447,7 +1447,7 @@ un_events.10 = {
 		trigger = {
 			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			has_global_variable = un_founded
-			is_subject = no
+			un_membership_eligible = yes
 			NOT = { has_modifier = un_expelled_cooldown }
 			NOT = { has_modifier = un_withdrawal_penalty_modifier }
 		}
