@@ -7,7 +7,8 @@
 # century. docs/systems/nuclear_crisis_design.md §0.9 is the checklist they
 # serve.
 #
-#   .1  arm and initialise; reset tenure so every posture button is live
+#   .1  arm and initialise; reset tenure so every posture button is live;
+#       Recessed or Automatic Retaliation at once
 #   .2  force an incident of a chosen family (and toggle forced odds)
 #   .3  open a crisis with a neighbour, private or public
 #   .4  push the live crisis: to its deadline, to acute, or to an outcome
@@ -75,6 +76,7 @@ te_debug_deterrence.1 = { # REVIEWED 2026-09-25: console-only test event (`event
 		add_technology_researched = recon_satellites
 		add_technology_researched = advanced_submarine_technology
 		add_technology_researched = tactical_nuclear_weapons
+		add_technology_researched = mainframe_computers
 	}
 
 	# Readiness straight to the target, and strain to 70: the Cost of
@@ -88,6 +90,33 @@ te_debug_deterrence.1 = { # REVIEWED 2026-09-25: console-only test event (`event
 			set_variable = { name = nd_readiness_months value = 6 }
 			set_variable = { name = nd_strain value = 70 }
 			nd_apply_posture_modifiers = yes
+		}
+	}
+
+	# Readiness straight to Recessed: every launch is greyed until Routine,
+	# and a strike on us offers "mate the warheads" (umbrella/recessed/
+	# dead-hand spec §2).
+	option = {
+		name = te_debug_deterrence.1.g
+		if = {
+			limit = { nd_is_initialized = yes }
+			set_variable = { name = nd_readiness value = 0 }
+			set_variable = { name = nd_readiness_target value = 0 }
+			set_variable = { name = nd_readiness_transition value = 0 }
+			nd_apply_posture_modifiers = yes
+		}
+	}
+
+	# Automatic Retaliation now, its technology and tenure included (same
+	# spec §3).
+	option = {
+		name = te_debug_deterrence.1.h
+		add_technology_researched = radar
+		add_technology_researched = ICBMs
+		add_technology_researched = mainframe_computers
+		if = {
+			limit = { nd_is_initialized = yes }
+			nd_set_authority_4 = yes
 		}
 	}
 }

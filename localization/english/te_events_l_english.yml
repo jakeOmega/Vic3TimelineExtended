@@ -4254,9 +4254,11 @@
 #
  te_debug_deterrence.1.a:0 "Arm us with ten warheads and initialise the posture"
  te_debug_deterrence.1.b:0 "Satisfy doctrine and authority tenure; lift any readiness lock"
- te_debug_deterrence.1.c:0 "Research radar, missiles, satellites, submarines and tactical weapons"
+ te_debug_deterrence.1.c:0 "Research radar, missiles, satellites, submarines, tactical weapons and mainframe computers"
  te_debug_deterrence.1.desc:0 "Console-only shortcuts for testing the posture and crisis panels of the Nuclear Weapons journal entry. None of these can happen in normal play."
  te_debug_deterrence.1.e:0 "High alert for six months already, strain at 70"
+ te_debug_deterrence.1.g:0 "Recessed at once (warheads in storage)"
+ te_debug_deterrence.1.h:0 "Automatic Retaliation at once (with its technology)"
  te_debug_deterrence.1.f:0 "Run te_debug_deterrence.1 first: the entry activates once a warhead exists."
  te_debug_deterrence.1.t:0 "Deterrence Console: Arsenal and Posture"
  te_debug_deterrence.2.a:0 "The Unconfirmed Warning"

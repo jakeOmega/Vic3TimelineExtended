@@ -327,3 +327,16 @@ Central as today.
 - Automatic entry into a war without the guarantor's choice (see "Claude's reading" above).
 - A peacetime strike path, a genuine-warning variant, or any change to the Launch on Warning or Conditional Delegation
   chains beyond the explicit `>= 2` audit.
+
+## As built (2026-09-25)
+
+Small departures from the text above, made while implementing:
+
+- The assemble option in `nuclear_weapon_events.1` is **option g** (`.1.d` is the event's description key); the Automatic
+  Retaliation option is `.1.e`. The console harness's new options are `te_debug_deterrence.1.g` / `.1.h`.
+- Dispute 3 keeps its trigger name, `nd_dispute_guarantee_against`, with an umbrella branch (no separate
+  `nd_guarantees_someone_against`); the shared "is in a play or war against X" test is `nd_beneficiary_threatened_by`.
+- `.24`'s options gate on `nd_auto_answers_strike` (permission and cooldown included), not the bare authority, so a
+  country under Automatic Retaliation that a pledge bars from answering still gets the ordinary options.
+- A guarantor's retaliation from `.20` always lands from the hidden `nuclear_crisis.22` a day later, including when it
+  was already at war — one path, which re-checks the war.
