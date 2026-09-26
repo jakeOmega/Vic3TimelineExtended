@@ -200,8 +200,9 @@ nd_readiness_locked = {
 # launch. Unauthorised and mistaken launches deliberately do NOT consult it:
 # that they can breach a doctrine is the point of §8.
 
-# Did $ENEMY$ — or anyone on its side of a war with us — strike us? Retaliation
-# is permitted under every doctrine, including no first use.
+# Did $ENEMY$ — or anyone on its side of a war with us — strike us, or a
+# country we cover? Retaliation is permitted under every doctrine, including
+# no first use.
 nd_was_struck_by = {
 	has_war_with = $ENEMY$
 	OR = {
@@ -213,6 +214,66 @@ nd_was_struck_by = {
 			OR = {
 				has_modifier = nuclear_strike_aftermath
 				has_modifier = tactical_nuke_aftermath
+			}
+		}
+		# A treaty beneficiary or a subject under our umbrella
+		# (umbrella/recessed/dead-hand spec §1.5): answering a nuclear strike
+		# on a protected country is not first use, under any doctrine.
+		nd_covered_country_struck_by = { ENEMY = $ENEMY$ }
+	}
+}
+
+# Did $ENEMY$ strike a country we cover? The struck country's
+# nuked_by_country (set by both strike kinds) names its last striker. The
+# caller (nd_was_struck_by) has checked that we are at war with $ENEMY$.
+nd_covered_country_struck_by = {
+	save_temporary_scope_as = nd_ccs_self
+	OR = {
+		any_direct_subject = {
+			nd_under_an_umbrella = yes
+			has_variable = nuked_by_country
+			var:nuked_by_country ?= $ENEMY$
+		}
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_guarantee
+				source_country = scope:nd_ccs_self
+				target_country = {
+					has_variable = nuked_by_country
+					var:nuked_by_country ?= $ENEMY$
+				}
+			}
+		}
+	}
+}
+
+# Does a country we cover carry a fresh strike's aftermath? The Rules of War
+# law yields to it as it does to a strike on our own cities
+# (nd_war_law_exception).
+nd_covered_country_struck = {
+	save_temporary_scope_as = nd_ccs2_self
+	OR = {
+		any_direct_subject = {
+			nd_under_an_umbrella = yes
+			any_scope_state = {
+				OR = {
+					has_modifier = nuclear_strike_aftermath
+					has_modifier = tactical_nuke_aftermath
+				}
+			}
+		}
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_guarantee
+				source_country = scope:nd_ccs2_self
+				target_country = {
+					any_scope_state = {
+						OR = {
+							has_modifier = nuclear_strike_aftermath
+							has_modifier = tactical_nuke_aftermath
+						}
+					}
+				}
 			}
 		}
 	}
@@ -338,8 +399,8 @@ nd_war_law_permits_tactical_strike = {
 	}
 }
 
-# Either lifts the law: we have been struck, or a war we are fighting carries an
-# annexation-type war goal against us.
+# Either lifts the law: we — or a country we cover — have been struck, or a war
+# we are fighting carries an annexation-type war goal against us.
 nd_war_law_exception = {
 	save_temporary_scope_as = nd_wl_self
 	OR = {
@@ -349,6 +410,7 @@ nd_war_law_exception = {
 				has_modifier = tactical_nuke_aftermath
 			}
 		}
+		nd_covered_country_struck = yes
 		any_scope_war = {
 			is_target_of_wargoal_in_war = scope:nd_wl_self
 			OR = {

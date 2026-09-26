@@ -1068,5 +1068,41 @@ class TestUmbrellaWithdrawal(unittest.TestCase):
         self.assertRegex(strip_comments(read(VALUES)), r"(?m)^nd_display_umbrella_count = \{")
 
 
+class TestExtendedDeterrence(unittest.TestCase):
+    """A strike on a country we cover licenses our answer under any doctrine,
+    and answering pulls us into the war (umbrella/recessed/dead-hand spec §1.5)."""
+
+    def setUp(self):
+        self.t = strip_comments(read(TRIGGERS))
+        self.c = strip_comments(read(CRISIS_EFFECTS))
+        self.ev = strip_comments(read(CRISIS_EVENTS))
+
+    def test_strike_on_covered_country_licenses(self):
+        self.assertIn("nd_covered_country_struck_by = { ENEMY = $ENEMY$ }", block(self.t, "nd_was_struck_by"))
+        body = block(self.t, "nd_covered_country_struck_by")
+        self.assertIn("nd_under_an_umbrella = yes", body)
+        self.assertIn("has_type = nuclear_guarantee", body)
+        self.assertIn("nd_covered_country_struck = yes", block(self.t, "nd_war_law_exception"))
+
+    def test_retaliate_no_longer_needs_our_doctrine_or_a_prior_war(self):
+        trig = block(option_body(self.ev, "nuclear_crisis.20.b"), "trigger")
+        self.assertNotIn("nd_doctrine_permits_strike", trig)
+        self.assertNotRegex(trig, r"(?m)^\s*has_war_with = scope:nd_guarantee_attacker")
+        self.assertIn("scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }", trig)
+        self.assertIn("nd_forces_assembled = yes", trig)
+
+    def test_answering_joins_the_war_then_strikes_only_at_war(self):
+        self.assertIn("join_war", block(self.c, "nd_guarantor_join_war"))
+        for act in ("nd_guarantee_act_honour", "nd_guarantee_act_retaliate"):
+            self.assertIn("nd_guarantor_join_war = yes", block(self.c, act), act)
+        self.assertIn("id = nuclear_crisis.22", block(self.c, "nd_guarantor_schedule_answer"))
+        self.assertNotIn("nd_dispatch_strategic_strike", block(self.c, "nd_guarantee_act_retaliate"))
+        hidden = block(self.ev, "nuclear_crisis.22")
+        self.assertIn("hidden = yes", hidden)
+        self.assertIn("has_war_with = var:nd_answer_strike_target", hidden)
+        self.assertIn("nuclear_response_strike = yes", hidden)
+        self.assertIn("remove_variable = nd_answer_strike_target", hidden)
+
+
 if __name__ == "__main__":
     unittest.main()

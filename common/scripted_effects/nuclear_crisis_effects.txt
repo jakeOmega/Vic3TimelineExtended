@@ -1936,11 +1936,22 @@ nd_guarantee_act_honour = {
 		text = nd_tt_credibility_up_5
 		nd_change_credibility = { AMOUNT = 5 }
 	}
-	# After a strike, with no war to answer in: a public ultimatum of our own
-	# against the attacker, if neither of us is in a crisis already. Outside
-	# the hidden block so the option shows what the ultimatum does
-	# (nd_crisis_preview).
+	# After a strike (umbrella/recessed/dead-hand spec §1.5): a strike on
+	# someone we protect pulls us into their war with the attacker, on their
+	# side. With no war to join — no strike happens outside a war today, so
+	# this is a guard — a public ultimatum of our own against the attacker,
+	# if neither of us is in a crisis already. Outside the hidden block so the
+	# option shows what joining or the ultimatum does (nd_crisis_preview).
 	if = {
+		limit = {
+			exists = scope:nd_guarantee_attacker
+			exists = scope:nd_guarantee_beneficiary
+			var:nd_guarantee_context = 2
+			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
+		}
+		nd_guarantor_join_war = yes
+	}
+	else_if = {
 		limit = {
 			exists = scope:nd_guarantee_attacker
 			exists = scope:nd_guarantee_beneficiary
@@ -1983,24 +1994,67 @@ nd_guarantee_act_honour = {
 	}
 }
 
-# Answer a strike on the beneficiary in kind: at war with the attacker, with
-# doctrine and pledges permitting. Through the one dispatch path.
+# Answer a strike on the beneficiary in kind (umbrella/recessed/dead-hand
+# spec §1.5): under any doctrine — a strike on someone we cover is not ours to
+# start — entering their war first if we are not in it. The strike itself
+# lands a day later (nuclear_crisis.22), as retaliation, not a first strike.
 nd_guarantee_act_retaliate = {
 	custom_tooltip = nd_tt_guarantee_retaliate
 	custom_tooltip = {
 		text = nd_tt_credibility_up_10
 		nd_change_credibility = { AMOUNT = 10 }
 	}
+	nd_guarantor_join_war = yes
+	if = {
+		limit = { exists = scope:nd_guarantee_attacker }
+		nd_guarantor_schedule_answer = yes
+	}
 	hidden_effect = {
-		if = {
-			limit = { exists = scope:nd_guarantee_attacker }
-			scope:nd_guarantee_attacker = { save_scope_as = nd_strike_victim }
-			nd_dispatch_strategic_strike = yes
-			scope:nd_guarantee_beneficiary ?= {
-				set_variable = { name = nd_guarantee_answer value = 1 }
-				trigger_event = { id = nuclear_crisis.21 }
+		scope:nd_guarantee_beneficiary ?= {
+			set_variable = { name = nd_guarantee_answer value = 1 }
+			trigger_event = { id = nuclear_crisis.21 }
+		}
+	}
+}
+
+# Enter the beneficiary's war with the attacker, on the beneficiary's side
+# (umbrella/recessed/dead-hand spec §1.5). Visible: the engine's join_war line
+# renders in the option. Guarantor scope; ROOT is the guarantor
+# (nuclear_crisis.20). Precedent: world_war_events.txt. Whether the engine
+# lets a country under a truce with the attacker join is not known — the
+# strike that follows re-checks the war (nuclear_crisis.22).
+nd_guarantor_join_war = {
+	if = {
+		limit = {
+			exists = scope:nd_guarantee_attacker
+			exists = scope:nd_guarantee_beneficiary
+			NOT = { has_war_with = scope:nd_guarantee_attacker }
+			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
+		}
+		custom_tooltip = nd_tt_guarantee_join_war
+		scope:nd_guarantee_beneficiary = {
+			every_scope_war = {
+				limit = { is_war_participant = scope:nd_guarantee_attacker }
+				join_war = {
+					target = root
+					side = scope:nd_guarantee_beneficiary
+				}
 			}
 		}
+	}
+}
+
+# The strike waits a day (nuclear_crisis.22), so it runs only once we are
+# actually at war with the attacker: whether join_war's effect on
+# has_war_with is visible later in the same effect is unverified, and a
+# refused join must not become a strike on a country we are not fighting.
+nd_guarantor_schedule_answer = {
+	custom_tooltip = {
+		text = nd_tt_guarantor_answer_strike
+		set_variable = { name = nd_answer_strike_target value = scope:nd_guarantee_attacker }
+	}
+	hidden_effect = {
+		trigger_event = { id = nuclear_crisis.22 days = 1 }
 	}
 }
 

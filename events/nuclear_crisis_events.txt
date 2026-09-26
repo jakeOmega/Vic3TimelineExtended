@@ -953,15 +953,19 @@ nuclear_crisis.20 = {
 		}
 	}
 
-	# Answer the strike in kind: only after a strike, only at war with the
-	# attacker, and only where doctrine and pledges allow it.
+	# Answer the strike in kind (umbrella/recessed/dead-hand spec §1.5): only
+	# after a strike, under any doctrine — a strike on someone we cover is not
+	# ours to start — entering their war first if we are not in it; the strike
+	# follows a day later through .22. Pledges and the Rules of War still bind
+	# (the law yields once a country we cover has been struck:
+	# nd_war_law_exception).
 	option = {
 		name = nuclear_crisis.20.b
 		trigger = {
 			var:nd_guarantee_context = 2
 			nd_is_armed = yes
-			has_war_with = scope:nd_guarantee_attacker
-			nd_doctrine_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
+			nd_forces_assembled = yes
+			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
 			nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
 			nd_war_law_permits_strategic_strike = yes
 		}
@@ -1059,6 +1063,43 @@ nuclear_crisis.21 = {
 	option = {
 		name = nuclear_crisis.21.a
 		default_option = yes
+	}
+}
+
+# ---- .22 Hidden: the guarantor's answer lands ------------------------------------
+# A day after "answer in kind" (.20.b, nd_guarantor_schedule_answer): one
+# warhead on the attacker named in nd_answer_strike_target, booked as
+# retaliation (nuclear_response_strike, not a first strike) — but only if we
+# are at war with it by now, since the join may have been refused
+# (umbrella/recessed/dead-hand spec §1.5).
+nuclear_crisis.22 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		has_variable = nd_answer_strike_target
+	}
+
+	immediate = {
+		if = {
+			limit = {
+				exists = var:nd_answer_strike_target
+				has_war_with = var:nd_answer_strike_target
+				nd_is_armed = yes
+				nd_forces_assembled = yes
+			}
+			save_scope_as = target_country
+			var:nd_answer_strike_target = {
+				save_scope_as = attacking_country
+				ordered_scope_state = {
+					order_by = nuclear_industrial_strike_target_score
+					position = 0
+					nuclear_response_strike = yes
+				}
+			}
+			nd_record_nuclear_use = { VICTIM = scope:attacking_country }
+		}
+		remove_variable = nd_answer_strike_target
 	}
 }
 
