@@ -64,7 +64,7 @@ Already state-level, with scope fixed by the engine: about 260 `state_building_<
 
 ## 3. Country-level, could move to states
 
-Loyalists, nuclear defence and religious war support moved to state level on 2026-09-26 (§2). The owner kept SoL expectations national for now, the one row left.
+Loyalists, nuclear defence and religious war support moved to state level on 2026-09-26 (#493, §2). The owner kept SoL expectations national for now, the one row left.
 
 | Modifier(s) | Effort | Why it works | What has to change |
 |---|---|---|---|
