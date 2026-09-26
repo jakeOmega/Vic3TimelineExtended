@@ -61,8 +61,9 @@ pm_st_res_hub_reserve = {
 
 
 # ---------------- SILO (capacity-only) ----------------
-# Single idle PM that provides +200 per good per level of silo. Ammunition
-# and oil capacity contributions are hidden behind their respective techs.
+# Single idle PM that provides +1000 capacity per good and +100 weekly flow cap
+# per level of silo. Ammunition and oil capacity contributions are hidden
+# behind their respective techs.
 pm_st_res_silo_capacity = {
 	texture = "gfx/interface/icons/production_method_icons/refrigerated_storage.dds"
 	country_modifiers = {

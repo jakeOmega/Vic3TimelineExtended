@@ -27,7 +27,7 @@ value_combat_unit_market_cost_DEW_tank = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 5800 # base_price(50) × quantity(116)
+		multiply = 2900 # base_price(50) × quantity(58)
 	}
 	add = {
 		value = this.market.mg:electronic_components.market_goods_pricier
@@ -55,7 +55,7 @@ value_combat_unit_market_cost_armored_infantry = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 200 # base_price(50) × quantity(4)
+		multiply = 100 # base_price(50) × quantity(2)
 	}
 	add = {
 		value = this.market.mg:tanks.market_goods_pricier
@@ -83,7 +83,7 @@ value_combat_unit_market_cost_bioenhanced_marines = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 2800 # base_price(50) × quantity(56)
+		multiply = 1400 # base_price(50) × quantity(28)
 	}
 	add = {
 		value = this.market.mg:artillery.market_goods_pricier
@@ -136,7 +136,7 @@ value_combat_unit_market_cost_bomber_aircraft = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 2000 # base_price(50) × quantity(40)
+		multiply = 1000 # base_price(50) × quantity(20)
 	}
 	add = {
 		value = this.market.mg:aeroplanes.market_goods_pricier
@@ -164,7 +164,7 @@ value_combat_unit_market_cost_combined_arms_marines = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 500 # base_price(50) × quantity(10)
+		multiply = 250 # base_price(50) × quantity(5)
 	}
 	add = {
 		value = this.market.mg:artillery.market_goods_pricier
@@ -202,7 +202,7 @@ value_combat_unit_market_cost_grey_goo = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 1500 # base_price(50) × quantity(30)
+		multiply = 750 # base_price(50) × quantity(15)
 	}
 	add = {
 		value = this.market.mg:tanks.market_goods_pricier
@@ -255,7 +255,7 @@ value_combat_unit_market_cost_guided_artillery_projectiles = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 800 # base_price(50) × quantity(16)
+		multiply = 400 # base_price(50) × quantity(8)
 	}
 	add = {
 		value = this.market.mg:electronic_components.market_goods_pricier
@@ -278,7 +278,7 @@ value_combat_unit_market_cost_holographic_ambush_combat_vehicle = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 2000 # base_price(50) × quantity(40)
+		multiply = 1000 # base_price(50) × quantity(20)
 	}
 	add = {
 		value = this.market.mg:radios.market_goods_pricier
@@ -311,7 +311,7 @@ value_combat_unit_market_cost_jet_powered_fighters = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 2000 # base_price(50) × quantity(40)
+		multiply = 1000 # base_price(50) × quantity(20)
 	}
 	add = {
 		value = this.market.mg:aeroplanes.market_goods_pricier
@@ -354,7 +354,7 @@ value_combat_unit_market_cost_light_scout_tanks = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 500 # base_price(50) × quantity(10)
+		multiply = 250 # base_price(50) × quantity(5)
 	}
 	add = {
 		value = this.market.mg:radios.market_goods_pricier
@@ -392,7 +392,7 @@ value_combat_unit_market_cost_main_battle_tank = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 1000 # base_price(50) × quantity(20)
+		multiply = 500 # base_price(50) × quantity(10)
 	}
 	add = {
 		value = this.market.mg:electronic_components.market_goods_pricier
@@ -430,7 +430,7 @@ value_combat_unit_market_cost_motorized_artillery = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 400 # base_price(50) × quantity(8)
+		multiply = 200 # base_price(50) × quantity(4)
 	}
 }
 
@@ -463,7 +463,7 @@ value_combat_unit_market_cost_networked_guided_artillery_projectiles = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 1600 # base_price(50) × quantity(32)
+		multiply = 800 # base_price(50) × quantity(16)
 	}
 	add = {
 		value = this.market.mg:electronic_components.market_goods_pricier
@@ -481,7 +481,7 @@ value_combat_unit_market_cost_networked_marines = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 1650 # base_price(50) × quantity(33)
+		multiply = 800 # base_price(50) × quantity(16)
 	}
 	add = {
 		value = this.market.mg:artillery.market_goods_pricier
@@ -539,7 +539,7 @@ value_combat_unit_market_cost_orbital_bombardment = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 2200 # base_price(50) × quantity(44)
+		multiply = 1100 # base_price(50) × quantity(22)
 	}
 	add = {
 		value = this.market.mg:electronic_components.market_goods_pricier
@@ -567,7 +567,7 @@ value_combat_unit_market_cost_orbital_precision_antimatter_strikes = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 2600 # base_price(50) × quantity(52)
+		multiply = 1300 # base_price(50) × quantity(26)
 	}
 	add = {
 		value = this.market.mg:electronic_components.market_goods_pricier
@@ -590,7 +590,7 @@ value_combat_unit_market_cost_orbital_tactical_vehicles = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 3200 # base_price(50) × quantity(64)
+		multiply = 1600 # base_price(50) × quantity(32)
 	}
 	add = {
 		value = this.market.mg:aeroplanes.market_goods_pricier
@@ -623,7 +623,7 @@ value_combat_unit_market_cost_orbital_weapons_platforms = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 3200 # base_price(50) × quantity(64)
+		multiply = 1600 # base_price(50) × quantity(32)
 	}
 	add = {
 		value = this.market.mg:aeroplanes.market_goods_pricier
@@ -681,7 +681,7 @@ value_combat_unit_market_cost_railgun_tank = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 4000 # base_price(50) × quantity(80)
+		multiply = 2000 # base_price(50) × quantity(40)
 	}
 	add = {
 		value = this.market.mg:electronic_components.market_goods_pricier
@@ -719,7 +719,7 @@ value_combat_unit_market_cost_reactive_armor_tank = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 1300 # base_price(50) × quantity(26)
+		multiply = 650 # base_price(50) × quantity(13)
 	}
 	add = {
 		value = this.market.mg:electronic_components.market_goods_pricier
@@ -737,7 +737,7 @@ value_combat_unit_market_cost_robotic_soldiers = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 500 # base_price(50) × quantity(10)
+		multiply = 250 # base_price(50) × quantity(5)
 	}
 	add = {
 		value = this.market.mg:tanks.market_goods_pricier
@@ -760,7 +760,7 @@ value_combat_unit_market_cost_stealth_aircraft = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 2000 # base_price(50) × quantity(40)
+		multiply = 1000 # base_price(50) × quantity(20)
 	}
 	add = {
 		value = this.market.mg:aeroplanes.market_goods_pricier
@@ -793,7 +793,7 @@ value_combat_unit_market_cost_stealth_marines = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 700 # base_price(50) × quantity(14)
+		multiply = 350 # base_price(50) × quantity(7)
 	}
 	add = {
 		value = this.market.mg:artillery.market_goods_pricier
@@ -846,7 +846,7 @@ value_combat_unit_market_cost_stealth_reconnaissance_drone_carrier = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 800 # base_price(50) × quantity(16)
+		multiply = 400 # base_price(50) × quantity(8)
 	}
 	add = {
 		value = this.market.mg:radios.market_goods_pricier
@@ -879,7 +879,7 @@ value_combat_unit_market_cost_swarm_bots = {
 	add = {
 		value = this.market.mg:ammunition.market_goods_pricier
 		add = 1
-		multiply = 1500 # base_price(50) × quantity(30)
+		multiply = 750 # base_price(50) × quantity(15)
 	}
 	add = {
 		value = this.market.mg:tanks.market_goods_pricier

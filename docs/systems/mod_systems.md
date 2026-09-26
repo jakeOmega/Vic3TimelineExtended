@@ -1929,6 +1929,18 @@ The worst-case mod-added negative `decrease` sum is −0.50 (`/modifier-grants/c
 
 **Not moved into the hook:** `war_propaganda_on_action` (`extra_on_actions.txt`, monthly per-state `add_war_war_support` driven by the state-scoped `state_war_support_monthly_add`, which does not cascade to a country-scope read) stays a one-off level change; a phase-scaled covert line would need a country variable written by the covert JE pulse.
 
+## Wartime Munitions Demand
+
+**Peacetime armies train with half of vanilla's ammunition. A mobilized battalion burns four times that, which is twice vanilla's peacetime figure.** Ammunition is the good a war uses up rather than wears out, so its demand should swing hard between peace and war. That swing is what makes a munitions industry, imports and the Strategic Reserve matter. In vanilla, mobilization raised ammunition only to 1.5× peacetime, or 2× with extra and luxurious supplies.
+
+- **Peacetime side:** a unit's `upkeep_modifier` is what its barracks buys every week, whether or not it is mobilized. Mod units in `common/combat_unit_types/extra_combat_units.txt` carry half their former ammunition. Vanilla units take an `INJECT` diff of minus half vanilla's value, summed with vanilla's own (squad infantry: 3 − 1.5), so a vanilla patch to any other good flows through untouched. `REPLACE:combat_unit_type_heavy_tank` carries the halved value directly.
+- **Wartime side:** `common/mobilization_options/te_wartime_munitions_injections.txt` raises `mobilization_option_basic_supplies`, which no army can switch off, from +50% to +300% ammunition while mobilized. It also cancels the +25% that extra and luxurious supplies each added, so ammunition has a single wartime knob. The per-battalion additions of the mod's own options (Entrenchment +5, Missile Defense +10, Exoskeleton Suits +40) come on top and were not changed.
+- **Why ×4:** with `BUY_SELL_DIFF_AT_MAX_FACTOR = 4` and `GOODS_SHORTAGE_PENALTY_THRESHOLD = 0.25`, four times the demand pushes a good whose demand is almost all military to its maximum price, and shortage penalties start only beyond that. A war therefore strains the munitions market without, by itself, starving barracks, whose input shortages cut formation supply and organization.
+- **Mobilization is not war.** The spike starts when an army mobilizes, including in a diplomatic play that never becomes a war, and it tapers over the 90-day demobilization.
+- **The Strategic Reserve is the buffer.** Its hub is cheap (`construction_cost_low`), the AI values it at 2000 in peacetime, and AI reserves run every good on Stabilize Prices, buying below −20% up to full capacity and releasing above +30% down to empty, on an 8-week average. A war's ammunition spike therefore draws AI stockpiles into the market (`docs/systems/strategic_reserve_system.md` §7).
+- **Drift guard:** `test_wartime_munitions.py` checks every diff against `vanilla_parsed/`. It fails when a vanilla unit's ammunition changes, when a new vanilla unit starts using ammunition without a diff, or when a supplies option's vanilla value moves.
+- **Not yet read in play:** whether an `INJECT` sums on combat unit types and mobilization options (it does for ranks, techs and static modifiers). The tells are a squad-infantry barracks buying 1.5 ammunition per battalion in peace, and basic supplies' tooltip showing +300% Ammunition next to +50% for the other goods. Two more things to read in the same launch: how formation supply consumption, which 1.14 derives from goods costs, responds; and whether the multiplier touches only the mobilized battalions' own upkeep or the whole barracks.
+
 ## Legacy narrative event integration
 
 Law-enactment bank runs (`extra_law_events.2` / `.38`) now apply a small
