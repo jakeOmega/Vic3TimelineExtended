@@ -331,6 +331,9 @@ tactical_nuke_diplo_action = {
 						limit = { owner = { has_modifier = nuclear_power }}
 						divide = 1000 # near-zero priority against nuclear-armed targets
 					}
+					# Times the chance a warhead gets through, as for the
+					# strategic strike: a base's missile defence covers its state.
+					multiply = nuclear_strike_success_fraction_here
 				}
 			}
 			# A war against a declared rival is one the AI is readier to escalate

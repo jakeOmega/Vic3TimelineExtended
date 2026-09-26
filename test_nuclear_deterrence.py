@@ -300,6 +300,10 @@ class TestTacticalTargets(unittest.TestCase):
         scored = set(re.findall(r"b:(\w+)\.level", block(self.action, "propose_score")))
         self.assertEqual(scored, self.targets)
 
+    def test_score_counts_the_chance_of_getting_through(self):
+        per_state = block(block(self.action, "propose_score"), "scope:second_state")
+        self.assertIn("multiply = nuclear_strike_success_fraction_here", per_state)
+
 
 class TestFollowThrough(unittest.TestCase):
     def setUp(self):
