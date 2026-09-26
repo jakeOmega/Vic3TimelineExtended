@@ -116,11 +116,20 @@ class RunLifecycleTests(unittest.TestCase):
 
     def test_every_end_hook_ends_the_run(self):
         cleanup = _block(_read(*EFFECTS), "cr_je_cleanup_effect")
-        self.assertIn("remove_variable = cr_run_in_progress", cleanup)
+        self.assertRegex(cleanup, r"has_variable\s*=\s*cr_run_in_progress\s*\}\s*remove_variable\s*=\s*cr_run_in_progress\b")
         for mod, var in MIRRORS.items():
             with self.subTest(policy=mod):
-                self.assertIn(f"remove_modifier = {mod}", cleanup)
-                self.assertIn(f"remove_variable = {var}", cleanup)
+                # Guarded (#469): remove_modifier on an absent modifier logs. Either
+                # the helper or an explicit has_modifier guard.
+                self.assertRegex(
+                    cleanup,
+                    r"remove_modifier_if_exists_effect\s*=\s*\{\s*MODIFIER\s*=\s*" + mod + r"\s*\}"
+                    r"|has_modifier\s*=\s*" + mod + r"\s*\}\s*remove_modifier\s*=\s*" + mod + r"\b",
+                )
+                self.assertRegex(
+                    cleanup,
+                    r"has_variable\s*=\s*" + var + r"\s*\}\s*remove_variable\s*=\s*" + var + r"\b",
+                )
         for hook in ("on_complete", "on_fail", "on_invalid"):
             with self.subTest(hook=hook):
                 self.assertIn("cr_je_cleanup_effect = yes", _je_block(hook))
@@ -293,7 +302,8 @@ class PolicyMirrorTests(unittest.TestCase):
         }
         names = "|".join(list(MIRRORS) + ["cr_cooptation_expired"])
         pattern = re.compile(
-            r"(?:add_modifier\s*=\s*\{\s*name\s*=\s*|add_modifier\s*=\s*|remove_modifier\s*=\s*)(?:"
+            r"(?:add_modifier\s*=\s*\{\s*name\s*=\s*|add_modifier\s*=\s*|remove_modifier\s*=\s*"
+            r"|remove_modifier_if_exists_effect\s*=\s*\{\s*MODIFIER\s*=\s*)(?:"
             + names + r")\b")
         for root in ("common", "events"):
             for dirpath, _dirs, files in os.walk(_path(root)):
@@ -308,34 +318,73 @@ class PolicyMirrorTests(unittest.TestCase):
 
 
 class HookTests(unittest.TestCase):
+    SHARED_HOOKS = ("common", "on_actions", "te_civil_war_on_actions.txt")
+
     def test_on_actions_are_wired(self):
+        # Round 4: the civil-war repair hangs off #467's shared layer; this system
+        # keeps only its monthly pulse.
         text = _read(*ON_ACTIONS)
-        self.assertIn("civil_rights_civil_war_won_on_action",
-                      _block(_block(text, "on_civil_war_won"), "on_actions", top_level=False))
-        self.assertIn("cr_after_civil_war = yes", _block(text, "civil_rights_civil_war_won_on_action"))
-        for hook in ("on_revolution_start", "on_secession_start"):
-            with self.subTest(hook=hook):
-                self.assertIn("civil_rights_revolution_start_on_action",
-                              _block(_block(text, hook), "on_actions", top_level=False))
-        self.assertRegex(_block(text, "civil_rights_revolution_start_on_action"),
-                         r"set_variable\s*=\s*\{\s*name\s*=\s*cr_revolution_original\s+value\s*=\s*ROOT\s*\}")
         self.assertIn("civil_rights_country_monthly_on_action",
                       _block(_block(text, "on_monthly_pulse_country"), "on_actions", top_level=False))
         self.assertIn("cr_outcome_monthly_update = yes", _block(text, "civil_rights_country_monthly_on_action"))
+        for hook in ("on_civil_war_won", "on_revolution_start", "on_secession_start",
+                     "on_revolution_end", "on_secession_end"):
+            with self.subTest(hook=hook):
+                self.assertIsNone(re.search(r"^" + hook + r"\s*=", text, re.M))
+
+    def test_repair_runs_inside_the_shared_hook(self):
+        won = _block(_read(*self.SHARED_HOOKS), "te_civil_war_on_won")
+        resolve = won.index("te_civil_war_resolve_sides = yes")
+        repair = won.index("cr_repair_after_civil_war = yes")
+        clear = won.index("te_civil_war_clear = yes")
+        self.assertLess(resolve, repair)
+        self.assertLess(repair, clear)
 
     def test_the_side_that_won_decides(self):
-        body = _block(_read(*EFFECTS), "cr_after_civil_war")
+        body = _block(_read(*EFFECTS), "cr_repair_after_civil_war")
         self.assertRegex(
             body,
-            r"var:cr_revolution_original\s*=\s*ROOT\s*\}\s*cr_drop_rebel_run_state\s*=\s*yes\s*\}\s*"
-            r"else\s*=\s*\{\s*cr_rebuild_after_civil_war\s*=\s*yes\s*"
-            r"set_variable\s*=\s*\{\s*name\s*=\s*cr_revolution_original\s+value\s*=\s*ROOT\s*\}\s*\}",
+            r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*te_cw_rebels_won\s+"
+            r"var:te_cw_rebels_won\s*=\s*1\s*\}\s*cr_rebuild_after_civil_war\s*=\s*yes\s*\}\s*"
+            r"else_if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*te_cw_role\s+var:te_cw_role\s*=\s*1\s*\}\s*"
+            r"cr_drop_rebel_run_state\s*=\s*yes\s*\}\s*"
+            r"else_if\s*=\s*\{\s*limit\s*=\s*\{\s*NOT\s*=\s*\{\s*has_variable\s*=\s*te_cw_role\s*\}\s*\}\s*"
+            r"cr_rebuild_after_civil_war\s*=\s*yes\s*\}",
         )
-        # Round 2 (review M2): a secession and a revolution can run at once, and
-        # the war that ends second must still find the pointer.
-        for parts in (EFFECTS, ON_ACTIONS):
-            with self.subTest(file=os.path.join(*parts)):
-                self.assertNotIn("remove_variable = cr_revolution_original", _read(*parts))
+        # te_cw_role = 2 with te_cw_rebels_won = 0 (a seceder won as a new nation)
+        # falls through: nothing was merged into it.
+        self.assertNotRegex(body, r"var:te_cw_role\s*=\s*2")
+
+    def test_the_private_pointer_is_retired(self):
+        # Round 4: #467's te_cw_* replace cr_revolution_original. Only its guarded
+        # removal (saves from the unmerged branch carry it) may remain.
+        for root in ("common", "events"):
+            for dirpath, _dirs, files in os.walk(_path(root)):
+                for name in files:
+                    if not name.endswith(".txt"):
+                        continue
+                    rel = os.path.relpath(os.path.join(dirpath, name), REPO)
+                    text = _read(rel)
+                    with self.subTest(file=rel):
+                        self.assertNotRegex(text, r"name\s*=\s*cr_revolution_original")
+                        self.assertNotRegex(text, r"var:cr_revolution_original")
+        self.assertRegex(_block(_read(*EFFECTS), "cr_repair_after_civil_war"),
+                         r"has_variable\s*=\s*cr_revolution_original\s*\}\s*remove_variable\s*=\s*cr_revolution_original")
+
+    def test_removals_are_guarded(self):
+        # #469: remove_modifier on a modifier the scope lacks logs to error.log;
+        # house style guards remove_variable too.
+        effects = _read(*EFFECTS)
+        self.assertIsNone(re.search(r"(?<![\w])remove_modifier\s*=", effects))
+        for parts in (EFFECTS, BUTTONS, JE):
+            text = _read(*parts)
+            for m in re.finditer(r"remove_variable\s*=\s*(\$?\w+\$?)", text):
+                var = m.group(1)
+                before = text[max(0, m.start() - 200):m.start()]
+                with self.subTest(file=os.path.join(*parts), variable=var):
+                    self.assertRegex(before, r"has_variable\s*=\s*" + re.escape(var) + r"(?!\w)")
+        pulse = _je_block("on_monthly_pulse")
+        self.assertIsNone(re.search(r"(?<![\w])remove_modifier\s*=", pulse))
 
     def test_rebuild_restores_outcome_and_a_running_struggle(self):
         body = _block(_read(*EFFECTS), "cr_rebuild_after_civil_war")

@@ -72,7 +72,7 @@ cr_remove_grassroots_organizing = {
 			text = "CR_REMOVE_GRASSROOTS_ORGANIZING_DESC"
 			remove_modifier = cr_grassroots_modifier
 		}
-		remove_variable = cr_policy_grassroots
+		if = { limit = { has_variable = cr_policy_grassroots } remove_variable = cr_policy_grassroots }
 	}
 }
 
@@ -139,7 +139,7 @@ cr_remove_federal_protection = {
 			text = "CR_REMOVE_FEDERAL_PROTECTION_DESC"
 			remove_modifier = cr_federal_protection_modifier
 		}
-		remove_variable = cr_policy_federal
+		if = { limit = { has_variable = cr_policy_federal } remove_variable = cr_policy_federal }
 	}
 }
 
@@ -192,7 +192,7 @@ cr_remove_gradualist_accommodation = {
 			text = "CR_REMOVE_GRADUALIST_ACCOMMODATION_DESC"
 			remove_modifier = cr_gradualist_modifier
 		}
-		remove_variable = cr_policy_gradualist
+		if = { limit = { has_variable = cr_policy_gradualist } remove_variable = cr_policy_gradualist }
 	}
 }
 
@@ -257,7 +257,7 @@ cr_remove_cooptation_token_reform = {
 			# 12-month bar bonus window cleanly.
 			remove_modifier = cr_cooptation_expired
 		}
-		remove_variable = cr_policy_cooptation
+		if = { limit = { has_variable = cr_policy_cooptation } remove_variable = cr_policy_cooptation }
 	}
 }
 
@@ -316,7 +316,7 @@ cr_remove_suppression_crackdown = {
 			text = "CR_REMOVE_SUPPRESSION_CRACKDOWN_DESC"
 			remove_modifier = cr_suppression_modifier
 		}
-		remove_variable = cr_policy_suppression
+		if = { limit = { has_variable = cr_policy_suppression } remove_variable = cr_policy_suppression }
 	}
 }
 
@@ -376,6 +376,6 @@ cr_remove_segregationist_consolidation = {
 			text = "CR_REMOVE_SEGREGATIONIST_CONSOLIDATION_DESC"
 			remove_modifier = cr_segregationist_modifier
 		}
-		remove_variable = cr_policy_segregationist
+		if = { limit = { has_variable = cr_policy_segregationist } remove_variable = cr_policy_segregationist }
 	}
 }

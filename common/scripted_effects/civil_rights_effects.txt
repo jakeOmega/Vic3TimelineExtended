@@ -97,16 +97,19 @@ cr_je_cleanup_effect = {
 #                           (cr_record_outcome_modifier, in the event option), and
 #   cr_outcome_months       the months since (0-120; counted by
 #                           cr_outcome_monthly_update).
-#   cr_revolution_original  set on the original country at on_revolution_start /
-#                           on_secession_start (a pointer to itself), read at
-#                           on_civil_war_won to tell which side won; a
-#                           revolutionary winner is then re-pointed at itself.
+#   cr_revolution_original  RETIRED (round 4). This branch's own which-side-won
+#                           pointer, before #467's shared layer. Nothing reads it;
+#                           only saves played on the unmerged branch carry it, and
+#                           cr_repair_after_civil_war drops it from a winner.
 #
-# Rebuilt at on_civil_war_won (common/on_actions/civil_rights_on_actions.txt),
-# ROOT = the winner, after the merge, when the revolutionaries won
-# (cr_after_civil_war). Every add is also guarded by the modifier being absent.
-# When the loyalists won, they keep their own modifiers, and what they inherited
-# from the rebels' own struggle is dropped instead (cr_drop_rebel_run_state).
+# Which side won comes from the shared civil-war layer (#467,
+# common/scripted_effects/te_civil_war_effects.txt): te_civil_war_on_won calls
+# cr_repair_after_civil_war (ROOT = THIS = the winner, after the merge) between
+# te_civil_war_resolve_sides and te_civil_war_clear. When the revolutionaries won
+# it rebuilds (cr_rebuild_after_civil_war; every add is also guarded by the
+# modifier being absent). When the original government won, it keeps its own
+# modifiers, and what it inherited from the rebels' own struggle is dropped
+# instead (cr_drop_rebel_run_state).
 # ============================================================================
 
 # Resolution event option: record the outcome modifier the option has just added
@@ -198,19 +201,19 @@ cr_rebuild_outcome_modifiers = {
 # The outcome modifier has run its ten years: nothing is left to rebuild.
 # civil_rights_resolved stays.
 cr_forget_outcome_modifiers = {
-	remove_variable = cr_outcome_civil_rights_triumph_modifier
-	remove_variable = cr_outcome_civil_rights_triumph_federal_modifier
-	remove_variable = cr_outcome_civil_rights_triumph_grassroots_modifier
-	remove_variable = cr_outcome_civil_rights_triumph_gradualist_modifier
-	remove_variable = cr_outcome_civil_rights_triumph_coopted_modifier
-	remove_variable = cr_outcome_civil_rights_hollow_victory_modifier
-	remove_variable = cr_outcome_civil_disobedience_crackdown_modifier
-	remove_variable = cr_outcome_movement_crushed_order_restored_modifier
-	remove_variable = cr_outcome_movement_crushed_assimilation_drive_modifier
-	remove_variable = cr_outcome_movement_crushed_segregation_enforced_modifier
-	remove_variable = cr_outcome_movement_crushed_political_suppression_modifier
-	remove_variable = cr_outcome_movement_crushed_expulsion_modifier
-	remove_variable = cr_outcome_months
+	if = { limit = { has_variable = cr_outcome_civil_rights_triumph_modifier } remove_variable = cr_outcome_civil_rights_triumph_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_rights_triumph_federal_modifier } remove_variable = cr_outcome_civil_rights_triumph_federal_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_rights_triumph_grassroots_modifier } remove_variable = cr_outcome_civil_rights_triumph_grassroots_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_rights_triumph_gradualist_modifier } remove_variable = cr_outcome_civil_rights_triumph_gradualist_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_rights_triumph_coopted_modifier } remove_variable = cr_outcome_civil_rights_triumph_coopted_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_rights_hollow_victory_modifier } remove_variable = cr_outcome_civil_rights_hollow_victory_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_disobedience_crackdown_modifier } remove_variable = cr_outcome_civil_disobedience_crackdown_modifier }
+	if = { limit = { has_variable = cr_outcome_movement_crushed_order_restored_modifier } remove_variable = cr_outcome_movement_crushed_order_restored_modifier }
+	if = { limit = { has_variable = cr_outcome_movement_crushed_assimilation_drive_modifier } remove_variable = cr_outcome_movement_crushed_assimilation_drive_modifier }
+	if = { limit = { has_variable = cr_outcome_movement_crushed_segregation_enforced_modifier } remove_variable = cr_outcome_movement_crushed_segregation_enforced_modifier }
+	if = { limit = { has_variable = cr_outcome_movement_crushed_political_suppression_modifier } remove_variable = cr_outcome_movement_crushed_political_suppression_modifier }
+	if = { limit = { has_variable = cr_outcome_movement_crushed_expulsion_modifier } remove_variable = cr_outcome_movement_crushed_expulsion_modifier }
+	if = { limit = { has_variable = cr_outcome_months } remove_variable = cr_outcome_months }
 }
 
 # The recorded outcome $MODIFIER$ is no longer running: forget the record (see
@@ -309,10 +312,10 @@ cr_outcome_monthly_update = {
 
 	# Orphaned run state. In normal play cr_run_in_progress exists only while the
 	# entry is active (cr_je_cleanup_effect removes it at every end). Without one
-	# it came from a civil war's merge that cr_after_civil_war could not place,
-	# e.g. a war begun before cr_revolution_original was recorded and won by
-	# loyalists without a struggle of their own. Clean it up so no stray policy
-	# outlives it and the next run starts fresh.
+	# it came from a civil war's merge that cr_repair_after_civil_war could not
+	# place, e.g. a war begun before #467 recorded the sides (no te_cw_role) and
+	# won by a government without a struggle of its own. Clean it up so no stray
+	# policy outlives it and the next run starts fresh.
 	if = {
 		limit = {
 			has_variable = cr_run_in_progress
@@ -355,38 +358,54 @@ cr_sync_policy_mirrors = {
 	cr_sync_policy_mirror = { MODIFIER = cr_segregationist_modifier VAR = cr_policy_segregationist }
 }
 
-# on_civil_war_won, ROOT = the winner.
+# te_civil_war_on_won (common/on_actions/te_civil_war_on_actions.txt): ROOT = THIS
+# = the winner, after the merge, between te_civil_war_resolve_sides and
+# te_civil_war_clear (which removes te_cw_rebels_won and te_cw_role in the same
+# tick, so nothing here may be left for a later pulse to read them).
 #
-# Which side won: at on_revolution_start the original country records itself in
-# cr_revolution_original (civil_rights_on_actions.txt). The revolutionaries start
-# with no mod variables, so if they win they inherit the loser's pointer, which
-# names the dead original; if the loyalists win, theirs still names ROOT.
-#
-# The pointer is never simply removed, because a secession and a revolution can
-# run at once, and the war that ends second must still find it naming the
-# nation. A loyalist winner keeps its self-pointer. A revolutionary winner, whose
-# inherited pointer names the dead loser, is re-pointed at itself: it is the
-# nation now, and a secession still running against it ends with it as ROOT. A
-# self-pointer is harmless between wars (it is read only here) and every start
-# hook sets it again.
-cr_after_civil_war = {
+#   te_cw_rebels_won = 1    the revolutionaries won a revolution: they continue
+#                           the nation, so rebuild what the loser held.
+#   te_cw_role = 1          the original government won: it keeps its own
+#                           modifiers; drop what it inherited from the rebels.
+#   te_cw_role = 2 (and     a seceder won as a new nation: nothing was merged
+#   te_cw_rebels_won = 0)   into it, so there is nothing to repair.
+#   no te_cw_role           a war begun before #467 recorded the sides, or a
+#                           seceder whose role on_secession_end already removed:
+#                           the guarded rebuild, as this branch did before it had
+#                           a pointer. It is a no-op unless foreign state exists:
+#                           every add waits for the modifier to be absent, and
+#                           rebels cannot start a struggle of their own
+#                           (is_revolutionary = no in is_shown_when_inactive).
+cr_repair_after_civil_war = {
 	if = {
 		limit = {
-			has_variable = cr_revolution_original
-			var:cr_revolution_original = ROOT
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+		}
+		cr_rebuild_after_civil_war = yes
+	}
+	else_if = {
+		limit = {
+			has_variable = te_cw_role
+			var:te_cw_role = 1
 		}
 		cr_drop_rebel_run_state = yes
 	}
-	else = {
-		# The revolutionaries won, or the war began before the pointer existed.
+	else_if = {
+		limit = { NOT = { has_variable = te_cw_role } }
 		cr_rebuild_after_civil_war = yes
-		set_variable = { name = cr_revolution_original value = ROOT }
+	}
+	# Retired pointer (see the header): drop it where it is cheapest to find.
+	if = {
+		limit = { has_variable = cr_revolution_original }
+		remove_variable = cr_revolution_original
 	}
 }
 
-# The loyalists won. They keep their own records and modifiers, but inherit every
-# variable only the rebels held, and the rebels may have run their own struggle
-# during the war. A policy mirror with no modifier behind it is the rebels', and
+# The original government won. It keeps its own records and modifiers, but
+# inherits every variable only the rebels held. Revolutionaries cannot start a
+# struggle of their own (is_revolutionary = no), but secessionists can, and a
+# war begun before that check may have let rebels start one. A policy mirror with no modifier behind it is the rebels', and
 # the pulse's self-heal would otherwise turn it into a policy; a run marker with
 # no active entry is theirs too, and would make the loyalists' next run skip its
 # reset. (Rebels that *resolved* a struggle mid-war would also pass on
@@ -444,4 +463,5 @@ cr_rebuild_after_civil_war = {
 			}
 			add_modifier = { name = cr_cooptation_expired }
 		}
-	}}
+	}
+}

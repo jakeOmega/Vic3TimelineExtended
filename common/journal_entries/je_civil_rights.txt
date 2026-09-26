@@ -74,10 +74,10 @@
 			set_variable = { name = cr_cooptation_months value = 0 }
 			set_variable = { name = cr_suppression_months value = 0 }
 			set_variable = { name = cr_segregationist_months value = 0 }
-			remove_variable = cr_tier_25_seen
-			remove_variable = cr_tier_50_seen
-			remove_variable = cr_tier_75_seen
-			remove_variable = cr_tier_90_seen
+			if = { limit = { has_variable = cr_tier_25_seen } remove_variable = cr_tier_25_seen }
+			if = { limit = { has_variable = cr_tier_50_seen } remove_variable = cr_tier_50_seen }
+			if = { limit = { has_variable = cr_tier_75_seen } remove_variable = cr_tier_75_seen }
+			if = { limit = { has_variable = cr_tier_90_seen } remove_variable = cr_tier_90_seen }
 
 			scope:journal_entry = {
 				set_bar_progress = { name = civil_rights_support_bar value = 30 }
@@ -398,11 +398,14 @@
 			}
 
 			# --- Phase modifier swap (5 bands keyed to bar tier) ---
-			je:je_civil_rights = { remove_modifier = civil_rights_phase_marginal_modifier }
-			je:je_civil_rights = { remove_modifier = civil_rights_phase_growing_modifier }
-			je:je_civil_rights = { remove_modifier = civil_rights_phase_active_modifier }
-			je:je_civil_rights = { remove_modifier = civil_rights_phase_pressuring_modifier }
-			je:je_civil_rights = { remove_modifier = civil_rights_phase_imminent_modifier }
+			# Removals guarded as #469 guards country ones (those log "Timed modifier
+			# ... not found" when absent). Journal-entry removals appear silent, but
+			# four of these five run on an absent modifier every month.
+			je:je_civil_rights = { remove_modifier_if_exists_effect = { MODIFIER = civil_rights_phase_marginal_modifier } }
+			je:je_civil_rights = { remove_modifier_if_exists_effect = { MODIFIER = civil_rights_phase_growing_modifier } }
+			je:je_civil_rights = { remove_modifier_if_exists_effect = { MODIFIER = civil_rights_phase_active_modifier } }
+			je:je_civil_rights = { remove_modifier_if_exists_effect = { MODIFIER = civil_rights_phase_pressuring_modifier } }
+			je:je_civil_rights = { remove_modifier_if_exists_effect = { MODIFIER = civil_rights_phase_imminent_modifier } }
 
 			if = {
 				limit = {
