@@ -11,9 +11,13 @@
 # workforce-scaled capacity could stall at zero before the first settlers
 # arrive. The pulse moves exactly the total.
 #
-# Multiplicative modifiers sit in unscaled blocks only, so levels never
-# multiply them. No PM carries IG approval: political reactions are one
-# country modifier per programme, scaled by volume (resettlement_*_politics).
+# No PM carries a multiplicative or unscaled destination effect: those are
+# the state modifiers resettlement_<pm>_destination (resettlement_modifiers.txt),
+# which the pulse applies scaled by the month's arrivals, so a level-1
+# Authority or an idle program buys little. The PMs keep the additive,
+# level- or workforce-scaled effects (capacity, infrastructure, pull, staff,
+# goods). No PM carries IG approval: political reactions are one country
+# modifier per programme, scaled by volume (resettlement_*_politics).
 # test_resettlement_programme_registry.py pins all of this.
 # =================================================================
 
@@ -32,10 +36,6 @@ pm_resettlement_land_grants = {
 		}
 		workforce_scaled = {
 			state_resettlement_transfer_add = 150
-		}
-		unscaled = {
-			state_incorporation_speed_mult = 0.10
-			state_colony_growth_speed_mult = 0.10
 		}
 	}
 
@@ -74,11 +74,6 @@ pm_resettlement_military_colonies = {
 		}
 		workforce_scaled = {
 			state_resettlement_transfer_add = 125
-		}
-		unscaled = {
-			state_turmoil_effects_mult = -0.25
-			state_incorporation_speed_mult = 0.25
-			state_colony_growth_speed_mult = 0.10
 		}
 	}
 
@@ -123,11 +118,6 @@ pm_resettlement_penal_transportation = {
 		workforce_scaled = {
 			state_resettlement_transfer_add = 50
 		}
-		unscaled = {
-			state_mortality_mult = 0.03
-			state_incorporation_speed_mult = 0.10
-			state_colony_growth_speed_mult = 0.10
-		}
 	}
 
 	country_modifiers = {
@@ -165,10 +155,6 @@ pm_resettlement_organized_colonization = {
 		}
 		workforce_scaled = {
 			state_resettlement_transfer_add = 250
-		}
-		unscaled = {
-			state_incorporation_speed_mult = 0.15
-			state_colony_growth_speed_mult = 0.15
 		}
 	}
 
@@ -218,11 +204,6 @@ pm_resettlement_special_settlements = {
 		workforce_scaled = {
 			state_resettlement_transfer_add = 500
 		}
-		unscaled = {
-			state_mortality_mult = 0.05
-			state_incorporation_speed_mult = 0.10
-			state_colony_growth_speed_mult = 0.10
-		}
 	}
 
 	country_modifiers = {
@@ -263,10 +244,6 @@ pm_resettlement_development_program = {
 		workforce_scaled = {
 			state_resettlement_transfer_add = 400
 			state_infrastructure_add = 2
-		}
-		unscaled = {
-			state_incorporation_speed_mult = 0.15
-			state_colony_growth_speed_mult = 0.15
 		}
 	}
 
@@ -310,10 +287,6 @@ pm_resettlement_rustication = {
 		workforce_scaled = {
 			state_resettlement_transfer_add = 400
 		}
-		unscaled = {
-			state_incorporation_speed_mult = 0.10
-			state_colony_growth_speed_mult = 0.10
-		}
 	}
 
 	country_modifiers = {
@@ -352,10 +325,6 @@ pm_resettlement_managed_retreat = {
 		workforce_scaled = {
 			state_resettlement_transfer_add = 300
 		}
-		unscaled = {
-			state_incorporation_speed_mult = 0.10
-			state_colony_growth_speed_mult = 0.10
-		}
 	}
 
 	country_modifiers = {
@@ -384,19 +353,15 @@ pm_resettlement_managed_retreat = {
 # Every settlement adds level-scaled migration pull, so the frontier is less
 # likely to become an emigration source while the program runs (§5).
 
-# Virgin soil: newly broken land yields well while the frontier is open. No
-# arable land is added; the bonus ends with the building.
+# Virgin soil: newly broken land yields well while settlers arrive
+# (resettlement_homesteads_destination). No arable land is added; the bonus
+# ends with the building.
 pm_resettlement_homesteads = {
 	texture = "gfx/interface/icons/production_method_icons/homesteading.dds"
 
 	state_modifiers = {
 		level_scaled = {
 			state_migration_pull_add = 1
-		}
-		unscaled = {
-			building_group_bg_agriculture_throughput_add = 0.10
-			building_group_bg_ranching_throughput_add = 0.10
-			building_subsistence_output_add = 1
 		}
 	}
 
@@ -413,10 +378,6 @@ pm_resettlement_work_settlements = {
 		}
 		workforce_scaled = {
 			state_infrastructure_add = 1
-		}
-		unscaled = {
-			building_group_bg_mining_throughput_add = 0.10
-			building_group_bg_logging_throughput_add = 0.10
 		}
 	}
 
@@ -448,9 +409,6 @@ pm_resettlement_planned_towns = {
 		workforce_scaled = {
 			state_infrastructure_add = 3
 			state_migration_pull_add = 2
-		}
-		unscaled = {
-			state_construction_mult = 0.10
 		}
 	}
 

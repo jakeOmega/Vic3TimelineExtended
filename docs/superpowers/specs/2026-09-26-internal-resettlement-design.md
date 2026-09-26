@@ -149,9 +149,14 @@ applies only while its count is above zero.
 
 ## 3. Programmes (PM group 1: `pmg_resettlement_programme`)
 
-Each programme sets who is recruited, capacity per level, staff and goods, destination effects (its `state_modifiers`,
-which land on the destination) and transit mortality. Its political reactions are **not** in the PM (§7.2).
-Multiplicative destination effects sit in `unscaled` blocks; additive ones in `workforce_scaled` blocks.
+Each programme sets who is recruited, capacity per level, staff and goods, destination effects and transit mortality.
+Its political reactions are **not** in the PM (§7.2). Additive destination effects sit in the PM's `workforce_scaled` or
+`level_scaled` blocks. Multiplicative destination effects are **not** in the PM, where a level-1 Authority would buy them
+in full and a programme with no one to recruit would keep them: each programme's are the state modifier
+`resettlement_<programme>_destination`, which the monthly pulse removes and re-applies after the walk (one refresh site)
+with `multiplier = rs_bonus_scale` = min(1, the month's arrivals ÷ `resettlement_bonus_full_arrivals`, 2,000). The
+settlement plan's (§5) work the same way. `rs_bonus_scale` persists, since it backs the multiplier; the modifiers and the
+variable are removed at closure and from any state that no longer has the building.
 
 | Programme | Anchors | Unlock / law gates | Recruits | Destination effects | Transit deaths |
 |---|---|---|---|---|---|
@@ -181,10 +186,13 @@ Each PM adds `state_resettlement_transfer_add` per level (additive, so safe as l
 ## 5. Settlement (PM group 2: `pmg_resettlement_settlement`)
 
 What the settlers build. Any pairing with any programme is allowed. Homesteads and Work Settlements need no unlock.
+Each plan's multiplicative effects (Homesteads' virgin soil, Work Settlements' mining and logging throughput, Planned
+Towns' construction) are the state modifier `resettlement_<plan>_destination`, scaled by the month's arrivals as in §3;
+its additive ones (infrastructure, migration pull, staff, goods) stay in the PM.
 
 | Settlement | Anchors | Effect |
 |---|---|---|
-| **Homesteads** | prairie homesteads, Stolypin farmsteads, Virgin Lands | *Virgin soil*: `building_group_bg_agriculture_throughput_add` and `building_group_bg_ranching_throughput_add` (unscaled) and `building_subsistence_output_add`. **No arable land is added.** Ends with the building |
+| **Homesteads** | prairie homesteads, Stolypin farmsteads, Virgin Lands | *Virgin soil*: `building_group_bg_agriculture_throughput_add`, `building_group_bg_ranching_throughput_add` and `building_subsistence_output_add` (`resettlement_homesteads_destination`, scaled by arrivals as in §3). **No arable land is added.** Ends with the building |
 | **Work Settlements** | Kolyma, Norilsk, the Belomorkanal, the Baikal–Amur Mainline; company towns | The building employs laborers (the arrivals fill the slots); infrastructure; mining and logging throughput |
 | **Planned Towns** | Brasília, the British New Towns, Akademgorodok | Infrastructure, construction, migration pull; engineer staff. Unlocked by `modern_urban_planning` (era 7); expensive |
 
@@ -221,8 +229,10 @@ Newfoundland; no European core. 2/km² is close to the US Census's 1890 frontier
 Hokkaido at about 0.8 million, near their populations at the end of their historical settlement booms (1.4 million in
 1890; about 1 million in 1901).
 
-Temporary destination benefits stay at full strength until closure; the frontier gate is what bounds them. The building's
-tooltip shows the density and both thresholds.
+Temporary destination benefits scale with the month's arrivals (full at 2,000 a month, §3) and end at closure or when the
+building is demolished. The frontier gate alone would not bound them in a vast region (Yakutsk, about 2 million km²,
+closes at about 20 million people; Alaska and Akmolinsk are similar), and a level-1 Authority or an idle programme would
+buy them in full; the arrivals scale bounds both. The building's tooltip shows the density and both thresholds.
 
 ## 7. Consequences
 
@@ -352,6 +362,7 @@ Rolled from the pulse, weighted by programme activity, each with a cooldown. The
 | Transport add per level | Overland 0, Rail and Steamship +200, Motor +400, Airlift +600 | — |
 | Per-pop monthly cap | 2% (4% under a drive) | vanilla emigration ceiling |
 | Transit mortality | Penal 5%, Special Settlements 15%, Rustication 1% | archival counts for the special settlements run to hundreds of thousands |
+| Destination bonus at full strength | 2,000 arrivals a month (`resettlement_bonus_full_arrivals`) | a level-5 Land Grants Authority at full staff moves 1,500 |
 | Intensity reference | 0.25% of population a year | Stolypin's peak |
 | IG caps | §7.2 | `00_defines.txt` law-change approval (5 / 10 / 20) |
 | Frontier thresholds | open < 2/km², close ≥ 10/km² | §6 |

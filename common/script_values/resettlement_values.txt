@@ -89,6 +89,12 @@ resettlement_state_eligible_pop = {
 	}
 }
 
+# ---- Destination bonuses (§3, §5) ------------------------------------------
+# Arrivals in a month at which the program's and settlement plan's effects on
+# the destination reach full strength; fewer give a proportional share
+# (resettlement_refresh_destination_bonus).
+resettlement_bonus_full_arrivals = 2000
+
 # ---- Consequences at the source (§7.1) -------------------------------------
 # Source state, after var:rs_taken_now is set. 10 × the share of the recruited
 # type taken this month, capped at 0.1.

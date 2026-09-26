@@ -19,6 +19,81 @@ resettlement_recruits = {
 	state_resettlement_recruits_add = 1
 }
 
+# ---- Destination bonuses (§3, §5): multiplier = var:rs_bonus_scale, 0–1 ------
+# The multiplicative effects of the running program and settlement plan, kept
+# out of the PMs so that a level-1 Authority or an idle program buys little:
+# resettlement_refresh_destination_bonus re-applies the active pair monthly,
+# scaled by the month's arrivals (full at resettlement_bonus_full_arrivals).
+resettlement_land_grants_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_incorporation_speed_mult = 0.10
+	state_colony_growth_speed_mult = 0.10
+}
+
+resettlement_military_colonies_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_rifle_positive.dds
+	state_turmoil_effects_mult = -0.25
+	state_incorporation_speed_mult = 0.25
+	state_colony_growth_speed_mult = 0.10
+}
+
+resettlement_penal_transportation_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_mortality_mult = 0.03
+	state_incorporation_speed_mult = 0.10
+	state_colony_growth_speed_mult = 0.10
+}
+
+resettlement_organized_colonization_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_incorporation_speed_mult = 0.15
+	state_colony_growth_speed_mult = 0.15
+}
+
+resettlement_special_settlements_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	state_mortality_mult = 0.05
+	state_incorporation_speed_mult = 0.10
+	state_colony_growth_speed_mult = 0.10
+}
+
+resettlement_development_program_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_incorporation_speed_mult = 0.15
+	state_colony_growth_speed_mult = 0.15
+}
+
+resettlement_rustication_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_incorporation_speed_mult = 0.10
+	state_colony_growth_speed_mult = 0.10
+}
+
+resettlement_managed_retreat_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_incorporation_speed_mult = 0.10
+	state_colony_growth_speed_mult = 0.10
+}
+
+# Virgin soil: no arable land is added, and the bonus ends with the building.
+resettlement_homesteads_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_agriculture_throughput_add = 0.10
+	building_group_bg_ranching_throughput_add = 0.10
+	building_subsistence_output_add = 1
+}
+
+resettlement_work_settlements_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	building_group_bg_mining_throughput_add = 0.10
+	building_group_bg_logging_throughput_add = 0.10
+}
+
+resettlement_planned_towns_destination = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_positive.dds
+	state_construction_mult = 0.10
+}
+
 # ---- Political reactions (§7.2): multiplier = the program's intensity, 0–1 ----
 # A running program is an ongoing action, so the scale is vanilla's approval from
 # changing a law (5 / 10 / 20 in 00_defines.txt), not the ±5 clamp on laws

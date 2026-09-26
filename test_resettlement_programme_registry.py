@@ -76,6 +76,33 @@ SETTLEMENTS = (
     ("work_settlements", ()),
     ("planned_towns", ("modern_urban_planning",)),
 )
+# The multiplicative destination effects (§3, §5). They are not in the PMs: the
+# pulse applies each as the state modifier resettlement_<key>_destination with
+# multiplier = var:rs_bonus_scale, so they grow with the month's arrivals.
+DESTINATION_EFFECTS = {
+    "land_grants": {"state_incorporation_speed_mult": 0.10, "state_colony_growth_speed_mult": 0.10},
+    "military_colonies": {"state_turmoil_effects_mult": -0.25, "state_incorporation_speed_mult": 0.25,
+                          "state_colony_growth_speed_mult": 0.10},
+    "penal_transportation": {"state_mortality_mult": 0.03, "state_incorporation_speed_mult": 0.10,
+                             "state_colony_growth_speed_mult": 0.10},
+    "organized_colonization": {"state_incorporation_speed_mult": 0.15, "state_colony_growth_speed_mult": 0.15},
+    "special_settlements": {"state_mortality_mult": 0.05, "state_incorporation_speed_mult": 0.10,
+                            "state_colony_growth_speed_mult": 0.10},
+    "development_program": {"state_incorporation_speed_mult": 0.15, "state_colony_growth_speed_mult": 0.15},
+    "rustication": {"state_incorporation_speed_mult": 0.10, "state_colony_growth_speed_mult": 0.10},
+    "managed_retreat": {"state_incorporation_speed_mult": 0.10, "state_colony_growth_speed_mult": 0.10},
+    "homesteads": {"building_group_bg_agriculture_throughput_add": 0.10,
+                   "building_group_bg_ranching_throughput_add": 0.10, "building_subsistence_output_add": 1},
+    "work_settlements": {"building_group_bg_mining_throughput_add": 0.10,
+                         "building_group_bg_logging_throughput_add": 0.10},
+    "planned_towns": {"state_construction_mult": 0.10},
+}
+
+
+def destination_modifier(key):
+    return block(read("common/static_modifiers/resettlement_modifiers.txt"), f"resettlement_{key}_destination")
+
+
 # (key, unlocking technologies, capacity per level)
 TRANSPORTS = (
     ("overland", (), 0),
@@ -285,11 +312,11 @@ class ProgrammeTests(unittest.TestCase):
             self.assertEqual(transfer_in(body, "workforce_scaled"), p.capacity / 2, p.key)
 
     def test_every_programme_speeds_incorporation_and_colony_growth(self):
-        text = read(PM_FILE)
         for p in PROGRAMMES:
-            unscaled = block(block(block(text, pm(p.key)), "state_modifiers"), "unscaled")
-            self.assertGreater(number(unscaled, "state_incorporation_speed_mult") or 0, 0, p.key)
-            self.assertGreater(number(unscaled, "state_colony_growth_speed_mult") or 0, 0, p.key)
+            body = destination_modifier(p.key)
+            self.assertIsNotNone(body, p.key)
+            self.assertGreater(number(body, "state_incorporation_speed_mult") or 0, 0, p.key)
+            self.assertGreater(number(body, "state_colony_growth_speed_mult") or 0, 0, p.key)
 
     def test_the_declaration_line_is_on_coercive_programmes_only(self):
         L = loc()
@@ -306,11 +333,11 @@ class SettlementAndTransportTests(unittest.TestCase):
             self.assertEqual(list_field(block(text, pm(key)), "unlocking_technologies"), techs, key)
 
     def test_homesteads_add_no_arable_land(self):
-        body = block(read(PM_FILE), pm("homesteads"))
-        self.assertNotIn("arable", body)
-        unscaled = block(block(body, "state_modifiers"), "unscaled")
-        self.assertGreater(number(unscaled, "building_group_bg_agriculture_throughput_add"), 0)
-        self.assertGreater(number(unscaled, "building_group_bg_ranching_throughput_add"), 0)
+        self.assertNotIn("arable", block(read(PM_FILE), pm("homesteads")))
+        bonus = destination_modifier("homesteads")
+        self.assertNotIn("arable", bonus)
+        self.assertGreater(number(bonus, "building_group_bg_agriculture_throughput_add"), 0)
+        self.assertGreater(number(bonus, "building_group_bg_ranching_throughput_add"), 0)
 
     def test_every_settlement_adds_level_scaled_pull(self):
         text = read(PM_FILE)
@@ -333,12 +360,13 @@ class PmHygieneTests(unittest.TestCase):
         names = [pm(p.key) for p in PROGRAMMES] + [pm(k) for k, _ in SETTLEMENTS] + [pm(k) for k, _, _ in TRANSPORTS]
         return {n: block(text, n) for n in names}
 
-    def test_multipliers_only_in_unscaled_blocks(self):
+    def test_no_pm_carries_a_multiplier_or_an_unscaled_block(self):
+        # A level-1 Authority or an idle programme must not buy the full
+        # destination bonus: the multiplicative effects are script-applied and
+        # scaled by arrivals (DestinationBonusTests). Additive effects stay.
         for name, body in self._all_pms().items():
-            for section in ("state_modifiers", "country_modifiers", "building_modifiers"):
-                sec = block(body, section) or ""
-                for scaling in ("level_scaled", "workforce_scaled", "throughput_scaled"):
-                    self.assertNotRegex(block(sec, scaling) or "", r"_mult\s*=", f"{name} {section}.{scaling}")
+            self.assertNotRegex(body, r"_mult\s*=", name)
+            self.assertNotIn("unscaled", body, name)
 
     def test_no_ig_approval_in_any_pm(self):
         for name, body in self._all_pms().items():
@@ -353,6 +381,70 @@ class PmHygieneTests(unittest.TestCase):
                       "pmg_resettlement_transportation", "building_resettlement_colony",
                       "building_resettlement_colony_desc"):
             self.assertIn(group, L)
+
+
+class DestinationBonusTests(unittest.TestCase):
+    def test_the_table_covers_every_programme_and_settlement(self):
+        self.assertEqual(set(DESTINATION_EFFECTS), set(PROGRAMME_KEYS) | {k for k, _ in SETTLEMENTS})
+
+    def test_each_destination_modifier_is_the_table(self):
+        L = loc()
+        for key, effects in DESTINATION_EFFECTS.items():
+            body = destination_modifier(key)
+            self.assertIsNotNone(body, key)
+            found = {k: float(v) for k, v in re.findall(r"(\w+)\s*=\s*(-?\d+(?:\.\d+)?)\s", body + "\n")}
+            self.assertEqual(found, {k: float(v) for k, v in effects.items()}, key)
+            self.assertIn(f"resettlement_{key}_destination", L)
+            self.assertIn(f"resettlement_{key}_destination_desc", L)
+
+    def test_the_full_bonus_needs_two_thousand_arrivals_a_month(self):
+        self.assertRegex(strip_comments(read(VALUES)), r"(?m)^resettlement_bonus_full_arrivals = 2000\s*$")
+        body = squash(block(read(EFFECTS), "resettlement_refresh_destination_bonus"))
+        self.assertIn("set_variable = { name = rs_bonus_scale value = { value = var:rs_arrived "
+                      "divide = resettlement_bonus_full_arrivals max = 1 } }", body)
+        # One refresh site: remove all eleven, then add the active pair.
+        self.assertLess(body.index("resettlement_remove_destination_bonuses = yes"),
+                        body.index("limit = { var:rs_bonus_scale > 0 }"))
+        programmes = re.findall(r"resettlement_add_programme_bonus = \{ CODE = (\d+) PROG = (\w+) \}", body)
+        self.assertEqual(programmes, [(str(p.code), p.key) for p in PROGRAMMES])
+        plans = re.findall(r"resettlement_add_settlement_bonus = \{ PLAN = (\w+) \}", body)
+        self.assertEqual(plans, [k for k, _ in SETTLEMENTS])
+        run = squash(block(read(EFFECTS), "resettlement_run_destination"))
+        self.assertLess(run.index("resettlement_take_from_source"), run.index("resettlement_refresh_destination_bonus = yes"))
+
+    def test_both_modifiers_are_added_with_the_persisting_scale(self):
+        text = read(EFFECTS)
+        prog = squash(block(text, "resettlement_add_programme_bonus"))
+        self.assertIn("limit = { var:rs_programme = $CODE$ } "
+                      "add_modifier = { name = resettlement_$PROG$_destination multiplier = var:rs_bonus_scale }", prog)
+        plan = squash(block(text, "resettlement_add_settlement_bonus"))
+        self.assertIn("limit = { resettlement_runs_pm = { PM = pm_resettlement_$PLAN$ } } "
+                      "add_modifier = { name = resettlement_$PLAN$_destination multiplier = var:rs_bonus_scale }", plan)
+        # rs_bonus_scale backs the multiplier, so only the clear-up helper
+        # removes it, after the modifiers.
+        self.assertEqual(len(re.findall(r"remove_variable = rs_bonus_scale", strip_comments(text))), 1)
+
+    def test_the_bonuses_end_with_the_building(self):
+        text = read(EFFECTS)
+        removed = re.findall(r"remove_modifier = resettlement_(\w+)_destination",
+                             block(text, "resettlement_remove_destination_bonuses"))
+        self.assertEqual(sorted(removed), sorted(DESTINATION_EFFECTS))
+        clear = squash(block(text, "resettlement_clear_destination_bonus"))
+        self.assertIn("resettlement_remove_destination_bonuses = yes remove_variable = rs_bonus_scale", clear)
+        self.assertIn("resettlement_clear_destination_bonus = yes", squash(block(text, "resettlement_close_frontier")))
+        monthly = squash(block(text, "resettlement_country_monthly"))
+        self.assertIn("every_scope_state = { limit = { has_variable = rs_bonus_scale "
+                      "NOT = { has_building = building_resettlement_colony } } "
+                      "resettlement_clear_destination_bonus = yes }", monthly)
+
+    def test_pm_descriptions_say_the_effects_grow_with_arrivals(self):
+        L = loc()
+        for line in ("resettlement_programme_bonus_pm_line", "resettlement_settlement_bonus_pm_line"):
+            self.assertIn("2,000", L[line], line)
+        for p in PROGRAMMES:
+            self.assertIn("$resettlement_programme_bonus_pm_line$", L[f"{pm(p.key)}_desc"], p.key)
+        for key, _ in SETTLEMENTS:
+            self.assertIn("$resettlement_settlement_bonus_pm_line$", L[f"{pm(key)}_desc"], key)
 
 
 class BuildingTests(unittest.TestCase):
