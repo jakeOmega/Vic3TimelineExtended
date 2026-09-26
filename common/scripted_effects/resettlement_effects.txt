@@ -54,6 +54,7 @@ resettlement_country_monthly = {
 	}
 	resettlement_refresh_politics = yes
 	resettlement_refresh_declaration = yes
+	resettlement_roll_events = yes
 	if = {
 		limit = {
 			OR = {
@@ -506,5 +507,83 @@ resettlement_refresh_declaration = {
 			var:rs_declaration_intensity <= 0.01
 		}
 		remove_variable = rs_declaration_warned
+	}
+}
+
+
+# ---- Events (§8) ---------------------------------------------------------------
+# Country scope, after the month's transfers. At most one program event every
+# eighteen months, from a destination that received settlers this month.
+resettlement_roll_events = {
+	if = {
+		limit = {
+			resettlement_system_enabled = yes
+			NOT = { has_variable = rs_event_cooldown }
+			any_scope_state = {
+				has_building = building_resettlement_colony
+				has_variable = rs_arrived
+				var:rs_arrived > 0
+			}
+		}
+		random = {
+			chance = 10
+			random_scope_state = {
+				limit = {
+					has_building = building_resettlement_colony
+					has_variable = rs_arrived
+					var:rs_arrived > 0
+				}
+				save_scope_as = rs_event_state
+				save_scope_as = rs_destination
+			}
+			set_variable = { name = rs_event_cooldown days = 540 }
+			random_list = {
+				10 = {
+					trigger = { scope:rs_event_state = { resettlement_state_runs_voluntary = yes } }
+					trigger_event = { id = resettlement.1 }
+				}
+				10 = {
+					trigger = { scope:rs_event_state = { resettlement_state_runs_voluntary = yes } }
+					trigger_event = { id = resettlement.2 }
+				}
+				10 = {
+					trigger_event = { id = resettlement.3 }
+				}
+				10 = {
+					trigger = {
+						scope:rs_event_state = {
+							resettlement_runs_pm = { PM = pm_resettlement_homesteads }
+							var:rs_months_running >= 120
+							NOT = { has_variable = rs_dust_done }
+						}
+					}
+					trigger_event = { id = resettlement.4 }
+				}
+				10 = {
+					trigger = { scope:rs_event_state = { resettlement_state_runs_coercive = yes } }
+					trigger_event = { id = resettlement.5 }
+				}
+				10 = {
+					trigger = { scope:rs_event_state = { resettlement_runs_pm = { PM = pm_resettlement_special_settlements } } }
+					trigger_event = { id = resettlement.6 }
+				}
+				10 = {
+					trigger = {
+						scope:rs_event_state = {
+							resettlement_state_runs_coercive = yes
+							var:rs_months_running >= 60
+							NOT = { has_variable = rs_petition_done }
+							has_variable = rs_last_source
+							var:rs_last_source = { owner = scope:rs_country }
+						}
+					}
+					trigger_event = { id = resettlement.7 }
+				}
+				10 = {
+					trigger = { scope:rs_event_state = { any_scope_pop = { pop_acceptance < acceptance_status_4 } } }
+					trigger_event = { id = resettlement.8 }
+				}
+			}
+		}
 	}
 }

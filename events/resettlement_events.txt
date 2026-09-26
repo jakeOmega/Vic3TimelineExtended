@@ -11,6 +11,411 @@
 #   .20    The Declaration and Our Settlements (resettlement_refresh_declaration)
 # ============================================================================
 
+# ---- .1 Land Rush ------------------------------------------------------------
+# Rolled for a voluntary program. Oklahoma, 1889.
+resettlement.1 = {
+	type = country_event
+	placement = scope:rs_event_state
+
+	event_image = {
+		video = "europenorthamerica_gold_prospectors"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = resettlement.1.t
+	desc = resettlement.1.d
+	flavor = resettlement.1.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:rs_event_state
+	}
+
+	option = {
+		name = resettlement.1.a
+		default_option = yes
+		scope:rs_event_state = {
+			add_modifier = { name = resettlement_land_rush days = 365 }
+		}
+		custom_tooltip = resettlement_land_rush_pressure_tt
+		ai_chance = { base = 60 }
+	}
+
+	option = {
+		name = resettlement.1.b
+		scope:rs_event_state = {
+			add_modifier = { name = resettlement_orderly_survey days = 730 }
+		}
+		ai_chance = { base = 40 }
+	}
+}
+
+# ---- .2 The Speculators ------------------------------------------------------
+# Rolled for a voluntary program. Railroad land grants and homestead fraud.
+resettlement.2 = {
+	type = country_event
+	placement = scope:rs_event_state
+
+	event_image = {
+		video = "europenorthamerica_capitalists_meeting"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_trade.dds"
+
+	title = resettlement.2.t
+	desc = resettlement.2.d
+	flavor = resettlement.2.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:rs_event_state
+	}
+
+	option = {
+		name = resettlement.2.a
+		default_option = yes
+		add_modifier = { name = resettlement_land_office_crackdown days = 730 }
+		ig:ig_rural_folk = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = resettlement.2.b
+		scope:rs_event_state = {
+			add_modifier = { name = resettlement_speculators days = 730 }
+		}
+		ig:ig_landowners = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		ig:ig_industrialists = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
+# ---- .3 A Hard Winter ------------------------------------------------------------
+# Rolled for any program.
+resettlement.3 = {
+	type = country_event
+	placement = scope:rs_event_state
+
+	event_image = {
+		video = "unspecific_sick_in_hospital"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	title = resettlement.3.t
+	desc = resettlement.3.d
+	flavor = resettlement.3.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:rs_event_state
+	}
+
+	option = {
+		name = resettlement.3.a
+		default_option = yes
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.01
+		}
+		ai_chance = { base = 60 }
+	}
+
+	option = {
+		name = resettlement.3.b
+		scope:rs_event_state = {
+			kill_population_in_state = { value = 1000 strata = lower }
+			add_radicals_in_state = { value = medium_radicals strata = lower }
+			add_modifier = { name = resettlement_hard_winter days = 365 }
+		}
+		ai_chance = { base = 40 }
+	}
+}
+
+# ---- .4 Dust Storms ------------------------------------------------------------
+# Rolled once per destination, after ten years of Homesteads. The Dust Bowl;
+# the Virgin Lands, 1960–65.
+resettlement.4 = {
+	type = country_event
+	placement = scope:rs_event_state
+
+	event_image = {
+		texture = "gfx/event_pictures/climate_refugee_exodus.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = resettlement.4.t
+	desc = resettlement.4.d
+	flavor = resettlement.4.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:rs_event_state
+	}
+
+	immediate = {
+		scope:rs_event_state = {
+			set_variable = rs_dust_done
+		}
+	}
+
+	option = {
+		name = resettlement.4.a
+		default_option = yes
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.02
+		}
+		scope:rs_event_state = {
+			add_modifier = { name = resettlement_soil_conservation days = 3650 }
+		}
+		ai_chance = { base = 60 }
+	}
+
+	option = {
+		name = resettlement.4.b
+		scope:rs_event_state = {
+			add_modifier = { name = resettlement_dust_bowl days = 1825 is_decaying = yes }
+		}
+		ai_chance = { base = 40 }
+	}
+}
+
+# ---- .5 The Reform Campaign ----------------------------------------------------
+# Rolled for a coercive program. The Anti-Transportation League, Chekhov's
+# Sakhalin Island, Albert Londres in French Guiana.
+resettlement.5 = {
+	type = country_event
+	placement = scope:rs_event_state
+
+	event_image = {
+		video = "middleeast_courtroom_upheaval"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_newspaper.dds"
+
+	title = resettlement.5.t
+	desc = resettlement.5.d
+	flavor = resettlement.5.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:rs_event_state
+	}
+
+	option = {
+		name = resettlement.5.a
+		resettlement_end_coercive_programmes = yes
+		add_modifier = { name = resettlement_reformed days = 1825 }
+		ig:ig_intelligentsia = {
+			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 40 }
+	}
+
+	option = {
+		name = resettlement.5.b
+		default_option = yes
+		add_modifier = { name = resettlement_defiant days = 1825 }
+		ig:ig_intelligentsia = {
+			add_modifier = { name = ig_approval_negative_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 60 }
+	}
+}
+
+# ---- .6 Famine in the Settlements -------------------------------------------------
+# Rolled for Special Settlements. Nazino, 1933.
+resettlement.6 = {
+	type = country_event
+	placement = scope:rs_event_state
+
+	event_image = {
+		video = "asia_dead_cattle_poor_harvest"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_skull.dds"
+
+	title = resettlement.6.t
+	desc = resettlement.6.d
+	flavor = resettlement.6.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:rs_event_state
+	}
+
+	option = {
+		name = resettlement.6.a
+		default_option = yes
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.02
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = resettlement.6.b
+		scope:rs_event_state = {
+			kill_population_in_state = { value = 5000 pop_type = farmers }
+			add_radicals_in_state = { value = large_radicals pop_type = farmers }
+		}
+		ig:ig_rural_folk = {
+			add_modifier = { name = ig_approval_very_negative_modifier days = normal_modifier_time }
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
+# ---- .7 A Petition to Return ------------------------------------------------------
+# Rolled once per destination, after five years of a coercive program. The
+# special settlers' release from 1954; the zhiqing strikes of 1978–79.
+resettlement.7 = {
+	type = country_event
+	placement = scope:rs_event_state
+
+	event_image = {
+		video = "asia_poor_people_moving"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_protest.dds"
+
+	title = resettlement.7.t
+	desc = resettlement.7.d
+	flavor = resettlement.7.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:rs_event_state
+		scope:rs_event_state = { has_variable = rs_last_source }
+	}
+
+	immediate = {
+		scope:rs_event_state = {
+			set_variable = rs_petition_done
+			var:rs_last_source = { save_scope_as = rs_return_state }
+		}
+	}
+
+	option = {
+		name = resettlement.7.a
+		# Those resettled can no longer be told apart from anyone else here, so
+		# one in twenty of the lower strata goes home.
+		custom_tooltip = {
+			text = resettlement_return_tt
+			scope:rs_event_state = {
+				every_scope_pop = {
+					limit = {
+						strata = lower
+						NOT = { is_pop_type = slaves }
+						# 5% of 2,000 is the walk's 100-person minimum:
+						# smaller pops stay, so the source is not splintered.
+						total_size >= 2000
+					}
+					move_partial_pop = {
+						state = scope:rs_return_state
+						population_ratio = 0.05
+					}
+				}
+			}
+		}
+		scope:rs_return_state = {
+			add_loyalists_in_state = { value = medium_radicals strata = lower }
+		}
+		resettlement_end_coercive_programmes = yes
+		ai_chance = { base = 40 }
+	}
+
+	option = {
+		name = resettlement.7.b
+		default_option = yes
+		scope:rs_event_state = {
+			add_radicals_in_state = { value = large_radicals strata = lower }
+		}
+		ai_chance = { base = 60 }
+	}
+}
+
+# ---- .8 Land Disputes -----------------------------------------------------------------
+# Rolled where settlers arrive among people below second-class acceptance
+# (§7.3). No option rewards the pressure: backing the settlers only avoids the
+# cost of negotiating.
+resettlement.8 = {
+	type = country_event
+	placement = scope:rs_event_state
+
+	event_image = {
+		video = "unspecific_signed_contract"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = resettlement.8.t
+	desc = resettlement.8.d
+	flavor = resettlement.8.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:rs_event_state
+	}
+
+	option = {
+		name = resettlement.8.a
+		default_option = yes
+		add_treasury = {
+			value = yearly_gross_income
+			multiply = -0.01
+		}
+		add_modifier = { name = resettlement_negotiation_cost days = 730 }
+		scope:rs_event_state = {
+			add_modifier = { name = resettlement_reserves days = 3650 }
+			resettlement_touch_pressed_cultures = { EFFECT = add_loyalists_in_state VALUE = medium_radicals }
+		}
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = resettlement.8.b
+		scope:rs_event_state = {
+			resettlement_touch_pressed_cultures = { EFFECT = add_radicals_in_state VALUE = medium_radicals }
+		}
+		ai_chance = { base = 50 }
+	}
+}
+
 # ---- .9 The Frontier Is Closed -------------------------------------------------
 # Sent by resettlement_close_frontier with scope:rs_closed_state saved.
 resettlement.9 = {

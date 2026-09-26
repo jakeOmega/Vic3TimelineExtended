@@ -62,3 +62,62 @@ resettlement_declaration_violation = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds
 	country_prestige_mult = -0.1
 }
+
+
+# ---- Event modifiers (§8) --------------------------------------------------
+resettlement_land_rush = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_resettlement_transfer_add = 2000
+}
+
+resettlement_orderly_survey = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_construction_mult = 0.10
+}
+
+resettlement_land_office_crackdown = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -50
+}
+
+resettlement_speculators = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_resettlement_transfer_add = -500
+}
+
+resettlement_hard_winter = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	state_migration_pull_add = -10
+}
+
+resettlement_soil_conservation = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.05
+	building_group_bg_ranching_throughput_add = -0.05
+}
+
+resettlement_dust_bowl = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_gear_negative.dds
+	building_group_bg_agriculture_throughput_add = -0.2
+	building_group_bg_ranching_throughput_add = -0.2
+}
+
+resettlement_reformed = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.05
+}
+
+resettlement_defiant = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.05
+}
+
+resettlement_reserves = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_resettlement_transfer_add = -300
+}
+
+resettlement_negotiation_cost = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_authority_add = -25
+}

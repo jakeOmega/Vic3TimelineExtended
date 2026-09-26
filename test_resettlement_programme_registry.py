@@ -619,5 +619,82 @@ class DeclarationTests(unittest.TestCase):
         self.assertRegex(read(UN_REGISTRY), r'violation_modifiers=\("resettlement_declaration_violation",\)')
 
 
+# ---- The program events (Task 6) -------------------------------------------------
+
+# id: (image kind, number of options)
+EVENTS = {
+    1: ("video", 2), 2: ("video", 2), 3: ("video", 2), 4: ("texture", 2),
+    5: ("video", 2), 6: ("video", 2), 7: ("video", 2), 8: ("video", 2),
+    9: ("video", 1), 20: ("texture", 2),
+}
+ROLLED = (1, 2, 3, 4, 5, 6, 7, 8)
+
+
+def event(n):
+    return block(read(RS_EVENTS), f"resettlement.{n}")
+
+
+def options(body):
+    text = strip_comments(body)
+    out = []
+    for m in re.finditer(r"(?<![\w])option\s*=\s*\{", text):
+        depth, i = 1, m.end()
+        while depth:
+            depth += {"{": 1, "}": -1}.get(text[i], 0)
+            i += 1
+        out.append(text[m.end():i - 1])
+    return out
+
+
+class EventTests(unittest.TestCase):
+    def test_every_event_has_image_placement_options_and_loc(self):
+        L = loc()
+        for n, (kind, count) in EVENTS.items():
+            body = event(n)
+            self.assertIsNotNone(body, n)
+            self.assertIn(f"{kind} =", block(body, "event_image"), n)
+            self.assertIn("placement =", body, n)
+            opts = options(body)
+            self.assertEqual(len(opts), count, n)
+            for suffix in ("t", "d", "f"):
+                self.assertIn(f"resettlement.{n}.{suffix}", L, n)
+            for opt in opts:
+                name = re.search(r"name\s*=\s*([\w.]+)", opt).group(1)
+                self.assertIn(name, L, n)
+
+    def test_the_roll_offers_each_programme_event_once(self):
+        body = squash(block(read(EFFECTS), "resettlement_roll_events"))
+        rolled = [int(n) for n in re.findall(r"trigger_event = \{ id = resettlement\.(\d+) \}", body)]
+        self.assertEqual(sorted(rolled), list(ROLLED))
+        self.assertIn("resettlement_system_enabled = yes", body)
+        self.assertIn("NOT = { has_variable = rs_event_cooldown }", body)
+        self.assertIn("resettlement_roll_events = yes", squash(block(read(EFFECTS), "resettlement_country_monthly")))
+
+    def test_once_only_events_mark_their_state(self):
+        roll = squash(block(read(EFFECTS), "resettlement_roll_events"))
+        for n, flag in ((4, "rs_dust_done"), (7, "rs_petition_done")):
+            self.assertIn(f"set_variable = {flag}", squash(block(event(n), "immediate")), n)
+            self.assertIn(f"NOT = {{ has_variable = {flag} }}", roll, n)
+
+    def test_land_disputes_rewards_nothing(self):
+        negotiate, back = options(event(8))
+        for opt in (negotiate, back):
+            self.assertNotIn("approval", opt)
+            self.assertNotIn("_positive_", opt)
+        self.assertIn("EFFECT = add_radicals_in_state", squash(back))
+        self.assertNotIn("add_modifier", back)
+
+    def test_event_modifiers_are_localized(self):
+        mods = read(RS_MODIFIERS)
+        L = loc()
+        for name in ("resettlement_land_rush", "resettlement_orderly_survey", "resettlement_land_office_crackdown",
+                     "resettlement_speculators", "resettlement_hard_winter", "resettlement_soil_conservation",
+                     "resettlement_dust_bowl", "resettlement_reformed", "resettlement_defiant",
+                     "resettlement_reserves", "resettlement_negotiation_cost"):
+            self.assertIsNotNone(block(mods, name), name)
+            self.assertIn(name, L)
+            self.assertIn(f"{name}_desc", L)
+
+
 if __name__ == "__main__":
     unittest.main()
