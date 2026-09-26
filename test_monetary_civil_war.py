@@ -15,8 +15,8 @@ is audit F7's bug. The engine checks none of this, so these tests do:
 * every monetary variable is classified — copied, or listed in NOT_COPIED
   below — so a new contract variable fails here until someone decides;
 * the copy is reached only through the repair's rebel-win guard, which reads
-  the shared layer's ``te_cw_rebels_won`` and ``scope:te_cw_loser``, and the
-  branch's own retired pointer (``te_cw_parent``) is gone.
+  the shared layer's ``te_cw_rebels_won`` and ``scope:te_cw_loser``; the
+  system keeps no which-side-won pointer of its own (no ``te_cw_parent``).
 """
 
 import os

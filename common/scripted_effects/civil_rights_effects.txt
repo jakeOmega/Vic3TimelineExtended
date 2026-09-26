@@ -97,10 +97,6 @@ cr_je_cleanup_effect = {
 #                           (cr_record_outcome_modifier, in the event option), and
 #   cr_outcome_months       the months since (0-120; counted by
 #                           cr_outcome_monthly_update).
-#   cr_revolution_original  RETIRED (round 4). This branch's own which-side-won
-#                           pointer, before #467's shared layer. Nothing reads it;
-#                           only saves played on the unmerged branch carry it, and
-#                           cr_repair_after_civil_war drops it from a winner.
 #
 # Which side won comes from the shared civil-war layer (#467,
 # common/scripted_effects/te_civil_war_effects.txt): te_civil_war_on_won calls
@@ -371,11 +367,11 @@ cr_sync_policy_mirrors = {
 #   te_cw_rebels_won = 0)   into it, so there is nothing to repair.
 #   no te_cw_role           a war begun before #467 recorded the sides, or a
 #                           seceder whose role on_secession_end already removed:
-#                           the guarded rebuild, as this branch did before it had
-#                           a pointer. It is a no-op unless foreign state exists:
-#                           every add waits for the modifier to be absent, and
-#                           rebels cannot start a struggle of their own
-#                           (is_revolutionary = no in is_shown_when_inactive).
+#                           the guarded rebuild. It is a no-op unless foreign
+#                           state exists: every add waits for the modifier to
+#                           be absent, and rebels cannot start a struggle of
+#                           their own (is_revolutionary = no in
+#                           is_shown_when_inactive).
 cr_repair_after_civil_war = {
 	if = {
 		limit = {
@@ -394,11 +390,6 @@ cr_repair_after_civil_war = {
 	else_if = {
 		limit = { NOT = { has_variable = te_cw_role } }
 		cr_rebuild_after_civil_war = yes
-	}
-	# Retired pointer (see the header): drop it where it is cheapest to find.
-	if = {
-		limit = { has_variable = cr_revolution_original }
-		remove_variable = cr_revolution_original
 	}
 }
 

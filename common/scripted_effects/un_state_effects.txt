@@ -476,9 +476,6 @@ un_hq_adopt_as_successor = {
 # A no-op for a loyalist winner (te_cw_rebels_won is 0, and it is still the
 # named, living host) and for any secession outcome (te_cw_rebels_won is 0; a
 # seceder is another country and inherits no entry).
-# Replaces the UN's own on_revolution_start / on_civil_war_won hooks and their
-# un_cw_rebel pointer (round 4). A save made on the development branch in
-# between may still carry un_cw_rebel on a country; nothing reads it.
 # Scope: country (the winner)
 un_repair_after_civil_war = {
 	if = {

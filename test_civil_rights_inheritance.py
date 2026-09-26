@@ -356,8 +356,8 @@ class HookTests(unittest.TestCase):
         self.assertNotRegex(body, r"var:te_cw_role\s*=\s*2")
 
     def test_the_private_pointer_is_retired(self):
-        # Round 4: #467's te_cw_* replace cr_revolution_original. Only its guarded
-        # removal (saves from the unmerged branch carry it) may remain.
+        # Which side won comes from #467's shared layer (te_cw_*); civil rights
+        # keeps no which-side-won pointer of its own.
         for root in ("common", "events"):
             for dirpath, _dirs, files in os.walk(_path(root)):
                 for name in files:
@@ -366,10 +366,7 @@ class HookTests(unittest.TestCase):
                     rel = os.path.relpath(os.path.join(dirpath, name), REPO)
                     text = _read(rel)
                     with self.subTest(file=rel):
-                        self.assertNotRegex(text, r"name\s*=\s*cr_revolution_original")
-                        self.assertNotRegex(text, r"var:cr_revolution_original")
-        self.assertRegex(_block(_read(*EFFECTS), "cr_repair_after_civil_war"),
-                         r"has_variable\s*=\s*cr_revolution_original\s*\}\s*remove_variable\s*=\s*cr_revolution_original")
+                        self.assertNotRegex(text, r"\bcr_revolution_original\b")
 
     def test_removals_are_guarded(self):
         # #469: remove_modifier on a modifier the scope lacks logs to error.log;
