@@ -48,6 +48,7 @@ te_debug_un_seat_member = {
 		if = {
 			limit = { NOT = { has_modifier = un_member_modifier } }
 			add_modifier = { name = un_member_modifier }
+			add_modifier = { name = un_member_privileges_modifier }
 		}
 	}
 	if = {

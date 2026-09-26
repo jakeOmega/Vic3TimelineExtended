@@ -496,6 +496,7 @@ un_dissolve_strip_country = {
 # Scope: country
 un_membership_end_effect = {
 	je:je_united_nations ?= { remove_modifier = un_member_modifier }
+	je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
 	# Dues stop with membership; arrears do not (redesign phase 5): a member
 	# that walks out owing money rejoins still withholding.
 	remove_modifier = un_dues_modifier
@@ -566,6 +567,7 @@ un_found_organisation = {
 	un_ladder_tier_update = yes
 	set_global_variable = { name = un_seat_signing_months_left value = un_seat_signing_months }
 	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+	je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
 	je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
 	je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
 	# THIS, not ROOT: un_conference_conclude reaches here from the global
@@ -603,6 +605,9 @@ un_charter_invitations = {
 # Scope: the joining country
 un_join_organisation = {
 	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+	# What membership brings, at once (§0.8 ruling 5); the monthly pulse
+	# reconciles it from then on.
+	je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
 	un_apply_ratified_conventions = yes
 }
 

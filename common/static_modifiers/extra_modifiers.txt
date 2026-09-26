@@ -3189,7 +3189,20 @@ cultural_synthesis_modifier = {
 
 # ---- Core Membership ----
 
+# The membership record itself (§0.8 ruling 5): every member carries it,
+# represented or not, and 196 lines read it as "is a member". It has no
+# effects. What membership brings is un_member_privileges_modifier, drawn only
+# by a member that is represented or whose seat is carried
+# (un_member_draws_benefits).
 un_member_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+}
+
+# What membership brings (§0.8 ruling 5). The journal entry's monthly member
+# pulse reconciles it; every join path adds it at once (un_join_organisation,
+# un_found_organisation, un_events.1, te_debug_un_seat_member);
+# un_membership_end_effect removes it. UN_JOIN_DESC restates these numbers.
+un_member_privileges_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
 	country_improve_relations_speed_mult = 0.10
 	country_leverage_generation_add = 5
@@ -3314,7 +3327,7 @@ un_vote_failure_penalty = {
 #     un_arms_control_participant_modifier +0.10, un_condemned_modifier -0.20,
 #     vanilla diplomatic_mitigation +0.25. A top-tier +0.10 sits below every
 #     one of those.
-#   country_improve_relations_speed_mult — un_member_modifier already grants
+#   country_improve_relations_speed_mult — un_member_privileges_modifier grants
 #     +0.10, un_membership_benefits_modifier another +0.10. The Exemplary +0.05
 #     is a quarter of what membership itself is worth.
 # No tier grants prestige, influence or leverage: those are the UN membership

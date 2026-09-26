@@ -180,5 +180,47 @@ class DuesTests(unittest.TestCase):
                 self.assertIn("un_representation_suspended", _block(buttons, name))
 
 
+MODIFIERS = _path("common", "static_modifiers", "extra_modifiers.txt")
+_FIELDS = {
+    "country_improve_relations_speed_mult",
+    "country_leverage_generation_add",
+    "country_prestige_mult",
+    "country_influence_mult",
+    "country_defender_diplomatic_play_escalation_weekly_mult",
+}
+
+
+class PrivilegesTests(unittest.TestCase):
+    def _fields(self, name):
+        body = _block(_read(MODIFIERS), name)
+        return {k for k in re.findall(r"^\s*(\w+)\s*=", body, re.M) if k != "icon"}
+
+    def test_marker_has_no_effects(self):
+        self.assertEqual(self._fields("un_member_modifier"), set())
+
+    def test_privileges_carry_the_old_bonuses(self):
+        self.assertEqual(self._fields("un_member_privileges_modifier"), _FIELDS)
+
+    def test_every_join_path_grants_privileges_at_once(self):
+        missing = []
+        for path in _script_files():
+            text = _read(path)
+            for m in _TOP.finditer(text):
+                body = _block(text, m.group(1))
+                if re.search(r"add_modifier\s*=\s*\{\s*name\s*=\s*un_member_modifier\b", body) \
+                        and "un_member_privileges_modifier" not in body:
+                    missing.append(m.group(1))
+        self.assertEqual(missing, [])
+
+    def test_leaving_and_the_pulse(self):
+        end = _block(_read(_path("common", "scripted_effects", "un_ladder_effects.txt")),
+                     "un_membership_end_effect")
+        self.assertIn("remove_modifier = un_member_privileges_modifier", end)
+        je = _read(_path("common", "journal_entries", "je_united_nations.txt"))
+        benefits = je.index("name = un_membership_benefits_modifier")
+        self.assertIn("un_member_draws_benefits = yes", je[benefits - 600:benefits])
+        self.assertGreaterEqual(je.count("un_member_privileges_modifier"), 3)
+
+
 if __name__ == "__main__":
     unittest.main()

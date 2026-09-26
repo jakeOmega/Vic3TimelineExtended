@@ -312,6 +312,15 @@
 				je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
 				je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
 			}
+			# A non-member draws no privileges (§0.8 ruling 5): a safety net for a
+			# path that ended membership without un_membership_end_effect.
+			if = {
+				limit = {
+					je:je_united_nations ?= { has_modifier = un_member_privileges_modifier }
+					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+				}
+				je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
+			}
 			# Strip non-permanent SC seats from sub-GP holders (legacy save migration).
 			if = {
 				limit = {
@@ -405,15 +414,35 @@
 				}
 				un_mission_service_refresh = yes
 
+				# ---- Membership privileges (§0.8 ruling 5) ----
+				# Represented, or suspended with the seat carried by a paying
+				# overlord. The join paths add it at once; this reconciles it
+				# every month, which is also how an existing save gains it.
+				if = {
+					limit = { un_member_draws_benefits = yes }
+					if = {
+						limit = { NOT = { je:je_united_nations ?= { has_modifier = un_member_privileges_modifier } } }
+						je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
+					}
+				}
+				else_if = {
+					limit = { je:je_united_nations ?= { has_modifier = un_member_privileges_modifier } }
+					je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
+				}
+
 				# ---- Apply scaled UN membership modifier ----
 				# Modifier stays applied per-member; the multiplier reads the shared
 				# global authority. Members of a bloc with the Multilateral Institutions
 				# principle scale the benefit further by (1 + country_un_institutional_alignment)
 				# -- 0.5 alignment = +50% magnitude. Non-aligned members read 0, so x1.
 				# Paid from the Contested tier up (redesign phase 2): a Moribund UN
-				# pays its members nothing.
+				# pays its members nothing. And only to a member that draws the
+				# benefits (§0.8): represented, or its seat carried.
 				if = {
-					limit = { un_tier_at_least_contested = yes }
+					limit = {
+						un_tier_at_least_contested = yes
+						un_member_draws_benefits = yes
+					}
 					je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
 					je:je_united_nations ?= { add_modifier = {
 							name = un_membership_benefits_modifier

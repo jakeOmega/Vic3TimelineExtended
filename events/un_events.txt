@@ -101,6 +101,7 @@ un_events.1 = {
 		# period closes (un_seat_effects.txt); the tooltip says so.
 		un_seat_join_tooltip = yes
 		je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
 		je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
 		# No conventions are ratified at UN founding, so this is a no-op today;
 		# kept for symmetry with the other join paths in case the founding event
