@@ -109,7 +109,7 @@ EXEMPT_FILES = {
 # Top-level definitions that write a mirrored modifier without its mirror on
 # purpose.
 EXEMPT_DEFINITIONS = {
-    "un_state_rebuild": "adds only what its mirror already records",
+    "un_state_restore_all": "adds only what its mirror already records",
     "te_debug_un_wipe_entry": "does what a revolution does: modifiers go, mirrors stay",
     "te_debug_un_drop": "the wipe's helper",
 }
@@ -254,13 +254,45 @@ class RebuildTests(unittest.TestCase):
         self.triggers = _read(STATE_TRIGGERS)
 
     def test_rebuild_restores_every_mirror(self):
-        body = _block(self.effects, "un_state_rebuild")
+        self.assertIn("un_state_restore_all = yes", _block(self.effects, "un_state_rebuild"))
+        body = _block(self.effects, "un_state_restore_all")
         for name in MIRRORED:
             with self.subTest(modifier=name):
                 self.assertRegex(
                     body,
                     r"(restore\s*=\s*\{\s*MODIFIER\s*=\s*" + name + r"\s*\}"
                     r"|name\s*=\s*" + name + r"\b)")
+
+    def test_restore_forgets_nothing(self):
+        """`immediate` runs mid-transition (the loser may still own a state,
+        the headquarters variable may still name it), so what it reaches may
+        only add. Forgetting is the pulse heal's (un_state_rebuild)."""
+        reached, todo = set(), ["un_state_restore_all"]
+        while todo:
+            name = todo.pop()
+            if name in reached:
+                continue
+            reached.add(name)
+            body = _block(self.effects, name)
+            for call in re.findall(r"\b(un_[a-z_]+)\s*=\s*(?:yes|\{)", body):
+                if re.search(r"^" + call + r"\s*=\s*\{", self.effects, re.M):
+                    todo.append(call)
+        self.assertNotIn("un_state_forget", reached)
+        self.assertNotIn("un_state_off", reached)
+        for name in reached:
+            body = _block(self.effects, name)
+            with self.subTest(effect=name):
+                self.assertNotRegex(body, r"un_state_forget|un_state_off|remove_modifier")
+                self.assertEqual(re.findall(r"remove_variable\s*=\s*(\w+)", body),
+                                 ["un_regime_stamp"] if name == "un_state_restore_all" else [])
+
+    def test_mirrors_are_recorded_only_where_the_entry_exists(self):
+        for name in ("un_state_on", "un_convention_on"):
+            with self.subTest(helper=name):
+                self.assertRegex(
+                    _block(self.effects, name),
+                    r"if\s*=\s*\{\s*limit\s*=\s*\{\s*exists = je:je_united_nations\s*\}\s*"
+                    r"un_state_record")
 
     def test_rebuild_forgets_what_it_cannot_honour(self):
         forgotten = (_block(self.effects, "un_state_forget_representation")
@@ -304,7 +336,11 @@ class JournalEntryTests(unittest.TestCase):
         start = re.search(r"^\timmediate\s*=\s*\{", body, re.M).end()
         immediate = body[start:body.index("\n\t}\n", start)]
         self.assertIn("set_variable = un_state_rebuild_pending", immediate)
-        self.assertIn("un_state_rebuild = yes", immediate)
+        # Restore only: the forgetting rebuild belongs to the pulse.
+        self.assertIn("un_state_restore_all = yes", immediate)
+        self.assertNotIn("un_state_rebuild = yes", immediate)
+        self.assertNotIn("un_state_rebuild = yes",
+                         _block(self.je, "je_united_nations").split("on_monthly_pulse")[0])
 
     def test_pulse_heals_first_and_otherwise_runs_as_usual(self):
         body = _block(self.je, "je_united_nations")
@@ -352,7 +388,40 @@ class GlobalPulseTests(unittest.TestCase):
         # Nothing on the journal entry is rebuilt from the hook: its order
         # against the inherited entry's `immediate` is unknown.
         self.assertNotIn("un_state_rebuild = yes", won)
+        self.assertNotIn("un_state_restore_all = yes", won)
         self.assertNotIn("add_modifier", won)
+        # The original drops any pointer of its own before the rebels get one.
+        start = _block(text, "un_on_revolution_start")
+        self.assertLess(start.index("remove_variable = un_cw_rebel"), start.index("scope:target"))
+
+    def test_headquarters_waits_within_the_hosts_civil_war(self):
+        text = _read(_path("common", "on_actions", "un_on_actions.txt"))
+        body = _block(text, "un_hq_on_state_owner_change")
+        self.assertRegex(
+            body,
+            r"limit\s*=\s*\{\s*NOT\s*=\s*\{\s*owner \?= \{\s*un_hq_shares_host_definition = yes"
+            r"\s*\}\s*\}\s*\}\s*un_hq_enforce_single_building = yes")
+        trig = _block(_read(_path("common", "scripted_triggers", "un_hq_triggers.txt")),
+                      "un_hq_shares_host_definition")
+        self.assertIn("NOT = { un_hq_is_host = yes }", trig)
+        self.assertIn("country_definition = global_var:un_hq_country.country_definition", trig)
+
+    def test_a_member_by_the_record_cannot_join_again(self):
+        """A winner awaiting its rebuild must not rejoin: joining hands it every
+        convention in force, the refused ones included."""
+        needle = "NOT = { has_variable = un_member_modifier_on }"
+        button = _block(_read(_path("common", "scripted_buttons", "un_buttons.txt")), "un_join_button")
+        for part in ("visible", "possible"):
+            with self.subTest(part=part):
+                m = re.search(r"^\t" + part + r"\s*=\s*(\{)", button, re.M)
+                self.assertIn(needle, _body_at(button, m.start(1))[0])
+        events = _read(_path("events", "un_events.txt"))
+        e10 = _block(events, "un_events.10")
+        opt = e10[e10.index("name = un_events.10.e"):]
+        self.assertIn(needle, opt[:opt.index("ai_chance")])
+        e1 = _block(events, "un_events.1")
+        m = re.search(r"^\ttrigger\s*=\s*(\{)", e1, re.M)
+        self.assertIn(needle, _body_at(e1, m.start(1))[0])
 
 
 if __name__ == "__main__":

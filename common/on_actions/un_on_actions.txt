@@ -142,6 +142,9 @@ un_global_authority_on_action = {
 # release, annexation of the host). Root = state. An HQ outside the host's
 # territory goes at once rather than at the next monthly pulse, so the
 # conqueror never runs one and the host can rebuild straight away.
+# Except when the state passes between the two sides of the host's own civil
+# war (un_hq_shares_host_definition, §0.9): that waits for the monthly update,
+# which knows by then whether the new owner continues the host.
 on_state_owner_change = {
 	on_actions = {
 		un_hq_on_state_owner_change
@@ -152,7 +155,12 @@ un_hq_on_state_owner_change = {
 	effect = {
 		if = {
 			limit = { has_building = building_un_headquarters }
-			un_hq_enforce_single_building = yes
+			if = {
+				limit = {
+					NOT = { owner ?= { un_hq_shares_host_definition = yes } }
+				}
+				un_hq_enforce_single_building = yes
+			}
 			un_hq_refresh_state = yes
 		}
 	}
@@ -180,9 +188,14 @@ on_civil_war_won = {
 # Root = the original country, scope:target = the uprising country.
 # The uprising side points at itself. If it wins, the pointer is its own value
 # and survives the merge; if the loyalists win, they inherit a pointer to a
-# dead country, which is how un_on_civil_war_won tells the two apart.
+# dead country, which is how un_on_civil_war_won tells the two apart. The
+# original must hold none of its own: a stale one would win the merge.
 un_on_revolution_start = {
 	effect = {
+		if = {
+			limit = { has_variable = un_cw_rebel }
+			remove_variable = un_cw_rebel
+		}
 		scope:target ?= {
 			set_variable = { name = un_cw_rebel value = THIS }
 		}

@@ -104,14 +104,20 @@ un_join_button = {
 	name = "UN_JOIN"
 	desc = "UN_JOIN_DESC"
 
+	# Nor while the membership mirror is set (§0.9): a revolution's winner
+	# whose entry awaits its rebuild is a member already, and joining again
+	# would hand it every convention in force, the ones the nation refused
+	# included.
 	visible = {
 		has_global_variable = un_founded
 		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		NOT = { has_variable = un_member_modifier_on }
 	}
 
 	possible = {
 		has_global_variable = un_founded
 		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		NOT = { has_variable = un_member_modifier_on }
 		custom_tooltip = {
 			text = un_membership_eligible_tt
 			un_membership_eligible = yes

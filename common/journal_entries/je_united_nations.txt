@@ -101,16 +101,18 @@
 		# ---- The record a revolution's winner inherits (§0.9) ----
 		# This runs on every activation, and again on the entry a won revolution
 		# hands its winner: the loser's variables, none of its modifiers. Mark
-		# the entry and rebuild what the mirrors say we hold
-		# (un_state_effects.txt). If this runs before the variables merge there
-		# is nothing to rebuild yet; the mark stays, and the monthly pulse heals
-		# the entry instead. A fresh activation has no mirrors, and the pulse
-		# drops the mark.
+		# the entry and restore what the mirrors say we hold
+		# (un_state_effects.txt). Restore only: the revolution is still being
+		# wound up, so a "not the host" or "seats full" read here is not
+		# evidence, and nothing is forgotten on it. Whatever is left missing,
+		# and a restore that ran before the variables merged, is healed by the
+		# first monthly pulse, which also decides what cannot be honoured. A
+		# fresh activation has no mirrors, and the pulse drops the mark.
 		if = {
 			limit = { NOT = { has_variable = un_state_rebuild_pending } }
 			set_variable = un_state_rebuild_pending
 		}
-		un_state_rebuild = yes # REVIEWED 2026-09-26: a rebuild, not a reset. It forgets a mirror only when the country no longer qualifies for it (not a member, representation suspended, not the HQ host, seats full), re-prices the programme costs it re-adds, and drops un_regime_stamp so the regime terms come back (§0.9)
+		un_state_restore_all = yes
 	}
 
 	complete = {
@@ -718,8 +720,8 @@
 
 	weight = 500
 	should_be_pinned_by_default_uninvolved_or_context = yes
-	# Inherited, but with no modifiers: `immediate` and the monthly pulse
-	# rebuild them from the mirrors (§0.9).
+	# Inherited, but with no modifiers: `immediate` restores them from the
+	# mirrors and the monthly pulse heals what is left (§0.9).
 	can_revolution_inherit = yes
 	can_deactivate = no
 	should_update_on_player_command = yes

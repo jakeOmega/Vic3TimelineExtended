@@ -45,8 +45,8 @@ te_debug_un_seat_member = {
 		add_journal_entry = { type = je_united_nations }
 	}
 	# Through the mirror helpers (un_state_effects.txt), so the seat count
-	# below sees each seat granted earlier in the same run, and an entry that
-	# has not activated yet is rebuilt from the mirrors when it does.
+	# below sees each seat granted earlier in the same run. Like the modifiers,
+	# the mirrors are written only where the entry is already active.
 	if = {
 		limit = { NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } } }
 		un_state_on = { MODIFIER = un_member_modifier }
