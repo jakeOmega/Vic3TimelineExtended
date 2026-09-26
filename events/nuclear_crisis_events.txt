@@ -1112,7 +1112,7 @@ nuclear_crisis.22 = {
 				save_scope_as = target_country
 				scope:attacking_country = {
 					ordered_scope_state = {
-						order_by = nuclear_industrial_strike_target_score
+						order_by = nuclear_strike_target_score
 						position = 0
 						nuclear_response_strike = yes
 					}

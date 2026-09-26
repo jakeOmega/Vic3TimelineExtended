@@ -7,7 +7,13 @@ value at an escaped `\"` nor misfile the rest of the text as `trailing`.
 """
 import unittest
 
-from concept_reference_audit import _parse_loc_line, _parse_reviewed
+from concept_reference_audit import (
+    AuditResult,
+    ConceptFlag,
+    _parse_loc_line,
+    _parse_reviewed,
+    render_report,
+)
 
 
 class ParseLocLineTests(unittest.TestCase):
@@ -32,6 +38,30 @@ class ParseLocLineTests(unittest.TestCase):
     def test_header_comment_and_malformed_lines_are_skipped(self):
         for line in ("l_english:\n", "# c\n", " # indented: c\n", " k:0 bare\n", r' k:0 "open \"' + "\n", "\n"):
             self.assertIsNone(_parse_loc_line(line), repr(line))
+
+
+class RenderReportTests(unittest.TestCase):
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and Coverage no scan counts,
+        so the report changes only when the findings do."""
+        result = AuditResult(
+            flags=[
+                ConceptFlag("k_bad", "concept_gone", "localization/english/a_l_english.yml", 7),
+                ConceptFlag("k_ok", "concept_later", "localization/english/b_l_english.yml", 12,
+                            exemption={"date": "2026-05-09", "rationale": "added next patch"}),
+            ],
+            loc_files_scanned=178, refs_checked=2939, registered_concepts=718,
+        )
+        report = render_report(result)
+        self.assertIn(
+            "- `localization/english/b_l_english.yml` — `k_ok` references "
+            "`concept_later` — **2026-05-09**: added next patch", report)
+        self.assertNotIn("b_l_english.yml:12", report)
+        self.assertIn("`localization/english/a_l_english.yml:7`", report)  # unreviewed
+        for gone in ("loc files scanned", "concept references checked",
+                     "registered concepts", "178", "2939", "718"):
+            self.assertNotIn(gone, report)
+        self.assertIn("- total flags: 2", report)
 
 
 if __name__ == "__main__":

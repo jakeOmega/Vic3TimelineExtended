@@ -197,7 +197,7 @@ directed_energy_defenses = {
 	}
 
 	modifier = {
-		country_nuclear_weapon_defense_chance_add = 0.5
+		state_nuclear_weapon_defense_chance_add = 0.5
 		country_space_race_max_funding_add = 1
 		country_st_res_aeroplanes_decay_add = -0.004
 	}

@@ -295,7 +295,7 @@ All under `docs/engine/`:
 - `vic3_triggers_effects_reference.md`, `vic3_modifier_type_definitions_reference.md`, `triggers_summary.txt`, `effects_summary.txt`, `modifiers_summary.txt`, `country_triggers.txt`, `triggers_parsed.txt`, `event_targets_summary.txt`, `on_actions_summary.txt`, `custom_localization_summary.txt`, `modifier_patterns.md` — engine docs rendered for grep.
 - `engine_coverage_report.md` — output of `/validate/engine-coverage`.
 - `error_log_digest.md` — game-log digest (gitignored, machine-local).
-- `event_image_inventory.md` — events ↔ image/video map.
+- `event_image_inventory.md` — events ↔ image/video map (gitignored, machine-local).
 - `*_report.md` — one per post-load audit (magnitude, modifier visibility, loc coverage, concept references, loc accessors, mod structure, loc render, `any_*` limits, iterator limits, modifier multiplier vars, PM employment, orphaned events, effect/trigger validity, duplicate keys, attitude keys) plus `kill_character_audit.md`. `effect_trigger_valid_keys.txt` is the one exception in this folder: a hand-refreshed bootstrap catalog, not a per-reload dump.
 
 **Design docs (hand-written):**

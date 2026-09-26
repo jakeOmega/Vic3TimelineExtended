@@ -502,6 +502,48 @@ class AuditTests(unittest.TestCase):
             self.assertIn("`bar` = `0` at `common/journal_entries/je.txt:4` — the entry's "
                           "`current_value` reads it; goal not pinned", report)
 
+    def test_reviewed_entries_and_coverage_carry_no_volatile_numbers(self):
+        """Reviewed entries (single, grouped and fully reviewed bar rows) print
+        no line numbers, their call chain's included, and Coverage no file or
+        entry count, so the report changes only when the findings do.
+        Unreviewed writes keep their lines."""
+        effects = "fx = {\n\tset_variable = { name = cached value = 0 }\n}\n"
+        je = (
+            "je_x = {\n"
+            "\timmediate = {\n"
+            "\t\tfx = yes # REVIEWED 2026-09-26: caches only\n"
+            "\t\tif = { # REVIEWED 2026-09-26: a pair\n"
+            "\t\t\tlimit = { is_ai = no }\n"
+            "\t\t\tset_variable = { name = p1 value = 0 }\n"
+            "\t\t\tset_variable = { name = p2 value = 0 }\n"
+            "\t\t}\n"
+            "\t\tset_variable = { name = bar value = 0 } # REVIEWED 2026-09-26: wraps\n"
+            "\t\tset_variable = { name = loose value = 0 }\n"
+            "\t}\n"
+            "\tcurrent_value = { value = var:bar }\n"
+            "}\n"
+        )
+        res = _run(je, effects)
+        self.assertEqual([(f.name, f.category, bool(f.exemption)) for f in res.flags], [
+            ("cached", UNGUARDED, True), ("p1", UNGUARDED, True), ("p2", UNGUARDED, True),
+            ("bar", BAR, True), ("loose", UNGUARDED, False),
+        ])
+        report = render_report(res)
+        self.assertIn(
+            "- `set_variable` `cached` = `0` at `common/scripted_effects/fx.txt` via `fx` "
+            "(common/journal_entries/je.txt) — **2026-09-26**: caches only", report)
+        self.assertIn(
+            "- 2 writes of `p1`, `p2`, first at `common/journal_entries/je.txt` — "
+            "**2026-09-26**: a pair", report)
+        self.assertIn(
+            "`set_variable` `bar` = `0` at `common/journal_entries/je.txt` — the entry's "
+            "`current_value` reads it; goal not pinned — reviewed **2026-09-26**: wraps", report)
+        self.assertIn("`loose` = `0` at `common/journal_entries/je.txt:10`", report)
+        for gone in ("fx.txt:2", "je.txt:3", "je.txt:6", "je.txt:9",
+                     "journal-entry files audited", "journal entries:"):
+            self.assertNotIn(gone, report)
+        self.assertIn("- exempted: 3 (3)", report)
+
     def test_load_file_missing(self):
         sf = load_file("/nonexistent/x.txt", "x.txt")
         self.assertEqual((sf.nodes, sf.comments), ([], {}))

@@ -460,8 +460,10 @@ def render_report(result: AuditResult) -> str:
     if not mod_exemp:
         out += ["_None._", ""]
     else:
+        # No line number on a reviewed entry: the building and profession
+        # name it, and an edit above it would otherwise churn the report.
         for f in mod_exemp:
-            anchor = f"`{f.file}:{f.line}`" if f.file else "(no anchor)"
+            anchor = f"`{f.file}`" if f.file else "(no anchor)"
             out.append(
                 f"- {anchor} — `{f.building}` — **{f.profession}** ({f.scaling}) "
                 f"total {f.total:+.0f} — **{f.exemption['date']}**: "
@@ -487,11 +489,11 @@ def render_report(result: AuditResult) -> str:
             )
         out.append("")
 
+    # Flag counts, plus the buildings the audit could not cover. The audited /
+    # enumerated building counts stay in `result.coverage` (and the
+    # regenerate() summary) but move with unrelated buildings and PMs.
     out += ["## Coverage", ""]
     cov = result.coverage
-    out.append(f"- buildings audited: {cov.get('buildings_audited', 0)}")
-    out.append(f"- buildings enumerated (had a negative-employment PM): "
-               f"{cov.get('buildings_enumerated', 0)}")
     out.append(f"- buildings skipped (combo count > {_COMBO_CAP}): "
                f"{cov.get('buildings_skipped_large', 0)}")
     out.append(f"- total negative combinations: {len(neg)}")

@@ -48,7 +48,12 @@ country_nuclear_weapon_attack_success_add = {
 	script_only = yes
 }
 
-country_nuclear_weapon_defense_chance_add = {
+# State-level: a strike's success chance subtracts the defence of the state it
+# lands on (nuclear_strike_success_chance). Techs, the NPT guarantee and the
+# orbital battlestation grant it nationally, so today every state of a country
+# carries the same value; a local grant (a building's state_modifiers) would
+# defend one state.
+state_nuclear_weapon_defense_chance_add = {
 	color = good
 	percent = yes
 	script_only = yes

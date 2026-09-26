@@ -54,6 +54,37 @@ class RegionalIteratorTests(unittest.TestCase):
         self.assertFalse(_is_regional_iterator("every_state"))
         self.assertFalse(_is_regional_iterator("any_scope_country"))
 
+    # The engine's script_docs dump prints unrelated script (a random scripted
+    # trigger's body, sometimes raw memory) as each regional iterator's
+    # description, and a fresh dump shuffles it — ~14k lines of diff per dump.
+    def test_summary_replaces_regional_description_with_fixed_text(self):
+        entries = [
+            {"name": "every_country_in_africa", "scopes": ["none"], "targets": ["country"],
+             "description": "military_clothes_trigger = {\n\texists = scope:character\n}"},
+            {"name": "every_state_region_in_europe", "scopes": ["none"], "targets": ["state_region"],
+             "description": "\x00\x9f garbage"},
+        ]
+        out = render_summary_triggers_effects(entries)
+        self.assertIn("none|every_country_in_africa|Iterate through all countries in geographic region africa", out)
+        self.assertIn("none|every_state_region_in_europe|Iterate through all state regions in geographic region europe", out)
+        self.assertNotIn("military_clothes_trigger", out)
+        self.assertNotIn("garbage", out)
+
+    def test_triggers_parsed_replaces_regional_body(self):
+        entries = [
+            {"name": "any_province_in_india", "scopes": ["none"], "targets": ["province"],
+             "description": "ai_can_incorporate_state = {\n\tOR = { }\n}"},
+        ]
+        out = render_triggers_parsed(entries)
+        self.assertIn("## any_province_in_india", out)
+        self.assertIn("Targets: province", out)
+        self.assertIn("Iterate through all provinces in geographic region india", out)
+        self.assertNotIn("ai_can_incorporate_state", out)
+
+    def test_plain_iterator_description_untouched(self):
+        entries = [{"name": "every_country", "scopes": ["none"], "description": "Iterate through all countries globally"}]
+        self.assertIn("none|every_country|Iterate through all countries globally", render_summary_triggers_effects(entries))
+
 
 class PrimaryScopeTests(unittest.TestCase):
     def test_known_scope_mapped_to_label(self):
@@ -314,6 +345,38 @@ class RenderAllIntegrationTests(unittest.TestCase):
                     "Auto-generated" in head,
                     f"{fname} missing auto-generated header",
                 )
+
+    def test_headers_name_the_snapshot_version_not_a_timestamp(self):
+        """A re-copied or re-dumped snapshot with identical content must not
+        re-diff every header, so headers carry the version, never an mtime."""
+        with tempfile.TemporaryDirectory() as tmp:
+            src_dir = os.path.join(tmp, "vic3-engine-docs", "1.14.4", "docs")
+            os.makedirs(src_dir)
+            sources = {}
+            for key, fname in [("triggers", "triggers.log"), ("effects", "effects.log"),
+                               ("modifiers", "modifiers.log"), ("event-targets", "event_targets.log"),
+                               ("on-actions", "on_actions.log"),
+                               ("custom-localization", "custom_localization.log")]:
+                sources[key] = os.path.join(src_dir, fname)
+                with open(sources[key], "w", encoding="utf-8") as f:
+                    f.write("")
+            out_dir = os.path.join(tmp, "out")
+            render_all(self.engine_docs, out_dir, pattern_catalog=self.pattern_catalog,
+                       pattern_index=self.pattern_index, vocabularies=self.vocabularies,
+                       source_paths=sources)
+            for fname in os.listdir(out_dir):
+                with open(os.path.join(out_dir, fname), "r", encoding="utf-8") as f:
+                    head = f.readline()
+                self.assertIn("1.14.4", head, fname)
+                self.assertNotRegex(head, r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}", fname)
+
+    def test_headers_without_a_versioned_source_carry_no_timestamp(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            render_all(self.engine_docs, tmp)
+            for fname in os.listdir(tmp):
+                with open(os.path.join(tmp, fname), "r", encoding="utf-8") as f:
+                    head = f.readline()
+                self.assertNotRegex(head, r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}", fname)
 
     def test_modifier_patterns_omitted_when_no_catalog(self):
         with tempfile.TemporaryDirectory() as tmp:

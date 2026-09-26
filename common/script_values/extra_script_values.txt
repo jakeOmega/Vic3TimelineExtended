@@ -629,8 +629,15 @@ nuclear_program_display_attack_rating = {
 	multiply = 100
 }
 
+# Country scope. The defence is state-level; the capital's value is the
+# national figure, since every grant today is national (a country-scope read of
+# a state_ type is unverified, docs/systems/modifier_scope_reference.md §1).
 nuclear_program_display_defense_rating = {
-	value = modifier:country_nuclear_weapon_defense_chance_add
+	value = 0
+	if = {
+		limit = { exists = capital }
+		add = capital.modifier:state_nuclear_weapon_defense_chance_add
+	}
 	multiply = 100
 }
 
@@ -646,10 +653,14 @@ nuclear_tactical_strike_civilian_killed_population = {
 	round = yes
 }
 
+# Evaluated in the striking country's scope. The defence is the struck state's
+# own, read from scope:target_state: in nuclear_response_strike the roles are
+# swapped and scope:target_country is the striker, so a country-side read
+# there subtracted the retaliator's own defence.
 nuclear_strike_success_chance = {
 	value = modifier:country_nuclear_weapon_attack_success_add
-	scope:target_country = {
-		subtract = modifier:country_nuclear_weapon_defense_chance_add
+	scope:target_state = {
+		subtract = modifier:state_nuclear_weapon_defense_chance_add
 	}
 	multiply = 100
 	max = 100
@@ -1434,15 +1445,24 @@ war_propaganda_support_script_value = {
 			}
 		}
 	}
+	# Religious fervour, scaled by the Devout IG's clout and spread by
+	# population like the term above, so the national total is the modifier
+	# times clout.
 	if = {
 		limit = {
-			ROOT.owner.modifier:country_war_support_monthly_add_religion > 0
+			ROOT.modifier:state_war_support_monthly_add_religion > 0
 			exists = ROOT.owner.ig:ig_devout
-			ROOT = { is_capital = yes }
 		}
 		add = {
-			value = ROOT.owner.modifier:country_war_support_monthly_add_religion
+			value = ROOT.modifier:state_war_support_monthly_add_religion
 			multiply = ROOT.owner.ig:ig_devout.ig_clout
+			multiply = {
+				value = ROOT.state_population
+				divide = {
+					value = ROOT.owner.total_population
+					min = 1
+				}
+			}
 		}
 	}
 }
@@ -1574,6 +1594,42 @@ nuclear_industrial_strike_target_score = {
 		limit = { owner = { has_modifier = nuclear_power }}
 		divide = 100 # hesitant to nuke if they can retaliate
 	}
+}
+
+# State scope: the chance (0.05-1) that a missile strike on this state lands,
+# the same formula as nuclear_strike_success_chance. The striker is whichever
+# of the two saved countries does not own this state, because retaliation
+# saves the roles swapped (nuclear_response_strike). In the strike action's
+# propose_score no attacking_country is saved and ROOT is the striker.
+nuclear_strike_success_fraction_here = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:attacking_country
+			exists = scope:target_country
+			owner ?= scope:attacking_country
+		}
+		add = scope:target_country.modifier:country_nuclear_weapon_attack_success_add
+	}
+	else_if = {
+		limit = { exists = scope:attacking_country }
+		add = scope:attacking_country.modifier:country_nuclear_weapon_attack_success_add
+	}
+	else = {
+		add = root.modifier:country_nuclear_weapon_attack_success_add
+	}
+	subtract = modifier:state_nuclear_weapon_defense_chance_add
+	min = 0.05
+	max = 1
+}
+
+# What missile strike planners rank a state by: its value times the chance a
+# warhead gets through, so a state defended by a military base's missile
+# defence draws fewer strikes. Loose warheads (nuclear_loose_effects.txt) are
+# smuggled, not launched, and keep the plain nuclear_industrial_strike_target_score.
+nuclear_strike_target_score = {
+	value = nuclear_industrial_strike_target_score
+	multiply = nuclear_strike_success_fraction_here
 }
 
 pop_culture_conversion_propotion_script_value = {

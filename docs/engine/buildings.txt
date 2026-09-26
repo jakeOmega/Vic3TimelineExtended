@@ -27,6 +27,7 @@ Food Industries (bg_light_industry):
 		Robotic Food Processing
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Textile Mills (bg_light_industry):
 	Unlocking Technology: Manufacturies
@@ -53,6 +54,7 @@ Textile Mills (bg_light_industry):
 		Mass Marketing
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Furniture Manufacturies (bg_light_industry):
 	Unlocking Technology: Manufacturies
@@ -85,6 +87,7 @@ Furniture Manufacturies (bg_light_industry):
 		Mass Marketing
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Glassworks (bg_light_industry):
 	Unlocking Technology: Manufacturies
@@ -122,6 +125,7 @@ Glassworks (bg_light_industry):
 			Monthly Pollution: -10
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Tooling Workshops (bg_light_industry):
 	Unlocking Technology: Manufacturies
@@ -156,6 +160,7 @@ Tooling Workshops (bg_light_industry):
 			Monthly Pollution: -10
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Paper Mills (bg_light_industry):
 	Unlocking Technology: Manufacturies
@@ -187,6 +192,7 @@ Paper Mills (bg_light_industry):
 			Monthly Pollution: -5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Chemical Plants (bg_heavy_industry):
 	Unlocking Technology: Intensive Agriculture
@@ -224,6 +230,7 @@ Chemical Plants (bg_heavy_industry):
 			Monthly Pollution: -15
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Explosives Factory (bg_heavy_industry):
 	Unlocking Technology: Intensive Agriculture
@@ -250,6 +257,7 @@ Explosives Factory (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Synthetic Dyes Industries (bg_heavy_industry):
 	Unlocking Technology: Aniline
@@ -272,6 +280,7 @@ Synthetic Dyes Industries (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Steel Mills (bg_heavy_industry):
 	Unlocking Technology: Steelworking
@@ -305,6 +314,7 @@ Steel Mills (bg_heavy_industry):
 			Monthly Pollution: -20
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Motor Industries (bg_heavy_industry):
 	Unlocking Technology: Atmospheric Engine
@@ -335,6 +345,7 @@ Motor Industries (bg_heavy_industry):
 		AI Managed Factory
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Shipyards (bg_ship_construction):
 	Unlocking Technology: Navigation
@@ -356,6 +367,7 @@ Shipyards (bg_ship_construction):
 		Wartime Mobilization
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Automotive Industries (bg_heavy_industry):
 	Unlocking Technology: Combustion Engine
@@ -392,6 +404,7 @@ Automotive Industries (bg_heavy_industry):
 			Monthly Pollution: -20
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Wired Telecommunications Industries (bg_heavy_industry):
 	Unlocking Technology: Telephone
@@ -413,6 +426,7 @@ Wired Telecommunications Industries (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Arms Industries (bg_military_industry):
 	Unlocking Technology: Gunsmithing
@@ -441,6 +455,7 @@ Arms Industries (bg_military_industry):
 			Monthly Pollution: -10
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Artillery Foundry (bg_military_industry):
 	Unlocking Technology: Gunsmithing
@@ -465,6 +480,7 @@ Artillery Foundry (bg_military_industry):
 		AI-Managed Arms Industry
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Munition Plants (bg_military_industry):
 	Unlocking Technology: Percussion Cap
@@ -497,6 +513,7 @@ Munition Plants (bg_military_industry):
 			Monthly Pollution: -10
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Rye Farms (bg_staple_crops):
 	Unlocking Technology: Enclosure
@@ -1202,6 +1219,8 @@ Barracks (bg_army):
 	Engineering and Logisitics [concept_power_bloc_principle_group]:
 		Engineering and Logisitics [concept_power_bloc_principle] 1
 		No Effect
+		$pm_principle_engineering_and_logistics$
+		$pm_engineering_and_logistics_no_effect$
 
 Conscription Center (bg_conscription):
 	$pmg_training$:
@@ -1301,6 +1320,7 @@ Creative Industries (bg_arts):
 		No Effect
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Power Plants (bg_power):
 	Unlocking Technology: Electrical Generation
@@ -1328,6 +1348,7 @@ Power Plants (bg_power):
 			Monthly Pollution: -20
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Government Administration (bg_bureaucracy):
 	Unlocking Technology: Bureaucracy
@@ -1379,6 +1400,7 @@ Skyscraper (bg_skyscraper):
 		Airship Mooring Post
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 The Eiffel Tower (bg_monuments):
 	Unlocking Technology: Steel-Frame Buildings
@@ -1775,6 +1797,7 @@ Port (bg_private_infrastructure):
 			Monthly Pollution: -20
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Railway (bg_private_infrastructure):
 	Unlocking Technology: Railways
@@ -1807,6 +1830,7 @@ Railway (bg_private_infrastructure):
 		Maglev Trains
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Trade Center (bg_trade):
 	$pm_base$:
@@ -1823,6 +1847,7 @@ Trade Center (bg_trade):
 		Autonomous Logistics
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Manor Houses (bg_manor_houses):
 	$pmg_ownership$:
@@ -1931,6 +1956,7 @@ Construction Sector (bg_construction):
 		No Effect
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Company Headquarter (bg_company_headquarter):
 	$pmg_ownership$:
@@ -2153,6 +2179,7 @@ Carajás Mine (bg_company_buildings):
 Disney World (bg_company_buildings):
 	Disney World:
 		Disney World
+		$pm_disney_world$
 
 Universal Studios Hollywood (bg_company_buildings):
 	Universal Studios Hollywood:
@@ -2249,6 +2276,7 @@ National Data Fortress (bg_company_buildings):
 Private Industrial City (bg_company_buildings):
 	Private Industrial City:
 		Private Industrial City
+		$pm_generic_industrial_city$
 
 Global Media Headquarters (bg_company_buildings):
 	Global Media Headquarters:
@@ -2281,6 +2309,7 @@ International Financial Center (bg_company_buildings):
 Monument to Industry (bg_company_buildings):
 	Monument to Industry:
 		Monument to Industry
+		$pm_generic_monument_to_industry$
 
 Spaceport (bg_company_buildings):
 	Spaceport:
@@ -3260,236 +3289,6 @@ Sumitomo Besshi Mine (bg_company_buildings):
 	Sumitomo Besshi Mine:
 		Sumitomo Besshi Mine
 
-Grand Monument (bg_grand_monuments):
-	A monument raised for its own sake — a tower, an arch, a hall of marble. Ruinously expensive to build and almost free to keep, it draws visitors and lends the state a little of whatever it was raised to honour. Its [concept_tourism_throughput] bonus only pays off where a Tourism Industry exists to receive it.
-	Dedication:
-		Undedicated
-		Civic Monument
-		Grand Shrine
-		War Memorial
-		Grand Opera House
-		Botanical Gardens
-		Grand Observatory
-		Great Exhibition Hall
-		Grand Stadium
-	Maintenance:
-		Maintenance
-
-United Nations Headquarters (bg_bureaucracy):
-	International Diplomacy:
-		Host Nation
-
-Power Bloc Headquarters (bg_bureaucracy):
-	Unlocking Technology: Intergovernmental Organizations
-	[concept_power_bloc] Headquarters:
-		Seat of the Empire
-		Alliance Command
-		Global Trade Center
-		Seat of the Faith
-		Central Committee Headquarters
-		World Cultural Center
-		Palace of Nations
-
-Golden Gate Bridge (bg_monuments):
-	Unlocking Technology: Marketing Research
-	Golden Gate Bridge:
-		Golden Gate Bridge
-
-Empire State Building (bg_monuments):
-	Unlocking Technology: Modern Skyscrapers
-	Empire State Building:
-		Empire State Building
-
-Sydney Opera House (bg_monuments):
-	Unlocking Technology: Art Deco Architecture
-	Sydney Opera House:
-		Sydney Opera House
-
-CN Tower (bg_monuments):
-	Unlocking Technology: Modern Skyscrapers
-	CN Tower:
-		CN Tower
-
-Hoover Dam (bg_monuments):
-	Unlocking Technology: Public Works Programs
-	Hoover Dam:
-		Hoover Dam
-
-The Pentagon (bg_monuments):
-	Unlocking Technology: Combined Arms
-	The Pentagon:
-		The Pentagon
-
-Kennedy Space Center (bg_monuments):
-	Unlocking Technology: Space Exploration
-	Kennedy Space Center:
-		Kennedy Space Center
-
-Aswan High Dam (bg_monuments):
-	Unlocking Technology: Nuclear Energy
-	Aswan High Dam:
-		Aswan High Dam
-
-Tokyo Tower (bg_monuments):
-	Unlocking Technology: Television Broadcasting
-	Tokyo Tower:
-		Tokyo Tower
-
-Moscow State University (bg_monuments):
-	Unlocking Technology: Mainframe Computers
-	Moscow State University:
-		Moscow State University
-
-Berlin TV Tower (bg_monuments):
-	Unlocking Technology: Transistor Technology
-	Berlin TV Tower:
-		Berlin TV Tower
-
-Azadi Tower (bg_monuments):
-	Unlocking Technology: Decolonization
-	Azadi Tower:
-		Azadi Tower
-
-Kenyatta International Convention Centre (bg_monuments):
-	Unlocking Technology: Decolonization
-	Kenyatta ICC:
-		Kenyatta ICC
-
-Burj Khalifa (bg_monuments):
-	Unlocking Technology: Computer-Aided Design
-	Burj Khalifa:
-		Burj Khalifa
-
-World Trade Center (bg_monuments):
-	Unlocking Technology: Containerization
-	World Trade Center:
-		World Trade Center
-
-Lotus Temple (bg_monuments):
-	Unlocking Technology: Pop Culture
-	Lotus Temple:
-		Lotus Temple
-
-Itaipu Dam (bg_monuments):
-	Unlocking Technology: Industrial Robotics
-	Itaipu Dam:
-		Itaipu Dam
-
-Petronas Towers (bg_monuments):
-	Unlocking Technology: Cellular Networks
-	Petronas Towers:
-		Petronas Towers
-
-Basilica of Our Lady of Peace (bg_monuments):
-	Unlocking Technology: Pop Culture
-	Basilica of Our Lady of Peace:
-		Basilica of Our Lady of Peace
-
-Three Gorges Dam (bg_monuments):
-	Unlocking Technology: Clean Energy Technologies
-	Three Gorges Dam:
-		Three Gorges Dam
-
-Channel Tunnel (bg_monuments):
-	Unlocking Technology: Globalization
-	Channel Tunnel:
-		Channel Tunnel
-
-Taipei 101 (bg_monuments):
-	Unlocking Technology: Digital Telecommunications
-	Taipei 101:
-		Taipei 101
-
-Lotte World Tower (bg_monuments):
-	Unlocking Technology: World Wide Web
-	Lotte World Tower:
-		Lotte World Tower
-
-Gardens by the Bay (bg_monuments):
-	Unlocking Technology: Clean Energy Technologies
-	Gardens by the Bay:
-		Gardens by the Bay
-
-Abraj Al-Bait Clock Tower (bg_monuments):
-	Unlocking Technology: Globalization
-	Abraj Al-Bait Clock Tower:
-		Abraj Al-Bait Clock Tower
-
-Shanghai Tower (bg_monuments):
-	Unlocking Technology: Advanced Structural Engineering
-	Shanghai Tower:
-		Shanghai Tower
-
-FAST Telescope (bg_monuments):
-	Unlocking Technology: Machine Learning
-	FAST Telescope:
-		FAST Telescope
-
-Statue of Unity (bg_monuments):
-	Unlocking Technology: Advanced Structural Engineering
-	Statue of Unity:
-		Statue of Unity
-
-Golden Bridge (bg_monuments):
-	Unlocking Technology: Advanced Structural Engineering
-	Golden Bridge:
-		Golden Bridge
-
-Large Hadron Collider (bg_monuments):
-	Unlocking Technology: World Wide Web
-	Large Hadron Collider:
-		Large Hadron Collider
-
-International Space Station (bg_monuments):
-	Unlocking Technology: Satellite Communications
-	International Space Station:
-		International Space Station
-
-ITER Fusion Reactor (bg_monuments):
-	Unlocking Technology: Fusion Power
-	ITER Fusion Reactor:
-		ITER Fusion Reactor
-
-Svalbard Global Seed Vault (bg_monuments):
-	Unlocking Technology: Biotechnology
-	Svalbard Global Seed Vault:
-		Svalbard Global Seed Vault
-
-LIGO Observatory (bg_monuments):
-	Unlocking Technology: Fiber Optics
-	LIGO Observatory:
-		LIGO Observatory
-
-Continental Union Headquarters (bg_monuments):
-	Unlocking Technology: Globalization
-	Continental Union Headquarters:
-		Continental Union Headquarters
-
-Peace Palace (bg_monuments):
-	Unlocking Technology: Intergovernmental Organizations
-	Peace Palace:
-		Peace Palace
-
-Palais des Nations (bg_monuments):
-	Palais des Nations:
-		Palais des Nations
-
-Construction Site (te_construction_market_bg):
-	Construction Site:
-		Basic Construction Market
-
-Strategic Reserve Hub (bg_public_infrastructure):
-	A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, and tanks. Each level provides +5000 capacity per reserve good and up to 10 goods per level each week of reserve flow, which can be fine-tuned separately for each good in the Strategic Reserve [concept_journal_entry].
-	Unlocking Technology: Logistics
-	Hub Reserve:
-		Reserve Control
-
-Strategic Reserve Silo (bg_public_infrastructure):
-	A distributed storage depot that adds +200 capacity per level for each reserve good. Passive — a Strategic Reserve Hub is still needed to move goods into or out of the stockpile.
-	Unlocking Technology: Logistics
-	Silo Storage:
-		Silo Storage
-
 Synthetic Clothes Industries (bg_heavy_industry):
 	Unlocking Technology: Art Silk
 	Synthetic Silk:
@@ -3516,6 +3315,7 @@ Synthetic Clothes Industries (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Synthetic Fuel Works (bg_heavy_industry):
 	Unlocking Technology: Bergius Process
@@ -3535,6 +3335,7 @@ Synthetic Fuel Works (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Synthetic Rubber Works (bg_heavy_industry):
 	Unlocking Technology: Isoprene
@@ -3560,6 +3361,7 @@ Synthetic Rubber Works (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Pharmaceutical Industries (bg_biotechnology):
 	Unlocking Technology: Modern Pharmaceuticals
@@ -3577,6 +3379,7 @@ Pharmaceutical Industries (bg_biotechnology):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Carbon Conversion Works (bg_heavy_industry):
 	Unlocking Technology: Genetic Engineering
@@ -3594,6 +3397,7 @@ Carbon Conversion Works (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Phenolic Resin Panels Plant (bg_heavy_industry):
 	Unlocking Technology: Biotechnology
@@ -3611,6 +3415,7 @@ Phenolic Resin Panels Plant (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Artificial Sweeteners Plant (bg_heavy_industry):
 	Unlocking Technology: Green Revolution
@@ -3634,6 +3439,7 @@ Artificial Sweeteners Plant (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Cultured Meat Plant (bg_biotechnology):
 	Unlocking Technology: Lab-Grown Food
@@ -3651,6 +3457,7 @@ Cultured Meat Plant (bg_biotechnology):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Cultured Produce Facility (bg_biotechnology):
 	Unlocking Technology: Lab-Grown Food
@@ -3668,6 +3475,7 @@ Cultured Produce Facility (bg_biotechnology):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Beverage Concentrates Plant (bg_heavy_industry):
 	Unlocking Technology: Biotechnology
@@ -3685,6 +3493,7 @@ Beverage Concentrates Plant (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Integrated Biorefinery (bg_biotechnology):
 	Unlocking Technology: Genetic Engineering
@@ -3702,6 +3511,7 @@ Integrated Biorefinery (bg_biotechnology):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Wireless Telecommunications Industries (bg_heavy_industry):
 	Unlocking Technology: Radio
@@ -3722,6 +3532,7 @@ Wireless Telecommunications Industries (bg_heavy_industry):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Consumer Appliance Industries (bg_high_tech):
 	Unlocking Technology: Personal Appliances
@@ -3749,6 +3560,7 @@ Consumer Appliance Industries (bg_high_tech):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Airport (bg_private_infrastructure):
 	Unlocking Technology: Commercial Aviation
@@ -3759,6 +3571,7 @@ Airport (bg_private_infrastructure):
 			Monthly Pollution: 50
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Highway (bg_private_infrastructure):
 	Unlocking Technology: Paved Roads
@@ -3772,6 +3585,7 @@ Highway (bg_private_infrastructure):
 		Autonomous Highway
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Software Industry (bg_high_tech):
 	Unlocking Technology: Computer Networks
@@ -3789,6 +3603,7 @@ Software Industry (bg_high_tech):
 		AI-Mediated Mind Sharing
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Network Infrastructure (bg_private_infrastructure):
 	Unlocking Technology: Computer Networks
@@ -3805,6 +3620,7 @@ Network Infrastructure (bg_private_infrastructure):
 		Autonomous Networks
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Hydro Plant (bg_power):
 	Unlocking Technology: Public Works Programs
@@ -3817,6 +3633,7 @@ Hydro Plant (bg_power):
 		AI Managed Power Plant
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Nuclear Plant (bg_power):
 	Unlocking Technology: Nuclear Energy
@@ -3829,6 +3646,7 @@ Nuclear Plant (bg_power):
 		AI Managed Power Plant
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Fusion Plant (bg_power):
 	Unlocking Technology: Fusion Power
@@ -3843,6 +3661,7 @@ Fusion Plant (bg_power):
 		AI Managed Power Plant
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Renewable Energy Plant (bg_power):
 	Unlocking Technology: Clean Energy Technologies
@@ -3856,6 +3675,7 @@ Renewable Energy Plant (bg_power):
 		AI Managed Power Plant
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Electronic Components and Semiconductor Industry (bg_high_tech):
 	Unlocking Technology: Transistor Technology
@@ -3877,6 +3697,7 @@ Electronic Components and Semiconductor Industry (bg_high_tech):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Robotics Industry (bg_high_tech):
 	Unlocking Technology: Industrial Robotics
@@ -3895,6 +3716,7 @@ Robotics Industry (bg_high_tech):
 			Monthly Pollution: 5
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Advanced Material Fabricator (bg_high_tech):
 	Unlocking Technology: Modern Material Science
@@ -3912,6 +3734,7 @@ Advanced Material Fabricator (bg_high_tech):
 		Orbital Fabrication
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Aerospace Industry (bg_high_tech):
 	Unlocking Technology: Military Aviation
@@ -3936,6 +3759,7 @@ Aerospace Industry (bg_high_tech):
 		AI-Optimized Operations
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Space Elevator Construction Site (bg_government):
 	Unlocking Technology: Space Elevator
@@ -3957,6 +3781,7 @@ Extraplanetary Base (bg_exotic):
 		Resort Colony
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Deep-Sea Mine (bg_exotic):
 	Unlocking Technology: Abyssal Plain Mining
@@ -3966,6 +3791,7 @@ Deep-Sea Mine (bg_exotic):
 		Automated Deep-Sea Mining
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Space Program (bg_monuments):
 	Unlocking Technology: Guided Missiles
@@ -3997,6 +3823,7 @@ Tourism Industry (bg_arts):
 		Space Tourism
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 State Youth Centers (bg_government):
 	Philosophy:
@@ -4012,6 +3839,7 @@ State Youth Centers (bg_government):
 		Cloning Vats
 	Maintenance:
 		Maintenance
+		No Maintenance
 
 Manganese Mine (bg_discoverable_mining):
 	Unlocking Technology: Modern Tools
@@ -4853,6 +4681,22 @@ Military Base (bg_government):
 		Territorial Defense
 		Logistics Hub
 
+Grand Monument (bg_grand_monuments):
+	A monument raised for its own sake — a tower, an arch, a hall of marble. Ruinously expensive to build and almost free to keep, it draws visitors and lends the state a little of whatever it was raised to honour. Its [concept_tourism_throughput] bonus only pays off where a Tourism Industry exists to receive it.
+	Dedication:
+		Undedicated
+		Civic Monument
+		Grand Shrine
+		War Memorial
+		Grand Opera House
+		Botanical Gardens
+		Grand Observatory
+		Great Exhibition Hall
+		Grand Stadium
+	Maintenance:
+		Maintenance
+		No Maintenance
+
 Resettlement Camp (bg_resettlement):
 	Unlocking Technology: Nationalism
 	Resettlement Method:
@@ -4874,4 +4718,236 @@ Resettlement Colony (bg_resettlement):
 		Railway Transport
 		Steamship Passage
 		Airlift
+
+Strategic Reserve Hub (bg_public_infrastructure):
+	A national stockpile facility for grain, ammunition, oil, small arms, artillery, aeroplanes, tanks, and chemicals. Each level provides +5000 capacity per reserve good and up to 10 goods per level each week of reserve flow, which can be fine-tuned separately for each good in the Strategic Reserve [concept_journal_entry].
+	Unlocking Technology: Logistics
+	Hub Reserve:
+		Reserve Control
+
+Strategic Reserve Silo (bg_public_infrastructure):
+	A distributed storage depot that adds +200 capacity per level for each reserve good. Passive — a Strategic Reserve Hub is still needed to move goods into or out of the stockpile.
+	Unlocking Technology: Logistics
+	Silo Storage:
+		Silo Storage
+
+Construction Site (te_construction_market_bg):
+	With the Free Market Construction game rule on, Construction Sites appear on their own wherever construction is under way and turn purchased [concept_construction] into construction points; nobody builds them. With the rule off, this is your construction sector: the government builds, expands and downsizes it, and each level provides construction points according to its production method.
+	Construction Site:
+		Basic Construction Market
+		$pm_wooden_buildings$
+		$pm_iron_frame_buildings$
+		$pm_steel_frame_buildings$
+		$pm_arc_welded_buildings$
+		$pm_reinforced_concrete_buildings$
+		$pm_advanced_construction$
+		$pm_nanomaterial_buildings$
+	Construction Automation:
+		No Construction Automation
+		Prefabricated Building Components
+		Tower Cranes
+		Computer-Aided Design
+		3D Printed Buildings
+	Construction [concept_power_bloc_principle_group]:
+		Construction Principle 2
+		No Effect
+
+United Nations Headquarters (bg_bureaucracy):
+	International Diplomacy:
+		Host Nation
+
+Power Bloc Headquarters (bg_bureaucracy):
+	Unlocking Technology: Intergovernmental Organizations
+	[concept_power_bloc] Headquarters:
+		Seat of the Empire
+		Alliance Command
+		Global Trade Center
+		Seat of the Faith
+		Central Committee Headquarters
+		World Cultural Center
+		Palace of Nations
+
+Golden Gate Bridge (bg_monuments):
+	Unlocking Technology: Marketing Research
+	Golden Gate Bridge:
+		Golden Gate Bridge
+
+Empire State Building (bg_monuments):
+	Unlocking Technology: Modern Skyscrapers
+	Empire State Building:
+		Empire State Building
+
+Sydney Opera House (bg_monuments):
+	Unlocking Technology: Art Deco Architecture
+	Sydney Opera House:
+		Sydney Opera House
+
+CN Tower (bg_monuments):
+	Unlocking Technology: Modern Skyscrapers
+	CN Tower:
+		CN Tower
+
+Hoover Dam (bg_monuments):
+	Unlocking Technology: Public Works Programs
+	Hoover Dam:
+		Hoover Dam
+
+The Pentagon (bg_monuments):
+	Unlocking Technology: Combined Arms
+	The Pentagon:
+		The Pentagon
+
+Kennedy Space Center (bg_monuments):
+	Unlocking Technology: Space Exploration
+	Kennedy Space Center:
+		Kennedy Space Center
+
+Aswan High Dam (bg_monuments):
+	Unlocking Technology: Nuclear Energy
+	Aswan High Dam:
+		Aswan High Dam
+
+Tokyo Tower (bg_monuments):
+	Unlocking Technology: Television Broadcasting
+	Tokyo Tower:
+		Tokyo Tower
+
+Moscow State University (bg_monuments):
+	Unlocking Technology: Mainframe Computers
+	Moscow State University:
+		Moscow State University
+
+Berlin TV Tower (bg_monuments):
+	Unlocking Technology: Transistor Technology
+	Berlin TV Tower:
+		Berlin TV Tower
+
+Azadi Tower (bg_monuments):
+	Unlocking Technology: Decolonization
+	Azadi Tower:
+		Azadi Tower
+
+Kenyatta International Convention Centre (bg_monuments):
+	Unlocking Technology: Decolonization
+	Kenyatta ICC:
+		Kenyatta ICC
+
+Burj Khalifa (bg_monuments):
+	Unlocking Technology: Computer-Aided Design
+	Burj Khalifa:
+		Burj Khalifa
+
+World Trade Center (bg_monuments):
+	Unlocking Technology: Containerization
+	World Trade Center:
+		World Trade Center
+
+Lotus Temple (bg_monuments):
+	Unlocking Technology: Pop Culture
+	Lotus Temple:
+		Lotus Temple
+
+Itaipu Dam (bg_monuments):
+	Unlocking Technology: Industrial Robotics
+	Itaipu Dam:
+		Itaipu Dam
+
+Petronas Towers (bg_monuments):
+	Unlocking Technology: Cellular Networks
+	Petronas Towers:
+		Petronas Towers
+
+Basilica of Our Lady of Peace (bg_monuments):
+	Unlocking Technology: Pop Culture
+	Basilica of Our Lady of Peace:
+		Basilica of Our Lady of Peace
+
+Three Gorges Dam (bg_monuments):
+	Unlocking Technology: Clean Energy Technologies
+	Three Gorges Dam:
+		Three Gorges Dam
+
+Channel Tunnel (bg_monuments):
+	Unlocking Technology: Globalization
+	Channel Tunnel:
+		Channel Tunnel
+
+Taipei 101 (bg_monuments):
+	Unlocking Technology: Digital Telecommunications
+	Taipei 101:
+		Taipei 101
+
+Lotte World Tower (bg_monuments):
+	Unlocking Technology: World Wide Web
+	Lotte World Tower:
+		Lotte World Tower
+
+Gardens by the Bay (bg_monuments):
+	Unlocking Technology: Clean Energy Technologies
+	Gardens by the Bay:
+		Gardens by the Bay
+
+Abraj Al-Bait Clock Tower (bg_monuments):
+	Unlocking Technology: Globalization
+	Abraj Al-Bait Clock Tower:
+		Abraj Al-Bait Clock Tower
+
+Shanghai Tower (bg_monuments):
+	Unlocking Technology: Advanced Structural Engineering
+	Shanghai Tower:
+		Shanghai Tower
+
+FAST Telescope (bg_monuments):
+	Unlocking Technology: Machine Learning
+	FAST Telescope:
+		FAST Telescope
+
+Statue of Unity (bg_monuments):
+	Unlocking Technology: Advanced Structural Engineering
+	Statue of Unity:
+		Statue of Unity
+
+Golden Bridge (bg_monuments):
+	Unlocking Technology: Advanced Structural Engineering
+	Golden Bridge:
+		Golden Bridge
+
+Large Hadron Collider (bg_monuments):
+	Unlocking Technology: World Wide Web
+	Large Hadron Collider:
+		Large Hadron Collider
+
+International Space Station (bg_monuments):
+	Unlocking Technology: Satellite Communications
+	International Space Station:
+		International Space Station
+
+ITER Fusion Reactor (bg_monuments):
+	Unlocking Technology: Fusion Power
+	ITER Fusion Reactor:
+		ITER Fusion Reactor
+
+Svalbard Global Seed Vault (bg_monuments):
+	Unlocking Technology: Biotechnology
+	Svalbard Global Seed Vault:
+		Svalbard Global Seed Vault
+
+LIGO Observatory (bg_monuments):
+	Unlocking Technology: Fiber Optics
+	LIGO Observatory:
+		LIGO Observatory
+
+Continental Union Headquarters (bg_monuments):
+	Unlocking Technology: Globalization
+	Continental Union Headquarters:
+		Continental Union Headquarters
+
+Peace Palace (bg_monuments):
+	Unlocking Technology: Intergovernmental Organizations
+	Peace Palace:
+		Peace Palace
+
+Palais des Nations (bg_monuments):
+	Palais des Nations:
+		Palais des Nations
 

@@ -222,6 +222,27 @@ class EndToEndTests(unittest.TestCase):
             self.assertIn("Localization render audit report", report)
             self.assertIn("Bracket formatting tags", report)
 
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and Coverage no scan counts,
+        so the report changes only when the findings do."""
+        from loc_render_audit import AuditResult, RenderFlag
+        result = AuditResult(
+            flags=[
+                RenderFlag("bad", "bracket_tag", "`[b]`", "localization/english/a_l_english.yml", 4),
+                RenderFlag("kept", "bracket_tag", "`[b]`", "localization/english/a_l_english.yml", 9,
+                           exemption={"date": "2026-05-01", "rationale": "literal text"}),
+            ],
+            loc_files_scanned=178, values_checked=18981,
+        )
+        report = render_report(result)
+        self.assertIn(
+            "- `localization/english/a_l_english.yml` — `kept` (bracket_tag) — "
+            "**2026-05-01**: literal text", report)
+        self.assertNotIn("a_l_english.yml:9", report)
+        self.assertIn("`localization/english/a_l_english.yml:4`", report)  # unreviewed
+        self.assertNotIn("18981", report)
+        self.assertNotIn("loc files scanned", report)
+
 
 @unittest.skipUnless(os.path.isdir(VANILLA_GAME), "vanilla install not found")
 class VanillaCleanTests(unittest.TestCase):

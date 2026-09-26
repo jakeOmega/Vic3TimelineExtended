@@ -184,6 +184,24 @@ class AuditTests(unittest.TestCase):
             self.assertIn("`set_variable` of `k` with `days`", report)
             self.assertIn("- unreviewed: 1", report)
 
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and Coverage no file or
+        variable-name count, so the report changes only when the findings do."""
+        from container_timed_variable_audit import AuditResult, Flag
+        result = AuditResult(flags=[
+            Flag("common/scripted_effects/a.txt", 7, "k", "days", "on a container"),
+            Flag("common/scripted_effects/b.txt", 70, "cool", "months", "on a container",
+                 exemption={"date": "2026-09-24", "rationale": "counted down elsewhere"}),
+        ], files_audited=490, container_var_names=51)
+        report = render_report(result)
+        self.assertIn(
+            "- `common/scripted_effects/b.txt` — `cool` (`months`) — **2026-09-24**: "
+            "counted down elsewhere", report)
+        self.assertNotIn("b.txt:70", report)
+        self.assertIn("- line 7: `set_variable` of `k`", report)  # unreviewed
+        for gone in ("files audited", "variable names used", "490", "51"):
+            self.assertNotIn(gone, report)
+
 
 if __name__ == "__main__":
     unittest.main()

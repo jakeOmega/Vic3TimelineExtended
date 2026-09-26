@@ -379,6 +379,42 @@ class AuditTests(unittest.TestCase):
         self.assertIn("space_race_events.20.a", report)
         self.assertIn("## Coverage", report)
 
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and Coverage no file, event
+        or option count, so the report changes only when the findings do.
+        Unreviewed flags and stale tags keep their lines."""
+        from empty_effect_audit import AuditResult, BlockFlag, OptionFlag, StaleTag
+        result = AuditResult(
+            block_flags=[
+                BlockFlag("events/a.txt", 12, "if", "chain-end"),
+                BlockFlag("events/a.txt", 40, "else", "else",
+                          {"date": "2026-09-26", "rationale": "claims the default"}),
+            ],
+            option_flags=[
+                OptionFlag("events/banking_cycle_events.txt", 4236, "banking_cycle_events.68",
+                           "banking_cycle_events.68.b",
+                           {"date": "2026-09-26", "rationale": "the decline"}),
+            ],
+            stale_tags=[StaleTag("events/a.txt", 77, "empty_block")],
+            files_audited=515, events_scanned=820, options_scanned=2029,
+        )
+        report = render_report(result)
+        self.assertIn(
+            "- `events/banking_cycle_events.txt` — `banking_cycle_events.68` option "
+            "`banking_cycle_events.68.b` (no_effect_option) — **2026-09-26**: the decline",
+            report)
+        self.assertIn(
+            "- `events/a.txt` — `else` has an empty body (empty_block) — **2026-09-26**: "
+            "claims the default", report)
+        self.assertNotIn("4236", report)
+        self.assertNotIn("a.txt:40", report)
+        self.assertIn("- `events/a.txt:12` — `if`", report)
+        self.assertIn("- `events/a.txt:77` (empty_block)", report)
+        for gone in ("files audited", "events scanned", "options scanned", "515", "820",
+                     "2029"):
+            self.assertNotIn(gone, report)
+        self.assertIn("- no-effect options: 1 (0 unreviewed)", report)
+
     def test_clean_tree_passes(self):
         root = self._tree({"events/e.txt": "ev.1 = {\n\toption = { name = a x = yes }\n}\n"})
         self.assertEqual(audit(mod_path=root).failing, 0)
