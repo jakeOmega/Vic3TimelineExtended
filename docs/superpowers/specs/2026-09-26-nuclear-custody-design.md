@@ -61,7 +61,9 @@ with a record, and after every launch (`nd_record_nuclear_use`). A record is cre
 for both sides of a civil war whose origin is armed.
 
 **Invariant.** Both sides of a civil war hold their own `nuclear_weapon_stockpile` and their own record from the
-outbreak on. So the merge never hands a winner the loser's stockpile or record pointer, and no transfer is counted twice.
+outbreak on — or, for an origin that gets its first record mid-war (a first device, a settlement landing on it), from
+that moment: `nd_ledger_ensure` seeds the origin's rebels when it creates the origin's record. So the merge never hands a
+winner the loser's stockpile or record pointer, and no transfer is counted twice.
 
 ## 2. The reconcile — one helper for every way an arsenal's owner can end
 

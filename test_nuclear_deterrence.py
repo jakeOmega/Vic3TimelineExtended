@@ -1344,6 +1344,12 @@ class TestCustody(unittest.TestCase):
         self.assertIn("name = nd_cw_origin_record", rebel)
         self.assertIn("nd_ledger_refresh = yes", start.replace(rebel, ""))
         self.assertIn("id = nuclear_custody.1", start)
+        # An origin that gets its first record mid-war seeds its rebels then.
+        ensure = block(self.ce, "nd_ledger_ensure")
+        seed = block(ensure, "every_country")
+        self.assertIn("civil_war_origin_country ?= scope:nd_ledger_parent", seed)
+        self.assertIn("name = nuclear_weapon_stockpile value = 0", seed)
+        self.assertIn("nd_ledger_create = yes", seed)
 
     def test_the_new_regime_reads_the_record_before_the_settlement(self):
         won = block(self.ce, "nd_custody_on_civil_war_won")

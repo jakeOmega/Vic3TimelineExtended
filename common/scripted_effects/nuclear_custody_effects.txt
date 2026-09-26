@@ -40,36 +40,63 @@
 #
 # Invariant: both sides of a civil war whose origin has a record hold their own
 # nuclear_weapon_stockpile and their own record from the outbreak on
-# (nd_custody_on_civil_war_start). A revolution's winner keeps its own value of
-# every variable both sides hold, so the merge never hands it the loser's
-# stockpile or record pointer, and no settlement is counted twice.
+# (nd_custody_on_civil_war_start), or from the moment the origin first gets a
+# record, if that is later (nd_ledger_ensure). A revolution's winner keeps its
+# own value of every variable both sides hold, so the merge never hands it the
+# loser's stockpile or record pointer, and no settlement is counted twice.
 
 # Country scope, any ROOT. Gives this country a record of its own if it has
-# none — including when its pointer names another country's record.
+# none — including when its pointer names another country's record. A country
+# that gets its first record in the middle of a civil war (a first device, a
+# settlement landing on it) gives its rebels theirs at the same moment, so the
+# invariant above holds for them too.
 nd_ledger_ensure = {
 	if = {
 		limit = { nd_ledger_is_own = no }
-		save_scope_as = nd_ledger_owner
-		create_container = {
-			tags = { nd_arsenal }
-			save_scope_as = nd_ledger_new
-		}
-		# The container exists only in the real run; a tooltip preview walks
-		# this with the scope unset (scripting_best_practices.md § script
-		# containers, rule 6).
-		if = {
-			limit = { exists = scope:nd_ledger_new }
-			scope:nd_ledger_new = {
-				set_variable = { name = nd_ar_owner value = scope:nd_ledger_owner }
-				set_variable = { name = nd_ar_count value = 0 }
-				set_variable = { name = nd_ar_progress value = 0 }
-				set_variable = { name = nd_ar_loose value = 0 }
-				set_variable = { name = nd_ar_at_war value = 0 }
+		save_scope_as = nd_ledger_parent
+		nd_ledger_create = yes
+		every_country = {
+			limit = {
+				civil_war_origin_country ?= scope:nd_ledger_parent
+				OR = {
+					is_revolutionary = yes
+					is_secessionist = yes
+				}
+				nd_ledger_is_own = no
 			}
-			add_to_global_variable_list = { name = nd_arsenal_records target = scope:nd_ledger_new }
-			set_variable = { name = nd_arsenal_record value = scope:nd_ledger_new }
-			clear_saved_scope = nd_ledger_new
+			if = {
+				limit = { NOT = { has_variable = nuclear_weapon_stockpile } }
+				set_variable = { name = nuclear_weapon_stockpile value = 0 }
+			}
+			set_variable = { name = nd_cw_origin_record value = scope:nd_ledger_parent.var:nd_arsenal_record }
+			nd_ledger_create = yes
 		}
+	}
+}
+
+# Country scope: creates this country's record and points it there. Only
+# nd_ledger_ensure calls it.
+nd_ledger_create = {
+	save_scope_as = nd_ledger_owner
+	create_container = {
+		tags = { nd_arsenal }
+		save_scope_as = nd_ledger_new
+	}
+	# The container exists only in the real run; a tooltip preview walks
+	# this with the scope unset (scripting_best_practices.md § script
+	# containers, rule 6).
+	if = {
+		limit = { exists = scope:nd_ledger_new }
+		scope:nd_ledger_new = {
+			set_variable = { name = nd_ar_owner value = scope:nd_ledger_owner }
+			set_variable = { name = nd_ar_count value = 0 }
+			set_variable = { name = nd_ar_progress value = 0 }
+			set_variable = { name = nd_ar_loose value = 0 }
+			set_variable = { name = nd_ar_at_war value = 0 }
+		}
+		add_to_global_variable_list = { name = nd_arsenal_records target = scope:nd_ledger_new }
+		set_variable = { name = nd_arsenal_record value = scope:nd_ledger_new }
+		clear_saved_scope = nd_ledger_new
 	}
 }
 
