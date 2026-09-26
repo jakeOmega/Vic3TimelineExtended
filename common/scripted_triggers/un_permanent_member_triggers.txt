@@ -41,6 +41,9 @@ un_permanent_seat_candidate = {
 	# Article 19 (redesign phase 5): a member two years in arrears on its
 	# dues has no vote, and no claim to a seat, until it pays.
 	NOT = { un_dues_vote_suspended = yes }
+	# §0.8: nor has a member whose representation is suspended (is_subject
+	# above already rules it out; kept beside Article 19 on purpose).
+	NOT = { un_representation_suspended = yes }
 }
 
 # Whether open permanent seats are being filled: the UN exists and the signing

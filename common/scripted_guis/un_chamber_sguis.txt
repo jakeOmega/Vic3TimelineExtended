@@ -1010,6 +1010,11 @@ un_chamber_vote_sgui = {
 			# Nothing on the record: the clause that actually gates the control,
 			# and the one green tick a player who can vote sees.
 			trigger_else = {
+				# §0.8: a member whose representation is suspended has no vote.
+				custom_tooltip = {
+					text = je_un_chamber_vote_represented_tt
+					NOT = { un_representation_suspended = yes }
+				}
 				# Article 19 (redesign phase 5): two years in arrears on our
 				# dues and the vote is gone until we pay.
 				custom_tooltip = {

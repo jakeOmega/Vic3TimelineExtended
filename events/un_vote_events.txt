@@ -244,6 +244,8 @@ un_vote.1 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { un_dues_vote_suspended = yes }
+		# §0.8: nor while our representation is suspended.
+		NOT = { un_representation_suspended = yes }
 		scope:un_resolution ?= {
 			has_tag = un_res_voting
 			NOT = { un_resolution_has_vote = { LIST = un_res_yes } }
@@ -1461,10 +1463,13 @@ un_vote.2 = {
 		}
 
 		# ---- Notify all other UN members of the result ----
+		# Not a member whose representation is suspended (§0.8): complying or
+		# ratifying is foreign policy, which its overlord conducts.
 		hidden_effect = {
 			every_country = {
 				limit = {
 					je:je_united_nations ?= { has_modifier = un_member_modifier }
+					NOT = { un_representation_suspended = yes }
 					NOT = { THIS = ROOT }
 				}
 				trigger_event = { id = un_vote.3 }
@@ -1520,8 +1525,11 @@ un_vote.3 = {
 	duration = 3
 
 	# scope:un_resolution is the closed resolution, passed on from un_vote.2.
+	# §0.8: not a member whose representation is suspended — ratifying is
+	# foreign policy, which its overlord conducts.
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
 		exists = scope:un_resolution
 	}
 

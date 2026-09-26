@@ -140,8 +140,10 @@ un_vote_eligible_member_count = {
 		limit = {
 			je:je_united_nations ?= { has_modifier = un_member_modifier }
 			# Article 19 (redesign phase 5): a member that has lost its vote
-			# for arrears is not counted.
+			# for arrears is not counted, nor is a member whose representation
+			# is suspended (§0.8).
 			NOT = { un_dues_vote_suspended = yes }
+			NOT = { un_representation_suspended = yes }
 		}
 		add = 1
 	}

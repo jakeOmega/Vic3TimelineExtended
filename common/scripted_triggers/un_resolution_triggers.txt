@@ -95,11 +95,13 @@ un_resolution_has_vote = {
 # player voted in the chamber never appears; what this guards is the popup that
 # had already fired and was left sitting in the notification list.
 # Article 19 (redesign phase 5): a member two years in arrears on its dues has
-# lost its vote until it pays.
+# lost its vote until it pays. §0.8: a member whose representation is
+# suspended has no vote either.
 # Scope: the voting country; expects scope:un_resolution
 un_vote_can_cast_ballot = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
 	NOT = { un_dues_vote_suspended = yes }
+	NOT = { un_representation_suspended = yes }
 	scope:un_resolution ?= {
 		has_tag = un_res_voting
 		NOT = { un_resolution_has_vote = { LIST = un_res_yes } }
@@ -114,6 +116,7 @@ un_vote_can_cast_ballot = {
 # Scope: the voting country
 un_chamber_ballot_open = {
 	NOT = { un_dues_vote_suspended = yes }
+	NOT = { un_representation_suspended = yes }
 	has_global_variable = un_active_resolution
 	global_var:un_active_resolution ?= {
 		has_tag = un_res_voting

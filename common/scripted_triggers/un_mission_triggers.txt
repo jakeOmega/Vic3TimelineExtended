@@ -110,10 +110,13 @@ un_mission_aid_recovered = {
 
 # The scoped country may send contingents at all: a member, of major-power
 # rank (every other path into a mission asks the same, and strength counts
-# heads up to three), and not under the Assembly's sanctions.
+# heads up to three), and not under the Assembly's sanctions. Not a member
+# whose representation is suspended (§0.8): sending troops is foreign policy,
+# which its overlord conducts. Contingents it already has in the field stay.
 # Scope: country
 un_mission_volunteer_eligible = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_representation_suspended = yes }
 	country_rank >= rank_value:major_power
 	NOT = { has_modifier = un_sanctions_target_modifier }
 }
@@ -208,6 +211,10 @@ un_mission_slot_can_volunteer = {
 	custom_tooltip = {
 		text = un_mission_volunteer_need_member_tt
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+	}
+	custom_tooltip = {
+		text = un_mission_volunteer_need_represented_tt
+		NOT = { un_representation_suspended = yes }
 	}
 	custom_tooltip = {
 		text = un_mission_volunteer_need_rank_tt

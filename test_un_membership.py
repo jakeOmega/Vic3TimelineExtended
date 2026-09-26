@@ -84,5 +84,72 @@ class EligibilityTests(unittest.TestCase):
                 self.assertIn("un_membership_eligible = yes", je[limit - 200:limit])
 
 
+_TOP = re.compile(r"^([A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{", re.M)
+
+# Blocks that name Article 19 for a reason other than taking a voice away.
+_ARTICLE_19_ONLY = {
+    "un_dues_vote_suspended",   # the definition
+    "un_chamber_dues_lines",    # the dues display
+    "un_pay_dues_button",       # an AI weight: settle once the vote is gone
+}
+
+
+def _script_files():
+    for root in ("common", "events"):
+        for dirpath, _dirs, files in os.walk(_path(root)):
+            for f in files:
+                if f.endswith(".txt"):
+                    yield os.path.join(dirpath, f)
+
+
+class RepresentationGateTests(unittest.TestCase):
+    def test_every_article_19_gate_also_asks_suspension(self):
+        missing = []
+        for path in _script_files():
+            text = _read(path)
+            if "un_dues_vote_suspended" not in text:
+                continue
+            for m in _TOP.finditer(text):
+                name = m.group(1)
+                body = _block(text, name)
+                if ("un_dues_vote_suspended" in body
+                        and "un_representation_suspended" not in body
+                        and name not in _ARTICLE_19_ONLY):
+                    missing.append(f"{os.path.relpath(path, REPO)}: {name}")
+        self.assertEqual(missing, [])
+
+    def test_gates_without_article_19(self):
+        cases = [
+            (("common", "diplomatic_actions", "un_lobbying.txt"), "un_secure_commitment_action"),
+            (("common", "scripted_triggers", "un_docket_triggers.txt"), "un_docket_loan_candidate"),
+            (("common", "scripted_triggers", "un_docket_triggers.txt"), "un_docket_peacekeeping_power"),
+            (("common", "scripted_triggers", "un_docket_triggers.txt"), "un_docket_aid_power"),
+            (("common", "scripted_triggers", "un_mission_triggers.txt"), "un_mission_volunteer_eligible"),
+            (("common", "scripted_triggers", "un_mission_triggers.txt"), "un_mission_slot_can_volunteer"),
+            (("events", "un_vote_events.txt"), "un_vote.2"),
+            (("events", "un_vote_events.txt"), "un_vote.3"),
+        ]
+        for parts, name in cases:
+            with self.subTest(block=name):
+                self.assertIn("un_representation_suspended", _block(_read(_path(*parts)), name))
+
+    def test_lobbying_target_needs_a_vote(self):
+        body = _block(_read(_path("common", "diplomatic_actions", "un_lobbying.txt")),
+                      "un_secure_commitment_action")
+        start = re.search(r"^\tpotential\s*=\s*\{", body, re.M).end()
+        end = re.search(r"^\tpossible\s*=\s*\{", body, re.M).start()
+        potential = body[start:end]
+        self.assertIn("un_representation_suspended", potential)
+        self.assertIn("un_dues_vote_suspended", potential)
+
+    def test_headquarters_goes_only_to_represented_members(self):
+        text = _read(_path("common", "scripted_effects", "un_hq_effects.txt"))
+        for name in ("un_hq_assign_host", "un_hq_monthly_update"):
+            with self.subTest(block=name):
+                body = _block(text, name)
+                self.assertIn("un_member_represented = yes", body)
+                self.assertNotIn("has_modifier = un_member_modifier", body)
+
+
 if __name__ == "__main__":
     unittest.main()
