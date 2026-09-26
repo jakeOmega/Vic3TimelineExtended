@@ -475,7 +475,24 @@ nuclear_weapon_events.5 = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
 	title = nuclear_weapon_events.5.t
-	desc = nuclear_weapon_events.5.d
+	# nuclear_tactical_strike_damage_installations counts the levels lost.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:target_state ?= {
+						has_variable = tactical_nuclear_strike_levels_destroyed
+						var:tactical_nuclear_strike_levels_destroyed > 0
+					}
+				}
+				desc = nuclear_weapon_events.5.d_installations
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.5.d
+			}
+		}
+	}
 	flavor = nuclear_weapon_events.5.f
 
 	duration = 3

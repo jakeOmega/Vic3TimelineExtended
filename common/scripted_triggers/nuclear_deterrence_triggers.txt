@@ -1419,8 +1419,9 @@ nd_monopoly_window_conditions = {
 # ----------------------------------------------------------------------------
 # TARGETS
 # ----------------------------------------------------------------------------
-# State scope: a military installation, the tactical strike's target list
-# (the same list tactical_nuke_diplo_action's second_state_trigger uses).
+# State scope: a military installation. The tactical strike's only target
+# list: tactical_nuke_diplo_action's second_state_trigger and AI state pick
+# read it, and its propose_score scores each building named here.
 nd_state_has_military_target = {
 	OR = {
 		has_building = building_barrack
@@ -1428,6 +1429,7 @@ nd_state_has_military_target = {
 		has_building = building_naval_fortification
 		has_building = building_naval_logistics_center
 		has_building = building_conscription_center
+		has_building = building_military_base
 	}
 }
 
