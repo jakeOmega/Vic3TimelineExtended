@@ -340,5 +340,78 @@ class LawTests(unittest.TestCase):
                 self.assertTrue(key in loc, f"no loc for {key}")
 
 
+GOVERNMENTS = _path("common", "government_types", "timeline_extended_governments.txt")
+
+Gov = namedtuple("Gov", "key trigger extra_law name male female transfer")
+
+# Resolution order: the engine takes the first government type whose possible
+# holds, so the more specific come first and the catch-all is last (spec §4).
+GOV_TYPES = [
+    Gov("gov_collective_noble_commonwealth", "collective_governance_is_patrician", "law_feudal_contracts",
+        "Noble Commonwealth", "RULER_TITLE_MARSHAL", "RULER_TITLE_MARSHAL", "parliamentary_elective"),
+    Gov("gov_collective_patrician_council", "collective_governance_is_patrician", None,
+        "Patrician Council", "RULER_TITLE_SYNDIC", "RULER_TITLE_SYNDIC", "parliamentary_elective"),
+    Gov("gov_direct_democracy_single_party_state", "collective_governance_is_party", None,
+        "Collective Leadership", "RULER_CHAIRMAN", "RULER_CHAIRWOMAN", "presidential_elective"),
+    Gov("gov_collective_administration", "collective_governance_is_technocratic", None,
+        "Collegial Administration", "RULER_TITLE_COORDINATOR", "RULER_TITLE_COORDINATOR", "parliamentary_elective"),
+    Gov("gov_collective_free_federation", "collective_governance_is_anarchic", None,
+        "Free Federation", "RULER_REPRESENTATIVE", "RULER_REPRESENTATIVE", "parliamentary_elective"),
+    Gov("gov_direct_democracy", "collective_governance_is_popular", None,
+        "Direct Democracy", "RULER_TITLE_SPEAKER", "RULER_TITLE_SPEAKER", "parliamentary_elective"),
+    Gov("gov_collective_governance", None, None,
+        "Collective Governance", "RULER_TITLE_SPEAKER", "RULER_TITLE_SPEAKER", "parliamentary_elective"),
+]
+
+
+class GovernmentTypeTests(unittest.TestCase):
+    def setUp(self):
+        self.text = _read(GOVERNMENTS)
+
+    def test_resolution_order(self):
+        keyed = [n for n in _top_level_names(self.text)
+                 if "law_type:law_direct_democracy" in _inner(_block(self.text, n), "possible")]
+        self.assertEqual(keyed, [g.key for g in GOV_TYPES])
+
+    def test_possible(self):
+        for g in GOV_TYPES:
+            with self.subTest(gov=g.key):
+                expected = ["has_law = law_type:law_direct_democracy"]
+                if g.trigger:
+                    expected.append(f"{g.trigger} = yes")
+                if g.extra_law:
+                    expected.append(f"has_law = law_type:{g.extra_law}")
+                self.assertEqual(_norm(_inner(_block(self.text, g.key), "possible")), " ".join(expected))
+
+    def test_every_expression_has_a_government(self):
+        self.assertEqual({g.trigger for g in GOV_TYPES if g.trigger}, {e.trigger for e in EXPRESSIONS})
+
+    def test_rulers_and_succession(self):
+        for g in GOV_TYPES:
+            with self.subTest(gov=g.key):
+                body = _block(self.text, g.key)
+                self.assertRegex(body, rf'(?<!fe)male_ruler\s*=\s*"{g.male}"')
+                self.assertRegex(body, rf'female_ruler\s*=\s*"{g.female}"')
+                self.assertRegex(body, rf"transfer_of_power\s*=\s*{g.transfer}\b")
+                self.assertIn(f"change_to_{g.transfer} = yes", body)
+                self.assertIn(f"post_change_to_{g.transfer} = yes", body)
+                self.assertRegex(body, r"new_leader_on_reform_government\s*=\s*yes")
+
+    def test_plebiscitary_autocracy_is_gone(self):
+        self.assertNotIn("gov_direct_democracy_autocracy", self.text)
+        loc = _loc()
+        self.assertFalse("gov_direct_democracy_autocracy" in loc, "stale loc gov_direct_democracy_autocracy")
+        self.assertFalse("gov_direct_democracy_autocracy_desc" in loc, "stale loc gov_direct_democracy_autocracy_desc")
+
+    def test_loc(self):
+        loc = _loc()
+        for g in GOV_TYPES:
+            with self.subTest(gov=g.key):
+                self.assertEqual(loc.get(g.key), g.name)
+                self.assertTrue(g.key + "_desc" in loc, f"no loc for {g.key}_desc")
+        for title in ("RULER_TITLE_MARSHAL", "RULER_TITLE_SYNDIC", "RULER_TITLE_COORDINATOR"):
+            self.assertTrue(title in loc, f"no loc for {title}")
+
+
 if __name__ == "__main__":
     unittest.main()

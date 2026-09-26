@@ -1,16 +1,42 @@
-﻿gov_direct_democracy = {
+﻿# Collective Governance (law_direct_democracy): one government type per
+# Distribution of Power group. The engine takes the first government type whose
+# possible holds, so the more specific come first and gov_collective_governance
+# is the catch-all (it shows only while a country holds the law under a
+# Distribution of Power the law does not allow, until the consistency cascade
+# replaces it). The two gov_direct_democracy* keys are kept for saves.
+# Spec: docs/superpowers/specs/2026-09-26-collective-governance-design.md
+
+gov_collective_noble_commonwealth = {
 	transfer_of_power = parliamentary_elective
 	new_leader_on_reform_government = yes
 
-	male_ruler = "RULER_TITLE_CHANCELLOR"
-	female_ruler = "RULER_TITLE_CHANCELLOR"
+	male_ruler = "RULER_TITLE_MARSHAL"
+	female_ruler = "RULER_TITLE_MARSHAL"
 
 	possible = {
 		has_law = law_type:law_direct_democracy
-		country_has_voting_franchise = yes
-		NOT = {
-			has_law = law_type:law_single_party_state
-		}
+		collective_governance_is_patrician = yes
+		has_law = law_type:law_feudal_contracts
+	}
+
+	on_government_type_change = {
+		change_to_parliamentary_elective = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_parliamentary_elective = yes
+	}
+}
+
+gov_collective_patrician_council = {
+	transfer_of_power = parliamentary_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_TITLE_SYNDIC"
+	female_ruler = "RULER_TITLE_SYNDIC"
+
+	possible = {
+		has_law = law_type:law_direct_democracy
+		collective_governance_is_patrician = yes
 	}
 
 	on_government_type_change = {
@@ -25,12 +51,12 @@ gov_direct_democracy_single_party_state = {
 	transfer_of_power = presidential_elective
 	new_leader_on_reform_government = yes
 
-	male_ruler = "RULER_TITLE_CHANCELLOR"
-	female_ruler = "RULER_TITLE_CHANCELLOR"
+	male_ruler = "RULER_CHAIRMAN"
+	female_ruler = "RULER_CHAIRWOMAN"
 
 	possible = {
 		has_law = law_type:law_direct_democracy
-		has_law = law_type:law_single_party_state
+		collective_governance_is_party = yes
 	}
 
 	on_government_type_change = {
@@ -41,21 +67,82 @@ gov_direct_democracy_single_party_state = {
 	}
 }
 
-gov_direct_democracy_autocracy = {
-	transfer_of_power = dictatorial
-	male_ruler = "RULER_TITLE_LORD_PROTECTOR"
-	female_ruler = "RULER_TITLE_LADY_PROTECTOR"
+gov_collective_administration = {
+	transfer_of_power = parliamentary_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_TITLE_COORDINATOR"
+	female_ruler = "RULER_TITLE_COORDINATOR"
 
 	possible = {
 		has_law = law_type:law_direct_democracy
-		country_has_voting_franchise = no
+		collective_governance_is_technocratic = yes
 	}
 
 	on_government_type_change = {
-		change_to_dictatorial = yes
+		change_to_parliamentary_elective = yes
 	}
 	on_post_government_type_change = {
-		post_change_to_dictatorial = yes
+		post_change_to_parliamentary_elective = yes
+	}
+}
+
+gov_collective_free_federation = {
+	transfer_of_power = parliamentary_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_REPRESENTATIVE"
+	female_ruler = "RULER_REPRESENTATIVE"
+
+	possible = {
+		has_law = law_type:law_direct_democracy
+		collective_governance_is_anarchic = yes
+	}
+
+	on_government_type_change = {
+		change_to_parliamentary_elective = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_parliamentary_elective = yes
+	}
+}
+
+gov_direct_democracy = {
+	transfer_of_power = parliamentary_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_TITLE_SPEAKER"
+	female_ruler = "RULER_TITLE_SPEAKER"
+
+	possible = {
+		has_law = law_type:law_direct_democracy
+		collective_governance_is_popular = yes
+	}
+
+	on_government_type_change = {
+		change_to_parliamentary_elective = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_parliamentary_elective = yes
+	}
+}
+
+gov_collective_governance = {
+	transfer_of_power = parliamentary_elective
+	new_leader_on_reform_government = yes
+
+	male_ruler = "RULER_TITLE_SPEAKER"
+	female_ruler = "RULER_TITLE_SPEAKER"
+
+	possible = {
+		has_law = law_type:law_direct_democracy
+	}
+
+	on_government_type_change = {
+		change_to_parliamentary_elective = yes
+	}
+	on_post_government_type_change = {
+		post_change_to_parliamentary_elective = yes
 	}
 }
 
