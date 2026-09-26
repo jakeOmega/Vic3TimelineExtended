@@ -151,5 +151,34 @@ class RepresentationGateTests(unittest.TestCase):
                 self.assertNotIn("has_modifier = un_member_modifier", body)
 
 
+DUES = _path("common", "script_values", "un_dues_values.txt")
+
+
+class DuesTests(unittest.TestCase):
+    def test_assessment_reads_the_carried_gdp(self):
+        text = _read(DUES)
+        self.assertIn("un_dues_billed_to_overlord = yes", _block(text, "un_dues_assessed_gdp"))
+        for name in ("un_dues_weekly_value", "un_dues_monthly_value"):
+            with self.subTest(value=name):
+                self.assertRegex(_block(text, name), r"value\s*=\s*un_dues_assessed_gdp")
+
+    def test_pillar_and_budget_count_represented_members_once(self):
+        text = _read(DUES)
+        for name in ("un_members_gdp_value", "un_withholders_gdp_value", "un_budget_weekly_value"):
+            with self.subTest(value=name):
+                body = _block(text, name)
+                self.assertIn("un_member_represented = yes", body)
+                self.assertNotIn("has_modifier = un_member_modifier", body)
+
+    def test_suspended_member_is_not_assessed(self):
+        je = _read(_path("common", "journal_entries", "je_united_nations.txt"))
+        call = je.index("un_dues_country_monthly_update = yes")
+        self.assertIn("un_representation_suspended = yes", je[call - 500:call])
+        buttons = _read(_path("common", "scripted_buttons", "un_buttons.txt"))
+        for name in ("un_withhold_dues_button", "un_pay_dues_button"):
+            with self.subTest(button=name):
+                self.assertIn("un_representation_suspended", _block(buttons, name))
+
+
 if __name__ == "__main__":
     unittest.main()

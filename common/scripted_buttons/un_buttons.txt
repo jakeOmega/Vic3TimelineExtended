@@ -243,13 +243,16 @@ un_withhold_dues_button = {
 	name = "UN_WITHHOLD_DUES"
 	desc = "UN_WITHHOLD_DUES_DESC"
 
+	# Our dues are our overlord's while our representation is suspended (§0.8).
 	visible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
 		NOT = { un_dues_is_withholding = yes }
 	}
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
 		NOT = { un_dues_is_withholding = yes }
 		custom_tooltip = {
 			text = un_dues_assessed_tt
@@ -292,13 +295,17 @@ un_pay_dues_button = {
 	name = "UN_PAY_DUES"
 	desc = "UN_PAY_DUES_DESC"
 
+	# Our dues are our overlord's while our representation is suspended (§0.8);
+	# arrears from before wait until we are restored.
 	visible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
 		un_dues_is_withholding = yes
 	}
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
 		un_dues_is_withholding = yes
 	}
 
