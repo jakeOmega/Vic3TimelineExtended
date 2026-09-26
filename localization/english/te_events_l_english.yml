@@ -1541,7 +1541,7 @@
  extra_law_events.83.t:0 "Tech First or Human Oversight First?"
  extra_law_events.84.a:0 "Direct citizen voting"
  extra_law_events.84.b:0 "Deliberative chambers by sortition"
- extra_law_events.84.d:0 "The direct-democracy bill [SCOPE.sLaw('current_law_scope').GetName] reaches its instrument question. Populists want direct citizen voting on legislation; reformers want sortition-based deliberative chambers. The design choice defines what 'democracy' will mean here."
+ extra_law_events.84.d:0 "The [SCOPE.sLaw('current_law_scope').GetName] bill reaches its instrument question: how will the voters govern? Populists want direct citizen voting on legislation; reformers want sortition-based deliberative chambers. The design choice defines what 'democracy' will mean here."
  extra_law_events.84.f:0 "\"A vote of all the people takes a day. A deliberation by a hundred chosen by lot takes a week and produces a better answer. The state must decide which it values more.\"\n\n\"Better by whose standard?\"\n\n\"By every standard except the speed of the answer. Which is, of course, the standard that wins most arguments in politics. Hence the difficulty of getting the deliberative model adopted.\""
  extra_law_events.84.t:0 "Direct Voting or Deliberative Chambers?"
  extra_law_events.85.a:0 "Make the exemption permanent."

@@ -371,7 +371,10 @@ ch_set_political_model = {
 		limit = {
 			OR = {
 				has_law_or_variant = law_type:law_universal_suffrage
-				has_law_or_variant = law_type:law_direct_democracy
+				AND = {
+					has_law = law_type:law_direct_democracy
+					collective_governance_is_popular = yes
+				}
 			}
 			OR = {
 				has_law_or_variant = law_type:law_protected_speech

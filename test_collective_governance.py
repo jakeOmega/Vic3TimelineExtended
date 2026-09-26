@@ -413,5 +413,51 @@ class GovernmentTypeTests(unittest.TestCase):
             self.assertTrue(title in loc, f"no loc for {title}")
 
 
+CH_EFFECTS = _path("common", "scripted_effects", "cultural_hegemony_effects.txt")
+LAW_EVENTS = _path("events", "extra_law_events.txt")
+ELECTION_EVENTS = _path("events", "modern_election_events.txt")
+
+
+def _between(text, start_marker, end_marker):
+    start = text.index(start_marker)
+    return text[start:text.index(end_marker, start)]
+
+
+class CallSiteTests(unittest.TestCase):
+    def test_liberal_democratic_model_needs_a_franchise(self):
+        branch = _norm(_between(_raw(CH_EFFECTS), "# Liberal / Progressive democratic", "# Republican:"))
+        self.assertIn(
+            "AND = { has_law = law_type:law_direct_democracy collective_governance_is_popular = yes }", branch)
+        self.assertNotIn("has_law_or_variant = law_type:law_direct_democracy", branch)
+
+    def test_republican_model_is_unchanged(self):
+        # An oligarchic council landing in Republican is historically fair (spec §5).
+        branch = _norm(_between(_raw(CH_EFFECTS), "# Republican:", "# Mixed / Other"))
+        self.assertIn("has_law_or_variant = law_type:law_direct_democracy", branch)
+
+    def test_referendum_events_need_a_franchise(self):
+        text = _read(LAW_EVENTS)
+        for event in ("extra_law_events.24", "extra_law_events.60", "extra_law_events.84"):
+            with self.subTest(event=event):
+                trigger = _norm(_inner(_block(text, event), "trigger"))
+                self.assertIn("is_enacting_law = law_type:law_direct_democracy "
+                              "collective_governance_is_popular = yes", trigger)
+
+    def test_every_enactment_event_for_the_law_is_gated(self):
+        text = _read(LAW_EVENTS)
+        enacting = re.findall(r"is_enacting_law = law_type:law_direct_democracy", text)
+        gated = re.findall(
+            r"is_enacting_law = law_type:law_direct_democracy\s+collective_governance_is_popular = yes", text)
+        self.assertEqual(len(enacting), len(gated))
+
+    def test_neural_democracy_weight_needs_a_franchise(self):
+        body = _norm(_block(_read(ELECTION_EVENTS), "modern_election_events.33"))
+        self.assertIn("trigger = { has_law = law_type:law_direct_democracy "
+                      "collective_governance_is_popular = yes } add = 5", body)
+
+    def test_instrument_question_does_not_call_the_law_direct_democracy(self):
+        self.assertNotIn("direct-democracy bill", _loc()["extra_law_events.84.d"])
+
+
 if __name__ == "__main__":
     unittest.main()
