@@ -3099,11 +3099,15 @@ te_unused_mandate_reserve_on_action = {
 	}
 }
 
-# --- Agricultural diffusion: backfill for newly-formed countries -----------
+# --- Agricultural diffusion: backfill for new countries and civil wars -----
 # The agdiff broadcast in agricultural_diffusion_effects.txt only reaches
 # countries that exist at the moment of first research. Decolonized 1960+
 # African states, formables, and released subjects are exactly the cohort
-# the issue is about, so we have to catch them on creation.
+# the issue is about, so we have to catch them on creation. The rebels in a
+# civil war are a new country object too, and a revolution's winner inherits
+# none of the loser's modifiers, so the uprising hooks and on_civil_war_won
+# below run the same backfill. Hook list: the backfill's header in
+# agricultural_diffusion_effects.txt.
 on_country_formed = {
 	on_actions = {
 		agdiff_backfill_on_country_formed
@@ -3128,7 +3132,8 @@ te_bespoke_formation_dispatcher = {
 	}
 }
 
-# scope:target = newly released country (per vanilla 00_code_on_actions.txt)
+# Root = Releasing Country
+# scope:target = Released Country (vanilla 00_code_on_actions.txt:3634-3840)
 on_country_released_as_independent = {
 	on_actions = {
 		agdiff_backfill_on_released_country
@@ -3141,17 +3146,65 @@ on_country_released_as_own_subject = {
 	}
 }
 
+on_country_released_as_overlord_subject = {
+	on_actions = {
+		agdiff_backfill_on_released_country
+	}
+}
+
+on_country_released_as_company_subject = {
+	on_actions = {
+		agdiff_backfill_on_released_country
+	}
+}
+
+# Root = Country
+# scope:target = Uprising country (vanilla 00_code_on_actions.txt:5143, :5510).
+# The rebels are the object that survives a rebel victory, so backfilling
+# them here covers both the war and the regime that follows.
+on_revolution_start = {
+	on_actions = {
+		agdiff_backfill_on_released_country
+	}
+}
+
+on_secession_start = {
+	on_actions = {
+		agdiff_backfill_on_released_country
+	}
+}
+
+# Root = the winner, after the loser's variables have merged in (vanilla
+# 00_code_on_actions.txt:5732; runs after on_revolution_end). Backstop for the
+# diffusion modifiers, and the only place the first-mover reward comes back.
+on_civil_war_won = {
+	on_actions = {
+		agdiff_on_civil_war_won
+	}
+}
+
 agdiff_backfill_on_country_formed = {
 	effect = {
 		agdiff_backfill_diffusion_for_country = yes
 	}
 }
 
+# Shared by the four release hooks and the two uprising hooks: the new
+# country is scope:target and ROOT is its parent. The backfill has no
+# multiplier and reads no ROOT, so it runs in place; no dispatch is needed.
 agdiff_backfill_on_released_country = {
 	effect = {
-		scope:target = {
+		scope:target ?= {
 			agdiff_backfill_diffusion_for_country = yes
 		}
+	}
+}
+
+# Called bare, so the winner is both ROOT and THIS, as
+# agdiff_restore_first_mover_prestige's multiplier requires.
+agdiff_on_civil_war_won = {
+	effect = {
+		agdiff_repair_after_civil_war = yes
 	}
 }
 
