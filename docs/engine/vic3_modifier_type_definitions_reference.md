@@ -1,4 +1,4 @@
-<!-- Auto-generated from modifiers.log @ 2026-09-19T21:06:43+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log (engine docs 1.14.4). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Modifier Type Definitions Reference
 
@@ -1179,15 +1179,15 @@ _How fast you change the size of Colonial Affairs_
 
 - `country_institution_size_change_speed_institution_colonial_affairs_mult`, `country_institution_size_change_speed_institution_ministry_of_the_environment_mult`, `country_institution_size_change_speed_institution_police_mult`, `country_institution_size_change_speed_institution_schools_mult`
 
-### `country_st_res_{good}_capacity_add` (7 members)
+### `country_st_res_{good}_capacity_add` (8 members)
 
-- `country_st_res_aeroplanes_capacity_add`, `country_st_res_ammunition_capacity_add`, `country_st_res_artillery_capacity_add`, `country_st_res_grain_capacity_add`, `country_st_res_oil_capacity_add`, `country_st_res_small_arms_capacity_add`
-- `country_st_res_tanks_capacity_add`
+- `country_st_res_aeroplanes_capacity_add`, `country_st_res_ammunition_capacity_add`, `country_st_res_artillery_capacity_add`, `country_st_res_fertilizer_capacity_add`, `country_st_res_grain_capacity_add`, `country_st_res_oil_capacity_add`
+- `country_st_res_small_arms_capacity_add`, `country_st_res_tanks_capacity_add`
 
-### `country_st_res_{good}_decay_add` (7 members)
+### `country_st_res_{good}_decay_add` (8 members)
 
-- `country_st_res_aeroplanes_decay_add`, `country_st_res_ammunition_decay_add`, `country_st_res_artillery_decay_add`, `country_st_res_grain_decay_add`, `country_st_res_oil_decay_add`, `country_st_res_small_arms_decay_add`
-- `country_st_res_tanks_decay_add`
+- `country_st_res_aeroplanes_decay_add`, `country_st_res_ammunition_decay_add`, `country_st_res_artillery_decay_add`, `country_st_res_fertilizer_decay_add`, `country_st_res_grain_decay_add`, `country_st_res_oil_decay_add`
+- `country_st_res_small_arms_decay_add`, `country_st_res_tanks_decay_add`
 
 ### `country_{bg}_goods_cost_mult` (3 members)
 
@@ -1743,12 +1743,11 @@ _Cannon Artillery Offense_
 - `battle_offense_owned_province_mult` — **Home Offense** — Alters the Offense of a Military Unit fighting in territory owned by its Country
 - `battle_total_combat_width_mult` — **Total Combat Width** — A bonus or penalty to the total Combat Width for this side of the Battle
 
-### building (56)
+### building (55)
 
 - `building_cash_reserves_mult` — **Maximum Cash Reserves** — A bonus or penalty to the maximum Cash Reserves that Buildings can retain.
 - `building_company_government_dividends_add` — **Company Government Dividends** — An increase or decrease to the amount of Government Dividends paid by Company Headquarters.
 - `building_company_worker_dividends_add` — **Company Workforce Dividends** — An increase or decrease to the amount of Dividends paid to the Workforce by Building levels owned by Companies.
-- `building_deportee_mortality_mult` — **Deportee Mortality Multiplier**
 - `building_economy_of_scale_level_cap_add` — **Economy of Scale Building Level Cap** — The maximum number of Building levels that can confer Economy of Scale effects.
 - `building_employment_deportee_add` — **Deportee Labor Positions**
 - `building_goods_input_mult` — **Goods Input** — An adjustment to the amount of Goods Consumed by a Building.
@@ -1832,7 +1831,7 @@ _Cannon Artillery Offense_
 - `character_battle_condition_rough_waters_mult` — **Chance** — Chance of being affected by the  Battle Condition
 - `character_battle_condition_strong_winds_mult` — **Chance** — Chance of being affected by the  Battle Condition
 - `character_battle_condition_surprise_maneuver_mult` — **Surprise Maneuver Chance** — Chance of being affected by the Surprise Maneuver Battle Condition
-- `character_blockade_mult` — **Admiral Blockade Strength** — A bonus or penalty to how effectively an Admiral Blockades enemy ports
+- `character_blockade_mult` — **Admiral Blockade Strength** — A bonus or penalty to how effectively an Admiral Blockades hostile ports
 - `character_command_limit_add` — **Command Limit** — Command Limit determines how many Battalions or Ships can be effectively Organized under a Formation.
 - `character_command_limit_mult` — **Command Limit** — Multiplies the amount of units this Character can command.
 - `character_commander_loyalty_add` — **Commander Loyalty** — An increase or decrease to a Commander’s Loyalty.
@@ -1852,7 +1851,7 @@ _Cannon Artillery Offense_
 - `character_prominence_add` — **Prominence** — An increase or decrease to a Character’s Prominence.
 - `character_raid_supply_add` — **Admiral Raid Supply Chance** — The chance the Admiral’s Fleet has at raiding Fleets supply ships every quarter of a day
 
-### country (537)
+### country (538)
 
 - `country_acceptance_homeland_add` — **Acceptance from Homeland** — The amount of Acceptance a Pop is subject to from living in Homeland
 - `country_acceptance_no_shared_heritage_trait_add` — **Acceptance from no shared Heritage Traits** — The amount of Acceptance a Pop is subject to if their Culture does not share a Heritage Trait with (one of) their Country’s Primary Cultures
@@ -1931,7 +1930,7 @@ _Cannon Artillery Offense_
 - `country_bureaucracy_mult` — **bur! Bureaucracy** — The amount of bur! Bureaucracy is modified up or down
 - `country_can_create_unbacked_money_bool` — **Enables #bold Open-Market Operations#!**
 - `country_can_form_construction_company_bool` — **Can form Construction type Companies** — Can form Construction type Companies
-- `country_can_join_united_nations_bool` — **Enables Joining the #bold United Nations#!**
+- `country_can_join_united_nations_bool` — **Enables Founding the #bold United Nations#!**
 - `country_can_only_conscript_peasants_bool` — **Allows only Infantry Conscript Battalions** — Conscript Battalions can only consist of Infantry Military Unit Types, except Mechanized Infantry
 - `country_can_use_asset_relief_bool` — **Enables #bold Asset Relief Program#!**
 - `country_can_use_bail_in_bool` — **Enables Bail-in Regime**
@@ -2029,7 +2028,6 @@ _Cannon Artillery Offense_
 - `country_forbid_monopoly_bool` — **Forbid Monopolies** — Forbid Buildings from being Monopolized by a Country or Company
 - `country_force_privatization_bool` — **Force Privatization** — Force all available Buildings to be available for Privatization
 - `country_foreign_collectivization_bool` — **Foreign Collectivization** — Allow Buildings owned by our Manor Houses and Financial Districts in foreign countries to become worker-owned
-- `country_foreign_investment_acceptance_add` — **[concept_foreign_investment] Acceptance**
 - `country_frankenstein_company_bool` — **Experimental Modules Operational** — Strange tidings have been reported from the Ingolstadt Electrical Factories.
 - `country_free_charters_add` — **Free Company Charters** — The amount of Company Charters a Country can hand out to their Companies for free
 - `country_general_rank_impact_mult` — **General Rank Impact** — An increase or decrease to the benefit that a General gains (such as an increase in Command Limit) from their Rank.
@@ -2050,6 +2048,7 @@ _Cannon Artillery Offense_
 - `country_infamy_decay_mult` — **Infamy Decay** — A bonus or penalty to Infamy decay
 - `country_infamy_generation_against_unrecognized_mult` — **Infamy Generation against Unrecognized Powers** — An increase or decrease in the amount of Infamy generated by  Diplomatic Incidents targeting Unrecognized Powers.
 - `country_infamy_generation_mult` — **Infamy Generation** — An increase or decrease in the amount of Infamy generated by  Diplomatic Incidents.
+- `country_inflation_anchoring_add` — **Inflation Anchoring**
 - `country_inflation_pressure_add` — **Inflationary Pressure**
 - `country_influence_add` — **inf! Influence** — How much inf! Influence the country has
 - `country_influence_cost_add` — **inf! Influence Cost** — Adds a flat cost to the country's inf! Influence usage
@@ -2150,7 +2149,7 @@ _Cannon Artillery Offense_
 - `country_port_connection_cost_mult` — **merchant_marine! Merchant Marine Cost of Port Connections** — An increase or decrease to the merchant_marine! Merchant Marine demand required to maintain Port Connections
 - `country_prestige_add` — **Prestige** — How much Prestige the country has.
 - `country_prestige_from_army_power_projection_mult` — **Prestige from Army Power Projection** — An increase or decrease to the amount of Prestige a Country receives from the Power Projection of its army.
-- `country_prestige_from_navy_power_projection_mult` — **Prestige from Navy Power Projection** — An increase or decrease to the amount of Prestige a Country receives from the Power Projection of its navy.
+- `country_prestige_from_navy_combat_power_mult` — **Prestige from Navy Combat Power** — An increase or decrease to the amount of Prestige a Country receives from the fighting strength of its navy.
 - `country_prestige_mult` — **Prestige** — How much Prestige the country has.
 - `country_primary_culture_fervor_from_laws_add` — **Primary Culture Fervor from Laws** — Primary Culture Fervor from Laws is a bonus or penalty to Fervor as a result of the country's laws that affect the primary culture
 - `country_private_construction_allocation_mult` — **Private Construction Allocation** — An increase or decrease in the fraction of weekly Construction that will be preferentially allocated to Private Constructions over Government Constructions .
@@ -2205,6 +2204,7 @@ _Cannon Artillery Offense_
 - `country_ship_type_destroyer_construction_efficiency_add`
 - `country_ship_type_dreadnought_construction_efficiency_add`
 - `country_ship_type_early_ironclad_construction_efficiency_add`
+- `country_ship_type_early_troop_ship_construction_efficiency_add` — **Early Troopship Construction Efficiency** — The efficiency of Early Troopship ship_construction! Ship Construction
 - `country_ship_type_frigate_construction_efficiency_add`
 - `country_ship_type_iron_frigate_construction_efficiency_add`
 - `country_ship_type_light_cruiser_construction_efficiency_add` — **Light Cruiser Construction Efficiency** — The efficiency of Light Cruiser ship_construction! Ship Construction
@@ -2445,7 +2445,7 @@ _Cannon Artillery Offense_
 - `political_movement_radicalism_from_enactment_approval_mult` — **Political Movement Activism Reduction from Approved Enactment** — An increase or decrease in the Movement Activism impact of enacting Laws that Political Movements approve of
 - `political_movement_radicalism_from_enactment_disapproval_mult` — **Political Movement Activism Increase from Disapproved Enactment** — An increase or decrease in the Movement Activism impact of enacting Laws that Political Movements disapprove of
 
-### power-bloc (22)
+### power-bloc (21)
 
 - `power_bloc_banking_union_bool` — **One supervisor and one deposit guarantee across the union: adopters get #G −25%#! banking crash chance, #G −25%#! random momentum and #G +1#! banking intervention in reserve, and a crash elsewhere in the currency spreads far less readily**
 - `power_bloc_can_enact_decree_cultural_emigration_initiative_bool` — **Can Enact Cultural Emigration Initiative and Forced Migration [Concept('concept_decree', 'Decrees')]**
@@ -2465,10 +2465,9 @@ _Cannon Artillery Offense_
 - `power_bloc_leader_can_force_cultural_acceptance_bool` — **Leader Can Force Cultural Acceptance**
 - `power_bloc_leader_can_force_cultural_adoption_bool` — **Leader Can Force Cultural Adoption**
 - `power_bloc_leader_can_peacefully_annex_bool` — **Leader Can Peacefully Annex Subjects**
-- `power_bloc_monetary_cooperation_bool` — **The leader's central bank backs every member: #G −0.5#! points of risk premium and #G +1#! peg confidence a month**
-- `power_bloc_principle_groups_max_add` — **Maximum [concept_power_bloc] [Concept('concept_power_bloc_principle_group', 'Principle Groups')]**
-- `power_bloc_reserve_currency_bool` — **The union's money is held the world over: the leader mints against those balances and may cut up to #G −1#! point of risk premium, and adopters get a further #G +5%#! trade advantage and #G −0.25#! points of premium**
-- `power_bloc_shared_currency_bool` — **Members may adopt the leader's currency**
+- `power_bloc_monetary_cooperation_bool` — **The leader’s central bank backs every member: #G −0.5#! points of risk premium and #G +1#! peg confidence a month**
+- `power_bloc_reserve_currency_bool` — **The union’s money is held the world over: the leader mints against those balances and may cut up to #G −1#! point of risk premium, and adopters get a further #G +5%#! trade advantage and #G −0.25#! points of premium**
+- `power_bloc_shared_currency_bool` — **Members may adopt the leader’s currency**
 
 ### power_bloc (20)
 
@@ -2548,8 +2547,8 @@ _Cannon Artillery Offense_
 - `ship_battle_against_ship_type_torpedo_boat_destroyer_accuracy_add` — **Torpedo Boat Destroyer Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
 - `ship_battle_against_ship_type_torpedo_boat_destroyer_accuracy_mult` — **Torpedo Boat Destroyer Accuracy** — An increase or decrease to the probability that the Ship will hit when attacking
 - `ship_battle_condition_accuracy_penalty_mult` — **Battle Condition Accuracy Penalty** — An increase or decrease to the Accuracy penalty inflicted by adverse Naval Battle Conditions
-- `ship_blockade_strength_add` — **Blockade Strength** — A Ship’s ability to Blockade enemy ports
-- `ship_blockade_strength_mult` — **Blockade Strength** — A Ship’s ability to Blockade enemy ports
+- `ship_blockade_strength_add` — **Blockade Strength** — A Ship’s ability to Blockade hostile ports
+- `ship_blockade_strength_mult` — **Blockade Strength** — A Ship’s ability to Blockade hostile ports
 - `ship_carrying_capacity_add` — **Carrying Capacity** — How many Battalions a single Ship can transport to support a Naval Invasion
 - `ship_carrying_capacity_mult` — **Carrying Capacity** — How many Battalions a single Ship can transport to support a Naval Invasion
 - `ship_construction_progress_max_add` — **Max Ship Construction Progress** — The maximum amount of construction progress a Country can apply to one shipbuilding project each week
@@ -2570,8 +2569,6 @@ _Cannon Artillery Offense_
 - `ship_hit_points_max_mult` — **Maximum Ship Hit Points** — An increase or decrease to the maximum amount of damage a Ship’s hull can take before being destroyed
 - `ship_hull_damage_add` — **Hull Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
 - `ship_hull_damage_mult` — **Hull Attack Damage** — An increase or decrease to the amount of damage a Ship can deal to another Ship’s hull
-- `ship_interest_gain_add` — **Ship Involvement Generation** — A bonus or penalty to the Involvement generated by this Ship for its strategic regions.
-- `ship_interest_gain_mult` — **Ship Involvement Generation** — A bonus or penalty to the Involvement generated by this Ship for its strategic regions.
 - `ship_marine_capacity_add` — **Marine Capacity** — An increase or decrease to the amount of marines a Ship can carry, affecting its ability to support Naval Invasions and other amphibious operations
 - `ship_marine_capacity_mult` — **Marine Capacity** — An increase or decrease to the amount of marines a Ship can carry, affecting its ability to support Naval Invasions and other amphibious operations
 - `ship_max_distance_to_port_add` — **Max Distance to Port** — An increase or decrease to the maximum distance a Ship can travel from a port without suffering penalties
@@ -2579,6 +2576,8 @@ _Cannon Artillery Offense_
 - `ship_movement_speed_add` — **Ship Speed** — An increase or decrease to the movement speed of ships.
 - `ship_movement_speed_mult` — **Ship Speed** — An increase or decrease to the movement speed of ships.
 - `ship_naval_invasion_efficiency_mult` — **Naval Invasion Efficiency** — How much a Ship contributes to the efficiency of Battalions conducting a Naval Invasion
+- `ship_power_projection_add` — **Ship Power Projection** — An increase or decrease to the Power Projection a Ship contributes, which determines how much Involvement it generates.
+- `ship_power_projection_mult` — **Ship Power Projection** — An increase or decrease to the Power Projection a Ship contributes, which determines how much Involvement it generates.
 - `ship_readiness_gain_add` — **Readiness** — An increase or decrease to how fast the Ship is able to act while in battle
 - `ship_readiness_gain_mult` — **Readiness** — An increase or decrease to how fast the Ship is able to act while in battle
 - `ship_screening_add` — **Screening** — An increase or decrease to how much the Ship is able to cover for the Vulnerability on other Ships
@@ -2600,7 +2599,7 @@ _Cannon Artillery Offense_
 - `ship_vulnerability_add` — **Vulnerability** — An increase or decrease to how vulnerable the Ship is to get attacked
 - `ship_vulnerability_mult` — **Vulnerability** — An increase or decrease to how vulnerable the Ship is to get attacked
 
-### state (238)
+### state (237)
 
 - `state_allow_assimilation_in_homeland_bool` — **Assimilation in Homeland States Allowed** — Assimilation of Pops is allowed even if they are living in one of their Homeland States
 - `state_allow_assimilation_without_presence_bool` — **Assimilation to Primary Culture Always Allowed** — Assimilation to Primary Culture is allowed even if no Pops of that Culture are present in the State
@@ -2731,7 +2730,6 @@ _Cannon Artillery Offense_
 - `state_loyalism_increases_violent_hostility_mult` — **Loyalism increases for the acceptance_status_1! Violent Hostility Status** — A bonus or penalty to increases in Loyalism for Pops in this Status
 - `state_loyalists_from_political_movements_mult` — **Loyalists from Political Movements** — A bonus or penalty to how many Pops will become Loyalist when enacting laws that please Political Movements
 - `state_market_access_price_impact` — **Market Access Price Impact** — An increase or decrease to the maximum influence of Market Access on the Local Price of a Good.
-- `state_mass_migration_encouragement_bool` — **[concept_mass_migration] Encouragement**
 - `state_max_trade_advantage_from_capacity_add` — **Maximum Trade Advantage from Capacity** — An increase or decrease in maximum Trade Advantage from Trade Capacity in a State
 - `state_middle_strata_expected_sol_add` — **Minimum Expected Standard of Living for the Middle Strata** — An increase or decrease to the minimum Standard of Living that Middle Strata Pops expect to enjoy
 - `state_middle_strata_standard_of_living_add` — **Standard of Living for the Middle Strata** — Extra Standard of Living added on top of Wealth

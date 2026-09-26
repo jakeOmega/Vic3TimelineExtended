@@ -89,7 +89,7 @@
 	Urban Planning - By planning out cities before they are built, rather than letting them develop naturally, it is possible to create a much more efficient living area.
 		Unlocking Technologies:
 			Urbanization
-		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
 	Rationalism - Rationalism is the philosophical doctrine that knowledge is acquired by reason without resort to experience.
 		Unlocks Laws: Freedom of Conscience, Religious Schools
 	Bureaucracy - Bureaucracy is the machine of government, the cogs and wheels that decide the efficiency of the state.
@@ -472,7 +472,7 @@
 		Unlocking Technologies:
 			Modern Sewerage
 		Unlocks Buildings: Atocha Railway Station, Statue of Liberty, The Eiffel Tower, Victoria Terminus
-		Unlocks PMs: 3 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
 	Civilizing Mission - It falls on our great nation's shoulders to shine the light of modernity into every uncivilized corner of the world, to educate and instill in the less developed peoples the divine values of our glorious culture.
 		Unlocking Technologies:
 			Quinine
@@ -677,7 +677,7 @@
 			Anarchism
 			Socialism
 			Corporatism
-		Unlocks Laws: Outlawed Dissent, Single-Party State
+		Unlocks Laws: Collective Governance, Outlawed Dissent, Single-Party State
 	International Exchange Standards - Establishing an international system of accounting and exchange makes trade between nations simpler and cheaper to maintain.
 		Unlocking Technologies:
 			Mutual Funds
@@ -713,7 +713,7 @@
 		Unlocking Technologies:
 			Electric Arc Process
 			Pneumatic Tools
-		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
 	Compression Ignition - A compression ignition engine ignites the fuel by compressing air and has the highest thermal efficiency of any engine.
 		Unlocking Technologies:
 			Combustion Engine
@@ -904,7 +904,7 @@
 	Mass Media - Through various platforms, we can now spread information, entertainment, and news to a massive audience. This gives the media a powerful influence over public opinion and culture.
 		Unlocking Technologies:
 			Film
-		Unlocks Laws: Direct Democracy, Donation Limits, Ministry of Propaganda Established, Ministry of Religion Established, State-Led Language Reform
+		Unlocks Laws: Donation Limits, Ministry of Propaganda Established, Ministry of Religion Established, State-Led Language Reform
 		Unlocks Decrees: Natalism Initiative, Political Patronage
 		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
 	Animation - By making drawings appear to move, we've created a new form of entertainment. It's a popular way to tell stories and express artistic ideas, for better or worse.
@@ -1061,7 +1061,7 @@
 	Prefabricated Construction - Standardized prefab building components - concrete panels, steel-frame modules, modular bathroom pods - slash construction time for housing, hospitals, and military bases. Postwar reconstruction speed defines the era.
 		Unlocking Technologies:
 			Modern Skyscrapers
-		Unlocks PMs: 1 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 2 (listed under their buildings in buildings.txt)
 	Photocopiers - The ability to quickly and easily make copies of documents has streamlined office work and improved productivity. It's a simple but essential tool in the modern workplace.
 		Unlocking Technologies:
 			Transistor Technology
@@ -1110,7 +1110,7 @@
 	Modern Urban Planning - By planning our cities more systematically, we can create more efficient, sustainable, and pleasant places to live. It's a way to bring some order to the chaos of urban growth.
 		Unlocking Technologies:
 			Art Deco Architecture
-		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 6 (listed under their buildings in buildings.txt)
 	Satellite Communications - Satellites have given us a global communication network. Now we can transmit information instantly across the world, making our planet a much more connected place.
 		Unlocking Technologies:
 			Space Exploration
@@ -1574,7 +1574,7 @@
 		Unlocking Technologies:
 			Synthetic Biology
 			Additive Manufacturing
-		Unlocks PMs: 4 (listed under their buildings in buildings.txt)
+		Unlocks PMs: 5 (listed under their buildings in buildings.txt)
 	Molecular Assemblers - Imagine machines that can build things atom by atom. These molecular assemblers could create highly customized goods with incredible precision, changing the very nature of manufacturing.
 		Unlocking Technologies:
 			Advanced Nanofabrication

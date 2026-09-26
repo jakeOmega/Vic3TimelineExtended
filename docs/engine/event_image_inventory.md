@@ -3,8 +3,8 @@
 This document inventories all mod events for the purpose of generating custom event images.
 Each event is listed with its title, description, and flavor text (where available).
 
-**Total events:** 785
-**Event files:** 52
+**Total events:** 871
+**Event files:** 57
 
 ## agricultural_diffusion_events.txt
 
@@ -71,9 +71,9 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Current image:** gfx/event_pictures/augmentation_divide.dds
 
 ### augmentation_events.100
-- **Title:** The Great Divide
+- **Title:** The Purity Laws
 - **Description:** (no localization)
-- **Flavor:** The last unaugmented factory in the city closed on a Tuesday. There was nobody left who could work it at the speed the market required.\n\nThe owner stood in the empty floor with the foreman.\n\n\"What will you do?\" the foreman asked.\n\n\"Retrain. Augment. Reopen as something else.\"\n\n\"And the workers who do not want the augmentation?\"\n\n\"Are no longer my workers. They are the city's problem now. The city has not yet noticed.\"
+- **Flavor:** The registrar looked at the form, then at the man's left hand.\n\n\"Date of installation?\"\n\n\"Four years ago. Before the law.\"\n\n\"And you wish to keep it.\"\n\n\"It is my hand. The old one went into a press at the mill. What would you have me do, go back to having none?\"\n\nThe registrar did not answer. She stamped the form, and then, after a moment, she stamped it again, harder, as if the second stamp might settle a question the first had not.
 - **Current image:** gfx/event_pictures/unaugmented_underclass.dds
 
 ### augmentation_events.200
@@ -440,8 +440,20 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.45
 - **Title:** International Bailout Request
-- **Description:** A diplomatically important trading partner has quietly approached our government requesting emergency financial assistance. Their banking system is on the verge of collapse, and without external support, the crisis will spread to our own markets through trade disruptions and defaulted debts. The request puts us in a difficult position - refusal risks contagion, but aid comes at a steep cost to our own treasury.
+- **Description:** [SCOPE.sCountry('bailout_country').GetName], an important trading partner, has approached our government requesting emergency financial assistance. Their banking system is on the verge of collapse, and without external support, the crisis will spread to our own markets through trade disruptions and defaulted debts. The request puts us in a difficult position - refusal risks contagion, but aid comes at a steep cost to our own treasury.
 - **Flavor:** \"Their ambassador was remarkably calm, considering he was effectively saying 'lend us an enormous sum of money or we'll take your economy down with us.'\"\n\n\"That's diplomacy for you.\"\n\n\"I preferred it when diplomacy involved sending gunboats.\"
+- **Current image:** gfx/event_pictures/central_bank_policy.dds
+
+### banking_cycle_events.68
+- **Title:** Appeal for a Rescue?
+- **Description:** Our banking system is failing, and the damage is already reaching the markets we trade with. [SCOPE.sCountry('bailout_donor').GetName], one of our important trading partners, has the reserves to steady us and every reason to fear our collapse spilling over into its own economy. We could ask it for emergency assistance. Asking will cost us face, and it may still say no. Not asking means riding out the storm on our own resources.
+- **Flavor:** \"The ambassador is ready to go in. He wants to know what to say if they ask what happens if they refuse.\"\n\n\"Tell him the truth. Tell him we go down, and we take a good part of their export trade with us.\"\n\n\"That sounds like a threat.\"\n\n\"It is a forecast. The threat is what makes it true.\"
+- **Current image:** gfx/event_pictures/banking_boardroom.dds
+
+### banking_cycle_events.69
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** \"How did they take it?\"\n\n\"Their finance minister listened to the whole appeal without interrupting once. Then he asked for the figures again, in writing, and for a glass of water.\"\n\n\"Is that good?\"\n\n\"It is what he does before he says yes, and it is what he does before he says no. I have stopped trying to read him. I read the cables.\"
 - **Current image:** gfx/event_pictures/central_bank_policy.dds
 
 ### banking_cycle_events.50
@@ -476,13 +488,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.55
 - **Title:** Socialist Fraternal Aid
-- **Description:** An ideological ally has offered a package of economic cooperation credits to help stabilize our planning cycle. The aid would include technical advisors, preferential trade terms, and direct financial assistance — but it comes with expectations of closer political alignment and joint economic planning committees.
+- **Description:** [SCOPE.sCountry('fraternal_ally').GetName], a fellow planned economy and an ideological ally, has offered a package of economic cooperation credits to help stabilize our planning cycle. The aid would include technical advisors, preferential trade terms, and direct financial assistance — but it comes with expectations of closer political alignment and joint economic planning committees.
 - **Flavor:** \"They are offering us five hundred million in long-term credits, at favorable rates. Their delegation arrives Friday.\"\n\n\"And the conditions?\"\n\n\"Two seats on our planning committee. A revision of our import targets to align with theirs. Quarterly progress reviews.\"\n\n\"That is not aid. That is partnership with the smaller word crossed out.\"
 - **Current image:** gfx/event_pictures/state_bank_reserves.dds
 
 ### banking_cycle_events.56
 - **Title:** Industrial Sabotage Investigation
-- **Description:** Reports are coming in from several major industrial facilities of suspicious equipment failures and unexplained production losses. Whether the cause is actual sabotage by foreign agents, internal dissent, or simply aging [concept_infrastructure], the disruptions are significant enough to demand a response.
+- **Description:** Reports are coming in from several major industrial facilities of suspicious equipment failures and unexplained production losses. Whether the cause is deliberate sabotage born of internal dissent or simply aging [concept_infrastructure], the disruptions are significant enough to demand a response.
 - **Flavor:** \"Three turbines, two assembly lines, one boiler. All in the same week, all in different factories.\"\n\n\"Sabotage?\"\n\n\"The reports from State Security say so. The reports from the engineers say the equipment was installed in 1923 and was supposed to be replaced in 1948.\"\n\n\"Then we have a saboteur in every factory in the country, and his name is the maintenance budget.\"
 - **Current image:** gfx/event_pictures/planning_bureau.dds
 
@@ -560,7 +572,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### banking_cycle_events.58
 - **Title:** The Gold Window Closes
-- **Description:** Foreign central banks have spent the week presenting dollars at [ROOT.GetCountry.GetName]'s treasury and demanding gold in exchange. The vaults are draining faster than anyone thought possible. At current rates, the peg cannot be held through the end of the month. A decision is due before trading opens Monday.
+- **Description:** Foreign central banks have spent the week presenting [ROOT.GetCountry.GetAdjective] notes at the treasury and demanding gold in exchange. The vaults are draining faster than anyone thought possible. At current rates, the peg cannot be held through the end of the month. A decision is due before trading opens Monday.
 - **Flavor:** \"We are all Keynesians now, even those of us who spent forty years arguing we were not.\"\n\n— Governor of the Central Bank
 - **Current image:** gfx/event_pictures/central_bank_policy.dds
 
@@ -580,8 +592,8 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### covert_warfare.2
 - **Title:** Foreign Interference Detected
-- **Description:** Our counterintelligence services have uncovered evidence of a sustained campaign of foreign [concept_covert_operations] against us — [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')], conducted by agents of a foreign power. We must decide how to respond.
-- **Flavor:** \"The anomalies in the election data were too precise to be accidental, too subtle to be domestic in origin.\"\n\n\"Foreign?\"\n\n\"Foreign. The signature matches three other operations we have catalogued over the last two years. The same patience. The same restraint. The same preference for influence over disruption.\"\n\n\"And the response?\"\n\n\"That is your decision, Minister. Ours was to detect it. The decision to respond — or not — is above our pay grade, and for once we are grateful for that.\"
+- **Description:** Our counterintelligence services have uncovered evidence of a sustained campaign of [concept_covert_operations] against us, run by agents of a foreign power. The operation, $covert_exposed_op_link$, is [ROOT.GetCountry.GetCustom('covert_last_exposed_tier_name')]. We must decide how to respond.
+- **Flavor:** \"How long has it been running?\"\n\n\"Longer than we would like. The first thread was a payment that passed through three banks and arrived nowhere. The second was a man who knew the name of a clerk he should never have met. After that, the rest came apart in our hands.\"\n\n\"And who is behind it?\"\n\n\"That, we now know. What to do about it is your decision, Minister. Ours was to find it. The decision to respond — or not — is above our pay grade, and for once we are grateful for that.\"
 - **Current image:** gfx/event_pictures/espionage_dead_drop.dds
 
 ## cultural_hegemony_events.txt
@@ -660,7 +672,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### cultural_hegemony.13
 - **Title:** Lingua Franca
-- **Description:** Diplomats negotiate in our tongue. Scientists publish in it. Merchants trade in it. The [ROOT.GetCountry.GetAdjective] language has become the world's default mode of communication — a lingua franca that opens doors and shapes thought. We can formalize this dominance through state-sponsored academies abroad, or let the invisible hand of commerce and scholarship continue its work.
+- **Description:** Diplomats negotiate in our tongue. Scientists publish in it. Merchants trade in it. The [ROOT.GetCountry.GetAdjective] language has become one of the world's great languages of diplomacy and science — a lingua franca that opens doors and shapes thought. We can formalize its reach through state-sponsored academies abroad, or let the invisible hand of commerce and scholarship continue its work.
 - **Flavor:** \"When they dream of a better future, they dream in our words.\"\n\n\"And when they dream of revolution?\"\n\n\"The same words. The same syntax. The same metaphors of progress and reaction. We did not intend it. We simply published more, in more places, for longer. The language followed the books, and the dreams followed the language.\"
 - **Current image:** gfx/event_pictures/fashion_diaspora_influence.dds
 
@@ -690,8 +702,8 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### cultural_hegemony.18
 - **Title:** Between Two Suns
-- **Description:** The two leading cultural powers hold up different models of how a state should be run: [SCOPE.sCountry('ch_bloc_a').GetName] the [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')] model, [SCOPE.sCountry('ch_bloc_b').GetName] the [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')] model. Both have sent envoys to [ROOT.GetCountry.GetName] with offers of scholarships, loans and friendship, and both expect an answer.
-- **Flavor:** The editor keeps two wire baskets on the desk now. The one on the left fills with dispatches from [SCOPE.sCountry('ch_bloc_a').GetName]: speeches, exhibitions, the price of wheat, all set in a confident typeface the whole newsroom has learned to recognise. The one on the right fills just as fast from [SCOPE.sCountry('ch_bloc_b').GetName]. Each agency has offered its service free of charge for a year, and the editor has noticed that neither offer mentions the other. By noon the office boy has stopped asking which basket to empty first. He waits, pencil behind his ear, for the editor to point.
+- **Description:** The two leading cultural powers hold up different models of how a state should be run: [SCOPE.sCountry('ch_bloc_a').GetName] the [SCOPE.sCountry('ch_bloc_a').GetCustom('ch_country_model_text')] model, [SCOPE.sCountry('ch_bloc_b').GetName] the [SCOPE.sCountry('ch_bloc_b').GetCustom('ch_country_model_text')] model. Neither has asked anything of [ROOT.GetCountry.GetName]. They do not need to: their films fill our cinemas, their books our lecture halls, their arguments our newspapers, and our own people are already taking sides. Sooner or later the government will have to say which way it leans.
+- **Flavor:** The editor keeps two wire baskets on the desk now. The one on the left fills with dispatches from [SCOPE.sCountry('ch_bloc_a').GetName]: speeches, exhibitions, the price of wheat, all set in a confident typeface the whole newsroom has learned to recognise. The one on the right fills just as fast from [SCOPE.sCountry('ch_bloc_b').GetName]. Nobody in the building ordered either; the readers did, by buying whichever paper carried more of them. By noon the office boy has stopped asking which basket to empty first. He waits, pencil behind his ear, for the editor to point.
 - **Current image:** gfx/event_pictures/ideological_confrontation_speech.dds
 
 ### cultural_hegemony.19
@@ -716,7 +728,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.2
 - **Title:** The World is Watching
-- **Description:** [SCOPE.sCountry('pressuring_power').GetName] and other [Concept('concept_great_power', 'great powers')] have called upon us to accelerate the dissolution of our colonial holdings, including our overlordship of [SCOPE.sCountry('pressured_subject').GetName]. Foreign governments and international organizations are voicing growing disapproval.
+- **Description:** [SCOPE.sCountry('pressuring_power').GetName], which has declared itself against colonial rule, has called upon us to accelerate the dissolution of our colonial holdings, including our overlordship of [SCOPE.sCountry('pressured_subject').GetName]. Its diplomats are pressing the case in every capital that will listen.
 - **Flavor:** \"The resolution passed with an overwhelming majority,\" the ambassador reported, adjusting his spectacles. \"Twenty-three in favor. We were... not among them.\"\n\n\"And what precisely does this resolution demand?\"\n\n\"A timetable. For the orderly transfer of sovereignty to... well, to everyone we currently govern who would rather govern themselves.\"\n\nA long silence.\n\n\"Which is all of them, presumably.\"
 - **Current image:** gfx/event_pictures/colonial_resistance_fighters.dds
 
@@ -740,7 +752,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.6
 - **Title:** Debts of Empire
-- **Description:** [SCOPE.sCountry('reparations_claimant').GetName] has formally demanded reparations for colonial exploitation. Their representatives present detailed accounts of resources extracted and communities displaced during the imperial period, drawing international attention.
+- **Description:** [SCOPE.sCountry('reparations_claimant').GetName] has formally demanded reparations for colonial exploitation and names its price: #b @money![SCOPE.sCountry('reparations_claimant').MakeScope.Var('decol_reparations_claim').GetValue|D]#!, a tenth of our yearly revenue, or a tenth of its [Concept('concept_gdp', 'GDP')] if that is less. Its representatives present detailed accounts of resources extracted and communities displaced during the imperial period, drawing international attention.
 - **Flavor:** \"We have prepared a full accounting,\" the [SCOPE.sCountry('reparations_claimant').GetAdjectiveNoFormatting] delegate said, laying a thick dossier on the table. \"Every ton of ore. Every acre seized. Every laborer conscripted.\"\n\n\"You cannot seriously expect us to-\"\n\n\"We expect you to read it, Minister. Just read it. Then tell us what you think a fair price would be.\"
 - **Current image:** gfx/event_pictures/post_colonial_strongman.dds
 
@@ -776,8 +788,8 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.12
 - **Title:** Powerful Friends
-- **Description:** [SCOPE.sCountry('supporting_power').GetName] has offered diplomatic and material support for maintaining our colonial holdings, recognizing their strategic value. Their backing provides welcome relief from mounting international pressure.
-- **Flavor:** \"We share certain... interests abroad,\" the [SCOPE.sCountry('supporting_power').GetAdjectiveNoFormatting] envoy said, sliding the dossier across the mahogany table. \"It would be a shame if the radicals in the Assembly were to succeed in their little crusade.\"\n\nThe colonial minister regarded the file without touching it.\n\n\"And what does your government expect in return?\"\n\n\"Friendship. Nothing more.\"
+- **Description:** [SCOPE.sCountry('supporting_power').GetName] has come out publicly in defence of the colonial powers' right to their overseas holdings, and its diplomats make little secret of whose holdings they have in mind. Standing openly beside it would give us a powerful friend against mounting international pressure — and tie our name to theirs.
+- **Flavor:** \"'The colonial powers have every right to administer their territories as they see fit,'\" the colonial minister read aloud from the transcript of the [SCOPE.sCountry('supporting_power').GetAdjectiveNoFormatting] foreign minister's speech. \"'And those who lecture them would do well to look to their own houses.'\"\n\nHe set the pages down.\n\n\"They have not said a word of this to us.\"\n\n\"They did not need to, Minister. They said it to everyone else.\"
 - **Current image:** gfx/event_pictures/cold_war_proxy_competition.dds
 
 ### decolonization_events.13
@@ -830,7 +842,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.21
 - **Title:** The Non-Aligned Path
-- **Description:** The [Concept('concept_great_power', 'great powers')] circle our young nation like hawks, each offering friendship and aid with strings carefully hidden. [SCOPE.sCountry('anti_colonial_gp').GetName] promises solidarity against imperialism. [SCOPE.sCountry('pro_colonial_gp').GetName] offers trade and investment. A growing movement among newly independent nations proposes a third way: non-alignment.
+- **Description:** The [Concept('concept_great_power', 'great powers')] have taken sides on empire, and a young nation cannot stay out of the argument for long. [SCOPE.sCountry('anti_colonial_gp').GetName] stands publicly against colonial rule, and its solidarity would be ours for the asking. [SCOPE.sCountry('pro_colonial_gp').GetName] stands with the old empires, but its markets and capital are what our economy lacks. A growing movement among newly independent nations proposes a third way: non-alignment.
 - **Flavor:** \"They call it a 'sphere of influence',\" the foreign minister explained to the cabinet. \"What it means in practice is that you smile at one superpower and the other one stops selling you wheat.\"\n\n\"And if we smile at neither?\"\n\n\"Then both of them stop selling you wheat.\"\n\nThe cabinet considered this for some time. The agriculture minister opened his folder and closed it again.
 - **Current image:** gfx/event_pictures/post_colonial_tensions.dds
 
@@ -872,14 +884,14 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### decolonization_events.206
 - **Title:** The Last Flag Lowered
-- **Description:** The colonial chapter of [ROOT.GetCountry.GetName]'s history closes — not in collapse, not under international ultimatum, but by decision. No overseas territories remain. What we held, we have chosen to release. Whether history reads this as wisdom or weakness, the timing was ours.
+- **Description:** The colonial chapter of [ROOT.GetCountry.GetName]'s history closes — not in collapse, not under international ultimatum, but by decision. No overseas territories remain, and the flags we lowered came down on our own order. Whether history reads this as wisdom or weakness, the timing was ours.
 - **Flavor:** \"We did not wait to be forced,\" the minister told the assembled representatives. \"That is the only distinction history will remember clearly. Everything else — the terms, the dates, the arguments — those will be debated. But this was ours to choose.\"
 - **Current image:** gfx/event_pictures/independence_celebration.dds
 
 ### decolonization_events.50
 - **Title:** The Treasury Says No
-- **Description:** The exchequer's monthly briefing has become an exercise in apocalyptic prose. Servicing colonial garrisons, [concept_infrastructure], and administration is consuming a quarter of state revenue. The latest borrowing round was undersubscribed. The City whispers about a sterling crisis.
-- **Flavor:** \"Minister, the simple truth is that we cannot afford this empire.\"\n\n\"We cannot afford NOT to have this empire. Without the colonies, what becomes of our trade balance? Of sterling? Of our standing in the world?\"\n\nThe Chancellor closed his folder. \"With them, sir, we may answer those questions in pounds. Without them, we may at least answer them in pounds we still possess.\"
+- **Description:** The treasury's monthly briefing has become an exercise in apocalyptic prose. Servicing colonial garrisons, [concept_infrastructure], and administration is consuming a quarter of state revenue. The latest borrowing round was undersubscribed, and the financiers who took it now whisper about a run on the currency.
+- **Flavor:** \"Minister, the simple truth is that we cannot afford this empire.\"\n\n\"We cannot afford NOT to have this empire. Without the colonies, what becomes of our trade balance? Of our currency? Of our standing in the world?\"\n\nThe finance minister closed his folder. \"With them, sir, we may answer those questions in borrowed money. Without them, we may at least answer them in money we still possess.\"
 - **Current image:** gfx/event_pictures/stock_exchange_frenzy.dds
 
 ### decolonization_events.51
@@ -905,6 +917,30 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** Soldiers home from the colonies have begun organizing. They have seen what they have seen — and what they have done — and they are no longer quiet about it. The petty bourgeoisie, the small-business backbone of the war economy, sides with them: their sons, their employees, their friends. The pension halls are full; the parade grounds are not.
 - **Flavor:** \"I served,\" the old veteran said. \"I came home. I will not serve again.\"\n\n\"And your sons?\"\n\n\"Will not serve either. I will not permit it. I have lived through enough wars to know which ones we should be fighting, and the next war they propose is not one of them. The pension will pay for both of them through university. The pension is the only thing the empire ever gave me that I will be passing on.\"
 - **Current image:** gfx/event_pictures/military_parade.dds
+
+### decolonization_events.60
+- **Title:** Old Ties, New Terms?
+- **Description:** Years after independence, trade still runs along the old sea lanes to [SCOPE.sCountry('ties_former_overlord').GetName], and so do our students, our debts and our diplomats' habits. Some in the cabinet want to formalise the link: a partnership of equals, on our terms this time. Others warn that a partnership with the old ruler is the empire by softer means.
+- **Flavor:** \"We would be going to them,\" the foreign minister said. \"Not the other way round. That is the difference.\"\n\n\"Is it?\" asked the education minister. \"My father went to them too. He called it a scholarship.\"
+- **Current image:** gfx/event_pictures/diplomatic_meeting.dds
+
+### decolonization_events.61
+- **Title:** The Accounting
+- **Description:** Our historians and lawyers have finished the ledger of the colonial years under [SCOPE.sCountry('reparations_payer').GetName]: the ore shipped out, the land taken, the labour conscripted. The cabinet must decide whether to present it as a formal claim for reparations of #b @money![ROOT.GetVariable('decol_reparations_claim').GetValue|D]#!, or to keep it in the drawer for now.
+- **Flavor:** \"They will say it was a hundred years ago,\" the justice minister said.\n\n\"Then we will show them the receipts,\" the finance minister replied. \"They kept very good receipts.\"
+- **Current image:** gfx/event_pictures/international_court_chamber.dds
+
+### decolonization_events.62
+- **Title:** A Fraternal Proposal
+- **Description:** [SCOPE.sCountry('truce_proposer').GetName], our neighbour and kin across a border the departing powers drew, has proposed a fraternal federation between our young nations, beginning with a five-year pledge that neither will take up arms against the other. Accepting binds us as much as them.
+- **Flavor:** \"One people, two flags,\" the envoy said. \"For now.\"\n\n\"And in five years?\"\n\n\"In five years, perhaps one flag. Or two peoples. That is what the five years are for.\"
+- **Current image:** gfx/event_pictures/peace_conference_grand.dds
+
+### decolonization_events.63
+- **Title:** The Line on the Map
+- **Description:** [SCOPE.sCountry('truce_proposer').GetName] has formally recognised the border between our nations as the departing powers left it, and offers a five-year truce so that both of us can build within it. Accepting binds us as much as them, and closes, for now, the question of the lands we both claim.
+- **Flavor:** The surveyor unrolled the colonial map on the table between the two delegations. Neither side touched it.\n\n\"It is a bad line,\" said one.\n\n\"It is the only line we have,\" said the other. \"Let us at least agree not to die over it this decade.\"
+- **Current image:** gfx/event_pictures/partition_border_drawing.dds
 
 ### decolonization_events.300
 - **Title:** The Imperial Federation Act
@@ -1238,7 +1274,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.29
 - **Title:** The Trust Question
-- **Description:** Grant a ten-year transition period instead.
+- **Description:** As the [SCOPE.sLaw('current_law_scope').GetName] legislation works its way through the halls of power, two competing visions have emerged. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] propose exempting the nation's largest enterprise from breakup - a 'national champion' clause that would preserve our ability to compete on the world stage. Meanwhile, the [SCOPE.gsInterestGroup('unions_ig').GetName] counter with a cooperative preference [concept_amendment], arguing that worker-owned enterprises should receive favorable treatment under the new rules.
 - **Flavor:** 'You want to break up our largest company,' the industrialist said. 'The one that employs more people than any other. The one that keeps us competitive abroad.'\n\n'We want to break up a monopoly that fixes prices and crushes competitors.'\n\n'Same thing, from different angles.' He leaned back. 'I'll offer you this: exempt the national champion, and I'll deliver the votes you need for everything else.'\n\nThe reformer stared at the ceiling. It was, she reflected, a very ugly ceiling. 'Let me think about it.'
 - **Current image:** gfx/event_pictures/labor_strike_picket.dds
 
@@ -1250,7 +1286,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.31
 - **Title:** The Privacy Bargain
-- **Description:** Allow a three-year compliance grace period.
+- **Description:** The privacy bill has attracted strange bedfellows. The [SCOPE.gsInterestGroup('industrialists_ig').GetName] want a carve-out allowing businesses to collect personal data for commercial purposes - claiming that innovation requires information. Meanwhile, the [SCOPE.gsInterestGroup('intelligentsia_ig').GetName] push for whistleblower protections, arguing that no privacy law is complete without shields for those who expose government wrongdoing.
 - **Flavor:** 'The industrialists want a clause permitting commercial data collection,' the aide said. 'The intelligentsia want whistleblower protections written in.'\n\n'And if I give one side what they want?'\n\n'The other side kills the bill.'\n\nThe legislator rubbed her eyes and looked at the stack of [Concept('concept_amendment', 'amendments')] on her desk. There were forty-seven of them. She had read eleven.\n\n'What does the current draft do?'\n\n'Nothing that anyone particularly wants, ma'am.'
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
@@ -1568,7 +1604,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### extra_law_events.84
 - **Title:** Direct Voting or Deliberative Chambers?
-- **Description:** The direct-democracy bill [SCOPE.sLaw('current_law_scope').GetName] reaches its instrument question. Populists want direct citizen voting on legislation; reformers want sortition-based deliberative chambers. The design choice defines what 'democracy' will mean here.
+- **Description:** The [SCOPE.sLaw('current_law_scope').GetName] bill reaches its instrument question: how will the voters govern? Populists want direct citizen voting on legislation; reformers want sortition-based deliberative chambers. The design choice defines what 'democracy' will mean here.
 - **Flavor:** \"A vote of all the people takes a day. A deliberation by a hundred chosen by lot takes a week and produces a better answer. The state must decide which it values more.\"\n\n\"Better by whose standard?\"\n\n\"By every standard except the speed of the answer. Which is, of course, the standard that wins most arguments in politics. Hence the difficulty of getting the deliberative model adopted.\"
 - **Current image:** gfx/event_pictures/parliamentary_debate_heated.dds
 
@@ -1620,8 +1656,8 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### international_relations_events.2
 - **Title:** The Shadow War
-- **Description:** Our operatives have identified opposition movements within [SCOPE.sCountry('proxy_rival').GetName]'s sphere of influence ripe for exploitation. Covert funding could destabilize their hold on the region - but such operations carry immense risk if discovered.
-- **Flavor:** \"The operation is already prepared. Our people are in place. All we need is your authorization and the funds.\"\n\nThe briefing officer pauses.\n\n\"Of course, if it goes wrong, we will deny everything. And if it goes very wrong - well, they will deny us.\"
+- **Description:** Opposition movements within [SCOPE.sCountry('proxy_rival').GetName]'s sphere of influence are ripe for exploitation, the intelligence service reports. Covert funding could destabilize their hold on the region - but such operations carry immense risk if discovered.
+- **Flavor:** \"The plan is drawn up and the contacts are waiting. All we need is your authorization and the funds.\"\n\nThe briefing officer pauses.\n\n\"Of course, if it goes wrong, we will deny everything. And if it goes very wrong - well, they will deny us.\"
 - **Current image:** gfx/event_pictures/proxy_war_map.dds
 
 ### international_relations_events.3
@@ -1656,8 +1692,8 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### international_relations_events.8
 - **Title:** Nuclear Brinkmanship
-- **Description:** A diplomatic crisis with [SCOPE.sCountry('nuclear_rival').GetName] has spiralled to the point where both nations' nuclear arsenals stand at maximum readiness. Military commanders on both sides await orders that could end civilization.
-- **Flavor:** The telephone rings at three in the morning. The aide's voice is strained.\n\n\"Sir, they have raised their alert status. Our forces are requesting authorization to do the same.\"\n\nA long pause.\n\n\"How long do we have?\"\n\n\"Hours, sir. Perhaps less.\"
+- **Description:** In the diplomatic confrontation now under way, [SCOPE.sCountry('nuclear_rival').GetName] stands on the other side from us - and like us, it holds nuclear weapons. Every step in the dispute is now weighed against the unthinkable, and military commanders on both sides are waiting to learn how hard their governments mean to push.
+- **Flavor:** The telephone rings at three in the morning. The aide's voice is strained.\n\n\"Sir, their foreign minister has said it again on the radio. They will not back down.\"\n\nA long pause.\n\n\"And our commanders?\"\n\n\"Waiting to hear what we say next, sir. So is the rest of the world.\"
 - **Current image:** gfx/event_pictures/nuclear_standoff_tension.dds
 
 ### international_relations_events.101
@@ -1702,6 +1738,24 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** \"No press conference. No trial. No headlines,\" the handler says, guiding the exhausted operative into a waiting car. \"That is the good news.\"\n\n\"And the bad news?\"\n\n\"If they were willing to return the agent quietly, they already learned everything they needed.\"
 - **Current image:** gfx/event_pictures/intelligence_dead_drop.dds
 
+### international_relations_events.201
+- **Title:** Plans on the Table
+- **Description:** The General Staff has laid a plan before the cabinet: a sweeping expansion of the armed forces, sized to outmatch [SCOPE.sCountry('arms_race_instigator').GetName]. New divisions, new aircraft, new long-range artillery - and a bill the treasury will feel for years. A buildup on this scale cannot be hidden. The rival will see it, and will have to decide how to answer.
+- **Flavor:** The chief of staff unrolls the procurement tables across the cabinet table and weighs the corners down with ashtrays.\n\n\"If we start now, we hold the advantage for a decade.\"\n\n\"And if they match us?\"\n\n\"Then we will have spent a great deal of money to stand exactly where we stand today,\" the finance minister says. \"But at least we will be standing there armed.\"
+- **Current image:** gfx/event_pictures/military_parade.dds
+
+### international_relations_events.202
+- **Title:** The War of Words
+- **Description:** The information ministry proposes a sustained propaganda offensive against [SCOPE.sCountry('propaganda_instigator').GetName]: radio broadcasts beamed across the border, pamphlets, and sympathetic journalists abroad, all aimed at the credibility of its institutions. The campaign would raise our standing in the world's press - but a rival under attack in its own newspapers will be tempted to strike back in ours.
+- **Flavor:** \"We have the transmitters. We have the writers. We have three editors in their capital who owe us favours.\"\n\nThe minister turns a page of the draft broadcast schedule. \"And when they answer in kind?\"\n\n\"Then, Minister, we will have started a conversation.\"
+- **Current image:** gfx/event_pictures/media_broadcast_global.dds
+
+### international_relations_events.203
+- **Title:** An Agent in Place
+- **Description:** The intelligence service has found a candidate inside [SCOPE.sCountry('espionage_catcher').GetName]'s defence ministry: a clerk with debts, access to the weapons bureau, and no love for his employers. Recruited, he could pass their designs to our engineers for years. If their counterintelligence finds him, the arrest will be front-page news in their capital - and the trail will lead straight back to us.
+- **Flavor:** The photograph shows an unremarkable man in an unremarkable coat, waiting for a tram.\n\n\"He has been passed over for promotion three times,\" the case officer says. \"His wife has expensive tastes. He hates his minister.\"\n\n\"And if he is a plant of theirs?\"\n\n\"Then we will find out very quickly, and very publicly.\"
+- **Current image:** gfx/event_pictures/espionage_dead_drop.dds
+
 ## irredentism_events.txt
 
 ### irredentism.1
@@ -1723,8 +1777,8 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Current image:** africa_diplomats_negotiating
 
 ### irredentism.4
-- **Title:** A Sister Nation Asks Us to Join
-- **Description:** A formal proposal has arrived. Our same-culture neighbor offers a voluntary union, dissolving us into them as a willing partner. The prosperity would be real and immediate; the name on the flag would not be ours.
+- **Title:** [SCOPE.sCountry('irr_unifier').GetName] Asks Us to Join
+- **Description:** A formal proposal has arrived from [SCOPE.sCountry('irr_unifier').GetName]. Our same-culture neighbor offers a voluntary union, dissolving us into them as a willing partner. The prosperity would be real and immediate; the name on the flag would not be ours.
 - **Flavor:** \"The formal offer arrived this morning. They are offering union — full citizenship, shared institutions, no border.\"\n\n\"And we are to dissolve ourselves into them?\"\n\n\"That is what union means in the smaller country. The benefits will be real. The flag will be theirs. The question is what is more precious — the prosperity that follows the union, or the name that does not.\"
 - **Current image:** africa_diplomats_negotiating
 
@@ -1732,6 +1786,18 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** [SCOPE.sCountry('irr_requester').GetName] Asks Us to Bless a War
 - **Description:** Our bloc client [SCOPE.sCountry('irr_requester').GetName] requests our blessing to wage a war of reunification against [SCOPE.sCountry('target_country').GetName]. The decision is ours; refusing risks straining the bloc.
 - **Flavor:** \"They want our blessing for a war of reunification.\"\n\n\"And if we refuse?\"\n\n\"The bloc fractures. They believed our solidarity meant approval as well as protection. We are about to teach them the difference. The lesson will be expensive.\"
+- **Current image:** africa_diplomats_negotiating
+
+### irredentism.10
+- **Title:** [SCOPE.sCountry('irr_bloc_leader').GetName] Blesses Our Claim
+- **Description:** [SCOPE.sCountry('irr_bloc_leader').GetName] has blessed our claim against [SCOPE.sCountry('target_country').GetName]. For the next five years our [Concept('concept_power_bloc_leader', 'bloc leader')] will not stand in the way of a war to bring our people home. Whether we fight it, and when, is now our decision alone.
+- **Flavor:** \"The embassy's reply came this morning. They will not stand in our way.\"\n\n\"Will they stand beside us?\"\n\n\"They did not say. A blessing is not an alliance. It is a promise to look away — which, from a patron, is worth a great deal and costs them nothing.\"
+- **Current image:** africa_diplomats_negotiating
+
+### irredentism.11
+- **Title:** [SCOPE.sCountry('irr_bloc_leader').GetName] Withholds Its Blessing
+- **Description:** [SCOPE.sCountry('irr_bloc_leader').GetName] has refused to bless our claim against [SCOPE.sCountry('target_country').GetName]. Our [Concept('concept_power_bloc_leader', 'bloc leader')] says the timing is wrong; our nationalists say a patron that will not stand by its own people's cause is no patron at all.
+- **Flavor:** \"They thanked us for our patience.\"\n\n\"We have been patient for forty years.\"
 - **Current image:** africa_diplomats_negotiating
 
 ### irredentism.8
@@ -2218,7 +2284,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### modern_election_events.4
 - **Title:** The Algorithm Knows
-- **Description:** Our campaign operatives have acquired access to a vast trove of personal data — browsing habits, purchase histories, social connections. With advanced analytics, they can craft individually tailored messages for millions of swing voters. The technique is devastatingly effective, but its ethics are questionable.
+- **Description:** A data broker has offered our campaign access to a vast trove of personal data — browsing habits, purchase histories, social connections. With advanced analytics, the campaign could craft individually tailored messages for millions of swing voters. The technique is devastatingly effective, but its ethics are questionable.
 - **Flavor:** \"We know what they fear. We know what they hope for. We can whisper exactly what each voter needs to hear.\"\n\n\"Is it manipulation if you're just telling people what they already believe?\"\n\n\"I deleted my social media accounts last week. I suggest you do the same.\"
 - **Current image:** gfx/event_pictures/election_campaign_rally.dds
 
@@ -2374,7 +2440,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### modern_election_events.30
 - **Title:** Lights Out
-- **Description:** On the eve of the vote, a sophisticated cyberattack has struck the election [concept_infrastructure] of [ROOT.GetCountry.GetNameNoFlag]. Voter rolls display errors, electronic tallying systems go dark, and confusion spreads across polling stations. Whether this is the work of foreign adversaries, domestic saboteurs, or mere technical failure, the integrity of the entire election is now in question.
+- **Description:** On the eve of the vote, a cascade of failures has struck the election [concept_infrastructure] of [ROOT.GetCountry.GetNameNoFlag]. Voter rolls display errors, electronic tallying systems go dark, and confusion spreads across polling stations. Some are already calling it a cyberattack. Whether this is the work of foreign adversaries, domestic saboteurs, or mere technical failure, the integrity of the entire election is now in question.
 - **Flavor:** \"Six polling stations lost power at the same minute.\"\n\n\"Coordinated?\"\n\n\"The investigators say no. The voters say yes. By morning the social platforms had circulated three competing theories about who was responsible. None of them mentioned the obvious explanation, which is that the backup generators are twenty years old and we have always known this.\"
 - **Current image:** gfx/event_pictures/election_interference_cyber.dds
 
@@ -2496,6 +2562,12 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** \"Their ambassador read the statement at the rostrum without once looking up from the page. He did not need to. The cameras were on him, not on us.\"\n\n\"For years the ministry told us the world was not watching. Now we have the front pages of three foreign capitals to wave in their faces, and the ministry has nothing to say about that either.\"\n\n\"My editor wanted the headline to be the recall, not the reason. I asked him which one embarrassed us more. He ran both, and then he stopped taking my calls for a week.\"
 - **Current image:** gfx/event_pictures/human_rights_declaration.dds
 
+### movement_events_te.17
+- **Title:** A Stain on Their Record
+- **Description:** The civil rights movement in [SCOPE.sCountry('cr_condemned_country').GetName] is appealing beyond its borders. Its activists have written to our newspapers, our churches and our parliament, asking the world to say out loud what [SCOPE.sCountry('cr_condemned_country').GetName]'s laws do to its minorities. Our own laws protect minorities, and our words would carry weight. A public condemnation would cost us goodwill in [SCOPE.sCountry('cr_condemned_country').GetName]'s capital, and it would please a good many people in ours.
+- **Flavor:** \"The ambassador asks whether you want it read at the rostrum or handed over quietly.\"\n\n\"What is the difference?\"\n\n\"About three front pages, sir, and one recalled ambassador. Theirs, most likely.\"
+- **Current image:** gfx/event_pictures/human_rights.dds
+
 ### movement_events_te.13
 - **Title:** The Underground Railroad
 - **Description:** Secret networks have emerged among discriminated communities, smuggling their most vulnerable members across the border to [SCOPE.sCountry('refuge_country').GetName], where more tolerant laws await them. Safe houses, forged documents, and sympathetic border guards form a chain of escape from persecution. The government faces a choice: crush the networks and seal the borders, or tacitly allow a safety valve that eases domestic tensions.
@@ -2524,7 +2596,7 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** The Movement Broken
 - **Description:** Reduce their political influence
 - **Flavor:** \"On Monday the landlord changed the locks. On Wednesday the membership rolls went into the back stove. On Friday the office telephone was disconnected. By the end of the month no one could remember which office it had been.\"\n\n\"My neighbour was a marcher. She is quiet now. She crosses the street when she sees me coming, and I do not blame her — I have been crossing the street to avoid other people myself.\"\n\n\"The minister wishes us all to know that order has been restored. He would prefer we did not ask at what cost. The press has, on the whole, obliged him.\"
-- **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
+- **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
 
 ### movement_events_te.5
 - **Title:** Draft Resistance
@@ -2578,7 +2650,7 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Title:** A New Era of Equality
 - **Description:** After years of struggle, the civil rights movement in [ROOT.GetCountry.GetName] has achieved its goals. Legal protections for minorities are now firmly established, and the nation can look forward to a more just society.
 - **Flavor:** \"My father lived for this day. He did not see it. I made sure to read him the morning paper aloud anyway, at the cemetery, sitting on the grass above where he sleeps.\"\n\n\"It was a long fight and a long after-fight, and we do not yet know which one cost us more. But it is done now, in law if not yet in fact, and it was done by us.\"\n\n#italic The arc of the moral universe is long, but it bends toward justice.#!
-- **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
+- **Current image:** gfx/event_pictures/movement_triumph_celebration.dds
 
 ### movement_events_te.220
 - **Title:** The Civil Rights Mandate is Signed
@@ -2622,6 +2694,12 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** \"Each year the bill is reasonable. Each year the bill is incremental. Each year the bill takes another two percent of what we asked for, and each year I tell my members that two percent is better than nothing. They are starting, this year, to disagree with me.\"\n\n\"We have, on paper, a great deal more than we had when I started. We have, in fact, almost exactly what we had when I started. I cannot any longer tell which one of those is the real thing.\"\n\n\"They said they would come back to the question next session. They have said that for nine sessions running. I am no longer in the habit of believing them.\"
 - **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
 
+### movement_events_te.232
+- **Title:** The Movement Fades
+- **Description:** The civil rights movement has lost its momentum. Its rallies thinned, its organizers drifted to other causes, and the newspapers that once covered every march have moved on. No single blow ended it; there was simply less of it each year, until what remained could no longer call itself a movement. The grievances that gave rise to it have not gone away.
+- **Flavor:** \"We had four hundred at the first meeting. Then two hundred. Then the hall wanted its deposit and nobody had it.\"\n\n\"Nobody broke us up. Nobody had to. People got tired, or got jobs, or got married, or moved to the city where the rents are worse and the evenings are shorter.\"\n\n\"I kept the banner. It is in the loft. I tell myself it is there because we will need it again, and some weeks I even believe it.\"
+- **Current image:** gfx/event_pictures/movement_crushed_aftermath.dds
+
 ### movement_events_te.301
 - **Title:** First Mass Rally Draws Notice
 - **Description:** What started as a community meeting filled a city block. Sympathetic newspapers run the photograph above the fold. The movement has, suddenly, faces and names.
@@ -2645,6 +2723,302 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** Hundreds of thousands fill the avenues outside the legislature. The speeches are broadcast; the demands are clear; the cameras do not look away. The country is being asked, in front of the cameras, what it intends to be.
 - **Flavor:** \"We have come, peacefully, in our numbers, to be answered. We will be here until the answer arrives. We have brought sandwiches and a great deal of patience, and we have been told there is more of both on the way.\"\n\n\"My cameraman has filmed three of these in the last decade. He says this one is different. The faces in the crowd are not afraid. The signs in the crowd are not pleas — they are demands. I am inclined to agree with him.\"\n\n\"From the window of the legislature you can see them as a single mass, from end to end, with no edge. My colleague suggested closing the curtains. I told him that would not make the question any quieter.\"
 - **Current image:** gfx/event_pictures/civil_rights_peaceful_march.dds
+
+## nuclear_crisis_events.txt
+
+### nuclear_crisis.1
+- **Title:** A Line Drawn in Private
+- **Description:** Through a private channel, [SCOPE.sCountry('nd_issuer').GetName] has warned our government that it is prepared to use nuclear weapons, and demands that [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')]. Nothing has been published, so neither side has yet staked its reputation before the world, and there is still room to answer quietly. The warning carries a deadline.
+- **Flavor:** \"Read me the operative sentence.\"\n\n\"There are two pages, and it is on the second. 'The government will regard itself as released from every restraint it has hitherto observed.'\"\n\n\"Every restraint.\"\n\n\"Our lawyers say it is deliberately vague. Our generals say it is perfectly clear. I suggest we assume the generals are right and hope the lawyers are.\"\n\n\"And if we give way?\"\n\n\"Then we will have learned what it costs to be threatened. So will everyone who was watching.\"
+- **Current image:** gfx/event_pictures/diplomatic_crisis_ultimatum.dds
+
+### nuclear_crisis.2
+- **Title:** The Reply Comes Back
+- **Description:** [SCOPE.sCountry('nd_target').GetName] has rejected our warning. Its reply refuses our demand point by point and offers nothing in return. The crisis has entered a new and more dangerous stage, and the next step, with all its costs, is ours to choose.
+- **Flavor:** \"They said no.\"\n\n\"They said a great deal more than no. Four pages of it.\"\n\n\"Summarise.\"\n\n\"'No,' with footnotes. And a paragraph at the end that our analysts have read eleven times and still cannot agree on, which I suspect is what it was written for.\"\n\n\"Can we make them regret it?\"\n\n\"We can make them believe they might. Whether that is the same thing is what we are about to find out.\"
+- **Current image:** gfx/event_pictures/nuclear_standoff_tension.dds
+
+### nuclear_crisis.3
+- **Title:** An Offer to Step Back
+- **Description:** An envoy has brought a proposal to end the nuclear standoff between [SCOPE.sCountry('nd_issuer').GetName] and [SCOPE.sCountry('nd_target').GetName]. Both sides would stand their forces down to routine readiness for two years and pledge never to use nuclear weapons against one another. The dispute that began the crisis would be left exactly where it is.
+- **Flavor:** The proposal was typed on plain paper with no letterhead, so that either side could later say it had come from the other. The envoy who carried it waited in the anteroom for forty minutes, holding it on one knee, and watched a clerk water the plants.\n\n\"Is it good news?\" the clerk asked eventually.\n\n\"It is a way out,\" the envoy said. \"Whether that is good news depends on whether anyone in there wants to leave.\"
+- **Current image:** gfx/event_pictures/detente_summit_meeting.dds
+
+### nuclear_crisis.4
+- **Title:** The Deadline Passes
+- **Description:** The deadline we set [SCOPE.sCountry('nd_target').GetName] has passed, and our demand has not been met. Whatever we do next will be taken as the true measure of our warning: by [SCOPE.sCountry('nd_target').GetName], by our own general staff, and by every government that has learned of it.
+- **Flavor:** \"It is past midnight. The deadline was midnight.\"\n\n\"I am aware. I wrote it.\"\n\n\"Their embassy has sent nothing. Their state radio is playing light music. Their ambassador was seen at the opera, smiling.\"\n\n\"They are telling us they do not believe us.\"\n\n\"Or that they do, and have decided to find out. Either way, whatever we do in the next hour is what we will turn out to have meant all along.\"
+- **Current image:** gfx/event_pictures/nuclear_standoff_tension.dds
+
+### nuclear_crisis.5
+- **Title:** Another Turn of the Screw
+- **Description:** [SCOPE.sCountry('nd_issuer').GetName] has pressed its nuclear demand again. It still insists that [SCOPE.sCountry('nd_target').GetName] [SCOPE.sCountry('nd_issuer').GetCustom('nd_crisis_demand_text')], and each week without an answer brings new signals: alerts allowed to leak, patrols flying closer to our borders, statements that grow shorter and colder. At home, the strain is beginning to show.
+- **Flavor:** The shop on the corner sold out of tinned food by Tuesday and candles by Wednesday. On Thursday the owner put a handwritten sign in the window: NO MORE BATTERIES. NO MORE WATER. NO MORE NEWS.\n\n\"Why no news?\" a customer asked.\n\n\"Because everyone who comes in asks me what is going to happen, and I sell newspapers, so they think I should know.\"\n\n\"And do you?\"\n\n\"I know what sells. Nobody buys candles when they believe the government knows what it is doing.\"
+- **Current image:** gfx/event_pictures/nuclear_standoff_tension.dds
+
+### nuclear_crisis.6
+- **Title:** The Crisis Passes
+- **Description:** (no localization)
+- **Flavor:** \"Every crisis ends in a document. A communiqué, a cable, a paragraph in somebody's memoirs. It will say how the thing ended, and it will be wrong in the details and right in the outline.\"\n\n\"And what does it leave out?\"\n\n\"The nights. Nobody writes down the nights. The duty officers remember them, and the signals clerks, and whoever sat beside the telephone waiting for it to ring. Then they retire, and it is as if the nights never happened. That is how we come to do it all again.\"
+- **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
+
+### nuclear_crisis.7
+- **Title:** They Chose War
+- **Description:** [SCOPE.sCountry('nd_target').GetName] has answered our public ultimatum with war. The diplomatic play we warned it over has become open fighting, and every government that read our ultimatum is now waiting to see whether we meant it. So is our own general staff.
+- **Flavor:** \"The ultimatum ran in every newspaper in the world. They mobilised the next morning.\"\n\n\"So the question is what we meant.\"\n\n\"No. The question is what we can live with having meant. Those are different questions, and they do not have the same answer.\"\n\n\"And the army?\"\n\n\"The army will fight whichever war you give it. It would like to know which one before breakfast.\"
+- **Current image:** gfx/event_pictures/nuclear_standoff_tension.dds
+
+### nuclear_crisis.20
+- **Title:** A Promise Called In
+- **Description:** [SCOPE.sCountry('nd_guarantee_attacker').GetName] has put [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] under a nuclear threat, exactly the danger our guarantee was written to meet. The government of [SCOPE.sCountry('nd_guarantee_beneficiary').GetName] has asked us, formally and in writing, whether we will stand by it. Every other country that relies on our word is waiting for the same answer.
+- **Flavor:** \"The treaty says we will regard any nuclear threat against them as a threat against ourselves.\"\n\n\"Treaties say a great many things. Who drafted that line?\"\n\n\"Our predecessors. At the time it was thought very reassuring.\"\n\n\"It was. That was its whole purpose. Nobody who signed it expected to be asked to mean it.\"\n\n\"They are asking now. And by tomorrow morning, so will everyone else who keeps something similar from us in a drawer.\"
+- **Current image:** gfx/event_pictures/nuclear_treaty_signing.dds
+
+### nuclear_crisis.21
+- **Title:** Our Guarantor Stands Firm
+- **Description:** Our guarantor has answered: it stands by its promise to protect us, and it has said so to [SCOPE.sCountry('nd_guarantee_attacker').GetName] in terms that leave little room for doubt. Whether the promise holds to the end remains to be seen, but for now, at least, we do not stand alone.
+- **Flavor:** \"What did they say?\"\n\n\"What they had to say. Their minister read it from a card and did not look up until the end.\"\n\n\"And when the minister looked up?\"\n\n\"Then I understood that the card had been written for the newspapers, and the look was meant for me. I have spent twenty years learning to read that look. Between governments, it is the only part of a treaty that was ever real.\"
+- **Current image:** gfx/event_pictures/nuclear_treaty_signing.dds
+
+### nuclear_crisis.22
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
+
+### nuclear_crisis.23
+- **Title:** Our Allies Are Alarmed
+- **Description:** Our warheads are off their delivery systems and in storage. We called it prudence. To the countries that shelter under our nuclear guarantee it reads otherwise: we promised to stand between them and the bomb, and we have put ours away. Their envoys ask, politely and then less politely, how long it would take to bring the weapons back — and whether we would.
+- **Flavor:** \"Two weeks,\" the minister said. The ambassador wrote it down, and then wrote it down again, as if the second time it might say something else.
+- **Current image:** gfx/event_pictures/nuclear_treaty_signing.dds
+
+### nuclear_crisis.24
+- **Title:** Our Protégé Struck First
+- **Description:** [SCOPE.sCountry('nd_guarantee_attacker').GetName] has answered with a nuclear weapon of its own — but it was answering [SCOPE.sCountry('nd_guarantee_beneficiary').GetName], a country we have promised to protect, which used the bomb first. Our guarantee was written to shield them. Whether it was written to cover this is for us to decide.
+- **Flavor:** \"We promised to defend them.\"\n\n\"We did. Nobody promised to follow them.\"
+- **Current image:** gfx/event_pictures/nuclear_treaty_signing.dds
+
+### nuclear_crisis.99
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
+
+### nuclear_crisis.100
+- **Title:** A Standing Deterrent
+- **Description:** Our nuclear arsenal is no longer a programme but a standing force. Crews must be trained, weapons maintained and bases guarded around the clock, and the bill now arrives every week, whatever we spend on the weapons programme itself. How that force is kept, from its doctrine and readiness to who may order it to fire, is set in the Nuclear Weapons journal entry, under Nuclear Posture.
+- **Flavor:** \"The weapons are built. They cost what they cost. Why is the bill still coming?\"\n\n\"Because a weapon nobody guards is a weapon somebody steals. Because a bomber nobody flies becomes a museum piece. Because somebody has to be awake at four in the morning on every holiday, for as long as the weapons exist, in case this is the night.\"\n\n\"And how long is that?\"\n\n\"Until nobody else has one. Budget accordingly.\"
+- **Current image:** gfx/event_pictures/nuclear_bunker_life.dds
+
+## nuclear_custody_events.txt
+
+### nuclear_custody.1
+- **Title:** Who Holds the Button?
+- **Description:** The uprising has a government, an army and a capital of its own now — [SCOPE.sCountry('nd_cw_rebel').GetName] — and some of our #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads are stored in the provinces it holds. The officers who guard them are waiting to be told whose orders to take. We can hold the line and trust our custodians, bring every weapon we can reach into storage for as long as the war lasts, or take them apart before anyone can use them. If the rebels win, whatever we still hold becomes theirs.
+- **Flavor:** On 25 April 1961, with mutinous generals holding Algiers, France set off its fourth test device in the Sahara ahead of schedule, so that it could not fall into their hands.
+- **Current image:** gfx/event_pictures/nuclear_standoff_tension.dds
+
+### nuclear_custody.2
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
+
+### nuclear_custody.3
+- **Title:** The Arsenal Changes Hands
+- **Description:** Custody of #v [ROOT.GetCountry.MakeScope.Var('nd_custody_received').GetValue|0]#! nuclear warheads has passed to us, together with the lands where they were stored. Our officers have checked every weapon against the old inventories, and the count matches.
+- **Flavor:** When the Soviet Union dissolved in 1991, its warheads were stored in four newly independent states. Gathering them into Russia took five years, and an American programme to pay for it.
+- **Current image:** gfx/event_pictures/nuclear_proliferation_threat.dds
+
+### nuclear_custody.4
+- **Title:** The Old Regime's Arsenal
+- **Description:** The old government left us no warheads, but its nuclear programme is ours, and with it the doctrine the state has always kept until we choose otherwise. The rest of the old regime's word died with it: its pledges bind us to nothing, and the world will judge our threats afresh.
+- **Flavor:** Whatever else a revolution changes, someone must know on its first day who holds the codes.
+- **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
+
+### nuclear_custody.5
+- **Title:** Deny Them the Bomb
+- **Description:** [SCOPE.sCountry('nd_cw_rebel').GetName] is winning. If it takes the capital, it takes the state — and with the state, the #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads we still hold. We can take them apart now, in haste and in the middle of a war, or keep them as the last card we hold.
+- **Flavor:** In 1989, as its government prepared to hand power to the majority it had fought for decades, South Africa began to dismantle the six bombs it had built. It told the world only in 1993.
+- **Current image:** gfx/event_pictures/nuclear_bunker_life.dds
+
+### nuclear_custody.6
+- **Title:** A Nuclear Power Divided
+- **Description:** [SCOPE.sCountry('nd_cwr_gov').GetName] is at war with itself. The rebels of [SCOPE.sCountry('nd_cwr_reb').GetName] hold part of the country, and the government still holds its nuclear arsenal. Every government with warheads of its own is asking the same questions: whose side are we on, and who will be counting the weapons when it is over?
+- **Flavor:** In December 1991, as the Soviet Union came apart, the United States Congress voted money to help secure and dismantle its weapons. The Nunn–Lugar programme went on to deactivate more than seven thousand warheads.
+- **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
+
+### nuclear_custody.7
+- **Title:** An Offer to Secure Our Arsenal
+- **Description:** [SCOPE.sCountry('nd_cw_helper').GetName] offers to send technicians and money to help us guard and count our nuclear warheads for as long as the war lasts. Its people would see our depots and our inventories. In return, fewer weapons would slip away whenever they change hands, and if the war goes against us, they could take the weapons apart for us without losing one.
+- **Flavor:** Under the Cooperative Threat Reduction programme, American engineers worked inside Russian weapons storage sites, fitting fences, alarms and accounting systems.
+- **Current image:** gfx/event_pictures/nuclear_treaty_signing.dds
+
+### nuclear_custody.8
+- **Title:** Our Offer to Secure Their Arsenal
+- **Description:** (no localization)
+- **Flavor:** In 1994, in Project Sapphire, American specialists flew nearly six hundred kilograms of weapons-grade uranium out of Kazakhstan, where it had been kept under little more than a padlock.
+- **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
+
+### nuclear_custody.9
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
+
+### nuclear_custody.10
+- **Title:** A New Nuclear State
+- **Description:** [SCOPE.sCountry('nd_bp_state').GetName] has won its independence and kept the nuclear warheads it seized in the fighting — about #v [SCOPE.sCountry('nd_bp_state').MakeScope.Var('nd_public_estimate').GetValue|0]#!, by our estimate. A new state with its borders still in dispute, holding weapons it may not be able to maintain, is a danger to everyone. We could join the great powers pressing it to give them up, in return for our guarantee of its security.
+- **Flavor:** In the Budapest Memorandum of December 1994, the United States, Britain and Russia gave Ukraine assurances of its independence and its borders. Ukraine gave up what was then the world's third-largest nuclear arsenal.
+- **Current image:** gfx/event_pictures/nuclear_proliferation_threat.dds
+
+### nuclear_custody.11
+- **Title:** The Budapest Offer
+- **Description:** [SCOPE.sCountry('nd_bp_lead').GetName] offers us its guarantee against nuclear attack if we give up our #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! warheads. The weapons would be taken apart, and [SCOPE.sCountry('nd_bp_lead').GetName] would hold the treaty that keeps us disarmed. Keeping them costs us money every week, and makes us a target for every power that would rather we had none. Giving them up leaves us with nothing but a great power's word.
+- **Flavor:** Twenty years after Budapest, one of the three powers that had given Ukraine its assurances annexed Crimea.
+- **Current image:** gfx/event_pictures/nuclear_treaty_signing.dds
+
+### nuclear_custody.12
+- **Title:** An Answer on the Warheads
+- **Description:** (no localization)
+- **Flavor:** The last nuclear warheads left Ukraine for Russia in June 1996.
+- **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
+
+## nuclear_incident_events.txt
+
+### nuclear_incident.1
+- **Title:** Conflicting Indications
+- **Description:** Our early-warning network is reporting what it reads as the opening of an attack from [SCOPE.sCountry('nd_warning_suspect').GetName]. The second channel, which should see whatever the first one sees, has confirmed nothing. The duty officer has passed the warning up with a written objection: an attack would not begin like this. The authority to act rests with the government, and the time to use it is running out.
+- **Flavor:** \"How long do we have?\"\n\n\"If it is real, minutes. Fewer than when you asked.\"\n\n\"And the second channel?\"\n\n\"Still nothing. By now it should be seeing something. It isn't.\"\n\n\"The officer on the floor?\"\n\n\"Says an attack would not start this way. Says their leader is abroad this week, shaking hands in front of cameras. Has also put it in writing that the blame is the officer's own if the objection turns out to be wrong.\"\n\n\"Keep that note somewhere safe. Somebody will want it, whichever way this goes.\"
+- **Current image:** gfx/event_pictures/nuclear_false_alarm_panic.dds
+
+### nuclear_incident.2
+- **Title:** The Order Nobody Passed
+- **Description:** The warning of an attack from [SCOPE.sCountry('nd_warning_suspect').GetName] went first to the launch crews, as our standing orders require, and reached the government only afterwards. The orders said fire. Somewhere between the warning centre and the launchers, an officer refused to pass the order on, and it went no further. Whether that refusal saved the country or left it exposed, nobody can yet say.
+- **Flavor:** \"The order came through authenticated. Twice.\"\n\n\"And you did not pass it on.\"\n\n\"I held it. The procedure gives me one minute to pass it on. It says nothing about what to do if you think the machine is wrong, because the people who wrote it could not imagine anyone thinking so.\"\n\n\"If the warning was true, you have left us defenceless.\"\n\n\"If the warning was true, we were dead already. All I declined to do was take a few million others with us.\"
+- **Current image:** gfx/event_pictures/nuclear_false_alarm_panic.dds
+
+### nuclear_incident.3
+- **Title:** What the Warning Was
+- **Description:** (no localization)
+- **Flavor:** \"The board would like to know why you doubted it.\"\n\n\"Because it did not look like the attack we trained for. In every exercise I have sat through, the attack comes the way the planners imagine it. This came some other way.\"\n\n\"Some would call that the enemy being clever.\"\n\n\"Some did, that night. Loudly.\"\n\n\"The board would also like to know why a system this expensive can hang on the judgement of one tired officer on a night shift.\"\n\n\"So would I. I was hoping the board would tell me.\"
+- **Current image:** gfx/event_pictures/budget_hearing_congress.dds
+
+### nuclear_incident.4
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** The duty log for that night has two entries seventeen minutes apart. The first records the order. The second records what came of it. Both are in the same careful hand, in the blue ink the regulations require, and the investigator who read them later noticed that the second was written more neatly than the first, as though the officer had taken great care over it, having nothing else left to take care of.\n\n\"Did you think of refusing?\" the investigator asked.\n\n\"The order was authenticated,\" the officer said. \"That was the whole point of it.\"
+- **Current image:** (unknown)
+
+### nuclear_incident.5
+- **Title:** Their Launchers Were Ready
+- **Description:** The nuclear forces of [SCOPE.sCountry('nd_interceptor').GetName] were prepared to launch against us, missiles fuelled and bombers in the air, and the order was recalled only at the last moment. Their government calls it a technical error. Our intelligence confirms how far it went, and nothing in their explanation changes how close we came.
+- **Flavor:** \"They are calling it a technical error.\"\n\n\"Of course they are. What else would they call it? 'We meant it, and then we changed our minds'?\"\n\n\"Our people watched the whole thing. Every step their crews take before a launch, they took. Then they stopped, all at once, as if someone had pulled a string.\"\n\n\"Someone did. I would very much like to know whether the same someone let go of it in the first place.\"
+- **Current image:** gfx/event_pictures/nuclear_proliferation_threat.dds
+
+### nuclear_incident.10
+- **Title:** The Exercise They Mistook
+- **Description:** Our latest exercise, and the alert around it, has been read in [SCOPE.sCountry('nd_exercise_opponent').GetName] as cover for a first strike. Its forces have gone to their highest alert, its leaders have moved to their shelters, and its diplomats are asking our embassy questions they have never asked before. Even if we scale back now, that alarm will not fade at once.
+- **Flavor:** \"Their bombers are fuelled and on the runways. Their leaders have gone underground. They think this is it.\"\n\n\"It is an exercise. It has a name. It has a timetable, printed and bound.\"\n\n\"They have not seen the timetable. They have seen our signals traffic double, our codes change, and our own leaders rehearse the procedure for releasing the weapons. What would you think?\"\n\n\"I would think we were being very thorough.\"\n\n\"That is exactly what they think.\"
+- **Current image:** gfx/event_pictures/joint_military_exercises.dds
+
+### nuclear_incident.11
+- **Title:** Is This the Real Thing?
+- **Description:** [SCOPE.sCountry('nd_exerciser').GetName] has put its nuclear forces through an exercise on a scale we have never seen, in the middle of a crisis with us: signals traffic doubled, codes changed, its leaders rehearsing the procedure for releasing the weapons. Our analysts cannot rule out that it is cover for a first strike, and the general staff asks for our highest alert. Going there costs money and strain, and [SCOPE.sCountry('nd_exerciser').GetName] will read it as darkly as we read its exercise.
+- **Flavor:** \"If it is an exercise, going to high alert tells them we believed it could be real.\"\n\n\"And if it is not an exercise?\"\n\n\"Then it will not matter very much what it tells them.\"
+- **Current image:** gfx/event_pictures/nuclear_standoff_tension.dds
+
+### nuclear_incident.12
+- **Title:** They Showed Us the Timetable
+- **Description:** [SCOPE.sCountry('nd_exerciser').GetName] has answered our alarm over its exercise by sending us the schedule, printed and bound, and inviting our officers to watch the rest of it from its own command posts. It is the first thing it has offered since this crisis began. We could take it as an opening for talks, or note it politely and keep up the pressure.
+- **Flavor:** \"They have sent the timetable.\"\n\n\"All of it?\"\n\n\"Every page. Launch windows, call signs, the names of the officers on duty. Either they have nothing to hide, or they want very much for us to believe that.\"\n\n\"Is there a difference, this late in the evening?\"
+- **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
+
+### nuclear_incident.20
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
+
+### nuclear_incident.30
+- **Title:** The Cost of Permanent Alert
+- **Description:** (no localization)
+- **Flavor:** \"How many hours did the crews work last month?\"\n\n\"On paper, the regulation number. In practice nobody knows. The logs were filled in afterwards, all with the same pen.\"\n\n\"And the maintenance backlog?\"\n\n\"We stopped counting when it passed the number of mechanics. You can hold a force at full alert for a week, or a month. We have held this one there since before some of these crews enlisted. Machines wear out. People wear out first.\"\n\n\"Put that in the report.\"\n\n\"It has been in the last four. This is the first one anybody has asked to read.\"
+- **Current image:** (unknown)
+
+### nuclear_incident.40
+- **Title:** A Routine Mishap
+- **Description:** (no localization)
+- **Flavor:** \"The report runs to forty pages.\"\n\n\"Summarise it.\"\n\n\"Nothing blew up that was not supposed to, or not much. Nobody died. Several things happened that the manual says cannot happen, in an order the manual never considered, and every one of them was somebody's routine.\"\n\n\"And the recommendations?\"\n\n\"Nine pages. Most of them say 'check it twice.'\"\n\n\"And the rest?\"\n\n\"'Check it three times.' The committee was very tired.\"
+- **Current image:** gfx/event_pictures/nuclear_bunker_life.dds
+
+### nuclear_incident.50
+- **Title:** The Monopoly Window
+- **Description:** Our general staff has brought a proposal to the government. [SCOPE.sCountry('nd_mw_enemy').GetName] has no nuclear weapons of its own, and no nuclear power has promised to answer for it. A single strike, the generals argue, would end the war in days and spare our soldiers months of fighting. They want an answer while the window is still open.
+- **Flavor:** \"They have no weapon of their own. Nobody will answer for them. There will never be a cleaner opportunity.\"\n\n\"Clean.\"\n\n\"In the military sense. Every month this war goes on, we bury more of our own. One weapon, and the letters to our soldiers' families stop.\"\n\n\"And every government in the world starts building one.\"\n\n\"They will build them anyway. We are only deciding whether they build them afraid of us.\"
+- **Current image:** gfx/event_pictures/nuclear_standoff_tension.dds
+
+### nuclear_incident.60
+- **Title:** A Secret Comes Out
+- **Description:** The press has published the story of a nuclear incident our government chose to conceal, complete with internal documents and the names of the officers involved. The cover-up is now a bigger story than the incident itself, and critics at home and governments abroad are asking what else has been kept from them.
+- **Flavor:** \"How did they get it?\"\n\n\"From everywhere. A clerk who kept a copy. A widow who kept a letter. An officer who retired and discovered that the pension did not come with a gag order.\"\n\n\"What do we say?\"\n\n\"What we should have said the first time. The difference is that now it will sound like a confession, because now it is one.\"
+- **Current image:** gfx/event_pictures/political_scandal_expose.dds
+
+## nuclear_loose_events.txt
+
+### nuclear_loose.1
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
+
+### nuclear_loose.2
+- **Title:** A City Destroyed
+- **Description:** A nuclear device has exploded in [SCOPE.sState('nd_loose_state').GetName]. No country has claimed it. No missile was seen and no bomber crossed our borders: it was carried into the city and set off there. An estimated #v [SCOPE.sState('nd_loose_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people are dead. Whoever built the weapon, it was not the people who used it.
+- **Flavor:** In November 1995, Chechen rebels buried a container of radioactive caesium in Moscow's Izmailovsky Park and told a television crew where to find it. It was a warning, not a bomb.
+- **Current image:** gfx/event_pictures/nuclear_city_destruction.dds
+
+### nuclear_loose.3
+- **Title:** A Device Seized
+- **Description:** Our security services have seized a nuclear warhead — a real one, taken intact — before it could be used. The people who carried it are in custody, and they are not saying where it came from. The weapon itself may tell us.
+- **Flavor:** In December 1994, police in Prague found nearly three kilograms of highly enriched uranium in the back of a car. Its origin was never officially confirmed.
+- **Current image:** gfx/event_pictures/sanctions_cargo_inspection.dds
+
+### nuclear_loose.4
+- **Title:** Where Did It Come From?
+- **Description:** (no localization)
+- **Flavor:** Nuclear forensics can read a weapon's origin in the ratios of its isotopes, but only if a sample from the source is on file to compare it with.
+- **Current image:** gfx/event_pictures/nuclear_proliferation_threat.dds
+
+### nuclear_loose.5
+- **Title:** A Stolen Bomb
+- **Description:** A nuclear device has exploded in [SCOPE.sState('nd_loose_state').GetName], in [SCOPE.sCountry('nd_loose_victim').GetName]. No state has claimed it. Somewhere, a government lost a warhead, and someone found a use for it.
+- **Flavor:** After the Cold War, the fear was no longer a war between the great powers. It was a warhead sold out of an unguarded depot.
+- **Current image:** gfx/event_pictures/mushroom_cloud_distant.dds
+
+### nuclear_loose.6
+- **Title:** The Warhead Was Ours
+- **Description:** [SCOPE.sCountry('nd_loose_claimant').GetName]'s investigators have traced the nuclear device that surfaced there to our arsenal, or to an arsenal whose custody passed to us. We did not send it. But we lost it, and [SCOPE.sCountry('nd_loose_claimant').GetName] wants us to answer for that: to pay for what it cost them, or to let their inspectors into our depots to count what we still hold.
+- **Flavor:** Since 1995 the IAEA's Incident and Trafficking Database has recorded thousands of cases of nuclear and radioactive material out of regulatory control.
+- **Current image:** gfx/event_pictures/diplomatic_crisis_ultimatum.dds
+
+### nuclear_loose.7
+- **Title:** Named in the Investigation
+- **Description:** [ROOT.GetCountry.MakeScope.Var('nd_loose_accused_by').GetCountry.GetName] has named us, in public, among the countries a stolen nuclear warhead may have come from. It has no proof, and says so. The accusation will be remembered all the same.
+- **Flavor:** In 2004 Abdul Qadeer Khan, the father of Pakistan's bomb, confessed on television to selling its secrets abroad. Suspicion had followed him for years before the evidence did.
+- **Current image:** gfx/event_pictures/political_scandal_expose.dds
+
+### nuclear_loose.8
+- **Title:** An Answer on the Warhead
+- **Description:** (no localization)
+- **Flavor:** It took a decade and a public inquiry for Britain to say where the polonium that killed Alexander Litvinenko in London in 2006 had come from.
+- **Current image:** gfx/event_pictures/nuclear_diplomacy_talks.dds
+
+### nuclear_loose.9
+- **Title:** Loose Material Secured
+- **Description:** (no localization)
+- **Flavor:** In 1998, in Operation Auburn Endeavor, the United States flew highly enriched uranium out of a research institute near Tbilisi, where the fighting of the civil war had come within a few miles.
+- **Current image:** gfx/event_pictures/sanctions_cargo_inspection.dds
 
 ## nuclear_weapon_events.txt
 
@@ -2734,13 +3108,13 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### nuclear_weapon_events.15
 - **Title:** Foreign War Escalates to Nuclear Conflict
-- **Description:** A foreign war has escalated to a nuclear conflict, with [SCOPE.sCountry('attacking_country').GetName] launching a [concept_nuclear_strike] devestating [SCOPE.sState('target_state').GetName].
+- **Description:** A foreign war has escalated to a nuclear conflict, with [SCOPE.sCountry('attacking_country').GetName] launching a [concept_nuclear_strike] devastating [SCOPE.sState('target_state').GetName].
 - **Flavor:** The world watches in horror as a foreign war spirals out of control, culminating in a nuclear conflict that has forever altered the course of history. The detonation of a nuclear weapon in [SCOPE.sState('target_state').GetName] has left a scar on the earth that will never heal, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The specter of nuclear annihilation now looms over the world, casting a shadow that may never be dispelled.
 - **Current image:** gfx/event_pictures/nuclear_fallout_contamination.dds
 
 ### nuclear_weapon_events.16
 - **Title:** Foreign War Escalates to Nuclear Conflict
-- **Description:** A foreign war has escalated to a nuclear conflict, with [SCOPE.sCountry('target_country').GetName] launching a [concept_nuclear_strike] devestating [SCOPE.sState('target_state').GetName].
+- **Description:** A foreign war has escalated to a nuclear conflict, with [SCOPE.sCountry('target_country').GetName] launching a [concept_nuclear_strike] devastating [SCOPE.sState('target_state').GetName].
 - **Flavor:** Reports from the affected region arrive piecemeal and contradict each other. What is confirmed: a nuclear device has been detonated within the boundaries of [SCOPE.sState('target_state').GetName], and the foreign powers involved are now bound to whatever follows from that fact. Casualty estimates of #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! are the lowest figure cited; the highest figures are several times that. The diplomatic establishment of every country is presently in continuous session.\n\nThe taboo is broken. Whether the breach widens or stops at one weapon is the only question that matters now.
 - **Current image:** gfx/event_pictures/nuclear_proliferation_threat.dds
 
@@ -2779,6 +3153,18 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** A mass movement against nuclear weapons has taken root across our cities. Tens of thousands march through the streets carrying banners depicting mushroom clouds and demanding disarmament. The protesters cut across class and political lines, unified by a primal fear of atomic annihilation.
 - **Flavor:** \"They are carrying photographs of the cities that were hit.\"\n\n\"And how many of them?\"\n\n\"Fifty thousand at the parliament gates this morning. By Friday it will be a hundred thousand at the defense ministry. The photographs do not need arguments. The photographs are the argument. Whatever we say in response will sound clinical, and the clinical sounds like complicity.\"
 - **Current image:** gfx/event_pictures/nuclear_power_debate.dds
+
+### nuclear_weapon_events.23
+- **Title:** The World Takes Notice
+- **Description:** Foreign intelligence services have concluded that our [concept_nuclear_program] is close to its first device. Our rivals, our neighbours and the great powers have all been briefed, and each is now deciding how to answer: with diplomatic pressure, with threats, or by hurrying programmes of their own. Some of those answers may set our work back.
+- **Flavor:** \"How long have they known?\"\n\n\"Long enough to brief their allies. The cables went out this week.\"\n\n\"Then we have lost the element of surprise.\"\n\n\"We never had it. A programme this size has a signature: the power draw, the ore purchases, the physicists who stopped publishing. All we have lost is the pretence.\"
+- **Current image:** gfx/event_pictures/nuclear_proliferation_threat.dds
+
+### nuclear_weapon_events.24
+- **Title:** Our Forces Are Ready
+- **Description:** Our warheads are back on their delivery systems. They lay in storage when [SCOPE.sCountry('attacking_country').GetName] struck us, and we could not answer then. We are still at war with [SCOPE.sCountry('attacking_country').GetName], and the answer we held back can be given now.
+- **Flavor:** \"The keys are in. Say the word.\"
+- **Current image:** gfx/event_pictures/nuclear_bunker_life.dds
 
 ## post_scarcity_events.txt
 
@@ -3204,6 +3590,18 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** The grandmother tried to teach the old folk song to her granddaughter, but the girl kept losing interest.\n\n'It's boring,' she said. 'Nobody listens to this anymore.'\n\n'Your mother listened to this. I sang it to her every night.'\n\nThe girl shrugged and put her earpieces back in. The grandmother hummed the melody to herself while she cleared the dishes.
 - **Current image:** gfx/event_pictures/globalization_protest_march.dds
 
+### social_tensions_events.17
+- **Title:** Friends in Exile
+- **Description:** Militant exiles from [SCOPE.sCountry('terror_cell_target').GetName] have come to our intelligence service with a proposal: money and training, in exchange for a campaign of violence against the government that drove them out. It would keep a rival bleeding and off balance. If their cell is uncovered, every document in it will lead back to us.
+- **Flavor:** The man across the table speaks our language badly and his own with great passion.\n\n\"We ask only for what they took from us. Weapons. Money. A safe house or two.\"\n\nThe case officer writes nothing down. \"And if your people are caught?\"\n\n\"Then they will say what patriots say. Nothing.\"\n\nNo one in the room believes that.
+- **Current image:** gfx/event_pictures/proxy_war_map.dds
+
+### social_tensions_events.18
+- **Title:** The Cell Is Blown
+- **Description:** (no localization)
+- **Flavor:** The case officer reads the wire twice before he hands it over.\n\n\"The safe house in the old quarter. All of them.\"\n\n\"Will they talk?\"\n\n\"They already have,\" he says. \"The question is only who they told.\"
+- **Current image:** gfx/event_pictures/sabotage_investigation.dds
+
 ## society_technology_events.txt
 
 ### society_technology_events.1
@@ -3328,7 +3726,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### society_technology_events.21
 - **Title:** Open Minds
-- **Description:** A foreign government has proposed an extraordinary experiment: a telepathic diplomatic channel. Neural-linked diplomats from both nations would share thoughts directly, bypassing the barriers of language, culture, and deception. The potential for breakthrough is enormous - but so is the risk of having state secrets read like an open book.
+- **Description:** Our neural-linked diplomats want to attempt an extraordinary experiment: a telepathic channel to [SCOPE.sCountry('telepathic_partner').GetName], whose own telepathic communities could meet ours halfway. Diplomats from both nations would share thoughts directly, bypassing the barriers of language, culture, and deception. The potential for breakthrough is enormous - but so is the risk of having our state secrets read like an open book.
 - **Flavor:** The diplomat sat across from her counterpart. Between them, the neural link hummed quietly.\n\n\"If we activate this, you will know what I am thinking. And I will know what you are thinking.\"\n\n\"That is the point.\"\n\n\"The point is also that neither of us can lie.\"\n\nA long pause. \"My government believes the benefits outweigh the risks.\"\n\n\"Does it? Or does it believe it has fewer secrets to lose than we do?\"
 - **Current image:** gfx/event_pictures/telepathic_diplomacy_link.dds
 
@@ -3391,6 +3789,30 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** A self-driving vehicle has struck and killed a pedestrian. The incident dominates the news cycle. Technical analysis shows the algorithm made a split-second decision that no human driver could have faced, but the victim is dead all the same.
 - **Flavor:** The engineer stared at the log file.\n\n\"At 14:07:33, the vehicle detected an obstacle. At 14:07:33.004, it calculated three possible responses. At 14:07:33.006, it chose the response with the lowest aggregate harm probability.\"\n\n\"And?\"\n\n\"And the lowest aggregate harm probability was still a fatality.\" He closed the laptop. \"The machine did exactly what we told it to do. That's the problem.\"
 - **Current image:** gfx/event_pictures/autonomous_vehicle_street.dds
+
+### society_technology_events.32
+- **Title:** A Thumb on the Scale
+- **Description:** [SCOPE.sCountry('interference_target').GetName] is in the middle of an election campaign, and our cyber directorate sees an opening. Thousands of fabricated accounts, amplifying fringe candidates and every divisive story, could shake the voters' faith in their own ballot and leave a rival government weaker whoever wins. A campaign on that scale will not stay hidden for long - it will be traced to us - but by then the damage will be done.
+- **Flavor:** The director scrolls through a dashboard of accounts that did not exist a month ago.\n\n\"Forty thousand profiles. Farmers, nurses, retired schoolteachers - all very worried about the state of their country.\"\n\n\"And when their counterintelligence finds the servers?\"\n\n\"They will make a great deal of noise about it,\" she says. \"In the middle of an election. Which is rather the point.\"
+- **Current image:** gfx/event_pictures/social_media_campaign.dds
+
+### society_technology_events.33
+- **Title:** Traced to Us
+- **Description:** (no localization)
+- **Flavor:** The director closes the dashboard. Forty thousand accounts, suspended in an afternoon.\n\n\"Did it work?\"\n\n\"That depends what you wanted,\" she says. \"If you wanted them to trust their own ballot a little less - yes. If you wanted nobody to know it was us - no.\"
+- **Current image:** gfx/event_pictures/social_media_crisis.dds
+
+### society_technology_events.34
+- **Title:** A Channel Offered
+- **Description:** The neural-linked diplomats of [SCOPE.sCountry('telepathic_proposer').GetName] have proposed an extraordinary experiment: a telepathic channel between our two governments. Diplomats from both nations would share thoughts directly, bypassing the barriers of language, culture, and deception. The potential for breakthrough is enormous - but so is the risk of having our state secrets read like an open book.
+- **Flavor:** The envoy's letter is short, handwritten, and oddly warm.\n\n\"They say it is like standing in a lit room with the curtains open,\" the foreign minister reads aloud. \"Both rooms. Both sets of curtains.\"\n\n\"And what do they see in ours?\"\n\n\"Whatever we are thinking when we say yes.\"
+- **Current image:** gfx/event_pictures/telepathic_diplomacy_link.dds
+
+### society_technology_events.35
+- **Title:** An Answer from Abroad
+- **Description:** (no localization)
+- **Flavor:** The neural link hums in its cradle, waiting for a second mind at the other end.\n\n\"Well?\"\n\nThe diplomat takes off the headset. \"Their answer came by telegram,\" she says. \"Which is, I suppose, an answer in itself.\"
+- **Current image:** gfx/event_pictures/telepathic_diplomacy_link.dds
 
 ## space_race_colony_events.txt
 
@@ -3788,8 +4210,8 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_events.52
 - **Title:** A Station for All Nations
-- **Description:** Several spacefaring nations have proposed constructing a jointly operated orbital station: a permanent laboratory in space, crewed continuously and funded cooperatively. The scientific benefits are substantial, but sharing a platform with rivals means sharing technology, procedures, and perhaps secrets.
-- **Flavor:** \"Imagine a laboratory where gravity is a variable, not a constant. Where materials science, biology, and physics can be studied in ways impossible on Earth. That's what an orbital station offers: if we can agree on who pays for it and who gets the data.\"\n\n— International Space Cooperation Proposal, executive summary\n\n\"They want us to bolt our module onto their station and pretend we're all friends up there. We're not friends. We're competitors who happen to share an orbit.\"\n\n— Skeptical Military Advisor
+- **Description:** Our space agency has drawn up a proposal for a jointly operated orbital station, to be built with [SCOPE.sCountry('sr_station_partner').GetName] and open to any other member of the United Nations that reaches orbit: a permanent laboratory in space, crewed continuously and funded cooperatively. The scientific benefits are substantial, but sharing a platform with rivals means sharing technology, procedures, and perhaps secrets.
+- **Flavor:** \"Imagine a laboratory where gravity is a variable, not a constant. Where materials science, biology, and physics can be studied in ways impossible on Earth. That's what an orbital station offers: if we can agree on who pays for it and who gets the data.\"\n\n— Space Agency Proposal, executive summary\n\n\"So we bolt our module onto a shared station and pretend we're all friends up there. We're not friends. We're competitors who happen to share an orbit.\"\n\n— Skeptical Military Advisor
 - **Current image:** gfx/event_pictures/international_station_construction.dds
 
 ### space_race_events.53
@@ -3848,7 +4270,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_events.17
 - **Title:** Heart of the Mission
-- **Description:** The mission surgeon's report was blunt: acute cardiac arrhythmia, likely triggered by prolonged microgravity adaptation. The affected crew member is stable but in no condition to continue operations. With the nearest hospital millions of miles away, every minute of delay in treatment is a risk calculation that no protocol fully covers.
+- **Description:** The mission surgeon's report was blunt: acute cardiac arrhythmia, likely triggered by prolonged microgravity adaptation. The affected crew member is stable but in no condition to continue operations. With the nearest hospital a world away, every minute of delay in treatment is a risk calculation that no protocol fully covers.
 - **Flavor:** \"We trained for this scenario. We just never thought it would actually happen: not to our crew, not this far from home.\"\n\n— Flight Surgeon, speaking to the press after the decision was announced
 - **Current image:** gfx/event_pictures/crew_medical_crisis.dds
 
@@ -3896,7 +4318,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_events.26
 - **Title:** When Politics Reaches Orbit
-- **Description:** A sudden deterioration in international relations has disrupted the space program's operations. Foreign-sourced components are stuck in customs. Tracking station access in allied nations is now politically sensitive. Technical exchange agreements signed in better times are being quietly frozen by nervous diplomats.
+- **Description:** Relations with [SCOPE.sCountry('sr_estranged_space_power').GetName] have soured, and our space program is paying for it. Components sourced from [SCOPE.sCountry('sr_estranged_space_power').GetAdjectiveNoFormatting] suppliers are stuck in customs. Tracking support from their ground stations is now politically sensitive. Technical exchange agreements signed in better times are being quietly frozen by nervous diplomats.
 - **Flavor:** \"We had a handshake agreement with their space agency: data sharing, tracking support, the works. Now their foreign ministry won't return our calls.\"\n\n— International Cooperation Director
 - **Current image:** gfx/event_pictures/budget_hearing_congress.dds
 
@@ -3938,7 +4360,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### space_race_events.76
 - **Title:** Program Discontinued
-- **Description:** With the space program facilities no longer operational, [ROOT.GetCountry.GetAdjective] ambitions beyond Earth have been shelved. The scientists and engineers who dedicated themselves to the mission now seek new assignments, and the vast [concept_infrastructure] built for the program sits idle.
+- **Description:** Our launch complex has been refitted to a mission profile that can no longer carry some of the programs it was built for, and [ROOT.GetCountry.GetAdjective] ambitions at that scale have been shelved. The scientists and engineers who dedicated themselves to those missions now seek new assignments, and the [concept_infrastructure] built for them sits idle.
 - **Flavor:** \"The stars will have to wait,\" the program director told the assembled engineers.\n\n\"For how long?\"\n\n\"Until the budget recovers. Until the political will returns. Until the country remembers why we started. Five years, perhaps. Possibly twenty. The stars are patient. The crews who would have flown to them are less so. We will lose talent before we lose the destination.\"
 - **Current image:** gfx/event_pictures/program_cancelled_empty.dds
 
@@ -4112,6 +4534,44 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** Test harness. Check debug.log after the next monthly pulse.
 - **Current image:** gfx/event_pictures/espionage_dead_drop.dds
 
+### te_debug_covert.5
+- **Title:** Covert Test Console: Network Intelligence
+- **Description:** Console-only shortcuts for the network intelligence reports (slice 7). None of these can happen in normal play. Seed an operation first (te_debug_covert.2) so there is a network.\n\nStrength 50 is the first tier: each network row shows the target's intelligence capacity and technology count beside ours, and says its operations against us need 75. Strength 80 is the second: the row also counts them, usually 0.\n\nThe third option makes every network's target run cultivate assets against us (its funding is raised to 1 if it has none) and refreshes the reports, so a second-tier row's count goes up by one. Force a detection afterwards (te_debug_covert.2) and a row that falls below 75 drops back to the first tier the same day.
+- **Flavor:** Test harness. Nothing here is real intelligence.
+- **Current image:** gfx/event_pictures/espionage_dead_drop.dds
+
+## te_debug_deterrence_events.txt
+
+### te_debug_deterrence.1
+- **Title:** Deterrence Console: Arsenal and Posture
+- **Description:** (no localization)
+- **Flavor:** Run te_debug_deterrence.1 first: the entry activates once a warhead exists.
+- **Current image:** gfx/event_pictures/nuclear_test_mushroom.dds
+
+### te_debug_deterrence.2
+- **Title:** Deterrence Console: Incidents
+- **Description:** (no localization)
+- **Flavor:** Each chain checks its own eligibility; an ineligible one does nothing or falls back to a routine mishap.
+- **Current image:** gfx/event_pictures/nuclear_false_alarm_panic.dds
+
+### te_debug_deterrence.3
+- **Title:** Deterrence Console: Open a Crisis
+- **Description:** (no localization)
+- **Flavor:** With no real dispute the crisis is classed as an alert standoff.
+- **Current image:** gfx/event_pictures/diplomatic_crisis_ultimatum.dds
+
+### te_debug_deterrence.4
+- **Title:** Deterrence Console: Push the Crisis
+- **Description:** (no localization)
+- **Flavor:** The deadline fires on the next weekly tick.
+- **Current image:** gfx/event_pictures/nuclear_standoff_tension.dds
+
+### te_debug_deterrence.5
+- **Title:** Deterrence Console: Estimates and Guarantees
+- **Description:** (no localization)
+- **Flavor:** The leaderboard recounts immediately.
+- **Current image:** gfx/event_pictures/nuclear_treaty_signing.dds
+
 ## te_debug_gw_events.txt
 
 ### te_debug_gw.1
@@ -4214,7 +4674,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### te_debug_un.1
 - **Title:** UN Test Console
-- **Description:** Console-only shortcuts for testing the United Nations systems. None of these can happen in normal play.\n\nFounding seats you and every great and major power as members (run it twice if the chamber still says non-member). The mandate option claims a neighbouring state for you and authorizes its recovery without a vote — open a diplomatic play against its owner to see the authorized war goal. Standing changes show in your modifiers after the next monthly tick.
+- **Description:** Console-only shortcuts for testing the United Nations systems. None of these can happen in normal play.\n\nFounding seats you and every great and major power as members (run it twice if the chamber still says non-member). The mandate option claims a neighbouring state for you and authorizes its recovery without a vote — open a diplomatic play against its owner to see the authorized war goal. Standing changes show in your modifiers after the next monthly tick.\n\nDooming the UN sets its authority to 1 and its credibility and order ledgers to their floors: the crisis opens at the next monthly update, the collapse clock runs, and it dissolves a few months later. Dissolving does it at once. After a dissolution the Found button convenes a founding conference once the cooldown is skipped; skipping again while a conference sits ends its year at the next monthly update.
 - **Flavor:** 'Is this in order?'\n\n'Nothing about this is in order.'
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
@@ -4270,6 +4730,12 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Flavor:** \"Lend freely, at a high rate, on good collateral — and if you have promised to, lend anyway.\"
 - **Current image:** gfx/event_pictures/banking_boardroom.dds
 
+### te_lolr.2
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** \"They sent the cable at nine. It was two lines long.\"\n\n\"Which two lines?\"\n\n\"That depends on which morning you are asking about. There is only ever one cable, and only ever two lines. The whole of the next ten years is in which two.\"
+- **Current image:** gfx/event_pictures/banking_boardroom.dds
+
 ### te_union.1
 - **Title:** The Question of the Common Currency
 - **Description:** [SCOPE.sCountry('te_union_leader').GetName] has stopped hinting. Its envoys arrive with charts: the bloc's trade, the cost of changing money at every border, the rate at which our bonds sell beside theirs. The cooperation between our central banks, they add, is naturally under review while the question is open. They do not mention that a single currency means a single interest rate, and that it will be set in their capital for their economy. They do not have to. Everybody in the room knows.
@@ -4314,7 +4780,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### treaty_article_events.2
 - **Title:** The Dead Drop
-- **Description:** A critical intelligence report from [SCOPE.sCountry('intel_partner').GetName] was delayed by bureaucratic confusion and interdepartmental rivalry. By the time the warning reached the right desk, the damage was done. Our intelligence-sharing pact failed us when it mattered most.
+- **Description:** A critical intelligence report from [SCOPE.sCountry('intel_partner').GetName] arrived in good time — and then sat in our own translation queue while bureaucratic confusion and interdepartmental rivalry passed it from office to office. By the time the warning reached the right desk, the damage was done. The pact delivered; our own ministry did not.
 - **Flavor:** \"The file sat in a translation queue for eleven days. Eleven days.\"\n\n\"Somebody will answer for this.\"\n\n\"Somebody always does. Never the right somebody.\"
 - **Current image:** gfx/event_pictures/intelligence_dead_drop.dds
 
@@ -4382,37 +4848,37 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### un_events.1
 - **Title:** The United Nations Charter
-- **Description:** In the aftermath of another devastating conflict, the nations of the world have drafted a charter for a new international body - the United Nations. [ROOT.GetCountry.GetName] has been invited to sign as a founding member. Membership promises a seat at the table of global governance, but carries [Concept('concept_obligation', 'obligations')]: international courts, collective security, and the subordination of national interests to the common good.
+- **Description:** The United Nations has been founded, and [ROOT.GetCountry.GetName] has been invited to sign its charter as a founding member. Membership promises a seat at the table of global governance, but carries [Concept('concept_obligation', 'obligations')]: international courts, collective security, and the subordination of national interests to the common good.
 - **Flavor:** The ambassador set down his pen and stared at the document. 'Do you know,' he said to no one in particular, 'how many treaties have promised to end all wars?'\n\n'Every single one of them,' his aide replied. 'And yet here we are, drafting another.'\n\n'Yes. And yet here we are.'
 - **Current image:** gfx/event_pictures/un_charter_signing.dds
 
 ### un_events.2
-- **Title:** General Assembly Condemns Aggression
-- **Description:** The General Assembly has convened an emergency session to address the military aggression of [SCOPE.sCountry('condemned_country').GetName]. Delegates from around the world are calling for a formal condemnation resolution, and [ROOT.GetCountry.GetName] must decide how to vote.
-- **Flavor:** The delegate from [SCOPE.sCountry('defender_country').GetName] rose to speak, his hands trembling. 'My country has no army,' he said. 'We have no bombs, no warships, no leverage of any kind. We have only this chamber and the hope that words spoken here still carry some weight.'\n\nThe gallery fell silent. For a moment, the institution almost believed in itself.
+- **Title:** An Appeal to the Assembly
+- **Description:** The General Assembly has put the conduct of [SCOPE.sCountry('condemned_country').GetName] on its docket, and it has fallen to us to decide whether the Assembly acts.
+- **Flavor:** The ambassador had rehearsed the speech on the plane, again in the car, and once more in the corridor outside the chamber. At the lectern he set his notes aside.\n\n'You all know what happened,' he said. 'The only question before this Assembly is whether it happened to all of us, or only to us.'
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
 ### un_events.3
 - **Title:** Declaration of Universal Human Rights
-- **Description:** A Universal Declaration of Human Rights has been proposed at the United Nations, establishing fundamental freedoms as the common standard for all peoples and nations. Ratifying it would signal our commitment to the international order, though some provisions may conflict with domestic policy.
+- **Description:** Delegations at the United Nations are pressing for a Universal Declaration of Human Rights, setting fundamental freedoms as the common standard for all peoples and nations. Nothing is before the General Assembly yet: we could table the declaration ourselves. Championing it would signal our commitment to the international order, though some of its provisions may conflict with domestic policy.
 - **Flavor:** 'Article One,' the chairwoman read aloud. 'All human beings are born free and equal in dignity and rights.' She looked up from the page. 'Does any delegation object?'\n\nA long silence. Then, from the back row, a dry voice: 'To the sentiment, Madam Chair, no one objects. To the enforcement - that is where the arguments begin.'
 - **Current image:** gfx/event_pictures/human_rights_declaration.dds
 
 ### un_events.4
-- **Title:** Peacekeeping Mission Authorized
-- **Description:** The Security Council has authorized a peacekeeping mission in the conflict zone involving [SCOPE.sCountry('peacekeeping_target').GetName]. As a committed contributor, [ROOT.GetCountry.GetName] has been called upon to provide troops for the operation.
+- **Title:** A State Has Collapsed
+- **Description:** Order has broken down in [SCOPE.sCountry('peacekeeping_target').GetName]. The General Assembly has put the collapse on its docket, and the Secretary-General has asked the powers able to help to send peacekeepers. [ROOT.GetCountry.GetName] is among them.
 - **Flavor:** The colonel studied the deployment orders and folded them carefully into his breast pocket. 'Blue helmets,' he said to his adjutant. 'Rules of engagement that would embarrass a traffic warden. No authority to fire unless fired upon, and even then, only if committee approves.'\n\nHe paused at the door. 'Still. Someone has to stand between the guns.'
 - **Current image:** gfx/event_pictures/peacekeeping_deployment.dds
 
 ### un_events.5
 - **Title:** Enforcing the Sanctions Regime
-- **Description:** The [concept_un_sanctions] against [SCOPE.sCountry('sanctioned_country').GetName] are now in effect, but enforcement requires active cooperation from member states. Strict compliance will hurt our own trade routes; the alternative is to quietly circumvent the very institution we helped create.
+- **Description:** The [concept_un_sanctions] against [SCOPE.sCountry('sanctioned_country').GetName] are now in effect, but enforcement requires active cooperation from member states. Strict compliance will hurt our own trade routes; the alternative is to quietly circumvent a regime we ourselves asked the Assembly to impose.
 - **Flavor:** 'The manifest says fertilizer,' the customs inspector said, turning the page with exaggerated slowness. 'Quite a lot of fertilizer.' He looked up. 'For a country with no farms.'\n\nThe shipping agent smiled and slid an envelope across the desk. 'A clerical error. I'm sure you understand.'
 - **Current image:** gfx/event_pictures/sanctions_cargo_inspection.dds
 
 ### un_events.6
-- **Title:** UN Reform: Expanding the Security Council
-- **Description:** A growing coalition of nations is demanding reform of the Security Council. The current structure, with its permanent members and [concept_un_veto] power, is seen as increasingly unrepresentative. As a [concept_great_power], [ROOT.GetCountry.GetName] must decide whether to champion reform or defend the status quo.
+- **Title:** The Charter Has Been Outgrown
+- **Description:** For two years the United Nations has pressed against the ceiling its founders wrote into the Charter, and a coalition of delegations now demands the next reform. As a [concept_great_power], [ROOT.GetCountry.GetName] can table it — a two-thirds supermajority of every member, and no [concept_un_veto] from the permanent seats — or defend the Charter as it stands.
 - **Flavor:** 'We are told this body represents the world,' the ambassador said, adjusting his spectacles. 'And yet the same five nations have held the same five seats since before half the countries in this room existed.'\n\nThe delegate from the permanent member state glanced at his papers. 'The matter has been raised before,' he replied. 'The committee will take it under advisement.'\n\nIt had been taken under advisement eleven times.
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
@@ -4429,38 +4895,32 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Current image:** gfx/event_pictures/international_court_chamber.dds
 
 ### un_events.9
-- **Title:** UNESCO: Protecting World Heritage
-- **Description:** UNESCO has launched a program to identify and preserve sites of outstanding cultural and natural heritage. Several sites within [ROOT.GetCountry.GetName] have been nominated, and participation would boost our [concept_prestige], though it requires funding and accepting international oversight.
+- **Title:** Protecting World Heritage
+- **Description:** Delegations at the United Nations are pressing for a convention to identify and preserve sites of outstanding cultural and natural heritage, with a UN agency to keep the list. Nothing is before the General Assembly yet: we could table it. Sites within [ROOT.GetCountry.GetName] could be listed, adding to our [concept_prestige], though it would mean funding their upkeep and accepting international oversight.
 - **Flavor:** The antiquarian ran his hand across the ancient stonework. 'This wall is older than our nation,' he said. 'Older than most nations.'\n\nThe treasury official beside him frowned at the estimate. 'And the cost of preserving it is older than my patience. Can we not simply photograph it and move on?'\n\n'You can photograph a ruin. You cannot photograph what it meant to stand.'
 - **Current image:** gfx/event_pictures/heritage_site_monument.dds
 
 ### un_events.10
 - **Title:** The United Nations in Crisis
-- **Description:** The United Nations faces a crisis of [concept_legitimacy]. Resolutions are routinely ignored, great powers act unilaterally, and member states question whether the institution serves any purpose. As a [concept_great_power], [ROOT.GetCountry.GetName] must decide whether to rally support or let it fade.
+- **Description:** The United Nations faces a crisis of [concept_legitimacy]. Its [concept_un_authority] has fallen below 10: resolutions are ignored, great powers act as they please, and members wonder aloud what the institution is for. As a [concept_great_power], [ROOT.GetCountry.GetName] is one of the few powers whose choice can still matter.
 - **Flavor:** 'When I joined the diplomatic service,' the old ambassador said, swirling his brandy, 'this building meant something. Resolutions had teeth. Delegations arrived with instructions to compromise.'\n\n'And now?'\n\n'Now they arrive with instructions to be seen arriving. It is theater, my dear boy. Very expensive theater.'
 - **Current image:** gfx/event_pictures/program_cancelled_empty.dds
 
 ### un_events.11
 - **Title:** Security Council [concept_un_veto] Crisis
-- **Description:** [SCOPE.sCountry('veto_power').GetName] has exercised its [concept_un_veto] in the Security Council, blocking a resolution with broad support among member states. The vetoed resolution would have authorized collective action to address a growing international crisis.
+- **Description:** [SCOPE.sCountry('veto_power').GetName] has cast its [concept_un_veto] in the Security Council against the resolution we tabled.
 - **Flavor:** The chamber erupted. Delegates shouted across the aisle; the chair's gavel cracked against wood like a pistol shot.\n\nIn the corridor afterward, a junior diplomat loosened his tie. 'We spent six months drafting that resolution,' he said. 'Six months of negotiations, concessions, rewording. And one raised hand killed it.'\n\nHis colleague shrugged. 'That is how it works.'\n\nThe junior diplomat said nothing. He already knew that.
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
 ### un_events.12
 - **Title:** Decolonization Resolution
-- **Description:** The General Assembly is debating a sweeping resolution calling for the immediate end of colonialism in all its forms. Dozens of newly independent nations are demanding that the [Concept('concept_great_power', 'great powers')] relinquish their overseas territories.
+- **Description:** Newly independent nations are pressing for the General Assembly to take up a sweeping declaration calling for the immediate end of colonialism in all its forms, and for the [Concept('concept_great_power', 'great powers')] to relinquish their overseas territories. Nothing has been tabled yet: we could table it.
 - **Flavor:** The new delegate adjusted the flag on his desk - a flag that had not existed three years ago - and addressed the chamber.\n\n'My country was administered, developed, and civilized, so we are told, for one hundred and forty years,' he said. 'In all that time, not one of our administrators thought to ask us whether we wished to be civilized. We have come here today to provide the answer.'
-- **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
-
-### un_events.13
-- **Title:** Ideological Confrontation at the Assembly
-- **Description:** Tensions between rival [Concept('concept_great_power', 'great powers')] have erupted into open confrontation at the United Nations General Assembly. [SCOPE.sCountry('ideological_rival').GetName] and [ROOT.GetCountry.GetName] represent fundamentally different visions for the world - and both sides have marshaled their allies to dominate the Assembly's agenda.\n\nDelegations are choosing sides. Non-aligned nations watch nervously as the two blocs trade accusations and threats. The question is whether to escalate the confrontation, seek détente, or make a dramatic gesture.
-- **Flavor:** The [SCOPE.sCountry('ideological_rival').GetAdjective] delegate slammed his fist upon the lectern. His counterpart waited for the translators to finish, then leaned into the microphone.\n\n'The committee has heard the delegate's position,' he said. 'We look forward to hearing his evidence, should any be forthcoming.'\n\nThe gallery murmured. The wire service correspondent underlined something in his notebook.
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
 ### un_events.14
 - **Title:** Nuclear Non-Proliferation Treaty
-- **Description:** The United Nations is proposing a Nuclear Non-Proliferation Treaty - a binding agreement to prevent the spread of nuclear weapons and promote disarmament. For [ROOT.GetCountry.GetName], without a nuclear arsenal, the treaty offers protection from proliferation by rival states.
+- **Description:** Delegations at the United Nations are pressing for a Nuclear Non-Proliferation Treaty - a binding agreement to prevent the spread of nuclear weapons and promote disarmament. Nothing is before the General Assembly yet: we could table it. For [ROOT.GetCountry.GetName], without a nuclear arsenal, the treaty offers protection from proliferation by rival states.
 - **Flavor:** The physicist adjusted his reading glasses and studied the treaty text. 'It is an elegant piece of hypocrisy,' he said. 'Those who have the bomb promise to someday give it up. Those who do not have the bomb promise never to build one. And everyone pretends not to notice the asymmetry.'\n\n'Will it work?' his colleague asked.\n\n'It will work precisely as long as everyone is more afraid of the alternative.'
 - **Current image:** gfx/event_pictures/nuclear_treaty_signing.dds
 
@@ -4471,32 +4931,32 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Current image:** gfx/event_pictures/sanctions_cargo_inspection.dds
 
 ### un_events.16
-- **Title:** Global Pandemic Response
-- **Description:** A devastating pandemic is sweeping across continents, and the World Health Organization is coordinating the international response. Member states are being asked to share medical data, pool research, and contribute to a global stockpile of treatments.
-- **Flavor:** The doctor peeled off her gloves and dropped them into the bin marked BIOHAZARD. 'The samples from the northern provinces match the strain in the south,' she said. 'It has already crossed three borders.'\n\n'Should we share the data?'\n\nShe looked at the official as though he had asked whether water was wet. 'The virus does not care about your diplomatic reservations. Share the data or bury more people. Those are the options.'
+- **Title:** Pandemic Preparedness
+- **Description:** Public-health experts warn that modern travel could carry a new disease across continents within weeks, and delegations at the United Nations are pressing for a pandemic preparedness convention: shared medical data, pooled research, a global stockpile of treatments, and a world health agency to coordinate them. Nothing is before the General Assembly yet: we could table it.
+- **Flavor:** The doctor laid the exercise report on the minister's desk. 'In our simulation, the strain crossed three borders before the first case was confirmed,' she said. 'By then it was in every capital.'\n\n'Must we really share our data with foreigners?'\n\nShe looked at him as though he had asked whether water was wet. 'The virus will not care about your diplomatic reservations. Share the data now, or bury more people later. Those are the options.'
 - **Current image:** gfx/event_pictures/pandemic_hospital_ward.dds
 
 ### un_events.17
 - **Title:** Climate Change Resolution
-- **Description:** The United Nations has proposed a binding resolution on climate change, requiring member states to commit to specific emissions reduction targets. The scientific consensus is clear, but the economic costs of compliance are staggering.
+- **Description:** Delegations at the United Nations are pressing for a binding climate accord that would commit member states to specific emissions reduction targets. The scientific consensus is clear, but the economic costs of compliance are staggering. Nothing is before the General Assembly yet: we could table it.
 - **Flavor:** The delegate from the sinking island nation spread a map across the table. 'This is my country,' she said, tracing the coastline with her finger. 'This -' she drew a line two inches inland '- is my country in thirty years.'\n\nThe industrial minister across the table cleared his throat. 'We sympathize, of course. But you must understand, our economy -'\n\n'Your economy,' she said, folding the map, 'is what is drowning mine.'
 - **Current image:** gfx/event_pictures/climate_assembly_debate.dds
 
 ### un_events.18
 - **Title:** International Refugee Crisis
-- **Description:** Conflict and famine in [SCOPE.sCountry('refugee_source').GetName] have created a massive refugee crisis. Millions are seeking safety, and the United Nations is calling on member states to accept resettlement quotas.
+- **Description:** \n\nDelegations at the United Nations are pressing for an international refugee convention: resettlement shared among the members, run by a UN refugee agency. Nothing is before the General Assembly yet. We could table it.
 - **Flavor:** The border guard studied the woman's papers - or rather, the scrap of cardboard that served as papers. Behind her, the queue stretched to the horizon. Children slept standing up, leaning against their mothers' legs.\n\n'These documents are not valid,' he said.\n\nShe looked at him with the flat patience of someone who has been told this before. 'Neither is the country that issued them. It does not exist anymore. So here I am.'
 - **Current image:** gfx/event_pictures/humanitarian_camp_tents.dds
 
 ### un_events.19
 - **Title:** International Space Cooperation
-- **Description:** The United Nations is proposing an international space cooperation program - a joint effort to build an orbital research station and share the costs of exploration. For [ROOT.GetCountry.GetName], this is a chance to participate in one of humanity's greatest endeavors.
+- **Description:** Delegations at the United Nations are pressing for an international space cooperation treaty - a joint effort to build an orbital research station and share the costs of exploration. Nothing is before the General Assembly yet: we could table it. For [ROOT.GetCountry.GetName], this is a chance to lead one of humanity's greatest endeavors.
 - **Flavor:** The mission director stood before the assembled delegations and pointed to the architectural model of the station. 'Twelve modules,' he said. 'Six nations. One orbit.'\n\n'And whose flag flies on the outside?' someone asked from the back.\n\nThe director permitted himself a thin smile. 'That, excellency, is precisely the question we are here to avoid.'
 - **Current image:** gfx/event_pictures/space_cooperation_station.dds
 
 ### un_events.20
 - **Title:** Assembly Walkout
-- **Description:** The delegation of [SCOPE.sCountry('walkout_leader').GetName] has led a dramatic walkout from the General Assembly, followed by several aligned nations. The departing delegates accused the Assembly of bias and hypocrisy, throwing the institution into crisis.
+- **Description:** The delegation of [SCOPE.sCountry('walkout_leader').GetName] has walked out of the United Nations and renounced its membership, accusing the Assembly of bias and hypocrisy. Its aligned nations are watching to see who follows.
 - **Flavor:** The doors slammed. The echo rolled across the chamber like a judgment. For a long moment, no one spoke.\n\nThen the secretary-general removed his reading glasses and looked at the empty seats. 'Well,' he said, with the calm of a man watching his house burn from a safe distance. 'I suppose we shall have to manage without them.'\n\n'Can we?' his aide whispered.\n\n'That, my dear fellow, is the question this institution was built to answer.'
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
 
@@ -4514,7 +4974,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### un_events.103
 - **Title:** Our People Resettled Abroad
-- **Description:** [SCOPE.sCountry('resettlement_host').GetName] has launched a major refugee resettlement program, accepting thousands of displaced people from [ROOT.GetCountry.GetName]. For the refugees, this is a lifeline. For our country, the departure of so many citizens is a complicated blessing.
+- **Description:** The General Assembly has adopted the refugee convention [SCOPE.sCountry('resettlement_host').GetName] tabled, and with it [SCOPE.sCountry('resettlement_host').GetName] has secured a UN resettlement programme for the displaced of [ROOT.GetCountry.GetName]. Thousands of our people are being offered new homes abroad. For them, it is a lifeline. For our country, the departure of so many citizens is a complicated blessing.
 - **Flavor:** At the airport, the families queued with suitcases held together by rope and prayer. A grandmother clutched a photograph of a house that no longer stood.\n\n'Will we come back?' the boy asked.\n\nHis father hoisted him onto his shoulders so he could see the departure board. 'When there is something to come back to,' he said. He did not look at his wife when he said it.
 - **Current image:** gfx/event_pictures/humanitarian_camp_tents.dds
 
@@ -4529,6 +4989,54 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** Delegates at the United Nations have drafted a statute to establish a permanent International Criminal Court with jurisdiction over genocide, war crimes, and crimes against humanity. For [ROOT.GetCountry.GetName], joining would signal commitment to international justice — but it would also mean submitting citizens, including military personnel, to foreign prosecution.
 - **Flavor:** The legal scholar adjusted his spectacles and addressed the committee. 'The question before us is simple,' he said. 'Shall the powerful be accountable, or shall they merely be powerful?'\n\nThe military attaché in the back row leaned toward his colleague. 'And who,' he whispered, 'shall guard the guardians?'\n\n'That,' the scholar replied, having excellent hearing, 'is the entire point of this court.'
 - **Current image:** gfx/event_pictures/human_rights_declaration.dds
+
+### un_events.23
+- **Title:** Physical Protection of Nuclear Material
+- **Description:** Nuclear warheads have gone missing in the world, lost when arsenals changed hands, and the United Nations is drafting a convention to stop it happening again: every party would guard, count and report its nuclear material to a common standard, and help the others find what has already been lost. For [ROOT.GetCountry.GetName], that means foreign standards in our depots — and fewer warheads loose in the world.
+- **Flavor:** The Convention on the Physical Protection of Nuclear Material was opened for signature in 1980. In 2005, after the attacks of September 2001, its parties extended it from material in international transport to material in storage and in use.
+- **Current image:** gfx/event_pictures/nuclear_treaty_signing.dds
+
+### un_events.30
+- **Title:** The United Nations Dissolves
+- **Description:** It is over. Its [concept_un_authority] exhausted, its members gone their own ways, the United Nations has been dissolved. Its headquarters is being demolished, its agencies have lapsed, its conventions bind no one, and every mandate it issued is void. The power blocs are already moving into the space it leaves.\n\nNo new organisation can be founded for twenty years — and then only if the world's leading power does not stand in the way.
+- **Flavor:** The last Secretary-General lowered the blue flag himself. There were no speeches; the delegates who might have made them had already gone home.\n\n'We will build another,' said the young attaché at his side.\n\n'Perhaps,' he said. 'Your grandchildren will. They will think they invented it.'
+- **Current image:** gfx/event_pictures/program_cancelled_empty.dds
+
+### un_events.31
+- **Title:** A Founding Conference
+- **Description:** [SCOPE.sCountry('un_conference_convener').GetName] has convened a founding conference for a new United Nations, and every delegation is watching us. As the world's leading power, [ROOT.GetCountry.GetName] can join the new organisation as a founding member, stay out of it — or oppose the refounding outright, which would end the conference and bar another for ten years.\n\nIf the conference is not wrecked, the new UN is founded in a year: weak, under the founding charter, with no reforms and no agencies.
+- **Flavor:** 'They want us in the photograph,' the foreign minister said. 'They need us in it.'\n\n'And if we are not?'\n\n'Then there is no photograph. That is the whole of our leverage — and it is a great deal.'
+- **Current image:** gfx/event_pictures/un_charter_signing.dds
+
+### un_events.32
+- **Title:** The Conference Collapses
+- **Description:** Our founding conference is over before it began. [SCOPE.sCountry('un_conference_wrecker').GetName], the world's leading power, has come out against a new United Nations, and without it the delegations will not sign. No new conference may be convened for ten years.
+- **Flavor:** The chairs had been set out in a great semicircle, each with its little flag. By evening the porters were stacking them again.
+- **Current image:** gfx/event_pictures/program_cancelled_empty.dds
+
+### un_events.33
+- **Title:** The Court Indicts Our Leader
+- **Description:** (no localization)
+- **Flavor:** \"No one is above the law.\"\n\n\"No one ever is, until the law comes for them.\"
+- **Current image:** gfx/event_pictures/international_court_chamber.dds
+
+### un_events.34
+- **Title:** Sovereignty First
+- **Description:** The United Nations has grown into something its founders never imagined: its resolutions are enforced, its embargoes bite, its dues are a levy on our wealth. To [SCOPE.sInterestGroup('un_sov_ig').GetName] it is a foreign government in all but name. They are in the streets and in the chamber, demanding that [ROOT.GetCountry.GetName] take back its sovereignty and leave.
+- **Flavor:** \"We did not win our independence to hand it to a committee in a glass tower.\"
+- **Current image:** gfx/event_pictures/nationalist_backlash_flags.dds
+
+### un_events.35
+- **Title:** An Emergency Lending Facility
+- **Description:** The contagion has reached [ROOT.GetCountry.GetName]. Depositors queue outside the banks, credit has frozen, and the treasury cannot borrow at any price it can pay. The United Nations offers an emergency loan from the budget its members' dues provide: @money![ROOT.GetCountry.MakeScope.ScriptValue('un_loan_amount_value')|D] now, repaid with interest over five years. The money comes with conditions, written by creditors who do not have to stand for election here.
+- **Flavor:** \"The terms are not negotiable.\"\n\n\"Then it is not a loan. It is a verdict.\"
+- **Current image:** gfx/event_pictures/banking_boardroom.dds
+
+### un_events.36
+- **Title:** Conventions Passed in Our Absence
+- **Description:** Our delegation has taken its seat in the General Assembly again. While our foreign policy was not our own, the Assembly passed conventions we were never asked to ratify. The other members took their decision when each was passed; ours is now, once.
+- **Flavor:** \"The Secretariat keeps the instruments open for signature. It does not keep them open for ever.\"
+- **Current image:** gfx/event_pictures/un_charter_signing.dds
 
 ## un_mandate_events.txt
 
@@ -4563,6 +5071,18 @@ Each event is listed with its title, description, and flavor text (where availab
 - **Description:** (no localization)
 - **Flavor:** (none)
 - **Current image:** gfx/event_pictures/un_assembly_hall_vote.dds
+
+### un_vote.4
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
+
+### un_vote.5
+- **Title:** (no localization)
+- **Description:** (no localization)
+- **Flavor:** (none)
+- **Current image:** (unknown)
 
 ## wonder_events.txt
 
@@ -4726,7 +5246,7 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### world_war_events.1
 - **Title:** Ideological Confrontation
-- **Description:** [SCOPE.sCountry('ideological_rival').GetName] has issued a series of provocative demands, challenging our ideological stance on the world stage. Their aggressive posture threatens to destabilize the fragile peace between the [Concept('concept_great_power', 'great powers')].
+- **Description:** [SCOPE.sCountry('ideological_rival').GetName] has formally delivered a series of provocative demands to our government, challenging our ideological stance on the world stage. Their aggressive posture threatens to destabilize the fragile peace between the [Concept('concept_great_power', 'great powers')].
 - **Flavor:** The foreign minister read the demands aloud, then set the paper down and removed his spectacles.\n\n'They wish us to renounce our system of government,' he said. 'Publicly. Before the world press.'\n\nThe room was quiet for a long time.\n\n'And if we refuse?'\n\n'Then, I rather think, we shall have our answer about whether they want peace or something else entirely.'
 - **Current image:** gfx/event_pictures/ideological_confrontation_speech.dds
 
@@ -4738,14 +5258,20 @@ Each event is listed with its title, description, and flavor text (where availab
 
 ### world_war_events.3
 - **Title:** Diplomatic Crisis
-- **Description:** [SCOPE.sCountry('crisis_aggressor').GetName] is pressuring smaller nations in our sphere of influence, demanding territorial concessions and political subservience. If we do not act, the balance of power may shift irrevocably.
+- **Description:** [SCOPE.sCountry('crisis_aggressor').GetName] has opened a diplomatic play against [SCOPE.sCountry('crisis_victim').GetName], a smaller nation in our sphere of influence, and is pressing it for concessions and political subservience. If we do not act, the balance of power may shift irrevocably.
 - **Flavor:** The ambassador from the small nation placed both palms flat on the table, as if to steady himself. 'If your guarantees mean nothing,' he said, 'then say so plainly, and we will make other arrangements.'\n\n'What arrangements?' the foreign minister asked.\n\n'The only kind available to nations without powerful friends: surrender.'
 - **Current image:** gfx/event_pictures/diplomatic_crisis_ultimatum.dds
 
+### world_war_events.4
+- **Title:** Ideological Demands
+- **Description:** Our quarrel with [SCOPE.sCountry('ww_demand_target').GetName] has become a contest between two irreconcilable systems of government. The foreign ministry has drafted a set of demands: that [SCOPE.sCountry('ww_demand_target').GetName] publicly renounce its hostility to our system and silence its propaganda against us. Once delivered, the demands will force [SCOPE.sCountry('ww_demand_target').GetName] to answer, and whatever it answers, the fragile peace between the [Concept('concept_great_power', 'great powers')] will be tested.
+- **Flavor:** 'It is a strong note,' the foreign minister said, sliding the draft across the desk. 'Some would say too strong.'\n\nThe premier read it twice. 'Will they accept?'\n\n'No. But they will have to refuse in public, and that is rather the point.'
+- **Current image:** gfx/event_pictures/ideological_confrontation_speech.dds
+
 ### world_war_events.5
-- **Title:** The World at War
-- **Description:** The tensions that have been building for years have finally exploded into open conflict. The [Concept('concept_great_power', 'great powers')] have chosen their sides. There is no turning back now - the world is engulfed in the most devastating war in human history.
-- **Flavor:** The telegram arrived at three in the morning. The minister read it standing in his dressing gown, his face grey in the lamplight.\n\n'War,' he said. The word hung in the air like smoke.\n\nHis secretary waited, pen in hand. 'Shall I draft the mobilization order?'\n\n'Draft it. Date it. And pray to God that the men who must carry it out are braver than I feel at this moment.'
+- **Title:** The Brink of War
+- **Description:** Years of mounting tension have brought us to the brink of war with [SCOPE.sCountry('war_target').GetName]. The general staff reports that the army is ready and asks for the order to move. If we give it, [SCOPE.sCountry('war_target').GetName] and its friends will answer, and the [Concept('concept_great_power', 'great powers')] will be drawn in one by one to the most devastating war in human history. If we do not, the moment will pass, and perhaps the initiative with it.
+- **Flavor:** The chief of the general staff did not sit down. 'The divisions are at the railheads,' he said. 'The plans are current. I need only your signature.'\n\nThe minister looked at the order for a long time. Outside, a tram bell rang; somewhere a café was opening its shutters, as though it were an ordinary morning.\n\n'And if I do not sign?'\n\n'Then you will have to explain to them,' the general said, nodding at the window, 'why we built all this and then lost our nerve.'
 - **Current image:** gfx/event_pictures/world_war_declaration.dds
 
 ### world_war_events.10
@@ -4817,5 +5343,5 @@ Each event is listed with its title, description, and flavor text (where availab
 ### world_war_events.105
 - **Title:** The New Rivalry
 - **Description:** The war is over, but already the seeds of the next conflict are being sown. [SCOPE.sCountry('new_rival_power').GetName] - once our ally of convenience - now stands as the greatest rival to our vision of the world. Two superpowers, two ideologies, one world.
-- **Flavor:** The intelligence briefing was three pages long. The analyst summarized it in one sentence: 'They are building what we are building, and they are not building it for friendship.'\n\nThe defence minister closed the folder. 'Six months ago they were our allies.'\n\n'Six months ago we had a common enemy. Now we are each other's.'
+- **Flavor:** The intelligence briefing was three pages long. The analyst summarized it in one sentence: 'They no longer need us, and they have stopped pretending otherwise.'\n\nThe defence minister closed the folder. 'Six months ago they were our allies.'\n\n'Six months ago we had a common enemy. Now we are each other's.'
 - **Current image:** gfx/event_pictures/post_war_order_map.dds

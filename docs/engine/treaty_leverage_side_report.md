@@ -33,12 +33,10 @@ _None._
 
 ## Reviewed Exemptions
 
-- `common/treaty_articles/extra_treaty_articles.txt:20` — `request_influence`: leverage in `source_modifier` with `maintenance_paid_by = source_country` — **2026-09-21**: the one article where the maintenance payer is also the leveraged party — the petitioner asks for the arrangement, so it pays, and it is what the bloc leader gains leverage over
+- `common/treaty_articles/extra_treaty_articles.txt` — `request_influence`: leverage in `source_modifier` with `maintenance_paid_by = source_country` — **2026-09-21**: the one article where the maintenance payer is also the leveraged party — the petitioner asks for the arrangement, so it pays, and it is what the bloc leader gains leverage over
 
 ## Coverage
 
-- files audited: 17
-- directed articles judged: 14
 - articles with a leverage line but no `maintenance_paid_by`: 0
 - total flags: 1
 - unreviewed: 0
