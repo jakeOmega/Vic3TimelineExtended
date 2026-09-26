@@ -87,18 +87,18 @@ orbital_battlestation_construction     = { generic_wonder_construction_base = { 
 
 mind_upload_nexus_construction         = { generic_wonder_construction_base = { WONDER = mind_upload_nexus         MAX_LEVEL =  5 } }
 
+# State scope, from on_monthly_pulse_state (ROOT is the state). Reads the
+# state's own value, so the national grants (the Ministry of Thought Control)
+# reach every incorporated state and a building's state_modifiers grant only
+# its own.
 thought_control_loyalists_update = {
 	if = {
 		limit = {
-			owner = {
-				modifier:country_monthly_loyalists_add > 0
-			}
+			is_incorporated = yes
+			modifier:state_monthly_loyalists_add > 0
 		}
-		every_scope_state = {
-			limit = { is_incorporated = yes }
-			add_loyalists_in_state = {
-				value = ROOT.modifier:country_monthly_loyalists_add
-			}
+		add_loyalists_in_state = {
+			value = modifier:state_monthly_loyalists_add
 		}
 	}
 }

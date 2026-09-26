@@ -143,7 +143,7 @@ institution_ministry_of_thought_control = {
 	background_texture = "gfx/interface/illustrations/institutions/home_affairs.dds"
 
 	modifier = {
-		country_monthly_loyalists_add = 0.001
+		state_monthly_loyalists_add = 0.001
 		country_colonial_stability_drift_add = 0.1
 		country_electoral_confidence_impact_mult = -0.1
 		country_legislative_override_capacity_add = 0.4

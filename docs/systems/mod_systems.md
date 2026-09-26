@@ -1065,13 +1065,13 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `state_yearly_cultural_acceptance_add_on_action` — cultural acceptance
 - `tourism_on_action` — tourism output/throughput modifier refresh (sole owner; the multipliers read monthly-varying `city_size_rank` and live building levels)
 - `resettlement_transfer_on_action` — population transfer
+- `ministry_of_thought_control_on_action` — monthly loyalists from `state_monthly_loyalists_add`, per incorporated state
 
 **`on_monthly_pulse`** (Root = global):
 - `city_rank_on_action` — city tier updates
 - `global_warming_events_on_action` — GW threshold & recurring events
 
 **`on_monthly_pulse_country`** (Root = Country):
-- `ministry_of_thought_control_on_action` — loyalist manipulation
 - `remove_invalid_buildings` — space program placement validation
 - `cheaty_on_action` — debug modifier (disabled)
 - `combined_arms_update_on_action` — military doctrine bonuses

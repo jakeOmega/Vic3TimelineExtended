@@ -164,7 +164,7 @@ The legacy `pm_base_building_space_power` PM has been removed. The solar collect
 | `unit_offense_mult` | +0.05 per level | — |
 | `unit_defense_mult` | +0.05 per level | — |
 | `unit_morale_recovery_mult` | +0.05 per level | — |
-| `country_nuclear_weapon_defense_chance_add` | +0.10 per level | — |
+| `state_nuclear_weapon_defense_chance_add` (state-masked; the country block applies it to every state) | +0.10 per level | — |
 | `unit_blockade_mult` | +0.10 per level | — |
 | `unit_morale_damage_mult` | +0.05 per level | — |
 

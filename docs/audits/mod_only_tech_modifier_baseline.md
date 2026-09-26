@@ -99,7 +99,6 @@ Polarity is heuristically classified; override in
 | `country_loyalists_from_legitimacy_mult` | 1 | 0.05 | 0.05 | 0.05 | positive-good | 0.05‡ |
 | `country_military_tech_spread_mult` | 1 | 0.25 | 0.25 | 0.25 | positive-good | 0.25‡ |
 | `country_nuclear_weapon_attack_success_add` | 4 | 0.5 | 0.5 | 1 | positive-good | 0.5‡ |
-| `country_nuclear_weapon_defense_chance_add` | 4 | 0.25 | 0.5 | 0.5 | positive-good | 0.5‡ |
 | `country_radicals_from_conquest_mult` | 2 | -0.5 | 0.375 | 0.25 | negative-good | 0.375‡ |
 | `country_radicals_from_sol_change_mult` | 1 | -0.05 | 0.05 | -0.05 | negative-good | 0.05‡ |
 | `country_ship_group_supply_ships_construction_efficiency_add` | 1 | 0.5 | 0.5 | 0.5 | positive-good | 0.5‡ |
@@ -137,6 +136,7 @@ Polarity is heuristically classified; override in
 | `state_homeland_removal_threshold_add` | 3 | -0.05 | 0.05 | 0.05 | positive-good | 0.05‡ |
 | `state_migration_crowding_density_mult` | 5 | 0.15 | 0.15 | 0.2 | negative-good | 0.15‡ |
 | `state_mortality_mult` | 5 | -0.2 | 0.05 | -0.05 | negative-good | 0.05‡ |
+| `state_nuclear_weapon_defense_chance_add` | 4 | 0.25 | 0.5 | 0.5 | positive-good | 0.5‡ |
 | `state_pollution_generation_mult` | 1 | -0.05 | 0.05 | -0.05 | negative-good | 0.05‡ |
 | `state_pop_qualifications_mult` | 2 | 0.05 | 0.05 | 0.05 | positive-good | 0.05‡ |
 | `state_standard_of_living_add` | 1 | 1 | 1 | 1 | positive-good | 1‡ |

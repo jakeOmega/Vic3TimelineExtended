@@ -2036,7 +2036,7 @@ These `script_only = yes` modifiers can be applied from laws, technologies, PMs,
 | Modifier | Type | Effect |
 |---|---|---|
 | `country_nuclear_weapon_attack_success_add` | flat, good | Base attack success chance (from techs: nuclear_weapons +1.0, ICBMs +0.5, hypersonic_weapons +0.5, orbital_weapon_platforms +0.5). |
-| `country_nuclear_weapon_defense_chance_add` | flat, good | Base defense chance (from techs: military_aviation +0.25, radar +0.25, missile_defense_systems +0.5, directed_energy_defenses +0.5, orbital_weapon_platforms +0.5). |
+| `state_nuclear_weapon_defense_chance_add` | flat, good | Base defense chance of the struck state (state-level, granted nationally; from techs: military_aviation +0.25, radar +0.25, missile_defense_systems +0.5, directed_energy_defenses +0.5, orbital_weapon_platforms +0.5). |
 
 ### Economy
 | Modifier | Type | Effect |

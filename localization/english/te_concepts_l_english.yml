@@ -1716,7 +1716,7 @@
  nuclear_strike_aftermath_desc:0 "The aftermath of a [concept_nuclear_strike]."
  nuclear_weapon_program_funding_desc:0 "Represents the current level of funding devoted to the nuclear weapons program."
  nuke_line_empty:0 ""
- nuke_success_chance_desc:0 "Our attack chance modifier: [GetPlayer.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')]\nTheir defense chance modifier: [SCOPE.sCountry('target_country').GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_defense_chance_add')]\nSuccess chance: #tooltippable #tooltip:[GetPlayer.GetTooltipTag],nuke_success_final_chance_breakdown_tt #g [SCOPE.ScriptValue('nuclear_strike_success_chance')]%#!#!#!"
+ nuke_success_chance_desc:0 "Our attack chance modifier: [GetPlayer.GetModifier.GetValueWithBreakdownFor('country_nuclear_weapon_attack_success_add')]\nTheir defense chance modifier: [SCOPE.sState('target_state').GetModifier.GetValueWithBreakdownFor('state_nuclear_weapon_defense_chance_add')]\nSuccess chance: #tooltippable #tooltip:[GetPlayer.GetTooltipTag],nuke_success_final_chance_breakdown_tt #g [SCOPE.ScriptValue('nuclear_strike_success_chance')]%#!#!#!"
  oil_spill_cleanup_modifier_desc:0 "A major oil spill cleanup effort is underway, diverting resources but protecting the local environment."
  one_party_consolidation_modifier_desc:0 "A single party has consolidated control, directing national resources toward rapid modernization."
  orbital_battlestation_progress:0 "Orbital Battlestation Progress"

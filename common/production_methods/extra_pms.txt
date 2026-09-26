@@ -19033,7 +19033,7 @@ pm_orbital_battlestation = {
 			unit_defense_mult = 0.05
 			unit_morale_recovery_mult = 0.05
 			unit_morale_damage_mult = 0.05
-			country_nuclear_weapon_defense_chance_add = 0.05
+			state_nuclear_weapon_defense_chance_add = 0.05
 		}
 	}
 
@@ -19887,6 +19887,7 @@ pm_consciousness_network_social_control = {
 			state_turmoil_effects_mult = -0.25
 			state_radicals_from_political_movements_mult = -0.25
 			state_loyalists_from_political_movements_mult = -0.25
+			state_monthly_loyalists_add = 0.001
 		}
 	}
 
@@ -19895,7 +19896,6 @@ pm_consciousness_network_social_control = {
 			interest_group_in_government_approval_add = 3
 			interest_group_in_government_attraction_mult = 0.10
 			country_authority_add = 100
-			country_monthly_loyalists_add = 0.001
 		}
 	}
 }
