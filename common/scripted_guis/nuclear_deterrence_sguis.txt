@@ -5,8 +5,9 @@
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
 # Two ACTION handlers, parameterized by a saved scope `op` (the Strategic
-# Reserve / nuclear programme pattern), and thirteen DISPLAY handlers: the five
-# yes/no questions and names below, three that hide the moves our side cannot
+# Reserve / nuclear programme pattern), and fourteen DISPLAY handlers: the six
+# yes/no questions and names below (nd_umbrella_sgui draws the umbrella
+# line), three that hide the moves our side cannot
 # make (nd_crisis_we_issued_sgui, nd_crisis_we_are_target_sgui,
 # nd_crisis_private_sgui), and three that print script-built text
 # (nd_crisis_pressure_breakdown_sgui, nd_crisis_danger_breakdown_sgui,
@@ -278,6 +279,18 @@ nd_armed_sgui = {
 	is_shown = {
 		nd_is_armed = yes
 		nd_is_initialized = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# Does anyone shelter under our umbrella? Draws the posture panel's umbrella
+# line (umbrella/recessed/dead-hand spec §1.6).
+nd_umbrella_sgui = {
+	scope = country
+	is_shown = {
+		any_direct_subject = { nd_under_an_umbrella = yes }
 	}
 	is_valid = { always = no }
 	ai_is_valid = { always = no }

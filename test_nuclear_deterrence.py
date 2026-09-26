@@ -36,6 +36,7 @@ LOC_DIR = ROOT / "localization/english"
 LENS_ICONS = ROOT / "gfx/interface/icons/lens_toolbar_icons"
 NUKE = ROOT / "common/diplomatic_actions/nuke.txt"
 WEAPON_EVENTS = ROOT / "events/nuclear_weapon_events.txt"
+UMBRELLA_ACTIONS = ROOT / "common/diplomatic_actions/nuclear_umbrella_actions.txt"
 
 
 def tracked(path):
@@ -1035,6 +1036,36 @@ class TestUmbrellaCoverage(unittest.TestCase):
 
     def test_article_refuses_own_subject(self):
         self.assertIn("nd_tt_already_under_umbrella", block(strip_comments(read(ARTICLE)), "possible"))
+
+
+class TestUmbrellaWithdrawal(unittest.TestCase):
+    """Withdrawing a subject's umbrella: a pact with a one-off and a lasting
+    liberty-desire cost (umbrella/recessed/dead-hand spec §1.3, §1.6)."""
+
+    def test_action_is_a_liberty_desire_pact(self):
+        text = strip_comments(read(UMBRELLA_ACTIONS))
+        body = block(text, "nd_withdraw_umbrella_action")
+        self.assertIn("overlord", block(body, "groups"))
+        self.assertIn("add_liberty_desire = 10", block(body, "accept_effect"))
+        self.assertIn("value = -20", block(body, "accept_effect"))
+        pact = block(body, "pact")
+        self.assertIn("country_liberty_desire_add = 0.10", block(pact, "second_modifier"))
+        self.assertIn("is_direct_subject_of = root", block(pact, "requirement_to_maintain"))
+        self.assertIn("always = no", block(block(body, "ai"), "will_propose"))
+        self.assertTrue(read(UMBRELLA_ACTIONS).startswith("\ufeff") or
+                        UMBRELLA_ACTIONS.read_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_action_loc(self):
+        a = "nd_withdraw_umbrella_action"
+        needed = {a, a + "_desc", a + "_action_propose_name", a + "_action_break_name", a + "_pact_desc",
+                  a + "_action_notification_name", a + "_action_notification_desc",
+                  a + "_action_notification_break_name", a + "_action_notification_break_desc"}
+        self.assertFalse(sorted(needed - loc_keys()))
+
+    def test_panel_line(self):
+        self.assertIn("nd_umbrella_sgui", read(GUI))
+        self.assertIn("is_valid = { always = no }", block(strip_comments(read(SGUIS)), "nd_umbrella_sgui"))
+        self.assertRegex(strip_comments(read(VALUES)), r"(?m)^nd_display_umbrella_count = \{")
 
 
 if __name__ == "__main__":

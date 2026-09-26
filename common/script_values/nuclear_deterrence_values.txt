@@ -868,6 +868,16 @@ nd_display_stockpile = {
 	value = nd_stockpile
 }
 
+# Direct subjects under our nuclear umbrella (umbrella/recessed/dead-hand spec
+# §1.6). Vanilla precedent for an iterator in a script value: india_values.txt.
+nd_display_umbrella_count = {
+	value = 0
+	every_direct_subject = {
+		limit = { nd_under_an_umbrella = yes }
+		add = 1
+	}
+}
+
 nd_display_doctrine_months_left = {
 	value = nd_doctrine_tenure_months
 	if = {

@@ -1,0 +1,85 @@
+﻿# ============================================================================
+# NUCLEAR UMBRELLA — withdrawing it from a subject
+# ============================================================================
+# docs/superpowers/specs/2026-09-25-nuclear-umbrella-recessed-dead-hand-design.md
+# §1.3. An armed overlord's direct subjects are under its nuclear umbrella by
+# default (nd_under_an_umbrella, nuclear_deterrence_triggers.txt): covered as
+# if it had signed them a nuclear_guarantee. This pact is the withdrawal.
+# While it stands the subject is not covered and its liberty desire grows
+# 0.1 a week (vanilla Raise Subject Payments' rate); making it costs +10
+# liberty desire at once (the size of vanilla law imposition) and 20
+# relations. Breaking it — "Restore Nuclear Umbrella" — is free and restores
+# coverage at once. The AI never withdraws, and restores any withdrawal it
+# inherits. An overlord action with no DLC gate has precedent in
+# annex_subject_peaceful (extra_diplo_actions.txt).
+# ============================================================================
+nd_withdraw_umbrella_action = {
+	groups = {
+		overlord
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_in_lens = no
+
+	texture = "gfx/interface/icons/diplomatic_action_icons/guarantee_independence.dds"
+
+	potential = {
+		has_game_rule = nuclear_weapons_enabled
+		scope:target_country = {
+			is_direct_subject_of = root
+		}
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = nd_tt_umbrella_needs_arsenal
+			nd_believed_armed = yes
+		}
+	}
+
+	accept_effect = {
+		custom_tooltip = nd_tt_umbrella_withdrawn
+		scope:target_country = {
+			add_liberty_desire = 10
+			change_relations = { country = root value = -20 }
+		}
+	}
+
+	pact = {
+		cost = 0
+
+		second_modifier = {
+			country_liberty_desire_add = 0.10
+		}
+
+		second_country_gets_income_transfer = no
+		income_transfer_based_on_second_country = no
+
+		actor_can_break = {
+			always = yes
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				scope:target_country = {
+					is_direct_subject_of = root
+				}
+			}
+		}
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0
+		}
+		propose_score = {
+			value = 0
+		}
+		will_propose = {
+			always = no
+		}
+		will_break = {
+			always = yes
+		}
+	}
+}
