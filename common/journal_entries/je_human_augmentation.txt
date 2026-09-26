@@ -10,6 +10,13 @@
 		has_game_rule = social_movements_enabled
 		has_augmentation_tech = yes
 		NOT = { is_country_type = decentralized }
+		# Rebels do not start their own debate mid-war (and, winning, keep a fresh
+		# outcome): vanilla's pattern for historical entries (je_the_two_spains,
+		# je_risorgimento). Here, not in possible, so it can never touch an
+		# active record, such as one a revolution's winner inherits; the winner
+		# stops being revolutionary (vanilla gates power-bloc invites, obligations
+		# and coups on it).
+		is_revolutionary = no
 		# Set by on_complete, on_fail and on_timeout. A revolution's winner gets a
 		# fresh record of an entry the loser had finished, and without this it
 		# would re-activate: a completed or failed debate would end again at once,

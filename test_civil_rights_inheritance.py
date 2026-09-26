@@ -213,6 +213,35 @@ class OutcomeModifierTests(unittest.TestCase):
         self.assertRegex(update, r"change_variable\s*=\s*\{\s*name\s*=\s*cr_outcome_months\s+add\s*=\s*1\s*\}")
         self.assertRegex(update, r"var:cr_outcome_months\s*>=\s*120\s*\}\s*cr_forget_outcome_modifiers\s*=\s*yes")
 
+    def test_a_record_without_its_modifier_is_forgotten(self):
+        # Round 2 (review I1): the old-save migration guesses the modifier's age.
+        # Without this a migrated record could outlive its modifier, and a later
+        # revolution would bring back a reward or penalty that had run out.
+        effects = _read(*EFFECTS)
+        update = _block(effects, "cr_outcome_monthly_update")
+        recorded = set(_param_calls(_read(*EVENTS), "cr_record_outcome_modifier"))
+        self.assertEqual(sorted(_param_calls(update, "cr_forget_lapsed_outcome")), sorted(recorded))
+        helper = _block(effects, "cr_forget_lapsed_outcome")
+        self.assertRegex(
+            helper,
+            r"has_variable\s*=\s*cr_outcome_\$MODIFIER\$\s+NOT\s*=\s*\{\s*has_modifier\s*=\s*\$MODIFIER\$\s*\}"
+            r"\s*\}\s*cr_forget_outcome_modifiers\s*=\s*yes",
+        )
+        # Only from the monthly pulse: the merge and on_civil_war_won share a tick,
+        # and anything that ran between them would forget a record the hook is
+        # about to rebuild.
+        callers = []
+        for root in ("common", "events"):
+            for dirpath, _dirs, files in os.walk(_path(root)):
+                for name in files:
+                    if name.endswith(".txt"):
+                        rel = os.path.relpath(os.path.join(dirpath, name), REPO)
+                        if re.search(r"cr_forget_lapsed_outcome\s*=\s*\{\s*MODIFIER", _read(rel)):
+                            callers.append(rel)
+        self.assertEqual(callers, [os.path.join(*EFFECTS)])
+        stripped = effects.replace(update, "")
+        self.assertNotRegex(stripped, r"cr_forget_lapsed_outcome\s*=\s*\{\s*MODIFIER")
+
 
 class PolicyMirrorTests(unittest.TestCase):
     def test_buttons_keep_modifier_and_mirror_in_step(self):
@@ -244,6 +273,14 @@ class PolicyMirrorTests(unittest.TestCase):
                     + r"\s*\}\s*\}\s*change_variable", pulse)
                 self.assertIsNotNone(m)
                 self.assertLess(heal, m.start())
+        # Round 2 (review M3): the expiry marker, like the counters, must not wait
+        # a month for a policy the self-heal has just re-added.
+        m = re.search(r"OR\s*=\s*\{\s*has_modifier\s*=\s*cr_cooptation_modifier\s+has_variable\s*=\s*"
+                      r"cr_policy_cooptation\s*\}\s*var:cr_cooptation_months\s*>=\s*12\s+"
+                      r"NOT\s*=\s*\{\s*has_modifier\s*=\s*cr_cooptation_expired\s*\}\s*\}\s*"
+                      r"add_modifier\s*=\s*\{\s*name\s*=\s*cr_cooptation_expired\s*\}", pulse)
+        self.assertIsNotNone(m)
+        self.assertLess(heal, m.start())
 
 
     def test_only_buttons_and_the_entry_touch_the_policy_modifiers(self):
@@ -256,7 +293,8 @@ class PolicyMirrorTests(unittest.TestCase):
         }
         names = "|".join(list(MIRRORS) + ["cr_cooptation_expired"])
         pattern = re.compile(
-            r"(?:add_modifier\s*=\s*\{\s*name\s*=\s*|remove_modifier\s*=\s*)(?:" + names + r")\b")
+            r"(?:add_modifier\s*=\s*\{\s*name\s*=\s*|add_modifier\s*=\s*|remove_modifier\s*=\s*)(?:"
+            + names + r")\b")
         for root in ("common", "events"):
             for dirpath, _dirs, files in os.walk(_path(root)):
                 for name in files:
@@ -290,9 +328,14 @@ class HookTests(unittest.TestCase):
         self.assertRegex(
             body,
             r"var:cr_revolution_original\s*=\s*ROOT\s*\}\s*cr_drop_rebel_run_state\s*=\s*yes\s*\}\s*"
-            r"else\s*=\s*\{\s*cr_rebuild_after_civil_war\s*=\s*yes\s*\}",
+            r"else\s*=\s*\{\s*cr_rebuild_after_civil_war\s*=\s*yes\s*"
+            r"set_variable\s*=\s*\{\s*name\s*=\s*cr_revolution_original\s+value\s*=\s*ROOT\s*\}\s*\}",
         )
-        self.assertRegex(body, r"remove_variable\s*=\s*cr_revolution_original\s*$")
+        # Round 2 (review M2): a secession and a revolution can run at once, and
+        # the war that ends second must still find the pointer.
+        for parts in (EFFECTS, ON_ACTIONS):
+            with self.subTest(file=os.path.join(*parts)):
+                self.assertNotIn("remove_variable = cr_revolution_original", _read(*parts))
 
     def test_rebuild_restores_outcome_and_a_running_struggle(self):
         body = _block(_read(*EFFECTS), "cr_rebuild_after_civil_war")
@@ -336,6 +379,20 @@ class OtherDebatesTests(unittest.TestCase):
                 with self.subTest(je=je, gate=gate):
                     self.assertRegex(_block(body, gate, top_level=False),
                                      r"NOT\s*=\s*\{\s*has_variable\s*=\s*" + var + r"\s*\}")
+
+    def test_rebels_do_not_start_these_entries(self):
+        # Round 2 (review M1). In is_shown_when_inactive only, as vanilla does
+        # (je_the_two_spains, je_risorgimento): it then cannot touch an active
+        # record, such as one a revolution's winner inherits.
+        cases = dict(self.CASES)
+        cases[JE] = ("je_civil_rights", None)
+        for parts, (je, _var) in cases.items():
+            body = _block(_read(*parts), je)
+            with self.subTest(je=je):
+                self.assertRegex(_block(body, "is_shown_when_inactive", top_level=False),
+                                 r"is_revolutionary\s*=\s*no\b")
+                self.assertNotIn("is_revolutionary", _block(body, "possible", top_level=False))
+                self.assertNotRegex(body, r"can_deactivate\s*=\s*yes")
 
 
 if __name__ == "__main__":
