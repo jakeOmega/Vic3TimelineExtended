@@ -78,7 +78,7 @@ sr_recalculate_cost = {
 	# completion and the monthly cleanup, so the panel's status label reacts to a
 	# click instead of lagging a month. Status is derived from variables only
 	# (never from a modifier), so the add_modifier churn above cannot affect it.
-	sr_refresh_milestone_statuses = yes
+	sr_refresh_milestone_statuses = yes # REVIEWED 2026-09-26: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 }
 
 # Re-derive every milestone's widget status (sr_<m>_last_status). The tail of

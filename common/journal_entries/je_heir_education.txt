@@ -47,7 +47,7 @@ je_heir_education = {
 		set_variable = { name = heir_ed_ig_radical value = 0 } # REVIEWED 2026-09-26: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
 		set_variable = { name = heir_ed_ig_moderate value = 0 } # REVIEWED 2026-09-26: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
 		set_variable = { name = heir_ed_ig_regressive value = 0 } # REVIEWED 2026-09-26: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
-		set_variable = { name = heir_ed_total value = 0 }
+		set_variable = { name = heir_ed_total value = 0 } # REVIEWED 2026-09-26: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
 		# Hidden intelligence score (1-5): affects gain amount per pulse tick
 		# Higher = faster learning, but player never sees exact value
 		random_list = { # REVIEWED 2026-09-26: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)

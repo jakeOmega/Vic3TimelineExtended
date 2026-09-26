@@ -3,9 +3,9 @@
 The crux is telling a reset from a write that cannot lose anything. A write
 in a journal entry's `immediate` (directly or through a scripted effect)
 flags unless it only runs while its own variable is missing, only ever
-writes `yes`, feeds the entry's progress bar, is a refresh some entry's pulse
-runs every time, or sits behind another variable's absence (those three are
-listed, not failing). A positive `has_variable` test is not a guard, and
+writes `yes`, feeds the entry's progress bar, is a refresh the entry's own
+pulse runs every time, or sits behind another variable's absence (those three
+are listed, not failing). A positive `has_variable` test is not a guard, and
 neither is a multi-child `NOT`.
 """
 from __future__ import annotations
@@ -244,6 +244,27 @@ class GuardTests(unittest.TestCase):
 
 
 class ProgressBarTests(unittest.TestCase):
+    def test_goal_pinned_against_the_same_variable(self):
+        res = _run(
+            "je_x = {\n"
+            "\timmediate = {\n"
+            "\t\tset_variable = { name = pinned value = 0 }\n"
+            "\t\tset_variable = { name = loose value = 0 }\n"
+            "\t}\n"
+            "\tcurrent_value = { value = var:pinned add = var:loose }\n"
+            "\tgoal_add_value = { value = { value = 100 subtract = pinned_sv } }\n"
+            "}\n",
+            svs="pinned_sv = { value = 0 if = { limit = { has_variable = pinned } add = var:pinned } }\n",
+        )
+        got = {f.name: f.detail for f in res.flags}
+        self.assertEqual(set(got), {"pinned", "loose"})
+        self.assertTrue(got["pinned"].endswith("goal pinned"))
+        self.assertTrue(got["loose"].endswith("goal not pinned"))
+        report = render_report(res)
+        self.assertIn("### Progress-bar inputs (follow-up candidates)", report)
+        self.assertIn("so guard the variable like any other", report)
+        self.assertNotIn("on purpose", report)
+
     def test_current_value_input_is_listed_not_failing(self):
         res = _run(
             "je_x = {\n"
@@ -306,13 +327,19 @@ class ScriptedEffectTests(unittest.TestCase):
         self.assertEqual([(f.name, f.category, f.refresh) for f in flags],
                          [("shown", REFRESH, "refresh_display")])
 
-    def test_another_entrys_pulse_also_proves_a_refresh(self):
+    def test_another_entrys_pulse_does_not_prove_a_refresh(self):
+        # je_b may not be running when je_a starts, so its pulse proves nothing
+        # about what happens next; only je_a's own pulse does.
         effects = "status = { set_variable = { name = s_$M$ value = 1 } }\n"
         je = (
-            "je_a = { immediate = { status = { M = b } } }\n"
+            "je_a = {\n"
+            "\timmediate = { status = { M = a } status = { M = b } }\n"
+            "\ton_weekly_pulse = { effect = { status = { M = a } } }\n"
+            "}\n"
             "je_b = { on_monthly_pulse = { effect = { status = { M = b } } } }\n"
         )
-        self.assertEqual([f.category for f in _flags(je, effects)], [REFRESH])
+        self.assertEqual([(f.name, f.category) for f in _flags(je, effects)],
+                         [("s_a", REFRESH), ("s_b", UNGUARDED)])
 
     def test_conditional_or_differently_parameterised_pulse_call_is_not_a_refresh(self):
         effects = "status = { set_variable = { name = s_$M$ value = 1 } }\n"
@@ -381,6 +408,23 @@ class ExemptionTests(unittest.TestCase):
         self.assertEqual(got, {"i": "caches only", "o": None})
         got = self._exemptions(_je("\t\touter = yes # REVIEWED 2026-09-26: all of it\n"), effects)
         self.assertEqual(got, {"i": "caches only", "o": "all of it"})
+
+    def test_reviewed_covering_an_other_guard_warning_moves_it_to_reviewed(self):
+        res = _run(_je(
+            "\t\tif = { # REVIEWED 2026-09-26: a group behind one sentinel\n"
+            "\t\t\tlimit = { NOT = { has_variable = total } }\n"
+            "\t\t\tset_variable = { name = part value = 0 }\n"
+            "\t\t}\n"
+            "\t\tif = {\n"
+            "\t\t\tlimit = { NOT = { has_variable = total } }\n"
+            "\t\t\tset_variable = { name = other value = 0 }\n"
+            "\t\t}\n"
+        ))
+        self.assertEqual([(f.name, f.category) for f in res.flags],
+                         [("part", OTHER_GUARD), ("other", OTHER_GUARD)])
+        self.assertEqual(_names(res.exempted), ["part"])
+        self.assertEqual(_names(res.warnings), ["other"])
+        self.assertEqual(res.unreviewed, [])
 
     def test_malformed_reviewed_does_not_count(self):
         got = self._exemptions(_je(
@@ -453,8 +497,10 @@ class AuditTests(unittest.TestCase):
             self.assertIn("### `je_q` (`common/journal_entries/je.txt`)", report)
             self.assertIn("can_revolution_inherit: unset (= yes); can_deactivate: yes", report)
             self.assertIn("`set_variable` `k` = `9` at `common/scripted_effects/fx.txt:1`", report)
-            self.assertIn("- unreviewed: 1", report)
-            self.assertIn("- progress-bar inputs: 1", report)
+            self.assertIn("- unreviewed: 1 (1)", report)
+            self.assertIn("- progress-bar inputs: 1 (1)", report)
+            self.assertIn("`bar` = `0` at `common/journal_entries/je.txt:4` — the entry's "
+                          "`current_value` reads it; goal not pinned", report)
 
     def test_load_file_missing(self):
         sf = load_file("/nonexistent/x.txt", "x.txt")
