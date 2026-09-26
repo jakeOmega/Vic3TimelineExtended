@@ -63,6 +63,9 @@ te_civil_war_on_secession_end = {
 	effect = {
 		te_civil_war_record_ending = { KIND = 2 }
 		nd_custody_reconcile = yes
+		# A secession that won holding warheads: the Budapest path
+		# (nuclear_custody_effects.txt).
+		nd_bp_open = yes
 		scope:target ?= {
 			if = {
 				limit = { is_country_alive = yes }

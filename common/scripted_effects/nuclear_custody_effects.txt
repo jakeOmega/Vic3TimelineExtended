@@ -989,6 +989,221 @@ nd_custody_restore_progress = {
 }
 
 # ----------------------------------------------------------------------------
+# SECESSION — the Budapest path (§0.10 step 4)
+# ----------------------------------------------------------------------------
+# A secession that wins keeps the warheads it took. The great powers press it
+# to trade them for guarantees, with the existing articles: the first to press
+# holds its disarmament (nuclear_disarmament) beside a guarantee
+# (nuclear_guarantee), every other presser signs a guarantee. The upkeep of an
+# arsenal it may not be able to replace is the pressure to accept (1994: the
+# Budapest Memorandum; Ukraine, Belarus and Kazakhstan gave up the Soviet
+# warheads on their soil for assurances from the United States, Britain and
+# Russia).
+
+# ROOT = the original country, scope:target = the secession
+# (te_civil_war_on_secession_end). Nothing unless the secession won — it is
+# alive — and holds warheads. The great powers hear a week from now.
+nd_bp_open = {
+	if = {
+		limit = {
+			has_game_rule = nuclear_weapons_enabled
+			scope:target ?= {
+				is_country_alive = yes
+				nd_is_armed = yes
+			}
+		}
+		scope:target = {
+			save_scope_as = nd_bp_state
+			if = {
+				limit = { has_variable_list = nd_bp_guarantors }
+				clear_variable_list = nd_bp_guarantors
+			}
+		}
+		debug_log = "TE_CUSTODY: [SCOPE.sCountry('nd_bp_state').GetName] won its secession holding warheads; the great powers will be asked to press it"
+		every_country = {
+			limit = { nd_bp_would_hear = { STATE = scope:nd_bp_state } }
+			set_variable = { name = nd_bp_new_state value = scope:nd_bp_state days = 30 }
+			trigger_event = { id = nuclear_custody.10 days = 7 popup = yes }
+		}
+	}
+}
+
+# ROOT = a great power (nuclear_custody.10), scope:nd_bp_state saved. Joins
+# the powers pressing; the first to press schedules the offer a month out.
+nd_bp_press = {
+	custom_tooltip = nd_tt_bp_press
+	hidden_effect = {
+		scope:nd_bp_state = {
+			if = {
+				limit = {
+					NOT = {
+						has_variable_list = nd_bp_guarantors
+						any_in_list = {
+							variable = nd_bp_guarantors
+							always = yes
+						}
+					}
+				}
+				trigger_event = { id = nuclear_custody.11 days = 30 popup = yes }
+			}
+			add_to_variable_list = { name = nd_bp_guarantors target = ROOT }
+		}
+	}
+}
+
+# ROOT = the new state (nuclear_custody.11's immediate). The lead guarantor —
+# the largest economy among the powers still able to stand behind the offer —
+# and how many there are.
+nd_bp_prepare_offer = {
+	set_variable = { name = nd_bp_count value = 0 }
+	every_in_list = {
+		variable = nd_bp_guarantors
+		limit = { nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT } }
+		ROOT = { change_variable = { name = nd_bp_count add = 1 } }
+	}
+	ordered_in_list = {
+		variable = nd_bp_guarantors
+		limit = { nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT } }
+		order_by = gdp
+		position = 0
+		save_scope_as = nd_bp_lead
+	}
+}
+
+nd_bp_treaty_lead = {
+	create_treaty = {
+		first_country = $GUARANTOR$
+		second_country = $STATE$
+		is_draft = no
+		binding_period = { years = 10 }
+		articles_to_create = {
+			{
+				article = nuclear_disarmament
+				source_country = $STATE$
+				target_country = $GUARANTOR$
+			}
+			{
+				article = nuclear_guarantee
+				source_country = $GUARANTOR$
+				target_country = $STATE$
+			}
+		}
+	}
+}
+
+nd_bp_treaty_guarantee = {
+	create_treaty = {
+		first_country = $GUARANTOR$
+		second_country = $STATE$
+		is_draft = no
+		binding_period = { years = 10 }
+		articles_to_create = {
+			{
+				article = nuclear_guarantee
+				source_country = $GUARANTOR$
+				target_country = $STATE$
+			}
+		}
+	}
+}
+
+# ROOT = the new state: "Trade them for guarantees". The lead's treaty carries
+# the disarmament; if it cannot be created (nuclear_disarmament wants the
+# nuclear_weapons technology of the state that disarms), the lead signs the
+# guarantee alone and the warheads are dismantled directly. They are
+# dismantled directly in any case once the treaties exist, because whether a
+# treaty created in force runs its articles' on_entry_into_force is
+# unverified — after the treaties, so an article that does run still finds
+# the warheads its record of an ended programme reads.
+nd_bp_accept = {
+	custom_tooltip = {
+		text = nd_tt_bp_accept
+		if = {
+			limit = {
+				exists = scope:nd_bp_lead
+				nd_bp_can_treaty_lead = { GUARANTOR = scope:nd_bp_lead STATE = ROOT }
+			}
+			nd_bp_treaty_lead = { GUARANTOR = scope:nd_bp_lead STATE = ROOT }
+		}
+		else_if = {
+			limit = {
+				exists = scope:nd_bp_lead
+				nd_bp_can_treaty_guarantee = { GUARANTOR = scope:nd_bp_lead STATE = ROOT }
+			}
+			nd_bp_treaty_guarantee = { GUARANTOR = scope:nd_bp_lead STATE = ROOT }
+		}
+		every_in_list = {
+			variable = nd_bp_guarantors
+			limit = {
+				NOT = { this = scope:nd_bp_lead }
+				nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT }
+			}
+			save_scope_as = nd_bp_other
+			if = {
+				limit = { nd_bp_can_treaty_guarantee = { GUARANTOR = scope:nd_bp_other STATE = ROOT } }
+				nd_bp_treaty_guarantee = { GUARANTOR = scope:nd_bp_other STATE = ROOT }
+			}
+		}
+		if = {
+			limit = { nd_stockpile > 0 }
+			set_variable = { name = nuclear_weapon_stockpile value = 0 }
+		}
+		if = {
+			limit = { has_modifier = nuclear_power }
+			remove_modifier = nuclear_power
+		}
+	}
+	custom_tooltip = {
+		text = nd_tt_bp_accept_relations
+		every_in_list = {
+			variable = nd_bp_guarantors
+			limit = { nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT } }
+			change_relations = { country = ROOT value = 20 }
+		}
+	}
+	hidden_effect = {
+		debug_log = "TE_CUSTODY: [ROOT.GetCountry.GetName] traded its warheads for guarantees"
+		nd_snap_public_estimate = yes
+		nd_apply_posture_modifiers = yes
+		nd_ledger_refresh = yes
+		nd_bp_answer = { ANSWER = 1 }
+	}
+}
+
+# ROOT = the new state: "Keep them".
+nd_bp_refuse = {
+	custom_tooltip = {
+		text = nd_tt_bp_refuse
+		every_in_list = {
+			variable = nd_bp_guarantors
+			limit = { is_country_alive = yes }
+			change_relations = { country = ROOT value = -20 }
+		}
+		set_variable = { name = nd_bp_refused value = 1 days = 3650 }
+	}
+	hidden_effect = {
+		nd_bp_answer = { ANSWER = 2 }
+	}
+}
+
+# ROOT = the new state. Tells each guarantor (nuclear_custody.12): 1 accepted,
+# 2 refused. Then forgets the offer.
+nd_bp_answer = {
+	every_in_list = {
+		variable = nd_bp_guarantors
+		limit = { is_country_alive = yes }
+		set_variable = { name = nd_bp_answer value = $ANSWER$ }
+		set_variable = { name = nd_bp_answer_from value = ROOT }
+		trigger_event = { id = nuclear_custody.12 popup = yes }
+	}
+	clear_variable_list = nd_bp_guarantors
+	if = {
+		limit = { has_variable = nd_bp_count }
+		remove_variable = nd_bp_count
+	}
+}
+
+# ----------------------------------------------------------------------------
 # OWN SIDE — a nuclear strike on one's own civil war (owner ruling 2026-09-25)
 # ----------------------------------------------------------------------------
 # Country scope = the striker, from nd_record_nuclear_use outside its

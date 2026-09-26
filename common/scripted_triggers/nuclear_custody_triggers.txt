@@ -159,3 +159,72 @@ nd_cwr_pair_at_war = {
 		has_war_with = scope:nd_cwr_pair_origin
 	}
 }
+
+# ----------------------------------------------------------------------------
+# SECESSION — the Budapest path (nuclear_custody.10 / .11 / .12)
+# ----------------------------------------------------------------------------
+# Does this country hear that $STATE$, a secession that has won, holds
+# warheads: a great power believed armed, not at war with it, not still
+# deciding about another (nd_bp_new_state is set for a month). Country scope.
+nd_bp_would_hear = {
+	NOT = { this = $STATE$ }
+	is_country_alive = yes
+	country_rank >= rank_value:great_power
+	nd_believed_armed = yes
+	NOT = { has_war_with = $STATE$ }
+	NOT = { has_variable = nd_bp_new_state }
+}
+
+# Can $GUARANTOR$ still stand behind the offer to $STATE$: alive, believed
+# armed, not at war with it. Country scope, any.
+nd_bp_guarantor_valid = {
+	$GUARANTOR$ = {
+		is_country_alive = yes
+		nd_believed_armed = yes
+		NOT = { has_war_with = $STATE$ }
+	}
+}
+
+# The two treaties the offer creates, in force at once. Keep each identical to
+# its effect in nuclear_custody_effects.txt (nd_bp_treaty_lead,
+# nd_bp_treaty_guarantee): can_create_treaty is how the offer knows which it
+# may create. The lead guarantor holds the new state's disarmament
+# (nuclear_disarmament: source = the state that disarms, target = the
+# demander, which pays) beside its guarantee; every other guarantor signs the
+# guarantee alone.
+nd_bp_can_treaty_lead = {
+	can_create_treaty = {
+		first_country = $GUARANTOR$
+		second_country = $STATE$
+		is_draft = no
+		binding_period = { years = 10 }
+		articles_to_create = {
+			{
+				article = nuclear_disarmament
+				source_country = $STATE$
+				target_country = $GUARANTOR$
+			}
+			{
+				article = nuclear_guarantee
+				source_country = $GUARANTOR$
+				target_country = $STATE$
+			}
+		}
+	}
+}
+
+nd_bp_can_treaty_guarantee = {
+	can_create_treaty = {
+		first_country = $GUARANTOR$
+		second_country = $STATE$
+		is_draft = no
+		binding_period = { years = 10 }
+		articles_to_create = {
+			{
+				article = nuclear_guarantee
+				source_country = $GUARANTOR$
+				target_country = $STATE$
+			}
+		}
+	}
+}

@@ -1470,5 +1470,56 @@ class TestCustodyLosingAndWatching(unittest.TestCase):
         self.assertIn("var:nd_cw_custodian", block(self.ct, "nd_custody_is_secured"))
 
 
+class TestBudapestPath(unittest.TestCase):
+    """Step 4 (spec §2): a secession that won holding warheads is pressed by
+    the great powers to trade them for guarantees, with the existing
+    nuclear_disarmament and nuclear_guarantee articles."""
+
+    def setUp(self):
+        self.ce = strip_comments(read(CUSTODY_EFFECTS))
+        self.ct = strip_comments(read(CUSTODY_TRIGGERS))
+        self.ev = strip_comments(read(CUSTODY_EVENTS))
+        self.cw = strip_comments(read(CIVIL_WAR_ON_ACTIONS))
+
+    def test_a_won_secession_opens_the_path(self):
+        self.assertIn("nd_bp_open = yes", block(self.cw, "te_civil_war_on_secession_end"))
+        opened = block(self.ce, "nd_bp_open")
+        self.assertIn("is_country_alive = yes", opened)
+        self.assertIn("nd_is_armed = yes", opened)
+        self.assertIn("id = nuclear_custody.10 days = 7", opened)
+        self.assertIn("country_rank >= rank_value:great_power", block(self.ct, "nd_bp_would_hear"))
+
+    def test_the_first_to_press_schedules_one_offer(self):
+        press = block(self.ce, "nd_bp_press")
+        self.assertIn("id = nuclear_custody.11 days = 30", press)
+        self.assertIn("add_to_variable_list = { name = nd_bp_guarantors target = ROOT }", press)
+        self.assertIn("nd_bp_press = yes", option_body(self.ev, "nuclear_custody.10.a"))
+
+    def test_treaty_effects_match_their_triggers(self):
+        """can_create_treaty must describe the very treaty create_treaty makes."""
+        for name in ("lead", "guarantee"):
+            trig = block(self.ct, f"nd_bp_can_treaty_{name}")
+            eff = block(self.ce, f"nd_bp_treaty_{name}")
+            norm = lambda t: re.sub(r"\s+", " ", t).strip()
+            self.assertEqual(norm(block(trig, "can_create_treaty")), norm(block(eff, "create_treaty")), name)
+        lead = block(self.ce, "nd_bp_treaty_lead")
+        self.assertIn("article = nuclear_disarmament", lead)
+        self.assertIn("article = nuclear_guarantee", lead)
+        self.assertIn("is_draft = no", lead)
+
+    def test_accept_creates_the_treaties_before_disarming(self):
+        accept = block(self.ce, "nd_bp_accept")
+        self.assertLess(accept.index("nd_bp_treaty_lead ="), accept.index("name = nuclear_weapon_stockpile value = 0"))
+        self.assertIn("nd_bp_can_treaty_guarantee = { GUARANTOR = scope:nd_bp_lead", accept)
+        self.assertIn("nd_bp_answer = { ANSWER = 1 }", accept)
+        refuse = block(self.ce, "nd_bp_refuse")
+        self.assertIn("name = nd_bp_refused", refuse)
+        self.assertIn("nd_bp_answer = { ANSWER = 2 }", refuse)
+        self.assertIn("nd_bp_accept = yes", option_body(self.ev, "nuclear_custody.11.a"))
+        self.assertIn("nd_bp_refuse = yes", option_body(self.ev, "nuclear_custody.11.b"))
+        articles = strip_comments(read(ROOT / "common/treaty_articles/extra_treaty_articles.txt"))
+        self.assertIn("has_variable = nd_bp_refused", block(articles, "nuclear_disarmament"))
+
+
 if __name__ == "__main__":
     unittest.main()
