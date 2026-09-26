@@ -2268,12 +2268,15 @@ banking_cycle_apply_phase_modifiers = {
 #     remembers which band was last put on instead. It initialises behind
 #     has_variable, is never removed, and 0 means "none applied yet".
 #
-#     THE FIRST RUN REMOVES ALL FIVE. je_banking_cycle is can_revolution_inherit,
-#     so the journal entry and its modifiers move to the successor tag while the
-#     country variables do not. A successor would otherwise start at the 0
-#     sentinel and add a second band on top of the inherited one. Removing all
-#     five once, on the pulse that creates the bookkeeping variable, closes that
-#     hole for the cost of five no-op removals per country per campaign.
+#     THE FIRST RUN REMOVES ALL FIVE, on the pulse that creates the bookkeeping
+#     variable, for the cost of five no-op removals per country per campaign. It
+#     was written for a revolution's winner on the premise that the entry's
+#     modifiers move and the variables don't. Saves (2026-09-25) showed the
+#     reverse: the winner inherits the entry with NO modifiers and the loser's
+#     te_mon_stance_band_applied, so the tracker claims a band that is not there,
+#     this sweep never fires, and the band stays off until the band itself
+#     changes (docs/audits/civil_war_inheritance_audit.md F7 — open;
+#     scripting_best_practices.md § "What a Civil War's Winner Inherits").
 #
 #     A country without the journal entry never gets here: this is called from
 #     je_banking_cycle's own monthly pulse.
