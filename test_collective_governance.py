@@ -501,5 +501,27 @@ class IdeologyTests(unittest.TestCase):
                 self.assertRegex(_block(text, ideology), rf"law_direct_democracy\s*=\s*{stance}\b")
 
 
+class PreviewTextTests(unittest.TestCase):
+    """What a player reads must include what the modifier lists can't show."""
+
+    def test_collective_leadership_names_its_hidden_effect(self):
+        # country_coup_resistance_mult is script_only: it never renders in the
+        # amendment's modifier list, so the loc has to say it (the
+        # covert_regime_change_desc precedent).
+        value = EXPRESSION_MODIFIERS["amendment_collective_leadership"]["country_coup_resistance_mult"]
+        phrase = f"+{round(float(value) * 100)}% [concept_coup_resistance]"
+        loc = _loc()
+        for key in ("amendment_collective_leadership_desc", "COLLECTIVE_GOVERNANCE_TT_PARTY"):
+            with self.subTest(key=key):
+                self.assertIn(phrase, loc[key])
+
+    def test_direct_democracy_preview_names_its_downside(self):
+        # The enactment preview is the only place a player sees the package
+        # before enacting; the amendment's own modifier list appears only after.
+        text = _loc()["COLLECTIVE_GOVERNANCE_TT_POPULAR"]
+        self.assertIn("radicalize more readily", text)
+        self.assertIn("[concept_legitimacy]", text)
+
+
 if __name__ == "__main__":
     unittest.main()

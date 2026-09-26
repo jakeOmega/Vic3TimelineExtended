@@ -221,7 +221,7 @@
  amendment_collective_free_federation:0 "Free Federation"
  amendment_collective_free_federation_desc:0 "Delegates act only on mandates from below. A law passes only when a political movement carries it."
  amendment_collective_leadership:0 "Collective Leadership"
- amendment_collective_leadership_desc:0 "The party's presidium governs together. There is no single leader for a coup to remove."
+ amendment_collective_leadership_desc:0 "The party's presidium governs together. With no single leader for a coup to remove, the country gains +25% [concept_coup_resistance], which the effects list does not show."
  amendment_collective_patrician_council:0 "Patrician Council"
  amendment_collective_patrician_council_desc:0 "The powerful govern as peers, and aristocrats and capitalists hold more of the country's political strength."
  amendment_community_service:0 "Community Service Alternative"
