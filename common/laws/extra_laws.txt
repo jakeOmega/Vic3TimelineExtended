@@ -3847,8 +3847,9 @@ law_direct_democracy = {
 		custom_tooltip = COLLECTIVE_GOVERNANCE_TT_FOLLOWS_DOP
 	}
 
-	# Fires however the law arrives (enactment or activate_law); hidden so
-	# add_amendment adds no line of its own to the preview.
+	# Hidden so add_amendment adds no line of its own to the preview. Whether
+	# this law already counts as active here is unverified (vanilla is mixed),
+	# so on_law_activated repeats the refresh (te_collective_governance_from_law_scope).
 	on_activate = {
 		hidden_effect = { te_refresh_collective_governance_amendment = yes }
 	}

@@ -69,13 +69,16 @@ Verified from script, vanilla files and the engine docs:
 **Not verified, and designed to work either way** (the first in-game checks, §8):
 1. Whether script `remove_amendment` respects `can_repeal`. `can_repeal` is true exactly when the refresh wants the
    amendment gone, so the swap works in both cases.
-2. Whether `add_amendment` respects `possible`. The script only adds the amendment whose `possible` holds.
+2. ~~Whether `add_amendment` respects `possible`.~~ Answered: it does; a false `possible` silently skips the add
+   (`scripting_best_practices.md` § "`add_amendment` Requirements"). The script only adds the amendment whose `possible`
+   holds.
 3. Whether the engine drops an amendment by itself when `possible` turns false. The refresh removes it either way.
 4. What happens when there is no ruler to supply the sponsor. The refresh skips the add until the next call.
 5. Whether `on_activate` sees the law as active (`active_law:lawgroup_governance_principles`). If not,
    `on_law_activated` attaches the amendment on the same day.
-6. Whether a law switched by `activate_law` (the consistency cascade) fires `on_law_activated`. The monthly pulse
-   catches it within a month.
+6. ~~Whether a law switched by `activate_law` (the consistency cascade) fires `on_law_activated`.~~ Answered: it does
+   (vanilla `00_code_on_actions.txt`: "if a law is directly set by script … this will execute"). The monthly pulse stays
+   as a backstop and save migration.
 7. Whether `amendment_type:X ?= this.type` (vanilla's form) works inside a parameterized scripted effect.
 8. What the engine does on a repeal. `on_amendment_repealed` has an empty script handler in vanilla and none in the mod,
    but the engine itself may notify the player or touch the sponsor's approval. Every Distribution of Power change
@@ -170,7 +173,8 @@ is the ruler's interest group; with no ruler, skip the add until the next call. 
 do nothing: the amendment left with the host law.
 
 **Call sites:**
-- the law's `on_activate` (§1), so the amendment is there the day the law lands, however it arrives;
+- the law's `on_activate` (§1), hidden. Whether the new law already counts as active there is unverified (vanilla is
+  mixed), which is why `on_law_activated` repeats it;
 - `on_law_activated`: a new on-action `te_collective_governance_from_law_scope` (`owner = { … }`), listed after
   `te_fix_inconsistent_laws_from_law_scope` so it sees the laws after the consistency cascade. It covers a change of
   Distribution of Power while the law is held;

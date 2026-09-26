@@ -1429,9 +1429,9 @@ te_collective_governance_from_law_scope = {
 	}
 }
 
-# Monthly backstop for the above: catches a law switched by activate_law
-# (whether that fires on_law_activated is unverified) and migrates saves that
-# already hold law_direct_democracy.
+# Monthly backstop for the above, and the migration for saves that already
+# hold law_direct_democracy. (activate_law does fire on_law_activated -- vanilla's
+# 00_code_on_actions.txt header -- so the consistency cascade is covered there.)
 te_collective_governance_country_pulse = {
 	effect = {
 		te_refresh_collective_governance_amendment = yes

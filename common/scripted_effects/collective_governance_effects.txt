@@ -8,8 +8,11 @@
 # law needs no cleanup.
 #
 # One refresh, three callers:
-#   law_direct_democracy on_activate (hidden)  - the day the law lands, however it arrives
-#   te_collective_governance_from_law_scope     - on_law_activated: a Distribution of Power change
+#   law_direct_democracy on_activate (hidden)  - when the law is activated; whether it already
+#                                                counts as active there is unverified (vanilla is
+#                                                mixed), so on_law_activated repeats the refresh
+#   te_collective_governance_from_law_scope     - on_law_activated: the law's arrival (enactment or
+#                                                activate_law) and any Distribution of Power change
 #   te_collective_governance_country_pulse      - monthly backstop, and migration of existing saves
 #
 # Amendments need a sponsor (vanilla land_ownership_law_events.txt). We use
