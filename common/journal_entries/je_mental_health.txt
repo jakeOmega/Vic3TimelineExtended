@@ -10,9 +10,17 @@
 		has_game_rule = social_movements_enabled
 		has_technology_researched = mental_health_awareness
 		NOT = { is_country_type = decentralized }
+		# Set by on_complete, on_fail and on_timeout. A revolution's winner gets a
+		# fresh record of an entry the loser had finished, and without this it
+		# would re-activate: a completed or failed debate would end again at once,
+		# under the laws that ended it, and replay its outcome event; a timed-out
+		# one would run its twenty years again. In normal play a finished record
+		# never re-activates, so this changes nothing there.
+		NOT = { has_variable = mental_health_crisis_resolved }
 	}
 
 	possible = {
+		NOT = { has_variable = mental_health_crisis_resolved }
 		has_technology_researched = mental_health_awareness
 	}
 
@@ -58,6 +66,7 @@
 	}
 
 	on_complete = {
+		set_variable = mental_health_crisis_resolved
 		trigger_event = { id = mental_health_events.200 }
 	}
 
@@ -72,12 +81,14 @@
 	}
 
 	on_fail = {
+		set_variable = mental_health_crisis_resolved
 		trigger_event = { id = mental_health_events.100 }
 	}
 
 	timeout = 7300
 
 	on_timeout = {
+		set_variable = mental_health_crisis_resolved
 		add_radicals = {
 			value = small_radicals
 			strata = lower

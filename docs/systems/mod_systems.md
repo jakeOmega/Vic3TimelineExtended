@@ -1435,6 +1435,8 @@ The `.100` (failure) and `.200` (victory) capstone events for these four have be
 | Post-Scarcity | `universal_basic_income` | `lawgroup_welfare` | `law_post-scarcity` | `fail = { always = no }` — timeout only |
 | Mental Health | `mental_health_awareness` | `lawgroup_criminal_justice` | `law_rehabilitation_focused_criminal_justice` + social_security ≥ 4 | `law_punishment_focused` + `decline_of_organized_religion` |
 
+**After a revolution.** A revolution's winner gets fresh records of every finished journal entry (`scripting_best_practices.md` § "What a Civil War's Winner Inherits"). For Human Augmentation and Mental Health, `possible` is tech-only and the end conditions are laws, so a finished debate would re-activate on the winner. It would then end again at once and replay its outcome event, or, after a timeout, run another twenty years. Both set a resolved variable (`human_augmentation_resolved`, `mental_health_crisis_resolved`) in `on_complete`, `on_fail` and `on_timeout`, and their `is_shown_when_inactive` / `possible` require its absence. Their 10-year outcome modifiers are not rebuilt on the winner; civil rights' are (`journal_entry_systems.md` § Civil Rights). Digital Rights and Post-Scarcity have no such guard yet. Their completion is blocked while the target law holds, but on a winner a failed Digital Rights entry re-arms and fails again at once, and a timed-out entry of either starts a new timer.
+
 ### Event Design Patterns
 
 Each surviving JE has monthly pulse events plus a fail-state event (except Post-Scarcity, whose `fail` block is `always = no`). Events follow these design principles:
