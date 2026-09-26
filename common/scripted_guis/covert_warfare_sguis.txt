@@ -202,6 +202,8 @@ covert_ops_dormant_sgui = {
 # renders blank in this mod. Storing the country rather than its capital is what
 # makes annexation safe: `exists` fails and the anonymous line renders, instead of
 # a months-old capital state naming whoever conquered it.
+# Both lines name the operation through $covert_exposed_op_link$, the hoverable
+# name the defender's event covert_warfare.2 uses too.
 covert_last_exposed_sgui = {
 	scope = country
 
