@@ -114,8 +114,8 @@ shortage costs at most half the capacity. Staff per level stays modest for the s
 **Recruitment rule.** Each programme defines which pops are eligible (§3). Culture and religion are never tested.
 
 **Source ranking.** The pulse ranks the owner's other states (never the destination, never another Settlement Authority
-state) by eligible population, unless the programme names another order in §3 (Penal Transportation ranks by turmoil),
-and walks down the list, taking from each state until capacity is met or states run out. From each eligible pop it takes
+state) by eligible population (for Penal Transportation, whose eligible pops are the radical ones, that is each state's
+radical population), and walks down the list, taking from each state until capacity is met or states run out. From each eligible pop it takes
 at most **2%** of the pop per month. Vanilla's emigration ceiling is 0.5% of a state's population per week, about 2% a
 month, so a programme drains no faster than a crisis would. Takes under 100 people are skipped, so the walk does not
 splinter the destination into tiny pops.
@@ -152,7 +152,7 @@ Multiplicative destination effects sit in `unscaled` blocks; additive ones in `w
 |---|---|---|---|---|---|
 | **Land Grants** | Homestead Act 1862, Dominion Lands Act 1872, Argentine colonisation laws | none | Unemployed and peasants, lower strata, `pop_acceptance >= acceptance_status_4`. No peasants under Serfdom | incorporation and colony growth | — |
 | **Military Colonies** | Russian military settlements, Cossack hosts, *tondenhei* 1874–1904, Xinjiang *bingtuan* | `standing_army` | As Land Grants, but `acceptance_status_5` only; staffed by soldiers and officers | turmoil effects reduced (`state_turmoil_effects_mult`, unscaled), faster incorporation | — |
-| **Penal Transportation** | Australia to 1868, French Guiana 1852–1953, New Caledonia, Sakhalin *katorga*, the Andamans | `law_enforcement`; disallowed by Guaranteed Liberties | Lower-strata pops with `pop_radical_fraction` above a threshold, in states ranked by turmoil | higher mortality (harsh conditions) | low |
+| **Penal Transportation** | Australia to 1868, French Guiana 1852–1953, New Caledonia, Sakhalin *katorga*, the Andamans | `law_enforcement`; disallowed by Guaranteed Liberties | Lower-strata pops with `pop_radical_fraction` of at least 0.2 | higher mortality (harsh conditions) | low |
 | **Organized Colonization** | Stolypin resettlement 1906–14 (~3M to Siberia), Brazilian state colonies | `railways` | Unemployed, peasants and laborers, `acceptance_status_4`+ | incorporation and colony growth | — |
 | **Special Settlements** | Soviet dekulakization 1930–33 (~1.8M deported) | `mass_propaganda` + Collectivized Agriculture; disallowed by Guaranteed Liberties, Protected Speech, Right of Assembly | Farmers | higher mortality | high |
 | **Development Program** | Virgin Lands 1954, FELDA 1956, Transmigrasi, Brasília, British New Towns | `keynesian_economics` | The voluntary pool plus machinists, engineers and clerks, `acceptance_status_4`+ | infrastructure | — |
