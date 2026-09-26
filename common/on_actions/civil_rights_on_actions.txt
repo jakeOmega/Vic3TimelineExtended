@@ -24,8 +24,16 @@ civil_rights_country_monthly_on_action = {
 # Root = the original country, scope:target = the uprising country. The original
 # records itself so that on_civil_war_won can tell which side won: the
 # revolutionaries start with no mod variables, so if they win they inherit this
-# pointer to the dead loser; if the loyalists win, it still names ROOT.
+# pointer to the dead loser; if the loyalists win, it still names ROOT. The same
+# for a secession, so loyalists who crush one also drop what the secessionists
+# held (a seceded winner is a separate country without the pointer: a no-op).
 on_revolution_start = {
+	on_actions = {
+		civil_rights_revolution_start_on_action
+	}
+}
+
+on_secession_start = {
 	on_actions = {
 		civil_rights_revolution_start_on_action
 	}

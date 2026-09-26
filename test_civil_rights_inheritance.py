@@ -275,8 +275,10 @@ class HookTests(unittest.TestCase):
         self.assertIn("civil_rights_civil_war_won_on_action",
                       _block(_block(text, "on_civil_war_won"), "on_actions", top_level=False))
         self.assertIn("cr_after_civil_war = yes", _block(text, "civil_rights_civil_war_won_on_action"))
-        self.assertIn("civil_rights_revolution_start_on_action",
-                      _block(_block(text, "on_revolution_start"), "on_actions", top_level=False))
+        for hook in ("on_revolution_start", "on_secession_start"):
+            with self.subTest(hook=hook):
+                self.assertIn("civil_rights_revolution_start_on_action",
+                              _block(_block(text, hook), "on_actions", top_level=False))
         self.assertRegex(_block(text, "civil_rights_revolution_start_on_action"),
                          r"set_variable\s*=\s*\{\s*name\s*=\s*cr_revolution_original\s+value\s*=\s*ROOT\s*\}")
         self.assertIn("civil_rights_country_monthly_on_action",
