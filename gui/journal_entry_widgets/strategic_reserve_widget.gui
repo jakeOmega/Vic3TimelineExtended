@@ -6,7 +6,8 @@
 ###   3. annual decay rate and this week's decay loss
 ###   4. reserve policy, price signal, policy flow (gear opens the settings)
 ###   5. the policy's plain-language explanation
-### Clicking the good's name collapses the row to line 1. Replaces the old
+### Rows start collapsed to line 1; clicking the good's name (or the chevron
+### beside it) expands lines 2-5 and clicking again collapses them. Replaces the old
 ### stand-alone step badge, the seven full-width scripted progress bars and the
 ### fourteen per-good journal-entry buttons.
 ###
@@ -31,8 +32,9 @@
 ###   - decay rate      -> ScriptValue('st_res_<good>_annual_decay_rate'), the
 ###                        same value the weekly bookkeeping divides by 52,
 ###                        and ScriptValue('st_res_<good>_weekly_decay')
-###   - collapsed       -> GetVariableSystem key 'st_res_row_collapsed_<good>',
-###                        presentation only (no script reads it)
+###   - expanded        -> GetVariableSystem key 'st_res_row_expanded_<good>',
+###                        presentation only (no script reads it); absent,
+###                        and so collapsed, until the player first clicks
 ###
 ### The three controls share one scripted GUI per good and differ only by the
 ### 'dir' saved scope (0 = decrease, 1 = stop, 2 = increase). Adding a good
@@ -105,15 +107,18 @@ types strategic_reserve_widget_types
 
 	### One inventory row. The instance supplies `datacontext` (the good's
 	### scripted GUI), `visible`, `tooltip`, the six text/value blocks and the
-	### two collapse blocks; everything else — including all three control
+	### three collapse blocks; everything else — including all three control
 	### buttons — is identical for every good because the buttons read the
 	### inherited ScriptedGui.
 	###
 	### Line 1 is always shown. Lines 2-5 and the settings panel sit in one
-	### container that `row_details_visible` hides when the player collapses
-	### the row by clicking the good's name. Like the settings panel, that is
-	### presentation only: a GetVariableSystem key no script reads, not saved,
-	### and a collapsed good keeps storing, releasing and running its policy.
+	### container that `row_expanded` shows only once the player expands the
+	### row by clicking the good's name, so every row starts collapsed:
+	### `row_expanded` / `row_collapsed` test the good's
+	### st_res_row_expanded_<good> key, which is absent until the first click.
+	### Like the settings panel, that is presentation only: a GetVariableSystem
+	### key no script reads, not saved, and a collapsed good keeps storing,
+	### releasing and running its policy.
 	type widget_je_st_res_inventory_row = flowcontainer {
 		direction = vertical
 		ignoreinvisible = yes
@@ -126,21 +131,45 @@ types strategic_reserve_widget_types
 			alpha = 0.5
 		}
 
-		### Line 1 — good (click to collapse), fill bar, status, controls
+		### Line 1 — good (click to expand / collapse), fill bar, status, controls
 		flowcontainer = {
 			direction = horizontal
 			spacing = 4
 
 			### Untextured button: the name reads as plain text, and clicking it
-			### toggles the row. Its tooltip replaces the row tooltip over the
-			### name only.
+			### expands or collapses the row. Its tooltip replaces the row tooltip
+			### over the name only.
+			###
+			### The chevron left of the name is vanilla's outliner pair
+			### (gui/outliner_framework.gui, expand_buttons): expand_arrow while
+			### the row is collapsed, expand_arrow_expanded while it is expanded.
+			### Both are alwaystransparent, so the chevron and the name are one
+			### click target. The 20px it takes comes out of the fill bar, so
+			### line 1 still totals 508.
 			button = {
-				size = { 150 30 }
+				size = { 170 30 }
 				parentanchor = vcenter
 				block "row_collapse_toggle" {}
 
+				button = {
+					using = expand_arrow
+					size = { 20 20 }
+					parentanchor = left|vcenter
+					alwaystransparent = yes
+					block "row_collapsed" {}
+				}
+
+				button = {
+					using = expand_arrow_expanded
+					size = { 20 20 }
+					parentanchor = left|vcenter
+					alwaystransparent = yes
+					block "row_expanded" {}
+				}
+
 				textbox = {
 					block "row_name" {}
+					position = { 20 0 }
 					size = { 150 30 }
 					align = left|nobaseline
 					using = fontsize_large
@@ -149,7 +178,7 @@ types strategic_reserve_widget_types
 			}
 
 			default_progressbar_horizontal = {
-				size = { 135 16 }
+				size = { 115 16 }
 				parentanchor = vcenter
 
 				blockoverride "values" {
@@ -201,12 +230,13 @@ types strategic_reserve_widget_types
 			}
 		}
 
-		### Lines 2-5 and the settings panel — hidden while the row is collapsed.
+		### Lines 2-5 and the settings panel — shown only while the row is
+		### expanded. `row_expanded` is the same block the expanded chevron reads.
 		flowcontainer = {
 			direction = vertical
 			ignoreinvisible = yes
 			spacing = 2
-			block "row_details_visible" {}
+			block "row_expanded" {}
 
 			### Line 2 — stored vs. capacity, the configured rate and the actual
 			### net change. 170 + 6 + 332 = 508, the width line 1 sets.
@@ -617,11 +647,14 @@ flowcontainer = {
 		tooltip = "st_res_row_grain_tooltip"
 
 		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_grain' )]"
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_grain' )]"
 			tooltip = "st_res_row_collapse_tooltip"
 		}
-		blockoverride "row_details_visible" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_grain' ) )]"
+		blockoverride "row_expanded" {
+			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_grain' )]"
+		}
+		blockoverride "row_collapsed" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_grain' ) )]"
 		}
 		blockoverride "row_name" { text = "st_res_row_grain_name" }
 		blockoverride "row_amount" { text = "st_res_row_grain_amount" }
@@ -679,11 +712,14 @@ flowcontainer = {
 		tooltip = "st_res_row_ammunition_tooltip"
 
 		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_ammunition' )]"
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_ammunition' )]"
 			tooltip = "st_res_row_collapse_tooltip"
 		}
-		blockoverride "row_details_visible" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_ammunition' ) )]"
+		blockoverride "row_expanded" {
+			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_ammunition' )]"
+		}
+		blockoverride "row_collapsed" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_ammunition' ) )]"
 		}
 		blockoverride "row_name" { text = "st_res_row_ammunition_name" }
 		blockoverride "row_amount" { text = "st_res_row_ammunition_amount" }
@@ -741,11 +777,14 @@ flowcontainer = {
 		tooltip = "st_res_row_oil_tooltip"
 
 		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_oil' )]"
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_oil' )]"
 			tooltip = "st_res_row_collapse_tooltip"
 		}
-		blockoverride "row_details_visible" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_oil' ) )]"
+		blockoverride "row_expanded" {
+			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_oil' )]"
+		}
+		blockoverride "row_collapsed" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_oil' ) )]"
 		}
 		blockoverride "row_name" { text = "st_res_row_oil_name" }
 		blockoverride "row_amount" { text = "st_res_row_oil_amount" }
@@ -803,11 +842,14 @@ flowcontainer = {
 		tooltip = "st_res_row_small_arms_tooltip"
 
 		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_small_arms' )]"
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_small_arms' )]"
 			tooltip = "st_res_row_collapse_tooltip"
 		}
-		blockoverride "row_details_visible" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_small_arms' ) )]"
+		blockoverride "row_expanded" {
+			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_small_arms' )]"
+		}
+		blockoverride "row_collapsed" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_small_arms' ) )]"
 		}
 		blockoverride "row_name" { text = "st_res_row_small_arms_name" }
 		blockoverride "row_amount" { text = "st_res_row_small_arms_amount" }
@@ -865,11 +907,14 @@ flowcontainer = {
 		tooltip = "st_res_row_artillery_tooltip"
 
 		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_artillery' )]"
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_artillery' )]"
 			tooltip = "st_res_row_collapse_tooltip"
 		}
-		blockoverride "row_details_visible" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_artillery' ) )]"
+		blockoverride "row_expanded" {
+			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_artillery' )]"
+		}
+		blockoverride "row_collapsed" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_artillery' ) )]"
 		}
 		blockoverride "row_name" { text = "st_res_row_artillery_name" }
 		blockoverride "row_amount" { text = "st_res_row_artillery_amount" }
@@ -927,11 +972,14 @@ flowcontainer = {
 		tooltip = "st_res_row_aeroplanes_tooltip"
 
 		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_aeroplanes' )]"
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_aeroplanes' )]"
 			tooltip = "st_res_row_collapse_tooltip"
 		}
-		blockoverride "row_details_visible" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_aeroplanes' ) )]"
+		blockoverride "row_expanded" {
+			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_aeroplanes' )]"
+		}
+		blockoverride "row_collapsed" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_aeroplanes' ) )]"
 		}
 		blockoverride "row_name" { text = "st_res_row_aeroplanes_name" }
 		blockoverride "row_amount" { text = "st_res_row_aeroplanes_amount" }
@@ -989,11 +1037,14 @@ flowcontainer = {
 		tooltip = "st_res_row_tanks_tooltip"
 
 		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_tanks' )]"
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_tanks' )]"
 			tooltip = "st_res_row_collapse_tooltip"
 		}
-		blockoverride "row_details_visible" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_tanks' ) )]"
+		blockoverride "row_expanded" {
+			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_tanks' )]"
+		}
+		blockoverride "row_collapsed" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_tanks' ) )]"
 		}
 		blockoverride "row_name" { text = "st_res_row_tanks_name" }
 		blockoverride "row_amount" { text = "st_res_row_tanks_amount" }
@@ -1051,11 +1102,14 @@ flowcontainer = {
 		tooltip = "st_res_row_fertilizer_tooltip"
 
 		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_fertilizer' )]"
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_fertilizer' )]"
 			tooltip = "st_res_row_collapse_tooltip"
 		}
-		blockoverride "row_details_visible" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_fertilizer' ) )]"
+		blockoverride "row_expanded" {
+			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_fertilizer' )]"
+		}
+		blockoverride "row_collapsed" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_fertilizer' ) )]"
 		}
 		blockoverride "row_name" { text = "st_res_row_fertilizer_name" }
 		blockoverride "row_amount" { text = "st_res_row_fertilizer_amount" }
