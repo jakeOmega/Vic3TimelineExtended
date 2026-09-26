@@ -1246,6 +1246,17 @@ nuclear_incident.30 = {
 	# Keep it out of the papers.
 	option = {
 		name = nuclear_incident.30.e
+		# Not once an Automatic Retaliation system has launched on the back of
+		# the accident: a strike, or an order recalled in full view of its
+		# target, is already the world's news (nd_system_reads_attack).
+		trigger = {
+			NOT = {
+				AND = {
+					has_variable = nd_system_reacted
+					var:nd_system_reacted = 2
+				}
+			}
+		}
 		nd_inquiry_conceal = yes
 		ai_chance = {
 			base = 1

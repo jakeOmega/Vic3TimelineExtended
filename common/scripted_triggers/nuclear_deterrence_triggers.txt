@@ -666,6 +666,50 @@ nd_has_armed_guarantor_against = {
 	}
 }
 
+# ...by such a guarantor whose warheads are mated to their delivery systems
+# (not Recessed)? A recessed protector still deters, but at weeks' remove:
+# the crisis pressure term counts it at half (nd_yp_protector_value).
+nd_has_ready_guarantor_against = {
+	save_temporary_scope_as = nd_guarantee_ben4
+	OR = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_guarantee
+				target_country = scope:nd_guarantee_ben4
+				source_country = {
+					nd_believed_armed = yes
+					nd_forces_assembled = yes
+					NOT = { this = $AGAINST$ }
+				}
+			}
+		}
+		AND = {
+			nd_under_an_umbrella = yes
+			overlord ?= {
+				nd_forces_assembled = yes
+				NOT = { this = $AGAINST$ }
+			}
+		}
+	}
+}
+
+# Guarantor scope: do we protect anyone — a subject under our umbrella, or a
+# treaty beneficiary? An AI keeps its warheads mated while it does, and a
+# country that shelves them anyway alarms the countries it protects
+# (nd_allies_alarmed).
+nd_protects_anyone = {
+	save_temporary_scope_as = nd_prot_self
+	OR = {
+		any_direct_subject = { nd_under_an_umbrella = yes }
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_guarantee
+				source_country = scope:nd_prot_self
+			}
+		}
+	}
+}
+
 # Is this country covered by any in-force nuclear_guarantee, or an umbrella?
 nd_is_guaranteed = {
 	save_temporary_scope_as = nd_guarantee_ben2

@@ -628,7 +628,9 @@ nd_yp_answer_value = {
 }
 
 # A protector: an armed guarantor that has not walked away, more so once it
-# has said publicly that it stands with us (nuclear_crisis.20).
+# has said publicly that it stands with us (nuclear_crisis.20). A protector
+# whose warheads are in storage (Recessed) counts half: it deters at weeks'
+# remove.
 nd_yp_protector_value = {
 	value = 0
 	if = {
@@ -641,7 +643,13 @@ nd_yp_protector_value = {
 				}
 			}
 		}
-		subtract = 20
+		if = {
+			limit = { nd_has_ready_guarantor_against = { AGAINST = scope:nd_issuer } }
+			subtract = 20
+		}
+		else = {
+			subtract = 10
+		}
 	}
 	if = {
 		limit = {

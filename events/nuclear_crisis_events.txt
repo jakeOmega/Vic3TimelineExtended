@@ -1011,7 +1011,8 @@ nuclear_crisis.20 = {
 }
 
 # ---- .21 The guarantor's answer -----------------------------------------------
-# To the beneficiary. nd_guarantee_answer: 1 stood by us, 0 walked away.
+# To the beneficiary. nd_guarantee_answer: 1 stood by us, 0 walked away,
+# 2 declined to answer for a strike we made first (.24.c).
 nuclear_crisis.21 = {
 	type = country_event
 	placement = root
@@ -1027,6 +1028,13 @@ nuclear_crisis.21 = {
 			triggered_desc = {
 				trigger = {
 					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 2
+				}
+				desc = nuclear_crisis.21.t_declined
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
 					var:nd_guarantee_answer = 0
 				}
 				desc = nuclear_crisis.21.t_abandoned
@@ -1039,6 +1047,13 @@ nuclear_crisis.21 = {
 	}
 	desc = {
 		first_valid = {
+			triggered_desc = {
+				trigger = {
+					has_variable = nd_guarantee_answer
+					var:nd_guarantee_answer = 2
+				}
+				desc = nuclear_crisis.21.d_declined
+			}
 			triggered_desc = {
 				trigger = {
 					has_variable = nd_guarantee_answer
@@ -1102,6 +1117,145 @@ nuclear_crisis.22 = {
 			}
 		}
 		remove_variable = nd_answer_strike_target
+	}
+}
+
+# ---- .23 Our Allies Are Alarmed -------------------------------------------------
+# Our readiness has just reached Recessed while others shelter under our
+# arsenal (nd_weekly_update): "you said you would protect us, and you are
+# putting your weapons away". The costs are applied in the option, so its
+# tooltip shows them (nd_allies_alarmed). Fired every time readiness reaches
+# Recessed with anyone to protect.
+nuclear_crisis.23 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_crisis.23.t
+	desc = nuclear_crisis.23.d
+	flavor = nuclear_crisis.23.f
+
+	duration = 3
+
+	trigger = {
+		nd_readiness_recessed = yes
+		nd_protects_anyone = yes
+	}
+
+	option = {
+		name = nuclear_crisis.23.a
+		default_option = yes
+		nd_allies_alarmed = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ---- .24 Our Protégé Struck First -------------------------------------------------
+# A country we cover (treaty or umbrella) used nuclear weapons first, and its
+# victim has answered (nd_guarantor_hears_of_strike). We may still cover it —
+# standing by a first user costs infamy — or decline without it counting as
+# abandonment. Scopes as for .20: nd_guarantee_attacker is the country that
+# answered, nd_guarantee_beneficiary our protégé; nd_guarantee_context = 2.
+nuclear_crisis.24 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_crisis.24.t
+	desc = nuclear_crisis.24.d
+	flavor = nuclear_crisis.24.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nd_guarantee_attacker
+		exists = scope:nd_guarantee_beneficiary
+		scope:nd_guarantee_beneficiary = { nd_is_guaranteed_by = { GUARANTOR = ROOT } }
+	}
+
+	# Stand by them anyway.
+	option = {
+		name = nuclear_crisis.24.a
+		nd_guarantee_act_honour = yes
+		change_infamy = 5
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = {
+					OR = {
+						has_attitude = { who = scope:nd_guarantee_attacker attitude = antagonistic }
+						has_attitude = { who = scope:nd_guarantee_attacker attitude = belligerent }
+						has_attitude = { who = scope:nd_guarantee_attacker attitude = domineering }
+						has_diplomatic_pact = { who = scope:nd_guarantee_attacker type = rivalry }
+					}
+				}
+				add = 3
+			}
+			modifier = {
+				trigger = { scope:nd_guarantee_beneficiary.relations:root >= relations_threshold:friendly }
+				add = 2
+			}
+		}
+	}
+
+	# Answer in kind anyway: as .20.b, and the same one-day strike (.22).
+	option = {
+		name = nuclear_crisis.24.b
+		trigger = {
+			var:nd_guarantee_context = 2
+			nd_is_armed = yes
+			nd_forces_assembled = yes
+			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
+			nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
+			nd_war_law_permits_strategic_strike = yes
+		}
+		highlighted_option = yes
+		nd_guarantee_act_retaliate = yes
+		change_infamy = 5
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					nd_ai_nuclear_use_justified = { ENEMY = scope:nd_guarantee_attacker }
+					OR = {
+						has_attitude = { who = scope:nd_guarantee_attacker attitude = antagonistic }
+						has_attitude = { who = scope:nd_guarantee_attacker attitude = belligerent }
+						has_diplomatic_pact = { who = scope:nd_guarantee_attacker type = rivalry }
+					}
+				}
+				add = 2
+			}
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				factor = 0
+			}
+		}
+	}
+
+	# They started this: it is not ours to answer for.
+	option = {
+		name = nuclear_crisis.24.c
+		default_option = yes
+		nd_guarantee_act_decline = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 2
+			}
+		}
 	}
 }
 

@@ -2060,6 +2060,89 @@ nd_guarantor_schedule_answer = {
 	}
 }
 
+# A strike on someone we cover has landed (nd_record_nuclear_use), and we
+# are asked what we will do: guarantor scope, scope:nd_guarantee_attacker and
+# scope:nd_guarantee_beneficiary saved. If the beneficiary struck the
+# attacker first — the attacker was answering it, the same test that spares
+# a retaliation from breaking a pledge — the guarantor gets the special case
+# (nuclear_crisis.24), where standing by a first user costs infamy and
+# declining is no abandonment; otherwise the ordinary guarantee event
+# (nuclear_crisis.20).
+nd_guarantor_hears_of_strike = {
+	set_variable = { name = nd_guarantee_context value = 2 }
+	if = {
+		limit = {
+			scope:nd_guarantee_attacker = { nd_was_struck_by = { ENEMY = scope:nd_guarantee_beneficiary } }
+		}
+		trigger_event = { id = nuclear_crisis.24 }
+	}
+	else = {
+		trigger_event = { id = nuclear_crisis.20 }
+	}
+}
+
+# Decline to answer for a protégé that struck first (nuclear_crisis.24.c): it
+# started this, so walking away is no abandonment — no credibility lost, no
+# nd_guarantee_abandoned, no word to our other protectees. The protégé still
+# resents it: relations -10, and +5 liberty desire for a subject under our
+# umbrella. The guarantee itself stands. Guarantor scope; ROOT is the
+# guarantor.
+nd_guarantee_act_decline = {
+	custom_tooltip = nd_tt_guarantee_decline
+	if = {
+		limit = {
+			exists = scope:nd_guarantee_beneficiary
+			scope:nd_guarantee_beneficiary = { nd_under_umbrella_of = { OVERLORD = ROOT } }
+		}
+		scope:nd_guarantee_beneficiary = { add_liberty_desire = 5 }
+	}
+	if = {
+		limit = { exists = scope:nd_guarantee_beneficiary }
+		scope:nd_guarantee_beneficiary = {
+			change_relations = { country = ROOT value = -10 }
+		}
+	}
+	hidden_effect = {
+		scope:nd_guarantee_beneficiary ?= {
+			set_variable = { name = nd_guarantee_answer value = 2 }
+			trigger_event = { id = nuclear_crisis.21 }
+		}
+	}
+}
+
+# Our readiness has just reached Recessed while others shelter under our
+# arsenal (nuclear_crisis.23, fired from nd_weekly_update): credibility -5,
+# relations -10 with every country we protect, and +5 liberty desire for
+# every subject under our umbrella. Each country once: a subject that also
+# holds a treaty from us is reached through the umbrella only. Country scope;
+# ROOT is the country.
+nd_allies_alarmed = {
+	custom_tooltip = {
+		text = nd_tt_credibility_down_5
+		nd_change_credibility = { AMOUNT = -5 }
+	}
+	custom_tooltip = nd_tt_allies_alarmed
+	hidden_effect = {
+		every_direct_subject = {
+			limit = { nd_under_umbrella_of = { OVERLORD = ROOT } }
+			add_liberty_desire = 5
+			change_relations = { country = ROOT value = -10 }
+		}
+		every_scope_treaty = {
+			every_scope_article = {
+				limit = {
+					has_type = nuclear_guarantee
+					source_country = ROOT
+					NOT = { target_country = { nd_under_umbrella_of = { OVERLORD = ROOT } } }
+				}
+				target_country = {
+					change_relations = { country = ROOT value = -10 }
+				}
+			}
+		}
+	}
+}
+
 # Walk away (§6: abandoning a covered commitment shakes every beneficiary).
 nd_guarantee_act_abandon = {
 	custom_tooltip = nd_tt_guarantee_abandon

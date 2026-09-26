@@ -345,3 +345,8 @@ Small departures from the text above, made while implementing:
   Retaliation twin (the default, so every state has one visible default); a system launch is narrated by `.30`
   alone (`NARRATE = no`); and `nuked_by_country` is now cleared when the war with the striker ends, which is what makes
   §1.5's "the licence lasts as long as the war does" true.
+- Owner follow-ups (2026-09-26): an AI never goes Recessed while it protects anyone, and a human that does gets
+  `nuclear_crisis.23` "Our Allies Are Alarmed" (credibility −5, relations −10 per protectee, +5 liberty desire per
+  subject; a recessed protector counts at half in crisis pressure); a protégé that struck first sends its guarantor
+  `nuclear_crisis.24` "Our Protégé Struck First" (cover it for +5 infamy, or decline without it counting as
+  abandonment); `.30`'s "keep it out of the papers" is hidden once the system has launched.

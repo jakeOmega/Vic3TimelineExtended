@@ -447,6 +447,16 @@ nd_weekly_update = {
 			}
 			else = {
 				change_variable = { name = nd_readiness subtract = 1 }
+				# Warheads shelved while others shelter under them: the
+				# countries we protect take note (nuclear_crisis.23). Every
+				# time — going back to Recessed pays again.
+				if = {
+					limit = {
+						var:nd_readiness = 0
+						nd_protects_anyone = yes
+					}
+					trigger_event = { id = nuclear_crisis.23 popup = yes }
+				}
 			}
 			nd_apply_posture_modifiers = yes
 		}
@@ -506,15 +516,16 @@ nd_monthly_update = {
 		# ---- AI posture: every sixth month -----------------------------------
 		if = {
 			limit = { is_ai = yes }
-			# A recessed AI that finds itself at war or in a crisis mates its
-			# warheads at once, not at its next review (umbrella/recessed/
-			# dead-hand spec §2.5).
+			# A recessed AI that finds itself at war, in a crisis, or
+			# protecting someone mates its warheads at once, not at its next
+			# review (umbrella/recessed/dead-hand spec §2.5).
 			if = {
 				limit = {
 					var:nd_readiness_target = 0
 					OR = {
 						is_at_war = yes
 						nd_in_crisis = yes
+						nd_protects_anyone = yes
 					}
 				}
 				nd_set_readiness_target_1 = yes
@@ -683,7 +694,15 @@ nd_set_doctrine = {
 	nd_apply_posture_modifiers = yes
 }
 
-nd_set_readiness_target_0 = { nd_set_readiness_target = { R = 0 STANDDOWN = yes } }
+nd_set_readiness_target_0 = {
+	nd_set_readiness_target = { R = 0 STANDDOWN = yes }
+	# Shelving the bomb while others shelter under it (nd_allies_alarmed, fired
+	# the week readiness reaches Recessed).
+	if = {
+		limit = { nd_protects_anyone = yes }
+		custom_tooltip = nd_tt_recessed_alarms_allies
+	}
+}
 nd_set_readiness_target_1 = { nd_set_readiness_target = { R = 1 STANDDOWN = yes } }
 nd_set_readiness_target_2 = { nd_set_readiness_target = { R = 2 STANDDOWN = no } }
 nd_set_readiness_target_3 = { nd_set_readiness_target = { R = 3 STANDDOWN = no } }
@@ -1229,13 +1248,15 @@ nd_ai_review_posture = {
 				nd_set_readiness_target_2 = yes
 			}
 		}
-		# Recessed: at peace, nothing to deter, and a reason to save the money
-		# or the risk (umbrella/recessed/dead-hand spec §2.5).
+		# Recessed: at peace, nothing to deter, nobody sheltering under our
+		# arsenal, and a reason to save the money or the risk
+		# (umbrella/recessed/dead-hand spec §2.5).
 		else_if = {
 			limit = {
 				is_at_war = no
 				nd_in_crisis = no
 				nd_has_plausible_attacker = no
+				nd_protects_anyone = no
 				nd_regime_is_militarist = no
 				OR = {
 					ruler_is_cautious = yes
@@ -1692,7 +1713,9 @@ nd_record_nuclear_use = {
 				is_decaying = yes
 			}
 		}
-		# The victim's guarantors are asked whether they will honour it.
+		# The victim's guarantors are asked whether they will honour it — or,
+		# if the victim struck first, whether they will answer for it
+		# (nd_guarantor_hears_of_strike).
 		save_scope_as = nd_guarantee_attacker
 		$VICTIM$ = {
 			save_scope_as = nd_guarantee_beneficiary
@@ -1703,10 +1726,7 @@ nd_record_nuclear_use = {
 						target_country = scope:nd_guarantee_beneficiary
 						NOT = { source_country = scope:nd_guarantee_attacker }
 					}
-					source_country = {
-						set_variable = { name = nd_guarantee_context value = 2 }
-						trigger_event = { id = nuclear_crisis.20 }
-					}
+					source_country = { nd_guarantor_hears_of_strike = yes }
 				}
 			}
 			# The umbrella: the victim's overlord, unless it is the attacker or
@@ -1721,10 +1741,7 @@ nd_record_nuclear_use = {
 				overlord = { save_scope_as = nd_umb_guarantor }
 				if = {
 					limit = { NOT = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_umb_guarantor } } }
-					scope:nd_umb_guarantor = {
-						set_variable = { name = nd_guarantee_context value = 2 }
-						trigger_event = { id = nuclear_crisis.20 }
-					}
+					scope:nd_umb_guarantor = { nd_guarantor_hears_of_strike = yes }
 				}
 			}
 		}
