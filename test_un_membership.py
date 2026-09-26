@@ -283,5 +283,31 @@ class DebugTests(unittest.TestCase):
                 self.assertIn(needle, effect)
 
 
+class StatusLineTests(unittest.TestCase):
+    """The journal entry's first line says what our membership amounts to."""
+
+    def test_suspended_and_ineligible_are_told_before_the_general_lines(self):
+        je = _read(_path("common", "journal_entries", "je_united_nations.txt"))
+        status = je[je.index("status_desc"):je.index("desc = je_un_status_member\n") + 40]
+        order = [status.index("desc = " + k + "\n") for k in (
+            "je_un_status_not_eligible", "je_un_status_not_member",
+            "je_un_status_suspended_carried", "je_un_status_suspended",
+            "je_un_status_member")]
+        self.assertEqual(order, sorted(order))
+        suspended = status[status.index("desc = je_un_status_suspended_carried\n"):
+                           status.index("desc = je_un_status_member\n")]
+        self.assertIn("un_seat_carried = yes", suspended)
+        self.assertIn("un_representation_suspended = yes", suspended)
+        not_eligible = status[status.index("desc = je_un_status_not_eligible\n"):
+                              status.index("desc = je_un_status_not_member\n")]
+        self.assertIn("un_membership_eligible = yes", not_eligible)
+        with open(LOC_JE, encoding="utf-8-sig") as f:
+            loc = f.read()
+        for key in ("je_un_status_not_eligible", "je_un_status_suspended",
+                    "je_un_status_suspended_carried"):
+            with self.subTest(key=key):
+                self.assertIn("\n " + key + ":0 ", loc)
+
+
 if __name__ == "__main__":
     unittest.main()

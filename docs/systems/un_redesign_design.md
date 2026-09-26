@@ -281,6 +281,11 @@ considered states at the time" ([Ask DAG, "founding members"](https://ask.un.org
   pillar already leaves subjects out.
 - **A decentralized member** (colonial collapse can make one) is suspended "because it lacks
   diplomatic autonomy", which is loose wording for a country without a state apparatus.
+- **Conventions passed during a suspension do not reach the member when it is restored.** It
+  is not asked to ratify them while suspended (ruling 3), and restoration does not catch up
+  the way joining does (`un_apply_ratified_conventions`). Catching up would override refusals
+  it made before its suspension; how a restored member should meet conventions it missed is
+  an open question for the owner.
 - **Restated numbers:** the bonus list in `UN_JOIN_DESC`, and the eligible subject types in the
   join tooltip and the concept.
 
@@ -290,8 +295,9 @@ The debug console has an option for this (`te_debug_un.1` option v). With no sub
 of ours, it makes a random minor member our puppet. Otherwise it moves our subject member
 along: puppet, then protectorate, then independent.
 
-1. **Puppet a member** (option v). At once, the member's chamber vote control is greyed with the
-   suspension reason, and its Propose rows are greyed. The General Assembly line reads "N of M
+1. **Puppet a member** (option v). At once, the member's journal entry says "Member,
+   representation suspended", its chamber vote control is greyed with the suspension reason,
+   and its Propose rows are greyed. The General Assembly line reads "N of M
    eligible nations are represented. 1 more member state has suspended representation…".
 2. **Next month:** the puppet gets the suspension notice. Its modifiers lose UN Membership
    Privileges only if we withhold our dues or are not a member. Our dues line says it includes
@@ -301,8 +307,9 @@ along: puppet, then protectorate, then independent.
 4. **Promote it to a protectorate** (option v): the vote control is live again. Next month it
    gets the restored notice and pays its own dues. Our line drops the carried seat.
 5. **Make it independent:** still represented, and nothing changes.
-6. **A non-member colony** shows no pariah modifier and no Join button. A non-member dominion
-   sees the Join button enabled.
+6. **A non-member colony** shows no pariah modifier. Its journal entry says it is not eligible,
+   and its Join button is greyed with the reason ("We conduct our own foreign policy…"). A
+   non-member dominion sees the Join button enabled.
 7. **An expulsion or reform vote** with a suspended member: the chamber's passage rule
    ("a two-thirds supermajority of all N members with a vote") counts one fewer than the
    members on the roll, and says why.

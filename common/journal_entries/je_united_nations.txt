@@ -107,11 +107,32 @@
 	progress_desc = un_authority_progress_desc
 
 	status_desc = {
-		# 1. Personal membership status
+		# 1. Personal membership status. §0.8: a country that does not conduct
+		# its own foreign policy is told it cannot join, and a member whose
+		# representation is suspended is told so, and whether its overlord
+		# carries its seat, before the general lines.
 		first_valid = {
+			triggered_desc = {
+				desc = je_un_status_not_eligible
+				trigger = {
+					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					NOT = { un_membership_eligible = yes }
+				}
+			}
 			triggered_desc = {
 				desc = je_un_status_not_member
 				trigger = { NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } } }
+			}
+			triggered_desc = {
+				desc = je_un_status_suspended_carried
+				trigger = {
+					un_representation_suspended = yes
+					un_seat_carried = yes
+				}
+			}
+			triggered_desc = {
+				desc = je_un_status_suspended
+				trigger = { un_representation_suspended = yes }
 			}
 			triggered_desc = {
 				desc = je_un_status_member
