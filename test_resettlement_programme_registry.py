@@ -13,7 +13,6 @@ Run: python3 -m unittest test_resettlement_programme_registry -v
 """
 import re
 import unittest
-from collections import namedtuple
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
