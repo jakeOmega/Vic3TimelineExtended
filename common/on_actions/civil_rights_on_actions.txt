@@ -1,8 +1,9 @@
 ﻿# ============================================================================
 # CIVIL RIGHTS - revolution continuity (issue #463)
 # je_civil_rights's own pulse runs only while the entry is active. These hooks
-# carry what outlives it: the outcome a resolved struggle left behind, and the
-# repair a revolution's winner needs. Design and variables:
+# carry what outlives it: the outcome a resolved struggle left behind, and what a
+# revolution's winner needs, rebuilt or dropped depending on which side won.
+# Design and variables:
 # common/scripted_effects/civil_rights_effects.txt § REVOLUTION CONTINUITY.
 # ============================================================================
 
@@ -20,11 +21,28 @@ civil_rights_country_monthly_on_action = {
 	}
 }
 
+# Root = the original country, scope:target = the uprising country. The original
+# records itself so that on_civil_war_won can tell which side won: the
+# revolutionaries start with no mod variables, so if they win they inherit this
+# pointer to the dead loser; if the loyalists win, it still names ROOT.
+on_revolution_start = {
+	on_actions = {
+		civil_rights_revolution_start_on_action
+	}
+}
+
+civil_rights_revolution_start_on_action = {
+	effect = {
+		set_variable = { name = cr_revolution_original value = ROOT }
+	}
+}
+
 # Root = the winner, after the loser's variables have merged into it. Runs after
-# on_revolution_end. The engine drops every modifier in the merge; re-add the
-# outcome modifier (for the time it had left) and, for a struggle still in
-# progress, the button policies. A loyalist winner keeps its own modifiers, and
-# every add is guarded by the modifier being absent.
+# on_revolution_end. The engine drops every modifier in the merge. If the
+# revolutionaries won, re-add the outcome modifier (for the time it had left)
+# and, for a struggle still in progress, the button policies. If the loyalists
+# won, they keep their own modifiers; drop the policy mirrors and run marker
+# they inherited from the rebels' own struggle.
 on_civil_war_won = {
 	on_actions = {
 		civil_rights_civil_war_won_on_action
@@ -33,6 +51,6 @@ on_civil_war_won = {
 
 civil_rights_civil_war_won_on_action = {
 	effect = {
-		cr_rebuild_after_civil_war = yes
+		cr_after_civil_war = yes
 	}
 }

@@ -175,13 +175,14 @@ class OutcomeModifierTests(unittest.TestCase):
         recorded = set(_param_calls(_read(*EVENTS), "cr_record_outcome_modifier"))
         self.assertLessEqual(migrated, recorded)
         # A modifier something else also grants would mark a country resolved
-        # that never was.
+        # that never was. This is the only check that catches a new grant site
+        # (say, a later event reusing a triumph modifier), so scan everything.
         sources = []
-        for folder in ("events", os.path.join("common", "scripted_effects"),
-                       os.path.join("common", "journal_entries"), os.path.join("common", "on_actions")):
-            for name in os.listdir(_path(folder)):
-                if name.endswith(".txt"):
-                    sources.append(_read(folder, name))
+        for root in ("common", "events"):
+            for dirpath, _dirs, files in os.walk(_path(root)):
+                for name in files:
+                    if name.endswith(".txt"):
+                        sources.append(_read(os.path.relpath(os.path.join(dirpath, name), REPO)))
         corpus = "\n".join(sources)
         for mod in recorded:
             grants = len(re.findall(r"name\s*=\s*" + mod + r"\b", corpus))
@@ -245,21 +246,74 @@ class PolicyMirrorTests(unittest.TestCase):
                 self.assertLess(heal, m.start())
 
 
+    def test_only_buttons_and_the_entry_touch_the_policy_modifiers(self):
+        # cr_sync_policy_mirror re-adds a policy whose mirror is set. That is safe
+        # only while nothing but the buttons (which move the mirror with it) and
+        # the entry's own cleanup adds or removes these modifiers; an event that
+        # handed one out as flavour would become a policy the player can't drop.
+        allowed = {
+            os.path.join(*BUTTONS), os.path.join(*EFFECTS), os.path.join(*JE),
+        }
+        names = "|".join(list(MIRRORS) + ["cr_cooptation_expired"])
+        pattern = re.compile(
+            r"(?:add_modifier\s*=\s*\{\s*name\s*=\s*|remove_modifier\s*=\s*)(?:" + names + r")\b")
+        for root in ("common", "events"):
+            for dirpath, _dirs, files in os.walk(_path(root)):
+                for name in files:
+                    if not name.endswith(".txt"):
+                        continue
+                    rel = os.path.relpath(os.path.join(dirpath, name), REPO)
+                    if rel in allowed:
+                        continue
+                    with self.subTest(file=rel):
+                        self.assertIsNone(pattern.search(_read(rel)))
+
+
 class HookTests(unittest.TestCase):
     def test_on_actions_are_wired(self):
         text = _read(*ON_ACTIONS)
         self.assertIn("civil_rights_civil_war_won_on_action",
                       _block(_block(text, "on_civil_war_won"), "on_actions", top_level=False))
-        self.assertIn("cr_rebuild_after_civil_war = yes", _block(text, "civil_rights_civil_war_won_on_action"))
+        self.assertIn("cr_after_civil_war = yes", _block(text, "civil_rights_civil_war_won_on_action"))
+        self.assertIn("civil_rights_revolution_start_on_action",
+                      _block(_block(text, "on_revolution_start"), "on_actions", top_level=False))
+        self.assertRegex(_block(text, "civil_rights_revolution_start_on_action"),
+                         r"set_variable\s*=\s*\{\s*name\s*=\s*cr_revolution_original\s+value\s*=\s*ROOT\s*\}")
         self.assertIn("civil_rights_country_monthly_on_action",
                       _block(_block(text, "on_monthly_pulse_country"), "on_actions", top_level=False))
         self.assertIn("cr_outcome_monthly_update = yes", _block(text, "civil_rights_country_monthly_on_action"))
 
+    def test_the_side_that_won_decides(self):
+        body = _block(_read(*EFFECTS), "cr_after_civil_war")
+        self.assertRegex(
+            body,
+            r"var:cr_revolution_original\s*=\s*ROOT\s*\}\s*cr_drop_rebel_run_state\s*=\s*yes\s*\}\s*"
+            r"else\s*=\s*\{\s*cr_rebuild_after_civil_war\s*=\s*yes\s*\}",
+        )
+        self.assertRegex(body, r"remove_variable\s*=\s*cr_revolution_original\s*$")
+
     def test_rebuild_restores_outcome_and_a_running_struggle(self):
         body = _block(_read(*EFFECTS), "cr_rebuild_after_civil_war")
         self.assertIn("cr_rebuild_outcome_modifiers = yes", body)
-        self.assertRegex(body, r"has_variable\s*=\s*cr_run_in_progress\s*\}\s*cr_sync_policy_mirrors\s*=\s*yes")
+        self.assertRegex(
+            body,
+            r"has_variable\s*=\s*cr_run_in_progress\s+has_journal_entry\s*=\s*je_civil_rights\s*\}\s*"
+            r"cr_sync_policy_mirrors\s*=\s*yes",
+        )
         self.assertRegex(body, r"NOT\s*=\s*\{\s*has_modifier\s*=\s*cr_cooptation_expired\s*\}")
+
+    def test_loyalists_drop_what_the_rebels_ran(self):
+        body = _block(_read(*EFFECTS), "cr_drop_rebel_run_state")
+        pairs = dict(re.findall(
+            r"cr_drop_rebel_policy_mirror\s*=\s*\{\s*MODIFIER\s*=\s*(\w+)\s+VAR\s*=\s*(\w+)\s*\}", body))
+        self.assertEqual(pairs, MIRRORS)
+        self.assertRegex(body, r"NOT\s*=\s*\{\s*has_journal_entry\s*=\s*je_civil_rights\s*\}\s*\}\s*"
+                               r"cr_je_cleanup_effect\s*=\s*yes")
+
+    def test_orphaned_run_state_is_swept(self):
+        update = _block(_read(*EFFECTS), "cr_outcome_monthly_update")
+        self.assertRegex(update, r"has_variable\s*=\s*cr_run_in_progress\s+NOT\s*=\s*\{\s*"
+                                 r"has_journal_entry\s*=\s*je_civil_rights\s*\}\s*\}\s*cr_je_cleanup_effect\s*=\s*yes")
 
 
 class OtherDebatesTests(unittest.TestCase):
