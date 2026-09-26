@@ -270,5 +270,18 @@ class DisplayTests(unittest.TestCase):
         self.assertRegex(concepts, re.compile(r"^concept_un_suspended_representation\s*=\s*\{", re.M))
 
 
+class DebugTests(unittest.TestCase):
+    def test_option_cycles_a_member_through_the_cases(self):
+        event = _block(_read(_path("events", "te_debug_un_events.txt")), "te_debug_un.1")
+        self.assertIn("name = te_debug_un.1.v", event)
+        self.assertIn("te_debug_un_cycle_subject_member = yes", event)
+        effect = _block(_read(_path("common", "scripted_effects", "te_debug_un_effects.txt")),
+                        "te_debug_un_cycle_subject_member")
+        for needle in ("type = puppet", "change_subject_type = subject_type_protectorate",
+                       "make_independent = yes"):
+            with self.subTest(needle=needle):
+                self.assertIn(needle, effect)
+
+
 if __name__ == "__main__":
     unittest.main()
