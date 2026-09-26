@@ -36,11 +36,13 @@
 # WHEN THE ENTRY IS REBUILT. var:un_state_rebuild_pending marks an entry whose
 # modifiers may have been wiped. It is set by the entry's `immediate`, which
 # runs on every activation and again on the record a revolution's winner
-# inherits, and by un_on_civil_war_won when the winner was the uprising side
-# (un_on_actions.txt). A loyalist winner keeps its own record, so nothing sets
-# it there. Then:
+# inherits, by un_on_civil_war_won when the winner was the uprising side
+# (un_on_actions.txt), and by the debug wipe (te_debug_un_wipe_entry). A
+# loyalist winner keeps its own record, so nothing sets it there. Then:
 #   - `immediate` rebuilds at once (un_state_rebuild), which works when it
-#     runs after the variable merge;
+#     runs after the variable merge and je:je_united_nations resolves during
+#     activation (untested; the nuclear entry waits for its first pulse for
+#     that reason, nd_rebuild_posture_modifiers);
 #   - the entry's monthly pulse, while pending, heals whatever is still
 #     missing and does nothing else that month (un_state_heal_needed): a
 #     modifier added in an effect block is invisible to the rest of that

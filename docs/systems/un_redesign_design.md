@@ -69,15 +69,20 @@ credit, its conventions, and its terms under the regimes.
 
 ### When the entry is rebuilt
 
-- `var:un_state_rebuild_pending` marks an entry whose modifiers may have been wiped. Two things
+- `var:un_state_rebuild_pending` marks an entry whose modifiers may have been wiped. Three things
   set it:
   - the entry's `immediate`, which runs on every activation, and again on the record a winner
     inherits;
   - `un_on_civil_war_won`, when the uprising side won. The side is recognised by a pointer it
     set to itself at `on_revolution_start`, `un_cw_rebel`: a loyalist winner inherits a pointer
-    to a dead object.
+    to a dead object;
+  - the debug wipe (`te_debug_un.1` option w).
 - **`immediate` rebuilds at once** (`un_state_rebuild`). That works if it runs after the
-  variables merge, which is the audit's reading of E3.
+  variables merge, which is the audit's reading of E3, and if `je:je_united_nations` resolves
+  while the entry is being activated. No other `immediate` in the mod relies on that; the
+  nuclear entry deliberately waits for its first pulse for the same reason
+  (`nd_rebuild_posture_modifiers`). If it does not resolve, the rebuild adds nothing to the
+  entry and the first monthly pulse heals it.
 - **The monthly pulse heals.** While the entry is pending and a mirrored modifier is still
   missing, the month only rebuilds and does nothing else (`un_state_heal_needed`). A modifier
   added in an effect block is invisible to the rest of that block, so the rest of the pulse
@@ -157,7 +162,8 @@ credit, its conventions, and its terms under the regimes.
   month. It pays no dues and accrues no standing that month. Its regime terms come back the
   month after.
 - **Untested engine behaviour:**
-  - whether `immediate` runs after the merge;
+  - whether `immediate` runs after the merge, and whether `je:je_united_nations` resolves
+    inside it;
   - whether the engine clears the modifier list after `immediate`;
   - whether `on_state_owner_change` fires on annexation;
   - how `exists` and `is_country_alive` read the lingering loser.
@@ -183,15 +189,17 @@ credit, its conventions, and its terms under the regimes.
    - The month after, privileges, benefits, dues, the standing tier and the regime terms return.
 2. **A real revolution won by the rebels** (a member, ideally a permanent member hosting the
    headquarters).
-   - At the win, check whether `immediate` rebuilt the entry, or whether the first monthly pulse
-     did.
+   - At the win, check whether `immediate` rebuilt the entry (the winner is a member on the day
+     of the win), or whether the first monthly pulse did (a member only after the month turns).
    - Check that the seat was not refilled, that the headquarters building still stands and
      that `un_hq_country` names the winner.
 3. **A revolution the loyalists win:** nothing about the UN changes.
 4. **A save from before this change:** after the first month, each member holds the mirrors of
    its modifiers, and no former member has regained membership.
-5. **`error.log` / `debug.log`:** nothing from `un_state_*`, `un_cw_rebel` or
-   `un_hq_adopt_as_successor`.
+5. **`error.log` / `debug.log`:** nothing from `un_state_*` or `un_cw_rebel`, and nothing from
+   `un_hq_adopt_as_successor` at a civil-war win. Its second test reads
+   `global_var:un_hq_country.country_definition`, which assumes the engine does not evaluate it
+   once the first test (the host no longer resolves) has passed.
 
 ---
 
