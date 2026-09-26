@@ -4593,6 +4593,17 @@
  te_debug_nuclear.2.t:0 "Nuclear Programme Blockers"
 
 #
+# TE_DEBUG_RESETTLEMENT
+#
+ te_debug_resettlement.1.a:0 "Found a Settlement Authority in our emptiest frontier"
+ te_debug_resettlement.1.b:0 "Run this month's resettlement now"
+ te_debug_resettlement.1.c:0 "Close one of our Settlement Authorities"
+ te_debug_resettlement.1.d:0 "Log the frontier numbers"
+ te_debug_resettlement.1.desc:0 "Test the Settlement Authority. Every option writes TE_RESETTLEMENT: lines to debug.log."
+ te_debug_resettlement.1.flavor:0 "Console only."
+ te_debug_resettlement.1.t:0 "Debug: Internal Resettlement"
+
+#
 # TE_DEBUG_SPACE_RACE
 #
  te_debug_space_race.1.a:0 "Push every running milestone to 90% of its goal"

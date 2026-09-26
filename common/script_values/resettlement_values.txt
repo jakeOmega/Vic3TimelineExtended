@@ -183,6 +183,11 @@ resettlement_debug_remaining = {
 	else = { value = -1 }
 }
 
+# State scope. The capacity modifier, for the debug event's log line.
+resettlement_debug_capacity = {
+	value = modifier:state_resettlement_transfer_add
+}
+
 # ---- The political layer (§7.2) -------------------------------------------
 # The volume counter keeps 11/12 of last month's value, so at a steady rate it
 # holds about a year's flow and fades over about a year once a program stops.

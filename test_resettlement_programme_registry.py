@@ -696,5 +696,26 @@ class EventTests(unittest.TestCase):
             self.assertIn(f"{name}_desc", L)
 
 
+# ---- the console test event (Task 7) --------------------------------------------------
+
+DEBUG_EVENTS = "events/te_debug_resettlement_events.txt"
+
+
+class DebugTests(unittest.TestCase):
+    def test_console_event(self):
+        text = read(DEBUG_EVENTS)
+        self.assertRegex(text, r"(?m)^te_debug_resettlement\.1 = \{ # REVIEWED \d{4}-\d{2}-\d{2}: console-only")
+        body = block(text, "te_debug_resettlement.1")
+        self.assertEqual(len(options(body)), 4)
+        flat = squash(body)
+        for call in ("create_building = { building = building_resettlement_colony level = 5 }",
+                     "resettlement_country_monthly = yes", "resettlement_close_frontier = yes",
+                     "TE_RESETTLEMENT:"):
+            self.assertIn(call, flat)
+        L = loc()
+        for suffix in ("t", "desc", "flavor", "a", "b", "c", "d"):
+            self.assertIn(f"te_debug_resettlement.1.{suffix}", L)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,81 @@
+﻿namespace = te_debug_resettlement
+
+# ============================================================================
+# INTERNAL RESETTLEMENT — console test event: `event te_debug_resettlement.1`
+# ============================================================================
+# Each option writes TE_RESETTLEMENT: lines to debug.log. Together they answer
+# the design's in-game questions (spec, "Verify in-game before building on
+# them"): exact counts moved, arrivals' pop types, deaths by type, closure.
+#
+# debug_log here uses only the documented working form (docs/guides/
+# scripting_best_practices.md § "debug_log Loc-String Templating
+# Limitations"): [SCOPE.ScriptValue('...')|N], no .MakeScope, no state name in
+# the string (state/country names don't render); debug_log_scopes = yes names
+# the scope in the log instead, same as resettlement_effects.txt.
+# ============================================================================
+
+te_debug_resettlement.1 = { # REVIEWED 2026-09-26: console-only test event (`event te_debug_resettlement.1`); never fired by script on purpose
+	type = country_event
+	placement = ROOT
+
+	event_image = {
+		texture = "gfx/event_pictures/humanitarian_camp_tents.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = te_debug_resettlement.1.t
+	desc = te_debug_resettlement.1.desc
+	flavor = te_debug_resettlement.1.flavor
+
+	# Found a five-level Settlement Authority in our emptiest open frontier.
+	option = {
+		name = te_debug_resettlement.1.a
+		default_option = yes
+		ordered_scope_state = {
+			limit = {
+				resettlement_state_is_open_frontier = yes
+				NOT = { has_building = building_resettlement_colony }
+			}
+			order_by = resettlement_frontier_close_margin
+			position = 0
+			check_range_bounds = no
+			create_building = { building = building_resettlement_colony level = 5 }
+			debug_log = "TE_RESETTLEMENT: debug founded a Settlement Authority"
+			debug_log_scopes = yes
+		}
+	}
+
+	# Run this month's resettlement now (the transfer, readouts, politics).
+	option = {
+		name = te_debug_resettlement.1.b
+		resettlement_country_monthly = yes
+	}
+
+	# Close one of our Settlement Authorities now, as if its frontier had filled.
+	option = {
+		name = te_debug_resettlement.1.c
+		save_scope_as = rs_country
+		random_scope_state = {
+			limit = { has_building = building_resettlement_colony }
+			resettlement_close_frontier = yes
+		}
+	}
+
+	# Print the frontier numbers for our capital and every Settlement Authority.
+	option = {
+		name = te_debug_resettlement.1.d
+		every_scope_state = {
+			limit = {
+				OR = {
+					is_capital = yes
+					has_building = building_resettlement_colony
+				}
+			}
+			debug_log = "TE_RESETTLEMENT: frontier [SCOPE.ScriptValue('te_region_population')|0] people on [SCOPE.ScriptValue('te_region_area_km2')|0] km2 = [SCOPE.ScriptValue('resettlement_frontier_density')|2] per km2; opens below [SCOPE.ScriptValue('resettlement_frontier_open_density')|2], closes at [SCOPE.ScriptValue('resettlement_frontier_close_density')|2]; capacity [SCOPE.ScriptValue('resettlement_debug_capacity')|0]"
+			debug_log_scopes = yes
+		}
+	}
+}
