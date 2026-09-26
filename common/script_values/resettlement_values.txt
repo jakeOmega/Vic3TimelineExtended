@@ -69,3 +69,74 @@ resettlement_frontier_close_margin = {
 	value = resettlement_frontier_close_density
 	subtract = resettlement_frontier_density
 }
+
+# ---- The walk (§2) ---------------------------------------------------------
+# The share of each eligible pop a source may give a month (vanilla's
+# emigration ceiling is 0.5% a week), and in a Recruitment Drive state.
+resettlement_pop_cap = 0.02
+resettlement_drive_pop_cap = 0.04
+# Takes under this many people are skipped, so the walk does not splinter the
+# destination into tiny pops.
+resettlement_min_take = 100
+
+# State scope, with scope:rs_country and scope:rs_destination saved. People
+# here the destination's program may recruit.
+resettlement_state_eligible_pop = {
+	value = 0
+	every_scope_pop = {
+		limit = { resettlement_pop_eligible = yes }
+		add = total_size
+	}
+}
+
+# ---- Consequences at the source (§7.1) -------------------------------------
+# Source state, after var:rs_taken_now is set. 10 × the share of the recruited
+# type taken this month, capped at 0.1.
+resettlement_state_farmers = {
+	value = 0
+	every_scope_pop = {
+		limit = { is_pop_type = farmers }
+		add = total_size
+	}
+}
+
+resettlement_farmer_unrest_share = {
+	value = var:rs_taken_now
+	multiply = 10
+	divide = {
+		value = resettlement_state_farmers
+		min = 1
+	}
+	max = 0.1
+}
+
+resettlement_state_urban_workers = {
+	value = 0
+	every_scope_pop = {
+		limit = { resettlement_pop_urban_worker = yes }
+		add = total_size
+	}
+}
+
+resettlement_urban_unrest_share = {
+	value = var:rs_taken_now
+	multiply = 10
+	divide = {
+		value = resettlement_state_urban_workers
+		min = 1
+	}
+	max = 0.1
+}
+
+# ---- Land pressure at the destination (§7.3) -------------------------------
+# Destination state after the walk. 5 × this month's arrivals ÷ its
+# population, capped at 0.05.
+resettlement_land_pressure_share = {
+	value = var:rs_arrived
+	multiply = 5
+	divide = {
+		value = state_population
+		min = 1
+	}
+	max = 0.05
+}

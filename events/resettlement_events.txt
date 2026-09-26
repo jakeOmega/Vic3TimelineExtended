@@ -1,0 +1,42 @@
+﻿namespace = resettlement
+
+# ============================================================================
+# INTERNAL RESETTLEMENT EVENTS
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md §8.
+# The logic is in common/scripted_effects/resettlement_effects.txt.
+#
+#   .1–.8  program events, rolled by resettlement_roll_events
+#   .9     The Frontier Is Closed (resettlement_close_frontier)
+#   .20    The Declaration and Our Settlements (resettlement_refresh_declaration)
+# ============================================================================
+
+# ---- .9 The Frontier Is Closed -------------------------------------------------
+# Sent by resettlement_close_frontier with scope:rs_closed_state saved.
+resettlement.9 = {
+	type = country_event
+	placement = scope:rs_closed_state
+
+	event_image = {
+		video = "unspecific_trains"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = resettlement.9.t
+	desc = resettlement.9.d
+	flavor = resettlement.9.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:rs_closed_state
+	}
+
+	option = {
+		name = resettlement.9.a
+		default_option = yes
+	}
+}

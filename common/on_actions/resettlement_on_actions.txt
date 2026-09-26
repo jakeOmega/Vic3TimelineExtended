@@ -1,0 +1,22 @@
+﻿# Internal resettlement: the monthly country pulse (resettlement_effects.txt).
+# Runs only for a country with a Settlement Authority, or with readouts left to
+# clear on states that gave settlers.
+on_monthly_pulse_country = {
+	on_actions = {
+		resettlement_country_on_action
+	}
+}
+
+resettlement_country_on_action = {
+	effect = {
+		if = {
+			limit = {
+				OR = {
+					any_scope_state = { has_building = building_resettlement_colony }
+					any_scope_state = { has_variable = rs_recruits }
+				}
+			}
+			resettlement_country_monthly = yes
+		}
+	}
+}

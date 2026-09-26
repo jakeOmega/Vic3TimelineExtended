@@ -352,6 +352,146 @@ class BuildingTests(unittest.TestCase):
         self.assertEqual(sorted(granted), sorted(CAP_TECHS))
 
 
+EFFECTS = "common/scripted_effects/resettlement_effects.txt"
+RS_MODIFIERS = "common/static_modifiers/resettlement_modifiers.txt"
+RS_ON_ACTIONS = "common/on_actions/resettlement_on_actions.txt"
+RS_EVENTS = "events/resettlement_events.txt"
+DECREES = "common/decrees/extra_decrees.txt"
+VOLUNTARY = ("land_grants", "military_colonies", "organized_colonization", "development_program")
+
+# (static modifier, modifier type, scope it sits on)
+READOUTS = (
+    ("resettlement_arrivals", "building_resettlement_arrivals_add", "building"),
+    ("resettlement_transit_deaths", "building_resettlement_transit_deaths_add", "building"),
+    ("resettlement_recruits", "state_resettlement_recruits_add", "state"),
+)
+
+
+class TransferTests(unittest.TestCase):
+    def test_eligibility_has_one_branch_per_code(self):
+        body = block(read(TRIGGERS), "resettlement_pop_eligible")
+        codes = {int(c) for c in re.findall(r"scope:rs_destination\.var:rs_programme = (\d+)", body)}
+        self.assertEqual(codes, {p.code for p in PROGRAMMES})
+
+    def test_eligibility_never_selects_culture_or_religion(self):
+        text = read(TRIGGERS)
+        for name in ("resettlement_pop_eligible", "resettlement_pop_volunteer", "resettlement_pop_colonist",
+                     "resettlement_pop_urban_worker", "resettlement_state_is_damaged"):
+            body = block(text, name)
+            self.assertIsNotNone(body, name)
+            self.assertNotRegex(body, r"\b(culture|religion)\b", name)
+
+    def test_slaves_are_never_eligible(self):
+        self.assertIn("NOT = { is_pop_type = slaves }", squash(block(read(TRIGGERS), "resettlement_pop_eligible")))
+
+    def test_code_switch_matches_the_table(self):
+        body = squash(block(read(EFFECTS), "resettlement_set_programme_code"))
+        found = {m.group(1): (int(m.group(2)), float(m.group(3))) for m in re.finditer(
+            r"resettlement_runs_pm = \{ PM = pm_resettlement_(\w+) \} \} "
+            r"set_variable = \{ name = rs_programme value = (\d+) \} "
+            r"set_variable = \{ name = rs_mortality value = ([\d.]+) \}", body)}
+        self.assertEqual(found, {p.key: (p.code, float(p.mortality)) for p in PROGRAMMES})
+
+    def test_coercive_and_voluntary_triggers_partition_the_table(self):
+        text = read(TRIGGERS)
+        def pms(name):
+            return set(re.findall(r"PM = pm_resettlement_(\w+)", block(text, name)))
+        self.assertEqual(pms("resettlement_state_runs_coercive"), {p.key for p in COERCIVE})
+        self.assertEqual(pms("resettlement_state_runs_voluntary"), set(VOLUNTARY))
+        self.assertEqual(set(VOLUNTARY) | {p.key for p in COERCIVE} | {"managed_retreat"}, set(PROGRAMME_KEYS))
+
+    def test_month_counters_cover_every_programme(self):
+        text = read(EFFECTS)
+        reset = squash(block(text, "resettlement_reset_month_counters"))
+        count = squash(block(text, "resettlement_count_programme_month"))
+        for p in PROGRAMMES:
+            self.assertIn(f"set_variable = {{ name = rs_month_{p.key} value = 0 }}", reset, p.key)
+            self.assertIn(f"resettlement_count_one = {{ CODE = {p.code} PROG = {p.key} }}", count, p.key)
+
+    def test_caps_and_minimum(self):
+        text = strip_comments(read(VALUES))
+        self.assertRegex(text, r"(?m)^resettlement_pop_cap = 0\.02\s*$")
+        self.assertRegex(text, r"(?m)^resettlement_drive_pop_cap = 0\.04\s*$")
+        self.assertRegex(text, r"(?m)^resettlement_min_take = 100\s*$")
+
+    def test_walk_takes_drive_states_first(self):
+        body = squash(block(read(EFFECTS), "resettlement_run_destination"))
+        drive = body.index("has_decree = decree_resettlement_recruitment_drive")
+        rest = body.index("NOT = { has_decree = decree_resettlement_recruitment_drive }")
+        self.assertLess(drive, rest)
+        self.assertIn("CAP = resettlement_drive_pop_cap", body[drive:rest])
+        self.assertIn("CAP = resettlement_pop_cap", body[rest:])
+
+    def test_capacity_is_the_modifier_and_never_negative(self):
+        body = squash(block(read(EFFECTS), "resettlement_run_destination"))
+        self.assertIn("set_variable = { name = rs_remaining value = modifier:state_resettlement_transfer_add }", body)
+        self.assertIn("limit = { var:rs_remaining < 0 } set_variable = { name = rs_remaining value = 0 }", body)
+        # Review Focus 5: the program code is re-read from the active PM every month.
+        self.assertIn("resettlement_set_programme_code = yes", body)
+
+    def test_every_take_is_guarded(self):
+        body = squash(block(read(EFFECTS), "resettlement_take_from_source"))
+        self.assertIn("scope:rs_destination.var:rs_remaining >= resettlement_min_take", body)
+        self.assertIn("local_var:rs_take >= resettlement_min_take", body)
+        self.assertIn("move_partial_pop = { state = scope:rs_destination population = { value = local_var:rs_move } }", body)
+
+    def test_deaths_in_steps_of_one_hundred_for_each_coercive_programme(self):
+        body = squash(block(read(EFFECTS), "resettlement_source_consequences"))
+        kills = re.findall(r"while = \{ count = local_var:rs_dead_steps kill_population_in_state = \{ value = 100 (\w+ = \w+) \} \}", body)
+        self.assertEqual(sorted(kills), ["pop_type = farmers", "pop_type = laborers", "strata = lower"])
+        for p in COERCIVE:
+            self.assertIn(f"scope:rs_destination.var:rs_programme = {p.code}", body, p.key)
+
+    def test_land_pressure_is_only_a_cost(self):
+        body = squash(block(read(EFFECTS), "resettlement_land_pressure"))
+        self.assertIn("EFFECT = add_radicals_in_state VALUE = resettlement_land_pressure_share", body)
+        self.assertNotIn("loyalists", body)
+        touch = squash(block(read(EFFECTS), "resettlement_touch_pressed_cultures"))
+        self.assertIn("pop_acceptance < acceptance_status_4", touch)
+        self.assertIn("is_target_in_variable_list", touch)
+
+    def test_readouts(self):
+        mods = read(RS_MODIFIERS)
+        types = read(MODIFIER_TYPES)
+        L = loc()
+        for modifier, mtype, _ in READOUTS:
+            self.assertEqual(number(block(mods, modifier), mtype), 1, modifier)
+            tbody = block(types, mtype)
+            self.assertIsNotNone(tbody, mtype)
+            self.assertEqual(number(tbody, "decimals"), 0, mtype)
+            for key in (modifier, f"{modifier}_desc", mtype, f"{mtype}_desc"):
+                self.assertIn(key, L)
+        effects = read(EFFECTS)
+        dest = squash(block(effects, "resettlement_refresh_destination_readout"))
+        self.assertIn("add_modifier = { name = resettlement_arrivals multiplier = var:rs_arrivals }", dest)
+        self.assertIn("add_modifier = { name = resettlement_transit_deaths multiplier = var:rs_deaths }", dest)
+        src = squash(block(effects, "resettlement_refresh_source_readout"))
+        self.assertIn("add_modifier = { name = resettlement_recruits multiplier = var:rs_recruits }", src)
+
+    def test_the_pulse_is_wired(self):
+        text = read(RS_ON_ACTIONS)
+        m = re.search(r"on_monthly_pulse_country\s*=\s*\{\s*on_actions\s*=\s*\{([^}]*)\}", text)
+        self.assertIsNotNone(m)
+        self.assertIn("resettlement_country_on_action", m.group(1))
+        self.assertIn("resettlement_country_monthly = yes", squash(block(text, "resettlement_country_on_action")))
+
+    def test_closure_removes_the_building_and_tells_the_owner(self):
+        body = squash(block(read(EFFECTS), "resettlement_close_frontier"))
+        self.assertIn("remove_building = building_resettlement_colony", body)
+        self.assertIn("trigger_event = { id = resettlement.9 }", body)
+        self.assertIsNotNone(block(read(RS_EVENTS), "resettlement.9"))
+        monthly = squash(block(read(EFFECTS), "resettlement_country_monthly"))
+        self.assertIn("limit = { resettlement_state_frontier_still_open = no } resettlement_close_frontier = yes", monthly)
+
+    def test_the_drive_decree(self):
+        body = block(read(DECREES), "decree_resettlement_recruitment_drive")
+        self.assertIsNotNone(body)
+        self.assertIn("has_building = building_resettlement_colony", squash(block(body, "country_trigger")))
+        for key in ("decree_resettlement_recruitment_drive", "decree_resettlement_recruitment_drive_desc",
+                    "decree_resettlement_recruitment_drive_needs_authority_tt"):
+            self.assertIn(key, loc())
+
+
 class OldSystemGoneTests(unittest.TestCase):
     GONE = ("building_resettlement_camp", "pmg_resettlement_method", "state_building_resettlement_camp_max_level_add",
             "resettlement_transfer_effect", "resettlement_transfer_on_action", "pm_homesteading_program",

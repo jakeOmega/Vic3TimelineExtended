@@ -392,3 +392,44 @@ decree_subsidize_immigration = {
 		value = 0
 	}
 }
+
+# Internal resettlement (docs/superpowers/specs/2026-09-26-internal-resettlement-design.md
+# §2): every Settlement Authority walks the states under this decree first, and
+# may take up to 4% of each eligible pop a month here instead of 2%. It changes
+# where settlers come from, never who is eligible. Valid only while the owner
+# runs a Settlement Authority, so it is never bought for nothing.
+decree_resettlement_recruitment_drive = {
+	texture = "gfx/interface/icons/decree/decree_promote_social_mobility.dds"
+	modifier = {
+		state_migration_pull_mult = -0.1
+	}
+
+	cost = 100
+
+	country_trigger = {
+		custom_tooltip = {
+			text = decree_resettlement_recruitment_drive_needs_authority_tt
+			any_scope_state = { has_building = building_resettlement_colony }
+		}
+	}
+
+	state_trigger = {
+		NOT = { has_building = building_resettlement_colony }
+	}
+
+	ai_weight = {
+		value = 0
+		if = {
+			limit = {
+				scope:country = {
+					any_scope_state = { has_building = building_resettlement_colony }
+				}
+				OR = {
+					state_unemployment_rate > 0.1
+					migration_crowding_mult > 1
+				}
+			}
+			add = 50
+		}
+	}
+}

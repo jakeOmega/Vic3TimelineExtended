@@ -1,0 +1,20 @@
+﻿# ============================================================================
+# INTERNAL RESETTLEMENT — static modifiers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+
+# ---- Readouts (§2): re-applied monthly with the month's count as multiplier ----
+resettlement_arrivals = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	building_resettlement_arrivals_add = 1
+}
+
+resettlement_transit_deaths = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	building_resettlement_transit_deaths_add = 1
+}
+
+resettlement_recruits = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_positive.dds
+	state_resettlement_recruits_add = 1
+}

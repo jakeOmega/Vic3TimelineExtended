@@ -1193,6 +1193,8 @@
  state_pop_support_movement_civil_rights_mult_desc:0 "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_civil_rights_name$."
  state_pop_support_movement_transhumanist_mult:0 "$movement_transhumanist_name$ [concept_pop] Attraction"
  state_pop_support_movement_transhumanist_mult_desc:0 "An increase or decrease to the share of [Concept('concept_pop', 'pops')] attracted to the $movement_transhumanist_name$."
+ state_resettlement_recruits_add:0 "Recruited for resettlement last month"
+ state_resettlement_recruits_add_desc:0 "People Settlement Authorities took from this state last month."
  state_resettlement_transfer_add:0 "Settlers Moved per Month"
  state_resettlement_transfer_add_desc:0 "How many people this state's Settlement Authority brings here each month, when enough eligible people can be recruited."
  state_war_support_monthly_add:0 "Monthly [concept_war_support]"

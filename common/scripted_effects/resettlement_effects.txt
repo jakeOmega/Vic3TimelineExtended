@@ -1,0 +1,403 @@
+﻿# ============================================================================
+# INTERNAL RESETTLEMENT — the monthly pulse
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md §2.
+#
+# One country pulse does everything, in this order, so several destinations can
+# share a source within a month and every readout has exactly one refresh site:
+#   1. zero every state's monthly recruit counter and the country's
+#      per-program month counters;
+#   2. an AI kept to voluntary programs is switched off coercive ones;
+#   3. each Settlement Authority closes (frontier full) or runs the walk;
+#   4. refresh the source readouts;
+#   5. the political layer and the Declaration;
+#   6. roll events.
+#
+# Variables
+#   destination state   rs_programme (the code in the registry's PROGRAMMES),
+#                       rs_mortality, rs_remaining, rs_arrived, rs_died,
+#                       rs_months_running, rs_last_source (a state)
+#   Authority building  rs_arrivals, rs_deaths (readout multipliers; persist,
+#                       so the modifiers' multipliers never read 'none')
+#   source state        rs_recruits (this month, every destination),
+#                       rs_taken_now (this destination's take, for unrest)
+#   country             rs_month_<program> (this month's recruits)
+# ============================================================================
+
+resettlement_country_monthly = {
+	save_scope_as = rs_country
+	every_scope_state = {
+		limit = { has_variable = rs_recruits }
+		set_variable = { name = rs_recruits value = 0 }
+	}
+	resettlement_reset_month_counters = yes
+	if = {
+		limit = { resettlement_system_enabled = yes }
+		if = {
+			limit = { resettlement_ai_voluntary_only = yes }
+			resettlement_end_coercive_programmes = yes
+		}
+		every_scope_state = {
+			limit = { has_building = building_resettlement_colony }
+			if = {
+				limit = { resettlement_state_frontier_still_open = no }
+				resettlement_close_frontier = yes
+			}
+			else = {
+				resettlement_run_destination = yes
+			}
+		}
+	}
+	every_scope_state = {
+		limit = { has_variable = rs_recruits }
+		resettlement_refresh_source_readout = yes
+	}
+}
+
+resettlement_reset_month_counters = {
+	set_variable = { name = rs_month_land_grants value = 0 }
+	set_variable = { name = rs_month_military_colonies value = 0 }
+	set_variable = { name = rs_month_penal_transportation value = 0 }
+	set_variable = { name = rs_month_organized_colonization value = 0 }
+	set_variable = { name = rs_month_special_settlements value = 0 }
+	set_variable = { name = rs_month_development_program value = 0 }
+	set_variable = { name = rs_month_rustication value = 0 }
+	set_variable = { name = rs_month_managed_retreat value = 0 }
+}
+
+# State scope: a destination. Read every month from the active PM, never
+# cached, so a law that retires the running program takes effect at once.
+resettlement_set_programme_code = {
+	if = {
+		limit = { resettlement_runs_pm = { PM = pm_resettlement_land_grants } }
+		set_variable = { name = rs_programme value = 0 }
+		set_variable = { name = rs_mortality value = 0 }
+	}
+	else_if = {
+		limit = { resettlement_runs_pm = { PM = pm_resettlement_military_colonies } }
+		set_variable = { name = rs_programme value = 1 }
+		set_variable = { name = rs_mortality value = 0 }
+	}
+	else_if = {
+		limit = { resettlement_runs_pm = { PM = pm_resettlement_penal_transportation } }
+		set_variable = { name = rs_programme value = 2 }
+		set_variable = { name = rs_mortality value = 0.05 }
+	}
+	else_if = {
+		limit = { resettlement_runs_pm = { PM = pm_resettlement_organized_colonization } }
+		set_variable = { name = rs_programme value = 3 }
+		set_variable = { name = rs_mortality value = 0 }
+	}
+	else_if = {
+		limit = { resettlement_runs_pm = { PM = pm_resettlement_special_settlements } }
+		set_variable = { name = rs_programme value = 4 }
+		set_variable = { name = rs_mortality value = 0.15 }
+	}
+	else_if = {
+		limit = { resettlement_runs_pm = { PM = pm_resettlement_development_program } }
+		set_variable = { name = rs_programme value = 5 }
+		set_variable = { name = rs_mortality value = 0 }
+	}
+	else_if = {
+		limit = { resettlement_runs_pm = { PM = pm_resettlement_rustication } }
+		set_variable = { name = rs_programme value = 6 }
+		set_variable = { name = rs_mortality value = 0.01 }
+	}
+	else_if = {
+		limit = { resettlement_runs_pm = { PM = pm_resettlement_managed_retreat } }
+		set_variable = { name = rs_programme value = 7 }
+		set_variable = { name = rs_mortality value = 0 }
+	}
+}
+
+# State scope: a source. scope:rs_country and scope:rs_destination saved.
+# $CAP$: the script value naming the share of each eligible pop it may give.
+# Moving pops from inside every_scope_pop is vanilla's own pattern (the
+# Hokkaido settlement events do it); leave it. Penal Transportation's premise
+# (it drains radicals) assumes move_partial_pop carries a pop's radical share
+# with the people it moves; that is engine question 5, unverified until the
+# in-game check.
+resettlement_take_from_source = {
+	save_scope_as = rs_source
+	set_variable = { name = rs_taken_now value = 0 }
+	every_scope_pop = {
+		limit = { resettlement_pop_eligible = yes }
+		if = {
+			limit = { scope:rs_destination.var:rs_remaining >= resettlement_min_take }
+			set_local_variable = {
+				name = rs_take
+				value = {
+					value = total_size
+					multiply = $CAP$
+				}
+			}
+			if = {
+				limit = { local_var:rs_take > scope:rs_destination.var:rs_remaining }
+				set_local_variable = { name = rs_take value = scope:rs_destination.var:rs_remaining }
+			}
+			if = {
+				limit = { local_var:rs_take >= resettlement_min_take }
+				# The dead are removed at the source afterwards
+				# (resettlement_source_consequences); the rest move now.
+				set_local_variable = {
+					name = rs_move
+					value = {
+						value = 1
+						subtract = scope:rs_destination.var:rs_mortality
+						multiply = local_var:rs_take
+						round = yes
+					}
+				}
+				move_partial_pop = {
+					state = scope:rs_destination
+					population = { value = local_var:rs_move }
+				}
+				scope:rs_destination = {
+					change_variable = { name = rs_remaining subtract = local_var:rs_take }
+					change_variable = { name = rs_arrived add = local_var:rs_move }
+				}
+				scope:rs_source = {
+					change_variable = { name = rs_taken_now add = local_var:rs_take }
+				}
+			}
+		}
+	}
+	if = {
+		limit = { var:rs_taken_now > 0 }
+		if = {
+			limit = { NOT = { has_variable = rs_recruits } }
+			set_variable = { name = rs_recruits value = 0 }
+		}
+		change_variable = { name = rs_recruits add = var:rs_taken_now }
+		scope:rs_destination = {
+			set_variable = { name = rs_last_source value = scope:rs_source }
+		}
+		resettlement_source_consequences = yes
+	}
+}
+
+# State scope: a source, after var:rs_taken_now is set. scope:rs_destination saved.
+# Deaths in transit (§2): kill_population_in_state takes a constant, so the dead
+# are removed in steps of 100, filtered to the program's recruits. Unrest
+# (§7.1) radicalizes the recruited type left behind. add_radicals_in_state
+# cannot tell urban laborers from farm laborers, so Rustication's unrest
+# reaches both; its share is computed against urban workers only.
+resettlement_source_consequences = {
+	set_local_variable = {
+		name = rs_dead_steps
+		value = {
+			value = var:rs_taken_now
+			multiply = scope:rs_destination.var:rs_mortality
+			divide = 100
+			round = yes
+		}
+	}
+	set_local_variable = {
+		name = rs_dead_people
+		value = {
+			value = local_var:rs_dead_steps
+			multiply = 100
+		}
+	}
+	scope:rs_destination = {
+		change_variable = { name = rs_died add = local_var:rs_dead_people }
+	}
+	if = {
+		limit = { scope:rs_destination.var:rs_programme = 4 }
+		while = {
+			count = local_var:rs_dead_steps
+			kill_population_in_state = { value = 100 pop_type = farmers }
+		}
+		add_radicals_in_state = { value = resettlement_farmer_unrest_share pop_type = farmers }
+	}
+	else_if = {
+		limit = { scope:rs_destination.var:rs_programme = 6 }
+		while = {
+			count = local_var:rs_dead_steps
+			kill_population_in_state = { value = 100 pop_type = laborers }
+		}
+		add_radicals_in_state = { value = resettlement_urban_unrest_share pop_type = laborers }
+		add_radicals_in_state = { value = resettlement_urban_unrest_share pop_type = clerks }
+	}
+	else_if = {
+		limit = { scope:rs_destination.var:rs_programme = 2 }
+		while = {
+			count = local_var:rs_dead_steps
+			kill_population_in_state = { value = 100 strata = lower }
+		}
+	}
+}
+
+# State scope: a destination with a Settlement Authority. scope:rs_country saved.
+resettlement_run_destination = {
+	save_scope_as = rs_destination
+	resettlement_set_programme_code = yes
+	set_variable = { name = rs_arrived value = 0 }
+	set_variable = { name = rs_died value = 0 }
+	set_variable = { name = rs_remaining value = modifier:state_resettlement_transfer_add }
+	if = {
+		limit = { var:rs_remaining < 0 }
+		set_variable = { name = rs_remaining value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = rs_months_running } }
+		set_variable = { name = rs_months_running value = 0 }
+	}
+	change_variable = { name = rs_months_running add = 1 }
+
+	# Drive states first, then everyone else, each walked in order of eligible
+	# population until the capacity is used (§2).
+	scope:rs_country = {
+		ordered_scope_state = {
+			limit = {
+				has_decree = decree_resettlement_recruitment_drive
+				resettlement_valid_source = yes
+			}
+			order_by = resettlement_state_eligible_pop
+			min = 0
+			max = 199
+			check_range_bounds = no
+			resettlement_take_from_source = { CAP = resettlement_drive_pop_cap }
+		}
+		ordered_scope_state = {
+			limit = {
+				NOT = { has_decree = decree_resettlement_recruitment_drive }
+				resettlement_valid_source = yes
+			}
+			order_by = resettlement_state_eligible_pop
+			min = 0
+			max = 199
+			check_range_bounds = no
+			resettlement_take_from_source = { CAP = resettlement_pop_cap }
+		}
+	}
+
+	resettlement_count_programme_month = yes
+	resettlement_land_pressure = yes
+	resettlement_refresh_destination_readout = yes
+	debug_log = "TE_RESETTLEMENT: [THIS.GetState.GetName] program [THIS.GetState.MakeScope.Var('rs_programme').GetValue|0]: [THIS.GetState.MakeScope.Var('rs_arrived').GetValue|0] arrived, [THIS.GetState.MakeScope.Var('rs_died').GetValue|0] died in transit, [THIS.GetState.MakeScope.Var('rs_remaining').GetValue|0] of capacity unused"
+}
+
+# State scope: a destination, after the walk. Adds this month's recruits
+# (arrived + died) to the owner's counter for the running program.
+resettlement_count_programme_month = {
+	set_local_variable = {
+		name = rs_recruited
+		value = {
+			value = var:rs_arrived
+			add = var:rs_died
+		}
+	}
+	resettlement_count_one = { CODE = 0 PROG = land_grants }
+	resettlement_count_one = { CODE = 1 PROG = military_colonies }
+	resettlement_count_one = { CODE = 2 PROG = penal_transportation }
+	resettlement_count_one = { CODE = 3 PROG = organized_colonization }
+	resettlement_count_one = { CODE = 4 PROG = special_settlements }
+	resettlement_count_one = { CODE = 5 PROG = development_program }
+	resettlement_count_one = { CODE = 6 PROG = rustication }
+	resettlement_count_one = { CODE = 7 PROG = managed_retreat }
+}
+
+resettlement_count_one = {
+	if = {
+		limit = { var:rs_programme = $CODE$ }
+		scope:rs_country = {
+			change_variable = { name = rs_month_$PROG$ add = local_var:rs_recruited }
+		}
+	}
+}
+
+# State scope. Applies $EFFECT$ (add_radicals_in_state or add_loyalists_in_state)
+# at $VALUE$, once for each culture here that has pops below second-class
+# acceptance. The land-pressure consequence and event resettlement.8 use it;
+# it never decides who moves. rs_pressed_culture is re-saved on every pop, as
+# the 2024 migration code did; if a reload ever logs a "scope already saved"
+# error here, switch to save_temporary_scope_as.
+resettlement_touch_pressed_cultures = {
+	save_scope_as = rs_touch_state
+	every_scope_pop = {
+		limit = { pop_acceptance < acceptance_status_4 }
+		culture = { save_scope_as = rs_pressed_culture }
+		scope:rs_touch_state = {
+			if = {
+				limit = {
+					NOT = {
+						is_target_in_variable_list = { name = rs_pressed_cultures target = scope:rs_pressed_culture }
+					}
+				}
+				add_to_variable_list = { name = rs_pressed_cultures target = scope:rs_pressed_culture }
+				$EFFECT$ = { value = $VALUE$ culture = scope:rs_pressed_culture }
+			}
+		}
+	}
+	clear_variable_list = rs_pressed_cultures
+}
+
+# State scope: a destination, after the walk. Land pressure (§7.3): only ever a
+# cost, never a benefit.
+resettlement_land_pressure = {
+	if = {
+		limit = { var:rs_arrived > 0 }
+		resettlement_touch_pressed_cultures = { EFFECT = add_radicals_in_state VALUE = resettlement_land_pressure_share }
+	}
+}
+
+# State scope: a destination. One refresh site for the building's readouts.
+resettlement_refresh_destination_readout = {
+	every_scope_building = {
+		limit = { is_building_type = building_resettlement_colony }
+		set_variable = { name = rs_arrivals value = scope:rs_destination.var:rs_arrived }
+		set_variable = { name = rs_deaths value = scope:rs_destination.var:rs_died }
+		remove_modifier = resettlement_arrivals
+		remove_modifier = resettlement_transit_deaths
+		if = {
+			limit = { var:rs_arrivals > 0 }
+			add_modifier = { name = resettlement_arrivals multiplier = var:rs_arrivals }
+		}
+		if = {
+			limit = { var:rs_deaths > 0 }
+			add_modifier = { name = resettlement_transit_deaths multiplier = var:rs_deaths }
+		}
+	}
+}
+
+# State scope: any state that has ever given settlers. One refresh site.
+resettlement_refresh_source_readout = {
+	remove_modifier = resettlement_recruits
+	if = {
+		limit = { var:rs_recruits > 0 }
+		add_modifier = { name = resettlement_recruits multiplier = var:rs_recruits }
+	}
+}
+
+# State scope: a destination whose frontier has filled. scope:rs_country saved.
+resettlement_close_frontier = {
+	save_scope_as = rs_closed_state
+	remove_building = building_resettlement_colony
+	remove_variable = rs_months_running
+	scope:rs_country = {
+		trigger_event = { id = resettlement.9 }
+	}
+	debug_log = "TE_RESETTLEMENT: the frontier at [THIS.GetState.GetName] is closed"
+}
+
+# Country scope. Every coercive program switches to the best voluntary one
+# available: Organized Colonization once railways are known, else Land Grants.
+resettlement_end_coercive_programmes = {
+	every_scope_state = {
+		limit = { resettlement_state_runs_coercive = yes }
+		if = {
+			limit = { owner = { has_technology_researched = railways } }
+			activate_production_method = {
+				building_type = building_resettlement_colony
+				production_method = pm_resettlement_organized_colonization
+			}
+		}
+		else = {
+			activate_production_method = {
+				building_type = building_resettlement_colony
+				production_method = pm_resettlement_land_grants
+			}
+		}
+	}
+}
