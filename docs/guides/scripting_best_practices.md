@@ -568,6 +568,12 @@ A classification or gate that asks "does this country run law X" should use `has
 
 **But the law you pass must be the parent.** Given a variant (e.g. `has_law_or_variant = law_type:law_homesteading`), the engine logs `Script system error! has_law_or_variant trigger [ Given law is a variant, we expect the parent ]` to `error.log` at runtime. `POST /reload` and every offline audit stay clean. To test one specific variant, use plain `has_law`. A law is a variant when its definition has a `parent = law_x` line.
 
+**`unlocking_laws` / `disallowing_laws` match exact keys, so list the variants too.** A law gated on `law_oligarchy` is not unlocked by its variant `law_organic_regulation`. Vanilla lists them side by side (`00_economic_system.txt`: `law_neo_absolutism`, `law_organic_regulation`). `gen_law_consistency.py` reads the same lists, so a variant left out also makes the consistency cascade treat its holders as violating.
+
+## Government Types: No Modifiers, First Match Wins
+
+A `common/government_types/` entry carries only `transfer_of_power`, `possible`, ruler/heir titles, `new_leader_on_reform_government` and the two `on_*government_type_change` hooks, and **no modifier block** (true of all 444 vanilla types). A per-combination effect has to live on a law, an amendment or a static modifier; the government type only names the result and picks the succession. Resolution appears to be **first match in load order**: vanilla puts `gov_papal_commune` first in `05_council_republics.txt` because `gov_soviet_republic` would also match. That is inferred rather than tested in-game. Vanilla's `0*_` files load before the mod's, so order a family most-specific-first with a catch-all last, and key mod types on a mod law so no vanilla type competes (`timeline_extended_governments.txt`: Noble Commonwealth before Patrician Council, `gov_collective_governance` last).
+
 ## Industry-Ban Triggers for New Buildings
 
 Modded industrial / extraction buildings should declare their `possible` clause through one of two scripted_triggers in `common/scripted_triggers/misc_triggers.txt`, not by inlining the `has_law_or_variant` check:
@@ -2341,6 +2347,15 @@ add_amendment = {
 - `remove_amendment = yes` (amendment scope, e.g. via `every_scope_amendment` on a law) removes an amendment immediately, bypassing the cooldown.
 - Mod usage (three sunset clauses, their events and timeouts): `docs/systems/mod_systems.md` § Temporary Amendments (Sunset Clauses).
 
+### Script-attached amendments that follow another law
+
+The pattern Collective Governance uses (`collective_governance_effects.txt`; `docs/systems/mod_systems.md` § Collective Governance): one amendment per state of *another* law, kept current by script.
+- **Vanilla does this.** `amendment_geheime_staatskonferenz` is attached from Austria's history with `would_sponsor = { always = no }`.
+- **An amendment needs no `parent`.** 12 of vanilla's 67 have none. A parentless amendment has no parent law for IGs to take a stance on, so it doesn't count the host law's approval a second time. Repeal requires an IG in government that opposes the parent law (`concept_amendment_repeal_desc`), so a parentless amendment can't be repealed from the UI either.
+- **Ask one trigger in both `possible` and `can_repeal` (negated).** Because `add_amendment` checks `possible` (above), the script can add the amendment exactly when it fits, and the player can't repeal the one that fits.
+- **A law's amendments leave with it** when the law is replaced (vanilla `amendment_geheime_staatskonferenz`: "can be removed by changing Distribution of Power"). The refresh only has to handle changes to the *other* law while the host stays.
+- **Remove by type** with `random_scope_amendment = { limit = { amendment_type:X ?= this.type } remove_amendment = yes }` (vanilla `ep2_tenpo_events.txt`), or `limit = { type = amendment_type:X }` (vanilla `remove_electoral_fraud_effect`).
+
 ## Journal Entry Modifier Scoping
 
 Modifiers applied by journal entry buttons or JE monthly/weekly pulse should be applied to the **journal entry scope** rather than directly to the country. This causes the modifier to appear in the JE's modifier panel instead of cluttering the country's general modifier list.
@@ -2536,6 +2551,8 @@ Four country-scope authority triggers, easy to confuse:
 - **`lawgroup_governance_principles`** — head-of-state structure: Monarchy / Presidential Republic / Parliamentary Republic / Theocracy / Council Republic / mod-added `law_direct_democracy` (displayed as Collective Governance) / `law_neocameralism` / etc.
 
 When designing a system that responds to "how authoritarian is this country", contribute modifier values across the *distribution-of-power* axis (and possibly free-speech / internal-security), not governance-principles. Don't mix law contributions across the two axes — the result is an incoherent gate where (e.g.) Direct Democracy lowers a value that Parliamentary Republic doesn't touch.
+
+**`country_has_voting_franchise = yes` under Single-Party State.** The vanilla trigger sums voting-power modifiers, and Single-Party State grants `country_voting_power_base_add = 50`. Technocracy, Oligarchy (and Organic Regulation) and Anarchy grant none, so the trigger is false for them. A test that means "is a voting democracy" needs `NOT = { has_law_or_variant = law_type:law_single_party_state }` as well, as vanilla's `gov_council_republic` does, or names the voting laws outright (`collective_governance_is_popular`). The removed `gov_direct_democracy_autocracy` (`franchise = no`) could never match for this reason. Once the law it dressed allowed Technocracy, Oligarchy and Anarchy, it would have caught every one of them.
 
 ## Legacy Modifier Cleanup Pattern
 
@@ -2846,6 +2863,10 @@ my_law_cascade = {
 Vanilla precedent: `00_ip4_victoria_scripted_triggers.txt` uses `scope:law.type = law_type:law_X` for the same comparison from a country scope (where the law is in a saved scope variable). Inside `on_law_activated` the law IS root, so `type = law_type:X` works directly.
 
 **Repo example:** `banking_law_cascade_on_law_activated` in `common/on_actions/extra_on_actions.txt` — auto-enacts `law_state_owned_banking` when `law_command_economy` activates.
+
+**It also fires for `activate_law`.** Vanilla's header in `00_code_on_actions.txt`: when "a law is directly set by script, thus bypassing the enactment process, this will execute while `on_law_enactment_ended` will not". So the law-consistency cascade's `activate_law` reaches it.
+
+**A law's own `on_activate` is ambiguous about timing.** Vanilla is mixed on whether the new law already counts as active there: the church-and-state laws test for the same-group law being replaced, while `law_council_republic` tests for itself. Anything that must read the *new* law state (`active_law:lawgroup_X`, `has_law`) should also run from `on_law_activated`, as `te_refresh_collective_governance_amendment` does.
 
 ## `create_dynamic_country.on_created`: Save Parent Scope BEFORE the Call
 
@@ -3300,6 +3321,7 @@ The engine auto-generates tooltip text for some effect-block contents and stays 
 - `trigger_event` — the chained event isn't previewed.
 - Scope iterators (`every_country`, `every_scope_state`, etc.) — the inner block's effects don't bubble up.
 - Anything inside `hidden_effect = { ... }` (intentional).
+- A `script_only = yes` modifier in any modifier block (law, amendment, static modifier). It never appears in the effects list, so name it in the `_desc` or tooltip loc (`covert_regime_change_desc`, `amendment_collective_leadership_desc`). A block whose only entries are script_only reads as "does nothing".
 
 **Antipattern**: wrapping the entire effect block in `custom_tooltip = { text = "X_DESC" ... add_modifier = ... change_variable = ... }`. The text replaces the auto-render entirely — so the modifier values that *would* have rendered automatically are now hand-typed in `X_DESC`, and they drift from the modifier definitions over time. The mod's `un_buttons.txt` had this for years before the autogen rewrite.
 
@@ -3343,6 +3365,10 @@ The keys still resolve at runtime: **all `te_*_l_english.yml` files in `localiza
 **Don't try to "fix" this** by renaming the file, registering the keys, or adding a fake script reference. The placement is benign. If the categorizer's misclassification is itself confusing — e.g. a code reviewer flags "why are the political_lobby `_name` keys in te_unused?" — leave a comment on the keys or call it out in the relevant design doc rather than relocating them.
 
 Caveat: if `organize_loc.py` ever changes to *delete* unused keys instead of relocating them, this convention breaks. Today (2026-05) it relocates, and there's no plan to change that. If the runbook for `organize_loc.py` gains a deletion mode in the future, engine-convention keys need an explicit script reference (e.g. a comment block with `# referenced-by-engine: lobby_<id>_name` that the categorizer learns to recognize, similar to the existing `POWER_BLOC_UNLOCKS` / `UN_BUTTON_EFFECTS` rules).
+
+### Law enactment preview: text in `on_enact`, work in `on_activate`
+
+Both blocks render in a law's enactment preview. Vanilla puts preview-only text in `on_enact`, as `if`/`custom_tooltip` branches whose conditions read the laws in force *before* enactment (the land-reform laws' `farmers_pb_ig_shift_effect_*_tt`; `law_state_led_language_reform`'s `LAW_STATE_LED_LANGUAGE_REFORM_EVENTS_EFFECT`). The work goes in `on_activate`, inside `hidden_effect` if it would otherwise print its own line (`add_amendment`). Anything a script-attached amendment or dynamic modifier adds later is invisible in the preview, so the preview text should name its downsides as well as its upsides. Repo example: `law_direct_democracy` (Collective Governance).
 
 ## Vanilla Script-Value Overrides Are the Bridge Between `script_only` Modifiers and Engine Hardcoded Values
 
