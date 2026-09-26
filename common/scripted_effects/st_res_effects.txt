@@ -140,9 +140,13 @@ st_res_reset_vars_effect = {
 	set_variable = { name = st_res_hub_level_cached value = 0 }
 	set_variable = { name = st_res_hub_throughput_cached value = 0 }
 	set_variable = { name = st_res_hub_workforce_cached value = 1 }
-	# Clearing the one-shot AI marker lets st_res_ai_seed_policies_effect hand a
+	# Clearing the one-shot AI markers lets st_res_ai_seed_policies_effect hand a
 	# rebuilt hub its presets again, exactly as a freshly activated JE would.
 	remove_variable = st_res_policy_ai_seeded
+	if = {
+		limit = { has_variable = st_res_policy_ai_stabilized }
+		remove_variable = st_res_policy_ai_stabilized
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -186,6 +190,70 @@ st_res_record_hub_holder_effect = {
 		limit = { is_building_type = building_strategic_reserve_hub }
 		state = {
 			set_variable = { name = st_res_hub_holder value = scope:st_res_hub_holder_country }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# st_res_relocate_hub_to_capital_effect — country scope, first thing in the
+# weekly pulse.
+# The hub belongs in the capital: its possible requires it, and the policy
+# price signal assumes the capital's market (strategic_reserve_system.md
+# §4.6). It ends up elsewhere when the capital moves, or when a hub state
+# passes to the other side of a civil war (st_res_hub_stays_within_nation),
+# and it cannot be demolished, so the reserve moves it: a level-1 hub is
+# created in the capital for free, and every hub outside the capital is
+# removed once the capital's stands. The stock lives on country variables and
+# does not move. The new building hires its staff from scratch, so flow runs
+# below capacity until it fills.
+#
+# Two steps, each safe to repeat, so that no hub is removed before its
+# replacement is seen. Whether create_building's result is visible to
+# has_building later in the same effect is unread. If it is not, step 2 runs
+# a week later, and for that week the country has two hubs, of which the
+# st_res effects read either.
+#
+# create_building checks the unlocking technology since 1.13.9
+# (scripting_best_practices.md), hence the logistics test: without it the
+# call would fail, and log the failure, every week. Whether it also checks
+# possible is unverified, so st_res_hub_relocating lets the hub's
+# one-per-country guard pass either way (the te_cm_placing_site pattern).
+# --------------------------------------------------------------------------
+st_res_relocate_hub_to_capital_effect = {
+	# Step 1: no hub in the capital, one elsewhere: build one in the capital.
+	if = {
+		limit = {
+			has_technology_researched = logistics
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+			capital ?= {
+				NOT = { has_building = building_strategic_reserve_hub }
+			}
+		}
+		set_variable = { name = st_res_hub_relocating value = 1 }
+		capital = {
+			create_building = {
+				building = building_strategic_reserve_hub
+				level = 1
+			}
+		}
+		remove_variable = st_res_hub_relocating
+		debug_log = "TE_ST_RES: a Strategic Reserve Hub outside the capital was rebuilt in the capital"
+	}
+	# Step 2: the capital has its hub: remove every other one.
+	if = {
+		limit = {
+			capital ?= { has_building = building_strategic_reserve_hub }
+		}
+		every_scope_state = {
+			limit = {
+				is_capital = no
+				has_building = building_strategic_reserve_hub
+			}
+			remove_building = building_strategic_reserve_hub
+			if = {
+				limit = { has_variable = st_res_hub_holder }
+				remove_variable = st_res_hub_holder
+			}
 		}
 	}
 }
@@ -518,6 +586,9 @@ st_res_mark_good_no_hub_effect = {
 # --------------------------------------------------------------------------
 st_res_weekly_update_effect = {
 	st_res_init_effect = yes
+	# Before the hub cache is read, so the cache and this week's flow refer
+	# to the capital's hub whenever step 2 of the move has already run.
+	st_res_relocate_hub_to_capital_effect = yes
 	st_res_refresh_hub_cache_effect = yes
 	# One-shot, AI-only. Guarded internally, so this costs a `has_variable`
 	# check for a human player and for any AI that has already been seeded.
@@ -1255,7 +1326,8 @@ st_res_policy_apply_good_effect = {
 # they simply never moved a rate and the reserve sat empty forever.
 #
 # st_res_ai_seed_good_effect hands an AI country the Conservative preset once,
-# and from then on the AI runs through st_res_policy_evaluate_good_effect —
+# on Stabilize Prices for every good, and from then on the AI runs through
+# st_res_policy_evaluate_good_effect —
 # the same evaluator, the same thresholds, the same clamps and the same costs
 # as a human on the same preset. There is no AI-only shortcut anywhere.
 #
@@ -1266,11 +1338,34 @@ st_res_policy_apply_good_effect = {
 # AI seeds its own presets on the next pulse. That is the intended outcome for
 # a country the player has walked away from, but it is a genuine overwrite,
 # not something the marker prevents.
+#
+# Every good is on Stabilize Prices (policy 3) — buy below the threshold,
+# release above it. Until 2026-09-26 the six military goods were on Buy When
+# Cheap (policy 1), which never sells, so an AI reserve never released a round
+# into a war's price spike (mobilized armies burn four times their peacetime
+# ammunition: common/mobilization_options/te_wartime_munitions_injections.txt).
+# The Conservative preset's 40% stock floor still holds back part of the
+# reserve.
+#
+# Saves seeded before then carry st_res_policy_ai_seeded but not
+# st_res_policy_ai_stabilized: the second block moves any good still on Buy
+# When Cheap to Stabilize Prices once and leaves its other settings alone.
 # --------------------------------------------------------------------------
 st_res_ai_seed_good_effect = {
 	st_res_apply_preset_conservative_base = { GOOD = $GOOD$ }
 	set_variable = { name = st_res_$GOOD$_policy value = $POLICY$ }
 	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+}
+
+st_res_ai_stabilize_good_effect = {
+	if = {
+		limit = {
+			has_variable = st_res_$GOOD$_policy
+			var:st_res_$GOOD$_policy = 1
+		}
+		set_variable = { name = st_res_$GOOD$_policy value = 3 }
+		set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+	}
 }
 
 st_res_ai_seed_policies_effect = {
@@ -1280,13 +1375,27 @@ st_res_ai_seed_policies_effect = {
 			NOT = { has_variable = st_res_policy_ai_seeded }
 		}
 		set_variable = { name = st_res_policy_ai_seeded value = 1 }
+		set_variable = { name = st_res_policy_ai_stabilized value = 1 }
 		st_res_ai_seed_good_effect = { GOOD = grain       POLICY = 3 }
-		st_res_ai_seed_good_effect = { GOOD = ammunition  POLICY = 1 }
-		st_res_ai_seed_good_effect = { GOOD = oil         POLICY = 1 }
-		st_res_ai_seed_good_effect = { GOOD = small_arms  POLICY = 1 }
-		st_res_ai_seed_good_effect = { GOOD = artillery   POLICY = 1 }
-		st_res_ai_seed_good_effect = { GOOD = aeroplanes  POLICY = 1 }
-		st_res_ai_seed_good_effect = { GOOD = tanks       POLICY = 1 }
+		st_res_ai_seed_good_effect = { GOOD = ammunition  POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = oil         POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = small_arms  POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = artillery   POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = aeroplanes  POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = tanks       POLICY = 3 }
 		st_res_ai_seed_good_effect = { GOOD = fertilizer  POLICY = 3 }
+	}
+	if = {
+		limit = {
+			is_ai = yes
+			NOT = { has_variable = st_res_policy_ai_stabilized }
+		}
+		set_variable = { name = st_res_policy_ai_stabilized value = 1 }
+		st_res_ai_stabilize_good_effect = { GOOD = ammunition }
+		st_res_ai_stabilize_good_effect = { GOOD = oil }
+		st_res_ai_stabilize_good_effect = { GOOD = small_arms }
+		st_res_ai_stabilize_good_effect = { GOOD = artillery }
+		st_res_ai_stabilize_good_effect = { GOOD = aeroplanes }
+		st_res_ai_stabilize_good_effect = { GOOD = tanks }
 	}
 }

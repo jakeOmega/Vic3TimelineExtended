@@ -90,7 +90,10 @@ st_res_reserve_filling_up = {
 #     rose against (te_civil_war_effects.txt). A dead civil-war loser still
 #     resolves and reads its variables (settled in play, 2026-09-26).
 # The last test also covers a secession, which takes the hub state with it
-# instead of razing it; if the secession wins, the new country keeps it.
+# instead of razing it; if the secession wins, the new country keeps it. A
+# hub kept outside its new owner's capital moves there at the owner's next
+# weekly pulse (st_res_relocate_hub_to_capital_effect), and so does the
+# captured one when the owner already has its own.
 # No stamp (a hub finished less than a week ago) counts as a capture.
 st_res_hub_stays_within_nation = {
 	exists = scope:st_res_capture_holder

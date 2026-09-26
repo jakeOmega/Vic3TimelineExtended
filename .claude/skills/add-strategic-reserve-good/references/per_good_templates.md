@@ -317,7 +317,7 @@ Most of the per-good work is now one line added to an existing `$GOOD$`-paramete
 	st_res_policy_tick_good_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (else branch too — see below)
 	st_res_set_good_status_effect    = { GOOD = <GOOD> }  # at the END of st_res_refresh_hub_flow_effect
 	st_res_switch_to_manual_base     = { GOOD = <GOOD> }  # in st_res_reset_rates_effect
-	st_res_ai_seed_good_effect       = { GOOD = <GOOD> POLICY = 1 }  # in st_res_ai_seed_policies_effect
+	st_res_ai_seed_good_effect       = { GOOD = <GOOD> POLICY = 3 }  # in st_res_ai_seed_policies_effect; every good is on Stabilize Prices
 ```
 
 `st_res_policy_tick_good_effect` goes in **both** branches of the weekly pulse. That is not redundancy: it advances the good's running price average and then runs `st_res_policy_evaluate_good_effect`, the single derivation site for `st_res_<GOOD>_policy_status`, whose no-hub branch is what writes status 9. Drop the else-branch call and a policy's explanation goes stale the moment the hub is destroyed. Never call the tick from a click path — the price average must advance once a week, not once per click.

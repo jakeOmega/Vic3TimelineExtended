@@ -11,7 +11,9 @@
 # (un_on_actions.txt) from a state that changes hands.
 #
 # A hand-over between the two sides of a civil war keeps the hub:
-# st_res_hub_stays_within_nation (st_res_triggers.txt) says why and how.
+# st_res_hub_stays_within_nation (st_res_triggers.txt) says why and how. A
+# kept hub outside its new owner's capital moves there at the next weekly
+# pulse (st_res_relocate_hub_to_capital_effect, st_res_effects.txt).
 # ============================================================================
 
 on_state_owner_change = {
