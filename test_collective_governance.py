@@ -153,5 +153,87 @@ class TriggerTests(unittest.TestCase):
             self.assertEqual(f.read(3), b"\xef\xbb\xbf")
 
 
+AMENDMENTS = _path("common", "amendments", "extra_amendments.txt")
+
+# Today's Direct Democracy law block, moved verbatim onto the amendment (spec §2).
+DIRECT_DEMOCRACY_PACKAGE = {
+    "country_must_have_movement_to_enact_laws_bool": "yes",
+    "political_movement_pop_attraction_mult": "1",
+    "political_movement_radicalism_add": "0.5",
+    "political_movement_radicalism_from_enactment_approval_mult": "-0.75",
+    "political_movement_radicalism_from_enactment_disapproval_mult": "-0.75",
+    "country_legitimacy_govt_total_votes_add": "30",
+    "state_political_strength_from_wealth_mult": "-0.25",
+    "country_law_enactment_success_add": "0.25",
+    "country_agitator_slots_add": "1",
+}
+
+EXPRESSION_MODIFIERS = {
+    "amendment_collective_direct_democracy": DIRECT_DEMOCRACY_PACKAGE,
+    "amendment_collective_leadership": {"country_coup_resistance_mult": "0.25"},
+    "amendment_collective_administration": {
+        "country_institution_size_change_speed_mult": "0.5",
+        "state_decree_cost_mult": "0.25",
+    },
+    "amendment_collective_free_federation": {
+        "country_must_have_movement_to_enact_laws_bool": "yes",
+        "political_movement_pop_attraction_mult": "0.5",
+    },
+    "amendment_collective_patrician_council": {
+        "country_aristocrats_pol_str_mult": "0.15",
+        "country_capitalists_pol_str_mult": "0.15",
+    },
+}
+
+
+class AmendmentTests(unittest.TestCase):
+    def setUp(self):
+        self.text = _read(AMENDMENTS)
+
+    def test_each_amendment_attaches_only_to_the_law(self):
+        for e in EXPRESSIONS:
+            with self.subTest(amendment=e.amendment):
+                body = _block(self.text, e.amendment)
+                self.assertEqual(_norm(_inner(body, "allowed_laws")), "law_direct_democracy")
+
+    def test_each_amendment_follows_its_trigger(self):
+        for e in EXPRESSIONS:
+            with self.subTest(amendment=e.amendment):
+                body = _block(self.text, e.amendment)
+                self.assertEqual(_norm(_inner(body, "possible")), f"{e.trigger} = yes")
+                self.assertEqual(
+                    _norm(_inner(body, "can_repeal")),
+                    "custom_tooltip = { text = COLLECTIVE_GOVERNANCE_TT_REPEAL "
+                    f"NOT = {{ {e.trigger} = yes }} }}",
+                )
+
+    def test_each_amendment_is_script_only(self):
+        for e in EXPRESSIONS:
+            with self.subTest(amendment=e.amendment):
+                body = _block(self.text, e.amendment)
+                self.assertEqual(_norm(_inner(body, "would_sponsor")), "always = no")
+                self.assertEqual(_norm(_inner(body, "ai_will_revoke")), "always = no")
+                self.assertRegex(body, r"amendment_activism_multiplier\s*=\s*0\b")
+                self.assertNotRegex(body, r"\bparent\s*=")
+
+    def test_modifiers(self):
+        for e in EXPRESSIONS:
+            with self.subTest(amendment=e.amendment):
+                body = _block(self.text, e.amendment)
+                self.assertEqual(_modifiers(_inner(body, "modifier")), EXPRESSION_MODIFIERS[e.amendment])
+
+    def test_no_stale_collective_amendment(self):
+        defined = {n for n in _top_level_names(self.text) if n.startswith("amendment_collective_")}
+        self.assertEqual(defined, {e.amendment for e in EXPRESSIONS})
+
+    def test_loc(self):
+        loc = _loc()
+        for e in EXPRESSIONS:
+            for key in (e.amendment, e.amendment + "_desc"):
+                with self.subTest(key=key):
+                    self.assertTrue(key in loc, f"no loc for {key}")
+        self.assertTrue("COLLECTIVE_GOVERNANCE_TT_REPEAL" in loc, "no loc for COLLECTIVE_GOVERNANCE_TT_REPEAL")
+
+
 if __name__ == "__main__":
     unittest.main()
