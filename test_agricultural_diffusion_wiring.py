@@ -2,14 +2,17 @@
 """Agricultural-diffusion backfill wiring (issue #460).
 
 The five agdiff_<tech> country modifiers (+130 % arable land between them)
-reach a country in one of two ways: the world-first broadcast, which only
-reaches countries that exist at that moment, or the stateless
-agdiff_backfill_diffusion_for_country, run from a set of on_action hooks. The
-rebels in a civil war are a new country object, and a revolution's winner
-inherits none of the loser's modifiers, so a hook that stops calling the
-backfill is a nation that loses its Green Revolution for the rest of the game.
-The engine says nothing. These tests pin every hook, and the first-mover
-restore that runs on the civil war's winner.
+reach a country in one of three ways: the world-first broadcast, which only
+reaches recognized countries that exist at that moment; the stateless
+agdiff_backfill_diffusion_for_country, run on new countries from the formation
+and release hooks; and, for the rebels in a civil war, a copy of what the
+original holds (agdiff_copy_diffusion_from_root). A revolution's winner
+inherits none of the loser's modifiers, so a hook that stops doing its part is
+a nation that loses its Green Revolution for the rest of the game, and the
+engine says nothing. These tests pin every hook, the rule that the civil-war
+paths give only what the nation had (the copy reads ROOT's modifiers, and the
+on_civil_war_won backstop is limited to recognized countries, the broadcast's
+filter), and the first-mover restore that runs on the civil war's winner.
 
 Run: python3 -m unittest test_agricultural_diffusion_wiring -v
 """
@@ -33,16 +36,18 @@ TECHS = {
 }
 
 BACKFILL = "agdiff_backfill_diffusion_for_country"
+COPY = "agdiff_copy_diffusion_from_root"
 
-# Hooks whose new country is scope:target (ROOT is the parent).
-TARGET_HOOKS = (
+# Hooks whose new country is scope:target and ROOT its parent. Released
+# countries get the global backfill (unfiltered, as before #460); the rebels
+# get a copy of what the original holds.
+RELEASE_HOOKS = (
     "on_country_released_as_independent",
     "on_country_released_as_own_subject",
     "on_country_released_as_overlord_subject",
     "on_country_released_as_company_subject",
-    "on_revolution_start",
-    "on_secession_start",
 )
+UPRISING_HOOKS = ("on_revolution_start", "on_secession_start")
 # Hooks whose country is ROOT.
 ROOT_HOOKS = ("on_country_formed", "on_civil_war_won")
 
@@ -127,8 +132,8 @@ class HookWiringTests(unittest.TestCase):
         self.assertTrue(names, f"{hook} hooks no agdiff on_action")
         return {n: _inner(_block(self.on_actions, n), "effect") for n in names}
 
-    def test_every_hook_runs_the_backfill(self):
-        for hook in TARGET_HOOKS + ROOT_HOOKS:
+    def test_new_countries_get_the_backfill(self):
+        for hook in RELEASE_HOOKS + ROOT_HOOKS:
             with self.subTest(hook=hook):
                 bodies = self._agdiff_effect_bodies(hook)
                 self.assertTrue(
@@ -136,10 +141,10 @@ class HookWiringTests(unittest.TestCase):
                     f"{hook} never reaches {BACKFILL}",
                 )
 
-    def test_target_hooks_backfill_the_new_country_guarded(self):
-        # The released or uprising country is scope:target; ROOT is its
-        # parent, which already has the modifiers.
-        for hook in TARGET_HOOKS:
+    def test_release_hooks_backfill_the_new_country_guarded(self):
+        # The released country is scope:target; ROOT is its parent, which
+        # already has the modifiers.
+        for hook in RELEASE_HOOKS:
             with self.subTest(hook=hook):
                 for name, body in self._agdiff_effect_bodies(hook).items():
                     self.assertRegex(body, r"scope:target\s*\?=\s*\{",
@@ -147,6 +152,33 @@ class HookWiringTests(unittest.TestCase):
                     target = _inner(body, "scope:target")
                     self.assertTrue(_calls(target, BACKFILL, self.effects),
                                     f"{name} does not backfill scope:target")
+
+    def test_rebels_get_a_copy_of_the_original_not_the_backfill(self):
+        # The winner continues the nation: the rebels get what the original
+        # holds, never what the global flags say, so an unrecognized nation's
+        # rebels gain nothing the broadcast never gave it.
+        for hook in UPRISING_HOOKS:
+            with self.subTest(hook=hook):
+                for name, body in self._agdiff_effect_bodies(hook).items():
+                    self.assertRegex(body, r"scope:target\s*\?=\s*\{",
+                                     f"{name} must scope into scope:target with ?=")
+                    target = _inner(body, "scope:target")
+                    self.assertTrue(_calls(target, COPY, self.effects),
+                                    f"{name} does not copy the original's diffusion")
+                    self.assertFalse(_calls(body, BACKFILL, self.effects),
+                                     f"{name} must not run the global backfill")
+
+    def test_copy_reads_the_originals_modifiers(self):
+        one = _block(self.effects, "agdiff_copy_one_tech_from_root")
+        limit = _inner(one, "limit")
+        self.assertRegex(limit, r"root\s*=\s*\{\s*has_modifier\s*=\s*agdiff_\$TECH\$\s*\}")
+        self.assertRegex(limit, r"NOT\s*=\s*\{\s*has_modifier\s*=\s*agdiff_\$TECH\$\s*\}")
+        self.assertNotIn("has_global_variable", one)
+        self.assertEqual(
+            set(re.findall(r"agdiff_copy_one_tech_from_root\s*=\s*\{\s*TECH\s*=\s*(\w+)",
+                           _block(self.effects, COPY))),
+            TECHS,
+        )
 
     def test_civil_war_won_repairs_the_winner_as_root(self):
         bodies = self._agdiff_effect_bodies("on_civil_war_won")
@@ -162,6 +194,20 @@ class HookWiringTests(unittest.TestCase):
             set(re.findall(r"agdiff_repoint_first_country\s*=\s*\{\s*TECH\s*=\s*(\w+)", repair)),
             TECHS,
         )
+
+    def test_civil_war_won_backfill_is_recognized_only(self):
+        # The backstop is for wars begun before the rebels got the copy. It
+        # uses the broadcast's own filter, so a winner of any other type
+        # (a loyalist one included) gains nothing its nation never had.
+        repair = _block(self.effects, "agdiff_repair_after_civil_war")
+        backfill_calls = re.findall(r"\b" + BACKFILL + r"\s*=\s*yes", repair)
+        self.assertEqual(len(backfill_calls), 1)
+        gated = _inner(repair, "if")
+        self.assertIsNotNone(gated)
+        self.assertRegex(_inner(gated, "limit"), r"is_country_type\s*=\s*recognized")
+        self.assertIn(BACKFILL + " = yes", gated)
+        broadcast = _block(self.effects, "agdiff_handle_tech_acquired_effect")
+        self.assertRegex(broadcast, r"is_country_type\s*=\s*recognized")
 
 
 class TechListTests(unittest.TestCase):
@@ -199,7 +245,7 @@ class FirstMoverTests(unittest.TestCase):
         limit = _inner(body, "limit")
         self.assertRegex(limit, r"NOT\s*=\s*\{\s*has_modifier\s*=\s*agdiff_first_mover_prestige\s*\}")
         self.assertIn("has_variable = agdiff_first_mover_month", limit)
-        self.assertRegex(limit, r"agdiff_first_mover_months_left\s*>\s*0")
+        self.assertRegex(limit, r"agdiff_first_mover_months_left\s*>\s*5")
         self.assertRegex(limit, r"root\s*\?=\s*this")
 
     def test_restore_matches_the_event_grant(self):
@@ -215,11 +261,24 @@ class FirstMoverTests(unittest.TestCase):
         self.assertEqual(grant_days, {"very_long_modifier_time"})
         self.assertTrue(all(re.search(r"is_decaying\s*=\s*yes", g) for g in grants))
 
-        restore = _inner(_block(self.effects, "agdiff_restore_first_mover_prestige"), "add_modifier")
-        self.assertIn("name = agdiff_first_mover_prestige", restore)
-        self.assertIn("days = very_long_modifier_time", restore)
-        self.assertIn("is_decaying = yes", restore)
-        self.assertIn("multiplier = agdiff_first_mover_strength_left", restore)
+        # The restore reads whole years left, to the nearest, off a ladder of
+        # literal durations: rung k covers 12k-6 .. 12k+5 months left, and its
+        # top rung is the grant's own very_long_modifier_time (7300 days).
+        restore = _block(self.effects, "agdiff_restore_first_mover_prestige")
+        rungs = re.findall(
+            r"limit\s*=\s*\{\s*agdiff_first_mover_months_left\s*>\s*(\d+)\s*\}\s*"
+            r"add_modifier\s*=\s*\{([^}]*)\}",
+            restore,
+        )
+        self.assertEqual(len(rungs), 20)
+        for k, (threshold, modifier) in zip(range(20, 0, -1), rungs):
+            with self.subTest(years=k):
+                self.assertEqual(int(threshold), 12 * k - 7)
+                self.assertIn("name = agdiff_first_mover_prestige", modifier)
+                self.assertRegex(modifier, r"days\s*=\s*%d\b" % (365 * k))
+                self.assertIn("multiplier = agdiff_first_mover_strength_left", modifier)
+                self.assertIn("is_decaying = yes", modifier)
+        self.assertEqual(len(re.findall(r"add_modifier", restore)), 20)
 
         values = _read(VALUES)
         total = _block(values, "agdiff_first_mover_months_total")
