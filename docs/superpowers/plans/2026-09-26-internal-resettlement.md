@@ -64,7 +64,7 @@ These are the failure modes the spec implies but that no static test fully exerc
 | `common/static_modifiers/resettlement_modifiers.txt` | Readouts, politics, Declaration and event modifiers | 4, 5, 6 |
 | `common/on_actions/resettlement_on_actions.txt` | Hooks the country pulse | 4 |
 | `common/decrees/extra_decrees.txt` | Recruitment Drive | 4 |
-| `common/scripted_effects/extra_effects.txt`, `common/on_actions/extra_on_actions.txt` | Old transfer removed | 4 |
+| `common/scripted_effects/extra_effects.txt`, `common/on_actions/extra_on_actions.txt` | Old transfer removed | 3 |
 | `events/resettlement_events.txt` | `resettlement.1`–`.9`, `.20` | 5, 6 |
 | `test_un_convention_registry.py` | `violation_modifiers` column | 5 |
 | `events/te_debug_resettlement_events.txt` | Console test event | 7 |
@@ -782,7 +782,7 @@ Claude-Session: https://claude.ai/code/session_01T1qW8R8hupnD5XBr5jhEoa"
 
 ### Task 3: The Settlement Authority and its production methods
 
-This replaces the camp and colony building definitions, all their PMs and PM groups, and the camp's level cap. The monthly transfer still points at the old effect until Task 4; nothing runs the new PMs yet, but the building, costs and destination effects are complete.
+This replaces the camp and colony building definitions, all their PMs and PM groups, the camp's level cap, and the old monthly transfer. The task ends with the old system gone and the new building complete but inert (costs and destination effects apply, but nobody moves) until Task 4 adds the pulse.
 
 **Files:**
 - Rewrite: `common/buildings/resettlement.txt`
@@ -792,6 +792,8 @@ This replaces the camp and colony building definitions, all their PMs and PM gro
 - Modify: `common/static_modifiers/extra_modifiers.txt:14` (`base_values` colony cap 1 → 5)
 - Modify: `common/technology/technologies/modified.txt` (`nationalism`, `civilizing_mission`, `mass_propaganda` INJECTs), `era_6.txt` (`keynesian_economics`), `era_7.txt` (`civil_rights_movement`): camp cap → colony cap
 - Modify: `common/_meta/duplicate_image_allowlist.yml:47` (drop `building_resettlement_camp`)
+- Modify: `common/scripted_effects/extra_effects.txt` (delete the `# Resettlement Population Transfer` header comment and `resettlement_transfer_effect`, about lines 1086–1135)
+- Modify: `common/on_actions/extra_on_actions.txt` (delete `resettlement_transfer_on_action` from `on_monthly_pulse_state`'s list at about line 319, and its definition with its comment header at about lines 2598–2613)
 - Modify: `localization/english/te_buildings_l_english.yml`, `te_production_methods_l_english.yml`, `te_modifiers_l_english.yml`, `te_miscellaneous_l_english.yml`
 - Modify: `test_resettlement_programme_registry.py` (add `PROGRAMMES`, `SETTLEMENTS`, `TRANSPORTS` and four test classes)
 
@@ -1027,12 +1029,10 @@ class OldSystemGoneTests(unittest.TestCase):
                     self.assertNotRegex(text, rf"(?<![\w]){name}(?![\w])", f"{name} in {path.relative_to(ROOT)}")
 ```
 
-`OldSystemGoneTests` also names `resettlement_transfer_effect` and `resettlement_transfer_on_action`, which Task 4 removes. The test fails until the end of Task 4. That's intended: it's the checklist for Task 4's cleanup. Run it by name only from Task 4 on.
-
 - [ ] **Step 2: Run the tests to confirm they fail**
 
-Run: `python3 -m unittest test_resettlement_programme_registry.GroupTests test_resettlement_programme_registry.ProgrammeTests test_resettlement_programme_registry.SettlementAndTransportTests test_resettlement_programme_registry.PmHygieneTests test_resettlement_programme_registry.BuildingTests -v`
-Expected: FAIL (groups list the old PMs; `pm_resettlement_land_grants` is missing).
+Run: `python3 -m unittest test_resettlement_programme_registry -v`
+Expected: FAIL (groups list the old PMs; `pm_resettlement_land_grants` is missing; the old names are still present).
 
 - [ ] **Step 3: Rewrite the building**
 
@@ -1760,6 +1760,13 @@ pm_resettlement_airlift = {
 
 Verify: `git grep -n "resettlement_camp" -- common localization` should print only the loc lines Step 7 removes.
 
+- [ ] **Step 6b: Remove the old transfer**
+
+- `common/scripted_effects/extra_effects.txt`: delete from the comment line `# Resettlement Population Transfer` (with the `# ===` rule above it) through the closing brace of `resettlement_transfer_effect`. Leave the `# Antimatter Facility Construction Effect` header that follows.
+- `common/on_actions/extra_on_actions.txt`: delete the `resettlement_transfer_on_action` line from `on_monthly_pulse_state`'s `on_actions` list, and delete the `# ---- Resettlement Population Transfer (state scope, monthly) ----` comment block with the `resettlement_transfer_on_action = { … }` definition.
+
+Verify: `git grep -n "resettlement_transfer_effect\|resettlement_transfer_on_action" -- common events docs/systems` prints only `docs/systems/mod_systems.md:1057`, which Task 8 updates.
+
 - [ ] **Step 7: Localization**
 
 In `localization/english/te_buildings_l_english.yml`, delete `building_resettlement_camp` and replace `building_resettlement_colony` with:
@@ -1829,9 +1836,9 @@ The `[SCOPE.ScriptValue(...)]` form must render in a building's `possible` toolt
 
 - [ ] **Step 8: Run the tests to confirm they pass**
 
-Run: `python3 -m unittest test_resettlement_programme_registry.FrontierTests test_resettlement_programme_registry.GroupTests test_resettlement_programme_registry.ProgrammeTests test_resettlement_programme_registry.SettlementAndTransportTests test_resettlement_programme_registry.PmHygieneTests test_resettlement_programme_registry.BuildingTests -v`
-Expected: all pass. (`OldSystemGoneTests` still fails on `resettlement_transfer_effect` / `_on_action`; Task 4 fixes it.)
-Run: `python3 scripts/format_paradox_tabs.py --check common/buildings/resettlement.txt common/production_method_groups/resettlement_pmgs.txt common/production_methods/resettlement_pms.txt && python3 scripts/analysis/check_localization_files.py`
+Run: `python3 -m unittest test_resettlement_programme_registry -v`
+Expected: all pass, including `OldSystemGoneTests`.
+Run: `python3 scripts/format_paradox_tabs.py --check common/buildings/resettlement.txt common/production_method_groups/resettlement_pmgs.txt common/production_methods/resettlement_pms.txt common/scripted_effects/extra_effects.txt common/on_actions/extra_on_actions.txt && python3 scripts/analysis/check_localization_files.py`
 Expected: exit 0.
 
 - [ ] **Step 9: Commit**
@@ -1841,7 +1848,8 @@ git add common/buildings/resettlement.txt common/production_method_groups/resett
         common/production_methods/resettlement_pms.txt common/modifier_type_definitions/mod_entity_modifier_types.txt \
         common/static_modifiers/extra_modifiers.txt common/technology/technologies/modified.txt \
         common/technology/technologies/era_6.txt common/technology/technologies/era_7.txt \
-        common/_meta/duplicate_image_allowlist.yml localization/english/te_buildings_l_english.yml \
+        common/_meta/duplicate_image_allowlist.yml common/scripted_effects/extra_effects.txt \
+        common/on_actions/extra_on_actions.txt localization/english/te_buildings_l_english.yml \
         localization/english/te_production_methods_l_english.yml localization/english/te_modifiers_l_english.yml \
         localization/english/te_miscellaneous_l_english.yml test_resettlement_programme_registry.py
 git commit -m "feat(resettlement): the Settlement Authority and its fifteen production methods
@@ -1849,7 +1857,8 @@ git commit -m "feat(resettlement): the Settlement Authority and its fifteen prod
 One destination building (key kept for saves) with Program, Settlement and
 Transport groups. Capacity is half level-, half workforce-scaled so a sparse
 frontier cannot stall it; multipliers only unscaled; no IG approval in PMs.
-The camp, its PMs and its level cap are gone; the cap is now 5 + 5 per tech.
+The camp, its PMs, its level cap and the old transfer are gone; the cap is now
+5 + 5 per tech. Nobody moves until the next commit adds the pulse.
 
 Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01T1qW8R8hupnD5XBr5jhEoa"
@@ -1864,8 +1873,7 @@ This task makes the Settlement Authority move people. It adds:
 - deaths in transit and source unrest;
 - land pressure on existing inhabitants;
 - the three readout modifiers and the frontier closure (with its notification, `resettlement.9`);
-- the Recruitment Drive decree;
-- removal of the old transfer.
+- the Recruitment Drive decree.
 
 **Files:**
 - Create: `common/scripted_effects/resettlement_effects.txt`
@@ -1875,8 +1883,6 @@ This task makes the Settlement Authority move people. It adds:
 - Modify: `common/scripted_triggers/resettlement_triggers.txt`, `common/script_values/resettlement_values.txt` (append)
 - Modify: `common/modifier_type_definitions/mod_entity_modifier_types.txt` (three readout types, after `state_resettlement_transfer_add`)
 - Modify: `common/decrees/extra_decrees.txt` (append the drive)
-- Modify: `common/scripted_effects/extra_effects.txt` (delete the `# Resettlement Population Transfer` header comment and `resettlement_transfer_effect`, about lines 1086–1135)
-- Modify: `common/on_actions/extra_on_actions.txt` (delete `resettlement_transfer_on_action` from `on_monthly_pulse_state`'s list at about line 319, and its definition with its comment header at about lines 2598–2613)
 - Modify: loc in `te_buildings`, `te_modifiers`, `te_miscellaneous`, `te_decrees` and `te_events`
 - Modify: `test_resettlement_programme_registry.py` (add `TransferTests`)
 
@@ -2034,8 +2040,8 @@ class TransferTests(unittest.TestCase):
 
 - [ ] **Step 2: Run the tests to confirm they fail**
 
-Run: `python3 -m unittest test_resettlement_programme_registry.TransferTests test_resettlement_programme_registry.OldSystemGoneTests -v`
-Expected: ERROR/FAIL (`resettlement_effects.txt` missing; the old transfer still present).
+Run: `python3 -m unittest test_resettlement_programme_registry.TransferTests -v`
+Expected: ERROR (`resettlement_effects.txt` missing).
 
 - [ ] **Step 3: Append the triggers**
 
@@ -2440,6 +2446,11 @@ resettlement_run_destination = {
 
 # State scope: a source. scope:rs_country and scope:rs_destination saved.
 # $CAP$: the script value naming the share of each eligible pop it may give.
+# Moving pops from inside every_scope_pop is vanilla's own pattern (the
+# Hokkaido settlement events do it); leave it. Penal Transportation's premise
+# (it drains radicals) assumes move_partial_pop carries a pop's radical share
+# with the people it moves; that is engine question 5, unverified until the
+# in-game check.
 resettlement_take_from_source = {
 	save_scope_as = rs_source
 	set_variable = { name = rs_taken_now value = 0 }
@@ -2592,7 +2603,9 @@ resettlement_land_pressure = {
 # State scope. Applies $EFFECT$ (add_radicals_in_state or add_loyalists_in_state)
 # at $VALUE$, once for each culture here that has pops below second-class
 # acceptance. The land-pressure consequence and event resettlement.8 use it;
-# it never decides who moves.
+# it never decides who moves. rs_pressed_culture is re-saved on every pop, as
+# the 2024 migration code did; if a reload ever logs a "scope already saved"
+# error here, switch to save_temporary_scope_as.
 resettlement_touch_pressed_cultures = {
 	save_scope_as = rs_touch_state
 	every_scope_pop = {
@@ -2900,31 +2913,23 @@ resettlement.9 = {
  resettlement.9.a:0 "A new chapter."
 ```
 
-- [ ] **Step 9: Remove the old transfer**
-
-- `common/scripted_effects/extra_effects.txt`: delete from the comment line `# Resettlement Population Transfer` (with the `# ===` rule above it) through the closing brace of `resettlement_transfer_effect`. Leave the `# Antimatter Facility Construction Effect` header that follows.
-- `common/on_actions/extra_on_actions.txt`: delete the `resettlement_transfer_on_action` line from `on_monthly_pulse_state`'s `on_actions` list, and delete the `# ---- Resettlement Population Transfer (state scope, monthly) ----` comment block with the `resettlement_transfer_on_action = { … }` definition.
-
-Verify: `git grep -n "resettlement_transfer_effect\|resettlement_transfer_on_action" -- common events docs/systems` prints only `docs/systems/mod_systems.md:1057`, which Task 8 updates.
-
-- [ ] **Step 10: Run the tests to confirm they pass**
+- [ ] **Step 9: Run the tests to confirm they pass**
 
 Run: `python3 -m unittest test_resettlement_programme_registry -v`
-Expected: all classes pass, including `OldSystemGoneTests`.
-Run: `python3 scripts/format_paradox_tabs.py --check common/scripted_effects/resettlement_effects.txt common/static_modifiers/resettlement_modifiers.txt common/on_actions/resettlement_on_actions.txt events/resettlement_events.txt common/scripted_triggers/resettlement_triggers.txt common/script_values/resettlement_values.txt common/decrees/extra_decrees.txt common/modifier_type_definitions/mod_entity_modifier_types.txt common/scripted_effects/extra_effects.txt common/on_actions/extra_on_actions.txt && python3 scripts/analysis/check_localization_files.py`
+Expected: all classes pass.
+Run: `python3 scripts/format_paradox_tabs.py --check common/scripted_effects/resettlement_effects.txt common/static_modifiers/resettlement_modifiers.txt common/on_actions/resettlement_on_actions.txt events/resettlement_events.txt common/scripted_triggers/resettlement_triggers.txt common/script_values/resettlement_values.txt common/decrees/extra_decrees.txt common/modifier_type_definitions/mod_entity_modifier_types.txt && python3 scripts/analysis/check_localization_files.py`
 Expected: exit 0.
 Run the offline strict audits that read these files:
 `for a in modifier_multiplier_var_audit prev_scope_audit iterator_limit_audit any_limit_audit event_image_audit orphaned_event_audit; do python3 $a.py --strict || echo "FAIL $a"; done`
 Expected: no `FAIL` line. If `iterator_limit_audit` flags the `ordered_scope_state` `limit` blocks, read its report; its suppression goes on the `limit = {` line (`# REVIEWED 2026-09-26: ordered walk, limit filters the list`), and only if the flag is a false positive.
 
-- [ ] **Step 11: Commit**
+- [ ] **Step 10: Commit**
 
 ```bash
 git add common/scripted_effects/resettlement_effects.txt common/static_modifiers/resettlement_modifiers.txt \
         common/on_actions/resettlement_on_actions.txt events/resettlement_events.txt \
         common/scripted_triggers/resettlement_triggers.txt common/script_values/resettlement_values.txt \
         common/modifier_type_definitions/mod_entity_modifier_types.txt common/decrees/extra_decrees.txt \
-        common/scripted_effects/extra_effects.txt common/on_actions/extra_on_actions.txt \
         localization/english/te_buildings_l_english.yml localization/english/te_modifiers_l_english.yml \
         localization/english/te_miscellaneous_l_english.yml localization/english/te_decrees_l_english.yml \
         localization/english/te_events_l_english.yml test_resettlement_programme_registry.py
@@ -2934,7 +2939,7 @@ One country pulse walks each Authority's sources in order of eligible
 population (drive states first), moves exactly the displayed capacity with
 move_partial_pop, removes deaths in transit in steps of 100, radicalizes
 those left behind and those pressed at the frontier, and closes full
-frontiers. Replaces resettlement_transfer_effect and its on_action.
+frontiers.
 
 Co-Authored-By: Claude Opus 5.5 (1M context) <noreply@anthropic.com>
 Claude-Session: https://claude.ai/code/session_01T1qW8R8hupnD5XBr5jhEoa"
@@ -3305,6 +3310,8 @@ resettlement.20 = {
 ```
 
 - [ ] **Step 7: The UN registry column**
+
+Checked while planning: no test uses `Convention._fields`, `_asdict`, `_replace` or unpacks a row by position (other files only read attributes), so a trailing field with a default is safe.
 
 In `test_un_convention_registry.py`:
 - Add to the column comment above `Convention`:
@@ -3973,6 +3980,9 @@ resettlement.7 = {
 					limit = {
 						strata = lower
 						NOT = { is_pop_type = slaves }
+						# 5% of 2,000 is the walk's 100-person minimum:
+						# smaller pops stay, so the source is not splintered.
+						total_size >= 2000
 					}
 					move_partial_pop = {
 						state = scope:rs_return_state
@@ -4489,19 +4499,26 @@ python3 event_image_audit.py --strict && echo images-ok
 
 - [ ] **Step 3: A reload from a second server**
 
-Follow `docs/guides/python_tools.md` § "Starting the Server" to start a server **from the worktree** on another port. Never POST to the main checkout's server (port 8950): its regenerators would rewrite the main checkout. Then:
+Start a server **from the worktree** on port 8951 (`docs/guides/python_tools.md` § "Starting the Server"). Never POST to the main checkout's server (port 8950): its regenerators would rewrite the main checkout. `PORT` is a module constant with no CLI flag, so it is set before `main()`. Run this as a background task (`run_in_background`, not `&`):
 
 ```bash
-curl -s -X POST "http://localhost:<port>/reload?mod_only=true&audits_only=true" | python3 -c "
+cd ~/src/Vic3TE-internal-resettlement && cp ~/src/Vic3TimelineExtended/paths.local.json .
+VIC3_SKIP_DIGESTS_FETCH=1 ~/src/Vic3TimelineExtended/.venv/bin/python -c "import mod_state_server as m; m.PORT=8951; m.main()"
+```
+
+When `curl -s http://127.0.0.1:8951/status` answers:
+
+```bash
+curl -s -X POST "http://127.0.0.1:8951/reload?mod_only=true&audits_only=true" | python3 -c "
 import json,sys; r=json.load(sys.stdin)
 print('parse_failures', r.get('parse_failures')); print('warnings', len(r.get('warnings', [])))
 [print(w.get('label'), str(w)[:300]) for w in r.get('warnings', []) if 'resettle' in json.dumps(w).lower() or 'region_area' in json.dumps(w).lower()]"
-curl -s "http://localhost:<port>/modifier-search?q=resettlement" | python3 -c "import json,sys; print(json.load(sys.stdin)['matching_modifier_names'])"
+curl -s "http://127.0.0.1:8951/modifier-search?q=resettlement" | python3 -c "import json,sys; print(json.load(sys.stdin)['matching_modifier_names'])"
 ```
 
 Expected: `parse_failures` empty; no warning mentioning resettlement or region_area; the modifier list includes `building_resettlement_arrivals_add`, `building_resettlement_transit_deaths_add`, `state_resettlement_recruits_add` and `state_resettlement_transfer_add`. Then check `docs/engine/loc_coverage_report.md` and `docs/engine/modifier_visibility_report.md` in the worktree for any line naming a `resettlement` key. Fix any real finding; don't commit the regenerated `docs/engine/*` churn.
 
-Stop the second server afterwards.
+Stop it with `kill $(cat mod_state_server.pid)` from the worktree (not `pkill -f`, which matches its own shell), then `git checkout -- docs/engine/` and delete the copied `paths.local.json` if `git status` lists it.
 
 - [ ] **Step 4: The PR body with the in-game checklist**
 
