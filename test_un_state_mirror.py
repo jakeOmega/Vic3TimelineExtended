@@ -14,6 +14,8 @@ import os
 import re
 import unittest
 
+from test_un_convention_registry import COUNTRY_CONVENTION, JE_CONVENTION
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -62,19 +64,8 @@ JE_COST = [
     "un_peacekeeping_contributor_cost",
     "un_development_contributor_cost",
 ]
-JE_CONVENTION = [
-    "un_human_rights_declaration_modifier",
-    "un_nonproliferation_modifier",
-    "un_climate_binding_modifier",
-    "un_heritage_program_modifier",
-    "un_pandemic_cooperation_modifier",
-    "un_refugee_program_modifier",
-    "un_space_partnership_modifier",
-]
-COUNTRY_CONVENTION = [
-    "un_law_of_sea_modifier",
-    "un_icc_member_modifier",
-]
+# The convention member modifiers, on the journal entry and on the country
+# (test_un_convention_registry.CONVENTIONS is the single list).
 MIRRORED = JE_PLAIN + JE_COST + JE_CONVENTION + COUNTRY_CONVENTION
 
 # Which names each helper may be called with.

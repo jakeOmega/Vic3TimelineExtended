@@ -11,6 +11,8 @@ import os
 import re
 import unittest
 
+from test_un_convention_registry import AGENCIES
+
 REPO = os.path.dirname(os.path.abspath(__file__))
 
 
@@ -366,7 +368,7 @@ class ConventionCatchUpTests(unittest.TestCase):
         effects = _read(_path("common", "scripted_effects", "un_membership_effects.txt"))
         triggers = _read(TRIGGERS)
         expected = self._in_force()
-        self.assertEqual(len(expected), 9)
+        self.assertEqual(expected, set(AGENCIES.values()))
         self.assertEqual(_agencies(_block(effects, "un_rep_convention_snapshot")), expected)
         self.assertEqual(_agencies(_block(effects, "un_rep_convention_forget")), expected)
         self.assertEqual(_agencies(_block(triggers, "un_rep_any_convention_missed")), expected)
