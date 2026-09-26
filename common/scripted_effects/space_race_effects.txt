@@ -1375,6 +1375,10 @@ sr_record_probe_result = {
 #     sr_ambitious_<m>, by sr_sync_<m>_entry.
 #   - sr_choice_* (entry): from the choice variable (sr_orbital_military, ...),
 #     by sr_sync_<m>_entry.
+#   - sr_colony_* (solar colonization entry): from <modifier>_held, by
+#     sr_sync_solar_colonization_entry.
+#   - sr_solar_system_trade (solar colonization entry): from
+#     sr_completed_solar_colonization, by sr_sync_solar_colonization_entry.
 #
 # Country modifiers come back at on_civil_war_won (ROOT = the winner, after the
 # merge; common/on_actions/space_race_on_actions.txt). Journal-entry modifiers
@@ -1455,6 +1459,34 @@ sr_sync_probe_data = {
 		sr_sync_probe_data_base = { MODIFIER = sr_probe_astro_wonders_data }
 		sr_sync_probe_data_base = { MODIFIER = sr_probe_biological_data    }
 		sr_sync_probe_data_base = { MODIFIER = sr_probe_intelligence_data  }
+	}
+}
+
+# A colony's specialisation: one of 68 modifiers on the solar colonization
+# entry, granted by an option of space_race_colony_events.1-34. Recorded as
+# <modifier>_held in the same effect. Country scope.
+sr_grant_colony_modifier = {
+	je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }
+	set_variable = { name = $MODIFIER$_held value = yes }
+}
+
+# Country scope. One colony modifier, both ways, as sr_sync_probe_data_base.
+# The entry is open whenever a colony is held (its `possible`), so both
+# directions can always reach it.
+sr_sync_colony_modifier_base = {
+	if = {
+		limit = {
+			NOT = { has_variable = $MODIFIER$_held }
+			je:je_space_race_solar_colonization ?= { has_modifier = $MODIFIER$ }
+		}
+		set_variable = { name = $MODIFIER$_held value = yes }
+	}
+	else_if = {
+		limit = {
+			has_variable = $MODIFIER$_held
+			je:je_space_race_solar_colonization ?= { NOT = { has_modifier = $MODIFIER$ } }
+		}
+		je:je_space_race_solar_colonization = { add_modifier = { name = $MODIFIER$ } }
 	}
 }
 
@@ -1552,6 +1584,88 @@ sr_sync_interstellar_probe_entry = {
 sr_sync_solar_colonization_entry = {
 	sr_sync_approach_modifier_base = { MILESTONE = solar_colonization APPROACH = safe      }
 	sr_sync_approach_modifier_base = { MILESTONE = solar_colonization APPROACH = ambitious }
+	# Only a colony holder has any, and its entry is always open.
+	if = {
+		limit = { sr_has_space_colony = yes }
+		# The colony specialisations, in space_race_colony_events order.
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_valles_marineris_research }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_valles_marineris_mining   }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_olympus_mons_atmospheric  }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_olympus_mons_geothermal   }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_hellas_settlement         }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_hellas_astrobiology       }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_utopia_ice                }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_utopia_agriculture        }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_arcadia_civilian          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_arcadia_military          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ceres_waystation          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ceres_observatory         }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_vesta_mining              }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_vesta_science             }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_psyche_industrial         }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_psyche_careful            }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_pallas_composites         }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_pallas_observatory        }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_hygiea_volatiles          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_hygiea_automated          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_io_mining                 }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_io_research               }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_europa_drilling           }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_europa_surface            }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ganymede_settlement       }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ganymede_command          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_callisto_gateway          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_callisto_agricultural     }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_himalia_telescope         }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_himalia_depot             }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_amalthea_physics          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_amalthea_rings            }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_venus_atmospheric         }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_venus_extraction          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_mercury_solar             }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_mercury_ice               }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_titan_hydrocarbons        }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_titan_prebiotic           }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_enceladus_astrobiology    }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_enceladus_water           }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_rhea_propellant           }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_rhea_observation          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_mimas_installation        }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_mimas_gravity             }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_iapetus_ridge             }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_iapetus_organics          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_titania_mining            }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_titania_geophysics        }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_oberon_relay              }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_oberon_research           }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_miranda_rupes             }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_miranda_drilling          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ariel_cryovolcanic        }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_ariel_quarrying           }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_triton_geyser             }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_triton_gateway            }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_proteus_probe             }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_proteus_extraction        }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_pluto_research            }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_pluto_harvesting          }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_eris_selfsufficiency      }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_eris_monitoring           }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_makemake_chemistry        }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_makemake_solarwind        }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_haumea_dynamics           }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_haumea_rings              }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_sedna_outpost             }
+		sr_sync_colony_modifier_base = { MODIFIER = sr_colony_sedna_interstellar        }
+		# The all-colonies reward: the entry's pulse adds it in the block that
+		# sets sr_completed_solar_colonization, so the variable alone records it.
+		if = {
+			limit = {
+				has_variable = sr_completed_solar_colonization
+				je:je_space_race_solar_colonization ?= { NOT = { has_modifier = sr_solar_system_trade } }
+			}
+			je:je_space_race_solar_colonization = { add_modifier = { name = sr_solar_system_trade } }
+		}
+	}
 }
 
 sr_sync_space_race_entries = {

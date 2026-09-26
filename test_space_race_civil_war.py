@@ -176,6 +176,17 @@ class RewardTests(unittest.TestCase):
         synced = set(re.findall(r"MODIFIER = (\w+)", _block(EFFECTS, "sr_sync_probe_data")))
         self.assertEqual(synced, defined)
 
+    def test_colony_modifiers_are_recorded(self):
+        text = _read("events", "space_race_colony_events.txt")
+        self.assertNotRegex(text, r"je:je_space_race_solar_colonization\s*=\s*\{\s*add_modifier")
+        granted = re.findall(r"sr_grant_colony_modifier = \{ MODIFIER = (\w+) \}", text)
+        self.assertEqual(len(granted), 68)
+        synced = re.findall(r"sr_sync_colony_modifier_base = \{ MODIFIER = (\w+)\s*\}",
+                            _block(EFFECTS, "sr_sync_solar_colonization_entry"))
+        self.assertEqual(sorted(synced), sorted(set(granted)))
+        defined = set(re.findall(r"^(sr_colony_\w+) = \{", MODIFIERS, re.M))
+        self.assertEqual(set(granted), defined)
+
 
 if __name__ == "__main__":
     unittest.main()
