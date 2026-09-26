@@ -204,8 +204,9 @@ st_res_record_hub_holder_effect = {
 # and it cannot be demolished, so the reserve moves it: a level-1 hub is
 # created in the capital for free, and every hub outside the capital is
 # removed once the capital's stands. The stock lives on country variables and
-# does not move. The new building hires its staff from scratch, so flow runs
-# below capacity until it fills.
+# does not move. The new building hires its 5000 staff from scratch: until it
+# is staffed, flow runs below capacity and the entry reads as deactivated
+# (st_res_hub_workforce_cached), so each move costs the reserve some weeks.
 #
 # Two steps, each safe to repeat, so that no hub is removed before its
 # replacement is seen. Whether create_building's result is visible to
@@ -237,7 +238,7 @@ st_res_relocate_hub_to_capital_effect = {
 			}
 		}
 		remove_variable = st_res_hub_relocating
-		debug_log = "TE_ST_RES: a Strategic Reserve Hub outside the capital was rebuilt in the capital"
+		debug_log = "TE_ST_RES: creating a Strategic Reserve Hub in the capital to replace one outside it"
 	}
 	# Step 2: the capital has its hub: remove every other one.
 	if = {
