@@ -1,0 +1,48 @@
+﻿# ============================================================================
+# TEMPORARY PROBE: which loc accessors print a variable inside debug_log?
+# ============================================================================
+# Delete this file and common/script_values/te_debug_probe_values.txt once a
+# launch has logged the TE_PROBE_LOC lines (search debug.log for TE_PROBE_LOC).
+#
+# Why. In debug_log, ROOT does not resolve and SCOPE.sCountry(...).MakeScope.Var
+# printed a silent 0 on a dead country (2026-09-26 log triage). Nobody has seen
+# GetVariable(...) print anything, and vanilla loc never uses it, yet three
+# debug lines (decolonization.txt, te_debug_colonial_empire_events.txt) and the
+# GW_AI_WILL readout (te_debug_gw_effects.txt) depend on it. Each line below
+# prints the same known value, 7, through one accessor. A line that prints 7
+# works; a blank, a 0 or a "Data error in loc string" line means it doesn't.
+#
+# Fires once per save (the global marker is kept), for a human player's
+# country, on its first monthly pulse after the load. te_probe_loc_value stays
+# on that country: a debug_log renders as it runs, but removing the variable in
+# the same block would make a deferred render read 0 and look like a failure.
+# ============================================================================
+
+on_monthly_pulse_country = {
+	on_actions = {
+		te_debug_probe_loc_accessors
+	}
+}
+
+te_debug_probe_loc_accessors = {
+	effect = {
+		if = {
+			limit = {
+				is_ai = no
+				NOT = { has_global_variable = te_probe_loc_accessors_done }
+			}
+			set_global_variable = { name = te_probe_loc_accessors_done value = 1 }
+			set_variable = { name = te_probe_loc_value value = 7 }
+			save_scope_as = te_probe_country
+			debug_log = "TE_PROBE_LOC 0 control: every line below should end in 7"
+			debug_log = "TE_PROBE_LOC 1 THIS.GetVariable (the colonial and decolonization debug lines): [THIS.GetVariable('te_probe_loc_value').GetValue]"
+			debug_log = "TE_PROBE_LOC 2 SCOPE.sCountry().GetVariable (the GW_AI_WILL readout): [SCOPE.sCountry('te_probe_country').GetVariable('te_probe_loc_value').GetValue]"
+			debug_log = "TE_PROBE_LOC 3 THIS.GetCountry.MakeScope.Var (vanilla loc's form): [THIS.GetCountry.MakeScope.Var('te_probe_loc_value').GetValue|0]"
+			debug_log = "TE_PROBE_LOC 4 SCOPE.sCountry().MakeScope.Var (on a live country): [SCOPE.sCountry('te_probe_country').MakeScope.Var('te_probe_loc_value').GetValue|0]"
+			debug_log = "TE_PROBE_LOC 5 THIS.Var: [THIS.Var('te_probe_loc_value').GetValue|0]"
+			debug_log = "TE_PROBE_LOC 6 SCOPE.ScriptValue wrapper (the documented workaround): [SCOPE.ScriptValue('te_probe_loc_value_sv')|0]"
+			debug_log = "TE_PROBE_LOC 7 THIS.GetCountry.MakeScope.ScriptValue wrapper (vanilla loc's form): [THIS.GetCountry.MakeScope.ScriptValue('te_probe_loc_value_sv')|0]"
+			debug_log = "TE_PROBE_LOC 8 SCOPE.sCountry().MakeScope.ScriptValue wrapper (for a saved country): [SCOPE.sCountry('te_probe_country').MakeScope.ScriptValue('te_probe_loc_value_sv')|0]"
+		}
+	}
+}

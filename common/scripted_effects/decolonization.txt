@@ -980,7 +980,7 @@ colonial_empire_effect_planned_decolonization = {
 			save_scope_as = decolonization_target_state
 		}
 		set_variable = decolonization_path_planned
-		debug_log = "DECOL_DEBUG: ce_planned_decolonization clicked, scope:decolonization_target_state=[SCOPE.sState('decolonization_target_state').GetName] count=[ROOT.GetVariable('decolonization_planned_count').GetValue], firing confirm_release_planned"  # DEBUG_DECOLONIZATION_TRACE
+		debug_log = "DECOL_DEBUG: ce_planned_decolonization clicked, scope:decolonization_target_state=[SCOPE.sState('decolonization_target_state').GetName] count=[THIS.GetVariable('decolonization_planned_count').GetValue], firing confirm_release_planned"  # DEBUG_DECOLONIZATION_TRACE
 		trigger_event = { id = decolonization_events.401 popup = yes }
 	}
 

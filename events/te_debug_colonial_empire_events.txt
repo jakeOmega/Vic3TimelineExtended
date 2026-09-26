@@ -87,7 +87,7 @@ te_debug_colonial_empire.1 = { # REVIEWED 2026-09-18: console-only test event (`
 	option = {
 		name = te_debug_colonial_empire.1.opt_f
 		colonial_empire_refresh_display = yes
-		debug_log = "COLONIAL_DEBUG: tier=[ROOT.GetVariable('colonial_empire_tier').GetValue] next_boundary=[ROOT.GetVariable('colonial_empire_next_boundary').GetValue] bucket=[ROOT.GetVariable('colonial_empire_bar_bucket').GetValue] total=[ROOT.GetVariable('colonial_empire_d_total').GetValue]"
+		debug_log = "COLONIAL_DEBUG: tier=[THIS.GetVariable('colonial_empire_tier').GetValue] next_boundary=[THIS.GetVariable('colonial_empire_next_boundary').GetValue] bucket=[THIS.GetVariable('colonial_empire_bar_bucket').GetValue] total=[THIS.GetVariable('colonial_empire_d_total').GetValue]"
 	}
 }
 
@@ -186,6 +186,6 @@ te_debug_colonial_empire.2 = { # REVIEWED 2026-09-18: console-only test event (`
 	option = {
 		name = te_debug_colonial_empire.2.g
 		colonial_empire_refresh_display = yes
-		debug_log = "COLONIAL_DEBUG: eligible=[ROOT.GetVariable('colonial_empire_eligible_count').GetValue] round_table_ok=[ROOT.GetVariable('colonial_empire_round_table_count').GetValue] overreach=[ROOT.GetVariable('colonial_empire_d_overreach').GetValue] gp=[ROOT.GetVariable('colonial_empire_d_gp').GetValue] acceptance=[ROOT.GetVariable('colonial_empire_d_acceptance').GetValue]"
+		debug_log = "COLONIAL_DEBUG: eligible=[THIS.GetVariable('colonial_empire_eligible_count').GetValue] round_table_ok=[THIS.GetVariable('colonial_empire_round_table_count').GetValue] overreach=[THIS.GetVariable('colonial_empire_d_overreach').GetValue] gp=[THIS.GetVariable('colonial_empire_d_gp').GetValue] acceptance=[THIS.GetVariable('colonial_empire_d_acceptance').GetValue]"
 	}
 }
