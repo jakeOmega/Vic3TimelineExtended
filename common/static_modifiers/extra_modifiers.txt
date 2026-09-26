@@ -4982,6 +4982,7 @@ demilitarized_zone_state_modifier = {
 	state_conscription_rate_mult = -1.0
 	state_building_barrack_max_level_add = -1000
 	state_building_naval_fortification_max_level_add = -1000
+	state_building_military_base_max_level_add = -1000
 }
 # ============================================================
 # COMMAND ECONOMY: Planning & Allocation Tools

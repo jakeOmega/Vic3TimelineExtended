@@ -1,7 +1,8 @@
 ﻿# =================================================================
 # TREATY ARTICLE: demilitarized_zone
 # Forbids military buildings in a specific state, preventing
-# barracks and naval bases from being constructed or maintained.
+# barracks, naval bases and military bases from being constructed or
+# maintained.
 # Historical: Rhineland DMZ, Korean DMZ, Sinai after Camp David,
 # Åland Islands, Black Sea limitations (Treaty of Paris 1856).
 # =================================================================
@@ -76,6 +77,9 @@ demilitarized_zone = {
 					add_modifier = {
 						name = demilitarized_zone_state_modifier
 					}
+					# The modifier caps a base at no levels; take down one already
+					# standing rather than rely on the engine to shrink it.
+					if = { limit = { has_building = building_military_base } remove_building = building_military_base }
 					set_variable = has_demilitarized_zone
 				}
 			}
@@ -189,6 +193,7 @@ demilitarized_zone = {
 								has_building = building_naval_administration
 								has_building = building_naval_fortification
 								has_building = building_naval_logistics_center
+								has_building = building_military_base
 							}
 						}
 					}
@@ -378,6 +383,7 @@ forced_disarmament = {
 					if = { limit = { has_building = building_naval_administration } remove_building = building_naval_administration }
 					if = { limit = { has_building = building_naval_fortification } remove_building = building_naval_fortification }
 					if = { limit = { has_building = building_naval_logistics_center } remove_building = building_naval_logistics_center }
+					if = { limit = { has_building = building_military_base } remove_building = building_military_base }
 				}
 			}
 		}
@@ -446,6 +452,7 @@ forced_disarmament = {
 								has_building = building_naval_administration
 								has_building = building_naval_fortification
 								has_building = building_naval_logistics_center
+								has_building = building_military_base
 							}
 						}
 					}
@@ -465,6 +472,7 @@ forced_disarmament = {
 								has_building = building_naval_administration
 								has_building = building_naval_fortification
 								has_building = building_naval_logistics_center
+								has_building = building_military_base
 							}
 						}
 					}
@@ -484,6 +492,7 @@ forced_disarmament = {
 								has_building = building_naval_administration
 								has_building = building_naval_fortification
 								has_building = building_naval_logistics_center
+								has_building = building_military_base
 							}
 						}
 					}
