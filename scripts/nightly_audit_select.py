@@ -56,6 +56,7 @@ EXCLUDED_REGISTRY_GLOBS = [
     "common/script_values/auto_combat_unit_market_costs.txt",
     "common/scripted_effects/company_building_cleanup_effects.txt",
     "common/scripted_effects/extra_law_consistency_generated.txt",
+    "common/scripted_effects/te_region_area_generated.txt",
     "common/geographic_regions/te_formable_regions_generated.txt",
     "gfx/map/fleet_entities/02_extra_fleet_entities.txt",
     "map_data/state_regions/*.txt",
