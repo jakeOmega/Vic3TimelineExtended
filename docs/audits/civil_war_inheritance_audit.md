@@ -119,6 +119,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   (`on_country_released_as_overlord_subject` / `_company_subject` are missing from the release hooks too.)
 
 ### F2. UN membership, seat, programmes and HQ-host status are silently dropped (H1: the state is JE modifiers). HIGH (#461)
+- **FIXED (#461).** Every UN state modifier on the entry (membership, founding, HQ, security council and permanent seat, programmes, conventions) has a mirror variable `<modifier>_on`, written with it through `un_state_effects.txt`; the variable is the truth (`un_redesign_design.md` §0.9). The entry's `immediate` restores from the mirrors, restore-only. A rebel win marks the entry pending, and the monthly pulse heals it before anything reads membership, so the programme counters survive. The seat count and the HQ host test honour the mirror while the named host is dead, and HQ demolition on a same-definition owner change is left to the monthly update. `un_hq_country` is re-pointed at `on_civil_war_won`. Debug: `event te_debug_un.1`, option w.
 - Membership is `un_member_modifier` on the JE (`common/scripted_effects/un_ladder_effects.txt:618-621`).
   The permanent seat is `un_permanent_member_modifier` on the JE
   (`common/scripted_triggers/un_permanent_member_triggers.txt:15-17`). Programmes (`un_champion_order_cost`,
