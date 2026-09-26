@@ -5,12 +5,13 @@
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
 # Two ACTION handlers, parameterized by a saved scope `op` (the Strategic
-# Reserve / nuclear programme pattern), and eleven DISPLAY handlers: the five
+# Reserve / nuclear programme pattern), and thirteen DISPLAY handlers: the five
 # yes/no questions and names below, three that hide the moves our side cannot
 # make (nd_crisis_we_issued_sgui, nd_crisis_we_are_target_sgui,
 # nd_crisis_private_sgui), and three that print script-built text
 # (nd_crisis_pressure_breakdown_sgui, nd_crisis_danger_breakdown_sgui,
-# nd_crisis_next_pressure_sgui). The op
+# nd_crisis_next_pressure_sgui) — plus the At Home list and its footer,
+# nd_home_list_sgui and nd_home_footer_sgui. The op
 # tables are repeated in the .gui header and in
 # docs/systems/journal_entry_systems.md — keep all three in step.
 #
@@ -431,6 +432,57 @@ nd_crisis_next_pressure_sgui = {
 		}
 		else = {
 			custom_tooltip_no_bullet = nd_next_pressure_weeks
+		}
+	}
+}
+
+# ---- At Home: each interest group with a view, and its numbers ----------------
+# Script-built text (ExecuteTooltip). Reads the variables nd_refresh_domestic_stance
+# stores on each group; the numbers are the ones in the group's approval breakdown.
+nd_home_list_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_armed = yes
+		nd_is_initialized = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		if = {
+			limit = { NOT = { has_variable = nd_stance_applied } }
+			custom_tooltip_no_bullet = nd_home_list_not_reviewed
+		}
+		else_if = {
+			limit = {
+				any_interest_group = { has_variable = nd_ig_class }
+			}
+			every_interest_group = {
+				limit = { has_variable = nd_ig_class }
+				nd_home_line = yes
+			}
+		}
+		else = {
+			custom_tooltip_no_bullet = nd_home_list_none
+		}
+	}
+}
+
+# The At Home footer, its own text below the list: a scope's lines print before
+# its nested blocks' lines (gui_modding_guide.md gotcha #18), so a closing line
+# inside nd_home_list_sgui would print above the groups.
+nd_home_footer_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_armed = yes
+		nd_is_initialized = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		custom_tooltip_no_bullet = nd_home_list_reviewed
+		if = {
+			limit = { nd_posture_judged = no }
+			custom_tooltip_no_bullet = nd_home_list_waiting
 		}
 	}
 }

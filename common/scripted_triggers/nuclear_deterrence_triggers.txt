@@ -562,67 +562,217 @@ nd_regime_is_militarist = {
 }
 
 # ----------------------------------------------------------------------------
-# INTEREST-GROUP CLASSES (interest-group scope) — §7
+# INTEREST GROUPS AND THE BOMB (2026-09-25 spec §4).
 # ----------------------------------------------------------------------------
-# A group is placed in exactly one class, tested in this order: warfighting
-# faction, professional officers, dove, business. Unclassified groups have no
-# nuclear stance.
+# The Armed Forces are professional officers and the Industrialists business,
+# whatever their politics; every other group is militarist or restraint by
+# its Rules of War stance, or has no view. A group's stance already folds in
+# its leader's ideology, so a fascist-led Intelligentsia is militarist with no
+# special case. Strongly approving is a full view (±2); approving is a mild
+# one (±1).
+#
+# The Armed Forces' and Industrialists' LEAN reads their leader's own stance,
+# not the group's: the Armed Forces' core ideology (patriotic) strongly
+# approves Total War, so a group-stance lean would make every army hawkish and
+# the officers' own view would never apply. A jingoist-led army leans
+# militarist, a pacifist-led one restraint, a moderate-led one neither.
+#
+# The nd_stance_* tests work in interest-group or character scope (law_stance
+# reads the base stance of either). law_stance compares one law at a time, so
+# "its stance on Total War beats its stance on Limited War" is spelled out.
+# law_stance can also return a value above strongly_approve (vanilla guards
+# `value > strongly_approve`, "equals count"); it is never counted as approval.
+# Every ideology that names lawgroup_rules_of_war names both laws, which these
+# comparisons rely on.
 
-nd_ig_leader_is_hawk = {
-	leader ?= {
-		OR = {
-			has_ideology = ideology:ideology_jingoist_leader
-			has_ideology = ideology:ideology_fascist
-			has_ideology = ideology:ideology_ethno_nationalist
+nd_stance_militarist_full = {
+	law_stance = {
+		law = law_type:law_total_war
+		value > approve
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_total_war
+			value > strongly_approve
+		}
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_limited_war
+			value > approve
 		}
 	}
 }
 
-nd_ig_leader_is_dove = {
-	leader ?= {
-		OR = {
-			has_ideology = ideology:ideology_pacifist
-			has_ideology = ideology:ideology_humanitarian
-			has_ideology = ideology:ideology_humanitarian_royalist
+nd_stance_militarist_mild = {
+	law_stance = {
+		law = law_type:law_total_war
+		value > neutral
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_total_war
+			value > approve
+		}
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_limited_war
+			value > neutral
 		}
 	}
 }
 
-# Hawks who want nuclear weapons usable: a jingoist/fascist leader anywhere, or
-# the Armed Forces of a fascist state.
-nd_ig_class_warfighting = {
-	nd_ig_leader_is_dove = no
+nd_stance_restraint_full = {
+	law_stance = {
+		law = law_type:law_limited_war
+		value > approve
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_limited_war
+			value > strongly_approve
+		}
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_total_war
+			value > approve
+		}
+	}
+}
+
+nd_stance_restraint_mild = {
+	law_stance = {
+		law = law_type:law_limited_war
+		value > neutral
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_limited_war
+			value > approve
+		}
+	}
+	NOT = {
+		law_stance = {
+			law = law_type:law_total_war
+			value > neutral
+		}
+	}
+}
+
+nd_stance_militarist = {
 	OR = {
-		nd_ig_leader_is_hawk = yes
-		AND = {
-			is_interest_group_type = ig_armed_forces
-			owner = { country_is_fascist = yes }
-		}
+		nd_stance_militarist_full = yes
+		nd_stance_militarist_mild = yes
 	}
 }
 
-# The Armed Forces under an ordinary leader: credible, funded, not reckless.
+nd_stance_restraint = {
+	OR = {
+		nd_stance_restraint_full = yes
+		nd_stance_restraint_mild = yes
+	}
+}
+
+nd_stance_full = {
+	OR = {
+		nd_stance_militarist_full = yes
+		nd_stance_restraint_full = yes
+	}
+}
+
+# ---- IG scope from here -------------------------------------------------------
+nd_ig_is_fixed_class = {
+	OR = {
+		is_interest_group_type = ig_armed_forces
+		is_interest_group_type = ig_industrialists
+	}
+}
+
 nd_ig_class_professional = {
 	is_interest_group_type = ig_armed_forces
-	nd_ig_class_warfighting = no
-	nd_ig_leader_is_dove = no
-}
-
-nd_ig_class_dove = {
-	nd_ig_class_warfighting = no
-	OR = {
-		nd_ig_leader_is_dove = yes
-		AND = {
-			is_interest_group_type = ig_intelligentsia
-			nd_ig_leader_is_hawk = no
-		}
-	}
 }
 
 nd_ig_class_business = {
 	is_interest_group_type = ig_industrialists
-	nd_ig_class_warfighting = no
-	nd_ig_class_dove = no
+}
+
+nd_ig_class_militarist = {
+	nd_ig_is_fixed_class = no
+	nd_stance_militarist = yes
+}
+
+nd_ig_class_restraint = {
+	nd_ig_is_fixed_class = no
+	nd_stance_restraint = yes
+}
+
+# The Armed Forces' or Industrialists' lean, from their leader.
+nd_ig_lean_militarist = {
+	nd_ig_is_fixed_class = yes
+	leader ?= { nd_stance_militarist = yes }
+}
+
+nd_ig_lean_restraint = {
+	nd_ig_is_fixed_class = yes
+	leader ?= { nd_stance_restraint = yes }
+}
+
+# A militarist or restraint view, by class or by lean.
+nd_ig_is_militarist = {
+	OR = {
+		nd_ig_class_militarist = yes
+		nd_ig_lean_militarist = yes
+	}
+}
+
+nd_ig_is_restraint = {
+	OR = {
+		nd_ig_class_restraint = yes
+		nd_ig_lean_restraint = yes
+	}
+}
+
+# Who crisis outcomes pay as hawks (§4.5): militarist groups and leans, and
+# the Armed Forces unless they lean restraint.
+nd_ig_is_hawk = {
+	OR = {
+		nd_ig_is_militarist = yes
+		AND = {
+			nd_ig_class_professional = yes
+			nd_ig_lean_restraint = no
+		}
+	}
+}
+
+# The view is held strongly: the group's own stance, or for the two fixed
+# classes their leader's.
+nd_ig_view_full = {
+	OR = {
+		AND = {
+			nd_ig_is_fixed_class = no
+			nd_stance_full = yes
+		}
+		AND = {
+			nd_ig_is_fixed_class = yes
+			leader ?= { nd_stance_full = yes }
+		}
+	}
+}
+
+# Country scope: our posture is judged at home only once the doctrine has
+# been held six months (§0.2 of the nuclear design: months, not a toggle).
+# The business terms do not wait.
+nd_posture_judged = {
+	nd_is_initialized = yes
+	has_variable = nd_doctrine_months
+	var:nd_doctrine_months >= nd_stance_tenure_months
+}
+
+# IG scope: the same question, about the group's country.
+nd_ig_posture_judged = {
+	owner = { nd_posture_judged = yes }
 }
 
 # ----------------------------------------------------------------------------

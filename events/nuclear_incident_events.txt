@@ -194,7 +194,7 @@ nuclear_incident.2 = {
 		name = nuclear_incident.2.b
 		nd_set_authority_1 = yes
 		every_interest_group = {
-			limit = { nd_ig_class_warfighting = yes }
+			limit = { nd_ig_is_militarist = yes }
 			add_modifier = {
 				name = ig_approval_negative_modifier
 				days = short_modifier_time
@@ -593,7 +593,7 @@ nuclear_incident.10 = {
 			custom_tooltip = nd_tt_exercise_notified_talks_open
 		}
 		every_interest_group = {
-			limit = { nd_ig_class_warfighting = yes }
+			limit = { nd_ig_is_militarist = yes }
 			add_modifier = {
 				name = ig_approval_negative_modifier
 				days = short_modifier_time
@@ -626,7 +626,7 @@ nuclear_incident.10 = {
 	option = {
 		name = nuclear_incident.10.c
 		every_interest_group = {
-			limit = { nd_ig_class_warfighting = yes }
+			limit = { nd_ig_is_militarist = yes }
 			add_modifier = {
 				name = ig_approval_positive_modifier
 				days = short_modifier_time
@@ -1012,7 +1012,7 @@ nuclear_incident.20 = {
 		name = nuclear_incident.20.g
 		trigger = { var:nd_launch_held = 0 }
 		every_interest_group = {
-			limit = { nd_ig_class_warfighting = yes }
+			limit = { nd_ig_is_militarist = yes }
 			add_modifier = {
 				name = ig_approval_positive_modifier
 				days = short_modifier_time
@@ -1020,7 +1020,7 @@ nuclear_incident.20 = {
 			}
 		}
 		every_interest_group = {
-			limit = { nd_ig_class_dove = yes }
+			limit = { nd_ig_is_restraint = yes }
 			add_modifier = {
 				name = ig_approval_negative_modifier
 				days = normal_modifier_time
@@ -1153,7 +1153,7 @@ nuclear_incident.30 = {
 			is_decaying = yes
 		}
 		every_interest_group = {
-			limit = { nd_ig_class_warfighting = yes }
+			limit = { nd_ig_is_militarist = yes }
 			add_modifier = {
 				name = ig_approval_negative_modifier
 				days = short_modifier_time
@@ -1399,7 +1399,7 @@ nuclear_incident.50 = {
 		if = {
 			limit = { nd_regime_is_militarist = yes }
 			every_interest_group = {
-				limit = { nd_ig_class_warfighting = yes }
+				limit = { nd_ig_is_militarist = yes }
 				add_modifier = {
 					name = ig_approval_negative_modifier
 					days = short_modifier_time

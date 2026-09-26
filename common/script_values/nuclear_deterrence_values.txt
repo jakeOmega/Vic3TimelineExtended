@@ -951,21 +951,15 @@ nd_display_estimate_year = {
 }
 
 # ----------------------------------------------------------------------------
-# DOMESTIC STANCE (§7) — one score per interest-group class, −2..+2
+# AT HOME — one interest group's opinion of our posture (2026-09-25 spec §4.2).
+# IG scope; reads the owner's posture. nd_refresh_domestic_stance stores each
+# term on the group, and the At Home list prints the stored terms.
 # ----------------------------------------------------------------------------
-# Zero until the doctrine has been held nd_stance_tenure_months: a posture is
-# judged once it has been kept, never on the click that set it.
 
-# Jingoist/fascist leaders, the Armed Forces of a fascist state: they want the
-# bomb usable and the forces ready.
-nd_stance_warfighting_value = {
+# The doctrine tables a group can judge with.
+nd_ig_doctrine_militarist_value = {
 	value = 0
-	if = {
-		limit = {
-			nd_is_initialized = yes
-			has_variable = nd_doctrine_months
-			var:nd_doctrine_months >= nd_stance_tenure_months
-		}
+	owner = {
 		if = {
 			limit = { nd_doctrine_nfu = yes }
 			add = -2
@@ -982,75 +976,12 @@ nd_stance_warfighting_value = {
 			limit = { nd_doctrine_warfighting = yes }
 			add = 2
 		}
-		if = {
-			limit = { var:nd_readiness = 1 }
-			add = -1
-		}
-		else_if = {
-			limit = { var:nd_readiness = 3 }
-			add = 1
-		}
 	}
-	min = -2
-	max = 2
 }
 
-# The Armed Forces under an ordinary leader: a credible, ready deterrent, not a
-# reckless one and not a hollow one.
-nd_stance_professional_value = {
+nd_ig_doctrine_restraint_value = {
 	value = 0
-	if = {
-		limit = {
-			nd_is_initialized = yes
-			has_variable = nd_doctrine_months
-			var:nd_doctrine_months >= nd_stance_tenure_months
-		}
-		if = {
-			limit = {
-				OR = {
-					nd_doctrine_nfu = yes
-					nd_doctrine_warfighting = yes
-				}
-			}
-			add = -1
-		}
-		else_if = {
-			limit = { nd_doctrine_flexible = yes }
-			add = 1
-		}
-		if = {
-			limit = {
-				var:nd_readiness = 1
-				nd_has_plausible_attacker = yes
-			}
-			add = -1
-		}
-		else_if = {
-			limit = { var:nd_readiness = 2 }
-			add = 1
-		}
-		else_if = {
-			limit = {
-				var:nd_readiness = 3
-				has_variable = nd_strain
-				var:nd_strain >= 50
-			}
-			add = -1
-		}
-	}
-	min = -2
-	max = 2
-}
-
-# Pacifist and humanitarian leaders, the Intelligentsia under a non-hawk.
-nd_stance_dove_value = {
-	value = 0
-	if = {
-		limit = {
-			nd_is_initialized = yes
-			has_variable = nd_doctrine_months
-			var:nd_doctrine_months >= nd_stance_tenure_months
-		}
+	owner = {
 		if = {
 			limit = { nd_doctrine_nfu = yes }
 			add = 2
@@ -1066,37 +997,186 @@ nd_stance_dove_value = {
 		else = {
 			add = -2
 		}
+	}
+}
+
+nd_ig_doctrine_professional_value = {
+	value = 0
+	owner = {
 		if = {
-			limit = { var:nd_readiness = 3 }
+			limit = {
+				OR = {
+					nd_doctrine_nfu = yes
+					nd_doctrine_warfighting = yes
+				}
+			}
 			add = -1
 		}
-		if = {
-			limit = { nd_authority_launch_on_warning = yes }
-			add = -1
+		else_if = {
+			limit = { nd_doctrine_flexible = yes }
+			add = 1
 		}
+	}
+}
+
+# A militarist or restraint view picks its table (a class, or the Armed
+# Forces' and Industrialists' lean from their leader); the Armed Forces with
+# no lean judge as officers; the Industrialists with none have no doctrine
+# view. A mild view is capped at ±1.
+nd_ig_term_doctrine_value = {
+	value = 0
+	if = {
+		limit = { nd_ig_posture_judged = yes }
+		if = {
+			limit = { nd_ig_is_militarist = yes }
+			add = nd_ig_doctrine_militarist_value
+		}
+		else_if = {
+			limit = { nd_ig_is_restraint = yes }
+			add = nd_ig_doctrine_restraint_value
+		}
+		else_if = {
+			limit = { nd_ig_class_professional = yes }
+			add = nd_ig_doctrine_professional_value
+		}
+		if = {
+			limit = {
+				OR = {
+					nd_ig_is_militarist = yes
+					nd_ig_is_restraint = yes
+				}
+				nd_ig_view_full = no
+			}
+			min = -1
+			max = 1
+		}
+	}
+}
+
+nd_ig_term_readiness_value = {
+	value = 0
+	if = {
+		limit = { nd_ig_posture_judged = yes }
+		if = {
+			limit = { nd_ig_class_militarist = yes }
+			owner = {
+				if = {
+					limit = { var:nd_readiness = 1 }
+					add = -1
+				}
+				else_if = {
+					limit = { var:nd_readiness = 3 }
+					add = 1
+				}
+			}
+		}
+		else_if = {
+			limit = { nd_ig_class_restraint = yes }
+			owner = {
+				if = {
+					limit = { var:nd_readiness = 3 }
+					add = -1
+				}
+			}
+		}
+		else_if = {
+			limit = { nd_ig_class_professional = yes }
+			owner = {
+				if = {
+					limit = {
+						var:nd_readiness = 1
+						nd_has_plausible_attacker = yes
+					}
+					add = -1
+				}
+				else_if = {
+					limit = { var:nd_readiness = 2 }
+					add = 1
+				}
+			}
+		}
+	}
+}
+
+nd_ig_term_authority_value = {
+	value = 0
+	if = {
+		limit = {
+			nd_ig_posture_judged = yes
+			nd_ig_class_restraint = yes
+			owner = { nd_authority_launch_on_warning = yes }
+		}
+		add = -1
+	}
+}
+
+nd_ig_term_strain_value = {
+	value = 0
+	if = {
+		limit = {
+			nd_ig_posture_judged = yes
+			nd_ig_class_professional = yes
+			owner = {
+				var:nd_readiness = 3
+				has_variable = nd_strain
+				var:nd_strain >= 50
+			}
+		}
+		add = -1
+	}
+}
+
+# Prolonged alerts and open crises are bad for business. Not tenure-gated.
+nd_ig_term_business_value = {
+	value = 0
+	if = {
+		limit = { nd_ig_class_business = yes }
+		owner = {
+			if = {
+				limit = {
+					nd_is_initialized = yes
+					var:nd_readiness = 3
+					has_variable = nd_readiness_months
+					var:nd_readiness_months >= 3
+				}
+				add = -1
+			}
+			if = {
+				limit = { nd_crisis_stage_at_least = { STAGE = 2 } }
+				add = -1
+			}
+		}
+	}
+}
+
+# The capped total the approval band is read from: ±1 for a mild militarist
+# or restraint group, ±2 otherwise.
+nd_ig_stance_value = {
+	value = nd_ig_term_doctrine_value
+	add = nd_ig_term_readiness_value
+	add = nd_ig_term_authority_value
+	add = nd_ig_term_strain_value
+	add = nd_ig_term_business_value
+	if = {
+		limit = {
+			nd_ig_is_fixed_class = no
+			nd_ig_view_full = no
+		}
+		min = -1
+		max = 1
 	}
 	min = -2
 	max = 2
 }
 
-# Industrialists: prolonged alerts and open crises are bad for business.
-nd_stance_business_value = {
-	value = 0
+# Country scope: months until our posture starts being judged at home.
+nd_display_stance_months_left = {
+	value = nd_stance_tenure_months
 	if = {
-		limit = {
-			nd_is_initialized = yes
-			var:nd_readiness = 3
-			has_variable = nd_readiness_months
-			var:nd_readiness_months >= 3
-		}
-		add = -1
+		limit = { has_variable = nd_doctrine_months }
+		subtract = var:nd_doctrine_months
 	}
-	if = {
-		limit = { nd_crisis_stage_at_least = { STAGE = 2 } }
-		add = -1
-	}
-	min = -2
-	max = 2
+	min = 0
 }
 
 # ----------------------------------------------------------------------------

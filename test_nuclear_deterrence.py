@@ -550,6 +550,110 @@ class TestCrisisPanel(unittest.TestCase):
             self.assertIn(n, loc_value("nd_w_crisis_pressure_tt"))
 
 
+class TestInterestGroupClasses(unittest.TestCase):
+    OLD = ("nd_ig_leader_is_hawk", "nd_ig_leader_is_dove", "nd_ig_class_warfighting", "nd_ig_class_dove")
+    NEW = ("nd_stance_militarist_full", "nd_stance_militarist_mild", "nd_stance_restraint_full",
+           "nd_stance_restraint_mild", "nd_stance_militarist", "nd_stance_restraint",
+           "nd_stance_full", "nd_ig_is_fixed_class", "nd_ig_class_professional", "nd_ig_class_business",
+           "nd_ig_class_militarist", "nd_ig_class_restraint", "nd_ig_lean_militarist", "nd_ig_lean_restraint",
+           "nd_ig_is_militarist", "nd_ig_is_restraint", "nd_ig_is_hawk", "nd_ig_view_full")
+
+    def test_new_triggers_exist(self):
+        t = read(TRIGGERS)
+        for name in self.NEW:
+            self.assertRegex(t, rf"(?m)^{name} = \{{", name)
+
+    def test_old_triggers_are_gone_everywhere(self):
+        for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").glob("*.txt")):
+            text = strip_comments(read(path))
+            for name in self.OLD:
+                self.assertNotIn(name, text, f"{path.name} still uses {name}")
+
+    def test_stances_read_the_rules_of_war_laws(self):
+        t = strip_comments(read(TRIGGERS))
+        for name in ("nd_stance_militarist_full", "nd_stance_restraint_full"):
+            body = block(t, name)
+            self.assertIn("law_type:law_total_war", body)
+            self.assertIn("law_type:law_limited_war", body)
+
+    def test_rewards_pay_hawks_and_doves(self):
+        effects = strip_comments(read(CRISIS_EFFECTS))
+        self.assertIn("nd_ig_is_hawk = yes", block(effects, "nd_reward_hawks"))
+        self.assertIn("nd_ig_is_restraint = yes", block(effects, "nd_reward_doves"))
+
+
+IG_VARS = ["nd_ig_class", "nd_ig_lean", "nd_ig_strength", "nd_ig_term_doctrine", "nd_ig_term_readiness",
+           "nd_ig_term_authority", "nd_ig_term_strain", "nd_ig_term_business", "nd_ig_stance"]
+
+
+class TestInterestGroupOpinion(unittest.TestCase):
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.effects = strip_comments(read(EFFECTS))
+
+    def test_country_level_stance_values_are_gone(self):
+        for old in ("nd_stance_warfighting_value", "nd_stance_professional_value",
+                    "nd_stance_dove_value", "nd_stance_business_value"):
+            self.assertNotRegex(self.values, rf"(?m)^{old} = \{{")
+
+    def test_ig_values_exist(self):
+        for name in ("nd_ig_doctrine_militarist_value", "nd_ig_doctrine_restraint_value",
+                     "nd_ig_doctrine_professional_value", "nd_ig_term_doctrine_value",
+                     "nd_ig_term_readiness_value", "nd_ig_term_authority_value", "nd_ig_term_strain_value",
+                     "nd_ig_term_business_value", "nd_ig_stance_value", "nd_display_stance_months_left"):
+            self.assertRegex(self.values, rf"(?m)^{name} = \{{", name)
+
+    def test_store_writes_and_clear_removes_every_variable(self):
+        store = block(self.effects, "nd_ig_store_opinion")
+        clear = block(self.effects, "nd_ig_clear_opinion")
+        for var in IG_VARS:
+            self.assertIn(f"name = {var} value", store, var)
+            self.assertIn(f"remove_variable = {var}", clear, var)
+
+    def test_band_reads_the_stored_stance(self):
+        band = block(self.effects, "nd_ig_set_band")
+        self.assertIn("var:nd_ig_stance >= 2", band)
+        self.assertNotIn("owner", band)
+
+    def test_business_terms_do_not_wait_for_tenure(self):
+        body = block(self.values, "nd_ig_term_business_value")
+        self.assertNotIn("nd_ig_posture_judged", body)
+        for name in ("nd_ig_term_doctrine_value", "nd_ig_term_readiness_value",
+                     "nd_ig_term_authority_value", "nd_ig_term_strain_value"):
+            self.assertIn("nd_ig_posture_judged = yes", block(self.values, name), name)
+
+
+HOME_LINES = ["nd_home_line_militarist", "nd_home_line_militarist_mild", "nd_home_line_restraint",
+              "nd_home_line_restraint_mild", "nd_home_line_officers", "nd_home_line_officers_hawkish",
+              "nd_home_line_officers_restrained", "nd_home_line_business", "nd_home_line_business_hawkish",
+              "nd_home_line_business_restrained"]
+HOME_TERMS = ["nd_home_terms_militarist", "nd_home_terms_restraint", "nd_home_terms_officers",
+              "nd_home_terms_business", "nd_home_terms_business_lean"]
+
+
+class TestAtHome(unittest.TestCase):
+    def test_every_class_line_is_printed_and_localised(self):
+        body = block(strip_comments(read(EFFECTS)), "nd_home_line")
+        for key in HOME_LINES + HOME_TERMS:
+            self.assertRegex(body, rf"custom_tooltip_no_bullet = {key}\s", key)
+            self.assertIn("THIS.Var('nd_ig_", loc_value(key), key)
+        for key in HOME_LINES:
+            self.assertIn("[THIS.GetInterestGroup.GetName]", loc_value(key), key)
+
+    def test_list_is_drawn_and_old_rows_are_gone(self):
+        gui = read(GUI)
+        self.assertIn("nd_home_list_sgui", gui)
+        for old in ("nd_w_home_warfighting_value", "nd_w_home_professional_value",
+                    "nd_w_home_dove_value", "nd_w_home_business_value"):
+            self.assertNotIn(old, gui)
+        custom = strip_comments(read(CUSTOM_LOC))
+        self.assertNotIn("nd_stance_warfighting_word", custom)
+
+    def test_list_handler_is_display_only(self):
+        body = block(strip_comments(read(SGUIS)), "nd_home_list_sgui")
+        self.assertIn("is_valid = { always = no }", body)
+        self.assertIn("every_interest_group", body)
+
 class TestReviewFixes(unittest.TestCase):
     """Fixes from the PR 1 whole-branch review."""
 
@@ -624,6 +728,84 @@ class TestReviewFixes(unittest.TestCase):
         header = loc_value("nd_tt_open_factors_header")
         self.assertIn("30", header)
         self.assertIn("journal entry", header)
+
+
+STANCES = ["strongly_disapprove", "disapprove", "neutral", "approve", "strongly_approve", "count"]
+
+
+def stance_clauses(trigger_body):
+    """(negated, law, threshold) for each `law_stance = { law = … value > … }`
+    in a trigger body, top-level or under one NOT."""
+    out = []
+    for m in re.finditer(r"(NOT = \{\s*)?law_stance = \{\s*law = law_type:(\w+)\s*value > (\w+)\s*\}", trigger_body):
+        out.append((bool(m.group(1)), m.group(2), m.group(3)))
+    return out
+
+
+def holds(clauses, total, limited):
+    for negated, law, threshold in clauses:
+        value = total if law == "law_total_war" else limited
+        result = STANCES.index(value) > STANCES.index(threshold)
+        if result == negated:
+            return False
+    return True
+
+
+class TestAtHomeReviewFixes(unittest.TestCase):
+    """Fixes from the PR 2 whole-branch review."""
+
+    def setUp(self):
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.sguis = strip_comments(read(SGUIS))
+
+    def test_stance_truth_table(self):
+        """Spec §4.1 over every pair of stances: the stronger approval of Total
+        War or Limited War wins, a tie is no view, and `count` is never
+        approval."""
+        names = ("nd_stance_militarist_full", "nd_stance_militarist_mild",
+                 "nd_stance_restraint_full", "nd_stance_restraint_mild")
+        clauses = {n: stance_clauses(block(self.triggers, n)) for n in names}
+        for n in names:
+            self.assertTrue(clauses[n], n)
+        real = STANCES[:5]
+        for total in STANCES:
+            for limited in STANCES:
+                got = [n for n in names if holds(clauses[n], total, limited)]
+                self.assertLessEqual(len(got), 1, (total, limited, got))
+                if "count" in (total, limited):
+                    expected = []
+                else:
+                    t, l = real.index(total), real.index(limited)
+                    expected = []
+                    if t > l and t >= 3:
+                        expected = ["nd_stance_militarist_full" if t == 4 else "nd_stance_militarist_mild"]
+                    elif l > t and l >= 3:
+                        expected = ["nd_stance_restraint_full" if l == 4 else "nd_stance_restraint_mild"]
+                self.assertEqual(got, expected, (total, limited))
+
+    def test_fixed_class_leans_read_the_leader(self):
+        self.assertIn("leader ?= { nd_stance_militarist = yes }", block(self.triggers, "nd_ig_lean_militarist"))
+        self.assertIn("leader ?= { nd_stance_restraint = yes }", block(self.triggers, "nd_ig_lean_restraint"))
+        self.assertIn("leader ?= { nd_stance_full = yes }", block(self.triggers, "nd_ig_view_full"))
+
+    def test_incident_sites_pay_militarists_including_leans(self):
+        text = strip_comments(read(INCIDENT_EVENTS))
+        self.assertIn("limit = { nd_ig_is_militarist = yes }", text)
+        for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").glob("*.txt")):
+            self.assertNotRegex(strip_comments(read(path)), r"nd_ig_stance_(militarist|restraint|full)", path.name)
+
+    def test_footer_follows_the_list_and_always_says_reviewed(self):
+        gui = read(GUI)
+        self.assertLess(gui.index("nd_home_list_sgui"), gui.index("nd_home_footer_sgui"))
+        footer = block(self.sguis, "nd_home_footer_sgui")
+        self.assertRegex(footer, r"custom_tooltip_no_bullet = nd_home_list_reviewed\s")
+        self.assertIn("custom_tooltip_no_bullet = nd_home_list_waiting", footer)
+        self.assertNotIn("nd_home_list_waiting", block(self.sguis, "nd_home_list_sgui"))
+
+    def test_list_before_the_first_review_says_so(self):
+        body = block(self.sguis, "nd_home_list_sgui")
+        self.assertIn("has_variable = nd_stance_applied", body)
+        self.assertIn("custom_tooltip_no_bullet = nd_home_list_not_reviewed", body)
 
 
 class TestManagedFamilies(unittest.TestCase):
