@@ -603,6 +603,17 @@ st_res_weekly_update_effect = {
 		}
 		st_res_record_hub_holder_effect = yes
 
+		# Preset-following flows and budgets, from today's capacity and GDP,
+		# before this week's policy decisions read them.
+		st_res_refresh_preset_magnitudes_effect = { GOOD = grain }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = ammunition }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = oil }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = small_arms }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = artillery }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = aeroplanes }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = tanks }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = fertilizer }
+
 		st_res_apply_weekly_good_effect = { GOOD = grain }
 		st_res_apply_weekly_good_effect = { GOOD = ammunition }
 		st_res_apply_weekly_good_effect = { GOOD = oil }
@@ -889,6 +900,12 @@ st_res_apply_sell_profit_effect = {
 # reached the 75% fill at which silos become worth building to it
 # (st_res_reserve_filling_up). Players can still set both with the steppers.
 #
+# Maximum weekly flow and the weekly budget are not fixed numbers: each preset
+# sets them as a share of the good's capacity and of weekly GDP
+# (st_res_preset_*_flow_pct / _budget_pct, st_res_script_values.txt), and they
+# go on following the country until the player sets them by hand
+# (st_res_preset_follow_magnitudes_base below).
+#
 # The three presets keep sell_thr - buy_thr >= st_res_policy_min_gap (15) and
 # ceil_pct - floor_pct >= st_res_policy_stock_min_gap (10), which is the same
 # non-overlap rule the steppers are gated on.
@@ -896,10 +913,14 @@ st_res_apply_sell_profit_effect = {
 st_res_apply_preset_conservative_base = {
 	set_variable = { name = st_res_$GOOD$_buy_thr value = -20 }
 	set_variable = { name = st_res_$GOOD$_sell_thr value = 30 }
-	set_variable = { name = st_res_$GOOD$_max_flow value = 100 }
 	set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
 	set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
-	set_variable = { name = st_res_$GOOD$_budget value = 5000 }
+	st_res_preset_follow_magnitudes_base = {
+		GOOD = $GOOD$
+		PRESET = 1
+		FLOW_PCT = st_res_preset_conservative_flow_pct
+		BUDGET_PCT = st_res_preset_conservative_budget_pct
+	}
 	set_variable = { name = st_res_$GOOD$_price_memory value = 8 }
 	set_variable = { name = st_res_$GOOD$_ramp value = 20 }
 	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
@@ -910,10 +931,14 @@ st_res_apply_preset_conservative_base = {
 st_res_apply_preset_standard_base = {
 	set_variable = { name = st_res_$GOOD$_buy_thr value = -10 }
 	set_variable = { name = st_res_$GOOD$_sell_thr value = 20 }
-	set_variable = { name = st_res_$GOOD$_max_flow value = 250 }
 	set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
 	set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
-	set_variable = { name = st_res_$GOOD$_budget value = 15000 }
+	st_res_preset_follow_magnitudes_base = {
+		GOOD = $GOOD$
+		PRESET = 2
+		FLOW_PCT = st_res_preset_standard_flow_pct
+		BUDGET_PCT = st_res_preset_standard_budget_pct
+	}
 	set_variable = { name = st_res_$GOOD$_price_memory value = 4 }
 	set_variable = { name = st_res_$GOOD$_ramp value = 10 }
 	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
@@ -924,15 +949,113 @@ st_res_apply_preset_standard_base = {
 st_res_apply_preset_aggressive_base = {
 	set_variable = { name = st_res_$GOOD$_buy_thr value = -5 }
 	set_variable = { name = st_res_$GOOD$_sell_thr value = 10 }
-	set_variable = { name = st_res_$GOOD$_max_flow value = 600 }
 	set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
 	set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
-	set_variable = { name = st_res_$GOOD$_budget value = 40000 }
+	st_res_preset_follow_magnitudes_base = {
+		GOOD = $GOOD$
+		PRESET = 3
+		FLOW_PCT = st_res_preset_aggressive_flow_pct
+		BUDGET_PCT = st_res_preset_aggressive_budget_pct
+	}
 	set_variable = { name = st_res_$GOOD$_price_memory value = 2 }
 	set_variable = { name = st_res_$GOOD$_ramp value = 5 }
 	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
 	# must re-test against the new band instead of the old stop threshold.
 	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+}
+
+# --------------------------------------------------------------------------
+# Preset magnitudes that follow the country.
+#
+# st_res_preset_follow_magnitudes_base marks both magnitude settings of one
+# good as following preset PRESET (1 Conservative, 2 Standard, 3 Aggressive:
+# st_res_<good>_auto_max_flow / _auto_budget) and writes them from today's
+# capacity and GDP. st_res_refresh_preset_magnitudes_effect rewrites every
+# still-marked setting each weekly pulse, before the policies are evaluated,
+# so a preset keeps pace as silos go up and the economy grows. A stepper click
+# on either setting removes its marker (st_res_policy_step_up_base /
+# _down_base), and from then on the player's number stands. Each setting has
+# its own marker, so setting the budget by hand leaves the flow following, and
+# changing a threshold, the stock band, the price memory or the ramp leaves
+# both following.
+#
+# The writers round to the stepper's grid and clamp to the stepper's range
+# (flow: st_res_policy_flow_min to st_res_policy_flow_max, the hub's weekly
+# cap; budget: st_res_policy_budget_min to st_res_<good>_policy_budget_max),
+# so a following value is always one the steppers could have reached.
+# Parameters: GOOD; PRESET; FLOW_PCT and BUDGET_PCT, the preset's script-value
+# names.
+# --------------------------------------------------------------------------
+st_res_preset_follow_magnitudes_base = {
+	set_variable = { name = st_res_$GOOD$_auto_max_flow value = $PRESET$ }
+	set_variable = { name = st_res_$GOOD$_auto_budget value = $PRESET$ }
+	st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = $FLOW_PCT$ }
+	st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = $BUDGET_PCT$ }
+}
+
+st_res_preset_write_flow_base = {
+	set_variable = {
+		name = st_res_$GOOD$_max_flow
+		value = {
+			value = st_res_$GOOD$_capacity
+			multiply = $PCT$
+			divide = 100
+			divide = st_res_policy_flow_step
+			round = yes
+			multiply = st_res_policy_flow_step
+			min = st_res_policy_flow_min
+			max = st_res_policy_flow_max
+		}
+	}
+}
+
+st_res_preset_write_budget_base = {
+	set_variable = {
+		name = st_res_$GOOD$_budget
+		value = {
+			value = gdp
+			divide = st_res_weeks_per_year
+			divide = 100
+			multiply = $PCT$
+			divide = st_res_policy_budget_step
+			round = yes
+			multiply = st_res_policy_budget_step
+			min = st_res_policy_budget_min
+			max = st_res_$GOOD$_policy_budget_max
+		}
+	}
+}
+
+# Parameter: GOOD. Weekly pulse only.
+st_res_refresh_preset_magnitudes_effect = {
+	if = {
+		limit = { has_variable = st_res_$GOOD$_auto_max_flow }
+		if = {
+			limit = { var:st_res_$GOOD$_auto_max_flow = 1 }
+			st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = st_res_preset_conservative_flow_pct }
+		}
+		else_if = {
+			limit = { var:st_res_$GOOD$_auto_max_flow = 2 }
+			st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = st_res_preset_standard_flow_pct }
+		}
+		else = {
+			st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = st_res_preset_aggressive_flow_pct }
+		}
+	}
+	if = {
+		limit = { has_variable = st_res_$GOOD$_auto_budget }
+		if = {
+			limit = { var:st_res_$GOOD$_auto_budget = 1 }
+			st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = st_res_preset_conservative_budget_pct }
+		}
+		else_if = {
+			limit = { var:st_res_$GOOD$_auto_budget = 2 }
+			st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = st_res_preset_standard_budget_pct }
+		}
+		else = {
+			st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = st_res_preset_aggressive_budget_pct }
+		}
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -981,11 +1104,23 @@ st_res_policy_select_base = {
 st_res_policy_step_up_base = {
 	change_variable = { name = st_res_$GOOD$_$SETTING$ add = $STEP$ }
 	clamp_variable = { name = st_res_$GOOD$_$SETTING$ min = $MIN$ max = $MAX$ }
+	st_res_policy_set_by_hand_base = { GOOD = $GOOD$ SETTING = $SETTING$ }
 }
 
 st_res_policy_step_down_base = {
 	change_variable = { name = st_res_$GOOD$_$SETTING$ subtract = $STEP$ }
 	clamp_variable = { name = st_res_$GOOD$_$SETTING$ min = $MIN$ max = $MAX$ }
+	st_res_policy_set_by_hand_base = { GOOD = $GOOD$ SETTING = $SETTING$ }
+}
+
+# A click on a magnitude stepper sets that value by hand: it stops following
+# its preset (st_res_preset_follow_magnitudes_base). Only max_flow and budget
+# carry a marker; for every other setting there is nothing to remove.
+st_res_policy_set_by_hand_base = {
+	if = {
+		limit = { has_variable = st_res_$GOOD$_auto_$SETTING$ }
+		remove_variable = st_res_$GOOD$_auto_$SETTING$
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -1360,9 +1495,10 @@ st_res_policy_apply_good_effect = {
 #
 # Saves seeded before then carry st_res_policy_ai_seeded but not
 # st_res_policy_ai_stabilized. The second block runs once for them: it moves
-# any good still on Buy When Cheap to Stabilize Prices, and it widens every
-# good's stock band from the old preset's 40-60% to 0-100%. It leaves the
-# other settings alone.
+# any good still on Buy When Cheap to Stabilize Prices, widens every good's
+# stock band from the old preset's 40-60% to 0-100%, and sets the flow and
+# budget to follow Conservative's shares of capacity and GDP in place of its
+# old fixed 100 units and £5 000. It leaves the other settings alone.
 # --------------------------------------------------------------------------
 st_res_ai_seed_good_effect = {
 	st_res_apply_preset_conservative_base = { GOOD = $GOOD$ }
@@ -1386,6 +1522,12 @@ st_res_ai_stabilize_good_effect = {
 	if = {
 		limit = { has_variable = st_res_$GOOD$_ceil_pct }
 		set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
+	}
+	st_res_preset_follow_magnitudes_base = {
+		GOOD = $GOOD$
+		PRESET = 1
+		FLOW_PCT = st_res_preset_conservative_flow_pct
+		BUDGET_PCT = st_res_preset_conservative_budget_pct
 	}
 }
 

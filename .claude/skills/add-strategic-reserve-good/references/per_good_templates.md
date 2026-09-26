@@ -311,6 +311,7 @@ Most of the per-good work is now one line added to an existing `$GOOD$`-paramete
 	st_res_init_good_effect          = { GOOD = <GOOD> }  # in st_res_init_effect
 	st_res_reset_good_vars_effect    = { GOOD = <GOOD> }  # in st_res_reset_vars_effect
 	st_res_startup_good_setup_effect = { GOOD = <GOOD> }  # in st_res_rebuild_hub_flow_modifiers_effect (country half)
+	st_res_refresh_preset_magnitudes_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (hub branch, BEFORE the apply loop)
 	st_res_apply_weekly_good_effect  = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (hub branch)
 	st_res_policy_tick_good_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (hub branch, AFTER the apply loop)
 	st_res_mark_good_no_hub_effect   = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (else branch)
