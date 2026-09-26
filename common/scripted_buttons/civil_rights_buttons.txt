@@ -254,8 +254,9 @@ cr_remove_cooptation_token_reform = {
 			text = "CR_REMOVE_COOPTATION_TOKEN_REFORM_DESC"
 			remove_modifier = cr_cooptation_modifier
 			# Also drop the expired-marker if present so re-toggling resets the
-			# 12-month bar bonus window cleanly.
-			remove_modifier = cr_cooptation_expired
+			# 12-month bar bonus window cleanly. Guarded: removing a modifier the
+			# country does not hold logs "not found" to error.log.
+			remove_modifier_if_exists_effect = { MODIFIER = cr_cooptation_expired }
 		}
 		if = { limit = { has_variable = cr_policy_cooptation } remove_variable = cr_policy_cooptation }
 	}
