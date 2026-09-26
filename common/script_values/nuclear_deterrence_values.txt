@@ -67,6 +67,7 @@ nd_upkeep_size_factor = {
 #   high alert     12 × size factor                        ≤ 12 units
 #   safeguards     2 per level (0–3)                       ≤  6 units
 #   hardening      3 per level (0–3)                       ≤  9 units
+#   automatic retaliation (authority 4)                      3 units
 #   cap            40 units ≈ 2 % of GDP a year
 nd_upkeep_units_custody = {
 	value = nd_stockpile_capped
@@ -79,9 +80,14 @@ nd_upkeep_units_custody_recessed = {
 	multiply = 0.5
 }
 
-# What does not depend on readiness: safeguards and hardening.
+# What does not depend on readiness: safeguards, hardening, and an Automatic
+# Retaliation system (3 units, as one hardening level).
 nd_upkeep_units_fixed = {
 	value = 0
+	if = {
+		limit = { nd_authority_automatic = yes }
+		add = 3
+	}
 	if = {
 		limit = { has_variable = nd_safeguards }
 		add = {
@@ -601,10 +607,18 @@ nd_yp_answer_value = {
 		limit = { nd_believed_armed = no }
 		add = 20
 	}
+	# Survivable forces answer — and so does an Automatic Retaliation system,
+	# however vulnerable the forces behind it (umbrella/recessed/dead-hand
+	# spec §3.2).
 	else_if = {
 		limit = {
-			has_variable = nd_survivability
-			var:nd_survivability >= 50
+			OR = {
+				nd_authority_automatic = yes
+				AND = {
+					has_variable = nd_survivability
+					var:nd_survivability >= 50
+				}
+			}
 		}
 		subtract = 25
 	}
@@ -1157,7 +1171,12 @@ nd_ig_term_authority_value = {
 		limit = {
 			nd_ig_posture_judged = yes
 			nd_ig_class_restraint = yes
-			owner = { nd_authority_launch_on_warning = yes }
+			owner = {
+				OR = {
+					nd_authority_launch_on_warning = yes
+					nd_authority_automatic = yes
+				}
+			}
 		}
 		add = -1
 	}
@@ -1286,6 +1305,13 @@ nd_upkeep_weekly_safeguards_step = {
 }
 
 nd_upkeep_weekly_hardening_step = {
+	value = gdp
+	divide = 100000
+	multiply = 3
+}
+
+# What Automatic Retaliation adds, weekly.
+nd_upkeep_weekly_automatic_step = {
 	value = gdp
 	divide = 100000
 	multiply = 3

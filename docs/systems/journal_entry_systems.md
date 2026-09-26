@@ -1346,7 +1346,7 @@ Op table (repeated in the sgui header and the `.gui` header — keep all three i
 |---|---|---|
 | `nd_posture_sgui` | 11–15 | adopt doctrine 1–5 |
 | | 20–23 | set readiness target 0–3 (0 = Recessed) |
-| | 31–33 | adopt launch authority 1–3 |
+| | 31–34 | adopt launch authority 1–4 (4 = Automatic Retaliation) |
 | | 40 / 41 | safeguards down / up |
 | | 50 / 51 | hardening down / up |
 | `nd_crisis_action_sgui` | 1 | go public (issuer) |

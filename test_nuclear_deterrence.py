@@ -181,7 +181,7 @@ class TestLocalization(unittest.TestCase):
         # Parameterised families: every value the wrappers pass.
         expanded |= {f"nd_tt_doctrine_adopted_{d}" for d in range(1, 6)}
         expanded |= {f"nd_tt_readiness_target_{r}" for r in range(0, 4)}
-        expanded |= {f"nd_tt_authority_adopted_{a}" for a in range(1, 4)}
+        expanded |= {f"nd_tt_authority_adopted_{a}" for a in range(1, 5)}
         expanded |= {f"nd_tt_{v}_{o}" for v in ("nd_safeguards", "nd_hardening") for o in ("add", "subtract")}
         self.assert_keys(expanded, "custom tooltips")
 
@@ -833,7 +833,7 @@ class TestManagedFamilies(unittest.TestCase):
             self.assertRegex(effects, rf"(?m)^nd_set_doctrine_{d} = \{{")
         for r in range(0, 4):
             self.assertRegex(effects, rf"(?m)^nd_set_readiness_target_{r} = \{{")
-        for a in range(1, 4):
+        for a in range(1, 5):
             self.assertRegex(effects, rf"(?m)^nd_set_authority_{a} = \{{")
 
     def test_no_bare_parameterised_calls_remain(self):
@@ -930,6 +930,65 @@ class TestLaunchGate(unittest.TestCase):
         self.assertIn("var:nd_readiness_target < 1", body)
         self.assertIn("nd_set_readiness_target_1 = yes", body)
         self.assertNotIn("nd_can_set_readiness", body)
+
+
+class TestAutomaticRetaliation(unittest.TestCase):
+    """Authority 4 (umbrella/recessed/dead-hand spec §3)."""
+
+    def setUp(self):
+        self.t = strip_comments(read(TRIGGERS))
+        self.ev = strip_comments(read(WEAPON_EVENTS))
+
+    def test_authority_triggers(self):
+        for name in ("nd_authority_automatic", "nd_can_adopt_automatic_retaliation", "nd_auto_answers_strike"):
+            self.assertRegex(self.t, rf"(?m)^{name} = \{{")
+        deleg = block(self.t, "nd_authority_delegated_or_warning")
+        self.assertNotIn(">= 2", deleg)
+        self.assertIn("var:nd_authority = 2", deleg)
+        self.assertIn("var:nd_authority = 3", deleg)
+        self.assertIn("mainframe_computers", block(self.t, "nd_can_adopt_automatic_retaliation"))
+        self.assertIn(34, gui_ops(read(GUI), "nd_posture_sgui"))
+        self.assertIn("localization_key = nd_authority_4", block(strip_comments(read(CUSTOM_LOC)), "nd_authority_name"))
+
+    def test_first_strike_is_answered_automatically_and_only_there(self):
+        auto = option_body(self.ev, "nuclear_weapon_events.1.e")
+        self.assertIn("nd_auto_answers_strike = { ENEMY = scope:attacking_country }", auto)
+        for opt in ("nuclear_weapon_events.1.a", "nuclear_weapon_events.1.b", "nuclear_weapon_events.1.c"):
+            self.assertIn("nd_auto_answers_strike = { ENEMY = scope:attacking_country }", option_body(self.ev, opt), opt)
+        # .11 (being answered) never fires by itself: no loop between two systems.
+        self.assertNotIn("nd_auto_answers_strike", block(self.ev, "nuclear_weapon_events.11"))
+        self.assertIn("nd_auto_answered_months", block(self.t, "nd_auto_answers_strike"))
+        self.assertIn("nd_auto_answer_record", auto)
+
+    def test_salvo_is_sized_before_anything_flies(self):
+        auto = option_body(self.ev, "nuclear_weapon_events.1.e")
+        # The stock-sized extra warheads come first, so the preview and the
+        # run read the same stock; the first warhead flies last.
+        self.assertLess(auto.index("var:nuclear_weapon_stockpile >= 3"), auto.index("position = 0"))
+
+    def test_ready_event_answers_automatically_too(self):
+        body = block(self.ev, "nuclear_weapon_events.24")
+        # Gated on the answer being permitted, not the bare authority: a system
+        # barred by a pledge must leave the ordinary options, not none.
+        self.assertIn("nd_auto_answers_strike = { ENEMY = scope:attacking_country }",
+                      option_body(body, "nuclear_weapon_events.24.e"))
+        for opt in ("nuclear_weapon_events.24.a", "nuclear_weapon_events.24.b", "nuclear_weapon_events.24.c"):
+            self.assertIn("NOT = { nd_auto_answers_strike = { ENEMY = scope:attacking_country } }",
+                          option_body(body, opt), opt)
+
+    def test_accident_branch_goes_through_the_launch_path(self):
+        inc = strip_comments(read(INCIDENT_EVENTS))
+        self.assertIn("nd_system_reads_attack = yes", block(inc, "nuclear_incident.30"))
+        e = block(strip_comments(read(EFFECTS)), "nd_system_reads_attack")
+        self.assertIn("KIND = system", e)
+        self.assertIn("nd_authority_automatic = yes", e)
+        self.assertIn("nd_roll_launch_hold = yes", e)
+        self.assertIn("nd_strike_from_incident_of = { KIND = system }", block(self.t, "nd_strike_from_incident"))
+
+    def test_warnings_route_to_the_government(self):
+        warn = block(strip_comments(read(EFFECTS)), "nd_start_unconfirmed_warning")
+        self.assertIn("nd_authority_launch_on_warning = yes", warn)
+        self.assertNotIn("nd_authority_automatic", warn)
 
 
 if __name__ == "__main__":

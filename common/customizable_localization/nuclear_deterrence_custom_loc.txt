@@ -132,6 +132,24 @@ nd_readiness_moving = {
 	}
 }
 
+# What an Automatic Retaliation system did with an accident it read as an
+# attack (nd_system_reads_attack; nuclear_incident.30's system descs).
+nd_system_outcome = {
+	type = country
+	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_system_reacted
+			var:nd_system_reacted = 1
+		}
+		localization_key = nd_system_outcome_held
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_system_outcome_fired
+	}
+}
+
 # Launch authority in force.
 nd_authority_name = {
 	type = country
@@ -149,6 +167,13 @@ nd_authority_name = {
 			var:nd_authority = 3
 		}
 		localization_key = nd_authority_3
+	}
+	text = {
+		trigger = {
+			has_variable = nd_authority
+			var:nd_authority = 4
+		}
+		localization_key = nd_authority_4
 	}
 	text = {
 		trigger = { always = yes }
