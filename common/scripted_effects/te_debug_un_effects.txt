@@ -48,6 +48,7 @@ te_debug_un_seat_member = {
 		if = {
 			limit = { NOT = { has_modifier = un_member_modifier } }
 			add_modifier = { name = un_member_modifier }
+			add_modifier = { name = un_member_privileges_modifier }
 		}
 	}
 	if = {
@@ -356,6 +357,48 @@ te_debug_un_open_mission = {
 			order_by = un_prestige_order_value
 			max = 1
 			un_mission_add_contributor = yes
+		}
+	}
+}
+
+# §0.8's cases in one button. If one of our direct subjects is a member, move
+# it along: puppet -> protectorate (still a member, now represented) ->
+# independent. Otherwise make a random independent member below major-power
+# rank our puppet (suspended at once). A protectorate, not a dominion: the
+# dominion needs a colonial country type.
+# Scope: the player's country
+te_debug_un_cycle_subject_member = {
+	if = {
+		limit = {
+			any_direct_subject = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		}
+		random_direct_subject = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			if = {
+				limit = { is_subject_type = subject_type_puppet }
+				change_subject_type = subject_type_protectorate
+			}
+			else = {
+				make_independent = yes
+			}
+		}
+	}
+	else = {
+		random_country = {
+			limit = {
+				NOT = { this = ROOT }
+				is_subject = no
+				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				country_rank < rank_value:major_power
+			}
+			save_scope_as = te_debug_un_new_subject
+		}
+		if = {
+			limit = { exists = scope:te_debug_un_new_subject }
+			create_diplomatic_pact = {
+				country = scope:te_debug_un_new_subject
+				type = puppet
+			}
 		}
 	}
 }

@@ -13,7 +13,8 @@
 #             4 (a collapsing state), 7 (a famine), 15 (an embargo)
 #   hooks     5 (sanctions adopted), 8 (a court case from event 2),
 #             10 (the crisis opens), 11 (a veto), 20 (a great power leaves),
-#             30-32 (dissolution and refounding), 101-103 (notifications)
+#             30-32 (dissolution and refounding), 101-103 (notifications),
+#             36 (our representation restored, with conventions passed meanwhile)
 # Event 13 (an ideological confrontation) was retired: no situation drives it.
 # Every option costs something; a proposer event's decline hands the item to
 # another delegation (un_docket_offer_topic_next) and earns nothing.
@@ -62,12 +63,12 @@ un_events.1 = {
 	duration = 3
 
 	trigger = {
-		# Fired by un_charter_invitations to every other recognized independent
-		# country once the UN is founded or refounded
+		# Fired by un_charter_invitations to every other country that conducts
+		# its own foreign policy (un_membership_eligible, §0.8) once the UN is
+		# founded or refounded
 		NOT = { has_variable = un_charter_signed }
 		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-		is_subject = no
-		NOT = { is_country_type = decentralized }
+		un_membership_eligible = yes
 	}
 
 	immediate = {
@@ -101,6 +102,7 @@ un_events.1 = {
 		# period closes (un_seat_effects.txt); the tooltip says so.
 		un_seat_join_tooltip = yes
 		je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+		je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
 		je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
 		# No conventions are ratified at UN founding, so this is a no-op today;
 		# kept for symmetry with the other join paths in case the founding event
@@ -1447,7 +1449,7 @@ un_events.10 = {
 		trigger = {
 			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 			has_global_variable = un_founded
-			is_subject = no
+			un_membership_eligible = yes
 			NOT = { has_modifier = un_expelled_cooldown }
 			NOT = { has_modifier = un_withdrawal_penalty_modifier }
 		}
@@ -3568,5 +3570,101 @@ un_events.35 = {
 			}
 		}
 		custom_tooltip = un_events.35.b_tt
+	}
+}
+
+# Event 36: Conventions passed in our absence (§0.8 ruling 14)
+# Fired by un_representation_monthly_update (un_membership_effects.txt) to a
+# member whose representation has just been restored, when conventions were
+# passed while it was suspended that it is not party to. While suspended it
+# was not asked to ratify them (un_vote.3 skips it); this is its one chance.
+# A convention it refused before its suspension is not offered again. Either
+# answer forgets the snapshot, so the choice is made once.
+un_events.36 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/un_charter_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_map.dds"
+
+	title = un_events.36.t
+	desc = un_events.36.d
+	flavor = un_events.36.f
+
+	duration = 3
+
+	trigger = {
+		un_member_represented = yes
+		un_rep_any_convention_missed = yes
+	}
+
+	# Option A: ratify every convention passed in our absence
+	option = {
+		name = un_events.36.a
+		default_option = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = -2
+			}
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = unhrc MODIFIER = un_human_rights_declaration_modifier } }
+			je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier multiplier = un_convention_multiplier } }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = iaea MODIFIER = un_nonproliferation_modifier } }
+			je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier multiplier = un_convention_multiplier } }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = unep MODIFIER = un_climate_binding_modifier } }
+			je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier multiplier = un_convention_multiplier } }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = unesco MODIFIER = un_heritage_program_modifier } }
+			je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier multiplier = un_convention_multiplier } }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = who MODIFIER = un_pandemic_cooperation_modifier } }
+			je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier multiplier = un_convention_multiplier } }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = unhcr MODIFIER = un_refugee_program_modifier } }
+			je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier multiplier = un_convention_multiplier } }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier } }
+			je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier multiplier = un_convention_multiplier } }
+		}
+		# The two country-scoped conventions, as un_apply_ratified_conventions has them.
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier } }
+			add_modifier = { name = un_law_of_sea_modifier multiplier = un_convention_multiplier }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier } }
+			add_modifier = { name = un_icc_member_modifier multiplier = un_convention_multiplier }
+		}
+		# Our terms under the regimes now in force, as a joiner's.
+		un_regime_refresh_country = yes
+		hidden_effect = { un_rep_convention_forget = yes }
+	}
+
+	# Option B: stay outside them
+	option = {
+		name = un_events.36.b
+		ai_chance = {
+			base = 1
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = 3
+			}
+		}
+		custom_tooltip = un_events.36.b_tt
+		hidden_effect = { un_rep_convention_forget = yes }
 	}
 }

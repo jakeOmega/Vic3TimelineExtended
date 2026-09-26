@@ -510,6 +510,7 @@ un_dissolve_strip_country = {
 # Scope: country
 un_membership_end_effect = {
 	je:je_united_nations ?= { remove_modifier = un_member_modifier }
+	je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
 	# Dues stop with membership; arrears do not (redesign phase 5): a member
 	# that walks out owing money rejoins still withholding.
 	remove_modifier = un_dues_modifier
@@ -580,6 +581,7 @@ un_found_organisation = {
 	un_ladder_tier_update = yes
 	set_global_variable = { name = un_seat_signing_months_left value = un_seat_signing_months }
 	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+	je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
 	je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
 	je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
 	# THIS, not ROOT: un_conference_conclude reaches here from the global
@@ -592,8 +594,9 @@ un_found_organisation = {
 	}
 }
 
-# Invite every other recognized independent country to sign the charter
-# (un_events.1, which skips a country already in). The founder is saved as
+# Invite every other country that conducts its own foreign policy
+# (un_membership_eligible, §0.8: independent, or a dominion, protectorate or
+# tributary) to sign the charter (un_events.1, which skips a country already in). The founder is saved as
 # scope:un_charter_founder for the invitation's text. It is saved from the
 # current scope, not ROOT: in the refounding path this runs from the global
 # monthly pulse (un_conference_monthly_update), which has no root.
@@ -603,8 +606,7 @@ un_charter_invitations = {
 	every_country = {
 		limit = {
 			NOT = { this = scope:un_charter_founder }
-			is_subject = no
-			NOT = { is_country_type = decentralized }
+			un_membership_eligible = yes
 		}
 		trigger_event = { id = un_events.1 }
 	}
@@ -617,6 +619,9 @@ un_charter_invitations = {
 # Scope: the joining country
 un_join_organisation = {
 	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+	# What membership brings, at once (§0.8 ruling 5); the monthly pulse
+	# reconciles it from then on.
+	je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
 	un_apply_ratified_conventions = yes
 }
 
@@ -632,8 +637,10 @@ un_leave_organisation = {
 	# of our power share from the participation pillar. Weighted by our
 	# weight in world affairs (at most x2), so a faded power still holding
 	# its seat costs the UN far less than a superpower. Checked before the
-	# block below strips the seat. Only this effect ends a membership: a
-	# member absorbed by a merger or annexation never passes through it.
+	# block below strips the seat. Only this effect ends a membership by
+	# choice: a member absorbed by a merger or annexation never passes through
+	# it, and a member that loses its diplomatic autonomy keeps its
+	# membership with its representation suspended (§0.8).
 	if = {
 		limit = { is_un_permanent_member = yes }
 		custom_tooltip = un_ledger_tt_p5_walkout

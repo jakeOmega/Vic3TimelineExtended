@@ -4,8 +4,10 @@
 > 3 (GROUNDS, THE ITEMISED LEAN, AI VOTING IN SCRIPT, THE RECESS), 4 (THE DOCKET AND THE
 > EVENT REWRITE), 5 (DUES, TEETH, REGIMES, SOVEREIGNTY, INTELLIGENCE) AND 6 (MISSIONS)
 > IMPLEMENTED,** with joining missions at will added after phase 6. Phase 1 has been
-> play-tested; phases 2–6 and §0.7 are pending in-game verification.
+> play-tested; phases 2–6, §0.7 and §0.8 (subjects, diplomatic autonomy and suspended
+> representation) are pending in-game verification.
 > Read
+> [§0.8](#08-subjects-diplomatic-autonomy-and-suspended-representation),
 > [§0.7](#07-joining-missions-at-will--rulings-and-open-checks),
 > [§0.6](#06-phase-6-as-shipped--rulings-deviations-and-open-checks),
 > [§0.5](#05-phase-5-as-shipped--rulings-deviations-and-open-checks),
@@ -24,6 +26,328 @@
 > The current system is documented in [`journal_entry_systems.md` § United Nations](journal_entry_systems.md).
 > This document describes where it goes next. Mandates, standing and lobbying all survive
 > the redesign; §10 says how each one plugs in.
+
+---
+
+## 0.8 Subjects, diplomatic autonomy and suspended representation
+
+Designed with the owner and built 2026-09-25 on `feat/un-subject-membership`. This closes
+the open question in §0.7 ruling 9 ("should a member lose its seat when it becomes a
+subject?"). Not yet seen in a running game. The owner's decisions are marked **(decided)**.
+
+### The rule in one paragraph
+
+A country may join the UN if it conducts its own foreign policy. That means it is independent,
+or it is a dominion, protectorate or tributary. A member that stops conducting its own foreign
+policy keeps its membership, but its **representation is suspended**. It casts no vote, tables
+nothing, and draws no membership benefits in its own right. It is treated as part of its
+overlord in foreign affairs. If the overlord is a represented member that pays its dues, the
+overlord **carries the seat**: the subject's GDP is added to the overlord's assessment, and the
+subject keeps the membership benefits. When the member conducts its own foreign policy again,
+its representation is restored automatically. Nothing about the member's government, laws or
+economy changes. The rule is about who speaks for it abroad.
+
+### Files
+
+- `common/scripted_triggers/un_membership_triggers.txt` (new): `un_membership_eligible`,
+  `un_member_represented`, `un_representation_suspended`, `un_dues_billed_to_overlord`,
+  `un_seat_carried`, `un_member_draws_benefits`.
+- `common/scripted_effects/un_membership_effects.txt` (new): `un_representation_monthly_update`,
+  and the convention snapshot (`un_rep_convention_snapshot`, `un_rep_convention_forget`).
+- `events/un_events.txt`: `un_events.36`, the one chance at conventions passed in our absence.
+- `common/scripted_buttons/un_buttons.txt`: the six programme and stance buttons refuse a
+  suspended member.
+- The gates beside Article 19: `un_resolution_triggers.txt`, `un_vote_events.txt` (`un_vote.1`,
+  and `un_vote.2`/`un_vote.3` for compliance), `un_chamber_sguis.txt`, `un_script_values.txt`
+  (`un_vote_eligible_member_count`), `un_propose_triggers.txt`, `un_docket_triggers.txt`,
+  `un_lobbying.txt`, `un_mission_triggers.txt`, `un_hq_effects.txt`,
+  `un_permanent_member_triggers.txt`.
+- The ways in and the outsiders: `un_buttons.txt` (Join; the dues buttons), `un_ladder_effects.txt`
+  (invitations; the privileges on joining and leaving), `un_events.txt` (`un_events.1`,
+  `un_events.10`), `un_teeth_triggers.txt`, `je_united_nations.txt` (enrolment, pariah, the
+  monthly check, dues and privileges in the member block, the General Assembly line).
+- Dues: `un_dues_values.txt` (`un_dues_assessed_gdp`).
+- Modifiers: `extra_modifiers.txt` (`un_member_modifier` emptied; `un_member_privileges_modifier`).
+- Display: `un_script_values.txt` (`un_member_count`, `un_suspended_member_count`,
+  `un_eligible_country_count`, `un_carried_seat_count`), `un_chamber_display_effects.txt`
+  (dues lines), `extra_concepts.txt` (`concept_un_suspended_representation`),
+  `extra_messages.txt` (the two notices), loc in `te_journal_entries`, `te_concepts`,
+  `te_miscellaneous`, `te_notifications`, `te_events`.
+- Debug: `te_debug_un_effects.txt` (`te_debug_un_cycle_subject_member`), `te_debug_un.1`
+  option v.
+- `test_un_membership.py`: every Article 19 gate also asks `un_representation_suspended`; the
+  eligible types; every way in; the dues values; the privileges on every join path; the
+  counts and journal lines.
+
+### Rulings
+
+1. **Eligibility is diplomatic autonomy (decided).** `un_membership_eligible` (country):
+   - the country is not decentralized, and
+   - it is independent, or its subject type is dominion, protectorate or tributary.
+
+   These are the vanilla subject types with `can_start_own_diplomatic_plays = yes`, less the
+   chartered company. The engine offers no trigger for that field, so the list is written out.
+   `te_mon_is_board_subject` groups subjects by `autonomy_level` instead. Do not reuse it here:
+   a personal union is autonomy level 2 but cannot start its own plays, so the two rules
+   disagree on it.
+   - **Chartered companies are excluded (decided).** The UN's own decolonisation regime
+     (`is_qualifying_colonial_subject`) already treats one as a colony.
+   - **Personal unions, puppets, vassals, colonies and crown lands are not eligible.** The
+     overlord conducts their diplomacy.
+
+   The mod's own subjugation action (`te_force_become_subject`) produces only tributaries,
+   dominions and protectorates. A member subjugated that way therefore stays represented.
+   Suspension comes from the vanilla paths: the puppet and other subject war goals, the
+   decrease-autonomy actions, and releases as a subject.
+2. **One trigger for every way in.** These all ask `un_membership_eligible`, where each used to
+   ask `is_subject = no` and not decentralized:
+   - the Join button;
+   - the charter invitations and `un_events.1`'s trigger;
+   - the treaty enrolment in the journal entry's pulse;
+   - `un_events.10`'s outsider option.
+
+   A dominion, protectorate or tributary can therefore join and is invited to sign. The
+   founding button keeps `is_subject = no`: a founder must be independent.
+3. **Suspended representation (decided).** `un_representation_suspended` is a member that is
+   not eligible. It is computed live, so it takes effect the moment a member is subjugated and
+   ends the moment it is released or promoted. It sits beside every Article 19 check
+   (`un_dues_vote_suspended`), with its own tooltip. A suspended member:
+   - **casts no ballot** (`un_vote_can_cast_ballot`, `un_vote.1`'s trigger, which copies it,
+     `un_chamber_ballot_open`, the chamber's vote control);
+   - **is not counted in the two-thirds** (`un_vote_eligible_member_count`);
+   - **tables nothing** (the seven topic `un_propose_*_possible` triggers and
+     `un_propose_own_motion_possible`, which the ten conventions share);
+   - **is offered nothing by the docket** (`un_docket_can_be_offered`; the peacekeeping and aid
+     asks, `un_docket_peacekeeping_power` and `un_docket_aid_power`; the lending facility,
+     `un_docket_loan_candidate`);
+   - **cannot be lobbied** (`un_secure_commitment_action`, both sides);
+   - **is not asked to comply with or ratify a passed resolution** (`un_vote.3`). Ratifying is an
+     act of foreign policy, and the overlord makes those. The conventions it ratified before its
+     suspension still bind it.
+   - **holds no permanent seat.** The seat is stripped at the next monthly update and refilled
+     by prestige as usual. This can happen: a personal-union junior may be of major-power rank,
+     and so may have been a great power;
+   - **does not host the headquarters.** The headquarters moves at the next monthly update, and
+     a suspended member is never picked to host it;
+   - **sends no contingent at will** (`un_mission_volunteer_eligible`). The major-power gate
+     already rules out all but personal-union juniors. Contingents already in the field stay
+     until their mission ends or the member withdraws them.
+   - **runs no UN programme and takes no stance (decided).** The six start buttons refuse it:
+     peacekeeping, development, human rights, arms control, champion and undermine. The
+     monthly check ends any it was running, as their stop buttons would.
+
+   A suspended member keeps its standing record and its ratified conventions. It can still
+   leave.
+4. **The overlord carries the seat (decided).** A suspended member is never assessed dues
+   itself.
+   - If its **direct** overlord is a represented member, the subject's GDP is added to the
+     overlord's assessment (`un_dues_assessed_gdp`). The overlord's weekly dues, what a month in
+     arrears adds, the budget and both GDP terms of the funding pillar all read that figure.
+     Each carried subject is therefore counted once, on its overlord's bill.
+   - If that overlord is also paying (not withholding), the seat is **carried**. The subject
+     draws the membership benefits (ruling 5).
+   - An overlord that withholds its dues withholds its subjects' share too, and their benefits
+     stop while it does.
+   - If the overlord is not a member, or is itself suspended, nobody pays and nobody benefits.
+     The seat is dormant until the subject is restored. This keeps chains simple: only a
+     represented overlord carries a subject.
+
+   Arrears a member ran up before its suspension stay on its books. They neither grow nor
+   clear while it is suspended; it faces them again when restored. The Withhold and Pay buttons
+   are hidden from a suspended member.
+5. **Membership and its benefits are separated.** `un_member_modifier` becomes the membership
+   record alone, with no effects, because 196 lines read it as "is a member". Its bonuses
+   (relations speed, +5 leverage, prestige, influence, defender escalation) move to
+   `un_member_privileges_modifier`. A member draws the privileges modifier while it is
+   represented, or while suspended and carried (`un_member_draws_benefits`). The
+   authority-scaled `un_membership_benefits_modifier` follows the same rule. The monthly
+   member pulse is the refresh site. The join paths add the privileges modifier at once, and
+   `un_membership_end_effect` removes it.
+6. **Annexation passes nothing on.** An annexed member's journal entry, and its membership with
+   it, ends with the country. Every count is computed live. The annexer gains no vote, no
+   seat, no dues and no benefits. A member that forms a new tag, or unifies others into itself,
+   keeps its one seat, and the seats of the countries it absorbed end.
+   `un_leave_organisation` stays the only effect that ends a membership by choice.
+7. **Counts and thresholds agree by construction.**
+   - **Represented members:** members that are eligible (`un_member_count`).
+   - **Suspended members:** members that are not (`un_suspended_member_count`).
+   - **Eligible nations:** countries that are eligible (`un_eligible_country_count`, which
+     replaces `un_independent_country_count`).
+
+   The numerator's set is a subset of the denominator's, so "N of M" never exceeds M. A simple
+   majority counts ballots cast. The two-thirds counts represented members who are not in
+   Article 19 arrears, taken when the resolution closes. A ballot cast before its voter was
+   suspended stands. Article 19 already behaves this way.
+8. **The journal entry says who takes part (decided).** The General Assembly line reads:
+
+   > **General Assembly:** 61 of 74 eligible nations are represented. 3 more member states have
+   > suspended representation because they lack diplomatic autonomy. Members hold 83% of world
+   > GDP and 78% of its population.
+
+   The second sentence appears only when a member is suspended, in a singular and a plural
+   form. The GDP and population shares count every member, suspended ones included, and the
+   line says "members". A new concept, `concept_un_suspended_representation`, states the rule
+   on hover. The General Assembly concept stops saying that every member casts a vote.
+   - A suspended member's chamber status line says that its representation is suspended, and
+     whether its overlord carries the seat.
+   - An overlord carrying seats is told in its dues line that its assessment includes them.
+   - The chamber's two-thirds passage rule, which already names Article 19, names suspended
+     representation too.
+9. **Transitions are announced once.** The journal entry's monthly pulse keeps a marker,
+   `var:un_rep_suspended`. On a change it posts `un_representation_suspended_notice` or
+   `un_representation_restored_notice`. While a member is suspended, the check also strips any
+   permanent seat and ends its programmes; the member block of the same pulse removes
+   `un_dues_modifier`.
+   There is no country-scoped on-action for a change of subject type (colony to dominion),
+   so the pulse is the authoritative check. The gates do not wait for it, because the trigger
+   is live.
+10. **Non-members that cannot join are not pariahs.** The non-member pariah modifiers, and the
+   Supranational standing case against outsiders (`un_case_standing_applies`), apply only to
+   eligible non-members. Before this, every puppet and colony carried the pariah penalty for
+   staying out of an organisation it could not join. An expelled country, or one that walked
+   out, is eligible by type, so it stays a pariah.
+11. **No founding exceptions (decided).** Nobody holds an active seat as a subject by virtue of
+    the founding. Rationale under *History and gameplay* below.
+12. **Subjects that were never members get nothing (decided).** Treating a subject as part of
+    its overlord could be read as giving every colony of a member the benefits, billed to the
+    overlord. That would charge colonial empires dues on every colony and shift the balance
+    widely. A suspended member differs from such a colony: it holds a seat on the roll, which
+    reactivates when it regains its autonomy.
+13. **The decolonisation regime is unchanged.** `un_regime_member_colony` reaches a qualifying
+    colonial subject through its overlord's membership. An overseas protectorate of another
+    heritage can now be a member itself. It then gets both the member terms and the colony's
+    liberty term. That is coherent: the declaration reaches it through its overlord in either
+    case. The comments that said a subject is never a member are corrected.
+14. **One chance at the conventions passed during a suspension (decided).** A suspended
+    member is not asked to ratify new conventions (ruling 3).
+    - When it is suspended, `un_rep_convention_snapshot` marks the conventions in force then
+      (`var:un_rep_had_<agency>`).
+    - When it is restored, `un_events.36` offers the conventions passed since that it is not
+      party to (`un_rep_any_convention_missed`). It can ratify them all, as a joiner would, or
+      stay outside them.
+    - Either answer forgets the snapshot, so it is asked once. A convention it refused before
+      its suspension was in force then, so it is never offered again.
+    - The convention list is `un_apply_ratified_conventions`'s, and `test_un_membership.py`
+      keeps the two in step.
+
+### Representative cases
+
+| Case | Before | After |
+|---|---|---|
+| Independent member | Votes | Unchanged |
+| Member made a protectorate, tributary or dominion (the mod's own subjugation action) | Kept its vote, counted as a "subject seat" | Represented: votes and tables, pays its own dues |
+| Member made a puppet (vanilla war goal) | Kept its vote and any seat, veto or headquarters | Suspended at once. At the next month: notice, seat and headquarters gone, dues billed to the overlord if it is represented, benefits if the overlord also pays |
+| Dominion member demoted to a colony, then promoted back | Voted throughout | Suspended, then restored. It pays its own dues again from the next month |
+| Suspended member made independent | — | Restored |
+| Personal-union junior member of major rank holding a permanent seat | Kept seat and veto | Suspended. The seat goes to the next great power by prestige |
+| Member annexed | Seat gone; the old "N of M" could exceed M | Seat gone; both counts drop by one; the annexer gains nothing |
+| Non-member puppet or colony | Pariah penalty; could not join | No penalty. Cannot join or be invited |
+| Non-member dominion, protectorate or tributary | Could not join | Invited to sign if the UN is founded later; may join |
+| British India (`BIC`) | Could never join as a subject | A chartered company, then the Raj (a colony): not eligible. A dominion or protectorate through `je_india_home_rule`: eligible. Independent: eligible |
+| Philippines (`PHI`) | Could never join as a subject | A Spanish colony: not eligible. A dominion or protectorate (the fail branch of `je_philippines_main`): eligible. A personal union: not eligible. Independent: eligible |
+| Ukraine (`UKR`), Belarus (`BYE`) | — | Released as puppets: not eligible. Released independent: eligible. No system in the game makes them Soviet subjects |
+
+### Existing saves
+
+- **The moment a save loads:**
+  - Every subject member of a non-autonomous type loses its vote, its tabling and its place in
+    the two-thirds. Subject members that are dominions, protectorates or tributaries keep
+    voting.
+  - The General Assembly line reclassifies at once. The old "seats held by members that have
+    since become subjects" clause is gone.
+  - A non-member puppet loses its pariah modifiers at its next pulse.
+- **At the first monthly pulse:**
+  - Suspended members get their notice, once.
+  - A suspended permanent member loses its seat, and a suspended host loses the headquarters.
+  - Dues move to the carrying overlords.
+- **The privileges gap.** Because the bonuses moved off `un_member_modifier`, members of an
+  existing save lack them until their first monthly pulse, for at most a month. Members that
+  join after the update get them at once.
+- **Votes.** A vote in progress keeps every ballot already cast.
+
+### History and gameplay
+
+The real UN admits "states" (Charter Art. 4) and keeps no rule for members that lose their
+independence. Its founding shows how elastic that was. The UN library lists the Byelorussian
+SSR, India, the Philippine Commonwealth and the Ukrainian SSR as founding members "not
+considered states at the time" ([Ask DAG, "founding members"](https://ask.un.org/faq/243656);
+[Growth in UN membership](https://www.un.org/en/about-us/growth-in-un-membership)).
+
+- **India and the Philippines** were self-governing entities on a road to independence. In the
+  game that road runs through dominion or protectorate status: `je_india_home_rule`, and the
+  fail branch of `je_philippines_main`. The autonomy rule already seats them there, without a
+  special case.
+- **The SSRs** were separate votes for an overlord that conducted their foreign policy. That is
+  the one thing this change removes, so the game does not reproduce it. Neither does it give
+  every founder's subjects seats.
+- **Suspension is a gameplay abstraction, not a Charter rule.** It borrows Article 5
+  (suspension of the rights and privileges of membership, obligations continuing) and Article
+  19 (the vote lost, membership kept). The overlord carrying the seat follows the owner's
+  framing: a subject that cannot conduct its own foreign policy is part of its overlord
+  abroad, like a territory. It stays a country in its own right for everything else.
+- **Later precedents fit the rule.** Protected states that kept their own diplomacy held seats
+  (Bhutan joined in 1971). A merger leaves one seat, as the United Arab Republic did.
+
+### Known roughnesses
+
+- **Proposer events do not re-check at the moment they are answered.** Neither Article 19 nor
+  suspension stops a proposer event already sitting in the notification list (duration 3).
+  The check runs when the docket makes the offer. This predates §0.8.
+- **Conventions do not follow the overlord.** A suspended member keeps its own earlier
+  ratifications. It does not take on its overlord's. The fully consistent version, where the
+  overlord's conventions bind a carried subject, is a new mechanic and was not built.
+- **Standing and authority pillars ignore suspension.** A suspended member's standing record
+  runs on. Participation counts every member's power share. Commitment and funding read the
+  stances and programmes a suspended member no longer holds (ruling 3). The order pillar
+  already leaves subjects out.
+- **A decentralized member** (colonial collapse can make one) is suspended "because it lacks
+  diplomatic autonomy", which is loose wording for a country without a state apparatus.
+- **The restoration offer is all or nothing.** `un_events.36` ratifies every missed convention
+  or none; a member cannot pick among them.
+- **Restated numbers:** the bonus list in `UN_JOIN_DESC`, and the eligible subject types in the
+  join tooltip and the concept.
+
+### IN-GAME VERIFICATION CHECKLIST (§0.8)
+
+The debug console has an option for this (`te_debug_un.1` option v). With no subject member
+of ours, it makes a random minor member our puppet. Otherwise it moves our subject member
+along: puppet, then protectorate, then independent.
+
+1. **Puppet a member** (option v). At once, the member's journal entry says "Member,
+   representation suspended", its chamber vote control is greyed with the suspension reason,
+   and its Propose rows are greyed. The General Assembly line reads "N of M
+   eligible nations are represented. 1 more member state has suspended representation…".
+2. **Next month:** the puppet gets the suspension notice. Its modifiers lose UN Membership
+   Privileges only if we withhold our dues or are not a member. Our dues line says it includes
+   a carried seat, and `un_dues_modifier`'s weekly figure rises by its share.
+3. **Withhold our dues:** next month the puppet loses its privileges and benefits. Pay again:
+   they return.
+4. **Promote it to a protectorate** (option v): the vote control is live again. Next month it
+   gets the restored notice and pays its own dues. Our line drops the carried seat.
+5. **Make it independent:** still represented, and nothing changes.
+6. **A non-member colony** shows no pariah modifier. Its journal entry says it is not eligible,
+   and its Join button is greyed with the reason ("We conduct our own foreign policy…"). A
+   non-member dominion sees the Join button enabled.
+7. **An expulsion or reform vote** with a suspended member: the chamber's passage rule
+   ("a two-thirds supermajority of all N members with a vote") counts one fewer than the
+   members on the roll, and says why.
+8. **Annex a member** (`annex` in the console): the line's N and M both drop by one, and the
+   annexer's votes and modifiers are unchanged.
+9. **Programmes.** Puppet a member (option v) and `tag` to it with the console. Its six
+   programme and stance start buttons are greyed with the suspension reason. At the next month,
+   any programme or stance it was running (for example UN Human Rights Champion or UN Arms
+   Control Participant) is gone from its modifiers.
+10. **Conventions in our absence.**
+    - Puppet a member (option v).
+    - While it is suspended, bring a convention into force. Option q sets up the International
+      Criminal Court, if it is not in force yet.
+    - Promote the puppet to a protectorate (option v).
+    - At the next month the member gets `un_events.36`, with the ICC modifier under Ratify. To
+      see it yourself, `tag` to the member before the month turns.
+    - Once it is answered, the member carries the modifier if it ratified (the AI usually
+      does), and the event does not come back.
+11. **`error.log` / `debug.log`:** nothing from `un_rep_suspended`, `un_dues_assessed_gdp` or
+   the new triggers.
 
 ---
 
@@ -77,8 +401,9 @@ Not yet seen in a running game. The same branch fixed two display bugs in the ch
 5. **The AI** runs the same trigger and the same writers from the journal entry's monthly
    pulse (`un_mission_ai_monthly`). About one month in ten it sends one contingent where
    `un_mission_ai_join_score` is highest, if that is above 10. The score reads what the
-   mission lacks (5 for each missing contributor up to three), the ties to the host from the
-   vote lean (alliance, bloc, overlord +15 each; rivalry −20; relevance +5; relations ±10),
+   mission lacks (5 for each missing contributor up to three), the ties to the host (the kinds
+   the vote lean reads, plus overlordship, which it does not: alliance, bloc, overlord +15
+   each; rivalry −20; relevance +5; relations ±10),
    the peacekeeping programme (+15 for peacekeeping and stabilisation), humanitarian law,
    great-power rank and authority of 40 or more (+5 each), from a base of −10. It serves in
    at most 2 missions at will (3 for a great power), and not while at war, in default or with
@@ -115,7 +440,9 @@ Not yet seen in a running game. The same branch fixed two display bugs in the ch
    seats. The treaty auto-enrolment (`country_un_membership_obligation_bool`) now requires
    independence, as the Join button always did. **Open question for the owner:** should a
    member lose its seat when it becomes a subject? `un_regime_member_colony` assumes a
-   subject is never a member.
+   subject is never a member. **Answered in §0.8:** it keeps its membership. A member that no
+   longer conducts its own foreign policy has its representation suspended. The line now reads
+   "N of M eligible nations are represented", and the subject-seats clause is gone.
 
 ### Known roughnesses
 

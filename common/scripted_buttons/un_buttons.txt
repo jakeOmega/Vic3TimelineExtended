@@ -105,8 +105,10 @@ un_join_button = {
 	possible = {
 		has_global_variable = un_founded
 		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-		is_subject = no
-		NOT = { is_country_type = decentralized }
+		custom_tooltip = {
+			text = un_membership_eligible_tt
+			un_membership_eligible = yes
+		}
 		NOT = { has_modifier = un_expelled_cooldown }
 		NOT = { has_modifier = un_withdrawal_penalty_modifier }
 	}
@@ -241,13 +243,16 @@ un_withhold_dues_button = {
 	name = "UN_WITHHOLD_DUES"
 	desc = "UN_WITHHOLD_DUES_DESC"
 
+	# Our dues are our overlord's while our representation is suspended (§0.8).
 	visible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
 		NOT = { un_dues_is_withholding = yes }
 	}
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
 		NOT = { un_dues_is_withholding = yes }
 		custom_tooltip = {
 			text = un_dues_assessed_tt
@@ -290,13 +295,17 @@ un_pay_dues_button = {
 	name = "UN_PAY_DUES"
 	desc = "UN_PAY_DUES_DESC"
 
+	# Our dues are our overlord's while our representation is suspended (§0.8);
+	# arrears from before wait until we are restored.
 	visible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
 		un_dues_is_withholding = yes
 	}
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
 		un_dues_is_withholding = yes
 	}
 
@@ -554,6 +563,12 @@ un_peacekeeping_mission_button = {
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
 		country_rank >= rank_value:major_power
 		NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
 		NOT = { has_modifier = un_peacekeeping_cooldown }
@@ -632,6 +647,12 @@ un_fund_development_button = {
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
 		country_rank >= rank_value:major_power
 		NOT = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
 	}
@@ -705,6 +726,12 @@ un_human_rights_resolution_button = {
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
 		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_champion_modifier } }
 		OR = {
 			has_law = law_type:law_multicultural
@@ -768,6 +795,12 @@ un_arms_control_button = {
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
 		NOT = { je:je_united_nations ?= { has_modifier = un_arms_control_participant_modifier } }
 		OR = {
 			has_law = law_type:law_war_crimes_forbidden
@@ -843,6 +876,12 @@ un_champion_order_button = {
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
 		country_rank >= rank_value:great_power
 		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }
 		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
@@ -902,6 +941,12 @@ un_undermine_order_button = {
 
 	possible = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		# §0.8: a member whose representation is suspended runs no UN programme
+		# and takes no stance; its overlord conducts its foreign policy.
+		custom_tooltip = {
+			text = un_representation_table_tt
+			NOT = { un_representation_suspended = yes }
+		}
 		country_rank >= rank_value:great_power
 		NOT = { je:je_united_nations ?= { has_modifier = un_undermine_order_cost } }
 		NOT = { je:je_united_nations ?= { has_modifier = un_champion_order_cost } }

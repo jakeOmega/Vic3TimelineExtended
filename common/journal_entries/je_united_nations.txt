@@ -107,11 +107,32 @@
 	progress_desc = un_authority_progress_desc
 
 	status_desc = {
-		# 1. Personal membership status
+		# 1. Personal membership status. §0.8: a country that does not conduct
+		# its own foreign policy is told it cannot join, and a member whose
+		# representation is suspended is told so, and whether its overlord
+		# carries its seat, before the general lines.
 		first_valid = {
+			triggered_desc = {
+				desc = je_un_status_not_eligible
+				trigger = {
+					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					NOT = { un_membership_eligible = yes }
+				}
+			}
 			triggered_desc = {
 				desc = je_un_status_not_member
 				trigger = { NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } } }
+			}
+			triggered_desc = {
+				desc = je_un_status_suspended_carried
+				trigger = {
+					un_representation_suspended = yes
+					un_seat_carried = yes
+				}
+			}
+			triggered_desc = {
+				desc = je_un_status_suspended
+				trigger = { un_representation_suspended = yes }
 			}
 			triggered_desc = {
 				desc = je_un_status_member
@@ -201,16 +222,23 @@
 			}
 		}
 
-		# 4. General Assembly statistics. Members that have become subjects
-		# keep their seats and are counted apart (un_subject_member_count).
+		# 4. General Assembly statistics (§0.8 ruling 8): the represented
+		# members of the eligible nations, then the members whose
+		# representation is suspended, in the singular or the plural.
 		first_valid = {
 			triggered_desc = {
-				desc = je_un_statistics_subject_seats
+				desc = je_un_statistics_suspended_many
 				trigger = {
 					any_country = {
-						je:je_united_nations ?= { has_modifier = un_member_modifier }
-						is_subject = yes
+						un_representation_suspended = yes
+						count >= 2
 					}
+				}
+			}
+			triggered_desc = {
+				desc = je_un_statistics_suspended_one
+				trigger = {
+					any_country = { un_representation_suspended = yes }
 				}
 			}
 			triggered_desc = {
@@ -312,6 +340,15 @@
 				je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
 				je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
 			}
+			# A non-member draws no privileges (§0.8 ruling 5): a safety net for a
+			# path that ended membership without un_membership_end_effect.
+			if = {
+				limit = {
+					je:je_united_nations ?= { has_modifier = un_member_privileges_modifier }
+					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+				}
+				je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
+			}
 			# Strip non-permanent SC seats from sub-GP holders (legacy save migration).
 			if = {
 				limit = {
@@ -330,14 +367,14 @@
 			# ---- Treaty obligation auto-enrollment ----
 			# Membership only: a great power enrolled by treaty stands for an
 			# open permanent seat like any other member (un_join_organisation).
-			# Only an independent country: subjects cannot join (un_join_button),
-			# and a treaty obligation is no way round that.
+			# Only a country that conducts its own foreign policy
+			# (un_membership_eligible, §0.8): a treaty obligation is no way
+			# round the Join button's gate.
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
 					modifier:country_un_membership_obligation_bool = yes
-					is_subject = no
-					NOT = { is_country_type = decentralized }
+					un_membership_eligible = yes
 				}
 				un_join_organisation = yes
 			}
@@ -355,6 +392,12 @@
 				}
 				un_mission_service_refresh = yes
 			}
+
+			# ---- Suspended representation (§0.8 ruling 9) ----
+			# Announce a suspension or restoration once, and strip a suspended
+			# member's permanent seat. Before the member block, so the dues and
+			# privileges below see the same month.
+			un_representation_monthly_update = yes
 
 			# ---- Member-only logic ----
 			if = {
@@ -381,7 +424,19 @@
 				# This month's assessment, or a month in arrears for a member
 				# withholding its dues (Article 19 after 24 of them). The single
 				# refresh site for un_dues_modifier.
-				un_dues_country_monthly_update = yes
+				# A suspended member is never assessed itself: its represented
+				# overlord is billed for its seat (un_dues_assessed_gdp, §0.8
+				# ruling 4). Its arrears, if any, neither grow nor clear.
+				if = {
+					limit = { un_representation_suspended = yes }
+					if = {
+						limit = { has_modifier = un_dues_modifier }
+						remove_modifier = un_dues_modifier
+					}
+				}
+				else = {
+					un_dues_country_monthly_update = yes
+				}
 
 				# ---- Missions joined at will (un_mission_effects.txt) ----
 				# The AI sends or recalls a contingent the way a player does from
@@ -393,15 +448,35 @@
 				}
 				un_mission_service_refresh = yes
 
+				# ---- Membership privileges (§0.8 ruling 5) ----
+				# Represented, or suspended with the seat carried by a paying
+				# overlord. The join paths add it at once; this reconciles it
+				# every month, which is also how an existing save gains it.
+				if = {
+					limit = { un_member_draws_benefits = yes }
+					if = {
+						limit = { NOT = { je:je_united_nations ?= { has_modifier = un_member_privileges_modifier } } }
+						je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
+					}
+				}
+				else_if = {
+					limit = { je:je_united_nations ?= { has_modifier = un_member_privileges_modifier } }
+					je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
+				}
+
 				# ---- Apply scaled UN membership modifier ----
 				# Modifier stays applied per-member; the multiplier reads the shared
 				# global authority. Members of a bloc with the Multilateral Institutions
 				# principle scale the benefit further by (1 + country_un_institutional_alignment)
 				# -- 0.5 alignment = +50% magnitude. Non-aligned members read 0, so x1.
 				# Paid from the Contested tier up (redesign phase 2): a Moribund UN
-				# pays its members nothing.
+				# pays its members nothing. And only to a member that draws the
+				# benefits (§0.8): represented, or its seat carried.
 				if = {
-					limit = { un_tier_at_least_contested = yes }
+					limit = {
+						un_tier_at_least_contested = yes
+						un_member_draws_benefits = yes
+					}
 					je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
 					je:je_united_nations ?= { add_modifier = {
 							name = un_membership_benefits_modifier
@@ -511,9 +586,13 @@
 			# relations and prestige from Established, trade and leverage as
 			# well from Strong. The tier carries the hysteresis the old 60/55
 			# pair used to. The single refresh site for both modifiers.
+			# Only an eligible outsider is a pariah (§0.8 ruling 10): a puppet or
+			# colony cannot join, so staying out is not its choice. An expelled
+			# country, or one that walked out, is eligible by type and stays one.
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					un_membership_eligible = yes
 					un_tier_at_least_established = yes
 				}
 				if = {
@@ -528,6 +607,7 @@
 			if = {
 				limit = {
 					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					un_membership_eligible = yes
 					un_tier_at_least_strong = yes
 				}
 				if = {
@@ -550,7 +630,8 @@
 			# our interest groups' reaction from Strong, and a colony's liberty
 			# under the decolonisation declaration. The single refresh site
 			# for every un_regime_* modifier (un_regime_effects.txt). Outside
-			# the member block: a colony is not a member.
+			# the member block: a colony of a member is reached through its
+			# overlord, whether or not it holds a seat itself.
 			un_regime_country_pulse = yes
 
 			# ---- International standing (all countries with the JE) ----

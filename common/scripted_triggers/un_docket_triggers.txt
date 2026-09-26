@@ -25,8 +25,9 @@ un_docket_can_be_offered = {
 	NOT = { has_variable = un_dkt_offered }
 	un_may_table_now = yes
 	# Article 19 (redesign phase 5): a member that has lost its vote tables
-	# nothing.
+	# nothing, and neither does one whose representation is suspended (§0.8).
 	NOT = { un_dues_vote_suspended = yes }
+	NOT = { un_representation_suspended = yes }
 }
 
 # ---- Situations --------------------------------------------------------------------------
@@ -39,6 +40,9 @@ un_docket_can_be_offered = {
 # Scope: the prospective borrower
 un_docket_loan_candidate = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	# §0.8: the docket offers nothing to a member whose representation is
+	# suspended.
+	NOT = { un_representation_suspended = yes }
 	has_journal_entry = je_banking_cycle
 	OR = {
 		in_default = yes
@@ -163,6 +167,7 @@ un_docket_embargo_counterpart = {
 # Scope: country
 un_docket_peacekeeping_power = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_representation_suspended = yes }
 	country_rank >= rank_value:major_power
 	NOT = { has_modifier = un_peacekeeping_deployed_modifier }
 	NOT = { has_modifier = un_observer_mission_modifier }
@@ -174,6 +179,7 @@ un_docket_peacekeeping_power = {
 # Scope: country
 un_docket_aid_power = {
 	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_representation_suspended = yes }
 	country_rank >= rank_value:major_power
 	NOT = { has_modifier = un_humanitarian_aid_modifier }
 	NOT = { has_modifier = un_humanitarian_token_modifier }

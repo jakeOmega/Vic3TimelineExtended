@@ -80,6 +80,10 @@ un_propose_condemn_possible = {
 		NOT = { un_dues_vote_suspended = yes }
 	}
 	custom_tooltip = {
+		text = un_representation_table_tt
+		NOT = { un_representation_suspended = yes }
+	}
+	custom_tooltip = {
 		text = un_grounds_condemn_tt
 		any_country = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
@@ -127,6 +131,10 @@ un_propose_sanctions_possible = {
 		NOT = { un_dues_vote_suspended = yes }
 	}
 	custom_tooltip = {
+		text = un_representation_table_tt
+		NOT = { un_representation_suspended = yes }
+	}
+	custom_tooltip = {
 		text = un_grounds_sanctions_tt
 		any_country = {
 			has_diplomatic_pact = { who = ROOT type = rivalry }
@@ -167,6 +175,10 @@ un_propose_expulsion_possible = {
 	custom_tooltip = {
 		text = un_article_19_table_tt
 		NOT = { un_dues_vote_suspended = yes }
+	}
+	custom_tooltip = {
+		text = un_representation_table_tt
+		NOT = { un_representation_suspended = yes }
 	}
 	any_country = {
 		NOT = { this = ROOT }
@@ -233,6 +245,10 @@ un_propose_mandate_possible = {
 		text = un_article_19_table_tt
 		NOT = { un_dues_vote_suspended = yes }
 	}
+	custom_tooltip = {
+		text = un_representation_table_tt
+		NOT = { un_representation_suspended = yes }
+	}
 }
 
 # Request a peacekeeping deployment on our own soil — binding, simple majority.
@@ -275,6 +291,10 @@ un_propose_peacekeepers_possible = {
 	custom_tooltip = {
 		text = un_article_19_table_tt
 		NOT = { un_dues_vote_suspended = yes }
+	}
+	custom_tooltip = {
+		text = un_representation_table_tt
+		NOT = { un_representation_suspended = yes }
 	}
 	OR = {
 		is_at_war = yes
@@ -325,6 +345,10 @@ un_propose_aid_possible = {
 		text = un_article_19_table_tt
 		NOT = { un_dues_vote_suspended = yes }
 	}
+	custom_tooltip = {
+		text = un_representation_table_tt
+		NOT = { un_representation_suspended = yes }
+	}
 	any_scope_state = {
 		OR = {
 			average_sol < 8
@@ -372,6 +396,10 @@ un_propose_reform_possible = {
 		text = un_article_19_table_tt
 		NOT = { un_dues_vote_suspended = yes }
 	}
+	custom_tooltip = {
+		text = un_representation_table_tt
+		NOT = { un_representation_suspended = yes }
+	}
 }
 
 # ============================================================================
@@ -401,6 +429,10 @@ un_propose_own_motion_possible = {
 	custom_tooltip = {
 		text = un_article_19_table_tt
 		NOT = { un_dues_vote_suspended = yes }
+	}
+	custom_tooltip = {
+		text = un_representation_table_tt
+		NOT = { un_representation_suspended = yes }
 	}
 }
 

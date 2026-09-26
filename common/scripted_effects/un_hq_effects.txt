@@ -17,6 +17,10 @@
 #   un_hq_enforce_single_building  removes every HQ but the host's one
 #   un_hq_monthly_update           both, from the global monthly pulse
 #
+# The host is a represented member (§0.8): a host whose representation is
+# suspended loses the headquarters at the next monthly update, and a suspended
+# member is never picked.
+#
 # Called from un_leave_button (un_buttons.txt), un_hq_on_state_owner_change
 # and un_global_authority_on_action (un_on_actions.txt).
 # ============================================================================
@@ -48,14 +52,14 @@ un_hq_assign_host = {
 	if = {
 		limit = {
 			any_country = {
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				un_member_represented = yes
 				country_rank >= rank_value:great_power
 				NOT = { un_hq_is_host = yes }
 			}
 		}
 		random_country = {
 			limit = {
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				un_member_represented = yes
 				country_rank >= rank_value:great_power
 				NOT = { un_hq_is_host = yes }
 			}
@@ -65,13 +69,13 @@ un_hq_assign_host = {
 	else_if = {
 		limit = {
 			any_country = {
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				un_member_represented = yes
 				NOT = { un_hq_is_host = yes }
 			}
 		}
 		random_country = {
 			limit = {
-				je:je_united_nations ?= { has_modifier = un_member_modifier }
+				un_member_represented = yes
 				NOT = { un_hq_is_host = yes }
 			}
 			un_hq_make_host = yes
@@ -160,7 +164,7 @@ un_hq_monthly_update = {
 	else_if = {
 		limit = {
 			global_var:un_hq_country = {
-				NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+				NOT = { un_member_represented = yes }
 			}
 		}
 		un_hq_assign_host = yes

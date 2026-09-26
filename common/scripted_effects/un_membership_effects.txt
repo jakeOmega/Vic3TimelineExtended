@@ -1,0 +1,118 @@
+﻿# ============================================================================
+# UN MEMBERSHIP — THE MONTHLY REPRESENTATION CHECK (§0.8 ruling 9)
+# ============================================================================
+# The gates read un_representation_suspended live and never wait for this.
+# It only announces a suspension or a restoration, once, and strips what a
+# suspended member may not hold. There is no country-scoped on-action for a
+# change of subject type (colony to dominion), so a monthly check is the
+# authoritative one. var:un_rep_suspended exists only to notice the change.
+# The headquarters moves by un_hq_monthly_update (un_hq_effects.txt), and the
+# vacated permanent seat is refilled by un_seat_monthly_update.
+# ============================================================================
+
+# Called from the journal entry's monthly pulse, for every country holding it.
+# Scope: country
+un_representation_monthly_update = {
+	if = {
+		limit = { un_representation_suspended = yes }
+		if = {
+			limit = { NOT = { has_variable = un_rep_suspended } }
+			set_variable = un_rep_suspended
+			# The conventions in force as we lose our voice: on restoration we
+			# get one chance at those passed meanwhile (un_events.36, ruling 14).
+			un_rep_convention_forget = yes
+			un_rep_convention_snapshot = yes
+			post_notification = un_representation_suspended_notice
+		}
+		# A permanent seat is a vote; it goes to the next great power by
+		# prestige (un_seat_monthly_update).
+		if = {
+			limit = { is_un_permanent_member = yes }
+			je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
+			je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
+			if = {
+				limit = { has_variable = un_permanent_subgp_months }
+				remove_variable = un_permanent_subgp_months
+			}
+		}
+		# UN programmes and stances end, as their stop buttons end them: a
+		# suspended member runs none (ruling 3), and the start buttons refuse
+		# it. Every month while suspended, so an old save's are ended too.
+		je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
+		je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
+		je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
+		je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
+		je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
+		je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
+		je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
+		je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
+	}
+	else_if = {
+		limit = { has_variable = un_rep_suspended }
+		remove_variable = un_rep_suspended
+		# Restored, not departed: a member that left while suspended is told
+		# nothing here.
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			post_notification = un_representation_restored_notice
+			# One chance at the conventions passed in our absence; the event
+			# forgets the snapshot whichever way we answer.
+			if = {
+				limit = { un_rep_any_convention_missed = yes }
+				trigger_event = { id = un_events.36 }
+			}
+			else = {
+				un_rep_convention_forget = yes
+			}
+		}
+		else = {
+			un_rep_convention_forget = yes
+		}
+	}
+}
+
+# Mark the conventions in force now (var:un_rep_had_<agency>), when our
+# representation is suspended. The list is un_apply_ratified_conventions's.
+# Scope: country
+un_rep_convention_snapshot = {
+	un_rep_convention_mark = { AGENCY = unhrc }
+	un_rep_convention_mark = { AGENCY = iaea }
+	un_rep_convention_mark = { AGENCY = unep }
+	un_rep_convention_mark = { AGENCY = unesco }
+	un_rep_convention_mark = { AGENCY = who }
+	un_rep_convention_mark = { AGENCY = unhcr }
+	un_rep_convention_mark = { AGENCY = unoosa }
+	un_rep_convention_mark = { AGENCY = itlos }
+	un_rep_convention_mark = { AGENCY = icc }
+}
+
+# Parameters: $AGENCY$. Scope: country
+un_rep_convention_mark = {
+	if = {
+		limit = { has_global_variable = un_agency_$AGENCY$ }
+		set_variable = un_rep_had_$AGENCY$
+	}
+}
+
+# Drop the snapshot: after the restoration event is answered, when there is
+# nothing to offer, or when a new suspension takes a fresh one.
+# Scope: country
+un_rep_convention_forget = {
+	un_rep_convention_unmark = { AGENCY = unhrc }
+	un_rep_convention_unmark = { AGENCY = iaea }
+	un_rep_convention_unmark = { AGENCY = unep }
+	un_rep_convention_unmark = { AGENCY = unesco }
+	un_rep_convention_unmark = { AGENCY = who }
+	un_rep_convention_unmark = { AGENCY = unhcr }
+	un_rep_convention_unmark = { AGENCY = unoosa }
+	un_rep_convention_unmark = { AGENCY = itlos }
+	un_rep_convention_unmark = { AGENCY = icc }
+}
+
+# Parameters: $AGENCY$. Scope: country
+un_rep_convention_unmark = {
+	if = {
+		limit = { has_variable = un_rep_had_$AGENCY$ }
+		remove_variable = un_rep_had_$AGENCY$
+	}
+}

@@ -310,8 +310,11 @@ te_monetary_arrangement_yearly_on_action = {
 # and scopes `top_overlord` from it, 00_code_on_actions.txt; the engine log
 # declares "Expected Scope: none", §17 check 17). Dispatched a day later so the
 # subject relationship has settled; the overlord is dispatched too, so it is
-# flagged as somebody's anchor. There is NO ceased-to-be-a-subject on-action:
-# that way round is the flagged monthly discovery, within a month.
+# flagged as somebody's anchor. The way back is not hooked here: vanilla's
+# on_become_independent (Root = country, 00_code_on_actions.txt) exists, but
+# it can also pulse on an overlord-to-overlord transfer (the note in
+# decolonization_events.txt), so a board would have to re-test is_subject.
+# The flagged monthly discovery handles it, within a month.
 on_become_subject = {
 	on_actions = {
 		te_monetary_on_become_subject

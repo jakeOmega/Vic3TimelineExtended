@@ -1,0 +1,117 @@
+﻿# ============================================================================
+# UN MEMBERSHIP — ELIGIBILITY AND REPRESENTATION
+# docs/systems/un_redesign_design.md §0.8
+# ============================================================================
+# Who may join, and whose seat is active. A member that stops conducting its
+# own foreign policy keeps its membership, but its representation is
+# suspended: it is treated as part of its overlord abroad. A represented
+# overlord is billed for its seat and, while it pays, the subject keeps the
+# benefits of membership (the seat is carried). Everything here is computed
+# live: a subjugation takes effect at once, and a release restores the seat at
+# once. The monthly pulse only announces the change
+# (un_representation_monthly_update, un_membership_effects.txt).
+# ============================================================================
+
+# The scoped country conducts its own foreign policy, so it may join and, as a
+# member, is represented: not decentralized, and independent or a dominion,
+# protectorate or tributary. Those are the vanilla subject types that may start
+# their own diplomatic plays, less the chartered company, which the
+# decolonisation regime already treats as a colony
+# (is_qualifying_colonial_subject). The engine has no trigger for
+# can_start_own_diplomatic_plays, so the types are listed: keep them in step
+# with common/subject_types/ when a patch adds one. Do not swap in
+# te_mon_is_board_subject: it groups by autonomy_level, which puts the personal
+# union (level 2, but no plays of its own) on the other side.
+# Scope: country
+un_membership_eligible = {
+	NOT = { is_country_type = decentralized }
+	OR = {
+		is_subject = no
+		is_subject_type = subject_type_dominion
+		is_subject_type = subject_type_protectorate
+		is_subject_type = subject_type_tributary
+	}
+}
+
+# A member whose seat is active.
+# Scope: country
+un_member_represented = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	un_membership_eligible = yes
+}
+
+# A member whose representation is suspended: it no longer conducts its own
+# foreign policy. It stays a member, keeps its standing and its ratified
+# conventions, and may leave. It casts no ballot, tables nothing, is offered
+# nothing by the docket, is not lobbied, is not asked to comply with or ratify
+# a passed resolution, is not counted in the two-thirds, holds no permanent
+# seat, does not host the headquarters and sends no contingent at will. It sits
+# beside every Article 19 check (un_dues_vote_suspended); test_un_membership.py
+# keeps the two together.
+# Scope: country
+un_representation_suspended = {
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_membership_eligible = yes }
+}
+
+# A suspended member whose direct overlord is a represented member: the
+# overlord is assessed dues for it (un_dues_assessed_gdp). Only a represented
+# overlord carries a subject, so a chain of colonies never bills a country
+# that is itself suspended.
+# Scope: country
+un_dues_billed_to_overlord = {
+	un_representation_suspended = yes
+	overlord ?= { un_member_represented = yes }
+}
+
+# The seat is carried: billed to an overlord that is paying its dues. An
+# overlord that withholds withholds its subjects' share too.
+# Scope: country
+un_seat_carried = {
+	un_dues_billed_to_overlord = yes
+	overlord ?= { NOT = { un_dues_is_withholding = yes } }
+}
+
+# Draws the benefits of membership (un_member_privileges_modifier, and
+# un_membership_benefits_modifier from the Contested tier): represented, or
+# suspended with its seat carried.
+# Scope: country
+un_member_draws_benefits = {
+	OR = {
+		un_member_represented = yes
+		un_seat_carried = yes
+	}
+}
+
+# ---- Conventions passed during a suspension (§0.8 ruling 14) -------------------
+
+# A convention in force now that was not in force when our representation was
+# suspended (var:un_rep_had_<agency>, un_rep_convention_snapshot), and that we
+# are not party to. A convention we refused before our suspension was in force
+# then, so it never counts.
+# Parameters: $AGENCY$ (the un_agency_* suffix), $MODIFIER$ (the convention's
+# member modifier; JE- or country-scoped, so both are asked)
+# Scope: country
+un_rep_convention_missed = {
+	has_global_variable = un_agency_$AGENCY$
+	NOT = { has_variable = un_rep_had_$AGENCY$ }
+	NOT = { je:je_united_nations ?= { has_modifier = $MODIFIER$ } }
+	NOT = { has_modifier = $MODIFIER$ }
+}
+
+# Any convention missed. The list is un_apply_ratified_conventions's
+# (un_vote_effects.txt); test_un_membership.py keeps the two in step.
+# Scope: country
+un_rep_any_convention_missed = {
+	OR = {
+		un_rep_convention_missed = { AGENCY = unhrc MODIFIER = un_human_rights_declaration_modifier }
+		un_rep_convention_missed = { AGENCY = iaea MODIFIER = un_nonproliferation_modifier }
+		un_rep_convention_missed = { AGENCY = unep MODIFIER = un_climate_binding_modifier }
+		un_rep_convention_missed = { AGENCY = unesco MODIFIER = un_heritage_program_modifier }
+		un_rep_convention_missed = { AGENCY = who MODIFIER = un_pandemic_cooperation_modifier }
+		un_rep_convention_missed = { AGENCY = unhcr MODIFIER = un_refugee_program_modifier }
+		un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier }
+		un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier }
+		un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier }
+	}
+}

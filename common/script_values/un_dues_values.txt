@@ -23,6 +23,10 @@
 #     two-thirds supermajority.
 # Resuming payment (un_pay_dues_button) settles everything owed at once.
 #
+# A member whose representation is suspended (§0.8) pays nothing itself: its
+# represented direct overlord is assessed on its GDP (un_dues_assessed_gdp),
+# and it neither runs up nor settles arrears until it is restored.
+#
 # The writers are in common/scripted_effects/un_dues_effects.txt, the tests in
 # common/scripted_triggers/un_dues_triggers.txt. Every figure is here, once;
 # the rates and the 24 months are also written in words in the
@@ -89,11 +93,24 @@ un_dues_rate = {
 	}
 }
 
+# The GDP a member is assessed on: its own, and that of every suspended member
+# whose seat it carries as the represented direct overlord (§0.8 ruling 4). A
+# suspended member itself is never assessed. Each carried subject is counted
+# once, here, so the budget and both GDP terms of the funding pillar read this.
+# Scope: country (a represented member)
+un_dues_assessed_gdp = {
+	value = gdp
+	every_direct_subject = {
+		limit = { un_dues_billed_to_overlord = yes }
+		add = gdp
+	}
+}
+
 # This member's dues a week: the multiplier on un_dues_modifier, whose one
 # field is country_expenses_add = 1.
 # Scope: country
 un_dues_weekly_value = {
-	value = gdp
+	value = un_dues_assessed_gdp
 	multiply = un_dues_rate
 	divide = 52
 }
@@ -101,7 +118,7 @@ un_dues_weekly_value = {
 # What a month in arrears adds to what the member owes.
 # Scope: country
 un_dues_monthly_value = {
-	value = gdp
+	value = un_dues_assessed_gdp
 	multiply = un_dues_rate
 	divide = 12
 }
@@ -129,8 +146,8 @@ un_funding_arrears_share_value = {
 un_members_gdp_value = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-		add = gdp
+		limit = { un_member_represented = yes }
+		add = un_dues_assessed_gdp
 	}
 }
 
@@ -138,10 +155,10 @@ un_withholders_gdp_value = {
 	value = 0
 	every_country = {
 		limit = {
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_member_represented = yes
 			has_variable = un_dues_withheld
 		}
-		add = gdp
+		add = un_dues_assessed_gdp
 	}
 }
 
@@ -152,7 +169,7 @@ un_budget_weekly_value = {
 	value = 0
 	every_country = {
 		limit = {
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			un_member_represented = yes
 			NOT = { has_variable = un_dues_withheld }
 		}
 		add = un_dues_weekly_value

@@ -66,6 +66,7 @@ un_secure_commitment_action = {
 		has_game_rule = united_nations_enabled
 		has_global_variable = un_active_resolution
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		NOT = { un_representation_suspended = yes }
 		global_var:un_active_resolution ?= {
 			has_tag = un_res_voting
 			var:un_res_proposer ?= ROOT
@@ -77,6 +78,10 @@ un_secure_commitment_action = {
 		scope:target_country = {
 			NOT = { is_country_type = decentralized }
 			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			# A member without a vote has none to promise: Article 19, or
+			# suspended representation (§0.8).
+			NOT = { un_dues_vote_suspended = yes }
+			NOT = { un_representation_suspended = yes }
 		}
 	}
 

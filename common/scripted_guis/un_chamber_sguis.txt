@@ -38,7 +38,19 @@ un_chamber_status_sgui = {
 	effect = {
 		if = {
 			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			# §0.8: a member whose representation is suspended is told so, and
+			# whether its overlord carries its seat.
 			if = {
+				limit = { un_representation_suspended = yes }
+				if = {
+					limit = { un_seat_carried = yes }
+					custom_tooltip_no_bullet = je_un_chamber_status_suspended_carried
+				}
+				else = {
+					custom_tooltip_no_bullet = je_un_chamber_status_suspended
+				}
+			}
+			else_if = {
 				limit = { is_un_permanent_member = yes }
 				custom_tooltip_no_bullet = je_un_chamber_status_permanent
 			}
@@ -1010,6 +1022,11 @@ un_chamber_vote_sgui = {
 			# Nothing on the record: the clause that actually gates the control,
 			# and the one green tick a player who can vote sees.
 			trigger_else = {
+				# §0.8: a member whose representation is suspended has no vote.
+				custom_tooltip = {
+					text = je_un_chamber_vote_represented_tt
+					NOT = { un_representation_suspended = yes }
+				}
 				# Article 19 (redesign phase 5): two years in arrears on our
 				# dues and the vote is gone until we pay.
 				custom_tooltip = {

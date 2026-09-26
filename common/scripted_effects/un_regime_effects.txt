@@ -17,8 +17,10 @@
 #   - from the Strong tier, shared intelligence (§7.4) and the reaction of its
 #     interest groups (§7.1): nationalists resent the UN, humanitarians and
 #     pacifists welcome it.
-# For a colony of a member, the decolonisation declaration's liberty desire.
-# For anyone else, nothing.
+# For a colony of a member, the decolonisation declaration's liberty desire —
+# whether or not the colony is itself a member (§0.8: an overseas protectorate
+# of another heritage can be one, and then gets both). For anyone else,
+# nothing.
 #
 # WHO WRITES WHAT
 #   un_regime_*_modifier (country)         un_regime_refresh_country, the single
@@ -292,7 +294,9 @@ un_regime_refresh_country = {
 			}
 		}
 	}
-	# Decolonisation reaches the colonies of members, which are not members.
+	# Decolonisation reaches the colonies of members through their overlord's
+	# membership, whether or not the colony holds a seat of its own (§0.8
+	# ruling 13).
 	if = {
 		limit = {
 			has_global_variable = un_founded
