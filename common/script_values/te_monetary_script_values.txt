@@ -404,6 +404,19 @@
 # nothing in the mod fires either event. The harness exists because every AI
 # country is delegated, so no observer run ever exercises the manual path §9.1
 # calls unstable by design.
+#
+# A FOURTH EXCEPTION: THE END OF A REVOLUTION (#462). A revolution's winner
+# keeps its OWN value of every variable it already held (scripting_best_
+# practices.md § "What a Civil War's Winner Inherits"), and the rebels have held
+# a full set since te_monetary_on_country_released — so on a rebel win
+# te_monetary_inherit_central_bank (common/scripted_effects/
+# te_monetary_civil_war_effects.txt), called once from on_civil_war_won, writes
+# the LOSER'S values over the winner's: the vault and hot money (added), the
+# state the update integrates (policy rate, inflation, the walks, the peg,
+# FX, the clocks), the player's choices and the arrangements. It writes no
+# `_applied` tracker and nothing the update recomputes; its header says which
+# variable is in which group and why. A NEW VARIABLE ADDED TO THIS CONTRACT
+# MUST BE CLASSIFIED THERE TOO — test_monetary_civil_war.py pins the list.
 # ============================================================================
 
 

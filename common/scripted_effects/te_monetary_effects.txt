@@ -394,7 +394,11 @@ te_monetary_monthly_update = {
 # STILL NOT MANAGED: the timed crisis modifiers (te_mon_currency_reform_premium,
 # te_mon_peg_*) are applied by event options with a clock on them and stay where
 # the event put them — a journal entry that vanishes mid-clock would take the
-# remaining years with it.
+# remaining years with it. A revolution's winner receives none of the loser's
+# country modifiers either; te_monetary_inherit_central_bank
+# (te_monetary_civil_war_effects.txt) re-adds the ones whose remaining time a
+# month counter records (te_mon_peg_suspension, te_mon_peg_credibility_lost,
+# te_mon_lolr_reneged), and the rest are lost with the loser.
 #
 # THE HOME CAN CHANGE — the entry activates when a country gets a stock
 # exchange, and is lost with it. te_monetary_settle_modifier_home runs first in
@@ -2044,6 +2048,11 @@ te_monetary_update_inflation = {
 # band modifier (scripting_best_practices.md § "What a Civil War's Winner
 # Inherits"). te_monetary_on_country_released gives the rebels their own
 # tracker at on_revolution_start, which is what keeps the two in agreement.
+# After a rebel win te_monetary_inherit_central_bank
+# (te_monetary_civil_war_effects.txt) hands the winner the loser's
+# te_inflation_band — hyperinflation stays hyperinflation — but deliberately
+# not the loser's tracker, so this swap moves the winner's own modifier to the
+# copied band at the next pulse.
 te_monetary_apply_inflation_band = {
 	# The crisis cooldown ages first, so the month it reaches 0 is a month the
 	# crisis can be offered again rather than the month after.
