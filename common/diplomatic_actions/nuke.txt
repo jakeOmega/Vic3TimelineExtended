@@ -32,6 +32,12 @@
 			text = nd_tt_war_law_permits_strike
 			nd_war_law_permits_strategic_strike = yes
 		}
+		# Recessed: the warheads are in storage (umbrella/recessed/dead-hand
+		# spec §2.3).
+		custom_tooltip = {
+			text = nd_tt_forces_assembled
+			nd_forces_assembled = yes
+		}
 	}
 
 	second_state_trigger = {
@@ -180,6 +186,12 @@ tactical_nuke_diplo_action = {
 		custom_tooltip = {
 			text = nd_tt_war_law_permits_tactical_strike
 			nd_war_law_permits_tactical_strike = yes
+		}
+		# Recessed: the warheads are in storage (umbrella/recessed/dead-hand
+		# spec §2.3).
+		custom_tooltip = {
+			text = nd_tt_forces_assembled
+			nd_forces_assembled = yes
 		}
 	}
 

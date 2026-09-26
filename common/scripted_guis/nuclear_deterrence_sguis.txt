@@ -5,8 +5,9 @@
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
 # Two ACTION handlers, parameterized by a saved scope `op` (the Strategic
-# Reserve / nuclear programme pattern), and thirteen DISPLAY handlers: the five
-# yes/no questions and names below, three that hide the moves our side cannot
+# Reserve / nuclear programme pattern), and fourteen DISPLAY handlers: the six
+# yes/no questions and names below (nd_umbrella_sgui draws the umbrella
+# line), three that hide the moves our side cannot
 # make (nd_crisis_we_issued_sgui, nd_crisis_we_are_target_sgui,
 # nd_crisis_private_sgui), and three that print script-built text
 # (nd_crisis_pressure_breakdown_sgui, nd_crisis_danger_breakdown_sgui,
@@ -17,8 +18,8 @@
 #
 # ---- nd_posture_sgui — op table ---------------------------------------------
 #   11..15  adopt doctrine 1..5           -> nd_set_doctrine
-#   21..23  set readiness target 1..3     -> nd_set_readiness_target
-#   31..33  adopt launch authority 1..3   -> nd_set_authority
+#   20..23  set readiness target 0..3     -> nd_set_readiness_target
+#   31..34  adopt launch authority 1..4   -> nd_set_authority
 #   40 / 41 safeguards down / up          -> nd_step_investment
 #   50 / 51 hardening down / up           -> nd_step_investment
 #
@@ -70,16 +71,20 @@ nd_posture_sgui = {
 			nd_can_set_doctrine = { D = 5 }
 		}
 		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 20 }
+			nd_can_set_readiness = { R = 0 LOCK_OK = yes }
+		}
+		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 21 }
-			nd_can_set_readiness = { R = 1 }
+			nd_can_set_readiness = { R = 1 LOCK_OK = yes }
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 22 }
-			nd_can_set_readiness = { R = 2 }
+			nd_can_set_readiness = { R = 2 LOCK_OK = no }
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 23 }
-			nd_can_set_readiness = { R = 3 }
+			nd_can_set_readiness = { R = 3 LOCK_OK = no }
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 31 }
@@ -99,6 +104,14 @@ nd_posture_sgui = {
 			custom_tooltip = {
 				text = nd_tt_need_icbms
 				nd_can_adopt_launch_on_warning = yes
+			}
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 34 }
+			nd_can_set_authority = { A = 4 }
+			custom_tooltip = {
+				text = nd_tt_need_computers
+				nd_can_adopt_automatic_retaliation = yes
 			}
 		}
 		trigger_else_if = {
@@ -148,6 +161,10 @@ nd_posture_sgui = {
 			nd_set_doctrine_5 = yes
 		}
 		else_if = {
+			limit = { exists = scope:op  scope:op = 20 }
+			nd_set_readiness_target_0 = yes
+		}
+		else_if = {
 			limit = { exists = scope:op  scope:op = 21 }
 			nd_set_readiness_target_1 = yes
 		}
@@ -170,6 +187,10 @@ nd_posture_sgui = {
 		else_if = {
 			limit = { exists = scope:op  scope:op = 33 }
 			nd_set_authority_3 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 34 }
+			nd_set_authority_4 = yes
 		}
 		else_if = {
 			limit = { exists = scope:op  scope:op = 40 }
@@ -258,6 +279,18 @@ nd_armed_sgui = {
 	is_shown = {
 		nd_is_armed = yes
 		nd_is_initialized = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# Does anyone shelter under our umbrella? Draws the posture panel's umbrella
+# line (umbrella/recessed/dead-hand spec §1.6).
+nd_umbrella_sgui = {
+	scope = country
+	is_shown = {
+		any_direct_subject = { nd_under_an_umbrella = yes }
 	}
 	is_valid = { always = no }
 	ai_is_valid = { always = no }
@@ -376,6 +409,7 @@ nd_crisis_pressure_breakdown_sgui = {
 		nd_crisis_breakdown_line = { C = nd_yp_protector KEY = nd_yp_protector_line }
 		nd_crisis_breakdown_line = { C = nd_yp_credibility KEY = nd_yp_credibility_line }
 		nd_crisis_breakdown_line = { C = nd_yp_alert KEY = nd_yp_alert_line }
+		nd_crisis_breakdown_line = { C = nd_yp_recessed KEY = nd_yp_recessed_line }
 		nd_crisis_breakdown_line = { C = nd_yp_danger KEY = nd_yp_danger_line }
 		nd_crisis_breakdown_line = { C = nd_yp_exercise KEY = nd_yp_exercise_line }
 		nd_crisis_breakdown_line = { C = nd_yp_temperament KEY = nd_yp_temperament_line }
