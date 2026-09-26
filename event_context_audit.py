@@ -100,7 +100,10 @@ CHECKS = ("system_ungated", "unchosen_self_action", "imputed_foreign_action")
 # Check-tagged REVIEWED comments that belong to other audits, which use the
 # same `# REVIEWED YYYY-MM-DD (<check>): …` shape inside an event. Not ours to
 # judge, so neither honoured nor reported as unknown.
-FOREIGN_CHECKS = frozenset({"silent_variable"})  # silent_variable_audit
+FOREIGN_CHECKS = frozenset({
+    "silent_variable",  # silent_variable_audit
+    "empty_block", "no_effect_option",  # empty_effect_audit
+})
 
 # ---------------------------------------------------------------------------
 # System registry

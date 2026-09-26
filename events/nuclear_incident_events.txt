@@ -432,6 +432,7 @@ nuclear_incident.5 = {
 
 	option = {
 		name = nuclear_incident.5.a
+		# REVIEWED 2026-09-26 (no_effect_option): the only option for a victim that is unarmed or not free to answer
 		default_option = yes
 	}
 
@@ -734,6 +735,7 @@ nuclear_incident.11 = {
 	# Hold our posture and ask them what they are doing.
 	option = {
 		name = nuclear_incident.11.b
+		# REVIEWED 2026-09-26 (no_effect_option): holding posture is the choice; the tooltip says readiness stays where it is
 		default_option = yes
 		custom_tooltip = nd_tt_alert_held
 		ai_chance = {
@@ -803,6 +805,7 @@ nuclear_incident.12 = {
 	# Note it, and keep up the pressure.
 	option = {
 		name = nuclear_incident.12.b
+		# REVIEWED 2026-09-26 (no_effect_option): the decline; the tooltip says nothing changes
 		custom_tooltip = nd_tt_exercise_invitation_declined
 		ai_chance = {
 			base = 2
@@ -1361,6 +1364,7 @@ nuclear_incident.40 = {
 	# Nothing happened.
 	option = {
 		name = nuclear_incident.40.b
+		# REVIEWED 2026-09-26 (no_effect_option): the no-cost choice beside paying to fix the procedure
 		ai_chance = {
 			base = 2
 			modifier = {

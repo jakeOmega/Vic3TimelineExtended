@@ -62,6 +62,7 @@ minor_events_timelineextended.2 = {
 
 	option = {
 		name = minor_events_timelineextended.2.a
+		# REVIEWED 2026-09-26 (no_effect_option): the decline: the law proceeds with no intervention
 		default_option = yes
 		ai_chance = {
 			base = 2

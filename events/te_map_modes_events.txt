@@ -73,6 +73,7 @@ te_map_modes.1 = {
 	# ("No default option in event te_map_modes.1", event.cpp:358).
 	option = {
 		name = te_map_modes.1.f_dismiss
+		# REVIEWED 2026-09-26 (no_effect_option): closes the survey menu
 		default_option = yes
 	}
 }
