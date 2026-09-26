@@ -1837,7 +1837,7 @@
  covert_election_interference_action_action_notification_break_name:0 "Election Interference Cancelled"
  covert_election_interference_action_action_notification_name:0 "Election Interference Launched"
  covert_election_interference_action_action_propose_name:0 "Launch Election Interference"
- covert_exposed_op_link:0 "#tooltippable;tooltip:[ROOT.GetCountry.GetTooltipTag],covert_exposed_op_tt #b [ROOT.GetCountry.GetCustom('covert_last_exposed_type_name')]#!#!"
+ covert_exposed_op_link:0 "#tooltippable;tooltip:[GetPlayer.GetTooltipTag],covert_exposed_op_tt #b [GetPlayer.GetCustom('covert_last_exposed_type_name')]#!#!"
  covert_exposed_op_tt:0 "#tooltip_header [Country.GetCustom('covert_last_exposed_type_name')]#!\n$TOOLTIP_DELIMITER$\n[Country.GetCustom('covert_last_exposed_type_desc')]"
  covert_exposure_third_party_tt:0 "Every country in the target's [concept_power_bloc] and every one of their treaty allies loses #R [GetPlayer.MakeScope.ScriptValue('covert_exposure_third_party_relations_display')|0]#! [concept_relations] with us"
  covert_financial_subversion_action:0 "Covert: Financial Subversion"

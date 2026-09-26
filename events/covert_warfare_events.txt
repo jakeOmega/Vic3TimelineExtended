@@ -310,6 +310,15 @@ covert_warfare.2 = {
 				}
 				desc = covert_warfare.2.f_preparatory
 			}
+			# The ballot-box vignette fits only election interference (code 0);
+			# every other type gets the general one.
+			triggered_desc = {
+				trigger = {
+					has_variable = iw_last_exposed_type
+					var:iw_last_exposed_type = 0
+				}
+				desc = covert_warfare.2.f_election
+			}
 			triggered_desc = {
 				trigger = { always = yes }
 				desc = covert_warfare.2.f
