@@ -10,9 +10,11 @@ original holds (agdiff_copy_diffusion_from_root). A revolution's winner
 inherits none of the loser's modifiers, so a hook that stops doing its part is
 a nation that loses its Green Revolution for the rest of the game, and the
 engine says nothing. These tests pin every hook, the rule that the civil-war
-paths give only what the nation had (the copy reads ROOT's modifiers, and the
-on_civil_war_won backstop is limited to recognized countries, the broadcast's
-filter), and the first-mover restore that runs on the civil war's winner.
+paths give only what the nation had (the copy reads ROOT's modifiers and marks
+the rebels, and the on_civil_war_won backstop runs only for an unmarked
+winner, i.e. a war begun before the copy existed, and only if it is
+recognized, the broadcast's filter), and the first-mover restore that runs on
+the civil war's winner.
 
 Run: python3 -m unittest test_agricultural_diffusion_wiring -v
 """
@@ -37,6 +39,7 @@ TECHS = {
 
 BACKFILL = "agdiff_backfill_diffusion_for_country"
 COPY = "agdiff_copy_diffusion_from_root"
+MARKER = "agdiff_cw_copied"
 
 # Hooks whose new country is scope:target and ROOT its parent. Released
 # countries get the global backfill (unfiltered, as before #460); the rebels
@@ -167,6 +170,12 @@ class HookWiringTests(unittest.TestCase):
                                     f"{name} does not copy the original's diffusion")
                     self.assertFalse(_calls(body, BACKFILL, self.effects),
                                      f"{name} must not run the global backfill")
+                    # ...and marks them, so the on_civil_war_won backstop
+                    # knows this war's rebels had the copy.
+                    self.assertRegex(target, r"\bset_variable\s*=\s*" + MARKER + r"\b",
+                                     f"{name} must mark the rebels with {MARKER}")
+                    self.assertNotIn(MARKER, body.replace(target, ""),
+                                     f"{name} must set {MARKER} on the rebels only")
 
     def test_copy_reads_the_originals_modifiers(self):
         one = _block(self.effects, "agdiff_copy_one_tech_from_root")
@@ -195,19 +204,40 @@ class HookWiringTests(unittest.TestCase):
             TECHS,
         )
 
-    def test_civil_war_won_backfill_is_recognized_only(self):
-        # The backstop is for wars begun before the rebels got the copy. It
-        # uses the broadcast's own filter, so a winner of any other type
-        # (a loyalist one included) gains nothing its nation never had.
+    def test_civil_war_won_backfill_only_for_pre_copy_wars(self):
+        # The backstop is for wars begun before the rebels got the copy: it
+        # runs only for a winner without the rebels' marker (a rebel winner
+        # holds its own, a loyalist winner inherits it in the merge). A
+        # recognized type alone is not enough: the decolonization tech makes
+        # laggards recognized without the diffusion, and they would gain it
+        # at their first civil war. The recognized filter (the broadcast's)
+        # stays on for the pre-build wars.
         repair = _block(self.effects, "agdiff_repair_after_civil_war")
         backfill_calls = re.findall(r"\b" + BACKFILL + r"\s*=\s*yes", repair)
         self.assertEqual(len(backfill_calls), 1)
         gated = _inner(repair, "if")
         self.assertIsNotNone(gated)
-        self.assertRegex(_inner(gated, "limit"), r"is_country_type\s*=\s*recognized")
+        limit = _inner(gated, "limit")
+        self.assertRegex(limit, r"NOT\s*=\s*\{\s*has_variable\s*=\s*" + MARKER + r"\s*\}")
+        self.assertRegex(limit, r"is_country_type\s*=\s*recognized")
         self.assertIn(BACKFILL + " = yes", gated)
         broadcast = _block(self.effects, "agdiff_handle_tech_acquired_effect")
         self.assertRegex(broadcast, r"is_country_type\s*=\s*recognized")
+
+    def test_marker_is_removed_after_the_gate(self):
+        # Read once, then dropped: a winner that later faces a war begun
+        # before this build must not be mistaken for one that had the copy.
+        repair = _block(self.effects, "agdiff_repair_after_civil_war")
+        removal = re.search(r"\bremove_variable\s*=\s*" + MARKER + r"\b", repair)
+        self.assertIsNotNone(removal, f"agdiff_repair_after_civil_war must remove {MARKER}")
+        gate = re.search(r"has_variable\s*=\s*" + MARKER, repair)
+        self.assertIsNotNone(gate, f"agdiff_repair_after_civil_war must test {MARKER}")
+        self.assertLess(gate.start(), removal.start())
+        # The marker is written only by the uprising on_action and read or
+        # removed only here.
+        on_actions = _read(ON_ACTIONS)
+        self.assertEqual(len(re.findall(r"\b" + MARKER + r"\b", on_actions)), 1)
+        self.assertEqual(len(re.findall(r"\b" + MARKER + r"\b", self.effects)), 2)
 
 
 class TechListTests(unittest.TestCase):

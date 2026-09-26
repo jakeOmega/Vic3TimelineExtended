@@ -3176,8 +3176,8 @@ on_secession_start = {
 
 # Root = the winner, after the loser's variables have merged in (vanilla
 # 00_code_on_actions.txt:5732; runs after on_revolution_end). Backstop for the
-# diffusion modifiers (recognized countries only), and the only place the
-# first-mover reward comes back.
+# diffusion modifiers (a recognized winner of a war begun before the rebels
+# got the copy), and the only place the first-mover reward comes back.
 on_civil_war_won = {
 	on_actions = {
 		agdiff_on_civil_war_won
@@ -3204,11 +3204,19 @@ agdiff_backfill_on_released_country = {
 # Shared by the two uprising hooks: the rebels are scope:target and ROOT is
 # the original. They get exactly the diffusion modifiers the original holds,
 # not the global backfill, so the rebels of a nation the broadcast skipped
-# gain nothing it lacked (agdiff_copy_diffusion_from_root).
+# gain nothing it lacked (agdiff_copy_diffusion_from_root). agdiff_cw_copied
+# marks them as having had the copy: the on_civil_war_won backstop skips any
+# winner that holds or inherits it (agdiff_repair_after_civil_war).
+#
+# Nothing is cleared on the original. The marker only ever sits on rebels,
+# or on a winner until its own on_civil_war_won removes it, so a marker on
+# ROOT here means ROOT is itself a rebel country still at war, and clearing
+# it would let that war's backstop run after all.
 agdiff_copy_on_uprising = {
 	effect = {
 		scope:target ?= {
 			agdiff_copy_diffusion_from_root = yes
+			set_variable = agdiff_cw_copied
 		}
 	}
 }
