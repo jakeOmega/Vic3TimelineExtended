@@ -523,6 +523,9 @@ st_res_adjust_fertilizer_sgui = {
 # `is_valid` carries the whole validation surface, so a disabled stepper always
 # explains itself in the tooltip and no rule lives only in a .gui expression:
 #   - a policy button is invalid when that policy is already selected;
+#   - a preset button is invalid while that preset is in force, i.e. it was
+#     the last preset applied and no stepper has been clicked since
+#     (st_res_<good>_preset, written by st_res_apply_preset_*_base);
 #   - a stepper is invalid at its absolute bound;
 #   - the purchase/release threshold steppers are additionally invalid when one
 #     more click would let the two bands overlap, and the floor/ceiling
@@ -582,18 +585,30 @@ st_res_policy_grain_sgui = {
 			}
 		}
 		trigger_else_if = {
-			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction. Listed explicitly rather than as a
-			# range so an op code nobody defined falls through to the
-			# fail-closed trigger_else at the bottom.
-			limit = {
-				OR = {
-					scope:op = 10
-					scope:op = 11
-					scope:op = 12
-				}
+			# Presets 10-12: every preset is internally consistent by
+			# construction, so the only gate is that it is not already in
+			# force (st_res_grain_preset, cleared by any stepper click).
+			# `?=` reads an absent marker — a save from before it existed —
+			# as no preset in force.
+			limit = { scope:op = 10 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_grain_preset ?= 1 }
 			}
-			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 11 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_grain_preset ?= 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 12 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_grain_preset ?= 3 }
+			}
 		}
 		trigger_else_if = {
 			limit = { scope:op = 20 }
@@ -1077,18 +1092,30 @@ st_res_policy_ammunition_sgui = {
 			}
 		}
 		trigger_else_if = {
-			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction. Listed explicitly rather than as a
-			# range so an op code nobody defined falls through to the
-			# fail-closed trigger_else at the bottom.
-			limit = {
-				OR = {
-					scope:op = 10
-					scope:op = 11
-					scope:op = 12
-				}
+			# Presets 10-12: every preset is internally consistent by
+			# construction, so the only gate is that it is not already in
+			# force (st_res_ammunition_preset, cleared by any stepper click).
+			# `?=` reads an absent marker — a save from before it existed —
+			# as no preset in force.
+			limit = { scope:op = 10 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_ammunition_preset ?= 1 }
 			}
-			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 11 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_ammunition_preset ?= 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 12 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_ammunition_preset ?= 3 }
+			}
 		}
 		trigger_else_if = {
 			limit = { scope:op = 20 }
@@ -1572,18 +1599,30 @@ st_res_policy_oil_sgui = {
 			}
 		}
 		trigger_else_if = {
-			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction. Listed explicitly rather than as a
-			# range so an op code nobody defined falls through to the
-			# fail-closed trigger_else at the bottom.
-			limit = {
-				OR = {
-					scope:op = 10
-					scope:op = 11
-					scope:op = 12
-				}
+			# Presets 10-12: every preset is internally consistent by
+			# construction, so the only gate is that it is not already in
+			# force (st_res_oil_preset, cleared by any stepper click).
+			# `?=` reads an absent marker — a save from before it existed —
+			# as no preset in force.
+			limit = { scope:op = 10 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_oil_preset ?= 1 }
 			}
-			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 11 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_oil_preset ?= 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 12 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_oil_preset ?= 3 }
+			}
 		}
 		trigger_else_if = {
 			limit = { scope:op = 20 }
@@ -2067,18 +2106,30 @@ st_res_policy_small_arms_sgui = {
 			}
 		}
 		trigger_else_if = {
-			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction. Listed explicitly rather than as a
-			# range so an op code nobody defined falls through to the
-			# fail-closed trigger_else at the bottom.
-			limit = {
-				OR = {
-					scope:op = 10
-					scope:op = 11
-					scope:op = 12
-				}
+			# Presets 10-12: every preset is internally consistent by
+			# construction, so the only gate is that it is not already in
+			# force (st_res_small_arms_preset, cleared by any stepper click).
+			# `?=` reads an absent marker — a save from before it existed —
+			# as no preset in force.
+			limit = { scope:op = 10 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_small_arms_preset ?= 1 }
 			}
-			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 11 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_small_arms_preset ?= 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 12 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_small_arms_preset ?= 3 }
+			}
 		}
 		trigger_else_if = {
 			limit = { scope:op = 20 }
@@ -2562,18 +2613,30 @@ st_res_policy_artillery_sgui = {
 			}
 		}
 		trigger_else_if = {
-			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction. Listed explicitly rather than as a
-			# range so an op code nobody defined falls through to the
-			# fail-closed trigger_else at the bottom.
-			limit = {
-				OR = {
-					scope:op = 10
-					scope:op = 11
-					scope:op = 12
-				}
+			# Presets 10-12: every preset is internally consistent by
+			# construction, so the only gate is that it is not already in
+			# force (st_res_artillery_preset, cleared by any stepper click).
+			# `?=` reads an absent marker — a save from before it existed —
+			# as no preset in force.
+			limit = { scope:op = 10 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_artillery_preset ?= 1 }
 			}
-			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 11 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_artillery_preset ?= 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 12 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_artillery_preset ?= 3 }
+			}
 		}
 		trigger_else_if = {
 			limit = { scope:op = 20 }
@@ -3057,18 +3120,30 @@ st_res_policy_aeroplanes_sgui = {
 			}
 		}
 		trigger_else_if = {
-			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction. Listed explicitly rather than as a
-			# range so an op code nobody defined falls through to the
-			# fail-closed trigger_else at the bottom.
-			limit = {
-				OR = {
-					scope:op = 10
-					scope:op = 11
-					scope:op = 12
-				}
+			# Presets 10-12: every preset is internally consistent by
+			# construction, so the only gate is that it is not already in
+			# force (st_res_aeroplanes_preset, cleared by any stepper click).
+			# `?=` reads an absent marker — a save from before it existed —
+			# as no preset in force.
+			limit = { scope:op = 10 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_aeroplanes_preset ?= 1 }
 			}
-			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 11 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_aeroplanes_preset ?= 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 12 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_aeroplanes_preset ?= 3 }
+			}
 		}
 		trigger_else_if = {
 			limit = { scope:op = 20 }
@@ -3552,18 +3627,30 @@ st_res_policy_tanks_sgui = {
 			}
 		}
 		trigger_else_if = {
-			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction. Listed explicitly rather than as a
-			# range so an op code nobody defined falls through to the
-			# fail-closed trigger_else at the bottom.
-			limit = {
-				OR = {
-					scope:op = 10
-					scope:op = 11
-					scope:op = 12
-				}
+			# Presets 10-12: every preset is internally consistent by
+			# construction, so the only gate is that it is not already in
+			# force (st_res_tanks_preset, cleared by any stepper click).
+			# `?=` reads an absent marker — a save from before it existed —
+			# as no preset in force.
+			limit = { scope:op = 10 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_tanks_preset ?= 1 }
 			}
-			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 11 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_tanks_preset ?= 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 12 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_tanks_preset ?= 3 }
+			}
 		}
 		trigger_else_if = {
 			limit = { scope:op = 20 }
@@ -4047,18 +4134,30 @@ st_res_policy_fertilizer_sgui = {
 			}
 		}
 		trigger_else_if = {
-			# Presets 10-12 are always legal: every preset is internally
-			# consistent by construction. Listed explicitly rather than as a
-			# range so an op code nobody defined falls through to the
-			# fail-closed trigger_else at the bottom.
-			limit = {
-				OR = {
-					scope:op = 10
-					scope:op = 11
-					scope:op = 12
-				}
+			# Presets 10-12: every preset is internally consistent by
+			# construction, so the only gate is that it is not already in
+			# force (st_res_fertilizer_preset, cleared by any stepper click).
+			# `?=` reads an absent marker — a save from before it existed —
+			# as no preset in force.
+			limit = { scope:op = 10 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_fertilizer_preset ?= 1 }
 			}
-			always = yes
+		}
+		trigger_else_if = {
+			limit = { scope:op = 11 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_fertilizer_preset ?= 2 }
+			}
+		}
+		trigger_else_if = {
+			limit = { scope:op = 12 }
+			custom_tooltip = {
+				text = "st_res_preset_apply_possible"
+				NOT = { var:st_res_fertilizer_preset ?= 3 }
+			}
 		}
 		trigger_else_if = {
 			limit = { scope:op = 20 }
