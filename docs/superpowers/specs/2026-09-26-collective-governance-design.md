@@ -27,7 +27,7 @@ Baseline: `main` at `6ca193db` (#478 merged).
 | Effects that depend on Distribution of Power | **A generic base on the law, plus one expression per Distribution of Power group** |
 | How the expression is applied | **As an amendment**, attached by script (like the language reform law's amendments) |
 | Which law hosts it | **The governance principle** (`law_direct_democracy`), not the Distribution of Power law |
-| Enactment preview | **A `custom_tooltip` in the law's `on_activate`**, as `law_state_led_language_reform` does, naming the amendment the current Distribution of Power will give |
+| Enactment preview | **A `custom_tooltip` in the law's `on_enact`**, as `law_state_led_language_reform` does, naming the amendment the current Distribution of Power will give |
 | Name | **Collective Governance** |
 | Tech gate | **`mass_media` (era 6) → `political_agitation` (era 4).** `democracy` (era 1) was proposed and rejected as too early. `political_agitation` is the mass-politics tech: it already unlocks Single-Party State, and it suits the movement-driven Direct Democracy and Free Federation amendments. Anarchy (era 3) waits one era, Technocracy (era 2) two; Direct Democracy arrives two eras earlier than today. The gate stays in `unlocking_technologies`, because `gen_law_consistency` reads that field and not `can_enact` |
 | Algorithmic Governance | **Not a prerequisite** (unchanged from today); follow-up if wanted |
@@ -57,7 +57,12 @@ Verified from script, vanilla files and the engine docs:
   (vanilla `amendments.md`), so they show on the active law's tooltip. No amendment cap in defines or GUI.
 - A law's amendments go with it when the law is replaced (vanilla `amendment_geheime_staatskonferenz`: "this can be
   removed by changing Distribution of Power").
-- Effects in a law's `on_activate` render in the enactment preview (`law_state_led_language_reform`'s `custom_tooltip`).
+- A law's `on_enact` is where vanilla puts preview-only text, with conditions read against the laws in force before
+  enactment (the land-reform laws' `farmers_pb_ig_shift_effect_*_tt`; `law_state_led_language_reform`'s `custom_tooltip`).
+  `on_activate` also renders in the preview, so anything there that should not show goes in `hidden_effect`.
+- **Amendments need a sponsor** (vanilla `land_ownership_law_events.txt`: "amendments need a sponsor"). Vanilla removes one
+  by type with `random_scope_amendment = { limit = { amendment_type:X ?= this.type } remove_amendment = yes }`
+  (`ep2_tenpo_events.txt`).
 - Vanilla's collective-executive precedent: `amendment_geheime_staatskonferenz` (Austria's Secret State Conference) —
   `country_legitimacy_govt_size_add = 1`, `country_authority_mult = -0.25`, enactment speed −0.20, success −0.10.
 
@@ -66,12 +71,12 @@ Verified from script, vanilla files and the engine docs:
    amendment gone, so the swap works in both cases.
 2. Whether `add_amendment` respects `possible`. The script only adds the amendment whose `possible` holds.
 3. Whether the engine drops an amendment by itself when `possible` turns false. The refresh removes it either way.
-4. Whether `sponsor` is optional. Every call in the repo passes one; the design passes the ruler's interest group.
+4. What happens when there is no ruler to supply the sponsor. The refresh skips the add until the next call.
 5. Whether `on_activate` sees the law as active (`active_law:lawgroup_governance_principles`). If not,
    `on_law_activated` attaches the amendment on the same day.
 6. Whether a law switched by `activate_law` (the consistency cascade) fires `on_law_activated`. The monthly pulse
    catches it within a month.
-7. The syntax for testing an amendment's type inside `every_scope_amendment`.
+7. Whether `amendment_type:X ?= this.type` (vanilla's form) works inside a parameterized scripted effect.
 8. What the engine does on a repeal. `on_amendment_repealed` has an empty script handler in vanilla and none in the mod,
    but the engine itself may notify the player or touch the sponsor's approval. Every Distribution of Power change
    repeals one of ours, so watch for a notification or an approval hit on the chair's interest group. If either appears,
@@ -109,10 +114,11 @@ key is historical and the law is Collective Governance.
   package: laws need a movement, +30 legitimacy from votes, an extra agitator. After migration it has the base and
   `country_coup_resistance_mult = 0.25`, and nothing else. That follows from the design (a party presidium is not a
   referendum), but it is a large change for any save that has one.
-- **`on_activate`:** one `if`/`else_if` over the five expression triggers (§3), each branch showing its
-  `custom_tooltip`, then a closing line saying the amendment follows Distribution of Power. Then
-  `hidden_effect = { te_refresh_collective_governance_amendment = yes }`, so `add_amendment` adds no line of its own to
-  the preview (language reform's `on_activate` likewise shows only its `custom_tooltip`).
+- **`on_enact`:** one `if`/`else_if` over the five expression triggers (§3), each branch showing its
+  `custom_tooltip`, then a closing line saying the amendment follows Distribution of Power.
+- **`on_activate`:** `hidden_effect = { te_refresh_collective_governance_amendment = yes }`. It fires however the law
+  arrives (enactment or the consistency cascade's `activate_law`), and `hidden_effect` keeps `add_amendment`'s own line
+  out of the preview.
 - **`ai_will_do`:** ruler has `ideology_radical` **or** `ideology_anarchist`.
 - **`ai_impose_chance`:** keep the egalitarian-agenda weight. Drop the Council Republic multiplier, which was copied from
   Neocameralism and means nothing here.
@@ -127,7 +133,7 @@ Draft loc (`te_laws_l_english.yml`):
 
 Five amendments in `common/amendments/extra_amendments.txt`, one per expression. Each has the same settings:
 `allowed_laws = { law_direct_democracy }`, `possible = { <its trigger> = yes }`,
-`can_repeal = { NOT = { <its trigger> = yes } }`, `would_sponsor = { always = no }`,
+`can_repeal = { custom_tooltip = { text = COLLECTIVE_GOVERNANCE_TT_REPEAL NOT = { <its trigger> = yes } } }`, `would_sponsor = { always = no }`,
 `ai_will_revoke = { always = no }`, `amendment_activism_multiplier = 0`. **No `parent`**: IG stance on the amendment would
 otherwise count the governance law's approval a second time. If the panel misbehaves without one, fall back to
 `parent = law_direct_democracy`.
@@ -164,7 +170,7 @@ is the ruler's interest group; with no ruler, skip the add until the next call. 
 do nothing: the amendment left with the host law.
 
 **Call sites:**
-- the law's `on_activate` (§1), so the amendment is there the day the law lands;
+- the law's `on_activate` (§1), so the amendment is there the day the law lands, however it arrives;
 - `on_law_activated`: a new on-action `te_collective_governance_from_law_scope` (`owner = { … }`), listed after
   `te_fix_inconsistent_laws_from_law_scope` so it sees the laws after the consistency cascade. It covers a change of
   Distribution of Power while the law is held;
@@ -231,9 +237,9 @@ output changes mainly because of §1's wider prerequisites (see §8).
 ## 7. Loc
 
 - Law name and description: `te_laws_l_english.yml` (§1).
-- Amendment names and `_desc`, government-type names and `_desc`, three new ruler titles, and the six on-activate
+- Amendment names and `_desc`, government-type names and `_desc`, three new ruler titles, and the six on-enact
   tooltip keys (`COLLECTIVE_GOVERNANCE_TT_POPULAR`, `_PARTY`, `_TECHNOCRATIC`, `_ANARCHIC`, `_PATRICIAN`, and
-  `COLLECTIVE_GOVERNANCE_TT_FOLLOWS_DOP`): added to existing
+  `COLLECTIVE_GOVERNANCE_TT_FOLLOWS_DOP`), and the repeal requirement `COLLECTIVE_GOVERNANCE_TT_REPEAL`: added to existing
   files, then `organize_loc.py`. Add `startswith` rules for any new family whose base key has 4+ tokens
   (`gov_collective_`, `amendment_collective_`) so a name and its `_desc` don't split across files.
 - Tooltip style: name the mechanism in plain words; `#b X#!`, not `[b]`. Draft:
@@ -246,7 +252,7 @@ output changes mainly because of §1's wider prerequisites (see §8).
 - **`test_collective_governance.py`**, in the style of `test_un_convention_registry.py`. One `EXPRESSIONS` table
   (trigger, Distribution of Power laws, amendment, government type(s), tooltip key) is checked both ways against: the
   law's `unlocking_laws`; each trigger's law list; each amendment's `allowed_laws`/`possible`/`can_repeal`; the refresh
-  effect's branches; the `on_activate` tooltip branches; the government types (order, catch-all last,
+  effect's branches; the `on_enact` tooltip branches; the government types (order, catch-all last,
   `gov_direct_democracy_autocracy` absent); and loc for every key.
 - **Read the regenerated `extra_law_consistency_generated.txt` diff.** For each governance-principle cascade, note
   where it now falls into Collective Governance (nine prerequisites and an era-4 tech make it a valid replacement far
