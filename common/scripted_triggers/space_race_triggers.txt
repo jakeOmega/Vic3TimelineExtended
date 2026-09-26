@@ -10,6 +10,22 @@ sr_is_pursuing_milestone = {
 	has_variable = sr_active_milestone
 }
 
+# The country has run a milestone, so it may hold space-race state to repair:
+# the gate of the monthly sync (space_race_on_actions.txt). A cheap test that
+# no such country fails:
+# - suborbital, the first milestone, runs with sr_active_suborbital set;
+# - every other entry's `possible` needs a sr_completed_<m> that needs
+#   sr_completed_suborbital before it, and nothing removes sr_completed_<m>;
+# - the probe result and the colony records exist only at the end of that chain.
+# Both are variables, so a revolution's winner inherits them together with the
+# records the sync rebuilds from.
+sr_space_race_participant = {
+	OR = {
+		has_variable = sr_active_suborbital
+		has_variable = sr_completed_suborbital
+	}
+}
+
 # AI participation gate: only the top ~3 countries by prestige should pursue space race
 # Players can always participate regardless
 sr_ai_should_participate = {

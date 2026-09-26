@@ -14,8 +14,13 @@ space_race_on_action = {
 		# What a revolution's winner keeps (space_race_effects.txt): the
 		# backstop that puts the entries' modifiers back, and the probe result's
 		# record, which also migrates a save from before the record existed.
-		sr_sync_space_race_entries = yes
-		sr_sync_probe_data = yes
+		# Only for a country that has run a milestone (sr_space_race_participant),
+		# which is every country with anything to put back.
+		if = {
+			limit = { sr_space_race_participant = yes }
+			sr_sync_space_race_entries = yes
+			sr_sync_probe_data = yes
+		}
 		if = {
 			limit = { NOT = { has_variable = sr_failure_cooldown } }
 			set_variable = { name = sr_failure_cooldown value = 0 }
