@@ -261,7 +261,7 @@ _decolonization_preview_region = {
 			prev = { change_variable = { name = $COUNT_VAR$ add = 1 } }
 		}
 	}
-	debug_log = "DECOL_DEBUG: _decolonization_preview_region completed (region var $REGION_VAR$, count var $COUNT_VAR$)"  # DEBUG_DECOLONIZATION_TRACE
+	debug_log = "DECOL_DEBUG: _decolonization_preview_region completed"  # DEBUG_DECOLONIZATION_TRACE (a parameter inside a debug_log string comes out mangled, so the region and count variable names are not printed)
 }
 
 form_decolonized_country = { # scope (THIS) is capital state of new country
@@ -980,7 +980,7 @@ colonial_empire_effect_planned_decolonization = {
 			save_scope_as = decolonization_target_state
 		}
 		set_variable = decolonization_path_planned
-		debug_log = "DECOL_DEBUG: ce_planned_decolonization clicked, scope:decolonization_target_state=[SCOPE.sState('decolonization_target_state').GetName] count=[ROOT.GetVariable('decolonization_planned_count').GetValue], firing confirm_release_planned"  # DEBUG_DECOLONIZATION_TRACE
+		debug_log = "DECOL_DEBUG: ce_planned_decolonization clicked, scope:decolonization_target_state=[SCOPE.sState('decolonization_target_state').GetName] count=[THIS.GetVariable('decolonization_planned_count').GetValue], firing confirm_release_planned"  # DEBUG_DECOLONIZATION_TRACE
 		trigger_event = { id = decolonization_events.401 popup = yes }
 	}
 

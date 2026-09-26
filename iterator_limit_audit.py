@@ -335,17 +335,20 @@ def render_report(result: AuditResult) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line number on a reviewed entry: an edit above it would
+        # otherwise churn the report.
         for f in exemp:
             out.append(
-                f"- `{f.file}:{f.line}` — `limit` inside `{f.iterator}` after "
+                f"- `{f.file}` — `limit` inside `{f.iterator}` after "
                 f"`{f.preceding_key}` — **{f.exemption['date']}**: "
                 f"{f.exemption['rationale']}"
             )
         out.append("")
 
+    # Flag counts only: `files_audited` stays on the result (and in the
+    # regenerate() summary) but moves with every new file.
     out.append("## Coverage")
     out.append("")
-    out.append(f"- files audited: {result.files_audited}")
     out.append(f"- total flags: {len(result.flags)}")
     out.append(f"- unreviewed: {len(unrev)}")
     out.append(f"- exempted: {len(exemp)}")

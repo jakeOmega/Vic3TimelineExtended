@@ -134,6 +134,15 @@ class PureExtractorTests(unittest.TestCase):
             "key_c": 'with \\"escaped\\" quotes',
         })
 
+    def test_code_part(self):
+        self.assertEqual(mss._code_part("a = b # c"), "a = b ")
+        self.assertEqual(mss._code_part("# whole line"), "")
+        self.assertEqual(mss._code_part("\tno_comment = 1"), "\tno_comment = 1")
+        # `#` inside quotes is loc markup / string text, not a comment
+        self.assertEqual(mss._code_part(' k:0 "#b x#!" # c'), ' k:0 "#b x#!" ')
+        self.assertEqual(mss._code_part(' k:0 "say \\"#hi\\" x" # c'),
+                         ' k:0 "say \\"#hi\\" x" ')
+
 
 class MigrationWorkerTests(unittest.TestCase):
     @classmethod
@@ -187,6 +196,19 @@ class MigrationWorkerTests(unittest.TestCase):
         _write(os.path.join(cls.mod,
                "common/modifier_type_definitions/mod_mt.txt"),
                "some_static = {\n\tremoved_used_mod = 3\n}\n")
+        # removed_unused_mod appears only in `#` comments — not a use (#485),
+        # including on a line whose code has a longer name containing it
+        _write(os.path.join(cls.mod, "common/static_modifiers/mod_sm.txt"),
+               "# added_mod is the new name of removed_unused_mod.\n"
+               "other_static = {\n"
+               "\tremoved_unused_mod_extra = 1 # was removed_unused_mod\n"
+               "}\n")
+        # uses of removed_used_mod that a naive `#` cut would miss: after loc
+        # markup inside quotes, and on a line that also comments on it
+        _write(os.path.join(cls.mod, "localization/english/mod_l_english.yml"),
+               'l_english:\n mod_note:0 "#b Note:#! removed_used_mod"\n')
+        _write(os.path.join(cls.mod, "events/mod_events.txt"),
+               "\tremoved_used_mod = 1 # removed_used_mod is gone upstream\n")
         _write(os.path.join(cls.mod, "gui/frontend/panel.gui"),
                "mod override of panel\n")            # same path -> at-risk
         _write(os.path.join(cls.mod, "gui/te_custom.gui"),
@@ -247,11 +269,18 @@ class MigrationWorkerTests(unittest.TestCase):
         self.assertIn("game/common/interest_groups/00_ig.txt", changed)
         self.assertNotIn("game/gui/frontend/stable.gui", changed)
 
-    def test_mod_grep_uses(self):
-        hits = mss._mod_grep_uses("removed_used_mod")
-        self.assertIn(
-            "common/modifier_type_definitions/mod_mt.txt", hits)
-        self.assertEqual(mss._mod_grep_uses("removed_unused_mod"), [])
+    def test_mod_grep_mentions(self):
+        uses, comment_only = mss._mod_grep_mentions("removed_used_mod")
+        self.assertEqual(uses, [
+            "common/modifier_type_definitions/mod_mt.txt",
+            "events/mod_events.txt",
+            "localization/english/mod_l_english.yml",
+        ])
+        self.assertEqual(comment_only, [])
+        uses, comment_only = mss._mod_grep_mentions("removed_unused_mod")
+        self.assertEqual(uses, [])
+        self.assertEqual(comment_only, ["common/static_modifiers/mod_sm.txt"])
+        self.assertEqual(mss._mod_grep_mentions("never_mentioned"), ([], []))
 
     # ---- endpoint workers -------------------------------------------------
     def test_surface_diff(self):
@@ -276,6 +305,12 @@ class MigrationWorkerTests(unittest.TestCase):
             joined["removed_used_mod"].get("re_registered_by_mod", False), bool)
         # a removed name the mod does NOT reference must not appear in the join
         self.assertNotIn("removed_unused_mod", joined)
+        # ...but its comment-only mentions are listed apart from the uses
+        commented = {j["name"]: j for j in d["removed_and_only_commented_in_mod"]}
+        self.assertEqual(set(commented), {"removed_unused_mod"})
+        self.assertEqual(commented["removed_unused_mod"]["mod_files"],
+                         ["common/static_modifiers/mod_sm.txt"])
+        self.assertEqual(d["summary"]["removed_and_only_commented_in_mod"], 1)
         # law removals never carry the modifier-only re_registered flag
         law_join = {j["name"]: j for j in d["removed_and_used_by_mod"]
                     if j["category"] == "laws"}
@@ -289,6 +324,7 @@ class MigrationWorkerTests(unittest.TestCase):
         self.assertEqual(d["summary"]["added"], 0)
         self.assertEqual(d["summary"]["removed"], 0)
         self.assertEqual(d["summary"]["removed_and_used_by_mod"], 0)
+        self.assertEqual(d["summary"]["removed_and_only_commented_in_mod"], 0)
 
     def test_gui_at_risk(self):
         g = mss._migration_gui_at_risk(self.old_ref)
@@ -319,20 +355,47 @@ class MigrationWorkerTests(unittest.TestCase):
         self.assertEqual(l["drifted"], [])
 
 
+def _mirror_at_install() -> bool:
+    """True when /status shows the vanilla mirror's HEAD at the installed game
+    version. vanilla-surface-diff and loc-override-drift read their NEW side
+    from the live install, so old_ref=HEAD is an identity diff only then; while
+    the mirror lags the install, their diffs are real (#485)."""
+    if not _server_up():
+        return False
+    try:
+        v = _get("/status").get("versions") or {}
+    except (URLError, OSError, ValueError):
+        return False
+    return bool(v.get("live_game")) and \
+        v.get("live_game") == v.get("vanilla_clone_head")
+
+
+_MIRROR_AT_INSTALL = _mirror_at_install()
+_MIRROR_LAGS = ("vanilla mirror HEAD is not the installed version, so "
+                "old_ref=HEAD against the live install is not an identity diff")
+
+
 @unittest.skipUnless(_server_has_new_code(),
                      "server not running #228 code (restart to activate)")
 class HttpSmokeTests(unittest.TestCase):
     """End-to-end HTTP envelope checks against the live server. Uses old_ref=HEAD
-    (always resolvable, deterministic empty diffs) so they don't depend on the
-    clone's history depth. Gives the orchestrator's post-restart step something
-    to run over the real route (do_GET -> _validate -> handler)."""
+    (always resolvable) so they don't depend on the clone's history depth. The
+    diff is empty for gui-at-risk, which reads the clone on both sides; the
+    other two compare against the live install, so their identity checks run
+    only while the mirror is at the installed version. Gives the orchestrator's
+    post-restart step something to run over the real route
+    (do_GET -> _validate -> handler)."""
 
     def test_surface_diff_envelope(self):
         d = _get("/validate/vanilla-surface-diff?old_ref=HEAD")
         for k in ("old_ref", "added", "removed",
                   "removed_and_used_by_mod", "summary"):
             self.assertIn(k, d)
-        self.assertEqual(d["removed_and_used_by_mod"], [])  # identity
+
+    @unittest.skipUnless(_MIRROR_AT_INSTALL, _MIRROR_LAGS)
+    def test_surface_diff_identity(self):
+        d = _get("/validate/vanilla-surface-diff?old_ref=HEAD")
+        self.assertEqual(d["removed_and_used_by_mod"], [])
 
     def test_gui_at_risk_envelope(self):
         d = _get("/validate/gui-at-risk?old_ref=HEAD")
@@ -344,7 +407,11 @@ class HttpSmokeTests(unittest.TestCase):
         d = _get("/validate/loc-override-drift?old_ref=HEAD")
         for k in ("shadowed_key_count", "drifted", "summary"):
             self.assertIn(k, d)
-        self.assertEqual(d["drifted"], [])                  # identity
+
+    @unittest.skipUnless(_MIRROR_AT_INSTALL, _MIRROR_LAGS)
+    def test_loc_drift_identity(self):
+        d = _get("/validate/loc-override-drift?old_ref=HEAD")
+        self.assertEqual(d["drifted"], [])
 
     def test_missing_ref_is_400(self):
         with self.assertRaises(HTTPError) as cm:

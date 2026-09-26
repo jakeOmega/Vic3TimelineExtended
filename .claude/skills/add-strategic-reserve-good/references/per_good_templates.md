@@ -293,6 +293,12 @@ st_res_<GOOD>_unlocked_trigger = {
 }
 ```
 
+Also add the good's line to `st_res_reserve_filling_up` further down the same file, the silo's AI storage signal:
+
+```
+		st_res_<GOOD>_fill_pct >= 75
+```
+
 ---
 
 ## File 7: `common/scripted_effects/st_res_effects.txt`
@@ -305,13 +311,14 @@ Most of the per-good work is now one line added to an existing `$GOOD$`-paramete
 	st_res_init_good_effect          = { GOOD = <GOOD> }  # in st_res_init_effect
 	st_res_reset_good_vars_effect    = { GOOD = <GOOD> }  # in st_res_reset_vars_effect
 	st_res_startup_good_setup_effect = { GOOD = <GOOD> }  # in st_res_rebuild_hub_flow_modifiers_effect (country half)
+	st_res_refresh_preset_magnitudes_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (hub branch, BEFORE the apply loop)
 	st_res_apply_weekly_good_effect  = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (hub branch)
 	st_res_policy_tick_good_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (hub branch, AFTER the apply loop)
 	st_res_mark_good_no_hub_effect   = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (else branch)
 	st_res_policy_tick_good_effect = { GOOD = <GOOD> }  # in st_res_weekly_update_effect (else branch too — see below)
 	st_res_set_good_status_effect    = { GOOD = <GOOD> }  # at the END of st_res_refresh_hub_flow_effect
 	st_res_switch_to_manual_base     = { GOOD = <GOOD> }  # in st_res_reset_rates_effect
-	st_res_ai_seed_good_effect       = { GOOD = <GOOD> POLICY = 1 }  # in st_res_ai_seed_policies_effect
+	st_res_ai_seed_good_effect       = { GOOD = <GOOD> POLICY = 3 }  # in st_res_ai_seed_policies_effect; every good is on Stabilize Prices
 ```
 
 `st_res_policy_tick_good_effect` goes in **both** branches of the weekly pulse. That is not redundancy: it advances the good's running price average and then runs `st_res_policy_evaluate_good_effect`, the single derivation site for `st_res_<GOOD>_policy_status`, whose no-hub branch is what writes status 9. Drop the else-branch call and a policy's explanation goes stale the moment the hub is destroyed. Never call the tick from a click path — the price average must advance once a week, not once per click.
@@ -538,11 +545,14 @@ One row instance, appended to the root `widget_je_strategic_reserve_inventory` f
 		tooltip = "st_res_row_<GOOD>_tooltip"
 
 		blockoverride "row_collapse_toggle" {
-			onclick = "[GetVariableSystem.Toggle( 'st_res_row_collapsed_<GOOD>' )]"
+			onclick = "[GetVariableSystem.Toggle( 'st_res_row_expanded_<GOOD>' )]"
 			tooltip = "st_res_row_collapse_tooltip"
 		}
-		blockoverride "row_details_visible" {
-			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_collapsed_<GOOD>' ) )]"
+		blockoverride "row_expanded" {
+			visible = "[GetVariableSystem.Exists( 'st_res_row_expanded_<GOOD>' )]"
+		}
+		blockoverride "row_collapsed" {
+			visible = "[Not( GetVariableSystem.Exists( 'st_res_row_expanded_<GOOD>' ) )]"
 		}
 		blockoverride "row_name" { text = "st_res_row_<GOOD>_name" }
 		blockoverride "row_amount" { text = "st_res_row_<GOOD>_amount" }
@@ -595,7 +605,7 @@ One row instance, appended to the root `widget_je_strategic_reserve_inventory` f
 	}
 ```
 
-The two collapse blocks toggle a GUI-only key: clicking the good's name hides lines 2–5 and the settings panel. `st_res_row_collapse_tooltip` is shared, so the good needs no loc key for it.
+The three collapse blocks share one GUI-only key, `st_res_row_expanded_<GOOD>`: clicking the good's name shows or hides lines 2–5 and the settings panel (`row_expanded`), and swaps the chevron beside the name (`row_expanded` / `row_collapsed`). The key is absent until the first click, so a new good's row starts collapsed like the others. `st_res_row_collapse_tooltip` is shared, so the good needs no loc key for it — but its `st_res_row_<GOOD>_tooltip` should end with the same "Click the good's name to expand this row…" line as the others.
 
 The three policy-panel `type`s (`widget_je_st_res_policy_choice`, `_stepper`, `_panel`) are **shared** — the op codes are the same for every good, so a new good adds only the blockoverrides above, never a new type. The eight value cells put their data function inline in `text` rather than behind a loc key, which is why adding a good needs no per-setting localization.
 
@@ -642,7 +652,7 @@ All row expressions use `JournalEntry.GetCountry…`, **not** `ROOT…` — the 
  st_res_row_<GOOD>_status:0 "[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')]"
  st_res_row_<GOOD>_decay:0 "#bold Decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_annual_decay_rate')|%1]/yr, currently [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_weekly_decay')|1]/wk"
  st_res_row_<GOOD>_flow:0 "#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0]  #bold Last wk:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1]/wk"
- st_res_row_<GOOD>_tooltip:0 "#header @<GOOD>! <GOOD_DISPLAY> Reserve#!\n#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct')|1]%)\n#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0] / week\n#bold [concept_st_res_active_rate]:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_actual_rate')|+1] / week\n#bold Net movement last week:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1] / week\n#bold Decay rate:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_<GOOD>_decay_add')] of the stockpile per year\n#bold Weekly decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_weekly_decay')|1] / week\n#bold Hub flow cap:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0] / week per good\n#bold Hub staffing:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_hub_staffing')|%0]\n\n#bold Status:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')] — [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_reason_text')]\n\n#bold Reserve policy:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_text')]\n[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_reason_text')]\n#bold National market price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_rel')|%0] against base price (this is the market the hub's purchases and sales clear on)\n#bold Averaged price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_signal')|+0]% against base ([JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_price_memory').GetValue|0]-week average — the figure the policy acts on)\n#bold Response ramp:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_ramp').GetValue|0] points past each threshold (0 = full flow at the threshold)\n#bold Price signal at the last review:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_policy_price').GetValue|+0]%\n\n#italic Click the good's name to collapse or expand this row.#!"
+ st_res_row_<GOOD>_tooltip:0 "#header @<GOOD>! <GOOD_DISPLAY> Reserve#!\n#bold Stored:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_stored').GetValue|0] / [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_capacity')|0] ([JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_fill_pct')|1]%)\n#bold [concept_st_res_rate_setting]:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_rate').GetValue|+0] / week\n#bold [concept_st_res_active_rate]:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_actual_rate')|+1] / week\n#bold Net movement last week:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_last_net')|+=1] / week\n#bold Decay rate:#! [JournalEntry.GetCountry.GetModifier.GetValueWithBreakdownFor('country_st_res_<GOOD>_decay_add')] of the stockpile per year\n#bold Weekly decay:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_weekly_decay')|1] / week\n#bold Hub flow cap:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_weekly_base_rate_cap')|0] / week per good\n#bold Hub staffing:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_hub_staffing')|%0]\n\n#bold Status:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_mode_text')] — [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_reason_text')]\n\n#bold Reserve policy:#! [JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_text')]\n[JournalEntry.GetCountry.GetCustom('st_res_<GOOD>_policy_reason_text')]\n#bold National market price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_rel')|%0] against base price (this is the market the hub's purchases and sales clear on)\n#bold Averaged price:#! [JournalEntry.GetCountry.MakeScope.ScriptValue('st_res_<GOOD>_price_signal')|+0]% against base ([JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_price_memory').GetValue|0]-week average — the figure the policy acts on)\n#bold Response ramp:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_ramp').GetValue|0] points past each threshold (0 = full flow at the threshold)\n#bold Price signal at the last review:#! [JournalEntry.GetCountry.MakeScope.Var('st_res_<GOOD>_policy_price').GetValue|+0]%\n\n#italic Click the good's name to expand this row for stock, flow, decay and policy details; click it again to collapse it.#!"
 ```
 
 `st_res_row_<GOOD>_decay`'s `%N` is per good: enough decimals to show the good's finest decay step, and no more. Grain moves in 5 pp steps (`%0`), oil and Chemicals in 0.05–0.25 pp steps (`%2`), everything else in 0.1–0.7 pp steps (`%1`, as above). Too few decimals and a tech's cut rounds away on the row. The row tooltip's *Decay rate* line carries the exact figure with a hoverable per-source breakdown.

@@ -20,8 +20,8 @@ Where:
                  fall back to a flat-by-mask listing.
     out_dir:     directory to write into (typically `docs/`).
     source_paths: dict mapping engine_docs key -> filesystem path of the
-                 source `.log`, used to embed mtimes in the auto-generated
-                 headers.
+                 source `.log`; the version in its directory name (e.g.
+                 `.../1.14.4/docs/`) goes into the auto-generated headers.
 
 The module also retains a `parse_log` shim for backwards-compat with the
 old `docs/parse_triggers_effects.py` callers, but new code should use the
@@ -32,24 +32,27 @@ from __future__ import annotations
 import os
 import re
 from collections import defaultdict
-from datetime import datetime, timezone
 
 
 # ---------------------------------------------------------------------------
 # Headers
 # ---------------------------------------------------------------------------
-def _auto_header(source_label: str, source_mtime: float | None, comment_prefix: str = "<!--") -> str:
-    """Build a do-not-hand-edit header. comment_prefix='#' for plain-text outputs."""
-    ts = "<unknown>"
-    if source_mtime:
-        ts = datetime.fromtimestamp(source_mtime, tz=timezone.utc).isoformat(timespec="seconds")
-    msg = (
-        f"Auto-generated from {source_label} at {ts}. "
-        f"Do not hand-edit. Run POST /reload after the engine regenerates the source."
-    )
-    if comment_prefix == "#":
-        return f"# {msg}\n\n"
-    return f"{comment_prefix} {msg} -->\n\n"
+# A dotted version in the source path — `.../vic3-engine-docs/1.14.4/docs/` or
+# `.../Modding-Digests/1.14.4/docs/`. Headers name it instead of the log's
+# mtime, so re-copying or re-dumping an unchanged snapshot rewrites no file.
+_VERSION_RE = re.compile(r"\d+\.\d+(?:\.\d+)?")
+
+
+def _source_version(path: str | None) -> str | None:
+    """The last dotted version token in `path`'s directory, or None."""
+    if not path:
+        return None
+    matches = _VERSION_RE.findall(os.path.dirname(path))
+    return matches[-1] if matches else None
+
+
+def _source_label(logs: str, version: str | None) -> str:
+    return f"{logs} (engine docs {version})" if version else logs
 
 
 # ---------------------------------------------------------------------------
@@ -119,12 +122,40 @@ _SCOPE_PRIORITY = [
 ]
 
 _REGIONAL_ITER_RE = re.compile(
-    r"^(any|every|random|ordered)_(country|state|province|state_region|strategic_region)_in_\w+$"
+    r"^(?:any|every|random|ordered)_(country|state|province|state_region|strategic_region)_in_(\w+)$"
 )
 
 
 def _is_regional_iterator(name: str) -> bool:
     return bool(_REGIONAL_ITER_RE.match(name))
+
+
+_REGIONAL_ITER_NOUNS = {
+    "country": "countries",
+    "state": "states",
+    "province": "provinces",
+    "state_region": "state regions",
+    "strategic_region": "strategic regions",
+}
+REGIONAL_ITERATOR_NOTE = (
+    "Regional iterators (<any|every|random|ordered>_<type>_in_<geographic_region>) carry a "
+    "fixed description: the engine dump prints unrelated script there, reshuffled on every dump."
+)
+
+
+def _regional_iterator_desc(name: str) -> str:
+    m = _REGIONAL_ITER_RE.match(name)
+    return f"Iterate through all {_REGIONAL_ITER_NOUNS[m.group(1)]} in geographic region {m.group(2)}"
+
+
+def _description(entry: dict) -> str:
+    """The entry's description, except a regional iterator's, which the engine
+    dump fills with unrelated script (a random scripted trigger's body,
+    sometimes raw memory) that changes on every dump."""
+    name = entry.get("name", "")
+    if _is_regional_iterator(name):
+        return _regional_iterator_desc(name)
+    return entry.get("description") or ""
 
 
 def _primary_scope(scope_field) -> str:
@@ -170,8 +201,7 @@ def _compact_desc(desc: str, max_len: int = 200) -> str:
 def render_triggers_effects_reference(
     triggers: list[dict],
     effects: list[dict],
-    triggers_mtime: float | None = None,
-    effects_mtime: float | None = None,
+    source_version: str | None = None,
 ) -> str:
     """Build the full vic3_triggers_effects_reference.md content."""
     triggers_filtered = [t for t in triggers if not _is_regional_iterator(t.get("name", ""))]
@@ -237,12 +267,7 @@ def render_triggers_effects_reference(
 
     out: list[str] = []
     # Header (Markdown comment so it doesn't render visibly)
-    sources = []
-    if triggers_mtime:
-        sources.append(f"triggers.log @ {datetime.fromtimestamp(triggers_mtime, tz=timezone.utc).isoformat(timespec='seconds')}")
-    if effects_mtime:
-        sources.append(f"effects.log @ {datetime.fromtimestamp(effects_mtime, tz=timezone.utc).isoformat(timespec='seconds')}")
-    src_label = "; ".join(sources) if sources else "triggers.log + effects.log"
+    src_label = _source_label("triggers.log + effects.log", source_version)
     out.append(f"<!-- Auto-generated from {src_label}. Do not hand-edit. "
                "Run POST /reload after the engine regenerates the source. -->")
     out.append("")
@@ -334,7 +359,7 @@ def render_triggers_effects_reference(
 def render_modifiers_reference(
     modifiers: list[dict],
     pattern_index: dict | None,
-    modifiers_mtime: float | None = None,
+    source_version: str | None = None,
 ) -> str:
     """Render vic3_modifier_type_definitions_reference.md.
 
@@ -343,9 +368,7 @@ def render_modifiers_reference(
     Modifiers not in any pattern are listed flat under their mask section.
     """
     out: list[str] = []
-    src_label = "modifiers.log"
-    if modifiers_mtime:
-        src_label = f"modifiers.log @ {datetime.fromtimestamp(modifiers_mtime, tz=timezone.utc).isoformat(timespec='seconds')}"
+    src_label = _source_label("modifiers.log", source_version)
     out.append(f"<!-- Auto-generated from {src_label}. Do not hand-edit. "
                "Run POST /reload after the engine regenerates the source. -->")
     out.append("")
@@ -448,7 +471,7 @@ def render_modifier_patterns(
     pattern_index: dict,
     discovered_patterns: list[dict] | None = None,
     vocabularies: dict | None = None,
-    modifiers_mtime: float | None = None,
+    source_version: str | None = None,
 ) -> str:
     """Render docs/engine/modifier_patterns.md.
 
@@ -459,9 +482,7 @@ def render_modifier_patterns(
     vocabularies: {placeholder_name: [valid_values]} for missing-value computation.
     """
     out: list[str] = []
-    src_label = "modifiers.log + common/_meta/modifier_patterns.yml"
-    if modifiers_mtime:
-        src_label += f" (modifiers.log @ {datetime.fromtimestamp(modifiers_mtime, tz=timezone.utc).isoformat(timespec='seconds')})"
+    src_label = _source_label("modifiers.log", source_version) + " + common/_meta/modifier_patterns.yml"
     out.append(f"<!-- Auto-generated from {src_label}. Do not hand-edit. "
                "Run POST /reload after the engine regenerates the source. -->")
     out.append("")
@@ -524,7 +545,7 @@ def render_summary_triggers_effects(entries: list[dict]) -> str:
         name = entry.get("name", "")
         scopes = entry.get("scopes") or []
         scope_str = ",".join(scopes) if isinstance(scopes, list) else str(scopes)
-        desc = _compact_desc(entry.get("description", ""), 150)
+        desc = _compact_desc(_description(entry), 150)
         lines.append(f"{scope_str}|{name}|{desc}")
     return "\n".join(lines) + "\n"
 
@@ -578,7 +599,7 @@ def render_country_triggers(triggers: list[dict]) -> str:
         if "country" not in (scopes if isinstance(scopes, list) else [scopes]):
             continue
         name = entry.get("name", "")
-        desc = _compact_desc(entry.get("description", ""), 200)
+        desc = _compact_desc(_description(entry), 200)
         lines.append(f"{name}: {desc}")
     return "\n".join(lines) + "\n"
 
@@ -590,7 +611,7 @@ def render_triggers_parsed(triggers: list[dict]) -> str:
         name = entry.get("name", "")
         scopes = ", ".join(entry.get("scopes") or []) or "(none)"
         targets = ", ".join(entry.get("targets") or [])
-        desc = (entry.get("description") or "").strip()
+        desc = _description(entry).strip()
         out.append(f"## {name}")
         out.append(f"Scopes: {scopes}")
         if targets:
@@ -635,48 +656,56 @@ def render_all(
     custom_loc = engine_docs.get("custom-localization", []) or []
 
     src = source_paths or {}
-    triggers_mtime = _mtime(src.get("triggers"))
-    effects_mtime = _mtime(src.get("effects"))
-    modifiers_mtime = _mtime(src.get("modifiers"))
+    triggers_version = _source_version(src.get("triggers"))
+    effects_version = _source_version(src.get("effects"))
+    modifiers_version = _source_version(src.get("modifiers"))
 
     # Markdown references
     _write(
         "vic3_triggers_effects_reference.md",
-        render_triggers_effects_reference(triggers, effects, triggers_mtime, effects_mtime),
+        render_triggers_effects_reference(triggers, effects, triggers_version or effects_version),
     )
     _write(
         "vic3_modifier_type_definitions_reference.md",
-        render_modifiers_reference(modifiers, pattern_index, modifiers_mtime),
+        render_modifiers_reference(modifiers, pattern_index, modifiers_version),
     )
 
     # Pipe-delimited summaries
-    _write("triggers_summary.txt", _txt_header("triggers.log", triggers_mtime) + render_summary_triggers_effects(triggers))
-    _write("effects_summary.txt", _txt_header("effects.log", effects_mtime) + render_summary_triggers_effects(effects))
-    _write("modifiers_summary.txt", _txt_header("modifiers.log", modifiers_mtime) + render_summary_modifiers(modifiers))
+    _write(
+        "triggers_summary.txt",
+        _txt_header("triggers.log", triggers_version, REGIONAL_ITERATOR_NOTE)
+        + render_summary_triggers_effects(triggers),
+    )
+    _write(
+        "effects_summary.txt",
+        _txt_header("effects.log", effects_version, REGIONAL_ITERATOR_NOTE)
+        + render_summary_triggers_effects(effects),
+    )
+    _write("modifiers_summary.txt", _txt_header("modifiers.log", modifiers_version) + render_summary_modifiers(modifiers))
     _write(
         "event_targets_summary.txt",
-        _txt_header("event_targets.log", _mtime(src.get("event-targets")))
+        _txt_header("event_targets.log", _source_version(src.get("event-targets")))
         + render_summary_event_targets(event_targets),
     )
     _write(
         "on_actions_summary.txt",
-        _txt_header("on_actions.log", _mtime(src.get("on-actions")))
+        _txt_header("on_actions.log", _source_version(src.get("on-actions")))
         + render_summary_on_actions(on_actions),
     )
     _write(
         "custom_localization_summary.txt",
-        _txt_header("custom_localization.log", _mtime(src.get("custom-localization")))
+        _txt_header("custom_localization.log", _source_version(src.get("custom-localization")))
         + render_summary_custom_localization(custom_loc),
     )
 
     # Existing-format files (kept for greppability)
     _write(
         "country_triggers.txt",
-        _txt_header("triggers.log", triggers_mtime) + render_country_triggers(triggers),
+        _txt_header("triggers.log", triggers_version) + render_country_triggers(triggers),
     )
     _write(
         "triggers_parsed.txt",
-        _txt_header("triggers.log", triggers_mtime) + render_triggers_parsed(triggers),
+        _txt_header("triggers.log", triggers_version, REGIONAL_ITERATOR_NOTE) + render_triggers_parsed(triggers),
     )
 
     # Modifier patterns
@@ -688,30 +717,21 @@ def render_all(
                 pattern_index or {},
                 discovered_patterns,
                 vocabularies,
-                modifiers_mtime,
+                modifiers_version,
             ),
         )
 
     return written
 
 
-def _mtime(path: str | None) -> float | None:
-    if not path:
-        return None
-    try:
-        return os.path.getmtime(path)
-    except OSError:
-        return None
-
-
-def _txt_header(source_label: str, source_mtime: float | None) -> str:
-    ts = ""
-    if source_mtime:
-        ts = f" @ {datetime.fromtimestamp(source_mtime, tz=timezone.utc).isoformat(timespec='seconds')}"
-    return (
-        f"# Auto-generated from {source_label}{ts}. "
-        f"Do not hand-edit. Run POST /reload after the engine regenerates the source.\n\n"
+def _txt_header(logs: str, version: str | None, note: str | None = None) -> str:
+    out = (
+        f"# Auto-generated from {_source_label(logs, version)}. "
+        f"Do not hand-edit. Run POST /reload after the engine regenerates the source.\n"
     )
+    if note:
+        out += f"# {note}\n"
+    return out + "\n"
 
 
 # ---------------------------------------------------------------------------

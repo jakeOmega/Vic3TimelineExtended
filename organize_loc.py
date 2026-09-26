@@ -434,6 +434,13 @@ def categorize_key(key, technology_keys):
     # ones would all fall to CONCEPTS, away from the rest of the family.
     if key.startswith("resettlement_"):
         return "MISCELLANEOUS"
+    # Collective Governance government types and amendments (law_direct_democracy):
+    # four-token bases (`gov_collective_noble_commonwealth`,
+    # `amendment_collective_direct_democracy`) would otherwise split, the name
+    # to MISCELLANEOUS and the `_desc` to CONCEPTS. File the whole family with
+    # the other government-type and amendment loc.
+    if key.startswith(("gov_collective_", "gov_direct_democracy", "amendment_collective_")):
+        return "CONCEPTS"
     if "_desc" in key or (re.match(r"^[a-zA-Z_]+$", key) and len(key.split("_")) < 4):
         return "CONCEPTS"
     return "MISCELLANEOUS"

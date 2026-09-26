@@ -162,7 +162,10 @@ irredentist_war_tilt = {
 		add = -2
 	}
 	if = {
-		limit = { scope:target_country.relations:root >= relations_threshold:cordial }
+		# ?= because an AI strategy's weight evaluates this with no target
+		# bound (common/ai_strategies/other.txt), which logged "Undefined event
+		# target 'target_country'".
+		limit = { scope:target_country ?= { relations:root >= relations_threshold:cordial } }
 		add = -2
 	}
 

@@ -75,6 +75,9 @@ nuclear_custody.1 = {
 		name = nuclear_custody.1.a
 		default_option = yes
 		nd_cw_apply_split = { MODE = hold TT = nd_tt_cw_split_hold }
+		hidden_effect = {
+			debug_log = "TE_CUSTODY: [THIS.GetCountry.GetNameNoFormatting] chose to hold the line at the outbreak"
+		}
 		ai_chance = {
 			base = 2
 			modifier = {
@@ -439,6 +442,7 @@ nuclear_custody.6 = {
 	# Stay out.
 	option = {
 		name = nuclear_custody.6.e
+		# REVIEWED 2026-09-26 (no_effect_option): the decline: we stay out of their civil war
 		default_option = yes
 		ai_chance = {
 			base = 5
@@ -629,6 +633,7 @@ nuclear_custody.10 = {
 	# Leave it.
 	option = {
 		name = nuclear_custody.10.b
+		# REVIEWED 2026-09-26 (no_effect_option): the decline: we leave the matter to others
 		default_option = yes
 		ai_chance = {
 			base = 2

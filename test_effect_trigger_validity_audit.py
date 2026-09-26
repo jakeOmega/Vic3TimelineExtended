@@ -231,5 +231,32 @@ class SuppressionTests(unittest.TestCase):
         self.assertTrue(any(f.exemption for f in result.flags))
 
 
+class RenderReportTests(unittest.TestCase):
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and the summary no scan
+        counts (the frozen catalog size stays), so the report changes only when
+        the findings do."""
+        result = eva.AuditResult(
+            flags=[
+                eva.Flag("/mod/events/e.txt", 5, "bogus_effect", "unknown-name", "bogus_effect = 1"),
+                eva.Flag("/mod/common/diplomatic_actions/a.txt", 128, "decline_effect",
+                         "unresolved-helper-call", "decline_effect = { }",
+                         exemption={"date": "2026-09-18", "rationale": "action field"}),
+            ],
+            coverage={"files_scanned": 262, "roots_scanned": 16, "keys_checked": 109392,
+                      "catalog_size": 7145, "mod_defined_names": 2650, "flags": 2},
+        )
+        report = eva.render_report(result, "/mod")
+        self.assertIn(
+            "- `decline_effect` (unresolved-helper-call) — common/diplomatic_actions/a.txt "
+            "(REVIEWED 2026-09-18: action field)", report)
+        self.assertNotIn("a.txt:128", report)
+        self.assertIn("— events/e.txt:5 —", report)  # unreviewed keeps its line
+        self.assertIn("- Catalog size: **7145**\n", report)
+        for gone in ("Roots scanned", "files scanned", "keys checked", "mod-defined names",
+                     "109392", "2650"):
+            self.assertNotIn(gone, report)
+
+
 if __name__ == "__main__":
     unittest.main()

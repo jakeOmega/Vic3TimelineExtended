@@ -1629,6 +1629,17 @@ pmg_military_base_purpose = {
 	}
 }
 
+# Local nuclear point defence: state_nuclear_weapon_defense_chance_add for the
+# base's own state, on top of the national tech grants.
+pmg_military_base_missile_defense = {
+	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
+	production_methods = {
+		pm_no_missile_defense
+		pm_missile_defense_battery
+		pm_directed_energy_point_defense
+	}
+}
+
 # Extend vanilla's naval fortification PMG with mod-added Era 7 and Era 9 tiers.
 # Vanilla caps at concrete_fortifications; these add guided_missiles- and
 # missile_defense_systems-gated upgrades to keep coastal defense relevant

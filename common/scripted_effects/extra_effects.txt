@@ -87,18 +87,18 @@ orbital_battlestation_construction     = { generic_wonder_construction_base = { 
 
 mind_upload_nexus_construction         = { generic_wonder_construction_base = { WONDER = mind_upload_nexus         MAX_LEVEL =  5 } }
 
+# State scope, from on_monthly_pulse_state (ROOT is the state). Reads the
+# state's own value, so the national grants (the Ministry of Thought Control)
+# reach every incorporated state and a building's state_modifiers grant only
+# its own.
 thought_control_loyalists_update = {
 	if = {
 		limit = {
-			owner = {
-				modifier:country_monthly_loyalists_add > 0
-			}
+			is_incorporated = yes
+			modifier:state_monthly_loyalists_add > 0
 		}
-		every_scope_state = {
-			limit = { is_incorporated = yes }
-			add_loyalists_in_state = {
-				value = ROOT.modifier:country_monthly_loyalists_add
-			}
+		add_loyalists_in_state = {
+			value = modifier:state_monthly_loyalists_add
 		}
 	}
 }
@@ -650,6 +650,12 @@ nuclear_tactical_strike = {
 	kill_population_percent_in_state = {
 		percent = 0.005
 	}
+	# The installations themselves. After the kills: rebuilding a damaged
+	# site lays its staff off, and the count above is of the dead.
+	custom_tooltip = {
+		text = nuclear_tactical_strike_installations_tt
+		nuclear_tactical_strike_damage_installations = yes
+	}
 	add_modifier = {
 		name = tactical_nuke_aftermath
 		days = short_modifier_time
@@ -681,6 +687,137 @@ nuclear_tactical_strike = {
 			set_global_variable = { name = world_first_nuclear_weapon_used value = yes }
 			trigger_event = { id = nuclear_weapon_events.17 }
 		}
+	}
+}
+
+# State scope. A tactical strike's damage to the installations it hit: each
+# naval fortification and military base loses half its levels, an odd level
+# going on a coin flip, so a level-1 site is destroyed half the time. Records
+# the levels lost in tactical_nuclear_strike_levels_destroyed for
+# nuclear_weapon_events.5. Left standing: barracks and conscription centres
+# (units recruit from them), naval administration (ships are assigned to it)
+# and the naval logistics centre (the engine re-spawns its levels from
+# formation supply).
+nuclear_tactical_strike_damage_installations = {
+	set_variable = { name = tactical_nuclear_strike_levels_destroyed value = 0 }
+	if = {
+		limit = { has_building = building_naval_fortification }
+		nuclear_strike_halve_building = {
+			BUILDING = building_naval_fortification
+			PMS = nuclear_strike_naval_fortification_pms
+		}
+	}
+	if = {
+		limit = {
+			has_building = building_military_base
+			# create_building refuses an owner without the unlocking
+			# technology, and a refused rebuild would lose the whole base.
+			owner = { has_technology_researched = trench_works }
+		}
+		nuclear_strike_halve_building = {
+			BUILDING = building_military_base
+			PMS = nuclear_strike_military_base_pms
+		}
+	}
+}
+
+# State scope, with $BUILDING$ present. The engine has no effect that removes
+# levels, so a damaged building is removed and rebuilt smaller, as vanilla's
+# destroy_barracks does. A rebuilt building starts on production methods the
+# engine picks; $PMS$ (MODE = record / restore) puts the old ones back.
+nuclear_strike_halve_building = {
+	# Levels left: half, rounded up, less one on a coin flip when odd.
+	set_variable = {
+		name = nuclear_strike_levels_left
+		value = {
+			value = b:$BUILDING$.level
+			divide = 2
+			ceiling = yes
+		}
+	}
+	set_variable = {
+		name = nuclear_strike_levels_doubled
+		value = {
+			value = var:nuclear_strike_levels_left
+			multiply = 2
+		}
+	}
+	if = {
+		limit = { b:$BUILDING$.level < var:nuclear_strike_levels_doubled }
+		random = {
+			chance = 50
+			change_variable = { name = nuclear_strike_levels_left subtract = 1 }
+		}
+	}
+	change_variable = {
+		name = tactical_nuclear_strike_levels_destroyed
+		add = {
+			value = b:$BUILDING$.level
+			subtract = var:nuclear_strike_levels_left
+		}
+	}
+	if = {
+		limit = { var:nuclear_strike_levels_left < 1 }
+		remove_building = $BUILDING$
+	}
+	else_if = {
+		limit = { b:$BUILDING$.level > var:nuclear_strike_levels_left }
+		$PMS$ = { MODE = record }
+		remove_building = $BUILDING$
+		te_construction_market_build_specified_level = {
+			SPEC_TYPE = $BUILDING$
+			SPEC_LEVEL = var:nuclear_strike_levels_left
+		}
+		$PMS$ = { MODE = restore }
+	}
+	remove_variable = nuclear_strike_levels_left
+	remove_variable = nuclear_strike_levels_doubled
+}
+
+# Every production method a halved building can run, for
+# nuclear_strike_halve_building. test_nuclear_deterrence.py pins these lists
+# to the buildings' production method groups.
+nuclear_strike_naval_fortification_pms = {
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_naval_fortification PM = pm_naval_fortification_basic }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_naval_fortification PM = pm_naval_fortification_reinforced }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_naval_fortification PM = pm_naval_fortification_advanced }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_naval_fortification PM = pm_naval_fortification_missile_battery }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_naval_fortification PM = pm_naval_fortification_integrated_defense }
+}
+
+nuclear_strike_military_base_pms = {
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_military_base }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_earthwork_fortifications }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_concrete_bunkers }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_hardened_positions }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_garrison_duty }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_territorial_defense }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_logistics_hub }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_no_missile_defense }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_missile_defense_battery }
+	nuclear_strike_pm_$MODE$ = { BUILDING = building_military_base PM = pm_directed_energy_point_defense }
+}
+
+nuclear_strike_pm_record = {
+	if = {
+		limit = {
+			any_scope_building = {
+				is_building_type = $BUILDING$
+				has_active_production_method = $PM$
+			}
+		}
+		set_variable = nuclear_strike_kept_$PM$
+	}
+}
+
+nuclear_strike_pm_restore = {
+	if = {
+		limit = { has_variable = nuclear_strike_kept_$PM$ }
+		activate_production_method = {
+			building_type = $BUILDING$
+			production_method = $PM$
+		}
+		remove_variable = nuclear_strike_kept_$PM$
 	}
 }
 
@@ -947,6 +1084,7 @@ state_collapse_remove_infrastructure = {
 	if = { limit = { has_building = building_naval_administration } remove_building = building_naval_administration }
 	if = { limit = { has_building = building_naval_fortification } remove_building = building_naval_fortification }
 	if = { limit = { has_building = building_naval_logistics_center } remove_building = building_naval_logistics_center }
+	if = { limit = { has_building = building_military_base } remove_building = building_military_base }
 	if = { limit = { has_building = building_port } remove_building = building_port }
 	if = { limit = { has_building = building_railway } remove_building = building_railway }
 	if = { limit = { has_building = building_university } remove_building = building_university }

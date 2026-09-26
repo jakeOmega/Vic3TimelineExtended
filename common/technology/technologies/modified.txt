@@ -7,7 +7,7 @@
 
 INJECT:military_aviation = {
 	modifier = {
-		country_nuclear_weapon_defense_chance_add = 0.25
+		state_nuclear_weapon_defense_chance_add = 0.25
 	}
 }
 

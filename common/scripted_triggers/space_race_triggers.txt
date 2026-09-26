@@ -6,10 +6,6 @@ sr_has_space_program = {
 	}
 }
 
-sr_is_pursuing_milestone = {
-	has_variable = sr_active_milestone
-}
-
 # The country has run a milestone, so it may hold space-race state to repair:
 # the gate of the monthly sync (space_race_on_actions.txt). A cheap test that
 # no such country fails:
@@ -33,12 +29,6 @@ sr_ai_should_participate = {
 		is_player = yes
 		global_country_ranking <= 3
 	}
-}
-
-sr_can_start_space_race = {
-	has_technology_researched = rocketry
-	is_great_or_major_power = yes
-	NOT = { has_variable = sr_active_milestone }
 }
 
 # is_shown_when_inactive composer for follow-up space race milestones —
@@ -134,6 +124,26 @@ sr_solar_colonization_running = {
 	NOT = { has_variable = sr_completed_solar_colonization }
 }
 
+# At least one milestone is under way: exactly the milestones
+# sr_boost_active_milestones pushes, so an event can offer progress when this
+# holds and something else when it does not. The one test of "a milestone is
+# running": it reads the per-milestone sr_active_<m> flags, which each journal
+# entry sets on activation and clears on completion or failure. It replaced a
+# shared sr_active_milestone flag that the completion of any one milestone
+# cleared while others (probe, moon base, Mars) were still running (#480).
+sr_has_running_milestone = {
+	OR = {
+		has_variable = sr_active_suborbital
+		has_variable = sr_active_orbital
+		has_variable = sr_active_moon_landing
+		has_variable = sr_active_probe
+		has_variable = sr_active_moon_base
+		has_variable = sr_active_mars_landing
+		has_variable = sr_active_interstellar_probe
+		sr_solar_colonization_running = yes
+	}
+}
+
 # We have really claimed at least one colony (sr_establish_colony_effect counts
 # only real claims). The same test society_technology_events.18 uses.
 sr_has_space_colony = {
@@ -223,7 +233,7 @@ sr_setback_is_crewed_outpost = {
 sr_is_spacefaring = {
 	OR = {
 		has_variable = sr_completed_suborbital
-		has_variable = sr_active_milestone
+		sr_has_running_milestone = yes
 	}
 }
 

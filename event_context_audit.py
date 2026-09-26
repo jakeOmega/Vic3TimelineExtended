@@ -100,7 +100,10 @@ CHECKS = ("system_ungated", "unchosen_self_action", "imputed_foreign_action")
 # Check-tagged REVIEWED comments that belong to other audits, which use the
 # same `# REVIEWED YYYY-MM-DD (<check>): …` shape inside an event. Not ours to
 # judge, so neither honoured nor reported as unknown.
-FOREIGN_CHECKS = frozenset({"silent_variable"})  # silent_variable_audit
+FOREIGN_CHECKS = frozenset({
+    "silent_variable",  # silent_variable_audit
+    "empty_block", "no_effect_option",  # empty_effect_audit
+})
 
 # ---------------------------------------------------------------------------
 # System registry
@@ -1234,7 +1237,6 @@ _CHECK_HELP = {
 
 
 def render_report(result: AuditResult) -> str:
-    cov = result.coverage
     out = ["# Event Context Report", ""]
     out.append(
         "Events whose text does not match the context they fire in: events about a mod "
@@ -1244,9 +1246,8 @@ def render_report(result: AuditResult) -> str:
         "line inside the event block: `# REVIEWED YYYY-MM-DD (<check>): rationale`."
     )
     out.append("")
-    out.append(f"- Events defined: **{cov.get('events_defined', 0)}**, visible: "
-               f"**{cov.get('visible', 0)}**, dispatch sites traced: "
-               f"**{cov.get('dispatch_sites', 0)}**")
+    # Finding counts only: the event / dispatch-site counts stay in
+    # `result.coverage` but move with every new event.
     for c in CHECKS:
         un = sum(1 for f in result.flags if f.check == c and not f.exemption)
         ex = sum(1 for f in result.flags if f.check == c and f.exemption)
@@ -1277,9 +1278,11 @@ def render_report(result: AuditResult) -> str:
         if ex:
             out.append("### REVIEWED")
             out.append("")
+            # No line number on a reviewed entry: the event id names it, and
+            # an edit above it would otherwise churn the report.
             for f in ex:
                 e = f.exemption or {}
-                out.append(f"- `{f.event_id}` — {f.file}:{f.line} (REVIEWED {e.get('date', '?')}: "
+                out.append(f"- `{f.event_id}` — {f.file} (REVIEWED {e.get('date', '?')}: "
                            f"{e.get('rationale', '')})")
             out.append("")
     if result.stale_tags or result.unknown_tags:
@@ -1316,7 +1319,9 @@ def regenerate(mod_state=None) -> dict:
         "unreviewed": result.failing,
         "stale_tags": len(result.stale_tags) + len(result.unknown_tags),
         "exempted": sum(1 for f in result.flags if f.exemption),
-        **{c: result.coverage.get(c, 0) for c in CHECKS},
+        # Per-check counts plus coverage (events defined, dispatch sites, ...),
+        # which the committed report no longer prints.
+        **result.coverage,
         "path": out_path,
     }
 

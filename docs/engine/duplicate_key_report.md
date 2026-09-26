@@ -34,8 +34,6 @@ _None._
 
 ## Coverage
 
-- files_audited: 418
-- tracked_modifier_scalar_lines: 11807
 - total flags: 0
 - unreviewed: 0 (errors: 0, warns: 0)
 - exempted: 0

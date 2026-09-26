@@ -780,6 +780,17 @@ def audit(mod_state=None, mod_path: str | None = None) -> AuditResult:
 # Report
 # ---------------------------------------------------------------------------
 
+# `file.txt:N` in a flag's description (the write, its call chain, a guard).
+_FILE_LINE_RE = re.compile(r"(\.txt):\d+")
+
+
+def _unlined(text: str) -> str:
+    """`text` without the `:N` of each `file.txt:N`. A reviewed entry is named
+    by its entry, variable and files; its line numbers would change the report
+    on every edit above them."""
+    return _FILE_LINE_RE.sub(r"\1", text)
+
+
 def _by_entry(flags: list[Flag], out: list[str]) -> None:
     if not flags:
         out.extend(["_None._", ""])
@@ -812,7 +823,7 @@ def _flat(flags: list[Flag], out: list[str]) -> None:
 
 def _exemption_summary(flags: list[Flag], out: list[str]) -> None:
     """One line per entry and REVIEWED comment: a comment on a call line or
-    a shared `if` can cover dozens of writes."""
+    a shared `if` can cover dozens of writes. No line numbers (`_unlined`)."""
     if not flags:
         out.extend(["_None._", ""])
         return
@@ -828,12 +839,12 @@ def _exemption_summary(flags: list[Flag], out: list[str]) -> None:
         for key in by_entry[(je_file, je, setting)]:
             fs = groups[key]
             if len(fs) == 1:
-                out.append(f"- {fs[0].describe()} — **{key[3]}**: {key[4]}")
+                out.append(f"- {_unlined(fs[0].describe())} — **{key[3]}**: {key[4]}")
                 continue
             names = list(dict.fromkeys(f.name for f in fs))
             shown = ", ".join(f"`{n}`" for n in names[:6])
             more = f", +{len(names) - 6} more" if len(names) > 6 else ""
-            out.append(f"- {len(fs)} writes of {shown}{more}, first at `{fs[0].where}` "
+            out.append(f"- {len(fs)} writes of {shown}{more}, first at `{fs[0].file}` "
                        f"— **{key[3]}**: {key[4]}")
         out.append("")
 
@@ -841,7 +852,8 @@ def _exemption_summary(flags: list[Flag], out: list[str]) -> None:
 def _bar_listing(flags: list[Flag], out: list[str]) -> None:
     """One line per entry and variable, with what decides the fix: whether a
     winner inherits the record, whether it can re-activate, and whether its
-    goal is pinned."""
+    goal is pinned. A line whose writes are all reviewed prints no line
+    numbers (`_unlined`)."""
     if not flags:
         out.extend(["_None._", ""])
         return
@@ -851,8 +863,9 @@ def _bar_listing(flags: list[Flag], out: list[str]) -> None:
     for fs in groups.values():
         f = fs[0]
         more = f" (+{len(fs) - 1} more writes)" if len(fs) > 1 else ""
-        line = f"- `{f.je}` ({f.je_setting}): {f.describe()}{more}"
         reviewed = [x.exemption for x in fs if x.exemption]
+        what = _unlined(f.describe()) if len(reviewed) == len(fs) else f.describe()
+        line = f"- `{f.je}` ({f.je_setting}): {what}{more}"
         if reviewed:
             share = "" if len(reviewed) == len(fs) else f" ({len(reviewed)} of {len(fs)} writes)"
             line += f" — reviewed{share} **{reviewed[0]['date']}**: {reviewed[0]['rationale']}"
@@ -950,13 +963,12 @@ def render_report(result: AuditResult) -> str:
     ])
     _flat(result.warnings, out)
 
-    with_immediate = sum(
-        1 for je in result.entries if any(_child(je.node, k) for k in IMMEDIATE_KEYS))
+    # Finding counts only: the file / entry counts stay on the result (and
+    # `files_audited` in the regenerate() summary) but move with every new
+    # journal entry.
     out.extend([
         "## Coverage",
         "",
-        f"- journal-entry files audited: {result.files_audited}",
-        f"- journal entries: {len(result.entries)} ({with_immediate} with an `immediate`)",
         "- counts are writes per entry, so a helper several entries call counts",
         "  once for each; distinct (line, variable) pairs are in brackets",
         f"- unreviewed: {len(unrev)} ({_distinct(unrev)})",

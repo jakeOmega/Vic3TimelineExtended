@@ -140,9 +140,13 @@ st_res_reset_vars_effect = {
 	set_variable = { name = st_res_hub_level_cached value = 0 }
 	set_variable = { name = st_res_hub_throughput_cached value = 0 }
 	set_variable = { name = st_res_hub_workforce_cached value = 1 }
-	# Clearing the one-shot AI marker lets st_res_ai_seed_policies_effect hand a
+	# Clearing the one-shot AI markers lets st_res_ai_seed_policies_effect hand a
 	# rebuilt hub its presets again, exactly as a freshly activated JE would.
 	remove_variable = st_res_policy_ai_seeded
+	if = {
+		limit = { has_variable = st_res_policy_ai_stabilized }
+		remove_variable = st_res_policy_ai_stabilized
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -167,6 +171,89 @@ st_res_refresh_hub_cache_effect = {
 				set_variable = { name = st_res_hub_level_cached value = prev.level }
 				set_variable = { name = st_res_hub_throughput_cached value = prev.modifier:building_throughput_add }
 				set_variable = { name = st_res_hub_workforce_cached value = prev.occupancy }
+			}
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# st_res_record_hub_holder_effect — country scope, weekly pulse.
+# Stamps the hub's state with the country holding it (state var
+# st_res_hub_holder). on_state_owner_change gives script only the state, not
+# its previous owner, so st_res_on_state_owner_change reads this stamp to tell
+# a capture from a hand-over between the two sides of a civil war
+# (st_res_hub_stays_within_nation, st_res_triggers.txt).
+# --------------------------------------------------------------------------
+st_res_record_hub_holder_effect = {
+	save_scope_as = st_res_hub_holder_country
+	every_scope_building = {
+		limit = { is_building_type = building_strategic_reserve_hub }
+		state = {
+			set_variable = { name = st_res_hub_holder value = scope:st_res_hub_holder_country }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
+# st_res_relocate_hub_to_capital_effect — country scope, first thing in the
+# weekly pulse.
+# The hub belongs in the capital: its possible requires it, and the policy
+# price signal assumes the capital's market (strategic_reserve_system.md
+# §4.6). It ends up elsewhere when the capital moves, or when a hub state
+# passes to the other side of a civil war (st_res_hub_stays_within_nation),
+# and it cannot be demolished, so the reserve moves it: a level-1 hub is
+# created in the capital for free, and every hub outside the capital is
+# removed once the capital's stands. The stock lives on country variables and
+# does not move. The new building hires its 5000 staff from scratch: until it
+# is staffed, flow runs below capacity and the entry reads as deactivated
+# (st_res_hub_workforce_cached), so each move costs the reserve some weeks.
+#
+# Two steps, each safe to repeat, so that no hub is removed before its
+# replacement is seen. Whether create_building's result is visible to
+# has_building later in the same effect is unread. If it is not, step 2 runs
+# a week later, and for that week the country has two hubs, of which the
+# st_res effects read either.
+#
+# create_building checks the unlocking technology since 1.13.9
+# (scripting_best_practices.md), hence the logistics test: without it the
+# call would fail, and log the failure, every week. Whether it also checks
+# possible is unverified, so st_res_hub_relocating lets the hub's
+# one-per-country guard pass either way (the te_cm_placing_site pattern).
+# --------------------------------------------------------------------------
+st_res_relocate_hub_to_capital_effect = {
+	# Step 1: no hub in the capital, one elsewhere: build one in the capital.
+	if = {
+		limit = {
+			has_technology_researched = logistics
+			any_scope_building = { is_building_type = building_strategic_reserve_hub }
+			capital ?= {
+				NOT = { has_building = building_strategic_reserve_hub }
+			}
+		}
+		set_variable = { name = st_res_hub_relocating value = 1 }
+		capital = {
+			create_building = {
+				building = building_strategic_reserve_hub
+				level = 1
+			}
+		}
+		remove_variable = st_res_hub_relocating
+		debug_log = "TE_ST_RES: creating a Strategic Reserve Hub in the capital to replace one outside it"
+	}
+	# Step 2: the capital has its hub: remove every other one.
+	if = {
+		limit = {
+			capital ?= { has_building = building_strategic_reserve_hub }
+		}
+		every_scope_state = {
+			limit = {
+				is_capital = no
+				has_building = building_strategic_reserve_hub
+			}
+			remove_building = building_strategic_reserve_hub
+			if = {
+				limit = { has_variable = st_res_hub_holder }
+				remove_variable = st_res_hub_holder
 			}
 		}
 	}
@@ -500,6 +587,9 @@ st_res_mark_good_no_hub_effect = {
 # --------------------------------------------------------------------------
 st_res_weekly_update_effect = {
 	st_res_init_effect = yes
+	# Before the hub cache is read, so the cache and this week's flow refer
+	# to the capital's hub whenever step 2 of the move has already run.
+	st_res_relocate_hub_to_capital_effect = yes
 	st_res_refresh_hub_cache_effect = yes
 	# One-shot, AI-only. Guarded internally, so this costs a `has_variable`
 	# check for a human player and for any AI that has already been seeded.
@@ -511,6 +601,19 @@ st_res_weekly_update_effect = {
 				is_building_type = building_strategic_reserve_hub
 			}
 		}
+		st_res_record_hub_holder_effect = yes
+
+		# Preset-following flows and budgets, from today's capacity and GDP,
+		# before this week's policy decisions read them.
+		st_res_refresh_preset_magnitudes_effect = { GOOD = grain }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = ammunition }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = oil }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = small_arms }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = artillery }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = aeroplanes }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = tanks }
+		st_res_refresh_preset_magnitudes_effect = { GOOD = fertilizer }
+
 		st_res_apply_weekly_good_effect = { GOOD = grain }
 		st_res_apply_weekly_good_effect = { GOOD = ammunition }
 		st_res_apply_weekly_good_effect = { GOOD = oil }
@@ -787,6 +890,22 @@ st_res_apply_sell_profit_effect = {
 # smooth harder the more patient they are: a Conservative reserve waits for a
 # real bargain and should not be spooked by one week's price.
 #
+# The stock band is the player's, not the presets': every preset uses the
+# whole capacity (floor_pct 0, ceil_pct 100), and the presets differ only in
+# how they trade. Until 2026-09-26 they kept 40-60 / 20-80 / 10-95% of
+# capacity. A floor the policy can never sell is dead weight: it still pays
+# its decay replacement every week (st_res_policy_afford). A ceiling below
+# 100 leaves capacity the player built and never uses. Under Conservative,
+# the AI's preset, only 40% to 60% of capacity ever moved, and the AI never
+# reached the 75% fill at which silos become worth building to it
+# (st_res_reserve_filling_up). Players can still set both with the steppers.
+#
+# Maximum weekly flow and the weekly budget are not fixed numbers: each preset
+# sets them as a share of the good's capacity and of weekly GDP
+# (st_res_preset_*_flow_pct / _budget_pct, st_res_script_values.txt), and they
+# go on following the country until the player sets them by hand
+# (st_res_preset_follow_magnitudes_base below).
+#
 # The three presets keep sell_thr - buy_thr >= st_res_policy_min_gap (15) and
 # ceil_pct - floor_pct >= st_res_policy_stock_min_gap (10), which is the same
 # non-overlap rule the steppers are gated on.
@@ -794,10 +913,14 @@ st_res_apply_sell_profit_effect = {
 st_res_apply_preset_conservative_base = {
 	set_variable = { name = st_res_$GOOD$_buy_thr value = -20 }
 	set_variable = { name = st_res_$GOOD$_sell_thr value = 30 }
-	set_variable = { name = st_res_$GOOD$_max_flow value = 100 }
-	set_variable = { name = st_res_$GOOD$_floor_pct value = 40 }
-	set_variable = { name = st_res_$GOOD$_ceil_pct value = 60 }
-	set_variable = { name = st_res_$GOOD$_budget value = 5000 }
+	set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
+	set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
+	st_res_preset_follow_magnitudes_base = {
+		GOOD = $GOOD$
+		PRESET = 1
+		FLOW_PCT = st_res_preset_conservative_flow_pct
+		BUDGET_PCT = st_res_preset_conservative_budget_pct
+	}
 	set_variable = { name = st_res_$GOOD$_price_memory value = 8 }
 	set_variable = { name = st_res_$GOOD$_ramp value = 20 }
 	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
@@ -808,10 +931,14 @@ st_res_apply_preset_conservative_base = {
 st_res_apply_preset_standard_base = {
 	set_variable = { name = st_res_$GOOD$_buy_thr value = -10 }
 	set_variable = { name = st_res_$GOOD$_sell_thr value = 20 }
-	set_variable = { name = st_res_$GOOD$_max_flow value = 250 }
-	set_variable = { name = st_res_$GOOD$_floor_pct value = 20 }
-	set_variable = { name = st_res_$GOOD$_ceil_pct value = 80 }
-	set_variable = { name = st_res_$GOOD$_budget value = 15000 }
+	set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
+	set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
+	st_res_preset_follow_magnitudes_base = {
+		GOOD = $GOOD$
+		PRESET = 2
+		FLOW_PCT = st_res_preset_standard_flow_pct
+		BUDGET_PCT = st_res_preset_standard_budget_pct
+	}
 	set_variable = { name = st_res_$GOOD$_price_memory value = 4 }
 	set_variable = { name = st_res_$GOOD$_ramp value = 10 }
 	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
@@ -822,15 +949,113 @@ st_res_apply_preset_standard_base = {
 st_res_apply_preset_aggressive_base = {
 	set_variable = { name = st_res_$GOOD$_buy_thr value = -5 }
 	set_variable = { name = st_res_$GOOD$_sell_thr value = 10 }
-	set_variable = { name = st_res_$GOOD$_max_flow value = 600 }
-	set_variable = { name = st_res_$GOOD$_floor_pct value = 10 }
-	set_variable = { name = st_res_$GOOD$_ceil_pct value = 95 }
-	set_variable = { name = st_res_$GOOD$_budget value = 40000 }
+	set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
+	set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
+	st_res_preset_follow_magnitudes_base = {
+		GOOD = $GOOD$
+		PRESET = 3
+		FLOW_PCT = st_res_preset_aggressive_flow_pct
+		BUDGET_PCT = st_res_preset_aggressive_budget_pct
+	}
 	set_variable = { name = st_res_$GOOD$_price_memory value = 2 }
 	set_variable = { name = st_res_$GOOD$_ramp value = 5 }
 	# Re-arm the hysteresis: the thresholds just moved, so an engaged lane
 	# must re-test against the new band instead of the old stop threshold.
 	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+}
+
+# --------------------------------------------------------------------------
+# Preset magnitudes that follow the country.
+#
+# st_res_preset_follow_magnitudes_base marks both magnitude settings of one
+# good as following preset PRESET (1 Conservative, 2 Standard, 3 Aggressive:
+# st_res_<good>_auto_max_flow / _auto_budget) and writes them from today's
+# capacity and GDP. st_res_refresh_preset_magnitudes_effect rewrites every
+# still-marked setting each weekly pulse, before the policies are evaluated,
+# so a preset keeps pace as silos go up and the economy grows. A stepper click
+# on either setting removes its marker (st_res_policy_step_up_base /
+# _down_base), and from then on the player's number stands. Each setting has
+# its own marker, so setting the budget by hand leaves the flow following, and
+# changing a threshold, the stock band, the price memory or the ramp leaves
+# both following.
+#
+# The writers round to the stepper's grid and clamp to the stepper's range
+# (flow: st_res_policy_flow_min to st_res_policy_flow_max, the hub's weekly
+# cap; budget: st_res_policy_budget_min to st_res_<good>_policy_budget_max),
+# so a following value is always one the steppers could have reached.
+# Parameters: GOOD; PRESET; FLOW_PCT and BUDGET_PCT, the preset's script-value
+# names.
+# --------------------------------------------------------------------------
+st_res_preset_follow_magnitudes_base = {
+	set_variable = { name = st_res_$GOOD$_auto_max_flow value = $PRESET$ }
+	set_variable = { name = st_res_$GOOD$_auto_budget value = $PRESET$ }
+	st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = $FLOW_PCT$ }
+	st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = $BUDGET_PCT$ }
+}
+
+st_res_preset_write_flow_base = {
+	set_variable = {
+		name = st_res_$GOOD$_max_flow
+		value = {
+			value = st_res_$GOOD$_capacity
+			multiply = $PCT$
+			divide = 100
+			divide = st_res_policy_flow_step
+			round = yes
+			multiply = st_res_policy_flow_step
+			min = st_res_policy_flow_min
+			max = st_res_policy_flow_max
+		}
+	}
+}
+
+st_res_preset_write_budget_base = {
+	set_variable = {
+		name = st_res_$GOOD$_budget
+		value = {
+			value = gdp
+			divide = st_res_weeks_per_year
+			divide = 100
+			multiply = $PCT$
+			divide = st_res_policy_budget_step
+			round = yes
+			multiply = st_res_policy_budget_step
+			min = st_res_policy_budget_min
+			max = st_res_$GOOD$_policy_budget_max
+		}
+	}
+}
+
+# Parameter: GOOD. Weekly pulse only.
+st_res_refresh_preset_magnitudes_effect = {
+	if = {
+		limit = { has_variable = st_res_$GOOD$_auto_max_flow }
+		if = {
+			limit = { var:st_res_$GOOD$_auto_max_flow = 1 }
+			st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = st_res_preset_conservative_flow_pct }
+		}
+		else_if = {
+			limit = { var:st_res_$GOOD$_auto_max_flow = 2 }
+			st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = st_res_preset_standard_flow_pct }
+		}
+		else = {
+			st_res_preset_write_flow_base = { GOOD = $GOOD$ PCT = st_res_preset_aggressive_flow_pct }
+		}
+	}
+	if = {
+		limit = { has_variable = st_res_$GOOD$_auto_budget }
+		if = {
+			limit = { var:st_res_$GOOD$_auto_budget = 1 }
+			st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = st_res_preset_conservative_budget_pct }
+		}
+		else_if = {
+			limit = { var:st_res_$GOOD$_auto_budget = 2 }
+			st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = st_res_preset_standard_budget_pct }
+		}
+		else = {
+			st_res_preset_write_budget_base = { GOOD = $GOOD$ PCT = st_res_preset_aggressive_budget_pct }
+		}
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -879,11 +1104,23 @@ st_res_policy_select_base = {
 st_res_policy_step_up_base = {
 	change_variable = { name = st_res_$GOOD$_$SETTING$ add = $STEP$ }
 	clamp_variable = { name = st_res_$GOOD$_$SETTING$ min = $MIN$ max = $MAX$ }
+	st_res_policy_set_by_hand_base = { GOOD = $GOOD$ SETTING = $SETTING$ }
 }
 
 st_res_policy_step_down_base = {
 	change_variable = { name = st_res_$GOOD$_$SETTING$ subtract = $STEP$ }
 	clamp_variable = { name = st_res_$GOOD$_$SETTING$ min = $MIN$ max = $MAX$ }
+	st_res_policy_set_by_hand_base = { GOOD = $GOOD$ SETTING = $SETTING$ }
+}
+
+# A click on a magnitude stepper sets that value by hand: it stops following
+# its preset (st_res_preset_follow_magnitudes_base). Only max_flow and budget
+# carry a marker; for every other setting there is nothing to remove.
+st_res_policy_set_by_hand_base = {
+	if = {
+		limit = { has_variable = st_res_$GOOD$_auto_$SETTING$ }
+		remove_variable = st_res_$GOOD$_auto_$SETTING$
+	}
 }
 
 # --------------------------------------------------------------------------
@@ -1229,13 +1466,14 @@ st_res_policy_apply_good_effect = {
 # --------------------------------------------------------------------------
 # AI
 # --------------------------------------------------------------------------
-# building_strategic_reserve_hub carries a real ai_value (+50 for a great or
-# major power, +150 while at war — common/buildings/strategic_reserve.txt), so
-# AI majors DO build hubs and DO get this journal entry. Before policies existed
+# building_strategic_reserve_hub carries a real ai_value (2000 for a great or
+# major power at peace, 1000 at war — common/buildings/strategic_reserve.txt),
+# so AI majors DO build hubs and DO get this journal entry. Before policies existed
 # they simply never moved a rate and the reserve sat empty forever.
 #
 # st_res_ai_seed_good_effect hands an AI country the Conservative preset once,
-# and from then on the AI runs through st_res_policy_evaluate_good_effect —
+# on Stabilize Prices for every good, and from then on the AI runs through
+# st_res_policy_evaluate_good_effect —
 # the same evaluator, the same thresholds, the same clamps and the same costs
 # as a human on the same preset. There is no AI-only shortcut anywhere.
 #
@@ -1246,11 +1484,51 @@ st_res_policy_apply_good_effect = {
 # AI seeds its own presets on the next pulse. That is the intended outcome for
 # a country the player has walked away from, but it is a genuine overwrite,
 # not something the marker prevents.
+#
+# Every good is on Stabilize Prices (policy 3) — buy below the threshold,
+# release above it. Until 2026-09-26 the six military goods were on Buy When
+# Cheap (policy 1), which never sells, so an AI reserve never released a round
+# into a war's price spike (mobilized armies burn four times their peacetime
+# ammunition: common/mobilization_options/te_wartime_munitions_injections.txt).
+# Stabilizing may fill the whole capacity and release down to empty: no
+# preset sets a stock band any more (see st_res_apply_preset_conservative_base).
+#
+# Saves seeded before then carry st_res_policy_ai_seeded but not
+# st_res_policy_ai_stabilized. The second block runs once for them: it moves
+# any good still on Buy When Cheap to Stabilize Prices, widens every good's
+# stock band from the old preset's 40-60% to 0-100%, and sets the flow and
+# budget to follow Conservative's shares of capacity and GDP in place of its
+# old fixed 100 units and £5 000. It leaves the other settings alone.
 # --------------------------------------------------------------------------
 st_res_ai_seed_good_effect = {
 	st_res_apply_preset_conservative_base = { GOOD = $GOOD$ }
 	set_variable = { name = st_res_$GOOD$_policy value = $POLICY$ }
 	set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+}
+
+st_res_ai_stabilize_good_effect = {
+	if = {
+		limit = {
+			has_variable = st_res_$GOOD$_policy
+			var:st_res_$GOOD$_policy = 1
+		}
+		set_variable = { name = st_res_$GOOD$_policy value = 3 }
+		set_variable = { name = st_res_$GOOD$_engaged value = 0 }
+	}
+	if = {
+		limit = { has_variable = st_res_$GOOD$_floor_pct }
+		set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
+	}
+	if = {
+		limit = { has_variable = st_res_$GOOD$_ceil_pct }
+		set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
+	}
+	st_res_preset_follow_magnitudes_base = {
+		GOOD = $GOOD$
+		PRESET = 1
+		FLOW_PCT = st_res_preset_conservative_flow_pct
+		BUDGET_PCT = st_res_preset_conservative_budget_pct
+	}
 }
 
 st_res_ai_seed_policies_effect = {
@@ -1260,13 +1538,29 @@ st_res_ai_seed_policies_effect = {
 			NOT = { has_variable = st_res_policy_ai_seeded }
 		}
 		set_variable = { name = st_res_policy_ai_seeded value = 1 }
+		set_variable = { name = st_res_policy_ai_stabilized value = 1 }
 		st_res_ai_seed_good_effect = { GOOD = grain       POLICY = 3 }
-		st_res_ai_seed_good_effect = { GOOD = ammunition  POLICY = 1 }
-		st_res_ai_seed_good_effect = { GOOD = oil         POLICY = 1 }
-		st_res_ai_seed_good_effect = { GOOD = small_arms  POLICY = 1 }
-		st_res_ai_seed_good_effect = { GOOD = artillery   POLICY = 1 }
-		st_res_ai_seed_good_effect = { GOOD = aeroplanes  POLICY = 1 }
-		st_res_ai_seed_good_effect = { GOOD = tanks       POLICY = 1 }
+		st_res_ai_seed_good_effect = { GOOD = ammunition  POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = oil         POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = small_arms  POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = artillery   POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = aeroplanes  POLICY = 3 }
+		st_res_ai_seed_good_effect = { GOOD = tanks       POLICY = 3 }
 		st_res_ai_seed_good_effect = { GOOD = fertilizer  POLICY = 3 }
+	}
+	if = {
+		limit = {
+			is_ai = yes
+			NOT = { has_variable = st_res_policy_ai_stabilized }
+		}
+		set_variable = { name = st_res_policy_ai_stabilized value = 1 }
+		st_res_ai_stabilize_good_effect = { GOOD = grain }
+		st_res_ai_stabilize_good_effect = { GOOD = ammunition }
+		st_res_ai_stabilize_good_effect = { GOOD = oil }
+		st_res_ai_stabilize_good_effect = { GOOD = small_arms }
+		st_res_ai_stabilize_good_effect = { GOOD = artillery }
+		st_res_ai_stabilize_good_effect = { GOOD = aeroplanes }
+		st_res_ai_stabilize_good_effect = { GOOD = tanks }
+		st_res_ai_stabilize_good_effect = { GOOD = fertilizer }
 	}
 }

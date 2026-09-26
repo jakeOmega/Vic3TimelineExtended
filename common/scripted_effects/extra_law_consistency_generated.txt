@@ -57,8 +57,12 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_single_party_state
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_oligarchy
+					has_law = law_type:law_organic_regulation
+					has_law = law_type:law_anarchy
 				}
-				has_technology_researched = mass_media
+				has_technology_researched = political_agitation
 			}
 			activate_law = law_type:law_direct_democracy
 		}
@@ -122,8 +126,12 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_single_party_state
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_oligarchy
+					has_law = law_type:law_organic_regulation
+					has_law = law_type:law_anarchy
 				}
-				has_technology_researched = mass_media
+				has_technology_researched = political_agitation
 			}
 			activate_law = law_type:law_direct_democracy
 		}
@@ -155,8 +163,12 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_single_party_state
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_oligarchy
+					has_law = law_type:law_organic_regulation
+					has_law = law_type:law_anarchy
 				}
-				has_technology_researched = mass_media
+				has_technology_researched = political_agitation
 			}
 			activate_law = law_type:law_direct_democracy
 		}
@@ -328,8 +340,12 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_single_party_state
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_oligarchy
+					has_law = law_type:law_organic_regulation
+					has_law = law_type:law_anarchy
 				}
-				has_technology_researched = mass_media
+				has_technology_researched = political_agitation
 			}
 			activate_law = law_type:law_direct_democracy
 		}
@@ -350,6 +366,10 @@ te_fix_inconsistent_lawgroup_governance_principles = {
 					has_law = law_type:law_census_voting
 					has_law = law_type:law_universal_suffrage
 					has_law = law_type:law_single_party_state
+					has_law = law_type:law_technocracy
+					has_law = law_type:law_oligarchy
+					has_law = law_type:law_organic_regulation
+					has_law = law_type:law_anarchy
 				}
 			}
 		}

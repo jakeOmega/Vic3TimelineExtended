@@ -1,0 +1,44 @@
+﻿# ============================================================================
+# Wartime munitions — ammunition while mobilized
+# ============================================================================
+# Peacetime unit upkeep carries half of vanilla's ammunition
+# (common/combat_unit_types/extra_combat_units.txt, "PEACETIME AMMUNITION IS
+# HALF VANILLA'S"). These three diffs make a mobilized battalion burn four
+# times that, which is twice vanilla's peacetime figure:
+#   - basic supplies, which no army can switch off, goes from vanilla's +50%
+#     ammunition to +300%;
+#   - extra and luxurious supplies stop adding their +25% each, so there is a
+#     single ammunition knob, and a war costs the same ammunition whatever
+#     the army is fed.
+# The spike stays inside the market's range: with BUY_SELL_DIFF_AT_MAX_FACTOR
+# = 4 and GOODS_SHORTAGE_PENALTY_THRESHOLD = 0.25 (common/defines/
+# extra_defines.txt), four times the demand pushes ammunition to its maximum
+# price, and shortage penalties start only beyond that.
+#
+# Diffs, not REPLACEs, so that vanilla changes to grain and the other five
+# military goods still apply. An INJECT sums with vanilla's block for ranks,
+# techs and static modifiers (docs/guides/scripting_best_practices.md, "an
+# INJECT: block sums with vanilla's"); for mobilization options the tell is
+# basic supplies' tooltip, which must read +300% Ammunition next to vanilla's
+# +50% for the other goods. If it reads +250%, the block replaced vanilla's:
+# switch these to REPLACE: and restate vanilla's bodies.
+# test_wartime_munitions.py checks each diff against vanilla_parsed/.
+# ============================================================================
+
+INJECT:mobilization_option_basic_supplies = {
+	upkeep_modifier_unscaled = {
+		goods_input_ammunition_mult = 2.5	# vanilla 0.5 -> 3.0: x4 while mobilized
+	}
+}
+
+INJECT:mobilization_option_extra_supplies = {
+	upkeep_modifier_unscaled = {
+		goods_input_ammunition_mult = -0.25	# cancels vanilla's +0.25
+	}
+}
+
+INJECT:mobilization_option_luxurious_supplies = {
+	upkeep_modifier_unscaled = {
+		goods_input_ammunition_mult = -0.25	# cancels vanilla's +0.25
+	}
+}

@@ -1766,6 +1766,7 @@ extra_law_events.24 = {
 
 	trigger = {
 		is_enacting_law = law_type:law_direct_democracy
+		collective_governance_is_popular = yes
 		NOR = {
 			has_modifier = govprin_popular_assembly_advance
 			has_modifier = govprin_popular_assembly_cautious
@@ -6116,6 +6117,7 @@ extra_law_events.60 = {
 
 	trigger = {
 		is_enacting_law = law_type:law_direct_democracy
+		collective_governance_is_popular = yes
 		NOR = {
 			has_modifier = govprin_popular_assembly_advance
 			has_modifier = govprin_popular_assembly_cautious
@@ -7519,6 +7521,7 @@ extra_law_events.84 = {
 
 	trigger = {
 		is_enacting_law = law_type:law_direct_democracy
+		collective_governance_is_popular = yes
 		NOR = {
 			has_modifier = govprin_direct_voting
 			has_modifier = govprin_deliberative_chambers

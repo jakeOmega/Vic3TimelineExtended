@@ -196,17 +196,20 @@ def render_report(result: AuditResult) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line number on a reviewed entry: an edit above it would
+        # otherwise churn the report.
         for f in exemp:
             out.append(
-                f"- `{f.file}:{f.line}` — `attitude = {f.key}` — "
+                f"- `{f.file}` — `attitude = {f.key}` — "
                 f"**{f.exemption['date']}**: {f.exemption['rationale']}"
             )
         out.append("")
 
+    # The catalog size changes only on an engine update; the file / reference
+    # counts stay on the result (and in the regenerate() summary) but move
+    # with unrelated mod content.
     out.append("## Coverage")
     out.append("")
-    out.append(f"- script files scanned: {result.files_scanned}")
-    out.append(f"- attitude references checked: {result.refs_checked}")
     out.append(f"- valid catalog keys: {len(ATTITUDE_KEYS)}")
     out.append(f"- total flags: {len(result.flags)}")
     out.append(f"- unreviewed: {len(unrev)}")

@@ -25,8 +25,6 @@ _None._
 
 ## Coverage
 
-- files audited: 490
-- variable names used on containers: 51
 - total flags: 0
 - unreviewed: 0
 - exempted: 0

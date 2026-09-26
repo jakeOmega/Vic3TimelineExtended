@@ -212,6 +212,7 @@ te_inflation.1 = {
 	# twice.
 	option = {
 		name = te_inflation.1.c
+		# REVIEWED 2026-09-26 (no_effect_option): doing nothing is the choice; the tooltip says the question returns in two years
 		default_option = yes
 		custom_tooltip = te_inflation.1.c.tt
 

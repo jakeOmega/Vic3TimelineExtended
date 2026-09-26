@@ -207,6 +207,7 @@ nuclear_loose.4 = {
 	# Say nothing for now.
 	option = {
 		name = nuclear_loose.4.g
+		# REVIEWED 2026-09-26 (no_effect_option): the decline: say nothing yet
 		default_option = yes
 		ai_chance = {
 			base = 2

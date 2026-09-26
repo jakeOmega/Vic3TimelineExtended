@@ -280,6 +280,32 @@ class EventContextAuditTests(unittest.TestCase):
             self.assertIn(f"## `{c}`", report)
         self.assertIn("flav.1", report)
 
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and the summary no event or
+        dispatch-site counts, so the report changes only when the findings do.
+        Unreviewed flags and tags to remove keep their lines."""
+        result = eca.AuditResult(
+            flags=[
+                eca.Flag("unchosen_self_action", "un_events.2", "events/un_events.txt", 135,
+                         "claims", "…text…", ["no mod dispatch site"],
+                         exemption={"date": "2026-09-25", "rationale": "a real use"}),
+                eca.Flag("system_ungated", "flav.1", "events/flav.txt", 7,
+                         "mentions", "…text…", ["no mod dispatch site"]),
+            ],
+            coverage={"events_defined": 784, "visible": 770, "dispatch_sites": 1020},
+            stale_tags=[eca.Tag("old.1", "system_ungated", "events/old.txt", 44,
+                                "2026-09-01", "gone")],
+        )
+        report = eca.render_report(result)
+        self.assertIn("- `un_events.2` — events/un_events.txt (REVIEWED 2026-09-25: a real use)",
+                      report)
+        self.assertNotIn("un_events.txt:135", report)
+        self.assertIn("### `flav.1` — events/flav.txt:7", report)
+        self.assertIn("- stale: `old.1` (system_ungated) — events/old.txt:44", report)
+        self.assertIn("- `unchosen_self_action`: **0** unreviewed, 1 REVIEWED", report)
+        for gone in ("Events defined", "dispatch sites traced", "784", "1020"):
+            self.assertNotIn(gone, report)
+
     # -- review follow-ups ------------------------------------------------
 
     def test_fixed_event_into_parameterised_scope_is_a_switch(self):

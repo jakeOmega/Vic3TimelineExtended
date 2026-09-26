@@ -124,21 +124,6 @@ civil_rights_movement = {
 		country_civil_rights_pb_principles_bool = yes
 	}
 
-	on_researched = {
-		if = {
-			limit = {
-				ig:ig_intelligentsia = {
-					NOT = { has_ideology = ideology:ideology_multicultural_ig }
-				}
-			}
-			ig:ig_intelligentsia = {
-				add_ideology = ideology_multicultural_ig
-				save_scope_as = interest_group_scope
-			}
-			post_notification = ideology_multicultural_added
-		}
-	}
-
 	ai_weight = {
 		value = 1
 	}

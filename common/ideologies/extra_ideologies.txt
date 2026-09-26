@@ -1808,7 +1808,7 @@ ideology_custom_religion_aristocratic_governance = {
 		law_parliamentary_republic = disapprove
 		law_council_republic = strongly_disapprove
 		law_neocameralism = disapprove
-		law_direct_democracy = disapprove
+		law_direct_democracy = neutral
 		law_social_monarchy = strongly_approve
 	}
 
@@ -1881,7 +1881,7 @@ ideology_custom_religion_technocratic_governance = {
 		law_parliamentary_republic = approve
 		law_council_republic = strongly_disapprove
 		law_neocameralism = neutral
-		law_direct_democracy = disapprove
+		law_direct_democracy = neutral
 		law_social_monarchy = disapprove
 	}
 

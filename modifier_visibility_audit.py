@@ -344,18 +344,20 @@ def render_report(result: AuditResult) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line number on a reviewed entry: the modifier and value name it,
+        # and an edit above it would otherwise churn the report.
         for f in exemp:
             out.append(
-                f"- `{f.file}:{f.line}` — `{f.modifier} = {f.value}` "
+                f"- `{f.file}` — `{f.modifier} = {f.value}` "
                 f"(displays as {_format_displayed(f)}) — "
                 f"**{f.exemption['date']}**: {f.exemption['rationale']}"
             )
         out.append("")
 
+    # Flag counts only: the file / registry counts stay in `result.coverage`
+    # (and the regenerate() summary) but move with unrelated mod content.
     out.append("## Coverage")
     out.append("")
-    for k, v in result.coverage.items():
-        out.append(f"- {k}: {v}")
     out.append(f"- total flags: {len(result.flags)}")
     out.append(f"- unreviewed: {len(unrev)}")
     out.append(f"- exempted: {len(exemp)}")

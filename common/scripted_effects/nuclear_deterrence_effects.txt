@@ -1605,7 +1605,7 @@ nd_dispatch_strategic_strike = {
 		scope:nd_strike_victim = {
 			save_scope_as = target_country
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_first_strike = yes
 			}

@@ -1227,6 +1227,28 @@ st_res_policy_flow_max = {
 	min = st_res_policy_flow_max_base
 }
 
+# Preset magnitudes (2026-09-26). The presets set maximum weekly flow and the
+# weekly budget as shares of the country, not as fixed numbers, because a flat
+# £5 000 a week per good, across eight goods, could come close to a small
+# minor's whole weekly GDP and was nothing to a late-game great power:
+#   - flow: a percentage of the good's reserve capacity per week. The old
+#     fixed values (100 / 250 / 600) were exactly 2 / 5 / 12% of the hub's 5000,
+#     so a new reserve reads as before, and a Conservative reserve takes about
+#     50 weeks to fill whatever the country's size;
+#   - budget: a percentage of weekly GDP (gdp is yearly, hence the 52), per good.
+# The results are rounded to the stepper's grid and kept inside its range
+# (st_res_preset_write_flow_base / _budget_base, st_res_effects.txt). While a
+# good's value still follows its preset (st_res_<good>_auto_max_flow /
+# _auto_budget), the weekly pulse rewrites it from today's capacity and GDP;
+# a stepper click on it sets it by hand and ends that.
+st_res_preset_conservative_flow_pct = { value = 2 }
+st_res_preset_standard_flow_pct = { value = 5 }
+st_res_preset_aggressive_flow_pct = { value = 12 }
+st_res_preset_conservative_budget_pct = { value = 0.1 }
+st_res_preset_standard_budget_pct = { value = 0.3 }
+st_res_preset_aggressive_budget_pct = { value = 0.8 }
+st_res_weeks_per_year = { value = 52 }
+
 # Price smoothing. The policies act on a running (exponential) average of the
 # market price rather than this week's reading: every weekly tick the average
 # moves 1/memory of the way to the live price, so `price_memory` is the

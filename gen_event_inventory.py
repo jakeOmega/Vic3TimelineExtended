@@ -1,6 +1,7 @@
 """Generate `docs/engine/event_image_inventory.md` — every mod event's title,
 description, flavor, and current image. Used to drive custom event-image
-generation.
+generation. The output is gitignored: it copies every event's loc text, so it
+changes with any loc edit.
 
 Auto-runs after every full `mod_state_server` reload via
 `POST_LOAD_GENERATORS`. Standalone usage:

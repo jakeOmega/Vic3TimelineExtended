@@ -501,7 +501,18 @@ cultural_hegemony_benchmark_mult = {
 		multiply = cultural_hegemony_foreign_benchmark_max
 		min = 0
 		max = cultural_hegemony_foreign_benchmark_max
+		multiply = ch_ideology_resistance_factor
 	}
+}
+
+# How much of the foreign benchmark still lands: 1 minus
+# country_ideology_resistance_mult, floored at 0.
+# Scope: country (the benchmark's add_modifier runs in the JE's monthly pulse,
+# whose ROOT is the country, so the multiplier reads the right country).
+ch_ideology_resistance_factor = {
+	value = 1
+	subtract = modifier:country_ideology_resistance_mult
+	min = 0
 }
 
 # Maximum cultural pull share a target can have for the ≥10x hegemony ratio to apply

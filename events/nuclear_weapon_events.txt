@@ -29,6 +29,7 @@ nuclear_weapon_events.1 = {
 	# mated (option g) (umbrella/recessed/dead-hand spec §3.3).
 	option = {
 		name = nuclear_weapon_events.1.a
+		# REVIEWED 2026-09-26 (no_effect_option): absorbing the blow without retaliating is the choice
 		trigger = {
 			NOT = { scope:target_country = { nd_auto_answers_strike = { ENEMY = scope:attacking_country } } }
 			NOT = {
@@ -115,7 +116,7 @@ nuclear_weapon_events.1 = {
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
@@ -189,19 +190,19 @@ nuclear_weapon_events.1 = {
 
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
 
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 1
 				nuclear_response_strike = yes
 			}
 
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 2
 				nuclear_response_strike = yes
 			}
@@ -278,12 +279,12 @@ nuclear_weapon_events.1 = {
 			limit = { scope:target_country = { var:nuclear_weapon_stockpile >= 3 } }
 			scope:attacking_country = {
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
 				}
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 2
 					nuclear_response_strike = yes
 				}
@@ -293,7 +294,7 @@ nuclear_weapon_events.1 = {
 			limit = { scope:target_country = { var:nuclear_weapon_stockpile >= 2 } }
 			scope:attacking_country = {
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
 				}
@@ -301,7 +302,7 @@ nuclear_weapon_events.1 = {
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
@@ -474,7 +475,24 @@ nuclear_weapon_events.5 = {
 	icon = "gfx/interface/icons/event_icons/event_fire.dds"
 
 	title = nuclear_weapon_events.5.t
-	desc = nuclear_weapon_events.5.d
+	# nuclear_tactical_strike_damage_installations counts the levels lost.
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				trigger = {
+					scope:target_state ?= {
+						has_variable = tactical_nuclear_strike_levels_destroyed
+						var:tactical_nuclear_strike_levels_destroyed > 0
+					}
+				}
+				desc = nuclear_weapon_events.5.d_installations
+			}
+			triggered_desc = {
+				trigger = { always = yes }
+				desc = nuclear_weapon_events.5.d
+			}
+		}
+	}
 	flavor = nuclear_weapon_events.5.f
 
 	duration = 3
@@ -687,6 +705,7 @@ nuclear_weapon_events.9 = {
 	# Subsequent nuclear powers: concern, but not shock
 	option = {
 		name = nuclear_weapon_events.9.a
+		# REVIEWED 2026-09-26 (no_effect_option): shown only when the world-first variant is not, so never a choice between the two
 		trigger = { NOT = { scope:first_nuke_country = { has_variable = is_world_first_nuclear_power } } }
 		default_option = yes
 	}
@@ -799,6 +818,7 @@ nuclear_weapon_events.11 = {
 
 	option = {
 		name = nuclear_weapon_events.11.a
+		# REVIEWED 2026-09-26 (no_effect_option): absorbing the blow without retaliating is the choice
 		default_option = yes
 		ai_chance = {
 			base = 1
@@ -865,7 +885,7 @@ nuclear_weapon_events.11 = {
 		}
 		scope:target_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_response_strike = yes
 			}
@@ -931,19 +951,19 @@ nuclear_weapon_events.11 = {
 		}
 		scope:target_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_response_strike = yes
 			}
 
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 1
 				nuclear_response_response_strike = yes
 			}
 
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 2
 				nuclear_response_response_strike = yes
 			}
@@ -1888,6 +1908,7 @@ nuclear_weapon_events.21 = {
 	# "This must never be spoken of." — no cost, but no benefit
 	option = {
 		name = nuclear_weapon_events.21.c
+		# REVIEWED 2026-09-26 (no_effect_option): silence is the choice, beside the two reforms
 		ai_chance = {
 			base = 2
 			modifier = { trigger = { ruler_is_aggressive = yes } add = 2 }
@@ -2082,6 +2103,7 @@ nuclear_weapon_events.24 = {
 	# Stand down: the moment has passed.
 	option = {
 		name = nuclear_weapon_events.24.a
+		# REVIEWED 2026-09-26 (no_effect_option): standing the crews down is the choice
 		trigger = {
 			NOT = { nd_auto_answers_strike = { ENEMY = scope:attacking_country } }
 		}
@@ -2102,7 +2124,7 @@ nuclear_weapon_events.24 = {
 		highlighted_option = yes
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
@@ -2128,17 +2150,17 @@ nuclear_weapon_events.24 = {
 		highlighted_option = yes
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 1
 				nuclear_response_strike = yes
 			}
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 2
 				nuclear_response_strike = yes
 			}
@@ -2172,12 +2194,12 @@ nuclear_weapon_events.24 = {
 			limit = { var:nuclear_weapon_stockpile >= 3 }
 			scope:attacking_country = {
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
 				}
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 2
 					nuclear_response_strike = yes
 				}
@@ -2187,7 +2209,7 @@ nuclear_weapon_events.24 = {
 			limit = { var:nuclear_weapon_stockpile >= 2 }
 			scope:attacking_country = {
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
 				}
@@ -2195,7 +2217,7 @@ nuclear_weapon_events.24 = {
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}

@@ -136,6 +136,12 @@ class EventImageAuditTests(unittest.TestCase):
         self.assertIn("`my.1`", report)
         self.assertIn("## REVIEWED-suppressed", report)
         self.assertIn("on purpose", report)
+        # The reviewed entry names its event without a line; the unreviewed
+        # one keeps its line. No event counts in the summary.
+        self.assertIn("- `my.2` — events/e.txt (REVIEWED 2026-09-21: on purpose)", report)
+        self.assertIn("- `my.1` — events/e.txt:1", report)
+        for gone in ("Events defined", "Visible (not", "Visible via alternate art"):
+            self.assertNotIn(gone, report)
 
     def test_report_clean_state(self):
         mod = self._mod({"e.txt": 'my.1 = {\n\tevent_image = { video = "x" }\n}\n'})

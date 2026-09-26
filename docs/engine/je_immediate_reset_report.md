@@ -29,81 +29,81 @@ _None._
 
 can_revolution_inherit: yes; can_deactivate: unset (= no)
 
-- `set_variable` `te_mon_stance_band_applied` = `0` at `common/journal_entries/je_banking.txt:177` — **2026-09-26**: reset on purpose; a fresh or inherited entry holds no stance band, so the tracker must say none (civil_war_inheritance_audit.md F7)
+- `set_variable` `te_mon_stance_band_applied` = `0` at `common/journal_entries/je_banking.txt` — **2026-09-26**: reset on purpose; a fresh or inherited entry holds no stance band, so the tracker must say none (civil_war_inheritance_audit.md F7)
 
 ### `je_heir_education` (`common/journal_entries/je_heir_education.txt`)
 
 can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)
 
-- 35 writes of `heir_ed_admin`, `heir_ed_diplo`, `heir_ed_military`, `heir_ed_ideology`, `heir_ed_ig_radical`, `heir_ed_ig_moderate`, +2 more, first at `common/journal_entries/je_heir_education.txt:43` — **2026-09-26**: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
+- 35 writes of `heir_ed_admin`, `heir_ed_diplo`, `heir_ed_military`, `heir_ed_ideology`, `heir_ed_ig_radical`, `heir_ed_ig_moderate`, +2 more, first at `common/journal_entries/je_heir_education.txt` — **2026-09-26**: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
 
 ### `je_nuclear_program` (`common/journal_entries/je_nuclear_program.txt`)
 
 can_revolution_inherit: no; can_deactivate: yes
 
-- `set_variable` `nuclear_weapons_program_funding` = `0` at `common/journal_entries/je_nuclear_program.txt:139` — **2026-09-26**: a new record has no nuclear_weapon_program_funding modifier, so funding restarts at 0 to match it
-- 3 writes of `nd_doctrine_mod_on`, `nd_readiness_mod_on`, `nd_upkeep_mod_on`, first at `common/journal_entries/je_nuclear_program.txt:149` — **2026-09-26**: tracker of a modifier a new record lacks; the first weekly pulse re-adds it
-- `remove_variable` `nd_posture_on_merged_entry` at `common/journal_entries/je_nuclear_program.txt:154` — only a positive existence test of `nd_posture_on_merged_entry` encloses it, so it destroys what is there — **2026-09-26**: clearing the marker makes the first weekly pulse rebuild the posture modifiers on this record
+- `set_variable` `nuclear_weapons_program_funding` = `0` at `common/journal_entries/je_nuclear_program.txt` — **2026-09-26**: a new record has no nuclear_weapon_program_funding modifier, so funding restarts at 0 to match it
+- 3 writes of `nd_doctrine_mod_on`, `nd_readiness_mod_on`, `nd_upkeep_mod_on`, first at `common/journal_entries/je_nuclear_program.txt` — **2026-09-26**: tracker of a modifier a new record lacks; the first weekly pulse re-adds it
+- `remove_variable` `nd_posture_on_merged_entry` at `common/journal_entries/je_nuclear_program.txt` — only a positive existence test of `nd_posture_on_merged_entry` encloses it, so it destroys what is there — **2026-09-26**: clearing the marker makes the first weekly pulse rebuild the posture modifiers on this record
 
 ### `je_space_race_interstellar_probe` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
-- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt:678` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_mars_landing` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
-- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt:678` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_moon_base` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
-- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt:678` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_moon_landing` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
-- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt:678` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_orbital` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
-- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt:678` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_probe` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
-- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt:678` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_solar_colonization` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
-- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt:678` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 49 writes of `sr_suborbital_last_status`, `sr_suborbital_setbacks`, `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_space_race_suborbital` (`common/journal_entries/je_space_race.txt`)
 
 can_revolution_inherit: yes; can_deactivate: yes
 
-- 49 writes of `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt:678` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
+- 49 writes of `sr_orbital_last_status`, `sr_orbital_setbacks`, `sr_moon_landing_last_status`, `sr_moon_landing_setbacks`, `sr_probe_last_status`, `sr_probe_setbacks`, +8 more, first at `common/scripted_effects/space_race_effects.txt` — **2026-09-26**: each milestone's status is derived from its own variables; one not running has its status and setback count cleared, as the monthly cleanup does
 
 ### `je_strategic_reserve` (`common/journal_entries/je_strategic_reserve.txt`)
 
 can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)
 
-- 89 writes of `st_res_grain_actual_rate_cached`, `st_res_ammunition_actual_rate_cached`, `st_res_oil_actual_rate_cached`, `st_res_small_arms_actual_rate_cached`, `st_res_artillery_actual_rate_cached`, `st_res_aeroplanes_actual_rate_cached`, +11 more, first at `common/scripted_effects/st_res_effects.txt:402` — **2026-09-26**: rate caches, sell profit and status labels, recomputed from the stockpiles and rates, which it leaves alone
+- 89 writes of `st_res_grain_actual_rate_cached`, `st_res_ammunition_actual_rate_cached`, `st_res_oil_actual_rate_cached`, `st_res_small_arms_actual_rate_cached`, `st_res_artillery_actual_rate_cached`, `st_res_aeroplanes_actual_rate_cached`, +11 more, first at `common/scripted_effects/st_res_effects.txt` — **2026-09-26**: rate caches, sell profit and status labels, recomputed from the stockpiles and rates, which it leaves alone
 
 ### `je_united_nations` (`common/journal_entries/je_united_nations.txt`)
 
 can_revolution_inherit: yes; can_deactivate: no
 
-- `remove_variable` `un_regime_stamp` at `common/scripted_effects/un_state_effects.txt:266` via `un_state_restore_all` (common/journal_entries/je_united_nations.txt:115) — only a positive existence test of `un_regime_stamp` encloses it, so it destroys what is there — **2026-09-26**: dropping the regime stamp is the point: the next ordinary pulse re-reads the regime terms the merge dropped (§0.9)
+- `remove_variable` `un_regime_stamp` at `common/scripted_effects/un_state_effects.txt` via `un_state_restore_all` (common/journal_entries/je_united_nations.txt) — only a positive existence test of `un_regime_stamp` encloses it, so it destroys what is there — **2026-09-26**: dropping the regime stamp is the point: the next ordinary pulse re-reads the regime terms the merge dropped (§0.9)
 
 ## Not Failing
 
@@ -119,9 +119,9 @@ where the bar wraps and say why with a REVIEWED comment
 (`scripting_best_practices.md`, "`immediate` runs again on every
 activation"). Not failing yet.
 
-- `je_heir_education` (can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)): `set_variable` `heir_ed_total` = `0` at `common/journal_entries/je_heir_education.txt:50` — the entry's `current_value` reads it; goal not pinned (+23 more writes) — reviewed **2026-09-26**: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
+- `je_heir_education` (can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)): `set_variable` `heir_ed_total` = `0` at `common/journal_entries/je_heir_education.txt` — the entry's `current_value` reads it; goal not pinned (+23 more writes) — reviewed **2026-09-26**: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
 - `je_nuclear_program` (can_revolution_inherit: no; can_deactivate: yes): `set_variable` `nuclear_weapon_program_progress` = `0` at `common/journal_entries/je_nuclear_program.txt:135` — the entry's `current_value` reads it; goal not pinned
-- `je_space_race_solar_colonization` (can_revolution_inherit: yes; can_deactivate: yes): `set_variable` `sr_progress_solar_colonization` = `0` at `common/journal_entries/je_space_race.txt:1137` — the entry's `current_value` reads it; goal not pinned — reviewed **2026-09-26**: deliberate reset of a bar input, see above
+- `je_space_race_solar_colonization` (can_revolution_inherit: yes; can_deactivate: yes): `set_variable` `sr_progress_solar_colonization` = `0` at `common/journal_entries/je_space_race.txt` — the entry's `current_value` reads it; goal not pinned — reviewed **2026-09-26**: deliberate reset of a bar input, see above
 - `je_state_collapse` (can_revolution_inherit: unset (= yes); can_deactivate: yes): `set_variable` `state_collapse_progress` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:16` — the entry's `current_value` reads it; goal not pinned
 
 ### Pulse refreshes
@@ -174,8 +174,6 @@ removed while this variable was kept.
 
 ## Coverage
 
-- journal-entry files audited: 17
-- journal entries: 26 (26 with an `immediate`)
 - counts are writes per entry, so a helper several entries call counts
   once for each; distinct (line, variable) pairs are in brackets
 - unreviewed: 0 (0)

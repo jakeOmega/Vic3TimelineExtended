@@ -309,7 +309,7 @@ nd_custody_settle_record = {
 				trigger_event = { id = nuclear_custody.2 }
 			}
 		}
-		debug_log = "TE_CUSTODY: settled an ended arsenal to [SCOPE.sCountry('nd_settle_successor').GetName]; its arrivals so far: [SCOPE.sCountry('nd_settle_successor').MakeScope.Var('nd_custody_received').GetValue|0] received, [SCOPE.sCountry('nd_settle_successor').MakeScope.Var('nd_custody_lost').GetValue|0] lost"
+		debug_log = "TE_CUSTODY: settled an ended arsenal to [SCOPE.sCountry('nd_settle_successor').GetNameNoFormatting]"
 		# ---- the old owner's pledges and defiance records lapse -----------
 		# Best effort: only while the dead owner still resolves.
 		var:nd_ar_owner ?= {
@@ -569,8 +569,9 @@ nd_cw_apply_split = {
 			nd_snap_public_estimate = yes
 		}
 	}
+	# The choice's TE_CUSTODY line is logged by the caller, which knows it as
+	# a literal: a parameter inside a debug_log string comes out mangled.
 	hidden_effect = {
-		debug_log = "TE_CUSTODY: [ROOT.GetCountry.GetName] chose $MODE$ at the outbreak: [ROOT.GetCountry.MakeScope.Var('nd_cw_$MODE$_taken').GetValue|0] to the rebels, [ROOT.GetCountry.MakeScope.Var('nd_cw_$MODE$_lost').GetValue|0] lost"
 		nd_ledger_refresh = yes
 		nd_cw_clear_roll = yes
 	}
@@ -598,6 +599,9 @@ nd_cw_clear_roll = {
 # every civil war of ours is over (nd_readiness_withdrawn).
 nd_cw_pull_back = {
 	nd_cw_apply_split = { MODE = pull TT = nd_tt_cw_split_pull }
+	hidden_effect = {
+		debug_log = "TE_CUSTODY: [THIS.GetCountry.GetNameNoFormatting] chose to pull its warheads back at the outbreak"
+	}
 	custom_tooltip = {
 		text = nd_tt_cw_withdrawn
 		set_variable = { name = nd_cw_withdrawn value = 1 }
@@ -646,7 +650,7 @@ nd_cw_dismantle_as = {
 		}
 	}
 	hidden_effect = {
-		debug_log = "TE_CUSTODY: [ROOT.GetCountry.GetName] dismantled its arsenal in a civil war"
+		debug_log = "TE_CUSTODY: [THIS.GetCountry.GetNameNoFormatting] dismantled its arsenal in a civil war"
 		nd_snap_public_estimate = yes
 		nd_apply_posture_modifiers = yes
 		nd_ledger_refresh = yes
@@ -975,7 +979,7 @@ nd_custody_new_regime = {
 		set_variable = { name = nd_custody_arrival_pending value = 1 }
 		trigger_event = { id = nuclear_custody.2 days = 1 }
 	}
-	debug_log = "TE_CUSTODY: [ROOT.GetCountry.GetName] is a new regime; doctrine [ROOT.GetCountry.MakeScope.Var('nd_doctrine').GetValue|0], carried progress [ROOT.GetCountry.MakeScope.Var('nd_custody_progress_carry').GetValue|0]"
+	debug_log = "TE_CUSTODY: [THIS.GetCountry.GetNameNoFormatting] is a new regime"
 }
 
 # ROOT = the country, from je_nuclear_program's weekly pulse: a new regime's
@@ -1027,7 +1031,7 @@ nd_bp_open = {
 				clear_variable_list = nd_bp_guarantors
 			}
 		}
-		debug_log = "TE_CUSTODY: [SCOPE.sCountry('nd_bp_state').GetName] won its secession holding warheads; the great powers will be asked to press it"
+		debug_log = "TE_CUSTODY: [SCOPE.sCountry('nd_bp_state').GetNameNoFormatting] won its secession holding warheads; the great powers will be asked to press it"
 		every_country = {
 			limit = { nd_bp_would_hear = { STATE = scope:nd_bp_state } }
 			set_variable = { name = nd_bp_new_state value = scope:nd_bp_state days = 30 }
@@ -1186,7 +1190,7 @@ nd_bp_accept = {
 		}
 	}
 	hidden_effect = {
-		debug_log = "TE_CUSTODY: [ROOT.GetCountry.GetName] traded its warheads for guarantees"
+		debug_log = "TE_CUSTODY: [THIS.GetCountry.GetNameNoFormatting] traded its warheads for guarantees"
 		nd_snap_public_estimate = yes
 		nd_apply_posture_modifiers = yes
 		nd_ledger_refresh = yes

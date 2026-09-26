@@ -112,8 +112,8 @@ Governance Principles:
 		A political system in which the state positions itself as the ultimate mediator between the nation's corporate groups. The monarchy is held to be a symbol of the country's national identity.
 	Neocameralism - Unlocking Technology: Marketing Research
 		A political system where the state is organized as a joint-stock corporation, with shareholders having control over government functions and policies.
-	Direct Democracy [progressiveness=50] - Unlocking Technology: Mass Media
-		A system of government where eligible citizens participate directly in decision-making processes, rather than through elected representatives.
+	Collective Governance [progressiveness=50] - Unlocking Technology: Political Agitation
+		No one person holds supreme executive power. Authority rests with a body of equals: an assembly of voters, a party presidium, a college of bureaus, a federation of communes or a council of the powerful, depending on who holds power. Whoever chairs it is first among equals, not a ruler.
 Internal Security:
 	No Home Affairs [progressiveness=-25]
 		The state relies upon conventional military and police forces to suppress unrest and uprisings.

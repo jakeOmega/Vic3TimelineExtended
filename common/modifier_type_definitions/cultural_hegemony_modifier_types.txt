@@ -12,6 +12,11 @@ country_cultural_pull_mult = {
 	decimals = 0
 }
 
+# Read only by ch_ideology_resistance_factor, which scales the foreign
+# benchmark (cultural_hegemony_benchmark_mult) by 1 minus this value. It does
+# not touch hegemon movement pressure: that modifier is added from foreign
+# ROOTs (the rebuild runner, a covert attacker), so a multiplier cannot read
+# the target's resistance there (scripting_best_practices.md, the ROOT section).
 country_ideology_resistance_mult = {
 	color = good
 	percent = yes

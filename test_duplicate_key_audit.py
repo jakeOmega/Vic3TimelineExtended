@@ -143,5 +143,31 @@ class SuppressionTests(unittest.TestCase):
         self.assertEqual(flags[0].exemption["date"], "2026-06-04")
 
 
+class RenderReportTests(unittest.TestCase):
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line numbers and Coverage no scan counts,
+        so the report changes only when the findings do."""
+        result = dk.AuditResult(
+            flags=[
+                dk.DuplicateKeyFlag("common/static_modifiers/a.txt", 9, "foo_add", "1", 8, "2",
+                                    "modifier", "error"),
+                dk.DuplicateKeyFlag("common/static_modifiers/b.txt", 21, "bar_add", "2", 20, "2",
+                                    "modifier", "warn",
+                                    exemption={"date": "2026-06-04", "rationale": "stacking"}),
+            ],
+            coverage={"files_audited": 418, "tracked_modifier_scalar_lines": 11807},
+        )
+        report = dk.render_report(result)
+        self.assertIn(
+            "- `common/static_modifiers/b.txt` — `bar_add = 2` (repeated inside "
+            "`modifier` block) — **2026-06-04**: stacking", report)
+        self.assertNotIn("b.txt:21", report)
+        self.assertNotIn("line 20", report)
+        self.assertIn("`common/static_modifiers/a.txt:9`", report)  # unreviewed
+        self.assertIn("at line 8", report)
+        for gone in ("files_audited", "tracked_modifier_scalar_lines", "418", "11807"):
+            self.assertNotIn(gone, report)
+
+
 if __name__ == "__main__":
     unittest.main()

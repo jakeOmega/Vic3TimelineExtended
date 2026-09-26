@@ -362,7 +362,29 @@ class EndToEndTests(unittest.TestCase):
             self.assertIn("# Localization accessor audit report", text)
             self.assertIn("## Unreviewed Flags", text)
             self.assertIn("_None._", text)
-            self.assertIn("- files_audited: 1", text)
+            self.assertIn("- total flags: 0", text)
+            self.assertNotIn("files_audited", text)
+            self.assertNotIn("chains_scanned", text)
+
+    def test_reviewed_entry_has_no_line_number(self):
+        from localization_accessor_audit import AuditFlag, AuditResult
+        result = AuditResult(
+            flags=[
+                AuditFlag("localization/english/a_l_english.yml", 5, "bad_key", "X.Y",
+                          "event", "unknown accessor"),
+                AuditFlag("localization/english/a_l_english.yml", 9, "ok_key", "X.Z",
+                          "event", "unknown accessor",
+                          exemption={"date": "2026-05-01", "rationale": "UI-only"}),
+            ],
+            coverage={"files_audited": 3, "chains_scanned": 4007},
+        )
+        text = render_report(result)
+        self.assertIn(
+            "- `localization/english/a_l_english.yml` — `ok_key` — `[X.Z]` — "
+            "2026-05-01: UI-only", text)
+        self.assertNotIn("a_l_english.yml:9", text)
+        self.assertIn("`localization/english/a_l_english.yml:5`", text)  # unreviewed
+        self.assertNotIn("4007", text)
 
 
 @unittest.skipUnless(
