@@ -611,17 +611,29 @@ nd_believed_armed = {
 # appears anywhere else.
 
 # Has our overlord withdrawn its umbrella from us? The pact exists only
-# between an overlord and its direct subject (its requirement_to_maintain).
+# between an overlord and its direct subject (its requirement_to_maintain);
+# we are its second country. A withdrawal we made from a subject of our own
+# is not one made from us.
 nd_umbrella_withdrawn = {
+	save_temporary_scope_as = nd_uw_self
 	any_scope_diplomatic_pact = {
 		is_diplomatic_action_type = nd_withdraw_umbrella_action
+		second_country = { this = scope:nd_uw_self }
 	}
 }
 
-# Is this country under its (direct) overlord's umbrella?
+# Is this country under its (direct) overlord's umbrella? Not while the two
+# are at war or on opposite sides of a play — a subject fighting for its
+# freedom is not protected by the arsenal it is fighting, as a treaty
+# guarantee lapses in a war between its parties.
 nd_under_an_umbrella = {
 	is_subject = yes
-	overlord ?= { nd_believed_armed = yes }
+	save_temporary_scope_as = nd_ua_self
+	overlord ?= {
+		nd_believed_armed = yes
+		NOT = { has_war_with = scope:nd_ua_self }
+		NOT = { is_diplomatic_play_enemy_of = scope:nd_ua_self }
+	}
 	NOT = { nd_umbrella_withdrawn = yes }
 }
 

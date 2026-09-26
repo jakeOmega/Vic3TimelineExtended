@@ -1938,15 +1938,17 @@ nd_guarantee_act_honour = {
 	}
 	# After a strike (umbrella/recessed/dead-hand spec §1.5): a strike on
 	# someone we protect pulls us into their war with the attacker, on their
-	# side. With no war to join — no strike happens outside a war today, so
-	# this is a guard — a public ultimatum of our own against the attacker,
-	# if neither of us is in a crisis already. Outside the hidden block so the
-	# option shows what joining or the ultimatum does (nd_crisis_preview).
+	# side, if we are not in it already. A guarantor already fighting beside
+	# them — or with no war to join — gets what it always did: a public
+	# ultimatum of its own against the attacker, if neither is in a crisis
+	# already. Outside the hidden block so the option shows what joining or
+	# the ultimatum does (nd_crisis_preview).
 	if = {
 		limit = {
 			exists = scope:nd_guarantee_attacker
 			exists = scope:nd_guarantee_beneficiary
 			var:nd_guarantee_context = 2
+			NOT = { has_war_with = scope:nd_guarantee_attacker }
 			scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }
 		}
 		nd_guarantor_join_war = yes

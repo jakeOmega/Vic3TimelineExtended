@@ -23,10 +23,20 @@ nd_withdraw_umbrella_action = {
 
 	texture = "gfx/interface/icons/diplomatic_action_icons/guarantee_independence.dds"
 
+	# Only an overlord that has tested a bomb has an umbrella to withdraw, so
+	# the action is not drawn on every subject from 1836 — unless a withdrawal
+	# already stands, which a disarmed overlord can still end.
 	potential = {
 		has_game_rule = nuclear_weapons_enabled
 		scope:target_country = {
 			is_direct_subject_of = root
+		}
+		OR = {
+			nd_believed_armed = yes
+			has_diplomatic_pact = {
+				who = scope:target_country
+				type = nd_withdraw_umbrella_action
+			}
 		}
 	}
 
@@ -47,6 +57,10 @@ nd_withdraw_umbrella_action = {
 
 	pact = {
 		cost = 0
+		# The overlord's decision alone: the subject can neither cancel the
+		# withdrawal nor be asked to (vanilla subject-relation pacts spell out
+		# target_can_break = no).
+		is_two_sided_pact = no
 
 		second_modifier = {
 			country_liberty_desire_add = 0.10
@@ -54,6 +68,10 @@ nd_withdraw_umbrella_action = {
 
 		second_country_gets_income_transfer = no
 		income_transfer_based_on_second_country = no
+
+		target_can_break = {
+			always = no
+		}
 
 		requirement_to_maintain = {
 			trigger = {
@@ -74,8 +92,12 @@ nd_withdraw_umbrella_action = {
 		will_propose = {
 			always = no
 		}
+		# Only as the overlord: the AI block's root is the AI whichever side
+		# it is on.
 		will_break = {
-			always = yes
+			scope:target_country = {
+				is_direct_subject_of = root
+			}
 		}
 	}
 }

@@ -99,6 +99,16 @@ nd_readiness_moving = {
 		}
 		localization_key = nd_readiness_moving_0
 	}
+	# Up to Routine from Recessed is no stand-down.
+	text = {
+		trigger = {
+			has_variable = nd_readiness
+			has_variable = nd_readiness_target
+			var:nd_readiness_target = 1
+			var:nd_readiness = 0
+		}
+		localization_key = nd_readiness_moving_1_up
+	}
 	text = {
 		trigger = {
 			has_variable = nd_readiness
@@ -133,7 +143,9 @@ nd_readiness_moving = {
 }
 
 # What an Automatic Retaliation system did with an accident it read as an
-# attack (nd_system_reads_attack; nuclear_incident.30's system descs).
+# attack (nd_system_reads_attack; nuclear_incident.30's system descs): halted
+# by someone in the chain, or launched — struck in a war, recalled outside one
+# (nd_last_launch_kind, written by nd_launch_or_intercept).
 nd_system_outcome = {
 	type = country
 	random_valid = no
@@ -145,8 +157,15 @@ nd_system_outcome = {
 		localization_key = nd_system_outcome_held
 	}
 	text = {
+		trigger = {
+			has_variable = nd_last_launch_kind
+			var:nd_last_launch_kind = 1
+		}
+		localization_key = nd_system_outcome_struck
+	}
+	text = {
 		trigger = { always = yes }
-		localization_key = nd_system_outcome_fired
+		localization_key = nd_system_outcome_recalled
 	}
 }
 

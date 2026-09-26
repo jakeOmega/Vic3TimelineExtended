@@ -159,6 +159,21 @@ SCAN_ROOTS: tuple[ScanRoot, ...] = (
             "max_paying_country_income_to_transfer", "allow_non_fully_accepted",
             "upper_strata_pops", "middle_strata_pops", "lower_strata_pops",
             "income_transfer_based_on_second_country",
+            # The rest of the vanilla pact / AI vocabulary
+            # (common/diplomatic_actions/diplomatic_action.md), valid in
+            # call form (#456).
+            "actor_can_break", "target_can_break", "forced_duration",
+            "daily_effect", "weekly_effect", "subject_relation",
+            "annex_on_country_formation", "auto_support_type",
+            "military_access", "actor_requires_approval_to_break",
+            "target_requires_approval_to_break", "is_breaking_hostile",
+            "is_target_breaking_hostile", "propose_string", "break_string",
+            "ask_to_end_string", "counts_for_tech_spread",
+            "max_target_involvement", "target_involvement_applies_to",
+            "income_transfer", "exempt_from_service",
+            "will_propose_even_if_not_accepted", "accept_break_score",
+            "propose_break_score", "use_favor_chance", "owe_favor_chance",
+            "evaluation_chance",
         }),
         skip_blocks=_STATIC_MODIFIER_BLOCKS,
     ),

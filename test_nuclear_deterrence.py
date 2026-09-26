@@ -1109,9 +1109,83 @@ class TestExtendedDeterrence(unittest.TestCase):
         self.assertNotIn("nd_dispatch_strategic_strike", block(self.c, "nd_guarantee_act_retaliate"))
         hidden = block(self.ev, "nuclear_crisis.22")
         self.assertIn("hidden = yes", hidden)
-        self.assertIn("has_war_with = var:nd_answer_strike_target", hidden)
+        self.assertIn("has_war_with = scope:attacking_country", hidden)
         self.assertIn("nuclear_response_strike = yes", hidden)
         self.assertIn("remove_variable = nd_answer_strike_target", hidden)
+
+
+class TestReviewFixesUmbrellaRecessed(unittest.TestCase):
+    """Fix pass after the whole-branch review of #455."""
+
+    def setUp(self):
+        self.t = strip_comments(read(TRIGGERS))
+        self.e = strip_comments(read(EFFECTS))
+        self.c = strip_comments(read(CRISIS_EFFECTS))
+        self.wev = strip_comments(read(WEAPON_EVENTS))
+        self.cev = strip_comments(read(CRISIS_EVENTS))
+
+    def test_honour_keeps_the_ultimatum_for_a_guarantor_already_at_war(self):
+        body = block(self.c, "nd_guarantee_act_honour")
+        join = body[:body.index("nd_guarantor_join_war = yes")]
+        self.assertIn("NOT = { has_war_with = scope:nd_guarantee_attacker }", join)
+        self.assertIn("nd_crisis_open", body)
+
+    def test_umbrella_lapses_while_the_subject_faces_its_overlord(self):
+        body = block(self.t, "nd_under_an_umbrella")
+        self.assertIn("NOT = { has_war_with = scope:", body)
+        self.assertIn("NOT = { is_diplomatic_play_enemy_of = scope:", body)
+
+    def test_withdrawal_read_only_from_the_subject_side(self):
+        self.assertIn("second_country = { this = scope:", block(self.t, "nd_umbrella_withdrawn"))
+
+    def test_subject_cannot_break_the_withdrawal(self):
+        body = block(strip_comments(read(UMBRELLA_ACTIONS)), "nd_withdraw_umbrella_action")
+        pact = block(body, "pact")
+        self.assertIn("always = no", block(pact, "target_can_break"))
+        self.assertIn("is_two_sided_pact = no", pact)
+        self.assertIn("is_direct_subject_of = root", block(block(body, "ai"), "will_break"))
+        self.assertIn("nd_believed_armed = yes", block(body, "potential"))
+
+    def test_system_launch_is_narrated_by_the_accident_not_a_warning(self):
+        body = block(self.e, "nd_system_reads_attack")
+        self.assertIn("NARRATE = no", body)
+        custom = block(strip_comments(read(CUSTOM_LOC)), "nd_system_outcome")
+        for key in ("nd_system_outcome_held", "nd_system_outcome_struck", "nd_system_outcome_recalled"):
+            self.assertIn(f"localization_key = {key}", custom)
+        self.assertIn("nd_last_launch_kind", custom)
+
+    def test_licence_ends_with_the_war(self):
+        body = block(self.e, "nd_country_monthly_cleanup")
+        self.assertIn("remove_variable = nuked_by_country", body)
+        self.assertIn("has_war_with = ROOT", body)
+
+    def test_one_visible_default_in_every_state(self):
+        for opt in ("nuclear_weapon_events.1.a", "nuclear_weapon_events.1.e", "nuclear_weapon_events.1.h",
+                    "nuclear_weapon_events.24.a", "nuclear_weapon_events.24.e"):
+            self.assertIn("default_option = yes", option_body(self.wev, opt), opt)
+        g = option_body(self.wev, "nuclear_weapon_events.1.g")
+        self.assertNotIn("default_option", g)
+        self.assertIn("nd_authority_automatic = no", g)
+        h = option_body(self.wev, "nuclear_weapon_events.1.h")
+        self.assertIn("nd_authority_automatic = yes", h)
+        self.assertIn("nd_assemble_for_retaliation = { ENEMY = scope:attacking_country }", h)
+
+    def test_war_checks_read_a_saved_scope(self):
+        weekly = block(self.e, "nd_weekly_update")
+        self.assertNotIn("has_war_with = var:", weekly)
+        self.assertIn("has_war_with = scope:nd_ready_enemy", weekly)
+        hidden = block(self.cev, "nuclear_crisis.22")
+        self.assertNotIn("has_war_with = var:", hidden)
+        self.assertIn("has_war_with = scope:attacking_country", hidden)
+
+    def test_a_pending_answer_ends_with_its_war(self):
+        weekly = block(self.e, "nd_weekly_update")
+        pending = weekly[weekly.index("nd_pending_retaliation"):]
+        self.assertRegex(pending, r"NOT = \{ has_war_with = scope:nd_ready_enemy \}\s*\}\s*remove_variable = nd_pending_retaliation")
+
+    def test_assembling_is_not_called_a_stand_down(self):
+        custom = block(strip_comments(read(CUSTOM_LOC)), "nd_readiness_moving")
+        self.assertIn("localization_key = nd_readiness_moving_1_up", custom)
 
 
 if __name__ == "__main__":

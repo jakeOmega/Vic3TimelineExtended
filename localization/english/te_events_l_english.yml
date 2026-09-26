@@ -2826,6 +2826,7 @@
  nuclear_weapon_events.1.e:0 "The system has already answered."
  nuclear_weapon_events.1.f:0 "The once bustling heart of [SCOPE.sState('target_state').GetName] now lies in ruins, consumed by fire and radiation. The blast has reduced industrial centers to ash, and an estimated #v [SCOPE.sState('target_state').MakeScope.Var('nuclear_strike_killed_population').GetValue|Kv]#! people were killed in the immediate [concept_devastation], and that number will surely rise in the coming weeks. The survivors speak of a searing light, a deafening roar, and a mushroom cloud that turned day into night. This heinous act of destruction has forever scarred our nation and altered the course of history.\n\nThe world has changed forever."
  nuclear_weapon_events.1.g:0 "Mate the warheads — we answer when they are ready"
+ nuclear_weapon_events.1.h:0 "The system waits for its warheads, then answers."
  nuclear_weapon_events.1.t:0 "A City Erased in [SCOPE.sState('target_state').GetName]"
  nuclear_weapon_events.10.a:0 "We have entered a new era of power and responsibility."
  nuclear_weapon_events.10.a_world_first:0 "We have split the atom. Nothing will ever be the same."

@@ -456,22 +456,29 @@ nd_weekly_update = {
 	# A country struck while Recessed that chose to answer when ready
 	# (nd_assemble_for_retaliation) is asked the week its warheads are mated
 	# again — if it is still at war with the attacker and still armed. The
-	# record goes either way: the licence is the war's, not this variable's.
+	# record ends with the war it was made in, or with the attacker, whether
+	# or not the forces ever got there.
 	if = {
-		limit = {
-			has_variable = nd_pending_retaliation
-			nd_forces_assembled = yes
-		}
+		limit = { has_variable = nd_pending_retaliation }
 		if = {
-			limit = {
-				exists = var:nd_pending_retaliation
-				nd_is_armed = yes
-				has_war_with = var:nd_pending_retaliation
-			}
-			var:nd_pending_retaliation = { save_scope_as = nd_ready_enemy }
-			trigger_event = { id = nuclear_weapon_events.24 popup = yes }
+			limit = { NOT = { exists = var:nd_pending_retaliation } }
+			remove_variable = nd_pending_retaliation
 		}
-		remove_variable = nd_pending_retaliation
+		else = {
+			var:nd_pending_retaliation = { save_scope_as = nd_ready_enemy }
+			if = {
+				limit = { NOT = { has_war_with = scope:nd_ready_enemy } }
+				remove_variable = nd_pending_retaliation
+			}
+			else_if = {
+				limit = {
+					nd_forces_assembled = yes
+					nd_is_armed = yes
+				}
+				trigger_event = { id = nuclear_weapon_events.24 popup = yes }
+				remove_variable = nd_pending_retaliation
+			}
+		}
 	}
 	# ---- the crisis this country owns --------------------------------------
 	if = {
@@ -1921,8 +1928,11 @@ nd_assemble_for_retaliation = {
 # — our crisis opponent if armed, else an armed enemy — through the one
 # launch path: a strike in a war, an order recalled at the last moment
 # outside one. Writes nd_system_reacted (1 halted, 2 launched) for .30's
-# text; .30's `after` removes it. Country scope = the country; called from
-# nuclear_incident.30's immediate once nd_accident_kind is drawn.
+# text, which also reads nd_last_launch_kind (struck or recalled) through
+# nd_system_outcome; .30's `after` removes nd_system_reacted. NARRATE = no:
+# .30 tells this story itself, and nuclear_incident.4's report is written for
+# a launch on an unconfirmed warning. Country scope = the country; called
+# from nuclear_incident.30's immediate once nd_accident_kind is drawn.
 nd_system_reads_attack = {
 	if = {
 		limit = {
@@ -1965,7 +1975,7 @@ nd_system_reads_attack = {
 			}
 			else = {
 				set_variable = { name = nd_system_reacted value = 2 }
-				nd_launch_or_intercept = { VICTIM = scope:nd_system_suspect NARRATE = yes KIND = system }
+				nd_launch_or_intercept = { VICTIM = scope:nd_system_suspect NARRATE = no KIND = system }
 			}
 		}
 	}
@@ -2001,5 +2011,22 @@ nd_country_monthly_cleanup = {
 		}
 		nd_clear_domestic_stance = yes
 		remove_variable = nd_stance_applied
+	}
+	# The licence to answer a strike is the war's (umbrella/recessed/dead-hand
+	# spec §1.5): nd_was_struck_by and nd_covered_country_struck_by read the
+	# striker from nuked_by_country, which the strike effects set and nothing
+	# cleared, so a strike licensed us — and our guarantors — in any later war
+	# with the same country, under any doctrine. Forget it once that war is
+	# over or the striker is gone. Every country, because a struck subject
+	# need not have the entry.
+	if = {
+		limit = {
+			has_variable = nuked_by_country
+			OR = {
+				NOT = { exists = var:nuked_by_country }
+				var:nuked_by_country ?= { NOT = { has_war_with = ROOT } }
+			}
+		}
+		remove_variable = nuked_by_country
 	}
 }

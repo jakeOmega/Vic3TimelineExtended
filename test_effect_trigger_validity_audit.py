@@ -44,6 +44,16 @@ class DetectionTests(unittest.TestCase):
         )
         self.assertEqual(_flagged(m.audit()), set())
 
+    def test_vanilla_pact_keys_not_flagged(self):
+        # Vanilla pact vocabulary (common/diplomatic_actions/diplomatic_action.md,
+        # 34_subjects_exempt_from_service.txt) is valid in call form (#456).
+        m = _Mod({"common/diplomatic_actions/d.txt":
+                  "my_action = {\n\tpact = {\n\t\tforced_duration = 12\n"
+                  "\t\tactor_can_break = { always = yes }\n"
+                  "\t\ttarget_can_break = { always = no }\n\t}\n}\n"})
+        flagged = {k for k, _ in _flagged(m.audit())}
+        self.assertFalse(flagged & {"actor_can_break", "target_can_break", "forced_duration"}, flagged)
+
     def test_unquoted_call_syntax_flagged(self):
         m = _Mod({"events/e.txt": "my.1 = {\n\tvalue = negate(foo)\n}\n"})
         flags = _flagged(m.audit())

@@ -1082,22 +1082,24 @@ nuclear_crisis.22 = {
 
 	immediate = {
 		if = {
-			limit = {
-				exists = var:nd_answer_strike_target
-				has_war_with = var:nd_answer_strike_target
-				nd_is_armed = yes
-				nd_forces_assembled = yes
-			}
-			save_scope_as = target_country
-			var:nd_answer_strike_target = {
-				save_scope_as = attacking_country
-				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
-					position = 0
-					nuclear_response_strike = yes
+			limit = { exists = var:nd_answer_strike_target }
+			var:nd_answer_strike_target = { save_scope_as = attacking_country }
+			if = {
+				limit = {
+					has_war_with = scope:attacking_country
+					nd_is_armed = yes
+					nd_forces_assembled = yes
 				}
+				save_scope_as = target_country
+				scope:attacking_country = {
+					ordered_scope_state = {
+						order_by = nuclear_industrial_strike_target_score
+						position = 0
+						nuclear_response_strike = yes
+					}
+				}
+				nd_record_nuclear_use = { VICTIM = scope:attacking_country }
 			}
-			nd_record_nuclear_use = { VICTIM = scope:attacking_country }
 		}
 		remove_variable = nd_answer_strike_target
 	}

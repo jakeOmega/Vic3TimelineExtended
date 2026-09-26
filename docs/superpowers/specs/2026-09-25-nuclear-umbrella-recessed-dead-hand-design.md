@@ -340,3 +340,8 @@ Small departures from the text above, made while implementing:
   country under Automatic Retaliation that a pledge bars from answering still gets the ordinary options.
 - A guarantor's retaliation from `.20` always lands from the hidden `nuclear_crisis.22` a day later, including when it
   was already at war — one path, which re-checks the war.
+- After the whole-branch review: the umbrella lapses while overlord and subject are at war or play enemies; the
+  withdrawal pact cannot be broken by the subject; `nuclear_weapon_events.1` option h is option g's Automatic
+  Retaliation twin (the default, so every state has one visible default); a system launch is narrated by `.30`
+  alone (`NARRATE = no`); and `nuked_by_country` is now cleared when the war with the striker ends, which is what makes
+  §1.5's "the licence lasts as long as the war does" true.
