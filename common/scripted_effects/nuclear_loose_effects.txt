@@ -535,7 +535,7 @@ nd_loose_recover_from_line = {
 			change_variable = { name = nd_ar_loose subtract = 1 }
 		}
 		nd_loose_pool_take = { AMOUNT = 1 }
-		debug_log = "TE_CUSTODY: a loose warhead from [ROOT.GetCountry.GetName]'s line was secured (how: $HOW$)"
+		debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_line_owner').GetName]'s line was secured (how: $HOW$)"
 	}
 }
 
