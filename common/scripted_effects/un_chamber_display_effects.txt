@@ -649,7 +649,7 @@ un_chamber_history_entry = {
 	un_chamber_tally_line = yes
 	custom_tooltip_no_bullet = je_un_chamber_hist_months
 	if = {
-		limit = { has_variable = un_res_cooldown }
+		limit = { has_variable = un_res_cooldown_months }
 		custom_tooltip_no_bullet = je_un_chamber_hist_cooldown
 	}
 }

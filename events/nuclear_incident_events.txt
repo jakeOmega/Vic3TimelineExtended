@@ -908,6 +908,7 @@ nuclear_incident.20 = {
 	trigger = {
 		nd_is_armed = yes
 		nd_authority_delegated_or_warning = yes
+		nd_forces_assembled = yes
 	}
 
 	immediate = {
@@ -1072,6 +1073,22 @@ nuclear_incident.30 = {
 	title = nuclear_incident.30.t
 	desc = {
 		first_valid = {
+			# Under Automatic Retaliation the system read the blast as an attack
+			# (nd_system_reads_attack); nd_system_outcome says what came of it.
+			triggered_desc = {
+				trigger = {
+					nd_accident_kind_is = { K = 1 }
+					has_variable = nd_system_reacted
+				}
+				desc = nuclear_incident.30.d_bomber_system
+			}
+			triggered_desc = {
+				trigger = {
+					nd_accident_kind_is = { K = 2 }
+					has_variable = nd_system_reacted
+				}
+				desc = nuclear_incident.30.d_silo_system
+			}
 			triggered_desc = {
 				trigger = { nd_accident_kind_is = { K = 1 } }
 				desc = nuclear_incident.30.d_bomber
@@ -1135,6 +1152,9 @@ nuclear_incident.30 = {
 			limit = { var:nd_accident_kind = 4 }
 			nd_accident_lose_warhead = yes
 		}
+		# Automatic Retaliation can read a bomber break-up or a silo explosion
+		# as an attack (umbrella/recessed/dead-hand spec §3.3).
+		nd_system_reads_attack = yes
 	}
 
 	# Stand down a step until the crews and machines recover.
@@ -1226,6 +1246,17 @@ nuclear_incident.30 = {
 	# Keep it out of the papers.
 	option = {
 		name = nuclear_incident.30.e
+		# Not once an Automatic Retaliation system has launched on the back of
+		# the accident: a strike, or an order recalled in full view of its
+		# target, is already the world's news (nd_system_reads_attack).
+		trigger = {
+			NOT = {
+				AND = {
+					has_variable = nd_system_reacted
+					var:nd_system_reacted = 2
+				}
+			}
+		}
 		nd_inquiry_conceal = yes
 		ai_chance = {
 			base = 1
@@ -1238,6 +1269,10 @@ nuclear_incident.30 = {
 
 	after = {
 		remove_variable = nd_accident_kind
+		if = {
+			limit = { has_variable = nd_system_reacted }
+			remove_variable = nd_system_reacted
+		}
 	}
 }
 

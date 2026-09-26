@@ -175,6 +175,32 @@ un_res_margin = {
 # Also written as the literal 26 (cap + 1) in un_resolution_archive — change both.
 un_resolution_history_cap = 25
 
+# How long a closed resolution bars its topic, in months: stamped on the
+# resolution as var:un_res_cooldown_months by un_resolution_archive and counted
+# down by un_resolutions_monthly_update. A month count, not a timed variable:
+# the engine never expires a timed variable on a script container.
+un_res_cooldown_months_default = 60
+un_res_cooldown_months_expulsion = 120
+
+# Months until the next charter reform may be tabled: the cooldown left on a
+# charter reform the Assembly has closed. A sum, but at most one reform is ever
+# on cooldown — the topic cannot be tabled again while one is. 0 when none is.
+# Scope: any
+un_reform_cooldown_months_left = {
+	value = 0
+	if = {
+		limit = { has_global_variable_list = un_resolution_history }
+		every_in_global_list = {
+			variable = un_resolution_history
+			limit = {
+				has_tag = un_topic_reform
+				has_variable = un_res_cooldown_months
+			}
+			add = var:un_res_cooldown_months
+		}
+	}
+}
+
 # ---- Resolution lobbying ----
 
 # How many vote commitments one resolution's proposer may secure, ever. Counted
@@ -424,6 +450,13 @@ un_agency_count = {
 # global UN pulse. Five years: long enough to raise the play and fight it,
 # short enough that a mandate cannot be banked indefinitely.
 un_mandate_expiry_months = 60
+
+# Monthly sweeps a freshly bound mandate is spared the "war goal has vanished"
+# check (var:un_mnd_grace_months, set by un_mandate_try_bind and counted down
+# by un_mandate_tick): two, so a goal added mid-month is never judged in the
+# tick it appeared. A month count, not a timed variable: the engine never
+# expires a timed variable on a script container.
+un_mandate_bind_grace_months = 2
 
 # Closed mandates kept in un_mandate_registry for the chamber's record. Past
 # this, the oldest closed entry is destroyed.

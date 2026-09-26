@@ -31,7 +31,8 @@ nd_on_diplo_play_back_down = {
 }
 
 # Root = Country. Takes the domestic-stance bands off interest groups once
-# je_nuclear_program is no longer active (nd_country_monthly_cleanup).
+# je_nuclear_program is no longer active, and forgets who struck us once that
+# war is over (nd_country_monthly_cleanup).
 on_monthly_pulse_country = {
 	on_actions = {
 		nd_country_monthly_cleanup_on_action

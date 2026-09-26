@@ -6,9 +6,9 @@
 # ============================================================================
 
 # Whether $TOPIC$ can't be proposed yet because a resolution on it closed
-# recently. A closed resolution carries the timed un_res_cooldown variable
-# for 5 years (10 for expulsion) and stays in un_resolution_history at least
-# that long.
+# recently. A closed resolution carries un_res_cooldown_months, counted down
+# from 60 (120 for expulsion) by un_resolution_cooldowns_tick, and stays in
+# un_resolution_history at least that long.
 # Parameters: $TOPIC$ = topic key (condemn, human_rights, sanctions, ...)
 # Scope: any
 un_resolution_topic_on_cooldown = {
@@ -16,7 +16,7 @@ un_resolution_topic_on_cooldown = {
 	any_in_global_list = {
 		variable = un_resolution_history
 		has_tag = un_topic_$TOPIC$
-		has_variable = un_res_cooldown
+		has_variable = un_res_cooldown_months
 	}
 }
 

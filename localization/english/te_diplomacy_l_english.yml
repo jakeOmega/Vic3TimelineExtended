@@ -66,6 +66,7 @@
  ministry_fa_diplomacy_cautious:0 "Foreign Affairs Ministry: Diplomacy Cautious Advance"
  ministry_fa_diplomacy_cautious_desc:0 "A smaller positive boost to ministry law enactment progress from a recent event."
  ministry_fa_diplomacy_stall:0 "Foreign Affairs Ministry: Diplomacy Stall"
+ nd_withdraw_umbrella_action_pact_desc:0 "[SCOPE.GetRootScope.GetDiplomaticPact.GetFirstCountry.GetName] has withdrawn its nuclear umbrella from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  nuke_diplo_action:0 "Nuclear Weapon Industrial Strike"
  nuke_diplo_action_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has launched a Nuclear Weapon Industrial Strike."
  nuke_diplo_action_action_notification_name:0 "Nuclear Weapon Industrial Strike Launched"

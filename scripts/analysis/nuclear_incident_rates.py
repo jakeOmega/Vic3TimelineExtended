@@ -12,6 +12,8 @@ Assumptions: one country, no crisis (danger band 0), no war, a plausible
 attacker exists (so the Unconfirmed Warning is eligible from heightened
 readiness), satellite communications researched, and incidents do not feed
 back into strain or reliability. The figures are expectations, not samples.
+Automatic Retaliation adds no row: its one launch branch (a .30 accident read
+as an attack) needs a war or an acute crisis, and this model is peacetime.
 
 Usage:
     python3 scripts/analysis/nuclear_incident_rates.py [--years N]
@@ -19,9 +21,9 @@ Usage:
 
 import argparse
 
-READINESS_NAMES = {1: "Routine", 2: "Heightened", 3: "High alert"}
+READINESS_NAMES = {0: "Recessed", 1: "Routine", 2: "Heightened", 3: "High alert"}
 AUTHORITY_NAMES = {1: "Central", 3: "Launch on warning"}
-BASE_PERMILLE = {1: 1, 2: 4, 3: 10}  # nd_incident_permille
+BASE_PERMILLE = {0: 0.5, 1: 1, 2: 4, 3: 10}  # nd_incident_permille
 WEIGHT_MISHAP, WEIGHT_WARNING, WEIGHT_ALERT = 20, 40, 35  # nd_fire_incident
 
 
@@ -68,7 +70,7 @@ def main():
     print(f"| Readiness | Safeguards | Authority | Strain / reliability after {years} y "
           f"| ‰ per month (end) | P(any incident, {years} y) | Warnings | Launch orders not held |")
     print("|---|---|---|---|---|---|---|---|")
-    for readiness in (1, 2, 3):
+    for readiness in (0, 1, 2, 3):
         for safeguards in (0, 3):
             for authority in ((1, 3) if readiness >= 2 else (1,)):
                 strain, rel, pm, p_any, warn, launch = simulate(

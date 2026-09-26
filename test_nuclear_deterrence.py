@@ -35,6 +35,8 @@ JE_DOC = ROOT / "docs/systems/journal_entry_systems.md"
 LOC_DIR = ROOT / "localization/english"
 LENS_ICONS = ROOT / "gfx/interface/icons/lens_toolbar_icons"
 NUKE = ROOT / "common/diplomatic_actions/nuke.txt"
+WEAPON_EVENTS = ROOT / "events/nuclear_weapon_events.txt"
+UMBRELLA_ACTIONS = ROOT / "common/diplomatic_actions/nuclear_umbrella_actions.txt"
 
 
 def tracked(path):
@@ -179,8 +181,8 @@ class TestLocalization(unittest.TestCase):
         expanded = {k for k in keys if "$" not in k}
         # Parameterised families: every value the wrappers pass.
         expanded |= {f"nd_tt_doctrine_adopted_{d}" for d in range(1, 6)}
-        expanded |= {f"nd_tt_readiness_target_{r}" for r in range(1, 4)}
-        expanded |= {f"nd_tt_authority_adopted_{a}" for a in range(1, 4)}
+        expanded |= {f"nd_tt_readiness_target_{r}" for r in range(0, 4)}
+        expanded |= {f"nd_tt_authority_adopted_{a}" for a in range(1, 5)}
         expanded |= {f"nd_tt_{v}_{o}" for v in ("nd_safeguards", "nd_hardening") for o in ("add", "subtract")}
         self.assert_keys(expanded, "custom tooltips")
 
@@ -251,7 +253,7 @@ class TestWarLawGate(unittest.TestCase):
 
     def test_every_crisis_strike_option_checks_the_law(self):
         text = strip_comments(read(CRISIS_EVENTS))
-        for opt in ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b"):
+        for opt in ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b", "nuclear_crisis.24.b"):
             self.assertIn("nd_war_law_permits_strategic_strike = yes", option_body(text, opt), opt)
 
 
@@ -283,7 +285,7 @@ DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness
                 "nd_cd_counter", "nd_cd_reliability", "nd_cd_weeks", "nd_cd_talks", "nd_cd_backed",
                 "nd_cd_exercise"]
 PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
-                  "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
+                  "nd_yp_recessed", "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
                   "nd_yp_follow_through"]
 
 
@@ -830,9 +832,9 @@ class TestManagedFamilies(unittest.TestCase):
         effects = read(EFFECTS)
         for d in range(1, 6):
             self.assertRegex(effects, rf"(?m)^nd_set_doctrine_{d} = \{{")
-        for r in range(1, 4):
+        for r in range(0, 4):
             self.assertRegex(effects, rf"(?m)^nd_set_readiness_target_{r} = \{{")
-        for a in range(1, 4):
+        for a in range(1, 5):
             self.assertRegex(effects, rf"(?m)^nd_set_authority_{a} = \{{")
 
     def test_no_bare_parameterised_calls_remain(self):
@@ -842,6 +844,411 @@ class TestManagedFamilies(unittest.TestCase):
             text = strip_comments(read(path))
             for m in re.finditer(r"nd_set_(doctrine|readiness_target|authority) = \{ [DRA] = \d \}", text):
                 self.fail(f"{path.name}: {m.group(0)} bypasses the wrapper")
+
+
+class TestRecessed(unittest.TestCase):
+    """Recessed readiness, level 0 (spec 2026-09-25 umbrella/recessed/dead-hand §2)."""
+
+    def setUp(self):
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.effects = strip_comments(read(EFFECTS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.values = strip_comments(read(VALUES))
+
+    def test_triggers_exist(self):
+        for name in ("nd_readiness_recessed", "nd_forces_assembled"):
+            self.assertRegex(self.triggers, rf"(?m)^{name} = \{{")
+
+    def test_standdowns_never_raise_a_recessed_country(self):
+        # A stand-down sets the target to Routine only when it is above Routine.
+        self.assertIn("var:nd_readiness_target > 1", block(self.crisis, "nd_standdown_one_side"))
+        concession = self.crisis[self.crisis.index("nd_crisis_programme_freeze"):]
+        concession = concession[:concession.index("nd_readiness_lock_months_value")]
+        self.assertIn("var:nd_readiness_target > 1", concession)
+
+    def test_stood_down_alert_includes_recessed(self):
+        self.assertIn("var:nd_readiness_target <= 1", self.crisis)
+        self.assertNotRegex(self.crisis, r"var:nd_readiness_target = 1\b")
+
+    def test_recessed_has_no_readiness_modifier(self):
+        # nd_readiness_mod_on uses 0 for "none": a level-0 member could never be tracked.
+        self.assertNotIn("nd_readiness_mod_0", read(MODIFIERS))
+        self.assertNotIn("nd_readiness_mod_0", self.effects)
+
+    def test_every_readiness_level_has_upkeep_and_a_row(self):
+        for r in range(0, 4):
+            self.assertRegex(self.values, rf"(?m)^nd_upkeep_weekly_at_readiness_{r} = \{{")
+        self.assertIn(20, gui_ops(read(GUI), "nd_posture_sgui"))
+
+    def test_lock_lets_routine_through(self):
+        sg = strip_comments(read(SGUIS))
+        for op, ok in ((20, "yes"), (21, "yes"), (22, "no"), (23, "no")):
+            self.assertIn(f"nd_can_set_readiness = {{ R = {op - 20} LOCK_OK = {ok} }}", sg)
+        self.assertIn("always = $LOCK_OK$", block(self.triggers, "nd_can_set_readiness"))
+
+    def test_recessed_is_named_everywhere_a_level_is(self):
+        custom = strip_comments(read(CUSTOM_LOC))
+        self.assertIn("localization_key = nd_readiness_0", block(custom, "nd_readiness_name"))
+        self.assertIn("localization_key = nd_readiness_moving_0", block(custom, "nd_readiness_moving"))
+        self.assertIn("nd_readiness_recessed = yes", block(self.values, "nd_incident_permille"))
+
+
+class TestLaunchGate(unittest.TestCase):
+    """Nothing launches from Recessed; a struck recessed country can answer
+    once assembled (umbrella/recessed/dead-hand spec §2.3–§2.4)."""
+
+    def test_every_launch_path_needs_assembled_forces(self):
+        nuke = strip_comments(read(NUKE))
+        for action in ("nuke_diplo_action", "tactical_nuke_diplo_action"):
+            self.assertIn("nd_forces_assembled = yes", block(block(nuke, action), "possible"), action)
+        t = strip_comments(read(TRIGGERS))
+        for name in ("nd_retaliation_permitted", "nd_incident_eligible_commander", "nd_monopoly_window_conditions"):
+            self.assertIn("nd_forces_assembled = yes", block(t, name), name)
+        e = strip_comments(read(EFFECTS))
+        for name in ("nd_dispatch_strategic_strike", "nd_dispatch_tactical_strike"):
+            self.assertIn("nd_forces_assembled = yes", block(e, name), name)
+        ev = strip_comments(read(CRISIS_EVENTS))
+        for opt in ("nuclear_crisis.4.g", "nuclear_crisis.7.a"):
+            self.assertIn("nd_forces_assembled = yes", option_body(ev, opt), opt)
+        inc = strip_comments(read(INCIDENT_EVENTS))
+        ev20 = block(inc, "nuclear_incident.20")
+        event_trigger = ev20[re.search(r"(?m)^\ttrigger = \{", ev20).start():]
+        self.assertIn("nd_forces_assembled = yes", block(event_trigger, "trigger"))
+
+    def test_struck_while_recessed_can_wait_and_answer(self):
+        ev = strip_comments(read(WEAPON_EVENTS))
+        self.assertIn("nd_assemble_for_retaliation = { ENEMY = scope:attacking_country }",
+                      option_body(ev, "nuclear_weapon_events.1.g"))
+        self.assertRegex(ev, r"(?m)^nuclear_weapon_events\.24 = \{")
+        weekly = block(strip_comments(read(EFFECTS)), "nd_weekly_update")
+        self.assertIn("nd_pending_retaliation", weekly)
+        self.assertIn("id = nuclear_weapon_events.24", weekly)
+        body = block(ev, "nuclear_weapon_events.24")
+        self.assertIn("has_war_with = scope:nd_ready_enemy", block(body, "trigger"))
+
+    def test_assembling_bypasses_the_lock_but_only_raises(self):
+        body = block(strip_comments(read(EFFECTS)), "nd_assemble_for_retaliation")
+        self.assertIn("var:nd_readiness_target < 1", body)
+        self.assertIn("nd_set_readiness_target_1 = yes", body)
+        self.assertNotIn("nd_can_set_readiness", body)
+
+
+class TestAutomaticRetaliation(unittest.TestCase):
+    """Authority 4 (umbrella/recessed/dead-hand spec §3)."""
+
+    def setUp(self):
+        self.t = strip_comments(read(TRIGGERS))
+        self.ev = strip_comments(read(WEAPON_EVENTS))
+
+    def test_authority_triggers(self):
+        for name in ("nd_authority_automatic", "nd_can_adopt_automatic_retaliation", "nd_auto_answers_strike"):
+            self.assertRegex(self.t, rf"(?m)^{name} = \{{")
+        deleg = block(self.t, "nd_authority_delegated_or_warning")
+        self.assertNotIn(">= 2", deleg)
+        self.assertIn("var:nd_authority = 2", deleg)
+        self.assertIn("var:nd_authority = 3", deleg)
+        self.assertIn("mainframe_computers", block(self.t, "nd_can_adopt_automatic_retaliation"))
+        self.assertIn(34, gui_ops(read(GUI), "nd_posture_sgui"))
+        self.assertIn("localization_key = nd_authority_4", block(strip_comments(read(CUSTOM_LOC)), "nd_authority_name"))
+
+    def test_first_strike_is_answered_automatically_and_only_there(self):
+        auto = option_body(self.ev, "nuclear_weapon_events.1.e")
+        self.assertIn("nd_auto_answers_strike = { ENEMY = scope:attacking_country }", auto)
+        for opt in ("nuclear_weapon_events.1.a", "nuclear_weapon_events.1.b", "nuclear_weapon_events.1.c"):
+            self.assertIn("nd_auto_answers_strike = { ENEMY = scope:attacking_country }", option_body(self.ev, opt), opt)
+        # .11 (being answered) never fires by itself: no loop between two systems.
+        self.assertNotIn("nd_auto_answers_strike", block(self.ev, "nuclear_weapon_events.11"))
+        self.assertIn("nd_auto_answered_months", block(self.t, "nd_auto_answers_strike"))
+        self.assertIn("nd_auto_answer_record", auto)
+
+    def test_salvo_is_sized_before_anything_flies(self):
+        auto = option_body(self.ev, "nuclear_weapon_events.1.e")
+        # The stock-sized extra warheads come first, so the preview and the
+        # run read the same stock; the first warhead flies last.
+        self.assertLess(auto.index("var:nuclear_weapon_stockpile >= 3"), auto.index("position = 0"))
+
+    def test_ready_event_answers_automatically_too(self):
+        body = block(self.ev, "nuclear_weapon_events.24")
+        # Gated on the answer being permitted, not the bare authority: a system
+        # barred by a pledge must leave the ordinary options, not none.
+        self.assertIn("nd_auto_answers_strike = { ENEMY = scope:attacking_country }",
+                      option_body(body, "nuclear_weapon_events.24.e"))
+        for opt in ("nuclear_weapon_events.24.a", "nuclear_weapon_events.24.b", "nuclear_weapon_events.24.c"):
+            self.assertIn("NOT = { nd_auto_answers_strike = { ENEMY = scope:attacking_country } }",
+                          option_body(body, opt), opt)
+
+    def test_accident_branch_goes_through_the_launch_path(self):
+        inc = strip_comments(read(INCIDENT_EVENTS))
+        self.assertIn("nd_system_reads_attack = yes", block(inc, "nuclear_incident.30"))
+        e = block(strip_comments(read(EFFECTS)), "nd_system_reads_attack")
+        self.assertIn("KIND = system", e)
+        self.assertIn("nd_authority_automatic = yes", e)
+        self.assertIn("nd_roll_launch_hold = yes", e)
+        self.assertIn("nd_strike_from_incident_of = { KIND = system }", block(self.t, "nd_strike_from_incident"))
+
+    def test_warnings_route_to_the_government(self):
+        warn = block(strip_comments(read(EFFECTS)), "nd_start_unconfirmed_warning")
+        self.assertIn("nd_authority_launch_on_warning = yes", warn)
+        self.assertNotIn("nd_authority_automatic", warn)
+
+
+class TestUmbrellaCoverage(unittest.TestCase):
+    """An armed overlord's direct subjects are covered as if guaranteed
+    (umbrella/recessed/dead-hand spec §1.1–§1.2)."""
+
+    GUARANTEE_READERS = {"nd_has_armed_guarantor_against", "nd_has_ready_guarantor_against", "nd_protects_anyone",
+                         "nd_allies_alarmed", "nd_is_guaranteed", "nd_is_guaranteed_by_treaty",
+                         "nd_dispute_guarantee_against", "nd_crisis_classify_dispute", "nd_crisis_notify_guarantors",
+                         "nd_record_nuclear_use", "nd_guarantee_act_abandon", "nd_covered_country_struck_by",
+                         "nd_covered_country_struck"}
+
+    def test_umbrella_triggers(self):
+        t = strip_comments(read(TRIGGERS))
+        for name in ("nd_umbrella_withdrawn", "nd_under_an_umbrella", "nd_under_umbrella_of",
+                     "nd_is_guaranteed_by_treaty", "nd_beneficiary_threatened_by"):
+            self.assertRegex(t, rf"(?m)^{name} = \{{")
+        self.assertIn("nd_withdraw_umbrella_action", block(t, "nd_umbrella_withdrawn"))
+        for name in ("nd_has_armed_guarantor_against", "nd_is_guaranteed", "nd_is_guaranteed_by",
+                     "nd_dispute_guarantee_against"):
+            self.assertIn("umbrella", block(t, name), name)
+
+    def test_every_guarantee_read_is_a_known_site(self):
+        """A new `has_type = nuclear_guarantee` read outside the known sites
+        would see treaties but not umbrellas."""
+        for path in (TRIGGERS, EFFECTS, CRISIS_EFFECTS):
+            text = strip_comments(read(path))
+            for m in re.finditer(r"has_type = nuclear_guarantee", text):
+                owner = re.findall(r"(?m)^(\w+) = \{", text[:m.start()])[-1]
+                self.assertIn(owner, self.GUARANTEE_READERS, f"{path.name}: {owner}")
+
+    def test_umbrella_loops_exist_beside_treaty_loops(self):
+        c = strip_comments(read(CRISIS_EFFECTS))
+        e = strip_comments(read(EFFECTS))
+        for body in (block(c, "nd_crisis_notify_guarantors"), block(e, "nd_record_nuclear_use")):
+            self.assertIn("nd_under_an_umbrella = yes", body)
+            self.assertIn("nd_is_guaranteed_by_treaty", body)   # asked once, not twice
+        self.assertIn("every_direct_subject", block(c, "nd_guarantee_act_abandon"))
+        self.assertIn("random_direct_subject", block(c, "nd_crisis_classify_dispute"))
+
+    def test_abandoning_a_subject_costs_liberty_desire(self):
+        body = block(strip_comments(read(CRISIS_EFFECTS)), "nd_guarantee_act_abandon")
+        visible = body.split("hidden_effect")[0]
+        self.assertIn("add_liberty_desire = 10", visible)
+
+    def test_article_refuses_own_subject(self):
+        self.assertIn("nd_tt_already_under_umbrella", block(strip_comments(read(ARTICLE)), "possible"))
+
+
+class TestUmbrellaWithdrawal(unittest.TestCase):
+    """Withdrawing a subject's umbrella: a pact with a one-off and a lasting
+    liberty-desire cost (umbrella/recessed/dead-hand spec §1.3, §1.6)."""
+
+    def test_action_is_a_liberty_desire_pact(self):
+        text = strip_comments(read(UMBRELLA_ACTIONS))
+        body = block(text, "nd_withdraw_umbrella_action")
+        self.assertIn("overlord", block(body, "groups"))
+        self.assertIn("add_liberty_desire = 10", block(body, "accept_effect"))
+        self.assertIn("value = -20", block(body, "accept_effect"))
+        pact = block(body, "pact")
+        self.assertIn("country_liberty_desire_add = 0.10", block(pact, "second_modifier"))
+        self.assertIn("is_direct_subject_of = root", block(pact, "requirement_to_maintain"))
+        self.assertIn("always = no", block(block(body, "ai"), "will_propose"))
+        self.assertTrue(read(UMBRELLA_ACTIONS).startswith("\ufeff") or
+                        UMBRELLA_ACTIONS.read_bytes().startswith(b"\xef\xbb\xbf"))
+
+    def test_action_loc(self):
+        a = "nd_withdraw_umbrella_action"
+        needed = {a, a + "_desc", a + "_action_propose_name", a + "_action_break_name", a + "_pact_desc",
+                  a + "_action_notification_name", a + "_action_notification_desc",
+                  a + "_action_notification_break_name", a + "_action_notification_break_desc"}
+        self.assertFalse(sorted(needed - loc_keys()))
+
+    def test_own_desc_names_no_unbound_country(self):
+        # A diplomatic action's own _desc has no TARGET_COUNTRY bound: it
+        # renders nullptr every frame (localization_accessor_audit).
+        self.assertNotIn("TARGET_COUNTRY", loc_value("nd_withdraw_umbrella_action_desc"))
+
+    def test_pact_leaves_breaking_to_the_engine_default(self):
+        # actor_can_break defaults to true; spelled out, the effect/trigger
+        # validity audit reads it as an unresolved helper call.
+        self.assertNotIn("actor_can_break", strip_comments(read(UMBRELLA_ACTIONS)))
+
+    def test_panel_line(self):
+        self.assertIn("nd_umbrella_sgui", read(GUI))
+        self.assertIn("is_valid = { always = no }", block(strip_comments(read(SGUIS)), "nd_umbrella_sgui"))
+        self.assertRegex(strip_comments(read(VALUES)), r"(?m)^nd_display_umbrella_count = \{")
+
+
+class TestExtendedDeterrence(unittest.TestCase):
+    """A strike on a country we cover licenses our answer under any doctrine,
+    and answering pulls us into the war (umbrella/recessed/dead-hand spec §1.5)."""
+
+    def setUp(self):
+        self.t = strip_comments(read(TRIGGERS))
+        self.c = strip_comments(read(CRISIS_EFFECTS))
+        self.ev = strip_comments(read(CRISIS_EVENTS))
+
+    def test_strike_on_covered_country_licenses(self):
+        self.assertIn("nd_covered_country_struck_by = { ENEMY = $ENEMY$ }", block(self.t, "nd_was_struck_by"))
+        body = block(self.t, "nd_covered_country_struck_by")
+        self.assertIn("nd_under_an_umbrella = yes", body)
+        self.assertIn("has_type = nuclear_guarantee", body)
+        self.assertIn("nd_covered_country_struck = yes", block(self.t, "nd_war_law_exception"))
+
+    def test_retaliate_no_longer_needs_our_doctrine_or_a_prior_war(self):
+        trig = block(option_body(self.ev, "nuclear_crisis.20.b"), "trigger")
+        self.assertNotIn("nd_doctrine_permits_strike", trig)
+        self.assertNotRegex(trig, r"(?m)^\s*has_war_with = scope:nd_guarantee_attacker")
+        self.assertIn("scope:nd_guarantee_beneficiary = { has_war_with = scope:nd_guarantee_attacker }", trig)
+        self.assertIn("nd_forces_assembled = yes", trig)
+
+    def test_answering_joins_the_war_then_strikes_only_at_war(self):
+        self.assertIn("join_war", block(self.c, "nd_guarantor_join_war"))
+        for act in ("nd_guarantee_act_honour", "nd_guarantee_act_retaliate"):
+            self.assertIn("nd_guarantor_join_war = yes", block(self.c, act), act)
+        self.assertIn("id = nuclear_crisis.22", block(self.c, "nd_guarantor_schedule_answer"))
+        self.assertNotIn("nd_dispatch_strategic_strike", block(self.c, "nd_guarantee_act_retaliate"))
+        hidden = block(self.ev, "nuclear_crisis.22")
+        self.assertIn("hidden = yes", hidden)
+        self.assertIn("has_war_with = scope:attacking_country", hidden)
+        self.assertIn("nuclear_response_strike = yes", hidden)
+        self.assertIn("remove_variable = nd_answer_strike_target", hidden)
+
+
+class TestReviewFixesUmbrellaRecessed(unittest.TestCase):
+    """Fix pass after the whole-branch review of #455."""
+
+    def setUp(self):
+        self.t = strip_comments(read(TRIGGERS))
+        self.e = strip_comments(read(EFFECTS))
+        self.c = strip_comments(read(CRISIS_EFFECTS))
+        self.wev = strip_comments(read(WEAPON_EVENTS))
+        self.cev = strip_comments(read(CRISIS_EVENTS))
+
+    def test_honour_keeps_the_ultimatum_for_a_guarantor_already_at_war(self):
+        body = block(self.c, "nd_guarantee_act_honour")
+        join = body[:body.index("nd_guarantor_join_war = yes")]
+        self.assertIn("NOT = { has_war_with = scope:nd_guarantee_attacker }", join)
+        self.assertIn("nd_crisis_open", body)
+
+    def test_umbrella_lapses_while_the_subject_faces_its_overlord(self):
+        body = block(self.t, "nd_under_an_umbrella")
+        self.assertIn("NOT = { has_war_with = scope:", body)
+        self.assertIn("NOT = { is_diplomatic_play_enemy_of = scope:", body)
+
+    def test_withdrawal_read_only_from_the_subject_side(self):
+        self.assertIn("second_country = { this = scope:", block(self.t, "nd_umbrella_withdrawn"))
+
+    def test_subject_cannot_break_the_withdrawal(self):
+        body = block(strip_comments(read(UMBRELLA_ACTIONS)), "nd_withdraw_umbrella_action")
+        pact = block(body, "pact")
+        self.assertIn("always = no", block(pact, "target_can_break"))
+        self.assertIn("is_two_sided_pact = no", pact)
+        self.assertIn("is_direct_subject_of = root", block(block(body, "ai"), "will_break"))
+        self.assertIn("nd_believed_armed = yes", block(body, "potential"))
+
+    def test_system_launch_is_narrated_by_the_accident_not_a_warning(self):
+        body = block(self.e, "nd_system_reads_attack")
+        self.assertIn("NARRATE = no", body)
+        custom = block(strip_comments(read(CUSTOM_LOC)), "nd_system_outcome")
+        for key in ("nd_system_outcome_held", "nd_system_outcome_struck", "nd_system_outcome_recalled"):
+            self.assertIn(f"localization_key = {key}", custom)
+        self.assertIn("nd_last_launch_kind", custom)
+
+    def test_licence_ends_with_the_war(self):
+        body = block(self.e, "nd_country_monthly_cleanup")
+        self.assertIn("remove_variable = nuked_by_country", body)
+        self.assertIn("has_war_with = ROOT", body)
+
+    def test_one_visible_default_in_every_state(self):
+        for opt in ("nuclear_weapon_events.1.a", "nuclear_weapon_events.1.e", "nuclear_weapon_events.1.h",
+                    "nuclear_weapon_events.24.a", "nuclear_weapon_events.24.e"):
+            self.assertIn("default_option = yes", option_body(self.wev, opt), opt)
+        g = option_body(self.wev, "nuclear_weapon_events.1.g")
+        self.assertNotIn("default_option", g)
+        self.assertIn("nd_authority_automatic = no", g)
+        h = option_body(self.wev, "nuclear_weapon_events.1.h")
+        self.assertIn("nd_authority_automatic = yes", h)
+        self.assertIn("nd_assemble_for_retaliation = { ENEMY = scope:attacking_country }", h)
+
+    def test_war_checks_read_a_saved_scope(self):
+        weekly = block(self.e, "nd_weekly_update")
+        self.assertNotIn("has_war_with = var:", weekly)
+        self.assertIn("has_war_with = scope:nd_ready_enemy", weekly)
+        hidden = block(self.cev, "nuclear_crisis.22")
+        self.assertNotIn("has_war_with = var:", hidden)
+        self.assertIn("has_war_with = scope:attacking_country", hidden)
+
+    def test_a_pending_answer_ends_with_its_war(self):
+        weekly = block(self.e, "nd_weekly_update")
+        pending = weekly[weekly.index("nd_pending_retaliation"):]
+        self.assertRegex(pending, r"NOT = \{ has_war_with = scope:nd_ready_enemy \}\s*\}\s*remove_variable = nd_pending_retaliation")
+
+    def test_assembling_is_not_called_a_stand_down(self):
+        custom = block(strip_comments(read(CUSTOM_LOC)), "nd_readiness_moving")
+        self.assertIn("localization_key = nd_readiness_moving_1_up", custom)
+
+
+class TestProtectorsAndProteges(unittest.TestCase):
+    """Owner follow-ups on #455: shelving the bomb while protecting others,
+    and a protected country that struck first."""
+
+    def setUp(self):
+        self.t = strip_comments(read(TRIGGERS))
+        self.e = strip_comments(read(EFFECTS))
+        self.c = strip_comments(read(CRISIS_EFFECTS))
+        self.v = strip_comments(read(VALUES))
+        self.cev = strip_comments(read(CRISIS_EVENTS))
+
+    def test_no_concealing_a_launch_the_world_saw(self):
+        opt = option_body(strip_comments(read(INCIDENT_EVENTS)), "nuclear_incident.30.e")
+        self.assertIn("var:nd_system_reacted = 2", block(opt, "trigger"))
+
+    def test_ai_keeps_its_warheads_mated_while_it_protects_anyone(self):
+        self.assertRegex(self.t, r"(?m)^nd_protects_anyone = \{")
+        review = block(self.e, "nd_ai_review_posture")
+        recessed = review[:review.index("nd_set_readiness_target_0 = yes")]
+        self.assertIn("nd_protects_anyone = no", recessed[recessed.rindex("else_if"):])
+        monthly = block(self.e, "nd_monthly_update")
+        stepout = monthly[monthly.index("var:nd_readiness_target = 0"):]
+        self.assertIn("nd_protects_anyone = yes", stepout[:stepout.index("nd_set_readiness_target_1 = yes")])
+
+    def test_allies_are_alarmed_when_readiness_reaches_recessed(self):
+        weekly = block(self.e, "nd_weekly_update")
+        self.assertIn("id = nuclear_crisis.23", weekly)
+        self.assertIn("nd_allies_alarmed = yes", option_body(self.cev, "nuclear_crisis.23.a"))
+        costs = block(self.c, "nd_allies_alarmed")
+        for bit in ("AMOUNT = -5", "value = -10", "add_liberty_desire = 5"):
+            self.assertIn(bit, costs)
+        self.assertIn("nd_tt_recessed_alarms_allies", block(self.e, "nd_set_readiness_target_0"))
+
+    def test_a_recessed_protector_protects_half_as_credibly(self):
+        body = block(self.v, "nd_yp_protector_value")
+        self.assertIn("nd_has_ready_guarantor_against = { AGAINST = scope:nd_issuer }", body)
+        self.assertIn("subtract = 10", body)
+        self.assertIn("nd_forces_assembled = yes", block(self.t, "nd_has_ready_guarantor_against"))
+
+    def test_a_protege_that_struck_first_gets_its_own_event(self):
+        hears = block(self.c, "nd_guarantor_hears_of_strike")
+        self.assertIn("nd_was_struck_by = { ENEMY = scope:nd_guarantee_beneficiary }", hears)
+        self.assertIn("id = nuclear_crisis.24", hears)
+        self.assertIn("id = nuclear_crisis.20", hears)
+        record = block(self.e, "nd_record_nuclear_use")
+        self.assertEqual(record.count("nd_guarantor_hears_of_strike = yes"), 2)
+        self.assertNotIn("id = nuclear_crisis.20", record)
+        self.assertIn("nd_guarantee_act_honour = yes", option_body(self.cev, "nuclear_crisis.24.a"))
+        self.assertIn("nd_guarantee_act_retaliate = yes", option_body(self.cev, "nuclear_crisis.24.b"))
+        self.assertIn("nd_guarantee_act_decline = yes", option_body(self.cev, "nuclear_crisis.24.c"))
+        for opt in ("nuclear_crisis.24.a", "nuclear_crisis.24.b"):
+            self.assertIn("change_infamy = 5", option_body(self.cev, opt), opt)
+
+    def test_declining_a_first_striker_is_not_abandonment(self):
+        decline = block(self.c, "nd_guarantee_act_decline")
+        self.assertNotIn("nd_guarantee_abandoned", decline)
+        self.assertNotIn("nd_change_credibility", decline)
+        self.assertIn("value = -10", decline)
+        self.assertIn("add_liberty_desire = 5", decline)
+        self.assertIn("var:nd_guarantee_answer = 2", block(self.cev, "nuclear_crisis.21"))
 
 
 if __name__ == "__main__":
