@@ -526,6 +526,7 @@ movement_events_te.17 = {
 	# Say nothing
 	option = {
 		name = movement_events_te.17.b
+		# REVIEWED 2026-09-26 (no_effect_option): the decline; the tooltip says nothing is said
 		# The default: an unanswered event must not condemn anyone.
 		default_option = yes
 		custom_tooltip = movement_events_te.17.b.tt

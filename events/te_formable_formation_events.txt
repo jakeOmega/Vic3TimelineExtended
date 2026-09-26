@@ -164,6 +164,7 @@ formation_te.10 = {
 	# Respect their sovereignty — for now.
 	option = {
 		name = formation_te.10.c
+		# REVIEWED 2026-09-26 (no_effect_option): the decline: no annexation
 		ai_chance = { factor = 1 }
 	}
 }

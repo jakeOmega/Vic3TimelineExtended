@@ -8313,6 +8313,7 @@ POST_LOAD_AUDITS = [
     ("container_timed_variable_audit", "container_timed_variable_audit"),
     ("je_immediate_reset_audit",      "je_immediate_reset_audit"),
     ("script_loc_reference_audit",    "script_loc_reference_audit"),
+    ("empty_effect_audit",            "empty_effect_audit"),
 ]
 
 POST_LOAD_GENERATORS = POST_LOAD_REGENERATORS + POST_LOAD_AUDITS

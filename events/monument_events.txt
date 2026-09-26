@@ -84,6 +84,7 @@ monument_events.2 = {
 	# player can still dedicate it by hand in the building panel later.
 	option = {
 		name = monument_events.2.a
+		# REVIEWED 2026-09-26 (no_effect_option): keeps the default production method, whose output the tooltip describes
 		default_option = yes
 		ai_chance = { base = 1 }
 

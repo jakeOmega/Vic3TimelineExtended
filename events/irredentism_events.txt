@@ -229,6 +229,7 @@ irredentism.1 = {
 	# the neutral, always-available timeout fallback.
 	option = {
 		name = irredentism.1.bide
+		# REVIEWED 2026-09-26 (no_effect_option): the decline: biding our time is the choice
 		default_option = yes
 		ai_chance = {
 			base = 1

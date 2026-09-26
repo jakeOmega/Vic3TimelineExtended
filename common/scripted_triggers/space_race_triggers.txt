@@ -134,6 +134,24 @@ sr_solar_colonization_running = {
 	NOT = { has_variable = sr_completed_solar_colonization }
 }
 
+# At least one milestone is under way: exactly the milestones
+# sr_boost_active_milestones pushes, so an event can offer progress when this
+# holds and something else when it does not. Reads the per-milestone
+# sr_active_<m> flags, not sr_active_milestone, which the completion of any one
+# milestone clears while others (probe, moon base, Mars) may still be running.
+sr_has_running_milestone = {
+	OR = {
+		has_variable = sr_active_suborbital
+		has_variable = sr_active_orbital
+		has_variable = sr_active_moon_landing
+		has_variable = sr_active_probe
+		has_variable = sr_active_moon_base
+		has_variable = sr_active_mars_landing
+		has_variable = sr_active_interstellar_probe
+		sr_solar_colonization_running = yes
+	}
+}
+
 # We have really claimed at least one colony (sr_establish_colony_effect counts
 # only real claims). The same test society_technology_events.18 uses.
 sr_has_space_colony = {

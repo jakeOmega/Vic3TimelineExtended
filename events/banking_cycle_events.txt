@@ -4237,6 +4237,7 @@ banking_cycle_events.68 = {
 	# Weather it alone: nothing asked, nothing owed.
 	option = {
 		name = banking_cycle_events.68.b
+		# REVIEWED 2026-09-26 (no_effect_option): the decline; the tooltip says no appeal is made
 		# The default: an unanswered event must not make the appeal (or pay for it).
 		default_option = yes
 		custom_tooltip = banking_cycle_events.68.b.tt

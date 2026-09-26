@@ -1484,6 +1484,7 @@ un_events.10 = {
 	# Option B: wait and see. Costs nothing — and does nothing for it.
 	option = {
 		name = un_events.10.b
+		# REVIEWED 2026-09-26 (no_effect_option): waiting is the choice; the tooltip says so
 		ai_chance = {
 			base = 4
 		}
@@ -3673,6 +3674,7 @@ un_events.35 = {
 	# Option B: weather it alone.
 	option = {
 		name = un_events.35.b
+		# REVIEWED 2026-09-26 (no_effect_option): the refusal; the tooltip says so
 		ai_chance = {
 			base = 1
 			modifier = {
