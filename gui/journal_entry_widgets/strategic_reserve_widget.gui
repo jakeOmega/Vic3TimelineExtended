@@ -450,7 +450,9 @@ types strategic_reserve_widget_types
 			elide = right
 		}
 
-		### Presets — ops 10-12. Each fills all six settings at once.
+		### Presets — ops 10-12. Each fills all eight settings at once. The
+		### button of the preset in force is disabled by is_valid, like the
+		### policy selector's, until a stepper changes a setting by hand.
 		flowcontainer = {
 			direction = horizontal
 			spacing = 3
