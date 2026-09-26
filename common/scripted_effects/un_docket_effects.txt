@@ -771,6 +771,13 @@ un_docket_take_up_agenda = {
 		}
 		10 = {
 			trigger = {
+				un_docket_topic_open_physical_protection = yes
+				any_country = { un_docket_may_propose_physical_protection = yes }
+			}
+			un_docket_offer_topic = { TOPIC = physical_protection EVENT = un_events.23 }
+		}
+		10 = {
+			trigger = {
 				un_docket_topic_open_decolonization = yes
 				any_country = { un_docket_may_propose_decolonization = yes }
 			}

@@ -1661,6 +1661,20 @@ class TestLooseRecovery(unittest.TestCase):
         self.assertIn("nd_loose_recover_from_line = { HOW = 3 }", monthly)
         self.assertIn("nd_loose_monthly = yes", block(strip_comments(read(EFFECTS)), "nd_country_monthly_cleanup"))
 
+    def test_un_convention_secures_custody_and_searches(self):
+        self.assertIn("has_modifier = un_physical_protection_modifier", block(self.ct, "nd_custody_is_secured"))
+        monthly = block(self.le, "nd_loose_monthly")
+        self.assertIn("chance = nd_loose_convention_chance", monthly)
+        self.assertIn("nd_loose_recover_from_line = { HOW = 4 }", monthly)
+        # Raised only once warheads have gone loose, and kept on the table
+        # after the pool drains (a permanent world flag).
+        docket = strip_comments(read(ROOT / "common/scripted_triggers/un_docket_triggers.txt"))
+        opened = block(docket, "un_docket_topic_open_physical_protection")
+        self.assertIn("has_game_rule = nuclear_weapons_enabled", opened)
+        self.assertIn("has_global_variable = nd_loose_device_surfaced", opened)
+        self.assertIn("name = nd_loose_device_surfaced", block(self.le, "nd_loose_surface"))
+        self.assertIn("set_global_variable = un_agency_cppnm", strip_comments(read(ROOT / "events/un_vote_events.txt")))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -2481,6 +2481,8 @@
  un_peacekeeping_received_modifier_desc:0 "International peacekeeping forces are deployed in our territory, reducing [concept_turmoil] and helping restore order."
  un_peacekeeping_resented_modifier_desc:0 "Foreign peacekeeping forces are viewed as an imposition on national sovereignty, rallying domestic authority but damaging diplomatic standing."
  un_peacekeeping_welcomed_modifier_desc:0 "[concept_un_peacekeeping] forces have been welcomed, reducing [concept_devastation] but at the cost of national [concept_prestige]."
+ un_physical_protection_modifier_desc:0 "This country is party to the Convention on the Physical Protection of Nuclear Material. It guards and counts its warheads to a common standard: half as many go missing whenever they change hands, and each month there is a chance to find one of its own that already has."
+ un_physical_protection_refusal_modifier_desc:0 "This country refused to table the Convention on the Physical Protection of Nuclear Material, and the world has noticed."
  un_reform_champion_modifier_desc:0 "This country is championing UN reform, pushing for a more representative and effective institution."
  un_reform_compromise_modifier_desc:0 "This country has proposed a compromise on UN reform, balancing institutional effectiveness with political reality."
  un_reform_opponent_modifier_desc:0 "This country is blocking UN reform, defending the existing power structure."

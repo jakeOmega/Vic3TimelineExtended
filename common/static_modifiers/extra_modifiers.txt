@@ -4170,6 +4170,22 @@ un_law_of_sea_reservations_modifier = {
 	country_prestige_mult = 0.01
 }
 
+# ---- Physical Protection of Nuclear Material (CPPNM) ----
+# nuclear_crisis_design.md §0.10 step 5. What a party gains is read as a check,
+# not from these values (which un_convention_multiplier scales with the UN's
+# enforcement): its custody counts as secured (nd_custody_is_secured) and its
+# loose warheads can be found (nd_loose_monthly). The descriptions say so.
+un_physical_protection_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
+	country_prestige_mult = 0.02
+}
+
+# Decaying penalty for refusing to table it (un_events.23, option C)
+un_physical_protection_refusal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
+}
+
 # ---- International Criminal Court (Rome Statute) ----
 
 # Permanent modifier for ICC member states

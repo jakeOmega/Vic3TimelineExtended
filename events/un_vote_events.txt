@@ -29,6 +29,8 @@
 #   refugee               - International Refugee Crisis (event 18)
 #   space                 - International Space Cooperation (event 19)
 #   law_of_sea            - Convention on the Law of the Sea (event 21)
+#   physical_protection   - Convention on the Physical Protection of Nuclear
+#                           Material (event 23)
 #   icc                   - International Criminal Court (event 22)
 #   peacekeeping_request  - Peacekeeping deployment (request button)
 #   aid_request           - Humanitarian aid (request button)
@@ -114,6 +116,10 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.t_law_of_sea
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.t_physical_protection
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_physical_protection } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.t_icc
@@ -211,6 +217,10 @@ un_vote.1 = {
 			triggered_desc = {
 				desc = un_vote.1.d_law_of_sea
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
+			}
+			triggered_desc = {
+				desc = un_vote.1.d_physical_protection
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_physical_protection } }
 			}
 			triggered_desc = {
 				desc = un_vote.1.d_icc
@@ -574,6 +584,16 @@ un_vote.2 = {
 			triggered_desc = {
 				trigger = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
 				desc = un_vote.2.d_law_of_sea_failed
+			}
+			# Physical Protection of Nuclear Material - Passed
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_physical_protection has_tag = un_res_passed } }
+				desc = un_vote.2.d_physical_protection_passed
+			}
+			# Physical Protection of Nuclear Material - Failed
+			triggered_desc = {
+				trigger = { scope:un_resolution ?= { has_tag = un_topic_physical_protection } }
+				desc = un_vote.2.d_physical_protection_failed
 			}
 			# International Criminal Court - Passed (vetoed: symbolic censure only)
 			triggered_desc = {
@@ -1298,6 +1318,16 @@ un_vote.2 = {
 				custom_tooltip = un_vote_law_of_sea_passed_tt
 				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
 				set_global_variable = un_agency_itlos
+			}
+
+			# ---- Physical Protection of Nuclear Material (nuclear_crisis_design.md
+			#      §0.10 step 5): parties' custody counts as secured, and their
+			#      loose warheads can be found (nuclear_loose_effects.txt) ----
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_physical_protection } }
+				custom_tooltip = un_vote_physical_protection_passed_tt
+				un_ledger_entry = { PILLAR = credibility POINTS = 1 REASON = 1 }
+				set_global_variable = un_agency_cppnm
 			}
 
 			# ---- Military Mandate: authorize one narrow objective ----

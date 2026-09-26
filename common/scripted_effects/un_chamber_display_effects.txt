@@ -107,6 +107,10 @@ un_chamber_topic_line = {
 		custom_tooltip_no_bullet = je_un_chamber_topic_law_of_sea
 	}
 	else_if = {
+		limit = { has_tag = un_topic_physical_protection }
+		custom_tooltip_no_bullet = je_un_chamber_topic_physical_protection
+	}
+	else_if = {
 		limit = { has_tag = un_topic_icc }
 		custom_tooltip_no_bullet = je_un_chamber_topic_icc
 	}
@@ -402,6 +406,10 @@ un_chamber_consequences_line = {
 	else_if = {
 		limit = { has_tag = un_topic_law_of_sea }
 		custom_tooltip_no_bullet = je_un_chamber_conseq_law_of_sea
+	}
+	else_if = {
+		limit = { has_tag = un_topic_physical_protection }
+		custom_tooltip_no_bullet = je_un_chamber_conseq_physical_protection
 	}
 	else_if = {
 		limit = { has_tag = un_topic_icc }
@@ -1392,6 +1400,23 @@ un_chamber_propose_law_of_sea_row = {
 		IN_FORCE = un_propose_law_of_sea_in_force
 		AVAILABLE = un_propose_law_of_sea_available
 		POSSIBLE = un_propose_law_of_sea_possible
+		NO_CASE = je_un_chamber_topic_in_force
+	}
+}
+
+# Convention on the Physical Protection of Nuclear Material.
+# The widget hides this row under the disabled nuclear weapons rule
+# (un_chamber_nuclear_rule_sgui).
+# Scope: country
+un_chamber_propose_physical_protection_row = {
+	un_chamber_propose_convention_row = {
+		NAME = je_un_chamber_propose_topic_physical_protection
+		TOPIC = physical_protection
+		BINDING = je_un_chamber_recommendatory
+		RAISED = je_un_chamber_raised_physical_protection
+		IN_FORCE = un_propose_physical_protection_in_force
+		AVAILABLE = un_propose_physical_protection_available
+		POSSIBLE = un_propose_physical_protection_possible
 		NO_CASE = je_un_chamber_topic_in_force
 	}
 }

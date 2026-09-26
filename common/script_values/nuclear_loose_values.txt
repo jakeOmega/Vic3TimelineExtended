@@ -202,6 +202,10 @@ nd_loose_compensation_cap = {
 # and a half while any are missing).
 nd_loose_assistance_chance = 6
 
+# The same under the UN's physical-protection convention, for a party (about
+# one in three years while any are missing): cooperation, not paid technicians.
+nd_loose_convention_chance = 3
+
 # ----------------------------------------------------------------------------
 # DISPLAY
 # ----------------------------------------------------------------------------

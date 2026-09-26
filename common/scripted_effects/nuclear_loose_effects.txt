@@ -59,16 +59,21 @@ nd_loose_plot = {
 # behind it blocks no one).
 nd_loose_surface = {
 	set_global_variable = { name = nd_loose_plot_cooldown value = 1 days = 365 }
+	# For good: the world has seen a loose warhead surface. The UN's
+	# physical-protection convention stays on the table after the pool drains
+	# (un_docket_topic_open_physical_protection).
+	set_global_variable = { name = nd_loose_device_surfaced value = 1 }
 	scope:nd_loose_line = {
 		var:nd_ar_owner = { save_scope_as = nd_loose_origin }
 	}
 	nd_loose_clear_record = yes
-	# How many lines the investigators must choose between, counted before
-	# this one's count falls.
+	# How many lines the investigators must choose between — the ones a
+	# device could have come from, as the pick saw them — counted before this
+	# one's count falls.
 	set_variable = { name = nd_loose_candidates value = 0 }
 	every_in_global_list = {
 		variable = nd_arsenal_records
-		limit = { nd_loose_line_live = yes }
+		limit = { nd_loose_line_usable = { VICTIM = ROOT } }
 		ROOT = {
 			change_variable = { name = nd_loose_candidates add = 1 }
 		}
@@ -78,6 +83,9 @@ nd_loose_surface = {
 	}
 	nd_loose_pool_take = { AMOUNT = 1 }
 	set_variable = { name = nd_loose_origin value = scope:nd_loose_origin }
+	# For good: the UN's physical-protection convention remembers who was
+	# targeted (un_lean_interests).
+	set_variable = { name = nd_loose_was_target value = 1 }
 	# Seized or detonated.
 	set_variable = { name = nd_loose_seized value = 0 }
 	random = {
@@ -477,7 +485,9 @@ nd_loose_answer = {
 # ----------------------------------------------------------------------------
 # Country scope, from nd_country_monthly_cleanup (every country, monthly).
 # While warheads from our line are unaccounted for, someone paying to secure
-# our arsenal (nuclear_security_assistance) may find one.
+# our arsenal (nuclear_security_assistance) may find one; so may the
+# cooperation of the UN's physical-protection convention, if we are a party.
+# Each has its own chance.
 nd_loose_monthly = {
 	if = {
 		limit = {
@@ -491,6 +501,18 @@ nd_loose_monthly = {
 			nd_loose_tell_recovery = { WHO = ROOT HOW = 3 }
 		}
 	}
+	if = {
+		limit = {
+			has_game_rule = nuclear_weapons_enabled
+			nd_loose_has_line = yes
+			has_modifier = un_physical_protection_modifier
+		}
+		random = {
+			chance = nd_loose_convention_chance
+			nd_loose_recover_from_line = { HOW = 4 }
+			nd_loose_tell_recovery = { WHO = ROOT HOW = 4 }
+		}
+	}
 }
 
 # Country scope = the owner of the line: one of its warheads unaccounted for
@@ -500,6 +522,12 @@ nd_loose_monthly = {
 # 2 a covert operation, 3 the security assistance article, 4 the physical-
 # protection convention.
 nd_loose_recover_from_line = {
+	# An owner saved by an earlier find in the same pass must not stand in for
+	# this one: nd_loose_tell_recovery tells only when this call found one.
+	if = {
+		limit = { exists = scope:nd_loose_line_owner }
+		clear_saved_scope = nd_loose_line_owner
+	}
 	if = {
 		limit = { nd_loose_has_line = yes }
 		save_scope_as = nd_loose_line_owner

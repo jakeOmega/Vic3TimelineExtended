@@ -1070,7 +1070,7 @@ un_chamber_vote_sgui = {
 #   op 5   request humanitarian aid
 #   op 6   charter reform (redesign phase 2)
 #
-#   The ten conventions, which the docket also raises (no scripted button):
+#   The eleven conventions, which the docket also raises (no scripted button):
 #   op 7   Universal Declaration of Human Rights
 #   op 8   International Criminal Court
 #   op 9   Nuclear Non-Proliferation Treaty
@@ -1081,6 +1081,7 @@ un_chamber_vote_sgui = {
 #   op 14  Decolonization Resolution
 #   op 15  International Space Cooperation
 #   op 16  Convention on the Law of the Sea
+#   op 17  Convention on the Physical Protection of Nuclear Material
 #
 # The op table is repeated in the widget and in the row renderers in
 # common/scripted_effects/un_chamber_display_effects.txt; keep all three in
@@ -1243,6 +1244,14 @@ un_chamber_propose_sgui = {
 			}
 			un_propose_law_of_sea_possible = yes
 		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			custom_tooltip = {
+				text = je_un_chamber_propose_need_physical_protection
+				un_propose_physical_protection_available = yes
+			}
+			un_propose_physical_protection_possible = yes
+		}
 		trigger_else = {
 			always = no
 		}
@@ -1316,6 +1325,10 @@ un_chamber_propose_sgui = {
 		else_if = {
 			limit = { exists = scope:op scope:op = 16 }
 			un_propose_law_of_sea_effect = yes
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			un_propose_physical_protection_effect = yes
 		}
 	}
 }
@@ -1405,6 +1418,10 @@ un_chamber_propose_row_sgui = {
 				limit = { exists = scope:op scope:op = 16 }
 				un_chamber_propose_law_of_sea_row = yes
 			}
+			else_if = {
+				limit = { exists = scope:op scope:op = 17 }
+				un_chamber_propose_physical_protection_row = yes
+			}
 		}
 	}
 }
@@ -1431,6 +1448,20 @@ un_chamber_climate_rule_sgui = {
 
 	is_shown = {
 		has_game_rule = global_warming_enabled
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+	}
+}
+
+# The same for the physical-protection convention's row: never under the
+# disabled nuclear weapons rule, where there are no warheads to lose.
+un_chamber_nuclear_rule_sgui = {
+	scope = country
+
+	is_shown = {
+		has_game_rule = nuclear_weapons_enabled
 	}
 	ai_is_valid = { always = no }
 
