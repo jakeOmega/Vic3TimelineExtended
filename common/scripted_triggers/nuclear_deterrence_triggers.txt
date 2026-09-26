@@ -537,41 +537,112 @@ nd_believed_armed = {
 	has_modifier = nuclear_power
 }
 
+# ---- The nuclear umbrella (umbrella/recessed/dead-hand spec §1) -------------
+# A direct subject of an overlord believed armed is covered as if that
+# overlord had signed a nuclear_guarantee for it, unless the overlord has
+# withdrawn it (nd_withdraw_umbrella_action, a pact). Coverage by umbrella is
+# coverage by guarantee: it is folded into nd_has_armed_guarantor_against,
+# nd_is_guaranteed and nd_is_guaranteed_by, and the three effect loops that
+# walk guarantee articles (nd_crisis_notify_guarantors, nd_record_nuclear_use,
+# nd_guarantee_act_abandon) each have an umbrella branch beside the treaty one.
+# test_nuclear_deterrence.TestUmbrellaCoverage fails if a new article reader
+# appears anywhere else.
+
+# Has our overlord withdrawn its umbrella from us? The pact exists only
+# between an overlord and its direct subject (its requirement_to_maintain).
+nd_umbrella_withdrawn = {
+	any_scope_diplomatic_pact = {
+		is_diplomatic_action_type = nd_withdraw_umbrella_action
+	}
+}
+
+# Is this country under its (direct) overlord's umbrella?
+nd_under_an_umbrella = {
+	is_subject = yes
+	overlord ?= { nd_believed_armed = yes }
+	NOT = { nd_umbrella_withdrawn = yes }
+}
+
+# ...under $OVERLORD$'s in particular?
+nd_under_umbrella_of = {
+	is_direct_subject_of = $OVERLORD$
+	nd_under_an_umbrella = yes
+}
+
 # Is this country (the beneficiary) covered by an in-force nuclear_guarantee
-# whose guarantor is believed armed and is not $AGAINST$?
+# — or an umbrella — whose guarantor is believed armed and is not $AGAINST$?
 nd_has_armed_guarantor_against = {
 	save_temporary_scope_as = nd_guarantee_ben
-	any_scope_treaty = {
-		any_scope_article = {
-			has_type = nuclear_guarantee
-			target_country = scope:nd_guarantee_ben
-			source_country = {
-				nd_believed_armed = yes
-				NOT = { this = $AGAINST$ }
+	OR = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_guarantee
+				target_country = scope:nd_guarantee_ben
+				source_country = {
+					nd_believed_armed = yes
+					NOT = { this = $AGAINST$ }
+				}
 			}
 		}
-	}
-}
-
-# Is this country covered by any in-force nuclear_guarantee at all?
-nd_is_guaranteed = {
-	save_temporary_scope_as = nd_guarantee_ben2
-	any_scope_treaty = {
-		any_scope_article = {
-			has_type = nuclear_guarantee
-			target_country = scope:nd_guarantee_ben2
+		# The umbrella of an overlord that is not $AGAINST$.
+		AND = {
+			nd_under_an_umbrella = yes
+			overlord ?= { NOT = { this = $AGAINST$ } }
 		}
 	}
 }
 
-# Does $GUARANTOR$ guarantee this country?
+# Is this country covered by any in-force nuclear_guarantee, or an umbrella?
+nd_is_guaranteed = {
+	save_temporary_scope_as = nd_guarantee_ben2
+	OR = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_guarantee
+				target_country = scope:nd_guarantee_ben2
+			}
+		}
+		nd_under_an_umbrella = yes
+	}
+}
+
+# Does $GUARANTOR$ guarantee this country, by treaty or by umbrella?
 nd_is_guaranteed_by = {
+	OR = {
+		nd_is_guaranteed_by_treaty = { GUARANTOR = $GUARANTOR$ }
+		nd_under_umbrella_of = { OVERLORD = $GUARANTOR$ }
+	}
+}
+
+# The treaty half: does $GUARANTOR$ hold a nuclear_guarantee article for this
+# country? The umbrella branches of the effect loops ask it so that an
+# overlord that also signed a guarantee for its subject (before subjugating
+# it, say) is asked once, not twice.
+nd_is_guaranteed_by_treaty = {
 	save_temporary_scope_as = nd_guarantee_ben3
 	any_scope_treaty = {
 		any_scope_article = {
 			has_type = nuclear_guarantee
 			target_country = scope:nd_guarantee_ben3
 			source_country = $GUARANTOR$
+		}
+	}
+}
+
+# Is this country in a play or war against $TARGET$ — the dispute a guarantor
+# may open a crisis over (dispute 3)?
+nd_beneficiary_threatened_by = {
+	OR = {
+		has_war_with = $TARGET$
+		AND = {
+			is_diplomatic_play_enemy_of = $TARGET$
+			any_diplomatic_play = {
+				is_war = no
+				OR = {
+					initiator_is = $TARGET$
+					target_is = $TARGET$
+				}
+			}
 		}
 	}
 }
@@ -1044,31 +1115,26 @@ nd_dispute_war_with = {
 }
 
 # Dispute 3: $TARGET$ leads a play, or fights a war, against a country we
-# guarantee, and we are not a party to it ourselves. Walks OUR treaties (a
-# handful), not every country.
+# guarantee — by treaty or by umbrella — and we are not a party to it
+# ourselves. Walks OUR treaties and subjects (a handful), not every country.
 nd_dispute_guarantee_against = {
 	NOT = { is_diplomatic_play_enemy_of = $TARGET$ }
 	NOT = { has_war_with = $TARGET$ }
 	save_temporary_scope_as = nd_dg_self
-	any_scope_treaty = {
-		any_scope_article = {
-			has_type = nuclear_guarantee
-			source_country = scope:nd_dg_self
-			target_country = {
-				OR = {
-					has_war_with = $TARGET$
-					AND = {
-						is_diplomatic_play_enemy_of = $TARGET$
-						any_diplomatic_play = {
-							is_war = no
-							OR = {
-								initiator_is = $TARGET$
-								target_is = $TARGET$
-							}
-						}
-					}
+	OR = {
+		any_scope_treaty = {
+			any_scope_article = {
+				has_type = nuclear_guarantee
+				source_country = scope:nd_dg_self
+				target_country = {
+					nd_beneficiary_threatened_by = { TARGET = $TARGET$ }
 				}
 			}
+		}
+		# A subject under our umbrella.
+		any_direct_subject = {
+			nd_under_umbrella_of = { OVERLORD = scope:nd_dg_self }
+			nd_beneficiary_threatened_by = { TARGET = $TARGET$ }
 		}
 	}
 }

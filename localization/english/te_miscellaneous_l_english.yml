@@ -2599,6 +2599,7 @@
  nd_tt_guarantee_honour:0 "We stand with them publicly: their attacker faces our guarantee, and our #v credibility#! rises"
  nd_tt_guarantee_retaliate:0 "#R We answer the strike on them with a nuclear strike of our own.#! Our #v credibility#! rises"
  nd_tt_guarantor_armed:0 "The guarantor holds nuclear weapons"
+ nd_tt_already_under_umbrella:0 "They are not our direct subject — a subject is already under our nuclear umbrella"
  nd_tt_has_dispute:0 "There is a dispute to threaten over: a diplomatic play they lead against us, a war with them, an attack on a country we guarantee, a weapons programme of a rival, or a rival's forces on alert"
  nd_tt_has_pledge_with_target:0 "We have pledged not to use nuclear weapons against them"
  nd_tt_hold_alert_2w:0 "Our forces reach #v High Alert#! in #v 2#! weeks. At High Alert their pressure to concede rises by #G 10#!, and so do our upkeep and the odds of an accident"

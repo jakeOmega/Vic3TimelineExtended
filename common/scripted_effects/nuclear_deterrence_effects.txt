@@ -1702,6 +1702,24 @@ nd_record_nuclear_use = {
 					}
 				}
 			}
+			# The umbrella: the victim's overlord, unless it is the attacker or
+			# a treaty above has already asked it (umbrella/recessed/dead-hand
+			# spec §1.2; siblings in nd_crisis_notify_guarantors and
+			# nd_guarantee_act_abandon).
+			if = {
+				limit = {
+					nd_under_an_umbrella = yes
+					overlord = { NOT = { this = scope:nd_guarantee_attacker } }
+				}
+				overlord = { save_scope_as = nd_umb_guarantor }
+				if = {
+					limit = { NOT = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_umb_guarantor } } }
+					scope:nd_umb_guarantor = {
+						set_variable = { name = nd_guarantee_context value = 2 }
+						trigger_event = { id = nuclear_crisis.20 }
+					}
+				}
+			}
 		}
 	}
 }

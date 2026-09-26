@@ -991,5 +991,51 @@ class TestAutomaticRetaliation(unittest.TestCase):
         self.assertNotIn("nd_authority_automatic", warn)
 
 
+class TestUmbrellaCoverage(unittest.TestCase):
+    """An armed overlord's direct subjects are covered as if guaranteed
+    (umbrella/recessed/dead-hand spec §1.1–§1.2)."""
+
+    GUARANTEE_READERS = {"nd_has_armed_guarantor_against", "nd_is_guaranteed", "nd_is_guaranteed_by_treaty",
+                         "nd_dispute_guarantee_against", "nd_crisis_classify_dispute", "nd_crisis_notify_guarantors",
+                         "nd_record_nuclear_use", "nd_guarantee_act_abandon", "nd_covered_country_struck_by",
+                         "nd_covered_country_struck"}
+
+    def test_umbrella_triggers(self):
+        t = strip_comments(read(TRIGGERS))
+        for name in ("nd_umbrella_withdrawn", "nd_under_an_umbrella", "nd_under_umbrella_of",
+                     "nd_is_guaranteed_by_treaty", "nd_beneficiary_threatened_by"):
+            self.assertRegex(t, rf"(?m)^{name} = \{{")
+        self.assertIn("nd_withdraw_umbrella_action", block(t, "nd_umbrella_withdrawn"))
+        for name in ("nd_has_armed_guarantor_against", "nd_is_guaranteed", "nd_is_guaranteed_by",
+                     "nd_dispute_guarantee_against"):
+            self.assertIn("umbrella", block(t, name), name)
+
+    def test_every_guarantee_read_is_a_known_site(self):
+        """A new `has_type = nuclear_guarantee` read outside the known sites
+        would see treaties but not umbrellas."""
+        for path in (TRIGGERS, EFFECTS, CRISIS_EFFECTS):
+            text = strip_comments(read(path))
+            for m in re.finditer(r"has_type = nuclear_guarantee", text):
+                owner = re.findall(r"(?m)^(\w+) = \{", text[:m.start()])[-1]
+                self.assertIn(owner, self.GUARANTEE_READERS, f"{path.name}: {owner}")
+
+    def test_umbrella_loops_exist_beside_treaty_loops(self):
+        c = strip_comments(read(CRISIS_EFFECTS))
+        e = strip_comments(read(EFFECTS))
+        for body in (block(c, "nd_crisis_notify_guarantors"), block(e, "nd_record_nuclear_use")):
+            self.assertIn("nd_under_an_umbrella = yes", body)
+            self.assertIn("nd_is_guaranteed_by_treaty", body)   # asked once, not twice
+        self.assertIn("every_direct_subject", block(c, "nd_guarantee_act_abandon"))
+        self.assertIn("random_direct_subject", block(c, "nd_crisis_classify_dispute"))
+
+    def test_abandoning_a_subject_costs_liberty_desire(self):
+        body = block(strip_comments(read(CRISIS_EFFECTS)), "nd_guarantee_act_abandon")
+        visible = body.split("hidden_effect")[0]
+        self.assertIn("add_liberty_desire = 10", visible)
+
+    def test_article_refuses_own_subject(self):
+        self.assertIn("nd_tt_already_under_umbrella", block(strip_comments(read(ARTICLE)), "possible"))
+
+
 if __name__ == "__main__":
     unittest.main()

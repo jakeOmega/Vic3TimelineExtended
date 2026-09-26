@@ -309,6 +309,18 @@ nd_crisis_classify_dispute = {
 				target_country = { save_scope_as = nd_crisis_ben }
 			}
 		}
+		# ...or a subject under our umbrella (umbrella/recessed/dead-hand spec
+		# §1.2).
+		if = {
+			limit = { NOT = { exists = scope:nd_crisis_ben } }
+			random_direct_subject = {
+				limit = {
+					nd_under_umbrella_of = { OVERLORD = scope:nd_issuer }
+					nd_beneficiary_threatened_by = { TARGET = scope:nd_target }
+				}
+				save_scope_as = nd_crisis_ben
+			}
+		}
 		if = {
 			limit = { exists = scope:nd_crisis_ben }
 			set_variable = { name = nd_crisis_beneficiary value = scope:nd_crisis_ben }
@@ -401,6 +413,24 @@ nd_crisis_notify_guarantors = {
 					}
 				}
 				source_country = {
+					save_scope_as = nd_guarantor
+					set_variable = { name = nd_guarantee_context value = 1 }
+					trigger_event = { id = nuclear_crisis.20 }
+				}
+			}
+		}
+		# The umbrella: our overlord, unless it is the issuer or the treaty
+		# loop above has already asked it (umbrella/recessed/dead-hand spec
+		# §1.2; siblings in nd_record_nuclear_use and nd_guarantee_act_abandon).
+		if = {
+			limit = {
+				nd_under_an_umbrella = yes
+				overlord = { NOT = { this = scope:nd_issuer } }
+			}
+			overlord = { save_scope_as = nd_umb_guarantor }
+			if = {
+				limit = { NOT = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_umb_guarantor } } }
+				scope:nd_umb_guarantor = {
 					save_scope_as = nd_guarantor
 					set_variable = { name = nd_guarantee_context value = 1 }
 					trigger_event = { id = nuclear_crisis.20 }
@@ -1981,6 +2011,17 @@ nd_guarantee_act_abandon = {
 		text = nd_tt_credibility_down_15
 		nd_change_credibility = { AMOUNT = -15 }
 	}
+	# Abandoning a subject under our umbrella feeds its wish to be free
+	# (umbrella/recessed/dead-hand spec §1.4). The umbrella stays. ROOT is the
+	# guarantor (nuclear_crisis.20), and the tooltip preview needs a scope
+	# that already exists.
+	if = {
+		limit = {
+			exists = scope:nd_guarantee_beneficiary
+			scope:nd_guarantee_beneficiary = { nd_under_umbrella_of = { OVERLORD = ROOT } }
+		}
+		scope:nd_guarantee_beneficiary = { add_liberty_desire = 10 }
+	}
 	add_modifier = {
 		name = nd_guarantee_abandoned
 		years = 5
@@ -2022,6 +2063,16 @@ nd_guarantee_act_abandon = {
 						change_relations = { country = scope:nd_guarantor_self value = -10 }
 					}
 				}
+			}
+			# ...and every subject under our umbrella (the treaty loop's
+			# sibling; a subject with a treaty too is told once, above).
+			every_direct_subject = {
+				limit = {
+					nd_under_umbrella_of = { OVERLORD = scope:nd_guarantor_self }
+					NOT = { this = scope:nd_guarantee_beneficiary }
+					NOT = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_guarantor_self } }
+				}
+				change_relations = { country = scope:nd_guarantor_self value = -10 }
 			}
 		}
 	}

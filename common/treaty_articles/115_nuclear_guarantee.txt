@@ -17,6 +17,9 @@
 #   * the guarantor may open a guarantee crisis against the beneficiary's
 #     attacker (dispute 3), and is asked to honour the guarantee when the
 #     beneficiary is threatened or struck (nuclear_crisis.20).
+# An armed overlord's direct subjects get all of this without the article
+# (the nuclear umbrella, nd_under_an_umbrella), so the article refuses a
+# guarantor's own subject.
 # A guarantee is not invulnerability and not an automatic war (§6): the
 # guarantor chooses, and walking away costs it (nd_guarantee_act_abandon).
 # Multiple guarantors do not add up: the pressure term is a flat −20 for
@@ -54,6 +57,13 @@ nuclear_guarantee = {
 		custom_tooltip = {
 			text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
 			scope:other_country.relations:root > relations_threshold:poor
+		}
+		# A direct subject is already covered by our nuclear umbrella
+		# (umbrella/recessed/dead-hand spec §1.2); a treaty on top would only
+		# duplicate it.
+		custom_tooltip = {
+			text = nd_tt_already_under_umbrella
+			NOT = { scope:other_country = { is_direct_subject_of = ROOT } }
 		}
 	}
 
