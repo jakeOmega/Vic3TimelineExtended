@@ -108,7 +108,7 @@ can_revolution_inherit: unset (= yes); can_deactivate: yes
 
 can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)
 
-- 35 writes of `heir_ed_admin`, `heir_ed_diplo`, `heir_ed_military`, `heir_ed_ideology`, `heir_ed_ig_radical`, `heir_ed_ig_moderate`, +2 more, first at `common/journal_entries/je_heir_education.txt:43` — **2026-09-26**: per-heir state; only a revolution's winner re-runs this, and its heir is a new character
+- 35 writes of `heir_ed_admin`, `heir_ed_diplo`, `heir_ed_military`, `heir_ed_ideology`, `heir_ed_ig_radical`, `heir_ed_ig_moderate`, +2 more, first at `common/journal_entries/je_heir_education.txt:43` — **2026-09-26**: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
 
 ### `je_nuclear_program` (`common/journal_entries/je_nuclear_program.txt`)
 
