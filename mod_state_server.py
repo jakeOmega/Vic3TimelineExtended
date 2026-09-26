@@ -4387,23 +4387,63 @@ def _read_live_file(relpath: str) -> Optional[str]:
         return None
 
 
-def _mod_grep_uses(name: str) -> list:
-    """Mod-relative files that reference <name> (whole-word, fixed-string) in
-    the mod content dirs, via `git grep`. Empty on no match (git grep exits 1)
-    or error. Only searches tracked files — matches the mod's committed state."""
+def _code_part(line: str) -> str:
+    """<line> up to its first `#` outside a double-quoted string — the part a
+    Paradox script or loc line executes. `#` inside quotes is loc markup
+    (`#b …#!`) or string text, not a comment; a backslash escapes the next
+    character inside quotes, as in loc values."""
+    in_quote = False
+    i = 0
+    while i < len(line):
+        ch = line[i]
+        if in_quote and ch == "\\":
+            i += 2
+            continue
+        if ch == '"':
+            in_quote = not in_quote
+        elif ch == "#" and not in_quote:
+            return line[:i]
+        i += 1
+    return line
+
+
+def _mod_grep_mentions(name: str) -> tuple:
+    """(use_files, comment_only_files): mod-relative files in the mod content
+    dirs that mention <name> (whole-word, fixed-string), via `git grep`. A file
+    is a use if any matching line has the name outside a `#` comment; it is
+    comment-only if every match sits in a comment (#485: a header comment
+    explaining a vanilla rename is not a use of the old name). Both empty on no
+    match (git grep exits 1) or error. Only searches tracked files — matches
+    the mod's committed state."""
     repo = mod_path
     dirs = [d for d in _MOD_GREP_DIRS if os.path.isdir(os.path.join(repo, d))]
     if not dirs:
-        return []
+        return [], []
     try:
         r = subprocess.run(
-            ["git", "-C", repo, "grep", "--no-color", "-l", "-w", "-F",
+            ["git", "-C", repo, "grep", "--no-color", "-z", "-w", "-F",
              "-e", name, "--", *dirs],
-            capture_output=True, text=True, timeout=30,
+            capture_output=True, encoding="utf-8", errors="replace",
+            timeout=30,
         )
     except (subprocess.SubprocessError, OSError):
-        return []
-    return sorted(ln for ln in r.stdout.splitlines() if ln.strip())
+        return [], []
+    # git grep's -w word boundary, re-applied to the code part: a plain
+    # substring test would count `<name>_extra` in code when the whole-word
+    # match was only in the comment.
+    word = re.compile(r"(?<![A-Za-z0-9_])" + re.escape(name) + r"(?![A-Za-z0-9_])")
+    used: set = set()
+    mentioned: set = set()
+    # Split on "\n" only: git ends each record with it, and splitlines() would
+    # also break a record at \x0c, \x85,   and the like inside the line.
+    for ln in r.stdout.split("\n"):
+        path, sep, text = ln.partition("\0")
+        if not sep:
+            continue
+        mentioned.add(path)
+        if word.search(_code_part(text)):
+            used.add(path)
+    return sorted(used), sorted(mentioned - used)
 
 
 def _extract_toplevel_keys(text: Optional[str]) -> set:
@@ -4547,6 +4587,7 @@ def _migration_surface_diff(old_ref: str) -> dict:
     added: dict = {}
     removed: dict = {}
     removed_join: list = []
+    commented_join: list = []
     for label, reldir, kind in _MIGRATION_SURFACE_CATEGORIES:
         old_keys: set = set()
         for f in _git_lstree_at_ref(ref, reldir, ".txt"):
@@ -4573,25 +4614,32 @@ def _migration_surface_diff(old_ref: str) -> dict:
         # a genuine silent-no-op (mod uses a name vanilla dropped) vs the mod
         # having already re-registered the dropped name in its own
         # modifier_type_definitions/ (the documented 1.13.9 harvest-condition
-        # fix) — the latter is safe, not a fire.
+        # fix) — the latter is safe, not a fire. A name the mod mentions only
+        # in `#` comments (say, a note on the rename) is not a use; it goes to
+        # the separate `removed_and_only_commented_in_mod` list instead.
         for name in cat_removed:
-            files = _mod_grep_uses(name)
+            files, comment_files = _mod_grep_mentions(name)
             if files:
                 entry = {"name": name, "category": label, "mod_files": files}
                 if label == "modifier_type_definitions" and any(
                         "modifier_type_definitions/" in f for f in files):
                     entry["re_registered_by_mod"] = True
                 removed_join.append(entry)
+            elif comment_files:
+                commented_join.append({"name": name, "category": label,
+                                       "mod_files": comment_files})
     return {
         "old_ref": old_ref,
         "old_ref_sha": ref,
         "added": added,
         "removed": removed,
         "removed_and_used_by_mod": removed_join,
+        "removed_and_only_commented_in_mod": commented_join,
         "summary": {
             "added": sum(len(v) for v in added.values()),
             "removed": sum(len(v) for v in removed.values()),
             "removed_and_used_by_mod": len(removed_join),
+            "removed_and_only_commented_in_mod": len(commented_join),
         },
     }
 
@@ -5906,10 +5954,15 @@ class ModStateHandler(BaseHTTPRequestHandler):
         `removed_and_used_by_mod`: for every name that vanilla dropped, whether
         the mod still references it (silent no-op / broken inject). This join
         surfaced both 1.13.9 breakage classes (the law-enactment rename and the
-        harvest-condition deregistration) without launching the game.
+        harvest-condition deregistration) without launching the game. Only
+        matches outside `#` comments count as uses; a removed name the mod
+        mentions only in comments is listed in
+        `removed_and_only_commented_in_mod` instead (#485).
 
         Returns {old_ref, old_ref_sha, added:{cat:[...]}, removed:{cat:[...]},
-        removed_and_used_by_mod:[{name, category, mod_files:[...]}], summary}.
+        removed_and_used_by_mod:[{name, category, mod_files:[...]}],
+        removed_and_only_commented_in_mod:[{name, category, mod_files:[...]}],
+        summary}.
         """
         old_ref = (params.get("old_ref") or [""])[0]
         return _migration_surface_diff(old_ref)
