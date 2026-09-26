@@ -532,6 +532,7 @@ nuclear_crisis.4 = {
 			has_war_with = scope:nd_target
 			nd_doctrine_permits_strike = { ENEMY = scope:nd_target }
 			nd_pledge_permits_strike = { ENEMY = scope:nd_target }
+			nd_war_law_permits_strategic_strike = yes
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -770,9 +771,43 @@ nuclear_crisis.6 = {
 		has_variable = nd_crisis_last_outcome
 	}
 
+	# The other party of THIS notice, from the scopes it was sent with. The
+	# option applies the pending record only if it is still this pair's.
+	immediate = {
+		if = {
+			limit = {
+				has_variable = nd_crisis_pending_role
+				var:nd_crisis_pending_role = 1
+				exists = scope:nd_target
+			}
+			scope:nd_target = { save_scope_as = nd_outcome_other }
+		}
+		else_if = {
+			limit = { exists = scope:nd_issuer }
+			scope:nd_issuer = { save_scope_as = nd_outcome_other }
+		}
+	}
+
 	option = {
 		name = nuclear_crisis.6.a
 		default_option = yes
+		# Apply this notice's record: the pending record is this pair's, or
+		# the other party no longer exists (annexed after conceding a war), in
+		# which case no newer record about it can have replaced this one.
+		if = {
+			limit = {
+				has_variable = nd_crisis_pending_outcome
+				OR = {
+					NOT = { exists = scope:nd_outcome_other }
+					NOT = { exists = var:nd_crisis_pending_opponent }
+					var:nd_crisis_pending_opponent ?= scope:nd_outcome_other
+				}
+			}
+			nd_crisis_apply_outcome_side = yes
+		}
+		else = {
+			custom_tooltip = nd_tt_outcome_already_settled
+		}
 	}
 }
 
@@ -808,6 +843,7 @@ nuclear_crisis.7 = {
 			has_war_with = scope:nd_target
 			nd_doctrine_permits_strike = { ENEMY = scope:nd_target }
 			nd_pledge_permits_strike = { ENEMY = scope:nd_target }
+			nd_war_law_permits_strategic_strike = yes
 		}
 		highlighted_option = yes
 		nd_crisis_option = { ACT = execute_threat }
@@ -925,6 +961,7 @@ nuclear_crisis.20 = {
 			has_war_with = scope:nd_guarantee_attacker
 			nd_doctrine_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
 			nd_pledge_permits_strike = { ENEMY = scope:nd_guarantee_attacker }
+			nd_war_law_permits_strategic_strike = yes
 		}
 		highlighted_option = yes
 		nd_guarantee_act_retaliate = yes

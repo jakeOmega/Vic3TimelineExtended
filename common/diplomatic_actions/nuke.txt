@@ -28,35 +28,9 @@
 			text = nd_tt_pledge_permits_strike
 			nd_pledge_permits_strike = { ENEMY = scope:target_country }
 		}
-		OR = {
-			# Normal: can use if no humanitarian/limited war laws
-			NOT = {
-				OR = {
-					has_law = law_type:law_humanitarian_regulations
-					has_law = law_type:law_limited_war
-				}
-			}
-			# Retaliation: already been nuked overrides war laws
-			any_scope_state = {
-				OR = {
-					has_modifier = nuclear_strike_aftermath
-					has_modifier = tactical_nuke_aftermath
-				}
-			}
-			# Existential threat overrides war laws
-			any_scope_war = {
-				is_target_of_wargoal_in_war = ROOT
-				OR = {
-					has_war_goal = make_protectorate
-					has_war_goal = make_dominion
-					has_war_goal = make_tributary
-					has_war_goal = make_personal_union
-					has_war_goal = make_crown_land
-					has_war_goal = make_chartered_company
-					has_war_goal = annex_country
-					has_war_goal = te_reunify_country
-				}
-			}
+		custom_tooltip = {
+			text = nd_tt_war_law_permits_strike
+			nd_war_law_permits_strategic_strike = yes
 		}
 	}
 
@@ -203,32 +177,9 @@ tactical_nuke_diplo_action = {
 			text = nd_tt_pledge_permits_strike
 			nd_pledge_permits_strike = { ENEMY = scope:target_country }
 		}
-		OR = {
-			# Normal: can use if no limited war law
-			NOT = {
-				has_law = law_type:law_limited_war
-			}
-			# Retaliation: already been nuked overrides war laws
-			any_scope_state = {
-				OR = {
-					has_modifier = nuclear_strike_aftermath
-					has_modifier = tactical_nuke_aftermath
-				}
-			}
-			# Existential threat overrides limited war law
-			any_scope_war = {
-				is_target_of_wargoal_in_war = ROOT
-				OR = {
-					has_war_goal = make_protectorate
-					has_war_goal = make_dominion
-					has_war_goal = make_tributary
-					has_war_goal = make_personal_union
-					has_war_goal = make_crown_land
-					has_war_goal = make_chartered_company
-					has_war_goal = annex_country
-					has_war_goal = te_reunify_country
-				}
-			}
+		custom_tooltip = {
+			text = nd_tt_war_law_permits_tactical_strike
+			nd_war_law_permits_tactical_strike = yes
 		}
 	}
 

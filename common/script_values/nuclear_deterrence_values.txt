@@ -423,9 +423,16 @@ nd_survivability_or_zero = {
 	}
 }
 
-# How dangerous the crisis is, 0–100 (§5.1: a shared assessment of danger, not
-# a trigger for weapons). Owner scope; needs scope:nd_target.
-nd_crisis_danger_value = {
+# ----------------------------------------------------------------------------
+# CRISIS FIGURES — danger and pressure, as named parts (2026-09-25 spec §1.2).
+# nd_crisis_refresh_figures stores every part on both parties, so the panel's
+# breakdowns print stored numbers that sum to the stored totals. Parts are
+# rounded so the printed lines add up.
+# ----------------------------------------------------------------------------
+
+# ---- Danger, 0–100 (§5.1: a shared assessment, not a trigger for weapons).
+# Issuer scope; needs scope:nd_target.
+nd_cd_stage_value = {
 	value = 0
 	if = {
 		limit = { has_variable = nd_crisis_stage }
@@ -434,11 +441,16 @@ nd_crisis_danger_value = {
 			multiply = 10
 		}
 	}
-	add = {
-		value = nd_readiness_or_routine
-		subtract = 1
-		multiply = 8
-	}
+}
+
+nd_cd_issuer_readiness_value = {
+	value = nd_readiness_or_routine
+	subtract = 1
+	multiply = 8
+}
+
+nd_cd_target_readiness_value = {
+	value = 0
 	scope:nd_target = {
 		add = {
 			value = nd_readiness_or_routine
@@ -446,10 +458,18 @@ nd_crisis_danger_value = {
 			multiply = 8
 		}
 	}
+}
+
+nd_cd_public_value = {
+	value = 0
 	if = {
 		limit = { nd_crisis_is_public = yes }
 		add = 10
 	}
+}
+
+nd_cd_counter_value = {
+	value = 0
 	if = {
 		limit = {
 			has_variable = nd_crisis_counter
@@ -457,12 +477,18 @@ nd_crisis_danger_value = {
 		}
 		add = 10
 	}
-	# Unreliable command makes every step more dangerous.
-	add = {
-		value = 100
-		subtract = nd_reliability_or_default
-		divide = 5
-	}
+}
+
+# Unreliable command makes every step more dangerous.
+nd_cd_reliability_value = {
+	value = 100
+	subtract = nd_reliability_or_default
+	divide = 5
+	round = yes
+}
+
+nd_cd_weeks_value = {
+	value = 0
 	if = {
 		limit = { has_variable = nd_crisis_weeks }
 		add = {
@@ -471,6 +497,11 @@ nd_crisis_danger_value = {
 			divide = 2
 		}
 	}
+	round = yes
+}
+
+nd_cd_talks_value = {
+	value = 0
 	if = {
 		limit = {
 			has_variable = nd_crisis_talks
@@ -478,6 +509,10 @@ nd_crisis_danger_value = {
 		}
 		subtract = 15
 	}
+}
+
+nd_cd_backed_value = {
+	value = 0
 	if = {
 		limit = {
 			has_variable = nd_crisis_backed
@@ -485,8 +520,14 @@ nd_crisis_danger_value = {
 		}
 		add = 10
 	}
-	# An exercise either side can see (nd_crisis_act_exercise,
-	# nuclear_incident.10) runs hot for a few weeks.
+}
+
+# An exercise either side can see (nd_crisis_act_exercise,
+# nuclear_incident.10) runs hot for a few weeks. (Pressure on the target,
+# nd_yp_exercise_value, counts only the threatening side's exercise:
+# nd_crisis_exercise_by_issuer.)
+nd_cd_exercise_value = {
+	value = 0
 	if = {
 		limit = {
 			has_variable = nd_crisis_exercise_weeks
@@ -494,15 +535,23 @@ nd_crisis_danger_value = {
 		}
 		add = 10
 	}
+}
+
+nd_crisis_danger_value = {
+	value = nd_cd_stage_value
+	add = nd_cd_issuer_readiness_value
+	add = nd_cd_target_readiness_value
+	add = nd_cd_public_value
+	add = nd_cd_counter_value
+	add = nd_cd_reliability_value
+	add = nd_cd_weeks_value
+	add = nd_cd_talks_value
+	add = nd_cd_backed_value
+	add = nd_cd_exercise_value
 	# With no arsenal on the other side there is no reciprocal alert to
 	# misread; the danger is our own hand, not an exchange.
 	if = {
-		limit = {
-			scope:nd_target = {
-				nd_believed_armed = no
-				NOT = { nd_has_armed_guarantor_against = { AGAINST = scope:nd_issuer } }
-			}
-		}
+		limit = { nd_crisis_danger_dampened = yes }
 		multiply = 0.7
 	}
 	min = 0
@@ -510,12 +559,15 @@ nd_crisis_danger_value = {
 	round = yes
 }
 
-# How hard the target is pushed to concede, 0–100. The one explanation both
-# the AI's event weights and the player's panel read (§9). Target scope;
-# needs scope:nd_issuer.
-nd_yield_pressure_value = {
+# ---- Pressure to concede, 0–100: the one explanation both the AI's event
+# weights and the player's panel read (§9). Target scope; needs scope:nd_issuer.
+nd_yp_base_value = {
 	value = 30
-	# Can we answer in kind?
+}
+
+# Can we answer in kind?
+nd_yp_answer_value = {
+	value = 0
 	if = {
 		limit = { nd_believed_armed = no }
 		add = 20
@@ -530,8 +582,12 @@ nd_yield_pressure_value = {
 	else = {
 		subtract = 10
 	}
-	# A protector: an armed guarantor that has not walked away, more so once
-	# it has said publicly that it stands with us (nuclear_crisis.20).
+}
+
+# A protector: an armed guarantor that has not walked away, more so once it
+# has said publicly that it stands with us (nuclear_crisis.20).
+nd_yp_protector_value = {
+	value = 0
 	if = {
 		limit = {
 			nd_has_armed_guarantor_against = { AGAINST = scope:nd_issuer }
@@ -553,17 +609,37 @@ nd_yield_pressure_value = {
 		}
 		subtract = 15
 	}
-	# Their record of following through.
+}
+
+# Issuer scope: what the issuer's record of following through is worth.
+# Also printed by the action preview (nd_crisis_preview).
+nd_credibility_pressure_term = {
+	value = nd_credibility_or_default
+	subtract = 50
+	divide = 2
+	round = yes
+}
+
+nd_yp_credibility_value = {
+	value = 0
 	scope:nd_issuer = {
-		add = {
-			value = nd_credibility_or_default
-			subtract = 50
-			divide = 2
-		}
+		add = nd_credibility_pressure_term
+	}
+}
+
+nd_yp_alert_value = {
+	value = 0
+	scope:nd_issuer = {
 		if = {
 			limit = { nd_readiness_high_alert = yes }
 			add = 10
 		}
+	}
+}
+
+nd_yp_danger_value = {
+	value = 0
+	scope:nd_issuer = {
 		if = {
 			limit = { has_variable = nd_crisis_danger }
 			add = {
@@ -571,15 +647,28 @@ nd_yield_pressure_value = {
 				divide = 5
 			}
 		}
+	}
+	round = yes
+}
+
+nd_yp_exercise_value = {
+	value = 0
+	scope:nd_issuer = {
 		if = {
 			limit = {
 				has_variable = nd_crisis_exercise_weeks
 				var:nd_crisis_exercise_weeks > 0
+				has_variable = nd_crisis_exercise_by_issuer
+				var:nd_crisis_exercise_by_issuer = 1
 			}
 			add = 10
 		}
 	}
-	# Our own temperament.
+}
+
+# Our own temperament.
+nd_yp_temperament_value = {
+	value = 0
 	if = {
 		limit = { ruler_is_aggressive = yes }
 		subtract = 15
@@ -588,18 +677,63 @@ nd_yield_pressure_value = {
 		limit = { ruler_is_cautious = yes }
 		add = 10
 	}
-	# What the dispute costs us to give up.
+}
+
+# What the dispute costs us to give up.
+nd_yp_war_value = {
+	value = 0
 	if = {
-		limit = { has_war_with = scope:nd_issuer }
-		if = {
-			limit = { is_losing_war_against = { ENEMY = scope:nd_issuer } }
-			add = 15
+		limit = {
+			has_war_with = scope:nd_issuer
+			nd_is_losing_war_to = { ENEMY = scope:nd_issuer }
 		}
+		add = 15
 	}
 	if = {
 		limit = { nd_enemy_threatens_existence = { ENEMY = scope:nd_issuer } }
 		subtract = 15
 	}
+}
+
+# Can they carry it out? (spec §1.1) Their doctrine is public.
+nd_yp_follow_through_value = {
+	value = 0
+	scope:nd_issuer = {
+		if = {
+			limit = {
+				has_variable = nd_ft_reason
+				var:nd_ft_reason <= 2
+			}
+			add = 10
+		}
+		else_if = {
+			limit = {
+				has_variable = nd_ft_reason
+				var:nd_ft_reason = 7
+			}
+			subtract = 35
+		}
+		else_if = {
+			limit = {
+				has_variable = nd_ft_reason
+				var:nd_ft_reason >= 5
+			}
+			subtract = 25
+		}
+	}
+}
+
+nd_yield_pressure_value = {
+	value = nd_yp_base_value
+	add = nd_yp_answer_value
+	add = nd_yp_protector_value
+	add = nd_yp_credibility_value
+	add = nd_yp_alert_value
+	add = nd_yp_danger_value
+	add = nd_yp_exercise_value
+	add = nd_yp_temperament_value
+	add = nd_yp_war_value
+	add = nd_yp_follow_through_value
 	min = 0
 	max = 100
 	round = yes
@@ -767,6 +901,35 @@ nd_display_yield_pressure = {
 			}
 		}
 	}
+}
+
+# Weeks until the target is pressed again (nd_crisis_weekly_tick fires the
+# event on the tick at which the counter reaches the interval), from either
+# side. At least 1: the soonest is next week.
+nd_display_next_pressure_weeks = {
+	value = 0
+	if = {
+		limit = {
+			nd_is_crisis_owner = yes
+			has_variable = nd_crisis_pressure_weeks
+		}
+		add = nd_crisis_pressure_interval_weeks
+		subtract = var:nd_crisis_pressure_weeks
+	}
+	else_if = {
+		limit = {
+			nd_is_crisis_target = yes
+			exists = var:nd_crisis_opponent
+		}
+		var:nd_crisis_opponent = {
+			if = {
+				limit = { has_variable = nd_crisis_pressure_weeks }
+				add = nd_crisis_pressure_interval_weeks
+				subtract = var:nd_crisis_pressure_weeks
+			}
+		}
+	}
+	min = 1
 }
 
 # The public estimate of this country's arsenal (§0.6), or the truth before

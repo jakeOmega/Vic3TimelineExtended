@@ -5,7 +5,12 @@
 # Design: docs/systems/nuclear_crisis_design.md (§0 is what shipped).
 #
 # Two ACTION handlers, parameterized by a saved scope `op` (the Strategic
-# Reserve / nuclear programme pattern), and five DISPLAY handlers. The op
+# Reserve / nuclear programme pattern), and eleven DISPLAY handlers: the five
+# yes/no questions and names below, three that hide the moves our side cannot
+# make (nd_crisis_we_issued_sgui, nd_crisis_we_are_target_sgui,
+# nd_crisis_private_sgui), and three that print script-built text
+# (nd_crisis_pressure_breakdown_sgui, nd_crisis_danger_breakdown_sgui,
+# nd_crisis_next_pressure_sgui). The op
 # tables are repeated in the .gui header and in
 # docs/systems/journal_entry_systems.md — keep all three in step.
 #
@@ -318,6 +323,114 @@ nd_last_crisis_sgui = {
 			var:nd_crisis_last_opponent ?= {
 				custom_tooltip_no_bullet = nd_last_crisis_line
 			}
+		}
+	}
+}
+
+# ---- Which side are we on? (the panel's move rows) ---------------------------
+nd_crisis_we_issued_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_crisis_owner = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+nd_crisis_we_are_target_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_crisis_target = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+nd_crisis_private_sgui = {
+	scope = country
+	is_shown = {
+		nd_is_crisis_owner = yes
+		nd_crisis_is_public = no
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
+# ---- Script-built text: breakdowns and the next pressure event ---------------
+# Printed with ExecuteTooltip; every line reads our own stored figures
+# (nd_crisis_refresh_figures mirrors them onto both parties).
+nd_crisis_pressure_breakdown_sgui = {
+	scope = country
+	is_shown = {
+		nd_in_crisis = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		nd_crisis_breakdown_line = { C = nd_yp_base KEY = nd_yp_base_line }
+		nd_crisis_breakdown_line = { C = nd_yp_answer KEY = nd_yp_answer_line }
+		nd_crisis_breakdown_line = { C = nd_yp_protector KEY = nd_yp_protector_line }
+		nd_crisis_breakdown_line = { C = nd_yp_credibility KEY = nd_yp_credibility_line }
+		nd_crisis_breakdown_line = { C = nd_yp_alert KEY = nd_yp_alert_line }
+		nd_crisis_breakdown_line = { C = nd_yp_danger KEY = nd_yp_danger_line }
+		nd_crisis_breakdown_line = { C = nd_yp_exercise KEY = nd_yp_exercise_line }
+		nd_crisis_breakdown_line = { C = nd_yp_temperament KEY = nd_yp_temperament_line }
+		nd_crisis_breakdown_line = { C = nd_yp_war KEY = nd_yp_war_line }
+		nd_crisis_breakdown_line = { C = nd_yp_follow_through KEY = nd_yp_follow_through_line }
+		custom_tooltip_no_bullet = nd_yp_total_line
+	}
+}
+
+nd_crisis_danger_breakdown_sgui = {
+	scope = country
+	is_shown = {
+		nd_in_crisis = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		nd_crisis_breakdown_line = { C = nd_cd_stage KEY = nd_cd_stage_line }
+		nd_crisis_breakdown_line = { C = nd_cd_issuer_readiness KEY = nd_cd_issuer_readiness_line }
+		nd_crisis_breakdown_line = { C = nd_cd_target_readiness KEY = nd_cd_target_readiness_line }
+		nd_crisis_breakdown_line = { C = nd_cd_public KEY = nd_cd_public_line }
+		nd_crisis_breakdown_line = { C = nd_cd_counter KEY = nd_cd_counter_line }
+		nd_crisis_breakdown_line = { C = nd_cd_reliability KEY = nd_cd_reliability_line }
+		nd_crisis_breakdown_line = { C = nd_cd_weeks KEY = nd_cd_weeks_line }
+		nd_crisis_breakdown_line = { C = nd_cd_talks KEY = nd_cd_talks_line }
+		nd_crisis_breakdown_line = { C = nd_cd_backed KEY = nd_cd_backed_line }
+		nd_crisis_breakdown_line = { C = nd_cd_exercise KEY = nd_cd_exercise_line }
+		if = {
+			limit = {
+				has_variable = nd_cd_dampened
+				var:nd_cd_dampened = 1
+			}
+			custom_tooltip_no_bullet = nd_cd_dampened_line
+		}
+		custom_tooltip_no_bullet = nd_cd_total_line
+	}
+}
+
+nd_crisis_next_pressure_sgui = {
+	scope = country
+	is_shown = {
+		nd_in_crisis = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = {
+		if = {
+			limit = { NOT = { nd_crisis_stage_at_least = { STAGE = 2 } } }
+			custom_tooltip_no_bullet = nd_next_pressure_none
+		}
+		else_if = {
+			limit = { nd_crisis_talks_open_either = yes }
+			custom_tooltip_no_bullet = nd_next_pressure_paused
+		}
+		else = {
+			custom_tooltip_no_bullet = nd_next_pressure_weeks
 		}
 	}
 }

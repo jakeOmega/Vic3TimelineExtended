@@ -34,6 +34,7 @@ DEBUG_EVENTS = ROOT / "events/te_debug_deterrence_events.txt"
 JE_DOC = ROOT / "docs/systems/journal_entry_systems.md"
 LOC_DIR = ROOT / "localization/english"
 LENS_ICONS = ROOT / "gfx/interface/icons/lens_toolbar_icons"
+NUKE = ROOT / "common/diplomatic_actions/nuke.txt"
 
 
 def tracked(path):
@@ -48,7 +49,7 @@ def tracked(path):
 FIRED = r"\b(?:id|EVENT) = ([a-z_]+\.\d+)"
 
 SCRIPT_FILES = (EFFECTS, CRISIS_EFFECTS, TRIGGERS, ACTIONS, ARTICLE, JE, SGUIS,
-                CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS)
+                CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS, NUKE)
 EVENT_FILES = (CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS)
 
 
@@ -71,8 +72,11 @@ def loc_keys():
 
 
 def block(text, name):
-    """The body of the first `name = { ... }` block that opens a line."""
-    m = re.search(r"^[ \t]*" + re.escape(name) + r"\s*=\s*\{", text, re.M)
+    """The body of the first `name = { ... }` block that opens a line: a
+    top-level definition if there is one, else the first indented one (an
+    indented `name = { PARAM = … }` call must not shadow the definition)."""
+    m = (re.search(r"^" + re.escape(name) + r"\s*=\s*\{", text, re.M)
+         or re.search(r"^[ \t]*" + re.escape(name) + r"\s*=\s*\{", text, re.M))
     if not m:
         raise AssertionError(f"{name} not found")
     depth, i = 1, m.end()
@@ -177,7 +181,6 @@ class TestLocalization(unittest.TestCase):
         expanded |= {f"nd_tt_doctrine_adopted_{d}" for d in range(1, 6)}
         expanded |= {f"nd_tt_readiness_target_{r}" for r in range(1, 4)}
         expanded |= {f"nd_tt_authority_adopted_{a}" for a in range(1, 4)}
-        expanded |= {"nd_tt_crisis_opens_yes", "nd_tt_crisis_opens_no"}
         expanded |= {f"nd_tt_{v}_{o}" for v in ("nd_safeguards", "nd_hardening") for o in ("add", "subtract")}
         self.assert_keys(expanded, "custom tooltips")
 
@@ -221,6 +224,406 @@ class TestLocalization(unittest.TestCase):
         self.assert_keys({"je_nuclear_program", "je_nuclear_program_desc",
                           "je_nuclear_program_reason",
                           "je_nuclear_program_status_line"}, JE.name)
+
+
+def option_body(text, option_name):
+    """The body of the `option = { … }` whose `name` is option_name."""
+    m = re.search(r"name = " + re.escape(option_name) + r"\s", text)
+    if not m:
+        raise AssertionError(f"{option_name} not found")
+    start = text.rfind("option = {", 0, m.start())
+    return block(text[start:], "option")
+
+
+class TestWarLawGate(unittest.TestCase):
+    def test_gate_triggers_exist(self):
+        t = read(TRIGGERS)
+        for name in ("nd_war_law_permits_strategic_strike",
+                     "nd_war_law_permits_tactical_strike",
+                     "nd_war_law_exception"):
+            self.assertRegex(t, rf"(?m)^{name} = \{{")
+
+    def test_strike_actions_use_the_shared_gate(self):
+        text = strip_comments(read(NUKE))
+        self.assertNotIn("has_law = law_type:law_limited_war", text)
+        self.assertIn("nd_war_law_permits_strategic_strike = yes", block(text, "nuke_diplo_action"))
+        self.assertIn("nd_war_law_permits_tactical_strike = yes", block(text, "tactical_nuke_diplo_action"))
+
+    def test_every_crisis_strike_option_checks_the_law(self):
+        text = strip_comments(read(CRISIS_EVENTS))
+        for opt in ("nuclear_crisis.4.g", "nuclear_crisis.7.a", "nuclear_crisis.20.b"):
+            self.assertIn("nd_war_law_permits_strategic_strike = yes", option_body(text, opt), opt)
+
+
+class TestFollowThrough(unittest.TestCase):
+    def setUp(self):
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_triggers_exist(self):
+        for name in ("nd_threat_bluff_nfu", "nd_threat_law_permits", "nd_threat_existential_stake",
+                     "nd_threat_backed", "nd_threat_uncertain", "nd_enemy_threatens_existence_in_play"):
+            self.assertRegex(self.triggers, rf"(?m)^{name} = \{{")
+
+    def test_classification_writes_every_reason_once(self):
+        body = block(self.effects, "nd_crisis_classify_follow_through")
+        codes = re.findall(r"name = nd_ft_reason value = (\d)", body)
+        self.assertEqual(sorted(codes), [str(c) for c in range(1, 8)])
+
+    def test_ai_never_bluffs_in_public(self):
+        self.assertIn("nd_threat_backed = { TARGET = $TARGET$ }",
+                      block(self.triggers, "nd_ai_would_issue_ultimatum"))
+
+    def test_ai_bluffs_in_private_only_when_aggressive(self):
+        warn = block(self.triggers, "nd_ai_would_warn")
+        self.assertRegex(warn, r"OR = \{\s*nd_threat_backed = \{ TARGET = \$TARGET\$ \}\s*ruler_is_aggressive = yes\s*\}")
+
+
+DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness", "nd_cd_public",
+                "nd_cd_counter", "nd_cd_reliability", "nd_cd_weeks", "nd_cd_talks", "nd_cd_backed",
+                "nd_cd_exercise"]
+PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
+                  "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
+                  "nd_yp_follow_through"]
+
+
+class TestCrisisFigures(unittest.TestCase):
+    def setUp(self):
+        self.values = strip_comments(read(VALUES))
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+
+    def summed(self, total):
+        body = block(self.values, total)
+        return re.findall(r"(?:value|add) = (nd_(?:cd|yp)_\w+)_value\b", body)
+
+    def test_totals_are_exactly_their_parts(self):
+        self.assertEqual(self.summed("nd_crisis_danger_value"), DANGER_PARTS)
+        self.assertEqual(self.summed("nd_yield_pressure_value"), PRESSURE_PARTS)
+
+    def test_every_part_has_a_value(self):
+        for part in DANGER_PARTS + PRESSURE_PARTS:
+            self.assertRegex(self.values, rf"(?m)^{part}_value = \{{", part)
+
+    def test_refresh_stores_every_part_under_its_own_value(self):
+        body = block(self.effects, "nd_crisis_refresh_figures")
+        stored = re.findall(r"nd_crisis_store_(?:cd|yp) = \{ C = (\w+) V = (\w+) \}", body)
+        self.assertEqual([c for c, _ in stored], DANGER_PARTS + PRESSURE_PARTS)
+        for c, v in stored:
+            self.assertEqual(v, c + "_value")
+
+    def test_clear_removes_every_part(self):
+        body = block(self.effects, "nd_crisis_clear_figures")
+        for var in DANGER_PARTS + PRESSURE_PARTS + ["nd_cd_dampened", "nd_ft_reason"]:
+            self.assertIn(f"remove_variable = {var}", body, var)
+
+    def test_losing_war_is_read_from_the_target(self):
+        self.assertNotIn("is_losing_war_against", block(self.values, "nd_yp_war_value"))
+        self.assertIn("nd_is_losing_war_to = { ENEMY = scope:nd_issuer }", block(self.values, "nd_yp_war_value"))
+        self.assertNotIn("ROOT", block(strip_comments(read(TRIGGERS)), "nd_is_losing_war_to"))
+
+    def test_refresh_is_the_only_writer_of_the_totals(self):
+        for path in (CRISIS_EFFECTS, EFFECTS, CRISIS_EVENTS, INCIDENT_EVENTS):
+            text = strip_comments(read(path))
+            if path == CRISIS_EFFECTS:
+                text = text.replace(block(text, "nd_crisis_refresh_figures"), "")
+            self.assertNotRegex(text, r"name = nd_(?:crisis_danger|yield_pressure) value", path.name)
+
+
+class TestOutcomeNotice(unittest.TestCase):
+    def setUp(self):
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+        self.events = strip_comments(read(CRISIS_EVENTS))
+
+    def test_close_no_longer_applies_consequences(self):
+        self.assertNotRegex(self.effects, r"(?m)^nd_crisis_apply_outcome = \{")
+        self.assertNotIn("nd_crisis_apply_outcome = yes", block(self.effects, "nd_crisis_close"))
+
+    def test_close_flushes_before_recording(self):
+        body = block(self.effects, "nd_crisis_close")
+        flush = body.index("nd_crisis_flush_pending = yes")
+        record = body.index("nd_crisis_record_pending = yes")
+        self.assertLess(flush, record)
+        self.assertEqual(body.count("nd_crisis_flush_pending = yes"), 2)
+
+    def test_outcome_nine_records_nothing(self):
+        body = block(self.effects, "nd_crisis_close")
+        self.assertRegex(body, r"NOT = \{ var:nd_crisis_outcome_now = 9 \}(\s*\})+\s*nd_crisis_record_pending = yes")
+
+    def test_outcome_option_guards_pending(self):
+        body = option_body(self.events, "nuclear_crisis.6.a")
+        self.assertIn("has_variable = nd_crisis_pending_outcome", body)
+        self.assertIn("var:nd_crisis_pending_opponent ?= scope:nd_outcome_other", body)
+        self.assertIn("nd_crisis_apply_outcome_side = yes", body)
+        self.assertIn("custom_tooltip = nd_tt_outcome_already_settled", body)
+
+    def test_every_credibility_change_says_its_number(self):
+        body = block(self.effects, "nd_crisis_apply_outcome_side") + block(self.effects, "nd_crisis_bluff_called")
+        pairs = re.findall(r"text = nd_tt_credibility_(up|down)_(\d+)(?:_bluff)?\s*nd_change_credibility = \{ AMOUNT = (-?\d+) \}", body)
+        self.assertTrue(pairs)
+        for direction, n, amount in pairs:
+            self.assertEqual(int(amount), int(n) if direction == "up" else -int(n))
+        self.assertEqual(body.count("nd_change_credibility"), len(pairs), "a credibility change without its number line")
+
+
+PREVIEW_PINS = {
+    # loc key: (script value holding the constant, operation, number)
+    "nd_tt_open_f_unarmed": ("nd_yp_answer_value", "add", 20),
+    "nd_tt_open_f_survivable": ("nd_yp_answer_value", "subtract", 25),
+    "nd_tt_open_f_armed": ("nd_yp_answer_value", "subtract", 10),
+    "nd_tt_open_f_protector": ("nd_yp_protector_value", "subtract", 20),
+    "nd_tt_open_f_aggressive": ("nd_yp_temperament_value", "subtract", 15),
+    "nd_tt_open_f_cautious": ("nd_yp_temperament_value", "add", 10),
+    "nd_tt_open_f_losing": ("nd_yp_war_value", "add", 15),
+    "nd_tt_open_f_existence": ("nd_yp_war_value", "subtract", 15),
+    "nd_tt_open_f_alert": ("nd_yp_alert_value", "add", 10),
+    "nd_tt_open_backed": ("nd_yp_follow_through_value", "add", 10),
+    "nd_tt_open_bluff_existential": ("nd_yp_follow_through_value", "subtract", 25),
+    "nd_tt_open_bluff_flexible": ("nd_yp_follow_through_value", "subtract", 25),
+    "nd_tt_open_bluff_law": ("nd_yp_follow_through_value", "subtract", 25),
+    "nd_tt_open_bluff_nfu": ("nd_yp_follow_through_value", "subtract", 35),
+}
+
+
+def loc_value(key):
+    for path in LOC_DIR.glob("*.yml"):
+        for line in path.read_text(encoding="utf-8-sig").splitlines():
+            m = re.match(r"\s+" + re.escape(key) + r":\d*\s+\"(.*)\"\s*$", line)
+            if m:
+                return m.group(1)
+    raise AssertionError(f"loc key {key} not found")
+
+
+class TestActionPreview(unittest.TestCase):
+    def setUp(self):
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+        self.values = strip_comments(read(VALUES))
+
+    def test_open_uses_the_preview(self):
+        body = block(self.effects, "nd_crisis_open")
+        self.assertIn("nd_crisis_preview = { TARGET = $TARGET$ PUBLIC = $PUBLIC$ }", body)
+        self.assertNotIn("nd_tt_crisis_opens_", body)
+        self.assertNotIn("change_infamy", body)
+        self.assertNotIn("change_relations", body)
+
+    def test_preview_reads_no_crisis_scopes(self):
+        body = block(self.effects, "nd_crisis_preview")
+        self.assertNotRegex(body, r"scope:nd_(?!pv_self\b)")
+        self.assertNotRegex(body, r"(?<!temporary_)save_scope_as")
+        self.assertNotRegex(body, r"= PREV\b", "PREV passed as a parameter")
+
+    def test_preview_numbers_match_the_formula(self):
+        preview = block(self.effects, "nd_crisis_preview")
+        for key, (value, op, n) in PREVIEW_PINS.items():
+            self.assertIn(key, preview, key)
+            self.assertRegex(block(self.values, value), rf"{op} = {n}\b", f"{value} lost {op} {n}")
+            self.assertIn(str(n), loc_value(key), key)
+
+    def test_preview_stakes_and_deadlines(self):
+        self.assertRegex(self.values, r"nd_crisis_deadline_public_weeks = 8\b")
+        self.assertRegex(self.values, r"nd_crisis_deadline_private_weeks = 10\b")
+        self.assertRegex(self.values, r"nd_crisis_pressure_interval_weeks = 6\b")
+        self.assertIn("8", loc_value("nd_tt_open_next_public"))
+        self.assertIn("10", loc_value("nd_tt_open_next_private"))
+        for key in ("nd_tt_open_next_public", "nd_tt_open_next_private"):
+            self.assertIn("6", loc_value(key))
+        for n in ("15", "10"):
+            self.assertIn(n, loc_value("nd_tt_open_stakes_public"))
+        for n in ("10", "5"):
+            self.assertIn(n, loc_value("nd_tt_open_stakes_private"))
+
+
+ACT_LINES = {
+    "nd_crisis_act_yield": ["nd_crisis_yield_lines = yes", "custom_tooltip = nd_tt_then_yield"],
+    "nd_crisis_yield_lines": ["nd_tt_yield_war", "nd_tt_yield_play", "nd_tt_yield_guarantee",
+                              "nd_tt_yield_freeze", "nd_tt_yield_alert"],
+    "nd_crisis_act_reject": ["nd_tt_stage_to_confrontation", "nd_tt_reject_defiance"],
+    "nd_crisis_act_counter_threat": ["nd_tt_stage_to_confrontation", "nd_tt_counter_danger"],
+    "nd_crisis_act_propose_talks": ["nd_tt_talks_terms", "nd_crisis_talks_credibility_lines = yes",
+                                    "nd_tt_talks_meanwhile"],
+    "nd_crisis_act_accept_standdown": ["nd_tt_standdown_terms", "nd_crisis_talks_credibility_lines = yes"],
+    "nd_crisis_act_hold": ["nd_tt_hold_deadline", "nd_tt_hold_alert_4w", "nd_tt_hold_alert_2w"],
+    "nd_crisis_act_extend": ["text = nd_tt_credibility_down_3"],
+    "nd_crisis_act_back_down": ["nd_tt_then_back_down_public", "nd_tt_then_back_down_private",
+                                "nd_tt_then_bluff_called"],
+    "nd_crisis_act_go_public": ["change_infamy = 5", "change_relations", "nd_tt_go_public_terms"],
+    "nd_crisis_act_exercise": ["text = nd_tt_strain_up_5", "text = nd_tt_credibility_up_3",
+                               "nd_tt_exercise_effect"],
+}
+
+
+class TestActLines(unittest.TestCase):
+    def setUp(self):
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_every_act_names_its_numbers(self):
+        for act, needles in ACT_LINES.items():
+            body = block(self.effects, act)
+            for needle in needles:
+                self.assertIn(needle, body, f"{act} lacks {needle}")
+
+    def test_visible_act_lines_read_no_saved_scopes(self):
+        """The panel renders these acts with no saved scopes."""
+        for act in ACT_LINES:
+            body = block(self.effects, act)
+            hidden = re.findall(r"hidden_effect = \{", body)
+            visible = body
+            for _ in hidden:
+                visible = visible.replace("hidden_effect = {" + block(visible, "hidden_effect") + "}", "")
+            self.assertNotRegex(visible, r"scope:nd_(issuer|target)", act)
+
+    def test_act_numbers_match_their_constants(self):
+        values = strip_comments(read(VALUES))
+        self.assertRegex(values, r"nd_crisis_deadline_extension_weeks = 6\b")
+        self.assertIn("6", loc_value("nd_tt_hold_deadline"))
+        self.assertIn("6", loc_value("nd_tt_act_extend"))
+        self.assertRegex(block(values, "nd_cd_counter_value"), r"add = 10\b")
+        self.assertIn("10", loc_value("nd_tt_counter_danger"))
+        self.assertRegex(block(values, "nd_cd_talks_value"), r"subtract = 15\b")
+        self.assertIn("15", loc_value("nd_tt_talks_meanwhile"))
+        self.assertRegex(block(values, "nd_yp_alert_value"), r"add = 10\b")
+        self.assertIn("10", loc_value("nd_tt_hold_alert_2w"))
+        self.assertIn("name = nd_crisis_exercise_weeks value = 6", block(self.effects, "nd_crisis_act_exercise"))
+        self.assertIn("6", loc_value("nd_tt_exercise_effect"))
+
+
+BREAKDOWN_KEYS = {p: p + "_line" for p in DANGER_PARTS + PRESSURE_PARTS}
+
+
+class TestCrisisPanel(unittest.TestCase):
+    def setUp(self):
+        self.sguis = strip_comments(read(SGUIS))
+        self.gui = read(GUI)
+        self.custom = strip_comments(read(CUSTOM_LOC))
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+
+    def test_display_handlers_exist_and_are_display_only(self):
+        for name in ("nd_crisis_we_issued_sgui", "nd_crisis_we_are_target_sgui", "nd_crisis_private_sgui",
+                     "nd_crisis_pressure_breakdown_sgui", "nd_crisis_danger_breakdown_sgui",
+                     "nd_crisis_next_pressure_sgui"):
+            body = block(self.sguis, name)
+            self.assertIn("is_valid = { always = no }", body, name)
+            self.assertIn("ai_is_valid = { always = no }", body, name)
+            self.assertIn(name, self.gui, f"{name} is never drawn")
+
+    def test_breakdowns_print_every_stored_part(self):
+        pressure = block(self.sguis, "nd_crisis_pressure_breakdown_sgui")
+        danger = block(self.sguis, "nd_crisis_danger_breakdown_sgui")
+        for part in PRESSURE_PARTS:
+            self.assertIn(f"nd_crisis_breakdown_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} }}", pressure)
+        for part in DANGER_PARTS:
+            self.assertIn(f"nd_crisis_breakdown_line = {{ C = {part} KEY = {BREAKDOWN_KEYS[part]} }}", danger)
+
+    def test_breakdown_lines_guard_their_variable(self):
+        body = block(self.effects, "nd_crisis_breakdown_line")
+        self.assertIn("has_variable = $C$", body)
+        for part, key in BREAKDOWN_KEYS.items():
+            self.assertIn(f"THIS.Var('{part}').GetValue", loc_value(key), key)
+
+    def test_role_rows_are_gated(self):
+        for key, sgui in (("nd_w_crisis_act_public", "nd_crisis_private_sgui"),
+                          ("nd_w_crisis_act_yield", "nd_crisis_we_are_target_sgui"),
+                          ("nd_w_crisis_act_back_down", "nd_crisis_we_issued_sgui"),
+                          ("nd_w_crisis_act_exercise", "nd_armed_sgui")):
+            i = self.gui.index(f'text = "{key}"')
+            row = self.gui.rfind("nd_choice_row = {", 0, i)
+            self.assertIn(f"GetScriptedGui('{sgui}')", self.gui[row:i], key)
+
+    def test_new_custom_loc_blocks_have_fallbacks(self):
+        for name in ("nd_crisis_pressure_label", "nd_crisis_concede_label", "nd_crisis_concession_short",
+                     "nd_crisis_concession_long", "nd_crisis_ft_label", "nd_crisis_ft_word",
+                     "nd_crisis_ft_reason", "nd_crisis_stakes_short", "nd_crisis_stakes_long",
+                     "nd_crisis_concession_past", "nd_crisis_stage_next"):
+            body = block(self.custom, name)
+            self.assertRegex(body, r"text = \{\s*trigger = \{ always = yes \}\s*localization_key = \w+\s*\}\s*$", name)
+
+    def test_localize_keys_in_gui_exist(self):
+        keys = set(re.findall(r"Localize\( '(\w+)' \)", self.gui))
+        self.assertTrue(keys)
+        missing = sorted(k for k in keys if k not in loc_keys())
+        self.assertFalse(missing, missing)
+
+    def test_pressure_thresholds_match_the_events(self):
+        events = strip_comments(read(CRISIS_EVENTS))
+        concede = option_body(events, "nuclear_crisis.5.a")
+        for n in ("50", "70", "85"):
+            self.assertIn(f"var:nd_yield_pressure >= {n}", concede)
+            self.assertIn(n, loc_value("nd_w_crisis_pressure_tt"))
+
+
+class TestReviewFixes(unittest.TestCase):
+    """Fixes from the PR 1 whole-branch review."""
+
+    def setUp(self):
+        self.effects = strip_comments(read(CRISIS_EFFECTS))
+        self.events = strip_comments(read(CRISIS_EVENTS))
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.values = strip_comments(read(VALUES))
+
+    def test_outcome_option_applies_when_the_opponent_is_gone(self):
+        body = option_body(self.events, "nuclear_crisis.6.a")
+        self.assertIn("NOT = { exists = scope:nd_outcome_other }", body)
+        self.assertIn("NOT = { exists = var:nd_crisis_pending_opponent }", body)
+
+    def test_opponent_reactions_need_the_live_pending_opponent(self):
+        self.assertRegex(self.triggers, r"(?m)^nd_outcome_other_is_live = \{")
+        body = block(self.effects, "nd_crisis_apply_outcome_side")
+        self.assertNotIn("limit = { exists = scope:nd_outcome_other }", body)
+        self.assertIn("nd_outcome_other_is_live = yes", body)
+
+    def test_outcome_notices_pop_up(self):
+        body = block(self.effects, "nd_crisis_close")
+        self.assertEqual(body.count("trigger_event = { id = nuclear_crisis.6 popup = yes }"), 2)
+
+    def test_every_act_credibility_change_says_its_number(self):
+        for m in re.finditer(r"(?m)^((?:nd_crisis_act|nd_guarantee_act)_\w+) = \{", self.effects):
+            body = block(self.effects, m.group(1))
+            pairs = re.findall(r"text = nd_tt_credibility_(up|down)_(\d+)(?:_bluff)?\s*nd_change_credibility = \{ AMOUNT = (-?\d+) \}", body)
+            for direction, n, amount in pairs:
+                self.assertEqual(int(amount), int(n) if direction == "up" else -int(n), m.group(1))
+            self.assertEqual(body.count("nd_change_credibility"), len(pairs),
+                             f"{m.group(1)} changes credibility without its number line")
+
+    def test_guarantee_honour_previews_its_ultimatum(self):
+        body = block(self.effects, "nd_guarantee_act_honour")
+        hidden = block(body, "hidden_effect")
+        self.assertNotIn("nd_crisis_open", hidden)
+        self.assertIn("nd_crisis_open = { TARGET = scope:nd_guarantee_attacker PUBLIC = yes }", body)
+
+    def test_exercise_pressure_counts_only_the_issuers(self):
+        self.assertIn("var:nd_crisis_exercise_by_issuer = 1", block(self.values, "nd_yp_exercise_value"))
+        act = block(self.effects, "nd_crisis_act_exercise")
+        self.assertIn("name = nd_crisis_exercise_by_issuer value = 1", act)
+        self.assertIn("name = nd_crisis_exercise_by_issuer value = 0", act)
+        self.assertIn("remove_variable = nd_crisis_exercise_by_issuer", block(self.effects, "nd_crisis_weekly_tick"))
+        self.assertIn("remove_variable = nd_crisis_exercise_by_issuer", block(self.effects, "nd_crisis_clear_vars"))
+        incidents = strip_comments(read(INCIDENT_EVENTS))
+        self.assertIn("nd_crisis_exercise_by_issuer", option_body(incidents, "nuclear_incident.10.c"))
+        self.assertIn("name = nd_crisis_exercise_by_issuer value = 1", option_body(incidents, "nuclear_incident.10.e"))
+
+    def test_preview_charges_only_when_the_crisis_opens(self):
+        body = block(self.effects, "nd_crisis_preview")
+        gate = body.index("nd_crisis_parties_free = { TARGET = $TARGET$ }")
+        self.assertLess(gate, body.index("change_infamy"))
+        self.assertLess(gate, body.index("change_relations"))
+
+    def test_refuse_talks_promises_pressure_only_from_confrontation(self):
+        body = block(self.effects, "nd_crisis_act_refuse_talks")
+        self.assertIn("custom_tooltip = nd_tt_refuse_talks_resume", body)
+        self.assertIn("custom_tooltip = nd_tt_refuse_talks_no_pressure_yet", body)
+        self.assertIn("6", loc_value("nd_tt_refuse_talks_resume"))
+
+    def test_war_law_tooltips_match_the_exception(self):
+        for key in ("nd_tt_war_law_permits_strike", "nd_tt_war_law_permits_tactical_strike"):
+            self.assertIn("a war we are fighting", loc_value(key), key)
+
+    def test_ft_reason_2_names_both_doctrines(self):
+        self.assertIn("Warfighting", loc_value("nd_ft_reason_2"))
+
+    def test_preview_header_is_pinned_and_points_to_the_journal(self):
+        self.assertRegex(block(self.values, "nd_yp_base_value"), r"value = 30\b")
+        header = loc_value("nd_tt_open_factors_header")
+        self.assertIn("30", header)
+        self.assertIn("journal entry", header)
 
 
 class TestManagedFamilies(unittest.TestCase):
