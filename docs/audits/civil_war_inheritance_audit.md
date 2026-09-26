@@ -146,7 +146,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   `un_hq_country` to ROOT when it names a dead same-tag object.
 
 ### F3. The central bank's gold and the whole monetary state are replaced by the rebel's (H2). HIGH (#462)
-- **FIXED (#462), pending the probe.** The audit's preferred option, with the pointer renamed `te_cw_parent` (system-neutral; contract at the foot of `te_monetary_on_actions.txt`). On a rebel win `te_monetary_inherit_central_bank` adds the two vaults and their hot money, and copies the loser's inflation, peg and FX state and the player's mandate, delegation and regime. It copies no tracker, and re-adds the peg's timed modifiers from their month counters. It logs `TE_CW_PROBE monetary 1/2` and `2/2`.
+- **FIXED (#462), pending the probe.** The audit's preferred option, with the pointer renamed `te_cw_parent` (system-neutral; contract at the foot of `te_monetary_on_actions.txt`). On a rebel win `te_monetary_inherit_central_bank` adds the two vaults and their hot money, and copies the loser's inflation, peg and FX state and the player's mandate, delegation and rate target. The monetary regime is a law, so it follows the winner's laws. It copies no tracker, and re-adds the peg's timed modifiers from their month counters. It logs `TE_CW_PROBE monetary 1/2` and `2/2`.
 - `common/on_actions/te_monetary_on_actions.txt:222-262` initialises the rebel at `on_revolution_start`
   (dispatching `te_monetary_internal.1`, `events/te_monetary_events.txt:56-63`). Under winner precedence,
   the rebel's value then beats the nation's on every `te_*` variable. The vault `te_bank_gold` is seeded
