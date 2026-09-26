@@ -1,0 +1,246 @@
+﻿# ============================================================================
+# GLOBAL WARMING — how the AI chooses mitigation policies
+# ============================================================================
+# Read ONLY by the `ai_chance` blocks in
+# common/scripted_buttons/global_warming_buttons.txt (and the console dump in
+# common/scripted_effects/te_debug_gw_effects.txt). Nothing here gates a player
+# control: `possible` stays in global_warming_triggers.txt, shared with the
+# widget, and movement_environmental's radicalism factors mirror it.
+#
+# WHY A SCORE AND NOT PER-BUTTON TERMS. The buttons used to weigh temperature
+# alone, and every repeal weight was zero above 0.3-0.5 C, so an adopted policy
+# never came off. Adoption was a one-way ratchet: every AI eventually rolled
+# every positive button, and a 2008 save (1.26 C) had 132 of 136 countries
+# holding seven of the eight policies. The only brake was laissez-faire, which
+# one country held -- the player.
+#
+# Now each country has one climate will (0 to roughly 100), and each policy a
+# threshold on it. Adopt scores only at or above the threshold; repeal scores
+# only below threshold - gw_ai_repeal_band. Between the two neither button
+# scores, so a policy sits where the country's conditions put it, and how often
+# the engine lets the AI click only sets how fast it gets there.
+#
+# THE BAND MUST STAY WIDER THAN ANY ONE POLITICAL SWING. Interest groups change
+# at every election; with a band narrower than an IG term, a country parked near
+# a threshold would adopt and repeal a policy every four years. The two IG terms
+# are 8 and the band is 15.
+#
+# Scope: country, throughout.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# The climate will and its parts. The parts are separate values so the console
+# dump (te_debug_gw.1) can log each one.
+# ----------------------------------------------------------------------------
+gw_ai_climate_will = {
+	value = gw_ai_will_urgency
+	add = gw_ai_will_politics
+	add = gw_ai_will_movement
+	add = gw_ai_will_wealth
+	add = gw_ai_will_fossil
+}
+
+# How bad it has got: 20 per degree, 25 at 1.26 C, 40 at 2 C, 60 at 3 C.
+gw_ai_will_urgency = {
+	value = temperature_anomaly_display
+	multiply = 20
+	min = 0
+	max = 70
+}
+
+# Government and law. Laissez-faire carries the brake the old weights put on
+# carbon tax, emission standards, green building codes and divestment.
+gw_ai_will_politics = {
+	value = 0
+	if = {
+		limit = { has_law_or_variant = law_type:law_ministry_of_the_environment }
+		add = 15
+	}
+	if = {
+		limit = { has_law_or_variant = law_type:law_laissez_faire }
+		add = -20
+	}
+	if = {
+		limit = {
+			any_interest_group = {
+				is_in_government = yes
+				leader ?= { has_ideology = ideology:ideology_environmentalists }
+			}
+		}
+		add = 8
+	}
+	if = {
+		limit = {
+			ig:ig_industrialists ?= { is_in_government = yes }
+		}
+		add = -8
+	}
+}
+
+# Popular pressure: the environmental movement's support, 5 per 10% of the
+# population, at most 10.
+gw_ai_will_movement = {
+	value = 0
+	every_political_movement = {
+		limit = { is_political_movement_type = movement_environmental }
+		add = this.political_movement_support
+	}
+	multiply = 50
+	max = 10
+}
+
+# Ability to pay: standard of living against the world mean over countries with
+# the journal entry (gw_refresh_global_counts_effect stores it monthly), one
+# point per point of SoL, within +-10. Zero until the first monthly sweep.
+gw_ai_will_wealth = {
+	value = 0
+	if = {
+		limit = { has_global_variable = gw_g_mean_sol }
+		add = average_sol
+		subtract = global_var:gw_g_mean_sol
+	}
+	min = -10
+	max = 10
+}
+
+# Fossil-fuel exporters resist: -10 when this country's market produces a
+# quarter more coal and oil than it burns.
+gw_ai_will_fossil = {
+	value = 0
+	if = {
+		limit = { gw_ai_market_fossil_output_ratio > 1.25 }
+		add = -10
+	}
+}
+
+# Coal and oil production over consumption for this country's market.
+gw_ai_market_fossil_output_ratio = {
+	value = 0
+	market = {
+		mg:coal = { add = market_goods_production }
+		mg:oil = { add = market_goods_production }
+	}
+	divide = {
+		value = 0
+		market = {
+			mg:coal = { add = market_goods_consumption }
+			mg:oil = { add = market_goods_consumption }
+		}
+		min = 1
+	}
+}
+
+# ----------------------------------------------------------------------------
+# Thresholds. A policy's threshold appears ONCE, in its adopt margin; the repeal
+# margin is derived from it, so the two can never drift apart
+# (test_gw_ai_policy_table.py checks the pairing).
+#
+# What the table means with no movement, no wealth gap and no IG term:
+#
+#   will            no ministry   with ministry (+15)
+#   1.26 C          25            40
+#   2.0 C           40            55
+#   3.0 C           60            75
+#
+#   threshold   policy                   first adopted by
+#   25          Climate Adaptation       everyone at 1.26 C, if authority allows
+#   30          Reforestation Subsidies  a ministry, or a movement, at 1.26 C
+#   35          Renewable Investment     a ministry at 1.26 C
+#   40          Public Transit           a ministry at 1.26 C; everyone at 2 C
+#   45          Green Building Codes     ministry + movement at 1.26 C
+#   45          Emission Standards       ministry + movement at 1.26 C
+#   55          Carbon Tax               ministry + movement + green IG at 1.26 C
+#   70          Fossil-Fuel Divestment   rare before 3 C
+# ----------------------------------------------------------------------------
+
+# Repeal waits until the will is this far BELOW the threshold.
+gw_ai_repeal_band = 15
+
+# Adopt weight = gw_ai_adopt_base_weight + margin, capped. The cap keeps one
+# policy from swamping the other buttons in the same roll.
+gw_ai_adopt_base_weight = 10
+gw_ai_max_weight = 30
+
+# Extra repeal weight on a policy that costs authority, while the country's
+# available authority is negative.
+gw_ai_authority_deficit_repeal_weight = 15
+
+gw_ai_adopt_margin_climate_adaptation = {
+	value = gw_ai_climate_will
+	subtract = 25
+}
+gw_ai_repeal_margin_climate_adaptation = {
+	value = 0
+	subtract = gw_ai_adopt_margin_climate_adaptation
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_adopt_margin_reforestation = {
+	value = gw_ai_climate_will
+	subtract = 30
+}
+gw_ai_repeal_margin_reforestation = {
+	value = 0
+	subtract = gw_ai_adopt_margin_reforestation
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_adopt_margin_renewable_investment = {
+	value = gw_ai_climate_will
+	subtract = 35
+}
+gw_ai_repeal_margin_renewable_investment = {
+	value = 0
+	subtract = gw_ai_adopt_margin_renewable_investment
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_adopt_margin_public_transit = {
+	value = gw_ai_climate_will
+	subtract = 40
+}
+gw_ai_repeal_margin_public_transit = {
+	value = 0
+	subtract = gw_ai_adopt_margin_public_transit
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_adopt_margin_green_building_codes = {
+	value = gw_ai_climate_will
+	subtract = 45
+}
+gw_ai_repeal_margin_green_building_codes = {
+	value = 0
+	subtract = gw_ai_adopt_margin_green_building_codes
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_adopt_margin_emission_standards = {
+	value = gw_ai_climate_will
+	subtract = 45
+}
+gw_ai_repeal_margin_emission_standards = {
+	value = 0
+	subtract = gw_ai_adopt_margin_emission_standards
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_adopt_margin_carbon_tax = {
+	value = gw_ai_climate_will
+	subtract = 55
+}
+gw_ai_repeal_margin_carbon_tax = {
+	value = 0
+	subtract = gw_ai_adopt_margin_carbon_tax
+	subtract = gw_ai_repeal_band
+}
+
+gw_ai_adopt_margin_fossil_fuel_divestment = {
+	value = gw_ai_climate_will
+	subtract = 70
+}
+gw_ai_repeal_margin_fossil_fuel_divestment = {
+	value = 0
+	subtract = gw_ai_adopt_margin_fossil_fuel_divestment
+	subtract = gw_ai_repeal_band
+}

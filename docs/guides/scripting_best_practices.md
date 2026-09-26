@@ -3166,6 +3166,23 @@ Two shapes that avoid it, both in the banking tools of 2026-09-23 (`docs/audits/
 A button that does something *different* (a new lever, a new trade-off) belongs in the pool on its own
 weight; this is only for buttons that answer the same question.
 
+## An Adopt Weight With No Repeal Counterweight Is a Ratchet — Every AI Ends Up Holding It
+
+If a toggle's enable button scores above zero and its disable button scores zero in the same conditions,
+the AI never turns the toggle off. How often the AI clicks decides only how soon every AI holds every
+positive-weight toggle. It does not decide *whether*. Global warming shipped that way: each policy's
+adopt weight read temperature alone, and every repeal weight was zero above 0.3–0.5°C. A 2008 save at
+1.26°C had 132 of 136 countries on seven of the eight policies. The one brake was laissez-faire, and only
+the player held it.
+
+The fix that makes the steady state independent of click cadence is to give each toggle one **threshold on
+a per-country score**. Adopt scores only at or above it, and repeal scores only a band below it. Keep the
+band wider than any single term that flips on its own, such as interest groups in government, which change
+at every election. Otherwise a country parked at the threshold toggles the policy every few years. Write
+each threshold once and derive the repeal margin from the adopt margin, so the pair cannot drift, and test
+the pairing. Example: `common/script_values/global_warming_ai_values.txt` and `test_gw_ai_policy_table.py`.
+Before adding an enable button's `ai_chance`, ask what makes its disable button score.
+
 ## Triggered Option Names: `name = { trigger=... text=... }`
 
 Event option labels can be conditional on context. Repeat the `name` field with each variant gated by a `trigger`; first match wins. No `else` / fallback syntax — use `trigger = { always = yes }` as the catch-all.
