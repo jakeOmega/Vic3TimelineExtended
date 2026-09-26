@@ -241,5 +241,34 @@ class TransitionTests(unittest.TestCase):
                 _block(msgs, name)
 
 
+LOC_JE = _path("localization", "english", "te_journal_entries_l_english.yml")
+
+
+class DisplayTests(unittest.TestCase):
+    def test_counts_share_one_rule(self):
+        text = _read(_path("common", "script_values", "un_script_values.txt"))
+        self.assertIn("un_member_represented = yes", _block(text, "un_member_count"))
+        self.assertIn("un_representation_suspended = yes", _block(text, "un_suspended_member_count"))
+        self.assertIn("un_membership_eligible = yes", _block(text, "un_eligible_country_count"))
+        for gone in ("un_subject_member_count", "un_independent_country_count"):
+            with self.subTest(gone=gone):
+                self.assertNotRegex(text, re.compile(r"^" + gone + r"\s*=", re.M))
+
+    def test_journal_lines(self):
+        je = _read(_path("common", "journal_entries", "je_united_nations.txt"))
+        with open(LOC_JE, encoding="utf-8-sig") as f:
+            loc = f.read()
+        for key in ("je_un_statistics", "je_un_statistics_suspended_one",
+                    "je_un_statistics_suspended_many"):
+            with self.subTest(key=key):
+                self.assertIn("desc = " + key + "\n", je)
+                self.assertRegex(loc, r"\n " + key + r":0 \".*un_eligible_country_count")
+        self.assertNotIn("je_un_statistics_subject_seats", loc + je)
+
+    def test_concept_defined(self):
+        concepts = _read(_path("common", "game_concepts", "extra_concepts.txt"))
+        self.assertRegex(concepts, re.compile(r"^concept_un_suspended_representation\s*=\s*\{", re.M))
+
+
 if __name__ == "__main__":
     unittest.main()

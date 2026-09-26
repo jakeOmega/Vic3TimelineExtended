@@ -5,41 +5,41 @@
 
 # ---- Member Statistics ----
 
-# The General Assembly line reads "N of M nations": members that are
-# independent, of the countries that could join (independent and not
-# decentralized — un_join_button's own gates). A member that has since become
-# a subject keeps its seat (nothing revokes un_member_modifier on
-# subjugation), so it is counted apart, by un_subject_member_count, rather
-# than in a numerator whose denominator leaves it out ("102 of 99").
+# The General Assembly line (§0.8 rulings 7-8): the represented members of the
+# eligible nations, then, apart, the members whose representation is
+# suspended. Both sides of "N of M" ask un_membership_eligible, so N never
+# exceeds M ("102 of 99" was a numerator and denominator asking different
+# questions), and an annexed member leaves both at once.
 un_member_count = {
 	value = 0
 	every_country = {
-		limit = {
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-			is_subject = no
-		}
+		limit = { un_member_represented = yes }
 		add = 1
 	}
 }
 
-un_subject_member_count = {
+un_suspended_member_count = {
 	value = 0
 	every_country = {
-		limit = {
-			je:je_united_nations ?= { has_modifier = un_member_modifier }
-			is_subject = yes
-		}
+		limit = { un_representation_suspended = yes }
 		add = 1
 	}
 }
 
-un_independent_country_count = {
+un_eligible_country_count = {
 	value = 0
 	every_country = {
-		limit = {
-			is_subject = no
-			NOT = { is_country_type = decentralized }
-		}
+		limit = { un_membership_eligible = yes }
+		add = 1
+	}
+}
+
+# Our direct subjects whose seats we carry (§0.8 ruling 4), for our dues line.
+# Scope: country
+un_carried_seat_count = {
+	value = 0
+	every_direct_subject = {
+		limit = { un_dues_billed_to_overlord = yes }
 		add = 1
 	}
 }

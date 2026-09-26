@@ -201,16 +201,23 @@
 			}
 		}
 
-		# 4. General Assembly statistics. Members that have become subjects
-		# keep their seats and are counted apart (un_subject_member_count).
+		# 4. General Assembly statistics (§0.8 ruling 8): the represented
+		# members of the eligible nations, then the members whose
+		# representation is suspended, in the singular or the plural.
 		first_valid = {
 			triggered_desc = {
-				desc = je_un_statistics_subject_seats
+				desc = je_un_statistics_suspended_many
 				trigger = {
 					any_country = {
-						je:je_united_nations ?= { has_modifier = un_member_modifier }
-						is_subject = yes
+						un_representation_suspended = yes
+						count >= 2
 					}
+				}
+			}
+			triggered_desc = {
+				desc = je_un_statistics_suspended_one
+				trigger = {
+					any_country = { un_representation_suspended = yes }
 				}
 			}
 			triggered_desc = {

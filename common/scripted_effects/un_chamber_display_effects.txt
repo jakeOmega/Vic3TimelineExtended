@@ -1818,7 +1818,12 @@ un_chamber_obligations_outside_block = {
 # Our own dues: paying, withholding, or silenced by Article 19.
 # Scope: country (a member)
 un_chamber_dues_lines = {
+	# §0.8: a suspended member pays nothing itself; its overlord is assessed.
 	if = {
+		limit = { un_representation_suspended = yes }
+		custom_tooltip_no_bullet = je_un_chamber_dues_suspended
+	}
+	else_if = {
 		limit = { un_dues_is_withholding = yes }
 		if = {
 			limit = { un_dues_vote_suspended = yes }
@@ -1838,6 +1843,11 @@ un_chamber_dues_lines = {
 	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_dues_none
+	}
+	# Seats we carry for suspended subjects (§0.8 ruling 4).
+	if = {
+		limit = { un_carried_seat_count > 0 }
+		custom_tooltip_no_bullet = je_un_chamber_dues_carried
 	}
 }
 
