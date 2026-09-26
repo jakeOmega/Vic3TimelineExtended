@@ -44,6 +44,11 @@ CUSTODY_ON_ACTIONS = ROOT / "common/on_actions/nuclear_custody_on_actions.txt"
 CUSTODY_EVENTS = ROOT / "events/nuclear_custody_events.txt"
 CIVIL_WAR_EFFECTS = ROOT / "common/scripted_effects/te_civil_war_effects.txt"
 CIVIL_WAR_ON_ACTIONS = ROOT / "common/on_actions/te_civil_war_on_actions.txt"
+LOOSE_EFFECTS = ROOT / "common/scripted_effects/nuclear_loose_effects.txt"
+LOOSE_TRIGGERS = ROOT / "common/scripted_triggers/nuclear_loose_triggers.txt"
+LOOSE_VALUES = ROOT / "common/script_values/nuclear_loose_values.txt"
+LOOSE_EVENTS = ROOT / "events/nuclear_loose_events.txt"
+SOCIAL_TENSIONS_ON_ACTIONS = ROOT / "common/on_actions/social_tensions_on_actions.txt"
 
 
 def tracked(path):
@@ -60,8 +65,9 @@ FIRED = r"\b(?:id|EVENT) = ([a-z_]+\.\d+)"
 SCRIPT_FILES = (EFFECTS, CRISIS_EFFECTS, TRIGGERS, ACTIONS, ARTICLE, JE, SGUIS,
                 CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS, NUKE,
                 CUSTODY_EFFECTS, CUSTODY_TRIGGERS, CUSTODY_ON_ACTIONS, CUSTODY_EVENTS,
-                CIVIL_WAR_EFFECTS, CIVIL_WAR_ON_ACTIONS)
-EVENT_FILES = (CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS, CUSTODY_EVENTS)
+                CIVIL_WAR_EFFECTS, CIVIL_WAR_ON_ACTIONS,
+                LOOSE_EFFECTS, LOOSE_TRIGGERS, LOOSE_EVENTS, SOCIAL_TENSIONS_ON_ACTIONS)
+EVENT_FILES = (CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS, CUSTODY_EVENTS, LOOSE_EVENTS)
 
 
 def read(path):
@@ -159,8 +165,11 @@ class TestEventReferences(unittest.TestCase):
     def test_every_new_event_is_fired_somewhere_or_console_only(self):
         fired = set()
         for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").glob("*.txt")):
-            fired |= set(re.findall(FIRED, strip_comments(read(path))))
-        for path in (CRISIS_EVENTS, INCIDENT_EVENTS, CUSTODY_EVENTS):
+            text = strip_comments(read(path))
+            fired |= set(re.findall(FIRED, text))
+            # An on_action's weighted random_events entry (`3 = nuclear_loose.1`).
+            fired |= set(re.findall(r"(?m)^\s*\d+ = ([a-z_]+\.\d+)\s*$", text))
+        for path in (CRISIS_EVENTS, INCIDENT_EVENTS, CUSTODY_EVENTS, LOOSE_EVENTS):
             for ev in re.findall(r"^([a-z_]+\.\d+)\s*=\s*\{", read(path), re.M):
                 if ev not in fired:
                     self.fail(f"{ev} is never fired")
@@ -1519,6 +1528,99 @@ class TestBudapestPath(unittest.TestCase):
         self.assertIn("nd_bp_refuse = yes", option_body(self.ev, "nuclear_custody.11.b"))
         articles = strip_comments(read(ROOT / "common/treaty_articles/extra_treaty_articles.txt"))
         self.assertIn("has_variable = nd_bp_refused", block(articles, "nuclear_disarmament"))
+
+
+class TestLooseWarheads(unittest.TestCase):
+    """Step 5 (spec §3): the pool's plots, the attribution roll that keeps the
+    truth apart from what the victim learns, and the reckoning."""
+
+    def setUp(self):
+        self.le = strip_comments(read(LOOSE_EFFECTS))
+        self.lt = strip_comments(read(LOOSE_TRIGGERS))
+        self.lv = strip_comments(read(LOOSE_VALUES))
+        self.lev = strip_comments(read(LOOSE_EVENTS))
+        self.ct = strip_comments(read(CUSTODY_TRIGGERS))
+
+    def test_the_plot_draws_from_the_terror_pool(self):
+        pool = block(strip_comments(read(SOCIAL_TENSIONS_ON_ACTIONS)), "random_events")
+        self.assertRegex(pool, r"(?m)^\s*\d+ = nuclear_loose\.1\s*$")
+        self.assertIn("nd_loose_plot_possible = yes", block(self.lev, "nuclear_loose.1"))
+        possible = block(self.lt, "nd_loose_plot_possible")
+        for gate in ("has_technology_researched = terrorism_and_anti_terrorism",
+                     "global_var:nd_loose_warheads > 0",
+                     "NOT = { has_global_variable = nd_loose_plot_cooldown }"):
+            self.assertIn(gate, possible)
+
+    def test_cooldown_only_once_a_device_exists(self):
+        self.assertNotIn("nd_loose_plot_cooldown", block(self.le, "nd_loose_plot"))
+        self.assertIn("name = nd_loose_plot_cooldown", block(self.le, "nd_loose_surface"))
+
+    def test_a_line_must_have_a_live_owner_and_not_be_the_victims(self):
+        live = block(self.lt, "nd_loose_line_live")
+        self.assertIn("is_country_alive = yes", live)
+        self.assertIn("NOT = { var:nd_ar_owner ?= $VICTIM$ }", block(self.lt, "nd_loose_line_usable"))
+        self.assertIn("nd_loose_line_usable = { VICTIM = scope:nd_loose_victim }", block(self.le, "nd_loose_plot"))
+
+    def test_the_warhead_leaves_the_pool_whatever_happens(self):
+        surface = block(self.le, "nd_loose_surface")
+        seized_branch = surface.index("var:nd_loose_seized = 1 }")
+        self.assertLess(surface.index("nd_loose_pool_take = { AMOUNT = 1 }"), seized_branch)
+        self.assertLess(surface.index("name = nd_ar_loose subtract = 1"), seized_branch)
+        # The candidates are counted before this line's count falls.
+        self.assertLess(surface.index("name = nd_loose_candidates add = 1"),
+                        surface.index("name = nd_ar_loose subtract = 1"))
+        # A terror device has no attacker to answer.
+        self.assertNotIn("attacking_country", surface)
+        self.assertIn("nuclear_industrial_strike = yes", surface)
+        self.assertIn("id = nuclear_loose.4 days = 30", surface)
+
+    def test_attribution_has_three_results_and_the_victims_options_follow_them(self):
+        attribute = block(self.le, "nd_loose_attribute")
+        for n in (1, 2, 3):
+            self.assertIn(f"name = nd_loose_attribution value = {n}", attribute)
+        self.assertIn("chance = nd_loose_confirm_chance", attribute)
+        self.assertIn("chance = nd_loose_shortlist_share", attribute)
+        for part in ("nd_loose_expertise", "nd_loose_network_part", "has_modifier = nuclear_power",
+                     "var:nd_loose_candidates", "var:nd_loose_seized"):
+            self.assertIn(part, block(self.lv, "nd_loose_confirm_chance"), part)
+        self.assertIn("max = 90", block(self.lv, "nd_loose_confirm_chance"))
+        self.assertIn("nd_loose_origin_answerable = yes", option_body(self.lev, "nuclear_loose.4.a"))
+        for opt in ("nuclear_loose.4.b", "nuclear_loose.4.c"):
+            self.assertIn("nd_loose_attributed = { RESULT = 2 }", option_body(self.lev, opt), opt)
+        self.assertIn("nd_loose_attributed = { RESULT = 3 }", option_body(self.lev, "nuclear_loose.4.e"))
+        self.assertIn("default_option = yes", option_body(self.lev, "nuclear_loose.4.g"))
+        # An AI names suspects in public only under an aggressive ruler.
+        name_all = option_body(self.lev, "nuclear_loose.4.b")
+        self.assertIn("base = 0", name_all)
+        self.assertIn("ruler_is_aggressive = yes", name_all)
+
+    def test_the_reckoning(self):
+        send = block(self.le, "nd_loose_send_demand")
+        self.assertIn("value = nd_loose_compensation_value", send)
+        self.assertIn("id = nuclear_loose.6", send)
+        self.assertIn("nd_loose_demand_is_full = yes", option_body(self.lev, "nuclear_loose.6.a"))
+        self.assertIn("nd_loose_pay = yes", option_body(self.lev, "nuclear_loose.6.a"))
+        self.assertIn("nd_loose_open_to_inspection = yes", option_body(self.lev, "nuclear_loose.6.b"))
+        self.assertIn("nd_loose_deny = yes", option_body(self.lev, "nuclear_loose.6.c"))
+        # Inspection secures custody; a search can find a warhead.
+        self.assertIn("has_variable = nd_loose_inspected", block(self.ct, "nd_custody_is_secured"))
+        inspect = block(self.le, "nd_loose_open_to_inspection")
+        self.assertIn("name = nd_loose_inspected", inspect)
+        self.assertIn("nd_loose_recover_from_line = { HOW = 1 }", inspect)
+        self.assertIn("country_legitimacy_base_add = -5",
+                      block(strip_comments(read(MODIFIERS)), "nd_loose_inspections"))
+
+    def test_recovery_destroys_the_warhead(self):
+        recover = block(self.le, "nd_loose_recover_from_line")
+        self.assertIn("name = nd_ar_loose subtract = 1", recover)
+        self.assertIn("nd_loose_pool_take = { AMOUNT = 1 }", recover)
+        self.assertNotIn("nuclear_weapon_stockpile", recover)
+
+    def test_panel_row(self):
+        gui = read(GUI)
+        self.assertIn("GetScriptedGui('nd_loose_sgui')", gui)
+        self.assertIn('text = "nd_w_loose_value"', gui)
+        self.assertIn("nd_loose_has_line = yes", block(strip_comments(read(SGUIS)), "nd_loose_sgui"))
 
 
 if __name__ == "__main__":

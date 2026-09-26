@@ -1587,6 +1587,8 @@
  nd_incident_coverup_exposed_desc:0 "A nuclear incident we tried to hide has come out."
  nd_incident_scandal:0 "Nuclear Incident Scandal"
  nd_incident_scandal_desc:0 "An accident or a false alarm with our nuclear forces has become public."
+ nd_loose_inspections:0 "Custody Inspections"
+ nd_loose_inspections_desc:0 "Foreign inspectors count and guard our nuclear warheads, after one of them was traced to us."
  nd_nuclear_ultimatum_action_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has issued a nuclear ultimatum to [TARGET_COUNTRY.GetName]."
  nd_nuclear_ultimatum_action_action_notification_third_party_desc:0 "[INITIATOR_COUNTRY.GetName] has issued a public nuclear ultimatum to [TARGET_COUNTRY.GetName]."
  nd_nuclear_ultimatum_action_desc:0 "Tell the world what we demand of them, and what we will do if they refuse. The strongest signal we can send, and a commitment we will be judged on."

@@ -3,6 +3,11 @@
 		chance_to_happen = 65
 		# Terrorism
 		10 = social_tensions_events.1
+		# A loose nuclear warhead (nuclear_crisis_design.md §0.10 step 5):
+		# nothing unless warheads are unaccounted for and the country has
+		# reached the terrorism era (nd_loose_plot_possible); the hidden
+		# event then rolls whether a device is real (nuclear_loose_effects.txt).
+		3 = nuclear_loose.1
 		# Foreign-linked terror: offered to the would-be sponsor (.17); its
 		# rival sees social_tensions_events.2 only if the sponsor funds the
 		# cell and the cell is uncovered. Covert-disabled only (.17's trigger).

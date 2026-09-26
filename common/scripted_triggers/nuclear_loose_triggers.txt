@@ -1,0 +1,84 @@
+﻿# ============================================================================
+# LOOSE WARHEADS — triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-loose-warheads-design.md
+# §3; what shipped is docs/systems/nuclear_crisis_design.md §0.10 step 5. The
+# effects are in common/scripted_effects/nuclear_loose_effects.txt.
+# ============================================================================
+
+# Can a loose-warhead plot be drawn against this country from the social-
+# tensions terror pool (nuclear_loose.1): the pool holds a warhead, no device
+# has surfaced anywhere in the last year, the country has reached the
+# terrorism era and has a city worth the attempt, and it has the unrest the
+# domestic terror attack needs (social_tensions_events.1: radicals, a war, or
+# a radical movement). Country scope.
+nd_loose_plot_possible = {
+	has_game_rule = nuclear_weapons_enabled
+	has_global_variable = nd_loose_warheads
+	global_var:nd_loose_warheads > 0
+	NOT = { has_global_variable = nd_loose_plot_cooldown }
+	has_technology_researched = terrorism_and_anti_terrorism
+	NOT = { is_country_type = decentralized }
+	any_scope_state = {
+		is_incorporated = yes
+		state_population > 100000
+	}
+	OR = {
+		radical_fraction = { value >= 0.1 }
+		is_at_war = yes
+		any_political_movement = { political_movement_radicalism >= 25 }
+	}
+}
+
+# Is this ledger record a line a device can come from: warheads from it are
+# unaccounted for, and its owner still stands to be blamed. A record whose
+# owner is gone waits for the settlement to pass its count on. Container scope.
+nd_loose_line_live = {
+	has_variable = nd_ar_loose
+	var:nd_ar_loose > 0
+	var:nd_ar_owner ?= { is_country_alive = yes }
+}
+
+# The same, for a plot against $VICTIM$: not the victim's own line. A warhead
+# a country lost itself is not turned on it here (spec §3.1). Container scope.
+nd_loose_line_usable = {
+	nd_loose_line_live = yes
+	NOT = { var:nd_ar_owner ?= $VICTIM$ }
+}
+
+# Does this country's line (its ledger record) hold warheads unaccounted for?
+# The posture panel's row, the covert operation and the treaty article read
+# it. Country scope.
+nd_loose_has_line = {
+	var:nd_arsenal_record ?= {
+		has_variable = nd_ar_loose
+		var:nd_ar_loose > 0
+	}
+}
+
+# ----------------------------------------------------------------------------
+# ATTRIBUTION
+# ----------------------------------------------------------------------------
+# The attribution the victim holds (nd_loose_attribution): 1 confirmed,
+# 2 a shortlist, 3 unknown. Country scope = the victim.
+nd_loose_attributed = {
+	has_variable = nd_loose_attribution
+	var:nd_loose_attribution = $RESULT$
+}
+
+# The origin a confirmed attribution named can still be held to account.
+# Country scope = the victim.
+nd_loose_origin_answerable = {
+	nd_loose_attributed = { RESULT = 1 }
+	var:nd_loose_origin ?= { is_country_alive = yes }
+}
+
+# ----------------------------------------------------------------------------
+# THE DEMAND (nuclear_loose.6)
+# ----------------------------------------------------------------------------
+# Is the demand this country received the full one (compensation or
+# inspection), not a request to cooperate? Country scope = the recipient.
+nd_loose_demand_is_full = {
+	has_variable = nd_loose_demand_kind
+	var:nd_loose_demand_kind = 1
+}
