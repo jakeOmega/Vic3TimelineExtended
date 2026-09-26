@@ -231,7 +231,7 @@ class SpaceEspionageTests(unittest.TestCase):
         self.assertIn(gate, _requirements(self.block))
         will = _section(self.block, "will_propose = {")
         self.assertIn(gate, will)
-        self.assertIn("sr_is_pursuing_milestone = yes", will)
+        self.assertIn("sr_has_running_milestone = yes", will)
 
     def test_modifiers(self):
         static = _text(STATIC)

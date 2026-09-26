@@ -49,7 +49,7 @@ te_debug_space_race.1 = { # REVIEWED 2026-09-18: console-only test event (`event
 	# follow that milestone only.
 	option = {
 		name = te_debug_space_race.1.j
-		trigger = { has_variable = sr_active_milestone }
+		trigger = { sr_has_running_milestone = yes }
 		te_debug_sr_fire_setback = yes
 	}
 

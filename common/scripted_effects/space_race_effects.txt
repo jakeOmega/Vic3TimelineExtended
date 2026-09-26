@@ -98,7 +98,8 @@ sr_refresh_milestone_statuses = {
 }
 
 # Keeps live milestone state aligned with the JEs that own it.
-# This is permanent logic for intentionally deactivatable JEs, not a save-migration cleanup.
+# This is permanent logic for intentionally deactivatable JEs, not a save-migration
+# cleanup (bar one marked old-save strip below).
 sr_cleanup_inactive_space_race_milestones = {
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = suborbital         }
 	sr_cleanup_milestone_if_inactive_base = { MILESTONE = orbital            }
@@ -124,22 +125,10 @@ sr_cleanup_inactive_space_race_milestones = {
 			if = { limit = { has_variable = sr_interstellar_transit_progress } remove_variable = sr_interstellar_transit_progress }
 		}
 	}
+	# Old saves: sr_active_milestone was retired for sr_has_running_milestone
+	# (#480). Nothing reads it any more; strip what a save still carries.
 	if = {
-		limit = {
-			has_variable = sr_active_milestone
-			NOT = {
-				OR = {
-					has_variable = sr_active_suborbital
-					has_variable = sr_active_orbital
-					has_variable = sr_active_moon_landing
-					has_variable = sr_active_probe
-					has_variable = sr_active_moon_base
-					has_variable = sr_active_mars_landing
-					has_variable = sr_active_interstellar_probe
-					has_variable = sr_active_solar_colonization
-				}
-			}
-		}
+		limit = { has_variable = sr_active_milestone }
 		remove_variable = sr_active_milestone
 	}
 	if = {
@@ -280,11 +269,6 @@ sr_boost_active_milestones = {
 
 # Called when a milestone is completed - handles cleanup
 sr_complete_milestone_effect = {
-	# Remove active milestone flag
-	if = {
-		limit = { has_variable = sr_active_milestone }
-		remove_variable = sr_active_milestone
-	}
 	# Recalculate JE cost modifiers (per-JE vars cleaned in per-milestone effect)
 	sr_recalculate_cost = yes
 }

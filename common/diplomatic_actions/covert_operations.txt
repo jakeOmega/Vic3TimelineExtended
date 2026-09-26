@@ -1944,7 +1944,7 @@ covert_space_espionage_action = {
 			in_default = no
 			# Only spy on a programme that is ahead, while we run one ourselves
 			covert_target_ahead_in_space = { TARGET = scope:target_country }
-			sr_is_pursuing_milestone = yes
+			sr_has_running_milestone = yes
 		}
 
 		propose_score = {
