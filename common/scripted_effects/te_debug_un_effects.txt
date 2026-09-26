@@ -407,6 +407,10 @@ te_debug_un_cycle_subject_member = {
 # Inherits"). The entry is marked for rebuilding, as its `immediate` marks the
 # record a winner inherits. The mirrors are brought up to date first, in case
 # this save has not had its first monthly pulse since they were added.
+# It tests the entry's rebuild only: no civil war ends, so #467's shared
+# te_civil_war_on_won and un_repair_after_civil_war (the pending mark, the
+# headquarters hand-over) do not run, and the dues, regime terms and cooldowns
+# a real revolution drops stay on.
 # At the next monthly pulse: membership, founding status, the headquarters,
 # the permanent seat, the programmes and the conventions come back, and the
 # programme counters survive. The month after: privileges, benefits, dues, the

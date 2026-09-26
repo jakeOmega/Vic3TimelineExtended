@@ -36,9 +36,10 @@
 # WHEN THE ENTRY IS REBUILT. var:un_state_rebuild_pending marks an entry whose
 # modifiers may have been wiped. It is set by the entry's `immediate`, which
 # runs on every activation and again on the record a revolution's winner
-# inherits, by un_on_civil_war_won when the winner was the uprising side
-# (un_on_actions.txt), and by the debug wipe (te_debug_un_wipe_entry). A
-# loyalist winner keeps its own record, so nothing sets it there. Then:
+# inherits, by un_repair_after_civil_war when the revolutionaries won (from
+# #467's shared te_civil_war_on_won), and by the debug wipe
+# (te_debug_un_wipe_entry). A loyalist winner keeps its own record, so nothing
+# sets it there. Then:
 #   - `immediate` restores at once (un_state_restore_all), which works when
 #     it runs after the variable merge and je:je_united_nations resolves
 #     during activation (untested; the nuclear entry waits for its first
@@ -73,7 +74,10 @@ un_state_forget = {
 }
 
 # Add or remove a journal-entry state modifier with its mirror. The remove is
-# as unguarded as the sites it replaced.
+# guarded: remove_modifier on a modifier the scope does not hold logs an error
+# (#469), and the suspension strip calls this every month. The guard reads the
+# modifier, so do not add and then remove the same modifier in one effect
+# block through this helper: the add is invisible to it there.
 # The mirror is recorded only where the modifier was actually added, i.e.
 # where the entry exists: a country that signs the charter before its entry
 # is active stays outside, as it always has (it joins later, and not as a
@@ -89,7 +93,12 @@ un_state_on = {
 }
 
 un_state_off = {
-	je:je_united_nations ?= { remove_modifier = $MODIFIER$ }
+	je:je_united_nations ?= {
+		if = {
+			limit = { has_modifier = $MODIFIER$ }
+			remove_modifier = $MODIFIER$
+		}
+	}
 	un_state_forget = { MODIFIER = $MODIFIER$ }
 }
 
@@ -111,7 +120,7 @@ un_convention_country_on = {
 }
 
 un_state_country_off = {
-	remove_modifier = $MODIFIER$
+	remove_modifier_if_exists_effect = { MODIFIER = $MODIFIER$ }
 	un_state_forget = { MODIFIER = $MODIFIER$ }
 }
 
@@ -262,7 +271,8 @@ un_state_restore_all = {
 # Rebuild the entry from the mirrors, and decide what the restore declined:
 # a mirror it still cannot honour is forgotten, never forced. By the pulse the
 # transition is over: the loser has lost its last state, and
-# un_on_civil_war_won has re-pointed the headquarters.
+# un_repair_after_civil_war (or the monthly net in un_hq_monthly_update) has
+# re-pointed the headquarters.
 # Called only from un_state_heal, in je_united_nations' monthly pulse. Never
 # from `immediate` (see un_state_restore_all).
 # Scope: country
@@ -337,7 +347,10 @@ un_state_forget_conventions = {
 # Scope: country
 un_state_heal = {
 	un_state_rebuild = yes
-	remove_variable = un_state_rebuild_pending
+	if = {
+		limit = { has_variable = un_state_rebuild_pending }
+		remove_variable = un_state_rebuild_pending
+	}
 }
 
 # ---- The ordinary month: the mirror follows the modifier -------------------------------
@@ -421,8 +434,8 @@ un_state_reconcile = {
 #   - the dead loser: it is not alive, so nothing happens;
 #   - anyone else: only a dead host of its own definition, or none at all.
 # A loyalist winner is still the named, living host, so nothing changes for it.
-# Called from un_on_civil_war_won (un_on_actions.txt), and every month for
-# every holder of the mirror from un_hq_monthly_update (un_hq_effects.txt).
+# Called from un_repair_after_civil_war, and every month for every holder of
+# the mirror from un_hq_monthly_update (un_hq_effects.txt).
 # un_hq_is_host already counts such a winner, so no headquarters is demolished
 # before this runs.
 # Scope: country
@@ -445,4 +458,36 @@ un_hq_adopt_as_successor = {
 		}
 		set_global_variable = { name = un_hq_country value = THIS }
 	}
+}
+
+# ---- A civil war's end ---------------------------------------------------------------
+
+# The UN's part of #467's shared civil-war repair: called from
+# te_civil_war_on_won (common/on_actions/te_civil_war_on_actions.txt), between
+# te_civil_war_resolve_sides and te_civil_war_clear. ROOT = THIS = the winner,
+# after the variables merged. Nothing on the journal entry is rebuilt here: the
+# order of this hook against the inherited entry's `immediate` is unknown, so
+# the entry does its own rebuilding. This only:
+#   - marks the entry for rebuilding when the revolutionaries won
+#     (var:te_cw_rebels_won = 1), in case its `immediate` did not run on the
+#     inherited record;
+#   - hands the headquarters to the winner when its predecessor hosted it
+#     (un_hq_adopt_as_successor; un_hq_monthly_update repeats that monthly).
+# A no-op for a loyalist winner (te_cw_rebels_won is 0, and it is still the
+# named, living host) and for any secession outcome (te_cw_rebels_won is 0; a
+# seceder is another country and inherits no entry).
+# Replaces the UN's own on_revolution_start / on_civil_war_won hooks and their
+# un_cw_rebel pointer (round 4). A save made on the development branch in
+# between may still carry un_cw_rebel on a country; nothing reads it.
+# Scope: country (the winner)
+un_repair_after_civil_war = {
+	if = {
+		limit = {
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+			NOT = { has_variable = un_state_rebuild_pending }
+		}
+		set_variable = un_state_rebuild_pending
+	}
+	un_hq_adopt_as_successor = yes
 }

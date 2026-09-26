@@ -60,8 +60,10 @@ credit, its conventions, and its terms under the regimes.
   (`un_state_on`/`_off`, `un_convention_on`, `un_convention_country_on`,
   `un_state_country_off`). `un_state_on` and `un_convention_on` record the mirror only where
   the entry exists, so the modifier was really added. A country that signs the charter before
-  its entry is active therefore stays outside, as before (see Known roughnesses). Two kinds of
-  site write the modifier themselves and call
+  its entry is active therefore stays outside, as before (see Known roughnesses). The
+  removals are guarded: `remove_modifier` on a modifier the scope does not hold logs an error
+  (#469), and the suspension strip runs every month. Two kinds of site write the modifier
+  themselves and call
   `un_state_record`/`un_state_forget` beside it:
   - the programme buttons, because `gen_un_button_descs.py` reads their literal modifier
     lines;
@@ -76,9 +78,10 @@ credit, its conventions, and its terms under the regimes.
   set it:
   - the entry's `immediate`, which runs on every activation, and again on the record a winner
     inherits;
-  - `un_on_civil_war_won`, when the uprising side won. The side is recognised by a pointer it
-    set to itself at `on_revolution_start`, `un_cw_rebel`: a loyalist winner inherits a pointer
-    to a dead object;
+  - `un_repair_after_civil_war`, when the revolutionaries won (`var:te_cw_rebels_won = 1`).
+    It is the UN's part of #467's shared civil-war layer: `te_civil_war_on_won`
+    (`te_civil_war_on_actions.txt`) calls it after `te_civil_war_resolve_sides` has worked out
+    the side. The value is 0 for a loyalist winner and for any secession outcome;
   - the debug wipe (`te_debug_un.1` option w).
 - **`immediate` restores at once, and only restores** (`un_state_restore_all`). That works if it
   runs after the variables merge, which is the audit's reading of E3, and if
@@ -157,7 +160,8 @@ credit, its conventions, and its terms under the regimes.
   - **The successor counts as host.** `un_hq_is_host` also counts a country that holds the
     headquarters mirror while the named host is not a living country. The single-building
     enforcement asks it in both of its branches.
-- **At `on_civil_war_won`:** `un_hq_adopt_as_successor` re-points the variable to the winner.
+- **At `on_civil_war_won`:** `un_repair_after_civil_war` calls `un_hq_adopt_as_successor`,
+  which re-points the variable to the winner.
   It does so when the winner, alive, inherited the headquarters mirror, and the named host is
   either dead with the winner's country definition, or no longer resolves at all (then the winner
   must also be a represented member by the record).
@@ -176,7 +180,11 @@ credit, its conventions, and its terms under the regimes.
 - `common/scripted_triggers/un_state_triggers.txt` (new): `un_state_missing`,
   `un_state_heal_needed` and `un_member_represented_by_record`.
 - `je_united_nations.txt`: `immediate` marks and restores, and the monthly pulse heals first.
-- `un_on_actions.txt`: `un_on_revolution_start` and `un_on_civil_war_won`.
+- `un_state_effects.txt`'s `un_repair_after_civil_war`, called from `te_civil_war_on_won`
+  (#467's shared layer, `te_civil_war_on_actions.txt`). The UN has no civil-war hook of its
+  own. Round 4 retired the UN's own `on_revolution_start` / `on_civil_war_won` hooks and their
+  `un_cw_rebel` pointer. Only a save made on the development branch in between can carry the
+  pointer, and nothing reads it.
 - Write sites now go through the helpers: `un_ladder_effects.txt`, `un_hq_effects.txt`,
   `un_seat_effects.txt`, `un_membership_effects.txt`, `un_vote_effects.txt`, `un_events.txt`,
   `un_vote_events.txt`, `je_united_nations.txt`, `un_buttons.txt` and `te_debug_un_effects.txt`.
@@ -220,7 +228,9 @@ credit, its conventions, and its terms under the regimes.
   The seat count leaves it out.
 - **The debug wipe** drops the journal-entry modifiers and the two country conventions only. A
   real revolution also drops the dues, the `un_regime_*` modifiers, the mission service cost and
-  the cooldowns, so their return is not tested by the debug path.
+  the cooldowns, so their return is not tested by the debug path. Nor are the shared layer's
+  side resolution and `un_repair_after_civil_war`: no civil war ends, the headquarters
+  variable still names us, and the wipe sets the pending mark itself.
 - **A rebel with a UN record of its own.** Nothing stops the rebel's entry from activating in a
   long war. The saves showed none. If it does, the merge keeps the rebel's standing score and
   programme counters over the nation's.
@@ -246,10 +256,10 @@ credit, its conventions, and its terms under the regimes.
 3. **A revolution the loyalists win:** nothing about the UN changes.
 4. **A save from before this change:** after the first month, each member holds the mirrors of
    its modifiers, and no former member has regained membership.
-5. **`error.log` / `debug.log`:** nothing from `un_state_*` or `un_cw_rebel`, and nothing from
-   `un_hq_adopt_as_successor` at a civil-war win. Its second test reads
-   `global_var:un_hq_country.country_definition`, which assumes the engine does not evaluate it
-   once the first test (the host no longer resolves) has passed.
+5. **`error.log` / `debug.log`:** nothing from `un_state_*`, and nothing from
+   `un_repair_after_civil_war` / `un_hq_adopt_as_successor` at a civil-war win. The adopt's
+   second test reads `global_var:un_hq_country.country_definition`, which assumes the engine
+   does not evaluate it once the first test (the host no longer resolves) has passed.
 
 ---
 

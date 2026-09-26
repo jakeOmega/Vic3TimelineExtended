@@ -378,21 +378,51 @@ class GlobalPulseTests(unittest.TestCase):
         enforce = _block(hq, "un_hq_enforce_single_building")
         self.assertEqual(enforce.count("NOT = { un_hq_is_host = yes }"), 2)
 
-    def test_civil_war_hooks(self):
-        text = _read(_path("common", "on_actions", "un_on_actions.txt"))
-        self.assertRegex(text, r"on_civil_war_won\s*=\s*\{\s*on_actions\s*=\s*\{\s*un_on_civil_war_won")
-        self.assertRegex(text, r"on_revolution_start\s*=\s*\{\s*on_actions\s*=\s*\{\s*un_on_revolution_start")
-        won = _block(text, "un_on_civil_war_won")
-        self.assertIn("un_hq_adopt_as_successor = yes", won)
-        self.assertIn("var:un_cw_rebel ?= THIS", won)
+    def test_civil_war_repair_hangs_off_the_shared_layer(self):
+        """#467's te_civil_war_on_won calls the UN's repair; the UN declares no
+        civil-war hook of its own and keeps no which-side-won pointer."""
+        shared = _block(_read(_path("common", "on_actions", "te_civil_war_on_actions.txt")),
+                        "te_civil_war_on_won")
+        self.assertIn("un_repair_after_civil_war = yes", shared)
+        self.assertLess(shared.index("te_civil_war_resolve_sides = yes"),
+                        shared.index("un_repair_after_civil_war = yes"))
+        self.assertLess(shared.index("un_repair_after_civil_war = yes"),
+                        shared.index("te_civil_war_clear = yes"))
+        un = _read(_path("common", "on_actions", "un_on_actions.txt"))
+        for hook in ("on_revolution_start", "on_secession_start", "on_civil_war_won",
+                     "on_revolution_end", "on_secession_end"):
+            with self.subTest(hook=hook):
+                self.assertNotRegex(un, r"^" + hook + r"\s*=", "declared in te_civil_war_on_actions.txt")
+        for path in _script_files():
+            with self.subTest(path=os.path.relpath(path, REPO)):
+                self.assertNotRegex(_read(path), r"\bun_cw_rebel\b")
+
+        repair = _block(_read(STATE_EFFECTS), "un_repair_after_civil_war")
+        # The rebels' win marks the entry; the headquarters is handed on.
+        self.assertRegex(repair, r"has_variable = te_cw_rebels_won\s*var:te_cw_rebels_won = 1")
+        self.assertIn("set_variable = un_state_rebuild_pending", repair)
+        self.assertIn("un_hq_adopt_as_successor = yes", repair)
         # Nothing on the journal entry is rebuilt from the hook: its order
         # against the inherited entry's `immediate` is unknown.
-        self.assertNotIn("un_state_rebuild = yes", won)
-        self.assertNotIn("un_state_restore_all = yes", won)
-        self.assertNotIn("add_modifier", won)
-        # The original drops any pointer of its own before the rebels get one.
-        start = _block(text, "un_on_revolution_start")
-        self.assertLess(start.index("remove_variable = un_cw_rebel"), start.index("scope:target"))
+        self.assertNotIn("un_state_rebuild = yes", repair)
+        self.assertNotIn("un_state_restore_all = yes", repair)
+        self.assertNotIn("add_modifier", repair)
+
+    def test_removals_are_guarded(self):
+        """remove_modifier on a modifier the scope does not hold logs an error
+        (#469); remove_variable is guarded by house style."""
+        effects = _read(STATE_EFFECTS)
+        self.assertRegex(_block(effects, "un_state_off"),
+                         r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_modifier = \$MODIFIER\$\s*\}\s*"
+                         r"remove_modifier = \$MODIFIER\$")
+        self.assertIn("remove_modifier_if_exists_effect = { MODIFIER = $MODIFIER$ }",
+                      _block(effects, "un_state_country_off"))
+        for m in re.finditer(r"^([a-z_]+)\s*=\s*\{", effects, re.M):
+            body = _block(effects, m.group(1))
+            for v in re.finditer(r"remove_variable\s*=\s*(\S+)", body):
+                with self.subTest(effect=m.group(1), variable=v.group(1)):
+                    self.assertRegex(body[:v.start()],
+                                     r"has_variable = " + re.escape(v.group(1)) + r"\s*\}\s*$")
 
     def test_the_successor_claims_the_headquarters_every_month(self):
         """The hook alone relies on the loser reading as dead at the win; the
