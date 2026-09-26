@@ -146,6 +146,7 @@ class ScanRootTests(unittest.TestCase):
             {
                 "common/journal_entries/je.txt": "je_x = {\n"
                 "\tgroup = je_group_x\n"
+                "\tis_shown_in_lobby = { is_war_participant = yes }\n"
                 "\tpossible = { is_war_participant = yes }\n"
                 "\tstatus_desc = je_x_status\n}\n",
                 "common/scripted_buttons/b.txt": "b_x = {\n"

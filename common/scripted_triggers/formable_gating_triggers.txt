@@ -318,3 +318,19 @@ une_formation_no_internal_rivalry = {
 		}
 	}
 }
+
+# === Vanilla's Turtle Island JE must not reach the unions =====================
+# Vanilla je_unite_the_nations shows for any North American country with an
+# indigenous-heritage primary culture while TIS does not exist, and its
+# "Proclaim Turtle Island" button is a bare change_tag = TIS. A union formed
+# from a Turtle Island (or holding Métis) qualifies, the tag change deletes the
+# union, and the same country forms the union again: UNA and TIS alternated in
+# play. UNA and UNE are the two unions that can hold a North American capital;
+# the other five bind candidacy to a capital in their own region.
+# Consumed by the REPLACE in common/journal_entries/te_vanilla_turtle_island.txt.
+te_is_north_american_capable_union = {
+	OR = {
+		c:UNA ?= this
+		c:UNE ?= this
+	}
+}
