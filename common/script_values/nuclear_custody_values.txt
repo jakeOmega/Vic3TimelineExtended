@@ -1,0 +1,200 @@
+﻿# ============================================================================
+# NUCLEAR CUSTODY — script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-custody-design.md; what
+# shipped is docs/systems/nuclear_crisis_design.md §0.10. The effects that read
+# these live in common/scripted_effects/nuclear_custody_effects.txt.
+#
+# Every value that reads an nd_* variable starts from a literal and adds the
+# variable inside a has_variable guard, as nuclear_deterrence_values.txt does,
+# so it is safe on a country (or ledger record) that never had it.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# LOSS RATE — the fraction of warheads that go missing when they change hands
+# ----------------------------------------------------------------------------
+# 1 % + 2 % per missing safeguards level + 3 % if commanders hold launch
+# authority (delegated or launch on warning). The caller doubles it for chaos:
+# at a civil war's outbreak always, and at a settlement if the arsenal's holder
+# was at war at the last ledger refresh (spec §4). Country scope.
+nd_custody_loss_rate = {
+	value = 0.07
+	if = {
+		limit = { has_variable = nd_safeguards }
+		subtract = {
+			value = var:nd_safeguards
+			multiply = 0.02
+		}
+	}
+	if = {
+		limit = { nd_authority_delegated_or_warning = yes }
+		add = 0.03
+	}
+	min = 0.01
+	max = 0.1
+}
+
+# The same rate, read from a ledger record (container scope) — the posture its
+# owner last had — including the doubling for an owner that was at war.
+nd_ar_loss_rate = {
+	value = 0.07
+	if = {
+		limit = { has_variable = nd_ar_safeguards }
+		subtract = {
+			value = var:nd_ar_safeguards
+			multiply = 0.02
+		}
+	}
+	if = {
+		limit = {
+			has_variable = nd_ar_authority
+			OR = {
+				var:nd_ar_authority = 2
+				var:nd_ar_authority = 3
+			}
+		}
+		add = 0.03
+	}
+	min = 0.01
+	max = 0.1
+	if = {
+		limit = {
+			has_variable = nd_ar_at_war
+			var:nd_ar_at_war = 1
+		}
+		multiply = 2
+	}
+}
+
+# ----------------------------------------------------------------------------
+# THE OUTBREAK SPLIT — ROOT/this = the original country, scope:nd_cw_rebel set
+# ----------------------------------------------------------------------------
+# The rebels' share of the population: where the warheads are stored follows
+# the country, so the share of it they hold is the share of the arsenal within
+# their reach. Falls back to the share of states if neither side reports
+# population yet.
+nd_cw_rebel_population_share = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:nd_cw_rebel
+			scope:nd_cw_rebel = { total_population > 0 }
+		}
+		add = scope:nd_cw_rebel.total_population
+		divide = {
+			value = total_population
+			add = scope:nd_cw_rebel.total_population
+		}
+	}
+	else_if = {
+		limit = { exists = scope:nd_cw_rebel }
+		add = scope:nd_cw_rebel.num_states
+		divide = {
+			value = num_states
+			add = scope:nd_cw_rebel.num_states
+			min = 1
+		}
+	}
+	min = 0
+	max = 1
+}
+
+# How many warheads the rebels could seize, before rounding: our stockpile ×
+# their population share × 1.5 where commanders hold launch authority (they
+# can defect with their weapons) × (1 − 0.2 per safeguards level: permissive
+# action links make a seized weapon useless, so fewer are worth taking).
+nd_cw_seizable_share = {
+	value = nd_stockpile
+	multiply = nd_cw_rebel_population_share
+	if = {
+		limit = { nd_authority_delegated_or_warning = yes }
+		multiply = 1.5
+	}
+	if = {
+		limit = { has_variable = nd_safeguards }
+		multiply = {
+			value = 1
+			subtract = {
+				value = var:nd_safeguards
+				multiply = 0.2
+			}
+		}
+	}
+	# Capped at the stockpile by the caller (nd_cw_roll_split).
+	min = 0
+}
+
+# Pulling the arsenal back: only what delegated commanders already hold can
+# still go over — half the share — and nothing under central control.
+nd_cw_pullback_share = {
+	value = 0
+	if = {
+		limit = { nd_authority_delegated_or_warning = yes }
+		add = nd_cw_seizable_share
+		multiply = 0.5
+	}
+}
+
+# The outbreak's loss rate: the ordinary rate, doubled for the chaos of a
+# country coming apart.
+nd_cw_outbreak_loss_rate = {
+	value = nd_custody_loss_rate
+	multiply = 2
+}
+
+# ----------------------------------------------------------------------------
+# STOCHASTIC ROUNDING — nd_custody_round's chance, in the scope it rounds in
+# ----------------------------------------------------------------------------
+nd_cr_chance = {
+	value = 0
+	if = {
+		limit = { has_variable = nd_cr_frac }
+		add = var:nd_cr_frac
+	}
+}
+
+# ----------------------------------------------------------------------------
+# STRIKING ONE'S OWN SIDE (spec §5)
+# ----------------------------------------------------------------------------
+# The share of every pop that turns radical: vanilla's very_large_radicals
+# (0.2), shrunk by laws that silence dissent and enlarged by laws that let it
+# speak and organise. 0.075 under Outlawed Dissent and a Secret Police, 0.375
+# under Protected Speech and Guaranteed Liberties. Country scope = the striker.
+nd_own_strike_radicals = {
+	value = very_large_radicals
+	if = {
+		limit = { has_law = law_type:law_outlawed_dissent }
+		multiply = 0.5
+	}
+	else_if = {
+		limit = { has_law = law_type:law_censorship }
+		multiply = 0.75
+	}
+	else_if = {
+		limit = { has_law = law_type:law_right_of_assembly }
+		multiply = 1.25
+	}
+	else_if = {
+		limit = { has_law = law_type:law_protected_speech }
+		multiply = 1.5
+	}
+	if = {
+		limit = { has_law_or_variant = law_type:law_secret_police }
+		multiply = 0.75
+	}
+	else_if = {
+		limit = { has_law = law_type:law_guaranteed_liberties }
+		multiply = 1.25
+	}
+}
+
+# ----------------------------------------------------------------------------
+# DISPLAY — the numbers the custody events print
+# ----------------------------------------------------------------------------
+nd_display_loose_warheads = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_loose_warheads }
+		add = global_var:nd_loose_warheads
+	}
+}

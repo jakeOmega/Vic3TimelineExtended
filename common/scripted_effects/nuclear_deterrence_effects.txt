@@ -429,6 +429,18 @@ nd_weekly_update = {
 			post_notification = nd_doctrine_bound_by_law
 		}
 	}
+	# ---- pulled back for a civil war (nuclear_custody_effects.txt) ----------
+	# The warheads stay in storage until every civil war of ours is over. The
+	# panel greys every raise; any other path that raised the target (an
+	# incident, a crisis act) is put back here, before a step could be taken.
+	if = {
+		limit = {
+			nd_readiness_withdrawn = yes
+			has_variable = nd_readiness_target
+			var:nd_readiness_target > 0
+		}
+		set_variable = { name = nd_readiness_target value = 0 }
+	}
 	# ---- readiness transition: one step every nd_readiness_step_weeks ------
 	if = {
 		limit = {
@@ -522,6 +534,7 @@ nd_monthly_update = {
 			if = {
 				limit = {
 					var:nd_readiness_target = 0
+					nd_readiness_withdrawn = no
 					OR = {
 						is_at_war = yes
 						nd_in_crisis = yes
@@ -1212,7 +1225,10 @@ nd_ai_review_posture = {
 	}
 	# ---- readiness ----------------------------------------------------------
 	if = {
-		limit = { nd_readiness_locked = no }
+		limit = {
+			nd_readiness_locked = no
+			nd_readiness_withdrawn = no
+		}
 		if = {
 			limit = {
 				var:nd_strain < 70
@@ -1745,6 +1761,17 @@ nd_record_nuclear_use = {
 				}
 			}
 		}
+		# The arsenal ledger records the warhead this launch spent
+		# (nuclear_custody_effects.txt).
+		nd_ledger_refresh = yes
+	}
+	# A strike on our own civil war — our rebels, or the government we rose
+	# against — costs legitimacy for twenty years and radicalizes the country
+	# (nuclear_custody_effects.txt, owner ruling 2026-09-25). Outside the
+	# hidden_effect, so every strike's tooltip shows the price.
+	if = {
+		limit = { nd_is_civil_war_counterpart = { ENEMY = $VICTIM$ } }
+		nd_custody_struck_own_people = yes
 	}
 }
 
@@ -1924,16 +1951,24 @@ nd_accident_lose_warhead = {
 # through nd_can_set_readiness: a stand-down lock holds readiness at Routine
 # or below, and Routine is where this goes.
 nd_assemble_for_retaliation = {
-	custom_tooltip = {
-		text = nd_tt_assemble_for_retaliation
-		set_variable = { name = nd_pending_retaliation value = $ENEMY$ }
-	}
+	# Pulled back for a civil war (nuclear_custody_effects.txt): the warheads
+	# stay in storage until that war is over, and the answer lapses with it.
 	if = {
-		limit = {
-			has_variable = nd_readiness_target
-			var:nd_readiness_target < 1
+		limit = { nd_readiness_withdrawn = yes }
+		custom_tooltip = nd_tt_withdrawn_no_answer
+	}
+	else = {
+		custom_tooltip = {
+			text = nd_tt_assemble_for_retaliation
+			set_variable = { name = nd_pending_retaliation value = $ENEMY$ }
 		}
-		nd_set_readiness_target_1 = yes
+		if = {
+			limit = {
+				has_variable = nd_readiness_target
+				var:nd_readiness_target < 1
+			}
+			nd_set_readiness_target_1 = yes
+		}
 	}
 }
 
@@ -2045,5 +2080,24 @@ nd_country_monthly_cleanup = {
 			}
 		}
 		remove_variable = nuked_by_country
+	}
+	# Custody (nuclear_custody_effects.txt). A country holding a ledger record
+	# without the entry — a rebel given no warheads, an arsenal emptied —
+	# still needs its capital's region current, so a settlement finds the
+	# right successor. The entry's weekly pulse refreshes everyone else.
+	if = {
+		limit = {
+			has_variable = nd_arsenal_record
+			NOT = { has_journal_entry = je_nuclear_program }
+		}
+		nd_ledger_refresh = yes
+	}
+	# Pulled back for a civil war that is over: the forces may be raised again.
+	if = {
+		limit = {
+			nd_readiness_withdrawn = yes
+			NOT = { any_civil_war = { always = yes } }
+		}
+		remove_variable = nd_cw_withdrawn
 	}
 }

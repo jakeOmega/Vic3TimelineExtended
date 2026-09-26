@@ -1,0 +1,744 @@
+﻿# ============================================================================
+# NUCLEAR CUSTODY — who holds an arsenal when its owner comes apart
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-custody-design.md; what
+# shipped is docs/systems/nuclear_crisis_design.md §0.10 (steps 2 and 3).
+#
+# Four parts:
+#   THE LEDGER      one freestanding script container per arsenal, refreshed
+#                   while its owner lives, so what it held outlives the owner
+#   THE SETTLEMENT  nd_custody_reconcile: an arsenal whose owner is gone passes
+#                   to whoever holds its capital's region, less a lost fraction
+#   CIVIL WARS      the outbreak split ("Who Holds the Button?") and what a
+#                   winning revolution's new regime keeps
+#   OWN SIDE        the price of a nuclear strike on one's own civil war
+#
+# Nothing here reads a dead country for a value it needs: a civil war's loser
+# is dead but still in the database at on_civil_war_won, and whether a stored
+# pointer still reaches it there is untested (civil_war_inheritance_audit.md).
+# The ledger record is a live container, so it is read instead.
+#
+# ROOT. nd_custody_reconcile uses no ROOT and may be called from any scope.
+# Everything that needs the receiving country as ROOT (the journal entry, the
+# posture initialiser, the notices) runs in nuclear_custody.2, a hidden event
+# fired on that country.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# THE LEDGER
+# ----------------------------------------------------------------------------
+# A record (tag nd_arsenal, in the global list nd_arsenal_records, reached
+# through the owner's nd_arsenal_record) holds:
+#   nd_ar_owner           the country
+#   nd_ar_count           its warheads at the last refresh
+#   nd_ar_progress        its progress toward the next warhead
+#   nd_ar_capital_region  its capital's state region — where a successor is found
+#   nd_ar_at_war          1 if it was at war (a settlement doubles the loss)
+#   nd_ar_doctrine / _authority / _safeguards / _hardening   its posture
+#   nd_ar_loose           warheads from this arsenal that are unaccounted for —
+#                         the per-origin count step 5 will draw on
+#
+# Invariant: both sides of a civil war whose origin has a record hold their own
+# nuclear_weapon_stockpile and their own record from the outbreak on
+# (nd_custody_on_civil_war_start). A revolution's winner keeps its own value of
+# every variable both sides hold, so the merge never hands it the loser's
+# stockpile or record pointer, and no settlement is counted twice.
+
+# Country scope, any ROOT. Gives this country a record of its own if it has
+# none — including when its pointer names another country's record.
+nd_ledger_ensure = {
+	if = {
+		limit = { nd_ledger_is_own = no }
+		save_scope_as = nd_ledger_owner
+		create_container = {
+			tags = { nd_arsenal }
+			save_scope_as = nd_ledger_new
+		}
+		# The container exists only in the real run; a tooltip preview walks
+		# this with the scope unset (scripting_best_practices.md § script
+		# containers, rule 6).
+		if = {
+			limit = { exists = scope:nd_ledger_new }
+			scope:nd_ledger_new = {
+				set_variable = { name = nd_ar_owner value = scope:nd_ledger_owner }
+				set_variable = { name = nd_ar_count value = 0 }
+				set_variable = { name = nd_ar_progress value = 0 }
+				set_variable = { name = nd_ar_loose value = 0 }
+				set_variable = { name = nd_ar_at_war value = 0 }
+			}
+			add_to_global_variable_list = { name = nd_arsenal_records target = scope:nd_ledger_new }
+			set_variable = { name = nd_arsenal_record value = scope:nd_ledger_new }
+			clear_saved_scope = nd_ledger_new
+		}
+	}
+}
+
+# Country scope, any ROOT. Copies what the record keeps from its owner.
+# Called weekly from je_nuclear_program, monthly from the country pulse for any
+# country with a record, after every launch, and around every custody change.
+nd_ledger_refresh = {
+	nd_ledger_ensure = yes
+	save_scope_as = nd_ledger_owner
+	var:nd_arsenal_record ?= {
+		set_variable = { name = nd_ar_count value = 0 }
+		set_variable = { name = nd_ar_progress value = 0 }
+		if = {
+			limit = { scope:nd_ledger_owner = { has_variable = nuclear_weapon_stockpile } }
+			set_variable = { name = nd_ar_count value = scope:nd_ledger_owner.var:nuclear_weapon_stockpile }
+			if = {
+				limit = { var:nd_ar_count < 0 }
+				set_variable = { name = nd_ar_count value = 0 }
+			}
+		}
+		if = {
+			limit = { scope:nd_ledger_owner = { has_variable = nuclear_weapon_program_progress } }
+			set_variable = { name = nd_ar_progress value = scope:nd_ledger_owner.var:nuclear_weapon_program_progress }
+		}
+		if = {
+			limit = { exists = scope:nd_ledger_owner.capital }
+			set_variable = { name = nd_ar_capital_region value = scope:nd_ledger_owner.capital.state_region }
+		}
+		if = {
+			limit = { scope:nd_ledger_owner = { is_at_war = yes } }
+			set_variable = { name = nd_ar_at_war value = 1 }
+		}
+		else = {
+			set_variable = { name = nd_ar_at_war value = 0 }
+		}
+		if = {
+			limit = { scope:nd_ledger_owner = { nd_is_initialized = yes } }
+			set_variable = { name = nd_ar_doctrine value = scope:nd_ledger_owner.var:nd_doctrine }
+			set_variable = { name = nd_ar_authority value = scope:nd_ledger_owner.var:nd_authority }
+		}
+		if = {
+			limit = { scope:nd_ledger_owner = { has_variable = nd_safeguards } }
+			set_variable = { name = nd_ar_safeguards value = scope:nd_ledger_owner.var:nd_safeguards }
+		}
+		if = {
+			limit = { scope:nd_ledger_owner = { has_variable = nd_hardening } }
+			set_variable = { name = nd_ar_hardening value = scope:nd_ledger_owner.var:nd_hardening }
+		}
+	}
+}
+
+# Country scope, any ROOT. Adds $AMOUNT$ warheads from this country's arsenal
+# to the unaccounted-for pool: the world count and this arsenal's own.
+nd_custody_lose_warheads = {
+	if = {
+		limit = { NOT = { has_global_variable = nd_loose_warheads } }
+		set_global_variable = { name = nd_loose_warheads value = 0 }
+	}
+	change_global_variable = { name = nd_loose_warheads add = $AMOUNT$ }
+	nd_ledger_ensure = yes
+	var:nd_arsenal_record ?= {
+		change_variable = { name = nd_ar_loose add = $AMOUNT$ }
+	}
+}
+
+# Rounds the variable $VAR$ in the current scope (a country or a record) to a
+# whole number of warheads, stochastically: the whole part, plus one with a
+# chance equal to the fractional part. Keeps the expected count exact, so a
+# small arsenal loses a warhead sometimes rather than never.
+nd_custody_round = {
+	set_variable = {
+		name = nd_cr_floor
+		value = {
+			value = var:$VAR$
+			floor = yes
+		}
+	}
+	set_variable = {
+		name = nd_cr_frac
+		value = {
+			value = var:$VAR$
+			subtract = var:nd_cr_floor
+			multiply = 100
+		}
+	}
+	set_variable = { name = $VAR$ value = var:nd_cr_floor }
+	random = {
+		chance = nd_cr_chance
+		change_variable = { name = $VAR$ add = 1 }
+	}
+	remove_variable = nd_cr_floor
+	remove_variable = nd_cr_frac
+}
+
+# ----------------------------------------------------------------------------
+# THE SETTLEMENT — one helper for every way an arsenal's owner can end
+# ----------------------------------------------------------------------------
+# A civil war either way, a secession crushed, a war annexation, a diplomatic
+# annexation, a formable swallowing a member, any scripted `annex`: in every
+# case the owner stops being alive and its capital's region passes to someone.
+# No scope, no ROOT. Idempotent: a pass with no ended owner walks the list and
+# does nothing. Called from on_civil_war_won and on_secession_end at once, from
+# nuclear_custody.9 a day after on_wargoal_enforced, on_country_formed and the
+# mod's own `annex` sites, and from on_monthly_pulse as the catch-all for every
+# other path (te_civil_war_on_actions.txt).
+nd_custody_reconcile = {
+	if = {
+		limit = { has_global_variable_list = nd_arsenal_records }
+		every_in_global_list = {
+			variable = nd_arsenal_records
+			limit = { nd_ar_owner_gone = yes }
+			add_to_temporary_list = nd_ar_ended
+		}
+		every_in_list = {
+			list = nd_ar_ended
+			nd_custody_settle_record = yes
+		}
+	}
+}
+
+# Container scope: a record whose owner is gone. The successor is the owner of
+# the most populous live state in the record's capital region. With none (the
+# region not yet refreshed, or nobody holding it) the record waits for the next
+# pass, unless it has nothing to hand on.
+nd_custody_settle_record = {
+	save_scope_as = nd_settle_record
+	# A successor saved for the previous record in this pass must not stand in
+	# for this one's.
+	if = {
+		limit = { exists = scope:nd_settle_successor }
+		clear_saved_scope = nd_settle_successor
+	}
+	if = {
+		limit = { exists = var:nd_ar_capital_region }
+		var:nd_ar_capital_region = {
+			ordered_scope_state = {
+				limit = { owner ?= { is_country_alive = yes } }
+				order_by = state_population
+				position = 0
+				owner = { save_scope_as = nd_settle_successor }
+			}
+		}
+	}
+	if = {
+		limit = { exists = scope:nd_settle_successor }
+		# ---- what moves, and what goes missing on the way -----------------
+		set_variable = { name = nd_ar_moving value = var:nd_ar_count }
+		set_variable = {
+			name = nd_ar_lost
+			value = {
+				value = var:nd_ar_count
+				multiply = nd_ar_loss_rate
+			}
+		}
+		nd_custody_round = { VAR = nd_ar_lost }
+		if = {
+			limit = { var:nd_ar_lost > var:nd_ar_moving }
+			set_variable = { name = nd_ar_lost value = var:nd_ar_moving }
+		}
+		change_variable = { name = nd_ar_moving subtract = var:nd_ar_lost }
+		if = {
+			limit = { NOT = { has_global_variable = nd_loose_warheads } }
+			set_global_variable = { name = nd_loose_warheads value = 0 }
+		}
+		change_global_variable = { name = nd_loose_warheads add = var:nd_ar_lost }
+		# ---- the successor takes custody ----------------------------------
+		scope:nd_settle_successor = {
+			nd_ledger_ensure = yes
+			if = {
+				limit = { NOT = { has_variable = nuclear_weapon_stockpile } }
+				set_variable = { name = nuclear_weapon_stockpile value = 0 }
+			}
+			change_variable = { name = nuclear_weapon_stockpile add = scope:nd_settle_record.var:nd_ar_moving }
+			# The lost warheads, and every warhead this arsenal had already
+			# lost, stay counted against the arsenal's line: the successor's.
+			var:nd_arsenal_record ?= {
+				change_variable = { name = nd_ar_loose add = scope:nd_settle_record.var:nd_ar_loose }
+				change_variable = { name = nd_ar_loose add = scope:nd_settle_record.var:nd_ar_lost }
+			}
+			# What nuclear_custody.2 and its notice report. Summed, because
+			# two arsenals can reach the same country in one pass.
+			if = {
+				limit = { NOT = { has_variable = nd_custody_received } }
+				set_variable = { name = nd_custody_received value = 0 }
+				set_variable = { name = nd_custody_lost value = 0 }
+			}
+			change_variable = { name = nd_custody_received add = scope:nd_settle_record.var:nd_ar_moving }
+			change_variable = { name = nd_custody_lost add = scope:nd_settle_record.var:nd_ar_lost }
+			if = {
+				limit = { NOT = { has_variable = nd_custody_arrival_pending } }
+				set_variable = { name = nd_custody_arrival_pending value = 1 }
+				trigger_event = { id = nuclear_custody.2 }
+			}
+		}
+		debug_log = "TE_CUSTODY: settled an ended arsenal to [SCOPE.sCountry('nd_settle_successor').GetName]; its arrivals so far: [SCOPE.sCountry('nd_settle_successor').MakeScope.Var('nd_custody_received').GetValue|0] received, [SCOPE.sCountry('nd_settle_successor').MakeScope.Var('nd_custody_lost').GetValue|0] lost"
+		# ---- the old owner's pledges and defiance records lapse -----------
+		# Best effort: only while the dead owner still resolves.
+		var:nd_ar_owner ?= {
+			save_scope_as = nd_settle_gone
+			every_country = {
+				limit = { nd_has_nonuse_pledge_with = { TARGET = scope:nd_settle_gone } }
+				remove_list_variable = { name = nd_nonuse_pledges target = scope:nd_settle_gone }
+			}
+			every_country = {
+				limit = { nd_was_defied_by = { ENEMY = scope:nd_settle_gone } }
+				remove_list_variable = { name = nd_defied_us target = scope:nd_settle_gone }
+			}
+		}
+		nd_custody_retire_record = yes
+	}
+	else_if = {
+		limit = {
+			var:nd_ar_count <= 0
+			var:nd_ar_loose <= 0
+		}
+		debug_log = "TE_CUSTODY: retired an empty arsenal record with no successor"
+		nd_custody_retire_record = yes
+	}
+	else = {
+		debug_log = "TE_CUSTODY: an ended arsenal has no successor yet; it waits for the next pass"
+	}
+}
+
+# Container scope: takes the record off the list, then destroys it
+# (scripting_best_practices.md § script containers, rule 2).
+nd_custody_retire_record = {
+	remove_list_global_variable = { name = nd_arsenal_records target = THIS }
+	destroy_container = yes
+}
+
+# Any country scope: runs the settlement a day from now, from nuclear_custody.9.
+# For hooks where the owner may still be alive for the rest of the effect — an
+# `annex` in a diplomatic action's accept_effect, on_wargoal_enforced — and so
+# would be skipped by a settlement run in the same block.
+nd_custody_reconcile_soon = {
+	if = {
+		limit = { has_global_variable_list = nd_arsenal_records }
+		trigger_event = { id = nuclear_custody.9 days = 1 }
+	}
+}
+
+# ROOT = the country that has just taken custody of warheads (nuclear_custody.2's
+# immediate): a rebel given its share at an outbreak, or the successor of an
+# ended arsenal. Everything the arsenal needs that must run with ROOT = the
+# holder, then the one notice.
+nd_custody_after_arrival = {
+	if = {
+		limit = { has_variable = nd_custody_arrival_pending }
+		remove_variable = nd_custody_arrival_pending
+	}
+	if = {
+		limit = { nd_is_armed = yes }
+		if = {
+			limit = {
+				has_game_rule = nuclear_weapons_enabled
+				NOT = { has_journal_entry = je_nuclear_program }
+			}
+			add_journal_entry = { type = je_nuclear_program }
+		}
+		# Warheads that were taken, not built: the programme's next device is
+		# not the first.
+		set_variable = { name = nuclear_weapons_program_first_nuke_done value = 1 }
+		nd_init_posture = yes
+		nd_snap_public_estimate = yes
+	}
+	nd_ledger_refresh = yes
+	# A winning revolution's new regime: the AI looks at the posture it
+	# inherited now, not at its next review; a human is told what it holds.
+	if = {
+		limit = { has_variable = nd_custody_new_regime }
+		if = {
+			limit = {
+				is_ai = yes
+				nd_is_armed = yes
+				nd_is_initialized = yes
+			}
+			nd_ai_review_posture = yes
+		}
+		if = {
+			limit = { is_ai = no }
+			trigger_event = { id = nuclear_custody.4 popup = yes }
+		}
+		else = {
+			nd_custody_clear_arrival = yes
+		}
+	}
+	else_if = {
+		limit = {
+			is_ai = no
+			has_variable = nd_custody_received
+			OR = {
+				var:nd_custody_received > 0
+				var:nd_custody_lost > 0
+			}
+		}
+		trigger_event = { id = nuclear_custody.3 popup = yes }
+	}
+	else = {
+		nd_custody_clear_arrival = yes
+	}
+}
+
+# Removes what the arrival notices read. Their `after` blocks call it.
+nd_custody_clear_arrival = {
+	if = {
+		limit = { has_variable = nd_custody_received }
+		remove_variable = nd_custody_received
+	}
+	if = {
+		limit = { has_variable = nd_custody_lost }
+		remove_variable = nd_custody_lost
+	}
+	if = {
+		limit = { has_variable = nd_custody_new_regime }
+		remove_variable = nd_custody_new_regime
+	}
+}
+
+# ----------------------------------------------------------------------------
+# CIVIL WARS — the outbreak
+# ----------------------------------------------------------------------------
+# ROOT = the original country, scope:target = the uprising country
+# (on_revolution_start / on_secession_start, through te_civil_war_on_start).
+# Both sides get a stockpile variable and a record of their own before anything
+# else (the invariant above); the rebel remembers the original's record, which
+# its new regime will read if it wins. Then the original decides.
+nd_custody_on_civil_war_start = {
+	if = {
+		limit = {
+			has_game_rule = nuclear_weapons_enabled
+			exists = scope:target
+			OR = {
+				nd_is_armed = yes
+				nd_ledger_is_own = yes
+			}
+		}
+		nd_ledger_refresh = yes
+		scope:target = {
+			if = {
+				limit = { NOT = { has_variable = nuclear_weapon_stockpile } }
+				set_variable = { name = nuclear_weapon_stockpile value = 0 }
+			}
+			nd_ledger_refresh = yes
+			set_variable = { name = nd_cw_origin_record value = ROOT.var:nd_arsenal_record }
+		}
+		if = {
+			limit = { nd_is_armed = yes }
+			scope:target = { save_scope_as = nd_cw_rebel }
+			trigger_event = { id = nuclear_custody.1 popup = yes }
+		}
+	}
+}
+
+# ROOT = the original country, scope:nd_cw_rebel set (nuclear_custody.1's
+# immediate). Rolls both splits once, so every option shows the numbers it will
+# apply. For each MODE (hold, pull):
+#   nd_cw_<MODE>_seized  warheads that leave our hands
+#   nd_cw_<MODE>_lost    of those, the ones nobody can account for
+#   nd_cw_<MODE>_taken   of those, the ones the rebels hold
+#   nd_cw_<MODE>_kept    what stays with us (the option tooltips print it)
+nd_cw_roll_split = {
+	set_variable = { name = nd_cw_hold_seized value = nd_cw_seizable_share }
+	set_variable = { name = nd_cw_pull_seized value = nd_cw_pullback_share }
+	nd_cw_roll_one = { MODE = hold }
+	nd_cw_roll_one = { MODE = pull }
+}
+
+nd_cw_roll_one = {
+	nd_custody_round = { VAR = nd_cw_$MODE$_seized }
+	if = {
+		limit = { var:nd_cw_$MODE$_seized > nd_stockpile }
+		set_variable = { name = nd_cw_$MODE$_seized value = nd_stockpile }
+	}
+	set_variable = {
+		name = nd_cw_$MODE$_lost
+		value = {
+			value = var:nd_cw_$MODE$_seized
+			multiply = nd_cw_outbreak_loss_rate
+		}
+	}
+	nd_custody_round = { VAR = nd_cw_$MODE$_lost }
+	if = {
+		limit = { var:nd_cw_$MODE$_lost > var:nd_cw_$MODE$_seized }
+		set_variable = { name = nd_cw_$MODE$_lost value = var:nd_cw_$MODE$_seized }
+	}
+	set_variable = {
+		name = nd_cw_$MODE$_taken
+		value = {
+			value = var:nd_cw_$MODE$_seized
+			subtract = var:nd_cw_$MODE$_lost
+		}
+	}
+	set_variable = {
+		name = nd_cw_$MODE$_kept
+		value = {
+			value = nd_stockpile
+			subtract = var:nd_cw_$MODE$_seized
+		}
+	}
+}
+
+# ROOT = the original country. Applies a rolled split: MODE = hold or pull,
+# TT = the tooltip key that prints its numbers (a literal, so organize_loc sees
+# the key used; #451). The numbers are re-capped at the stockpile we hold now —
+# a launch may have spent some since the roll.
+nd_cw_apply_split = {
+	custom_tooltip = {
+		text = $TT$
+		if = {
+			limit = { var:nd_cw_$MODE$_seized > nd_stockpile }
+			set_variable = { name = nd_cw_$MODE$_seized value = nd_stockpile }
+			if = {
+				limit = { var:nd_cw_$MODE$_lost > var:nd_cw_$MODE$_seized }
+				set_variable = { name = nd_cw_$MODE$_lost value = var:nd_cw_$MODE$_seized }
+			}
+			set_variable = {
+				name = nd_cw_$MODE$_taken
+				value = {
+					value = var:nd_cw_$MODE$_seized
+					subtract = var:nd_cw_$MODE$_lost
+				}
+			}
+		}
+		if = {
+			limit = {
+				var:nd_cw_$MODE$_seized > 0
+				exists = scope:nd_cw_rebel
+				scope:nd_cw_rebel = { is_country_alive = yes }
+			}
+			change_variable = { name = nuclear_weapon_stockpile subtract = var:nd_cw_$MODE$_seized }
+			nd_custody_lose_warheads = { AMOUNT = var:nd_cw_$MODE$_lost }
+			scope:nd_cw_rebel = {
+				if = {
+					limit = { NOT = { has_variable = nuclear_weapon_stockpile } }
+					set_variable = { name = nuclear_weapon_stockpile value = 0 }
+				}
+				change_variable = { name = nuclear_weapon_stockpile add = ROOT.var:nd_cw_$MODE$_taken }
+				if = {
+					limit = { NOT = { has_variable = nd_custody_received } }
+					set_variable = { name = nd_custody_received value = 0 }
+					set_variable = { name = nd_custody_lost value = 0 }
+				}
+				change_variable = { name = nd_custody_received add = ROOT.var:nd_cw_$MODE$_taken }
+				change_variable = { name = nd_custody_lost add = ROOT.var:nd_cw_$MODE$_lost }
+				if = {
+					limit = { NOT = { has_variable = nd_custody_arrival_pending } }
+					set_variable = { name = nd_custody_arrival_pending value = 1 }
+					trigger_event = { id = nuclear_custody.2 }
+				}
+			}
+			nd_snap_public_estimate = yes
+		}
+	}
+	hidden_effect = {
+		debug_log = "TE_CUSTODY: [ROOT.GetCountry.GetName] chose $MODE$ at the outbreak: [ROOT.GetCountry.MakeScope.Var('nd_cw_$MODE$_taken').GetValue|0] to the rebels, [ROOT.GetCountry.MakeScope.Var('nd_cw_$MODE$_lost').GetValue|0] lost"
+		nd_ledger_refresh = yes
+		nd_cw_clear_roll = yes
+	}
+}
+
+nd_cw_clear_roll = {
+	if = {
+		limit = { has_variable = nd_cw_hold_seized }
+		remove_variable = nd_cw_hold_seized
+		remove_variable = nd_cw_hold_lost
+		remove_variable = nd_cw_hold_taken
+		remove_variable = nd_cw_hold_kept
+	}
+	if = {
+		limit = { has_variable = nd_cw_pull_seized }
+		remove_variable = nd_cw_pull_seized
+		remove_variable = nd_cw_pull_lost
+		remove_variable = nd_cw_pull_taken
+		remove_variable = nd_cw_pull_kept
+	}
+}
+
+# ROOT = the original country: "Pull them back". What delegated commanders
+# hold still goes over; the rest go into storage at once and stay there until
+# every civil war of ours is over (nd_readiness_withdrawn).
+nd_cw_pull_back = {
+	nd_cw_apply_split = { MODE = pull TT = nd_tt_cw_split_pull }
+	custom_tooltip = {
+		text = nd_tt_cw_withdrawn
+		set_variable = { name = nd_cw_withdrawn value = 1 }
+		set_variable = { name = nd_readiness value = 0 }
+		set_variable = { name = nd_readiness_target value = 0 }
+		set_variable = { name = nd_readiness_transition value = 0 }
+		set_variable = { name = nd_readiness_months value = 0 }
+	}
+	hidden_effect = {
+		nd_apply_posture_modifiers = yes
+		# Shelving the bomb while others shelter under it costs what going to
+		# Recessed always costs (nuclear_crisis.23).
+		if = {
+			limit = { nd_protects_anyone = yes }
+			trigger_event = { id = nuclear_crisis.23 popup = yes }
+		}
+	}
+	if = {
+		limit = { nd_protects_anyone = yes }
+		custom_tooltip = nd_tt_recessed_alarms_allies
+	}
+}
+
+# ROOT = the original country: "Dismantle them".
+nd_cw_dismantle = {
+	custom_tooltip = {
+		text = nd_tt_cw_dismantle
+		set_variable = { name = nuclear_weapon_stockpile value = 0 }
+	}
+	if = {
+		limit = { has_modifier = nuclear_power }
+		remove_modifier = nuclear_power
+	}
+	custom_tooltip = {
+		text = nd_tt_cw_dismantle_relations
+		every_country = {
+			limit = { NOT = { this = ROOT } }
+			change_relations = { country = ROOT value = 10 }
+		}
+	}
+	hidden_effect = {
+		debug_log = "TE_CUSTODY: [ROOT.GetCountry.GetName] dismantled its arsenal at the outbreak"
+		nd_snap_public_estimate = yes
+		nd_apply_posture_modifiers = yes
+		nd_ledger_refresh = yes
+		nd_cw_clear_roll = yes
+	}
+}
+
+# ----------------------------------------------------------------------------
+# CIVIL WARS — the end
+# ----------------------------------------------------------------------------
+# ROOT = the winner (on_civil_war_won, through te_civil_war_on_won), after
+# te_civil_war_resolve_sides has set te_cw_rebels_won. A revolution's winner is
+# a new regime and settles its inheritance first, from the old state's record;
+# then the settlement moves the loser's remaining warheads — the old state's to
+# the new regime, the rebels' back to the loyalists.
+nd_custody_on_civil_war_won = {
+	if = {
+		limit = { has_game_rule = nuclear_weapons_enabled }
+		if = {
+			limit = {
+				has_variable = te_cw_rebels_won
+				var:te_cw_rebels_won = 1
+				has_variable = nd_cw_origin_record
+			}
+			nd_custody_new_regime = yes
+		}
+		# The merge hands a loyalist winner the rebel's pointer to its own
+		# record; a new regime has just read it. Neither needs it again.
+		if = {
+			limit = { has_variable = nd_cw_origin_record }
+			remove_variable = nd_cw_origin_record
+		}
+		nd_custody_reconcile = yes
+	}
+}
+
+# ROOT = a winning revolution. The decisions of 2026-09-26: the state's
+# doctrine and investments carry over, with both tenures satisfied so the new
+# government may re-choose at once; credibility starts again at 50; the old
+# regime's pledges and defiance records are not inherited (variable lists never
+# are) and lapse for its partners in the settlement; a crisis it inherited that
+# the other side no longer mirrors is dropped without consequences; progress
+# toward the next warhead is carried over the entry's fresh activation.
+nd_custody_new_regime = {
+	var:nd_cw_origin_record ?= { save_scope_as = nd_nr_record }
+	if = {
+		limit = { exists = scope:nd_nr_record }
+		if = {
+			limit = { scope:nd_nr_record = { has_variable = nd_ar_doctrine } }
+			set_variable = { name = nd_doctrine value = scope:nd_nr_record.var:nd_ar_doctrine }
+			set_variable = { name = nd_authority value = scope:nd_nr_record.var:nd_ar_authority }
+		}
+		if = {
+			limit = { scope:nd_nr_record = { has_variable = nd_ar_safeguards } }
+			set_variable = { name = nd_safeguards value = scope:nd_nr_record.var:nd_ar_safeguards }
+		}
+		if = {
+			limit = { scope:nd_nr_record = { has_variable = nd_ar_hardening } }
+			set_variable = { name = nd_hardening value = scope:nd_nr_record.var:nd_ar_hardening }
+		}
+		if = {
+			limit = { scope:nd_nr_record = { var:nd_ar_progress > 0 } }
+			set_variable = { name = nd_custody_progress_carry value = scope:nd_nr_record.var:nd_ar_progress }
+		}
+	}
+	if = {
+		limit = { has_variable = nd_doctrine }
+		set_variable = { name = nd_doctrine_months value = nd_doctrine_tenure_months }
+	}
+	if = {
+		limit = { has_variable = nd_authority }
+		set_variable = { name = nd_authority_months value = nd_authority_tenure_months }
+	}
+	set_variable = { name = nd_credibility value = 50 }
+	if = {
+		limit = {
+			nd_is_crisis_owner = yes
+			NOT = { nd_crisis_pair_intact = yes }
+		}
+		nd_crisis_clear_own_record = yes
+	}
+	else_if = {
+		limit = {
+			nd_is_crisis_target = yes
+			NOT = { var:nd_crisis_opponent ?= { nd_crisis_pair_intact = yes } }
+		}
+		nd_crisis_clear_own_record = yes
+	}
+	# The old regime's pull-back, inherited through the merge, is not ours.
+	if = {
+		limit = { has_variable = nd_cw_withdrawn }
+		remove_variable = nd_cw_withdrawn
+	}
+	# For nuclear_custody.2: this arrival is a new regime's. It is sent a day
+	# from now, so the settlement that follows (which finds it pending and only
+	# adds to the counts) has delivered the old state's warheads by then —
+	# and the new regime is still told what it holds if the old state's record
+	# settles elsewhere or not at all.
+	set_variable = { name = nd_custody_new_regime value = 1 }
+	if = {
+		limit = { NOT = { has_variable = nd_custody_received } }
+		set_variable = { name = nd_custody_received value = 0 }
+		set_variable = { name = nd_custody_lost value = 0 }
+	}
+	if = {
+		limit = { NOT = { has_variable = nd_custody_arrival_pending } }
+		set_variable = { name = nd_custody_arrival_pending value = 1 }
+		trigger_event = { id = nuclear_custody.2 days = 1 }
+	}
+	debug_log = "TE_CUSTODY: [ROOT.GetCountry.GetName] is a new regime; doctrine [ROOT.GetCountry.MakeScope.Var('nd_doctrine').GetValue|0], carried progress [ROOT.GetCountry.MakeScope.Var('nd_custody_progress_carry').GetValue|0]"
+}
+
+# ROOT = the country, from je_nuclear_program's weekly pulse: a new regime's
+# carried progress, restored once the entry is active — after any activation's
+# immediate has zeroed it (je_nuclear_program.txt, immediate).
+nd_custody_restore_progress = {
+	if = {
+		limit = { has_variable = nd_custody_progress_carry }
+		if = {
+			limit = {
+				has_variable = nuclear_weapon_program_progress
+				var:nuclear_weapon_program_progress < var:nd_custody_progress_carry
+				var:nd_custody_progress_carry < nuclear_weapon_program_goal_value
+			}
+			set_variable = { name = nuclear_weapon_program_progress value = var:nd_custody_progress_carry }
+		}
+		remove_variable = nd_custody_progress_carry
+	}
+}
+
+# ----------------------------------------------------------------------------
+# OWN SIDE — a nuclear strike on one's own civil war (owner ruling 2026-09-25)
+# ----------------------------------------------------------------------------
+# Country scope = the striker, from nd_record_nuclear_use outside its
+# hidden_effect, so every strike's tooltip shows it. The same for every
+# regime: a legitimacy blow that fades over twenty years (a second strike
+# renews it) and a radical surge that the laws on speech and internal security
+# shrink or enlarge (nd_own_strike_radicals).
+nd_custody_struck_own_people = {
+	add_modifier = {
+		name = nd_struck_own_people
+		years = 20
+		is_decaying = yes
+	}
+	add_radicals = {
+		value = nd_own_strike_radicals
+	}
+}
