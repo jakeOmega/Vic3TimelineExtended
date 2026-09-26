@@ -1,0 +1,501 @@
+﻿# ============================================================================
+# Monetary Policy — a revolution's winner takes over the loser's central bank
+# ============================================================================
+# Issue #462; docs/audits/civil_war_inheritance_audit.md F3, and F13's pointer
+# half. Spec: docs/systems/monetary_policy_design.md §0.4 checklist item 32.
+# Engine rules: scripting_best_practices.md § "What a Civil War's Winner
+# Inherits".
+#
+# WHAT WENT WRONG. te_monetary_on_country_released gives the rebels a full
+# monetary state at on_revolution_start, because they need a rate of their own
+# to price their loans during the war. When a revolution ends the winner annexes
+# the loser, and the variable merge keeps the WINNER'S value wherever both hold
+# one, so after a rebel win every te_* variable was the rebels': the German
+# save's vault went from 111.5M to 2.8M, 54.6% hyperinflation became 5.1%, the
+# exchange-rate index went from 61 back to par, a 35-month suspension of
+# convertibility and a 22-month crisis cooldown were wiped, and the player's
+# mandate was replaced by the rebels' AI default. No modifier is inherited
+# either, so the timed peg modifiers went too.
+#
+# THE RULING (owner, 2026-09-26): the winner continues the nation. It takes the
+# loser's central bank — its stocks, its inflation and peg state, and the
+# player's choices — and the gold in the rebels' own vault is added on top.
+#
+# HOW. te_civil_war_record_parent (te_monetary_on_actions.txt) stores
+# te_cw_parent = the original country on the rebels at on_revolution_start.
+# te_monetary_on_civil_war_won resolves it at on_civil_war_won (ROOT = the
+# winner, after the merge) and, only when it names a different object that is
+# no longer alive — a rebel win — and that object's rate paid reads as a real
+# rate (a canary against a read that resolves but returns zeros), saves it as
+# scope:te_cw_loser and calls te_monetary_inherit_central_bank below. That
+# rests on an engine fact nobody has observed yet: that a dead but not yet
+# deleted country can still be read through a stored scope variable. The
+# loser was still in the save after this hook, with every variable and
+# modifier, and vanilla's on_secession_end reads the capital of a country it
+# calls dead. Everything here reads the loser only inside that `?=` guard,
+# and the on-action logs what it saw (TE_CW_PROBE).
+#
+# WHAT IS COPIED. Every variable of te_monetary_monthly_update's contract
+# (the header of common/script_values/te_monetary_script_values.txt, and its
+# phase-4 / 5 / 5b siblings) falls into one of five groups:
+#
+#   (a) STOCKS, ADDED: the vault te_bank_gold and the hot money inside it. Two
+#       banks' reserves merge into one; so do the two balances owed back.
+#   (b) THE NATION'S STATE, TAKEN FROM THE LOSER: everything the update
+#       INTEGRATES from month to month rather than recomputing — the policy
+#       rate, inflation and its hidden noise walk, the sticky band, the neutral
+#       rate's two walks, the exchange rate, the peg, every clock and cooldown,
+#       the lender-of-last-resort record, and the two yearly caches.
+#   (c) THE PLAYER'S CHOICES, TAKEN FROM THE LOSER: the rate target,
+#       delegation, the mandate, the monetisation level, the bloc-currency
+#       adoption and a bloc leader's pressing. The monetary REGIME is not
+#       among them: it is a law, the rebels start with the nation's laws
+#       (except the one their movement fought for), and step 1 re-derives
+#       te_mon_regime from the winner's laws every pulse.
+#   (d) NOT COPIED: every `_applied` tracker, te_rate_paid_rooted,
+#       te_mon_mod_home and the other bookkeeping that records which modifier
+#       is PHYSICALLY on which object, plus every value the monthly update
+#       recomputes from scratch (premiums, rate paid, market yield, neutral
+#       rate, stance gap and band, cost-push, flows, carry, the per-pulse
+#       copies of world and anchor figures, the discovery's points). The
+#       trackers are the winner's own and describe the winner's own modifiers,
+#       so leaving them alone is what lets the next pulse swap every modifier
+#       from the copied state correctly; copying the loser's tracker without the
+#       loser's modifier is exactly audit F7's bug.
+#   (e) ARRANGEMENTS, TAKEN FROM THE LOSER AND RE-VALIDATED: the anchor and its
+#       kind, the swap line, the guarantee and the receivership, then
+#       te_mon_arr_scan = 1 so step 1c's discovery re-derives them next pulse
+#       from the treaties, subject link and bloc the winner actually holds.
+#       Whether those pass to the winner is engine behaviour nobody has
+#       observed; the discovery's own change logic does the right thing either
+#       way — an arrangement that survived continues untouched, one that did not
+#       is un-anchored, and a swap balance still drawn is settled with the
+#       provider rather than stranded.
+#
+# WHAT THE NEXT PULSE DOES WITH IT. Nothing here touches a modifier except the
+# three timed ones at the foot, and nothing calls the monthly update, which is
+# not idempotent. At the winner's next monthly pulse step 0b sees the inherited
+# banking entry as a change of home (the rebels normally had none), strips
+# every managed modifier and zeroes the five trackers; steps 6c, 8b, 9 and 9b
+# then swap each modifier from the copied state against the winner's own
+# tracker; step 10 finds the summed vault already counted. So for up to a
+# month the winner still pays the rebels' rate and carries their band.
+#
+# ROOT = THIS = the winner, scope:te_cw_loser = the loser. Every read of the
+# loser is inside the caller's `?=` on the pointer.
+# ============================================================================
+
+
+te_monetary_inherit_central_bank = {
+	# --- (a) THE VAULT: the two are added ------------------------------------
+	# Only a COUNTED vault counts. te_bank_gold_seeded = 0 means the figure is
+	# stale — the country has never had gold flows, or the gold LAW went — and
+	# step 10 overwrites it with a fresh seed the first month it has flows again.
+	# So the loser's vault is taken only if the loser had counted it; the
+	# winner's own is kept on top only if the winner had counted its own.
+	#
+	# THE ONE PLACE THIS CAN OVERSHOOT is a winner whose "own" vault is really
+	# the loser's: a rebel that never ran te_monetary_internal.1 would have
+	# inherited the loser's figure in the merge, and adding the loser's again
+	# would double it. After the merge the two cannot be told apart, so a
+	# winner's vault EQUAL to the loser's is read as inherited. Two real vaults
+	# are never equal to the last decimal unless both are 0, and 0 + 0 is 0
+	# either way. The hot money rides with its vault on the same test, because
+	# step 0 seeds both on the same pulse.
+	#
+	# The hot money is added for the same reason the vaults are: it is the part
+	# of each vault still owed back to foreign depositors, and the merged bank
+	# owes both — as a liability it can only be added, and step 10 keeps
+	# charging the carry on it and letting it drain home at a higher rate.
+	#
+	# NO CLAMP AT THE LIMIT. The limit is 0.2 x the winner's GDP, which may not
+	# count the annexed states until the engine next recomputes it, so a clamp
+	# here could throw the nation's reserve away. An over-full vault does no
+	# harm: step 10's inflow room floors at 0, so it simply stops refilling.
+	if = {
+		limit = {
+			scope:te_cw_loser = {
+				has_variable = te_bank_gold_seeded
+				var:te_bank_gold_seeded = 1
+				has_variable = te_bank_gold
+				has_variable = te_gold_hot_money
+			}
+		}
+		if = {
+			limit = {
+				has_variable = te_bank_gold_seeded
+				var:te_bank_gold_seeded = 1
+				has_variable = te_bank_gold
+				has_variable = te_gold_hot_money
+				NOT = { var:te_bank_gold = scope:te_cw_loser.var:te_bank_gold }
+			}
+			change_variable = { name = te_bank_gold add = scope:te_cw_loser.var:te_bank_gold }
+			change_variable = { name = te_gold_hot_money add = scope:te_cw_loser.var:te_gold_hot_money }
+		}
+		else = {
+			set_variable = { name = te_bank_gold value = scope:te_cw_loser.var:te_bank_gold }
+			set_variable = { name = te_gold_hot_money value = scope:te_cw_loser.var:te_gold_hot_money }
+		}
+		set_variable = { name = te_bank_gold_seeded value = 1 }
+	}
+
+	# --- (b) THE NATION'S STATE ----------------------------------------------
+	# The rate the bank has actually reached (it drifts toward the target).
+	te_mon_cw_take = { VAR = te_policy_rate }
+	# Inflation. Headline is recomputed from core next pulse but is what the
+	# dashboard shows until then; the band is STICKY (step 6b reads last
+	# month's to know which way the country is travelling); the hyperinflation
+	# cooldown and dollarisation are the §9.2 crisis's own record — without them
+	# the winner would be offered the crisis again at once.
+	te_mon_cw_take = { VAR = te_inflation }
+	te_mon_cw_take = { VAR = te_inflation_core }
+	te_mon_cw_take = { VAR = te_inflation_expected }
+	te_mon_cw_take = { VAR = te_inflation_noise }
+	te_mon_cw_take = { VAR = te_inflation_band }
+	te_mon_cw_take = { VAR = te_mon_hyper_cooldown }
+	te_mon_cw_take = { VAR = te_mon_dollarised }
+	# The neutral rate's two hidden walks (step 8 rebuilds te_neutral_rate from
+	# them), and the sustained-stance counter step 8b's politics key on.
+	te_mon_cw_take = { VAR = te_neutral_walk }
+	te_mon_cw_take = { VAR = te_neutral_error }
+	te_mon_cw_take = { VAR = te_mon_stance_months }
+	# The two YEARLY caches. Left as the rebels', next January's growth term
+	# would compare the whole nation's GDP with the rebel enclave's and read a
+	# boom, pushing the neutral rate to its ceiling for a year.
+	te_mon_cw_take = { VAR = te_mon_gdp_last_year }
+	te_mon_cw_take = { VAR = te_mon_growth_term }
+	# The exchange rate, as one set: step 5b's imported inflation differences
+	# the index against its three-year average, so an index taken without its
+	# average would book the whole gap as a shock.
+	te_mon_cw_take = { VAR = te_fx_index }
+	te_mon_cw_take = { VAR = te_fx_shadow }
+	te_mon_cw_take = { VAR = te_fx_shock }
+	te_mon_cw_take = { VAR = te_fx_avg }
+	te_mon_cw_take = { VAR = te_fx_devalued_months }
+	te_mon_cw_take = { VAR = te_capital_controls_months }
+	# The peg and its three clocks.
+	te_mon_cw_take = { VAR = te_peg_confidence }
+	te_mon_cw_take = { VAR = te_peg_crisis_cooldown }
+	te_mon_cw_take = { VAR = te_peg_defend_months }
+	te_mon_cw_take = { VAR = te_peg_suspended_months }
+	# The lender-of-last-resort record — "a fact about the ward", which a
+	# revolution can no more launder than a change of guarantor can — and the
+	# arrangement clocks.
+	te_mon_cw_take = { VAR = te_mon_lolr_calls }
+	te_mon_cw_take = { VAR = te_mon_lolr_call_forget }
+	te_mon_cw_take = { VAR = te_mon_lolr_default_cooldown }
+	te_mon_cw_take = { VAR = te_mon_lolr_suspended_months }
+	te_mon_cw_take = { VAR = te_mon_emergency_controls_months }
+	te_mon_cw_take = { VAR = te_mon_receivership_clear_months }
+	te_mon_cw_take = { VAR = te_mon_union_lock_months }
+	te_mon_cw_take = { VAR = te_mon_union_ask_cooldown }
+	te_mon_cw_take = { VAR = te_mon_union_q_state }
+	te_mon_cw_take = { VAR = te_mon_board_wrong_months }
+	# An overlord's board seigniorage is re-summed only YEARLY, so it is a cache
+	# of the nation's figure like the two above, not a monthly derived value.
+	te_mon_cw_take = { VAR = te_mon_board_seigniorage_pts }
+
+	# --- (c) THE PLAYER'S CHOICES --------------------------------------------
+	# For an AI winner step 2 overwrites delegation and mandate from its own
+	# rule next pulse, so this matters for the player, who keeps playing the
+	# tag. A mandate or level the winner can no longer hold is corrected by the
+	# update's own rules (peg defence off gold -> price stability; a country
+	# that may not monetise -> 0).
+	te_mon_cw_take = { VAR = te_policy_rate_target }
+	te_mon_cw_take = { VAR = te_mon_delegated }
+	te_mon_cw_take = { VAR = te_mon_mandate }
+	te_mon_cw_take = { VAR = te_monetisation_level }
+	te_mon_cw_take = { VAR = te_mon_union_pressing }
+	# Adoption of the bloc currency is taken only if the winner is in a bloc
+	# that still has one. Otherwise the discovery would treat the loser's
+	# choice as an EXIT and charge the exit's radicals, relations and
+	# investment-pool hit for a membership the revolution took away, not the
+	# player.
+	if = {
+		limit = { te_mon_bloc_has_common_currency = yes }
+		te_mon_cw_take = { VAR = te_mon_union_member }
+	}
+
+	# --- (e) ARRANGEMENTS, RE-VALIDATED NEXT PULSE ---------------------------
+	te_mon_cw_take_scope = { VAR = te_mon_anchor }
+	te_mon_cw_take = { VAR = te_mon_anchor_kind }
+	te_mon_cw_take = { VAR = te_mon_peg_parity_offset }
+	te_mon_cw_take = { VAR = te_mon_swap_recipient }
+	te_mon_cw_take_scope = { VAR = te_mon_swap_provider }
+	te_mon_cw_take = { VAR = te_mon_swap_drawn }
+	te_mon_cw_take = { VAR = te_mon_lolr_ward }
+	te_mon_cw_take_scope = { VAR = te_mon_lolr_guarantor }
+	te_mon_cw_take = { VAR = te_mon_receivership }
+	te_mon_cw_take_scope = { VAR = te_mon_receiver }
+	set_variable = { name = te_mon_arr_scan value = 1 }
+
+	# --- (d) one deliberate reset: the price basket --------------------------
+	# The basket's trailing average was measured on the rebels' market, which
+	# has just absorbed the nation's states. Re-seeding is what step 6a does
+	# for any change of market ("joining a customs union re-seeds instead of
+	# booking the new market's price level as inflation"), but the market's
+	# OWNER has not changed here — it is the winner object either way — so the
+	# re-seed has to be asked for. Without it the rebels' average would feed a
+	# spurious cost-push shock for up to three years.
+	set_variable = { name = te_basket_seeded value = 0 }
+
+	# --- the timed crisis modifiers ------------------------------------------
+	# Country modifiers applied by event options with a clock (te_peg.1's
+	# Suspend, te_lolr.1's Renege). None is inherited. The engine offers no read
+	# of a modifier's remaining time, so each is re-added from the month
+	# counter the same option started, which the block above has just copied.
+	# Skipped if the winner somehow already carries its own.
+	#
+	# SUSPENSION (1825 days = 60 months, set beside te_peg_suspended_months = 60):
+	# the counter IS its remaining time. A counter at 0 beside a live modifier
+	# means one of two things, told apart by the loser's law. Still on gold: the
+	# suspension ran its course at the last pulse and the modifier has days
+	# left, so it is not re-added. Off gold: step 10 zeroed the counter because
+	# the gold LAW went, the modifier runs on, and its remaining time lies
+	# anywhere in the 60 months — 30 is the middle.
+	if = {
+		limit = {
+			scope:te_cw_loser = { has_modifier = te_mon_peg_suspension }
+			NOT = { has_modifier = te_mon_peg_suspension }
+			OR = {
+				var:te_peg_suspended_months > 0
+				scope:te_cw_loser = {
+					NOT = { has_law_or_variant = law_type:law_gold_standard }
+				}
+			}
+		}
+		if = {
+			limit = { var:te_peg_suspended_months > 0 }
+			set_variable = { name = te_mon_work value = var:te_peg_suspended_months }
+		}
+		else = {
+			set_variable = { name = te_mon_work value = 30 }
+		}
+		te_mon_cw_add_timed = { NAME = te_mon_peg_suspension }
+	}
+	# LOST CREDIBILITY (3650 days = 120 months, from the same click): the
+	# suspension's remaining time plus 60. With the counter at 0 it is read off
+	# the suspension MODIFIER: gone means over 60 months have passed (0-60
+	# left, so 30); still there means under 60 — 60 left if the suspension has
+	# just run its course on gold, and anywhere in 60-120 (so 90) if the gold
+	# law went.
+	if = {
+		limit = {
+			scope:te_cw_loser = { has_modifier = te_mon_peg_credibility_lost }
+			NOT = { has_modifier = te_mon_peg_credibility_lost }
+		}
+		if = {
+			limit = { var:te_peg_suspended_months > 0 }
+			set_variable = { name = te_mon_work value = var:te_peg_suspended_months }
+			change_variable = { name = te_mon_work add = 60 }
+		}
+		else_if = {
+			limit = {
+				scope:te_cw_loser = {
+					has_modifier = te_mon_peg_suspension
+					has_law_or_variant = law_type:law_gold_standard
+				}
+			}
+			set_variable = { name = te_mon_work value = 60 }
+		}
+		else_if = {
+			limit = { scope:te_cw_loser = { has_modifier = te_mon_peg_suspension } }
+			set_variable = { name = te_mon_work value = 90 }
+		}
+		else = {
+			set_variable = { name = te_mon_work value = 30 }
+		}
+		te_mon_cw_add_timed = { NAME = te_mon_peg_credibility_lost }
+	}
+	# RENEGED (1825 days, set beside te_mon_lolr_suspended_months = 60): the
+	# counter is its remaining time, and nothing else zeroes it, so a 0 means
+	# the modifier expires within the month and is not worth re-adding.
+	if = {
+		limit = {
+			scope:te_cw_loser = { has_modifier = te_mon_lolr_reneged }
+			NOT = { has_modifier = te_mon_lolr_reneged }
+			var:te_mon_lolr_suspended_months > 0
+		}
+		set_variable = { name = te_mon_work value = var:te_mon_lolr_suspended_months }
+		te_mon_cw_add_timed = { NAME = te_mon_lolr_reneged }
+	}
+
+	# --- F13: third countries' pointers to the loser -------------------------
+	te_mon_cw_repoint_to_winner = yes
+}
+
+
+# ----------------------------------------------------------------------------
+# Take the loser's $VAR$, if it has one. A number variable.
+# ----------------------------------------------------------------------------
+# Scope: the winner; scope:te_cw_loser saved by the caller.
+te_mon_cw_take = {
+	if = {
+		limit = { scope:te_cw_loser = { has_variable = $VAR$ } }
+		set_variable = { name = $VAR$ value = scope:te_cw_loser.var:$VAR$ }
+	}
+}
+
+# ...and a SCOPE variable (a country), which must also still name something.
+# Written through a saved scope, the form every scope variable in the monetary
+# files is set with.
+te_mon_cw_take_scope = {
+	if = {
+		limit = {
+			scope:te_cw_loser = {
+				has_variable = $VAR$
+				exists = var:$VAR$
+			}
+		}
+		scope:te_cw_loser = {
+			var:$VAR$ = { save_scope_as = te_mon_cw_ref }
+		}
+		set_variable = { name = $VAR$ value = scope:te_mon_cw_ref }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# Add the timed modifier $NAME$ for var:te_mon_work months
+# ----------------------------------------------------------------------------
+# Scope: the country receiving it. Rounded UP to the next half-year, so a
+# penalty is never cut short by the rounding; 0 or less adds nothing.
+#
+# WHY A LADDER OF LITERALS. Nothing in vanilla or the mod passes add_modifier a
+# duration that depends on scope: every non-literal one is a $PARAMETER$, and
+# the engine docs give no signature for the field. An engine field that does
+# not take a script value ignores it silently (add_escalation did), and a
+# timed modifier with no time is a permanent one, so this does not gamble.
+te_mon_cw_add_timed = {
+	if = {
+		limit = { var:te_mon_work > 114 }
+		add_modifier = { name = $NAME$ months = 120 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 108 }
+		add_modifier = { name = $NAME$ months = 114 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 102 }
+		add_modifier = { name = $NAME$ months = 108 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 96 }
+		add_modifier = { name = $NAME$ months = 102 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 90 }
+		add_modifier = { name = $NAME$ months = 96 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 84 }
+		add_modifier = { name = $NAME$ months = 90 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 78 }
+		add_modifier = { name = $NAME$ months = 84 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 72 }
+		add_modifier = { name = $NAME$ months = 78 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 66 }
+		add_modifier = { name = $NAME$ months = 72 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 60 }
+		add_modifier = { name = $NAME$ months = 66 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 54 }
+		add_modifier = { name = $NAME$ months = 60 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 48 }
+		add_modifier = { name = $NAME$ months = 54 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 42 }
+		add_modifier = { name = $NAME$ months = 48 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 36 }
+		add_modifier = { name = $NAME$ months = 42 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 30 }
+		add_modifier = { name = $NAME$ months = 36 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 24 }
+		add_modifier = { name = $NAME$ months = 30 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 18 }
+		add_modifier = { name = $NAME$ months = 24 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 12 }
+		add_modifier = { name = $NAME$ months = 18 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 6 }
+		add_modifier = { name = $NAME$ months = 12 }
+	}
+	else_if = {
+		limit = { var:te_mon_work > 0 }
+		add_modifier = { name = $NAME$ months = 6 }
+	}
+}
+
+
+# ----------------------------------------------------------------------------
+# F13 — third countries whose arrangement pointers name the loser
+# ----------------------------------------------------------------------------
+# Scope: the winner (ROOT); scope:te_cw_loser saved by the caller.
+#
+# Countries pegged to the old nation, drawing on its swap line, guaranteed by
+# it or paying it a receivership keep a scope variable naming the dead object
+# (audit E6: five te_mon_anchor, a te_mon_receiver and a te_mon_swap_provider
+# two weeks after the German win). Until their discovery runs they copy the
+# dead bank's frozen rate, repay a swap line and remit receivership money to a
+# country that no longer exists, and a discovery that then finds the WINNER
+# behind the same treaty or subject link reads it as a change of anchor —
+# confidence back to the start, the index snapped — although nothing changed.
+#
+# Repointing each at the winner makes the continuation explicit: a surviving
+# arrangement is found unchanged, one that did not survive ends the way any
+# other does, and a swap balance still drawn is settled with the winner, which
+# holds the nation's books. te_mon_arr_scan = 1 puts each through the
+# discovery next pulse, whichever it holds.
+te_mon_cw_repoint_to_winner = {
+	every_country = {
+		limit = {
+			NOT = { this = root }
+			OR = {
+				var:te_mon_anchor ?= scope:te_cw_loser
+				var:te_mon_swap_provider ?= scope:te_cw_loser
+				var:te_mon_lolr_guarantor ?= scope:te_cw_loser
+				var:te_mon_receiver ?= scope:te_cw_loser
+			}
+		}
+		if = {
+			limit = { var:te_mon_anchor ?= scope:te_cw_loser }
+			set_variable = { name = te_mon_anchor value = root }
+		}
+		if = {
+			limit = { var:te_mon_swap_provider ?= scope:te_cw_loser }
+			set_variable = { name = te_mon_swap_provider value = root }
+		}
+		if = {
+			limit = { var:te_mon_lolr_guarantor ?= scope:te_cw_loser }
+			set_variable = { name = te_mon_lolr_guarantor value = root }
+		}
+		if = {
+			limit = { var:te_mon_receiver ?= scope:te_cw_loser }
+			set_variable = { name = te_mon_receiver value = root }
+		}
+		set_variable = { name = te_mon_arr_scan value = 1 }
+	}
+}

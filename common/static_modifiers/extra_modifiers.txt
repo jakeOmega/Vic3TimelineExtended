@@ -7652,10 +7652,14 @@ te_mon_currency_reform_premium = {
 # with `days =`, on te_mon_currency_reform_premium's reasoning: lenders remember
 # for a fixed term, and a timed modifier shows the player the clock.
 #
-# THE SCRIPT NEVER READS has_modifier ON THESE. The suspension's regime effects
-# run off the month counter te_peg_suspended_months (te_mon_is_on_gold); these
-# only carry the prices, which the monthly update picks up through the two
-# premium modifier types like any other source.
+# THE MONTHLY UPDATE NEVER READS has_modifier ON THESE. The suspension's regime
+# effects run off the month counter te_peg_suspended_months (te_mon_is_on_gold);
+# these only carry the prices, which the monthly update picks up through the two
+# premium modifier types like any other source. The one reader is
+# te_monetary_inherit_central_bank (te_monetary_civil_war_effects.txt): a
+# revolution's winner inherits no modifier, so it re-adds the loser's
+# te_mon_peg_suspension and te_mon_peg_credibility_lost for the time their
+# counter says is left.
 
 # The carry on borrowed gold (owner decision I), as a line in the budget. A
 # UNIT modifier: step 10 of te_monetary_monthly_update applies it with
