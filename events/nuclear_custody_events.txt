@@ -13,8 +13,18 @@
 #        arsenal's settlement. Runs what needs ROOT = the new holder
 #   .3   The Arsenal Changes Hands — a human's notice of warheads received
 #   .4   The Old Regime's Arsenal — a human new regime's notice
+#   .5   Deny Them the Bomb — a government losing a revolution while armed
+#   .6   A Nuclear Power Divided — a watching power takes a side, offers to
+#        secure the arsenal, or stays out
+#   .7   An Offer to Secure Our Arsenal — the government answers .6's offer
+#   .8   the helper hears the answer
 #   .9   (hidden) the settlement, a day after a hook where the old owner may
 #        still have been alive (nd_custody_reconcile_soon)
+#   .10  A New Nuclear State — a great power decides whether to press a
+#        secession that won holding warheads (the Budapest path)
+#   .11  The Budapest Offer — the new state trades its warheads for
+#        guarantees, or keeps them
+#   .12  each guarantor hears the answer
 # ============================================================================
 
 # ---- .1 Who Holds the Button? -----------------------------------------------
@@ -218,6 +228,341 @@ nuclear_custody.4 = {
 	}
 }
 
+# ---- .5 Deny Them the Bomb ---------------------------------------------------------
+# Sent by nd_cw_monthly_check, once per civil war, to a government losing a
+# revolution while it still holds warheads, with scope:nd_cw_rebel saved. The
+# winner would inherit what it holds. The loss of a hasty dismantling is
+# rolled once in immediate, so the option shows it.
+nuclear_custody.5 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_custody.5.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_custody.5.d_custodian
+				trigger = { nd_cw_custodian_can_supervise = yes }
+			}
+			triggered_desc = {
+				desc = nuclear_custody.5.d
+			}
+		}
+	}
+	flavor = nuclear_custody.5.f
+
+	duration = 3
+
+	trigger = {
+		nd_is_armed = yes
+		exists = scope:nd_cw_rebel
+		scope:nd_cw_rebel = { is_country_alive = yes }
+	}
+
+	immediate = {
+		nd_cw_deny_roll = yes
+		var:nd_cw_custodian ?= { save_scope_as = nd_cw_helper }
+	}
+
+	# Take them apart now, in haste.
+	option = {
+		name = nuclear_custody.5.a
+		nd_cw_deny_dismantle = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 3
+			}
+			modifier = {
+				trigger = { enemy_occupation >= 0.5 }
+				add = 3
+			}
+		}
+	}
+
+	# Let the custodian take them apart: nothing goes missing.
+	option = {
+		name = nuclear_custody.5.b
+		trigger = { nd_cw_custodian_can_supervise = yes }
+		nd_cw_deny_supervised = yes
+		ai_chance = {
+			base = 8
+		}
+	}
+
+	# Keep them: the last card.
+	option = {
+		name = nuclear_custody.5.c
+		default_option = yes
+		custom_tooltip = nd_tt_cw_deny_keep
+		hidden_effect = {
+			nd_cw_deny_clear = yes
+		}
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 2
+			}
+		}
+	}
+}
+
+# ---- .6 A Nuclear Power Divided ----------------------------------------------------
+# To a power that watches closely (nd_cw_would_watch), a week after the
+# outbreak of a civil war in an armed country (nd_cw_notify_world). The pair
+# is read from the observer's own variables, set for a month.
+nuclear_custody.6 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_custody.6.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_custody.6.d_rebels_armed
+				trigger = { scope:nd_cwr_reb ?= { nd_is_armed = yes } }
+			}
+			triggered_desc = {
+				desc = nuclear_custody.6.d
+			}
+		}
+	}
+	flavor = nuclear_custody.6.f
+
+	duration = 3
+
+	trigger = {
+		nd_cwr_pair_at_war = yes
+	}
+
+	immediate = {
+		var:nd_cwr_origin = { save_scope_as = nd_cwr_gov }
+		var:nd_cwr_rebel = { save_scope_as = nd_cwr_reb }
+	}
+
+	# Back the government.
+	option = {
+		name = nuclear_custody.6.a
+		nd_cwr_back = { SIDE = gov OTHER = reb TT = nd_tt_cwr_back_gov }
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					OR = {
+						has_attitude = { who = scope:nd_cwr_gov attitude = protective }
+						has_attitude = { who = scope:nd_cwr_gov attitude = genial }
+						has_attitude = { who = scope:nd_cwr_gov attitude = loyal }
+					}
+				}
+				add = 6
+			}
+			modifier = {
+				trigger = { is_in_same_power_bloc = scope:nd_cwr_gov }
+				add = 4
+			}
+			modifier = {
+				trigger = { scope:nd_cwr_gov.relations:root >= relations_threshold:cordial }
+				add = 2
+			}
+		}
+	}
+
+	# Back the rebels.
+	option = {
+		name = nuclear_custody.6.b
+		nd_cwr_back = { SIDE = reb OTHER = gov TT = nd_tt_cwr_back_rebels }
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					OR = {
+						has_diplomatic_pact = { who = scope:nd_cwr_gov type = rivalry }
+						has_attitude = { who = scope:nd_cwr_gov attitude = antagonistic }
+						has_attitude = { who = scope:nd_cwr_gov attitude = belligerent }
+						has_attitude = { who = scope:nd_cwr_gov attitude = domineering }
+					}
+				}
+				add = 5
+			}
+		}
+	}
+
+	# Offer to secure their arsenal.
+	option = {
+		name = nuclear_custody.6.c
+		trigger = {
+			nd_is_armed = yes
+			scope:nd_cwr_gov = {
+				nd_is_armed = yes
+				NOT = { has_variable = nd_cw_custodian }
+				NOT = { has_variable = nd_cw_offer_from }
+			}
+			NOR = {
+				has_attitude = { who = scope:nd_cwr_gov attitude = antagonistic }
+				has_attitude = { who = scope:nd_cwr_gov attitude = belligerent }
+				has_attitude = { who = scope:nd_cwr_gov attitude = domineering }
+			}
+		}
+		nd_cwr_offer_custody = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					scope:nd_cwr_gov = {
+						has_variable = nd_public_estimate
+						var:nd_public_estimate >= 5
+					}
+				}
+				add = 4
+			}
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 2
+			}
+		}
+	}
+
+	# Stay out.
+	option = {
+		name = nuclear_custody.6.e
+		default_option = yes
+		ai_chance = {
+			base = 5
+		}
+	}
+
+	after = {
+		if = {
+			limit = { has_variable = nd_cwr_origin }
+			remove_variable = nd_cwr_origin
+		}
+		if = {
+			limit = { has_variable = nd_cwr_rebel }
+			remove_variable = nd_cwr_rebel
+		}
+	}
+}
+
+# ---- .7 An Offer to Secure Our Arsenal ---------------------------------------------
+# The government weighs the first offer that reached it (nd_cwr_offer_custody).
+nuclear_custody.7 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_custody.7.t
+	desc = nuclear_custody.7.d
+	flavor = nuclear_custody.7.f
+
+	duration = 3
+
+	trigger = {
+		var:nd_cw_offer_from ?= { is_country_alive = yes }
+		NOT = { has_variable = nd_cw_custodian }
+	}
+
+	immediate = {
+		var:nd_cw_offer_from = { save_scope_as = nd_cw_helper }
+	}
+
+	option = {
+		name = nuclear_custody.7.a
+		default_option = yes
+		nd_cw_accept_custodian = yes
+		ai_chance = {
+			base = 5
+		}
+	}
+
+	option = {
+		name = nuclear_custody.7.b
+		nd_cw_decline_custodian = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					OR = {
+						has_diplomatic_pact = { who = scope:nd_cw_helper type = rivalry }
+						has_attitude = { who = scope:nd_cw_helper attitude = antagonistic }
+						has_attitude = { who = scope:nd_cw_helper attitude = belligerent }
+						has_attitude = { who = scope:nd_cw_helper attitude = domineering }
+						has_attitude = { who = scope:nd_cw_helper attitude = wary }
+					}
+				}
+				add = 10
+			}
+		}
+	}
+}
+
+# ---- .8 the helper hears the answer --------------------------------------------------
+nuclear_custody.8 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_custody.8.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_custody.8.d_accepted
+				trigger = {
+					has_variable = nd_cw_offer_answer
+					var:nd_cw_offer_answer = 1
+				}
+			}
+			triggered_desc = {
+				desc = nuclear_custody.8.d_declined
+			}
+		}
+	}
+	flavor = nuclear_custody.8.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_cw_offer_answer
+		exists = var:nd_cw_offer_to
+	}
+
+	option = {
+		name = nuclear_custody.8.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	after = {
+		remove_variable = nd_cw_offer_answer
+		remove_variable = nd_cw_offer_to
+	}
+}
+
 # ---- .9 (hidden) the settlement, a day later --------------------------------------
 nuclear_custody.9 = {
 	type = country_event
@@ -225,5 +570,242 @@ nuclear_custody.9 = {
 
 	immediate = {
 		nd_custody_reconcile = yes
+	}
+}
+
+# ---- .10 A New Nuclear State ----------------------------------------------------------
+# To every great power believed armed, a week after a secession won holding
+# warheads (nd_bp_open). The new state is read from the power's own variable,
+# set for a month.
+nuclear_custody.10 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_custody.10.t
+	desc = nuclear_custody.10.d
+	flavor = nuclear_custody.10.f
+
+	duration = 3
+
+	trigger = {
+		var:nd_bp_new_state ?= {
+			is_country_alive = yes
+			nd_is_armed = yes
+			NOT = { has_variable = nd_bp_answered }
+		}
+	}
+
+	immediate = {
+		var:nd_bp_new_state = { save_scope_as = nd_bp_state }
+	}
+
+	# Press them to trade the warheads for guarantees.
+	option = {
+		name = nuclear_custody.10.a
+		nd_bp_press = yes
+		ai_chance = {
+			base = 6
+			# A hostile power demands disarmament through the article, as
+			# with any other nuclear state; it offers no guarantee.
+			modifier = {
+				trigger = {
+					OR = {
+						has_attitude = { who = scope:nd_bp_state attitude = antagonistic }
+						has_attitude = { who = scope:nd_bp_state attitude = belligerent }
+						has_attitude = { who = scope:nd_bp_state attitude = domineering }
+					}
+				}
+				factor = 0
+			}
+		}
+	}
+
+	# Leave it.
+	option = {
+		name = nuclear_custody.10.b
+		default_option = yes
+		ai_chance = {
+			base = 2
+			# A friend's bomb frightens no one here.
+			modifier = {
+				trigger = {
+					OR = {
+						has_attitude = { who = scope:nd_bp_state attitude = protective }
+						has_attitude = { who = scope:nd_bp_state attitude = genial }
+						has_attitude = { who = scope:nd_bp_state attitude = loyal }
+					}
+				}
+				add = 6
+			}
+		}
+	}
+
+	after = {
+		if = {
+			limit = { has_variable = nd_bp_new_state }
+			remove_variable = nd_bp_new_state
+		}
+	}
+}
+
+# ---- .11 The Budapest Offer ------------------------------------------------------------
+# To the new state, a month after the first great power pressed it (nd_bp_press).
+nuclear_custody.11 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_custody.11.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_custody.11.d_many
+				trigger = { var:nd_bp_count > 1 }
+			}
+			triggered_desc = {
+				desc = nuclear_custody.11.d
+			}
+		}
+	}
+	flavor = nuclear_custody.11.f
+
+	duration = 3
+
+	# Only while some presser can still sign a guarantee with us: an offer
+	# with no treaty behind it would disarm us for nothing.
+	trigger = {
+		nd_is_armed = yes
+		has_variable_list = nd_bp_guarantors
+		any_in_list = {
+			variable = nd_bp_guarantors
+			nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT }
+			nd_bp_can_treaty_guarantee = { GUARANTOR = this STATE = ROOT }
+		}
+	}
+
+	immediate = {
+		nd_bp_prepare_offer = yes
+	}
+
+	# Trade them for guarantees.
+	option = {
+		name = nuclear_custody.11.a
+		trigger = { exists = scope:nd_bp_lead }
+		nd_bp_accept = yes
+		ai_chance = {
+			base = 3
+			# It cannot build more; what it holds only ages and costs.
+			modifier = {
+				trigger = { NOT = { has_technology_researched = nuclear_weapons } }
+				add = 4
+			}
+			modifier = {
+				trigger = { nd_stockpile <= 3 }
+				add = 2
+			}
+			modifier = {
+				trigger = { var:nd_bp_count >= 2 }
+				add = 2
+			}
+		}
+	}
+
+	# Keep them.
+	option = {
+		name = nuclear_custody.11.b
+		default_option = yes
+		nd_bp_refuse = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = {
+					OR = {
+						any_rival_country = { nd_believed_armed = yes }
+						any_neighbouring_state = {
+							owner = {
+								nd_believed_armed = yes
+								OR = {
+									has_attitude = { who = ROOT attitude = antagonistic }
+									has_attitude = { who = ROOT attitude = belligerent }
+									has_attitude = { who = ROOT attitude = domineering }
+								}
+							}
+						}
+					}
+				}
+				add = 4
+			}
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 2
+			}
+		}
+	}
+}
+
+# ---- .12 each guarantor hears the answer --------------------------------------------------
+nuclear_custody.12 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_custody.12.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_custody.12.d_accepted
+				trigger = {
+					has_variable = nd_bp_answer
+					var:nd_bp_answer = 1
+				}
+			}
+			triggered_desc = {
+				desc = nuclear_custody.12.d_no_treaty
+				trigger = {
+					has_variable = nd_bp_answer
+					var:nd_bp_answer = 3
+				}
+			}
+			triggered_desc = {
+				desc = nuclear_custody.12.d_refused
+			}
+		}
+	}
+	flavor = nuclear_custody.12.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_bp_answer
+		exists = var:nd_bp_answer_from
+	}
+
+	option = {
+		name = nuclear_custody.12.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	after = {
+		remove_variable = nd_bp_answer
+		remove_variable = nd_bp_answer_from
 	}
 }

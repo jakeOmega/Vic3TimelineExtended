@@ -323,6 +323,7 @@ un_regime_reapply_conventions = {
 	un_regime_reapply_je = { MODIFIER = un_space_partnership_modifier }
 	un_regime_reapply_country = { MODIFIER = un_law_of_sea_modifier }
 	un_regime_reapply_country = { MODIFIER = un_icc_member_modifier }
+	un_regime_reapply_country = { MODIFIER = un_physical_protection_modifier }
 }
 
 # Parameters: $MODIFIER$ = a convention member modifier on the journal entry

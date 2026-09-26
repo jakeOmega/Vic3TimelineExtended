@@ -543,6 +543,16 @@ un_vote_apply_treaty_modifier = {
 		}
 		un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
 	}
+	# Physical protection of nuclear material: country-scoped, like the law of
+	# the sea, so the nuclear code reads it without a je: hop
+	# (nd_custody_is_secured, nd_loose_monthly).
+	if = {
+		limit = {
+			scope:un_resolution ?= { has_tag = un_topic_physical_protection }
+			NOT = { has_modifier = un_physical_protection_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
+	}
 	# ICC membership: skipped when the resolution was vetoed (graduated form
 	# is symbolic censure only — no court jurisdiction is established).
 	if = {
@@ -636,6 +646,15 @@ un_apply_ratified_conventions = {
 			NOT = { has_modifier = un_law_of_sea_modifier }
 		}
 		un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
+	}
+	# Physical Protection of Nuclear Material (CPPNM in force).
+	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.
+	if = {
+		limit = {
+			has_global_variable = un_agency_cppnm
+			NOT = { has_modifier = un_physical_protection_modifier }
+		}
+		un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
 	}
 	# International Criminal Court (ICC established, non-vetoed pass).
 	# Country-scoped (not JE-scoped) — matches un_vote_apply_treaty_modifier.

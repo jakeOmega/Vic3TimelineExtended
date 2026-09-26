@@ -85,6 +85,7 @@ un_rep_convention_snapshot = {
 	un_rep_convention_mark = { AGENCY = unhcr }
 	un_rep_convention_mark = { AGENCY = unoosa }
 	un_rep_convention_mark = { AGENCY = itlos }
+	un_rep_convention_mark = { AGENCY = cppnm }
 	un_rep_convention_mark = { AGENCY = icc }
 }
 
@@ -108,6 +109,7 @@ un_rep_convention_forget = {
 	un_rep_convention_unmark = { AGENCY = unhcr }
 	un_rep_convention_unmark = { AGENCY = unoosa }
 	un_rep_convention_unmark = { AGENCY = itlos }
+	un_rep_convention_unmark = { AGENCY = cppnm }
 	un_rep_convention_unmark = { AGENCY = icc }
 }
 

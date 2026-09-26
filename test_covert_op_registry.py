@@ -50,7 +50,14 @@ OPS = (
     ("nuclear_sabotage", 10, "military", "severe", "covert_nuclear_sabotage"),
     ("space_espionage", 11, "economic", "mild", "covert_space_espionage_detected"),
     ("cultivate_assets", 12, "ideological", "mild", None),
+    ("secure_material", 13, "military", "mild", None),
 )
+
+# Types with no target marker that still act in the monthly pulse, on
+# something that is not a modifier: secure material finds warheads in the
+# loose pool (nuclear_loose_effects.txt). Every other marker-less type
+# (cultivate assets) acts on nothing but its network.
+ACTS_WITHOUT_MODIFIER = {"secure_material"}
 
 TIER_NAMES = ("mild", "moderate", "severe", "war")
 NUMBER_WORDS = ("Zero", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight",
@@ -221,7 +228,13 @@ class DetectionEventTests(unittest.TestCase):
         block = _top_level_block(_text(EFFECTS), "covert_ops_apply_all_phase_effects = {")
         for t, _, _, _, marker in OPS:
             with self.subTest(type=t):
-                if marker is None:
+                if marker is None and t in ACTS_WITHOUT_MODIFIER:
+                    # Acts on something other than a country (secure
+                    # material: the loose-warhead pool), through its own
+                    # block keyed on the tag, never a modifier helper.
+                    self.assertIn("has_tag = iw_op_%s" % t, block)
+                    self.assertNotIn("TYPE = %s " % t, block)
+                elif marker is None:
                     # No effect at all: not on the target, not on the operator.
                     self.assertNotIn("iw_op_%s" % t, block)
                     self.assertNotIn("TYPE = %s " % t, block)

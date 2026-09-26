@@ -180,6 +180,13 @@ nd_struck_own_people = {
 	country_legitimacy_base_add = -50
 }
 
+# Our custody opened to foreign inspectors after a loose warhead was traced to
+# us (nuclear_loose.6): a sovereignty cost, decaying over ten years.
+nd_loose_inspections = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -5
+}
+
 # A guarantor walked away from a covered commitment.
 nd_guarantee_abandoned = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds

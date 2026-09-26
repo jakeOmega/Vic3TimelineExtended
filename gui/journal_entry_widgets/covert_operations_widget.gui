@@ -293,6 +293,10 @@ types covert_operations_widget_types
 			visible = "[ScriptContainer.HasTag('iw_op_cultivate_assets')]"
 			text = "je_iw_op_row_cultivate_assets"
 		}
+		widget_je_covert_operation_text = {
+			visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
+			text = "je_iw_op_row_secure_material"
+		}
 
 		# ---- Phase, and how long until the next one ----
 		# iw_phase is written by covert_op_refresh_phase, so the 6 / 12 month
@@ -450,6 +454,14 @@ types covert_operations_widget_types
 			}
 			blockoverride "sd_visible" {
 				visible = "[ScriptContainer.HasTag('iw_op_cultivate_assets')]"
+			}
+		}
+		covert_op_stand_down_button = {
+			blockoverride "sd_context" {
+				datacontext = "[GetScriptedGui('covert_stand_down_secure_material_sgui')]"
+			}
+			blockoverride "sd_visible" {
+				visible = "[ScriptContainer.HasTag('iw_op_secure_material')]"
 			}
 		}
 	}

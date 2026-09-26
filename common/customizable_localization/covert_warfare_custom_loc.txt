@@ -163,6 +163,10 @@ covert_last_exposed_type_name = {
 		localization_key = iw_op_name_cultivate_assets
 	}
 	text = {
+		trigger = { var:iw_last_exposed_type = 13 }
+		localization_key = iw_op_name_secure_material
+	}
+	text = {
 		localization_key = iw_op_name_unknown
 	}
 }
@@ -225,6 +229,10 @@ covert_burned_type_name = {
 	text = {
 		trigger = { var:iw_burned_type_code = 12 }
 		localization_key = iw_op_name_cultivate_assets
+	}
+	text = {
+		trigger = { var:iw_burned_type_code = 13 }
+		localization_key = iw_op_name_secure_material
 	}
 	text = {
 		localization_key = iw_op_name_unknown

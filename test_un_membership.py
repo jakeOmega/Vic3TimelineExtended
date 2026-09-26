@@ -366,7 +366,7 @@ class ConventionCatchUpTests(unittest.TestCase):
         effects = _read(_path("common", "scripted_effects", "un_membership_effects.txt"))
         triggers = _read(TRIGGERS)
         expected = self._in_force()
-        self.assertEqual(len(expected), 9)
+        self.assertEqual(len(expected), 10)
         self.assertEqual(_agencies(_block(effects, "un_rep_convention_snapshot")), expected)
         self.assertEqual(_agencies(_block(effects, "un_rep_convention_forget")), expected)
         self.assertEqual(_agencies(_block(triggers, "un_rep_any_convention_missed")), expected)

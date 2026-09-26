@@ -74,6 +74,7 @@ JE_CONVENTION = [
 COUNTRY_CONVENTION = [
     "un_law_of_sea_modifier",
     "un_icc_member_modifier",
+    "un_physical_protection_modifier",
 ]
 MIRRORED = JE_PLAIN + JE_COST + JE_CONVENTION + COUNTRY_CONVENTION
 

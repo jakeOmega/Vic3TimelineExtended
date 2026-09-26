@@ -26,7 +26,8 @@
 #                          un_arms_control_participant_modifier,
 #                          un_champion_order_cost, un_undermine_order_cost,
 #                          the seven convention modifiers
-#   country                un_law_of_sea_modifier, un_icc_member_modifier
+#   country                un_law_of_sea_modifier, un_icc_member_modifier,
+#                          un_physical_protection_modifier
 #
 # Not mirrored, because the monthly pulse derives them from the above:
 # un_member_privileges_modifier, un_membership_benefits_modifier,
@@ -103,7 +104,8 @@ un_state_off = {
 }
 
 # Ratify a convention: its member modifier at the current enforcement, on the
-# journal entry, or on the country for the law of the sea and the ICC.
+# journal entry, or on the country for the law of the sea, the ICC and the
+# physical protection of nuclear material.
 # Parameters: $MODIFIER$
 # Scope: country
 un_convention_on = {
@@ -209,6 +211,7 @@ un_state_restore_all = {
 		un_convention_restore = { MODIFIER = un_space_partnership_modifier }
 		un_convention_country_restore = { MODIFIER = un_law_of_sea_modifier }
 		un_convention_country_restore = { MODIFIER = un_icc_member_modifier }
+		un_convention_country_restore = { MODIFIER = un_physical_protection_modifier }
 
 		if = {
 			limit = { un_hq_is_host = yes }
@@ -340,6 +343,7 @@ un_state_forget_conventions = {
 	un_state_forget = { MODIFIER = un_space_partnership_modifier }
 	un_state_forget = { MODIFIER = un_law_of_sea_modifier }
 	un_state_forget = { MODIFIER = un_icc_member_modifier }
+	un_state_forget = { MODIFIER = un_physical_protection_modifier }
 }
 
 # The pulse's turn on a pending entry that still lacks something: rebuild, and
@@ -416,6 +420,7 @@ un_state_reconcile = {
 	un_state_reconcile_one = { MODIFIER = un_space_partnership_modifier }
 	un_state_reconcile_country = { MODIFIER = un_law_of_sea_modifier }
 	un_state_reconcile_country = { MODIFIER = un_icc_member_modifier }
+	un_state_reconcile_country = { MODIFIER = un_physical_protection_modifier }
 }
 
 # ---- The headquarters host across a revolution ------------------------------------------

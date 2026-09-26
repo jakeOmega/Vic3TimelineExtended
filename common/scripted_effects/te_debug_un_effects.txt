@@ -454,6 +454,10 @@ te_debug_un_wipe_entry = {
 		remove_modifier = un_icc_member_modifier
 	}
 	if = {
+		limit = { has_modifier = un_physical_protection_modifier }
+		remove_modifier = un_physical_protection_modifier
+	}
+	if = {
 		limit = { NOT = { has_variable = un_state_rebuild_pending } }
 		set_variable = un_state_rebuild_pending
 	}

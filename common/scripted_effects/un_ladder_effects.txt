@@ -389,6 +389,7 @@ un_dissolve = {
 	un_dissolve_remove_global = { NAME = un_agency_unhcr }
 	un_dissolve_remove_global = { NAME = un_agency_unoosa }
 	un_dissolve_remove_global = { NAME = un_agency_itlos }
+	un_dissolve_remove_global = { NAME = un_agency_cppnm }
 	un_dissolve_remove_global = { NAME = un_agency_icc }
 
 	# 9. The organisation's own state. Its record of acts (the ledger log)
@@ -552,11 +553,12 @@ un_membership_end_effect = {
 	un_state_off = { MODIFIER = un_pandemic_cooperation_modifier }
 	un_state_off = { MODIFIER = un_refugee_program_modifier }
 	un_state_off = { MODIFIER = un_space_partnership_modifier }
-	# The two conventions that sit on the country rather than the journal
-	# entry. un_apply_ratified_conventions re-adds both on rejoining,
+	# The three conventions that sit on the country rather than the journal
+	# entry. un_apply_ratified_conventions re-adds them on rejoining,
 	# exactly as it does the journal-entry ones above.
 	un_state_country_off = { MODIFIER = un_law_of_sea_modifier }
 	un_state_country_off = { MODIFIER = un_icc_member_modifier }
+	un_state_country_off = { MODIFIER = un_physical_protection_modifier }
 }
 
 # ---- Founding and joining ------------------------------------------------------------

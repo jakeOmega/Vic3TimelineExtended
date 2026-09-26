@@ -3010,6 +3010,111 @@ un_events.22 = {
 	}
 }
 
+# ---- Convention on the Physical Protection of Nuclear Material ----
+# nuclear_crisis_design.md §0.10 step 5: raised by the docket only once
+# warheads have gone loose (un_docket_topic_open_physical_protection), offered
+# to a member with the nuclear_weapons technology.
+un_events.23 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_treaty_signing.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = un_events.23.t
+	desc = {
+		first_valid = {
+			triggered_desc = { desc = un_events.23.d_struck trigger = { has_variable = nd_loose_was_target } }
+			desc = un_events.23.d
+		}
+	}
+	flavor = un_events.23.f
+
+	duration = 3
+
+	trigger = {
+		has_game_rule = nuclear_weapons_enabled
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		global_var:un_authority >= 30
+		has_technology_researched = nuclear_weapons
+		# Global ratification gate, as for the law of the sea (un_events.21).
+		NOT = { has_global_variable = un_agency_cppnm }
+		NOT = { has_modifier = un_physical_protection_modifier }
+		NOT = { has_modifier = un_physical_protection_refusal_modifier }
+		NOT = { has_global_variable = un_vote_active }
+	}
+
+	immediate = {
+		un_vote_reserve = yes
+	}
+
+	# Option A: Propose the Convention to the General Assembly
+	option = {
+		name = un_events.23.a
+		default_option = yes
+		ai_chance = {
+			base = 5
+			modifier = {
+				trigger = { has_variable = nd_loose_was_target }
+				add = 5
+			}
+			modifier = {
+				trigger = { country_rank >= rank_value:great_power }
+				add = 2
+			}
+		}
+		custom_tooltip = un_vote_initiated_tt
+		# The proposer ratifies on passage with every other member. What
+		# tabling it does is the chamber's Propose control's script too
+		# (un_propose_physical_protection_table, un_propose_effects.txt).
+		un_propose_physical_protection_table = yes
+	}
+
+	# Option B: Leave it to another delegation.
+	option = {
+		name = un_docket_option_pass
+		ai_chance = {
+			base = 3
+		}
+		custom_tooltip = un_docket_pass_tt
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = physical_protection EVENT = un_events.23 }
+		}
+	}
+
+	# Option C: Our depots are our own business
+	option = {
+		name = un_events.23.c
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { has_law = law_type:law_isolationism }
+				add = 4
+			}
+			modifier = {
+				trigger = { nd_loose_has_line = yes }
+				add = 3
+			}
+		}
+		add_modifier = {
+			name = un_physical_protection_refusal_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
+		custom_tooltip = un_ledger_tt_credibility_down_1
+		un_ledger_actor_entry = { PILLAR = credibility POINTS = -1 REASON = 1231 }
+		ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_positive_modifier DAYS = short_modifier_time }
+		un_vote_release = yes
+		hidden_effect = {
+			un_docket_offer_topic_next = { TOPIC = physical_protection EVENT = un_events.23 }
+		}
+	}
+}
+
 
 # ============================================================================
 # THE FLOOR: DISSOLUTION AND REFOUNDING (redesign phase 2)
@@ -3644,10 +3749,14 @@ un_events.36 = {
 			limit = { un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier } }
 			un_convention_on = { MODIFIER = un_space_partnership_modifier }
 		}
-		# The two country-scoped conventions, as un_apply_ratified_conventions has them.
+		# The three country-scoped conventions, as un_apply_ratified_conventions has them.
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier } }
 			un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
+		}
+		if = {
+			limit = { un_rep_convention_missed = { AGENCY = cppnm MODIFIER = un_physical_protection_modifier } }
+			un_convention_country_on = { MODIFIER = un_physical_protection_modifier }
 		}
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier } }

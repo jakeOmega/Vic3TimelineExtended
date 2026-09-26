@@ -356,6 +356,35 @@ un_docket_topic_open_law_of_sea = {
 	}
 }
 
+# Only once warheads have gone loose: the pool holds one, or a device has
+# surfaced somewhere (for good, so it stays on the table after the pool
+# drains). No convention under the disabled nuclear weapons rule.
+un_docket_topic_open_physical_protection = {
+	has_game_rule = nuclear_weapons_enabled
+	custom_tooltip = {
+		text = un_physical_protection_loose_tt
+		OR = {
+			has_global_variable = nd_loose_device_surfaced
+			AND = {
+				has_global_variable = nd_loose_warheads
+				global_var:nd_loose_warheads > 0
+			}
+		}
+	}
+	custom_tooltip = {
+		text = un_propose_not_in_force_tt
+		NOT = { un_propose_physical_protection_in_force = yes }
+	}
+	custom_tooltip = {
+		text = un_no_resolution_cooldown_tt
+		NOT = { un_resolution_topic_on_cooldown = { TOPIC = physical_protection } }
+	}
+	custom_tooltip = {
+		text = un_authority_at_least_30_tt
+		global_var:un_authority >= 30
+	}
+}
+
 un_docket_topic_open_decolonization = {
 	custom_tooltip = {
 		text = un_propose_not_in_force_tt
@@ -430,6 +459,11 @@ un_docket_may_propose_law_of_sea = {
 	un_propose_law_of_sea_qualifies = yes
 }
 
+un_docket_may_propose_physical_protection = {
+	un_docket_can_be_offered = yes
+	un_propose_physical_protection_qualifies = yes
+}
+
 un_docket_may_propose_decolonization = {
 	un_docket_can_be_offered = yes
 	un_propose_decolonization_qualifies = yes
@@ -471,6 +505,10 @@ un_docket_agenda_ready = {
 		AND = {
 			un_docket_topic_open_law_of_sea = yes
 			any_country = { un_docket_may_propose_law_of_sea = yes }
+		}
+		AND = {
+			un_docket_topic_open_physical_protection = yes
+			any_country = { un_docket_may_propose_physical_protection = yes }
 		}
 		AND = {
 			un_docket_topic_open_decolonization = yes

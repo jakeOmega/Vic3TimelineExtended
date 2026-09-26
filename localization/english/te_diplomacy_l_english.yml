@@ -32,6 +32,7 @@
  covert_military_espionage_action_pact_desc:0 "We are conducting military espionage against [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName], gathering intelligence on their armed forces."
  covert_nuclear_sabotage_action_pact_desc:0 "We are sabotaging the nuclear weapons programme of [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  covert_regime_change_action_pact_desc:0 "We are bankrolling a change of government in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
+ covert_secure_material_action_pact_desc:0 "We are searching for loose nuclear material in [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  covert_space_espionage_action_pact_desc:0 "We are stealing space programme designs from [SCOPE.GetRootScope.GetDiplomaticPact.GetSecondCountry.GetName]."
  decolonize_diplo_action:0 "Decolonize"
  decolonize_diplo_action_action_notification_desc:0 "[INITIATOR_COUNTRY.GetName] has initiated [concept_decolonization_system] of [TARGET_COUNTRY.GetName]."

@@ -1,0 +1,219 @@
+﻿# ============================================================================
+# LOOSE WARHEADS — script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-loose-warheads-design.md
+# §3; what shipped is docs/systems/nuclear_crisis_design.md §0.10 step 5. The
+# effects that read these are in common/scripted_effects/nuclear_loose_effects.txt.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# THE PLOT (nuclear_loose.1)
+# ----------------------------------------------------------------------------
+# The chance, in percent, that a plot the terror pool drew has a real device
+# behind it: 20 for every warhead unaccounted for in the world, at most 80.
+# The pool entry's own odds (weight 3 of the yearly social-tensions draw) and
+# the year-long world cooldown after a device surfaces bound how often.
+nd_loose_plot_chance = {
+	value = 0
+	if = {
+		limit = { has_global_variable = nd_loose_warheads }
+		add = global_var:nd_loose_warheads
+		multiply = 20
+	}
+	min = 0
+	max = 80
+}
+
+# The chance, in percent, that the target's security services find the device
+# before it is used: 10, +5 for each level of the intelligence ministry, +15
+# with the nuclear_weapons technology (the detection equipment of a nuclear
+# programme), at most 75. Country scope = the target.
+nd_loose_foil_chance = {
+	value = 10
+	if = {
+		limit = { institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 1 } }
+		add = 5
+	}
+	if = {
+		limit = { institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 2 } }
+		add = 5
+	}
+	if = {
+		limit = { institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 3 } }
+		add = 5
+	}
+	if = {
+		limit = { institution_investment_level = { institution = institution_ministry_of_intelligence_and_security value >= 4 } }
+		add = 5
+	}
+	if = {
+		limit = { has_intelligence_ministry_5 = yes }
+		add = 5
+	}
+	if = {
+		limit = { has_technology_researched = nuclear_weapons }
+		add = 15
+	}
+	max = 75
+}
+
+# ----------------------------------------------------------------------------
+# ATTRIBUTION (owner ruling 2026-09-25)
+# ----------------------------------------------------------------------------
+# Country scope = the victim; scope:nd_loose_origin = the true origin (the
+# owner of the line the device came from); var:nd_loose_candidates = how many
+# lines had warheads unaccounted for when the device surfaced;
+# var:nd_loose_seized = 1 if it was seized rather than detonated.
+#
+# The roll (nd_loose_attribute): confirmed with nd_loose_confirm_chance; of
+# what is not confirmed, nd_loose_unknown_share percent stays unknown and the
+# rest narrows to a shortlist. Nuclear forensics and intelligence both help:
+# few candidate origins, the victim's own nuclear expertise, an origin that
+# has tested openly (its signature is on file), a covert network inside it,
+# and a device in hand rather than debris.
+
+# The victim's own expertise, 0-25: 15 for the nuclear_weapons technology, 10
+# for an arsenal of its own.
+nd_loose_expertise = {
+	value = 0
+	if = {
+		limit = { has_technology_researched = nuclear_weapons }
+		add = 15
+	}
+	if = {
+		limit = { nd_is_armed = yes }
+		add = 10
+	}
+}
+
+# The intelligence tier of the victim's covert network inside the origin
+# (covert warfare's iw_nets; the tier code covert_net_clamp stores, so the
+# strength thresholds stay compared in one place): 0 none, 1 it reads the
+# target's service, 2 it reads its operations too. One network per target.
+nd_loose_network_tier = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:nd_loose_origin
+			has_variable_list = iw_nets
+		}
+		every_in_list = {
+			variable = iw_nets
+			limit = {
+				var:iw_target ?= scope:nd_loose_origin
+				has_variable = iw_net_intel_tier
+			}
+			add = var:iw_net_intel_tier
+		}
+	}
+	max = 2
+}
+
+# What that network is worth to the investigation: 15 at tier 1, 25 at tier 2.
+nd_loose_network_part = {
+	value = 0
+	if = {
+		limit = { nd_loose_network_tier >= 2 }
+		add = 25
+	}
+	else_if = {
+		limit = { nd_loose_network_tier >= 1 }
+		add = 15
+	}
+}
+
+nd_loose_confirm_chance = {
+	value = 10
+	if = {
+		limit = {
+			has_variable = nd_loose_candidates
+			var:nd_loose_candidates <= 1
+		}
+		add = 30
+	}
+	else_if = {
+		limit = {
+			has_variable = nd_loose_candidates
+			var:nd_loose_candidates = 2
+		}
+		add = 15
+	}
+	add = nd_loose_expertise
+	if = {
+		limit = { scope:nd_loose_origin ?= { has_modifier = nuclear_power } }
+		add = 15
+	}
+	add = nd_loose_network_part
+	if = {
+		limit = {
+			has_variable = nd_loose_seized
+			var:nd_loose_seized = 1
+		}
+		add = 20
+	}
+	min = 0
+	max = 90
+}
+
+nd_loose_unknown_share = {
+	value = 60
+	subtract = nd_loose_expertise
+	subtract = nd_loose_network_part
+	min = 10
+	max = 90
+}
+
+# The rest of what is not confirmed: the chance, once not confirmed, that the
+# investigators narrow it to a shortlist.
+nd_loose_shortlist_share = {
+	value = 100
+	subtract = nd_loose_unknown_share
+}
+
+# ----------------------------------------------------------------------------
+# THE DEMAND (nuclear_loose.6)
+# ----------------------------------------------------------------------------
+# Compensation an origin held to account is asked to pay, fixed when the
+# demand is sent (nd_loose_send_demand) so the option shows what it pays: a
+# tenth of its yearly revenue, capped at a tenth of the victim's GDP — the
+# reparations formula (te_event_agency_decol_values.txt), whose scale matches
+# the mod's other country-to-country sums. `income` is weekly, annualised
+# through te_mon_deficit_annualise_factor. Any scope, with
+# scope:nd_loose_payer and scope:nd_loose_claimant saved.
+nd_loose_compensation_value = {
+	value = scope:nd_loose_payer.income
+	multiply = te_mon_deficit_annualise_factor
+	multiply = 0.1
+	max = nd_loose_compensation_cap
+	min = 0
+	round = yes
+}
+
+nd_loose_compensation_cap = {
+	value = scope:nd_loose_claimant.gdp
+	multiply = 0.1
+}
+
+# ----------------------------------------------------------------------------
+# RECOVERY
+# ----------------------------------------------------------------------------
+# The monthly chance, in percent, that security assistance paid for by another
+# power finds one of a country's warheads unaccounted for (about one a year
+# and a half while any are missing).
+nd_loose_assistance_chance = 6
+
+# The same under the UN's physical-protection convention, for a party (about
+# one in three years while any are missing): cooperation, not paid technicians.
+nd_loose_convention_chance = 3
+
+# ----------------------------------------------------------------------------
+# DISPLAY
+# ----------------------------------------------------------------------------
+# Our own line's warheads unaccounted for (the posture panel's row).
+nd_display_our_loose = {
+	value = 0
+	if = {
+		limit = { nd_loose_has_line = yes }
+		add = var:nd_arsenal_record.var:nd_ar_loose
+	}
+}
