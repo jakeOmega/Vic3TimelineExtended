@@ -1,6 +1,7 @@
 ﻿# Space Race On-Actions
 
-# Global cooldown tick - once per month per country (not per-JE)
+# Once a month per country (not per journal entry): the inactive-milestone
+# cleanup, the revolution backstop and the global failure-cooldown tick.
 on_monthly_pulse_country = {
 	on_actions = {
 		space_race_on_action
@@ -10,6 +11,11 @@ on_monthly_pulse_country = {
 space_race_on_action = {
 	effect = {
 		sr_cleanup_inactive_space_race_milestones = yes
+		# What a revolution's winner keeps (space_race_effects.txt): the
+		# backstop that puts the entries' modifiers back, and the probe result's
+		# record, which also migrates a save from before the record existed.
+		sr_sync_space_race_entries = yes
+		sr_sync_probe_data = yes
 		if = {
 			limit = { NOT = { has_variable = sr_failure_cooldown } }
 			set_variable = { name = sr_failure_cooldown value = 0 }
@@ -18,6 +24,27 @@ space_race_on_action = {
 			limit = { sr_has_failure_cooldown = yes }
 			change_variable = { name = sr_failure_cooldown subtract = 1 }
 		}
+	}
+}
+
+# Root = the winner, after the loser's variables have merged in (vanilla
+# 00_code_on_actions.txt:5732; runs after on_revolution_end). Puts back the
+# space race's country modifiers, which a winner does not inherit. Not the
+# journal-entry modifiers: whether this hook runs before or after an inherited
+# entry's `immediate` is unknown, so the entries' own `immediate` and the
+# monthly pulse above rebuild those. A loyalist winner still holds its
+# modifiers, so this does nothing there. See "What a revolution's winner
+# keeps" in common/scripted_effects/space_race_effects.txt.
+on_civil_war_won = {
+	on_actions = {
+		sr_on_civil_war_won
+	}
+}
+
+sr_on_civil_war_won = {
+	effect = {
+		sr_restore_milestone_rewards = yes
+		sr_sync_probe_data = yes
 	}
 }
 

@@ -125,6 +125,50 @@ sr_has_space_colony = {
 	var:sr_colony_count > 0
 }
 
+# The milestone's choice event has been answered: the answer is one of these
+# country variables, set by the option (space_race_events.80 / .5 / .81 / .82 /
+# .83). The entry's `immediate` asks the question only while none is set, and
+# the event re-checks when it fires. `immediate` runs again when the entry
+# re-activates and on an entry a revolution's winner inherits (the variables
+# merge in), and the answer stands in both cases: sr_sync_<m>_entry puts its
+# modifier back instead (common/scripted_effects/space_race_effects.txt).
+sr_orbital_choice_made = {
+	OR = {
+		has_variable = sr_orbital_civilian
+		has_variable = sr_orbital_military
+		has_variable = sr_orbital_scientist
+	}
+}
+sr_moon_landing_choice_made = {
+	OR = {
+		has_variable = sr_moon_site_shackleton
+		has_variable = sr_moon_site_equatorial
+		has_variable = sr_moon_site_tranquility
+		has_variable = sr_moon_site_far_side
+	}
+}
+sr_probe_choice_made = {
+	OR = {
+		has_variable = sr_probe_target_venus
+		has_variable = sr_probe_target_mars
+		has_variable = sr_probe_target_asteroid
+	}
+}
+sr_moon_base_choice_made = {
+	OR = {
+		has_variable = sr_moon_base_scientific
+		has_variable = sr_moon_base_industrial
+		has_variable = sr_moon_base_military
+	}
+}
+sr_mars_landing_choice_made = {
+	OR = {
+		has_variable = sr_mars_direct
+		has_variable = sr_mars_orbital_first
+		has_variable = sr_mars_robotic
+	}
+}
+
 # Failure-event themes, keyed on the milestone that failed
 # (scope:sr_setback_<milestone>, saved by the failure dispatchers in
 # common/scripted_effects/space_race_effects.txt).
