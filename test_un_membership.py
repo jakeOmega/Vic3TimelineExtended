@@ -222,5 +222,24 @@ class PrivilegesTests(unittest.TestCase):
         self.assertGreaterEqual(je.count("un_member_privileges_modifier"), 3)
 
 
+class TransitionTests(unittest.TestCase):
+    def test_pulse_announces_and_strips(self):
+        body = _block(_read(_path("common", "scripted_effects", "un_membership_effects.txt")),
+                      "un_representation_monthly_update")
+        for needle in ("un_representation_suspended_notice", "un_representation_restored_notice",
+                       "remove_modifier = un_permanent_member_modifier", "un_rep_suspended"):
+            with self.subTest(needle=needle):
+                self.assertIn(needle, body)
+        je = _read(_path("common", "journal_entries", "je_united_nations.txt"))
+        self.assertLess(je.index("un_representation_monthly_update = yes"),
+                        je.index("un_dues_country_monthly_update = yes"))
+
+    def test_messages_exist(self):
+        msgs = _read(_path("common", "messages", "extra_messages.txt"))
+        for name in ("un_representation_suspended_notice", "un_representation_restored_notice"):
+            with self.subTest(message=name):
+                _block(msgs, name)
+
+
 if __name__ == "__main__":
     unittest.main()

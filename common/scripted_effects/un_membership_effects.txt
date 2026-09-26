@@ -1,0 +1,45 @@
+﻿# ============================================================================
+# UN MEMBERSHIP — THE MONTHLY REPRESENTATION CHECK (§0.8 ruling 9)
+# ============================================================================
+# The gates read un_representation_suspended live and never wait for this.
+# It only announces a suspension or a restoration, once, and strips what a
+# suspended member may not hold. There is no country-scoped on-action for a
+# change of subject type (colony to dominion), so a monthly check is the
+# authoritative one. var:un_rep_suspended exists only to notice the change.
+# The headquarters moves by un_hq_monthly_update (un_hq_effects.txt), and the
+# vacated permanent seat is refilled by un_seat_monthly_update.
+# ============================================================================
+
+# Called from the journal entry's monthly pulse, for every country holding it.
+# Scope: country
+un_representation_monthly_update = {
+	if = {
+		limit = { un_representation_suspended = yes }
+		if = {
+			limit = { NOT = { has_variable = un_rep_suspended } }
+			set_variable = un_rep_suspended
+			post_notification = un_representation_suspended_notice
+		}
+		# A permanent seat is a vote; it goes to the next great power by
+		# prestige (un_seat_monthly_update).
+		if = {
+			limit = { is_un_permanent_member = yes }
+			je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
+			je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
+			if = {
+				limit = { has_variable = un_permanent_subgp_months }
+				remove_variable = un_permanent_subgp_months
+			}
+		}
+	}
+	else_if = {
+		limit = { has_variable = un_rep_suspended }
+		remove_variable = un_rep_suspended
+		# Restored, not departed: a member that left while suspended is told
+		# nothing here.
+		if = {
+			limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			post_notification = un_representation_restored_notice
+		}
+	}
+}

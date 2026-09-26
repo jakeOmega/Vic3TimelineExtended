@@ -365,6 +365,12 @@
 				un_mission_service_refresh = yes
 			}
 
+			# ---- Suspended representation (§0.8 ruling 9) ----
+			# Announce a suspension or restoration once, and strip a suspended
+			# member's permanent seat. Before the member block, so the dues and
+			# privileges below see the same month.
+			un_representation_monthly_update = yes
+
 			# ---- Member-only logic ----
 			if = {
 				limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }

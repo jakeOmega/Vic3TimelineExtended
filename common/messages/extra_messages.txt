@@ -2107,3 +2107,20 @@ un_article_19_notice = {
 	notification_type = feed
 	color = bad
 }
+
+# §0.8: our representation in the UN is suspended because we no longer
+# conduct our own foreign policy, or restored because we do again
+# (un_representation_monthly_update, un_membership_effects.txt).
+un_representation_suspended_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/interest_group_bad.dds"
+	notification_type = feed
+	color = bad
+}
+
+un_representation_restored_notice = {
+	type = country
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
+	notification_type = feed
+	color = good
+}
