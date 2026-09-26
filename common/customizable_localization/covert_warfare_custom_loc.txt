@@ -171,6 +171,75 @@ covert_last_exposed_type_name = {
 	}
 }
 
+# What that operation does to the country it is run against, for the hover
+# tooltip on its name in covert_warfare.2 (covert_exposed_op_tt). Written from
+# the target's side: the defender is the one reading it. Same codes as
+# covert_last_exposed_type_name.
+covert_last_exposed_type_desc = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { var:iw_last_exposed_type = 0 }
+		localization_key = iw_op_exposed_desc_election_interference
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 1 }
+		localization_key = iw_op_exposed_desc_financial_subversion
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 2 }
+		localization_key = iw_op_exposed_desc_infrastructure_sabotage
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 3 }
+		localization_key = iw_op_exposed_desc_comms_disruption
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 4 }
+		localization_key = iw_op_exposed_desc_industrial_espionage
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 5 }
+		localization_key = iw_op_exposed_desc_military_espionage
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 6 }
+		localization_key = iw_op_exposed_desc_influence_campaign
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 7 }
+		localization_key = iw_op_exposed_desc_ideological_subversion
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 8 }
+		localization_key = iw_op_exposed_desc_destabilization
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 9 }
+		localization_key = iw_op_exposed_desc_regime_change
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 10 }
+		localization_key = iw_op_exposed_desc_nuclear_sabotage
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 11 }
+		localization_key = iw_op_exposed_desc_space_espionage
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 12 }
+		localization_key = iw_op_exposed_desc_cultivate_assets
+	}
+	text = {
+		trigger = { var:iw_last_exposed_type = 13 }
+		localization_key = iw_op_exposed_desc_secure_material
+	}
+	text = {
+		localization_key = iw_op_exposed_desc_unknown
+	}
+}
+
 # The operation covert_warfare.1 is reporting on. Same mapping as
 # covert_last_exposed_type_name, read from the code covert_warfare.1's
 # `immediate` copied onto the country (the event's loc cannot see the container).

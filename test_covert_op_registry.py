@@ -224,6 +224,27 @@ class DetectionEventTests(unittest.TestCase):
         self.assertIn("name = iw_last_exposed_phase", burn)
         self.assertIn("var:iw_last_exposed_phase = 1", ev)
 
+    def test_defender_event_names_the_operation_and_its_country(self):
+        # Every text names the operation through the hoverable link; the
+        # _named ones also name the perpetrator, and are chosen only while
+        # scope:iw_exposed_by exists, so a vanished country falls back to the
+        # anonymous text instead of rendering a blank name.
+        ev = _event(2)
+        loc = _loc()
+        for key in ("covert_warfare.2.d", "covert_warfare.2.d_preparatory"):
+            with self.subTest(key=key):
+                self.assertIn("$covert_exposed_op_link$", loc[key])
+                self.assertNotIn("iw_exposed_by", loc[key])
+                named = key + "_named"
+                self.assertIn("$covert_exposed_op_link$", loc[named])
+                self.assertIn("#b [SCOPE.sCountry('iw_exposed_by').GetName]#!", loc[named])
+                self.assertRegex(
+                    ev,
+                    r"exists = scope:iw_exposed_by\s*\}\s*desc = %s\s" % re.escape(named),
+                )
+        self.assertIn("covert_exposed_op_tt", loc["covert_exposed_op_link"])
+        self.assertIn("covert_last_exposed_type_desc", loc["covert_exposed_op_tt"])
+
     def test_markers_are_what_the_operation_leaves_on_its_target(self):
         block = _top_level_block(_text(EFFECTS), "covert_ops_apply_all_phase_effects = {")
         for t, _, _, _, marker in OPS:
@@ -246,23 +267,26 @@ class DetectionEventTests(unittest.TestCase):
 
 
 class CustomLocTests(unittest.TestCase):
-    def test_both_type_name_blocks_name_every_code(self):
+    def test_type_blocks_map_every_code(self):
+        # The two name blocks, and the description the defender's event shows
+        # on hover over the operation's name (covert_exposed_op_tt).
         body = _text(CUSTOM_LOC)
-        for entry, var in (
-            ("covert_last_exposed_type_name", "iw_last_exposed_type"),
-            ("covert_burned_type_name", "iw_burned_type_code"),
+        for entry, var, prefix in (
+            ("covert_last_exposed_type_name", "iw_last_exposed_type", "iw_op_name_"),
+            ("covert_burned_type_name", "iw_burned_type_code", "iw_op_name_"),
+            ("covert_last_exposed_type_desc", "iw_last_exposed_type", "iw_op_exposed_desc_"),
         ):
             with self.subTest(entry=entry):
                 block = _top_level_block(body, "%s = {" % entry)
                 pairs = re.findall(
-                    r"trigger = \{ var:%s = (\d+) \}\s*localization_key = iw_op_name_(\w+)" % var,
+                    r"trigger = \{ var:%s = (\d+) \}\s*localization_key = %s(\w+)" % (var, prefix),
                     block,
                 )
                 self.assertEqual(
                     {(int(c), t) for c, t in pairs},
                     {(code, t) for t, code, _, _, _ in OPS},
                 )
-                self.assertIn("localization_key = iw_op_name_unknown", block)
+                self.assertIn("localization_key = %sunknown" % prefix, block)
 
 
 class StandDownHandlerTests(unittest.TestCase):
@@ -296,7 +320,7 @@ class LocTests(unittest.TestCase):
     def test_every_type_has_its_loc(self):
         loc = _loc()
         for t in TYPES:
-            keys = ["iw_op_name_%s" % t, "je_iw_op_row_%s" % t]
+            keys = ["iw_op_name_%s" % t, "iw_op_exposed_desc_%s" % t, "je_iw_op_row_%s" % t]
             keys += ["covert_%s%s" % (t, s) for s in ACTION_LOC_SUFFIXES]
             for key in keys:
                 with self.subTest(key=key):

@@ -268,6 +268,11 @@ covert_warfare.2 = {
 	placement = root
 
 	title = covert_warfare.2.t
+	# The _named texts name the perpetrator (scope:iw_exposed_by, saved in
+	# immediate) and the operation, each hoverable: the country through its
+	# own name link, the operation through covert_exposed_op_tt. The plain
+	# texts are the fallback for a record whose country no longer exists;
+	# they still name the operation.
 	desc = {
 		first_valid = {
 			# Caught during preparation: nothing had happened to us yet.
@@ -275,8 +280,20 @@ covert_warfare.2 = {
 				trigger = {
 					has_variable = iw_last_exposed_phase
 					var:iw_last_exposed_phase = 1
+					exists = scope:iw_exposed_by
+				}
+				desc = covert_warfare.2.d_preparatory_named
+			}
+			triggered_desc = {
+				trigger = {
+					has_variable = iw_last_exposed_phase
+					var:iw_last_exposed_phase = 1
 				}
 				desc = covert_warfare.2.d_preparatory
+			}
+			triggered_desc = {
+				trigger = { exists = scope:iw_exposed_by }
+				desc = covert_warfare.2.d_named
 			}
 			triggered_desc = {
 				trigger = { always = yes }
