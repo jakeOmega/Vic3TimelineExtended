@@ -476,6 +476,10 @@ Hooks that already declare "Expected Scope: country" (`on_monthly_pulse_country`
 
 **A pulse hook with a country ROOT is still the wrong ROOT when it fans out.** One country's pulse running a global rebuild — `every_country = { add_modifier = { … multiplier = X } }` — resolves `X` against that one country for every target, and so does an effect that enters its victim with `var:target = { … }` (a covert operation's ROOT is the attacker). So a multiplier can carry a value that is the same for every target (a global, a constant), but never the target's own modifiers or variables. This is why `country_ideology_resistance_mult` scales the foreign benchmark, which each country applies to itself from its own JE pulse, but not the hegemon movement pressure: `ch_yearly_global_update` adds that pressure from the rebuild runner's pulse, and Ideological Subversion adds it from the attacker's. Scaling a per-target value there needs the target as ROOT, either through a hidden country event or by having each country refresh itself from its own pulse.
 
+## A Shared Script Value Must Not Read a Scope Named for a Role Its Callers Swap
+
+A helper that reads `scope:target_country` or `scope:attacking_country` is only right while every caller saves those names with the same meaning. `nuclear_response_strike` reuses the strike machinery with the roles reversed: there `scope:target_country` is the retaliator. So `nuclear_strike_success_chance`, which subtracted `scope:target_country`'s defence, made every retaliation subtract the retaliator's *own* defence. The engine gives no sign of it; the odds are simply wrong. It was fixed in #493 by reading the struck state (`scope:target_state`), whose role never swaps. When a script value or effect is shared by callers that name scopes by role, read from an entity whose meaning is fixed, or take the entity as a `$PARAM$`.
+
 ## What a Civil War's Winner Inherits: The Loser's Missing Variables — No Modifiers, No Lists
 
 **Read from saves, 2026-09-25.** A German revolution the revolutionaries won, saved during the war, 15 days later just after the win, and two weeks after that. Compare two saves with `scripts/analysis/save_country_probe.py --diff <before> <after> --tag GER`; its MERGE section reports the variable half. Findings system by system: `docs/audits/civil_war_inheritance_audit.md`. Until then this repo's comments said the opposite on both counts ("the entry and its modifiers move, variables do not"). Vanilla's own `journal_entries.md:405` says it in a line: "Revolutions also get all variables from the defeated parent country."
@@ -957,6 +961,8 @@ Both can store scope references, but they differ in persistence and loc access:
 - **Treaty articles**: `[FIRST_COUNTRY.…]`, `[SECOND_COUNTRY.…]`.
 - **Journal entries** (`je_<x>*`): `[JournalEntry.GetGoalProgressValue|D]`, etc.
 - **Always valid**: `[GetPlayer.GetName]`, `[Concept('concept_x', '$fallback$')]`, `[GetDefine('NSomething', 'KEY')]`, `[GetCulture('foo')]`, plus `[concept_X]` direct references and `$X$` substitutions (passed at render time).
+
+- **Nested tooltips** (`#tooltip:[X.GetTooltipTag],key`) render `key` in X's context. It is **unverified** whether the outer effect's saved scopes reach the inner key. The nuclear strike breakdown (`nuke_success_final_chance_breakdown_tt`) reads them as `Country.MakeScope.sState('target_state')`, a `MakeScope.s<Type>(...)` chain vanilla never uses (#493), so check it in game before copying it.
 
 **Silent-drop symptom**: a tooltip with missing chunks ("Norway will annex without war.") usually means a chain failed and the renderer chopped at the failure point, eating intermediate text. The engine doesn't log it, so static analysis is the only signal.
 
@@ -2036,7 +2042,7 @@ These `script_only = yes` modifiers can be applied from laws, technologies, PMs,
 | Modifier | Type | Effect |
 |---|---|---|
 | `country_nuclear_weapon_attack_success_add` | flat, good | Base attack success chance (from techs: nuclear_weapons +1.0, ICBMs +0.5, hypersonic_weapons +0.5, orbital_weapon_platforms +0.5). |
-| `country_nuclear_weapon_defense_chance_add` | flat, good | Base defense chance (from techs: military_aviation +0.25, radar +0.25, missile_defense_systems +0.5, directed_energy_defenses +0.5, orbital_weapon_platforms +0.5). |
+| `state_nuclear_weapon_defense_chance_add` | flat, good | Base defense chance of the struck state (state-level, granted nationally; from techs: military_aviation +0.25, radar +0.25, missile_defense_systems +0.5, directed_energy_defenses +0.5, orbital_weapon_platforms +0.5). |
 
 ### Economy
 | Modifier | Type | Effect |

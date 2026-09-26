@@ -317,6 +317,7 @@ on_monthly_pulse_state = {
 		state_yearly_cultural_acceptance_add_on_action
 		tourism_on_action
 		resettlement_transfer_on_action
+		ministry_of_thought_control_on_action
 	}
 }
 
@@ -329,7 +330,6 @@ on_monthly_pulse = {
 
 on_monthly_pulse_country = {
 	on_actions = {
-		ministry_of_thought_control_on_action
 		remove_invalid_buildings
 		cheaty_on_action
 		combined_arms_update_on_action
@@ -784,6 +784,8 @@ combined_arms_update_on_action = {
 	}
 }
 
+# State scope (on_monthly_pulse_state): state_monthly_loyalists_add is read
+# per state.
 ministry_of_thought_control_on_action = {
 	effect = {
 		thought_control_loyalists_update = yes

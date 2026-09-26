@@ -60,6 +60,6 @@ These `script_only` modifiers can be applied in any `modifier = { }` block (laws
 | `country_banking_intervention_max_add` | Banking | Available intervention points |
 | `country_sol_expectation_adaptation_rate_mult` | SoL Expectations | Scales adaptation speed (±%) |
 | `country_nuclear_weapon_attack_success_add` | Nuclear | Attack success chance (flat, 0–1 scale) |
-| `country_nuclear_weapon_defense_chance_add` | Nuclear | Defense chance (flat, 0–1 scale) |
+| `state_nuclear_weapon_defense_chance_add` | Nuclear | Defense chance of the struck state (flat, 0–1 scale; granted nationally) |
 | `country_monthly_investment_pool_add` | Economy | Flat monthly investment income |
 | `country_monthly_investment_pool_mult` | Economy | Scales monthly investment income |

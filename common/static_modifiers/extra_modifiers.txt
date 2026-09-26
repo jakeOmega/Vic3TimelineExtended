@@ -3709,7 +3709,7 @@ un_regime_npt_inspection_modifier = {
 # Non-proliferation, a state without the bomb: the treaty's security guarantee.
 un_regime_npt_guarantee_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	country_nuclear_weapon_defense_chance_add = 0.05
+	state_nuclear_weapon_defense_chance_add = 0.05
 }
 # The law of the sea, a great power: its fleets are held to the convention.
 un_regime_naval_curb_modifier = {

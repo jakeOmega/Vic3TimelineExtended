@@ -116,7 +116,7 @@ nuclear_weapon_events.1 = {
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
@@ -190,19 +190,19 @@ nuclear_weapon_events.1 = {
 
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
 
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 1
 				nuclear_response_strike = yes
 			}
 
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 2
 				nuclear_response_strike = yes
 			}
@@ -279,12 +279,12 @@ nuclear_weapon_events.1 = {
 			limit = { scope:target_country = { var:nuclear_weapon_stockpile >= 3 } }
 			scope:attacking_country = {
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
 				}
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 2
 					nuclear_response_strike = yes
 				}
@@ -294,7 +294,7 @@ nuclear_weapon_events.1 = {
 			limit = { scope:target_country = { var:nuclear_weapon_stockpile >= 2 } }
 			scope:attacking_country = {
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
 				}
@@ -302,7 +302,7 @@ nuclear_weapon_events.1 = {
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
@@ -868,7 +868,7 @@ nuclear_weapon_events.11 = {
 		}
 		scope:target_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_response_strike = yes
 			}
@@ -934,19 +934,19 @@ nuclear_weapon_events.11 = {
 		}
 		scope:target_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_response_strike = yes
 			}
 
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 1
 				nuclear_response_response_strike = yes
 			}
 
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 2
 				nuclear_response_response_strike = yes
 			}
@@ -2107,7 +2107,7 @@ nuclear_weapon_events.24 = {
 		highlighted_option = yes
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
@@ -2133,17 +2133,17 @@ nuclear_weapon_events.24 = {
 		highlighted_option = yes
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 1
 				nuclear_response_strike = yes
 			}
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 2
 				nuclear_response_strike = yes
 			}
@@ -2177,12 +2177,12 @@ nuclear_weapon_events.24 = {
 			limit = { var:nuclear_weapon_stockpile >= 3 }
 			scope:attacking_country = {
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
 				}
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 2
 					nuclear_response_strike = yes
 				}
@@ -2192,7 +2192,7 @@ nuclear_weapon_events.24 = {
 			limit = { var:nuclear_weapon_stockpile >= 2 }
 			scope:attacking_country = {
 				ordered_scope_state = {
-					order_by = nuclear_industrial_strike_target_score
+					order_by = nuclear_strike_target_score
 					position = 1
 					nuclear_response_strike = yes
 				}
@@ -2200,7 +2200,7 @@ nuclear_weapon_events.24 = {
 		}
 		scope:attacking_country = {
 			ordered_scope_state = {
-				order_by = nuclear_industrial_strike_target_score
+				order_by = nuclear_strike_target_score
 				position = 0
 				nuclear_response_strike = yes
 			}

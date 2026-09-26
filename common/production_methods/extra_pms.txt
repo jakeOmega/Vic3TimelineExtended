@@ -19033,7 +19033,7 @@ pm_orbital_battlestation = {
 			unit_defense_mult = 0.05
 			unit_morale_recovery_mult = 0.05
 			unit_morale_damage_mult = 0.05
-			country_nuclear_weapon_defense_chance_add = 0.05
+			state_nuclear_weapon_defense_chance_add = 0.05
 		}
 	}
 
@@ -19887,6 +19887,7 @@ pm_consciousness_network_social_control = {
 			state_turmoil_effects_mult = -0.25
 			state_radicals_from_political_movements_mult = -0.25
 			state_loyalists_from_political_movements_mult = -0.25
+			state_monthly_loyalists_add = 0.001
 		}
 	}
 
@@ -19895,7 +19896,6 @@ pm_consciousness_network_social_control = {
 			interest_group_in_government_approval_add = 3
 			interest_group_in_government_attraction_mult = 0.10
 			country_authority_add = 100
-			country_monthly_loyalists_add = 0.001
 		}
 	}
 }
@@ -20045,6 +20045,81 @@ pm_logistics_hub = {
 	country_modifiers = {
 		workforce_scaled = {
 			unit_supply_consumption_mult = -0.03
+		}
+	}
+}
+
+# Missile defence: interceptors defending the base's own state against nuclear
+# strikes. Techs grant the national defence (+0.25 to +0.5 each); these add a
+# local share on top: +0.10 / +0.15 at level 5, fully staffed.
+pm_no_missile_defense = {
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p0.dds"
+}
+
+pm_missile_defense_battery = {
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p1.dds"
+
+	unlocking_technologies = {
+		missile_defense_systems
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (50.00%)
+			goods_input_explosives_add = 8                       # Price:   50, Total cost:   400.0 (50.00%)
+			# Output goods
+			# Total input cost: 800.0
+			# Total output cost: 0
+			# Profit: -800.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 75
+			# Wage breakeven: -10.67
+		}
+		level_scaled = {
+			building_employment_engineers_add = 50
+			building_employment_officers_add = 25
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_nuclear_weapon_defense_chance_add = 0.02
+		}
+	}
+}
+
+pm_directed_energy_point_defense = {
+	texture = "gfx/interface/icons/production_method_icons/cat_shield_purple_p2.dds"
+
+	unlocking_technologies = {
+		directed_energy_defenses
+	}
+
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_electricity_add = 20                     # Price:   30, Total cost:   600.0 (60.00%)
+			goods_input_electronic_components_add = 5            # Price:   80, Total cost:   400.0 (40.00%)
+			# Output goods
+			# Total input cost: 1000.0
+			# Total output cost: 0
+			# Profit: -1000.0
+			# Profit margin: -100.00%
+			# Zero profit price multiplier: 0.00
+			# Employment: 100
+			# Wage breakeven: -10.00
+		}
+		level_scaled = {
+			building_employment_engineers_add = 75
+			building_employment_officers_add = 25
+		}
+	}
+
+	state_modifiers = {
+		workforce_scaled = {
+			state_nuclear_weapon_defense_chance_add = 0.03
 		}
 	}
 }

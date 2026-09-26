@@ -3409,7 +3409,11 @@ building_group_te_construction_market_bg_employee_mult = {
 	percent = yes
 }
 
-country_monthly_loyalists_add = {
+# Share of each incorporated state's population turned loyalist per month, read
+# per state by thought_control_loyalists_update (extra_effects.txt). The
+# Ministry of Thought Control grants it nationally; the Consciousness
+# Network's social-control mode grants it only in its own state.
+state_monthly_loyalists_add = {
 	color = good
 	percent = yes
 	script_only = yes
@@ -3514,7 +3518,11 @@ state_war_support_monthly_add = {
 	script_only = yes
 }
 
-country_war_support_monthly_add_religion = {
+# Religious fervour: war support per month, scaled by the Devout IG's clout and
+# paid by each state in proportion to its population
+# (war_propaganda_support_script_value). The Sacred Civics principles grant it
+# nationally.
+state_war_support_monthly_add_religion = {
 	color = good
 	percent = no
 }

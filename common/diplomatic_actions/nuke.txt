@@ -134,7 +134,7 @@
 				limit = { exists = scope:second_state }
 				add = {
 					scope:second_state = {
-						value = nuclear_industrial_strike_target_score
+						value = nuclear_strike_target_score
 					}
 				}
 			}

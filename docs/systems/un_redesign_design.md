@@ -1050,7 +1050,7 @@ charter reforms' own teeth), §5.3 (convention regimes, the ICC indictment), §7
       E. `has_emissions_reduction_treaty` is left to the treaty article that owns it.
     - **NPT:** threshold states (running `je_nuclear_program` with no bomb) get
       `country_nuclear_program_progress_mult` −0.25 × E. States without the bomb get the
-      security guarantee, `country_nuclear_weapon_defense_chance_add` +0.05 × E.
+      security guarantee, `state_nuclear_weapon_defense_chance_add` +0.05 × E.
     - **Law of the sea (deviation):** the mod does not use vanilla piracy, so the pirates' side
       is not built. Great powers' naval prestige projection is curbed (−10% × E).
     - **Human rights:** a member with an ethnostate, outlawed dissent or any slavery law loses
