@@ -891,9 +891,16 @@ space_race_events.20 = {
 		name = space_race_events.20.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		# We must accelerate our own program
+		# We must accelerate our own program: every milestone under way gains a
+		# little. A country with none running rallies its scientists instead.
 		if = {
-			limit = { has_variable = sr_active_milestone }
+			limit = { sr_has_running_milestone = yes }
+			custom_tooltip = SR_PROGRESS_ADD_3_TT
+			set_variable = { name = sr_progress_boost value = 3 }
+			sr_boost_active_milestones = yes
+		}
+		else = {
+			add_loyalists = { value = very_small_radicals pop_type = academics }
 		}
 	}
 
