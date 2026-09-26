@@ -290,6 +290,12 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
 12. **Revolution inheritance.** `je_banking_cycle` is `can_revolution_inherit`, so the entry's
     modifiers move but country variables do not. Worst traced case is **one month with no
     stance band** on the successor, not two stacked. Watch one revolution.
+    **Watched (saves, 2026-09-25) — the premise was backwards:** the inherited entry arrives
+    with no modifiers, and the country variables the winner lacked arrive with it. The
+    monetary modifiers came back through `te_monetary_settle_modifier_home`, but the stance
+    band stayed off, because its swap trusts the inherited `te_mon_stance_band_applied`.
+    `immediate` also re-ran, resetting the cycle to 50. These are open findings F6 and F7 in
+    `docs/audits/civil_war_inheritance_audit.md`.
 12a. **Releasing a subject does not move the parent's own rate.** The six release and uprising
     hooks update `scope:target`, the new tag, and deliberately *not* ROOT, which is the parent
     and already pulses monthly. Note a great power's policy rate, release a subject, and check
@@ -750,6 +756,16 @@ still open and are inherited, not repeated.
     specifically for two band modifiers on one country**, and for a minting or dividend
     modifier with no variable behind it. Trigger a revolution and a formable unification and
     read the successor's modifier list against `te_debug_monetary.1`.
+    **Revolution half answered from saves (2026-09-25):** the winner keeps its own value of
+    every variable it already held, receives the loser's only where it had none, and
+    receives none of the loser's modifiers (`scripting_best_practices.md` § "What a Civil
+    War's Winner Inherits"). In the save the rebels' own monetary state — given them at
+    `on_revolution_start` — survived intact with its own band modifier, so the two agreed.
+    The cost it showed instead is that the loser's whole monetary state is discarded, not
+    merged: the loyalists' 111M `te_bank_gold` vanished beside the rebels' 2.8M, 54.6 %
+    hyperinflation became the rebels' 5.1 %, and the player's mandate was replaced
+    (`docs/audits/civil_war_inheritance_audit.md` F3, open). The formable-unification half
+    is still open.
 33. **The empty `te_inflation_band_comfort`, on roughly every tag in the world.** It is
     applied deliberately (step 6c always has exactly one thing to apply, and the modifier
     list always names the band), but an empty `modifier = { }` on ~1,400 countries is a form

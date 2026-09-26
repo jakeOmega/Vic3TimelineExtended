@@ -244,6 +244,7 @@ The beneficiary hears the answer through `.21`. Programme freezes and disarmamen
 - Posture and crises share the programme's journal entry (§2 and §10 kept them apart). The separations those sections care about are kept without a second entry: arsenal ownership is still separate from programme eligibility — the entry's `possible` admits anyone armed, while the programme half of its weekly pulse runs only under `nuclear_program_has_programme`, so a demoted power keeps its posture, upkeep and accidents and stops building — and production still does not share a bar with the crisis: the native bar is warhead progress, and the crisis has its own panel.
 - A strike through a crisis option (`.4.g`, `.7.a`, `.20.b`) now needs the Rules of War gate as well (`nd_war_law_permits_strategic_strike`). It used to check doctrine and pledges only, so a country under Limited War could strike through a crisis.
 - The AI's first use in `nuke.txt` used to test `scope:country` (the actor) and so probably never passed. It now tests `scope:target_country` and goes through `nd_ai_nuclear_use_justified`, so an AI warfighting monopolist **can** use weapons in an ordinary war, as §9 requires. Expect more AI nuclear use than before.
+- Civil war, secession and annexation are **not handled explicitly**, as §11 asks. What happens today, read from saves of a revolution the rebels won (2026-09-25): the rebels hold nothing during the war; the winner receives the loser's arsenal and posture through the engine's variable merge, but not `nuclear_power` or the entry. A fresh entry activates within two weeks, restores the modifier on its first pulse and zeroes progress toward the next warhead (`mod_systems.md` § Nuclear Weapons, "Civil wars"). An ordinary annexation has not been observed; the engine documents the merge as the civil-war victor's (`annex_as_civil_war`), so an armed country annexed any other way probably takes its arsenal with it, unmentioned. Nothing in the doctrine gate or `nd_ai_nuclear_use_justified` knows that the enemy is a civil-war rebel.
 
 ### 0.8 Tuning constants
 
@@ -293,6 +294,33 @@ The tenures, deadlines, cooldowns and locks sit in the top block of `common/scri
 40. With a subject under our umbrella (or a treaty guarantee), the Recessed button warns of the cost; the week readiness reaches Recessed, "Our Allies Are Alarmed" applies credibility −5, relations −10 and +5 liberty desire, and a crisis against the protectee shows the protector line at −10. An AI with subjects never goes Recessed.
 41. Nuke a country with our own protégé, answer, and check the guarantor gets "Our Protégé Struck First" (not "A Promise Called In"), that declining costs no credibility and sends `.21`'s "Not Their War to Answer", and that standing by them costs +5 infamy.
 42. After an Automatic Retaliation launch from a `.30` accident, "Classify the whole affair" is not offered; after a halted one, it is.
+
+### 0.10 Planned: civil wars, custody and loose warheads (agreed 2026-09-25)
+
+Nothing here is built. It is the order agreed with the owner for closing the §11 gap ("handle annexation, civil war … explicitly") and extending it. §0.7 says what happens today. Each step starts with its own design pass.
+
+1. **Engine test — done.** A save pair of a revolution the rebels won showed what the winner inherits (`scripting_best_practices.md` § "What a Civil War's Winner Inherits"). A winning revolution does not lose the arsenal. It passes whole to the rebels through the variable merge, and `nuclear_power` comes back on the fresh entry's first pulse. So custody is an explicit transfer, not a rescue.
+2. **Custody transfer.** One helper covers every way an armed country can end: civil war either way, secession, war annexation, reunification, absorbing a subject, a formable swallowing an armed member.
+   - **At the outbreak**, on `on_revolution_start` / `on_secession_start` while both objects exist, the rebels take a share of the warheads. The share follows the territory they hold: safeguards shrink it, delegated launch authority grows it, and a fraction is lost (step 5).
+   - **At the end**, the winner absorbs the loser's remainder in `on_civil_war_won`, from a count each side caches weekly. The merge keeps the winner's own `nuclear_weapon_stockpile`, so without this the loser's share vanishes whichever side wins.
+   - **Also:**
+     - snap `nd_public_estimate`;
+     - decide what a new regime keeps of the old one's doctrine, pledges and credibility (§11 asks for a re-evaluation);
+     - carry the pledge lists `nd_nonuse_pledges` / `nd_defied_us` across, since variable lists are not inherited at all;
+     - keep warhead progress through the fresh entry, and consider `can_revolution_inherit = yes`, which should only close the two-week gap (an inherited entry arrives empty and re-runs `immediate` too).
+   - **Shared infrastructure:** the transfer needs the same thing as the civil-war audit's cross-cutting repair (`docs/audits/civil_war_inheritance_audit.md`): a parent pointer on the rebel at `on_revolution_start`, and one repair effect at `on_civil_war_won` that reads the not-yet-deleted loser through it. Build it once. It rests on one untested engine fact, whether the loser still resolves through a stored scope variable at that hook — test that first.
+   - **Striking one's own rebels (owner ruling):** allowed, at a very high price — legitimacy −50 or worse, fading over many years, and heavy radicalization. "Hard to imagine anything but a totalitarian government getting away with that." The proposal still to be settled: the legitimacy hit is the same for every regime, and repressive laws (Outlawed Dissent, Secret Police) shrink the radical surge while free-speech laws enlarge it, rather than a regime-type branch. The AI weight is near zero unless it is losing badly under those laws. Check the legitimacy defines before fixing numbers.
+3. **Civil-war events.**
+   - **"Who holds the button?"** at the outbreak: pull the warheads back (forced Recessed readiness, no share for the rebels, no use in the war — France's Gerboise Verte test during the 1961 Generals' putsch), hold the line (the split is rolled), or dismantle them (South Africa before its transition).
+   - **"Deny them the bomb"** when the loyalists are losing.
+   - **Foreign reaction** for other nuclear powers: back a side, offer to secure the arsenal, stay out.
+4. **Secession and the Budapest path.** Winning secessionists keep their share, and the great powers press them to trade it for a guarantee, using the existing `nuclear_disarmament` and `nuclear_guarantee` articles. A state that holds warheads but cannot build them already pays upkeep, which is the pressure.
+5. **Loose warheads.**
+   - **The pool:** every custody change loses a fraction, larger with low safeguards, delegated authority or a chaotic collapse. The pool stores a global count and a count per origin country. When an origin dies, its count passes to its successor.
+   - **Detonation** reuses `nuclear_industrial_strike`, which already works without a war or an attacker, with its own notice events. It is gated by the `terrorism_and_anti_terrorism` era and draws from the social-tensions terror pool.
+   - **Attribution (owner ruling):** keep the truth — the per-origin counts — apart from what the victim learns. At detonation, roll confirmed / shortlist / unknown. The odds rise with few candidate origins, the victim's own nuclear expertise, an origin that has tested openly (`nuclear_power`) and a covert network in the origin, as nuclear forensics and intelligence do. Blame means negligence: compensation, inspections, custody cooperation.
+   - **Recovery:** a covert operation to secure loose material, a treaty article paying an origin to secure its stock, a UN physical-protection convention.
+   - **Phase 2 (owner ruling):** states buy loose warheads through a covert operation. The buyer is armed but undeclared (`nd_is_armed` without `nd_believed_armed`), so it must test or declare before it can threaten or strike. Without the `nuclear_weapons` tech its reliability target drops and a warhead can decay each year.
 
 ## 1. Intent and owner requirements
 

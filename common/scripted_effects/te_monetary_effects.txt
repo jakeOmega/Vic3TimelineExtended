@@ -2036,9 +2036,14 @@ te_monetary_update_inflation = {
 #
 # NO FIRST-RUN SWEEP. banking_cycle_apply_stance_band removes all five of its
 # bands once, because its modifiers live on a can_revolution_inherit journal
-# entry and move to a successor tag while the variables do not. These are
+# entry that can reach a successor whose tracker does not describe it. These are
 # COUNTRY modifiers on the country itself, and a country that has never run this
-# step carries the 0 from step 0 and no band modifier — the two agree.
+# step carries the 0 from step 0 and no band modifier — the two agree. A
+# revolution's winner is the exception to watch: it receives the loser's
+# te_inflation_band_applied if it has none of its own, but never the loser's
+# band modifier (scripting_best_practices.md § "What a Civil War's Winner
+# Inherits"). te_monetary_on_country_released gives the rebels their own
+# tracker at on_revolution_start, which is what keeps the two in agreement.
 te_monetary_apply_inflation_band = {
 	# The crisis cooldown ages first, so the month it reaches 0 is a month the
 	# crisis can be offered again rather than the month after.

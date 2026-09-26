@@ -208,6 +208,7 @@ Notes:
 |--------|---------|-----|
 | `scripts/analysis/pop_growth.py` | Pop growth model (birthrate, mortality vs SoL). | `python scripts/analysis/pop_growth.py` (text table), `--plot` for chart |
 | `scripts/analysis/check_save_history_order.py` | Reads a `.v3` save and reports whether each country's `te_hist` history store is in chronological order — the order the history charts draw. Unpacks the save's binary `gamestate` directly; no game needed beyond the file. Exits 1 on an out-of-order store. | `python3 scripts/analysis/check_save_history_order.py` (newest save), `<save.v3>`, or `--all` |
+| `scripts/analysis/save_country_probe.py` | Dumps or diffs per-country script state in a `.v3` save — variables (script values, country references resolved to their tag or `gone`), modifiers, running journal entries — filtered by `--tag`, `--var` / `--modifier` regex and `--je`. `--diff` compares two saves per tag; when a civil war has ended between them it adds a MERGE section (which of the loser's variables the survivor received, whose value it kept where both held one). How the civil-war inheritance rules in `scripting_best_practices.md` were read. Binary layout in its docstring. | `python3 scripts/analysis/save_country_probe.py [<save.v3>] --tag GER`, `--diff <before.v3> <after.v3> --tag GER --var '^nuclear_'` |
 | `pop_needs_curves.py` | Pop needs curve definitions and buy_packages generator. **Auto-runs on every server reload.** | `python pop_needs_curves.py` (generate), `--table` for display only |
 
 ## Content Generation

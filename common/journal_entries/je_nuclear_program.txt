@@ -267,10 +267,24 @@ je_nuclear_program = {
 
 	should_update_on_player_command = yes
 	should_be_pinned_by_default_uninvolved_or_context = yes
-	# Country variables do not follow a revolution, and the funding and
-	# posture modifiers on this entry are multiplied by them, so an inherited
-	# entry would carry modifiers its new owner has no state for. A successor
-	# starts a fresh entry from its own arsenal and standing instead.
+	# A revolution's winner receives the loser's country variables, keeping
+	# its own value wherever it already had one, but none of its modifiers
+	# (read from a before/after save pair, 2026-09-25 — scripting_best_practices.md
+	# § "What a Civil War's Winner Inherits"). So a winning revolution inherits
+	# the arsenal and the posture, and with `no` the winner starts a fresh
+	# entry: it auto-activates because the inherited arsenal satisfies
+	# `possible`, `immediate` keeps the stockpile and resets the posture
+	# trackers, and the first weekly pulse rebuilds the posture modifiers and
+	# restores nuclear_power. Two costs, both seen in the saves: up to two
+	# weeks with neither the entry nor nuclear_power, and progress toward the
+	# next warhead, which `immediate` zeroes (see its header).
+	# The original reason for `no` — an inherited entry would carry the loser's
+	# modifiers — was wrong: an inherited entry arrives with none and re-runs
+	# `immediate` too. So `yes` should differ only by activating at once, closing
+	# the two-week gap — but only while the rebels hold no nuclear variables of
+	# their own. Once the custody split gives them some, their values win the
+	# merge and `immediate` runs against those, so settle the flag together with
+	# the split (nuclear_crisis_design.md §0.10, step 2).
 	can_revolution_inherit = no
 	can_deactivate = yes
 }

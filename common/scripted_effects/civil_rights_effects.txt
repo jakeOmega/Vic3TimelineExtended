@@ -13,10 +13,13 @@ save_civil_rights_movement_scope = {
 }
 
 # Defensive zero-init for the six cr_*_months trackers consumed by je_civil_rights's
-# on_complete / on_fail / on_monthly_pulse. Required because can_revolution_inherit = yes
-# transfers the JE to a successor country without re-running immediate, so the trackers
-# may not exist when on_fail fires (the fail block's NOT = { has_active_civil_rights_movement }
-# can evaluate true on the first tick post-inheritance, before on_monthly_pulse runs).
+# on_complete / on_fail / on_monthly_pulse. Written on the premise that an entry a
+# revolution's winner inherits (can_revolution_inherit = yes) skips immediate, so the
+# trackers might not exist when on_fail fires. Saves (2026-09-25) showed that immediate
+# does run again on an inherited entry, and the winner receives the loser's cr_* variables
+# too (scripting_best_practices.md § "What a Civil War's Winner Inherits"). The init is now
+# belt-and-braces, and harmless. The open problem is the reverse: a movement the loser had
+# already completed starts over on the winner (docs/audits/civil_war_inheritance_audit.md F4).
 cr_ensure_tracker_vars_effect = {
 	if = { limit = { NOT = { has_variable = cr_grassroots_months } }
 		set_variable = { name = cr_grassroots_months value = 0 } }
