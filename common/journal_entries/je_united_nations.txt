@@ -609,7 +609,8 @@
 			# our interest groups' reaction from Strong, and a colony's liberty
 			# under the decolonisation declaration. The single refresh site
 			# for every un_regime_* modifier (un_regime_effects.txt). Outside
-			# the member block: a colony is not a member.
+			# the member block: a colony of a member is reached through its
+			# overlord, whether or not it holds a seat itself.
 			un_regime_country_pulse = yes
 
 			# ---- International standing (all countries with the JE) ----

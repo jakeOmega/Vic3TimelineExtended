@@ -10,8 +10,10 @@
 # falls vacant later, un_seat_monthly_update gives it to the great-power member
 # with the most prestige that holds none (un_permanent_seat_candidate). A 2/3
 # expulsion vote fills the seat it vacates the same way, at once (un_vote.2).
-# A seat is lost by leaving the UN, by sustained sub-GP rank (10+ years), or by
-# 2/3 expulsion. The helpers are in common/scripted_effects/un_seat_effects.txt.
+# A seat is lost by leaving the UN, by sustained sub-GP rank (10+ years), by
+# 2/3 expulsion, or when the holder's representation is suspended (§0.8,
+# un_representation_monthly_update). The helpers are in
+# common/scripted_effects/un_seat_effects.txt.
 is_un_permanent_member = {
 	je:je_united_nations ?= { has_modifier = un_permanent_member_modifier }
 }

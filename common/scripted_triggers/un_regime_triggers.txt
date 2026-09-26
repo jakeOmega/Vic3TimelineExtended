@@ -77,7 +77,9 @@ un_regime_colonial_power = {
 
 # A colony of a member: a qualifying colonial subject (a colony, a chartered
 # company, an overseas protectorate of another heritage) whose overlord is in
-# the UN. Not itself a member: subjects cannot join.
+# the UN. It may hold a seat of its own (§0.8: a protectorate is eligible, and
+# a member made a colony keeps its membership, suspended); the declaration
+# reaches it through its overlord either way.
 un_regime_member_colony = {
 	is_subject = yes
 	is_qualifying_colonial_subject = yes

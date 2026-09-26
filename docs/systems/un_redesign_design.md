@@ -4,9 +4,8 @@
 > 3 (GROUNDS, THE ITEMISED LEAN, AI VOTING IN SCRIPT, THE RECESS), 4 (THE DOCKET AND THE
 > EVENT REWRITE), 5 (DUES, TEETH, REGIMES, SOVEREIGNTY, INTELLIGENCE) AND 6 (MISSIONS)
 > IMPLEMENTED,** with joining missions at will added after phase 6. Phase 1 has been
-> play-tested; phases 2–6 and §0.7 are pending in-game verification. §0.8 (subjects,
-> diplomatic autonomy and suspended representation) is designed and awaiting the owner's
-> review.
+> play-tested; phases 2–6, §0.7 and §0.8 (subjects, diplomatic autonomy and suspended
+> representation) are pending in-game verification.
 > Read
 > [§0.8](#08-subjects-diplomatic-autonomy-and-suspended-representation),
 > [§0.7](#07-joining-missions-at-will--rulings-and-open-checks),
@@ -32,9 +31,9 @@
 
 ## 0.8 Subjects, diplomatic autonomy and suspended representation
 
-Designed 2026-09-25 on `feat/un-subject-membership` with the owner. This closes the open
-question in §0.7 ruling 9 ("should a member lose its seat when it becomes a subject?"). Not
-yet implemented. The owner's decisions are marked **(decided)**.
+Designed with the owner and built 2026-09-25 on `feat/un-subject-membership`. This closes
+the open question in §0.7 ruling 9 ("should a member lose its seat when it becomes a
+subject?"). Not yet seen in a running game. The owner's decisions are marked **(decided)**.
 
 ### The rule in one paragraph
 
@@ -47,6 +46,34 @@ overlord **carries the seat**: the subject's GDP is added to the overlord's asse
 subject keeps the membership benefits. When the member conducts its own foreign policy again,
 its representation is restored automatically. Nothing about the member's government, laws or
 economy changes. The rule is about who speaks for it abroad.
+
+### Files
+
+- `common/scripted_triggers/un_membership_triggers.txt` (new): `un_membership_eligible`,
+  `un_member_represented`, `un_representation_suspended`, `un_dues_billed_to_overlord`,
+  `un_seat_carried`, `un_member_draws_benefits`.
+- `common/scripted_effects/un_membership_effects.txt` (new): `un_representation_monthly_update`.
+- The gates beside Article 19: `un_resolution_triggers.txt`, `un_vote_events.txt` (`un_vote.1`,
+  and `un_vote.2`/`un_vote.3` for compliance), `un_chamber_sguis.txt`, `un_script_values.txt`
+  (`un_vote_eligible_member_count`), `un_propose_triggers.txt`, `un_docket_triggers.txt`,
+  `un_lobbying.txt`, `un_mission_triggers.txt`, `un_hq_effects.txt`,
+  `un_permanent_member_triggers.txt`.
+- The ways in and the outsiders: `un_buttons.txt` (Join; the dues buttons), `un_ladder_effects.txt`
+  (invitations; the privileges on joining and leaving), `un_events.txt` (`un_events.1`,
+  `un_events.10`), `un_teeth_triggers.txt`, `je_united_nations.txt` (enrolment, pariah, the
+  monthly check, dues and privileges in the member block, the General Assembly line).
+- Dues: `un_dues_values.txt` (`un_dues_assessed_gdp`).
+- Modifiers: `extra_modifiers.txt` (`un_member_modifier` emptied; `un_member_privileges_modifier`).
+- Display: `un_script_values.txt` (`un_member_count`, `un_suspended_member_count`,
+  `un_eligible_country_count`, `un_carried_seat_count`), `un_chamber_display_effects.txt`
+  (dues lines), `extra_concepts.txt` (`concept_un_suspended_representation`),
+  `extra_messages.txt` (the two notices), loc in `te_journal_entries`, `te_concepts`,
+  `te_miscellaneous`, `te_notifications`, `te_events`.
+- Debug: `te_debug_un_effects.txt` (`te_debug_un_cycle_subject_member`), `te_debug_un.1`
+  option v.
+- `test_un_membership.py`: every Article 19 gate also asks `un_representation_suspended`; the
+  eligible types; every way in; the dues values; the privileges on every join path; the
+  counts and journal lines.
 
 ### Rulings
 
@@ -259,8 +286,9 @@ considered states at the time" ([Ask DAG, "founding members"](https://ask.un.org
 
 ### IN-GAME VERIFICATION CHECKLIST (§0.8)
 
-The debug console gains an option (`te_debug_un.1` option v) that makes a neighbouring member
-our puppet, moves our subject member along puppet, dominion, independent, and back.
+The debug console has an option for this (`te_debug_un.1` option v). With no subject member
+of ours, it makes a random minor member our puppet. Otherwise it moves our subject member
+along: puppet, then protectorate, then independent.
 
 1. **Puppet a member** (option v). At once, the member's chamber vote control is greyed with the
    suspension reason, and its Propose rows are greyed. The General Assembly line reads "N of M
@@ -270,8 +298,8 @@ our puppet, moves our subject member along puppet, dominion, independent, and ba
    a carried seat, and `un_dues_modifier`'s weekly figure rises by its share.
 3. **Withhold our dues:** next month the puppet loses its privileges and benefits. Pay again:
    they return.
-4. **Promote it to a dominion** (option v): the vote control is live again. Next month it gets
-   the restored notice and pays its own dues. Our line drops the carried seat.
+4. **Promote it to a protectorate** (option v): the vote control is live again. Next month it
+   gets the restored notice and pays its own dues. Our line drops the carried seat.
 5. **Make it independent:** still represented, and nothing changes.
 6. **A non-member colony** shows no pariah modifier and no Join button. A non-member dominion
    sees the Join button enabled.
@@ -335,8 +363,9 @@ Not yet seen in a running game. The same branch fixed two display bugs in the ch
 5. **The AI** runs the same trigger and the same writers from the journal entry's monthly
    pulse (`un_mission_ai_monthly`). About one month in ten it sends one contingent where
    `un_mission_ai_join_score` is highest, if that is above 10. The score reads what the
-   mission lacks (5 for each missing contributor up to three), the ties to the host from the
-   vote lean (alliance, bloc, overlord +15 each; rivalry −20; relevance +5; relations ±10),
+   mission lacks (5 for each missing contributor up to three), the ties to the host (the kinds
+   the vote lean reads, plus overlordship, which it does not: alliance, bloc, overlord +15
+   each; rivalry −20; relevance +5; relations ±10),
    the peacekeeping programme (+15 for peacekeeping and stabilisation), humanitarian law,
    great-power rank and authority of 40 or more (+5 each), from a base of −10. It serves in
    at most 2 missions at will (3 for a great power), and not while at war, in default or with
@@ -373,7 +402,9 @@ Not yet seen in a running game. The same branch fixed two display bugs in the ch
    seats. The treaty auto-enrolment (`country_un_membership_obligation_bool`) now requires
    independence, as the Join button always did. **Open question for the owner:** should a
    member lose its seat when it becomes a subject? `un_regime_member_colony` assumes a
-   subject is never a member.
+   subject is never a member. **Answered in §0.8:** it keeps its membership. A member that no
+   longer conducts its own foreign policy has its representation suspended. The line now reads
+   "N of M eligible nations are represented", and the subject-seats clause is gone.
 
 ### Known roughnesses
 
