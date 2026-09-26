@@ -103,7 +103,7 @@ can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)
 
 can_revolution_inherit: yes; can_deactivate: no
 
-- `remove_variable` `un_regime_stamp` at `common/scripted_effects/un_state_effects.txt:257` via `un_state_restore_all` (common/journal_entries/je_united_nations.txt:115) — only a positive existence test of `un_regime_stamp` encloses it, so it destroys what is there — **2026-09-26**: dropping the regime stamp is the point: the next ordinary pulse re-reads the regime terms the merge dropped (§0.9)
+- `remove_variable` `un_regime_stamp` at `common/scripted_effects/un_state_effects.txt:266` via `un_state_restore_all` (common/journal_entries/je_united_nations.txt:115) — only a positive existence test of `un_regime_stamp` encloses it, so it destroys what is there — **2026-09-26**: dropping the regime stamp is the point: the next ordinary pulse re-reads the regime terms the merge dropped (§0.9)
 
 ## Not Failing
 

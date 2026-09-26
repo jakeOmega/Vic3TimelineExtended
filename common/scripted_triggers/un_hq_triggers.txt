@@ -12,7 +12,7 @@
 # variable still names the loser, a different country object that is dead or
 # gone, and the winner inherited the host's record (the headquarters mirror,
 # un_state_effects.txt). Annexing the loser moves the headquarters state to
-# the winner before un_on_civil_war_won re-points the variable, and
+# the winner before un_repair_after_civil_war re-points the variable, and
 # un_hq_on_state_owner_change would otherwise demolish the building on the
 # winner's soil. While the named host lives, this is false for everyone else,
 # so a rebel holding the headquarters state during the war is not a host.
@@ -34,8 +34,8 @@ un_hq_is_host = {
 # un_hq_on_state_owner_change leaves a headquarters state that passes to such a
 # country to the monthly update: when annexation moves the loser's states to
 # the winner, the engine's order (the loser's last state, the variable merge,
-# un_on_civil_war_won's re-point) is unknown, and a demolition there cannot be
-# undone. By the monthly update the host variable names the winner, or the
+# un_repair_after_civil_war's re-point) is unknown, and a demolition there
+# cannot be undone. By the monthly update the host variable names the winner, or the
 # host is alive and the new owner is a rebel, whose building then goes.
 un_hq_shares_host_definition = {
 	has_global_variable = un_hq_country
