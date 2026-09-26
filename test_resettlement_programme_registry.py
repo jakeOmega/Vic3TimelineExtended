@@ -455,12 +455,40 @@ class TransferTests(unittest.TestCase):
         self.assertIn("local_var:rs_take >= resettlement_min_take", body)
         self.assertIn("move_partial_pop = { state = scope:rs_destination population = { value = local_var:rs_move } }", body)
 
+    def test_each_source_gives_at_most_its_cap_across_all_authorities(self):
+        # Spec §2: at most $CAP$ of a source's eligible population a month,
+        # however many Authorities walk it.
+        body = squash(block(read(EFFECTS), "resettlement_take_from_source"))
+        self.assertIn("set_local_variable = { name = rs_budget value = { value = resettlement_state_eligible_pop "
+                      "multiply = $CAP$ } }", body)
+        self.assertIn("if = { limit = { has_variable = rs_recruits } "
+                      "change_local_variable = { name = rs_budget subtract = var:rs_recruits } }", body)
+        self.assertIn("if = { limit = { local_var:rs_budget >= resettlement_min_take } every_scope_pop = {", body)
+        self.assertIn("set_local_variable = { name = rs_budget_left value = { value = local_var:rs_budget "
+                      "subtract = scope:rs_source.var:rs_taken_now } }", body)
+        self.assertIn("if = { limit = { local_var:rs_take > local_var:rs_budget_left } "
+                      "set_local_variable = { name = rs_take value = local_var:rs_budget_left } }", body)
+        # The budget limit comes before the minimum-take test and the move.
+        self.assertLess(body.index("local_var:rs_budget_left }"), body.index("local_var:rs_take >= resettlement_min_take"))
+
     def test_deaths_in_steps_of_one_hundred_for_each_coercive_programme(self):
         body = squash(block(read(EFFECTS), "resettlement_source_consequences"))
         kills = re.findall(r"while = \{ count = local_var:rs_dead_steps kill_population_in_state = \{ value = 100 (\w+ = \w+) \} \}", body)
         self.assertEqual(sorted(kills), ["pop_type = farmers", "pop_type = laborers", "strata = lower"])
         for p in COERCIVE:
             self.assertIn(f"scope:rs_destination.var:rs_programme = {p.code}", body, p.key)
+        # A per-source carry: a small program's dead are killed, and counted,
+        # once they add up to 100, instead of being rounded away every month.
+        self.assertIn("set_local_variable = { name = rs_dead_now value = { value = var:rs_taken_now "
+                      "multiply = scope:rs_destination.var:rs_mortality } }", body)
+        self.assertIn("change_variable = { name = rs_death_carry add = local_var:rs_dead_now }", body)
+        self.assertIn("set_local_variable = { name = rs_dead_steps value = { value = var:rs_death_carry "
+                      "divide = 100 floor = yes } }", body)
+        self.assertIn("set_local_variable = { name = rs_dead_people value = { value = local_var:rs_dead_steps "
+                      "multiply = 100 } }", body)
+        self.assertIn("change_variable = { name = rs_death_carry subtract = local_var:rs_dead_people }", body)
+        self.assertIn("scope:rs_destination = { change_variable = { name = rs_died add = local_var:rs_dead_people } }", body)
+        self.assertNotIn("round = yes", body)
 
     def test_land_pressure_is_only_a_cost(self):
         body = squash(block(read(EFFECTS), "resettlement_land_pressure"))
@@ -779,6 +807,9 @@ class DocsTests(unittest.TestCase):
         for p in PROGRAMMES:
             self.assertIn(L[pm(p.key)], section, p.key)
         self.assertIn("test_resettlement_programme_registry.py", section)
+        # The cap is per source, across every Authority (spec §2).
+        self.assertIn("each source gives at most 2% of its eligible population a month (4% under a drive), "
+                      "across all Authorities", section)
 
     def test_no_doc_names_the_old_transfer(self):
         self.assertNotIn("resettlement_transfer_on_action", read(MOD_SYSTEMS))

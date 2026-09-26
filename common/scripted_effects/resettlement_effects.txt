@@ -141,44 +141,74 @@ resettlement_set_programme_code = {
 resettlement_take_from_source = {
 	save_scope_as = rs_source
 	set_variable = { name = rs_taken_now value = 0 }
-	every_scope_pop = {
-		limit = { resettlement_pop_eligible = yes }
-		if = {
-			limit = { scope:rs_destination.var:rs_remaining >= resettlement_min_take }
-			set_local_variable = {
-				name = rs_take
-				value = {
-					value = total_size
-					multiply = $CAP$
-				}
-			}
+	# §2: a source gives at most $CAP$ of its eligible population a month,
+	# across every Authority that walks it. The budget is $CAP$ of the people
+	# here this destination's program may recruit, less what earlier
+	# destinations took this month (var:rs_recruits; removed after a month
+	# with none, hence the guard). Each take is also held to what is left.
+	set_local_variable = {
+		name = rs_budget
+		value = {
+			value = resettlement_state_eligible_pop
+			multiply = $CAP$
+		}
+	}
+	if = {
+		limit = { has_variable = rs_recruits }
+		change_local_variable = { name = rs_budget subtract = var:rs_recruits }
+	}
+	if = {
+		limit = { local_var:rs_budget >= resettlement_min_take }
+		every_scope_pop = {
+			limit = { resettlement_pop_eligible = yes }
 			if = {
-				limit = { local_var:rs_take > scope:rs_destination.var:rs_remaining }
-				set_local_variable = { name = rs_take value = scope:rs_destination.var:rs_remaining }
-			}
-			if = {
-				limit = { local_var:rs_take >= resettlement_min_take }
-				# The dead are removed at the source afterwards
-				# (resettlement_source_consequences); the rest move now.
+				limit = { scope:rs_destination.var:rs_remaining >= resettlement_min_take }
 				set_local_variable = {
-					name = rs_move
+					name = rs_take
 					value = {
-						value = 1
-						subtract = scope:rs_destination.var:rs_mortality
-						multiply = local_var:rs_take
-						round = yes
+						value = total_size
+						multiply = $CAP$
 					}
 				}
-				move_partial_pop = {
-					state = scope:rs_destination
-					population = { value = local_var:rs_move }
+				if = {
+					limit = { local_var:rs_take > scope:rs_destination.var:rs_remaining }
+					set_local_variable = { name = rs_take value = scope:rs_destination.var:rs_remaining }
 				}
-				scope:rs_destination = {
-					change_variable = { name = rs_remaining subtract = local_var:rs_take }
-					change_variable = { name = rs_arrived add = local_var:rs_move }
+				set_local_variable = {
+					name = rs_budget_left
+					value = {
+						value = local_var:rs_budget
+						subtract = scope:rs_source.var:rs_taken_now
+					}
 				}
-				scope:rs_source = {
-					change_variable = { name = rs_taken_now add = local_var:rs_take }
+				if = {
+					limit = { local_var:rs_take > local_var:rs_budget_left }
+					set_local_variable = { name = rs_take value = local_var:rs_budget_left }
+				}
+				if = {
+					limit = { local_var:rs_take >= resettlement_min_take }
+					# The dead are removed at the source afterwards
+					# (resettlement_source_consequences); the rest move now.
+					set_local_variable = {
+						name = rs_move
+						value = {
+							value = 1
+							subtract = scope:rs_destination.var:rs_mortality
+							multiply = local_var:rs_take
+							round = yes
+						}
+					}
+					move_partial_pop = {
+						state = scope:rs_destination
+						population = { value = local_var:rs_move }
+					}
+					scope:rs_destination = {
+						change_variable = { name = rs_remaining subtract = local_var:rs_take }
+						change_variable = { name = rs_arrived add = local_var:rs_move }
+					}
+					scope:rs_source = {
+						change_variable = { name = rs_taken_now add = local_var:rs_take }
+					}
 				}
 			}
 		}
@@ -199,29 +229,49 @@ resettlement_take_from_source = {
 
 # State scope: a source, after var:rs_taken_now is set. scope:rs_destination saved.
 # Deaths in transit (§2): kill_population_in_state takes a constant, so the dead
-# are removed in steps of 100, filtered to the program's recruits. Unrest
-# (§7.1) radicalizes the recruited type left behind. add_radicals_in_state
-# cannot tell urban laborers from farm laborers, so Rustication's unrest
-# reaches both; its share is computed against urban workers only.
+# are removed in steps of 100, filtered to the program's recruits. The source
+# carries the fraction (var:rs_death_carry, never removed) from month to
+# month, so a small program's dead are killed and counted once they add up to
+# 100 instead of being rounded away; only those actually killed reach the
+# destination's rs_died. Unrest (§7.1) radicalizes the recruited type left
+# behind. add_radicals_in_state cannot tell urban laborers from farm laborers,
+# so Rustication's unrest reaches both; its share is computed against urban
+# workers only.
 resettlement_source_consequences = {
-	set_local_variable = {
-		name = rs_dead_steps
-		value = {
-			value = var:rs_taken_now
-			multiply = scope:rs_destination.var:rs_mortality
-			divide = 100
-			round = yes
+	set_local_variable = { name = rs_dead_steps value = 0 }
+	if = {
+		limit = { scope:rs_destination.var:rs_mortality > 0 }
+		if = {
+			limit = { NOT = { has_variable = rs_death_carry } }
+			set_variable = { name = rs_death_carry value = 0 }
 		}
-	}
-	set_local_variable = {
-		name = rs_dead_people
-		value = {
-			value = local_var:rs_dead_steps
-			multiply = 100
+		set_local_variable = {
+			name = rs_dead_now
+			value = {
+				value = var:rs_taken_now
+				multiply = scope:rs_destination.var:rs_mortality
+			}
 		}
-	}
-	scope:rs_destination = {
-		change_variable = { name = rs_died add = local_var:rs_dead_people }
+		change_variable = { name = rs_death_carry add = local_var:rs_dead_now }
+		set_local_variable = {
+			name = rs_dead_steps
+			value = {
+				value = var:rs_death_carry
+				divide = 100
+				floor = yes
+			}
+		}
+		set_local_variable = {
+			name = rs_dead_people
+			value = {
+				value = local_var:rs_dead_steps
+				multiply = 100
+			}
+		}
+		change_variable = { name = rs_death_carry subtract = local_var:rs_dead_people }
+		scope:rs_destination = {
+			change_variable = { name = rs_died add = local_var:rs_dead_people }
+		}
 	}
 	if = {
 		limit = { scope:rs_destination.var:rs_programme = 4 }

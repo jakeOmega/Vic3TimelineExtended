@@ -116,9 +116,11 @@ shortage costs at most half the capacity. Staff per level stays modest for the s
 **Source ranking.** The pulse ranks the owner's other states (never the destination, never another Settlement Authority
 state) by eligible population (for Penal Transportation, whose eligible pops are the radical ones, that is each state's
 radical population), and walks down the list, taking from each state until capacity is met or states run out. From each eligible pop it takes
-at most **2%** of the pop per month. Vanilla's emigration ceiling is 0.5% of a state's population per week, about 2% a
-month, so a programme drains no faster than a crisis would. Takes under 100 people are skipped, so the walk does not
-splinter the destination into tiny pops.
+at most **2%** of the pop per month, and each source gives at most **2%** of its eligible population a month across all
+Authorities: a destination's walk starts from 2% of the people at that source its programme may recruit, less what
+earlier destinations took from it this month (`rs_recruits`), and every take is held to what is left. Vanilla's
+emigration ceiling is 0.5% of a state's population per week, about 2% a month, so a programme drains no faster than a
+crisis would. Takes under 100 people are skipped, so the walk does not splinter the destination into tiny pops.
 
 **Recruitment Drive decree** (`decree_resettlement_recruitment_drive`, costs authority, AI weight in §10). All drive states
 form a priority tier: every destination walks the drive states first, in order of eligible population, and reaches
@@ -129,7 +131,10 @@ lapses when the last programme ends.
 
 **Deaths in transit** (coercive programmes, §3). Of each month's recruits, the programme's transit-mortality share is
 removed at the source with `kill_population_in_state`, in steps of 100, filtered to the programme's recruits (farmers for
-Special Settlements, laborers for Rustication, the lower strata for Penal Transportation), and the rest are moved.
+Special Settlements, laborers for Rustication, the lower strata for Penal Transportation), and the rest are moved. Each
+source carries the fraction of a step from month to month (`rs_death_carry`), so a small programme's dead (Penal
+Transportation at 5% needs 2,000 recruits for one step) are killed and counted once they add up to 100; the destination's
+*Died in transit* counts only those actually killed.
 
 **Readouts** (dynamic-modifier pattern: a static modifier re-applied monthly with the month's count as its multiplier):
 
