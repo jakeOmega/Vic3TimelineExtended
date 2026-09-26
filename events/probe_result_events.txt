@@ -16,6 +16,10 @@
 # Cat II: Astrophysical Wonders (results 9-15) → events 609-615
 # Cat III: Biological Discovery (results 16-24) → events 616-624
 # Cat IV: Intelligence & Tech-signatures (results 25-30) → events 625-630
+#
+# Every option grants its category's modifier through sr_grant_probe_data,
+# which also records it (<modifier>_held) so a revolution's winner gets it
+# back: "What a revolution's winner keeps" in space_race_effects.txt.
 ##############################################
 
 # =================================================================
@@ -57,7 +61,7 @@ space_race_events.601 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -75,14 +79,14 @@ space_race_events.601 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -123,7 +127,7 @@ space_race_events.602 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -141,14 +145,14 @@ space_race_events.602 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -189,7 +193,7 @@ space_race_events.603 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -207,14 +211,14 @@ space_race_events.603 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -255,7 +259,7 @@ space_race_events.604 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -273,14 +277,14 @@ space_race_events.604 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -321,7 +325,7 @@ space_race_events.605 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -339,14 +343,14 @@ space_race_events.605 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -387,7 +391,7 @@ space_race_events.606 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -405,14 +409,14 @@ space_race_events.606 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -453,7 +457,7 @@ space_race_events.607 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -471,14 +475,14 @@ space_race_events.607 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -519,7 +523,7 @@ space_race_events.608 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -537,14 +541,14 @@ space_race_events.608 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_dead_worlds_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_dead_worlds_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -584,7 +588,7 @@ space_race_events.609 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -602,14 +606,14 @@ space_race_events.609 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -645,7 +649,7 @@ space_race_events.610 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -663,14 +667,14 @@ space_race_events.610 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -706,7 +710,7 @@ space_race_events.611 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -724,14 +728,14 @@ space_race_events.611 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -767,7 +771,7 @@ space_race_events.612 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -785,14 +789,14 @@ space_race_events.612 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -828,7 +832,7 @@ space_race_events.613 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -846,14 +850,14 @@ space_race_events.613 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -889,7 +893,7 @@ space_race_events.614 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -907,14 +911,14 @@ space_race_events.614 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -950,7 +954,7 @@ space_race_events.615 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -968,14 +972,14 @@ space_race_events.615 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_astro_wonders_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_astro_wonders_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1015,7 +1019,7 @@ space_race_events.616 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1033,14 +1037,14 @@ space_race_events.616 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1076,7 +1080,7 @@ space_race_events.617 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1094,14 +1098,14 @@ space_race_events.617 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1137,7 +1141,7 @@ space_race_events.618 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1155,14 +1159,14 @@ space_race_events.618 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1198,7 +1202,7 @@ space_race_events.619 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1216,14 +1220,14 @@ space_race_events.619 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1259,7 +1263,7 @@ space_race_events.620 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1277,14 +1281,14 @@ space_race_events.620 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1320,7 +1324,7 @@ space_race_events.621 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1338,14 +1342,14 @@ space_race_events.621 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1381,7 +1385,7 @@ space_race_events.622 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1399,14 +1403,14 @@ space_race_events.622 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1442,7 +1446,7 @@ space_race_events.623 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1460,14 +1464,14 @@ space_race_events.623 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1503,7 +1507,7 @@ space_race_events.624 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1521,14 +1525,14 @@ space_race_events.624 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_biological_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_biological_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1568,7 +1572,7 @@ space_race_events.625 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1586,14 +1590,14 @@ space_race_events.625 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1629,7 +1633,7 @@ space_race_events.626 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1647,14 +1651,14 @@ space_race_events.626 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1690,7 +1694,7 @@ space_race_events.627 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1708,14 +1712,14 @@ space_race_events.627 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1751,7 +1755,7 @@ space_race_events.628 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1769,14 +1773,14 @@ space_race_events.628 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1812,7 +1816,7 @@ space_race_events.629 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1830,14 +1834,14 @@ space_race_events.629 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}
@@ -1873,7 +1877,7 @@ space_race_events.630 = {
 		name = space_race_events.60.a
 		default_option = yes
 		ai_chance = { base = 5 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 		add_loyalists = { value = large_radicals }
 		custom_tooltip = {
@@ -1891,14 +1895,14 @@ space_race_events.630 = {
 	option = {
 		name = space_race_events.60.b
 		ai_chance = { base = 4 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = large_radicals pop_type = academics }
 		add_loyalists = { value = medium_radicals pop_type = officers }
 	}
 	option = {
 		name = space_race_events.60.c
 		ai_chance = { base = 2 }
-		add_modifier = { name = sr_probe_intelligence_data }
+		sr_grant_probe_data = { MODIFIER = sr_probe_intelligence_data }
 		add_loyalists = { value = medium_radicals pop_type = capitalists }
 		add_loyalists = { value = medium_radicals pop_type = academics }
 	}

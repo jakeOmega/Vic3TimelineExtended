@@ -1,7 +1,10 @@
 # Civil-war audit: Vic3TimelineExtended vs. the verified revolution-merge behaviour
 
-**Status (2026-09-25): findings F1–F16 are open.** The high-severity ones are tracked in #460–#465 (F7 rides with F6 in #465). This PR records them and corrects the docs; the fixes
-follow in their own PRs. The engine rules the findings rest on are summarised in
+**Status (2026-09-26): F1–F7 are fixed, and F13's pointer half with them** (#460–#465, one PR, branch
+`fix/civil-war-inheritance`), under the owner's ruling that **a revolution's winner continues the nation**.
+That PR also added `je_immediate_reset_audit`, which flags the E3 bug class in every journal entry. F8–F12
+and F14–F16 are open. Only F3's copy depends on reading the dead loser at `on_civil_war_won`: its
+`TE_CW_PROBE` lines in `debug.log` settle that on the first rebel win. This report was added in #459. The engine rules the findings rest on are summarised in
 `docs/guides/scripting_best_practices.md` § "What a Civil War's Winner Inherits".
 
 Read-only audit (no repo edits, no reload). Evidence: the three German-revolution saves
@@ -104,6 +107,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
 ## Findings, most severe first
 
 ### F1. Agricultural-diffusion arable-land bonuses are lost permanently (H1: re-apply not hooked). HIGH (#460)
+- **FIXED (#460).** From the shared civil-war hooks (`te_civil_war_on_actions.txt`): at `on_revolution_start` / `on_secession_start`, `agdiff_on_uprising` gives the rebels (`scope:target`) a copy of each diffusion modifier the original holds (`agdiff_copy_diffusion_from_root`), and nothing the nation lacked, and marks them `agdiff_cw_copied`. At `on_civil_war_won`, `agdiff_repair_after_civil_war` gives the winner the backfill as a backstop only when the revolutionaries won a revolution (`var:te_cw_rebels_won = 1`), the winner carries no marker (the war began before this build), and it is recognized (the broadcast's filter). The marker is then removed. The remaining exposure: rebels who win a revolution begun before the build in a recognized laggard (a country the `decolonization` tech recognized after the broadcasts) gain the diffusion. The overlord- and company-subject release hooks now run the backfill too; the release and formation hooks stay unfiltered, as before. On a rebel win (`te_cw_rebels_won`), the first-mover reward is restored from a new grant-month record (`agdiff_first_mover_month`), not from the permanent `is_world_first_<tech>`. It comes back at the strength it had decayed to, for the whole years it had left (to the nearest year, off a ladder of literal durations). Rewards granted before the fix have no record and are not restored. `first_<tech>_country` is re-pointed from the dead loser.
 - `common/scripted_effects/agricultural_diffusion_effects.txt:125-141` (`agdiff_backfill_one_tech` /
   `agdiff_backfill_diffusion_for_country`) is stateless and correct: it adds `agdiff_<tech>` when
   `world_first_<tech>` is set and the modifier is missing. But it is wired only into `on_country_formed` and
@@ -120,6 +124,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   (`on_country_released_as_overlord_subject` / `_company_subject` are missing from the release hooks too.)
 
 ### F2. UN membership, seat, programmes and HQ-host status are silently dropped (H1: the state is JE modifiers). HIGH (#461)
+- **FIXED (#461).** Every UN state modifier on the entry (membership, founding, HQ, security council and permanent seat, programmes, conventions) has a mirror variable `<modifier>_on`, written with it through `un_state_effects.txt`; the variable is the truth (`un_redesign_design.md` §0.9). The entry's `immediate` restores from the mirrors, restore-only. On a rebel win (`var:te_cw_rebels_won`), `un_repair_after_civil_war` (called from #467's `te_civil_war_on_won`) marks the entry pending, and the monthly pulse heals it before anything reads membership, so the programme counters survive. The seat count and the HQ host test honour the mirror while the named host is dead, and HQ demolition on a same-definition owner change is left to the monthly update. `un_hq_country` is re-pointed by the same repair, and again by a monthly net in `un_hq_monthly_update`. Debug: `event te_debug_un.1`, option w.
 - Membership is `un_member_modifier` on the JE (`common/scripted_effects/un_ladder_effects.txt:618-621`).
   The permanent seat is `un_permanent_member_modifier` on the JE
   (`common/scripted_triggers/un_permanent_member_triggers.txt:15-17`). Programmes (`un_champion_order_cost`,
@@ -147,6 +152,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   `un_hq_country` to ROOT when it names a dead same-tag object.
 
 ### F3. The central bank's gold and the whole monetary state are replaced by the rebel's (H2). HIGH (#462)
+- **FIXED (#462), pending the probe.** The audit's preferred option, built on the shared civil-war layer (#467): `te_civil_war_on_won` calls `te_monetary_repair_after_civil_war`, which on a rebel win (`te_cw_rebels_won = 1`) whose `scope:te_cw_loser` resolves dead and reads (a rate-paid canary) — and only once per loser (`te_mon_cw_bank_taken`) — runs `te_monetary_inherit_central_bank`. It adds the two vaults and their hot money, and copies the loser's inflation, peg and FX state and the player's mandate, delegation and rate target. The monetary regime is a law, so it follows the winner's laws. It copies no tracker, and re-adds the peg's timed modifiers from their month counters. It logs `TE_CW_PROBE monetary 1/2` and `2/2` (the loser's own figures). Concurrent revolutions are a known limitation (`monetary_policy_design.md` §0.4 item 32).
 - `common/on_actions/te_monetary_on_actions.txt:222-262` initialises the rebel at `on_revolution_start`
   (dispatching `te_monetary_internal.1`, `events/te_monetary_events.txt:56-63`). Under winner precedence,
   the rebel's value then beats the nation's on every `te_*` variable. The vault `te_bank_gold` is seeded
@@ -168,6 +174,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
     price its loans), so the loser-only values win the merge.
 
 ### F4. Completed JEs re-arm: the civil-rights movement restarts from scratch (H4 via E5). HIGH (#463)
+- **FIXED (#463).** `civil_rights_resolved` is set at `on_complete` / `on_fail` and blocks the entry. The outcome modifiers (all twelve are 10-year decaying) are recorded and rebuilt by `cr_repair_after_civil_war`, called from the shared `te_civil_war_on_won` (#467), for the time they had left. An inherited active run keeps its counters (`cr_run_in_progress`), and the six button policies are mirrored in `cr_policy_*` and rebuilt. Correction to the sweep below: a *completed* `je_human_augmentation` / `je_mental_health` doesn't just re-arm, it completes again at once and replays its outcome event, because their `possible` is technology-only. Both now carry a resolved variable, set at timeout too.
 - `common/journal_entries/je_civil_rights.txt:5-19` has no completed/failed guard
   (`possible = has_active_civil_rights_movement`). Its `immediate` (`:40-63`) zeroes all six
   `cr_*_months`, removes `cr_tier_*_seen` and sets the bar to 30.
@@ -186,6 +193,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   health can re-run after a timeout/fail (low).
 
 ### F5. Space-race rewards are lost for good, and an active milestone's progress is reset (H1 + H4). HIGH (#464)
+- **FIXED (#464).** Milestone rewards come back in `sr_repair_after_civil_war`, which the shared hook `te_civil_war_on_won` runs for the winner. Probe results are recorded and re-added. Choice, approach and colony-specialisation modifiers (the 68 `sr_colony_*` and `sr_solar_system_trade`, which this report missed) are rebuilt from their variables by the entries' `immediate` and a monthly self-heal. The milestone `immediate` sets are guarded, with the goal pinned by `goal_add_value`. Also fixed, all missed above: `je_space_race_interstellar_results` restarting its 132-month transit, the choice events firing a second time, and a finished solar colonization re-opening.
 - Rewards: `common/scripted_effects/space_race_effects.txt:404-412` adds `sr_first_<m>` / `sr_<m>` as
   permanent COUNTRY modifiers on completion. The inherited `sr_completed_<m>` then blocks the JE forever
   (`je_space_race.txt:29-34`).
@@ -210,6 +218,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   has_variable.
 
 ### F6. The banking cycle resets to 50 because `immediate` re-runs (H4 via E3). HIGH (#465)
+- **FIXED (#465).** The three cycle variables are seeded only when absent, and the bars are drawn from them.
 - `common/journal_entries/je_banking.txt:143-156`: `immediate` sets `finance_cycle_value = 50`,
   `finance_cycle_momentum = 0`, `bubble_pressure = 0` and the four bars, all with no guard.
 - What the player sees: loyal Germany was in a deep panic (cycle 6.6, momentum +2.6). The day the rebels win,
@@ -221,14 +230,16 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   `immediate` (`mod_systems.md:411`); these cycle variables predate that rule.
 
 ### F7. The banking stance band is never re-added because its swap trusts the stored `_applied` tracker (H1). MEDIUM (#465)
+- **FIXED (#465).** `immediate` sets `te_mon_stance_band_applied` to 0, and a 0 tracker makes the swap clear all five bands before adding. A one-time migration (`banking_stance_band_healed`) heals saves already hit.
 - `common/scripted_effects/banking_cycle_effects.txt:2280-2316` (`banking_cycle_apply_stance_band`) swaps only
   when `te_mon_stance_band_applied != te_mon_stance_band`. The first-run sweep at `:2281-2289` was written
   for revolutions, but it fires only when the tracker is ABSENT. Its premise (comment `:2271-2277`) is false
   (E1).
 - What the player sees: the loser had band 1 applied, and `te_mon_stance_band_applied = 1` was inherited.
   The winner's band is also 1, so no swap runs. `banking_stance_band_1` (+0.04 investment-pool contribution,
-  and the JE's "Monetary Stance" line) stays missing until the band changes. When it does, removing the
-  absent modifier logs an error.
+  and the JE's "Monetary Stance" line) stays missing until the band changes. (Removing an absent
+  modifier logs an error at country scope. At journal-entry scope the monthly phase sweep suggests it
+  is silent: the 2026-09-25 logs have none for it.)
 - Evidence: SAVE-CONFIRMED. At +2w the banking JE has no `banking_stance_band_*`; tracker = 1, band = 1.
 - Fix: run the sweep when the JE carries none of the five bands, instead of keying it on a missing tracker.
   Or zero the tracker in the repair hook.
@@ -313,6 +324,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   intended conquest semantics, document it.
 
 ### F13. Monetary arrangement pointers keep naming the dead loser (H3). LOW
+- **Pointer half FIXED (#462).** `te_mon_cw_repoint_to_winner` repoints `te_mon_anchor` / `te_mon_swap_provider` / `te_mon_lolr_guarantor` / `te_mon_receiver` on third countries from the dead loser (`scope:te_cw_loser`) to the winner, and flags them for discovery. It rests on the same loser read as F3.
 - `te_mon_anchor` / `te_mon_receiver` / `te_mon_swap_provider` on third countries (E6: D42, E17, NEJ, SOK, UNL,
   POR). Every read is guarded with `exists = var:te_mon_anchor` or `?=`
   (`te_monetary_arrangement_effects.txt:60-66, 260-275`; `te_monetary_arrangement_triggers.txt:24-32`), and
@@ -350,6 +362,8 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
 - Lost: every toggled policy (F8).
 - The mix isn't principled. Pick one rule per system: "a regime keeps the state's institutions" versus
   "a new regime chooses afresh".
+- **Ruled 2026-09-26: the winner continues the nation.** It keeps the institutions and the player's
+  choices. F1–F7 follow that rule; the open findings should too.
 
 ---------------------------------------------------------------------------------------------------
 
@@ -374,8 +388,10 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   (`space_race_effects.txt:533-554`).
 - **Strategic reserve init**: every variable is guarded (`st_res_effects.txt:40-104`), so the E3 re-run of
   `immediate` is harmless. (Stock loss: F11.)
-- **je_colonial_empire, je_space_race_\*, je_world_war**: re-entry is blocked by inherited completion
-  variables (`colonial_empire_completed`, `sr_completed_<m>`, `ww_fully_resolved`). je_heir_education is
+- **je_colonial_empire, je_space_race_\***: re-entry is blocked by inherited completion
+  variables (`colonial_empire_completed`, `sr_completed_<m>`). **Correction (#463's sweep):**
+  `je_world_war` removes `ww_fully_resolved` in `on_complete` / `on_fail`, so it does *not* block
+  re-entry on a winner, and a failed `je_digital_rights` re-arms and fails again at once. Both are open. je_heir_education is
   blocked by the heir's own variable. je_digital_rights and je_post_scarcity are blocked by their target
   law.
 - **Nuclear** (beyond the brief's four known items): `je_nuclear_program.txt:106-160` correctly zeroes the

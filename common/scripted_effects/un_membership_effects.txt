@@ -28,8 +28,8 @@ un_representation_monthly_update = {
 		# prestige (un_seat_monthly_update).
 		if = {
 			limit = { is_un_permanent_member = yes }
-			je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
-			je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
+			un_state_off = { MODIFIER = un_permanent_member_modifier }
+			un_state_off = { MODIFIER = un_security_council_modifier }
 			if = {
 				limit = { has_variable = un_permanent_subgp_months }
 				remove_variable = un_permanent_subgp_months
@@ -38,14 +38,16 @@ un_representation_monthly_update = {
 		# UN programmes and stances end, as their stop buttons end them: a
 		# suspended member runs none (ruling 3), and the start buttons refuse
 		# it. Every month while suspended, so an old save's are ended too.
-		je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
-		je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
-		je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
-		je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
-		je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
-		je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
-		je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
-		je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
+		# un_state_off forgets each mirror as well (§0.9), so a journal entry
+		# rebuilt after a revolution does not bring any of these back.
+		un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
+		un_state_off = { MODIFIER = un_peacekeeping_contributor_cost }
+		un_state_off = { MODIFIER = un_development_contributor_modifier }
+		un_state_off = { MODIFIER = un_development_contributor_cost }
+		un_state_off = { MODIFIER = un_human_rights_champion_modifier }
+		un_state_off = { MODIFIER = un_arms_control_participant_modifier }
+		un_state_off = { MODIFIER = un_champion_order_cost }
+		un_state_off = { MODIFIER = un_undermine_order_cost }
 	}
 	else_if = {
 		limit = { has_variable = un_rep_suspended }

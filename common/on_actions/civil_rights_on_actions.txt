@@ -1,0 +1,25 @@
+﻿# ============================================================================
+# CIVIL RIGHTS - revolution continuity (issue #463)
+# je_civil_rights's own pulse runs only while the entry is active. This pulse
+# carries what outlives it: the age of the outcome a resolved struggle left
+# behind, the save migration, and the sweep of an orphaned run marker. The
+# civil-war repair itself (cr_repair_after_civil_war) is called from the shared
+# te_civil_war_on_won (common/on_actions/te_civil_war_on_actions.txt, #467).
+# Design and variables: common/scripted_effects/civil_rights_effects.txt
+# § REVOLUTION CONTINUITY.
+# ============================================================================
+
+on_monthly_pulse_country = {
+	on_actions = {
+		civil_rights_country_monthly_on_action
+	}
+}
+
+# Counts the months since the outcome modifier was granted, so a winner gets back
+# only what the loser had left, forgets a record whose modifier has run out,
+# migrates saves from before #463, and sweeps an orphaned run marker.
+civil_rights_country_monthly_on_action = {
+	effect = {
+		cr_outcome_monthly_update = yes
+	}
+}

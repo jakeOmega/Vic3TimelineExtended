@@ -32,6 +32,8 @@ te_civil_war_on_start = {
 			limit = { exists = scope:target }
 			te_civil_war_record_start = yes
 			nd_custody_on_civil_war_start = yes
+			# The rebels share the nation's agricultural-diffusion bonuses (#460).
+			agdiff_on_uprising = yes
 		}
 	}
 }
@@ -92,12 +94,22 @@ on_civil_war_won = {
 	}
 }
 
-# Every system's repair runs between resolve and clear (#460–#465 plug in
-# here).
+# Every system's repair runs between resolve and clear, and reads what
+# te_civil_war_resolve_sides leaves: var:te_cw_rebels_won (1 when the
+# revolutionaries won), the winner's own var:te_cw_role (1 original, 2 rebel;
+# the merge keeps the winner's value) and scope:te_cw_loser (when it resolves).
+# Owner ruling 2026-09-26: a revolution's winner continues the nation, so each
+# repair restores what the loser held (#460-#465). Each is a no-op for a
+# loyalist winner, and none depends on the order of the others.
 te_civil_war_on_won = {
 	effect = {
 		te_civil_war_resolve_sides = yes
 		nd_custody_on_civil_war_won = yes
+		agdiff_repair_after_civil_war = yes		# #460
+		un_repair_after_civil_war = yes			# #461
+		te_monetary_repair_after_civil_war = yes	# #462
+		cr_repair_after_civil_war = yes			# #463
+		sr_repair_after_civil_war = yes			# #464
 		te_civil_war_clear = yes
 	}
 }

@@ -97,6 +97,22 @@
 				set_bar_progress = { name = un_authority_bar value = 50 }
 			}
 		}
+
+		# ---- The record a revolution's winner inherits (§0.9) ----
+		# This runs on every activation, and again on the entry a won revolution
+		# hands its winner: the loser's variables, none of its modifiers. Mark
+		# the entry and restore what the mirrors say we hold
+		# (un_state_effects.txt). Restore only: the revolution is still being
+		# wound up, so a "not the host" or "seats full" read here is not
+		# evidence, and nothing is forgotten on it. Whatever is left missing,
+		# and a restore that ran before the variables merged, is healed by the
+		# first monthly pulse, which also decides what cannot be honoured. A
+		# fresh activation has no mirrors, and the pulse drops the mark.
+		if = {
+			limit = { NOT = { has_variable = un_state_rebuild_pending } }
+			set_variable = un_state_rebuild_pending
+		}
+		un_state_restore_all = yes
 	}
 
 	complete = {
@@ -327,323 +343,340 @@
 
 	on_monthly_pulse = {
 		effect = {
-			# ---- Security Council cleanup (all countries with JE) ----
-			# Strip SC seat when leaving the UN. Sub-GP rank no longer immediately
-			# strips the seat — permanent members keep it for 10 years sub-GP
-			# (eligibility check below). Non-permanent SC seats are no longer
-			# created in the new model, but legacy saves may still have them.
+			# ---- A wiped entry first (§0.9, un_state_effects.txt) ----
+			# A revolution's winner inherits this entry without its modifiers.
+			# While the entry is marked for rebuilding and a mirrored modifier is
+			# still missing, this month only rebuilds it: everything below reads
+			# membership from the modifiers, and a modifier added in this effect
+			# block would be invisible to it, so it would drop our programme
+			# counters, re-enrol us and brand us a pariah. Otherwise the mirrors
+			# follow the modifiers (how an older save gains them), and the month
+			# runs as usual.
 			if = {
-				limit = {
-					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
-					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-				}
-				je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
-				je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
+				limit = { un_state_heal_needed = yes }
+				un_state_heal = yes
 			}
-			# A non-member draws no privileges (§0.8 ruling 5): a safety net for a
-			# path that ended membership without un_membership_end_effect.
-			if = {
-				limit = {
-					je:je_united_nations ?= { has_modifier = un_member_privileges_modifier }
-					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-				}
-				je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
-			}
-			# Strip non-permanent SC seats from sub-GP holders (legacy save migration).
-			if = {
-				limit = {
-					je:je_united_nations ?= { has_modifier = un_security_council_modifier }
-					NOT = { is_un_permanent_member = yes }
-					NOT = { country_rank >= rank_value:great_power }
-				}
-				je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
-			}
-			# A great power holding an orphaned Council seat from an old save
-			# (the charter once granted un_security_council_modifier alone) used
-			# to be upgraded here, first come first served. It is now simply a
-			# candidate for the next open seat, filled by prestige
-			# (un_seat_monthly_update, un_seat_effects.txt).
+			else = {
+				un_state_reconcile = yes
 
-			# ---- Treaty obligation auto-enrollment ----
-			# Membership only: a great power enrolled by treaty stands for an
-			# open permanent seat like any other member (un_join_organisation).
-			# Only a country that conducts its own foreign policy
-			# (un_membership_eligible, §0.8): a treaty obligation is no way
-			# round the Join button's gate.
-			if = {
-				limit = {
-					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-					modifier:country_un_membership_obligation_bool = yes
-					un_membership_eligible = yes
+				# ---- Security Council cleanup (all countries with JE) ----
+				# Strip SC seat when leaving the UN. Sub-GP rank no longer immediately
+				# strips the seat — permanent members keep it for 10 years sub-GP
+				# (eligibility check below). Non-permanent SC seats are no longer
+				# created in the new model, but legacy saves may still have them.
+				if = {
+					limit = {
+						je:je_united_nations ?= { has_modifier = un_security_council_modifier }
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					}
+					un_state_off = { MODIFIER = un_security_council_modifier }
+					un_state_off = { MODIFIER = un_permanent_member_modifier }
 				}
-				un_join_organisation = yes
-			}
+				# A non-member draws no privileges (§0.8 ruling 5): a safety net for a
+				# path that ended membership without un_membership_end_effect.
+				if = {
+					limit = {
+						je:je_united_nations ?= { has_modifier = un_member_privileges_modifier }
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+					}
+					je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
+				}
+				# Strip non-permanent SC seats from sub-GP holders (legacy save migration).
+				if = {
+					limit = {
+						je:je_united_nations ?= { has_modifier = un_security_council_modifier }
+						NOT = { is_un_permanent_member = yes }
+						NOT = { country_rank >= rank_value:great_power }
+					}
+					un_state_off = { MODIFIER = un_security_council_modifier }
+				}
+				# A great power holding an orphaned Council seat from an old save
+				# (the charter once granted un_security_council_modifier alone) used
+				# to be upgraded here, first come first served. It is now simply a
+				# candidate for the next open seat, filled by prestige
+				# (un_seat_monthly_update, un_seat_effects.txt).
 
-			# A member that has left stops paying for the contingents it sent at
-			# will (un_mission_service_refresh removes the cost for a
-			# non-member; the members' refresh is below).
-			if = {
-				limit = {
-					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-					OR = {
-						has_modifier = un_mission_service_cost
-						has_variable = un_msn_service_cached
+				# ---- Treaty obligation auto-enrollment ----
+				# Membership only: a great power enrolled by treaty stands for an
+				# open permanent seat like any other member (un_join_organisation).
+				# Only a country that conducts its own foreign policy
+				# (un_membership_eligible, §0.8): a treaty obligation is no way
+				# round the Join button's gate.
+				if = {
+					limit = {
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+						modifier:country_un_membership_obligation_bool = yes
+						un_membership_eligible = yes
+					}
+					un_join_organisation = yes
+				}
+
+				# A member that has left stops paying for the contingents it sent at
+				# will (un_mission_service_refresh removes the cost for a
+				# non-member; the members' refresh is below).
+				if = {
+					limit = {
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+						OR = {
+							has_modifier = un_mission_service_cost
+							has_variable = un_msn_service_cached
+						}
+					}
+					un_mission_service_refresh = yes
+				}
+
+				# ---- Suspended representation (§0.8 ruling 9) ----
+				# Announce a suspension or restoration once, and strip a suspended
+				# member's permanent seat. Before the member block, so the dues and
+				# privileges below see the same month.
+				un_representation_monthly_update = yes
+
+				# ---- Member-only logic ----
+				if = {
+					limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+
+					# Authority moves ONCE globally per month, toward the target computed
+					# from the seven pillars, in un_global_authority_on_action
+					# (un_authority_monthly_update, un_authority_effects.txt). Nothing
+					# per-member is applied here.
+
+					# Refresh contributor-cost cached expense vars so the JE-scoped
+					# add_modifier multipliers track current GDP. JE scope can't read
+					# country properties like gdp directly inside multiplier blocks.
+					if = {
+						limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
+						set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
+					}
+					if = {
+						limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
+						set_variable = { name = un_development_expense_cached value = un_program_expense_value }
+					}
+
+					# ---- Assessed dues (redesign phase 5, un_dues_effects.txt) ----
+					# This month's assessment, or a month in arrears for a member
+					# withholding its dues (Article 19 after 24 of them). The single
+					# refresh site for un_dues_modifier.
+					# A suspended member is never assessed itself: its represented
+					# overlord is billed for its seat (un_dues_assessed_gdp, §0.8
+					# ruling 4). Its arrears, if any, neither grow nor clear.
+					if = {
+						limit = { un_representation_suspended = yes }
+						if = {
+							limit = { has_modifier = un_dues_modifier }
+							remove_modifier = un_dues_modifier
+						}
+					}
+					else = {
+						un_dues_country_monthly_update = yes
+					}
+
+					# ---- Missions joined at will (un_mission_effects.txt) ----
+					# The AI sends or recalls a contingent the way a player does from
+					# the chamber; then this month's cost of every mission we serve
+					# in at will (un_mission_service_cost's refresh).
+					if = {
+						limit = { is_ai = yes }
+						un_mission_ai_monthly = yes
+					}
+					un_mission_service_refresh = yes
+
+					# ---- Membership privileges (§0.8 ruling 5) ----
+					# Represented, or suspended with the seat carried by a paying
+					# overlord. The join paths add it at once; this reconciles it
+					# every month, which is also how an existing save gains it.
+					if = {
+						limit = { un_member_draws_benefits = yes }
+						if = {
+							limit = { NOT = { je:je_united_nations ?= { has_modifier = un_member_privileges_modifier } } }
+							je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
+						}
+					}
+					else_if = {
+						limit = { je:je_united_nations ?= { has_modifier = un_member_privileges_modifier } }
+						je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
+					}
+
+					# ---- Apply scaled UN membership modifier ----
+					# Modifier stays applied per-member; the multiplier reads the shared
+					# global authority. Members of a bloc with the Multilateral Institutions
+					# principle scale the benefit further by (1 + country_un_institutional_alignment)
+					# -- 0.5 alignment = +50% magnitude. Non-aligned members read 0, so x1.
+					# Paid from the Contested tier up (redesign phase 2): a Moribund UN
+					# pays its members nothing. And only to a member that draws the
+					# benefits (§0.8): represented, or its seat carried.
+					if = {
+						limit = {
+							un_tier_at_least_contested = yes
+							un_member_draws_benefits = yes
+						}
+						je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
+						je:je_united_nations ?= { add_modifier = {
+								name = un_membership_benefits_modifier
+								multiplier = {
+									value = global_var:un_authority
+									divide = 50
+									multiply = {
+										value = 1
+										add = modifier:country_un_institutional_alignment
+									}
+								} }
+						}
+					}
+					else = {
+						je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
+					}
+
+					# ---- Retired: the blanket infamy modifier ----
+					# Redesign phase 5 (§5.2): a war goal added without a mandate now
+					# carries its own infamy surcharge (un_teeth_war_goal_surcharge),
+					# so the flat +10% infamy generation every member used to carry
+					# at authority 50+ is gone. A save that carries it loses it here.
+					if = {
+						limit = { je:je_united_nations ?= { has_modifier = un_high_authority_infamy_modifier } }
+						je:je_united_nations ?= { remove_modifier = un_high_authority_infamy_modifier }
+					}
+
+					# ---- NPT enforcement (requires the IAEA) ----
+					# From the Strong tier (redesign phase 5; it was authority 80,
+					# leaving at 75), non-nuclear members are held to disarmament.
+					# The tier carries the hysteresis the 80/75 pair used to.
+					if = {
+						limit = {
+							has_global_variable = un_agency_iaea
+							un_tier_at_least_strong = yes
+							NOT = { has_modifier = nuclear_power }
+							NOT = { je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier } }
+						}
+						je:je_united_nations ?= { add_modifier = { name = un_npt_disarmament_modifier } }
+					}
+					# Remove if the tier drops or they become nuclear
+					if = {
+						limit = {
+							je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier }
+							OR = {
+								NOT = { un_tier_at_least_strong = yes }
+								has_modifier = nuclear_power
+								NOT = { has_global_variable = un_agency_iaea }
+							}
+						}
+						je:je_united_nations ?= { remove_modifier = un_npt_disarmament_modifier }
+					}
+
+					# ---- Permanent Member eligibility re-check ----
+					# Seats are filled by prestige (un_seat_effects.txt). Here we track
+					# sub-GP duration: a permanent member that falls below GP rank for
+					# 10+ years (120 months) loses the seat, which the next month's
+					# un_seat_monthly_update gives to the great-power member with the
+					# most prestige. (Captures real instability — e.g., a former GP whose
+					# collapse is permanent eventually loses its veto. See Q2 in the
+					# design doc.)
+					if = {
+						limit = {
+							is_un_permanent_member = yes
+							NOT = { country_rank >= rank_value:great_power }
+						}
+						if = {
+							limit = { NOT = { has_variable = un_permanent_subgp_months } }
+							set_variable = { name = un_permanent_subgp_months value = 0 }
+						}
+						change_variable = { name = un_permanent_subgp_months add = 1 }
+					}
+					# Reset counter when permanent member regains GP rank
+					if = {
+						limit = {
+							is_un_permanent_member = yes
+							country_rank >= rank_value:great_power
+							has_variable = un_permanent_subgp_months
+						}
+						remove_variable = un_permanent_subgp_months
+					}
+					# Strip permanent status after sustained sub-GP rank
+					if = {
+						limit = { un_permanent_member_eligibility_lost = yes }
+						un_state_off = { MODIFIER = un_permanent_member_modifier }
+						un_state_off = { MODIFIER = un_security_council_modifier }
+						if = {
+							limit = { has_variable = un_permanent_subgp_months }
+							remove_variable = un_permanent_subgp_months
+						}
 					}
 				}
-				un_mission_service_refresh = yes
-			}
 
-			# ---- Suspended representation (§0.8 ruling 9) ----
-			# Announce a suspension or restoration once, and strip a suspended
-			# member's permanent seat. Before the member block, so the dues and
-			# privileges below see the same month.
-			un_representation_monthly_update = yes
-
-			# ---- Member-only logic ----
-			if = {
-				limit = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-
-				# Authority moves ONCE globally per month, toward the target computed
-				# from the seven pillars, in un_global_authority_on_action
-				# (un_authority_monthly_update, un_authority_effects.txt). Nothing
-				# per-member is applied here.
-
-				# Refresh contributor-cost cached expense vars so the JE-scoped
-				# add_modifier multipliers track current GDP. JE scope can't read
-				# country properties like gdp directly inside multiplier blocks.
+				# Sync progress bar to the single global authority value for ALL JE holders
+				# (members and non-members alike — the bar is now a global fact). Needs
+				# scope:journal_entry, which only the per-country pulse has, so it stays
+				# here rather than in the global updater.
 				if = {
-					limit = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier } }
-					set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
-				}
-				if = {
-					limit = { je:je_united_nations ?= { has_modifier = un_development_contributor_modifier } }
-					set_variable = { name = un_development_expense_cached value = un_program_expense_value }
-				}
-
-				# ---- Assessed dues (redesign phase 5, un_dues_effects.txt) ----
-				# This month's assessment, or a month in arrears for a member
-				# withholding its dues (Article 19 after 24 of them). The single
-				# refresh site for un_dues_modifier.
-				# A suspended member is never assessed itself: its represented
-				# overlord is billed for its seat (un_dues_assessed_gdp, §0.8
-				# ruling 4). Its arrears, if any, neither grow nor clear.
-				if = {
-					limit = { un_representation_suspended = yes }
-					if = {
-						limit = { has_modifier = un_dues_modifier }
-						remove_modifier = un_dues_modifier
+					limit = { has_global_variable = un_authority }
+					scope:journal_entry = {
+						set_bar_progress = { name = un_authority_bar value = global_var:un_authority }
 					}
 				}
-				else = {
-					un_dues_country_monthly_update = yes
-				}
 
-				# ---- Missions joined at will (un_mission_effects.txt) ----
-				# The AI sends or recalls a contingent the way a player does from
-				# the chamber; then this month's cost of every mission we serve
-				# in at will (un_mission_service_cost's refresh).
+				# ---- Non-member pariah status (all countries with JE) ----
+				# Grows in steps with the tier (redesign phase 2, design §4.2):
+				# relations and prestige from Established, trade and leverage as
+				# well from Strong. The tier carries the hysteresis the old 60/55
+				# pair used to. The single refresh site for both modifiers.
+				# Only an eligible outsider is a pariah (§0.8 ruling 10): a puppet or
+				# colony cannot join, so staying out is not its choice. An expelled
+				# country, or one that walked out, is eligible by type and stays one.
 				if = {
-					limit = { is_ai = yes }
-					un_mission_ai_monthly = yes
-				}
-				un_mission_service_refresh = yes
-
-				# ---- Membership privileges (§0.8 ruling 5) ----
-				# Represented, or suspended with the seat carried by a paying
-				# overlord. The join paths add it at once; this reconciles it
-				# every month, which is also how an existing save gains it.
-				if = {
-					limit = { un_member_draws_benefits = yes }
+					limit = {
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+						un_membership_eligible = yes
+						un_tier_at_least_established = yes
+					}
 					if = {
-						limit = { NOT = { je:je_united_nations ?= { has_modifier = un_member_privileges_modifier } } }
-						je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
+						limit = { NOT = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_modifier } } }
+						je:je_united_nations ?= { add_modifier = { name = un_nonmember_pariah_modifier } }
 					}
 				}
 				else_if = {
-					limit = { je:je_united_nations ?= { has_modifier = un_member_privileges_modifier } }
-					je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
+					limit = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_modifier } }
+					je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
 				}
-
-				# ---- Apply scaled UN membership modifier ----
-				# Modifier stays applied per-member; the multiplier reads the shared
-				# global authority. Members of a bloc with the Multilateral Institutions
-				# principle scale the benefit further by (1 + country_un_institutional_alignment)
-				# -- 0.5 alignment = +50% magnitude. Non-aligned members read 0, so x1.
-				# Paid from the Contested tier up (redesign phase 2): a Moribund UN
-				# pays its members nothing. And only to a member that draws the
-				# benefits (§0.8): represented, or its seat carried.
 				if = {
 					limit = {
-						un_tier_at_least_contested = yes
-						un_member_draws_benefits = yes
-					}
-					je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
-					je:je_united_nations ?= { add_modifier = {
-							name = un_membership_benefits_modifier
-							multiplier = {
-								value = global_var:un_authority
-								divide = 50
-								multiply = {
-									value = 1
-									add = modifier:country_un_institutional_alignment
-								}
-							} }
-					}
-				}
-				else = {
-					je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
-				}
-
-				# ---- Retired: the blanket infamy modifier ----
-				# Redesign phase 5 (§5.2): a war goal added without a mandate now
-				# carries its own infamy surcharge (un_teeth_war_goal_surcharge),
-				# so the flat +10% infamy generation every member used to carry
-				# at authority 50+ is gone. A save that carries it loses it here.
-				if = {
-					limit = { je:je_united_nations ?= { has_modifier = un_high_authority_infamy_modifier } }
-					je:je_united_nations ?= { remove_modifier = un_high_authority_infamy_modifier }
-				}
-
-				# ---- NPT enforcement (requires the IAEA) ----
-				# From the Strong tier (redesign phase 5; it was authority 80,
-				# leaving at 75), non-nuclear members are held to disarmament.
-				# The tier carries the hysteresis the 80/75 pair used to.
-				if = {
-					limit = {
-						has_global_variable = un_agency_iaea
+						NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+						un_membership_eligible = yes
 						un_tier_at_least_strong = yes
-						NOT = { has_modifier = nuclear_power }
-						NOT = { je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier } }
-					}
-					je:je_united_nations ?= { add_modifier = { name = un_npt_disarmament_modifier } }
-				}
-				# Remove if the tier drops or they become nuclear
-				if = {
-					limit = {
-						je:je_united_nations ?= { has_modifier = un_npt_disarmament_modifier }
-						OR = {
-							NOT = { un_tier_at_least_strong = yes }
-							has_modifier = nuclear_power
-							NOT = { has_global_variable = un_agency_iaea }
-						}
-					}
-					je:je_united_nations ?= { remove_modifier = un_npt_disarmament_modifier }
-				}
-
-				# ---- Permanent Member eligibility re-check ----
-				# Seats are filled by prestige (un_seat_effects.txt). Here we track
-				# sub-GP duration: a permanent member that falls below GP rank for
-				# 10+ years (120 months) loses the seat, which the next month's
-				# un_seat_monthly_update gives to the great-power member with the
-				# most prestige. (Captures real instability — e.g., a former GP whose
-				# collapse is permanent eventually loses its veto. See Q2 in the
-				# design doc.)
-				if = {
-					limit = {
-						is_un_permanent_member = yes
-						NOT = { country_rank >= rank_value:great_power }
 					}
 					if = {
-						limit = { NOT = { has_variable = un_permanent_subgp_months } }
-						set_variable = { name = un_permanent_subgp_months value = 0 }
-					}
-					change_variable = { name = un_permanent_subgp_months add = 1 }
-				}
-				# Reset counter when permanent member regains GP rank
-				if = {
-					limit = {
-						is_un_permanent_member = yes
-						country_rank >= rank_value:great_power
-						has_variable = un_permanent_subgp_months
-					}
-					remove_variable = un_permanent_subgp_months
-				}
-				# Strip permanent status after sustained sub-GP rank
-				if = {
-					limit = { un_permanent_member_eligibility_lost = yes }
-					je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
-					je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
-					if = {
-						limit = { has_variable = un_permanent_subgp_months }
-						remove_variable = un_permanent_subgp_months
+						limit = { NOT = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_strong_modifier } } }
+						je:je_united_nations ?= { add_modifier = { name = un_nonmember_pariah_strong_modifier } }
 					}
 				}
-			}
-
-			# Sync progress bar to the single global authority value for ALL JE holders
-			# (members and non-members alike — the bar is now a global fact). Needs
-			# scope:journal_entry, which only the per-country pulse has, so it stays
-			# here rather than in the global updater.
-			if = {
-				limit = { has_global_variable = un_authority }
-				scope:journal_entry = {
-					set_bar_progress = { name = un_authority_bar value = global_var:un_authority }
+				else_if = {
+					limit = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_strong_modifier } }
+					je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_strong_modifier }
 				}
-			}
 
-			# ---- Non-member pariah status (all countries with JE) ----
-			# Grows in steps with the tier (redesign phase 2, design §4.2):
-			# relations and prestige from Established, trade and leverage as
-			# well from Strong. The tier carries the hysteresis the old 60/55
-			# pair used to. The single refresh site for both modifiers.
-			# Only an eligible outsider is a pariah (§0.8 ruling 10): a puppet or
-			# colony cannot join, so staying out is not its choice. An expelled
-			# country, or one that walked out, is eligible by type and stays one.
-			if = {
-				limit = {
-					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-					un_membership_eligible = yes
-					un_tier_at_least_established = yes
-				}
-				if = {
-					limit = { NOT = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_modifier } } }
-					je:je_united_nations ?= { add_modifier = { name = un_nonmember_pariah_modifier } }
-				}
-			}
-			else_if = {
-				limit = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_modifier } }
-				je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
-			}
-			if = {
-				limit = {
-					NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
-					un_membership_eligible = yes
-					un_tier_at_least_strong = yes
-				}
-				if = {
-					limit = { NOT = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_strong_modifier } } }
-					je:je_united_nations ?= { add_modifier = { name = un_nonmember_pariah_strong_modifier } }
-				}
-			}
-			else_if = {
-				limit = { je:je_united_nations ?= { has_modifier = un_nonmember_pariah_strong_modifier } }
-				je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_strong_modifier }
-			}
+				# ---- Authority history (the chart in the authority widget) ----
+				un_authority_record_history = yes
 
-			# ---- Authority history (the chart in the authority widget) ----
-			un_authority_record_history = yes
+				# ---- The convention regimes (redesign phase 5) ----
+				# Re-read our terms when the tier has changed or a year has
+				# passed: the conventions' member modifiers at the current E, the
+				# winner or loser modifier each gives us, shared intelligence and
+				# our interest groups' reaction from Strong, and a colony's liberty
+				# under the decolonisation declaration. The single refresh site
+				# for every un_regime_* modifier (un_regime_effects.txt). Outside
+				# the member block: a colony of a member is reached through its
+				# overlord, whether or not it holds a seat itself.
+				un_regime_country_pulse = yes
 
-			# ---- The convention regimes (redesign phase 5) ----
-			# Re-read our terms when the tier has changed or a year has
-			# passed: the conventions' member modifiers at the current E, the
-			# winner or loser modifier each gives us, shared intelligence and
-			# our interest groups' reaction from Strong, and a colony's liberty
-			# under the decolonisation declaration. The single refresh site
-			# for every un_regime_* modifier (un_regime_effects.txt). Outside
-			# the member block: a colony of a member is reached through its
-			# overlord, whether or not it holds a seat itself.
-			un_regime_country_pulse = yes
-
-			# ---- International standing (all countries with the JE) ----
-			# The whole national-standing system's monthly work, in one call:
-			# seed a new member at the neutral value, advance the rolling year,
-			# tick the ongoing-programme and undermining counters, award the
-			# capped programme accrual, and swap the tier modifier. This is the
-			# SINGLE refresh site for the un_standing_*_modifier family
-			# (common/scripted_effects/un_standing_effects.txt). It sits outside
-			# the member-only block on purpose: a country that has left still
-			# needs its counters dropped and its tier modifier removed.
-			un_standing_country_pulse = yes
+				# ---- International standing (all countries with the JE) ----
+				# The whole national-standing system's monthly work, in one call:
+				# seed a new member at the neutral value, advance the rolling year,
+				# tick the ongoing-programme and undermining counters, award the
+				# capped programme accrual, and swap the tier modifier. This is the
+				# SINGLE refresh site for the un_standing_*_modifier family
+				# (common/scripted_effects/un_standing_effects.txt). It sits outside
+				# the member-only block on purpose: a country that has left still
+				# needs its counters dropped and its tier modifier removed.
+				un_standing_country_pulse = yes
+			}
 		}
 	}
 
@@ -687,6 +720,8 @@
 
 	weight = 500
 	should_be_pinned_by_default_uninvolved_or_context = yes
+	# Inherited, but with no modifiers: `immediate` restores them from the
+	# mirrors and the monthly pulse heals what is left (§0.9).
 	can_revolution_inherit = yes
 	can_deactivate = no
 	should_update_on_player_command = yes

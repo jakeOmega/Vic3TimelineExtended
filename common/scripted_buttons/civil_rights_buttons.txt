@@ -6,6 +6,11 @@
 # historical "coopt moderates, jail radicals" stance) but no other pro/anti
 # pair coexists. Each button increments a months-tracker variable read by
 # je_civil_rights' path-dependent on_complete / on_fail.
+#
+# Each modifier is mirrored in a cr_policy_* country variable, set and removed
+# together with it: a revolution's winner inherits variables but no modifiers,
+# and cr_sync_policy_mirrors (civil_rights_effects.txt) rebuilds the policies from
+# the mirrors. Keep the two in step in any new button.
 # ============================================================================
 
 # ------ Grassroots Organizing (pro) ------
@@ -48,6 +53,7 @@ cr_grassroots_organizing = {
 			text = "CR_GRASSROOTS_ORGANIZING_DESC"
 			add_modifier = { name = cr_grassroots_modifier }
 		}
+		set_variable = cr_policy_grassroots
 	}
 }
 
@@ -66,6 +72,7 @@ cr_remove_grassroots_organizing = {
 			text = "CR_REMOVE_GRASSROOTS_ORGANIZING_DESC"
 			remove_modifier = cr_grassroots_modifier
 		}
+		if = { limit = { has_variable = cr_policy_grassroots } remove_variable = cr_policy_grassroots }
 	}
 }
 
@@ -113,6 +120,7 @@ cr_federal_protection = {
 			text = "CR_FEDERAL_PROTECTION_DESC"
 			add_modifier = { name = cr_federal_protection_modifier }
 		}
+		set_variable = cr_policy_federal
 	}
 }
 
@@ -131,6 +139,7 @@ cr_remove_federal_protection = {
 			text = "CR_REMOVE_FEDERAL_PROTECTION_DESC"
 			remove_modifier = cr_federal_protection_modifier
 		}
+		if = { limit = { has_variable = cr_policy_federal } remove_variable = cr_policy_federal }
 	}
 }
 
@@ -164,6 +173,7 @@ cr_gradualist_accommodation = {
 			text = "CR_GRADUALIST_ACCOMMODATION_DESC"
 			add_modifier = { name = cr_gradualist_modifier }
 		}
+		set_variable = cr_policy_gradualist
 	}
 }
 
@@ -182,6 +192,7 @@ cr_remove_gradualist_accommodation = {
 			text = "CR_REMOVE_GRADUALIST_ACCOMMODATION_DESC"
 			remove_modifier = cr_gradualist_modifier
 		}
+		if = { limit = { has_variable = cr_policy_gradualist } remove_variable = cr_policy_gradualist }
 	}
 }
 
@@ -224,6 +235,7 @@ cr_cooptation_token_reform = {
 			text = "CR_COOPTATION_TOKEN_REFORM_DESC"
 			add_modifier = { name = cr_cooptation_modifier }
 		}
+		set_variable = cr_policy_cooptation
 	}
 }
 
@@ -242,9 +254,11 @@ cr_remove_cooptation_token_reform = {
 			text = "CR_REMOVE_COOPTATION_TOKEN_REFORM_DESC"
 			remove_modifier = cr_cooptation_modifier
 			# Also drop the expired-marker if present so re-toggling resets the
-			# 12-month bar bonus window cleanly.
-			remove_modifier = cr_cooptation_expired
+			# 12-month bar bonus window cleanly. Guarded: removing a modifier the
+			# country does not hold logs "not found" to error.log.
+			remove_modifier_if_exists_effect = { MODIFIER = cr_cooptation_expired }
 		}
+		if = { limit = { has_variable = cr_policy_cooptation } remove_variable = cr_policy_cooptation }
 	}
 }
 
@@ -284,6 +298,7 @@ cr_suppression_crackdown = {
 			text = "CR_SUPPRESSION_CRACKDOWN_DESC"
 			add_modifier = { name = cr_suppression_modifier }
 		}
+		set_variable = cr_policy_suppression
 	}
 }
 
@@ -302,6 +317,7 @@ cr_remove_suppression_crackdown = {
 			text = "CR_REMOVE_SUPPRESSION_CRACKDOWN_DESC"
 			remove_modifier = cr_suppression_modifier
 		}
+		if = { limit = { has_variable = cr_policy_suppression } remove_variable = cr_policy_suppression }
 	}
 }
 
@@ -342,6 +358,7 @@ cr_segregationist_consolidation = {
 			text = "CR_SEGREGATIONIST_CONSOLIDATION_DESC"
 			add_modifier = { name = cr_segregationist_modifier }
 		}
+		set_variable = cr_policy_segregationist
 	}
 }
 
@@ -360,5 +377,6 @@ cr_remove_segregationist_consolidation = {
 			text = "CR_REMOVE_SEGREGATIONIST_CONSOLIDATION_DESC"
 			remove_modifier = cr_segregationist_modifier
 		}
+		if = { limit = { has_variable = cr_policy_segregationist } remove_variable = cr_policy_segregationist }
 	}
 }

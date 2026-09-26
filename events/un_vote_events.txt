@@ -755,8 +755,8 @@ un_vote.2 = {
 			if = {
 				limit = { exists = scope:un_vote_target }
 				scope:un_vote_target = {
-					je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
-					je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
+					un_state_off = { MODIFIER = un_permanent_member_modifier }
+					un_state_off = { MODIFIER = un_security_council_modifier }
 					add_modifier = {
 						name = un_withdrawal_penalty_modifier
 						days = long_modifier_time
@@ -1168,7 +1168,7 @@ un_vote.2 = {
 							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 							NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } }
 						}
-						je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
+						un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
 					}
 				}
 			}
@@ -1476,7 +1476,7 @@ un_vote.2 = {
 							je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_modifier }
 							NOT = { je:je_united_nations ?= { has_modifier = un_peacekeeping_contributor_cost } }
 						}
-						je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
+						un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
 					}
 				}
 				if = {

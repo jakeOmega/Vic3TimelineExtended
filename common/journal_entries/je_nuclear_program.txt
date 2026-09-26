@@ -136,7 +136,7 @@ je_nuclear_program = {
 			name = nuclear_weapon_program_progress
 			value = 0
 		}
-		set_variable = {
+		set_variable = { # REVIEWED 2026-09-26: a new record has no nuclear_weapon_program_funding modifier, so funding restarts at 0 to match it
 			name = nuclear_weapons_program_funding
 			value = 0
 		}
@@ -146,10 +146,10 @@ je_nuclear_program = {
 		# managed modifiers are on it, whatever the trackers from a previous
 		# activation say. They are put on by nd_rebuild_posture_modifiers from
 		# the first weekly pulse, not here — see its header.
-		set_variable = { name = nd_doctrine_mod_on value = 0 }
-		set_variable = { name = nd_readiness_mod_on value = 0 }
-		set_variable = { name = nd_upkeep_mod_on value = 0 }
-		if = {
+		set_variable = { name = nd_doctrine_mod_on value = 0 } # REVIEWED 2026-09-26: tracker of a modifier a new record lacks; the first weekly pulse re-adds it
+		set_variable = { name = nd_readiness_mod_on value = 0 } # REVIEWED 2026-09-26: tracker of a modifier a new record lacks; the first weekly pulse re-adds it
+		set_variable = { name = nd_upkeep_mod_on value = 0 } # REVIEWED 2026-09-26: tracker of a modifier a new record lacks; the first weekly pulse re-adds it
+		if = { # REVIEWED 2026-09-26: clearing the marker makes the first weekly pulse rebuild the posture modifiers on this record
 			limit = { has_variable = nd_posture_on_merged_entry }
 			remove_variable = nd_posture_on_merged_entry
 		}

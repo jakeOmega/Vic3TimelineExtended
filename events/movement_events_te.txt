@@ -1050,6 +1050,7 @@ movement_events_te.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = movement_crushed_order_restored_modifier }
 		social_regressive_reaction_effect = { DAYS = long_modifier_time }
 		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 	}
@@ -1068,6 +1069,7 @@ movement_events_te.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = movement_crushed_assimilation_drive_modifier }
 		social_regressive_reaction_effect = { DAYS = long_modifier_time }
 	}
 
@@ -1085,6 +1087,7 @@ movement_events_te.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = movement_crushed_segregation_enforced_modifier }
 		social_regressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
 		discriminated_pops_radicalism_effect = { VALUE = medium_radicals }
 	}
@@ -1107,6 +1110,7 @@ movement_events_te.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = movement_crushed_political_suppression_modifier }
 		social_regressive_reaction_effect = { DAYS = long_modifier_time }
 		discriminated_pops_radicalism_effect = { VALUE = small_radicals }
 	}
@@ -1125,6 +1129,7 @@ movement_events_te.100 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = movement_crushed_expulsion_modifier }
 		social_regressive_reform_major_reaction_effect = { DAYS = long_modifier_time }
 		discriminated_pops_radicalism_effect = { VALUE = large_radicals }
 	}
@@ -1981,6 +1986,7 @@ movement_events_te.200 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = civil_rights_triumph_modifier }
 	}
 }
 
@@ -2024,6 +2030,7 @@ movement_events_te.220 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = civil_rights_triumph_federal_modifier }
 	}
 }
 
@@ -2062,6 +2069,7 @@ movement_events_te.221 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = civil_rights_triumph_grassroots_modifier }
 	}
 }
 
@@ -2100,6 +2108,7 @@ movement_events_te.222 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = civil_rights_triumph_gradualist_modifier }
 	}
 }
 
@@ -2138,6 +2147,7 @@ movement_events_te.223 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = civil_rights_triumph_coopted_modifier }
 	}
 }
 
@@ -2217,6 +2227,7 @@ movement_events_te.240 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = civil_rights_hollow_victory_modifier }
 		every_political_movement = {
 			limit = { is_political_movement_type = movement_civil_rights }
 			add_modifier = {
@@ -2246,6 +2257,7 @@ movement_events_te.240 = {
 			days = long_modifier_time
 			is_decaying = yes
 		}
+		cr_record_outcome_modifier = { MODIFIER = civil_disobedience_crackdown_modifier }
 	}
 }
 

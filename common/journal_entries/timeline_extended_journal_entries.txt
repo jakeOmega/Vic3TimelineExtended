@@ -219,26 +219,34 @@ je_create_new_religion = {
 		is_ai = no
 	}
 
+	# The wizard's counters and stage are seeded only when absent. `immediate`
+	# runs again on every activation and on the copy of this entry a
+	# revolution's winner inherits, after the loser's variables have merged in
+	# (scripting_best_practices.md § "What a Civil War's Winner Inherits").
+	# The per-pick custom_religion_*_selected flags are never reset here, so
+	# zeroing the counters beside them sent the player back to stage 1 with
+	# the old picks still marked: more picks than the caps allow, and kept picks
+	# that could not be deselected (je_immediate_reset_audit, 2026-09-26).
 	immediate = {
-		set_variable = {
-			name = selected_idelogies
-			value = 0
+		if = {
+			limit = { NOT = { has_variable = selected_idelogies } }
+			set_variable = { name = selected_idelogies value = 0 }
 		}
-		set_variable = {
-			name = selected_traits
-			value = 0
+		if = {
+			limit = { NOT = { has_variable = selected_traits } }
+			set_variable = { name = selected_traits value = 0 }
 		}
-		set_variable = {
-			name = selected_name
-			value = 0
+		if = {
+			limit = { NOT = { has_variable = selected_name } }
+			set_variable = { name = selected_name value = 0 }
 		}
-		set_variable = {
-			name = selected_religion_group
-			value = 0
+		if = {
+			limit = { NOT = { has_variable = selected_religion_group } }
+			set_variable = { name = selected_religion_group value = 0 }
 		}
-		set_variable = {
-			name = current_stage
-			value = 1
+		if = {
+			limit = { NOT = { has_variable = current_stage } }
+			set_variable = { name = current_stage value = 1 }
 		}
 	}
 

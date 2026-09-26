@@ -20,8 +20,10 @@
 # whose absence is load-bearing — and NONE of them is ever removed (a `remove_variable` on a
 # variable read by an `add_modifier { multiplier = ... }` is what
 # modifier_multiplier_var_audit exists to catch). No new monetary variable may
-# be introduced in je_banking.txt's `immediate` — that block resets unguarded
-# and the JE is can_revolution_inherit.
+# be introduced in je_banking.txt's `immediate` — that block runs again on the
+# copy of the entry a revolution's winner inherits, so anything set there must
+# be `has_variable`-guarded unless resetting it is the point (as with
+# te_mon_stance_band_applied).
 #
 #   te_policy_rate_target   regime range, integer   the dial's setting (§5)
 #   te_policy_rate          regime range, fractional  drifts toward the target
@@ -349,12 +351,14 @@
 # banking_cycle_apply_stance_band (common/scripted_effects/banking_cycle_effects.txt),
 # not to the monthly update: it is bookkeeping for the banking journal entry's
 # stance modifier, so it only exists for countries that have that journal entry.
-# It follows the same two rules — initialised behind `has_variable`, never
-# removed.
+# It is never removed, but it is not initialised only behind `has_variable`:
+# je_banking_cycle's `immediate` sets it to 0 on every activation, including the
+# copy a revolution's winner inherits, which carries no band (civil-war audit
+# F7, #465). On 0 the swap clears all five bands before adding.
 #
 #   te_mon_stance_band_applied  0 to 5              which banking_stance_band_* is
 #                                                   currently on je_banking_cycle;
-#                                                   0 = none applied yet
+#                                                   0 = none recorded
 #
 # WORKING VARIABLES (task 2, common/scripted_effects/te_monetary_effects.txt).
 # Not part of the displayed contract, but they follow the same two rules —
@@ -404,6 +408,25 @@
 # nothing in the mod fires either event. The harness exists because every AI
 # country is delegated, so no observer run ever exercises the manual path §9.1
 # calls unstable by design.
+#
+# A FOURTH EXCEPTION: THE END OF A REVOLUTION (#462). A revolution's winner
+# keeps its OWN value of every variable it already held (scripting_best_
+# practices.md § "What a Civil War's Winner Inherits"), and the rebels have held
+# a full set since te_monetary_on_country_released — so on a rebel win
+# te_monetary_inherit_central_bank (common/scripted_effects/
+# te_monetary_civil_war_effects.txt) writes the LOSER'S values over the
+# winner's, once, through te_monetary_repair_after_civil_war, which the shared
+# civil-war layer calls from te_civil_war_on_won
+# (common/on_actions/te_civil_war_on_actions.txt): the vault and hot money
+# (added), the state the update integrates (policy rate, inflation, the walks,
+# the peg, FX, the clocks), the player's choices and the arrangements. It writes no
+# `_applied` tracker and nothing the update recomputes; its header says which
+# variable is in which group and why. A NEW VARIABLE ADDED TO THIS CONTRACT
+# MUST BE CLASSIFIED THERE TOO — test_monetary_civil_war.py pins the list.
+# Its once-per-loser marker, te_mon_cw_bank_taken, is civil-war bookkeeping,
+# not part of this contract: a scope variable naming the loser whose bank was
+# taken, removed by the monthly on-action once that object no longer resolves
+# (common/on_actions/te_monetary_on_actions.txt).
 # ============================================================================
 
 
@@ -821,7 +844,7 @@ te_mon_scaled_debt_premium = {
 # restated here because those triggers read var:finance_cycle_value itself.
 #
 # finance_cycle_value and bubble_pressure are COUNTRY variables owned by
-# je_banking_cycle's `immediate` (je_banking.txt:119-133) — the same variables
+# je_banking_cycle's `immediate` (je_banking.txt, seeded only when absent) — the same variables
 # harvest conditions read through `owner = { ... }`. A country without the
 # journal entry has neither, so every branch carries its own has_variable guard
 # and such a country simply leans by 0. The guard matters doubly now: without

@@ -477,7 +477,7 @@ un_dissolve_strip_country = {
 	je:je_united_nations ?= { remove_modifier = un_npt_disarmament_modifier }
 	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_modifier }
 	je:je_united_nations ?= { remove_modifier = un_nonmember_pariah_strong_modifier }
-	je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
+	un_state_off = { MODIFIER = un_headquarters_modifier }
 	un_standing_clear_tier_modifiers = yes
 	remove_modifier = un_sanctions_target_modifier
 	remove_modifier = un_sanctions_voluntary_target_modifier
@@ -510,7 +510,7 @@ un_dissolve_strip_country = {
 # Called from un_leave_button (inside its tooltip) and un_dissolve_strip_country.
 # Scope: country
 un_membership_end_effect = {
-	je:je_united_nations ?= { remove_modifier = un_member_modifier }
+	un_state_off = { MODIFIER = un_member_modifier }
 	je:je_united_nations ?= { remove_modifier = un_member_privileges_modifier }
 	# Dues stop with membership; arrears do not (redesign phase 5): a member
 	# that walks out owing money rejoins still withholding.
@@ -528,37 +528,37 @@ un_membership_end_effect = {
 		remove_modifier = un_regime_colony_liberty_modifier
 	}
 	je:je_united_nations ?= { remove_modifier = un_membership_benefits_modifier }
-	je:je_united_nations ?= { remove_modifier = un_security_council_modifier }
-	je:je_united_nations ?= { remove_modifier = un_permanent_member_modifier }
-	je:je_united_nations ?= { remove_modifier = un_founding_member_modifier }
+	un_state_off = { MODIFIER = un_security_council_modifier }
+	un_state_off = { MODIFIER = un_permanent_member_modifier }
+	un_state_off = { MODIFIER = un_founding_member_modifier }
 	remove_modifier = un_sanctions_enforcer_modifier
-	je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
-	je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
-	je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
-	je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
+	un_state_off = { MODIFIER = un_peacekeeping_contributor_modifier }
+	un_state_off = { MODIFIER = un_peacekeeping_contributor_cost }
+	un_state_off = { MODIFIER = un_development_contributor_modifier }
+	un_state_off = { MODIFIER = un_development_contributor_cost }
 	# The aid programme ends with its cost; keeping the prestige marker
 	# while dropping the bill made leaving a way to stop paying for aid.
 	remove_modifier = un_humanitarian_aid_modifier
 	remove_modifier = un_humanitarian_aid_cost
-	je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
-	je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
-	je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
-	je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
+	un_state_off = { MODIFIER = un_human_rights_champion_modifier }
+	un_state_off = { MODIFIER = un_arms_control_participant_modifier }
+	un_state_off = { MODIFIER = un_champion_order_cost }
+	un_state_off = { MODIFIER = un_undermine_order_cost }
 	# Permanent treaty commitments
-	je:je_united_nations ?= { remove_modifier = un_human_rights_declaration_modifier }
+	un_state_off = { MODIFIER = un_human_rights_declaration_modifier }
 	remove_modifier = un_human_rights_reservations_modifier
-	je:je_united_nations ?= { remove_modifier = un_nonproliferation_modifier }
-	je:je_united_nations ?= { remove_modifier = un_climate_binding_modifier }
-	je:je_united_nations ?= { remove_modifier = un_heritage_program_modifier }
-	je:je_united_nations ?= { remove_modifier = un_pandemic_cooperation_modifier }
-	je:je_united_nations ?= { remove_modifier = un_refugee_program_modifier }
-	je:je_united_nations ?= { remove_modifier = un_space_partnership_modifier }
+	un_state_off = { MODIFIER = un_nonproliferation_modifier }
+	un_state_off = { MODIFIER = un_climate_binding_modifier }
+	un_state_off = { MODIFIER = un_heritage_program_modifier }
+	un_state_off = { MODIFIER = un_pandemic_cooperation_modifier }
+	un_state_off = { MODIFIER = un_refugee_program_modifier }
+	un_state_off = { MODIFIER = un_space_partnership_modifier }
 	# The three conventions that sit on the country rather than the journal
 	# entry. un_apply_ratified_conventions re-adds them on rejoining,
 	# exactly as it does the journal-entry ones above.
-	remove_modifier = un_law_of_sea_modifier
-	remove_modifier = un_icc_member_modifier
-	remove_modifier = un_physical_protection_modifier
+	un_state_country_off = { MODIFIER = un_law_of_sea_modifier }
+	un_state_country_off = { MODIFIER = un_icc_member_modifier }
+	un_state_country_off = { MODIFIER = un_physical_protection_modifier }
 }
 
 # ---- Founding and joining ------------------------------------------------------------
@@ -582,17 +582,17 @@ un_found_organisation = {
 	set_global_variable = { name = un_charter_pressure_months value = 0 }
 	un_ladder_tier_update = yes
 	set_global_variable = { name = un_seat_signing_months_left value = un_seat_signing_months }
-	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+	un_state_on = { MODIFIER = un_member_modifier }
 	je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
-	je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
-	je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
+	un_state_on = { MODIFIER = un_founding_member_modifier }
+	un_state_on = { MODIFIER = un_headquarters_modifier }
 	# THIS, not ROOT: un_conference_conclude reaches here from the global
 	# monthly pulse, which has no root.
 	set_global_variable = { name = un_hq_country value = THIS }
 	if = {
 		limit = { country_rank >= rank_value:great_power }
-		je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
-		je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
+		un_state_on = { MODIFIER = un_security_council_modifier }
+		un_state_on = { MODIFIER = un_permanent_member_modifier }
 	}
 }
 
@@ -620,7 +620,7 @@ un_charter_invitations = {
 # show a tooltip add un_seat_join_tooltip beside this.
 # Scope: the joining country
 un_join_organisation = {
-	je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+	un_state_on = { MODIFIER = un_member_modifier }
 	# What membership brings, at once (§0.8 ruling 5); the monthly pulse
 	# reconciles it from then on.
 	je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
@@ -673,7 +673,7 @@ un_leave_organisation = {
 		# before the HQ hand-off was fixed) just goes.
 		else_if = {
 			limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
-			je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
+			un_state_off = { MODIFIER = un_headquarters_modifier }
 		}
 		add_modifier = {
 			name = un_withdrawal_penalty_modifier

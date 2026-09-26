@@ -1,0 +1,35 @@
+﻿# ============================================================================
+# AGRICULTURAL DIFFUSION SCRIPT VALUES
+# Read by agdiff_restore_first_mover_prestige
+# (common/scripted_effects/agricultural_diffusion_effects.txt), which gives a
+# civil war's winner what is left of the first-mover reward the loser held.
+# ============================================================================
+
+# The reward's full length in months: its grant duration,
+# very_long_modifier_time (7300 days, 20 years), in the units of
+# te_history_month_index (12 to a year).
+agdiff_first_mover_months_total = {
+	value = very_long_modifier_time
+	divide = 365
+	multiply = 12
+}
+
+# Months of the reward still to run, from agdiff_first_mover_month, the month
+# index recorded with the first-mover title. A whole number; zero or negative
+# once it has run out. It picks the restore's rung (whole years left, to the
+# nearest). Scope: a country holding agdiff_first_mover_month.
+agdiff_first_mover_months_left = {
+	value = var:agdiff_first_mover_month
+	add = agdiff_first_mover_months_total
+	subtract = te_history_month_index
+}
+
+# The share of the reward's strength left, 0 to 1: a decaying modifier fades
+# linearly to nothing over its duration, so this is the multiplier that
+# restores it at the strength it had reached. Scope: as above.
+agdiff_first_mover_strength_left = {
+	value = agdiff_first_mover_months_left
+	divide = agdiff_first_mover_months_total
+	min = 0
+	max = 1
+}

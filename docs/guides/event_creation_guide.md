@@ -284,7 +284,7 @@ After editing modifier or event files, `POST /reload` to refresh the server's vi
 ### Modifier Design
 - **Modifiers in `common/static_modifiers/extra_modifiers.txt`** — every new modifier needs an `icon`, gameplay fields, and two loc keys.
 - **Differentiate options mechanically**, not just by magnitude. Each option should apply a different modifier with distinct effects.
-- **Duration tiers:** `short_modifier_time` (1 year), `normal_modifier_time` (3 years), `long_modifier_time` (5 years). Use `is_decaying = yes` for most event modifiers.
+- **Duration tiers** (days, from vanilla `common/script_values/event_values.txt`): `very_short_modifier_time` (365, 1 year), `short_modifier_time` (913, 2.5 years), `normal_modifier_time` (1825, 5 years), `long_modifier_time` (3650, 10 years), `very_long_modifier_time` (7300, 20 years). Pass them as `days =`, never `months =`. Use `is_decaying = yes` for most event modifiers.
 - **Icon convention:** `modifier_coins_negative.dds` for economic costs, `modifier_lightbulb_positive.dds` for research/innovation, `modifier_flag_positive/negative.dds` for political/prestige, `modifier_gear_positive/negative.dds` for production/throughput, `modifier_military_negative.dds` for military costs.
 
 ### Localization Scope References
