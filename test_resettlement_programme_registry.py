@@ -530,5 +530,94 @@ class OldSystemGoneTests(unittest.TestCase):
                     self.assertNotRegex(text, rf"(?<![\w]){name}(?![\w])", f"{name} in {path.relative_to(ROOT)}")
 
 
+UN_REGISTRY = "test_un_convention_registry.py"
+
+
+class PoliticsTests(unittest.TestCase):
+    def test_constants(self):
+        text = strip_comments(read(VALUES))
+        self.assertRegex(text, r"(?m)^resettlement_volume_decay = 0\.9167\s*$")
+        self.assertRegex(text, r"(?m)^resettlement_intensity_reference = 0\.0025\s*$")
+
+    def test_each_politics_modifier_is_the_table(self):
+        mods = read(RS_MODIFIERS)
+        for p in PROGRAMMES:
+            body = block(mods, f"resettlement_{p.key}_politics")
+            if not p.politics:
+                self.assertIsNone(body, p.key)
+                continue
+            found = {k: float(v) for k, v in re.findall(r"(interest_group_\w+_approval_add)\s*=\s*(-?[\d.]+)", body)}
+            self.assertEqual(found, {k: float(v) for k, v in p.politics.items()}, p.key)
+            self.assertIn(f"resettlement_{p.key}_politics", loc())
+            self.assertIn(f"resettlement_{p.key}_politics_desc", loc())
+
+    def test_magnitudes_stay_within_a_major_law_change(self):
+        # A running program is an ongoing action: its scale is vanilla's approval
+        # from changing a law (5 / 10 / 20), not the ±5 clamp on laws on the books.
+        for p in WITH_POLITICS:
+            for key, value in p.politics.items():
+                self.assertLessEqual(value, 3, (p.key, key))
+                self.assertGreaterEqual(value, -10, (p.key, key))
+
+    def test_refresh_covers_every_programme_with_politics(self):
+        body = squash(block(read(EFFECTS), "resettlement_refresh_politics"))
+        called = re.findall(r"resettlement_refresh_programme_politics = \{ PROG = (\w+) \}", body)
+        self.assertEqual(called, [p.key for p in WITH_POLITICS])
+
+    def test_one_modifier_per_programme_scaled_by_intensity(self):
+        body = squash(block(read(EFFECTS), "resettlement_refresh_programme_politics"))
+        self.assertIn("change_variable = { name = rs_volume_$PROG$ multiply = resettlement_volume_decay }", body)
+        self.assertIn("change_variable = { name = rs_volume_$PROG$ add = var:rs_month_$PROG$ }", body)
+        self.assertIn("add_modifier = { name = resettlement_$PROG$_politics multiplier = var:rs_intensity_$PROG$ }", body)
+        self.assertIn("max = 1", body)
+
+    def test_the_pulse_keeps_running_while_reactions_fade(self):
+        fading = squash(block(read(TRIGGERS), "resettlement_country_still_fading"))
+        for p in WITH_POLITICS:
+            self.assertIn(f"var:rs_volume_{p.key} > 1", fading, p.key)
+        self.assertIn("has_variable = rs_active", squash(block(read(RS_ON_ACTIONS), "resettlement_country_on_action")))
+
+
+class DeclarationTests(unittest.TestCase):
+    def test_party_reads_the_conventions_member_and_reservations_modifiers(self):
+        body = squash(block(read(TRIGGERS), "resettlement_is_declaration_party"))
+        self.assertIn("je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }", body)
+        self.assertIn("has_modifier = un_human_rights_reservations_modifier", body)
+
+    def test_intensity_sums_the_coercive_programmes_and_halves_under_reservations(self):
+        body = squash(block(read(EFFECTS), "resettlement_refresh_declaration"))
+        summed = set(re.findall(r"var:rs_intensity_(\w+)", body))
+        self.assertEqual(summed, {p.key for p in COERCIVE})
+        self.assertIn("change_variable = { name = rs_declaration_intensity multiply = 0.5 }", body)
+        self.assertIn("add_modifier = { name = resettlement_declaration_violation multiplier = var:rs_declaration_intensity }", body)
+        self.assertIn("trigger_event = { id = resettlement.20 }", body)
+
+    def test_the_violation_modifier(self):
+        body = block(read(RS_MODIFIERS), "resettlement_declaration_violation")
+        self.assertEqual(number(body, "country_prestige_mult"), -0.1)
+        L = loc()
+        self.assertIn("resettlement_declaration_violation", L)
+        self.assertIn("resettlement_declaration_violation_desc", L)
+
+    def test_communicated_at_every_step(self):
+        L = loc()
+        # 1. before choosing: TestProgramme.test_the_declaration_line_is_on_coercive_programmes_only
+        # 2. when it starts: resettlement.20, whose second option ends the programmes
+        event = block(read(RS_EVENTS), "resettlement.20")
+        self.assertIsNotNone(event)
+        options = re.findall(r"option\s*=\s*\{", strip_comments(event))
+        self.assertEqual(len(options), 2)
+        self.assertIn("resettlement_end_coercive_programmes = yes", squash(event))
+        for suffix in ("t", "d", "f", "a", "b"):
+            self.assertIn(f"resettlement.20.{suffix}", L)
+        # 3. while it runs: the modifier's description (test_the_violation_modifier)
+        # 4. at the vote: the proposal, the vote and the member modifier say so
+        for key in ("un_events.3.d", "un_vote.1.d_human_rights", "un_human_rights_declaration_modifier_desc"):
+            self.assertIn("resettlement", L[key].lower(), key)
+
+    def test_the_un_registry_names_it(self):
+        self.assertRegex(read(UN_REGISTRY), r'violation_modifiers=\("resettlement_declaration_violation",\)')
+
+
 if __name__ == "__main__":
     unittest.main()

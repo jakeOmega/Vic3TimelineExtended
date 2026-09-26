@@ -52,6 +52,21 @@ resettlement_country_monthly = {
 		limit = { has_variable = rs_recruits }
 		resettlement_refresh_source_readout = yes
 	}
+	resettlement_refresh_politics = yes
+	resettlement_refresh_declaration = yes
+	if = {
+		limit = {
+			OR = {
+				any_scope_state = { has_building = building_resettlement_colony }
+				resettlement_country_still_fading = yes
+			}
+		}
+		set_variable = rs_active
+	}
+	else_if = {
+		limit = { has_variable = rs_active }
+		remove_variable = rs_active
+	}
 }
 
 resettlement_reset_month_counters = {
@@ -406,5 +421,90 @@ resettlement_end_coercive_programmes = {
 				production_method = pm_resettlement_land_grants
 			}
 		}
+	}
+}
+
+# ---- The political layer (§7.2) ---------------------------------------------
+# Country scope. One modifier per program, scaled by the volume it moved: twenty
+# Settlement Authorities running one program still apply it once.
+resettlement_refresh_politics = {
+	resettlement_refresh_programme_politics = { PROG = land_grants }
+	resettlement_refresh_programme_politics = { PROG = military_colonies }
+	resettlement_refresh_programme_politics = { PROG = penal_transportation }
+	resettlement_refresh_programme_politics = { PROG = organized_colonization }
+	resettlement_refresh_programme_politics = { PROG = special_settlements }
+	resettlement_refresh_programme_politics = { PROG = rustication }
+}
+
+resettlement_refresh_programme_politics = {
+	if = {
+		limit = { NOT = { has_variable = rs_volume_$PROG$ } }
+		set_variable = { name = rs_volume_$PROG$ value = 0 }
+	}
+	change_variable = { name = rs_volume_$PROG$ multiply = resettlement_volume_decay }
+	change_variable = { name = rs_volume_$PROG$ add = var:rs_month_$PROG$ }
+	set_variable = {
+		name = rs_intensity_$PROG$
+		value = {
+			value = var:rs_volume_$PROG$
+			divide = {
+				value = total_population
+				multiply = resettlement_intensity_reference
+				min = 1
+			}
+			max = 1
+		}
+	}
+	remove_modifier = resettlement_$PROG$_politics
+	if = {
+		limit = { var:rs_intensity_$PROG$ > 0.01 }
+		add_modifier = { name = resettlement_$PROG$_politics multiplier = var:rs_intensity_$PROG$ }
+	}
+}
+
+# ---- The UN Declaration (§7.4) -----------------------------------------------
+# Country scope, after resettlement_refresh_politics (which sets the three
+# coercive intensities every month).
+resettlement_refresh_declaration = {
+	set_variable = { name = rs_declaration_intensity value = 0 }
+	if = {
+		limit = { resettlement_is_declaration_party = yes }
+		set_variable = {
+			name = rs_declaration_intensity
+			value = {
+				value = var:rs_intensity_penal_transportation
+				add = var:rs_intensity_special_settlements
+				add = var:rs_intensity_rustication
+				max = 1
+			}
+		}
+		if = {
+			limit = { has_modifier = un_human_rights_reservations_modifier }
+			change_variable = { name = rs_declaration_intensity multiply = 0.5 }
+		}
+	}
+	remove_modifier = resettlement_declaration_violation
+	if = {
+		limit = { var:rs_declaration_intensity > 0.01 }
+		add_modifier = { name = resettlement_declaration_violation multiplier = var:rs_declaration_intensity }
+	}
+	# The warning: once per spell of coercion, the first month a party runs a
+	# coercive program, and again if it stops and later starts again.
+	if = {
+		limit = {
+			resettlement_is_declaration_party = yes
+			any_scope_state = { resettlement_state_runs_coercive = yes }
+			NOT = { has_variable = rs_declaration_warned }
+		}
+		set_variable = rs_declaration_warned
+		trigger_event = { id = resettlement.20 }
+	}
+	else_if = {
+		limit = {
+			has_variable = rs_declaration_warned
+			NOT = { any_scope_state = { resettlement_state_runs_coercive = yes } }
+			var:rs_declaration_intensity <= 0.01
+		}
+		remove_variable = rs_declaration_warned
 	}
 }

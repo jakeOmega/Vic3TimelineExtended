@@ -40,3 +40,38 @@ resettlement.9 = {
 		default_option = yes
 	}
 }
+
+# ---- .20 The Declaration and Our Settlements -------------------------------------
+# Sent by resettlement_refresh_declaration the first month a party to the
+# Universal Declaration runs a coercive program.
+resettlement.20 = {
+	type = country_event
+	placement = ROOT
+
+	event_image = {
+		texture = "gfx/event_pictures/international_court_chamber.dds"
+	}
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = resettlement.20.t
+	desc = resettlement.20.d
+	flavor = resettlement.20.f
+
+	duration = 3
+
+	option = {
+		name = resettlement.20.a
+		default_option = yes
+		custom_tooltip = resettlement_declaration_continue_tt
+		ai_chance = { base = 50 }
+	}
+
+	option = {
+		name = resettlement.20.b
+		resettlement_end_coercive_programmes = yes
+		ai_chance = { base = 50 }
+	}
+}

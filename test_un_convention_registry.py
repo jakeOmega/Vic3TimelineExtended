@@ -78,16 +78,20 @@ LOC_DIR = _path("localization", "english")
 #                   for a convention that exists only under a game rule
 # agenda            whether the docket's Assembly business may raise it with no
 #                   situation behind it (un_docket_take_up_agenda)
+# violation_modifiers  what a party carries while it breaks the convention
+#                   elsewhere in the mod (defaults to none)
 Convention = namedtuple(
     "Convention",
     "key in_force member_modifier scope op event refusal_reason refusal_modifier"
-    " regime_modifiers rule agenda",
+    " regime_modifiers rule agenda violation_modifiers",
+    defaults=((),),
 )
 
 CONVENTIONS = (
     Convention("human_rights", "un_agency_unhrc", "un_human_rights_declaration_modifier", "je",
                7, 3, 1031, "un_human_rights_refusal_modifier",
-               ("un_regime_rights_violator_modifier",), None, True),
+               ("un_regime_rights_violator_modifier",), None, True,
+               violation_modifiers=("resettlement_declaration_violation",)),
     Convention("icc", "un_agency_icc", "un_icc_member_modifier", "country",
                8, 22, 1221, "un_icc_refusal_modifier",
                (), None, True),
@@ -334,7 +338,7 @@ class TableTests(unittest.TestCase):
             if name.endswith(".txt"):
                 defined |= _top_level_names(_read(os.path.join(STATIC_MODIFIERS, name)))
         for c in CONVENTIONS:
-            for mod in (c.member_modifier, c.refusal_modifier) + c.regime_modifiers:
+            for mod in (c.member_modifier, c.refusal_modifier) + c.regime_modifiers + c.violation_modifiers:
                 if mod:
                     with self.subTest(key=c.key, modifier=mod):
                         self.assertIn(mod, defined)

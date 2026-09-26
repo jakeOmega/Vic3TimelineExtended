@@ -175,3 +175,25 @@ resettlement_valid_source = {
 	NOT = { has_building = building_resettlement_colony }
 	resettlement_state_eligible_pop >= resettlement_min_take
 }
+
+# ---- The political layer and the Declaration (§7.2, §7.4) -------------------
+# Country scope. Party to the Universal Declaration of Human Rights, in full or
+# with reservations (read as un_human_rights_signatories does).
+resettlement_is_declaration_party = {
+	OR = {
+		je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier }
+		has_modifier = un_human_rights_reservations_modifier
+	}
+}
+
+# Country scope. A program's political reaction has not yet faded.
+resettlement_country_still_fading = {
+	OR = {
+		AND = { has_variable = rs_volume_land_grants var:rs_volume_land_grants > 1 }
+		AND = { has_variable = rs_volume_military_colonies var:rs_volume_military_colonies > 1 }
+		AND = { has_variable = rs_volume_penal_transportation var:rs_volume_penal_transportation > 1 }
+		AND = { has_variable = rs_volume_organized_colonization var:rs_volume_organized_colonization > 1 }
+		AND = { has_variable = rs_volume_special_settlements var:rs_volume_special_settlements > 1 }
+		AND = { has_variable = rs_volume_rustication var:rs_volume_rustication > 1 }
+	}
+}

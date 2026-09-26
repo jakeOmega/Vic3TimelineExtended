@@ -2437,7 +2437,7 @@
  un_heritage_token_modifier_desc:0 "This country has made a modest contribution to UNESCO heritage preservation."
  un_high_authority_infamy_modifier_desc:0 "The UN's authority means that aggressive acts carry greater international consequences. [concept_infamy] generation is increased."
  un_human_rights_champion_modifier_desc:0 "This country is actively championing human rights at the United Nations."
- un_human_rights_declaration_modifier_desc:0 "Having ratified the Universal Declaration of Human Rights, this country gains [concept_prestige] and institutional reform momentum."
+ un_human_rights_declaration_modifier_desc:0 "Having ratified the Universal Declaration of Human Rights, this country gains [concept_prestige] and institutional reform momentum. Running a coercive resettlement program brings #N Violating the Declaration#!."
  un_human_rights_refusal_modifier_desc:0 "This country has refused to sign the Universal Declaration of Human Rights, strengthening domestic authority but damaging its international image."
  un_human_rights_reservations_modifier_desc:0 "This country has signed the Universal Declaration of Human Rights with reservations on certain provisions."
  un_humanitarian_aid_cost_desc:0 "Ongoing financial costs of providing humanitarian assistance through the UN."
