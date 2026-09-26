@@ -783,11 +783,15 @@ still open and are inherited, not repeated.
     **No `_applied` tracker is copied** — the winner's describe the winner's own modifiers,
     and the next pulse swaps each to the copied state. The price basket is re-seeded, and
     `te_mon_peg_suspension`, `te_mon_peg_credibility_lost` and `te_mon_lolr_reneged` are
-    re-added from their month counters, rounded up to a half-year (the engine cannot read a
-    modifier's remaining time). The regime is a law, so it is the winner's own. The copy runs
-    only when the shared pointer `te_cw_parent`, stored on the rebels at
-    `on_revolution_start`, names a different object that is no longer alive; a loyalist win
-    and a secession need nothing.
+    re-added from their month counters — exact under six months, to the nearest half-year
+    above (the engine cannot read a modifier's remaining time, and takes only literal
+    durations). The regime is a law, so it is the winner's own. The copy runs only when the
+    shared pointer `te_cw_parent`, stored on the rebels at `on_revolution_start`, names a
+    different object that is no longer alive, and at most once per loser: the pointer is
+    retired only at the winner's next monthly pulse, so a second civil war ending inside that
+    window (two revolutions at once) is refused by the copy's own marker,
+    `te_mon_cw_bank_taken`, instead of adding the loser's gold again. A loyalist win and a
+    secession need nothing.
     **Still to watch — one revolution the rebels win.** Everything above assumes the dead but
     not yet deleted loser can be read through a stored scope variable at `on_civil_war_won`
     (the loser was still in the save after that hook; nobody has read it from script). Search
@@ -795,8 +799,9 @@ still open and are inherited, not repeated.
     vault is line 1's winner vault plus the loser's, and line 2's inflation and mandate are the
     loser's. `1/2` missing, with `set but does not resolve`, `figures read as nothing` or
     `still alive` in its place, means the read failed (or a guard term is wrong) and the copy
-    did not run; a loyalist win logs `loyalists won`. Then read `te_debug_monetary.1` on the winner a month later — the band modifier
-    should match the copied inflation, and there should be exactly one. Remove the
+    did not run; a loyalist win logs `loyalists won`, and a second win inside the window logs
+    `already taken`. Then read `te_debug_monetary.1` on the winner a month later — the band
+    modifier should match the copied inflation, and there should be exactly one. Remove the
     `TE_CW_PROBE` lines once read.
 33. **The empty `te_inflation_band_comfort`, on roughly every tag in the world.** It is
     applied deliberately (step 6c always has exactly one thing to apply, and the modifier

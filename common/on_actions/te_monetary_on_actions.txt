@@ -81,15 +81,27 @@ te_monetary_world_monthly_on_action = {
 # call is made directly, with no dispatch event. This is also the hook that
 # heals anything applied from a root-less context — see the te_rate_paid_rooted
 # marker in step 9.
+#
+# te_civil_war_retire_parent is the SHARED parent pointer's monthly retirement
+# (the section at the foot of this file), not part of the monetary update.
 on_monthly_pulse_country = {
 	on_actions = {
 		te_monetary_monthly_on_action
+		te_civil_war_retire_parent
 	}
 }
 
 te_monetary_monthly_on_action = {
 	effect = {
 		te_monetary_monthly_update = yes
+		# The civil-war copy's once-per-win marker lives from a rebel win to the
+		# winner's next monthly pulse, when te_civil_war_retire_parent retires
+		# the pointer it guards (te_monetary_on_civil_war_won says why). Both go
+		# on the same pulse, whichever of the two on-actions runs first.
+		if = {
+			limit = { has_variable = te_mon_cw_bank_taken }
+			remove_variable = te_mon_cw_bank_taken
+		}
 	}
 }
 
@@ -334,15 +346,26 @@ te_monetary_on_country_formed = {
 # the read everything in te_monetary_inherit_central_bank depends on. Delete the
 # debug_log lines once one revolution has been read (monetary_policy_design.md
 # §0.4 checklist item 32).
+#
+# ONCE PER LOSER. The pointer outlives this hook until the winner's next
+# monthly pulse, so every reader in the hook sees it whatever order the files
+# run in. That leaves a window: with two revolutions at once, the winner of the
+# first can beat the second as the loyalists before that pulse, while the first
+# loser still lingers — and the guard alone would take its bank a second time,
+# adding its gold again. te_mon_cw_bank_taken records the object the bank was
+# taken from, and the guard refuses that object. It is this reader's own
+# marker, not a shared "spent" flag, so no other reader depends on whether
+# this on-action ran before it.
 on_civil_war_won = {
 	on_actions = {
 		te_monetary_on_civil_war_won
-		te_civil_war_drop_self_parent
+		te_civil_war_settle_parent
 	}
 }
 
 te_monetary_on_civil_war_won = {
 	effect = {
+		var:te_cw_parent ?= { save_scope_as = te_cw_parent_now }
 		if = {
 			limit = {
 				var:te_cw_parent ?= {
@@ -356,15 +379,27 @@ te_monetary_on_civil_war_won = {
 					has_variable = te_rate_paid_pts
 					var:te_rate_paid_pts >= 0.5
 				}
+				NOT = { var:te_mon_cw_bank_taken ?= scope:te_cw_parent_now }
 			}
 			var:te_cw_parent = { save_scope_as = te_cw_loser }
 			debug_log = "TE_CW_PROBE monetary 1/2 [ROOT.GetCountry.GetNameNoFormatting]: rebels won, the parent pointer resolves to a dead object. BEFORE the copy, winner: vault [ROOT.GetCountry.MakeScope.Var('te_bank_gold').GetValue|0] inflation [ROOT.GetCountry.MakeScope.Var('te_inflation').GetValue|1] mandate [ROOT.GetCountry.MakeScope.Var('te_mon_mandate').GetValue|0]. Loser, read by loc: vault [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_bank_gold').GetValue|0] inflation [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_inflation').GetValue|1] mandate [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_mon_mandate').GetValue|0]"
 			te_monetary_inherit_central_bank = yes
+			set_variable = { name = te_mon_cw_bank_taken value = scope:te_cw_loser }
 			debug_log = "TE_CW_PROBE monetary 2/2 [ROOT.GetCountry.GetNameNoFormatting]: AFTER the copy, winner: vault [ROOT.GetCountry.MakeScope.Var('te_bank_gold').GetValue|0] inflation [ROOT.GetCountry.MakeScope.Var('te_inflation').GetValue|1] mandate [ROOT.GetCountry.MakeScope.Var('te_mon_mandate').GetValue|0]. Script read the loser if this vault is the winner's plus the loser's from line 1/2 and the inflation and mandate are the loser's"
 		}
 		else_if = {
 			limit = { var:te_cw_parent ?= root }
 			debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: loyalists won (the parent pointer names the winner itself); nothing copied"
+		}
+		else_if = {
+			limit = {
+				var:te_cw_parent ?= {
+					NOT = { this = root }
+					is_country_alive = no
+				}
+				var:te_mon_cw_bank_taken ?= scope:te_cw_parent_now
+			}
+			debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: this parent's bank was already taken at an earlier win, before the pointer was retired; nothing copied"
 		}
 		else_if = {
 			limit = {
@@ -504,7 +539,7 @@ te_monetary_on_country_default = {
 # NOT MONETARY. It lives here because monetary policy is its first reader
 # (te_monetary_on_civil_war_won above); nuclear custody (nuclear_crisis_design.md
 # §0.10) and the history charts (docs/audits/civil_war_inheritance_audit.md F9)
-# are the planned next ones. Move these three on-actions to a civil-war
+# are the planned next ones. Move these four on-actions to a civil-war
 # on-actions file of their own when a second reader arrives.
 #
 # THE CONTRACT. te_cw_parent is a country SCOPE variable meaning "the country
@@ -527,6 +562,23 @@ te_monetary_on_country_default = {
 #     start means the pointer a winner holds always comes from this war.
 #   * DROPPED at on_civil_war_won when it names the winner itself, which is
 #     what a loyalist winner inherits from the rebels it defeated.
+#   * RETIRED after any other win (a rebel win, as a rule), at the winner's
+#     next monthly pulse — not in the hook, so every reader of on_civil_war_won
+#     sees it whatever order the hook's files run in. te_civil_war_settle_parent
+#     marks it (te_cw_parent_retire, which no reader tests) and
+#     te_civil_war_retire_parent removes both. Until then it still names the
+#     dead loser, and a second
+#     civil war can end inside that window (two revolutions at once, the winner
+#     of the first beating the second). A reader that must act ONCE per loser
+#     therefore keeps its own marker of the object it acted on and refuses it
+#     (te_monetary_on_civil_war_won's te_mon_cw_bank_taken) — its own, so no
+#     reader depends on another having run first.
+#   * RE-PARENTED at a rebel win: every other uprising whose pointer names the
+#     annexed loser now fights the winner, its continuation, so its pointer is
+#     set to ROOT. If that uprising later wins, it takes over the winner's
+#     state rather than the long-dead loser's. One that ends without a win of
+#     its own keeps a pointer to a LIVE country until it is the original at a
+#     start hook; the guard's is_country_alive = no makes it inert.
 #   * NEVER SET FOR A SECESSION. A seceder never continues the original: if it
 #     wins it is a new nation and the original survives; if it loses, the
 #     original is the winner. There is nothing for a reader to inherit, and a
@@ -545,6 +597,10 @@ te_civil_war_record_parent = {
 			limit = { has_variable = te_cw_parent }
 			remove_variable = te_cw_parent
 		}
+		if = {
+			limit = { has_variable = te_cw_parent_retire }
+			remove_variable = te_cw_parent_retire
+		}
 		scope:target ?= {
 			set_variable = { name = te_cw_parent value = root }
 			debug_log = "TE_CW_PROBE parent pointer recorded on the revolutionaries rising against [ROOT.GetCountry.GetNameNoFormatting]"
@@ -559,17 +615,61 @@ te_civil_war_forget_parent = {
 			limit = { has_variable = te_cw_parent }
 			remove_variable = te_cw_parent
 		}
+		if = {
+			limit = { has_variable = te_cw_parent_retire }
+			remove_variable = te_cw_parent_retire
+		}
 	}
 }
 
 # Root = the winner. Listed after te_monetary_on_civil_war_won, which logs the
-# loyalist branch before this drops the pointer.
-te_civil_war_drop_self_parent = {
+# loyalist branch before this drops the pointer. Nothing here removes a pointer
+# a reader could still need: the self-pointer means "nothing to read", and a
+# rebel winner's pointer is only MARKED for te_civil_war_retire_parent. The
+# re-parenting writes other countries' pointers, never ROOT's.
+te_civil_war_settle_parent = {
 	effect = {
 		if = {
 			limit = { var:te_cw_parent ?= root }
 			remove_variable = te_cw_parent
 			debug_log = "TE_CW_PROBE parent pointer named the winner itself (a loyalist win); dropped"
+		}
+		else_if = {
+			# Any other pointer has served this war, whatever it resolves to.
+			limit = { has_variable = te_cw_parent }
+			set_variable = { name = te_cw_parent_retire value = yes }
+			if = {
+				limit = {
+					var:te_cw_parent ?= {
+						NOT = { this = root }
+						is_country_alive = no
+					}
+				}
+				var:te_cw_parent = { save_scope_as = te_cw_retired_parent }
+				every_country = {
+					limit = {
+						NOT = { this = root }
+						var:te_cw_parent ?= scope:te_cw_retired_parent
+					}
+					set_variable = { name = te_cw_parent value = root }
+				}
+			}
+		}
+	}
+}
+
+# Root = Country. The monthly pulse after a rebel win: the pointer has served
+# every reader of that on_civil_war_won, so it and its mark go. One has_variable
+# a month for every other country.
+te_civil_war_retire_parent = {
+	effect = {
+		if = {
+			limit = { has_variable = te_cw_parent_retire }
+			if = {
+				limit = { has_variable = te_cw_parent }
+				remove_variable = te_cw_parent
+			}
+			remove_variable = te_cw_parent_retire
 		}
 	}
 }

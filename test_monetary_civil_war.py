@@ -113,19 +113,23 @@ DIRECT_WRITES = {
     "te_mon_receiver",
 }
 
+# `name =` anywhere inside the block, not only first, so a write spelled
+# `set_variable = { value = ... name = X }` is not missed.
 WRITE = re.compile(
-    r"(?:set_variable|change_variable|clamp_variable)\s*=\s*\{\s*name\s*=\s*(te_\w+)"
+    r"(?:set_variable|change_variable|clamp_variable)\s*=\s*\{[^{}]*?\bname\s*=\s*(te_\w+)"
 )
+
+# Civil-war bookkeeping written in the monetary on-actions file: the shared
+# parent pointer, its retirement mark, and the copy's once-per-loser marker.
+# None is a monetary contract variable.
+CIVIL_WAR_BOOKKEEPING = {"te_cw_parent", "te_cw_parent_retire", "te_mon_cw_bank_taken"}
 
 
 def _monetary_variables():
     names = set()
     for parts in MONETARY_FILES:
         names |= set(WRITE.findall(_read(_path(*parts))))
-    # The shared civil-war parent pointer lives in the monetary on-actions file
-    # but is not a monetary variable.
-    names.discard("te_cw_parent")
-    return names
+    return names - CIVIL_WAR_BOOKKEEPING
 
 
 def _copied():
@@ -194,30 +198,65 @@ class ClassificationTests(unittest.TestCase):
             with self.subTest(duration=value):
                 self.assertRegex(value, r"^\d+$")
 
+    def test_ladder_is_exact_when_short_and_never_more_than_three_months_off(self):
+        """Walk the ladder the way the engine does, for every remainder a counter can hold."""
+        ladder = _block(_read(EFFECTS), "te_mon_cw_add_timed")
+        rungs = [
+            (int(threshold), int(months))
+            for threshold, months in re.findall(
+                r"var:te_mon_work\s*>\s*(\d+)\s*\}\s*add_modifier\s*=\s*\{\s*name\s*=\s*\$NAME\$"
+                r"\s+months\s*=\s*(\d+)", ladder)
+        ]
+        self.assertEqual(len(rungs), ladder.count("add_modifier"))
+
+        def added(remaining):
+            for threshold, months in rungs:  # if / else_if: the first that holds
+                if remaining > threshold:
+                    return months
+            return 0
+
+        self.assertEqual(added(0), 0)
+        for remaining in range(1, 121):
+            with self.subTest(remaining=remaining):
+                if remaining < 6:
+                    self.assertEqual(added(remaining), remaining)
+                else:
+                    self.assertLessEqual(abs(added(remaining) - remaining), 3)
+
 
 class WiringTests(unittest.TestCase):
     def test_the_copy_runs_only_behind_the_rebel_win_guard(self):
         text = _read(ON_ACTIONS)
         self.assertRegex(
             _block(text, "on_civil_war_won"),
-            r"on_actions\s*=\s*\{\s*te_monetary_on_civil_war_won\s+te_civil_war_drop_self_parent\s*\}")
+            r"on_actions\s*=\s*\{\s*te_monetary_on_civil_war_won\s+te_civil_war_settle_parent\s*\}")
         body = _block(text, "te_monetary_on_civil_war_won")
         guard = re.search(
             r"limit\s*=\s*\{\s*var:te_cw_parent\s*\?=\s*\{\s*NOT\s*=\s*\{\s*this\s*=\s*root\s*\}"
             r"\s*is_country_alive\s*=\s*no\s*has_variable\s*=\s*te_rate_paid_pts"
-            r"\s*var:te_rate_paid_pts\s*>=\s*0\.5\s*\}\s*\}", body)
+            r"\s*var:te_rate_paid_pts\s*>=\s*0\.5\s*\}"
+            r"\s*NOT\s*=\s*\{\s*var:te_mon_cw_bank_taken\s*\?=\s*scope:te_cw_parent_now\s*\}\s*\}",
+            body)
         self.assertIsNotNone(guard)
+        self.assertLess(
+            body.index("var:te_cw_parent ?= { save_scope_as = te_cw_parent_now }"), guard.start())
         self.assertEqual(body.count("te_monetary_inherit_central_bank"), 1)
         self.assertGreater(body.index("te_monetary_inherit_central_bank"), guard.end())
         self.assertLess(body.index("te_monetary_inherit_central_bank"), body.index("else_if"))
+        # Once per loser: the marker names the object the bank was taken from.
+        copy_branch = body[guard.end():body.index("else_if")]
+        self.assertRegex(
+            copy_branch[copy_branch.index("te_monetary_inherit_central_bank"):],
+            r"set_variable\s*=\s*\{\s*name\s*=\s*te_mon_cw_bank_taken\s+value\s*=\s*scope:te_cw_loser\s*\}")
         # Nowhere else calls it.
-        for root, _dirs, files in os.walk(_path("common")):
-            for name in files:
-                if not name.endswith(".txt") or name == "te_monetary_on_actions.txt":
-                    continue
-                with self.subTest(file=name):
-                    text = _read(os.path.join(root, name))
-                    self.assertNotRegex(text, r"te_monetary_inherit_central_bank\s*=\s*yes")
+        for top in ("common", "events"):
+            for root, _dirs, files in os.walk(_path(top)):
+                for name in files:
+                    if not name.endswith(".txt") or name == "te_monetary_on_actions.txt":
+                        continue
+                    with self.subTest(file=name):
+                        text = _read(os.path.join(root, name))
+                        self.assertNotRegex(text, r"te_monetary_inherit_central_bank\s*=\s*yes")
 
     def test_pointer_is_set_at_revolutions_and_never_at_secessions(self):
         text = _read(ON_ACTIONS)
@@ -237,6 +276,38 @@ class WiringTests(unittest.TestCase):
                     _block(text, name),
                     r"^\s*effect\s*=\s*\{\s*if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*"
                     r"te_cw_parent\s*\}\s*remove_variable\s*=\s*te_cw_parent")
+
+    def test_pointer_is_retired_at_the_next_pulse_not_in_the_hook(self):
+        text = _read(ON_ACTIONS)
+        self.assertRegex(
+            _block(text, "on_monthly_pulse_country"),
+            r"on_actions\s*=\s*\{\s*te_monetary_monthly_on_action\s+te_civil_war_retire_parent\s*\}")
+        # The hook removes only a self-pointer (a loyalist win); a rebel
+        # winner's pointer is marked, and other uprisings are re-parented.
+        settle = _block(text, "te_civil_war_settle_parent")
+        self.assertEqual(settle.count("remove_variable = te_cw_parent"), 1)
+        self.assertRegex(
+            settle, r"^\s*effect\s*=\s*\{\s*if\s*=\s*\{\s*limit\s*=\s*\{\s*var:te_cw_parent\s*\?=\s*root"
+            r"\s*\}\s*remove_variable\s*=\s*te_cw_parent")
+        rebel_win = settle[settle.index("else_if"):]
+        self.assertIn("set_variable = { name = te_cw_parent_retire value = yes }", rebel_win)
+        self.assertRegex(
+            rebel_win, r"every_country\s*=\s*\{\s*limit\s*=\s*\{\s*NOT\s*=\s*\{\s*this\s*=\s*root\s*\}"
+            r"\s*var:te_cw_parent\s*\?=\s*scope:te_cw_retired_parent\s*\}"
+            r"\s*set_variable\s*=\s*\{\s*name\s*=\s*te_cw_parent\s+value\s*=\s*root\s*\}")
+        # The pulse retires only a marked pointer: a rebel mid-war keeps its own.
+        retire = _block(text, "te_civil_war_retire_parent")
+        self.assertRegex(
+            retire, r"^\s*effect\s*=\s*\{\s*if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*"
+            r"te_cw_parent_retire\s*\}")
+        self.assertIn("remove_variable = te_cw_parent_retire", retire)
+        self.assertIn("remove_variable = te_cw_parent\n", retire + "\n")
+        # Both start hooks clear the mark with the pointer, and the monetary
+        # marker goes on the same pulse as the pointer.
+        for name in ("te_civil_war_record_parent", "te_civil_war_forget_parent"):
+            with self.subTest(on_action=name):
+                self.assertIn("remove_variable = te_cw_parent_retire", _block(text, name))
+        self.assertIn("remove_variable = te_mon_cw_bank_taken", _block(text, "te_monetary_monthly_on_action"))
 
     def test_every_loser_read_is_through_the_saved_scope(self):
         effects = _read(EFFECTS)

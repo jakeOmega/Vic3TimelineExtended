@@ -421,6 +421,9 @@
 # `_applied` tracker and nothing the update recomputes; its header says which
 # variable is in which group and why. A NEW VARIABLE ADDED TO THIS CONTRACT
 # MUST BE CLASSIFIED THERE TOO — test_monetary_civil_war.py pins the list.
+# Its once-per-loser marker, te_mon_cw_bank_taken, is civil-war bookkeeping,
+# not part of this contract: it lives from the copy to the winner's next
+# monthly pulse (common/on_actions/te_monetary_on_actions.txt).
 # ============================================================================
 
 
