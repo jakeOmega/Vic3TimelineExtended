@@ -131,7 +131,8 @@ once; `banking_stance_band_3` is an empty modifier (it had no icon until the pha
 `pm_shell_pernis_refinery`'s structural term is `workforce_scaled`, so §7.5's "−0.3" is only
 true at one building level; `cb_fx_support`'s `banking_stance_is_tight` easing weight may be
 sign-wrong — moot once phase 4 deletes the button (§15.5), so not worth fixing before then; the band swap does not self-heal if a JE's
-modifiers are lost while `te_mon_stance_band_applied` persists.
+modifiers are lost while `te_mon_stance_band_applied` persists (fixed 2026-09-26, #465: `immediate`
+zeroes the tracker, and a 0 tracker clears the family).
 
 One entry on that list is now **stale and has been struck**: "OMO's `ai_chance` has no
 recession-only term at the floor". Phase 2 rewrote those weights to §11's rule. Recession was
@@ -294,8 +295,10 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
     with no modifiers, and the country variables the winner lacked arrive with it. The
     monetary modifiers came back through `te_monetary_settle_modifier_home`, but the stance
     band stayed off, because its swap trusts the inherited `te_mon_stance_band_applied`.
-    `immediate` also re-ran, resetting the cycle to 50. These are open findings F6 and F7 in
-    `docs/audits/civil_war_inheritance_audit.md`.
+    `immediate` also re-ran, resetting the cycle to 50. These were findings F6 and F7 in
+    `docs/audits/civil_war_inheritance_audit.md`, **fixed in #465**: the cycle variables are
+    seeded only when absent, and `immediate` zeroes the band tracker so the next swap puts the
+    band back.
 12a. **Releasing a subject does not move the parent's own rate.** The six release and uprising
     hooks update `scope:target`, the new tag, and deliberately *not* ROOT, which is the parent
     and already pulses monthly. Note a great power's policy rate, release a subject, and check
@@ -3870,8 +3873,8 @@ under all three settings of the rule; everything gated on `te_mon_full_system` d
 ### 16.2 Single owner: the monthly country update
 
 New on-action on `on_monthly_pulse_country` calling `te_monetary_monthly_update`. **No new
-variable goes in `je_banking.txt`'s `immediate`** — that block resets unguarded
-(`:119-133`) and the JE is `can_revolution_inherit`. Every variable initialises behind
+variable goes in `je_banking.txt`'s `immediate`** — that block runs again on the copy of the
+entry a revolution's winner inherits (its three cycle variables are guarded since #465). Every variable initialises behind
 `has_variable`, and **none is ever removed** (`modifier_multiplier_var_audit`).
 
 Order: 0 init → 1 regime code → 2 target (mandate if delegated / AI / CBI / bank-without-JE,
