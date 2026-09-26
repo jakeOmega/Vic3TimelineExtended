@@ -819,14 +819,14 @@ Define 'scope' defined in 'common/defines/00_audio_persistent_objects.txt' not s
 
 The referenced file lives at `<install>/jomini/common/defines/00_audio_persistent_objects.txt` (Jomini engine-shared, not in the Victoria 3 `game/` tree), and the `'name'` / `'scope'` defines it declares are placeholder slots that the engine never resolves a macro for. Pure engine noise on every load — not vanilla-game and not mod-modifiable.
 
-### `virtualfilesystem.cpp:388` — VFS "Done enumerating" trace for `gfx/frontend/interface/frontend/startscreen.dds`
+### `virtualfilesystem.cpp:388` — VFS "Done enumerating" trace, one line per directory at launch
 - source: `virtualfilesystem.cpp:388`
 
 ```
-Done enumerating 'gfx/frontend/interface/frontend/startscreen.dds'
+Done enumerating '
 ```
 
-Informational VFS trace line (mis-tagged as `missing_file` by the categorizer because the wording overlaps with missing-file phrasing). The file exists in vanilla `<install>/gfx/frontend/...`. Not actionable. The companion `:420` "Starting pre-enumerating" line is registered separately below — different source token, same root cause.
+Informational VFS trace (mis-tagged as `missing_file` by the categorizer because the wording overlaps with missing-file phrasing). Each launch logs one line per enumerated directory: 73 distinct directories per launch on 2026-09-26 (`common/*`, `events`, `gui`, `fonts`, `gfx/portraits/*`, …). This entry first covered only `gfx/frontend/interface/frontend/startscreen.dds`; it was broadened then, so a fresh launch in the window no longer floods triage. Not actionable. The companion `:420` "Starting pre-enumerating" line is registered separately below — different source token, same root cause.
 
 ### `virtualfilesystem.cpp:420` — VFS "Starting pre-enumerating" trace for `gfx/frontend/interface/frontend/startscreen.dds`
 - source: `virtualfilesystem.cpp:420`
@@ -836,6 +836,105 @@ Starting pre-enumerating 'gfx/frontend/interface/frontend/startscreen.dds'
 ```
 
 Companion to the `:388` entry above — same VFS pre-enumeration cycle, same harmless trace, different cpp emit point.
+
+### `virtualfilesystem_physfs.cpp:460` — "Mounted Data", one line per mounted folder at launch
+- source: `virtualfilesystem_physfs.cpp:460`
+
+```
+Mounted Data:
+```
+
+The virtual file system lists every folder it mounts at launch: the game, `jomini`, `clausewitz`, each DLC, each Workshop mod and this mod's deploy folder. 20 distinct lines per launch on 2026-09-26. Not an error. If a mod seems not to load at all, this is the list to read, so find the lines with `?mod_noise=show&vanilla_bugs=only&q=Mounted` rather than deleting the entry.
+
+### `main.cpp:564` — engine startup trace (log system, worker threads, settings paths, SDK, checksum, texture lookup)
+- source: `main.cpp:564`
+- source: `jomini_game_setup.cpp:134`
+- source: `pdx_task.cpp:87`
+- source: `pdx_task.cpp:88`
+- source: `systemsettings.cpp:332`
+- source: `pdx_account.cpp:600`
+- source: `pdx_matchmaking.cpp:62`
+- source: `jomini_social.cpp:20`
+- source: `application.cpp:925`
+- source: `pdxassetutil.cpp:304`
+- source: `pdxassetutil.cpp:313`
+- source: `pdxfilewatcher_windows.cpp:363`
+
+```
+Total startup duration
+Log system initialized
+worker threads
+is not defined in path.settings
+Starting up PDX SDK
+Matchmaking Interface:
+Created Jomini Social
+Starting checksum calculation
+ThreadedInitTextureLookup
+Invalid path passed in Directories:
+```
+
+One line each, once per launch: the log system coming up, the worker-thread pools, the two settings paths falling back to their defaults, the Paradox SDK and matchmaking back ends, the checksum pass, the texture lookup, and the total startup time. `pdxfilewatcher_windows.cpp:363` is the file watcher being pointed at a `tools_import` folder that doesn't exist in the user directory; harmless. (`application.cpp` also has a `:1861` "Quit from inside game" entry below, a different message.) None of these is an error.
+
+### `gfx_dx11_master_context.cpp:149` — graphics adapter lines at launch
+- source: `gfx_dx11_master_context.cpp:149`
+- source: `gfx_dx11_master_context.cpp:296`
+- source: `gfx_dx11_master_context.cpp:297`
+- source: `gfx_dx11_master_context.cpp:298`
+- source: `gfx_dx11_master_context.cpp:299`
+
+```
+Adapter
+VendorId:
+DeviceId:
+SubSysId:
+Revision:
+```
+
+The DirectX 11 back end lists each adapter it finds, the one it selected, and that one's vendor, device, subsystem and revision IDs. Machine description, not an error.
+
+### `pdx_audio2.cpp:614` — audio engine startup lines
+- source: `pdx_audio2.cpp:614`
+- source: `pdx_audio2.cpp:540`
+- source: `pdx_audio2.cpp:547`
+- source: `pdx_audio2.cpp:554`
+
+```
+Creating FMOD sound engine
+Legacy setting: audio_profile
+```
+
+The FMOD engine starting, and three notices that the user's settings still carry the old per-output `audio_profile_*_path` keys. Settings-file housekeeping, not a mod or game bug.
+
+### `pdx_json_settings.cpp:325` — the settings file lacks a setting, so the default is used
+- source: `pdx_json_settings.cpp:325`
+
+```
+file lacks
+```
+
+`[SPdxJsonSettingsIO] "pdx_settings.json" file lacks "<setting>" setting in "<category>" category.`: 16 settings per launch on 2026-09-26 (resolution, device, anti-aliasing, the audio device profile, …). The engine uses its defaults. It depends on the user's settings file, not on content. The shutdown-side `:425` notice is a separate entry below.
+
+### `jominiapplication.cpp:698` — the launch's DLC list and third-party mod metadata
+- source: `jominiapplication.cpp:698`
+- source: `dlc.cpp:748`
+- source: `pdx_json_doc_serialize.cpp:98`
+
+```
+DLC:
+successfully matched game version
+Skipped member:
+```
+
+The installed-DLC list, each playset mod whose `supported_game_version` matches the game, and the metadata reader skipping keys it doesn't know (`"victoria3"`, `"thumbnail.png"`). The **mismatch** line from the same checker (`dlc.cpp:753`, "does not match game version") is left visible on purpose. For this mod it means `.metadata/metadata.json` needs its version bumped (it did on 2026-09-26, 1.14.3 against 1.14.4). Only the third-party mismatch below is registered.
+
+### `dlc.cpp:753` — a third-party playset mod declares an older game version (Headlines)
+- source: `dlc.cpp:753`
+
+```
+Mod Headlines (
+```
+
+The Workshop "Headlines" mod declares `1.13.*` against the 1.14.4 game. That's its author's metadata, not this mod's. The signature names that mod alone, so this mod's own mismatch line still surfaces.
 
 ### `pdx_persistent_reader.cpp:268` — save-game scan key-reference and province-reference parse warnings
 - source: `pdx_persistent_reader.cpp:268`

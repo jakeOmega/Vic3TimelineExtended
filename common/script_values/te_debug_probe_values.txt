@@ -1,0 +1,10 @@
+﻿# TEMPORARY PROBE, read by common/on_actions/te_debug_probe_on_actions.txt:
+# delete both files together once a launch has logged the TE_PROBE_LOC lines.
+# The country's te_probe_loc_value (the probe sets it to 7), or -1 without it.
+te_probe_loc_value_sv = {
+	value = -1
+	if = {
+		limit = { has_variable = te_probe_loc_value }
+		value = var:te_probe_loc_value
+	}
+}
