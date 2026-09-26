@@ -122,30 +122,33 @@ agdiff_handle_tech_acquired_effect = {
 
 # --- Backfill for countries the broadcast missed ----------------------------
 # Countries that come into existence AFTER the first researcher (decolonization,
-# releases, formables, secession) miss the every_country broadcast in
-# agdiff_handle_tech_acquired_effect, and so do the rebels in a revolution: a
-# second country object with the same tag, which starts with no modifiers.
-# This catch-up effect adds any diffusion modifier whose global-first flag is
-# already set but which isn't yet on the country. It reads only global flags
-# and the country's own modifiers, so it is safe to run on any country at any
-# time, as often as you like.
+# releases, formables) miss the every_country broadcast in
+# agdiff_handle_tech_acquired_effect. This catch-up effect adds any diffusion
+# modifier whose global-first flag is already set but which isn't yet on the
+# country. It reads only global flags and the country's own modifiers, so it is
+# safe to run on any country at any time, as often as you like.
 #
-# Wired into (common/on_actions/extra_on_actions.txt, agricultural diffusion
-# section):
-#   on_country_formed                           ROOT = the new country
-#   on_country_released_as_independent          scope:target = released country
-#   on_country_released_as_own_subject          scope:target = released country
-#   on_country_released_as_overlord_subject     scope:target = released country
-#   on_country_released_as_company_subject      scope:target = released country
-#   on_revolution_start, on_secession_start     scope:target = uprising country
-#   on_civil_war_won                            ROOT = the winner, through
-#                                               agdiff_repair_after_civil_war
+# Unlike the broadcast, it does not filter on country type: a released or
+# formed country gets the diffusion whatever its type. That predates the
+# civil-war hooks and is left as it was. The civil-war paths do filter,
+# because there the rule is that the winner continues the nation: it keeps
+# what the nation had and gains nothing the nation never had.
 #
-# The rebels get it when the uprising starts, not only when they win: they
-# are the object that survives a rebel victory, and a revolution's winner
-# inherits none of the loser's modifiers (docs/guides/scripting_best_practices.md
-# § "What a Civil War's Winner Inherits"; in the German-revolution saves the
-# winner held none of the five). The on_civil_war_won pass is the backstop.
+# How each kind of new country gets the diffusion (the on_actions are in
+# common/on_actions/extra_on_actions.txt, agricultural diffusion section):
+#   on_country_formed                        ROOT = the new country:
+#                                            this backfill
+#   on_country_released_as_independent       scope:target = the released
+#   on_country_released_as_own_subject       country: this backfill
+#   on_country_released_as_overlord_subject
+#   on_country_released_as_company_subject
+#   on_revolution_start, on_secession_start  scope:target = the uprising
+#                                            country: a copy of what the
+#                                            original (ROOT) holds,
+#                                            agdiff_copy_diffusion_from_root
+#   on_civil_war_won                         ROOT = the winner: this backfill,
+#                                            recognized countries only,
+#                                            agdiff_repair_after_civil_war
 #
 # Without this, decolonized 1960+ African nations (the exact target of issue
 # #114) would get zero benefit from the Green Revolution diffusion that fired
@@ -171,12 +174,49 @@ agdiff_backfill_diffusion_for_country = {
 	agdiff_backfill_one_tech = { TECH = biotechnology }
 }
 
+# --- The rebels: a copy of what the nation holds ------------------------------
+# The rebels in a civil war are a second country object (the same tag in a
+# revolution, a new one in a secession), and it starts with no modifiers. In a
+# revolution it is also the object that survives a rebel victory, and a
+# revolution's winner inherits none of the loser's modifiers
+# (docs/guides/scripting_best_practices.md § "What a Civil War's Winner
+# Inherits"; in the German-revolution saves the winner held none of the five).
+# So when the uprising starts the rebels get each diffusion modifier the
+# original holds: what the nation had, and no more. The global flags are not
+# consulted: a nation the broadcast skipped (it was not recognized at the
+# time) has nothing to pass on, and its rebels must not gain what it lacked.
+#
+# Scope: the uprising country, with ROOT = the original (on_revolution_start /
+# on_secession_start, through agdiff_copy_on_uprising).
+agdiff_copy_one_tech_from_root = {
+	if = {
+		limit = {
+			root = { has_modifier = agdiff_$TECH$ }
+			NOT = { has_modifier = agdiff_$TECH$ }
+		}
+		add_modifier = { name = agdiff_$TECH$ }
+	}
+}
+
+agdiff_copy_diffusion_from_root = {
+	agdiff_copy_one_tech_from_root = { TECH = nitrogen_fixation }
+	agdiff_copy_one_tech_from_root = { TECH = modern_chemical_processes }
+	agdiff_copy_one_tech_from_root = { TECH = green_revolution }
+	agdiff_copy_one_tech_from_root = { TECH = gene_splicing }
+	agdiff_copy_one_tech_from_root = { TECH = biotechnology }
+}
+
 # --- After a civil war ------------------------------------------------------
-# A revolution's winner inherits the loser's variables but none of its
-# modifiers (docs/guides/scripting_best_practices.md § "What a Civil War's
-# Winner Inherits"). When the rebels win, the loyalist object dies holding the
-# five diffusion modifiers and, if it was a first researcher, the first-mover
-# reward. The winner continues the nation, so it gets both back.
+# When the rebels win, the loyalist object dies holding the diffusion
+# modifiers and, if it was a first researcher, the first-mover reward, and the
+# winner inherits neither. The winner continues the nation, so it gets both
+# back.
+#
+# The rebels already hold the diffusion, copied from the original when the
+# uprising started, so the backfill here is only a backstop, for a war that
+# began before that copy existed. It is limited to recognized countries, the
+# broadcast's own filter, so no winner gains diffusion that its nation was
+# never given. The first-mover reward has no such copy and is restored here.
 #
 # Scope: the winner, which must also be ROOT (called bare from
 # agdiff_on_civil_war_won; on_civil_war_won runs with ROOT = the winner, after
@@ -184,7 +224,10 @@ agdiff_backfill_diffusion_for_country = {
 # that still holds what it restores, which is what a loyalist victory
 # presumably leaves: the original keeps its own modifiers.
 agdiff_repair_after_civil_war = {
-	agdiff_backfill_diffusion_for_country = yes
+	if = {
+		limit = { is_country_type = recognized }
+		agdiff_backfill_diffusion_for_country = yes
+	}
 	agdiff_restore_first_mover_prestige = yes
 	agdiff_repoint_first_country = { TECH = nitrogen_fixation }
 	agdiff_repoint_first_country = { TECH = modern_chemical_processes }
@@ -200,13 +243,15 @@ agdiff_repair_after_civil_war = {
 # like it) says how much is left, and the reward comes back only while some is.
 #
 # The restored modifier starts at the strength the lost one had decayed to
-# (multiplier = the fraction of the 20 years still to run), so the number the
-# player was watching carries straight across the win. It then fades over a
-# full very_long_modifier_time instead of over what was left, so it fades more
-# slowly than the original would have. A duration computed from a script value
-# would end it on the original date, but no add_modifier in vanilla or this mod
-# takes a non-constant duration, and one the engine ignored would leave the
-# modifier permanent.
+# (multiplier = the fraction of the 20 years still to run) and runs for the
+# whole years left, rounded to the nearest, so it ends within six months of the
+# day the original would have, fading at close to the original's slope. Under
+# six months left the reward has as good as expired and is not restored. The
+# years are read off a ladder of literal durations, as cr_rebuild_outcome_modifier
+# (civil_rights_effects.txt) does for the same kind of reward: no add_modifier in
+# vanilla or this mod takes a computed duration, and one the engine ignored
+# would leave the modifier permanent. months_left is a whole number, so each
+# rung's `> 12k - 7` is "at least 12k - 6 months", the lower edge of k years.
 #
 # A title won before agdiff_first_mover_month existed has no record and is not
 # restored: there is no way to tell whether its 20 years have run out.
@@ -222,13 +267,87 @@ agdiff_restore_first_mover_prestige = {
 			root ?= this
 			has_variable = agdiff_first_mover_month
 			NOT = { has_modifier = agdiff_first_mover_prestige }
-			agdiff_first_mover_months_left > 0
+			agdiff_first_mover_months_left > 5
 		}
-		add_modifier = {
-			name = agdiff_first_mover_prestige
-			days = very_long_modifier_time
-			multiplier = agdiff_first_mover_strength_left
-			is_decaying = yes
+		if = {
+			limit = { agdiff_first_mover_months_left > 233 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 7300 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 221 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 6935 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 209 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 6570 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 197 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 6205 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 185 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 5840 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 173 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 5475 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 161 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 5110 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 149 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 4745 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 137 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 4380 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 125 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 4015 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 113 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 3650 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 101 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 3285 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 89 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 2920 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 77 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 2555 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 65 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 2190 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 53 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 1825 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 41 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 1460 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 29 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 1095 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 17 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 730 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
+		}
+		else_if = {
+			limit = { agdiff_first_mover_months_left > 5 }
+			add_modifier = { name = agdiff_first_mover_prestige days = 365 multiplier = agdiff_first_mover_strength_left is_decaying = yes }
 		}
 	}
 }

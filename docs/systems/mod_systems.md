@@ -1110,11 +1110,14 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 - `cultural_hegemony_tech_first_on_action` — world-first tech prestige (`cultural_hegemony_on_actions.txt`)
 - `agricultural_diffusion_on_action` — broadcasts the first researcher of each diffusion-eligible tech
 
-**`on_country_formed`** (Root = the new country), **`on_country_released_as_{independent,own_subject,overlord_subject,company_subject}`, `on_revolution_start`, `on_secession_start`** (scope:target = the released or uprising country):
-- `agdiff_backfill_on_country_formed` / `agdiff_backfill_on_released_country` — give the new country, or the rebels, every agricultural-diffusion modifier whose world-first has already fired (`agdiff_backfill_diffusion_for_country`, stateless). The broadcast only reaches countries that exist at the time, and a revolution's winner inherits no modifier from the loser.
+**`on_country_formed`** (Root = the new country), **`on_country_released_as_{independent,own_subject,overlord_subject,company_subject}`** (scope:target = the released country):
+- `agdiff_backfill_on_country_formed` / `agdiff_backfill_on_released_country` — give the new country every agricultural-diffusion modifier whose world-first has already fired (`agdiff_backfill_diffusion_for_country`, stateless). The broadcast only reaches countries that exist at the time. Unlike the broadcast (recognized countries only), this backfill ignores country type; that predates #460 and is left as it was.
+
+**`on_revolution_start`, `on_secession_start`** (Root = the original, scope:target = the uprising country):
+- `agdiff_copy_on_uprising` — gives the rebels each diffusion modifier the original holds (`agdiff_copy_diffusion_from_root`), and nothing the nation lacked. The rebel object is the one that survives a rebel victory, and a revolution's winner inherits no modifier from the loser.
 
 **`on_civil_war_won`** (Root = the winner):
-- `agdiff_on_civil_war_won` — the backfill again, plus what is left of a lost `agdiff_first_mover_prestige` (from `agdiff_first_mover_month`, recorded with the title; not restored for titles won before that variable existed), and re-points `first_<tech>_country` from the dead loser to the winner.
+- `agdiff_on_civil_war_won` — the backfill again for recognized winners only (a backstop for wars begun before the rebels got the copy); what is left of a lost `agdiff_first_mover_prestige`, read from `agdiff_first_mover_month` (recorded with the title) off a ladder of whole years left, and not restored for titles won before that variable existed; and re-points `first_<tech>_country` from the dead loser to the winner.
 
 **`on_law_activated`** (Root = Law scope):
 - `fix_incompatible_laws_from_law_scope` — law compatibility

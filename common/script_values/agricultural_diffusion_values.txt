@@ -15,8 +15,9 @@ agdiff_first_mover_months_total = {
 }
 
 # Months of the reward still to run, from agdiff_first_mover_month, the month
-# index recorded with the first-mover title. Zero or negative once it has run
-# out. Scope: a country holding agdiff_first_mover_month.
+# index recorded with the first-mover title. A whole number; zero or negative
+# once it has run out. It picks the restore's rung (whole years left, to the
+# nearest). Scope: a country holding agdiff_first_mover_month.
 agdiff_first_mover_months_left = {
 	value = var:agdiff_first_mover_month
 	add = agdiff_first_mover_months_total
