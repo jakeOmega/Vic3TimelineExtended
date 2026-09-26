@@ -276,6 +276,31 @@ class TestWarLawGate(unittest.TestCase):
             self.assertIn("nd_war_law_permits_strategic_strike = yes", option_body(text, opt), opt)
 
 
+class TestTacticalTargets(unittest.TestCase):
+    """nd_state_has_military_target is the tactical strike's one target list:
+    the action's state pickers read it, and its AI score covers every
+    building on it (a building missing from the score is a target the AI
+    never prefers)."""
+
+    def setUp(self):
+        self.targets = set(re.findall(r"has_building = (\w+)",
+                                      block(strip_comments(read(TRIGGERS)), "nd_state_has_military_target")))
+        self.action = block(strip_comments(read(NUKE)), "tactical_nuke_diplo_action")
+
+    def test_military_bases_are_targets(self):
+        self.assertIn("building_military_base", self.targets)
+
+    def test_state_pickers_read_the_shared_trigger(self):
+        for picker in ("second_state_trigger", "will_select_as_second_state"):
+            body = block(self.action, picker)
+            self.assertIn("nd_state_has_military_target = yes", body, picker)
+            self.assertNotIn("has_building =", body, picker)
+
+    def test_score_covers_exactly_the_targets(self):
+        scored = set(re.findall(r"b:(\w+)\.level", block(self.action, "propose_score")))
+        self.assertEqual(scored, self.targets)
+
+
 class TestFollowThrough(unittest.TestCase):
     def setUp(self):
         self.triggers = strip_comments(read(TRIGGERS))

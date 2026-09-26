@@ -200,13 +200,7 @@ tactical_nuke_diplo_action = {
 		owner = {
 			has_war_with = scope:country
 		}
-		OR = {
-			has_building = building_barrack
-			has_building = building_naval_administration
-			has_building = building_naval_fortification
-			has_building = building_naval_logistics_center
-			has_building = building_conscription_center
-		}
+		nd_state_has_military_target = yes
 	}
 
 	accept_effect = {
@@ -266,13 +260,7 @@ tactical_nuke_diplo_action = {
 		}
 
 		will_select_as_second_state = {
-			OR = {
-				has_building = building_barrack
-				has_building = building_naval_administration
-				has_building = building_naval_fortification
-				has_building = building_naval_logistics_center
-				has_building = building_conscription_center
-			}
+			nd_state_has_military_target = yes
 		}
 
 		will_propose = {
@@ -327,6 +315,15 @@ tactical_nuke_diplo_action = {
 						}
 						add = {
 							value = b:building_conscription_center.level
+							divide = 100
+						}
+					}
+					if = {
+						limit = {
+							has_building = building_military_base
+						}
+						add = {
+							value = b:building_military_base.level
 							divide = 100
 						}
 					}
