@@ -348,6 +348,7 @@ on_monthly_pulse_country = {
 		te_collective_governance_country_pulse
 		operation_polo_on_action
 		aptitude_traits_cleanup_on_action
+		tech_marker_grants_on_action
 	}
 }
 
@@ -1093,12 +1094,66 @@ tech_spread_on_action = {
 				multiplier = global_tech_spread_script_value
 			}
 		}
+	}
+}
+
+# One-shot grants keyed on a technology's tooltip-marker modifier, not on the
+# technology: the tech's modifier block shows the bool, and this is the one
+# place that acts on it. Reading the modifier means anything else that grants
+# the bool triggers the same result, and it also catches any path to the tech
+# that skips its on_researched. Monthly, so a grant lands within a month of the
+# research. The bools are defined in era_6.txt (decolonization) and era_7.txt
+# (civil_rights_movement).
+tech_marker_grants_on_action = {
+	effect = {
+		# decolonization
 		if = {
 			limit = {
 				is_country_type = unrecognized
-				has_technology_researched = decolonization
+				modifier:country_unrecognized_become_recognized_bool = yes
 			}
 			set_country_type = recognized
+		}
+		if = {
+			limit = { modifier:country_add_anticolonial_ideology_to_igs_bool = yes }
+			if = {
+				limit = {
+					ig:ig_trade_unions ?= {
+						NOT = { has_ideology = ideology:ideology_anti_colonialist }
+					}
+				}
+				ig:ig_trade_unions = {
+					add_ideology = ideology_anti_colonialist
+					save_scope_as = interest_group_scope
+				}
+				post_notification = ideology_anti_colonialist_added
+			}
+			if = {
+				limit = {
+					ig:ig_intelligentsia ?= {
+						NOT = { has_ideology = ideology:ideology_anti_colonialist }
+					}
+				}
+				ig:ig_intelligentsia = {
+					add_ideology = ideology_anti_colonialist
+					save_scope_as = interest_group_scope
+				}
+				post_notification = ideology_anti_colonialist_added
+			}
+		}
+		# civil_rights_movement
+		if = {
+			limit = {
+				modifier:country_add_multicultural_ideology_to_intelligentsia_bool = yes
+				ig:ig_intelligentsia ?= {
+					NOT = { has_ideology = ideology:ideology_multicultural_ig }
+				}
+			}
+			ig:ig_intelligentsia = {
+				add_ideology = ideology_multicultural_ig
+				save_scope_as = interest_group_scope
+			}
+			post_notification = ideology_multicultural_added
 		}
 	}
 }

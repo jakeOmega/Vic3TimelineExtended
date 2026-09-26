@@ -869,11 +869,6 @@ building_highway_throughput_add = {
 	percent = yes
 }
 
-building_deportee_mortality_mult = {
-	color = bad
-	percent = yes
-}
-
 building_farmers_shares_add={
 	decimals=0
 	color=neutral
@@ -3489,15 +3484,6 @@ country_unrecognized_become_recognized_bool = {
 	script_only = yes
 }
 
-state_mass_migration_encouragement_bool = {
-	color = neutral
-	boolean = yes
-	game_data = {
-		ai_value = 0
-	}
-	script_only = yes
-}
-
 state_arable_land_mult = {
 	color = good
 	percent = yes
@@ -3531,12 +3517,6 @@ state_war_support_monthly_add = {
 country_war_support_monthly_add_religion = {
 	color = good
 	percent = no
-}
-
-country_foreign_investment_acceptance_add = {
-	color = good
-	percent = no
-	script_only = yes
 }
 
 country_economic_dependence_leverage_gain_mult = {

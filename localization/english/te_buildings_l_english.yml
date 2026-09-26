@@ -100,8 +100,6 @@
  building_dassault_merignac_plant:0 "Dassault Merignac Plant"
  building_de_beers_sorting_office:0 "De Beers Sorting Office"
  building_de_beers_sorting_office_desc:0 "The De Beers diamond sorting and valuation office, controlling the global flow of rough diamonds from South African mines to world markets."
- building_deportee_mortality_mult:0 "Deportee Mortality Multiplier"
- building_deportee_mortality_mult_desc:0 "A percentage change to mortality among deportee laborers in this building"
  building_disney_world:0 "Disney World"
  building_dmc_mulhouse_mills:0 "DMC Mulhouse Thread Mills"
  building_douro_wine_lodge:0 "Douro Wine Lodge"

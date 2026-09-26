@@ -1671,7 +1671,7 @@ The risk to be aware of: if a mod system *also* adds loyalists/radicals tied to 
 - `country_cultural_pull_add` — flat pull bonus (techs, laws, buildings)
 - `country_cultural_pull_mult` — percentage pull multiplier
 - `country_cultural_hegemony_art_mult` — art production contribution multiplier
-- `country_ideology_resistance_mult` — resist foreign ideology shift
+- `country_ideology_resistance_mult` — resistance to foreign cultural influence: scales the foreign benchmark (`cultural_hegemony_benchmark_mult`) by `1 − resistance`, floored at 0 (`ch_ideology_resistance_factor`). It does **not** scale hegemon movement pressure: the baseline and covert channels add that modifier with a foreign ROOT (the rebuild runner, the attacker), and `add_modifier`'s multiplier resolves against ROOT, so it cannot read the target's resistance there. Granted by `principle_education_5` (tier V of the education principle group), on its Schools `institution_modifier`, so it grows with the institution's level.
 
 ### Key Files
 | File | Purpose |
