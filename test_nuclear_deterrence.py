@@ -1336,6 +1336,20 @@ class TestCustody(unittest.TestCase):
         self.assertIn("nd_readiness_withdrawn", block(self.t, "nd_can_set_readiness"))
         self.assertIn("remove_variable = nd_cw_withdrawn", block(self.e, "nd_country_monthly_cleanup"))
 
+    def test_a_civil_war_is_read_from_the_rebel_country(self):
+        """any_civil_war iterates the civil wars still brewing (a movement's
+        progress), not one that has broken out: the lock read it and lifted
+        the month after the outbreak. Every "is our civil war still on" test
+        goes through nd_in_civil_war instead."""
+        live = block(self.ct, "nd_in_civil_war")
+        self.assertIn("civil_war_origin_country ?= scope:nd_icw_self", live)
+        self.assertIn("is_revolutionary = yes", live)
+        self.assertIn("is_secessionist = yes", live)
+        cleanup = block(self.e, "nd_country_monthly_cleanup")
+        self.assertIn("nd_in_civil_war = no", cleanup)
+        for path in (EFFECTS, CUSTODY_EFFECTS, CUSTODY_TRIGGERS, TRIGGERS, CUSTODY_EVENTS):
+            self.assertNotIn("any_civil_war", strip_comments(read(path)), path.name)
+
     def test_both_sides_of_a_civil_war_hold_their_own_arsenal(self):
         start = block(self.ce, "nd_custody_on_civil_war_start")
         rebel = block(start, "scope:target")

@@ -2093,10 +2093,12 @@ nd_country_monthly_cleanup = {
 		nd_ledger_refresh = yes
 	}
 	# Pulled back for a civil war that is over: the forces may be raised again.
+	# The rebel country tells whether one is still being fought
+	# (nd_in_civil_war); any_civil_war iterates the ones still brewing.
 	if = {
 		limit = {
 			nd_readiness_withdrawn = yes
-			NOT = { any_civil_war = { always = yes } }
+			nd_in_civil_war = no
 		}
 		remove_variable = nd_cw_withdrawn
 	}

@@ -58,6 +58,22 @@ nd_is_civil_war_counterpart = {
 	}
 }
 
+# Is one of our civil wars still being fought: does a country that rose
+# against us still stand as rebels? Read from the rebel country, never from
+# any_civil_war: that iterates the civil wars still brewing (a movement's
+# civil_war_progress, vanilla's JEs test `civil_war_progress >= 0.75`), not
+# the war once it has broken out. Country scope.
+nd_in_civil_war = {
+	save_temporary_scope_as = nd_icw_self
+	any_country = {
+		civil_war_origin_country ?= scope:nd_icw_self
+		OR = {
+			is_revolutionary = yes
+			is_secessionist = yes
+		}
+	}
+}
+
 # Pulled back at the outbreak of a civil war ("Who Holds the Button?", option
 # b): the warheads are held in storage until every civil war of ours is over.
 # Every raise of readiness is greyed (nd_can_set_readiness), the AI does not
