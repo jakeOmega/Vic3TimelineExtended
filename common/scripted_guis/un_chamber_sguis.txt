@@ -192,6 +192,301 @@ un_chamber_missions_ended_sgui = {
 	}
 }
 
+# Under the rows: "no mission is in the field", or the missions opened while
+# all eight rows were taken. Shown only when there is something to say. Never
+# executed; is_shown reads only the root (gotcha #22).
+un_chamber_missions_unlisted_sgui = {
+	scope = country
+
+	is_shown = {
+		OR = {
+			NOT = { has_global_variable_list = un_mission_registry }
+			NOT = {
+				any_in_global_list = {
+					variable = un_mission_registry
+					has_tag = un_msn_active
+				}
+			}
+			any_in_global_list = {
+				variable = un_mission_registry
+				has_tag = un_msn_active
+				NOT = { has_variable = un_msn_slot }
+			}
+		}
+	}
+	ai_is_valid = { always = no }
+
+	effect = {
+	}
+}
+
+# MISSIONS IN THE FIELD, ONE ROW PER DISPLAY SLOT. Every active mission holds a
+# slot, 0-7 (un_mission_assign_slot), and the widget draws one row per slot:
+# the mission (un_chamber_mission_slot_sgui) and our Join or Withdraw control
+# beside it (un_chamber_mission_join_sgui / un_chamber_mission_withdraw_sgui).
+# Each passes the slot as `op`. The slot table is repeated in
+# un_mission_assign_slot (un_mission_effects.txt) and the widget's rows; keep
+# them in step (test_un_chamber_mission_slots.py checks that they are).
+#
+# A row's visibility, and the choice between Join and Withdraw, read IsValid,
+# never IsShown: a saved scope is documented to reach is_valid, and only
+# thinly evidenced to reach is_shown (gui_modding_guide.md gotcha #22), which
+# here would fail by hiding every row.
+
+# The row: is_valid says whether the slot holds a mission (the row's
+# `visible`); the effect renders it (the row's text).
+un_chamber_mission_slot_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_mission_slot_filled = { SLOT = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_mission_slot_filled = { SLOT = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_mission_slot_filled = { SLOT = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_mission_slot_filled = { SLOT = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_mission_slot_filled = { SLOT = 4 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_mission_slot_filled = { SLOT = 5 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_mission_slot_filled = { SLOT = 6 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_mission_slot_filled = { SLOT = 7 }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_chamber_mission_slot_entry = { SLOT = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_chamber_mission_slot_entry = { SLOT = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_chamber_mission_slot_entry = { SLOT = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_chamber_mission_slot_entry = { SLOT = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_chamber_mission_slot_entry = { SLOT = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_chamber_mission_slot_entry = { SLOT = 5 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_chamber_mission_slot_entry = { SLOT = 6 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_chamber_mission_slot_entry = { SLOT = 7 }
+		}
+	}
+}
+
+# Join: send a contingent to the mission in the slot. The same rule and the
+# same writer as the AI's (un_mission_ai_monthly).
+un_chamber_mission_join_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_global_variable = un_founded
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_mission_slot_can_volunteer = { SLOT = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_mission_slot_can_volunteer = { SLOT = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_mission_slot_can_volunteer = { SLOT = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_mission_slot_can_volunteer = { SLOT = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_mission_slot_can_volunteer = { SLOT = 4 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_mission_slot_can_volunteer = { SLOT = 5 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_mission_slot_can_volunteer = { SLOT = 6 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_mission_slot_can_volunteer = { SLOT = 7 }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_mission_slot_volunteer = { SLOT = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_mission_slot_volunteer = { SLOT = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_mission_slot_volunteer = { SLOT = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_mission_slot_volunteer = { SLOT = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_mission_slot_volunteer = { SLOT = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_mission_slot_volunteer = { SLOT = 5 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_mission_slot_volunteer = { SLOT = 6 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_mission_slot_volunteer = { SLOT = 7 }
+		}
+	}
+}
+
+# Withdraw: bring our contingent home from the mission in the slot. is_valid
+# says whether we serve in it, which is also what picks Withdraw over Join.
+un_chamber_mission_withdraw_sgui = {
+	scope = country
+	saved_scopes = { op }
+
+	is_shown = {
+		has_global_variable = un_founded
+	}
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_mission_slot_served = { SLOT = 0 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_mission_slot_served = { SLOT = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_mission_slot_served = { SLOT = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_mission_slot_served = { SLOT = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_mission_slot_served = { SLOT = 4 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_mission_slot_served = { SLOT = 5 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_mission_slot_served = { SLOT = 6 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_mission_slot_served = { SLOT = 7 }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
+
+	effect = {
+		if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_mission_slot_withdraw = { SLOT = 0 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_mission_slot_withdraw = { SLOT = 1 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_mission_slot_withdraw = { SLOT = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_mission_slot_withdraw = { SLOT = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_mission_slot_withdraw = { SLOT = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_mission_slot_withdraw = { SLOT = 5 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_mission_slot_withdraw = { SLOT = 6 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_mission_slot_withdraw = { SLOT = 7 }
+		}
+	}
+}
+
 # Our obligations (redesign phase 5), one builder per heading in the widget:
 # a member's dues and arrears, the conventions' terms that bind it and the
 # pressure on its sovereignty; a non-member's position; and, for everyone,
@@ -307,32 +602,269 @@ un_chamber_history_sgui = {
 	}
 }
 
-# The same history with each resolution's recorded ballot appended. Split from
-# un_chamber_history_sgui rather than driven by a flag because ExecuteTooltip
-# re-renders every frame the widget is visible; the widget keeps this variant
-# behind its own collapsed-by-default toggle.
-un_chamber_history_details_sgui = {
+# The same history with each resolution's recorded ballot appended, one GUI
+# row per resolution (op = its place in the archive, newest first, 0-29):
+# is_valid says whether the archive reaches that far (the row's `visible`,
+# read through IsValid for the reason given at un_chamber_mission_slot_sgui),
+# the effect renders it. One row each, because in one block the tooltip
+# engine gathers every ballot line of a country under its first appearance
+# (gui_modding_guide.md gotcha #27). 30 rows cover the 25-entry cap and the
+# handful of entries that can outlive it (see un_chamber_history_sgui); the
+# widget's rows repeat the op table (test_un_chamber_mission_slots.py).
+# The widget keeps this behind its own collapsed-by-default toggle, since
+# ExecuteTooltip re-renders every frame the widget is visible.
+un_chamber_history_details_row_sgui = {
 	scope = country
+	saved_scopes = { op }
+
+	ai_is_valid = { always = no }
+
+	is_valid = {
+		trigger_if = {
+			limit = { exists = scope:op scope:op = 0 }
+			un_chamber_history_has_entry = { COUNT = 1 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_chamber_history_has_entry = { COUNT = 2 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_chamber_history_has_entry = { COUNT = 3 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_chamber_history_has_entry = { COUNT = 4 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_chamber_history_has_entry = { COUNT = 5 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_chamber_history_has_entry = { COUNT = 6 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_chamber_history_has_entry = { COUNT = 7 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_chamber_history_has_entry = { COUNT = 8 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			un_chamber_history_has_entry = { COUNT = 9 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			un_chamber_history_has_entry = { COUNT = 10 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			un_chamber_history_has_entry = { COUNT = 11 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			un_chamber_history_has_entry = { COUNT = 12 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			un_chamber_history_has_entry = { COUNT = 13 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			un_chamber_history_has_entry = { COUNT = 14 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			un_chamber_history_has_entry = { COUNT = 15 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			un_chamber_history_has_entry = { COUNT = 16 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			un_chamber_history_has_entry = { COUNT = 17 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			un_chamber_history_has_entry = { COUNT = 18 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			un_chamber_history_has_entry = { COUNT = 19 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			un_chamber_history_has_entry = { COUNT = 20 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			un_chamber_history_has_entry = { COUNT = 21 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			un_chamber_history_has_entry = { COUNT = 22 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			un_chamber_history_has_entry = { COUNT = 23 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			un_chamber_history_has_entry = { COUNT = 24 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			un_chamber_history_has_entry = { COUNT = 25 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			un_chamber_history_has_entry = { COUNT = 26 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			un_chamber_history_has_entry = { COUNT = 27 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			un_chamber_history_has_entry = { COUNT = 28 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			un_chamber_history_has_entry = { COUNT = 29 }
+		}
+		trigger_else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			un_chamber_history_has_entry = { COUNT = 30 }
+		}
+		trigger_else = {
+			always = no
+		}
+	}
 
 	effect = {
 		if = {
-			limit = {
-				has_global_variable_list = un_resolution_history
-				any_in_global_list = {
-					variable = un_resolution_history
-					has_tag = un_resolution
-				}
-			}
-			ordered_in_global_list = {
-				variable = un_resolution_history
-				order_by = un_res_recency_order
-				max = 100
-				un_chamber_history_entry = yes
-				un_chamber_ballot_lines = yes
-			}
+			limit = { exists = scope:op scope:op = 0 }
+			un_chamber_history_details_row = { POSITION = 0 COUNT = 1 }
 		}
-		else = {
-			custom_tooltip_no_bullet = je_un_chamber_no_history
+		else_if = {
+			limit = { exists = scope:op scope:op = 1 }
+			un_chamber_history_details_row = { POSITION = 1 COUNT = 2 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 2 }
+			un_chamber_history_details_row = { POSITION = 2 COUNT = 3 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 3 }
+			un_chamber_history_details_row = { POSITION = 3 COUNT = 4 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 4 }
+			un_chamber_history_details_row = { POSITION = 4 COUNT = 5 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 5 }
+			un_chamber_history_details_row = { POSITION = 5 COUNT = 6 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 6 }
+			un_chamber_history_details_row = { POSITION = 6 COUNT = 7 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 7 }
+			un_chamber_history_details_row = { POSITION = 7 COUNT = 8 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 8 }
+			un_chamber_history_details_row = { POSITION = 8 COUNT = 9 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 9 }
+			un_chamber_history_details_row = { POSITION = 9 COUNT = 10 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 10 }
+			un_chamber_history_details_row = { POSITION = 10 COUNT = 11 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 11 }
+			un_chamber_history_details_row = { POSITION = 11 COUNT = 12 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 12 }
+			un_chamber_history_details_row = { POSITION = 12 COUNT = 13 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 13 }
+			un_chamber_history_details_row = { POSITION = 13 COUNT = 14 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 14 }
+			un_chamber_history_details_row = { POSITION = 14 COUNT = 15 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 15 }
+			un_chamber_history_details_row = { POSITION = 15 COUNT = 16 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 16 }
+			un_chamber_history_details_row = { POSITION = 16 COUNT = 17 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 17 }
+			un_chamber_history_details_row = { POSITION = 17 COUNT = 18 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 18 }
+			un_chamber_history_details_row = { POSITION = 18 COUNT = 19 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 19 }
+			un_chamber_history_details_row = { POSITION = 19 COUNT = 20 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 20 }
+			un_chamber_history_details_row = { POSITION = 20 COUNT = 21 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 21 }
+			un_chamber_history_details_row = { POSITION = 21 COUNT = 22 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 22 }
+			un_chamber_history_details_row = { POSITION = 22 COUNT = 23 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 23 }
+			un_chamber_history_details_row = { POSITION = 23 COUNT = 24 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 24 }
+			un_chamber_history_details_row = { POSITION = 24 COUNT = 25 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 25 }
+			un_chamber_history_details_row = { POSITION = 25 COUNT = 26 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 26 }
+			un_chamber_history_details_row = { POSITION = 26 COUNT = 27 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 27 }
+			un_chamber_history_details_row = { POSITION = 27 COUNT = 28 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 28 }
+			un_chamber_history_details_row = { POSITION = 28 COUNT = 29 }
+		}
+		else_if = {
+			limit = { exists = scope:op scope:op = 29 }
+			un_chamber_history_details_row = { POSITION = 29 COUNT = 30 }
 		}
 	}
 }

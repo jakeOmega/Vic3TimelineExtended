@@ -544,7 +544,7 @@ un_chamber_outcome_line = {
 # print the "a former member" fallback instead of a broken name.
 #
 # Called from un_chamber_active_voters_sgui (the resolution in session) and
-# from un_chamber_history_details_sgui (the archive's voting details), so the
+# from un_chamber_history_details_row (the archive's voting details), so the
 # commitments appear in both without a second builder.
 # Scope: resolution container
 un_chamber_ballot_lines = {
@@ -611,6 +611,30 @@ un_chamber_commitment_lines = {
 				variable = un_res_commit_broken
 				custom_tooltip = je_un_chamber_commitment_broken
 			}
+		}
+	}
+}
+
+# One row of the archive's Voting Details: the resolution at $POSITION$
+# (0-based, newest first) and its recorded ballot, if the archive holds
+# $COUNT$ ($POSITION$ + 1). Every resolution is its own row, one ExecuteTooltip
+# each: every member votes on most resolutions, and in one block the tooltip
+# engine gathers all of a country's ballot lines under its first appearance
+# (gui_modding_guide.md gotcha #27), which left the newest resolution carrying
+# every vote and the older ones none.
+# Parameters: $POSITION$, $COUNT$
+# Scope: country (the viewer)
+un_chamber_history_details_row = {
+	if = {
+		limit = { un_chamber_history_has_entry = { COUNT = $COUNT$ } }
+		ordered_in_global_list = {
+			variable = un_resolution_history
+			limit = { has_tag = un_resolution }
+			order_by = un_res_recency_order
+			position = $POSITION$
+			check_range_bounds = no
+			un_chamber_history_entry = yes
+			un_chamber_ballot_lines = yes
 		}
 	}
 }
@@ -890,6 +914,7 @@ un_standing_reason_line = {
 	else_if = { limit = { var:un_standing_last_reason = 32 } custom_tooltip_no_bullet = je_un_standing_reason_32 }
 	else_if = { limit = { var:un_standing_last_reason = 33 } custom_tooltip_no_bullet = je_un_standing_reason_33 }
 	else_if = { limit = { var:un_standing_last_reason = 34 } custom_tooltip_no_bullet = je_un_standing_reason_34 }
+	else_if = { limit = { var:un_standing_last_reason = 35 } custom_tooltip_no_bullet = je_un_standing_reason_35 }
 	else = { custom_tooltip_no_bullet = je_un_standing_reason_none }
 }
 
@@ -1893,11 +1918,20 @@ un_chamber_regime_line = {
 # ============================================================================
 # MISSIONS IN THE FIELD (redesign phase 6)
 # ============================================================================
-# The mission register, in the two lists the widget shows under their own
-# headings: the missions still at work, newest first, then the ones that have
-# ended. Read in place from un_mission_registry. What a mission is and how it
-# ends is static text, under a third heading (je_un_chamber_missions_intro,
-# je_un_chamber_missions_help).
+# The mission register, under the widget's own headings: the missions still
+# at work, one GUI row each (the mission in display slot 0-7, with our Join or
+# Withdraw control beside it: un_chamber_mission_slot_entry), then the ones
+# that have ended, newest first. Read in place from un_mission_registry. What
+# a mission is and how it ends is static text, under a third heading
+# (je_un_chamber_missions_intro, je_un_chamber_missions_help).
+#
+# The rows are GUI rows, one ExecuteTooltip each, not one script-built list:
+# a row needs its own controls, and each block stays small.
+
+# Under the rows: that there is no mission in the field, or the missions with
+# no row (opened while all eight slots were taken; they take one as it frees
+# up, un_mission_monthly). Shown only when there is something to say
+# (un_chamber_missions_unlisted_sgui).
 # Scope: country (the viewer)
 un_chamber_missions_active_block = {
 	if = {
@@ -1910,7 +1944,10 @@ un_chamber_missions_active_block = {
 		}
 		ordered_in_global_list = {
 			variable = un_mission_registry
-			limit = { has_tag = un_msn_active }
+			limit = {
+				has_tag = un_msn_active
+				NOT = { has_variable = un_msn_slot }
+			}
 			order_by = un_mission_recency_order
 			max = 100
 			un_chamber_mission_entry = yes
@@ -1918,6 +1955,44 @@ un_chamber_missions_active_block = {
 	}
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_missions_none_active
+	}
+}
+
+# One row of Missions in the Field: the mission in display slot $SLOT$, and
+# where we stand with it.
+# Scope: country (the viewer)
+un_chamber_mission_slot_entry = {
+	if = {
+		limit = { un_mission_slot_filled = { SLOT = $SLOT$ } }
+		ordered_in_global_list = {
+			variable = un_mission_registry
+			limit = { un_mission_in_slot = { SLOT = $SLOT$ } }
+			order_by = un_mission_recency_order
+			max = 1
+			un_chamber_mission_entry = yes
+			un_chamber_mission_our_part = yes
+		}
+	}
+}
+
+# Our part in the scoped mission, if we have one.
+# Scope: mission container; ROOT: the viewer
+un_chamber_mission_our_part = {
+	if = {
+		limit = { var:un_msn_host ?= ROOT }
+		custom_tooltip_no_bullet = je_un_chamber_mission_ours_host
+	}
+	else_if = {
+		limit = { un_mission_charges = { WHO = ROOT } }
+		custom_tooltip_no_bullet = je_un_chamber_mission_ours_paid
+	}
+	else_if = {
+		limit = { un_mission_served_by = { WHO = ROOT } }
+		custom_tooltip_no_bullet = je_un_chamber_mission_ours_serving
+	}
+	else_if = {
+		limit = { un_mission_withdrawn_by = { WHO = ROOT } }
+		custom_tooltip_no_bullet = je_un_chamber_mission_ours_withdrawn
 	}
 }
 
@@ -1996,12 +2071,51 @@ un_chamber_mission_entry = {
 	else = {
 		custom_tooltip_no_bullet = je_un_chamber_mission_lapsed
 	}
+	# The contributors, largest economy first. Each name is printed from the
+	# mission's own scope, never from inside the contributor's: the tooltip
+	# engine gathers every line printed in one country's scope, anywhere in
+	# the block, under that country's first appearance, so a country serving
+	# in two missions was listed three times under the first and not at all
+	# under the second (gui_modding_guide.md gotcha #27).
 	if = {
-		limit = { un_lobby_list_has_entries = { LIST = un_msn_contributors } }
-		custom_tooltip_no_bullet = je_un_chamber_mission_contributors
-		every_in_list = {
-			variable = un_msn_contributors
-			custom_tooltip_no_bullet = je_un_chamber_mission_contributor
+		limit = {
+			has_variable_list = un_msn_contributors
+			any_in_list = { variable = un_msn_contributors exists = this }
 		}
+		custom_tooltip_no_bullet = je_un_chamber_mission_contributors
+		un_chamber_mission_contributor_at = { POSITION = 0 COUNT = 1 }
+		un_chamber_mission_contributor_at = { POSITION = 1 COUNT = 2 }
+		un_chamber_mission_contributor_at = { POSITION = 2 COUNT = 3 }
+		un_chamber_mission_contributor_at = { POSITION = 3 COUNT = 4 }
+		un_chamber_mission_contributor_at = { POSITION = 4 COUNT = 5 }
+		un_chamber_mission_contributor_at = { POSITION = 5 COUNT = 6 }
+		un_chamber_mission_contributor_at = { POSITION = 6 COUNT = 7 }
+		un_chamber_mission_contributor_at = { POSITION = 7 COUNT = 8 }
+		if = {
+			limit = { any_in_list = { variable = un_msn_contributors count >= 9 exists = this } }
+			custom_tooltip_no_bullet = je_un_chamber_mission_contributors_more
+		}
+	}
+}
+
+# The contributor at $POSITION$ (0-based, largest economy first), if the list
+# has $COUNT$ ($POSITION$ + 1) that still exist. It is saved as a temporary
+# scope and printed from the mission's scope (see un_chamber_mission_entry);
+# the saved scope survives into the next entry (gotcha #25), so the line is
+# printed only when this position was filled just now.
+# Parameters: $POSITION$, $COUNT$
+# Scope: mission container
+un_chamber_mission_contributor_at = {
+	if = {
+		limit = { any_in_list = { variable = un_msn_contributors count >= $COUNT$ exists = this } }
+		ordered_in_list = {
+			variable = un_msn_contributors
+			limit = { exists = this }
+			order_by = gdp
+			position = $POSITION$
+			check_range_bounds = no
+			save_temporary_scope_as = un_chamber_msn_contrib
+		}
+		custom_tooltip_no_bullet = je_un_chamber_mission_contributor
 	}
 }
