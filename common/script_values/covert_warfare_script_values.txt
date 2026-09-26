@@ -492,16 +492,9 @@ covert_op_roll_chance = {
 # SECTION 4: ESPIONAGE TECH GAP CHECK
 # ============================================================================
 
-# Used to gate tech spread bonuses — espionage only gives tech spread
-# if the target has more technologies researched than the spy
-espionage_target_tech_advantage = {
-	value = 0
-	if = {
-		limit = { exists = scope:espionage_target }
-		add = scope:espionage_target.techs_researched
-		subtract = techs_researched
-	}
-}
+# Retired: the check is the trigger covert_op_target_ahead_in_tech
+# (covert_warfare_triggers.txt), evaluated per operation. The script value it
+# replaced read one saved target, the last in iw_ops.
 
 # ============================================================================
 # SECTION 5: DISPLAY VALUES FOR JE TOOLTIPS

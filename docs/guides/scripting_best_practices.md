@@ -3210,6 +3210,8 @@ Engine pattern: wrap effects in `show_as_tooltip = { ... }` and the engine rende
 
 Repo example: `events/un_vote_events.txt` `un_vote.1` option A wraps a per-topic `if = { limit = { scope:un_resolution ?= { has_tag = un_topic_X } } add_modifier = { name = ... } }` switch in `show_as_tooltip` so voters see the treaty modifier they would receive if the resolution passes — the actual `add_modifier` runs later in `un_vote.3` option A, not at vote-cast time.
 
+Second repo example: every covert diplomatic action (`common/diplomatic_actions/covert_operations.txt`) previews in its `accept_effect` the static modifiers its operation's monthly pulse will apply. Two things to know when the real apply is scaled: preview the **unscaled** modifier (no `multiplier`, no duration) under a header that says so, and state the scaling in words, rather than rendering one scaled case; and a field whose modifier type is `script_only = yes` (`country_coup_resistance_add`, the mod's `country_bubble_pressure_monthly_add`, …) is not listed in the rendered modifier, so it needs its own `custom_tooltip` line. `test_covert_launch_preview.py` pins the preview to the pulse.
+
 Don't pair `show_as_tooltip = { add_modifier = X }` with a separate scripted-effect call that *also* adds X — the engine tooltip will list the modifier twice. Either preview-only (the real apply is elsewhere) or apply-only (no wrapper needed). When you need both visibility and execution at the same site, just write `add_modifier` directly at the option level — the engine auto-tooltips it.
 
 ## Multi-Stage Event Flows: `add_modifier` Visibility Across Audience Splits

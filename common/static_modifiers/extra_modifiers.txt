@@ -6401,14 +6401,16 @@ covert_ideological_subversion = {
 	political_movement_pop_attraction_mult = 0.1
 }
 
-# Applied to TARGET's separatist movements during destabilization operation
+# RETIRED 2026-09-25: destabilization's movement pressure now rides on
+# covert_destabilization_resist. These two survive one release so a save made
+# while one was running loads clean; see PENDING REMOVAL in
+# common/scripted_effects/legacy_modifier_cleanup.txt.
 covert_destabilization_separatist = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	political_movement_radicalism_add = 0.15
 	political_movement_pop_attraction_mult = 0.15
 }
 
-# Applied to ALL of TARGET's political movements during destabilization (general unrest)
 covert_destabilization_general = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	political_movement_radicalism_add = 0.05
@@ -6434,11 +6436,17 @@ covert_ideological_subversion_resist = {
 	country_support_separatism_resistance_mult = -0.10
 }
 
-# Applied to TARGET during destabilization (separatism resistance, country-scoped)
+# Applied to TARGET during destabilization, scaled by phase x priority. The
+# movement fields reach every political movement from the country, as vanilla's
+# home-affairs institution modifiers do. Until 2026-09-25 they were split
+# across two more modifiers, one on the country (+0.05 each) and one on every
+# movement (+0.15 each); these values are that sum.
 covert_destabilization_resist = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
 	country_support_separatism_resistance_mult = -0.15
 	country_colonial_stability_drift_add = -0.35
+	political_movement_radicalism_add = 0.20
+	political_movement_pop_attraction_mult = 0.20
 }
 
 # Applied to TARGET when industrial espionage operation is detected against them.

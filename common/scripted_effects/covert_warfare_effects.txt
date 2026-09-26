@@ -1182,30 +1182,30 @@ covert_ops_apply_all_phase_effects = {
 		covert_op_apply_self_effect = { TYPE = military_espionage MODIFIER = covert_military_espionage_unit }
 		# Weak counter-intel marker on the TARGET (authority -3; see industrial espionage above)
 		covert_op_apply_target_effect = { TYPE = military_espionage MODIFIER = covert_military_espionage_detected }
-		# Conditional tech spread: only if target has tech advantage, from the
-		# strongest military espionage operation (phase x priority)
+		# Conditional tech spread, from the strongest military espionage
+		# operation (phase x priority) whose target is ahead of us in
+		# technology. Filter first, then choose: an operation against a country
+		# that is behind neither blocks the bonus nor lends it its strength.
+		# (Until 2026-09 the check read whichever operation came last in iw_ops,
+		# and the strength came from the strongest operation whatever its
+		# target.) Removed as soon as no operation qualifies, not left to run out.
 		if = {
-			limit = {
-				any_in_list = {
-					variable = iw_ops
-					has_tag = iw_op_military_espionage
-					covert_op_is_established = yes
-				}
-			}
-			every_in_list = {
-				variable = iw_ops
-				limit = { has_tag = iw_op_military_espionage }
-				var:iw_target = { save_scope_as = espionage_target }
-			}
+			limit = { any_in_list = { variable = iw_ops has_tag = iw_op_military_espionage } }
+			remove_modifier = covert_military_espionage
 			if = {
 				limit = {
-					exists = scope:espionage_target
-					espionage_target_tech_advantage > 0
+					any_in_list = {
+						variable = iw_ops
+						has_tag = iw_op_military_espionage
+						covert_op_target_ahead_in_tech = yes
+					}
 				}
-				remove_modifier = covert_military_espionage
 				ordered_in_list = {
 					variable = iw_ops
-					limit = { has_tag = iw_op_military_espionage }
+					limit = {
+						has_tag = iw_op_military_espionage
+						covert_op_target_ahead_in_tech = yes
+					}
 					order_by = covert_op_effect_mult
 					position = 0
 					save_scope_as = iw_op
@@ -1248,26 +1248,10 @@ covert_ops_apply_all_phase_effects = {
 			}
 		}
 
-		# ---- Destabilization: country resist modifier + movement modifiers on TARGET ----
+		# ---- Destabilization: one country modifier on TARGET, whose movement
+		#      fields reach every political movement there. (Until 2026-09-25 a
+		#      second country modifier and a per-movement one carried them.)
 		covert_op_apply_target_effect = { TYPE = destabilization MODIFIER = covert_destabilization_resist }
-		every_in_list = {
-			variable = iw_ops
-			limit = {
-				has_tag = iw_op_destabilization
-				covert_op_is_established = yes
-			}
-			save_scope_as = iw_op
-			var:iw_target = {
-				# Separatist movement pressure
-				every_political_movement = {
-					remove_modifier = covert_destabilization_separatist
-					covert_op_add_scaled_modifier = { MODIFIER = covert_destabilization_separatist MONTHS = 3 }
-				}
-				# General destabilization pressure
-				remove_modifier = covert_destabilization_general
-				covert_op_add_scaled_modifier = { MODIFIER = covert_destabilization_general MONTHS = 3 }
-			}
-		}
 
 		# ---- Regime Change (slice 6): country modifier on TARGET; once fully
 		#      operational, a monthly push on any coup already under way there.

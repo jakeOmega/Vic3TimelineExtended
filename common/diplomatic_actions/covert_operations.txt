@@ -7,6 +7,15 @@
 # Complex state/movement-scoped effects supplement pact modifiers via JE pulse.
 # All ops auto-cancel when funding drops to 0 (requirement_to_maintain).
 #
+# LAUNCH PREVIEW: each accept_effect shows what its operation does, at base
+# strength (established, priority 1). show_as_tooltip renders the same static
+# modifiers covert_ops_apply_all_phase_effects applies, unscaled and with no
+# duration; nothing in it runs. The <type>_extra_tt lines after it state what
+# the engine cannot list: script_only fields, modifiers on movements or
+# states, and conditional parts. covert_op_phase_warning_tt then says how
+# phase and priority scale all of it. test_covert_launch_preview.py keeps the
+# preview in step with the pulse.
+#
 # AI DESIGN:
 # - Low evaluation_chance (0.02–0.05) — strategic long-term decisions, not
 #   re-evaluated every tick. Prevents spammy on/off toggling.
@@ -30,6 +39,14 @@ covert_election_interference_action = {
 	should_notify_third_parties = no
 
 	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_election_interference }
+			}
+		}
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
@@ -197,6 +214,17 @@ covert_financial_subversion_action = {
 
 	accept_effect = {
 		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_financial_subversion }
+			}
+		}
+		custom_tooltip = {
+			text = covert_financial_subversion_extra_tt
+		}
+		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
 		custom_tooltip = {
@@ -339,6 +367,14 @@ covert_infrastructure_sabotage_action = {
 	should_notify_third_parties = no
 
 	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_infra_sabotage_morale }
+			}
+		}
 		custom_tooltip = {
 			text = covert_infrastructure_sabotage_extra_tt
 		}
@@ -487,6 +523,14 @@ covert_comms_disruption_action = {
 
 	accept_effect = {
 		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_comms_disruption }
+			}
+		}
+		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
 		custom_tooltip = {
@@ -633,7 +677,17 @@ covert_industrial_espionage_action = {
 
 	accept_effect = {
 		custom_tooltip = {
-			text = covert_espionage_tech_spread_tt
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			add_modifier = { name = covert_espionage_base }
+			add_modifier = { name = covert_industrial_espionage }
+			scope:target_country = {
+				add_modifier = { name = covert_industrial_espionage_detected }
+			}
+		}
+		custom_tooltip = {
+			text = covert_op_self_effect_note_tt
 		}
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
@@ -771,7 +825,19 @@ covert_military_espionage_action = {
 
 	accept_effect = {
 		custom_tooltip = {
-			text = covert_espionage_tech_spread_tt
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			add_modifier = { name = covert_military_espionage_unit }
+			scope:target_country = {
+				add_modifier = { name = covert_military_espionage_detected }
+			}
+		}
+		custom_tooltip = {
+			text = covert_military_espionage_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_self_effect_note_tt
 		}
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
@@ -901,6 +967,14 @@ covert_influence_campaign_action = {
 	should_notify_third_parties = no
 
 	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_influence_campaign }
+			}
+		}
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
 		}
@@ -1055,6 +1129,14 @@ covert_ideological_subversion_action = {
 	should_notify_third_parties = no
 
 	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_ideological_subversion_resist }
+			}
+		}
 		custom_tooltip = {
 			text = covert_ideological_subversion_extra_tt
 		}
@@ -1217,6 +1299,14 @@ covert_destabilization_action = {
 	should_notify_third_parties = no
 
 	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_destabilization_resist }
+			}
+		}
 		custom_tooltip = {
 			text = covert_destabilization_extra_tt
 		}
@@ -1384,6 +1474,14 @@ covert_regime_change_action = {
 
 	accept_effect = {
 		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_regime_change }
+			}
+		}
+		custom_tooltip = {
 			text = covert_regime_change_extra_tt
 		}
 		custom_tooltip = {
@@ -1544,6 +1642,14 @@ covert_nuclear_sabotage_action = {
 	should_notify_third_parties = no
 
 	accept_effect = {
+		custom_tooltip = {
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			scope:target_country = {
+				add_modifier = { name = covert_nuclear_sabotage }
+			}
+		}
 		custom_tooltip = {
 			text = covert_nuclear_sabotage_extra_tt
 		}
@@ -1713,7 +1819,16 @@ covert_space_espionage_action = {
 
 	accept_effect = {
 		custom_tooltip = {
-			text = covert_space_espionage_extra_tt
+			text = covert_op_preview_header_tt
+		}
+		show_as_tooltip = {
+			add_modifier = { name = covert_space_espionage }
+			scope:target_country = {
+				add_modifier = { name = covert_space_espionage_detected }
+			}
+		}
+		custom_tooltip = {
+			text = covert_op_self_effect_note_tt
 		}
 		custom_tooltip = {
 			text = covert_op_phase_warning_tt
