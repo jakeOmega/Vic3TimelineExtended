@@ -40,6 +40,7 @@ At least one source is a decree or a building's `state_modifiers`.
 | `state_yearly_cultural_acceptance_add` | 1 decree, plus principles and the cultural exchange treaty | `state_yearly_cultural_acceptance_add_on_action` (`extra_on_actions.txt`) |
 | `state_violence_against_minorities_bool` | 1 decree, 1 law | `violent_hostility_on_action` (`extra_on_actions.txt`) |
 | `state_monthly_loyalists_add` | the Consciousness Network's social-control production method (`state_modifiers`), plus the Ministry of Thought Control institution | `thought_control_loyalists_update` (`extra_effects.txt`), from `on_monthly_pulse_state`, incorporated states only |
+| `state_nuclear_weapon_defense_chance_add` | the military base's Missile Defense production methods (plus national techs, the NPT guarantee, the orbital battlestation) | `nuclear_strike_success_chance` from `scope:target_state`; strike planners rank states by `nuclear_strike_target_score`; the journal entry's figure reads the capital |
 
 ### 2b. State-typed, but only national grants
 
@@ -51,7 +52,6 @@ These are the same in every state of a country today. **They are the cheapest pe
 | `state_homeland_removal_threshold_add` | the same set |
 | `state_arable_land_mult` | techs, principles, the agricultural-diffusion modifiers (added to countries) |
 | `state_min_cultural_acceptance_delta_add` | laws, principles |
-| `state_nuclear_weapon_defense_chance_add` | techs, the NPT guarantee (`un_regime_npt_guarantee_modifier`), the orbital battlestation's `country_modifiers`. Read by `nuclear_strike_success_chance` from `scope:target_state`; the journal entry's figure reads the capital. |
 | `state_war_support_monthly_add_religion` | the Sacred Civics principles. Each state pays its population share of the modifier × Devout clout (`war_propaganda_support_script_value`). |
 
 The comments in `homelands_modifier_types.txt` say the thresholds are "modified by … decrees (per-state), buildings". No such grant exists yet.

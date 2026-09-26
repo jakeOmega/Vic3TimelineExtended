@@ -1596,6 +1596,42 @@ nuclear_industrial_strike_target_score = {
 	}
 }
 
+# State scope: the chance (0.05-1) that a missile strike on this state lands,
+# the same formula as nuclear_strike_success_chance. The striker is whichever
+# of the two saved countries does not own this state, because retaliation
+# saves the roles swapped (nuclear_response_strike). In the strike action's
+# propose_score no attacking_country is saved and ROOT is the striker.
+nuclear_strike_success_fraction_here = {
+	value = 0
+	if = {
+		limit = {
+			exists = scope:attacking_country
+			exists = scope:target_country
+			owner ?= scope:attacking_country
+		}
+		add = scope:target_country.modifier:country_nuclear_weapon_attack_success_add
+	}
+	else_if = {
+		limit = { exists = scope:attacking_country }
+		add = scope:attacking_country.modifier:country_nuclear_weapon_attack_success_add
+	}
+	else = {
+		add = root.modifier:country_nuclear_weapon_attack_success_add
+	}
+	subtract = modifier:state_nuclear_weapon_defense_chance_add
+	min = 0.05
+	max = 1
+}
+
+# What missile strike planners rank a state by: its value times the chance a
+# warhead gets through, so a state defended by a military base's missile
+# defence draws fewer strikes. Loose warheads (nuclear_loose_effects.txt) are
+# smuggled, not launched, and keep the plain nuclear_industrial_strike_target_score.
+nuclear_strike_target_score = {
+	value = nuclear_industrial_strike_target_score
+	multiply = nuclear_strike_success_fraction_here
+}
+
 pop_culture_conversion_propotion_script_value = {
 	value = 0.002 # base rate
 	multiply = {
