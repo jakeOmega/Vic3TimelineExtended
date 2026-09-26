@@ -41,8 +41,22 @@ nd_loose_plot = {
 		random_in_global_list = {
 			variable = nd_arsenal_records
 			limit = { nd_loose_line_usable = { VICTIM = scope:nd_loose_victim } }
+			# A random_* iterator's weight is an MTTH block (base / modifier),
+			# not a script value: `value = var:nd_ar_loose` logged "unknown
+			# command 'value' for MTTH" and was dropped. Vanilla never feeds a
+			# variable to an MTTH add, so the count is laddered: the weight is
+			# the line's loose count up to 5, then steps to 10, 20, 50 and 100.
+			# Every usable line has at least 1 (nd_loose_line_live).
 			weight = {
-				value = var:nd_ar_loose
+				base = 1
+				modifier = { var:nd_ar_loose >= 2 add = 1 }
+				modifier = { var:nd_ar_loose >= 3 add = 1 }
+				modifier = { var:nd_ar_loose >= 4 add = 1 }
+				modifier = { var:nd_ar_loose >= 5 add = 1 }
+				modifier = { var:nd_ar_loose >= 10 add = 5 }
+				modifier = { var:nd_ar_loose >= 20 add = 10 }
+				modifier = { var:nd_ar_loose >= 50 add = 30 }
+				modifier = { var:nd_ar_loose >= 100 add = 50 }
 			}
 			save_scope_as = nd_loose_line
 		}
@@ -93,9 +107,22 @@ nd_loose_surface = {
 		set_variable = { name = nd_loose_seized value = 1 }
 	}
 	nd_loose_attribute = yes
+	# Gated lines, not a loc read: in debug_log, `.Var().GetValue` prints 0
+	# and ROOT does not resolve (scripting_best_practices.md § debug_log).
+	if = {
+		limit = { var:nd_loose_attribution = 1 }
+		debug_log = "TE_CUSTODY: loose-warhead attribution rolled: confirmed"
+	}
+	else_if = {
+		limit = { var:nd_loose_attribution = 2 }
+		debug_log = "TE_CUSTODY: loose-warhead attribution rolled: a shortlist"
+	}
+	else = {
+		debug_log = "TE_CUSTODY: loose-warhead attribution rolled: unknown"
+	}
 	if = {
 		limit = { var:nd_loose_seized = 1 }
-		debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_origin').GetName] was seized in [ROOT.GetCountry.GetName]; attribution [ROOT.GetCountry.MakeScope.Var('nd_loose_attribution').GetValue|0]"
+		debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_origin').GetNameNoFormatting] was seized in [THIS.GetCountry.GetNameNoFormatting]"
 		trigger_event = { id = nuclear_loose.3 popup = yes }
 	}
 	else = {
@@ -109,8 +136,23 @@ nd_loose_surface = {
 				is_incorporated = yes
 				state_population > 100000
 			}
+			# An MTTH weight, like nd_loose_plot's: the strike planner's score,
+			# laddered. Each rung multiplies the weight by 3.16 (half a
+			# decade), so it stays roughly proportional to the score from
+			# 0.0001 up, which covers a nuclear power's states (scored 100
+			# times lower) as well as everyone else's.
 			weight = {
-				value = nuclear_industrial_strike_target_score
+				base = 1
+				modifier = { nuclear_industrial_strike_target_score >= 0.0001 factor = 3.16 }
+				modifier = { nuclear_industrial_strike_target_score >= 0.000316 factor = 3.16 }
+				modifier = { nuclear_industrial_strike_target_score >= 0.001 factor = 3.16 }
+				modifier = { nuclear_industrial_strike_target_score >= 0.00316 factor = 3.16 }
+				modifier = { nuclear_industrial_strike_target_score >= 0.01 factor = 3.16 }
+				modifier = { nuclear_industrial_strike_target_score >= 0.0316 factor = 3.16 }
+				modifier = { nuclear_industrial_strike_target_score >= 0.1 factor = 3.16 }
+				modifier = { nuclear_industrial_strike_target_score >= 0.316 factor = 3.16 }
+				modifier = { nuclear_industrial_strike_target_score >= 1 factor = 3.16 }
+				modifier = { nuclear_industrial_strike_target_score >= 3.16 factor = 3.16 }
 			}
 			save_scope_as = nd_loose_state
 		}
@@ -120,7 +162,7 @@ nd_loose_surface = {
 			scope:nd_loose_state = {
 				nuclear_industrial_strike = yes
 			}
-			debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_origin').GetName] detonated in [ROOT.GetCountry.GetName]; attribution [ROOT.GetCountry.MakeScope.Var('nd_loose_attribution').GetValue|0]"
+			debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_origin').GetNameNoFormatting] detonated in [THIS.GetCountry.GetNameNoFormatting]"
 			trigger_event = { id = nuclear_loose.2 popup = yes }
 			every_country = {
 				limit = {
@@ -543,7 +585,24 @@ nd_loose_recover_from_line = {
 			change_variable = { name = nd_ar_loose subtract = 1 }
 		}
 		nd_loose_pool_take = { AMOUNT = 1 }
-		debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_line_owner').GetName]'s line was secured (how: $HOW$)"
+		# A parameter inside a debug_log string comes out mangled, so HOW picks
+		# a literal line instead.
+		set_local_variable = { name = nd_loose_how value = $HOW$ }
+		if = {
+			limit = { local_var:nd_loose_how = 1 }
+			debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_line_owner').GetNameNoFormatting]'s line was secured by inspectors"
+		}
+		else_if = {
+			limit = { local_var:nd_loose_how = 2 }
+			debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_line_owner').GetNameNoFormatting]'s line was secured by a covert operation"
+		}
+		else_if = {
+			limit = { local_var:nd_loose_how = 3 }
+			debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_line_owner').GetNameNoFormatting]'s line was secured under the security assistance article"
+		}
+		else = {
+			debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_line_owner').GetNameNoFormatting]'s line was secured under the physical-protection convention"
+		}
 	}
 }
 

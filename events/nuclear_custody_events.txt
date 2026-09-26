@@ -75,6 +75,9 @@ nuclear_custody.1 = {
 		name = nuclear_custody.1.a
 		default_option = yes
 		nd_cw_apply_split = { MODE = hold TT = nd_tt_cw_split_hold }
+		hidden_effect = {
+			debug_log = "TE_CUSTODY: [THIS.GetCountry.GetNameNoFormatting] chose to hold the line at the outbreak"
+		}
 		ai_chance = {
 			base = 2
 			modifier = {
