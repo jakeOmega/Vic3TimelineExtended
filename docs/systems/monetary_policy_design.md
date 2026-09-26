@@ -2921,7 +2921,9 @@ arrangement **lapses**: kind → 0 next month, and a treaty's `requirement_to_ma
 the article.
 
 **Detection: cheap monthly validity, event-driven discovery, yearly full scan.** There are
-no bloc join / leave on-actions and no ceased-to-be-a-subject on-action, and a per-country
+no bloc join / leave on-actions. Vanilla's `on_become_independent` (Root = country) exists,
+but it can also pulse on an overlord-to-overlord transfer, so it is not relied on for the
+ceased-to-be-a-subject case. A per-country
 `any_scope_treaty × any_scope_article` walk every month for ~200 countries would be the
 heaviest thing in the update, spent detecting something that happens a handful of times a
 campaign. Going yearly is worse — an ex-member would import its ex-leader's rate for up to a
