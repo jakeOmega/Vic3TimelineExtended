@@ -319,15 +319,20 @@ resettlement.7 = {
 
 	duration = 3
 
+	# var:rs_last_source can point to a state merged away since; every read
+	# is guarded.
 	trigger = {
 		exists = scope:rs_event_state
-		scope:rs_event_state = { has_variable = rs_last_source }
+		scope:rs_event_state = {
+			has_variable = rs_last_source
+			var:rs_last_source ?= { owner = root }
+		}
 	}
 
 	immediate = {
 		scope:rs_event_state = {
 			set_variable = rs_petition_done
-			var:rs_last_source = { save_scope_as = rs_return_state }
+			var:rs_last_source ?= { save_scope_as = rs_return_state }
 		}
 	}
 
@@ -339,24 +344,27 @@ resettlement.7 = {
 		# lived in the source and are not sent there.
 		custom_tooltip = {
 			text = resettlement_return_tt
-			scope:rs_event_state = {
-				every_scope_pop = {
-					limit = {
-						strata = lower
-						NOT = { is_pop_type = slaves }
-						pop_acceptance >= acceptance_status_4
-						# 5% of 2,000 is the walk's 100-person minimum:
-						# smaller pops stay, so the source is not splintered.
-						total_size >= 2000
-					}
-					move_partial_pop = {
-						state = scope:rs_return_state
-						population_ratio = 0.05
+			if = {
+				limit = { exists = scope:rs_return_state }
+				scope:rs_event_state = {
+					every_scope_pop = {
+						limit = {
+							strata = lower
+							NOT = { is_pop_type = slaves }
+							pop_acceptance >= acceptance_status_4
+							# 5% of 2,000 is the walk's 100-person minimum:
+							# smaller pops stay, so the source is not splintered.
+							total_size >= 2000
+						}
+						move_partial_pop = {
+							state = scope:rs_return_state
+							population_ratio = 0.05
+						}
 					}
 				}
 			}
 		}
-		scope:rs_return_state = {
+		scope:rs_return_state ?= {
 			add_loyalists_in_state = { value = medium_radicals strata = lower }
 		}
 		# The program ends here only; other destinations keep theirs.

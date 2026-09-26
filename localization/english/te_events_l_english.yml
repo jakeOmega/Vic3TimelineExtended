@@ -3312,7 +3312,7 @@
  resettlement.20.f:0 "The Declaration of 1948 promised everyone the right to freedom of movement and residence within the borders of their own state."
  resettlement.20.t:0 "The Declaration and Our Settlements"
  resettlement.3.a:0 "Send relief."
- resettlement.3.b:0 "They knew what they were signing up for."
+ resettlement.3.b:0 "They will have to endure."
  resettlement.3.d:0 "The first winter has caught the settlers of [SCOPE.sState('rs_event_state').GetName] in sod houses and dugouts. Fuel is short, the roads are closed and the new arrivals are falling sick."
  resettlement.3.f:0 "Settlers on the northern plains measured their first years by the winters they survived."
  resettlement.3.t:0 "A Hard Winter on the Frontier"

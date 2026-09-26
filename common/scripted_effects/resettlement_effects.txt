@@ -236,6 +236,10 @@ resettlement_take_from_source = {
 			set_variable = { name = rs_last_source value = scope:rs_source }
 		}
 		resettlement_source_consequences = yes
+		# Per-source line (§13). Script-value wrapper, no .MakeScope; the
+		# state is named by debug_log_scopes.
+		debug_log = "TE_RESETTLEMENT: source gave [SCOPE.ScriptValue('resettlement_debug_taken_now')|0] recruits"
+		debug_log_scopes = yes
 	}
 }
 
@@ -519,12 +523,18 @@ resettlement_clear_destination_bonus = {
 	remove_variable = rs_bonus_scale
 }
 
-# State scope: any state that has ever given settlers. One refresh site.
+# State scope: a state that gave settlers this month or last. One refresh
+# site. After a month with none, the readout and its variable go, so the
+# owner's pulse (which runs while any state has rs_recruits) can stop.
 resettlement_refresh_source_readout = {
-	remove_modifier = resettlement_recruits
 	if = {
 		limit = { var:rs_recruits > 0 }
+		remove_modifier = resettlement_recruits
 		add_modifier = { name = resettlement_recruits multiplier = var:rs_recruits }
+	}
+	else = {
+		remove_modifier = resettlement_recruits
+		remove_variable = rs_recruits
 	}
 }
 
@@ -620,6 +630,15 @@ resettlement_refresh_programme_politics = {
 # Country scope, after resettlement_refresh_politics (which sets the three
 # coercive intensities every month).
 resettlement_refresh_declaration = {
+	# resettlement.5.a rewards ending coercive programs; switching one back
+	# forfeits the reward.
+	if = {
+		limit = {
+			has_modifier = resettlement_reformed
+			any_scope_state = { resettlement_state_runs_coercive = yes }
+		}
+		remove_modifier = resettlement_reformed
+	}
 	set_variable = { name = rs_declaration_intensity value = 0 }
 	if = {
 		limit = { resettlement_is_declaration_party = yes }
@@ -687,7 +706,6 @@ resettlement_roll_events = {
 					var:rs_arrived > 0
 				}
 				save_scope_as = rs_event_state
-				save_scope_as = rs_destination
 			}
 			set_variable = { name = rs_event_cooldown days = 540 }
 			random_list = {
@@ -727,7 +745,8 @@ resettlement_roll_events = {
 							var:rs_months_running >= 60
 							NOT = { has_variable = rs_petition_done }
 							has_variable = rs_last_source
-							var:rs_last_source = { owner = scope:rs_country }
+							# The state may have been merged away since.
+							var:rs_last_source ?= { owner = scope:rs_country }
 						}
 					}
 					trigger_event = { id = resettlement.7 }

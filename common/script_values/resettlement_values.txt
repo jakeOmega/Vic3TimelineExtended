@@ -189,6 +189,16 @@ resettlement_debug_remaining = {
 	else = { value = -1 }
 }
 
+# State scope. debug_log readout of var:rs_taken_now (a source's take for the
+# destination walking it).
+resettlement_debug_taken_now = {
+	if = {
+		limit = { has_variable = rs_taken_now }
+		value = var:rs_taken_now
+	}
+	else = { value = -1 }
+}
+
 # State scope. The capacity modifier, for the debug event's log line.
 resettlement_debug_capacity = {
 	value = modifier:state_resettlement_transfer_add

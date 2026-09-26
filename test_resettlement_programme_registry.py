@@ -614,6 +614,27 @@ class TransferTests(unittest.TestCase):
         body = strip_comments(block(read(EFFECTS), "resettlement_country_monthly"))
         self.assertEqual(body.split()[:3], ["te_set_region_areas_if_stale", "=", "yes"])
 
+    def test_source_readout_clears_after_a_month_with_no_recruits(self):
+        # Otherwise any state that ever gave settlers keeps its owner's pulse
+        # running monthly forever (the on_action runs while rs_recruits exists).
+        body = squash(block(read(EFFECTS), "resettlement_refresh_source_readout"))
+        self.assertIn("if = { limit = { var:rs_recruits > 0 } remove_modifier = resettlement_recruits "
+                      "add_modifier = { name = resettlement_recruits multiplier = var:rs_recruits } }", body)
+        self.assertIn("else = { remove_modifier = resettlement_recruits remove_variable = rs_recruits }", body)
+        self.assertIn("any_scope_state = { has_variable = rs_recruits }",
+                      squash(block(read(RS_ON_ACTIONS), "resettlement_country_on_action")))
+
+    def test_each_source_is_logged(self):
+        # Spec §13: TE_RESETTLEMENT: lines name each month's sources.
+        body = squash(block(read(EFFECTS), "resettlement_take_from_source"))
+        logged = body[body.index("limit = { var:rs_taken_now > 0 }"):]
+        self.assertIn("[SCOPE.ScriptValue('resettlement_debug_taken_now')|0]", logged)
+        self.assertIn("TE_RESETTLEMENT:", logged)
+        self.assertIn("debug_log_scopes = yes", logged)
+        self.assertNotIn("MakeScope", body)
+        wrapper = squash(block(read(VALUES), "resettlement_debug_taken_now"))
+        self.assertIn("limit = { has_variable = rs_taken_now } value = var:rs_taken_now", wrapper)
+
     def test_the_pulse_is_wired(self):
         text = read(RS_ON_ACTIONS)
         m = re.search(r"on_monthly_pulse_country\s*=\s*\{\s*on_actions\s*=\s*\{([^}]*)\}", text)
@@ -717,6 +738,14 @@ class DeclarationTests(unittest.TestCase):
         self.assertIn("change_variable = { name = rs_declaration_intensity multiply = 0.5 }", body)
         self.assertIn("add_modifier = { name = resettlement_declaration_violation multiplier = var:rs_declaration_intensity }", body)
         self.assertIn("trigger_event = { id = resettlement.20 }", body)
+
+    def test_the_reform_prestige_is_lost_on_reneging(self):
+        # .5.a's reward must not survive switching the program straight back.
+        body = squash(block(read(EFFECTS), "resettlement_refresh_declaration"))
+        self.assertIn("if = { limit = { has_modifier = resettlement_reformed "
+                      "any_scope_state = { resettlement_state_runs_coercive = yes } } "
+                      "remove_modifier = resettlement_reformed }", body)
+        self.assertIn("coercive program again", loc()["resettlement_reformed_desc"])
 
     def test_the_violation_modifier(self):
         body = block(read(RS_MODIFIERS), "resettlement_declaration_violation")
@@ -822,6 +851,37 @@ class EventTests(unittest.TestCase):
         self.assertIn("resettlement_system_enabled = yes", body)
         self.assertIn("NOT = { has_variable = rs_event_cooldown }", body)
         self.assertIn("resettlement_roll_events = yes", squash(block(read(EFFECTS), "resettlement_country_monthly")))
+
+    def test_the_roll_does_not_resave_the_walks_scope(self):
+        self.assertNotIn("save_scope_as = rs_destination", squash(block(read(EFFECTS), "resettlement_roll_events")))
+
+    def test_the_last_source_may_have_been_merged_away(self):
+        # var:rs_last_source can point to a state that no longer exists.
+        for rel in (EFFECTS, RS_EVENTS):
+            self.assertNotRegex(strip_comments(read(rel)), r"var:rs_last_source\s*=\s*\{", rel)
+        roll = squash(block(read(EFFECTS), "resettlement_roll_events"))
+        self.assertIn("var:rs_last_source ?= { owner = scope:rs_country }", roll)
+        body = event(7)
+        self.assertIn("var:rs_last_source ?= { owner = root }", squash(block(body, "trigger")))
+        self.assertIn("var:rs_last_source ?= { save_scope_as = rs_return_state }", squash(block(body, "immediate")))
+        allow = squash(options(body)[0])
+        self.assertIn("limit = { exists = scope:rs_return_state }", allow)
+        self.assertIn("scope:rs_return_state ?= { add_loyalists_in_state", allow)
+
+    def test_loc_says_what_the_code_does(self):
+        L = loc()
+        self.assertNotIn("everyone", L["pm_resettlement_managed_retreat_desc"])
+        self.assertIn("every free person", L["pm_resettlement_managed_retreat_desc"])
+        concept = L["concept_internal_resettlement_desc"]
+        self.assertIn("Special Settlements and Rustication", concept)
+        for key in ("pm_resettlement_rustication_desc", "resettlement_recruits_desc"):
+            self.assertIn("laborers and clerks left behind", L[key], key)
+            self.assertNotIn("urban workers left behind", L[key], key)
+            self.assertNotIn("the urban workers do", L[key], key)
+        self.assertNotIn("signing up", L["resettlement.3.b"])
+        transfer = L["state_resettlement_transfer_add_desc"]
+        self.assertIn("recruit", transfer)
+        self.assertIn("die in transit", transfer)
 
     def test_once_only_events_mark_their_state(self):
         roll = squash(block(read(EFFECTS), "resettlement_roll_events"))
