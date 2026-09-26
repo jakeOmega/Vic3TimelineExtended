@@ -54,27 +54,36 @@ Not flagged:
 
 Listed in the report, not failing:
 
-- **Progress-bar inputs** (`progress_bar`). A variable the entry's
-  `current_value` reads with `var:`, directly or through the script values it
-  names. The goal is frozen at activation as `current_value +
-  goal_add_value`, so carrying the old progress into a new record inflates
-  the goal and the bar reads negative when it next wraps: resetting it is
-  the documented rule. On an inheritable entry it still costs the player the
-  progress, which the listing lets a reader weigh.
+- **Progress-bar inputs** (`progress_bar`; follow-up candidates, not
+  failing yet). A variable the entry's `current_value` reads with `var:`,
+  directly or through the script values it names. An unguarded reset of one
+  costs an inherited entry its progress: the winner keeps the loser's bar
+  baseline and goal, so guard it like any other variable. A record whose goal
+  is evaluated again — a re-activation, or the fresh record of a
+  `can_revolution_inherit = no` entry — computes it as `current_value +
+  goal_add_value`, so carried progress would inflate it; pin it with
+  `goal_add_value = TARGET - current`, or keep the reset where the bar
+  wraps and say so with a REVIEWED comment. Each listing says whether the
+  goal is pinned: `goal_add_value` subtracts something that reads the same
+  variable. These stay non-failing so as not to force decisions on other
+  systems in the change that added the audit.
 - **Pulse refreshes** (`pulse_refresh`). A write inside a scripted effect,
-  called with the same parameters, that some mod journal entry's
+  called with the same parameters, that the entry's *own*
   `on_weekly_pulse` / `on_monthly_pulse` / `on_yearly_pulse` runs *every
   time it fires* — reached with no `if`, `while`, `random`, iterator or
-  `limit` on the way. Running it once more at activation does what the next
-  pulse does anyway: display caches and status codes
-  (`colonial_empire_refresh_display`, `sr_set_milestone_status_base`). An
-  accumulator the pulse also ticks gets one extra tick. A refresh the pulse
-  runs only conditionally is not proven, and needs a REVIEWED comment.
+  `limit` on the way. The entry whose `immediate` is running is about to be
+  active, so its next pulse does the same thing anyway: display caches and
+  status codes (`colonial_empire_refresh_display`, a milestone's own
+  `sr_set_milestone_status_base`). An accumulator the pulse also ticks gets
+  one extra tick. Another entry's pulse proves nothing (that entry may not be
+  running), and nor does a pulse that runs the effect only conditionally;
+  such a refresh needs a REVIEWED comment.
 - **Guarded by another variable** (`other_guard`, a warning). The write
   runs only while a *different* variable is missing — a group initialised
   behind one sentinel (`NOT = { has_variable = ch_total }` around the sets
   of `ch_art`, `ch_sol`, ...). It resets only if the sentinel was removed
-  while the variable was kept.
+  while the variable was kept. A REVIEWED comment that covers one moves it to
+  the reviewed list.
 
 Each finding names its entry, the entry's `can_revolution_inherit` (`yes`,
 `no`, or unset, which the engine treats as `yes`; `transferable = yes`
@@ -329,23 +338,43 @@ def journal_entries(files: list[SourceFile]) -> list[JournalEntry]:
     return out
 
 
-def bar_variables(je: JournalEntry, script_values: dict[str, Node]) -> set[str]:
-    """Variables the entry's `current_value` reads with `var:`, directly or
-    through the script values it names, transitively."""
-    cv = _child(je.node, "current_value")
-    if cv is None:
-        return set()
+def _var_reads(node: Node, script_values: dict[str, Node]) -> set[str]:
+    """Variables read with `var:` under `node`, directly or through the
+    script values it names, transitively."""
     found: set[str] = set()
     seen: set[str] = set()
-    todo: list[Node] = [cv]
+    todo: list[Node] = [node]
     while todo:
-        node = todo.pop()
-        for s in _strings(node):
+        n = todo.pop()
+        for s in _strings(n):
             found.update(_VAR_READ_RE.findall(s))
             if s in script_values and s not in seen:
                 seen.add(s)
                 todo.append(script_values[s])
     return found
+
+
+def bar_variables(je: JournalEntry, script_values: dict[str, Node]) -> set[str]:
+    """Variables the entry's `current_value` reads."""
+    cv = _child(je.node, "current_value")
+    return _var_reads(cv, script_values) if cv is not None else set()
+
+
+def pinned_variables(je: JournalEntry, script_values: dict[str, Node]) -> set[str]:
+    """Variables a `subtract` in the entry's `goal_add_value` reads: the goal
+    is pinned (`TARGET - current`) against a change in those."""
+    goal = _child(je.node, "goal_add_value")
+    out: set[str] = set()
+
+    def visit(n: Node):
+        for c in n.children or ():
+            if c.key == "subtract":
+                out.update(_var_reads(c, script_values))
+            visit(c)
+
+    if goal is not None:
+        visit(goal)
+    return out
 
 
 # ---------------------------------------------------------------------------
@@ -634,7 +663,12 @@ class AuditResult:
 
     @property
     def exempted(self) -> list[Flag]:
-        return [f for f in self.flags if f.category == UNGUARDED and f.exemption]
+        """Unguarded writes and other-variable warnings a REVIEWED covers."""
+        return [f for f in self.flags if f.category in (UNGUARDED, OTHER_GUARD) and f.exemption]
+
+    @property
+    def warnings(self) -> list[Flag]:
+        return [f for f in self.flags if f.category == OTHER_GUARD and not f.exemption]
 
 
 def _exemption(w: Write, comments: dict[str, dict[int, str]]) -> dict | None:
@@ -649,12 +683,13 @@ def _exemption(w: Write, comments: dict[str, dict[int, str]]) -> dict | None:
     return None
 
 
-def _classify(w: Write, bars: set[str]) -> tuple[str, str]:
+def _classify(w: Write, bars: set[str], pinned: set[str]) -> tuple[str, str]:
     """(category, detail) for a write that is neither guarded nor a flag."""
     if w.namespace == "scope" and w.name in bars:
-        return BAR, "the entry's `current_value` reads it"
+        pin = "goal pinned" if w.name in pinned else "goal not pinned"
+        return BAR, f"the entry's `current_value` reads it; {pin}"
     if w.ctx.refresh:
-        return REFRESH, f"`{w.ctx.refresh}` also runs on every pulse of a journal entry"
+        return REFRESH, f"`{w.ctx.refresh}` also runs on every pulse of this entry"
     other = [g for g in w.ctx.guards if g.name != w.name]
     if other:
         g = other[-1]
@@ -685,16 +720,15 @@ def evaluate(je_files: list[SourceFile], effect_files: list[SourceFile],
     walker = _Walker(effects, links)
     result = AuditResult(files_audited=len(je_files), entries=journal_entries(je_files))
 
-    # Effects some mod entry's pulse runs every time it fires.
-    refreshes: set[tuple] = set()
     for je in result.entries:
+        # Effects the entry's own pulse runs every time it fires.
+        refreshes: set[tuple] = set()
         for pk in PULSE_KEYS:
             pulse = _child(je.node, pk)
             if pulse is not None:
                 refreshes |= walker.calls_every_pulse(pulse, {})
-
-    for je in result.entries:
         bars = bar_variables(je, script_values)
+        pinned = pinned_variables(je, script_values)
         seen: set[tuple] = set()
         for ik in IMMEDIATE_KEYS:
             block = _child(je.node, ik)
@@ -708,7 +742,7 @@ def evaluate(je_files: list[SourceFile], effect_files: list[SourceFile],
                 if (w.file, w.line, w.name) in seen:
                     continue
                 seen.add((w.file, w.line, w.name))
-                category, detail = _classify(w, bars)
+                category, detail = _classify(w, bars, pinned)
                 result.flags.append(Flag(
                     je=je.name, je_file=je.file, je_setting=je.describe(),
                     inherits=je.inherits, category=category,
@@ -804,6 +838,32 @@ def _exemption_summary(flags: list[Flag], out: list[str]) -> None:
         out.append("")
 
 
+def _bar_listing(flags: list[Flag], out: list[str]) -> None:
+    """One line per entry and variable, with what decides the fix: whether a
+    winner inherits the record, whether it can re-activate, and whether its
+    goal is pinned."""
+    if not flags:
+        out.extend(["_None._", ""])
+        return
+    groups: dict[tuple, list[Flag]] = {}
+    for f in sorted(flags, key=lambda f: (f.je_file, f.je, f.file, f.line, f.name)):
+        groups.setdefault((f.je_file, f.je, f.name), []).append(f)
+    for fs in groups.values():
+        f = fs[0]
+        more = f" (+{len(fs) - 1} more writes)" if len(fs) > 1 else ""
+        line = f"- `{f.je}` ({f.je_setting}): {f.describe()}{more}"
+        reviewed = [x.exemption for x in fs if x.exemption]
+        if reviewed:
+            share = "" if len(reviewed) == len(fs) else f" ({len(reviewed)} of {len(fs)} writes)"
+            line += f" — reviewed{share} **{reviewed[0]['date']}**: {reviewed[0]['rationale']}"
+        out.append(line)
+    out.append("")
+
+
+def _distinct(flags: list[Flag]) -> int:
+    return len({(f.file, f.line, f.name) for f in flags})
+
+
 def _refresh_summary(flags: list[Flag], out: list[str]) -> None:
     if not flags:
         out.extend(["_None._", ""])
@@ -856,22 +916,27 @@ def render_report(result: AuditResult) -> str:
     out.extend([
         "## Not Failing",
         "",
-        "### Progress-bar inputs",
+        "### Progress-bar inputs (follow-up candidates)",
         "",
-        "The entry's `current_value` reads these. Its goal is frozen at",
-        "activation as `current_value + goal_add_value`, so they are reset on",
-        "purpose (`scripting_best_practices.md`, \"`immediate` runs again on",
-        "every activation\"). On an inherited entry the reset still costs the",
-        "player the progress made.",
+        "Unguarded resets of a variable the entry's `current_value` reads.",
+        "Each costs an inherited entry its progress: the winner keeps the",
+        "loser's bar baseline and goal, so guard the variable like any other.",
+        "Where the record's goal is evaluated again (`can_deactivate = yes`, or",
+        "the fresh record of a `can_revolution_inherit = no` entry), pin it",
+        "with `goal_add_value = TARGET - current` as well, or keep the reset",
+        "where the bar wraps and say why with a REVIEWED comment",
+        "(`scripting_best_practices.md`, \"`immediate` runs again on every",
+        "activation\"). Not failing yet.",
         "",
     ])
-    _flat(result.of(BAR), out)
+    _bar_listing(result.of(BAR), out)
     out.extend([
         "### Pulse refreshes",
         "",
-        "Written inside a scripted effect that a journal entry's pulse runs,",
-        "with the same parameters, every time it fires: a recomputation, not a",
-        "reset. One line per entry and outermost refresh effect.",
+        "Written inside a scripted effect that the entry's own pulse runs,",
+        "with the same parameters, every time it fires: a recomputation the",
+        "next pulse would make anyway, not a reset. One line per entry and",
+        "outermost refresh effect.",
         "",
     ])
     _refresh_summary(result.of(REFRESH), out)
@@ -883,7 +948,7 @@ def render_report(result: AuditResult) -> str:
         "removed while this variable was kept.",
         "",
     ])
-    _flat(result.of(OTHER_GUARD), out)
+    _flat(result.warnings, out)
 
     with_immediate = sum(
         1 for je in result.entries if any(_child(je.node, k) for k in IMMEDIATE_KEYS))
@@ -892,11 +957,13 @@ def render_report(result: AuditResult) -> str:
         "",
         f"- journal-entry files audited: {result.files_audited}",
         f"- journal entries: {len(result.entries)} ({with_immediate} with an `immediate`)",
-        f"- unreviewed: {len(unrev)}",
-        f"- exempted: {len(exemp)}",
-        f"- progress-bar inputs: {len(result.of(BAR))}",
-        f"- pulse refreshes: {len(result.of(REFRESH))}",
-        f"- guarded by another variable: {len(result.of(OTHER_GUARD))}",
+        "- counts are writes per entry, so a helper several entries call counts",
+        "  once for each; distinct (line, variable) pairs are in brackets",
+        f"- unreviewed: {len(unrev)} ({_distinct(unrev)})",
+        f"- exempted: {len(exemp)} ({_distinct(exemp)})",
+        f"- progress-bar inputs: {len(result.of(BAR))} ({_distinct(result.of(BAR))})",
+        f"- pulse refreshes: {len(result.of(REFRESH))} ({_distinct(result.of(REFRESH))})",
+        f"- guarded by another variable: {len(result.warnings)} ({_distinct(result.warnings)})",
         "",
     ])
     return "\n".join(out) + "\n"
@@ -916,7 +983,7 @@ def regenerate(mod_state=None) -> dict:
         "exempted": len(result.exempted),
         "progress_bar_inputs": len(result.of(BAR)),
         "pulse_refreshes": len(result.of(REFRESH)),
-        "other_guard_warnings": len(result.of(OTHER_GUARD)),
+        "other_guard_warnings": len(result.warnings),
     }
 
 
