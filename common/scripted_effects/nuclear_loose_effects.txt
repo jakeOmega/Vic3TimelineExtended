@@ -392,6 +392,14 @@ nd_loose_blame_rival = {
 	scope:nd_loose_rival = {
 		change_relations = { country = ROOT value = -30 }
 	}
+	# Named in public, as "Name them all" names a shortlist (.7).
+	custom_tooltip = {
+		text = nd_tt_loose_blame_rival
+		scope:nd_loose_rival = {
+			set_variable = { name = nd_loose_accused_by value = ROOT days = 60 }
+			trigger_event = { id = nuclear_loose.7 popup = yes }
+		}
+	}
 	add_loyalists = {
 		value = small_radicals
 	}

@@ -160,16 +160,24 @@ nd_ledger_refresh = {
 
 # Country scope, any ROOT. Adds $AMOUNT$ warheads from this country's arsenal
 # to the unaccounted-for pool: the world count and this arsenal's own.
+# AMOUNT is fixed into nd_clw_amount on this country first: a caller passes
+# a `var:` of its own (var:nd_cw_hold_lost, var:nd_cw_deny_lost), which read
+# inside the ledger record would name the record's variable — absent, so the
+# arsenal's line gained nothing while the world count gained the lot (#474
+# review; the loss was invisible until the loose-warhead plots read the line).
 nd_custody_lose_warheads = {
+	save_scope_as = nd_clw_holder
+	set_variable = { name = nd_clw_amount value = $AMOUNT$ }
 	if = {
 		limit = { NOT = { has_global_variable = nd_loose_warheads } }
 		set_global_variable = { name = nd_loose_warheads value = 0 }
 	}
-	change_global_variable = { name = nd_loose_warheads add = $AMOUNT$ }
+	change_global_variable = { name = nd_loose_warheads add = var:nd_clw_amount }
 	nd_ledger_ensure = yes
 	var:nd_arsenal_record ?= {
-		change_variable = { name = nd_ar_loose add = $AMOUNT$ }
+		change_variable = { name = nd_ar_loose add = scope:nd_clw_holder.var:nd_clw_amount }
 	}
+	remove_variable = nd_clw_amount
 }
 
 # Rounds the variable $VAR$ in the current scope (a country or a record) to a
@@ -1034,19 +1042,25 @@ nd_bp_press = {
 	custom_tooltip = nd_tt_bp_press
 	hidden_effect = {
 		scope:nd_bp_state = {
+			# Once the offer has been answered a late presser changes nothing.
 			if = {
-				limit = {
-					NOT = {
-						has_variable_list = nd_bp_guarantors
-						any_in_list = {
-							variable = nd_bp_guarantors
-							always = yes
+				limit = { NOT = { has_variable = nd_bp_answered } }
+				if = {
+					limit = {
+						OR = {
+							NOT = { has_variable_list = nd_bp_guarantors }
+							NOT = {
+								any_in_list = {
+									variable = nd_bp_guarantors
+									always = yes
+								}
+							}
 						}
 					}
+					trigger_event = { id = nuclear_custody.11 days = 30 popup = yes }
 				}
-				trigger_event = { id = nuclear_custody.11 days = 30 popup = yes }
+				add_to_variable_list = { name = nd_bp_guarantors target = ROOT }
 			}
-			add_to_variable_list = { name = nd_bp_guarantors target = ROOT }
 		}
 	}
 }
@@ -1061,9 +1075,16 @@ nd_bp_prepare_offer = {
 		limit = { nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT } }
 		ROOT = { change_variable = { name = nd_bp_count add = 1 } }
 	}
+	# The lead: the largest economy among the powers a guarantee can actually
+	# be made with now (can_create_treaty runs the article's own gates:
+	# armed, relations above poor). A former parent that lost the war may
+	# press but fail them, and must not lead an offer it cannot sign.
 	ordered_in_list = {
 		variable = nd_bp_guarantors
-		limit = { nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT } }
+		limit = {
+			nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT }
+			nd_bp_can_treaty_guarantee = { GUARANTOR = this STATE = ROOT }
+		}
 		order_by = gdp
 		position = 0
 		save_scope_as = nd_bp_lead
@@ -1118,6 +1139,21 @@ nd_bp_treaty_guarantee = {
 nd_bp_accept = {
 	custom_tooltip = {
 		text = nd_tt_bp_accept
+		# The other guarantors' treaties first, while we still hold our
+		# warheads: whatever the articles' gates read, none of them can then
+		# fail on a disarmament the lead's treaty has already put in force.
+		every_in_list = {
+			variable = nd_bp_guarantors
+			limit = {
+				NOT = { this = scope:nd_bp_lead }
+				nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT }
+			}
+			save_scope_as = nd_bp_other
+			if = {
+				limit = { nd_bp_can_treaty_guarantee = { GUARANTOR = scope:nd_bp_other STATE = ROOT } }
+				nd_bp_treaty_guarantee = { GUARANTOR = scope:nd_bp_other STATE = ROOT }
+			}
+		}
 		if = {
 			limit = {
 				exists = scope:nd_bp_lead
@@ -1131,18 +1167,6 @@ nd_bp_accept = {
 				nd_bp_can_treaty_guarantee = { GUARANTOR = scope:nd_bp_lead STATE = ROOT }
 			}
 			nd_bp_treaty_guarantee = { GUARANTOR = scope:nd_bp_lead STATE = ROOT }
-		}
-		every_in_list = {
-			variable = nd_bp_guarantors
-			limit = {
-				NOT = { this = scope:nd_bp_lead }
-				nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT }
-			}
-			save_scope_as = nd_bp_other
-			if = {
-				limit = { nd_bp_can_treaty_guarantee = { GUARANTOR = scope:nd_bp_other STATE = ROOT } }
-				nd_bp_treaty_guarantee = { GUARANTOR = scope:nd_bp_other STATE = ROOT }
-			}
 		}
 		if = {
 			limit = { nd_stockpile > 0 }
@@ -1186,16 +1210,28 @@ nd_bp_refuse = {
 	}
 }
 
-# ROOT = the new state. Tells each guarantor (nuclear_custody.12): 1 accepted,
-# 2 refused. Then forgets the offer.
+# ROOT = the new state. Tells each guarantor (nuclear_custody.12): 1 accepted
+# and it signed a guarantee, 3 accepted but no treaty could be made with it,
+# 2 refused. Then forgets the offer; for a year no late presser can reopen it
+# (nd_bp_answered).
 nd_bp_answer = {
+	save_scope_as = nd_bp_answering
 	every_in_list = {
 		variable = nd_bp_guarantors
 		limit = { is_country_alive = yes }
+		save_scope_as = nd_bp_signer
 		set_variable = { name = nd_bp_answer value = $ANSWER$ }
+		if = {
+			limit = {
+				var:nd_bp_answer = 1
+				NOT = { scope:nd_bp_answering = { nd_is_guaranteed_by_treaty = { GUARANTOR = scope:nd_bp_signer } } }
+			}
+			set_variable = { name = nd_bp_answer value = 3 }
+		}
 		set_variable = { name = nd_bp_answer_from value = ROOT }
 		trigger_event = { id = nuclear_custody.12 popup = yes }
 	}
+	set_variable = { name = nd_bp_answered value = 1 days = 365 }
 	clear_variable_list = nd_bp_guarantors
 	if = {
 		limit = { has_variable = nd_bp_count }

@@ -1676,5 +1676,49 @@ class TestLooseRecovery(unittest.TestCase):
         self.assertIn("set_global_variable = un_agency_cppnm", strip_comments(read(ROOT / "events/un_vote_events.txt")))
 
 
+class TestReviewFixes474(unittest.TestCase):
+    """Findings of the independent review of #474."""
+
+    def setUp(self):
+        self.ce = strip_comments(read(CUSTODY_EFFECTS))
+        self.ev = strip_comments(read(CUSTODY_EVENTS))
+        self.le = strip_comments(read(LOOSE_EFFECTS))
+
+    def test_lost_warheads_reach_the_origins_line(self):
+        """A caller passes AMOUNT = var:<its own variable>; read inside the
+        ledger record that named the record's (absent) variable, so the line
+        gained nothing while the world count gained the lot."""
+        lose = block(self.ce, "nd_custody_lose_warheads")
+        record = lose[lose.index("var:nd_arsenal_record ?="):]
+        self.assertNotIn("$AMOUNT$", record)
+        self.assertIn("scope:nd_clw_holder.var:nd_clw_amount", record)
+        self.assertIn("name = nd_clw_amount value = $AMOUNT$", lose)
+        # No other effect adds a parameter to a record's count from inside it.
+        for name in ("nd_custody_lose_warheads", "nd_loose_recover_from_line"):
+            body = block(self.ce if name.startswith("nd_custody") else self.le, name)
+            self.assertNotRegex(body, r"nd_ar_loose (?:add|subtract) = \$")
+
+    def test_budapest_lead_can_sign_and_signs_last(self):
+        prepare = block(self.ce, "nd_bp_prepare_offer")
+        self.assertIn("nd_bp_can_treaty_guarantee = { GUARANTOR = this STATE = ROOT }",
+                      block(prepare, "ordered_in_list"))
+        accept = block(self.ce, "nd_bp_accept")
+        self.assertLess(accept.index("save_scope_as = nd_bp_other"),
+                        accept.index("nd_bp_treaty_lead = { GUARANTOR = scope:nd_bp_lead"))
+        offer = block(self.ev, "nuclear_custody.11")
+        gate = offer[offer.index("\n\ttrigger = {"): offer.index("\n\timmediate = {")]
+        self.assertIn("nd_bp_can_treaty_guarantee = { GUARANTOR = this STATE = ROOT }", gate)
+        self.assertIn("exists = scope:nd_bp_lead", option_body(self.ev, "nuclear_custody.11.a"))
+        answer = block(self.ce, "nd_bp_answer")
+        self.assertIn("name = nd_bp_answer value = 3", answer)
+        self.assertIn("name = nd_bp_answered", answer)
+        self.assertIn("has_variable = nd_bp_answered", block(self.ce, "nd_bp_press"))
+
+    def test_a_blamed_rival_is_told(self):
+        blame = block(self.le, "nd_loose_blame_rival")
+        self.assertIn("name = nd_loose_accused_by", blame)
+        self.assertIn("id = nuclear_loose.7", blame)
+
+
 if __name__ == "__main__":
     unittest.main()

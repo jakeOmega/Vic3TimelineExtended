@@ -83,18 +83,21 @@ inspection), a `nuclear_security_assistance` article as its target, or the UN co
   stored on the power for a month): **press them** — joins `nd_bp_guarantors`; the first to press schedules `.11` a
   month out — or **leave it** (default). AI presses (6) unless hostile to the new state (factor 0: a hostile power uses
   the ordinary article); friendly powers lean to leave it (+6).
-- **`.11` "The Budapest Offer"** (the new state): the lead guarantor is the largest economy among those still able
-  (`nd_bp_guarantor_valid`).
+- **`.11` "The Budapest Offer"** (the new state), sent only while some presser can still sign a guarantee with it
+  (`nd_bp_can_treaty_guarantee`, i.e. `can_create_treaty`, which runs the article's own gates): the lead guarantor is
+  the largest economy among those that can.
   - **Trade them for guarantees**: `create_treaty` in force, 10-year binding: with the lead, `nuclear_disarmament`
     (source = the new state, target = the lead) and `nuclear_guarantee`; with each other presser, `nuclear_guarantee`
-    alone. Each is gated by a `can_create_treaty` trigger kept identical to its effect (a test compares them). If the
-    lead's disarmament cannot be created (it wants the disarming state's `nuclear_weapons` tech), the lead signs the
-    guarantee alone. The warheads are zeroed directly after the treaties as well. Relations +20 with each.
+    alone. Each is gated by a `can_create_treaty` trigger kept identical to its effect (a test compares them). The other
+    pressers' treaties are made first and the lead's last, so no guarantee can fail on a disarmament already in force.
+    If the lead's disarmament cannot be created (it wants the disarming state's `nuclear_weapons` tech), the lead signs
+    the guarantee alone. The warheads are zeroed directly after the treaties as well. Relations +20 with each.
   - **Keep them** (default): relations −20 with each; `nd_bp_refused` for ten years adds 0.25 to the AI's evaluation
     chance of demanding `nuclear_disarmament` from it.
   - AI: trade 3 (+4 without `nuclear_weapons`, +2 with 3 or fewer, +2 with two or more guarantors); keep 3 (+4 facing an
     armed rival or an armed hostile neighbour, +2 aggressive).
-- **`.12`** tells each guarantor.
+- **`.12`** tells each presser: accepted and signed, accepted but no treaty could be made with it, or refused. A presser
+  arriving after the answer changes nothing for a year (`nd_bp_answered`).
 
 ## 3. Step 5, loose warheads
 
@@ -211,3 +214,7 @@ Everything below was decided while building; none of it is in §0.10's rulings.
 - **Convention**: agenda business (not a docket situation); open once warheads have gone loose, permanently after the
   first device surfaces; 3 % a month; the lean weights above; no regime modifier.
 - **The panel row** shows only our own line's count; the world count is in its tooltip.
+- **Open questions from the independent review:** should the former parent state be allowed to press (and guarantee)
+  its own former secession? It may now, but it cannot lead the offer or sign unless the article's gates (relations above
+  poor) allow it. And a terrorist detonation books none of a strike's UN authority shock, dossier or ledger entries
+  (there is no attacker); should the world-order shock apply anyway?

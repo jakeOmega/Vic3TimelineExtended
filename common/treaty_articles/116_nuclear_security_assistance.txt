@@ -65,6 +65,16 @@ nuclear_security_assistance = {
 		}
 	}
 
+	# Nothing left to secure: no warheads, none unaccounted for.
+	requirement_to_maintain = {
+		trigger = {
+			custom_tooltip = {
+				text = nd_tt_assistance_target_eligible
+				scope:target_country = { nd_can_receive_security_assistance = yes }
+			}
+		}
+	}
+
 	can_ratify = {
 		custom_tooltip = {
 			text = DUPLICATE_ARTICLE_SAME_INPUTS

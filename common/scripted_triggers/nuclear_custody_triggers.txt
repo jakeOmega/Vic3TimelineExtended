@@ -109,8 +109,12 @@ nd_ai_would_strike_own_people = {
 #   a nuclear_security_assistance article paying for it, while it is in force;
 #   party to the UN's physical-protection convention (un_events.23).
 nd_custody_is_secured = {
+	save_temporary_scope_as = nd_cis_self
 	OR = {
-		var:nd_cw_custodian ?= { is_country_alive = yes }
+		var:nd_cw_custodian ?= {
+			is_country_alive = yes
+			NOT = { has_war_with = scope:nd_cis_self }
+		}
 		has_variable = nd_loose_inspected
 		nd_has_security_assistance = yes
 		has_modifier = un_physical_protection_modifier

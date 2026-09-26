@@ -2659,6 +2659,7 @@
  nd_tt_investment_min:0 "Not already at zero"
  nd_tt_launch_or_intercept:0 "#R A weapon is launched.#! In a war with its target, it strikes. Outside a war, the order is recalled at the last moment — after the other side has seen everything"
  nd_tt_loose_ask_suspects:0 "Each country on the list is asked, privately, to open its custody to our inspectors or refuse"
+ nd_tt_loose_blame_rival:0 "[SCOPE.sCountry('nd_loose_rival').GetName] is accused in public, and told so"
  nd_tt_loose_first_search:0 "Their first search has a #v 50%#! chance to find one of the #v [ROOT.GetCountry.MakeScope.ScriptValue('nd_display_our_loose')|0]#! warheads from our arsenal that are unaccounted for"
  nd_tt_loose_hold_to_account:0 "[SCOPE.sCountry('nd_loose_accused').GetName] is told the warhead was its own and asked to answer for losing it: compensation, its custody opened to our inspectors, or a denial"
  nd_tt_loose_inspection:0 "Foreign inspectors count and guard our warheads for twenty years: #G half#! as many go missing whenever they change hands"

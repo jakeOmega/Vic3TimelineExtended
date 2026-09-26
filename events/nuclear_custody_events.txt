@@ -421,7 +421,12 @@ nuclear_custody.6 = {
 		ai_chance = {
 			base = 0
 			modifier = {
-				trigger = { scope:nd_cwr_gov = { nd_stockpile >= 5 } }
+				trigger = {
+					scope:nd_cwr_gov = {
+						has_variable = nd_public_estimate
+						var:nd_public_estimate >= 5
+					}
+				}
 				add = 4
 			}
 			modifier = {
@@ -592,6 +597,7 @@ nuclear_custody.10 = {
 		var:nd_bp_new_state ?= {
 			is_country_alive = yes
 			nd_is_armed = yes
+			NOT = { has_variable = nd_bp_answered }
 		}
 	}
 
@@ -676,12 +682,15 @@ nuclear_custody.11 = {
 
 	duration = 3
 
+	# Only while some presser can still sign a guarantee with us: an offer
+	# with no treaty behind it would disarm us for nothing.
 	trigger = {
 		nd_is_armed = yes
 		has_variable_list = nd_bp_guarantors
 		any_in_list = {
 			variable = nd_bp_guarantors
 			nd_bp_guarantor_valid = { GUARANTOR = this STATE = ROOT }
+			nd_bp_can_treaty_guarantee = { GUARANTOR = this STATE = ROOT }
 		}
 	}
 
@@ -692,6 +701,7 @@ nuclear_custody.11 = {
 	# Trade them for guarantees.
 	option = {
 		name = nuclear_custody.11.a
+		trigger = { exists = scope:nd_bp_lead }
 		nd_bp_accept = yes
 		ai_chance = {
 			base = 3
@@ -763,6 +773,13 @@ nuclear_custody.12 = {
 				trigger = {
 					has_variable = nd_bp_answer
 					var:nd_bp_answer = 1
+				}
+			}
+			triggered_desc = {
+				desc = nuclear_custody.12.d_no_treaty
+				trigger = {
+					has_variable = nd_bp_answer
+					var:nd_bp_answer = 3
 				}
 			}
 			triggered_desc = {

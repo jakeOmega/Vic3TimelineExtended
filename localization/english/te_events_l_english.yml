@@ -2743,6 +2743,7 @@
  nuclear_custody.11.t:0 "The Budapest Offer"
  nuclear_custody.12.a:0 "So be it."
  nuclear_custody.12.d_accepted:0 "[ROOT.GetCountry.MakeScope.Var('nd_bp_answer_from').GetCountry.GetName] has accepted. Its warheads will be taken apart, and we are among its guarantors."
+ nuclear_custody.12.d_no_treaty:0 "[ROOT.GetCountry.MakeScope.Var('nd_bp_answer_from').GetCountry.GetName] has accepted the other powers' guarantees and given up its warheads, but no treaty could be made with us: our relations with it, or our own arsenal, would not allow one."
  nuclear_custody.12.d_refused:0 "[ROOT.GetCountry.MakeScope.Var('nd_bp_answer_from').GetCountry.GetName] has refused to give up its warheads. The guarantees of great powers, it says, are worth the paper they are written on."
  nuclear_custody.12.f:0 "The last nuclear warheads left Ukraine for Russia in June 1996."
  nuclear_custody.12.t:0 "An Answer on the Warheads"
