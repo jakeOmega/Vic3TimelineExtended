@@ -56,6 +56,9 @@ _REVIEWED_RE = re.compile(
     r"#\s*REVIEWED\s+(?P<date>\d{4}-\d{2}-\d{2})\s*:\s*(?P<rationale>.+?)\s*$"
 )
 
+# `file.txt:N` inside a flag's detail; a reviewed entry drops the `:N`.
+_FILE_LINE_RE = re.compile(r"(\.txt):\d+")
+
 # `common/<subdir>/` namespaces in which Paradox merges multiple bare blocks
 # of the same name across files instead of treating them as collisions:
 #   - on_actions: every file's `on_X = { events = {...} }` blocks merge
@@ -332,16 +335,21 @@ def render_report(result: AuditResult) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line numbers on a reviewed entry (its own or the ones its detail
+        # cites): the `INJECT:<name>` names it, and an edit above it would
+        # otherwise churn the report.
         for f in exemp:
+            detail = _FILE_LINE_RE.sub(r"\1", f.detail)
             out.append(
-                f"- `{f.file}:{f.line}` — {f.detail} — "
+                f"- `{f.file}` — {detail} — "
                 f"**{f.exemption['date']}**: {f.exemption['rationale']}"
             )
         out.append("")
 
+    # Flag counts only: `files_audited` stays on the result (and in the
+    # regenerate() summary) but moves with every new file.
     out.append("## Coverage")
     out.append("")
-    out.append(f"- files audited: {result.files_audited}")
     by_kind_all: dict[str, int] = {}
     for f in result.flags:
         by_kind_all[f.kind] = by_kind_all.get(f.kind, 0) + 1

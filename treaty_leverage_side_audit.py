@@ -373,18 +373,21 @@ def render_report(result: AuditResult) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line number on a reviewed entry: the article names it, and an
+        # edit above it would otherwise churn the report.
         for f in exemp:
             out.append(
-                f"- `{f.file}:{f.line}` — `{f.article}`: leverage in `{f.side}` "
+                f"- `{f.file}` — `{f.article}`: leverage in `{f.side}` "
                 f"with `maintenance_paid_by = {f.maintenance_paid_by}` — "
                 f"**{f.exemption['date']}**: {f.exemption['rationale']}"
             )
         out.append("")
 
+    # Flag counts, plus the articles the audit could not judge. The file /
+    # judged-article counts stay on the result (and in the regenerate()
+    # summary) but move with every new article.
     out.append("## Coverage")
     out.append("")
-    out.append(f"- files audited: {result.files_audited}")
-    out.append(f"- directed articles judged: {result.articles_checked}")
     out.append(
         f"- articles with a leverage line but no `maintenance_paid_by`: "
         f"{result.articles_undetermined}"

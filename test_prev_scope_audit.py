@@ -193,6 +193,24 @@ class AuditTests(unittest.TestCase):
                 fh.write("e = {\n\tevery_country = {\n\t\tscope:a = { random_state = { x = prev } }\n\t}\n}\n")
             self.assertEqual(len(audit(mod_path=tmp).flags), 1)
 
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and Coverage no file count,
+        so the report changes only when the findings do."""
+        from prev_scope_audit import AuditResult, Flag
+        result = AuditResult(flags=[
+            Flag("events/x.txt", 12, "root", 10, "random_state", "every_country"),
+            Flag("events/y.txt", 90, "scope:a", 88, "random_state", "every_country",
+                 exemption={"date": "2026-09-24", "rationale": "means scope:a"}),
+        ], files_audited=489)
+        report = render_report(result)
+        self.assertIn(
+            "- `events/y.txt` — `prev` = `scope:a` inside `random_state` — "
+            "**2026-09-24**: means scope:a", report)
+        self.assertNotIn("y.txt:90", report)
+        self.assertIn("- line 12: `prev` inside `random_state`", report)  # unreviewed
+        self.assertNotIn("files audited", report)
+        self.assertNotIn("489", report)
+
 
 if __name__ == "__main__":
     unittest.main()

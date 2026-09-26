@@ -81,19 +81,19 @@ Suppress an intentional case with a trailing comment on the same line:
 - line 489: `desc = UPPER_CLASS`
 - line 518: `desc = MIDDLE_CLASS`
 - line 528: `desc = LOWER_CLASS`
-- line 764: `desc = UPPER_CLASS`
-- line 793: `desc = MIDDLE_CLASS`
-- line 803: `desc = LOWER_CLASS`
-- line 994: `desc = TECHNOLOGY_RESEARCHED_biohacking_and_human_augmentation`
-- line 1002: `desc = TECHNOLOGY_RESEARCHED_mind_backups`
-- line 1010: `desc = TECHNOLOGY_RESEARCHED_post-scarcity_economy`
-- line 1031: `desc = UPPER_CLASS`
-- line 1069: `desc = MIDDLE_CLASS`
-- line 1079: `desc = LOWER_CLASS`
-- line 1130: `desc = LAW_HUMAN_PURITY`
-- line 1137: `desc = LAW_BAN_ON_GENETIC_MODIFICATION`
-- line 1144: `desc = LAW_UNRESTRICTED_AUGMENTATION`
-- line 1151: `desc = LAW_REGULATED_AUGMENTATION`
+- line 766: `desc = UPPER_CLASS`
+- line 795: `desc = MIDDLE_CLASS`
+- line 805: `desc = LOWER_CLASS`
+- line 996: `desc = TECHNOLOGY_RESEARCHED_biohacking_and_human_augmentation`
+- line 1004: `desc = TECHNOLOGY_RESEARCHED_mind_backups`
+- line 1012: `desc = TECHNOLOGY_RESEARCHED_post-scarcity_economy`
+- line 1033: `desc = UPPER_CLASS`
+- line 1071: `desc = MIDDLE_CLASS`
+- line 1081: `desc = LOWER_CLASS`
+- line 1132: `desc = LAW_HUMAN_PURITY`
+- line 1139: `desc = LAW_BAN_ON_GENETIC_MODIFICATION`
+- line 1146: `desc = LAW_UNRESTRICTED_AUGMENTATION`
+- line 1153: `desc = LAW_REGULATED_AUGMENTATION`
 
 ### `common/power_bloc_identities/extra_power_bloc_identities.txt` (1)
 
@@ -104,19 +104,14 @@ Suppress an intentional case with a trailing comment on the same line:
 - line 357: `desc = POWER_BLOC_MANDATE_PROGRESS_AVERAGE_LITERACY`
 - line 362: `desc = POWER_BLOC_MANDATE_PROGRESS_NUM_STATES`
 
-### `common/scripted_effects/un_chamber_display_effects.txt` (2)
-
-- line 1192: `custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown`
-- line 1296: `custom_tooltip_no_bullet = je_un_chamber_propose_topic_cooldown`
-
 ### `common/treaty_articles/05_transfer_money.txt` (1)
 
 - line 550: `desc = INFAMY_MONEY_TRANSFER_QUANTITY_ROOT_HAS_ALREADY_ESTABLISHED_FACTOR`
 
 ### `common/treaty_articles/extra_treaty_articles.txt` (2)
 
-- line 2115: `desc = AI_ISOLATIONIST`
-- line 2123: `desc = AI_TOTAL_WAR`
+- line 2125: `desc = AI_ISOLATIONIST`
+- line 2133: `desc = AI_TOTAL_WAR`
 
 ## Reviewed Exemptions
 
@@ -124,9 +119,7 @@ _None._
 
 ## Coverage
 
-- files audited: 489
-- references checked: 7038
-- total flags: 75
-- unreviewed: 75
+- total flags: 73
+- unreviewed: 73
 - exempted: 0
 

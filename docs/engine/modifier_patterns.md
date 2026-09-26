@@ -1,4 +1,4 @@
-<!-- Auto-generated from modifiers.log + common/_meta/modifier_patterns.yml (modifiers.log @ 2026-09-19T21:06:43+00:00). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from modifiers.log (engine docs 1.14.4) + common/_meta/modifier_patterns.yml. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Modifier Patterns
 
@@ -867,14 +867,14 @@ These patterns were auto-detected by matching engine modifiers against loaded vo
 ### `country_st_res_{good}_capacity_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **7**
-  - Examples: `aeroplanes`, `ammunition`, `artillery`, `grain`, `oil`, `small_arms`
+- Members: **8**
+  - Examples: `aeroplanes`, `ammunition`, `artillery`, `fertilizer`, `grain`, `oil`
 
 ### `country_st_res_{good}_decay_add`
 
 - Placeholder: `good` (vocab: `good`)
-- Members: **7**
-  - Examples: `aeroplanes`, `ammunition`, `artillery`, `grain`, `oil`, `small_arms`
+- Members: **8**
+  - Examples: `aeroplanes`, `ammunition`, `artillery`, `fertilizer`, `grain`, `oil`
 
 ### `country_{bg}_goods_cost_mult`
 

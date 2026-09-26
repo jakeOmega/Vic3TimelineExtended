@@ -1,4 +1,4 @@
-# Auto-generated from event_targets.log @ 2026-09-19T21:06:43+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from event_targets.log (engine docs 1.14.4). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 country|active_law|law|Scope to the scoped country's active law in the named law group (active_law:lawgroup_trade_policy)
 country|ai_army_comparison|value|Scope to comparative army strength between two countries (example:
@@ -6,7 +6,9 @@ strategic_region|ai_colonization_value|value|Scope to target country AI desire t
 country|ai_gdp_comparison|value|Scope to comparative GDP between two countries (example:
 country|ai_ideological_opinion|value|Scope to AI ideological opinion of scope country on target country (example:
 country|ai_navy_comparison|value|Scope to comparative navy strength between two countries (example:
+|ai_regional_objective_type|ai_regional_objective_type|Scope to an AI regional objective type from its key (ai_regional_objective_type:ai_regional_objective_acquire_state) Global Link: yes
 state|ai_state_value|value|Scope to target country AI desire to own scope state (example:
+|ai_strategic_region_stance_type|ai_strategic_region_stance_type|Scope to an AI regional stance type from its key (ai_strategic_region_stance_type:stance_conquer_region) Global Link: yes
 country|ai_subject_value|value|Scope to AI desire of target country to have scope country as a subject (example:
 country|ai_transit_rights_value|value|Scope to AI desire of to have transit rights through target country (example:
 market_goods|ai_treaty_export_value|value|Scope to target country AI desire to export scoped market good (example:
@@ -20,6 +22,7 @@ treaty_options,treaty|amended_treaty|treaty|Scope to the treaty the scoped treat
 country|army_size|value|Number of battalions of scope country, excluding currently raised conscripts.
 country|army_size_including_conscripts|value|Number of battalions of scope country, including currently raised conscripts.
 country|army_size_including_raised_conscripts|value|Number of battalions of scope country, including currently raised conscripts but excluding unraised conscripts.
+|aro|ai_regional_objective_type|Scope to an AI regional objective type from its key (aro:ai_regional_objective_acquire_state) Global Link: yes
 |array_define|value|Reference the value of a numeric value in an array define: array_define:Namespace|Name|Index.
 amendment|attached_law|law|Links from an amendment scope to the law the amendment is attached to
 battle|attacker_side|battle_side|Scope from a battle to the BattleSide corresponding to the attacker
@@ -47,6 +50,7 @@ country|cached_ai_total_population|value|Scope to total population recorded in A
 country|cached_ai_unincorporated_coastal_population|value|Scope to total unincorporated coastal population recorded in AI spending variables (example:
 country|cached_ai_unincorporated_population|value|Scope to total unincorporated population recorded in AI spending variables (example:
 country|capital|state|Scope to the capital state of a country
+country|carrying_capacity|value|Total naval carrying capacity of scope country, across all of its fleets.
 |catalyst_type|diplomatic_catalyst_type|Scope to a diplomatic catalyst type from its name (catalyst_type:catalyst_relations_level_improved) Global Link: yes
 |cd|country_definition|Scope to the country definition with specified tag Global Link: yes
 political_movement|civil_war|civil_war|Scope to the civil war started by the scoped (revolutionary) political movement.
@@ -62,7 +66,7 @@ country|company|company|Scope to the scoped country's company of the named compa
 |compare_value|value|A comparison trigger that will return its value in the context it is used eg: root.gold Wild Card: yes
 |container|container|Scope to a named script container (example: container:my_container) Global Link: yes
 province,state|controller|country|Scope to the controller of the object
-military_formation,ship|country|country|Scope to the country of a military formation or ship
+military_formation,ship,ai_regional_objective|country|country|Scope to the country of a military formation, ship or AI regional objective
 country|country_definition|country_definition|Scope to country's definition
 country|credit|value|Scope to the current amount of max credit the country can take
 |cu|culture|Scope to the culture with specified key Global Link: yes
@@ -290,12 +294,13 @@ company|prosperity|value|Scope to the amount of prosperity for scope company (ex
 battle_side|province|province|Scope from a battle side to the province in which the battle is being fought
 country|py|party|Scope to the active party of specified key belonging to the country
 |rank_value|value|Scope to rank value of a particular country rank (rank_value:great_power)
-building,diplomatic_play,hq,interest_marker,province,state,state_region|region|strategic_region|Scope to the strategic region of the object!
+building,diplomatic_play,hq,interest_marker,province,state,state_region,ai_regional_objective|region|strategic_region|Scope to the strategic region of the object!
 state_region|region_state|state|Unknown, add something in code registration
 |rel|religion|Scope to the religion with specified key Global Link: yes
 country|relations|value|Scope to relations between two countries (example: relations:root >= 2)
 country|relations_change_rate|value|Scope to daily change in relations progress between two countries (example: relations_change_rate:root > 0)
 |relations_threshold|value|Scope to relations threshold level for comparison purposes (relations_threshold:warm)
+country|relative_carrying_capacity|value|Naval carrying capacity of scope country relative to its standing battalions.
 country,character,country_definition,political_movement,pop|religion|religion|Scope to country or country definition's primary religion or pop religion
 treaty_options,treaty|remaining_binding_period|value|Get the current remaining binding period in days for the scoped treaty
 building_type|required_construction|value|Get the required amount of construction for scope building type
@@ -306,6 +311,7 @@ country|ruler|character|Scope to the ruler of a country
 diplomatic_relations|scope_relations|value|Scope to relations value in diplomatic relations scope (example:
 diplomatic_relations|scope_tension|value|Scope to tension value in diplomatic relations scope (example:
 military_formation|screening|value|Links from a fleet scope to the total screening of the ships in the fleet
+political_movement|secession_tag|country_definition|Scope to the country the scoped political movement would secede as, if any.
 diplomatic_pact,treaty_article,treaty_options,treaty_article_options,treaty|second_country|country|Scope to the second_country of any of: 1.
 state|sg|state_goods|Scope from a state to the StateGoods with the specified key
 ship|ship_fleet|military_formation|Links from a ship scope to the ship fleet
@@ -315,8 +321,10 @@ ship|ship_group|ship_group|Scope from a ship to its group
 treaty_article|shipping_lane|shipping_lanes|Scope to the shipping lane for the military formation, or treaty article (goods transfer)
 building_type|slaves_role|pop_type|Scope from building type to it's slaves role pop type
 treaty_article,treaty_article_options|source_country|country|Scope to the source_country of any of: 1.
-amendment|sponsor|interest_group|Links from an amendment scope to the interest group that sponsored the amendment   --------------------  Event Targets Saved from Code:  context am...
+amendment|sponsor|interest_group|Links from an amendment scope to the interest group that sponsored the amendment
 |sr|strategic_region|Scope to the strategic region of specified key Global Link: yes
+|srs|ai_strategic_region_stance_type|Scope to an AI regional stance type from its key (srs:stance_conquer_region) Global Link: yes
+ai_regional_objective|stance|ai_strategic_region_stance_type|Scope to the AI regional stance an AI regional objective was rolled under
 building,market,pop,province|state|state|Scope to the state of the object
 state|state_region|state_region|Scope to the state region of a state
 country|strait_trade_importance_by|value|Scope to the trade importance of goods this country is trading through straits controlled by a target country.
@@ -341,7 +349,7 @@ building|training_rate|value|Scope to the current maximum weekly training rate o
 treaty_article|treaty|treaty|Scope to the treaty a treaty article belongs to
 market_goods|treaty_exports|value|Get the current number of treaty (NOT world market) exports of the good to the market of the scoped MarketGoods
 market_goods|treaty_imports|value|Get the current number of treaty (NOT world market) imports of the good to the market of the scoped MarketGoods
-building,company,diplomatic_play,diplomatic_catalyst,political_lobby,institution,interest_group,law,political_movement,ship,strait,harvest_condition_area,amendment|type|building_type,company_type,diplomatic_play_type,institution_type,interest_group_type,law_type,political_movement_type,ship_type,strait_type,harvest_condition_type,amendment_type|Scope from an object to its type
+building,company,diplomatic_play,diplomatic_catalyst,political_lobby,institution,interest_group,law,political_movement,ship,strait,harvest_condition_area,amendment,ai_regional_objective|type|building_type,company_type,diplomatic_play_type,institution_type,interest_group_type,law_type,political_movement_type,ship_type,strait_type,harvest_condition_type,amendment_type,ai_regional_objective_type|Scope from an object to its type
 |unit_type|combat_unit_type|Scope to a combat unit type from its name (unit_type:key) Global Link: yes
 |value|value|A numeric literal value eg: 1, 5.2, -6 Wild Card: yes Global Link: yes
 |var||Reference a previous set variable via its name eg: var:mortal_enemy

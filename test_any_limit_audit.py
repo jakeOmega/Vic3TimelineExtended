@@ -136,6 +136,25 @@ class ReportTests(unittest.TestCase):
             self.assertIn("any_*` limit audit report", report)
             self.assertIn("any_scope_state", report)
 
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and Coverage no file count,
+        so the report changes only when the findings do."""
+        from any_limit_audit import AuditResult, Flag
+        result = AuditResult(flags=[
+            Flag("common/scripted_effects/x.txt", 3, "any_scope_state", 2),
+            Flag("common/scripted_effects/y.txt", 40, "any_country", 39,
+                 exemption={"date": "2026-05-21", "rationale": "deliberate"}),
+        ], files_audited=418)
+        report = render_report(result)
+        self.assertIn(
+            "- `common/scripted_effects/y.txt` — `limit` inside `any_country` — "
+            "**2026-05-21**: deliberate", report)
+        self.assertNotIn("y.txt:40", report)
+        self.assertIn("- line 3: `limit` inside `any_scope_state` (opened at line 2)",
+                      report)  # unreviewed keeps its lines
+        self.assertNotIn("files audited", report)
+        self.assertNotIn("418", report)
+
 
 @unittest.skipUnless(os.path.isdir(VANILLA_GAME), "vanilla install not found")
 class VanillaCleanTests(unittest.TestCase):

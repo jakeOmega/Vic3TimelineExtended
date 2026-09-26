@@ -1378,17 +1378,19 @@ def render_report(result: AuditResult) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line number on a reviewed entry: the loc key and chain name it,
+        # and an edit above it would otherwise churn the report.
         for f in sorted(exemp, key=lambda x: (x.file, x.line)):
             out.append(
-                f"- `{f.file}:{f.line}` — `{f.key}` — `[{f.chain}]` — "
+                f"- `{f.file}` — `{f.key}` — `[{f.chain}]` — "
                 f"{f.exemption['date']}: {f.exemption['rationale']}"
             )
         out.append("")
 
+    # Flag counts only: the file / chain counts stay in `result.coverage`
+    # (and the regenerate() summary) but move with unrelated loc.
     out.append("## Coverage")
     out.append("")
-    for k, v in result.coverage.items():
-        out.append(f"- {k}: {v}")
     out.append(f"- total flags: {len(result.flags)}")
     out.append(f"- unreviewed: {len(unrev)}")
     out.append(f"- exempted: {len(exemp)}")

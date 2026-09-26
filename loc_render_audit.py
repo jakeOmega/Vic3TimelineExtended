@@ -411,17 +411,19 @@ def render_report(result: AuditResult) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line number on a reviewed entry: the loc key names it, and an
+        # edit above it would otherwise churn the report.
         for f in exemp:
             out.append(
-                f"- `{f.file}:{f.line}` — `{f.loc_key}` ({f.issue}) — "
+                f"- `{f.file}` — `{f.loc_key}` ({f.issue}) — "
                 f"**{f.exemption['date']}**: {f.exemption['rationale']}"
             )
         out.append("")
 
+    # Flag counts only: the file / value counts stay on the result (and in
+    # the regenerate() summary) but move with unrelated loc.
     out.append("## Coverage")
     out.append("")
-    out.append(f"- loc files scanned: {result.loc_files_scanned}")
-    out.append(f"- loc values checked: {result.values_checked}")
     out.append(f"- total flags: {len(result.flags)}")
     out.append(f"- unreviewed: {len(unrev)}")
     out.append(f"- exempted: {len(exemp)}")

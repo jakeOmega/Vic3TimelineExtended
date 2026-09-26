@@ -665,6 +665,27 @@ class RenderTests(unittest.TestCase):
         self.assertIn("`common/static_modifiers/y.txt:1` — `x`", report)
         self.assertIn("Modifiers (1)", report)
 
+    def test_reviewed_entry_and_coverage_carry_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and Coverage no file count,
+        so the report changes only when the findings do."""
+        from loc_coverage_audit import AuditResult, LocFlag
+        result = AuditResult(
+            flags=[
+                LocFlag(category="Modifiers", entity="te_sol_x", missing_keys=["te_sol_x"],
+                        file="common/static_modifiers/te_sol.txt", line=58,
+                        exemption={"date": "2026-09-01", "rationale": "hidden"}),
+            ],
+            coverage={"files_audited": 178, "by_category": {"Modifiers": 1}},
+        )
+        report = render_report(result)
+        self.assertIn(
+            "- `common/static_modifiers/te_sol.txt` — `te_sol_x` (Modifiers) — "
+            "missing: `te_sol_x` — **2026-09-01**: hidden", report)
+        self.assertNotIn("te_sol.txt:58", report)
+        self.assertNotIn("files audited", report)
+        self.assertNotIn("178", report)
+        self.assertIn("  - Modifiers: 1", report)
+
 
 if __name__ == "__main__":
     unittest.main()

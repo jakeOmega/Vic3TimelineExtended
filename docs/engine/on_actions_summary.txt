@@ -1,4 +1,4 @@
-# Auto-generated from on_actions.log @ 2026-09-19T21:06:43+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source.
+# Auto-generated from on_actions.log (engine docs 1.14.4). Do not hand-edit. Run POST /reload after the engine regenerates the source.
 
 austrian_monarchy_yearly_events|country|from_code=no
 bp1_misc_yearly_events|country|from_code=no
@@ -77,6 +77,7 @@ on_diplo_play_back_down||from_code=yes
 on_diplo_play_back_down_involved||from_code=yes
 on_diplo_play_declare_neutrality||from_code=yes
 on_diplo_play_join_side||from_code=yes
+on_diplo_play_overlord_protects_subject||from_code=yes
 on_diplo_play_start||from_code=yes
 on_diplo_play_start_third_party||from_code=yes
 on_diplo_play_subject_backstab_overlord||from_code=yes

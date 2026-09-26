@@ -171,7 +171,6 @@ def audit(mod_path: str) -> AuditResult:
 def render_report(result: AuditResult, mod_path: str = "") -> str:
     unreviewed = [f for f in result.flags if not f.exemption]
     exempted = [f for f in result.flags if f.exemption]
-    cov = result.coverage
 
     out: list[str] = []
     out.append("# Event Image Report")
@@ -184,19 +183,17 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
         "has exactly one such event across the whole base game (`test.120`)."
     )
     out.append("")
-    out.append(f"- Events defined: **{cov.get('events_defined', 0)}**")
-    out.append(f"- Visible (not `hidden = yes`): **{cov.get('visible', 0)}**")
-    out.append(
-        f"- Visible via alternate art (`gui_window` / icons): "
-        f"**{cov.get('alt_art', 0)}**"
-    )
+    # Finding counts only: the defined / visible / alternate-art event counts
+    # stay in `coverage` but move with every new event.
     out.append(f"- Imageless (unreviewed): **{len(unreviewed)}**")
     out.append(f"- Imageless (REVIEWED-suppressed): **{len(exempted)}**")
     out.append("")
 
+    def _rel(f: ImageFlag) -> str:
+        return os.path.relpath(f.file, mod_path) if mod_path else f.file
+
     def _loc(f: ImageFlag) -> str:
-        rel = os.path.relpath(f.file, mod_path) if mod_path else f.file
-        return f"{rel}:{f.line}"
+        return f"{_rel(f)}:{f.line}"
 
     if unreviewed:
         out.append("## Unreviewed")
@@ -219,10 +216,12 @@ def render_report(result: AuditResult, mod_path: str = "") -> str:
     if exempted:
         out.append("## REVIEWED-suppressed")
         out.append("")
+        # No line number on a reviewed entry: the event id names it, and an
+        # edit above it would otherwise churn the report.
         for f in exempted:
             ex = f.exemption or {}
             out.append(
-                f"- `{f.event_id}` — {_loc(f)} "
+                f"- `{f.event_id}` — {_rel(f)} "
                 f"(REVIEWED {ex.get('date', '?')}: {ex.get('rationale', '')})"
             )
         out.append("")
@@ -248,7 +247,8 @@ def regenerate(mod_state=None) -> dict:
     return {
         "unreviewed": sum(1 for f in result.flags if not f.exemption),
         "exempted": sum(1 for f in result.flags if f.exemption),
-        "visible": result.coverage.get("visible", 0),
+        # Coverage, which the committed report no longer prints.
+        **result.coverage,
         "path": out_path,
     }
 

@@ -267,6 +267,24 @@ class AuditAndReportTests(unittest.TestCase):
             self.assertIn("_None._", report)
             self.assertIn("- total flags: 0", report)
 
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and Coverage no file count,
+        so the report changes only when the findings do."""
+        from iterator_limit_audit import AuditResult, Flag
+        result = AuditResult(flags=[
+            Flag("common/scripted_effects/x.txt", 4, "every_scope_state", 2, "do_a", 3),
+            Flag("common/scripted_effects/y.txt", 44, "random_country", 42, "do_b", 43,
+                 exemption={"date": "2026-06-01", "rationale": "both filtered"}),
+        ], files_audited=162)
+        report = render_report(result)
+        self.assertIn(
+            "- `common/scripted_effects/y.txt` — `limit` inside `random_country` after "
+            "`do_b` — **2026-06-01**: both filtered", report)
+        self.assertNotIn("y.txt:44", report)
+        self.assertIn("- line 4: `limit` inside `every_scope_state`", report)  # unreviewed
+        self.assertNotIn("files audited", report)
+        self.assertNotIn("162", report)
+
 
 if __name__ == "__main__":
     unittest.main()

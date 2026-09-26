@@ -1,9 +1,9 @@
-<!-- Auto-generated from triggers.log @ 2026-09-19T21:06:43+00:00; effects.log @ 2026-09-19T21:06:43+00:00. Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
+<!-- Auto-generated from triggers.log + effects.log (engine docs 1.14.4). Do not hand-edit. Run POST /reload after the engine regenerates the source. -->
 
 # Victoria 3 — Triggers & Effects Compressed Reference
 
-*Auto-generated from 1828 trigger entries and 3152 effect entries.*
-*97 iterator families, 914 standalone triggers, 390 standalone effects.*
+*Auto-generated from 1846 trigger entries and 3158 effect entries.*
+*99 iterator families, 930 standalone triggers, 390 standalone effects.*
 
 ## Reading Guide
 
@@ -26,7 +26,7 @@
 ---
 ## Country
 
-### Iterators (51)
+### Iterators (53)
 
 - `any/every/ordered/random_active_law` → law — Iterate through all active laws in a country
 - `any/every/ordered/random_active_party` → party — Iterate through all active political parties in a country
@@ -51,6 +51,7 @@
 - `any/every/ordered/random_political_movement` → political_movement — Iterate through all political movements in a country
 - `any/every/ordered/random_potential_party` → party — Iterate through all potential political parties in a country
 - `any/every/ordered/random_primary_culture` → culture (scopes: country, country_definition) — Primary cultures of the scoped country or country definition
+- `any/every/ordered/random_releasable_state` → state — Iterate through the states of the scoped country that would be released to scope:target_country_creation, for country creation war goals
 - `any/every/ordered/random_rival_country` → country — Any country that is being rivaled by the country in a scope
 - `any/every/ordered/random_rivaling_country` → country — Any country that is rivaling the country in a scope
 - `any/every/ordered/random_scope_admiral` → character (scopes: country, front, interest_group, military_formation) — Iterate through all admirals in a: country, interestgroup, or military formation
@@ -67,6 +68,7 @@
 - `any/every/ordered/random_scope_interest_marker` → interest_marker (scopes: country, state_region, strategic_region) — Iterate through all interest markers in a: country, strategic region, state region
 - `any/every/ordered/random_scope_politician` → character (scopes: country, front, interest_group, military_formation) — Iterate through all politicians in a: country or interestgroup
 - `any/every/ordered/random_scope_pop` → pop (scopes: country, culture, interest_group, state) — Iterate through all pops in a: country, state, interest group, culture
+- `any/every/ordered/random_scope_regional_objective` → ai_regional_objective (scopes: country, strategic_region) — Iterate through the AI regional objectives of the scoped country, or the ones held in the scoped strategic region
 - `any/every/ordered/random_scope_ship` → ship (scopes: country, military_formation) — Iterate through all ships in a country or military formation
 - `any/every/ordered/random_scope_state` → state (scopes: country, front, state_region, strait, strategic_region, theater) — Iterate through all states including provinces from a: country, state_region, theater, front, or strait
 - `any/every/ordered/random_scope_strait` → strait (scopes: country, state) — Iterate through all straits with a land endpoint in the scoped state or country
@@ -80,7 +82,7 @@
 - `any/every/ordered/random_subject_or_below` → country — Any country below current in hierarchy
 - `any/every/ordered/random_valid_mass_migration_culture` → culture — Lists for cultures in the scoped country that are valid for mass migration
 
-### Triggers (328)
+### Triggers (336)
 
 - `additional_war_support_change` — Compares the additional war support change the scoped country has accumulated from scripted events in the target diplomatic play
 - `aggressive_diplomatic_plays_permitted` — True if country is independent or permitted to start their own Diplomatic Plays
@@ -168,6 +170,7 @@
 - `expanding_institution` — Checks if the institution is expanding
 - `fixed_expenses` — Does the country have this amount of weekly fixed expenses
 - `fixed_income` — Does the country have this amount of weekly fixed income
+- `gdp_owned_by` — Compares the yearly GDP the specified country owns in the scoped country
 - `gdp_ownership_ratio` — Compares the ratio of GDP the specified country owns in the scoped country
 - `gdp_per_capita_ranking` — Compares a Country's GDP per Capita Ranking (position)
 - `gdp_ranking` — Compares a Country's GDP Ranking (position)
@@ -182,10 +185,12 @@
 - `has_active_peace_deal` — True if the country is in a war where there is a proposed peace deal
 - `has_any_law_commitment` — Checks if a country has a commitment to enact any law
 - `has_any_naval_only_hostilities` — Check if the country has naval hostilities with any country it is not also at war with
+- `has_any_potential_strait_province` — Check if a state, state region or country owns any potential strait province (scopes: country, state, state_region)
+- `has_any_regional_objective` — Checks if the scoped country's AI has a regional objective in a strategic region, completed or not Leave out type to match an objective of any type Usage:
 - `has_any_secessionists_broken_out` — Check if the country has secessionists broken out
 - `has_any_secessionists_growing` — Check if the country has any secessionists growing
-- `has_any_strait_control` — Check if the scoped country owns a strait province with naval fortification → country
-- `has_any_strait_province` — Check if the scoped country owns any strait province → country
+- `has_any_strait_control` — Check if the scoped country owns a strait province with naval fortification
+- `has_any_strait_province` — Check if a state, state region or country owns any strait province (scopes: country, state, state_region)
 - `has_any_subventions_on` — Check if the scoped country has any level of subventions on a goods scope:country → goods
 - `has_any_tariffs_on` — Check if the scoped country has any level of tariffs on a goods scope:country → goods
 - `has_attitude` — Checks if scoped country has a particular attitude towards another country Where X = country and Y = attitude type
@@ -224,6 +229,7 @@
 - `has_potential_to_form_country` — Check if the target country could ever be able to form a nation
 - `has_power_struggle` — Checks if scope Power Bloc has a power struggle
 - `has_region_stance` — Checks if the scoped country's AI has the specified stance for a strategic region Usage: region_stance
+- `has_regional_objective` — Checks if the scoped country's AI has an active regional objective in a strategic region Leave out type to match an objective of any type Usage:
 - `has_researchable_technology` — Check if the country has any researchable technology left.
 - `has_revolution` — Check if the country has revolutionary uprising
 - `has_ruling_interest_group` — Does the country's government include the named IG
@@ -232,8 +238,8 @@
 - `has_social_hierarchy` — Checks if the scoped country has adopted a specific social hierarchy
 - `has_state_in_state_region` — Check if country has a state in the state region
 - `has_strait_toll_exemption_from` — Check if the scoped country is exempt from the strait tolls charged by the target country → country
-- `has_strategic_adjacency` — Checks if country in scope has a strategic adjacency (direct/coastal/war goal adjacency) to target state/country
-- `has_strategic_land_adjacency` — Checks if country in scope has a strategic adjacency (direct land border or war goal adjacency only) to target state/country has_strategic_adjacency
+- `has_strategic_adjacency` — Checks if country in scope has a strategic adjacency (direct/coastal/military access/war goal adjacency) to target state/country
+- `has_strategic_land_adjacency` — Checks if country in scope has a strategic adjacency (direct land border, military access or war goal adjacency only) to target state/country
 - `has_strategic_region_interest_tier` — Checks the scoped country's interest tier rank in a specific strategic region scope:country
 - `has_strategy` — Checks if country in scope has a particular AI strategy
 - `has_subject_relation_with` — Checks if country in scope is subject or overlord of event target → country
@@ -261,6 +267,7 @@
 - `is_ai` — True if country scope is controlled by an AI
 - `is_at_war` — Check if the country is at war
 - `is_banning_goods` — Check if a country is banning a good
+- `is_coastal` — Check if a state borders a (non-impassable) sea region or if a country contains any such state. (scopes: country, state)
 - `is_considered_adjacent_due_to_wargoals` — Checks if the scoped country is considered adjacent to the target country by virtue of the scoped country having war goals that are adjacent to the target country in a committed diplomatic play → country
 - `is_construction_paused` — Check if construction in a state is paused.
 - `is_country_alive` — Checks if the scoped country is alive, i.e.
@@ -289,6 +296,7 @@
 - `is_insurrectionary` — Check if country, movement or IG is insurrectionary (scopes: country, interest_group, political_movement)
 - `is_involved_in_journal_entry` — Check if the country is involved in a specific journal entry
 - `is_junior_in_customs_union` — True if country is a junior country in a customs custom
+- `is_land_adjacent_to_state` — Checks if country in scope shares a land border with a target state, ignoring sea crossings → state
 - `is_local_country` — Checks if the scoped country is local in specified strategic region
 - `is_local_player` — True if country scope is a player
 - `is_losing_power_rank` — Check if the country is in the process of dropping in power ranking
@@ -318,6 +326,7 @@
 - `liberty_desire_weekly_progress` — Compare trigger for the weekly Liberty Desire progress value in a scoped country.
 - `liberty_desire_weekly_progress_from_support_independence` — Compare trigger for the weekly Liberty Desire progress value from the scoped country having their independence supported.
 - `literacy_rate` — Checks if a pop, state or country has a certain amount of literacy (scopes: country, pop, state)
+- `lowest_war_support_in_overlord_war` — Compares the lowest war support the scoped country has in any war it fights on the same side as its overlord, or the maximum war support if it has no such war
 - `loyalist_fraction` — Compares loyalist fraction in pops in state or country, all parameters except value are optional (scopes: country, state)
 - `max_law_enactment_setbacks` — Compares to the max number of law enactment setbacks a country can suffer before the law fails
 - `max_num_companies` — The limit of how many companies the scoped country is allowed to have
@@ -360,7 +369,7 @@
 - `power_bloc_share_prestige_with` — Compare the share of Prestige of the country in scope against all its Power Bloc members plus an additional country, returns -1 if not in a Power Bloc "power_bloc_share_prestige_with(scope:country)...
 - `power_bloc_share_prestige_without` — Compare the share of Prestige of the country in scope against all its Power Bloc members minus one of the members, returns -1 if not in a Power Bloc "power_bloc_share_prestige_without(scope:country...
 - `prestige` — Compare prestige
-- `primary_cultures_percent_country` — Checks that a country's population has a certain percentage of the country's primary cultures scope:example_country
+- `primary_cultures_percent_country` — Checks that a country's population has a certain percentage of the target country's primary cultures scope:example_country
 - `produced_authority` — Compares the produced authority of the scoped country
 - `produced_bureaucracy` — Compares the produced bureaucracy of the scoped country
 - `produced_influence` — Compares the produced influence of the scoped country
@@ -388,6 +397,7 @@
 - `supply_network_strength` — Compares the country's supply network strength (can exceed 1)
 - `supply_ship_maintenance_fulfillment` — Compares the supply ship maintenance fulfillment ratio of a country
 - `taking_loans` — Check if the country is currently running a weekly deficit and taking loans to compensate
+- `tax_income` — Does the country have this amount of weekly income from taxation, excluding tariffs, pacts, transfers and other external sources
 - `tax_level` — Compares the overall tax level of scoped country
 - `tax_level_value` — Compares the overall tax level integer value of scoped country income_tax_level_value
 - `tax_waste` — Compare the tax waste of the country
@@ -553,6 +563,7 @@
 - `free_arable_land` — Check free arable land in state
 - `has_assimilating_pops` — Check if a state has any pops currently in the process of assimilating.
 - `has_claim_by` — Checks if a state is claimed by a country any_state → country
+- `has_coastal_access` — Check if this state has a direct connection to a coastal state owned by the same country.
 - `has_converting_pops` — Check if a state has any pops currently in the process of converting.
 - `has_cultural_community` — Checks if a culture has a cultural community in the scoped state.
 - `has_decree` — Checks if scope state has a particular type of decree
@@ -568,7 +579,6 @@
 - `is_being_bombarded` — Checks if a state is currently being port bombarded by a hostile fleet
 - `is_blockaded_by` — Checks if a state is blockaded by a country → country
 - `is_capital` — Check if state is the capital of the
-- `is_coastal` — Check if state borders a (non-impassable) sea region
 - `is_homeland_of_country_cultures` — Checks if state is homeland of any of the target country's primary cultures → country
 - `is_in_revolt` — Check if a state has any chance to split off into a revolutionary or seceding country
 - `is_in_same_market_area` — Checks if scope state is in the same market area as target state → state
@@ -596,7 +606,7 @@
 - `pollution_generation` — Compare total pollution generation across all buildings in the state
 - `pop_type_percent_state` — Checks that a state's population has a certain percentage of a specific pop type scope:example_state
 - `population_by_culture` — Compare the current population of a target culture in the scoped state
-- `primary_cultures_percent_state` — Checks that a state's population has a certain percentage of the country's primary cultures scope:example_state
+- `primary_cultures_percent_state` — Checks that a state's population has a certain percentage of the target country's primary cultures scope:example_state
 - `relative_infrastructure` — Compares the infrastructure to infrastructure usage of a state
 - `religion_percent_state` — Checks that a state's population has a certain percentage of a specific religion scope:example_state
 - `state_average_culture_and_religion_pop_acceptance` — Average acceptance of state pops of a specific culture and religion.
@@ -1136,18 +1146,22 @@
 - `any/every/ordered/random_scope_front` → front — Iterate through all Fronts related to the scoped War
 - `any/every/ordered/random_war_participant` → country — Iterate through all participants in a war
 
-### Triggers (21)
+### Triggers (25)
 
+- `gdp_change_since_war_start` — Compares the fraction of GDP the target country has gained or lost since it entered the scoped war
 - `has_stalled_wargoal_against` — Checks if any enemy war goal in the scoped war targets the specified country without being contested or advanced on → country
 - `has_stalled_wargoal_held_by` — Checks if the specified country holds a war goal in the scoped war that is neither being contested nor advanced on → country
 - `has_war_goal` — Checks if war has a certain war goal type
 - `has_war_support` — Checks the war support of the target country in the scoped war
 - `has_war_support_change` — Checks the war support change of the target country in the scoped war
 - `is_at_war_with_rival` — Checks if the specified country is at war against a declared rival in the scoped war → country
+- `is_fighting_overlord_in_war` — Checks if the specified country is a subject fighting its own overlord in the scoped war → country
 - `is_holder_of_wargoal_in_war` — Checks if the specified country is the holder of any war goal in the scoped war → country
+- `is_on_defending_side` — Checks if the target country is on the target side of the scoped war, as the target itself or backing it → country
 - `is_target_of_wargoal_in_war` — Checks if the specified country is the target of any war goal in the scoped war → country
 - `is_war_participant` — Check if the target country is participant in a war → country
 - `is_warleader` — Check if country is warleader in war → country
+- `land_lost_since_war_start` — Compares how much of what the target country's economy was worth on entering the scoped war has since been taken from it by war goal enforcement
 - `num_casualties` — Checks the number of total casualties in the scoped war
 - `num_country_casualties` — Checks the number of casualties for the target country in the scoped war
 - `num_country_dead` — Checks the number of dead for the target country in the scoped war
@@ -1555,6 +1569,15 @@
 - `harvest_condition_intensity` — With a harvest condition scope, compare the intensity of the harvest condition in a given country (since the state region can span multiple countries)
 
 ---
+## Ai Regional Objective
+
+### Triggers (3)
+
+- `completion_date` — Compare to the date the scoped AI regional objective was completed Uncompleted objectives have no completion date, so check is_completed first
+- `is_completed` — Checks if the scoped AI regional objective has been completed
+- `start_date` — Compare to the date the scoped AI regional objective was rolled
+
+---
 ## Character Role
 
 ### Triggers (5)
@@ -1798,7 +1821,7 @@
 ---
 ## Ship
 
-### Triggers (14)
+### Triggers (15)
 
 - `ai_ship_value` — AI valuation of a ship in £, equal to the current template-version construction cost times NAI::SHIP_TRANSFER_BASE_VALUE_PER_CONSTRUCTION_POINT
 - `armor` — Compare a ship's armor
@@ -1806,6 +1829,7 @@
 - `crew_percent` — Compare a ship's current crew
 - `hit_points` — Compare a ship's current hit points
 - `hit_points_percent` — Compare a ship's current hit points
+- `is_ai_ship_category` — Checks if scoped ship is in the specified AI ship category
 - `is_damaged` — Checks if a ship is damaged
 - `is_flagship` — Checks if the scoped ship is assigned as the flagship
 - `is_in_port` — Checks if a ship is in port

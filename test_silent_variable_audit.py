@@ -131,5 +131,33 @@ class SilentVariableAuditTests(unittest.TestCase):
         self.assertEqual(self._flags(mod), {("my.1", "my.1.a")})
 
 
+class RenderReportTests(unittest.TestCase):
+    def test_report_carries_no_volatile_numbers(self):
+        """A reviewed entry prints no line number and the summary no scan
+        counts, so the report changes only when the findings do. Unreviewed
+        flags and stale tags keep their lines."""
+        w = [sva.Write("un_hq_country", "global", None)]
+        result = sva.AuditResult(
+            flags=[
+                sva.OptionFlag("un_events.1", "un_events.1.a", "/mod/events/un.txt", 78, w,
+                               exemption={"date": "2026-09-25", "rationale": "modifier shows it"}),
+                sva.OptionFlag("my.1", "my.1.a", "/mod/events/e.txt", 5, w),
+            ],
+            stale_tags=[sva.StaleTag("my.2", "my.2.b", "/mod/events/e.txt", 30)],
+            coverage={"events_scanned": 797, "options_scanned": 1974,
+                      "displayed_scope_variables": 370, "displayed_global_variables": 158},
+        )
+        report = sva.render_report(result, "/mod")
+        self.assertIn(
+            "- `un_events.1` option `un_events.1.a` — events/un.txt — global `un_hq_country` "
+            "(REVIEWED 2026-09-25: modifier shows it)", report)
+        self.assertNotIn("un.txt:78", report)
+        self.assertIn("- `my.1` option `my.1.a` — events/e.txt:5 —", report)
+        self.assertIn("- `my.2` option `my.2.b` — events/e.txt:30", report)
+        for gone in ("Events scanned", "Options scanned", "Displayed variables",
+                     "797", "1974", "370", "158"):
+            self.assertNotIn(gone, report)
+
+
 if __name__ == "__main__":
     unittest.main()

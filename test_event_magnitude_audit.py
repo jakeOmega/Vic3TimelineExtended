@@ -395,7 +395,32 @@ class ReportRenderTests(unittest.TestCase):
         self.assertIn("bar.7", md)
         self.assertIn("tech-gated", md)
         self.assertIn("## Coverage", md)
-        self.assertIn("files_audited", md)
+        self.assertIn("- exempted: 1", md)
+
+    def test_render_is_stable_under_unrelated_edits(self):
+        """A reviewed entry prints no line number and Coverage no file count,
+        so the report changes only when the findings do."""
+        flags = [
+            AuditFlag(
+                file="events/foo.txt", line=10, event_id="foo.1",
+                kind="direct_effect", effect="add_treasury", value="-10000",
+                resource="treasury (instant)", fix_hint="use a tier",
+            ),
+            AuditFlag(
+                file="events/bar.txt", line=42, event_id="bar.7",
+                kind="modifier_named", effect="country_prestige_add", value="-20",
+                resource="prestige", fix_hint="use prestige_loss_<tier>",
+                exemption={"date": "2026-05-04", "rationale": "tech-gated"},
+            ),
+        ]
+        md = render_report(AuditResult(flags=flags, coverage={"files_audited": 57}))
+        self.assertIn(
+            "- `events/bar.txt` — `bar.7` — `country_prestige_add = -20` — "
+            "2026-05-04: tech-gated", md)
+        self.assertNotIn("bar.txt:42", md)
+        self.assertIn("`events/foo.txt:10`", md)  # unreviewed keeps its line
+        self.assertNotIn("files_audited", md)
+        self.assertNotIn("57", md)
 
     def test_empty_render(self):
         result = AuditResult(flags=[], coverage={"files_audited": 0})

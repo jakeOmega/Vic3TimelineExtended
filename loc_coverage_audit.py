@@ -501,18 +501,21 @@ def render_report(result: AuditResult) -> str:
         out.append("_None._")
         out.append("")
     else:
+        # No line number on a reviewed entry: the entity names it, and an
+        # edit above it would otherwise churn the report.
         for f in exemp:
             missing_str = ", ".join(f"`{k}`" for k in f.missing_keys)
             out.append(
-                f"- `{f.file}:{f.line}` — `{f.entity}` ({f.category}) — "
+                f"- `{f.file}` — `{f.entity}` ({f.category}) — "
                 f"missing: {missing_str} — "
                 f"**{f.exemption['date']}**: {f.exemption['rationale']}"
             )
         out.append("")
 
+    # Flag counts only: `files_audited` stays in `result.coverage` (and the
+    # regenerate() summary) but moves with unrelated mod content.
     out.append("## Coverage")
     out.append("")
-    out.append(f"- files audited: {result.coverage.get('files_audited', 0)}")
     by_cat = result.coverage.get("by_category", {})
     if by_cat:
         out.append("- flags by category:")
