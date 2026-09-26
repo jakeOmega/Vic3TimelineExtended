@@ -420,7 +420,7 @@
  building_resettlement_arrivals_add:0 "Settlers arrived last month"
  building_resettlement_arrivals_add_desc:0 "People this Settlement Authority brought here last month."
  building_resettlement_colony:0 "Settlement Authority"
- building_resettlement_colony_desc:0 "A government office that recruits settlers across the country and brings them to this frontier. Its program decides who is recruited and how; its settlement plan decides what they build here. It can be founded only on an open frontier and closes when the region fills up; its build requirements show the numbers."
+ building_resettlement_colony_desc:0 "A [concept_internal_resettlement] office that recruits settlers across the country and brings them to this frontier. Its program decides who is recruited and how; its settlement plan decides what they build here. It can be founded only on an open frontier and closes when the region fills up; its build requirements show the numbers."
  building_resettlement_transit_deaths_add:0 "Died in transit last month"
  building_resettlement_transit_deaths_add_desc:0 "People recruited for this Settlement Authority last month who died before they arrived."
  building_rheinmetall_unterluss_proving_ground:0 "Rheinmetall Unterlüss Proving Ground"

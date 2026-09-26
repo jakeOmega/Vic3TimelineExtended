@@ -717,5 +717,32 @@ class DebugTests(unittest.TestCase):
             self.assertIn(f"te_debug_resettlement.1.{suffix}", L)
 
 
+# ---- the docs and the concept (Task 8) -------------------------------------------------
+
+MOD_SYSTEMS = "docs/systems/mod_systems.md"
+
+
+class DocsTests(unittest.TestCase):
+    def test_the_system_section_names_every_programme(self):
+        text = read(MOD_SYSTEMS)
+        m = re.search(r"(?ms)^## Internal Resettlement \(Settlement Authority\)\n(.*?)(?=^## )", text)
+        self.assertIsNotNone(m)
+        section = m.group(1)
+        L = loc()
+        for p in PROGRAMMES:
+            self.assertIn(L[pm(p.key)], section, p.key)
+        self.assertIn("test_resettlement_programme_registry.py", section)
+
+    def test_no_doc_names_the_old_transfer(self):
+        self.assertNotIn("resettlement_transfer_on_action", read(MOD_SYSTEMS))
+
+    def test_concept(self):
+        self.assertIsNotNone(block(read("common/game_concepts/extra_concepts.txt"), "concept_internal_resettlement"))
+        L = loc()
+        self.assertIn("concept_internal_resettlement", L)
+        self.assertIn("concept_internal_resettlement_desc", L)
+        self.assertIn("[concept_internal_resettlement]", L["building_resettlement_colony_desc"])
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -1034,9 +1034,11 @@ The mod uses 23 on-action files under `common/on_actions/`. These wire mod logic
 | `langreform_events_on_actions.txt` | Language reform yearly random events | Pulse |
 | `minor_events_on_actions.txt` | Miscellaneous yearly random events | Pulse |
 | `repeatable_events_on_actions.txt` | Generic repeatable yearly events | Pulse |
+| `resettlement_on_actions.txt` | Internal resettlement: the monthly country pulse (transfer, readouts, politics, Declaration, events) | Pulse (monthly) |
 | `social_tensions_on_actions.txt` | Social/political tension yearly events | Pulse |
 | `space_race_on_actions.txt` | Space race in-progress and cross-system yearly events | Pulse |
 | `te_monetary_on_actions.txt` | Monetary policy: world reference rate and (phase 3) the world rate, the monthly country update, the yearly growth snapshot, the country-creation hooks (see **Monetary Policy (phase 1)**), and — phase 5 — the anchored-GDP refresh on the global pulse, the yearly arrangement scan + seigniorage re-sum, `on_country_default` (the guarantee is called) and `on_become_subject` (currency boards) | Mixed |
+| `te_region_area_on_actions.txt` | Writes each state region's land area once per save (`te_region_area_generated.txt`) | Mixed |
 | `un_on_actions.txt` | UN formation and recurring member events | Pulse (monthly) |
 | `wonder_events_on_actions.txt` | Wonder building narrative events | Pulse (monthly) |
 
@@ -1054,7 +1056,6 @@ All pulse-based on_actions are routed through `extra_on_actions.txt`:
 - `war_propaganda_on_action` — wartime propaganda effects
 - `state_yearly_cultural_acceptance_add_on_action` — cultural acceptance
 - `tourism_on_action` — tourism output/throughput modifier refresh (sole owner; the multipliers read monthly-varying `city_size_rank` and live building levels)
-- `resettlement_transfer_on_action` — population transfer
 
 **`on_monthly_pulse`** (Root = global):
 - `city_rank_on_action` — city tier updates
@@ -1312,6 +1313,26 @@ AI weights across events are tuned to favor decolonization:
 - **Gates:** `possible` / `can_ratify` call `nuclear_program_can_be_paused` (`nuke_triggers.txt`; `nuclear_disarmament` uses `nuclear_program_can_be_disarmed`). The source must have researched `nuclear_weapons`, must not already be frozen or disarmed, and must not be receiving `nuclear_program_aid`. `nuclear_program_aid` refuses a frozen or disarmed recipient, and neither article can share a draft with aid to the same country.
 - **AI logic:** AI will accept if it doesn't yet have nukes and the other party is much stronger, or if relations are very high. AI proposes this against rivals pursuing nuclear weapons.
 - **Files:** `common/treaty_articles/extra_treaty_articles.txt` (article definition), `common/static_modifiers/extra_modifiers.txt` (modifier), localization in main loc file.
+
+## Internal Resettlement (Settlement Authority)
+
+- **Design:** `docs/superpowers/specs/2026-09-26-internal-resettlement-design.md` (Decisions table is settled). International transfers stay with the Population Transfer treaty article below.
+- **Building:** `building_resettlement_colony`, displayed as Settlement Authority, in the destination state only. Frontier gate: a new one needs fewer than 2 people per km² over the whole state region, and it closes at 10 per km²; both scale with `1 + state_migration_crowding_density_mult`. Areas come from `te_region_area_generated.txt` (`scripts/generators/gen_region_area.py`). Level cap is 5 from `base_values`, plus 5 each from nationalism, civilizing_mission, mass_propaganda, keynesian_economics and civil_rights_movement.
+- **Programs** (`pmg_resettlement_programme`): Land Grants, Military Colonies, Penal Transportation, Organized Colonization, Special Settlements, Development Program, Rustication, Managed Retreat. Each sets who is recruited (`resettlement_pop_eligible`; never by culture or religion), capacity (`state_resettlement_transfer_add`, half level-scaled, half workforce-scaled), staff, goods and destination effects. Settlement plans (`pmg_resettlement_settlement`): Homesteads, Work Settlements, Planned Towns. Transport (`pmg_resettlement_transportation`) adds capacity.
+- **Monthly pulse** (`resettlement_country_monthly`, `on_monthly_pulse_country`):
+  - Each Authority walks its owner's states in order of eligible population (Recruitment Drive decree states first) and takes up to 2% of each eligible pop (4% under a drive), skipping takes under 100.
+  - It moves the survivors with `move_partial_pop`; for coercive programs, deaths in transit are removed at the source in steps of 100.
+  - Readouts: *Settlers arrived* and *Died in transit* on the building, *Recruited for resettlement* on each source.
+- **Consequences:**
+  - Source unrest (Special Settlements, Rustication).
+  - Land pressure on pops below second-class acceptance at the destination: only ever a cost.
+  - One political modifier per program, `resettlement_<program>_politics`, scaled by a volume counter that decays 11/12 a month, never per building.
+  - `resettlement_declaration_violation` for parties to the UN Declaration running coercive programs, announced by `resettlement.20`.
+- **Events:** `resettlement.1`–`.8` rolled at most every 18 months; `.9` on closure; `.20` the Declaration warning.
+- **Game rule:** `internal_resettlement_rule` (enabled / AI voluntary only / disabled).
+- **Homelands:** left emergent. Settlers shift culture shares at the destination, which may eventually create or remove a homeland under the homeland system's own gates and timer. Nothing here special-cases it.
+- **Adding a program:** add a row to `PROGRAMMES` in `test_resettlement_programme_registry.py` and follow the failures: the PM and its loc, the group list, the code switch, the eligibility branch, the month counter, the voluntary or coercive trigger, the politics modifier and this section.
+- **Debug:** `event te_debug_resettlement.1`; `TE_RESETTLEMENT:` lines in `debug.log`.
 
 ## Population Transfer (Treaty Article)
 

@@ -222,6 +222,8 @@ Notes:
 | `scripts/image_pipeline/event_image_prompts.py` | Maps all mod events to image/video assets. Defines AI image generation prompts. Used by `generate_event_images.py`. | Library (import) |
 | `scripts/image_pipeline/generate_event_images.py` | 3-phase pipeline: generate AI images (FLUX.1-schnell), convert to DDS, create event videos. | `python scripts/image_pipeline/generate_event_images.py --phase generate` |
 
+- **`map_data/state_regions/*.txt` lists province ids both quoted and bare** (`"x29CCD6"` and `x29CCD6`) — both are valid to the engine. Any generator that scans provinces out of a state region block needs a regex that matches both forms; `scripts/generators/gen_region_area.py`'s `HEX_RE` (`\bx([0-9A-Fa-f]{6})\b`, no quote anchor) is the pattern to copy.
+
 ## Event Scaffolding (`scripts/generators/gen_event.py`)
 
 Generates boilerplate-free Paradox event definitions and localization entries from compact JSON specs. Handles auto-ID allocation (scans existing event files), UTF-8 BOM encoding, triggered_desc chains, default option inheritance, and section headers.

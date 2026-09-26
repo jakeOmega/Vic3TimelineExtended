@@ -428,6 +428,12 @@ def categorize_key(key, technology_keys):
     # longer siblings stay in MISCELLANEOUS.
     if key.startswith("TE_HOMELAND_"):
         return "MISCELLANEOUS"
+    # Internal resettlement (the Settlement Authority): static modifiers,
+    # tooltips and the Declaration splice line. Four-token names would land in
+    # MISCELLANEOUS and their `_desc` halves in CONCEPTS; two- and three-token
+    # ones would all fall to CONCEPTS, away from the rest of the family.
+    if key.startswith("resettlement_"):
+        return "MISCELLANEOUS"
     if "_desc" in key or (re.match(r"^[a-zA-Z_]+$", key) and len(key.split("_")) < 4):
         return "CONCEPTS"
     return "MISCELLANEOUS"

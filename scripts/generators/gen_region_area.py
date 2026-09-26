@@ -12,6 +12,10 @@ and stretched toward the poles. The row weights below were fitted against
 Hokkaido, Île-de-France, Montana, Iceland, Kola, Alaska, Ceylon and New
 Zealand's South Island (all within 12%; test_region_area.py pins six).
 
+Province tokens in map_data/state_regions/*.txt appear both quoted
+("x29CCD6") and bare (x29CCD6); both are valid to the engine, and HEX_RE
+below matches either form.
+
 Needs the Victoria 3 install (provinces.png is not in the repo) and Pillow and
 NumPy (system python3 has both; the repo .venv does not). Re-run after a vanilla
 map change, and bump VERSION so old saves re-read the table:
