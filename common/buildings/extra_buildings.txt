@@ -963,7 +963,8 @@ REPLACE_OR_CREATE:building_space_program = {
 	}
 
 	possible = {
-		owner.market_capital = THIS
+		# ?=: a market with no capital state returns an invalid object.
+		owner.market_capital ?= THIS
 	}
 
 	required_construction = construction_cost_super_high
