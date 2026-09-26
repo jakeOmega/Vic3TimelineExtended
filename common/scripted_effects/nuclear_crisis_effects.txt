@@ -450,6 +450,7 @@ nd_crisis_refresh_figures = {
 		nd_crisis_store_yp = { C = nd_yp_protector V = nd_yp_protector_value }
 		nd_crisis_store_yp = { C = nd_yp_credibility V = nd_yp_credibility_value }
 		nd_crisis_store_yp = { C = nd_yp_alert V = nd_yp_alert_value }
+		nd_crisis_store_yp = { C = nd_yp_recessed V = nd_yp_recessed_value }
 		nd_crisis_store_yp = { C = nd_yp_danger V = nd_yp_danger_value }
 		nd_crisis_store_yp = { C = nd_yp_exercise V = nd_yp_exercise_value }
 		nd_crisis_store_yp = { C = nd_yp_temperament V = nd_yp_temperament_value }
@@ -544,6 +545,10 @@ nd_crisis_clear_figures = {
 	if = {
 		limit = { has_variable = nd_yp_alert }
 		remove_variable = nd_yp_alert
+	}
+	if = {
+		limit = { has_variable = nd_yp_recessed }
+		remove_variable = nd_yp_recessed
 	}
 	if = {
 		limit = { has_variable = nd_yp_danger }
@@ -730,7 +735,7 @@ nd_crisis_revalidate_dispute = {
 				OR = {
 					nd_is_armed = no
 					NOT = { has_variable = nd_readiness_target }
-					var:nd_readiness_target = 1
+					var:nd_readiness_target <= 1
 				}
 			}
 		}
@@ -1337,7 +1342,12 @@ nd_crisis_act_yield = {
 					scope:nd_target = {
 						if = {
 							limit = { has_variable = nd_readiness }
-							nd_set_readiness_target_1 = yes
+							# Down to Routine — never up to it: a Recessed target
+							# already stands lower.
+							if = {
+								limit = { var:nd_readiness_target > 1 }
+								nd_set_readiness_target_1 = yes
+							}
 							set_variable = { name = nd_readiness_lock_months value = nd_readiness_lock_months_value }
 						}
 					}
@@ -1609,11 +1619,15 @@ nd_crisis_talks_credibility_lines = {
 	}
 }
 
-# Country scope: stand down to routine and lock it.
+# Country scope: stand down to routine and lock it. Down only — a Recessed
+# country already stands lower and stays there.
 nd_standdown_one_side = {
 	if = {
 		limit = { has_variable = nd_readiness }
-		nd_set_readiness_target_1 = yes
+		if = {
+			limit = { var:nd_readiness_target > 1 }
+			nd_set_readiness_target_1 = yes
+		}
 		set_variable = { name = nd_readiness_lock_months value = nd_readiness_lock_months_value }
 	}
 }
@@ -1663,6 +1677,10 @@ nd_crisis_act_hold = {
 		}
 		nd_set_readiness_target_3 = yes
 		if = {
+			limit = { var:nd_readiness = 0 }
+			custom_tooltip = nd_tt_hold_alert_6w
+		}
+		else_if = {
 			limit = { var:nd_readiness = 1 }
 			custom_tooltip = nd_tt_hold_alert_4w
 		}

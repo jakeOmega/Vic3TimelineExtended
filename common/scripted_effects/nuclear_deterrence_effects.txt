@@ -477,6 +477,19 @@ nd_monthly_update = {
 		# ---- AI posture: every sixth month -----------------------------------
 		if = {
 			limit = { is_ai = yes }
+			# A recessed AI that finds itself at war or in a crisis mates its
+			# warheads at once, not at its next review (umbrella/recessed/
+			# dead-hand spec §2.5).
+			if = {
+				limit = {
+					var:nd_readiness_target = 0
+					OR = {
+						is_at_war = yes
+						nd_in_crisis = yes
+					}
+				}
+				nd_set_readiness_target_1 = yes
+			}
 			change_variable = { name = nd_ai_review_months add = 1 }
 			if = {
 				limit = { var:nd_ai_review_months >= 6 }
@@ -640,22 +653,28 @@ nd_set_doctrine = {
 	nd_apply_posture_modifiers = yes
 }
 
+nd_set_readiness_target_0 = { nd_set_readiness_target = { R = 0 STANDDOWN = yes } }
 nd_set_readiness_target_1 = { nd_set_readiness_target = { R = 1 STANDDOWN = yes } }
 nd_set_readiness_target_2 = { nd_set_readiness_target = { R = 2 STANDDOWN = no } }
 nd_set_readiness_target_3 = { nd_set_readiness_target = { R = 3 STANDDOWN = no } }
 
-# R = 1..3: the target; nd_weekly_update walks the actual readiness there.
+# R = 0..3 (0 = Recessed): the target; nd_weekly_update walks the actual
+# readiness there.
 nd_set_readiness_target = {
 	custom_tooltip = {
 		text = nd_tt_readiness_target_$R$
 		set_variable = { name = nd_readiness_target value = $R$ }
 		set_variable = { name = nd_readiness_transition value = 0 }
 	}
-	# A stand-down is visible at once, even though the forces take weeks.
+	# A stand-down is visible at once, even though the forces take weeks. Only
+	# a move down is one: Routine from Recessed is a raise. The limit reads the
+	# target as it stands in the tooltip preview; in the run the line renders
+	# nothing either way.
 	if = {
 		limit = {
 			always = $STANDDOWN$
 			nd_in_crisis = yes
+			var:nd_readiness_target > $R$
 		}
 		custom_tooltip = nd_tt_standdown_signal
 	}
@@ -1162,6 +1181,25 @@ nd_ai_review_posture = {
 			if = {
 				limit = { NOT = { var:nd_readiness_target = 2 } }
 				nd_set_readiness_target_2 = yes
+			}
+		}
+		# Recessed: at peace, nothing to deter, and a reason to save the money
+		# or the risk (umbrella/recessed/dead-hand spec §2.5).
+		else_if = {
+			limit = {
+				is_at_war = no
+				nd_in_crisis = no
+				nd_has_plausible_attacker = no
+				nd_regime_is_militarist = no
+				OR = {
+					ruler_is_cautious = yes
+					nd_doctrine_nfu = yes
+					in_default = yes
+				}
+			}
+			if = {
+				limit = { NOT = { var:nd_readiness_target = 0 } }
+				nd_set_readiness_target_0 = yes
 			}
 		}
 		else = {

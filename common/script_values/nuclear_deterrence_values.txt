@@ -62,14 +62,26 @@ nd_upkeep_size_factor = {
 # Worked in units of 1/100,000 of GDP per week, so no constant is small enough
 # to fall below fixed-point precision; one unit is ≈ 0.052 % of GDP a year.
 #   custody        0.2 × warheads (capped at 50)          ≤ 10 units
+#                  (0.1 at Recessed: warheads in storage)
 #   heightened     4 × size factor                         ≤  4 units
 #   high alert     12 × size factor                        ≤ 12 units
 #   safeguards     2 per level (0–3)                       ≤  6 units
 #   hardening      3 per level (0–3)                       ≤  9 units
 #   cap            40 units ≈ 2 % of GDP a year
-nd_upkeep_units_base = {
+nd_upkeep_units_custody = {
 	value = nd_stockpile_capped
 	multiply = 0.2
+}
+
+# Custody at Recessed: warheads in storage cost half to keep.
+nd_upkeep_units_custody_recessed = {
+	value = nd_upkeep_units_custody
+	multiply = 0.5
+}
+
+# What does not depend on readiness: safeguards and hardening.
+nd_upkeep_units_fixed = {
+	value = 0
 	if = {
 		limit = { has_variable = nd_safeguards }
 		add = {
@@ -83,6 +95,19 @@ nd_upkeep_units_base = {
 			value = var:nd_hardening
 			multiply = 3
 		}
+	}
+}
+
+# Custody at the readiness in force, plus the fixed items. The per-level
+# previews below build from the same parts, so a button's cost is exact.
+nd_upkeep_units_base = {
+	value = nd_upkeep_units_fixed
+	if = {
+		limit = { nd_readiness_recessed = yes }
+		add = nd_upkeep_units_custody_recessed
+	}
+	else = {
+		add = nd_upkeep_units_custody
 	}
 }
 
@@ -308,7 +333,7 @@ nd_own_danger_band = {
 
 # Monthly incident probability, per mille. One roll per country per month,
 # shared across any crisis (a weekly crisis tick never rolls).
-#   routine 1, heightened 4, high alert 10
+#   recessed 0.5, routine 1, heightened 4, high alert 10
 #   × (1 + strain/100) × (0.5 + (100 − reliability)/100) × (1 + 0.5 × danger band)
 #   capped at 30 ‰
 # nd_debug_incident_odds (console harness only) forces 1000.
@@ -327,6 +352,10 @@ nd_incident_permille = {
 			var:nd_readiness = 3
 		}
 		value = 10
+	}
+	else_if = {
+		limit = { nd_readiness_recessed = yes }
+		value = 0.5
 	}
 	if = {
 		limit = { has_variable = nd_strain }
@@ -637,6 +666,19 @@ nd_yp_alert_value = {
 	}
 }
 
+# Weapons stored apart from their delivery systems cannot be used for weeks:
+# the threat is that much further from being carried out (Recessed,
+# umbrella/recessed/dead-hand spec §2.2).
+nd_yp_recessed_value = {
+	value = 0
+	scope:nd_issuer = {
+		if = {
+			limit = { nd_readiness_recessed = yes }
+			add = -10
+		}
+	}
+}
+
 nd_yp_danger_value = {
 	value = 0
 	scope:nd_issuer = {
@@ -729,6 +771,7 @@ nd_yield_pressure_value = {
 	add = nd_yp_protector_value
 	add = nd_yp_credibility_value
 	add = nd_yp_alert_value
+	add = nd_yp_recessed_value
 	add = nd_yp_danger_value
 	add = nd_yp_exercise_value
 	add = nd_yp_temperament_value
@@ -1061,7 +1104,7 @@ nd_ig_term_readiness_value = {
 			limit = { nd_ig_class_militarist = yes }
 			owner = {
 				if = {
-					limit = { var:nd_readiness = 1 }
+					limit = { var:nd_readiness <= 1 }
 					add = -1
 				}
 				else_if = {
@@ -1077,12 +1120,22 @@ nd_ig_term_readiness_value = {
 					limit = { var:nd_readiness = 3 }
 					add = -1
 				}
+				# Warheads in storage: the restraint they ask for.
+				else_if = {
+					limit = { var:nd_readiness = 0 }
+					add = 1
+				}
 			}
 		}
 		else_if = {
 			limit = { nd_ig_class_professional = yes }
 			owner = {
+				# Officers never like a force that cannot fire for weeks.
 				if = {
+					limit = { var:nd_readiness = 0 }
+					add = -1
+				}
+				else_if = {
 					limit = {
 						var:nd_readiness = 1
 						nd_has_plausible_attacker = yes
@@ -1183,8 +1236,19 @@ nd_display_stance_months_left = {
 # WHAT A CHANGE WOULD COST — for the posture buttons' tooltips (§3.2: show the
 # actual budget cost before confirmation). Weekly, in money.
 # ----------------------------------------------------------------------------
+nd_upkeep_weekly_at_readiness_0 = {
+	value = nd_upkeep_units_fixed
+	add = nd_upkeep_units_custody_recessed
+	max = 40
+	multiply = {
+		value = gdp
+		divide = 100000
+	}
+}
+
 nd_upkeep_weekly_at_readiness_1 = {
-	value = nd_upkeep_units_base
+	value = nd_upkeep_units_fixed
+	add = nd_upkeep_units_custody
 	max = 40
 	multiply = {
 		value = gdp
@@ -1193,7 +1257,8 @@ nd_upkeep_weekly_at_readiness_1 = {
 }
 
 nd_upkeep_weekly_at_readiness_2 = {
-	value = nd_upkeep_units_base
+	value = nd_upkeep_units_fixed
+	add = nd_upkeep_units_custody
 	add = nd_upkeep_units_readiness_2
 	max = 40
 	multiply = {
@@ -1203,7 +1268,8 @@ nd_upkeep_weekly_at_readiness_2 = {
 }
 
 nd_upkeep_weekly_at_readiness_3 = {
-	value = nd_upkeep_units_base
+	value = nd_upkeep_units_fixed
+	add = nd_upkeep_units_custody
 	add = nd_upkeep_units_readiness_3
 	max = 40
 	multiply = {

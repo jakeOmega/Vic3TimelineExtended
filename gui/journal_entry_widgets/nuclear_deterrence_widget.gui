@@ -33,7 +33,7 @@
 ### WHAT A HUMAN CAN DO HERE. Two action handlers in
 ### common/scripted_guis/nuclear_deterrence_sguis.txt, addressed by op code
 ### (keep this table, the sgui header and journal_entry_systems.md in step):
-###   nd_posture_sgui         11..15 doctrine 1..5   21..23 readiness 1..3
+###   nd_posture_sgui         11..15 doctrine 1..5   20..23 readiness 0..3
 ###                           31..33 authority 1..3  40/41 safeguards -/+
 ###                           50/51 hardening -/+
 ###   nd_crisis_action_sgui   1 go public  2 propose stand-down  3 exercise
@@ -398,6 +398,27 @@ flowcontainer = {
 			default_format = "#lore"
 		}
 
+		nd_choice_row = {
+			datacontext = "[GetScriptedGui('nd_posture_sgui')]"
+			textbox = {
+				size = { 360 30 }
+				align = left|nobaseline
+				using = fontsize_medium
+				parentanchor = vcenter
+				elide = right
+				text = "nd_w_readiness_choice_0"
+				tooltip = "nd_w_readiness_choice_0_tt"
+			}
+			button = {
+				using = default_button_action
+				size = { 110 30 }
+				parentanchor = vcenter
+				text = "nd_w_btn_order"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End )]"
+				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)20' ) ).End ) ) )]"
+			}
+		}
 		nd_choice_row = {
 			datacontext = "[GetScriptedGui('nd_posture_sgui')]"
 			textbox = {

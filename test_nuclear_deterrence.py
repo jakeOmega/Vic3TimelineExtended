@@ -179,7 +179,7 @@ class TestLocalization(unittest.TestCase):
         expanded = {k for k in keys if "$" not in k}
         # Parameterised families: every value the wrappers pass.
         expanded |= {f"nd_tt_doctrine_adopted_{d}" for d in range(1, 6)}
-        expanded |= {f"nd_tt_readiness_target_{r}" for r in range(1, 4)}
+        expanded |= {f"nd_tt_readiness_target_{r}" for r in range(0, 4)}
         expanded |= {f"nd_tt_authority_adopted_{a}" for a in range(1, 4)}
         expanded |= {f"nd_tt_{v}_{o}" for v in ("nd_safeguards", "nd_hardening") for o in ("add", "subtract")}
         self.assert_keys(expanded, "custom tooltips")
@@ -283,7 +283,7 @@ DANGER_PARTS = ["nd_cd_stage", "nd_cd_issuer_readiness", "nd_cd_target_readiness
                 "nd_cd_counter", "nd_cd_reliability", "nd_cd_weeks", "nd_cd_talks", "nd_cd_backed",
                 "nd_cd_exercise"]
 PRESSURE_PARTS = ["nd_yp_base", "nd_yp_answer", "nd_yp_protector", "nd_yp_credibility", "nd_yp_alert",
-                  "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
+                  "nd_yp_recessed", "nd_yp_danger", "nd_yp_exercise", "nd_yp_temperament", "nd_yp_war",
                   "nd_yp_follow_through"]
 
 
@@ -830,7 +830,7 @@ class TestManagedFamilies(unittest.TestCase):
         effects = read(EFFECTS)
         for d in range(1, 6):
             self.assertRegex(effects, rf"(?m)^nd_set_doctrine_{d} = \{{")
-        for r in range(1, 4):
+        for r in range(0, 4):
             self.assertRegex(effects, rf"(?m)^nd_set_readiness_target_{r} = \{{")
         for a in range(1, 4):
             self.assertRegex(effects, rf"(?m)^nd_set_authority_{a} = \{{")
@@ -842,6 +842,53 @@ class TestManagedFamilies(unittest.TestCase):
             text = strip_comments(read(path))
             for m in re.finditer(r"nd_set_(doctrine|readiness_target|authority) = \{ [DRA] = \d \}", text):
                 self.fail(f"{path.name}: {m.group(0)} bypasses the wrapper")
+
+
+class TestRecessed(unittest.TestCase):
+    """Recessed readiness, level 0 (spec 2026-09-25 umbrella/recessed/dead-hand §2)."""
+
+    def setUp(self):
+        self.triggers = strip_comments(read(TRIGGERS))
+        self.effects = strip_comments(read(EFFECTS))
+        self.crisis = strip_comments(read(CRISIS_EFFECTS))
+        self.values = strip_comments(read(VALUES))
+
+    def test_triggers_exist(self):
+        for name in ("nd_readiness_recessed", "nd_forces_assembled"):
+            self.assertRegex(self.triggers, rf"(?m)^{name} = \{{")
+
+    def test_standdowns_never_raise_a_recessed_country(self):
+        # A stand-down sets the target to Routine only when it is above Routine.
+        self.assertIn("var:nd_readiness_target > 1", block(self.crisis, "nd_standdown_one_side"))
+        concession = self.crisis[self.crisis.index("nd_crisis_programme_freeze"):]
+        concession = concession[:concession.index("nd_readiness_lock_months_value")]
+        self.assertIn("var:nd_readiness_target > 1", concession)
+
+    def test_stood_down_alert_includes_recessed(self):
+        self.assertIn("var:nd_readiness_target <= 1", self.crisis)
+        self.assertNotRegex(self.crisis, r"var:nd_readiness_target = 1\b")
+
+    def test_recessed_has_no_readiness_modifier(self):
+        # nd_readiness_mod_on uses 0 for "none": a level-0 member could never be tracked.
+        self.assertNotIn("nd_readiness_mod_0", read(MODIFIERS))
+        self.assertNotIn("nd_readiness_mod_0", self.effects)
+
+    def test_every_readiness_level_has_upkeep_and_a_row(self):
+        for r in range(0, 4):
+            self.assertRegex(self.values, rf"(?m)^nd_upkeep_weekly_at_readiness_{r} = \{{")
+        self.assertIn(20, gui_ops(read(GUI), "nd_posture_sgui"))
+
+    def test_lock_lets_routine_through(self):
+        sg = strip_comments(read(SGUIS))
+        for op, ok in ((20, "yes"), (21, "yes"), (22, "no"), (23, "no")):
+            self.assertIn(f"nd_can_set_readiness = {{ R = {op - 20} LOCK_OK = {ok} }}", sg)
+        self.assertIn("always = $LOCK_OK$", block(self.triggers, "nd_can_set_readiness"))
+
+    def test_recessed_is_named_everywhere_a_level_is(self):
+        custom = strip_comments(read(CUSTOM_LOC))
+        self.assertIn("localization_key = nd_readiness_0", block(custom, "nd_readiness_name"))
+        self.assertIn("localization_key = nd_readiness_moving_0", block(custom, "nd_readiness_moving"))
+        self.assertIn("nd_readiness_recessed = yes", block(self.values, "nd_incident_permille"))
 
 
 if __name__ == "__main__":

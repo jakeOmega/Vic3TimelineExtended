@@ -17,7 +17,7 @@
 #
 # ---- nd_posture_sgui — op table ---------------------------------------------
 #   11..15  adopt doctrine 1..5           -> nd_set_doctrine
-#   21..23  set readiness target 1..3     -> nd_set_readiness_target
+#   20..23  set readiness target 0..3     -> nd_set_readiness_target
 #   31..33  adopt launch authority 1..3   -> nd_set_authority
 #   40 / 41 safeguards down / up          -> nd_step_investment
 #   50 / 51 hardening down / up           -> nd_step_investment
@@ -70,16 +70,20 @@ nd_posture_sgui = {
 			nd_can_set_doctrine = { D = 5 }
 		}
 		trigger_else_if = {
+			limit = { exists = scope:op  scope:op = 20 }
+			nd_can_set_readiness = { R = 0 LOCK_OK = yes }
+		}
+		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 21 }
-			nd_can_set_readiness = { R = 1 }
+			nd_can_set_readiness = { R = 1 LOCK_OK = yes }
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 22 }
-			nd_can_set_readiness = { R = 2 }
+			nd_can_set_readiness = { R = 2 LOCK_OK = no }
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 23 }
-			nd_can_set_readiness = { R = 3 }
+			nd_can_set_readiness = { R = 3 LOCK_OK = no }
 		}
 		trigger_else_if = {
 			limit = { exists = scope:op  scope:op = 31 }
@@ -146,6 +150,10 @@ nd_posture_sgui = {
 		else_if = {
 			limit = { exists = scope:op  scope:op = 15 }
 			nd_set_doctrine_5 = yes
+		}
+		else_if = {
+			limit = { exists = scope:op  scope:op = 20 }
+			nd_set_readiness_target_0 = yes
 		}
 		else_if = {
 			limit = { exists = scope:op  scope:op = 21 }
@@ -376,6 +384,7 @@ nd_crisis_pressure_breakdown_sgui = {
 		nd_crisis_breakdown_line = { C = nd_yp_protector KEY = nd_yp_protector_line }
 		nd_crisis_breakdown_line = { C = nd_yp_credibility KEY = nd_yp_credibility_line }
 		nd_crisis_breakdown_line = { C = nd_yp_alert KEY = nd_yp_alert_line }
+		nd_crisis_breakdown_line = { C = nd_yp_recessed KEY = nd_yp_recessed_line }
 		nd_crisis_breakdown_line = { C = nd_yp_danger KEY = nd_yp_danger_line }
 		nd_crisis_breakdown_line = { C = nd_yp_exercise KEY = nd_yp_exercise_line }
 		nd_crisis_breakdown_line = { C = nd_yp_temperament KEY = nd_yp_temperament_line }

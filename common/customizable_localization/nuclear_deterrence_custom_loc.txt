@@ -62,6 +62,13 @@ nd_readiness_name = {
 	text = {
 		trigger = {
 			has_variable = nd_readiness
+			var:nd_readiness = 0
+		}
+		localization_key = nd_readiness_0
+	}
+	text = {
+		trigger = {
+			has_variable = nd_readiness
 			var:nd_readiness = 2
 		}
 		localization_key = nd_readiness_2
@@ -83,6 +90,15 @@ nd_readiness_name = {
 nd_readiness_moving = {
 	type = country
 	random_valid = no
+	text = {
+		trigger = {
+			has_variable = nd_readiness
+			has_variable = nd_readiness_target
+			var:nd_readiness_target = 0
+			NOT = { var:nd_readiness = 0 }
+		}
+		localization_key = nd_readiness_moving_0
+	}
 	text = {
 		trigger = {
 			has_variable = nd_readiness

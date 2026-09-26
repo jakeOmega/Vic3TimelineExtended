@@ -123,6 +123,24 @@ nd_readiness_high_alert = {
 	var:nd_readiness = 3
 }
 
+# Recessed (docs/superpowers/specs/2026-09-25-nuclear-umbrella-recessed-dead-
+# hand-design.md §2): warheads stored apart from their delivery systems.
+# Level 0, below Routine.
+nd_readiness_recessed = {
+	has_variable = nd_readiness
+	var:nd_readiness = 0
+}
+
+# Are our warheads mated to their delivery systems? Every launch needs it
+# (same spec §2.3). A country that never set a readiness is at Routine, the
+# default, so it is assembled.
+nd_forces_assembled = {
+	OR = {
+		NOT = { has_variable = nd_readiness }
+		var:nd_readiness >= 1
+	}
+}
+
 nd_authority_delegated_or_warning = {
 	has_variable = nd_authority
 	var:nd_authority >= 2
@@ -1378,13 +1396,15 @@ nd_can_set_readiness = {
 		nd_is_initialized = yes
 		NOT = { var:nd_readiness_target = $R$ }
 	}
-	# An agreed or conceded stand-down holds readiness at routine; lowering is
-	# never blocked.
+	# An agreed or conceded stand-down holds readiness at Routine or below:
+	# lowering, and returning to Routine from Recessed (LOCK_OK = yes for the
+	# two levels a lock allows), are never blocked.
 	custom_tooltip = {
 		text = nd_tt_readiness_locked
 		OR = {
 			nd_readiness_locked = no
 			var:nd_readiness_target > $R$
+			always = $LOCK_OK$
 		}
 	}
 }
