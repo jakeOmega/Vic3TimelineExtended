@@ -256,18 +256,19 @@ agdiff_copy_diffusion_from_root = {
 # removed here, once read; a loyalist winner inherits it in the merge and
 # loses it here too.
 #
-# The first-mover reward has no copy and is restored here for every winner:
-# the engine hands the winner the loser's is_world_first_<tech> title in the
-# merge, and the reward follows the title. For a loyalist winner that is a
-# no-op unless the rebels themselves won a world-first during the war.
+# The first-mover reward has no copy. It is restored here, and the
+# first_<tech>_country pointers re-pointed, only when the revolutionaries won
+# (var:te_cw_rebels_won = 1): the engine hands the winner the loser's
+# is_world_first_<tech> title in the merge, and the reward follows the title.
+# A loyalist winner is left alone even when the rebels won a world-first during
+# the war and it inherits their title, so its repair stays a no-op.
 #
 # Scope: the winner, which must also be ROOT (called bare from
 # te_civil_war_on_won, common/on_actions/te_civil_war_on_actions.txt;
 # on_civil_war_won runs with ROOT = the winner, after the loser's variables
 # have merged in, and te_civil_war_clear removes te_cw_rebels_won right after).
-# Every step is a no-op for a winner that still holds what it restores, which
-# is what a loyalist victory presumably leaves: the original keeps its own
-# modifiers.
+# A loyalist winner takes none of it: every step is gated on
+# var:te_cw_rebels_won = 1, except dropping the inherited marker.
 agdiff_repair_after_civil_war = {
 	if = {
 		limit = {
@@ -282,12 +283,18 @@ agdiff_repair_after_civil_war = {
 		limit = { has_variable = agdiff_cw_copied }
 		remove_variable = agdiff_cw_copied
 	}
-	agdiff_restore_first_mover_prestige = yes
-	agdiff_repoint_first_country = { TECH = nitrogen_fixation }
-	agdiff_repoint_first_country = { TECH = modern_chemical_processes }
-	agdiff_repoint_first_country = { TECH = green_revolution }
-	agdiff_repoint_first_country = { TECH = gene_splicing }
-	agdiff_repoint_first_country = { TECH = biotechnology }
+	if = {
+		limit = {
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+		}
+		agdiff_restore_first_mover_prestige = yes
+		agdiff_repoint_first_country = { TECH = nitrogen_fixation }
+		agdiff_repoint_first_country = { TECH = modern_chemical_processes }
+		agdiff_repoint_first_country = { TECH = green_revolution }
+		agdiff_repoint_first_country = { TECH = gene_splicing }
+		agdiff_repoint_first_country = { TECH = biotechnology }
+	}
 }
 
 # The first-mover reward. is_world_first_<tech> reaches the winner, but it is

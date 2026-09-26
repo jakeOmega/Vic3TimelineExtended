@@ -276,6 +276,20 @@ class HookWiringTests(unittest.TestCase):
                                         _block(self.effects, "agdiff_on_uprising"))), 1)
         self.assertEqual(len(re.findall(r"\b" + MARKER + r"\b", self.effects)), 4)
 
+    def test_first_mover_restore_and_repoint_only_for_rebel_winners(self):
+        # A loyalist winner inherits a world-first title the rebels won during
+        # the war, but its repair must stay a no-op: the restore and the
+        # first_<tech>_country re-point run only when the revolutionaries won.
+        repair = _block(self.effects, "agdiff_repair_after_civil_war")
+        restore = repair.index("agdiff_restore_first_mover_prestige = yes")
+        gates = [m.start() for m in re.finditer(r"var:te_cw_rebels_won\s*=\s*1\b", repair)]
+        self.assertEqual(len(gates), 2, "the backfill and the restore each gate on te_cw_rebels_won")
+        self.assertLess(gates[1], restore)
+        tail = repair[gates[1]:]
+        self.assertIn("agdiff_restore_first_mover_prestige = yes", tail)
+        self.assertEqual(len(re.findall(r"agdiff_repoint_first_country\s*=", tail)), 5)
+        self.assertEqual(len(re.findall(r"agdiff_repoint_first_country\s*=", repair)), 5)
+
 
 class TechListTests(unittest.TestCase):
     def test_backfill_covers_every_broadcast_tech(self):
