@@ -27,7 +27,7 @@
 
 # Scope: country. Makes this country the headquarters host.
 un_hq_make_host = {
-	je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
+	un_state_on = { MODIFIER = un_headquarters_modifier }
 	set_global_variable = { name = un_hq_country value = THIS }
 }
 
@@ -43,11 +43,14 @@ un_hq_make_host = {
 # block (a scripted effect is inlined into its caller), so the leaver can
 # still read as a member here. The variable is written only after the pick,
 # so it still names the outgoing host; when it is unset or names a country
-# that no longer exists, un_hq_is_host is false and nobody is excluded.
+# that no longer exists, un_hq_is_host is false and nobody is excluded, except
+# a revolution's winner that inherited the host's record before its journal
+# entry was rebuilt (un_hq_is_host counts it; un_on_civil_war_won re-points
+# the variable to it, so this is not reached for it in practice).
 un_hq_assign_host = {
 	every_country = {
 		limit = { je:je_united_nations ?= { has_modifier = un_headquarters_modifier } }
-		je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
+		un_state_off = { MODIFIER = un_headquarters_modifier }
 	}
 	if = {
 		limit = {
@@ -89,7 +92,8 @@ un_hq_assign_host = {
 # Scope: any. Leaves at most one building_un_headquarters in the world.
 #   1. Every HQ outside the host's territory goes: a former host's, one in a
 #      state that was conquered or released, or all of them while there is no
-#      live host.
+#      host. A revolution's winner whose predecessor hosted it counts as the
+#      host (un_hq_is_host), also once the named loser no longer resolves.
 #   2. If the host has more than one (pre-fix saves, when each of its states
 #      could hold one), it keeps the one in its capital, or an arbitrary one
 #      when the capital has none.
@@ -139,7 +143,10 @@ un_hq_enforce_single_building = {
 	}
 	else = {
 		every_country = {
-			limit = { any_scope_state = { has_building = building_un_headquarters } }
+			limit = {
+				NOT = { un_hq_is_host = yes }
+				any_scope_state = { has_building = building_un_headquarters }
+			}
 			every_scope_state = {
 				limit = { has_building = building_un_headquarters }
 				remove_building = building_un_headquarters
@@ -152,6 +159,9 @@ un_hq_enforce_single_building = {
 # is none, when it no longer exists, or when it is no longer a member (saves
 # from before withdrawal handed the HQ on reliably), strips the host modifier
 # from anyone else, then enforces the single building.
+# Membership is read by the record (un_member_represented_by_record): this
+# pulse may run before a revolution's winner has had its journal entry
+# rebuilt, and the winner must not lose the headquarters in that month.
 un_hq_monthly_update = {
 	if = {
 		limit = { NOT = { has_global_variable = un_hq_country } }
@@ -164,7 +174,7 @@ un_hq_monthly_update = {
 	else_if = {
 		limit = {
 			global_var:un_hq_country = {
-				NOT = { un_member_represented = yes }
+				NOT = { un_member_represented_by_record = yes }
 			}
 		}
 		un_hq_assign_host = yes
@@ -179,7 +189,7 @@ un_hq_monthly_update = {
 				NOT = { un_hq_is_host = yes }
 				je:je_united_nations ?= { has_modifier = un_headquarters_modifier }
 			}
-			je:je_united_nations ?= { remove_modifier = un_headquarters_modifier }
+			un_state_off = { MODIFIER = un_headquarters_modifier }
 		}
 	}
 	un_hq_enforce_single_building = yes

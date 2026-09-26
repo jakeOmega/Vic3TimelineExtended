@@ -157,3 +157,59 @@ un_hq_on_state_owner_change = {
 		}
 	}
 }
+
+# ---- Civil wars (§0.9, un_state_effects.txt) ----
+# A revolution's winner inherits je_united_nations with the loser's variables
+# and none of its modifiers. The entry rebuilds itself from the mirror
+# variables (its `immediate`, then its monthly pulse); these two hooks only
+# make sure the rebuild is asked for, and hand the headquarters on. Both are
+# no-ops for a loyalist winner, which keeps its own entry and its own
+# modifiers. The engine unions same-name on_action declarations across files.
+on_revolution_start = {
+	on_actions = {
+		un_on_revolution_start
+	}
+}
+
+on_civil_war_won = {
+	on_actions = {
+		un_on_civil_war_won
+	}
+}
+
+# Root = the original country, scope:target = the uprising country.
+# The uprising side points at itself. If it wins, the pointer is its own value
+# and survives the merge; if the loyalists win, they inherit a pointer to a
+# dead country, which is how un_on_civil_war_won tells the two apart.
+un_on_revolution_start = {
+	effect = {
+		scope:target ?= {
+			set_variable = { name = un_cw_rebel value = THIS }
+		}
+	}
+}
+
+# Root = the winner, after the variables merged (it runs after
+# on_revolution_end). Nothing is rebuilt here: the order of this hook against
+# the inherited entry's `immediate` is unknown, so the entry does its own
+# rebuilding. This hook:
+#   - marks the entry for rebuilding when the uprising side won, in case its
+#     `immediate` did not run on the inherited record;
+#   - hands the headquarters to the winner when its predecessor hosted it
+#     (un_hq_adopt_as_successor).
+un_on_civil_war_won = {
+	effect = {
+		if = {
+			limit = { var:un_cw_rebel ?= THIS }
+			if = {
+				limit = { NOT = { has_variable = un_state_rebuild_pending } }
+				set_variable = un_state_rebuild_pending
+			}
+		}
+		if = {
+			limit = { has_variable = un_cw_rebel }
+			remove_variable = un_cw_rebel
+		}
+		un_hq_adopt_as_successor = yes
+	}
+}

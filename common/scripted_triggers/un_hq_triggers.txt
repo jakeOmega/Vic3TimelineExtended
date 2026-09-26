@@ -4,10 +4,25 @@
 
 # Scope: country. True for the UN headquarters host, global_var:un_hq_country:
 # the only country that may build building_un_headquarters. False while the
-# variable is unset (UN not founded, or no members left) or names a country
-# that no longer exists. The has_global_variable guard comes first so an unset
-# variable is never read. See common/scripted_effects/un_hq_effects.txt.
+# variable is unset (UN not founded, or no members left). The
+# has_global_variable guard comes first so an unset variable is never read.
+# See common/scripted_effects/un_hq_effects.txt.
+#
+# Also true for a revolution's winner whose predecessor hosted it (§0.9): the
+# variable still names the loser, a different country object that is dead or
+# gone, and the winner inherited the host's record (the headquarters mirror,
+# un_state_effects.txt). Annexing the loser moves the headquarters state to
+# the winner before un_on_civil_war_won re-points the variable, and
+# un_hq_on_state_owner_change would otherwise demolish the building on the
+# winner's soil. While the named host lives, this is false for everyone else,
+# so a rebel holding the headquarters state during the war is not a host.
 un_hq_is_host = {
 	has_global_variable = un_hq_country
-	global_var:un_hq_country ?= THIS
+	OR = {
+		global_var:un_hq_country ?= THIS
+		AND = {
+			has_variable = un_headquarters_modifier_on
+			NOT = { global_var:un_hq_country ?= { is_country_alive = yes } }
+		}
+	}
 }

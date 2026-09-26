@@ -52,8 +52,10 @@ un_seat_monthly_update = {
 		}
 		# Counted once, up front: a seat granted below is a modifier, and a
 		# modifier added in this effect block is not visible to the checks
-		# that follow it (so un_permanent_seat_count cannot be re-read, and
-		# each pick marks itself with a variable instead). A global rather
+		# that follow it (so is_un_permanent_member cannot be re-read, and
+		# each pick marks itself with a variable instead; the count itself
+		# would move, as it also counts the mirror each grant writes, §0.9,
+		# but one figure taken up front is simpler to follow). A global rather
 		# than a local variable: this runs in the no-country scope of the
 		# global pulse, where the mod has never exercised local variables.
 		set_global_variable = { name = un_seats_to_fill value = un_permanent_seats_vacant }
@@ -104,9 +106,12 @@ un_seat_fill_one = {
 un_seat_grant = {
 	if = {
 		limit = { NOT = { je:je_united_nations ?= { has_modifier = un_security_council_modifier } } }
-		je:je_united_nations ?= { add_modifier = { name = un_security_council_modifier } }
+		un_state_on = { MODIFIER = un_security_council_modifier }
 	}
-	je:je_united_nations ?= { add_modifier = { name = un_permanent_member_modifier } }
+	# A legacy Council seat already held is recorded too (the mirrors,
+	# un_state_effects.txt).
+	un_state_record = { MODIFIER = un_security_council_modifier }
+	un_state_on = { MODIFIER = un_permanent_member_modifier }
 	if = {
 		limit = { has_variable = un_permanent_subgp_months }
 		remove_variable = un_permanent_subgp_months

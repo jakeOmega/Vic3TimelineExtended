@@ -23,6 +23,13 @@
 # the AI reaches them only through the docket's offers (un_docket_effects.txt),
 # which pace the floor. A button here would give the AI an ai_chance path that
 # skips that pacing.
+#
+# THE PROGRAMME BUTTONS WRITE THEIR MIRRORS. Every programme modifier they add
+# or remove has a mirror variable (un_state_record / un_state_forget beside
+# it), because a revolution's winner inherits the journal entry without its
+# modifiers and rebuilds them from the mirrors (un_state_effects.txt, design
+# §0.9). The modifier lines stay literal here, not behind un_state_on: they
+# are what gen_un_button_descs.py reads to write each button's effects text.
 
 # ---- 0. FOUND THE UNITED NATIONS ----
 # A Great Power with intergovernmental_organizations tech creates the UN.
@@ -586,6 +593,7 @@ un_peacekeeping_mission_button = {
 		custom_tooltip = {
 			text = "UN_PEACEKEEPING_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_peacekeeping_contributor_modifier } }
+			un_state_record = { MODIFIER = un_peacekeeping_contributor_modifier }
 			add_modifier = {
 				name = un_peacekeeping_cooldown
 				days = long_modifier_time
@@ -600,6 +608,7 @@ un_peacekeeping_mission_button = {
 				name = un_peacekeeping_contributor_cost
 				multiplier = root.var:un_peacekeeping_expense_cached
 			} }
+		un_state_record = { MODIFIER = un_peacekeeping_contributor_cost }
 	}
 }
 
@@ -629,7 +638,9 @@ un_end_peacekeeping_button = {
 		custom_tooltip = {
 			text = "UN_END_PEACEKEEPING_DESC"
 			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_modifier }
+			un_state_forget = { MODIFIER = un_peacekeeping_contributor_modifier }
 			je:je_united_nations ?= { remove_modifier = un_peacekeeping_contributor_cost }
+			un_state_forget = { MODIFIER = un_peacekeeping_contributor_cost }
 		}
 	}
 }
@@ -676,6 +687,7 @@ un_fund_development_button = {
 		custom_tooltip = {
 			text = "UN_FUND_DEVELOPMENT_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_development_contributor_modifier } }
+			un_state_record = { MODIFIER = un_development_contributor_modifier }
 		}
 		# Cache expense in country scope; see un_peacekeeping_mission_button.
 		set_variable = { name = un_development_expense_cached value = un_program_expense_value }
@@ -683,6 +695,7 @@ un_fund_development_button = {
 				name = un_development_contributor_cost
 				multiplier = root.var:un_development_expense_cached
 			} }
+		un_state_record = { MODIFIER = un_development_contributor_cost }
 	}
 }
 
@@ -708,7 +721,9 @@ un_defund_development_button = {
 		custom_tooltip = {
 			text = "UN_DEFUND_DEVELOPMENT_DESC"
 			je:je_united_nations ?= { remove_modifier = un_development_contributor_modifier }
+			un_state_forget = { MODIFIER = un_development_contributor_modifier }
 			je:je_united_nations ?= { remove_modifier = un_development_contributor_cost }
+			un_state_forget = { MODIFIER = un_development_contributor_cost }
 		}
 	}
 }
@@ -752,6 +767,7 @@ un_human_rights_resolution_button = {
 		custom_tooltip = {
 			text = "UN_HUMAN_RIGHTS_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_human_rights_champion_modifier } }
+			un_state_record = { MODIFIER = un_human_rights_champion_modifier }
 		}
 	}
 }
@@ -778,6 +794,7 @@ un_withdraw_human_rights_button = {
 		custom_tooltip = {
 			text = "UN_WITHDRAW_HUMAN_RIGHTS_DESC"
 			je:je_united_nations ?= { remove_modifier = un_human_rights_champion_modifier }
+			un_state_forget = { MODIFIER = un_human_rights_champion_modifier }
 		}
 	}
 }
@@ -829,6 +846,7 @@ un_arms_control_button = {
 		custom_tooltip = {
 			text = "UN_ARMS_CONTROL_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_arms_control_participant_modifier } }
+			un_state_record = { MODIFIER = un_arms_control_participant_modifier }
 		}
 	}
 }
@@ -855,6 +873,7 @@ un_withdraw_arms_control_button = {
 		custom_tooltip = {
 			text = "UN_WITHDRAW_ARMS_CONTROL_DESC"
 			je:je_united_nations ?= { remove_modifier = un_arms_control_participant_modifier }
+			un_state_forget = { MODIFIER = un_arms_control_participant_modifier }
 		}
 	}
 }
@@ -898,6 +917,7 @@ un_champion_order_button = {
 		custom_tooltip = {
 			text = "UN_CHAMPION_ORDER_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_champion_order_cost } }
+			un_state_record = { MODIFIER = un_champion_order_cost }
 		}
 	}
 }
@@ -925,6 +945,7 @@ un_stop_championing_button = {
 		custom_tooltip = {
 			text = "UN_STOP_CHAMPIONING_DESC"
 			je:je_united_nations ?= { remove_modifier = un_champion_order_cost }
+			un_state_forget = { MODIFIER = un_champion_order_cost }
 		}
 	}
 }
@@ -963,6 +984,7 @@ un_undermine_order_button = {
 		custom_tooltip = {
 			text = "UN_UNDERMINE_ORDER_DESC"
 			je:je_united_nations ?= { add_modifier = { name = un_undermine_order_cost } }
+			un_state_record = { MODIFIER = un_undermine_order_cost }
 		}
 	}
 }
@@ -990,6 +1012,7 @@ un_stop_undermining_button = {
 		custom_tooltip = {
 			text = "UN_STOP_UNDERMINING_DESC"
 			je:je_united_nations ?= { remove_modifier = un_undermine_order_cost }
+			un_state_forget = { MODIFIER = un_undermine_order_cost }
 		}
 	}
 }
