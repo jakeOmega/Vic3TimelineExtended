@@ -179,6 +179,32 @@ nuclear_weapon_events.1 = {
 			nd_record_nuclear_use = { VICTIM = scope:attacking_country }
 		}
 	}
+
+	# Struck while Recessed (umbrella/recessed/dead-hand spec §2.4): the
+	# weapons cannot fly yet. Mate them and answer when they are ready —
+	# nuclear_weapon_events.24 asks again the week they reach Routine.
+	option = {
+		name = nuclear_weapon_events.1.g
+		trigger = {
+			scope:target_country = {
+				nd_is_armed = yes
+				nd_forces_assembled = no
+			}
+		}
+		scope:target_country = {
+			nd_assemble_for_retaliation = { ENEMY = scope:attacking_country }
+		}
+		ai_chance = {
+			base = 10
+			# Last: a factor applies to what the modifiers above have added.
+			modifier = {
+				trigger = {
+					NOT = { scope:target_country = { nd_ai_nuclear_use_justified = { ENEMY = scope:attacking_country } } }
+				}
+				factor = 0
+			}
+		}
+	}
 }
 
 nuclear_weapon_events.2 = {
@@ -1900,5 +1926,115 @@ nuclear_weapon_events.23 = {
 		name = nuclear_weapon_events.23.a
 		default_option = yes
 		ai_chance = { base = 1 }
+	}
+}
+
+# ---- .24 Our Forces Are Ready ---------------------------------------------------
+# A country struck while Recessed chose to answer once its warheads were mated
+# (.1 option d, nd_assemble_for_retaliation). nd_weekly_update sends this the
+# week readiness reaches Routine, if the country is still at war with the
+# attacker (scope:nd_ready_enemy) and still armed. The options are .1's b and
+# c, with the roles saved under the names nuclear_response_strike reads:
+# target_country = us, the answering side; attacking_country = them.
+# (umbrella/recessed/dead-hand spec §2.4)
+nuclear_weapon_events.24 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_bunker_life.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_military.dds"
+
+	title = nuclear_weapon_events.24.t
+	desc = nuclear_weapon_events.24.d
+	flavor = nuclear_weapon_events.24.f
+
+	duration = 3
+
+	trigger = {
+		exists = scope:nd_ready_enemy
+		nd_is_armed = yes
+		has_war_with = scope:nd_ready_enemy
+	}
+
+	immediate = {
+		save_scope_as = target_country
+		scope:nd_ready_enemy = { save_scope_as = attacking_country }
+	}
+
+	# Stand down: the moment has passed.
+	option = {
+		name = nuclear_weapon_events.24.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	# One warhead.
+	option = {
+		name = nuclear_weapon_events.24.b
+		trigger = {
+			var:nuclear_weapon_stockpile > 0
+			nd_retaliation_permitted = { ENEMY = scope:attacking_country }
+		}
+		highlighted_option = yes
+		scope:attacking_country = {
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 0
+				nuclear_response_strike = yes
+			}
+		}
+		nd_record_nuclear_use = { VICTIM = scope:attacking_country }
+		ai_chance = {
+			base = 8
+			modifier = {
+				trigger = { NOT = { nd_ai_nuclear_use_justified = { ENEMY = scope:attacking_country } } }
+				factor = 0
+			}
+		}
+	}
+
+	# Everything we promised.
+	option = {
+		name = nuclear_weapon_events.24.c
+		trigger = {
+			var:nuclear_weapon_stockpile > 2
+			nd_retaliation_permitted = { ENEMY = scope:attacking_country }
+		}
+		highlighted_option = yes
+		scope:attacking_country = {
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 0
+				nuclear_response_strike = yes
+			}
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 1
+				nuclear_response_strike = yes
+			}
+			ordered_scope_state = {
+				order_by = nuclear_industrial_strike_target_score
+				position = 2
+				nuclear_response_strike = yes
+			}
+		}
+		nd_record_nuclear_use = { VICTIM = scope:attacking_country }
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 8
+			}
+			# Last: a factor applies to what the modifiers above have added.
+			modifier = {
+				trigger = { NOT = { nd_ai_nuclear_use_justified = { ENEMY = scope:attacking_country } } }
+				factor = 0
+			}
+		}
 	}
 }

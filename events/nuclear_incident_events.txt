@@ -908,6 +908,7 @@ nuclear_incident.20 = {
 	trigger = {
 		nd_is_armed = yes
 		nd_authority_delegated_or_warning = yes
+		nd_forces_assembled = yes
 	}
 
 	immediate = {

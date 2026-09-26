@@ -476,6 +476,12 @@ nd_retaliation_permitted = {
 		text = nd_tt_pledge_permits_strike
 		nd_pledge_permits_strike = { ENEMY = $ENEMY$ }
 	}
+	# Recessed: nothing flies until the warheads are mated again
+	# (umbrella/recessed/dead-hand spec §2.3–§2.4).
+	custom_tooltip = {
+		text = nd_tt_forces_assembled
+		nd_forces_assembled = yes
+	}
 }
 
 # ----------------------------------------------------------------------------
@@ -1131,6 +1137,8 @@ nd_incident_eligible_exercise = {
 
 nd_incident_eligible_commander = {
 	nd_authority_delegated_or_warning = yes
+	# A cut-off commander has nothing to launch from storage.
+	nd_forces_assembled = yes
 	OR = {
 		is_at_war = yes
 		nd_crisis_stage_at_least = { STAGE = 3 }
@@ -1165,6 +1173,7 @@ nd_monopoly_window_eligible = {
 
 nd_monopoly_window_conditions = {
 	nd_is_armed = yes
+	nd_forces_assembled = yes
 	nd_doctrine_at_least_compellence = yes
 	is_at_war = yes
 	save_temporary_scope_as = nd_mw_self

@@ -35,6 +35,7 @@ JE_DOC = ROOT / "docs/systems/journal_entry_systems.md"
 LOC_DIR = ROOT / "localization/english"
 LENS_ICONS = ROOT / "gfx/interface/icons/lens_toolbar_icons"
 NUKE = ROOT / "common/diplomatic_actions/nuke.txt"
+WEAPON_EVENTS = ROOT / "events/nuclear_weapon_events.txt"
 
 
 def tracked(path):
@@ -889,6 +890,46 @@ class TestRecessed(unittest.TestCase):
         self.assertIn("localization_key = nd_readiness_0", block(custom, "nd_readiness_name"))
         self.assertIn("localization_key = nd_readiness_moving_0", block(custom, "nd_readiness_moving"))
         self.assertIn("nd_readiness_recessed = yes", block(self.values, "nd_incident_permille"))
+
+
+class TestLaunchGate(unittest.TestCase):
+    """Nothing launches from Recessed; a struck recessed country can answer
+    once assembled (umbrella/recessed/dead-hand spec §2.3–§2.4)."""
+
+    def test_every_launch_path_needs_assembled_forces(self):
+        nuke = strip_comments(read(NUKE))
+        for action in ("nuke_diplo_action", "tactical_nuke_diplo_action"):
+            self.assertIn("nd_forces_assembled = yes", block(block(nuke, action), "possible"), action)
+        t = strip_comments(read(TRIGGERS))
+        for name in ("nd_retaliation_permitted", "nd_incident_eligible_commander", "nd_monopoly_window_conditions"):
+            self.assertIn("nd_forces_assembled = yes", block(t, name), name)
+        e = strip_comments(read(EFFECTS))
+        for name in ("nd_dispatch_strategic_strike", "nd_dispatch_tactical_strike"):
+            self.assertIn("nd_forces_assembled = yes", block(e, name), name)
+        ev = strip_comments(read(CRISIS_EVENTS))
+        for opt in ("nuclear_crisis.4.g", "nuclear_crisis.7.a"):
+            self.assertIn("nd_forces_assembled = yes", option_body(ev, opt), opt)
+        inc = strip_comments(read(INCIDENT_EVENTS))
+        ev20 = block(inc, "nuclear_incident.20")
+        event_trigger = ev20[re.search(r"(?m)^\ttrigger = \{", ev20).start():]
+        self.assertIn("nd_forces_assembled = yes", block(event_trigger, "trigger"))
+
+    def test_struck_while_recessed_can_wait_and_answer(self):
+        ev = strip_comments(read(WEAPON_EVENTS))
+        self.assertIn("nd_assemble_for_retaliation = { ENEMY = scope:attacking_country }",
+                      option_body(ev, "nuclear_weapon_events.1.g"))
+        self.assertRegex(ev, r"(?m)^nuclear_weapon_events\.24 = \{")
+        weekly = block(strip_comments(read(EFFECTS)), "nd_weekly_update")
+        self.assertIn("nd_pending_retaliation", weekly)
+        self.assertIn("id = nuclear_weapon_events.24", weekly)
+        body = block(ev, "nuclear_weapon_events.24")
+        self.assertIn("has_war_with = scope:nd_ready_enemy", block(body, "trigger"))
+
+    def test_assembling_bypasses_the_lock_but_only_raises(self):
+        body = block(strip_comments(read(EFFECTS)), "nd_assemble_for_retaliation")
+        self.assertIn("var:nd_readiness_target < 1", body)
+        self.assertIn("nd_set_readiness_target_1 = yes", body)
+        self.assertNotIn("nd_can_set_readiness", body)
 
 
 if __name__ == "__main__":

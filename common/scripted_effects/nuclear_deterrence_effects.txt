@@ -451,6 +451,28 @@ nd_weekly_update = {
 			nd_apply_posture_modifiers = yes
 		}
 	}
+	# ---- an answer that waited for the forces (umbrella/recessed/dead-hand
+	# spec §2.4) ---------------------------------------------------------------
+	# A country struck while Recessed that chose to answer when ready
+	# (nd_assemble_for_retaliation) is asked the week its warheads are mated
+	# again — if it is still at war with the attacker and still armed. The
+	# record goes either way: the licence is the war's, not this variable's.
+	if = {
+		limit = {
+			has_variable = nd_pending_retaliation
+			nd_forces_assembled = yes
+		}
+		if = {
+			limit = {
+				exists = var:nd_pending_retaliation
+				nd_is_armed = yes
+				has_war_with = var:nd_pending_retaliation
+			}
+			var:nd_pending_retaliation = { save_scope_as = nd_ready_enemy }
+			trigger_event = { id = nuclear_weapon_events.24 popup = yes }
+		}
+		remove_variable = nd_pending_retaliation
+	}
 	# ---- the crisis this country owns --------------------------------------
 	if = {
 		limit = { nd_is_crisis_owner = yes }
@@ -1495,6 +1517,7 @@ nd_dispatch_strategic_strike = {
 			exists = scope:nd_dispatching
 			exists = scope:nd_strike_victim
 			nd_is_armed = yes
+			nd_forces_assembled = yes
 			has_war_with = scope:nd_strike_victim
 			scope:nd_strike_victim = {
 				any_scope_state = { always = yes }
@@ -1522,6 +1545,7 @@ nd_dispatch_tactical_strike = {
 			exists = scope:nd_dispatching
 			exists = scope:nd_strike_victim
 			nd_is_armed = yes
+			nd_forces_assembled = yes
 			has_war_with = scope:nd_strike_victim
 			has_technology_researched = tactical_nuclear_weapons
 			scope:nd_strike_victim = {
@@ -1813,6 +1837,27 @@ nd_accident_lose_warhead = {
 			limit = { nd_is_armed = yes }
 			change_variable = { name = nuclear_weapon_stockpile subtract = 1 }
 		}
+	}
+}
+
+# Struck while Recessed (umbrella/recessed/dead-hand spec §2.4): mate the
+# warheads to their delivery systems — the readiness target goes to Routine
+# unless it is already higher — and remember whom to answer. nd_weekly_update
+# asks again (nuclear_weapon_events.24) the week the forces reach Routine.
+# Country scope = the struck country. The target is set directly, not
+# through nd_can_set_readiness: a stand-down lock holds readiness at Routine
+# or below, and Routine is where this goes.
+nd_assemble_for_retaliation = {
+	custom_tooltip = {
+		text = nd_tt_assemble_for_retaliation
+		set_variable = { name = nd_pending_retaliation value = $ENEMY$ }
+	}
+	if = {
+		limit = {
+			has_variable = nd_readiness_target
+			var:nd_readiness_target < 1
+		}
+		nd_set_readiness_target_1 = yes
 	}
 }
 

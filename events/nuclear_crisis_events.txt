@@ -529,6 +529,7 @@ nuclear_crisis.4 = {
 		name = nuclear_crisis.4.g
 		trigger = {
 			nd_is_armed = yes
+			nd_forces_assembled = yes
 			has_war_with = scope:nd_target
 			nd_doctrine_permits_strike = { ENEMY = scope:nd_target }
 			nd_pledge_permits_strike = { ENEMY = scope:nd_target }
@@ -840,6 +841,7 @@ nuclear_crisis.7 = {
 		name = nuclear_crisis.7.a
 		trigger = {
 			nd_is_armed = yes
+			nd_forces_assembled = yes
 			has_war_with = scope:nd_target
 			nd_doctrine_permits_strike = { ENEMY = scope:nd_target }
 			nd_pledge_permits_strike = { ENEMY = scope:nd_target }

@@ -2601,6 +2601,7 @@
  nd_tt_hold_alert_4w:0 "Our forces reach #v High Alert#! in #v 4#! weeks. At High Alert their pressure to concede rises by #G 10#!, and so do our upkeep and the odds of an accident"
  nd_tt_hold_alert_6w:0 "Our forces reach #v High Alert#! in #v 6#! weeks. At High Alert their pressure to concede rises by #G 10#!, and so do our upkeep and the odds of an accident"
  nd_tt_forces_assembled:0 "Our warheads are mated to their delivery systems (readiness #v Routine#! or higher; from #v Recessed#! that is two weeks away)"
+ nd_tt_assemble_for_retaliation:0 "Our warheads are put back on their delivery systems (readiness #v Routine#!, two weeks away). When they are ready, and if we are still at war with the country that struck us, we decide how to answer"
  nd_tt_hold_deadline:0 "Their new deadline is #v 6#! weeks from now, and they are pressed again next week"
  nd_tt_in_crisis:0 "We are in a nuclear crisis"
  nd_tt_inquiry_conceal:0 "Nothing is made public. Command reliability suffers while the secret is kept, and it may still come out"
