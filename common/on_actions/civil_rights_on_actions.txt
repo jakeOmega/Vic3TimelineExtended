@@ -1,0 +1,38 @@
+﻿# ============================================================================
+# CIVIL RIGHTS - revolution continuity (issue #463)
+# je_civil_rights's own pulse runs only while the entry is active. These hooks
+# carry what outlives it: the outcome a resolved struggle left behind, and the
+# repair a revolution's winner needs. Design and variables:
+# common/scripted_effects/civil_rights_effects.txt § REVOLUTION CONTINUITY.
+# ============================================================================
+
+on_monthly_pulse_country = {
+	on_actions = {
+		civil_rights_country_monthly_on_action
+	}
+}
+
+# Counts the months since the outcome modifier was granted, so a winner gets back
+# only what the loser had left, and migrates saves from before #463.
+civil_rights_country_monthly_on_action = {
+	effect = {
+		cr_outcome_monthly_update = yes
+	}
+}
+
+# Root = the winner, after the loser's variables have merged into it. Runs after
+# on_revolution_end. The engine drops every modifier in the merge; re-add the
+# outcome modifier (for the time it had left) and, for a struggle still in
+# progress, the button policies. A loyalist winner keeps its own modifiers, and
+# every add is guarded by the modifier being absent.
+on_civil_war_won = {
+	on_actions = {
+		civil_rights_civil_war_won_on_action
+	}
+}
+
+civil_rights_civil_war_won_on_action = {
+	effect = {
+		cr_rebuild_after_civil_war = yes
+	}
+}

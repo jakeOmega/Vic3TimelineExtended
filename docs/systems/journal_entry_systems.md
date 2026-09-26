@@ -147,6 +147,15 @@ Tracks a civil rights movement for minority populations. Activates when a countr
 ### Path-dependent resolution
 - **Complete (`movement_events_te.220-.223`):** dispatches on the months-tracker that led for ≥18 months. Federal Mandate / Grassroots Triumph / Negotiated Settlement / Coopted Reform. Falls through to existing single-option `.200` if no track took clear lead.
 - **Fail (`movement_events_te.100/.230/.231/.232`):** existing `.100` (oppressive aftermath) under suppression/segregationist dominance or any discriminatory law (its desc switches to `.100.desc_faded`, the movement fading under the law, when both suppression trackers are 0). New `.230` (token reform demobilized) under cooptation dominance. New `.231` (gradualist stagnation) when `cr_gradualist_months > 18`. `.232` (lost momentum, neutral) otherwise.
+- **Once only.** `on_complete` / `on_fail` set `civil_rights_resolved`, and `is_shown_when_inactive` / `possible` require its absence. In normal play that changes nothing (a finished record never re-activates), but a revolution's winner gets fresh records and used to start the struggle over at 30 %, with rewards to earn again (#463). `on_invalid` sets nothing: no outcome, nothing to replay.
+- **Run lifecycle.** `immediate` zeroes the six counters, clears the tier flags and sets the bar only when `cr_run_in_progress` is absent, and sets it; `cr_je_cleanup_effect` (every end hook) removes it. So a fresh run starts clean, while an entry a winner inherits mid-struggle (its `immediate` re-runs after the variable merge) keeps its counters, tier flags and bar. The counters are not reset at the end because `.100`'s desc reads them after `on_fail` fires it.
+
+### Revolution continuity ("the winner continues the nation")
+A revolution's winner inherits the loser's variables but no modifiers (`docs/guides/scripting_best_practices.md` § "What a Civil War's Winner Inherits"). `common/on_actions/civil_rights_on_actions.txt` hooks `on_civil_war_won` (ROOT = winner) to `cr_rebuild_after_civil_war`; every add is guarded by the modifier being absent, so a loyalist winner is untouched. Design and variables: `common/scripted_effects/civil_rights_effects.txt` § REVOLUTION CONTINUITY.
+- **Outcome modifier.** Each resolution option records the modifier it granted (`cr_record_outcome_modifier` → `cr_outcome_<modifier>`, `cr_outcome_months = 0`). All twelve are 10-year decaying (`long_modifier_time`). `on_monthly_pulse_country` counts `cr_outcome_months` to 120, then forgets it. The rebuild re-adds the modifier for the whole years it had left, at `years left / 10` strength, so it decays to zero on the original date. Durations are constants on a ladder: no script feeds a computed value to `add_modifier`'s `days =`. `.230`–`.232` grant only radicals, so there is nothing to rebuild.
+- **Button policies.** Each button sets or removes a `cr_policy_<path>` mirror with its modifier. For a run in progress (`cr_run_in_progress`), the rebuild re-adds the six modifiers from the mirrors, plus `cr_cooptation_expired` when cooptation has run 12 months. The JE pulse syncs both directions too, as a safety net, and it counts a month for a mirror as well as for a modifier.
+- **Old saves.** The same monthly on_action sets `civil_rights_resolved` for a country running a resolution-only outcome modifier without it. The age is unknown, so it assumes 60 months. Not recognisable: `.240` option B (its modifier is shared with `.16`), `.230`–`.232`, and rewards that have already expired. A save that is mid-run gets its marker and mirrors from the JE pulse.
+- **Not rebuilt:** the IG approval modifiers from `.100`'s `social_*_reaction_effect`, and `.240` A's modifier on the political movement.
 
 ### Random pool (slimmed)
 - `movement_events_te.1, .2, .3, .4, .14` — kept in JE on_monthly_pulse `random_list` at lower weights (~20% chance per month). Threshold events carry the narrative arc; this pool provides ambient flavor. `.4` (a great power condemns us) goes through `te_ea_cr_invite_condemnation`: a great power with a progressive minority law is asked first (`.17`), and `.4` follows only if it condemns.
@@ -154,6 +163,8 @@ Tracks a civil rights movement for minority populations. Activates when a countr
 ### Supporting files
 - `common/scripted_progress_bars/extra_progress_bars.txt` — `civil_rights_support_bar`
 - `common/scripted_buttons/civil_rights_buttons.txt` — 12 buttons
+- `common/scripted_effects/civil_rights_effects.txt` — tracker init, end-of-run cleanup, revolution continuity
+- `common/on_actions/civil_rights_on_actions.txt` — outcome-age counter, save migration, `on_civil_war_won` rebuild
 - `common/script_values/civil_rights_values.txt` — `cr_low_acceptance_count`
 - `common/static_modifiers/extra_modifiers.txt` — phase + button + victory modifiers (`civil_rights_phase_*`, `cr_*_modifier`, `civil_rights_triumph_*_modifier`)
 
