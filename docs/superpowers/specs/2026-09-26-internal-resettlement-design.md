@@ -34,9 +34,11 @@ Baseline: `main` at `80ad254a` (#479 merged).
 | Shape | **A: destination-driven Settlement Authority.** One building in the destination; the programme PM decides who is recruited and how; sources are ranked automatically; an optional Recruitment Drive decree steers them |
 | Costs | Real money, goods and staff, through the building |
 | Transport | **Stays a PM group**, but made real (adds capacity, costs transportation) |
-| Where the building works | **Frontier only**: below the state's crowding floor. The frontier closes when it fills |
+| Where the building works | **Frontier only.** The frontier closes when it fills |
+| Frontier measure (amended after calibration, 2026-09-26) | **People per km² of real land area**, over the whole state region, from a generated area table. A frontier **opens below 2/km²** and **closes at 10/km²**, both scaled by the existing `state_migration_crowding_density_mult` (§6). Replaces "below the crowding floor", which counted Connecticut, D.C. and Rio de Janeiro as frontier and Kolyma as settled |
+| Managed Retreat's sources (amended) | Global-warming damage is country-level, so: coastal states of a country carrying `coastal_flooding_modifier` or `coastal_relocation_modifier`, plus states carrying `nuclear_strike_aftermath` or `nd_weapons_accident_contamination`. Per-state GW damage is a future expansion of that system |
 | Homesteads' payoff | **No permanent arable land.** A temporary agriculture/ranching throughput and subsistence-output bonus |
-| IG reactions | **One country modifier per programme, scaled by volume**, never per building. Positives small and capped |
+| IG reactions | **One country modifier per programme, scaled by volume**, never per building. Positives small and capped; magnitudes anchored to vanilla's approval scale (§7.2) |
 | Land pressure on existing frontier inhabitants | **Kept**: a real cost, never a benefit |
 | Violating the UN Declaration | Allowed, with a modifier that scales with intensity, and **communicated clearly** at every step |
 | Old saves with camps | Assumed to load (the engine drops unknown building types); no dedicated check |
@@ -47,13 +49,18 @@ From the engine docs and vanilla script:
 - `move_partial_pop = { state = <state> population = <script value> }` moves an exact count (vanilla ACW events pass an
   inline script value); `population_ratio` moves a share. Moved pops become unemployed; a pop type that cannot be
   unemployed, or a slave type moved to a free state, becomes the default type.
-- `kill_population_in_state = { value = <int> pop_type = <type> }` kills a count in a state, filtered by pop type or strata.
+- `kill_population_in_state = { value = <int> pop_type = <type> }` kills a count in a state, filtered by pop type or strata
+  (vanilla and the mod only ever pass constants).
 - `add_radicals_in_state = { value = <share> culture = <cu> pop_type = <type> }` radicalizes a share of matching pops.
 - `add_modifier` works on buildings as well as states and countries.
 - Pop triggers: `is_employed`, `is_pop_type`, `strata`, `pop_acceptance`, `pop_radical_fraction`,
   `pop_employment_building_group`; state triggers `turmoil`, `state_unemployment_rate`, `has_decree`.
-- `activate_production_method` exists (vanilla effect localization lists it under state-region effects); the plan confirms
-  its scope before §7.4 and §10 rely on it to switch a building's Programme PM.
+- `activate_production_method = { building_type = <type> production_method = <pm> }` works in state and country scope
+  (engine docs; the mod's own `te_construction_market_direct_effects.txt` and `monument_events.txt` use it).
+- A `state_region` scope holds variables (vanilla `krakatoa_events.txt` sets one). Script cannot iterate a state's
+  provinces, so land area has to come from a generated table (§6).
+- Engine-doc `<int>` fields may silently ignore a script value (the owner's notes record `add_escalation` doing so), so
+  deaths are removed in steps of 100 with `while = { count = <value> kill_population_in_state = { value = 100 … } }`.
 - PMs have no state trigger, so a PM cannot test whether its state is coastal.
 - There is no modifier that blocks emigration, and a state's migration attraction cannot be read in script (`migration_pull`
   returns the country's mass-migration value). Retention can only come from making the destination attractive.
@@ -79,18 +86,22 @@ From the engine docs and vanilla script:
   nationalism, civilizing_mission, mass_propaganda, keynesian_economics and civil_rights_movement each add **5**, as they
   do for the camp today. Maximum 30. Level is capacity: throughput and every cost scale with it. The cap is the only bound
   on how fast one state fills, since vanilla's per-state immigration cap does not apply to `move_partial_pop`.
-- **Frontier gate (`possible`):** the state's frontier density (§6) is below its crowding floor, tested as
-  `resettlement_frontier_headroom > 0`. A script value compared inside a trigger is existing practice in this repo
+- **Frontier gate (`possible`):** a new Authority needs an **open** frontier (below the opening density, §6); a state
+  that already has one may add levels until the closing density. Tested as `resettlement_frontier_open_margin > 0` /
+  `resettlement_frontier_close_margin > 0`. A script value compared inside a trigger is existing practice in this repo
   (`migration_crowding_mult` does `limit = { migration_crowding_ratio <= 0 }`). Lombardy, Paris or the Ruhr cannot host
   one. No Closed Borders gate.
-- **Closure:** when the destination reaches its floor, the monthly pulse removes the building and the country is told
+- **Closure:** when the destination reaches the closing density, the monthly pulse removes the building and the country is told
   *The Frontier Is Closed* (§8). The player moves the programme to the next frontier.
 - **PM groups:** Programme (§3), Settlement (§5), Transport (§4).
 
 ## 2. The monthly transfer
 
-Runs on `on_monthly_pulse_state` for each state with a Settlement Authority (replacing
-`resettlement_transfer_on_action`), in a new `common/scripted_effects/resettlement_effects.txt`.
+Runs on `on_monthly_pulse_country` (replacing `resettlement_transfer_on_action`), in a new
+`common/scripted_effects/resettlement_effects.txt`. The country pulse resets every state's monthly counters, walks its
+Settlement Authorities one after another, then refreshes every readout and the political layer, all in one execution.
+Several destinations can draw on one source in a month, and a state pulse per destination would leave the source's
+counter at the mercy of pulse order. Every per-state computation still runs in state scope inside `every_scope_state`.
 
 **Capacity.** The Programme and Transport PMs grant `state_resettlement_transfer_add`, **half in a `level_scaled` block
 and half in a `workforce_scaled` block** (vanilla uses both in `state_modifiers`). The pulse moves exactly the total, so
@@ -103,21 +114,22 @@ shortage costs at most half the capacity. Staff per level stays modest for the s
 **Recruitment rule.** Each programme defines which pops are eligible (§3). Culture and religion are never tested.
 
 **Source ranking.** The pulse ranks the owner's other states (never the destination, never another Settlement Authority
-state) by eligible population, unless the programme names another order in §3 (Penal Transportation ranks by turmoil,
-Managed Retreat by damage), and takes from the top **3**. From each eligible pop it takes at most **2%** of the pop per
-month. Vanilla's emigration ceiling is 0.5% of a state's population per week, about 2% a month, so a programme drains no
-faster than a crisis would. If the top three cannot fill capacity, the pulse moves down the list until capacity is met or
-states run out.
+state) by eligible population, unless the programme names another order in §3 (Penal Transportation ranks by turmoil),
+and walks down the list, taking from each state until capacity is met or states run out. From each eligible pop it takes
+at most **2%** of the pop per month. Vanilla's emigration ceiling is 0.5% of a state's population per week, about 2% a
+month, so a programme drains no faster than a crisis would. Takes under 100 people are skipped, so the walk does not
+splinter the destination into tiny pops.
 
 **Recruitment Drive decree** (`decree_resettlement_recruitment_drive`, costs authority, AI weight in §10). All drive states
-form a priority tier: every destination fills from drive states first, split in proportion to their eligible pops, and
-reaches other states only when drive states hit their cap. A drive raises its state's per-pop cap to **4%**. A drive
+form a priority tier: every destination walks the drive states first, in order of eligible population, and reaches
+other states only when drive states hit their cap. A drive raises its state's per-pop cap to **4%**. A drive
 changes where people come from, never who is eligible. Several drives are allowed; each costs authority. The decree's
-`valid` trigger requires the owner to run at least one Settlement Authority, so a drive is never bought for nothing and
+`country_trigger` requires the owner to run at least one Settlement Authority, so a drive is never bought for nothing and
 lapses when the last programme ends.
 
 **Deaths in transit** (coercive programmes, §3). Of each month's recruits, the programme's transit-mortality share is
-removed at the source with `kill_population_in_state` (same pop type) and the rest are moved.
+removed at the source with `kill_population_in_state`, in steps of 100, filtered to the programme's recruits (farmers for
+Special Settlements, laborers for Rustication, the lower strata for Penal Transportation), and the rest are moved.
 
 **Readouts** (dynamic-modifier pattern: a static modifier re-applied monthly with the month's count as its multiplier):
 
@@ -141,11 +153,11 @@ Multiplicative destination effects sit in `unscaled` blocks; additive ones in `w
 | **Land Grants** | Homestead Act 1862, Dominion Lands Act 1872, Argentine colonisation laws | none | Unemployed and peasants, lower strata, `pop_acceptance >= acceptance_status_4`. No peasants under Serfdom | incorporation and colony growth | — |
 | **Military Colonies** | Russian military settlements, Cossack hosts, *tondenhei* 1874–1904, Xinjiang *bingtuan* | `standing_army` | As Land Grants, but `acceptance_status_5` only; staffed by soldiers and officers | turmoil effects reduced (`state_turmoil_effects_mult`, unscaled), faster incorporation | — |
 | **Penal Transportation** | Australia to 1868, French Guiana 1852–1953, New Caledonia, Sakhalin *katorga*, the Andamans | `law_enforcement`; disallowed by Guaranteed Liberties | Lower-strata pops with `pop_radical_fraction` above a threshold, in states ranked by turmoil | higher mortality (harsh conditions) | low |
-| **Organised Colonisation** | Stolypin resettlement 1906–14 (~3M to Siberia), Brazilian state colonies | `railways` | Unemployed, peasants and laborers, `acceptance_status_4`+ | incorporation and colony growth | — |
+| **Organized Colonization** | Stolypin resettlement 1906–14 (~3M to Siberia), Brazilian state colonies | `railways` | Unemployed, peasants and laborers, `acceptance_status_4`+ | incorporation and colony growth | — |
 | **Special Settlements** | Soviet dekulakization 1930–33 (~1.8M deported) | `mass_propaganda` + Collectivized Agriculture; disallowed by Guaranteed Liberties, Protected Speech, Right of Assembly | Farmers | higher mortality | high |
-| **Development Programme** | Virgin Lands 1954, FELDA 1956, Transmigrasi, Brasília, British New Towns | `keynesian_economics` | The voluntary pool plus machinists, engineers and clerks, `acceptance_status_4`+ | infrastructure | — |
+| **Development Program** | Virgin Lands 1954, FELDA 1956, Transmigrasi, Brasília, British New Towns | `keynesian_economics` | The voluntary pool plus machinists, engineers and clerks, `acceptance_status_4`+ | infrastructure | — |
 | **Rustication** | China's Down to the Countryside 1968–80 (~17M) | `mass_media` (era 6) + Single-Party State | Laborers and clerks not employed in agriculture, plantations, ranching or subsistence (`pop_employment_building_group`) | — | near zero |
-| **Managed Retreat** | Chernobyl exclusion zone 1986, Jakarta → Nusantara, Newtok | `environmental_movement` (era 8) | Everyone, from states carrying climate or contamination damage (§9) | — | — |
+| **Managed Retreat** | Chernobyl exclusion zone 1986, Jakarta → Nusantara, Newtok | `environmental_movement` (era 8) | Everyone except slaves, from coastal states of a country carrying `coastal_flooding_modifier` or `coastal_relocation_modifier`, and from states carrying `nuclear_strike_aftermath` or `nd_weapons_accident_contamination` | — | — |
 
 Every programme's PM description states who it recruits and from where, and each coercive PM's description carries the
 Declaration line (§7.4).
@@ -176,28 +188,34 @@ likely to become an emigration source while the programme runs. Retention otherw
 living. A legal ban on leaving (special settlers, *propiska*) is **not modelled**: a pull strong enough to hold them would
 also draw volunteers, so coercive programmes leak somewhat more than they did historically.
 
-## 6. Frontier headroom
+## 6. The frontier: people per km²
 
-The crowding system already computes population per unit of base arable land against a floor of 10,000 people per unit
-(`state_population_density`, `migration_crowding_density_floor` in `extra_script_values.txt`; the state view's crowding
-tile). The frontier test reuses it with one change: a minimum arable denominator, so resource frontiers with little
-farmland (Kolyma, Taymyr) do not read as crowded while nearly empty.
+The crowding floor (people per unit of arable land) was the first candidate and failed against 1836 data: at the floor it
+counts Connecticut, Delaware, D.C., Rio de Janeiro, Buenos Aires and Slovenia as frontier, and at any lower fraction it
+drops Kolyma and Yakutsk, the classic penal and mining frontiers, because they have almost no farmland. The frontier is
+measured against **land area** instead.
 
-- `resettlement_frontier_density = state_population / max(arable_land_base, resettlement_frontier_min_arable)`, divided by
-  the same `state_migration_crowding_density_mult` term as `state_population_density`.
-- `resettlement_frontier_headroom = 1 − resettlement_frontier_density / migration_crowding_density_floor`, clamped to
-  [0, 1].
-- The building is `possible` while headroom > 0 and is removed at closure when it reaches 0.
-- `resettlement_frontier_min_arable` first estimate **50** (the crowding notes call 20–50 a small state), set in the plan
-  from 1836 state data so the qualifying set looks right: Siberia, the American West, Patagonia, the Australian interior,
-  Hokkaido qualify; European cores do not.
+**The area table.** `scripts/generators/gen_region_area.py` counts each province's pixels in the game's
+`map_data/provinces.png`, weights each pixel by its map row (14.5 km² per pixel between about 50°N and 50°S, falling to
+about 5 km² near 70°), and sums a state region's provinces. Checked against real areas: Hokkaido 1.00, Île-de-France 1.02,
+Iceland 1.02, Ceylon 1.03, New Zealand's South Island 0.96, Alaska 0.92, Kansas 0.91, Kola 0.88. It writes
+`common/scripted_effects/te_region_area_generated.txt`, one `set_variable` per land state region; a monthly global pulse
+runs it once per save (guarded by a version number), and `on_game_started` runs it for new games.
 
-Temporary destination benefits stay at full strength until closure; the frontier gate is what bounds them. Headroom is
-shown in the building's tooltip.
+**The measure.** `resettlement_frontier_density` = the population of the whole state region (every owner's part) ÷ its
+area in km². The frontier is geographic, so a split region is measured as one.
 
-Techs and principles that raise `state_migration_crowding_density_mult` raise the floor, so the frontier set widens in
-later eras. That is intended: better-planned states can take more people, and late programmes such as Nusantara on
-Borneo land on states that were not frontiers in 1836.
+**The thresholds.** A frontier **opens below 2 people per km²** and **closes at 10 per km²**, both multiplied by
+`1 + state_migration_crowding_density_mult` — the crowding system's own modifier, which techs, principles and institutions
+already raise. The 1836 set at 2/km² is the American West and upper Midwest, Siberia, the steppe and the Russian north,
+Hokkaido, Manchuria, Xinjiang and Mongolia, the Brazilian interior, the Argentine pampas, Norrland, the Guianas and
+Newfoundland; no European core. 2/km² is close to the US Census's 1890 frontier line (2 people per square mile, about
+0.8/km²) scaled up for a game with no unsettled "empty" provinces. Closing at 10/km² puts Kansas at about 1.9 million and
+Hokkaido at about 0.8 million, near their populations at the end of their historical settlement booms (1.4 million in
+1890; about 1 million in 1901).
+
+Temporary destination benefits stay at full strength until closure; the frontier gate is what bounds them. The building's
+tooltip shows the density and both thresholds.
 
 ## 7. Consequences
 
@@ -216,15 +234,19 @@ Borneo land on states that were not frontiers in 1836.
 - The monthly country pulse applies `resettlement_<programme>_politics` with `multiplier = intensity`. Twenty buildings
   running one programme apply it once.
 
-| Programme | At full intensity (first estimates) |
+Vanilla's scale (`00_defines.txt`): every law on the books together is clamped to ±5 approval, a strongly held law stance
+is worth ±2, and an IG turns unhappy at −5. So a programme at full intensity is worth at most one strong law stance on the
+plus side, and at most "unhappy" on its own for the two great coercive programmes.
+
+| Programme | At full intensity |
 |---|---|
-| Land Grants | Rural Folk +3, Landowners −3 (Southern planters blocked the Homestead Act until secession) |
-| Military Colonies | Armed Forces +3, Rural Folk −3 |
-| Penal Transportation | Intelligentsia −3 |
-| Organised Colonisation | Rural Folk +3 |
-| Special Settlements | Rural Folk −10, Intelligentsia −5 |
-| Rustication | Intelligentsia −10, Petty Bourgeoisie −5 |
-| Development Programme, Managed Retreat | none |
+| Land Grants | Rural Folk +2, Landowners −2 (Southern planters blocked the Homestead Act until secession) |
+| Military Colonies | Armed Forces +2, Rural Folk −2 |
+| Penal Transportation | Intelligentsia −2 |
+| Organized Colonization | Rural Folk +2 |
+| Special Settlements | Rural Folk −5, Intelligentsia −3 |
+| Rustication | Intelligentsia −5, Petty Bourgeoisie −3 |
+| Development Program, Managed Retreat | none |
 
 Only costs (bureaucracy, wages, goods) remain per building. Anything country-wide goes through this layer.
 
@@ -274,8 +296,10 @@ Rolled from the pulse, weighted by programme activity, each with a cooldown. The
 - **Laws:** §3 gates. The Closed Borders gate is removed.
 - **Homelands:** left emergent. Settlers shift culture shares at the destination, which may eventually trigger homeland
   creation or removal; the homeland system's own unlock gates and ten-year timer govern that. Documented, not special-cased.
-- **Global warming and nuclear:** Managed Retreat's source rule reads the GW state-damage modifiers (starting with
-  `coastal_flooding_modifier`) and nuclear contamination markers. The plan inventories both.
+- **Global warming and nuclear:** Managed Retreat's source rule (§3). GW damage is country-level
+  (`coastal_flooding_modifier` sits on the country), so it is read through the owner and the state's coast; the nuclear
+  markers are state-level. The meltdown event's modifier is country-level and cannot be traced to a state, so it is not
+  read.
 - **Existing decrees:** `decree_encourage_emigration` and `decree_subsidize_immigration` stay; they tune natural
   migration.
 - **Vanilla content:** the system never targets a culture, so it cannot collide with `je_indian_removal`, the Circassian
@@ -284,7 +308,7 @@ Rolled from the pulse, weighted by programme activity, each with a cooldown. The
 
 ## 10. Game rule and AI
 
-- **Game rule** `te_rule_internal_resettlement` in `extra_game_rules.txt`: *Enabled* (default) / *Enabled, AI voluntary
+- **Game rule** `internal_resettlement_rule` in `extra_game_rules.txt`: *Enabled* (default) / *Enabled, AI voluntary
   only* / *Disabled*. Disabled makes the building impossible and stops the pulse. *AI voluntary only* has the pulse
   switch AI buildings off coercive PMs.
 - **Building `ai_value`:** frontier headroom, plus crowding and unemployment in the AI's own states; a soft cap on how
@@ -308,24 +332,25 @@ Rolled from the pulse, weighted by programme activity, each with a cooldown. The
 
 | Quantity | First estimate | Anchor |
 |---|---|---|
-| Capacity per level | Land Grants 300, Military Colonies 250, Penal 100, Organised Colonisation 500, Special Settlements 1,000, Development Programme 800, Rustication 800, Managed Retreat 600 people/month | vanilla weekly immigration cap 500 + 5 × infrastructure per state; Stolypin ~375k a year across several states |
+| Capacity per level | Land Grants 300, Military Colonies 250, Penal 100, Organized Colonization 500, Special Settlements 1,000, Development Program 800, Rustication 800, Managed Retreat 600 people/month | Organized Colonization with rail at 10 levels moves 84,000 a year: an empty Kansas closes in about 23 years (historically 1860–1890). Three Siberian Authorities at 15 levels move about 378,000 a year, Stolypin's rate |
 | Staff per level | about 100 bureaucrats + 100 clerks (coercive programmes: soldiers instead of clerks); Work Settlements add 100 laborer slots | small enough that a sparse frontier can staff the first levels (§2) |
 | Transport add per level | Overland 0, Rail and Steamship +200, Motor +400, Airlift +600 | — |
 | Per-pop monthly cap | 2% (4% under a drive) | vanilla emigration ceiling |
-| Sources per destination | top 3 | — |
 | Transit mortality | Penal 5%, Special Settlements 15%, Rustication 1% | archival counts for the special settlements run to hundreds of thousands |
 | Intensity reference | 0.25% of population a year | Stolypin's peak |
-| IG caps | §7.2 | vanilla approval sources |
-| Frontier minimum arable | 50 | §6 |
+| IG caps | §7.2 | `00_defines.txt` approval clamps |
+| Frontier thresholds | open < 2/km², close ≥ 10/km² | §6 |
 
-The plan builds the calibration table before fixing values: defines, a projection of how long a typical frontier takes to
-close at each tier, and vanilla approval magnitudes.
+The frontier thresholds and IG caps were calibrated against data before the plan. The remaining numbers are first
+estimates, checked in play (the debug event prints each month's flows).
 
 ## 13. Tests, docs, in-game checks
 
 - **`test_resettlement_programme_registry.py`:** one `PROGRAMMES` table pinning every site a programme touches (PM,
   loc, recruitment-rule branch, transit mortality, volume counter, politics modifier, law gates, events, Declaration
   line). It is the add-a-programme checklist, like `test_covert_op_registry.py` and `test_un_convention_registry.py`.
+- **`test_region_area.py`:** every land state region has exactly one positive area in the generated file, and spot
+  areas stay within 12% of reality.
 - **Debug:** `te_debug_resettlement` in `events/te_debug_*` (force a destination, jump a month, print flows) and
   `TE_RESETTLEMENT:` lines in `debug.log` for each month's sources, recruits, deaths and arrivals. The first run answers
   the five engine questions above.
@@ -341,3 +366,4 @@ close at each tier, and vanilla approval magnitudes.
 - Later events: a penal-colony mutiny, tickets of leave, soldier-settler petitions, boomtowns, managed-retreat holdouts.
 - Wartime evacuation of industry (the Soviet 1941 move east).
 - A state-panel tile.
+- Per-state global-warming damage (so Managed Retreat can read a flooded state directly).
