@@ -1,38 +1,46 @@
-﻿# Source building: Resettlement Camp
-pmg_resettlement_method = {
+﻿# Settlement Authority (common/buildings/resettlement.txt). Design:
+# docs/superpowers/specs/2026-09-26-internal-resettlement-design.md §3–§5.
+# Order matters: the first PM of each group is the fallback when a law change
+# retires the running one. test_resettlement_programme_registry.py pins it.
+
+# Who is recruited across the country, and how.
+pmg_resettlement_programme = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
 
 	production_methods = {
-		pm_homesteading_program
-		pm_organized_colonization
-		pm_forced_resettlement
-		pm_penal_transportation
-		pm_incentivized_relocation
+		pm_resettlement_land_grants
+		pm_resettlement_military_colonies
+		pm_resettlement_penal_transportation
+		pm_resettlement_organized_colonization
+		pm_resettlement_special_settlements
+		pm_resettlement_development_program
+		pm_resettlement_rustication
+		pm_resettlement_managed_retreat
 	}
 }
 
-# Destination building: Resettlement Colony
+# What the settlers build on arrival.
 pmg_resettlement_settlement = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
 
 	production_methods = {
-		pm_settler_homesteads
-		pm_planned_settlement
-		pm_administered_territory
-		pm_development_zone
+		pm_resettlement_homesteads
+		pm_resettlement_work_settlements
+		pm_resettlement_planned_towns
 	}
 }
 
+# How many can be carried each month.
 pmg_resettlement_transportation = {
 	texture = "gfx/interface/icons/generic_icons/mixed_icon_base.dds"
 	ai_selection = most_productive
 
 	production_methods = {
 		pm_resettlement_overland
-		pm_resettlement_railway
-		pm_resettlement_steamship
+		pm_resettlement_rail_steamship
+		pm_resettlement_motor_transport
 		pm_resettlement_airlift
 	}
 }

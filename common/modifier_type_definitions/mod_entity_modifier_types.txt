@@ -1425,11 +1425,6 @@ state_building_strategic_reserve_hub_max_level_add = {
 	percent = no
 }
 
-state_building_resettlement_camp_max_level_add = {
-	color = good
-	percent = no
-}
-
 state_building_resettlement_colony_max_level_add = {
 	color = good
 	percent = no

@@ -33,21 +33,21 @@ INJECT:nitrogen_fixation = {
 
 INJECT:nationalism = {
 	modifier = {
-		state_building_resettlement_camp_max_level_add = 5
+		state_building_resettlement_colony_max_level_add = 5
 	}
 }
 
-# Civilizing mission: organized colonization becomes possible
+# Civilizing mission: the Settlement Authority grows
 INJECT:civilizing_mission = {
 	modifier = {
-		state_building_resettlement_camp_max_level_add = 5
+		state_building_resettlement_colony_max_level_add = 5
 	}
 }
 
 # Mass propaganda is effective at both creating and erasing homeland claims
 INJECT:mass_propaganda = {
 	modifier = {
-		state_building_resettlement_camp_max_level_add = 5
+		state_building_resettlement_colony_max_level_add = 5
 	}
 }
 
