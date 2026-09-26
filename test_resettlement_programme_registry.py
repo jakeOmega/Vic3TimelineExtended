@@ -110,9 +110,21 @@ def strip_comments(text):
 
 
 def block(text, name):
-    """Body of the first `name = {` block in text (comments stripped), or None."""
+    """Body of the `name = {` block in text (comments stripped), or None.
+
+    Prefers a column-0 definition over a match anywhere else: a parameterized
+    call site (`name = { KEY = value }`) is textually identical to a
+    definition's opener, so if the call appears earlier in the file than the
+    definition itself, a plain first-match search would return the call's
+    tiny body instead. Falls back to the first match anywhere when no
+    column-0 opener exists, which nested lookups like
+    `block(pm_body, "state_modifiers")` rely on (those are never at column 0).
+    """
     text = strip_comments(text)
-    m = re.search(r"(?<![\w.:$])" + re.escape(name) + r"\s*=\s*\{", text)
+    escaped = re.escape(name)
+    m = re.search(r"(?m)^" + escaped + r"\s*=\s*\{", text)
+    if not m:
+        m = re.search(r"(?<![\w.:$])" + escaped + r"\s*=\s*\{", text)
     if not m:
         return None
     depth, i = 1, m.end()
@@ -156,6 +168,14 @@ def loc():
                 if m:
                     _LOC[m.group(1)] = m.group(2)
     return _LOC
+
+
+# ---- the block() test helper itself ---------------------------------------------------
+
+class BlockHelperTests(unittest.TestCase):
+    def test_prefers_the_column_zero_definition_over_an_earlier_call_site(self):
+        text = "wrapper = {\n\tfoo = { X = 1 }\n}\n\nfoo = {\n\treal\n}\n"
+        self.assertEqual(squash(block(text, "foo")), "real")
 
 
 # ---- the frontier and the game rule (Task 2) -----------------------------------------

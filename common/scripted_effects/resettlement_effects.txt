@@ -275,7 +275,12 @@ resettlement_run_destination = {
 	resettlement_count_programme_month = yes
 	resettlement_land_pressure = yes
 	resettlement_refresh_destination_readout = yes
-	debug_log = "TE_RESETTLEMENT: [THIS.GetState.GetName] program [THIS.GetState.MakeScope.Var('rs_programme').GetValue|0]: [THIS.GetState.MakeScope.Var('rs_arrived').GetValue|0] arrived, [THIS.GetState.MakeScope.Var('rs_died').GetValue|0] died in transit, [THIS.GetState.MakeScope.Var('rs_remaining').GetValue|0] of capacity unused"
+	# .MakeScope and .Var(...).GetValue are rejected/silent inside debug_log
+	# (docs/guides/scripting_best_practices.md § "debug_log Loc-String
+	# Templating Limitations"); read the numbers through script-value
+	# wrappers instead, and let debug_log_scopes name the state.
+	debug_log = "TE_RESETTLEMENT: program [SCOPE.ScriptValue('resettlement_debug_programme')|0]: [SCOPE.ScriptValue('resettlement_debug_arrived')|0] arrived, [SCOPE.ScriptValue('resettlement_debug_died')|0] died in transit, [SCOPE.ScriptValue('resettlement_debug_remaining')|0] of capacity unused"
+	debug_log_scopes = yes
 }
 
 # State scope: a destination, after the walk. Adds this month's recruits
@@ -378,7 +383,9 @@ resettlement_close_frontier = {
 	scope:rs_country = {
 		trigger_event = { id = resettlement.9 }
 	}
-	debug_log = "TE_RESETTLEMENT: the frontier at [THIS.GetState.GetName] is closed"
+	# State names don't render in debug_log; debug_log_scopes names the state instead.
+	debug_log = "TE_RESETTLEMENT: the frontier is closed"
+	debug_log_scopes = yes
 }
 
 # Country scope. Every coercive program switches to the best voluntary one

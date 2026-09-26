@@ -140,3 +140,45 @@ resettlement_land_pressure_share = {
 	}
 	max = 0.05
 }
+
+# ---- debug_log readouts -----------------------------------------------------
+# docs/guides/scripting_best_practices.md § "debug_log Loc-String Templating
+# Limitations": .MakeScope and .Var(...).GetValue are rejected/silent inside
+# debug_log, so the variables it reports are wrapped here and read back with
+# [SCOPE.ScriptValue('...')|0].
+
+# State scope. debug_log readout of var:rs_programme.
+resettlement_debug_programme = {
+	if = {
+		limit = { has_variable = rs_programme }
+		value = var:rs_programme
+	}
+	else = { value = -1 }
+}
+
+# State scope. debug_log readout of var:rs_arrived.
+resettlement_debug_arrived = {
+	if = {
+		limit = { has_variable = rs_arrived }
+		value = var:rs_arrived
+	}
+	else = { value = -1 }
+}
+
+# State scope. debug_log readout of var:rs_died.
+resettlement_debug_died = {
+	if = {
+		limit = { has_variable = rs_died }
+		value = var:rs_died
+	}
+	else = { value = -1 }
+}
+
+# State scope. debug_log readout of var:rs_remaining.
+resettlement_debug_remaining = {
+	if = {
+		limit = { has_variable = rs_remaining }
+		value = var:rs_remaining
+	}
+	else = { value = -1 }
+}
