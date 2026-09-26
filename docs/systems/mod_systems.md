@@ -1115,11 +1115,9 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 **`on_country_formed`** (Root = the new country), **`on_country_released_as_{independent,own_subject,overlord_subject,company_subject}`** (scope:target = the released country):
 - `agdiff_backfill_on_country_formed` / `agdiff_backfill_on_released_country` — give the new country every agricultural-diffusion modifier whose world-first has already fired (`agdiff_backfill_diffusion_for_country`, stateless). The broadcast only reaches countries that exist at the time. Unlike the broadcast (recognized countries only), this backfill ignores country type; that predates #460 and is left as it was.
 
-**`on_revolution_start`, `on_secession_start`** (Root = the original, scope:target = the uprising country):
-- `agdiff_copy_on_uprising` — gives the rebels each diffusion modifier the original holds (`agdiff_copy_diffusion_from_root`), and nothing the nation lacked, and marks them with `agdiff_cw_copied`. The rebel object is the one that survives a rebel victory, and a revolution's winner inherits no modifier from the loser.
-
-**`on_civil_war_won`** (Root = the winner):
-- `agdiff_on_civil_war_won` — the backfill again, only for a recognized winner without `agdiff_cw_copied` (a backstop for wars begun before the rebels got the copy; a rebel winner holds the marker and a loyalist inherits it, and it is removed here); what is left of a lost `agdiff_first_mover_prestige`, read from `agdiff_first_mover_month` (recorded with the title) off a ladder of whole years left, and not restored for titles won before that variable existed; and re-points `first_<tech>_country` from the dead loser to the winner.
+**Civil wars** (from the shared hooks in `te_civil_war_on_actions.txt`):
+- `agdiff_on_uprising`, from `te_civil_war_on_start` at `on_revolution_start` / `on_secession_start` (Root = the original, scope:target = the uprising country) — gives the rebels each diffusion modifier the original holds (`agdiff_copy_diffusion_from_root`), and nothing the nation lacked, and marks them with `agdiff_cw_copied`. The rebel object is the one that survives a rebel victory, and a revolution's winner inherits no modifier from the loser.
+- `agdiff_repair_after_civil_war`, from `te_civil_war_on_won` at `on_civil_war_won` (Root = the winner) — the backfill again, only when the revolutionaries won a revolution (`var:te_cw_rebels_won = 1`), the winner carries no `agdiff_cw_copied` (a backstop for wars begun before the rebels got the copy), and it is recognized; the marker is removed here. Also what is left of a lost `agdiff_first_mover_prestige`, read from `agdiff_first_mover_month` (recorded with the title) off a ladder of whole years left, and not restored for titles won before that variable existed; and re-points `first_<tech>_country` from the dead loser to the winner.
 
 **`on_law_activated`** (Root = Law scope):
 - `fix_incompatible_laws_from_law_scope` — law compatibility

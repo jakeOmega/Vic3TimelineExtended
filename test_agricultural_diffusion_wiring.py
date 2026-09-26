@@ -9,12 +9,14 @@ and release hooks; and, for the rebels in a civil war, a copy of what the
 original holds (agdiff_copy_diffusion_from_root). A revolution's winner
 inherits none of the loser's modifiers, so a hook that stops doing its part is
 a nation that loses its Green Revolution for the rest of the game, and the
-engine says nothing. These tests pin every hook, the rule that the civil-war
-paths give only what the nation had (the copy reads ROOT's modifiers and marks
-the rebels, and the on_civil_war_won backstop runs only for an unmarked
-winner, i.e. a war begun before the copy existed, and only if it is
-recognized, the broadcast's filter), and the first-mover restore that runs on
-the civil war's winner.
+engine says nothing. The civil-war half hangs off the shared hooks in
+te_civil_war_on_actions.txt (agdiff_on_uprising from te_civil_war_on_start,
+agdiff_repair_after_civil_war from te_civil_war_on_won). These tests pin every
+hook, the rule that the civil-war paths give only what the nation had (the
+copy reads ROOT's modifiers and marks the rebels, and the on_civil_war_won
+backstop runs only for rebels who won a revolution without the copy, i.e. one
+begun before the copy existed, and only if recognized, the broadcast's
+filter), and the first-mover restore that runs on the civil war's winner.
 
 Run: python3 -m unittest test_agricultural_diffusion_wiring -v
 """
@@ -25,6 +27,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
 ON_ACTIONS = ROOT / "common/on_actions/extra_on_actions.txt"
+CW_ON_ACTIONS = ROOT / "common/on_actions/te_civil_war_on_actions.txt"
 EFFECTS = ROOT / "common/scripted_effects/agricultural_diffusion_effects.txt"
 VALUES = ROOT / "common/script_values/agricultural_diffusion_values.txt"
 EVENTS = ROOT / "events/agricultural_diffusion_events.txt"
@@ -42,17 +45,19 @@ COPY = "agdiff_copy_diffusion_from_root"
 MARKER = "agdiff_cw_copied"
 
 # Hooks whose new country is scope:target and ROOT its parent. Released
-# countries get the global backfill (unfiltered, as before #460); the rebels
-# get a copy of what the original holds.
+# countries get the global backfill (unfiltered, as before #460).
 RELEASE_HOOKS = (
     "on_country_released_as_independent",
     "on_country_released_as_own_subject",
     "on_country_released_as_overlord_subject",
     "on_country_released_as_company_subject",
 )
-UPRISING_HOOKS = ("on_revolution_start", "on_secession_start")
 # Hooks whose country is ROOT.
-ROOT_HOOKS = ("on_country_formed", "on_civil_war_won")
+ROOT_HOOKS = ("on_country_formed",)
+# The civil-war hooks, and the shared on_action each reaches in
+# te_civil_war_on_actions.txt.
+UPRISING_HOOKS = ("on_revolution_start", "on_secession_start")
+CIVIL_WAR_HOOKS = UPRISING_HOOKS + ("on_civil_war_won",)
 
 
 def _read(path):
@@ -156,26 +161,41 @@ class HookWiringTests(unittest.TestCase):
                     self.assertTrue(_calls(target, BACKFILL, self.effects),
                                     f"{name} does not backfill scope:target")
 
+    def test_civil_war_hooks_are_only_the_shared_ones(self):
+        # agdiff's own civil-war hook blocks are gone: a second declaration
+        # would run the copy or the repair twice.
+        for hook in CIVIL_WAR_HOOKS:
+            with self.subTest(hook=hook):
+                self.assertEqual(
+                    [n for n in _hooked_on_actions(self.on_actions, hook)
+                     if n.startswith("agdiff_")],
+                    [],
+                )
+
     def test_rebels_get_a_copy_of_the_original_not_the_backfill(self):
         # The winner continues the nation: the rebels get what the original
         # holds, never what the global flags say, so an unrecognized nation's
         # rebels gain nothing the broadcast never gave it.
+        cw = _read(CW_ON_ACTIONS)
         for hook in UPRISING_HOOKS:
             with self.subTest(hook=hook):
-                for name, body in self._agdiff_effect_bodies(hook).items():
-                    self.assertRegex(body, r"scope:target\s*\?=\s*\{",
-                                     f"{name} must scope into scope:target with ?=")
-                    target = _inner(body, "scope:target")
-                    self.assertTrue(_calls(target, COPY, self.effects),
-                                    f"{name} does not copy the original's diffusion")
-                    self.assertFalse(_calls(body, BACKFILL, self.effects),
-                                     f"{name} must not run the global backfill")
-                    # ...and marks them, so the on_civil_war_won backstop
-                    # knows this war's rebels had the copy.
-                    self.assertRegex(target, r"\bset_variable\s*=\s*" + MARKER + r"\b",
-                                     f"{name} must mark the rebels with {MARKER}")
-                    self.assertNotIn(MARKER, body.replace(target, ""),
-                                     f"{name} must set {MARKER} on the rebels only")
+                self.assertIn("te_civil_war_on_start", _hooked_on_actions(cw, hook))
+        start = _inner(_block(cw, "te_civil_war_on_start"), "effect")
+        self.assertRegex(start, r"\bagdiff_on_uprising\s*=\s*yes\b")
+        uprising = _block(self.effects, "agdiff_on_uprising")
+        self.assertRegex(uprising, r"scope:target\s*\?=\s*\{",
+                         "agdiff_on_uprising must scope into scope:target with ?=")
+        target = _inner(uprising, "scope:target")
+        self.assertTrue(_calls(target, COPY, self.effects),
+                        "agdiff_on_uprising does not copy the original's diffusion")
+        self.assertFalse(_calls(uprising, BACKFILL, self.effects),
+                         "agdiff_on_uprising must not run the global backfill")
+        # ...and marks them, so the on_civil_war_won backstop knows this
+        # war's rebels had the copy.
+        self.assertRegex(target, r"\bset_variable\s*=\s*" + MARKER + r"\b",
+                         f"agdiff_on_uprising must mark the rebels with {MARKER}")
+        self.assertNotIn(MARKER, uprising.replace(target, ""),
+                         f"agdiff_on_uprising must set {MARKER} on the rebels only")
 
     def test_copy_reads_the_originals_modifiers(self):
         one = _block(self.effects, "agdiff_copy_one_tech_from_root")
@@ -190,34 +210,45 @@ class HookWiringTests(unittest.TestCase):
         )
 
     def test_civil_war_won_repairs_the_winner_as_root(self):
-        bodies = self._agdiff_effect_bodies("on_civil_war_won")
-        for name, body in bodies.items():
-            # Bare call: the restore's multiplier resolves against ROOT, which
-            # is the winner only outside any scope change.
-            self.assertNotRegex(body, r"scope:|every_|random_|any_",
-                                f"{name} must call the repair on ROOT directly")
-        joined = "\n".join(bodies.values())
-        self.assertTrue(_calls(joined, "agdiff_restore_first_mover_prestige", self.effects))
+        cw = _read(CW_ON_ACTIONS)
+        self.assertIn("te_civil_war_on_won", _hooked_on_actions(cw, "on_civil_war_won"))
+        won = _inner(_block(cw, "te_civil_war_on_won"), "effect")
+        call = re.search(r"\bagdiff_repair_after_civil_war\s*=\s*yes\b", won)
+        self.assertIsNotNone(call, "te_civil_war_on_won must call agdiff_repair_after_civil_war")
+        # Bare call: the restore's multiplier resolves against ROOT, which is
+        # the winner only outside any scope change...
+        depth = won[:call.start()].count("{") - won[:call.start()].count("}")
+        self.assertEqual(depth, 0, "the repair must be called on ROOT directly")
+        # ...and between resolve (which sets te_cw_rebels_won) and clear
+        # (which removes it).
+        resolve = won.index("te_civil_war_resolve_sides")
+        clear = won.index("te_civil_war_clear")
+        self.assertLess(resolve, call.start())
+        self.assertLess(call.start(), clear)
+        self.assertTrue(_calls(won, "agdiff_restore_first_mover_prestige", self.effects))
         repair = _block(self.effects, "agdiff_repair_after_civil_war")
         self.assertEqual(
             set(re.findall(r"agdiff_repoint_first_country\s*=\s*\{\s*TECH\s*=\s*(\w+)", repair)),
             TECHS,
         )
 
-    def test_civil_war_won_backfill_only_for_pre_copy_wars(self):
-        # The backstop is for wars begun before the rebels got the copy: it
-        # runs only for a winner without the rebels' marker (a rebel winner
-        # holds its own, a loyalist winner inherits it in the merge). A
-        # recognized type alone is not enough: the decolonization tech makes
-        # laggards recognized without the diffusion, and they would gain it
-        # at their first civil war. The recognized filter (the broadcast's)
-        # stays on for the pre-build wars.
+    def test_civil_war_won_backfill_only_for_uncopied_rebel_winners(self):
+        # The backstop is for revolutions begun before the rebels got the
+        # copy, and only the rebels' side needs it. It runs only when the
+        # shared layer says the revolutionaries won (a loyalist winner keeps
+        # its own modifiers, and a secession is never a new regime), when the
+        # winner carries no copy marker, and when it is recognized (the
+        # broadcast's filter). A recognized type alone is not enough: the
+        # decolonization tech makes laggards recognized without the
+        # diffusion.
         repair = _block(self.effects, "agdiff_repair_after_civil_war")
         backfill_calls = re.findall(r"\b" + BACKFILL + r"\s*=\s*yes", repair)
         self.assertEqual(len(backfill_calls), 1)
         gated = _inner(repair, "if")
         self.assertIsNotNone(gated)
         limit = _inner(gated, "limit")
+        self.assertIn("has_variable = te_cw_rebels_won", limit)
+        self.assertRegex(limit, r"var:te_cw_rebels_won\s*=\s*1\b")
         self.assertRegex(limit, r"NOT\s*=\s*\{\s*has_variable\s*=\s*" + MARKER + r"\s*\}")
         self.assertRegex(limit, r"is_country_type\s*=\s*recognized")
         self.assertIn(BACKFILL + " = yes", gated)
@@ -225,19 +256,25 @@ class HookWiringTests(unittest.TestCase):
         self.assertRegex(broadcast, r"is_country_type\s*=\s*recognized")
 
     def test_marker_is_removed_after_the_gate(self):
-        # Read once, then dropped: a winner that later faces a war begun
-        # before this build must not be mistaken for one that had the copy.
+        # Read once, then dropped (guarded, house style): a winner that later
+        # faces a war begun before this build must not be mistaken for one
+        # that had the copy.
         repair = _block(self.effects, "agdiff_repair_after_civil_war")
-        removal = re.search(r"\bremove_variable\s*=\s*" + MARKER + r"\b", repair)
-        self.assertIsNotNone(removal, f"agdiff_repair_after_civil_war must remove {MARKER}")
-        gate = re.search(r"has_variable\s*=\s*" + MARKER, repair)
+        removal = re.search(
+            r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*" + MARKER
+            + r"\s*\}\s*remove_variable\s*=\s*" + MARKER + r"\s*\}",
+            repair,
+        )
+        self.assertIsNotNone(removal, f"agdiff_repair_after_civil_war must remove {MARKER}, guarded")
+        gate = re.search(r"NOT\s*=\s*\{\s*has_variable\s*=\s*" + MARKER, repair)
         self.assertIsNotNone(gate, f"agdiff_repair_after_civil_war must test {MARKER}")
         self.assertLess(gate.start(), removal.start())
-        # The marker is written only by the uprising on_action and read or
-        # removed only here.
-        on_actions = _read(ON_ACTIONS)
-        self.assertEqual(len(re.findall(r"\b" + MARKER + r"\b", on_actions)), 1)
-        self.assertEqual(len(re.findall(r"\b" + MARKER + r"\b", self.effects)), 2)
+        # The marker is written only by agdiff_on_uprising and read or
+        # removed only in the repair.
+        self.assertNotIn(MARKER, self.on_actions)
+        self.assertEqual(len(re.findall(r"\b" + MARKER + r"\b",
+                                        _block(self.effects, "agdiff_on_uprising"))), 1)
+        self.assertEqual(len(re.findall(r"\b" + MARKER + r"\b", self.effects)), 4)
 
 
 class TechListTests(unittest.TestCase):

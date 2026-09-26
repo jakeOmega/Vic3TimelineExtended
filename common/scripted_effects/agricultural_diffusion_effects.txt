@@ -16,8 +16,10 @@
 #
 # Wired in via on_acquired_technology in common/on_actions/extra_on_actions.txt.
 # Countries the broadcast misses (new tags, and the rebels in a civil war) are
-# caught by the backfill below, and a civil war's winner is repaired by
-# agdiff_repair_after_civil_war at the end of this file.
+# caught by the backfill and the copy below, and a civil war's winner is
+# repaired by agdiff_repair_after_civil_war at the end of this file. The two
+# civil-war entry points hang off the shared hooks in
+# common/on_actions/te_civil_war_on_actions.txt.
 
 # --- Dispatcher (called from agricultural_diffusion_on_action) --------------
 # Guard + dispatch in one parameterized block: if $TECH$ is researched and
@@ -134,23 +136,23 @@ agdiff_handle_tech_acquired_effect = {
 # because there the rule is that the winner continues the nation: it keeps
 # what the nation had and gains nothing the nation never had.
 #
-# How each kind of new country gets the diffusion (the on_actions are in
-# common/on_actions/extra_on_actions.txt, agricultural diffusion section):
+# How each kind of new country gets the diffusion:
 #   on_country_formed                        ROOT = the new country:
 #                                            this backfill
 #   on_country_released_as_independent       scope:target = the released
 #   on_country_released_as_own_subject       country: this backfill
-#   on_country_released_as_overlord_subject
-#   on_country_released_as_company_subject
+#   on_country_released_as_overlord_subject  (these five: extra_on_actions.txt,
+#   on_country_released_as_company_subject   agricultural diffusion section)
 #   on_revolution_start, on_secession_start  scope:target = the uprising
-#                                            country: a copy of what the
-#                                            original (ROOT) holds,
+#     (te_civil_war_on_start ->              country: a copy of what the
+#      agdiff_on_uprising)                   original (ROOT) holds,
 #                                            agdiff_copy_diffusion_from_root
 #   on_civil_war_won                         ROOT = the winner: this backfill,
-#                                            only for a recognized winner of
-#                                            a war begun before the copy
+#     (te_civil_war_on_won ->                only for the rebels who won a
+#      agdiff_repair_after_civil_war)        revolution begun before the copy
 #                                            existed (no agdiff_cw_copied),
-#                                            agdiff_repair_after_civil_war
+#                                            and only if recognized
+#   (the last two: te_civil_war_on_actions.txt, the shared civil-war hooks)
 #
 # Without this, decolonized 1960+ African nations (the exact target of issue
 # #114) would get zero benefit from the Green Revolution diffusion that fired
@@ -188,11 +190,28 @@ agdiff_backfill_diffusion_for_country = {
 # consulted: a nation the broadcast skipped (it was not recognized at the
 # time) has nothing to pass on, and its rebels must not gain what it lacked.
 #
-# agdiff_copy_on_uprising also marks the rebels with agdiff_cw_copied, which
-# tells agdiff_repair_after_civil_war that this war's rebels got the copy.
+# agdiff_on_uprising also marks the rebels with agdiff_cw_copied, which tells
+# agdiff_repair_after_civil_war that this war's rebels got the copy. That is a
+# different question from the shared layer's te_cw_role: a war begun after
+# the shared hooks existed but before this copy did has a te_cw_role and no
+# copy.
 #
-# Scope: the uprising country, with ROOT = the original (on_revolution_start /
-# on_secession_start, through agdiff_copy_on_uprising).
+# Nothing is cleared on the original. The marker only ever sits on rebels,
+# or on a winner until its own agdiff_repair_after_civil_war removes it, so a
+# marker on ROOT here means ROOT is itself a rebel country still at war, and
+# clearing it would let that war's backstop run after all.
+#
+# Scope: ROOT = the original, scope:target = the uprising country (called
+# from te_civil_war_on_start, common/on_actions/te_civil_war_on_actions.txt,
+# at on_revolution_start and on_secession_start).
+agdiff_on_uprising = {
+	scope:target ?= {
+		agdiff_copy_diffusion_from_root = yes
+		set_variable = agdiff_cw_copied
+	}
+}
+
+# Scope: the uprising country, with ROOT = the original.
 agdiff_copy_one_tech_from_root = {
 	if = {
 		limit = {
@@ -219,38 +238,50 @@ agdiff_copy_diffusion_from_root = {
 #
 # The rebels already hold the diffusion, copied from the original when the
 # uprising started, so the backfill here is only a backstop, for a war that
-# began before that copy existed. The copy marks the rebels with
-# agdiff_cw_copied, and the backstop runs only for a winner without it. That
-# holds whatever the order of the on_civil_war_won files: a rebel winner holds
-# its own marker, and a loyalist winner inherits the rebels' marker in the
-# merge, like any variable only the losing side held (seen in rebel wins; no
-# loyalist win has been observed yet). The marker is removed here, once read.
+# began before that copy existed. It runs only when all three hold:
+#   - the revolutionaries won a revolution (var:te_cw_rebels_won = 1, from
+#     the shared layer's te_civil_war_resolve_sides). A loyalist winner keeps
+#     its own modifiers and never takes it; nor does either side of a
+#     secession, which the shared layer never counts as a new regime;
+#   - the winner carries no agdiff_cw_copied: these rebels did not get the
+#     copy (a rebel winner holds its own marker);
+#   - the winner is recognized, the broadcast's own filter. A recognized type
+#     is not enough on its own: the mod's decolonization tech
+#     (common/technology/technologies/era_6.txt) makes unrecognized countries
+#     recognized, so a laggard that researched it after the broadcasts is
+#     recognized without the diffusion.
+# So the only remaining exposure is a revolution begun before this build in
+# a nation that is such a recognized laggard, won by the rebels: they gain the
+# diffusion their nation lacked. It closes as those wars end. The marker is
+# removed here, once read; a loyalist winner inherits it in the merge and
+# loses it here too.
 #
-# A recognized country type is not enough on its own. The mod's decolonization
-# tech (common/technology/technologies/era_6.txt) makes unrecognized countries
-# recognized, so a laggard that researched it after the broadcasts is
-# recognized without the diffusion, and a backfill on every recognized winner
-# would hand it the lot at its first civil war, loyalist or not. The
-# recognized filter (the broadcast's own) stays for the pre-build wars, so
-# the only remaining exposure is a war begun before this build in a nation
-# that is such a recognized laggard: its winner, loyalists or rebels, gains
-# the diffusion. It closes as those wars end.
-# The first-mover reward has no copy and is restored here for every winner.
+# The first-mover reward has no copy and is restored here for every winner:
+# the engine hands the winner the loser's is_world_first_<tech> title in the
+# merge, and the reward follows the title. For a loyalist winner that is a
+# no-op unless the rebels themselves won a world-first during the war.
 #
 # Scope: the winner, which must also be ROOT (called bare from
-# agdiff_on_civil_war_won; on_civil_war_won runs with ROOT = the winner, after
-# the loser's variables have merged in). Every step is a no-op for a winner
-# that still holds what it restores, which is what a loyalist victory
-# presumably leaves: the original keeps its own modifiers.
+# te_civil_war_on_won, common/on_actions/te_civil_war_on_actions.txt;
+# on_civil_war_won runs with ROOT = the winner, after the loser's variables
+# have merged in, and te_civil_war_clear removes te_cw_rebels_won right after).
+# Every step is a no-op for a winner that still holds what it restores, which
+# is what a loyalist victory presumably leaves: the original keeps its own
+# modifiers.
 agdiff_repair_after_civil_war = {
 	if = {
 		limit = {
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
 			NOT = { has_variable = agdiff_cw_copied }
 			is_country_type = recognized
 		}
 		agdiff_backfill_diffusion_for_country = yes
 	}
-	remove_variable = agdiff_cw_copied
+	if = {
+		limit = { has_variable = agdiff_cw_copied }
+		remove_variable = agdiff_cw_copied
+	}
 	agdiff_restore_first_mover_prestige = yes
 	agdiff_repoint_first_country = { TECH = nitrogen_fixation }
 	agdiff_repoint_first_country = { TECH = modern_chemical_processes }
