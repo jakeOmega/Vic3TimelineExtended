@@ -394,6 +394,26 @@ class GlobalPulseTests(unittest.TestCase):
         start = _block(text, "un_on_revolution_start")
         self.assertLess(start.index("remove_variable = un_cw_rebel"), start.index("scope:target"))
 
+    def test_the_successor_claims_the_headquarters_every_month(self):
+        """The hook alone relies on the loser reading as dead at the win; the
+        global pulse asks every mirror holder before it can reassign."""
+        hq = _read(_path("common", "scripted_effects", "un_hq_effects.txt"))
+        body = _block(hq, "un_hq_monthly_update")
+        net = re.search(
+            r"every_country\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable = un_headquarters_modifier_on"
+            r"\s*\}\s*un_hq_adopt_as_successor = yes\s*\}", body)
+        self.assertIsNotNone(net)
+        self.assertLess(net.start(), body.index("un_hq_assign_host = yes"))
+        adopt = _block(_read(STATE_EFFECTS), "un_hq_adopt_as_successor")
+        limit = _body_at(adopt, adopt.index("limit") + adopt[adopt.index("limit"):].index("{"))[0]
+        # Never the dead loser; a dead host only of our definition; a vanished
+        # host only for a represented member by the record.
+        self.assertRegex(limit, r"^\s*is_country_alive = yes")
+        self.assertRegex(limit, r"AND\s*=\s*\{\s*global_var:un_hq_country \?= \{ is_country_alive = no \}\s*"
+                                r"country_definition = global_var:un_hq_country\.country_definition\s*\}")
+        self.assertRegex(limit, r"AND\s*=\s*\{\s*NOT = \{ exists = global_var:un_hq_country \}\s*"
+                                r"un_member_represented_by_record = yes\s*\}")
+
     def test_headquarters_waits_within_the_hosts_civil_war(self):
         text = _read(_path("common", "on_actions", "un_on_actions.txt"))
         body = _block(text, "un_hq_on_state_owner_change")
