@@ -1380,13 +1380,15 @@ sr_record_probe_result = {
 #   - sr_solar_system_trade (solar colonization entry): from
 #     sr_completed_solar_colonization, by sr_sync_solar_colonization_entry.
 #
-# Country modifiers come back at on_civil_war_won (ROOT = the winner, after the
-# merge; common/on_actions/space_race_on_actions.txt). Journal-entry modifiers
-# do not: whether that hook runs before or after an inherited entry's
+# Country modifiers come back in sr_repair_after_civil_war, which the shared
+# civil-war hook runs for the winner (te_civil_war_on_won in
+# common/on_actions/te_civil_war_on_actions.txt). Journal-entry modifiers do
+# not: whether on_civil_war_won runs before or after an inherited entry's
 # `immediate` is unknown. Each entry's own `immediate` rebuilds them, and the
-# monthly country pulse (sr_sync_space_race_entries) is the backstop. A
-# loyalist win changes nothing: the original still holds every modifier, so
-# every "missing" test fails.
+# monthly country pulse (sr_sync_space_race_entries) is the backstop. Every
+# step puts back only what a record says is missing (the one removal, of a
+# stale approach modifier, is not about revolutions), so a loyalist winner,
+# which still holds its modifiers, sees no change.
 #
 # Not rebuilt: timed modifiers (the completion events' themed rewards, the
 # failure penalties, sr_temporary_safety_review), whose remaining time is
@@ -1396,9 +1398,9 @@ sr_record_probe_result = {
 # Country scope. The milestone's reward, when the milestone is complete and
 # neither reward modifier is on the country. sr_apply_milestone_reward_base adds
 # the modifier and nothing else, so running it again replays no prestige, popup
-# or notification. Only at on_civil_war_won: a monthly check would also fire
-# between on_complete, which sets sr_completed_<m>, and the completion event's
-# option, which grants the reward.
+# or notification. Only at the civil war's end (sr_repair_after_civil_war): a
+# monthly check would also fire between on_complete, which sets
+# sr_completed_<m>, and the completion event's option, which grants the reward.
 sr_restore_milestone_reward_base = {
 	if = {
 		limit = {
@@ -1420,6 +1422,29 @@ sr_restore_milestone_rewards = {
 	sr_restore_milestone_reward_base = { MILESTONE = interstellar_probe }
 }
 
+# The space race's part of the civil-war repair (#464). ROOT = THIS = the
+# winner, called from te_civil_war_on_won (te_civil_war_on_actions.txt) after
+# the loser's variables have merged in. Puts back the country modifiers a
+# revolution's winner does not inherit: the milestone rewards and the probe
+# result. The journal-entry modifiers are rebuilt elsewhere (see "What a
+# revolution's winner keeps" above).
+#
+# It reads no side information (te_cw_rebels_won, te_cw_role, the loser): it
+# is stateless, adding only a reward whose record the country holds and whose
+# modifier it lacks, and it never removes anything. So it is a no-op wherever
+# nothing was lost:
+# - a loyalist winner still holds its own modifiers and records;
+# - a secession's winner, if this hook fires for one at all, is either the
+#   original (as a loyalist) or the new country, which merged nothing and
+#   holds only what it earned itself.
+# One edge on any winner: a milestone completed while its completion event
+# still waits for an answer already has its record, so the reward is added
+# here and again by the option (assumed not to stack; untested).
+sr_repair_after_civil_war = {
+	sr_restore_milestone_rewards = yes
+	sr_sync_probe_data = yes
+}
+
 # The interstellar probe's result: one of four permanent country modifiers,
 # granted by every option of space_race_events.601-630. Recorded as
 # <modifier>_held in the same effect, so the record and the modifier cannot
@@ -1431,10 +1456,10 @@ sr_grant_probe_data = {
 
 # Country scope. One probe result, both ways: a modifier with no record was
 # granted before the record existed (record it); a record with no modifier is a
-# revolution's winner (put it back). Run at on_civil_war_won and monthly, so a
-# save from before the record existed records itself within a month, a loser
-# already fighting its civil war included: its record is a variable, which the
-# winner inherits.
+# revolution's winner (put it back). Run at the civil war's end
+# (sr_repair_after_civil_war) and monthly, so a save from before the record
+# existed records itself within a month, a loser already fighting its civil war
+# included: its record is a variable, which the winner inherits.
 sr_sync_probe_data_base = {
 	if = {
 		limit = {

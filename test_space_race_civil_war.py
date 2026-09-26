@@ -135,6 +135,18 @@ class ImmediateTests(unittest.TestCase):
                 limits = _if_limits_around(monthly, monthly.index(call))
                 self.assertEqual(limits, [" sr_space_race_participant = yes "])
 
+    def test_the_monthly_sync_removes_only_what_is_there(self):
+        # remove_modifier on an absent modifier logs an error on every call
+        # (#469), and this runs monthly.
+        names = re.findall(r"^(sr_sync_\w+) = \{", EFFECTS, re.M)
+        self.assertIn("sr_sync_approach_modifier_base", names)
+        for name in names:
+            body = _block(EFFECTS, name)
+            for m in re.finditer(r"remove_modifier\s*=\s*(\S+)", body):
+                with self.subTest(effect=name, modifier=m.group(1)):
+                    self.assertTrue(any("has_modifier = " + m.group(1) in lim
+                                        for lim in _if_limits_around(body, m.start())))
+
     def test_the_monthly_gate_admits_every_country_with_state(self):
         # Each entry's `possible` must name a completion variable (or be
         # suborbital, which the gate names by its active flag), and every
@@ -161,11 +173,20 @@ class RewardTests(unittest.TestCase):
     """Every reward modifier is recorded in a variable and rebuilt from it."""
 
     def test_milestone_rewards_come_back_at_civil_war_won(self):
-        hook = _block(ON_ACTIONS, "on_civil_war_won")
-        self.assertIn("sr_on_civil_war_won", hook)
-        handler = _block(ON_ACTIONS, "sr_on_civil_war_won")
-        self.assertIn("sr_restore_milestone_rewards = yes", handler)
-        self.assertIn("sr_sync_probe_data = yes", handler)
+        # Through the shared civil-war hook (#467), not a hook of our own.
+        shared = _read("common", "on_actions", "te_civil_war_on_actions.txt")
+        self.assertIn("te_civil_war_on_won", _block(shared, "on_civil_war_won"))
+        self.assertIn("sr_repair_after_civil_war = yes", _block(shared, "te_civil_war_on_won"))
+        for hook in ("on_civil_war_won", "on_revolution_start", "on_secession_start"):
+            self.assertNotRegex(ON_ACTIONS, r"(?m)^" + hook + r"\s*=")
+        repair = _block(EFFECTS, "sr_repair_after_civil_war")
+        self.assertIn("sr_restore_milestone_rewards = yes", repair)
+        self.assertIn("sr_sync_probe_data = yes", repair)
+        # Stateless: it reads none of the shared layer's side information and
+        # removes nothing, so it cannot hurt a loyalist or a seceder winner.
+        for text in (repair, _block(EFFECTS, "sr_restore_milestone_reward_base"),
+                     _block(EFFECTS, "sr_sync_probe_data_base")):
+            self.assertNotRegex(text, r"te_cw_|remove_")
         rewarded = set(re.findall(r"^sr_first_(\w+) = \{", MODIFIERS, re.M))
         self.assertEqual(rewarded, set(MILESTONES))
         restored = re.findall(r"MILESTONE = (\w+)", _block(EFFECTS, "sr_restore_milestone_rewards"))

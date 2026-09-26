@@ -32,26 +32,9 @@ space_race_on_action = {
 	}
 }
 
-# Root = the winner, after the loser's variables have merged in (vanilla
-# 00_code_on_actions.txt:5732; runs after on_revolution_end). Puts back the
-# space race's country modifiers, which a winner does not inherit. Not the
-# journal-entry modifiers: whether this hook runs before or after an inherited
-# entry's `immediate` is unknown, so the entries' own `immediate` and the
-# monthly pulse above rebuild those. A loyalist winner still holds its
-# modifiers, so this does nothing there. See "What a revolution's winner
-# keeps" in common/scripted_effects/space_race_effects.txt.
-on_civil_war_won = {
-	on_actions = {
-		sr_on_civil_war_won
-	}
-}
-
-sr_on_civil_war_won = {
-	effect = {
-		sr_restore_milestone_rewards = yes
-		sr_sync_probe_data = yes
-	}
-}
+# A civil war's end: the shared hook te_civil_war_on_won
+# (te_civil_war_on_actions.txt) calls sr_repair_after_civil_war
+# (space_race_effects.txt) for the winner.
 
 # Wire up in-progress and cross-system events as yearly random events
 
