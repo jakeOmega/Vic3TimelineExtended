@@ -239,9 +239,9 @@ gw_rebase_annual_emissions_effect = {
 # that were rendered live in the reason text.
 #
 # The same sweep stores the mean standard of living over these countries
-# (gw_g_mean_sol), which the AI's climate will measures wealth against
-# (gw_ai_will_wealth in global_warming_ai_values.txt). It is the only world
-# figure that score needs, so it rides this pass instead of adding one.
+# (gw_g_mean_sol), which the AI's climate wills measure wealth against
+# (gw_ai_sig_wealth in global_warming_ai_values.txt). It is the only world
+# figure those scores need, so it rides this pass instead of adding one.
 # Scope: any (called from the global monthly pulse)
 gw_refresh_global_counts_effect = {
 	hidden_effect = {

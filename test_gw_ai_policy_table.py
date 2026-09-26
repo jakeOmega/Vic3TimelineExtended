@@ -7,8 +7,11 @@ fix gives each policy one threshold on a per-country climate will: adopt at or
 above it, repeal only a band below it. That only works while each button pair
 reads the SAME threshold, and nothing in the engine notices when a pair drifts
 apart -- a repeal gate above its adopt gate flips a policy every roll, and an
-adopt with no repeal is the old ratchet again. Everything here is derived from
-the journal entry's `scripted_button = gw_*` lines.
+adopt with no repeal is the old ratchet again. Each policy's will is a shared
+core plus the same five signals under per-policy weights; the weights are a
+table in the values file's header, checked here against the code so the table
+a reader edits is the one the game runs. Everything is derived from the
+journal entry's `scripted_button = gw_*` lines.
 """
 
 import json
@@ -24,6 +27,12 @@ BUTTONS = ROOT / "common/scripted_buttons/global_warming_buttons.txt"
 VALUES = ROOT / "common/script_values/global_warming_ai_values.txt"
 TRIGGERS = ROOT / "common/scripted_triggers/global_warming_triggers.txt"
 MODIFIERS = ROOT / "common/static_modifiers/extra_modifiers.txt"
+
+# The five signals every policy's will weighs, in the header table's column
+# order. Industrialists is the one that flips on its own (at elections) and is
+# yes/no, so its weight must stay inside the repeal band in every row.
+SIGNALS = ("laissez_faire", "industrialists", "movement", "wealth", "fossil")
+ELECTION_SIGNALS = ("industrialists",)
 
 
 def _text(path):
@@ -62,6 +71,33 @@ def _policies():
     """Policy keys, from the adopt half of every button the entry registers."""
     names = re.findall(r"(?m)^\s*scripted_button = (gw_\w+)_button", _text(JE))
     return [n[len("gw_"):] for n in names if not n.startswith("gw_remove_")]
+
+
+def _header_table():
+    """{policy: {signal: weight}} from the values file's header table."""
+    rows = {}
+    for line in _text(VALUES).splitlines():
+        if not line.startswith("#"):
+            if rows:
+                break
+            continue
+        m = re.match(r"#\s+([a-z_]+)" + r"\s+(-?\d+)" * len(SIGNALS) + r"\s*$", line)
+        if m:
+            rows[m.group(1)] = dict(zip(SIGNALS, map(int, m.groups()[1:])))
+    return rows
+
+
+def _code_weights(values, policy):
+    """(shared core, {signal: weight}, signals in order of appearance) for
+    one policy's will as the game computes it."""
+    will = _body(values[f"gw_ai_will_{policy}"])
+    weights, order = {}, []
+    for term in _items(will["add"]):
+        block = _body(term)
+        signal = block["value"][1].removeprefix("gw_ai_sig_")
+        order.append(signal)
+        weights[signal] = int(block["multiply"][1])
+    return will["value"][1], weights, order
 
 
 def _authority_cost(policy):
@@ -110,7 +146,7 @@ class GwAiPolicyTableTest(unittest.TestCase):
         for p in _policies():
             with self.subTest(policy=p):
                 adopt = _body(self.values[f"gw_ai_adopt_margin_{p}"])
-                self.assertEqual(adopt["value"][1], "gw_ai_climate_will")
+                self.assertEqual(adopt["value"][1], f"gw_ai_will_{p}")
                 int(adopt["subtract"][1])  # the threshold, written once, here
                 repeal = _body(self.values[f"gw_ai_repeal_margin_{p}"])
                 self.assertEqual(repeal["value"][1], "0")
@@ -119,15 +155,37 @@ class GwAiPolicyTableTest(unittest.TestCase):
                     subtracted, [f"gw_ai_adopt_margin_{p}", "gw_ai_repeal_band"]
                 )
 
+    def test_each_will_is_the_shared_core_plus_every_signal(self):
+        for p in _policies():
+            with self.subTest(policy=p):
+                core, _, order = _code_weights(self.values, p)
+                self.assertEqual(core, "gw_ai_will_shared")
+                # Every signal exactly once, zeros included: a dropped term
+                # would otherwise be indistinguishable from a zero weight.
+                self.assertEqual(sorted(order), sorted(SIGNALS))
+                for signal in SIGNALS:
+                    self.assertIn(f"gw_ai_sig_{signal}", self.values)
+
+    def test_header_table_matches_the_code(self):
+        table = _header_table()
+        self.assertEqual(sorted(table), sorted(_policies()))
+        for p in _policies():
+            with self.subTest(policy=p):
+                _, weights, _ = _code_weights(self.values, p)
+                self.assertEqual(weights, table[p])
+
     def test_band_is_wider_than_any_election_driven_term(self):
         band = int(self.values["gw_ai_repeal_band"][1])
-        politics = _body(self.values["gw_ai_will_politics"])
+        shared = _body(self.values["gw_ai_will_shared"])
         ig_terms = [
             abs(int(_body(branch)["add"][1]))
-            for branch in _items(politics["if"])
+            for branch in _items(shared["if"])
             if "is_in_government" in json.dumps(_body(branch)["limit"])
         ]
-        self.assertTrue(ig_terms, "no interest-group terms found")
+        self.assertTrue(ig_terms, "no interest-group term in the shared core")
+        for p in _policies():
+            _, weights, _ = _code_weights(self.values, p)
+            ig_terms += [abs(weights[s]) for s in ELECTION_SIGNALS]
         self.assertGreater(band, max(ig_terms))
 
     def test_adopt_checks_the_authority_the_policy_costs(self):
