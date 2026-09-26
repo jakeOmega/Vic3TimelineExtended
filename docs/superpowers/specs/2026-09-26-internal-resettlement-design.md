@@ -200,7 +200,9 @@ measured against **land area** instead.
 about 5 km² near 70°), and sums a state region's provinces. Checked against real areas: Hokkaido 1.00, Île-de-France 1.02,
 Iceland 1.02, Ceylon 1.03, New Zealand's South Island 0.96, Alaska 0.92, Kansas 0.91, Kola 0.88. It writes
 `common/scripted_effects/te_region_area_generated.txt`, one `set_variable` per land state region; a monthly global pulse
-runs it once per save (guarded by a version number), and `on_game_started` runs it for new games.
+runs it once per save (guarded by a version number), and `on_game_started` runs it for new games. The resettlement
+country pulse also calls the guarded effect first, since on an old save a country pulse may run before the global one
+and would otherwise read 1 km² and close every frontier.
 
 **The measure.** `resettlement_frontier_density` = the population of the whole state region (every owner's part) ÷ its
 area in km². The frontier is geographic, so a split region is measured as one.

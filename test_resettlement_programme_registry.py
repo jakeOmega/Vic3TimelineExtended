@@ -488,6 +488,12 @@ class TransferTests(unittest.TestCase):
         src = squash(block(effects, "resettlement_refresh_source_readout"))
         self.assertIn("add_modifier = { name = resettlement_recruits multiplier = var:rs_recruits }", src)
 
+    def test_the_area_table_is_written_before_the_first_density_read(self):
+        # On a save from before the table, a country pulse that ran before the
+        # global one would read 1 km² and close every real frontier.
+        body = strip_comments(block(read(EFFECTS), "resettlement_country_monthly"))
+        self.assertEqual(body.split()[:3], ["te_set_region_areas_if_stale", "=", "yes"])
+
     def test_the_pulse_is_wired(self):
         text = read(RS_ON_ACTIONS)
         m = re.search(r"on_monthly_pulse_country\s*=\s*\{\s*on_actions\s*=\s*\{([^}]*)\}", text)

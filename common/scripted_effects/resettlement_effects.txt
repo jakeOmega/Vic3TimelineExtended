@@ -25,6 +25,11 @@
 # ============================================================================
 
 resettlement_country_monthly = {
+	# The frontier test divides by the region's area, which the global monthly
+	# pulse writes once per save (te_region_area_on_actions.txt). On a save from
+	# before the table, a country pulse that runs first would read 1 km² and
+	# close every Authority. Idempotent: one global-variable check once written.
+	te_set_region_areas_if_stale = yes
 	save_scope_as = rs_country
 	every_scope_state = {
 		limit = { has_variable = rs_recruits }
