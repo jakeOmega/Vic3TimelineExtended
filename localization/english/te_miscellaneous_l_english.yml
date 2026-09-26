@@ -1821,7 +1821,7 @@
  covert_destabilization_action_action_notification_break_name:0 "Destabilization Cancelled"
  covert_destabilization_action_action_notification_name:0 "Destabilization Launched"
  covert_destabilization_action_action_propose_name:0 "Launch Destabilization"
- covert_destabilization_extra_tt:0 "Every [concept_political_movement] in the target also gets #R +15%#! [concept_activism] and #R +15%#! [concept_pop] attraction. Not listed above: the target's [concept_colonial_stability] drift is #R -0.35#!."
+ covert_destabilization_extra_tt:0 "Not listed above: the target's [concept_colonial_stability] drift is #R -0.35#!."
  covert_election_interference_action:0 "Covert: Election Interference"
  covert_election_interference_action_action_break_name:0 "Cancel Election Interference"
  covert_election_interference_action_action_notification_break_name:0 "Election Interference Cancelled"

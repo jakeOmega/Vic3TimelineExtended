@@ -151,13 +151,29 @@ class ScaledApplicationTests(unittest.TestCase):
         for modifier in (
             "covert_infrastructure_sabotage",
             "covert_military_espionage",
-            "covert_destabilization_separatist",
-            "covert_destabilization_general",
         ):
             self.assertIn(
                 "covert_op_add_scaled_modifier = { MODIFIER = %s MONTHS = 3 }" % modifier,
                 block,
             )
+
+    def test_destabilization_is_one_country_modifier(self):
+        # Its movement pressure rides on covert_destabilization_resist, whose
+        # movement fields reach every movement from the country. The retired
+        # per-movement and second country modifiers survive only for the
+        # legacy strip (legacy_modifier_cleanup.txt, PENDING REMOVAL).
+        effects = _text(EFFECTS)
+        self.assertIn(
+            "covert_op_apply_target_effect = { TYPE = destabilization MODIFIER = covert_destabilization_resist }",
+            effects,
+        )
+        for retired in ("covert_destabilization_separatist", "covert_destabilization_general"):
+            self.assertNotIn(retired, effects)
+            self.assertNotIn(retired, _text(ROOT / "common/diplomatic_actions/covert_operations.txt"))
+        block = _top_level_block(_text(ROOT / "common/static_modifiers/extra_modifiers.txt"),
+                                 "covert_destabilization_resist = {")
+        self.assertIn("political_movement_radicalism_add = 0.20", block)
+        self.assertIn("political_movement_pop_attraction_mult = 0.20", block)
 
     def test_ideological_pressure_scales_with_priority(self):
         block = _top_level_block(_text(EFFECTS), "covert_ops_apply_all_phase_effects = {")

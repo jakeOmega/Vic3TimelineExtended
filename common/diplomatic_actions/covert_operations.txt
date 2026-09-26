@@ -1305,7 +1305,6 @@ covert_destabilization_action = {
 		show_as_tooltip = {
 			scope:target_country = {
 				add_modifier = { name = covert_destabilization_resist }
-				add_modifier = { name = covert_destabilization_general }
 			}
 		}
 		custom_tooltip = {

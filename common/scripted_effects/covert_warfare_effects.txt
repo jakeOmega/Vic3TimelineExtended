@@ -1248,26 +1248,10 @@ covert_ops_apply_all_phase_effects = {
 			}
 		}
 
-		# ---- Destabilization: country resist modifier + movement modifiers on TARGET ----
+		# ---- Destabilization: one country modifier on TARGET, whose movement
+		#      fields reach every political movement there. (Until 2026-09-25 a
+		#      second country modifier and a per-movement one carried them.)
 		covert_op_apply_target_effect = { TYPE = destabilization MODIFIER = covert_destabilization_resist }
-		every_in_list = {
-			variable = iw_ops
-			limit = {
-				has_tag = iw_op_destabilization
-				covert_op_is_established = yes
-			}
-			save_scope_as = iw_op
-			var:iw_target = {
-				# Separatist movement pressure
-				every_political_movement = {
-					remove_modifier = covert_destabilization_separatist
-					covert_op_add_scaled_modifier = { MODIFIER = covert_destabilization_separatist MONTHS = 3 }
-				}
-				# General destabilization pressure
-				remove_modifier = covert_destabilization_general
-				covert_op_add_scaled_modifier = { MODIFIER = covert_destabilization_general MONTHS = 3 }
-			}
-		}
 
 		# ---- Regime Change (slice 6): country modifier on TARGET; once fully
 		#      operational, a monthly push on any coup already under way there.

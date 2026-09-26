@@ -80,6 +80,18 @@
 #      common/static_modifiers/extra_modifiers.txt
 #   2. its loc keys `banking_event_bank_holiday` and
 #      `banking_event_bank_holiday_desc` in te_events_l_english.yml
+#
+# ── PENDING REMOVAL: covert_destabilization_separatist /
+#    covert_destabilization_general (added 2026-09-25) ──
+# Destabilization's movement pressure moved onto its one country modifier,
+# covert_destabilization_resist (PR #458). The two old modifiers were
+# three-month modifiers refreshed monthly on the target and on every movement
+# there; the strip below keeps a save made mid-operation from carrying them on
+# top of the new one until they run out. Remove ALL of the following together,
+# one release after 2026-09-25:
+#   1. the two blocks in common/static_modifiers/extra_modifiers.txt
+#   2. their names and `_desc` keys in te_concepts_l_english.yml
+#   3. the destabilization strip in legacy_je_modifier_cleanup_effect below
 ########################################
 
 legacy_je_modifier_cleanup_effect = {
@@ -180,6 +192,14 @@ legacy_je_modifier_cleanup_effect = {
 	if = { limit = { has_modifier = iw_domestic_defense } remove_modifier = iw_domestic_defense }
 	if = { limit = { has_modifier = iw_funding_defense } remove_modifier = iw_funding_defense }
 	if = { limit = { has_modifier = covert_operation_funding_cost } remove_modifier = covert_operation_funding_cost }
+	# Destabilization's retired pair (PENDING REMOVAL above). Both were applied
+	# together with the same duration, so the country one marks where the
+	# movement one is.
+	if = {
+		limit = { has_modifier = covert_destabilization_general }
+		remove_modifier = covert_destabilization_general
+		every_political_movement = { remove_modifier = covert_destabilization_separatist }
+	}
 
 	# ── World War (je:je_world_war) ──
 	if = { limit = { has_modifier = ww_rising_tensions_modifier } remove_modifier = ww_rising_tensions_modifier }
