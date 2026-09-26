@@ -1,0 +1,21 @@
+﻿# Stores every state region's land area (te_region_area_generated.txt) on the
+# region, once per save: at game start for new games, on the first monthly
+# pulse for a save from before the table existed or from an older VERSION.
+# Read by the Settlement Authority's frontier test (resettlement_values.txt).
+on_game_started = {
+	on_actions = {
+		te_region_area_on_action
+	}
+}
+
+on_monthly_pulse = {
+	on_actions = {
+		te_region_area_on_action
+	}
+}
+
+te_region_area_on_action = {
+	effect = {
+		te_set_region_areas_if_stale = yes
+	}
+}

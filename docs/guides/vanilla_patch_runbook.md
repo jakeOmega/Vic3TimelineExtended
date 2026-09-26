@@ -136,6 +136,7 @@ python3 ig_feminism.py                               # common/interest_groups/00
 python3 pop_needs_curves.py                          # common/buy_packages/00_buy_packages.txt
 python3 resources.py                                 # map_data/state_regions/*.txt
 python3 scripts/generators/gen_formable_regions.py   # common/geographic_regions/te_formable_regions_generated.txt
+python3 scripts/generators/gen_region_area.py         # common/scripted_effects/te_region_area_generated.txt (bump VERSION if the map changed)
 python3 effect_trigger_validity_audit.py bootstrap   # docs/engine/effect_trigger_valid_keys.txt (frozen valid effect/trigger catalog)
 python3 scripts/generators/fold_vanilla_loc_accessors.py  # localization_accessor_vanilla_extras.py (1.14 added 117 accessors; 1.14.3 a further 5 — point releases count)
 ```
