@@ -1,0 +1,229 @@
+﻿namespace = nuclear_custody
+
+# ============================================================================
+# NUCLEAR CUSTODY EVENTS
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-custody-design.md; what
+# shipped is docs/systems/nuclear_crisis_design.md §0.10. The logic is in
+# common/scripted_effects/nuclear_custody_effects.txt.
+#
+#   .1   Who Holds the Button? — an armed country at the outbreak of a civil
+#        war decides what becomes of its warheads
+#   .2   (hidden) warheads have arrived: the rebels' share, or an ended
+#        arsenal's settlement. Runs what needs ROOT = the new holder
+#   .3   The Arsenal Changes Hands — a human's notice of warheads received
+#   .4   The Old Regime's Arsenal — a human new regime's notice
+#   .9   (hidden) the settlement, a day after a hook where the old owner may
+#        still have been alive (nd_custody_reconcile_soon)
+# ============================================================================
+
+# ---- .1 Who Holds the Button? -----------------------------------------------
+# Sent by nd_custody_on_civil_war_start with scope:nd_cw_rebel saved. The split
+# is rolled once in immediate, so each option shows the numbers it applies.
+# France tested its bomb early during the 1961 Generals' putsch in Algiers, so
+# the device could not fall to the plotters; South Africa dismantled its six
+# before the transfer of power. The default is to hold the line: what would
+# have happened had nobody decided.
+nuclear_custody.1 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_standoff_tension.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_custody.1.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_custody.1.d_secession
+				trigger = { scope:nd_cw_rebel ?= { is_secessionist = yes } }
+			}
+			triggered_desc = {
+				desc = nuclear_custody.1.d
+			}
+		}
+	}
+	flavor = nuclear_custody.1.f
+
+	duration = 3
+
+	trigger = {
+		nd_is_armed = yes
+		exists = scope:nd_cw_rebel
+		scope:nd_cw_rebel = { is_country_alive = yes }
+	}
+
+	immediate = {
+		nd_cw_roll_split = yes
+	}
+
+	# Hold the line: the rebels keep what they can reach.
+	option = {
+		name = nuclear_custody.1.a
+		default_option = yes
+		nd_cw_apply_split = { MODE = hold TT = nd_tt_cw_split_hold }
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { var:nd_cw_hold_taken < 1 }
+				add = 6
+			}
+		}
+	}
+
+	# Pull them back: into storage for the whole war.
+	option = {
+		name = nuclear_custody.1.b
+		nd_cw_pull_back = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { var:nd_cw_hold_taken >= 1 }
+				add = 6
+			}
+			modifier = {
+				trigger = {
+					has_variable = nd_safeguards
+					var:nd_safeguards >= 3
+				}
+				add = -1
+			}
+		}
+	}
+
+	# Dismantle them: if the rebels win, nothing of ours is left for them.
+	option = {
+		name = nuclear_custody.1.c
+		nd_cw_dismantle = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = {
+					ruler_is_cautious = yes
+					nd_cw_rebel_population_share >= 0.5
+				}
+				add = 3
+			}
+		}
+	}
+}
+
+# ---- .2 (hidden) warheads have arrived -------------------------------------------
+# Fired on the country that has just taken custody, once per pass however many
+# arsenals reached it (nd_custody_arrival_pending).
+nuclear_custody.2 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		nd_custody_after_arrival = yes
+	}
+}
+
+# ---- .3 The Arsenal Changes Hands ------------------------------------------------
+# A human that took custody of an ended arsenal (or, as rebels, of a share at
+# an outbreak). Reads nd_custody_received / nd_custody_lost.
+nuclear_custody.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_custody.3.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_custody.3.d_lost
+				trigger = {
+					has_variable = nd_custody_lost
+					var:nd_custody_lost > 0
+				}
+			}
+			triggered_desc = {
+				desc = nuclear_custody.3.d
+			}
+		}
+	}
+	flavor = nuclear_custody.3.f
+
+	duration = 3
+
+	option = {
+		name = nuclear_custody.3.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	after = {
+		nd_custody_clear_arrival = yes
+	}
+}
+
+# ---- .4 The Old Regime's Arsenal ---------------------------------------------------
+# A human government that came to power in a revolution: what it holds and on
+# what terms (nd_custody_new_regime).
+nuclear_custody.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_custody.4.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_custody.4.d_armed_lost
+				trigger = {
+					nd_is_armed = yes
+					has_variable = nd_custody_lost
+					var:nd_custody_lost > 0
+				}
+			}
+			triggered_desc = {
+				desc = nuclear_custody.4.d_armed
+				trigger = { nd_is_armed = yes }
+			}
+			triggered_desc = {
+				desc = nuclear_custody.4.d
+			}
+		}
+	}
+	flavor = nuclear_custody.4.f
+
+	duration = 3
+
+	option = {
+		name = nuclear_custody.4.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	after = {
+		nd_custody_clear_arrival = yes
+	}
+}
+
+# ---- .9 (hidden) the settlement, a day later --------------------------------------
+nuclear_custody.9 = {
+	type = country_event
+	hidden = yes
+
+	immediate = {
+		nd_custody_reconcile = yes
+	}
+}

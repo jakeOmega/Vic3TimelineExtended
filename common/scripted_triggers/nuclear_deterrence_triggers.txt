@@ -1442,6 +1442,13 @@ nd_state_has_military_target = {
 # guarantor) and a six-month pause between first uses bound it.
 nd_ai_nuclear_use_justified = {
 	nd_is_armed = yes
+	# Our own civil war: only when losing badly under laws that already
+	# silence dissent — retaliation included (owner ruling 2026-09-25;
+	# nuclear_custody_triggers.txt).
+	OR = {
+		NOT = { nd_is_civil_war_counterpart = { ENEMY = $ENEMY$ } }
+		nd_ai_would_strike_own_people = yes
+	}
 	OR = {
 		# Retaliation is always on the table.
 		nd_was_struck_by = { ENEMY = $ENEMY$ }
@@ -1641,6 +1648,15 @@ nd_can_set_readiness = {
 			nd_readiness_locked = no
 			var:nd_readiness_target > $R$
 			always = $LOCK_OK$
+		}
+	}
+	# Pulled back at a civil war's outbreak (nuclear_custody_effects.txt): in
+	# storage until every civil war of ours is over.
+	custom_tooltip = {
+		text = nd_tt_readiness_withdrawn
+		OR = {
+			nd_readiness_withdrawn = no
+			var:nd_readiness_target > $R$
 		}
 	}
 }

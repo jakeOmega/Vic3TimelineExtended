@@ -1,0 +1,100 @@
+﻿# ============================================================================
+# CIVIL WARS — the shared hooks
+# ============================================================================
+# One place every system's civil-war handling hangs off
+# (common/scripted_effects/te_civil_war_effects.txt explains the variables and
+# the open engine question). The engine unions same-name on_action
+# declarations across files, so declaring these here leaves the construction
+# market's and the monetary system's own on_revolution_start untouched.
+#
+# Vanilla's scopes (game/common/on_actions/00_code_on_actions.txt):
+#   on_revolution_start / on_secession_start / on_revolution_end /
+#   on_secession_end   ROOT = the original country, scope:target = the
+#                      uprising country
+#   on_civil_war_won   ROOT = the winner; fired after on_revolution_end
+# ============================================================================
+
+on_revolution_start = {
+	on_actions = {
+		te_civil_war_on_start
+	}
+}
+
+on_secession_start = {
+	on_actions = {
+		te_civil_war_on_start
+	}
+}
+
+te_civil_war_on_start = {
+	effect = {
+		if = {
+			limit = { exists = scope:target }
+			te_civil_war_record_start = yes
+			nd_custody_on_civil_war_start = yes
+		}
+	}
+}
+
+on_revolution_end = {
+	on_actions = {
+		te_civil_war_on_revolution_end
+	}
+}
+
+te_civil_war_on_revolution_end = {
+	effect = {
+		te_civil_war_record_ending = { KIND = 1 }
+	}
+}
+
+on_secession_end = {
+	on_actions = {
+		te_civil_war_on_secession_end
+	}
+}
+
+# Whether on_civil_war_won also fires for a secession is not known, so a
+# secession settles here: a crushed secessionist is dead, and its arsenal's
+# record settles to the original country. Secessionists who won are a new,
+# live country: nothing is merged, they keep their share, and they stop being
+# anyone's rebels.
+te_civil_war_on_secession_end = {
+	effect = {
+		te_civil_war_record_ending = { KIND = 2 }
+		nd_custody_reconcile = yes
+		scope:target ?= {
+			if = {
+				limit = { is_country_alive = yes }
+				if = {
+					limit = { has_variable = te_cw_origin }
+					remove_variable = te_cw_origin
+				}
+				if = {
+					limit = { has_variable = te_cw_role }
+					remove_variable = te_cw_role
+				}
+				if = {
+					limit = { has_variable = nd_cw_origin_record }
+					remove_variable = nd_cw_origin_record
+				}
+			}
+		}
+	}
+}
+
+on_civil_war_won = {
+	on_actions = {
+		te_civil_war_on_won
+	}
+}
+
+# Every system's repair runs between resolve and clear (#460–#465 plug in
+# here).
+te_civil_war_on_won = {
+	effect = {
+		te_civil_war_resolve_sides = yes
+		nd_custody_on_civil_war_won = yes
+		te_civil_war_clear = yes
+	}
+}

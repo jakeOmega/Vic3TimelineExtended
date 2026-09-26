@@ -13,8 +13,13 @@ their modifiers, and the MERGE summary (`--diff <before> <after> --tag GER`). Va
 containers and third-country references were read with ad-hoc decoders that were not kept. E1, E3, E4
 and F4 were re-checked independently against the saves before this report was committed.
 
-Cross-cutting fix site: the mod hooks neither `on_civil_war_won` nor `on_revolution_end`
-(`git grep on_civil_war_won -- common` finds nothing). `on_civil_war_won` has ROOT = winner and runs after
+**2026-09-26:** the cross-cutting fix site now exists: `common/on_actions/te_civil_war_on_actions.txt` and
+`common/scripted_effects/te_civil_war_effects.txt` (the rebel's parent pointer is `te_cw_origin`; a repair goes in
+`te_civil_war_on_won` between `te_civil_war_resolve_sides` and `te_civil_war_clear`). Nuclear custody is its first user
+(`nuclear_crisis_design.md` §0.10), and it logs the loser-readability answer below on the first civil war in a test game.
+
+Cross-cutting fix site (as found): the mod hooked neither `on_civil_war_won` nor `on_revolution_end`
+(`git grep on_civil_war_won -- common` found nothing). `on_civil_war_won` has ROOT = winner and runs after
 the merge (verified), so one "post-revolution repair" effect there can re-derive trackers, re-apply
 permanent rewards and re-seed stocks. Fix directions below assume that hook unless stated.
 
@@ -329,14 +334,16 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
 
 ### F15. Other country variable LISTS that are silently not inherited (E4). LOW
 - `nd_nonuse_pledges` / `nd_defied_us` (`nuclear_crisis_effects.txt:1585, 1805-1815`): the winner forgets
-  pledges and defiance records. The counterparties still list the dead loser in their own lists, which
+  pledges and defiance records. **Handled 2026-09-26:** by ruling, a new regime's pledges lapse, and the custody
+  settlement removes the dead owner from its partners' lists while it still resolves (`nuclear_custody_effects.txt`). The counterparties still list the dead loser in their own lists, which
   become one-sided. `un_embargo_by` (`un_teeth_effects.txt:80, 212`) is on the sanctions target: a sanctioned
   loser's enforcer list is dropped. That's arguably fine, since the sanctions modifier is a country modifier
   and is lost too.
 - Evidence: CODE-INFERRED (lists absent in these saves).
 
 ### F16. Regime continuity (H6): what a new regime inherits or loses wholesale. LOW, for design review
-- Inherited verbatim from the old regime (LOYAL-ONLY variables): the nuclear posture and doctrine (`nd_*`),
+- Inherited verbatim from the old regime (LOYAL-ONLY variables): the nuclear posture and doctrine (`nd_*`; **decided
+  2026-09-26:** a new regime keeps the doctrine and investments, restarts credibility at 50 and drops the old pledges),
   covert funding and tradecraft, cultural-hegemony funding level, UN standing and lean, one-time event flags
   (good: stops re-fires), banking cooldowns, and the civil-rights path months (then wiped by F4).
 - Replaced by the rebel's own: every monetary choice (mandate, delegation, regime; F3).

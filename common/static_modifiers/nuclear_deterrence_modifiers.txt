@@ -172,6 +172,14 @@ nd_pledge_broken_mod = {
 	country_improve_relations_speed_mult = -0.15
 }
 
+# We used nuclear weapons in our own civil war (nd_custody_struck_own_people,
+# nuclear_custody_effects.txt). Twenty years, decaying; the same for every
+# regime (owner ruling 2026-09-25).
+nd_struck_own_people = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_legitimacy_base_add = -50
+}
+
 # A guarantor walked away from a covered commitment.
 nd_guarantee_abandoned = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_statue_negative.dds

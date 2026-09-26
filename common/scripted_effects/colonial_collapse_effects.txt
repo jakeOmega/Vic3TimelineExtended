@@ -94,6 +94,8 @@ colonial_collapse_effect = {
 			# Culturally similar neighbor absorbs this country
 			scope:absorbing_country = {
 				annex = scope:collapsing_country
+				# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
+				nd_custody_reconcile_soon = yes
 			}
 
 			# Notify countries with strategic interest

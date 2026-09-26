@@ -106,6 +106,8 @@ annex_subject_peaceful = {
 
 	accept_effect = {
 		annex = scope:target_country
+		# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
+		hidden_effect = { nd_custody_reconcile_soon = yes }
 	}
 
 	is_hostile = no
@@ -936,6 +938,8 @@ voluntary_union = {
 		}
 		te_irredentism_notify_third_parties_effect = { PEACEFUL = yes }
 		annex = scope:target_country
+		# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
+		hidden_effect = { nd_custody_reconcile_soon = yes }
 	}
 
 	ai = {
@@ -1345,6 +1349,8 @@ voluntary_union_decentralized = {
 		# engine via should_notify_third_parties = yes, using this action's own
 		# *_action_notification_third_party_* loc (scope-correct INITIATOR/TARGET tokens).
 		annex = scope:target_country
+		# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
+		hidden_effect = { nd_custody_reconcile_soon = yes }
 	}
 
 	ai = {

@@ -1,0 +1,52 @@
+﻿# ============================================================================
+# NUCLEAR CUSTODY — when an arsenal's owner can have ended
+# ============================================================================
+# The settlement (nd_custody_reconcile, nuclear_custody_effects.txt) moves an
+# arsenal whose owner is gone to whoever holds its capital's region. It is
+# idempotent, so it is run from every hook where an owner may have ended, and
+# monthly as the catch-all for the paths no hook reports (vanilla diplomatic
+# annexation, event scripts). The civil-war hooks call it from
+# te_civil_war_on_actions.txt.
+# ============================================================================
+
+# No root scope.
+on_monthly_pulse = {
+	on_actions = {
+		nd_custody_monthly_on_action
+	}
+}
+
+nd_custody_monthly_on_action = {
+	effect = {
+		nd_custody_reconcile = yes
+	}
+}
+
+# Root = the country enforcing the war goal; scope:target = the country it was
+# enforced against. An annexation war goal may leave the target alive until
+# the peace is applied, so the settlement runs a day later.
+on_wargoal_enforced = {
+	on_actions = {
+		nd_custody_on_wargoal_enforced
+	}
+}
+
+nd_custody_on_wargoal_enforced = {
+	effect = {
+		nd_custody_reconcile_soon = yes
+	}
+}
+
+# Root = the newly formed country: a unification may have swallowed an armed
+# member.
+on_country_formed = {
+	on_actions = {
+		nd_custody_on_country_formed
+	}
+}
+
+nd_custody_on_country_formed = {
+	effect = {
+		nd_custody_reconcile_soon = yes
+	}
+}
