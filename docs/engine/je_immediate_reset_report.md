@@ -103,7 +103,7 @@ can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)
 
 can_revolution_inherit: yes; can_deactivate: no
 
-- 25 writes of `un_headquarters_modifier_on`, `un_security_council_modifier_on`, `un_permanent_member_modifier_on`, `un_undermine_order_cost_on`, `un_peacekeeping_expense_cached`, `un_development_expense_cached`, +19 more, first at `common/scripted_effects/un_state_effects.txt:69` — **2026-09-26**: a rebuild, not a reset. It forgets a mirror only when the country no longer qualifies for it (not a member, representation suspended, not the HQ host, seats full), re-prices the programme costs it re-adds, and drops un_regime_stamp so the regime terms come back (§0.9)
+- `remove_variable` `un_regime_stamp` at `common/scripted_effects/un_state_effects.txt:257` via `un_state_restore_all` (common/journal_entries/je_united_nations.txt:115) — only a positive existence test of `un_regime_stamp` encloses it, so it destroys what is there — **2026-09-26**: dropping the regime stamp is the point: the next ordinary pulse re-reads the regime terms the merge dropped (§0.9)
 
 ## Not Failing
 
@@ -121,7 +121,7 @@ activation"). Not failing yet.
 
 - `je_heir_education` (can_revolution_inherit: unset (= yes); can_deactivate: unset (= no)): `set_variable` `heir_ed_total` = `0` at `common/journal_entries/je_heir_education.txt:50` — the entry's `current_value` reads it; goal not pinned (+23 more writes) — reviewed **2026-09-26**: per-heir state: a new record of this entry means a new heir (a revolution's winner has its own)
 - `je_nuclear_program` (can_revolution_inherit: no; can_deactivate: yes): `set_variable` `nuclear_weapon_program_progress` = `0` at `common/journal_entries/je_nuclear_program.txt:135` — the entry's `current_value` reads it; goal not pinned
-- `je_space_race_solar_colonization` (can_revolution_inherit: yes; can_deactivate: yes): `set_variable` `sr_progress_solar_colonization` = `0` at `common/journal_entries/je_space_race.txt:1127` — the entry's `current_value` reads it; goal not pinned — reviewed **2026-09-26**: deliberate reset of a bar input, see above
+- `je_space_race_solar_colonization` (can_revolution_inherit: yes; can_deactivate: yes): `set_variable` `sr_progress_solar_colonization` = `0` at `common/journal_entries/je_space_race.txt:1137` — the entry's `current_value` reads it; goal not pinned — reviewed **2026-09-26**: deliberate reset of a bar input, see above
 - `je_state_collapse` (can_revolution_inherit: unset (= yes); can_deactivate: yes): `set_variable` `state_collapse_progress` = `0` at `common/journal_entries/timeline_extended_journal_entries.txt:16` — the entry's `current_value` reads it; goal not pinned
 
 ### Pulse refreshes
@@ -179,7 +179,7 @@ removed while this variable was kept.
 - counts are writes per entry, so a helper several entries call counts
   once for each; distinct (line, variable) pairs are in brackets
 - unreviewed: 0 (0)
-- exempted: 547 (211)
+- exempted: 523 (187)
 - progress-bar inputs: 27 (27)
 - pulse refreshes: 298 (298)
 - guarded by another variable: 20 (20)
