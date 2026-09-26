@@ -237,6 +237,11 @@ gw_rebase_annual_emissions_effect = {
 # Count how many countries run each of the eight policies, in ONE country sweep
 # that fills all eight counters. Replaces eight separate sweeping script values
 # that were rendered live in the reason text.
+#
+# The same sweep stores the mean standard of living over these countries
+# (gw_g_mean_sol), which the AI's climate wills measure wealth against
+# (gw_ai_sig_wealth in global_warming_ai_values.txt). It is the only world
+# figure those scores need, so it rides this pass instead of adding one.
 # Scope: any (called from the global monthly pulse)
 gw_refresh_global_counts_effect = {
 	hidden_effect = {
@@ -248,8 +253,12 @@ gw_refresh_global_counts_effect = {
 		set_global_variable = { name = gw_g_n_public_transit value = 0 }
 		set_global_variable = { name = gw_g_n_fossil_fuel_divestment value = 0 }
 		set_global_variable = { name = gw_g_n_green_building_codes value = 0 }
+		set_global_variable = { name = gw_g_sol_sum value = 0 }
+		set_global_variable = { name = gw_g_sol_n value = 0 }
 		every_country = {
 			limit = { has_journal_entry = je_global_warming }
+			change_global_variable = { name = gw_g_sol_sum add = average_sol }
+			change_global_variable = { name = gw_g_sol_n add = 1 }
 			if = {
 				limit = { gw_policy_carbon_tax_active = yes }
 				change_global_variable = { name = gw_g_n_carbon_tax add = 1 }
@@ -281,6 +290,16 @@ gw_refresh_global_counts_effect = {
 			if = {
 				limit = { gw_policy_green_building_codes_active = yes }
 				change_global_variable = { name = gw_g_n_green_building_codes add = 1 }
+			}
+		}
+		if = {
+			limit = { global_var:gw_g_sol_n > 0 }
+			set_global_variable = {
+				name = gw_g_mean_sol
+				value = {
+					value = global_var:gw_g_sol_sum
+					divide = global_var:gw_g_sol_n
+				}
 			}
 		}
 	}

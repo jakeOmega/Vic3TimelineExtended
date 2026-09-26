@@ -4342,6 +4342,7 @@
  te_debug_gw.1.i:0 "Recompute the yearly figures now"
  te_debug_gw.1.j:0 "Adopt all eight mitigation policies"
  te_debug_gw.1.k:0 "Repeal all eight mitigation policies"
+ te_debug_gw.1.l:0 "Log every country's AI climate will to debug.log (search GW_AI_WILL)"
  te_debug_gw.1.t:0 "Climate Test Console"
 
 #
