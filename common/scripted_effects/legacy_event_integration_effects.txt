@@ -11,19 +11,25 @@ banking_enactment_run_shock = {
 # ROOT is the donor. Transfer the same amount between treasuries, as te_lolr.1
 # does. AMOUNT is the donor's GDP-scaled weekly cost; DAYS / 14 preserves the
 # approximate total cost of the old linearly decaying weekly expense stream.
+# CAP, a script value evaluated on the recipient, bounds that sum by the
+# recipient's own GDP (banking_bailout_rescue_cap / _grant_cap).
 # No treaty is created: this is discretionary aid, not a swap or guarantee.
 banking_transfer_emergency_aid = {
 	add_treasury = {
-		value = $AMOUNT$
-		multiply = $DAYS$
-		divide = 14
-		multiply = -1
+		value = 0
+		subtract = {
+			value = $AMOUNT$
+			multiply = $DAYS$
+			divide = 14
+			max = scope:bailout_country.$CAP$
+		}
 	}
 	scope:bailout_country = {
 		add_treasury = {
 			value = root.$AMOUNT$
 			multiply = $DAYS$
 			divide = 14
+			max = $CAP$
 		}
 		add_modifier = { name = finreg_banking_stability days = $DAYS$ }
 	}

@@ -4,12 +4,23 @@ banking_is_bailout_recipient = {
 	has_journal_entry = je_banking_cycle
 	has_diplomatic_relevance = root
 	NOT = { has_war_with = root }
+	# The rescuer must be the larger economy: a donor smaller than the country
+	# it rescues cannot steady it (a ~5M-GDP puppet was being offered to a
+	# ~20B-GDP power). Same rule as te_mon_can_backstop's GDP clause.
+	gdp < root.gdp
 	banking_bilateral_bailout_trade > 0
 	OR = {
 		banking_cycle_is_downturn = yes
 		banking_cycle_is_panic = yes
 	}
 	NOT = { has_modifier = finreg_banking_stability }
+	# Last, as the costly check: an important trading partner to at least one
+	# side, not merely one it trades with (banking_bailout_min_trade_reliance).
+	# prev.market is ours: a dotted chain is one scope change.
+	OR = {
+		market ?= { market_trade_reliance = { target = root.market value >= banking_bailout_min_trade_reliance } }
+		root.market ?= { market_trade_reliance = { target = prev.market value >= banking_bailout_min_trade_reliance } }
+	}
 }
 
 banking_can_offer_bailout = {
