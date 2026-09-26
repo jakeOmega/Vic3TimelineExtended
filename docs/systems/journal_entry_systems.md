@@ -471,7 +471,7 @@ Each button's `possible` lives in `gw_possible_<button>` (`common/scripted_trigg
 
 **How the AI chooses.** Every button's `ai_chance` reads `common/script_values/global_warming_ai_values.txt`, which gives each country a climate will per policy. Each will has two parts:
 
-- **A shared core**, the same for all eight policies: temperature (20 per °C, capped at 70), the environment ministry (+15), and an environmentalist leading a governing interest group (+8).
+- **A shared core**, the same for all eight policies: temperature (20 per °C, capped at 100 = 5 °C, so stacked opposition can still hold out), the environment ministry (+15), and an environmentalist leading a governing interest group (+8).
 - **Five signals, weighted per policy** by who the policy costs or helps: laissez-faire, industrialists in government, the environmental movement's support, standard of living against the world mean (the mean is stored by `gw_refresh_global_counts_effect`), and how far the market is a net coal and oil exporter. Each signal runs from 0 to 1, or −1 to 1 for wealth.
 
 The weight table sits in the file's header with one line of reasoning per row, taken from what each policy's modifier does. For example, wealth counts *against* Climate Adaptation, because its flat +0.5 standard of living is worth most in poor countries. Fossil exports weigh −25 on divestment and −20 on carbon tax, and nothing on adaptation. Every will lists all five signals, zeros included.

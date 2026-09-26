@@ -88,11 +88,21 @@ gw_ai_will_shared = {
 # How bad it has got: 20 per degree, 25 at 1.26 C, 40 at 2 C, 60 at 3 C. The
 # per-policy thresholds already say how bad each policy needs it to be, so this
 # is not weighted per policy.
+#
+# The cap (5 C) only binds for countries whose signals hold them back: a
+# country with every signal at 0 has reached the top threshold (70) by 3.5 C.
+# It sits where one strong opponent gives way (a full fuel exporter divests
+# from 4.75 C) but stacked opposition does not: on temperature alone a
+# laissez-faire exporter never divests (100 - 25 - 25 = 50), and with
+# industrialists in government never taxes carbon (43). Only a ministry, green
+# government, movement or wealth carries those over, so the world's last
+# holdouts are the ones with several reasons to hold out. A cap
+# at 3.5 C froze the will halfway through the catastrophic tier (3 C and up).
 gw_ai_will_urgency = {
 	value = temperature_anomaly_display
 	multiply = 20
 	min = 0
-	max = 70
+	max = 100
 }
 
 # ----------------------------------------------------------------------------
@@ -276,7 +286,8 @@ gw_ai_will_fossil_fuel_divestment = {
 #
 # The signals then move each country off that line by its row in the table:
 # a poor country reaches adaptation up to 10 points (half a degree) early and a
-# rich one that much late; a full exporter reaches divestment 25 points late.
+# rich one that much late; a full exporter reaches the carbon tax 20 points
+# (3.75 C) and divestment 25 points (4.75 C) late.
 # ----------------------------------------------------------------------------
 
 # Repeal waits until the will is this far BELOW the threshold.
