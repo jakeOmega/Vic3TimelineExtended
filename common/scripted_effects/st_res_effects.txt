@@ -879,13 +879,15 @@ st_res_apply_sell_profit_effect = {
 # smooth harder the more patient they are: a Conservative reserve waits for a
 # real bargain and should not be spooked by one week's price.
 #
-# Every preset's protected stockpile (floor_pct) is 0: a policy may release
-# the whole reserve. Until 2026-09-26 the presets held back 40 / 20 / 10%,
-# but a stock the policy can never sell is dead weight. It still pays its
-# decay replacement every week (st_res_policy_afford), and it shrinks the
-# usable reserve to the band between floor and ceiling; under Conservative,
-# the AI's preset, that band was 40% to 60%. Players can still set a floor
-# with the stepper.
+# The stock band is the player's, not the presets': every preset uses the
+# whole capacity (floor_pct 0, ceil_pct 100), and the presets differ only in
+# how they trade. Until 2026-09-26 they kept 40-60 / 20-80 / 10-95% of
+# capacity. A floor the policy can never sell is dead weight: it still pays
+# its decay replacement every week (st_res_policy_afford). A ceiling below
+# 100 leaves capacity the player built and never uses. Under Conservative,
+# the AI's preset, only 40% to 60% of capacity ever moved, and the AI never
+# reached the 75% fill at which silos become worth building to it
+# (st_res_reserve_filling_up). Players can still set both with the steppers.
 #
 # The three presets keep sell_thr - buy_thr >= st_res_policy_min_gap (15) and
 # ceil_pct - floor_pct >= st_res_policy_stock_min_gap (10), which is the same
@@ -896,7 +898,7 @@ st_res_apply_preset_conservative_base = {
 	set_variable = { name = st_res_$GOOD$_sell_thr value = 30 }
 	set_variable = { name = st_res_$GOOD$_max_flow value = 100 }
 	set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
-	set_variable = { name = st_res_$GOOD$_ceil_pct value = 60 }
+	set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
 	set_variable = { name = st_res_$GOOD$_budget value = 5000 }
 	set_variable = { name = st_res_$GOOD$_price_memory value = 8 }
 	set_variable = { name = st_res_$GOOD$_ramp value = 20 }
@@ -910,7 +912,7 @@ st_res_apply_preset_standard_base = {
 	set_variable = { name = st_res_$GOOD$_sell_thr value = 20 }
 	set_variable = { name = st_res_$GOOD$_max_flow value = 250 }
 	set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
-	set_variable = { name = st_res_$GOOD$_ceil_pct value = 80 }
+	set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
 	set_variable = { name = st_res_$GOOD$_budget value = 15000 }
 	set_variable = { name = st_res_$GOOD$_price_memory value = 4 }
 	set_variable = { name = st_res_$GOOD$_ramp value = 10 }
@@ -924,7 +926,7 @@ st_res_apply_preset_aggressive_base = {
 	set_variable = { name = st_res_$GOOD$_sell_thr value = 10 }
 	set_variable = { name = st_res_$GOOD$_max_flow value = 600 }
 	set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
-	set_variable = { name = st_res_$GOOD$_ceil_pct value = 95 }
+	set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
 	set_variable = { name = st_res_$GOOD$_budget value = 40000 }
 	set_variable = { name = st_res_$GOOD$_price_memory value = 2 }
 	set_variable = { name = st_res_$GOOD$_ramp value = 5 }
@@ -1353,14 +1355,14 @@ st_res_policy_apply_good_effect = {
 # Cheap (policy 1), which never sells, so an AI reserve never released a round
 # into a war's price spike (mobilized armies burn four times their peacetime
 # ammunition: common/mobilization_options/te_wartime_munitions_injections.txt).
-# Stabilizing may release down to empty: no preset protects a stockpile any
-# more (see st_res_apply_preset_conservative_base).
+# Stabilizing may fill the whole capacity and release down to empty: no
+# preset sets a stock band any more (see st_res_apply_preset_conservative_base).
 #
 # Saves seeded before then carry st_res_policy_ai_seeded but not
 # st_res_policy_ai_stabilized. The second block runs once for them: it moves
-# any good still on Buy When Cheap to Stabilize Prices and drops every good's
-# protected stockpile from the old preset's 40% to 0, and leaves the other
-# settings alone.
+# any good still on Buy When Cheap to Stabilize Prices, and it widens every
+# good's stock band from the old preset's 40-60% to 0-100%. It leaves the
+# other settings alone.
 # --------------------------------------------------------------------------
 st_res_ai_seed_good_effect = {
 	st_res_apply_preset_conservative_base = { GOOD = $GOOD$ }
@@ -1380,6 +1382,10 @@ st_res_ai_stabilize_good_effect = {
 	if = {
 		limit = { has_variable = st_res_$GOOD$_floor_pct }
 		set_variable = { name = st_res_$GOOD$_floor_pct value = 0 }
+	}
+	if = {
+		limit = { has_variable = st_res_$GOOD$_ceil_pct }
+		set_variable = { name = st_res_$GOOD$_ceil_pct value = 100 }
 	}
 }
 
