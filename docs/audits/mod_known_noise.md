@@ -155,3 +155,26 @@ Event te_debug_
 ```
 
 The `te_debug_<system>.1` test consoles in `events/te_debug_*_events.txt` are fired by hand with `event te_debug_<x>.1`. Nothing in script fires them, so each is logged as orphaned at load (ch, colonial_empire, covert, gw, nuclear, space_race, un as of 2026-09-19). By design. The signature is the `te_debug_` prefix only, not `is orphaned`, because signatures match if ANY line matches: an `is orphaned` line would also hide a real mod event that lost its trigger. A new console needs no change here. Tracked at `docs/audits/open_issues.md#l23-console-only-debug-test-events-logged-as-orphaned-by-design`.
+
+### `jomini_effect.cpp:1139` — old-save migration cleanup reads variables nothing sets
+- source: `jomini_effect.cpp:1139`
+- tracked: `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`
+
+```
+Variable 'sr_notify_achiever_capital' is used but is never set
+Variable 'sr_notify_is_first' is used but is never set
+Variable 'sr_notify_suborbital' is used but is never set
+Variable 'sr_notify_orbital' is used but is never set
+Variable 'sr_notify_moon_landing' is used but is never set
+Variable 'sr_notify_probe' is used but is never set
+Variable 'sr_notify_moon_base' is used but is never set
+Variable 'sr_notify_mars_landing' is used but is never set
+Variable 'sr_notify_interstellar_probe' is used but is never set
+Variable 'nd_stance_warfighting' is used but is never set
+Variable 'nd_stance_professional' is used but is never set
+Variable 'nd_stance_dove' is used but is never set
+Variable 'nd_stance_business' is used but is never set
+Variable 'un_founding_window_active' is used but is never set
+```
+
+`sr_clear_legacy_milestone_notice` (`space_race_effects.txt`), `nd_refresh_domestic_stance` (`nuclear_deterrence_effects.txt`) and the UN dissolution sweep (`un_ladder_effects.txt`) remove variables an older save may still hold and nothing sets any more, each behind a `has_variable` guard. The validator reports each read once per launch. The signatures name all fourteen variables, so a new never-set variable is not hidden. Tracked at `docs/audits/open_issues.md#l24-old-save-migration-cleanup-reads-variables-nothing-sets`.

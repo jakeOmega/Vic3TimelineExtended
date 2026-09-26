@@ -131,3 +131,87 @@ te_debug_gw_repeal_all = {
 	gw_effect_remove_green_building_codes = yes
 	te_debug_gw_refresh_display = yes
 }
+
+# Write every country's AI climate wills, part by part, to debug.log -- two
+# GW_AI_WILL lines per country with the journal entry, player included: the
+# shared core and the five signals with its policy count and how much policy
+# cost its authority covers, then the eight per-policy wills (compare each with
+# its threshold in global_warming_ai_values.txt). A header line gives the
+# temperature and the world mean standard of living. This is how the table in
+# that file is checked against a real save: grep debug.log for GW_AI_WILL.
+#
+# The world mean is refreshed first, so the wealth signal is current even on a
+# save whose monthly sweep has not run since the update. The te_dbg_gw_*
+# variables exist only for the length of the two log lines.
+# Scope: country (the player)
+te_debug_gw_log_ai_will = {
+	gw_refresh_global_counts_effect = yes
+	debug_log = "GW_AI_WILL: temperature=[GetGlobalVariable('greenhouse_gas_emissions').GetValue] (hundredths x100) mean_sol=[GetGlobalVariable('gw_g_mean_sol').GetValue]"
+	every_country = {
+		limit = { has_journal_entry = je_global_warming }
+		save_scope_as = te_debug_gw_c
+		set_variable = { name = te_dbg_gw_shared value = gw_ai_will_shared }
+		set_variable = { name = te_dbg_gw_lf value = gw_ai_sig_laissez_faire }
+		set_variable = { name = te_dbg_gw_ind value = gw_ai_sig_industrialists }
+		set_variable = { name = te_dbg_gw_mov value = gw_ai_sig_movement }
+		set_variable = { name = te_dbg_gw_wealth value = gw_ai_sig_wealth }
+		set_variable = { name = te_dbg_gw_fossil value = gw_ai_sig_fossil }
+		set_variable = { name = te_dbg_gw_w_adapt value = gw_ai_will_climate_adaptation }
+		set_variable = { name = te_dbg_gw_w_refor value = gw_ai_will_reforestation }
+		set_variable = { name = te_dbg_gw_w_renew value = gw_ai_will_renewable_investment }
+		set_variable = { name = te_dbg_gw_w_transit value = gw_ai_will_public_transit }
+		set_variable = { name = te_dbg_gw_w_codes value = gw_ai_will_green_building_codes }
+		set_variable = { name = te_dbg_gw_w_standards value = gw_ai_will_emission_standards }
+		set_variable = { name = te_dbg_gw_w_carbon value = gw_ai_will_carbon_tax }
+		set_variable = { name = te_dbg_gw_w_divest value = gw_ai_will_fossil_fuel_divestment }
+		set_variable = { name = te_dbg_gw_policies value = gw_policies_active_count_display }
+		set_variable = { name = te_dbg_gw_leader value = 0 }
+		if = {
+			limit = { gw_is_market_leader = yes }
+			set_variable = { name = te_dbg_gw_leader value = 1 }
+		}
+		# The dearest policy cost (100/150/200/250) the available authority
+		# covers, 0 if none, -1 in deficit -- the adopt buttons' second gate,
+		# so a low count can be told apart from a low will.
+		set_variable = { name = te_dbg_gw_auth value = 0 }
+		if = {
+			limit = { authority >= 250 }
+			set_variable = { name = te_dbg_gw_auth value = 250 }
+		}
+		else_if = {
+			limit = { authority >= 200 }
+			set_variable = { name = te_dbg_gw_auth value = 200 }
+		}
+		else_if = {
+			limit = { authority >= 150 }
+			set_variable = { name = te_dbg_gw_auth value = 150 }
+		}
+		else_if = {
+			limit = { authority >= 100 }
+			set_variable = { name = te_dbg_gw_auth value = 100 }
+		}
+		else_if = {
+			limit = { authority < 0 }
+			set_variable = { name = te_dbg_gw_auth value = -1 }
+		}
+		debug_log = "GW_AI_WILL: [SCOPE.sCountry('te_debug_gw_c').GetName] shared=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_shared').GetValue] lf=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_lf').GetValue] ind=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_ind').GetValue] mov=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_mov').GetValue] wealth=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_wealth').GetValue] fossil=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_fossil').GetValue] policies=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_policies').GetValue] market_leader=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_leader').GetValue] authority_covers=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_auth').GetValue]"
+		debug_log = "GW_AI_WILL: [SCOPE.sCountry('te_debug_gw_c').GetName] wills adapt=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_adapt').GetValue] refor=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_refor').GetValue] renew=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_renew').GetValue] transit=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_transit').GetValue] codes=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_codes').GetValue] standards=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_standards').GetValue] carbon=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_carbon').GetValue] divest=[SCOPE.sCountry('te_debug_gw_c').GetVariable('te_dbg_gw_w_divest').GetValue]"
+		remove_variable = te_dbg_gw_shared
+		remove_variable = te_dbg_gw_lf
+		remove_variable = te_dbg_gw_ind
+		remove_variable = te_dbg_gw_mov
+		remove_variable = te_dbg_gw_wealth
+		remove_variable = te_dbg_gw_fossil
+		remove_variable = te_dbg_gw_w_adapt
+		remove_variable = te_dbg_gw_w_refor
+		remove_variable = te_dbg_gw_w_renew
+		remove_variable = te_dbg_gw_w_transit
+		remove_variable = te_dbg_gw_w_codes
+		remove_variable = te_dbg_gw_w_standards
+		remove_variable = te_dbg_gw_w_carbon
+		remove_variable = te_dbg_gw_w_divest
+		remove_variable = te_dbg_gw_policies
+		remove_variable = te_dbg_gw_leader
+		remove_variable = te_dbg_gw_auth
+	}
+}

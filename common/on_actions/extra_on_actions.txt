@@ -1696,7 +1696,7 @@ decolonization_events_on_action = {
 					trigger = {
 						any_subject_or_below = { is_qualifying_colonial_subject = yes }
 						ig:ig_intelligentsia ?= {
-							leader = { has_ideology = ideology:ideology_anti_colonialist }
+							leader = { has_ideology = ideology:ideology_anti_colonialist_leader }
 						}
 					}
 					trigger_event = { id = decolonization_events.8 }
@@ -1897,7 +1897,7 @@ decolonization_events_on_action = {
 					trigger = {
 						any_scope_state = { is_overseas_colonial_state = yes }
 						ig:ig_intelligentsia ?= {
-							leader = { has_ideology = ideology:ideology_anti_colonialist }
+							leader = { has_ideology = ideology:ideology_anti_colonialist_leader }
 						}
 					}
 					trigger_event = { id = decolonization_events.52 }

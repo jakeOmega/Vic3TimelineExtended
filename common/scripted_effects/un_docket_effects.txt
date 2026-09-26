@@ -647,6 +647,7 @@ un_docket_take_up_collapse = {
 		}
 		order_by = un_docket_peacekeeper_order
 		max = 3
+		check_range_bounds = no # often fewer than three powers qualify
 		trigger_event = { id = un_events.4 days = 1 }
 	}
 }

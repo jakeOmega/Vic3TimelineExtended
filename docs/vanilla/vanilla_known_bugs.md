@@ -532,6 +532,51 @@ The same block appears in `common/war_goal_types/03_conquer_state.txt` (`:69`, `
 
 20 lines in one session (2026-09-20). Not mod-caused: this mod defines only `te_reunify_country` and `te_un_mandate_restore_state` under `common/war_goal_types/`, and references `wg_return_state` / `wg_conquer_state` / `wg_annex_country` nowhere in `common/` or `events/`. Cosmetic — the `multiply` simply fails its limit, so the subject-related infamy discounts don't apply during the preview.
 
+### `common/scripted_triggers/00_ai_triggers.txt:614, 624, 644` — AI regional-objective iterators meet a null objective (1.14.4)
+
+```
+Scoped object of type 'ai_regional_objective' is not valid
+```
+
+`ai_is_regional_objective_local_country`, `ai_is_regional_objective_state` and `ai_is_regional_objective_protect_target` run `any_scope_regional_objective = { type = … }`, and the `type` comparison logs `AI Regional Objective (4294967295)`, the engine's null handle, as though the country's objective list held an empty slot. The AI evaluates them from `common/diplomatic_actions/00_relations_actions.txt` and treaty articles such as `common/treaty_articles/01_defensive_pact.txt`. About 1,300 lines in one session (2026-09-26), the second-largest source after the power-bloc invite burst. Not mod-caused as far as the log shows: the mod has no `common/ai_regional_objectives/` and none of the calling files. The null handle comes from engine-side objective bookkeeping; the scripts only read it.
+
+### `common/political_movements/01_religious_movements.txt:305`, `events/soi_events/00_lobbies_events_01.txt:927`, `events/soi_events/00_lobbies_events_04.txt:878` — `leader = { … }` on an interest group without a leader
+
+```
+Could not get leader of interest group
+Event target link 'leader' returned an unset scope
+```
+
+Vanilla reads an interest group's `leader` with no `?=`: the religious movement's `interest_group_can_join`, and the lobby events' `any_interest_group = { leader = { … } }`. When a group has no leader, each check logs two lines. Sibling of the `ruler = { … }` entry above. 2026-09-26: 155 lines, nearly all from one country (the formed Republic of India, Armed Forces most of all), across twenty minutes of play. If one country's groups stay leaderless that long again, find out why before reading it as this entry.
+
+### `events/fascism_events.txt:98, 209, 210` — `c:BRZ` and `scope:general_2` read without an existence check
+
+```
+Event target link 'c' returned an unset scope
+Invalid left side during comparison 'c'
+Undefined event target 'general_2'
+Event target link 'scope' returned an unset scope
+retire_character effect [ Wrong scope for effect: none, expected character ]
+```
+
+`c:BRZ = this` (line 98) fails when Brazil no longer exists. `scope:general_2 = { retire_character = yes }` (lines 209–210) fails when the event found only one general to save. One line each per firing, 2026-09-26.
+
+### `common/political_movements/00_ideological_movements.txt:4947` — Div/0 in a movement's `state_weight`
+
+```
+Div/0 near
+```
+
+The `state_weight` that opens `value = state_urbanization_rate` divides by zero in some state (likely one with no urban population). Once in a session, 2026-09-26.
+
+### `common/ai_regional_objectives/00_ai_regional_objectives.txt:194` — befriend objective's `complete` reads a missing variable-map entry
+
+```
+Got value of type 'none'
+```
+
+`count < "root.variable_map(aro_befriend_countries_map|scope:target_region)"` for a region the map has no entry for. Once in a session, 2026-09-26.
+
 ## Expected mod-override noise
 
 These warnings are emitted by the engine when this mod intentionally overrides vanilla content via the `localization/english/replace/` convention. They're not bugs — they're the engine reporting that an override is happening — but they dominate triage and should be filtered. Registered here so the autoflag system tags them as known noise.
@@ -1215,6 +1260,15 @@ Assertion failed: Treaty.IsValid()
 ```
 
 The three fire together, on the same second, interleaved into the `28_invite_to_power_bloc.txt:87` render burst — the engine evaluating a treaty preview before either party or the draft is bound. Engine-internal; nothing in script sets these. One line each per burst, cosmetic. Observed 2026-09-21. Registered as three signatures under one entry so a genuinely new `:641` assert still surfaces.
+
+### `eventtargetlinks_country.cpp:98` — a revolution's government change finds no ruler for its new government type
+- source: `eventtargetlinks_country.cpp:98`
+
+```
+Unable to scope to the new ruler for
+```
+
+The engine's half of the `00_government_type_change_effects.txt` `get_ruler_for` entry above: `get_ruler_for:parliamentary_elective` on a revolutionary country (`Tunisian Uprising`) with no eligible character logs this line before the script error. Once, 2026-09-26.
 
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
 

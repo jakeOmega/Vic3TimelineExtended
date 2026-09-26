@@ -53,7 +53,7 @@ New modifier fields must be registered in `common/modifier_type_definitions/` wi
 | `country_infamy_generation` | `_mult` | Infamy generation |
 | `country_infamy_decay` | `_mult` | Infamy decay |
 | `country_prestige_from_army_power_projection` | `_mult` | Prestige from army |
-| `country_prestige_from_navy_power_projection` | `_mult` | Prestige from navy |
+| `country_prestige_from_navy_combat_power` | `_mult` | Prestige from navy (1.14.4; `country_prestige_from_navy_power_projection` before) |
 | `country_max_declared_interests` | `_add`, `_mult` | Interest slots |
 | `country_diplomatic_play_maneuvers` | `_add` | Maneuvers |
 | `country_diplomatic_reputation` | `_add` | Diplo reputation |
@@ -755,7 +755,7 @@ show_as_tooltip = { ... }                  — Show effects as tooltip only
 | `pop_is_discriminated` | Use `pop_acceptance < acceptance_status_4` (acceptance ≥ 60 = accepted) |
 | `state_cultural_acceptance_growth_mult` | Use `country_acceptance_not_homeland_add` (flat add, country scope) |
 | `country_army_power_projection_mult` | `country_prestige_from_army_power_projection_mult` |
-| `country_navy_power_projection_mult` | `country_prestige_from_navy_power_projection_mult` |
+| `country_navy_power_projection_mult` | `country_prestige_from_navy_combat_power_mult` (1.14.4 rename; `country_prestige_from_navy_power_projection_mult` no longer loads) |
 | `random_rival_country` (for scoping) | Use `random_country` with `limit = { has_diplomatic_pact = { who = ROOT type = rivalry } }` |
 | `age` (for countries) | `age` only works in **character** scope. Use variables or `game_date` for countries |
 

@@ -1050,6 +1050,7 @@ floor = yes
 - In `random_country`/`random_X` weight modifier blocks AND `random` effect modifier blocks, `add = named_script_value` causes **"Malformed token"** errors.
 - **Invalid:** `modifier = { trigger = { always = yes } add = my_script_value }` (named SV reference)
 - **Valid (inline):** `modifier = { trigger = { always = yes } add = { value = X divide = Y } }` (inline SV)
+  - Unverified for `random` blocks: as of 2026-09-26 no mod or vanilla file puts an inline `add = { … }` in a weight or `random` modifier. The literal form is the one known to load (`te_mon_union_contagion_damp` shipped as a name, logged `Malformed token` every launch, and was inlined as `add = -6`).
 - **Valid (variable):** `modifier = { trigger = { always = yes } add = var:my_var }` (direct variable ref)
 - If the limit block already guarantees a variable exists, use `add = var:X` directly instead of referencing a named SV that wraps `var:X`.
 
@@ -2552,7 +2553,7 @@ The inner `has_journal_entry` guard is critical — if the country doesn't have 
 
 Deleting a player-facing toggle whose modifier reserved a resource is the third shape. The modifier itself is the only thing a pre-deletion save can be holding, and nothing re-applies it — but nothing releases it either, so the save keeps paying for a control that no longer exists (the *Raise Policy Rate* banking tool reserved 2 intervention points this way). The pattern:
 
-1. **Keep the static modifier defined for one release.** `remove_modifier` on an undefined modifier is not a safe no-op, and the modifier still needs its loc key while it is defined.
+1. **Keep the static modifier defined for one release.** `remove_modifier` on an undefined modifier is not a safe no-op, and the modifier still needs its loc key while it is defined. Nor is it a no-op on a *defined* modifier the scope does not hold: that logs `remove_modifier effect [ Timed modifier X in scope object … not found ]` to `error.log` on every call. Guard it (`remove_modifier_if_exists_effect = { MODIFIER = X }`, `extra_effects.txt`). `cr_je_cleanup_effect` removed seven unconditionally and logged 120 lines in one session.
 2. **Strip it from a guarded one-shot at the head of the owning JE's `on_monthly_pulse`**, not from `on_game_started` — a JE pulse reaches every save including ones already in progress, and `limit = { … has_modifier = X }` makes it free on every other month. Remember the refund is not visible inside that same effect block, so any `modifier:` read later in the same pulse still sees the pre-refund value; check that the stale reading errs on the conservative side before choosing where in the pulse to put it.
 3. **Write a dated `PENDING REMOVAL` block at the top of `legacy_modifier_cleanup.txt`** listing *every* artefact that must be deleted together — the static modifier, its loc keys, the one-shot, and the line in `legacy_je_modifier_cleanup_effect`. Removing any subset early re-breaks it in one direction or the other, and nothing enforces the grouping. Live example: `banking_policy_rate_hike`, added 2026-09-19.
 
@@ -3167,6 +3168,23 @@ Two shapes that avoid it, both in the banking tools of 2026-09-23 (`docs/audits/
 
 A button that does something *different* (a new lever, a new trade-off) belongs in the pool on its own
 weight; this is only for buttons that answer the same question.
+
+## An Adopt Weight With No Repeal Counterweight Is a Ratchet — Every AI Ends Up Holding It
+
+If a toggle's enable button scores above zero and its disable button scores zero in the same conditions,
+the AI never turns the toggle off. How often the AI clicks decides only how soon every AI holds every
+positive-weight toggle. It does not decide *whether*. Global warming shipped that way: each policy's
+adopt weight read temperature alone, and every repeal weight was zero above 0.3–0.5°C. A 2008 save at
+1.26°C had 132 of 136 countries on seven of the eight policies. The one brake was laissez-faire, and only
+the player held it.
+
+The fix that makes the steady state independent of click cadence is to give each toggle one **threshold on
+a per-country score**. Adopt scores only at or above it, and repeal scores only a band below it. Keep the
+band wider than any single term that flips on its own, such as interest groups in government, which change
+at every election. Otherwise a country parked at the threshold toggles the policy every few years. Write
+each threshold once and derive the repeal margin from the adopt margin, so the pair cannot drift, and test
+the pairing. Example: `common/script_values/global_warming_ai_values.txt` and `test_gw_ai_policy_table.py`.
+Before adding an enable button's `ai_chance`, ask what makes its disable button score.
 
 ## Triggered Option Names: `name = { trigger=... text=... }`
 

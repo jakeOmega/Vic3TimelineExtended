@@ -180,6 +180,13 @@ Suppress an intentional `event_context_audit` flag with a check-tagged `# REVIEW
 
 **Fix:** None needed while the consoles exist. A new `te_debug_*` console needs no registry change. Delete this entry if the consoles are ever removed.
 
+### L24. Old-save migration cleanup reads variables nothing sets
+**Files:** `common/scripted_effects/space_race_effects.txt` (`sr_clear_legacy_milestone_notice`), `common/scripted_effects/nuclear_deterrence_effects.txt` (`nd_refresh_domestic_stance`), `common/scripted_effects/un_ladder_effects.txt` (the dissolution sweep)
+
+**Problem (2026-09-26):** Three systems strip variables an older save may still hold: the space race's single-variable milestone notice (nine `sr_notify_*`), the nuclear doctrine's country-level class scores (four `nd_stance_*`, before 2026-09-25) and the UN's founding window (`un_founding_window_active`). Nothing sets them any more, so the parse-time validator logs `Variable 'X' is used but is never set` (`jomini_effect.cpp:1139`) once per launch for each of the fourteen. Harmless: each read is a `has_variable` guard in front of a `remove_variable`. Filtered from log triage via `docs/audits/mod_known_noise.md`, which names the fourteen, so a new never-set variable still shows up.
+
+**Fix:** Delete the three migration blocks, and this entry, once saves from before 2026-09-25 are no longer in play (a release or two after that date).
+
 ---
 
 ## Vanilla 1.13.7 patch impact (2026-05-27)

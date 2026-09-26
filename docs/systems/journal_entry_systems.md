@@ -469,6 +469,19 @@ Each button's `possible` lives in `gw_possible_<button>` (`common/scripted_trigg
 
 3 policies are market-wide (carbon tax, renewable investment, emission standards) and are applied by the leader to **every member's** journal entry; 5 are national.
 
+**How the AI chooses.** Every button's `ai_chance` reads `common/script_values/global_warming_ai_values.txt`, which gives each country a climate will per policy. Each will has two parts:
+
+- **A shared core**, the same for all eight policies: temperature (20 per °C, capped at 100 = 5 °C, so stacked opposition can still hold out), the environment ministry (+15), and an environmentalist leading a governing interest group (+8).
+- **Five signals, weighted per policy** by who the policy costs or helps: laissez-faire, industrialists in government, the environmental movement's support, standard of living against the world mean (the mean is stored by `gw_refresh_global_counts_effect`), and how far the market is a net coal and oil exporter. Each signal runs from 0 to 1, or −1 to 1 for wealth.
+
+The weight table sits in the file's header with one line of reasoning per row, taken from what each policy's modifier does. For example, wealth counts *against* Climate Adaptation, because its flat +0.5 standard of living is worth most in poor countries. Fossil exports weigh −25 on divestment and −20 on carbon tax, and nothing on adaptation. Every will lists all five signals, zeros included.
+
+Each policy has one threshold on its will. The AI adopts at or above it, and only with the authority the policy costs to spare. It repeals only once the will is `gw_ai_repeal_band` (15) below the threshold, or while authority is negative. Between the two, neither button scores. The thresholds, from cheapest to hardest, are adaptation 25, reforestation 30, renewables 35, transit 40, green building codes and emission standards 45, carbon tax 55 and divestment 70.
+
+The band must stay wider than any yes/no signal that flips on its own (industrialists, at elections; at most 12). Heavier weights sit only on laws or on continuous signals, which is why the fossil signal is continuous rather than a cut-off.
+
+The old weights read temperature alone and never repealed above ~0.5°C, so every AI ended up holding every policy; a 2008 save at 1.26°C had 132 of 136 countries on seven of eight. `test_gw_ai_policy_table.py` checks the header table against the code, every will for all five signals, each adopt/repeal pair for the same threshold, and the band against the election-driven terms. `event te_debug_gw.1`, option **l**, writes each country's core, signals and eight wills to `debug.log` (`GW_AI_WILL`), which is how to check the table against a save.
+
 ### Climate Dashboard (journal-entry widget)
 Three additive widgets mounted into the vanilla panel are the player-facing surface.
 

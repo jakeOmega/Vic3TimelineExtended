@@ -2129,12 +2129,16 @@ banking_cycle_spread_contagion = {
 				# supervisor and one deposit guarantee over all of it, which is most
 				# of what the shared currency was carrying. Not all of it: a common
 				# supervisor is not a wall, and 2008 and 2011 both crossed one.
+				# -6 of the channel's +10 leaves +4. A literal, as in every other
+				# `random` modifier in the mod: a script-value name here is a
+				# malformed token and the line is dropped (scripting_best_practices.md
+				# § Named Script Values in Weight/Random Modifier `add =`).
 				modifier = {
 					trigger = {
 						te_mon_shares_currency_with = { OTHER = scope:banking_crash_origin_country }
 						te_mon_bloc_union_tier_4_plus = yes
 					}
-					add = te_mon_union_contagion_damp
+					add = -6
 				}
 				modifier = {
 					trigger = { is_adjacent_to_country = scope:banking_crash_origin_country }
