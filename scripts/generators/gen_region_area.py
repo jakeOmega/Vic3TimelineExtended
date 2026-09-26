@@ -39,7 +39,7 @@ MIN_KM2_PER_PIXEL = 4.0
 
 BLOCK_RE = re.compile(r"^﻿?(STATE_[A-Z0-9_]+)\s*=\s*\{(.*?)^\}", re.S | re.M)
 PROVINCES_RE = re.compile(r"provinces\s*=\s*\{([^}]*)\}")
-HEX_RE = re.compile(r'"x([0-9A-Fa-f]{6})"')
+HEX_RE = re.compile(r'\bx([0-9A-Fa-f]{6})\b')  # quoted or bare — both are valid Paradox script
 
 
 def land_regions(state_regions_dir=STATE_REGIONS):

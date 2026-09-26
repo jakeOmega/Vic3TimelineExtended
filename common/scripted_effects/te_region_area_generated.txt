@@ -366,7 +366,7 @@ te_set_region_areas = {
 	s:STATE_MARRAKECH = { set_variable = { name = te_region_area value = 64684 } }
 	s:STATE_MARYLAND = { set_variable = { name = te_region_area value = 24200 } }
 	s:STATE_MASSACHUSETTS = { set_variable = { name = te_region_area value = 21054 } }
-	s:STATE_MATO_GROSSO = { set_variable = { name = te_region_area value = 960509 } }
+	s:STATE_MATO_GROSSO = { set_variable = { name = te_region_area value = 961582 } }
 	s:STATE_MATRUH = { set_variable = { name = te_region_area value = 146914 } }
 	s:STATE_MAURITANIA = { set_variable = { name = te_region_area value = 229419 } }
 	s:STATE_MAZANDARAN = { set_variable = { name = te_region_area value = 51780 } }
@@ -439,7 +439,7 @@ te_set_region_areas = {
 	s:STATE_NORTH_DAKOTA = { set_variable = { name = te_region_area value = 184764 } }
 	s:STATE_NORTH_ISLAND = { set_variable = { name = te_region_area value = 111144 } }
 	s:STATE_NORTH_MADAGASCAR = { set_variable = { name = te_region_area value = 200782 } }
-	s:STATE_NORTH_RHINE = { set_variable = { name = te_region_area value = 1 } }
+	s:STATE_NORTH_RHINE = { set_variable = { name = te_region_area value = 11774 } }
 	s:STATE_NORTH_SUMATRA = { set_variable = { name = te_region_area value = 127832 } }
 	s:STATE_NOVGOROD = { set_variable = { name = te_region_area value = 137630 } }
 	s:STATE_NUNAVUT = { set_variable = { name = te_region_area value = 1331094 } }
@@ -504,7 +504,7 @@ te_set_region_areas = {
 	s:STATE_RIO_NEGRO = { set_variable = { name = te_region_area value = 286867 } }
 	s:STATE_ROMAGNA = { set_variable = { name = te_region_area value = 11100 } }
 	s:STATE_ROSTOV = { set_variable = { name = te_region_area value = 158503 } }
-	s:STATE_RUHR = { set_variable = { name = te_region_area value = 8892 } }
+	s:STATE_RUHR = { set_variable = { name = te_region_area value = 11179 } }
 	s:STATE_RUTHENIA = { set_variable = { name = te_region_area value = 13089 } }
 	s:STATE_RYAZAN = { set_variable = { name = te_region_area value = 55438 } }
 	s:STATE_RYUKYU_ISLANDS = { set_variable = { name = te_region_area value = 4901 } }
@@ -512,7 +512,7 @@ te_set_region_areas = {
 	s:STATE_SAKHALIN = { set_variable = { name = te_region_area value = 98535 } }
 	s:STATE_SAMARA = { set_variable = { name = te_region_area value = 194706 } }
 	s:STATE_SANTA_CATARINA = { set_variable = { name = te_region_area value = 68136 } }
-	s:STATE_SANTA_CRUZ = { set_variable = { name = te_region_area value = 1 } }
+	s:STATE_SANTA_CRUZ = { set_variable = { name = te_region_area value = 306864 } }
 	s:STATE_SANTA_FE = { set_variable = { name = te_region_area value = 167591 } }
 	s:STATE_SANTIAGO = { set_variable = { name = te_region_area value = 130761 } }
 	s:STATE_SANTO_DOMINGO = { set_variable = { name = te_region_area value = 30566 } }
@@ -555,7 +555,7 @@ te_set_region_areas = {
 	s:STATE_SOUTHERN_TRANSYLVANIA = { set_variable = { name = te_region_area value = 28345 } }
 	s:STATE_SOUTH_ANGOLA = { set_variable = { name = te_region_area value = 213005 } }
 	s:STATE_SOUTH_ATLANTIC_ISLANDS = { set_variable = { name = te_region_area value = 21540 } }
-	s:STATE_SOUTH_AUSTRALIA = { set_variable = { name = te_region_area value = 1 } }
+	s:STATE_SOUTH_AUSTRALIA = { set_variable = { name = te_region_area value = 726116 } }
 	s:STATE_SOUTH_CAMEROON = { set_variable = { name = te_region_area value = 125266 } }
 	s:STATE_SOUTH_CAROLINA = { set_variable = { name = te_region_area value = 64162 } }
 	s:STATE_SOUTH_DAKOTA = { set_variable = { name = te_region_area value = 205926 } }

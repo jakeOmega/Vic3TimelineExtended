@@ -37,10 +37,33 @@ REAL_KM2 = {
     "STATE_SOUTH_ISLAND": 150437,
 }
 
+# Independent of gen.HEX_RE: a province token is "x" + 6 hex digits, quoted or
+# bare (map_data/state_regions/00_west_europe.txt, 07_south_america.txt and
+# 13_australasia.txt list some states' provinces unquoted; both are valid
+# Paradox script). Re-derived here from the raw map files so a regression in
+# the generator's own token regex can't hide from this test.
+STATE_REGIONS_DIR = ROOT / "map_data/state_regions"
+BLOCK_RE = re.compile(r"^﻿?(STATE_[A-Z0-9_]+)\s*=\s*\{(.*?)^\}", re.S | re.M)
+PROVINCES_RE = re.compile(r"provinces\s*=\s*\{([^}]*)\}")
+TOKEN_RE = re.compile(r"\bx[0-9A-Fa-f]{6}\b")
+
 
 def _areas():
     return {m.group(1): int(m.group(2))
             for m in ENTRY_RE.finditer(GENERATED.read_text(encoding="utf-8-sig"))}
+
+
+def _province_token_counts():
+    """{region: number of province tokens (quoted or bare) in its map file}."""
+    counts = {}
+    for path in sorted(STATE_REGIONS_DIR.glob("*.txt")):
+        if path.name == "99_seas.txt":
+            continue
+        text = path.read_text(encoding="utf-8-sig")
+        for m in BLOCK_RE.finditer(text):
+            p = PROVINCES_RE.search(m.group(2))
+            counts[m.group(1)] = len(TOKEN_RE.findall(p.group(1))) if p else 0
+    return counts
 
 
 class RegionAreaTests(unittest.TestCase):
@@ -77,6 +100,17 @@ class RegionAreaTests(unittest.TestCase):
             self.assertIsNotNone(m, hook)
             self.assertIn("te_region_area_on_action", m.group(1))
         self.assertIn("te_set_region_areas_if_stale = yes", text)
+
+    def test_every_province_token_is_counted(self):
+        land = gen.land_regions()
+        counts = _province_token_counts()
+        for region in land:
+            self.assertEqual(len(land[region]), counts[region], region)
+
+    def test_no_region_sits_at_the_floor(self):
+        areas = _areas()
+        for region, area in areas.items():
+            self.assertNotEqual(area, 1, region)
 
 
 if __name__ == "__main__":
