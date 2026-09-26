@@ -414,16 +414,19 @@
 # practices.md § "What a Civil War's Winner Inherits"), and the rebels have held
 # a full set since te_monetary_on_country_released — so on a rebel win
 # te_monetary_inherit_central_bank (common/scripted_effects/
-# te_monetary_civil_war_effects.txt), called once from on_civil_war_won, writes
-# the LOSER'S values over the winner's: the vault and hot money (added), the
-# state the update integrates (policy rate, inflation, the walks, the peg,
-# FX, the clocks), the player's choices and the arrangements. It writes no
+# te_monetary_civil_war_effects.txt) writes the LOSER'S values over the
+# winner's, once, through te_monetary_repair_after_civil_war, which the shared
+# civil-war layer calls from te_civil_war_on_won
+# (common/on_actions/te_civil_war_on_actions.txt): the vault and hot money
+# (added), the state the update integrates (policy rate, inflation, the walks,
+# the peg, FX, the clocks), the player's choices and the arrangements. It writes no
 # `_applied` tracker and nothing the update recomputes; its header says which
 # variable is in which group and why. A NEW VARIABLE ADDED TO THIS CONTRACT
 # MUST BE CLASSIFIED THERE TOO — test_monetary_civil_war.py pins the list.
 # Its once-per-loser marker, te_mon_cw_bank_taken, is civil-war bookkeeping,
-# not part of this contract: it lives from the copy to the winner's next
-# monthly pulse (common/on_actions/te_monetary_on_actions.txt).
+# not part of this contract: a scope variable naming the loser whose bank was
+# taken, removed by the monthly on-action once that object no longer resolves
+# (common/on_actions/te_monetary_on_actions.txt).
 # ============================================================================
 
 

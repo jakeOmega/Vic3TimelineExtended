@@ -21,20 +21,22 @@
 # loser's central bank — its stocks, its inflation and peg state, and the
 # player's choices — and the gold in the rebels' own vault is added on top.
 #
-# HOW. te_civil_war_record_parent (te_monetary_on_actions.txt) stores
-# te_cw_parent = the original country on the rebels at on_revolution_start.
-# te_monetary_on_civil_war_won resolves it at on_civil_war_won (ROOT = the
-# winner, after the merge) and, only when it names a different object that is
-# no longer alive — a rebel win — and that object's rate paid reads as a real
-# rate (a canary against a read that resolves but returns zeros), saves it as
-# scope:te_cw_loser and calls te_monetary_inherit_central_bank below — once
-# per loser, which te_mon_cw_bank_taken enforces (the on-action says why). That
-# rests on an engine fact nobody has observed yet: that a dead but not yet
-# deleted country can still be read through a stored scope variable. The
-# loser was still in the save after this hook, with every variable and
-# modifier, and vanilla's on_secession_end reads the capital of a country it
-# calls dead. Everything here reads the loser only inside that `?=` guard,
-# and the on-action logs what it saw (TE_CW_PROBE).
+# HOW. The shared civil-war layer (common/on_actions/te_civil_war_on_actions.txt,
+# common/scripted_effects/te_civil_war_effects.txt, #467) works out at
+# on_civil_war_won which side won, and calls te_monetary_repair_after_civil_war
+# below from te_civil_war_on_won with ROOT = THIS = the winner, after the merge.
+# The layer leaves var:te_cw_rebels_won (1 only when the revolutionaries won a
+# revolution) and scope:te_cw_loser (the loser, when it still resolves). The
+# repair copies only on a rebel win whose loser is no longer alive and reads —
+# its rate paid is a real rate, a canary against a read that resolves but
+# returns zeros — and only once per loser (te_mon_cw_bank_taken). That rests
+# on an engine fact nobody has observed yet: that a dead but not yet deleted
+# country can still be read at that hook. The loser was still in the save
+# after it, with every variable and modifier, and vanilla's on_secession_end
+# reads the capital of a country it calls dead. Everything here reads the
+# loser only behind that guard, and the repair logs what it saw (TE_CW_PROBE
+# monetary lines, which print the loser's own figures; the layer's
+# TE_CIVIL_WAR lines say only which side won and whether the loser resolves).
 #
 # WHAT IS COPIED. Every variable of te_monetary_monthly_update's contract
 # (the header of common/script_values/te_monetary_script_values.txt, and its
@@ -83,8 +85,78 @@
 # month the winner still pays the rebels' rate and carries their band.
 #
 # ROOT = THIS = the winner, scope:te_cw_loser = the loser. Every read of the
-# loser is inside the caller's `?=` on the pointer.
+# loser is behind te_monetary_repair_after_civil_war's `?=` on that scope.
 # ============================================================================
+
+
+# ----------------------------------------------------------------------------
+# The entry point — called from te_civil_war_on_won, and from nowhere else
+# ----------------------------------------------------------------------------
+# ROOT = THIS = the winner. A no-op for a loyalist winner and after a secession
+# (te_cw_rebels_won is 0 for both), and for any loser that is still alive,
+# does not read, or has already been taken from.
+#
+# ONCE PER LOSER. The layer's end-hook pair and te_cw_origin decide the loser,
+# and with two civil wars at once the dead original of the first can be named
+# again at the end of the second (see "Concurrent wars" in
+# docs/systems/monetary_policy_design.md §0.4 item 32). Taking its bank twice
+# would add its gold twice, so te_mon_cw_bank_taken records the object the bank
+# was taken from and the guard refuses it. The marker is this system's own, so
+# no other repair depends on whether this one ran first. It is removed at a
+# monthly pulse once the object it names no longer resolves: from then on no
+# guard could pass for it anyway (te_monetary_monthly_on_action).
+#
+# THE PROBE (TE_CW_PROBE). Every branch logs one line to debug.log, once per
+# win — on a copy, two, either side of it, which read the vault two ways: line 1
+# prints the loser's figures through the loc accessor, and line 2's winner vault
+# equals line 1's winner vault plus the loser's only if SCRIPT could read the
+# loser — the read everything below depends on. Delete the debug_log lines once
+# one revolution has been read (monetary_policy_design.md §0.4 item 32).
+te_monetary_repair_after_civil_war = {
+	if = {
+		limit = {
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+		}
+		if = {
+			limit = {
+				scope:te_cw_loser ?= {
+					is_country_alive = no
+					# THE CANARY. A loser that resolves but whose variables read
+					# as nothing would have the copy write zeros over the nation's
+					# rate, inflation, peg and mandate — worse than no copy. Every
+					# country that has pulsed holds a rate paid clamped to 0.5-60,
+					# so a real read is at least 0.5.
+					has_variable = te_rate_paid_pts
+					var:te_rate_paid_pts >= 0.5
+				}
+				NOT = { var:te_mon_cw_bank_taken ?= scope:te_cw_loser }
+			}
+			debug_log = "TE_CW_PROBE monetary 1/2 [ROOT.GetCountry.GetNameNoFormatting]: rebels won, the loser resolves and is dead. BEFORE the copy, winner: vault [ROOT.GetCountry.MakeScope.Var('te_bank_gold').GetValue|0] inflation [ROOT.GetCountry.MakeScope.Var('te_inflation').GetValue|1] mandate [ROOT.GetCountry.MakeScope.Var('te_mon_mandate').GetValue|0]. Loser, read by loc: vault [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_bank_gold').GetValue|0] inflation [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_inflation').GetValue|1] mandate [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_mon_mandate').GetValue|0]"
+			te_monetary_inherit_central_bank = yes
+			set_variable = { name = te_mon_cw_bank_taken value = scope:te_cw_loser }
+			debug_log = "TE_CW_PROBE monetary 2/2 [ROOT.GetCountry.GetNameNoFormatting]: AFTER the copy, winner: vault [ROOT.GetCountry.MakeScope.Var('te_bank_gold').GetValue|0] inflation [ROOT.GetCountry.MakeScope.Var('te_inflation').GetValue|1] mandate [ROOT.GetCountry.MakeScope.Var('te_mon_mandate').GetValue|0]. Script read the loser if this vault is the winner's plus the loser's from line 1/2 and the inflation and mandate are the loser's"
+		}
+		else_if = {
+			limit = { NOT = { exists = scope:te_cw_loser } }
+			debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: rebels won but the loser does not resolve; nothing copied"
+		}
+		else_if = {
+			limit = { scope:te_cw_loser = { is_country_alive = yes } }
+			debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: rebels won but the loser is still alive; nothing copied"
+		}
+		else_if = {
+			limit = { var:te_mon_cw_bank_taken ?= scope:te_cw_loser }
+			debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: this loser's bank was already taken at an earlier win; nothing copied"
+		}
+		else = {
+			debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: rebels won and the loser resolves dead, but its figures read as nothing (no rate paid of 0.5 or more); nothing copied"
+		}
+	}
+	else = {
+		debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: not a rebel win (the loyalists won, or a secession ended); nothing copied"
+	}
+}
 
 
 te_monetary_inherit_central_bank = {
