@@ -10,10 +10,10 @@
 # relations hit) arrives with an explanation.
 #
 # Each option calls one of these last, after its own effects.
-# te_ea_bailout_answer_aid takes the AMOUNT and DAYS the option passed to
+# te_ea_bailout_answer_aid takes the AMOUNT, DAYS and CAP the option passed to
 # banking_transfer_emergency_aid (legacy_event_integration_effects.txt) and
-# repeats its arithmetic (root.$AMOUNT$ x $DAYS$ / 14) so the notice can name
-# the sum; ANSWER is 1 for the rescue package, 2 for the smaller grant.
+# repeats its arithmetic (root.$AMOUNT$ x $DAYS$ / 14, at most $CAP$) so the
+# notice can name the sum; ANSWER is 1 for the rescue package, 2 for the smaller grant.
 # The answer variables outlive the notice's lifetime (duration = 3 is months;
 # an unopened event auto-opens around day 60), so a late reader still sees the
 # answer that was given.
@@ -26,6 +26,7 @@ te_ea_bailout_answer_aid = {
 				value = root.$AMOUNT$
 				multiply = $DAYS$
 				divide = 14
+				max = $CAP$
 			}
 			days = 120
 		}

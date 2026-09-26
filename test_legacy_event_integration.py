@@ -24,6 +24,10 @@ def body(data, key):
     return data[key][1]
 
 
+def entries_op(block, key):
+    return block[key][0]
+
+
 def find_dispatch(block, event):
     """The `trigger` of the random-list entry that fires `event`, or None."""
     if any(key == 'trigger_event' and isinstance(value, dict) and body(value, 'id') == event
@@ -42,6 +46,8 @@ class LegacyIntegrationTests(unittest.TestCase):
     def setUpClass(cls):
         cls.triggers = parse('common/scripted_triggers/legacy_event_integration_triggers.txt')
         cls.effects = parse('common/scripted_effects/legacy_event_integration_effects.txt')
+        cls.values = parse('common/script_values/legacy_event_integration_values.txt')
+        cls.agency = parse('common/scripted_effects/te_event_agency_misc_effects.txt')
         cls.ir = parse('events/international_relations_events.txt')
         cls.society = parse('events/society_technology_events.txt')
         cls.laws = parse('events/extra_law_events.txt')
@@ -71,6 +77,22 @@ class LegacyIntegrationTests(unittest.TestCase):
             elif key.startswith('var:') or key == 'banking_bilateral_bailout_trade':
                 number = current.get('trade', 0) if key == 'banking_bilateral_bailout_trade' else current.get('vars', {}).get(key[4:], 0)
                 answer = {'=': operator.eq, '>': operator.gt, '>=': operator.ge, '<': operator.lt}[op](number, float(value))
+            elif key == 'gdp':
+                # `gdp < root.gdp`: the candidate recipient against the donor.
+                self.assertEqual(value, 'root.gdp')
+                answer = {'<': operator.lt, '>': operator.gt}[op](current['gdp'], donor['gdp'])
+            elif key in ('market', 'root.market'):
+                # A dotted chain is one scope change: `prev` inside is the
+                # country it was entered from (vanilla trade_route_events.txt).
+                owner = current if key == 'market' else donor
+                answer = self.evaluate(value, dict(market_owner=owner, prev=current), donor)
+            elif key == 'market_trade_reliance':
+                target = {'root.market': donor, 'prev.market': current.get('prev')}[body(value, 'target')]
+                threshold = float(body(body(self.values, body(value, 'value')), 'value'))
+                reliance = current['market_owner']['reliance']
+                share = reliance.get(target['name'], 0) if isinstance(reliance, dict) else reliance
+                self.assertEqual(entries_op(value, 'value'), '>=')
+                answer = share >= threshold
             elif key == 'any_scope_building':
                 answer = current.get('building', False)
             elif key in ('any_rival_country', 'country_rank', 'exists'):
@@ -88,12 +110,13 @@ class LegacyIntegrationTests(unittest.TestCase):
 
     def country(self, cycle=50, **fields):
         result = dict(journals={'je_banking_cycle'}, techs={'keynesian_economics'},
-                      vars={'finance_cycle_value': cycle}, trade=100)
+                      vars={'finance_cycle_value': cycle}, trade=100, gdp=100,
+                      name='country', reliance=0.1)
         result.update(fields)
         return result
 
     def test_bailout_requires_distressed_actual_trade_partner(self):
-        donor = self.country()
+        donor = self.country(gdp=1000)
         for cycle, trade, journal, war, expected in [
             (5, 100, True, False, True), (20, 100, True, False, True),
             (50, 100, True, False, False), (20, 0, True, False, False),
@@ -106,10 +129,31 @@ class LegacyIntegrationTests(unittest.TestCase):
 
     def test_bailout_uses_recipient_distress_not_donor_distress(self):
         for cycle, default, expected in [(50, False, True), (20, False, False), (50, True, False)]:
-            donor = self.country(cycle, in_default=default, countries=[self.country(5)])
+            donor = self.country(cycle, in_default=default, gdp=1000, countries=[self.country(5)])
             self.assertEqual(self.evaluate(body(self.triggers, 'banking_can_offer_bailout'), donor, donor), expected)
         donor = self.country(countries=[])
         self.assertFalse(self.evaluate(body(self.triggers, 'banking_can_offer_bailout'), donor, donor))
+
+    def test_bailout_donor_must_out_gdp_the_recipient(self):
+        # A rescuer smaller than the economy it would rescue cannot steady it:
+        # a ~5M-GDP puppet was offered as the rescuer of a ~20B-GDP country.
+        donor = self.country(gdp=1000)
+        for gdp, expected in [(999, True), (1000, False), (4_000_000, False)]:
+            with self.subTest(gdp=gdp):
+                candidate = self.country(5, gdp=gdp)
+                self.assertEqual(self.evaluate(body(self.triggers, 'banking_is_bailout_recipient'), candidate, donor), expected)
+
+    def test_bailout_needs_trade_reliance_on_either_side(self):
+        # Either market relying on the other for 5% of its trade is enough
+        # (the banking contagion's first tier); any trade at all is not.
+        for donor_on_recipient, recipient_on_donor, expected in [
+            (0.06, 0.0, True), (0.0, 0.06, True), (0.05, 0.0, True),
+            (0.04, 0.04, False), (0.0, 0.0, False),
+        ]:
+            with self.subTest(donor_on_recipient=donor_on_recipient, recipient_on_donor=recipient_on_donor):
+                donor = self.country(gdp=1000, name='donor', reliance={'recipient': donor_on_recipient})
+                candidate = self.country(5, name='recipient', reliance={'donor': recipient_on_donor})
+                self.assertEqual(self.evaluate(body(self.triggers, 'banking_is_bailout_recipient'), candidate, donor), expected)
 
     def test_protected_recipient_cannot_collect_repeat_bailouts(self):
         candidate = self.country(5, modifiers={'finreg_banking_stability'})
@@ -204,31 +248,62 @@ class LegacyIntegrationTests(unittest.TestCase):
             self.assertEqual(body(immediate, 'banking_enactment_run_shock'), 'yes')
         self.assertEqual(body(conditional, 'banking_cycle_post_event_refresh'), 'yes')
 
-    def test_grants_pay_the_recipient_the_donors_amount(self):
+    def test_grants_pay_the_recipient_the_donors_amount_up_to_a_cap(self):
+        # Donor-GDP sized, capped at a share of the recipient's GDP: the donor
+        # pays, the recipient receives and .69 names the same sum.
         effect = body(self.effects, 'banking_transfer_emergency_aid')
         debit = body(effect, 'add_treasury')
         credit = body(body(effect, 'scope:bailout_country'), 'add_treasury')
-        self.assertEqual(body(debit, 'value'), '$AMOUNT$')
-        self.assertEqual(body(credit, 'value'), 'root.$AMOUNT$')
-        def arithmetic(block, amount, days):
+        sets = body(body(self.agency, 'te_ea_bailout_answer_aid'), 'scope:bailout_country')['set_variable']
+        reported = [v for _, v in sets if body(v, 'name') == 'te_ea_bailout_amount'][0]
+        def arithmetic(block, amount, days, cap):
             total = 0
             for key, _, value in entries(block):
-                number = amount if value in ('$AMOUNT$', 'root.$AMOUNT$') else days if value == '$DAYS$' else float(value)
+                if isinstance(value, dict):
+                    number = None
+                else:
+                    number = {'$AMOUNT$': amount, 'root.$AMOUNT$': amount, '$DAYS$': days,
+                              '$CAP$': cap, 'scope:bailout_country.$CAP$': cap}.get(value)
+                    number = float(value) if number is None else number
                 if key == 'value':
                     total = number
                 elif key == 'multiply':
                     total *= number
                 elif key == 'divide':
                     total /= number
+                elif key == 'max':
+                    total = min(total, number)
+                elif key == 'subtract':
+                    total -= arithmetic(value, amount, days, cap)
                 else:
                     self.fail(key)
             return total
-        for amount in (100, 10000):
-            for days in (365, 1825):
-                self.assertGreater(arithmetic(credit, amount, days), 0)
-                self.assertEqual(arithmetic(debit, amount, days) + arithmetic(credit, amount, days), 0)
-        options = body(self.banking, 'banking_cycle_events.45')['option']
-        self.assertEqual(sum('banking_transfer_emergency_aid' in option for _, option in options), 2)
+        for amount, days, cap, expected in [(100, 1400, 1e9, 10000), (100, 1400, 2500, 2500)]:
+            with self.subTest(amount=amount, cap=cap):
+                self.assertEqual(arithmetic(credit, amount, days, cap), expected)
+                self.assertEqual(arithmetic(debit, amount, days, cap), -expected)
+                self.assertEqual(arithmetic(body(reported, 'value'), amount, days, cap), expected)
+        # Each paying option hands the transfer and the report the same terms.
+        options = [option for _, option in body(self.banking, 'banking_cycle_events.45')['option']
+                   if 'banking_transfer_emergency_aid' in option]
+        self.assertEqual(len(options), 2)
+        def find(block, key):
+            for k, _, v in entries(block):
+                if k == key:
+                    return v
+                if isinstance(v, dict) and (found := find(v, key)) is not None:
+                    return found
+            return None
+        caps = []
+        for option in options:
+            transfer = body(option, 'banking_transfer_emergency_aid')
+            answer = find(option, 'te_ea_bailout_answer_aid')
+            for param in ('AMOUNT', 'DAYS', 'CAP'):
+                self.assertEqual(body(transfer, param), body(answer, param), param)
+            caps.append(body(transfer, 'CAP'))
+        self.assertEqual(caps, ['banking_bailout_rescue_cap', 'banking_bailout_grant_cap'])
+        for cap in caps:
+            self.assertIn(cap, self.values)
 
     def test_bailout_is_asked_for_before_it_is_answered(self):
         # The donor's pulse puts the question to the distressed partner (.68);
