@@ -401,6 +401,9 @@ sr_complete_milestone_effect_base = {
 	sr_complete_milestone_effect = yes
 }
 
+# Adds the reward modifier and nothing else. Keep it that way:
+# sr_restore_milestone_reward_base runs it again for a revolution's winner, so
+# a one-off added here (prestige, an event) would be paid twice.
 sr_apply_milestone_reward_base = {
 	if = {
 		limit = { has_variable = sr_was_first_$MILESTONE$ }
@@ -1354,4 +1357,210 @@ sr_record_probe_result = {
 	else = {
 		set_global_variable = { name = sr_probe_found_$RESULT$ value = ROOT }
 	}
+}
+
+# --- What a revolution's winner keeps ----------------------------------------
+# A civil war's winner inherits the loser's variables (its own value wins where
+# both sides hold one) but none of its modifiers, on the country or on a journal
+# entry, and every entry it inherits active runs `immediate` again after the
+# merge (docs/guides/scripting_best_practices.md § "What a Civil War's Winner
+# Inherits"; docs/audits/civil_war_inheritance_audit.md F5). The winner
+# continues the nation, so every space-race reward is recorded in a variable and
+# rebuilt from it:
+#
+#   - sr_first_<m> / sr_<m> (country): from sr_completed_<m> and
+#     sr_was_first_<m>, by sr_restore_milestone_rewards.
+#   - sr_probe_*_data (country): from <modifier>_held, by sr_sync_probe_data.
+#   - sr_safe_approach / sr_ambitious_approach (entry): from sr_safe_<m> /
+#     sr_ambitious_<m>, by sr_sync_<m>_entry.
+#   - sr_choice_* (entry): from the choice variable (sr_orbital_military, ...),
+#     by sr_sync_<m>_entry.
+#
+# Country modifiers come back at on_civil_war_won (ROOT = the winner, after the
+# merge; common/on_actions/space_race_on_actions.txt). Journal-entry modifiers
+# do not: whether that hook runs before or after an inherited entry's
+# `immediate` is unknown. Each entry's own `immediate` rebuilds them, and the
+# monthly country pulse (sr_sync_space_race_entries) is the backstop. A
+# loyalist win changes nothing: the original still holds every modifier, so
+# every "missing" test fails.
+#
+# Not rebuilt: timed modifiers (the completion events' themed rewards, the
+# failure penalties, sr_temporary_safety_review), whose remaining time is
+# recorded nowhere; and the cost and funding modifiers, which
+# sr_recalculate_cost derives from the variables in every `immediate`.
+
+# Country scope. The milestone's reward, when the milestone is complete and
+# neither reward modifier is on the country. sr_apply_milestone_reward_base adds
+# the modifier and nothing else, so running it again replays no prestige, popup
+# or notification. Only at on_civil_war_won: a monthly check would also fire
+# between on_complete, which sets sr_completed_<m>, and the completion event's
+# option, which grants the reward.
+sr_restore_milestone_reward_base = {
+	if = {
+		limit = {
+			has_variable = sr_completed_$MILESTONE$
+			NOT = { has_modifier = sr_first_$MILESTONE$ }
+			NOT = { has_modifier = sr_$MILESTONE$ }
+		}
+		sr_apply_milestone_reward_base = { MILESTONE = $MILESTONE$ }
+	}
+}
+
+sr_restore_milestone_rewards = {
+	sr_restore_milestone_reward_base = { MILESTONE = suborbital         }
+	sr_restore_milestone_reward_base = { MILESTONE = orbital            }
+	sr_restore_milestone_reward_base = { MILESTONE = moon_landing       }
+	sr_restore_milestone_reward_base = { MILESTONE = probe              }
+	sr_restore_milestone_reward_base = { MILESTONE = moon_base          }
+	sr_restore_milestone_reward_base = { MILESTONE = mars_landing       }
+	sr_restore_milestone_reward_base = { MILESTONE = interstellar_probe }
+}
+
+# The interstellar probe's result: one of four permanent country modifiers,
+# granted by every option of space_race_events.601-630. Recorded as
+# <modifier>_held in the same effect, so the record and the modifier cannot
+# disagree. Country scope.
+sr_grant_probe_data = {
+	add_modifier = { name = $MODIFIER$ }
+	set_variable = { name = $MODIFIER$_held value = yes }
+}
+
+# Country scope. One probe result, both ways: a modifier with no record was
+# granted before the record existed (record it); a record with no modifier is a
+# revolution's winner (put it back). Run at on_civil_war_won and monthly, so a
+# save from before the record existed records itself within a month, a loser
+# already fighting its civil war included: its record is a variable, which the
+# winner inherits.
+sr_sync_probe_data_base = {
+	if = {
+		limit = {
+			has_modifier = $MODIFIER$
+			NOT = { has_variable = $MODIFIER$_held }
+		}
+		set_variable = { name = $MODIFIER$_held value = yes }
+	}
+	else_if = {
+		limit = {
+			has_variable = $MODIFIER$_held
+			NOT = { has_modifier = $MODIFIER$ }
+		}
+		add_modifier = { name = $MODIFIER$ }
+	}
+}
+
+sr_sync_probe_data = {
+	if = {
+		limit = { has_variable = sr_interstellar_results_received }
+		sr_sync_probe_data_base = { MODIFIER = sr_probe_dead_worlds_data   }
+		sr_sync_probe_data_base = { MODIFIER = sr_probe_astro_wonders_data }
+		sr_sync_probe_data_base = { MODIFIER = sr_probe_biological_data    }
+		sr_sync_probe_data_base = { MODIFIER = sr_probe_intelligence_data  }
+	}
+}
+
+# Country scope. The approach modifier on a running milestone's entry follows
+# the approach variable, which sr_effect_safe / sr_effect_ambitious set together
+# with it ($APPROACH$ = safe | ambitious). Added when the variable is set and
+# the entry lacks it (an entry a revolution's winner inherited). Removed when
+# the variable is gone and the entry still has it, which needs no revolution:
+# the monthly cleanup clears a deactivated milestone's approach variable but
+# cannot reach the inactive entry's modifiers, so the entry came back with its
+# old approach modifier and no approach selected (the German-revolution saves'
+# inactive orbital entry carried sr_safe_approach, with no sr_safe_orbital);
+# and a finished solar colonization kept its approach modifier on the entry
+# that stays open for the colonies.
+sr_sync_approach_modifier_base = {
+	if = {
+		limit = {
+			has_variable = sr_$APPROACH$_$MILESTONE$
+			je:je_space_race_$MILESTONE$ ?= { NOT = { has_modifier = sr_$APPROACH$_approach } }
+		}
+		je:je_space_race_$MILESTONE$ = { add_modifier = sr_$APPROACH$_approach }
+	}
+	else_if = {
+		limit = {
+			NOT = { has_variable = sr_$APPROACH$_$MILESTONE$ }
+			je:je_space_race_$MILESTONE$ ?= { has_modifier = sr_$APPROACH$_approach }
+		}
+		je:je_space_race_$MILESTONE$ = { remove_modifier = sr_$APPROACH$_approach }
+	}
+}
+
+# Country scope. A running milestone's choice ($CHOICE$, the variable the choice
+# event's option sets) puts $MODIFIER$ on its entry; put it back when the entry
+# lacks it. Only while the milestone runs: these modifiers shape the run's risk
+# and speed (see their header in space_race_modifiers.txt).
+sr_sync_choice_modifier_base = {
+	if = {
+		limit = {
+			has_variable = sr_active_$MILESTONE$
+			has_variable = $CHOICE$
+			je:je_space_race_$MILESTONE$ ?= { NOT = { has_modifier = $MODIFIER$ } }
+		}
+		je:je_space_race_$MILESTONE$ = { add_modifier = $MODIFIER$ }
+	}
+}
+
+# One per entry, called from that entry's `immediate`; sr_sync_space_race_entries
+# runs them all from the monthly country pulse. An `immediate` syncs only its
+# own entry, so no block reads a modifier another block may have just changed
+# on a second entry.
+sr_sync_suborbital_entry = {
+	sr_sync_approach_modifier_base = { MILESTONE = suborbital APPROACH = safe      }
+	sr_sync_approach_modifier_base = { MILESTONE = suborbital APPROACH = ambitious }
+}
+sr_sync_orbital_entry = {
+	sr_sync_approach_modifier_base = { MILESTONE = orbital APPROACH = safe      }
+	sr_sync_approach_modifier_base = { MILESTONE = orbital APPROACH = ambitious }
+	sr_sync_choice_modifier_base = { MILESTONE = orbital CHOICE = sr_orbital_civilian  MODIFIER = sr_choice_orbital_civilian }
+	sr_sync_choice_modifier_base = { MILESTONE = orbital CHOICE = sr_orbital_military  MODIFIER = sr_choice_orbital_military }
+	sr_sync_choice_modifier_base = { MILESTONE = orbital CHOICE = sr_orbital_scientist MODIFIER = sr_choice_orbital_scientist }
+}
+sr_sync_moon_landing_entry = {
+	sr_sync_approach_modifier_base = { MILESTONE = moon_landing APPROACH = safe      }
+	sr_sync_approach_modifier_base = { MILESTONE = moon_landing APPROACH = ambitious }
+	sr_sync_choice_modifier_base = { MILESTONE = moon_landing CHOICE = sr_moon_site_shackleton  MODIFIER = sr_choice_site_shackleton }
+	sr_sync_choice_modifier_base = { MILESTONE = moon_landing CHOICE = sr_moon_site_equatorial  MODIFIER = sr_choice_site_equatorial }
+	sr_sync_choice_modifier_base = { MILESTONE = moon_landing CHOICE = sr_moon_site_tranquility MODIFIER = sr_choice_site_tranquility }
+	sr_sync_choice_modifier_base = { MILESTONE = moon_landing CHOICE = sr_moon_site_far_side    MODIFIER = sr_choice_site_far_side }
+}
+sr_sync_probe_entry = {
+	sr_sync_approach_modifier_base = { MILESTONE = probe APPROACH = safe      }
+	sr_sync_approach_modifier_base = { MILESTONE = probe APPROACH = ambitious }
+	sr_sync_choice_modifier_base = { MILESTONE = probe CHOICE = sr_probe_target_venus    MODIFIER = sr_choice_probe_venus }
+	sr_sync_choice_modifier_base = { MILESTONE = probe CHOICE = sr_probe_target_mars     MODIFIER = sr_choice_probe_mars }
+	sr_sync_choice_modifier_base = { MILESTONE = probe CHOICE = sr_probe_target_asteroid MODIFIER = sr_choice_probe_asteroid }
+}
+sr_sync_moon_base_entry = {
+	sr_sync_approach_modifier_base = { MILESTONE = moon_base APPROACH = safe      }
+	sr_sync_approach_modifier_base = { MILESTONE = moon_base APPROACH = ambitious }
+	sr_sync_choice_modifier_base = { MILESTONE = moon_base CHOICE = sr_moon_base_scientific MODIFIER = sr_choice_moon_base_scientific }
+	sr_sync_choice_modifier_base = { MILESTONE = moon_base CHOICE = sr_moon_base_industrial MODIFIER = sr_choice_moon_base_industrial }
+	sr_sync_choice_modifier_base = { MILESTONE = moon_base CHOICE = sr_moon_base_military   MODIFIER = sr_choice_moon_base_military }
+}
+sr_sync_mars_landing_entry = {
+	sr_sync_approach_modifier_base = { MILESTONE = mars_landing APPROACH = safe      }
+	sr_sync_approach_modifier_base = { MILESTONE = mars_landing APPROACH = ambitious }
+	sr_sync_choice_modifier_base = { MILESTONE = mars_landing CHOICE = sr_mars_direct        MODIFIER = sr_choice_mars_direct }
+	sr_sync_choice_modifier_base = { MILESTONE = mars_landing CHOICE = sr_mars_orbital_first MODIFIER = sr_choice_mars_orbital }
+	sr_sync_choice_modifier_base = { MILESTONE = mars_landing CHOICE = sr_mars_robotic       MODIFIER = sr_choice_mars_robotic }
+}
+sr_sync_interstellar_probe_entry = {
+	sr_sync_approach_modifier_base = { MILESTONE = interstellar_probe APPROACH = safe      }
+	sr_sync_approach_modifier_base = { MILESTONE = interstellar_probe APPROACH = ambitious }
+}
+sr_sync_solar_colonization_entry = {
+	sr_sync_approach_modifier_base = { MILESTONE = solar_colonization APPROACH = safe      }
+	sr_sync_approach_modifier_base = { MILESTONE = solar_colonization APPROACH = ambitious }
+}
+
+sr_sync_space_race_entries = {
+	sr_sync_suborbital_entry = yes
+	sr_sync_orbital_entry = yes
+	sr_sync_moon_landing_entry = yes
+	sr_sync_probe_entry = yes
+	sr_sync_moon_base_entry = yes
+	sr_sync_mars_landing_entry = yes
+	sr_sync_interstellar_probe_entry = yes
+	sr_sync_solar_colonization_entry = yes
 }

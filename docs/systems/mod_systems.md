@@ -819,7 +819,7 @@ Multi-stage competition system simulating a space race between Great Powers. 9 m
 - **Debug console:** `events/te_debug_space_race_events.txt` + `common/scripted_effects/te_debug_space_race_effects.txt` — `event te_debug_space_race.1` reaches every panel state. Option j fires one real setback event through the themed dispatcher (most advanced running milestone); option k has the two most prestigious other powers both report Suborbital Flight, to check that two notifications inside the 14-day delay give two correct popups.
 - **Scripted Effects:** `common/scripted_effects/space_race_effects.txt` — milestone completion, failure, cleanup, colony establishment (`sr_establish_colony_effect`), stage advancement (`sr_check_colony_stage_effect`)
 - **Scripted Triggers:** `common/scripted_triggers/space_race_triggers.txt` — has_space_program, is_pursuing, can_start, failure_cooldown
-- **On Actions:** `common/on_actions/space_race_on_actions.txt` — yearly random events for all in-progress and cross-system events
+- **On Actions:** `common/on_actions/space_race_on_actions.txt` — yearly random events for all in-progress and cross-system events; the monthly country pulse (inactive-milestone cleanup, entry-modifier backstop, failure cooldown); `on_civil_war_won` (a revolution's winner gets its country rewards back)
 - **Localization:** Organized into main loc files by `organize_loc.py` (events in `te_events_l_english.yml`, JE labels in `te_journal_entries_l_english.yml`, modifiers in `te_modifiers_l_english.yml`, etc.)
 
 ### Milestone Progression (Semi-Parallel)
@@ -867,6 +867,10 @@ Suborbital Flight (rocketry tech)
   - **Stage 5:** Kuiper Belt/Oort Cloud (5) = 5 colonies
 - **Late-Game Economic Rewards:** Interstellar Probe grants one of 4 category-specific modifiers (see Interstellar Probe above), all colonies complete grants `sr_solar_system_trade`.
 - **Progress Sources:** Base rate + Aerospace Industry levels + Space Elevator + Extraplanetary Base + UN Space Partnership + SpaceX company + funding + tech bonuses.
+- **A revolution's winner continues the programme** (`docs/audits/civil_war_inheritance_audit.md` F5, #464). The winner inherits the loser's variables but none of its modifiers, and every entry it inherits active runs `immediate` again. So:
+  - **`immediate` only creates what is missing.** Progress and funding are guarded with `has_variable`, so a milestone at 90 % stays at 90 %. That is safe for the native progress bar because an inherited record keeps the loser's bar: start date, baseline and goal are copied, not evaluated again (the German-revolution saves' `je_global_warming`: baseline 0.1 and goal 4.0 on the winner with the anomaly at 1.18). For a same-record re-activation inside a month (before the monthly cleanup clears the progress), `goal_add_value` subtracts the progress so the goal stays at `sr_<m>_goal`. Solar colonization's bar restarts at every colony, so it keeps progress only while it holds a colony (it cannot deactivate then); a colony-less programme still restarts, and a finished one is not re-opened. `je_space_race_interstellar_results` keeps its transit months the same way.
+  - **Choice events are asked once per milestone** (`sr_<m>_choice_made`, checked in `immediate` and in the event's `trigger`). Before, a re-activation or an inherited entry asked again and could leave two answers and two modifiers.
+  - **Every reward is rebuilt from a variable.** Milestone rewards (`sr_first_<m>` / `sr_<m>`) from `sr_completed_<m>` / `sr_was_first_<m>`, and the probe result (`sr_probe_*_data`, recorded as `<modifier>_held` by `sr_grant_probe_data`), come back at `on_civil_war_won`. Entry modifiers come back from each entry's `immediate` (`sr_sync_<m>_entry`) and, as a backstop, the monthly country pulse (`sr_sync_space_race_entries`): the approach modifier from `sr_safe_<m>` / `sr_ambitious_<m>` (and a stale one with no approach selected is removed), and the choice modifier from the choice variable. The monthly pulse also records a probe result granted before the record existed, so old saves migrate themselves. A loyalist winner still holds every modifier, so all of it is a no-op there. Timed modifiers (the completion events' themed rewards, failure penalties, the safety review) are not restored.
 
 ### Cross-System Connections
 | System | Connection |
@@ -895,7 +899,9 @@ Suborbital Flight (rocketry tech)
 | `sr_progress_boost` | **Proxy variable** — set before calling `sr_boost_active_milestones` (every running milestone) or `sr_boost_setback_milestone` (the failed one) |
 | `sr_notify_achievers_<m>` | **Variable list** on each receiver: capitals of achievers whose `.20` popup is still pending, one entry per completion |
 | `sr_program_lost_<m>` / `sr_program_loss_report_queued` | A milestone closed by a lost/lowered launch complex, waiting for the single `.76` report |
-| `sr_moon_site_shackleton/equatorial` | Moon landing site choice |
+| `sr_moon_site_shackleton/equatorial/tranquility/far_side` | Moon landing site choice |
+| `sr_orbital_*`, `sr_probe_target_*`, `sr_moon_base_*`, `sr_mars_direct/orbital_first/robotic` | The other milestones' choice-event answers; each drives an `sr_choice_*` modifier on the running entry, rebuilt from it by `sr_sync_<m>_entry` |
+| `<modifier>_held` | The reward modifier `<modifier>` was granted: `sr_probe_*_data_held` (country). Rebuilt from after a revolution |
 | `sr_colony_count` | Total colonies established by this country |
 | `sr_probe_launched` | Interstellar probe has been launched (triggers results JE) |
 
