@@ -1017,6 +1017,17 @@ Three amendments can be attached **temporarily** (`add_amendment = { … timeout
 
 The `has_amendment` guards on events 29/31/58 make the permanent and temporary variants mutually exclusive within one enactment. The expiry events re-derive `sunset_law` from `active_law:<lawgroup>` and `industrialists_ig` in `immediate`, and are not in any checkpoint pool. Deferred from issue #278: a financial-regulation phase-in (the three laws' penalties are structurally different — numeric, none, boolean lock) and a wartime rules-of-war clause (no per-country war-start on-action; would need a timeout on an already-active law).
 
+## Collective Governance (`law_direct_democracy`)
+
+The governance principle `law_direct_democracy` is displayed as **Collective Governance**: no individual holds supreme executive power. The key is historical (the law was Direct Democracy) and kept because renaming a law breaks saves. Spec: `docs/superpowers/specs/2026-09-26-collective-governance-design.md`.
+
+- **What it means depends on Distribution of Power**, expressed as one amendment on the law per group: the voting laws → *Direct Democracy* (the old referendum package: laws need a movement), Single-Party State → *Collective Leadership*, Technocracy → *Collegial Administration*, Anarchy → *Free Federation*, Oligarchy/Organic Regulation → *Patrician Council*. Autocracy can't hold the law. The law itself carries only the "no head" base (legitimacy from broad coalitions, less authority, slower enactment).
+- **Script-attached, never negotiated.** `te_refresh_collective_governance_amendment` (`collective_governance_effects.txt`) keeps exactly the matching amendment, derived from current laws on every call: the law's `on_activate` (hidden), `on_law_activated` (after the consistency cascade) and the monthly country pulse. The amendments' `possible` and `can_repeal` ask the same triggers (`collective_governance_triggers.txt`), so the player can't repeal the one their Distribution of Power calls for.
+- **Preview:** the law's `on_enact` names the amendment the current Distribution of Power will give (the language-reform pattern).
+- **Government types** (`timeline_extended_governments.txt`) run most specific first, because the first match wins: Noble Commonwealth (Oligarchy + Feudal Contracts) before Patrician Council, with `gov_collective_governance` as the catch-all.
+- **"Democracy" readings** (the liberal-democratic cultural-hegemony model, the referendum events `extra_law_events.24/.60/.84`) also require `collective_governance_is_popular`.
+- **Adding a Distribution of Power law:** add it to its row of `EXPRESSIONS` in `test_collective_governance.py` (or add a row); the failures are the checklist.
+
 ## On-Actions Reference
 
 The mod uses 23 on-action files under `common/on_actions/`. These wire mod logic into engine hooks — either **pulse-based** (fires periodically for all relevant scopes) or **immediate** (fires the instant a specific game event occurs).
@@ -1927,13 +1938,18 @@ share that protection.
 
 The discretionary bailout (`banking_cycle_events.45`) requires a non-defaulting
 donor at cycle 40+ and a non-hostile, diplomatically relevant trading partner
-in downturn/panic with an active banking JE. The partner is asked first: the
+with a smaller GDP than the donor's, in downturn/panic with an active banking JE.
+One of the two markets must rely on the other for at least 5% of its trade
+(`market_trade_reliance`, `banking_bailout_min_trade_reliance` — the banking
+contagion's first tier). The partner is asked first: the
 donor's banking pulse picks it with the same gate and sends it
 `banking_cycle_events.68` ("appeal to [donor]?", −5% prestige for asking), and
 only its appeal option sends `.45` to the donor; whatever the donor answers
 reaches the partner as `.69`, naming the sum. Rescue options transfer equal treasury amounts (the donor's
 old weekly expense multiplied by duration / 14, approximating its former
-linearly decaying total) and grant temporary banking stability to the recipient.
+linearly decaying total), capped by the recipient's GDP — the rescue package at
+0.2× (vanilla's gold reserve limit), the smaller grant at 1/8 of that — and grant
+temporary banking stability to the recipient.
 This is a grant, not a new swap-line or lender-of-last-resort treaty. The latter
 continues to use its own default-driven event. Protected recipients cannot draw
 another discretionary bailout while the stability modifier lasts.

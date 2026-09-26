@@ -2,3 +2,28 @@
 banking_bilateral_bailout_trade = {
 	value = "mutual_trade_value_with_country(root)"
 }
+
+# The discretionary bailout's trade gate (banking_is_bailout_recipient): either
+# market must rely on the other for at least this share of its buy and sell
+# orders (market_trade_reliance). 5% is the first tier at which a banking crash
+# spreads more readily between two markets (the contagion weights in
+# banking_cycle_effects.txt); below it, neither side has a trade reason to care.
+banking_bailout_min_trade_reliance = { value = 0.05 }
+
+# Evaluated on the recipient; the CAP of banking_transfer_emergency_aid. The
+# rescue package is sized by the donor's GDP (banking_event_expense_large),
+# which a far larger donor turns into many times the recipient's output. It is
+# capped at vanilla's gold reserve limit (GOLD_RESERVE_LIMIT_FACTOR = 0.2 of
+# GDP), above which the gold would decay out of the recipient's treasury. The
+# cap binds once the donor is about 3.8 times the recipient's size.
+banking_bailout_rescue_cap = {
+	value = gdp
+	multiply = 0.2
+}
+
+# The smaller grant keeps its 1:8 ratio to the rescue package (0.0001 x 913
+# days against 0.0004 x 1825), so both caps bind at the same size ratio.
+banking_bailout_grant_cap = {
+	value = banking_bailout_rescue_cap
+	divide = 8
+}

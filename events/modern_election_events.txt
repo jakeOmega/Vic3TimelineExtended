@@ -3134,7 +3134,7 @@ modern_election_events.33 = {
 		ai_chance = {
 			base = 3
 			modifier = { trigger = { has_law = law_type:law_technocracy } add = 5 }
-			modifier = { trigger = { has_law = law_type:law_direct_democracy } add = 5 }
+			modifier = { trigger = { has_law = law_type:law_direct_democracy collective_governance_is_popular = yes } add = 5 }
 			modifier = { trigger = { has_law = law_type:law_algorithmic_governance } add = 5 }
 		}
 	}

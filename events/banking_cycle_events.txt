@@ -4097,6 +4097,7 @@ banking_cycle_events.45 = {
 		banking_transfer_emergency_aid = {
 			AMOUNT = banking_event_expense_large
 			DAYS = normal_modifier_time
+			CAP = banking_bailout_rescue_cap
 		}
 		add_modifier = {
 			name = banking_event_bailout_goodwill
@@ -4111,7 +4112,7 @@ banking_cycle_events.45 = {
 			}
 			create_diplomatic_catalyst = { type = catalyst_event_positive target = scope:bailout_country }
 			hidden_effect = {
-				te_ea_bailout_answer_aid = { ANSWER = 1 AMOUNT = banking_event_expense_large DAYS = normal_modifier_time }
+				te_ea_bailout_answer_aid = { ANSWER = 1 AMOUNT = banking_event_expense_large DAYS = normal_modifier_time CAP = banking_bailout_rescue_cap }
 			}
 		}
 		ai_chance = {
@@ -4126,6 +4127,7 @@ banking_cycle_events.45 = {
 		banking_transfer_emergency_aid = {
 			AMOUNT = banking_event_expense_small
 			DAYS = short_modifier_time
+			CAP = banking_bailout_grant_cap
 		}
 		if = {
 			limit = { exists = scope:bailout_country }
@@ -4134,7 +4136,7 @@ banking_cycle_events.45 = {
 				value = 10
 			}
 			hidden_effect = {
-				te_ea_bailout_answer_aid = { ANSWER = 2 AMOUNT = banking_event_expense_small DAYS = short_modifier_time }
+				te_ea_bailout_answer_aid = { ANSWER = 2 AMOUNT = banking_event_expense_small DAYS = short_modifier_time CAP = banking_bailout_grant_cap }
 			}
 		}
 		ai_chance = {

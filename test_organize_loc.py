@@ -44,6 +44,23 @@ class CategorizeKeyTests(unittest.TestCase):
             with self.subTest(key=key):
                 self.assertEqual(categorize_key(key, set()), "MISCELLANEOUS")
 
+    def test_collective_governance_families_stay_together(self):
+        # A government type or amendment name and its _desc must land in the
+        # same file. Four-token bases would otherwise split: the name to
+        # MISCELLANEOUS, the _desc to CONCEPTS.
+        for key in (
+            "gov_collective_noble_commonwealth",
+            "gov_collective_noble_commonwealth_desc",
+            "gov_collective_governance",
+            "gov_collective_governance_desc",
+            "gov_direct_democracy_single_party_state",
+            "gov_direct_democracy_single_party_state_desc",
+            "amendment_collective_direct_democracy",
+            "amendment_collective_direct_democracy_desc",
+        ):
+            with self.subTest(key=key):
+                self.assertEqual(categorize_key(key, set()), "CONCEPTS")
+
 
 class OrganizeAllUnusedTests(unittest.TestCase):
     def test_quoted_argument_keeps_key_out_of_unused(self):

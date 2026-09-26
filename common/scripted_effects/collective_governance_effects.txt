@@ -1,0 +1,68 @@
+﻿# Collective Governance (law_direct_democracy, displayed as "Collective
+# Governance"): keeps on the governance law exactly the one amendment the
+# country's Distribution of Power calls for, and none of the other four.
+#
+# Derived from current laws on every call, so nothing is stored, and a
+# revolution's winner gets the amendment its own laws call for. A law's
+# amendments leave with it when it is replaced, so a country that drops the
+# law needs no cleanup.
+#
+# One refresh, three callers:
+#   law_direct_democracy on_activate (hidden)  - when the law is activated; whether it already
+#                                                counts as active there is unverified (vanilla is
+#                                                mixed), so on_law_activated repeats the refresh
+#   te_collective_governance_from_law_scope     - on_law_activated: the law's arrival (enactment or
+#                                                activate_law) and any Distribution of Power change
+#   te_collective_governance_country_pulse      - monthly backstop, and migration of existing saves
+#
+# Amendments need a sponsor (vanilla land_ownership_law_events.txt). We use
+# the ruler's interest group; with no ruler the add waits for the next call.
+#
+# Spec: docs/superpowers/specs/2026-09-26-collective-governance-design.md
+# Pinned by test_collective_governance.py.
+
+te_refresh_collective_governance_amendment = {
+	if = {
+		limit = { has_law = law_type:law_direct_democracy }
+		save_scope_as = cg_country
+		ruler ?= {
+			interest_group ?= { save_scope_as = cg_sponsor }
+		}
+		active_law:lawgroup_governance_principles ?= {
+			te_cg_sync_amendment = { AMENDMENT = amendment_collective_direct_democracy TRIGGER = collective_governance_is_popular }
+			te_cg_sync_amendment = { AMENDMENT = amendment_collective_leadership TRIGGER = collective_governance_is_party }
+			te_cg_sync_amendment = { AMENDMENT = amendment_collective_administration TRIGGER = collective_governance_is_technocratic }
+			te_cg_sync_amendment = { AMENDMENT = amendment_collective_free_federation TRIGGER = collective_governance_is_anarchic }
+			te_cg_sync_amendment = { AMENDMENT = amendment_collective_patrician_council TRIGGER = collective_governance_is_patrician }
+		}
+	}
+}
+
+# Law scope (the governance law). Needs scope:cg_country, and scope:cg_sponsor
+# to add. Removes $AMENDMENT$ when the country no longer meets $TRIGGER$;
+# adds it when the country does and it is missing. Vanilla's remove-by-type
+# form (ep2_tenpo_events.txt).
+te_cg_sync_amendment = {
+	if = {
+		limit = {
+			has_amendment = amendment_type:$AMENDMENT$
+			scope:cg_country = { $TRIGGER$ = no }
+		}
+		random_scope_amendment = {
+			limit = { amendment_type:$AMENDMENT$ ?= this.type }
+			remove_amendment = yes
+		}
+	}
+	else_if = {
+		limit = {
+			NOT = { has_amendment = amendment_type:$AMENDMENT$ }
+			scope:cg_country = { $TRIGGER$ = yes }
+			exists = scope:cg_sponsor
+		}
+		add_amendment = {
+			type = $AMENDMENT$
+			sponsor = scope:cg_sponsor
+			cooldown = 0
+		}
+	}
+}

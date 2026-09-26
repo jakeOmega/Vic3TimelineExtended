@@ -1157,3 +1157,113 @@ amendment_langreform_national_focus = {
 	can_repeal = { always = yes }
 	amendment_activism_multiplier = 0
 }
+
+# ======================================================================
+#  COLLECTIVE GOVERNANCE (law_direct_democracy)
+#
+#  One amendment per Distribution of Power group, attached and removed
+#  only by te_refresh_collective_governance_amendment
+#  (collective_governance_effects.txt), never by negotiation.
+#  possible and can_repeal both ask the group's trigger
+#  (collective_governance_triggers.txt), so the swap works whether or
+#  not script removal respects can_repeal, and the player cannot repeal
+#  the amendment their Distribution of Power calls for.
+#  No parent: IG stance would count the law's approval a second time.
+#  Spec: docs/superpowers/specs/2026-09-26-collective-governance-design.md
+# ======================================================================
+
+amendment_collective_direct_democracy = {
+	allowed_laws = { law_direct_democracy }
+	modifier = {
+		country_must_have_movement_to_enact_laws_bool = yes
+		political_movement_pop_attraction_mult = 1
+		political_movement_radicalism_add = 0.5
+		political_movement_radicalism_from_enactment_approval_mult = -0.75
+		political_movement_radicalism_from_enactment_disapproval_mult = -0.75
+		country_legitimacy_govt_total_votes_add = 30
+		state_political_strength_from_wealth_mult = -0.25
+		country_law_enactment_success_add = 0.25
+		country_agitator_slots_add = 1
+	}
+	possible = { collective_governance_is_popular = yes }
+	would_sponsor = { always = no }
+	ai_will_revoke = { always = no }
+	can_repeal = {
+		custom_tooltip = {
+			text = COLLECTIVE_GOVERNANCE_TT_REPEAL
+			NOT = { collective_governance_is_popular = yes }
+		}
+	}
+	amendment_activism_multiplier = 0
+}
+
+amendment_collective_leadership = {
+	allowed_laws = { law_direct_democracy }
+	modifier = {
+		country_coup_resistance_mult = 0.25
+	}
+	possible = { collective_governance_is_party = yes }
+	would_sponsor = { always = no }
+	ai_will_revoke = { always = no }
+	can_repeal = {
+		custom_tooltip = {
+			text = COLLECTIVE_GOVERNANCE_TT_REPEAL
+			NOT = { collective_governance_is_party = yes }
+		}
+	}
+	amendment_activism_multiplier = 0
+}
+
+amendment_collective_administration = {
+	allowed_laws = { law_direct_democracy }
+	modifier = {
+		country_institution_size_change_speed_mult = 0.5
+		state_decree_cost_mult = 0.25
+	}
+	possible = { collective_governance_is_technocratic = yes }
+	would_sponsor = { always = no }
+	ai_will_revoke = { always = no }
+	can_repeal = {
+		custom_tooltip = {
+			text = COLLECTIVE_GOVERNANCE_TT_REPEAL
+			NOT = { collective_governance_is_technocratic = yes }
+		}
+	}
+	amendment_activism_multiplier = 0
+}
+
+amendment_collective_free_federation = {
+	allowed_laws = { law_direct_democracy }
+	modifier = {
+		country_must_have_movement_to_enact_laws_bool = yes
+		political_movement_pop_attraction_mult = 0.5
+	}
+	possible = { collective_governance_is_anarchic = yes }
+	would_sponsor = { always = no }
+	ai_will_revoke = { always = no }
+	can_repeal = {
+		custom_tooltip = {
+			text = COLLECTIVE_GOVERNANCE_TT_REPEAL
+			NOT = { collective_governance_is_anarchic = yes }
+		}
+	}
+	amendment_activism_multiplier = 0
+}
+
+amendment_collective_patrician_council = {
+	allowed_laws = { law_direct_democracy }
+	modifier = {
+		country_aristocrats_pol_str_mult = 0.15
+		country_capitalists_pol_str_mult = 0.15
+	}
+	possible = { collective_governance_is_patrician = yes }
+	would_sponsor = { always = no }
+	ai_will_revoke = { always = no }
+	can_repeal = {
+		custom_tooltip = {
+			text = COLLECTIVE_GOVERNANCE_TT_REPEAL
+			NOT = { collective_governance_is_patrician = yes }
+		}
+	}
+	amendment_activism_multiplier = 0
+}
