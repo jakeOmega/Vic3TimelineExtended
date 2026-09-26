@@ -805,40 +805,6 @@ decolonization = {
 		country_can_use_cultural_assimilation_bool = yes
 	}
 
-	on_researched = {
-		if = {
-			limit = {
-				ig:ig_trade_unions = {
-					NOT = { has_ideology = ideology:ideology_anti_colonialist }
-				}
-			}
-			ig:ig_trade_unions = {
-				add_ideology = ideology_anti_colonialist
-				save_scope_as = interest_group_scope
-			}
-			post_notification = ideology_anti_colonialist_added
-		}
-		if = {
-			limit = {
-				ig:ig_intelligentsia = {
-					NOT = { has_ideology = ideology:ideology_anti_colonialist }
-				}
-			}
-			ig:ig_intelligentsia = {
-				add_ideology = ideology_anti_colonialist
-				save_scope_as = interest_group_scope
-			}
-			post_notification = ideology_anti_colonialist_added
-		}
-
-		if = {
-			limit = {
-				is_country_type = unrecognized
-			}
-			set_country_type = recognized
-		}
-	}
-
 	unlocking_technologies = {
 		intergovernmental_organizations
 	}

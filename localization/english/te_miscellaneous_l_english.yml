@@ -3389,7 +3389,6 @@
  st_res_small_arms_withdraw_flow:0 "Strategic Reserve Small Arms Release"
  st_res_tanks_store_flow:0 "Strategic Reserve Tanks Intake"
  st_res_tanks_withdraw_flow:0 "Strategic Reserve Tanks Release"
- state_mass_migration_encouragement_bool:"[concept_mass_migration] Encouragement"
  state_violence_against_minorities_bool:0 "Violence Against Minorities"
  statepower_autonomy_debate_advance:0 "State Power: Autonomy Debate Advance"
  statepower_autonomy_debate_cautious:0 "State Power: Autonomy Debate Cautious Advance"

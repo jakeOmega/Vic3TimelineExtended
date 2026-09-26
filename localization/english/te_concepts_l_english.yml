@@ -2232,7 +2232,6 @@
  st_res_small_arms_withdraw_flow_desc:0 "This hub is releasing small arms from the strategic reserve."
  st_res_tanks_store_flow_desc:0 "This hub is purchasing tanks for the strategic reserve."
  st_res_tanks_withdraw_flow_desc:0 "This hub is releasing tanks from the strategic reserve."
- state_mass_migration_encouragement_bool_desc:"Encourages [concept_mass_migration] of non-[Concept('concept_accepted_culture', 'accepted cultures')] present in this state to other countries. Each month, there is a 10% chance of generating a mass migration event."
  state_violence_against_minorities_bool_desc:0 "The state engages in violence against minority groups, leading to occasional deaths and injuries."
  statepower_autonomy_debate_advance_desc:0 "A strong positive boost to law enactment progress from a recent event."
  statepower_autonomy_debate_cautious_desc:0 "A smaller positive boost to law enactment progress from a recent event."
