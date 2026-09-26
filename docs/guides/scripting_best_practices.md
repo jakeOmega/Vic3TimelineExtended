@@ -2533,7 +2533,7 @@ Four country-scope authority triggers, easy to confuse:
 ### Lawgroup Orthogonality
 **Distribution of Power and Governance Principles are different axes.** A country has one law from each lawgroup; they coexist independently:
 - **`lawgroup_distribution_of_power`** — who holds power: Autocracy / Oligarchy / various Voting laws / Universal Suffrage / Single-Party State / etc. The "concentration of power" axis.
-- **`lawgroup_governance_principles`** — head-of-state structure: Monarchy / Presidential Republic / Parliamentary Republic / Theocracy / Council Republic / mod-added `law_direct_democracy` / `law_neocameralism` / etc.
+- **`lawgroup_governance_principles`** — head-of-state structure: Monarchy / Presidential Republic / Parliamentary Republic / Theocracy / Council Republic / mod-added `law_direct_democracy` (displayed as Collective Governance) / `law_neocameralism` / etc.
 
 When designing a system that responds to "how authoritarian is this country", contribute modifier values across the *distribution-of-power* axis (and possibly free-speech / internal-security), not governance-principles. Don't mix law contributions across the two axes — the result is an incoherent gate where (e.g.) Direct Democracy lowers a value that Parliamentary Republic doesn't touch.
 
