@@ -25,13 +25,14 @@
 #                  on_secession_end reported, consumed by on_civil_war_won,
 #                  which vanilla fires straight after on_revolution_end
 #
-# THE OPEN ENGINE QUESTION. Whether a dead-but-undeleted loser still resolves
-# through a stored pointer at on_civil_war_won is untested. The saves show it
-# still in the database then (civil_war_inheritance_audit.md), and vanilla's
-# on_secession_end reads a dead rebel through scope:target. Nothing that must
-# work depends on it: the nuclear custody code reads live ledger containers.
-# te_civil_war_resolve_sides logs the answer (TE_CIVIL_WAR: lines in
-# debug.log) the first time a civil war ends in a test game.
+# THE ENGINE QUESTION, ANSWERED 2026-09-26. A dead-but-undeleted loser still
+# resolves through a stored pointer at on_civil_war_won, and script reads its
+# variables. Five endings in one test game (three rebel wins, two loyalist
+# wins) all logged the loser as resolving and dead with te_cw_role present,
+# and each rebel win passed the monetary repair's canary, a script comparison
+# of the dead loser's rate paid (te_monetary_civil_war_effects.txt).
+# te_civil_war_resolve_sides keeps logging each ending (TE_CIVIL_WAR: lines in
+# debug.log). The nuclear custody code still reads live ledger containers.
 # ============================================================================
 
 # ROOT = the original country, scope:target = the uprising country.
@@ -41,7 +42,7 @@ te_civil_war_record_start = {
 		set_variable = { name = te_cw_role value = 2 }
 	}
 	set_variable = { name = te_cw_role value = 1 }
-	debug_log = "TE_CIVIL_WAR: [ROOT.GetCountry.GetName] faces an uprising"
+	debug_log = "TE_CIVIL_WAR: [THIS.GetCountry.GetNameNoFormatting] faces an uprising"
 }
 
 # ROOT = the original country, scope:target = the uprising country. KIND = 1
@@ -53,12 +54,21 @@ te_civil_war_record_ending = {
 		limit = { exists = scope:target }
 		set_global_variable = { name = te_cw_ending_rebel value = scope:target }
 	}
+	# The kind is read back from the global, not printed from the parameter:
+	# a parameter inside a debug_log string comes out mangled.
 	if = {
-		limit = { is_country_alive = yes }
-		debug_log = "TE_CIVIL_WAR: a civil war (kind $KIND$) ended; the original country [ROOT.GetCountry.GetName] is alive"
+		limit = { global_var:te_cw_ending_kind = 1 }
+		debug_log = "TE_CIVIL_WAR: a revolution ended"
 	}
 	else = {
-		debug_log = "TE_CIVIL_WAR: a civil war (kind $KIND$) ended; the original country [ROOT.GetCountry.GetName] is dead"
+		debug_log = "TE_CIVIL_WAR: a secession ended"
+	}
+	if = {
+		limit = { is_country_alive = yes }
+		debug_log = "TE_CIVIL_WAR: the original country [THIS.GetCountry.GetNameNoFormatting] is alive"
+	}
+	else = {
+		debug_log = "TE_CIVIL_WAR: the original country [THIS.GetCountry.GetNameNoFormatting] is dead"
 	}
 	if = {
 		limit = { scope:target ?= { is_country_alive = yes } }
@@ -84,12 +94,12 @@ te_civil_war_resolve_sides = {
 		limit = { global_var:te_cw_ending_rebel ?= ROOT }
 		set_variable = { name = te_cw_rebels_won value = 1 }
 		global_var:te_cw_ending_origin ?= { save_scope_as = te_cw_loser }
-		debug_log = "TE_CIVIL_WAR: [ROOT.GetCountry.GetName] won as the uprising (end-hook pair)"
+		debug_log = "TE_CIVIL_WAR: [THIS.GetCountry.GetNameNoFormatting] won as the uprising (end-hook pair)"
 	}
 	else_if = {
 		limit = { global_var:te_cw_ending_origin ?= ROOT }
 		global_var:te_cw_ending_rebel ?= { save_scope_as = te_cw_loser }
-		debug_log = "TE_CIVIL_WAR: [ROOT.GetCountry.GetName] won as the original government (end-hook pair)"
+		debug_log = "TE_CIVIL_WAR: [THIS.GetCountry.GetNameNoFormatting] won as the original government (end-hook pair)"
 	}
 	else_if = {
 		limit = {
@@ -98,10 +108,10 @@ te_civil_war_resolve_sides = {
 		}
 		set_variable = { name = te_cw_rebels_won value = 1 }
 		var:te_cw_origin ?= { save_scope_as = te_cw_loser }
-		debug_log = "TE_CIVIL_WAR: [ROOT.GetCountry.GetName] won as the uprising (no end-hook pair; te_cw_origin)"
+		debug_log = "TE_CIVIL_WAR: [THIS.GetCountry.GetNameNoFormatting] won as the uprising (no end-hook pair; te_cw_origin)"
 	}
 	else = {
-		debug_log = "TE_CIVIL_WAR: [ROOT.GetCountry.GetName] won; no end-hook pair, taken as the original government"
+		debug_log = "TE_CIVIL_WAR: [THIS.GetCountry.GetNameNoFormatting] won; no end-hook pair, taken as the original government"
 	}
 	# A secession's winner is never a new regime of the same state.
 	if = {
@@ -121,9 +131,21 @@ te_civil_war_resolve_sides = {
 		else = {
 			debug_log = "TE_CIVIL_WAR: the loser resolves at on_civil_war_won and is dead"
 		}
+		# Read in script: the loc accessor .Var().GetValue printed 0 here even
+		# though te_cw_role was set (it is never 0).
 		if = {
 			limit = { scope:te_cw_loser = { has_variable = te_cw_role } }
-			debug_log = "TE_CIVIL_WAR: the loser's variables read: te_cw_role = [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_cw_role').GetValue|0]"
+			if = {
+				limit = { scope:te_cw_loser = { var:te_cw_role = 1 } }
+				debug_log = "TE_CIVIL_WAR: the loser's variables read: te_cw_role = 1 (the original government)"
+			}
+			else_if = {
+				limit = { scope:te_cw_loser = { var:te_cw_role = 2 } }
+				debug_log = "TE_CIVIL_WAR: the loser's variables read: te_cw_role = 2 (the uprising)"
+			}
+			else = {
+				debug_log = "TE_CIVIL_WAR: the loser's variables read, but te_cw_role is neither 1 nor 2"
+			}
 		}
 		else = {
 			debug_log = "TE_CIVIL_WAR: the loser resolves but its te_cw_role does not read"

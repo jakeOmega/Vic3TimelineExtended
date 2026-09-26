@@ -3,8 +3,9 @@
 **Status (2026-09-26): F1–F7 are fixed, and F13's pointer half with them** (#460–#465, one PR, branch
 `fix/civil-war-inheritance`), under the owner's ruling that **a revolution's winner continues the nation**.
 That PR also added `je_immediate_reset_audit`, which flags the E3 bug class in every journal entry. F8–F12
-and F14–F16 are open. Only F3's copy depends on reading the dead loser at `on_civil_war_won`: its
-`TE_CW_PROBE` lines in `debug.log` settle that on the first rebel win. This report was added in #459. The engine rules the findings rest on are summarised in
+and F14–F16 are open. Only F3's copy depends on reading the dead loser at `on_civil_war_won`, and that
+read works: three rebel wins in a 2026-09-26 test game each logged `TE_CW_PROBE monetary 1/2`, which
+fires only when a script comparison of the dead loser's rate paid passes. This report was added in #459. The engine rules the findings rest on are summarised in
 `docs/guides/scripting_best_practices.md` § "What a Civil War's Winner Inherits".
 
 Read-only audit (no repo edits, no reload). Evidence: the three German-revolution saves
@@ -41,11 +42,15 @@ Candidate mechanism:
    `st_res_*`), its JE modifier set (`je:je_banking_cycle = { has_modifier = ... }`), its country modifiers,
    its lists (`every_in_list`) and its completion state, and copy them onto ROOT.
 
-**Unverified, and cheap to test:** whether a dead-but-undeleted country object resolves through a stored
-scope variable (`exists`, `has_modifier`, `var:` reads). A debug event printing `var:te_parent_object.var:te_bank_gold`
-from `on_civil_war_won` would settle it. Hints that it does: third-country pointers to id 5 still exist at +2w,
-and vanilla's `on_secession_end` comment says "owned by a dead country at this point".
-Loyalist wins are unverified too. Presumably the original keeps its own JEs and modifiers, so most findings
+**Verified 2026-09-26:** a dead-but-undeleted country object resolves through a stored scope at
+`on_civil_war_won`, and script reads its variables (`exists`, `has_variable`, `var:` comparisons). In one
+test game five civil wars ended: three rebel wins and two loyalist wins, one of them a secession. The
+`TE_CIVIL_WAR:` lines logged the loser resolving and dead every time, with `has_variable = te_cw_role` true.
+At each rebel win `TE_CW_PROBE monetary 1/2` fired, and it fires only when `var:te_rate_paid_pts >= 0.5`
+passes on the dead loser. `has_modifier` on the dead loser was not tested. The `debug_log` loc accessor did
+**not** print the loser's figures (blanks and a silent `0`), so read them in script
+(`scripting_best_practices.md` § "`debug_log` Loc-String Templating Limitations").
+Loyalist wins: the loser is readable there too, but what the original keeps is still unverified. Presumably the original keeps its own JEs and modifiers, so most findings
 would not apply there, except the dangling references to the dead rebel object (F13-F14).
 
 **Open item: interest-group and state modifiers.** Not tested. The winner's interest groups are different
@@ -152,7 +157,7 @@ E6. **References to the dead loser persist two weeks after the win** (`h3_raw.py
   `un_hq_country` to ROOT when it names a dead same-tag object.
 
 ### F3. The central bank's gold and the whole monetary state are replaced by the rebel's (H2). HIGH (#462)
-- **FIXED (#462), pending the probe.** The audit's preferred option, built on the shared civil-war layer (#467): `te_civil_war_on_won` calls `te_monetary_repair_after_civil_war`, which on a rebel win (`te_cw_rebels_won = 1`) whose `scope:te_cw_loser` resolves dead and reads (a rate-paid canary) — and only once per loser (`te_mon_cw_bank_taken`) — runs `te_monetary_inherit_central_bank`. It adds the two vaults and their hot money, and copies the loser's inflation, peg and FX state and the player's mandate, delegation and rate target. The monetary regime is a law, so it follows the winner's laws. It copies no tracker, and re-adds the peg's timed modifiers from their month counters. It logs `TE_CW_PROBE monetary 1/2` and `2/2` (the loser's own figures). Concurrent revolutions are a known limitation (`monetary_policy_design.md` §0.4 item 32).
+- **FIXED (#462); the loser read is verified (2026-09-26), the copied figures are not yet checked in game.** The audit's preferred option, built on the shared civil-war layer (#467): `te_civil_war_on_won` calls `te_monetary_repair_after_civil_war`, which on a rebel win (`te_cw_rebels_won = 1`) whose `scope:te_cw_loser` resolves dead and reads (a rate-paid canary) — and only once per loser (`te_mon_cw_bank_taken`) — runs `te_monetary_inherit_central_bank`. It adds the two vaults and their hot money, and copies the loser's inflation, peg and FX state and the player's mandate, delegation and rate target. The monetary regime is a law, so it follows the winner's laws. It copies no tracker, and re-adds the peg's timed modifiers from their month counters. It logs `TE_CW_PROBE monetary 1/2` (the read passed, the copy runs) and `2/2` (whether the winner's inflation now equals the loser's). Concurrent revolutions are a known limitation (`monetary_policy_design.md` §0.4 item 32).
 - `common/on_actions/te_monetary_on_actions.txt:222-262` initialises the rebel at `on_revolution_start`
   (dispatching `te_monetary_internal.1`, `events/te_monetary_events.txt:56-63`). Under winner precedence,
   the rebel's value then beats the nation's on every `te_*` variable. The vault `te_bank_gold` is seeded

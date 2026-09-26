@@ -809,18 +809,20 @@ still open and are inherited, not repeated.
     grow that (re-point every live `te_cw_origin` naming the loser at the winner when the
     rebels win, and take a rebel win's loser from the winner's own `te_cw_origin` before the
     pair), rather than each system working around it.
-    **Still to watch — one revolution the rebels win.** Everything above assumes the dead but
-    not yet deleted loser can be read at `on_civil_war_won` (the loser was still in the save
-    after that hook; nobody has read it from script). Search
-    `debug.log` for `TE_CW_PROBE monetary 1/2` and `2/2`: the copy worked if line 2's winner
-    vault is line 1's winner vault plus the loser's, and line 2's inflation and mandate are the
-    loser's. `1/2` missing, with `does not resolve`, `figures read as nothing` or `still
-    alive` in its place, means the read failed (or a guard term is wrong) and the copy did not
-    run; a loyalist win logs `not a rebel win`, and a second copy from the same loser logs
-    `already taken`. The layer's own `TE_CIVIL_WAR` lines, just before, say which side won and
-    whether the loser resolves. Then read `te_debug_monetary.1` on the winner a month later — the band
-    modifier should match the copied inflation, and there should be exactly one. Remove the
-    `TE_CW_PROBE` lines once read.
+    **The read is settled; the copy is still to watch.** Everything above assumes the dead but
+    not yet deleted loser can be read at `on_civil_war_won`. On 2026-09-26 three rebel wins in
+    one test game each logged `TE_CW_PROBE monetary 1/2`, which fires only when the canary's
+    script read of the dead loser's rate paid passes, so it can. The first probe's figures
+    came out blank (in `debug_log`, `ROOT` does not resolve and `.Var().GetValue` prints 0),
+    so the lines now print none: `1/2` means the read passed and the copy ran, and `2/2`
+    checks in script that the winner's inflation equals the loser's afterwards. `1/2`
+    missing, with `does not resolve`, `figures read as nothing` or `still alive` in its place,
+    means the read failed (or a guard term is wrong) and the copy did not run; a loyalist win
+    logs `not a rebel win`, and a second copy from the same loser logs `already taken`. The
+    layer's own `TE_CIVIL_WAR` lines, just before, say which side won and whether the loser
+    resolves. Still to do: read `te_debug_monetary.1` on the winner of a rebel win a month
+    later. The vault should hold both banks' gold, the band modifier should match the copied
+    inflation, and there should be exactly one. Remove the `TE_CW_PROBE` lines once read.
 33. **The empty `te_inflation_band_comfort`, on roughly every tag in the world.** It is
     applied deliberately (step 6c always has exactly one thing to apply, and the modifier
     list always names the band), but an empty `modifier = { }` on ~1,400 countries is a form

@@ -30,13 +30,13 @@
 # repair copies only on a rebel win whose loser is no longer alive and reads —
 # its rate paid is a real rate, a canary against a read that resolves but
 # returns zeros — and only once per loser (te_mon_cw_bank_taken). That rests
-# on an engine fact nobody has observed yet: that a dead but not yet deleted
-# country can still be read at that hook. The loser was still in the save
-# after it, with every variable and modifier, and vanilla's on_secession_end
-# reads the capital of a country it calls dead. Everything here reads the
-# loser only behind that guard, and the repair logs what it saw (TE_CW_PROBE
-# monetary lines, which print the loser's own figures; the layer's
-# TE_CIVIL_WAR lines say only which side won and whether the loser resolves).
+# on an engine fact first observed on 2026-09-26: a dead but not yet deleted
+# country can still be read at that hook. At three rebel wins in one test game
+# the dead loser resolved and the canary passed (te_civil_war_effects.txt,
+# "THE ENGINE QUESTION"). Everything here still reads the loser only behind
+# that guard, and the repair logs what it saw (TE_CW_PROBE monetary lines; the
+# layer's TE_CIVIL_WAR lines say which side won and whether the loser
+# resolves).
 #
 # WHAT IS COPIED. Every variable of te_monetary_monthly_update's contract
 # (the header of common/script_values/te_monetary_script_values.txt, and its
@@ -107,11 +107,13 @@
 # guard could pass for it anyway (te_monetary_monthly_on_action).
 #
 # THE PROBE (TE_CW_PROBE). Every branch logs one line to debug.log, once per
-# win — on a copy, two, either side of it, which read the vault two ways: line 1
-# prints the loser's figures through the loc accessor, and line 2's winner vault
-# equals line 1's winner vault plus the loser's only if SCRIPT could read the
-# loser — the read everything below depends on. Delete the debug_log lines once
-# one revolution has been read (monetary_policy_design.md §0.4 item 32).
+# win — on a copy, two, either side of it. Line 1 fires only if the canary's
+# script read of the loser passed; line 2 checks in script that the copy wrote
+# the loser's inflation to the winner. They print no figures: in debug_log the
+# loc accessor .Var().GetValue prints 0 and ROOT does not resolve
+# (scripting_best_practices.md § debug_log), so the first version's figures
+# came out blank. The read itself was settled on 2026-09-26 (header above).
+# Delete the debug_log lines once read (monetary_policy_design.md §0.4 item 32).
 te_monetary_repair_after_civil_war = {
 	if = {
 		limit = {
@@ -132,29 +134,39 @@ te_monetary_repair_after_civil_war = {
 				}
 				NOT = { var:te_mon_cw_bank_taken ?= scope:te_cw_loser }
 			}
-			debug_log = "TE_CW_PROBE monetary 1/2 [ROOT.GetCountry.GetNameNoFormatting]: rebels won, the loser resolves and is dead. BEFORE the copy, winner: vault [ROOT.GetCountry.MakeScope.Var('te_bank_gold').GetValue|0] inflation [ROOT.GetCountry.MakeScope.Var('te_inflation').GetValue|1] mandate [ROOT.GetCountry.MakeScope.Var('te_mon_mandate').GetValue|0]. Loser, read by loc: vault [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_bank_gold').GetValue|0] inflation [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_inflation').GetValue|1] mandate [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_mon_mandate').GetValue|0]"
+			debug_log = "TE_CW_PROBE monetary 1/2 [THIS.GetCountry.GetNameNoFormatting]: rebels won, the loser resolves and is dead, and script read its rate paid (0.5 or more). Copying its central bank."
 			te_monetary_inherit_central_bank = yes
 			set_variable = { name = te_mon_cw_bank_taken value = scope:te_cw_loser }
-			debug_log = "TE_CW_PROBE monetary 2/2 [ROOT.GetCountry.GetNameNoFormatting]: AFTER the copy, winner: vault [ROOT.GetCountry.MakeScope.Var('te_bank_gold').GetValue|0] inflation [ROOT.GetCountry.MakeScope.Var('te_inflation').GetValue|1] mandate [ROOT.GetCountry.MakeScope.Var('te_mon_mandate').GetValue|0]. Script read the loser if this vault is the winner's plus the loser's from line 1/2 and the inflation and mandate are the loser's"
+			if = {
+				limit = {
+					has_variable = te_inflation
+					scope:te_cw_loser = { has_variable = te_inflation }
+					var:te_inflation = scope:te_cw_loser.var:te_inflation
+				}
+				debug_log = "TE_CW_PROBE monetary 2/2 [THIS.GetCountry.GetNameNoFormatting]: after the copy, the winner's inflation equals the loser's"
+			}
+			else = {
+				debug_log = "TE_CW_PROBE monetary 2/2 [THIS.GetCountry.GetNameNoFormatting]: after the copy, the winner's inflation does NOT equal the loser's (or one of them has none)"
+			}
 		}
 		else_if = {
 			limit = { NOT = { exists = scope:te_cw_loser } }
-			debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: rebels won but the loser does not resolve; nothing copied"
+			debug_log = "TE_CW_PROBE monetary [THIS.GetCountry.GetNameNoFormatting]: rebels won but the loser does not resolve; nothing copied"
 		}
 		else_if = {
 			limit = { scope:te_cw_loser = { is_country_alive = yes } }
-			debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: rebels won but the loser is still alive; nothing copied"
+			debug_log = "TE_CW_PROBE monetary [THIS.GetCountry.GetNameNoFormatting]: rebels won but the loser is still alive; nothing copied"
 		}
 		else_if = {
 			limit = { var:te_mon_cw_bank_taken ?= scope:te_cw_loser }
-			debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: this loser's bank was already taken at an earlier win; nothing copied"
+			debug_log = "TE_CW_PROBE monetary [THIS.GetCountry.GetNameNoFormatting]: this loser's bank was already taken at an earlier win; nothing copied"
 		}
 		else = {
-			debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: rebels won and the loser resolves dead, but its figures read as nothing (no rate paid of 0.5 or more); nothing copied"
+			debug_log = "TE_CW_PROBE monetary [THIS.GetCountry.GetNameNoFormatting]: rebels won and the loser resolves dead, but its figures read as nothing (no rate paid of 0.5 or more); nothing copied"
 		}
 	}
 	else = {
-		debug_log = "TE_CW_PROBE monetary [ROOT.GetCountry.GetNameNoFormatting]: not a rebel win (the loyalists won, or a secession ended); nothing copied"
+		debug_log = "TE_CW_PROBE monetary [THIS.GetCountry.GetNameNoFormatting]: not a rebel win (the loyalists won, or a secession ended); nothing copied"
 	}
 }
 

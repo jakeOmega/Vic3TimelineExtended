@@ -261,7 +261,7 @@ _decolonization_preview_region = {
 			prev = { change_variable = { name = $COUNT_VAR$ add = 1 } }
 		}
 	}
-	debug_log = "DECOL_DEBUG: _decolonization_preview_region completed (region var $REGION_VAR$, count var $COUNT_VAR$)"  # DEBUG_DECOLONIZATION_TRACE
+	debug_log = "DECOL_DEBUG: _decolonization_preview_region completed"  # DEBUG_DECOLONIZATION_TRACE (a parameter inside a debug_log string comes out mangled, so the region and count variable names are not printed)
 }
 
 form_decolonized_country = { # scope (THIS) is capital state of new country
