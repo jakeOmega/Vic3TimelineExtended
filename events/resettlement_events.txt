@@ -229,6 +229,10 @@ resettlement.5 = {
 	option = {
 		name = resettlement.5.a
 		resettlement_end_coercive_programmes = yes
+		if = {
+			limit = { resettlement_is_declaration_party = yes }
+			custom_tooltip = resettlement_declaration_fades_tt
+		}
 		add_modifier = { name = resettlement_reformed days = 1825 }
 		ig:ig_intelligentsia = {
 			add_modifier = { name = ig_approval_positive_modifier days = normal_modifier_time }
@@ -330,7 +334,9 @@ resettlement.7 = {
 	option = {
 		name = resettlement.7.a
 		# Those resettled can no longer be told apart from anyone else here, so
-		# one in twenty of the lower strata goes home.
+		# one in twenty of the lower strata goes home. Only second-class
+		# citizens or better: the frontier's original inhabitants (§7.3) never
+		# lived in the source and are not sent there.
 		custom_tooltip = {
 			text = resettlement_return_tt
 			scope:rs_event_state = {
@@ -338,6 +344,7 @@ resettlement.7 = {
 					limit = {
 						strata = lower
 						NOT = { is_pop_type = slaves }
+						pop_acceptance >= acceptance_status_4
 						# 5% of 2,000 is the walk's 100-person minimum:
 						# smaller pops stay, so the source is not splintered.
 						total_size >= 2000
@@ -352,7 +359,13 @@ resettlement.7 = {
 		scope:rs_return_state = {
 			add_loyalists_in_state = { value = medium_radicals strata = lower }
 		}
-		resettlement_end_coercive_programmes = yes
+		# The program ends here only; other destinations keep theirs.
+		custom_tooltip = {
+			text = resettlement_end_programme_here_tt
+			scope:rs_event_state = {
+				resettlement_switch_to_best_voluntary = yes
+			}
+		}
 		ai_chance = { base = 40 }
 	}
 
@@ -479,6 +492,7 @@ resettlement.20 = {
 	option = {
 		name = resettlement.20.b
 		resettlement_end_coercive_programmes = yes
+		custom_tooltip = resettlement_declaration_fades_tt
 		ai_chance = { base = 50 }
 	}
 }

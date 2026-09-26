@@ -618,6 +618,33 @@ class DeclarationTests(unittest.TestCase):
     def test_the_un_registry_names_it(self):
         self.assertRegex(read(UN_REGISTRY), r'violation_modifiers=\("resettlement_declaration_violation",\)')
 
+    def test_the_penalty_is_said_to_fade_not_to_end(self):
+        # The penalty follows the decaying volume counters (§7.2): about a third
+        # of its level a year after the programme stops, gone after several years.
+        L = loc()
+        for key in ("resettlement_declaration_violation_desc", "resettlement.20.d"):
+            self.assertNotIn("ends once", L[key], key)
+            self.assertNotIn("while the program runs", L[key], key)
+            self.assertIn("fades over the following years", L[key], key)
+        self.assertIn("fades over the following years", L["resettlement_declaration_fades_tt"])
+        for n, index in ((20, 1), (5, 0)):
+            self.assertIn("custom_tooltip = resettlement_declaration_fades_tt", squash(options(event(n))[index]), n)
+
+    def test_coercive_programmes_switch_to_the_best_voluntary_one(self):
+        # §7.4 "best available": the Development Program, then Organized
+        # Colonization, then Land Grants.
+        text = read(EFFECTS)
+        helper = squash(block(text, "resettlement_switch_to_best_voluntary"))
+        for tech, key in (("keynesian_economics", "development_program"), ("railways", "organized_colonization")):
+            self.assertIn(f"limit = {{ owner = {{ has_technology_researched = {tech} }} }} activate_production_method = "
+                          f"{{ building_type = building_resettlement_colony production_method = {pm(key)} }}", helper)
+        self.assertIn("else = { activate_production_method = { building_type = building_resettlement_colony "
+                      "production_method = pm_resettlement_land_grants } }", helper)
+        order = [helper.index(pm(k)) for k in ("development_program", "organized_colonization", "land_grants")]
+        self.assertEqual(order, sorted(order))
+        end = squash(block(text, "resettlement_end_coercive_programmes"))
+        self.assertIn("limit = { resettlement_state_runs_coercive = yes } resettlement_switch_to_best_voluntary = yes", end)
+
 
 # ---- The program events (Task 6) -------------------------------------------------
 
@@ -675,6 +702,20 @@ class EventTests(unittest.TestCase):
         for n, flag in ((4, "rs_dust_done"), (7, "rs_petition_done")):
             self.assertIn(f"set_variable = {flag}", squash(block(event(n), "immediate")), n)
             self.assertIn(f"NOT = {{ has_variable = {flag} }}", roll, n)
+
+    def test_return_moves_accepted_people_and_ends_the_programme_here_only(self):
+        allow = squash(options(event(7))[0])
+        # §7.3 protects the frontier's original inhabitants: only second-class
+        # citizens or better "go home", and culture is never tested.
+        self.assertIn("pop_acceptance >= acceptance_status_4", allow)
+        self.assertNotRegex(allow, r"\bculture\b")
+        self.assertNotIn("resettlement_end_coercive_programmes", allow)
+        self.assertIn("custom_tooltip = { text = resettlement_end_programme_here_tt "
+                      "scope:rs_event_state = { resettlement_switch_to_best_voluntary = yes } }", allow)
+        L = loc()
+        self.assertIn("second-class", L["resettlement_return_tt"])
+        self.assertIn("resettlement_end_programme_here_tt", L)
+        self.assertIn("here", L["resettlement.7.a"])
 
     def test_land_disputes_rewards_nothing(self):
         negotiate, back = options(event(8))

@@ -228,7 +228,9 @@ tooltip shows the density and both thresholds.
 
 ### 7.2 Political reactions: one country modifier per programme, scaled by volume
 - Each programme has a counter on the country: `resettlement_<programme>_volume = volume × 11/12 + this month's
-  settlers`. At steady state it approximates a year's flow, and it fades over about a year after the programme stops.
+  settlers`. At steady state it approximates a year's flow. Once the programme stops it keeps (11/12)^12, about a third
+  (35%), of its level a year later, and the modifier goes once intensity falls below 0.01: after several years (about
+  four and a half from full intensity, nearly six from four times the reference), sooner for a small programme.
 - **Intensity** = counter ÷ (country population × `resettlement_intensity_reference`), clamped to [0, 1]. First estimate
   0.0025 (0.25% of the population a year; Stolypin's peak was about that).
 - The monthly country pulse applies `resettlement_<programme>_politics` with `multiplier = intensity`. Twenty buildings
@@ -265,8 +267,13 @@ with `multiplier = intensity` summed over its coercive programmes (clamped to 1)
 1. **Before choosing:** each coercive PM's description says a party to the Declaration will incur the modifier.
 2. **When it starts:** the first month a party runs a coercive programme, or a country running one becomes a party, event
    `resettlement.20` explains the modifier, its scaling and how to end it. Options: *continue*, or *end our coercive
-   programmes*, which switches every coercive Programme PM to the best available voluntary one.
-3. **While it runs:** the modifier's name and description say what causes it and that it grows with the programme.
+   programmes*, which switches every coercive Programme PM to the best available voluntary one (the Development Program
+   once `keynesian_economics` is known, else Organized Colonization once `railways` is, else Land Grants). The modifier
+   follows the coercive volume counters (§7.2), so it does not end when the programmes do: it keeps about a third of its
+   level a year after they stop and is gone after several years, sooner for a small programme. Both the event and the
+   option's tooltip say it fades over the following years.
+3. **While it runs:** the modifier's name and description say what causes it, that it grows with the programme and that
+   it fades over the following years once the programme stops.
 4. **At the vote:** the Declaration's proposal and vote text (`un_propose_human_rights_*`, `un_vote.1.d_*`) mention that
    parties running coercive resettlement will be penalised.
 
@@ -287,7 +294,7 @@ Rolled from the pulse, weighted by programme activity, each with a cooldown. The
 | .4 | **Dust Storms** | the Dust Bowl, Virgin Lands 1960–65 | Homesteads running for years | Conservation programme (cost; smaller bonus kept) / Press on (bonus ends, temporary farm-output malus) |
 | .5 | **Reform Campaign** | Anti-Transportation League 1851, Chekhov's *Sakhalin Island*, Albert Londres 1923 | penal / coercive | End the programme (prestige, Intelligentsia approval) / Defy (both down) |
 | .6 | **Famine in the Settlements** | 1930s special settlements, Nazino 1933 | Special Settlements | Relief (money) / Ignore (mortality spike, radicals) |
-| .7 | **Petition to Return** | release of special settlers 1954, the zhiqing strikes 1978–79 | coercive, after years | Allow return (programme ends; a share of settlers moves back) / Refuse (radicals) |
+| .7 | **Petition to Return** | release of special settlers 1954, the zhiqing strikes 1978–79 | coercive, after years | Allow return (this destination's programme switches to the best voluntary one; one in twenty of its lower strata who are at least second-class citizens moves back, so the inhabitants §7.3 protects stay) / Refuse (radicals) |
 | .8 | **Land Disputes** | reservations and treaty negotiations | destinations under land pressure (§7.3) | Negotiate reserves (costs authority and money, capacity down, inhabitants calmed) / Back the settlers (costs nothing now; inhabitants' radicals rise). No option rewards the pressure (§7.3) |
 | .9 | **The Frontier Is Closed** | the 1890 census and Turner | closure | notification |
 | .20 | **The Declaration and Our Programme** | — | §7.4 | continue / end coercive programmes |

@@ -405,22 +405,37 @@ resettlement_close_frontier = {
 }
 
 # Country scope. Every coercive program switches to the best voluntary one
-# available: Organized Colonization once railways are known, else Land Grants.
+# available (resettlement_switch_to_best_voluntary).
 resettlement_end_coercive_programmes = {
 	every_scope_state = {
 		limit = { resettlement_state_runs_coercive = yes }
-		if = {
-			limit = { owner = { has_technology_researched = railways } }
-			activate_production_method = {
-				building_type = building_resettlement_colony
-				production_method = pm_resettlement_organized_colonization
-			}
+		resettlement_switch_to_best_voluntary = yes
+	}
+}
+
+# State scope: a destination. Its Settlement Authority switches to the best
+# voluntary program its owner has (§7.4): the Development Program once
+# keynesian_economics is known, else Organized Colonization once railways are,
+# else Land Grants. None of the three has a law gate.
+resettlement_switch_to_best_voluntary = {
+	if = {
+		limit = { owner = { has_technology_researched = keynesian_economics } }
+		activate_production_method = {
+			building_type = building_resettlement_colony
+			production_method = pm_resettlement_development_program
 		}
-		else = {
-			activate_production_method = {
-				building_type = building_resettlement_colony
-				production_method = pm_resettlement_land_grants
-			}
+	}
+	else_if = {
+		limit = { owner = { has_technology_researched = railways } }
+		activate_production_method = {
+			building_type = building_resettlement_colony
+			production_method = pm_resettlement_organized_colonization
+		}
+	}
+	else = {
+		activate_production_method = {
+			building_type = building_resettlement_colony
+			production_method = pm_resettlement_land_grants
 		}
 	}
 }

@@ -190,7 +190,8 @@ resettlement_debug_capacity = {
 
 # ---- The political layer (§7.2) -------------------------------------------
 # The volume counter keeps 11/12 of last month's value, so at a steady rate it
-# holds about a year's flow and fades over about a year once a program stops.
+# holds about a year's flow. Once a program stops it keeps about a third (35%)
+# a year later, and its modifier goes after several years (below 0.01).
 resettlement_volume_decay = 0.9167
 # A program at full intensity moves this share of the country's population a
 # year (Stolypin's resettlement at its peak).
