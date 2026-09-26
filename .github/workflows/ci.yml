@@ -174,6 +174,10 @@ jobs:
         if: ${{ !cancelled() }}
         run: python3 container_timed_variable_audit.py --strict
 
+      - name: Audit — unguarded resets in journal-entry immediate blocks
+        if: ${{ !cancelled() }}
+        run: python3 je_immediate_reset_audit.py --strict
+
       # Fails when a POST_LOAD_REGENERATORS / POST_LOAD_AUDITS module in
       # mod_state_server.py is missing from CLAUDE.md, docs/guides/python_tools.md
       # or docs/auto_generated_files.md. Reads the rosters with `ast`, so it needs
