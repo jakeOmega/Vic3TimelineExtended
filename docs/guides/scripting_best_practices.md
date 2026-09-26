@@ -3663,6 +3663,7 @@ Intent: "this state already has the HQ, OR no state anywhere has one." Reality: 
 
 - **`base_values` max levels are per state.** `state_building_un_headquarters_max_level_add = 1` in `base_values` reaches every state of every country, so the host could build one HQ in *each* of its states. A holder check needs `building_unique_per_owner_potential` beside it.
 - **`potential` only gates construction.** A building whose `potential` stops holding keeps running, modifiers and all (the reason `remove_invalid_buildings` exists). When the holder can change (the HQ passes on when the host leaves the UN, or its state is conquered), the old holder's building must be removed by script: `common/scripted_effects/un_hq_effects.txt`, run on withdrawal, from `on_state_owner_change` and monthly.
+- **`on_state_owner_change` gives script only the state.** ROOT is the state, with its new owner; there is no scope for the previous owner. A rule that depends on who held the building, such as removing it on a capture but not on a hand-over between the sides of a civil war, needs the holder stamped on the state beforehand. The Strategic Reserve hub stamps it weekly (`st_res_record_hub_holder_effect`, state var `st_res_hub_holder`) and compares in `st_res_on_state_owner_change`.
 
 ## Event Option Triggers Must Cover the Event's Trigger Surface
 
