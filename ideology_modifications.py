@@ -1195,7 +1195,7 @@ modifications = {
         "lawgroup_inheritance": communal_inheritance,
         "lawgroup_governance_principles": [
             ("law_neocameralism", "strongly_disapprove"),
-            ("law_direct_democracy", "approve"),
+            ("law_direct_democracy", "strongly_approve"),
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
@@ -1526,7 +1526,7 @@ modifications = {
         ),
         "lawgroup_governance_principles": [
             ("law_neocameralism", "approve"),
-            ("law_direct_democracy", "disapprove"),
+            ("law_direct_democracy", "neutral"),
         ],
         "lawgroup_colonization": [("law_neocolonialism", "strongly_approve")],
         "lawgroup_distribution_of_power": [
@@ -1944,7 +1944,7 @@ modifications = {
     "ideology_caudillismo": {
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
-            ("law_direct_democracy", "disapprove"),
+            ("law_direct_democracy", "strongly_disapprove"),
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "approve"),
@@ -2013,7 +2013,7 @@ modifications = {
         "lawgroup_inheritance": bonapartist_inheritance,
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
-            ("law_direct_democracy", "disapprove"),
+            ("law_direct_democracy", "strongly_disapprove"),
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
@@ -2249,7 +2249,7 @@ modifications = {
         ],
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
-            ("law_direct_democracy", "disapprove"),
+            ("law_direct_democracy", "strongly_disapprove"),
         ],
     },
     "ideology_royalist_movement": {
@@ -2341,7 +2341,7 @@ modifications = {
     "ideology_anarchist_movement": {
         "lawgroup_governance_principles": [
             ("law_neocameralism", "strongly_disapprove"),
-            ("law_direct_democracy", "approve"),
+            ("law_direct_democracy", "strongly_approve"),
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
@@ -2397,7 +2397,7 @@ modifications = {
         "lawgroup_minority_rights": minority_hate,
         "lawgroup_governance_principles": [
             ("law_neocameralism", "neutral"),
-            ("law_direct_democracy", "disapprove"),
+            ("law_direct_democracy", "strongly_disapprove"),
         ],
         "lawgroup_state_power": [
             ("law_feudal_contracts", "strongly_disapprove"),
@@ -2660,7 +2660,7 @@ modifications = {
         "lawgroup_inheritance": bonapartist_inheritance,
         "lawgroup_governance_principles": [
             ("law_neocameralism", "disapprove"),
-            ("law_direct_democracy", "disapprove"),
+            ("law_direct_democracy", "strongly_disapprove"),
         ],
         "lawgroup_distribution_of_power": [
             ("law_algorithmic_governance", "disapprove"),
