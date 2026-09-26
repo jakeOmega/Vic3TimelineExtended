@@ -44,3 +44,63 @@ st_res_tanks_unlocked_trigger = {
 st_res_fertilizer_unlocked_trigger = {
 	has_technology_researched = intensive_agriculture
 }
+
+# ============================================================================
+# AI storage demand — country scope
+# ============================================================================
+# True when any reserve good stands at 75% of its capacity or more: the point
+# where another silo is worth building. building_strategic_reserve_silo's
+# ai_value reads it, so the AI adds storage as its reserve fills instead of
+# building silos without end. st_res_<good>_fill_pct is has_variable-guarded
+# (0 before the reserve has been set up).
+st_res_reserve_filling_up = {
+	OR = {
+		st_res_grain_fill_pct >= 75
+		st_res_ammunition_fill_pct >= 75
+		st_res_oil_fill_pct >= 75
+		st_res_small_arms_fill_pct >= 75
+		st_res_artillery_fill_pct >= 75
+		st_res_aeroplanes_fill_pct >= 75
+		st_res_tanks_fill_pct >= 75
+		st_res_fertilizer_fill_pct >= 75
+	}
+}
+
+# ============================================================================
+# Hub capture — state scope, from st_res_on_state_owner_change
+# (common/on_actions/st_res_on_actions.txt)
+# ============================================================================
+# True when a hub state that just changed hands stays within one nation, so
+# the hub survives; false is a capture, and the hub is demolished. The effect
+# saves the two countries first:
+#   scope:st_res_capture_holder     the country that held the hub, from the
+#                                   state's week-old var:st_res_hub_holder stamp
+#                                   (st_res_record_hub_holder_effect)
+#   scope:st_res_capture_new_owner  the state's owner now
+# The owner ruling (2026-09-26) is that a revolution's winner continues the
+# nation, so neither the outbreak (the hub state goes to the rebels) nor the
+# ending (the winner annexes the loser's states) may cost the depot. Which of
+# the tests below holds at each moment depends on an engine order nobody has
+# read, so any one of them keeps the hub:
+#   - the same country (an owner change that is not one);
+#   - one country definition: a revolution's rebels share the original
+#     country's (the reading un_hq_shares_host_definition rests on);
+#   - var:te_cw_origin in either direction: set on the rebels at
+#     on_revolution_start and on_secession_start, naming the country they
+#     rose against (te_civil_war_effects.txt). A dead civil-war loser still
+#     resolves and reads its variables (settled in play, 2026-09-26).
+# The last test also covers a secession, which takes the hub state with it
+# instead of razing it; if the secession wins, the new country keeps it.
+# No stamp (a hub finished less than a week ago) counts as a capture.
+st_res_hub_stays_within_nation = {
+	exists = scope:st_res_capture_holder
+	exists = scope:st_res_capture_new_owner
+	OR = {
+		scope:st_res_capture_new_owner = { this = scope:st_res_capture_holder }
+		scope:st_res_capture_new_owner = {
+			country_definition = scope:st_res_capture_holder.country_definition
+		}
+		scope:st_res_capture_new_owner = { var:te_cw_origin ?= scope:st_res_capture_holder }
+		scope:st_res_capture_holder = { var:te_cw_origin ?= scope:st_res_capture_new_owner }
+	}
+}

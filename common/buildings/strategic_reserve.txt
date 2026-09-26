@@ -18,6 +18,12 @@ building_strategic_reserve_hub = {
 
 	has_max_level = yes
 
+	# A standing national asset: neither the player nor the AI can downsize or
+	# demolish it. The one way to lose it is to lose its state to another
+	# nation (st_res_on_state_owner_change demolishes a captured hub; script's
+	# remove_building is unaffected by this flag).
+	downsizeable = no
+
 	unlocking_technologies = {
 		logistics
 	}
@@ -33,8 +39,27 @@ building_strategic_reserve_hub = {
 
 	possible = {
 		is_capital = yes
+		# One hub per country. A hub cannot be demolished, so a country that
+		# moves its capital keeps the old one (it works from any state) rather
+		# than adding a second: every st_res effect reads "the" hub through
+		# random_scope_building. Max level is 1, so this never blocks an
+		# expansion either.
+		custom_tooltip = {
+			text = st_res_hub_one_per_country_tt
+			owner = {
+				NOT = {
+					any_scope_building = { is_building_type = building_strategic_reserve_hub }
+				}
+			}
+		}
 	}
 
+	# GOVERNMENT_BUILDING_BASE_VALUE (1000) is what a government building with
+	# no ai_value gets; this one used to script 50, or 200 at war, which the AI
+	# read as nearly worthless. 2000 is vanilla's "higher base value" tier
+	# (naval administration). A depot is built for the next war, so peacetime
+	# counts double: one begun during a war finishes too late to fill before
+	# the peace, when barracks already take every round the market makes.
 	ai_value = {
 		value = 0
 		if = {
@@ -43,13 +68,13 @@ building_strategic_reserve_hub = {
 					is_great_or_major_power = yes
 				}
 			}
-			add = 50
-		}
-		if = {
-			limit = {
-				owner = { is_at_war = yes }
+			add = 1000
+			if = {
+				limit = {
+					owner = { is_at_war = no }
+				}
+				add = 1000
 			}
-			add = 150
 		}
 	}
 }
@@ -75,6 +100,13 @@ building_strategic_reserve_silo = {
 
 	required_construction = construction_cost_high
 
+	# Storage is worth building when the reserve is running out of room: at
+	# the government-building default (1000) while any good stands at 75% of
+	# capacity (st_res_reserve_filling_up), and next to nothing otherwise. A
+	# flat value with no such signal would have the AI raise silos without
+	# end, since, unlike a bureaucracy or a barracks, nothing in code tells
+	# it how much storage it needs. A war drains the reserve, so the value
+	# falls on its own while one is on.
 	ai_value = {
 		value = 0
 		if = {
@@ -83,16 +115,15 @@ building_strategic_reserve_silo = {
 					any_scope_building = {
 						is_building_type = building_strategic_reserve_hub
 					}
-					is_great_or_major_power = yes
 				}
 			}
 			add = 25
-		}
-		if = {
-			limit = {
-				owner = { is_at_war = yes }
+			if = {
+				limit = {
+					owner = { st_res_reserve_filling_up = yes }
+				}
+				add = 1000
 			}
-			add = 50
 		}
 	}
 }

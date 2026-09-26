@@ -293,6 +293,12 @@ st_res_<GOOD>_unlocked_trigger = {
 }
 ```
 
+Also add the good's line to `st_res_reserve_filling_up` further down the same file, the silo's AI storage signal:
+
+```
+		st_res_<GOOD>_fill_pct >= 75
+```
+
 ---
 
 ## File 7: `common/scripted_effects/st_res_effects.txt`

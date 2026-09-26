@@ -173,6 +173,24 @@ st_res_refresh_hub_cache_effect = {
 }
 
 # --------------------------------------------------------------------------
+# st_res_record_hub_holder_effect — country scope, weekly pulse.
+# Stamps the hub's state with the country holding it (state var
+# st_res_hub_holder). on_state_owner_change gives script only the state, not
+# its previous owner, so st_res_on_state_owner_change reads this stamp to tell
+# a capture from a hand-over between the two sides of a civil war
+# (st_res_hub_stays_within_nation, st_res_triggers.txt).
+# --------------------------------------------------------------------------
+st_res_record_hub_holder_effect = {
+	save_scope_as = st_res_hub_holder_country
+	every_scope_building = {
+		limit = { is_building_type = building_strategic_reserve_hub }
+		state = {
+			set_variable = { name = st_res_hub_holder value = scope:st_res_hub_holder_country }
+		}
+	}
+}
+
+# --------------------------------------------------------------------------
 # st_res_startup_good_setup_effect — Country-scoped per-good startup helper.
 # Parameter: GOOD = any reserve good (list at st_res_init_good_effect).
 # Populates local vars the building-scoped helpers expect before the
@@ -511,6 +529,8 @@ st_res_weekly_update_effect = {
 				is_building_type = building_strategic_reserve_hub
 			}
 		}
+		st_res_record_hub_holder_effect = yes
+
 		st_res_apply_weekly_good_effect = { GOOD = grain }
 		st_res_apply_weekly_good_effect = { GOOD = ammunition }
 		st_res_apply_weekly_good_effect = { GOOD = oil }
@@ -1229,9 +1249,9 @@ st_res_policy_apply_good_effect = {
 # --------------------------------------------------------------------------
 # AI
 # --------------------------------------------------------------------------
-# building_strategic_reserve_hub carries a real ai_value (+50 for a great or
-# major power, +150 while at war — common/buildings/strategic_reserve.txt), so
-# AI majors DO build hubs and DO get this journal entry. Before policies existed
+# building_strategic_reserve_hub carries a real ai_value (2000 for a great or
+# major power at peace, 1000 at war — common/buildings/strategic_reserve.txt),
+# so AI majors DO build hubs and DO get this journal entry. Before policies existed
 # they simply never moved a rate and the reserve sat empty forever.
 #
 # st_res_ai_seed_good_effect hands an AI country the Conservative preset once,

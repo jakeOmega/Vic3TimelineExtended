@@ -38,11 +38,15 @@ Capital-only (`possible = { is_capital = yes }`), scalable (`has_max_level = yes
 - **+5 000 capacity per reserve good** via `country_st_res_<good>_capacity_add` (`country_modifiers` → `level_scaled`).
 - **+1 000 to the shared weekly flow cap** via `country_st_res_weekly_rate_cap_add`. The cap (`st_res_weekly_base_rate_cap`) is per good, not a pool: every good may move up to that many units a week.
 
-It also carries an `ai_value` (+50 for a great or major power, +150 at war), so AI majors build it — see §7.
+**One per country, and permanent.** `possible` also requires that the owner has no hub anywhere else (`st_res_hub_one_per_country_tt`), and the hub is `downsizeable = no`: neither the player nor the AI can downsize or demolish it. A country that moves its capital therefore keeps its hub in the old capital, where it goes on working, rather than building a second one; every effect reads "the" hub through `random_scope_building`, so two would be read at random. The one way to lose a hub is to lose its state to another nation: `st_res_on_state_owner_change` (`common/on_actions/st_res_on_actions.txt`) demolishes it at once, so the conqueror never inherits an empty depot it cannot remove, and the loser's journal entry goes invalid (`st_res_je_invalid_effect`), resetting its reserve. This is the same pattern as `building_space_program` and the UN headquarters.
+
+A hand-over between the two sides of a civil war keeps the hub, following the owner ruling that a revolution's winner continues the nation. `on_state_owner_change` gives script only the state and not its previous owner, so the weekly pulse stamps the hub's state with its holder (`st_res_record_hub_holder_effect`, state var `st_res_hub_holder`). `st_res_hub_stays_within_nation` (`st_res_triggers.txt`) then keeps the hub when the new owner is the stamped holder, shares its country definition (a revolution's rebels do), or is linked to it by `te_cw_origin` in either direction (the rebels of a revolution or a secession). Any one test is enough, because which of them holds at the outbreak and at the win depends on an engine order that has not been read in play. A hub less than a week old has no stamp, and counts as captured. `debug.log` records each outcome as a `TE_ST_RES:` line. This does not fix audit F11: the loser still resets its stock when its only hub goes to the rebels.
+
+It carries an `ai_value` of 2000 for a great or major power at peace and 1000 at war (§7).
 
 ### Silo — `building_strategic_reserve_silo`
 
-Passive capacity-only building, buildable in any state, expandable, unlocked by `logistics`. Construction cost is `construction_cost_high`. Each level adds **+1 000 capacity per reserve good** and **+100 to the weekly flow cap** via the single PM `pm_st_res_silo_capacity`. Useless without a hub (it has no controls), but the way to scale a reserve past the hub's own capacity.
+Passive capacity-only building, buildable in any state, expandable, unlocked by `logistics`. Construction cost is `construction_cost_high`. Each level adds **+1 000 capacity per reserve good** and **+100 to the weekly flow cap** via the single PM `pm_st_res_silo_capacity`. Useless without a hub (it has no controls), but the way to scale a reserve past the hub's own capacity. Its `ai_value` is 25 for a country with a hub, and 1025 while any reserve good stands at 75% of capacity or more (`st_res_reserve_filling_up`), so the AI adds storage as its reserve fills (§7).
 
 Both buildings are in `bg_public_infrastructure`.
 
@@ -364,7 +368,7 @@ Two things — and only two — switch a good back to Manual, both of them expli
 
 ## 6. Lifecycle Wiring
 
-Weekly bookkeeping now lives on the JE itself: `je_strategic_reserve` calls `st_res_je_weekly_pulse_effect` from `on_weekly_pulse`, and `st_res_je_immediate_effect` / `st_res_je_invalid_effect` own activation and teardown. There is no separate SR on-action file in the current implementation.
+Weekly bookkeeping now lives on the JE itself: `je_strategic_reserve` calls `st_res_je_weekly_pulse_effect` from `on_weekly_pulse`, and `st_res_je_immediate_effect` / `st_res_je_invalid_effect` own activation and teardown. The one on-action, in `common/on_actions/st_res_on_actions.txt`, is `on_state_owner_change`, which demolishes a captured hub (§2).
 
 Button presses call country-scoped wrapper effects in [common/scripted_effects/st_res_effects.txt](../../common/scripted_effects/st_res_effects.txt). Those wrappers mutate the signed-rate or step-size vars, then immediately call the shared refresh helpers so the hub reflects the change without waiting for the next weekly tick.
 
@@ -374,7 +378,7 @@ Button presses call country-scoped wrapper effects in [common/scripted_effects/s
 
 **The reserve used to be player-only. It no longer is** — and the reason matters, because the old claim was wrong about the premise rather than the code.
 
-`building_strategic_reserve_hub` carries a real construction desire: [`common/buildings/strategic_reserve.txt:38-54`](../../common/buildings/strategic_reserve.txt) gives it `ai_value` +50 for a great or major power and a further +150 while at war. AI majors therefore **do** build hubs and **do** get this journal entry. What they never had was anything that moved a rate, so an AI reserve sat empty forever: every scripted button carries `ai_chance = { value = 0 }` and both scripted GUIs carry `ai_is_valid = { always = no }`.
+`building_strategic_reserve_hub` carries a real construction desire: [`common/buildings/strategic_reserve.txt`](../../common/buildings/strategic_reserve.txt) gives it an `ai_value` of 2000 for a great or major power at peace and 1000 at war. For scale, `GOVERNMENT_BUILDING_BASE_VALUE` (1000) is what a government building with no scripted `ai_value` gets, and 2000 is vanilla's "higher base value" tier (naval administration). Until 2026-09-26 the hub scripted +50, or +200 at war, which the AI read as nearly worthless; peacetime now counts double because a depot begun in a war finishes too late to fill. The silo is worth 1025 while any good is at 75% of capacity or more, and 25 otherwise. A flat value would have the AI build silos without end, since nothing in code tells it how much storage it needs. AI majors **do** build hubs and **do** get this journal entry. What they never had was anything that moved a rate, so an AI reserve sat empty forever: every scripted button carries `ai_chance = { value = 0 }` and both scripted GUIs carry `ai_is_valid = { always = no }`.
 
 Reserve policies close that gap without giving the AI a UI path. `st_res_ai_seed_policies_effect` hands an AI country the **Conservative** preset once — Stabilize Prices for the two civilian goods, grain and chemicals, and Buy When Cheap for every military good, on an 8-week price average with a 20-point ramp, so an AI reserve leans gently rather than flipping — and from then on it runs through `st_res_policy_evaluate_good_effect`, the same evaluator, thresholds, clamps and costs as a human on the same preset. There is no AI-only shortcut anywhere in the feature.
 
@@ -396,7 +400,7 @@ Details worth knowing:
 | Weekly pulse | Weekly pulse on the JE itself | Keeps bookkeeping close to the JE lifecycle and the signed-rate controls |
 | Flat throughput compensation multiplier | `st_res_throughput_factor` reads `modifier:building_throughput_add` from the hub | Same intent, but the hub-scope read automatically accounts for every contributing source |
 | Fixed hard-coded decay rates | Custom modifier types + `INJECT:base_values` + tech INJECTs | Modders, techs, events, and laws can all alter decay now |
-| `single_level = yes` | `possible = { is_capital = yes }` + `has_max_level = yes` | `single_level` isn't a real field; capital-only achieves one-per-country |
+| `single_level = yes` | `possible = { is_capital = yes }` + a no-other-hub guard + `has_max_level = yes` | `single_level` isn't a real field. Capital-only alone did not keep it to one per country, because a country that moved its capital could build a second hub |
 | Modifier `country_[good]_storage_max_add` | `country_sr_<good>_capacity_add` | The `sr_` prefix avoids colliding with any vanilla modifier name |
 | Read `scope:sr_decay_amount` from loc | `GetVariable` / `GetModifier.GetValueWithBreakdownFor` / `custom_localization` | Temporary saved scopes don't persist into `status_desc`; only persistent variables and modifiers work for UI display |
 
@@ -421,6 +425,7 @@ Reserve policies added a second layer on top of that: a `st_res_policy_<good>_sg
 - No event flavor — a short event chain could celebrate reaching capacity or warn of shortages.
 - The weekly purchase budget is an **estimate** applied as a units cap, not a true spend meter, because reserve purchases go through production-method modifiers rather than a money effect (§4.6). A real meter would need the engine to expose the hub's realised goods expense.
 - The policy price signal is the **national market** price, not the hub state's local price (§4.6). They diverge when the capital is badly connected or in local shortage.
-- AI policy presets are static and do not react to war.
+- AI policy presets are static and do not react to war. Worse for wartime use, the Conservative preset puts every military good on **Buy When Cheap**, which never sells, so an AI reserve never releases ammunition into a war's price spike. Stabilize Prices (policy 3) would. That is a balance call and has not been made.
+- A hub cannot be moved: after a capital move it stays in the old capital and keeps working, but the policy signal's national-market assumption (§4.6) then rests on a non-capital state.
 - The response shape is a single linear ramp (a proportional controller); there is no integral term and no curved response, and the hysteresis bands only apply to the step response.
 - Silo has no distinctive icon — reuses the government-admin icon.

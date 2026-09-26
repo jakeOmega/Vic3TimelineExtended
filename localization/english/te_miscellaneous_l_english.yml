@@ -3240,6 +3240,7 @@
  st_res_grain_disable_output_flow:0 "Strategic Reserve Grain Release Halted"
  st_res_grain_store_flow:0 "Strategic Reserve Grain Intake"
  st_res_grain_withdraw_flow:0 "Strategic Reserve Grain Release"
+ st_res_hub_one_per_country_tt:0 "We do not already have a [GetBuildingType('building_strategic_reserve_hub').GetName] in another state"
  st_res_mode_blocked:0 "#R Blocked#!"
  st_res_mode_idle:0 "#Y Idle#!"
  st_res_mode_storing:0 "#G Storing#!"

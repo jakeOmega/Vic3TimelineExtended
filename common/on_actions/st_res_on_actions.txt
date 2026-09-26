@@ -1,0 +1,49 @@
+﻿# ============================================================================
+# Strategic Reserve — on-actions
+# ============================================================================
+# A Strategic Reserve Hub cannot be downsized or demolished
+# (building_strategic_reserve_hub, downsizeable = no). The one way to lose it
+# is to lose its state to another nation: a captured hub is demolished at
+# once, so the conqueror never inherits an empty depot it cannot remove (or a
+# second one beside its own), and the loser's Strategic Reserve journal entry
+# goes invalid (st_res_je_invalid_effect). The same pattern removes
+# building_space_program (extra_on_actions.txt) and the UN headquarters
+# (un_on_actions.txt) from a state that changes hands.
+#
+# A hand-over between the two sides of a civil war keeps the hub:
+# st_res_hub_stays_within_nation (st_res_triggers.txt) says why and how.
+# ============================================================================
+
+on_state_owner_change = {
+	on_actions = {
+		st_res_on_state_owner_change
+	}
+}
+
+# Root = the state that changed hands.
+st_res_on_state_owner_change = {
+	trigger = {
+		has_building = building_strategic_reserve_hub
+	}
+	effect = {
+		owner ?= { save_scope_as = st_res_capture_new_owner }
+		var:st_res_hub_holder ?= { save_scope_as = st_res_capture_holder }
+		if = {
+			limit = {
+				NOT = { st_res_hub_stays_within_nation = yes }
+			}
+			remove_building = building_strategic_reserve_hub
+			if = {
+				limit = { has_variable = st_res_hub_holder }
+				remove_variable = st_res_hub_holder
+			}
+			debug_log = "TE_ST_RES: a captured Strategic Reserve Hub was demolished"
+		}
+		else = {
+			# The hub stays in the nation; restamp it now rather than wait for
+			# the new holder's weekly pulse.
+			set_variable = { name = st_res_hub_holder value = scope:st_res_capture_new_owner }
+			debug_log = "TE_ST_RES: a Strategic Reserve Hub changed hands within one nation and was kept"
+		}
+	}
+}
