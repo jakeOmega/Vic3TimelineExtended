@@ -771,9 +771,11 @@ still open and are inherited, not repeated.
     is still open.
     **Fixed for the rebel win (#462; owner ruling 2026-09-26: the winner continues the
     nation).** The rebels keep their own state for the war — they need a rate to price their
-    loans — and `on_civil_war_won` hands the winner the loser's central bank through
-    `te_monetary_inherit_central_bank` (`common/scripted_effects/te_monetary_civil_war_effects.txt`,
-    whose header classifies every contract variable). The two vaults and their hot money are
+    loans — and at `on_civil_war_won` the shared civil-war layer (#467,
+    `common/on_actions/te_civil_war_on_actions.txt`) calls `te_monetary_repair_after_civil_war`,
+    which hands the winner the loser's central bank through `te_monetary_inherit_central_bank`
+    (`common/scripted_effects/te_monetary_civil_war_effects.txt`, whose header classifies every
+    contract variable). The two vaults and their hot money are
     **added**; everything the update integrates — policy rate, inflation and its noise walk,
     the sticky band, the neutral rate's two walks, the exchange rate, the peg, every clock and
     cooldown, the lender-of-last-resort record, the yearly GDP caches — and the player's
@@ -786,21 +788,37 @@ still open and are inherited, not repeated.
     re-added from their month counters — exact under six months, to the nearest half-year
     above (the engine cannot read a modifier's remaining time, and takes only literal
     durations). The regime is a law, so it is the winner's own. The copy runs only when the
-    shared pointer `te_cw_parent`, stored on the rebels at `on_revolution_start`, names a
-    different object that is no longer alive, and at most once per loser: the pointer is
-    retired only at the winner's next monthly pulse, so a second civil war ending inside that
-    window (two revolutions at once) is refused by the copy's own marker,
-    `te_mon_cw_bank_taken`, instead of adding the loser's gold again. A loyalist win and a
+    layer says the revolutionaries won (`var:te_cw_rebels_won = 1`, from the end-hook pair, or
+    the rebel's `te_cw_origin` without one) and its `scope:te_cw_loser` resolves, is no longer
+    alive and reads (a canary: a rate paid of at least 0.5) — and at most once per loser: the
+    copy records the loser in `te_mon_cw_bank_taken` and refuses it thereafter, so a later
+    civil war that names the same dead loser (below) cannot add its gold again. The marker
+    goes at a monthly pulse once that loser no longer resolves. A loyalist win and a
     secession need nothing.
+    **Concurrent wars — a known limitation.** With two revolutions at once, the first win
+    annexes the original; the second uprising fights on against the first winner. The
+    shared layer names that war's loser from the end-hook pair `on_revolution_end` reports,
+    and falls back to the rebel's `te_cw_origin`, which still names the dead original. If
+    the engine reports the second war against the first winner, both outcomes are right. If
+    it reports it against the dead original: a second uprising that wins is matched with the
+    dead original — it takes nothing (the original is gone, or its bank is refused by the
+    marker it inherits) and keeps its own fresh bank, so the nation's bank is lost as it was
+    before #462; and the first winner beating it is read as a rebel win against the dead
+    original, which the marker makes a no-op here but other repairs may not. The branch's
+    own pointer used to re-point the other uprisings at the winner; the shared layer should
+    grow that (re-point every live `te_cw_origin` naming the loser at the winner when the
+    rebels win, and take a rebel win's loser from the winner's own `te_cw_origin` before the
+    pair), rather than each system working around it.
     **Still to watch — one revolution the rebels win.** Everything above assumes the dead but
-    not yet deleted loser can be read through a stored scope variable at `on_civil_war_won`
-    (the loser was still in the save after that hook; nobody has read it from script). Search
+    not yet deleted loser can be read at `on_civil_war_won` (the loser was still in the save
+    after that hook; nobody has read it from script). Search
     `debug.log` for `TE_CW_PROBE monetary 1/2` and `2/2`: the copy worked if line 2's winner
     vault is line 1's winner vault plus the loser's, and line 2's inflation and mandate are the
-    loser's. `1/2` missing, with `set but does not resolve`, `figures read as nothing` or
-    `still alive` in its place, means the read failed (or a guard term is wrong) and the copy
-    did not run; a loyalist win logs `loyalists won`, and a second win inside the window logs
-    `already taken`. Then read `te_debug_monetary.1` on the winner a month later — the band
+    loser's. `1/2` missing, with `does not resolve`, `figures read as nothing` or `still
+    alive` in its place, means the read failed (or a guard term is wrong) and the copy did not
+    run; a loyalist win logs `not a rebel win`, and a second copy from the same loser logs
+    `already taken`. The layer's own `TE_CIVIL_WAR` lines, just before, say which side won and
+    whether the loser resolves. Then read `te_debug_monetary.1` on the winner a month later — the band
     modifier should match the copied inflation, and there should be exactly one. Remove the
     `TE_CW_PROBE` lines once read.
 33. **The empty `te_inflation_band_comfort`, on roughly every tag in the world.** It is

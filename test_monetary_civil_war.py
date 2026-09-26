@@ -3,7 +3,9 @@
 
 ``te_monetary_inherit_central_bank`` (common/scripted_effects/
 te_monetary_civil_war_effects.txt) copies the loser's monetary state onto the
-winner at ``on_civil_war_won``. Its safety rests on a classification: state and
+winner at ``on_civil_war_won``, through ``te_monetary_repair_after_civil_war``,
+which the shared civil-war layer (#467) calls from ``te_civil_war_on_won``.
+Its safety rests on a classification: state and
 choices are copied, while bookkeeping that records which modifier is physically
 on which object is not — copying an ``_applied`` tracker without its modifier
 is audit F7's bug. The engine checks none of this, so these tests do:
@@ -12,8 +14,9 @@ is audit F7's bug. The engine checks none of this, so these tests do:
 * no tracker is copied;
 * every monetary variable is classified — copied, or listed in NOT_COPIED
   below — so a new contract variable fails here until someone decides;
-* the copy is reached only through the rebel-win guard on the shared pointer,
-  which is set at revolutions and never at secessions.
+* the copy is reached only through the repair's rebel-win guard, which reads
+  the shared layer's ``te_cw_rebels_won`` and ``scope:te_cw_loser``, and the
+  branch's own retired pointer (``te_cw_parent``) is gone.
 """
 
 import os
@@ -50,6 +53,7 @@ def _block(text, name):
 
 EFFECTS = _path("common", "scripted_effects", "te_monetary_civil_war_effects.txt")
 ON_ACTIONS = _path("common", "on_actions", "te_monetary_on_actions.txt")
+SHARED_ON_ACTIONS = _path("common", "on_actions", "te_civil_war_on_actions.txt")
 
 # The files whose variables make up the monetary contract.
 MONETARY_FILES = [
@@ -119,10 +123,9 @@ WRITE = re.compile(
     r"(?:set_variable|change_variable|clamp_variable)\s*=\s*\{[^{}]*?\bname\s*=\s*(te_\w+)"
 )
 
-# Civil-war bookkeeping written in the monetary on-actions file: the shared
-# parent pointer, its retirement mark, and the copy's once-per-loser marker.
-# None is a monetary contract variable.
-CIVIL_WAR_BOOKKEEPING = {"te_cw_parent", "te_cw_parent_retire", "te_mon_cw_bank_taken"}
+# Civil-war bookkeeping, not a monetary contract variable: the copy's
+# once-per-loser marker.
+CIVIL_WAR_BOOKKEEPING = {"te_mon_cw_bank_taken"}
 
 
 def _monetary_variables():
@@ -226,93 +229,73 @@ class ClassificationTests(unittest.TestCase):
 
 class WiringTests(unittest.TestCase):
     def test_the_copy_runs_only_behind_the_rebel_win_guard(self):
-        text = _read(ON_ACTIONS)
         self.assertRegex(
-            _block(text, "on_civil_war_won"),
-            r"on_actions\s*=\s*\{\s*te_monetary_on_civil_war_won\s+te_civil_war_settle_parent\s*\}")
-        body = _block(text, "te_monetary_on_civil_war_won")
+            _block(_read(SHARED_ON_ACTIONS), "te_civil_war_on_won"),
+            r"te_civil_war_resolve_sides\s*=\s*yes[^}]*te_monetary_repair_after_civil_war\s*=\s*yes"
+            r"[^}]*te_civil_war_clear\s*=\s*yes")
+        body = _block(_read(EFFECTS), "te_monetary_repair_after_civil_war")
+        self.assertRegex(
+            body, r"^\s*if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*te_cw_rebels_won"
+            r"\s*var:te_cw_rebels_won\s*=\s*1\s*\}")
         guard = re.search(
-            r"limit\s*=\s*\{\s*var:te_cw_parent\s*\?=\s*\{\s*NOT\s*=\s*\{\s*this\s*=\s*root\s*\}"
-            r"\s*is_country_alive\s*=\s*no\s*has_variable\s*=\s*te_rate_paid_pts"
-            r"\s*var:te_rate_paid_pts\s*>=\s*0\.5\s*\}"
-            r"\s*NOT\s*=\s*\{\s*var:te_mon_cw_bank_taken\s*\?=\s*scope:te_cw_parent_now\s*\}\s*\}",
+            r"limit\s*=\s*\{\s*scope:te_cw_loser\s*\?=\s*\{\s*is_country_alive\s*=\s*no"
+            r"\s*has_variable\s*=\s*te_rate_paid_pts\s*var:te_rate_paid_pts\s*>=\s*0\.5\s*\}"
+            r"\s*NOT\s*=\s*\{\s*var:te_mon_cw_bank_taken\s*\?=\s*scope:te_cw_loser\s*\}\s*\}",
             body)
         self.assertIsNotNone(guard)
-        self.assertLess(
-            body.index("var:te_cw_parent ?= { save_scope_as = te_cw_parent_now }"), guard.start())
         self.assertEqual(body.count("te_monetary_inherit_central_bank"), 1)
-        self.assertGreater(body.index("te_monetary_inherit_central_bank"), guard.end())
-        self.assertLess(body.index("te_monetary_inherit_central_bank"), body.index("else_if"))
+        call = body.index("te_monetary_inherit_central_bank")
+        self.assertGreater(call, guard.end())
+        self.assertLess(call, body.index("else_if"))
         # Once per loser: the marker names the object the bank was taken from.
-        copy_branch = body[guard.end():body.index("else_if")]
         self.assertRegex(
-            copy_branch[copy_branch.index("te_monetary_inherit_central_bank"):],
+            body[call:body.index("else_if")],
             r"set_variable\s*=\s*\{\s*name\s*=\s*te_mon_cw_bank_taken\s+value\s*=\s*scope:te_cw_loser\s*\}")
-        # Nowhere else calls it.
+        # Nothing else calls either effect.
+        callers = {"te_monetary_inherit_central_bank": [], "te_monetary_repair_after_civil_war": []}
         for top in ("common", "events"):
             for root, _dirs, files in os.walk(_path(top)):
                 for name in files:
-                    if not name.endswith(".txt") or name == "te_monetary_on_actions.txt":
+                    if not name.endswith(".txt"):
                         continue
-                    with self.subTest(file=name):
-                        text = _read(os.path.join(root, name))
-                        self.assertNotRegex(text, r"te_monetary_inherit_central_bank\s*=\s*yes")
+                    text = _read(os.path.join(root, name))
+                    for effect, found in callers.items():
+                        found.extend([name] * len(re.findall(re.escape(effect) + r"\s*=\s*yes", text)))
+        self.assertEqual(callers["te_monetary_inherit_central_bank"], ["te_monetary_civil_war_effects.txt"])
+        self.assertEqual(callers["te_monetary_repair_after_civil_war"], ["te_civil_war_on_actions.txt"])
 
-    def test_pointer_is_set_at_revolutions_and_never_at_secessions(self):
+    def test_the_private_pointer_is_retired(self):
+        """The shared layer decides who won; this system hooks no civil-war end of its own."""
         text = _read(ON_ACTIONS)
-        revolution = _block(text, "on_revolution_start")
-        secession = _block(text, "on_secession_start")
-        self.assertIn("te_civil_war_record_parent", revolution)
-        self.assertNotIn("te_civil_war_record_parent", secession)
-        self.assertIn("te_civil_war_forget_parent", secession)
-        record = _block(text, "te_civil_war_record_parent")
-        self.assertRegex(
-            record, r"scope:target\s*\?=\s*\{\s*set_variable\s*=\s*\{\s*name\s*=\s*te_cw_parent"
-            r"\s+value\s*=\s*root\s*\}")
-        # The original forgets any old pointer at every start.
-        for name in ("te_civil_war_record_parent", "te_civil_war_forget_parent"):
-            with self.subTest(on_action=name):
+        self.assertNotRegex(text, r"^on_civil_war_won\s*=", "the shared te_civil_war_on_won calls the repair")
+        for hook in ("on_revolution_start", "on_secession_start"):
+            with self.subTest(hook=hook):
+                # The rebels' own monetary state stays: they price their loans with it.
                 self.assertRegex(
-                    _block(text, name),
-                    r"^\s*effect\s*=\s*\{\s*if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*"
-                    r"te_cw_parent\s*\}\s*remove_variable\s*=\s*te_cw_parent")
-
-    def test_pointer_is_retired_at_the_next_pulse_not_in_the_hook(self):
-        text = _read(ON_ACTIONS)
+                    _block(text, hook), r"^\s*on_actions\s*=\s*\{\s*te_monetary_on_country_released\s*\}\s*$")
         self.assertRegex(
             _block(text, "on_monthly_pulse_country"),
-            r"on_actions\s*=\s*\{\s*te_monetary_monthly_on_action\s+te_civil_war_retire_parent\s*\}")
-        # The hook removes only a self-pointer (a loyalist win); a rebel
-        # winner's pointer is marked, and other uprisings are re-parented.
-        settle = _block(text, "te_civil_war_settle_parent")
-        self.assertEqual(settle.count("remove_variable = te_cw_parent"), 1)
+            r"^\s*on_actions\s*=\s*\{\s*te_monetary_monthly_on_action\s*\}\s*$")
+        for top in ("common", "events"):
+            for root, _dirs, files in os.walk(_path(top)):
+                for name in files:
+                    if name.endswith(".txt"):
+                        with self.subTest(file=name):
+                            self.assertNotIn("te_cw_parent", _read(os.path.join(root, name)))
+
+    def test_the_marker_goes_once_its_loser_no_longer_resolves(self):
+        monthly = _block(_read(ON_ACTIONS), "te_monetary_monthly_on_action")
         self.assertRegex(
-            settle, r"^\s*effect\s*=\s*\{\s*if\s*=\s*\{\s*limit\s*=\s*\{\s*var:te_cw_parent\s*\?=\s*root"
-            r"\s*\}\s*remove_variable\s*=\s*te_cw_parent")
-        rebel_win = settle[settle.index("else_if"):]
-        self.assertIn("set_variable = { name = te_cw_parent_retire value = yes }", rebel_win)
-        self.assertRegex(
-            rebel_win, r"every_country\s*=\s*\{\s*limit\s*=\s*\{\s*NOT\s*=\s*\{\s*this\s*=\s*root\s*\}"
-            r"\s*var:te_cw_parent\s*\?=\s*scope:te_cw_retired_parent\s*\}"
-            r"\s*set_variable\s*=\s*\{\s*name\s*=\s*te_cw_parent\s+value\s*=\s*root\s*\}")
-        # The pulse retires only a marked pointer: a rebel mid-war keeps its own.
-        retire = _block(text, "te_civil_war_retire_parent")
-        self.assertRegex(
-            retire, r"^\s*effect\s*=\s*\{\s*if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*"
-            r"te_cw_parent_retire\s*\}")
-        self.assertIn("remove_variable = te_cw_parent_retire", retire)
-        self.assertIn("remove_variable = te_cw_parent\n", retire + "\n")
-        # Both start hooks clear the mark with the pointer, and the monetary
-        # marker goes on the same pulse as the pointer.
-        for name in ("te_civil_war_record_parent", "te_civil_war_forget_parent"):
-            with self.subTest(on_action=name):
-                self.assertIn("remove_variable = te_cw_parent_retire", _block(text, name))
-        self.assertIn("remove_variable = te_mon_cw_bank_taken", _block(text, "te_monetary_monthly_on_action"))
+            monthly, r"if\s*=\s*\{\s*limit\s*=\s*\{\s*has_variable\s*=\s*te_mon_cw_bank_taken"
+            r"\s*NOT\s*=\s*\{\s*exists\s*=\s*var:te_mon_cw_bank_taken\s*\}\s*\}"
+            r"\s*remove_variable\s*=\s*te_mon_cw_bank_taken\s*\}")
 
     def test_every_loser_read_is_through_the_saved_scope(self):
+        """The repair reads the shared layer's results, never its raw pointers."""
         effects = _read(EFFECTS)
-        self.assertNotIn("var:te_cw_parent", effects)
-        self.assertNotIn("prev", effects)
+        for raw in ("var:te_cw_origin", "var:te_cw_parent", "global_var:te_cw_ending", "te_cw_role", "prev"):
+            with self.subTest(raw=raw):
+                self.assertNotIn(raw, effects)
 
 
 if __name__ == "__main__":
