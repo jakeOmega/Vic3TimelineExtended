@@ -13,8 +13,13 @@
 #
 # Variables:
 #   te_cw_origin   on the rebel from the outbreak: the country it rose against
-#   te_cw_role     1 on the original country, 2 on the rebel — only so the log
-#                  can show whether the loser's variables still read
+#   te_cw_role     1 on the original country, 2 on the rebel. The log uses it to
+#                  show whether the loser's variables still read, and at
+#                  on_civil_war_won the winner's own value (the merge keeps it)
+#                  says which side won: cr_repair_after_civil_war branches on it.
+#                  te_civil_war_clear strips it from the winner at every win, so
+#                  the winner of a second, concurrent war may carry none of its
+#                  own and inherit the loser's
 #   global te_cw_ending_origin / te_cw_ending_rebel / te_cw_ending_kind
 #                  (1 revolution, 2 secession): the pair on_revolution_end /
 #                  on_secession_end reported, consumed by on_civil_war_won,

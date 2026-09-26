@@ -157,7 +157,7 @@ A revolution's winner inherits the loser's variables but no modifiers (`docs/gui
 - **`te_cw_role = 2` with `te_cw_rebels_won = 0`** (a seceder won as a new nation): nothing, since nothing was merged into it.
 - **No `te_cw_role`** (a war begun before #467 recorded the sides): the guarded rebuild, as before. It is a no-op unless foreign state exists.
 
-The branch's own pointer, `cr_revolution_original`, is retired. Only saves from the unmerged branch carry it, nothing reads it, and the repair drops it from a winner.
+Which side won comes from the shared civil-war layer (`te_cw_rebels_won`, the winner's `te_cw_role`). Civil rights keeps no pointer of its own.
 
 Design and variables: `common/scripted_effects/civil_rights_effects.txt` § REVOLUTION CONTINUITY.
 - **Outcome modifier.** Each resolution option records the modifier it granted (`cr_record_outcome_modifier` → `cr_outcome_<modifier>`, `cr_outcome_months = 0`). All twelve are 10-year decaying (`long_modifier_time`). `on_monthly_pulse_country` counts `cr_outcome_months` to 120, then forgets the record. It forgets it sooner if the modifier is gone. That can't happen within a civil war's tick, since `te_civil_war_on_won` repairs the merge in the same tick, so outside it a missing modifier means it has run out. The rebuild re-adds the modifier for the whole years it had left, at `years left / 10` strength, so it decays to zero on the original date. Durations are constants on a ladder: no script feeds a computed value to `add_modifier`'s `days =`. `.230`–`.232` grant only radicals, so there is nothing to rebuild.

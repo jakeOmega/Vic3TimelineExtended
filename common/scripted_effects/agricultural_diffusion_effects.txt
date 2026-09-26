@@ -198,8 +198,9 @@ agdiff_backfill_diffusion_for_country = {
 #
 # Nothing is cleared on the original. The marker only ever sits on rebels,
 # or on a winner until its own agdiff_repair_after_civil_war removes it, so a
-# marker on ROOT here means ROOT is itself a rebel country still at war, and
-# clearing it would let that war's backstop run after all.
+# marker on ROOT here means ROOT is itself a rebel country still at war (or a
+# seceder that won, if its war's on_civil_war_won never fired), and clearing
+# it would let that war's backstop run after all.
 #
 # Scope: ROOT = the original, scope:target = the uprising country (called
 # from te_civil_war_on_start, common/on_actions/te_civil_war_on_actions.txt,
