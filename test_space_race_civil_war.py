@@ -130,8 +130,31 @@ class ImmediateTests(unittest.TestCase):
         pulse = _block(EFFECTS, "sr_sync_space_race_entries")
         self.assertEqual(re.findall(r"sr_sync_(\w+)_entry = yes", pulse), list(ENTRIES))
         monthly = _block(ON_ACTIONS, "space_race_on_action")
-        self.assertIn("sr_sync_space_race_entries = yes", monthly)
-        self.assertIn("sr_sync_probe_data = yes", monthly)
+        for call in ("sr_sync_space_race_entries = yes", "sr_sync_probe_data = yes"):
+            with self.subTest(call=call):
+                limits = _if_limits_around(monthly, monthly.index(call))
+                self.assertEqual(limits, [" sr_space_race_participant = yes "])
+
+    def test_the_monthly_gate_admits_every_country_with_state(self):
+        # Each entry's `possible` must name a completion variable (or be
+        # suborbital, which the gate names by its active flag), and every
+        # completion chain starts at suborbital.
+        gate = _block(TRIGGERS, "sr_space_race_participant")
+        self.assertIn("has_variable = sr_active_suborbital", gate)
+        self.assertIn("has_variable = sr_completed_suborbital", gate)
+        for entry in ENTRIES[1:]:
+            with self.subTest(entry=entry):
+                possible = _block(_block(JE, f"je_space_race_{entry}"), "possible")
+                self.assertRegex(possible, r"(?<!NOT = \{ )has_variable = sr_completed_\w+")
+        self.assertIn("has_variable = sr_completed_suborbital",
+                      _block(_block(JE, "je_space_race_orbital"), "possible"))
+        self.assertNotRegex(EFFECTS + JE, r"remove_variable\s*=\s*sr_completed_")
+
+    def test_rebels_start_no_programme(self):
+        entry = _block(JE, "je_space_race_suborbital")
+        self.assertIn("is_revolutionary = no", _block(entry, "is_shown_when_inactive"))
+        # Not in `possible`: an inherited running entry re-checks it.
+        self.assertNotIn("is_revolutionary", _block(entry, "possible"))
 
 
 class RewardTests(unittest.TestCase):

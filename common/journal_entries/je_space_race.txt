@@ -48,6 +48,16 @@ je_space_race_suborbital = {
 		has_game_rule = space_race_enabled
 		has_technology_researched = rocketry
 		is_great_or_major_power = yes
+		# The rebels of a running revolution start no programme of their own.
+		# They hold none of the country's variables, so they would begin again
+		# from suborbital flight. If they won, their own progress and funding
+		# would beat the loser's in the variable merge, and a run the loser had
+		# already completed would reopen. Only suborbital needs this: every
+		# later entry requires a sr_completed_<m> the rebels do not hold. Not in
+		# `possible`, which an inherited running entry re-checks
+		# (can_deactivate = yes). Vanilla precedent:
+		# 02_south_american_national_identity.txt.
+		is_revolutionary = no
 	}
 
 	possible = {
