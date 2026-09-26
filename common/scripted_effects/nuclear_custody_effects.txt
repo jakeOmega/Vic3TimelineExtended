@@ -35,8 +35,11 @@
 #   nd_ar_capital_region  its capital's state region — where a successor is found
 #   nd_ar_at_war          1 if it was at war (a settlement doubles the loss)
 #   nd_ar_doctrine / _authority / _safeguards / _hardening   its posture
+#   nd_ar_secured         1 if its custody was secured (nd_custody_is_secured):
+#                         a settlement then loses half as many
 #   nd_ar_loose           warheads from this arsenal that are unaccounted for —
-#                         the per-origin count step 5 will draw on
+#                         the per-origin count the loose-warhead plots draw on
+#                         (nuclear_loose_effects.txt)
 #
 # Invariant: both sides of a civil war whose origin has a record hold their own
 # nuclear_weapon_stockpile and their own record from the outbreak on
@@ -144,6 +147,13 @@ nd_ledger_refresh = {
 		if = {
 			limit = { scope:nd_ledger_owner = { has_variable = nd_hardening } }
 			set_variable = { name = nd_ar_hardening value = scope:nd_ledger_owner.var:nd_hardening }
+		}
+		if = {
+			limit = { scope:nd_ledger_owner = { nd_custody_is_secured = yes } }
+			set_variable = { name = nd_ar_secured value = 1 }
+		}
+		else = {
+			set_variable = { name = nd_ar_secured value = 0 }
 		}
 	}
 }
@@ -446,6 +456,7 @@ nd_custody_on_civil_war_start = {
 			limit = { nd_is_armed = yes }
 			scope:target = { save_scope_as = nd_cw_rebel }
 			trigger_event = { id = nuclear_custody.1 popup = yes }
+			nd_cw_notify_world = yes
 		}
 	}
 }
@@ -604,8 +615,15 @@ nd_cw_pull_back = {
 
 # ROOT = the original country: "Dismantle them".
 nd_cw_dismantle = {
+	nd_cw_dismantle_as = { TT = nd_tt_cw_dismantle }
+}
+
+# ROOT = the original country. Takes every warhead we still hold apart; TT is
+# the tooltip that says how (a literal key, so organize_loc sees it used;
+# #451). The outbreak's Dismantle, and both of "Deny Them the Bomb"'s.
+nd_cw_dismantle_as = {
 	custom_tooltip = {
-		text = nd_tt_cw_dismantle
+		text = $TT$
 		set_variable = { name = nuclear_weapon_stockpile value = 0 }
 	}
 	if = {
@@ -620,11 +638,230 @@ nd_cw_dismantle = {
 		}
 	}
 	hidden_effect = {
-		debug_log = "TE_CUSTODY: [ROOT.GetCountry.GetName] dismantled its arsenal at the outbreak"
+		debug_log = "TE_CUSTODY: [ROOT.GetCountry.GetName] dismantled its arsenal in a civil war"
 		nd_snap_public_estimate = yes
 		nd_apply_posture_modifiers = yes
 		nd_ledger_refresh = yes
 		nd_cw_clear_roll = yes
+	}
+}
+
+# ----------------------------------------------------------------------------
+# CIVIL WARS — a government that is losing ("Deny Them the Bomb")
+# ----------------------------------------------------------------------------
+# A revolution's winner inherits whatever the government still holds (the
+# settlement hands a dead owner's arsenal to whoever holds its capital). So a
+# government losing a revolution while it is still armed is asked, once per
+# civil war, what becomes of its warheads (nuclear_custody.5). A secession is
+# not asked: its winner does not take the government's arsenal.
+
+# Country scope, from nd_country_monthly_cleanup (every country, monthly).
+# Asks the question; and once no civil war of ours is left, forgets it (the
+# next civil war may ask again) and lets a custodian's help lapse.
+nd_cw_monthly_check = {
+	if = {
+		limit = {
+			has_game_rule = nuclear_weapons_enabled
+			nd_is_armed = yes
+			NOT = { has_variable = nd_cw_deny_asked }
+		}
+		save_scope_as = nd_cw_self
+		random_country = {
+			limit = {
+				civil_war_origin_country ?= scope:nd_cw_self
+				is_revolutionary = yes
+				is_country_alive = yes
+			}
+			save_scope_as = nd_cw_rebel
+		}
+		if = {
+			limit = {
+				exists = scope:nd_cw_rebel
+				nd_is_losing_war_to = { ENEMY = scope:nd_cw_rebel }
+			}
+			set_variable = nd_cw_deny_asked
+			trigger_event = { id = nuclear_custody.5 popup = yes }
+		}
+	}
+	if = {
+		limit = {
+			OR = {
+				has_variable = nd_cw_deny_asked
+				has_variable = nd_cw_custodian
+			}
+			nd_in_civil_war = no
+		}
+		if = {
+			limit = { has_variable = nd_cw_deny_asked }
+			remove_variable = nd_cw_deny_asked
+		}
+		if = {
+			limit = { has_variable = nd_cw_custodian }
+			remove_variable = nd_cw_custodian
+			nd_ledger_refresh = yes
+		}
+	}
+}
+
+# ROOT = the government (nuclear_custody.5's immediate). How many warheads a
+# dismantling in haste loses: the outbreak's chaos rate (halved if our custody
+# is secured), stochastically rounded once so the option shows the number.
+nd_cw_deny_roll = {
+	set_variable = {
+		name = nd_cw_deny_lost
+		value = {
+			value = nd_stockpile
+			multiply = nd_cw_outbreak_loss_rate
+		}
+	}
+	nd_custody_round = { VAR = nd_cw_deny_lost }
+	if = {
+		limit = { var:nd_cw_deny_lost > nd_stockpile }
+		set_variable = { name = nd_cw_deny_lost value = nd_stockpile }
+	}
+}
+
+# ROOT = the government: "Take them apart now". The rolled loss goes missing
+# on the way (re-capped at what we hold now: a launch may have spent some);
+# the rest are dismantled.
+nd_cw_deny_dismantle = {
+	custom_tooltip = {
+		text = nd_tt_cw_deny_hurried
+		if = {
+			limit = { var:nd_cw_deny_lost > nd_stockpile }
+			set_variable = { name = nd_cw_deny_lost value = nd_stockpile }
+		}
+		if = {
+			limit = { var:nd_cw_deny_lost > 0 }
+			change_variable = { name = nuclear_weapon_stockpile subtract = var:nd_cw_deny_lost }
+			nd_custody_lose_warheads = { AMOUNT = var:nd_cw_deny_lost }
+		}
+	}
+	nd_cw_dismantle_as = { TT = nd_tt_cw_deny_rest }
+	hidden_effect = {
+		nd_cw_deny_clear = yes
+	}
+}
+
+# ROOT = the government: "Let [custodian] take them apart" — nothing is lost
+# under a foreign power's supervision, which is what accepting its offer
+# (nuclear_custody.7) bought.
+nd_cw_deny_supervised = {
+	nd_cw_dismantle_as = { TT = nd_tt_cw_deny_supervised }
+	custom_tooltip = {
+		text = nd_tt_cw_deny_custodian_relations
+		var:nd_cw_custodian ?= {
+			change_relations = { country = ROOT value = 15 }
+		}
+	}
+	hidden_effect = {
+		nd_cw_deny_clear = yes
+	}
+}
+
+nd_cw_deny_clear = {
+	if = {
+		limit = { has_variable = nd_cw_deny_lost }
+		remove_variable = nd_cw_deny_lost
+	}
+}
+
+# ----------------------------------------------------------------------------
+# CIVIL WARS — the world watching (nuclear_custody.6 / .7 / .8)
+# ----------------------------------------------------------------------------
+# ROOT = the original country, scope:nd_cw_rebel set (nd_custody_on_civil_war_
+# start, armed origins only). Every power that watches closely
+# (nd_cw_would_watch) hears a week from now, once "Who Holds the Button?" has
+# been answered. The pair is stored on the observer for a month, not passed as
+# saved scopes, because the event is delayed.
+nd_cw_notify_world = {
+	save_scope_as = nd_cw_origin
+	every_country = {
+		limit = { nd_cw_would_watch = { ORIGIN = scope:nd_cw_origin REBEL = scope:nd_cw_rebel } }
+		set_variable = { name = nd_cwr_origin value = scope:nd_cw_origin days = 30 }
+		set_variable = { name = nd_cwr_rebel value = scope:nd_cw_rebel days = 30 }
+		trigger_event = { id = nuclear_custody.6 days = 7 popup = yes }
+	}
+}
+
+# ROOT = the observer (nuclear_custody.6), scope:nd_cwr_gov and scope:nd_cwr_reb
+# saved. Backs SIDE (gov or reb) against OTHER: relations, and the side's war
+# support in their civil war. TT names it (a literal key).
+nd_cwr_back = {
+	scope:nd_cwr_$SIDE$ = {
+		change_relations = { country = ROOT value = 20 }
+	}
+	scope:nd_cwr_$OTHER$ = {
+		change_relations = { country = ROOT value = -20 }
+	}
+	custom_tooltip = {
+		text = $TT$
+		scope:nd_cwr_$SIDE$ = {
+			every_scope_war = {
+				limit = { is_war_participant = scope:nd_cwr_$OTHER$ }
+				add_war_war_support = {
+					target = scope:nd_cwr_$SIDE$
+					value = 5
+				}
+			}
+		}
+	}
+}
+
+# ROOT = the observer: offers to secure the government's arsenal. The first
+# offer to arrive is the one the government weighs (nuclear_custody.7).
+nd_cwr_offer_custody = {
+	custom_tooltip = nd_tt_cwr_offer
+	hidden_effect = {
+		scope:nd_cwr_gov = {
+			if = {
+				limit = {
+					NOT = { has_variable = nd_cw_offer_from }
+					NOT = { has_variable = nd_cw_custodian }
+				}
+				set_variable = { name = nd_cw_offer_from value = ROOT days = 60 }
+				trigger_event = { id = nuclear_custody.7 popup = yes }
+			}
+		}
+	}
+}
+
+# ROOT = the government (nuclear_custody.7), scope:nd_cw_helper saved.
+nd_cw_accept_custodian = {
+	custom_tooltip = {
+		text = nd_tt_cw_custodian_accept
+		set_variable = { name = nd_cw_custodian value = scope:nd_cw_helper }
+	}
+	scope:nd_cw_helper = {
+		change_relations = { country = ROOT value = 10 }
+	}
+	hidden_effect = {
+		nd_ledger_refresh = yes
+		nd_cw_answer_offer = { ANSWER = 1 }
+	}
+}
+
+nd_cw_decline_custodian = {
+	scope:nd_cw_helper = {
+		change_relations = { country = ROOT value = -5 }
+	}
+	hidden_effect = {
+		nd_cw_answer_offer = { ANSWER = 2 }
+	}
+}
+
+# ROOT = the government. Tells the helper (nuclear_custody.8): 1 accepted,
+# 2 declined.
+nd_cw_answer_offer = {
+	if = {
+		limit = { has_variable = nd_cw_offer_from }
+		remove_variable = nd_cw_offer_from
+	}
+	save_scope_as = nd_cw_answering
+	scope:nd_cw_helper = {
+		set_variable = { name = nd_cw_offer_answer value = $ANSWER$ }
+		set_variable = { name = nd_cw_offer_to value = scope:nd_cw_answering }
+		trigger_event = { id = nuclear_custody.8 popup = yes }
 	}
 }
 

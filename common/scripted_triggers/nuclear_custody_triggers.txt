@@ -93,3 +93,69 @@ nd_ai_would_strike_own_people = {
 		has_law_or_variant = law_type:law_secret_police
 	}
 }
+
+# ----------------------------------------------------------------------------
+# SECURED CUSTODY
+# ----------------------------------------------------------------------------
+# Is this country's custody of its warheads secured — someone else's
+# technicians and money helping to guard and count them? Halves the fraction
+# lost whenever they change hands (nd_custody_loss_rate, and nd_ar_loss_rate
+# through the record's nd_ar_secured, which nd_ledger_refresh copies from
+# here). Country scope. Sources:
+#   a custodian accepted in a civil war ("An Offer to Secure Our Arsenal",
+#   nuclear_custody.7), for as long as that civil war lasts.
+nd_custody_is_secured = {
+	OR = {
+		var:nd_cw_custodian ?= { is_country_alive = yes }
+	}
+}
+
+# Can the custodian we accepted in this civil war still take our warheads
+# apart under its supervision ("Deny Them the Bomb", option b): alive, armed
+# (it knows how) and not at war with us. Country scope = the government.
+nd_cw_custodian_can_supervise = {
+	save_temporary_scope_as = nd_ccs_self
+	var:nd_cw_custodian ?= {
+		is_country_alive = yes
+		nd_is_armed = yes
+		NOT = { has_war_with = scope:nd_ccs_self }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# CIVIL WARS — the world watching (nuclear_custody.6)
+# ----------------------------------------------------------------------------
+# Does this country watch the civil war between $ORIGIN$ and $REBEL$ closely
+# enough to take a side: a power believed armed that is a major power or
+# borders the origin, a party to neither side of the war, and not still
+# deciding about another one (nd_cwr_origin is set for a month). Country scope.
+nd_cw_would_watch = {
+	NOT = { this = $ORIGIN$ }
+	NOT = { this = $REBEL$ }
+	is_country_alive = yes
+	nd_believed_armed = yes
+	NOT = { has_war_with = $ORIGIN$ }
+	NOT = { has_war_with = $REBEL$ }
+	OR = {
+		country_rank >= rank_value:major_power
+		is_adjacent_to_country = $ORIGIN$
+	}
+	NOT = { has_variable = nd_cwr_origin }
+}
+
+# The pair nuclear_custody.6 was sent about is still at war: both sides alive,
+# the rebels still rebels. Country scope = the observer.
+nd_cwr_pair_at_war = {
+	var:nd_cwr_origin ?= {
+		is_country_alive = yes
+		save_temporary_scope_as = nd_cwr_pair_origin
+	}
+	var:nd_cwr_rebel ?= {
+		is_country_alive = yes
+		OR = {
+			is_revolutionary = yes
+			is_secessionist = yes
+		}
+		has_war_with = scope:nd_cwr_pair_origin
+	}
+}

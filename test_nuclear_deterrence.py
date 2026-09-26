@@ -1376,7 +1376,10 @@ class TestCustody(unittest.TestCase):
 
     def test_split_tooltips_are_literal_and_localized(self):
         keys = set(re.findall(r"TT = (nd_\w+)", self.ce + self.ev))
-        self.assertEqual(keys, {"nd_tt_cw_split_hold", "nd_tt_cw_split_pull"})
+        self.assertEqual(keys, {"nd_tt_cw_split_hold", "nd_tt_cw_split_pull",
+                                "nd_tt_cw_dismantle", "nd_tt_cw_deny_rest",
+                                "nd_tt_cw_deny_supervised",
+                                "nd_tt_cwr_back_gov", "nd_tt_cwr_back_rebels"})
         missing = keys - loc_keys()
         self.assertFalse(missing, missing)
         # Every figure the roll writes is cleared again, for both modes.
@@ -1394,6 +1397,77 @@ class TestCustody(unittest.TestCase):
         self.assertIn("nd_cw_dismantle = yes", option_body(self.ev, "nuclear_custody.1.c"))
         self.assertIn("default_option = yes", option_body(self.ev, "nuclear_custody.1.a"))
         self.assertIn("nd_cw_roll_split = yes", block(self.ev, "nuclear_custody.1"))
+
+
+class TestCustodyLosingAndWatching(unittest.TestCase):
+    """Step 3's rest (spec docs/superpowers/specs/2026-09-26-nuclear-loose-
+    warheads-design.md §1): "Deny Them the Bomb" for a government losing a
+    revolution, the watching powers' event, and secured custody, which halves
+    what goes missing whenever warheads change hands."""
+
+    def setUp(self):
+        self.e = strip_comments(read(EFFECTS))
+        self.ce = strip_comments(read(CUSTODY_EFFECTS))
+        self.ct = strip_comments(read(CUSTODY_TRIGGERS))
+        self.cv = strip_comments(read(CUSTODY_VALUES))
+        self.ev = strip_comments(read(CUSTODY_EVENTS))
+
+    def test_deny_is_asked_of_a_losing_revolution_only(self):
+        self.assertIn("nd_cw_monthly_check = yes", block(self.e, "nd_country_monthly_cleanup"))
+        check = block(self.ce, "nd_cw_monthly_check")
+        ask = block(check, "random_country")
+        self.assertIn("is_revolutionary = yes", ask)
+        self.assertNotIn("is_secessionist", ask)
+        self.assertIn("nd_is_losing_war_to = { ENEMY = scope:nd_cw_rebel }", check)
+        self.assertIn("id = nuclear_custody.5", check)
+        # Forgotten, with the custodian, once no civil war is left.
+        self.assertIn("nd_in_civil_war = no", check)
+        self.assertIn("remove_variable = nd_cw_deny_asked", check)
+        self.assertIn("remove_variable = nd_cw_custodian", check)
+
+    def test_deny_options(self):
+        self.assertIn("nd_cw_deny_roll = yes", block(self.ev, "nuclear_custody.5"))
+        self.assertIn("nd_cw_deny_dismantle = yes", option_body(self.ev, "nuclear_custody.5.a"))
+        supervised = option_body(self.ev, "nuclear_custody.5.b")
+        self.assertIn("nd_cw_custodian_can_supervise = yes", supervised)
+        self.assertIn("nd_cw_deny_supervised = yes", supervised)
+        keep = option_body(self.ev, "nuclear_custody.5.c")
+        self.assertIn("default_option = yes", keep)
+        self.assertIn("nd_tt_cw_deny_keep", keep)
+        # The hasty dismantling loses what the roll said, into the pool.
+        hurried = block(self.ce, "nd_cw_deny_dismantle")
+        self.assertIn("nd_custody_lose_warheads = { AMOUNT = var:nd_cw_deny_lost }", hurried)
+        self.assertIn("nd_cw_dismantle_as = { TT = nd_tt_cw_deny_rest }", hurried)
+        self.assertNotIn("nd_custody_lose_warheads", block(self.ce, "nd_cw_deny_supervised"))
+        self.assertIn("multiply = nd_cw_outbreak_loss_rate", block(self.ce, "nd_cw_deny_roll"))
+
+    def test_the_world_hears_of_an_armed_civil_war(self):
+        start = block(self.ce, "nd_custody_on_civil_war_start")
+        self.assertIn("nd_cw_notify_world = yes", start)
+        notify = block(self.ce, "nd_cw_notify_world")
+        self.assertIn("nd_cw_would_watch = {", notify)
+        self.assertIn("id = nuclear_custody.6 days = 7", notify)
+        # Stored on the observer for the delayed event, not passed as scopes.
+        self.assertIn("name = nd_cwr_origin", notify)
+        self.assertIn("name = nd_cwr_rebel", notify)
+        self.assertIn("nd_cwr_pair_at_war = yes", block(self.ev, "nuclear_custody.6"))
+        self.assertIn("SIDE = gov OTHER = reb", option_body(self.ev, "nuclear_custody.6.a"))
+        self.assertIn("SIDE = reb OTHER = gov", option_body(self.ev, "nuclear_custody.6.b"))
+        self.assertIn("nd_cwr_offer_custody = yes", option_body(self.ev, "nuclear_custody.6.c"))
+        self.assertIn("default_option = yes", option_body(self.ev, "nuclear_custody.6.e"))
+        self.assertIn("id = nuclear_custody.7", block(self.ce, "nd_cwr_offer_custody"))
+        self.assertIn("nd_cw_accept_custodian = yes", option_body(self.ev, "nuclear_custody.7.a"))
+        self.assertIn("id = nuclear_custody.8", block(self.ce, "nd_cw_answer_offer"))
+
+    def test_secured_custody_halves_both_loss_rates_after_the_clamp(self):
+        for name, test in (("nd_custody_loss_rate", "nd_custody_is_secured = yes"),
+                           ("nd_ar_loss_rate", "var:nd_ar_secured = 1")):
+            body = block(self.cv, name)
+            self.assertIn(test, body, name)
+            self.assertLess(body.index("max = 0.1"), body.index(test), name)
+        self.assertIn("nd_custody_is_secured = yes", block(self.ce, "nd_ledger_refresh"))
+        self.assertIn("name = nd_ar_secured value = 1", block(self.ce, "nd_ledger_refresh"))
+        self.assertIn("var:nd_cw_custodian", block(self.ct, "nd_custody_is_secured"))
 
 
 if __name__ == "__main__":
