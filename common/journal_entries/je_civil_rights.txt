@@ -6,6 +6,13 @@
 		has_game_rule = social_movements_enabled
 		has_technology_researched = civil_rights_movement
 		NOT = { is_country_type = decentralized }
+		# Rebels do not start their own struggle mid-war (and, winning, keep a fresh
+		# outcome): vanilla's pattern for historical entries (je_the_two_spains,
+		# je_risorgimento). Here, not in possible, so it can never touch an
+		# active record, such as one a revolution's winner inherits; the winner
+		# stops being revolutionary (vanilla gates power-bloc invites, obligations
+		# and coups on it).
+		is_revolutionary = no
 		# Set by on_complete / on_fail. A revolution's winner gets a fresh record
 		# of a resolved entry; without this it would start the struggle over
 		# (civil_rights_effects.txt § REVOLUTION CONTINUITY).
@@ -320,10 +327,14 @@
 
 			# --- Cooptation expiry: after 12 months the bar push goes to 0 ---
 			# Re-applies cleanly each tick once expired so the marker survives
-			# the periodic phase-modifier swaps below.
+			# the periodic phase-modifier swaps below. The mirror counts, as for
+			# the counters: the self-heal above may have just re-added the policy.
 			if = {
 				limit = {
-					has_modifier = cr_cooptation_modifier
+					OR = {
+						has_modifier = cr_cooptation_modifier
+						has_variable = cr_policy_cooptation
+					}
 					var:cr_cooptation_months >= 12
 					NOT = { has_modifier = cr_cooptation_expired }
 				}
