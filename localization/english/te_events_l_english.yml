@@ -3290,12 +3290,12 @@
  repeatable_events.90.t:0 "Quantum Materials Bottleneck"
 
 #
-# RESETTLEMENT_EVENTS
+# RESETTLEMENT
 #
- resettlement.9.t:0 "The Frontier Is Closed"
+ resettlement.9.a:0 "A new chapter."
  resettlement.9.d:0 "[SCOPE.sState('rs_closed_state').GetName] is a frontier no longer. Its farms and towns are as settled as the rest of the country, and the Settlement Authority there has been wound up. If we want more settlers, we will have to find another frontier."
  resettlement.9.f:0 "In 1890 the Superintendent of the Census reported that the United States no longer had a frontier line. Three years later Frederick Jackson Turner argued that its closing ended the first period of American history."
- resettlement.9.a:0 "A new chapter."
+ resettlement.9.t:0 "The Frontier Is Closed"
 
 #
 # SOCIAL_TENSIONS_EVENTS
