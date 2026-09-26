@@ -18,9 +18,14 @@
 #           un_res_support    yes votes (starts at 1: the proposer)
 #           un_res_oppose     no votes (a veto also counts as no)
 #           un_res_months     months open (lapse watchdog)
-#           un_res_cooldown   timed, set on close: the topic can't be proposed
-#                             again while any closed resolution of it carries it
-#                             (military_mandate opts out — see un_buttons.txt)
+#           un_res_cooldown_months  set on close, counted down monthly and
+#                             removed at 0: the topic can't be proposed again
+#                             while any closed resolution of it carries it
+#                             (military_mandate opts out — see un_buttons.txt).
+#                             A month count, not a timed variable: the engine
+#                             never expires a timed variable on a container.
+#                             Saves from before this carry a frozen timed
+#                             un_res_cooldown that nothing reads any more.
 #           un_res_mandate_region       military_mandate only: the state region
 #                             the resolution would authorize recovering
 #           un_res_mandate_beneficiary  military_mandate only: who receives it
@@ -277,10 +282,10 @@ un_resolution_archive = {
 	save_scope_as = un_res_archived
 	if = {
 		limit = { has_tag = un_topic_expulsion }
-		set_variable = { name = un_res_cooldown days = long_modifier_time }
+		set_variable = { name = un_res_cooldown_months value = un_res_cooldown_months_expulsion }
 	}
 	else = {
-		set_variable = { name = un_res_cooldown days = normal_modifier_time }
+		set_variable = { name = un_res_cooldown_months value = un_res_cooldown_months_default }
 	}
 	add_to_global_variable_list = { name = un_resolution_history target = scope:un_res_archived }
 	if = {
@@ -302,13 +307,13 @@ un_resolution_archive = {
 			any_in_global_list = { variable = un_resolution_history count >= 26 has_tag = un_resolution } # un_resolution_history_cap + 1
 			any_in_global_list = {
 				variable = un_resolution_history
-				NOT = { has_variable = un_res_cooldown }
+				NOT = { has_variable = un_res_cooldown_months }
 			}
 		}
 		ordered_in_global_list = {
 			variable = un_resolution_history
 			position = 0
-			limit = { NOT = { has_variable = un_res_cooldown } }
+			limit = { NOT = { has_variable = un_res_cooldown_months } }
 			order_by = un_resolution_age_order
 			save_scope_as = un_res_evicted
 		}
@@ -317,7 +322,48 @@ un_resolution_archive = {
 	}
 }
 
+# Count every closed resolution's topic cooldown down by a month and remove it
+# at 0 (var:un_res_cooldown_months — see the header). When the cooldown that
+# was holding back a ripe charter reform lifts, the members who may table it
+# are told, as they are when it ripens (un_ladder_charter_pressure_update).
+# The lifted reform is staged in a global because it is noticed inside the
+# list iteration and acted on after it.
+# Scope: none (the global monthly pulse). Call it from nowhere else: every
+# call is a month.
+un_resolution_cooldowns_tick = {
+	if = {
+		limit = { has_global_variable_list = un_resolution_history }
+		every_in_global_list = {
+			variable = un_resolution_history
+			limit = { has_variable = un_res_cooldown_months }
+			change_variable = { name = un_res_cooldown_months subtract = 1 }
+			if = {
+				limit = { var:un_res_cooldown_months <= 0 }
+				remove_variable = un_res_cooldown_months
+				if = {
+					limit = { has_tag = un_topic_reform }
+					set_global_variable = un_reform_cooldown_lifted
+				}
+			}
+		}
+	}
+	if = {
+		limit = { has_global_variable = un_reform_cooldown_lifted }
+		remove_global_variable = un_reform_cooldown_lifted
+		if = {
+			limit = {
+				un_charter_reform_ripe = yes
+				NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
+			}
+			un_charter_reform_notify_ripe = yes
+		}
+	}
+}
+
 # Global monthly upkeep (no-country scope; from un_global_authority_on_action).
+#   0. Count the closed resolutions' topic cooldowns down
+#      (un_resolution_cooldowns_tick). First, so a resolution that lapses in
+#      step 1 keeps its full count.
 #   1. Age the open resolution. If it is still voting after 14 months its
 #      un_vote.2 never fired (the proposer stopped existing or left the UN,
 #      which fails the event's trigger), so it lapses and frees the lock.
@@ -325,6 +371,7 @@ un_resolution_archive = {
 #   2. Free a lock that neither a resolution nor a reservation holds: saves
 #      from before containers, or a resolution reference that stopped resolving.
 un_resolutions_monthly_update = {
+	un_resolution_cooldowns_tick = yes
 	if = {
 		limit = {
 			has_global_variable = un_active_resolution

@@ -88,13 +88,26 @@ un_authority_ladder_block = {
 		else = {
 			custom_tooltip_no_bullet = je_un_auth_charter_0
 		}
+		# Ripe is only an invitation when no reform voted on in the last five
+		# years still bars the topic; otherwise the clock shows, and the
+		# cooldown line says how long is left.
 		if = {
-			limit = { un_charter_reform_ripe = yes }
+			limit = {
+				un_charter_reform_ripe = yes
+				NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
+			}
 			custom_tooltip_no_bullet = je_un_auth_reform_ripe
 		}
 		else_if = {
 			limit = { un_charter_can_be_reformed = yes }
 			custom_tooltip_no_bullet = je_un_auth_reform_clock
+		}
+		if = {
+			limit = {
+				un_charter_can_be_reformed = yes
+				un_resolution_topic_on_cooldown = { TOPIC = reform }
+			}
+			custom_tooltip_no_bullet = je_un_auth_reform_cooldown
 		}
 	}
 }
