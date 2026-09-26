@@ -1062,6 +1062,16 @@ class TestUmbrellaWithdrawal(unittest.TestCase):
                   a + "_action_notification_break_name", a + "_action_notification_break_desc"}
         self.assertFalse(sorted(needed - loc_keys()))
 
+    def test_own_desc_names_no_unbound_country(self):
+        # A diplomatic action's own _desc has no TARGET_COUNTRY bound: it
+        # renders nullptr every frame (localization_accessor_audit).
+        self.assertNotIn("TARGET_COUNTRY", loc_value("nd_withdraw_umbrella_action_desc"))
+
+    def test_pact_leaves_breaking_to_the_engine_default(self):
+        # actor_can_break defaults to true; spelled out, the effect/trigger
+        # validity audit reads it as an unresolved helper call.
+        self.assertNotIn("actor_can_break", strip_comments(read(UMBRELLA_ACTIONS)))
+
     def test_panel_line(self):
         self.assertIn("nd_umbrella_sgui", read(GUI))
         self.assertIn("is_valid = { always = no }", block(strip_comments(read(SGUIS)), "nd_umbrella_sgui"))

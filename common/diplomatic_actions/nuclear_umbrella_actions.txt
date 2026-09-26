@@ -55,10 +55,6 @@ nd_withdraw_umbrella_action = {
 		second_country_gets_income_transfer = no
 		income_transfer_based_on_second_country = no
 
-		actor_can_break = {
-			always = yes
-		}
-
 		requirement_to_maintain = {
 			trigger = {
 				scope:target_country = {
