@@ -97,20 +97,34 @@ un_ladder_charter_pressure_update = {
 			set_global_variable = { name = un_charter_pressure_months value = 0 }
 		}
 		change_global_variable = { name = un_charter_pressure_months add = 1 }
-		# The month it ripens, the members who can table it are told.
+		# The month it ripens, the members who can table it are told — unless a
+		# reform voted on in the last five years still bars the topic, in which
+		# case they are told the month that lifts (un_resolution_cooldowns_tick).
 		if = {
-			limit = { global_var:un_charter_pressure_months = un_charter_reform_months_needed }
-			every_country = {
-				limit = {
-					je:je_united_nations ?= { has_modifier = un_member_modifier }
-					country_rank >= rank_value:major_power
-				}
-				post_notification = un_charter_reform_ripe_notice
+			limit = {
+				global_var:un_charter_pressure_months = un_charter_reform_months_needed
+				NOT = { un_resolution_topic_on_cooldown = { TOPIC = reform } }
 			}
+			un_charter_reform_notify_ripe = yes
 		}
 	}
 	else = {
 		set_global_variable = { name = un_charter_pressure_months value = 0 }
+	}
+}
+
+# Tell every member that may table a charter reform that one can now be tabled.
+# Called when the reform ripens (un_ladder_charter_pressure_update) and when a
+# past reform's cooldown lifts on a reform already ripe
+# (un_resolution_cooldowns_tick, un_vote_effects.txt).
+# Scope: any
+un_charter_reform_notify_ripe = {
+	every_country = {
+		limit = {
+			je:je_united_nations ?= { has_modifier = un_member_modifier }
+			country_rank >= rank_value:major_power
+		}
+		post_notification = un_charter_reform_ripe_notice
 	}
 }
 

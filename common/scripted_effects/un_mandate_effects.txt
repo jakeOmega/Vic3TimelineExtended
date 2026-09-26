@@ -26,9 +26,14 @@
 #           un_mnd_region         the authorized state region
 #           un_mnd_resolution     the resolution that granted it
 #           un_mnd_months         months since issue (expiry counter)
-#           un_mnd_grace          timed, 60 days: set on binding so the
+#           un_mnd_grace_months   set on binding (un_mandate_bind_grace_months)
+#                                 and counted down by un_mandate_tick, so the
 #                                 "war goal has vanished" sweep cannot fire
-#                                 in the tick the goal was added
+#                                 in the tick the goal was added. A month
+#                                 count, not a timed variable: the engine
+#                                 never expires a timed variable on a
+#                                 container. Saves from before this carry a
+#                                 frozen timed un_mnd_grace nothing reads.
 #           un_mnd_closed_months  months since the mandate closed (pruning)
 #
 # Globals:
@@ -144,7 +149,7 @@ un_mandate_close = {
 	if = { limit = { has_tag = un_mandate_bound } remove_tag = un_mandate_bound }
 	if = { limit = { NOT = { has_tag = un_mandate_$STATUS$ } } add_tag = un_mandate_$STATUS$ }
 	set_variable = { name = un_mnd_closed_months value = 0 }
-	if = { limit = { has_variable = un_mnd_grace } remove_variable = un_mnd_grace }
+	if = { limit = { has_variable = un_mnd_grace_months } remove_variable = un_mnd_grace_months }
 
 	# Saved for un_mandate.1's text: the notification cannot read the container's
 	# variables through loc (no container accessor exists), so the two things it
@@ -310,7 +315,7 @@ un_mandate_try_bind = {
 			scope:un_mandate_binding = {
 				remove_tag = un_mandate_active
 				add_tag = un_mandate_bound
-				set_variable = { name = un_mnd_grace days = 60 }
+				set_variable = { name = un_mnd_grace_months value = un_mandate_bind_grace_months }
 			}
 			# Tell a human holder, at the moment it matters, what the mandate
 			# does and does not cover. (The rule is also in the proposal text and
@@ -504,7 +509,7 @@ un_mandate_tick = {
 			# the claim was revoked), and backing down is caught explicitly by
 			# on_diplo_play_back_down.
 			limit = {
-				NOT = { has_variable = un_mnd_grace }
+				NOT = { has_variable = un_mnd_grace_months }
 				exists = var:un_mnd_actor
 				exists = var:un_mnd_target
 				exists = scope:un_mnd_target_scope
@@ -513,6 +518,18 @@ un_mandate_tick = {
 				}
 			}
 			un_mandate_close = { STATUS = void }
+		}
+
+		# Count the binding grace down after the sweep above has skipped this
+		# tick. un_mandate_close removes it, so a mandate closed above is left
+		# alone.
+		if = {
+			limit = { has_variable = un_mnd_grace_months }
+			change_variable = { name = un_mnd_grace_months subtract = 1 }
+			if = {
+				limit = { var:un_mnd_grace_months <= 0 }
+				remove_variable = un_mnd_grace_months
+			}
 		}
 	}
 	else = {
