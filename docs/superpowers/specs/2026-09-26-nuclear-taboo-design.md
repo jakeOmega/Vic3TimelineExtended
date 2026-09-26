@@ -68,7 +68,11 @@ global number).
 **Birth.** At the first-warhead site in `nuclear_weapon_effects.txt` (the branch that sets `world_first_nuclear_weapon`
 and fires `nuclear_weapon_events.9`), `nd_taboo_birth` sets `nd_taboo` to 20, the clock to 0, the ledger to 0, and the
 target and parts at once. **Existing saves** in which warheads already exist: the monthly update seeds the same state
-once when `world_first_nuclear_weapon` is set and `nd_taboo` is not.
+once when `world_first_nuclear_weapon` is set and `nd_taboo` is not. So that a forty-year-old nuclear age does not
+wake at 20 with no tradition, the clock is seeded from the world's first device — the years since the
+`nuclear_program_first_device_year` of the country holding `is_world_first_nuclear_power`, if it still exists — when
+no weapon has ever been used (`world_first_nuclear_weapon_used` absent), and 0 otherwise; the score is seeded at the
+resulting target rather than at 20.
 
 Nothing reads the taboo before it is born: no one can use, threaten with or hold a warhead. Every reader nevertheless
 goes through `nd_taboo_value`, which returns the birth value, 20, when the global is absent, so no script ever reads a
@@ -84,7 +88,10 @@ Gated on `nuclear_weapons_enabled` and on the taboo existing. In order:
 4. Step: `nd_taboo` += (target − score) / 36, clamped to ±1 a month (half a gap closes in about two years), then to
    0–100.
 5. The band check and its events (§6.3).
-6. The per-country sweep: possession cost, breakout detection, treaty-ceiling walk-outs (§5, §7.1).
+6. The per-country sweep, **variables only**: breakout detection, the `nd_renounced` mirror's rebuild, treaty-ceiling
+   walk-outs (§5.1, §7.1). Nothing that applies a modifier runs here: the posture modifiers' multipliers are
+   `root.var:…` and every posture effect runs with the country as ROOT (`nuclear_crisis_design.md` §0.2), which a
+   no-country global pulse cannot give. The possession cost is refreshed by the entry's own monthly pulse (§4.4).
 7. One `TE_TABOO:` debug-log line: score, target, every part, the ledger, the clock.
 
 ## 3. The target
@@ -133,7 +140,7 @@ UN's monthly update caches, and is 0 in a world without a UN).
 | Private warning | | −0.3 | rank | `nd_crisis_open`, private |
 | Adopting Compellence or Warfighting | | −1 | rank | `nd_set_doctrine` with `OFFENSIVE = yes` |
 | Repudiating No First Use, or breaking a pledge | | −1.5 | rank | `nd_break_pledge_effects` |
-| Adopting No First Use | | +0.5 | rank | `nd_set_doctrine` with `D = 1`, **not** when `nd_weekly_update` binds the doctrine to the No-First-Strike amendment (the law's act, not the government's; the binding call site passes a flag) |
+| Adopting No First Use | | +0.5 | rank | `nd_set_doctrine` with `D = 1` (a new arsenal's seed in `nd_init_posture` sets the variable directly, so it books nothing), **not** when `nd_weekly_update` binds the doctrine to the No-First-Strike amendment (the law's act, not the government's; the binding call site passes a flag) |
 | A crisis ending in a reciprocal stand-down | | +0.5 | nothing | `nd_crisis_close`, outcome 3 |
 | Giving up an arsenal, any path | | +1 + 0.1 per warhead, cap +6 | warheads | `nd_taboo_note_renunciation` (§5.1) |
 | Retiring a warhead under a ceiling | | +0.05 each | warheads | the retirement step (§5.3) |
@@ -169,7 +176,8 @@ Today's fixed numbers become, roughly, the value at a young taboo. All readers g
 | The victim's relations | −50 | unchanged | |
 | Retaliation's infamy | none | none: it is licensed, deterrence working | |
 
-**"Pariah" is vanilla's pariah tier** (infamy ≥ 100): at a maximal taboo one strategic strike lands there, and infamy's
+**"Pariah" is vanilla's pariah tier** (infamy above 100): at a maximal taboo one strategic strike lands at or past it —
+the war's own infamy tips it over — and infamy's
 5-a-year decay keeps the striker Notorious for about a decade. No separate pariah modifier: infamy already drives the
 AI's hostility and doubles pact costs. The world-reaction relations line sits in `nd_record_nuclear_use` behind one
 `custom_tooltip` (an `every_country` renders every member in a preview).
@@ -205,8 +213,10 @@ The arsenal factor saturates at 50, the count the upkeep's custody term already 
 
 1. **`nd_taboo_possession_cost`**, a static modifier on the entry (`je:je_nuclear_program`, the upkeep's scope), per
    unit country_prestige_mult −0.45 and country_leverage_generation_mult −0.25, applied with `multiplier =` the
-   burden, removed and re-added each month as the burden moves (the dynamic-modifier scaling pattern). One refresh site, the monthly sweep, with a tracker variable (`nd_taboo_cost_on`) because add/remove results
-   are invisible in the same block; it comes off when the burden is 0 **or the country is not armed** (the entry no
+   burden, removed and re-added each month as the burden moves (the dynamic-modifier scaling pattern). One refresh
+   site, the entry's `nd_monthly_update` (which now runs for every country, §6.1), with the upkeep's shape: the burden
+   is cached on the country (`nd_taboo_burden_cached`) and applied as `multiplier = root.var:nd_taboo_burden_cached`;
+   a tracker variable (`nd_taboo_cost_on`) because add/remove results are invisible in the same block; it comes off when the burden is 0 **or the country is not armed** (the entry no
    longer closes on disarmament, §6.1). `nuclear_power` is left exactly as it is: it is tested as a boolean elsewhere
    (the NPT's enforcement gate, the nuclear-shadow war-support line), and scaling it would also flip its maneuvers.
    Net: a 50+ arsenal at taboo 100 goes from +30 % prestige to −15 % and its leverage bonus to zero; a 5-warhead
@@ -245,7 +255,8 @@ one whose disarmament treaty lapsed and which rebuilt — clears the variable an
 A posture-panel action. Not at war, not in a nuclear crisis, not in a civil war (`nd_in_civil_war`).
 
 - Takes 12 months, + 1 per 10 warheads above 20, at most 36 (`nd_dismantle_months_left`, `nd_dismantle_per_month`);
-  warheads retire evenly across it. Readiness is locked at Recessed and the programme frozen throughout.
+  warheads retire evenly across it. Readiness is locked at Recessed and the programme held throughout (§5.3's
+  `nd_programme_held_modifier`).
 - Each month's retirement goes through the custody ledger (`nd_ledger_refresh`); nothing is added to the loose pool.
 - **Halt the Dismantling** at any time: what is retired stays gone; −10 credibility and −1 × rank weight on the ledger
   (a public reversal).
@@ -264,7 +275,13 @@ the country is armed again.
 
 A posture-panel stepper, **Arsenal ceiling: N** (`nd_warhead_ceiling`; unlimited when absent; minimum 1 — zero is the
 dismantle). Warheads above it retire at max(1, 10 % of the excess) a month through the custody ledger, +0.05 on the
-ledger apiece. The programme builds nothing while at or above the ceiling (`nuclear_program_weekly_progress`). Raising
+ledger apiece. The programme builds nothing while at or above the ceiling, through the freeze that already exists rather than a new
+branch: **`nd_programme_held_modifier`**, a static modifier carrying `country_nuclear_program_pause_bool`, is on the
+country while the stock is at or above the ceiling (and while dismantling). The pulse then zeroes funding, the funding
+button refuses, `nuclear_program_is_proliferating` is false, and no one pays for a programme that builds nothing. The
+panel's status code gains **4, "held at our ceiling"** (and 5, "being dismantled"), tested before 3's "frozen by a
+pause treaty" in `nuclear_program_refresh_state_effect`. Mirrored by `nd_warhead_ceiling` and re-applied by the
+monthly refresh, so a revolution cannot drop it. Raising
 the ceiling is free: the ledger credit decays on its own, and rebuilding costs the programme's money. The panel shows,
 beside the stepper, the arsenal size at which the burden would drop a domestic step.
 
@@ -291,10 +308,14 @@ would make it a lottery; `nuclear_crisis_design.md` §0.2):
 `nuclear_program_entry_applies` gains a branch: the taboo exists, `nuclear_weapons_enabled`, and not decentralized.
 Before the first warhead the old gate holds. Consequences the plan must carry out and check:
 
-- **Disarmament no longer deactivates the entry.** The posture modifiers and the possession cost came off *because the
-  entry closed*; they must now come off *because the country is not armed*, and both refresh sites key off
-  `nd_is_armed`. `mod_systems.md`'s "Disarmament deactivates the entry" paragraph and `journal_entry_systems.md` are
-  rewritten.
+- **Disarmament no longer deactivates the entry, and nothing may rely on it closing.** The rule: every branch of
+  `nd_country_monthly_cleanup` keyed on `NOT = { has_journal_entry = je_nuclear_program }` — today the domestic
+  stance's clean-up (`nd_clear_domestic_stance`) and the custody record's refresh for a country without the entry —
+  and every other site that acts "once the entry is inactive", is re-keyed on `nd_is_armed` (or, for the record,
+  becomes dead code the entry's weekly refresh covers and is removed). The posture modifiers and the possession cost
+  come off *because the country is not armed*, and their refresh sites key off `nd_is_armed`. Every "once the entry
+  is inactive" sentence in `mod_systems.md` and `journal_entry_systems.md` is rewritten, and `test_nuclear_taboo.py`
+  fails on any remaining inactivity-gated branch in the nuclear files.
 - **Every pulse effect must be a cheap no-op for an unarmed country** — already the entry's rule, now exercised
   weekly by ~200 countries rather than ~10. The plan audits each pulse effect's early exit.
 - The programme, posture and crisis panels keep their gates; a non-nuclear country sees the taboo panel, the nuclear
