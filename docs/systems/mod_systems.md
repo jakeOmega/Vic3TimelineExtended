@@ -894,10 +894,9 @@ Suborbital Flight (rocketry tech)
 ### Variables (Country Scope)
 | Variable | Description |
 |----------|-------------|
-| `sr_active_*` | Active milestone flag (suborbital, orbital, etc.) |
+| `sr_active_*` | Active milestone flag (suborbital, orbital, etc.), set on activation and cleared on completion or failure. Test "any milestone under way" with the trigger `sr_has_running_milestone`, which reads these. A shared `sr_active_milestone` flag used to do that job; it was retired because the completion of any one milestone cleared it while others ran (#480) |
 | `sr_completed_*` | Completed milestone flag |
 | `sr_was_first_*` | Country was first to achieve milestone |
-| `sr_active_milestone` | Generic "has active milestone" flag |
 | `sr_progress_<m>` | Per-JE progress toward milestone (e.g. `sr_progress_suborbital`) |
 | `sr_funding_<m>` | Per-JE funding level (0 to sr_max_funding_level) |
 | `sr_safe_<m>` / `sr_ambitious_<m>` | Per-JE approach flags |

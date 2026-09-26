@@ -1826,7 +1826,7 @@ space_race_events.44 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_variable = sr_active_milestone
+		sr_has_running_milestone = yes
 		OR = {
 			AND = {
 				has_variable = sr_active_moon_landing
@@ -2274,7 +2274,7 @@ space_race_events.49 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_variable = sr_active_milestone
+		sr_has_running_milestone = yes
 		has_variable = sr_completed_orbital
 		OR = {
 			AND = {
@@ -2358,7 +2358,7 @@ space_race_events.50 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_variable = sr_active_milestone
+		sr_has_running_milestone = yes
 		has_company = company_type:company_spacex
 		OR = {
 			AND = {
@@ -2522,7 +2522,7 @@ space_race_events.52 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_variable = sr_active_milestone
+		sr_has_running_milestone = yes
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		has_variable = sr_completed_orbital
 		NOT = { has_variable = sr_completed_moon_landing }
@@ -2776,7 +2776,7 @@ space_race_events.55 = {
 	cooldown = { days = long_modifier_time }
 
 	trigger = {
-		has_variable = sr_active_milestone
+		sr_has_running_milestone = yes
 		any_scope_building = {
 			is_building_type = building_space_elevator
 		}
