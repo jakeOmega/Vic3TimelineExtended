@@ -313,3 +313,24 @@ free_market_construction_rule = {
 		flag = disable_pm_engineering_and_logistics_no_effect
 	}
 }
+
+# Internal resettlement: the Settlement Authority
+# (docs/superpowers/specs/2026-09-26-internal-resettlement-design.md). "AI
+# voluntary only" keeps AI countries off the coercive programmes (Penal
+# Transportation, Special Settlements, Rustication); humans keep every programme
+# their laws allow. Disabled makes the building impossible and stops the pulse.
+internal_resettlement_rule = {
+	default = internal_resettlement_enabled
+
+	internal_resettlement_enabled = {
+		flag = internal_resettlement_enabled
+	}
+
+	internal_resettlement_ai_voluntary = {
+		flag = internal_resettlement_ai_voluntary
+	}
+
+	internal_resettlement_disabled = {
+		flag = internal_resettlement_disabled
+	}
+}

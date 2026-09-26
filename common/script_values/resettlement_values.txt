@@ -1,0 +1,71 @@
+﻿# ============================================================================
+# INTERNAL RESETTLEMENT — script values
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+# The monthly pulse is resettlement_country_monthly (resettlement_effects.txt).
+
+# ---- The frontier (§6) -----------------------------------------------------
+# People per km² below which a new Settlement Authority may be built, and at
+# which one closes. Both scale with state_migration_crowding_density_mult.
+resettlement_frontier_open_base = 2
+resettlement_frontier_close_base = 10
+
+# State scope. Everyone in this state's region, whoever owns each part: the
+# frontier is geographic, so a split region is measured as one.
+te_region_population = {
+	value = 0
+	state_region = {
+		every_scope_state = {
+			add = state_population
+		}
+	}
+}
+
+# State scope. The region's land area in km² (te_region_area_generated.txt).
+# 1 until the table has been written, which keeps every state off the frontier.
+te_region_area_km2 = {
+	value = 1
+	state_region = {
+		if = {
+			limit = { has_variable = te_region_area }
+			value = var:te_region_area
+		}
+	}
+	min = 1
+}
+
+# State scope. People per km² over the whole region.
+resettlement_frontier_density = {
+	value = te_region_population
+	divide = te_region_area_km2
+}
+
+# State scope. The crowding system's own modifier: techs, principles and
+# institutions that let a state hold more people raise both thresholds.
+resettlement_crowding_scale = {
+	value = 1
+	add = modifier:state_migration_crowding_density_mult
+	min = 0.1
+}
+
+resettlement_frontier_open_density = {
+	value = resettlement_frontier_open_base
+	multiply = resettlement_crowding_scale
+}
+
+resettlement_frontier_close_density = {
+	value = resettlement_frontier_close_base
+	multiply = resettlement_crowding_scale
+}
+
+# State scope. Positive while a new Authority may be built here.
+resettlement_frontier_open_margin = {
+	value = resettlement_frontier_open_density
+	subtract = resettlement_frontier_density
+}
+
+# State scope. Positive while an existing Authority keeps running.
+resettlement_frontier_close_margin = {
+	value = resettlement_frontier_close_density
+	subtract = resettlement_frontier_density
+}

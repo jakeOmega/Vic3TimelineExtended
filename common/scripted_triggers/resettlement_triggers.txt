@@ -1,0 +1,28 @@
+﻿# ============================================================================
+# INTERNAL RESETTLEMENT — scripted triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-internal-resettlement-design.md.
+# Culture and religion are never tested to choose who moves (Decisions table).
+
+# ---- The frontier (§6) -----------------------------------------------------
+# State scope. A new Settlement Authority may be built here.
+resettlement_state_is_open_frontier = {
+	resettlement_frontier_open_margin > 0
+}
+
+# State scope. An existing Settlement Authority keeps running here.
+resettlement_state_frontier_still_open = {
+	resettlement_frontier_close_margin > 0
+}
+
+# ---- The game rule (§10) ---------------------------------------------------
+# Any scope. The system runs under this rule setting.
+resettlement_system_enabled = {
+	NOT = { has_game_rule = internal_resettlement_disabled }
+}
+
+# Country scope. An AI country kept to voluntary programmes.
+resettlement_ai_voluntary_only = {
+	is_ai = yes
+	has_game_rule = internal_resettlement_ai_voluntary
+}
