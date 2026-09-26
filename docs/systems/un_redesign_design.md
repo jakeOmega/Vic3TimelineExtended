@@ -58,7 +58,10 @@ credit, its conventions, and its terms under the regimes.
   modifier.
 - **Every write goes through a helper** in `common/scripted_effects/un_state_effects.txt`
   (`un_state_on`/`_off`, `un_convention_on`, `un_convention_country_on`,
-  `un_state_country_off`). Two kinds of site write the modifier themselves and call
+  `un_state_country_off`). `un_state_on` and `un_convention_on` record the mirror only where
+  the entry exists, so the modifier was really added. A country that signs the charter before
+  its entry is active therefore stays outside, as before (see Known roughnesses). Two kinds of
+  site write the modifier themselves and call
   `un_state_record`/`un_state_forget` beside it:
   - the programme buttons, because `gen_un_button_descs.py` reads their literal modifier
     lines;
@@ -77,14 +80,20 @@ credit, its conventions, and its terms under the regimes.
     set to itself at `on_revolution_start`, `un_cw_rebel`: a loyalist winner inherits a pointer
     to a dead object;
   - the debug wipe (`te_debug_un.1` option w).
-- **`immediate` rebuilds at once** (`un_state_rebuild`). That works if it runs after the
-  variables merge, which is the audit's reading of E3, and if `je:je_united_nations` resolves
-  while the entry is being activated. No other `immediate` in the mod relies on that; the
-  nuclear entry deliberately waits for its first pulse for the same reason
-  (`nd_rebuild_posture_modifiers`). If it does not resolve, the rebuild adds nothing to the
-  entry and the first monthly pulse heals it.
+- **`immediate` restores at once, and only restores** (`un_state_restore_all`). That works if it
+  runs after the variables merge, which is the audit's reading of E3, and if
+  `je:je_united_nations` resolves while the entry is being activated. No other `immediate` in the
+  mod relies on that; the nuclear entry deliberately waits for its first pulse for the same
+  reason (`nd_rebuild_posture_modifiers`). If it does not resolve, the restore adds nothing to
+  the entry and the first monthly pulse heals it.
+  - **It never forgets a mirror.** When the inherited entry's `immediate` runs, the revolution
+    is still being wound up. The loser may still own a state, and `un_hq_country` may still
+    name it. So a "not the host" or "the seats are full" read is not evidence then, and
+    forgetting the headquarters or seat mirror on it could not be undone. What the restore
+    declines stays missing, the pending mark stays, and the pulse decides.
 - **The monthly pulse heals.** While the entry is pending and a mirrored modifier is still
-  missing, the month only rebuilds and does nothing else (`un_state_heal_needed`). A modifier
+  missing, the month only rebuilds and does nothing else (`un_state_heal_needed`). The rebuild
+  (`un_state_rebuild`) restores, then forgets what still cannot be honoured. A modifier
   added in an effect block is invisible to the rest of that block, so the rest of the pulse
   would read the winner as a non-member. It would delete the programme counters, re-enrol it
   by treaty, brand it a pariah and re-read its regime terms as an outsider's. The heal costs the
@@ -93,13 +102,15 @@ credit, its conventions, and its terms under the regimes.
   (`un_state_reconcile`). That is how a save from before this change gains its mirrors: the
   first pulse after loading records whatever the entry holds. A country that has left holds
   nothing, so nothing is resurrected. It is also how a loyalist winner drops any mirror it
-  inherited from the rebels. The heal and the reconcile never run in the same month.
+  inherited from the rebels. The heal and the reconcile never run in the same month. A save
+  loaded during a civil war whose loser has not yet had that first pulse loses its UN state
+  once, as before this change.
 - **The loyalist winner keeps its own entry,** so neither `immediate` nor the hook marks it,
   and the reconcile treats its modifiers as the truth. A rebel practically has no UN state of
   its own. In the saves, the rebel held no `je_united_nations` record during the war, so it
   could not join or run a programme.
 
-### What the rebuild restores, and when it declines
+### What the restore brings back, and what the heal forgets
 
 - Membership, founding status and conventions come back for any member. A suspended member
   keeps them (§0.8).
@@ -113,7 +124,12 @@ credit, its conventions, and its terms under the regimes.
 - `un_regime_stamp` is removed, so the next ordinary pulse re-reads our regime terms. Those are
   country modifiers, and the merge dropped them too. Without this they would wait for the next
   epoch.
-- A mirror the rebuild cannot honour is forgotten, never forced.
+- The restore never forgets. At the pulse heal, a mirror the rebuild still cannot honour is
+  forgotten, never forced.
+- **No rejoining in the gap.** The Join button, `un_events.10` option E and the charter
+  invitation (`un_events.1`) are closed to a country holding the membership mirror. A winner
+  awaiting its heal would otherwise rejoin, and take every convention in force, the refused
+  ones included.
 
 ### The global pulse in the gap
 
@@ -129,11 +145,18 @@ credit, its conventions, and its terms under the regimes.
 - `global_var:un_hq_country` names a country object, and the loser is a different object from
   the winner.
 - **Before `on_civil_war_won`:** annexing the loser moves the headquarters state to the winner,
-  and `un_hq_on_state_owner_change` then enforces a single building. It would demolish the
+  and `un_hq_on_state_owner_change` then enforced a single building. It would have demolished the
   headquarters on the winner's soil if the dead loser still resolved, and every headquarters in
-  the world if it did not. `un_hq_is_host` therefore also counts a country that holds the
-  headquarters mirror while the named host is not a living country. The single-building
-  enforcement asks it in both of its branches.
+  the world if it did not. Two guards now close this:
+  - **The deferral.** When a headquarters state passes to a country that shares the named
+    host's country definition without being the host (`un_hq_shares_host_definition`),
+    `un_hq_on_state_owner_change` leaves the enforcement to the monthly update. The only
+    countries sharing a living host's definition are its revolutionaries. This needs no engine
+    ordering: by the monthly update the variable names the winner, or the host is alive and the
+    new owner is a rebel, whose building then goes, a month later than before.
+  - **The successor counts as host.** `un_hq_is_host` also counts a country that holds the
+    headquarters mirror while the named host is not a living country. The single-building
+    enforcement asks it in both of its branches.
 - **At `on_civil_war_won`:** `un_hq_adopt_as_successor` re-points the variable to the winner.
   It does so when the winner inherited the headquarters mirror, and the named host is dead with
   the winner's country definition or no longer resolves.
@@ -145,22 +168,25 @@ credit, its conventions, and its terms under the regimes.
   reconcile, and `un_hq_adopt_as_successor`.
 - `common/scripted_triggers/un_state_triggers.txt` (new): `un_state_missing`,
   `un_state_heal_needed` and `un_member_represented_by_record`.
-- `je_united_nations.txt`: `immediate` marks and rebuilds, and the monthly pulse heals first.
+- `je_united_nations.txt`: `immediate` marks and restores, and the monthly pulse heals first.
 - `un_on_actions.txt`: `un_on_revolution_start` and `un_on_civil_war_won`.
 - Write sites now go through the helpers: `un_ladder_effects.txt`, `un_hq_effects.txt`,
   `un_seat_effects.txt`, `un_membership_effects.txt`, `un_vote_effects.txt`, `un_events.txt`,
   `un_vote_events.txt`, `je_united_nations.txt`, `un_buttons.txt` and `te_debug_un_effects.txt`.
-- `un_hq_triggers.txt` (`un_hq_is_host`), `un_hq_effects.txt` (both enforcement branches, and
-  the monthly reassignment by the record), and `un_script_values.txt`
+- `un_hq_triggers.txt` (`un_hq_is_host`, `un_hq_shares_host_definition`), `un_hq_effects.txt`
+  (both enforcement branches, and the monthly reassignment by the record), `un_on_actions.txt`
+  (`un_hq_on_state_owner_change`'s deferral), and `un_script_values.txt`
   (`un_permanent_seat_count`).
+- The ways in: `un_buttons.txt` (Join), and `un_events.txt` (`un_events.1`, `un_events.10`
+  option E).
 - Debug: `te_debug_un.1` option w, `te_debug_un_wipe_entry`.
 - `test_un_state_mirror.py`.
 
 ### Known roughnesses
 
-- **The heal month.** If `immediate` does not rebuild, the winner draws no benefits for one
-  month. It pays no dues and accrues no standing that month. Its regime terms come back the
-  month after.
+- **The heal month.** If `immediate` does not restore everything, the winner draws no benefits
+  for one month. It pays no dues and accrues no standing that month. Its regime terms come back
+  the month after.
 - **Untested engine behaviour:**
   - whether `immediate` runs after the merge, and whether `je:je_united_nations` resolves
     inside it;
@@ -176,7 +202,21 @@ credit, its conventions, and its terms under the regimes.
 - **Records naming the loser** (missions, mandates and resolutions; audit F14) still name the
   dead object.
 - **During the war,** a rebel that takes the headquarters state at `on_revolution_start` is not
-  the host. The building is demolished then, whichever side wins.
+  the host. The building is demolished at the next monthly update, whichever side wins.
+- **Owner question: should signing the charter without the entry count as membership?** A
+  country without `intergovernmental_organizations` has no active entry when the charter
+  arrives. It "signs" (`un_charter_signed`), gets no modifier and must join later, and then not
+  as a founding member. The mirror keeps that behaviour. Recording the mirror anyway would make
+  it a founding member when its entry activates.
+- **The dead loser reads as a permanent member** until it is deleted, about two weeks after the
+  win. It keeps its modifiers, so anything that iterates `is_un_permanent_member` sees one more.
+  The seat count leaves it out.
+- **The debug wipe** drops the journal-entry modifiers and the two country conventions only. A
+  real revolution also drops the dues, the `un_regime_*` modifiers, the mission service cost and
+  the cooldowns, so their return is not tested by the debug path.
+- **A rebel with a UN record of its own.** Nothing stops the rebel's entry from activating in a
+  long war. The saves showed none. If it does, the merge keeps the rebel's standing score and
+  programme counters over the nation's.
 
 ### IN-GAME VERIFICATION CHECKLIST (§0.9)
 
@@ -193,6 +233,9 @@ credit, its conventions, and its terms under the regimes.
      of the win), or whether the first monthly pulse did (a member only after the month turns).
    - Check that the seat was not refilled, that the headquarters building still stands and
      that `un_hq_country` names the winner.
+   - Right after the win, `un_headquarters_modifier_on` and `un_permanent_member_modifier_on`
+     are still on the winner (the save probe shows them). The restore never forgets them.
+   - Whether the rebel held a `je_united_nations` record of its own before the win.
 3. **A revolution the loyalists win:** nothing about the UN changes.
 4. **A save from before this change:** after the first month, each member holds the mirrors of
    its modifiers, and no former member has regained membership.

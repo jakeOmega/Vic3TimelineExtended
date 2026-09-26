@@ -26,3 +26,20 @@ un_hq_is_host = {
 		}
 	}
 }
+
+# Scope: country. Shares the named host's country definition without being
+# the host: the host's own revolutionaries during a civil war, or a winner
+# that has not yet been recognised as the host (§0.9). The only countries that
+# share a living country's definition are its revolutionaries.
+# un_hq_on_state_owner_change leaves a headquarters state that passes to such a
+# country to the monthly update: when annexation moves the loser's states to
+# the winner, the engine's order (the loser's last state, the variable merge,
+# un_on_civil_war_won's re-point) is unknown, and a demolition there cannot be
+# undone. By the monthly update the host variable names the winner, or the
+# host is alive and the new owner is a rebel, whose building then goes.
+un_hq_shares_host_definition = {
+	has_global_variable = un_hq_country
+	exists = global_var:un_hq_country
+	NOT = { un_hq_is_host = yes }
+	country_definition = global_var:un_hq_country.country_definition
+}

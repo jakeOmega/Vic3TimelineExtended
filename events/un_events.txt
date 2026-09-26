@@ -68,6 +68,8 @@ un_events.1 = {
 		# founded or refounded
 		NOT = { has_variable = un_charter_signed }
 		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		# A revolution's winner awaiting its rebuild is a member (§0.9).
+		NOT = { has_variable = un_member_modifier_on }
 		un_membership_eligible = yes
 	}
 
@@ -1448,6 +1450,8 @@ un_events.10 = {
 		name = un_events.10.e
 		trigger = {
 			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			# A revolution's winner awaiting its rebuild is a member (§0.9).
+			NOT = { has_variable = un_member_modifier_on }
 			has_global_variable = un_founded
 			un_membership_eligible = yes
 			NOT = { has_modifier = un_expelled_cooldown }

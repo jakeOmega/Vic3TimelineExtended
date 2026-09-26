@@ -39,12 +39,14 @@
 # inherits, by un_on_civil_war_won when the winner was the uprising side
 # (un_on_actions.txt), and by the debug wipe (te_debug_un_wipe_entry). A
 # loyalist winner keeps its own record, so nothing sets it there. Then:
-#   - `immediate` rebuilds at once (un_state_rebuild), which works when it
-#     runs after the variable merge and je:je_united_nations resolves during
-#     activation (untested; the nuclear entry waits for its first pulse for
-#     that reason, nd_rebuild_posture_modifiers);
+#   - `immediate` restores at once (un_state_restore_all), which works when
+#     it runs after the variable merge and je:je_united_nations resolves
+#     during activation (untested; the nuclear entry waits for its first
+#     pulse for that reason, nd_rebuild_posture_modifiers). It only ever
+#     adds: the world is mid-transition then, so it forgets nothing;
 #   - the entry's monthly pulse, while pending, heals whatever is still
-#     missing and does nothing else that month (un_state_heal_needed): a
+#     missing (un_state_rebuild: restore, then forget what cannot be
+#     honoured) and does nothing else that month (un_state_heal_needed): a
 #     modifier added in an effect block is invisible to the rest of that
 #     block, so the pulse would otherwise read us as a non-member, delete the
 #     programme counters and brand us a pariah;
@@ -72,11 +74,18 @@ un_state_forget = {
 
 # Add or remove a journal-entry state modifier with its mirror. The remove is
 # as unguarded as the sites it replaced.
+# The mirror is recorded only where the modifier was actually added, i.e.
+# where the entry exists: a country that signs the charter before its entry
+# is active stays outside, as it always has (it joins later, and not as a
+# founding member). The mirror then never claims more than the entry held.
 # Parameters: $MODIFIER$
 # Scope: country
 un_state_on = {
 	je:je_united_nations ?= { add_modifier = { name = $MODIFIER$ } }
-	un_state_record = { MODIFIER = $MODIFIER$ }
+	if = {
+		limit = { exists = je:je_united_nations }
+		un_state_record = { MODIFIER = $MODIFIER$ }
+	}
 }
 
 un_state_off = {
@@ -90,7 +99,10 @@ un_state_off = {
 # Scope: country
 un_convention_on = {
 	je:je_united_nations ?= { add_modifier = { name = $MODIFIER$ multiplier = un_convention_multiplier } }
-	un_state_record = { MODIFIER = $MODIFIER$ }
+	if = {
+		limit = { exists = je:je_united_nations }
+		un_state_record = { MODIFIER = $MODIFIER$ }
+	}
 }
 
 un_convention_country_on = {
@@ -129,23 +141,24 @@ un_convention_country_restore = {
 	}
 }
 
-# Rebuild the entry from the mirrors. Only adds what is missing, so it is safe
-# on an entry that kept its modifiers. It never removes a modifier: a mirror it
-# cannot honour is forgotten, and the next reconcile tidies anything left.
+# Restore the entry from the mirrors. Only adds what is missing, so it is safe
+# on an entry that kept its modifiers, and it writes no mirror: what it cannot
+# honour yet is left for the pulse's heal (un_state_rebuild) to decide.
 #   - Membership, founding status and conventions come back for any member:
 #     a suspended member keeps them (§0.8).
 #   - The headquarters only while we are its host (un_hq_is_host, which
 #     counts a winner whose predecessor hosted it).
 #   - The permanent seat, the Council seat and the programmes only while we
 #     conduct our own foreign policy: un_representation_monthly_update strips
-#     them from a suspended member, and so does this. The seat also needs a
-#     free place: un_permanent_seat_count counts our mirror, so five or fewer
-#     means nobody was given our seat in the meantime.
+#     them from a suspended member. The seat also needs a free place:
+#     un_permanent_seat_count counts our mirror, so five or fewer means nobody
+#     was given our seat in the meantime.
 #   - Championing and undermining exclude each other (their buttons say so).
 #     A merge can deliver both mirrors, the rebels' and the nation's; the
-#     nation's championing is kept.
-#   - The programme costs are re-added as their buttons add them, from a fresh
-#     expense figure.
+#     nation's championing is restored and the undermining is not.
+#   - The programme costs are re-added as their buttons add them. The expense
+#     figure their multiplier reads is inherited with the other variables; it
+#     is created only if missing, and the member block re-prices it monthly.
 #   - The regime stamp goes, so our next ordinary pulse re-reads our terms
 #     under the conventions (the un_regime_* modifiers are country modifiers,
 #     and the merge dropped them too) instead of waiting for the next epoch.
@@ -153,11 +166,17 @@ un_convention_country_restore = {
 # whole at once; a carried seat's come from the member block's monthly
 # reconcile, as do the benefits, the dues, the standing tier and NPT
 # enforcement.
-# Called from je_united_nations `immediate` and un_state_heal. Does not clear
-# un_state_rebuild_pending: an `immediate` that runs before the merge rebuilds
-# nothing, and the pulse must still get its turn.
+#
+# RESTORE-ONLY, because je_united_nations' `immediate` calls it, and the world
+# is mid-transition then: the loser may still own a state, and the
+# headquarters variable may still name it. A "not the host" or "the seats are
+# full" read at that moment is not evidence, and forgetting the mirror on it
+# would lose the headquarters and the seat for good. It never clears
+# un_state_rebuild_pending either, so anything it declined still trips
+# un_state_heal_needed at the first monthly pulse.
+# Called from je_united_nations `immediate` and un_state_rebuild.
 # Scope: country
-un_state_rebuild = {
+un_state_restore_all = {
 	if = {
 		limit = {
 			has_global_variable = un_founded
@@ -186,9 +205,6 @@ un_state_rebuild = {
 			limit = { un_hq_is_host = yes }
 			un_state_restore = { MODIFIER = un_headquarters_modifier }
 		}
-		else = {
-			un_state_forget = { MODIFIER = un_headquarters_modifier }
-		}
 
 		if = {
 			limit = { un_membership_eligible = yes }
@@ -197,25 +213,21 @@ un_state_rebuild = {
 				un_state_restore = { MODIFIER = un_security_council_modifier }
 				un_state_restore = { MODIFIER = un_permanent_member_modifier }
 			}
-			else = {
-				un_state_forget = { MODIFIER = un_security_council_modifier }
-				un_state_forget = { MODIFIER = un_permanent_member_modifier }
-			}
 			un_state_restore = { MODIFIER = un_peacekeeping_contributor_modifier }
 			un_state_restore = { MODIFIER = un_development_contributor_modifier }
 			un_state_restore = { MODIFIER = un_human_rights_champion_modifier }
 			un_state_restore = { MODIFIER = un_arms_control_participant_modifier }
 			un_state_restore = { MODIFIER = un_champion_order_cost }
 			if = {
-				limit = { has_variable = un_champion_order_cost_on }
-				un_state_forget = { MODIFIER = un_undermine_order_cost }
-			}
-			else = {
+				limit = { NOT = { has_variable = un_champion_order_cost_on } }
 				un_state_restore = { MODIFIER = un_undermine_order_cost }
 			}
 			if = {
 				limit = { un_state_missing = { MODIFIER = un_peacekeeping_contributor_cost } }
-				set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
+				if = {
+					limit = { NOT = { has_variable = un_peacekeeping_expense_cached } }
+					set_variable = { name = un_peacekeeping_expense_cached value = un_program_expense_value }
+				}
 				je:je_united_nations ?= {
 					add_modifier = {
 						name = un_peacekeeping_contributor_cost
@@ -225,13 +237,56 @@ un_state_rebuild = {
 			}
 			if = {
 				limit = { un_state_missing = { MODIFIER = un_development_contributor_cost } }
-				set_variable = { name = un_development_expense_cached value = un_program_expense_value }
+				if = {
+					limit = { NOT = { has_variable = un_development_expense_cached } }
+					set_variable = { name = un_development_expense_cached value = un_program_expense_value }
+				}
 				je:je_united_nations ?= {
 					add_modifier = {
 						name = un_development_contributor_cost
 						multiplier = root.var:un_development_expense_cached
 					}
 				}
+			}
+		}
+		# The stamp is dropped only for a member whose entry is being restored:
+		# a fresh activation has no stamp, and a non-member's terms (a colony's
+		# liberty under decolonisation) come back at the next epoch as before.
+		if = { # REVIEWED 2026-09-26: dropping the regime stamp is the point: the next ordinary pulse re-reads the regime terms the merge dropped (§0.9)
+			limit = { has_variable = un_regime_stamp }
+			remove_variable = un_regime_stamp
+		}
+	}
+}
+
+# Rebuild the entry from the mirrors, and decide what the restore declined:
+# a mirror it still cannot honour is forgotten, never forced. By the pulse the
+# transition is over: the loser has lost its last state, and
+# un_on_civil_war_won has re-pointed the headquarters.
+# Called only from un_state_heal, in je_united_nations' monthly pulse. Never
+# from `immediate` (see un_state_restore_all).
+# Scope: country
+un_state_rebuild = {
+	un_state_restore_all = yes
+	if = {
+		limit = {
+			has_global_variable = un_founded
+			has_variable = un_member_modifier_on
+		}
+		if = {
+			limit = { NOT = { un_hq_is_host = yes } }
+			un_state_forget = { MODIFIER = un_headquarters_modifier }
+		}
+		if = {
+			limit = { un_membership_eligible = yes }
+			if = {
+				limit = { un_permanent_seat_count > 5 }
+				un_state_forget = { MODIFIER = un_security_council_modifier }
+				un_state_forget = { MODIFIER = un_permanent_member_modifier }
+			}
+			if = {
+				limit = { has_variable = un_champion_order_cost_on }
+				un_state_forget = { MODIFIER = un_undermine_order_cost }
 			}
 		}
 		else = {
@@ -245,10 +300,6 @@ un_state_rebuild = {
 		un_state_forget = { MODIFIER = un_headquarters_modifier }
 		un_state_forget_representation = yes
 		un_state_forget_conventions = yes
-	}
-	if = {
-		limit = { has_variable = un_regime_stamp }
-		remove_variable = un_regime_stamp
 	}
 }
 
