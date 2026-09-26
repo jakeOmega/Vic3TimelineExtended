@@ -22,9 +22,9 @@
 # topic, un_propose_reform_*): it is also still raised by its proposer event,
 # un_events.6, under the same gates.
 #
-# THE TEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
-# heritage, decolonization, space, law of the sea) are at the bottom of the
-# file. The docket raises them for everyone through the proposer events in
+# THE ELEVEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
+# heritage, decolonization, space, law of the sea, physical protection of
+# nuclear material) are at the bottom of the file. The docket raises them for everyone through the proposer events in
 # events/un_events.txt; a human member may also table one from the chamber on
 # its own motion. They have no scripted button: the AI reaches them only
 # through the docket, which paces the floor (un_docket_effects.txt), and a
@@ -403,9 +403,9 @@ un_propose_reform_possible = {
 }
 
 # ============================================================================
-# THE TEN CONVENTIONS
+# THE ELEVEN CONVENTIONS
 # ============================================================================
-# Tabled on our own motion from the chamber (ops 7-16 of
+# Tabled on our own motion from the chamber (ops 7-17 of
 # un_chamber_propose_sgui), or on the docket's offer through the proposer
 # events. Every topic below is recommendatory except the ICC, which is binding
 # and can be vetoed; all pass by simple majority.
@@ -448,6 +448,10 @@ un_propose_human_rights_qualifies = {
 	custom_tooltip = {
 		text = un_propose_not_party_tt
 		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_human_rights_refusal_modifier }
 	}
 }
 
@@ -685,7 +689,7 @@ un_propose_heritage_qualifies = {
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
-		NOT = { has_modifier = un_heritage_token_modifier }
+		NOT = { has_modifier = un_heritage_refusal_modifier }
 	}
 }
 

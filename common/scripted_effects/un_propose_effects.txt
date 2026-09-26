@@ -298,7 +298,7 @@ un_charter_reform_open = {
 #                            un_propose_<key>_effect calls it too, so the two
 #                            paths cannot drift.
 #   un_propose_<key>_effect  tabling it on our own motion from the chamber
-#                            (ops 7-16 of un_chamber_propose_sgui): _table,
+#                            (ops 7-17 of un_chamber_propose_sgui): _table,
 #                            plus the costs every own-motion proposal takes.
 #
 # Accepting the docket's offer costs nothing extra: the docket paces the floor

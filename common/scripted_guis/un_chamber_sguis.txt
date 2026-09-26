@@ -1089,7 +1089,7 @@ un_chamber_vote_sgui = {
 # every effect is shared through common/scripted_triggers/un_propose_triggers.txt
 # and common/scripted_effects/un_propose_effects.txt: ops 0-6 with the
 # journal-entry buttons, so a human proposing here and an AI proposing through
-# the button grid run identical script; ops 7-16 with the docket's proposer
+# the button grid run identical script; ops 7-17 with the docket's proposer
 # events, which call the same un_propose_<key>_table the Propose control does.
 #
 # `is_shown` is membership alone, deliberately: a topic we have no case for

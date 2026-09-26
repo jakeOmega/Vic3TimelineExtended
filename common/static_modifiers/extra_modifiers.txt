@@ -3613,6 +3613,13 @@ un_heritage_token_modifier = {
 	country_prestige_mult = 0.02
 }
 
+# Decaying penalty for refusing to table it (un_events.9, option C), which bars
+# the refuser from tabling it (un_propose_heritage_qualifies) while it lasts.
+un_heritage_refusal_modifier = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
+	country_prestige_mult = -0.03
+}
+
 # ---- Authority Crisis Modifiers ----
 
 un_authority_restored_modifier = {
