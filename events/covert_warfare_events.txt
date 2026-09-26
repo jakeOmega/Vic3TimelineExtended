@@ -223,6 +223,10 @@ covert_warfare.1 = {
 				limit = { var:iw_burned_type_code = 12 }
 				covert_op_burn = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action TARGET = scope:detected_by_country CODE = 12 }
 			}
+			else_if = {
+				limit = { var:iw_burned_type_code = 13 }
+				covert_op_burn = { TYPE = secure_material ACTION = covert_secure_material_action TARGET = scope:detected_by_country CODE = 13 }
+			}
 
 			# The agency's experience takes the hit (slice 5), by tier. Here,
 			# while iw_burned_type_code still exists; removed further down.

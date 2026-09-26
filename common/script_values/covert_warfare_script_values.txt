@@ -209,6 +209,12 @@ covert_regime_change_coup_push = 5
 covert_net_cultivate_mult = 1.5
 # The AI proposes cultivate assets only where its network is weaker than this.
 covert_cultivate_ai_net_ceiling = 50
+# Secure loose material (nuclear_crisis_design.md §0.10 step 5): the monthly
+# chance, in percent, of finding one of the target line's missing warheads,
+# times covert_op_effect_mult (1 established, 2 fully operational, x1.35 /
+# x1.6 at priority 2 / 3): 3 % a month established at priority 1, 6 % fully
+# operational (about one a year and a half), 9.6 % at priority 3.
+covert_secure_material_base_chance = 3
 # ---- Network intelligence (slice 7) ----
 # A network this strong reports on the service it has penetrated: from tier 1
 # the target's intelligence capacity and technology count, from tier 2 also how
@@ -1028,6 +1034,13 @@ covert_op_effect_mult = {
 		limit = { covert_op_priority_at_least = { N = 2 } }
 		multiply = covert_op_priority_2_effect_mult
 	}
+}
+
+# Secure loose material's monthly chance of a find, in percent (constant above).
+# Scope: covert operation container
+covert_secure_material_chance = {
+	value = covert_op_effect_mult
+	multiply = covert_secure_material_base_chance
 }
 
 # The detection points each priority level adds, for the row and the stepper

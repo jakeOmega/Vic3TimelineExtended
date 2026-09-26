@@ -983,6 +983,7 @@ covert_ops_sync_all = {
 	covert_op_sync = { TYPE = nuclear_sabotage ACTION = covert_nuclear_sabotage_action DEFENSE_MOD = country_covert_defense_military_add CODE = 10 }
 	covert_op_sync = { TYPE = space_espionage ACTION = covert_space_espionage_action DEFENSE_MOD = country_covert_defense_economic_add CODE = 11 }
 	covert_op_sync = { TYPE = cultivate_assets ACTION = covert_cultivate_assets_action DEFENSE_MOD = country_covert_defense_ideological_add CODE = 12 }
+	covert_op_sync = { TYPE = secure_material ACTION = covert_secure_material_action DEFENSE_MOD = country_covert_defense_military_add CODE = 13 }
 	# The sync reaps lapsed containers without going through covert_op_destroy.
 	covert_refresh_priority_cost = yes
 }
@@ -1282,6 +1283,27 @@ covert_ops_apply_all_phase_effects = {
 
 		# Cultivate assets (slice 6) is deliberately absent: it acts on
 		# nothing but the network (covert_nets_sync / covert_net_tick_gain).
+
+		# ---- Secure Loose Material (nuclear_crisis_design.md §0.10 step 5):
+		#      no modifier. Once established, a monthly chance, scaled by
+		#      phase and priority, of finding one of the warheads missing from
+		#      the target's arsenal line; it is destroyed and leaves the pool
+		#      (nuclear_loose_effects.txt). The operator hears; the target
+		#      does not. ROOT = the operator (je_covert_warfare's pulse). ----
+		every_in_list = {
+			variable = iw_ops
+			limit = {
+				has_tag = iw_op_secure_material
+				covert_op_is_established = yes
+			}
+			random = {
+				chance = covert_secure_material_chance
+				var:iw_target ?= {
+					nd_loose_recover_from_line = { HOW = 2 }
+				}
+				nd_loose_tell_recovery = { WHO = ROOT HOW = 2 }
+			}
+		}
 
 		# The applied-priority snapshot just moved: recharge upkeep from it.
 		covert_refresh_priority_cost = yes

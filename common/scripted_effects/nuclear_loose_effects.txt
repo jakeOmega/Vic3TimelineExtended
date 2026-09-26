@@ -475,6 +475,24 @@ nd_loose_answer = {
 # ----------------------------------------------------------------------------
 # RECOVERY
 # ----------------------------------------------------------------------------
+# Country scope, from nd_country_monthly_cleanup (every country, monthly).
+# While warheads from our line are unaccounted for, someone paying to secure
+# our arsenal (nuclear_security_assistance) may find one.
+nd_loose_monthly = {
+	if = {
+		limit = {
+			has_game_rule = nuclear_weapons_enabled
+			nd_loose_has_line = yes
+			nd_has_security_assistance = yes
+		}
+		random = {
+			chance = nd_loose_assistance_chance
+			nd_loose_recover_from_line = { HOW = 3 }
+			nd_loose_tell_recovery = { WHO = ROOT HOW = 3 }
+		}
+	}
+}
+
 # Country scope = the owner of the line: one of its warheads unaccounted for
 # is found and secured, and leaves the pool. The warhead is destroyed, not
 # added to anyone's arsenal. Saves the owner as scope:nd_loose_line_owner for

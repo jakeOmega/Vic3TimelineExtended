@@ -82,3 +82,27 @@ nd_loose_demand_is_full = {
 	has_variable = nd_loose_demand_kind
 	var:nd_loose_demand_kind = 1
 }
+
+# ----------------------------------------------------------------------------
+# RECOVERY — the security assistance article (116_nuclear_security_assistance.txt)
+# ----------------------------------------------------------------------------
+# Can this country be helped to secure its arsenal: it holds warheads, or
+# warheads from its line are unaccounted for. Country scope.
+nd_can_receive_security_assistance = {
+	OR = {
+		nd_is_armed = yes
+		nd_loose_has_line = yes
+	}
+}
+
+# Is someone paying to secure this country's arsenal (a nuclear_security_
+# assistance article with this country as its target)? Country scope.
+nd_has_security_assistance = {
+	save_temporary_scope_as = nd_hsa_self
+	any_scope_treaty = {
+		any_scope_article = {
+			has_type = nuclear_security_assistance
+			target_country = scope:nd_hsa_self
+		}
+	}
+}

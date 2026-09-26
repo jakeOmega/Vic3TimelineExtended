@@ -86,9 +86,11 @@ nd_loose_expertise = {
 	}
 }
 
-# The victim's covert network inside the origin (covert warfare's iw_nets):
-# its strength, 0-100.
-nd_loose_network_strength = {
+# The intelligence tier of the victim's covert network inside the origin
+# (covert warfare's iw_nets; the tier code covert_net_clamp stores, so the
+# strength thresholds stay compared in one place): 0 none, 1 it reads the
+# target's service, 2 it reads its operations too. One network per target.
+nd_loose_network_tier = {
 	value = 0
 	if = {
 		limit = {
@@ -99,25 +101,23 @@ nd_loose_network_strength = {
 			variable = iw_nets
 			limit = {
 				var:iw_target ?= scope:nd_loose_origin
-				has_variable = iw_net_strength
+				has_variable = iw_net_intel_tier
 			}
-			add = var:iw_net_strength
+			add = var:iw_net_intel_tier
 		}
 	}
-	max = 100
+	max = 2
 }
 
-# What that network is worth to the investigation: 15 at the strength that
-# first reveals the target's service (covert_net_intel_tier_1_strength), 25
-# at the next tier.
+# What that network is worth to the investigation: 15 at tier 1, 25 at tier 2.
 nd_loose_network_part = {
 	value = 0
 	if = {
-		limit = { nd_loose_network_strength >= covert_net_intel_tier_2_strength }
+		limit = { nd_loose_network_tier >= 2 }
 		add = 25
 	}
 	else_if = {
-		limit = { nd_loose_network_strength >= covert_net_intel_tier_1_strength }
+		limit = { nd_loose_network_tier >= 1 }
 		add = 15
 	}
 }
@@ -193,6 +193,14 @@ nd_loose_compensation_cap = {
 	value = scope:nd_loose_claimant.gdp
 	multiply = 0.1
 }
+
+# ----------------------------------------------------------------------------
+# RECOVERY
+# ----------------------------------------------------------------------------
+# The monthly chance, in percent, that security assistance paid for by another
+# power finds one of a country's warheads unaccounted for (about one a year
+# and a half while any are missing).
+nd_loose_assistance_chance = 6
 
 # ----------------------------------------------------------------------------
 # DISPLAY

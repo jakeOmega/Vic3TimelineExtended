@@ -2095,6 +2095,9 @@ nd_country_monthly_cleanup = {
 	# A government losing a revolution while armed is asked what becomes of
 	# its warheads; a custodian's help lapses with the civil war.
 	nd_cw_monthly_check = yes
+	# Warheads unaccounted for that someone is paying to find
+	# (nuclear_loose_effects.txt).
+	nd_loose_monthly = yes
 	# Pulled back for a civil war that is over: the forces may be raised again.
 	# The rebel country tells whether one is still being fought
 	# (nd_in_civil_war); any_civil_war iterates the ones still brewing.

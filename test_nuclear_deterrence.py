@@ -225,8 +225,9 @@ class TestLocalization(unittest.TestCase):
         needed = set()
         for a in acts:
             needed |= {a, a + "_desc", a + "_action_notification_name", a + "_action_notification_desc"}
-        needed |= {"nuclear_guarantee", "nuclear_guarantee_desc",
-                   "nuclear_guarantee_article_short_desc", "nuclear_guarantee_effects_desc"}
+        for article in ("nuclear_guarantee", "nuclear_security_assistance"):
+            needed |= {article, article + "_desc", article + "_article_short_desc",
+                       article + "_effects_desc"}
         self.assert_keys(needed, "actions and article")
 
     def test_diplomatic_actions_have_lens_icons(self):
@@ -1621,6 +1622,44 @@ class TestLooseWarheads(unittest.TestCase):
         self.assertIn("GetScriptedGui('nd_loose_sgui')", gui)
         self.assertIn('text = "nd_w_loose_value"', gui)
         self.assertIn("nd_loose_has_line = yes", block(strip_comments(read(SGUIS)), "nd_loose_sgui"))
+
+
+class TestLooseRecovery(unittest.TestCase):
+    """Step 5's recovery (spec §3.5): a covert operation, a treaty article and
+    inspection each find warheads unaccounted for and take them out of the
+    pool; the article and inspection also secure custody."""
+
+    def setUp(self):
+        self.le = strip_comments(read(LOOSE_EFFECTS))
+        self.lt = strip_comments(read(LOOSE_TRIGGERS))
+        self.ct = strip_comments(read(CUSTODY_TRIGGERS))
+
+    def test_covert_operation_finds_warheads_once_established(self):
+        effects = strip_comments(read(ROOT / "common/scripted_effects/covert_warfare_effects.txt"))
+        phase = block(effects, "covert_ops_apply_all_phase_effects")
+        i = phase.index("has_tag = iw_op_secure_material")
+        search = phase[i: phase.index("covert_refresh_priority_cost", i)]
+        self.assertIn("covert_op_is_established = yes", search)
+        self.assertIn("chance = covert_secure_material_chance", search)
+        self.assertIn("nd_loose_recover_from_line = { HOW = 2 }", search)
+        # The operator hears; the target is never told.
+        self.assertIn("nd_loose_tell_recovery = { WHO = ROOT HOW = 2 }", search)
+        action = block(strip_comments(read(ROOT / "common/diplomatic_actions/covert_operations.txt")),
+                       "covert_secure_material_action")
+        self.assertIn("has_game_rule = nuclear_weapons_enabled", action)
+        # Ends by itself when nothing is left to find.
+        self.assertIn("nd_loose_has_line = yes", block(action, "pact"))
+
+    def test_article_secures_custody_and_searches(self):
+        article = strip_comments(read(ROOT / "common/treaty_articles/116_nuclear_security_assistance.txt"))
+        self.assertIn("maintenance_paid_by = source_country", article)
+        self.assertIn("country_treaty_leverage_generation_add", block(article, "target_modifier"))
+        self.assertIn("has_type = nuclear_security_assistance", block(self.lt, "nd_has_security_assistance"))
+        self.assertIn("nd_has_security_assistance = yes", block(self.ct, "nd_custody_is_secured"))
+        monthly = block(self.le, "nd_loose_monthly")
+        self.assertIn("nd_has_security_assistance = yes", monthly)
+        self.assertIn("nd_loose_recover_from_line = { HOW = 3 }", monthly)
+        self.assertIn("nd_loose_monthly = yes", block(strip_comments(read(EFFECTS)), "nd_country_monthly_cleanup"))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,168 @@
+﻿# ============================================================================
+# NUCLEAR SECURITY ASSISTANCE — paying another state to secure its arsenal
+# ============================================================================
+# nuclear_crisis_design.md §0.10 step 5 (recovery). Modelled on the Nunn–Lugar
+# Cooperative Threat Reduction programme (1991): one power pays, with money and
+# technicians, for another to guard, count and dismantle its warheads.
+#
+# Directed, like the aid articles: SOURCE = the provider (armed — it has the
+# expertise — and it pays the upkeep), TARGET = the country helped, which holds
+# an arsenal or a line with warheads unaccounted for. The leverage line sits on
+# the target's block (the aided party is the one leaned on; scripting_best_
+# practices.md § country_treaty_leverage_generation_add).
+#
+# What it does lives elsewhere, and reads the article as the source of truth
+# (nd_has_security_assistance, nuclear_loose_triggers.txt):
+#   * the target's custody counts as secured (nd_custody_is_secured): half as
+#     many of its warheads go missing whenever they change hands;
+#   * each month, a chance to find one of its warheads unaccounted for
+#     (nd_loose_monthly, nuclear_loose_effects.txt).
+# ============================================================================
+nuclear_security_assistance = {
+	icon = "gfx/interface/icons/diplomatic_treaties_articles_icons/offer_embassy.dds"
+	kind = directed
+	maintenance_paid_by = source_country
+	cost = 100
+	relations_progress_per_day = 1
+	relations_improvement_max = 40
+
+	flags = { can_be_renegotiated giftable friendly }
+
+	usage_limit = once_per_side
+
+	# The aided party is the one leaned on (see header).
+	target_modifier = {
+		country_treaty_leverage_generation_add = 100
+	}
+
+	# ROOT is the source (the provider) in visible and possible, as in the
+	# other nuclear articles.
+	visible = {
+		has_game_rule = nuclear_weapons_enabled
+		nd_is_armed = yes
+	}
+
+	possible = {
+		nd_is_armed = yes
+		custom_tooltip = {
+			text = nd_tt_assistance_target_eligible
+			scope:other_country = { nd_can_receive_security_assistance = yes }
+		}
+		scope:other_country = {
+			NOT = { has_war_with = ROOT }
+		}
+		custom_tooltip = {
+			text = DIPLO_ACTION_RELATIONS_POOR_OR_LESS_NOT
+			scope:other_country.relations:root > relations_threshold:poor
+		}
+	}
+
+	requirement_to_maintain = {
+		trigger = {
+			scope:source_country = {
+				NOT = { has_war_with = scope:target_country }
+			}
+		}
+	}
+
+	can_ratify = {
+		custom_tooltip = {
+			text = DUPLICATE_ARTICLE_SAME_INPUTS
+			no_duplicate_treaty_article = { ARTICLE_TYPE = nuclear_security_assistance }
+		}
+		custom_tooltip = {
+			text = nd_tt_assistance_provider_armed
+			scope:source_country = { nd_is_armed = yes }
+		}
+		custom_tooltip = {
+			text = nd_tt_assistance_target_eligible
+			scope:target_country = { nd_can_receive_security_assistance = yes }
+		}
+	}
+
+	ai = {
+		treaty_categories = { other }
+		article_ai_usage = { offer request }
+		evaluation_chance = {
+			value = 0
+			if = {
+				limit = {
+					exists = scope:other_country
+					scope:other_country = { nd_loose_has_line = yes }
+				}
+				add = 0.1
+			}
+			if = {
+				limit = {
+					nd_is_armed = yes
+					country_rank >= rank_value:great_power
+				}
+				add = 0.05
+			}
+		}
+		inherent_accept_score = {
+			value = 0
+			if = {
+				# The provider weighs the cost.
+				limit = { scope:source_country ?= this }
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = -20
+				}
+				if = {
+					limit = {
+						OR = {
+							has_attitude = { who = scope:target_country attitude = domineering }
+							has_attitude = { who = scope:target_country attitude = belligerent }
+							has_attitude = { who = scope:target_country attitude = antagonistic }
+						}
+					}
+					add = {
+						desc = "AI_HOSTILE_ATTITUDE"
+						value = -1000
+					}
+				}
+				if = {
+					limit = { scope:target_country = { nd_loose_has_line = yes } }
+					add = {
+						desc = "nd_ai_warheads_unaccounted_for"
+						value = 40
+					}
+				}
+				if = {
+					limit = { is_adjacent_to_country = scope:target_country }
+					add = {
+						desc = "nd_ai_warheads_next_door"
+						value = 20
+					}
+				}
+			}
+			else = {
+				# The country helped weighs foreign eyes on its depots.
+				add = {
+					desc = "DIPLOMATIC_ACCEPTANCE_BASE"
+					value = 5
+				}
+				if = {
+					limit = { nd_loose_has_line = yes }
+					add = {
+						desc = "nd_ai_warheads_unaccounted_for"
+						value = 20
+					}
+				}
+				if = {
+					limit = {
+						OR = {
+							has_diplomatic_pact = { who = scope:source_country type = rivalry }
+							has_attitude = { who = scope:source_country attitude = wary }
+						}
+					}
+					add = {
+						desc = "DIPLOMATIC_ACCEPTANCE_ATTITUDE"
+						value = -40
+					}
+				}
+			}
+		}
+	}
+}

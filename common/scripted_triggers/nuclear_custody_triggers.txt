@@ -105,11 +105,13 @@ nd_ai_would_strike_own_people = {
 #   a custodian accepted in a civil war ("An Offer to Secure Our Arsenal",
 #   nuclear_custody.7), for as long as that civil war lasts;
 #   custody opened to inspection after a loose warhead was traced to us
-#   (nuclear_loose.6), for twenty years.
+#   (nuclear_loose.6), for twenty years;
+#   a nuclear_security_assistance article paying for it, while it is in force.
 nd_custody_is_secured = {
 	OR = {
 		var:nd_cw_custodian ?= { is_country_alive = yes }
 		has_variable = nd_loose_inspected
+		nd_has_security_assistance = yes
 	}
 }
 

@@ -2937,7 +2937,7 @@
  nuclear_loose.8.f:0 "It took a decade and a public inquiry for Britain to say where the polonium that killed Alexander Litvinenko in London in 2006 had come from."
  nuclear_loose.8.t:0 "An Answer on the Warhead"
  nuclear_loose.9.a:0 "One fewer."
- nuclear_loose.9.d_assistance:0 "The security assistance we are paying for in [ROOT.GetCountry.MakeScope.Var('nd_loose_recovered_from').GetCountry.GetName] has found one of its missing warheads. It has been dismantled."
+ nuclear_loose.9.d_assistance:0 "The foreign technicians paid to secure our arsenal have found one of our warheads that had gone missing. It has been dismantled."
  nuclear_loose.9.d_convention:0 "Under the Convention on the Physical Protection of Nuclear Material, one of our missing warheads has been found and dismantled."
  nuclear_loose.9.d_covert:0 "Our agents in [ROOT.GetCountry.MakeScope.Var('nd_loose_recovered_from').GetCountry.GetName] have found one of the warheads missing from its arsenal and seen it destroyed. [ROOT.GetCountry.MakeScope.Var('nd_loose_recovered_from').GetCountry.GetName] need never know how."
  nuclear_loose.9.d_inspectors:0 "Inspectors searching our depots have found one of our warheads that had gone missing. It has been dismantled."
