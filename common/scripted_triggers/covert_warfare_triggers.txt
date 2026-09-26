@@ -60,6 +60,13 @@ covert_op_is_fully_operational = {
 	covert_op_effective_duration >= 12
 }
 
+# The operation's target has researched more technologies than the operator.
+# Military espionage's tech-spread bonus comes only from such operations.
+# Scope: covert operation container; ROOT = operator country
+covert_op_target_ahead_in_tech = {
+	var:iw_target ?= { techs_researched > ROOT.techs_researched }
+}
+
 # True when the operation's priority is at least $N$. A container without
 # iw_priority (a save made before slice 3, until the first monthly sync) reads
 # as priority 1, so this is false for it.

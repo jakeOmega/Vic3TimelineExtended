@@ -133,6 +133,19 @@ class ScaledApplicationTests(unittest.TestCase):
         self.assertIn("position = 0", block)
         self.assertIn("save_scope_as = iw_op", block)
 
+    def test_military_tech_spread_picks_among_operations_whose_target_is_ahead(self):
+        # The strongest QUALIFYING operation, chosen per operation. It used to
+        # save each operation's target in an every_in_list and test the scope
+        # afterwards, which reads only the last one in iw_ops.
+        block = _top_level_block(_text(EFFECTS), "covert_ops_apply_all_phase_effects = {")
+        site = block[: block.index("covert_op_add_scaled_modifier = { MODIFIER = covert_military_espionage MONTHS")]
+        chooser = site[site.rindex("ordered_in_list = {"):]
+        self.assertIn("covert_op_target_ahead_in_tech = yes", chooser)
+        self.assertIn("order_by = covert_op_effect_mult", chooser)
+        self.assertNotIn("espionage_target", block)
+        trigger = _top_level_block(_text(TRIGGERS), "covert_op_target_ahead_in_tech = {")
+        self.assertIn("var:iw_target ?= { techs_researched > ROOT.techs_researched }", trigger)
+
     def test_every_bespoke_site_calls_the_helper(self):
         block = _top_level_block(_text(EFFECTS), "covert_ops_apply_all_phase_effects = {")
         for modifier in (

@@ -1865,7 +1865,7 @@
  covert_military_espionage_action_action_notification_name:0 "Military Espionage Launched"
  covert_military_espionage_action_action_propose_name:0 "Launch Military Espionage"
  covert_military_espionage_detected:0 "Foreign Military Espionage"
- covert_military_espionage_extra_tt:0 "While the target has more technologies researched than we do, our military [concept_technology_spread] is also #G +15%#!."
+ covert_military_espionage_extra_tt:0 "While the target has more technologies researched than we do, our military [concept_technology_spread] is also #G +15%#!. With several military espionage operations running, it comes from the strongest one whose target is ahead of us."
  covert_military_espionage_unit:0 "Military Intelligence Advantage"
  covert_nuclear_sabotage_action:0 "Covert: Nuclear Programme Sabotage"
  covert_nuclear_sabotage_action_action_break_name:0 "Cancel Nuclear Sabotage"
