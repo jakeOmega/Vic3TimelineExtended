@@ -856,6 +856,7 @@
  je_un_chamber_propose_topic_aid:0 "#bold Request Humanitarian Aid#!"
  je_un_chamber_propose_topic_climate:0 "#bold Climate Accord#! — would establish the UN Environment Programme (UNEP)."
  je_un_chamber_propose_topic_condemn:0 "#bold Condemnation of Aggression#!"
+ je_un_chamber_propose_topic_cooldown:0 "  #Y A resolution on this question closed within the last five years. Neither we nor the docket may table it again until they are up.#!"
  je_un_chamber_propose_topic_decolonization:0 "#bold [Concept('concept_decolonization_system', 'Decolonization')] Resolution#! — a standing declaration that puts colonial powers under pressure."
  je_un_chamber_propose_topic_expulsion:0 "#bold Motion to Expel a [concept_un_permanent_member]#!"
  je_un_chamber_propose_topic_heritage:0 "#bold Cultural Heritage Program#! — would establish UNESCO."

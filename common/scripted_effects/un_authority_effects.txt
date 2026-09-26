@@ -300,8 +300,13 @@ un_ledger_record = {
 				set_global_variable = { name = un_ledger_$PILLAR$ value = 0 }
 			}
 			change_global_variable = { name = un_ledger_$PILLAR$ add = global_var:un_led_stage }
+			# An option's tooltip evaluates this limit on every frame without
+			# running the set above, so the stage is unset there: without the
+			# has_global_variable test each render logged three errors per
+			# ledger entry (un_events.7's aid option, un_vote.1's veto).
 			if = {
 				limit = {
+					has_global_variable = un_led_stage
 					OR = {
 						global_var:un_led_stage >= un_ledger_log_threshold
 						global_var:un_led_stage <= un_ledger_log_threshold_negative

@@ -46,6 +46,8 @@
  AI_WANTS_THIS_MORE_IF_HOSTILE:0 "Hostile relations"
  AI_WANTS_THIS_MORE_IF_MILITARIZED:0 "State has [Concept('concept_military_building', 'military buildings')]"
  AI_WANTS_THIS_MORE_IF_WARY:0 "Wary relations"
+ ANTI_COLONIALIST_COLONIES_HELD:0 "The country still rules colonies"
+ ANTI_COLONIALIST_GROUP_IDEOLOGY:0 "The interest group is Anti-Colonialist"
  BANKING_CONTAGION_SPREAD_TT:0 "May spread financial contagion to trade-linked countries (eligibility scales with market integration, customs unions, adjacency, economic dependence, and source-vs-target GDP — tiny economies cannot destabilise giants)."
  BANKING_POINTS_1:0 "At least 1 free Banking Intervention Point"
  BANKING_POINTS_2:0 "At least 2 free Banking Intervention Points"

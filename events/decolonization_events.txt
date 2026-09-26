@@ -59,7 +59,7 @@ decolonization_events.1 = {
 			modifier = {
 				trigger = {
 					ig:ig_intelligentsia ?= {
-						leader = { has_ideology = ideology:ideology_anti_colonialist }
+						leader = { has_ideology = ideology:ideology_anti_colonialist_leader }
 					}
 				}
 				add = 3
@@ -292,7 +292,7 @@ decolonization_events.2 = {
 			modifier = {
 				trigger = {
 					ig:ig_intelligentsia ?= {
-						leader = { has_ideology = ideology:ideology_anti_colonialist }
+						leader = { has_ideology = ideology:ideology_anti_colonialist_leader }
 					}
 				}
 				add = 3
@@ -913,7 +913,7 @@ decolonization_events.8 = {
 		has_technology_researched = decolonization
 		any_subject_or_below = { is_qualifying_colonial_subject = yes }
 		ig:ig_intelligentsia ?= {
-			leader = { has_ideology = ideology:ideology_anti_colonialist }
+			leader = { has_ideology = ideology:ideology_anti_colonialist_leader }
 		}
 	}
 
@@ -3428,7 +3428,7 @@ decolonization_events.51 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { ig:ig_intelligentsia ?= { leader = { has_ideology = ideology:ideology_anti_colonialist } } }
+				trigger = { ig:ig_intelligentsia ?= { leader = { has_ideology = ideology:ideology_anti_colonialist_leader } } }
 				add = 4
 			}
 		}
@@ -3458,7 +3458,7 @@ decolonization_events.52 = {
 		has_technology_researched = decolonization
 		any_scope_state = { is_overseas_colonial_state = yes }
 		ig:ig_intelligentsia ?= {
-			leader = { has_ideology = ideology:ideology_anti_colonialist }
+			leader = { has_ideology = ideology:ideology_anti_colonialist_leader }
 		}
 	}
 

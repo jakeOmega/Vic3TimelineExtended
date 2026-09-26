@@ -3707,7 +3707,7 @@ un_regime_npt_guarantee_modifier = {
 # The law of the sea, a great power: its fleets are held to the convention.
 un_regime_naval_curb_modifier = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	country_prestige_from_navy_power_projection_mult = -0.1
+	country_prestige_from_navy_combat_power_mult = -0.1
 }
 # Human rights, a member whose laws the declaration condemns.
 un_regime_rights_violator_modifier = {

@@ -40,10 +40,14 @@ nuclear_crisis.1 = {
 
 	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
 
+	# `?=` on the crisis scopes in titles and descs: the diplomatic action's
+	# confirmation box names this event, and renders its title, before
+	# nd_crisis_open has saved scope:nd_issuer (a preview runs no
+	# save_scope_as). Same in .2, .4 and .7, which option tooltips name.
 	title = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { scope:nd_issuer = { nd_crisis_is_public = yes } }
+				trigger = { scope:nd_issuer ?= { nd_crisis_is_public = yes } }
 				desc = nuclear_crisis.1.t_public
 			}
 			triggered_desc = {
@@ -55,7 +59,7 @@ nuclear_crisis.1 = {
 	desc = {
 		first_valid = {
 			triggered_desc = {
-				trigger = { scope:nd_issuer = { nd_crisis_is_public = yes } }
+				trigger = { scope:nd_issuer ?= { nd_crisis_is_public = yes } }
 				desc = nuclear_crisis.1.d_public
 			}
 			triggered_desc = {
@@ -125,7 +129,7 @@ nuclear_crisis.1 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { scope:nd_issuer = { nd_crisis_is_public = yes } }
+				trigger = { scope:nd_issuer ?= { nd_crisis_is_public = yes } }
 				add = 1
 			}
 		}
@@ -264,7 +268,7 @@ nuclear_crisis.2 = {
 				add = 3
 			}
 			modifier = {
-				trigger = { scope:nd_target = { nd_believed_armed = no } }
+				trigger = { scope:nd_target ?= { nd_believed_armed = no } }
 				add = 2
 			}
 		}
@@ -278,7 +282,7 @@ nuclear_crisis.2 = {
 		ai_chance = {
 			base = 3
 			modifier = {
-				trigger = { scope:nd_target = { nd_believed_armed = yes } }
+				trigger = { scope:nd_target ?= { nd_believed_armed = yes } }
 				add = 3
 			}
 			modifier = {
@@ -487,7 +491,7 @@ nuclear_crisis.4 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { scope:nd_target = { nd_believed_armed = yes } }
+				trigger = { scope:nd_target ?= { nd_believed_armed = yes } }
 				add = 3
 			}
 			modifier = {
@@ -887,7 +891,7 @@ nuclear_crisis.7 = {
 		ai_chance = {
 			base = 2
 			modifier = {
-				trigger = { scope:nd_target = { nd_believed_armed = yes } }
+				trigger = { scope:nd_target ?= { nd_believed_armed = yes } }
 				add = 3
 			}
 		}

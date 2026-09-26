@@ -314,10 +314,9 @@ ideology_multicultural_inclusive = {
 			limit = {
 				OR = {
 					AND = {
+						# Already the group's own scope: an ig: link needs a country.
 						is_interest_group_type = ig_intelligentsia
-						ig:ig_intelligentsia = {
-							NOT = { has_ideology = ideology:ideology_multicultural_ig }
-						}
+						NOT = { has_ideology = ideology:ideology_multicultural_ig }
 					}
 					is_interest_group_type = ig_trade_unions
 				}
@@ -353,6 +352,11 @@ ideology_multicultural_inclusive = {
 	}
 }
 
+# The interest-group half of the pair: the decolonization tech adds it to the
+# Intelligentsia and the Trade Unions (era_6.txt). A group's LEADER cannot hold
+# it: the engine refuses a non-character ideology on a character. Leaders get
+# ideology_anti_colonialist_leader below, the same split as
+# ideology_multicultural / ideology_multicultural_ig.
 ideology_anti_colonialist = {
 	icon = "gfx/interface/icons/ideology_icons/abolitionist.dds"
 
@@ -364,6 +368,95 @@ ideology_anti_colonialist = {
 		law_colonial_exploitation = strongly_disapprove
 		law_frontier_colonization = disapprove
 		law_neocolonialism = neutral
+	}
+}
+
+# The leader half. Every `leader = { has_ideology = ... }` check in the
+# decolonization content asks for this one, and movement_anti_war hands it to
+# the leaders of the groups it pressures. Same colonial stances as the group
+# ideology. Weighted toward the two groups that carry the group ideology, and
+# toward countries where the question is live: they still hold colonies, or
+# colonial laws are in force.
+ideology_anti_colonialist_leader = {
+	icon = "gfx/interface/icons/ideology_icons/ideology_leader/ideology_leader_abolitionist.dds"
+
+	character_ideology = yes
+
+	priority = 200
+
+	lawgroup_colonization = {
+		law_no_colonial_affairs = strongly_approve
+		law_colonial_resettlement = strongly_disapprove
+		law_colonial_exploitation = strongly_disapprove
+		law_frontier_colonization = disapprove
+		law_neocolonialism = neutral
+	}
+
+	country_trigger = {
+		has_technology_researched = decolonization
+	}
+
+	interest_group_leader_trigger = {
+		OR = {
+			is_interest_group_type = ig_intelligentsia
+			is_interest_group_type = ig_trade_unions
+			has_ideology = ideology:ideology_anti_colonialist
+		}
+	}
+
+	non_interest_group_leader_trigger = {
+		always = no
+	}
+
+	interest_group_leader_weight = {
+		value = {
+			add = 25
+			desc = "base_value"
+		}
+		# The group took up the cause (era_6.txt, decolonization on_researched).
+		if = {
+			limit = { has_ideology = ideology:ideology_anti_colonialist }
+			add = {
+				value = 75
+				desc = "ANTI_COLONIALIST_GROUP_IDEOLOGY"
+			}
+		}
+		# The country still rules colonies: the same two tests the
+		# decolonization events use to decide the question is open.
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						country_has_qualifying_colonial_subject = yes
+						any_scope_state = { is_overseas_colonial_state = yes }
+					}
+				}
+			}
+			add = {
+				value = 75
+				desc = "ANTI_COLONIALIST_COLONIES_HELD"
+			}
+		}
+		# The laws it opposes most are in force (vanilla's pacifist reads the
+		# same pair).
+		if = {
+			limit = {
+				owner = {
+					OR = {
+						has_law_or_variant = law_type:law_colonial_resettlement
+						has_law_or_variant = law_type:law_colonial_exploitation
+					}
+				}
+			}
+			add = {
+				value = 50
+				desc = "DISFAVORED_LAWS"
+			}
+		}
+	}
+
+	non_interest_group_leader_weight = {
+		value = 0
 	}
 }
 

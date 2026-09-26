@@ -119,11 +119,8 @@ te_mon_premium_union_overvaluation = {
 # that makes the backstop less likely to be called.
 te_mon_union_supervision_cost = { value = 0.25 }
 
-# How much of the shared-currency contagion channel one supervisor catches. The
-# channel is worth +10 percentage points of spread chance
-# (banking_cycle_spread_contagion); -6 leaves +4, because a common supervisor
-# is not a wall — the 2008 and 2011 waves crossed one.
-te_mon_union_contagion_damp = { value = -6 }
+# The shared-currency contagion damp (-6 of the channel's +10) is a literal in
+# banking_cycle_spread_contagion: a `random` modifier cannot name a script value.
 
 
 # --- Tier 5: the reserve currency --------------------------------------------
