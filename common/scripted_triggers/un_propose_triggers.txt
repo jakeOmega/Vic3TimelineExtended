@@ -449,6 +449,10 @@ un_propose_human_rights_qualifies = {
 		text = un_propose_not_party_tt
 		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
 	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_human_rights_refusal_modifier }
+	}
 }
 
 # Scope: the proposing country
@@ -685,7 +689,7 @@ un_propose_heritage_qualifies = {
 	}
 	custom_tooltip = {
 		text = un_propose_not_refused_tt
-		NOT = { has_modifier = un_heritage_token_modifier }
+		NOT = { has_modifier = un_heritage_refusal_modifier }
 	}
 }
 

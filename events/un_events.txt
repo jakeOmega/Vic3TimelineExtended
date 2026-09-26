@@ -450,6 +450,7 @@ un_events.3 = {
 	trigger = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		NOT = { je:je_united_nations ?= { has_modifier = un_human_rights_declaration_modifier } }
+		NOT = { has_modifier = un_human_rights_refusal_modifier }
 		has_technology_researched = human_rights
 		global_var:un_authority >= 40
 		NOT = { has_global_variable = un_vote_active }
@@ -1298,7 +1299,7 @@ un_events.9 = {
 		je:je_united_nations ?= { has_modifier = un_member_modifier }
 		global_var:un_authority >= 40
 		NOT = { je:je_united_nations ?= { has_modifier = un_heritage_program_modifier } }
-		NOT = { has_modifier = un_heritage_token_modifier }
+		NOT = { has_modifier = un_heritage_refusal_modifier }
 		NOT = { has_global_variable = un_vote_active }
 	}
 
@@ -1353,6 +1354,11 @@ un_events.9 = {
 		}
 		custom_tooltip = un_ledger_tt_credibility_down_0_5
 		un_ledger_actor_entry = { PILLAR = credibility POINTS = -0.5 REASON = 1091 }
+		add_modifier = {
+			name = un_heritage_refusal_modifier
+			days = normal_modifier_time
+			is_decaying = yes
+		}
 		add_loyalists = {
 			value = very_small_radicals
 			strata = upper

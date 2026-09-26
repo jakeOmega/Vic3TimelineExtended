@@ -3742,6 +3742,7 @@
  un_grounds_condemn_tt:0 "A rival prosecuting a war of its own making has a record that supports a censure (case strength 30 or more)"
  un_grounds_sanctions_tt:0 "A rival not already under sanctions has a record that supports them (case strength 50 or more)"
  un_heritage_program_modifier:0 "UNESCO Heritage Program"
+ un_heritage_refusal_modifier:0 "Refused World Heritage Convention"
  un_heritage_token_modifier:0 "UNESCO Heritage Participant"
  un_high_authority_infamy_modifier:0 "UN International Order"
  un_hist_chart_auth_legend:0 "#lore 0-100, sampled monthly#!"

@@ -105,7 +105,7 @@ CONVENTIONS = (
                12, 18, 1181, "un_refugee_closed_modifier",
                ("un_regime_refugee_host_modifier", "un_regime_refugee_source_modifier"), None, True),
     Convention("heritage", "un_agency_unesco", "un_heritage_program_modifier", "je",
-               13, 9, 1091, None,
+               13, 9, 1091, "un_heritage_refusal_modifier",
                ("un_regime_heritage_site_modifier",), None, True),
     Convention("decolonization", "un_regime_decolonization", None, None,
                14, 12, 1121, "un_colonial_defender_modifier",
@@ -148,19 +148,12 @@ OTHER_REGIME_MODIFIERS = {"un_regime_shared_intelligence_modifier", "un_regime_c
 # Agencies founded other than by a convention (dissolution lapses them too).
 OTHER_AGENCIES = {"un_agency_icj"}
 
-# Gaps this table found when it was written (2026-09-26), left for the owner to
-# rule on rather than changed with the test. Each is asserted still to hold, so
-# fixing one fails here until its entry is deleted.
-KNOWN_GAPS = {
-    ("human_rights", "refusal_bars_tabling"):
-        "un_events.3 option C adds un_human_rights_refusal_modifier, but neither the event's "
-        "trigger nor un_propose_human_rights_qualifies checks it, so a refuser can be offered "
-        "the Declaration again at once. Every other refusal modifier bars both.",
-    ("heritage", "qualifies_reads_only_live_modifiers"):
-        "un_propose_heritage_qualifies and un_events.9's trigger bar un_heritage_token_modifier, "
-        "which nothing adds (since the UN's first commit); un_events.9 option C leaves no "
-        "modifier at all.",
-}
+# Gaps left open on purpose, as {(key, check): why}. A check named here must
+# fail, so an entry cannot outlive its gap: fixing one fails the test until the
+# entry is deleted. (The two the table found when it was written, 2026-09-26,
+# were fixed with it: the human-rights refusal now bars tabling, and heritage's
+# refusal leaves the modifier its gates read.)
+KNOWN_GAPS = {}
 
 # Loc every convention needs, as <template>.format(k=key).
 LOC_PER_CONVENTION = (

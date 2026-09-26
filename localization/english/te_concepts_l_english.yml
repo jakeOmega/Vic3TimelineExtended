@@ -2433,6 +2433,7 @@
  un_headquarters_modifier:0 "UN Headquarters Host"
  un_headquarters_modifier_desc:0 "This country hosts the United Nations Headquarters, serving as the center of international diplomacy and gaining significant [concept_prestige] and influence."
  un_heritage_program_modifier_desc:0 "This country is fully participating in the UNESCO world heritage preservation program."
+ un_heritage_refusal_modifier_desc:0 "This country refused to table a convention protecting the world's cultural and natural heritage, calling culture a domestic matter."
  un_heritage_token_modifier_desc:0 "This country has made a modest contribution to UNESCO heritage preservation."
  un_high_authority_infamy_modifier_desc:0 "The UN's authority means that aggressive acts carry greater international consequences. [concept_infamy] generation is increased."
  un_human_rights_champion_modifier_desc:0 "This country is actively championing human rights at the United Nations."
