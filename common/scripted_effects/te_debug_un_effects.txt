@@ -44,12 +44,13 @@ te_debug_un_seat_member = {
 		limit = { NOT = { has_journal_entry = je_united_nations } }
 		add_journal_entry = { type = je_united_nations }
 	}
-	je:je_united_nations ?= {
-		if = {
-			limit = { NOT = { has_modifier = un_member_modifier } }
-			add_modifier = { name = un_member_modifier }
-			add_modifier = { name = un_member_privileges_modifier }
-		}
+	# Through the mirror helpers (un_state_effects.txt), so the seat count
+	# below sees each seat granted earlier in the same run, and an entry that
+	# has not activated yet is rebuilt from the mirrors when it does.
+	if = {
+		limit = { NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } } }
+		un_state_on = { MODIFIER = un_member_modifier }
+		je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
 	}
 	if = {
 		limit = {
@@ -57,10 +58,8 @@ te_debug_un_seat_member = {
 			un_permanent_seat_count < 5
 			je:je_united_nations ?= { NOT = { has_modifier = un_permanent_member_modifier } }
 		}
-		je:je_united_nations ?= {
-			add_modifier = { name = un_security_council_modifier }
-			add_modifier = { name = un_permanent_member_modifier }
-		}
+		un_state_on = { MODIFIER = un_security_council_modifier }
+		un_state_on = { MODIFIER = un_permanent_member_modifier }
 	}
 }
 
@@ -312,10 +311,7 @@ te_debug_un_indict_us = {
 	}
 	if = {
 		limit = { NOT = { has_modifier = un_icc_member_modifier } }
-		add_modifier = {
-			name = un_icc_member_modifier
-			multiplier = un_convention_multiplier
-		}
+		un_convention_country_on = { MODIFIER = un_icc_member_modifier }
 	}
 	set_variable = { name = un_icc_crime value = 1 }
 	trigger_event = { id = un_events.33 }
@@ -399,6 +395,74 @@ te_debug_un_cycle_subject_member = {
 				country = scope:te_debug_un_new_subject
 				type = puppet
 			}
+		}
+	}
+}
+
+# ---- §0.9: a revolution's winner ----
+
+# Do to our journal entry what a won revolution does to the winner's: every UN
+# modifier on it goes, and the two country-scoped conventions with them, while
+# the variables stay (scripting_best_practices.md § "What a Civil War's Winner
+# Inherits"). The entry is marked for rebuilding, as its `immediate` marks the
+# record a winner inherits. The mirrors are brought up to date first, in case
+# this save has not had its first monthly pulse since they were added.
+# At the next monthly pulse: membership, founding status, the headquarters,
+# the permanent seat, the programmes and the conventions come back, and the
+# programme counters survive. The month after: privileges, benefits, dues, the
+# standing tier and the regime terms.
+# Scope: country (the player, a member)
+te_debug_un_wipe_entry = {
+	un_state_reconcile = yes
+	te_debug_un_drop = { MODIFIER = un_member_modifier }
+	te_debug_un_drop = { MODIFIER = un_member_privileges_modifier }
+	te_debug_un_drop = { MODIFIER = un_membership_benefits_modifier }
+	te_debug_un_drop = { MODIFIER = un_founding_member_modifier }
+	te_debug_un_drop = { MODIFIER = un_headquarters_modifier }
+	te_debug_un_drop = { MODIFIER = un_security_council_modifier }
+	te_debug_un_drop = { MODIFIER = un_permanent_member_modifier }
+	te_debug_un_drop = { MODIFIER = un_peacekeeping_contributor_modifier }
+	te_debug_un_drop = { MODIFIER = un_peacekeeping_contributor_cost }
+	te_debug_un_drop = { MODIFIER = un_development_contributor_modifier }
+	te_debug_un_drop = { MODIFIER = un_development_contributor_cost }
+	te_debug_un_drop = { MODIFIER = un_human_rights_champion_modifier }
+	te_debug_un_drop = { MODIFIER = un_arms_control_participant_modifier }
+	te_debug_un_drop = { MODIFIER = un_champion_order_cost }
+	te_debug_un_drop = { MODIFIER = un_undermine_order_cost }
+	te_debug_un_drop = { MODIFIER = un_human_rights_declaration_modifier }
+	te_debug_un_drop = { MODIFIER = un_nonproliferation_modifier }
+	te_debug_un_drop = { MODIFIER = un_climate_binding_modifier }
+	te_debug_un_drop = { MODIFIER = un_heritage_program_modifier }
+	te_debug_un_drop = { MODIFIER = un_pandemic_cooperation_modifier }
+	te_debug_un_drop = { MODIFIER = un_refugee_program_modifier }
+	te_debug_un_drop = { MODIFIER = un_space_partnership_modifier }
+	te_debug_un_drop = { MODIFIER = un_npt_disarmament_modifier }
+	te_debug_un_drop = { MODIFIER = un_standing_exemplary_modifier }
+	te_debug_un_drop = { MODIFIER = un_standing_respected_modifier }
+	te_debug_un_drop = { MODIFIER = un_standing_poor_modifier }
+	te_debug_un_drop = { MODIFIER = un_standing_disgraced_modifier }
+	if = {
+		limit = { has_modifier = un_law_of_sea_modifier }
+		remove_modifier = un_law_of_sea_modifier
+	}
+	if = {
+		limit = { has_modifier = un_icc_member_modifier }
+		remove_modifier = un_icc_member_modifier
+	}
+	if = {
+		limit = { NOT = { has_variable = un_state_rebuild_pending } }
+		set_variable = un_state_rebuild_pending
+	}
+}
+
+# Remove $MODIFIER$ from our journal entry if it is there, leaving its mirror.
+# Parameters: $MODIFIER$
+# Scope: country
+te_debug_un_drop = {
+	je:je_united_nations ?= {
+		if = {
+			limit = { has_modifier = $MODIFIER$ }
+			remove_modifier = $MODIFIER$
 		}
 	}
 }

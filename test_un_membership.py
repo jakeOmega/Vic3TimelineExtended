@@ -147,8 +147,14 @@ class RepresentationGateTests(unittest.TestCase):
         for name in ("un_hq_assign_host", "un_hq_monthly_update"):
             with self.subTest(block=name):
                 body = _block(text, name)
-                self.assertIn("un_member_represented = yes", body)
+                # The monthly update reads membership by the record, so a
+                # revolution's winner keeps the headquarters until its entry
+                # is rebuilt (§0.9); the record trigger asks the same rule.
+                self.assertRegex(body, r"un_member_represented(_by_record)? = yes")
                 self.assertNotIn("has_modifier = un_member_modifier", body)
+        record = _block(_read(_path("common", "scripted_triggers", "un_state_triggers.txt")),
+                        "un_member_represented_by_record")
+        self.assertIn("un_membership_eligible = yes", record)
 
 
 DUES = _path("common", "script_values", "un_dues_values.txt")
@@ -227,7 +233,8 @@ class TransitionTests(unittest.TestCase):
         body = _block(_read(_path("common", "scripted_effects", "un_membership_effects.txt")),
                       "un_representation_monthly_update")
         for needle in ("un_representation_suspended_notice", "un_representation_restored_notice",
-                       "remove_modifier = un_permanent_member_modifier", "un_rep_suspended"):
+                       "un_state_off = { MODIFIER = un_permanent_member_modifier }",
+                       "un_rep_suspended"):
             with self.subTest(needle=needle):
                 self.assertIn(needle, body)
         je = _read(_path("common", "journal_entries", "je_united_nations.txt"))
@@ -342,7 +349,9 @@ class ProgrammeTests(unittest.TestCase):
                       "un_representation_monthly_update")
         for mod in _PROGRAMME_MODIFIERS:
             with self.subTest(modifier=mod):
-                self.assertIn("remove_modifier = " + mod, body)
+                # Through the mirror helper, which forgets the mirror too
+                # (§0.9, test_un_state_mirror.py).
+                self.assertIn("un_state_off = { MODIFIER = " + mod + " }", body)
 
 
 class ConventionCatchUpTests(unittest.TestCase):

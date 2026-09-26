@@ -1,0 +1,65 @@
+﻿# ============================================================================
+# UN STATE MIRRORS — TRIGGERS
+# docs/systems/un_redesign_design.md §0.9; the effects and the contract are in
+# common/scripted_effects/un_state_effects.txt.
+# ============================================================================
+
+# The mirror says we hold $MODIFIER$ and the journal entry has lost it.
+# Parameters: $MODIFIER$
+# Scope: country
+un_state_missing = {
+	has_variable = $MODIFIER$_on
+	NOT = { je:je_united_nations ?= { has_modifier = $MODIFIER$ } }
+}
+
+# The same for a state modifier kept on the country.
+# Parameters: $MODIFIER$
+# Scope: country
+un_state_country_missing = {
+	has_variable = $MODIFIER$_on
+	NOT = { has_modifier = $MODIFIER$ }
+}
+
+# The monthly pulse heals this month and does nothing else: the entry may have
+# been wiped (un_state_rebuild_pending), and a mirrored modifier is missing.
+# Scope: country
+un_state_heal_needed = {
+	has_variable = un_state_rebuild_pending
+	OR = {
+		un_state_missing = { MODIFIER = un_member_modifier }
+		un_state_missing = { MODIFIER = un_founding_member_modifier }
+		un_state_missing = { MODIFIER = un_headquarters_modifier }
+		un_state_missing = { MODIFIER = un_security_council_modifier }
+		un_state_missing = { MODIFIER = un_permanent_member_modifier }
+		un_state_missing = { MODIFIER = un_peacekeeping_contributor_modifier }
+		un_state_missing = { MODIFIER = un_peacekeeping_contributor_cost }
+		un_state_missing = { MODIFIER = un_development_contributor_modifier }
+		un_state_missing = { MODIFIER = un_development_contributor_cost }
+		un_state_missing = { MODIFIER = un_human_rights_champion_modifier }
+		un_state_missing = { MODIFIER = un_arms_control_participant_modifier }
+		un_state_missing = { MODIFIER = un_champion_order_cost }
+		un_state_missing = { MODIFIER = un_undermine_order_cost }
+		un_state_missing = { MODIFIER = un_human_rights_declaration_modifier }
+		un_state_missing = { MODIFIER = un_nonproliferation_modifier }
+		un_state_missing = { MODIFIER = un_climate_binding_modifier }
+		un_state_missing = { MODIFIER = un_heritage_program_modifier }
+		un_state_missing = { MODIFIER = un_pandemic_cooperation_modifier }
+		un_state_missing = { MODIFIER = un_refugee_program_modifier }
+		un_state_missing = { MODIFIER = un_space_partnership_modifier }
+		un_state_country_missing = { MODIFIER = un_law_of_sea_modifier }
+		un_state_country_missing = { MODIFIER = un_icc_member_modifier }
+	}
+}
+
+# A represented member by the record: the membership modifier, or its mirror
+# while a revolution's winner waits for its entry to be rebuilt. For the global
+# monthly pulse, which may run before the winner's own pulse has healed it
+# (un_hq_monthly_update keeps such a winner as the headquarters host).
+# Scope: country
+un_member_represented_by_record = {
+	OR = {
+		je:je_united_nations ?= { has_modifier = un_member_modifier }
+		has_variable = un_member_modifier_on
+	}
+	un_membership_eligible = yes
+}
