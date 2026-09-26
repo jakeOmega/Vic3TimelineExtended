@@ -1777,10 +1777,12 @@ banking_crisis_wave_check_great_depression = {
 #
 # The tooltip line shows, and the variable moves, only for a country that holds
 # the banking journal entry — the only place the cycle's bars are drawn. For
-# any other country both are skipped: it has no cycle, and should it gain the
-# entry later, the entry's `immediate` sets all three variables afresh, so an
-# earlier write would be thrown away. Almost every caller can only reach a
-# holder already (the events fire from the entry's own pulse);
+# any other country both are skipped: it has no cycle, and must not be handed
+# the start of one. The entry's `immediate` seeds each of the three variables
+# only when it is absent (so a revolution's winner keeps the cycle it
+# inherits), so a write here would survive into the cycle the country starts
+# with when it gains the entry, instead of 50 / 0 / 0. Almost every caller can
+# only reach a holder already (the events fire from the entry's own pulse);
 # society_technology_events.30 fires from a technology on-action and reaches
 # every country.
 #
@@ -2265,18 +2267,31 @@ banking_cycle_apply_phase_modifiers = {
 #     them (scripting_best_practices.md, "Modifier Values Are NOT Recalculated
 #     Within a Single Effect Block"), so asking `has_modifier` here would read the
 #     state this effect is in the middle of changing. te_mon_stance_band_applied
-#     remembers which band was last put on instead. It initialises behind
-#     has_variable, is never removed, and 0 means "none applied yet".
+#     remembers which band was last put on instead. It is never removed, and 0
+#     means "none recorded".
 #
-#     THE FIRST RUN REMOVES ALL FIVE, on the pulse that creates the bookkeeping
-#     variable, for the cost of five no-op removals per country per campaign. It
-#     was written for a revolution's winner on the premise that the entry's
-#     modifiers move and the variables don't. Saves (2026-09-25) showed the
-#     reverse: the winner inherits the entry with NO modifiers and the loser's
-#     te_mon_stance_band_applied, so the tracker claims a band that is not there,
-#     this sweep never fires, and the band stays off until the band itself
-#     changes (docs/audits/civil_war_inheritance_audit.md F7 — open;
-#     scripting_best_practices.md § "What a Civil War's Winner Inherits").
+#     THE ENTRY'S `immediate` SETS IT TO 0, unguarded, because that is exactly
+#     when the entry carries no band: on a first activation, and on every copy of
+#     the entry a revolution's winner inherits. Saves (2026-09-25) showed that
+#     copy arriving with NO modifiers but with the loser's tracker, so before
+#     that reset the tracker claimed a band that was not there, matched the band,
+#     and no swap ran: the band stayed off until the band itself changed
+#     (docs/audits/civil_war_inheritance_audit.md F7; scripting_best_practices.md
+#     § "What a Civil War's Winner Inherits").
+#
+#     0 CLEARS THE WHOLE FAMILY BEFORE ADDING, rather than removing nothing. The
+#     copies seen so far arrive empty, so those five removals are no-ops, once
+#     per activation. But if `immediate` ever re-ran on a record that kept its
+#     modifiers (a loyalist win has not been observed), the band is replaced
+#     rather than put on a second time. Removing and re-adding the same modifier
+#     in one block is safe: banking_cycle_apply_phase_modifiers does exactly that
+#     to the phase modifier every month.
+#
+#     THE has_variable INITIALISATION STAYS for saves whose entry was activated
+#     before the tracker existed (monetary phase 1, 2026-09-19): that entry's
+#     `immediate` never set it and will not run again, and the swap below reads
+#     the variable unconditionally. It used to remove all five bands as well;
+#     the 0 branch of the swap does that now.
 #
 #     A country without the journal entry never gets here: this is called from
 #     je_banking_cycle's own monthly pulse.
@@ -2284,11 +2299,23 @@ banking_cycle_apply_stance_band = {
 	if = {
 		limit = { NOT = { has_variable = te_mon_stance_band_applied } }
 		set_variable = { name = te_mon_stance_band_applied value = 0 }
-		je:je_banking_cycle = { remove_modifier = banking_stance_band_1 }
-		je:je_banking_cycle = { remove_modifier = banking_stance_band_2 }
-		je:je_banking_cycle = { remove_modifier = banking_stance_band_3 }
-		je:je_banking_cycle = { remove_modifier = banking_stance_band_4 }
-		je:je_banking_cycle = { remove_modifier = banking_stance_band_5 }
+	}
+
+	# SAVE MIGRATION — added 2026-09-26, remove after one release.
+	# A save in which a revolution was already won with this entry active holds
+	# the winner's copy with a tracker naming a band that is not on it, and that
+	# copy's `immediate` ran before the reset there existed, so it never will
+	# now. Every country whose revolutionaries won while it held the entry is in
+	# that state (AI countries too, not just the player's), unless its band has
+	# changed since, which puts the right one on. Zero the tracker once per
+	# country; the swap below then clears the family and puts the current band
+	# on, this month. On a healthy entry that takes the band off and puts the same
+	# one straight back. banking_stance_band_healed stays in the save once this
+	# block is gone, read by nothing, which is harmless.
+	if = {
+		limit = { NOT = { has_variable = banking_stance_band_healed } }
+		set_variable = { name = banking_stance_band_healed value = 1 }
+		set_variable = { name = te_mon_stance_band_applied value = 0 }
 	}
 
 	if = {
@@ -2300,8 +2327,17 @@ banking_cycle_apply_stance_band = {
 			NOT = { var:te_mon_stance_band_applied = var:te_mon_stance_band }
 		}
 
-		# Take off the band we put on last month.
-		if = { limit = { var:te_mon_stance_band_applied = 1 } je:je_banking_cycle = { remove_modifier = banking_stance_band_1 } }
+		# Take off the band we put on last month. 0: none recorded, so take
+		# off all five (see the header).
+		if = {
+			limit = { var:te_mon_stance_band_applied = 0 }
+			je:je_banking_cycle = { remove_modifier = banking_stance_band_1 }
+			je:je_banking_cycle = { remove_modifier = banking_stance_band_2 }
+			je:je_banking_cycle = { remove_modifier = banking_stance_band_3 }
+			je:je_banking_cycle = { remove_modifier = banking_stance_band_4 }
+			je:je_banking_cycle = { remove_modifier = banking_stance_band_5 }
+		}
+		else_if = { limit = { var:te_mon_stance_band_applied = 1 } je:je_banking_cycle = { remove_modifier = banking_stance_band_1 } }
 		else_if = { limit = { var:te_mon_stance_band_applied = 2 } je:je_banking_cycle = { remove_modifier = banking_stance_band_2 } }
 		else_if = { limit = { var:te_mon_stance_band_applied = 3 } je:je_banking_cycle = { remove_modifier = banking_stance_band_3 } }
 		else_if = { limit = { var:te_mon_stance_band_applied = 4 } je:je_banking_cycle = { remove_modifier = banking_stance_band_4 } }
@@ -2320,7 +2356,8 @@ banking_cycle_apply_stance_band = {
 
 # 5. Update the four JE progress bars (the fourth, the policy-stance band,
 #    is the monetary system's — see banking_policy_stance_bar).
-#    Called from the monthly pulse (where scope:journal_entry is available).
+#    Called from the monthly pulse and from je_banking_cycle's `immediate`:
+#    both have scope:journal_entry, and ROOT is the country.
 banking_cycle_update_progress_bars = {
 	scope:journal_entry = {
 		set_bar_progress = { name = banking_cycle_value_bar value = ROOT.var:finance_cycle_value }

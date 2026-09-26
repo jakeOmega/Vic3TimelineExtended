@@ -140,21 +140,48 @@
 	can_revolution_inherit      = yes
 	should_update_on_player_command = yes
 
+	# `immediate` runs on the entry's first activation and again on every copy
+	# of it that a revolution's winner inherits. That second run comes after the
+	# loser's variables have been merged into the winner, and the inherited copy
+	# arrives with NO modifiers (scripting_best_practices.md § "What a Civil
+	# War's Winner Inherits"; docs/audits/civil_war_inheritance_audit.md E1,
+	# E3). The entry cannot deactivate, so nothing else re-runs it.
 	immediate = {
-		# Cycle state vars
-		set_variable = { name = finance_cycle_value         value = 50 } # 0..100
-		set_variable = { name = finance_cycle_momentum      value = 0 }
-		set_variable = {
-			name = bubble_pressure
-			value = 0
+		# Cycle state. Each variable is seeded only when it is absent, so a
+		# revolution's winner carries on the cycle it inherits. Until 2026-09-26
+		# these three sets were unguarded, and winning a revolution turned a
+		# panic (or a boom) into a stable 50 with no momentum and no bubble
+		# (audit F6). On a first activation all three are absent: every writer
+		# of them is reached only through this entry (the header above
+		# banking_change_bubble_pressure says why), so 50 / 0 / 0 it is.
+		if = {
+			limit = { NOT = { has_variable = finance_cycle_value } }
+			set_variable = { name = finance_cycle_value value = 50 } # 0..100
+		}
+		if = {
+			limit = { NOT = { has_variable = finance_cycle_momentum } }
+			set_variable = { name = finance_cycle_momentum value = 0 }
+		}
+		if = {
+			limit = { NOT = { has_variable = bubble_pressure } }
+			set_variable = { name = bubble_pressure value = 0 }
 		}
 
-		scope:journal_entry = {
-			set_bar_progress = { name = banking_cycle_value_bar value = 50 }
-			set_bar_progress = { name = banking_cycle_momentum_bar value = 0 }
-			set_bar_progress = { name = banking_policy_stance_bar value = 0 }
-			set_bar_progress = { name = banking_bubble_pressure_bar value = 0 }
-		}
+		# Deliberately UNGUARDED. te_mon_stance_band_applied records which
+		# banking_stance_band_* sits on this entry, and at this point the entry
+		# carries none: a first activation has no modifiers yet, and an inherited
+		# copy arrives with an empty list but with the loser's tracker still
+		# naming the loser's band. Left alone, that tracker matched the band,
+		# no swap ran, and the band stayed off (audit F7). 0 = none recorded, so
+		# next month's banking_cycle_apply_stance_band puts the band back on.
+		set_variable = { name = te_mon_stance_band_applied value = 0 } # REVIEWED 2026-09-26: reset on purpose; a fresh or inherited entry holds no stance band, so the tracker must say none (civil_war_inheritance_audit.md F7)
+
+		# The four bars, drawn from the variables above by the monthly pulse's
+		# own effect (its momentum clamp, and its has_variable test on the
+		# monetary system's te_mon_stance_bar_pos). On an inherited copy the
+		# saves showed the loser's bar values surviving whatever this block
+		# wrote (audit E3); either way the bars now agree with the variables.
+		banking_cycle_update_progress_bars = yes
 	}
 
 	# Progress bar: shows remaining points as % of initial allowance at activation.
