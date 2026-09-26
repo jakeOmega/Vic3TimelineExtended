@@ -2009,7 +2009,7 @@ covert_severe_exposure_notice = {
 # A charter reform may now be tabled (to member major and great powers).
 un_charter_reform_ripe_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
 	color = good
 }
@@ -2024,14 +2024,14 @@ un_crisis_opened_notice = {
 # The crisis has passed (to every member).
 un_crisis_closed_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
 	color = good
 }
 # A founding conference for a new UN is in session (to major and great powers).
 un_conference_opened_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
 	color = neutral
 }
@@ -2039,7 +2039,7 @@ un_conference_opened_notice = {
 # un_seat_grant, un_seat_effects.txt).
 un_permanent_seat_granted_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
 	color = good
 }
@@ -2047,7 +2047,7 @@ un_permanent_seat_granted_notice = {
 # human members; redesign phase 3, un_recess_monthly_update).
 un_floor_open_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
 	color = neutral
 }
@@ -2064,13 +2064,13 @@ un_war_surcharge_notice = {
 # mission opens, and to the host and every contributor when it ends.
 un_mission_opened_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
 	color = good
 }
 un_mission_succeeded_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
 	color = good
 }
@@ -2082,7 +2082,7 @@ un_mission_failed_notice = {
 }
 un_mission_reinforced_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
 	color = good
 }
@@ -2094,7 +2094,7 @@ un_mission_withdrawn_notice = {
 }
 un_mission_lapsed_notice = {
 	type = country
-	texture = "gfx/interface/icons/notification_icons/interest_group_good.dds"
+	texture = "gfx/interface/icons/notification_icons/unused/interest_group_good.dds"
 	notification_type = feed
 	color = neutral
 }

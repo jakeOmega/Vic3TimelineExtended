@@ -2721,6 +2721,28 @@
  nuclear_crisis.7.t:0 "They Chose War"
 
 #
+# NUCLEAR_CUSTODY
+#
+ nuclear_custody.1.a:0 "Hold the line. Our custodians will do their duty."
+ nuclear_custody.1.b:0 "Bring them in. Every one we can reach goes into storage."
+ nuclear_custody.1.c:0 "Take them apart. No one will inherit them."
+ nuclear_custody.1.d:0 "The uprising has a government, an army and a capital of its own now — [SCOPE.sCountry('nd_cw_rebel').GetName] — and some of our #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads are stored in the provinces it holds. The officers who guard them are waiting to be told whose orders to take. We can hold the line and trust our custodians, bring every weapon we can reach into storage for as long as the war lasts, or take them apart before anyone can use them. If the rebels win, whatever we still hold becomes theirs."
+ nuclear_custody.1.d_secession:0 "[SCOPE.sCountry('nd_cw_rebel').GetName] has declared itself a country, and some of our #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads are stored in the provinces it claims. The officers who guard them are waiting to be told whose orders to take. We can hold the line and trust our custodians, bring every weapon we can reach into storage for as long as the war lasts, or take them apart before anyone can use them. If the secession succeeds, whatever it holds goes with it."
+ nuclear_custody.1.f:0 "On 25 April 1961, with mutinous generals holding Algiers, France set off its fourth test device in the Sahara ahead of schedule, so that it could not fall into their hands."
+ nuclear_custody.1.t:0 "Who Holds the Button?"
+ nuclear_custody.3.a:0 "Secure them."
+ nuclear_custody.3.d:0 "Custody of #v [ROOT.GetCountry.MakeScope.Var('nd_custody_received').GetValue|0]#! nuclear warheads has passed to us, together with the lands where they were stored. Our officers have checked every weapon against the old inventories, and the count matches."
+ nuclear_custody.3.d_lost:0 "Custody of #v [ROOT.GetCountry.MakeScope.Var('nd_custody_received').GetValue|0]#! nuclear warheads has passed to us, together with the lands where they were stored. When our officers checked the weapons against the old inventories, #R [ROOT.GetCountry.MakeScope.Var('nd_custody_lost').GetValue|0]#! could not be found. Somewhere, someone has them."
+ nuclear_custody.3.f:0 "When the Soviet Union dissolved in 1991, its warheads were stored in four newly independent states. Gathering them into Russia took five years, and an American programme to pay for it."
+ nuclear_custody.3.t:0 "The Arsenal Changes Hands"
+ nuclear_custody.4.a:0 "The codes are ours now."
+ nuclear_custody.4.d:0 "The old government left us no warheads, but its nuclear programme is ours, and with it the doctrine the state has always kept until we choose otherwise. The rest of the old regime's word died with it: its pledges bind us to nothing, and the world will judge our threats afresh."
+ nuclear_custody.4.d_armed:0 "We hold #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads: the old government's arsenal, and any our side held during the fighting. The officers who guard them have sworn to the new government. They keep the doctrine and the safeguards the state has always kept until we choose otherwise, and we may choose at once. The rest of the old regime's word died with it: its pledges bind us to nothing, and the world will judge our threats afresh."
+ nuclear_custody.4.d_armed_lost:0 "We hold #v [ROOT.GetCountry.MakeScope.Var('nuclear_weapon_stockpile').GetValue|0]#! nuclear warheads: the old government's arsenal, and any our side held during the fighting — less #R [ROOT.GetCountry.MakeScope.Var('nd_custody_lost').GetValue|0]#! that went missing when its custodians fled. The officers who guard the rest have sworn to the new government. They keep the doctrine and the safeguards the state has always kept until we choose otherwise, and we may choose at once. The rest of the old regime's word died with it: its pledges bind us to nothing, and the world will judge our threats afresh."
+ nuclear_custody.4.f:0 "Whatever else a revolution changes, someone must know on its first day who holds the codes."
+ nuclear_custody.4.t:0 "The Old Regime's Arsenal"
+
+#
 # NUCLEAR_INCIDENT
 #
  nuclear_incident.1.a:0 "Trust the duty officer. We wait for a second confirmation."
@@ -4320,6 +4342,7 @@
  te_debug_gw.1.i:0 "Recompute the yearly figures now"
  te_debug_gw.1.j:0 "Adopt all eight mitigation policies"
  te_debug_gw.1.k:0 "Repeal all eight mitigation policies"
+ te_debug_gw.1.l:0 "Log every country's AI climate will to debug.log (search GW_AI_WILL)"
  te_debug_gw.1.t:0 "Climate Test Console"
 
 #

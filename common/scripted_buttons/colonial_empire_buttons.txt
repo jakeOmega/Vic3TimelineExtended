@@ -304,7 +304,7 @@ ce_round_table_conference = {
 		if = {
 			limit = {
 				ig:ig_intelligentsia ?= {
-					leader = { has_ideology = ideology:ideology_anti_colonialist }
+					leader = { has_ideology = ideology:ideology_anti_colonialist_leader }
 				}
 			}
 			add = 20

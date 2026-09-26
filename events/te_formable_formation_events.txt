@@ -143,6 +143,8 @@ formation_te.10 = {
 		default_option = yes
 		change_infamy = 20
 		annex = scope:polo_target_country
+		# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
+		hidden_effect = { nd_custody_reconcile_soon = yes }
 		ai_chance = { factor = 2 }
 	}
 
@@ -154,6 +156,8 @@ formation_te.10 = {
 		}
 		change_infamy = 8
 		annex = scope:polo_target_country
+		# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
+		hidden_effect = { nd_custody_reconcile_soon = yes }
 		ai_chance = { factor = 1 }
 	}
 

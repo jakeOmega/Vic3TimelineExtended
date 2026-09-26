@@ -1405,6 +1405,8 @@ te_ai_decentralized_absorption_effect = {
 			}
 			scope:irr_dc_annexer = {
 				annex = scope:irr_dc_target
+				# An armed country annexed: its arsenal settles to us (nuclear_custody_effects.txt).
+				nd_custody_reconcile_soon = yes
 			}
 		}
 	}

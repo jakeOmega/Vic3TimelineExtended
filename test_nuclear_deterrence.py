@@ -37,6 +37,13 @@ LENS_ICONS = ROOT / "gfx/interface/icons/lens_toolbar_icons"
 NUKE = ROOT / "common/diplomatic_actions/nuke.txt"
 WEAPON_EVENTS = ROOT / "events/nuclear_weapon_events.txt"
 UMBRELLA_ACTIONS = ROOT / "common/diplomatic_actions/nuclear_umbrella_actions.txt"
+CUSTODY_EFFECTS = ROOT / "common/scripted_effects/nuclear_custody_effects.txt"
+CUSTODY_TRIGGERS = ROOT / "common/scripted_triggers/nuclear_custody_triggers.txt"
+CUSTODY_VALUES = ROOT / "common/script_values/nuclear_custody_values.txt"
+CUSTODY_ON_ACTIONS = ROOT / "common/on_actions/nuclear_custody_on_actions.txt"
+CUSTODY_EVENTS = ROOT / "events/nuclear_custody_events.txt"
+CIVIL_WAR_EFFECTS = ROOT / "common/scripted_effects/te_civil_war_effects.txt"
+CIVIL_WAR_ON_ACTIONS = ROOT / "common/on_actions/te_civil_war_on_actions.txt"
 
 
 def tracked(path):
@@ -51,8 +58,10 @@ def tracked(path):
 FIRED = r"\b(?:id|EVENT) = ([a-z_]+\.\d+)"
 
 SCRIPT_FILES = (EFFECTS, CRISIS_EFFECTS, TRIGGERS, ACTIONS, ARTICLE, JE, SGUIS,
-                CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS, NUKE)
-EVENT_FILES = (CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS)
+                CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS, NUKE,
+                CUSTODY_EFFECTS, CUSTODY_TRIGGERS, CUSTODY_ON_ACTIONS, CUSTODY_EVENTS,
+                CIVIL_WAR_EFFECTS, CIVIL_WAR_ON_ACTIONS)
+EVENT_FILES = (CRISIS_EVENTS, INCIDENT_EVENTS, DEBUG_EVENTS, CUSTODY_EVENTS)
 
 
 def read(path):
@@ -151,7 +160,7 @@ class TestEventReferences(unittest.TestCase):
         fired = set()
         for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").glob("*.txt")):
             fired |= set(re.findall(FIRED, strip_comments(read(path))))
-        for path in (CRISIS_EVENTS, INCIDENT_EVENTS):
+        for path in (CRISIS_EVENTS, INCIDENT_EVENTS, CUSTODY_EVENTS):
             for ev in re.findall(r"^([a-z_]+\.\d+)\s*=\s*\{", read(path), re.M):
                 if ev not in fired:
                     self.fail(f"{ev} is never fired")
@@ -1249,6 +1258,128 @@ class TestProtectorsAndProteges(unittest.TestCase):
         self.assertIn("value = -10", decline)
         self.assertIn("add_liberty_desire = 5", decline)
         self.assertIn("var:nd_guarantee_answer = 2", block(self.cev, "nuclear_crisis.21"))
+
+
+class TestCustody(unittest.TestCase):
+    """Nuclear custody (nuclear_crisis_design.md §0.10, spec
+    docs/superpowers/specs/2026-09-26-nuclear-custody-design.md): the
+    settlement is one idempotent helper, so every hook where an arsenal's
+    owner can end must call it, and the invariants that keep the civil-war
+    merge from counting a transfer twice live in a few specific blocks."""
+
+    def setUp(self):
+        self.e = strip_comments(read(EFFECTS))
+        self.ce = strip_comments(read(CUSTODY_EFFECTS))
+        self.t = strip_comments(read(TRIGGERS))
+        self.ct = strip_comments(read(CUSTODY_TRIGGERS))
+        self.cw = strip_comments(read(CIVIL_WAR_ON_ACTIONS))
+        self.coa = strip_comments(read(CUSTODY_ON_ACTIONS))
+        self.ev = strip_comments(read(CUSTODY_EVENTS))
+        self.je = strip_comments(read(JE))
+
+    def test_every_hook_settles(self):
+        self.assertIn("nd_custody_reconcile = yes", block(self.coa, "nd_custody_monthly_on_action"))
+        self.assertIn("nd_custody_reconcile_soon = yes", block(self.coa, "nd_custody_on_wargoal_enforced"))
+        self.assertIn("nd_custody_reconcile_soon = yes", block(self.coa, "nd_custody_on_country_formed"))
+        self.assertIn("nd_custody_reconcile = yes", block(self.cw, "te_civil_war_on_secession_end"))
+        self.assertIn("nd_custody_on_civil_war_won = yes", block(self.cw, "te_civil_war_on_won"))
+        self.assertIn("nd_custody_reconcile = yes", block(self.ce, "nd_custody_on_civil_war_won"))
+        self.assertIn("nd_custody_reconcile = yes", block(self.ev, "nuclear_custody.9"))
+        self.assertIn("id = nuclear_custody.9", block(self.ce, "nd_custody_reconcile_soon"))
+        # Every hook the on_actions file declares is actually declared.
+        for hook, handler in (("on_monthly_pulse", "nd_custody_monthly_on_action"),
+                              ("on_wargoal_enforced", "nd_custody_on_wargoal_enforced"),
+                              ("on_country_formed", "nd_custody_on_country_formed")):
+            self.assertIn(handler, block(self.coa, hook))
+        for hook, handler in (("on_revolution_start", "te_civil_war_on_start"),
+                              ("on_secession_start", "te_civil_war_on_start"),
+                              ("on_revolution_end", "te_civil_war_on_revolution_end"),
+                              ("on_secession_end", "te_civil_war_on_secession_end"),
+                              ("on_civil_war_won", "te_civil_war_on_won")):
+            self.assertIn(handler, block(self.cw, hook))
+
+    def test_every_mod_annex_schedules_the_settlement(self):
+        """An `annex` the mod scripts itself must settle an armed victim's
+        arsenal a day later (the monthly pass would, up to a month late)."""
+        for path in list((ROOT / "common").rglob("*.txt")) + list((ROOT / "events").glob("*.txt")):
+            lines = strip_comments(read(path)).splitlines()
+            for i, line in enumerate(lines):
+                if re.match(r"\s*annex\s*=\s*\S", line):
+                    after = "\n".join(lines[i + 1:i + 4])
+                    self.assertIn("nd_custody_reconcile_soon = yes", after,
+                                  f"{path.relative_to(ROOT)}:{i + 1} annexes without scheduling the settlement")
+
+    def test_the_price_of_striking_our_own_side_is_shown(self):
+        record = block(self.e, "nd_record_nuclear_use")
+        hidden = block(record, "hidden_effect")
+        self.assertIn("nd_custody_struck_own_people = yes", record)
+        self.assertNotIn("nd_custody_struck_own_people", hidden)
+        self.assertIn("nd_is_civil_war_counterpart = { ENEMY = $VICTIM$ }", record)
+        cost = block(self.ce, "nd_custody_struck_own_people")
+        self.assertIn("name = nd_struck_own_people", cost)
+        self.assertIn("is_decaying = yes", cost)
+        self.assertIn("value = nd_own_strike_radicals", cost)
+        self.assertIn("country_legitimacy_base_add = -50",
+                      block(strip_comments(read(MODIFIERS)), "nd_struck_own_people"))
+
+    def test_the_ai_spares_its_own_side(self):
+        gate = block(self.t, "nd_ai_nuclear_use_justified")
+        self.assertIn("nd_is_civil_war_counterpart = { ENEMY = $ENEMY$ }", gate)
+        self.assertIn("nd_ai_would_strike_own_people = yes", gate)
+        # The gate sits before the retaliation clause, so it binds it too.
+        self.assertLess(gate.index("nd_is_civil_war_counterpart"), gate.index("nd_was_struck_by"))
+
+    def test_the_withdrawn_lock_is_read_everywhere_readiness_rises(self):
+        for name in ("nd_weekly_update", "nd_monthly_update", "nd_ai_review_posture",
+                     "nd_assemble_for_retaliation"):
+            self.assertIn("nd_readiness_withdrawn", block(self.e, name), name)
+        self.assertIn("nd_readiness_withdrawn", block(self.t, "nd_can_set_readiness"))
+        self.assertIn("remove_variable = nd_cw_withdrawn", block(self.e, "nd_country_monthly_cleanup"))
+
+    def test_both_sides_of_a_civil_war_hold_their_own_arsenal(self):
+        start = block(self.ce, "nd_custody_on_civil_war_start")
+        rebel = block(start, "scope:target")
+        self.assertIn("name = nuclear_weapon_stockpile value = 0", rebel)
+        self.assertIn("nd_ledger_refresh = yes", rebel)
+        self.assertIn("name = nd_cw_origin_record", rebel)
+        self.assertIn("nd_ledger_refresh = yes", start.replace(rebel, ""))
+        self.assertIn("id = nuclear_custody.1", start)
+        # An origin that gets its first record mid-war seeds its rebels then.
+        ensure = block(self.ce, "nd_ledger_ensure")
+        seed = block(ensure, "every_country")
+        self.assertIn("civil_war_origin_country ?= scope:nd_ledger_parent", seed)
+        self.assertIn("name = nuclear_weapon_stockpile value = 0", seed)
+        self.assertIn("nd_ledger_create = yes", seed)
+
+    def test_the_new_regime_reads_the_record_before_the_settlement(self):
+        won = block(self.ce, "nd_custody_on_civil_war_won")
+        self.assertLess(won.index("nd_custody_new_regime = yes"), won.index("nd_custody_reconcile = yes"))
+        regime = block(self.ce, "nd_custody_new_regime")
+        self.assertIn("var:nd_cw_origin_record", regime)
+        self.assertNotIn("te_cw_loser", regime)  # never the dead loser itself
+        self.assertIn("name = nd_credibility value = 50", regime)
+        self.assertIn("nd_custody_restore_progress = yes", self.je)
+
+    def test_split_tooltips_are_literal_and_localized(self):
+        keys = set(re.findall(r"TT = (nd_\w+)", self.ce + self.ev))
+        self.assertEqual(keys, {"nd_tt_cw_split_hold", "nd_tt_cw_split_pull"})
+        missing = keys - loc_keys()
+        self.assertFalse(missing, missing)
+        # Every figure the roll writes is cleared again, for both modes.
+        roll = block(self.ce, "nd_cw_roll_one")
+        clear = block(self.ce, "nd_cw_clear_roll")
+        for part in ("seized", "lost", "taken", "kept"):
+            self.assertIn(f"name = nd_cw_$MODE$_{part}", roll, part)
+            for mode in ("hold", "pull"):
+                self.assertIn(f"remove_variable = nd_cw_{mode}_{part}", clear, (mode, part))
+
+    def test_outbreak_options(self):
+        self.assertIn("nd_cw_apply_split = { MODE = hold TT = nd_tt_cw_split_hold }",
+                      option_body(self.ev, "nuclear_custody.1.a"))
+        self.assertIn("nd_cw_pull_back = yes", option_body(self.ev, "nuclear_custody.1.b"))
+        self.assertIn("nd_cw_dismantle = yes", option_body(self.ev, "nuclear_custody.1.c"))
+        self.assertIn("default_option = yes", option_body(self.ev, "nuclear_custody.1.a"))
+        self.assertIn("nd_cw_roll_split = yes", block(self.ev, "nuclear_custody.1"))
 
 
 if __name__ == "__main__":

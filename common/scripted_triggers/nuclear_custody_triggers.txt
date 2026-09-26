@@ -1,0 +1,79 @@
+﻿# ============================================================================
+# NUCLEAR CUSTODY — triggers
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-custody-design.md; what
+# shipped is docs/systems/nuclear_crisis_design.md §0.10.
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# THE LEDGER
+# ----------------------------------------------------------------------------
+# Does this country's nd_arsenal_record point at a live ledger record that it
+# owns? False for a missing pointer, a dangling one, and a record some other
+# country owns (a pointer a civil-war winner could only have from the merge).
+# Country scope.
+nd_ledger_is_own = {
+	save_temporary_scope_as = nd_lio_self
+	var:nd_arsenal_record ?= {
+		has_tag = nd_arsenal
+		var:nd_ar_owner ?= scope:nd_lio_self
+	}
+}
+
+# Has this record's owner stopped being a country that can hold an arsenal —
+# deleted, or dead (no state on the map; a civil war's loser is dead but still
+# in the database for up to two weeks)? Container scope.
+nd_ar_owner_gone = {
+	NOT = {
+		var:nd_ar_owner ?= { is_country_alive = yes }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# CIVIL WARS
+# ----------------------------------------------------------------------------
+# Is $ENEMY$ the other side of one of our civil wars — our rebels, or the
+# country we rose against? Both directions, so rebels that strike the capital
+# pay the same price as a government that strikes its rebels (spec §5).
+# The rebel side must still be one (is_revolutionary / is_secessionist): whether
+# civil_war_origin_country outlives a secession that won its independence is
+# unknown, and a later ordinary war with the old country is not a civil war.
+nd_is_civil_war_counterpart = {
+	save_temporary_scope_as = nd_cwc_self
+	OR = {
+		AND = {
+			civil_war_origin_country ?= $ENEMY$
+			OR = {
+				is_revolutionary = yes
+				is_secessionist = yes
+			}
+		}
+		$ENEMY$ = {
+			civil_war_origin_country ?= scope:nd_cwc_self
+			OR = {
+				is_revolutionary = yes
+				is_secessionist = yes
+			}
+		}
+	}
+}
+
+# Pulled back at the outbreak of a civil war ("Who Holds the Button?", option
+# b): the warheads are held in storage until every civil war of ours is over.
+# Every raise of readiness is greyed (nd_can_set_readiness), the AI does not
+# try, nd_weekly_update puts back any target another path raised, and a strike
+# taken meanwhile cannot be answered (nd_assemble_for_retaliation).
+nd_readiness_withdrawn = {
+	has_variable = nd_cw_withdrawn
+}
+
+# The AI strikes its own side only when it is losing badly and its laws
+# already silence the people who would rise against it (owner ruling,
+# 2026-09-25). Country scope = the AI.
+nd_ai_would_strike_own_people = {
+	enemy_occupation >= 0.4
+	OR = {
+		has_law = law_type:law_outlawed_dissent
+		has_law_or_variant = law_type:law_secret_police
+	}
+}

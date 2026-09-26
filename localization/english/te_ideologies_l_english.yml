@@ -5,6 +5,8 @@
 #
  ideology_anti_colonialist:0 "Anti-Colonialist"
  ideology_anti_colonialist_desc:0 "Anti-Colonialists believe that colonialism is wrong and that colonized peoples should be free to govern themselves."
+ ideology_anti_colonialist_leader:0 "Anti-Colonialist"
+ ideology_anti_colonialist_leader_desc:0 "This leader holds that colonial rule is wrong and that colonized peoples should govern themselves."
  ideology_corporate:0 "Corpocrat"
  ideology_corporate_desc:0 "This leader believes in a system where corporations play a central role in governance and decision-making, shaping policy to benefit business interests. The state and corporations are closely intertwined, with the private sector exerting significant influence over public affairs."
  ideology_custom_religion_aristocratic_governance:0 "Aristocracy"

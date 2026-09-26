@@ -61,6 +61,7 @@
  pm_nitrogen_fixation:0 "Synthetic Nitrogen Production"
  pm_photographic_art:0 "Photography"
  pm_film_art:0 "Moving Pictures"
+ pm_no_maintenance:0 "No Maintenance"
  no_veterancy:"Recruit"
  veterancy0:"Green"
  veterancy1:"Regular"

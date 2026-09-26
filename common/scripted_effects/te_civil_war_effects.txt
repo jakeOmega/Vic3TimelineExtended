@@ -1,0 +1,162 @@
+﻿# ============================================================================
+# CIVIL WARS — shared bookkeeping for every system's repair
+# ============================================================================
+# The cross-cutting repair site docs/audits/civil_war_inheritance_audit.md
+# proposed, built once (docs/superpowers/specs/2026-09-26-nuclear-custody-design.md
+# §3.1). The hooks are in common/on_actions/te_civil_war_on_actions.txt. A
+# system that must repair what a revolution's winner loses (#460–#465) adds
+# its call to te_civil_war_on_won there, beside nd_custody_on_civil_war_won,
+# and reads what te_civil_war_resolve_sides leaves:
+#   scope:te_cw_winner   ROOT, the winner
+#   scope:te_cw_loser    the loser, when it still resolves (see below)
+#   var:te_cw_rebels_won 1 when the revolutionaries won — a new regime
+#
+# Variables:
+#   te_cw_origin   on the rebel from the outbreak: the country it rose against
+#   te_cw_role     1 on the original country, 2 on the rebel — only so the log
+#                  can show whether the loser's variables still read
+#   global te_cw_ending_origin / te_cw_ending_rebel / te_cw_ending_kind
+#                  (1 revolution, 2 secession): the pair on_revolution_end /
+#                  on_secession_end reported, consumed by on_civil_war_won,
+#                  which vanilla fires straight after on_revolution_end
+#
+# THE OPEN ENGINE QUESTION. Whether a dead-but-undeleted loser still resolves
+# through a stored pointer at on_civil_war_won is untested. The saves show it
+# still in the database then (civil_war_inheritance_audit.md), and vanilla's
+# on_secession_end reads a dead rebel through scope:target. Nothing that must
+# work depends on it: the nuclear custody code reads live ledger containers.
+# te_civil_war_resolve_sides logs the answer (TE_CIVIL_WAR: lines in
+# debug.log) the first time a civil war ends in a test game.
+# ============================================================================
+
+# ROOT = the original country, scope:target = the uprising country.
+te_civil_war_record_start = {
+	scope:target = {
+		set_variable = { name = te_cw_origin value = ROOT }
+		set_variable = { name = te_cw_role value = 2 }
+	}
+	set_variable = { name = te_cw_role value = 1 }
+	debug_log = "TE_CIVIL_WAR: [ROOT.GetCountry.GetName] faces an uprising"
+}
+
+# ROOT = the original country, scope:target = the uprising country. KIND = 1
+# for a revolution, 2 for a secession.
+te_civil_war_record_ending = {
+	set_global_variable = { name = te_cw_ending_origin value = ROOT }
+	set_global_variable = { name = te_cw_ending_kind value = $KIND$ }
+	if = {
+		limit = { exists = scope:target }
+		set_global_variable = { name = te_cw_ending_rebel value = scope:target }
+	}
+	if = {
+		limit = { is_country_alive = yes }
+		debug_log = "TE_CIVIL_WAR: a civil war (kind $KIND$) ended; the original country [ROOT.GetCountry.GetName] is alive"
+	}
+	else = {
+		debug_log = "TE_CIVIL_WAR: a civil war (kind $KIND$) ended; the original country [ROOT.GetCountry.GetName] is dead"
+	}
+	if = {
+		limit = { scope:target ?= { is_country_alive = yes } }
+		debug_log = "TE_CIVIL_WAR: the uprising country is alive"
+	}
+	else_if = {
+		limit = { exists = scope:target }
+		debug_log = "TE_CIVIL_WAR: the uprising country is dead but resolves"
+	}
+	else = {
+		debug_log = "TE_CIVIL_WAR: the uprising country does not resolve"
+	}
+}
+
+# ROOT = the winner (on_civil_war_won). Works out which side won and saves the
+# loser if it resolves. The end hook's pair decides; without one, the rebel's
+# own te_cw_origin does (on a loyalist winner the merge hands it the rebel's
+# te_cw_origin, which then names the winner itself).
+te_civil_war_resolve_sides = {
+	save_scope_as = te_cw_winner
+	set_variable = { name = te_cw_rebels_won value = 0 }
+	if = {
+		limit = { global_var:te_cw_ending_rebel ?= ROOT }
+		set_variable = { name = te_cw_rebels_won value = 1 }
+		global_var:te_cw_ending_origin ?= { save_scope_as = te_cw_loser }
+		debug_log = "TE_CIVIL_WAR: [ROOT.GetCountry.GetName] won as the uprising (end-hook pair)"
+	}
+	else_if = {
+		limit = { global_var:te_cw_ending_origin ?= ROOT }
+		global_var:te_cw_ending_rebel ?= { save_scope_as = te_cw_loser }
+		debug_log = "TE_CIVIL_WAR: [ROOT.GetCountry.GetName] won as the original government (end-hook pair)"
+	}
+	else_if = {
+		limit = {
+			has_variable = te_cw_origin
+			NOT = { var:te_cw_origin ?= ROOT }
+		}
+		set_variable = { name = te_cw_rebels_won value = 1 }
+		var:te_cw_origin ?= { save_scope_as = te_cw_loser }
+		debug_log = "TE_CIVIL_WAR: [ROOT.GetCountry.GetName] won as the uprising (no end-hook pair; te_cw_origin)"
+	}
+	else = {
+		debug_log = "TE_CIVIL_WAR: [ROOT.GetCountry.GetName] won; no end-hook pair, taken as the original government"
+	}
+	# A secession's winner is never a new regime of the same state.
+	if = {
+		limit = {
+			has_global_variable = te_cw_ending_kind
+			global_var:te_cw_ending_kind = 2
+		}
+		set_variable = { name = te_cw_rebels_won value = 0 }
+	}
+	# ---- the engine question: does the loser still resolve, and read? -------
+	if = {
+		limit = { exists = scope:te_cw_loser }
+		if = {
+			limit = { scope:te_cw_loser = { is_country_alive = yes } }
+			debug_log = "TE_CIVIL_WAR: the loser resolves at on_civil_war_won and is alive"
+		}
+		else = {
+			debug_log = "TE_CIVIL_WAR: the loser resolves at on_civil_war_won and is dead"
+		}
+		if = {
+			limit = { scope:te_cw_loser = { has_variable = te_cw_role } }
+			debug_log = "TE_CIVIL_WAR: the loser's variables read: te_cw_role = [SCOPE.sCountry('te_cw_loser').MakeScope.Var('te_cw_role').GetValue|0]"
+		}
+		else = {
+			debug_log = "TE_CIVIL_WAR: the loser resolves but its te_cw_role does not read"
+		}
+	}
+	else = {
+		debug_log = "TE_CIVIL_WAR: the loser does not resolve at on_civil_war_won"
+	}
+}
+
+# ROOT = the winner, after every system's repair.
+te_civil_war_clear = {
+	if = {
+		limit = { has_variable = te_cw_rebels_won }
+		remove_variable = te_cw_rebels_won
+	}
+	if = {
+		limit = { has_variable = te_cw_origin }
+		remove_variable = te_cw_origin
+	}
+	if = {
+		limit = { has_variable = te_cw_role }
+		remove_variable = te_cw_role
+	}
+	te_civil_war_clear_ending = yes
+}
+
+te_civil_war_clear_ending = {
+	if = {
+		limit = { has_global_variable = te_cw_ending_origin }
+		remove_global_variable = te_cw_ending_origin
+	}
+	if = {
+		limit = { has_global_variable = te_cw_ending_rebel }
+		remove_global_variable = te_cw_ending_rebel
+	}
+	if = {
+		limit = { has_global_variable = te_cw_ending_kind }
+		remove_global_variable = te_cw_ending_kind
+	}
+}

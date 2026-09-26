@@ -22,6 +22,13 @@
 # The widget normalises that by showing all eight rows always and letting
 # `is_valid` carry the anomaly and authority gates as readable conditions, so it
 # is intentionally more forthcoming than this grid ever was.
+#
+# `ai_chance` is the AI's whole decision, and every one reads the table in
+# common/script_values/global_warming_ai_values.txt: one climate will per
+# country, one threshold per policy, adopt at or above it, repeal only a band
+# below it. Keep adopt and repeal on the same policy's margins
+# (test_gw_ai_policy_table.py), and never give an adopt button a weight with no
+# repeal counterweight -- that is what made every AI hold every policy.
 # ----------------------------------------------------------------------------
 gw_carbon_tax_button = {
 	name = "GW_CARBON_TAX"
@@ -34,22 +41,18 @@ gw_carbon_tax_button = {
 		market_capital.owner = THIS
 	}
 
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt).
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display >= 1.0 }
-			add = 30
-		}
-		if = {
-			limit = { temperature_anomaly_display >= 2.0 }
-			add = 30
-		}
-		if = {
 			limit = {
-				has_law = law_type:law_laissez_faire
+				gw_ai_adopt_margin_carbon_tax >= 0
 			}
-			add = -50
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_carbon_tax
 		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_carbon_tax = yes }
@@ -68,18 +71,16 @@ gw_remove_carbon_tax_button = {
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
 
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display < 0.5 }
-			add = 50
+			limit = { gw_ai_repeal_margin_carbon_tax > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_carbon_tax
 		}
-		if = {
-			limit = {
-				has_law = law_type:law_laissez_faire
-			}
-			add = 30
-		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_remove_carbon_tax = yes }
@@ -98,16 +99,18 @@ gw_renewable_investment_button = {
 		market_capital.owner = THIS
 	}
 
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt).
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display >= 1.0 }
-			add = 20
+			limit = {
+				gw_ai_adopt_margin_renewable_investment >= 0
+			}
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_renewable_investment
 		}
-		if = {
-			limit = { temperature_anomaly_display >= 2.0 }
-			add = 20
-		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_renewable_investment = yes }
@@ -126,22 +129,16 @@ gw_remove_renewable_investment_button = {
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
 
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold.
 	ai_chance = {
 		value = 0
-		# AI removes renewable investment only when warming is negligible
-		# (warming below threshold = less urgency to maintain green policies)
 		if = {
-			limit = { temperature_anomaly_display < 0.3 }
-			add = 60
+			limit = { gw_ai_repeal_margin_renewable_investment > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_renewable_investment
 		}
-		# AI also more likely to remove if warming isn't worsening significantly
-		if = {
-			limit = {
-				has_law = law_type:law_laissez_faire
-				temperature_anomaly_display < 1.0
-			}
-			add = 30
-		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_remove_renewable_investment = yes }
@@ -158,20 +155,20 @@ gw_climate_adaptation_button = {
 		NOT = { je:je_global_warming = { has_modifier = climate_adaptation_modifier } }
 	}
 
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt), and only with
+	# the 250 authority it costs to spare.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display >= 0.5 }
-			add = 25
+			limit = {
+				gw_ai_adopt_margin_climate_adaptation >= 0
+				authority >= 250
+			}
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_climate_adaptation
 		}
-		if = {
-			limit = { temperature_anomaly_display >= 2.0 }
-			add = 25
-		}
-		if = {
-			limit = { produced_authority < 250 }
-			add = -25
-		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_climate_adaptation = yes }
@@ -188,12 +185,20 @@ gw_remove_climate_adaptation_button = {
 		je:je_global_warming = { has_modifier = climate_adaptation_modifier }
 	}
 
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold, or while authority is in deficit.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display < 0.5 }
-			add = 50
+			limit = { gw_ai_repeal_margin_climate_adaptation > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_climate_adaptation
 		}
+		if = {
+			limit = { authority < 0 }
+			add = gw_ai_authority_deficit_repeal_weight
+		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_remove_climate_adaptation = yes }
@@ -212,20 +217,20 @@ gw_emission_standards_button = {
 		market_capital.owner = THIS
 	}
 
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt), and only with
+	# the 200 authority it costs to spare.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display >= 1.0 }
-			add = 25
+			limit = {
+				gw_ai_adopt_margin_emission_standards >= 0
+				authority >= 200
+			}
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_emission_standards
 		}
-		if = {
-			limit = { temperature_anomaly_display >= 2.0 }
-			add = 25
-		}
-		if = {
-			limit = { has_law = law_type:law_laissez_faire }
-			add = -40
-		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_emission_standards = yes }
@@ -244,16 +249,20 @@ gw_remove_emission_standards_button = {
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
 
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold, or while authority is in deficit.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display < 0.5 }
-			add = 60
+			limit = { gw_ai_repeal_margin_emission_standards > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_emission_standards
 		}
 		if = {
-			limit = { has_law = law_type:law_laissez_faire }
-			add = 30
+			limit = { authority < 0 }
+			add = gw_ai_authority_deficit_repeal_weight
 		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_remove_emission_standards = yes }
@@ -271,16 +280,20 @@ gw_reforestation_button = {
 		temperature_anomaly_display >= 0.5
 	}
 
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt), and only with
+	# the 100 authority it costs to spare.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display >= 0.5 }
-			add = 20
+			limit = {
+				gw_ai_adopt_margin_reforestation >= 0
+				authority >= 100
+			}
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_reforestation
 		}
-		if = {
-			limit = { temperature_anomaly_display >= 2.0 }
-			add = 20
-		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_reforestation = yes }
@@ -298,12 +311,20 @@ gw_remove_reforestation_button = {
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
 
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold, or while authority is in deficit.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display < 0.3 }
-			add = 50
+			limit = { gw_ai_repeal_margin_reforestation > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_reforestation
 		}
+		if = {
+			limit = { authority < 0 }
+			add = gw_ai_authority_deficit_repeal_weight
+		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_remove_reforestation = yes }
@@ -320,16 +341,20 @@ gw_public_transit_button = {
 		NOT = { je:je_global_warming = { has_modifier = public_transit_modifier } }
 	}
 
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt), and only with
+	# the 150 authority it costs to spare.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display >= 0.5 }
-			add = 15
+			limit = {
+				gw_ai_adopt_margin_public_transit >= 0
+				authority >= 150
+			}
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_public_transit
 		}
-		if = {
-			limit = { temperature_anomaly_display >= 1.5 }
-			add = 15
-		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_public_transit = yes }
@@ -347,12 +372,20 @@ gw_remove_public_transit_button = {
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
 
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold, or while authority is in deficit.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display < 0.3 }
-			add = 40
+			limit = { gw_ai_repeal_margin_public_transit > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_public_transit
 		}
+		if = {
+			limit = { authority < 0 }
+			add = gw_ai_authority_deficit_repeal_weight
+		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_remove_public_transit = yes }
@@ -369,20 +402,20 @@ gw_fossil_fuel_divestment_button = {
 		NOT = { je:je_global_warming = { has_modifier = fossil_fuel_divestment_modifier } }
 	}
 
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt), and only with
+	# the 200 authority it costs to spare.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display >= 1.5 }
-			add = 20
+			limit = {
+				gw_ai_adopt_margin_fossil_fuel_divestment >= 0
+				authority >= 200
+			}
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_fossil_fuel_divestment
 		}
-		if = {
-			limit = { temperature_anomaly_display >= 2.5 }
-			add = 30
-		}
-		if = {
-			limit = { has_law = law_type:law_laissez_faire }
-			add = -50
-		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_fossil_fuel_divestment = yes }
@@ -400,16 +433,20 @@ gw_remove_fossil_fuel_divestment_button = {
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
 
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold, or while authority is in deficit.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display < 1.0 }
-			add = 60
+			limit = { gw_ai_repeal_margin_fossil_fuel_divestment > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_fossil_fuel_divestment
 		}
 		if = {
-			limit = { has_law = law_type:law_laissez_faire }
-			add = 30
+			limit = { authority < 0 }
+			add = gw_ai_authority_deficit_repeal_weight
 		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_remove_fossil_fuel_divestment = yes }
@@ -426,20 +463,20 @@ gw_green_building_codes_button = {
 		NOT = { je:je_global_warming = { has_modifier = green_building_codes_modifier } }
 	}
 
+	# Adopt only at or above this policy's threshold on the country's climate
+	# will (common/script_values/global_warming_ai_values.txt), and only with
+	# the 100 authority it costs to spare.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display >= 0.5 }
-			add = 15
+			limit = {
+				gw_ai_adopt_margin_green_building_codes >= 0
+				authority >= 100
+			}
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_adopt_margin_green_building_codes
 		}
-		if = {
-			limit = { temperature_anomaly_display >= 1.5 }
-			add = 25
-		}
-		if = {
-			limit = { has_law = law_type:law_laissez_faire }
-			add = -30
-		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_green_building_codes = yes }
@@ -457,16 +494,20 @@ gw_remove_green_building_codes_button = {
 		NOT = { has_variable = has_emissions_reduction_treaty }
 	}
 
+	# Repeal only once the climate will has fallen gw_ai_repeal_band below the
+	# threshold, or while authority is in deficit.
 	ai_chance = {
 		value = 0
 		if = {
-			limit = { temperature_anomaly_display < 0.3 }
-			add = 50
+			limit = { gw_ai_repeal_margin_green_building_codes > 0 }
+			add = gw_ai_adopt_base_weight
+			add = gw_ai_repeal_margin_green_building_codes
 		}
 		if = {
-			limit = { has_law = law_type:law_laissez_faire }
-			add = 20
+			limit = { authority < 0 }
+			add = gw_ai_authority_deficit_repeal_weight
 		}
+		max = gw_ai_max_weight
 	}
 
 	possible = { gw_possible_remove_green_building_codes = yes }

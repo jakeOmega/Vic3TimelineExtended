@@ -625,9 +625,11 @@ movement_anti_war = {
 	category = movement_category_ideological
 
 	ideology = ideology_pacifist
+	# Character ideologies only: ideology_anti_colonialist is the group
+	# ideology, and a leader given it is refused by the engine.
 	character_ideologies = {
 		ideology_pacifist
-		ideology_anti_colonialist
+		ideology_anti_colonialist_leader
 	}
 
 	disband_trigger = {
@@ -653,7 +655,7 @@ movement_anti_war = {
 	character_support_trigger = {
 		OR = {
 			has_ideology = ideology:ideology_pacifist
-			has_ideology = ideology:ideology_anti_colonialist
+			has_ideology = ideology:ideology_anti_colonialist_leader
 			OR = {
 				is_interest_group_type = ig_intelligentsia
 				is_interest_group_type = ig_trade_unions
@@ -666,7 +668,7 @@ movement_anti_war = {
 			limit = {
 				OR  = {
 					has_ideology = ideology:ideology_pacifist
-					has_ideology = ideology:ideology_anti_colonialist
+					has_ideology = ideology:ideology_anti_colonialist_leader
 				}
 			}
 			multiply = {

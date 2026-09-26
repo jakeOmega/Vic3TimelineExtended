@@ -790,7 +790,7 @@ Law of the Sea; Exclusive Economic Zones; British blockade of Argentina during t
 - `state_trade_capacity_mult = -0.1` — Trade disruption in coastal states of that region
 
 **Target modifier** (enforcing naval power):
-- `country_prestige_from_navy_power_projection_mult = 0.1` — Naval prestige
+- `country_prestige_from_navy_combat_power_mult = 0.1` — Naval prestige
 
 The `country_treaty_leverage_generation_add = 200` for maritime dominance goes in the **source** block (the country whose waters are restricted), not here — the engine generates the leverage *against* the modifier's carrier. See the placement rule at the top of this file.
 

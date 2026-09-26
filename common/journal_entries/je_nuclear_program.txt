@@ -183,6 +183,12 @@ je_nuclear_program = {
 			# its own entry.
 			nd_rebuild_posture_modifiers = yes
 
+			# A winning revolution's new regime carries the old state's
+			# progress toward the next warhead over the activation that
+			# zeroed it (nuclear_custody_effects.txt). Before the programme
+			# block, so this week's progress adds to it.
+			nd_custody_restore_progress = yes
+
 			# Update global nuclear powers leaderboard
 			update_nuclear_powers_ranking = yes
 
@@ -242,6 +248,21 @@ je_nuclear_program = {
 			# After the programme block, so a warhead finished this week is
 			# already under a posture.
 			nd_weekly_update = yes
+
+			# ==== CUSTODY ====================================================
+			# The arsenal ledger: what the settlement hands on if this country
+			# ends (nuclear_custody_effects.txt). Last, so it records this
+			# week's warheads, progress and posture.
+			if = {
+				limit = {
+					OR = {
+						nd_is_armed = yes
+						nuclear_program_has_programme = yes
+						has_variable = nd_arsenal_record
+					}
+				}
+				nd_ledger_refresh = yes
+			}
 		}
 	}
 
@@ -270,21 +291,16 @@ je_nuclear_program = {
 	# A revolution's winner receives the loser's country variables, keeping
 	# its own value wherever it already had one, but none of its modifiers
 	# (read from a before/after save pair, 2026-09-25 — scripting_best_practices.md
-	# § "What a Civil War's Winner Inherits"). So a winning revolution inherits
-	# the arsenal and the posture, and with `no` the winner starts a fresh
-	# entry: it auto-activates because the inherited arsenal satisfies
-	# `possible`, `immediate` keeps the stockpile and resets the posture
-	# trackers, and the first weekly pulse rebuilds the posture modifiers and
-	# restores nuclear_power. Two costs, both seen in the saves: up to two
-	# weeks with neither the entry nor nuclear_power, and progress toward the
-	# next warhead, which `immediate` zeroes (see its header).
-	# The original reason for `no` — an inherited entry would carry the loser's
-	# modifiers — was wrong: an inherited entry arrives with none and re-runs
-	# `immediate` too. So `yes` should differ only by activating at once, closing
-	# the two-week gap — but only while the rebels hold no nuclear variables of
-	# their own. Once the custody split gives them some, their values win the
-	# merge and `immediate` runs against those, so settle the flag together with
-	# the split (nuclear_crisis_design.md §0.10, step 2).
+	# § "What a Civil War's Winner Inherits"). Since the custody work
+	# (nuclear_custody_effects.txt, 2026-09-26) both sides of a civil war hold
+	# their own stockpile and ledger record from the outbreak, so the merge
+	# hands the winner none of the loser's arsenal; the settlement moves it
+	# explicitly and its follow-up (nuclear_custody.2) adds this entry at once
+	# for a winner without one. An armed rebel has had its own entry since the
+	# outbreak. So `no` costs nothing: inheriting the loser's record would only
+	# re-run `immediate` on an entry the winner already has or is given.
+	# Progress toward the next warhead, which `immediate` zeroes, is carried
+	# over by nd_custody_restore_progress.
 	can_revolution_inherit = no
 	can_deactivate = yes
 }
