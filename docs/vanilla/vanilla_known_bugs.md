@@ -539,6 +539,25 @@ Scoped object of type 'ai_regional_objective' is not valid
 ```
 
 `ai_is_regional_objective_local_country`, `ai_is_regional_objective_state` and `ai_is_regional_objective_protect_target` run `any_scope_regional_objective = { type = … }`, and the `type` comparison logs `AI Regional Objective (4294967295)`, the engine's null handle, as though the country's objective list held an empty slot. The AI evaluates them from `common/diplomatic_actions/00_relations_actions.txt` and treaty articles such as `common/treaty_articles/01_defensive_pact.txt`. About 1,300 lines in one session (2026-09-26), the second-largest source after the power-bloc invite burst. Not mod-caused as far as the log shows: the mod has no `common/ai_regional_objectives/` and none of the calling files. The null handle comes from engine-side objective bookkeeping; the scripts only read it.
+The same null handle reaches `common/diplomatic_actions/56_stake_colonial_claim.txt` (`:241`), whose own `any_scope_regional_objective` check logged it 37 times on 2026-09-26.
+
+### `common/ai_regional_objectives/00_ai_regional_objectives.txt:37` — the acquire-states objective counts against a missing map entry (1.14.4)
+
+```
+Count was less than zero
+```
+
+The acquire-states objective's `complete` trigger runs `any_scope_state = { owner = root  count > "root.variable_map(aro_acquire_states_map|scope:target_region)" }`. When the map has no usable entry for the region, the threshold comes out below zero and the engine clamps it. 3 lines in one session (2026-09-26). Not mod-caused: the mod has no `common/ai_regional_objectives/`.
+
+### `common/script_values/ip4_cuba_values.txt:291, 337` — the Cuba journal entry reads `c:USA` without an existence check
+
+```
+Event target link 'c' returned an unset scope
+Invalid left side during comparison 'compare_value'
+Invalid left side during comparison 'average_sol'
+```
+
+The join-the-USA score reads `c:USA.prestige` (`:291`) and `"c:USA.average_sol"` (`:337`) with a plain link, not `?=`. Only the CSA branches check that their tag exists. When the USA is gone, every evaluation logs these four lines, and `common/journal_entries/06_cuba.txt` (`:379`) then logs the type-`none` line registered further down. On 2026-09-26 that was 336 lines, 84 evaluations in 19 minutes. `c:CUB` still resolved (Cuba held an election in that window). Not mod-caused: the mod has no Cuba content and overrides neither file.
 
 ### `common/political_movements/01_religious_movements.txt:305`, `events/soi_events/00_lobbies_events_01.txt:927`, `events/soi_events/00_lobbies_events_04.txt:878` — `leader = { … }` on an interest group without a leader
 
@@ -1271,6 +1290,24 @@ Unable to scope to the new ruler for
 The engine's half of the `00_government_type_change_effects.txt` `get_ruler_for` entry above: `get_ruler_for:parliamentary_elective` on a revolutionary country (`Tunisian Uprising`) with no eligible character logs this line before the script error. Once, 2026-09-26.
 
 > **Mod-side cosmetic noise lives in `docs/audits/mod_known_noise.md`** — those entries aren't vanilla bugs, they're mod issues filtered for triage cleanliness but tracked in `open_issues.md` so they remain actionable. Filter via `?mod_noise=hide|only|show` (parallel to `?vanilla_bugs=`). For a fully clean view: `?vanilla_bugs=hide&mod_noise=hide`.
+
+### `pdx_assert.cpp:641` — `NBattles::CanSwitchStatus` battle-state assertion
+- source: `pdx_assert.cpp:641`
+
+```
+NBattles::CanSwitchStatus
+```
+
+An engine assertion in the battle state machine, with no script frame attached. One line in a session with several naval battles (2026-09-26). Not actionable from script.
+
+### `naval_battle_manager.cpp:452` — a naval battle not spawned because the units were not worth it
+- source: `naval_battle_manager.cpp:452`
+
+```
+Failed to create battle in province
+```
+
+Logged with a `Script error:` prefix, but it reports a decision, not a failure: vanilla's `naval_battle_size` script value (`common/script_values/command_values.txt`) judged the available units too few to spawn a battle. One line on 2026-09-26.
 
 ## How to triage a new error-log entry
 
