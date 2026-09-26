@@ -18,7 +18,7 @@
 - Per-pop monthly take is **2%** (**4%** in a Recruitment Drive state). Takes under **100** people are skipped.
 - Capacity per level (people a month, half `level_scaled`, half `workforce_scaled`): Land Grants 300, Military Colonies 250, Penal Transportation 100, Organized Colonization 500, Special Settlements 1000, Development Program 800, Rustication 800, Managed Retreat 600. Transport adds Overland 0, Rail and Steamship 200, Motor Transport 400, Airlift 600.
 - Transit mortality: Penal Transportation 0.05, Special Settlements 0.15, Rustication 0.01, all others 0.
-- IG approval at full intensity: Land Grants rural folk +2 / landowners −2; Military Colonies armed forces +2 / rural folk −2; Penal Transportation intelligentsia −2; Organized Colonization rural folk +2; Special Settlements rural folk −5 / intelligentsia −3; Rustication intelligentsia −5 / petty bourgeoisie −3. **No IG approval in any PM.**
+- IG approval at full intensity: Land Grants rural folk +3 / landowners −3; Military Colonies armed forces +3 / rural folk −3; Penal Transportation intelligentsia −3; Organized Colonization rural folk +3; Special Settlements rural folk −10 / intelligentsia −5; Rustication intelligentsia −10 / petty bourgeoisie −5. (Scale: vanilla's approval from changing a law, 5/10/20, because a running program is an ongoing action; owner ruling.) **No IG approval in any PM.**
 - Intensity reference is 0.0025 of the country's population a year. The volume counter decays by 11/12 each month.
 - Declaration violation: `country_prestige_mult = -0.1` at full intensity, half strength under reservations.
 - Multiplicative modifiers in resettlement PMs go only in `unscaled` blocks.
@@ -832,20 +832,20 @@ Programme = namedtuple("Programme", "key code techs laws disallowed coercive cap
 
 PROGRAMMES = (
     Programme("land_grants", 0, (), (), (), False, 300, 0,
-              {"interest_group_ig_rural_folk_approval_add": 2, "interest_group_ig_landowners_approval_add": -2}),
+              {"interest_group_ig_rural_folk_approval_add": 3, "interest_group_ig_landowners_approval_add": -3}),
     Programme("military_colonies", 1, ("standing_army",), (), (), False, 250, 0,
-              {"interest_group_ig_armed_forces_approval_add": 2, "interest_group_ig_rural_folk_approval_add": -2}),
+              {"interest_group_ig_armed_forces_approval_add": 3, "interest_group_ig_rural_folk_approval_add": -3}),
     Programme("penal_transportation", 2, ("law_enforcement",), (), ("law_guaranteed_liberties",), True, 100, 0.05,
-              {"interest_group_ig_intelligentsia_approval_add": -2}),
+              {"interest_group_ig_intelligentsia_approval_add": -3}),
     Programme("organized_colonization", 3, ("railways",), (), (), False, 500, 0,
-              {"interest_group_ig_rural_folk_approval_add": 2}),
+              {"interest_group_ig_rural_folk_approval_add": 3}),
     Programme("special_settlements", 4, ("mass_propaganda",), ("law_collectivized_agriculture",),
               ("law_guaranteed_liberties", "law_protected_speech", "law_right_of_assembly"), True, 1000, 0.15,
-              {"interest_group_ig_rural_folk_approval_add": -5, "interest_group_ig_intelligentsia_approval_add": -3}),
+              {"interest_group_ig_rural_folk_approval_add": -10, "interest_group_ig_intelligentsia_approval_add": -5}),
     Programme("development_program", 5, ("keynesian_economics",), (), (), False, 800, 0, None),
     Programme("rustication", 6, ("mass_media",), ("law_single_party_state",), (), True, 800, 0.01,
-              {"interest_group_ig_intelligentsia_approval_add": -5,
-               "interest_group_ig_petty_bourgeoisie_approval_add": -3}),
+              {"interest_group_ig_intelligentsia_approval_add": -10,
+               "interest_group_ig_petty_bourgeoisie_approval_add": -5}),
     Programme("managed_retreat", 7, ("environmental_movement",), (), (), False, 600, 0, None),
 )
 PROGRAMME_KEYS = tuple(p.key for p in PROGRAMMES)
@@ -2990,11 +2990,13 @@ class PoliticsTests(unittest.TestCase):
             self.assertIn(f"resettlement_{p.key}_politics", loc())
             self.assertIn(f"resettlement_{p.key}_politics_desc", loc())
 
-    def test_positives_never_exceed_a_strong_law_stance(self):
+    def test_magnitudes_stay_within_a_major_law_change(self):
+        # A running program is an ongoing action: its scale is vanilla's approval
+        # from changing a law (5 / 10 / 20), not the ±5 clamp on laws on the books.
         for p in WITH_POLITICS:
             for key, value in p.politics.items():
-                self.assertLessEqual(value, 2, (p.key, key))
-                self.assertGreaterEqual(value, -5, (p.key, key))
+                self.assertLessEqual(value, 3, (p.key, key))
+                self.assertGreaterEqual(value, -10, (p.key, key))
 
     def test_refresh_covers_every_programme_with_politics(self):
         body = squash(block(read(EFFECTS), "resettlement_refresh_politics"))
@@ -3224,40 +3226,41 @@ Append to `common/static_modifiers/resettlement_modifiers.txt`:
 ```
 
 # ---- Political reactions (§7.2): multiplier = the program's intensity, 0–1 ----
-# Vanilla's scale: every law on the books together is clamped to ±5 approval, a
-# strongly held stance is ±2, and an IG is unhappy at −5.
+# A running program is an ongoing action, so the scale is vanilla's approval from
+# changing a law (5 / 10 / 20 in 00_defines.txt), not the ±5 clamp on laws
+# already on the books.
 resettlement_land_grants_politics = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	interest_group_ig_rural_folk_approval_add = 2
-	interest_group_ig_landowners_approval_add = -2
+	interest_group_ig_rural_folk_approval_add = 3
+	interest_group_ig_landowners_approval_add = -3
 }
 
 resettlement_military_colonies_politics = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	interest_group_ig_armed_forces_approval_add = 2
-	interest_group_ig_rural_folk_approval_add = -2
+	interest_group_ig_armed_forces_approval_add = 3
+	interest_group_ig_rural_folk_approval_add = -3
 }
 
 resettlement_penal_transportation_politics = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	interest_group_ig_intelligentsia_approval_add = -2
+	interest_group_ig_intelligentsia_approval_add = -3
 }
 
 resettlement_organized_colonization_politics = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_positive.dds
-	interest_group_ig_rural_folk_approval_add = 2
+	interest_group_ig_rural_folk_approval_add = 3
 }
 
 resettlement_special_settlements_politics = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	interest_group_ig_rural_folk_approval_add = -5
-	interest_group_ig_intelligentsia_approval_add = -3
+	interest_group_ig_rural_folk_approval_add = -10
+	interest_group_ig_intelligentsia_approval_add = -5
 }
 
 resettlement_rustication_politics = {
 	icon = gfx/interface/icons/timed_modifier_icons/modifier_flag_negative.dds
-	interest_group_ig_intelligentsia_approval_add = -5
-	interest_group_ig_petty_bourgeoisie_approval_add = -3
+	interest_group_ig_intelligentsia_approval_add = -10
+	interest_group_ig_petty_bourgeoisie_approval_add = -5
 }
 
 # ---- The UN Declaration (§7.4): multiplier = coercive intensity, 0–1 --------
@@ -3389,7 +3392,7 @@ git add common/scripted_effects/resettlement_effects.txt common/scripted_trigger
 git commit -m "feat(resettlement): volume-scaled political reactions and the UN Declaration
 
 One modifier per program, scaled by a decaying volume counter against the
-country's population, capped at vanilla's approval scale. Parties to the
+country's population, on the scale of vanilla's law-change approval. Parties to the
 Declaration running coercive programs carry Violating the Declaration,
 announced by resettlement.20 and named in the PM, the vote and the modifier.
 

@@ -38,7 +38,7 @@ Baseline: `main` at `80ad254a` (#479 merged).
 | Frontier measure (amended after calibration, 2026-09-26) | **People per km² of real land area**, over the whole state region, from a generated area table. A frontier **opens below 2/km²** and **closes at 10/km²**, both scaled by the existing `state_migration_crowding_density_mult` (§6). Replaces "below the crowding floor", which counted Connecticut, D.C. and Rio de Janeiro as frontier and Kolyma as settled |
 | Managed Retreat's sources (amended) | Global-warming damage is country-level, so: coastal states of a country carrying `coastal_flooding_modifier` or `coastal_relocation_modifier`, plus states carrying `nuclear_strike_aftermath` or `nd_weapons_accident_contamination`. Per-state GW damage is a future expansion of that system |
 | Homesteads' payoff | **No permanent arable land.** A temporary agriculture/ranching throughput and subsistence-output bonus |
-| IG reactions | **One country modifier per programme, scaled by volume**, never per building. Positives small and capped; magnitudes anchored to vanilla's approval scale (§7.2) |
+| IG reactions | **One country modifier per programme, scaled by volume**, never per building. Positives small and capped; magnitudes on the scale of vanilla's approval from *changing* a law, since a running programme is an ongoing action, not the status quo (§7.2) |
 | Land pressure on existing frontier inhabitants | **Kept**: a real cost, never a benefit |
 | Violating the UN Declaration | Allowed, with a modifier that scales with intensity, and **communicated clearly** at every step |
 | Old saves with camps | Assumed to load (the engine drops unknown building types); no dedicated check |
@@ -234,18 +234,19 @@ tooltip shows the density and both thresholds.
 - The monthly country pulse applies `resettlement_<programme>_politics` with `multiplier = intensity`. Twenty buildings
   running one programme apply it once.
 
-Vanilla's scale (`00_defines.txt`): every law on the books together is clamped to ±5 approval, a strongly held law stance
-is worth ±2, and an IG turns unhappy at −5. So a programme at full intensity is worth at most one strong law stance on the
-plus side, and at most "unhappy" on its own for the two great coercive programmes.
+A running programme is an ongoing action, not the status quo, so the yardstick is vanilla's approval from *changing* a
+law (`00_defines.txt`: 5 for a change, 10 for a major one, 20 for an extreme one), not the ±5 clamp on laws already on
+the books. (Owner ruling, 2026-09-26: a first calibration against the on-the-books clamp shrank these to +2/−5 and was
+reverted.)
 
 | Programme | At full intensity |
 |---|---|
-| Land Grants | Rural Folk +2, Landowners −2 (Southern planters blocked the Homestead Act until secession) |
-| Military Colonies | Armed Forces +2, Rural Folk −2 |
-| Penal Transportation | Intelligentsia −2 |
-| Organized Colonization | Rural Folk +2 |
-| Special Settlements | Rural Folk −5, Intelligentsia −3 |
-| Rustication | Intelligentsia −5, Petty Bourgeoisie −3 |
+| Land Grants | Rural Folk +3, Landowners −3 (Southern planters blocked the Homestead Act until secession) |
+| Military Colonies | Armed Forces +3, Rural Folk −3 |
+| Penal Transportation | Intelligentsia −3 |
+| Organized Colonization | Rural Folk +3 |
+| Special Settlements | Rural Folk −10, Intelligentsia −5 |
+| Rustication | Intelligentsia −10, Petty Bourgeoisie −5 |
 | Development Program, Managed Retreat | none |
 
 Only costs (bureaucracy, wages, goods) remain per building. Anything country-wide goes through this layer.
@@ -338,7 +339,7 @@ Rolled from the pulse, weighted by programme activity, each with a cooldown. The
 | Per-pop monthly cap | 2% (4% under a drive) | vanilla emigration ceiling |
 | Transit mortality | Penal 5%, Special Settlements 15%, Rustication 1% | archival counts for the special settlements run to hundreds of thousands |
 | Intensity reference | 0.25% of population a year | Stolypin's peak |
-| IG caps | §7.2 | `00_defines.txt` approval clamps |
+| IG caps | §7.2 | `00_defines.txt` law-change approval (5 / 10 / 20) |
 | Frontier thresholds | open < 2/km², close ≥ 10/km² | §6 |
 
 The frontier thresholds and IG caps were calibrated against data before the plan. The remaining numbers are first
