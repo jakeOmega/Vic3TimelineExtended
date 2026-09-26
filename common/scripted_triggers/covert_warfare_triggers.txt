@@ -20,6 +20,7 @@ is_covert_operation_pact = {
 		is_diplomatic_action_type = covert_nuclear_sabotage_action
 		is_diplomatic_action_type = covert_space_espionage_action
 		is_diplomatic_action_type = covert_cultivate_assets_action
+		is_diplomatic_action_type = covert_secure_material_action
 	}
 }
 
@@ -250,6 +251,7 @@ covert_code_tier_mild = {
 		var:$VAR$ = 5
 		var:$VAR$ = 11
 		var:$VAR$ = 12
+		var:$VAR$ = 13
 	}
 }
 

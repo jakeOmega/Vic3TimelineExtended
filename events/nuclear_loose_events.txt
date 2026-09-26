@@ -1,0 +1,489 @@
+﻿namespace = nuclear_loose
+
+# ============================================================================
+# LOOSE WARHEADS
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-loose-warheads-design.md
+# §3; what shipped is docs/systems/nuclear_crisis_design.md §0.10 step 5. The
+# logic is in common/scripted_effects/nuclear_loose_effects.txt.
+#
+#   .1   (hidden) a plot, drawn from the social-tensions terror pool
+#   .2   A City Destroyed — the victim, when the device detonates
+#   .3   A Device Seized — the victim, when its services find it first
+#   .4   Where Did It Come From? — the investigation reports, a month later:
+#        confirmed, a shortlist, or unknown
+#   .5   A Stolen Bomb — every other human country, when a device detonates
+#   .6   The Warhead Was Ours? — a demand to a confirmed origin, or a request
+#        to a shortlisted suspect
+#   .7   Named in the Investigation — a suspect named in public
+#   .8   the victim hears the answer to its demand
+#   .9   Loose Material Secured — a warhead unaccounted for is found
+# ============================================================================
+
+# ---- .1 (hidden) the plot ------------------------------------------------------------
+# Weight 3 in on_yearly_events' random_events (social_tensions_on_actions.txt),
+# beside the domestic terror attack.
+nuclear_loose.1 = {
+	type = country_event
+	hidden = yes
+
+	trigger = {
+		nd_loose_plot_possible = yes
+	}
+
+	immediate = {
+		nd_loose_plot = yes
+	}
+}
+
+# ---- .2 A City Destroyed -----------------------------------------------------------------
+# Sent by nd_loose_surface with scope:nd_loose_state saved.
+nuclear_loose.2 = {
+	type = country_event
+	placement = scope:nd_loose_state
+
+	event_image = { texture = "gfx/event_pictures/nuclear_city_destruction.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_loose.2.t
+	desc = nuclear_loose.2.d
+	flavor = nuclear_loose.2.f
+
+	duration = 3
+
+	option = {
+		name = nuclear_loose.2.a
+		default_option = yes
+		custom_tooltip = nd_tt_loose_investigation
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ---- .3 A Device Seized ------------------------------------------------------------------
+nuclear_loose.3 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/sanctions_cargo_inspection.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/mushroom_cloud.dds"
+
+	title = nuclear_loose.3.t
+	desc = nuclear_loose.3.d
+	flavor = nuclear_loose.3.f
+
+	duration = 3
+
+	option = {
+		name = nuclear_loose.3.a
+		default_option = yes
+		custom_tooltip = nd_tt_loose_investigation
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ---- .4 Where Did It Come From? -----------------------------------------------------
+# A month after a device surfaced. The attribution was rolled then
+# (nd_loose_attribute); this says what the investigators found and asks what
+# to do with it.
+nuclear_loose.4 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_proliferation_threat.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_loose.4.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_loose.4.d_confirmed
+				trigger = { nd_loose_origin_answerable = yes }
+			}
+			triggered_desc = {
+				desc = nuclear_loose.4.d_confirmed_gone
+				trigger = { nd_loose_attributed = { RESULT = 1 } }
+			}
+			triggered_desc = {
+				desc = nuclear_loose.4.d_shortlist_three
+				trigger = {
+					nd_loose_attributed = { RESULT = 2 }
+					var:nd_loose_suspect_count >= 3
+				}
+			}
+			triggered_desc = {
+				desc = nuclear_loose.4.d_shortlist
+				trigger = { nd_loose_attributed = { RESULT = 2 } }
+			}
+			triggered_desc = {
+				desc = nuclear_loose.4.d_unknown
+			}
+		}
+	}
+	flavor = nuclear_loose.4.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_loose_attribution
+	}
+
+	immediate = {
+		var:nd_loose_origin ?= { save_scope_as = nd_loose_accused }
+		var:nd_loose_suspect_1 ?= { save_scope_as = nd_loose_s1 }
+		var:nd_loose_suspect_2 ?= { save_scope_as = nd_loose_s2 }
+		var:nd_loose_suspect_3 ?= { save_scope_as = nd_loose_s3 }
+		random_rival_country = {
+			limit = { is_country_alive = yes }
+			save_scope_as = nd_loose_rival
+		}
+	}
+
+	# Hold them to account: a confirmed origin that still stands.
+	option = {
+		name = nuclear_loose.4.a
+		trigger = { nd_loose_origin_answerable = yes }
+		nd_loose_hold_to_account = yes
+		ai_chance = {
+			base = 8
+		}
+	}
+
+	# Name every suspect, in public.
+	option = {
+		name = nuclear_loose.4.b
+		trigger = { nd_loose_attributed = { RESULT = 2 } }
+		nd_loose_name_suspects = yes
+		ai_chance = {
+			# An AI names innocent great powers only under a ruler who would
+			# rather be seen to act than be right.
+			base = 0
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 4
+			}
+		}
+	}
+
+	# Ask each suspect, privately, to cooperate.
+	option = {
+		name = nuclear_loose.4.c
+		trigger = { nd_loose_attributed = { RESULT = 2 } }
+		nd_loose_ask_suspects = yes
+		ai_chance = {
+			base = 6
+		}
+	}
+
+	# Blame a rival anyway.
+	option = {
+		name = nuclear_loose.4.e
+		trigger = {
+			nd_loose_attributed = { RESULT = 3 }
+			exists = scope:nd_loose_rival
+		}
+		nd_loose_blame_rival = yes
+		ai_chance = {
+			base = 0
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 3
+			}
+		}
+	}
+
+	# Say nothing for now.
+	option = {
+		name = nuclear_loose.4.g
+		default_option = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { nd_loose_attributed = { RESULT = 3 } }
+				add = 4
+			}
+		}
+	}
+
+	after = {
+		nd_loose_clear_record = yes
+	}
+}
+
+# ---- .5 A Stolen Bomb ---------------------------------------------------------------------
+# Every other human country, when a device detonates (scope:nd_loose_victim,
+# scope:nd_loose_state saved). Who it came from is not known here.
+nuclear_loose.5 = {
+	type = country_event
+	placement = scope:nd_loose_state
+
+	event_image = { texture = "gfx/event_pictures/mushroom_cloud_distant.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_fire.dds"
+
+	title = nuclear_loose.5.t
+	desc = nuclear_loose.5.d
+	flavor = nuclear_loose.5.f
+
+	duration = 3
+
+	option = {
+		name = nuclear_loose.5.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+}
+
+# ---- .6 The Warhead Was Ours? ------------------------------------------------------------
+# To a confirmed origin (the full demand) or a shortlisted suspect (a request
+# to cooperate), from nd_loose_send_demand.
+nuclear_loose.6 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/diplomatic_crisis_ultimatum.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_loose.6.t
+				trigger = { nd_loose_demand_is_full = yes }
+			}
+			triggered_desc = {
+				desc = nuclear_loose.6.t_request
+			}
+		}
+	}
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_loose.6.d
+				trigger = { nd_loose_demand_is_full = yes }
+			}
+			triggered_desc = {
+				desc = nuclear_loose.6.d_request
+			}
+		}
+	}
+	flavor = nuclear_loose.6.f
+
+	duration = 3
+
+	trigger = {
+		var:nd_loose_demand_from ?= { is_country_alive = yes }
+		has_variable = nd_loose_demand_kind
+	}
+
+	immediate = {
+		var:nd_loose_demand_from = { save_scope_as = nd_loose_claimant }
+	}
+
+	# Pay compensation (the full demand only).
+	option = {
+		name = nuclear_loose.6.a
+		trigger = { nd_loose_demand_is_full = yes }
+		nd_loose_pay = yes
+		ai_chance = {
+			base = 3
+			modifier = {
+				trigger = { scope:nd_loose_claimant.relations:root >= relations_threshold:cordial }
+				add = 3
+			}
+			modifier = {
+				trigger = { scope:nd_loose_claimant = { country_rank >= rank_value:great_power } }
+				add = 2
+			}
+		}
+	}
+
+	# Open our custody to inspection.
+	option = {
+		name = nuclear_loose.6.b
+		nd_loose_open_to_inspection = yes
+		ai_chance = {
+			base = 4
+			modifier = {
+				trigger = { ruler_is_cautious = yes }
+				add = 3
+			}
+		}
+	}
+
+	# Deny it.
+	option = {
+		name = nuclear_loose.6.c
+		default_option = yes
+		nd_loose_deny = yes
+		ai_chance = {
+			base = 2
+			modifier = {
+				trigger = { ruler_is_aggressive = yes }
+				add = 5
+			}
+			modifier = {
+				trigger = { has_diplomatic_pact = { who = scope:nd_loose_claimant type = rivalry } }
+				add = 3
+			}
+		}
+	}
+}
+
+# ---- .7 Named in the Investigation ------------------------------------------------------
+nuclear_loose.7 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/political_scandal_expose.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_loose.7.t
+	desc = nuclear_loose.7.d
+	flavor = nuclear_loose.7.f
+
+	duration = 3
+
+	trigger = {
+		var:nd_loose_accused_by ?= { is_country_alive = yes }
+	}
+
+	option = {
+		name = nuclear_loose.7.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	after = {
+		remove_variable = nd_loose_accused_by
+	}
+}
+
+# ---- .8 the victim hears the answer ---------------------------------------------------------
+nuclear_loose.8 = {
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/nuclear_diplomacy_talks.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_loose.8.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_loose.8.d_paid
+				trigger = { var:nd_loose_answer = 1 }
+			}
+			triggered_desc = {
+				desc = nuclear_loose.8.d_inspection
+				trigger = { var:nd_loose_answer = 2 }
+			}
+			triggered_desc = {
+				desc = nuclear_loose.8.d_denied
+			}
+		}
+	}
+	flavor = nuclear_loose.8.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_loose_answer
+		exists = var:nd_loose_answer_from
+	}
+
+	option = {
+		name = nuclear_loose.8.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	after = {
+		remove_variable = nd_loose_answer
+		remove_variable = nd_loose_answer_from
+	}
+}
+
+# ---- .9 Loose Material Secured -------------------------------------------------------------
+# A human told by nd_loose_tell_recovery.
+nuclear_loose.9 = {
+	# REVIEWED 2026-09-26 (unchosen_self_action): "Our agents" is d_covert's, shown only for nd_loose_recovered_how = 2, which only the recipient's own covert operation sets (covert_secure_material_action, which it launched); inspection, the article and the convention have their own texts
+	type = country_event
+	placement = root
+
+	event_image = { texture = "gfx/event_pictures/sanctions_cargo_inspection.dds" }
+
+	on_created_soundeffect = "event:/SFX/UI/Alerts/event_appear"
+
+	icon = "gfx/interface/icons/event_icons/event_scales.dds"
+
+	title = nuclear_loose.9.t
+	desc = {
+		first_valid = {
+			triggered_desc = {
+				desc = nuclear_loose.9.d_inspectors
+				trigger = { var:nd_loose_recovered_how = 1 }
+			}
+			triggered_desc = {
+				desc = nuclear_loose.9.d_covert
+				trigger = { var:nd_loose_recovered_how = 2 }
+			}
+			triggered_desc = {
+				desc = nuclear_loose.9.d_assistance
+				trigger = { var:nd_loose_recovered_how = 3 }
+			}
+			triggered_desc = {
+				desc = nuclear_loose.9.d_convention
+			}
+		}
+	}
+	flavor = nuclear_loose.9.f
+
+	duration = 3
+
+	trigger = {
+		has_variable = nd_loose_recovered_how
+		exists = var:nd_loose_recovered_from
+	}
+
+	option = {
+		name = nuclear_loose.9.a
+		default_option = yes
+		ai_chance = {
+			base = 1
+		}
+	}
+
+	after = {
+		remove_variable = nd_loose_recovered_how
+		remove_variable = nd_loose_recovered_from
+	}
+}

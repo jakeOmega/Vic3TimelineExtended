@@ -402,7 +402,7 @@ te_debug_un_cycle_subject_member = {
 # ---- §0.9: a revolution's winner ----
 
 # Do to our journal entry what a won revolution does to the winner's: every UN
-# modifier on it goes, and the two country-scoped conventions with them, while
+# modifier on it goes, and the three country-scoped conventions with them, while
 # the variables stay (scripting_best_practices.md § "What a Civil War's Winner
 # Inherits"). The entry is marked for rebuilding, as its `immediate` marks the
 # record a winner inherits. The mirrors are brought up to date first, in case
@@ -452,6 +452,10 @@ te_debug_un_wipe_entry = {
 	if = {
 		limit = { has_modifier = un_icc_member_modifier }
 		remove_modifier = un_icc_member_modifier
+	}
+	if = {
+		limit = { has_modifier = un_physical_protection_modifier }
+		remove_modifier = un_physical_protection_modifier
 	}
 	if = {
 		limit = { NOT = { has_variable = un_state_rebuild_pending } }

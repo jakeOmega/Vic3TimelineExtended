@@ -178,6 +178,10 @@ UNA = {
 
 	tier = hegemony
 
+	# The constituents' national cultures (USA, Canada, Mexico, Central
+	# America). Forming grants every culture here as primary, so an
+	# indigenous-heritage one would make UNA read as indigenous to vanilla
+	# content such as the Turtle Island JE.
 	cultures = {
 		yankee
 		dixie
@@ -185,7 +189,6 @@ UNA = {
 		franco_canadian
 		mexican
 		central_american
-		metis
 	}
 	capital = STATE_DISTRICT_OF_COLUMBIA
 }

@@ -3,7 +3,7 @@
 # ============================================================================
 # What each of the seven member-initiated topics actually does when tabled:
 # the costs and cooldowns it takes, the target it names, and the
-# un_resolution_open call that opens the vote. The ten conventions follow at
+# un_resolution_open call that opens the vote. The eleven conventions follow at
 # the bottom of the file, with their own header.
 #
 # Extracted word for word out of each scripted button's `effect` in
@@ -285,10 +285,11 @@ un_charter_reform_open = {
 }
 
 # ============================================================================
-# THE TEN CONVENTIONS
+# THE ELEVEN CONVENTIONS
 # ============================================================================
 # Human rights, ICC, NPT, climate, pandemic, refugee, heritage,
-# decolonization, space and the law of the sea. Each has two effects:
+# decolonization, space, the law of the sea and the physical protection of
+# nuclear material. Each has two effects:
 #
 #   un_propose_<key>_table   what tabling it does, whoever tables it: the
 #                            domestic reaction and the vote itself. The
@@ -297,7 +298,7 @@ un_charter_reform_open = {
 #                            un_propose_<key>_effect calls it too, so the two
 #                            paths cannot drift.
 #   un_propose_<key>_effect  tabling it on our own motion from the chamber
-#                            (ops 7-16 of un_chamber_propose_sgui): _table,
+#                            (ops 7-17 of un_chamber_propose_sgui): _table,
 #                            plus the costs every own-motion proposal takes.
 #
 # Accepting the docket's offer costs nothing extra: the docket paces the floor
@@ -561,4 +562,21 @@ un_propose_law_of_sea_effect = {
 	custom_tooltip = un_vote_initiated_tt
 	un_propose_own_motion_costs = yes
 	un_propose_law_of_sea_table = yes
+}
+
+# ---- Convention on the Physical Protection of Nuclear Material (CPPNM) — un_events.23 ----
+# Scope: the proposing country
+un_propose_physical_protection_table = {
+	ig_approval_effect = { IG = ig_intelligentsia MODIFIER = ig_approval_positive_modifier DAYS = normal_modifier_time }
+	ig_approval_effect = { IG = ig_armed_forces MODIFIER = ig_approval_negative_modifier DAYS = short_modifier_time }
+	hidden_effect = {
+		un_resolution_open = { TOPIC = physical_protection }
+	}
+}
+
+# Scope: the proposing country
+un_propose_physical_protection_effect = {
+	custom_tooltip = un_vote_initiated_tt
+	un_propose_own_motion_costs = yes
+	un_propose_physical_protection_table = yes
 }

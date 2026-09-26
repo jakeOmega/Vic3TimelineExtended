@@ -22,9 +22,9 @@
 # topic, un_propose_reform_*): it is also still raised by its proposer event,
 # un_events.6, under the same gates.
 #
-# THE TEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
-# heritage, decolonization, space, law of the sea) are at the bottom of the
-# file. The docket raises them for everyone through the proposer events in
+# THE ELEVEN CONVENTIONS (human rights, ICC, NPT, climate, pandemic, refugee,
+# heritage, decolonization, space, law of the sea, physical protection of
+# nuclear material) are at the bottom of the file. The docket raises them for everyone through the proposer events in
 # events/un_events.txt; a human member may also table one from the chamber on
 # its own motion. They have no scripted button: the AI reaches them only
 # through the docket, which paces the floor (un_docket_effects.txt), and a
@@ -403,9 +403,9 @@ un_propose_reform_possible = {
 }
 
 # ============================================================================
-# THE TEN CONVENTIONS
+# THE ELEVEN CONVENTIONS
 # ============================================================================
-# Tabled on our own motion from the chamber (ops 7-16 of
+# Tabled on our own motion from the chamber (ops 7-17 of
 # un_chamber_propose_sgui), or on the docket's offer through the proposer
 # events. Every topic below is recommendatory except the ICC, which is binding
 # and can be vetoed; all pass by simple majority.
@@ -804,4 +804,40 @@ un_propose_law_of_sea_possible = {
 	un_propose_own_motion_possible = yes
 	un_docket_topic_open_law_of_sea = yes
 	un_propose_law_of_sea_qualifies = yes
+}
+
+# ---- Convention on the Physical Protection of Nuclear Material (CPPNM) ----
+# nuclear_crisis_design.md §0.10 step 5. Parties' custody counts as secured
+# (nd_custody_is_secured) and their loose warheads can be found under it
+# (nd_loose_monthly). Needs the nuclear weapons rule, like climate needs its own.
+# Scope: any
+un_propose_physical_protection_in_force = {
+	has_global_variable = un_agency_cppnm
+}
+
+# Scope: the prospective proposer: a state that knows what a warhead is.
+un_propose_physical_protection_qualifies = {
+	has_technology_researched = nuclear_weapons
+	custom_tooltip = {
+		text = un_propose_not_party_tt
+		NOT = { has_modifier = un_physical_protection_modifier }
+	}
+	custom_tooltip = {
+		text = un_propose_not_refused_tt
+		NOT = { has_modifier = un_physical_protection_refusal_modifier }
+	}
+}
+
+# Scope: the proposing country
+un_propose_physical_protection_available = {
+	has_game_rule = nuclear_weapons_enabled
+	je:je_united_nations ?= { has_modifier = un_member_modifier }
+	NOT = { un_propose_physical_protection_in_force = yes }
+}
+
+# Scope: the proposing country
+un_propose_physical_protection_possible = {
+	un_propose_own_motion_possible = yes
+	un_docket_topic_open_physical_protection = yes
+	un_propose_physical_protection_qualifies = yes
 }

@@ -176,6 +176,7 @@ un_resolution_is_convention = {
 		has_tag = un_topic_refugee
 		has_tag = un_topic_space
 		has_tag = un_topic_law_of_sea
+		has_tag = un_topic_physical_protection
 		AND = {
 			has_tag = un_topic_icc
 			NOT = { has_tag = un_res_vetoed }

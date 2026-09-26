@@ -16,7 +16,10 @@
 # 1 % + 2 % per missing safeguards level + 3 % if commanders hold launch
 # authority (delegated or launch on warning). The caller doubles it for chaos:
 # at a civil war's outbreak always, and at a settlement if the arsenal's holder
-# was at war at the last ledger refresh (spec §4). Country scope.
+# was at war at the last ledger refresh (spec §4). Halved, after the clamp, when
+# custody is secured (nd_custody_is_secured: a civil-war custodian, a security
+# assistance article, inspections, the physical-protection convention). Country
+# scope.
 nd_custody_loss_rate = {
 	value = 0.07
 	if = {
@@ -32,10 +35,15 @@ nd_custody_loss_rate = {
 	}
 	min = 0.01
 	max = 0.1
+	if = {
+		limit = { nd_custody_is_secured = yes }
+		multiply = 0.5
+	}
 }
 
 # The same rate, read from a ledger record (container scope) — the posture its
-# owner last had — including the doubling for an owner that was at war.
+# owner last had — including the doubling for an owner that was at war and the
+# halving for custody that was secured.
 nd_ar_loss_rate = {
 	value = 0.07
 	if = {
@@ -63,6 +71,14 @@ nd_ar_loss_rate = {
 			var:nd_ar_at_war = 1
 		}
 		multiply = 2
+	}
+	# Custody was secured at the last refresh (nd_custody_is_secured).
+	if = {
+		limit = {
+			has_variable = nd_ar_secured
+			var:nd_ar_secured = 1
+		}
+		multiply = 0.5
 	}
 }
 

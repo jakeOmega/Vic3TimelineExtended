@@ -206,6 +206,7 @@ un_regime_any_convention = {
 		has_global_variable = un_agency_unep
 		has_global_variable = un_agency_iaea
 		has_global_variable = un_agency_itlos
+		has_global_variable = un_agency_cppnm
 		has_global_variable = un_agency_unhrc
 		has_global_variable = un_regime_decolonization
 		has_global_variable = un_agency_unhcr

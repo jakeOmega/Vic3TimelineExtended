@@ -2099,3 +2099,153 @@ covert_cultivate_assets_action = {
 		}
 	}
 }
+
+# ----------------------------------------------------------------------------
+# SECURE LOOSE MATERIAL (nuclear_crisis_design.md §0.10 step 5)
+# ----------------------------------------------------------------------------
+# Hunts, inside the target, for the nuclear warheads missing from its arsenal
+# line (nd_ar_loose): lost when its arsenal, or one that passed to it, changed
+# hands. It does nothing to the target. Once established, each month it may
+# find one (covert_secure_material_chance); the warhead is destroyed and
+# leaves the loose pool, the operator is told, and the target never is. Mild
+# tier: every service looks for loose material. Ends by itself when the
+# target's line has nothing left to find.
+covert_secure_material_action = {
+	groups = {
+		general
+	}
+	requires_approval = no
+	show_confirmation_box = yes
+	show_effect_in_tooltip = yes
+	is_hostile = yes
+	should_notify_third_parties = no
+
+	accept_effect = {
+		custom_tooltip = {
+			text = covert_secure_material_extra_tt
+		}
+		custom_tooltip = {
+			text = covert_op_detection_warning_tt
+		}
+		covert_op_start = { TYPE = secure_material DEFENSE_MOD = country_covert_defense_military_add CODE = 13 }
+	}
+
+	potential = {
+		has_game_rule = covert_warfare_enabled
+		has_game_rule = nuclear_weapons_enabled
+	}
+
+	possible = {
+		custom_tooltip = {
+			text = covert_op_capacity_secure_material_tt
+			covert_ops_type_below_cap = { TYPE = covert_secure_material_action }
+		}
+		custom_tooltip = {
+			text = iw_has_available_slot_tt
+			covert_operations_available_slots >= 1
+		}
+		custom_tooltip = {
+			text = iw_no_duplicate_target_tt
+			NOT = { has_diplomatic_pact = { who = scope:target_country type = covert_secure_material_action } }
+		}
+		custom_tooltip = {
+			text = iw_target_not_decentralized_tt
+			scope:target_country = { covert_action_valid_target = yes }
+		}
+		custom_tooltip = {
+			text = iw_no_truce_tt
+			NOT = { has_truce_with = scope:target_country }
+		}
+		# Allowed during war: no has_war guard
+		custom_tooltip = {
+			text = iw_no_intel_sharing_tt
+			NOT = {
+				any_scope_treaty = {
+					binds = scope:target_country
+					any_scope_article = { has_type = intelligence_sharing_pact }
+				}
+			}
+		}
+		custom_tooltip = {
+			text = iw_target_has_loose_material_tt
+			scope:target_country = { nd_loose_has_line = yes }
+		}
+		custom_tooltip = {
+			text = iw_funding_not_zero_tt
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+		}
+	}
+
+	pact = {
+		cost = 0
+		is_two_sided_pact = no
+		show_in_outliner = yes
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_funding_not_zero_tt
+					has_variable = iw_funding_level
+					var:iw_funding_level >= 1
+				}
+			}
+		}
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_not_decentralized_tt
+					scope:target_country = { covert_action_valid_target = yes }
+				}
+			}
+		}
+
+		# Nothing left to find: the operation ends by itself.
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_target_has_loose_material_tt
+					scope:target_country = { nd_loose_has_line = yes }
+				}
+			}
+		}
+
+		# Allowed during war: do not auto-break when war starts
+
+		requirement_to_maintain = {
+			trigger = {
+				custom_tooltip = {
+					text = iw_no_truce_tt
+					NOT = { has_truce_with = scope:target_country }
+				}
+			}
+		}
+		manual_break_effect = { covert_op_end = { TYPE = secure_material } }
+		auto_break_effect = { covert_op_end = { TYPE = secure_material } }
+	}
+
+	ai = {
+		evaluation_chance = {
+			value = 0.05
+		}
+
+		will_propose = {
+			scope:target_country = { nd_loose_has_line = yes }
+			country_rank >= rank_value:major_power
+			covert_operations_available_slots >= 1
+			has_variable = iw_funding_level
+			var:iw_funding_level >= 1
+			in_default = no
+		}
+
+		propose_score = {
+			value = 5
+			# A warhead in a neighbour's hands is a warhead near us.
+			if = {
+				limit = { is_adjacent_to_country = scope:target_country }
+				add = 5
+			}
+		}
+	}
+}

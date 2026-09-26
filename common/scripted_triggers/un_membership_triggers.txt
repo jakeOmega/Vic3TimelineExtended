@@ -112,6 +112,7 @@ un_rep_any_convention_missed = {
 		un_rep_convention_missed = { AGENCY = unhcr MODIFIER = un_refugee_program_modifier }
 		un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier }
 		un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier }
+		un_rep_convention_missed = { AGENCY = cppnm MODIFIER = un_physical_protection_modifier }
 		un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier }
 	}
 }

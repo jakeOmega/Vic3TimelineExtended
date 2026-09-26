@@ -117,6 +117,9 @@ CONVENTIONS = (
     Convention("law_of_sea", "un_agency_itlos", "un_law_of_sea_modifier", "country",
                16, 21, 1211, "un_law_of_sea_refusal_modifier",
                ("un_regime_naval_curb_modifier",), None, True),
+    Convention("physical_protection", "un_agency_cppnm", "un_physical_protection_modifier", "country",
+               17, 23, 1231, "un_physical_protection_refusal_modifier",
+               (), ("nuclear_weapons_enabled", "un_chamber_nuclear_rule_sgui"), True),
 )
 
 KEYS = tuple(c.key for c in CONVENTIONS)

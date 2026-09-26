@@ -18,12 +18,12 @@
 ### The widget is no longer display-only. Two of its scripted GUIs act:
 ###   un_chamber_vote_sgui     casts our ballot on the resolution in session
 ###                            (op 0 favour / 1 against / 2 veto)
-###   un_chamber_propose_sgui  tables one of seventeen topics
+###   un_chamber_propose_sgui  tables one of eighteen topics
 ###                            (op 0 condemn / 1 sanctions / 2 expulsion /
 ###                             3 mandate / 4 peacekeepers / 5 aid /
-###                             6 charter reform / 7-16 the ten conventions)
+###                             6 charter reform / 7-17 the eleven conventions)
 ### Both run the same script the existing paths run — un_vote.1's option bodies,
-### the journal entry's own proposal buttons, and (ops 7-16) the docket's
+### the journal entry's own proposal buttons, and (ops 7-17) the docket's
 ### proposer events — so the AI, which still votes by event and proposes by
 ### button or on the docket's offer, behaves exactly as before. Every other
 ### scripted GUI here is still called only through ExecuteTooltip, which
@@ -812,7 +812,7 @@ flowcontainer = {
 	}
 
 	# ---- Table a Resolution ----
-	# Collapsed by default like every other section: seventeen ExecuteTooltip
+	# Collapsed by default like every other section: eighteen ExecuteTooltip
 	# rows re-render every frame the panel is open.
 	#
 	# The rows are the topics a member can put before the Assembly on its own
@@ -958,11 +958,13 @@ flowcontainer = {
 			}
 		}
 
-		# The ten conventions and declarations. The docket also raises each of
+		# The eleven conventions and declarations. The docket also raises each of
 		# them for everyone (un_docket_effects.txt); these rows let a member
 		# table one on its own motion. The climate accord's row is hidden under
-		# the disabled global warming rule, by a scripted GUI that reads only
-		# the root (gotcha #22), never by the op-carrying one.
+		# the disabled global warming rule and the physical-protection
+		# convention's under the disabled nuclear weapons rule, each by a
+		# scripted GUI that reads only the root (gotcha #22), never by the
+		# op-carrying one.
 		un_chamber_subheader = {
 			visible = "[GetScriptedGui('un_chamber_member_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
 			blockoverride "subheader_text" {
@@ -1088,6 +1090,19 @@ flowcontainer = {
 				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
 				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End )]"
 				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)16' ) ).End ) ) )]"
+			}
+		}
+
+		un_chamber_propose_row = {
+			visible = "[GetScriptedGui('un_chamber_nuclear_rule_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "row_text" {
+				text = "[GetScriptedGui('un_chamber_propose_row_sgui').ExecuteTooltip(GuiScope.SetRoot(JournalEntry.GetCountry.MakeScope).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End)]"
+			}
+			blockoverride "row_action" {
+				visible = "[ScriptedGui.IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
+				enabled = "[ScriptedGui.IsValid( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
+				onclick = "[ScriptedGui.Execute( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End )]"
+				tooltip = "[Concatenate( ScriptedGui.IsValidTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End ), Concatenate( Localize( 'te_tt_break' ), ScriptedGui.ExecuteTooltip( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).AddScope( 'op', MakeScopeValue( '(CFixedPoint)17' ) ).End ) ) )]"
 			}
 		}
 

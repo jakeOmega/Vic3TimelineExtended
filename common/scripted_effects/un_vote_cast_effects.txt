@@ -43,7 +43,7 @@
 
 # Vote in favour. Extracted from un_vote.1 option A.
 # Carries that option's `show_as_tooltip` block as well as its effects: on the
-# eleven treaty topics it is the engine-generated modifier preview that tells a
+# twelve treaty topics it is the engine-generated modifier preview that tells a
 # player what they are ratifying, and the chamber button's tooltip needs it as
 # much as the popup does. That block's original note, kept from un_vote.1:
 #
@@ -103,6 +103,10 @@ un_vote_cast_yes = {
 			if = {
 				limit = { scope:un_resolution ?= { has_tag = un_topic_law_of_sea } }
 				add_modifier = { name = un_law_of_sea_modifier multiplier = un_convention_multiplier }
+			}
+			if = {
+				limit = { scope:un_resolution ?= { has_tag = un_topic_physical_protection } }
+				add_modifier = { name = un_physical_protection_modifier multiplier = un_convention_multiplier }
 			}
 			if = {
 				limit = {

@@ -1,0 +1,566 @@
+﻿# ============================================================================
+# LOOSE WARHEADS — plots, attribution, the reckoning, recovery
+# ============================================================================
+# Design: docs/superpowers/specs/2026-09-26-nuclear-loose-warheads-design.md
+# §3; what shipped is docs/systems/nuclear_crisis_design.md §0.10 step 5.
+#
+# The pool (built by the custody settlement, nuclear_custody_effects.txt):
+#   global_var:nd_loose_warheads   every warhead unaccounted for, the world over
+#   nd_ar_loose                    on each ledger record: those from that
+#                                  arsenal's line (the per-origin count), which
+#                                  passes to the successor's record when the
+#                                  origin dies
+# The per-origin counts are the truth. The victim learns only what the
+# attribution roll tells it (owner ruling 2026-09-25).
+#
+# Four parts:
+#   THE PLOT         an entry in the social-tensions terror pool
+#                    (nuclear_loose.1): whether a device exists, whose it is,
+#                    whether it is seized or detonates
+#   ATTRIBUTION      confirmed / shortlist / unknown, rolled at once and
+#                    reported a month later (nuclear_loose.4)
+#   THE RECKONING    blame means negligence: the named origin pays
+#                    compensation, opens its custody to inspection, or denies
+#                    it (nuclear_loose.6)
+#   RECOVERY         a warhead found and secured leaves the pool
+#                    (nd_loose_recover_from_line), from a search after
+#                    inspection, a covert operation, a treaty article, or the
+#                    UN convention
+# ============================================================================
+
+# ----------------------------------------------------------------------------
+# THE PLOT
+# ----------------------------------------------------------------------------
+# ROOT = the country the terror pool drew (nuclear_loose.1's immediate). Is
+# there a real device? Whose line is it from, weighted by how many each line
+# has lost? A line's owner never has its own warhead turned on it here.
+nd_loose_plot = {
+	save_scope_as = nd_loose_victim
+	random = {
+		chance = nd_loose_plot_chance
+		random_in_global_list = {
+			variable = nd_arsenal_records
+			limit = { nd_loose_line_usable = { VICTIM = scope:nd_loose_victim } }
+			weight = {
+				value = var:nd_ar_loose
+			}
+			save_scope_as = nd_loose_line
+		}
+	}
+	if = {
+		limit = { exists = scope:nd_loose_line }
+		nd_loose_surface = yes
+	}
+}
+
+# ROOT = the victim, scope:nd_loose_line = the line the device came from. The
+# warhead leaves the pool whatever happens next; the world waits a year before
+# another device can surface (set only once one has, so a plot with nothing
+# behind it blocks no one).
+nd_loose_surface = {
+	set_global_variable = { name = nd_loose_plot_cooldown value = 1 days = 365 }
+	# For good: the world has seen a loose warhead surface. The UN's
+	# physical-protection convention stays on the table after the pool drains
+	# (un_docket_topic_open_physical_protection).
+	set_global_variable = { name = nd_loose_device_surfaced value = 1 }
+	scope:nd_loose_line = {
+		var:nd_ar_owner = { save_scope_as = nd_loose_origin }
+	}
+	nd_loose_clear_record = yes
+	# How many lines the investigators must choose between — the ones a
+	# device could have come from, as the pick saw them — counted before this
+	# one's count falls.
+	set_variable = { name = nd_loose_candidates value = 0 }
+	every_in_global_list = {
+		variable = nd_arsenal_records
+		limit = { nd_loose_line_usable = { VICTIM = ROOT } }
+		ROOT = {
+			change_variable = { name = nd_loose_candidates add = 1 }
+		}
+	}
+	scope:nd_loose_line = {
+		change_variable = { name = nd_ar_loose subtract = 1 }
+	}
+	nd_loose_pool_take = { AMOUNT = 1 }
+	set_variable = { name = nd_loose_origin value = scope:nd_loose_origin }
+	# For good: the UN's physical-protection convention remembers who was
+	# targeted (un_lean_interests).
+	set_variable = { name = nd_loose_was_target value = 1 }
+	# Seized or detonated.
+	set_variable = { name = nd_loose_seized value = 0 }
+	random = {
+		chance = nd_loose_foil_chance
+		set_variable = { name = nd_loose_seized value = 1 }
+	}
+	nd_loose_attribute = yes
+	if = {
+		limit = { var:nd_loose_seized = 1 }
+		debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_origin').GetName] was seized in [ROOT.GetCountry.GetName]; attribution [ROOT.GetCountry.MakeScope.Var('nd_loose_attribution').GetValue|0]"
+		trigger_event = { id = nuclear_loose.3 popup = yes }
+	}
+	else = {
+		# A city chosen as a strike planner would choose it, among those
+		# big enough to be worth the attempt. No scope:attacking_country:
+		# there is no one to retaliate against (nuked_by_country stays unset).
+		# The strike's own war-support loss still applies to any war the
+		# victim is in: a city lost is a city lost.
+		random_scope_state = {
+			limit = {
+				is_incorporated = yes
+				state_population > 100000
+			}
+			weight = {
+				value = nuclear_industrial_strike_target_score
+			}
+			save_scope_as = nd_loose_state
+		}
+		if = {
+			limit = { exists = scope:nd_loose_state }
+			set_variable = { name = nd_loose_state value = scope:nd_loose_state }
+			scope:nd_loose_state = {
+				nuclear_industrial_strike = yes
+			}
+			debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_origin').GetName] detonated in [ROOT.GetCountry.GetName]; attribution [ROOT.GetCountry.MakeScope.Var('nd_loose_attribution').GetValue|0]"
+			trigger_event = { id = nuclear_loose.2 popup = yes }
+			every_country = {
+				limit = {
+					NOT = { this = ROOT }
+					is_ai = no
+				}
+				trigger_event = { id = nuclear_loose.5 popup = yes }
+			}
+		}
+	}
+	# The investigation reports in a month.
+	trigger_event = { id = nuclear_loose.4 days = 30 popup = yes }
+}
+
+# Takes $AMOUNT$ warheads out of the world count (never below 0).
+nd_loose_pool_take = {
+	if = {
+		limit = { has_global_variable = nd_loose_warheads }
+		change_global_variable = { name = nd_loose_warheads subtract = $AMOUNT$ }
+		if = {
+			limit = { global_var:nd_loose_warheads < 0 }
+			set_global_variable = { name = nd_loose_warheads value = 0 }
+		}
+	}
+}
+
+# ----------------------------------------------------------------------------
+# ATTRIBUTION (owner ruling 2026-09-25)
+# ----------------------------------------------------------------------------
+# ROOT = the victim, scope:nd_loose_origin saved. Rolled once, at once;
+# nuclear_loose.4 reports it. nd_loose_attribution: 1 confirmed, 2 a
+# shortlist, 3 unknown. Of what is not confirmed, nd_loose_unknown_share
+# percent stays unknown. A shortlist is the true origin and up to two
+# decoys — other lines first, then other countries believed armed — in a
+# random order, so it can name the innocent. A shortlist of one names the
+# origin outright.
+nd_loose_attribute = {
+	set_variable = { name = nd_loose_attribution value = 3 }
+	random = {
+		chance = nd_loose_confirm_chance
+		set_variable = { name = nd_loose_attribution value = 1 }
+	}
+	if = {
+		limit = { var:nd_loose_attribution = 3 }
+		random = {
+			chance = nd_loose_shortlist_share
+			set_variable = { name = nd_loose_attribution value = 2 }
+		}
+	}
+	if = {
+		limit = { var:nd_loose_attribution = 2 }
+		nd_loose_draw_suspects = yes
+		if = {
+			limit = { var:nd_loose_suspect_count <= 1 }
+			set_variable = { name = nd_loose_attribution value = 1 }
+		}
+	}
+}
+
+# ROOT = the victim, scope:nd_loose_origin saved.
+nd_loose_draw_suspects = {
+	random_in_global_list = {
+		variable = nd_arsenal_records
+		limit = {
+			nd_loose_line_live = yes
+			NOT = { var:nd_ar_owner ?= scope:nd_loose_origin }
+			NOT = { var:nd_ar_owner ?= ROOT }
+		}
+		var:nd_ar_owner = { save_scope_as = nd_loose_decoy_a }
+	}
+	if = {
+		limit = { NOT = { exists = scope:nd_loose_decoy_a } }
+		random_country = {
+			limit = {
+				is_country_alive = yes
+				nd_believed_armed = yes
+				NOT = { this = scope:nd_loose_origin }
+				NOT = { this = ROOT }
+			}
+			save_scope_as = nd_loose_decoy_a
+		}
+	}
+	random_country = {
+		limit = {
+			is_country_alive = yes
+			nd_believed_armed = yes
+			NOT = { this = scope:nd_loose_origin }
+			NOT = { this = ROOT }
+			NOT = { scope:nd_loose_decoy_a ?= this }
+		}
+		save_scope_as = nd_loose_decoy_b
+	}
+	set_variable = { name = nd_loose_suspect_count value = 0 }
+	random_list = {
+		1 = {
+			nd_loose_add_suspect = { WHO = scope:nd_loose_origin }
+			nd_loose_add_suspect = { WHO = scope:nd_loose_decoy_a }
+			nd_loose_add_suspect = { WHO = scope:nd_loose_decoy_b }
+		}
+		1 = {
+			nd_loose_add_suspect = { WHO = scope:nd_loose_decoy_a }
+			nd_loose_add_suspect = { WHO = scope:nd_loose_origin }
+			nd_loose_add_suspect = { WHO = scope:nd_loose_decoy_b }
+		}
+		1 = {
+			nd_loose_add_suspect = { WHO = scope:nd_loose_decoy_a }
+			nd_loose_add_suspect = { WHO = scope:nd_loose_decoy_b }
+			nd_loose_add_suspect = { WHO = scope:nd_loose_origin }
+		}
+	}
+}
+
+# ROOT = the victim: $WHO$ takes the next free place on the shortlist
+# (nd_loose_suspect_1..3), if there is such a country.
+nd_loose_add_suspect = {
+	if = {
+		limit = { exists = $WHO$ }
+		if = {
+			limit = { NOT = { has_variable = nd_loose_suspect_1 } }
+			set_variable = { name = nd_loose_suspect_1 value = $WHO$ }
+		}
+		else_if = {
+			limit = { NOT = { has_variable = nd_loose_suspect_2 } }
+			set_variable = { name = nd_loose_suspect_2 value = $WHO$ }
+		}
+		else = {
+			set_variable = { name = nd_loose_suspect_3 value = $WHO$ }
+		}
+		change_variable = { name = nd_loose_suspect_count add = 1 }
+	}
+}
+
+# ROOT = the victim: forgets the last device's record, before a new one or
+# once nuclear_loose.4 has been answered.
+nd_loose_clear_record = {
+	if = {
+		limit = { has_variable = nd_loose_attribution }
+		remove_variable = nd_loose_attribution
+	}
+	if = {
+		limit = { has_variable = nd_loose_origin }
+		remove_variable = nd_loose_origin
+	}
+	if = {
+		limit = { has_variable = nd_loose_seized }
+		remove_variable = nd_loose_seized
+	}
+	if = {
+		limit = { has_variable = nd_loose_state }
+		remove_variable = nd_loose_state
+	}
+	if = {
+		limit = { has_variable = nd_loose_candidates }
+		remove_variable = nd_loose_candidates
+	}
+	if = {
+		limit = { has_variable = nd_loose_suspect_count }
+		remove_variable = nd_loose_suspect_count
+	}
+	if = {
+		limit = { has_variable = nd_loose_suspect_1 }
+		remove_variable = nd_loose_suspect_1
+	}
+	if = {
+		limit = { has_variable = nd_loose_suspect_2 }
+		remove_variable = nd_loose_suspect_2
+	}
+	if = {
+		limit = { has_variable = nd_loose_suspect_3 }
+		remove_variable = nd_loose_suspect_3
+	}
+}
+
+# ----------------------------------------------------------------------------
+# THE RECKONING — blame means negligence (owner ruling 2026-09-25)
+# ----------------------------------------------------------------------------
+# ROOT = the victim (nuclear_loose.4). Sends $TARGET$ the demand
+# (nuclear_loose.6): KIND 1, the full demand to a confirmed origin
+# (compensation, inspection, or denial); KIND 2, a request to a shortlisted
+# suspect to cooperate (inspection, or a refusal). The compensation is fixed
+# now, so the demand's option shows what it pays. A demand still pending on
+# the target is not overwritten.
+nd_loose_send_demand = {
+	save_scope_as = nd_loose_claimant
+	$TARGET$ = {
+		if = {
+			limit = {
+				is_country_alive = yes
+				NOT = { has_variable = nd_loose_demand_from }
+			}
+			save_scope_as = nd_loose_payer
+			set_variable = { name = nd_loose_demand_from value = scope:nd_loose_claimant days = 60 }
+			set_variable = { name = nd_loose_demand_kind value = $KIND$ days = 60 }
+			set_variable = { name = nd_loose_compensation value = nd_loose_compensation_value days = 60 }
+			trigger_event = { id = nuclear_loose.6 popup = yes }
+		}
+	}
+}
+
+# ROOT = the victim: "Hold them to account" — a confirmed origin.
+nd_loose_hold_to_account = {
+	custom_tooltip = {
+		text = nd_tt_loose_hold_to_account
+		nd_loose_send_demand = { TARGET = scope:nd_loose_accused KIND = 1 }
+	}
+	scope:nd_loose_accused = {
+		change_relations = { country = ROOT value = -30 }
+	}
+}
+
+# ROOT = the victim: "Name them all" — every shortlisted country, publicly.
+nd_loose_name_suspects = {
+	custom_tooltip = {
+		text = nd_tt_loose_name_suspects
+		nd_loose_on_each_suspect = { EFFECT = nd_loose_accuse_one }
+	}
+}
+
+# ROOT = the victim: "Ask each for their cooperation" — privately.
+nd_loose_ask_suspects = {
+	custom_tooltip = {
+		text = nd_tt_loose_ask_suspects
+		nd_loose_on_each_suspect = { EFFECT = nd_loose_ask_one }
+	}
+}
+
+# ROOT = the victim: runs $EFFECT$ = { WHO = <suspect> } for each suspect on
+# the shortlist that still stands.
+nd_loose_on_each_suspect = {
+	var:nd_loose_suspect_1 ?= {
+		if = {
+			limit = { is_country_alive = yes }
+			save_scope_as = nd_loose_suspect
+			ROOT = { $EFFECT$ = yes }
+		}
+	}
+	var:nd_loose_suspect_2 ?= {
+		if = {
+			limit = { is_country_alive = yes }
+			save_scope_as = nd_loose_suspect
+			ROOT = { $EFFECT$ = yes }
+		}
+	}
+	var:nd_loose_suspect_3 ?= {
+		if = {
+			limit = { is_country_alive = yes }
+			save_scope_as = nd_loose_suspect
+			ROOT = { $EFFECT$ = yes }
+		}
+	}
+}
+
+# ROOT = the victim, scope:nd_loose_suspect saved.
+nd_loose_accuse_one = {
+	scope:nd_loose_suspect = {
+		change_relations = { country = ROOT value = -25 }
+		set_variable = { name = nd_loose_accused_by value = ROOT days = 60 }
+		trigger_event = { id = nuclear_loose.7 popup = yes }
+	}
+}
+
+nd_loose_ask_one = {
+	nd_loose_send_demand = { TARGET = scope:nd_loose_suspect KIND = 2 }
+}
+
+# ROOT = the victim: "Blame our rival anyway" — no one can say where it came
+# from, so a rival will do.
+nd_loose_blame_rival = {
+	scope:nd_loose_rival = {
+		change_relations = { country = ROOT value = -30 }
+	}
+	# Named in public, as "Name them all" names a shortlist (.7).
+	custom_tooltip = {
+		text = nd_tt_loose_blame_rival
+		scope:nd_loose_rival = {
+			set_variable = { name = nd_loose_accused_by value = ROOT days = 60 }
+			trigger_event = { id = nuclear_loose.7 popup = yes }
+		}
+	}
+	add_loyalists = {
+		value = small_radicals
+	}
+}
+
+# ---- the answer (nuclear_loose.6's options) --------------------------------
+# ROOT = the country the demand reached, scope:nd_loose_claimant saved.
+
+# Pay compensation: the sum fixed when the demand was sent.
+nd_loose_pay = {
+	add_treasury = {
+		value = var:nd_loose_compensation
+		multiply = -1
+	}
+	scope:nd_loose_claimant = {
+		add_treasury = ROOT.var:nd_loose_compensation
+		change_relations = { country = ROOT value = 20 }
+	}
+	hidden_effect = {
+		nd_loose_answer = { ANSWER = 1 }
+	}
+}
+
+# Open our custody to inspection: our custody counts as secured for twenty
+# years (nd_custody_is_secured), a sovereignty cost that fades over ten, and
+# the inspectors' first search may find one of our warheads that is loose.
+nd_loose_open_to_inspection = {
+	custom_tooltip = {
+		text = nd_tt_loose_inspection
+		set_variable = { name = nd_loose_inspected value = 1 days = 7300 }
+	}
+	add_modifier = {
+		name = nd_loose_inspections
+		years = 10
+		is_decaying = yes
+	}
+	if = {
+		limit = { nd_loose_has_line = yes }
+		custom_tooltip = {
+			text = nd_tt_loose_first_search
+			random = {
+				chance = 50
+				nd_loose_recover_from_line = { HOW = 1 }
+				nd_loose_tell_recovery = { WHO = ROOT HOW = 1 }
+			}
+		}
+	}
+	scope:nd_loose_claimant = {
+		change_relations = { country = ROOT value = 10 }
+	}
+	hidden_effect = {
+		nd_ledger_refresh = yes
+		nd_loose_answer = { ANSWER = 2 }
+	}
+}
+
+# Deny it: a confirmed origin that denies it in public pays in infamy too.
+nd_loose_deny = {
+	if = {
+		limit = { nd_loose_demand_is_full = yes }
+		scope:nd_loose_claimant = {
+			change_relations = { country = ROOT value = -40 }
+		}
+		change_infamy = 5
+	}
+	else = {
+		scope:nd_loose_claimant = {
+			change_relations = { country = ROOT value = -10 }
+		}
+	}
+	hidden_effect = {
+		nd_loose_answer = { ANSWER = 3 }
+	}
+}
+
+# Tells the claimant (nuclear_loose.8): 1 paid, 2 opened to inspection,
+# 3 denied. Then forgets the demand.
+nd_loose_answer = {
+	scope:nd_loose_claimant ?= {
+		set_variable = { name = nd_loose_answer value = $ANSWER$ days = 60 }
+		set_variable = { name = nd_loose_answer_from value = ROOT days = 60 }
+		trigger_event = { id = nuclear_loose.8 popup = yes }
+	}
+	remove_variable = nd_loose_demand_from
+	remove_variable = nd_loose_demand_kind
+	remove_variable = nd_loose_compensation
+}
+
+# ----------------------------------------------------------------------------
+# RECOVERY
+# ----------------------------------------------------------------------------
+# Country scope, from nd_country_monthly_cleanup (every country, monthly).
+# While warheads from our line are unaccounted for, someone paying to secure
+# our arsenal (nuclear_security_assistance) may find one; so may the
+# cooperation of the UN's physical-protection convention, if we are a party.
+# Each has its own chance.
+nd_loose_monthly = {
+	if = {
+		limit = {
+			has_game_rule = nuclear_weapons_enabled
+			nd_loose_has_line = yes
+			nd_has_security_assistance = yes
+		}
+		random = {
+			chance = nd_loose_assistance_chance
+			nd_loose_recover_from_line = { HOW = 3 }
+			nd_loose_tell_recovery = { WHO = ROOT HOW = 3 }
+		}
+	}
+	if = {
+		limit = {
+			has_game_rule = nuclear_weapons_enabled
+			nd_loose_has_line = yes
+			has_modifier = un_physical_protection_modifier
+		}
+		random = {
+			chance = nd_loose_convention_chance
+			nd_loose_recover_from_line = { HOW = 4 }
+			nd_loose_tell_recovery = { WHO = ROOT HOW = 4 }
+		}
+	}
+}
+
+# Country scope = the owner of the line: one of its warheads unaccounted for
+# is found and secured, and leaves the pool. The warhead is destroyed, not
+# added to anyone's arsenal. Saves the owner as scope:nd_loose_line_owner for
+# nd_loose_tell_recovery. HOW names the finder in debug.log: 1 inspectors,
+# 2 a covert operation, 3 the security assistance article, 4 the physical-
+# protection convention.
+nd_loose_recover_from_line = {
+	# An owner saved by an earlier find in the same pass must not stand in for
+	# this one: nd_loose_tell_recovery tells only when this call found one.
+	if = {
+		limit = { exists = scope:nd_loose_line_owner }
+		clear_saved_scope = nd_loose_line_owner
+	}
+	if = {
+		limit = { nd_loose_has_line = yes }
+		save_scope_as = nd_loose_line_owner
+		var:nd_arsenal_record = {
+			change_variable = { name = nd_ar_loose subtract = 1 }
+		}
+		nd_loose_pool_take = { AMOUNT = 1 }
+		debug_log = "TE_CUSTODY: a loose warhead from [SCOPE.sCountry('nd_loose_line_owner').GetName]'s line was secured (how: $HOW$)"
+	}
+}
+
+# Any scope, after nd_loose_recover_from_line found one: tells $WHO$, if
+# human, whose warhead was found and how (nuclear_loose.9). The owner of the
+# line hears it from inspectors, the article and the convention; a covert
+# operation's operator hears it, and the owner does not.
+nd_loose_tell_recovery = {
+	if = {
+		limit = { exists = scope:nd_loose_line_owner }
+		$WHO$ = {
+			if = {
+				limit = { is_ai = no }
+				set_variable = { name = nd_loose_recovered_how value = $HOW$ days = 30 }
+				set_variable = { name = nd_loose_recovered_from value = scope:nd_loose_line_owner days = 30 }
+				trigger_event = { id = nuclear_loose.9 popup = yes }
+			}
+		}
+	}
+}

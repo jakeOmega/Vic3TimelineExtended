@@ -58,6 +58,22 @@ nd_is_civil_war_counterpart = {
 	}
 }
 
+# Is one of our civil wars still being fought: does a country that rose
+# against us still stand as rebels? Read from the rebel country, never from
+# any_civil_war: that iterates the civil wars still brewing (a movement's
+# civil_war_progress, vanilla's JEs test `civil_war_progress >= 0.75`), not
+# the war once it has broken out. Country scope.
+nd_in_civil_war = {
+	save_temporary_scope_as = nd_icw_self
+	any_country = {
+		civil_war_origin_country ?= scope:nd_icw_self
+		OR = {
+			is_revolutionary = yes
+			is_secessionist = yes
+		}
+	}
+}
+
 # Pulled back at the outbreak of a civil war ("Who Holds the Button?", option
 # b): the warheads are held in storage until every civil war of ours is over.
 # Every raise of readiness is greyed (nd_can_set_readiness), the AI does not
@@ -75,5 +91,151 @@ nd_ai_would_strike_own_people = {
 	OR = {
 		has_law = law_type:law_outlawed_dissent
 		has_law_or_variant = law_type:law_secret_police
+	}
+}
+
+# ----------------------------------------------------------------------------
+# SECURED CUSTODY
+# ----------------------------------------------------------------------------
+# Is this country's custody of its warheads secured — someone else's
+# technicians and money helping to guard and count them? Halves the fraction
+# lost whenever they change hands (nd_custody_loss_rate, and nd_ar_loss_rate
+# through the record's nd_ar_secured, which nd_ledger_refresh copies from
+# here). Country scope. Sources:
+#   a custodian accepted in a civil war ("An Offer to Secure Our Arsenal",
+#   nuclear_custody.7), for as long as that civil war lasts;
+#   custody opened to inspection after a loose warhead was traced to us
+#   (nuclear_loose.6), for twenty years;
+#   a nuclear_security_assistance article paying for it, while it is in force;
+#   party to the UN's physical-protection convention (un_events.23).
+nd_custody_is_secured = {
+	save_temporary_scope_as = nd_cis_self
+	OR = {
+		var:nd_cw_custodian ?= {
+			is_country_alive = yes
+			NOT = { has_war_with = scope:nd_cis_self }
+		}
+		has_variable = nd_loose_inspected
+		nd_has_security_assistance = yes
+		has_modifier = un_physical_protection_modifier
+	}
+}
+
+# Can the custodian we accepted in this civil war still take our warheads
+# apart under its supervision ("Deny Them the Bomb", option b): alive, armed
+# (it knows how) and not at war with us. Country scope = the government.
+nd_cw_custodian_can_supervise = {
+	save_temporary_scope_as = nd_ccs_self
+	var:nd_cw_custodian ?= {
+		is_country_alive = yes
+		nd_is_armed = yes
+		NOT = { has_war_with = scope:nd_ccs_self }
+	}
+}
+
+# ----------------------------------------------------------------------------
+# CIVIL WARS — the world watching (nuclear_custody.6)
+# ----------------------------------------------------------------------------
+# Does this country watch the civil war between $ORIGIN$ and $REBEL$ closely
+# enough to take a side: a power believed armed that is a major power or
+# borders the origin, a party to neither side of the war, and not still
+# deciding about another one (nd_cwr_origin is set for a month). Country scope.
+nd_cw_would_watch = {
+	NOT = { this = $ORIGIN$ }
+	NOT = { this = $REBEL$ }
+	is_country_alive = yes
+	nd_believed_armed = yes
+	NOT = { has_war_with = $ORIGIN$ }
+	NOT = { has_war_with = $REBEL$ }
+	OR = {
+		country_rank >= rank_value:major_power
+		is_adjacent_to_country = $ORIGIN$
+	}
+	NOT = { has_variable = nd_cwr_origin }
+}
+
+# The pair nuclear_custody.6 was sent about is still at war: both sides alive,
+# the rebels still rebels. Country scope = the observer.
+nd_cwr_pair_at_war = {
+	var:nd_cwr_origin ?= {
+		is_country_alive = yes
+		save_temporary_scope_as = nd_cwr_pair_origin
+	}
+	var:nd_cwr_rebel ?= {
+		is_country_alive = yes
+		OR = {
+			is_revolutionary = yes
+			is_secessionist = yes
+		}
+		has_war_with = scope:nd_cwr_pair_origin
+	}
+}
+
+# ----------------------------------------------------------------------------
+# SECESSION — the Budapest path (nuclear_custody.10 / .11 / .12)
+# ----------------------------------------------------------------------------
+# Does this country hear that $STATE$, a secession that has won, holds
+# warheads: a great power believed armed, not at war with it, not still
+# deciding about another (nd_bp_new_state is set for a month). Country scope.
+nd_bp_would_hear = {
+	NOT = { this = $STATE$ }
+	is_country_alive = yes
+	country_rank >= rank_value:great_power
+	nd_believed_armed = yes
+	NOT = { has_war_with = $STATE$ }
+	NOT = { has_variable = nd_bp_new_state }
+}
+
+# Can $GUARANTOR$ still stand behind the offer to $STATE$: alive, believed
+# armed, not at war with it. Country scope, any.
+nd_bp_guarantor_valid = {
+	$GUARANTOR$ = {
+		is_country_alive = yes
+		nd_believed_armed = yes
+		NOT = { has_war_with = $STATE$ }
+	}
+}
+
+# The two treaties the offer creates, in force at once. Keep each identical to
+# its effect in nuclear_custody_effects.txt (nd_bp_treaty_lead,
+# nd_bp_treaty_guarantee): can_create_treaty is how the offer knows which it
+# may create. The lead guarantor holds the new state's disarmament
+# (nuclear_disarmament: source = the state that disarms, target = the
+# demander, which pays) beside its guarantee; every other guarantor signs the
+# guarantee alone.
+nd_bp_can_treaty_lead = {
+	can_create_treaty = {
+		first_country = $GUARANTOR$
+		second_country = $STATE$
+		is_draft = no
+		binding_period = { years = 10 }
+		articles_to_create = {
+			{
+				article = nuclear_disarmament
+				source_country = $STATE$
+				target_country = $GUARANTOR$
+			}
+			{
+				article = nuclear_guarantee
+				source_country = $GUARANTOR$
+				target_country = $STATE$
+			}
+		}
+	}
+}
+
+nd_bp_can_treaty_guarantee = {
+	can_create_treaty = {
+		first_country = $GUARANTOR$
+		second_country = $STATE$
+		is_draft = no
+		binding_period = { years = 10 }
+		articles_to_create = {
+			{
+				article = nuclear_guarantee
+				source_country = $GUARANTOR$
+				target_country = $STATE$
+			}
+		}
 	}
 }

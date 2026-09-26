@@ -232,6 +232,18 @@ flowcontainer = {
 			}
 		}
 		nd_row = {
+			visible = "[GetScriptedGui('nd_loose_sgui').IsShown( GuiScope.SetRoot( JournalEntry.GetCountry.MakeScope ).End )]"
+			blockoverride "row_label" {
+				text = "nd_w_loose_label"
+			}
+			blockoverride "row_value" {
+				text = "nd_w_loose_value"
+			}
+			blockoverride "row_tooltip" {
+				tooltip = "nd_w_loose_tt"
+			}
+		}
+		nd_row = {
 			blockoverride "row_label" {
 				text = "nd_w_upkeep_label"
 			}

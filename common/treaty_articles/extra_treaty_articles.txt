@@ -1220,6 +1220,16 @@ nuclear_disarmament = {
 				}
 				add = 0.25
 			}
+			# A secession that refused to trade the warheads it took for
+			# guarantees (nuclear_custody.11) is pressed through the article
+			# for ten years (nd_bp_refused).
+			if = {
+				limit = {
+					exists = scope:other_country
+					scope:other_country = { has_variable = nd_bp_refused }
+				}
+				add = 0.25
+			}
 			# Never try to disarm allies or friendly nations
 			if = {
 				limit = {

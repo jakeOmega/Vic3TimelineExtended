@@ -1,0 +1,112 @@
+﻿# ======================================================================
+#  The Nations of Turtle Island (je_unite_the_nations) — union exclusion
+# ======================================================================
+#
+# Vanilla shows this entry to any North American country with an indigenous-
+# heritage primary culture while TIS does not exist, and its "Proclaim Turtle
+# Island" button is change_tag = TIS. A UNA formed from a Turtle Island, or
+# one holding Métis, qualifies. change_tag deletes UNA, the country forms UNA
+# again, and the entry lights up once more, so the AI alternated between the
+# two tags and stacked a unification_prestige modifier on every formation.
+#
+# te_is_north_american_capable_union (formable_gating_triggers.txt) keeps the
+# entry off UNA and UNE: it is not shown to them, and `invalid` removes it
+# silently from a union that already holds it (an active entry otherwise stays
+# active through change_tag, buttons and all). Turtle Island may still form UNA.
+#
+# Everything else is vanilla 00_turtle_island.txt, copied from 1.14.4
+# (unchanged since 1.13.9) — re-diff on every Vic3 patch. The mod-only
+# lines are the three te_is_north_american_capable_union checks.
+
+REPLACE:je_unite_the_nations = {
+	icon = "gfx/interface/icons/event_icons/waving_flag.dds"
+
+	group = je_group_foreign_affairs
+
+	scripted_button = je_unite_the_nations_proclaim_turtle_island_button
+	scripted_button = je_unite_the_nations_organize_the_tribes_button
+	scripted_button = je_unite_the_nations_offer_confederation_button
+
+	is_shown_in_lobby = {
+		NOT = { is_country_type = decentralized }
+		is_in_geographic_region = geographic_region_north_america
+		any_primary_culture = {
+			has_discrimination_trait_group = heritage_group_indigenous_american
+		}
+		OR = {
+			NOT = {
+				exists = c:TIS
+			}
+			AND = {
+				exists = c:TIS
+				c:TIS = this
+			}
+		}
+		NOT = { te_is_north_american_capable_union = yes }
+	}
+
+	is_shown_when_inactive = {
+		NOT = { is_country_type = decentralized }
+		is_in_geographic_region = geographic_region_north_america
+		any_primary_culture = {
+			has_discrimination_trait_group = heritage_group_indigenous_american
+		}
+		OR = {
+			NOT = {
+				exists = c:TIS
+			}
+			AND = {
+				exists = c:TIS
+				c:TIS = this
+			}
+		}
+		NOT = { te_is_north_american_capable_union = yes }
+	}
+
+	possible = {
+		is_subject = no
+	}
+
+	complete = {
+		custom_tooltip = {
+			text = je_unite_the_nations_complete_tt
+			NOT = {
+				any_decentralized_country = {
+					is_in_geographic_region = geographic_region_north_america
+					any_primary_culture = {
+						shares_heritage_trait_group_with_any_primary_culture = ROOT
+					}
+				}
+			}
+		}
+		any_scope_state = {
+			is_homeland_of_country_cultures = ROOT
+			count >= 5
+		}
+	}
+
+	on_complete = {
+		if = {
+			limit = { is_country_type = unrecognized }
+			set_country_type = recognized
+		}
+		add_modifier = {
+			name = turtle_island_state_of_nations
+			months = -1 # FOREVER
+		}
+	}
+
+	fail = {
+	}
+
+	on_fail = {
+	}
+
+	invalid = {
+		te_is_north_american_capable_union = yes
+	}
+
+	weight = 100
+
+	should_be_pinned_by_default_uninvolved_or_context = yes
+}

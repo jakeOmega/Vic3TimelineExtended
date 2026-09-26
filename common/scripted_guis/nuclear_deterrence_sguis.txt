@@ -297,6 +297,18 @@ nd_umbrella_sgui = {
 	effect = { }
 }
 
+# Are warheads from our arsenal unaccounted for? Draws the posture panel's
+# "Unaccounted for" row (loose-warheads spec §3.7).
+nd_loose_sgui = {
+	scope = country
+	is_shown = {
+		nd_loose_has_line = yes
+	}
+	is_valid = { always = no }
+	ai_is_valid = { always = no }
+	effect = { }
+}
+
 # Is there a reputation to show? Credibility is created with the posture, or
 # by a crisis; a great power still building its first warhead has neither.
 nd_has_reputation_sgui = {

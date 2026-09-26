@@ -48,6 +48,7 @@ un_state_heal_needed = {
 		un_state_missing = { MODIFIER = un_space_partnership_modifier }
 		un_state_country_missing = { MODIFIER = un_law_of_sea_modifier }
 		un_state_country_missing = { MODIFIER = un_icc_member_modifier }
+		un_state_country_missing = { MODIFIER = un_physical_protection_modifier }
 	}
 }
 

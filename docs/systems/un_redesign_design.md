@@ -52,7 +52,8 @@ credit, its conventions, and its terms under the regimes.
   and the modifier is rebuilt from it.**
 - Mirrored on the journal entry: membership, founding member, headquarters, the Security Council
   seat, the permanent seat, the six programmes and stances, the two programme costs, and the
-  seven convention modifiers. Mirrored on the country: the law of the sea and the ICC.
+  seven convention modifiers. Mirrored on the country: the law of the sea, the ICC and the physical
+  protection of nuclear material (#474).
 - Not mirrored, because the monthly pulse derives them: the privileges and benefits, NPT
   enforcement, both pariah modifiers, the standing tier, the dues and every `un_regime_*`
   modifier.
@@ -350,7 +351,7 @@ economy changes. The rule is about who speaks for it abroad.
      `un_chamber_ballot_open`, the chamber's vote control);
    - **is not counted in the two-thirds** (`un_vote_eligible_member_count`);
    - **tables nothing** (the seven topic `un_propose_*_possible` triggers and
-     `un_propose_own_motion_possible`, which the ten conventions share);
+     `un_propose_own_motion_possible`, which the eleven conventions share);
    - **is offered nothing by the docket** (`un_docket_can_be_offered`; the peacekeeping and aid
      asks, `un_docket_peacekeeping_power` and `un_docket_aid_power`; the lending facility,
      `un_docket_loan_candidate`);
@@ -2257,7 +2258,8 @@ These are the convention losers in §5.3, plus the embargo symmetry in §5.2.
 - **The victim goes first:** for a situation's own docket item, the aggrieved party gets
   first refusal for 30 days.
 - **Conventions on our own motion (shipped after phase 6):** a human member may also table
-  any of the ten conventions from the chamber (ops 7–16), under the docket's own gates plus
+  any of the eleven conventions from the chamber (ops 7–17; the physical protection of
+  nuclear material joined on 2026-09-26), under the docket's own gates plus
   the costs every own-motion proposal takes. The AI still reaches them only through the
   docket, so its pacing is unchanged. See `journal_entry_systems.md` § Chamber Widget.
 
