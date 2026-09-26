@@ -42,13 +42,16 @@ building_strategic_reserve_hub = {
 		# One hub per country. A hub cannot be demolished, so a country that
 		# moves its capital keeps the old one (it works from any state) rather
 		# than adding a second: every st_res effect reads "the" hub through
-		# random_scope_building. Max level is 1, so this never blocks an
-		# expansion either.
+		# random_scope_building. The hub's own state always passes, so the
+		# guard never reads against the building it guards.
 		custom_tooltip = {
 			text = st_res_hub_one_per_country_tt
-			owner = {
-				NOT = {
-					any_scope_building = { is_building_type = building_strategic_reserve_hub }
+			OR = {
+				has_building = building_strategic_reserve_hub
+				owner = {
+					NOT = {
+						any_scope_building = { is_building_type = building_strategic_reserve_hub }
+					}
 				}
 			}
 		}
