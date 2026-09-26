@@ -309,5 +309,71 @@ class StatusLineTests(unittest.TestCase):
                 self.assertIn("\n " + key + ":0 ", loc)
 
 
+_PROGRAMME_BUTTONS = (
+    "un_peacekeeping_mission_button", "un_fund_development_button",
+    "un_human_rights_resolution_button", "un_arms_control_button",
+    "un_champion_order_button", "un_undermine_order_button",
+)
+_PROGRAMME_MODIFIERS = (
+    "un_peacekeeping_contributor_modifier", "un_peacekeeping_contributor_cost",
+    "un_development_contributor_modifier", "un_development_contributor_cost",
+    "un_human_rights_champion_modifier", "un_arms_control_participant_modifier",
+    "un_champion_order_cost", "un_undermine_order_cost",
+)
+
+
+def _agencies(body):
+    return set(re.findall(r"un_agency_(\w+)", body)) | set(re.findall(r"AGENCY\s*=\s*(\w+)", body))
+
+
+class ProgrammeTests(unittest.TestCase):
+    """§0.8: a suspended member runs no UN programme and takes no stance."""
+
+    def test_start_buttons_refuse_a_suspended_member(self):
+        buttons = _read(_path("common", "scripted_buttons", "un_buttons.txt"))
+        for name in _PROGRAMME_BUTTONS:
+            with self.subTest(button=name):
+                body = _block(buttons, name)
+                possible = body[body.index("possible"):body.index("ai_chance")]
+                self.assertIn("un_representation_suspended", possible)
+
+    def test_suspension_ends_running_programmes(self):
+        body = _block(_read(_path("common", "scripted_effects", "un_membership_effects.txt")),
+                      "un_representation_monthly_update")
+        for mod in _PROGRAMME_MODIFIERS:
+            with self.subTest(modifier=mod):
+                self.assertIn("remove_modifier = " + mod, body)
+
+
+class ConventionCatchUpTests(unittest.TestCase):
+    """§0.8: one chance, on restoration, at the conventions passed in our absence."""
+
+    def _in_force(self):
+        joiner = _block(_read(_path("common", "scripted_effects", "un_vote_effects.txt")),
+                        "un_apply_ratified_conventions")
+        return _agencies(joiner)
+
+    def test_snapshot_and_missed_cover_every_convention(self):
+        effects = _read(_path("common", "scripted_effects", "un_membership_effects.txt"))
+        triggers = _read(TRIGGERS)
+        expected = self._in_force()
+        self.assertEqual(len(expected), 9)
+        self.assertEqual(_agencies(_block(effects, "un_rep_convention_snapshot")), expected)
+        self.assertEqual(_agencies(_block(effects, "un_rep_convention_forget")), expected)
+        self.assertEqual(_agencies(_block(triggers, "un_rep_any_convention_missed")), expected)
+
+    def test_restoration_offers_the_event_once(self):
+        body = _block(_read(_path("common", "scripted_effects", "un_membership_effects.txt")),
+                      "un_representation_monthly_update")
+        self.assertIn("un_rep_convention_snapshot = yes", body)
+        self.assertIn("trigger_event = { id = un_events.36 }", body)
+        event = _block(_read(_path("events", "un_events.txt")), "un_events.36")
+        options = re.split(r"\n\toption\s*=\s*\{", event)[1:]
+        self.assertEqual(len(options), 2)
+        for opt in options:
+            self.assertIn("un_rep_convention_forget = yes", opt)
+        self.assertEqual(_agencies(options[0]), self._in_force())
+
+
 if __name__ == "__main__":
     unittest.main()

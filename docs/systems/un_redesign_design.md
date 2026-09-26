@@ -52,7 +52,11 @@ economy changes. The rule is about who speaks for it abroad.
 - `common/scripted_triggers/un_membership_triggers.txt` (new): `un_membership_eligible`,
   `un_member_represented`, `un_representation_suspended`, `un_dues_billed_to_overlord`,
   `un_seat_carried`, `un_member_draws_benefits`.
-- `common/scripted_effects/un_membership_effects.txt` (new): `un_representation_monthly_update`.
+- `common/scripted_effects/un_membership_effects.txt` (new): `un_representation_monthly_update`,
+  and the convention snapshot (`un_rep_convention_snapshot`, `un_rep_convention_forget`).
+- `events/un_events.txt`: `un_events.36`, the one chance at conventions passed in our absence.
+- `common/scripted_buttons/un_buttons.txt`: the six programme and stance buttons refuse a
+  suspended member.
 - The gates beside Article 19: `un_resolution_triggers.txt`, `un_vote_events.txt` (`un_vote.1`,
   and `un_vote.2`/`un_vote.3` for compliance), `un_chamber_sguis.txt`, `un_script_values.txt`
   (`un_vote_eligible_member_count`), `un_propose_triggers.txt`, `un_docket_triggers.txt`,
@@ -128,6 +132,9 @@ economy changes. The rule is about who speaks for it abroad.
    - **sends no contingent at will** (`un_mission_volunteer_eligible`). The major-power gate
      already rules out all but personal-union juniors. Contingents already in the field stay
      until their mission ends or the member withdraws them.
+   - **runs no UN programme and takes no stance (decided).** The six start buttons refuse it:
+     peacekeeping, development, human rights, arms control, champion and undermine. The
+     monthly check ends any it was running, as their stop buttons would.
 
    A suspended member keeps its standing record and its ratified conventions. It can still
    leave.
@@ -188,7 +195,9 @@ economy changes. The rule is about who speaks for it abroad.
      representation too.
 9. **Transitions are announced once.** The journal entry's monthly pulse keeps a marker,
    `var:un_rep_suspended`. On a change it posts `un_representation_suspended_notice` or
-   `un_representation_restored_notice`, strips a permanent seat, and removes `un_dues_modifier`.
+   `un_representation_restored_notice`. While a member is suspended, the check also strips any
+   permanent seat and ends its programmes; the member block of the same pulse removes
+   `un_dues_modifier`.
    There is no country-scoped on-action for a change of subject type (colony to dominion),
    so the pulse is the authoritative check. The gates do not wait for it, because the trigger
    is live.
@@ -209,6 +218,17 @@ economy changes. The rule is about who speaks for it abroad.
     heritage can now be a member itself. It then gets both the member terms and the colony's
     liberty term. That is coherent: the declaration reaches it through its overlord in either
     case. The comments that said a subject is never a member are corrected.
+14. **One chance at the conventions passed during a suspension (decided).** A suspended
+    member is not asked to ratify new conventions (ruling 3).
+    - When it is suspended, `un_rep_convention_snapshot` marks the conventions in force then
+      (`var:un_rep_had_<agency>`).
+    - When it is restored, `un_events.36` offers the conventions passed since that it is not
+      party to (`un_rep_any_convention_missed`). It can ratify them all, as a joiner would, or
+      stay outside them.
+    - Either answer forgets the snapshot, so it is asked once. A convention it refused before
+      its suspension was in force then, so it is never offered again.
+    - The convention list is `un_apply_ratified_conventions`'s, and `test_un_membership.py`
+      keeps the two in step.
 
 ### Representative cases
 
@@ -277,15 +297,13 @@ considered states at the time" ([Ask DAG, "founding members"](https://ask.un.org
   ratifications. It does not take on its overlord's. The fully consistent version, where the
   overlord's conventions bind a carried subject, is a new mechanic and was not built.
 - **Standing and authority pillars ignore suspension.** A suspended member's standing record
-  runs on. Participation, commitment and funding count every member's power share. The order
-  pillar already leaves subjects out.
+  runs on. Participation counts every member's power share. Commitment and funding read the
+  stances and programmes a suspended member no longer holds (ruling 3). The order pillar
+  already leaves subjects out.
 - **A decentralized member** (colonial collapse can make one) is suspended "because it lacks
   diplomatic autonomy", which is loose wording for a country without a state apparatus.
-- **Conventions passed during a suspension do not reach the member when it is restored.** It
-  is not asked to ratify them while suspended (ruling 3), and restoration does not catch up
-  the way joining does (`un_apply_ratified_conventions`). Catching up would override refusals
-  it made before its suspension; how a restored member should meet conventions it missed is
-  an open question for the owner.
+- **The restoration offer is all or nothing.** `un_events.36` ratifies every missed convention
+  or none; a member cannot pick among them.
 - **Restated numbers:** the bonus list in `UN_JOIN_DESC`, and the eligible subject types in the
   join tooltip and the concept.
 
@@ -315,7 +333,20 @@ along: puppet, then protectorate, then independent.
    members on the roll, and says why.
 8. **Annex a member** (`annex` in the console): the line's N and M both drop by one, and the
    annexer's votes and modifiers are unchanged.
-9. **`error.log` / `debug.log`:** nothing from `un_rep_suspended`, `un_dues_assessed_gdp` or
+9. **Programmes.** Puppet a member (option v) and `tag` to it with the console. Its six
+   programme and stance start buttons are greyed with the suspension reason. At the next month,
+   any programme or stance it was running (for example UN Human Rights Champion or UN Arms
+   Control Participant) is gone from its modifiers.
+10. **Conventions in our absence.**
+    - Puppet a member (option v).
+    - While it is suspended, bring a convention into force. Option q sets up the International
+      Criminal Court, if it is not in force yet.
+    - Promote the puppet to a protectorate (option v).
+    - At the next month the member gets `un_events.36`, with the ICC modifier under Ratify. To
+      see it yourself, `tag` to the member before the month turns.
+    - Once it is answered, the member carries the modifier if it ratified (the AI usually
+      does), and the event does not come back.
+11. **`error.log` / `debug.log`:** nothing from `un_rep_suspended`, `un_dues_assessed_gdp` or
    the new triggers.
 
 ---

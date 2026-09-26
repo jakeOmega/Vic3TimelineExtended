@@ -82,3 +82,36 @@ un_member_draws_benefits = {
 		un_seat_carried = yes
 	}
 }
+
+# ---- Conventions passed during a suspension (§0.8 ruling 14) -------------------
+
+# A convention in force now that was not in force when our representation was
+# suspended (var:un_rep_had_<agency>, un_rep_convention_snapshot), and that we
+# are not party to. A convention we refused before our suspension was in force
+# then, so it never counts.
+# Parameters: $AGENCY$ (the un_agency_* suffix), $MODIFIER$ (the convention's
+# member modifier; JE- or country-scoped, so both are asked)
+# Scope: country
+un_rep_convention_missed = {
+	has_global_variable = un_agency_$AGENCY$
+	NOT = { has_variable = un_rep_had_$AGENCY$ }
+	NOT = { je:je_united_nations ?= { has_modifier = $MODIFIER$ } }
+	NOT = { has_modifier = $MODIFIER$ }
+}
+
+# Any convention missed. The list is un_apply_ratified_conventions's
+# (un_vote_effects.txt); test_un_membership.py keeps the two in step.
+# Scope: country
+un_rep_any_convention_missed = {
+	OR = {
+		un_rep_convention_missed = { AGENCY = unhrc MODIFIER = un_human_rights_declaration_modifier }
+		un_rep_convention_missed = { AGENCY = iaea MODIFIER = un_nonproliferation_modifier }
+		un_rep_convention_missed = { AGENCY = unep MODIFIER = un_climate_binding_modifier }
+		un_rep_convention_missed = { AGENCY = unesco MODIFIER = un_heritage_program_modifier }
+		un_rep_convention_missed = { AGENCY = who MODIFIER = un_pandemic_cooperation_modifier }
+		un_rep_convention_missed = { AGENCY = unhcr MODIFIER = un_refugee_program_modifier }
+		un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier }
+		un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier }
+		un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier }
+	}
+}

@@ -647,7 +647,7 @@
  notification_un_representation_restored_notice_desc:0 "We conduct our own foreign policy again, so our delegation takes its seat in the General Assembly once more. We vote, table resolutions and pay our own dues."
  notification_un_representation_restored_notice_name:0 "Our UN Representation Is Restored"
  notification_un_representation_restored_notice_tooltip:0 "#header $notification_un_representation_restored_notice_name$#!\n$notification_un_representation_restored_notice_desc$"
- notification_un_representation_suspended_notice_desc:0 "We no longer conduct our own foreign policy, so our seat in the United Nations is suspended. We remain a member, but we cast no vote and table no resolution. While our overlord sits in the Assembly and pays its dues, it pays ours and we keep the benefits of membership."
+ notification_un_representation_suspended_notice_desc:0 "We no longer conduct our own foreign policy, so our seat in the United Nations is suspended. We remain a member, but we cast no vote and table no resolution; any permanent seat, the headquarters and our UN programmes are given up. While our overlord sits in the Assembly and pays its dues, it pays ours and we keep the benefits of membership."
  notification_un_representation_suspended_notice_name:0 "Our UN Representation Is Suspended"
  notification_un_representation_suspended_notice_tooltip:0 "#header $notification_un_representation_suspended_notice_name$#!\n$notification_un_representation_suspended_notice_desc$"
  notification_un_tariff_retaliation_received_desc:0 "A rival has imposed unilateral tariffs on our trade. Our merchants are scrambling to find alternative markets."
