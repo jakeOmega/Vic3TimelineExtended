@@ -10,6 +10,22 @@ sr_is_pursuing_milestone = {
 	has_variable = sr_active_milestone
 }
 
+# The country has run a milestone, so it may hold space-race state to repair:
+# the gate of the monthly sync (space_race_on_actions.txt). A cheap test that
+# no such country fails:
+# - suborbital, the first milestone, runs with sr_active_suborbital set;
+# - every other entry's `possible` needs a sr_completed_<m> that needs
+#   sr_completed_suborbital before it, and nothing removes sr_completed_<m>;
+# - the probe result and the colony records exist only at the end of that chain.
+# Both are variables, so a revolution's winner inherits them together with the
+# records the sync rebuilds from.
+sr_space_race_participant = {
+	OR = {
+		has_variable = sr_active_suborbital
+		has_variable = sr_completed_suborbital
+	}
+}
+
 # AI participation gate: only the top ~3 countries by prestige should pursue space race
 # Players can always participate regardless
 sr_ai_should_participate = {
@@ -123,6 +139,50 @@ sr_solar_colonization_running = {
 sr_has_space_colony = {
 	has_variable = sr_colony_count
 	var:sr_colony_count > 0
+}
+
+# The milestone's choice event has been answered: the answer is one of these
+# country variables, set by the option (space_race_events.80 / .5 / .81 / .82 /
+# .83). The entry's `immediate` asks the question only while none is set, and
+# the event re-checks when it fires. `immediate` runs again when the entry
+# re-activates and on an entry a revolution's winner inherits (the variables
+# merge in), and the answer stands in both cases: sr_sync_<m>_entry puts its
+# modifier back instead (common/scripted_effects/space_race_effects.txt).
+sr_orbital_choice_made = {
+	OR = {
+		has_variable = sr_orbital_civilian
+		has_variable = sr_orbital_military
+		has_variable = sr_orbital_scientist
+	}
+}
+sr_moon_landing_choice_made = {
+	OR = {
+		has_variable = sr_moon_site_shackleton
+		has_variable = sr_moon_site_equatorial
+		has_variable = sr_moon_site_tranquility
+		has_variable = sr_moon_site_far_side
+	}
+}
+sr_probe_choice_made = {
+	OR = {
+		has_variable = sr_probe_target_venus
+		has_variable = sr_probe_target_mars
+		has_variable = sr_probe_target_asteroid
+	}
+}
+sr_moon_base_choice_made = {
+	OR = {
+		has_variable = sr_moon_base_scientific
+		has_variable = sr_moon_base_industrial
+		has_variable = sr_moon_base_military
+	}
+}
+sr_mars_landing_choice_made = {
+	OR = {
+		has_variable = sr_mars_direct
+		has_variable = sr_mars_orbital_first
+		has_variable = sr_mars_robotic
+	}
 }
 
 # Failure-event themes, keyed on the milestone that failed

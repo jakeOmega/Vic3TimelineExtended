@@ -101,11 +101,21 @@ un_security_council_count = {
 	}
 }
 
-# Number of permanent-seat holders right now (cap is 5)
+# Number of permanent-seat holders right now (cap is 5). A holder is counted by
+# the modifier or by its mirror (§0.9, un_state_effects.txt): a revolution's
+# winner holds only the mirror until its journal entry is rebuilt, and
+# un_seat_monthly_update, which may run first, must not give its seat away. The
+# dead loser, which keeps its modifiers until it is deleted, is not counted.
 un_permanent_seat_count = {
 	value = 0
 	every_country = {
-		limit = { je:je_united_nations ?= { has_modifier = un_permanent_member_modifier } }
+		limit = {
+			is_country_alive = yes
+			OR = {
+				je:je_united_nations ?= { has_modifier = un_permanent_member_modifier }
+				has_variable = un_permanent_member_modifier_on
+			}
+		}
 		add = 1
 	}
 }

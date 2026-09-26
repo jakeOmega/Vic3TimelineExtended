@@ -352,7 +352,9 @@ space_race_events.5 = {
 
 	duration = 3
 
-	trigger = { }
+	# Once per milestone. `immediate` asks only while unanswered; this re-check
+	# covers a second question queued before the first was answered.
+	trigger = { NOT = { sr_moon_landing_choice_made = yes } }
 	immediate = { }
 
 	# Shackleton Crater - polar ice, science + progress
@@ -4254,7 +4256,9 @@ space_race_events.80 = {
 
 	duration = 3
 
-	trigger = { }
+	# Once per milestone. `immediate` asks only while unanswered; this re-check
+	# covers a second question queued before the first was answered.
+	trigger = { NOT = { sr_orbital_choice_made = yes } }
 	immediate = { }
 
 	# Civilian astronaut - prestige and soft power
@@ -4322,7 +4326,9 @@ space_race_events.81 = {
 
 	duration = 3
 
-	trigger = { }
+	# Once per milestone. `immediate` asks only while unanswered; this re-check
+	# covers a second question queued before the first was answered.
+	trigger = { NOT = { sr_probe_choice_made = yes } }
 	immediate = { }
 
 	# Venus - atmospheric science
@@ -4386,7 +4392,9 @@ space_race_events.82 = {
 
 	duration = 3
 
-	trigger = { }
+	# Once per milestone. `immediate` asks only while unanswered; this re-check
+	# covers a second question queued before the first was answered.
+	trigger = { NOT = { sr_moon_base_choice_made = yes } }
 	immediate = { }
 
 	# Scientific research station
@@ -4453,7 +4461,9 @@ space_race_events.83 = {
 
 	duration = 3
 
-	trigger = { }
+	# Once per milestone. `immediate` asks only while unanswered; this re-check
+	# covers a second question queued before the first was answered.
+	trigger = { NOT = { sr_mars_landing_choice_made = yes } }
 	immediate = { }
 
 	# Direct landing - bold and prestigious

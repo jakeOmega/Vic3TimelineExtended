@@ -3099,11 +3099,14 @@ te_unused_mandate_reserve_on_action = {
 	}
 }
 
-# --- Agricultural diffusion: backfill for newly-formed countries -----------
+# --- Agricultural diffusion: backfill for new countries --------------------
 # The agdiff broadcast in agricultural_diffusion_effects.txt only reaches
 # countries that exist at the moment of first research. Decolonized 1960+
 # African states, formables, and released subjects are exactly the cohort
-# the issue is about, so we have to catch them on creation.
+# the issue is about, so we have to catch them on creation. Civil wars are
+# handled from the shared hooks in te_civil_war_on_actions.txt
+# (agdiff_on_uprising, agdiff_repair_after_civil_war). Hook list: the
+# backfill's header in agricultural_diffusion_effects.txt.
 on_country_formed = {
 	on_actions = {
 		agdiff_backfill_on_country_formed
@@ -3128,7 +3131,8 @@ te_bespoke_formation_dispatcher = {
 	}
 }
 
-# scope:target = newly released country (per vanilla 00_code_on_actions.txt)
+# Root = Releasing Country
+# scope:target = Released Country (vanilla 00_code_on_actions.txt:3634-3840)
 on_country_released_as_independent = {
 	on_actions = {
 		agdiff_backfill_on_released_country
@@ -3141,15 +3145,30 @@ on_country_released_as_own_subject = {
 	}
 }
 
+on_country_released_as_overlord_subject = {
+	on_actions = {
+		agdiff_backfill_on_released_country
+	}
+}
+
+on_country_released_as_company_subject = {
+	on_actions = {
+		agdiff_backfill_on_released_country
+	}
+}
+
 agdiff_backfill_on_country_formed = {
 	effect = {
 		agdiff_backfill_diffusion_for_country = yes
 	}
 }
 
+# Shared by the four release hooks: the new country is scope:target and ROOT
+# is its parent. The backfill has no multiplier and reads no ROOT, so it runs
+# in place; no dispatch is needed.
 agdiff_backfill_on_released_country = {
 	effect = {
-		scope:target = {
+		scope:target ?= {
 			agdiff_backfill_diffusion_for_country = yes
 		}
 	}

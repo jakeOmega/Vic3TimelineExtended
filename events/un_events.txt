@@ -68,6 +68,8 @@ un_events.1 = {
 		# founded or refounded
 		NOT = { has_variable = un_charter_signed }
 		NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+		# A revolution's winner awaiting its rebuild is a member (§0.9).
+		NOT = { has_variable = un_member_modifier_on }
 		un_membership_eligible = yes
 	}
 
@@ -93,7 +95,7 @@ un_events.1 = {
 		if = {
 			limit = { NOT = { has_global_variable = un_hq_country } }
 			set_global_variable = { name = un_hq_country value = ROOT }
-			je:je_united_nations ?= { add_modifier = { name = un_headquarters_modifier } }
+			un_state_on = { MODIFIER = un_headquarters_modifier }
 		}
 		# Signing seats nobody. The charter goes to every country at once and
 		# the AI answers the moment it arrives, so seats given to the first
@@ -101,9 +103,9 @@ un_events.1 = {
 		# stands for a permanent seat, filled by prestige when the signing
 		# period closes (un_seat_effects.txt); the tooltip says so.
 		un_seat_join_tooltip = yes
-		je:je_united_nations ?= { add_modifier = { name = un_member_modifier } }
+		un_state_on = { MODIFIER = un_member_modifier }
 		je:je_united_nations ?= { add_modifier = { name = un_member_privileges_modifier } }
-		je:je_united_nations ?= { add_modifier = { name = un_founding_member_modifier } }
+		un_state_on = { MODIFIER = un_founding_member_modifier }
 		# No conventions are ratified at UN founding, so this is a no-op today;
 		# kept for symmetry with the other join paths in case the founding event
 		# is ever fired after conventions exist (alternate timeline starts, etc.).
@@ -1448,6 +1450,8 @@ un_events.10 = {
 		name = un_events.10.e
 		trigger = {
 			NOT = { je:je_united_nations ?= { has_modifier = un_member_modifier } }
+			# A revolution's winner awaiting its rebuild is a member (§0.9).
+			NOT = { has_variable = un_member_modifier_on }
 			has_global_variable = un_founded
 			un_membership_eligible = yes
 			NOT = { has_modifier = un_expelled_cooldown }
@@ -3614,40 +3618,40 @@ un_events.36 = {
 		}
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = unhrc MODIFIER = un_human_rights_declaration_modifier } }
-			je:je_united_nations ?= { add_modifier = { name = un_human_rights_declaration_modifier multiplier = un_convention_multiplier } }
+			un_convention_on = { MODIFIER = un_human_rights_declaration_modifier }
 		}
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = iaea MODIFIER = un_nonproliferation_modifier } }
-			je:je_united_nations ?= { add_modifier = { name = un_nonproliferation_modifier multiplier = un_convention_multiplier } }
+			un_convention_on = { MODIFIER = un_nonproliferation_modifier }
 		}
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = unep MODIFIER = un_climate_binding_modifier } }
-			je:je_united_nations ?= { add_modifier = { name = un_climate_binding_modifier multiplier = un_convention_multiplier } }
+			un_convention_on = { MODIFIER = un_climate_binding_modifier }
 		}
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = unesco MODIFIER = un_heritage_program_modifier } }
-			je:je_united_nations ?= { add_modifier = { name = un_heritage_program_modifier multiplier = un_convention_multiplier } }
+			un_convention_on = { MODIFIER = un_heritage_program_modifier }
 		}
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = who MODIFIER = un_pandemic_cooperation_modifier } }
-			je:je_united_nations ?= { add_modifier = { name = un_pandemic_cooperation_modifier multiplier = un_convention_multiplier } }
+			un_convention_on = { MODIFIER = un_pandemic_cooperation_modifier }
 		}
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = unhcr MODIFIER = un_refugee_program_modifier } }
-			je:je_united_nations ?= { add_modifier = { name = un_refugee_program_modifier multiplier = un_convention_multiplier } }
+			un_convention_on = { MODIFIER = un_refugee_program_modifier }
 		}
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = unoosa MODIFIER = un_space_partnership_modifier } }
-			je:je_united_nations ?= { add_modifier = { name = un_space_partnership_modifier multiplier = un_convention_multiplier } }
+			un_convention_on = { MODIFIER = un_space_partnership_modifier }
 		}
 		# The two country-scoped conventions, as un_apply_ratified_conventions has them.
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = itlos MODIFIER = un_law_of_sea_modifier } }
-			add_modifier = { name = un_law_of_sea_modifier multiplier = un_convention_multiplier }
+			un_convention_country_on = { MODIFIER = un_law_of_sea_modifier }
 		}
 		if = {
 			limit = { un_rep_convention_missed = { AGENCY = icc MODIFIER = un_icc_member_modifier } }
-			add_modifier = { name = un_icc_member_modifier multiplier = un_convention_multiplier }
+			un_convention_country_on = { MODIFIER = un_icc_member_modifier }
 		}
 		# Our terms under the regimes now in force, as a joiner's.
 		un_regime_refresh_country = yes

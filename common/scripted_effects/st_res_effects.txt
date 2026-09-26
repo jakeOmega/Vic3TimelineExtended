@@ -578,7 +578,7 @@ st_res_weekly_update_effect = {
 st_res_je_immediate_effect = {
 	st_res_init_effect = yes
 	st_res_ai_seed_policies_effect = yes
-	st_res_refresh_hub_flow_effect = yes
+	st_res_refresh_hub_flow_effect = yes # REVIEWED 2026-09-26: rate caches, sell profit and status labels, recomputed from the stockpiles and rates, which it leaves alone
 	st_res_clamp_stockpiles_effect = yes
 }
 

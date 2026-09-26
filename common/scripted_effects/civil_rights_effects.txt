@@ -18,8 +18,8 @@ save_civil_rights_movement_scope = {
 # trackers might not exist when on_fail fires. Saves (2026-09-25) showed that immediate
 # does run again on an inherited entry, and the winner receives the loser's cr_* variables
 # too (scripting_best_practices.md § "What a Civil War's Winner Inherits"). The init is now
-# belt-and-braces, and harmless. The open problem is the reverse: a movement the loser had
-# already completed starts over on the winner (docs/audits/civil_war_inheritance_audit.md F4).
+# belt-and-braces, and harmless. What a winner keeps is handled by the revolution
+# continuity block at the foot of this file.
 cr_ensure_tracker_vars_effect = {
 	if = { limit = { NOT = { has_variable = cr_grassroots_months } }
 		set_variable = { name = cr_grassroots_months value = 0 } }
@@ -39,8 +39,15 @@ cr_ensure_tracker_vars_effect = {
 # scripted buttons (or on_monthly_pulse) may have attached. The six path
 # modifiers are mutex-by-button but a single playthrough may have run
 # through several (e.g. start grassroots, switch to suppression), so all
-# six are checked every time. cr_cooptation_expired is the timed
-# bar-suppression marker applied at 12 months of cooptation.
+# six are checked every time. cr_cooptation_expired is the
+# bar-suppression marker (no duration) applied at 12 months of cooptation.
+#
+# It also ends the run: the six cr_policy_* mirrors go with their modifiers, and
+# cr_run_in_progress is removed so that the next activation (after on_invalid;
+# on_complete / on_fail also set civil_rights_resolved, which blocks one) starts
+# with zeroed counters. The cr_*_months counters themselves are left in place:
+# the resolution events read them after on_complete / on_fail has fired them
+# (movement_events_te.100's desc reads cr_suppression_months).
 #
 # Called from je_civil_rights's on_complete, on_fail, on_invalid. Each removal
 # is guarded: remove_modifier on a modifier the country does not hold is not a
@@ -53,4 +60,399 @@ cr_je_cleanup_effect = {
 	remove_modifier_if_exists_effect = { MODIFIER = cr_suppression_modifier }
 	remove_modifier_if_exists_effect = { MODIFIER = cr_segregationist_modifier }
 	remove_modifier_if_exists_effect = { MODIFIER = cr_cooptation_expired }
+	if = { limit = { has_variable = cr_policy_grassroots } remove_variable = cr_policy_grassroots }
+	if = { limit = { has_variable = cr_policy_federal } remove_variable = cr_policy_federal }
+	if = { limit = { has_variable = cr_policy_gradualist } remove_variable = cr_policy_gradualist }
+	if = { limit = { has_variable = cr_policy_cooptation } remove_variable = cr_policy_cooptation }
+	if = { limit = { has_variable = cr_policy_suppression } remove_variable = cr_policy_suppression }
+	if = { limit = { has_variable = cr_policy_segregationist } remove_variable = cr_policy_segregationist }
+	if = { limit = { has_variable = cr_run_in_progress } remove_variable = cr_run_in_progress }
+}
+
+# ============================================================================
+# REVOLUTION CONTINUITY (issue #463)
+# The winner of a revolution continues the nation (owner ruling, 2026-09-26): it
+# keeps the civil-rights outcome the loser reached, and a struggle still in
+# progress carries on where it was. The engine merges the loser's variables into
+# the winner but drops every modifier and forgets completed journal entries
+# (scripting_best_practices.md § "What a Civil War's Winner Inherits"; audit F4),
+# so this system's state lives in variables and its modifiers are rebuilt from them:
+#
+#   civil_rights_resolved   set by je_civil_rights's on_complete and on_fail and
+#                           never removed. The entry's is_shown_when_inactive and
+#                           possible require its absence, so a winner, which gets
+#                           a fresh record, does not start the struggle over. In
+#                           normal play it changes nothing: a completed or failed
+#                           record is never re-activated (vanilla je_kaiserforum
+#                           relies on that; nothing stops its possible afterwards).
+#                           on_invalid does not set it: nothing was won or lost.
+#   cr_run_in_progress      set by immediate when a run starts, removed by
+#                           cr_je_cleanup_effect when it ends. An inherited active
+#                           entry re-runs immediate after the merge; the marker
+#                           tells it not to zero the counters.
+#   cr_policy_<path>        mirrors of the six button modifiers (set and removed by
+#                           the buttons in civil_rights_buttons.txt, removed by
+#                           cr_je_cleanup_effect).
+#   cr_outcome_<modifier>   the outcome modifier a resolution event granted
+#                           (cr_record_outcome_modifier, in the event option), and
+#   cr_outcome_months       the months since (0-120; counted by
+#                           cr_outcome_monthly_update).
+#
+# Which side won comes from the shared civil-war layer (#467,
+# common/scripted_effects/te_civil_war_effects.txt): te_civil_war_on_won calls
+# cr_repair_after_civil_war (ROOT = THIS = the winner, after the merge) between
+# te_civil_war_resolve_sides and te_civil_war_clear. When the revolutionaries won
+# it rebuilds (cr_rebuild_after_civil_war; every add is also guarded by the
+# modifier being absent). When the original government won, it keeps its own
+# modifiers, and what it inherited from the rebels' own struggle is dropped
+# instead (cr_drop_rebel_run_state).
+# ============================================================================
+
+# Resolution event option: record the outcome modifier the option has just added
+# (with days = long_modifier_time and is_decaying = yes; every call sits directly
+# after that add_modifier, test_civil_rights_inheritance.py checks the pairing).
+# $MODIFIER$ must also be listed in cr_rebuild_outcome_modifiers,
+# cr_forget_outcome_modifiers and the lapse checks in cr_outcome_monthly_update.
+cr_record_outcome_modifier = {
+	set_variable = cr_outcome_$MODIFIER$
+	set_variable = { name = cr_outcome_months value = 0 }
+}
+
+# Re-adds $MODIFIER$ as it stood on the loser: for the years it had left, at the
+# strength its linear decay had reached (years left / 10), so it still runs out on
+# the day the original would have. The whole years left (rounded to the nearest)
+# are read off a ladder of constant durations because neither vanilla nor this mod
+# ever feeds a computed value to add_modifier's days =, and a wrong guess there
+# would fail silently. Under six months left the reward has as good as expired and
+# is not re-added.
+cr_rebuild_outcome_modifier = {
+	if = {
+		limit = {
+			has_variable = cr_outcome_$MODIFIER$
+			has_variable = cr_outcome_months
+			NOT = { has_modifier = $MODIFIER$ }
+		}
+		if = {
+			limit = { var:cr_outcome_months < 6 }
+			add_modifier = { name = $MODIFIER$ days = 3650 multiplier = 1 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:cr_outcome_months < 18 }
+			add_modifier = { name = $MODIFIER$ days = 3285 multiplier = 0.9 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:cr_outcome_months < 30 }
+			add_modifier = { name = $MODIFIER$ days = 2920 multiplier = 0.8 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:cr_outcome_months < 42 }
+			add_modifier = { name = $MODIFIER$ days = 2555 multiplier = 0.7 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:cr_outcome_months < 54 }
+			add_modifier = { name = $MODIFIER$ days = 2190 multiplier = 0.6 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:cr_outcome_months < 66 }
+			add_modifier = { name = $MODIFIER$ days = 1825 multiplier = 0.5 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:cr_outcome_months < 78 }
+			add_modifier = { name = $MODIFIER$ days = 1460 multiplier = 0.4 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:cr_outcome_months < 90 }
+			add_modifier = { name = $MODIFIER$ days = 1095 multiplier = 0.3 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:cr_outcome_months < 102 }
+			add_modifier = { name = $MODIFIER$ days = 730 multiplier = 0.2 is_decaying = yes }
+		}
+		else_if = {
+			limit = { var:cr_outcome_months < 114 }
+			add_modifier = { name = $MODIFIER$ days = 365 multiplier = 0.1 is_decaying = yes }
+		}
+	}
+}
+
+# Every outcome modifier a je_civil_rights resolution event can grant: the five
+# victories (.200, .220-.223), the hollow victory (.240, both options) and the
+# oppressive aftermath (.100, five options). The other failure events (.230-.232)
+# add only radicals, which live on the pops and need no rebuild.
+cr_rebuild_outcome_modifiers = {
+	cr_rebuild_outcome_modifier = { MODIFIER = civil_rights_triumph_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = civil_rights_triumph_federal_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = civil_rights_triumph_grassroots_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = civil_rights_triumph_gradualist_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = civil_rights_triumph_coopted_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = civil_rights_hollow_victory_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = civil_disobedience_crackdown_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = movement_crushed_order_restored_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = movement_crushed_assimilation_drive_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = movement_crushed_segregation_enforced_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = movement_crushed_political_suppression_modifier }
+	cr_rebuild_outcome_modifier = { MODIFIER = movement_crushed_expulsion_modifier }
+}
+
+# The outcome modifier has run its ten years: nothing is left to rebuild.
+# civil_rights_resolved stays.
+cr_forget_outcome_modifiers = {
+	if = { limit = { has_variable = cr_outcome_civil_rights_triumph_modifier } remove_variable = cr_outcome_civil_rights_triumph_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_rights_triumph_federal_modifier } remove_variable = cr_outcome_civil_rights_triumph_federal_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_rights_triumph_grassroots_modifier } remove_variable = cr_outcome_civil_rights_triumph_grassroots_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_rights_triumph_gradualist_modifier } remove_variable = cr_outcome_civil_rights_triumph_gradualist_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_rights_triumph_coopted_modifier } remove_variable = cr_outcome_civil_rights_triumph_coopted_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_rights_hollow_victory_modifier } remove_variable = cr_outcome_civil_rights_hollow_victory_modifier }
+	if = { limit = { has_variable = cr_outcome_civil_disobedience_crackdown_modifier } remove_variable = cr_outcome_civil_disobedience_crackdown_modifier }
+	if = { limit = { has_variable = cr_outcome_movement_crushed_order_restored_modifier } remove_variable = cr_outcome_movement_crushed_order_restored_modifier }
+	if = { limit = { has_variable = cr_outcome_movement_crushed_assimilation_drive_modifier } remove_variable = cr_outcome_movement_crushed_assimilation_drive_modifier }
+	if = { limit = { has_variable = cr_outcome_movement_crushed_segregation_enforced_modifier } remove_variable = cr_outcome_movement_crushed_segregation_enforced_modifier }
+	if = { limit = { has_variable = cr_outcome_movement_crushed_political_suppression_modifier } remove_variable = cr_outcome_movement_crushed_political_suppression_modifier }
+	if = { limit = { has_variable = cr_outcome_movement_crushed_expulsion_modifier } remove_variable = cr_outcome_movement_crushed_expulsion_modifier }
+	if = { limit = { has_variable = cr_outcome_months } remove_variable = cr_outcome_months }
+}
+
+# The recorded outcome $MODIFIER$ is no longer running: forget the record (see
+# cr_outcome_monthly_update, the only caller; it must stay in a monthly pulse).
+cr_forget_lapsed_outcome = {
+	if = {
+		limit = {
+			has_variable = cr_outcome_$MODIFIER$
+			NOT = { has_modifier = $MODIFIER$ }
+		}
+		cr_forget_outcome_modifiers = yes
+	}
+}
+
+# Save migration: a country that resolved the struggle before #463 has the outcome
+# modifier running but none of the variables above.
+cr_migrate_outcome_modifier = {
+	if = {
+		limit = { has_modifier = $MODIFIER$ }
+		set_variable = cr_outcome_$MODIFIER$
+	}
+}
+
+# Country scope, every month (civil_rights_country_monthly_on_action).
+cr_outcome_monthly_update = {
+	# Save migration, once per country. Only modifiers that nothing but a
+	# resolution event grants are read: civil_disobedience_crackdown_modifier is
+	# also a mid-struggle event's (.16), so a hollow victory's option B (and any
+	# failure through .230-.232, or a reward that has already expired) cannot be
+	# recognised, and such a country stays unguarded. New play never takes this
+	# branch: on_complete / on_fail set civil_rights_resolved before the event
+	# option adds the modifier.
+	if = {
+		limit = {
+			has_technology_researched = civil_rights_movement
+			NOT = { has_variable = civil_rights_resolved }
+			OR = {
+				has_modifier = civil_rights_triumph_modifier
+				has_modifier = civil_rights_triumph_federal_modifier
+				has_modifier = civil_rights_triumph_grassroots_modifier
+				has_modifier = civil_rights_triumph_gradualist_modifier
+				has_modifier = civil_rights_triumph_coopted_modifier
+				has_modifier = civil_rights_hollow_victory_modifier
+				has_modifier = movement_crushed_order_restored_modifier
+				has_modifier = movement_crushed_assimilation_drive_modifier
+				has_modifier = movement_crushed_segregation_enforced_modifier
+				has_modifier = movement_crushed_political_suppression_modifier
+				has_modifier = movement_crushed_expulsion_modifier
+			}
+		}
+		set_variable = civil_rights_resolved
+		cr_migrate_outcome_modifier = { MODIFIER = civil_rights_triumph_modifier }
+		cr_migrate_outcome_modifier = { MODIFIER = civil_rights_triumph_federal_modifier }
+		cr_migrate_outcome_modifier = { MODIFIER = civil_rights_triumph_grassroots_modifier }
+		cr_migrate_outcome_modifier = { MODIFIER = civil_rights_triumph_gradualist_modifier }
+		cr_migrate_outcome_modifier = { MODIFIER = civil_rights_triumph_coopted_modifier }
+		cr_migrate_outcome_modifier = { MODIFIER = civil_rights_hollow_victory_modifier }
+		cr_migrate_outcome_modifier = { MODIFIER = movement_crushed_order_restored_modifier }
+		cr_migrate_outcome_modifier = { MODIFIER = movement_crushed_assimilation_drive_modifier }
+		cr_migrate_outcome_modifier = { MODIFIER = movement_crushed_segregation_enforced_modifier }
+		cr_migrate_outcome_modifier = { MODIFIER = movement_crushed_political_suppression_modifier }
+		cr_migrate_outcome_modifier = { MODIFIER = movement_crushed_expulsion_modifier }
+		# How long it has been running is unknown; assume half of its ten years.
+		set_variable = { name = cr_outcome_months value = 60 }
+	}
+
+	# A record lives only as long as its modifier. Outside the tick of a civil
+	# war's merge (which on_civil_war_won repairs in the same tick, before any
+	# monthly pulse can see it), a recorded outcome without its modifier has run
+	# out: forget it, so a later revolution cannot bring it back. This is what
+	# makes the migration's 60-month guess safe: a migrated modifier older than
+	# that expires before its counter does. It also absorbs the few days between
+	# the 120-month counter and the 3650-day modifier, and drops a record whose
+	# rebuild was skipped for having under six months left.
+	cr_forget_lapsed_outcome = { MODIFIER = civil_rights_triumph_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = civil_rights_triumph_federal_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = civil_rights_triumph_grassroots_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = civil_rights_triumph_gradualist_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = civil_rights_triumph_coopted_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = civil_rights_hollow_victory_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = civil_disobedience_crackdown_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = movement_crushed_order_restored_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = movement_crushed_assimilation_drive_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = movement_crushed_segregation_enforced_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = movement_crushed_political_suppression_modifier }
+	cr_forget_lapsed_outcome = { MODIFIER = movement_crushed_expulsion_modifier }
+
+	if = {
+		limit = { has_variable = cr_outcome_months }
+		change_variable = { name = cr_outcome_months add = 1 }
+		if = {
+			limit = { var:cr_outcome_months >= 120 }
+			cr_forget_outcome_modifiers = yes
+		}
+	}
+
+	# Orphaned run state. In normal play cr_run_in_progress exists only while the
+	# entry is active (cr_je_cleanup_effect removes it at every end). Without one
+	# it came from a civil war's merge that cr_repair_after_civil_war could not
+	# place, e.g. a war begun before #467 recorded the sides (no te_cw_role) and
+	# won by a government without a struggle of its own. Clean it up so no stray
+	# policy outlives it and the next run starts fresh.
+	if = {
+		limit = {
+			has_variable = cr_run_in_progress
+			NOT = { has_journal_entry = je_civil_rights }
+		}
+		cr_je_cleanup_effect = yes
+	}
+}
+
+# One button path. The buttons keep the modifier and its mirror in step; this
+# repairs whichever half is missing: the modifier after a revolution (the winner
+# inherits the mirror but no modifiers), or the mirror on a save from before the
+# mirrors existed.
+cr_sync_policy_mirror = {
+	if = {
+		limit = {
+			has_variable = $VAR$
+			NOT = { has_modifier = $MODIFIER$ }
+		}
+		add_modifier = { name = $MODIFIER$ }
+	}
+	else_if = {
+		limit = {
+			has_modifier = $MODIFIER$
+			NOT = { has_variable = $VAR$ }
+		}
+		set_variable = $VAR$
+	}
+}
+
+# Called from on_civil_war_won and at the top of je_civil_rights's monthly pulse
+# (its safety net, since the order of on_civil_war_won against the inherited
+# entry is not known).
+cr_sync_policy_mirrors = {
+	cr_sync_policy_mirror = { MODIFIER = cr_grassroots_modifier VAR = cr_policy_grassroots }
+	cr_sync_policy_mirror = { MODIFIER = cr_federal_protection_modifier VAR = cr_policy_federal }
+	cr_sync_policy_mirror = { MODIFIER = cr_gradualist_modifier VAR = cr_policy_gradualist }
+	cr_sync_policy_mirror = { MODIFIER = cr_cooptation_modifier VAR = cr_policy_cooptation }
+	cr_sync_policy_mirror = { MODIFIER = cr_suppression_modifier VAR = cr_policy_suppression }
+	cr_sync_policy_mirror = { MODIFIER = cr_segregationist_modifier VAR = cr_policy_segregationist }
+}
+
+# te_civil_war_on_won (common/on_actions/te_civil_war_on_actions.txt): ROOT = THIS
+# = the winner, after the merge, between te_civil_war_resolve_sides and
+# te_civil_war_clear (which removes te_cw_rebels_won and te_cw_role in the same
+# tick, so nothing here may be left for a later pulse to read them).
+#
+#   te_cw_rebels_won = 1    the revolutionaries won a revolution: they continue
+#                           the nation, so rebuild what the loser held.
+#   te_cw_role = 1          the original government won: it keeps its own
+#                           modifiers; drop what it inherited from the rebels.
+#   te_cw_role = 2 (and     a seceder won as a new nation: nothing was merged
+#   te_cw_rebels_won = 0)   into it, so there is nothing to repair.
+#   no te_cw_role           a war begun before #467 recorded the sides, or a
+#                           seceder whose role on_secession_end already removed:
+#                           the guarded rebuild. It is a no-op unless foreign
+#                           state exists: every add waits for the modifier to
+#                           be absent, and rebels cannot start a struggle of
+#                           their own (is_revolutionary = no in
+#                           is_shown_when_inactive).
+cr_repair_after_civil_war = {
+	if = {
+		limit = {
+			has_variable = te_cw_rebels_won
+			var:te_cw_rebels_won = 1
+		}
+		cr_rebuild_after_civil_war = yes
+	}
+	else_if = {
+		limit = {
+			has_variable = te_cw_role
+			var:te_cw_role = 1
+		}
+		cr_drop_rebel_run_state = yes
+	}
+	else_if = {
+		limit = { NOT = { has_variable = te_cw_role } }
+		cr_rebuild_after_civil_war = yes
+	}
+}
+
+# The original government won. It keeps its own records and modifiers, but
+# inherits every variable only the rebels held. Revolutionaries cannot start a
+# struggle of their own (is_revolutionary = no), but secessionists can, and a
+# war begun before that check may have let rebels start one. A policy mirror with no modifier behind it is the rebels', and
+# the pulse's self-heal would otherwise turn it into a policy; a run marker with
+# no active entry is theirs too, and would make the loyalists' next run skip its
+# reset. (Rebels that *resolved* a struggle mid-war would also pass on
+# civil_rights_resolved and an outcome record; not handled, see the #463 notes.)
+cr_drop_rebel_policy_mirror = {
+	if = {
+		limit = {
+			has_variable = $VAR$
+			NOT = { has_modifier = $MODIFIER$ }
+		}
+		remove_variable = $VAR$
+	}
+}
+
+cr_drop_rebel_run_state = {
+	cr_drop_rebel_policy_mirror = { MODIFIER = cr_grassroots_modifier VAR = cr_policy_grassroots }
+	cr_drop_rebel_policy_mirror = { MODIFIER = cr_federal_protection_modifier VAR = cr_policy_federal }
+	cr_drop_rebel_policy_mirror = { MODIFIER = cr_gradualist_modifier VAR = cr_policy_gradualist }
+	cr_drop_rebel_policy_mirror = { MODIFIER = cr_cooptation_modifier VAR = cr_policy_cooptation }
+	cr_drop_rebel_policy_mirror = { MODIFIER = cr_suppression_modifier VAR = cr_policy_suppression }
+	cr_drop_rebel_policy_mirror = { MODIFIER = cr_segregationist_modifier VAR = cr_policy_segregationist }
+	if = {
+		limit = {
+			has_variable = cr_run_in_progress
+			NOT = { has_journal_entry = je_civil_rights }
+		}
+		cr_je_cleanup_effect = yes
+	}
+}
+
+# The revolutionaries won and continue the nation.
+cr_rebuild_after_civil_war = {
+	# A resolved struggle: the outcome modifier, for the time it had left.
+	cr_rebuild_outcome_modifiers = yes
+
+	# A struggle still in progress: the entry itself is inherited with its bar,
+	# and its counters survive (immediate sees cr_run_in_progress). Restore the
+	# policies the counters assume, and cooptation's expiry marker with them; the
+	# pulse would add the marker only a month later, after the bar had had a
+	# month of the cooptation push it no longer earns. Only with the entry
+	# active: if the inherited record is not in place yet when this hook runs,
+	# the entry's pulse restores the policies a month later instead.
+	if = {
+		limit = {
+			has_variable = cr_run_in_progress
+			has_journal_entry = je_civil_rights
+		}
+		cr_sync_policy_mirrors = yes
+		if = {
+			limit = {
+				has_variable = cr_policy_cooptation
+				has_variable = cr_cooptation_months
+				var:cr_cooptation_months >= 12
+				NOT = { has_modifier = cr_cooptation_expired }
+			}
+			add_modifier = { name = cr_cooptation_expired }
+		}
+	}
 }

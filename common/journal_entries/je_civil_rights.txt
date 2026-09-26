@@ -6,6 +6,17 @@
 		has_game_rule = social_movements_enabled
 		has_technology_researched = civil_rights_movement
 		NOT = { is_country_type = decentralized }
+		# Rebels do not start their own struggle mid-war (and, winning, keep a fresh
+		# outcome): vanilla's pattern for historical entries (je_the_two_spains,
+		# je_risorgimento). Here, not in possible, so it can never touch an
+		# active record, such as one a revolution's winner inherits; the winner
+		# stops being revolutionary (vanilla gates power-bloc invites, obligations
+		# and coups on it).
+		is_revolutionary = no
+		# Set by on_complete / on_fail. A revolution's winner gets a fresh record
+		# of a resolved entry; without this it would start the struggle over
+		# (civil_rights_effects.txt § REVOLUTION CONTINUITY).
+		NOT = { has_variable = civil_rights_resolved }
 		any_scope_state = {
 			is_incorporated = yes
 			any_scope_pop = {
@@ -15,6 +26,7 @@
 	}
 
 	possible = {
+		NOT = { has_variable = civil_rights_resolved }
 		has_active_civil_rights_movement = yes
 	}
 
@@ -22,7 +34,8 @@
 
 	# Player policy buttons. Pro/anti are mutually exclusive; cooptation is
 	# cross-compatible with anti buttons (the historical "coopt moderates,
-	# jail radicals" stance). Each pair toggles a country modifier; months
+	# jail radicals" stance). Each pair toggles a country modifier, mirrored in a
+	# cr_policy_* variable so a revolution's winner can have it back; months
 	# active per modifier feed the path-dependent on_complete / on_fail.
 	scripted_button = cr_grassroots_organizing
 	scripted_button = cr_remove_grassroots_organizing
@@ -44,21 +57,31 @@
 			create_political_movement = { type = movement_civil_rights }
 		}
 
-		# Tracker variable resets — JE may re-activate after a revolution, so
-		# stale months counts from a prior run would corrupt path resolution.
-		set_variable = { name = cr_grassroots_months value = 0 }
-		set_variable = { name = cr_federal_months value = 0 }
-		set_variable = { name = cr_gradualist_months value = 0 }
-		set_variable = { name = cr_cooptation_months value = 0 }
-		set_variable = { name = cr_suppression_months value = 0 }
-		set_variable = { name = cr_segregationist_months value = 0 }
-		remove_variable = cr_tier_25_seen
-		remove_variable = cr_tier_50_seen
-		remove_variable = cr_tier_75_seen
-		remove_variable = cr_tier_90_seen
+		# A fresh run starts clean: stale months counts from an earlier run (one
+		# that was invalidated) would corrupt path resolution, and the tier
+		# notices re-arm. immediate also runs again, after the variable merge,
+		# when a revolution's winner inherits this entry mid-struggle; the
+		# loser's cr_run_in_progress then says the run is not fresh, and its
+		# counters, tier flags and bar carry on. cr_je_cleanup_effect removes the
+		# marker when a run ends. The bar starts at 30 anyway (start_value); the
+		# explicit set is kept in case the engine re-uses an invalidated record.
+		if = {
+			limit = { NOT = { has_variable = cr_run_in_progress } }
+			set_variable = cr_run_in_progress
+			set_variable = { name = cr_grassroots_months value = 0 }
+			set_variable = { name = cr_federal_months value = 0 }
+			set_variable = { name = cr_gradualist_months value = 0 }
+			set_variable = { name = cr_cooptation_months value = 0 }
+			set_variable = { name = cr_suppression_months value = 0 }
+			set_variable = { name = cr_segregationist_months value = 0 }
+			if = { limit = { has_variable = cr_tier_25_seen } remove_variable = cr_tier_25_seen }
+			if = { limit = { has_variable = cr_tier_50_seen } remove_variable = cr_tier_50_seen }
+			if = { limit = { has_variable = cr_tier_75_seen } remove_variable = cr_tier_75_seen }
+			if = { limit = { has_variable = cr_tier_90_seen } remove_variable = cr_tier_90_seen }
 
-		scope:journal_entry = {
-			set_bar_progress = { name = civil_rights_support_bar value = 30 }
+			scope:journal_entry = {
+				set_bar_progress = { name = civil_rights_support_bar value = 30 }
+			}
 		}
 	}
 
@@ -122,7 +145,12 @@
 	# discriminatory laws in place, the movement's "victory" is purely on paper.
 	# Fire a separate event so an actively oppressive government doesn't get
 	# the victory-coded rewards (issue #14).
+	#
+	# civil_rights_resolved keeps this entry from starting over on a revolution's
+	# winner; the event option records which outcome modifier it granted
+	# (cr_record_outcome_modifier) so on_civil_war_won can give it back.
 	on_complete = {
+		set_variable = civil_rights_resolved
 		cr_ensure_tracker_vars_effect = yes
 		if = {
 			limit = { has_discriminatory_minority_law = yes }
@@ -178,7 +206,10 @@
 	on_invalid = {
 		# JE invalidated without victory/defeat -- still strip the path modifiers
 		# so they don't persist on the country after the political pretext for
-		# the movement disappeared.
+		# the movement disappeared. Deliberately does not set
+		# civil_rights_resolved: no outcome was reached and nothing was granted,
+		# so there is nothing to replay, and if the grievance returns the
+		# struggle may too. The cleanup ends the run, so that one starts clean.
 		cr_je_cleanup_effect = yes
 	}
 
@@ -195,6 +226,7 @@
 	# cooptation (movement demobilized by token reform), gradualist drift, and a
 	# movement that simply lost momentum with no track dominant (.232).
 	on_fail = {
+		set_variable = civil_rights_resolved
 		cr_ensure_tracker_vars_effect = yes
 		if = {
 			limit = {
@@ -225,38 +257,84 @@
 		effect = {
 			cr_ensure_tracker_vars_effect = yes
 
-			# --- Tracker increments — one variable per active button modifier ---
+			# --- Revolution continuity self-heal (civil_rights_effects.txt) ---
+			# A save from before the run marker and the policy mirrors existed
+			# gets them here; a revolution's winner that on_civil_war_won did not
+			# repair gets its policy modifiers back.
 			if = {
-				limit = { has_modifier = cr_grassroots_modifier }
+				limit = { NOT = { has_variable = cr_run_in_progress } }
+				set_variable = cr_run_in_progress
+			}
+			cr_sync_policy_mirrors = yes
+
+			# --- Tracker increments — one variable per active button policy ---
+			# The mirror counts too: a modifier the self-heal has just re-added is
+			# not visible to has_modifier until this block ends.
+			if = {
+				limit = {
+					OR = {
+						has_modifier = cr_grassroots_modifier
+						has_variable = cr_policy_grassroots
+					}
+				}
 				change_variable = { name = cr_grassroots_months add = 1 }
 			}
 			if = {
-				limit = { has_modifier = cr_federal_protection_modifier }
+				limit = {
+					OR = {
+						has_modifier = cr_federal_protection_modifier
+						has_variable = cr_policy_federal
+					}
+				}
 				change_variable = { name = cr_federal_months add = 1 }
 			}
 			if = {
-				limit = { has_modifier = cr_gradualist_modifier }
+				limit = {
+					OR = {
+						has_modifier = cr_gradualist_modifier
+						has_variable = cr_policy_gradualist
+					}
+				}
 				change_variable = { name = cr_gradualist_months add = 1 }
 			}
 			if = {
-				limit = { has_modifier = cr_cooptation_modifier }
+				limit = {
+					OR = {
+						has_modifier = cr_cooptation_modifier
+						has_variable = cr_policy_cooptation
+					}
+				}
 				change_variable = { name = cr_cooptation_months add = 1 }
 			}
 			if = {
-				limit = { has_modifier = cr_suppression_modifier }
+				limit = {
+					OR = {
+						has_modifier = cr_suppression_modifier
+						has_variable = cr_policy_suppression
+					}
+				}
 				change_variable = { name = cr_suppression_months add = 1 }
 			}
 			if = {
-				limit = { has_modifier = cr_segregationist_modifier }
+				limit = {
+					OR = {
+						has_modifier = cr_segregationist_modifier
+						has_variable = cr_policy_segregationist
+					}
+				}
 				change_variable = { name = cr_segregationist_months add = 1 }
 			}
 
 			# --- Cooptation expiry: after 12 months the bar push goes to 0 ---
 			# Re-applies cleanly each tick once expired so the marker survives
-			# the periodic phase-modifier swaps below.
+			# the periodic phase-modifier swaps below. The mirror counts, as for
+			# the counters: the self-heal above may have just re-added the policy.
 			if = {
 				limit = {
-					has_modifier = cr_cooptation_modifier
+					OR = {
+						has_modifier = cr_cooptation_modifier
+						has_variable = cr_policy_cooptation
+					}
 					var:cr_cooptation_months >= 12
 					NOT = { has_modifier = cr_cooptation_expired }
 				}
@@ -320,11 +398,14 @@
 			}
 
 			# --- Phase modifier swap (5 bands keyed to bar tier) ---
-			je:je_civil_rights = { remove_modifier = civil_rights_phase_marginal_modifier }
-			je:je_civil_rights = { remove_modifier = civil_rights_phase_growing_modifier }
-			je:je_civil_rights = { remove_modifier = civil_rights_phase_active_modifier }
-			je:je_civil_rights = { remove_modifier = civil_rights_phase_pressuring_modifier }
-			je:je_civil_rights = { remove_modifier = civil_rights_phase_imminent_modifier }
+			# Removals guarded as #469 guards country ones (those log "Timed modifier
+			# ... not found" when absent). Journal-entry removals appear silent, but
+			# four of these five run on an absent modifier every month.
+			je:je_civil_rights = { remove_modifier_if_exists_effect = { MODIFIER = civil_rights_phase_marginal_modifier } }
+			je:je_civil_rights = { remove_modifier_if_exists_effect = { MODIFIER = civil_rights_phase_growing_modifier } }
+			je:je_civil_rights = { remove_modifier_if_exists_effect = { MODIFIER = civil_rights_phase_active_modifier } }
+			je:je_civil_rights = { remove_modifier_if_exists_effect = { MODIFIER = civil_rights_phase_pressuring_modifier } }
+			je:je_civil_rights = { remove_modifier_if_exists_effect = { MODIFIER = civil_rights_phase_imminent_modifier } }
 
 			if = {
 				limit = {

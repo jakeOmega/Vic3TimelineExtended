@@ -131,7 +131,8 @@ once; `banking_stance_band_3` is an empty modifier (it had no icon until the pha
 `pm_shell_pernis_refinery`'s structural term is `workforce_scaled`, so §7.5's "−0.3" is only
 true at one building level; `cb_fx_support`'s `banking_stance_is_tight` easing weight may be
 sign-wrong — moot once phase 4 deletes the button (§15.5), so not worth fixing before then; the band swap does not self-heal if a JE's
-modifiers are lost while `te_mon_stance_band_applied` persists.
+modifiers are lost while `te_mon_stance_band_applied` persists (fixed 2026-09-26, #465: `immediate`
+zeroes the tracker, and a 0 tracker clears the family).
 
 One entry on that list is now **stale and has been struck**: "OMO's `ai_chance` has no
 recession-only term at the floor". Phase 2 rewrote those weights to §11's rule. Recession was
@@ -294,8 +295,10 @@ they belong with; the numbering is stable so earlier notes that cite "checklist 
     with no modifiers, and the country variables the winner lacked arrive with it. The
     monetary modifiers came back through `te_monetary_settle_modifier_home`, but the stance
     band stayed off, because its swap trusts the inherited `te_mon_stance_band_applied`.
-    `immediate` also re-ran, resetting the cycle to 50. These are open findings F6 and F7 in
-    `docs/audits/civil_war_inheritance_audit.md`.
+    `immediate` also re-ran, resetting the cycle to 50. These were findings F6 and F7 in
+    `docs/audits/civil_war_inheritance_audit.md`, **fixed in #465**: the cycle variables are
+    seeded only when absent, and `immediate` zeroes the band tracker so the next swap puts the
+    band back.
 12a. **Releasing a subject does not move the parent's own rate.** The six release and uprising
     hooks update `scope:target`, the new tag, and deliberately *not* ROOT, which is the parent
     and already pulses monthly. Note a great power's policy rate, release a subject, and check
@@ -764,8 +767,60 @@ still open and are inherited, not repeated.
     The cost it showed instead is that the loser's whole monetary state is discarded, not
     merged: the loyalists' 111M `te_bank_gold` vanished beside the rebels' 2.8M, 54.6 %
     hyperinflation became the rebels' 5.1 %, and the player's mandate was replaced
-    (`docs/audits/civil_war_inheritance_audit.md` F3, open). The formable-unification half
+    (`docs/audits/civil_war_inheritance_audit.md` F3). The formable-unification half
     is still open.
+    **Fixed for the rebel win (#462; owner ruling 2026-09-26: the winner continues the
+    nation).** The rebels keep their own state for the war — they need a rate to price their
+    loans — and at `on_civil_war_won` the shared civil-war layer (#467,
+    `common/on_actions/te_civil_war_on_actions.txt`) calls `te_monetary_repair_after_civil_war`,
+    which hands the winner the loser's central bank through `te_monetary_inherit_central_bank`
+    (`common/scripted_effects/te_monetary_civil_war_effects.txt`, whose header classifies every
+    contract variable). The two vaults and their hot money are
+    **added**; everything the update integrates — policy rate, inflation and its noise walk,
+    the sticky band, the neutral rate's two walks, the exchange rate, the peg, every clock and
+    cooldown, the lender-of-last-resort record, the yearly GDP caches — and the player's
+    choices (target, delegation, mandate, monetisation level, bloc-currency adoption) are
+    **taken from the loser**; the arrangements are taken and put through the discovery next
+    pulse, and third countries' pointers to the loser are repointed at the winner (F13).
+    **No `_applied` tracker is copied** — the winner's describe the winner's own modifiers,
+    and the next pulse swaps each to the copied state. The price basket is re-seeded, and
+    `te_mon_peg_suspension`, `te_mon_peg_credibility_lost` and `te_mon_lolr_reneged` are
+    re-added from their month counters — exact under six months, to the nearest half-year
+    above (the engine cannot read a modifier's remaining time, and takes only literal
+    durations). The regime is a law, so it is the winner's own. The copy runs only when the
+    layer says the revolutionaries won (`var:te_cw_rebels_won = 1`, from the end-hook pair, or
+    the rebel's `te_cw_origin` without one) and its `scope:te_cw_loser` resolves, is no longer
+    alive and reads (a canary: a rate paid of at least 0.5) — and at most once per loser: the
+    copy records the loser in `te_mon_cw_bank_taken` and refuses it thereafter, so a later
+    civil war that names the same dead loser (below) cannot add its gold again. The marker
+    goes at a monthly pulse once that loser no longer resolves. A loyalist win and a
+    secession need nothing.
+    **Concurrent wars — a known limitation.** With two revolutions at once, the first win
+    annexes the original; the second uprising fights on against the first winner. The
+    shared layer names that war's loser from the end-hook pair `on_revolution_end` reports,
+    and falls back to the rebel's `te_cw_origin`, which still names the dead original. If
+    the engine reports the second war against the first winner, both outcomes are right. If
+    it reports it against the dead original: a second uprising that wins is matched with the
+    dead original — it takes nothing (the original is gone, or its bank is refused by the
+    marker it inherits) and keeps its own fresh bank, so the nation's bank is lost as it was
+    before #462; and the first winner beating it is read as a rebel win against the dead
+    original, which the marker makes a no-op here but other repairs may not. The branch's
+    own pointer used to re-point the other uprisings at the winner; the shared layer should
+    grow that (re-point every live `te_cw_origin` naming the loser at the winner when the
+    rebels win, and take a rebel win's loser from the winner's own `te_cw_origin` before the
+    pair), rather than each system working around it.
+    **Still to watch — one revolution the rebels win.** Everything above assumes the dead but
+    not yet deleted loser can be read at `on_civil_war_won` (the loser was still in the save
+    after that hook; nobody has read it from script). Search
+    `debug.log` for `TE_CW_PROBE monetary 1/2` and `2/2`: the copy worked if line 2's winner
+    vault is line 1's winner vault plus the loser's, and line 2's inflation and mandate are the
+    loser's. `1/2` missing, with `does not resolve`, `figures read as nothing` or `still
+    alive` in its place, means the read failed (or a guard term is wrong) and the copy did not
+    run; a loyalist win logs `not a rebel win`, and a second copy from the same loser logs
+    `already taken`. The layer's own `TE_CIVIL_WAR` lines, just before, say which side won and
+    whether the loser resolves. Then read `te_debug_monetary.1` on the winner a month later — the band
+    modifier should match the copied inflation, and there should be exactly one. Remove the
+    `TE_CW_PROBE` lines once read.
 33. **The empty `te_inflation_band_comfort`, on roughly every tag in the world.** It is
     applied deliberately (step 6c always has exactly one thing to apply, and the modifier
     list always names the band), but an empty `modifier = { }` on ~1,400 countries is a form
@@ -3841,8 +3896,8 @@ under all three settings of the rule; everything gated on `te_mon_full_system` d
 ### 16.2 Single owner: the monthly country update
 
 New on-action on `on_monthly_pulse_country` calling `te_monetary_monthly_update`. **No new
-variable goes in `je_banking.txt`'s `immediate`** — that block resets unguarded
-(`:119-133`) and the JE is `can_revolution_inherit`. Every variable initialises behind
+variable goes in `je_banking.txt`'s `immediate`** — that block runs again on the copy of the
+entry a revolution's winner inherits (its three cycle variables are guarded since #465). Every variable initialises behind
 `has_variable`, and **none is ever removed** (`modifier_multiplier_var_audit`).
 
 Order: 0 init → 1 regime code → 2 target (mandate if delegated / AI / CBI / bank-without-JE,

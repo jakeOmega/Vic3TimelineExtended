@@ -1,6 +1,30 @@
 ﻿############################################
 # Space Race Journal Entries
 # Linear milestone competition system
+#
+# `immediate` runs again: when an entry re-activates (every milestone has
+# can_deactivate = yes), and on every entry a revolution's winner inherits,
+# after the loser's variables have merged in
+# (docs/guides/scripting_best_practices.md § "What a Civil War's Winner
+# Inherits"). So it creates only what is missing (progress, funding), puts
+# back the modifiers the new record lacks (sr_sync_<m>_entry in
+# space_race_effects.txt), and asks each choice event once per milestone
+# (sr_<m>_choice_made).
+#
+# Carrying progress into a new record keeps the progress bar right:
+# - Inherited: the new record keeps the loser's bar. Its start date, baseline
+#   and goal are copied, not evaluated again (German-revolution saves,
+#   2026-09-25: the winner's je_global_warming kept baseline 0.1 and goal 4.0
+#   with the anomaly at 1.18).
+# - Re-activated before the next monthly pulse, which clears a deactivated
+#   milestone's progress (sr_cleanup_inactive_space_race_milestones): the goal
+#   is evaluated again, as current_value + goal_add_value, with the progress
+#   in current_value. So goal_add_value subtracts the progress, which pins the
+#   goal at sr_<m>_goal, and the bar fills from there. This reads like a bug
+#   and is not (scripting_best_practices.md § "A Journal Entry's Goal Is
+#   Frozen at Activation").
+# Solar colonization's bar restarts at every colony, so it keeps its progress
+# only when it cannot deactivate: see its `immediate`.
 ############################################
 
 # ===========================================
@@ -24,6 +48,16 @@ je_space_race_suborbital = {
 		has_game_rule = space_race_enabled
 		has_technology_researched = rocketry
 		is_great_or_major_power = yes
+		# The rebels of a running revolution start no programme of their own.
+		# They hold none of the country's variables, so they would begin again
+		# from suborbital flight. If they won, their own progress and funding
+		# would beat the loser's in the variable merge, and a run the loser had
+		# already completed would reopen. Only suborbital needs this: every
+		# later entry requires a sr_completed_<m> the rebels do not hold. Not in
+		# `possible`, which an inherited running entry re-checks
+		# (can_deactivate = yes). Vanilla precedent:
+		# 02_south_american_national_identity.txt.
+		is_revolutionary = no
 	}
 
 	possible = {
@@ -36,8 +70,9 @@ je_space_race_suborbital = {
 	immediate = {
 		set_variable = { name = sr_active_suborbital value = yes }
 		set_variable = { name = sr_active_milestone value = yes }
-		set_variable = { name = sr_progress_suborbital value = 0 }
-		set_variable = { name = sr_funding_suborbital value = 1 }
+		if = { limit = { NOT = { has_variable = sr_progress_suborbital } } set_variable = { name = sr_progress_suborbital value = 0 } }
+		if = { limit = { NOT = { has_variable = sr_funding_suborbital } } set_variable = { name = sr_funding_suborbital value = 1 } }
+		sr_sync_suborbital_entry = yes
 		sr_recalculate_cost = yes
 	}
 
@@ -50,8 +85,10 @@ je_space_race_suborbital = {
 		value = sr_progress_suborbital_value
 	}
 
+	# Pins the goal at sr_suborbital_goal: see the file header.
 	goal_add_value = {
 		value = sr_suborbital_goal
+		subtract = sr_progress_suborbital_value
 	}
 
 	progressbar = yes
@@ -159,11 +196,16 @@ je_space_race_orbital = {
 	immediate = {
 		set_variable = { name = sr_active_orbital value = yes }
 		set_variable = { name = sr_active_milestone value = yes }
-		set_variable = { name = sr_progress_orbital value = 0 }
-		set_variable = { name = sr_funding_orbital value = 1 }
+		if = { limit = { NOT = { has_variable = sr_progress_orbital } } set_variable = { name = sr_progress_orbital value = 0 } }
+		if = { limit = { NOT = { has_variable = sr_funding_orbital } } set_variable = { name = sr_funding_orbital value = 1 } }
+		sr_sync_orbital_entry = yes
 		sr_recalculate_cost = yes
-		# Fire astronaut type choice event
-		trigger_event = { id = space_race_events.80 days = 30 }
+		# The astronaut type choice, asked once per milestone
+		# (sr_orbital_choice_made, space_race_triggers.txt).
+		if = {
+			limit = { NOT = { sr_orbital_choice_made = yes } }
+			trigger_event = { id = space_race_events.80 days = 30 }
+		}
 	}
 
 	scripted_button = sr_btn_safe_orbital
@@ -175,8 +217,10 @@ je_space_race_orbital = {
 		value = sr_progress_orbital_value
 	}
 
+	# Pins the goal at sr_orbital_goal: see the file header.
 	goal_add_value = {
 		value = sr_orbital_goal
+		subtract = sr_progress_orbital_value
 	}
 
 	progressbar = yes
@@ -284,11 +328,16 @@ je_space_race_moon_landing = {
 	immediate = {
 		set_variable = { name = sr_active_moon_landing value = yes }
 		set_variable = { name = sr_active_milestone value = yes }
-		set_variable = { name = sr_progress_moon_landing value = 0 }
-		set_variable = { name = sr_funding_moon_landing value = 1 }
+		if = { limit = { NOT = { has_variable = sr_progress_moon_landing } } set_variable = { name = sr_progress_moon_landing value = 0 } }
+		if = { limit = { NOT = { has_variable = sr_funding_moon_landing } } set_variable = { name = sr_funding_moon_landing value = 1 } }
+		sr_sync_moon_landing_entry = yes
 		sr_recalculate_cost = yes
-		# Fire landing site choice event
-		trigger_event = { id = space_race_events.5 days = 30 }
+		# The landing site choice, asked once per milestone
+		# (sr_moon_landing_choice_made, space_race_triggers.txt).
+		if = {
+			limit = { NOT = { sr_moon_landing_choice_made = yes } }
+			trigger_event = { id = space_race_events.5 days = 30 }
+		}
 	}
 
 	scripted_button = sr_btn_safe_moon_landing
@@ -300,8 +349,10 @@ je_space_race_moon_landing = {
 		value = sr_progress_moon_landing_value
 	}
 
+	# Pins the goal at sr_moon_landing_goal: see the file header.
 	goal_add_value = {
 		value = sr_moon_landing_goal
+		subtract = sr_progress_moon_landing_value
 	}
 
 	progressbar = yes
@@ -410,11 +461,16 @@ je_space_race_probe = {
 	immediate = {
 		set_variable = { name = sr_active_probe value = yes }
 		set_variable = { name = sr_active_milestone value = yes }
-		set_variable = { name = sr_progress_probe value = 0 }
-		set_variable = { name = sr_funding_probe value = 1 }
+		if = { limit = { NOT = { has_variable = sr_progress_probe } } set_variable = { name = sr_progress_probe value = 0 } }
+		if = { limit = { NOT = { has_variable = sr_funding_probe } } set_variable = { name = sr_funding_probe value = 1 } }
+		sr_sync_probe_entry = yes
 		sr_recalculate_cost = yes
-		# Fire probe target choice event
-		trigger_event = { id = space_race_events.81 days = 30 }
+		# The probe target choice, asked once per milestone
+		# (sr_probe_choice_made, space_race_triggers.txt).
+		if = {
+			limit = { NOT = { sr_probe_choice_made = yes } }
+			trigger_event = { id = space_race_events.81 days = 30 }
+		}
 	}
 
 	scripted_button = sr_btn_safe_probe
@@ -426,8 +482,10 @@ je_space_race_probe = {
 		value = sr_progress_probe_value
 	}
 
+	# Pins the goal at sr_probe_goal: see the file header.
 	goal_add_value = {
 		value = sr_probe_goal
+		subtract = sr_progress_probe_value
 	}
 
 	progressbar = yes
@@ -534,11 +592,16 @@ je_space_race_moon_base = {
 	immediate = {
 		set_variable = { name = sr_active_moon_base value = yes }
 		set_variable = { name = sr_active_milestone value = yes }
-		set_variable = { name = sr_progress_moon_base value = 0 }
-		set_variable = { name = sr_funding_moon_base value = 1 }
+		if = { limit = { NOT = { has_variable = sr_progress_moon_base } } set_variable = { name = sr_progress_moon_base value = 0 } }
+		if = { limit = { NOT = { has_variable = sr_funding_moon_base } } set_variable = { name = sr_funding_moon_base value = 1 } }
+		sr_sync_moon_base_entry = yes
 		sr_recalculate_cost = yes
-		# Fire moon base purpose choice event
-		trigger_event = { id = space_race_events.82 days = 30 }
+		# The moon base purpose choice, asked once per milestone
+		# (sr_moon_base_choice_made, space_race_triggers.txt).
+		if = {
+			limit = { NOT = { sr_moon_base_choice_made = yes } }
+			trigger_event = { id = space_race_events.82 days = 30 }
+		}
 	}
 
 	scripted_button = sr_btn_safe_moon_base
@@ -550,8 +613,10 @@ je_space_race_moon_base = {
 		value = sr_progress_moon_base_value
 	}
 
+	# Pins the goal at sr_moon_base_goal: see the file header.
 	goal_add_value = {
 		value = sr_moon_base_goal
+		subtract = sr_progress_moon_base_value
 	}
 
 	progressbar = yes
@@ -660,11 +725,16 @@ je_space_race_mars_landing = {
 	immediate = {
 		set_variable = { name = sr_active_mars_landing value = yes }
 		set_variable = { name = sr_active_milestone value = yes }
-		set_variable = { name = sr_progress_mars_landing value = 0 }
-		set_variable = { name = sr_funding_mars_landing value = 1 }
+		if = { limit = { NOT = { has_variable = sr_progress_mars_landing } } set_variable = { name = sr_progress_mars_landing value = 0 } }
+		if = { limit = { NOT = { has_variable = sr_funding_mars_landing } } set_variable = { name = sr_funding_mars_landing value = 1 } }
+		sr_sync_mars_landing_entry = yes
 		sr_recalculate_cost = yes
-		# Fire Mars strategy choice event
-		trigger_event = { id = space_race_events.83 days = 30 }
+		# The Mars strategy choice, asked once per milestone
+		# (sr_mars_landing_choice_made, space_race_triggers.txt).
+		if = {
+			limit = { NOT = { sr_mars_landing_choice_made = yes } }
+			trigger_event = { id = space_race_events.83 days = 30 }
+		}
 	}
 
 	scripted_button = sr_btn_safe_mars_landing
@@ -676,8 +746,10 @@ je_space_race_mars_landing = {
 		value = sr_progress_mars_landing_value
 	}
 
+	# Pins the goal at sr_mars_landing_goal: see the file header.
 	goal_add_value = {
 		value = sr_mars_landing_goal
+		subtract = sr_progress_mars_landing_value
 	}
 
 	progressbar = yes
@@ -791,8 +863,9 @@ je_space_race_interstellar_probe = {
 	immediate = {
 		set_variable = { name = sr_active_interstellar_probe value = yes }
 		set_variable = { name = sr_active_milestone value = yes }
-		set_variable = { name = sr_progress_interstellar_probe value = 0 }
-		set_variable = { name = sr_funding_interstellar_probe value = 1 }
+		if = { limit = { NOT = { has_variable = sr_progress_interstellar_probe } } set_variable = { name = sr_progress_interstellar_probe value = 0 } }
+		if = { limit = { NOT = { has_variable = sr_funding_interstellar_probe } } set_variable = { name = sr_funding_interstellar_probe value = 1 } }
+		sr_sync_interstellar_probe_entry = yes
 		sr_recalculate_cost = yes
 	}
 
@@ -805,8 +878,10 @@ je_space_race_interstellar_probe = {
 		value = sr_progress_interstellar_probe_value
 	}
 
+	# Pins the goal at sr_interstellar_probe_goal: see the file header.
 	goal_add_value = {
 		value = sr_interstellar_probe_goal
+		subtract = sr_progress_interstellar_probe_value
 	}
 
 	progressbar = yes
@@ -913,15 +988,17 @@ je_space_race_interstellar_results = {
 
 	immediate = {
 		set_variable = { name = sr_active_interstellar_results value = yes }
-		set_variable = { name = sr_interstellar_transit_progress value = 0 }
+		if = { limit = { NOT = { has_variable = sr_interstellar_transit_progress } } set_variable = { name = sr_interstellar_transit_progress value = 0 } }
 	}
 
 	current_value = {
 		value = sr_interstellar_transit_value
 	}
 
+	# Pins the goal at 132 months: see the file header.
 	goal_add_value = {
 		value = 132
+		subtract = sr_interstellar_transit_value
 	}
 
 	progressbar = yes
@@ -1033,10 +1110,35 @@ je_space_race_solar_colonization = {
 	}
 
 	immediate = {
-		set_variable = { name = sr_active_solar_colonization value = yes }
-		set_variable = { name = sr_active_milestone value = yes }
-		set_variable = { name = sr_progress_solar_colonization value = 0 }
-		set_variable = { name = sr_funding_solar_colonization value = 1 }
+		# A finished programme stays open to hold the colony modifiers, and a
+		# revolution's winner inherits it that way. Running this block again
+		# must not re-open it: it would bill its cost until a bar fill closed
+		# it a second time, which never comes with the production method off.
+		if = {
+			limit = { NOT = { has_variable = sr_completed_solar_colonization } }
+			set_variable = { name = sr_active_solar_colonization value = yes }
+			set_variable = { name = sr_active_milestone value = yes }
+			# Progress survives only while a colony is held. Then `possible`'s
+			# first branch always holds, so the entry never deactivates, and
+			# the only re-run is a revolution's inheritance, which keeps the
+			# bar (see the file header). With no colony the entry can drop out
+			# and come back within a month, carrying its progress in as the
+			# bar's baseline; this bar restarts at every colony, so it would
+			# read negative for the rest of the game. So a colony-less
+			# programme restarts, as it always did, and a revolution costs it
+			# the progress towards its first colony.
+			if = { # REVIEWED 2026-09-26: deliberate reset of a bar input, see above
+				limit = {
+					OR = {
+						NOT = { has_variable = sr_progress_solar_colonization }
+						NOT = { sr_has_space_colony = yes }
+					}
+				}
+				set_variable = { name = sr_progress_solar_colonization value = 0 }
+			}
+			if = { limit = { NOT = { has_variable = sr_funding_solar_colonization } } set_variable = { name = sr_funding_solar_colonization value = 1 } }
+		}
+		sr_sync_solar_colonization_entry = yes
 		if = {
 			limit = { NOT = { has_global_variable = sr_colonization_stage } }
 			set_global_variable = { name = sr_colonization_stage value = 1 }

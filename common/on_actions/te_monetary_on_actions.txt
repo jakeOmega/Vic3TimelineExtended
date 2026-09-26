@@ -7,7 +7,13 @@
 # (common/scripted_effects/te_monetary_effects.txt), which is the system's
 # single owner: no other file writes te_policy_rate, te_rate_paid_pts or the
 # interest modifier, and no step of it is ever called in isolation — see
-# the contract comment on te_monetary_monthly_update.
+# the contract comment on te_monetary_monthly_update. The one exception is the
+# end of a revolution: te_monetary_repair_after_civil_war
+# (common/scripted_effects/te_monetary_civil_war_effects.txt), called from the
+# shared te_civil_war_on_won (common/on_actions/te_civil_war_on_actions.txt),
+# where the winner takes over the loser's te_policy_rate once, with the rest of
+# its central bank. That advances nothing, so the update's non-idempotence is
+# not in play.
 #
 # ROOT MATTERS AT EVERY ENTRY POINT. The update's last step applies its modifier
 # with `multiplier = var:te_rate_paid_applied`, and the engine resolves a
@@ -87,6 +93,17 @@ on_monthly_pulse_country = {
 te_monetary_monthly_on_action = {
 	effect = {
 		te_monetary_monthly_update = yes
+		# The civil-war copy's once-per-loser marker names the loser whose bank
+		# this country took (te_monetary_repair_after_civil_war says why). It
+		# goes once that object no longer resolves — the engine deleted the dead
+		# loser — because from then on no copy from it could pass the guard.
+		if = {
+			limit = {
+				has_variable = te_mon_cw_bank_taken
+				NOT = { exists = var:te_mon_cw_bank_taken }
+			}
+			remove_variable = te_mon_cw_bank_taken
+		}
 	}
 }
 
@@ -251,6 +268,22 @@ on_secession_start = {
 # parent's rate onto the newly created tag — the same class of bug as the
 # game-start one above, with a wrong number instead of a 1.0. The country event
 # re-roots on the country it fires on. See events/te_monetary_events.txt.
+#
+# AN UPRISING'S STATE IS ONLY ITS OWN UNTIL THE WAR ENDS. The rebels need a
+# rate of their own to price their loans while they fight, so they get the full
+# update — and a full monetary state — like any new tag. But when a revolution
+# ends the winner annexes the loser, and the variable merge keeps the WINNER'S
+# value wherever both hold one (scripting_best_practices.md § "What a Civil
+# War's Winner Inherits"). A rebel win therefore used to throw the nation's
+# whole central bank away and keep the rebels' fresh one: the vault, inflation,
+# the peg, the exchange rate, every clock and the player's mandate (audit F3,
+# #462). te_monetary_repair_after_civil_war now hands the winner the loser's
+# bank at the end, from the shared te_civil_war_on_won
+# (common/on_actions/te_civil_war_on_actions.txt, #467), which also decides
+# which side won; this file no longer hooks the end of a civil war itself. A
+# loyalist win needs nothing, because the original keeps its own values and
+# the rebels' only fill gaps it never had. A seceder that wins is a new nation
+# and simply keeps its own.
 te_monetary_on_country_released = {
 	effect = {
 		scope:target ?= {
@@ -384,3 +417,4 @@ te_monetary_on_country_default = {
 		}
 	}
 }
+

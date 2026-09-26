@@ -4486,6 +4486,7 @@
  te_debug_un.1.t:0 "UN Test Console"
  te_debug_un.1.u:0 "Send a UN peacekeeping mission to our most devastated state"
  te_debug_un.1.v:0 "Puppet a random minor member, or move our subject member along: puppet, protectorate, independent"
+ te_debug_un.1.w:0 "Wipe my UN journal entry as a won revolution does (modifiers gone, record kept); the next month rebuilds it"
  te_debug_un.1.z:0 "Close"
 
 #
