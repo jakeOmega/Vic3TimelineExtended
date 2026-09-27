@@ -94,11 +94,14 @@ je_nuclear_program = {
 
 	progressbar = yes
 
-	# Body single-sourced in common/scripted_triggers/nuke_triggers.txt. With
-	# can_deactivate = yes the entry drops back to inactive the moment this goes
-	# false — a disarmament settlement or the UN's NPT modifier landing on a
-	# country that is not in a crisis, before the weekly pulse can run — and the
-	# status line, which asks the same triggers, explains why.
+	# Body single-sourced in common/scripted_triggers/nuke_triggers.txt. Once
+	# the nuclear taboo exists it holds for every non-decentralized country, so
+	# the entry no longer closes when a country disarms: whatever a disarmed
+	# country must shed (posture modifiers, upkeep, the taboo's possession cost,
+	# interest-group bands) comes off because it is not armed, from the entry's
+	# own pulses. Before the first warhead (and with the rule off) can_deactivate
+	# still lets a disarmed country's entry close, and the status line explains
+	# why.
 	possible = {
 		nuclear_program_entry_applies = yes
 	}
@@ -201,7 +204,12 @@ je_nuclear_program = {
 					name = nuclear_weapon_program_progress
 					value = 0
 				}
-				remove_modifier = nuclear_power
+				# Guarded: the entry no longer closes on disarmament, so this
+				# runs every week for a disarmed country.
+				if = {
+					limit = { has_modifier = nuclear_power }
+					remove_modifier = nuclear_power
+				}
 			}
 			# Self-heal: the first-nuke branch below only grants nuclear_power
 			# on the initial build (gated on first_nuke_done = 0), so a
@@ -276,11 +284,11 @@ je_nuclear_program = {
 		}
 	}
 
-	# One line (two while armed or in a crisis). Unlike the widgets, status_desc
-	# is rendered by gui/journal_entry.gui:188 with no IsActive gate, so this is
-	# the only surface that can speak for a *deactivated* entry — the state a
-	# disarmament settlement puts it into — and for an inactive one shown to a
-	# country with the science but not the standing.
+	# The nuclear taboo first, then the programme's line (two while armed or in
+	# a crisis). Unlike the widgets, status_desc is rendered by
+	# gui/journal_entry.gui:188 with no IsActive gate, so it also speaks for an
+	# inactive entry shown before the first warhead to a country with the
+	# science but not the standing.
 	status_desc = je_nuclear_program_status_line
 
 	should_update_on_player_command = yes

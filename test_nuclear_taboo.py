@@ -15,7 +15,7 @@ import sys
 import unittest
 from pathlib import Path
 
-from test_nuclear_deterrence import block, loc_keys, read, strip_comments
+from test_nuclear_deterrence import block, loc_keys, loc_value, read, strip_comments
 
 ROOT = Path(__file__).resolve().parent
 TABOO_VALUES = ROOT / "common/script_values/nuclear_taboo_values.txt"
@@ -298,6 +298,72 @@ class TestCosts(unittest.TestCase):
         for key in ("nd_taboo_tt_strike_first_use", "nd_taboo_tt_tactical_first_use",
                     "nd_taboo_tt_strike_answer", "nd_yp_taboo_line"):
             self.assertIn(key, keys, key)
+
+
+NUKE_TRIGGERS = ROOT / "common/scripted_triggers/nuke_triggers.txt"
+PROGRAM_CUSTOM_LOC = ROOT / "common/customizable_localization/nuclear_program_custom_loc.txt"
+
+
+def enclosing_block(text, index):
+    """Name of the top-level `name = {` block that contains index."""
+    names = list(re.finditer(r"(?m)^(\w+) = \{", text[:index]))
+    return names[-1].group(1) if names else None
+
+
+class TestEveryoneActive(unittest.TestCase):
+    def setUp(self):
+        self.det = strip_comments(read(DETERRENCE_EFFECTS))
+
+    def test_entry_applies_to_everyone_once_the_taboo_exists(self):
+        body = block(strip_comments(read(NUKE_TRIGGERS)), "nuclear_program_entry_applies")
+        self.assertIn("has_global_variable = nd_taboo", body)
+        self.assertIn("NOT = { is_country_type = decentralized }", body)
+
+    def test_unarmed_cleanup_runs_from_the_entrys_own_pulses(self):
+        monthly = block(self.det, "nd_monthly_update")
+        unarmed = monthly[monthly.index("else = {"):]
+        self.assertIn("nd_apply_posture_modifiers = yes", unarmed)
+        self.assertIn("nd_clear_domestic_stance = yes", unarmed)
+        self.assertIn("remove_modifier = nd_upkeep_cost", block(self.det, "nd_apply_posture_modifiers"))
+        weekly = block(strip_comments(read(JE)), "on_weekly_pulse")
+        self.assertIn("has_variable = nd_arsenal_record", weekly)
+        # A disarmed country now keeps the entry, so its weekly clean-up runs
+        # every week: taking off a modifier it no longer has would log each time.
+        self.assertRegex(weekly, r"limit = \{ has_modifier = nuclear_power \}\s*remove_modifier = nuclear_power")
+        self.assertNotRegex(weekly, r"value = 0\s*\}\s*remove_modifier = nuclear_power")
+
+    def test_nothing_else_waits_for_the_entry_to_close(self):
+        # With the entry active for every country, a branch that acts only
+        # once the entry is gone never runs for a disarmed country. These are
+        # the known ones: the two clean-up fallbacks for a world where the
+        # entry never activated (the rule off, before the first warhead), and
+        # custody adding a missing entry.
+        allowed = {("nuclear_deterrence_effects.txt", "nd_country_monthly_cleanup"),
+                   ("nuclear_custody_effects.txt", "nd_custody_after_arrival")}
+        found = set()
+        for path in (ROOT / "common").rglob("nuclear_*.txt"):
+            text = strip_comments(read(path))
+            for m in re.finditer(r"NOT = \{ has_journal_entry = je_nuclear_program \}", text):
+                found.add((path.name, enclosing_block(text, m.start())))
+        self.assertEqual(found, allowed)
+
+    def test_status_line_opens_with_the_taboo(self):
+        self.assertTrue(loc_value("je_nuclear_program_status_line").startswith(
+            "[ROOT.GetCountry.GetCustom('nd_taboo_status_line')]"))
+
+    def test_status_line_targets_are_accessor_free(self):
+        body = block(strip_comments(read(PROGRAM_CUSTOM_LOC)), "nd_taboo_status_line")
+        keys = re.findall(r"localization_key = (\w+)", body)
+        self.assertEqual(keys, ["nuke_line_empty"] + [f"nd_taboo_status_{n}" for n in range(1, 6)])
+        for key in keys[1:]:
+            value = loc_value(key)
+            for accessor in ("GetCountry", "ROOT", "JournalEntry", "GetPlayer"):
+                self.assertNotIn(accessor, value, key)
+
+    def test_band_names_exist(self):
+        keys = loc_keys()
+        for n in range(1, 6):
+            self.assertIn(f"nd_taboo_band_{n}", keys)
 
 
 if __name__ == "__main__":

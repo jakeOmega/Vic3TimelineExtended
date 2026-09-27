@@ -44,16 +44,24 @@ nuclear_program_has_programme = {
 }
 
 # Country scope: the body of je_nuclear_program's `possible` — everyone the
-# entry applies to: a country with a programme, one that holds warheads
-# (whatever its rank: a demoted power keeps its posture, upkeep and
-# accidents), and one party to a nuclear crisis (a non-nuclear target needs
-# the crisis panel as much as the country that made the threat).
+# entry applies to: a country with a programme, one that holds warheads, one
+# party to a nuclear crisis, and — once the nuclear taboo exists — every
+# country.
 nuclear_program_entry_applies = {
 	has_game_rule = nuclear_weapons_enabled
 	OR = {
 		nuclear_program_has_programme = yes
 		nd_is_armed = yes
 		nd_in_crisis = yes
+		# Once the nuclear taboo exists (nuclear_taboo_effects.txt) the entry
+		# is every country's: its panel and status line speak to the countries
+		# without the bomb as much as to those with it. Every pulse effect is a
+		# cheap no-op for a country that is neither armed, building nor in a
+		# crisis (nuclear_deterrence_effects.txt's header).
+		AND = {
+			has_global_variable = nd_taboo
+			NOT = { is_country_type = decentralized }
+		}
 	}
 }
 

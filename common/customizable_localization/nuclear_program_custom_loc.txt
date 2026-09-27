@@ -100,6 +100,69 @@ nuclear_program_status_line = {
 	}
 }
 
+# The nuclear taboo, first on the status line (nuclear_taboo_values.txt). Once
+# it exists the entry is active for every country, and for most of them the
+# taboo is the whole story. Accessor-free: the score is a global, read in the
+# targets with GetGlobalVariable, which needs no country root; the bands are
+# the live score's (nd_taboo_line_*), not the last one announced.
+nd_taboo_status_line = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { NOT = { has_global_variable = nd_taboo } }
+		localization_key = nuke_line_empty
+	}
+	text = {
+		trigger = { nd_taboo_value < nd_taboo_line_fragile }
+		localization_key = nd_taboo_status_1
+	}
+	text = {
+		trigger = { nd_taboo_value < nd_taboo_line_established }
+		localization_key = nd_taboo_status_2
+	}
+	text = {
+		trigger = { nd_taboo_value < nd_taboo_line_strong }
+		localization_key = nd_taboo_status_3
+	}
+	text = {
+		trigger = { nd_taboo_value < nd_taboo_line_absolute }
+		localization_key = nd_taboo_status_4
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_taboo_status_5
+	}
+}
+
+# The band's name alone, for the widget and events. Accessor-free, so it is
+# safe from a status line, a widget and an event alike.
+nd_taboo_band_name = {
+	type = country
+	random_valid = no
+
+	text = {
+		trigger = { nd_taboo_value < nd_taboo_line_fragile }
+		localization_key = nd_taboo_band_1
+	}
+	text = {
+		trigger = { nd_taboo_value < nd_taboo_line_established }
+		localization_key = nd_taboo_band_2
+	}
+	text = {
+		trigger = { nd_taboo_value < nd_taboo_line_strong }
+		localization_key = nd_taboo_band_3
+	}
+	text = {
+		trigger = { nd_taboo_value < nd_taboo_line_absolute }
+		localization_key = nd_taboo_band_4
+	}
+	text = {
+		trigger = { always = yes }
+		localization_key = nd_taboo_band_5
+	}
+}
+
 # ---------------------------------------------------------------------------
 # WIDGET-ONLY BLOCKS — targets below may use JournalEntry.GetCountry, so none of
 # them may ever be called from a status_desc, desc or scripted-button desc.
