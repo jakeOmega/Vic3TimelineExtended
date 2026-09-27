@@ -1,5 +1,6 @@
 ﻿
 decolonize_diplo_action = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/decolonize_diplo_action.dds"
 	groups= {
 		general
 	}
@@ -53,6 +54,7 @@ decolonize_diplo_action = {
 }
 
 annex_subject_peaceful = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/annex_subject_peaceful.dds"
 	groups= {
 		overlord
 	}
@@ -399,6 +401,7 @@ diplomatic_alignment = {
 }
 
 humanitarian_aid = {
+	texture = "gfx/interface/icons/diplomatic_action_icons/humanitarian_aid.dds"
 	groups= {
 		general
 	}
