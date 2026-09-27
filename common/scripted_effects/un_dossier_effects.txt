@@ -300,6 +300,10 @@ un_lean_tally_un_res_no = {
 			un_lean_count_reason = { NAME = un_res_why_no_self }
 		}
 		if = {
+			limit = { var:un_lean_pledge <= un_lean_reason_size_negative }
+			un_lean_count_reason = { NAME = un_res_why_no_pledge }
+		}
+		if = {
 			limit = { var:un_lean_proposer <= un_lean_reason_size_negative }
 			un_lean_count_reason = { NAME = un_res_why_no_proposer }
 		}

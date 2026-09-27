@@ -126,6 +126,10 @@ un_vote_cast_yes = {
 			limit = { un_lobby_holds_pending_commitment = yes }
 			custom_tooltip = UN_VOTE_COMMITMENT_KEEP_TT
 		}
+		else_if = {
+			limit = { un_lobby_holds_pending_against = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
+		}
 
 		custom_tooltip = {
 			text = UN_VOTE_IN_FAVOR_TT
@@ -266,6 +270,10 @@ un_vote_cast_no = {
 			limit = { un_lobby_holds_pending_commitment = yes }
 			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
 		}
+		else_if = {
+			limit = { un_lobby_holds_pending_against = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_KEEP_TT
+		}
 
 		custom_tooltip = {
 			text = UN_VOTE_AGAINST_TT
@@ -332,14 +340,18 @@ un_vote_cast_no = {
 }
 
 # Veto. Extracted from un_vote.1 option C. A veto books a NO vote as well as
-# tagging the resolution, so it settles a lobbying commitment as broken — see
-# un_resolution_record_veto.
+# tagging the resolution, so it breaks a pledge to vote for and keeps a pledge
+# to vote against — see un_resolution_record_veto.
 un_vote_cast_veto = {
 	if = {
 		limit = { un_vote_can_cast_ballot = yes }
 		if = {
 			limit = { un_lobby_holds_pending_commitment = yes }
 			custom_tooltip = UN_VOTE_COMMITMENT_BREAK_TT
+		}
+		else_if = {
+			limit = { un_lobby_holds_pending_against = yes }
+			custom_tooltip = UN_VOTE_COMMITMENT_KEEP_TT
 		}
 
 		# At Moribund (redesign phase 2) a veto costs nothing: the Assembly's

@@ -27,6 +27,10 @@ DOSSIER_EFFECTS = _path("common", "scripted_effects", "un_dossier_effects.txt")
 DOSSIER_TRIGGERS = _path("common", "scripted_triggers", "un_dossier_triggers.txt")
 DOSSIER_VALUES = _path("common", "script_values", "un_dossier_values.txt")
 LOBBYING_VALUES = _path("common", "script_values", "un_lobbying_values.txt")
+LOBBYING_ACTIONS = _path("common", "diplomatic_actions", "un_lobbying.txt")
+LOBBY_EFFECTS = _path("common", "scripted_effects", "un_lobby_effects.txt")
+LOBBY_TRIGGERS = _path("common", "scripted_triggers", "un_lobby_triggers.txt")
+CAST_EFFECTS = _path("common", "scripted_effects", "un_vote_cast_effects.txt")
 
 _TOP_LEVEL = re.compile(r"^([A-Za-z_][A-Za-z0-9_.]*)\s*=\s*\{", re.M)
 
@@ -181,6 +185,82 @@ class DecideLaterTest(unittest.TestCase):
             r"var:un_res_months\s*=\s*9\s+var:un_res_months\s*=\s*11[\s\S]*?"
             r"variable\s*=\s*un_res_deferred[\s\S]*?trigger_event\s*=\s*\{\s*id\s*=\s*un_vote\.1\s*\}",
         )
+
+
+
+def _accept_terms(action_body):
+    """{desc: value} for each `add = { desc = X value = N }` in the accept score."""
+    score = _sub_block(_sub_block(action_body, "ai"), "accept_score")
+    return {
+        d: int(v)
+        for d, v in re.findall(r'desc\s*=\s*"([A-Z_]+)"\s+value\s*=\s*(-?\d+)', score)
+    }
+
+
+class PledgeTest(unittest.TestCase):
+    """§4: a pledge for or against, sought by any member, paid with an obligation."""
+
+    @classmethod
+    def setUpClass(cls):
+        actions = _read(LOBBYING_ACTIONS)
+        cls.pledge_for = _block(actions, "un_secure_commitment_action")
+        cls.pledge_against = _block(actions, "un_secure_commitment_against_action")
+        cls.effects = _read(LOBBY_EFFECTS)
+        cls.triggers = _read(LOBBY_TRIGGERS)
+
+    def test_any_member_may_ask(self):
+        for body in (self.pledge_for, self.pledge_against):
+            self.assertNotIn("un_res_proposer", _sub_block(body, "selectable"))
+
+    def test_the_target_ties_flip_for_a_pledge_against(self):
+        yes = _accept_terms(self.pledge_for)
+        no = _accept_terms(self.pledge_against)
+        for key in ("UN_LOBBY_ACCEPT_TARGET_ALLY", "UN_LOBBY_ACCEPT_TARGET_BLOC", "UN_LOBBY_ACCEPT_TARGET_RIVAL"):
+            with self.subTest(term=key):
+                self.assertEqual(no[key], -yes[key])
+        for key in ("UN_LOBBY_ACCEPT_BASE", "UN_LOBBY_ACCEPT_OBLIGATION", "UN_LOBBY_ACCEPT_RIVALRY"):
+            with self.subTest(term=key):
+                self.assertEqual(no[key], yes[key])
+
+    def test_each_direction_books_its_own_list(self):
+        self.assertRegex(_sub_block(self.pledge_for, "accept_effect"), r"un_lobby_accept_commitment\s*=\s*\{\s*LIST\s*=\s*yes\s+DIR\s*=\s*1\s*\}")
+        self.assertRegex(_sub_block(self.pledge_against, "accept_effect"), r"un_lobby_accept_commitment\s*=\s*\{\s*LIST\s*=\s*no\s+DIR\s*=\s*-1\s*\}")
+        accept = _block(self.effects, "un_lobby_accept_commitment")
+        self.assertIn("name = un_res_committed_$LIST$", accept)
+        self.assertIn("name = un_pledge_dir value = $DIR$", accept)
+
+    def test_one_pledge_per_member_and_two_per_asker(self):
+        made = _block(self.triggers, "un_pledge_made_by")
+        for lst in ("un_res_committed_yes", "un_res_committed_no", "un_res_commit_kept", "un_res_commit_broken"):
+            self.assertIn(lst, made)
+        deal = _block(self.triggers, "un_pledge_deal_available")
+        self.assertIn("un_pledge_made_by", deal)
+        self.assertIn("un_pledge_under_cap = yes", deal)
+        cap = _block(self.triggers, "un_pledge_under_cap")
+        self.assertIn("var:un_pledge_count < un_lobby_commitment_cap", cap)
+
+    def test_the_lean_moves_a_hundred_either_way(self):
+        pledge = _block(_read(DOSSIER_VALUES), "un_lean_pledge")
+        self.assertRegex(pledge, r"un_lobby_holds_pending_commitment\s*=\s*yes\s*\}\s*add\s*=\s*100")
+        self.assertRegex(pledge, r"un_lobby_holds_pending_against\s*=\s*yes\s*\}\s*add\s*=\s*-100")
+
+    def test_settlement_reads_the_side_each_pledge_was_made_on(self):
+        settle = _block(self.effects, "un_lobby_settle_commitment")
+        self.assertRegex(settle, r"un_res_committed_yes[\s\S]*?un_lobby_settle_pledge\s*=\s*\{\s*KEPT_LIST\s*=\s*un_res_yes\s*\}")
+        self.assertRegex(settle, r"un_res_committed_no[\s\S]*?un_lobby_settle_pledge\s*=\s*\{\s*KEPT_LIST\s*=\s*un_res_no\s*\}")
+        pledge = _block(self.effects, "un_lobby_settle_pledge")
+        self.assertIn("var:un_pledge_to", pledge)
+
+    def test_the_ballot_says_whether_it_keeps_or_breaks_either_pledge(self):
+        cast = _read(CAST_EFFECTS)
+        yes = _block(cast, "un_vote_cast_yes")
+        self.assertRegex(yes, r"un_lobby_holds_pending_commitment\s*=\s*yes\s*\}\s*custom_tooltip\s*=\s*UN_VOTE_COMMITMENT_KEEP_TT")
+        self.assertRegex(yes, r"un_lobby_holds_pending_against\s*=\s*yes\s*\}\s*custom_tooltip\s*=\s*UN_VOTE_COMMITMENT_BREAK_TT")
+        for name in ("un_vote_cast_no", "un_vote_cast_veto"):
+            body = _block(cast, name)
+            with self.subTest(cast=name):
+                self.assertRegex(body, r"un_lobby_holds_pending_commitment\s*=\s*yes\s*\}\s*custom_tooltip\s*=\s*UN_VOTE_COMMITMENT_BREAK_TT")
+                self.assertRegex(body, r"un_lobby_holds_pending_against\s*=\s*yes\s*\}\s*custom_tooltip\s*=\s*UN_VOTE_COMMITMENT_KEEP_TT")
 
 
 if __name__ == "__main__":

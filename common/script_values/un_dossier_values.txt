@@ -342,12 +342,17 @@ un_lean_standing = {
 	}
 }
 
-# A PLEDGE: a vote committed through lobbying is a promise, not a lean.
+# A PLEDGE: a vote committed through lobbying is a promise, not a lean — for
+# (+100) or against (−100). The veto leaves it out (un_lean_veto_basis_value).
 un_lean_pledge = {
 	value = 0
 	if = {
 		limit = { un_lobby_holds_pending_commitment = yes }
 		add = 100
+	}
+	else_if = {
+		limit = { un_lobby_holds_pending_against = yes }
+		add = -100
 	}
 }
 

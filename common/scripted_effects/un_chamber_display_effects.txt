@@ -579,16 +579,17 @@ un_chamber_ballot_lines = {
 	un_chamber_commitment_lines = yes
 }
 
-# Vote commitments secured by the resolution's proposer — SEPARATE from the two
+# Vote pledges, for and against — SEPARATE from the two
 # ballot lists above, and never folded into them: a commitment is a promise, a
 # vote is a ballot, and the chamber has to be able to tell the player apart.
 # Nothing here is counted by un_chamber_tally_line's figures or by
 # un_chamber_projection_line, both of which read un_res_support / un_res_oppose
 # and therefore see votes actually cast and nothing else.
 #
-# The three lists are disjoint by construction (un_lobby_settle_commitment moves
-# a recipient off the pending list as it adds it to a settled one), so the
-# entries below never repeat. Country names print through the same guarded
+# The four lists are disjoint by construction (a member pledges once per
+# resolution, un_pledge_made_by, and un_lobby_settle_commitment moves it off
+# its pending list as it adds it to a settled one), so the entries below never
+# repeat. Country names print through the same guarded
 # accessor the ballot uses, so a recipient annexed since it pledged reads as
 # "a former member".
 #
@@ -604,6 +605,13 @@ un_chamber_commitment_lines = {
 			every_in_list = {
 				variable = un_res_committed_yes
 				custom_tooltip = je_un_chamber_commitment_pending
+			}
+		}
+		if = {
+			limit = { un_lobby_list_has_entries = { LIST = un_res_committed_no } }
+			every_in_list = {
+				variable = un_res_committed_no
+				custom_tooltip = je_un_chamber_commitment_pending_no
 			}
 		}
 		if = {
@@ -1581,6 +1589,7 @@ un_chamber_reasons_block = {
 				has_variable = un_res_why_yes_interests
 				has_variable = un_res_why_no_grounds
 				has_variable = un_res_why_no_self
+				has_variable = un_res_why_no_pledge
 				has_variable = un_res_why_no_proposer
 				has_variable = un_res_why_no_target
 				has_variable = un_res_why_no_glass
@@ -1597,6 +1606,7 @@ un_chamber_reasons_block = {
 		un_chamber_reason_line = { NAME = un_res_why_yes_interests KEY = je_un_res_why_yes_interests }
 		un_chamber_reason_line = { NAME = un_res_why_no_grounds KEY = je_un_res_why_no_grounds }
 		un_chamber_reason_line = { NAME = un_res_why_no_self KEY = je_un_res_why_no_self }
+		un_chamber_reason_line = { NAME = un_res_why_no_pledge KEY = je_un_res_why_no_pledge }
 		un_chamber_reason_line = { NAME = un_res_why_no_proposer KEY = je_un_res_why_no_proposer }
 		un_chamber_reason_line = { NAME = un_res_why_no_target KEY = je_un_res_why_no_target }
 		un_chamber_reason_line = { NAME = un_res_why_no_glass KEY = je_un_res_why_no_glass }
