@@ -100,35 +100,12 @@ Space Transport, and one of First Aid, Field Hospitals and Medevac Helicopters.
 Many options can be chosen only while your market has the goods they consume for
 sale.
 
-| Option | Unlocked by | Effect |
-|---|---|---|
-| Logistical Support, then Extensive, Modern and Advanced Logistical Support | Military Statistics, Central Planning, Reconnaissance Satellites, Rapid Deployment Forces; each needs the one before | −40% attrition risk, then a further −30%, −15% and −10% |
-| Home Communications | Cellular Networks | +25% morale recovery |
-| Robotic Assistance | Network Centric Warfare | +25% morale recovery, −20% morale loss, +5% offense and defense |
-| Coffee, Appliances | The good on your market | +10% morale recovery |
-| Air Transport | Commercial Aviation | +150% movement, +100% mobilization speed |
-| Space Transport | Rapid Deployment Forces | +300% movement and mobilization speed |
-| Entrenchment | Engineering and Logistics principle, tier III+ | +25% defense, half the provinces lost and captured, −50% movement |
-| Space Recon | Reconnaissance Satellites | +100% occupation, more surprise maneuvers |
-| Molecular Scanners | Molecular Assemblers | +100% occupation |
-| Radar Equipment | Radar | +10% defense, +5% offense, −10% morale loss |
-| Night Vision Gear | Infrared Night Vision | +5% offense and defense, −10% morale loss, +10% morale recovery |
-| Missile Defense System | Missile Defense Systems | +20% defense, +5% offense, −10% morale loss |
-| Directed Energy Defenses | Directed Energy Defenses | +20% defense, +5% offense |
-| Cyberwarfare Team | Cyber Warfare | +20% morale damage, −20% morale loss, +5% offense and defense |
-| Electronic Warfare Team | Electronic Warfare | +20% morale damage, +10% offense, +5% defense |
-| Exoskeleton Suits | Advanced Body Armor | +15% offense and defense |
-| Medevac Helicopters | Advanced Military Aircraft | +80% recovery rate |
-| Voluntary Bioenhancement | Regulated Augmentation Market or Unrestricted Augmentation law | +25% offense and defense |
-| Mandatory Bioenhancement | Mandatory Augmentation law | +50% offense and defense |
-| Jungle Combat Training | Military Training principle, tier III+ | +25% offense and defense in forest and hazardous terrain |
-| Mountain Combat Training | Military Training principle, tier III+ | +25% offense and defense in hills, mountains and hazardous terrain |
-| Amphibious Warfare Training | Engineering and Logistics principle, tier III+ | +25% offense and defense in water terrain |
-| Flight Simulators | Military Training principle, tier V | +10% offense and defense for Jet-Powered Aircraft and later |
-
-The principles come from your power bloc ([New principle
-groups](08-diplomacy.md#new-principle-groups)); the augmentation laws are in
-[Rights and society laws](05-politics.md#rights-and-society-laws).
+Beyond transport and medicine, the options run from logistics that cut
+attrition, through morale and combat gear such as Radar Equipment, Night Vision
+Gear and Exoskeleton Suits, to terrain training from your power bloc's
+principles and bioenhancement under the augmentation laws. [Mobilization option
+list](19-appendix-reference-lists.md#mobilization-option-list) gives each
+option's unlock and effect.
 
 Entrenchment, the three terrain trainings, Missile Defense System and
 Exoskeleton Suits add ammunition to a mobilized battalion's upkeep, on top of

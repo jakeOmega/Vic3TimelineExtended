@@ -676,12 +676,12 @@ shows as overvaluation, which drains Peg Confidence. While overvaluation stays a
 
 The last two are hostile: a larger power can demand them only of a country in
 default. If the stronger party leads a power bloc, each article also gives it
-leverage generation over the weaker, from 150 to 500 by article, which builds the Leverage
-Advantage it needs to invite that country into its bloc (see [Other power bloc
-changes](08-diplomacy.md#other-power-bloc-changes)). A country may receive only one
-swap line at a time. A treaty pegger at Peg Confidence 20 gets The Peg Under
-Siege: impose capital controls for a year (+40 confidence), break the peg by
-leaving the treaty, or re-peg lower. AI countries look for a swap line when
+leverage generation over the weaker, from 150 to 500 by article, which builds
+the Leverage Advantage it needs to invite that country into its bloc (see [Other
+power bloc changes](08-diplomacy.md#other-power-bloc-changes)). A country may
+receive only one swap line at a time. A treaty pegger at Peg Confidence 20 gets
+The Peg Under Siege: impose capital controls for a year (+40 confidence), break
+the peg by leaving the treaty, or re-peg lower. AI countries look for a swap line when
 their peg wobbles and a guarantee when heavily in debt, and are reluctant to peg
 their own currency.
 
