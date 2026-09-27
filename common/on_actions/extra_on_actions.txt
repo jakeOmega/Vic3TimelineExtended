@@ -1196,6 +1196,28 @@ war_propaganda_on_action = {
 	}
 }
 
+# Excess Private Construction (docs/systems/mod_systems.md § Excess Private
+# Construction). too_much_private_construction raises every project's weekly
+# construction cap so an investment pool the private queue can't spend gets
+# spent, and charges a construction-efficiency penalty that scales with it.
+#
+# Its conditions are checked every year, also while the modifier is in force:
+# investors have more than target_queue_length levels queued and the pool is
+# still growing. While they hold, the value ramps toward its target (at most
+# x1.2 or /1.2 a year, too_much_private_construction_script_value). The year
+# they fail, the modifier is removed. Until 2026-09-26 the check was skipped
+# once the modifier existed and the value could only fall /1.2 a year, so it
+# never reached 0 and lingered for about a century.
+#
+# Overinvestment counts as the conditions holding. It cuts every pop's pool
+# contribution, so net income turns negative the year after it lands, while
+# the pool still holds more than a year's GDP. Removing the construction
+# modifier then would end Overinvestment after one year (it needs the cached
+# value above 1000) and leave that pool with no sink.
+#
+# The variable is written first and the modifier reads it flat, so the
+# modifier always equals var:too_much_private_construction_cached, which
+# base_construction_per_week subtracts. It is set to 0, never removed.
 excess_private_construction_on_action = {
 	effect = {
 		if = {
@@ -1205,23 +1227,41 @@ excess_private_construction_on_action = {
 						construction_queue_num_queued_private_levels > target_queue_length
 						investment_pool_net_income > 0
 					}
-					has_modifier = too_much_private_construction
+					has_modifier = overinvestment_modifier
+				}
+			}
+			if = {
+				limit = {
+					NOT = { has_variable = too_much_private_construction_cached }
+				}
+				set_variable = {
+					name = too_much_private_construction_cached
+					value = 0
 				}
 			}
 			remove_modifier = too_much_private_construction
-			if = {
-				limit = {
-					too_much_private_construction_script_value > 0
-				}
-				add_modifier = {
-					name = too_much_private_construction
-					multiplier = too_much_private_construction_script_value
-
-				}
-			}
 			set_variable = {
 				name = too_much_private_construction_cached
 				value = too_much_private_construction_script_value
+			}
+			if = {
+				limit = {
+					var:too_much_private_construction_cached > 0
+				}
+				add_modifier = {
+					name = too_much_private_construction
+					multiplier = var:too_much_private_construction_cached
+				}
+			}
+		}
+		else_if = {
+			limit = {
+				has_modifier = too_much_private_construction
+			}
+			remove_modifier = too_much_private_construction
+			set_variable = {
+				name = too_much_private_construction_cached
+				value = 0
 			}
 		}
 		remove_modifier = overinvestment_modifier

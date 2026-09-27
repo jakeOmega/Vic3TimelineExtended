@@ -1484,8 +1484,14 @@ curr_year = {
 	value = year
 }
 
+# Excess Private Construction, read by excess_private_construction_on_action
+# (extra_on_actions.txt), which evaluates too_much_private_construction_script_value
+# only in years its conditions hold and removes the modifier the year they fail.
+# var:too_much_private_construction_cached is last year's value, which is also
+# the modifier's multiplier (0 when the modifier is absent).
 target_queue_length = 500
 
+# The per-project weekly construction cap without this modifier.
 base_construction_per_week = {
 	value = modifier:country_max_weekly_construction_progress_add
 	subtract = var:too_much_private_construction_cached
@@ -1513,6 +1519,11 @@ target_construction_per_week = {
 	divide = target_queue_length
 }
 
+# The per-project cap raise at which target_queue_length projects could spend
+# the pool's gross income, moving at most x1.2 or /1.2 a year from last year's
+# value. A new episode starts at 10 at most; the cap is 9000 (-90% construction
+# efficiency). The /1.2 floor is the ramp down while the conditions hold; once
+# they fail the modifier is removed instead.
 too_much_private_construction_script_value = {
 	value = target_construction_per_week
 	subtract = base_construction_per_week
