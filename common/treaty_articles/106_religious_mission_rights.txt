@@ -74,13 +74,15 @@ religious_mission_rights = {
 		}
 	}
 
+	# The condition is the contravention: the source breaks the article by
+	# adopting State Atheism, which bans the missions.
 	non_fulfillment = {
 		consequences = freeze
 		conditions = {
 			monthly = {
 				scope:article = {
 					source_country = {
-						NOT = { has_law = law_type:law_state_atheism }
+						has_law = law_type:law_state_atheism
 					}
 				}
 			}

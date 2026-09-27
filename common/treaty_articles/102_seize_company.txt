@@ -26,11 +26,12 @@ seize_company = {
 		always = yes
 	}
 
+	# ROOT here is the source, whose company is seized. (Vanilla
+	# 18_acquire_monopoly_for_company checks scope:other_country instead
+	# because there the company belongs to the target.)
 	possible = {
-		scope:other_country = {
-			any_company = {
-				owner = prev
-			}
+		any_company = {
+			owner = root
 		}
 	}
 

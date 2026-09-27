@@ -45,23 +45,24 @@ enforce_emissions_reduction = {
 		country_prestige_mult = 0.02
 	}
 
+	# ROOT in visible and possible is the source, the market leader being
+	# forced to reduce emissions; scope:other_country is the demanding target
+	# (vanilla 14_treaty_port, 29_recognize_independence).
 	visible = {
 		# Only visible once global warming is active
 		temperature_anomaly_display > 0.1
-		# Only target market leaders
-		scope:other_country = {
-			market_capital.owner = scope:other_country
-		}
+		# Only market leaders can be forced
+		market_capital.owner = root
 	}
 
 	possible = {
 		has_diplomatic_relevance = scope:other_country
 		NOT = { is_country_type = decentralized }
 		temperature_anomaly_display >= 0.5
+		# Must be a market leader
+		market_capital.owner = root
 		scope:other_country = {
 			NOT = { is_country_type = decentralized }
-			# Must be a market leader
-			market_capital.owner = scope:other_country
 		}
 	}
 
