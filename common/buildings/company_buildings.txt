@@ -11176,3 +11176,563 @@ building_sumitomo_besshi_mine = {
 		}
 	}
 }
+
+#============================================================
+# Phase 9: The Great Wave (DLC 018) Company Buildings
+# Hand-written in the shape of the Sumitomo flagship above.
+#============================================================
+
+building_yasuda_atosanupuri_mine = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_yasuda.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_yasuda_atosanupuri_mine
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_yasuda
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_yasuda_atosanupuri_mine
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_yasuda_atosanupuri_mine
+					}
+				}
+			}
+		}
+	}
+}
+
+building_tokyo_electric_asakusa_station = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_tokyo_electric_light_company.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_tokyo_electric_asakusa_station
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_tokyo_electric_light_company
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_tokyo_electric_asakusa_station
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_tokyo_electric_asakusa_station
+					}
+				}
+			}
+		}
+	}
+}
+
+building_guthrie_singapore_agency = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_guthrie.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_guthrie_singapore_agency
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_guthrie
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_guthrie_singapore_agency
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_guthrie_singapore_agency
+					}
+				}
+			}
+		}
+	}
+}
+
+building_sfct_hon_gai_collieries = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_societe_francaise_charbonnages_du_tonkin.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_sfct_hon_gai_collieries
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_societe_francaise_charbonnages_du_tonkin
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_sfct_hon_gai_collieries
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_sfct_hon_gai_collieries
+					}
+				}
+			}
+		}
+	}
+}
+
+building_bhp_broken_hill_mine = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_broken_hill_proprietary_company.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_bhp_broken_hill_mine
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_broken_hill_proprietary_company
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_bhp_broken_hill_mine
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_bhp_broken_hill_mine
+					}
+				}
+			}
+		}
+	}
+}
+
+building_ramirez_vila_real_cannery = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_ramirez.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_ramirez_vila_real_cannery
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_ramirez
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_ramirez_vila_real_cannery
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_ramirez_vila_real_cannery
+					}
+				}
+			}
+		}
+	}
+}
+
+building_ocmc_unsan_gold_mines = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_oriental_consolidated_mining.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_ocmc_unsan_gold_mines
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_oriental_consolidated_mining
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_ocmc_unsan_gold_mines
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_ocmc_unsan_gold_mines
+					}
+				}
+			}
+		}
+	}
+}
+
+building_siam_electric_wat_liab_station = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_siam_electrical_company_limited.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_siam_electric_wat_liab_station
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_siam_electrical_company_limited
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_siam_electric_wat_liab_station
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_siam_electric_wat_liab_station
+					}
+				}
+			}
+		}
+	}
+}
+
+building_ferranti_hollinwood_works = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_ferranti_ltd.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_ferranti_hollinwood_works
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_ferranti_ltd
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_ferranti_hollinwood_works
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_ferranti_hollinwood_works
+					}
+				}
+			}
+		}
+	}
+}
+
+building_van_vlissingen_oostenburg_works = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_van_vlissingen_en_dudok_van_heel.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_van_vlissingen_oostenburg_works
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_van_vlissingen_en_dudok_van_heel
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_van_vlissingen_oostenburg_works
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_van_vlissingen_oostenburg_works
+					}
+				}
+			}
+		}
+	}
+}
+
+building_mfo_oerlikon_works = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_maschinenfabrik_oerlikon.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_mfo_oerlikon_works
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_maschinenfabrik_oerlikon
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_mfo_oerlikon_works
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_mfo_oerlikon_works
+					}
+				}
+			}
+		}
+	}
+}
+
+building_markwald_bangkok_rice_mill = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_a_markwald_and_company.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_markwald_bangkok_rice_mill
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_a_markwald_and_company
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_markwald_bangkok_rice_mill
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_markwald_bangkok_rice_mill
+					}
+				}
+			}
+		}
+	}
+}
+
+building_nhm_factorij_batavia = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_nhm.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_nhm_factorij_batavia
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_nhm
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_nhm_factorij_batavia
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_nhm_factorij_batavia
+					}
+				}
+			}
+		}
+	}
+}
+
+building_white_star_albion_house = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_white_star_line.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_white_star_albion_house
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_white_star_line
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_white_star_albion_house
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_white_star_albion_house
+					}
+				}
+			}
+		}
+	}
+}
+
+building_noda_shoyu_goyogura = {
+	building_group = bg_company_buildings
+	icon = "gfx/interface/icons/company_icons/historical_company_icons/company_noda_shoyu.dds"
+	expandable = yes
+	downsizeable = yes
+	has_max_level = yes
+	unique = no
+	city_type = city
+	ai_nationalization_desire = 0
+	production_method_groups = {
+		pmg_noda_shoyu_goyogura
+	}
+	required_construction = construction_cost_mega_high
+	ownership_type = self
+	can_build_private = {
+		always = no
+	}
+	background = "gfx/interface/icons/building_icons/backgrounds/building_panel_bg_monuments.dds"
+	potential = {
+		owner = {
+			has_company = company_type:company_noda_shoyu
+		}
+		OR = {
+			any_scope_building = {
+				is_building_type = building_noda_shoyu_goyogura
+			}
+			NOT = {
+				any_state = {
+					any_scope_building = {
+						is_building_type = building_noda_shoyu_goyogura
+					}
+				}
+			}
+		}
+	}
+}

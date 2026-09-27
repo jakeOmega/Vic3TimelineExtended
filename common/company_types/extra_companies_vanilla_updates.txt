@@ -3540,3 +3540,157 @@ INJECT:company_sumitomo = {
 		state_building_sumitomo_besshi_mine_max_level_add = 1
 	}
 }
+
+#============================================================
+# Phase 9: The Great Wave (DLC 018) Company Unique Buildings
+#============================================================
+
+# company_yasuda → Unique building: Yasuda Atosanupuri Sulfur Mine
+INJECT:company_yasuda = {
+	building_types = {
+		building_yasuda_atosanupuri_mine
+	}
+	prosperity_modifier = {
+		state_building_yasuda_atosanupuri_mine_max_level_add = 1
+	}
+}
+
+# company_tokyo_electric_light_company → Unique building: Tokyo Electric Asakusa Power Station
+INJECT:company_tokyo_electric_light_company = {
+	building_types = {
+		building_tokyo_electric_asakusa_station
+	}
+	prosperity_modifier = {
+		state_building_tokyo_electric_asakusa_station_max_level_add = 1
+	}
+}
+
+# company_guthrie → Unique building: Guthrie Singapore Agency House
+INJECT:company_guthrie = {
+	building_types = {
+		building_guthrie_singapore_agency
+	}
+	prosperity_modifier = {
+		state_building_guthrie_singapore_agency_max_level_add = 1
+	}
+}
+
+# company_societe_francaise_charbonnages_du_tonkin → Unique building: SFCT Hòn Gai Collieries
+INJECT:company_societe_francaise_charbonnages_du_tonkin = {
+	building_types = {
+		building_sfct_hon_gai_collieries
+	}
+	prosperity_modifier = {
+		state_building_sfct_hon_gai_collieries_max_level_add = 1
+	}
+}
+
+# company_broken_hill_proprietary_company → Unique building: BHP Broken Hill Mine
+INJECT:company_broken_hill_proprietary_company = {
+	building_types = {
+		building_bhp_broken_hill_mine
+	}
+	prosperity_modifier = {
+		state_building_bhp_broken_hill_mine_max_level_add = 1
+	}
+}
+
+# company_ramirez → Unique building: Ramirez Vila Real Cannery
+INJECT:company_ramirez = {
+	building_types = {
+		building_ramirez_vila_real_cannery
+	}
+	prosperity_modifier = {
+		state_building_ramirez_vila_real_cannery_max_level_add = 1
+	}
+}
+
+# company_oriental_consolidated_mining → Unique building: OCMC Unsan Gold Mines
+INJECT:company_oriental_consolidated_mining = {
+	building_types = {
+		building_ocmc_unsan_gold_mines
+	}
+	prosperity_modifier = {
+		state_building_ocmc_unsan_gold_mines_max_level_add = 1
+	}
+}
+
+# company_siam_electrical_company_limited → Unique building: Siam Electricity Wat Liab Power Station
+INJECT:company_siam_electrical_company_limited = {
+	building_types = {
+		building_siam_electric_wat_liab_station
+	}
+	prosperity_modifier = {
+		state_building_siam_electric_wat_liab_station_max_level_add = 1
+	}
+}
+
+# company_ferranti_ltd → Unique building: Ferranti Hollinwood Works
+INJECT:company_ferranti_ltd = {
+	building_types = {
+		building_ferranti_hollinwood_works
+	}
+	prosperity_modifier = {
+		state_building_ferranti_hollinwood_works_max_level_add = 1
+	}
+}
+
+# company_van_vlissingen_en_dudok_van_heel → Unique building: Van Vlissingen Oostenburg Works
+INJECT:company_van_vlissingen_en_dudok_van_heel = {
+	building_types = {
+		building_van_vlissingen_oostenburg_works
+	}
+	prosperity_modifier = {
+		state_building_van_vlissingen_oostenburg_works_max_level_add = 1
+	}
+}
+
+# company_maschinenfabrik_oerlikon → Unique building: MFO Oerlikon Works
+INJECT:company_maschinenfabrik_oerlikon = {
+	building_types = {
+		building_mfo_oerlikon_works
+	}
+	prosperity_modifier = {
+		state_building_mfo_oerlikon_works_max_level_add = 1
+	}
+}
+
+# company_a_markwald_and_company → Unique building: Markwald Bangkok Rice Mill
+INJECT:company_a_markwald_and_company = {
+	building_types = {
+		building_markwald_bangkok_rice_mill
+	}
+	prosperity_modifier = {
+		state_building_markwald_bangkok_rice_mill_max_level_add = 1
+	}
+}
+
+# company_nhm → Unique building: NHM Factorij Batavia
+INJECT:company_nhm = {
+	building_types = {
+		building_nhm_factorij_batavia
+	}
+	prosperity_modifier = {
+		state_building_nhm_factorij_batavia_max_level_add = 1
+	}
+}
+
+# company_white_star_line → Unique building: White Star Albion House
+INJECT:company_white_star_line = {
+	building_types = {
+		building_white_star_albion_house
+	}
+	prosperity_modifier = {
+		state_building_white_star_albion_house_max_level_add = 1
+	}
+}
+
+# company_noda_shoyu → Unique building: Noda Shoyu Goyōgura
+INJECT:company_noda_shoyu = {
+	building_types = {
+		building_noda_shoyu_goyogura
+	}
+	prosperity_modifier = {
+		state_building_noda_shoyu_goyogura_max_level_add = 1
+	}
+}

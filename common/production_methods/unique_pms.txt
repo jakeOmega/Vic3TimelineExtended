@@ -11077,3 +11077,512 @@ pm_sumitomo_besshi_mine = {
 		}
 	}
 }
+
+#==================================================
+# Phase 9: The Great Wave (DLC 018) Company PMs
+#==================================================
+
+# --- Yasuda Atosanupuri Sulfur Mine ---
+pm_yasuda_atosanupuri_mine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_sulfur_mine_throughput_add = 0.15
+			building_railway_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (57.14%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (42.86%)
+			# Output goods
+			goods_output_sulfur_add = 20                         # Price:   50, Total cost:  1000.0 (76.92%)
+			goods_output_transportation_add = 10                 # Price:   30, Total cost:   300.0 (23.08%)
+			# Total input cost: 700.0
+			# Total output cost: 1300.0
+			# Profit: 600.0
+			# Profit margin: 85.71%
+			# Zero profit price multiplier: 0.54
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_laborers_add = 900
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 300
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Tokyo Electric Asakusa Power Station ---
+pm_tokyo_electric_asakusa_station = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_power_plant_throughput_add = 0.15
+			building_urban_center_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 20                            # Price:   30, Total cost:   600.0 (66.67%)
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (33.33%)
+			# Output goods
+			goods_output_electricity_add = 50                    # Price:   30, Total cost:  1500.0 (100.00%)
+			# Total input cost: 900.0
+			# Total output cost: 1500.0
+			# Profit: 600.0
+			# Profit margin: 66.67%
+			# Zero profit price multiplier: 0.60
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Guthrie Singapore Agency House ---
+pm_guthrie_singapore_agency = {
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_coffee_plantation_throughput_add = 0.10
+			building_tea_plantation_throughput_add = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (72.73%)
+			goods_input_paper_add = 5                            # Price:   30, Total cost:   150.0 (27.27%)
+			# Output goods
+			goods_output_coffee_add = 10                         # Price:   50, Total cost:   500.0 (50.00%)
+			goods_output_tea_add = 10                            # Price:   50, Total cost:   500.0 (50.00%)
+			# Total input cost: 550.0
+			# Total output cost: 1000.0
+			# Profit: 450.0
+			# Profit margin: 81.82%
+			# Zero profit price multiplier: 0.55
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_laborers_add = 600
+			building_employment_shopkeepers_add = 400
+			building_employment_farmers_add = 200
+		}
+	}
+}
+
+# --- SFCT Hòn Gai Collieries ---
+pm_sfct_hon_gai_collieries = {
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_coal_mine_throughput_add = 0.15
+			building_port_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (66.67%)
+			goods_input_wood_add = 10                            # Price:   20, Total cost:   200.0 (33.33%)
+			# Output goods
+			goods_output_coal_add = 40                           # Price:   30, Total cost:  1200.0 (100.00%)
+			# Total input cost: 600.0
+			# Total output cost: 1200.0
+			# Profit: 600.0
+			# Profit margin: 100.00%
+			# Zero profit price multiplier: 0.50
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 500
+			building_employment_engineers_add = 300
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- BHP Broken Hill Mine ---
+pm_bhp_broken_hill_mine = {
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_lead_mine_throughput_add = 0.15
+			building_steel_mill_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (57.14%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (42.86%)
+			# Output goods
+			goods_output_lead_add = 25                           # Price:   40, Total cost:  1000.0 (76.92%)
+			goods_output_gold_add = 3                            # Price:  100, Total cost:   300.0 (23.08%)
+			# Total input cost: 700.0
+			# Total output cost: 1300.0
+			# Profit: 600.0
+			# Profit margin: 85.71%
+			# Zero profit price multiplier: 0.54
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_laborers_add = 900
+			building_employment_machinists_add = 600
+			building_employment_engineers_add = 300
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Ramirez Vila Real Cannery ---
+pm_ramirez_vila_real_cannery = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_food_industry_throughput_add = 0.15
+			building_fishing_wharf_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_fish_add = 20                            # Price:   20, Total cost:   400.0 (61.54%)
+			goods_input_steel_add = 5                            # Price:   50, Total cost:   250.0 (38.46%)
+			# Output goods
+			goods_output_groceries_add = 40                      # Price:   30, Total cost:  1200.0 (100.00%)
+			# Total input cost: 650.0
+			# Total output cost: 1200.0
+			# Profit: 550.0
+			# Profit margin: 84.62%
+			# Zero profit price multiplier: 0.54
+			# Employment: 2000
+			# Wage breakeven: 0.28
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_machinists_add = 600
+			building_employment_clerks_add = 400
+			building_employment_shopkeepers_add = 200
+		}
+	}
+}
+
+# --- OCMC Unsan Gold Mines ---
+pm_ocmc_unsan_gold_mines = {
+	texture = "gfx/interface/icons/production_method_icons/cat_diamond_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_gold_mine_throughput_add = 0.15
+			building_logging_camp_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_tools_add = 10                           # Price:   40, Total cost:   400.0 (61.54%)
+			goods_input_explosives_add = 5                       # Price:   50, Total cost:   250.0 (38.46%)
+			# Output goods
+			goods_output_gold_add = 10                           # Price:  100, Total cost:  1000.0 (83.33%)
+			goods_output_wood_add = 10                           # Price:   20, Total cost:   200.0 (16.67%)
+			# Total input cost: 650.0
+			# Total output cost: 1200.0
+			# Profit: 550.0
+			# Profit margin: 84.62%
+			# Zero profit price multiplier: 0.54
+			# Employment: 2000
+			# Wage breakeven: 0.28
+		}
+		level_scaled = {
+			building_employment_laborers_add = 1000
+			building_employment_machinists_add = 400
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Siam Electricity Wat Liab Power Station ---
+pm_siam_electric_wat_liab_station = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bolt_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_power_plant_throughput_add = 0.15
+			building_railway_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (60.00%)
+			goods_input_engines_add = 5                          # Price:   60, Total cost:   300.0 (40.00%)
+			# Output goods
+			goods_output_electricity_add = 40                    # Price:   30, Total cost:  1200.0 (88.89%)
+			goods_output_transportation_add = 5                  # Price:   30, Total cost:   150.0 (11.11%)
+			# Total input cost: 750.0
+			# Total output cost: 1350.0
+			# Profit: 600.0
+			# Profit margin: 80.00%
+			# Zero profit price multiplier: 0.56
+			# Employment: 2000
+			# Wage breakeven: 0.30
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Ferranti Hollinwood Works ---
+pm_ferranti_hollinwood_works = {
+	texture = "gfx/interface/icons/production_method_icons/cat_antenna_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_electrics_industry_throughput_add = 0.15
+			building_power_plant_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (71.43%)
+			goods_input_glass_add = 5                            # Price:   40, Total cost:   200.0 (28.57%)
+			# Output goods
+			goods_output_radios_add = 10                         # Price:   80, Total cost:   800.0 (69.57%)
+			goods_output_telephones_add = 5                      # Price:   70, Total cost:   350.0 (30.43%)
+			# Total input cost: 700.0
+			# Total output cost: 1150.0
+			# Profit: 450.0
+			# Profit margin: 64.29%
+			# Zero profit price multiplier: 0.61
+			# Employment: 2000
+			# Wage breakeven: 0.23
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Van Vlissingen Oostenburg Works ---
+pm_van_vlissingen_oostenburg_works = {
+	texture = "gfx/interface/icons/production_method_icons/cat_gear_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.15
+			building_shipyard_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 15                           # Price:   50, Total cost:   750.0 (71.43%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (28.57%)
+			# Output goods
+			goods_output_engines_add = 20                        # Price:   60, Total cost:  1200.0 (75.00%)
+			goods_output_tools_add = 10                          # Price:   40, Total cost:   400.0 (25.00%)
+			# Total input cost: 1050.0
+			# Total output cost: 1600.0
+			# Profit: 550.0
+			# Profit margin: 52.38%
+			# Zero profit price multiplier: 0.66
+			# Employment: 2000
+			# Wage breakeven: 0.28
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_laborers_add = 600
+			building_employment_engineers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- MFO Oerlikon Works ---
+pm_mfo_oerlikon_works = {
+	texture = "gfx/interface/icons/production_method_icons/cat_factory_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_motor_industry_throughput_add = 0.10
+			building_tooling_workshop_throughput_add = 0.10
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_steel_add = 10                           # Price:   50, Total cost:   500.0 (62.50%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (37.50%)
+			# Output goods
+			goods_output_engines_add = 15                        # Price:   60, Total cost:   900.0 (69.23%)
+			goods_output_tools_add = 10                          # Price:   40, Total cost:   400.0 (30.77%)
+			# Total input cost: 800.0
+			# Total output cost: 1300.0
+			# Profit: 500.0
+			# Profit margin: 62.50%
+			# Zero profit price multiplier: 0.62
+			# Employment: 2000
+			# Wage breakeven: 0.25
+		}
+		level_scaled = {
+			building_employment_machinists_add = 800
+			building_employment_engineers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_clerks_add = 200
+		}
+	}
+}
+
+# --- Markwald Bangkok Rice Mill ---
+pm_markwald_bangkok_rice_mill = {
+	texture = "gfx/interface/icons/production_method_icons/cat_wheat_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_rice_farm_throughput_add = 0.15
+			building_port_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                           # Price:   20, Total cost:   400.0 (57.14%)
+			goods_input_coal_add = 10                            # Price:   30, Total cost:   300.0 (42.86%)
+			# Output goods
+			goods_output_groceries_add = 20                      # Price:   30, Total cost:   600.0 (44.44%)
+			goods_output_merchant_marine_add = 15                # Price:   50, Total cost:   750.0 (55.56%)
+			# Total input cost: 700.0
+			# Total output cost: 1350.0
+			# Profit: 650.0
+			# Profit margin: 92.86%
+			# Zero profit price multiplier: 0.52
+			# Employment: 2000
+			# Wage breakeven: 0.33
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_clerks_add = 600
+			building_employment_shopkeepers_add = 400
+			building_employment_machinists_add = 200
+		}
+	}
+}
+
+# --- NHM Factorij Batavia ---
+pm_nhm_factorij_batavia = {
+	texture = "gfx/interface/icons/production_method_icons/cat_cube_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_coffee_plantation_throughput_add = 0.15
+			building_sugar_plantation_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_paper_add = 10                           # Price:   30, Total cost:   300.0 (50.00%)
+			goods_input_clothes_add = 10                         # Price:   30, Total cost:   300.0 (50.00%)
+			# Output goods
+			goods_output_merchant_marine_add = 25                # Price:   50, Total cost:  1250.0 (100.00%)
+			# Total input cost: 600.0
+			# Total output cost: 1250.0
+			# Profit: 650.0
+			# Profit margin: 108.33%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.33
+		}
+		level_scaled = {
+			building_employment_clerks_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_laborers_add = 400
+			building_employment_machinists_add = 200
+		}
+	}
+}
+
+# --- White Star Albion House ---
+pm_white_star_albion_house = {
+	texture = "gfx/interface/icons/production_method_icons/cat_ship_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_port_throughput_add = 0.15
+			building_shipyard_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_coal_add = 15                            # Price:   30, Total cost:   450.0 (60.00%)
+			goods_input_groceries_add = 10                       # Price:   30, Total cost:   300.0 (40.00%)
+			# Output goods
+			goods_output_merchant_marine_add = 25                # Price:   50, Total cost:  1250.0 (80.65%)
+			goods_output_transportation_add = 10                 # Price:   30, Total cost:   300.0 (19.35%)
+			# Total input cost: 750.0
+			# Total output cost: 1550.0
+			# Profit: 800.0
+			# Profit margin: 106.67%
+			# Zero profit price multiplier: 0.48
+			# Employment: 2000
+			# Wage breakeven: 0.40
+		}
+		level_scaled = {
+			building_employment_clerks_add = 700
+			building_employment_laborers_add = 600
+			building_employment_shopkeepers_add = 400
+			building_employment_machinists_add = 300
+		}
+	}
+}
+
+# --- Noda Shoyu Goyōgura ---
+pm_noda_shoyu_goyogura = {
+	texture = "gfx/interface/icons/production_method_icons/cat_bottle_gold_p0.dds"
+	state_modifiers = {
+		workforce_scaled = {
+			building_food_industry_throughput_add = 0.15
+			building_rice_farm_throughput_add = 0.05
+		}
+	}
+	building_modifiers = {
+		workforce_scaled = {
+			# Input goods
+			goods_input_grain_add = 20                           # Price:   20, Total cost:   400.0 (80.00%)
+			goods_input_wood_add = 5                             # Price:   20, Total cost:   100.0 (20.00%)
+			# Output goods
+			goods_output_groceries_add = 30                      # Price:   30, Total cost:   900.0 (100.00%)
+			# Total input cost: 500.0
+			# Total output cost: 900.0
+			# Profit: 400.0
+			# Profit margin: 80.00%
+			# Zero profit price multiplier: 0.56
+			# Employment: 2000
+			# Wage breakeven: 0.20
+		}
+		level_scaled = {
+			building_employment_laborers_add = 800
+			building_employment_shopkeepers_add = 600
+			building_employment_clerks_add = 400
+			building_employment_farmers_add = 200
+		}
+	}
+}
