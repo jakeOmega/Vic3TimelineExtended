@@ -1486,9 +1486,9 @@ curr_year = {
 
 # Excess Private Construction, read by excess_private_construction_on_action
 # (extra_on_actions.txt), which evaluates too_much_private_construction_script_value
-# only in years its conditions hold and removes the modifier the year they fail.
-# var:too_much_private_construction_cached is last year's value, which is also
-# the modifier's multiplier (0 when the modifier is absent).
+# only in years the modifier's conditions hold and removes the modifier the year
+# they fail. var:too_much_private_construction_cached is last year's value, which
+# is also the modifier's multiplier (0 when the modifier is absent).
 target_queue_length = 500
 
 # The per-project weekly construction cap without this modifier.
@@ -1520,13 +1520,31 @@ target_construction_per_week = {
 }
 
 # The per-project cap raise at which target_queue_length projects could spend
-# the pool's gross income, moving at most x1.2 or /1.2 a year from last year's
-# value. A new episode starts at 10 at most; the cap is 9000 (-90% construction
-# efficiency). The /1.2 floor is the ramp down while the conditions hold; once
-# they fail the modifier is removed instead.
+# the pool's gross income: positive exactly when that many projects at base
+# speed couldn't. This is the overflow the modifier compensates for, and its
+# exit test. Gross income and the cost per point don't depend on the modifier,
+# so the modifier can't end its own need by working (net income can: it turns
+# negative as soon as the modifier drains the pool). 0 while nothing is spent
+# privately, which also keeps curr_cost_per_construction_point from dividing
+# by 0 on an empty queue.
+too_much_private_construction_overflow = {
+	value = 0
+	if = {
+		limit = {
+			private_construction_used > 0
+		}
+		value = target_construction_per_week
+		subtract = base_construction_per_week
+	}
+}
+
+# The overflow, moving at most x1.2 or /1.2 a year from last year's value. A new
+# episode starts at 10 at most; the cap is 9000 (-90% construction efficiency).
+# The /1.2 floor is the ramp down while the modifier stays. The on-action
+# removes the modifier once the overflow is 0 or less, so the floor can't hold
+# it above 0 after its need is gone (Overinvestment aside, see the on-action).
 too_much_private_construction_script_value = {
-	value = target_construction_per_week
-	subtract = base_construction_per_week
+	value = too_much_private_construction_overflow
 	min = {
 		value = var:too_much_private_construction_cached
 		divide = 1.2
