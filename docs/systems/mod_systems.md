@@ -1149,7 +1149,7 @@ These fire instantly when the engine event occurs, providing same-tick responsiv
 - `te_amendment_timeout_on_action` — routes to the sunset-clause expiry events (`amendment_on_actions.txt`; see § Temporary Amendments)
 
 **`on_merge_markets`** (Root = dissolving market, scope:market = absorbing market):
-- `gw_market_join_on_action` — copies market leader's GW policy modifiers to new member
+- `gw_market_join_on_action` — `gw_sync_market_policy_modifiers`: the joining market's owner takes the absorbing leader's three market-wide GW policies and drops any the leader lacks (unless bound by an emissions reduction treaty). Other members of the dissolving market are not touched.
 
 
 ### Construction-Market Immediate Triggers (`te_construction_market_on_actions.txt`)

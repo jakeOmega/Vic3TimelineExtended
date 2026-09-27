@@ -725,8 +725,11 @@ gw_market_join_on_action = {
 				exists = scope:market.owner
 			}
 			owner = {
-				# Apply any active market-leader policies from the absorbing market's leader.
-				gw_copy_market_policy_modifiers = yes
+				# The joiner's market-wide policies become the absorbing leader's.
+				if = {
+					limit = { has_journal_entry = je_global_warming }
+					gw_sync_market_policy_modifiers = yes
+				}
 			}
 		}
 	}
