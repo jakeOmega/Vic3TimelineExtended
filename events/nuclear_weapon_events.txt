@@ -1626,8 +1626,7 @@ nuclear_weapon_events.19 = {
 		default_option = yes
 		custom_tooltip = {
 			text = NW_PROGRESS_SUBTRACT_15_TT
-			change_variable = { name = nuclear_weapon_program_progress subtract = 15 }
-			change_variable = { name = nuclear_weapon_program_progress max = 0 }
+			nw_prolif_progress_setback = { AMOUNT = 15 }
 		}
 		add_modifier = { name = nuclear_safety_review days = normal_modifier_time is_decaying = yes }
 		ai_chance = {
@@ -1649,8 +1648,7 @@ nuclear_weapon_events.19 = {
 		name = nuclear_weapon_events.19.b
 		custom_tooltip = {
 			text = NW_PROGRESS_SUBTRACT_5_TT
-			change_variable = { name = nuclear_weapon_program_progress subtract = 5 }
-			change_variable = { name = nuclear_weapon_program_progress max = 0 }
+			nw_prolif_progress_setback = { AMOUNT = 5 }
 		}
 		add_radicals = {
 			value = small_radicals
@@ -1686,8 +1684,7 @@ nuclear_weapon_events.19 = {
 		name = nuclear_weapon_events.19.c
 		custom_tooltip = {
 			text = NW_PROGRESS_SUBTRACT_25_TT
-			change_variable = { name = nuclear_weapon_program_progress subtract = 25 }
-			change_variable = { name = nuclear_weapon_program_progress max = 0 }
+			nw_prolif_progress_setback = { AMOUNT = 25 }
 		}
 		add_modifier = { name = prestige_gain_small days = normal_modifier_time is_decaying = yes }
 		every_interest_group = {
@@ -1758,8 +1755,7 @@ nuclear_weapon_events.20 = {
 		name = nuclear_weapon_events.20.a
 		custom_tooltip = {
 			text = NW_PROGRESS_SUBTRACT_10_TT
-			change_variable = { name = nuclear_weapon_program_progress subtract = 10 }
-			change_variable = { name = nuclear_weapon_program_progress max = 0 }
+			nw_prolif_progress_setback = { AMOUNT = 10 }
 		}
 		add_modifier = { name = nuclear_civilian_applications days = normal_modifier_time is_decaying = yes }
 		add_modifier = { name = prestige_gain_tiny days = normal_modifier_time is_decaying = yes }
@@ -1811,8 +1807,7 @@ nuclear_weapon_events.20 = {
 		name = nuclear_weapon_events.20.c
 		custom_tooltip = {
 			text = NW_PROGRESS_SUBTRACT_5_TT
-			change_variable = { name = nuclear_weapon_program_progress subtract = 5 }
-			change_variable = { name = nuclear_weapon_program_progress max = 0 }
+			nw_prolif_progress_setback = { AMOUNT = 5 }
 		}
 		add_modifier = { name = nuclear_civilian_applications days = short_modifier_time is_decaying = yes }
 		ai_chance = {

@@ -1365,7 +1365,7 @@ AI weights across events are tuned to favor decolonization:
 
 ## Intelligence Sharing Defense Shield
 
-- **Purpose:** Countries with an intelligence sharing pact benefit from their partner's covert defense strength. The weaker partner receives a shield equal to 50% of the difference between their base defense and their strongest partner's base defense.
+- **Purpose:** Countries with an intelligence sharing pact benefit from their partner's covert defense strength. The weaker partner receives a shield equal to 50% of the difference between their combined base defense and their strongest partner's, spread evenly over the three defense types (a sixth of the gap on each; the boost is multiplied by 0.5 and divided by 3).
 - **Mechanism:** Uses the "prior variable subtraction" pattern for modifier recalculation. Each country stores `intel_shield_mult` (the multiplier currently applied to their shield modifier). When recalculating:
   1. Reads own total defense from `modifier:country_covert_defense_*_add` (3 types summed).
   2. Subtracts `3 * intel_shield_mult` to get base defense (since the shield adds multiplier to each of 3 types).
