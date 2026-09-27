@@ -101,7 +101,10 @@ ship_mod_asw_destroyer_guns_high = {
 		ship_crew_damage_add = 50
 		ship_critical_hit_chance_add = 0.2
 		ship_vulnerability_add = 25
+		ship_battle_against_ship_type_submarine_accuracy_mult = 0.15
 		ship_battle_against_ship_type_nuclear_submarine_accuracy_mult = 0.15
+		ship_battle_against_ship_type_stealth_attack_submarine_accuracy_mult = 0.15
+		ship_battle_against_ship_type_autonomous_swarm_submarine_accuracy_mult = 0.15
 	}
 	construction_goods = {
 		goods_input_ammunition_add = 30
