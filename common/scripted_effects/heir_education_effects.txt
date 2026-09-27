@@ -415,50 +415,69 @@ heir_education_resolve_effect = {
 	# ─── Resolve Ideology ───
 	# Positive = progressive, Negative = conservative
 	# Thresholds at ±1 (leaning) and ±4 (strong)
-	# Every roll must be a character ideology (character_ideology = yes). These
-	# lists once named the interest-group ideologies ideology_liberal,
-	# ideology_patriarchal and ideology_pious, which a character cannot hold;
-	# their character counterparts are ideology_liberal_leader ("Liberal"),
-	# ideology_royalist and ideology_theocrat. The focus buttons' text
+	# Every roll is a character ideology (character_ideology = yes). The lists are
+	# the original design's (13a09b8f) minus Communist and Vanguardist, which
+	# vanilla bars for a monarchy's heir; the rework's Radical takes their 8 as the
+	# extreme progressive outcome, and Moderate takes the "no change" weight.
+	# A roll whose ideology has a country_trigger is gated on it
+	# (heir_education_triggers.txt), so it never lands on an ideology the country
+	# cannot have; Moderate, Authoritarian, Theocrat and Jingoist have none, so
+	# every list keeps a valid outcome. The focus buttons' text
 	# (HE_ENABLE_PROGRESSIVE_DESC, HE_ENABLE_CONSERVATIVE_DESC) names these
-	# outcomes; keep the two in step.
+	# outcomes; keep the two in step. test_heir_education_ideologies.py checks
+	# the character flags and the gates.
 	if = {
 		limit = { var:heir_ed_ideology >= 4 }
+		# Strong progressive
 		heir ?= {
 			random_list = {
-				50 = { set_ideology = ideology:ideology_reformer }
-				30 = { set_ideology = ideology:ideology_liberal_leader }
-				20 = { set_ideology = ideology:ideology_radical }
+				35 = { trigger = { owner = { heir_ed_country_allows_ideology_reformer = yes } } set_ideology = ideology:ideology_reformer }
+				25 = { trigger = { owner = { heir_ed_country_allows_ideology_liberal_leader = yes } } set_ideology = ideology:ideology_liberal_leader }
+				20 = { trigger = { owner = { heir_ed_country_allows_ideology_social_democrat = yes } } set_ideology = ideology:ideology_social_democrat }
+				10 = { trigger = { owner = { heir_ed_country_allows_ideology_humanitarian = yes } } set_ideology = ideology:ideology_humanitarian }
+				8 = { trigger = { owner = { heir_ed_country_allows_ideology_radical = yes } } set_ideology = ideology:ideology_radical }
+				2 = { set_ideology = ideology:ideology_moderate }
 			}
 		}
 	}
 	else_if = {
 		limit = { var:heir_ed_ideology >= 1 }
+		# Leaning progressive
 		heir ?= {
 			random_list = {
-				40 = { set_ideology = ideology:ideology_reformer }
-				35 = { set_ideology = ideology:ideology_moderate }
-				25 = { set_ideology = ideology:ideology_liberal_leader }
+				30 = { trigger = { owner = { heir_ed_country_allows_ideology_reformer = yes } } set_ideology = ideology:ideology_reformer }
+				20 = { trigger = { owner = { heir_ed_country_allows_ideology_liberal_leader = yes } } set_ideology = ideology:ideology_liberal_leader }
+				15 = { trigger = { owner = { heir_ed_country_allows_ideology_humanitarian = yes } } set_ideology = ideology:ideology_humanitarian }
+				5 = { trigger = { owner = { heir_ed_country_allows_ideology_social_democrat = yes } } set_ideology = ideology:ideology_social_democrat }
+				30 = { set_ideology = ideology:ideology_moderate }
 			}
 		}
 	}
 	else_if = {
 		limit = { var:heir_ed_ideology <= -4 }
+		# Strong conservative
 		heir ?= {
 			random_list = {
-				50 = { set_ideology = ideology:ideology_traditionalist }
-				30 = { set_ideology = ideology:ideology_royalist }
-				20 = { set_ideology = ideology:ideology_theocrat }
+				35 = { trigger = { owner = { heir_ed_country_allows_ideology_royalist = yes } } set_ideology = ideology:ideology_royalist }
+				25 = { trigger = { owner = { heir_ed_country_allows_ideology_traditionalist = yes } } set_ideology = ideology:ideology_traditionalist }
+				15 = { set_ideology = ideology:ideology_authoritarian }
+				10 = { set_ideology = ideology:ideology_theocrat }
+				8 = { trigger = { owner = { heir_ed_country_allows_ideology_ethno_nationalist = yes } } set_ideology = ideology:ideology_ethno_nationalist }
+				5 = { set_ideology = ideology:ideology_jingoist_leader }
+				2 = { set_ideology = ideology:ideology_moderate }
 			}
 		}
 	}
 	else_if = {
 		limit = { var:heir_ed_ideology <= -1 }
+		# Leaning conservative
 		heir ?= {
 			random_list = {
-				40 = { set_ideology = ideology:ideology_traditionalist }
+				30 = { trigger = { owner = { heir_ed_country_allows_ideology_royalist = yes } } set_ideology = ideology:ideology_royalist }
+				20 = { trigger = { owner = { heir_ed_country_allows_ideology_traditionalist = yes } } set_ideology = ideology:ideology_traditionalist }
+				10 = { set_ideology = ideology:ideology_authoritarian }
+				5 = { set_ideology = ideology:ideology_theocrat }
 				35 = { set_ideology = ideology:ideology_moderate }
-				25 = { set_ideology = ideology:ideology_royalist }
 			}
 		}
 	}
@@ -467,9 +486,9 @@ heir_education_resolve_effect = {
 		heir ?= {
 			random_list = {
 				50 = { set_ideology = ideology:ideology_moderate }
-				20 = { set_ideology = ideology:ideology_reformer }
-				20 = { set_ideology = ideology:ideology_traditionalist }
-				10 = { set_ideology = ideology:ideology_liberal_leader }
+				20 = { trigger = { owner = { heir_ed_country_allows_ideology_reformer = yes } } set_ideology = ideology:ideology_reformer }
+				20 = { trigger = { owner = { heir_ed_country_allows_ideology_traditionalist = yes } } set_ideology = ideology:ideology_traditionalist }
+				10 = { trigger = { owner = { heir_ed_country_allows_ideology_liberal_leader = yes } } set_ideology = ideology:ideology_liberal_leader }
 			}
 		}
 	}
