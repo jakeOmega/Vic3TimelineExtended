@@ -8083,3 +8083,37 @@ te_mon_lolr_reneged = {
 	country_credit_standing_add = 0.005
 }
 
+banking_restrict_inflows = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_banking_intervention_max_add = -2
+	country_bureaucracy_mult = -0.03
+	country_finance_momentum_monthly_add = -0.02
+	country_bubble_pressure_monthly_add = -0.1
+}
+
+banking_sterilize_inflows = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_banking_intervention_max_add = -2
+	country_finance_momentum_monthly_add = -0.03
+	country_bubble_pressure_monthly_add = -0.1
+}
+
+banking_foreign_borrowing_limits = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_banking_intervention_max_add = -2
+	country_risk_premium_add = 0.0025
+	country_finance_momentum_monthly_add = -0.02
+}
+
+banking_fx_surrender = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_banking_intervention_max_add = -2
+	state_export_advantage_mult = -0.1
+	country_bureaucracy_mult = -0.03
+}
+
+banking_emergency_import_financing = {
+	icon = gfx/interface/icons/timed_modifier_icons/modifier_documents_negative.dds
+	country_banking_intervention_max_add = -3
+	state_import_advantage_mult = 0.15
+}

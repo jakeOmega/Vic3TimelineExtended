@@ -95,6 +95,21 @@
 	scripted_button = cb_bail_in_regime
 	scripted_button = cb_disable_bail_in_regime
 
+	scripted_button = cb_restrict_inflows
+	scripted_button = cb_disable_restrict_inflows
+
+	scripted_button = cb_sterilize_inflows
+	scripted_button = cb_disable_sterilize_inflows
+
+	scripted_button = cb_foreign_borrowing_limits
+	scripted_button = cb_disable_foreign_borrowing_limits
+
+	scripted_button = cb_fx_surrender
+	scripted_button = cb_disable_fx_surrender
+
+	scripted_button = cb_emergency_import_financing
+	scripted_button = cb_disable_emergency_import_financing
+
 	# Command Economy planning tools (visible only under law_command_economy)
 	scripted_button = ce_plan_revision
 	scripted_button = ce_disable_plan_revision

@@ -3035,6 +3035,10 @@ te_mon_pressure_gold_flow = {
 		add = var:te_gold_flow_pct
 	}
 	multiply = te_mon_gold_flow_pressure_per_pct
+	if = {
+		limit = { te_mon_gold_flow_signed > 0 }
+		multiply = banking_external_gold_pressure_factor
+	}
 	min = -6
 	max = 6
 }

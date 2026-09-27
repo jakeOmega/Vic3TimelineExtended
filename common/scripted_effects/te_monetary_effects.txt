@@ -259,6 +259,7 @@ te_monetary_monthly_update = {
 	if = {
 		limit = { te_mon_full_system = yes }
 		te_monetary_update_anchor = yes
+		banking_external_monthly_update = yes
 
 		# --- 1b. monetising the deficit, and the minting it buys ------------
 		# Before the premium and the pressure sum, both of which read the level.
@@ -352,6 +353,7 @@ te_monetary_monthly_update = {
 		te_monetary_apply_fx_modifiers = yes
 		te_monetary_apply_arrangement_modifiers = yes
 		te_monetary_update_gold = yes
+		banking_external_purchase_reserves = yes
 	}
 }
 
@@ -2807,6 +2809,7 @@ te_monetary_update_gold = {
 			limit = { var:te_gold_flow_gap > 0 }
 			set_variable = { name = te_gold_flow value = te_mon_gold_flow_unit }
 			change_variable = { name = te_gold_flow multiply = var:te_gold_flow_gap }
+			change_variable = { name = te_gold_flow multiply = banking_external_inflow_damp }
 			set_variable = { name = te_mon_work value = te_mon_gold_inflow_room }
 			if = {
 				limit = { var:te_gold_flow > var:te_mon_work }
