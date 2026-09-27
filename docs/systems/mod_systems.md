@@ -14,7 +14,7 @@ Systems using this pattern:
 - **Global Warming** — `global_warming` modifier × `temperature_anomaly_display` (applied from JE `on_monthly_pulse`)
 - **Construction Cost Scaling** — `construction_cost_scaling` modifier × `construction_cost_scaling_mult` (applied yearly, country scope)
 - **Migration Crowding** — `migration_crowding` modifier × `migration_crowding_mult` (applied yearly, state scope)
-- **Excess Private Construction** — `too_much_private_construction` modifier × `too_much_private_construction_script_value`
+- **Excess Private Construction** — `too_much_private_construction` modifier × `too_much_private_construction_script_value` (applied yearly, country scope; see § Excess Private Construction and Overinvestment)
 - **Tourism** — `tourism_output` × `total_tourism_output_bonus_percent` and `tourism_throughput` × `total_tourism_throughput_bonus_percent` (state scope), re-applied by `te_update_tourism_modifier` from `tourism_on_action` on `on_monthly_pulse_state`, because its inputs (`city_size_rank`, building levels) move monthly. Uses ~2700 lines of state_region appeal values in `common/script_values/tourism.txt`. It must run from a state pulse: law, treaty and building hooks have unreliable scope chains for state-targeted script values.
 
 ## Production Methods (PMs)
@@ -54,6 +54,15 @@ Systems using this pattern:
 - **Curve:** Linear interpolation from 0 at floor to `max_mult` at ceiling.
 - `goods_input_construction_mult` affects both construction project costs AND ongoing building maintenance.
 - With `free_market_construction_rule` disabled there is no construction good to scale, so the on_action applies `construction_cost_scaling_direct` (`country_construction_goods_cost_mult = 1`, adjusted by `construction_cost_scaling_direct_adjusted_mult`) instead. See § Free Market Construction off.
+
+## Excess Private Construction and Overinvestment
+
+- **Purpose:** When private investment queues far more construction than it can finish and money keeps piling up in the investment pool, speed up how fast each project can progress so the queue drains, and, if the pool still grows past the country's GDP, stop pops paying into it.
+- **On action:** `excess_private_construction_on_action` in `common/on_actions/extra_on_actions.txt`, wired to `on_yearly_pulse_country`. No game rule gates it.
+- **Excess Private Construction** (`too_much_private_construction`, `extra_modifiers.txt`): re-applied each year while the private queue holds more than `target_queue_length` (500) queued private levels and `investment_pool_net_income > 0`, or while the modifier is already on. Per unit of multiplier it grants `country_max_weekly_construction_progress_add` +1 (the most construction one project can absorb a week) and `state_construction_mult` −0.01% (intentionally tiny, since the multiplier can reach the thousands; at 1,000 it is −10% construction).
+- **The multiplier** (`too_much_private_construction_script_value`, `extra_script_values.txt`): the weekly progress per project that would spend the investment pool's gross income across a 500-level queue (`target_construction_per_week`), minus what the country's per-project cap would be without this modifier (`base_construction_per_week`). Each year it may rise to at most 1.2× last year's value (`var:too_much_private_construction_cached`; at least 10, so the first year is at most 10) and fall to no less than last year's ÷ 1.2, and it is capped at 9,000. Because the floor is last year's value ÷ 1.2, a country that has had the modifier keeps it: once the target is lower, it shrinks by a sixth a year without reaching 0.
+- **Overinvestment** (`overinvestment_modifier`): removed every year and re-applied when the cached multiplier is over 1,000 and `investment_pool > gdp`. It sets every profession's `state_<profession>_investment_pool_contribution_add` to −1, so no pop pays into the investment pool until the pool falls back below GDP or the excess eases.
+- **Files:** `common/on_actions/extra_on_actions.txt`, `common/script_values/extra_script_values.txt` (search `target_queue_length`), `common/static_modifiers/extra_modifiers.txt`, loc in `te_miscellaneous_l_english.yml` / `te_concepts_l_english.yml`.
 
 ## Construction as a Market Good (FMC architecture)
 
@@ -788,14 +797,14 @@ Per tracked country: 120 containers, each with 3 bookkeeping variables plus one 
 
 ## Colonial Collapse (`colonial_collapse_effect`)
 
-- **Purpose:** After decolonization tech spreads, tiny AI countries (remnants of colonial breakups) are absorbed by culturally similar neighbors or reverted to uncolonized land.
-- **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`).
-- **Criteria for collapse:** Non-player, non-decentralized, not a subject, single-state, pop < 100k, no decolonization tech, not in a diplomatic play.
-- **Resolution order:**
-  1. Find culturally similar neighbor → **annex** into that neighbor.
-  2. If no cultural match, find any neighbor → **annex**.
-  3. If no neighbors → **`set_country_type = decentralized`** (revert to uncolonized).
-- **Notifications:** Countries in same strategic region AND great powers receive alerts.
+- **Status: currently disabled.** The limit contains `any_civil_war = { always = no }` (`colonial_collapse_effects.txt:25-27`), which is never true, so no country ever passes it and the effect does nothing. It was added on 2026-03-23 (`db166830`, "colonial collapse checks tightened"), probably meant as "not in a civil war". Whether to re-enable it is being handled separately; the rest of this section describes what the effect would do.
+- **Purpose:** Tiny, poor AI countries (remnants of colonial breakups) are absorbed by a culturally similar neighbour or revert to uncolonized land. Despite the file header, nothing in the script checks the decolonization tech.
+- **Location:** `common/scripted_effects/colonial_collapse_effects.txt`, triggered by `colonial_collapse_on_action` in `common/on_actions/extra_on_actions.txt` (wired to `on_yearly_pulse_country`); each country checks itself.
+- **Criteria for collapse:** alive, not player-controlled, not decentralized, not a subject, and small and poor on one of five tiers: population under 100k with average SoL under 6, under 200k and SoL under 5, under 300k and SoL under 4, under 500k and SoL under 3, or under 1M and SoL under 2. Not while committed or undecided in a diplomatic play, and not at war. (No single-state or decolonization-tech test.)
+- **Resolution:**
+  1. From the country's most populous state, a random neighbouring state whose owner is alive, not decentralized and has a primary culture sharing a heritage trait group with ours → that owner **annexes** the country (and `nd_custody_reconcile_soon` settles any arsenal).
+  2. Otherwise → **`set_country_type = decentralized`** (revert to uncolonized). There is no "any neighbour" fallback.
+- **Notifications:** player countries in the same strategic region as that state, and player great powers, receive `colonial_territory_absorbed_notice` or `colonial_territory_collapsed_notice`.
 
 ## Treaty Articles with Entity Selection
 
